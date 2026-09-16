@@ -3,21 +3,24 @@
 > One sentence: what this is and who it is for.
 
 **Where to see it:** [URL, or where the work lives: a live app, a published page, a model in this repo]
-**Built by:** [your name], MSB 341 Product Management, BYU
+**Built by:** Lance Kirkpatrick, MSB 341 Product Management, BYU
 
 ## Context
 
 Fill this in during Sprint 1 and keep it current. Every sprint is read against it.
 
-- **My role:** [the hats you wear, and what you own. Most roles combine several: product,
-  engineering, design, go-to-market, pricing, analytics, operations. A solo builder wears most
-  of them]
-- **What I am working on:** [your product, or your part of a team's product. "Not decided" is
-  fine early on; list the options you are weighing]
-- **Who it is for:** [the customer or segment the work ultimately serves]
-- **Who uses my work:** [the specific person who will use what you make, and how you reach
-  them. On a team this can be your teammates: engineers using your specs, sales using your
-  pricing]
+- **My role:** Solo builder, working the beginning of the product stack: product discovery and
+  spec development, building features, designing flows and interfaces, and testing, plus GTM
+  strategy. Want to bring operational efficiency (agent workflows/automations) into how I work.
+  Not expecting to spend much time on pricing/business model or analytics given the current
+  project scope, but that could change.
+- **What I am working on:** Not decided. Weighing two directions: (1) a tool to enhance
+  creative workflows for designers, editors, and animators, or (2) something to help students
+  with school-work-life balance and organizational efficiency. Haven't yet defined the specific
+  problem for either — that's a Sprint 1 goal.
+- **Who it is for:** Provisional, depending on which direction is chosen: creative
+  professionals (idea 1) or college students (idea 2).
+- **Who uses my work:** Same as the customer segment above.
 
 If your situation changes, revise this and note what changed. That is normal; a silent
 mismatch between this file and your work is not.
