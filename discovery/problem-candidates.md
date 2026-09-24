@@ -38,3 +38,32 @@ The next step is to test these, not build them.
 ## Self-test log
 
 _(add entries: date, bet, what I tried, time taken, what worked, what broke)_
+
+### 2026-09-23 — Bet A, self-test 1: kinetic-type intro
+
+- **What I tried:** built an 8s vertical (1080×1920) kinetic-type intro in After Effects, cut
+  to Noisestorm – Crab Rave, entirely from Claude's step-by-step instructions instead of
+  YouTube. Starting knowledge: basic keyframes, nothing more.
+- **Time taken:** ~29 minutes from first step to a working, audio-synced result (measured off
+  screenshot timestamps), against my own estimate of 1–2 hours for something basic and usable.
+- **What I built:** one text layer eased in/out on Position + Opacity, timed to the actual
+  drop (confirmed against the audio waveform, not just by ear), plus a second line staggered
+  onto a later beat (counted by ear once the waveform got too dense past the drop to read
+  visually).
+- **What worked:**
+  - The actual hard part of learning from YouTube, for me, is knowing what to search for.
+    Describing my goal in plain language and getting ordered, project-specific steps back
+    solved that directly.
+  - A taught pattern transferred within the session — I repeated Easy Ease and a paired-
+    keyframe drag on the second line without being walked through it again.
+  - Diagnosing my screenshots caught two things I'd have missed alone: a keyframe/playhead
+    mismatch, and a Mac-specific F9/Mission Control shortcut conflict.
+- **What broke / limits found:**
+  - Reading the waveform visually only works for isolated transients (the drop itself). Past
+    that, in a dense section, it's continuous noise — timing still comes down to my own ear/
+    rhythm sense, which a screenshot can't verify.
+  - What I made isn't usable on a real project — rough, two lines, no polish. That was
+    expected for a "basic" bar.
+- **Bottom line:** felt easier and faster than YouTube, and the understanding transferred —
+  I could reapply the same principles (paired-keyframe timing, easing, cutting to a waveform)
+  to a different project without re-explaining. Perceived effort matched actual time.
