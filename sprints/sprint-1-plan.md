@@ -7,3 +7,18 @@
 **Done looks like:** I will have a defined product idea and description that someone could read and understand what I plan on building. All of the features and ideas may not be defined yet, but it will be clear enough that I can start actually building.
 
 **Predicted difficulty:** 3
+
+## Finish-line checklist (added 2026-09-28)
+
+Leaning toward Bet A after the self-test and the first interviews. Interviews continue
+alongside these steps.
+
+- [x] 1. **Competitor check:** evaluate Adobe's current AI assistants across all apps, plus
+      other AI tutors for creative software → `discovery/competitors.md` (done 2026-09-28;
+      hands-on test of the After Effects assistant also done)
+- [ ] 2. **Draft `decisions/002`:** choose Bet A, explain dropping Bet B, and answer belief 7
+      (under deadline, people want the result, not the lesson)
+- [ ] 3. **Product description:** what it is, who it's for, how it differs from YouTube plus
+      a chatbot, and what's out of scope. Then update the README and CLAUDE.md
+- [ ] 4. **Personas:** first draft from the interviews in `discovery/personas.md`
+- [ ] 5. **Sprint review:** run `/sprint-review` → `sprints/sprint-1-review.md`
