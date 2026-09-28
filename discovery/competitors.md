@@ -54,9 +54,10 @@ All are free public betas as of Sept 2026, with usage limits and no announced pr
   teaching Adobe's AI features, not AI-powered teaching.
 - **AI plugins for other apps (Figma copilots, etc.):** all about generating or doing, not
   teaching.
-- **AI tutor startups for creative software:** none turned up in searches. That could
-  mean a real gap, or just a limit of web search. Worth a manual check on Product Hunt and
-  in design communities before relying on it.
+- **AI tutor startups for creative software:** the only one found is a generic Blender
+  chat tutor that can't see your project (see the non-Adobe section). None found that teach
+  inside the user's own project. That could be a limit of web search, so it's worth a manual
+  check on Product Hunt and in design communities.
 
 ## After Effects assistant: hands-on test (2026-09-28)
 
@@ -119,11 +120,57 @@ directly, it sees details a screenshot-based web app can't.
 5. **The plugin question now has a competitor angle.** Adobe's assistants live *inside* the
    app. A separate web app starts at a disadvantage against that (see belief 6).
 
+## Non-Adobe apps (checked 2026-09-28)
+
+| App | Built-in AI assistant? | Teaches? | Can an outside tool read the project? |
+|---|---|---|---|
+| **Figma** | Yes: Figma Design Agent, beta since May 2026, on the canvas. Generates and edits designs, gives design and accessibility feedback, summarizes comments | **Yes, Q&A.** The docs say "You can ask how-to questions directly in the chat," with answers drawn from the Help Center | Yes, Figma has opened the canvas to outside agents |
+| **DaVinci Resolve** | **No built-in chat assistant.** AI is limited to specific features. v21.1 (Sept 9, 2026) added a **built-in MCP server** so Claude, Claude Code, or ChatGPT Codex can analyze projects, organize media, adjust settings, and render | No | **Yes, officially,** but only in **Resolve Studio** (paid). Python scripting also moved to Studio only |
+| **Blender** | **No official assistant.** Add-ons: BlendAI (one-click "Feature Explain" for settings and nodes), Vibe4D (chat that can read and edit the scene), 3D-Agent. Separate "AI Blender Tutor" (My Clever AI): generic chat lessons, no view of your scene, subscription | Add-ons explain features. The tutor product teaches but isn't tied to your project | Yes, through Blender's open Python API; add-ons already do it |
+| **Final Cut Pro** | **No assistant.** Apple added AI *features* (Generate Captions, Edit Detection, Auto Mask; Creator Studio, Jun 2026), not a chat | No | Limited. It's a closed app without an agent-friendly way in |
+
+### The access finding: my tool could read the project too
+
+The hands-on test's biggest advantage for Adobe was that its assistant reads real project
+data while my product would rely on screenshots. **That advantage isn't exclusive:**
+
+- **After Effects:** several community MCP servers (for example
+  [LiamcKerr/after-effects-mcp][ae-mcp-liam], tested against AE 26.4 and 26.5) use a CEP panel
+  and ExtendScript to let Claude inspect comps, read layer properties, preview frames, and
+  run scripts. They're community-built, not official, and the user has to install a panel.
+  ExtendScript can also read keyframe ease values, which Adobe's own assistant said it
+  couldn't see. Confirm this before relying on it.
+- **Resolve:** an official MCP server (Studio only).
+- **Blender:** an open Python API, with community MCP bridges.
+
+So a Claude-based tutor could see the user's actual project in After Effects, Resolve, and
+Blender, which would remove the screenshot disadvantage.
+
+### What this means
+
+1. **Every app's own assistant covers one app, works when asked, does the task first, and
+   has no memory.** Figma and InDesign answer how-to questions. After Effects answers,
+   checks work, and suggests a path when asked. None of them tracks what you've learned
+   across sessions, let alone across apps.
+2. **Where a gap remains:** a **teaching layer that works across apps**, with a record of
+   what the user knows that carries from After Effects to Resolve to Blender. It would
+   connect to each app through MCP bridges instead of competing on a single app's built-in
+   access. No app maker has a reason to build a tutor that works across competitors' apps.
+3. **Least crowded apps:** Resolve (official MCP but no built-in assistant) and Blender (no
+   official assistant, a huge self-taught community living on YouTube). Final Cut is hard
+   to connect to.
+4. **Caveats:** relying on community bridges for After Effects is fragile and adds setup.
+   Resolve's MCP needs the paid Studio edition. I can't build for Blender or Resolve from
+   my own experience yet. The "works across apps" angle needs interviewees who actually
+   use more than one app, which interview 003 hinted at.
+
 ## Open follow-ups
 
 - [x] **Hands-on test (2026-09-28):** see "After Effects assistant: hands-on test" below.
 - [ ] Check the Photoshop and Premiere assistant help pages directly (blocked for automated
       access) for any how-to or Q&A ability.
+- [ ] Check what an After Effects MCP bridge can actually read (ease values, keyframes, effects)
+      with a quick local test before choosing a stack.
 - [ ] Manual search for AI tutor startups for creative software (Product Hunt, r/AfterEffects,
       design Discords).
 
@@ -143,6 +190,14 @@ directly, it sees details a screenshot-based web app can't.
 - [Adobe Help: Photoshop Discover panel][adobe-discover]
 - [Adobe Help: Premiere AI Assistant overview][adobe-pr]
 
+- [Resolve 21.1 MCP integration (CineD)][resolve-mcp]
+- [Figma agent help: how-to questions][figma-agent]
+- [TechCrunch: Figma adds AI assistant to canvas][figma-tc]
+- [Best AI tools for Blender 2026][blender-tools]
+- [AI Blender Tutor][blender-tutor]
+- [Final Cut Pro Creator Studio AI update (CineD)][fcp]
+- [After Effects MCP server (community)][ae-mcp-liam]
+
 [cg-ae]: https://www.cgchannel.com/2026/09/adobe-releases-after-effects-26-5-and-new-ai-assistant-in-beta/
 [cined-ae]: https://www.cined.com/adobe-after-effects-ai-assistant-enters-public-beta-whole-project-scope-expression-rigs-and-project-cleanup/
 [adobe-ae]: https://community.adobe.com/announcements-532/new-in-after-effects-beta-after-effects-ai-assistant-1635658
@@ -156,3 +211,10 @@ directly, it sees details a screenshot-based web app can't.
 [adobe-claude]: https://blog.adobe.com/en/publish/2026/09/24/adobe-comes-to-gemini-expands-what-you-can-do-in-claude
 [adobe-discover]: https://helpx.adobe.com/photoshop/desktop/get-started/learn-the-basics/access-discover-panel.html
 [adobe-pr]: https://helpx.adobe.com/premiere/desktop/premiere-ai-assistant/overview.html
+[ae-mcp-liam]: https://github.com/LiamcKerr/after-effects-mcp
+[resolve-mcp]: https://www.cined.com/davinci-resolve-21-1-released-ai-assistant-integration-via-mcp-individual-hdr-trims-and-python-scripting-moves-to-studio/
+[figma-agent]: https://help.figma.com/hc/en-us/articles/37998629035799-Work-with-the-Figma-agent-in-design-files
+[figma-tc]: https://techcrunch.com/2026/05/20/figma-adds-an-ai-assistant-to-its-collaborative-canvas/
+[blender-tools]: https://www.3daistudio.com/blog/best-ai-tools-for-blender-2026
+[blender-tutor]: https://mycleverai.com/ai-blender-tutor
+[fcp]: https://www.cined.com/apple-creator-studio-update-adds-generate-captions-edit-detection-and-auto-mask-to-final-cut-pro/
