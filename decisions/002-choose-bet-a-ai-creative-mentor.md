@@ -15,9 +15,13 @@ Evidence so far:
 - **Self-test (Bet A, 2026-09-23):** built a kinetic-type intro in After Effects from Claude's
   instructions in about 29 minutes, against an estimate of 1–2 hours. The skills carried over
   to a second layer without being re-taught. See `discovery/problem-candidates.md`.
-- **Three conversations** (`discovery/interviews/001`–`003`): all three struggled to learn
+- **Four conversations** (`discovery/interviews/001`–`004`): all four struggled to learn
   Adobe apps. Their workaround is guess-and-check, or YouTube plus a general chatbot used
   together. One said that under deadline they wanted the result, not the lesson (belief 7).
+  Interview 004 added three things: chatbot text steps stop working once the app gets
+  complex ("I would rather see a mouse on a screen moving"); they have never paid to learn
+  and wouldn't (belief 12); and they use apps from more than one company (Lightroom,
+  Photoshop, Final Cut, Snapseed), though they weren't asked about a tutor across apps.
 - **Competitor check** (`discovery/competitors.md`): Adobe says its assistants are meant to
   do tasks, not teach. But in my hands-on test, the After Effects beta assistant, **when
   asked**, gave clear instructions, checked my work against real project data, and suggested
@@ -42,7 +46,8 @@ Evidence so far:
    works across competitors' apps. It's still my own workflow, and a real building stretch
    (MCP, agent design, memory, evals). Cons: the gap is thin and Adobe could close parts of
    it (memory, a teaching mode). The After Effects bridges are community-built. No
-   interviewee has asked for a tool across apps yet.
+   interviewee has asked for a tool across apps yet, though one (004) uses apps from several
+   companies.
 3. **Bet A for apps without an assistant only (Resolve, Blender).** Pros: least crowded. Cons:
    I don't use either app, so I lose the weekly self-testing that drove decision 001.
 4. **Bet B (creative-operations copilot, starting with brand audits).** Pros: narrow, easy to
@@ -83,6 +88,17 @@ test that.
 
 Separate decisions still to make: web app vs. plugin vs. MCP-connected app (after testing
 what an After Effects bridge can read), and the stack.
+
+Open questions this decision doesn't settle yet:
+
+- **Who pays.** The one learner asked (004, a student) won't pay, because AI and YouTube are
+  free. Their suggestion was an Adobe bundle. Possible payers: working professionals, their
+  employers, schools. Pricing is low priority this semester, but Sprint 2 interviews should
+  ask.
+- **Showing, not only telling.** Two interviewees (003, 004) use YouTube because it shows the
+  steps visually. Text steps alone put the mentor level with Adobe's assistant and ChatGPT.
+  The first prototype needs some visual way to show where to click (highlights, annotated
+  screenshots, or short clips).
 
 ## What would change our mind
 

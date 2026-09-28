@@ -22,6 +22,8 @@ had to learn something for a specific project are the best fit.
 - When they say something vague ("it's kind of annoying"), dig in: "Can you tell me more?"
   or "What happened next?"
 - Let silence do the work. Write down their exact words.
+- **Don't share my own experience** ("I do the same thing") until they've finished
+  answering. It tells them what I want to hear.
 
 ## Questions
 
@@ -39,6 +41,7 @@ had to learn something for a specific project are the best fit.
 - Where did you get stuck? What did you do when you got stuck?
 - How long did it take overall? Is that more or less than you expected?
 - Did you finish the project the way you wanted, or settle for something simpler?
+- Which parts did you need to *see* done, rather than read steps for? Why?
 
 ### 3. Current tools and spending (5 min)
 
@@ -47,6 +50,10 @@ had to learn something for a specific project are the best fit.
 - Have you used AI (ChatGPT, Claude, Adobe's assistant) to help with a creative app? What
   did you ask it? Did it help?
   - *If yes:* Did you want it to do the task for you, or explain how to do it? Why?
+- Have you tried the AI assistant built into the app itself (Photoshop, Lightroom, After
+  Effects...)? What did you ask it? Was it enough?
+- Which of your apps come from different companies (Final Cut, Resolve, Figma, Blender...)?
+  How do you learn those compared with the Adobe ones?
 
 ### 4. Learn vs. just get it done (5 min)
 
@@ -56,18 +63,27 @@ had to learn something for a specific project are the best fit.
   you learn it?
 - If an AI could just make the thing for you, would you still want to know how to do it
   yourself? Why or why not?
+- After you learned something, did you ever practice it or come back to it? Have you lost
+  a skill you once had? What happened?
+- Is there a creator whose style you've tried to copy? How did you go about it?
 
 ### 5. Reaction to the idea (5 min, only at the end)
 
-> "Here's what I'm exploring: you describe what you're trying to make, or share a
-> screenshot of your project, and an AI mentor teaches you how to build it step by step,
-> in your own project instead of a generic tutorial. It can look at your screenshots and
-> tell you what's going wrong."
+> "Here's what I'm exploring: you describe what you're trying to make, and an AI mentor
+> teaches you how to build it step by step, in your own project instead of a generic
+> tutorial. It can see your project and tell you what's going wrong. It remembers what
+> you've already learned, across apps, and gives you practice so the skill sticks."
+
+(Pitch updated after `decisions/002` to include leading, memory, and practice.)
 
 - What's your first reaction?
 - When would that have helped you recently? When wouldn't it have?
 - What would make you not trust it or stop using it?
 - What would you compare it to? (Listen for what they think it replaces.)
+- Would you pay for it? If not you, who would you expect to pay (you, your school, your
+  employer, Adobe)?
+- Would a record of what you've learned, or practice exercises, change whether you'd use it
+  over the app's own assistant?
 
 ### 6. Close (1 min)
 

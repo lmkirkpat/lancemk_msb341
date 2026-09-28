@@ -3,8 +3,8 @@
 > One entry per customer type. Update as interviews sharpen the picture:
 > this file should get *more specific* over the semester, not longer.
 
-Last updated 2026-09-28, from self-test 1 and interviews 001–003. First draft. Still thin:
-only one direct quote from someone other than me, and no data on what anyone pays.
+Last updated 2026-09-28, from self-test 1 and interviews 001–004. First draft. Still thin:
+one data point on paying (a no), and nobody has been asked about memory or practice.
 
 ## 1. The skill-builder: creative adding a new app to their toolkit (primary)
 
@@ -13,23 +13,31 @@ only one direct quote from someone other than me, and no data on what anyone pay
   designer adding motion graphics in After Effects, or a video editor learning more of the
   Adobe suite. Learns in bursts around real projects, not in a course. Includes me (user #1:
   in-house university designer learning After Effects), interview 001 (video editor), and
-  interview 002 (PM with a creative background, struggled with Illustrator and Photoshop).
-- **The problem in their words:** "YouTube is scattered, courses are expensive, and none of it
-  is built into the projects I'm actually working on." (me, from CLAUDE.md. Need a quote from
-  someone else.)
-- **Current workaround:** guess-and-check (001), YouTube, and sometimes a chatbot. Learning
-  feels piecemeal. 001 couldn't learn Adobe apps "in a cohesive way."
-- **What they want:** to actually own the skill, because they'll use it again. Wants help
-  inside the app, not in another tab (002 strongly prefers a plugin).
-- **What they'd pay / have paid for:** unknown. Not asked yet.
+  interview 002 (PM with a creative background, struggled with Illustrator and Photoshop),
+  and interview 004 (student who edits photos for their YouTube channel and runs a freelance
+  video business in Final Cut).
+- **The problem in their words:** "[ChatGPT] will give me steps for simple tasks, but with
+  something like Photoshop that's more complex, I would rather see a mouse on a screen moving
+  and showing me where to go and how to do it than having to read instructions." (004)
+- **Current workaround:** guess-and-check (001), YouTube, a chatbot in plain words (004 asks it
+  for a YouTube link when the steps aren't enough), and saved Instagram reels to copy a
+  creator's style (004). Learning feels piecemeal. 001 couldn't learn Adobe apps "in a
+  cohesive way."
+- **What they want:** to actually own the skill, because they'll use it again (004 now uses
+  ChatGPT less because they "picked up on my normal routines"). Wants help inside the app,
+  not in another tab (002 strongly prefers a plugin). Wants to see it done, not only read
+  steps, once the app gets complex (004). Often wants a specific look, not a skill list (004).
+- **What they'd pay / have paid for:** 004 has never paid to learn and wouldn't: "I couldn't
+  justify paying for something like that when there's just so many tools with AI and
+  YouTube." Suggested Adobe bundle it instead. Only one data point, and a student.
 - **Why they're primary:** they want the lesson, not just the result, which is exactly the
   gap Adobe's do-it-for-you assistants leave.
 - **Evidence:** `discovery/problem-candidates.md` self-test 1, `interviews/001-video-editor.md`,
-  `interviews/002-pm-creative.md`
-- **Still need to learn:** a quote from someone else in their own words; whether they've paid
-  for learning; whether they use more than one creative app (tests the across-apps angle);
-  whether they'd value a mentor that remembers their progress over Adobe's assistant used
-  on request.
+  `interviews/002-pm-creative.md`, `interviews/004-student-photographer-freelance-video.md`
+- **Still need to learn:** whether working professionals (not students) would pay, and who
+  pays if the learner won't; whether people who use apps from several companies (004 does)
+  want one tutor across them; whether they'd value a mentor that remembers their progress
+  over Adobe's assistant used on request.
 
 ## 2. The occasional user: needs a creative app now and then (secondary)
 
