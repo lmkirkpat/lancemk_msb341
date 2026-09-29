@@ -23,20 +23,28 @@ a brand new session act like a colleague who already knows what you are working 
 
 ## Current state
 
-- **This sprint's goal:** Sprint 1 is closed (`sprints/sprint-1-review.md`, retro in the
-  plan). Sprint 2 isn't planned yet.
+- **This sprint's goal:** Sprint 2 (`sprints/sprint-2-plan.md`): spec the product, test the
+  MCP bridge, decide the architecture (`decisions/003`), build a working slice on one After
+  Effects skill, and run 3 target-market interviews.
 - **Progress so far:**
   - Narrowed to creative workflows (`decisions/001`), then chose the AI creative mentor
     (`decisions/002`).
   - Self-test 1, five interviews (`discovery/interviews/001`–`005`), competitor check
     (`discovery/competitors.md`), insights, personas, and a product description.
+  - MCP bridge test done (`specs/001`, `discovery/ae-bridge-findings.md`). All 11 reads work,
+    including temporal ease. Deep reads need custom ExtendScript through `ae_run_script`.
+    Change detection means taking a snapshot and comparing. Setup is built for developers.
+    CEP is retired in AE (off by default Dec 2028, removed Dec 2029), and the AE UXP public
+    beta is due Nov 2026.
 - **Next steps:**
-  1. Run `/sprint-plan` for Sprint 2: write the product spec, start building, and run
-     usage interviews with people squarely in the target market.
-  2. Write the first spec in `specs/`, and test what an After Effects MCP bridge can read
-     (keyframes, easing, effects) before choosing web app vs. plugin vs. MCP-connected app.
-  3. In interviews, ask about Adobe's assistant, who pays, and whether memory and practice
-     matter, before pitching (`discovery/interviews/bet-a-interview-guide.md`).
+  1. Read Adobe's CEP/UXP post first-hand (linked in the findings note), then write
+     `decisions/003` (architecture). Leaning: prototype on the CEP bridge and keep the AE-side
+     piece thin so it can move to UXP.
+  2. Write the spec for the test slice in `specs/` (one skill, likely easing), then build it.
+  3. Book and run 3 usage interviews in the target market. Ask about Adobe's assistant, who
+     pays, and whether memory and practice matter, before pitching
+     (`discovery/interviews/bet-a-interview-guide.md`).
+  4. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
 - **Where to see it:** Nothing built yet.
 - **Biggest open risk:** that leading, memory, and practice aren't worth more to people than
   Adobe's free assistant used on request. Also: learners may not pay (belief 12), people take
