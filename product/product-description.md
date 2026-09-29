@@ -15,8 +15,8 @@ ask the right question. Courses are expensive and built around practice projects
 care about. So people get by with guess-and-check, stitch these sources together, and
 lose the skill when they don't use it for a while ("I'm probably already rusty").
 
-Evidence: self-test 1 (`discovery/problem-candidates.md`), interviews 001–003, and beliefs
-1–8 in `discovery/insights.md`.
+Evidence: self-test 1 (`discovery/problem-candidates.md`), interviews 001–005, and
+`discovery/insights.md`.
 
 ## Who it's for
 

@@ -1,7 +1,8 @@
 # Decision 002: Build Bet A, an AI creative mentor, as a teaching layer across apps
 
 **Date:** 2026-09-28
-**Status:** Draft (finalize after today's interviews)
+**Status:** Accepted, 2026-09-28, after interviews 001–005. Open questions below carry into
+Sprint 2.
 
 ## Context
 

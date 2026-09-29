@@ -1,8 +1,10 @@
-# [Product name TBD]: creative workflows
+# [Product name TBD]: AI creative mentor
 
-> One sentence: what this is and who it is for. *(Finalize after `decisions/002`.)*
+> An AI mentor that teaches creative professionals and students creative software inside
+> their own projects, starting with After Effects, and remembers what they've learned so
+> the skills stick.
 
-**Where to see it:** [URL, or where the work lives: a live app, a published page, a model in this repo]
+**Where to see it:** Nothing built yet. The product so far is in `product/product-description.md`.
 **Built by:** Lance Kirkpatrick, MSB 341 Product Management, BYU
 
 ## Context
@@ -14,11 +16,10 @@ spec development, building features, designing flows and interfaces, and testing
 strategy. Want to bring operational efficiency (agent workflows/automations) into how I work.
 Not expecting to spend much time on pricing/business model or analytics given the current
 project scope, but that could change.
-- **What I am working on:** A tool for creative workflows (designers, editors, animators).
-The specific problem is still being chosen between two bets: **(A)** an AI creative mentor
-that teaches creative software (e.g., After Effects) inside the user's own projects, or
-**(B)** a creative-operations copilot for solo or in-house designers (brand-compliance audits,
-merging feedback, finding assets). See `discovery/problem-candidates.md`.
+- **What I am working on:** An AI creative mentor: a teaching layer that leads the teaching,
+remembers what the user has learned across sessions, and builds practice so skills stick,
+inside the user's own project. After Effects first, designed so other apps can be added.
+See `product/product-description.md` and `decisions/002`.
 - **Who it is for:** Creative professionals and students who work in Adobe Creative Cloud,
 starting with solo or in-house designers like me (design role at a university department).
 - **Who uses my work:** Same as the customer segment above. I'm also user #1 and test on
@@ -27,6 +28,11 @@ myself weekly.
 **What changed (2026-09-21):** Dropped the student school-work-life balance direction and a
 later student-club-operations idea, and narrowed to creative workflows. See
 `decisions/001-narrow-to-creative-workflows.md`.
+
+**What changed (2026-09-28):** Chose Bet A, the AI creative mentor, and dropped Bet B (the
+creative-operations copilot) without testing it. Repositioned Bet A after finding that
+Adobe's After Effects assistant already teaches when asked. See
+`decisions/002-choose-bet-a-ai-creative-mentor.md`.
 
 If your situation changes, revise this and note what changed. That is normal; a silent
 mismatch between this file and your work is not.

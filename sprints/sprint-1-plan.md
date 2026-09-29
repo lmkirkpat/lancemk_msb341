@@ -16,9 +16,21 @@ alongside these steps.
 - [x] 1. **Competitor check:** evaluate Adobe's current AI assistants across all apps, plus
       other AI tutors for creative software → `discovery/competitors.md` (done 2026-09-28;
       hands-on test of the After Effects assistant also done)
-- [ ] 2. **Draft `decisions/002`:** choose Bet A, explain dropping Bet B, and answer belief 7
+- [x] 2. **Draft `decisions/002`:** choose Bet A, explain dropping Bet B, and answer belief 7
       (under deadline, people want the result, not the lesson)
-- [ ] 3. **Product description:** what it is, who it's for, how it differs from YouTube plus
+- [x] 3. **Product description:** what it is, who it's for, how it differs from YouTube plus
       a chatbot, and what's out of scope. Then update the README and CLAUDE.md
-- [ ] 4. **Personas:** first draft from the interviews in `discovery/personas.md`
-- [ ] 5. **Sprint review:** run `/sprint-review` → `sprints/sprint-1-review.md`
+- [x] 4. **Personas:** first draft from the interviews in `discovery/personas.md`
+- [x] 5. **Sprint review:** run `/sprint-review` → `sprints/sprint-1-review.md`
+
+## Retro
+
+**Actual difficulty:** 2
+
+**Why it differed:** Once I had a direction to start with, it ended up being easier than I
+expected to flesh out the idea and to start conducting user interviews.
+
+**Retro:** Yes, I did hit my goal of defining what my product is, who it's for, and why it
+needs to be built. For the next sprint, I need to define the product spec, start building,
+and conduct more thorough usage interviews with people that are squarely in the target
+market.
