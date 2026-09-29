@@ -3,8 +3,9 @@
 > One entry per customer type. Update as interviews sharpen the picture:
 > this file should get *more specific* over the semester, not longer.
 
-Last updated 2026-09-28, from self-test 1 and interviews 001–004. First draft. Still thin:
-one data point on paying (a no), and nobody has been asked about memory or practice.
+Last updated 2026-09-28, from self-test 1 and interviews 001–005. First draft. Still thin:
+one data point on paying (a no), and nobody has been asked about memory or practice before
+hearing the pitch.
 
 ## 1. The skill-builder: creative adding a new app to their toolkit (primary)
 
@@ -45,22 +46,29 @@ one data point on paying (a no), and nobody has been asked about memory or pract
   social-media intern, but who sometimes has to make or edit something in it. Works next to
   specialists and handles the small jobs themselves. Example: interview 003, a writer who
   learned Premiere for TikTok content during an internship and now does quick cuts and
-  transcripts at work.
+  transcripts at work. Also interview 005, who learned Photoshop basics in a class, has
+  mostly stopped using it, and now uses Canva.
 - **The problem in their words:** "It's just so much. Like, it takes so long to learn
   sometimes." YouTube "can be a little hard to translate" to their own project.
 - **Current workaround:** YouTube for the visuals, plus ChatGPT or Gemini with screenshots to
   debug, plus asking an expert colleague. "I couldn't have done it probably with one or the
-  other." Tried Premiere's built-in tutorials and dropped them.
+  other." Tried Premiere's built-in tutorials and dropped them. 005: a teacher's overview,
+  then "trial and error," then the teacher, YouTube, or Google when stuck. Now lets Canva's
+  AI "do the task for me."
 - **What they want:** in the moment, the result: "it was more just to get the project done
   because we were on a crunch." The value of having learned comes later ("it is very useful to
-  understand how it's done"). The skill fades: "I'm probably already rusty."
+  understand how it's done"). The skill fades: "I'm probably already rusty." 005 says they'd
+  want AI to teach them ("used as a tool, not just like replacing thinking") but used it to
+  do the task. Would still pick an in-person teacher over an AI mentor.
 - **What they'd pay / have paid for:** unknown. Not asked.
 - **Why they're secondary:** under deadline they're Adobe's assistant's user, not ours.
   They matter because the skill fading is exactly what memory and practice would solve,
   if they'll come back to learn when they're not under pressure.
-- **Evidence:** `interviews/003-writer-social-intern.md`
+- **Evidence:** `interviews/003-writer-social-intern.md`, `interviews/005-photoshop-class-canva-user.md`
 - **Still need to learn:** whether they'd ever choose to learn when not under a deadline, or
-  only ever want the result. If it's only the result, drop this persona.
+  only ever want the result. So far: 003 took the result under deadline; 005 says they'd
+  want to learn but took the result when they could. Leaning toward "only the result" (two
+  of two by behavior). One more like this and drop the persona.
 
 ## Not a target: the one-off "just do it for me" user
 
