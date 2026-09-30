@@ -132,6 +132,12 @@ open.
   comparing different comps and takes a new snapshot instead of reporting a false result.
 - **Overdone ease:** I set extreme influence (for example 100%). It passes as eased, and the
   mentor may comment on the feel but doesn't fail it.
+- **Lots to fix:** the comp has many linear pairs across many layers. The mentor picks a focus
+  (a layer or two) instead of listing everything, and the check grades only that focus.
+- **Hidden or invisible layers:** linear pairs on a hidden layer or a null are reported, but the
+  demonstration always happens on a layer the learner can see.
+- **Animation inside a precomp:** the mentor says there's a precomp it can't look inside yet,
+  and doesn't claim that part of the project is fine.
 - **Undo:** I undo my change before the check. The mentor reports that the keyframes are still
   linear.
 
@@ -194,9 +200,9 @@ open.
 
 ### Measurable Outcomes
 
-- **SC-001**: On the test project, the mentor finds 100% of the linear keyframes on animated
-  properties, with no false flags on hold keyframes, single keyframes, or expression-driven
-  properties.
+- **SC-001**: On the practice comp, the mentor finds 100% of the linear keyframe pairs on
+  animated properties (including nested, separated, and effect properties), with no false flags
+  on eased pairs, hold keyframes, single keyframes, or expression-driven properties.
 - **SC-002**: A full lesson, from starting the session to a verified eased result, takes 15
   minutes or less for the builder on the test project.
 - **SC-003**: The mentor's check agrees with a manual inspection in AE in at least 9 of 10

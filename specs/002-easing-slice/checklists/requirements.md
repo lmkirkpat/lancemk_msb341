@@ -37,6 +37,9 @@
   the first keyframe pair on one property; learner eases the rest). Added acceptance scenario
   1.6 so the check separates the demo from the learner's work. Animated panel demo noted as a
   future idea in Assumptions. All items pass.
+- Iteration 3 (2026-09-30, during planning): added edge cases for a busy comp (mentor picks a
+  focus), hidden/null layers, and precomps. Broadened SC-001 to the practice comp's nested,
+  separated, and effect properties. All items still pass.
 - Tool and bridge names from the input are kept out of the requirements and appear only in
   Assumptions as a dependency on `decisions/003`. FR-013 states the constraint in user terms.
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
