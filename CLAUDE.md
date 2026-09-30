@@ -36,11 +36,15 @@ a brand new session act like a colleague who already knows what you are working 
     Change detection means taking a snapshot and comparing. Setup is built for developers.
     CEP is retired in AE (off by default Dec 2028, removed Dec 2029), and the AE UXP public
     beta is due Nov 2026.
+  - Architecture decided (`decisions/003`): a thin AE pipe (forked CEP bridge), the mentor as
+    an MCP server with narrow tools run from Claude, and the learner record in local files.
+  - Spec Kit set up for build specs (`decisions/004`). Easing slice spec written
+    (`specs/002-easing-slice/spec.md`), with demos following "I do, we do, you do": the mentor
+    eases the first keyframe pair and the learner eases the rest.
 - **Next steps:**
-  1. Read Adobe's CEP/UXP post first-hand (linked in the findings note), then write
-     `decisions/003` (architecture). Leaning: prototype on the CEP bridge and keep the AE-side
-     piece thin so it can move to UXP.
-  2. Write the spec for the test slice in `specs/` (one skill, likely easing), then build it.
+  1. `/speckit-plan` → `/speckit-tasks` → build the easing slice (`specs/002`).
+  2. Use the slice on the test project and keep usage notes (SC-007: did I reach for it or
+     Adobe's assistant?).
   3. Book and run 3 usage interviews in the target market. Ask about Adobe's assistant, who
      pays, and whether memory and practice matter, before pitching
      (`discovery/interviews/bet-a-interview-guide.md`).
