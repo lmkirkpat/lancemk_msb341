@@ -1,7 +1,7 @@
 # After Effects MCP bridge: what we learned
 
 **Date:** 2026-09-28
-**Source:** `specs/001-ae-mcp-bridge-test.md` (results table), plus a read of the bridge's source
+**Source:** `specs/001-ae-mcp-bridge-test/spec.md` (results table), plus a read of the bridge's source
 ([LiamcKerr/after-effects-mcp](https://github.com/LiamcKerr/after-effects-mcp) v1.1.0, MIT).
 Input to `decisions/003`.
 

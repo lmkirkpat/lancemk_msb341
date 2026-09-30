@@ -56,7 +56,11 @@ a brand new session act like a colleague who already knows what you are working 
   and usability findings all live here.
 - Specs go in `specs/` and are written before the work. When asked to build or produce
   something non-trivial, check for its spec first. If there is none, draft one and confirm it
-  before starting.
+  before starting. Each spec gets a numbered folder (`specs/NNN-name/spec.md`).
+  - **Build work** uses GitHub Spec Kit (`decisions/004`): `/speckit-specify` →
+    `/speckit-plan` → `/speckit-tasks` → `/speckit-implement`, which add `plan.md` and
+    `tasks.md` to the same folder. Project rules for it are in `.specify/memory/constitution.md`.
+  - **Non-code specs** (tests, campaigns, pricing) copy `specs/000-spec-template.md` instead.
 - Meaningful choices get a numbered record in `decisions/`, written when the choice is made,
   including what was rejected and why.
 - Sprint plans and reviews live in `sprints/`. The plan is committed on day one.
