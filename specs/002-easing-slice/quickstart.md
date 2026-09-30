@@ -83,7 +83,9 @@ pass (SC-006).
 
 - Close AE, then `/ease-mentor`: the mentor says it can't see the project and makes no claims
   (FR-009).
-- Switch comps between "try it" and "done": the mentor notices and re-snapshots.
+- Switch comps between "try it" and "done": the mentor notices, doesn't grade it, and asks you to
+  return to Mentor Practice by name. Switch back and say "done" again: it grades against the
+  original baseline, and the demo still counts as used.
 
 ## 8. Usage notes (SC-007)
 

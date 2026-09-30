@@ -44,6 +44,9 @@
   learner to switch back instead of re-snapshotting (closes a one-demo loophole, finding C1).
   Added a "Keyframe pair (segment)" key entity to align spec and plan vocabulary (T2). All items
   still pass.
+- Iteration 5 (2026-09-30, after the second /speckit-analyze): "Different comp" edge case adds
+  that the unfinished lesson on the first comp is kept (lessons are per comp, finding N3). All
+  items still pass.
 - Tool and bridge names from the input are kept out of the requirements and appear only in
   Assumptions as a dependency on `decisions/003`. FR-013 states the constraint in user terms.
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`

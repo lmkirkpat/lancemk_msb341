@@ -101,6 +101,8 @@ bridge/                          # Forked from LiamcKerr/after-effects-mcp @ 2cf
 
 mentor/                          # MCP server "ae-mentor" (stdio)
 ├── server.mjs                   # JSON-RPC over stdio, adapted from upstream server.mjs
+├── paths.mjs                    # AE_MENTOR_HOME, session/learner/calls file paths, bridge config
+├── errors.mjs                   # MentorError and the contract's error codes
 ├── bridge-client.mjs            # HTTP + token to the panel (from upstream), or fixture mode
 ├── tools.mjs                    # The 6 tools from contracts/mentor-tools.md
 ├── lib/
@@ -133,6 +135,9 @@ product/evals/easing/
 └── results/                     # Dated run outputs, committed for comparison
 
 .mcp.json                        # Registers ae-mentor for this repo
+
+discovery/usage-notes/
+└── easing-slice.md              # Live-run logs: SC-002/003/004 tables, SC-005, SC-007
 ```
 
 **Structure Decision**: two code folders that match `decisions/003`'s layers. `bridge/` is the
@@ -144,6 +149,8 @@ layer. Teaching lives in the skill, and evals live where the constitution says
 ## Build order (input for /speckit-tasks)
 
 1. **Foundation:**
+   - `mentor/jsx/lib/paths.jsx`, then the practice comp and its answer key (the analysis tests
+     are written against it).
    - `bridge/` fork with renamed IDs, installed, doctor passes.
    - `mentor/server.mjs` + `bridge-client.mjs` answering a health check.
    - `.mcp.json`.
@@ -152,7 +159,6 @@ layer. Teaching lives in the skill, and evals live where the constitution says
    - `set-ease.jsx` + session rules.
    - `diff.mjs`.
    - `preview_frame`.
-   - Practice comp and answer key (early: the analysis tests are written against it).
    - `/ease-mentor` skill.
    - Live run, quickstart steps 4a–f.
 3. **US2, memory:** `learner-store.mjs`, `read_learner_record` / `record_lesson`, and the skill's

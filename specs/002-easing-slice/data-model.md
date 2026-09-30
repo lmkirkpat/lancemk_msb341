@@ -57,35 +57,40 @@ lesson's **targets**.
 
 ## Session (`session.json`)
 
-One lesson in progress. Created by the first `snapshot_project`, and replaced when a new
-lesson starts.
+`session.json` holds **one lesson per comp**, `{ "version": 1, "current": comp_id, "lessons":
+{ [comp_id]: Session } }`. `current` is the comp of the most recent `snapshot_project`;
+`set_ease` and `diff_since_last` act on its lesson. Switching comps pauses a lesson instead of
+throwing it away (N3).
 
 | Field | Type | Notes |
 |---|---|---|
 | `lesson_id` | string | Timestamp-based |
+| `comp_id` | number | The comp this lesson belongs to |
 | `baseline` | Snapshot | The "before" |
 | `focus` | string[] \| null | Layer names the lesson is limited to (null = all) |
 | `targets` | Segment id[] | Linear segments at baseline within the focus. Only these are graded |
 | `demo` | `null \| { segment_id, at }` | Set once by `set_ease`; see state transitions |
 | `status` | `"started" \| "demo_done" \| "checked"` | |
-| `passed` | boolean | Set by the last `diff_since_last`. A lesson only ends by passing or by switching comps |
+| `passed` | boolean | Set by the last `diff_since_last`. A lesson only ends by passing; switching comps pauses it |
 
 **State transitions**:
 
 ```
 (no session) ──snapshot_project──▶ started ──set_ease (first time)──▶ demo_done
      started / demo_done ──diff_since_last──▶ checked ──diff_since_last──▶ checked (re-check allowed)
-snapshot_project, same comp, lesson not passed ──▶ same lesson: baseline and demo kept;
+snapshot_project, active comp has an unfinished lesson ──▶ that lesson continues (same comp) or
+                                                  resumes (after a switch): baseline and demo kept;
                                                   focus_layers recomputes targets from the baseline
-snapshot_project, no session / last check passed / different comp ──▶ started (new lesson,
-                                                  new baseline, demo reset)
+snapshot_project, active comp has no lesson, or its last check passed ──▶ started (new lesson
+                                                  for this comp, new baseline, demo reset)
 set_ease when demo ≠ null ──▶ error "demo already used" (FR-006)
 ```
 
 Why: if re-snapshotting started a new lesson, a second `snapshot_project` would reset `demo` and
 allow a second demonstration, and would make the learner's earlier edits part of the new
-"before". Tying lesson boundaries to passing (or a comp change) closes both. An unfinished lesson
-also carries over to the next day, which is what US2-3 asks for.
+"before". Tying lesson boundaries to passing closes both, and keeping one lesson per comp means
+switching comps back and forth can't reset a demo or lose progress. An unfinished lesson also
+carries over to the next day, which is what US2-3 asks for.
 
 ```
 ```
@@ -94,7 +99,7 @@ also carries over to the next day, which is what US2-3 asks for.
 
 | Field | Type | Notes |
 |---|---|---|
-| `comp_matches` | boolean | False if the active comp isn't the baseline comp (edge case: different comp) |
+| `comp_matches` | boolean | False if the active comp isn't the `current` lesson's comp (edge case: different comp) |
 | `targets` | `{ segment_id, result }[]` | `result`: `"eased_by_learner" \| "eased_by_demo" \| "still_linear" \| "removed"` |
 | `unexpected_changes` | string[] | Plain-language notes, for example "Opacity on Title now has 3 keys (was 2)" |
 | `summary` | `{ learner_eased, still_linear, total_for_learner }` | Excludes the demo segment (scenario 1.6) |

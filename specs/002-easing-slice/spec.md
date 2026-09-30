@@ -130,7 +130,8 @@ open.
   treating them as errors.
 - **Different comp:** I switch to a different comp before the check. The mentor notices, doesn't
   grade it, and asks me to switch back to the lesson's comp by name. It starts a new lesson on the
-  other comp only if I say I want to.
+  other comp only if I say I want to, and my unfinished lesson on the first comp is kept for when
+  I come back.
 - **Overdone ease:** I set extreme influence (for example 100%). It passes as eased, and the
   mentor may comment on the feel but doesn't fail it.
 - **Lots to fix:** the comp has many linear pairs across many layers. The mentor picks a focus

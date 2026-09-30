@@ -71,6 +71,7 @@ Every story depends on these.
 - [ ] T009 Create `mentor/tools.mjs` exporting `TOOLS`: the six tools `snapshot_project`, `preview_frame`, `set_ease`, `diff_since_last`, `read_learner_record`, and `record_lesson`, with input schemas exactly as in contracts/mentor-tools.md. Each handler throws `new Error("not implemented")` for now
 - [ ] T010 Create `.mcp.json` at the repo root registering `ae-mentor` as `{ "type": "stdio", "command": "node", "args": ["mentor/server.mjs"] }`
 - [ ] T011 🖐 Live: run `bash bridge/install.sh`, restart AE, and confirm Window > Extensions shows both "Claude Bridge" and "AE Mentor Bridge". Run `node bridge/scripts/doctor.mjs` (expect OK) and `claude mcp list` (expect `ae-mentor` connected). Record any install fixes in `bridge/UPSTREAM.md`
+- [ ] T020a [P] Write `mentor/jsx/lib/paths.jsx` (ES3): `propPath(prop)` builds the match-name `path` and `displayPath(prop)` builds the `display_path` (joined with ` › `) by walking `propertyGroup()` up to the layer; `propByPath(layer, path)` does the reverse lookup. This is the **only** place paths are built (I1). Needed by T012 (answer key) and by T021/T022, so it lives in the foundation phase
 - [ ] T012 Write `mentor/dev/build-practice-comp.jsx` (ES3) to build **Mentor Practice** exactly as in research.md › R8:
   - Comp: 1920×1080, 30 fps, 8 s, with 10 layers in this order: Title, Subtitle, CTRL (null, parent of Title and Subtitle), Bar, Glow (adjustment), Cursor, Logo, Old Take (hidden), Icon (precomp containing a shape with 2 linear Position keys), Background.
   - Each layer gets the keys, interpolations, and expression listed in the R8 table.
@@ -122,15 +123,15 @@ correctly grades a partial and then a complete attempt.
 - [ ] T017 [P] [US1] Write `mentor/test/session.test.mjs` for FR-006 and FR-007 covering data-model.md › Session state transitions:
   - `start()` → `started`; `recordDemo()` → `demo_done`; a second `recordDemo()` throws `DEMO_USED`; a demo on anything but `demo_target` throws `NOT_DEMO_TARGET`.
   - `markChecked()` → `checked`, and re-checking is allowed; calls with no session throw `NO_SESSION`; a new `start()` replaces the old session.
-  - **Lesson boundaries (C1, C2):** `start()` on the same comp with the lesson not passed keeps `baseline` and `demo`, so `recordDemo()` still throws `DEMO_USED`; a new focus recomputes `targets` from the baseline, not the current state; `start()` after a passed check, or on a different comp id, resets everything; the result reports `lesson: "new" | "continued"`.
+  - **Lesson boundaries (C1, C2):** `start()` on the same comp with the lesson not passed keeps `baseline` and `demo`, so `recordDemo()` still throws `DEMO_USED`; a new focus recomputes `targets` from the baseline, not the current state; `start()` after a passed check, or on a different comp id, resets everything; the result reports `lesson: "new" | "continued" | "resumed"`.
+  - **Per-comp lessons (N3):** lesson on comp A, then a new lesson on comp B, then `start()` on A again **resumes** A's lesson with its baseline, targets, and `demo` intact (so a demo on A still can't be repeated); passing on B doesn't end A's lesson.
   - State persists to `session.json` in a temp `AE_MENTOR_HOME` and **survives re-importing the module** (research R4).
 
 ### Implementation for User Story 1
 
 - [ ] T018 [US1] Implement `mentor/lib/analyze.mjs` (FR-002): `analyze(snapshot, { focus_layers })` → `{ findings, skipped, hidden_layers, precomp_layers, focus, targets, demo_target, counts }`, following research R7 and data-model.md › Segment. Make T015 pass
 - [ ] T019 [US1] Implement `mentor/lib/diff.mjs`: `diff(baseline, current, session)` → the Check result from data-model.md, compared by segment id. Make T016 pass
-- [ ] T020 [US1] Implement `mentor/lib/session.mjs` over `SESSION_FILE`, with fields `lesson_id`, `baseline`, `focus`, `targets`, `demo` (`null | { segment_id, at }`), `status` (`"started" | "demo_done" | "checked"`), and `passed` (boolean), with the lesson-boundary rules from data-model.md › Session. Make T017 pass
-- [ ] T020a [P] [US1] Write `mentor/jsx/lib/paths.jsx` (ES3): `propPath(prop)` builds the match-name `path` and `displayPath(prop)` builds the `display_path` (joined with ` › `) by walking `propertyGroup()` up to the layer; `propByPath(layer, path)` does the reverse lookup. This is the **only** place paths are built (I1)
+- [ ] T020 [US1] Implement `mentor/lib/session.mjs` over `SESSION_FILE`, shaped `{ "version": 1, "current": comp_id, "lessons": { [comp_id]: Session } }` (N3), where each Session has `lesson_id`, `baseline`, `focus`, `targets`, `demo` (`null | { segment_id, at }`), `comp_id`, `status` (`"started" | "demo_done" | "checked"`), and `passed` (boolean), with the lesson-boundary rules from data-model.md › Session. Make T017 pass
 - [ ] T021 [P] [US1] Write `mentor/jsx/snapshot.jsx` (ES3, no dialogs) for FR-001:
   - Read the active comp, and throw `NO_ACTIVE_COMP` if it isn't a CompItem.
   - For each layer, record `index`, `name`, `kind`, `enabled`, and `is_null` (`nullLayer`). Walk every property group recursively (transform, shape contents, effects, text animators), keeping properties where `canVaryOverTime && numKeys > 0`.
@@ -246,7 +247,7 @@ pass or fail per case with reasons, and saves dated results that can be compared
   | 09 | Returning learner who passed | US2-2, R-USES-MEMORY |
   | 10 | Returning learner whose last attempt was partial | US2-3 |
   | 11 | AE unreachable | FR-009, R-HONEST-WHEN-BLIND |
-  | 12 | Different comp at the check | edge case |
+  | 12 | Different comp at the check: `expect` no verdict reported and no `set_ease`; the mentor names the lesson's comp and asks to switch back | edge case, R-HONEST-WHEN-BLIND |
   | 13 | Nothing to ease (`all-eased`) | edge case |
   | 14 | Demo, re-snapshot, then "show me again" → `DEMO_USED`, `set_ease_calls_max: 1` | FR-006, C1 |
 
@@ -299,6 +300,7 @@ pass or fail per case with reasons, and saves dated results that can be compared
 |---|---|
 | T018 analyze | T014, T015 |
 | T019 diff | T014, T016, T018 |
+| T012 answer key | T020a |
 | T021, T022 snippets | T020a |
 | T024 tools | T007, T018–T023, T020a |
 | T025 practice test | T013, T021, T024 |
@@ -311,6 +313,8 @@ pass or fail per case with reasons, and saves dated results that can be compared
 
 **Phase 1**: T004 alongside T002–T003.
 
+**Phase 2**: T020a (paths.jsx) alongside T005–T010; T012 waits for it.
+
 **US1, tests first (all different files):**
 ```text
 T014 synthetic fixtures   T015 analyze.test.mjs   T016 diff.test.mjs   T017 session.test.mjs
@@ -318,7 +322,7 @@ T014 synthetic fixtures   T015 analyze.test.mjs   T016 diff.test.mjs   T017 sess
 
 **US1, AE snippets (independent of lib/ code):**
 ```text
-T020a lib/paths.jsx → T021 snapshot.jsx   T022 set-ease.jsx   T023 preview-frame.jsx
+T021 snapshot.jsx   T022 set-ease.jsx   T023 preview-frame.jsx   (paths.jsx already exists from T020a, Phase 2)
 ```
 
 **US2 alongside US1:** T029 and T030 (learner store) can be built while US1's live tasks wait for

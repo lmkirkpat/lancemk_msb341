@@ -29,11 +29,13 @@ Reads the active comp, starts a new lesson, and returns what to teach.
   limits the lesson's **targets** to those layers, so the mentor can teach a manageable chunk
   (R8). Omitted means every flagged layer. A typical flow is to call it once with no focus to see
   everything, then again with a focus to start the lesson (nothing changes in between).
-- **Effect**: starts a **new** lesson (new baseline, `demo` reset, state → `started`) **only** if
-  there's no session, the last check passed, or the active comp differs from the lesson's comp.
-  Otherwise it **continues** the current lesson: `baseline` and `demo` are kept, and
-  `focus_layers` recomputes `targets` from the *baseline*, so earlier edits keep their credit
-  (data-model › Session). The output includes `"lesson": "new" | "continued"`.
+- **Effect**: sets `current` to the active comp. Lessons are kept **per comp** (data-model ›
+  Session). If the active comp has an unfinished lesson, it **continues** it (same comp as
+  before) or **resumes** it (after switching back): `baseline` and `demo` are kept, and
+  `focus_layers` recomputes `targets` from the *baseline*, so earlier edits keep their credit.
+  Only if the comp has no lesson, or its last check passed, does it start a **new** one (new
+  baseline, `demo` reset, state → `started`). The output includes
+  `"lesson": "new" | "continued" | "resumed"`.
 - **Output**:
   ```json
   {
@@ -55,6 +57,8 @@ Reads the active comp, starts a new lesson, and returns what to teach.
   ```
 - `findings` always covers the whole comp; `targets` is the focused subset that gets graded.
 - `demo_target` is the first target on a visible, non-null layer (R7), or null if there is none.
+  In a continued or resumed lesson it's recomputed within the new focus **only if no demo has
+  happened yet**; after a demo it's always null (N6).
 - `findings` is empty when there's nothing to ease (edge case). `demo_target` is then null.
 - Errors: `UNKNOWN_LAYER` if a `focus_layers` name isn't in the comp.
 
