@@ -1,0 +1,11 @@
+{
+  "name": "ae-mentor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP server for the AI creative mentor's After Effects easing slice (specs/002-easing-slice).",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test test/"
+  }
+}

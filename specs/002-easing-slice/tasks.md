@@ -34,13 +34,13 @@ From plan.md › Project Structure: `bridge/` (forked AE panel), `mentor/` (MCP 
 
 **Purpose**: fork the bridge and create the folder layout.
 
-- [ ] T001 Create the folders from plan.md › Project Structure: `bridge/`, `mentor/lib/`, `mentor/jsx/`, `mentor/dev/`, `mentor/test/fixtures/`, `product/evals/easing/{cases,fixtures,results}/`, `.claude/skills/ease-mentor/`
-- [ ] T002 Copy `cep/` (all files), `scripts/doctor.mjs`, `install.sh`, `uninstall.sh`, `install.ps1`, `uninstall.ps1`, and `LICENSE` from `~/after-effects-mcp` into `bridge/`, keeping the upstream MIT notice unchanged in `bridge/LICENSE`. Write `bridge/UPSTREAM.md` recording the source repo, commit `2cfff1a`, the date, and a "Changes" list (filled in by T003)
-- [ ] T003 Rename the fork's identity so it coexists with the installed upstream (research R1):
+- [X] T001 Create the folders from plan.md › Project Structure: `bridge/`, `mentor/lib/`, `mentor/jsx/`, `mentor/dev/`, `mentor/test/fixtures/`, `product/evals/easing/{cases,fixtures,results}/`, `.claude/skills/ease-mentor/`
+- [X] T002 Copy `cep/` (all files), `scripts/doctor.mjs`, `install.sh`, `uninstall.sh`, `install.ps1`, `uninstall.ps1`, and `LICENSE` from `~/after-effects-mcp` into `bridge/`, keeping the upstream MIT notice unchanged in `bridge/LICENSE`. Write `bridge/UPSTREAM.md` recording the source repo, commit `2cfff1a`, the date, and a "Changes" list (filled in by T003)
+- [X] T003 Rename the fork's identity so it coexists with the installed upstream (research R1):
   - In `bridge/cep/CSXS/manifest.xml`: `ExtensionBundleId="com.aementor.bridge"`, extension IDs `com.aementor.bridge.host` / `.panel`, and `ExtensionBundleName="AE Mentor Bridge"`.
   - In `bridge/cep/host.js`, `bridge/cep/panel.js`, `bridge/install.sh`, `bridge/uninstall.sh`, `bridge/install.ps1`, `bridge/uninstall.ps1`, and `bridge/scripts/doctor.mjs`: config folder `AEMentorBridge` (not `ClaudeAEBridge`) and default port `47671` (not `47670`).
   - Verify that `grep -rn "claudebridge\|ClaudeAEBridge\|47670" bridge/` returns nothing, then list every change in `bridge/UPSTREAM.md`.
-- [ ] T004 [P] Create `mentor/package.json` with `"name": "ae-mentor"`, `"type": "module"`, `"engines": { "node": ">=18" }`, `"scripts": { "test": "node --test test/" }`, and **no dependencies** (constitution V, research R10)
+- [X] T004 [P] Create `mentor/package.json` with `"name": "ae-mentor"`, `"type": "module"`, `"engines": { "node": ">=18" }`, `"scripts": { "test": "node --test test/" }`, and **no dependencies** (constitution V, research R10)
 
 ---
 
