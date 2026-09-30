@@ -22,10 +22,15 @@ lesson baseline in `session.json`, and saved as eval fixtures.
 Also on the Snapshot: `precomp_layers: { index, name }[]`, the precomp layers whose insides
 weren't read (R8).
 
-**AnimatedProperty**: `{ path, match_name, display_name, dimensions, expression_enabled, keys: Key[] }`
-- `path`: a stable reference built from match names, such as `"Transform/Position"`,
-  `"Transform/X Position"`, `"Contents/Rectangle 1/Trim Paths 1/End"`, or
-  `"Effects/Gaussian Blur/Blurriness"`.
+**AnimatedProperty**: `{ path, display_path, match_name, display_name, dimensions, expression_enabled, keys: Key[] }`
+- `path`: the stable ID path, built from `matchName`s by `mentor/jsx/lib/paths.jsx`, for example
+  `ADBE Transform Group/ADBE Position`, `ADBE Transform Group/ADBE Position_0` (separated X),
+  `ADBE Root Vectors Group/.../ADBE Vector Trim End`, or
+  `ADBE Effect Parade/ADBE Gaussian Blur 2/ADBE Gaussian Blur 2-0001`. It survives layer renames
+  and a different AE language.
+- `display_path`: for people, built from display names, for example `Transform › Position` or
+  `Contents › Rectangle 1 › Trim Paths 1 › End`. Used in labels and by the mentor. **Never used for
+  matching.**
 - `dimensions`: number of temporal ease dimensions (1 for Position/Opacity, 2–3 for Scale).
 
 **Key**: `{ index, time, in_type, out_type, in_ease: Ease[], out_ease: Ease[] }`
@@ -41,7 +46,8 @@ A keyframe pair, key *i* → key *i+1*, on one property. Computed from a Snapsho
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | string | `"<layer index>/<property path>/<i>"`, for example `"1/Transform/Position/1"` |
+| `id` | string | `"<layer index>/<path>/<i>"` using the match-name `path`, for example `"1/ADBE Transform Group/ADBE Position/1"` |
+| `display_path` | string | Carried from the property, for labels |
 | `layer_name`, `property`, `from_time`, `to_time` | | For the mentor to name in plain language |
 | `state` | `"linear" \| "eased" \| "held"` | Rules in research R7 |
 | `skipped_reason` | `null \| "expression" \| "single_key"` | Why a property wasn't analyzed |
@@ -62,14 +68,26 @@ lesson starts.
 | `targets` | Segment id[] | Linear segments at baseline within the focus. Only these are graded |
 | `demo` | `null \| { segment_id, at }` | Set once by `set_ease`; see state transitions |
 | `status` | `"started" \| "demo_done" \| "checked"` | |
+| `passed` | boolean | Set by the last `diff_since_last`. A lesson only ends by passing or by switching comps |
 
 **State transitions**:
 
 ```
 (no session) ──snapshot_project──▶ started ──set_ease (first time)──▶ demo_done
      started / demo_done ──diff_since_last──▶ checked ──diff_since_last──▶ checked (re-check allowed)
-     any ──snapshot_project──▶ started (new lesson, new baseline; old session replaced)
+snapshot_project, same comp, lesson not passed ──▶ same lesson: baseline and demo kept;
+                                                  focus_layers recomputes targets from the baseline
+snapshot_project, no session / last check passed / different comp ──▶ started (new lesson,
+                                                  new baseline, demo reset)
 set_ease when demo ≠ null ──▶ error "demo already used" (FR-006)
+```
+
+Why: if re-snapshotting started a new lesson, a second `snapshot_project` would reset `demo` and
+allow a second demonstration, and would make the learner's earlier edits part of the new
+"before". Tying lesson boundaries to passing (or a comp change) closes both. An unfinished lesson
+also carries over to the next day, which is what US2-3 asks for.
+
+```
 ```
 
 ## Check result (returned by `diff_since_last`, never stored on its own)

@@ -40,8 +40,9 @@ from upstream but not tested in this slice
 
 **Project Type**: local MCP server with an AE extension (CLI-hosted, no custom interface)
 
-**Performance Goals**: snapshot of a comp with up to 50 layers under 2 s, check under 5 s; full
-lesson in 15 minutes or less (SC-002)
+**Performance Goals**: snapshot under 2 s and check under 5 s **on the 10-layer practice comp**
+(measured in T028 from `calls.jsonl`); full lesson in 15 minutes or less (SC-002). Larger comps
+(about 50 layers) aren't tested in this slice
 
 **Constraints**:
 - No general script tool reachable by the mentor (FR-013).
@@ -108,11 +109,13 @@ mentor/                          # MCP server "ae-mentor" (stdio)
 │   ├── session.mjs              # session.json state machine (data-model)
 │   └── learner-store.mjs        # learner.json read/append, privacy check
 ├── jsx/                         # Fixed ExtendScript snippets (the only code sent to AE)
+│   ├── lib/paths.jsx            # The only place property paths are built (id + display)
 │   ├── snapshot.jsx
 │   ├── set-ease.jsx
 │   └── preview-frame.jsx
 ├── dev/
-│   └── build-practice-comp.jsx  # R8: builds "Mentor Practice" and writes its answer key
+│   ├── build-practice-comp.jsx  # R8: builds "Mentor Practice" and writes its answer key
+│   └── assemble.mjs             # Prints lib/*.jsx + a dev script for pasting into ae_run_script
 └── test/
     ├── fixtures/                # practice-expected.json (answer key) + snapshots for unit tests
     └── *.test.mjs               # node:test

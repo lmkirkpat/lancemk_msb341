@@ -128,8 +128,9 @@ open.
 - **Project changed in other ways:** between the snapshot and the check I also moved layers or
   edited text. The check reports the easing result and briefly notes other changes, without
   treating them as errors.
-- **Different comp:** I switch to a different comp before the check. The mentor notices it's
-  comparing different comps and takes a new snapshot instead of reporting a false result.
+- **Different comp:** I switch to a different comp before the check. The mentor notices, doesn't
+  grade it, and asks me to switch back to the lesson's comp by name. It starts a new lesson on the
+  other comp only if I say I want to.
 - **Overdone ease:** I set extreme influence (for example 100%). It passes as eased, and the
   mentor may comment on the feel but doesn't fail it.
 - **Lots to fix:** the comp has many linear pairs across many layers. The mentor picks a focus
@@ -185,6 +186,9 @@ open.
 
 ### Key Entities
 
+- **Keyframe pair (segment)**: two neighbouring keyframes on one property, and the motion between
+  them. Easing is judged per pair. The pairs a lesson focuses on are its **targets**, and "the
+  keyframes it pointed to" in the scenarios means these.
 - **Project snapshot**: what the mentor saw in the comp at a moment in time: the comp, its
   layers, their animated properties, and each keyframe's time, value, interpolation, and ease.
   Two snapshots can be compared to see what the learner changed.

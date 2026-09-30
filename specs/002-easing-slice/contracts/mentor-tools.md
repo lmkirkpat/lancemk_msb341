@@ -29,21 +29,27 @@ Reads the active comp, starts a new lesson, and returns what to teach.
   limits the lesson's **targets** to those layers, so the mentor can teach a manageable chunk
   (R8). Omitted means every flagged layer. A typical flow is to call it once with no focus to see
   everything, then again with a focus to start the lesson (nothing changes in between).
-- **Effect**: replaces `session.json` with a new baseline and target list (state → `started`)
+- **Effect**: starts a **new** lesson (new baseline, `demo` reset, state → `started`) **only** if
+  there's no session, the last check passed, or the active comp differs from the lesson's comp.
+  Otherwise it **continues** the current lesson: `baseline` and `demo` are kept, and
+  `focus_layers` recomputes `targets` from the *baseline*, so earlier edits keep their credit
+  (data-model › Session). The output includes `"lesson": "new" | "continued"`.
 - **Output**:
   ```json
   {
-    "comp": { "name": "Mentor Practice", "duration": 5 },
+    "lesson": "new",
+    "comp": { "name": "Mentor Practice", "duration": 8 },
     "findings": [
       { "layer": "Title", "property": "Position", "segments": [
-          { "id": "1/Transform/Position/1", "from_time": 0, "to_time": 1, "state": "linear" } ] }
+          { "id": "1/ADBE Transform Group/ADBE Position/1", "display_path": "Transform › Position",
+        "from_time": 0, "to_time": 1, "state": "linear" } ] }
     ],
     "skipped": [ { "layer": "Logo", "property": "Rotation", "reason": "expression" } ],
     "hidden_layers": ["Old Take"],
     "precomp_layers": ["Icon"],
     "focus": ["Title"],
-    "targets": ["1/Transform/Position/1", "1/Transform/Position/2", "1/Transform/Scale/1", "1/Transform/Opacity/1"],
-    "demo_target": "1/Transform/Position/1",
+    "targets": ["1/ADBE Transform Group/ADBE Position/1", "1/ADBE Transform Group/ADBE Position/2", "1/ADBE Transform Group/ADBE Scale/1", "1/ADBE Transform Group/ADBE Opacity/1"],
+    "demo_target": "1/ADBE Transform Group/ADBE Position/1",
     "counts": { "linear": 11, "eased": 1, "held": 5 }
   }
   ```
@@ -80,9 +86,9 @@ Checks the learner's attempt against the lesson baseline (FR-007).
   {
     "comp_matches": true,
     "targets": [
-      { "segment_id": "1/Transform/Position/1", "label": "Title › Position 0–1 s", "result": "eased_by_demo" },
-      { "segment_id": "1/Transform/Position/2", "label": "Title › Position 1–2 s", "result": "eased_by_learner" },
-      { "segment_id": "2/Transform/Opacity/1", "label": "Shape › Opacity 0–0.5 s", "result": "still_linear" }
+      { "segment_id": "1/ADBE Transform Group/ADBE Position/1", "label": "Title › Position 0–1 s", "result": "eased_by_demo" },
+      { "segment_id": "1/ADBE Transform Group/ADBE Position/2", "label": "Title › Position 1–2 s", "result": "eased_by_learner" },
+      { "segment_id": "2/ADBE Transform Group/ADBE Opacity/1", "label": "Subtitle › Opacity 0–0.5 s", "result": "still_linear" }
     ],
     "unexpected_changes": ["Title › Scale was changed (not part of this lesson)"],
     "summary": { "learner_eased": 1, "still_linear": 1, "total_for_learner": 2 },
