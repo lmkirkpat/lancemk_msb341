@@ -98,6 +98,14 @@ Dec 2028. What we don't know until the AE beta lands:
   UXP version would probably have to connect *out* to a local helper instead of listening.
   To be confirmed in the beta.
 
+**Adobe Developers Live, Day 1 (2026-09-29).** Nothing new for AE beyond the timeline above.
+Adobe confirmed that every flagship app gets at least two years from its UXP public beta before
+CEP is removed, which matches Nov 2026 → Dec 2029 for AE. Adobe also launched the
+[UXP Hub](https://blog.developer.adobe.com/en/publish/2026/09/introducing-the-uxp-hub), one
+place for UXP docs, packaging, and marketplace publishing. AE isn't listed as a host there yet.
+Neither open question below (ExtendScript access, local server) was answered in anything
+published. Check the session recordings once they're posted.
+
 **The upside:** UXP plugins install through the Creative Cloud marketplace, which could remove
 most of the setup friction from spec 001 (unsigned-extension flags, cloning repos).
 

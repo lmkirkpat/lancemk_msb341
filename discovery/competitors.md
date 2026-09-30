@@ -33,7 +33,7 @@ All are free public betas as of Sept 2026, with usage limits and no announced pr
 | **InDesign** | Public beta, Apr 2026 | Layout setup, bulk text, image, and style edits, **and how-to answers**: "ask ... 'How do I create a table of contents?' and learn as you go," "instant, in-context answers without leaving the app" | **Partly.** In-app Q&A, but reactive. No skill path, no practice, no checking your work |
 | **Firefly AI Assistant** | Web beta, Apr 2026 | Coordinates tasks across Photoshop, Premiere, Lightroom, Express, and Illustrator. Learns your *preferences* over time | **No.** "Learning" means the tool learning about you, not you learning the tool |
 | **Frame.io, Express, Photoshop Elements** | Betas | Asset organization and feedback (Frame.io), template editing (Express), consumer photo editing (Elements) | Not checked in depth. The Elements help page blocked access |
-| **Adobe in Claude and Gemini** | Sept 24, 2026 | Photoshop, Illustrator, Premiere, Lightroom, InDesign, Express, Firefly, Stock, and Acrobat tools callable from a Claude chat (fewer in Gemini). **After Effects is not included** | **No.** "Describe the outcome you want and call on our tools." |
+| **Adobe in Claude and Gemini** | Sept 24, 2026 | Photoshop, Illustrator, Premiere, Lightroom, InDesign, Express, Firefly, Stock, and Acrobat tools callable from a Claude chat (fewer in Gemini). **After Effects is not included** (rechecked 2026-09-29, after Adobe Developers Live Day 1). Works on cloud assets at the Express/Firefly level, not local desktop project files, so it can't stand in for an AE bridge | **No.** "Describe the outcome you want and call on our tools." |
 
 ## Adobe's non-AI learning features
 
