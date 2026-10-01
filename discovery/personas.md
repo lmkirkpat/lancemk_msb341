@@ -3,9 +3,9 @@
 > One entry per customer type. Update as interviews sharpen the picture:
 > this file should get *more specific* over the semester, not longer.
 
-Last updated 2026-09-28, from self-test 1 and interviews 001–005. First draft. Still thin:
-one data point on paying (a no), and nobody has been asked about memory or practice before
-hearing the pitch.
+Last updated 2026-10-01, from self-test 1 and interviews 001–006. First draft. Still thin:
+two data points on paying (a no, and a "depends on depth"), and nobody has been asked about
+memory or practice before hearing the pitch.
 
 ## 1. The skill-builder: creative adding a new app to their toolkit (primary)
 
@@ -15,8 +15,9 @@ hearing the pitch.
   Adobe suite. Learns in bursts around real projects, not in a course. Includes me (user #1:
   in-house university designer learning After Effects), interview 001 (video editor), and
   interview 002 (PM with a creative background, struggled with Illustrator and Photoshop),
-  and interview 004 (student who edits photos for their YouTube channel and runs a freelance
-  video business in Final Cut).
+  interview 004 (student who edits photos for their YouTube channel and runs a freelance
+  video business in Final Cut), and interview 006 (professional graphic designer and
+  photographer, in Illustrator, Photoshop, InDesign, and Lightroom daily).
 - **The problem in their words:** "[ChatGPT] will give me steps for simple tasks, but with
   something like Photoshop that's more complex, I would rather see a mouse on a screen moving
   and showing me where to go and how to do it than having to read instructions." (004)
@@ -27,18 +28,26 @@ hearing the pitch.
 - **What they want:** to actually own the skill, because they'll use it again (004 now uses
   ChatGPT less because they "picked up on my normal routines"). Wants help inside the app,
   not in another tab (002 strongly prefers a plugin). Wants to see it done, not only read
-  steps, once the app gets complex (004). Often wants a specific look, not a skill list (004).
+  steps, once the app gets complex (004). Often wants a specific look, not a skill list (004). Wants the skill so the work is theirs:
+  "a design that I designed is being able to walk someone through my design" (006). Wants
+  help that is "super clear and direct": one best route, no side paths (006).
 - **What they'd pay / have paid for:** 004 has never paid to learn and wouldn't: "I couldn't
   justify paying for something like that when there's just so many tools with AI and
-  YouTube." Suggested Adobe bundle it instead. Only one data point, and a student.
+  YouTube." Suggested Adobe bundle it instead. 006, a working pro: "that would depend on my
+  skill level." Not for basics they've forgotten (a clipping mask, fixed free in minutes), maybe
+  for going deeper. Would want it as a monthly add-on sold with the Adobe plan. Both answers
+  came after the pitch.
 - **Why they're primary:** they want the lesson, not just the result, which is exactly the
   gap Adobe's do-it-for-you assistants leave.
 - **Evidence:** `discovery/problem-candidates.md` self-test 1, `interviews/001-video-editor.md`,
-  `interviews/002-pm-creative.md`, `interviews/004-student-photographer-freelance-video.md`
+  `interviews/002-pm-creative.md`, `interviews/004-student-photographer-freelance-video.md`,
+  `interviews/006-graphic-designer-photographer.md`
 - **Still need to learn:** whether working professionals (not students) would pay, and who
   pays if the learner won't; whether people who use apps from several companies (004 does)
   want one tutor across them; whether they'd value a mentor that remembers their progress
-  over Adobe's assistant used on request.
+  over Adobe's assistant used on request; whether working pros even know Adobe's assistant
+  exists (006 didn't); whether skills fade on deeper techniques, not just basics, since free
+  AI already covers forgotten basics.
 
 ## 2. The occasional user: needs a creative app now and then (secondary)
 

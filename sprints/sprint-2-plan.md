@@ -16,6 +16,6 @@ whether the workflow I have in mind is viable.
 - [ ] A note on what the MCP bridge can and can't read
 - [ ] `decisions/003` defining the architecture
 - [ ] The test slice running on my own test After Effects project, with notes from using it
-- [ ] 3 usage interviews with people in my target market, logged in `discovery/interviews/`
+- [ ] 3 usage interviews with people in my target market, logged in `discovery/interviews/` (1 of 3: `006`)
 
 **Predicted difficulty:** 4
