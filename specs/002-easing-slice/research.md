@@ -133,7 +133,8 @@ local toolchain (Node 26.8.1, Claude Code 2.1.285).
   - The demo applies Easy Ease (speed 0, influence 33.33%) to key *i* out and key *i+1* in,
     using `setInterpolationTypeAtKey` and `setTemporalEaseAtKey`. It keeps the other side of
     each key as it was, and uses one `KeyframeEase` per temporal dimension
-    (1 for Position/Opacity/Rotation, 2–3 for Scale and other multi-dimension properties).
+    (1 for Position/Opacity/Rotation; **3 for Scale even on a 2D layer**, checked live on 2026-09-30).
+    Always ask AE (`keyInTemporalEase(1).length`) rather than assuming a count.
 - **Rationale:** the spec talks about "keyframe pairs", and the demo covers one pair. Linear
   is a property of the segment between two keys, so flagging segments matches both the spec
   and how AE draws motion. Spec 001 rows 4, 5, and 11 confirmed these calls work.
@@ -156,7 +157,7 @@ everything else, a new comp tests the mentor's limits.
 | # | Layer | Animated property (keys) | Expected | What it tests |
 |---|---|---|---|---|
 | 1 | Title (text) | Position (3, linear) | 2 linear | Basic case; **demo target** (Title › Position, first pair) |
-| | | Scale, 2D (2, linear) | 1 linear | Ease needs 2 dimensions; a wrong count throws in AE |
+| | | Scale on a 2D layer (2, linear) | 1 linear | Multi-dimension ease: AE reports 3 dimensions here, and a wrong count throws |
 | | | Opacity (2, linear) | 1 linear | |
 | 2 | Subtitle (text) | Position (2, already Easy Ease) | 1 eased | No false flag on correct work |
 | | | Opacity (2: key 1 out Bezier, key 2 in linear) | 1 linear | Half-eased pair: either side linear counts as linear |

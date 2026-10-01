@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "ae-mentor": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["mentor/server.mjs"]
+    }
+  }
+}

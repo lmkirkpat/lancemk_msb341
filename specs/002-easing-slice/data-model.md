@@ -26,12 +26,15 @@ weren't read (R8).
 - `path`: the stable ID path, built from `matchName`s by `mentor/jsx/lib/paths.jsx`, for example
   `ADBE Transform Group/ADBE Position`, `ADBE Transform Group/ADBE Position_0` (separated X),
   `ADBE Root Vectors Group/.../ADBE Vector Trim End`, or
-  `ADBE Effect Parade/ADBE Gaussian Blur 2/ADBE Gaussian Blur 2-0001`. It survives layer renames
-  and a different AE language.
+  `ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001`. It survives layer renames
+  and a different AE language. Children of **indexed groups** (shape contents, the Effects list)
+  get `#<index>`, because two rectangles or two blurs share a match name (found while building
+  T020a).
 - `display_path`: for people, built from display names, for example `Transform › Position` or
   `Contents › Rectangle 1 › Trim Paths 1 › End`. Used in labels and by the mentor. **Never used for
   matching.**
-- `dimensions`: number of temporal ease dimensions (1 for Position/Opacity, 2–3 for Scale).
+- `dimensions`: number of temporal ease dimensions (1 for Position/Opacity; 3 for Scale, even on a 2D
+  layer, as checked live on the practice comp). Always read from AE, never assumed.
 
 **Key**: `{ index, time, in_type, out_type, in_ease: Ease[], out_ease: Ease[] }`
 - `in_type` / `out_type`: `"linear" | "bezier" | "hold"`.

@@ -1,0 +1,188 @@
+{
+  "generated_by": "mentor/dev/build-practice-comp.jsx",
+  "comp": {
+    "name": "Mentor Practice",
+    "width": 1920,
+    "height": 1080,
+    "duration": 8,
+    "frame_rate": 30
+  },
+  "layers": [
+    {
+      "index": 1,
+      "name": "Title"
+    },
+    {
+      "index": 2,
+      "name": "Subtitle"
+    },
+    {
+      "index": 3,
+      "name": "CTRL"
+    },
+    {
+      "index": 4,
+      "name": "Bar"
+    },
+    {
+      "index": 5,
+      "name": "Glow"
+    },
+    {
+      "index": 6,
+      "name": "Cursor"
+    },
+    {
+      "index": 7,
+      "name": "Logo"
+    },
+    {
+      "index": 8,
+      "name": "Old Take"
+    },
+    {
+      "index": 9,
+      "name": "Icon"
+    },
+    {
+      "index": 10,
+      "name": "Background"
+    }
+  ],
+  "segments": [
+    {
+      "id": "8/ADBE Transform Group/ADBE Position/1",
+      "layer": "Old Take",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "6/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Cursor",
+      "display_path": "Transform › Opacity",
+      "state": "held"
+    },
+    {
+      "id": "6/ADBE Transform Group/ADBE Opacity/2",
+      "layer": "Cursor",
+      "display_path": "Transform › Opacity",
+      "state": "held"
+    },
+    {
+      "id": "6/ADBE Transform Group/ADBE Opacity/3",
+      "layer": "Cursor",
+      "display_path": "Transform › Opacity",
+      "state": "held"
+    },
+    {
+      "id": "6/ADBE Transform Group/ADBE Opacity/4",
+      "layer": "Cursor",
+      "display_path": "Transform › Opacity",
+      "state": "held"
+    },
+    {
+      "id": "6/ADBE Transform Group/ADBE Opacity/5",
+      "layer": "Cursor",
+      "display_path": "Transform › Opacity",
+      "state": "held"
+    },
+    {
+      "id": "5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1",
+      "layer": "Glow",
+      "display_path": "Effects › Gaussian Blur › Blurriness",
+      "state": "linear"
+    },
+    {
+      "id": "4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1",
+      "layer": "Bar",
+      "display_path": "Contents › Rectangle › Contents › Trim Paths 1 › End",
+      "state": "linear"
+    },
+    {
+      "id": "4/ADBE Transform Group/ADBE Position_0/1",
+      "layer": "Bar",
+      "display_path": "Transform › X Position",
+      "state": "linear"
+    },
+    {
+      "id": "4/ADBE Transform Group/ADBE Position_0/2",
+      "layer": "Bar",
+      "display_path": "Transform › X Position",
+      "state": "linear"
+    },
+    {
+      "id": "3/ADBE Transform Group/ADBE Position/1",
+      "layer": "CTRL",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "2/ADBE Transform Group/ADBE Position/1",
+      "layer": "Subtitle",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    },
+    {
+      "id": "2/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Subtitle",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    },
+    {
+      "id": "1/ADBE Transform Group/ADBE Position/1",
+      "layer": "Title",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "1/ADBE Transform Group/ADBE Position/2",
+      "layer": "Title",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "1/ADBE Transform Group/ADBE Scale/1",
+      "layer": "Title",
+      "display_path": "Transform › Scale",
+      "state": "linear"
+    },
+    {
+      "id": "1/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Title",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    }
+  ],
+  "skipped": [
+    {
+      "layer": "Logo",
+      "layer_index": 7,
+      "path": "ADBE Transform Group/ADBE Rotate Z",
+      "display_path": "Transform › Rotation",
+      "reason": "expression"
+    },
+    {
+      "layer": "Logo",
+      "layer_index": 7,
+      "path": "ADBE Transform Group/ADBE Scale",
+      "display_path": "Transform › Scale",
+      "reason": "single_key"
+    }
+  ],
+  "hidden_layers": [
+    "Old Take"
+  ],
+  "precomp_layers": [
+    {
+      "index": 9,
+      "name": "Icon"
+    }
+  ],
+  "totals": {
+    "linear": 11,
+    "eased": 1,
+    "held": 5,
+    "skipped": 2,
+    "precomp": 1
+  }
+}

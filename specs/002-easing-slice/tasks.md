@@ -51,34 +51,34 @@ Every story depends on these.
 
 **⚠️ CRITICAL**: no user story work can begin until this phase is complete.
 
-- [ ] T005 Create `mentor/paths.mjs` exporting:
+- [X] T005 Create `mentor/paths.mjs` exporting:
   - `MENTOR_HOME`: `process.env.AE_MENTOR_HOME`, else `~/Library/Application Support/AEMentor`, created if missing.
   - `SESSION_FILE`, `LEARNER_FILE`, and `CALLS_LOG` inside it (`session.json`, `learner.json`, `calls.jsonl`).
   - `BRIDGE_CONFIG`: `~/Library/Application Support/AEMentorBridge/bridge.json`.
-- [ ] T006 Create `mentor/errors.mjs` exporting `class MentorError extends Error { constructor(code, message) }` and the codes from contracts/mentor-tools.md › Errors: `AE_UNREACHABLE`, `AE_BUSY`, `NO_ACTIVE_COMP`, `NO_SESSION`, `DEMO_USED`, `NOT_DEMO_TARGET`, `UNKNOWN_LAYER`, `UNSAFE_RECORD`. Each carries the plain-language message from the contract table
-- [ ] T007 Create `mentor/bridge-client.mjs`:
+- [X] T006 Create `mentor/errors.mjs` exporting `class MentorError extends Error { constructor(code, message) }` and the codes from contracts/mentor-tools.md › Errors: `AE_UNREACHABLE`, `AE_BUSY`, `NO_ACTIVE_COMP`, `NO_SESSION`, `DEMO_USED`, `NOT_DEMO_TARGET`, `UNKNOWN_LAYER`, `UNSAFE_RECORD`. Each carries the plain-language message from the contract table
+- [X] T007 Create `mentor/bridge-client.mjs`:
   - Adapt `bridge()` and `ctx.health` / `ctx.run` from `~/after-effects-mcp/server/server.mjs`: `node:http`, a Bearer token from `BRIDGE_CONFIG`, and the timeout.
   - Map `ECONNREFUSED`, a missing config, and 401 to `AE_UNREACHABLE`, and a timeout to `AE_BUSY`.
   - Export only `health()` and `runSnippet(name, args)`. `runSnippet` reads `mentor/jsx/<name>.jsx`, prepends `var ARGS = <lit(args)>;`, using `lit()` copied from `~/after-effects-mcp/server/tools.mjs`, and sends it through `/run` with undo name `"AE Mentor: <name>"`.
   - `runSnippet` prepends every `mentor/jsx/lib/*.jsx` before `ARGS` (I1).
   - Script errors whose message starts with a known code (`"NO_ACTIVE_COMP: …"`) become `new MentorError(code, rest)`. Anything else becomes a generic error with the script's line number, like upstream's `scriptError` (U1).
   - Do **not** export a general `run(code)` (FR-013).
-- [ ] T008 Create `mentor/server.mjs` by adapting `~/after-effects-mcp/server/server.mjs`:
+- [X] T008 Create `mentor/server.mjs` by adapting `~/after-effects-mcp/server/server.mjs`:
   - JSON-RPC 2.0 over stdio, the same protocol versions, `SERVER_INFO = { name: "ae-mentor", title: "AE Mentor", version: "0.1.0" }`.
   - `INSTRUCTIONS` stating the hard rules: say "Edit > Undo" and never an undo label; make no claims about the project after an `AE_UNREACHABLE` or `AE_BUSY` error; at most one demo per lesson.
   - Lists and calls `TOOLS` from `mentor/tools.mjs`, and returns a `MentorError` as an `isError` tool result with text `"<CODE>: <message>"`.
   - Appends every tool call to `CALLS_LOG` as `{ tool, args, ok, error_code, ms, at }`, in live and fixture mode alike, so SC-004 and the speed goals can be checked from the first live run (U2).
-- [ ] T009 Create `mentor/tools.mjs` exporting `TOOLS`: the six tools `snapshot_project`, `preview_frame`, `set_ease`, `diff_since_last`, `read_learner_record`, and `record_lesson`, with input schemas exactly as in contracts/mentor-tools.md. Each handler throws `new Error("not implemented")` for now
-- [ ] T010 Create `.mcp.json` at the repo root registering `ae-mentor` as `{ "type": "stdio", "command": "node", "args": ["mentor/server.mjs"] }`
-- [ ] T011 🖐 Live: run `bash bridge/install.sh`, restart AE, and confirm Window > Extensions shows both "Claude Bridge" and "AE Mentor Bridge". Run `node bridge/scripts/doctor.mjs` (expect OK) and `claude mcp list` (expect `ae-mentor` connected). Record any install fixes in `bridge/UPSTREAM.md`
-- [ ] T020a [P] Write `mentor/jsx/lib/paths.jsx` (ES3): `propPath(prop)` builds the match-name `path` and `displayPath(prop)` builds the `display_path` (joined with ` › `) by walking `propertyGroup()` up to the layer; `propByPath(layer, path)` does the reverse lookup. This is the **only** place paths are built (I1). Needed by T012 (answer key) and by T021/T022, so it lives in the foundation phase
-- [ ] T012 Write `mentor/dev/build-practice-comp.jsx` (ES3) to build **Mentor Practice** exactly as in research.md › R8:
+- [X] T009 Create `mentor/tools.mjs` exporting `TOOLS`: the six tools `snapshot_project`, `preview_frame`, `set_ease`, `diff_since_last`, `read_learner_record`, and `record_lesson`, with input schemas exactly as in contracts/mentor-tools.md. Each handler throws `new Error("not implemented")` for now
+- [X] T010 Create `.mcp.json` at the repo root registering `ae-mentor` as `{ "type": "stdio", "command": "node", "args": ["mentor/server.mjs"] }`
+- [X] T011 🖐 Live: run `bash bridge/install.sh`, restart AE, and confirm Window > Extensions shows both "Claude Bridge" and "AE Mentor Bridge". Run `node bridge/scripts/doctor.mjs` (expect OK) and `claude mcp list` (expect `ae-mentor` connected). Record any install fixes in `bridge/UPSTREAM.md`
+- [X] T020a [P] Write `mentor/jsx/lib/paths.jsx` (ES3): `propPath(prop)` builds the match-name `path` and `displayPath(prop)` builds the `display_path` (joined with ` › `) by walking `propertyGroup()` up to the layer; `propByPath(layer, path)` does the reverse lookup. This is the **only** place paths are built (I1). Needed by T012 (answer key) and by T021/T022, so it lives in the foundation phase
+- [X] T012 Write `mentor/dev/build-practice-comp.jsx` (ES3) to build **Mentor Practice** exactly as in research.md › R8:
   - Comp: 1920×1080, 30 fps, 8 s, with 10 layers in this order: Title, Subtitle, CTRL (null, parent of Title and Subtitle), Bar, Glow (adjustment), Cursor, Logo, Old Take (hidden), Icon (precomp containing a shape with 2 linear Position keys), Background.
   - Each layer gets the keys, interpolations, and expression listed in the R8 table.
   - Build every path with `propPath` / `displayPath` from `mentor/jsx/lib/paths.jsx` (T020a), never by hand. Write `mentor/dev/assemble.mjs`, which prints `mentor/jsx/lib/*.jsx` + a named dev script, so `node mentor/dev/assemble.mjs build-practice-comp` gives the text to paste into `ae_run_script`.
   - Then write `mentor/test/fixtures/practice-expected.json` (path passed as `ARGS.out`) listing every segment id (`"<layer index>/<match-name path>/<i>"`) and `display_path` with its expected `state` (`linear`, `eased`, or `held`), plus the expected `skipped`, `hidden_layers`, and `precomp_layers`.
   - Totals must be: 11 linear, 1 eased, 5 held, 2 skipped, 1 precomp.
-- [ ] T013 🖐 Live: open `discovery/Claude AE Tutor Test.aep`, run T012's assembled script through the **upstream** bridge (`ae_run_script`), and save the project. Check `practice-expected.json` against the Graph Editor by eye, and fix the script if they disagree. Leave the original comp untouched (the "nothing to ease" case)
+- [X] T013 🖐 Live: open `discovery/Claude AE Tutor Test.aep`, run T012's assembled script through the **upstream** bridge (`ae_run_script`), and save the project. Check `practice-expected.json` against the Graph Editor by eye, and fix the script if they disagree. Leave the original comp untouched (the "nothing to ease" case)
 
 **Checkpoint**: the bridge answers, `ae-mentor` is listed in Claude Code, and the practice comp and
 its answer key exist.
@@ -100,7 +100,7 @@ correctly grades a partial and then a complete attempt.
   - `linear-basic.json`, `eased.json`, `held.json`, `half-eased.json` (key 1 out Bezier, key 2 in linear)
   - `expression.json` (`expression_enabled: true`), `single-key.json`
   - `separated-xy.json` (path `Transform/X Position`), `nested-trim.json` (`Contents/Rectangle 1/Trim Paths 1/End`), `effect.json` (`Effects/Gaussian Blur/Blurriness`)
-  - `hidden-layer.json` (`enabled: false`), `null-first.json` (the first linear pair is on an `is_null` layer), `precomp.json` (`precomp_layers` non-empty), `scale-2d.json` (`dimensions: 2`)
+  - `hidden-layer.json` (`enabled: false`), `null-first.json` (the first linear pair is on an `is_null` layer), `precomp.json` (`precomp_layers` non-empty), `scale-2d.json` (`dimensions: 3`, what AE reports for Scale on a 2D layer, checked in T013)
   - Plus `attempt-*.json` pairs (before/after) for diff tests: learner eased one pair, eased none, removed a key, changed an untargeted property, different comp id, **overdone** (influence 100%, must count as eased), and **undone** (eased then undone, must be still linear) (E1).
   - All paths use the match-name format from data-model.md › AnimatedProperty (`ADBE Transform Group/ADBE Position`), with `display_path` alongside.
 - [ ] T015 [P] [US1] Write `mentor/test/analyze.test.mjs` (`node:test`) for FR-002 covering:
