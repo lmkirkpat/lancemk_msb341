@@ -96,14 +96,14 @@ correctly grades a partial and then a complete attempt.
 
 ### Tests for User Story 1 (write first, confirm they fail) ⚠️
 
-- [ ] T014 [P] [US1] Hand-write synthetic snapshots in `mentor/test/fixtures/synthetic/`, following data-model.md › Snapshot (`layers[].properties[].keys[]` with `in_type`/`out_type` ∈ `"linear" | "bezier" | "hold"`, and `in_ease`/`out_ease` as `{ speed, influence }[]`). One file per case:
+- [X] T014 [P] [US1] Hand-write synthetic snapshots in `mentor/test/fixtures/synthetic/`, following data-model.md › Snapshot (`layers[].properties[].keys[]` with `in_type`/`out_type` ∈ `"linear" | "bezier" | "hold"`, and `in_ease`/`out_ease` as `{ speed, influence }[]`). One file per case:
   - `linear-basic.json`, `eased.json`, `held.json`, `half-eased.json` (key 1 out Bezier, key 2 in linear)
   - `expression.json` (`expression_enabled: true`), `single-key.json`
   - `separated-xy.json` (path `Transform/X Position`), `nested-trim.json` (`Contents/Rectangle 1/Trim Paths 1/End`), `effect.json` (`Effects/Gaussian Blur/Blurriness`)
   - `hidden-layer.json` (`enabled: false`), `null-first.json` (the first linear pair is on an `is_null` layer), `precomp.json` (`precomp_layers` non-empty), `scale-2d.json` (`dimensions: 3`, what AE reports for Scale on a 2D layer, checked in T013)
   - Plus `attempt-*.json` pairs (before/after) for diff tests: learner eased one pair, eased none, removed a key, changed an untargeted property, different comp id, **overdone** (influence 100%, must count as eased), and **undone** (eased then undone, must be still linear) (E1).
   - All paths use the match-name format from data-model.md › AnimatedProperty (`ADBE Transform Group/ADBE Position`), with `display_path` alongside.
-- [ ] T015 [P] [US1] Write `mentor/test/analyze.test.mjs` (`node:test`) for FR-002 covering:
+- [X] T015 [P] [US1] Write `mentor/test/analyze.test.mjs` (`node:test`) for FR-002 covering:
   - A segment is `linear` if either side is `"linear"`, `held` if key *i* out is `"hold"`, otherwise `eased`.
   - Skips `expression` and `single_key`, with `skipped_reason`.
   - Segment id format `"<layer index>/<match-name path>/<i>"` (for example `"1/ADBE Transform Group/ADBE Position/1"`), and `display_path` carried into findings (I1).
@@ -112,7 +112,7 @@ correctly grades a partial and then a complete attempt.
   - `demo_target` is the first target on an `enabled && !is_null` layer, or `null` if there is none (null-first.json must pick the next visible layer).
   - `counts` totals.
   - An unknown focus name throws `UNKNOWN_LAYER`.
-- [ ] T016 [P] [US1] Write `mentor/test/diff.test.mjs` covering:
+- [X] T016 [P] [US1] Write `mentor/test/diff.test.mjs` covering:
   - Per-target `result` ∈ `"eased_by_learner" | "eased_by_demo" | "still_linear" | "removed"`.
   - The demo segment is reported as `eased_by_demo` and excluded from `summary.total_for_learner` (US1-6).
   - `unexpected_changes` lists untargeted changes in plain language.
@@ -120,7 +120,7 @@ correctly grades a partial and then a complete attempt.
   - `passed` = `comp_matches && still_linear === 0`.
   - Labels are formatted like `"Title › Position 0–1 s"` (layer name + the last part of `display_path`).
   - Overdone ease counts as `eased_by_learner`; an undone attempt reports `still_linear` (E1).
-- [ ] T017 [P] [US1] Write `mentor/test/session.test.mjs` for FR-006 and FR-007 covering data-model.md › Session state transitions:
+- [X] T017 [P] [US1] Write `mentor/test/session.test.mjs` for FR-006 and FR-007 covering data-model.md › Session state transitions:
   - `start()` → `started`; `recordDemo()` → `demo_done`; a second `recordDemo()` throws `DEMO_USED`; a demo on anything but `demo_target` throws `NOT_DEMO_TARGET`.
   - `markChecked()` → `checked`, and re-checking is allowed; calls with no session throw `NO_SESSION`; a new `start()` replaces the old session.
   - **Lesson boundaries (C1, C2):** `start()` on the same comp with the lesson not passed keeps `baseline` and `demo`, so `recordDemo()` still throws `DEMO_USED`; a new focus recomputes `targets` from the baseline, not the current state; `start()` after a passed check, or on a different comp id, resets everything; the result reports `lesson: "new" | "continued" | "resumed"`.
@@ -129,10 +129,10 @@ correctly grades a partial and then a complete attempt.
 
 ### Implementation for User Story 1
 
-- [ ] T018 [US1] Implement `mentor/lib/analyze.mjs` (FR-002): `analyze(snapshot, { focus_layers })` → `{ findings, skipped, hidden_layers, precomp_layers, focus, targets, demo_target, counts }`, following research R7 and data-model.md › Segment. Make T015 pass
-- [ ] T019 [US1] Implement `mentor/lib/diff.mjs`: `diff(baseline, current, session)` → the Check result from data-model.md, compared by segment id. Make T016 pass
-- [ ] T020 [US1] Implement `mentor/lib/session.mjs` over `SESSION_FILE`, shaped `{ "version": 1, "current": comp_id, "lessons": { [comp_id]: Session } }` (N3), where each Session has `lesson_id`, `baseline`, `focus`, `targets`, `demo` (`null | { segment_id, at }`), `comp_id`, `status` (`"started" | "demo_done" | "checked"`), and `passed` (boolean), with the lesson-boundary rules from data-model.md › Session. Make T017 pass
-- [ ] T021 [P] [US1] Write `mentor/jsx/snapshot.jsx` (ES3, no dialogs) for FR-001:
+- [X] T018 [US1] Implement `mentor/lib/analyze.mjs` (FR-002): `analyze(snapshot, { focus_layers })` → `{ findings, skipped, hidden_layers, precomp_layers, focus, targets, demo_target, counts }`, following research R7 and data-model.md › Segment. Make T015 pass
+- [X] T019 [US1] Implement `mentor/lib/diff.mjs`: `diff(baseline, current, session)` → the Check result from data-model.md, compared by segment id. Make T016 pass
+- [X] T020 [US1] Implement `mentor/lib/session.mjs` over `SESSION_FILE`, shaped `{ "version": 1, "current": comp_id, "lessons": { [comp_id]: Session } }` (N3), where each Session has `lesson_id`, `baseline`, `focus`, `targets`, `demo` (`null | { segment_id, at }`), `comp_id`, `status` (`"started" | "demo_done" | "checked"`), and `passed` (boolean), with the lesson-boundary rules from data-model.md › Session. Make T017 pass
+- [X] T021 [P] [US1] Write `mentor/jsx/snapshot.jsx` (ES3, no dialogs) for FR-001:
   - Read the active comp, and throw `NO_ACTIVE_COMP` if it isn't a CompItem.
   - For each layer, record `index`, `name`, `kind`, `enabled`, and `is_null` (`nullLayer`). Walk every property group recursively (transform, shape contents, effects, text animators), keeping properties where `canVaryOverTime && numKeys > 0`.
   - Use `propPath` and `displayPath` from `mentor/jsx/lib/paths.jsx` for `path` and `display_path`, plus `display_name`, `expression_enabled`, and `dimensions` (from `keyInTemporalEase(1).length`).
@@ -140,16 +140,16 @@ correctly grades a partial and then a complete attempt.
   - Per key: `time` (rounded to 3 decimals), `in_type`/`out_type` from `keyIn/OutInterpolationType`, and `in_ease`/`out_ease`.
   - Record `precomp_layers` (`source instanceof CompItem`) without reading inside them, and `project` as the file **name only**.
   - Return JSON.
-- [ ] T022 [P] [US1] Write `mentor/jsx/set-ease.jsx` (ES3), taking `ARGS = { layer_index, property_path, key_index }`:
+- [X] T022 [P] [US1] Write `mentor/jsx/set-ease.jsx` (ES3), taking `ARGS = { layer_index, property_path, key_index }`:
   - Resolve the property with `propByPath` from `mentor/jsx/lib/paths.jsx`, and throw `"CODE: message"` errors (U1).
   - Set key *i* out and key *i+1* in to `BEZIER`, keeping each key's other side as it was.
   - Call `setTemporalEaseAtKey` with `new KeyframeEase(0, 33.33)` repeated `dimensions` times for the eased side, and the existing ease for the other side.
   - Return a read-back of both keys.
-- [ ] T023 [P] [US1] Write `mentor/jsx/preview-frame.jsx` by adapting `ae_preview_frame` in `~/after-effects-mcp/server/tools.mjs` (`saveFrameToPng` to a temp file). Wait for a stable file size in `tools.mjs` the way upstream does, and default `time` to the comp's current time
-- [ ] T024 [US1] Implement `snapshot_project`, `set_ease`, `diff_since_last`, and `preview_frame` in `mentor/tools.mjs` (FR-001, FR-005, FR-006, FR-007, FR-013), exactly per contracts/mentor-tools.md, including the `lesson: "new" | "continued"` output: inputs, outputs (including `targets`, `demo_target`, `hidden_layers`, `precomp_layers`, and labels), the effects on the session, and error codes. `set_ease` checks the session **before** calling AE, and `diff_since_last` never changes the baseline
-- [ ] T025 [US1] 🖐 Live: with Mentor Practice active, call `snapshot_project` and save its raw snapshot as `mentor/test/fixtures/practice-before.json`. Add `mentor/test/practice.test.mjs` asserting that `analyze(practice-before)` matches `practice-expected.json` exactly (SC-001), and fix `snapshot.jsx` until it passes
+- [X] T023 [P] [US1] Write `mentor/jsx/preview-frame.jsx` by adapting `ae_preview_frame` in `~/after-effects-mcp/server/tools.mjs` (`saveFrameToPng` to a temp file). Wait for a stable file size in `tools.mjs` the way upstream does, and default `time` to the comp's current time
+- [X] T024 [US1] Implement `snapshot_project`, `set_ease`, `diff_since_last`, and `preview_frame` in `mentor/tools.mjs` (FR-001, FR-005, FR-006, FR-007, FR-013), exactly per contracts/mentor-tools.md, including the `lesson: "new" | "continued"` output: inputs, outputs (including `targets`, `demo_target`, `hidden_layers`, `precomp_layers`, and labels), the effects on the session, and error codes. `set_ease` checks the session **before** calling AE, and `diff_since_last` never changes the baseline
+- [X] T025 [US1] 🖐 Live: with Mentor Practice active, call `snapshot_project` and save its raw snapshot as `mentor/test/fixtures/practice-before.json`. Add `mentor/test/practice.test.mjs` asserting that `analyze(practice-before)` matches `practice-expected.json` exactly (SC-001), and fix `snapshot.jsx` until it passes
 - [ ] T026 [US1] 🖐 Live: on a **duplicate** of Mentor Practice, run `set-ease.jsx` through the upstream `ae_run_script` on Title › Scale (2D) and on Bar › X Position. Confirm the read-back shows Bezier with 33.33% influence and the right number of dimensions, and that one Edit > Undo restores it. Delete the duplicate afterwards (plan › Risks: multi-dimension ease)
-- [ ] T027 [US1] Write `.claude/skills/ease-mentor/SKILL.md`, the teaching behavior (research R9):
+- [X] T027 [US1] Write `.claude/skills/ease-mentor/SKILL.md`, the teaching behavior (research R9):
   1. Call `snapshot_project` with no focus.
   2. Open with a short summary: propose **one layer (two at most)** and name **no more than 5 pairs**; mention hidden layers and precomps as limits.
   3. Propose a focus and call `snapshot_project` again with it.

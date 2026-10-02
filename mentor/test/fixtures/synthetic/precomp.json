@@ -1,0 +1,73 @@
+{
+  "taken_at": "2026-10-01T12:00:00.000Z",
+  "project": "Synthetic.aep",
+  "comp": {
+    "id": 100,
+    "name": "Synthetic",
+    "duration": 4,
+    "frame_rate": 30
+  },
+  "precomp_layers": [
+    {
+      "index": 2,
+      "name": "Icon"
+    }
+  ],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Title",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

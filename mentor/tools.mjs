@@ -1,10 +1,113 @@
 // The mentor's six tools, as defined in specs/002-easing-slice/contracts/mentor-tools.md. This is
-// the entire set: there is no tool that runs arbitrary ExtendScript (FR-013). Handlers are filled
-// in by US1 (T024) and US2 (T031).
+// the entire set: there is no tool that runs arbitrary ExtendScript (FR-013). read_learner_record
+// and record_lesson are filled in by US2 (T031).
+
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { runSnippet } from "./bridge-client.mjs";
+import { diff } from "./lib/diff.mjs";
+import * as session from "./lib/session.mjs";
 
 const notImplemented = (name) => async () => {
   throw new Error(`${name} is not implemented yet (specs/002-easing-slice/tasks.md).`);
 };
+
+const json = (value) => ({ content: [{ type: "text", text: JSON.stringify(value, null, 2) }] });
+
+async function takeSnapshot() {
+  const raw = await runSnippet("snapshot", {});
+  return { taken_at: new Date().toISOString(), ...raw };
+}
+
+// "<layer index>/<match-name path>/<key index>"; the path itself contains slashes.
+function parseSegmentId(id) {
+  const first = id.indexOf("/");
+  const last = id.lastIndexOf("/");
+  return { layer_index: Number(id.slice(0, first)), property_path: id.slice(first + 1, last), key_index: Number(id.slice(last + 1)) };
+}
+
+async function snapshotProject({ focus_layers } = {}) {
+  const snapshot = await takeSnapshot();
+  const { lesson, analysis } = session.start(snapshot, { focus_layers });
+  return json({
+    lesson,
+    comp: { name: snapshot.comp.name, duration: snapshot.comp.duration },
+    findings: analysis.findings,
+    skipped: analysis.skipped.map(({ layer, property, reason }) => ({ layer, property, reason })),
+    hidden_layers: analysis.hidden_layers,
+    precomp_layers: analysis.precomp_layers,
+    focus: analysis.focus,
+    targets: analysis.targets,
+    demo_target: analysis.demo_target,
+    counts: analysis.counts,
+  });
+}
+
+async function setEase({ segment_id }) {
+  const lesson = session.assertCanDemo(segment_id); // DEMO_USED / NOT_DEMO_TARGET / NO_SESSION, before AE
+  const r = await runSnippet("set-ease", { comp_id: lesson.comp_id, ...parseSegmentId(segment_id) }, { undo: true });
+  session.recordDemo(segment_id);
+  return json({
+    eased: `${r.layer} › ${r.display_name}, ${r.from_time.toFixed(3)} s → ${r.to_time.toFixed(3)} s`,
+    undo: "Edit > Undo",
+  });
+}
+
+// Never changes the baseline, so the learner can fix things and check again.
+async function diffSinceLast() {
+  const lesson = session.currentLesson();
+  const current = await takeSnapshot();
+  const result = diff(lesson.baseline, current, lesson);
+  if (result.comp_matches) session.markChecked(result.passed);
+  return json(result);
+}
+
+// From upstream ae_preview_frame: saveFrameToPng finishes writing after it returns.
+const FRAME_DIR = path.join(os.tmpdir(), "ae-mentor-frames");
+const MAX_IMAGE_BYTES = 4.5 * 1024 * 1024;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function pruneFrames() {
+  try {
+    const cutoff = Date.now() - 24 * 3600 * 1000;
+    for (const f of fs.readdirSync(FRAME_DIR)) {
+      const p = path.join(FRAME_DIR, f);
+      if (fs.statSync(p).mtimeMs < cutoff) fs.unlinkSync(p);
+    }
+  } catch {}
+}
+
+async function waitForFile(file, timeoutMs) {
+  const end = Date.now() + timeoutMs;
+  let last = -1;
+  while (Date.now() < end) {
+    try {
+      const size = fs.statSync(file).size;
+      if (size > 0 && size === last) return size;
+      last = size;
+    } catch {}
+    await sleep(250);
+  }
+  throw new Error(`After Effects did not write the frame within ${timeoutMs / 1000} s.`);
+}
+
+async function previewFrame({ time } = {}) {
+  fs.mkdirSync(FRAME_DIR, { recursive: true });
+  pruneFrames();
+  const file = path.join(FRAME_DIR, `frame-${Date.now()}.png`);
+  const r = await runSnippet("preview-frame", { file: file.replace(/\\/g, "/"), time: time ?? null });
+  const bytes = await waitForFile(file, 30000);
+  if (bytes > MAX_IMAGE_BYTES) {
+    return json({ ...r, file, note: `The PNG is ${(bytes / 1048576).toFixed(1)} MB, too large to return inline. Open the file instead.` });
+  }
+  return {
+    content: [
+      { type: "image", data: fs.readFileSync(file).toString("base64"), mimeType: "image/png" },
+      { type: "text", text: JSON.stringify(r) },
+    ],
+  };
+}
 
 export const TOOLS = [
   {
@@ -26,7 +129,7 @@ export const TOOLS = [
       additionalProperties: false,
     },
     annotations: { readOnlyHint: true },
-    handler: notImplemented("snapshot_project"),
+    handler: snapshotProject,
   },
   {
     name: "preview_frame",
@@ -38,7 +141,7 @@ export const TOOLS = [
       additionalProperties: false,
     },
     annotations: { readOnlyHint: true },
-    handler: notImplemented("preview_frame"),
+    handler: previewFrame,
   },
   {
     name: "set_ease",
@@ -53,7 +156,7 @@ export const TOOLS = [
       additionalProperties: false,
     },
     annotations: { readOnlyHint: false, destructiveHint: false },
-    handler: notImplemented("set_ease"),
+    handler: setEase,
   },
   {
     name: "diff_since_last",
@@ -63,7 +166,7 @@ export const TOOLS = [
       "still_linear or removed, plus other changes, and whether the lesson passed. Doesn't change the baseline.",
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
     annotations: { readOnlyHint: true },
-    handler: notImplemented("diff_since_last"),
+    handler: diffSinceLast,
   },
   {
     name: "read_learner_record",

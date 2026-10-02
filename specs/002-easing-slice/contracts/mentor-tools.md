@@ -76,7 +76,8 @@ The one demonstration (FR-006, "I do").
 - **Effect**: Easy Ease (speed 0, influence 33.33%) on that pair's out and in sides, as one
   undo step. Records `demo` in `session.json` (state → `demo_done`)
 - **Output**: `{ "eased": "Title › Position, 0.000 s → 1.000 s", "undo": "Edit > Undo" }`
-- **Errors**: `DEMO_USED`, `NOT_DEMO_TARGET`, `NO_SESSION`
+- **Errors**: `DEMO_USED`, `NOT_DEMO_TARGET`, `NO_SESSION` (all checked before AE is contacted).
+  If the active comp isn't the lesson's comp, AE refuses with a plain error and nothing changes
 
 ## 4. `diff_since_last`
 
@@ -89,6 +90,7 @@ Checks the learner's attempt against the lesson baseline (FR-007).
   ```json
   {
     "comp_matches": true,
+    "lesson_comp": "Mentor Practice",
     "targets": [
       { "segment_id": "1/ADBE Transform Group/ADBE Position/1", "label": "Title › Position 0–1 s", "result": "eased_by_demo" },
       { "segment_id": "1/ADBE Transform Group/ADBE Position/2", "label": "Title › Position 1–2 s", "result": "eased_by_learner" },
@@ -99,7 +101,10 @@ Checks the learner's attempt against the lesson baseline (FR-007).
     "passed": false
   }
   ```
-- If `comp_matches` is false, `targets` is empty and the mentor should re-snapshot (edge case).
+- If `comp_matches` is false, `targets` is empty and nothing is graded. The mentor asks the learner
+  to switch back to `lesson_comp` and doesn't re-snapshot unless they want a new lesson (edge case, C1).
+- `unexpected_changes` also notes a layer whose name changed at the same index ("Layer 2 is now
+  \"Tagline\" (was \"Subtitle\")"), since segment ids use layer indexes.
 
 ## 5. `read_learner_record`
 

@@ -52,7 +52,7 @@ A keyframe pair, key *i* → key *i+1*, on one property. Computed from a Snapsho
 | `id` | string | `"<layer index>/<path>/<i>"` using the match-name `path`, for example `"1/ADBE Transform Group/ADBE Position/1"` |
 | `display_path` | string | Carried from the property, for labels |
 | `layer_name`, `property`, `from_time`, `to_time` | | For the mentor to name in plain language |
-| `state` | `"linear" \| "eased" \| "held"` | Rules in research R7 |
+| `state` | `"linear" \| "eased" \| "held"` | Rules in research R7. Held is checked first: a hold out side means no motion, even if the next key's in side is linear |
 | `skipped_reason` | `null \| "expression" \| "single_key"` | Why a property wasn't analyzed |
 
 **Findings** = the Segments with `state: "linear"`, grouped by layer and property. These are the
@@ -72,6 +72,7 @@ throwing it away (N3).
 | `baseline` | Snapshot | The "before" |
 | `focus` | string[] \| null | Layer names the lesson is limited to (null = all) |
 | `targets` | Segment id[] | Linear segments at baseline within the focus. Only these are graded |
+| `demo_target` | Segment id \| null | The one pair `set_ease` accepts. Null after a demo (N6) |
 | `demo` | `null \| { segment_id, at }` | Set once by `set_ease`; see state transitions |
 | `status` | `"started" \| "demo_done" \| "checked"` | |
 | `passed` | boolean | Set by the last `diff_since_last`. A lesson only ends by passing; switching comps pauses it |
@@ -103,6 +104,7 @@ carries over to the next day, which is what US2-3 asks for.
 | Field | Type | Notes |
 |---|---|---|
 | `comp_matches` | boolean | False if the active comp isn't the `current` lesson's comp (edge case: different comp) |
+| `lesson_comp` | string | The lesson comp's name, so the mentor can ask the learner to switch back to it |
 | `targets` | `{ segment_id, result }[]` | `result`: `"eased_by_learner" \| "eased_by_demo" \| "still_linear" \| "removed"` |
 | `unexpected_changes` | string[] | Plain-language notes, for example "Opacity on Title now has 3 keys (was 2)" |
 | `summary` | `{ learner_eased, still_linear, total_for_learner }` | Excludes the demo segment (scenario 1.6) |
