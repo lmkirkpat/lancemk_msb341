@@ -24,11 +24,14 @@ function easy() {
     return a;
 }
 
-// Interpolation first: switching Linear to Bezier resets the ease, so the ease goes on after.
-prop.setInterpolationTypeAtKey(i, prop.keyInInterpolationType(i), BEZ);
+// setTemporalEaseAtKey makes both sides of a key Bezier (seen live in T026), which would also
+// change the learner's neighbouring pair. So set the ease, then put the other side's type back.
+var keepIn = prop.keyInInterpolationType(i);
+var keepOut = prop.keyOutInterpolationType(i + 1);
 prop.setTemporalEaseAtKey(i, prop.keyInTemporalEase(i), easy());
-prop.setInterpolationTypeAtKey(i + 1, BEZ, prop.keyOutInterpolationType(i + 1));
 prop.setTemporalEaseAtKey(i + 1, easy(), prop.keyOutTemporalEase(i + 1));
+prop.setInterpolationTypeAtKey(i, keepIn, BEZ);
+prop.setInterpolationTypeAtKey(i + 1, BEZ, keepOut);
 
 function r3(t) { return Math.round(t * 1000) / 1000; }
 function influences(list) {
@@ -37,7 +40,8 @@ function influences(list) {
     return out;
 }
 
-if (prop.keyOutInterpolationType(i) !== BEZ || prop.keyInInterpolationType(i + 1) !== BEZ) {
+if (prop.keyOutInterpolationType(i) !== BEZ || prop.keyInInterpolationType(i + 1) !== BEZ ||
+        prop.keyInInterpolationType(i) !== keepIn || prop.keyOutInterpolationType(i + 1) !== keepOut) {
     throw new Error("After Effects didn't apply the ease to " + displayPath(prop) + ". Use Edit > Undo and tell the mentor.");
 }
 

@@ -135,6 +135,10 @@ local toolchain (Node 26.8.1, Claude Code 2.1.285).
     each key as it was, and uses one `KeyframeEase` per temporal dimension
     (1 for Position/Opacity/Rotation; **3 for Scale even on a 2D layer**, checked live on 2026-09-30).
     Always ask AE (`keyInTemporalEase(1).length`) rather than assuming a count.
+  - **`setTemporalEaseAtKey` makes both sides of the key Bezier** (checked live in T026,
+    2026-10-01). So `set-ease.jsx` sets the ease first, then restores the other side's original
+    type with `setInterpolationTypeAtKey`, which keeps the 33.33% ease. Without this, the demo on
+    pair 1 would also change key 2's out side, half-easing the learner's pair 2.
 - **Rationale:** the spec talks about "keyframe pairs", and the demo covers one pair. Linear
   is a property of the segment between two keys, so flagging segments matches both the spec
   and how AE draws motion. Spec 001 rows 4, 5, and 11 confirmed these calls work.

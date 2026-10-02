@@ -45,10 +45,10 @@ function mockProp(name, matchName, dims, keys) {
       key.inT = inT;
       key.outT = outT;
     },
+    // Like AE (seen live in T026): setting temporal ease makes both sides of the key Bezier.
     setTemporalEaseAtKey(i, inE, outE) {
       if (inE.length !== dims || outE.length !== dims) throw new Error("wrong number of dimensions");
-      k[i - 1].inE = inE;
-      k[i - 1].outE = outE;
+      Object.assign(k[i - 1], { inE, outE, inT: KIT.BEZIER, outT: KIT.BEZIER });
     },
   };
 }
