@@ -10,3 +10,6 @@ build/
 *.log
 *.tmp
 *.swp
+
+# After Effects auto-saves
+discovery/Auto-Save/

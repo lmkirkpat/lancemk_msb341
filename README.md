@@ -4,7 +4,9 @@
 > their own projects, starting with After Effects, and remembers what they've learned so
 > the skills stick.
 
-**Where to see it:** Nothing built yet. The product so far is in `product/product-description.md`.
+**Where to see it:** In progress: the easing test slice (`specs/002-easing-slice`), built as an
+After Effects bridge (`bridge/`) plus an MCP mentor server (`mentor/`). Not yet tested live;
+run it with `specs/002-easing-slice/quickstart.md`. Product description: `product/product-description.md`.
 **Built by:** Lance Kirkpatrick, MSB 341 Product Management, BYU
 
 ## Context
