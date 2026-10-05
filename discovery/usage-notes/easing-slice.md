@@ -132,3 +132,36 @@ the eval set instead (T039).
 
 **For T033 (on or after 2026-10-06):** run `/ease-mentor` on Mentor Practice. Expected: it
 mentions the Subtitle lesson unprompted, skips the basics, and proposes Glow (SC-005).
+
+## Eval baseline: 2026-10-05 (T042)
+
+Full runs of the 16-case eval set (`product/evals/easing/`), with no AE open. SC-006 (≥ 80%)
+passed from the first run.
+
+| Run | Result | Cost | Notes |
+|---|---|---|---|
+| `2026-10-05-1601.json` (baseline) | 14/16 (88%) | $4.65 | 09 and 16 fail |
+| `2026-10-05-1611.json` (after fixes) | 15/16 (94%) | $4.92 | 09 and 16 pass; 10 fails |
+| `2026-10-05-1612.json` (`--only 10 --repeat 3`) | 3/3 | $0.43 | 10's fail was noise |
+
+**Failures and fixes (`SKILL.md`):**
+- **09 · returning learner (R-USES-MEMORY).** It did the right thing: it skipped the basics and
+  moved to Bar. But it told the learner "Easing is marked `learned`" and "`demo_target` still
+  points at Title". The skill banned the record's field names but not the tools'. **Fix:** a new
+  hard rule, "Speak plainly, never in field names".
+- **16 · stopping early (R-RECORD-HONEST).** `summary` recorded a guess about the learner's
+  thinking ("Position easing seemed to be read as covering the other Transform properties").
+  It's the same overclaim as session 1b, from a new angle: a guessed *reason* instead of a
+  guessed *method*. **Fix:** step 11 now says to record what was missed, not a theory of why.
+- **10 · returning partial (R-NAMES-LAYERS), second run only.** The judge failed "Title's
+  Position still looks eased" because the snapshot reports only linear pairs, so "eased" is an
+  inference. It passed 3/3 on repeat. Treated as noise and judge strictness, no change. If it
+  comes back, the rubric needs to decide whether "not in the linear findings" supports "still
+  eased".
+
+**Takeaway:** both real failures were about honesty in words, not tool behavior. Every
+deterministic check (set_ease limits, verdicts, records) passed in both runs. The tool
+contracts hold; the remaining risk is in what the mentor says and writes.
+
+**Note for the next full run:** the newest results file is the 1-case repeat, so the next run's
+"vs" line will compare only case 10. Compare against `2026-10-05-1611.json` by eye.

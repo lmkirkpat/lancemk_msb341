@@ -259,7 +259,7 @@ pass or fail per case with reasons, and saves dated results that can be compared
   - Flags: `--only <case id | FR/US code>`; `--changed`, which skips cases whose SHA-256 over `SKILL.md`, `mentor/tools.mjs`, `mentor/lib/*`, the case file, and its fixtures matches the last passing result; and `--repeat N`.
   - Write `product/evals/easing/results/<YYYY-MM-DD-HHMM>.json` and print one summary line (passed/total and the percentage against the SC-006 target of 80%), plus the change against the most recent previous result (for example, "+1 pass; 04 now fails") (US3-3).
 - [X] T041 [US3] Write `product/evals/easing/README.md`: how to run (full run vs. `--changed` / `--only` / `--repeat`, and when a full run is required), how to read results, the cost per run (research R6), and the headless invocation from T036
-- [ ] T042 [US3] Run the full eval set once, commit the results file as the baseline, and turn any failures into fixes in `.claude/skills/ease-mentor/SKILL.md` or new tasks. Re-run until SC-006 (≥ 80%) passes, or record why not in `discovery/usage-notes/easing-slice.md`
+- [X] T042 [US3] Run the full eval set once, commit the results file as the baseline, and turn any failures into fixes in `.claude/skills/ease-mentor/SKILL.md` or new tasks. Re-run until SC-006 (≥ 80%) passes, or record why not in `discovery/usage-notes/easing-slice.md`
 
 **Checkpoint**: all three stories work, and teaching quality has a baseline score.
 
