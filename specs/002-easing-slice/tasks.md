@@ -267,9 +267,9 @@ pass or fail per case with reasons, and saves dated results that can be compared
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T043 [P] Privacy sweep (constitution IV): search `mentor/test/fixtures/`, `product/evals/easing/`, and `discovery/usage-notes/` for email and phone patterns and for folder paths containing a real name. Fix anything found
-- [ ] T044 [P] Finish `bridge/UPSTREAM.md` (the full list of changes vs. `2cfff1a`) and confirm `bridge/LICENSE` is the unchanged upstream MIT text
-- [ ] T045 [P] Update `CLAUDE.md`: "Where to see it" (`/ease-mentor` + quickstart), "Stack or tools" (Node MCP server + forked CEP bridge per `decisions/003`), and "Current state"
+- [X] T043 [P] Privacy sweep (constitution IV): search `mentor/test/fixtures/`, `product/evals/easing/`, and `discovery/usage-notes/` for email and phone patterns and for folder paths containing a real name. Fix anything found
+- [X] T044 [P] Finish `bridge/UPSTREAM.md` (the full list of changes vs. `2cfff1a`) and confirm `bridge/LICENSE` is the unchanged upstream MIT text
+- [X] T045 [P] Update `CLAUDE.md`: "Where to see it" (`/ease-mentor` + quickstart), "Stack or tools" (Node MCP server + forked CEP bridge per `decisions/003`), and "Current state"
 - [ ] T046 🖐 Live: run all of quickstart.md §2–§7 once end to end, and confirm SC-001 through SC-004 hold
 - [ ] T047 After at least 3 real sessions, write the SC-007 note in `discovery/usage-notes/easing-slice.md`: did I reach for this or Adobe's assistant while learning easing, and why? Link it from `decisions/002` › What would change our mind if it points either way
 

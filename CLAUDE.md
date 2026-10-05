@@ -25,7 +25,8 @@ a brand new session act like a colleague who already knows what you are working 
 
 - **This sprint's goal:** Sprint 2 (`sprints/sprint-2-plan.md`): spec the product, test the
   MCP bridge, decide the architecture (`decisions/003`), build a working slice on one After
-  Effects skill, and run 3 target-market interviews.
+  Effects skill, and run 3 target-market interviews. **Raised 2026-10-05:** also a rudimentary
+  mentor panel inside AE that runs one easing lesson start to finish and shows memory.
 - **Progress so far:**
   - Narrowed to creative workflows (`decisions/001`), then chose the AI creative mentor
     (`decisions/002`).
@@ -38,18 +39,32 @@ a brand new session act like a colleague who already knows what you are working 
     beta is due Nov 2026.
   - Architecture decided (`decisions/003`): a thin AE pipe (forked CEP bridge), the mentor as
     an MCP server with narrow tools run from Claude, and the learner record in local files.
-  - Spec Kit set up for build specs (`decisions/004`). Easing slice spec written
-    (`specs/002-easing-slice/spec.md`), with demos following "I do, we do, you do": the mentor
-    eases the first keyframe pair and the learner eases the rest.
+  - Spec Kit set up for build specs (`decisions/004`).
+  - **Easing slice built** (`specs/002-easing-slice/`, Phases 1–5 done): the forked bridge
+    (`bridge/`), the `ae-mentor` MCP server (`mentor/`), the `/ease-mentor` skill
+    ("I do, we do, you do": the mentor eases one pair, the learner eases the rest), and the
+    learner record. Usage sessions are in `discovery/usage-notes/easing-slice.md`.
+  - **Eval set** (`product/evals/easing/`, 16 cases, about $5 per full run, no AE needed):
+    baseline 14/16, then 15/16 (94%) after `SKILL.md` fixes. SC-006 (≥ 80%) passes. Every
+    hard-rule check passed; the failures were about wording and honesty in the learner record.
+  - **Panel decided** (`decisions/005`, amends 003): the AE panel drives headless Claude Code
+    (`claude -p --resume`), so it reuses the skill and server unchanged and the evals stay valid.
+    Prototype only; shipping to others needs the direct API (option A). Panel spec drafted in
+    `specs/003-mentor-panel/spec.md`, mockup in `product/mockups/ae-panel.md`.
+  - Interviews: 1 of 3 target-market interviews done (`discovery/interviews/006`), 2 booked.
 - **Next steps:**
-  1. `/speckit-plan` → `/speckit-tasks` → build the easing slice (`specs/002`).
-  2. Use the slice on the test project and keep usage notes (SC-007: did I reach for it or
-     Adobe's assistant?).
-  3. Book and run 3 usage interviews in the target market. Ask about Adobe's assistant, who
-     pays, and whether memory and practice matter, before pitching
-     (`discovery/interviews/bet-a-interview-guide.md`).
+  1. Finish spec 002: T033 (the memory check, on or after 2026-10-06), T046 (live quickstart
+     §2–§7), and T047 (the SC-007 note after 3 real sessions: did I reach for this or Adobe's
+     assistant?).
+  2. Panel: finish `specs/003` → `/speckit-plan` → `/speckit-tasks` → build. Done means one
+     lesson (quickstart a–f) with nothing typed in the terminal.
+  3. Run the 2 booked interviews. Ask about Adobe's assistant, who pays, and whether memory and
+     practice matter, before pitching (`discovery/interviews/bet-a-interview-guide.md`).
   4. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
-- **Where to see it:** Nothing built yet.
+- **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
+  `discovery/Claude AE Tutor Test.aep` (the Mentor Practice comp). Setup and checks are in
+  `specs/002-easing-slice/quickstart.md`. Evals: `node product/evals/easing/run.mjs`
+  (see its README).
 - **Biggest open risk:** that leading, memory, and practice aren't worth more to people than
   Adobe's free assistant used on request. Also: learners may not pay (belief 12), people take
   the result over the lesson in practice (belief 7), and Adobe could add a teaching mode.
@@ -72,8 +87,15 @@ a brand new session act like a colleague who already knows what you are working 
 
 ## Tools and conventions
 
-- **Stack or tools:** TBD, a separate decision after testing an After Effects MCP bridge.
-  Options: web app, plugin, or MCP-connected app.
+- **Stack or tools:** `decisions/003`, amended by `decisions/005`:
+  - `bridge/`: a forked CEP bridge (thin pipe into AE, no teaching logic). Changes from upstream
+    are in `bridge/UPSTREAM.md`. CEP is retired, so expect a UXP rebuild after Nov 2026.
+  - `mentor/`: a Node MCP server (`ae-mentor`, registered in `.mcp.json`) with six narrow tools.
+    Node built-ins only. Unit tests: `cd mentor && npm test`.
+  - `.claude/skills/ease-mentor/SKILL.md`: the teaching itself, run by Claude Code.
+  - Learner record: local JSON files in `~/Library/Application Support/AEMentor/` (or
+    `AE_MENTOR_HOME`, which tests and evals set to a temp folder), never in the repo.
+  - Panel (next): the CEP panel spawns headless Claude Code (`decisions/005`, option B1).
 - **How work ships:** TBD
 - **Testing and style:** AI features get an eval set in `product/evals/`.
 
