@@ -1,9 +1,99 @@
 # Easing evals
 
-The eval set for the `/ease-mentor` slice (spec 002, User Story 3). How to run it and read the
-results is added in T041. This section records the headless invocation proven in T036.
+The eval set for the `/ease-mentor` slice (spec 002, User Story 3). It scores whether the mentor
+*teaches* well: leading, focusing, hints instead of fixes, and using memory. It runs the real
+skill and server in headless Claude Code against saved snapshots, so **After Effects doesn't
+need to be open**. Whether the detection and grading are *correct* is covered by the unit tests
+(`cd mentor && npm test`), which are free and instant. Evals cost real usage, so they don't
+repeat what the unit tests already prove.
+
+## Running
+
+From the repo root:
+
+```sh
+node product/evals/easing/run.mjs --dry-run          # free: check cases, fixtures and rubric items
+node product/evals/easing/run.mjs                    # full run: every case once
+node product/evals/easing/run.mjs --only 07          # one case, by id prefix
+node product/evals/easing/run.mjs --only FR-006      # every case that covers a requirement
+node product/evals/easing/run.mjs --changed          # skip cases unchanged since their last pass
+node product/evals/easing/run.mjs --repeat 3         # each case 3 times; passes on a majority
+node product/evals/easing/run.mjs --judge-always     # judge even after a failed check
+```
+
+**When to use which:**
+- **While editing `SKILL.md` or the tools:** `--only` for the cases you're working on, then
+  `--changed` to catch side effects without paying for unchanged cases. A case's hash covers
+  `SKILL.md`, `mentor/tools.mjs`, `mentor/fixture.mjs`, `mentor/server.mjs`, `mentor/lib/*`,
+  `rubric.md`, the case file, its learner record and its fixtures.
+- **Full run required:** before committing a change to `SKILL.md` or the tools, and for the
+  baseline. Commit its results file. `--changed` never replaces a full run, because a model
+  update can change behavior when no file has.
+- **`--repeat 3`:** when a case flips between runs, to tell a real failure from noise.
+  Runs aren't deterministic.
+- **Always `--dry-run` first** after editing cases. It's free and catches a missing fixture or a
+  misspelled rubric item before you pay for a run.
+
+## Reading results
+
+The console prints one line per case: `pass` or `FAIL`, the cost, and for failures each failed
+check or rubric item with its reason. Then a summary line:
+
+```
+14/16 passed (88%, target 80%) ✓  $9.12 | vs 2026-10-06-0930.json: +1 pass; 04 now passes, 11 now fails
+```
+
+**The target is SC-006:** at least 10 cases, at least 80% passing.
+
+Each run writes `results/<YYYY-MM-DD-HHMM>.json`:
+- `summary`: passed, total, percent and target.
+- `cases[].runs[]`: for each run of a case:
+  - `checks`: the deterministic checks. These are facts from the tool calls: `set_ease` counts
+    and targets, the check's verdict, and what was recorded.
+  - `rubric`: the judge's `{ item, pass, reason }` for each of the case's rubric items.
+  - `transcript`: everything the learner said, everything the mentor said, and every tool call
+    and result.
+  - `cost`, `session_id`.
+- `cases[].hash`: what `--changed` compares. `skipped: true` marks cases carried over by
+  `--changed`.
+
+**When a case fails, read in this order:**
+1. **A failed `run` check** means headless Claude or the server broke (a timeout, an error
+   turn). Fix the plumbing before reading anything else.
+2. **A failed deterministic check** means a hard rule broke: an extra `set_ease`, a verdict
+   given when it shouldn't be, a wrong record. These are the serious ones.
+3. **A failed rubric item** means teaching quality. Read the `reason`, then the transcript. If
+   the judge looks wrong, re-run with `--repeat 3` before changing `SKILL.md`.
+
+Turn real failures into a `SKILL.md` fix or a new task, and log what changed in
+`discovery/usage-notes/easing-slice.md`.
+
+## Cases
+
+16 cases in `cases/NN-name.json` (data-model.md › Eval case): the 14 from T039, plus
+**15 · wrong layer** (the mistake from usage session 1) and **16 · stopping early** (step 11's
+"record a partial" branch). Seed learner records are in `cases/learners/`.
+
+Each turn names the fixture that is "the project" for that turn (or `"unreachable"`), and what
+the learner says. `expect` holds the deterministic checks:
+
+| Key | Passes when |
+|---|---|
+| `first_tool` | the first mentor tool call is this one |
+| `set_ease_max` / `set_ease_min` | the number of **successful** `set_ease` calls is within range (a refused `DEMO_USED` doesn't count; the judge grades the attempt) |
+| `set_ease_only_on` | every successful `set_ease` was on this segment |
+| `verdict` | the last turn's final `diff_since_last` was `pass`, `fail`, or `none` (error, a different comp, or no check) |
+| `tools_called` | each tool was called at least once |
+| `last_turn_tools_not_called` | none of these were called in the last turn |
+| `record_lesson` | `null`: nothing was recorded. Otherwise, the last recorded lesson has these field values |
+
+In eval turns the mentor gets only `ToolSearch` and the six `ae-mentor` tools (`--tools
+ToolSearch`), so it can't read files such as the fixtures or `SKILL.md`. The judge gets no
+tools.
 
 ## Headless invocation (T036, 2026-10-05, Claude Code 2.1.289)
+
+`run.mjs` builds these commands. Here's what the T036 check proved about them.
 
 **Turn 1** starts the lesson through the project skill:
 
