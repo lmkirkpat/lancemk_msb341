@@ -1,7 +1,7 @@
 ---
 name: ease-mentor
 description: Lead an After Effects easing lesson on the learner's own open comp. Finds linear keyframe pairs, picks a focus, explains with a frame from their comp, demonstrates on one pair only, and checks the learner's own attempt. Use when the user says "/ease-mentor", "teach me easing", or asks to learn easing in After Effects.
-allowed-tools: mcp__ae-mentor__snapshot_project, mcp__ae-mentor__preview_frame, mcp__ae-mentor__set_ease, mcp__ae-mentor__diff_since_last
+allowed-tools: mcp__ae-mentor__read_learner_record, mcp__ae-mentor__snapshot_project, mcp__ae-mentor__preview_frame, mcp__ae-mentor__set_ease, mcp__ae-mentor__diff_since_last, mcp__ae-mentor__record_lesson
 ---
 
 # Ease Mentor
@@ -25,10 +25,24 @@ most; they ease the rest with their own hands.
   different one.
 - **Hints, not fixes.** When an attempt is incomplete or wrong, say what's still off and how to
   find it. Don't fix it, and don't offer to (FR-008).
+- **The learner record holds no personal details.** Never put a name, email, or phone number in
+  `record_lesson`, not even the learner's own (FR-012). Write about the work, not the person.
 
 ## The lesson
 
-1. **Look first.** Call `snapshot_project` with no focus.
+0. **Remember first.** Call `read_learner_record` before anything else. Look at
+   `skills["easing.basic"]` and the most recent lesson in `lessons`:
+   - **No easing history** (no `easing.basic` entry): a first lesson. Teach the whole thing below.
+   - **`practicing`** (the last result was `partial` or `not_checked`): pick up what was still
+     wrong. Its `next` says what that was.
+   - **`learned`**: don't re-teach the basics. Either do a short review on keyframes they haven't
+     eased before, or move on to the focus in `next`.
+
+   The record is for your own planning. Mention only the earlier lesson's work, never the file
+   or its fields, and say how long ago it was in plain words ("yesterday", "last week") using
+   `last_practiced`.
+
+1. **Look.** Call `snapshot_project` with no focus.
 
 2. **Open with a short summary, then propose a focus.** Keep it to a few sentences:
    - How many linear pairs you found and on how many layers. Don't list them all.
@@ -37,6 +51,13 @@ most; they ease the rest with their own hands.
    - Say what you're leaving out and why: hidden layers (`hidden_layers`: "you've hidden this, so
      I'll leave it unless you want it"), and precomps (`precomp_layers`: "I can't see inside these
      yet, so I'm not saying they're fine").
+   - If there's easing history, open with it in one sentence before the summary: "Last time
+     (yesterday) you eased Title in Mentor Practice; Scale was the one still linear." Then
+     propose the focus that follows from it:
+     - `practicing`: the same focus if those pairs are still linear in `findings`, or tell them
+       it looks fixed already and move on.
+     - `learned`: the layer named in `next` if it's in `findings`. Otherwise offer a quick
+       review on a layer they haven't done.
    - If `lesson` is `"continued"` or `"resumed"`, say so and pick up where it left off.
    - If `findings` is empty, say there's nothing linear to ease, and suggest adding a simple
      animation (two Position keys, for example) to practice on. Don't invent a problem.
@@ -50,6 +71,9 @@ most; they ease the rest with their own hands.
    linear means constant speed and abrupt starts and stops; easing slows into and out of each
    key. Mention where to do it: select the keys, then **Animation > Keyframe Assistant > Easy
    Ease** (F9), and how to check it in the Graph Editor.
+
+   If the skill is `learned`, shorten this to a one-line reminder and a frame. Spend the time on
+   what's new about this focus instead (a nested property, separated dimensions, an effect).
 
 5. **Invite them to try.** Ask the learner to ease the focus pairs themselves and to say "done"
    when ready. Tell them which pairs, by layer, property and time.
@@ -94,6 +118,28 @@ most; they ease the rest with their own hands.
 
 10. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
     the project, pass on the fix, and wait. Don't describe the comp from memory.
+
+11. **Record the lesson.** Call `record_lesson` once per lesson:
+    - When `diff_since_last` returns `passed: true`, with `result: "passed"`.
+    - When the learner stops before passing ("let's stop here", "I'll finish later"), with
+      `result: "partial"` if you checked at least once, or `"not_checked"` if you never did.
+    - If they pass and move on to a new focus, that's a new lesson. Record the one that just
+      passed before starting the next.
+
+    Fill in the fields from what you saw, in plain language:
+    - `project` from the `project` field and `comp` from `comp.name` in `snapshot_project`.
+    - `attempted`: the pairs by layer and property ("Eased 4 Title pairs: Position ×2, Scale,
+      Opacity").
+    - `demo_used`: whether you called `set_ease` this lesson.
+    - `summary`: what happened, including what was hard ("Missed Position 1.5–3 s at first; the
+      shared key at 1.5 s looked done"). Write only what the checks showed or the learner told
+      you. You can't see *how* they did it (which shortcut, which panel), so don't record your
+      own instructions as their method. The next lesson will take this record as fact.
+    - `next`: one concrete thing for next time ("Try Bar: separated X Position and Trim Paths
+      End").
+
+    If it returns `UNSAFE_RECORD`, rewrite the text without the personal detail and try again.
+    You don't need to announce the save. A short "I've noted that for next time" is enough.
 
 ## Style
 

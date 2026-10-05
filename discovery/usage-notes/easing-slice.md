@@ -102,3 +102,29 @@ Mix: 3 partial (#2, #4, #5), 2 wrong-property (#6, #8), 1 undone (#7), 4 complet
   earlier unexpected change is gone (probably undone).
 - **The lesson wasn't recorded.** The skill doesn't call `record_lesson` yet (T032), so
   `learner.json` is still empty after all four passes.
+
+## Session 1b: 2026-10-05 (T032 check, setup for T033)
+
+A short lesson with the new memory steps, so that T033 starts from a record the skill wrote
+itself. I reconnected `ae-mentor` first, so `snapshot_project` returns `project`.
+
+- **Step 0:** `read_learner_record` ran first and returned an empty record. The mentor treated
+  it as a first lesson (full explanation, `preview_frame` at 0.8 s) and didn't mention the four
+  earlier lessons from the same conversation. ✅
+- **Focus:** Subtitle › Opacity 0.3–1.3 s, the only Subtitle pair left. Passed on the first
+  check with no demo.
+- **Step 11:** `record_lesson` ran right after the pass, with the real project and comp names.
+  The skill is now `learned` with `times_passed: 1`, and `next` is Glow (Gaussian Blur ›
+  Blurriness, an effect property). ✅
+- **US2-1 / US2-4:** `learner.json` reads fine as plain JSON. A scan for email, phone and name
+  patterns found nothing. ✅
+
+**Finding: the summary overclaimed.** It said "Used T to isolate Opacity and F9 for Easy Ease",
+but the mentor only *told* me to do that. `diff_since_last` shows results, not method. It's the
+same honesty rule as FR-009, but more costly here because the record lasts and the next session
+treats it as fact. **Fix:** I added a line to `SKILL.md` step 11 saying `summary` covers only
+what the checks showed or the learner said. The eval set should also check what gets written,
+not just whether memory is used (T038).
+
+**For T033 (on or after 2026-10-06):** run `/ease-mentor` on Mentor Practice. Expected: it
+mentions the Subtitle lesson unprompted, skips the basics, and proposes Glow (SC-005).

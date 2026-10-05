@@ -40,6 +40,7 @@ Reads the active comp, starts a new lesson, and returns what to teach.
   ```json
   {
     "lesson": "new",
+    "project": "Claude AE Tutor Test.aep",
     "comp": { "name": "Mentor Practice", "duration": 8 },
     "findings": [
       { "layer": "Title", "property": "Position", "segments": [

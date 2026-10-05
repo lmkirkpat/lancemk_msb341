@@ -187,7 +187,7 @@ personal data. A session at least one day later refers to the lesson unprompted 
 
 - [X] T030 [US2] Implement `mentor/lib/learner-store.mjs` (FR-010, FR-012) over `LEARNER_FILE`, with a LessonEntry of `{ date, skill: "easing.basic", project, comp, attempted, result, demo_used, summary, next }` as in data-model.md › Learner record. Write atomically (temp file + rename). Make T029 pass
 - [X] T031 [US2] Implement `read_learner_record` and `record_lesson` in `mentor/tools.mjs` per contracts/mentor-tools.md §5–6
-- [ ] T032 [US2] Update `.claude/skills/ease-mentor/SKILL.md` (FR-011, FR-010):
+- [X] T032 [US2] Update `.claude/skills/ease-mentor/SKILL.md` (FR-011, FR-010):
   - Call `read_learner_record` **first**.
   - If there's no easing history, teach. If the last result was `partial`, pick up what was still wrong (US2-3). If `learned`, do a short review on new keyframes or advance to the next focus (US2-2), and mention the earlier lesson in the opening.
   - At the end of a lesson, call `record_lesson` with plain-language `summary` and `next` and no names.

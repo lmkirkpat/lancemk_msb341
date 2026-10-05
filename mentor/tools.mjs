@@ -28,6 +28,7 @@ async function snapshotProject({ focus_layers } = {}) {
   const { lesson, analysis } = session.start(snapshot, { focus_layers });
   return json({
     lesson,
+    project: snapshot.project,
     comp: { name: snapshot.comp.name, duration: snapshot.comp.duration },
     findings: analysis.findings,
     skipped: analysis.skipped.map(({ layer, property, reason }) => ({ layer, property, reason })),
