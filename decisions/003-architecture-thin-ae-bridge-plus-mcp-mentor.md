@@ -65,6 +65,10 @@ be replaced on its own:
 | **Mentor tools (MCP server, Node)** | Narrow tools: `snapshot_project`, `diff_since_last`, `preview_frame`, `set_ease`, plus reading and writing the learner record | Same tools; other apps (Resolve, Blender) added as more pipes behind them |
 | **Teaching (AI + interface)** | Claude Code / Claude Desktop, driven by a mentor prompt/skill. Learner record as local JSON/Markdown | A companion app or in-app panel (option 2 or 3), if the slice shows the teaching is worth it |
 
+**Amended 2026-10-05 by `decisions/005`:** the interface moves into a CEP panel in AE that drives
+headless Claude Code (same skill, MCP server and learner record). The AE pipe and mentor tools
+rows are unchanged.
+
 **The deciding reason:** the biggest open risk is whether the teaching is worth more than
 Adobe's assistant, not whether we can build an interface. Option 1 reaches that test fastest,
 and almost everything it builds survives whichever interface wins later.
