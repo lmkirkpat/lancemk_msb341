@@ -1,6 +1,5 @@
 // The mentor's six tools, as defined in specs/002-easing-slice/contracts/mentor-tools.md. This is
-// the entire set: there is no tool that runs arbitrary ExtendScript (FR-013). read_learner_record
-// and record_lesson are filled in by US2 (T031).
+// the entire set: there is no tool that runs arbitrary ExtendScript (FR-013).
 
 import fs from "node:fs";
 import os from "node:os";
@@ -8,10 +7,7 @@ import path from "node:path";
 import { runSnippet } from "./bridge-client.mjs";
 import { diff } from "./lib/diff.mjs";
 import * as session from "./lib/session.mjs";
-
-const notImplemented = (name) => async () => {
-  throw new Error(`${name} is not implemented yet (specs/002-easing-slice/tasks.md).`);
-};
+import * as learner from "./lib/learner-store.mjs";
 
 const json = (value) => ({ content: [{ type: "text", text: JSON.stringify(value, null, 2) }] });
 
@@ -109,6 +105,16 @@ async function previewFrame({ time } = {}) {
   };
 }
 
+// Learner record tools (§5–6). These never contact AE, so they work even when it's closed.
+async function readLearnerRecord() {
+  return json(learner.readRecord());
+}
+
+async function recordLesson(entry) {
+  const { skill } = learner.recordLesson(entry);
+  return json({ saved: true, skill: { status: skill.status, next: skill.next } });
+}
+
 export const TOOLS = [
   {
     name: "snapshot_project",
@@ -174,7 +180,7 @@ export const TOOLS = [
     description: "What the learner has practiced before, and what to review or do next. Read it before opening a lesson.",
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
     annotations: { readOnlyHint: true },
-    handler: notImplemented("read_learner_record"),
+    handler: readLearnerRecord,
   },
   {
     name: "record_lesson",
@@ -197,6 +203,6 @@ export const TOOLS = [
       additionalProperties: false,
     },
     annotations: { readOnlyHint: false, destructiveHint: false },
-    handler: notImplemented("record_lesson"),
+    handler: recordLesson,
   },
 ];

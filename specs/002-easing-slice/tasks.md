@@ -176,7 +176,7 @@ personal data. A session at least one day later refers to the lesson unprompted 
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T029 [P] [US2] Write `mentor/test/learner-store.test.mjs` covering:
+- [X] T029 [P] [US2] Write `mentor/test/learner-store.test.mjs` covering:
   - A missing file reads as `{ "version": 1, "skills": {}, "lessons": [] }`, and the result includes `path`.
   - `recordLesson(entry)` adds `date` and appends to `lessons`. It updates `skills["easing.basic"]`: `status` goes `"not_started" | "practicing" | "learned"`, becoming `learned` after 1 pass, with `last_practiced`, `times_passed`, and `next`.
   - `result` must be one of `"passed" | "partial" | "not_checked"`.
@@ -185,8 +185,8 @@ personal data. A session at least one day later refers to the lesson unprompted 
 
 ### Implementation for User Story 2
 
-- [ ] T030 [US2] Implement `mentor/lib/learner-store.mjs` (FR-010, FR-012) over `LEARNER_FILE`, with a LessonEntry of `{ date, skill: "easing.basic", project, comp, attempted, result, demo_used, summary, next }` as in data-model.md › Learner record. Write atomically (temp file + rename). Make T029 pass
-- [ ] T031 [US2] Implement `read_learner_record` and `record_lesson` in `mentor/tools.mjs` per contracts/mentor-tools.md §5–6
+- [X] T030 [US2] Implement `mentor/lib/learner-store.mjs` (FR-010, FR-012) over `LEARNER_FILE`, with a LessonEntry of `{ date, skill: "easing.basic", project, comp, attempted, result, demo_used, summary, next }` as in data-model.md › Learner record. Write atomically (temp file + rename). Make T029 pass
+- [X] T031 [US2] Implement `read_learner_record` and `record_lesson` in `mentor/tools.mjs` per contracts/mentor-tools.md §5–6
 - [ ] T032 [US2] Update `.claude/skills/ease-mentor/SKILL.md` (FR-011, FR-010):
   - Call `read_learner_record` **first**.
   - If there's no easing history, teach. If the last result was `partial`, pick up what was still wrong (US2-3). If `learned`, do a short review on new keyframes or advance to the next focus (US2-2), and mention the earlier lesson in the opening.
