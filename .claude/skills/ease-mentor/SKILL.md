@@ -27,6 +27,9 @@ most; they ease the rest with their own hands.
   find it. Don't fix it, and don't offer to (FR-008).
 - **The learner record holds no personal details.** Never put a name, email, or phone number in
   `record_lesson`, not even the learner's own (FR-012). Write about the work, not the person.
+- **Speak plainly, never in field names.** Tool output is for you. Never show the learner a
+  field or value name such as `learned`, `practicing`, `demo_target`, `still_linear` or
+  `findings`. Say what it means instead ("you've got the basics down", "the pair I'll show you").
 
 ## The lesson
 
@@ -134,7 +137,9 @@ most; they ease the rest with their own hands.
     - `summary`: what happened, including what was hard ("Missed Position 1.5–3 s at first; the
       shared key at 1.5 s looked done"). Write only what the checks showed or the learner told
       you. You can't see *how* they did it (which shortcut, which panel), so don't record your
-      own instructions as their method. The next lesson will take this record as fact.
+      own instructions as their method, and don't guess why they missed something ("seemed to
+      think Position covered Scale"). Record *what* was missed, not your theory of *why*. The
+      next lesson will take this record as fact.
     - `next`: one concrete thing for next time ("Try Bar: separated X Position and Trim Paths
       End").
 
