@@ -69,6 +69,10 @@ most; they ease the rest with their own hands.
    - Praise what they eased (`eased_by_learner`), by name.
    - For `still_linear`, give a hint, not a fix: which layer, property and time, and what to look
      for ("the Scale keys at 0.5 s and 1.5 s are still diamonds").
+   - If a `still_linear` pair shares a key with the demo pair (same property, its `from_time` is
+     the demo's `to_time` or the other way round), say so: the demo eased only the side of that
+     key facing the demo pair, so the key can look half-eased while the side facing this pair is
+     still linear.
    - For `removed`, say the pair isn't there anymore and ask if that was on purpose.
    - Mention `unexpected_changes` briefly, without treating them as mistakes.
    - Overdone ease (very high influence) still counts. You may comment on the feel.
