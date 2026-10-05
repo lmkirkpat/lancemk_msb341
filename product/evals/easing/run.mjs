@@ -94,6 +94,14 @@ function caseHash(c) {
 
 // ---------- results ----------
 
+// Results are committed (constitution IV). Claude Code puts local paths in transcripts (an image
+// tool result shows where it was saved), and a home folder path usually contains a real name.
+// Covers both the plain path and the dashed form in ~/.claude/projects folder names.
+function scrubHome(text) {
+  const home = os.homedir();
+  return text.replaceAll(home, "~").replaceAll(home.replaceAll("/", "-"), "-~");
+}
+
 function previousResults() {
   if (!fs.existsSync(RESULTS_DIR)) return [];
   return fs
@@ -357,7 +365,7 @@ function main() {
     summary: { passed, total: results.length, percent: pct, target_percent: TARGET * 100 }, cases: results };
   fs.mkdirSync(RESULTS_DIR, { recursive: true });
   const file = path.join(RESULTS_DIR, `${stamp()}.json`);
-  fs.writeFileSync(file, JSON.stringify(out, null, 2) + "\n");
+  fs.writeFileSync(file, scrubHome(JSON.stringify(out, null, 2)) + "\n");
 
   // Change against the most recent previous result (US3-3).
   const prev = history.at(-1);
