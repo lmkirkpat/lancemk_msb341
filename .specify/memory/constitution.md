@@ -17,11 +17,15 @@ work turns it into documentation instead of a decision.
 
 Meaningful choices MUST get a numbered record in `decisions/`, written when the choice is made,
 covering the options rejected and what would change our mind. Plans MUST respect active
-decisions. In particular, `decisions/003` requires:
+decisions. In particular, `decisions/003` and `decisions/005` require:
 
-- The piece inside After Effects is a thin pipe with no teaching logic.
+- The bridge, the piece that reads and changes the After Effects project, is a thin pipe with no
+  teaching logic.
 - The mentor uses narrow, tested MCP tools, with no open-ended script execution in the product.
-- The mentor and the learner record live outside After Effects.
+- The mentor's reasoning and the learner record live outside After Effects. A panel inside AE MAY
+  start the mentor and show what it says (`decisions/005`), but it MUST hold no teaching logic,
+  MUST NOT read or change the project except through the mentor's tools, and MUST NOT keep its
+  own copy of the learner record (it only reads the record).
 
 A plan that conflicts with an active decision MUST either change or propose a new decision
 that supersedes it.
@@ -77,4 +81,4 @@ editing this file, bumping the version (MAJOR: a principle removed or redefined;
 principle or section added or materially expanded; PATCH: wording), and updating the dates
 below. Every Spec Kit plan checks compliance before tasks are generated.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-09-29
+**Version**: 1.1.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-10-05
