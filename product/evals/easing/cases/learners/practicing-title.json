@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "practicing",
+      "last_practiced": "2026-10-01T18:00:00.000Z",
+      "times_passed": 0,
+      "next": "Ease Title › Scale and Title › Opacity (0.5–1.5 s); Position is done."
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-01T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Eased Title › Position 1.5–3 s after the demo on Position 0.5–1.5 s",
+      "result": "partial",
+      "demo_used": true,
+      "summary": "Stopped with Title › Scale and Title › Opacity still linear.",
+      "next": "Ease Title › Scale and Title › Opacity (0.5–1.5 s); Position is done."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "01-new-learner-opening",
+  "title": "New learner opening on a busy comp",
+  "covers": [
+    "US1-1",
+    "FR-003",
+    "FR-011"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "read_learner_record",
+    "tools_called": [
+      "snapshot_project"
+    ],
+    "set_ease_max": 0
+  },
+  "rubric": [
+    "R-LEADS",
+    "R-FOCUS",
+    "R-STATES-LIMITS",
+    "R-NAMES-LAYERS",
+    "R-USES-MEMORY"
+  ]
+}

@@ -126,5 +126,9 @@ treats it as fact. **Fix:** I added a line to `SKILL.md` step 11 saying `summary
 what the checks showed or the learner said. The eval set should also check what gets written,
 not just whether memory is used (T038).
 
+I then removed the false sentence from `learner.json` by hand, so T033 tests memory use (SC-005)
+without a wrong fact mixed in. Repeating false facts from memory will be tested on purpose in
+the eval set instead (T039).
+
 **For T033 (on or after 2026-10-06):** run `/ease-mentor` on Mentor Practice. Expected: it
 mentions the Subtitle lesson unprompted, skips the basics, and proposes Glow (SC-005).

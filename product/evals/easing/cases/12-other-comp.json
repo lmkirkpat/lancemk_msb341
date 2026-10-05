@@ -1,0 +1,33 @@
+{
+  "id": "12-other-comp",
+  "title": "A different comp is active at the check",
+  "covers": [
+    "FR-007",
+    "C1"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good."
+    },
+    {
+      "project": "other-comp",
+      "say": "done"
+    }
+  ],
+  "expect": {
+    "verdict": "none",
+    "set_ease_max": 0,
+    "last_turn_tools_not_called": [
+      "snapshot_project"
+    ]
+  },
+  "rubric": [
+    "R-HONEST-WHEN-BLIND"
+  ]
+}

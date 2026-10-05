@@ -1,0 +1,29 @@
+{
+  "id": "02-explanation",
+  "title": "Explains easing on the learner's own layers with a frame",
+  "covers": [
+    "FR-004"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "preview_frame"
+    ],
+    "set_ease_max": 0
+  },
+  "rubric": [
+    "R-SHOWS",
+    "R-NAMES-LAYERS",
+    "R-LEARNER-DOES"
+  ]
+}

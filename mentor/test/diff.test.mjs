@@ -103,3 +103,34 @@ test("renamed or reordered layers are noted, since segment ids use layer indexes
   const r = diff(before, moved, lesson());
   assert.ok(r.unexpected_changes.includes("Layer 2 is now \"Tagline\" (was \"Subtitle\")"), r.unexpected_changes.join("; "));
 });
+
+// Key values (recorded since T039's snapshot change). Synthetic fixtures predate them, so these
+// tests add values to copies.
+const withValues = (snap) => {
+  const s = structuredClone(snap);
+  for (const l of s.layers) for (const p of l.properties) p.keys.forEach((k, i) => (k.value = [100 + i * 10, 100 + i * 10]));
+  return s;
+};
+const scaleKeys = (s) => s.layers[0].properties.find((p) => p.match_name === "ADBE Scale").keys;
+
+test("a changed value on a target property is noted, and the pair still counts as linear", () => {
+  const was = withValues(before);
+  const now = withValues(before);
+  scaleKeys(now)[1].value = [125, 125];
+  const r = diff(was, now, lesson());
+  assert.equal(r.targets.find((t) => t.segment_id === SCALE).result, "still_linear");
+  assert.deepEqual(r.unexpected_changes, [`Title › Scale value changed at ${scaleKeys(now)[1].time} s`]);
+});
+
+test("snapshots without values (older fixtures) never report a value change", () => {
+  const now = withValues(before);
+  scaleKeys(now)[1].value = [125, 125];
+  assert.deepEqual(diff(before, now, lesson()).unexpected_changes, []);
+  assert.deepEqual(diff(withValues(before), before, lesson()).unexpected_changes, []);
+});
+
+test("an eased target with unchanged values adds no note", () => {
+  const r = diff(withValues(before), withValues(fixture("attempt-complete")), lesson());
+  assert.deepEqual(r.unexpected_changes, []);
+  assert.equal(r.passed, true);
+});

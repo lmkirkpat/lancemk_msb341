@@ -206,7 +206,7 @@ pass or fail per case with reasons, and saves dated results that can be compared
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T034 [P] [US3] Write `mentor/test/fixture-mode.test.mjs` covering:
+- [X] T034 [P] [US3] Write `mentor/test/fixture-mode.test.mjs` covering:
   - Spawn `node mentor/server.mjs` with `AE_MENTOR_HOME` (temp) and `AE_MENTOR_FIXTURE_STATE` set, and speak JSON-RPC over stdio.
   - `snapshot_project` reads the fixture named in the state file.
   - `set_ease` changes an in-memory copy, so a following `diff_since_last` shows `eased_by_demo`.
@@ -215,13 +215,13 @@ pass or fail per case with reasons, and saves dated results that can be compared
 
 ### Implementation for User Story 3
 
-- [ ] T035 [US3] (FR-014) Add fixture mode to `mentor/bridge-client.mjs` and `mentor/tools.mjs` per contracts/mentor-tools.md › Fixture mode:
+- [X] T035 [US3] (FR-014) Add fixture mode to `mentor/bridge-client.mjs` and `mentor/tools.mjs` per contracts/mentor-tools.md › Fixture mode:
   - When `AE_MENTOR_FIXTURE_STATE` is set, never open HTTP.
   - Snapshots come from the named fixture, with `set_ease` applied to an in-memory copy that is persisted in `MENTOR_HOME` so it survives a server restart between turns.
   - `preview_frame` returns a 1×1 placeholder PNG.
   - Make T034 pass.
-- [ ] T036 [US3] **Risk check first** (plan › Risks): confirm `claude -p --mcp-config .mcp.json --output-format json` in this repo can load the `/ease-mentor` skill and the `ae-mentor` tools, and that `--resume <session_id>` continues a conversation. If the skill doesn't load headless, use `--append-system-prompt-file .claude/skills/ease-mentor/SKILL.md` instead. Record the working invocation in `product/evals/easing/README.md`
-- [ ] T037 [P] [US3] 🖐 Live: capture eval fixtures from Mentor Practice into `product/evals/easing/fixtures/`, using `snapshot_project` after each setup:
+- [X] T036 [US3] **Risk check first** (plan › Risks): confirm `claude -p --mcp-config .mcp.json --output-format json` in this repo can load the `/ease-mentor` skill and the `ae-mentor` tools, and that `--resume <session_id>` continues a conversation. If the skill doesn't load headless, use `--append-system-prompt-file .claude/skills/ease-mentor/SKILL.md` instead. Record the working invocation in `product/evals/easing/README.md`
+- [X] T037 [P] [US3] 🖐 Live: capture eval fixtures from Mentor Practice into `product/evals/easing/fixtures/`, using `snapshot_project` after each setup:
   - `before.json`
   - `after-demo.json` (Title › Position pair 1 eased)
   - `partial.json` (demo + Title › Position pair 2 eased; Scale and Opacity still linear)
@@ -231,8 +231,8 @@ pass or fail per case with reasons, and saves dated results that can be compared
   - `all-eased.json` (the original comp)
 
   Restore the comp with Edit > Undo between captures.
-- [ ] T038 [P] [US3] Write `product/evals/easing/rubric.md` with pass/fail definitions for: `R-LEADS` (proposes a lesson without being asked), `R-FOCUS` (on a busy comp, proposes one layer, two at most, and names no more than 5 pairs in the opening), `R-NAMES-LAYERS` (uses real layer and property names), `R-SHOWS` (uses a frame when explaining), `R-LEARNER-DOES` (asks the learner to act; no extra edits), `R-HINT-NOT-FIX`, `R-USES-MEMORY`, `R-STATES-LIMITS` (hidden layers, precomps), and `R-HONEST-WHEN-BLIND` (no claims when AE is unreachable)
-- [ ] T039 [US3] Write at least 10 cases (14 listed) in `product/evals/easing/cases/NN-name.json`, following data-model.md › Eval case (`id`, `title`, `covers`, `learner_record`, `turns[{ project, say }]`, `expect`, `rubric`):
+- [X] T038 [P] [US3] Write `product/evals/easing/rubric.md` with pass/fail definitions for: `R-LEADS` (proposes a lesson without being asked), `R-FOCUS` (on a busy comp, proposes one layer, two at most, and names no more than 5 pairs in the opening), `R-NAMES-LAYERS` (uses real layer and property names), `R-SHOWS` (uses a frame when explaining), `R-LEARNER-DOES` (asks the learner to act; no extra edits), `R-HINT-NOT-FIX`, `R-USES-MEMORY`, `R-STATES-LIMITS` (hidden layers, precomps), and `R-HONEST-WHEN-BLIND` (no claims when AE is unreachable)
+- [X] T039 [US3] Write at least 10 cases (14 listed) in `product/evals/easing/cases/NN-name.json`, following data-model.md › Eval case (`id`, `title`, `covers`, `learner_record`, `turns[{ project, say }]`, `expect`, `rubric`):
 
   | # | Case | Covers |
   |---|---|---|
@@ -252,7 +252,7 @@ pass or fail per case with reasons, and saves dated results that can be compared
   | 14 | Demo, re-snapshot, then "show me again" → `DEMO_USED`, `set_ease_calls_max: 1` | FR-006, C1 |
 
   Seed learner records live in `product/evals/easing/cases/learners/`.
-- [ ] T040 [US3] Write `product/evals/easing/run.mjs` (Node built-ins only), following research R6:
+- [X] T040 [US3] Write `product/evals/easing/run.mjs` (Node built-ins only), following research R6:
   - Per case: create a temp `AE_MENTOR_HOME`, seed the learner record, and write the fixture state before each turn. Run turn 1 with `claude -p` (T036's invocation, `--max-turns 12`) and later turns with `--resume`.
   - Run deterministic checks from `calls.jsonl` and the tool results against `expect`.
   - Only if those pass (unless `--judge-always`): run a judge `claude -p` with `rubric.md`, the transcript, and the case's `rubric` items, requiring JSON `{ item, pass, reason }[]`.

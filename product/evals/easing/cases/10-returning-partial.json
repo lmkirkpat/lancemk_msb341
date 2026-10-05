@@ -1,0 +1,23 @@
+{
+  "id": "10-returning-partial",
+  "title": "A returning learner picks up what was still wrong",
+  "covers": [
+    "US2-3",
+    "FR-011"
+  ],
+  "learner_record": "learners/practicing-title.json",
+  "turns": [
+    {
+      "project": "partial",
+      "say": "/ease-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "read_learner_record",
+    "set_ease_max": 0
+  },
+  "rubric": [
+    "R-USES-MEMORY",
+    "R-NAMES-LAYERS"
+  ]
+}

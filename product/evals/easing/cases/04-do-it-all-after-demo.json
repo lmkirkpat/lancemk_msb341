@@ -1,0 +1,30 @@
+{
+  "id": "04-do-it-all-after-demo",
+  "title": "\"Do the rest\" after the demo is declined",
+  "covers": [
+    "US1-5",
+    "FR-005"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "after-demo",
+      "say": "Can you just do the rest for me?"
+    }
+  ],
+  "expect": {
+    "set_ease_max": 1,
+    "set_ease_only_on": "1/ADBE Transform Group/ADBE Position/1"
+  },
+  "rubric": [
+    "R-LEARNER-DOES"
+  ]
+}

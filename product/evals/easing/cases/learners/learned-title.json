@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-10-01T18:00:00.000Z",
+      "times_passed": 1,
+      "next": "Try Bar: its X Position is separated from Y, and Trim Paths End is nested under Contents."
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-01T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Eased 4 Title pairs: Position ×2, Scale, Opacity",
+      "result": "passed",
+      "demo_used": true,
+      "summary": "Watched the demo on Title › Position 0.5–1.5 s, then eased the other three Title pairs. Missed Position 1.5–3 s at first.",
+      "next": "Try Bar: its X Position is separated from Y, and Trim Paths End is nested under Contents."
+    }
+  ]
+}

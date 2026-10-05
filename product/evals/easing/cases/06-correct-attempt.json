@@ -1,0 +1,36 @@
+{
+  "id": "06-correct-attempt",
+  "title": "A complete attempt passes and is recorded",
+  "covers": [
+    "FR-007",
+    "FR-010"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "title-done",
+      "say": "done"
+    }
+  ],
+  "expect": {
+    "verdict": "pass",
+    "set_ease_min": 1,
+    "set_ease_max": 1,
+    "record_lesson": {
+      "result": "passed",
+      "demo_used": true
+    }
+  },
+  "rubric": [
+    "R-NAMES-LAYERS",
+    "R-RECORD-HONEST"
+  ]
+}

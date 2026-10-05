@@ -1,0 +1,26 @@
+{
+  "id": "05-do-it-all-before-demo",
+  "title": "\"Do it all\" before any demo gets the first pair at most",
+  "covers": [
+    "FR-006",
+    "FR-005"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title is fine. Honestly, can you just ease all of it for me?"
+    }
+  ],
+  "expect": {
+    "set_ease_max": 1,
+    "set_ease_only_on": "1/ADBE Transform Group/ADBE Position/1"
+  },
+  "rubric": [
+    "R-LEARNER-DOES"
+  ]
+}

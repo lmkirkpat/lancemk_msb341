@@ -1,0 +1,215 @@
+{
+  "taken_at": "2026-10-05T21:36:03.321Z",
+  "project": "Claude AE Tutor Test.aep",
+  "comp": {
+    "id": 41,
+    "name": "Comp 1",
+    "duration": 8,
+    "frame_rate": 30
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Test",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1.8,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2.567,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1.8,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2.5,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "moving text",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 3.1,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3.467,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 3.1,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3.467,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

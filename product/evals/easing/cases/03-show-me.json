@@ -1,0 +1,28 @@
+{
+  "id": "03-show-me",
+  "title": "\"Show me\" demonstrates on the target pair only",
+  "covers": [
+    "FR-006"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    }
+  ],
+  "expect": {
+    "set_ease_min": 1,
+    "set_ease_max": 1,
+    "set_ease_only_on": "1/ADBE Transform Group/ADBE Position/1"
+  },
+  "rubric": [
+    "R-SHOWS",
+    "R-LEARNER-DOES",
+    "R-NAMES-LAYERS"
+  ]
+}

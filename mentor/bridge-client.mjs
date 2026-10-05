@@ -6,6 +6,7 @@ import http from "node:http";
 import path from "node:path";
 import { BRIDGE_CONFIG, JSX_DIR } from "./paths.mjs";
 import { CODES, MentorError } from "./errors.mjs";
+import { FIXTURE_STATE, runFixtureSnippet } from "./fixture.mjs";
 
 // JSON literals are valid ExtendScript once U+2028/2029 are escaped (from upstream tools.mjs).
 const LINE_SEPARATORS = new RegExp("[" + String.fromCharCode(0x2028, 0x2029) + "]", "g");
@@ -92,8 +93,9 @@ export function toError(r, name, prefixLines) {
 }
 
 // Runs mentor/jsx/<name>.jsx. Pass undo: true only for snippets that change the project, so the
-// learner gets exactly one undo step per change.
+// learner gets exactly one undo step per change. In fixture mode, AE is never contacted.
 export async function runSnippet(name, args, { undo = false, timeoutMs = 30000 } = {}) {
+  if (FIXTURE_STATE) return runFixtureSnippet(name, args);
   const { code, prefixLines } = assemble(name, args);
   const r = await bridge("POST", "/run", { code, undo: undo ? `AE Mentor: ${name}` : "", label: name }, timeoutMs);
   if (!r.ok) throw toError(r, name, prefixLines);

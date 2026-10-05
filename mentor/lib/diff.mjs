@@ -11,6 +11,18 @@ const segLabel = (s) => `${propLabel(s.layer, s.prop)} ${secs(s.from_time)}–${
 // What a pair's motion depends on: its times and the two sides that face each other.
 const signature = (s) => JSON.stringify([s.from_time, s.to_time, s.from.out_type, s.to.in_type, s.from.out_ease, s.to.in_ease]);
 
+// The first key whose value differs, or null. Snapshots from before values were recorded (and
+// properties whose values aren't numbers) have no value to compare, so they never differ.
+function changedValueAt(was, now) {
+  for (let i = 0; i < was.keys.length; i++) {
+    const a = was.keys[i].value;
+    const b = now.keys[i].value;
+    if (a == null || b == null) continue;
+    if (JSON.stringify(a) !== JSON.stringify(b)) return was.keys[i].time;
+  }
+  return null;
+}
+
 function propsByKey(snapshot) {
   const map = new Map();
   for (const layer of snapshot.layers) for (const prop of layer.properties) map.set(`${layer.index}/${prop.path}`, { layer, prop });
@@ -49,7 +61,9 @@ function unexpectedChanges(baseline, current, targets) {
       notes.push(`${label} expression was turned ${now.prop.expression_enabled ? "on" : "off"}`);
       continue;
     }
-    if (touched.has(key)) notes.push(`${label} was changed (not part of this lesson)`);
+    const valueAt = changedValueAt(prop, now.prop);
+    if (valueAt != null) notes.push(`${label} value changed at ${secs(valueAt)} s`);
+    else if (touched.has(key)) notes.push(`${label} was changed (not part of this lesson)`);
   }
   for (const [key, { layer, prop }] of after) {
     if (!before.has(key)) notes.push(`${propLabel(layer, prop)} is now animated (wasn't before)`);

@@ -1,0 +1,31 @@
+{
+  "id": "08-wrong-property",
+  "title": "An extra key on the wrong property is noted, not graded as easing",
+  "covers": [
+    "US1-4",
+    "FR-007"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "wrong-property",
+      "say": "done"
+    }
+  ],
+  "expect": {
+    "verdict": "fail",
+    "set_ease_max": 1
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-LAYERS"
+  ]
+}

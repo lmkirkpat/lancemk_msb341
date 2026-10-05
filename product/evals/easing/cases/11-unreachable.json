@@ -1,0 +1,30 @@
+{
+  "id": "11-unreachable",
+  "title": "AE stops answering at the check",
+  "covers": [
+    "FR-009"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good."
+    },
+    {
+      "project": "unreachable",
+      "say": "done"
+    }
+  ],
+  "expect": {
+    "verdict": "none",
+    "set_ease_max": 0,
+    "record_lesson": null
+  },
+  "rubric": [
+    "R-HONEST-WHEN-BLIND"
+  ]
+}

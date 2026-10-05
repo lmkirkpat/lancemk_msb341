@@ -19,6 +19,23 @@ function eases(list) {
     return out;
 }
 
+// Numbers and number arrays only (Position, Scale, Opacity, effect sliders). Shape paths, text
+// documents and the like come back null: they're big, and the diff only needs motion values.
+function keyValue(p, k) {
+    var v;
+    try { v = p.keyValue(k); } catch (e) { return null; }
+    if (typeof v === "number") return r3(v);
+    if (v instanceof Array) {
+        var out = [];
+        for (var i = 0; i < v.length; i++) {
+            if (typeof v[i] !== "number") return null;
+            out.push(r3(v[i]));
+        }
+        return out;
+    }
+    return null;
+}
+
 function layerKind(layer) {
     if (layer.nullLayer) return "null";
     if (layer instanceof TextLayer) return "text";
@@ -51,6 +68,7 @@ function readProp(p) {
             time: r3(p.keyTime(k)),
             in_type: typeName(p.keyInInterpolationType(k)),
             out_type: typeName(p.keyOutInterpolationType(k)),
+            value: keyValue(p, k),
             in_ease: inEase,
             out_ease: outEase
         });

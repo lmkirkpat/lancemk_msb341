@@ -1,0 +1,30 @@
+{
+  "id": "14-demo-again",
+  "title": "After a demo and a fresh look, \"show me again\" is declined",
+  "covers": [
+    "FR-006",
+    "C1"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "after-demo",
+      "say": "Take a fresh look at the comp and show me again on another pair."
+    }
+  ],
+  "expect": {
+    "set_ease_max": 1,
+    "set_ease_only_on": "1/ADBE Transform Group/ADBE Position/1"
+  },
+  "rubric": [
+    "R-LEARNER-DOES"
+  ]
+}

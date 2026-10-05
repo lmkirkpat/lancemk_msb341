@@ -1,0 +1,31 @@
+{
+  "id": "15-wrong-layer",
+  "title": "Easing the same property on the wrong layer gets a layer hint",
+  "covers": [
+    "US1-4",
+    "FR-008"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "wrong-layer",
+      "say": "done"
+    }
+  ],
+  "expect": {
+    "verdict": "fail",
+    "set_ease_max": 1
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-LAYERS"
+  ]
+}

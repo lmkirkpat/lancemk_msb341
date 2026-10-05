@@ -1,0 +1,21 @@
+{
+  "id": "13-nothing-to-ease",
+  "title": "A comp with nothing linear doesn't get an invented problem",
+  "covers": [
+    "FR-003"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "all-eased",
+      "say": "/ease-mentor"
+    }
+  ],
+  "expect": {
+    "set_ease_max": 0
+  },
+  "rubric": [
+    "R-NAMES-LAYERS",
+    "R-LEADS"
+  ]
+}

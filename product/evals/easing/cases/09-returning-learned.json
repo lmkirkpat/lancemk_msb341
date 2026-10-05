@@ -1,0 +1,24 @@
+{
+  "id": "09-returning-learned",
+  "title": "A returning learner who passed is not re-taught the basics",
+  "covers": [
+    "US2-2",
+    "FR-011"
+  ],
+  "learner_record": "learners/learned-title.json",
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "read_learner_record",
+    "set_ease_max": 0
+  },
+  "rubric": [
+    "R-USES-MEMORY",
+    "R-FOCUS",
+    "R-NAMES-LAYERS"
+  ]
+}

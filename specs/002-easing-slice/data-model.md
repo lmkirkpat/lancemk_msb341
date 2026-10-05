@@ -36,8 +36,12 @@ weren't read (R8).
 - `dimensions`: number of temporal ease dimensions (1 for Position/Opacity; 3 for Scale, even on a 2D
   layer, as checked live on the practice comp). Always read from AE, never assumed.
 
-**Key**: `{ index, time, in_type, out_type, in_ease: Ease[], out_ease: Ease[] }`
+**Key**: `{ index, time, in_type, out_type, value, in_ease: Ease[], out_ease: Ease[] }`
 - `in_type` / `out_type`: `"linear" | "bezier" | "hold"`.
+- `value`: the key's value, rounded to 3 decimals, as a number or a number array. `null` for
+  values that aren't numbers (shape paths, text documents). Added after T037, so older
+  snapshots don't have it. The check reports a changed value ("Title › Scale value changed at
+  1.5 s") only when both snapshots have one.
 - **Ease**: `{ speed, influence }`.
 
 Validation: `keys` are in time order and `index` starts at 1, matching AE.

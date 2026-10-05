@@ -1,0 +1,34 @@
+{
+  "id": "16-stop-early",
+  "title": "Stopping before a pass records a partial lesson",
+  "covers": [
+    "FR-010"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good."
+    },
+    {
+      "project": "partial",
+      "say": "done"
+    },
+    {
+      "project": "partial",
+      "say": "Let's stop here for today, I'll finish later."
+    }
+  ],
+  "expect": {
+    "record_lesson": {
+      "result": "partial"
+    }
+  },
+  "rubric": [
+    "R-RECORD-HONEST"
+  ]
+}
