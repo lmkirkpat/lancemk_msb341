@@ -35,7 +35,7 @@ Everything the panel needs, and nothing tied to Claude Code's wire format.
 | `text` | `{ text }` | A complete text block. Replaces the deltas shown for that block |
 | `tool_call` | `{ id, name }` | The mentor called a tool. `name` without the `mcp__ae-mentor__` prefix |
 | `tool_result` | `{ id, name, ok, json?, text?, images[] }` | `json` when the text parses as JSON. `images` as `{ data, mimeType }` |
-| `turn_end` | `{ ok, cost_usd?, wait_ms, total_ms }` | The stream's `result` event, or the timeout |
+| `turn_end` | `{ ok, cost_usd?, wait_ms, first_event_ms, total_ms }` | The stream's `result` event, or the timeout. `wait_ms` to the first `text_delta`; `first_event_ms` to the first `text_delta` or `tool_call` |
 | `error` | `{ kind, message }` | See below. A turn in flight also gets `turn_end { ok: false }` |
 | `exit` | `{ code }` | The process ended |
 
@@ -55,7 +55,8 @@ Verified in the spike task. Only these message types are read. Everything else i
 | `user` message: `tool_result` block | `tool_result` (text parts joined; `image` parts → `images`) |
 | `result` | `turn_end` (`total_cost_usd` → `cost_usd`); `is_error` with an auth message → `error not_signed_in` |
 
-Launch arguments (R2), run with `cwd = repo_path`:
+Launch arguments (R2), run with `cwd = repo_path` and an environment of the panel's environment
+plus `PATH` = `dirname(claude_path):dirname(node_path):/usr/bin:/bin:/usr/sbin:/sbin` (R3):
 
 ```text
 --print --input-format stream-json --output-format stream-json --verbose
@@ -72,4 +73,5 @@ Launch arguments (R2), run with `cwd = repo_path`:
 - The adapter never reads or writes the AE project, `session.json`, or `learner.json`.
 - The adapter never adds tools beyond the six above, and never enables Bash, file or web tools.
 - One turn at a time.
+- The child process can always find `node`, so the `ae-mentor` server starts inside AE (R3).
 - `stop()` leaves no child process running.

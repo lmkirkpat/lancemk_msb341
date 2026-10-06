@@ -18,8 +18,8 @@ How to install the panel and prove spec 003 works. Steps a–f are the same less
 bash panel/install.sh
 ```
 
-Expected: `OK` lines for the CEP link (`AEMentorPanel`) and for `panel.json` with the `claude`
-and repo paths. Restart AE. **Window > Extensions > AE Mentor** opens the panel.
+Expected: `OK` lines for the CEP link (`AEMentorPanel`) and for `panel.json` with the `claude`,
+`node` and repo paths. Restart AE. **Window > Extensions > AE Mentor** opens the panel.
 
 ## 2. Unit tests (no AE, no cost)
 

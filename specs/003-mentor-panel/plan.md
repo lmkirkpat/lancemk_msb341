@@ -55,6 +55,8 @@ against fixture mode; a manual live run per `quickstart.md`
 - At most one demonstration per lesson, still enforced by the server (`DEMO_USED`).
 - No npm dependencies; code must run in CEP's older Node (R8).
 - Everything model-facing behind one adapter (`decisions/005`).
+- AE's child processes don't inherit the Terminal's `PATH`, so the adapter sets it (R3), and a
+  check inside CEP runs before the UI is built (tasks T004).
 
 **Scale/Scope**: one learner, one Mac, one skill. About 12 small panel modules, 2 dev scripts,
 install and uninstall scripts, 4 eval cases, 1 new eval check
@@ -110,13 +112,14 @@ panel/                          # NEW: the AE Mentor panel (its own CEP bundle, 
 │   ├── requests.js             # Button labels and fixed requests (contracts/button-requests.md)
 │   ├── text.js                 # Safe rendering subset for mentor text (R8)
 │   ├── panel-session.js        # Read and write panel-session.json; continue rules (R6)
+│   ├── bridge-status.js        # The bridge's start time from /health, nothing else (R6)
 │   └── turns.js                # Append panel-turns.jsonl (R9)
 ├── test/                       # node:test; recorded stream lines in test/fixtures/
 ├── dev/
 │   ├── drive.js                # Run the adapter from Terminal (fixture or live)
 │   └── turns.js                # SC-004 share and cost per lesson from panel-turns.jsonl
 ├── package.json                # "test": "node --test test/" (no dependencies)
-├── install.sh                  # Symlink AEMentorPanel, write panel.json
+├── install.sh                  # Symlink AEMentorPanel, write panel.json (claude, node, repo paths)
 └── uninstall.sh
 
 product/evals/easing/

@@ -16,9 +16,11 @@ Written by `panel/install.sh`, read by the panel at start (R3).
 |---|---|---|
 | `version` | 1 | |
 | `claude_path` | string | Absolute path to the `claude` executable |
+| `node_path` | string | Absolute path to `node` (Claude Code starts the mentor with it, R3) |
 | `repo_path` | string | Absolute path to this repo (skill, `.mcp.json`) |
 
-Validation: both paths exist; `claude_path` is executable. Otherwise the panel shows the fix and
+Validation: all three paths exist; `claude_path` and `node_path` are executable; `repo_path`
+contains `.mcp.json`. Otherwise the panel shows the fix and
 starts nothing (FR-015).
 
 ## Panel session (`panel-session.json`)
@@ -129,7 +131,9 @@ One line per turn, appended (R9). For SC-004 and cost.
 |---|---|---|
 | `at` | ISO time | When the request was sent |
 | `kind` | `"start" \| "check" \| "hint" \| "show_me" \| "show_me_again" \| "ask" \| "continue"` | |
-| `wait_ms` | number or null | Click to first text delta. Null if none came |
+| `wait_ms` | number or null | Click to first text delta (SC-004). Null if none came |
+| `first_event_ms` | number or null | Click to the first text delta or tool call, whichever comes first. Context for SC-004 only |
+| `lesson_passed` | boolean | True when this turn's check passed (an ok `diff_since_last` with `passed: true`). Used for lesson duration (SC-005) |
 | `total_ms` | number | Click to the end of the turn |
 | `cost_usd` | number or null | From the `result` event |
 | `ok` | boolean | False on error, timeout or process exit |

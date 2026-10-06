@@ -51,13 +51,20 @@ of the same steps (quickstart §5).
 ## R3. Finding Claude Code and the repo from inside AE
 
 **Decision:** a new `panel/install.sh` writes `~/Library/Application Support/AEMentor/panel.json`
-with `claude_path` (from `command -v claude`) and `repo_path` (the repo root). The panel reads it
-at start. If either is missing or not usable, the panel shows a plain message with the fix
-(FR-015) and starts nothing.
+with `claude_path` (from `command -v claude`), `node_path` (from `command -v node`) and
+`repo_path` (the repo root). The panel reads it at start. If any is missing or not usable, the
+panel shows a plain message with the fix (FR-015) and starts nothing.
 
-**Rationale:** apps opened from the Dock don't get the shell's `PATH`, so a bare `claude` would
-fail inside AE even though it works in Terminal. The repo path tells Claude Code which skill and
-`.mcp.json` to load.
+The adapter spawns Claude Code with `PATH` set to the folders of `claude_path` and `node_path`,
+then `/usr/bin:/bin:/usr/sbin:/sbin`. Claude Code starts the mentor through `.mcp.json` as
+`"command": "node"`, so without this the `ae-mentor` server can't start inside AE and the mentor
+has no tools. On the builder's Mac, `node` is in `/opt/homebrew/bin` and `claude` in
+`~/.local/bin`, and neither is on a Dock-launched app's `PATH`.
+
+**Rationale:** apps opened from the Dock don't get the shell's `PATH`, so a bare `claude` (or the
+`node` that `.mcp.json` names) would fail inside AE even though it works in Terminal. The repo
+path tells Claude Code which skill and `.mcp.json` to load. Terminal-run tests can't catch this,
+so a check inside CEP runs before the UI is built (tasks T004).
 
 **Sign-in:** if Claude Code isn't signed in, the process ends with an error result. The panel maps
 it to "Claude Code isn't signed in. Open Terminal and run `claude` once to sign in." Other start
@@ -114,6 +121,10 @@ Claude Code with `--resume <session id>`. Otherwise it offers a new lesson.
 display log and Claude Code's own session history are enough to pick up where it stopped. The
 bridge's start time (from its status endpoint, which returns no project data) is a simple "same
 AE session" test, since the bridge restarts with AE.
+
+**Known limit:** the bridge's own status panel has a Restart button that restarts the bridge but
+not AE. After using it, the start time changes and Continue lesson isn't offered, even though AE
+didn't restart. That's acceptable for one user and noted here, not handled.
 
 **Frames in the log:** stored as file paths in the frames temp folder, not base64, to keep the
 log small. A missing file shows "frame no longer available".

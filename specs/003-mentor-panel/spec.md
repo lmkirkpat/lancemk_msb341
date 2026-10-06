@@ -170,7 +170,7 @@ open, and get a pass/fail per case.
   corrupt the learner record (one lesson writes at a time).
 - **Long or off-topic question:** the mentor answers briefly and returns to the lesson, as in
   spec 002's usage notes.
-- **Narrow panel:** the panel is docked at its narrowest useful width. The lesson list, buttons,
+- **Narrow panel:** the panel is docked at its minimum width of 260 px. The lesson list, buttons,
   and input stay usable without horizontal scrolling. Long mentor messages wrap.
 - **Missing or unreadable learner record:** the memory section and the path say there's no
   history yet, and the lesson starts as a first lesson.
@@ -187,7 +187,8 @@ open, and get a pass/fail per case.
   scrollable conversation with the newest message visible.
 - **FR-004**: Frames the mentor renders from the learner's comp MUST appear inside the panel, next
   to the message they belong to.
-- **FR-005**: The panel MUST offer **Check my work**, **Hint**, and **Show me** buttons. Each
+- **FR-005**: The panel MUST offer **Check my work**, **Hint** (from the first check on), and
+  **Show me** buttons. Each
   sends the mentor one fixed request. The mentor answers with the same teaching rules as spec 002
   (FR-005 to FR-009 there apply unchanged).
 - **FR-006**: Before the lesson's demonstration, the demo button MUST read **Show me**. After it,
@@ -203,7 +204,8 @@ open, and get a pass/fail per case.
 - **FR-009**: The panel MUST show the lesson's stage (I do, We do, You do) and update it as the
   lesson moves: the demo moves past "I do", and a learner attempt moves to "You do".
 - **FR-010**: The panel MUST show a short learning path with each skill as done, current, or next,
-  based on the learner record and the current lesson.
+  based on the learner record and the current lesson. Keyframes, the assumed prerequisite, always
+  shows as done.
 - **FR-011**: The panel MUST show a read-only memory section with the most recent lesson's date,
   skill, result, and "next" note from the learner record, and MUST update it when a lesson is
   recorded.
@@ -250,9 +252,10 @@ open, and get a pass/fail per case.
   matches a manual inspection in AE in at least 9 of 10.
 - **SC-003**: Across all panel sessions, the project is changed only by the one declared
   demonstration per lesson, never by the panel or by Show me again.
-- **SC-004**: After a button press or question, the mentor's reply starts appearing within 10
-  seconds in at least 9 of 10 turns. (This is the main risk of `decisions/005`; log every turn's
-  wait in usage notes.)
+- **SC-004**: After a button press or question, the mentor's first words appear within 10 seconds
+  in at least 9 of 10 turns. (This is the main risk of `decisions/005`. Log every turn's wait in
+  usage notes, along with the time to the first sign of activity, such as "checking your comp",
+  for context. Only the first-words time counts toward this criterion.)
 - **SC-005**: A full lesson in the panel, from starting it to a passing check, takes 15 minutes or
   less for the builder, the same bar as spec 002 SC-002.
 - **SC-006**: The memory section matches the learner record in 100% of checks (at least 3: no
@@ -278,7 +281,8 @@ open, and get a pass/fail per case.
 - **Look:** follows `product/mockups/ae-panel.md` loosely and fits AE's dark UI. Visual polish
   isn't graded in this slice.
 - **Learning path:** a fixed, short list for easing's neighbours (Keyframes, Easing, Graph Editor,
-  Bounce). Only Easing is teachable. The others are labels.
+  Bounce). Only Easing is teachable. The others are labels. Keyframes is assumed known, since the
+  easing lesson needs keyframes to exist, so it shows as done without a record entry.
 - **Continue after reopening:** only within the same AE session. After AE restarts, a new lesson
   starts from the learner record.
 - **Out of scope:** other skills, other apps, a direct API connection, UXP, packaging for other
