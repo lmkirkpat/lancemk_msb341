@@ -1,0 +1,38 @@
+{
+  "id": "17-button-check-partial",
+  "title": "Panel: Check my work on a partial attempt gets hints, not fixes",
+  "covers": [
+    "FR-005",
+    "FR-019",
+    "US1-5"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Show me how first."
+    },
+    {
+      "project": "partial",
+      "say": "I'm done. Check my work."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "diff_since_last"
+    ],
+    "verdict": "fail",
+    "set_ease_max": 1,
+    "last_turn_tools_not_called": [
+      "set_ease"
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-LAYERS"
+  ]
+}

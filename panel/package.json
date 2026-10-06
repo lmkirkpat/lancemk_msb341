@@ -1,0 +1,10 @@
+{
+  "name": "ae-mentor-panel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AE Mentor panel (specs/003-mentor-panel).",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test test/"
+  }
+}

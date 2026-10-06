@@ -85,6 +85,7 @@ the learner says. `expect` holds the deterministic checks:
 | `verdict` | the last turn's final `diff_since_last` was `pass`, `fail`, or `none` (error, a different comp, or no check) |
 | `tools_called` | each tool was called at least once |
 | `last_turn_tools_not_called` | none of these were called in the last turn |
+| `last_turn_tools_called` | each of these was called **successfully** in the last turn (spec 003, case 20) |
 | `record_lesson` | `null`: nothing was recorded. Otherwise, the last recorded lesson has these field values |
 
 In eval turns the mentor gets only `ToolSearch` and the six `ae-mentor` tools (`--tools

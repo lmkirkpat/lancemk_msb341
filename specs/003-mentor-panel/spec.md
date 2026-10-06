@@ -209,8 +209,9 @@ open, and get a pass/fail per case.
 - **FR-011**: The panel MUST show a read-only memory section with the most recent lesson's date,
   skill, result, and "next" note from the learner record, and MUST update it when a lesson is
   recorded.
-- **FR-012**: While the mentor is working, the panel MUST show that it's working and MUST NOT send
-  another request until the current one finishes.
+- **FR-012**: While the mentor is working, the panel MUST show what it's doing in plain words (for
+  example "Checking your keyframes…"), based on which of the mentor's tools is running, and MUST
+  NOT send another request until the current one finishes.
 - **FR-013**: The panel MUST hold no teaching rules of its own. What to teach, when to demonstrate,
   how to grade, and what to record are decided by the mentor exactly as in spec 002
   (`decisions/003`, `decisions/005`).
@@ -252,10 +253,11 @@ open, and get a pass/fail per case.
   matches a manual inspection in AE in at least 9 of 10.
 - **SC-003**: Across all panel sessions, the project is changed only by the one declared
   demonstration per lesson, never by the panel or by Show me again.
-- **SC-004**: After a button press or question, the mentor's first words appear within 10 seconds
-  in at least 9 of 10 turns. (This is the main risk of `decisions/005`. Log every turn's wait in
-  usage notes, along with the time to the first sign of activity, such as "checking your comp",
-  for context. Only the first-words time counts toward this criterion.)
+- **SC-004**: After a button press or question, the panel shows the first sign of the mentor
+  working (a line such as "Looking at your comp…" or its first words) within 10 seconds in at
+  least 9 of 10 turns. (This is the main risk of `decisions/005`. Log every turn's time to first
+  activity and to first words in usage notes. Changed from "first words" on 2026-10-05 after the
+  spike showed the mentor uses its tools before it speaks: research R1 › Spike result.)
 - **SC-005**: A full lesson in the panel, from starting it to a passing check, takes 15 minutes or
   less for the builder, the same bar as spec 002 SC-002.
 - **SC-006**: The memory section matches the learner record in 100% of checks (at least 3: no

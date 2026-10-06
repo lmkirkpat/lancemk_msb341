@@ -131,8 +131,8 @@ One line per turn, appended (R9). For SC-004 and cost.
 |---|---|---|
 | `at` | ISO time | When the request was sent |
 | `kind` | `"start" \| "check" \| "hint" \| "show_me" \| "show_me_again" \| "ask" \| "continue"` | |
-| `wait_ms` | number or null | Click to first text delta (SC-004). Null if none came |
-| `first_event_ms` | number or null | Click to the first text delta or tool call, whichever comes first. Context for SC-004 only |
+| `wait_ms` | number or null | Click to first text delta (first words). Context only. Null if none came |
+| `first_event_ms` | number or null | Click to the first text delta or tool call, whichever comes first. **The SC-004 measure** (option A, research R1) |
 | `lesson_passed` | boolean | True when this turn's check passed (an ok `diff_since_last` with `passed: true`). Used for lesson duration (SC-005) |
 | `total_ms` | number | Click to the end of the turn |
 | `cost_usd` | number or null | From the `result` event |

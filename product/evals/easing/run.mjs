@@ -68,7 +68,7 @@ function validate(c) {
   if (c.learner_record && !fs.existsSync(path.join(CASES_DIR, c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  const known = ["first_tool", "set_ease_max", "set_ease_min", "set_ease_only_on", "verdict", "tools_called", "last_turn_tools_not_called", "record_lesson"];
+  const known = ["first_tool", "set_ease_max", "set_ease_min", "set_ease_only_on", "verdict", "tools_called", "last_turn_tools_not_called", "last_turn_tools_called", "record_lesson"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   return problems;
 }
@@ -220,6 +220,11 @@ function check(expect, turns) {
   if ("last_turn_tools_not_called" in expect) {
     const called = expect.last_turn_tools_not_called.filter((n) => tools([turns.at(-1)]).some((e) => e.name === n));
     add("last_turn_tools_not_called", called.length === 0, called.length ? `called ${called.join(", ")}` : "none called");
+  }
+  // Successful calls only (spec 003, case 20: Show me again must show a frame).
+  if ("last_turn_tools_called" in expect) {
+    const missing = expect.last_turn_tools_called.filter((n) => !tools([turns.at(-1)]).some((e) => e.name === n && e.ok));
+    add("last_turn_tools_called", missing.length === 0, missing.length ? `no successful ${missing.join(", ")} in the last turn` : "all called");
   }
   if ("record_lesson" in expect) {
     const recs = calls.filter((e) => e.name === "record_lesson" && e.ok);

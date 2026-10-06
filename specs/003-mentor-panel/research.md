@@ -28,6 +28,52 @@ let the panel show words as they're written, so "the reply starts appearing" is 
 starts the skill the same way it does as a `-p` argument, and the exact line format for a user
 message (`{"type":"user","message":{"role":"user","content":"..."}}`).
 
+### Spike result (2026-10-05, tasks T005)
+
+`panel/dev/drive.js` (since kept as `panel/dev/record-fixtures.js`) ran three turns through **one** Claude Code 2.1.289 process in fixture mode
+(`before`, `before`, `after-demo`). Raw stdout is in `panel/test/fixtures/stream-*.jsonl`
+(home folder and session ids scrubbed).
+
+- **(a) Input line:** `{"type":"user","message":{"role":"user","content":"<text>"}}` plus a
+  newline. Works.
+- **(b) `/ease-mentor` on stdin** starts the skill: `read_learner_record`, then `snapshot_project`,
+  then the opening, as in the evals.
+- **(c) Stream shapes:**
+  - Text deltas: `stream_event` › `event.type: "content_block_delta"`, `delta.type: "text_delta"`.
+    Thinking and tool-input deltas use the same envelope with `thinking_delta`, `signature_delta`
+    and `input_json_delta`, and are ignored.
+  - Tool calls: `assistant` messages with `tool_use` blocks. Tool results: `user` messages with
+    `tool_result` blocks.
+  - `preview_frame` results are `[image, text, text]` content.
+  - `ToolSearch` results are `tool_reference` blocks and are ignored.
+  - Each turn ends with one `result` message. It also includes `system/init`, `system/status`,
+    `system/thinking_tokens` and `rate_limit_event` lines, which are all ignored.
+- **(d) Timing:**
+
+  | Turn | First text | First text or tool call | Turn end | `total_cost_usd` |
+  |---|---|---|---|---|
+  | `/ease-mentor` | 13.1 s | 5.0 s | 13.1 s | 0.129 |
+  | `Show me how first.` | 18.7 s | 4.1 s | 18.7 s | 0.189 |
+  | `I'm done. Check my work.` | 9.7 s | 2.2 s | 9.7 s | 0.219 |
+
+  `total_cost_usd` grows across the process, so it's **cumulative per process**. The adapter
+  reports each turn's cost as the difference from the previous turn. The whole three-turn lesson
+  cost about $0.22, well under the $0.50–$1.50 estimate in `decisions/005`.
+- **(e) One process, several turns:** works. Turns 2 and 3 start in under 10 ms, with no
+  re-initialization delay.
+
+**What this means for SC-004.** Start-up isn't the slow part. The mentor calls its tools and thinks
+first, then writes all its words at the end, so the first words come 10–19 s after a click (1 of 3
+turns under 10 s). The first sign of activity (a tool call) always came within 5 s. As written
+(first words), SC-004 fails on this evidence.
+
+**Decision (builder, 2026-10-05): option A.** The panel shows a plain status line for each mentor
+tool call as it happens (`panel/lib/activity.js`, tasks T014). SC-004 now measures the first
+visible activity, which all three spike turns met in under 5 s. First words are still logged for
+the usage notes. Rejected: (B) changing the skill to speak before using tools, or lowering effort,
+which changes the mentor and needs a full eval re-run; (C) keeping the first-words criterion and
+recording a failure.
+
 ## R2. The same mentor, the same limits as the evals
 
 **Decision:** the panel launches Claude Code with the eval runner's flags so the mentor in the
@@ -157,12 +203,33 @@ decide what's shown (stream parsing, check list, stage, memory) unit-testable wi
 **Look:** follows `product/mockups/ae-panel.md` and AE's dark UI colors. Narrow-width layout is a
 single column that wraps (edge case: narrow panel).
 
+### CEP check (2026-10-05, tasks T004)
+
+Run in AE 26 from a throwaway panel page with the adapter's `PATH`:
+
+```text
+process.version: v17.7.2
+crypto.randomUUID: yes
+inherited PATH: /usr/bin:/bin:/usr/sbin:/sbin
+adapter PATH: ~/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
+claude --version: exit 0 in 216 ms -> 2.1.290 (Claude Code)
+node --version (bare name): exit 0 in 190 ms -> v26.8.1
+```
+
+- CEP's Node is **v17.7.2**: CommonJS and ES2020 are fine. `crypto.randomUUID` exists, so no
+  fallback is needed.
+- AE's inherited `PATH` has neither `claude` nor `node`. That confirms research R3: without the
+  adapter's `PATH`, the `ae-mentor` server couldn't start inside AE.
+- Spawning from CEP works, with stdio pipes, in about 0.2 s per process.
+
 ## R9. Measuring SC-004 and cost
 
 **Decision:** the panel appends one line per turn to `AEMentor/panel-turns.jsonl`:
-`{ at, kind, wait_ms, total_ms, cost_usd, ok }`. `wait_ms` runs from the click to the first text
-delta. `cost_usd` comes from the `result` event. `node panel/dev/turns.js` prints the share of
-turns under 10 s and the cost per lesson for the usage notes.
+`{ at, kind, wait_ms, first_event_ms, total_ms, cost_usd, ok, lesson_passed }`.
+`first_event_ms` runs from the click to the first tool call or text delta: it's the SC-004 measure
+(option A, R1). `wait_ms` runs to the first text delta and is logged for context. `cost_usd` is
+the turn's share of the process's cumulative `total_cost_usd`. `node panel/dev/turns.js` prints
+the share of turns under 10 s, lesson durations, and the cost per lesson for the usage notes.
 
 **Rationale:** SC-004 and the cost estimate in `decisions/005` both need real numbers. The
 mentor's own `calls.jsonl` already logs tool timings.

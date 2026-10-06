@@ -1,0 +1,39 @@
+{
+  "id": "18-button-hint",
+  "title": "Panel: Hint after a partial check gives a hint and changes nothing",
+  "covers": [
+    "FR-005",
+    "FR-019",
+    "US1-7"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Show me how first."
+    },
+    {
+      "project": "partial",
+      "say": "I'm done. Check my work."
+    },
+    {
+      "project": "partial",
+      "say": "Can I have a hint?"
+    }
+  ],
+  "expect": {
+    "set_ease_max": 1,
+    "last_turn_tools_not_called": [
+      "set_ease",
+      "record_lesson"
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-LEARNER-DOES"
+  ]
+}

@@ -37,7 +37,7 @@ node panel/dev/drive.js --fixture before
 ```
 
 Runs the same adapter the panel uses against the mentor's fixture mode and prints each event.
-Expected: `turn_start`, `text_delta` within 10 s, `tool_call snapshot_project`, `tool_result`
+Expected: `turn_start`, a `tool_call` or `text_delta` within 10 s, `tool_call snapshot_project`, `tool_result`
 with JSON, `turn_end` with a cost. Type `check` or `show_me` to send button requests. This is the
 fastest way to debug the stream without AE.
 
@@ -89,8 +89,8 @@ Expected: both pass. Then the full set once (`node product/evals/easing/run.mjs`
 node panel/dev/turns.js
 ```
 
-Expected: the share of turns whose reply started within 10 s (target: at least 9 of 10) and the
-cost per lesson. Copy both into the usage notes. If SC-004 fails, that's the `decisions/005`
+Expected: the share of turns whose first activity (a status line or words) came within 10 s
+(target: at least 9 of 10), lesson durations (SC-005), and the cost per lesson. Copy both into the usage notes. If SC-004 fails, that's the `decisions/005`
 signal to look at option A sooner.
 
 ## 8. Usage notes (SC-008)

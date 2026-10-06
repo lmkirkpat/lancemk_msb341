@@ -1,0 +1,35 @@
+{
+  "id": "20-button-show-me-again",
+  "title": "Panel: Show me again re-explains with a frame and makes no second demo",
+  "covers": [
+    "FR-006",
+    "FR-019",
+    "US1-4"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Show me how first."
+    },
+    {
+      "project": "after-demo",
+      "say": "Show me again: explain the pair you already eased, with a frame. Don't change anything."
+    }
+  ],
+  "expect": {
+    "set_ease_max": 1,
+    "set_ease_only_on": "1/ADBE Transform Group/ADBE Position/1",
+    "last_turn_tools_called": [
+      "preview_frame"
+    ]
+  },
+  "rubric": [
+    "R-SHOWS",
+    "R-LEARNER-DOES"
+  ]
+}

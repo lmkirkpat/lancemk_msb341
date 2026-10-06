@@ -45,8 +45,8 @@ against fixture mode; a manual live run per `quickstart.md`
 
 **Project Type**: AE extension panel (UI) driving a local CLI agent
 
-**Performance Goals**: the mentor's reply starts appearing within 10 s of a click in at least 9 of
-10 turns (SC-004); a full lesson in 15 minutes or less (SC-005)
+**Performance Goals**: the first sign of the mentor working (a status line or its words) within
+10 s of a click in at least 9 of 10 turns (SC-004, measured as `first_event_ms`); a full lesson in 15 minutes or less (SC-005)
 
 **Constraints**:
 - Constitution 1.1.0 › II: the panel holds no teaching logic, touches the project only through the
@@ -110,6 +110,7 @@ panel/                          # NEW: the AE Mentor panel (its own CEP bundle, 
 │   ├── path.js                 # Path view
 │   ├── memory.js               # Memory view from learner.json
 │   ├── requests.js             # Button labels and fixed requests (contracts/button-requests.md)
+│   ├── activity.js             # Tool name → plain status line ("Checking your keyframes…"), FR-012
 │   ├── text.js                 # Safe rendering subset for mentor text (R8)
 │   ├── panel-session.js        # Read and write panel-session.json; continue rules (R6)
 │   ├── bridge-status.js        # The bridge's start time from /health, nothing else (R6)
@@ -117,6 +118,7 @@ panel/                          # NEW: the AE Mentor panel (its own CEP bundle, 
 ├── test/                       # node:test; recorded stream lines in test/fixtures/
 ├── dev/
 │   ├── drive.js                # Run the adapter from Terminal (fixture or live)
+│   ├── record-fixtures.js      # Re-record test/fixtures/stream-*.jsonl (the T005 spike)
 │   └── turns.js                # SC-004 share and cost per lesson from panel-turns.jsonl
 ├── package.json                # "test": "node --test test/" (no dependencies)
 ├── install.sh                  # Symlink AEMentorPanel, write panel.json (claude, node, repo paths)

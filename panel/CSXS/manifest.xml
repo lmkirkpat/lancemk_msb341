@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AE Mentor panel (specs/003-mentor-panel, research R4). Its own bundle, so bridge/ stays a
+     thin pipe and this panel can be rebuilt on UXP without touching it. -->
+<ExtensionManifest Version="7.0" ExtensionBundleId="com.aementor.panel" ExtensionBundleVersion="0.1.0" ExtensionBundleName="AE Mentor">
+  <ExtensionList>
+    <Extension Id="com.aementor.panel.main" Version="0.1.0" />
+  </ExtensionList>
+  <ExecutionEnvironment>
+    <HostList>
+      <Host Name="AEFT" Version="[18.0,99.9]" />
+    </HostList>
+    <LocaleList>
+      <Locale Code="All" />
+    </LocaleList>
+    <RequiredRuntimeList>
+      <RequiredRuntime Name="CSXS" Version="9.0" />
+    </RequiredRuntimeList>
+  </ExecutionEnvironment>
+  <DispatchInfoList>
+    <!-- Window > Extensions > AE Mentor. Node is on so the panel can run Claude Code (decisions/005). -->
+    <Extension Id="com.aementor.panel.main">
+      <DispatchInfo>
+        <Resources>
+          <MainPath>./index.html</MainPath>
+          <CEFCommandLine>
+            <Parameter>--enable-nodejs</Parameter>
+            <Parameter>--mixed-context</Parameter>
+          </CEFCommandLine>
+        </Resources>
+        <Lifecycle>
+          <AutoVisible>true</AutoVisible>
+        </Lifecycle>
+        <UI>
+          <Type>Panel</Type>
+          <Menu>AE Mentor</Menu>
+          <Geometry>
+            <Size>
+              <Height>720</Height>
+              <Width>340</Width>
+            </Size>
+            <MinSize>
+              <Height>400</Height>
+              <Width>260</Width>
+            </MinSize>
+          </Geometry>
+        </UI>
+      </DispatchInfo>
+    </Extension>
+  </DispatchInfoList>
+</ExtensionManifest>

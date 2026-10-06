@@ -31,11 +31,11 @@ Everything the panel needs, and nothing tied to Claude Code's wire format.
 | Event | Payload | When |
 |---|---|---|
 | `turn_start` | `{ kind, at }` | `send` accepted |
-| `text_delta` | `{ text }` | Partial words from the mentor (first one stops the SC-004 clock) |
+| `text_delta` | `{ text }` | Partial words from the mentor |
 | `text` | `{ text }` | A complete text block. Replaces the deltas shown for that block |
 | `tool_call` | `{ id, name }` | The mentor called a tool. `name` without the `mcp__ae-mentor__` prefix |
 | `tool_result` | `{ id, name, ok, json?, text?, images[] }` | `json` when the text parses as JSON. `images` as `{ data, mimeType }` |
-| `turn_end` | `{ ok, cost_usd?, wait_ms, first_event_ms, total_ms }` | The stream's `result` event, or the timeout. `wait_ms` to the first `text_delta`; `first_event_ms` to the first `text_delta` or `tool_call` |
+| `turn_end` | `{ ok, cost_usd?, wait_ms, first_event_ms, total_ms }` | The stream's `result` event, or the timeout. `first_event_ms` to the first `text_delta` or `tool_call` (the SC-004 clock); `wait_ms` to the first `text_delta`. `cost_usd` is this turn's share of the cumulative `total_cost_usd` (research R1) |
 | `error` | `{ kind, message }` | See below. A turn in flight also gets `turn_end { ok: false }` |
 | `exit` | `{ code }` | The process ended |
 
