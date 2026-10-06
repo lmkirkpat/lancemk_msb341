@@ -191,7 +191,7 @@ personal data. A session at least one day later refers to the lesson unprompted 
   - Call `read_learner_record` **first**.
   - If there's no easing history, teach. If the last result was `partial`, pick up what was still wrong (US2-3). If `learned`, do a short review on new keyframes or advance to the next focus (US2-2), and mention the earlier lesson in the opening.
   - At the end of a lesson, call `record_lesson` with plain-language `summary` and `next` and no names.
-- [ ] T033 [US2] 🖐 Live: after a lesson, open `learner.json` and confirm it reads without tools and contains no name, email, or phone (US2-1, US2-4). **At least one day later**, run `/ease-mentor` and log whether it referred to the earlier lesson and reviewed or advanced (SC-005) in `discovery/usage-notes/easing-slice.md` (session 2). Also check `calls.jsonl` for SC-004 as in T028
+- [X] T033 [US2] 🖐 Live: after a lesson, open `learner.json` and confirm it reads without tools and contains no name, email, or phone (US2-1, US2-4). **At least one day later**, run `/ease-mentor` and log whether it referred to the earlier lesson and reviewed or advanced (SC-005) in `discovery/usage-notes/easing-slice.md` (session 2). Also check `calls.jsonl` for SC-004 as in T028
 
 **Checkpoint**: US1 and US2 both work. Memory carries across sessions.
 

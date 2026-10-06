@@ -133,6 +133,37 @@ the eval set instead (T039).
 **For T033 (on or after 2026-10-06):** run `/ease-mentor` on Mentor Practice. Expected: it
 mentions the Subtitle lesson unprompted, skips the basics, and proposes Glow (SC-005).
 
+## Session 2: 2026-10-06 (T033, SC-005)
+
+`/ease-mentor` in a fresh Claude Code session, with Mentor Practice in its original build state.
+The learner record held two lessons: Subtitle (2026-10-05, more than a day earlier) and Glow
+(earlier today, through the panel, `next`: Bar).
+
+- **Memory first:** `read_learner_record`, then `snapshot_project`. No other calls. ✅
+- **SC-005 passes.** The opening mentioned the earlier lesson in plain words ("Earlier today you
+  eased Glow's Blurriness… after watching my demo") and the plan for Bar. It skipped the basics
+  and proposed Bar, saying what's new about each pair (Trim Paths nested in Contents, separated
+  X Position with a shared key). ✅
+- **Honest about the comp:** "10 pairs on 5 layers" (correct, leaving out the hidden Old Take).
+  It noticed Glow was linear again and said the project may have been reset, without guessing
+  further. It named Subtitle's half-eased fade and the key where it still stops hard (1.3 s). ✅
+- **Limits:** left out Old Take (hidden) and Icon ("I can't see inside those yet, so I'm not
+  saying it's fine"). ✅
+- **US2-1 / US2-4:** `learner.json` reads as plain JSON, with no email, phone or name. ✅
+- **SC-004:** `calls.jsonl` has 2 `set_ease` calls in total, one demo per lesson (10-05 and
+  10-06), and none in this session. ✅
+
+**Finding: the Explanatory output style leaks into lessons run from the terminal.** The reply
+ended with a "★ Insight" block from my Claude Code output style, telling the learner "The record
+said you'd learned the basics" and that the check "marked this lesson as 'continued'". That's
+internal state and a field value, which `SKILL.md` bans. 83a406a fixed this for the panel and
+the eval runner (both launch with the default output style), but an interactive `/ease-mentor`
+uses whatever style the session has. **Fix:** run lessons in the terminal with the default output
+style. This is a builder-setup issue, not a mentor bug; real learners get the panel.
+
+Caveat: the most recent lesson (Glow) was the same day, so the mentor said "earlier today". The
+"at least one day later" condition holds against the Subtitle lesson.
+
 ## Eval baseline: 2026-10-05 (T042)
 
 Full runs of the 16-case eval set (`product/evals/easing/`), with no AE open. SC-006 (≥ 80%)
