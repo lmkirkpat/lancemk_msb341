@@ -95,6 +95,17 @@ test("swapping the fixture between turns changes what the tools see", async () =
   assert.equal(d.passed, true);
 });
 
+test('"undo_demo" leaves the demo out (Edit > Undo); easing it again then counts for the learner', async () => {
+  fs.writeFileSync(stateFile, JSON.stringify({ project: fixturePath("attempt-before"), undo_demo: true }));
+  const undone = data(await server.call("diff_since_last"));
+  assert.equal(undone.targets.find((t) => t.segment_id === DEMO).result, "still_linear");
+  assert.equal(undone.demo_undone, true);
+  // The same pair eased again (here, by the edit that fixture mode re-applies) is the learner's now.
+  setProject(fixturePath("attempt-before"));
+  const redone = data(await server.call("diff_since_last"));
+  assert.equal(redone.targets.find((t) => t.segment_id === DEMO).result, "eased_by_learner");
+});
+
 test("preview_frame returns a placeholder PNG", async () => {
   const r = await server.call("preview_frame", { time: 0.5 });
   const img = r.content.find((c) => c.type === "image");

@@ -108,3 +108,14 @@ test("state lives in session.json and survives re-importing the module (R4)", as
   assert.equal(fresh.currentLesson().status, "demo_done");
   assert.throws(() => fresh.recordDemo(POS1), { code: "DEMO_USED" });
 });
+
+test("a check that saw the demo undone is remembered, and stays remembered", () => {
+  session.start(A, { focus_layers: ["Title"] });
+  session.recordDemo(POS1);
+  assert.equal(session.currentLesson().demo.undone, undefined);
+  session.markChecked(false, { demoUndone: true });
+  const first = session.currentLesson().demo.undone;
+  assert.ok(first, "undone time recorded");
+  session.markChecked(true, { demoUndone: false });
+  assert.equal(session.currentLesson().demo.undone, first, "a later check doesn't clear it");
+});

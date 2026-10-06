@@ -1,7 +1,7 @@
 // FR-007: compare the comp now with the lesson baseline, by segment id (data-model.md › Check result).
 // Only the lesson's targets are graded; anything else that changed is listed in plain language.
 
-import { segments } from "./analyze.mjs";
+import { segments, linearEnd } from "./analyze.mjs";
 
 const SEP = " › ";
 const secs = (t) => String(Number(t.toFixed(3)));
@@ -71,8 +71,15 @@ function unexpectedChanges(baseline, current, targets) {
   return notes;
 }
 
+// The demo pair is credited to the demo only while the demo is in place. Once a check has seen it
+// needing ease again (the learner undid it), it's the learner's pair from then on, so redoing it
+// counts as their work (usage notes, panel session 1).
 export function diff(baseline, current, session) {
-  const demoId = session.demo ? session.demo.segment_id : null;
+  const demoSeg = session.demo ? session.demo.segment_id : null;
+  const nowSegs = new Map(segments(current).segments.map((s) => [s.id, s]));
+  const demoGoneNow = !!(demoSeg && current.comp.id === session.comp_id && nowSegs.has(demoSeg) && nowSegs.get(demoSeg).state !== "eased");
+  const demoUndone = !!(demoSeg && (session.demo.undone || demoGoneNow));
+  const demoId = demoUndone ? null : demoSeg;
   const totalForLearner = session.targets.filter((id) => id !== demoId).length;
 
   if (current.comp.id !== session.comp_id) {
@@ -81,26 +88,35 @@ export function diff(baseline, current, session) {
       lesson_comp: baseline.comp.name,
       targets: [],
       unexpected_changes: [],
-      summary: { learner_eased: 0, still_linear: 0, total_for_learner: totalForLearner },
+      summary: { learner_eased: 0, still_linear: 0, partly_eased: 0, total_for_learner: totalForLearner },
       passed: false,
+      demo_undone: !!(session.demo && session.demo.undone),
     };
   }
 
   const was = new Map(segments(baseline).segments.map((s) => [s.id, s]));
-  const now = new Map(segments(current).segments.map((s) => [s.id, s]));
+  const now = nowSegs;
   const targets = session.targets.map((id) => {
     const after = now.get(id);
     let result;
     if (!after) result = "removed";
     else if (after.state === "linear") result = "still_linear"; // includes an undone demo: it needs easing again
+    else if (after.state === "partly_eased") result = "partly_eased";
     else result = id === demoId ? "eased_by_demo" : "eased_by_learner";
     const before = was.get(id);
-    return { segment_id: id, label: before ? segLabel(before) : id, result };
+    const t = { segment_id: id, label: before ? segLabel(before) : id, result };
+    if (result === "partly_eased") {
+      t.linear_end = linearEnd(after);
+      t.linear_key_time = Number((t.linear_end === "start" ? after.from_time : after.to_time).toFixed(3));
+    }
+    if (id === demoSeg && demoUndone) t.demo_undone = true;
+    return t;
   });
 
   const summary = {
     learner_eased: targets.filter((t) => t.result === "eased_by_learner").length,
     still_linear: targets.filter((t) => t.result === "still_linear").length,
+    partly_eased: targets.filter((t) => t.result === "partly_eased").length,
     total_for_learner: totalForLearner,
   };
   return {
@@ -109,6 +125,7 @@ export function diff(baseline, current, session) {
     targets,
     unexpected_changes: unexpectedChanges(baseline, current, new Set(session.targets)),
     summary,
-    passed: summary.still_linear === 0,
+    passed: summary.still_linear === 0 && summary.partly_eased === 0,
+    demo_undone: demoUndone,
   };
 }

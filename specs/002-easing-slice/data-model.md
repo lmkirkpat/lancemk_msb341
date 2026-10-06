@@ -109,11 +109,18 @@ carries over to the next day, which is what US2-3 asks for.
 |---|---|---|
 | `comp_matches` | boolean | False if the active comp isn't the `current` lesson's comp (edge case: different comp) |
 | `lesson_comp` | string | The lesson comp's name, so the mentor can ask the learner to switch back to it |
-| `targets` | `{ segment_id, result }[]` | `result`: `"eased_by_learner" \| "eased_by_demo" \| "still_linear" \| "removed"` |
+| `targets` | `{ segment_id, label, result, linear_end?, linear_key_time?, demo_undone? }[]` | `result`: `"eased_by_learner" \| "eased_by_demo" \| "still_linear" \| "partly_eased" \| "removed"`. `partly_eased` (added 2026-10-06) carries `linear_end` (`"start"` or `"end"`) and `linear_key_time` |
 | `unexpected_changes` | string[] | Plain-language notes, for example "Opacity on Title now has 3 keys (was 2)" |
-| `summary` | `{ learner_eased, still_linear, total_for_learner }` | Excludes the demo segment (scenario 1.6) |
+| `summary` | `{ learner_eased, still_linear, partly_eased, total_for_learner }` | Excludes the demo segment (scenario 1.6) unless the demo was undone |
+| `demo_undone` | boolean | True once a check has seen the demo pair needing ease again. The session remembers it (`demo.undone`), and the pair is the learner's from then on (added 2026-10-06) |
 
-**Pass** = `comp_matches` is true and `still_linear` is 0. The mentor turns this into words.
+**Pass** = `comp_matches` is true and `still_linear` and `partly_eased` are both 0. The mentor
+turns this into words.
+
+**Segment state** (added 2026-10-06): `linear` (both facing sides linear), `partly_eased` (exactly
+one), `eased`, or `held`. Findings and targets include `linear` and `partly_eased` pairs.
+`snapshot_project` also returns `no_demo_reason`: `"single_pair"`, `"nothing_to_ease"`,
+`"no_visible_layer"`, or null when there's a demo target.
 
 ## Learner record (`learner.json`)
 

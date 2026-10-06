@@ -126,7 +126,7 @@
       "id": "2/ADBE Transform Group/ADBE Opacity/1",
       "layer": "Subtitle",
       "display_path": "Transform › Opacity",
-      "state": "linear"
+      "state": "partly_eased"
     },
     {
       "id": "1/ADBE Transform Group/ADBE Position/1",
@@ -179,10 +179,11 @@
     }
   ],
   "totals": {
-    "linear": 11,
+    "linear": 10,
     "eased": 1,
     "held": 5,
     "skipped": 2,
-    "precomp": 1
+    "precomp": 1,
+    "partly_eased": 1
   }
 }

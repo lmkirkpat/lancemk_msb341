@@ -37,14 +37,14 @@ test("the recorded show-me and check turns: demo made, one failed check, demo ro
   assert.equal(v.passed, false);
   assert.equal(v.check_list.rows[0].shown, "demo (mentor)");
   assert.deepEqual(v.check_list.rows.slice(1).map((r) => r.shown), ["linear ✗", "linear ✗", "linear ✗"]);
-  assert.equal(v.check_list.summary, "0 of 3 yours eased · 3 still linear");
+  assert.equal(v.check_list.summary, "0 of 3 yours eased · 3 still to ease");
 });
 
 test("partial attempt: rows, outside changes listed separately, summary", () => {
   const v = reduceLesson(initialLesson(), diff(partial));
   assert.deepEqual(v.check_list.rows.map((r) => r.shown), ["demo (mentor)", "you ✓", "linear ✗"]);
   assert.deepEqual(v.check_list.outside, ["Subtitle › Opacity was changed (not part of this lesson)"]);
-  assert.equal(v.check_list.summary, "1 of 2 yours eased · 1 still linear");
+  assert.equal(v.check_list.summary, "1 of 2 yours eased · 1 still to ease");
   assert.equal(v.passed, false);
 });
 
@@ -113,4 +113,19 @@ test("stage: checking without a demo skips I do", () => {
 
 test("stage labels are plain words", () => {
   assert.deepEqual(stageOf(null).steps.map((s) => s.label), ["I do", "We do", "You do"]);
+});
+
+test("a half-eased pair shows which key is still linear and isn't ok", () => {
+  const v = reduceLesson(initialLesson(), diff({
+    comp_matches: true,
+    targets: [{ label: "Glow › Blurriness 0–1 s", result: "partly_eased", linear_end: "end", linear_key_time: 1 }],
+    unexpected_changes: [],
+    summary: { learner_eased: 0, still_linear: 0, partly_eased: 1, total_for_learner: 1 },
+    passed: false,
+  }));
+  const row = v.check_list.rows[0];
+  assert.equal(row.shown, "half eased ✗");
+  assert.equal(row.ok, false);
+  assert.equal(row.detail, "the 1 s key is still linear");
+  assert.equal(v.check_list.summary, "0 of 1 yours eased · 1 still to ease");
 });

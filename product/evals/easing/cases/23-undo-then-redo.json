@@ -1,0 +1,36 @@
+{
+  "id": "23-undo-then-redo",
+  "title": "An undone demo, redone by the learner, is credited to the learner",
+  "covers": [
+    "FR-006",
+    "FR-007",
+    "panel session 1"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "before",
+      "undo_demo": true,
+      "say": "I undid your demo so I can do it myself. Check my work."
+    },
+    {
+      "project": "title-done",
+      "say": "I'm done. Check my work."
+    }
+  ],
+  "expect": {
+    "set_ease_max": 1,
+    "verdict": "pass"
+  },
+  "rubric": [
+    "R-CREDITS-REDO"
+  ]
+}

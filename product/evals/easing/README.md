@@ -156,6 +156,7 @@ re-capture.
 | `partial.json` | Demo, plus Position 1.5–3 s eased with F9 | 2 eased, Scale and Opacity still linear |
 | `wrong-property.json` | Demo, plus an extra **Scale key at 1 s** (no easing) | 3 still linear; "Title › Scale now has 3 keys (was 2)" |
 | `wrong-layer.json` | Demo, plus **Subtitle › Opacity** eased instead of a Title pair | 3 still linear; Subtitle flagged as outside the lesson |
+| `half-eased.json` | **Derived, not captured** (2026-10-06): `after-demo.json` plus F9 on the shared 1.5 s Position key only. Position 1.5–3 s is eased at 1.5 s and still linear at 3 s | demo eased, 1 half eased, 2 still linear |
 | `title-done.json` | Demo, plus every other Title pair eased | pass |
 | `all-eased.json` | "Comp 1", the original comp: 4 eased pairs, nothing linear | nothing to ease |
 | `other-comp.json` | Same capture as `all-eased.json`, used as "a different comp is active" | `comp_matches: false` |
@@ -168,6 +169,9 @@ re-capture.
   and number arrays), and the check reports "… value changed at … s". These fixtures were
   captured before that change and have no values, so the check skips the value comparison for
   them. A value-only wrong-property fixture needs a new capture.
+
+A turn can also set `"undo_demo": true`: fixture mode then leaves the demo out of that turn's
+snapshots, the way Edit > Undo would (case 23).
 
 Fixture mode's fake `set_ease` was compared with the real `after-demo.json`. Both change only
 the inner sides of the pair (Bezier at 33.33%) and leave the outer sides and all other layers as

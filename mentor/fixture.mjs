@@ -21,15 +21,18 @@ const PLACEHOLDER_PNG = Buffer.from(
   "base64",
 );
 
-// The named fixture, or AE_UNREACHABLE for "unreachable" or a missing state file. Paths are
-// relative to the state file.
-function loadProject() {
-  let state;
+function readState() {
   try {
-    state = JSON.parse(fs.readFileSync(FIXTURE_STATE, "utf8"));
+    return JSON.parse(fs.readFileSync(FIXTURE_STATE, "utf8"));
   } catch {
     throw new MentorError("AE_UNREACHABLE");
   }
+}
+
+// The named fixture, or AE_UNREACHABLE for "unreachable" or a missing state file. Paths are
+// relative to the state file.
+function loadProject() {
+  const state = readState();
   if (!state.project || state.project === "unreachable") throw new MentorError("AE_UNREACHABLE");
   const file = path.resolve(path.dirname(FIXTURE_STATE), state.project);
   return JSON.parse(fs.readFileSync(file, "utf8"));
@@ -65,8 +68,11 @@ function applyEase(snapshot, edit) {
   return { layer, prop, from, to };
 }
 
+// A state with "undo_demo": true is the learner's Edit > Undo of the demo: the demo edit is left
+// out of this snapshot (usage notes, panel session 1).
 function snapshot() {
   const project = loadProject();
+  if (readState().undo_demo) return project;
   for (const edit of readEdits()) if (edit.comp_id === project.comp.id) applyEase(project, edit);
   return project;
 }

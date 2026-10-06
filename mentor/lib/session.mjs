@@ -101,9 +101,11 @@ export function recordDemo(segmentId) {
   });
 }
 
-export function markChecked(passed) {
+// demoUndone: the check saw the demo pair needing ease again. From then on it's the learner's pair.
+export function markChecked(passed, { demoUndone = false } = {}) {
   return updateCurrent((lesson) => {
     lesson.status = "checked";
     lesson.passed = passed;
+    if (demoUndone && lesson.demo && !lesson.demo.undone) lesson.demo.undone = new Date().toISOString();
   });
 }

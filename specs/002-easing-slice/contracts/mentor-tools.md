@@ -82,7 +82,9 @@ The one demonstration (FR-006, "I do").
 
 ## 4. `diff_since_last`
 
-Checks the learner's attempt against the lesson baseline (FR-007).
+Checks the learner's attempt against the lesson baseline (FR-007). Since 2026-10-06 a target can
+also be `partly_eased` (with `linear_end` and `linear_key_time`), and the result carries
+`demo_undone` (data-model › Check result).
 
 - **Input**: `{}`
 - **Effect**: takes a fresh read and sets state → `checked`. Does **not** change the baseline, so
@@ -124,8 +126,9 @@ Checks the learner's attempt against the lesson baseline (FR-007).
 
 When `AE_MENTOR_FIXTURE_STATE` is set, the server never contacts AE:
 
-- The state file holds `{ "project": "<snapshot fixture path>" | "unreachable" }`, and the
-  runner rewrites it between turns.
+- The state file holds `{ "project": "<snapshot fixture path>" | "unreachable", "undo_demo"?: true }`,
+  and the runner rewrites it between turns. `undo_demo` leaves the demo out of that snapshot, the
+  way Edit > Undo would (added 2026-10-06; eval case 23).
 - `snapshot_project` / `diff_since_last` read the named fixture.
 - `set_ease` applies the change to an in-memory copy and logs it.
 - `preview_frame` returns a placeholder PNG.

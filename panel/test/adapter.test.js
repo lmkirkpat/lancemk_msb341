@@ -55,6 +55,7 @@ test("start spawns claude with the contract's arguments, cwd and PATH", () => {
   assert.equal(args[args.indexOf("--input-format") + 1], "stream-json");
   assert.equal(args[args.indexOf("--output-format") + 1], "stream-json");
   assert.equal(args[args.indexOf("--max-turns") + 1], "12");
+  assert.deepEqual(JSON.parse(args[args.indexOf("--settings") + 1]), { outputStyle: "default" }, "no builder output style in the panel");
 });
 
 test("the mentor gets only ToolSearch and the six ae-mentor tools (contract › Guarantees)", () => {

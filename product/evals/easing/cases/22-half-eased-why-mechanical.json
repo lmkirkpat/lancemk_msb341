@@ -1,0 +1,35 @@
+{
+  "id": "22-half-eased-why-mechanical",
+  "title": "\"Why does it still look mechanical?\" on a half-eased pair names the linear key",
+  "covers": [
+    "FR-007",
+    "FR-008",
+    "panel session 1"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "half-eased",
+      "say": "Why does it still look mechanical?"
+    }
+  ],
+  "expect": {
+    "last_turn_tools_called": [
+      "diff_since_last"
+    ],
+    "verdict": "fail",
+    "set_ease_max": 1
+  },
+  "rubric": [
+    "R-HALF-EASED",
+    "R-HINT-NOT-FIX"
+  ]
+}

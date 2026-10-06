@@ -72,6 +72,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .check-summary { margin: 0 0 4px; color: var(--text-strong); }
 .check-rows li, .check-outside li { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; border-bottom: 1px solid #2e2e2e; }
 .check-rows li span:first-child { overflow-wrap: anywhere; }
+.check-rows li small { display: block; color: var(--muted); }
 .check-rows li span:last-child { flex: none; }
 .check-rows li.ok span:last-child { color: var(--ok); }
 .check-rows li.bad span:last-child { color: var(--bad); }

@@ -10,17 +10,23 @@ const ids = (a) => a.findings.flatMap((f) => f.segments.map((s) => s.id));
 test("a pair is linear if either side is linear", () => {
   const a = analyze(fixture("linear-basic"));
   assert.deepEqual(ids(a), ["1/ADBE Transform Group/ADBE Position/1", "1/ADBE Transform Group/ADBE Position/2"]);
-  assert.deepEqual(a.counts, { linear: 2, eased: 0, held: 0 });
+  assert.deepEqual(a.counts, { linear: 2, partly_eased: 0, eased: 0, held: 0 });
+});
 
+test("a pair with exactly one linear side is partly eased: still a finding and a target, with the linear end", () => {
   const half = analyze(fixture("half-eased"));
-  assert.deepEqual(half.counts, { linear: 1, eased: 0, held: 0 }, "key 1 out Bezier, key 2 in linear is still linear");
+  assert.deepEqual(half.counts, { linear: 0, partly_eased: 1, eased: 0, held: 0 }, "key 1 out Bezier, key 2 in linear");
+  const seg = half.findings[0].segments[0];
+  assert.equal(seg.state, "partly_eased");
+  assert.equal(seg.linear_end, "end");
+  assert.deepEqual(half.targets, [seg.id]);
 });
 
 test("a pair is eased when neither side is linear, and held when key i out is hold", () => {
-  assert.deepEqual(analyze(fixture("eased")).counts, { linear: 0, eased: 1, held: 0 });
-  assert.deepEqual(analyze(fixture("held")).counts, { linear: 0, eased: 0, held: 2 });
+  assert.deepEqual(analyze(fixture("eased")).counts, { linear: 0, partly_eased: 0, eased: 1, held: 0 });
+  assert.deepEqual(analyze(fixture("held")).counts, { linear: 0, partly_eased: 0, eased: 0, held: 2 });
   // A hold out side means no motion at all, so the pair isn't flagged even if the next key's in side is linear.
-  assert.deepEqual(analyze(fixture("hold-into-linear")).counts, { linear: 0, eased: 0, held: 1 });
+  assert.deepEqual(analyze(fixture("hold-into-linear")).counts, { linear: 0, partly_eased: 0, eased: 0, held: 1 });
 });
 
 test("expressions and single keys are skipped with a reason", () => {
@@ -87,11 +93,31 @@ test("focus_layers limits targets but not findings", () => {
     "1/ADBE Transform Group/ADBE Opacity/1",
   ]);
   assert.deepEqual(title.findings.map((f) => f.layer), ["Title", "Title", "Title", "Subtitle"]);
-  assert.deepEqual(title.counts, { linear: 5, eased: 0, held: 0 });
+  assert.deepEqual(title.counts, { linear: 5, partly_eased: 0, eased: 0, held: 0 });
 });
 
 test("an unknown focus name throws UNKNOWN_LAYER", () => {
   assert.throws(() => analyze(fixture("attempt-before"), { focus_layers: ["Titel"] }), { code: "UNKNOWN_LAYER" });
   // A precomp layer is a real layer, so focusing on it is allowed (it just has no targets).
   assert.deepEqual(analyze(fixture("precomp"), { focus_layers: ["Icon"] }).targets, []);
+});
+
+test("no demo when the focus has a single pair, so the learner always has one (FR-006 as amended)", () => {
+  const snap = fixture("attempt-before");
+  const all = analyze(snap, { focus_layers: ["Title"] });
+  assert.ok(all.targets.length >= 2);
+  assert.ok(all.demo_target);
+  assert.equal(all.no_demo_reason, null);
+  // Keep only Title's Opacity pair animated: one target.
+  const one = structuredClone(snap);
+  const title = one.layers.find((l) => l.name === "Title");
+  title.properties = title.properties.filter((p) => p.display_name === "Opacity");
+  const a = analyze(one, { focus_layers: ["Title"] });
+  assert.equal(a.targets.length, 1);
+  assert.equal(a.demo_target, null);
+  assert.equal(a.no_demo_reason, "single_pair");
+});
+
+test("no_demo_reason says why there's no demo target", () => {
+  assert.equal(analyze(fixture("eased")).no_demo_reason, "nothing_to_ease");
 });

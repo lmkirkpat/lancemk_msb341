@@ -37,6 +37,7 @@ async function snapshotProject({ focus_layers } = {}) {
     focus: analysis.focus,
     targets: analysis.targets,
     demo_target: analysis.demo_target,
+    no_demo_reason: analysis.no_demo_reason,
     counts: analysis.counts,
   });
 }
@@ -56,7 +57,7 @@ async function diffSinceLast() {
   const lesson = session.currentLesson();
   const current = await takeSnapshot();
   const result = diff(lesson.baseline, current, lesson);
-  if (result.comp_matches) session.markChecked(result.passed);
+  if (result.comp_matches) session.markChecked(result.passed, { demoUndone: result.demo_undone });
   return json(result);
 }
 

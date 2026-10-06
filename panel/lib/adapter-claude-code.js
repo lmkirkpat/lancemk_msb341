@@ -13,12 +13,17 @@ const PREFIX = "mcp__ae-mentor__";
 const MENTOR_TOOLS = ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson"];
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
 const AUTH = /not (?:logged|signed) in|\/login|authenticat|api key/i;
+// The repo's .claude/settings.local.json can set an output style for the builder (Explanatory adds
+// "★ Insight" notes). CLI settings outrank local settings, so this keeps the mentor's voice the
+// learner's (usage notes, panel session 1; verified with the init line's output_style).
+const LEARNER_SETTINGS = JSON.stringify({ outputStyle: "default" });
 
 function launchArgs(sessionFlag, sessionId) {
   return ["--print", "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",
     "--include-partial-messages", sessionFlag, sessionId,
     "--mcp-config", ".mcp.json", "--strict-mcp-config", "--tools", "ToolSearch",
-    "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t), "--max-turns", "12"];
+    "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t), "--max-turns", "12",
+    "--settings", LEARNER_SETTINGS];
 }
 
 // config: a loaded Panel config. deps: { spawn, now, setTimeout, clearTimeout, env, randomUUID,
@@ -147,4 +152,4 @@ function createAdapter(config, deps) {
   };
 }
 
-module.exports = { createAdapter, launchArgs, MENTOR_TOOLS, PREFIX };
+module.exports = { createAdapter, launchArgs, MENTOR_TOOLS, PREFIX, LEARNER_SETTINGS };

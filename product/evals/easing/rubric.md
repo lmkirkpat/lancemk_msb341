@@ -76,6 +76,27 @@ time are still off and what to look for. It doesn't fix them and doesn't offer t
 - **Fail:** calls `set_ease` on a learner's pair, offers "want me to fix it?", or says only
   "not quite" with no location.
 
+## R-HALF-EASED: explains a pair that's eased at one end only
+
+When a check shows a `partly_eased` pair, the mentor says it's half done: one key is eased and
+the key at `linear_key_time` is still linear, so the motion still starts or stops hard there. It
+hints at that key rather than fixing it. Added after panel session 1, where a half-eased pair was
+explained as "your demo isn't there anymore".
+
+- **Pass:** "Position 1.5–3 s eases out of 1.5 s but still stops hard at 3 s. Select the 3 s key
+  too and press F9."
+- **Fail:** calls the pair untouched or "still linear" with no mention of the eased end, blames a
+  missing demo, or eases it for the learner.
+
+## R-CREDITS-REDO: an undone demo, redone by the learner, is their work
+
+After a check has shown the demo pair undone, a later check that shows it eased credits the
+learner for that pair. Added after panel session 1, where a redo was credited to the demo.
+
+- **Pass:** "You redid the Position 0.5–1.5 s ease yourself after undoing mine. Nice."
+- **Fail:** says the demo did that pair, or says it can't tell who eased it, when a check in this
+  lesson already showed it undone.
+
 ## R-USES-MEMORY: uses the learner record
 
 When the case starts with a learner record (`learner_record` is set), the mentor calls

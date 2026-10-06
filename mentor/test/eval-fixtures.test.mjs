@@ -19,10 +19,11 @@ const check = (name) =>
   diff(before, load(name), { comp_id: before.comp.id, targets: lesson.targets, demo: { segment_id: lesson.demo_target } });
 const results = (r) => r.targets.map((t) => t.result);
 
-test("before: Mentor Practice as built, 11 linear pairs on 6 layers, demo on Title › Position 1", () => {
+test("before: Mentor Practice as built, 11 pairs to ease on 6 layers (Subtitle's fade half eased), demo on Title › Position 1", () => {
   const a = analyze(before);
   assert.equal(before.comp.name, "Mentor Practice");
-  assert.equal(a.counts.linear, 11);
+  assert.equal(a.counts.linear + a.counts.partly_eased, 11);
+  assert.equal(a.counts.partly_eased, 1);
   assert.equal(a.findings.length, 9);
   assert.equal(lesson.demo_target, "1/ADBE Transform Group/ADBE Position/1");
   assert.deepEqual(a.hidden_layers, ["Old Take"]);
@@ -51,6 +52,16 @@ test("wrong-layer: Subtitle › Opacity eased instead of a Title pair", () => {
   const r = check("wrong-layer");
   assert.deepEqual(results(r), ["eased_by_demo", "still_linear", "still_linear", "still_linear"]);
   assert.deepEqual(r.unexpected_changes, ["Subtitle › Opacity was changed (not part of this lesson)"]);
+});
+
+test("half-eased: demo + F9 on the shared 1.5 s key only; Position 1.5–3 s is eased at the start, linear at 3 s", () => {
+  const r = check("half-eased");
+  assert.deepEqual(results(r), ["eased_by_demo", "partly_eased", "still_linear", "still_linear"]);
+  const half = r.targets[1];
+  assert.equal(half.linear_end, "end");
+  assert.equal(half.linear_key_time, 3);
+  assert.equal(r.passed, false);
+  assert.deepEqual(r.unexpected_changes, []);
 });
 
 test("title-done: every Title pair eased, and it passes", () => {

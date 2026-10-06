@@ -23,14 +23,14 @@ test("the demo pair is credited to the demo and left out of the learner's total"
   const r = diff(before, fixture("attempt-eased-one"), lesson());
   assert.equal(r.comp_matches, true);
   assert.deepEqual(results(r), { [POS1]: "eased_by_demo", [POS2]: "eased_by_learner", [SCALE]: "still_linear", [OPACITY]: "still_linear" });
-  assert.deepEqual(r.summary, { learner_eased: 1, still_linear: 2, total_for_learner: 3 });
+  assert.deepEqual(r.summary, { learner_eased: 1, still_linear: 2, partly_eased: 0, total_for_learner: 3 });
   assert.equal(r.passed, false);
 });
 
 test("without a demo, every eased target counts for the learner", () => {
   const r = diff(before, fixture("attempt-eased-one"), lesson(null));
   assert.equal(results(r)[POS1], "eased_by_learner");
-  assert.deepEqual(r.summary, { learner_eased: 2, still_linear: 2, total_for_learner: 4 });
+  assert.deepEqual(r.summary, { learner_eased: 2, still_linear: 2, partly_eased: 0, total_for_learner: 4 });
 });
 
 test("labels name the layer, the property and the times", () => {
@@ -47,7 +47,7 @@ test("labels name the layer, the property and the times", () => {
 test("a complete attempt passes with no unexpected changes", () => {
   const r = diff(before, fixture("attempt-complete"), lesson());
   assert.equal(r.passed, true);
-  assert.deepEqual(r.summary, { learner_eased: 3, still_linear: 0, total_for_learner: 3 });
+  assert.deepEqual(r.summary, { learner_eased: 3, still_linear: 0, partly_eased: 0, total_for_learner: 3 });
   assert.deepEqual(r.unexpected_changes, []);
 });
 
@@ -133,4 +133,59 @@ test("an eased target with unchanged values adds no note", () => {
   const r = diff(withValues(before), withValues(fixture("attempt-complete")), lesson());
   assert.deepEqual(r.unexpected_changes, []);
   assert.equal(r.passed, true);
+});
+
+// ---- Panel session 1 fixes (usage notes, spec 002 FR-006/FR-007 as amended 2026-10-06) ----
+
+// A copy of `snap` with one pair's two facing sides set: "linear" or "bezier" (eased).
+function withSides(snap, segId, startSide, endSide) {
+  const s = structuredClone(snap);
+  const at = segId.lastIndexOf("/");
+  const [layerIndex, propPath, key] = [Number(segId.split("/")[0]), segId.slice(segId.indexOf("/") + 1, at), Number(segId.slice(at + 1))];
+  const prop = s.layers.find((l) => l.index === layerIndex).properties.find((p) => p.path === propPath);
+  prop.keys[key - 1].out_type = startSide;
+  prop.keys[key].in_type = endSide;
+  return s;
+}
+
+test("one key eased and the other still linear is partly_eased, names the linear end, and blocks a pass", () => {
+  const complete = fixture("attempt-complete");
+  const half = withSides(complete, POS2, "bezier", "linear");
+  const r = diff(before, half, lesson());
+  assert.equal(results(r)[POS2], "partly_eased");
+  const t = r.targets.find((x) => x.segment_id === POS2);
+  assert.equal(t.linear_end, "end");
+  assert.equal(typeof t.linear_key_time, "number");
+  assert.equal(r.summary.partly_eased, 1);
+  assert.equal(r.passed, false);
+
+  const startOnly = diff(before, withSides(complete, POS2, "linear", "bezier"), lesson());
+  assert.equal(startOnly.targets.find((x) => x.segment_id === POS2).linear_end, "start");
+});
+
+test("an undone demo pair becomes the learner's: redoing it counts as eased_by_learner", () => {
+  const complete = fixture("attempt-complete");
+  // A check while the demo is undone flags it.
+  const undone = diff(before, withSides(complete, POS1, "linear", "linear"), lesson());
+  assert.equal(undone.demo_undone, true);
+  assert.equal(undone.targets.find((t) => t.segment_id === POS1).demo_undone, true);
+  // The next check, with the session remembering the undo, credits the learner.
+  const redone = diff(before, complete, { ...lesson(), demo: { segment_id: POS1, at: "2026-10-01T12:01:00.000Z", undone: "2026-10-01T12:05:00.000Z" } });
+  assert.equal(results(redone)[POS1], "eased_by_learner");
+  assert.equal(redone.summary.total_for_learner, 4);
+  assert.equal(redone.summary.learner_eased, 4);
+  assert.equal(redone.passed, true);
+  assert.equal(redone.demo_undone, true);
+});
+
+test("a demo left in place is still credited to the demo, and demo_undone is false", () => {
+  const r = diff(before, fixture("attempt-complete"), lesson());
+  assert.equal(results(r)[POS1], "eased_by_demo");
+  assert.equal(r.demo_undone, false);
+});
+
+test("a partly eased demo pair counts as undone too", () => {
+  const r = diff(before, withSides(fixture("attempt-complete"), POS1, "bezier", "linear"), lesson());
+  assert.equal(results(r)[POS1], "partly_eased");
+  assert.equal(r.demo_undone, true);
 });

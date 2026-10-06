@@ -1,0 +1,29 @@
+{
+  "id": "21-single-pair-no-demo",
+  "title": "A one-pair focus gets a walkthrough, not a demo that does the whole lesson",
+  "covers": [
+    "FR-006",
+    "panel session 1"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Let's do Glow. Show me how first."
+    }
+  ],
+  "expect": {
+    "set_ease_max": 0,
+    "tools_called": [
+      "preview_frame"
+    ]
+  },
+  "rubric": [
+    "R-SHOWS",
+    "R-LEARNER-DOES"
+  ]
+}

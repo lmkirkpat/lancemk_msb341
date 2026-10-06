@@ -6,7 +6,10 @@ const STATE_LABELS = {
   eased_by_learner: "you ✓",
   eased_by_demo: "demo (mentor)",
   still_linear: "linear ✗",
+  partly_eased: "half eased ✗",
 };
+
+const secs = (t) => `${Number(Number(t).toFixed(2))} s`;
 
 function initialLesson() {
   return { demo_made: false, checks: 0, passed: false, check_list: null, recorded: false };
@@ -19,15 +22,17 @@ function checkListFrom(result) {
     state: t.result,
     shown: STATE_LABELS[t.result] || "not checked", // unknown values are never a pass
     ok: t.result === "eased_by_learner" || t.result === "eased_by_demo",
+    // Half eased: which key is still linear, so the learner knows where to look.
+    detail: t.result === "partly_eased" && typeof t.linear_key_time === "number" ? `the ${secs(t.linear_key_time)} key is still linear` : null,
   }));
   const s = result.summary || {};
   const learnerEased = Number(s.learner_eased) || 0;
   const total = Number(s.total_for_learner) || 0;
-  const still = Number(s.still_linear) || 0;
+  const still = (Number(s.still_linear) || 0) + (Number(s.partly_eased) || 0);
   return {
     rows,
     outside: Array.isArray(result.unexpected_changes) ? result.unexpected_changes.map(String) : [],
-    summary: `${learnerEased} of ${total} yours eased · ${still} still linear`,
+    summary: `${learnerEased} of ${total} yours eased · ${still} still to ease`,
     passed: result.passed === true,
     stale: false,
   };

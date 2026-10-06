@@ -30,6 +30,10 @@ const MAX_TURNS = "12";
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
 const MENTOR_TOOLS = ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson"];
 const PREFIX = "mcp__ae-mentor__";
+// The repo's local settings may set a builder output style (Explanatory adds "★ Insight" notes).
+// CLI settings outrank local ones, so every headless run here uses the default voice (usage notes,
+// panel session 1: baseline results before this fix include builder notes).
+const SETTINGS = ["--settings", JSON.stringify({ outputStyle: "default" })];
 
 // ---------- arguments ----------
 
@@ -146,7 +150,7 @@ function claude(args, env) {
 
 function mentorTurn(say, sessionId, env) {
   const args = ["-p", say, "--mcp-config", ".mcp.json", "--strict-mcp-config", "--output-format", "json", "--verbose",
-    "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t)];
+    "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t), ...SETTINGS];
   if (sessionId) args.push("--resume", sessionId);
   return claude(args, env);
 }
@@ -271,7 +275,7 @@ function judge(c, turns) {
     "",
     "<transcript>", renderTranscript(turns), "</transcript>",
   ].join("\n");
-  const { result } = claude(["-p", prompt, "--output-format", "json", "--tools", "", "--strict-mcp-config", "--max-turns", "1"], {});
+  const { result } = claude(["-p", prompt, "--output-format", "json", "--tools", "", "--strict-mcp-config", "--max-turns", "1", ...SETTINGS], {});
   const text = String(result.result || "").replace(/^```(?:json)?\s*|\s*```$/g, "").trim();
   const items = parse(text);
   if (!Array.isArray(items)) return { items: [{ item: "judge", pass: false, reason: `unreadable judge reply: ${text.slice(0, 300)}` }], cost: result.total_cost_usd || 0 };
@@ -295,7 +299,7 @@ function runCase(c, opts) {
   try {
     for (const t of c.turns) {
       const project = t.project === "unreachable" ? "unreachable" : fixtureFile(t.project);
-      fs.writeFileSync(stateFile, JSON.stringify({ project }));
+      fs.writeFileSync(stateFile, JSON.stringify(t.undo_demo ? { project, undo_demo: true } : { project }));
       const { messages, result } = mentorTurn(t.say, sessionId, env);
       sessionId = result.session_id;
       cost += result.total_cost_usd || 0;

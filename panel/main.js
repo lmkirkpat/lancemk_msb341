@@ -33,6 +33,7 @@
     block: "", // the text block being streamed
     passedBeforeTurn: false,
     turnError: false,
+    sentAt: null, // ISO time the turn was sent, for the turn log
     record: null, // learner.json, read-only (FR-011)
   };
 
@@ -101,7 +102,7 @@
     $("check-stale").hidden = !list.stale;
     $("check-summary").textContent = list.passed ? "All eased. Lesson passed ✓" : list.summary;
     $("check-rows").innerHTML = list.rows
-      .map((r) => `<li class="${r.ok ? "ok" : "bad"}"><span>${escapeHtml(r.label)}</span><span>${escapeHtml(r.shown)}</span></li>`)
+      .map((r) => `<li class="${r.ok ? "ok" : "bad"}"><span>${escapeHtml(r.label)}${r.detail ? `<small>${escapeHtml(r.detail)}</small>` : ""}</span><span>${escapeHtml(r.shown)}</span></li>`)
       .join("");
     $("check-outside").hidden = list.outside.length === 0;
     $("check-outside-rows").innerHTML = list.outside.map((o) => `<li>${escapeHtml(o)}</li>`).join("");
@@ -201,6 +202,7 @@
   };
 
   function wireAdapter(a) {
+    a.on("turn_start", (e) => { state.sentAt = e.at; });
     a.on("tool_call", (e) => {
       if (!state.block && !state.committed) setStatus(statusFor(e.name));
     });
@@ -235,6 +237,7 @@
       state.mentorEl = null;
       if (!e.ok && !state.turnError) notice("The mentor stopped before finishing. Try again.");
       appendTurn({}, {
+        at: state.sentAt || undefined, // when the request was sent (data-model › Turn log)
         kind: e.kind,
         wait_ms: e.wait_ms,
         first_event_ms: e.first_event_ms,

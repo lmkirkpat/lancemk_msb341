@@ -164,9 +164,15 @@ open.
   layer, then the learner eases the rest. Any demonstration MUST be a single step the learner
   can undo, the mentor MUST say what it changed, and the check (FR-007) MUST report the
   demonstrated pair separately from the learner's own work. The mentor MUST NOT make more than
-  one demonstration per lesson, even if asked.
+  one demonstration per lesson, even if asked. *Amended 2026-10-06 (panel session 1,
+  `discovery/usage-notes/mentor-panel.md`):* the demonstration MUST NOT take the learner's only
+  pair. When the lesson's focus has a single pair, there's no demonstration, and the mentor walks
+  the learner through it with a frame instead. If a check shows the learner undid the
+  demonstration, that pair is the learner's from then on, and easing it again counts as their work.
 - **FR-007**: When the learner says they're done, the mentor MUST compare the project with its
-  earlier snapshot and report, per keyframe it pointed to, whether it is now eased.
+  earlier snapshot and report, per keyframe it pointed to, whether it is now eased. *Amended
+  2026-10-06:* a pair eased at one end only is reported as half eased, naming the key that's
+  still linear, and doesn't count as eased.
 - **FR-008**: When an attempt is incomplete or wrong, the mentor MUST say what's still off and
   why, and MUST give a hint instead of fixing it.
 - **FR-009**: The mentor MUST NOT report a pass or fail when it can't read the project (AE busy,
@@ -232,9 +238,9 @@ open.
   keyframe interpolation and temporal ease can be read.
 - **Interface:** the session runs in Claude Code (or Claude Desktop). No custom interface,
   highlights, or video. "Showing" means rendered frames and references to named layers.
-- **What counts as eased:** a keyframe counts as eased if its temporal interpolation is no
-  longer linear on the side(s) the mentor pointed to. The exact ease values aren't graded in
-  this slice.
+- **What counts as eased:** a pair counts as eased when neither of its facing sides (the first
+  key's out, the second key's in) is linear. Exactly one linear side is "half eased" (amended
+  2026-10-06). The exact ease values aren't graded in this slice.
 - **Change detection:** the mentor compares snapshots on request ("I'm done"). It doesn't
   watch the project live, since After Effects doesn't push changes (`discovery/ae-bridge-findings.md`).
 - **Learner record scope:** one learner, one file, on this machine. No accounts or sync.

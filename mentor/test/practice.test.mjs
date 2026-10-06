@@ -18,11 +18,11 @@ test("every segment has the expected id, display_path and state", () => {
   assert.deepEqual(byId(got), byId(key.segments));
 });
 
-test("findings are exactly the answer key's linear pairs, and counts match its totals", () => {
+test("findings are exactly the answer key's pairs that need ease, and counts match its totals", () => {
   const a = analyze(snapshot);
-  const linear = a.findings.flatMap((f) => f.segments.map((s) => s.id)).sort();
-  assert.deepEqual(linear, key.segments.filter((s) => s.state === "linear").map((s) => s.id).sort());
-  assert.deepEqual(a.counts, { linear: key.totals.linear, eased: key.totals.eased, held: key.totals.held });
+  const found = a.findings.flatMap((f) => f.segments.map((s) => s.id)).sort();
+  assert.deepEqual(found, key.segments.filter((s) => s.state === "linear" || s.state === "partly_eased").map((s) => s.id).sort());
+  assert.deepEqual(a.counts, { linear: key.totals.linear, partly_eased: key.totals.partly_eased, eased: key.totals.eased, held: key.totals.held });
 });
 
 test("skipped properties, hidden layers and precomps match", () => {
