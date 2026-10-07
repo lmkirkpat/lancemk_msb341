@@ -40,15 +40,15 @@ or (b) the panel is a front end to a Claude Code session. This changes the archi
 
 **Done looks like:**
 
-- [ ] `decisions/005` committed, choosing how the panel runs the mentor and what was rejected
-- [ ] A panel spec in `specs/003-*/`, committed before the build
-- [ ] One easing lesson (quickstart steps a–f: opening, explain with a frame, demo, partial
+- [x] `decisions/005` committed, choosing how the panel runs the mentor and what was rejected
+- [x] A panel spec in `specs/003-*/`, committed before the build
+- [x] One easing lesson (quickstart steps a–f: opening, explain with a frame, demo, partial
       attempt, complete attempt) runs start to finish using only the panel, with nothing typed in
       the Claude Code terminal. Claude Code may be running in the background if `decisions/005`
       needs it
 - [ ] For the same attempt, "Check my work" in the panel gives the same verdict as
       `diff_since_last` does in Claude Code
 - [ ] The panel shows the learner's memory from the learner record (read-only)
-- [ ] Notes from the panel run logged in `discovery/usage-notes/`
+- [x] Notes from the panel run logged in `discovery/usage-notes/`
 
 **Predicted difficulty:** 4

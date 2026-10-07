@@ -49,21 +49,33 @@ a brand new session act like a colleague who already knows what you are working 
     hard-rule check passed; the failures were about wording and honesty in the learner record.
   - **Panel decided** (`decisions/005`, amends 003): the AE panel drives headless Claude Code
     (`claude -p --resume`), so it reuses the skill and server unchanged and the evals stay valid.
-    Prototype only; shipping to others needs the direct API (option A). Panel spec drafted in
-    `specs/003-mentor-panel/spec.md`, mockup in `product/mockups/ae-panel.md`.
+    Prototype only; shipping to others needs the direct API (option A). Mockup in
+    `product/mockups/ae-panel.md`.
+  - Spec 002 T033 (memory check) passed SC-005.
+  - **Panel built** (`specs/003-mentor-panel/`, `panel/`: T001–T026, T031–T032): the lesson
+    chat, the stage indicator, the path, and a read-only memory section. Panel session 1
+    (2026-10-05/06, `discovery/usage-notes/mentor-panel.md`) found 3 teaching problems at
+    steps c, d, and f: half-eased pairs read as linear, a one-pair focus let the demo take the
+    whole lesson, and the output style leaked into headless runs. All fixed 2026-10-06: the
+    `partly_eased` state, no demo when the focus has one pair, the demo fingerprint, and
+    `outputStyle: default`. Eval cases 21–24 were added; the new baseline is 23/24.
   - Interviews: 1 of 3 target-market interviews done (`discovery/interviews/006`), 2 booked.
 - **Next steps:**
-  1. Finish spec 002: T033 (the memory check, on or after 2026-10-06), T046 (live quickstart
-     §2–§7), and T047 (the SC-007 note after 3 real sessions: did I reach for this or Adobe's
-     assistant?).
-  2. Panel: finish `specs/003` → `/speckit-plan` → `/speckit-tasks` → build. Done means one
-     lesson (quickstart a–f) with nothing typed in the terminal.
-  3. Run the 2 booked interviews. Ask about Adobe's assistant, who pays, and whether memory and
-     practice matter, before pitching (`discovery/interviews/bet-a-interview-guide.md`).
-  4. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
+  1. Panel: T017 passed in session 2 (2026-10-07: a–f clean, 5.5 min, $0.51, one quirk logged
+     in `discovery/usage-notes/mentor-panel.md` › To fix later). Next: T023 (memory section
+     vs. `learner.json`), T027 (confirm the eval run meets SC-007), and 5 more SC-002 checks
+     (5 of 10 logged; partials done; still need ≥ 2 outside the lesson and ≥ 1 undone).
+  2. Run the 2 booked interviews (`007`, `008`). Ask about Adobe's assistant, who pays, and
+     whether memory and practice matter, before pitching
+     (`discovery/interviews/bet-a-interview-guide.md`).
+  3. Spec 002 leftovers: T046 (live quickstart §2–§7) and T047 (the SC-007 note after 3 real
+     sessions; panel lessons count: did I reach for this or Adobe's assistant?).
+  4. Not needed for sprint 2: spec 003 T028–T030 (continue a lesson), T033–T036.
+  5. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
 - **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
   `discovery/Claude AE Tutor Test.aep` (the Mentor Practice comp). Setup and checks are in
-  `specs/002-easing-slice/quickstart.md`. Evals: `node product/evals/easing/run.mjs`
+  `specs/002-easing-slice/quickstart.md`. Panel: `bash panel/install.sh`, restart AE, and
+  follow `specs/003-mentor-panel/quickstart.md`. Evals: `node product/evals/easing/run.mjs`
   (see its README).
 - **Biggest open risk:** that leading, memory, and practice aren't worth more to people than
   Adobe's free assistant used on request. Also: learners may not pay (belief 12), people take
@@ -95,7 +107,8 @@ a brand new session act like a colleague who already knows what you are working 
   - `.claude/skills/ease-mentor/SKILL.md`: the teaching itself, run by Claude Code.
   - Learner record: local JSON files in `~/Library/Application Support/AEMentor/` (or
     `AE_MENTOR_HOME`, which tests and evals set to a temp folder), never in the repo.
-  - Panel (next): the CEP panel spawns headless Claude Code (`decisions/005`, option B1).
+  - `panel/`: the CEP panel, which spawns headless Claude Code (`decisions/005`, option B1)
+    and only displays. Its tests are in `panel/test/`.
 - **How work ships:** TBD
 - **Testing and style:** AI features get an eval set in `product/evals/`.
 
