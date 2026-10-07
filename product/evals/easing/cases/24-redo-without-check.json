@@ -1,0 +1,32 @@
+{
+  "id": "24-redo-without-check",
+  "title": "An undone demo redone with F9 and no check in between is still credited to the learner",
+  "covers": [
+    "FR-006",
+    "FR-007",
+    "panel session 1"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "redone",
+      "undo_demo": true,
+      "say": "I'm done. Check my work."
+    }
+  ],
+  "expect": {
+    "set_ease_max": 1,
+    "verdict": "pass"
+  },
+  "rubric": [
+    "R-CREDITS-REDO"
+  ]
+}

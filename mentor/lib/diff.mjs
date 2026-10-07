@@ -71,14 +71,35 @@ function unexpectedChanges(baseline, current, targets) {
   return notes;
 }
 
+// The demo's fingerprint. set-ease.jsx applies influence 33.33 exactly; F9 (Easy Ease) applies
+// 33.3333…, which snapshots record as 33.333. Real captures show both (eval fixtures after-demo,
+// partial, title-done), so the demo can be told apart from the learner's own ease.
+export const DEMO_INFLUENCE = 33.33;
+const hasFingerprint = (eases) => Array.isArray(eases) && eases.length > 0 &&
+  eases.every((e) => e && typeof e.influence === "number" && Math.abs(e.influence - DEMO_INFLUENCE) < 0.0005);
+const knowsEase = (eases) => Array.isArray(eases) && eases.length > 0 && eases.every((e) => e && typeof e.influence === "number");
+
+// Who the demo pair's ease belongs to right now:
+//   "demo"     eased, and at least one facing side still has the demo's value. (F9 on a shared key
+//              can overwrite the other side, as in the partial fixture, and the demo is still there.)
+//   "redone"   eased, but neither side has the demo's value: the learner undid it and eased it again.
+//   "gone"     not eased: the learner undid it (or changed it).
+//   "unknown"  eased, but the snapshot has no ease values to compare. The mentor asks (SKILL.md).
+function demoState(seg) {
+  if (!seg || seg.state !== "eased") return "gone";
+  if (!knowsEase(seg.from.out_ease) || !knowsEase(seg.to.in_ease)) return "unknown";
+  return hasFingerprint(seg.from.out_ease) || hasFingerprint(seg.to.in_ease) ? "demo" : "redone";
+}
+
 // The demo pair is credited to the demo only while the demo is in place. Once a check has seen it
-// needing ease again (the learner undid it), it's the learner's pair from then on, so redoing it
-// counts as their work (usage notes, panel session 1).
+// undone, or its ease no longer carries the demo's fingerprint, it's the learner's pair from then
+// on, so easing it again counts as their work (usage notes, panel session 1).
 export function diff(baseline, current, session) {
   const demoSeg = session.demo ? session.demo.segment_id : null;
   const nowSegs = new Map(segments(current).segments.map((s) => [s.id, s]));
-  const demoGoneNow = !!(demoSeg && current.comp.id === session.comp_id && nowSegs.has(demoSeg) && nowSegs.get(demoSeg).state !== "eased");
-  const demoUndone = !!(demoSeg && (session.demo.undone || demoGoneNow));
+  const sameComp = current.comp.id === session.comp_id;
+  const demoNow = demoSeg && sameComp && nowSegs.has(demoSeg) ? demoState(nowSegs.get(demoSeg)) : null;
+  const demoUndone = !!(demoSeg && (session.demo.undone || demoNow === "gone" || demoNow === "redone"));
   const demoId = demoUndone ? null : demoSeg;
   const totalForLearner = session.targets.filter((id) => id !== demoId).length;
 
@@ -109,7 +130,13 @@ export function diff(baseline, current, session) {
       t.linear_end = linearEnd(after);
       t.linear_key_time = Number((t.linear_end === "start" ? after.from_time : after.to_time).toFixed(3));
     }
-    if (id === demoSeg && demoUndone) t.demo_undone = true;
+    if (id === demoSeg) {
+      if (demoUndone) t.demo_undone = true;
+      // How the check knows who eased it (C: "unknown" means the mentor asks the learner).
+      t.demo_credit = demoUndone
+        ? (session.demo.undone ? "learner_after_undo" : demoNow === "redone" ? "learner_redo" : "learner_after_undo")
+        : demoNow === "unknown" ? "unknown" : "demo";
+    }
     return t;
   });
 

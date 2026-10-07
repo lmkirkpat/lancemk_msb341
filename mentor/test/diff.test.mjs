@@ -189,3 +189,52 @@ test("a partly eased demo pair counts as undone too", () => {
   assert.equal(results(r)[POS1], "partly_eased");
   assert.equal(r.demo_undone, true);
 });
+
+// ---- The demo's fingerprint: 33.33 (set-ease.jsx) vs F9's 33.333 (A + C, 2026-10-06) ----
+
+function withInfluence(snap, segId, startInf, endInf) {
+  const s = withSides(snap, segId, "bezier", "bezier");
+  const at = segId.lastIndexOf("/");
+  const prop = s.layers.find((l) => l.index === Number(segId.split("/")[0])).properties.find((p) => p.path === segId.slice(segId.indexOf("/") + 1, at));
+  const k = Number(segId.slice(at + 1));
+  const set = (list, inf) => (inf === null ? [] : (list.length ? list : [{}]).map(() => ({ speed: 0, influence: inf })));
+  prop.keys[k - 1].out_ease = set(prop.keys[k - 1].out_ease, startInf);
+  prop.keys[k].in_ease = set(prop.keys[k].in_ease, endInf);
+  return s;
+}
+
+test("the demo in place (33.33 on both sides) is the demo's", () => {
+  const r = diff(before, withInfluence(fixture("attempt-complete"), POS1, 33.33, 33.33), lesson());
+  const t = r.targets.find((x) => x.segment_id === POS1);
+  assert.equal(t.result, "eased_by_demo");
+  assert.equal(t.demo_credit, "demo");
+  assert.equal(r.demo_undone, false);
+});
+
+test("F9 on the shared key overwrites one side; the other still has the fingerprint, so it's still the demo", () => {
+  const r = diff(before, withInfluence(fixture("attempt-complete"), POS1, 33.33, 33.333), lesson());
+  assert.equal(results(r)[POS1], "eased_by_demo");
+});
+
+test("undone and redone with F9, with no check in between: no fingerprint left, so it's the learner's", () => {
+  const r = diff(before, withInfluence(fixture("attempt-complete"), POS1, 33.333, 33.333), lesson());
+  const t = r.targets.find((x) => x.segment_id === POS1);
+  assert.equal(t.result, "eased_by_learner");
+  assert.equal(t.demo_credit, "learner_redo");
+  assert.equal(r.demo_undone, true);
+  assert.equal(r.summary.total_for_learner, 4);
+});
+
+test("after a check saw it undone, the credit says so", () => {
+  const r = diff(before, withInfluence(fixture("attempt-complete"), POS1, 33.333, 33.333),
+    { ...lesson(), demo: { segment_id: POS1, at: "x", undone: "y" } });
+  assert.equal(r.targets.find((x) => x.segment_id === POS1).demo_credit, "learner_after_undo");
+});
+
+test("no ease values to compare: credit is unknown, it stays with the demo, and the mentor asks (C)", () => {
+  const r = diff(before, withInfluence(fixture("attempt-complete"), POS1, null, null), lesson());
+  const t = r.targets.find((x) => x.segment_id === POS1);
+  assert.equal(t.result, "eased_by_demo");
+  assert.equal(t.demo_credit, "unknown");
+  assert.equal(r.demo_undone, false);
+});

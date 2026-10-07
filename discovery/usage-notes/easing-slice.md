@@ -174,6 +174,8 @@ passed from the first run.
 | `2026-10-05-1601.json` (baseline) | 14/16 (88%) | $4.65 | 09 and 16 fail |
 | `2026-10-05-1611.json` (after fixes) | 15/16 (94%) | $4.92 | 09 and 16 pass; 10 fails |
 | `2026-10-05-1612.json` (`--only 10 --repeat 3`) | 3/3 | $0.43 | 10's fail was noise |
+| `2026-10-06-1726.json` (**new baseline**, 24 cases) | 23/24 (96%) | $8.24 | First run with `outputStyle: default` (earlier runs carried the builder's Explanatory notes, so they aren't comparable). Adds cases 17–24 (panel buttons, panel session 1 fixes). 21 failed: the mentor spotted fixture mode's placeholder frame and `"fixture": true` flag and wrote a note to the tester |
+| `2026-10-06-1727.json` (`--only 21`) | 1/1 | $0.43 | After fixture mode served a real Mentor Practice frame with no fixture flag, and the eval's temp folder got a neutral name |
 
 **Failures and fixes (`SKILL.md`):**
 - **09 · returning learner (R-USES-MEMORY).** It did the right thing: it skipped the basics and

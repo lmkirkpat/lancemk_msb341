@@ -158,6 +158,7 @@ re-capture.
 | `wrong-layer.json` | Demo, plus **Subtitle › Opacity** eased instead of a Title pair | 3 still linear; Subtitle flagged as outside the lesson |
 | `half-eased.json` | **Derived, not captured** (2026-10-06): `after-demo.json` plus F9 on the shared 1.5 s Position key only. Position 1.5–3 s is eased at 1.5 s and still linear at 3 s | demo eased, 1 half eased, 2 still linear |
 | `title-done.json` | Demo, plus every other Title pair eased | pass |
+| `redone.json` | **Derived, not captured** (2026-10-06): `title-done.json` with the demo pair's 0.5 s side changed from the demo's 33.33 to F9's 33.333, as if the learner undid the demo and eased it with F9. Use with `"undo_demo": true` so fixture mode doesn't re-apply the demo | pass, all 4 the learner's |
 | `all-eased.json` | "Comp 1", the original comp: 4 eased pairs, nothing linear | nothing to ease |
 | `other-comp.json` | Same capture as `all-eased.json`, used as "a different comp is active" | `comp_matches: false` |
 

@@ -96,10 +96,15 @@ function setEase(args) {
   };
 }
 
+// A real frame of Mentor Practice (frame.png next to the snapshot fixtures, rendered at 0.5 s in
+// panel session 1) when there is one, else the placeholder. It returns exactly what the real
+// snippet returns, with no "fixture" flag: in eval case 21 the mentor spotted that flag and the
+// placeholder and wrote a note to the tester instead of teaching (usage notes, 2026-10-06).
 function previewFrame(args) {
   const project = loadProject();
-  fs.writeFileSync(args.file, PLACEHOLDER_PNG);
-  return { comp: project.comp.name, time: args.time ?? 0, fixture: true };
+  const real = path.join(path.dirname(path.resolve(path.dirname(FIXTURE_STATE), readState().project)), "frame.png");
+  fs.writeFileSync(args.file, fs.existsSync(real) ? fs.readFileSync(real) : PLACEHOLDER_PNG);
+  return { comp: project.comp.name, time: args.time ?? 0 };
 }
 
 const SNIPPETS = { snapshot, "set-ease": setEase, "preview-frame": previewFrame };

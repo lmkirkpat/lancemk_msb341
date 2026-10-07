@@ -112,7 +112,12 @@ carries over to the next day, which is what US2-3 asks for.
 | `targets` | `{ segment_id, label, result, linear_end?, linear_key_time?, demo_undone? }[]` | `result`: `"eased_by_learner" \| "eased_by_demo" \| "still_linear" \| "partly_eased" \| "removed"`. `partly_eased` (added 2026-10-06) carries `linear_end` (`"start"` or `"end"`) and `linear_key_time` |
 | `unexpected_changes` | string[] | Plain-language notes, for example "Opacity on Title now has 3 keys (was 2)" |
 | `summary` | `{ learner_eased, still_linear, partly_eased, total_for_learner }` | Excludes the demo segment (scenario 1.6) unless the demo was undone |
-| `demo_undone` | boolean | True once a check has seen the demo pair needing ease again. The session remembers it (`demo.undone`), and the pair is the learner's from then on (added 2026-10-06) |
+| `demo_undone` | boolean | True once a check has seen the demo pair needing ease again, or eased without the demo's fingerprint. The session remembers it (`demo.undone`), and the pair is the learner's from then on (added 2026-10-06) |
+
+The demo pair's target also carries `demo_credit` (added 2026-10-06): `"demo"` (at least one
+facing side still has the demo's influence, 33.33), `"learner_redo"` (eased, but neither side
+has it: F9 records 33.333), `"learner_after_undo"` (a check already saw it undone), or
+`"unknown"` (no ease values to compare, so the mentor asks the learner).
 
 **Pass** = `comp_matches` is true and `still_linear` and `partly_eased` are both 0. The mentor
 turns this into words.

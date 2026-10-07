@@ -64,6 +64,13 @@ test("half-eased: demo + F9 on the shared 1.5 s key only; Position 1.5–3 s is 
   assert.deepEqual(r.unexpected_changes, []);
 });
 
+test("redone: the demo undone and every Title pair eased with F9, so no demo fingerprint is left", () => {
+  const r = check("redone");
+  assert.deepEqual(results(r), ["eased_by_learner", "eased_by_learner", "eased_by_learner", "eased_by_learner"]);
+  assert.equal(r.targets[0].demo_credit, "learner_redo");
+  assert.equal(r.passed, true);
+});
+
 test("title-done: every Title pair eased, and it passes", () => {
   const r = check("title-done");
   assert.deepEqual(results(r), ["eased_by_demo", "eased_by_learner", "eased_by_learner", "eased_by_learner"]);

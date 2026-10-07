@@ -31,8 +31,10 @@ single pair on an effect property. Nothing was typed in a terminal (SC-001 ✓).
    one end, still stops hard at the other") and checks before answering "how does it look now?".
 2. **A one-pair focus let the demo take the whole lesson,** and an undone-then-redone demo pair
    was credited to the demo. Now there's no demo when the focus has one pair. Once a check sees
-   the demo undone, the pair is the learner's. Gap still open: an undo **without** a check in
-   between is invisible (ideas in the 2026-10-06 session with Claude).
+   the demo undone, the pair is the learner's. An undo **without** a check in between is caught by
+   the demo's fingerprint: the demo sets influence 33.33 and F9 records 33.333 (seen in the real
+   captures). An eased demo pair with neither side at 33.33 was redone by the learner. If a
+   snapshot has no ease values to compare, the mentor asks (options A + C, chosen 2026-10-06).
 3. **The builder's output style leaked into the mentor.** The repo's `.claude/settings.local.json`
    sets Explanatory, and headless runs picked it up: the last reply ended with a "★ Insight"
    note meant for the builder. The baseline eval results (`2026-10-05-1611.json`) contain the same
@@ -41,7 +43,7 @@ single pair on an effect property. Nothing was typed in a terminal (SC-001 ✓).
 4. **Minor:** the turn log's `at` was the turn's end, not when it was sent. Fixed.
 
 New eval cases: 21 (single pair, no demo), 22 (half eased, "why mechanical?"), 23 (undo, then
-redo after a check).
+redo after a check), 24 (undo and redo with no check in between).
 
 ## SC-002: checks (10 needed: ≥ 3 partial, ≥ 2 outside the lesson, ≥ 1 undone)
 

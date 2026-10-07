@@ -287,7 +287,9 @@ function judge(c, turns) {
 // ---------- one run of one case ----------
 
 function runCase(c, opts) {
-  const home = fs.mkdtempSync(path.join(os.tmpdir(), `ae-mentor-eval-${c.id.slice(0, 2)}-`));
+  // A neutral folder name: read_learner_record returns the record's path, and a name with "eval"
+  // in it told the mentor it was being tested (case 21, 2026-10-06).
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-"));
   const stateFile = path.join(home, "fixture-state.json");
   if (c.learner_record) fs.copyFileSync(path.join(CASES_DIR, c.learner_record), path.join(home, "learner.json"));
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
@@ -314,9 +316,14 @@ function runCase(c, opts) {
   const checksPass = checks.every((x) => x.pass);
   let rubric = [];
   if (!error && (checksPass || opts.judgeAlways)) {
-    const j = judge(c, turns);
-    rubric = j.items;
-    cost += j.cost;
+    // A judge that times out or errors fails this case's rubric; it never stops the whole run.
+    try {
+      const j = judge(c, turns);
+      rubric = j.items;
+      cost += j.cost;
+    } catch (e) {
+      rubric = [{ item: "judge", pass: false, reason: `judge failed to run: ${e.message}` }];
+    }
   }
   const pass = checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
   fs.rmSync(home, { recursive: true, force: true });

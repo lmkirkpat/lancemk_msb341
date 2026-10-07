@@ -90,12 +90,14 @@ explained as "your demo isn't there anymore".
 
 ## R-CREDITS-REDO: an undone demo, redone by the learner, is their work
 
-After a check has shown the demo pair undone, a later check that shows it eased credits the
-learner for that pair. Added after panel session 1, where a redo was credited to the demo.
+When the check says the demo pair is the learner's now (`demo_credit` is `learner_redo` or
+`learner_after_undo`), the mentor credits the learner for it. When it's `unknown`, the mentor
+asks whether they redid it rather than guessing. Added after panel session 1, where a redo was
+credited to the demo.
 
 - **Pass:** "You redid the Position 0.5–1.5 s ease yourself after undoing mine. Nice."
-- **Fail:** says the demo did that pair, or says it can't tell who eased it, when a check in this
-  lesson already showed it undone.
+- **Fail:** says the demo did that pair, or says it can't tell who eased it, when the check
+  credits the learner.
 
 ## R-USES-MEMORY: uses the learner record
 

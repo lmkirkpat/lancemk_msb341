@@ -17,6 +17,8 @@ if (i < 1 || i + 1 > prop.numKeys) throw new Error("Keys " + i + " and " + (i + 
 var BEZ = KeyframeInterpolationType.BEZIER;
 
 // One KeyframeEase per temporal dimension; Scale reports 3 even on a 2D layer, so always ask AE.
+// Keep 33.33, not 33.3333: it's the demo's fingerprint. F9 records as 33.333, so the check can tell
+// the demo from the learner's own ease (mentor/lib/diff.mjs › DEMO_INFLUENCE).
 function easy() {
     var n = prop.keyInTemporalEase(1).length;
     var a = [];
