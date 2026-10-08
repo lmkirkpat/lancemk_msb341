@@ -1,21 +1,226 @@
 # Running Insights
 
-> Synthesis, not a diary. Keep it to the 5–10 things you currently believe about
-> your market, each with evidence. Revise beliefs in place; note the date of last change.
+> Synthesis, not a diary. Keep it to the 5–10 things you currently believe about your market,
+> each with evidence. Revise beliefs in place; note the date of last change. Numbers are
+> stable because decisions and specs cite them: merged or parked beliefs keep a stub.
 
-| # | Belief | Confidence | Evidence | Last updated |
-|---|--------|------------|----------|--------------|
-| 1 | The hardest part of learning creative software from YouTube isn't following steps, it's knowing what to search for or ask. Natural-language input that returns ordered, project-specific steps solves that directly. One interviewee needed YouTube first just to know enough to ask AI. Another described the problem in plain words ("the sky is blown out") and a chatbot pointed them to masking. In a long project the search problem is worse: a step missed early breaks things hours later, and finding the mistake took longer than finding a video (007). | Low–Med (n=4) | `discovery/problem-candidates.md` self-test 1; `discovery/interviews/003-writer-social-intern.md`; `discovery/interviews/004-student-photographer-freelance-video.md`; `discovery/interviews/007-student-photographer-social-animator.md` | 2026-10-08 |
-| 2 | A taught technique carries over. A pattern shown once (easing, paired-keyframe timing) got reapplied unprompted on a second repetition. An interviewee who learned Lightroom through ChatGPT now uses it less because they "picked up on my normal routines." What doesn't carry over is memorizing apart from real work: shortcuts drilled for a test were forgotten "the day after" (007). Practice probably has to happen in real projects. | Low (n=3, one self) | `discovery/problem-candidates.md` self-test 1; `discovery/interviews/004-student-photographer-freelance-video.md`; `discovery/interviews/007-student-photographer-social-animator.md` | 2026-10-08 |
-| 3 | Diagnosing screenshots catches real, non-obvious mistakes (state mismatches, platform-specific shortcut conflicts) that a static tutorial wouldn't surface. People already do this by hand with general chatbots: 006 photographed their Layers panel and got the exact fix for a clipping mask. Asked how a mentor would have helped in After Effects, 007 named diagnosis first: "what's the problem here? Why does it look like this?" | Low–Med (n=4, two unprompted, one after the pitch) | `discovery/problem-candidates.md` self-test 1; `discovery/interviews/003-writer-social-intern.md`; `discovery/interviews/006-graphic-designer-photographer.md`; `discovery/interviews/007-student-photographer-social-animator.md` | 2026-10-08 |
-| 4 | Reading a waveform visually to hit a beat only works for isolated transients; in a dense section it's back to ear/rhythm, which is a real ceiling on the "diagnose from screenshot" mechanic for audio-timed work. | Low (n=1, self) | `discovery/problem-candidates.md` self-test 1 | 2026-09-23 |
-| 5 | Other people also struggle to learn Adobe apps as a coherent whole, not just me. The workaround is guess-and-check, chatbots, YouTube, and saved social clips, not structured tutorials or courses. Even someone who took a class mostly learned by trial and error. A graduate After Effects class felt like "trying to keep myself from drowning," and the fix was YouTube and retracing steps (007). | Low (n=5; 001, 002, 005, and 007 informal or friends) | `discovery/interviews/001-video-editor.md`, `discovery/interviews/002-pm-creative.md`, `discovery/interviews/004-student-photographer-freelance-video.md`, `discovery/interviews/005-photoshop-class-canva-user.md`, `discovery/interviews/007-student-photographer-social-animator.md` | 2026-10-08 |
-| 6 | Where the teaching happens matters: people want guidance inside the app, tied to their own project. One strongly prefers a plugin. Another suggested, unprompted, merging the app's built-in tips with the user's project. A third would trust it *more* for being built in ("if anything's going to understand this software, it would be this"), but only if it's "super clear and direct" and doesn't "take you on a different path." | Low (n=3) | `discovery/interviews/002-pm-creative.md`, `discovery/interviews/003-writer-social-intern.md`, `discovery/interviews/006-graphic-designer-photographer.md` | 2026-10-01 |
-| 7 | Under deadline, non-specialists want the result, not the lesson. Learning feels valuable later, not in the moment. That's the opening for do-it-for-you assistants and the biggest threat to a teaching-first product. People also *say* they want to learn more than they act on it: 005 said they'd want AI to teach them, but the one time they used AI in a creative app (Canva), they had it do the task. The counterpoint is a working professional (006): they want the lesson because the design has to be theirs, to "walk someone through my design and tell them exactly what I did." A student (007) wants the lesson for the same authorship reason ("If AI makes it, it's not yours") but admits wanting to "just get past it," especially late in a project: "If I've done 4 hours on it, I don't want to do it." So it may depend less on the person and more on the moment: the more time already sunk into a project, the less they want the lesson. | Low (n=4) | `discovery/interviews/003-writer-social-intern.md`; `discovery/interviews/005-photoshop-class-canva-user.md`; `discovery/interviews/006-graphic-designer-photographer.md`; `discovery/interviews/007-student-photographer-social-animator.md` | 2026-10-08 |
-| 8 | The real competitor is YouTube plus a general chatbot used together, not paid courses. YouTube is visual but generic. The chatbot is project-specific but only text, which stops working once the app gets complex: "I would rather see a mouse on a screen moving." One interviewee asks the chatbot for a YouTube link when its steps aren't enough. Built-in tutorials were tried and dropped (003) or not mentioned (004). YouTube's cost is stitching together "4 different YouTube videos" for one specific problem (005). A daily Photoshop user now goes to AI before YouTube (no searching) and finds text-only help fine in an app they know well. Real layer names made it feel "a little visual." Text may only fall short in an app that's new to the learner. | Low–Med (n=4, matches my self-test) | `discovery/interviews/003-writer-social-intern.md`; `discovery/interviews/004-student-photographer-freelance-video.md`; `discovery/interviews/005-photoshop-class-canva-user.md`; `discovery/interviews/006-graphic-designer-photographer.md` | 2026-10-01 |
-| 9 | Adobe agrees its apps are hard to learn, but its stated AI strategy is to remove the need to learn, not to teach. Its announcements never mention teaching. In practice the tools do more than the marketing says (see belief 10), so judge Adobe by hands-on tests, not announcements. | Med (Adobe statements on record, plus my hands-on test) | `discovery/competitors.md` | 2026-09-28 |
-| 10 | When asked, Adobe's After Effects assistant already teaches in the user's own project: step-by-step instructions, checking work against real project data, and an ordered next-skills path. What's left for Bet A: taking the lead instead of waiting to be asked, memory and progress across sessions, practice so skills stick, and non-Adobe apps. Awareness may be a gap: a professional who uses Photoshop daily hadn't noticed its assistant (006). A student thought of Adobe's help as the help button: "how helpful is it really? ... I don't know if I've ever used it and that's actually helped me" (007). | Med (hands-on test, one session; awareness n=2) | `discovery/competitors.md` hands-on test; `discovery/interviews/006-graphic-designer-photographer.md`; `discovery/interviews/007-student-photographer-social-animator.md` | 2026-10-08 |
-| 11 | Every app's own assistant covers one app, works only when asked, and has no memory of what the user has learned. Figma now answers how-to questions in the canvas. Resolve and Blender have no official assistant but do let outside AI read the project (MCP or Python), and community bridges do the same for After Effects. A possible gap: a tutor that works across apps and remembers what the user knows. | Low (desk research, untested) | `discovery/competitors.md` non-Adobe section | 2026-09-28 |
-| 12 | Nobody pays to relearn basics: free AI and YouTube set that price at zero. Students won't pay at all ("I would rather do it myself," 004). A working professional might pay for depth: "that would depend on my skill level." A forgotten clipping mask was fixed for free in minutes, but they would pay to go "deeper to understand like a different concept" (006). Both suggested selling it with the Adobe plan; 006 wanted it as a monthly add-on at signup. A third (007) said "I don't know" and suggested a separate student price, billed yearly like Adobe. Students face a second barrier: some classes ban AI outright ("you will get kicked out of class and like reported"), so they don't try it. | Low (n=3, pay answers after the pitch; 007's were led) | `discovery/interviews/004-student-photographer-freelance-video.md`; `discovery/interviews/006-graphic-designer-photographer.md`; `discovery/interviews/007-student-photographer-social-animator.md` | 2026-10-08 |
-| 13 | What makes people want to learn is often a look they want to copy (a film look, a specific creator's style), not a list of skills. People save creators' tip reels to copy later, and one interviewee suggested creators could sell techniques the way they sell presets. | Low (n=1, but backed by actual behavior) | `discovery/interviews/004-student-photographer-freelance-video.md` | 2026-09-28 |
-| 14 | The best help people have had is a person: a teacher (005) or an expert colleague (003). One would still pick an in-person teacher over an AI mentor, but the AI mentor over YouTube. The mentor's job is to get as close to a person as possible, not just to beat YouTube. 006 learned partly from a parent who is a graphic designer. A person can also be bad help: 007's classmate "just took my keyboard" instead of saying the step. The mentor should copy the person who explains, not the one who takes over. | Low (n=4) | `discovery/interviews/003-writer-social-intern.md`; `discovery/interviews/005-photoshop-class-canva-user.md`; `discovery/interviews/006-graphic-designer-photographer.md`; `discovery/interviews/007-student-photographer-social-animator.md` | 2026-10-08 |
+Last reviewed 2026-10-08, after interviews 001–007 and self-test 1.
+
+## How confidence is rated
+
+Each piece of evidence is scored by what kind it is, not just how many people said it:
+
+| Evidence | Points |
+|---|---|
+| **Did:** a real past story, told before the pitch | 1 |
+| **Did (outside research):** a hands-on competitor test, or a competitor's own public statement | 1 |
+| **Said:** a stated preference, before the pitch | ½ |
+| **Weak:** a reaction after the pitch, a hypothetical, an answer I led, or my own self-test | ¼ |
+
+| Level | Rule |
+|---|---|
+| **Hunch** | Under 1.5 points, or only one source |
+| **Low** | 1.5–3 points |
+| **Med** | 3+ points from 3+ people (or sources), with no strong counter-evidence |
+| **High** | Med, and it held up when people could choose otherwise (they used the mentor, came back, or paid) |
+
+Rules for applying it:
+
+- **Interviews alone top out at Med.** High needs behavior with the product.
+- **Rate the claim as written.** Keep claims narrow. Anything the claim implies but the
+  evidence doesn't show goes on an **Untested** line, not into the rating.
+- **Counter-evidence gets its own line** and can hold a belief at Low however many points
+  it has.
+- Friends and informal chats score the same as anyone else, but the note should say so.
+
+## Beliefs
+
+### 1. The hard part is knowing what's wrong; diagnosing from the project is the most-wanted job
+
+People can follow steps. What costs them is not knowing what went wrong or what to search
+for. In a long project it's worse: a step missed early breaks things hours later.
+
+- **Confidence:** Med (≈4.5 points, 4 people + self)
+- **Did:** 003 sent screenshots asking "what am I looking at?" (needed YouTube first to know
+  enough to ask). 004 typed "the sky on my photo is really blown out" and was pointed to
+  masking. 006 photographed their Layers panel and got the clipping-mask fix. 007: "it maybe
+  took more time to find the error than to find a video that would help." Self-test 1 caught
+  state mismatches and shortcut conflicts from screenshots.
+- **Said:** 007, after the pitch, named diagnosis first: "what's the problem here? Why does it
+  look like this?"
+- **Against:** none yet.
+- **Untested:** whether diagnosis inside the mentor is worth more than a free chatbot with a
+  screenshot, which is what 003, 004, and 006 already use. Spec 002 teaches a new skill
+  (easing); it doesn't diagnose a broken project.
+- **Sources:** `problem-candidates.md` self-test 1; interviews 003, 004, 006, 007
+- **Updated:** 2026-10-08 (merged old belief 3)
+
+### 2. Skills stick when used in real work and fade when not
+
+- **Confidence:** Med (≈4.5 points, 5 people + self)
+- **Did:** 004 now uses ChatGPT less in Lightroom because they "picked up on my normal
+  routines." Fading: 003 "I'm probably already rusty" on Premiere. 005 let Photoshop lapse.
+  006 had done clipping masks before and still had to look one up. 007 drilled shortcuts for a
+  test and forgot them "the day after." Self-test 1: easing carried over unprompted on a
+  second repetition.
+- **Against:** none yet.
+- **Untested:** whether practice built into real projects slows the fade, and whether anyone
+  would value not forgetting over relearning on demand (see belief 12: relearning basics is
+  free). This is the core claim behind memory and practice, and no interview has tested it
+  before the pitch.
+- **Sources:** self-test 1; interviews 003, 004, 005, 006, 007
+- **Updated:** 2026-10-08
+
+### 3. → merged into belief 1 (2026-10-08)
+
+### 4. → parked (see below)
+
+### 5. Today's workaround is YouTube + a free chatbot + trial and error; nobody uses paid courses
+
+The real competitor is that combination, not courses. YouTube is visual but generic; the
+chatbot is project-specific but text only. People stitch them together, plus a person when
+they have one.
+
+- **Confidence:** Med (≈5.5 points, 6 people)
+- **Did:** 001 guess-and-check (informal, paraphrased). 003 YouTube + ChatGPT/Gemini + an
+  in-house editor: "I couldn't have done it probably with one or the other." 004 chat first,
+  then asks chat for a YouTube link. 005 a teacher's overview, then trial and error, YouTube,
+  Google. 006 AI first now, since you "don't have to like watch a video or like search
+  Google." 007 YouTube and retracing steps; finding the right video took "hours." Nobody has
+  paid for a course; 004 never has.
+- **Against:** none. Built-in app tutorials were tried and dropped (003).
+- **Sources:** interviews 001, 003, 004, 005, 006, 007
+- **Updated:** 2026-10-08 (absorbed the competitor half of old belief 8)
+
+### 6. Help should be inside the app
+
+- **Confidence:** Hunch (≈1 point). The architecture already bets on this (`decisions/003`,
+  `decisions/005`), so it needs testing more than any other Hunch.
+- **Said:** 003 suggested without prompting merging the built-in tips with your own project
+  (½). 002 strongly prefers a plugin (informal, after the pitch, ¼). 006 would trust it
+  *more* built in: "if anything's going to understand this software, it would be this"
+  (after the pitch, ¼).
+- **Against:** everyone's actual workaround (belief 5) lives in another tab and works.
+- **Sources:** interviews 002, 003, 006
+- **Updated:** 2026-10-08
+
+### 7. Whether people want the lesson depends on the moment: mid-project, they take the result
+
+The biggest risk to a teaching-first product. People value learning, and authorship is a
+real reason for it, but the more time already sunk into a project, the less they want the
+lesson.
+
+- **Confidence:** Low (≈2.5 points toward "the moment decides")
+- **Did:** 003, on a crunch: "it was more just to get the project done." 005 had Canva's AI
+  "do the task for me." 007 described their own habit before the pitch: "If I've done 4 hours
+  on it, I don't want to do it."
+- **Said (why people want the lesson):** 006, before the pitch: "I'd want it to be like my
+  work ... being able to walk someone through my design." 007: "If AI makes it, it's not
+  yours." 005 (hypothetical) would want AI to teach them.
+- **Against:** 006 followed AI's steps themselves mid-task rather than finding a way to have
+  it done, but no do-it-for-you option was in front of them.
+- **Untested:** whether people come back to learn *after* the deadline. If they do, the
+  mentor's moment is after the crunch, not during it.
+- **Sources:** interviews 003, 005, 006, 007; `product/product-description.md`
+- **Updated:** 2026-10-08
+
+### 8. Text-only help falls short in an app the learner doesn't know yet
+
+- **Confidence:** Low (≈2.5 points)
+- **Did:** 004 chains them: "if I still don't get it, I have chat give me a YouTube link." 003
+  used YouTube for the visuals and chat for their own project.
+- **Said:** 004, for Photoshop: "I would rather see a mouse on a screen moving."
+- **Against:** 006 finds text fine in apps they know well; real layer names made it feel "a
+  little visual in its own sense." That fits the "doesn't know yet" limit but narrows it.
+- **Sources:** interviews 003, 004, 006
+- **Updated:** 2026-10-08 (competitor half moved to belief 5)
+
+### 9. → merged into belief 10 (2026-10-08)
+
+### 10. Adobe's assistant already teaches on request, but nobody we've talked to has used it
+
+Adobe's stated strategy is to remove the need to learn, but in practice its After Effects
+assistant gives step-by-step instructions, checks work against real project data, and
+suggests next skills, when asked. Every app's assistant covers one app, works only when
+asked, and has no memory of the learner. What's left for the mentor: leading, memory,
+practice, and working across apps.
+
+- **Confidence:** Med (≈4.5 points; desk research, one hands-on test, 2 interviews)
+- **Did (research):** hands-on test of the After Effects assistant (one session). Adobe's
+  public statements never mention teaching. Figma answers how-to questions in the canvas;
+  Resolve and Blender have no official assistant but let outside AI read the project.
+- **Did (interviews):** 006, a daily Photoshop user, hadn't noticed its assistant. 007 thinks
+  of Adobe's help as the help button: "how helpful is it really?" (½, after the pitch).
+- **Against:** none yet. Judge Adobe by hands-on tests, not announcements.
+- **Untested:** whether people would pick the mentor over Adobe's assistant once they know
+  it exists.
+- **Sources:** `discovery/competitors.md`; interviews 006, 007
+- **Updated:** 2026-10-08 (merged old beliefs 9 and 11)
+
+### 11. → merged into belief 10 (2026-10-08)
+
+### 12. Nobody pays to relearn basics; free AI and YouTube set that price at zero
+
+- **Confidence:** Med for the claim as written (≈3.75 points, 3 people)
+- **Did:** 004 has never paid to learn. 006 fixed a forgotten clipping mask with free AI in
+  minutes. 007 didn't try AI at all because a class banned it ("you will get kicked out of
+  class and like reported"), a second barrier for students.
+- **Weak (after the pitch):** 004: "I couldn't justify paying ... I would rather do it myself."
+  006: "that would depend on my skill level"; might pay to go "deeper." 007: "I don't know";
+  suggested a student price and a professional price, billed yearly like Adobe. 004 and 006
+  both suggested selling it with the Adobe plan. My own example led 007's pro answer.
+- **Against:** none.
+- **Untested:** whether anyone pays for depth, and who pays (learner, school, employer,
+  Adobe). No pay behavior at all yet.
+- **Sources:** interviews 004, 006, 007; `decisions/002`; `decisions/005`
+- **Updated:** 2026-10-08
+
+### 13. → parked (see below)
+
+### 14. The best help people have had is a person who explains, not one who takes over
+
+The mentor's job is to get as close to a good teacher as possible, not just to beat YouTube.
+
+- **Confidence:** Med (≈4 points, 4 people)
+- **Did:** 003 leaned on an in-house video editor. 005: a teacher was the best help they had.
+  006 learned partly from a parent who is a graphic designer. 007's classmate "just took my
+  keyboard" instead of saying the step: help from a person can be bad too.
+- **Said:** 005 would still pick an in-person teacher over an AI mentor, but the mentor over
+  YouTube (hypothetical, ¼).
+- **Sources:** interviews 003, 005, 006, 007
+- **Updated:** 2026-10-08
+
+### 15. Trust breaks if it's wrong, takes a side path, or does the work for you
+
+The direct evidence for demo-once (`specs/002`, the `set_ease` limit).
+
+- **Confidence:** Low (≈1.5 points)
+- **Did:** 007 was frustrated when a classmate took over instead of explaining.
+- **Weak (after the pitch):** 006 would stop if it "take[s] you on a different path" or
+  "isn't direct." 007 would stop "if it was wrong," "if I have to ask it multiple times," or
+  "if it does it for me ... starts filling in stuff." 007 on demo-once: "That's cool."
+- **Against:** none yet. Untested in a real lesson with someone other than me.
+- **Sources:** interviews 006, 007
+- **Updated:** 2026-10-08 (new)
+
+## Open questions with no evidence yet
+
+The questions the product most depends on, and no interview has tested before the pitch:
+
+1. **Do memory and practice matter more than relearning on demand?** (beliefs 2, 10, 12)
+2. **When people know Adobe's assistant exists, do they still want a mentor that leads?**
+3. **Do people who use apps from several companies want one tutor across them?** 004 and
+   007 are the best fits so far; neither was asked.
+
+## Parked
+
+Not wrong, just not supported by interviews and not driving decisions now. Bring one back
+if new evidence shows up.
+
+- **Old belief 4 (audio timing):** reading a waveform to hit a beat only works for isolated
+  transients; in a dense section it's back to ear and rhythm. A limit on diagnosing
+  audio-timed work from screenshots. Self-test 1 only. Cited by `decisions/002`.
+- **Old belief 13 (copying a look):** what makes people want to learn is often a look they
+  want to copy, not a list of skills. 004 saves creators' tip reels to copy later and
+  suggested creators could sell techniques like presets. n=1; not seen in the six other
+  interviews, but no one else was asked.
