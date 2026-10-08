@@ -238,3 +238,31 @@ test("no ease values to compare: credit is unknown, it stays with the demo, and 
   assert.equal(t.demo_credit, "unknown");
   assert.equal(r.demo_undone, false);
 });
+
+// ---- T023 check 9 (usage notes): an eased property with an expression, outside the lesson ----
+
+// `before` plus the Logo layer from the expression fixture (Rotation with an expression, 2 linear keys).
+const withLogo = (snap, ease) => {
+  const s = structuredClone(snap);
+  const logo = structuredClone(fixture("expression").layers[0]);
+  logo.index = s.layers.length + 1;
+  if (ease) for (const k of logo.properties[0].keys) {
+    k.in_type = k.out_type = "bezier";
+    k.in_ease = k.out_ease = [{ speed: 0, influence: 33.333 }];
+  }
+  s.layers.push(logo);
+  return s;
+};
+
+test("easing keys on a property with an expression, outside the lesson, is noted", () => {
+  const r = diff(withLogo(before), withLogo(fixture("attempt-complete"), true), lesson());
+  assert.equal(r.passed, true);
+  assert.deepEqual(r.unexpected_changes, [
+    "Logo › Rotation keys were changed (not part of this lesson). It has an expression, so this may not change the motion",
+  ]);
+});
+
+test("an unchanged property with an expression adds no note", () => {
+  const r = diff(withLogo(before), withLogo(fixture("attempt-complete")), lesson());
+  assert.deepEqual(r.unexpected_changes, []);
+});

@@ -151,10 +151,24 @@ assistant instead.
   `record_lesson` would replace the whole history with one lesson. Fix: if the file exists but
   can't be parsed, refuse to write, leave the file alone, and return an error the mentor
   explains. Add a unit test.
-- **A change outside the focus was missed** (T023 lesson 4, check 9, 2026-10-07). The builder
-  edited a layer outside the Glow focus, and `diff_since_last` reported no `unexpected_changes`,
-  in the panel and in the terminal. Check 6 caught an edit to Glow in lesson 3, so it isn't
-  every edit. Next: re-create it, note the layer, the property, and whether the property had
-  keyframes, then see what `snapshot_project` includes. Likely suspects: layers left out of the
-  snapshot (hidden, locked, or shy, given "4 visible layers" in the opening) or changes it
-  doesn't compare (a value with no keyframes, or a key's time).
+- ~~**A change outside the focus was missed**~~ **Fixed 2026-10-08.** T023 lesson 4, check 9:
+  Easy Ease on **Logo › Rotation**, which has an expression, didn't appear in
+  `unexpected_changes`. Cause: `segments()` (`mentor/lib/analyze.mjs`) leaves out properties
+  with an expression because they can't be taught, and the change check reused it, so their
+  pairs were never compared. The property-level checks only look at key count, expression on or
+  off, and values, and Easy Ease changes none of those. Fix in `mentor/lib/diff.mjs`: compare every key
+  of a property with an expression, and note that the change may not show on screen, since the
+  expression can override the keys. Regression tests in `mentor/test/diff.test.mjs`. Confirmed
+  live 2026-10-08: with Logo › Rotation eased again, `diff_since_last` against lesson 4's
+  baseline reported "Logo › Rotation keys were changed (not part of this lesson). It has an
+  expression, so this may not change the motion", and Glow was still graded as passed.
+
+## Edge cases to plan for as teaching grows
+
+Check 9 came from a filter built for one job (which pairs can be taught) being reused for another
+(which pairs changed). Where After Effects concepts overlap, such as keys and expressions, a
+rule that's right for teaching can hide things from checking. Each new skill (Graph Editor,
+bounce, other apps) should list these overlaps in its spec and test the check on each:
+expressions over keys, single keys, hold keys, separated dimensions, effect properties, layers
+inside precomps, and hidden or locked layers. The Mentor Practice comp's trap layers (Logo, Old
+Take) are where these cases get tested live.

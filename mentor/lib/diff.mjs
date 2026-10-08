@@ -10,6 +10,9 @@ const segLabel = (s) => `${propLabel(s.layer, s.prop)} ${secs(s.from_time)}–${
 
 // What a pair's motion depends on: its times and the two sides that face each other.
 const signature = (s) => JSON.stringify([s.from_time, s.to_time, s.from.out_type, s.to.in_type, s.from.out_ease, s.to.in_ease]);
+// The same for every key of a property. Used where segments() leaves the property out (an
+// expression), so its pairs aren't compared above (usage notes, T023 check 9: Logo › Rotation).
+const keysSignature = (p) => JSON.stringify(p.keys.map((k) => [k.time, k.in_type, k.out_type, k.in_ease, k.out_ease]));
 
 // The first key whose value differs, or null. Snapshots from before values were recorded (and
 // properties whose values aren't numbers) have no value to compare, so they never differ.
@@ -64,6 +67,9 @@ function unexpectedChanges(baseline, current, targets) {
     const valueAt = changedValueAt(prop, now.prop);
     if (valueAt != null) notes.push(`${label} value changed at ${secs(valueAt)} s`);
     else if (touched.has(key)) notes.push(`${label} was changed (not part of this lesson)`);
+    else if (prop.expression_enabled && prop.keys.length > 1 && keysSignature(prop) !== keysSignature(now.prop)) {
+      notes.push(`${label} keys were changed (not part of this lesson). It has an expression, so this may not change the motion`);
+    }
   }
   for (const [key, { layer, prop }] of after) {
     if (!before.has(key)) notes.push(`${propLabel(layer, prop)} is now animated (wasn't before)`);

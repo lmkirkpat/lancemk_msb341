@@ -66,8 +66,8 @@ a brand new session act like a colleague who already knows what you are working 
   1. Panel: T017 passed in session 2 (2026-10-07: a–f clean, 5.5 min, $0.51, one quirk logged
      in `discovery/usage-notes/mentor-panel.md` › To fix later). T023 passed 2026-10-07, and the
      panel's check matched `diff_since_last` from the terminal. Next: T027 (confirm the eval
-     run meets SC-007). SC-002: 10 checks, 9 agree. Check 9 missed an edit outside
-     the focus (To fix later): find out why before the panel counts as trustworthy.
+     run meets SC-007). SC-002: 10 checks, 9 agree. Check 9 missed an Easy Ease on a property with an
+     expression outside the focus. Fixed and confirmed live 2026-10-08 (`mentor/lib/diff.mjs`).
   2. Run the last booked interview (`008`). Ask about Adobe's assistant, who pays, and
      whether memory and practice matter, before pitching
      (`discovery/interviews/bet-a-interview-guide.md`).
@@ -114,6 +114,11 @@ a brand new session act like a colleague who already knows what you are working 
     and only displays. Its tests are in `panel/test/`.
 - **How work ships:** TBD
 - **Testing and style:** AI features get an eval set in `product/evals/`.
+- **Edge cases where concepts overlap:** when adding a teaching skill, list in its spec where
+  AE concepts overlap (expressions over keys, single and hold keys, separated dimensions,
+  effects, precomps, hidden layers) and test what the check sees for each. A rule that's right
+  for teaching can hide changes from checking (`discovery/usage-notes/mentor-panel.md` › Edge
+  cases to plan for).
 
 ## Working with me
 
