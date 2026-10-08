@@ -3,8 +3,8 @@
 > One entry per customer type. Update as interviews sharpen the picture:
 > this file should get *more specific* over the semester, not longer.
 
-Last updated 2026-10-01, from self-test 1 and interviews 001–006. First draft. Still thin:
-two data points on paying (a no, and a "depends on depth"), and nobody has been asked about
+Last updated 2026-10-08, from self-test 1 and interviews 001–007. First draft. Still thin:
+three data points on paying (a no, a "depends on depth," and an "I don't know"), and nobody has been asked about
 memory or practice before hearing the pitch.
 
 ## 1. The skill-builder: creative adding a new app to their toolkit (primary)
@@ -17,7 +17,9 @@ memory or practice before hearing the pitch.
   interview 002 (PM with a creative background, struggled with Illustrator and Photoshop),
   interview 004 (student who edits photos for their YouTube channel and runs a freelance
   video business in Final Cut), and interview 006 (professional graphic designer and
-  photographer, in Illustrator, Photoshop, InDesign, and Lightroom daily).
+  photographer, in Illustrator, Photoshop, InDesign, and Lightroom daily), and interview 007
+  (student photographer, videographer, and animator who took a graduate After Effects class
+  and uses apps from six or more companies).
 - **The problem in their words:** "[ChatGPT] will give me steps for simple tasks, but with
   something like Photoshop that's more complex, I would rather see a mouse on a screen moving
   and showing me where to go and how to do it than having to read instructions." (004)
@@ -30,18 +32,22 @@ memory or practice before hearing the pitch.
   not in another tab (002 strongly prefers a plugin). Wants to see it done, not only read
   steps, once the app gets complex (004). Often wants a specific look, not a skill list (004). Wants the skill so the work is theirs:
   "a design that I designed is being able to walk someone through my design" (006). Wants
-  help that is "super clear and direct": one best route, no side paths (006).
+  help that is "super clear and direct": one best route, no side paths (006). Wants help
+  finding what broke, not only how to do something new: "what's the problem here? Why does it
+  look like this?" (007). Will stop using it if it's wrong or "if it does it for me" (007).
 - **What they'd pay / have paid for:** 004 has never paid to learn and wouldn't: "I couldn't
   justify paying for something like that when there's just so many tools with AI and
   YouTube." Suggested Adobe bundle it instead. 006, a working pro: "that would depend on my
   skill level." Not for basics they've forgotten (a clipping mask, fixed free in minutes), maybe
-  for going deeper. Would want it as a monthly add-on sold with the Adobe plan. Both answers
-  came after the pitch.
+  for going deeper. Would want it as a monthly add-on sold with the Adobe plan. 007, a student:
+  "I don't know"; suggested a separate student price, billed yearly like Adobe. All three
+  answers came after the pitch. Students may also be blocked by class AI bans (007).
 - **Why they're primary:** they want the lesson, not just the result, which is exactly the
   gap Adobe's do-it-for-you assistants leave.
 - **Evidence:** `discovery/problem-candidates.md` self-test 1, `interviews/001-video-editor.md`,
   `interviews/002-pm-creative.md`, `interviews/004-student-photographer-freelance-video.md`,
-  `interviews/006-graphic-designer-photographer.md`
+  `interviews/006-graphic-designer-photographer.md`,
+  `interviews/007-student-photographer-social-animator.md`
 - **Still need to learn:** whether working professionals (not students) would pay, and who
   pays if the learner won't; whether people who use apps from several companies (004 does)
   want one tutor across them; whether they'd value a mentor that remembers their progress

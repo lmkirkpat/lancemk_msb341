@@ -106,7 +106,7 @@ and two lessons (SC-006).
 
 - [X] T021 [P] [US3] Write `panel/lib/memory.js` and `panel/test/memory.test.js` (data-model › Memory view): `readLearnerRecord({ home, fs })` returns the parsed file or null (missing or unreadable); `memoryView(record)` returns the last lesson's date as "Oct 3" style, the skill in plain words (`easing.basic` → "Easing"), the result (`passed` → "passed ✓", `partial` → "not finished", `not_checked` → "not checked"), and next (`skills[skill].next`, else `lessons[-1].next`). No file or empty `lessons` → "No lessons yet."; `version` other than 1 → "Memory format not recognised" with nothing else. Never output field names (FR-017). The module only reads (constitution 1.1.0 › II)
 - [X] T022 [US3] Render the memory section in `panel/index.html`, `panel/panel.css` and `panel/main.js`: read on open, re-read after a `tool_result` for `record_lesson` with `ok: true` (US3-3), and also re-render the path (T020). No edit controls (US3-4)
-- [ ] T023 🖐 [US3] Check SC-006: with `learner.json` backed up and removed, then after one panel lesson, then after a second, compare the memory section with the file each time. Log in `discovery/usage-notes/mentor-panel.md`
+- [X] T023 🖐 [US3] Check SC-006: with `learner.json` backed up and removed, then after one panel lesson, then after a second, compare the memory section with the file each time. Log in `discovery/usage-notes/mentor-panel.md`
 
 **Checkpoint**: US1–US3 work together.
 

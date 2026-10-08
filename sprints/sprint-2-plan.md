@@ -16,14 +16,14 @@ whether the workflow I have in mind is viable.
 - [x] A note on what the MCP bridge can and can't read
 - [x] `decisions/003` defining the architecture
 - [ ] The test slice running on my own test After Effects project, with notes from using it
-- [ ] 3 usage interviews with people in my target market, logged in `discovery/interviews/` (1 of 3: `006`)
+- [ ] 3 usage interviews with people in my target market, logged in `discovery/interviews/` (2 of 3: `006`, `007`)
 
 **Predicted difficulty:** 4
 
 ## Raised goals (added 2026-10-05)
 
 Ahead of schedule on most of the plan above, so the goal grows mid-sprint. Everything above
-still stands. The 2 remaining interviews are already booked.
+still stands. The last remaining interview is already booked.
 
 **Goal:** Everything in the original plan, plus a rudimentary version of the mentor panel built
 inside After Effects that can run one easing lesson from start to finish and shows the learner's
@@ -46,9 +46,9 @@ or (b) the panel is a front end to a Claude Code session. This changes the archi
       attempt, complete attempt) runs start to finish using only the panel, with nothing typed in
       the Claude Code terminal. Claude Code may be running in the background if `decisions/005`
       needs it
-- [ ] For the same attempt, "Check my work" in the panel gives the same verdict as
+- [x] For the same attempt, "Check my work" in the panel gives the same verdict as
       `diff_since_last` does in Claude Code
-- [ ] The panel shows the learner's memory from the learner record (read-only)
+- [x] The panel shows the learner's memory from the learner record (read-only)
 - [x] Notes from the panel run logged in `discovery/usage-notes/`
 
 **Predicted difficulty:** 4

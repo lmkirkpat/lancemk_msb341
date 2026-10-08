@@ -83,6 +83,11 @@ written just before a tool call. Not harmful, but it reads like internal plumbin
 | 3 | 2 (Title) | Partial (hint, no change) | Nothing since check 2 | No change | Same | ✓ |
 | 4 | 2 (Title) | Partial | Finished Scale, eased Opacity | Scale + Opacity mine, 1 pair left | Same | ✓ |
 | 5 | 2 (Title) | Complete | Eased Position 1.5 s → 3 s | Passed, all 4 pairs | Same | ✓ |
+| 6 | 3 (Subtitle + Bar) | Outside the lesson | Edited Glow › Blurriness, none of the 4 focus pairs | 4 pairs not done (Subtitle half eased), "Glow › Blurriness was changed (not part of this lesson)" | Same | ✓ |
+| 7 | 3 (Subtitle + Bar) | Complete | Undid the Glow edit, eased all 4 pairs | Passed, 4 of 4 mine, nothing outside | Same | ✓ |
+| 8 | 4 (Glow) | Partial (to confirm) | Ease not on any keys | Still linear, nothing else changed | Same | ✓ |
+| 9 | 4 (Glow) | Partial (to confirm) | Same as check 8. Terminal `diff_since_last` on this attempt gave the same result (still linear, not passed) | Still linear, nothing else changed | Same | ✓ |
+| 10 | 4 (Glow) | Complete | Eased the Blurriness pair | Passed, 1 of 1 | Same | ✓ |
 
 ## SC-003: project changes
 
@@ -101,9 +106,17 @@ written just before a tool call. Not harmful, but it reads like internal plumbin
 
 | Check | Memory section showed | `learner.json` says | Match? |
 |---|---|---|---|
-| No record | | | |
-| After one lesson | | | |
-| After a second lesson | | | |
+| No record (`learner.json` moved to `learner.json.bak-T023`, panel reopened) | "No lessons yet." | No file | ✓ |
+| After one lesson (lesson 3, 23:25 UTC) | Oct 7 · Easing · passed · Next: Try Glow… then CTRL Position 0–1 s | Same date, `easing.basic`, `passed`, same `next` | ✓ |
+| After a second lesson (lesson 4, 23:33 UTC) | Oct 7 · Easing · passed · Next: Try CTRL Position 0–1 s; if keys again don't change, check key selection before F9 | Same | ✓ |
+
+T023 run 2026-10-07. Each panel lesson opened from the record as it was at the time: lesson 3 as a
+first lesson, lesson 4 referring back to lesson 3. Afterwards the backup was merged back
+(5 lessons, passed 5 times), with the T023 file kept as `learner.json.t023-after`.
+
+**"Check my work" vs Claude Code (sprint 2 item):** on the same attempt (check 9), the panel and a
+`diff_since_last` run from the Claude Code terminal both reported Glow › Blurriness still linear,
+nothing else changed, not passed. Same verdict ✓.
 
 ## Edge cases (quickstart §6)
 
@@ -121,3 +134,16 @@ assistant instead.
   reaches the learner. Possible fixes: a line in `SKILL.md` saying the learner sees every
   word, so never narrate rules or tool calls; or hiding short text that comes just before a
   tool call in the panel. Needs an eval check either way.
+- **The learner record reset between sessions 1 and 2.** On 2026-10-06, around 23:06, the whole
+  `AEMentor` folder was renamed to `AEMentor.pre-T046` and an empty one replaced it, so session 2
+  opened as a first lesson. No code in the repo does this, and no transcript or shell history
+  shows who did it. The name points to preparing spec 002 T046 (a run with no record). Opening a
+  different AE project was ruled out: the mentor keeps one record in a fixed folder, whatever
+  project is open. Recovered 2026-10-07 by merging the old lessons back (3 lessons, passed 3
+  times). Fix: any step that needs "no record" (T023, T046) should use `AE_MENTOR_HOME` set to a
+  temp folder, never move the real folder, and quickstart should say so.
+- **An unreadable `learner.json` would be overwritten.** `read()` in
+  `mentor/lib/learner-store.mjs` treats a file it can't parse as an empty record, so the next
+  `record_lesson` would replace the whole history with one lesson. Fix: if the file exists but
+  can't be parsed, refuse to write, leave the file alone, and return an error the mentor
+  explains. Add a unit test.

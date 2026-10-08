@@ -59,13 +59,16 @@ a brand new session act like a colleague who already knows what you are working 
     whole lesson, and the output style leaked into headless runs. All fixed 2026-10-06: the
     `partly_eased` state, no demo when the focus has one pair, the demo fingerprint, and
     `outputStyle: default`. Eval cases 21–24 were added; the new baseline is 23/24.
-  - Interviews: 1 of 3 target-market interviews done (`discovery/interviews/006`), 2 booked.
+  - Interviews: 2 of 3 target-market interviews done (`discovery/interviews/006`, `007`), 1 booked.
+    007 (student, After Effects class) found the biggest time sink was finding what broke, not
+    finding the instructions.
 - **Next steps:**
   1. Panel: T017 passed in session 2 (2026-10-07: a–f clean, 5.5 min, $0.51, one quirk logged
-     in `discovery/usage-notes/mentor-panel.md` › To fix later). Next: T023 (memory section
-     vs. `learner.json`), T027 (confirm the eval run meets SC-007), and 5 more SC-002 checks
-     (5 of 10 logged; partials done; still need ≥ 2 outside the lesson and ≥ 1 undone).
-  2. Run the 2 booked interviews (`007`, `008`). Ask about Adobe's assistant, who pays, and
+     in `discovery/usage-notes/mentor-panel.md` › To fix later). T023 passed 2026-10-07, and the
+     panel's check matched `diff_since_last` from the terminal. Next: T027 (confirm the eval
+     run meets SC-007). SC-002 has 10 checks logged but still needs a second check outside the
+     lesson and a confirmed undone check.
+  2. Run the last booked interview (`008`). Ask about Adobe's assistant, who pays, and
      whether memory and practice matter, before pitching
      (`discovery/interviews/bet-a-interview-guide.md`).
   3. Spec 002 leftovers: T046 (live quickstart §2–§7) and T047 (the SC-007 note after 3 real
