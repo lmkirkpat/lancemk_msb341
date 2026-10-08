@@ -66,8 +66,8 @@ a brand new session act like a colleague who already knows what you are working 
   1. Panel: T017 passed in session 2 (2026-10-07: a–f clean, 5.5 min, $0.51, one quirk logged
      in `discovery/usage-notes/mentor-panel.md` › To fix later). T023 passed 2026-10-07, and the
      panel's check matched `diff_since_last` from the terminal. Next: T027 (confirm the eval
-     run meets SC-007). SC-002 has 10 checks logged but still needs a second check outside the
-     lesson and a confirmed undone check.
+     run meets SC-007). SC-002: 10 checks, 9 agree. Check 9 missed an edit outside
+     the focus (To fix later): find out why before the panel counts as trustworthy.
   2. Run the last booked interview (`008`). Ask about Adobe's assistant, who pays, and
      whether memory and practice matter, before pitching
      (`discovery/interviews/bet-a-interview-guide.md`).

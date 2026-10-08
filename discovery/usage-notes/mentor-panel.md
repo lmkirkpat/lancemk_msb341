@@ -85,8 +85,8 @@ written just before a tool call. Not harmful, but it reads like internal plumbin
 | 5 | 2 (Title) | Complete | Eased Position 1.5 s → 3 s | Passed, all 4 pairs | Same | ✓ |
 | 6 | 3 (Subtitle + Bar) | Outside the lesson | Edited Glow › Blurriness, none of the 4 focus pairs | 4 pairs not done (Subtitle half eased), "Glow › Blurriness was changed (not part of this lesson)" | Same | ✓ |
 | 7 | 3 (Subtitle + Bar) | Complete | Undid the Glow edit, eased all 4 pairs | Passed, 4 of 4 mine, nothing outside | Same | ✓ |
-| 8 | 4 (Glow) | Partial (to confirm) | Ease not on any keys | Still linear, nothing else changed | Same | ✓ |
-| 9 | 4 (Glow) | Partial (to confirm) | Same as check 8. Terminal `diff_since_last` on this attempt gave the same result (still linear, not passed) | Still linear, nothing else changed | Same | ✓ |
+| 8 | 4 (Glow) | Undone | One of checks 8–9 came after easing Glow and undoing it (order not recorded) | Still linear, nothing else changed | Same: an undone ease looks like no edit | ✓ |
+| 9 | 4 (Glow) | Outside the lesson | The other of checks 8–9 came after an edit on a layer outside the focus (which layer not recorded). Terminal `diff_since_last` at this point gave the same result | Still linear, **nothing else changed** | The other layer had changed | **✗ missed** |
 | 10 | 4 (Glow) | Complete | Eased the Blurriness pair | Passed, 1 of 1 | Same | ✓ |
 
 ## SC-003: project changes
@@ -113,6 +113,10 @@ written just before a tool call. Not harmful, but it reads like internal plumbin
 T023 run 2026-10-07. Each panel lesson opened from the record as it was at the time: lesson 3 as a
 first lesson, lesson 4 referring back to lesson 3. Afterwards the backup was merged back
 (5 lessons, passed 5 times), with the T023 file kept as `learner.json.t023-after`.
+
+**SC-002 after 10 checks:** 9 of 10 agree. Partial ✓ (3+), outside the lesson ✓ (checks 6, 9),
+undone ✓ (check 8). Check 9 is a real miss: an edit outside the focus didn't appear in
+`unexpected_changes`, in the panel or in the terminal. See To fix later.
 
 **"Check my work" vs Claude Code (sprint 2 item):** on the same attempt (check 9), the panel and a
 `diff_since_last` run from the Claude Code terminal both reported Glow › Blurriness still linear,
@@ -147,3 +151,10 @@ assistant instead.
   `record_lesson` would replace the whole history with one lesson. Fix: if the file exists but
   can't be parsed, refuse to write, leave the file alone, and return an error the mentor
   explains. Add a unit test.
+- **A change outside the focus was missed** (T023 lesson 4, check 9, 2026-10-07). The builder
+  edited a layer outside the Glow focus, and `diff_since_last` reported no `unexpected_changes`,
+  in the panel and in the terminal. Check 6 caught an edit to Glow in lesson 3, so it isn't
+  every edit. Next: re-create it, note the layer, the property, and whether the property had
+  keyframes, then see what `snapshot_project` includes. Likely suspects: layers left out of the
+  snapshot (hidden, locked, or shy, given "4 visible layers" in the opening) or changes it
+  doesn't compare (a value with no keyframes, or a key's time).
