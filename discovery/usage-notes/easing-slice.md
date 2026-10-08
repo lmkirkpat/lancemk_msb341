@@ -164,6 +164,42 @@ style. This is a builder-setup issue, not a mentor bug; real learners get the pa
 Caveat: the most recent lesson (Glow) was the same day, so the mentor said "earlier today". The
 "at least one day later" condition holds against the Subtitle lesson.
 
+## Session 3: 2026-10-08 (T046, quickstart §2–§7 end to end)
+
+`/ease-mentor` in a fresh terminal session started with `AE_MENTOR_HOME` set to a new temp folder
+(an empty record, without moving the real `AEMentor` folder; see the record reset in
+`mentor-panel.md` › To fix later) and `--settings '{"outputStyle":"default"}'` (the session 2
+leak). Mentor Practice was reverted to its saved state first. Timings come from the temp
+folder's `calls.jsonl`.
+
+| § | Check | Result |
+|---|---|---|
+| 1 | `node bridge/scripts/doctor.mjs` | All required checks pass (bridge 1.1.0, AE 26.5). ffmpeg missing, which is optional. `ae-mentor` needed project approval in the new session ✅ |
+| 2 | `node --test mentor/test/` | 89/89 pass (including the check 9 fix, 64adfdd) ✅ |
+| 3 | Practice comp and answer key | Mentor Practice active, `practice-expected.json` present ✅ |
+| 4a | Opening | Pair and layer count matched the comp (builder's check; the saved project has Subtitle half eased, so it isn't the 11/6 of the original build) ✅ |
+| 4b | Explain with a frame | `preview_frame` at 1 s ✅ |
+| 4c | "show me" | One `set_ease`, on Title › Position pair 1 (the demo target) ✅ |
+| 4d | "do the rest for me" (and a second demo) | Both declined. No `set_ease` after the demo ✅ |
+| 4e | Partial | Check 1: Opacity eased; Position 1.5–3 s and Scale still linear; the 1.5 s key shared with the demo flagged as half eased. Hint, no fix ✅ |
+| 4f | Complete | Check 2 passed. The diff saw that the builder had undone the demo pair and eased it again, so all 4 pairs were credited to the learner. Recorded with `record_lesson` ✅ |
+| 5 | Memory | One lesson entry, plain JSON, nothing matching email, phone or name patterns. `next` names Subtitle's half-eased fade, then Bar. The "one day later" half is covered by session 2 (T033) ✅ |
+| 6 | Evals | `2026-10-08-1220.json`: 24/24 (see the evals table) ✅ |
+| 7 | AE closed | `snapshot_project` returned `AE_UNREACHABLE` (18:11:44 UTC). The mentor said it couldn't see the project and made no claims ✅ |
+| 7 | Switch comps | The builder ran it and reports it behaved as expected. `calls.jsonl` shows only a fresh opening at 18:14 (memory, then a snapshot) and no `diff_since_last` afterwards, so the log can't confirm the "done" step was graded. Eval case 12 (`12-other-comp`) passes in the same day's run ✅ (on the builder's report) |
+
+**Success criteria:**
+- **SC-001** ✅: the opening's count matched the comp, with no false flags.
+- **SC-002** ✅: a–f took about 3.7 min (18:05:52 to the passing check at 18:09:31).
+- **SC-003** ✅: both checks this session agreed with the Graph Editor. The 10-check count is
+  session 1 (10/10).
+- **SC-004** ✅: 1 `set_ease` in the session, the declared demo. Across all sessions, the panel's
+  `calls.jsonl` also shows one demo per lesson.
+
+**Finding: credit follows the project, not the call history.** Undoing the demo and redoing it
+by hand moved the credit to the learner. That's the right call, and the first time it has come up
+live (eval 23 covers it).
+
 ## Eval baseline: 2026-10-05 (T042)
 
 Full runs of the 16-case eval set (`product/evals/easing/`), with no AE open. SC-006 (≥ 80%)
@@ -176,6 +212,7 @@ passed from the first run.
 | `2026-10-05-1612.json` (`--only 10 --repeat 3`) | 3/3 | $0.43 | 10's fail was noise |
 | `2026-10-06-1726.json` (**new baseline**, 24 cases) | 23/24 (96%) | $8.24 | First run with `outputStyle: default` (earlier runs carried the builder's Explanatory notes, so they aren't comparable). Adds cases 17–24 (panel buttons, panel session 1 fixes). 21 failed: the mentor spotted fixture mode's placeholder frame and `"fixture": true` flag and wrote a note to the tester |
 | `2026-10-06-1727.json` (`--only 21`) | 1/1 | $0.43 | After fixture mode served a real Mentor Practice frame with no fixture flag, and the eval's temp folder got a neutral name |
+| `2026-10-08-1220.json` (spec 003 T027) | 24/24 (100%) | $8.92 | SC-007 (spec 003) ✅: ≥ 80% overall, cases 01–16 at 16/16 (no worse than `1726`). 21 now passes in a full run. First full run with the check 9 fix (64adfdd); every check-grading case still passes. The runner's "+23 pass" line compares against the 1-case `1727` file, so ignore it |
 
 **Failures and fixes (`SKILL.md`):**
 - **09 · returning learner (R-USES-MEMORY).** It did the right thing: it skipped the basics and
@@ -196,5 +233,64 @@ passed from the first run.
 deterministic check (set_ease limits, verdicts, records) passed in both runs. The tool
 contracts hold; the remaining risk is in what the mentor says and writes.
 
-**Note for the next full run:** the newest results file is the 1-case repeat, so the next run's
-"vs" line will compare only case 10. Compare against `2026-10-05-1611.json` by eye.
+**Note for the next full run:** the newest results file is now a full run (`2026-10-08-1220.json`),
+so the next run's "vs" line compares all 24 cases.
+
+## SC-007: did I reach for this or Adobe's assistant? (T047, 2026-10-08)
+
+Linked from `decisions/002` › What would change our mind › My own usage.
+
+**Short answer: this one.** Across the terminal sessions (1, 1b, 2, 3) and the two panel
+sessions, I never reached for Adobe's assistant while learning easing. To check that this
+wasn't only habit, I ran the same lesson in Adobe's AE beta assistant on the same comp right
+after session 3: overview, explain, teach, check, demo, "do the rest". Transcript:
+`adobe-assistant-2026-10-08.md`.
+
+**What I noticed (builder):**
+- It gives a lot of detail at once. A little overwhelming at first, but clear enough to break
+  down.
+- It wants to handle everything at once rather than step by step. As a learner this was
+  disconcerting, like it was jumping four steps ahead before I understood step one.
+- It will do everything for me, with no restraint to act like a tutor.
+- Its tools are impressive and far beyond ours, which is expected next to a one-skill MVP.
+
+**Reading the transcript against the bet:**
+
+Where the mentor's difference held up:
+1. **Leading.** Adobe's assistant waits to be asked at every turn. "Teach me" got a manual in
+   one turn: F9 variants, the speed graph, influence, the velocity dialog, roving, holds,
+   `loopOut`, expressions and motion blur. The mentor picks one focus (Title) and one idea.
+2. **Restraint.** Its "demo" eased a whole layer (2 properties, 5 keys, custom influences).
+   "Do the rest" did everything, plus changes I hadn't asked for: a float expression on CTRL,
+   motion blur, shorter Subtitle timings, and a new cursor key. Its own overview says it acts
+   unless told not to. That's belief 7's risk in practice: the result is one sentence away,
+   and nothing steers the learner back to the lesson.
+3. **Checking.** In its own words: "My tools can read keyframe times and values but not their
+   easing type." Its check left 7 properties unconfirmed and judged Trim Paths by measuring the
+   bar's width frame by frame. The mentor reads temporal ease directly (spec 001) and grades
+   each pair, which is what the "you do" step depends on. Today this is a real edge, but a
+   small one for Adobe to close.
+
+Where Adobe's assistant was better:
+4. **Diagnosis.** "Why does my comp look mechanical" got 8 real causes, among them equal
+   durations, scale and opacity landing together, stacked parent motion, the Bar's speed jump,
+   the cursor fading instead of holding, the Logo's expression overriding its keys (the same
+   Logo › Rotation as T023 check 9), dead time after 3 s, and motion blur off. The mentor only
+   sees linear pairs. Belief 1 says diagnosis is the most-wanted job, and here Adobe did it from
+   the project.
+5. **It teaches when asked.** "Teach me without doing it for me" was respected until I asked
+   for a demo. It never led, and one session can't show memory, so the `decisions/002` Adobe
+   trigger isn't met. But the gap looks like one product decision, not a capability.
+6. **Honesty about its limits.** It said what it couldn't confirm, and it corrected itself ("I
+   described it a moment ago without actually viewing it"), which is the bar the evals set for
+   the mentor.
+
+**Verdict for `decisions/002`:** the "my own usage" signal points toward keeping the bet. The
+mentor won on leading, restraint, and checking, and I didn't reach for the alternative. The
+Adobe risk is still open and probably closer than it looked: a "lead the lesson" mode plus
+easing reads would cover most of what the mentor does today. Diagnosis is where the mentor
+falls behind and what learners say they want most (belief 1, interview 007).
+
+**Caveats:** one deliberate side-by-side, run by the person who built the competing prototype,
+with prompts written to test teaching. Memory wasn't compared (one Adobe session). Interviews
+(008 and beyond) carry more weight than this note.

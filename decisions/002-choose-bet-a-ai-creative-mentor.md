@@ -104,7 +104,11 @@ Open questions this decision doesn't settle yet:
 ## What would change our mind
 
 - **My own usage:** if, while learning After Effects, I keep reaching for Adobe's assistant
-  instead of my prototype, the difference isn't real.
+  instead of my prototype, the difference isn't real. *2026-10-08 (spec 002 T047):* I didn't
+  reach for it over 6 sessions. A side-by-side on the same comp found Adobe's assistant
+  doesn't lead, does the work when asked, and can't read easing, but it diagnosed the comp
+  better. This points toward keeping the bet; the Adobe risk stays open
+  (`discovery/usage-notes/easing-slice.md` › SC-007).
 - **Interviews:** by the end of Sprint 2, if most people who recently learned a creative app
   say Adobe's assistant or a chatbot on request is enough, and don't value a record of their
   progress or structured practice, fall back to Option 4 or treat this openly as a learning
