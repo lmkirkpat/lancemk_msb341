@@ -4,7 +4,8 @@
 > each with evidence. Revise beliefs in place; note the date of last change. Numbers are
 > stable because decisions and specs cite them: merged or parked beliefs keep a stub.
 
-Last reviewed 2026-10-08, after interviews 001–007 and self-test 1.
+Last reviewed 2026-10-08, after interviews 001–007, self-test 1, and the second hands-on test of
+Adobe's assistant (`discovery/usage-notes/adobe-assistant-2026-10-08.md`).
 
 ## How confidence is rated
 
@@ -52,8 +53,15 @@ for. In a long project it's worse: a step missed early breaks things hours later
 - **Untested:** whether diagnosis inside the mentor is worth more than a free chatbot with a
   screenshot, which is what 003, 004, and 006 already use. Spec 002 teaches a new skill
   (easing); it doesn't diagnose a broken project.
-- **Sources:** `problem-candidates.md` self-test 1; interviews 003, 004, 006, 007
-- **Updated:** 2026-10-08 (merged old belief 3)
+- **The bar moved (2026-10-08):** Adobe's assistant already diagnoses from the project. Asked
+  why Mentor Practice looked mechanical, it named 8 causes across layers (equal durations,
+  properties landing together, stacked parent motion, a speed jump, a fading cursor, an
+  expression overriding keys, dead time, no motion blur). The mentor only sees linear pairs.
+  So the comparison is now Adobe in the app, not a chatbot with a screenshot. This is a
+  competitor fact, not evidence of what people want, so it doesn't change the rating.
+- **Sources:** `problem-candidates.md` self-test 1; interviews 003, 004, 006, 007;
+  `discovery/usage-notes/adobe-assistant-2026-10-08.md`
+- **Updated:** 2026-10-08 (merged old belief 3; Adobe's diagnosis)
 
 ### 2. Skills stick when used in real work and fade when not
 
@@ -118,7 +126,9 @@ lesson.
   work ... being able to walk someone through my design." 007: "If AI makes it, it's not
   yours." 005 (hypothetical) would want AI to teach them.
 - **Against:** 006 followed AI's steps themselves mid-task rather than finding a way to have
-  it done, but no do-it-for-you option was in front of them.
+  it done, but no do-it-for-you option was in front of them. Adobe's assistant puts one in
+  front of them: it offered "do all of it" after explaining, and did the whole comp when asked
+  (2026-10-08 test).
 - **Untested:** whether people come back to learn *after* the deadline. If they do, the
   mentor's moment is after the crunch, not during it.
 - **Sources:** interviews 003, 005, 006, 007; `product/product-description.md`
@@ -140,22 +150,36 @@ lesson.
 ### 10. Adobe's assistant already teaches on request, but nobody we've talked to has used it
 
 Adobe's stated strategy is to remove the need to learn, but in practice its After Effects
-assistant gives step-by-step instructions, checks work against real project data, and
-suggests next skills, when asked. Every app's assistant covers one app, works only when
-asked, and has no memory of the learner. What's left for the mentor: leading, memory,
-practice, and working across apps.
+assistant gives step-by-step instructions, checks work against the project data it can read,
+diagnoses a whole comp, and suggests next skills, when asked. Every app's assistant covers
+one app, works only when asked, and has no memory of the learner. What's left for the
+mentor: leading, restraint, depth on each skill it teaches, memory, practice, and working
+across apps. Adobe's lead is breadth: many skills plus diagnosis.
 
-- **Confidence:** Med (≈4.5 points; desk research, one hands-on test, 2 interviews)
+- **Confidence:** Med (≈5.5 points; desk research, two hands-on tests, 2 interviews)
 - **Did (research):** hands-on test of the After Effects assistant (one session). Adobe's
   public statements never mention teaching. Figma answers how-to questions in the canvas;
   Resolve and Blender have no official assistant but let outside AI read the project.
+- **Did (research, 2026-10-08):** a side-by-side with the mentor on Mentor Practice
+  (`discovery/usage-notes/adobe-assistant-2026-10-08.md`, `easing-slice.md` › SC-007). It
+  diagnosed the comp well and respected "teach me without doing it for me". But it never led:
+  "teach me" got a whole manual in one turn. Its "demo" eased a whole layer, and "do the rest"
+  did the comp plus changes nobody asked for. It also can't read easing type ("My tools can
+  read keyframe times and values but not their easing type"), so its check left 7 properties
+  unconfirmed.
 - **Did (interviews):** 006, a daily Photoshop user, hadn't noticed its assistant. 007 thinks
   of Adobe's help as the help button: "how helpful is it really?" (½, after the pitch).
 - **Against:** none yet. Judge Adobe by hands-on tests, not announcements.
 - **Untested:** whether people would pick the mentor over Adobe's assistant once they know
-  it exists.
-- **Sources:** `discovery/competitors.md`; interviews 006, 007
-- **Updated:** 2026-10-08 (merged old beliefs 9 and 11)
+  it exists. Also how far Adobe is from a "lead the lesson" mode: restraint and leading are
+  product choices, not capabilities, and the 2026-10-08 test shows it already has most of the
+  pieces. Memory wasn't compared (one session each time).
+- **Builder's plan (2026-10-08):** close the breadth gap (sprint 3: more skills, then
+  diagnosis and recommended paths), so that what's left to tell them apart is depth,
+  restraint, and a focus on teaching.
+- **Sources:** `discovery/competitors.md`; `discovery/usage-notes/adobe-assistant-2026-10-08.md`;
+  interviews 006, 007
+- **Updated:** 2026-10-08 (merged old beliefs 9 and 11; second hands-on test)
 
 ### 11. → merged into belief 10 (2026-10-08)
 
@@ -194,14 +218,17 @@ The mentor's job is to get as close to a good teacher as possible, not just to b
 
 The direct evidence for demo-once (`specs/002`, the `set_ease` limit).
 
-- **Confidence:** Low (≈1.5 points)
+- **Confidence:** Low (≈1.75 points)
 - **Did:** 007 was frustrated when a classmate took over instead of explaining.
+- **Weak (self-test, 2026-10-08):** in the side-by-side, Adobe's assistant jumping ahead and
+  doing the work felt "disconcerting as a learner, like it was trying to jump four steps
+  ahead before I understood step one." The builder only (¼).
 - **Weak (after the pitch):** 006 would stop if it "take[s] you on a different path" or
   "isn't direct." 007 would stop "if it was wrong," "if I have to ask it multiple times," or
   "if it does it for me ... starts filling in stuff." 007 on demo-once: "That's cool."
 - **Against:** none yet. Untested in a real lesson with someone other than me.
-- **Sources:** interviews 006, 007
-- **Updated:** 2026-10-08 (new)
+- **Sources:** interviews 006, 007; `discovery/usage-notes/adobe-assistant-2026-10-08.md`
+- **Updated:** 2026-10-08 (new; the builder's side-by-side)
 
 ## Open questions with no evidence yet
 

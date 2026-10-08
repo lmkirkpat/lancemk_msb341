@@ -44,8 +44,8 @@ a brand new session act like a colleague who already knows what you are working 
     (`bridge/`), the `ae-mentor` MCP server (`mentor/`), the `/ease-mentor` skill
     ("I do, we do, you do": the mentor eases one pair, the learner eases the rest), and the
     learner record. Usage sessions are in `discovery/usage-notes/easing-slice.md`.
-  - **Eval set** (`product/evals/easing/`, 16 cases, about $5 per full run, no AE needed):
-    baseline 14/16, then 15/16 (94%) after `SKILL.md` fixes. SC-006 (≥ 80%) passes. Every
+  - **Eval set** (`product/evals/easing/`, now 24 cases, about $9 per full run, no AE needed;
+    latest 24/24 on 2026-10-08): first baseline 14/16, then 15/16 (94%) after `SKILL.md` fixes. SC-006 (≥ 80%) passes. Every
     hard-rule check passed; the failures were about wording and honesty in the learner record.
   - **Panel decided** (`decisions/005`, amends 003): the AE panel drives headless Claude Code
     (`claude -p --resume`), so it reuses the skill and server unchanged and the evals stay valid.
@@ -62,17 +62,27 @@ a brand new session act like a colleague who already knows what you are working 
   - Interviews: 2 of 3 target-market interviews done (`discovery/interviews/006`, `007`), 1 booked.
     007 (student, After Effects class) found the biggest time sink was finding what broke, not
     finding the instructions.
+  - **2026-10-08:** T046 passed (quickstart §1–§7 live: a–f in 3.7 min, one demo), and T027
+    passed (evals 24/24, $8.92). T047's SC-007 note: I didn't reach for Adobe's assistant in
+    6 sessions. A side-by-side on Mentor Practice
+    (`discovery/usage-notes/adobe-assistant-2026-10-08.md`) found it doesn't lead, does the
+    work when asked, and can't read easing, but it diagnosed the comp better (8 causes across
+    layers). Logged in `discovery/insights.md` (beliefs 1, 7, 10, 15) and `decisions/002`.
+  - **Positioning (2026-10-08):** Adobe's lead is breadth (many skills plus diagnosis). The
+    plan is to close it in sprint 3 (more skills, then diagnosis and recommended paths), so
+    what tells the mentor apart is depth, restraint, and a focus on teaching, plus memory and
+    practice.
 - **Next steps:**
-  1. Panel: T017 passed in session 2 (2026-10-07: a–f clean, 5.5 min, $0.51, one quirk logged
-     in `discovery/usage-notes/mentor-panel.md` › To fix later). T023 passed 2026-10-07, and the
-     panel's check matched `diff_since_last` from the terminal. Next: T027 (confirm the eval
-     run meets SC-007). SC-002: 10 checks, 9 agree. Check 9 missed an Easy Ease on a property with an
-     expression outside the focus. Fixed and confirmed live 2026-10-08 (`mentor/lib/diff.mjs`).
-  2. Run the last booked interview (`008`). Ask about Adobe's assistant, who pays, and
+  1. Run the last booked interview (`008`). Ask about Adobe's assistant, who pays, and
      whether memory and practice matter, before pitching
-     (`discovery/interviews/bet-a-interview-guide.md`).
-  3. Spec 002 leftovers: T046 (live quickstart §2–§7) and T047 (the SC-007 note after 3 real
-     sessions; panel lessons count: did I reach for this or Adobe's assistant?).
+     (`discovery/interviews/bet-a-interview-guide.md`). Also probe diagnosis vs. lessons
+     (belief 1: Adobe already diagnoses from the project).
+  2. Close sprint 2: `/sprint-review` writes `sprints/sprint-2-review.md`. Every other "done
+     looks like" item is checked.
+  3. Sprint 3 (plan with `/sprint-plan`): more skills for the mentor first, then diagnosis and
+     recommended paths. Small fixes waiting in `discovery/usage-notes/mentor-panel.md` › To fix
+     later: an unreadable `learner.json` gets overwritten (data loss), and "Must call diff
+     first." leaks into the chat.
   4. Not needed for sprint 2: spec 003 T028–T030 (continue a lesson), T033–T036.
   5. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
 - **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
@@ -82,7 +92,9 @@ a brand new session act like a colleague who already knows what you are working 
   (see its README).
 - **Biggest open risk:** that leading, memory, and practice aren't worth more to people than
   Adobe's free assistant used on request. Also: learners may not pay (belief 12), people take
-  the result over the lesson in practice (belief 7), and Adobe could add a teaching mode.
+  the result over the lesson in practice (belief 7), and Adobe could add a teaching mode. The
+  2026-10-08 side-by-side made that last one look closer: restraint and leading are product
+  choices, and Adobe already has most of the pieces.
 
 ## How this repo works
 

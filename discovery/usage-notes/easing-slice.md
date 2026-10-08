@@ -186,7 +186,7 @@ folder's `calls.jsonl`.
 | 5 | Memory | One lesson entry, plain JSON, nothing matching email, phone or name patterns. `next` names Subtitle's half-eased fade, then Bar. The "one day later" half is covered by session 2 (T033) ✅ |
 | 6 | Evals | `2026-10-08-1220.json`: 24/24 (see the evals table) ✅ |
 | 7 | AE closed | `snapshot_project` returned `AE_UNREACHABLE` (18:11:44 UTC). The mentor said it couldn't see the project and made no claims ✅ |
-| 7 | Switch comps | The builder ran it and reports it behaved as expected. `calls.jsonl` shows only a fresh opening at 18:14 (memory, then a snapshot) and no `diff_since_last` afterwards, so the log can't confirm the "done" step was graded. Eval case 12 (`12-other-comp`) passes in the same day's run ✅ (on the builder's report) |
+| 7 | Switch comps | The mentor said it noticed the other comp (builder's report). It did this from `snapshot_project` (18:14:53 UTC, after `read_learner_record`) with no `diff_since_last`, so nothing was graded against the wrong comp. Eval case 12 (`12-other-comp`) passes in the same day's run ✅ |
 
 **Success criteria:**
 - **SC-001** ✅: the opening's count matched the comp, with no false flags.
