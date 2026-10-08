@@ -80,9 +80,19 @@ a brand new session act like a colleague who already knows what you are working 
   2. Close sprint 2: `/sprint-review` writes `sprints/sprint-2-review.md`. Every other "done
      looks like" item is checked.
   3. Sprint 3 (plan with `/sprint-plan`): more skills for the mentor first, then diagnosis and
-     recommended paths. Small fixes waiting in `discovery/usage-notes/mentor-panel.md` › To fix
-     later: an unreadable `learner.json` gets overwritten (data loss), and "Must call diff
-     first." leaks into the chat.
+     recommended paths. **Bring these two caveats into the plan** (from the 2026-10-08 Adobe
+     side-by-side):
+     - Diagnosis is its own capability, not the last step of adding skills. Adobe's answer
+       came from reading the whole comp (equal durations, stacked parent motion, dead time),
+       which per-skill, per-pair checks won't produce. Give it its own spec, and consider a
+       light "what's wrong here" opening before skill 3 or 4, since belief 1 and interview 007
+       say finding what broke is the biggest pain.
+     - Restraint and a teaching focus are product choices Adobe could copy with a mode switch
+       (the `decisions/002` trigger). The harder-to-copy parts are depth (per-pair checks Adobe
+       can't do today) and memory and practice across sessions. Keep those in the plan's "why".
+     Small fixes waiting in `discovery/usage-notes/mentor-panel.md` › To fix later: an
+     unreadable `learner.json` gets overwritten (data loss), and "Must call diff first." leaks
+     into the chat.
   4. Not needed for sprint 2: spec 003 T028–T030 (continue a lesson), T033–T036.
   5. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
 - **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
