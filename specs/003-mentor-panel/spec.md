@@ -4,9 +4,8 @@
 
 **Created**: 2026-10-05
 
-**Status**: In progress. US1–US4 are built and T027 passed (evals 24/24, 2026-10-08). Continue a lesson
-(T028–T030) and the privacy sweep (T035) done 2026-10-12. Open: the live checks (T033–T034) and
-the last of the docs (T036).
+**Status**: Shipped (2026-10-12). All tasks done. Evals 24/24 (T027); edge cases 10/10 (T033);
+SC-002 to SC-005 and the SC-008 note in `discovery/usage-notes/mentor-panel.md` (T034).
 
 **Input**: User description: "A rudimentary version of the mentor panel inside After Effects,
 built from `product/mockups/ae-panel.md` and `decisions/005` (the panel drives headless Claude

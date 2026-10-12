@@ -94,6 +94,12 @@ written just before a tool call. Not harmful, but it reads like internal plumbin
 | Lesson | ok `set_ease` calls (`calls.jsonl`) | After Show me again? |
 |---|---|---|
 | 2 (2026-10-07, Title) | 1 (the demo, 22:51 UTC) | None ✓ |
+| 3 (2026-10-07, Subtitle + Bar) | 0 (no demo) | n/a ✓ |
+| 4 (2026-10-07, Glow) | 0 (one pair, so no demo offered) | n/a ✓ |
+| 2026-10-12 edge-case lessons (T033) | 0 | n/a ✓ |
+
+`calls.jsonl` holds one ok `set_ease` in total, so SC-003 (at most one per lesson, none after Show
+me again) holds for every panel lesson so far.
 
 ## SC-004 / SC-005: speed and cost (`node panel/dev/turns.js`)
 
@@ -101,6 +107,10 @@ written just before a tool call. Not harmful, but it reads like internal plumbin
 |---|---|---|---|---|---|---|
 | 2026-10-06 | 6 | 6/6 ✓ (worst 8.5 s) | 4.7 s | 14.1 s | not meaningful (finished the next day) | $0.50 |
 | 2026-10-07 | 10 | 10/10 ✓ (worst 4.1 s) | 1.8 s | 6.9 s | 5.5 min ✓ | $0.51 |
+| All of `panel-turns.jsonl` (2026-10-07 to 2026-10-12, 6 lessons) | 36 | 36/36 ✓ (worst 5.4 s) | 1.7 s | 7.3 s | 5.5, 1.5 and 1.3 min ✓ for the 3 that passed | $0.38 average ($2.30 total) |
+
+The three 2026-10-12 lessons that didn't pass were edge-case runs (T033: continue, New lesson, AE
+restart), stopped on purpose, not failed lessons.
 
 ## SC-006: memory section vs `learner.json`
 
@@ -147,6 +157,19 @@ call (`mentor/bridge-client.mjs`) and reports `AE_UNREACHABLE` when it's missing
 
 After at least 2 panel lessons: compared with the terminal, and whether I reached for Adobe's
 assistant instead.
+
+**Note (2026-10-12, after 6 panel lessons on 10-06, 10-07 and 10-12):**
+
+- **Compared with the terminal: yes, it changed how I learn.** The panel made it much easier to
+  stay in AE, see things in a more intuitive way, and follow the instructions. The check list
+  helped most: it sits right next to my comp, so I didn't have to hunt for what to do next.
+- **Adobe's assistant: I didn't reach for it.** The mentor in the panel was easy to use, and I
+  didn't need the assistant for anything it couldn't do.
+
+**Caveat:** I'm the builder and user #1, so this is the most favourable tester there is. It
+agrees with the terminal SC-007 note (`easing-slice.md`, 6 sessions without the assistant), but
+it needs a target-market learner to count as evidence for belief 7 (people take the result over
+the lesson).
 
 ## To fix later
 
