@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import { LEARNER_FILE } from "../paths.mjs";
 import { MentorError } from "../errors.mjs";
+import { readJson } from "./json-file.mjs";
 
 const SKILLS = ["easing.basic"];
 const RESULTS = ["passed", "partial", "not_checked"];
@@ -18,12 +19,13 @@ const PHONE = [/\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b/, /\+\d[\d\s().-]{6,}\d/
 
 const empty = () => ({ version: 1, skills: {}, lessons: [] });
 
+// RECORD_UNREADABLE if the file is there but broken: it's set aside, never written over.
 function read() {
-  try {
-    return JSON.parse(fs.readFileSync(LEARNER_FILE, "utf8"));
-  } catch {
-    return empty();
-  }
+  return readJson(LEARNER_FILE, {
+    empty,
+    valid: (r) => r && typeof r === "object" && r.skills && typeof r.skills === "object" && Array.isArray(r.lessons),
+    code: "RECORD_UNREADABLE",
+  });
 }
 
 function write(record) {

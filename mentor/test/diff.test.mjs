@@ -266,3 +266,12 @@ test("an unchanged property with an expression adds no note", () => {
   const r = diff(withLogo(before), withLogo(fixture("attempt-complete")), lesson());
   assert.deepEqual(r.unexpected_changes, []);
 });
+
+test("a focus with nothing linear has nothing to pass (a precomp layer, for one)", () => {
+  const pre = fixture("precomp");
+  const focus = analyze(pre, { focus_layers: ["Icon"] });
+  assert.deepEqual(focus.targets, []);
+  assert.equal(focus.no_demo_reason, "nothing_to_ease");
+  const r = diff(pre, pre, { comp_id: pre.comp.id, targets: focus.targets, demo: null });
+  assert.equal(r.passed, false, "zero targets must not count as a pass");
+});

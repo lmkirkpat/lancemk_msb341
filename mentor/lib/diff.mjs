@@ -158,7 +158,8 @@ export function diff(baseline, current, session) {
     targets,
     unexpected_changes: unexpectedChanges(baseline, current, new Set(session.targets)),
     summary,
-    passed: summary.still_linear === 0 && summary.partly_eased === 0,
+    // A lesson with no targets (a focus with nothing linear) has nothing to pass.
+    passed: targets.length > 0 && summary.still_linear === 0 && summary.partly_eased === 0,
     demo_undone: demoUndone,
   };
 }

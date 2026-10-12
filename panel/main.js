@@ -9,7 +9,8 @@
   const DIR = path.dirname(decodeURIComponent(window.location.pathname));
   const lib = (name) => req(path.join(DIR, "lib", name));
 
-  const { loadConfig } = lib("config.js");
+  const { loadConfig, defaultHome } = lib("config.js");
+  const { ensureRuntime } = lib("runtime.js");
   const { createAdapter } = lib("adapter-claude-code.js");
   const { REQUESTS, visibleKinds } = lib("requests.js");
   const { initialLesson, reduceLesson, stageOf } = lib("lesson.js");
@@ -397,6 +398,13 @@
   });
 
   const cfg = loadConfig();
+  if (cfg.ok) {
+    try {
+      cfg.runtime_path = ensureRuntime(cfg.repo_path, path.join(defaultHome(), "runtime"));
+    } catch (e) {
+      Object.assign(cfg, { ok: false, fix: `The panel couldn't set up its working folder (${e.message}). Run \`bash panel/install.sh\` from the repo, then reopen the panel.` });
+    }
+  }
   if (!cfg.ok) {
     setConn("bad", "AE Mentor · not set up");
     notice(cfg.fix);

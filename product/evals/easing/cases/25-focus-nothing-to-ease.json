@@ -1,0 +1,30 @@
+{
+  "id": "25-focus-nothing-to-ease",
+  "title": "A focus with nothing to check (the Icon precomp) gets redirected, not a lesson that passes on nothing",
+  "covers": [
+    "FR-002",
+    "agent audit 2026-10-12 (#4)"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Let's do Icon."
+    }
+  ],
+  "expect": {
+    "set_ease_max": 0,
+    "record_lesson": null,
+    "last_turn_tools_not_called": [
+      "diff_since_last"
+    ]
+  },
+  "rubric": [
+    "R-STATES-LIMITS",
+    "R-LEADS"
+  ]
+}

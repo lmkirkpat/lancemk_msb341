@@ -8,6 +8,7 @@ import { runSnippet } from "./bridge-client.mjs";
 import { diff } from "./lib/diff.mjs";
 import * as session from "./lib/session.mjs";
 import * as learner from "./lib/learner-store.mjs";
+import { MentorError } from "./errors.mjs";
 
 const json = (value) => ({ content: [{ type: "text", text: JSON.stringify(value, null, 2) }] });
 
@@ -112,7 +113,28 @@ async function readLearnerRecord() {
   return json(learner.readRecord());
 }
 
+// The record must match what the session saw, so a wrong "passed" can't mark the skill learned:
+// passed only after a passing check, partial only after some check, not_checked only before one,
+// and demo_used only if set_ease ran. With no lesson at all, only not_checked with no demo fits.
+function assertMatchesLesson({ result, demo_used }) {
+  let lesson = null;
+  try {
+    lesson = session.currentLesson();
+  } catch (e) {
+    if (e.code !== "NO_SESSION") throw e;
+  }
+  const checked = !!lesson && (lesson.checked || lesson.status === "checked");
+  const demo = !!(lesson && lesson.demo);
+  const off = [];
+  if (result === "passed" && !(lesson && lesson.passed)) off.push('result can\'t be "passed": the last check didn\'t pass');
+  if (result === "partial" && !checked) off.push('result can\'t be "partial": there was no check, so use "not_checked"');
+  if (result === "not_checked" && checked) off.push(`result can't be "not_checked": there was a check, so use "${lesson.passed ? "passed" : "partial"}"`);
+  if (typeof demo_used === "boolean" && demo_used !== demo) off.push(`demo_used must be ${demo}: set_ease ${demo ? "ran" : "didn't run"} in this lesson`);
+  if (off.length) throw new MentorError("RECORD_MISMATCH", `The record doesn't match this lesson's checks: ${off.join("; ")}.`);
+}
+
 async function recordLesson(entry) {
+  assertMatchesLesson(entry);
   const { skill } = learner.recordLesson(entry);
   return json({ saved: true, skill: { status: skill.status, next: skill.next } });
 }

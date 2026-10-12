@@ -91,9 +91,11 @@ a brand new session act like a colleague who already knows what you are working 
      - Restraint and a teaching focus are product choices Adobe could copy with a mode switch
        (the `decisions/002` trigger). The harder-to-copy parts are depth (per-pair checks Adobe
        can't do today) and memory and practice across sessions. Keep those in the plan's "why".
-     Small fixes waiting in `discovery/usage-notes/mentor-panel.md` › To fix later: an
-     unreadable `learner.json` gets overwritten (data loss), and "Must call diff first." leaks
-     into the chat.
+     The two small fixes from `discovery/usage-notes/mentor-panel.md` › To fix later (unreadable
+     `learner.json`, "Must call diff first.") were done 2026-10-12 in the `/agent-audit` pass,
+     along with: `record_lesson` checks results against the session, an empty focus can't pass,
+     and the panel and evals now run the mentor from a runtime folder outside the repo
+     (`panel/lib/runtime.js`), so this file and my memory never reach a learner.
   4. Spec 003 shipped 2026-10-12: continue a lesson (T028–T030), edge cases 10/10 (T033), and
      T034 (SC-004 36/36 turns ≤ 10 s, $0.38 per lesson; SC-008: the panel's check list next to the
      comp made it easier to follow, and I didn't reach for Adobe's assistant). Builder-only

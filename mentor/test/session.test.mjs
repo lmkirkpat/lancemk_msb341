@@ -119,3 +119,29 @@ test("a check that saw the demo undone is remembered, and stays remembered", () 
   session.markChecked(true, { demoUndone: false });
   assert.equal(session.currentLesson().demo.undone, first, "a later check doesn't clear it");
 });
+
+test("an unreadable session.json is set aside unchanged, never written over", () => {
+  const file = path.join(home, "session.json");
+  fs.writeFileSync(file, '{"version": 1, "lessons": {"200": {"demo": ');
+  assert.throws(() => session.start(A), { code: "SESSION_UNREADABLE" });
+  const aside = fs.readdirSync(home).filter((f) => f.startsWith("session.json.unreadable-"));
+  assert.equal(aside.length, 1);
+  assert.equal(fs.readFileSync(path.join(home, aside[0]), "utf8"), '{"version": 1, "lessons": {"200": {"demo": ');
+  assert.equal(session.start(A).lesson, "new", "the next snapshot starts fresh");
+  for (const f of aside) fs.rmSync(path.join(home, f));
+});
+
+test("a session.json with the wrong shape counts as unreadable too", () => {
+  fs.writeFileSync(path.join(home, "session.json"), "[]");
+  assert.throws(() => session.currentLesson(), { code: "SESSION_UNREADABLE" });
+  for (const f of fs.readdirSync(home).filter((f) => f.startsWith("session.json.unreadable-"))) fs.rmSync(path.join(home, f));
+});
+
+test("markChecked leaves checked set even if a demo follows", () => {
+  session.start(A);
+  session.markChecked(false);
+  session.recordDemo(POS1);
+  const l = session.currentLesson();
+  assert.equal(l.status, "demo_done");
+  assert.equal(l.checked, true);
+});

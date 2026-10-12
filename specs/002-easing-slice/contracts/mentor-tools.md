@@ -17,9 +17,12 @@ Tool errors come back as MCP tool errors with a plain-language message the mento
 | `NO_ACTIVE_COMP` | No composition is active | Ask the learner to open a comp |
 | `NO_SESSION` | `diff_since_last` or `set_ease` before any snapshot | Take a snapshot first |
 | `DEMO_USED` | `set_ease` called a second time in a lesson | Explain the learner does the rest (US1-5) |
-| `NOT_DEMO_TARGET` | `set_ease` on anything but the first flagged pair of a flagged property | Same as above |
+| `NOT_DEMO_TARGET` | `set_ease` on anything but the lesson's `demo_target` | Same as above |
 | `UNKNOWN_LAYER` | `focus_layers` names a layer that isn't in the comp | Re-read the findings and use the exact name |
 | `UNSAFE_RECORD` | `record_lesson` text contains an email or phone pattern | Rewrite without it |
+| `RECORD_MISMATCH` | `record_lesson`'s `result` or `demo_used` doesn't match the session (added 2026-10-12, agent audit) | Fix the named field and record again; don't mention it |
+| `SESSION_UNREADABLE` | `session.json` exists but can't be read; it's moved to `session.json.unreadable-<time>`, never written over | Pass on the message, then snapshot again |
+| `RECORD_UNREADABLE` | `learner.json` exists but can't be read; it's moved to `learner.json.unreadable-<time>`, never written over | Say once that earlier notes couldn't be read; teach a first lesson |
 
 ## 1. `snapshot_project`
 
@@ -104,6 +107,8 @@ also be `partly_eased` (with `linear_end` and `linear_key_time`), and the result
     "passed": false
   }
   ```
+- A lesson with no targets never passes (`passed: false`), so a focus with nothing linear can't
+  mark the skill learned (2026-10-12, agent audit).
 - If `comp_matches` is false, `targets` is empty and nothing is graded. The mentor asks the learner
   to switch back to `lesson_comp` and doesn't re-snapshot unless they want a new lesson (edge case, C1).
 - `unexpected_changes` also notes a layer whose name changed at the same index ("Layer 2 is now
@@ -119,7 +124,9 @@ also be `partly_eased` (with `linear_end` and `linear_key_time`), and the result
 
 - **Input**: a LessonEntry without `date` (the server adds it)
 - **Effect**: appends to `lessons` and updates `skills["easing.basic"]` (FR-010). Refuses
-  unsafe text (`UNSAFE_RECORD`)
+  unsafe text (`UNSAFE_RECORD`), and a record the session doesn't back (`RECORD_MISMATCH`):
+  `passed` needs a passing last check, `partial` needs a check, `not_checked` needs none, and
+  `demo_used` must match whether `set_ease` ran
 - **Output**: `{ "saved": true, "skill": { "status": "learned", "next": "..." } }`
 
 ## Fixture mode (evals and tests only)

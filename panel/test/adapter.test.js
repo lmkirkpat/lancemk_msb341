@@ -6,7 +6,7 @@ const path = require("path");
 const { EventEmitter } = require("events");
 const { createAdapter, MENTOR_TOOLS, PREFIX } = require("../lib/adapter-claude-code.js");
 
-const CONFIG = { claude_path: "/home/u/.local/bin/claude", node_path: "/opt/homebrew/bin/node", repo_path: "/repo" };
+const CONFIG = { claude_path: "/home/u/.local/bin/claude", node_path: "/opt/homebrew/bin/node", repo_path: "/repo", runtime_path: "/home/u/AEMentor/runtime" };
 const fixture = (name) => fs.readFileSync(path.join(__dirname, "fixtures", name), "utf8");
 
 function fakeChild() {
@@ -47,7 +47,7 @@ test("start spawns claude with the contract's arguments, cwd and PATH", () => {
   assert.equal(id, "11111111-1111-4111-8111-111111111111");
   const { cmd, args, opts } = h.spawned[0];
   assert.equal(cmd, CONFIG.claude_path);
-  assert.equal(opts.cwd, "/repo");
+  assert.equal(opts.cwd, "/home/u/AEMentor/runtime", "never the repo, so the builder's CLAUDE.md and memory stay out");
   assert.equal(opts.env.PATH, "/home/u/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin");
   assert.equal(opts.env.HOME, "/home/u");
   assert.deepEqual(args.slice(args.indexOf("--session-id"), args.indexOf("--session-id") + 2), ["--session-id", id]);
@@ -166,4 +166,15 @@ test("stop kills the child, is safe twice, and reports no error", async () => {
   await new Promise((r) => setImmediate(r));
   assert.ok(!h.events.some((e) => e.type === "error"));
   assert.deepEqual(h.events.slice(-2).map((e) => e.type), ["turn_end", "exit"]);
+});
+
+test("with no runtime folder, start refuses rather than run from the repo", () => {
+  const spawned = [];
+  const events = [];
+  const noRuntime = Object.assign({}, CONFIG, { runtime_path: undefined });
+  const adapter = createAdapter(noRuntime, { spawn: () => spawned.push(1), env: { HOME: "/home/u" }, randomUUID: () => "id" });
+  adapter.on("error", (e) => events.push(e));
+  adapter.start();
+  assert.equal(spawned.length, 0);
+  assert.equal(events[0].kind, "start_failed");
 });

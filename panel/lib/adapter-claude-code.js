@@ -1,6 +1,7 @@
 // The one seam between the panel and whatever runs the mentor (contracts/mentor-adapter.md,
 // decisions/005 option B1). This adapter keeps one headless Claude Code process per lesson and
-// talks stream-json over stdin/stdout (research R1, confirmed by the spike). It never reads or
+// talks stream-json over stdin/stdout (research R1, confirmed by the spike), in the runtime folder
+// from runtime.js, never the repo. It never reads or
 // writes the AE project, session.json or learner.json, and gives the mentor no tools beyond the
 // six ae-mentor tools plus ToolSearch (research R2).
 "use strict";
@@ -88,8 +89,9 @@ function createAdapter(config, deps) {
     lastCostTotal = 0;
     const env = Object.assign({}, baseEnv, { PATH: childPath(config) });
     try {
+      if (!config.runtime_path) throw new Error("No runtime folder: the mentor must not run from the repo (runtime.js).");
       child = spawn(config.claude_path, launchArgs(resumeSessionId ? "--resume" : "--session-id", sessionId), {
-        cwd: config.repo_path,
+        cwd: config.runtime_path, // never the repo: see runtime.js
         env,
         stdio: ["pipe", "pipe", "pipe"],
       });

@@ -173,7 +173,10 @@ the lesson).
 
 ## To fix later
 
-- **"Must call diff first." in the chat** (session 2). The mentor's text before a tool call
+- ~~**"Must call diff first." in the chat**~~ **Fixed 2026-10-12 (agent audit).** A line in
+  `SKILL.md` Hard rules and rule (6) in the server instructions say the learner sees every word,
+  and every eval case now runs a `no_narration` check (it flags this exact line in the
+  2026-10-08 case 22 transcript, which had passed). Original note: (session 2) the mentor's text before a tool call
   reaches the learner. Possible fixes: a line in `SKILL.md` saying the learner sees every
   word, so never narrate rules or tool calls; or hiding short text that comes just before a
   tool call in the panel. Needs an eval check either way.
@@ -185,7 +188,10 @@ the lesson).
   project is open. Recovered 2026-10-07 by merging the old lessons back (3 lessons, passed 3
   times). Fix: any step that needs "no record" (T023, T046) should use `AE_MENTOR_HOME` set to a
   temp folder, never move the real folder, and quickstart should say so.
-- **An unreadable `learner.json` would be overwritten.** `read()` in
+- ~~**An unreadable `learner.json` would be overwritten.**~~ **Fixed 2026-10-12 (agent audit).**
+  `mentor/lib/json-file.mjs` moves an unreadable `learner.json` or `session.json` aside
+  (`*.unreadable-<time>`), unchanged, and returns `RECORD_UNREADABLE` / `SESSION_UNREADABLE`.
+  Tests in `learner-store.test.mjs` and `session.test.mjs`. Original note: `read()` in
   `mentor/lib/learner-store.mjs` treats a file it can't parse as an empty record, so the next
   `record_lesson` would replace the whole history with one lesson. Fix: if the file exists but
   can't be parsed, refuse to write, leave the file alone, and return an error the mentor

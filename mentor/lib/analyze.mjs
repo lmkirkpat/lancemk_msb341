@@ -65,7 +65,7 @@ export function analyze(snapshot, { focus_layers } = {}) {
     const unknown = focus.filter((name) => !known.has(name));
     if (unknown.length) {
       throw new MentorError("UNKNOWN_LAYER", `No layer named ${unknown.map((n) => `"${n}"`).join(", ")} in this comp. ` +
-        "Use a layer name exactly as it appears in the findings.");
+        "Use the layer's name exactly as it appears in the comp.");
     }
   }
 

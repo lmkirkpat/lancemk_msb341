@@ -6,13 +6,15 @@ import fs from "node:fs";
 import { SESSION_FILE } from "../paths.mjs";
 import { MentorError } from "../errors.mjs";
 import { analyze } from "./analyze.mjs";
+import { readJson } from "./json-file.mjs";
 
+// SESSION_UNREADABLE if the file is there but broken: it's set aside, never written over.
 function read() {
-  try {
-    return JSON.parse(fs.readFileSync(SESSION_FILE, "utf8"));
-  } catch {
-    return { version: 1, current: null, lessons: {} };
-  }
+  return readJson(SESSION_FILE, {
+    empty: () => ({ version: 1, current: null, lessons: {} }),
+    valid: (s) => s && typeof s === "object" && s.lessons && typeof s.lessons === "object",
+    code: "SESSION_UNREADABLE",
+  });
 }
 
 function write(state) {
@@ -105,6 +107,7 @@ export function recordDemo(segmentId) {
 export function markChecked(passed, { demoUndone = false } = {}) {
   return updateCurrent((lesson) => {
     lesson.status = "checked";
+    lesson.checked = true; // stays true after a later demo, unlike status
     lesson.passed = passed;
     if (demoUndone && lesson.demo && !lesson.demo.undone) lesson.demo.undone = new Date().toISOString();
   });

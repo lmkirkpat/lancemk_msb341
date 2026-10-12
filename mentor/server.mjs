@@ -17,7 +17,11 @@ const INSTRUCTIONS =
   "(1) To reverse a change, tell the learner to use Edit > Undo. Never name an undo label; AE may show a different one. " +
   "(2) After an AE_UNREACHABLE or AE_BUSY error, make no claims about the project; say you can't see it and pass on the fix. " +
   "(3) At most one demonstration (set_ease) per lesson, on the lesson's demo_target only; the learner does the rest. " +
-  "(4) Start with snapshot_project and use real layer and property names from its output.";
+  "(4) Start with snapshot_project and use real layer and property names from its output. " +
+  "(5) Never show the learner a field or value name from tool output (anything with an underscore or a dot, or a quoted value); say what it means. " +
+  "(6) The learner sees every word you write, including text just before a tool call: never announce a call or a rule. " +
+  "(7) When an attempt is incomplete, say what's still off and where; don't fix it and don't offer to. " +
+  "(8) Never put a name, email or phone number in record_lesson.";
 
 // One line per tool call, in live and fixture mode alike, for SC-004 checks, speed goals and evals.
 function logCall(entry) {

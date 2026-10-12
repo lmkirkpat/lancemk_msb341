@@ -16,7 +16,12 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+
+// The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
+// with no builder CLAUDE.md or auto-memory in context (agent audit 2026-10-12, lesson 4.5).
+const { ensureRuntime } = createRequire(import.meta.url)("../../../panel/lib/runtime.js");
 
 const EVAL_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(EVAL_DIR, "..", "..", "..");
@@ -83,8 +88,10 @@ const SHARED_INPUTS = [
   "mentor/tools.mjs",
   "mentor/fixture.mjs",
   "mentor/server.mjs",
+  "mentor/errors.mjs",
   ...fs.readdirSync(path.join(REPO, "mentor", "lib")).map((f) => `mentor/lib/${f}`),
   "product/evals/easing/rubric.md",
+  "panel/lib/runtime.js",
 ];
 
 function caseHash(c) {
@@ -126,9 +133,9 @@ function lastPassWithHash(results, id, hash) {
 
 // ---------- running claude ----------
 
-function claude(args, env) {
+function claude(args, env, cwd) {
   const r = spawnSync("claude", args, {
-    cwd: REPO,
+    cwd,
     env: { ...process.env, ...env },
     encoding: "utf8",
     timeout: TURN_TIMEOUT_MS,
@@ -148,11 +155,11 @@ function claude(args, env) {
   return { messages, result };
 }
 
-function mentorTurn(say, sessionId, env) {
+function mentorTurn(say, sessionId, env, cwd) {
   const args = ["-p", say, "--mcp-config", ".mcp.json", "--strict-mcp-config", "--output-format", "json", "--verbose",
     "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t), ...SETTINGS];
   if (sessionId) args.push("--resume", sessionId);
-  return claude(args, env);
+  return claude(args, env, cwd);
 }
 
 // The turn's transcript: what the mentor said and every tool call with its result.
@@ -197,8 +204,19 @@ function verdictOf(turn) {
   return r.passed ? "pass" : "fail";
 }
 
+// Run on every case, with no expect key (agent audit 2026-10-12, lessons 4.3 and 4.4). The
+// learner sees every word, so no field or value name from tool output, and no narrated calls.
+const INTERNAL_NAME = /\b[a-z]+_[a-z_]+\b|\beasing\.basic\b|`(?:learned|practicing|passed|partial|not_checked|continued|resumed|new|demo|unknown)`/;
+const NARRATION = /\bmust (?:call|run|check|diff|snapshot|read)\b[^.]*\bfirst\b|\b(?:let me|I'll|I will|now I'll) (?:call|run|use) (?:the )?(?:check|snapshot|diff|tool)/i;
+
+function wordsCheck(name, re, turns) {
+  const said = turns.flatMap((t) => t.events.filter((e) => e.kind === "say").map((e) => e.text));
+  const hit = said.map((text) => text.match(re)).find(Boolean);
+  return { check: name, pass: !hit, detail: hit ? `said "${hit[0]}"` : "clean" };
+}
+
 function check(expect, turns) {
-  const out = [];
+  const out = [wordsCheck("plain_words", INTERNAL_NAME, turns), wordsCheck("no_narration", NARRATION, turns)];
   const add = (name, pass, detail) => out.push({ check: name, pass, detail });
   const calls = tools(turns);
   const okEases = calls.filter((e) => e.name === "set_ease" && e.ok);
@@ -275,7 +293,7 @@ function judge(c, turns) {
     "",
     "<transcript>", renderTranscript(turns), "</transcript>",
   ].join("\n");
-  const { result } = claude(["-p", prompt, "--output-format", "json", "--tools", "", "--strict-mcp-config", "--max-turns", "1", ...SETTINGS], {});
+  const { result } = claude(["-p", prompt, "--output-format", "json", "--tools", "", "--strict-mcp-config", "--max-turns", "1", ...SETTINGS], {}, os.tmpdir());
   const text = String(result.result || "").replace(/^```(?:json)?\s*|\s*```$/g, "").trim();
   const items = parse(text);
   if (!Array.isArray(items)) return { items: [{ item: "judge", pass: false, reason: `unreadable judge reply: ${text.slice(0, 300)}` }], cost: result.total_cost_usd || 0 };
@@ -293,6 +311,7 @@ function runCase(c, opts) {
   const stateFile = path.join(home, "fixture-state.json");
   if (c.learner_record) fs.copyFileSync(path.join(CASES_DIR, c.learner_record), path.join(home, "learner.json"));
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
+  const runtime = ensureRuntime(REPO, path.join(home, "runtime"));
 
   const turns = [];
   let sessionId = null;
@@ -302,7 +321,7 @@ function runCase(c, opts) {
     for (const t of c.turns) {
       const project = t.project === "unreachable" ? "unreachable" : fixtureFile(t.project);
       fs.writeFileSync(stateFile, JSON.stringify(t.undo_demo ? { project, undo_demo: true } : { project }));
-      const { messages, result } = mentorTurn(t.say, sessionId, env);
+      const { messages, result } = mentorTurn(t.say, sessionId, env, runtime);
       sessionId = result.session_id;
       cost += result.total_cost_usd || 0;
       turns.push({ project: t.project, say: t.say, events: transcriptOf(messages), denials: result.permission_denials || [] });

@@ -97,3 +97,22 @@ test("the store honors AE_MENTOR_HOME", () => {
   assert.ok(fs.existsSync(path.join(home, "learner.json")));
   assert.equal(store.readRecord().path, path.join(home, "learner.json"));
 });
+
+test("an unreadable learner.json is set aside unchanged, and new notes start fresh (6.4)", () => {
+  const broken = '{"version": 1, "skills": {"easing.basic": {"status": "learned"';
+  fs.writeFileSync(FILE, broken);
+  assert.throws(() => store.readRecord(), { code: "RECORD_UNREADABLE" });
+  const aside = fs.readdirSync(home).filter((f) => f.startsWith("learner.json.unreadable-"));
+  assert.equal(aside.length, 1);
+  assert.equal(fs.readFileSync(path.join(home, aside[0]), "utf8"), broken, "the old history is kept as it was");
+  store.recordLesson(entry());
+  assert.equal(store.readRecord().lessons.length, 1);
+  for (const f of aside) fs.rmSync(path.join(home, f));
+});
+
+test("recordLesson on a broken file refuses before writing anything", () => {
+  fs.writeFileSync(FILE, "not json");
+  assert.throws(() => store.recordLesson(entry()), { code: "RECORD_UNREADABLE" });
+  assert.equal(fs.existsSync(FILE), false, "moved aside, not overwritten");
+  for (const f of fs.readdirSync(home).filter((f) => f.startsWith("learner.json.unreadable-"))) fs.rmSync(path.join(home, f));
+});
