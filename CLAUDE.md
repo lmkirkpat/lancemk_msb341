@@ -93,7 +93,9 @@ a brand new session act like a colleague who already knows what you are working 
      Small fixes waiting in `discovery/usage-notes/mentor-panel.md` › To fix later: an
      unreadable `learner.json` gets overwritten (data loss), and "Must call diff first." leaks
      into the chat.
-  4. Not needed for sprint 2: spec 003 T028–T030 (continue a lesson), T033–T036.
+  4. Not needed for sprint 2: spec 003 T033–T034 (live edge cases, 10 panel checks, speed and
+     cost, SC-008 note). T028–T030 (continue a lesson), T035 (privacy sweep) and T036's docs
+     were done 2026-10-12. Continue is unit-tested but not yet tried live (T033's §6 rows).
   5. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
 - **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
   `discovery/Claude AE Tutor Test.aep` (the Mentor Practice comp). Setup and checks are in

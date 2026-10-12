@@ -18,6 +18,9 @@
   const { renderMentorText, escapeHtml } = lib("text.js");
   const { statusFor } = lib("activity.js");
   const { appendTurn } = lib("turns.js");
+  const { bridgeStarted } = lib("bridge-status.js");
+  const ps = lib("panel-session.js");
+  const fs = req("fs");
 
   const $ = (id) => document.getElementById(id);
   const conversation = $("conversation");
@@ -35,6 +38,10 @@
     turnError: false,
     sentAt: null, // ISO time the turn was sent, for the turn log
     record: null, // learner.json, read-only (FR-011)
+    session: null, // the display log being written (panel-session.json, FR-016)
+    mentorEntry: null, // this turn's mentor message in session.messages
+    saved: null, // a session that can be continued, found on open
+    canContinue: false,
   };
 
   // ---------- conversation ----------
@@ -54,30 +61,90 @@
     return el;
   }
 
-  const learnerSays = (label) => addMessage("learner", `<span>${escapeHtml(label)}</span>`);
-  const notice = (text) => addMessage("notice", escapeHtml(text));
+  // ---------- the display log (research R6) ----------
+
+  function persist() {
+    if (state.session) ps.writePanelSession({}, Object.assign(state.session, { lesson: state.view }));
+  }
+
+  function logMessage(role, text, frames) {
+    if (!state.session) return null;
+    const entry = { role, text, frames: frames || [] };
+    state.session.messages.push(entry);
+    return entry;
+  }
+
+  const showLearner = (label) => addMessage("learner", `<span>${escapeHtml(label)}</span>`);
+  const showNotice = (text) => addMessage("notice", escapeHtml(text));
+
+  function learnerSays(label) {
+    showLearner(label);
+    logMessage("learner", label); // the button label, not the fixed request (data-model)
+    persist();
+  }
+
+  function notice(text) {
+    showNotice(text);
+    logMessage("notice", text);
+    persist();
+  }
 
   function mentorMessage() {
     if (!state.mentorEl) {
       state.mentorEl = addMessage("mentor", '<div class="text"></div><div class="frames"></div>');
+      state.mentorEntry = logMessage("mentor", "");
     }
     return state.mentorEl;
   }
 
   function renderMentor() {
     const el = mentorMessage();
-    el.querySelector(".text").innerHTML = renderMentorText(state.committed + state.block);
+    const text = state.committed + state.block;
+    el.querySelector(".text").innerHTML = renderMentorText(text);
+    if (state.mentorEntry) state.mentorEntry.text = text;
     scrollToEnd();
+  }
+
+  function appendFrame(container, src) {
+    const img = document.createElement("img");
+    img.className = "frame";
+    img.alt = "A frame from your comp";
+    img.src = src;
+    container.appendChild(img);
   }
 
   function addFrames(images) {
     const frames = mentorMessage().querySelector(".frames");
     for (const im of images) {
-      const img = document.createElement("img");
-      img.className = "frame";
-      img.alt = "A frame from your comp";
-      img.src = `data:${im.mimeType || "image/png"};base64,${im.data}`;
-      frames.appendChild(img);
+      appendFrame(frames, `data:${im.mimeType || "image/png"};base64,${im.data}`);
+      const file = ps.saveFrame({}, im);
+      if (file && state.mentorEntry) state.mentorEntry.frames.push(file);
+    }
+    scrollToEnd();
+  }
+
+  // Redraw a saved conversation. Frames come back from their files; a missing one says so.
+  function redraw(messages) {
+    conversation.innerHTML = "";
+    for (const m of messages) {
+      if (m.role === "learner") showLearner(m.text);
+      else if (m.role === "notice") showNotice(m.text);
+      else {
+        const el = addMessage("mentor", '<div class="text"></div><div class="frames"></div>');
+        el.querySelector(".text").innerHTML = renderMentorText(m.text);
+        const frames = el.querySelector(".frames");
+        for (const file of m.frames) {
+          let data = null;
+          try { data = fs.readFileSync(file).toString("base64"); } catch (e) {}
+          if (data) appendFrame(frames, `data:image/png;base64,${data}`);
+          else {
+            const gone = document.createElement("p");
+            gone.className = "frame-missing";
+            gone.textContent = "frame no longer available";
+            frames.appendChild(gone);
+          }
+        }
+      }
     }
     scrollToEnd();
   }
@@ -112,10 +179,10 @@
     const nav = $("buttons");
     nav.innerHTML = "";
     if (!state.cfg) return;
-    for (const kind of visibleKinds(state.view, { lessonOpen: state.lessonOpen, canContinue: false })) {
+    for (const kind of visibleKinds(state.view, { lessonOpen: state.lessonOpen, canContinue: state.canContinue })) {
       const b = document.createElement("button");
       b.type = "button";
-      b.textContent = REQUESTS[kind].label;
+      b.textContent = kind === "start" && state.canContinue ? "New lesson" : REQUESTS[kind].label;
       if (kind === "start" || kind === "continue" || kind === "check") b.className = "primary";
       b.disabled = state.busy;
       b.addEventListener("click", () => onButton(kind));
@@ -172,6 +239,7 @@
     learnerSays(label);
     state.busy = true;
     state.mentorEl = null;
+    state.mentorEntry = null;
     state.committed = "";
     state.block = "";
     state.turnError = false;
@@ -189,7 +257,9 @@
   }
 
   function onButton(kind) {
+    if (kind === "start" && state.canContinue) return newLessonInstead();
     if (kind === "start") return startLesson();
+    if (kind === "continue") return continueLesson();
     send(kind, REQUESTS[kind].request, REQUESTS[kind].label);
   }
 
@@ -222,7 +292,11 @@
         notice("The mentor can't see After Effects right now. Check that AE is open with no dialog showing and nothing rendering.");
       }
       state.view = reduceLesson(state.view, e);
-      if (e.name === "record_lesson" && e.ok) state.record = readLearnerRecord(); // US3-3
+      if (e.name === "record_lesson" && e.ok) {
+        state.record = readLearnerRecord(); // US3-3
+        if (state.session) state.session.ended = true;
+      }
+      persist();
       render();
     });
     a.on("error", (e) => {
@@ -235,7 +309,9 @@
       state.busy = false;
       setStatus("");
       state.mentorEl = null;
+      state.mentorEntry = null;
       if (!e.ok && !state.turnError) notice("The mentor stopped before finishing. Try again.");
+      persist();
       appendTurn({}, {
         at: state.sentAt || undefined, // when the request was sent (data-model › Turn log)
         kind: e.kind,
@@ -258,15 +334,50 @@
     });
   }
 
+  // A new lesson replaces the display log (data-model › Panel session).
   function startLesson() {
     if (state.adapter) state.adapter.stop();
+    state.canContinue = false;
+    state.saved = null;
     state.view = initialLesson();
     state.lessonOpen = true;
     state.adapter = createAdapter(state.cfg);
     wireAdapter(state.adapter);
-    state.adapter.start();
+    const id = state.adapter.start();
+    const session = ps.newPanelSession({ claude_session_id: id, lesson: state.view });
+    state.session = session;
+    persist();
+    bridgeStarted().then((started) => {
+      session.bridge_started = started;
+      if (state.session === session) persist();
+    });
     setConn("ok", "AE Mentor · lesson open");
     send("start", REQUESTS.start.request, REQUESTS.start.label);
+  }
+
+  // Continue (FR-016): redraw from the log, resume the same Claude Code session, and say so.
+  function continueLesson() {
+    const saved = state.saved;
+    if (!saved) return startLesson();
+    if (state.adapter) state.adapter.stop();
+    state.canContinue = false;
+    state.saved = null;
+    state.session = saved;
+    state.view = Object.assign(initialLesson(), saved.lesson || {});
+    state.lessonOpen = true;
+    redraw(saved.messages);
+    state.adapter = createAdapter(state.cfg);
+    wireAdapter(state.adapter);
+    state.adapter.start({ resumeSessionId: saved.claude_session_id });
+    setConn("ok", "AE Mentor · lesson open");
+    send("continue", REQUESTS.continue.request, REQUESTS.continue.label);
+  }
+
+  function newLessonInstead() {
+    ps.clearPanelSession({});
+    state.canContinue = false;
+    state.saved = null;
+    render();
   }
 
   // ---------- start-up ----------
@@ -281,6 +392,7 @@
   });
 
   window.addEventListener("beforeunload", () => {
+    persist();
     if (state.adapter) state.adapter.stop();
   });
 
@@ -292,6 +404,15 @@
     state.cfg = cfg;
     state.record = readLearnerRecord();
     setConn("", "AE Mentor");
+    const saved = ps.readPanelSession({});
+    if (saved && !saved.ended) {
+      bridgeStarted().then((started) => {
+        if (state.lessonOpen || !ps.canContinue(saved, started)) return;
+        state.saved = saved;
+        state.canContinue = true;
+        render();
+      });
+    }
   }
   render();
 })();

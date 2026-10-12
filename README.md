@@ -4,9 +4,12 @@
 > their own projects, starting with After Effects, and remembers what they've learned so
 > the skills stick.
 
-**Where to see it:** In progress: the easing test slice (`specs/002-easing-slice`), built as an
-After Effects bridge (`bridge/`) plus an MCP mentor server (`mentor/`). Not yet tested live;
-run it with `specs/002-easing-slice/quickstart.md`. Product description: `product/product-description.md`.
+**Where to see it:** The easing slice (`specs/002-easing-slice`, shipped 2026-10-08): an After
+Effects bridge (`bridge/`), an MCP mentor server (`mentor/`) and the `/ease-mentor` skill. Run
+`/ease-mentor` in Claude Code from this repo with AE open; setup is in
+`specs/002-easing-slice/quickstart.md`. The mentor panel inside AE (`panel/`,
+`specs/003-mentor-panel`): `bash panel/install.sh`, restart AE, then follow
+`specs/003-mentor-panel/quickstart.md`. Product description: `product/product-description.md`.
 **Built by:** Lance Kirkpatrick, MSB 341 Product Management, BYU
 
 ## Context

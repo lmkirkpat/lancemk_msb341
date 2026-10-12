@@ -78,6 +78,8 @@ Expected: both pass. Then the full set once (`node product/evals/easing/run.mjs`
 | Quit the bridge (or close AE's scripting access), press Check my work | "Can't see After Effects" notice; the last list greyed as "from your last check" |
 | Switch to another comp, press Check my work | Mentor asks to switch back; no new list |
 | Close the panel mid-lesson, reopen it | **Continue lesson** offered; continuing shows the earlier messages and frames |
+| Close the panel mid-lesson, reopen it, press **New lesson** | Only **Start lesson** shows; `panel-session.json` is gone |
+| Finish a lesson (record saved), close and reopen the panel | No continue: the lesson ended |
 | Quit and reopen AE, open the panel | No continue; new lesson; memory as recorded |
 | Click Check my work twice fast | One turn; buttons disabled while the mentor works |
 | Dock the panel narrow | No horizontal scroll; messages wrap |
