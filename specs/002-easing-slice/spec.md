@@ -4,7 +4,9 @@
 
 **Created**: 2026-09-30
 
-**Status**: Draft
+**Status**: Shipped (2026-10-08). All tasks done. SC-001–SC-004 from the T046 live run and
+SC-007 are in `discovery/usage-notes/easing-slice.md`, SC-005 from T033, and SC-006 from the
+evals (24/24, `product/evals/easing/results/2026-10-08-1220.json`).
 
 **Input**: User description: "Easing test slice. A mentor session in which Claude, connected to
 my open After Effects project, leads a lesson on easing: takes a snapshot of my comp and spots

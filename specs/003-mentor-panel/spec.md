@@ -4,7 +4,8 @@
 
 **Created**: 2026-10-05
 
-**Status**: Draft
+**Status**: In progress. US1–US4 are built and T027 passed (evals 24/24, 2026-10-08). Open:
+continue a lesson (T028–T030) and the live checks and polish (T033–T036).
 
 **Input**: User description: "A rudimentary version of the mentor panel inside After Effects,
 built from `product/mockups/ae-panel.md` and `decisions/005` (the panel drives headless Claude
