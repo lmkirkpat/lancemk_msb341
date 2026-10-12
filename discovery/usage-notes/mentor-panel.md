@@ -124,8 +124,24 @@ nothing else changed, not passed. Same verdict ✓.
 
 ## Edge cases (quickstart §6)
 
-| Case | Result |
-|---|---|
+T033, 2026-10-12. All 10 rows pass. Rows 7–9 are the first live run of continue (T028–T030).
+
+| # | Case | Result |
+|---|---|---|
+| 1 | `panel.json` renamed, panel reopened | ✅ "The panel isn't set up yet. Run `bash panel/install.sh` from the repo, then reopen the panel." Nothing started |
+| 2 | `learner.json` deleted (backed up) | ✅ "No lessons yet", and the lesson started as a first lesson |
+| 3 | Panel docked narrow | ✅ No horizontal scroll, messages wrap |
+| 4 | Check my work clicked twice fast | ✅ One turn; buttons disabled while the mentor checked |
+| 5 | Other comp active, Check my work | ✅ "It looks like a different comp is active in After Effects right now, so I can't check Title's keys. Switch back to Mentor Practice and say "done" again. Your lesson is still saved, so nothing's lost." No new list |
+| 6 | Bridge unreachable (`bridge.json` moved aside), Check my work | ✅ "Can't see After Effects" notice, last list greyed "from your last check", no claims about the project. Worked again once the file was put back |
+| 7 | Panel closed mid-lesson, reopened | ✅ **Continue lesson** offered; continuing showed the earlier messages and frames and picked up the lesson |
+| 8 | Reopened, **New lesson** | ✅ Only **Start lesson** shown |
+| 9 | Lesson finished (recorded), panel reopened | ✅ Only **Start lesson** shown (`panel-session.json` had `ended: true`) |
+| 10 | AE quit and reopened mid-lesson | ✅ No continue; new lesson; memory as recorded |
+
+**Row 6's method changed.** The bridge panel has no stop button (only Restart bridge, which would
+also block continue in row 7). Moving `bridge.json` aside works because the mentor reads it on every
+call (`mentor/bridge-client.mjs`) and reports `AE_UNREACHABLE` when it's missing. Quickstart updated.
 
 ## SC-008: did the panel change how I learn?
 

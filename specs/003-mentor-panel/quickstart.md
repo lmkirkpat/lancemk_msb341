@@ -75,7 +75,7 @@ Expected: both pass. Then the full set once (`node product/evals/easing/run.mjs`
 | Do | Expect |
 |---|---|
 | Rename `panel.json`, reopen the panel | Plain message with the fix, nothing starts (FR-015) |
-| Quit the bridge (or close AE's scripting access), press Check my work | "Can't see After Effects" notice; the last list greyed as "from your last check" |
+| After one check, move `~/Library/Application Support/AEMentorBridge/bridge.json` to `bridge.json.off`, press Check my work, then move it back | "Can't see After Effects" notice; the last list greyed as "from your last check". (The bridge panel has no stop button, and Restart bridge would block the continue rows.) |
 | Switch to another comp, press Check my work | Mentor asks to switch back; no new list |
 | Close the panel mid-lesson, reopen it | **Continue lesson** offered; continuing shows the earlier messages and frames |
 | Close the panel mid-lesson, reopen it, press **New lesson** | Only **Start lesson** shows; `panel-session.json` is gone |
