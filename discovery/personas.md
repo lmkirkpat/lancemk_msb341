@@ -3,9 +3,9 @@
 > One entry per customer type. Update as interviews sharpen the picture:
 > this file should get *more specific* over the semester, not longer.
 
-Last updated 2026-10-08, from self-test 1 and interviews 001–007. First draft. Still thin:
-three data points on paying (a no, a "depends on depth," and an "I don't know"), and nobody has been asked about
-memory or practice before hearing the pitch.
+Last updated 2026-10-12, from self-test 1 and interviews 001–008. First draft. Still thin:
+four data points on paying (a no, a "depends on depth," an "I don't know," and "my employer"),
+and only one person (008) has talked about keeping what they learned before hearing the pitch.
 
 ## 1. The skill-builder: creative adding a new app to their toolkit (primary)
 
@@ -19,13 +19,16 @@ memory or practice before hearing the pitch.
   video business in Final Cut), and interview 006 (professional graphic designer and
   photographer, in Illustrator, Photoshop, InDesign, and Lightroom daily), and interview 007
   (student photographer, videographer, and animator who took a graduate After Effects class
-  and uses apps from six or more companies).
+  and uses apps from six or more companies), and interview 008 (freelance web and graphic
+  designer on retainer with one company: Photoshop, Illustrator, Animate; Figma before).
 - **The problem in their words:** "[ChatGPT] will give me steps for simple tasks, but with
   something like Photoshop that's more complex, I would rather see a mouse on a screen moving
   and showing me where to go and how to do it than having to read instructions." (004)
 - **Current workaround:** guess-and-check (001), YouTube, a chatbot in plain words (004 asks it
   for a YouTube link when the steps aren't enough), and saved Instagram reels to copy a
-  creator's style (004). Learning feels piecemeal. 001 couldn't learn Adobe apps "in a
+  creator's style (004). Adobe's own previews and docs for new features, and ChatGPT when
+  Adobe's in-app AI fails (008). No notes: their own old project files are the record (008).
+  Learning feels piecemeal. 001 couldn't learn Adobe apps "in a
   cohesive way."
 - **What they want:** to actually own the skill, because they'll use it again (004 now uses
   ChatGPT less because they "picked up on my normal routines"). Wants help inside the app,
@@ -35,19 +38,25 @@ memory or practice before hearing the pitch.
   help that is "super clear and direct": one best route, no side paths (006). Wants help
   finding what broke, not only how to do something new: "what's the problem here? Why does it
   look like this?" (007). Will stop using it if it's wrong or "if it does it for me" (007).
+  Learns only what the current project needs, and would like to say the goal and be taught
+  toward it (008, after the pitch). Wants help that matches their version of the app and
+  shows it on their own screen (008).
 - **What they'd pay / have paid for:** 004 has never paid to learn and wouldn't: "I couldn't
   justify paying for something like that when there's just so many tools with AI and
   YouTube." Suggested Adobe bundle it instead. 006, a working pro: "that would depend on my
   skill level." Not for basics they've forgotten (a clipping mask, fixed free in minutes), maybe
   for going deeper. Would want it as a monthly add-on sold with the Adobe plan. 007, a student:
   "I don't know"; suggested a separate student price, billed yearly like Adobe. All three
-  answers came after the pitch. Students may also be blocked by class AI bans (007).
+  answers came after the pitch. Students may also be blocked by class AI bans (007). 008's
+  employer pays for their apps; they'd want the employer to pay for this too, but think "any
+  freelance person would pay" (after the pitch).
 - **Why they're primary:** they want the lesson, not just the result, which is exactly the
   gap Adobe's do-it-for-you assistants leave.
 - **Evidence:** `discovery/problem-candidates.md` self-test 1, `interviews/001-video-editor.md`,
   `interviews/002-pm-creative.md`, `interviews/004-student-photographer-freelance-video.md`,
   `interviews/006-graphic-designer-photographer.md`,
-  `interviews/007-student-photographer-social-animator.md`
+  `interviews/007-student-photographer-social-animator.md`,
+  `interviews/008-freelance-web-graphic-designer.md`
 - **Still need to learn:** whether working professionals (not students) would pay, and who
   pays if the learner won't; whether people who use apps from several companies (004 does)
   want one tutor across them; whether they'd value a mentor that remembers their progress

@@ -59,9 +59,11 @@ a brand new session act like a colleague who already knows what you are working 
     whole lesson, and the output style leaked into headless runs. All fixed 2026-10-06: the
     `partly_eased` state, no demo when the focus has one pair, the demo fingerprint, and
     `outputStyle: default`. Eval cases 21–24 were added; the new baseline is 23/24.
-  - Interviews: 2 of 3 target-market interviews done (`discovery/interviews/006`, `007`), 1 booked.
+  - Interviews: 3 of 3 target-market interviews done (`discovery/interviews/006`–`008`).
     007 (student, After Effects class) found the biggest time sink was finding what broke, not
-    finding the instructions.
+    finding the instructions. 008 (freelance web and graphic designer, 2026-10-12) got stuck on
+    help written for older app versions, left Photoshop's in-app AI for ChatGPT when it failed,
+    and keeps no notes, only old project files (open question 1's first evidence; new belief 16).
   - **2026-10-08:** T046 passed (quickstart §1–§7 live: a–f in 3.7 min, one demo), and T027
     passed (evals 24/24, $8.92). T047's SC-007 note: I didn't reach for Adobe's assistant in
     6 sessions. A side-by-side on Mentor Practice
@@ -73,10 +75,9 @@ a brand new session act like a colleague who already knows what you are working 
     what tells the mentor apart is depth, restraint, and a focus on teaching, plus memory and
     practice.
 - **Next steps:**
-  1. Run the last booked interview (`008`). Ask about Adobe's assistant, who pays, and
-     whether memory and practice matter, before pitching
-     (`discovery/interviews/bet-a-interview-guide.md`). Also probe diagnosis vs. lessons
-     (belief 1: Adobe already diagnoses from the project).
+  1. Interviews done for sprint 2. Gaps 008 left for the next ones: learn vs. done (section 5),
+     which Adobe AI people mean (generative fill vs. the assistant), whether steps match their
+     version (belief 16), and referrals.
   2. Close sprint 2: `/sprint-review` writes `sprints/sprint-2-review.md`. Every other "done
      looks like" item is checked.
   3. Sprint 3 (plan with `/sprint-plan`): more skills for the mentor first, then diagnosis and

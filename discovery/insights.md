@@ -4,7 +4,7 @@
 > each with evidence. Revise beliefs in place; note the date of last change. Numbers are
 > stable because decisions and specs cite them: merged or parked beliefs keep a stub.
 
-Last reviewed 2026-10-08, after interviews 001–007, self-test 1, and the second hands-on test of
+Last reviewed 2026-10-12, after interviews 001–008, self-test 1, and the second hands-on test of
 Adobe's assistant (`discovery/usage-notes/adobe-assistant-2026-10-08.md`).
 
 ## How confidence is rated
@@ -41,7 +41,7 @@ Rules for applying it:
 People can follow steps. What costs them is not knowing what went wrong or what to search
 for. In a long project it's worse: a step missed early breaks things hours later.
 
-- **Confidence:** Med (≈4.5 points, 4 people + self)
+- **Confidence:** Med (≈5.5 points, 5 people + self)
 - **Did:** 003 sent screenshots asking "what am I looking at?" (needed YouTube first to know
   enough to ask). 004 typed "the sky on my photo is really blown out" and was pointed to
   masking. 006 photographed their Layers panel and got the clipping-mask fix. 007: "it maybe
@@ -49,7 +49,10 @@ for. In a long project it's worse: a step missed early breaks things hours later
   state mismatches and shortcut conflicts from screenshots.
 - **Said:** 007, after the pitch, named diagnosis first: "what's the problem here? Why does it
   look like this?"
-- **Against:** none yet.
+- **Did (2026-10-12):** 008 spent "like 35 minutes" figuring out "why it was wrong" when an
+  export failed; the app turned out not to support that file type.
+- **Against:** 008's SVG discoloration was "just a quick fix" with "normal Google." Some
+  "what's wrong" moments are cheap; the cost shows up when the cause isn't searchable.
 - **Untested:** whether diagnosis inside the mentor is worth more than a free chatbot with a
   screenshot, which is what 003, 004, and 006 already use. Spec 002 teaches a new skill
   (easing); it doesn't diagnose a broken project.
@@ -59,9 +62,9 @@ for. In a long project it's worse: a step missed early breaks things hours later
   expression overriding keys, dead time, no motion blur). The mentor only sees linear pairs.
   So the comparison is now Adobe in the app, not a chatbot with a screenshot. This is a
   competitor fact, not evidence of what people want, so it doesn't change the rating.
-- **Sources:** `problem-candidates.md` self-test 1; interviews 003, 004, 006, 007;
+- **Sources:** `problem-candidates.md` self-test 1; interviews 003, 004, 006, 007, 008;
   `discovery/usage-notes/adobe-assistant-2026-10-08.md`
-- **Updated:** 2026-10-08 (merged old belief 3; Adobe's diagnosis)
+- **Updated:** 2026-10-12 (008)
 
 ### 2. Skills stick when used in real work and fade when not
 
@@ -76,8 +79,10 @@ for. In a long project it's worse: a step missed early breaks things hours later
   would value not forgetting over relearning on demand (see belief 12: relearning basics is
   free). This is the core claim behind memory and practice, and no interview has tested it
   before the pitch.
+- **Not counted:** 008's "skill I had to look up again" (a Photoshop export) turned out to be
+  something the app can't do, not a faded skill.
 - **Sources:** self-test 1; interviews 003, 004, 005, 006, 007
-- **Updated:** 2026-10-08
+- **Updated:** 2026-10-12
 
 ### 3. → merged into belief 1 (2026-10-08)
 
@@ -89,28 +94,32 @@ The real competitor is that combination, not courses. YouTube is visual but gene
 chatbot is project-specific but text only. People stitch them together, plus a person when
 they have one.
 
-- **Confidence:** Med (≈5.5 points, 6 people)
+- **Confidence:** Med (≈6.5 points, 7 people)
 - **Did:** 001 guess-and-check (informal, paraphrased). 003 YouTube + ChatGPT/Gemini + an
   in-house editor: "I couldn't have done it probably with one or the other." 004 chat first,
   then asks chat for a YouTube link. 005 a teacher's overview, then trial and error, YouTube,
   Google. 006 AI first now, since you "don't have to like watch a video or like search
-  Google." 007 YouTube and retracing steps; finding the right video took "hours." Nobody has
-  paid for a course; 004 never has.
+  Google." 007 YouTube and retracing steps; finding the right video took "hours." 008 Adobe's
+  own previews and docs plus YouTube for new features, Google for quick fixes, ChatGPT when
+  it beats Photoshop's AI. Nobody has paid for a course; 004 never has.
 - **Against:** none. Built-in app tutorials were tried and dropped (003).
-- **Sources:** interviews 001, 003, 004, 005, 006, 007
-- **Updated:** 2026-10-08 (absorbed the competitor half of old belief 8)
+- **Sources:** interviews 001, 003, 004, 005, 006, 007, 008
+- **Updated:** 2026-10-12
 
 ### 6. Help should be inside the app
 
-- **Confidence:** Hunch (≈1 point). The architecture already bets on this (`decisions/003`,
+- **Confidence:** Hunch (≈1.25 points). The architecture already bets on this (`decisions/003`,
   `decisions/005`), so it needs testing more than any other Hunch.
 - **Said:** 003 suggested without prompting merging the built-in tips with your own project
   (½). 002 strongly prefers a plugin (informal, after the pitch, ¼). 006 would trust it
   *more* built in: "if anything's going to understand this software, it would be this"
-  (after the pitch, ¼).
-- **Against:** everyone's actual workaround (belief 5) lives in another tab and works.
-- **Sources:** interviews 002, 003, 006
-- **Updated:** 2026-10-08
+  (after the pitch, ¼). 008: "I wish it was all in one place" (before the pitch, but I asked
+  "does that bother you?", so ¼).
+- **Against:** everyone's actual workaround (belief 5) lives in another tab and works. 008
+  *left* Photoshop's in-app AI for ChatGPT in another tab "because it's so much easier": being
+  in the app earned nothing once the answer was worse (a Did against).
+- **Sources:** interviews 002, 003, 006, 008
+- **Updated:** 2026-10-12
 
 ### 7. Whether people want the lesson depends on the moment: mid-project, they take the result
 
@@ -118,10 +127,11 @@ The biggest risk to a teaching-first product. People value learning, and authors
 real reason for it, but the more time already sunk into a project, the less they want the
 lesson.
 
-- **Confidence:** Low (≈2.5 points toward "the moment decides")
+- **Confidence:** Low (≈2.75 points toward "the moment decides")
 - **Did:** 003, on a crunch: "it was more just to get the project done." 005 had Canva's AI
   "do the task for me." 007 described their own habit before the pitch: "If I've done 4 hours
   on it, I don't want to do it."
+- **Weak:** 008, after the pitch: "I learn only the things that I need to complete a project."
 - **Said (why people want the lesson):** 006, before the pitch: "I'd want it to be like my
   work ... being able to walk someone through my design." 007: "If AI makes it, it's not
   yours." 005 (hypothetical) would want AI to teach them.
@@ -131,19 +141,22 @@ lesson.
   (2026-10-08 test).
 - **Untested:** whether people come back to learn *after* the deadline. If they do, the
   mentor's moment is after the crunch, not during it.
-- **Sources:** interviews 003, 005, 006, 007; `product/product-description.md`
-- **Updated:** 2026-10-08
+- **Sources:** interviews 003, 005, 006, 007, 008; `product/product-description.md`
+- **Updated:** 2026-10-12
 
 ### 8. Text-only help falls short in an app the learner doesn't know yet
 
-- **Confidence:** Low (≈2.5 points)
+- **Confidence:** Low (≈3 points, 4 people; held at Low by 006's counter, and 008 fits only
+  partly: their complaint is stale labels in an app they know)
 - **Did:** 004 chains them: "if I still don't get it, I have chat give me a YouTube link." 003
   used YouTube for the visuals and chat for their own project.
-- **Said:** 004, for Photoshop: "I would rather see a mouse on a screen moving."
+- **Said:** 004, for Photoshop: "I would rather see a mouse on a screen moving." 008, before
+  the pitch: wants it "doing it itself along with you ... taking like screenshots ... this is
+  exactly what you're gonna do."
 - **Against:** 006 finds text fine in apps they know well; real layer names made it feel "a
   little visual in its own sense." That fits the "doesn't know yet" limit but narrows it.
-- **Sources:** interviews 003, 004, 006
-- **Updated:** 2026-10-08 (competitor half moved to belief 5)
+- **Sources:** interviews 003, 004, 006, 008
+- **Updated:** 2026-10-12
 
 ### 9. → merged into belief 10 (2026-10-08)
 
@@ -156,7 +169,7 @@ one app, works only when asked, and has no memory of the learner. What's left fo
 mentor: leading, restraint, depth on each skill it teaches, memory, practice, and working
 across apps. Adobe's lead is breadth: many skills plus diagnosis.
 
-- **Confidence:** Med (≈5.5 points; desk research, two hands-on tests, 2 interviews)
+- **Confidence:** Med (≈6.75 points; desk research, two hands-on tests, 3 interviews)
 - **Did (research):** hands-on test of the After Effects assistant (one session). Adobe's
   public statements never mention teaching. Figma answers how-to questions in the canvas;
   Resolve and Blender have no official assistant but let outside AI read the project.
@@ -168,7 +181,10 @@ across apps. Adobe's lead is breadth: many skills plus diagnosis.
   read keyframe times and values but not their easing type"), so its check left 7 properties
   unconfirmed.
 - **Did (interviews):** 006, a daily Photoshop user, hadn't noticed its assistant. 007 thinks
-  of Adobe's help as the help button: "how helpful is it really?" (½, after the pitch).
+  of Adobe's help as the help button: "how helpful is it really?" (½, after the pitch). 008
+  used Photoshop beta's generative extend on their own patterns; it was "so bad" they deleted
+  the results and used ChatGPT (1; Adobe's generative AI, not the teaching assistant). After
+  the pitch: "I don't like Photoshop assistance" (¼; unclear which feature).
 - **Against:** none yet. Judge Adobe by hands-on tests, not announcements.
 - **Untested:** whether people would pick the mentor over Adobe's assistant once they know
   it exists. Also how far Adobe is from a "lead the lesson" mode: restraint and leading are
@@ -177,27 +193,32 @@ across apps. Adobe's lead is breadth: many skills plus diagnosis.
 - **Builder's plan (2026-10-08):** close the breadth gap (sprint 3: more skills, then
   diagnosis and recommended paths), so that what's left to tell them apart is depth,
   restraint, and a focus on teaching.
+- **Still true:** no one interviewed is known to have used the teaching assistant itself.
+  008 is the first to use Adobe's in-app AI at all, and judged it by results.
 - **Sources:** `discovery/competitors.md`; `discovery/usage-notes/adobe-assistant-2026-10-08.md`;
-  interviews 006, 007
-- **Updated:** 2026-10-08 (merged old beliefs 9 and 11; second hands-on test)
+  interviews 006, 007, 008
+- **Updated:** 2026-10-12
 
 ### 11. → merged into belief 10 (2026-10-08)
 
 ### 12. Nobody pays to relearn basics; free AI and YouTube set that price at zero
 
-- **Confidence:** Med for the claim as written (≈3.75 points, 3 people)
+- **Confidence:** Med for the claim as written (≈5 points, 4 people)
 - **Did:** 004 has never paid to learn. 006 fixed a forgotten clipping mask with free AI in
   minutes. 007 didn't try AI at all because a class banned it ("you will get kicked out of
-  class and like reported"), a second barrier for students.
+  class and like reported"), a second barrier for students. 008 fixed an SVG export problem
+  free with Google, and their employer pays for their apps (first "who pays" fact).
 - **Weak (after the pitch):** 004: "I couldn't justify paying ... I would rather do it myself."
   006: "that would depend on my skill level"; might pay to go "deeper." 007: "I don't know";
   suggested a student price and a professional price, billed yearly like Adobe. 004 and 006
-  both suggested selling it with the Adobe plan. My own example led 007's pro answer.
+  both suggested selling it with the Adobe plan. My own example led 007's pro answer. 008:
+  "I would want the employer to do it, but I think any freelance person would pay for that
+  too."
 - **Against:** none.
 - **Untested:** whether anyone pays for depth, and who pays (learner, school, employer,
   Adobe). No pay behavior at all yet.
-- **Sources:** interviews 004, 006, 007; `decisions/002`; `decisions/005`
-- **Updated:** 2026-10-08
+- **Sources:** interviews 004, 006, 007, 008; `decisions/002`; `decisions/005`
+- **Updated:** 2026-10-12
 
 ### 13. → parked (see below)
 
@@ -218,8 +239,14 @@ The mentor's job is to get as close to a good teacher as possible, not just to b
 
 The direct evidence for demo-once (`specs/002`, the `set_ease` limit).
 
-- **Confidence:** Low (≈1.75 points)
-- **Did:** 007 was frustrated when a classmate took over instead of explaining.
+- **Confidence:** Med for "it's wrong" (≈4.25 points, 4 sources); Low for "does the work for
+  you" (007 and the builder only). Rate them apart.
+- **Did:** 007 was frustrated when a classmate took over instead of explaining. 008 got
+  "stuck for a while" on Photoshop videos from "like 2014 where nothing looks the same." 008
+  tried Photoshop's generative extend with "many different types of prompts," deleted the
+  results, and left for ChatGPT.
+- **Said:** 008, before the pitch: AI steps "labeled based on like a previous version" make it
+  "muddy."
 - **Weak (self-test, 2026-10-08):** in the side-by-side, Adobe's assistant jumping ahead and
   doing the work felt "disconcerting as a learner, like it was trying to jump four steps
   ahead before I understood step one." The builder only (¼).
@@ -227,14 +254,37 @@ The direct evidence for demo-once (`specs/002`, the `set_ease` limit).
   "isn't direct." 007 would stop "if it was wrong," "if I have to ask it multiple times," or
   "if it does it for me ... starts filling in stuff." 007 on demo-once: "That's cool."
 - **Against:** none yet. Untested in a real lesson with someone other than me.
-- **Sources:** interviews 006, 007; `discovery/usage-notes/adobe-assistant-2026-10-08.md`
-- **Updated:** 2026-10-08 (new; the builder's side-by-side)
+- **Sources:** interviews 006, 007, 008; `discovery/usage-notes/adobe-assistant-2026-10-08.md`
+- **Updated:** 2026-10-12 (008)
+
+### 16. Generic help is often for the wrong version of the app
+
+YouTube videos and chatbot steps describe menus and labels from older versions, and the
+learner gets stuck translating. Help that reads the live app gets the version right by
+design.
+
+- **Confidence:** Hunch (≈1.5 points, one source)
+- **Did:** 008 learning Photoshop: videos "from versions of Photoshop that's like 2014 where
+  nothing looks the same. ... I can't find any modern examples and so I'm just like stuck for
+  a while."
+- **Said:** 008: AI "will be labeled based on like a previous version or generation."
+- **Related:** 003 found YouTube "a little hard to translate" to their own project (not
+  version-specific).
+- **Against:** none yet.
+- **Untested:** whether it happens in After Effects, and whether others name it unprompted.
+  Ask "did the steps match what you saw on screen?" in the next interviews.
+- **Sources:** interview 008
+- **Updated:** 2026-10-12 (new)
 
 ## Open questions with no evidence yet
 
-The questions the product most depends on, and no interview has tested before the pitch:
+The questions the product most depends on, with little or no evidence from before the pitch:
 
 1. **Do memory and practice matter more than relearning on demand?** (beliefs 2, 10, 12)
+   *First evidence (008, 2026-10-12):* keeps no notes; their record is their old files:
+   "previous work ... where I can go in and see what I did" (Did, 1). After the pitch:
+   "something I wish I had" (¼). So far memory competes with the learner's own project files,
+   and nobody has shown a cost from relearning on demand.
 2. **When people know Adobe's assistant exists, do they still want a mentor that leads?**
 3. **Do people who use apps from several companies want one tutor across them?** 004 and
    007 are the best fits so far; neither was asked.

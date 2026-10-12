@@ -7,7 +7,8 @@ the time on what's still a Hunch, Low, or untested: the claims the product most 
 **Who to talk to:** people who do creative work for pay or for their job at least weekly, and
 who learned or relearned something in a creative app in the past 3 months. Working designers
 (in-house or solo) first; students only if they also work. Prefer people I don't know well.
-Four of seven so far were friends.
+Four of eight so far were friends. 008 was a stranger found in person: I saw Photoshop open
+on a classmate's screen and asked if they did creative work. Do that again.
 
 **Length:** 35 min (★ questions alone fit in 20). Log each one with `000-interview-template.md`, anonymized, and score the
 evidence with the rubric in `discovery/insights.md`.
