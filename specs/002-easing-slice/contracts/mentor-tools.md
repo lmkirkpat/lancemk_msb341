@@ -109,6 +109,9 @@ also be `partly_eased` (with `linear_end` and `linear_key_time`), and the result
   ```
 - A lesson with no targets never passes (`passed: false`), so a focus with nothing linear can't
   mark the skill learned (2026-10-12, agent audit).
+- A `removed` pair doesn't block a pass (decided 2026-10-12). Most lessons will run on the
+  learner's own projects, where deleting keys is a real edit, not a way around the lesson, and a
+  layer reorder can also make a pair look removed. The mentor asks whether it was on purpose.
 - If `comp_matches` is false, `targets` is empty and nothing is graded. The mentor asks the learner
   to switch back to `lesson_comp` and doesn't re-snapshot unless they want a new lesson (edge case, C1).
 - `unexpected_changes` also notes a layer whose name changed at the same index ("Layer 2 is now

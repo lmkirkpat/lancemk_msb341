@@ -45,7 +45,7 @@ check or rubric item with its reason. Then a summary line:
 
 **The target is SC-006:** at least 10 cases, at least 80% passing.
 
-Each run writes `results/<YYYY-MM-DD-HHMM>.json`:
+Each run writes `results/<YYYY-MM-DD-HHMMSS>.json` (never overwritten):
 - `summary`: passed, total, percent and target.
 - `cases[].runs[]`: for each run of a case:
   - `checks`: the deterministic checks. These are facts from the tool calls: `set_ease` counts

@@ -351,9 +351,21 @@ function runCase(c, opts) {
 
 // ---------- main ----------
 
+// To the second: per-minute names let two --only runs in the same minute overwrite each other
+// (case 22's result, 2026-10-12). Older HHMM names still sort before HHMMSS ones in the same
+// minute, since "." sorts before any digit.
 function stamp(d = new Date()) {
   const p = (n) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`;
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
+}
+
+// A results file that never replaces another: _2, _3… if the second is taken ("_" sorts after ".").
+function newResultsFile() {
+  const base = stamp();
+  for (let n = 1; ; n++) {
+    const file = path.join(RESULTS_DIR, n === 1 ? `${base}.json` : `${base}_${n}.json`);
+    if (!fs.existsSync(file)) return file;
+  }
 }
 
 function main() {
@@ -399,8 +411,8 @@ function main() {
   const out = { run_at: new Date().toISOString(), options: opts, partial: !!opts.only, cost_usd: Number(cost.toFixed(2)),
     summary: { passed, total: results.length, percent: pct, target_percent: TARGET * 100 }, cases: results };
   fs.mkdirSync(RESULTS_DIR, { recursive: true });
-  const file = path.join(RESULTS_DIR, `${stamp()}.json`);
-  fs.writeFileSync(file, scrubHome(JSON.stringify(out, null, 2)) + "\n");
+  const file = newResultsFile();
+  fs.writeFileSync(file, scrubHome(JSON.stringify(out, null, 2)) + "\n", { flag: "wx" });
 
   // Change against the most recent previous result (US3-3).
   const prev = history.at(-1);
