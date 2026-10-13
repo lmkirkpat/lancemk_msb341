@@ -180,7 +180,10 @@ the lesson).
   reaches the learner. Possible fixes: a line in `SKILL.md` saying the learner sees every
   word, so never narrate rules or tool calls; or hiding short text that comes just before a
   tool call in the panel. Needs an eval check either way.
-- **The learner record reset between sessions 1 and 2.** On 2026-10-06, around 23:06, the whole
+- ~~**The learner record reset between sessions 1 and 2.**~~ **Fixed 2026-10-12 (docs).** Spec 002
+  quickstart §4 now starts a no-record run with `AE_MENTOR_HOME` set to a temp folder, and spec
+  003 quickstart §6 renames only `learner.json` and renames it back. Both say never to move the
+  `AEMentor` folder. Original note: On 2026-10-06, around 23:06, the whole
   `AEMentor` folder was renamed to `AEMentor.pre-T046` and an empty one replaced it, so session 2
   opened as a first lesson. No code in the repo does this, and no transcript or shell history
   shows who did it. The name points to preparing spec 002 T046 (a run with no record). Opening a

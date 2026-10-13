@@ -213,6 +213,10 @@ passed from the first run.
 | `2026-10-06-1726.json` (**new baseline**, 24 cases) | 23/24 (96%) | $8.24 | First run with `outputStyle: default` (earlier runs carried the builder's Explanatory notes, so they aren't comparable). Adds cases 17–24 (panel buttons, panel session 1 fixes). 21 failed: the mentor spotted fixture mode's placeholder frame and `"fixture": true` flag and wrote a note to the tester |
 | `2026-10-06-1727.json` (`--only 21`) | 1/1 | $0.43 | After fixture mode served a real Mentor Practice frame with no fixture flag, and the eval's temp folder got a neutral name |
 | `2026-10-08-1220.json` (spec 003 T027) | 24/24 (100%) | $8.92 | SC-007 (spec 003) ✅: ≥ 80% overall, cases 01–16 at 16/16 (no worse than `1726`). 21 now passes in a full run. First full run with the check 9 fix (64adfdd); every check-grading case still passes. The runner's "+23 pass" line compares against the 1-case `1727` file, so ignore it |
+| `2026-10-12-1636.json` (`--only 25`) | 1/1 | $0.33 | New case 25 (agent audit): an empty focus can't pass |
+| `2026-10-12-1637.json` (`--only 06`) | 1/1 | $0.61 | Spot check after the agent audit fixes (ddf3040). Case 22 also passed in this batch, but its result file was overwritten (fixed in 7bd450b) |
+| `2026-10-12-1638.json` (`--only 16`) | 1/1 | $0.76 | Same spot check |
+| `2026-10-12-182238.json` (**new baseline**, 25 cases) | 25/25 (100%) | $12.29 | Full run after the agent audit fixes (safe stores, record checks, runtime folder outside the repo, `no_narration` check on every case). Only tool error was the expected AE_UNREACHABLE in case 11. Result files are now named to the second, so runs in the same minute no longer overwrite each other |
 
 **Failures and fixes (`SKILL.md`):**
 - **09 · returning learner (R-USES-MEMORY).** It did the right thing: it skipped the basics and
@@ -233,8 +237,8 @@ passed from the first run.
 deterministic check (set_ease limits, verdicts, records) passed in both runs. The tool
 contracts hold; the remaining risk is in what the mentor says and writes.
 
-**Note for the next full run:** the newest results file is now a full run (`2026-10-08-1220.json`),
-so the next run's "vs" line compares all 24 cases.
+**Note for the next full run:** the newest results file is a full run (`2026-10-12-182238.json`),
+so the next run's "vs" line compares all 25 cases. A full run now costs about $12, up from $9.
 
 ## SC-007: did I reach for this or Adobe's assistant? (T047, 2026-10-08)
 

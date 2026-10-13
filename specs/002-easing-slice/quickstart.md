@@ -41,6 +41,16 @@ Check the answer key against the comp once by eye in the Graph Editor before tru
 
 ## 4. Live lesson (User Story 1)
 
+Steps a–f expect a first lesson. To run them with no record, start Claude Code with an empty
+temp record folder, which the `ae-mentor` server inherits:
+
+```bash
+AE_MENTOR_HOME="$(mktemp -d)" claude
+```
+
+Never move or rename the real `AEMentor` folder to get a fresh start: on 2026-10-06 that
+wiped the record between two sessions (`discovery/usage-notes/mentor-panel.md` › To fix later).
+
 In Claude Code: `/ease-mentor`. With "Mentor Practice" active:
 
 | Step | You do | Expect |
@@ -76,7 +86,7 @@ node product/evals/easing/run.mjs --repeat 3   # flakiness check
 ```
 
 Expected: at least 10 cases, pass or fail per case with reasons, a summary line, and results
-saved under `product/evals/easing/results/<date>.json` for comparing runs. Target: 80% or more
+saved under `product/evals/easing/results/<YYYY-MM-DD-HHMMSS>.json` for comparing runs. Target: 80% or more
 pass (SC-006).
 
 ## 7. Edge cases (spot check)

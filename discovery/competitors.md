@@ -169,8 +169,9 @@ Blender, which would remove the screenshot disadvantage.
 - [x] **Hands-on test (2026-09-28):** see "After Effects assistant: hands-on test" below.
 - [ ] Check the Photoshop and Premiere assistant help pages directly (blocked for automated
       access) for any how-to or Q&A ability.
-- [ ] Check what an After Effects MCP bridge can actually read (ease values, keyframes, effects)
-      with a quick local test before choosing a stack.
+- [x] Check what an After Effects MCP bridge can actually read (ease values, keyframes, effects)
+      with a quick local test before choosing a stack. Done in spec 001: all 11 reads work
+      (`discovery/ae-bridge-findings.md`).
 - [ ] Manual search for AI tutor startups for creative software (Product Hunt, r/AfterEffects,
       design Discords).
 

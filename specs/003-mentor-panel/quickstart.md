@@ -83,7 +83,7 @@ Expected: both pass. Then the full set once (`node product/evals/easing/run.mjs`
 | Quit and reopen AE, open the panel | No continue; new lesson; memory as recorded |
 | Click Check my work twice fast | One turn; buttons disabled while the mentor works |
 | Dock the panel narrow | No horizontal scroll; messages wrap |
-| Delete `learner.json` (back it up first) | "No lessons yet"; lesson starts as a first lesson |
+| Rename `learner.json` to `learner.json.off` (only that file, never the `AEMentor` folder), reopen the panel, then rename it back | "No lessons yet"; lesson starts as a first lesson. After renaming back, the memory section shows the earlier lessons again |
 
 ## 7. Speed and cost (SC-004)
 

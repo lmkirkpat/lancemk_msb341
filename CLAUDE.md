@@ -44,8 +44,8 @@ a brand new session act like a colleague who already knows what you are working 
     (`bridge/`), the `ae-mentor` MCP server (`mentor/`), the `/ease-mentor` skill
     ("I do, we do, you do": the mentor eases one pair, the learner eases the rest), and the
     learner record. Usage sessions are in `discovery/usage-notes/easing-slice.md`.
-  - **Eval set** (`product/evals/easing/`, now 24 cases, about $9 per full run, no AE needed;
-    latest 24/24 on 2026-10-08): first baseline 14/16, then 15/16 (94%) after `SKILL.md` fixes. SC-006 (≥ 80%) passes. Every
+  - **Eval set** (`product/evals/easing/`, now 25 cases, about $12 per full run, no AE needed;
+    latest 25/25 on 2026-10-12, the new baseline after the agent audit): first baseline 14/16, then 15/16 (94%) after `SKILL.md` fixes. SC-006 (≥ 80%) passes. Every
     hard-rule check passed; the failures were about wording and honesty in the learner record.
   - **Panel decided** (`decisions/005`, amends 003): the AE panel drives headless Claude Code
     (`claude -p --resume`), so it reuses the skill and server unchanged and the evals stay valid.
