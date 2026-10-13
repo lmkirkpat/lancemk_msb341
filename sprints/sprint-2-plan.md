@@ -52,3 +52,11 @@ or (b) the panel is a front end to a Claude Code session. This changes the archi
 - [x] Notes from the panel run logged in `discovery/usage-notes/`
 
 **Predicted difficulty:** 4
+
+## Retro
+
+**Actual difficulty:** 4
+
+**Why it differed:** The difficulty was as expected because this sprint required me to learn a lot about AI application and architecture, but I still was able to finish everything in my sprint plan, even after raising the goal halfway through.
+
+**Retro:** I did hit my goal of specing the product, testing the MCP bridge, deciding the architecture, building a working slice, and interviewing 3 people. I also hit the raised goal of turning the slice into a functional panel inside of After Effects, essentially a stripped down MVP. Next sprint, I want to expand the capabilities of the mentor to teach more than just easing while maintaining the same disciplined, educational focus of the mentor. I also want to start working to make the user flows more intuitive and helpful by refining the panel UI.
