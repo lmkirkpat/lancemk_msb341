@@ -43,7 +43,7 @@ Adobe's After Effects assistant already teaches when asked. See
 
 **What changed (2026-10-19):** Named the product **Knack** (tagline: "Your project is the
 tutorial."). The AE panel now shows the name; its internal IDs and the `AEMentor` learner-record
-folder are unchanged.
+folder are unchanged. See `decisions/006-name-the-product-knack.md`.
 
 If your situation changes, revise this and note what changed. That is normal; a silent
 mismatch between this file and your work is not.

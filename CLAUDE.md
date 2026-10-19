@@ -7,7 +7,8 @@ a brand new session act like a colleague who already knows what you are working 
 
 - **My role:** Solo builder: discovery, specs, building, design, testing, and GTM. Want to use
   agent workflows and automations in how I work. Low priority: pricing and analytics.
-- **What it is:** An AI creative mentor (`decisions/002`, `product/product-description.md`).
+- **What it is:** **Knack** (`decisions/006`), an AI creative mentor (`decisions/002`,
+  `product/product-description.md`).
   A teaching layer that leads the teaching, remembers what the user has learned across
   sessions, and builds practice so skills stick, inside the user's own project. After
   Effects first, designed so other apps can be added. Adobe's After Effects assistant
