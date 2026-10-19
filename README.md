@@ -48,6 +48,13 @@ folder are unchanged. See `decisions/006-name-the-product-knack.md`.
 If your situation changes, revise this and note what changed. That is normal; a silent
 mismatch between this file and your work is not.
 
+## Where the work lives
+
+- **Repos:** [lmkirkpat/lancemk_msb341](https://github.com/lmkirkpat/lancemk_msb341), public,
+  shared with sdmurff
+- **Live:** Knack has no hosted version: the AE panel installs locally (`bash panel/install.sh`)
+- **Docs:** none outside this repo
+
 ## What is in this repo
 
 | Folder | What lives here |
