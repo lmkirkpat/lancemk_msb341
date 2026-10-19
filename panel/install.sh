@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs the AE Mentor panel on macOS (specs/003-mentor-panel). Non-interactive, safe to re-run.
+# Installs the Knack panel on macOS (specs/003-mentor-panel). Non-interactive, safe to re-run.
 #   bash panel/install.sh
 # 1. symlinks panel/ into ~/Library/Application Support/Adobe/CEP/extensions/AEMentorPanel
 # 2. lets After Effects load unsigned CEP extensions (PlayerDebugMode, current user only)
@@ -41,4 +41,4 @@ chmod 600 "$CFG"
 echo "OK   wrote $(tilde "$CFG")"
 
 echo
-echo "NEXT: restart After Effects, then open Window > Extensions > AE Mentor."
+echo "NEXT: restart After Effects, then open Window > Extensions > Knack."

@@ -1,4 +1,6 @@
-# [Product name TBD]: AI creative mentor
+# Knack: AI creative mentor
+
+**Your project is the tutorial.** Learn inside the work you're already doing.
 
 > An AI mentor that teaches creative professionals and students creative software inside
 > their own projects, starting with After Effects, and remembers what they've learned so
@@ -38,6 +40,10 @@ later student-club-operations idea, and narrowed to creative workflows. See
 creative-operations copilot) without testing it. Repositioned Bet A after finding that
 Adobe's After Effects assistant already teaches when asked. See
 `decisions/002-choose-bet-a-ai-creative-mentor.md`.
+
+**What changed (2026-10-19):** Named the product **Knack** (tagline: "Your project is the
+tutorial."). The AE panel now shows the name; its internal IDs and the `AEMentor` learner-record
+folder are unchanged.
 
 If your situation changes, revise this and note what changed. That is normal; a silent
 mismatch between this file and your work is not.

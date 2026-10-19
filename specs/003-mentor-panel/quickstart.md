@@ -19,7 +19,7 @@ bash panel/install.sh
 ```
 
 Expected: `OK` lines for the CEP link (`AEMentorPanel`) and for `panel.json` with the `claude`,
-`node` and repo paths. Restart AE. **Window > Extensions > AE Mentor** opens the panel.
+`node` and repo paths. Restart AE. **Window > Extensions > Knack** opens the panel.
 
 ## 2. Unit tests (no AE, no cost)
 

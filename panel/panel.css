@@ -1,4 +1,4 @@
-/* AE Mentor panel. AE's dark UI; one column that wraps down to the 260 px minimum (spec edge case). */
+/* Knack panel. AE's dark UI; one column that wraps down to the 260 px minimum (spec edge case). */
 :root {
   color-scheme: dark;
   --bg: #232323;

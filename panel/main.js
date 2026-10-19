@@ -1,4 +1,4 @@
-// AE Mentor panel: DOM wiring only (FR-013). What to teach, when to demonstrate and how to grade
+// Knack panel: DOM wiring only (FR-013). What to teach, when to demonstrate and how to grade
 // all come from the mentor. What the panel shows besides the mentor's words comes from tool
 // results and the learner record (research R5), through the pure modules in lib/.
 (function () {
@@ -302,7 +302,7 @@
     });
     a.on("error", (e) => {
       const msg = ERRORS[e.kind];
-      if (e.kind === "bad_stream") return console.warn("[AE Mentor] bad stream line", e.message);
+      if (e.kind === "bad_stream") return console.warn("[Knack] bad stream line", e.message);
       state.turnError = true;
       notice(msg === undefined ? `Something went wrong: ${e.message}` : e.kind === "start_failed" ? `${msg} ${e.message || ""}`.trim() : msg);
     });
@@ -330,7 +330,7 @@
       state.lessonOpen = false;
       state.busy = false;
       setStatus("");
-      setConn("", "AE Mentor");
+      setConn("", "Knack");
       render();
     });
   }
@@ -352,7 +352,7 @@
       session.bridge_started = started;
       if (state.session === session) persist();
     });
-    setConn("ok", "AE Mentor · lesson open");
+    setConn("ok", "Knack · lesson open");
     send("start", REQUESTS.start.request, REQUESTS.start.label);
   }
 
@@ -370,7 +370,7 @@
     state.adapter = createAdapter(state.cfg);
     wireAdapter(state.adapter);
     state.adapter.start({ resumeSessionId: saved.claude_session_id });
-    setConn("ok", "AE Mentor · lesson open");
+    setConn("ok", "Knack · lesson open");
     send("continue", REQUESTS.continue.request, REQUESTS.continue.label);
   }
 
@@ -406,12 +406,12 @@
     }
   }
   if (!cfg.ok) {
-    setConn("bad", "AE Mentor · not set up");
+    setConn("bad", "Knack · not set up");
     notice(cfg.fix);
   } else {
     state.cfg = cfg;
     state.record = readLearnerRecord();
-    setConn("", "AE Mentor");
+    setConn("", "Knack");
     const saved = ps.readPanelSession({});
     if (saved && !saved.ended) {
       bridgeStarted().then((started) => {
