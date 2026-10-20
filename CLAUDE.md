@@ -105,9 +105,10 @@ a brand new session act like a colleague who already knows what you are working 
     git guard, `check-branch.mjs`; 24 tests) and `/merge-worktree`. Ownership and the git guard
     were checked live in a headless run; the AE lock only in unit tests so far.
 - **Next steps:**
-  1. Sprint 3, agent team. Still to do: restart Claude Code (or approve in `/hooks`) so the
-     `decisions/008` hooks load here, and re-run the agent-identity logging test before the first
-     parallel run; split `mentor/tools.mjs` per skill before the parallel build; write the setup
+  1. Sprint 3, agent team. Done 2026-10-19: the `decisions/008` hooks are loaded in the cockpit
+     (git guard blocked a probe live), and the agent-identity logging test re-ran clean (subagents
+     still carry `agent_type` and `agent_id`, and `SubagentStop` does too). Still to do: split
+     `mentor/tools.mjs` per skill before the parallel build; write the setup
      README; a template for the parallel-run notes on time and quality. Then the curriculum
      spec, which decides the 10 skills, before building them. Run `/overlap-audit` for each new
      skill (see "Edge cases where concepts overlap" below). Parallel agents share `SKILL.md`,

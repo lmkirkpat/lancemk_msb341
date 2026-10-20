@@ -36,8 +36,9 @@ Facts that shaped it:
   already share the repo's CLAUDE.md.
 - **Sequential numbers collide in parallel** (assessment). Spec Kit takes the next spec number
   itself unless given `--number` (`create-new-feature.sh:295`).
-- **Untested:** whether `SubagentStop` input carries `agent_id`, so the AE lock can be freed the
-  moment a subagent finishes. The idle lease covers it either way.
+- **`SubagentStop` carries `agent_id`** (and `agent_type`), so the AE lock is freed the moment
+  the holding subagent finishes; the idle lease is only a backstop. Untested when this was
+  written; confirmed 2026-10-19 by the re-run below.
 
 ## Options considered
 
@@ -129,3 +130,9 @@ and `ownership.json`. The hooks themselves shouldn't change.
   look like the cockpit and every hook would wave them through, silently. **Then** stop parallel
   runs until it's fixed. Re-run the logging test before each sprint's first parallel run, so
   this shows up as a test result rather than a surprise.
+  - *2026-10-19, re-run (Claude Code 2.1.304, headless, logging hook passed with `--settings`
+    so the repo's settings were untouched, $0.48):* still sent. The cockpit's `Glob`, `Read` and
+    `Agent` carried no identity; the reviewer's `Read` carried `agent_type: "reviewer"` and an
+    `agent_id`; all shared one `session_id`. The reviewer's `SubagentStop` carried the same
+    `agent_type` and `agent_id`, which also settles the `SubagentStop` question above. Sprint 3's
+    first parallel run is clear on this signal.
