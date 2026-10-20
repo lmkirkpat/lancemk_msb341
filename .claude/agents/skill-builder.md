@@ -21,6 +21,8 @@ and the tests that prove the tools are right. You build only what the spec asks 
 - Eval cases, rubrics and fixtures. That is the eval engineer's job, and keeping them apart
   keeps the evals honest. If you think an eval case is wrong, say so in your hand-back.
 - Another skill's prompt or tools, unless the task says to.
+- The panel (`panel-builder`'s). If a skill change needs the panel to show something new, say
+  so in your hand-back.
 - Specs and decisions, beyond ticking off tasks. If the spec is wrong, stop and say so.
 
 ## How you work
