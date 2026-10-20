@@ -2,6 +2,8 @@
 
 **Date:** 2026-10-19
 **Status:** Active. Drafted before the hooks are built or any parallel run; revisit after the first one.
+Amended 2026-10-20 (see the end): permission rules, auto mode, fail-closed on crash, more git
+rules, and an ExtendScript guard.
 **Amends `decisions/007`:** 007 waited for a violation before enforcing file ownership in tools.
 This enforces it before the first parallel run.
 
@@ -143,3 +145,30 @@ and `ownership.json`. The hooks themselves shouldn't change.
     `agent_id`; all shared one `session_id`. The reviewer's `SubagentStop` carried the same
     `agent_type` and `agent_id`, which also settles the `SubagentStop` question above. Sprint 3's
     first parallel run is clear on this signal.
+
+## Amendment 2026-10-20: the rules around the hooks
+
+**Why:** a review against the course book's Advice Versus Enforcement and Blast Radius sections
+(`learning/2026-10-19-*.md`) found the hooks sound but the setup around them open. Seven gaps,
+all closed in one change:
+
+| Gap | Fix |
+|---|---|
+| "Fail closed" covered bad input only. A crash, a timeout or a missing `node` exits non-zero, and Claude Code lets the call through | `"onFailure": "block"` on every `PreToolUse` hook. Probed headless (Claude Code 2.1.304, Haiku, $0.01): the same crashing hook let `touch` run without it and blocked it with it |
+| The cockpit ran in bypass permissions on the laptop, where only deny rules and hooks hold | `defaultMode: "auto"` and `disableBypassPermissionsMode: "disable"` in `.claude/settings.json` |
+| The cockpit's push was a prompt rule (memory and CLAUDE.md), and auto mode allows pushes to the working repo | `ask` rule for `Bash(git push)` and `Bash(git push *)`, backed by the git guard answering `ask` for any cockpit push, including `git -C . push` that the rule's text match misses |
+| The cockpit could send email, share or trash Drive files, delete Notion pages, and deploy, with no prompt | `deny` for those MCP tools, the whole Vercel server, `vercel *`, `npm publish *`, `gh pr merge *`, `gh repo delete *`. Also `Read` of `.env` files. Confirmed live: saving the rules removed exactly those tools from the session |
+| `ae_run_script` runs ExtendScript inside AE, past every Bash guard: `system.callSystem`, saving the `.aep`, deleting or writing files | `ae-script-guard.mjs`: blocks those calls for subagents. Text match, like the git guard |
+| Bash writes in the shared tree were never checked: `check-branch` runs only on branches | Process rule (README, "Run a parallel job"): every persona with Bash runs in a worktree. No new code |
+| Subagents could remove worktrees, delete or force branches, and switch branches in the shared tree | Added to the git guard's subagent rules. The cockpit's merge cleanup still works |
+
+**Rejected:** staying in bypass with `deny` on push (the human pushes from their own terminal).
+Safer on push alone, but leaves every other action with no prompt and no classifier.
+
+**What would change our mind:**
+
+- **If the ExtendScript guard blocks a legitimate build step** (most likely `layer.remove()` on a
+  layer the builder added), **then** narrow `.remove(` to file and folder objects, or let the
+  builder hand it back for the cockpit.
+- **If auto mode's prompts slow a parallel run enough to matter** (counted in the run notes),
+  **then** add narrow `allow` rules for the prompts that keep coming up, never bypass.

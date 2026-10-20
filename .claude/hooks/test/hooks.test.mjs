@@ -24,7 +24,7 @@ function makeRepo() {
 function run(hook, payload, args = []) {
   const input = typeof payload === "string" ? payload : JSON.stringify(payload);
   const r = spawnSync("node", [path.join(HOOKS, hook), ...args], { input, encoding: "utf8" });
-  return { code: r.status, err: r.stderr };
+  return { code: r.status, err: r.stderr, out: r.stdout };
 }
 
 const sub = (type, id, extra) => ({ agent_type: type, agent_id: id, ...extra });
@@ -197,6 +197,49 @@ test("git guard: the cockpit may push and merge; subagents may not", (t) => {
   assert.equal(run("git-guard.mjs", bash(r.dir, "git rebase main", "skill-builder")).code, 2);
 });
 
+test("git guard: every cockpit push asks the human, however it's written; other git work doesn't", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  for (const c of ["git push", "git push origin main", "git -C . push origin main", "cd x && git push"]) {
+    const res = run("git-guard.mjs", bash(r.dir, c));
+    assert.equal(res.code, 0, c);
+    assert.equal(JSON.parse(res.out).hookSpecificOutput.permissionDecision, "ask", c);
+  }
+  for (const c of ["git merge --no-edit feature", "git status", "git log --oneline -5"]) {
+    assert.equal(run("git-guard.mjs", bash(r.dir, c)).out, "", c);
+  }
+});
+
+test("git guard: subagents can't remove worktrees or delete, force or rename branches; the cockpit can", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  for (const c of ["git worktree remove --force ../wt", "git worktree prune", "git worktree move a b", "git branch -D skill-x",
+    "git branch -d skill-x", "git branch --delete skill-x", "git branch -f main HEAD~1", "git branch -m old new"]) {
+    assert.equal(run("git-guard.mjs", bash(r.dir, c, "skill-builder")).code, 2, c);
+    assert.equal(run("git-guard.mjs", bash(r.dir, c)).code, 0, c);
+  }
+  for (const c of ["git branch", "git branch -a", "git branch --merged", "git worktree list"]) {
+    assert.equal(run("git-guard.mjs", bash(r.dir, c, "skill-builder")).code, 0, c);
+  }
+});
+
+test("git guard: a subagent can't switch branches in the shared tree, but can restore its own file", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  for (const c of ["git checkout feature", "git checkout -b new", "git switch main", "git switch -c new"]) {
+    assert.equal(run("git-guard.mjs", bash(r.dir, c, "spec-writer")).code, 2, c);
+    assert.equal(run("git-guard.mjs", bash(r.dir, c)).code, 0, c);
+  }
+  for (const c of ["git checkout -- specs/004-x/spec.md", "git restore specs/004-x/spec.md"]) {
+    assert.equal(run("git-guard.mjs", bash(r.dir, c, "spec-writer")).code, 0, c);
+  }
+});
+
+test("git guard: inside its own worktree a subagent may switch branches", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  const wt = path.join(r.dir, "..", path.basename(r.dir) + "-wt3");
+  r.g("worktree", "add", "-q", "-b", "wt", wt);
+  t.after(() => fs.rmSync(wt, { recursive: true, force: true }));
+  assert.equal(run("git-guard.mjs", bash(wt, "git checkout -b wt-2", "skill-builder")).code, 0);
+});
+
 test("git guard: force-push is blocked even for the cockpit", (t) => {
   const r = makeRepo(); t.after(r.done);
   for (const c of ["git push --force", "git push -f origin main", "git push --force-with-lease"]) {
@@ -215,6 +258,54 @@ test("git guard: inside its own worktree an agent may stage everything", (t) => 
 
 test("git guard: unreadable input blocks", () => {
   assert.equal(run("git-guard.mjs", "nope").code, 2);
+});
+
+// --- AE script guard ---
+
+const aeScript = (script, who) => ({ tool_name: "mcp__after-effects__ae_run_script", tool_input: { script }, ...(who ? sub(who, "s1") : {}) });
+
+test("AE script guard: a subagent's script that reaches past the comp is blocked; the cockpit's isn't", () => {
+  for (const s of [
+    'system.callSystem("rm -rf ~/x");',
+    "app.project.save();",
+    'app.project.save(new File("~/Desktop/x.aep"));',
+    'new File("~/notes.txt").remove();',
+    "app.project.activeItem.layer(1).remove();",
+    'var f = new File("~/x.txt"); f.open("w"); f.write("x"); f.close();',
+    "new File('~/a.jsx').execute();",
+    "app.quit();",
+    "app.project.close(CloseOptions.SAVE_CHANGES);",
+  ]) {
+    assert.equal(run("ae-script-guard.mjs", aeScript(s, "skill-builder")).code, 2, s);
+    assert.equal(run("ae-script-guard.mjs", aeScript(s)).code, 0, s);
+  }
+});
+
+test("AE script guard: reads and in-comp builds pass", () => {
+  for (const s of [
+    "var c = app.project.activeItem; return c.numLayers;",
+    "var p = app.project.activeItem.layer(1).property('ADBE Transform Group').property('ADBE Position'); return p.numKeys;",
+    "app.project.activeItem.layers.addNull(); return 1;",
+    'var f = new File("~/x.txt"); f.open("r"); var t = f.read(); f.close(); return t;',
+  ]) {
+    assert.equal(run("ae-script-guard.mjs", aeScript(s, "skill-builder")).code, 0, s);
+  }
+});
+
+test("AE script guard: unreadable input or no script blocks a subagent", () => {
+  assert.equal(run("ae-script-guard.mjs", "nope").code, 2);
+  assert.equal(run("ae-script-guard.mjs", sub("skill-builder", "s2", { tool_input: {} })).code, 2);
+});
+
+// --- settings ---
+
+test("settings: every PreToolUse hook blocks when it fails, and pushes ask", () => {
+  const s = JSON.parse(fs.readFileSync(path.join(HOOKS, "..", "settings.json"), "utf8"));
+  for (const entry of s.hooks.PreToolUse) {
+    for (const h of entry.hooks) assert.equal(h.onFailure, "block", entry.matcher);
+  }
+  assert.ok(s.permissions.ask.includes("Bash(git push *)"));
+  assert.equal(s.permissions.disableBypassPermissionsMode, "disable");
 });
 
 // --- merge check ---

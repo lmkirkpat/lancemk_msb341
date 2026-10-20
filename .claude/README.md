@@ -13,7 +13,8 @@ guardrails, and what was tested). This file is the how-to.
    don't collide and nobody checks their own work. A hook enforces it.
 2. **The cockpit runs the show.** Subagents can't start other subagents, so your main session
    sends work out, hands out numbers (spec, decision, eval case), merges branches and pushes when
-   you ask. Subagents never push, merge or rebase. A hook enforces that too.
+   you ask. Subagents never push, merge or rebase. A hook enforces that too, and every push the
+   cockpit makes stops and asks you first.
 3. **Builders work in their own git worktree** when others run at the same time, and commit on
    their own branch. The cockpit merges with `/merge-worktree`.
 4. **One agent at a time on a shared single resource.** Here that's After Effects (one app, one
@@ -44,20 +45,26 @@ personas run on Opus and three on Sonnet (the `model:` line in each file).
 | `agents/*.md` | The ten personas. Each ends with an **In this repo** section: the only part that's project-specific |
 | `hooks/ae-lock.mjs` | One agent at a time on After Effects. 10-minute idle lease, freed on `SubagentStop` |
 | `hooks/ownership.mjs` + `ownership.json` | Blocks a subagent's `Write`/`Edit` outside its row. The cockpit isn't restricted |
-| `hooks/git-guard.mjs` | Blocks blanket `git add`, `commit -a`, `reset --hard`, `clean -f`, `stash` and force-push for everyone; push, merge and rebase for subagents |
+| `hooks/git-guard.mjs` | Blocks blanket `git add`, `commit -a`, `reset --hard`, `clean -f`, `stash` and force-push for everyone; push, merge, rebase, removing worktrees, deleting branches, and switching branches in the shared tree for subagents. Makes every cockpit push ask you |
+| `hooks/ae-script-guard.mjs` | Blocks a subagent's `ae_run_script` from reaching past the comp: shell (`callSystem`), saving the `.aep`, deleting or writing files, quitting AE |
 | `hooks/check-branch.mjs` | Run at merge: lists files a branch changed outside its persona's row (catches writes through Bash, which the ownership hook can't see) |
 | `hooks/probe/identity.mjs` | Checks that hooks can still tell agents apart (see "Check it works") |
 | `hooks/test/` | Unit tests for all of the above |
-| `settings.json` | Wires the hooks in |
+| `settings.json` | Wires the hooks in, and sets the permission rules: auto mode, no bypass mode, ask before `git push`, deny secrets and actions that reach other people (email, sharing, deploys) |
 | `skills/merge-worktree/` | The cockpit's merge: ownership check, number check, one branch at a time, never pushes |
 
-All hooks use Node built-ins only and **fail closed**: if a hook can't read its input, it blocks
-the call and says why.
+All hooks use Node built-ins only and **fail closed** in two layers. In the code: if a hook
+can't read its input, it blocks the call and says why. In `settings.json`: every `PreToolUse`
+hook has `"onFailure": "block"`, so a crash, a timeout or a missing `node` blocks too. Without
+it, Claude Code treats any exit other than 0 or 2 as the hook failing and lets the call through
+(probed 2026-10-20, Claude Code 2.1.304; needs 2.1.295 or later).
 
 ## Copy it to another project
 
 1. **Copy** `.claude/agents/`, `.claude/hooks/`, `.claude/skills/merge-worktree/`, and the
-   `hooks` block of `.claude/settings.json` (merge it into yours if you have one).
+   `hooks` and `permissions` blocks of `.claude/settings.json` (merge them into yours if you have
+   one). Edit the deny list to fit: this repo denies the whole Vercel server and `vercel *`
+   because it never deploys; a web project that deploys should switch those to `ask`.
 2. **Rewrite each persona's "In this repo" section**: where things live, how to run tests, the
    project's rules. Leave the rest of the persona alone; that's the reusable part. Delete personas
    you don't need (a project without a curriculum doesn't need the two curriculum agents).
@@ -95,13 +102,19 @@ guard should block it.
 
 1. **Plan in the cockpit.** Decide the pieces, which persona does each, and hand out any numbers
    (spec `012`, eval case `26`) in the prompt. Numbers taken by agents themselves collide.
-2. **Spawn builders in worktrees** (`isolation: "worktree"`), one piece each. Researchers,
-   designers and reviewers can share the main tree, since they write to separate folders.
-3. **Stay off the shared resource** while a builder needs it. The cockpit never stops, so if it
+2. **Commit first.** `git status --short` should be empty, including the `.aep`. A worktree is a
+   fresh checkout, so uncommitted changes (a CLAUDE.md edit, say) never reach it, and a
+   subagent's edits aren't covered by `/rewind`: the commit is the way back.
+3. **Spawn every persona that has Bash in a worktree** (`isolation: "worktree"`): skill-builder,
+   panel-builder, eval-engineer, spec-writer, reviewer. The ownership hook can't see a write made
+   through Bash; the merge check (`check-branch.mjs`) can, but only on a branch. Personas without
+   Bash (researchers, designers, design-reviewer) can share the main tree, since the hook covers
+   every write they can make.
+4. **Stay off the shared resource** while a builder needs it. The cockpit never stops, so if it
    takes the lock, every subagent waits the full 10 idle minutes.
-4. **Merge one branch at a time** with `/merge-worktree <branch> <persona>`. It stops on conflicts
+5. **Merge one branch at a time** with `/merge-worktree <branch> <persona>`. It stops on conflicts
    and on files outside the persona's row instead of guessing.
-5. **Write down time and quality** compared with doing it alone. That's what tells you whether the
+6. **Write down time and quality** compared with doing it alone. That's what tells you whether the
    team is worth it.
 
 ## Lessons so far
