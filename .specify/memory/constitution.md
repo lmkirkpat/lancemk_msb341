@@ -69,6 +69,9 @@ When work is split across agents (`decisions/007`):
 - Spec, decision and eval case numbers are assigned by the cockpit (the main session), not
   taken by agents working in parallel.
 - Only one agent at a time may drive the live After Effects project.
+- Where a tool can check these rules, a hook enforces them (`decisions/008`): file ownership
+  on writes, the After Effects lock, and no push or merge from subagents. A hook that can't
+  read its input blocks the call.
 
 **Rationale:** agents working in parallel collide on shared files, and a check written by the
 person it checks proves nothing. The eval baseline only counts if the builder couldn't change it.
@@ -99,4 +102,4 @@ editing this file, bumping the version (MAJOR: a principle removed or redefined;
 principle or section added or materially expanded; PATCH: wording), and updating the dates
 below. Every Spec Kit plan checks compliance before tasks are generated.
 
-**Version**: 1.2.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-10-19
+**Version**: 1.3.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-10-19

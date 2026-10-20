@@ -95,5 +95,7 @@ together with the After Effects lock hook and the rule for handing out numbers.
 - **If copying the team to the portfolio site takes more than rewriting each "In this repo"
   section**, **then** pull what had to change out of the general part of each persona.
 - **If a read-only reviewer changes a file**, **then** add a `PreToolUse` hook that blocks it.
+  *2026-10-19 (`decisions/008`):* ownership and the read-only rule are now enforced by a hook
+  before any violation, amending this signal and the "a builder edits eval files" one above.
 - **If the hand-offs make a parallel build slower than building it alone** (sprint 3 notes on
   time and quality), **then** cut back to the roles that actually ran in parallel.

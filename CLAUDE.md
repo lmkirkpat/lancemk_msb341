@@ -95,12 +95,17 @@ a brand new session act like a colleague who already knows what you are working 
   - **Agent team drafted (2026-10-19, `decisions/007`):** ten personas in `.claude/agents/`, each
     owning its own files, with the main session as the cockpit. Started from
     `ai-foundry-byu/agent-team-kit`, which handles keeping agents from colliding but has no
-    personas (`discovery/agent-team-kit-assessment.md`). Not yet run in parallel or audited.
+    personas (`discovery/agent-team-kit-assessment.md`). Not yet run in parallel.
+  - **Agent audit and guardrails (2026-10-19):** `/agent-audit` on the personas found 10 issues;
+    the prompt fixes are in (skill-builder lost `record_lesson`, Spec Kit gets the cockpit's
+    `--number`, subagents hand back instead of asking). `decisions/008`: our own hooks, keyed
+    on which agent is calling (hooks get `agent_type` and `agent_id`; subagents share the
+    cockpit's `session_id`, so the kit's locks can't tell them apart), plus the kit's
+    `merge-worktree` and worktree mode.
 - **Next steps:**
-  1. Sprint 3, agent team. Still to do: run `/agent-audit` on the personas; decide which kit
-     pieces to adopt (`decisions/008`), together with an After Effects lock hook (only one agent
-     drives AE at a time) and the rule that the cockpit hands out spec, decision and eval
-     numbers; split `mentor/tools.mjs` per skill before the parallel build; write the setup
+  1. Sprint 3, agent team. Still to do: build the `decisions/008` hooks (AE lock, ownership,
+     git guard), adopt `merge-worktree` with an ownership check at merge, and re-run the
+     agent-identity logging test before the first parallel run; split `mentor/tools.mjs` per skill before the parallel build; write the setup
      README; a template for the parallel-run notes on time and quality. Then the curriculum
      spec, which decides the 10 skills, before building them. Run `/overlap-audit` for each new
      skill (see "Edge cases where concepts overlap" below). Parallel agents share `SKILL.md`,
