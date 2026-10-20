@@ -51,7 +51,8 @@ a brand new session act like a colleague who already knows what you are working 
     ("I do, we do, you do": the mentor eases one pair, the learner eases the rest), and the
     learner record. Usage sessions are in `discovery/usage-notes/easing-slice.md`.
   - **Eval set** (`product/evals/easing/`, now 25 cases, about $12 per full run, no AE needed;
-    latest 25/25 on 2026-10-12, the new baseline after the agent audit): first baseline 14/16, then 15/16 (94%) after `SKILL.md` fixes. SC-006 (≥ 80%) passes. Every
+    latest 25/25 on 2026-10-19, the new baseline after the `mentor/tools/` split; 25/25 on
+    2026-10-12 after the agent audit): first baseline 14/16, then 15/16 (94%) after `SKILL.md` fixes. SC-006 (≥ 80%) passes. Every
     hard-rule check passed; the failures were about wording and honesty in the learner record.
   - **Panel decided** (`decisions/005`, amends 003): the AE panel drives headless Claude Code
     (`claude -p --resume`), so it reuses the skill and server unchanged and the evals stay valid.
@@ -109,9 +110,9 @@ a brand new session act like a colleague who already knows what you are working 
 - **Next steps:**
   1. Sprint 3, agent team. Done 2026-10-19: the `decisions/008` hooks are loaded in the cockpit
      (git guard blocked a probe live), and the agent-identity logging test re-ran clean (subagents
-     still carry `agent_type` and `agent_id`, and `SubagentStop` does too). Still to do: split
-     `mentor/tools.mjs` per skill before the parallel build; write the setup
-     README; a template for the parallel-run notes on time and quality. Then the curriculum
+     still carry `agent_type` and `agent_id`, and `SubagentStop` does too; re-run with
+     `node .claude/hooks/probe/identity.mjs`). Also done: `mentor/tools.mjs` split per skill into
+     `mentor/tools/`, and the setup README (`.claude/README.md`). Still to do: a template for the parallel-run notes on time and quality. Then the curriculum
      spec, which decides the 10 skills, before building them. Run `/overlap-audit` for each new
      skill (see "Edge cases where concepts overlap" below). Parallel agents share `SKILL.md`,
      the eval set, and `mentor/`, so isolate them (for example, worktrees).
@@ -164,7 +165,8 @@ a brand new session act like a colleague who already knows what you are working 
 - **Stack or tools:** `decisions/003`, amended by `decisions/005`:
   - `bridge/`: a forked CEP bridge (thin pipe into AE, no teaching logic). Changes from upstream
     are in `bridge/UPSTREAM.md`. CEP is retired, so expect a UXP rebuild after Nov 2026.
-  - `mentor/`: a Node MCP server (`ae-mentor`, registered in `.mcp.json`) with six narrow tools.
+  - `mentor/`: a Node MCP server (`ae-mentor`, registered in `.mcp.json`) with six narrow tools. Each skill's tools are their own file in `mentor/tools/`, found by
+    `index.mjs`; `common.mjs` holds the shared ones (frame, learner record).
     Node built-ins only. Unit tests: `cd mentor && npm test`.
   - `.claude/skills/ease-mentor/SKILL.md`: the teaching itself, run by Claude Code.
   - Learner record: local JSON files in `~/Library/Application Support/AEMentor/` (or

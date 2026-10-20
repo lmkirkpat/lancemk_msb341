@@ -44,7 +44,7 @@ test("table: builders don't own eval cases, and the eval engineer doesn't own sk
   assert.ok(!owns(a["skill-builder"], "product/evals/easing/cases/01-new-learner-opening.json"));
   assert.ok(!owns(a["panel-builder"], "product/evals/easing/cases/17-button-check-partial.json"));
   assert.ok(!owns(a["eval-engineer"], ".claude/skills/ease-mentor/SKILL.md"));
-  assert.ok(!owns(a["eval-engineer"], "mentor/tools.mjs"));
+  assert.ok(!owns(a["eval-engineer"], "mentor/tools/easing.mjs"));
   assert.ok(owns(a["eval-engineer"], "product/evals/easing/cases/26-new.json"));
   assert.ok(owns(a["skill-builder"], ".claude/skills/ease-mentor/SKILL.md"));
 });

@@ -8,7 +8,6 @@ import { LEARNER_FILE } from "../paths.mjs";
 import { MentorError } from "../errors.mjs";
 import { readJson } from "./json-file.mjs";
 
-const SKILLS = ["easing.basic"];
 const RESULTS = ["passed", "partial", "not_checked"];
 const TEXT_FIELDS = ["project", "comp", "attempted", "summary", "next"];
 
@@ -38,9 +37,10 @@ function isUnsafe(text) {
   return EMAIL.test(text) || PHONE.some((re) => re.test(text));
 }
 
-// Returns a clean LessonEntry (without date), or throws before anything is written.
-function validate(input) {
-  if (!SKILLS.includes(input.skill)) throw new Error(`skill must be one of: ${SKILLS.join(", ")}`);
+// Returns a clean LessonEntry (without date), or throws before anything is written. `skills` is
+// every skill ID the tool files declare (mentor/tools/index.mjs), so the store keeps no list.
+function validate(input, skills) {
+  if (!skills.includes(input.skill)) throw new Error(`skill must be one of: ${skills.join(", ")}`);
   if (!RESULTS.includes(input.result)) throw new Error(`result must be one of: ${RESULTS.join(", ")}`);
   if (typeof input.demo_used !== "boolean") throw new Error("demo_used must be true or false");
   for (const field of TEXT_FIELDS) {
@@ -57,8 +57,8 @@ export function readRecord() {
 
 // Appends the lesson and updates the skill's state. `learned` after one pass, and it stays learned:
 // a later partial is practice, not forgetting.
-export function recordLesson(input) {
-  const entry = { date: new Date().toISOString(), ...validate(input) };
+export function recordLesson(input, skills) {
+  const entry = { date: new Date().toISOString(), ...validate(input, skills) };
   const record = read();
   const prev = record.skills[entry.skill] || { status: "not_started", times_passed: 0 };
   const times_passed = prev.times_passed + (entry.result === "passed" ? 1 : 0);

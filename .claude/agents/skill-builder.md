@@ -64,8 +64,12 @@ and the tests that prove the tools are right. You build only what the spec asks 
   scripts in the product. `ae_run_script` is for building and checking, never for a lesson.
 - Code: `mentor/` (Node built-ins only; tests with `cd mentor && npm test`), skills in
   `.claude/skills/<name>/SKILL.md`, the bridge in `bridge/`, the panel in `panel/`.
-- Shared files: `mentor/tools.mjs` and `mentor/server.mjs` are edited by every skill. Keep your
-  change to them small and in one place, so merges stay easy.
+- Tools: a skill's tools go in their own file, `mentor/tools/<skill>.mjs`, exporting `TOOLS` and
+  `SKILLS` (its learner-record skill IDs, like `easing.basic`); `mentor/tools/index.mjs` finds
+  the file, so add yours and leave `index.mjs`, `common.mjs` and other skills' files alone. The
+  shared files still edited by every skill are `mentor/server.mjs` (its instructions name easing
+  only) and `mentor/lib/session.mjs`: keep any change to them small and in one place, and say in
+  your hand-back that you touched them.
 - Learner record: `AE_MENTOR_HOME` points tests at a temp folder. Never write to the real one.
   You don't have `record_lesson`: the live server writes the builder's real record, so memory is
   proven by unit tests and evals, which use a temp folder.

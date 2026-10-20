@@ -5,7 +5,7 @@
 
 import fs from "node:fs";
 import readline from "node:readline";
-import { TOOLS } from "./tools.mjs";
+import { TOOLS } from "./tools/index.mjs";
 import { CALLS_LOG } from "./paths.mjs";
 import { MentorError } from "./errors.mjs";
 

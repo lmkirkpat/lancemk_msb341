@@ -85,7 +85,7 @@ function validate(c) {
 // What a case's behavior depends on. --changed skips a case whose hash matches its last pass.
 const SHARED_INPUTS = [
   ".claude/skills/ease-mentor/SKILL.md",
-  "mentor/tools.mjs",
+  ...fs.readdirSync(path.join(REPO, "mentor", "tools")).map((f) => `mentor/tools/${f}`),
   "mentor/fixture.mjs",
   "mentor/server.mjs",
   "mentor/errors.mjs",

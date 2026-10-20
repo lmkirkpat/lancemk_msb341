@@ -9,6 +9,7 @@ import { tempHome } from "./helpers.mjs";
 const home = tempHome();
 const store = await import("../lib/learner-store.mjs");
 const FILE = path.join(home, "learner.json");
+const record = (e) => store.recordLesson(e, ["easing.basic"]);
 
 const entry = (over = {}) => ({
   skill: "easing.basic",
@@ -30,8 +31,8 @@ test("a missing file reads as an empty record, with its path", () => {
 
 test("recordLesson adds a date, appends, and writes a file you can read without tools", () => {
   const before = Date.now();
-  store.recordLesson(entry());
-  store.recordLesson(entry({ result: "passed" }));
+  record(entry());
+  record(entry({ result: "passed" }));
   const file = JSON.parse(fs.readFileSync(FILE, "utf8"));
   assert.equal(file.version, 1);
   assert.equal(file.lessons.length, 2);
@@ -41,17 +42,17 @@ test("recordLesson adds a date, appends, and writes a file you can read without 
 });
 
 test("skill state: partial → practicing, a pass → learned, and learned stays learned", () => {
-  let r = store.recordLesson(entry({ result: "partial", next: "Ease Scale" }));
+  let r = record(entry({ result: "partial", next: "Ease Scale" }));
   assert.equal(r.skill.status, "practicing");
   assert.equal(r.skill.times_passed, 0);
   assert.equal(r.skill.next, "Ease Scale");
   assert.equal(r.skill.last_practiced, r.entry.date);
 
-  r = store.recordLesson(entry({ result: "passed", next: "Try Bar" }));
+  r = record(entry({ result: "passed", next: "Try Bar" }));
   assert.equal(r.skill.status, "learned");
   assert.equal(r.skill.times_passed, 1);
 
-  r = store.recordLesson(entry({ result: "partial", next: "Review" }));
+  r = record(entry({ result: "partial", next: "Review" }));
   assert.equal(r.skill.status, "learned");
   assert.equal(r.skill.times_passed, 1);
   assert.equal(r.skill.next, "Review");
@@ -59,41 +60,41 @@ test("skill state: partial → practicing, a pass → learned, and learned stays
 });
 
 test("not_checked counts as practice, not a pass", () => {
-  const r = store.recordLesson(entry({ result: "not_checked" }));
+  const r = record(entry({ result: "not_checked" }));
   assert.equal(r.skill.status, "practicing");
   assert.equal(r.skill.times_passed, 0);
 });
 
 test("result and skill must be known values, and every field is required", () => {
-  assert.throws(() => store.recordLesson(entry({ result: "done" })), /result/);
-  assert.throws(() => store.recordLesson(entry({ skill: "easing.advanced" })), /skill/);
-  assert.throws(() => store.recordLesson(entry({ summary: undefined })), /summary/);
-  assert.throws(() => store.recordLesson(entry({ demo_used: "yes" })), /demo_used/);
+  assert.throws(() => record(entry({ result: "done" })), /result/);
+  assert.throws(() => record(entry({ skill: "easing.advanced" })), /skill/);
+  assert.throws(() => record(entry({ summary: undefined })), /summary/);
+  assert.throws(() => record(entry({ demo_used: "yes" })), /demo_used/);
   assert.equal(fs.existsSync(FILE), false, "nothing is written on a bad entry");
 });
 
 test("an email or phone number anywhere is refused with UNSAFE_RECORD", () => {
   for (const bad of ["Sent to someone@example.edu", "Call 801-555-0123", "Call (801) 555 0123", "+44 20 7946 0958"]) {
-    assert.throws(() => store.recordLesson(entry({ summary: bad })), { code: "UNSAFE_RECORD" }, bad);
-    assert.throws(() => store.recordLesson(entry({ comp: bad })), { code: "UNSAFE_RECORD" }, bad);
+    assert.throws(() => record(entry({ summary: bad })), { code: "UNSAFE_RECORD" }, bad);
+    assert.throws(() => record(entry({ comp: bad })), { code: "UNSAFE_RECORD" }, bad);
   }
   assert.equal(fs.existsSync(FILE), false);
 });
 
 test("timings, percentages and dates are not mistaken for phone numbers", () => {
-  store.recordLesson(entry({ summary: "Keys at 0.5 s, 1.25 s and 2.0 s; 33.33% influence; frames 12–48; 2026-10-05" }));
+  record(entry({ summary: "Keys at 0.5 s, 1.25 s and 2.0 s; 33.33% influence; frames 12–48; 2026-10-05" }));
   assert.equal(store.readRecord().lessons.length, 1);
 });
 
 test("there is no name field: fields outside LessonEntry are not stored", () => {
-  const r = store.recordLesson(entry({ name: "Learner", email: "x" }));
+  const r = record(entry({ name: "Learner", email: "x" }));
   assert.equal("name" in r.entry, false);
   assert.equal("email" in r.entry, false);
   assert.equal(JSON.stringify(store.readRecord()).includes("Learner"), false);
 });
 
 test("the store honors AE_MENTOR_HOME", () => {
-  store.recordLesson(entry());
+  record(entry());
   assert.ok(fs.existsSync(path.join(home, "learner.json")));
   assert.equal(store.readRecord().path, path.join(home, "learner.json"));
 });
@@ -105,14 +106,14 @@ test("an unreadable learner.json is set aside unchanged, and new notes start fre
   const aside = fs.readdirSync(home).filter((f) => f.startsWith("learner.json.unreadable-"));
   assert.equal(aside.length, 1);
   assert.equal(fs.readFileSync(path.join(home, aside[0]), "utf8"), broken, "the old history is kept as it was");
-  store.recordLesson(entry());
+  record(entry());
   assert.equal(store.readRecord().lessons.length, 1);
   for (const f of aside) fs.rmSync(path.join(home, f));
 });
 
 test("recordLesson on a broken file refuses before writing anything", () => {
   fs.writeFileSync(FILE, "not json");
-  assert.throws(() => store.recordLesson(entry()), { code: "RECORD_UNREADABLE" });
+  assert.throws(() => record(entry()), { code: "RECORD_UNREADABLE" });
   assert.equal(fs.existsSync(FILE), false, "moved aside, not overwritten");
   for (const f of fs.readdirSync(home).filter((f) => f.startsWith("learner.json.unreadable-"))) fs.rmSync(path.join(home, f));
 });

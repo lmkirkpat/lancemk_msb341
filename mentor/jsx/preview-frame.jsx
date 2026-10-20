@@ -1,6 +1,6 @@
 // Renders one frame of the active comp to a PNG, adapted from upstream ae_preview_frame. ES3
 // function body. ARGS = { file, time } (time in seconds, or null for the current time indicator).
-// saveFrameToPng finishes writing after it returns; mentor/tools.mjs waits for a stable file size.
+// saveFrameToPng finishes writing after it returns; mentor/tools/common.mjs waits for a stable file size.
 
 var comp = app.project.activeItem;
 if (!(comp && comp instanceof CompItem)) throw new Error("NO_ACTIVE_COMP: Open a composition first.");

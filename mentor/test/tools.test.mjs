@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { fixture, tempHome } from "./helpers.mjs";
 
 tempHome();
-const { TOOLS } = await import("../tools.mjs");
+const { TOOLS } = await import("../tools/index.mjs");
 const session = await import("../lib/session.mjs");
 const tool = (name) => TOOLS.find((t) => t.name === name).handler;
 

@@ -24,7 +24,7 @@ node product/evals/easing/run.mjs --judge-always     # judge even after a failed
 **When to use which:**
 - **While editing `SKILL.md` or the tools:** `--only` for the cases you're working on, then
   `--changed` to catch side effects without paying for unchanged cases. A case's hash covers
-  `SKILL.md`, `mentor/tools.mjs`, `mentor/fixture.mjs`, `mentor/server.mjs`, `mentor/lib/*`,
+  `SKILL.md`, `mentor/tools/*`, `mentor/fixture.mjs`, `mentor/server.mjs`, `mentor/lib/*`,
   `rubric.md`, the case file, its learner record and its fixtures.
 - **Full run required:** before committing a change to `SKILL.md` or the tools, and for the
   baseline. Commit its results file. `--changed` never replaces a full run, because a model
