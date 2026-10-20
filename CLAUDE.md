@@ -103,7 +103,9 @@ a brand new session act like a colleague who already knows what you are working 
     cockpit's `session_id`, so the kit's locks can't tell them apart), plus the kit's
     `merge-worktree` and worktree mode. Built the same day: `.claude/hooks/` (AE lock, ownership,
     git guard, `check-branch.mjs`; 24 tests) and `/merge-worktree`. Ownership and the git guard
-    were checked live in a headless run; the AE lock only in unit tests so far.
+    were checked live in a headless run; the AE lock too on 2026-10-19 (a subagent got AE and
+    released it on stop, a second was blocked while the cockpit held it). The cockpit never
+    stops, so it stays off AE while a builder needs it.
 - **Next steps:**
   1. Sprint 3, agent team. Done 2026-10-19: the `decisions/008` hooks are loaded in the cockpit
      (git guard blocked a probe live), and the agent-identity logging test re-ran clean (subagents

@@ -122,6 +122,13 @@ and `ownership.json`. The hooks themselves shouldn't change.
 - **If the lock is often held by a finished agent** (waits near 10 minutes, counted in the
   parallel-run notes), **then** test `SubagentStop`; if it can't release by `agent_id`, move to
   the cockpit granting the lock.
+  - *2026-10-19, live test (headless, AE 26.5 open on Mentor Practice, `ae_status` only, a
+    `PostToolUse` logger reading the lock file, $0.56):* a skill-builder subagent got AE and
+    held the lock under its `agent_id`; the lock was gone by the time its `Agent` call returned
+    (released on `SubagentStop`); the cockpit then got AE and held it as `main`; a second
+    skill-builder was blocked with the "cockpit is driving After Effects (last call 4s ago)"
+    message. One gap: the cockpit never stops, so once it touches AE every subagent waits the
+    full 10 idle minutes. During parallel runs, the cockpit stays off AE while a builder needs it.
 - **If two new files ever share a number**, **then** add the number check as a hook.
 - **If someone copying the team needs separate terminal sessions** (for example, a second person
   working at the same time), **then** revisit the launchers and team memory, and re-test that the
