@@ -1,0 +1,23 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__after-effects__.*|mcp__ae-mentor__.*",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/ae-lock.mjs\"" }]
+      },
+      {
+        "matcher": "Write|Edit|NotebookEdit",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/ownership.mjs\"" }]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/git-guard.mjs\"" }]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/ae-lock.mjs\" --release" }]
+      }
+    ]
+  }
+}

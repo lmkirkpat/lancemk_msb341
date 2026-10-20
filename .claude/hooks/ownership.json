@@ -1,0 +1,24 @@
+{
+  "about": "Which files each persona may write, from decisions/007. Paths are relative to the repo root. Patterns apply in order and the last match wins; ! takes a path back out. A persona with an empty list writes nothing; a persona that isn't listed writes nothing. The cockpit (main session) isn't restricted. Copying the team to another project means rewriting this file and each persona's 'In this repo' section.",
+  "agents": {
+    "curriculum-researcher": ["discovery/curriculum-research/**"],
+    "curriculum-designer": ["specs/*/teaching-design.md", "specs/*/curriculum.md"],
+    "spec-writer": [
+      "specs/**",
+      "!specs/*/teaching-design.md",
+      "!specs/*/curriculum.md",
+      ".specify/feature.json"
+    ],
+    "ui-designer": ["product/mockups/**"],
+    "design-reviewer": [],
+    "skill-builder": ["mentor/**", "bridge/**", ".claude/skills/*-mentor/**", "specs/*/tasks.md"],
+    "panel-builder": ["panel/**", "specs/*/tasks.md"],
+    "eval-engineer": ["product/evals/**"],
+    "reviewer": [],
+    "user-researcher": [
+      "discovery/**",
+      "!discovery/curriculum-research/**",
+      "!discovery/*.aep"
+    ]
+  }
+}

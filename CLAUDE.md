@@ -101,11 +101,13 @@ a brand new session act like a colleague who already knows what you are working 
     `--number`, subagents hand back instead of asking). `decisions/008`: our own hooks, keyed
     on which agent is calling (hooks get `agent_type` and `agent_id`; subagents share the
     cockpit's `session_id`, so the kit's locks can't tell them apart), plus the kit's
-    `merge-worktree` and worktree mode.
+    `merge-worktree` and worktree mode. Built the same day: `.claude/hooks/` (AE lock, ownership,
+    git guard, `check-branch.mjs`; 24 tests) and `/merge-worktree`. Ownership and the git guard
+    were checked live in a headless run; the AE lock only in unit tests so far.
 - **Next steps:**
-  1. Sprint 3, agent team. Still to do: build the `decisions/008` hooks (AE lock, ownership,
-     git guard), adopt `merge-worktree` with an ownership check at merge, and re-run the
-     agent-identity logging test before the first parallel run; split `mentor/tools.mjs` per skill before the parallel build; write the setup
+  1. Sprint 3, agent team. Still to do: restart Claude Code (or approve in `/hooks`) so the
+     `decisions/008` hooks load here, and re-run the agent-identity logging test before the first
+     parallel run; split `mentor/tools.mjs` per skill before the parallel build; write the setup
      README; a template for the parallel-run notes on time and quality. Then the curriculum
      spec, which decides the 10 skills, before building them. Run `/overlap-audit` for each new
      skill (see "Edge cases where concepts overlap" below). Parallel agents share `SKILL.md`,
@@ -171,6 +173,9 @@ a brand new session act like a colleague who already knows what you are working 
     edits what it checks. The main session is the cockpit: it sends work out, assigns numbers,
     and merges. Project details are in each persona's "In this repo" section, so copying an
     agent to another project means rewriting that section.
+  - `.claude/hooks/` (`decisions/008`, wired in `.claude/settings.json`): the AE lock, file
+    ownership (`ownership.json`, mirrors 007's table) and the git guard, keyed on the calling
+    subagent. Tests: `node --test .claude/hooks/test/`. Merge agent branches with `/merge-worktree`.
 - **How work ships:** TBD
 - **Testing and style:** AI features get an eval set in `product/evals/`.
 - **Edge cases where concepts overlap:** when adding a teaching skill, list in its spec where

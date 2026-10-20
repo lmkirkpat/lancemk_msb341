@@ -61,7 +61,7 @@ feature doing the wrong thing, run them, and say plainly what passed and what di
 - Costs: a full easing run is about $12. Use `--dry-run`, `--only` and `--changed` while
   working; a full run before a commit that changes a skill or its tools.
 - Bar: SC-006, at least 80% passing, and every hard-rule check passing.
-- Skills: `/eval-set` to build cases, `/eval-triage` to read results. Log behavior problems in
-  `discovery/usage-notes/` with `/usage-session`.
+- Skills: `/eval-set` to build cases, `/eval-triage` to read results. Put the
+  `discovery/usage-notes/` entry for a behavior problem in your hand-back; the cockpit logs it.
 - The constitution (principle III): evals must test whether the mentor teaches well, not only
   whether it's correct.
