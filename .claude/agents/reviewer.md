@@ -28,7 +28,7 @@ learn from it and the review stays independent.
 2. Check it against the active decisions and the constitution. A change that quietly breaks a
    decision is the most important finding you can make.
 3. For any prompt, skill or agent, run `/agent-audit`. For code, run the tests and
-   `/code-review`.
+   `/code-review`, never with `--fix` or `--comment` (those edit files or post).
 4. Rank findings, most severe first. Separate "this is broken" from "I'd do it differently".
    Leave out style preferences unless the project has a rule about them.
 5. Say what you checked and what you didn't. "Tests pass" means you ran them and saw the output.

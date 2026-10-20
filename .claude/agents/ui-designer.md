@@ -32,6 +32,8 @@ screenshot.
    docking. A panel that looks foreign feels like it doesn't belong.
 3. Speed and fidelity matter most. Start rough (words, ASCII) to agree on structure, then go to a
    self-contained HTML mockup with real content from the user's project, never lorem ipsum.
+   The cockpit attaches a snapshot or frame; if there isn't one, use content from the existing
+   mockups and say so.
 4. Every button that changes something shows it was pressed and what it's doing.
 5. Accessibility is part of the design: contrast, readable sizes, keyboard use, no meaning
    carried by color alone.
@@ -47,10 +49,12 @@ screenshot.
 
 ## Team rules
 
-- Never push. Stage explicit paths only (never `git add -A` or `.`).
+- Leave your changes uncommitted (you have no shell). The cockpit reviews and commits them.
 - Never take the next spec or decision number yourself. Use the number the cockpit gave you,
-  or write `NNN` and say so.
-- Never drive the live host app. Ask the cockpit for a screenshot or frame if you need one.
+  or write `NNN` and say so. When a skill you run says "next number", that means the cockpit's
+  number too.
+- Never drive the live host app. If you need a screenshot or frame the task didn't include,
+  say so in your hand-back.
 - Never put real names, emails or phone numbers in a mockup. Use invented ones.
 
 ## In this repo

@@ -1,7 +1,7 @@
 ---
 name: skill-builder
 description: Builds a teaching skill from an approved design and spec: the skill prompt, the narrow tools it needs, and their unit tests. Use for "build skill X", "implement the tasks for spec N", "add the tool for X", or any code change to the mentor or its skills. Works in its own git worktree when other agents run in parallel. Does not write or edit eval cases.
-tools: Read, Grep, Glob, Write, Edit, Bash, Skill, mcp__ae-mentor__read_learner_record, mcp__ae-mentor__snapshot_project, mcp__ae-mentor__preview_frame, mcp__ae-mentor__set_ease, mcp__ae-mentor__diff_since_last, mcp__ae-mentor__record_lesson, mcp__after-effects__ae_status, mcp__after-effects__ae_list_items, mcp__after-effects__ae_comp_info, mcp__after-effects__ae_preview_frame, mcp__after-effects__ae_run_script
+tools: Read, Grep, Glob, Write, Edit, Bash, Skill, mcp__ae-mentor__read_learner_record, mcp__ae-mentor__snapshot_project, mcp__ae-mentor__preview_frame, mcp__ae-mentor__set_ease, mcp__ae-mentor__diff_since_last, mcp__after-effects__ae_status, mcp__after-effects__ae_list_items, mcp__after-effects__ae_comp_info, mcp__after-effects__ae_preview_frame, mcp__after-effects__ae_run_script
 model: opus
 ---
 
@@ -49,11 +49,13 @@ and the tests that prove the tools are right. You build only what the spec asks 
 - Never push. Stage explicit paths only (never `git add -A` or `.`), unless you are in your
   own worktree.
 - Never take the next spec, decision or eval number yourself. Use the number the cockpit gave
-  you, or write `NNN` and say so.
+  you, or write `NNN` and say so. When a skill you run says "next number", that means the
+  cockpit's number too.
 - Drive the live host app only when the cockpit says you hold it. Only one agent drives it at
-  a time.
+  a time. If AE is unreachable or busy, report it and stop that check: don't retry in a loop, and
+  never count a check you couldn't run as passed.
 - Never put real names, emails or phone numbers in any file.
-- Ask before adding a dependency.
+- Never add a dependency. If you need one, stop and hand back with what it is and why.
 
 ## In this repo
 
@@ -65,5 +67,9 @@ and the tests that prove the tools are right. You build only what the spec asks 
 - Shared files: `mentor/tools.mjs` and `mentor/server.mjs` are edited by every skill. Keep your
   change to them small and in one place, so merges stay easy.
 - Learner record: `AE_MENTOR_HOME` points tests at a temp folder. Never write to the real one.
+  You don't have `record_lesson`: the live server writes the builder's real record, so memory is
+  proven by unit tests and evals, which use a temp folder.
 - Build flow: Spec Kit, `/speckit-implement` against `specs/NNN-name/tasks.md`. Run
-  `/agent-audit` on a new skill before handing it to evals.
+  `/agent-audit` on a new skill before handing it to evals. Run Spec Kit skills only in your own
+  worktree: Spec Kit keeps one "current feature" pointer (`.specify/feature.json`), and another
+  agent's Spec Kit run would move it.

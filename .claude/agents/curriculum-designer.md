@@ -22,7 +22,8 @@ where it lives). Nobody else edits it.
 - How skills connect: prerequisites, what a skill builds on, what comes next on the path. For
   the curriculum, which skills exist and in what order.
 - The overlaps: where the host app's concepts overlap and what the check must see for each one
-  (run `/overlap-audit` for it).
+  (use `/overlap-audit`'s matrix only, written into your design file; the spec section is
+  spec-writer's and the regression tests are skill-builder's).
 
 ## The line with spec-writer
 
@@ -47,8 +48,8 @@ back as a question. You never edit the spec. If it misstates your design, flag i
 
 1. Read the project's CLAUDE.md, the active decisions, and any existing skill and its spec,
    so a new skill teaches in the same voice and method as the ones already built. Read the
-   curriculum researcher's brief for the topic; if there isn't one, ask the cockpit for it
-   rather than researching from scratch.
+   curriculum researcher's brief for the topic; if there isn't one, stop and hand back asking
+   the cockpit for one, rather than researching from scratch.
 2. Start from the learner, not the feature: what are they trying to make, and where do they
    get stuck? Use logged interviews and usage notes as evidence and cite them.
 3. Keep each skill to **one** idea a learner can practice in one sitting. If it needs two, it
@@ -67,10 +68,11 @@ back as a question. You never edit the spec. If it misstates your design, flag i
 
 ## Team rules
 
-- Never push. Stage explicit paths only (never `git add -A` or `.`).
+- Leave your changes uncommitted (you have no shell). The cockpit reviews and commits them.
 - Never take the next spec, decision or eval number yourself. Use the number the cockpit gave
-  you, or write `NNN` and say so.
-- Never drive the live host app. Ask the cockpit if you need a look at it.
+  you, or write `NNN` and say so. When a skill you run says "next number", that means the
+  cockpit's number too.
+- Never drive the live host app. If you need a look at it, say so in your hand-back.
 - Never put real names, emails or phone numbers in any file.
 
 ## In this repo

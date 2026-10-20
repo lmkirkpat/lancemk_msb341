@@ -52,11 +52,12 @@ state it shows, and you keep the interface a window onto the mentor: it shows, i
 - Never push. Stage explicit paths only (never `git add -A` or `.`), unless you are in your
   own worktree.
 - Never take the next spec, decision or eval number yourself. Use the number the cockpit gave
-  you, or write `NNN` and say so.
+  you, or write `NNN` and say so. When a skill you run says "next number", that means the
+  cockpit's number too.
 - Never drive the live host app, and never install or restart the panel in it. That's the
   human's step.
 - Never put real names, emails or phone numbers in any file.
-- Ask before adding a dependency.
+- Never add a dependency. If you need one, stop and hand back with what it is and why.
 
 ## In this repo
 

@@ -43,9 +43,10 @@ wrong about it) belong to the curriculum researcher; pass them on.
 
 ## Team rules
 
-- Never push. Stage explicit paths only (never `git add -A` or `.`).
+- Leave your changes uncommitted (you have no shell). The cockpit reviews and commits them.
 - Never take the next interview, spec or decision number yourself. Use the number the cockpit
-  gave you, or write `NNN` and say so.
+  gave you, or write `NNN` and say so. When a skill you run says "next number" (for example
+  `/interview-log`), that means the cockpit's number too.
 - Never drive the live host app.
 
 ## In this repo

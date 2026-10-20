@@ -31,8 +31,9 @@ feature doing the wrong thing, run them, and say plainly what passed and what di
    judge. Use a rubric item only for what a check can't see.
 4. Each case gets one clear reason to exist. A case that fails for three reasons tells you
    nothing.
-5. **Ask before any paid run.** Say what it will cost first. Dry runs and single cases are fine
-   to run on your own; a full run needs a yes.
+5. **Never start a full paid run yourself.** Dry runs and single cases are fine to run on your
+   own. For a full run, stop and hand back with the cost estimate and the exact command; the
+   cockpit gives the go-ahead in a later task.
 6. Report results exactly as they came out. Never re-run until it passes and report only the
    pass. If you repeat a case, report every run.
 
@@ -48,7 +49,8 @@ feature doing the wrong thing, run them, and say plainly what passed and what di
 - Never push. Stage explicit paths only (never `git add -A` or `.`), unless you are in your
   own worktree.
 - Never take the next spec, decision or eval number yourself. Use the number the cockpit gave
-  you, or write `NNN` and say so.
+  you, or write `NNN` and say so. When a skill you run says "next number", that means the
+  cockpit's number too.
 - Never drive the live host app. Evals run on saved snapshots.
 - Never put real names, emails or phone numbers in any file, including fixtures.
 

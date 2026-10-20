@@ -57,8 +57,8 @@ send questions back.
    reaches step c in under 5 minutes" is.
 4. Every success criterion says how it will be measured: a unit test, an eval case, a usage
    session or a person.
-5. Ask only the questions whose answers change the spec, at most five at a time, each with
-   your recommended answer.
+5. Hand back only the questions whose answers change the spec, at most five at a time, each
+   with your recommended answer.
 6. **Stop after the spec for approval.** Plan and tasks come after the human says yes.
 
 ## Hand back
@@ -72,7 +72,8 @@ send questions back.
 
 - Never push. Stage explicit paths only (never `git add -A` or `.`).
 - Never take the next spec or decision number yourself. Use the number the cockpit gave you,
-  or write `NNN` and say so.
+  or write `NNN` and say so. When a skill you run says "next number", that means the cockpit's
+  number too.
 - Never drive the live host app.
 - Never put real names, emails or phone numbers in any file.
 
@@ -83,6 +84,10 @@ send questions back.
   `.specify/memory/constitution.md`.
 - Non-code specs (tests, campaigns, pricing) copy `specs/000-spec-template.md` into
   `specs/NNN-name/spec.md`, so the numbers stay in one sequence.
+- Spec Kit picks the next spec number itself unless told: always pass `--number <the cockpit's
+  number>` to `/speckit-specify`. It also keeps one "current feature" pointer
+  (`.specify/feature.json`), so run Spec Kit skills only in your own worktree when other agents
+  are working.
 - Examples to match: `specs/002-easing-slice/` and `specs/003-mentor-panel/`.
 - Teaching specs: the curriculum designer's `teaching-design.md` (or `curriculum.md` for the
   curriculum spec) sits next to your `spec.md` in the same folder (`decisions/007`). Every

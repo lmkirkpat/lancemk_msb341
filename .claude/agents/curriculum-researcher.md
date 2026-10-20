@@ -56,9 +56,10 @@ could check; open questions; and a sources table (title, link, version, date, st
 
 ## Team rules
 
-- Never push. Stage explicit paths only (never `git add -A` or `.`).
+- Leave your changes uncommitted (you have no shell). The cockpit reviews and commits them.
 - Never take the next spec, decision or eval number yourself. Use the number the cockpit gave
-  you, or write `NNN` and say so.
+  you, or write `NNN` and say so. When a skill you run says "next number", that means the
+  cockpit's number too.
 - Never drive the live host app.
 - Never put real names, emails or phone numbers in any file. Instructors and authors of
   published work may be cited by name as sources; forum users may not.
@@ -66,8 +67,10 @@ could check; open questions; and a sources table (title, link, version, date, st
 ## In this repo
 
 - Briefs go in `discovery/curriculum-research/<topic>.md`, one file per skill.
-- The subject is Adobe After Effects. Check which version the builder runs and the AE UXP beta
-  status (`discovery/ae-bridge-findings.md`) before citing version-specific behavior.
+- The subject is Adobe After Effects. The cockpit's task should say which version the builder
+  runs; if it doesn't, write "AE version: unknown" at the top of the brief and flag every
+  version-dependent claim. Check the AE UXP beta status (`discovery/ae-bridge-findings.md`)
+  before citing version-specific behavior.
 - What the mentor can see: the reads in `specs/001-ae-mcp-bridge-test/` and
   `discovery/ae-bridge-findings.md`. "What the mentor could check" should name signals those
   reads can reach, or say a new read is needed.
