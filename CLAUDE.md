@@ -24,10 +24,15 @@ a brand new session act like a colleague who already knows what you are working 
 
 ## Current state
 
-- **This sprint's goal:** Sprint 2 (`sprints/sprint-2-plan.md`): spec the product, test the
-  MCP bridge, decide the architecture (`decisions/003`), build a working slice on one After
-  Effects skill, and run 3 target-market interviews. **Raised 2026-10-05:** also a rudimentary
-  mentor panel inside AE that runs one easing lesson start to finish and shows memory.
+- **This sprint's goal:** Sprint 3 (`sprints/sprint-3-plan.md`, 2026-10-13 to 2026-10-26):
+  build a team of subagents with personas I can reuse on future projects, so building,
+  curriculum, and evals can run in parallel. Use them to build 10 new After Effects teaching
+  skills beyond easing (each run as a live lesson on my comp, with eval cases). Use them to write
+  specs for the expanded curriculum, diagnostic tools, an installer, and a UI overhaul.
+  Done also needs a setup README so someone else can copy the agents, proof they carry over
+  (used to build my portfolio website), and one piece of work built by several agents in
+  parallel, with notes on time and quality. The aim is to build faster now that the idea is
+  validated and the MVP works.
 - **Progress so far:**
   - Narrowed to creative workflows (`decisions/001`), then chose the AI creative mentor
     (`decisions/002`).
@@ -75,33 +80,45 @@ a brand new session act like a colleague who already knows what you are working 
     plan is to close it in sprint 3 (more skills, then diagnosis and recommended paths), so
     what tells the mentor apart is depth, restraint, and a focus on teaching, plus memory and
     practice.
+  - **Agent audit (2026-10-12):** the two small fixes from `discovery/usage-notes/mentor-panel.md`
+    › To fix later (unreadable `learner.json`, "Must call diff first.") are done, plus:
+    `record_lesson` checks results against the session, an empty focus can't pass, and the panel
+    and evals run the mentor from a runtime folder outside the repo (`panel/lib/runtime.js`), so
+    this file and my memory never reach a learner.
+  - **Spec 003 shipped 2026-10-12:** continue a lesson (T028–T030), edge cases 10/10 (T033), and
+    T034 (SC-004 36/36 turns ≤ 10 s, $0.38 per lesson; SC-008: the panel's check list next to the
+    comp made it easier to follow, and I didn't reach for Adobe's assistant). Builder-only
+    evidence, so it needs a target-market learner before it counts for belief 7.
+  - **Sprint 2 closed 2026-10-12** (`sprints/sprint-2-review.md`): every "done looks like" item
+    checked. Axis tags so far: Discovery (sprint 1) and AI Systems (sprint 2). Not yet touched:
+    Agentic Workflow, Design, Application Architecture, and Launch and Learn (I need 5 of 6).
+  - **Agent team drafted (2026-10-19, `decisions/007`):** ten personas in `.claude/agents/`, each
+    owning its own files, with the main session as the cockpit. Started from
+    `ai-foundry-byu/agent-team-kit`, which handles keeping agents from colliding but has no
+    personas (`discovery/agent-team-kit-assessment.md`). Not yet run in parallel or audited.
 - **Next steps:**
-  1. Interviews done for sprint 2. Gaps 008 left for the next ones: learn vs. done (section 5),
-     which Adobe AI people mean (generative fill vs. the assistant), whether steps match their
-     version (belief 16), and referrals.
-  2. Close sprint 2: `/sprint-review` writes `sprints/sprint-2-review.md`. Every other "done
-     looks like" item is checked.
-  3. Sprint 3 (plan with `/sprint-plan`): more skills for the mentor first, then diagnosis and
-     recommended paths. **Bring these two caveats into the plan** (from the 2026-10-08 Adobe
+  1. Sprint 3, agent team. Still to do: run `/agent-audit` on the personas; decide which kit
+     pieces to adopt (`decisions/008`), together with an After Effects lock hook (only one agent
+     drives AE at a time) and the rule that the cockpit hands out spec, decision and eval
+     numbers; split `mentor/tools.mjs` per skill before the parallel build; write the setup
+     README; a template for the parallel-run notes on time and quality. Then the curriculum
+     spec, which decides the 10 skills, before building them. Run `/overlap-audit` for each new
+     skill (see "Edge cases where concepts overlap" below). Parallel agents share `SKILL.md`,
+     the eval set, and `mentor/`, so isolate them (for example, worktrees).
+  2. Carry these two caveats into the diagnosis and curriculum specs (from the 2026-10-08 Adobe
      side-by-side):
      - Diagnosis is its own capability, not the last step of adding skills. Adobe's answer
        came from reading the whole comp (equal durations, stacked parent motion, dead time),
        which per-skill, per-pair checks won't produce. Give it its own spec, and consider a
-       light "what's wrong here" opening before skill 3 or 4, since belief 1 and interview 007
-       say finding what broke is the biggest pain.
+       light "what's wrong here" opening early, since belief 1 and interview 007 say finding
+       what broke is the biggest pain.
      - Restraint and a teaching focus are product choices Adobe could copy with a mode switch
        (the `decisions/002` trigger). The harder-to-copy parts are depth (per-pair checks Adobe
-       can't do today) and memory and practice across sessions. Keep those in the plan's "why".
-     The two small fixes from `discovery/usage-notes/mentor-panel.md` › To fix later (unreadable
-     `learner.json`, "Must call diff first.") were done 2026-10-12 in the `/agent-audit` pass,
-     along with: `record_lesson` checks results against the session, an empty focus can't pass,
-     and the panel and evals now run the mentor from a runtime folder outside the repo
-     (`panel/lib/runtime.js`), so this file and my memory never reach a learner.
-  4. Spec 003 shipped 2026-10-12: continue a lesson (T028–T030), edge cases 10/10 (T033), and
-     T034 (SC-004 36/36 turns ≤ 10 s, $0.38 per lesson; SC-008: the panel's check list next to the
-     comp made it easier to follow, and I didn't reach for Adobe's assistant). Builder-only
-     evidence, so it needs a target-market learner before it counts for belief 7.
-  5. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
+       can't do today) and memory and practice across sessions. Keep those in each spec's "why".
+  3. Gaps 008 left for the next interviews: learn vs. done (section 5), which Adobe AI people
+     mean (generative fill vs. the assistant), whether steps match their version (belief 16),
+     and referrals. A target-market learner on the panel is still needed for belief 7.
+  4. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
 - **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
   `discovery/Claude AE Tutor Test.aep` (the Mentor Practice comp). Setup and checks are in
   `specs/002-easing-slice/quickstart.md`. Panel: `bash panel/install.sh`, restart AE, and
@@ -124,6 +141,9 @@ a brand new session act like a colleague who already knows what you are working 
     `/speckit-plan` → `/speckit-tasks` → `/speckit-implement`, which add `plan.md` and
     `tasks.md` to the same folder. Project rules for it are in `.specify/memory/constitution.md`.
   - **Non-code specs** (tests, campaigns, pricing) copy `specs/000-spec-template.md` instead.
+  - **Teaching specs** have two files: the curriculum designer's `teaching-design.md` (what is
+    taught; `curriculum.md` for the curriculum spec) and the spec writer's `spec.md`, which
+    links to it rather than copying it (`decisions/007`).
 - Meaningful choices get a numbered record in `decisions/`, written when the choice is made,
   including what was rejected and why.
 - Sprint plans and reviews live in `sprints/`. The plan is committed on day one.
@@ -141,6 +161,11 @@ a brand new session act like a colleague who already knows what you are working 
     `AE_MENTOR_HOME`, which tests and evals set to a temp folder), never in the repo.
   - `panel/`: the CEP panel, which spawns headless Claude Code (`decisions/005`, option B1)
     and only displays. Its tests are in `panel/test/`.
+  - `.claude/agents/`: the agent team (`decisions/007`). Each persona owns its own files (the
+    table in 007), and anyone checking work (reviewer, design-reviewer, eval-engineer) never
+    edits what it checks. The main session is the cockpit: it sends work out, assigns numbers,
+    and merges. Project details are in each persona's "In this repo" section, so copying an
+    agent to another project means rewriting that section.
 - **How work ships:** TBD
 - **Testing and style:** AI features get an eval set in `product/evals/`.
 - **Edge cases where concepts overlap:** when adding a teaching skill, list in its spec where
@@ -157,5 +182,8 @@ a brand new session act like a colleague who already knows what you are working 
 
 ## Voice
 
-Writing other people read (product copy, marketing, memos) sounds like: [2 or 3 adjectives,
-plus one example line]
+Writing other people read (product copy, marketing, memos) sounds like: warm, playful, and
+encouraging, like a friend a few steps ahead of you in the studio. Use creative-tool language,
+and poke fun at the struggle, never at the learner. Example line: "Undo the tutorial spiral."
+This is for product copy and marketing only. The mentor's in-lesson voice lives in `SKILL.md`
+and is covered by the eval set.

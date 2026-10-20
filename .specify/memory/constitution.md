@@ -58,6 +58,21 @@ usability findings, and user data MUST be anonymized.
 **Rationale:** the biggest open risk is whether the product is worth using at all, so effort
 goes to reaching that test, and the builder stays in control of the repo.
 
+### VI. One Owner per File, Independent Checks
+
+When work is split across agents (`decisions/007`):
+
+- Each file or folder MUST have one owning agent, listed in `decisions/007`. Other agents
+  MUST NOT edit it; they send questions or proposed changes to its owner.
+- Whoever checks work (reviewer, design-reviewer, eval-engineer) MUST NOT be the one who made
+  it. A builder MUST NOT write or edit the eval cases that test its work.
+- Spec, decision and eval case numbers are assigned by the cockpit (the main session), not
+  taken by agents working in parallel.
+- Only one agent at a time may drive the live After Effects project.
+
+**Rationale:** agents working in parallel collide on shared files, and a check written by the
+person it checks proves nothing. The eval baseline only counts if the builder couldn't change it.
+
 ## Work in the Repo
 
 - Non-code work (interviews, experiments, pricing models, usability findings) is committed as
@@ -70,7 +85,10 @@ goes to reaching that test, and the builder stays in control of the repo.
 - Build work: `/speckit-specify` → optional `/speckit-clarify` → `/speckit-plan` →
   `/speckit-tasks` → optional `/speckit-analyze` → `/speckit-implement`.
 - Non-code work: copy `specs/000-spec-template.md` into the next numbered folder.
-- Each plan's constitution check MUST confirm Principles I–V, and list any active decision the
+- Teaching specs: the curriculum designer's `teaching-design.md` (or `curriculum.md`) sits next
+  to `spec.md`. The spec links to it and turns it into requirements; it MUST NOT restate or
+  change what is taught.
+- Each plan's constitution check MUST confirm Principles I–VI, and list any active decision the
   plan depends on.
 
 ## Governance
@@ -81,4 +99,4 @@ editing this file, bumping the version (MAJOR: a principle removed or redefined;
 principle or section added or materially expanded; PATCH: wording), and updating the dates
 below. Every Spec Kit plan checks compliance before tasks are generated.
 
-**Version**: 1.1.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-10-05
+**Version**: 1.2.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-10-19
