@@ -5,6 +5,7 @@
 // clusters(), spec 004 FR-016); this file only applies spec 004 FR-027's floor to them (FR-002).
 // Raw-key reads (other changes, per-dimension shifts, keys outside the comp) are offset-keys.mjs.
 
+import { needsEase, segmentState } from "./analyze.mjs";
 import { clusters, timing } from "./timing.mjs";
 import { MentorError, registerErrors } from "../errors.mjs";
 import { dimensionShifts, isMoved, matchLayer, movedApart, otherChanges, outOfComp } from "./offset-keys.mjs";
@@ -275,11 +276,20 @@ function frameTogether(group, t) {
   return Math.round(Math.round(mid * fps) / fps * 1000) / 1000;
 }
 
-const publicMember = (m) => {
+// Whether a member still has a pair that's linear at either end (FR-018: said once at "done" when
+// easing isn't learned; never graded here). Easing's own pair states, not a copy.
+function hasLinearPairs(snapshot, m) {
+  const sl = snapLayerOf(snapshot, m.layer_index);
+  const props = sl ? sl.properties.filter((p) => !p.expression_enabled && (!m.paths || m.paths.includes(p.path))) : [];
+  return props.some((p) => p.keys.slice(1).some((k, i) => needsEase(segmentState(p.keys[i], k))));
+}
+
+const publicMember = (snapshot) => (m) => {
   const { units, paths, ...rest } = m;
-  return m.unit ? { ...rest, target: targetId(m) } : { ...rest, properties: units, target: targetId(m) };
+  const out = m.unit ? { ...rest } : { ...rest, properties: units };
+  return { ...out, target: targetId(m), has_linear_pairs: hasLinearPairs(snapshot, m) };
 };
-const publicGroup = (g) => (g ? { kind: g.kind, ...(g.layer ? { layer: g.layer } : {}), start: g.start, end: g.end, members: g.members.map(publicMember) } : null);
+const publicGroup = (g, snapshot) => (g ? { kind: g.kind, ...(g.layer ? { layer: g.layer } : {}), start: g.start, end: g.end, members: g.members.map(publicMember(snapshot)) } : null);
 
 // The analyzer the session calls (spec 004 data-model › Analyzer result, plus spec 010's fields).
 // `kept_linear` is accepted and has no effect: constant speed isn't timing.
@@ -325,11 +335,11 @@ export function analyze(snapshot, opts = {}) {
   }
 
   return {
-    group: publicGroup(group),
+    group: publicGroup(group, snapshot),
     proposed_kind,
     other_kind,
     // The other kind's best group, offered in one sentence (FR-006).
-    other_group: kind ? publicGroup(best[kind === "layers" ? "properties" : "layers"]) : null,
+    other_group: kind ? publicGroup(best[kind === "layers" ? "properties" : "layers"], snapshot) : null,
     left_out: leftOut(found.pool),
     refused_members,
     order: ordered && complete ? ordered.map((m) => m.label) : null,

@@ -187,3 +187,8 @@ test("FINDERS focus agrees with the analysis on every fixture, with and without 
     }
   }
 });
+
+test("has_linear_pairs, for the missing-easing note at 'done' (FR-018): Title's eased moves no, the Dots yes", () => {
+  assert.ok(analyze(now).group.members.every((m) => m.has_linear_pairs === false));
+  assert.ok(analyze(mp2, { skill_options: { kind: "layers" } }).group.members.every((m) => m.has_linear_pairs === true));
+});
