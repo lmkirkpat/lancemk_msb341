@@ -3,7 +3,8 @@
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Questions or contradictions come back as questions; this file is changed
 only by its owner.
-**Date:** 2026-10-20. **Status:** draft for the cockpit's review.
+**Date:** 2026-10-20. **Status:** caught up with spec 004 as approved on 2026-10-20 (H1, H2 and
+spec 004's Q1 to Q3 answered; sections 3, 5, 6, 9, 12 and 13).
 **Inputs:** the 15 briefs in `discovery/curriculum-research/`, `discovery/diagnosis-evidence.md`,
 `specs/005-diagnosis/spec.md` (draft, branch `worktree-agent-a4ba74721dd169ee2`),
 `discovery/usage-notes/adobe-assistant-2026-10-08.md`, interviews 007 and 008, `discovery/insights.md`,
@@ -87,6 +88,11 @@ skill covers motion sources only, not visibility.
 | Teaching the learner to trace a layer's motion to its source themselves | Curriculum skill 4, **Find what's moving it** | 007's cost was hours of not finding the cause. A tool that only tells you leaves you just as stuck next time it's not open. Teaching the trace is the part that sticks, and it's the part the record can practice (review: "trace this one before I tell you"). |
 | Whether a layer renders (eye, guide, solo) and "why can't I see it" | Diagnosis, and later a render skill | It's a second idea: visibility, not motion. Keeping it out keeps skill 4 to one idea. Tracing a source only touches shy layers, because a shy parent hides the source from the timeline. |
 
+**Session openings (builder's call, 2026-10-20).** In a Claude Code session started without a named
+skill, the diagnosis opening comes first, and the path's skill recommendation applies only when the
+comp has no findings. The builder treats that entry as low priority, so this design doesn't expand
+on it.
+
 Reasons it's not *only* diagnosis: spec 005 says diagnosis never changes the project and has no demo
 of its own (FR-011). So it can hand off but it can't teach. Its own handover rule (FR-012) expects a
 skill to hand to for DX-06 and DX-08, and skill 4 is that skill.
@@ -161,7 +167,27 @@ FR-010 shows it as done). It isn't one of the 10 (section 7).
 
 ## 5. Build order, and the reads to build once
 
-### First skills to build (if the sprint is cut back, build these)
+### This sprint's baseline and build order (H2, answered 2026-10-20)
+
+The builder set this sprint's baseline at **five skills, 2, 1, 3, 5 and 6, plus reviews for skills
+2, 1 and 3**. Reviews for 5 and 6, and skills 4 and 7 to 10, are stretch or next sprint. In the
+builder's words: "to make the sprint goal feasible in the timeline of the sprint and to make sure
+that I can execute on the sprint goal with quality. I would rather cut back on what I'm doing and
+execute well than rush and have a low quality output."
+
+The build order follows spec 004's waves:
+
+1. **Wave A:** skills 2, 1, 3 (below, "First skills").
+2. **Wave B:** reads R1 and R3 (with the visibility classification and the parent-chain step of the
+   motion-sources map), then skill 5, then skill 6 (5 is 6's hard prerequisite).
+3. **Reviews:** for 2, 1 and 3 in the baseline; for 5 and 6 as stretch.
+4. **Then the rest:** R2 and R4 with skills 4 and 10, then R5, R8, R6 with 7, 8, 9.
+
+Nothing about the path changes. Skill 4 stays 4th in the path; it's built later only because it
+needs the most new reads. Until it's built, the hand-off to it (section 6, skill 4) never fires, and
+skills 5 and 6 name a parent or expression in one sentence and carry on.
+
+### First skills to build (wave A)
 
 Chosen for **no new After Effects reads** (they run on what `snapshot.jsx` reads today: key times,
 in and out types, temporal ease and influence, values, the expression flag on keyed properties) and a
@@ -212,7 +238,10 @@ the T023 lesson):
   `hidden_layers` means "eye off", so **easing would skip a moving matte (a wipe) as hidden**. That's
   a live regression once mattes are taught (open question B3).
 - **One "motion sources" map per layer** (own keys, parent chain, expressions, precomp contents),
-  from R1, R2 and R4. Skill 4's answer key, skill 6's checks and DX-06 and DX-08 all read it.
+  from R1, R2 and R4. Skill 4's answer key, skill 6's checks and DX-06 and DX-08 all read it. Spec
+  004 FR-014 builds it in two steps: own keys and the parent chain with R1 (wave B), then expressions
+  and precomp contents with R2 and R4 (for skill 4). **Skill 6 needs only the first step** (section
+  6, skill 6, Reads).
 
 **Contract risk.** R2 and R4 widen what the snapshot returns. Easing's findings must not change on
 Mentor Practice (25/25 baseline). Unkeyed expression properties must not become easing findings.
@@ -411,8 +440,15 @@ skill builder names them in `mentor/tools/`.
 - **Not taught here:** chains deeper than one, rigs, expression links, 3D and cameras, stacked
   parent-and-child motion as a timing problem (DX-08: skill 4 traces it, diagnosis hints).
   Non-uniform parent scale is named only if the read sees it.
-- **Reads:** R1 (parent), R3 (comp-space position), the motion-sources map. A demo write tool (set a
-  parent with no jump).
+- **Reads:** R1 (parent), R3 (comp-space position), the motion-sources map's **first step only** (own
+  keys and parent chain, spec 004 FR-014). A demo write tool (set a parent with no jump). Skill 6
+  doesn't need expression sources (R2): the pass is graded on the Parent link from R1, so a layer that
+  follows the null only through an expression link is simply not parented and doesn't pass (its
+  overlap row); and the no-jump check uses comp-space positions, which already include whatever an
+  expression does. If a child jumps and the snapshot shows no expression on its keyed properties, the
+  hint names the jump, not a cause, and the mentor says it can't see expressions on unkeyed
+  properties yet (the map's "not read" marker), never that there are none. It doesn't need R4 either:
+  parents work only within one comp.
 - **Review:** a new group on another comp gets a null.
 
 ### 7. Draw it on with Trim Paths (suggested `shape.trim_paths`)
@@ -571,8 +607,17 @@ at curriculum level. "Expr" means expressions over keys.
 
 ## 9. Version traps per skill
 
-The builder's version is unknown. The 2026-10-08 session ran a 26.5-era beta, and spec 005 assumes
-26.4 or later. **Rule for every skill:** read the version (R0) at the start, and give any step whose
+The builder uses **After Effects 26.5 on macOS 27.0.1** (H1, answered 2026-10-20; CLAUDE.md › My
+setup). Version-dependent steps and the live runs target 26.5. What that settles:
+
+- **Skill 3:** Quick Offset shipped in 25.4, so it's present at 26.5. The gesture itself still needs
+  confirming on a live run.
+- **Skill 5:** Quick Set Anchor is still beta at 26.5, so skill 5 teaches **Pan Behind**. No step,
+  pass check or review depends on Quick Set Anchor.
+- **Skill 8:** the matte wording at 26.5 is still unsettled (one weak 2025 report of different column
+  labels). Settle it on a live run before skill 8 is built.
+
+**Rule for every skill:** read the version (R0) at the start, and give any step whose
 UI changed in the form that version has. Never quote a shortcut whose Mac and Windows forms
 conflict: name the menu path instead.
 
@@ -580,12 +625,12 @@ conflict: name the menu path instead.
 |---|---|---|
 | 1 | Hold shortcut: Ctrl+Alt+H on Windows; Mac sources conflict (C). "Freeze Frame" used for "hold" in some teaching | Name Animation > Toggle Hold Keyframe; never say "freeze" |
 | 2 | Graph type is Auto-Select by default (speed for Position, value for the rest); 25.0 themes change how tutorials look; the Keyframe Velocity shortcut is unverified on 26.x | Ask which graph is showing; name the menu, not a picture of it |
-| 3 | Quick Offset (Cmd+Option or Ctrl+Alt drag) exists only from 25.4; older help uses Sequence Layers; 26.2 changed timeline scrubbing feel | Offer Quick Offset only if R0 says 25.4+; manual dragging works on every version |
+| 3 | Quick Offset (Cmd+Option or Ctrl+Alt drag) exists only from 25.4; older help uses Sequence Layers; 26.2 changed timeline scrubbing feel | Offer Quick Offset only if R0 says 25.4+ (so at 26.5, yes, once a live run confirms the gesture); manual dragging works on every version |
 | 4 | Properties panel (23.4) and Essential Properties (23.6) let you edit without opening a precomp; newer layouts have two pick-whip columns (C); the U behaviour needs checking (B4) | Teach the timeline route; mention the panel only as "you may also see it here" |
-| 5 | Quick Set Anchor (Shift+Tab, nine points, 2D only) is beta from 25.1 and still listed as beta at 26.5 (A); Pan Behind (Y) is stable | Teach Pan Behind; mention Quick Set Anchor only if present |
+| 5 | Quick Set Anchor (Shift+Tab, nine points, 2D only) is beta from 25.1 and still listed as beta at 26.5 (A); Pan Behind (Y) is stable | Teach Pan Behind (at 26.5 too); mention Quick Set Anchor only if present, never rely on it |
 | 6 | Null defaults (size, anchor corner) are from CS-era text, unverified for 26.x | Don't describe the null's defaults until tested |
 | 7 | Paste and SVG import into shape layers (26.2); old tutorials use Stroke and Write-on effects | If a shape came from Illustrator, check it has a stroke before Trim |
-| 8 | **23.0:** the matte can be any layer, picked from a menu or pick-whip, with two toggles; older videos show four menu items. Object Matte (26.2) is a different feature. One 2025 thread reports different column labels | Describe the picker plus toggles; warn once that old videos look different |
+| 8 | **23.0:** the matte can be any layer, picked from a menu or pick-whip, with two toggles; older videos show four menu items. Object Matte (26.2) is a different feature. One 2025 thread reports different column labels | Describe the picker plus toggles; warn once that old videos look different. 26.5's exact labels: settle on a live run first |
 | 9 | Text-style expressions (25.0); the core animator path looks stable 2023–2026 (absence of evidence) | None beyond R0 |
 | 10 | Properties panel / Essential Properties (23.x); 25.0 themes | Teach double-click to open |
 
@@ -614,10 +659,11 @@ findings with hints. Each "not taught here" line in section 6 says where its pie
 
 ### For the human (H)
 
-1. **AE version and OS** on the builder's machine. They decide 3's Quick Offset, 5's Quick Set
-   Anchor, 8's wording and every shortcut. R0 would read them every session.
-2. **Ten skills, or fewer?** If the sprint is cut back: 2, 1, 3 first (section 5), then the shared
-   reads, then 4–10.
+1. ~~AE version and OS~~ **Answered 2026-10-20:** After Effects 26.5 on macOS 27.0.1. What it
+   settles is in section 9. R0 still reads the version every session.
+2. ~~Ten skills, or fewer?~~ **Answered 2026-10-20:** this sprint's baseline is skills 2, 1, 3, 5
+   and 6, plus reviews for 2, 1 and 3. Reviews for 5 and 6, and skills 4 and 7 to 10, are stretch
+   or next sprint. Build order and the builder's reason are in section 5.
 3. **Skill 4's place:** 4th by default and pulled forward by diagnosis. Or 1st, as 007 suggests? A
    guess either way.
 4. **Is "name the sources" a real "you do"?** The check is real, but nothing changes in the comp. If
@@ -708,6 +754,15 @@ thing (now in section 2):
   parenting if AE rewrites a keyed child's Position into the parent's space, which I believe it
   does (B9). Check that key count and times are unchanged, and that the **comp-space position at
   each key time is within 1 px**, not the raw values. The 1 px current-time check is fine.
+
+**Spec 004's Q1 to Q3 (settled 2026-10-20 with the spec's written defaults).** The builder ran the
+defaults for now. They fit this design:
+
+| Q | Settled as | Fits because |
+|---|---|---|
+| Q1 Reviews and the second practice comp | A due review waits for the learner's own work. The mentor never suggests the practice comp for a review; its review targets are for the builder's live runs and evals only (spec 004 FR-021) | Section 2's "no new target, no review", and learners learn what the project needs (008) |
+| Q2 A review from diagnosis and the one-per-session limit | A review on a finding the learner chose from a diagnosis doesn't count toward the limit; the limit covers only reviews the mentor offers unprompted (FR-020) | It's pulled by the learner's comp and choice, not by the schedule |
+| Q3 Skill 4's hand-off vs. its review schedule | A hand-off counts as a skill 4 review only when skill 4's review is due; otherwise it's ungraded and not recorded. It never counts toward the limit (FR-037) | Skill 4's review already is "trace an unfamiliar layer in a later lesson", so a due hand-off is that review |
 
 ## 14. Claims to verify before they're taught
 
