@@ -47,6 +47,9 @@ export function nextState(prev, { kind, result, date, wasLearned }) {
     return s;
   };
 
+  // A review with no check changes nothing, the status included: a skill never started stays so.
+  if (kind === "review" && result === "not_checked") return { ...keep(), status: learned ? "learned" : before.status || "not_started" };
+
   if (!learned) {
     // A first pass of any kind ("already knew it" included) starts the schedule.
     if (passed) return { status: "learned", times_passed, review_due: addDays(d, INTERVALS[0]), reviews_passed_in_row: 0 };

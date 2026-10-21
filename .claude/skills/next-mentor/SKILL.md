@@ -1,7 +1,7 @@
 ---
 name: next-mentor
 description: Suggest the one After Effects skill to learn next, from the learner's record and their open comp, then hand over to that skill's lesson. Use when the user says "/next-mentor", "what should I learn next", "what's next", or starts a session without naming a skill.
-allowed-tools: mcp__ae-mentor__read_learner_record, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__read_learner_record, mcp__ae-mentor__recommend_next, Skill
 ---
 
 # Next Mentor
@@ -63,13 +63,17 @@ recommendation.)
      by its `skill_name` and offer it first, in one sentence about why ("the speed graph shapes
      the ease you add in Easing"). If the learner still wants the skill they asked for, hand over
      to it, and tell them in one sentence what it builds on. Don't teach the prerequisite here.
-   - **Already learned** (`learned` is true): offer a review of it, or a practice lesson.
+   - **Already learned** (`learned` is true): if `review_available` is true, offer a review of it,
+     or a practice lesson. If it's false (Easing has no review yet), offer a practice lesson only,
+     and don't mention reviews.
    - **Built, prerequisites learned, `has_focus` false:** say this comp has nothing for it yet
      and ask whether they'd like to make a quick example in their comp first.
 
 5. **Never offer a review of a skill the learner hasn't learned.** But if the learner says they
    already know a skill that isn't learned yet, hand over to that skill as a review (no
-   demonstration), so a pass counts as "already knew it" (FR-020).
+   demonstration), so a pass counts as "already knew it" (FR-020). That needs a review: call
+   `recommend_next` with the skill as `requested_skill`, and if `review_available` is false, offer
+   a practice lesson instead ("let's do a quick one together and you can fly through it").
 
 6. **Hand over on agreement.** Invoke the chosen skill's lesson by its Claude Code skill:
 
@@ -80,7 +84,8 @@ recommendation.)
    | Shape the ease in the speed graph | `/speed-graph-mentor` |
    | Break the lockstep with offset | `/offset-mentor` |
 
-   For a review, hand over with "review" so the lesson starts in review mode. For a recommendation
+   For a review, hand over with "review" so the lesson starts in review mode, and only for a skill
+   whose `review_available` is true or that `recommend_next` recommended as a review. For a recommendation
    with `focus_layers`, pass the layer names on, so the lesson can propose them. Only hand over to
    a skill whose `built` is true or that `recommend_next` recommended; if the skill's command
    isn't available, say it isn't ready yet.

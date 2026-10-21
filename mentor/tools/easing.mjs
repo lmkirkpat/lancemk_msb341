@@ -4,6 +4,7 @@
 import { runSnippet } from "../bridge-client.mjs";
 import { needsEase, parseSegmentId, segments } from "../lib/analyze.mjs";
 import { diff } from "../lib/diff.mjs";
+import { isKeptLinear } from "../lib/marks.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { json } from "../lib/reply.mjs";
@@ -11,13 +12,15 @@ import { json } from "../lib/reply.mjs";
 export const SKILLS = ["easing.basic"];
 
 // Does this comp have pairs to ease? For recommend_next (contracts/skill-module.md › 2). Counts the
-// same pairs analyze() targets, leaving out the {layer, property} pairs in `exclude`. No review mode
-// for easing this sprint (spec 004 plan P5), so `review: false`.
+// same pairs analyze() targets, leaving out the {layer, property} pairs in `exclude` and the
+// properties a kept-linear mark in `kept_linear` covers (as analyze() does). No review mode for
+// easing this sprint (spec 004 plan P5), so `review: false`.
 export const FINDERS = {
   "easing.basic": {
-    focus(snapshot, { exclude = [] } = {}) {
+    focus(snapshot, { exclude = [], kept_linear = [] } = {}) {
       const excluded = (s) => exclude.some((e) => e.layer === s.layer.name && e.property === s.prop.display_name);
-      const pairs = segments(snapshot).segments.filter((s) => needsEase(s.state) && !excluded(s));
+      const kept = (s) => kept_linear.length > 0 && isKeptLinear(kept_linear, s.layer.name, s.prop.path, snapshot);
+      const pairs = segments(snapshot).segments.filter((s) => needsEase(s.state) && !excluded(s) && !kept(s));
       return { count: pairs.length, layers: [...new Set(pairs.map((s) => s.layer.name))] };
     },
     review: false,

@@ -3,6 +3,7 @@
 // in, including `now`, so the same input always gives the same answer.
 
 import { isDue, pastTargetsIn } from "./reviews.mjs";
+import { applies, marksFor } from "./marks.mjs";
 
 // "This session" for the one-review limit (research R8): an unprompted review offer counts for this
 // long, and so does a practice lesson on the same skill.
@@ -20,11 +21,13 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
   const learned = (id) => id === path.on_ramp.id || (skills[id] && skills[id].status === "learned");
   const isBuilt = (id) => built.includes(id);
   const hardMet = (s) => s.hard.every(learned);
+  // The kept-linear marks that apply to this comp (FR-038), so a finder agrees with its analyzer.
+  const kept_linear = snapshot ? marksFor(record, snapshot.project, snapshot.comp.name).filter((m) => applies(m, snapshot)) : [];
   const focusOf = (id, exclude = []) => {
     const f = finders[id];
     if (!snapshot || !f || typeof f.focus !== "function") return null;
     try {
-      const r = f.focus(snapshot, { exclude });
+      const r = f.focus(snapshot, { exclude, kept_linear });
       return { count: r.count || 0, layers: r.layers || [] };
     } catch {
       return { count: 0, layers: [] };
@@ -44,19 +47,19 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
   if (practicing.length) recommendation = result(practicing[0], "continue", "in_progress", focusOf(practicing[0].id));
 
   // 2. A due review, only with the comp in view (it needs a new target), at most one per session,
-  //    and none on a skill practiced in this session (FR-020).
+  //    and none on a skill practiced in this session (FR-020). Once a review has been offered in
+  //    this window, only that one can come back: a repeat call offers it again while it still
+  //    qualifies, and never another.
   if (!recommendation && snapshot) {
-    const offeredRecently = offers.some((o) => o && Date.parse(o.at) >= windowStart);
+    const offered = offers.find((o) => o && Date.parse(o.at) >= windowStart);
     const practicedRecently = (id) => lessons.some((l) => l.skill === id && l.kind !== "review" && Date.parse(l.date) >= windowStart);
-    if (!offeredRecently) {
-      for (const s of ordered) {
-        if (!isBuilt(s.id) || !learned(s.id) || !finders[s.id] || finders[s.id].review !== true) continue;
-        if (!isDue(skills[s.id], now) || practicedRecently(s.id)) continue;
-        const focus = focusOf(s.id, pastTargetsIn(record, s.id, snapshot.project, snapshot.comp.name));
-        if (focus && focus.count > 0) {
-          recommendation = result(s, "review", "review_due", focus);
-          break;
-        }
+    for (const s of offered ? ordered.filter((x) => x.id === offered.skill) : ordered) {
+      if (!isBuilt(s.id) || !learned(s.id) || !finders[s.id] || finders[s.id].review !== true) continue;
+      if (!isDue(skills[s.id], now) || practicedRecently(s.id)) continue;
+      const focus = focusOf(s.id, pastTargetsIn(record, s.id, snapshot.project, snapshot.comp.name));
+      if (focus && focus.count > 0) {
+        recommendation = result(s, "review", "review_due", focus);
+        break;
       }
     }
   }
@@ -90,6 +93,7 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
         skill: s.id, skill_name: s.name, built: isBuilt(s.id), learned: !!learned(s.id),
         missing_prerequisites: s.hard.filter((p) => !learned(p)).map((p) => ({ skill: p, skill_name: nameOf(p) })),
         has_focus: !!(focus && focus.count > 0),
+        review_available: finders[s.id]?.review === true,
       };
     }
   }

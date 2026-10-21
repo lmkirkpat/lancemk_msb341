@@ -94,7 +94,8 @@ export function recordLesson(input, skills, context = {}) {
   const lesson = context.lesson || null;
   const now = new Date();
   const entry = { date: now.toISOString(), ...validate(input, skills) };
-  const newMarks = lesson ? marksToWrite(lesson, entry.skill, now) : [];
+  // FR-038: only a passing check writes a mark, so a lesson's marks are written only with a pass.
+  const newMarks = lesson && entry.result === "passed" ? marksToWrite(lesson, entry.skill, now) : [];
   const targets = lesson ? uniqueRefs(lesson.target_refs) : [];
   for (const t of targets) if (isUnsafe(t.layer) || isUnsafe(t.property)) throw new MentorError("UNSAFE_RECORD");
   const record = read();
@@ -108,6 +109,9 @@ export function recordLesson(input, skills, context = {}) {
       times_passed,
       next: entry.next,
     };
+    // The review schedule isn't this call's to change: carry it over as it was.
+    if (prev.review_due) skill.review_due = prev.review_due;
+    if (prev.reviews_passed_in_row != null) skill.reviews_passed_in_row = prev.reviews_passed_in_row;
     record.lessons.push(entry);
     record.skills[entry.skill] = skill;
     write(record);
@@ -117,7 +121,7 @@ export function recordLesson(input, skills, context = {}) {
   const wasLearned = prev.status === "learned";
   const kind = lesson.mode === "review" ? "review" : record.lessons.some((l) => l.skill === entry.skill) ? "practice" : "first";
   entry.kind = kind;
-  if (kind === "review" && !wasLearned) entry.already_knew = true;
+  if (kind === "review" && !wasLearned && entry.result === "passed") entry.already_knew = true;
   entry.targets = targets;
   const state = nextState(prev, { kind, result: entry.result, date: now, wasLearned });
   const skill = { status: state.status, last_practiced: entry.date, times_passed: state.times_passed, next: entry.next };
@@ -156,7 +160,7 @@ function updateMarks(record, lesson, newMarks) {
   const here = (m) => m.project === base.project && m.comp === base.comp.name;
   let marks = (Array.isArray(record.marks) ? record.marks : []).filter((m) => !(m && m.kind === "kept_linear" && here(m) && !applies(m, base)));
   for (const m of newMarks) {
-    marks = marks.filter((x) => !(x.kind === "kept_linear" && here(x) && x.layer === m.layer && x.path === m.path));
+    marks = marks.filter((x) => !(x && x.kind === "kept_linear" && here(x) && x.layer === m.layer && x.path === m.path));
     marks.push(m);
   }
   record.marks = marks;

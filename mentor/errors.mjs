@@ -14,6 +14,10 @@ export const MESSAGES = {
   REVIEW_NO_DEMO: "This one's a review, so it's all yours this time. Have a go and I'll check it.",
   NOT_KEPT_LINEAR:
     "That one isn't linear all the way through yet, so I can't note it as constant speed. Set its keys to linear first.",
+  KEEP_LINEAR_NO_CHECK:
+    "I need to check your comp before I can note that one as constant speed. Let me look at it first.",
+  KEEP_LINEAR_OTHER_COMP:
+    "That's a different comp from the one we're working in, so I can't note it here. Switch back to our comp and I'll check again.",
   LESSON_UNDERWAY: "We've already started on this one, so I'll keep checking it against where we began.",
   UNKNOWN_LAYER: "That layer isn't in the comp. Use the layer's name exactly as it appears in the comp.",
   UNSAFE_RECORD: "The learner record can't contain an email address or phone number. Rewrite that part without it.",

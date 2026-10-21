@@ -218,9 +218,17 @@ export function markChecked(passed, { demoUndone = false } = {}) {
 // Skill 1's check (FR-038, contracts/skill-module.md › 6): note that each named property runs at
 // constant speed, after confirming in `snapshot` that it's there, has no expression on, and every
 // pair is linear at both ends. All or nothing: one that doesn't qualify stores none. record_lesson
-// writes them to the record.
+// writes them to the record, and only when the lesson's result is a pass ("Only a passing check
+// writes one"). Refused before that: KEEP_LINEAR_OTHER_COMP when `snapshot` isn't the lesson's
+// project and comp, KEEP_LINEAR_NO_CHECK until a check has run on this lesson (call markChecked()
+// first, in the same check).
 export function keepLinear(snapshot, refs) {
-  currentLesson(); // NO_SESSION before anything else
+  const lesson = currentLesson(); // NO_SESSION before anything else
+  const baseProject = lesson.baseline ? lesson.baseline.project : undefined;
+  if (!snapshot || !snapshot.comp || snapshot.comp.id !== lesson.comp_id || (baseProject !== undefined && snapshot.project !== baseProject)) {
+    throw new MentorError("KEEP_LINEAR_OTHER_COMP");
+  }
+  if (!(lesson.checked || lesson.status === "checked")) throw new MentorError("KEEP_LINEAR_NO_CHECK");
   const found = (refs || []).map(({ layer: layerName, property }) => {
     for (const layer of snapshot.layers.filter((l) => l.name === layerName)) {
       const prop = layer.properties.find((p) => p.display_name === property || p.path === property || p.display_path === property);

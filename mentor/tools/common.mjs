@@ -115,7 +115,9 @@ async function recommendNext({ requested_skill } = {}, { skills, finders }) {
     // An unreadable session file: no offers remembered. The next lesson start sets it aside.
   }
   const result = recommend({ path: readPath(), record, built: skills, finders, snapshot, now: new Date(), offers, requested_skill });
-  if (result.recommendation && result.recommendation.kind === "review") {
+  // Remember a review the first time it's offered in this window. Offering it again doesn't add
+  // another, so the window stays where it started (FR-020, research R8).
+  if (result.recommendation && result.recommendation.kind === "review" && !offers.some((o) => o && o.skill === result.recommendation.skill)) {
     try {
       session.recordReviewOffer(result.recommendation.skill);
     } catch {
@@ -185,7 +187,7 @@ export function commonTools(options) {
       description:
         "Pick the one skill to suggest next, from the learner record and a look at the active comp: a skill in progress, " +
         "then a review that's due, then the next skill in the path. Say skill_name, never the ID. Pass requested_skill " +
-        "when the learner asks for a skill, to learn whether it's ready and what it builds on.",
+        "when the learner asks for a skill, to learn whether it's ready, what it builds on, and whether it has a review.",
       inputSchema: {
         type: "object",
         properties: {
@@ -193,7 +195,8 @@ export function commonTools(options) {
         },
         additionalProperties: false,
       },
-      annotations: { readOnlyHint: true },
+      // Not read-only: it remembers the review it offers (session.json › review_offers).
+      annotations: { readOnlyHint: false, destructiveHint: false },
       handler: (args) => recommendNext(args, { skills, finders }),
     },
   ];
