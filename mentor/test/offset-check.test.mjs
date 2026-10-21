@@ -84,7 +84,7 @@ test("per-property shifts are measured within half a frame (row 19)", () => {
   assert.ok(Math.abs(d2.moved_by.Opacity - 2.7) < 0.05);
 });
 
-test("a member whose remembered move is gone is keys_changed, and isn't graded", () => {
+test("a member whose remembered move is gone is keys_changed, isn't graded, and holds the pass", () => {
   const base = load(PRACTICE_NOW);
   const lesson = lessonFor(base, { kind: "properties" });
   const s = clone(base);
@@ -95,7 +95,44 @@ test("a member whose remembered move is gone is keys_changed, and isn't graded",
   const r = check(base, s, lesson);
   assert.equal(r.members.find((m) => m.label === "Title › Position").status, "keys_changed");
   assert.deepEqual(r.still_same, [], "Scale and Opacity no longer start together");
-  assert.equal(r.passed, true, "the two graded members pass; the changed one is reported, not graded");
+  assert.equal(r.passed, false, "the two graded members are apart, but the changed one could still be in step: held");
+});
+
+test("a pass held by changed keys comes back once the member is graded again (keys undone)", () => {
+  const base = load(PRACTICE_NOW);
+  const lesson = lessonFor(base, { kind: "properties" });
+  const title = (snap) => snap.layers.find((l) => l.name === "Title");
+  const prop = (snap, name) => title(snap).properties.find((p) => p.display_name === name);
+  const by = (k, frames) => (k.time = Math.round((k.time + frames / 30) * 1000) / 1000);
+  // Scale and Opacity staggered away from Position; Position itself left in place.
+  const staggered = clone(base);
+  prop(staggered, "Scale").keys.forEach((k) => by(k, 4));
+  prop(staggered, "Opacity").keys.forEach((k) => by(k, 8));
+  assert.equal(check(base, staggered, lesson).passed, true, "every member graded and apart");
+  // A key added on Position: its move count changes, so the pass is held.
+  const added = clone(staggered);
+  const pk = prop(added, "Position").keys;
+  const last = pk[pk.length - 1];
+  pk.push({ ...last, time: Math.round((last.time + 0.5) * 1000) / 1000, value: last.value.map((v) => v + 100) }); // a new move
+  const held = check(base, added, lesson);
+  assert.equal(held.members.find((m) => m.label === "Title › Position").status, "keys_changed");
+  assert.deepEqual(held.still_same, [], "nothing still together among the graded ones");
+  assert.equal(held.passed, false, "held, not failed: the changed member is the only thing in the way");
+  // Undo the added key: Position is graded again and the pass is back.
+  const undone = check(base, staggered, lesson);
+  assert.ok(undone.members.every((m) => m.status === "graded"));
+  assert.equal(undone.passed, true);
+});
+
+test("layers kind: a member whose keys are all gone is keys_changed and holds the pass", () => {
+  const { baseline, lesson, current, r } = run("pops-in", { split: ["Dot 1"] });
+  assert.equal(r.passed, true, "the starting point passes with the split kept on purpose");
+  const s = clone(current);
+  const dot = s.layers.find((l) => l.name === "Dot 1");
+  for (const p of dot.properties) p.keys = [];
+  const held = check(baseline, s, lesson, { split: ["Dot 1"] });
+  assert.equal(member(held, "Dot 1").status, "keys_changed");
+  assert.equal(held.passed, false);
 });
 
 test("another comp: comp_matches false, nothing graded", () => {
