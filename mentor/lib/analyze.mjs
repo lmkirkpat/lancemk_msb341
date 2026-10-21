@@ -2,6 +2,7 @@
 // data-model.md › Segment). Pure and deterministic, so the answer key can prove it (SC-001).
 
 import { MentorError } from "../errors.mjs";
+import { isKeptLinear } from "./marks.mjs";
 
 // Hold first: a hold out side means the value jumps, so there's no motion to ease, whatever the
 // next key's in side says. Both sides linear is "linear". Exactly one linear side is "partly_eased":
@@ -66,7 +67,33 @@ export function segments(snapshot) {
   return { segments: out, skipped };
 }
 
-export function analyze(snapshot, { focus_layers } = {}) {
+// `kept_linear`: kept-linear marks (FR-038). A property with a mark that applies is skipped with
+// reason "kept_linear" (after expression and single_key, which win) and isn't a finding, target or
+// demo, even when its layer is the focus; `counts` still count its pairs. No marks, no change.
+export function analyze(snapshot, { focus_layers, kept_linear } = {}) {
+  if (kept_linear && kept_linear.length) return withoutKeptLinear(snapshot, { focus_layers, kept_linear });
+  return analyzeAll(snapshot, { focus_layers });
+}
+
+function withoutKeptLinear(snapshot, { focus_layers, kept_linear }) {
+  const keptSkips = [];
+  const trimmed = {
+    ...snapshot,
+    layers: snapshot.layers.map((layer) => ({
+      ...layer,
+      properties: layer.properties.filter((prop) => {
+        if (prop.expression_enabled || prop.keys.length < 2 || !isKeptLinear(kept_linear, layer.name, prop.path, snapshot)) return true;
+        keptSkips.push({ layer: layer.name, layer_index: layer.index, property: prop.display_name, path: prop.path, display_path: prop.display_path, reason: "kept_linear" });
+        return false;
+      }),
+    })),
+  };
+  if (!keptSkips.length) return analyzeAll(snapshot, { focus_layers });
+  const result = analyzeAll(trimmed, { focus_layers });
+  return { ...result, skipped: [...result.skipped, ...keptSkips], counts: analyzeAll(snapshot, {}).counts };
+}
+
+function analyzeAll(snapshot, { focus_layers } = {}) {
   const focus = focus_layers && focus_layers.length ? [...focus_layers] : null;
   if (focus) {
     const known = new Set([...snapshot.layers.map((l) => l.name), ...snapshot.precomp_layers.map((l) => l.name)]);
