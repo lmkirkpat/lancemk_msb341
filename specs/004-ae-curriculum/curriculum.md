@@ -59,6 +59,15 @@ demo and no walkthrough, then checks it the same way. That's what Adobe's assist
 today (it described no memory of the learner, 2026-10-08). When the review runs (spacing, triggers) is
 up to the spec writer. What the review checks is fixed per skill below.
 
+Three rules for every review (round 1):
+- **"No walkthrough" doesn't mean "no questions".** Where a skill asks about intent (1: what should
+  snap; 5: where the hinge is; 3: what order), the review asks too. Without the question, the check
+  grades a guess.
+- **No new target, no review.** If the comp has nothing new to practice on, the review isn't offered
+  and stays due. It isn't counted as missed or failed.
+- **A failed review doesn't reteach.** It gives the skill's normal hints. The learner can then ask
+  for a practice lesson, which may have a demo.
+
 **Why each skill's "why" names depth and memory.** Restraint and leading are product choices Adobe
 could copy with a mode switch (`decisions/002`, CLAUDE.md next step 2). What's harder to copy is
 (a) depth: per-step checks on data Adobe's assistant couldn't read on 2026-10-08 (key types, ease,
@@ -292,8 +301,10 @@ skill builder names them in `mentor/tools/`.
   before and after. *You do:* offset the rest. *Hint path:* if only some of a layer's properties
   moved (Position late, Opacity early, so it pops in), point at the one left behind.
 - **Pass:** no two focus layers (or properties) start on the same frame. Within a shifted layer, all
-  its animated properties moved by the same amount, unless the learner said otherwise. Uneven gaps
-  get a comment on the rhythm, **never a fail**. Taste is the learner's (`decisions/002` restraint;
+  its animated properties moved by the same amount, unless the learner said otherwise. "The same
+  frame" is a floor for lockstep, not a target: the mentor never says "2 frames is enough", and the
+  learner picks the gap. The floor is defined in time as well as frames, so that at 60 fps it isn't
+  half as long as at 30 (round 1, C3). Uneven gaps get a comment on the rhythm, **never a fail**. Taste is the learner's (`decisions/002` restraint;
   timing brief Q3).
 - **Mistakes:** everything in lockstep (R, builder-only). Offsetting one property but not the ones
   that belong with it (P). Moving a layer's in point while its key times stay put, or the reverse
@@ -333,6 +344,12 @@ skill builder names them in `mentor/tools/`.
 - **Reads:** R1 (parent, shy), R2, R4, and the shared motion-sources map.
 - **Review:** in a later lesson, the learner traces an unfamiliar layer before the mentor explains
   it.
+- **Hand-off from other skills (round 1, C5):** inside another skill's lesson, the mentor asks
+  "trace this one first" only when all three hold: (a) a source other than the layer's own keys
+  (expression, parent, precomp) affects that lesson's focus or its check; (b) skill 4 is learned;
+  (c) it hasn't already asked this lesson. At most once per lesson. Otherwise it names the source in
+  one sentence and carries on. It isn't a detour, and an unlearned skill 4 is never forced in
+  mid-lesson.
 - **Claim to verify before teaching:** whether **U** shows properties driven only by an expression.
   The expressions brief says no and to use EE ([B]). My memory is that U shows "keyframes or
   expressions". Test it on the builder's version (open question B4).
@@ -356,7 +373,10 @@ skill builder names them in `mentor/tools/`.
   where the layer hasn't moved, then a rotated frame. *You do:* the learner's layer, with Pan Behind
   (Y).
 - **Pass:** the anchor is in the named region of the layer's bounds, and the layer's comp-space
-  footprint at the current time is unchanged.
+  footprint at the current time is unchanged. Measure "in the region" **on each axis against that
+  axis's own size** (width for left and right, height for top and bottom). On a thin layer like an
+  800 × 60 bar, one tolerance taken from the larger side would make top-left, left-center and
+  bottom-left the same place.
 - **Mistakes:** typing a new Anchor Point value or dragging with the Selection tool, so the layer
   jumps (C, very common). Leaving the pivot at the center for a hinge motion (C). Changing the anchor
   after Position is keyed (C, vendor source; open question B5).
@@ -380,9 +400,11 @@ skill builder names them in `mentor/tools/`.
 - **Steps:** *We do:* the learner adds a null and places it where the group should pivot (skill 5's
   idea). *I do:* parent one child to it, and show that the child didn't move. *You do:* parent the
   rest, then give the null one move (two keys).
-- **Pass:** every focus layer's parent is the null. Each child's own key count and values are
-  unchanged, and its comp-space position at the current time is unchanged (no jump). The null has at
-  least two keys with different values. The parent isn't a content layer.
+- **Pass:** every focus layer's parent is the null. Each child kept its own animation: the same key
+  count and key times, and the same comp-space position at each of its key times and at the current
+  time (no jump). **Don't compare raw key values.** Parenting rewrites a child's Position into the
+  parent's space, so the numbers change even when nothing moved on screen (claim to verify, B9). The
+  null has at least two keys with different values. The parent isn't a content layer.
 - **Mistakes:** a visible layer as the parent (B). Fading the null and expecting the children to fade
   (B). Opacity isn't inherited, so if the read sees the null's opacity below 100, that's the hint.
   A child jumping when parented (B).
@@ -631,6 +653,9 @@ findings with hints. Each "not taught here" line in section 6 says where its pie
    maybe none. Each is one change, on one target, once per lesson, as `set_ease` is.
 8. Track matte scripting names (`trackMatteLayer` and others), shape-layer anchors, and 26.x null
    defaults are unverified.
+9. **When a keyed child is parented, does AE rewrite its Position key values** into the parent's
+   space? (I believe it does, so the look stays the same.) Skill 6's "no jump" check depends on the
+   answer: compare comp-space positions, not raw values.
 
 ### For the eval engineer (E)
 
@@ -648,7 +673,43 @@ findings with hints. Each "not taught here" line in section 6 says where its pie
    inside a region) are yours to set as measures.
 2. The review timing and trigger are yours. What each review checks is in section 6.
 
-## 13. Claims to verify before they're taught
+## 13. Answers to the spec writer, round 1 (2026-10-20)
+
+| Q | Answer | Spec default |
+|---|---|---|
+| C1 Learner insists on a skill without its hard prerequisite | **It runs**, after one sentence on what it builds on. Learners learn what the project needs (008), and a blocked learner leaves for YouTube. The lesson doesn't reteach the prerequisite. If the learner hits that prerequisite's typical mistake, the mentor gives that skill's hint and suggests the prerequisite after this lesson. If the focus rule finds nothing to teach (skill 2 with no eased pairs), it says so and offers the prerequisite. Record nothing about the gap beyond what the checks showed. | Kept |
+| C2 Skill in progress vs a due review at session start | **The skill in progress comes first.** Finishing beats reviewing, and a review stays due. Still at most one review offered per session, and none after a practice lesson on the same skill. | Kept |
+| C3 Under 2 frames apart counts as lockstep | **Fair as a floor**, provided it's never shown as the target (the learner picks the gap) and is defined in time as well. Use under 2 frames **or under 1/15 s, whichever is longer**. At 60 fps two frames is 33 ms, which reads as together. | **Changed** (FR-027 adds the time floor) |
+| C4 Passing a review before any first lesson | **Yes, it counts as learned**, recorded as "already knew it", and the schedule starts from that pass. But the mentor never *offers* a review for an unlearned skill. It happens only when the learner says they know it. That keeps "review" meaning "try it yourself, no demo". | Kept, with that condition |
+| C5 Every skill hands off to skill 4's "trace this one first" | **No, only when** another source affects that lesson's focus or check, **and** skill 4 is learned, **at most once per lesson**. Otherwise one sentence naming the source, then carry on (section 6, skill 4). | **Changed** (narrower) |
+| H4 Is naming sources a real "you do"? | Still open for the human. Keep naming as the pass until one live run. If it feels like a quiz, add the reversible step (turn the expression off with =, watch the keys take over, Edit > Undo), ungraded. | n/a |
+| H6 Animators before presets; anchor separate from parenting | Still the human's call. My recommendation stands; the design is unchanged. | n/a |
+| H7 Offset taste rule | Still the human's call. Recommendation stands: name the pattern, never fail on rhythm. | n/a |
+
+**Review schedule (1, 3, 7, 14, 30 days; a failed review goes back to 1; offered, at most one per
+session, no demo).** It fits the design, with three additions that keep it from teaching the wrong
+thing (now in section 2):
+- reviews still ask the skill's intent questions;
+- no new target means no review: it stays due, and doesn't count as missed;
+- a failed review gives hints, not a reteach. "Back to 1 day" is fine, because "learned" isn't taken
+  away.
+
+**Pass margins:**
+- **FR-026 (skill 2):** fine. Adobe's 15/80 demo and a modest 33/53 both pass; untouched Easy Ease
+  fails. "Neither key at default on both sides" is right, because a key's other side belongs to the
+  next pair.
+- **FR-027 (skill 3):** fine with C3's time floor. Half a frame for "moved by the same amount" is
+  fine.
+- **FR-028 (skill 5): would teach the wrong thing.** Using 10% of the *larger* side makes regions
+  overlap on thin layers: on an 800 × 60 bar the tolerance is 80 px, so top-left, left-center and
+  bottom-left all pass for each other. Use 10% of **each axis's own size**. The 1 px footprint check
+  is fine.
+- **FR-029 (skill 6): would teach the wrong thing.** "Values within 0.01" fails every correct
+  parenting if AE rewrites a keyed child's Position into the parent's space, which I believe it
+  does (B9). Check that key count and times are unchanged, and that the **comp-space position at
+  each key time is within 1 px**, not the raw values. The 1 px current-time check is fine.
+
+## 14. Claims to verify before they're taught
 
 - U and expression-only properties (B4); Pan Behind and existing keys (B5); the Cursor on 2026-10-08
   (B2).
