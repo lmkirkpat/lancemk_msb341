@@ -314,14 +314,15 @@ skill builder names them in `mentor/tools/`.
 
 ### 3. Break the lockstep with offset (suggested `timing.offset`)
 
-- **Idea:** motion reads as designed when things don't all start together. Shift layers (or one
-  layer's properties) a few frames apart.
+- **Idea:** motion reads as designed when things don't all start and land together. Shift layers
+  (or one layer's properties) a few frames apart.
 - **Why:** equal start and landing frames were among Adobe's top findings (R). Honestly, Adobe can
   read key times too, so the depth edge here is small. The difference is that the learner does it,
   each layer is checked, and the record notices lockstep coming back on new comps (spec 005's
   pattern rule, FR-020). The edge is memory and practice, not depth.
 - **Outcome:** can stagger a group of moves so no two start on the same frame, keeping each layer's
-  properties moving together unless they mean to split them, without help.
+  properties moving together unless they mean to split them, or split one layer's properties so no
+  two start and land together, without help.
 - **Focus:** one kind per lesson. Default: 2–5 layers whose first keys share a time. Alternative:
   one layer's properties that start and land on the same frames (Title Scale and Opacity, DX-03).
   The mentor points out the pattern ("all four start at 0.5 s"). The learner picks the gap and the
@@ -329,8 +330,10 @@ skill builder names them in `mentor/tools/`.
 - **Steps:** *I do:* shift all of one layer's keys by the learner's chosen gap, and show frames
   before and after. *You do:* offset the rest. *Hint path:* if only some of a layer's properties
   moved (Position late, Opacity early, so it pops in), point at the one left behind.
-- **Pass:** no two focus layers (or properties) start on the same frame. Within a shifted layer, all
-  its animated properties moved by the same amount, unless the learner said otherwise. "The same
+- **Pass:** no two focus layers start on the same frame; for one layer's properties, no two both
+  start **and land** on the same frames (moving only a start or only a landing breaks the lockstep;
+  spec 010 S-1, 2026-10-20). Within a shifted layer, all its animated properties moved by the same
+  amount, unless the learner said otherwise (before, or in answer to the hint). "The same
   frame" is a floor for lockstep, not a target: the mentor never says "2 frames is enough", and the
   learner picks the gap. The floor is defined in time as well as frames, so that at 60 fps it isn't
   half as long as at 30 (round 1, C3). Uneven gaps get a comment on the rhythm, **never a fail**. Taste is the learner's (`decisions/002` restraint;

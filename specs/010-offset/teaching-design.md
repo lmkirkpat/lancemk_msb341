@@ -2,7 +2,7 @@
 
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
-**Date:** 2026-10-20. **Status:** draft, round 1.
+**Date:** 2026-10-20. **Status:** draft, round 1 answered (§ 14).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 3, § 8, § 9, § 13 (C3, H7);
 spec 004 (approved), above all FR-004, FR-005, FR-016, FR-017, FR-018 to FR-022, FR-024, FR-027,
 FR-030, FR-037; spec 005's DX-02, DX-03, DX-07. Research:
@@ -55,7 +55,12 @@ run 0.5 s to 1.5 s"). It proposes the kind with the larger group of visible, non
 properties, and offers the other kind in one sentence if both exist. The learner agrees or picks.
 Then the mentor asks the **intent question**: "Which should go first?" The learner picks the order
 **and the gap**. The mentor never names a gap to use; asked, it says that's their call and to try one
-and play it back (FR-027; curriculum H7).
+and play it back (FR-027; curriculum H7). If the learner says up front that they want a layer's
+properties split (Opacity before Position, say), the mentor repeats that back too.
+
+**A properties focus with several moves.** When a property moves more than once (Title's Position
+has four keys), it joins the group through the one move that starts and lands with the others, and
+the lesson remembers which move that is, per property (round 1).
 
 Say what's left out: hidden layers, nulls (their move shows only through children), precomps ("I
 can't check their timing yet"), properties under an expression.
@@ -84,7 +89,7 @@ the second practice comp (B-1).
 | 0. Remember | nothing | The record for this skill | n/a |
 | 1. Look and propose | agrees or picks the other kind or other layers | Fresh read; the timing analysis's shared starts; focus rule (§ 4) | A group of at least 2 |
 | 2. Explain on their comp | watches | One frame where the group visibly moves together, real names and times. Words: when everything moves at once, nothing leads the eye | n/a |
-| 3. Intent | picks the order and the gap | Nothing to check; the mentor repeats it back in plain words | n/a |
+| 3. Intent | picks the order and the gap | The mentor repeats it back in plain words. If the gap is under the floor (1 frame at 30 fps), it says a gap that small still reads as together and asks them to pick again, naming no number. If they keep it, there's no demo: the mentor walks it through in words, and the check applies the floor as usual (round 1, D-1) | n/a |
 | 4. I do (one demo) | watches, can Edit > Undo | Only when asked or clearly stuck. One write on the demo target (§ 4). Frames before and after the shift at the same time, so the difference shows | n/a |
 | 5. You do | Offsets the rest, by any method, says "done" | Fresh read and diff. § 6. Credit the demo to the demo. Hints, never the fix | § 6 |
 | 6. Rhythm comment (layers kind) | nothing | If gaps are uneven, one sentence on the rhythm, never a fail. If even, nothing | Never graded |
@@ -101,7 +106,9 @@ whichever is longer. That floor is never shown as a target.
 **Layers kind:**
 1. No two focus layers start the same (counting the demo layer).
 2. Within each layer that moved, all its animated properties moved by the same amount (within half a
-   frame), unless the learner said they want them split.
+   frame), unless the learner said they want them split. They can say it up front (stage 3) or in
+   answer to the "pops in" hint: the hint comes first, and if the learner says the split is on
+   purpose, that layer passes on the next check. Ask, don't fail (round 1, D-2).
 
 **Properties kind:**
 1. No two focus properties **both start and land** the same. Shifting a whole property, moving only
@@ -143,7 +150,7 @@ All of these come from the shared timing analysis (FR-016), not this skill's own
 | Hidden layer (eye off) | Left out, "unless you want it" | Count it in the group |
 | Matte (KD-001) | **Mattes should be in**: their motion is the reveal. Until R1, a matte looks like any eye-off layer, so it's left out with the same "unless you want it", and the learner can add it. After R1, the visibility class includes mattes by default | Leave a matte out once R1 can tell |
 | Null | Left out as a focus layer (its motion shows only through children); named in one sentence | Demo on it |
-| Parenting | A child's visible start includes its parent's motion. Not read until R1: in wave A the mentor says nothing about parents. After R1: name it in one sentence, don't grade it; FR-037 hand-off only if skill 4 is learned | Grade a child's start by the parent's keys |
+| Parenting | A child's visible start includes its parent's motion. Not read until R1: in wave A the mentor says nothing about parents. **Known blind spot until R1:** staggering two children of a moving parent passes on their own keys, while the parent's shared motion still moves them together on screen. After R1: name it in one sentence, don't grade it; FR-037 hand-off only if skill 4 is learned | Grade a child's start by the parent's keys, or claim in wave A that the children no longer move together at all |
 | Keys before 0 s or after the comp's end | Flag in a hint (§ 7) | Count a key the comp never plays as a landing |
 
 ## 10. Version notes (After Effects 26.5, macOS 27.0.1)
@@ -180,8 +187,8 @@ Spec 004 FR-018's shared fields. In plain words in the lesson entry:
 - **kind** and **targets** (layers, or one layer's properties, and the comp), plus which focus kind;
 - **attempted:** "Staggered Bar, Glow and Cursor, in that order";
 - **summary:** what the checks showed ("Title's Position moved but Scale and Opacity stayed at
-  0.5 s at first"; "gaps about 4 and 8 frames"). The gap the learner chose is a measure of the work,
-  not a method;
+  0.5 s at first"; "gaps about 4 and 8 frames"; "split Title's Opacity on purpose"). The gap the
+  learner chose is a measure of the work, not a method;
 - **next:** one thing.
 
 ## 13. Open items
@@ -201,10 +208,9 @@ Spec 004 FR-018's shared fields. In plain words in the lesson entry:
   skill is built. Skill 3 consumes its measures and applies FR-027; it never copies it.
 
 **For the spec writer (S):**
-- **S-1 (changes curriculum § 6's pass):** the properties kind passes when no two focus properties
-  **both start and land** the same, not "start" alone. DX-03 is defined as "start and end on the same
-  frames", and Adobe's fix for Title moved only the landing. FR-027 defines "the same" and still fits;
-  the properties-kind rule needs a line. I'll update curriculum § 6 to match once you agree.
+- **S-1 (agreed; curriculum § 6 skill 3 updated 2026-10-20):** the properties kind passes when no
+  two focus properties **both start and land** the same, not "start" alone. DX-03 is defined as
+  "start and end on the same frames", and Adobe's fix for Title moved only the landing.
 - **S-2** The hold-pair start is the jump time (second key). Spec 004's Edge Cases says only "a hold
   pair: a start, in timing"; please pin it in FR-016's rules, since spec 005 uses the same analysis.
 - **S-3** Proposing the larger group, then offering the other kind: the tie-break is yours.
@@ -223,3 +229,13 @@ proposing.
 
 **Curriculum B items this skill settles:** B1 (skill 3's targets), B6 (consumer of FR-016), B7 (shift
 one layer's keys).
+
+## 14. Answers to the spec writer, round 1 (2026-10-20)
+
+| Q | Answer | Spec default |
+|---|---|---|
+| D-1 Demo gap under the floor | **Agreed, and moved earlier:** catch it at stage 3 when the gap is repeated back, not only at the demo. Plain words ("a gap that small still reads as together"), no number, let them pick again. If they keep it, no demo; walk it through in words and check as usual. The one demo must show a real stagger (§ 5). | **Changed** (stage 3, not only the demo) |
+| D-2 "Unless they said they want them split" | **Agreed: ask, don't fail.** The "pops in" hint first; if the learner says the split is on purpose, that layer passes on the next check. Saying it up front at stage 3 counts too (§ 4, § 6). The record's summary says it in plain words ("split Title's Opacity on purpose"). | Kept, plus the up-front case |
+| Several moves in one property (FR-005) | **Confirmed:** the matching move counts, remembered per property (§ 4). | Kept |
+| Children of a moving parent in wave A | **Confirmed** as a known blind spot until R1 (§ 9). The mentor says nothing about the parent and doesn't claim the children are now fully apart on screen. | Kept |
+| Tie-break (properties kind) and rhythm threshold (FR-027's floor) | **No conflict.** The properties kind on a tie fits "one layer is a smaller lesson". Reusing the floor for "uneven" is right: no new number, and the comment is never a fail. | Kept |
