@@ -13,3 +13,6 @@ build/
 
 # After Effects auto-saves
 discovery/Auto-Save/
+
+# Agent worktrees (Agent tool isolation)
+.claude/worktrees/
