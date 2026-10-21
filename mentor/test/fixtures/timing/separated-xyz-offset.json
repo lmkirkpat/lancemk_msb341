@@ -1,0 +1,224 @@
+{
+  "comment": "Synthetic (spec 004 T038): a copy of synthetic/separated-xy.json with Y keyed too and times changed. Bar's X (0-0.6 s) and Y (0.4-1 s) overlap, so they read as one Position move; Apart's X (0-0.5 s) and Y (1-1.5 s) don't, so they're two.",
+  "taken_at": "2026-10-01T12:00:00.000Z",
+  "project": "Synthetic.aep",
+  "comp": {
+    "id": 100,
+    "name": "Synthetic",
+    "duration": 6,
+    "frame_rate": 30
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Bar",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position_0",
+          "display_path": "Transform › X Position",
+          "match_name": "ADBE Position_0",
+          "display_name": "X Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 200,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 0.6,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 700,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Position_1",
+          "display_path": "Transform › Y Position",
+          "match_name": "ADBE Position_1",
+          "display_name": "Y Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.4,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 900,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 500,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Apart",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position_0",
+          "display_path": "Transform › X Position",
+          "match_name": "ADBE Position_0",
+          "display_name": "X Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 200,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 700,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Position_1",
+          "display_path": "Transform › Y Position",
+          "match_name": "ADBE Position_1",
+          "display_name": "Y Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 900,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 500,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
