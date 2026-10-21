@@ -289,11 +289,11 @@ Phase 6 despite their numbers. Each pair is test first, then code.
 **Purpose**: prove FR-035 and SC-004 on the branch, and leave the parallel builders a working
 contract.
 
-- [ ] T044 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/`: all green, T001's count plus the new tests, no existing test edited (`git diff --stat main -- mentor/test/*.test.mjs` shows only new files)
-- [ ] T045 [US6] Run `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: every changed file is the skill-builder's, and the list of changed existing files matches this file's table exactly. Paste the output in the hand-back
+- [x] T044 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/`: all green, T001's count plus the new tests, no existing test edited (`git diff --stat main -- mentor/test/*.test.mjs` shows only new files)
+- [x] T045 [US6] Run `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: every changed file is the skill-builder's, and the list of changed existing files matches this file's table exactly. Paste the output in the hand-back
 - [ ] T046 [US6] Hand back to the cockpit for the easing eval run (eval engineer, `node product/evals/easing/run.mjs`, about $12): expect 25/25 or 24/25 with no hard-rule failure (FR-035, SC-003). If a case drops because of T021's wording or T036's extra fields, fix it on this branch before merge (plan › Risks)
 - [ ] T047 [US6] Quickstart › 5 (🖐, Claude Code, a temp `AE_MENTOR_HOME` with `easing-learned` copied in): `/next-mentor` answers in at most two sentences with no IDs; asking for an unbuilt skill says it isn't ready and starts nothing. Note the result in the hand-back
-- [ ] T048 [US6] Write the hand-back for the cockpit: the branch and commit; the changed-files table with any difference from this file's; test counts; the T042 host values and the beta finding; anything specs 008 to 010 need that the contract doesn't give (as requests, not changes); and a reminder that `panel/lib/runtime.js` must link every `*-mentor` skill before new-skill evals run (plan › P3)
+- [x] T048 [US6] Write the hand-back for the cockpit: the branch and commit; the changed-files table with any difference from this file's; test counts; the T042 host values and the beta finding; anything specs 008 to 010 need that the contract doesn't give (as requests, not changes); and a reminder that `panel/lib/runtime.js` must link every `*-mentor` skill before new-skill evals run (plan › P3)
 
 ---
 
