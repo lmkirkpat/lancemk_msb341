@@ -85,7 +85,7 @@ it, Claude Code treats any exit other than 0 or 2 as the hook failing and lets t
 ## Check it works
 
 ```bash
-node --test .claude/hooks/test/          # unit tests, free
+node --test .claude/hooks/test/*.test.mjs   # unit tests, free
 node .claude/hooks/probe/identity.mjs    # one headless run, about $0.50
 ```
 

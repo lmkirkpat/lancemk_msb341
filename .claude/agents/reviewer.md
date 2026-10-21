@@ -53,4 +53,4 @@ learn from it and the review stays independent.
 - For a new teaching skill, also check: the spec has an overlap section, each hard rule is
   enforced in a tool, nothing the learner sees names an internal field, and the eval set covers
   the skill's requirements.
-- Tests: `cd mentor && npm test`, `panel/test/`, and `node --test .claude/hooks/test/`.
+- Tests: `cd mentor && npm test`, `panel/test/`, and `node --test .claude/hooks/test/*.test.mjs`.

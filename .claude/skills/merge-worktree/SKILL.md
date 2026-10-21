@@ -37,7 +37,7 @@ If unsure what exists, run `git worktree list`.
    exist on `main`. A clash means renumber before merging.
 
 4. **Run the tests the branch touches.** `cd mentor && npm test` for `mentor/`, `cd panel && npm
-   test` for `panel/`, `node --test .claude/hooks/test/` for hooks. Report the real output.
+   test` for `panel/`, `node --test .claude/hooks/test/*.test.mjs` for hooks. Report the real output.
 
 5. **Merge.** `git merge --no-edit <branch>`.
    - On a conflict, stop. Show `git diff --name-only --diff-filter=U`, say what overlapped, and

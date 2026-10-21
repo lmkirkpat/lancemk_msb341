@@ -184,7 +184,7 @@ a brand new session act like a colleague who already knows what you are working 
     agent to another project means rewriting that section.
   - `.claude/hooks/` (`decisions/008`, wired in `.claude/settings.json`): the AE lock, file
     ownership (`ownership.json`, mirrors 007's table) and the git guard, keyed on the calling
-    subagent. Tests: `node --test .claude/hooks/test/`. Merge agent branches with `/merge-worktree`.
+    subagent. Tests: `node --test .claude/hooks/test/*.test.mjs`. Merge agent branches with `/merge-worktree`.
 - **How work ships:** TBD
 - **Testing and style:** AI features get an eval set in `product/evals/`.
 - **Edge cases where concepts overlap:** when adding a teaching skill, list in its spec where
