@@ -394,7 +394,12 @@ Other edge cases:
   MUST run only in a session started **without a named skill, outside the panel** (for example,
   typing in Claude Code). In the panel, **Start lesson** opens the named skill's lesson with no
   diagnosis opening, and diagnosis stays a separate press (spec 007 FR-012, its open question 1).
-  A session that names a skill MUST NOT open with a diagnosis anywhere.
+  A session that names a skill MUST NOT open with a diagnosis anywhere. In a session started
+  without a named skill outside the panel, the diagnosis opening comes first, and its suggestion
+  follows FR-020; spec 004 FR-004's recommendation applies only when the comp has no findings
+  (builder, 2026-10-20). **Low priority**, kept small, with no eval cases beyond case 15. The
+  builder's note: "honestly i don't see this being much of a relevant use case because i don't see
+  many people using it in claude code".
 
 ### Evals and tests
 

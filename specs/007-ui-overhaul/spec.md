@@ -726,7 +726,7 @@ Each step can stop on its own and leave a working panel.
 | **1. Shell and lesson** | P1 | Tabs, Home A from today's record, the Lesson tab with the docked checklist, lesson-in-progress rules, plain errors, accessibility, the widened sync test | PN-10, PN-13, PN-14 (easing skill and tools), their eval cases | Easing only, in the new layout. Up next comes from today's fixed path (`panel/lib/path.js`) until spec 004's path data exists. |
 | **2. Curriculum wave A** | P1 | Skills tab, path from data, Up next from the stored recommendation, Start lesson and New lesson for any built skill | Spec 004 wave A (PN-09, PN-16) | Easing plus skills 2, 1, 3; skills 5 and 6 (spec 004 wave B) arrive through the same screens |
 | **3. Diagnosis** | P1 | The `diag-*` screens, story by story with spec 005 | Spec 005 US1, then US2, then US3 | See the next table |
-| **4. Reviews** | P2 | Practice due, Warm up, the practice state | Spec 004 wave C (PN-11) | Practice across sessions |
+| **4. Reviews** | P2 | Practice due, Warm up, the practice state | Spec 004 wave C (PN-11) | Practice across sessions (for skills 2, 1, 3 this sprint; spec 004 has them in its baseline) |
 | **5. First run** | P2 | `setup-*` screens and the Check setup entry, with option A's access-key sign-in | Spec 006 (its Q1 answered by `decisions/009`; the key source waits on its Q2) and the option A runtime spec | The installer path |
 
 ### If only diagnosis US1 and curriculum wave A exist

@@ -5,9 +5,10 @@
 **Created**: 2026-10-20
 
 **Status**: Approved 2026-10-20. Plan and tasks come next. The builder's answers are folded in the
-same day: H1 (After Effects 26.5 on macOS 27.0.1), H2 (this sprint's baseline is five skills: 2, 1,
-3, 5, 6) and Q1 to Q3 (the written defaults, for now). Still open: H3, H4, H5 and its shared-code
-owner note (FR-032), `curriculum.md`'s H4, H6 and H7, and the B and E items. None blocks the plan.
+same day: H1 (After Effects 26.5 on macOS 27.0.1), H2 (this sprint's baseline is five skills, 2, 1,
+3, 5, 6, plus reviews for 2, 1, 3), session start without a named skill (diagnosis first) and Q1 to
+Q3 (the written defaults, for now). Still open: H3, H4, H5 and its shared-code owner note (FR-032),
+`curriculum.md`'s H4, H6 and H7, and the B and E items. None blocks the plan.
 Revised 2026-10-20 with the curriculum designer's round 1 answers (`curriculum.md` › 13): FR-004,
 FR-005, FR-018 to FR-021, FR-027 to FR-029 and the new FR-037 changed; the three conflicts they
 raised (Q1 to Q3) are settled.
@@ -105,7 +106,8 @@ easing evals still pass at baseline.
 
 1. **Given** the record says easing is learned, **When** I start a session without naming a
    skill, **Then** the mentor recommends one of the built first skills by the path rule (FR-004)
-   and says why in one sentence.
+   and says why in one sentence. Outside the panel, spec 005's diagnosis opening comes first, and
+   this recommendation applies only when the comp has no findings (FR-004).
 2. **Given** I start skill 2, 1 or 3, **When** the lesson runs, **Then** it follows the six stages
    in `curriculum.md` › 2, with that skill's focus, steps and pass from `curriculum.md` › 6, and
    the margins in FR-026 to FR-029.
@@ -148,14 +150,16 @@ recommendation matches FR-004 every time. Then one live check in a session.
 
 ---
 
-### User Story 3 - Review a skill in a later session (Priority: P2)
+### User Story 3 - Review a skill in a later session (Priority: P1 for skills 2, 1, 3; P2 for 5 and 6)
 
 A few days after I learned a skill, Knack asks me to use it again on something I haven't done
 before, without a demonstration or a walkthrough, and checks it the same way. If I get it, the
 next review is further out. If something's off, it tells me what, and reviews it sooner.
 
 **Why this priority**: this is the practice half of the "why", and the part Adobe has no way to do
-today. P2 because it only matters once a skill has been learned, and the first skills come first.
+today. The builder put reviews for skills 2, 1 and 3 in this sprint's baseline (2026-10-20), so
+those are P1; reviews for skills 5 and 6 are stretch, P2. The review rules (FR-019 to FR-021) are
+the same for every skill.
 
 **Independent Test**: with a saved record that says skill 2 was learned three or more days ago,
 start a session on a comp with a new eased pair. It's complete if the mentor offers a review, gives
@@ -333,7 +337,11 @@ Other edge cases:
      saying the comp has nothing for it yet and offering the second practice comp.
   Soft prerequisites never block; they only break ties in step 3 (a skill whose soft prerequisites
   are learned comes first). Practicing before a due review is the designer's answer
-  (`curriculum.md` › 13, C2).
+  (`curriculum.md` › 13, C2). In a session started without a named skill outside the panel (for
+  example, typing in Claude Code), spec 005's diagnosis opening comes first and its suggestion
+  follows spec 005 FR-020; this rule applies there only when the comp has no findings (spec 005
+  FR-026; builder, 2026-10-20). Low priority: the builder doesn't expect many people to start
+  lessons from Claude Code.
 - **FR-005**: The mentor MUST NOT start a lesson for a skill whose hard prerequisite isn't learned
   without first naming the prerequisite and offering it. If the learner insists, the lesson runs
   after one sentence saying what it builds on (`curriculum.md` › 13, C1), and:
@@ -564,7 +572,7 @@ own and leave a working path.
 |---|---|---|---|---|
 | **A. First skills** (baseline) | P1 | Path data and recommendation (FR-001 to FR-008), record and reviews' data (FR-018, FR-023), R0, the timing analysis (FR-016), then skills **2, 1, 3** (each with its own spec and demo tool); second practice comp's skill 1 and review targets | Shared-code owner named (FR-032); skills 2, 1, 3's own specs approved | Ships easing plus 2, 1, 3, a path and a recommendation. Below the baseline. |
 | **B. Reads for 5 and 6, then skills 5 and 6** (baseline) | P2 | R1, R3, the visibility class (FR-013), the motion-sources map's first step (own keys and parent chain, FR-014), KD-001's fix (it comes with R1); then skills **5, 6** | Wave A merged, easing at baseline; skills 5 and 6's own specs approved | Ships the baseline: easing plus 2, 1, 3, 5, 6. |
-| **C. Reviews** (stretch) | P2 | Reviews (FR-019 to FR-021) | Wave A merged | Ships practice across sessions for every built skill |
+| **C. Reviews** (baseline for 2, 1, 3; stretch for 5, 6) | P1 | Reviews (FR-019 to FR-021), live first for skills 2, 1, 3; then for 5 and 6 once they're built | Wave A merged | Ships practice across sessions for the first skills, then every built skill |
 | **D. The rest, in parallel** (stretch or next sprint) | P3 | R2, R4 and the map's second step, then skills **4, 10**; then R5, R8, R6 and skills **7, 8, 9**; the rest of the second practice comp | Wave B's reads merged; each skill's spec approved; KD-001 fixed before 8 | Any subset ships, as long as its hard prerequisites are built |
 
 Within wave A, 2 first: it needs no new read and only a demo tool. 1 needs its practice target. 3
@@ -573,8 +581,9 @@ new read, and 6 needs R1 and R3. Waves B and C don't depend on each other. Skill
 skills in wave D, run in parallel worktrees once the shared pieces they need are merged
 (`decisions/008`); none of them edits the shared files (FR-032).
 
-Reviews (wave C) aren't in the five-skill baseline as H2 was answered. That makes SC-009 and US3
-stretch for this sprint, even though memory and practice are half of the "why".
+Reviews for skills 2, 1 and 3 are in the baseline (builder, 2026-10-20), so wave C runs alongside
+wave B; reviews for skills 5 and 6 are stretch. This sprint's baseline is **skills 2, 1, 3, 5, 6
+plus reviews for 2, 1, 3**.
 
 ## Success Criteria *(mandatory)*
 
@@ -601,7 +610,7 @@ stretch for this sprint, even though memory and practice are half of the "why".
 - **SC-008**: In review eval cases, **100%** have no demonstration and no walkthrough, use a
   target not in the record, ask the skill's intent questions where it has them, and offer no review
   when the comp has no new target. *Measured by:* deterministic eval checks.
-- **SC-009** (stretch, with wave C): For each first skill (2, 1, 3), at least **one live review at
+- **SC-009** (baseline, with wave C): For each first skill (2, 1, 3), at least **one live review at
   least one day after its first pass** is logged, with the check agreeing with After Effects.
   *Measured by:* the builder, in usage notes.
 - **SC-010**: Parallel skill builds (waves B and D) cause **0 merge conflicts** in the shared
@@ -611,7 +620,8 @@ stretch for this sprint, even though memory and practice are half of the "why".
   with its eye off is in easing's findings in the unit test and the eval case **every time**.
   *Measured by:* a unit test and eval case 3.
 - **SC-012**: This sprint's baseline (H2): skills **2, 1, 3, 5 and 6** are each built and each
-  meet SC-001, SC-002 and SC-007. Skills 4 and 7 to 10 don't count against the sprint.
+  meet SC-001, SC-002 and SC-007, and reviews for **2, 1 and 3** meet SC-008 and SC-009. Skills 4
+  and 7 to 10, and reviews for 5 and 6, don't count against the sprint.
   *Measured by:* the usage notes and eval runs behind those criteria, listed in the sprint review.
 
 ## Eval plan (outline, for the eval engineer)
@@ -713,7 +723,7 @@ lesson again.
   tracking, roto, Object Matte, color.
 - **Skills 4, 7, 8, 9 and 10 this sprint** (H2): stretch or next sprint. Their designs and the
   requirements for them stay in this spec; nothing about them is cut, only scheduled later
-  (wave D).
+  (wave D). Reviews for skills 5 and 6 are stretch too (wave C).
 - **The panel's screens** for the path, reviews and recommendations (UI overhaul spec).
 - **Other apps,** accounts, sync of the record across machines, pricing and analytics.
 - **A setting-keyframes skill** (an on-ramp only, pending H4).
@@ -727,8 +737,9 @@ lesson again.
    beta, so skill 5 doesn't rely on it; skill 8's wording left for the live run).
 2. **Ten skills this sprint, or fewer?** (`curriculum.md` H2.) **Answered 2026-10-20:** this
    sprint's baseline is five skills, 2, 1, 3, 5 and 6; skills 4 and 7 to 10 are stretch or next
-   sprint. Folded into US4, US5, FR-010, FR-014, Build order, SC-012 and Out of scope. Reviews
-   (wave C) aren't in the baseline as answered.
+   sprint. Folded into US4, US5, FR-010, FR-014, Build order, SC-012 and Out of scope. Follow-up
+   the same day: reviews for skills 2, 1 and 3 are in the baseline, reviews for 5 and 6 are stretch
+   (US3, wave C, SC-009, SC-012).
 3. **Skill 4 first, or 4th?** (`curriculum.md` H3; interview 007 suggests earlier.)
    **Recommended:** keep it 4th in the path. It needs three new reads (R1, R2, R4), the most of any
    skill, so making it first would delay every lesson; diagnosis can still pull it forward at any
