@@ -41,9 +41,10 @@
   and the spec-writer persona require; the targets themselves are outcomes (minutes, agreement
   rate, pass rate, conflicts).
 - **No [NEEDS CLARIFICATION] markers.** Choices that need someone else are open questions with a
-  recommended default written into the requirement: H1 to H5 for the human, C1 to C5 for the
-  curriculum designer (what is taught), and B and E items carried from `curriculum.md` › 12.
+  recommended default written into the requirement: H1 to H5 for the human, Q1 to Q3 (conflicts
+  raised by the designer's round 1 answers), and B and E items carried from `curriculum.md` › 12.
+  C1 to C5 were answered in `curriculum.md` › 13 and folded in (2026-10-20).
 - **Teaching design not restated.** Every skill's idea, focus, steps, pass and review are linked to
   `curriculum.md` › 6; only the measures the designer delegated (pass margins, review timing) are
   set here (FR-019, FR-026 to FR-029).
-- Validation run once; all items pass.
+- Validation run twice (first draft; after round 1 answers); all items pass.

@@ -5,6 +5,9 @@
 **Created**: 2026-10-20
 
 **Status**: Draft, awaiting approval. Plan and tasks come after approval and the open questions.
+Revised 2026-10-20 with the curriculum designer's round 1 answers (`curriculum.md` › 13): FR-004,
+FR-005, FR-018 to FR-021, FR-027 to FR-029 and the new FR-037 changed; three conflicts they raise
+are open questions Q1 to Q3.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
@@ -132,8 +135,8 @@ recommendation matches FR-004 every time. Then one live check in a session.
    built, not-yet-learned skill in path order whose hard prerequisites I've learned, preferring
    one my open comp has a focus for (FR-004).
 3. **Given** I ask for a skill whose hard prerequisite I haven't learned, **When** the mentor
-   answers, **Then** it names the prerequisite in one sentence and offers it first (what happens if
-   I insist is open question C1).
+   answers, **Then** it names the prerequisite in one sentence and offers it first. If I still want my
+   skill, the lesson runs without reteaching the prerequisite (FR-005).
 4. **Given** the path, **When** a skill isn't built yet, **Then** it's never recommended or started.
 5. **Given** a recommendation, **When** I pick a different built skill whose hard prerequisites
    I've learned, **Then** that lesson starts.
@@ -156,18 +159,25 @@ with the skill's own pass, and records it as a review with the next review date 
 
 **Acceptance Scenarios**:
 
-1. **Given** a learned skill whose review is due, **When** a session starts and no skill is in
-   progress, **Then** the mentor offers that review in one sentence. It's an offer: if I decline,
-   the session goes on and the review stays due.
-2. **Given** a review, **When** it runs, **Then** there's no demonstration and no walkthrough,
-   only the task and, after "done", the check. Hints after a check that isn't a pass are allowed.
+1. **Given** a learned skill whose review is due and a new target in my comp, **When** a session
+   starts and no skill is in progress, **Then** the mentor offers that review in one sentence. It's
+   an offer: if I decline, the session goes on and the review stays due.
+2. **Given** a review, **When** it runs, **Then** there's no demonstration and no walkthrough: the
+   task, the skill's intent questions (what should snap, where the hinge is, what order), and after
+   "done", the check. Hints after a check that isn't a pass are allowed; a reteach isn't.
 3. **Given** a review, **When** the mentor picks a target, **Then** it's not a layer and property
    the record shows I did for this skill on this comp.
 4. **Given** I pass the review, **When** it's recorded, **Then** the next review is further out
    (FR-019). **Given** I don't, **Then** the skill stays learned, the next review is the shortest
-   interval, and the record's "next" names what was still off.
+   interval, and the record's "next" names what was still off. I can then ask for a practice
+   lesson, which may have a demonstration.
 5. **Given** spec 005 finds something a learned skill covers, **When** it recommends, **Then** it
    offers this review on that finding (spec 005 FR-020), counted as the same review.
+6. **Given** a review is due but my comp has nothing new to practice it on, **When** the session
+   starts, **Then** no review is offered, and it stays due without counting as missed or failed.
+7. **Given** a skill I haven't learned, **When** I say I already know it, **Then** the mentor runs
+   it as a review (no demo, no walkthrough); if I pass, the skill is learned, recorded as "already
+   knew it", and its schedule starts from that pass. The mentor never offers this unprompted.
 
 ---
 
@@ -282,8 +292,9 @@ Other edge cases:
   different layer and property or a different comp (FR-018).
 - **Two skills could teach the same finding** (skill 3 and spec 005's DX-03): the path decides
   which is offered (`curriculum.md` › 10).
-- **A skill passed as a review before its first lesson** (the learner already knew it): recorded as
-  passed; the skill becomes learned (open question C4).
+- **A skill passed as a review before its first lesson** (the learner said they already know it):
+  recorded as passed and "already knew it"; the skill becomes learned (FR-020, `curriculum.md` › 13
+  C4).
 - **Different AE version from last session:** R0 is read every session; version-dependent steps
   follow today's version.
 
@@ -303,16 +314,24 @@ Other edge cases:
   present count as built.
 - **FR-004**: The recommended next skill MUST follow this rule, in order:
   1. a skill the record says is *practicing*;
-  2. else a learned skill whose review is due (FR-019);
+  2. else a learned skill whose review is due (FR-019) and that has a new target in the open comp
+     (FR-021);
   3. else the first built, not-learned skill in path order whose hard prerequisites are all learned
      and that has a focus candidate in the open comp;
   4. else the first built, not-learned skill in path order whose hard prerequisites are learned,
      saying the comp has nothing for it yet and offering the second practice comp.
   Soft prerequisites never block; they only break ties in step 3 (a skill whose soft prerequisites
-  are learned comes first). The order of 1 and 2 is open question C2.
+  are learned comes first). Practicing before a due review is the designer's answer
+  (`curriculum.md` › 13, C2).
 - **FR-005**: The mentor MUST NOT start a lesson for a skill whose hard prerequisite isn't learned
-  without first naming the prerequisite and offering it. What happens when the learner insists is
-  open question C1; until answered, the lesson runs after one sentence saying what it builds on.
+  without first naming the prerequisite and offering it. If the learner insists, the lesson runs
+  after one sentence saying what it builds on (`curriculum.md` › 13, C1), and:
+  - it MUST NOT reteach the prerequisite;
+  - if the learner makes that prerequisite's typical mistake, the mentor gives the prerequisite
+    skill's hint and suggests the prerequisite after this lesson;
+  - if the skill's focus rule finds nothing to teach in the comp (skill 2 with no eased pairs), it
+    says so and offers the prerequisite instead;
+  - the record holds nothing about the gap beyond what the checks showed (FR-022).
 - **FR-006**: A skill that isn't built MUST NOT be recommended, offered or started.
 - **FR-007**: When spec 005 pulls a skill forward from a finding (its FR-020), only hard
   prerequisites apply. Skill 4's only hard prerequisite is keyframes, so diagnosis can offer it at
@@ -372,20 +391,29 @@ Other edge cases:
 - **FR-018**: The learner record MUST hold, per skill: its status (*not started*, *practicing*,
   *learned*, as today; *learned* stays learned), when it was last practiced, how many times it
   passed, the "next" note, **when its next review is due**, and **how many reviews in a row it has
-  passed**. Each lesson entry MUST also say whether it was a **first lesson, practice or review**,
-  and which **layers and properties it targeted, on which comp**, so a review can pick a new target.
+  passed**. Each lesson entry MUST also say whether it was a **first lesson, practice or review**
+  (a review run before any first lesson is marked **"already knew it"**, FR-020), and which **layers and properties it targeted, on which comp**, so a review can pick a new target.
 - **FR-019**: Reviews MUST run on this schedule: the first review is due 1 day after the skill's
   first pass; after a passed review the next is due 3 days later, then 7, then 14, then 30, and
   stays at 30. After a review that isn't a pass, the next is due 1 day later and the run of passes
-  goes back to 0.
-- **FR-020**: Reviews MUST be offered, never forced, and at most one review MUST be offered at the
-  start of a session (FR-004, step 2). A declined review stays due. A review is also offered when
-  spec 005 finds something a learned skill covers (spec 005 FR-020); passing it there counts the
-  same.
+  goes back to 0. A review not offered because the comp has no new target (FR-021) changes
+  nothing: it stays due and isn't counted as missed or failed.
+- **FR-020**: Reviews MUST be offered, never forced, and at most one review MUST be offered per
+  session (FR-004, step 2), and none after a practice lesson on the same skill in that session
+  (`curriculum.md` › 13, C2). A declined review stays due. A review is also offered when spec 005
+  finds something a learned skill covers (spec 005 FR-020); passing it there counts the same
+  (whether it counts toward the one per session is Q2). The mentor MUST NOT offer a review for a
+  skill that isn't learned. If the learner says they already know an unlearned skill, the mentor
+  runs it as a review; a pass makes it learned, marked "already knew it", and FR-019's schedule
+  starts from that pass (C4).
 - **FR-021**: A review MUST have no demonstration and no walkthrough, run on a target not in the
-  record for that skill on that comp, and use the skill's own pass check. Hints after a check that
-  isn't a pass follow spec 002 FR-008. `record_lesson` MUST refuse a review entry that says a demo
-  was used.
+  record for that skill on that comp, and use the skill's own pass check. It MUST still ask the
+  skill's intent questions where the skill has them (1: what should snap; 3: what order; 5: where
+  the hinge is), so the check doesn't grade a guess. If the open comp has no new target, the review
+  isn't offered (FR-019; Q1). After a check that isn't a pass it gives the skill's normal hints
+  (spec 002 FR-008) and doesn't reteach; the learner can then ask for a practice lesson, which may
+  have a demonstration and is recorded as practice (`curriculum.md` › 2). `record_lesson` MUST
+  refuse a review entry that says a demo was used.
 - **FR-022**: Every record write MUST keep spec 002's rules: what the checks showed, one "next", no
   method, no motive, no names, emails or phone numbers; and a result must match what the session's
   check saw.
@@ -401,6 +429,12 @@ Other edge cases:
 - **FR-025**: Every skill MUST follow the six stages in `curriculum.md` › 2 and the server rules
   (spec 002 FR-005 to FR-013; Edit > Undo with no undo label; no claims when AE is unreachable or
   busy; real layer names; no field names shown; no announced calls; hints, not fixes).
+- **FR-037**: Inside any other skill's lesson, the mentor MUST ask the learner to "trace this one
+  first" only when all three hold: a source other than the layer's own keys (parent, expression,
+  precomp contents, from the motion-sources map) affects that lesson's focus or its check; skill 4
+  is learned; and it hasn't asked already in this lesson. Otherwise it names the source in one
+  sentence and carries on (`curriculum.md` › 6, skill 4, hand-off; › 13, C5). How this relates to
+  skill 4's review schedule is Q3.
 
 ### Pass margins (measures for `curriculum.md` › 6 passes; the designer asked for these)
 
@@ -408,17 +442,25 @@ Other edge cases:
   is at least **20 percentage points** more than the start key's outgoing influence; neither key is
   at the default on both sides, where default means within **1 point of 33.33%** influence; and both
   keys are still bezier.
-- **FR-027 (skill 3, offset)**: two starts are **the same** if they are less than **2 frames apart**
-  at the comp's frame rate (so a 1-frame nudge still counts as lockstep). Within a shifted layer,
+- **FR-027 (skill 3, offset)**: two starts are **the same** if they are less than **2 frames apart
+  at the comp's frame rate or less than 1/15 s apart, whichever is longer** (so a 1-frame nudge
+  still counts as lockstep, and at 60 fps so do 3 frames). This is a floor the check uses, never a
+  target: the mentor MUST NOT tell the learner a gap to use; the learner picks it
+  (`curriculum.md` › 13, C3). Within a shifted layer,
   its animated properties count as moved by the same amount if their shifts differ by **less than
   half a frame**. Uneven gaps get a comment on the rhythm, never a fail (`curriculum.md` › 6).
 - **FR-028 (skill 5, anchor)**: the anchor is **in the named region** if it is within **10% of the
-  layer's larger bound dimension** of that region's point (corner, edge center or center). The
+  layer's width** of that region's point horizontally **and within 10% of its height** vertically
+  (corner, edge center or center). Each axis uses its own size, so regions don't overlap on thin
+  layers (on an 800 × 60 bar: 80 px across, 6 px up and down). The
   layer's footprint is **unchanged** if every edge of its comp-space bounds at the current time
   moved by **1 pixel or less**.
 - **FR-029 (skill 6, null)**: a child **didn't jump** if its comp-space position at the current time
-  moved by **1 pixel or less**; its own keys are unchanged if key count, times (within half a frame)
-  and values (within 0.01) match the read before.
+  moved by **1 pixel or less**. It **kept its own animation** if its key count and key times (within
+  half a frame) match the read before, and its **comp-space position at each of its key times** is
+  within **1 pixel** of the read before. The check MUST NOT compare raw key values: parenting may
+  rewrite a child's Position into the parent's space, which would fail every correct parenting
+  (`curriculum.md` › 12, B9, unverified; › 13).
 
 ### Version, practice comp and ownership
 
@@ -515,8 +557,9 @@ them edits the shared files (FR-032).
   skill 3 and spec 005 the same numbers from one place. *Measured by:* unit tests.
 - **SC-007**: Each built skill's eval cases pass **at least 80%**, every hard-rule check passes,
   and there are **at least 6 cases per skill** (Eval plan). *Measured by:* eval runs.
-- **SC-008**: In review eval cases, **100%** have no demonstration and no walkthrough and use a
-  target not in the record. *Measured by:* deterministic eval checks.
+- **SC-008**: In review eval cases, **100%** have no demonstration and no walkthrough, use a
+  target not in the record, ask the skill's intent questions where it has them, and offer no review
+  when the comp has no new target. *Measured by:* deterministic eval checks.
 - **SC-009**: For each first skill (2, 1, 3), at least **one live review at least one day after its
   first pass** is logged, with the check agreeing with After Effects. *Measured by:* the builder, in
   usage notes.
@@ -555,21 +598,37 @@ Plus its version trap (FR-030) where the skill has one.
 - **Intent questions (skills 1, 5):** the learner says "it's meant to fade" (1) or names a hinge
   the mentor didn't expect (5); the point is dropped or the focus follows the learner.
 - **Skill 2:** a pair at Easy Ease's default on both ends doesn't pass; a pair 15/80 does.
-- **Skill 3:** a 1-frame offset is still called lockstep; uneven gaps get a rhythm comment, never a
-  fail.
+- **Skill 3:** a 1-frame offset at 30 fps and a 3-frame offset at 60 fps are still called lockstep;
+  the mentor never names a gap to use; uneven gaps get a rhythm comment, never a fail.
+- **Skill 5:** on a thin layer (an 800 × 60 bar), an anchor at left-center doesn't pass for
+  top-left.
+- **Skill 6:** a correct parenting where the child's raw Position values changed but its comp-space
+  positions at its key times didn't passes.
 
 **Cross-skill:**
 
 1. **Recommendation:** session start with easing learned, no skill named: recommends by FR-004,
    in at most two sentences, no IDs shown.
 2. **Missing prerequisite:** the learner asks for skill 6 with 5 not learned: names 5 and offers it.
+   If the learner insists, the lesson runs without reteaching 5; making 5's typical mistake gets
+   5's hint.
 3. **Matte (KD-001, easing regression):** a comp with a moving matte, eye off. The easing lesson
    includes it and doesn't say "you've hidden this".
 4. **Review declined:** the session goes on; nothing is recorded as a review.
-5. **Review not passed:** hints, not the fix; the record's "next" names what's off.
-6. **Unreadable record:** lessons still run; one sentence about the notes; no recommendation from
+5. **Review not passed:** hints, not the fix and not a reteach; the record's "next" names what's
+   off.
+6. **Review with no new target:** a due review on a comp with nothing new; no review is offered,
+   and the record doesn't count it as missed.
+7. **Review asks intent:** a skill 1 review still asks what's meant to snap before checking.
+8. **"I already know it":** the learner says so for an unlearned skill; it runs as a review, and a
+   pass is recorded as learned, "already knew it". No review is ever offered unprompted for an
+   unlearned skill.
+9. **Skill 4 hand-off:** in a skill 2 lesson with skill 4 learned and the focus layer riding a
+   moving parent, the mentor asks "trace this one first" once; with skill 4 not learned, it names the
+   parent in one sentence and carries on.
+10. **Unreadable record:** lessons still run; one sentence about the notes; no recommendation from
    history.
-7. **Plain speech:** no record IDs, field names or quoted values in anything the learner sees (on
+11. **Plain speech:** no record IDs, field names or quoted values in anything the learner sees (on
    every case, deterministic).
 
 Rubric additions: the recommendation gives a reason; a review is clearly a "try it yourself", not a
@@ -587,7 +646,7 @@ lesson again.
 - **"Learned" means one pass**, as today; reviews add practice, they don't take "learned" away.
 - **Second practice comp:** a separate comp built by its own script; whether it lives in the same
   `.aep` or its own file is a plan choice, as long as FR-031 holds.
-- **Claims to verify** in `curriculum.md` › 13 (U and expression-only properties, Pan Behind and
+- **Claims to verify** in `curriculum.md` › 14 (U and expression-only properties, Pan Behind and
   existing keys, the Cursor on 2026-10-08) are settled in the affected skill's spec, before it's
   built.
 
@@ -634,22 +693,38 @@ lesson again.
    once, `decisions/007`'s table names only "skill-builder" for `mentor/`, so a one-line note there
    (or in the plan) saying who owns the shared files during a parallel run would help.
 
-### For the curriculum designer (C) — what is taught, not decided here
+### Answered by the curriculum designer, round 1 (`curriculum.md` › 13)
 
-1. **Missing hard prerequisite, learner insists** (FR-005): does the lesson run anyway, or does the
-   mentor hold to the prerequisite? Spec's default until answered: it runs after one sentence
-   saying what it builds on (restraint: the learner chooses).
-2. **Practicing skill vs. a due review at session start** (FR-004 steps 1 and 2): which comes first?
-   Spec's default: the practicing skill.
-3. **Skill 3's "same frame"** (FR-027): is treating starts under 2 frames apart as lockstep a fair
-   reading of "a few frames apart", or should only an exact same frame fail?
-4. **Passing a review before a first lesson:** if the learner already knows a skill and passes on
-   the first try with no demo, is that "learned"? Spec's default: yes.
-5. **Skill 4's review inside other lessons** ("trace this one before I tell you"): every skill's
-   lesson would need to hand to it when a focus layer's motion has another source. Confirm that's
-   the intent, so each skill spec carries it. Also still open from `curriculum.md`: H4 (is naming
-   sources a real "you do"), H6 (animators before presets, anchor kept separate) and H7 (the offset
-   taste rule).
+C1 (insisting on a missing prerequisite: the lesson runs, no reteach; FR-005), C2 (in progress
+before a due review, none after a practice lesson on the same skill; FR-004, FR-020), C3 (lockstep
+floor in time as well as frames, never shown as the target; FR-027), C4 ("already knew it", never
+offered unprompted; FR-018, FR-020), C5 (a narrower skill 4 hand-off; FR-037). The designer also
+changed FR-028 (per-axis region) and FR-029 (comp-space positions at key times, not raw values), and
+added three review rules (intent questions still asked, no new target means no review, no reteach;
+FR-019, FR-021). Still open for you from `curriculum.md` › 12: **H4** (is naming sources a real "you
+do"), **H6** (animators before presets; anchor kept separate) and **H7** (the offset taste rule).
+
+### Conflicts the round 1 answers raise (Q)
+
+Defaults are written into the requirements; each changes the spec if answered differently.
+
+1. **Reviews and the second practice comp.** "No new target, no review" (FR-021) means a learner
+   whose comp has nothing new never reviews. FR-031 puts review targets in the second practice comp
+   for testing. May the mentor *suggest* opening the practice comp for a due review, or does the
+   review simply wait for the learner's own work? **Recommended:** it waits (the designer's rule;
+   learners learn what the project needs), and the practice comp's review targets are for the
+   builder's live runs and evals only. Question for the designer.
+2. **A review from diagnosis and the one-per-session limit.** FR-020 allows one review per session,
+   and spec 005 FR-020 offers a review when a finding is covered by a learned skill. If a review ran
+   at session start, can diagnosis offer another? **Recommended:** yes. A review on a finding the
+   learner chose is pulled by their comp, not by the schedule, so the limit covers only reviews the
+   mentor offers unprompted. Question for the designer, and a note for spec 005.
+3. **Skill 4's hand-off vs. its review schedule.** FR-037 fires whenever skill 4 is learned, not
+   when its review is due, and skill 4's review *is* "trace an unfamiliar layer in a later lesson".
+   Is each hand-off a scheduled review (recorded, moves FR-019's schedule, counts toward the
+   one-per-session limit) or ungraded practice? **Recommended:** a hand-off is recorded as a skill 4
+   review only when skill 4's review is due; otherwise it's ungraded and not recorded. It never
+   counts toward the one-per-session limit. Question for the designer.
 
 ### For the skill builder (B) and eval engineer (E)
 
