@@ -1,0 +1,128 @@
+{
+  "about": "Spec 008's answer key, written by hand from FR-003 to FR-016 and research R2 to R7 (not from the code's output). Keyed by fixture file name without the folder, so the same key serves a stand-in and its live capture (research R8). 'analysis' is what speed_graph_snapshot's analyzer gives with no options; 'check' is what speed_graph_check gives against the baseline with the baseline's US1 targets, after any 'demo' and with any 'seen_shaped'. A target not listed under a check's 'pairs' is 'untouched'. Fastest parts by research R2 (peaks: Easy Ease 0.5, 15/80 0.13, demo 0.13, 20/85 0.16, 90/95 0.48, dragged up a little 0.52, Position dragged up a lot 1.0, Scale dragged up a lot 0.6).",
+  "ids": {
+    "P1": "1/ADBE Transform Group/ADBE Position/1",
+    "P2": "1/ADBE Transform Group/ADBE Position/2",
+    "P3": "1/ADBE Transform Group/ADBE Position/3",
+    "S": "1/ADBE Transform Group/ADBE Scale/1",
+    "SUB1": "2/ADBE Transform Group/ADBE Position/1",
+    "CARD_P": "4/ADBE Transform Group/ADBE Position/1",
+    "CARD_S": "4/ADBE Transform Group/ADBE Scale/1"
+  },
+  "untouched": { "result": "not_passed", "failed": ["a", "b"], "mistake": "not_shaped", "parts": ["middle"] },
+  "analysis": {
+    "practice-now.json": {
+      "candidates_count": 8,
+      "focus": ["Title"],
+      "targets": ["P1", "P2", "P3", "S"],
+      "demo_target": "P1",
+      "no_demo_reason": null,
+      "left_out": [
+        { "kind": "hidden", "layers": ["Old Take"] },
+        { "kind": "null", "layers": ["CTRL"] },
+        { "kind": "precomp", "layers": ["Icon"] },
+        { "kind": "expression", "layers": ["Logo"] },
+        { "kind": "ease_first", "layers": ["Subtitle", "Bar", "Glow"] }
+      ],
+      "ease_first_count": 6,
+      "parts": { "P1": ["middle"], "P2": ["middle"], "P3": ["middle"], "S": ["middle"] }
+    },
+    "practice-before.json": {
+      "note": "mentor/test/fixtures/practice-before.json, Mentor Practice as built (no key values): only Subtitle Position is eased.",
+      "candidates_count": 1,
+      "focus": ["Subtitle"],
+      "targets": ["SUB1"],
+      "demo_target": null,
+      "no_demo_reason": "single_target",
+      "ease_first_count": 11
+    },
+    "practice2-before.json": {
+      "candidates_count": 6,
+      "focus": ["Card"],
+      "targets": ["CARD_P", "CARD_S"],
+      "demo_target": "CARD_P",
+      "no_demo_reason": null,
+      "ease_first_count": 21
+    },
+    "planted-hold-in.json": {
+      "note": "Bezier out into hold in (overlap row 7) isn't a candidate.",
+      "candidates_count": 7,
+      "focus": ["Title"],
+      "targets": ["P2", "P3", "S"],
+      "demo_target": "P2",
+      "no_demo_reason": null
+    },
+    "planted-15-80.json": {
+      "note": "A pair that already passes is left out as already shaped.",
+      "candidates_count": 7,
+      "focus": ["Title"],
+      "targets": ["P2", "P3", "S"],
+      "demo_target": "P2",
+      "already_shaped": ["Title"]
+    }
+  },
+  "check": {
+    "planted-15-80.json": { "passed": false, "pairs": { "P1": { "result": "passed", "failed": [], "mistake": null, "parts": ["first"] } } },
+    "planted-33-33.json": { "passed": false, "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b"], "mistake": "not_shaped", "parts": ["middle"] } } },
+    "planted-33-33.json+seen": {
+      "file": "planted-33-33.json", "seen_shaped": ["P1"], "passed": false,
+      "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b"], "mistake": "back_to_default", "parts": ["middle"] } }
+    },
+    "planted-dragged-up-small.json": {
+      "passed": false,
+      "pairs": {
+        "P1": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] },
+        "S": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] }
+      }
+    },
+    "planted-dragged-up-large.json": {
+      "passed": false,
+      "pairs": {
+        "P1": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["last"] },
+        "S": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] }
+      }
+    },
+    "planted-one-scale-dim.json": {
+      "passed": false,
+      "pairs": { "S": { "result": "not_passed", "failed": ["a", "b"], "mistake": "not_shaped", "dimension": "height", "parts": ["first"] } }
+    },
+    "planted-hold-in.json": {
+      "passed": false,
+      "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b", "c"], "mistake": "no_handle", "key_time": 1.5, "parts": ["middle"] } }
+    },
+    "planted-shared-key.json": {
+      "note": "Pair 1's landing is shaped; pair 2 shares the 1.5 s key and isn't credited, and its start key's in side is pair 1's landing, so it isn't 'mixed up' (FR-013, D-3).",
+      "passed": false,
+      "pairs": {
+        "P1": { "result": "passed", "failed": [], "mistake": null, "parts": ["first"] },
+        "P2": { "result": "not_passed", "failed": ["a", "b"], "mistake": "not_shaped", "parts": ["middle"] }
+      }
+    },
+    "planted-long-both.json": {
+      "passed": false,
+      "pairs": { "S": { "result": "not_passed", "failed": ["a"], "mistake": "long_both_ends", "parts": ["middle"] } }
+    },
+    "planted-in-out-mixed.json": {
+      "passed": false,
+      "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b"], "mistake": "in_out_mixed", "parts": ["middle"] } }
+    },
+    "planted-easy-ease-again.json": {
+      "file": "planted-easy-ease-again.json", "seen_shaped": ["S"], "passed": false,
+      "pairs": { "S": { "result": "not_passed", "failed": ["a", "b"], "mistake": "back_to_default", "parts": ["middle"] } }
+    },
+    "planted-expression-off.json": { "passed": false, "pairs": {}, "other_changes": ["Logo › Rotation expression was turned off"] },
+    "planted-key-added.json": { "passed": false, "pairs": { "S": { "result": "keys_changed" } }, "other_changes": ["Title › Scale now has 3 keys (was 2)"] },
+    "after-demo.json": {
+      "demo": "P1", "passed": false,
+      "pairs": { "P1": { "result": "passed", "failed": [], "mistake": null, "credit": "demo", "parts": ["first"] } }
+    },
+    "after-demo-undone.json": {
+      "demo": "P1", "passed": false,
+      "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b"], "mistake": "not_shaped", "credit": "learner_after_undo", "parts": ["middle"] } }
+    },
+    "after-demo-redone.json": {
+      "demo": "P1", "passed": false,
+      "pairs": { "P1": { "result": "passed", "failed": [], "mistake": null, "credit": "learner_redo", "parts": ["first"] } }
+    }
+  }
+}

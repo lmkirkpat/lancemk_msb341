@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-10-12T18:00:00.000Z",
+      "times_passed": 1,
+      "next": "Shape the eases on Title in the speed graph.",
+      "review_due": "2026-10-13",
+      "reviews_passed_in_row": 0
+    },
+    "easing.speed_graph": {
+      "status": "learned",
+      "last_practiced": "2026-10-15T17:00:00.000Z",
+      "times_passed": 1,
+      "next": "Shape Subtitle Position, or try a review on a new move.",
+      "review_due": "2026-10-16",
+      "reviews_passed_in_row": 0
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-12T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Eased 4 Title pairs: Position x2, Scale, Opacity",
+      "result": "passed",
+      "demo_used": true,
+      "summary": "Eased every Title pair.",
+      "next": "Shape the eases on Title in the speed graph.",
+      "kind": "first",
+      "targets": [
+        { "layer": "Title", "property": "Position" },
+        { "layer": "Title", "property": "Scale" },
+        { "layer": "Title", "property": "Opacity" }
+      ]
+    },
+    {
+      "date": "2026-10-15T17:00:00.000Z",
+      "skill": "easing.speed_graph",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Shaped Title Position 1.5–3 s, 3–4.37 s and Scale: short start, long landing",
+      "result": "passed",
+      "demo_used": true,
+      "summary": "Said 'the middle' first time; after shaping, said 'near the start'. Scale's landing arrived moving at first, then came to rest.",
+      "next": "Shape Subtitle Position, or try a review on a new move.",
+      "kind": "first",
+      "targets": [
+        { "layer": "Title", "property": "Position" },
+        { "layer": "Title", "property": "Scale" }
+      ]
+    }
+  ]
+}

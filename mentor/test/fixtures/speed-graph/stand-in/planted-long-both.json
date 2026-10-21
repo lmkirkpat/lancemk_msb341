@@ -1,0 +1,946 @@
+{
+  "synthetic": "stand-in for mentor/test/fixtures/speed-graph/planted-long-both.json",
+  "note": "Title Scale with both ends long: 0.5 s out 90, 1.5 s in 95, every dimension.",
+  "taken_at": "2026-10-01T23:44:53.955Z",
+  "project": "Claude AE Tutor Test.aep",
+  "comp": {
+    "id": 97,
+    "name": "Mentor Practice",
+    "duration": 8,
+    "frame_rate": 30
+  },
+  "precomp_layers": [
+    {
+      "index": 9,
+      "name": "Icon"
+    }
+  ],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Title",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                0,
+                -60
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                0,
+                -100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "time": 3,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                0,
+                -110
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "time": 4.37,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                0,
+                -40
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Scale",
+          "display_path": "Transform › Scale",
+          "match_name": "ADBE Scale",
+          "display_name": "Scale",
+          "dimensions": 3,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                80,
+                80,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 90
+                },
+                {
+                  "speed": 0,
+                  "influence": 90
+                },
+                {
+                  "speed": 0,
+                  "influence": 90
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                100,
+                100,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 95
+                },
+                {
+                  "speed": 0,
+                  "influence": 95
+                },
+                {
+                  "speed": 0,
+                  "influence": 95
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Subtitle",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.3,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                0,
+                280
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.3,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                0,
+                230
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "time": 4.37,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                0,
+                300
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.3,
+              "in_type": "linear",
+              "out_type": "bezier",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "value": 0
+            },
+            {
+              "index": 2,
+              "time": 1.3,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 100,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 100
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "CTRL",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 40,
+                  "influence": 16.667
+                }
+              ],
+              "value": [
+                960,
+                540
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 40,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": [
+                960,
+                500
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Bar",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End",
+          "display_path": "Contents › Rectangle › Contents › Trim Paths 1 › End",
+          "match_name": "ADBE Vector Trim End",
+          "display_name": "End",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.2,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.2,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Position_0",
+          "display_path": "Transform › X Position",
+          "match_name": "ADBE Position_0",
+          "display_name": "X Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 833.333,
+                  "influence": 16.667
+                }
+              ],
+              "value": 200
+            },
+            {
+              "index": 2,
+              "time": 0.6,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 833.333,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 433.333,
+                  "influence": 16.667
+                }
+              ],
+              "value": 700
+            },
+            {
+              "index": 3,
+              "time": 1.2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 433.333,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 960
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Glow",
+      "kind": "adjustment",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001",
+          "display_path": "Effects › Gaussian Blur › Blurriness",
+          "match_name": "ADBE Gaussian Blur 2-0001",
+          "display_name": "Blurriness",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": -20,
+                  "influence": 16.667
+                }
+              ],
+              "value": 20
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": -20,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "name": "Cursor",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "hold",
+              "out_type": "hold",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 100
+            },
+            {
+              "index": 2,
+              "time": 0.5,
+              "in_type": "hold",
+              "out_type": "hold",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 0
+            },
+            {
+              "index": 3,
+              "time": 1,
+              "in_type": "hold",
+              "out_type": "hold",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 100
+            },
+            {
+              "index": 4,
+              "time": 1.5,
+              "in_type": "hold",
+              "out_type": "hold",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 0
+            },
+            {
+              "index": 5,
+              "time": 2,
+              "in_type": "hold",
+              "out_type": "hold",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 100
+            },
+            {
+              "index": 6,
+              "time": 2.5,
+              "in_type": "hold",
+              "out_type": "hold",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "name": "Logo",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Scale",
+          "display_path": "Transform › Scale",
+          "match_name": "ADBE Scale",
+          "display_name": "Scale",
+          "dimensions": 3,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": [
+                100,
+                100,
+                100
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Rotate Z",
+          "display_path": "Transform › Rotation",
+          "match_name": "ADBE Rotate Z",
+          "display_name": "Rotation",
+          "dimensions": 1,
+          "expression_enabled": true,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 45,
+                  "influence": 16.667
+                }
+              ],
+              "value": 0
+            },
+            {
+              "index": 2,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 45,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "name": "Old Take",
+      "kind": "text",
+      "enabled": false,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 200,
+                  "influence": 16.667
+                }
+              ],
+              "value": [
+                200,
+                900
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "in_ease": [
+                {
+                  "speed": 200,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "value": [
+                400,
+                900
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "host": {
+    "ae_version": "26.5x89",
+    "os": "Macintosh OS 27.0.1/64"
+  }
+}
