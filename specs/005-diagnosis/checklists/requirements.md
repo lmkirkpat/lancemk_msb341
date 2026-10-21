@@ -39,3 +39,5 @@
   mentor may state a threshold at all is open question 4.
 - No [NEEDS CLARIFICATION] markers: the five open questions in the spec each carry a
   recommended answer, and the spec is written to those answers. Plan only after they're decided.
+- **Approved 2026-10-20.** Open question 2 (entry) is answered and folded in (Assumptions, FR-026,
+  eval case 15). Questions 1, 3, 4 and 5 stay open. Plan and tasks come next.

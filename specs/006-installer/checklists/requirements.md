@@ -38,3 +38,5 @@
 - No inline [NEEDS CLARIFICATION] markers: the five choices that change the spec are listed as
   Open Questions with a recommended answer each, and the spec is written to the recommendations.
   Q1 (runtime) needs a decision record amending `decisions/005` before `/speckit-plan`.
+- **Approved 2026-10-20.** Q1 is answered by `decisions/009` (option A, amends 005); Q2 to Q5 stay
+  open. Plan and tasks come next.

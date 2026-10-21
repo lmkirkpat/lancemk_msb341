@@ -5,8 +5,8 @@
 
 **Created**: 2026-10-20
 
-**Status**: Draft, awaiting approval. Five open questions at the end; Q1 needs a decision record
-before planning.
+**Status**: Approved 2026-10-20. Plan and tasks come next. Q1 is answered: option A, recorded in
+`decisions/009-ship-runtime-option-a.md` (amends `decisions/005`). Still open: Q2 to Q5.
 
 **Input**: Cockpit task, sprint 3 (`sprints/sprint-3-plan.md` › Done looks like › specs › an
 installer): "an installer that lets someone who isn't a developer set up Knack on a Mac", covering
@@ -32,7 +32,8 @@ main difference.
 
 `decisions/005` chose B1 (the panel drives headless Claude Code) for the prototype and said
 shipping to others needs option A (the panel calls the Claude API directly). **This spec targets
-option A**, pending Q1:
+option A**, decided in `decisions/009` (2026-10-20, amends 005; B1 stays for the builder's own
+prototype until A is built). The reasons, as 009 records them:
 
 - **B1 can't go to other people.** Each learner would need Claude Code installed and signed in,
   which is the most developer-shaped step on the list, and `decisions/005` › B1 cons flags that a
@@ -263,11 +264,11 @@ info names the commit and results file.
 - **FR-003**: Any Node runtime Knack needs MUST be private to Knack: installed with it, used only
   by it, and removed with it. The installer MUST NOT require Node to be installed, MUST NOT change
   the user's PATH or shell files, and MUST NOT replace or depend on a Node the user already has.
-- **FR-004**: The model runtime MUST be the one chosen in Q1 (this spec targets option A), and the
-  installer MUST treat it as one replaceable part, so swapping runtimes changes that part and not
-  the rest of the installer. For option A: the installer asks for an access key once, checks it
-  works before finishing, and stores it only in the macOS Keychain, never in a file, the extension
-  folder, a log or the copied report. The installer MUST NOT install Claude Code.
+- **FR-004**: The model runtime MUST be option A (`decisions/009`), and the installer MUST treat it
+  as one replaceable part, so swapping runtimes changes that part and not the rest of the installer.
+  For option A: the installer asks for an access key once, checks it works before finishing, and
+  stores it only in the macOS Keychain, never in a file, the extension folder, a log or the copied
+  report. The installer MUST NOT install Claude Code.
 - **FR-005**: The installed product MUST NOT depend on the repo, and no builder file may reach a
   learner's lesson: no `CLAUDE.md`, auto-memory, sprint notes, eval fixtures or test settings
   (the same rule `panel/lib/runtime.js` enforces for the builder's own panel runs). The installed
@@ -471,10 +472,9 @@ table is a design target to re-check against the spec 001 re-run (`CLAUDE.md` �
 - **`decisions/002`**: across apps (FR-027).
 - **`decisions/003`**: the three layers (thin AE pipe, mentor tools, teaching outside AE) map onto
   FR-026's AE-side and outside-AE split.
-- **`decisions/005`**: this spec proposes acting on its "panel becomes the product" signal and
-  targeting option A (Q1). That needs a new decision record that amends 005 (number NNN, from the
-  cockpit) before planning. 005's open check on claude.ai login for shipped products is part of
-  why.
+- **`decisions/005`**, amended by **`decisions/009`** (2026-10-20): 009 acts on 005's "panel
+  becomes the product" signal and chooses option A for shipped Knack (Q1). 005's open check on
+  claude.ai login for shipped products is part of why.
 - **`decisions/006`**: says to revisit the name "before anything ships to people outside this
   repo". The first tester release is that moment.
 - **The option A runtime build spec** (number to be assigned): User Story 1 and SC-001, SC-006 can't
@@ -486,12 +486,14 @@ table is a design target to re-check against the spec 001 re-run (`CLAUDE.md` �
 
 Each changes the spec. Recommended answer first.
 
-1. **Runtime: option A, or a B1 tester build first?** *Recommended: A.* B1 can't go to other
+1. **Runtime: option A, or a B1 tester build first?** **Answered 2026-10-20: A**, recorded in
+   `decisions/009-ship-runtime-option-a.md` (amends 005). The option A runtime is its own build
+   spec, number from the cockpit. The reasoning as asked: *Recommended: A.* B1 can't go to other
    people (Claude Code install and sign-in, and the unchecked claude.ai-login policy), and won't
    survive UXP. The cost is that User Story 1 waits for the option A build. The alternative, a B1
    build for at most 5 testers who already have Claude Code, gets a learner on the panel sooner
    (belief 7) but means the installer installs or checks Claude Code, and its runtime part is
-   thrown away later. Either way, this needs a decision record amending `decisions/005`.
+   thrown away later.
 2. **Where does the access key come from?** *Recommended: the builder issues one key per tester,
    each with its own spend limit, revocable.* Testers don't create an Anthropic account, the
    builder sees cost per tester, and a leaked key costs at most its limit. Alternatives: each

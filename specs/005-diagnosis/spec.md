@@ -4,7 +4,9 @@
 
 **Created**: 2026-10-20
 
-**Status**: Draft, awaiting approval. Plan and tasks come after approval and the open questions.
+**Status**: Approved 2026-10-20. Plan and tasks come next. Open question 2 (entry point) is
+answered, together with spec 007's open question 1, and folded into Assumptions and FR-026. Still
+open: questions 1, 3, 4 and 5.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1: "Write the spec for Knack's diagnostic
 capability: reading the learner's whole After Effects comp to find what's wrong (across layers,
@@ -369,7 +371,9 @@ Other edge cases:
   re-read the comp before saying any finding is still open, and MUST say which look fixed.
 - **FR-020**: The recommendation of what to learn next MUST use both the findings and the learner
   record: a kind found in two or more diagnoses is named as a pattern; a skill already learned
-  gets a review, not a first lesson; a finding with no skill yet is named as not teachable yet.
+  gets a review, not a first lesson; a finding with no skill yet is named as not teachable yet. A
+  review offered this way doesn't count toward spec 004's one-review-per-session limit (spec 004
+  FR-020, its Q2 settled 2026-10-20).
 - **FR-021**: Diagnosis records MUST NOT mark any skill as learned or practiced. Only a skill
   lesson's passing check does that (spec 002 FR-010, `record_lesson`'s session check).
 
@@ -382,6 +386,15 @@ Other edge cases:
 - **FR-023**: Diagnosis MUST work from Claude Code and from the panel without the panel holding
   any diagnosis logic (`decisions/005`, constitution II). How the panel shows a diagnosis belongs
   to the UI overhaul spec.
+
+### Entry
+
+- **FR-026**: Diagnosis MUST run when the learner asks for it ("what's wrong here?", or the panel's
+  **Look at my comp**). The short diagnosis opening (one or two sentences and one place to start)
+  MUST run only in a session started **without a named skill, outside the panel** (for example,
+  typing in Claude Code). In the panel, **Start lesson** opens the named skill's lesson with no
+  diagnosis opening, and diagnosis stays a separate press (spec 007 FR-012, its open question 1).
+  A session that names a skill MUST NOT open with a diagnosis anywhere.
 
 ### Evals and tests
 
@@ -466,6 +479,8 @@ numbering and fixtures):
 13. **Learned skill:** a finding covered by a learned skill gets a review, not a first lesson.
 14. **Plain speech:** no catalogue IDs, field names or quoted values in anything the learner
     sees (applies to every case as a deterministic check).
+15. **Entry (FR-026):** a session started in Claude Code with no skill named gets the short
+    opening; a session that names a skill (the panel's Start lesson) gets no diagnosis opening.
 
 Rubric additions: leads with one place to start; honest about limits; asks about intent before
 calling something wrong; doesn't lecture the whole list. Fixtures need snapshots with parenting
@@ -473,11 +488,13 @@ and motion blur once US4's reads exist; take them from live reads, not by hand.
 
 ## Assumptions
 
-- **Entry:** diagnosis is its own entry ("what's wrong here?", its own skill), and also offered
-  as the opening when a session starts without a named skill (the light opening from CLAUDE.md
-  "Next steps" 2). Existing skill lessons keep their own openings. Pending open question 2.
-- **Learner:** the builder on their own Mac with After Effects 26.4 or later, then target-market
-  learners. No accounts, no other apps.
+- **Entry:** diagnosis is its own entry ("what's wrong here?", its own skill; in the panel, Look
+  at my comp). The light opening from CLAUDE.md "Next steps" 2 applies only to sessions started
+  without a named skill outside the panel, for example typing in Claude Code (FR-026). In the
+  panel, Start lesson opens the named skill and diagnosis stays a separate press (spec 007 open
+  question 1, answered (a) plus (c), 2026-10-20). Skill lessons keep their own openings.
+- **Learner:** the builder on their own Mac with After Effects 26.5 on macOS 27.0.1 (CLAUDE.md ›
+  My setup), then target-market learners. No accounts, no other apps.
 - **One comp at a time:** the active comp. Other comps in the project aren't read.
 - **Curriculum not ready:** until spec 004 lands, the skill map has one entry (DX-01 → the easing
   lesson) and every other finding maps to "no skill yet" (FR-013 hints apply).
@@ -520,9 +537,10 @@ and motion blur once US4's reads exist; take them from live reads, not by hand.
    least one hidden-fault session is logged (SC-009). If the learner reaches for a chatbot and
    is satisfied, rethink before building memory and new reads.
 2. **Entry point:** diagnosis only on request, or also as the default opening when a session
-   starts without a named skill? **Recommended:** both, as in Assumptions. The opening is one or
-   two sentences ("I see three things that make this look mechanical; want to start with
-   Title?"), so it tests the light "what's wrong here" opening without changing any skill.
+   starts without a named skill? **Answered 2026-10-20** (with spec 007 open question 1): on
+   request everywhere, plus the short opening only in sessions started without a named skill
+   outside the panel (typing in Claude Code). In the panel, Start lesson opens the named skill and
+   diagnosis is its own press, Look at my comp. Folded into Assumptions › Entry and FR-026.
 3. **How many findings up front:** a ranked short list, or one finding only? Nothing in the
    interviews speaks to it; the builder found Adobe's 8 "a lot at once". **Recommended:** at most
    3 ranked, one named to start, the rest on request (FR-007). Revisit after SC-009.
@@ -537,16 +555,16 @@ and motion blur once US4's reads exist; take them from live reads, not by hand.
 
 ## Dependencies
 
-- **Spec 004 (curriculum), in progress:** the skill map (FR-010, FR-012, FR-020) needs its skill
-  IDs. Until then, see Assumptions › Curriculum not ready.
+- **Spec 004 (curriculum), approved 2026-10-20:** the skill map (FR-010, FR-012, FR-020) needs its
+  skill IDs. Until then, see Assumptions › Curriculum not ready.
 - **Spec 002 mentor:** the snapshot, the ae-mentor server and its rules, the learner record, and
   the easing lesson (DX-01's skill). The `mentor/tools/` per-skill layout (`b1875f1`) lets
   diagnosis be its own tool file without editing the easing tools.
 - **Decisions it relies on:** `decisions/002` (the bet and its Adobe trigger), `003` (thin
   bridge, narrow tools, local learner record), `005` (panel shows only), `007` (ownership; the
   teaching design is the curriculum designer's), `008` (hooks; one agent on AE at a time).
-  None needs changing. A new decision is needed only if open question 2's answer changes how
-  every session opens for every skill.
+  None needs changing. Open question 2's answer doesn't change how sessions that name a skill
+  open, so it needs no new decision record.
 - **Constitution 1.3.0:** I (this spec before build), II (FR-002, FR-023), III (FR-025, US5),
   IV (FR-018), VI (the eval engineer writes the cases, not the builder).
 - **Evidence:** `discovery/diagnosis-evidence.md` (not yet committed on `main` as of

@@ -48,3 +48,6 @@
   `curriculum.md` › 6; only the measures the designer delegated (pass margins, review timing) are
   set here (FR-019, FR-026 to FR-029).
 - Validation run twice (first draft; after round 1 answers); all items pass.
+- **Approved 2026-10-20.** The builder's answers to H1 (26.5 on macOS 27.0.1), H2 (a five-skill
+  baseline: 2, 1, 3, 5, 6) and Q1 to Q3 (the defaults) are folded in. Still open: H3 to H5 and the
+  FR-032 owner note. Plan and tasks come next.

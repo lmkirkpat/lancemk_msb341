@@ -5,7 +5,9 @@
 
 **Created**: 2026-10-20
 
-**Status**: Draft, awaiting approval. Plan and tasks come after approval and the open questions.
+**Status**: Approved 2026-10-20. Plan and tasks come next. Home A is approved for now. Open
+questions 1, 3 and 5 are answered and folded in (FR-007, FR-012, FR-054, RQ-01, SC-013,
+Assumptions). Still open: questions 2 and 4, and the D and C questions.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the spec for the UI overhaul:
 three tabs (Home, Lesson, Skills), Home option A (path-first) as recommended, the docked
@@ -47,7 +49,8 @@ for the designer (Open questions › D), not an edit.
   free from the local record, and it works before diagnosis or the curriculum ship. The
   diagnosis card and an Up next that quotes a dated finding keep B's strength, "your comp is the
   hook" (README › Home screen: two options, Recommendation). The open risk is that A reads like a
-  course menu; Open questions 1 and 3 are how that gets checked.
+  course menu. Home A is approved for now (2026-10-20); it gets evaluated, and possibly A/B tested
+  against Home B, once there are enough target-market testers (Open question 3, SC-013).
 - **The overhaul also clears debts from spec 003:** developer error copy ("Run `bash
   panel/install.sh`") for an installer audience, a silent fresh start after AE restarts, and
   three colour tokens that fail contrast (FR-074).
@@ -56,11 +59,13 @@ for the designer (Open questions › D), not an edit.
 
 - `decisions/002`: the mentor leads; the "why" names depth, memory and practice, never restraint
   alone.
-- `decisions/003` amended by `decisions/005`: the panel only displays. It spawns headless Claude
-  Code (option B1) behind one replaceable seam; it holds no teaching logic, never reads or changes
-  the project except through the mentor's tools, and only reads the learner record (constitution
-  1.3.0 › II). Every requirement in "What the panel needs from the mentor" exists because of
-  this rule: anything the panel shows that isn't the mentor's words must arrive as data.
+- `decisions/003` amended by `decisions/005` and `decisions/009`: the panel only displays. It spawns
+  headless Claude Code (option B1) behind one replaceable seam for the builder's prototype; shipped
+  Knack uses option A (the Claude API directly, `decisions/009`) behind the same seam; it holds no
+  teaching logic, never reads or changes the project except through the mentor's tools, and only
+  reads the learner record (constitution 1.3.0 › II). Every requirement in "What the panel needs
+  from the mentor" exists because of this rule: anything the panel shows that isn't the mentor's
+  words must arrive as data.
 - `decisions/006`: the product is Knack; copy says Knack.
 - `decisions/007`: the UI designer owns the mockup; the curriculum designer owns what is taught
   (`curriculum.md`, and spec 005's `teaching-design.md` if one is written); the panel builder owns
@@ -74,15 +79,16 @@ for the designer (Open questions › D), not an edit.
 - **Spec 003** (shipped): the base this replaces. Its FR-005 to FR-019 carry over unless a
   requirement here changes them, and its requests-eval-sync test rule is kept and widened
   (FR-071).
-- **Spec 004** (draft): path data, recommendation, record shape and reviews (its FR-001 to
-  FR-008, FR-018 to FR-023), and its waves A to C.
-- **Spec 005** (draft): the diagnosis's behaviour (FR-004, FR-006 to FR-008, FR-010 to FR-017,
+- **Spec 004** (approved): path data, recommendation, record shape and reviews (its FR-001 to
+  FR-008, FR-018 to FR-023), and its waves A to D (wave C is reviews).
+- **Spec 005** (approved): the diagnosis's behaviour (FR-004, FR-006 to FR-008, FR-010 to FR-017,
   FR-019) that the diagnosis screens show, and its FR-023 (the panel holds no diagnosis logic).
-- **Spec 006** (draft): the installer and its setup check, whose screens this spec doesn't draw,
-  and its Q1 (runtime) that decides the sign-in screen.
+- **Spec 006** (approved): the installer and its setup check, whose screens this spec doesn't draw.
+  Its Q1 is answered by `decisions/009` (option A), so the sign-in screen draws an access key; its
+  Q2 (where the key comes from) is still open.
 
-None needs changing. Open question 1 may need a decision record (spec 005 says so too) if its
-answer changes how every session opens.
+None needs changing. Open question 1 was answered (a) plus (c), which doesn't change how a session
+that names a skill opens, so it needs no decision record.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -243,7 +249,7 @@ practice due, in progress, up next, not started, coming later. I pick one to see
 start a **New lesson** or a **Warm up**. Home's **Practice due** card offers the warm-up that's due.
 
 **Why this priority**: memory and practice are the harder-to-copy parts, and they only matter
-once a second skill and reviews exist (spec 004 waves A and B).
+once a second skill and reviews exist (spec 004 waves A and C).
 
 **Independent Test**: on saved records in spec 004's states (nothing learned; easing learned;
 skill 2 practicing; skills 1 to 3 learned with a review due), the Skills tab and `skill-detail`
@@ -271,7 +277,8 @@ Effects, signing in, and opening a comp. When something breaks, a banner says wh
 what to do, in words a designer understands, with no commands to type.
 
 **Why this priority**: the installer audience isn't developers (spec 006). The error copy can
-change now; the sign-in step waits for spec 006's runtime decision.
+change now. The sign-in step draws option A's access-key flow (`decisions/009`); the exact key
+source waits on spec 006 Q2.
 
 **Independent Test**: on a fresh learner home, open the panel and walk `setup-welcome` to
 `home-first`; then fault one thing at a time (no AE, mentor can't start, record unreadable, AE
@@ -377,7 +384,9 @@ From the README's "States still missing" and the specs this one sits on.
   last look** when there is an unanswered ask finding; **Practice due** when a review is due;
   **What's wrong here?** with an optional **What looks off?** input; **What the mentor
   remembers**. A card with no data is left out, not shown empty (except `home-first`'s "No lessons
-  yet").
+  yet"). Up next's **Start lesson** and the diagnosis card's **Look at my comp** MUST both be
+  above the fold at 260 × 480 px (Open question 3). The card order that does it is the UI
+  designer's revision (D5); until it lands, the order above stands.
 - **FR-008**: Home MUST be drawn from the learner record and the path data alone, with no mentor
   turn, so opening it costs nothing (README › Home, cost row). If the read takes more than 300 ms
   it MUST show `home-loading`.
@@ -391,9 +400,9 @@ From the README's "States still missing" and the specs this one sits on.
   `home-unreadable` and MUST NOT be treated as a first run (the 2026-10-12 agent audit's rule:
   unreadable is not empty). Today's `panel/lib/memory.js` returns the same thing for both, which
   this changes.
-- **FR-012**: **Start lesson** on Up next MUST send that skill's start request (RQ-01). What the
-  request asks the mentor to open with is Open question 1; until it's answered, it starts the
-  named skill's lesson as today.
+- **FR-012**: **Start lesson** on Up next MUST send that skill's start request (RQ-01), which opens
+  the named skill's lesson as today, with no diagnosis opening. Diagnosis stays a separate press,
+  **Look at my comp** (Open question 1, answered (a); spec 005 FR-026).
 - **FR-013**: **Pick another skill** MUST go to the Skills tab.
 
 ### Lesson
@@ -526,8 +535,10 @@ From the README's "States still missing" and the specs this one sits on.
 ### Setup and errors
 
 - **FR-054**: On the first open after install, the panel MUST walk `setup-welcome`,
-  `setup-checking`, `setup-signin` and `setup-ready` to `home-first`. The sign-in step's content
-  depends on spec 006 Q1 (Open question 5); everything else uses the panel's own checks.
+  `setup-checking`, `setup-signin` and `setup-ready` to `home-first`. `setup-signin` draws option
+  A's access-key flow (`decisions/009`, Open question 5): the key is entered once and checked
+  before setup finishes. Where the key comes from waits on spec 006 Q2. Everything else uses the
+  panel's own checks.
 - **FR-055**: An incomplete install MUST show `err-notsetup` with **Open the install
   instructions**, which opens them in the browser.
 - **FR-056**: When the mentor can't start, exits, or isn't signed in, the panel MUST show
@@ -579,7 +590,7 @@ From the README's "States still missing" and the specs this one sits on.
 
   | ID | Request (button) | Sends text? | Eval set | Notes |
   |---|---|---|---|---|
-  | RQ-01 | Start lesson (Up next's skill) | Yes | each built skill's set | Replaces `/ease-mentor`; wording waits on Open question 1 |
+  | RQ-01 | Start lesson (Up next's skill) | Yes | each built skill's set | Replaces `/ease-mentor`; opens the named skill, no diagnosis opening (Open question 1) |
   | RQ-02 | New lesson (a skill picked in Skills) | Yes, RQ-01's template | each built skill's set | One case where the picked skill isn't Up next |
   | RQ-03 | Look at my comp | Yes | diagnosis | |
   | RQ-04 | Look at my comp, with a symptom | Yes | diagnosis | Cases for a match and a miss |
@@ -713,10 +724,10 @@ Each step can stop on its own and leave a working panel.
 |---|---|---|---|---|
 | **0. Contrast fixes** | P1 | FR-074's three tokens and FR-076's 11 px floor, in today's `panel/panel.css` | Nothing | Can ship **ahead of the overhaul**, on spec 003's panel, as one small change with its own test (SC-008). |
 | **1. Shell and lesson** | P1 | Tabs, Home A from today's record, the Lesson tab with the docked checklist, lesson-in-progress rules, plain errors, accessibility, the widened sync test | PN-10, PN-13, PN-14 (easing skill and tools), their eval cases | Easing only, in the new layout. Up next comes from today's fixed path (`panel/lib/path.js`) until spec 004's path data exists. |
-| **2. Curriculum wave A** | P1 | Skills tab, path from data, Up next from the stored recommendation, Start lesson and New lesson for any built skill | Spec 004 wave A (PN-09, PN-16) | Easing plus skills 2, 1, 3 |
+| **2. Curriculum wave A** | P1 | Skills tab, path from data, Up next from the stored recommendation, Start lesson and New lesson for any built skill | Spec 004 wave A (PN-09, PN-16) | Easing plus skills 2, 1, 3; skills 5 and 6 (spec 004 wave B) arrive through the same screens |
 | **3. Diagnosis** | P1 | The `diag-*` screens, story by story with spec 005 | Spec 005 US1, then US2, then US3 | See the next table |
-| **4. Reviews** | P2 | Practice due, Warm up, the practice state | Spec 004 wave B (PN-11) | Practice across sessions |
-| **5. First run** | P2 | `setup-*` screens and the Check setup entry | Spec 006 and its Q1 | The installer path |
+| **4. Reviews** | P2 | Practice due, Warm up, the practice state | Spec 004 wave C (PN-11) | Practice across sessions |
+| **5. First run** | P2 | `setup-*` screens and the Check setup entry, with option A's access-key sign-in | Spec 006 (its Q1 answered by `decisions/009`; the key source waits on its Q2) and the option A runtime spec | The installer path |
 
 ### If only diagnosis US1 and curriculum wave A exist
 
@@ -743,7 +754,7 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
 | Spec 005 US2 | `diag-hints`, `diag-recheck-gone`, `diag-recheck-still`, `diag-recheck-changed`, `diag-intended`; finding actions and answer buttons |
 | Spec 005 US3 | `diag-again`, `diag-othercomp`, Home's question card, Up next quoting a finding |
 | Spec 004 wave A | `skills-few`, `skills-many`, Start lesson for skills other than easing |
-| Spec 004 wave B | Practice due, `practice`, Warm up, the practice due state |
+| Spec 004 wave C | Practice due, `practice`, Warm up, the practice due state |
 | Curriculum designer (C1) | Getting rusty |
 | Spec 006 | `setup-welcome`, `setup-checking`, `setup-signin`, `setup-ready`, `err-notsetup` |
 | Nothing (step 1) | Every other state in the README's table |
@@ -806,27 +817,33 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
 - **SC-013**: After at least 3 sessions with the overhaul, the builder's usage notes say which
   start each session used (Up next, Look at my comp, Skills), whether Up next was what they wanted,
   and whether they reached for Adobe's assistant. Either answer counts; it feeds Open question 3.
-  *Measured by:* the builder, in usage notes.
+  *Measured by:* the builder, in usage notes. *Later:* these notes are the start of evaluating
+  Home A. Once there are enough target-market testers for a comparison to mean something, Home A
+  gets evaluated with them and possibly A/B tested against Home B (Open question 3); with the
+  builder alone, the notes don't settle it.
 
 ## Assumptions
 
-- **Runtime:** the panel keeps running the mentor through headless Claude Code (`decisions/005`,
-  B1) behind its one seam. If spec 006's Q1 moves to option A, only the seam and the sign-in step
-  change.
+- **Runtime:** for the builder's prototype, the panel keeps running the mentor through headless
+  Claude Code (`decisions/005`, B1) behind its one seam. Shipped Knack uses option A
+  (`decisions/009`), built in its own runtime spec; when it lands, only the seam and the sign-in
+  step change.
 - **Container:** CEP, as today; nothing in the mockup needs more than the panel already uses
   (README › Open questions 9). A UXP port is its own work after the Nov 2026 beta.
-- **User:** the builder on their own Mac with After Effects 26.4 or later, then the installer's
+- **User:** the builder on their own Mac with After Effects 26.5 on macOS 27.0.1, then the
+  installer's
   testers.
 - **Design source:** the README and `index.html` at revision 2. Text marked Placeholder there is
   the mentor's voice (the skill's) or catalogue wording (spec 005's), not panel copy.
 - **Warm up is spec 004's review.** The button says Warm up; the record calls it a review.
 - **Skill names** shown in the panel come from the path data (PN-16), not from the mockup.
-- **Diagnosis entry:** on Home only, by the learner's press. Whether a lesson's opening also
-  includes a diagnosis is Open question 1.
+- **Diagnosis entry:** on Home only, by the learner's press (Look at my comp). A lesson's opening
+  never includes a diagnosis in the panel (Open question 1, answered; spec 005 FR-026).
 
 ## Out of scope (build scope)
 
-- **Home option B** (diagnose-first), except as the arm of a test if Open question 3 chooses one.
+- **Home option B** (diagnose-first) now. It may come back later as the other arm of an A/B test,
+  once there are enough target-market testers (Open question 3).
 - **What the mentor says and teaches:** `SKILL.md` wording, the diagnosis catalogue and its
   analysis, the path rule, the review schedule and what a warm-up contains. They belong to specs
   002, 004 and 005 and the curriculum design; this spec only shows them.
@@ -857,8 +874,9 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
    opening, and the panel never does. **Recommended: (a) for the panel plus (c) for Claude Code.**
    Home A already puts the diagnosis one press away, (b) adds a whole-comp read to every lesson's
    first turn (cost and the 10 s first-activity bar, spec 003 SC-004), and it changes every
-   skill's opening eval cases. The cockpit decides with the curriculum designer; if it's (b), it
-   needs a decision record, and RQ-01's cases change.
+   skill's opening eval cases. **Answered 2026-10-20: (a) for the panel plus (c) for Claude Code**,
+   as recommended. Folded into FR-012, RQ-01, Assumptions › Diagnosis entry, and spec 005 FR-026.
+   No decision record needed.
 2. **Does ending an unfinished lesson record anything?** Spec 003 says nothing is recorded for an
    unfinished lesson; the mockup says End lesson isn't saved. But "attempted, not passed" is what
    spec 004's *practicing* state and the next session's pick-up need. **Recommended: record
@@ -870,7 +888,10 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
    above the fold at 480 px on A, or give some learners B. **Recommended: both starts above the
    fold on A, no B build.** With one builder and at most 5 testers, a split gives no usable
    numbers; SC-013's notes, plus the first target-market sessions, answer it. This changes Home's
-   card order, so it goes back to the UI designer as a revision.
+   card order, so it goes back to the UI designer as a revision. **Answered 2026-10-20: the
+   default** (both starts above the fold on A, FR-007; no B build now). The builder's follow-up:
+   **evaluate Home A, and potentially A/B test it against Home B, later**, once there are enough
+   target-market testers for a comparison to mean something (SC-013's notes).
 4. **What does one look cost and how long does it take?** It decides whether a diagnosis card on
    Home is affordable to press often, and whether `diag-again` can re-read on every open. Not
    measured; spec 005 SC-004 allows 30 s. **Recommended: measure it in spec 005's first usage
@@ -880,6 +901,8 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
    between B1 (Claude Code signed in) and option A (an access key, spec 006 Q1 and Q2).
    **Recommended: build steps 0 to 4 now and hold step 5 until spec 006's Q1 decision record**;
    until then `err-mentor`'s copy names no runtime ("The mentor can't start. Check setup.").
+   **Answered 2026-10-20 by `decisions/009`:** step 5's first-run sign-in draws option A's
+   access-key flow (FR-054). The exact key source still waits on spec 006 Q2.
 
 ### For the UI designer (D, don't block approval)
 
@@ -892,7 +915,7 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
 3. **Before and after frames vs. a moving demo** (interview 004): this spec shows only the frames
    the mentor renders. A before frame needs the skill to render one before the change.
 4. **What does "What happened?" lead to** on `home-unreadable`?
-5. **Card order on Home** if Open question 3 is answered "both above the fold".
+5. **Card order on Home** now that Open question 3 is answered "both above the fold" (FR-007).
 
 ### For the curriculum designer (C, don't block approval)
 
@@ -910,12 +933,12 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
   UI designer's.
 - **Spec 003** (shipped): the panel, its requests and sync test, its activity map, and its
   quickstart (used by SC-001).
-- **Spec 004** (draft): path data (PN-16), the stored recommendation (PN-09), the record's review
-  fields (PN-11), and waves A and B.
-- **Spec 005** (draft): the diagnosis result (PN-01 to PN-08), the diagnosis record (PN-08, PN-12),
+- **Spec 004** (approved): path data (PN-16), the stored recommendation (PN-09), the record's review
+  fields (PN-11), and waves A and C.
+- **Spec 005** (approved): the diagnosis result (PN-01 to PN-08), the diagnosis record (PN-08, PN-12),
   its fixtures for SC-005, and its stories US1 to US3.
-- **Spec 006** (draft): first run and sign-in (step 5), Check setup (FR-059).
-- **Decisions:** `002`, `003`, `005`, `006`, `007`, `008`; none changes. A new one only if Open
-  question 1 is answered (b).
+- **Spec 006** (approved): first run and sign-in (step 5), Check setup (FR-059).
+- **Decisions:** `002`, `003`, `005`, `006`, `007`, `008`, and `009` (option A for shipped Knack,
+  amends 005); none changes. Open question 1 was answered (a) plus (c), so no new one is needed.
 - **Constitution 1.3.0**, Principles I to VI.
 - **Eval engineer:** writes every case in FR-070 and owns their numbers and fixtures.

@@ -45,3 +45,5 @@
   shapes, which this spec can't edit. The cockpit needs to pass them to those specs' owners
   before their plans.
 - `.specify/feature.json` was not updated: the cockpit asked for only spec.md and this file.
+- **Approved 2026-10-20.** Home A approved for now; open questions 1, 3 and 5 are answered and
+  folded in. Questions 2 and 4, and the D and C questions, stay open. Plan and tasks come next.
