@@ -26,8 +26,10 @@ a brand new session act like a colleague who already knows what you are working 
 
 - **This sprint's goal:** Sprint 3 (`sprints/sprint-3-plan.md`, 2026-10-13 to 2026-10-26):
   build a team of subagents with personas I can reuse on future projects, so building,
-  curriculum, and evals can run in parallel. Use them to build 10 new After Effects teaching
-  skills beyond easing (each run as a live lesson on my comp, with eval cases). Use them to write
+  curriculum, and evals can run in parallel. Use them to build 5 new After Effects teaching
+  skills beyond easing as the baseline (key types, speed graph, offset, set the pivot, move a
+  group with a null; cut from 10 on 2026-10-20 for quality), each run as a live lesson on my comp,
+  with eval cases. Use them to write
   specs for the expanded curriculum, diagnostic tools, an installer, and a UI overhaul.
   Done also needs a setup README so someone else can copy the agents, proof they carry over
   (used to build my portfolio website), and one piece of work built by several agents in
