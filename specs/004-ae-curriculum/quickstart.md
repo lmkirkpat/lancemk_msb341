@@ -29,7 +29,7 @@ rows), `host.test.mjs` (R0, FR-011), `session-skills.test.mjs` (per-skill lesson
 Then the hook tests, to be sure nothing under `.claude/hooks/` was touched:
 
 ```bash
-node --test .claude/hooks/test/
+node --test .claude/hooks/test/*.test.mjs
 ```
 
 ## 2. R0 live check (🖐, AE open)

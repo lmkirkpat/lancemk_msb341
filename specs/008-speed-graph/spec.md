@@ -4,7 +4,10 @@
 
 **Created**: 2026-10-20
 
-**Status**: Approved 2026-10-21. Plan and tasks come next. The builder took H1 to H3 as
+**Status**: Approved 2026-10-21; planned and tasked. Amended 2026-10-21 (round 6) from the
+builder's cloud hand-back: FR-004 (two layers share the cap), FR-014 (changed keys hold the pass),
+the fastest-part assumption for L-6, and one optional shared-contract request (Open questions ›
+SR-2); the extra output fields are in the contract and data-model. The builder took H1 to H3 as
 recommended (SR-1 folded into spec 004 as T060 and T061; FR-010d's 5%; the live-check order), and
 the curriculum designer agreed D-1 to D-5 and S-1 (`teaching-design.md` › 14), folded in below.
 Still open: nothing for the spec; the live checks L-1 to L-7 settle facts during the build.
@@ -223,7 +226,8 @@ Other edge cases:
   targeted first, then the rest in layer order. Any candidate the learner names (Opacity, Rotation,
   an effect, a null, a hidden layer) MUST be allowed. A pair with no value change is left out
   silently; if the learner picks one, the mentor says it holds still between those keys, so there's
-  nothing to shape, and offers the next pair (TD § 4). The ranking MUST be deterministic given the
+  nothing to shape, and offers the next pair (TD § 4). When the learner names two layers, they
+  share the 5-pair cap one pair at a time, in turn (as built, 2026-10-21). The ranking MUST be deterministic given the
   layer names the mentor takes from `read_learner_record` (from lesson entries' targets; for
   entries written before spec 004, a layer whose exact name appears in the entry's text); the
   skill MUST NOT read the record file itself.
@@ -288,7 +292,10 @@ Other edge cases:
   to the later one; a change to one side MUST NOT count for the other pair.
 - **FR-014**: If a focus property's key count or key times change during the lesson, its pairs
   MUST NOT be graded; the check says the keys changed and the mentor asks if that was on purpose.
-  Other changes are listed as easing lists them.
+  Such a pair, or a focus pair that's gone, **holds the pass** until the learner answers: the
+  lesson doesn't pass while any focus pair is ungraded for this reason (as built, 2026-10-21).
+  Other changes are listed as easing lists them, leaving out the pairs the learner said should land
+  hard (FR-006).
 - **FR-015**: The check MUST call the session's `markChecked` only when the comp matches, and list
   other changes with the shared `unexpectedChanges`.
 
@@ -415,7 +422,9 @@ to this spec.
 - **L-5:** drag a landing handle up a little and a lot on Position and on Scale; log the speeds the
   read shows and whether each looks like it arrives moving. Tunes FR-010d's 5%.
 - **L-6:** on 33/33, 15/80 and one in-between pair, compare FR-016's fastest part with the speed
-  graph's peak; and press Easy Ease on a shaped pair to see it reset both facing sides (§ 7's Guess).
+  graph's peak (15/80 is expected at about 0.13 of the pair, Assumptions); also look at one pair
+  whose facing influences add up to more than 100 (for example 60/70), to check the scaling
+  assumption (logged, not one of SC-004's 3); and press Easy Ease on a shaped pair to see it reset both facing sides (§ 7's Guess).
 - **L-7:** a pair with a bezier out side and a hold in side on the landing key: what After Effects
   plays, and what the read shows. Pins row 7; if AE holds the move, it's a note for the shared owner
   about easing's `segmentState`.
@@ -464,6 +473,11 @@ fastest part and overlap rows; evals check what the mentor does with them.
   (spec 004: skill 2 needs no new read).
 - **The temporal bezier model** for FR-016 is the standard one (influence sets the handle's length
   as a share of the time to the next key, speed sets its slope); L-6 confirms it against the graph.
+  **When the two facing influences add up to more than 100**, the build scales both down to sum to
+  100 so time never runs backwards; this is an assumption, and L-6 MUST check it on a pair whose
+  influences add up to more than 100. On 15/80 the model puts the fastest part at about 0.13 of the
+  pair, not the 0.3 research R2's first draft said; L-6 checks that against the speed graph's peak
+  too (as built, 2026-10-21).
 
 ## Out of scope (build scope)
 
@@ -514,6 +528,14 @@ FR-010b, FR-011, FR-012, FR-019 and the overlap rows 9, 15 and 16.
    CTRL's move too, and in wave A the mentor can't know it. **Recommended:** keep § 9's "say
    nothing" for wave A, but have frame claims describe only where the layer is on screen, never how
    far along its own move it is, until R1 lets the mentor avoid frames while a parent moves.
+
+### For spec 004's shared-code owner (optional, raised 2026-10-21)
+
+4. **SR-2, pass `mode` to the analyzer.** `session.start` takes `mode` but doesn't pass it to the
+   skill's analyzer, so this skill's tool wraps the analyzer to pass it (contract ›
+   `speed_graph_snapshot`). **Recommended:** optional; a later shared-contract change could have
+   the session pass `mode` in the analyzer's options (spec 004 contracts/skill-module.md), and the
+   wrapper would then be dropped. Not a task here; nothing in this skill waits on it.
 
 ### For the eval engineer (E)
 

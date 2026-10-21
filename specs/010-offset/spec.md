@@ -4,7 +4,10 @@
 
 **Created**: 2026-10-20
 
-**Status**: Approved 2026-10-21. Plan and tasks come next. The builder took B-3 (properties kind on
+**Status**: Approved 2026-10-21; planned and tasked. Amended 2026-10-21 (round 6) with five
+choices the builder confirmed as built: the proposal on Mentor Practice 2 (US2 #1), the 0.1-frame
+read allowance in "same" (FR-008), "pops in" on any moved property (FR-008, FR-012), members whose
+moves changed (FR-008, row 8), and the demo's fresh read (FR-010). The builder took B-3 (properties kind on
 a tie) and B-4 (the rhythm threshold reuses FR-027's floor) as recommended, and both shared requests
 are tasked in spec 004 (SR-1 as T058 and T059, SR-2 as T064 and T065). The curriculum designer's
 round 1 answers (`teaching-design.md` › 14) are folded in: D-1 changed (a gap under the floor is
@@ -115,8 +118,11 @@ its saved snapshots each mistake in TD § 7 gets its hint.
 
 **Acceptance Scenarios**:
 
-1. **Given** three visible layers whose starts are the same, **When** the lesson starts, **Then**
-   the mentor names them and their shared start in one sentence and asks the intent question.
+1. **Given** Mentor Practice 2, **When** the lesson starts, **Then** the mentor proposes Dot 2's
+   three properties first (its group of 3 ties with Dot 1 to 3, and FR-006 sends a tie to the
+   properties kind) and offers the Dots in one sentence; **when** the learner picks the Dots, it
+   names them and their shared start in one sentence and asks the intent question (as built,
+   2026-10-21).
 2. **Given** the demo, **When** it runs, **Then** it shifts every keyed property on the second
    layer in the learner's order (effects and separated X and Y included), keys only, by the
    learner's gap (TD § 4).
@@ -236,15 +242,25 @@ section). Other edge cases:
 
 - **FR-008 (pass, settles S-1)**: The check MUST pass when, on the lesson's group:
   - **Layers:** no two group layers start the same, counting the demo layer (TD § 6 L1); and in
-    each group layer whose start moved, every counted property's start moved by the same amount
-    within half a frame (TD § 6 L2), unless the learner said they wanted that layer's properties
-    split (FR-012).
+    each group layer where **any counted property moved** (not only where the layer's start moved),
+    every counted property's start moved by the same amount within half a frame (TD § 6 L2),
+    unless the learner said they wanted that layer's properties split (FR-012). Keyed to any moved
+    property because a layer whose later property (say Opacity) moved alone keeps its start, so a
+    start-only rule would never fire the "pops in" hint (as built, 2026-10-21; TD § 6 to be
+    mirrored by the curriculum designer).
   - **Properties:** no two group properties have their group moves **both start and land** the
     same. Shifting a whole property, moving only its start, or moving only its landing each breaks
     the lockstep (TD § 6 P1).
   - **Both:** nothing about the size or evenness of the gaps is graded (TD § 6; H7).
-  "Same" is spec 004 FR-027's floor everywhere; the comparison is pairwise (two members within the
-  floor are the same even when a chain of near neighbours would link others).
+  - **Members whose moves changed:** a member whose number of moves changed since the baseline
+    (properties kind: its remembered move is gone; layers kind: it has no start any more) is
+    reported as `keys_changed`, isn't graded, and doesn't block a pass, **as long as at least 2
+    members are graded**; with fewer than 2 graded, the check doesn't pass (as built, 2026-10-21).
+  "Same" is spec 004 FR-027's floor everywhere, with **0.1 frame allowed for rounding**: key times
+  are read to the millisecond, so two keys exactly 2 frames apart at 30 fps (0.967 s and 1.033 s)
+  read as 1.98 frames, and must still count as 2 (as built, 2026-10-21; FR-023's cases don't
+  change). The comparison is pairwise (two members within the floor are the same even when a chain
+  of near neighbours would link others).
 
 ### Demonstration
 
@@ -263,7 +279,13 @@ section). Other edge cases:
   as one undo step. It MUST refuse, changing nothing, if any shifted key would land after the comp's
   end, if the layer is locked, or if the gap isn't a whole number of frames of at least 1. It MUST also refuse, changing nothing,
   a gap under spec 004 FR-027's floor at the comp's frame rate, so the one demo always shows a real
-  stagger (TD § 5, D-1). The reply says what moved and "Edit > Undo" (server rule 1).
+  stagger (TD § 5, D-1). Before writing, `offset_demo` MUST take **one fresh read** of the comp
+  (not the lesson's baseline): it matches the demo layer by name in that read (so a layer moved in
+  the stack is still the right one), refuses if the active comp isn't the lesson's, and applies
+  the refusals above to the comp as it is now, so a key the learner already pushed toward the end,
+  or a lock, is caught before After Effects is written to; the snippet repeats the lock and end
+  checks itself (as built, 2026-10-21). The reply says what moved and "Edit > Undo" (server rule
+  1).
 - **FR-011 (credit)**: The check MUST credit the demo member to the demo while its shift is still in
   place, count it in "no two start the same", and treat it as the learner's once they've undone it
   and moved it themselves (`markChecked(passed, { demoUndone })`, contract › 3).
@@ -275,7 +297,7 @@ section). Other edge cases:
   member: its start (and landing, properties kind) before and now, how far each counted property
   moved, and which pairs are still the same. The skill prompt turns that into TD § 7's hints: name
   the layers, properties and times, never the fix (spec 002 FR-008). For the layers kind, a split
-  inside a moved layer gets the "pops in" hint; if the learner answers that the split is on purpose,
+  inside a layer with any moved property gets the "pops in" hint (FR-008); if the learner answers that the split is on purpose,
   the next check counts that layer as split by intent. A split the learner asked for up front
   (FR-007) counts from the first check. Ask, don't fail (TD § 6 L2, D-2 agreed).
 - **FR-013**: The check MUST report, as other changes and not graded, any change outside the group
@@ -385,7 +407,7 @@ the check and the learner each see, and the reused filters.
 | 5 | Two held jumps on one layer at the same time | Both start and land the same → a properties group | Pass once either jump moves past the floor | As any pair | Right but surprising; pin with a synthetic test |
 | 6 | Hold jump vs. a ramp starting together | Starts same, landings differ → not a properties group (S-1); same start for the layers kind | As focus | | Right; pin with a test |
 | 7 | Separated dimensions (Bar X Position) | One "Position" unit; start is the earlier of X and Y | X shifted and Y not reads as a changed Position move, and the layer's Position start moves only if X was first; flagged as a split within Position | "Bar's Y Position didn't move with X" | **Gap**: the contract merges dimensions into one unit, so the check needs per-dimension shifts from the raw keys. Skill-local (its own diff). Test on Mentor Practice 2's separated layer |
-| 8 | Several moves in one property (Title Position: 0.5, 1.5, 3, 4.37 s) | Matches its first move against Scale and Opacity | Compares the remembered move (FR-005); if its move count changed, says so and doesn't grade that property | | Pinned by spec 004 T058 and T059 (SR-1): each key pair is its own move, so the matching move is found. Test on Mentor Practice |
+| 8 | Several moves in one property (Title Position: 0.5, 1.5, 3, 4.37 s) | Matches its first move against Scale and Opacity | Compares the remembered move (FR-005); if its move count changed, says so and doesn't grade that property, which doesn't block a pass while 2 or more members are graded (FR-008) | | Pinned by spec 004 T058 and T059 (SR-1): each key pair is its own move, so the matching move is found. Test on Mentor Practice |
 | 9 | Two neighbouring keys with equal values (a pause) | Not a move | A value given to a paused key makes a new move: other change | | Right with FR-013. Mentor Practice 2 "Pause" |
 | 10 | Effect keys (Glow's blur) | Count in the layer's start | Must move with the layer's other keys; moved with it = pass | | Right per contract. Test: Glow shifted with its layer passes |
 | 11 | Adjustment layer (Glow) | Eligible (renders); it's an odd "entrance" (TD § 4) | As any layer | | Right; no special case |
@@ -454,7 +476,8 @@ Unit tests cover the measures (FR-022, FR-023); evals score the teaching.
 
 1. **First lesson, properties kind** on Mentor Practice: proposes Title's three properties, offers
    the layers kind once, names what's left out, asks order and gap, real names (US1 #1).
-2. **First lesson, layers kind** on Mentor Practice 2.
+2. **First lesson, layers kind** on Mentor Practice 2: Dot 2's properties proposed first (the tie),
+   the Dots offered in one sentence, the learner picks them (US2 #1).
 3. **Demonstration**: one shift on the second member in the learner's order; frames before and
    after; none with a two-member group (walks it through in words).
 4. **"What gap should I use?"**: it's their call, no number (SC-004).

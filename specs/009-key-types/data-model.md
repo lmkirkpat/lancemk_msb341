@@ -12,7 +12,8 @@ The shared `segmentId(layer, prop, i)` (`"<layer index>/<property path>/<i>"`), 
 ## Property ref
 
 `{ layer, property }`: the layer's name and the property's display name or path. Resolved against
-the snapshot; a name that doesn't resolve is `not_found` (check) or refused (focus).
+the snapshot; a name that doesn't resolve is `not_found` (check) or refused as `not_found` (focus),
+never thrown (as built, 2026-10-21).
 
 ## `skill_options` (stored by the session, spec 004 T060, T061)
 
@@ -36,20 +37,25 @@ A pair on a layer's own `ADBE Transform Group/ADBE Opacity` where: one key's val
 For each focus ref: all of that property's pairs whose first key's out side isn't hold and whose
 values aren't known to be equal (pause, row 16). Separated Position expands to each keyed
 dimension. A ref is **refused** (with `reason`) when: `expression`, `single_key`, `all_held`,
-`only_pauses`, `precomp_inside`, `not_found`. Hidden layers and nulls are allowed when named.
+`only_pauses`, `precomp_inside`, `not_found`, or (review mode) `past_target`, when every keyed
+property it names was a target for this skill before (added in the build, 2026-10-21). Hidden
+layers and nulls are allowed when named.
 
 ## Analyzer result (spec 004's, plus these fields)
 
 | Field | Rule |
 |---|---|
 | `targets`, `target_refs` | Focus pair IDs and one `{layer, property}` each; `[]` before the learner names a focus |
+| `target_pairs` | The targets described for the mentor (layer, property and times of each pair), so it can name them without parsing IDs (added in the build) |
 | `demo_target` | Earliest target in time on an `enabled`, non-null layer, or `null` |
-| `no_demo_reason` | `null`, `single_target`, `no_new_target` (session), or this skill's `awaiting_focus`, `no_candidate`, `hidden_or_null` |
+| `no_demo_reason` | `null`, `single_target`, `no_new_target` (session), or this skill's `awaiting_focus`, `no_candidate`, `hidden_or_null`, `demo_used` (the lesson's one demo has run; added in the build) |
 | `focus` | Focus layer names, or `null` |
 | `candidates` | Candidate list (above), minus `should_move` refs |
+| `more_candidates` | How many candidates there are beyond the 3 named (0 when none), so the mentor can say there are more without naming them (added in the build) |
+| `should_move` | The stored `skill_options.should_move`, echoed back (added in the build) |
 | `refused` | `[{ layer, property, reason }]` for focus refs that can't be a focus |
 | `held_examples` | Up to 2 already-held pairs on visible layers, `{ layer, property, jump_time }`, for stage 2's frames |
-| `left_out` | `[{ reason, layers }]`: `hidden`, `precomp`, `expression`, `already_held`, `kept_linear`, `unknown_values` |
+| `left_out` | `[{ reason, layers, properties }]`: `hidden`, `precomp`, `expression`, `already_held`, `kept_linear`, `unknown_values`; `properties` lists the items behind each reason (`properties` added in the build) |
 
 ## Pair verdict (`key_types_check`)
 
@@ -79,5 +85,6 @@ non-null items true and every pair `held_*`. `markChecked(passed, { demoUndone }
 
 ## Demo result (`key_types_demo`)
 
-`{ layer, property, from_time, to_time, in_type, out_type, undo: "Edit > Undo" }`, the first key's
-types as read back.
+`{ layer, property, from_time, to_time, in_type, out_type, frames: { before, after }, undo:
+"Edit > Undo" }`, the first key's types as read back; `frames` are one frame before and one after
+the jump (clamped at 0 s), for stage 3's two frames (`frames` added in the build).

@@ -4,7 +4,10 @@
 
 **Created**: 2026-10-20
 
-**Status**: Approved 2026-10-21. Plan and tasks come next. The builder took H-1 to H-4 as
+**Status**: Approved 2026-10-21; planned and tasked. Amended 2026-10-21 (round 6) from the
+builder's cloud hand-back (R3): FR-014 and H-4 now say a move volunteered in a review that doesn't
+pass leaves no mark (FR-038's "only a passing check writes one"); the extra output fields are in
+the contract and data-model. The builder took H-1 to H-4 as
 recommended (SR-1 is tasked in spec 004 as T062 and T063, the `fresh` restart), and the curriculum
 designer's answers to C-1 to C-3 (`teaching-design.md` › 14, round 1, cockpit commit 96e954b) are
 folded in. Still open: SR-2 and SR-3 (conditional and wave B), and live checks L-1 to L-4, which
@@ -334,7 +337,10 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
   passes on **linear**; on **expression** the item doesn't apply (the mentor can't check it). The
   model can't write a mark any other way (spec 004 FR-038). Stage 6 isn't asked in a review; if the
   learner volunteers one there, the check confirms it the same way and marks it on **linear**, and it
-  doesn't affect the review's pass (H-4, approved 2026-10-21).
+  doesn't affect the review's pass (H-4, approved 2026-10-21). Because spec 004 FR-038 says only a
+  passing check writes a mark, a move volunteered in a review **that doesn't pass** leaves no mark,
+  even when it reads linear; the learner can name it again in a review or lesson that passes
+  (noted 2026-10-21, from the build).
 - **FR-015**: A property with an applying kept-linear mark MUST NOT be a candidate, and the mentor
   names it once with the learner's reason (row 21).
 - **FR-016 (pass)**: The lesson passes when `teaching-design.md` › 6's items 1 to 3 hold at a check
@@ -529,7 +535,8 @@ answers for the record.
    rather than edits to T006 and T017: spec 004 T062 (tests, in T006's new test file) and T063 (code,
    built into T017's session rewrite).
 4. **H-4. A constant-speed move the learner volunteers in a review** may be confirmed and marked,
-   ungraded. **Recommended:** yes; it's the same fact, checked the same way. **Approved 2026-10-21**
+   ungraded; it's marked only when that review's check passes (FR-038: only a passing check writes
+   a mark), so a review that doesn't pass leaves no mark. **Recommended:** yes; it's the same fact, checked the same way. **Approved 2026-10-21**
    (FR-014).
 
 ### For the curriculum designer (C)

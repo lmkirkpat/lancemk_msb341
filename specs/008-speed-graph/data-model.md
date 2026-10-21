@@ -41,17 +41,22 @@ enabled expression) where all of:
 | `targets` | Focus pair IDs, layer then property then time order |
 | `target_refs` | One `{ layer, property }` per target (layer name, property display name) |
 | `demo_target` | The first target on a visible, non-null layer (FR-007), or `null`. The session forces `null` in a review and with one target |
-| `no_demo_reason` | `null`, `single_target`, `no_new_target` (session), or this skill's `nothing_to_shape` (no candidate) |
+| `no_demo_reason` | `null`, `single_target`, `no_new_target` (session), or this skill's `nothing_to_shape` (no candidate in the comp), `none_in_focus` (candidates exist, but none on the layers in focus), `no_visible_layer` (two or more targets, none on a visible, non-null layer), and the tool's `demo_used` (the lesson's one demo has run). The last three were added in the build (2026-10-21) |
 | `focus` | The focus layer names (one, two at most) |
 | `candidates_count` | Candidates in the comp, before the 5-pair cap |
 | `left_out` | `[{ kind, layers }]`, one entry per kind present, in FR-005's order: `hidden`, `null`, `precomp`, `expression`, `ease_first` (linear or half eased), `already_shaped` |
 | `ease_first_count` | Pairs that need easing first (counts toward US3's "offer easing") |
-| `pairs` | Per target: `{ id, layer, property, from_time, to_time, moving_dims, fastest }` with `fastest` from research R2 (`{ parts: [...] }`) |
+| `pairs` | Per target: `{ id, layer, property, display_path, from_time, to_time, moving_dims, fastest }` with `fastest` from research R2 (`{ parts: [...] }`) and `display_path` the property's plain path (for an effect, "Effect › Property") |
+| `other_candidates` | Candidates outside the focus, one entry per layer and property, `{ layer, property, display_path, pairs }` (`pairs`: how many), so the mentor can offer them by name (added in the build, 2026-10-21) |
 
 Focus rule (FR-004): with no `focus_layers`, candidates on Position or Scale only; rank layers in
 `eased_layers` first (in comp layer order), then the rest in layer order; the focus is the first
 visible, non-null layer that has a Position or Scale candidate, capped at 5 pairs in property then
-time order. A second layer comes in only when the learner names two (`focus_layers`). On Mentor
+time order. A second layer comes in only when the learner names two (`focus_layers`); two named
+layers **share the 5-pair cap one pair at a time** (a round from each layer in turn, each layer's
+pairs in property then time order), so neither crowds the other out (as built, 2026-10-21).
+**Review** (`mode: "review"`, FR-021): one layer and **one property** (Position or Scale first),
+**up to 2 pairs** of it. On Mentor
 Practice in its 2026-10-20 state this gives Title, Position 0.5–1.5, 1.5–3, 3–4.37 s and Scale
 0.5–1.5 s (spec US1). With `focus_layers`, any candidate on those layers, including Opacity,
 Rotation, effects, a null or a hidden layer; the cap still applies. `UNKNOWN_LAYER` is the
@@ -75,13 +80,19 @@ session's.
 
 `{ comp_matches, lesson_comp, pairs: [Pair result], other_changes: [string], passed, demo_undone,
 seen_shaped: [pair ID] }`. `other_changes` is the shared `unexpectedChanges(baseline, current,
-targetSet)`. `passed` is true when every graded focus pair passed (dropped pairs aren't graded).
+targetSet)`, where `targetSet` is the lesson's targets **plus the pairs the learner said should land
+hard** (`land_hard`), so a dropped pair the learner then changes isn't reported as an other change.
+`passed` is true when every focus pair (dropped pairs aren't focus pairs) was graded and passed: a
+pair whose keys changed (`keys_changed`) or that's gone (`removed`) **holds the pass** until the
+learner answers whether that was on purpose (FR-014; as built, 2026-10-21).
 `markChecked(passed, { demoUndone })` is called only when `comp_matches`.
 
 ## Demo result (`speed_graph_demo`)
 
 `{ layer, property, from_time, to_time, dimensions, out_influence: [n], in_influence: [n],
-undo: "Edit > Undo" }`, the influences as read back after the write.
+undo: "Edit > Undo" }`, the influences as read back after the write. The values written come from
+the lib's `DEMO_OUT` and `DEMO_IN` (15.13, 79.87), passed to the snippet by the tool, so the snippet,
+its twin and the check's fingerprint read one source.
 
 ## Reading answer
 

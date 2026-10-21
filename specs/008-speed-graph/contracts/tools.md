@@ -35,11 +35,15 @@ Input:
 
 All optional. `mode` is `"lesson"` (default) or `"review"`. Calls `takeSnapshot()`, then
 `session.start(snapshot, { skill: "easing.speed_graph", analyze, focus_layers, mode,
-skill_options })`.
+skill_options })`. The session doesn't pass `mode` to the analyzer, so the tool passes a wrapper,
+`analyze: (snap, o) => analyze(snap, { ...o, mode })`, so a review picks its one layer and property
+(as built, 2026-10-21; spec › Open questions asks the shared owner whether the session should pass
+it).
 
-Output: `host` (from `parseHost`), `lesson` (`new`, `continued`, `resumed`), `comp`, and the
-analyzer result's `focus`, `targets`, `demo_target`, `no_demo_reason`, `left_out`,
-`ease_first_count`, `candidates_count`, `pairs` (data-model › Analyzer result).
+Output: `host` (from `parseHost`), `lesson` (`new`, `continued`, `resumed`), `mode`, `comp`, and
+the analyzer result's `focus`, `targets`, `demo_target`, `no_demo_reason` (`demo_used` once the
+demo has run), `left_out`, `ease_first_count`, `candidates_count`, `other_candidates`, `pairs`
+(data-model › Analyzer result).
 `annotations: { readOnlyHint: true }`.
 
 ## `speed_graph_demo`
@@ -47,7 +51,9 @@ analyzer result's `focus`, `targets`, `demo_target`, `no_demo_reason`, `left_out
 Input: `{ "segment_id": "1/ADBE Transform Group/ADBE Position/1" }`.
 
 Order: `session.assertCanDemo(segment_id)` (before any AE call) → `runSnippet("speed-graph-demo",
-{ comp_id, layer_index, property_path, key_index }, { undo: true })` → `session.recordDemo(segment_id)`.
+{ comp_id, layer_index, property_path, key_index, out_influence: DEMO_OUT, in_influence: DEMO_IN },
+{ undo: true })` → `session.recordDemo(segment_id)`. The influences come from the lib's constants
+(data-model › Demo result).
 Output: data-model › Demo result. Never runs in a review (`REVIEW_NO_DEMO`), twice
 (`DEMO_USED`), or off target (`NOT_DEMO_TARGET`).
 

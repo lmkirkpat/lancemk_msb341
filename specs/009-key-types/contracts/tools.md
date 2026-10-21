@@ -19,7 +19,10 @@ export const TOOLS = [keyTypesSnapshot, keyTypesDemo, keyTypesCheck];
 ```
 
 No `registerErrors`: errors use existing codes (`NO_SESSION`, `DEMO_USED`, `NOT_DEMO_TARGET`,
-`REVIEW_NO_DEMO`, `UNKNOWN_LAYER`, `LESSON_UNDERWAY`, `AE_UNREACHABLE`, `AE_BUSY`).
+`REVIEW_NO_DEMO`, `UNKNOWN_LAYER`, `LESSON_UNDERWAY`, `AE_UNREACHABLE`, `AE_BUSY`). A layer or
+property name in `skill_options.focus` that doesn't resolve isn't thrown: it comes back in
+`refused` with `reason: "not_found"` (and a name in `constant_speed` as the `not_found` verdict), so
+the mentor can say so in one sentence and the lesson goes on (as built, 2026-10-21).
 
 ## `key_types_snapshot`
 
@@ -40,15 +43,17 @@ Calls `takeSnapshot()`, then `session.start(snapshot, { skill: "keyframes.types"
 focus_layers: <focus layer names>, mode, skill_options, fresh })`. `LESSON_UNDERWAY` is passed
 through unchanged (FR-007).
 
-Output: `host`, `lesson`, `comp`, and the analyzer result's `focus`, `targets`, `demo_target`,
-`no_demo_reason` (with research R1's review rule), `candidates`, `refused`, `held_examples`,
-`left_out`. `annotations: { readOnlyHint: true }`.
+Output: `host`, `lesson`, `mode`, `project`, `comp`, and the analyzer result's `focus`, `targets`,
+`target_pairs`, `demo_target`, `no_demo_reason` (with research R1's review rule, plus
+`demo_used`), `candidates`, `more_candidates`, `refused`, `held_examples`, `left_out`, and the
+stored `should_move`. Fields added in the build (2026-10-21) are in data-model › Analyzer result.
+`annotations: { readOnlyHint: true }`.
 
 ## `key_types_demo`
 
 Input: `{ "segment_id": "<pair ID>" }`. Order: `session.assertCanDemo` → `runSnippet("key-types-demo",
 { comp_id, layer_index, property_path, key_index }, { undo: true })` → `session.recordDemo`.
-Output: data-model › Demo result.
+Output: data-model › Demo result, including `frames: { before, after }` for `preview_frame`.
 
 ## `key_types_check`
 

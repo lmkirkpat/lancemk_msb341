@@ -73,7 +73,9 @@ The builder, in a plain Claude Code session in the repo (not a subagent), easing
 1. Mentor Practice active, `/offset-mentor`: Title's Position, Scale and Opacity proposed, the layers
    kind offered once, leave-outs named, the order and gap asked and said back, a demo on the second
    property only if asked, the check.
-2. Mentor Practice 2 active, `/offset-mentor`: the Dots proposed (or picked), the same flow.
+2. Mentor Practice 2 active, `/offset-mentor`: Dot 2's three properties proposed first (they tie
+   with Dot 1 to 3, and a tie goes to the properties kind), the Dots offered in one sentence; pick
+   the Dots, then the same flow.
 
 Each to a verified pass in ≤ 15 minutes with ≤ 1 demo (times from `calls.jsonl`); note per check
 whether it matched a scrub in After Effects (SC-002: 9 of 10 across the live runs).
