@@ -4,7 +4,7 @@ description: "Task list for spec 009: skill 1, pick the key type on purpose"
 
 # Tasks: Pick the key type on purpose (curriculum skill 1, key types)
 
-**Status**: Draft, awaiting the builder's approval.
+**Status**: Approved 2026-10-21.
 
 **Input**: Design documents from `specs/009-key-types/`
 

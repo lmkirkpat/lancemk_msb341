@@ -6,7 +6,7 @@
 
 **Input**: Feature specification from `specs/010-offset/spec.md`, approved 2026-10-21.
 
-**Status**: Draft, awaiting the builder's approval.
+**Status**: Approved 2026-10-21.
 
 ## Summary
 

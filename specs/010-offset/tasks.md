@@ -4,7 +4,7 @@ description: "Task list for spec 010: skill 3, break the lockstep with offset"
 
 # Tasks: Break the lockstep with offset (curriculum skill 3)
 
-**Status**: Draft, awaiting the builder's approval.
+**Status**: Approved 2026-10-21.
 
 **Input**: Design documents from `specs/010-offset/`
 

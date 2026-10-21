@@ -66,10 +66,13 @@ and the tests that prove the tools are right. You build only what the spec asks 
   `.claude/skills/<name>/SKILL.md`, the bridge in `bridge/`, the panel in `panel/`.
 - Tools: a skill's tools go in their own file, `mentor/tools/<skill>.mjs`, exporting `TOOLS` and
   `SKILLS` (its learner-record skill IDs, like `easing.basic`); `mentor/tools/index.mjs` finds
-  the file, so add yours and leave `index.mjs`, `common.mjs` and other skills' files alone. The
-  shared files still edited by every skill are `mentor/server.mjs` (its instructions name easing
-  only) and `mentor/lib/session.mjs`: keep any change to them small and in one place, and say in
-  your hand-back that you touched them.
+  the file, so add yours and leave `index.mjs`, `common.mjs` and other skills' files alone.
+- Shared code is add-only (spec 004 FR-032, `ownership.json` › addOnly): a skill branch only adds
+  files under `mentor/`, `bridge/` and `.claude/skills/*-mentor/`. Only the one branch the cockpit
+  names shared-code owner for a wave changes existing files there (`server.mjs`, `session.mjs`
+  and the rest). Any change you need to a shared file goes back to the cockpit as a request in
+  your hand-back; `check-branch.mjs` rejects the branch otherwise. Name a skill's folder
+  `.claude/skills/<short>-mentor/` so `panel/lib/runtime.js` links it.
 - Learner record: `AE_MENTOR_HOME` points tests at a temp folder. Never write to the real one.
   You don't have `record_lesson`: the live server writes the builder's real record, so memory is
   proven by unit tests and evals, which use a temp folder.

@@ -4,7 +4,7 @@ description: "Task list for spec 008: skill 2, shape the ease in the speed graph
 
 # Tasks: Shape the ease in the speed graph (curriculum skill 2)
 
-**Status**: Draft, awaiting the builder's approval.
+**Status**: Approved 2026-10-21.
 
 **Input**: Design documents from `specs/008-speed-graph/`
 
