@@ -51,6 +51,7 @@ test("the tool file plugs in: three speed_graph_ tools, one skill ID, a finder",
   for (const t of own.TOOLS) assert.ok(index.TOOLS.includes(t), `${t.name} is found by index.mjs`);
   assert.ok(index.SKILLS.includes("easing.speed_graph"));
   assert.equal(index.FINDERS["easing.speed_graph"], own.FINDERS["easing.speed_graph"]);
+  assert.equal(own.FINDERS["easing.speed_graph"].review, true, "review mode ships in the first build (FR-021)");
   const recordSkills = index.TOOLS.find((t) => t.name === "record_lesson").inputSchema.properties.skill.enum;
   assert.ok(recordSkills.includes("easing.speed_graph"), "record_lesson accepts this skill");
 });

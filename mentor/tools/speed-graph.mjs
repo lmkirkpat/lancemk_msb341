@@ -15,13 +15,13 @@ const SKILL = "easing.speed_graph";
 export const SKILLS = [SKILL];
 
 // recommend_next's question (contract › 2): a count above 0 exactly when the snapshot tool would find
-// a target with the same exclude and kept-linear marks.
+// a target with the same exclude and kept-linear marks. Review mode is built and tested (FR-021).
 export const FINDERS = {
   [SKILL]: {
     focus(snapshot, { exclude = [], kept_linear } = {}) {
       return finder(snapshot, { exclude, kept_linear });
     },
-    review: false,
+    review: true,
   },
 };
 

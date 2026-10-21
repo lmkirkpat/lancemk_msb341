@@ -165,6 +165,7 @@ test("FINDERS agrees with analyze() on every fixture, with and without exclude",
   const f = FINDERS["easing.speed_graph"];
   for (const file of [...new Set(files), "practice-before.json"]) {
     const snap = load(file);
+    if (!Array.isArray(snap.layers)) continue; // the learner record, not a snapshot
     for (const exclude of excludes) {
       const found = f.focus(snap, { exclude });
       for (const mode of ["lesson", "review"]) {
