@@ -202,8 +202,8 @@ eval cases. Specs 008–010 kept their numbers for Spec Kit (`--number`).
 | 3 | skill-builder | Skill 2, speed graph, cloud part | yes | 20:09 | 20:28 | 19.2 | done (`9fd101e`): 115 tests, 33 files. Reported "about 2.5 hours" |
 | 3 | skill-builder | Skill 1, key types, cloud part | yes | 20:09 | 20:26 | 17.0 | done (`0e73e3c`): 78 tests, 38 files. Reported "roughly 2.5 hours" |
 | 3 | skill-builder | Skill 3, offset, cloud part | yes | 20:27 | 20:49 | 22.1 | done (`7e2ccef`): 128 tests, 45 files. Reported "roughly 2.5 hours" |
-| 4 | eval-engineer | Easing eval run after wave A (004 T046) | yes | 20:58 | | | (fill in) |
-| 4 | spec-writer | Fold the builders' findings and my five offset confirmations into the specs | yes | 20:58 | | | (fill in) |
+| 4 | eval-engineer | Easing eval run after wave A (004 T046) | yes | 20:58 | 22:00 | 41.3 | **20/25** (80%, just meets SC-006), $5.90, vs 25/25 on 10-19; no hard-rule failure. Repeats (3 each): 02, 03, 07 noise; 08 fails 4/4, 15 fails 3/4. Both state things no tool reports (which side of a shared key the demo eased, layer stack order). Those `SKILL.md` lines date from 10-05, so the cause isn't confirmed as wave A. About $14 with repeats (`ca9fa99`) |
+| 4 | spec-writer | Fold the builders' findings and my five offset confirmations into the specs | yes | 20:58 | 21:04 | 5.7 | done (`d75beac`): 21 spec files, 5 build-vs-spec conflicts flagged for me |
 
 At most three Opus agents at once (the README's rule from run 1). Wave 3 launched the reviewer
 and two builders together; the shared fixes took the reviewer's slot and offset took the next.
@@ -278,5 +278,7 @@ changes before wave B:
 2. Shared tests must not enumerate skills.
 3. A worktree base setting (or a standing prompt line) for runs off a feature branch.
 4. Run the reviewer on each skill branch too, and `/agent-audit` on the Mac before evals.
-5. The Mac sitting is now the bottleneck: spec 004's Mentor Practice 2 build and captures first,
+5. Easing dropped from 25/25 to 20/25 after wave A (cases 08 and 15 fail on repeat). Find the
+   cause before wave B: run case 08 at the pre-wave commit to separate wave A from model drift.
+6. The Mac sitting is now the bottleneck: spec 004's Mentor Practice 2 build and captures first,
    then skills 2, 1, 3 in order.
