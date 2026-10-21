@@ -5,6 +5,6 @@
   "description": "Knack panel (specs/003-mentor-panel).",
   "engines": { "node": ">=18" },
   "scripts": {
-    "test": "node --test test/"
+    "test": "node --test test/*.test.js"
   }
 }
