@@ -491,7 +491,10 @@ export function check(baseline, current, lesson, { split = [] } = {}) {
     }
   }
 
-  const passed = graded.length >= 2 && still_same.length === 0 && !unexplainedSplit;
+  // A member whose keys changed can't be compared, so it holds the pass until the learner says
+  // whether that was on purpose and it's graded again or undone (spec 008 FR-014's rule, here too):
+  // an ungraded member could still be in lockstep.
+  const passed = graded.length >= 2 && graded.length === results.length && still_same.length === 0 && !unexplainedSplit;
   const starts = graded.map((r) => r.start_now).sort((a, b) => a - b);
   const gaps = starts.slice(1).map((s, i) => s - starts[i]);
   const gaps_frames = gaps.map((g) => Math.round(g * fps * 10) / 10);

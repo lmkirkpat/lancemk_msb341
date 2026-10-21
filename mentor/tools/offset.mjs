@@ -189,7 +189,8 @@ export const TOOLS = [
     description:
       "Compare the comp now with the lesson's start. Per member: start (and landing) before and now, how far each property " +
       "moved, any split, and whose shift it is; pairs still together, order changes, keys outside the comp, other changes, " +
-      "the rhythm, and whether it passed. Doesn't change the baseline.",
+      "the rhythm, and whether it passed. A member whose keys changed can't be compared and holds the pass until it's " +
+      "undone or compared again. Doesn't change the baseline.",
     inputSchema: {
       type: "object",
       properties: {

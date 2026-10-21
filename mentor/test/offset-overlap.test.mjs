@@ -104,7 +104,7 @@ test("row 7: separated X and Y are one Position unit starting at the earlier; X 
   assert.deepEqual(member(r, "Dot 3").dimensions, { "X Position": 8, "Y Position": 0 });
 });
 
-test("row 8: Title's Position (four keys, three moves) joins through its first move; a changed move count isn't graded", () => {
+test("row 8: Title's Position (four keys, three moves) joins through its first move; a changed move count isn't graded and holds the pass", () => {
   const units = timing(now).layers.find((l) => l.layer === "Title").units;
   assert.equal(units.find((u) => u.unit === "Transform › Position").moves.length, 3);
   const a = analyze(now);
@@ -113,6 +113,7 @@ test("row 8: Title's Position (four keys, three moves) joins through its first m
   prop(s, "Title", "Position").keys.pop();
   const r = check(now, s, lessonFor(now, PROPS));
   assert.equal(r.members.find((m) => m.label === "Title › Position").status, "keys_changed");
+  assert.equal(r.passed, false, "a changed member holds the pass");
 });
 
 test("row 9: a pause isn't a move; a pause given a new value is an other change", () => {

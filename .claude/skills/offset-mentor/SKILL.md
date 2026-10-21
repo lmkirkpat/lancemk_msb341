@@ -175,7 +175,10 @@ at most; they stagger the rest with their own hands.
    - **A key outside the comp** (`out_of_comp`): "Glow's last key is now at 8.2 s, after the comp
      ends at 8 s, so it never finishes."
    - **Keys changed** (`status` says the move can't be compared): "Title's Position has a
-     different number of keys now, so I can't compare it. Was that on purpose?"
+     different number of keys now, so I can't compare it. Was that on purpose?" Ask; it isn't a
+     fail, and don't fix it for them. It holds the pass even when the others are apart, since it
+     could still be moving with one of them: the lesson passes once they undo those keys or it
+     can be compared again and is apart. Don't call it a pass while any member has changed keys.
    - **Nothing moved on a layer they say they moved:** its bar may have moved without its keys.
      "Title's keys still start at 0.5 s. Its bar may have moved, but the animation inside it
      didn't." <!-- L-3: confirm or rewrite this hint from live check L-3 (bar dragged vs in point
@@ -186,7 +189,7 @@ at most; they stagger the rest with their own hands.
    - Mention `other_changes` briefly, without treating them as mistakes.
    - If `comp_matches` is false, don't grade: ask them to switch back to `lesson_comp` by name and
      say "done" again.
-   - **A pass** (`passed`): say so plainly. If easing isn't learned and a member has
+   - **A pass** (`passed`, which needs every member compared and apart): say so plainly. If easing isn't learned and a member has
      `has_linear_pairs`, say once that the moves are still linear and suggest easing next.
    - They can fix things and say "done" as many times as they like.
 
