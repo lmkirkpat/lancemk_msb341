@@ -81,7 +81,10 @@ test("a finder for a skill ID its module doesn't declare is refused", async () =
 
 test("index.mjs and common.mjs are never loaded as skills", async () => {
   const found = await discover([TOOLS_DIR]);
-  assert.deepEqual(found.SKILLS, ["easing.basic"]);
+  // Any skill file may add IDs; index.mjs and common.mjs must add none, so easing's stays first and
+  // record_lesson (common's) is registered once.
+  assert.equal(found.SKILLS[0], "easing.basic");
+  assert.equal(new Set(found.SKILLS).size, found.SKILLS.length);
   assert.equal(found.TOOLS.filter((t) => t.name === "record_lesson").length, 1);
 });
 
