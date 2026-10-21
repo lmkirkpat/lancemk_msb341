@@ -35,17 +35,19 @@ back to the cockpit as a request, not into a skill branch.
 | `mentor/bridge-client.mjs` | Build the coded-error pattern lazily | T010 |
 | `mentor/jsx/snapshot.jsx` | Add `host: { ae_version, os }` (R0) | T012 |
 | `mentor/dev/capture.mjs` | `--compare` ignores `host` | T013 |
-| `mentor/lib/analyze.mjs` | Add `parseSegmentId` (moved), no behaviour change | T014 |
+| `mentor/lib/analyze.mjs` | Add `parseSegmentId` (moved), no behaviour change; `kept_linear` option (FR-038) | T014, T052 |
 | `mentor/lib/diff.mjs` | Export `unexpectedChanges` | T014 |
 | `mentor/tools/easing.mjs` | Use the shared `takeSnapshot` and `parseSegmentId`; add `FINDERS` | T015 |
-| `mentor/lib/session.mjs` | Per skill and comp; analyzer passed in; review mode; `review_offers` | T017 |
+| `mentor/lib/session.mjs` | Per skill and comp; analyzer passed in; review mode; `review_offers`; marks passed to analyzers, `keepLinear()` | T017, T053 |
 | `mentor/fixture.mjs` | Load `mentor/fixture/<snippet>.mjs` twins; edits carry `snippet` | T019 |
 | `mentor/tools/index.mjs` | Collect `FINDERS`; pass skills and finders to `commonTools` | T020 |
 | `mentor/server.mjs` | Instructions: "After Effects skills"; rule 3 generalised | T021 |
-| `mentor/lib/learner-store.mjs` | Lesson `kind`, `already_knew`, `targets`; skill `review_due`, `reviews_passed_in_row`; `pastTargets()` read | T017, T034 |
-| `mentor/tools/common.mjs` | `record_lesson` checks and stored fields; review fields in `read_learner_record`; `recommend_next` | T035, T036, T027 |
+| `mentor/lib/learner-store.mjs` | Lesson `kind`, `already_knew`, `targets`; skill `review_due`, `reviews_passed_in_row`; `pastTargets()` read; `marks` | T017, T034, T054 |
+| `mentor/tools/common.mjs` | `record_lesson` checks and stored fields; review fields in `read_learner_record`; `recommend_next` | T035, T036, T027, T054 |
+| `mentor/errors.mjs` (again) | `NOT_KEPT_LINEAR` | T053 |
+| `.claude/skills/ease-mentor/SKILL.md` | Step 2: one line for a kept-linear property (FR-038) | T055 |
 
-Nothing under `bridge/` and nothing in `.claude/skills/ease-mentor/` changes. **No existing test
+Nothing under `bridge/` changes; `.claude/skills/ease-mentor/SKILL.md` changes only in T055. **No existing test
 file is edited**: every existing test must pass as it is. If one truly can't, stop and hand back
 which and why instead of editing it.
 
@@ -58,7 +60,7 @@ T041).
 
 - **[P]**: can run in parallel (different files, no dependency on unfinished tasks). With one
   builder, [P] only means "order doesn't matter".
-- **[Story]**: US1 (first three lessons), US2 (what to learn next), US3 (reviews), US6 (evals and
+- **[Story]**: US1 (first three lessons; FR-038's marks are under US1 because skill 1 writes them and easing reads them), US2 (what to learn next), US3 (reviews), US6 (evals and
   easing holds), from spec.md.
 - **🖐 Live**: needs After Effects 26.5 open on `discovery/Claude AE Tutor Test.aep` and the AE
   lock (`decisions/008`); the builder at the keyboard for anything that saves the `.aep`.
@@ -212,6 +214,35 @@ Practice 2 (30 and 60 fps) and the synthetic timing cases, layer by layer (SC-00
 
 ---
 
+## Phase 5b: User Story 1 — Linear on purpose is remembered (FR-038, P1)
+
+**Goal**: when skill 1's check confirms a move the learner said runs at constant speed, the record
+keeps a kept-linear mark, and easing stops proposing that property while the mark applies
+(data-model › Kept-linear mark, contracts/skill-module.md › 6). Added 2026-10-20 (builder's call).
+
+**Independent test**: SC-013: on saved snapshots, a marked property is in easing's findings and
+targets 0 times while the mark applies and back every time after its keys change; with no marks,
+easing's output equals `practice-findings-baseline.json`.
+
+### Tests first
+
+- [ ] T049 [P] [US1] Write `mentor/test/marks.test.mjs` for `mentor/lib/marks.mjs` on `practice-before.json` and the synthetic `linear-basic.json`, `eased.json`, `expression.json`: `applies(mark, snapshot)` true when the layer and path exist with exactly `key_times`, no expression, and every pair `linear` (`segmentState`); false (lapsed) after one pair is eased, a key is held, a key is added or moved, the expression is turned on, or the layer is renamed; `marksFor(record, project, comp)` returns only that project and comp's marks; `isKeptLinear(marks, layer, path, snapshot)`; a record with no `marks` gives `[]`
+- [ ] T050 [P] [US1] Write `mentor/test/analyze-kept-linear.test.mjs`: `analyze(practice-before, { kept_linear: [CTRL Position mark] })` leaves CTRL Position out of `findings` and `targets`, lists it in `skipped` with `reason: "kept_linear"`, keeps `counts` the same, and picks a `demo_target` elsewhere; with `focus_layers: ["CTRL"]` it stays skipped and `targets` is empty (`no_demo_reason: "nothing_to_ease"`); a lapsed mark (CTRL Position eased in a copy) changes nothing; `kept_linear: []` and no option both deep-equal `practice-findings-baseline.json` (SC-004, SC-013). After T042, add the same on `practice2-before.json` with a mark on Spinner Rotation
+- [ ] T051 [P] [US1] Write `mentor/test/kept-linear-record.test.mjs` (fixture mode, temp home): `session.keepLinear(snapshot, [{ layer, property }])` stores `{ layer, path, property, key_times }` on the current lesson for an all-linear property, and throws `NOT_KEPT_LINEAR` for a property not found, one with an expression on, or one with any non-linear side, storing nothing; with no lesson it throws `NO_SESSION`; `record_lesson` writes the lesson's marks to `learner.json` › `marks` (replacing one on the same comp, layer and path), removes marks for that comp that are lapsed in the lesson's baseline, leaves other comps' marks alone, keeps `version: 1`, and its reply is unchanged; the email and phone check rejects a mark whose layer name is an email; `read_learner_record` returns `marks`; a second easing lesson on that comp (`session.start`) passes the applying marks to the analyzer and leaves the property out; no tool input lets the model write a mark
+
+### Implementation
+
+- [ ] T052 [US1] Create `mentor/lib/marks.mjs` (`applies`, `marksFor`, `isKeptLinear`, `markFrom(snapshotProp, layer)`), and add the `kept_linear` option to `analyze()` in `mentor/lib/analyze.mjs`: a property with an applying mark goes to `skipped` with `reason: "kept_linear"` (after the existing `expression` and `single_key` reasons, which win) and is left out of `findings` and `targets`; `counts` unchanged. T049, T050 pass; T004 still passes
+- [ ] T053 [US1] Update `mentor/lib/session.mjs`: `start()` reads `marksFor(record, project, comp)` from the learner record (unreadable record → no marks, never an error from here), keeps the applying ones on the lesson as `marks`, and passes them to any analyzer as `opts.kept_linear`; add `keepLinear(snapshot, refs)` per contracts/skill-module.md › 6, resolving each property by display name or path on the named layer. Add `NOT_KEPT_LINEAR` to `mentor/errors.mjs` with the text in contracts/shared-tools.md › Errors
+- [ ] T054 [US1] Update `mentor/lib/learner-store.mjs` and `record_lesson` in `mentor/tools/common.mjs`: write `context.lesson.kept_linear` to `record.marks` (data-model › Kept-linear mark: `kind: "kept_linear"`, `project`, `comp`, `layer`, `path`, `property`, `key_times`, `skill`, `date` as a local `YYYY-MM-DD`), replacing on the same comp, layer and path; drop that comp's marks that don't `apply` to the lesson's baseline; run the email and phone check on `layer` and `property`. A record without `marks` reads as `[]`; `recordLesson(input, skills)` without a lesson behaves exactly as today. T051 passes; `learner-store.test.mjs` and `tools.test.mjs` pass unchanged
+- [ ] T055 [US1] Update `.claude/skills/ease-mentor/SKILL.md` step 2's "Say what you're leaving out and why" list with one item: a `skipped` property with reason `kept_linear` is named once in plain words with the learner's reason ("Logo's Rotation stays linear: you said it runs at constant speed"), never proposed or demonstrated on; if the learner asks to ease it after all, they can ease it themselves whenever they like and it's an ordinary pair from then on. Change nothing else in the file
+- [ ] T056 [US1] Add a learner record with a kept-linear mark to `mentor/test/fixtures/records/` (`easing-learned-kept-linear.json`, a mark on Mentor Practice's CTRL Position with its real key times) for the eval engineer's case 12 and for T050's tool-level check through `snapshot_project`; and assert in `mentor/test/kept-linear-record.test.mjs` that `snapshot_project` in fixture mode with that record lists CTRL Position in `skipped` with reason `kept_linear`
+- [ ] T057 [US1] Note for spec 009 and spec 005 in the hand-back (T048): skill 1's check calls `keepLinear` with what the learner named; diagnosis reads marks with `marksFor` and `isKeptLinear` (contracts/skill-module.md › 6). No code in this task beyond confirming the exports exist and are covered by T049 to T051
+
+**Checkpoint**: SC-013's unit tests pass; easing's output with no marks is unchanged.
+
+---
+
 ## Phase 6: User Story 6 — Easing still holds, and the hand-over (P1)
 
 **Purpose**: prove FR-035 and SC-004 on the branch, and leave the parallel builders a working
@@ -227,7 +258,8 @@ contract.
 
 ## Dependencies & execution order
 
-- **Phase 1** → **Phase 2** (blocking) → Phases 3, 4, 5 → **Phase 6**.
+- **Phase 1** → **Phase 2** (blocking) → Phases 3, 4, 5 → Phase 5b → **Phase 6**. Phase 5b
+  (T049–T057) needs T017 (session) and T034 (record writes) done, and runs before T044–T048.
 - Phases 3, 4 and 5 don't depend on each other except: T026 needs T033 (`isDue`); T017 adds
   `pastTargets` which T034 extends. Do Phase 4's T033 before T026, or stub `isDue` first.
 - Within Phase 2: tests T004 to T008 first; then T009 → T010; T011 → T012; T014 → T015 → T017 →
@@ -255,4 +287,4 @@ T038 are all independent new files. With one builder this only means the order i
 Don't merge a partial branch: the parallel builders start only from the full merge, because
 after it nothing shared can change without a new owner branch.
 
-**Task count:** 48 (T001–T048): Setup 3, Foundational 18, US2 8, US3 7, US1 7, US6 5. Three are 🖐 live (T041, T042, T047).
+**Task count:** 57 (T001–T057): Setup 3, Foundational 18, US2 8, US3 7, US1 16 (7 in Phase 5, 9 in Phase 5b), US6 5. Three are 🖐 live (T041, T042, T047). T049–T057 were added 2026-10-20 for FR-038; they run before Phase 6 despite their numbers.

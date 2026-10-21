@@ -70,6 +70,8 @@ Shared tools a skill's SKILL.md also lists in `allowed-tools`: `read_learner_rec
 | `start`, `currentLesson`, `assertCanDemo`, `recordDemo`, `markChecked` | `mentor/lib/session.mjs` | The lesson state machine, per skill and comp. Review mode: no demo (`REVIEW_NO_DEMO`), past targets passed as `exclude` |
 | `segments`, `segmentState`, `segmentId`, `parseSegmentId`, `needsEase`, `linearEnd` | `mentor/lib/analyze.mjs` | Keyframe pairs and their states, the same as easing's (skills 1, 2) |
 | `unexpectedChanges(baseline, current, targetIds)`, `DEMO_INFLUENCE` | `mentor/lib/diff.mjs` | "Other changes" in a check; the easing demo's fingerprint |
+| `keepLinear(snapshot, refs)` | `mentor/lib/session.mjs` | Skill 1 only: note a confirmed constant-speed property for the record (section 6) |
+| `marksFor`, `applies`, `isKeptLinear` | `mentor/lib/marks.mjs` | Reading kept-linear marks outside a lesson (section 6) |
 | `timing(snapshot)`, `clusters(events, tolSeconds)` | `mentor/lib/timing.mjs` | Cross-layer timing measures (skill 3; spec 005) |
 | `runSnippet(name, args, opts)` | `mentor/bridge-client.mjs` | The only way into AE |
 | `MentorError(code, message?)` | `mentor/errors.mjs` | Errors. A skill may pass its own learner-facing message with an existing code |
@@ -104,7 +106,26 @@ export function apply(snapshot, edit) { /* mutate snapshot */ }
 `fixture.mjs` loads these by snippet name. `saveEdit(edit)` stores `{ snippet, comp_id, ...edit }`
 in `fixture-edits.json`. A twin never writes a fixture file.
 
-## 6. What a skill must not do
+## 6. Kept-linear marks (FR-038)
+
+**Writing (skill 1, spec 009, only).** When the learner names a move that should run at constant
+speed, skill 1's `key_types_check` takes what they named as input (layer and property names) and
+calls `session.keepLinear(snapshot, refs)` with the check's fresh snapshot. `keepLinear` throws
+`NOT_KEPT_LINEAR` (named property not found, an expression on it, or any pair not linear at both
+ends) and otherwise stores `{ layer, path, property, key_times }` on the current lesson.
+`record_lesson` then writes the marks. The check reports the result; it doesn't write the record.
+No tool lets the model write a mark directly, and a review records marks the same way.
+
+**Reading (easing now; diagnosis in spec 005).** `session.start()` passes the marks that apply to
+the analyzer as `opts.kept_linear`. For code outside a lesson (diagnosis), `mentor/lib/marks.mjs`
+exports `marksFor(record, project, comp)`, `applies(mark, snapshot)` and `isKeptLinear(marks,
+layerName, path, snapshot)`. Spec 005's DX-01 (linear pairs) and DX-05 (ramp vs hold) skip a
+property while a mark applies, and its "not checked" list doesn't list it (the learner chose it).
+
+**Taking it back.** Nothing to call: when the learner eases, holds, adds or moves a key on the
+property, the mark lapses (it no longer `applies`) and the next record write removes it.
+
+## 7. What a skill must not do
 
 - Edit any existing file under `mentor/`, `bridge/`, `.claude/skills/*-mentor/` (including
   `ease-mentor`), or any file under `product/evals/` or `panel/`.

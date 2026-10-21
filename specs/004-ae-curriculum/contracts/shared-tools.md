@@ -40,6 +40,11 @@ Stored: the entry plus `kind`, `already_knew` and `targets` from the current les
 state per [data-model.md](../data-model.md) › Skill state. Reply unchanged: `{ saved: true, skill:
 { status, next } }` (the existing tool test asserts it word for word).
 
+Also: `record_lesson` writes the current lesson's `kept_linear` list to the record's `marks`
+(replacing a mark on the same comp, layer and path) and removes marks for this comp that have
+lapsed in the lesson's baseline (data-model › Kept-linear mark). `read_learner_record` returns
+`marks` as stored.
+
 ## `recommend_next` (new)
 
 ```json
@@ -104,6 +109,7 @@ rest." The other seven rules are unchanged, word for word.
 |---|---|---|
 | `DEMO_USED` | "I've already shown you one in this lesson. The rest are yours to do, and I'll check them." | reworded (was "one pair") |
 | `NOT_DEMO_TARGET` | "I can only demonstrate on the one I picked for this lesson. The others are yours to do." | reworded |
+| `NOT_KEPT_LINEAR` | "That one isn't linear all the way through yet, so I can't note it as constant speed. Set its keys to linear first." | new |
 | `REVIEW_NO_DEMO` | "This one's a review, so it's all yours this time. Have a go and I'll check it." | new |
 | everything else | unchanged | |
 
