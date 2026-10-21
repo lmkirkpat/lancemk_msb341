@@ -4,7 +4,8 @@
 
 **Created**: 2026-10-20
 
-**Status**: Approved 2026-10-20. Plan and tasks come next. The builder's answers are folded in the
+**Status**: Approved 2026-10-20. Plan ([plan.md](plan.md)) and wave A's shared tasks
+([tasks.md](tasks.md)) drafted 2026-10-20, awaiting the builder's approval. The builder's answers are folded in the
 same day: H1 (After Effects 26.5 on macOS 27.0.1), H2 (this sprint's baseline is five skills, 2, 1,
 3, 5, 6, plus reviews for 2, 1, 3), session start without a named skill (diagnosis first) and Q1 to
 Q3 (the written defaults, for now). Still open: H3, H4, H5 and its shared-code owner note (FR-032),
