@@ -4,11 +4,14 @@
 
 **Created**: 2026-10-20
 
-**Status**: Draft, awaiting the builder's approval. No plan or tasks until approved.
+**Status**: Approved 2026-10-21. Plan and tasks come next. The builder took H1 to H3 as
+recommended (SR-1 folded into spec 004 as T060 and T061; FR-010d's 5%; the live-check order), and
+the curriculum designer agreed D-1 to D-5 and S-1 (`teaching-design.md` › 14), folded in below.
+Still open: nothing for the spec; the live checks L-1 to L-7 settle facts during the build.
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 2, the speed graph." Number 008 assigned by the cockpit. The teaching design is the
-curriculum designer's [`teaching-design.md`](teaching-design.md) (same folder, draft round 1,
+curriculum designer's [`teaching-design.md`](teaching-design.md) (same folder, round 1 answered,
 `decisions/007`). This spec links to it by section (§) and turns it into requirements. It doesn't
 restate or change what is taught; gaps go back as questions (Open questions › D).
 
@@ -54,7 +57,8 @@ Shared-code requests), not this skill's work.
   FR-024 to FR-026 (demo and the pass margins for this skill), FR-030 (version), FR-032 (adds files
   only), FR-033 to FR-035 (evals and overlaps), FR-037 (skill 4 hand-off, after R1/R2).
 
-None needs changing. One shared-code request (SR-1) is listed under Dependencies.
+None needs changing. One shared-code request (SR-1) is listed under Dependencies; approved and
+tasked in spec 004 (T060, T061).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -172,14 +176,14 @@ FR-025):
 | 6 | Half eased (Subtitle › Opacity) | Not a candidate; counted as "ease these first" | A focus pair turning half eased fails FR-010c | Easing's hint (FR-002) | Yes |
 | 7 | Bezier out, **hold in** on the landing key | Not a candidate (this skill's own facing-sides test) | Fails FR-010c | § 7 row 3's hint | Yes here; easing calls it "eased" (observation, L-7) |
 | 8 | Separated dimensions (Bar › X Position) | X and Y are separate properties, separate pairs | Each graded on its own | By its own name ("X Position") | Yes |
-| 9 | Multi-dimension ease (Scale reads 3 on a 2D layer) | One pair | Every **moving** dimension graded (FR-011) | Names the dimension that's off | Yes, pending L-2 and D-4 |
+| 9 | Multi-dimension ease (Scale reads 3 on a 2D layer) | One pair | Every **moving** dimension graded (FR-011) | Names the dimension that's off | Yes (D-4 agreed), pending L-2 |
 | 10 | Hidden layer (Old Take) / matte before R1 | Left out unless the learner wants it; never the demo | Graded if chosen | "You've hidden this…" (a matte reads the same until R1, KD-001) | Yes until R1 |
 | 11 | Null (CTRL) | Not a default candidate; allowed if picked; never the demo | Graded if chosen | Its move can't be seen in a frame | Yes |
 | 12 | Shared middle key (Title Position 1.5 s, 3 s) | Each pair owns its facing side | Pair 1's landing change never counts for pair 2, and back | The shared-key hint (§ 9) | Yes, pending L-4 (does AE tie the two sides?) |
 | 13 | Precomp (Icon) | Inside keys not read; its own transform keys are candidates if eased | Same | "I can't see inside these yet" | Yes |
 | 14 | Effect or shape-content pair (Bar › Trim Paths End, eased) | A candidate if picked; not in the default focus | Graded | By its real name | Yes |
-| 15 | Parenting (Title rides CTRL, 0–1 s) | Not read until R1 | Only the layer's own keys | Nothing in wave A; after R1, one sentence or spec 004 FR-037 | Partly: a frame inside 0.5–1 s mixes in CTRL's move, so a frame claim can be off (D-5) |
-| 16 | Pair with no value change (Mentor Practice 2 "Pause") | Not a candidate (pending D-1) | Not graded | Nothing | Pending D-1 |
+| 15 | Parenting (Title rides CTRL, 0–1 s) | Not read until R1 | Only the layer's own keys | Nothing in wave A; after R1, one sentence or spec 004 FR-037 | Yes for wave A: frame claims say only where the layer is on screen, never how far along its move (FR-019, D-5 agreed) |
+| 16 | Pair with no value change (Mentor Practice 2 "Pause") | Not a candidate | Not graded | Nothing, unless the learner picks it: "it holds still between those keys, so there's nothing to shape" (FR-004) | Yes (D-1 agreed) |
 | 17 | Keys added, removed or moved on a focus property mid-lesson | n/a | Those pairs aren't graded (pair IDs follow key order) | The keys changed; asks if on purpose (FR-014) | Yes |
 | 18 | Demo undone, or redone by the learner | n/a | Demo credit: demo / learner redo / after undo / unknown (FR-008) | Credit to whoever did it | Yes |
 | 19 | Easy Ease applied again after shaping | Still a candidate (unshaped) | Fails FR-010a and b; "back to default" | § 7 row 5's hint | Yes (the hint's cause is a Guess, L-6) |
@@ -213,11 +217,13 @@ Other edge cases:
 - **FR-003**: A pair MUST be a candidate only when all hold: the start key's out side and the
   landing key's in side are both bezier; the property has no enabled expression; the layer is read
   in the open comp; the pair doesn't already pass FR-010; its value changes across the pair
-  (pending D-1); and the learner hasn't said it should land hard (FR-006).
+  (D-1, TD § 4); and the learner hasn't said it should land hard (FR-006).
 - **FR-004**: Without a learner's pick, the focus MUST be Position or Scale candidates on one layer
   (two at most), no more than 5 pairs, ranked by § 4: layers the record shows an easing lesson
   targeted first, then the rest in layer order. Any candidate the learner names (Opacity, Rotation,
-  an effect, a null, a hidden layer) MUST be allowed. The ranking MUST be deterministic given the
+  an effect, a null, a hidden layer) MUST be allowed. A pair with no value change is left out
+  silently; if the learner picks one, the mentor says it holds still between those keys, so there's
+  nothing to shape, and offers the next pair (TD § 4). The ranking MUST be deterministic given the
   layer names the mentor takes from `read_learner_record` (from lesson entries' targets; for
   entries written before spec 004, a layer whose exact name appears in the entry's text); the
   skill MUST NOT read the record file itself.
@@ -225,7 +231,9 @@ Other edge cases:
   layers, nulls, precomps, pairs under an expression, linear or half-eased pairs, and pairs already
   shaped. It MUST NOT say a precomp is fine or that a layer has no expression.
 - **FR-006**: If the learner says a focus pair should land hard, that pair MUST leave the focus for
-  the rest of the lesson, with no argument, and the check MUST NOT grade it (needs SR-1).
+  the rest of the lesson, with no argument, and the check MUST NOT grade it. The skill keeps the dropped pairs in the session's
+  `skill_options` (spec 004 contracts/skill-module.md › 4, tasks T060 and T061), so a continued or
+  resumed lesson still leaves them out.
 
 ### The demonstration
 
@@ -249,19 +257,21 @@ Other edge cases:
   dimension (FR-011):
   - a. the landing key's in-side influence is at least **20 points** above the start key's out-side
     influence (spec 004 FR-026);
-  - b. the pair's two facing sides are not both within **1 point of 33.33%** (spec 004 FR-026; see
-    D-2);
+  - b. the pair's two facing sides are not both within **1 point of 33.33%** (spec 004 FR-026). Only
+    the facing sides count; a key's far side belongs to the neighbouring pair (TD § 6 item 2, D-2
+    agreed). b is implied by a and stays to drive the "back to default" hint;
   - c. both facing sides are bezier (spec 004 FR-026);
   - d. **still comes to rest:** the landing key's in-side speed is at most **5% of the pair's
     average speed** in that dimension (the value change divided by the pair's duration; for
     unseparated Position, the straight-line distance between the two key values). Where the value
-    can't be read, the speed must be 0 (within 0.001). The 5% is tuned on L-5 before the build is
-    merged.
+    can't be read, the speed must be 0 (within 0.001). The 5% is approved (2026-10-21) and tuned on L-5 before the build is
+    merged; if L-5 changes it, only toward catching a visible bump, never toward passing more pairs
+    (TD § 14, S-1).
   The lesson passes when every graded focus pair passes. The demo pair counts while the demo is in
   place, and as the learner's pair after it's undone. The check MUST read the comp fresh, never
   change the baseline, and not grade on another comp.
 - **FR-011**: A moving dimension MUST be one whose value differs between the pair's two keys;
-  dimensions that don't move are not graded (pending L-2 and D-4). When only some moving dimensions
+  dimensions that don't move are not graded (D-4 agreed; pending L-2). When only some moving dimensions
   pass, the check MUST say which one is off in a way the mentor can say plainly.
 - **FR-012**: For each pair that doesn't pass, the check MUST say which of a to d failed and which
   of § 7's mistakes it matches, so the mentor gives that hint and never the fix:
@@ -299,8 +309,10 @@ Other edge cases:
 - **FR-018**: The mentor MUST NOT state the pass margins (20 points, 33.33%, 5%) or 15/80 as a
   target; it says "make the landing ease clearly longer than the start" (§ 6). It MUST NOT show
   record IDs, field names or quoted values (server rule 5).
-- **FR-019**: Claims about motion MUST come from frames only; no percentage of distance travelled
-  (§ 5, "Claims from frames").
+- **FR-019**: Claims about motion MUST come from frames only, and describe only where the layer is on
+  screen in a frame, never how far along its own move it is; no percentage of distance travelled
+  (§ 5, "Claims from frames"; D-5 agreed). This holds until R1 lets the mentor pick frames where no
+  parent is moving.
 - **FR-020**: Version steps MUST follow § 10 and spec 004 FR-030: the Graph Editor by its timeline
   button, never Shift+F3; always ask the learner to choose Edit Speed Graph; the Keyframe Velocity
   menu path and shortcut quoted only in the form L-1 confirms at 26.5, and until then not quoted.
@@ -382,7 +394,9 @@ Other edge cases:
 
 ## Live checks for the build (run under the AE lock; results logged, not guessed)
 
-These settle facts the spec can't. The builder runs them on a duplicate comp (deleted before
+These settle facts the spec can't. **When (H3, approved 2026-10-21):** L-1 to L-4 are the build's
+first live task, before `SKILL.md`'s wording is final; L-5 to L-7 run with the fixture captures.
+The builder runs them on a duplicate comp (deleted before
 saving) and logs results in `discovery/usage-notes/`. Where one changes a requirement, it comes back
 to this spec.
 
@@ -444,7 +458,7 @@ fastest part and overlap rows; evals check what the mentor does with them.
   eased pairs. So designer B-1 is answered: the live lesson runs on Mentor Practice as it is, with
   Title Position 0.5–1.5 s as the demo target. The live review uses Mentor Practice 2's "Card"
   (spec 004 T041) or a new eased move on the builder's own comp.
-- **Wave A shared pieces are merged first** (spec 004 tasks T001–T048), so the session takes an
+- **Wave A shared pieces are merged first** (spec 004 tasks T001–T065), so the session takes an
   analyzer, review mode and fixture twins exist.
 - **Speeds and influence** are read per dimension as easing reads them today; no new read is needed
   (spec 004: skill 2 needs no new read).
@@ -465,18 +479,25 @@ fastest part and overlap rows; evals check what the mentor does with them.
 
 ## Open questions
 
+All answered 2026-10-21. Kept here with their answers for the record.
+
 ### For the builder (H), each with a recommendation
 
 1. **SR-1, a shared-code request** (below): may the session keep a skill's own analyzer options
    across a continued lesson, so a "lands hard" pair stays out? **Recommended:** yes, fold it into
    spec 004 T017 before the shared owner starts. Without it, FR-006 works only if the mentor
    re-sends the dropped pairs on every call, which a resumed headless turn can forget.
+   **Approved 2026-10-21:** spec 004 T060 and T061 (`skill_options`).
 2. **FR-010d's tolerance:** 5% of the pair's average speed, tuned on L-5. **Recommended:** approve;
-   change only the number if L-5 shows a bump below it.
+   change only the number if L-5 shows a bump below it. **Approved 2026-10-21.**
 3. **When the live checks run:** **Recommended:** L-1 to L-4 as the build's first live task, before
    `SKILL.md`'s wording is final; L-5 to L-7 with the fixture captures. None blocks the plan.
+   **Approved 2026-10-21.**
 
 ### For the curriculum designer (D)
+
+All five agreed as recommended (`teaching-design.md` › 14, 2026-10-20); folded into FR-003, FR-004,
+FR-010b, FR-011, FR-012, FR-019 and the overlap rows 9, 15 and 16.
 
 1. **D-1, pairs that don't move:** a pair whose two keys have the same value (Mentor Practice 2
    "Pause") has nothing to shape. **Recommended:** not a candidate; added to § 4's focus rule and § 9.
@@ -501,15 +522,16 @@ The cases above, plus § 13's E items (expression-over-keys named, dragged up, o
 
 ## Dependencies
 
-- **Spec 004 wave A shared pieces** (tasks T001–T048) merged first: the session with an analyzer and
+- **Spec 004 wave A shared pieces** (tasks T001–T065) merged first: the session with an analyzer and
   review mode (T017), fixture twins (T019), finders (T020), shared errors (T009), Mentor Practice 2
   with "Card" (T041, T042).
 - **Shared-code requests** (to the cockpit for the shared owner, not this skill's work):
   - **SR-1:** `session.start` keeps the skill's own analyzer options (here, the pairs left out for
     a hard landing) with the lesson and passes them again when it re-runs the analyzer on a
-    continued or resumed lesson. Proposed as part of spec 004 T017.
+    continued or resumed lesson. **Approved and tasked 2026-10-21:** spec 004 T060 (test) and T061
+    (code), built into T017's rewrite, as the `skill_options` option.
 - **Panel-builder request** (spec 004 plan P3): `panel/lib/runtime.js` links every
   `.claude/skills/*-mentor` folder, before any eval run of this skill.
 - **Eval engineer:** this skill's eval set and its runner's tool list.
-- **Teaching design** (`teaching-design.md`, draft round 1): if D-1 to D-5 change it, this spec
+- **Teaching design** (`teaching-design.md`, round 1 answered): if it changes again, this spec
   follows.

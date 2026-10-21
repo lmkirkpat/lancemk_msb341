@@ -4,14 +4,19 @@
 
 **Created**: 2026-10-20
 
-**Status**: Draft, awaiting the builder's approval. No plan or tasks yet.
+**Status**: Approved 2026-10-21. Plan and tasks come next. The builder took B-3 (properties kind on
+a tie) and B-4 (the rhythm threshold reuses FR-027's floor) as recommended, and both shared requests
+are tasked in spec 004 (SR-1 as T058 and T059, SR-2 as T064 and T065). The curriculum designer's
+round 1 answers (`teaching-design.md` › 14) are folded in: D-1 changed (a gap under the floor is
+caught at the intent step), D-2 agreed plus the up-front case. Still open: nothing for the spec;
+live checks L-1 to L-4 settle facts during the build.
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 3, offset." Record ID `timing.offset`, short name `offset`, tool prefix `offset_`
 (spec 004 [contracts/skill-module.md](../004-ae-curriculum/contracts/skill-module.md) › 1).
 
 **What is taught** is the curriculum designer's [teaching-design.md](teaching-design.md) (this
-folder, draft round 1, 2026-10-20; `decisions/007`). This spec links to it by section (written
+folder, round 1 answered 2026-10-20; `decisions/007`). This spec links to it by section (written
 "TD § n") and turns it into requirements. It doesn't restate or change the teaching. Where it needs
 something the design doesn't say, that's a question in Open questions › D.
 
@@ -55,8 +60,9 @@ something the design doesn't say, that's a question in Open questions › D.
 - **Spec 005** (diagnosis, approved): DX-02, DX-03 and DX-07 read the same timing analysis
   (its FR-016 dependency on spec 004), never a copy.
 
-None needs changing. One shared-code request and one fixture request go back to spec 004's owner
-(Dependencies › Shared-code requests).
+None needs changing. One shared-code request and one fixture request went back to spec 004's owner
+(Dependencies › Shared-code requests); both are approved and tasked there (T058 to T059, T064 to
+T065).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -116,7 +122,8 @@ its saved snapshots each mistake in TD § 7 gets its hint.
    learner's gap (TD § 4).
 3. **Given** the learner shifts a layer's Opacity but not its Position, **When** they say "done",
    **Then** it doesn't pass and the hint shows a frame where Opacity is up and Position hasn't
-   started (TD § 7, "pops in"), unless they'd said they want them split.
+   started (TD § 7, "pops in"), unless they'd said they want them split; if they answer that the
+   split is on purpose, that layer passes on the next check (FR-012).
 4. **Given** staggered starts with uneven gaps, **When** checked, **Then** it passes with one
    sentence on the rhythm, never a fail (FR-011).
 5. **Given** staggered starts in a different order from the one the learner said, **When**
@@ -126,8 +133,8 @@ its saved snapshots each mistake in TD § 7 gets its hint.
 
 ### User Story 3 - Review the skill in a later session (Priority: P1)
 
-A day or more after I learned it, Knack names a new group on my comp ("Card, Icon and Label all
-start at 1 s"), asks which goes first, and says to stagger them however I like. No demo, no
+A day or more after I learned it, Knack names a new group on my comp ("Chip A, Chip B and Chip C
+all start at 2 s"), asks which goes first, and says to stagger them however I like. No demo, no
 walkthrough. It checks the same way.
 
 **Why this priority**: reviews for skill 3 are in this sprint's baseline (spec 004 H2, SC-009,
@@ -213,11 +220,15 @@ section). Other edge cases:
 - **FR-006**: The mentor MUST propose the kind with the **larger group** (counting eligible members
   of the largest group of each kind); **on a tie it proposes the properties kind** (S-3: one layer
   is a smaller lesson, and it's the same finding as spec 005's DX-03). Within a kind, a tie goes to
-  the earlier start, then the comp's layer order. It offers the other kind in one sentence when
+  the earlier start, then the comp's layer order (tie rule approved 2026-10-21, B-3). It offers the other kind in one sentence when
   both exist, and names what it left out in one sentence per reason (TD § 4). The learner can agree,
   pick the other kind, or name the layers. The rule is deterministic and unit tested.
 - **FR-007**: After the learner agrees, the mentor MUST ask the intent question (which goes first)
-  and the gap, and repeat both back in plain words. It MUST NOT name a gap, a number of frames or a
+  and the gap, and repeat both back in plain words, along with any layer the learner says up front
+  they want split (TD § 4, stage 3). If the gap is under spec 004 FR-027's floor, the mentor MUST
+  say in plain words that a gap that small still reads as together and ask them to pick again,
+  naming no number; if they keep it, there's no demo (the mentor walks it through in words) and
+  the check applies the floor as usual (TD § 5 stage 3, D-1). It MUST NOT name a gap, a number of frames or a
   number of seconds to use, even when asked (TD § 4, spec 004 FR-027, curriculum H7). Converting
   the learner's own gap into frames to say it back is allowed.
 
@@ -242,7 +253,7 @@ section). Other edge cases:
   AE is touched. The demo target is set from the learner's stated order (TD § 4): the second member
   in that order, or the next one in that order if the second has an expression on a keyed
   property; **none** when the group has two members. Until the learner has given an
-  order, there's no demo target.
+  order, there's no demo target. A gap the learner kept under the floor means no demo (FR-007).
 - **FR-010**: The demo MUST shift keys only (not the layer's in or out point) by a whole, positive
   number of frames equal to the learner's gap:
   - **Layers kind:** every keyed property on the demo layer, including effect keys, both separated
@@ -250,9 +261,9 @@ section). Other edge cases:
   - **Properties kind:** every key of the demo property (both dimensions if separated).
   It MUST keep each key's value, interpolation types, temporal ease, and spatial tangents, and run
   as one undo step. It MUST refuse, changing nothing, if any shifted key would land after the comp's
-  end, if the layer is locked, or if the gap isn't a whole number of frames of at least 1. The
-  reply says what moved and "Edit > Undo" (server rule 1). Whether the demo also refuses a gap
-  under the floor is open (D-1).
+  end, if the layer is locked, or if the gap isn't a whole number of frames of at least 1. It MUST also refuse, changing nothing,
+  a gap under spec 004 FR-027's floor at the comp's frame rate, so the one demo always shows a real
+  stagger (TD § 5, D-1). The reply says what moved and "Edit > Undo" (server rule 1).
 - **FR-011 (credit)**: The check MUST credit the demo member to the demo while its shift is still in
   place, count it in "no two start the same", and treat it as the learner's once they've undone it
   and moved it themselves (`markChecked(passed, { demoUndone })`, contract › 3).
@@ -265,7 +276,8 @@ section). Other edge cases:
   moved, and which pairs are still the same. The skill prompt turns that into TD § 7's hints: name
   the layers, properties and times, never the fix (spec 002 FR-008). For the layers kind, a split
   inside a moved layer gets the "pops in" hint; if the learner answers that the split is on purpose,
-  the next check counts that layer as split by intent (D-2).
+  the next check counts that layer as split by intent. A split the learner asked for up front
+  (FR-007) counts from the first check. Ask, don't fail (TD § 6 L2, D-2 agreed).
 - **FR-013**: The check MUST report, as other changes and not graded, any change outside the group
   that the timing analysis would hide: key times or count on a property outside the group, a single
   key moved, an expression turned on or off, a property that's newly animated or no longer animated.
@@ -278,7 +290,8 @@ section). Other edge cases:
 - **FR-015 (rhythm, layers kind)**: After a pass with 3 or more layers, the mentor MUST add one
   sentence on the rhythm when the gaps between consecutive starts (in time order) differ by the
   floor or more (largest gap minus smallest), and say nothing about rhythm otherwise. Never a fail
-  (TD § 5 stage 6). The floor reuses spec 004 FR-027 (spec writer's call; the designer may revise).
+  (TD § 5 stage 6). The floor reuses spec 004 FR-027, so no new number enters the product (approved
+  2026-10-21, B-4; the designer agreed, TD § 14).
 
 ### Lesson, version and record
 
@@ -299,7 +312,8 @@ section). Other edge cases:
   input fields. In plain words (TD § 12): `attempted` names the kind and the members in the
   learner's order ("Staggered Title's Position, Scale and Opacity, in that order"); `summary` says
   what the checks showed, including the gaps as measured ("gaps about 4 and 8 frames"), which is a
-  measure of the work, not a method; one `next`. The targets stored are the group's members as
+  measure of the work, not a method, and any split the learner kept on purpose ("split Title's
+  Opacity on purpose"); one `next`. The targets stored are the group's members as
   `{layer, property}` (every counted property of each layer for the layers kind), so a review can
   find a new group (spec 004 data-model › Lesson entry). No names, motive or method (spec 004
   FR-022).
@@ -334,7 +348,8 @@ section). Other edge cases:
 
 - **Group**: the lesson's focus. Kind (layers or properties), members (layers, or one layer's
   properties with the matching move of each), the shared start (and landing).
-- **Intent**: the learner's order and gap, and any layer they said to split.
+- **Intent**: the learner's order and gap, and any layer they said to split (up front or after the
+  "pops in" hint).
 - **Demo target**: one member, from the order (FR-009), or none.
 - **Check result**: per member, start and landing before and now, per-property shift, the pairs
   still the same, other changes, out-of-comp keys.
@@ -370,14 +385,14 @@ the check and the learner each see, and the reused filters.
 | 5 | Two held jumps on one layer at the same time | Both start and land the same → a properties group | Pass once either jump moves past the floor | As any pair | Right but surprising; pin with a synthetic test |
 | 6 | Hold jump vs. a ramp starting together | Starts same, landings differ → not a properties group (S-1); same start for the layers kind | As focus | | Right; pin with a test |
 | 7 | Separated dimensions (Bar X Position) | One "Position" unit; start is the earlier of X and Y | X shifted and Y not reads as a changed Position move, and the layer's Position start moves only if X was first; flagged as a split within Position | "Bar's Y Position didn't move with X" | **Gap**: the contract merges dimensions into one unit, so the check needs per-dimension shifts from the raw keys. Skill-local (its own diff). Test on Mentor Practice 2's separated layer |
-| 8 | Several moves in one property (Title Position: 0.5, 1.5, 3, 4.37 s) | Matches its first move against Scale and Opacity | Compares the remembered move (FR-005); if its move count changed, says so and doesn't grade that property | | **Gap in the contract**: whether touching ramps in one property are one move or several isn't pinned (SR-1). Test on Mentor Practice |
+| 8 | Several moves in one property (Title Position: 0.5, 1.5, 3, 4.37 s) | Matches its first move against Scale and Opacity | Compares the remembered move (FR-005); if its move count changed, says so and doesn't grade that property | | Pinned by spec 004 T058 and T059 (SR-1): each key pair is its own move, so the matching move is found. Test on Mentor Practice |
 | 9 | Two neighbouring keys with equal values (a pause) | Not a move | A value given to a paused key makes a new move: other change | | Right with FR-013. Mentor Practice 2 "Pause" |
 | 10 | Effect keys (Glow's blur) | Count in the layer's start | Must move with the layer's other keys; moved with it = pass | | Right per contract. Test: Glow shifted with its layer passes |
 | 11 | Adjustment layer (Glow) | Eligible (renders); it's an odd "entrance" (TD § 4) | As any layer | | Right; no special case |
 | 12 | Precomp layer (Icon) | Not eligible until R1 | Not graded | "I can't check their timing yet" | Right. Test |
 | 13 | Hidden layer (Old Take) and matte, eye off | Left out until R1 | Not graded unless added | "unless you want it" | Right for wave A (KD-001 caveat, filter 2). Test |
 | 14 | Null (CTRL) | Not eligible; never the demo | Not graded | One sentence | Right. Test, including a learner who adds it (refused) |
-| 15 | Parenting (Title, Subtitle under CTRL, which moves 0 to 1 s) | Own keys only; a child's visible start includes the parent's motion, not read in wave A | Own keys only | Nothing about parents in wave A (TD § 9) | Known blind spot: staggering two children of one moving parent still shares the parent's motion. Stated in Out of scope |
+| 15 | Parenting (Title, Subtitle under CTRL, which moves 0 to 1 s) | Own keys only; a child's visible start includes the parent's motion, not read in wave A | Own keys only | Nothing about parents in wave A, and never a claim that the children no longer move together on screen (TD § 9) | Known blind spot until R1 (designer confirmed, TD § 14): staggering two children of one moving parent passes on their own keys while the parent's motion still moves them together. Stated in Out of scope |
 | 16 | Layer bar dragged vs. in point trimmed | Not read (in points are R1) | Bar drag: keys move, so the check sees it (**live check L-3**). Trim: keys unchanged, still lockstep | "Its bar may have moved, but the animation inside it didn't" | Right if L-3 confirms key times are read in comp time after a drag |
 | 17 | Layer reordered in the stack | n/a | Matched by name (FR-012); key times unchanged → still lockstep | "The order in the stack isn't when they move" | **Gap fixed by FR-012** (index matching would see a different layer). Test |
 | 18 | Keys before 0 s or after the comp's end | n/a | Flag (FR-014); not a landing the comp plays | TD § 7 hint | Right with FR-014. Synthetic test |
@@ -386,9 +401,9 @@ the check and the learner each see, and the reused filters.
 | 21 | Locked layer as demo target | n/a (lock not read until R1) | Demo refuses, nothing changed (FR-010) | Plain sentence | **Live check L-4** |
 | 22 | Text animator, mask path, shape keys | Counted like any keyed property | Counted | | Right; no special case |
 
-**Trap layers proposed for Mentor Practice 2** (to spec 004's owner, SR-2): a group layer with an
-effect key, one with separated Position, a hold-then-ramp layer in a group, and a second layers group
-for reviews.
+**Trap layers in Mentor Practice 2** (spec 004 T064, from SR-2): Dot 2 with an effect key, Dot 3
+with separated Position, Dot 1 hold then ramp, and a second layers group (Chip A to C, 2 s) for
+reviews.
 
 ## Live run (builder, needs After Effects; not guesses)
 
@@ -404,7 +419,7 @@ for reviews.
 - **L-4 (new)**: the demo on a locked layer refuses without a partial change.
 - **TD B-4** is answered by `discovery/usage-notes/mentor-practice-state-2026-10-20.md`: Title's
   Position now has 4 keys (0.5, 1.5, 3, 4.37 s), so fixtures and tests MUST NOT assume three.
-- **TD B-1** (the second practice comp) is spec 004 T041 plus SR-2.
+- **TD B-1** (the second practice comp) is spec 004 T041 plus T064.
 
 ## Success Criteria *(mandatory)*
 
@@ -461,6 +476,11 @@ Unit tests cover the measures (FR-022, FR-023); evals score the teaching.
     after L-1, 26.5 offers it alongside dragging.
 18. **Missing prerequisite**: easing not learned; one sentence, the lesson runs, linear moves
     mentioned once at "done".
+19. **Gap under the floor at the intent step** (D-1): the learner picks 1 frame at 30 fps; the
+    mentor says a gap that small still reads as together, names no number, and asks again; if they
+    keep it and ask for the demo, there's none and it walks it through in words.
+20. **Split on purpose** (D-2): said up front, or in answer to the "pops in" hint; that layer passes
+    on the next check, and the summary says it in plain words.
 
 Plus spec 004's cross-skill cases that touch this skill (plain speech on every case).
 
@@ -468,7 +488,7 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech on every c
 
 - **Learner:** the builder on After Effects 26.5 on macOS 27.0.1 (CLAUDE.md › My setup); R0 is still
   read each session.
-- **Wave A shared pieces are merged first** (spec 004 tasks T001 to T048): `timing()`,
+- **Wave A shared pieces are merged first** (spec 004 tasks T001 to T065): `timing()`,
   `clusters()`, the per-skill session with review mode, R0, `record_lesson`'s new checks, Mentor
   Practice 2. This skill builds on them and is blocked until they land.
 - **Mentor Practice is unchanged** for this skill; the layers-kind lesson and reviews use Mentor
@@ -481,7 +501,8 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech on every c
 
 - What TD § 8 doesn't teach: varying durations (DX-02), Sequence Layers as a technique, delay
   expressions, follow-through and overlap, dead time (DX-07), keys inside precomps, time remapping.
-- **Parents' motion** in a child's start, in points, out points, stretch and precomp timing: not
+- **Parents' motion** in a child's start (a known blind spot until R1: children of a moving parent
+  can pass while still moving together on screen), in points, out points, stretch and precomp timing: not
   read until R1 (wave B); nothing said about them in wave A (TD § 9).
 - **Expressions with no keys** (R2, wave D).
 - **Grading the gap** (size or evenness), and any demo that shifts in points or more than one
@@ -493,46 +514,54 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech on every c
 
 ## Open questions
 
+All answered (designer 2026-10-20, `teaching-design.md` › 14; builder 2026-10-21). Kept with their
+answers for the record.
+
 ### For the curriculum designer (D)
 
 1. **D-1, a demo gap under the floor.** If the learner picks 1 frame at 30 fps and asks for the
    demo, should the demo run (and the check then call it still together), or should the mentor
    say a gap that small still reads as together and ask them to pick another, without naming a
    number? **Recommended:** don't run it; say it in plain words and let them pick again, so the
-   one demo shows a real stagger.
+   one demo shows a real stagger. **Answered, changed:** catch it earlier, at stage 3 when the gap
+   is repeated back; if they keep it, no demo and the check applies the floor (FR-007, FR-009,
+   FR-010).
 2. **D-2, "unless they said they want them split".** TD § 6 L2 assumes the learner said it
    beforehand. **Recommended:** the check gives the "pops in" hint first; if the learner answers
    that the split is on purpose, that layer passes on the next check (as TD § 7's Sequence Layers
-   row: ask, don't fail).
+   row: ask, don't fail). **Answered: agreed**, plus saying it up front at stage 3 counts, and the
+   summary says it in plain words (FR-007, FR-012, FR-019).
 
 ### For the builder (B)
 
 3. **The tie-break (S-3).** **Recommended:** on a tie, the properties kind (FR-006), as above.
+   **Approved 2026-10-21.**
 4. **Rhythm threshold (FR-015).** **Recommended:** reuse FR-027's floor for "uneven" (largest minus
-   smallest gap), so no new number enters the product.
+   smallest gap), so no new number enters the product. **Approved 2026-10-21.**
 
 ### Settled here
 
 - **S-1** agreed: the properties kind passes when no two properties both start **and** land the
-  same (FR-005, FR-008). The designer updates curriculum.md § 6 to match.
+  same (FR-005, FR-008). The designer updated curriculum.md § 6 to match (2026-10-20).
 - **S-2**: already pinned by spec 004's contract (data-model › Timing measures: a hold pair is an
   instant move at the second key's time; tasks T040), so it isn't a shared-code request. Spec 004's
-  spec text (Edge Cases "Hold pair" row) still says only "a start", so the spec writer should add
-  "at the second key's time" there in a follow-up.
+  Edge Cases "Hold pair" row now says "an instant move at the second key's time" (2026-10-21).
 
 ## Dependencies
 
-- **Spec 004 wave A** (tasks T001 to T048) merged, including T037 to T043 (timing and Mentor
+- **Spec 004 wave A** (tasks T001 to T065) merged, including T037 to T043 (timing and Mentor
   Practice 2).
 - **Shared-code requests** (to spec 004's shared-code owner; not this skill's work):
   - **SR-1 (timing, T040 and data-model):** pin whether consecutive ramp pairs in **one** property
     (or one dimension) are separate moves or one move. **Recommended:** each key pair is its own
     move, pauses dropped, and only moves from **different** separated dimensions merge. Add a test
     with Title's 4-key Position. Without it, the properties group on Mentor Practice (FR-005) may
-    not form.
+    not form. **Approved and tasked 2026-10-21:** spec 004 T058 (tests) and T059 (code).
   - **SR-2 (Mentor Practice 2, T041):** TD B-1's layer target needs more than "Dot 1 to 3, first
     Position keys at 0.5 s": each Dot with two animated properties, one with an effect key, one
     with separated Position, a hold-then-ramp member, and a **second layers group** on other layers
-    for reviews and evals.
+    for reviews and evals. **Approved and tasked 2026-10-21:** spec 004 T064 (build, live) and T065
+    (tests); the second group is Chip A, B and C at 2 s, and no skill 3 layer's Opacity goes
+    between 0 and 100, so none is a skill 1 candidate.
 - **Spec 005**: DX-03's threshold (Assumptions).
 - **Eval engineer**: the Eval plan; fixtures from the live captures above.

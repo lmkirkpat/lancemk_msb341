@@ -87,9 +87,12 @@ Shared tools a skill's SKILL.md also lists in `allowed-tools`: `read_learner_rec
 | `analyze` | easing's `analyze` | `(snapshot, { focus_layers, exclude }) → analyzer result` ([data-model.md](../data-model.md) › Analyzer result) |
 | `focus_layers` | none | As easing |
 | `mode` | `"lesson"` | `"review"`: no demo, and `exclude` is filled from the record's past targets for this skill on this comp and project |
+| `skill_options` | none | The skill's own analyzer options (plain JSON data; for example skill 2's pairs the learner said land hard). Passed to the analyzer as `opts.skill_options` and stored on the lesson. On a continued or resumed lesson, a call without it reuses the stored value; a call with it replaces it. The session never reads inside it (spec 008 SR-1; tasks T060, T061) |
+| `fresh` | `false` | `true`: start this skill's lesson on this comp again from this snapshot, as a new lesson, when no demo has run and no check has been made (for example after the learner builds a practice blink, spec 009 SR-1). Refused with `LESSON_UNDERWAY`, changing nothing, after a demo or a check (tasks T062, T063) |
 
 Returns `{ lesson: "new" | "continued" | "resumed", session, analysis }`, as today. A lesson for
-the same skill and comp that isn't passed is continued; a different `mode` starts a new one.
+the same skill and comp that isn't passed is continued (unless `fresh` restarts it); a different
+`mode` starts a new one.
 `UNKNOWN_LAYER` is thrown before any write. In review mode, a result with no targets gets
 `no_demo_reason: "no_new_target"` and the skill tells the learner there's nothing new to review on
 (FR-021) and records nothing.

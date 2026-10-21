@@ -4,11 +4,15 @@
 
 **Created**: 2026-10-20
 
-**Status**: Draft, awaiting the builder's approval. Plan and tasks come after approval.
+**Status**: Approved 2026-10-21. Plan and tasks come next. The builder took H-1 to H-4 as
+recommended (SR-1 is tasked in spec 004 as T062 and T063, the `fresh` restart), and the curriculum
+designer's answers to C-1 to C-3 (`teaching-design.md` › 14, round 1, cockpit commit 96e954b) are
+folded in. Still open: SR-2 and SR-3 (conditional and wave B), and live checks L-1 to L-4, which
+settle facts during the build.
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 1, key types (hold and linear)." The teaching design is the curriculum designer's
-[`teaching-design.md`](teaching-design.md) (same folder, `decisions/007`, draft round 1). This spec
+[`teaching-design.md`](teaching-design.md) (same folder, `decisions/007`, round 1 answered). This spec
 links to it and turns it into requirements. It doesn't restate or change what is taught; where it
 needs something the design doesn't say, it's a question for the designer (Open questions › C).
 
@@ -59,7 +63,8 @@ the shared-code owner (spec 004 FR-032), listed under Shared-code requests.
   `key_types_check`, and § 6 kept-linear marks) and
   [contracts/shared-tools.md](../004-ae-curriculum/contracts/shared-tools.md).
 
-None needs changing. One shared-code request is needed (SR-1, below).
+None needs changing. One shared-code request is needed (SR-1, below); approved and tasked in spec
+004 (T062, T063).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -187,7 +192,7 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 | `unexpectedChanges` | list other changes | list holds outside the focus | **Not** enough for pass item 2: it says "was changed", not "now held, and you said it should move". Item 2 needs its own check (FR-012) |
 | eye switch (`layer.enabled`; the visibility class comes with R1 in wave B) | leave eye-off layers out | leave eye-off layers out of candidates and the demo | A matte with its eye off is left out (row 13; KD-001) until wave B |
 | kept-linear marks (`applies`) | skip marked properties | skip them as candidates; write them at stage 6 | Writing a mark on an expression property would make easing skip a property the check never saw (row 1): the check rejects it first (FR-014) |
-| session baseline (`session.start` continues an unpassed lesson on its first baseline) | the baseline is the first look | the baseline is the first look | **The practice blink is made after the first look**, so its keys aren't in the baseline and can't be targets (row 17). Needs SR-1 |
+| session baseline (`session.start` continues an unpassed lesson on its first baseline) | the baseline is the first look | the baseline is the first look, or the read after a practice blink is made (`fresh`) | **The practice blink is made after the first look**, so its keys aren't in the baseline until the skill restarts the lesson with `fresh: true` before any demo or check (row 17; SR-1, spec 004 T062 and T063) |
 
 **The matrix:**
 
@@ -208,10 +213,10 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 | 13 | Track matte, eye off (KD-001) | Left out like an eye-off layer, "unless you want it", until R1 | Graded if focus | Never "you've hidden this" once R1 can tell; until then the generic left-out wording | Wave A right; wave B change (SR-3) |
 | 14 | Null | Not a default candidate; can be the focus if named; never the demo | Graded if focus | Nothing unless named | Right |
 | 15 | Parenting | Opacity isn't inherited by children, and a parent's held Position moves children with no keys of their own: none of this is read at this level | Own keys only | Nothing | Right (curriculum § 8) |
-| 16 | Pause pair (both values known and equal) | Not a candidate; not a target even inside a named property | Not graded | Nothing (holding it changes nothing) | Added here; question C-2 |
-| 17 | Practice blink made during the lesson | Its keys don't exist at the first look | With today's session, not in the baseline: no targets | Would be told there's nothing to check | **Wrong** without SR-1 |
+| 16 | Pause pair (both values known and equal) | Not a candidate; not a target even inside a named property; a named property whose only non-held pairs are pauses isn't a focus | Not graded; a held pause isn't listed as an extra hold | Nothing (holding it changes nothing); if named as the focus, "it holds still between those keys" | Right (C-2 agreed) |
+| 17 | Practice blink made during the lesson | Its keys don't exist at the first look | The skill restarts the lesson from the read after the blink exists (`fresh: true`, no demo or check yet), so its pairs are the targets | As any focus | Right with SR-1 (spec 004 T062, T063). Test: blink keys are targets after the restart; `fresh` after a demo or check is refused |
 | 18 | Keys added, removed or moved during the attempt | Pair IDs shift | Reported as "now has N keys" (existing other-changes rule); the affected focus pairs as removed or changed | Where it changed, and asks if it was meant | Right (pin) |
-| 19 | "Select all, toggle hold" | n/a | Holds on pairs outside the focus listed; the first key's incoming side and the last key's outgoing side face no pair and are ignored | `teaching-design.md` › 7 row 3, then asks whether it was meant | Right (FR-013) |
+| 19 | "Select all, toggle hold" | n/a | Holds on pairs outside the focus listed, except pause pairs (row 16); the first key's incoming side and the last key's outgoing side face no pair and are ignored | `teaching-design.md` › 7 row 3, then asks whether it was meant | Right (FR-013) |
 | 20 | The demo pair undone and re-held by the learner | n/a | A hold has no fingerprint (unlike easing's influence), so it can't be told apart from the demo unless a check saw it not held in between | Credited to the demo unless a check saw it undone | Right, and said plainly (FR-011) |
 | 21 | Kept-linear mark on an Opacity 0 ↔ 100 property | Not a candidate | n/a | Named once with the learner's reason | Right (FR-015) |
 | 22 | Key values unknown (older captures, non-numeric values) | Not a candidate by value; can be the focus if named | Graded on types only | Nothing | Right; skill 1 fixtures must be live captures with values |
@@ -220,10 +225,12 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 ### Other edge cases
 
 - **Mentor Practice (no real skill 1 target).** Title Opacity (0 → 100, linear) and Subtitle
-  Opacity (half-eased) meet the candidate rule, so the mentor names them; they're fades that are
-  almost certainly meant to fade. The Cursor is held already; Logo's Rotation is linear on purpose
-  but under an expression. So a first lesson on Mentor Practice normally goes "meant to fade" →
-  practice blink or Mentor Practice 2 (FR-008; disagreement C-1 with the design's § 4).
+  Opacity (half-eased) meet the candidate rule, so the mentor asks about them as a question, never
+  as mistakes; they're fades that are almost certainly meant to fade. The Cursor is held already;
+  Logo's Rotation is linear on purpose but under an expression. So a first lesson on Mentor
+  Practice normally goes "meant to fade" → practice blink or Mentor Practice 2 (FR-008; the
+  designer confirmed the rule and fixed § 4, C-1). A review there ends the same way, records
+  nothing and isn't counted (H-1).
 - **AE busy or unreachable:** no claims, no check, no review result (server rule 2).
 - **Learner insists without easing learned:** spec 004 FR-005 and `teaching-design.md` › 3.
 - **Learner names a move as both "snap" and "constant speed":** the check reports it held at stage 6,
@@ -263,7 +270,9 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 - **FR-005**: Anything the learner names MUST be accepted as the focus if it's a keyed layer and
   property in the active comp with at least one non-held pair, two or more keys and no expression.
   The targets are all of that property's non-held pairs whose values aren't known to be equal
-  (row 16); Position on a separated layer means each keyed dimension (row 7). A hidden layer or null
+  (row 16); Position on a separated layer means each keyed dimension (row 7). A named property whose
+  only non-held pairs are pauses isn't a focus: the mentor says it holds still between those keys
+  (C-2). A hidden layer or null
   is allowed when named. Anything else (an expression, a single key, all pairs already held, inside a
   precomp) is refused in one sentence saying why (rows 1, 3, 4, 10).
 - **FR-006**: `key_types_snapshot` MUST accept a focus by **layer and property** (not only layer) and
@@ -273,11 +282,14 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
   focus is passed to the skill's own analyzer; it needs no shared change.
 - **FR-007**: With no candidate and nothing named, the mentor MUST offer the practice blink
   (`teaching-design.md` › 4) or Mentor Practice 2, and never invent a focus. A practice blink the
-  learner makes MUST become the lesson's targets: the lesson's baseline is the read taken after the
-  blink exists (needs **SR-1**). If the learner declines both, the lesson ends and nothing is
+  learner makes MUST become the lesson's targets: the skill restarts the lesson with
+  `session.start(snapshot, { fresh: true })` on the read taken after the blink exists, before any
+  demo or check, so that read is the baseline (SR-1; spec 004 contracts/skill-module.md › 4, tasks
+  T062 and T063). If a demo or check has already happened, the session refuses (`LESSON_UNDERWAY`)
+  and the skill doesn't retry. If the learner declines both, the lesson ends and nothing is
   recorded.
 - **FR-008**: On Mentor Practice as it is (2026-10-20 read), the mentor MUST name Title Opacity and
-  Subtitle Opacity as candidates, name the Cursor once as already snapping (and use it for the stage 2
+  Subtitle Opacity as candidates, asked about as a question (C-1), name the Cursor once as already snapping (and use it for the stage 2
   frames), name Logo's Rotation as driven by an expression, and never call the fades mistakes. A
   "meant to fade" answer leads to FR-007.
 - **FR-009**: The skill MUST declare `FINDERS["keyframes.types"].focus(snapshot, { exclude })`,
@@ -310,7 +322,7 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
   held now and wasn't at the baseline, naming the layer, property and the time it now waits until.
   It MUST NOT rely on the generic other-changes list for this.
 - **FR-013**: Holds on pairs outside the focus and the should-move list MUST be listed by layer,
-  property and time (row 19). They don't fail the lesson; the mentor asks whether they were meant
+  property and time (row 19), except held pause pairs, which aren't named (row 16, C-2). They don't fail the lesson; the mentor asks whether they were meant
   (`teaching-design.md` › 7 row 3).
 - **FR-014 (linear on purpose; S-2 settled by spec 004 FR-038)**: At stage 6 the check MUST take the
   move the learner named as constant speed (layer and property; a layer with one keyed property means
@@ -321,8 +333,8 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
   `NOT_KEPT_LINEAR`'s "set its keys to linear" for an expression or a name it couldn't find. Item 3
   passes on **linear**; on **expression** the item doesn't apply (the mentor can't check it). The
   model can't write a mark any other way (spec 004 FR-038). Stage 6 isn't asked in a review; if the
-  learner volunteers one there, the check may confirm and mark it, and it doesn't affect the review's
-  pass (question H-4).
+  learner volunteers one there, the check confirms it the same way and marks it on **linear**, and it
+  doesn't affect the review's pass (H-4, approved 2026-10-21).
 - **FR-015**: A property with an applying kept-linear mark MUST NOT be a candidate, and the mentor
   names it once with the learner's reason (row 21).
 - **FR-016 (pass)**: The lesson passes when `teaching-design.md` › 6's items 1 to 3 hold at a check
@@ -343,7 +355,8 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 
 - **FR-019 (review)**: Review mode MUST ship in the first build (spec 004 plan › Wave C) and follow
   `teaching-design.md` › 11 and spec 004 FR-019 to FR-021: a target is a candidate on a layer and
-  property not in the record for this skill on this comp; the intent question comes first; then
+  property not in the record for this skill on this comp (candidate values exactly 0 and 100 within
+  0.5, H-2); the intent question comes first; then
   "make it snap" with no demo, walkthrough or menu path; pass items 1 and 2 on what they named; no
   stage 6 question; "nothing should snap" ends the review with nothing recorded; a review that doesn't
   pass gets the hints, no reteach; "I already know it" runs the same way.
@@ -390,7 +403,8 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 
 ## Shared-code requests (to the cockpit, for the shared-code owner; not this skill's work)
 
-- **SR-1 (needed before skill 1 builds): a fresh baseline when the learner has just made the
+- **SR-1 (needed before skill 1 builds; approved and tasked 2026-10-21 as spec 004 T062 and T063,
+  the `fresh` option and `LESSON_UNDERWAY`): a fresh baseline when the learner has just made the
   target.** `session.start` continues an unpassed lesson for the same skill and comp from its first
   baseline, so a practice blink made after the first look has no keys in the baseline and can't be
   targeted (row 17). Ask: a way for a skill to start the lesson again from the current read while no
@@ -472,9 +486,10 @@ Practice 2 capture (spec 004 T042).
   version wording targets that.
 - **Shared pieces exist:** spec 004's wave A merge (session per skill with review mode, fixture
   twins, finders, kept-linear marks and `keepLinear`, Mentor Practice 2 and its captures) is in before
-  this skill builds, plus SR-1.
-- **Mentor Practice 2's Blink** is built eased (spec 004 T041, research R13) or linear (design B-1);
-  either is a candidate, so this spec doesn't depend on which (question C-3).
+  this skill builds, including SR-1 (T062, T063).
+- **Mentor Practice 2's Blink and Cut** are built eased (spec 004 T041 and T064; the designer's B-1
+  now matches, C-3). Their first keys sit off the Dots' and Chips' start times, so they never join
+  a skill 3 group.
 - **The property focus** goes to the skill's own analyzer, so `session.start`'s `focus_layers` is
   enough for the session's own checks.
 - **"Learned" means one pass**, as spec 004.
@@ -493,6 +508,9 @@ Practice 2 capture (spec 004 T042).
 
 ## Open questions
 
+All answered: the builder on 2026-10-21, the designer in `teaching-design.md` › 14. Kept with their
+answers for the record.
+
 ### For the builder (H), each with a recommendation
 
 1. **H-1. Mentor Practice's fades count as candidates.** The rule can't read intent, so Title and
@@ -500,30 +518,43 @@ Practice 2 capture (spec 004 T042).
    learned a review can be offered there that ends in "meant to fade" and records nothing, so it
    stays due and comes back next session. **Recommended:** accept it this sprint (at most one
    unprompted offer per 3 hours, declining is free) and watch it in SC-007's live review; if it nags,
-   add a "meant to fade" mark next sprint, a shared change.
+   add a "meant to fade" mark next sprint, a shared change. **Approved 2026-10-21:** accepted for
+   this sprint; watched in SC-007's live review.
 2. **H-2. Candidate values exactly 0 and 100 (within 0.5).** A 0 ↔ 80 blink wouldn't be named.
    **Recommended:** keep it strict as the designer wrote; the learner can name anything else.
+   **Approved 2026-10-21:** strict (FR-003).
 3. **H-3. SR-1 goes into spec 004's wave A shared tasks** (T017's session change and T006's test)
    before the shared merge. **Recommended:** yes; without it the practice blink, the designer's
-   answer for comps with no target, can't be checked.
+   answer for comps with no target, can't be checked. **Approved 2026-10-21:** tasked as new tasks
+   rather than edits to T006 and T017: spec 004 T062 (tests, in T006's new test file) and T063 (code,
+   built into T017's session rewrite).
 4. **H-4. A constant-speed move the learner volunteers in a review** may be confirmed and marked,
-   ungraded. **Recommended:** yes; it's the same fact, checked the same way.
+   ungraded. **Recommended:** yes; it's the same fact, checked the same way. **Approved 2026-10-21**
+   (FR-014).
 
 ### For the curriculum designer (C)
 
 1. **C-1.** `teaching-design.md` › 4 says Mentor Practice "as built" has no candidate, but its own
    rule (Opacity pairs between 0 and 100, not held) names Title and Subtitle Opacity. This spec
-   follows the rule and says what happens (FR-008). Is that the intent?
+   follows the rule and says what happens (FR-008). Is that the intent? **Answered:** yes; § 4's
+   "no candidate" line was wrong and is fixed. They're asked about as a question, not as mistakes;
+   "meant to fade" drops them and the lesson moves to the practice blink or Mentor Practice 2; a
+   review there ends the same way and isn't counted (FR-008, Other edge cases).
 2. **C-2.** Pause pairs (two equal values) inside a named property are left out of the targets
-   (row 16), where the design says "all of that property's non-held pairs". Agree?
+   (row 16), where the design says "all of that property's non-held pairs". Agree? **Answered:**
+   agreed; also a held pause isn't named as an extra hold, and a named property whose only non-held
+   pairs are pauses isn't a focus. Pairs with unreadable values stay in (FR-005, FR-013, rows 16,
+   19).
 3. **C-3.** Mentor Practice 2's Blink: the design's B-1 says built linear; spec 004 T041 says eased.
    Either works here; settle one with the shared-code owner so the answer key and eval wording agree.
+   **Answered:** eased, as T041 says; Cut eased too, and their first keys off the skill 3 group
+   times (spec 004 T064) (Assumptions).
 
 ## Dependencies
 
-- [`teaching-design.md`](teaching-design.md) (curriculum designer, draft round 1): the source of what
-  is taught. If it changes, this spec follows.
-- Spec 004 wave A tasks: T006 and T017 (session, review mode, plus SR-1), T019 (fixture twins), T020
+- [`teaching-design.md`](teaching-design.md) (curriculum designer, round 1 answered): the source of
+  what is taught. If it changes, this spec follows.
+- Spec 004 wave A tasks: T006 and T017 (session, review mode), T062 and T063 (SR-1's `fresh`), T019 (fixture twins), T020
   (finders), T041 and T042 (Mentor Practice 2 and captures), T049 to T054 (marks and `keepLinear`);
   plan A2 (runtime linking for evals).
 - `discovery/usage-notes/mentor-practice-state-2026-10-20.md` (the Cursor, Logo, what Mentor Practice

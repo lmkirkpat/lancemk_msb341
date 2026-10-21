@@ -5,7 +5,8 @@
 **Created**: 2026-10-20
 
 **Status**: Approved 2026-10-20. Plan ([plan.md](plan.md)) and wave A's shared tasks
-([tasks.md](tasks.md)) drafted 2026-10-20, awaiting the builder's approval. The builder's answers are folded in the
+([tasks.md](tasks.md)) approved 2026-10-21 (plan P1 to P5 as recommended; tasks T058 to T065 added
+for specs 008 to 010's shared-code requests). The builder's answers are folded in the
 same day: H1 (After Effects 26.5 on macOS 27.0.1), H2 (this sprint's baseline is five skills, 2, 1,
 3, 5, 6, plus reviews for 2, 1, 3), session start without a named skill (diagnosis first) and Q1 to
 Q3 (the written defaults, for now). Still open: H3, H4, H5 and its shared-code owner note (FR-032),
@@ -286,7 +287,7 @@ saved snapshot (FR-012):
 | Expression turned off | Listed as off; keys drive | List it as a source |
 | Precomp layer | Its own transform keys, plus "contents" as a source once R4 exists | Compare inner key times to the parent's as if time ran the same (time remap or stretch, R1) |
 | Single key | A set value, not a move, in timing | A move of zero length |
-| Hold pair | A start, in timing (`curriculum.md` › 8, skill 3) | A move with a duration |
+| Hold pair | An instant move at the second key's time: a start, in timing (`curriculum.md` › 8, skill 3) | A move with a duration |
 | Separated dimensions | X and Y as one move in timing | Two moves landing together |
 | Effect keys | Motion, in timing | Skipped |
 | Layer with no keys, no parent, no expression | Static | Missing or broken |

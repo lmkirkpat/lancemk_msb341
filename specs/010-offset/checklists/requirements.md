@@ -41,3 +41,7 @@
 - **Blocked on spec 004 wave A** and two shared-code requests (SR-1 timing moves, SR-2 Mentor
   Practice 2 targets); neither blocks approval of this spec.
 - Live checks L-1 to L-4 are for the builder's live run, not settled here.
+- **Approved 2026-10-21.** B-3 (properties kind on a tie) and B-4 (rhythm reuses FR-027's floor)
+  as recommended; SR-1 and SR-2 tasked in spec 004 (T058, T059, T064, T065). The designer's round 1
+  answers are folded in: D-1 changed (a gap under the floor is caught at stage 3; no demo if kept;
+  `offset_demo` refuses it), D-2 agreed plus the up-front split. Plan and tasks come next.

@@ -46,3 +46,9 @@
   that the build must run before its wording is final (FR-024).
 - **Success criteria name their measure** (unit test, eval run, usage notes, `check-branch.mjs`).
 - Validation run once; all items pass.
+- **Approved 2026-10-21.** H-1 (accept the Mentor Practice fades this sprint; watch in SC-007), H-2
+  (strict 0 and 100 within 0.5), H-3 (SR-1 as spec 004 T062 and T063, `fresh`) and H-4 (volunteered
+  constant-speed move in a review confirmed and marked, ungraded) as recommended. The designer's
+  C-1 to C-3 answers are folded in (FR-005, FR-007, FR-008, FR-013, rows 16, 17, 19, the session
+  baseline classifier row, Other edge cases, Assumptions). Row 17 is now right. Plan and tasks come
+  next.
