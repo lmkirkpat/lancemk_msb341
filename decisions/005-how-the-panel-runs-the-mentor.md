@@ -3,6 +3,7 @@
 **Date:** 2026-10-05
 **Status:** Accepted, 2026-10-05 (option B1). Covers the Sprint 2 panel and the prototype.
 Raised in `sprints/sprint-2-plan.md` › Raised goals. Amends `decisions/003` (Teaching row).
+Amended by `decisions/009` (2026-10-20): shipped Knack uses option A; B1 stays for the prototype.
 
 ## Context
 
@@ -169,6 +170,8 @@ affect this sprint, only when to move to A.
   usage notes), switch to A sooner.
 - **The panel becomes the product:** once the panel test shows leading, memory and practice
   hold up in AE and the next step is other users, move to A and retarget the evals.
+  - *2026-10-20:* fired. Spec 006 (the installer) is the first step toward other users, and the
+    builder chose A for it (`decisions/009`).
 - **UXP beta (Nov 2026):** if AE UXP can't spawn processes, B1 has no future on UXP. If UXP can't
   make network calls either, the model loop moves to a local service outside the panel, under
   either option.
