@@ -2,7 +2,7 @@
 
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
-**Date:** 2026-10-20. **Status:** draft, round 1.
+**Date:** 2026-10-20; round 1 answers 2026-10-21 (§ 14). **Status:** draft, round 1 answered.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 1, § 8, § 9, § 12 (B1, B2), § 13;
 spec 004 (approved), above all FR-004, FR-005, FR-018 to FR-022, FR-024, FR-025, FR-030, FR-031.
 Research: `discovery/curriculum-research/keyframe-types-hold-and-linear.md`. Evidence:
@@ -52,8 +52,10 @@ move in their comp should stay linear (constant speed) and leave it that way.
 like a blink, an on/off, or a cut?" It helps the learner answer by naming **candidates** from the
 read: pairs on Opacity going between 0 and 100 (either direction) that aren't held, on visible,
 non-null layers with no expression on the property. It names at most three.
-- The learner names one or more → those pairs (all of that property's non-held pairs on that layer)
-  are the focus.
+- The learner names one or more → those pairs (all of that property's non-held pairs on that layer,
+  except pause pairs: two neighbouring keys with the same value, where holding changes nothing on
+  screen) are the focus. If every non-held pair in the named property is a pause, it isn't a focus:
+  "it holds still between those keys, so there's nothing to snap" (§ 14, C-2).
 - The learner says a candidate is meant to fade → drop it, no argument (spec 004 eval: "it's meant to
   fade" must drop the point).
 - The learner names something that isn't a candidate (a Position jump, a color change) → it's
@@ -74,9 +76,17 @@ learner's only pair: with one focus pair there's no demo and the mentor walks it
 The demo is one write: set that pair's first key to hold on its outgoing side, the same way Toggle
 Hold Keyframe does (exactly what that writes at 26.5 is B-3).
 
-**On Mentor Practice:** as built, there's no candidate. Title Opacity and Subtitle Opacity are fades
-(likely meant to fade); the Cursor is already held. So a first lesson there goes to the practice
-blink or the second practice comp, unless the builder's `.aep` differs (B2, B-1).
+**On Mentor Practice:** as built, the rule names two candidates, Title Opacity and Subtitle Opacity
+(0 to 100 fades, not held). That's intended (§ 14, C-1; builder's H-1). The rule can't read intent,
+which is why the lesson asks: the mentor names them as a question ("Title and Subtitle fade in from
+see-through. Is either meant to snap on instead?"), never as mistakes. The expected answer is
+"they're meant to fade", so both drop with no argument and the lesson goes to the practice blink or
+the second practice comp. A learner who says one should snap gets it as the focus. The Cursor is
+already held (mentioned, not a candidate), unless the builder's `.aep` differs (B2).
+
+**On Mentor Practice 2 (spec 004 T041):** Blink is the lesson's target, built **eased** (§ 14, C-3):
+a blink that fades because it got eased, the "ease everything" habit from § 1. Spinner is the
+stage 6 constant-speed move (linear), and Cut is the review's on/off change (§ 11).
 
 ## 5. Sequence
 
@@ -93,7 +103,8 @@ blink or the second practice comp, unless the builder's `.aep` differs (B2, B-1)
 
 ## 6. Pass
 
-1. Every focus pair is held (its first key's outgoing type is hold), counting the demo pair.
+1. Every focus pair is held (its first key's outgoing type is hold), counting the demo pair. Pause
+   pairs aren't focus pairs (§ 4): held or not, they're neither graded nor counted.
 2. No pair the learner said should move in this lesson is held.
 3. If the learner named a constant-speed move in stage 6, it's linear at both ends (both keys linear
    on the sides facing the pair). If they named none, this item doesn't apply.
@@ -109,7 +120,7 @@ learner the pair is done.
 |---|---|---|---|
 | Wants a cut, gets a fade (the starting state) | Focus pair still linear or eased | A frame mid-pair: "At 1.0 s Title is still half see-through, so 0.5 s to 1.5 s still fades" | C |
 | Hold on a key meant to move ("my animation is stuck": sits still, then snaps) | A pair the learner said should move is held | "Title Position doesn't move between 0.5 s and 1.5 s now; it waits and then jumps. The key at 0.5 s is a hold" | C, one thread |
-| Selecting all keys and holding everything | Holds on pairs outside the focus, on the same layer or others | "Holds landed on more than the blink: Scale on Title jumps now too." Then ask whether that was meant | C |
+| Selecting all keys and holding everything | Holds on pairs outside the focus, on the same layer or others (a held pause pair changes nothing on screen, so it isn't named) | "Holds landed on more than the blink: Scale on Title jumps now too." Then ask whether that was meant | C |
 | Held the wrong side (the second key instead of the first) | Second key's incoming side hold, first key's outgoing side not | "The jump happens from the key at 0.5 s, so that's the key to hold. The one at 1.0 s holds what comes after it" | Guess (B-2 decides the wording) |
 | Some of a separated property held, not the rest | X Position held, Y Position still moving | "X Position snaps now, but Y Position still slides between 0.5 s and 1.0 s" | brief, overlap |
 | Mentor's own wording trap | n/a | Never say "freeze" for hold: Layer > Time > Freeze Frame is a different feature (brief) | brief |
@@ -127,6 +138,7 @@ interpolation of hold on Position (a layer teleporting along a path is shown, no
 | Expression over keys (loopOut on a blink) | A property with an expression on isn't a candidate and isn't graded; name it ("an expression drives this, so the key types may not be what you see") | Grade the keys under it |
 | Expression with no keys | Not read until R2; never claim there's none | Say the focus is everything that changes |
 | Single key | Not a pair; nothing to hold | Count it |
+| Pause pair (two neighbouring keys, same value) | Not a candidate and not a target, even inside a named property; holding it changes nothing (§ 14, C-2). Mentor Practice 2's "Pause" layer | Grade it, or name a held one as an extra hold |
 | Already held | Not a candidate; mention once; used for the explanation frame | Credit it to the learner |
 | Mixed pair | § 6 note; B-2 | Call it done before B-2 is settled |
 | Separated dimensions | X and Y are separate pairs, each checked; a Position jump needs both held if both move | Check the combined Position |
@@ -157,7 +169,9 @@ interpolation of hold on Position (a layer teleporting along a path is shown, no
   No candidate → no review offered; it stays due.
 - **What it asks:** the intent question first, as in the lesson ("Is anything here meant to snap?";
   FR-021). Then "Make it snap", with no demo, no walkthrough, no menu path. If the learner says
-  nothing should snap, the review ends with no target: not counted, stays due.
+  nothing should snap, the review ends with no target: not counted, stays due. On Mentor Practice
+  this is the expected path (Title and Subtitle are candidates that are meant to fade, § 4; H-1);
+  watch in the live review whether it nags. On Mentor Practice 2, Cut is the review target.
 - **What passes:** § 6 items 1 and 2 on the pairs they named. The stage 6 linear question isn't asked
   in a review.
 - **Not a pass:** § 7's hints, no reteach; recorded as a review that didn't pass; "learned" stays.
@@ -185,9 +199,10 @@ purpose) is open item S-2.
   "ramps evenly", then called it "fixed" after the learner changed it. Read the Cursor's key types
   in the builder's `.aep` now: if it's linear, Mentor Practice already has skill 1's target and the
   practice blink isn't needed there. If it's held, Adobe misread it, which goes in skill 1's "why".
-- **B-1** Second practice comp (curriculum B1, FR-031): a fade that should be a cut (a 4-key Opacity
-  blink built linear, on a visible text layer), a constant-speed candidate (a keyed linear Rotation,
-  no expression), and a second on/off target on another layer for review runs and evals.
+- **B-1** Second practice comp (curriculum B1, FR-031; spec 004 T041): a fade that should be a cut
+  ("Blink", a 4-key Opacity blink built **eased**, on a visible layer; settled in § 14, C-3, was
+  "linear" in round 1), a constant-speed candidate ("Spinner", a keyed linear Rotation, no
+  expression), and a second on/off target on another layer ("Cut") for review runs and evals.
 - **B-2** The mixed pair: first key's outgoing side linear or bezier, second key's incoming side hold.
   Does the value travel or jump? Check with frames inside the pair. Decides § 6's note and § 7 row 4.
 - **B-3** At 26.5 on the Mac: what Toggle Hold Keyframe writes (outgoing only, or both sides), its
@@ -214,3 +229,21 @@ place before skill 3 is worth a second look; it doesn't change this design.
 
 **Curriculum B items this skill settles:** B1 (skill 1's targets), B2 (the Cursor), B6 (read access
 only), B7 (set interpolation).
+
+## 14. Answers to the spec writer, round 1 (2026-10-21)
+
+The builder approved spec 009 with H-1 to H-4 as recommended; these answers assume that.
+
+| Q | Answer | Spec default |
+|---|---|---|
+| C-1 Mentor Practice's fades | **The rule is what I meant; § 4's "no candidate" line was wrong.** Title and Subtitle Opacity are candidates, named as a question, never as mistakes. The expected answer is "meant to fade", which drops them with no argument and goes to the practice blink or Mentor Practice 2 (FR-008). The same goes for a review there (§ 11). That's the ask-first design working: the mentor can't read intent, so it asks. Fixed in § 4 and § 11. | Kept (spec follows the rule) |
+| C-2 Pause pairs in a named property | **Agreed.** A hold on two equal values changes nothing on screen, so there's nothing to teach or check there, and grading it would ask the learner to click for no visible reason. Pauses are left out of the targets, never graded, and a held one isn't named as an extra hold. A named property whose only non-held pairs are pauses isn't a focus ("it holds still between those keys"), the same words as speed graph's pause rule (`specs/008-speed-graph/teaching-design.md` › 4). Pairs whose values can't be read stay in, as the spec has it. Fixed in § 4, § 6, § 7 and § 9. | Kept (row 16) |
+| C-3 Blink's starting type | **Eased**, as spec 004 T041 and research R13 already say. My B-1 is changed to match. The reasons, in teaching terms: (1) the mistake this lesson exists for is the habit easing leaves behind, "ease everything" (§ 1), and an eased blink is that mistake exactly; (2) Mentor Practice 2 then shows all three types next to each other, eased where it should be held (Blink), linear on purpose (Spinner), and held (Flag), which is the lesson's idea, "the type is a choice"; (3) a linear Blink would be one of the pairs easing proposes to ease on that comp (T043), so one comp would have easing teach the learner to ease a blink and skill 1 teach them to undo it. Stage 2's frame and § 7 row 1 work the same either way: a symmetric ease is still about half see-through mid-pair. | Settled (no spec dependency) |
+
+**Other designs that touch the Blink.** Neither names it. Speed graph (008): an eased Blink is an
+eased pair, so its rule sees it, but it defaults to Position or Scale, so Card is still proposed on
+Mentor Practice 2. A learner who picks Blink there is allowed by 008's rule as written; that's a
+teaching edge to watch, not a change now. Offset (010): Blink, Spinner and Cut add layers to the
+layer-start groups, so their first keys should not land on 0.5 s, or the Dots group grows past
+three. The answer key (T041) lists whatever's built, so this is a build note, not a design change.
+Neither file needs editing.
