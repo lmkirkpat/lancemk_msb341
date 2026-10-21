@@ -130,6 +130,8 @@ a brand new session act like a colleague who already knows what you are working 
      mean (generative fill vs. the assistant), whether steps match their version (belief 16),
      and referrals. A target-market learner on the panel is still needed for belief 7.
   4. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
+- **My setup:** After Effects 26.5 on macOS 27.0.1 (stated 2026-10-20). Version-dependent
+  steps and shortcuts in specs and lessons target this.
 - **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
   `discovery/Claude AE Tutor Test.aep` (the Mentor Practice comp). Setup and checks are in
   `specs/002-easing-slice/quickstart.md`. Panel: `bash panel/install.sh`, restart AE, and
