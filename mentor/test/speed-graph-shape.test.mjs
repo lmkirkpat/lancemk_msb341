@@ -215,6 +215,17 @@ test("demo credit (FR-008): demo, learner after undo, learner redo, unknown", ()
   assert.equal(check(baseline, load("after-demo.json"), lessonFor({ demo })).demo_undone, false);
 });
 
+test("US3: a focus pair turned half eased or linear fails c, naming the linear side's key (FR-002)", () => {
+  const half = clone(baseline);
+  half.layers[0].properties[0].keys[2].in_type = "linear"; // pair 2's landing at 3 s
+  const p2 = check(baseline, half, lessonFor()).pairs.find((p) => p.id === id("P2"));
+  assert.deepEqual([p2.result, p2.mistake, p2.key_time], ["not_passed", "no_handle", 3]);
+  const lin = clone(baseline);
+  lin.layers[0].properties[1].keys.forEach((k) => (k.in_type = k.out_type = "linear"));
+  const s = check(baseline, lin, lessonFor()).pairs.find((p) => p.id === id("S"));
+  assert.deepEqual([s.mistake, s.key_time], ["no_handle", 0.5], "the start key's side comes first");
+});
+
 test("another comp isn't graded; the baseline is never changed", () => {
   const before = JSON.stringify(baseline);
   const other = load("practice2-before.json");
