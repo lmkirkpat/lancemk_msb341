@@ -29,7 +29,7 @@ const data = async (p) => JSON.parse((await p).content[0].text);
 const KT = { skill: "keyframes.types", analyze: SAMPLE.analyze };
 const entry = (over = {}) => ({
   skill: "keyframes.types", project: "Claude AE Tutor Test.aep", comp: "Mentor Practice", attempted: "Held the Cursor pairs",
-  result: "not_checked", demo_used: false, summary: "Said CTRL's move runs at constant speed.", next: "Hold a blink.", ...over,
+  result: "passed", demo_used: false, summary: "Said CTRL's move runs at constant speed.", next: "Hold a blink.", ...over,
 });
 const file = () => JSON.parse(fs.readFileSync(FILE, "utf8"));
 
@@ -40,6 +40,7 @@ beforeEach(() => {
 
 test("keepLinear stores { layer, path, property, key_times } for an all-linear property", () => {
   session.start(practice, KT);
+  session.markChecked(true);
   const list = session.keepLinear(practice, [{ layer: "CTRL", property: "Position" }]);
   assert.deepEqual(list, [{ layer: "CTRL", path: POS, property: "Position", key_times: [0, 1] }]);
   assert.deepEqual(session.currentLesson().kept_linear, list);
@@ -49,7 +50,13 @@ test("keepLinear stores { layer, path, property, key_times } for an all-linear p
 
 test("keepLinear refuses a missing property, one with an expression, or one not linear, and stores nothing", () => {
   session.start(practice, KT);
-  const eased = fixture("eased"); // Title Position eased
+  session.markChecked(true);
+  // Title Position eased, on the lesson's own comp.
+  const eased = structuredClone(practice);
+  for (const k of eased.layers.find((l) => l.name === "Title").properties.find((p) => p.display_name === "Position").keys) {
+    k.in_type = "bezier";
+    k.out_type = "bezier";
+  }
   for (const [snap, refs] of [
     [practice, [{ layer: "CTRL", property: "Scale" }]],
     [practice, [{ layer: "Nobody", property: "Position" }]],
@@ -71,9 +78,10 @@ test("keepLinear with no lesson throws NO_SESSION", () => {
 
 test("record_lesson writes the lesson's marks; the reply and version are unchanged", async () => {
   session.start(practice, KT);
+  session.markChecked(true);
   session.keepLinear(practice, [{ layer: "CTRL", property: "Position" }]);
   const saved = await data(tool("record_lesson")(entry()));
-  assert.deepEqual(saved, { saved: true, skill: { status: "practicing", next: "Hold a blink." } });
+  assert.deepEqual(saved, { saved: true, skill: { status: "learned", next: "Hold a blink." } });
   const f = file();
   assert.equal(f.version, 1);
   assert.equal(f.marks.length, 1);
@@ -94,6 +102,7 @@ test("a new mark replaces one on the same comp, layer and path; lapsed marks for
   const old = { ...other, comp: "Mentor Practice", layer: "CTRL", path: POS, property: "Position", key_times: [0, 1], date: "2026-10-01" };
   fs.writeFileSync(FILE, JSON.stringify({ version: 1, skills: {}, lessons: [], marks: [other, lapsed, old] }));
   session.start(practice, KT);
+  session.markChecked(true);
   session.keepLinear(practice, [{ layer: "CTRL", property: "Position" }]);
   await tool("record_lesson")(entry());
   const marks = file().marks;
@@ -105,6 +114,7 @@ test("the email and phone check covers a mark's layer name", async () => {
   const snap = structuredClone(practice);
   snap.layers.find((l) => l.name === "CTRL").name = "someone@example.edu";
   session.start(snap, KT);
+  session.markChecked(true);
   session.keepLinear(snap, [{ layer: "someone@example.edu", property: "Position" }]);
   await assert.rejects(tool("record_lesson")(entry()), { code: "UNSAFE_RECORD" });
   assert.equal(fs.existsSync(FILE), false);

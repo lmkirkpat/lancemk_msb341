@@ -84,7 +84,7 @@ test("step order: a skill in progress beats a due review (C2)", () => {
   assert.equal(run(r).recommendation.skill, "easing.speed_graph");
 });
 
-test("a due review needs review: true, a new target, no offer in the window, and no practice in it", () => {
+test("a due review needs review: true, a new target, no other review offered in the window, and no practice in it", () => {
   const due = load("first-three-learned-review-due");
   const noReview = { ...FINDERS, "keyframes.types": { ...FINDERS["keyframes.types"], review: false } };
   assert.equal(run(due, { finders: noReview }).recommendation.skill, "timing.offset", "key types can't review yet; offset is due too");
@@ -93,7 +93,8 @@ test("a due review needs review: true, a new target, no offer in the window, and
 
   const hoursAgo = (h) => new Date(NOW.getTime() - h * 3600 * 1000).toISOString();
   const recent = run(due, { offers: [{ skill: "timing.offset", at: hoursAgo(1) }] });
-  assert.deepEqual(recent, { ...looked, recommendation: null, reason: "nothing_left" }, "one unprompted review per session");
+  assert.deepEqual(recent, { ...looked, recommendation: rec("timing.offset", "review", "review_due", ["Title"]) },
+    "one unprompted review per session: the one already offered comes back, not key types");
   const old = run(due, { offers: [{ skill: "timing.offset", at: hoursAgo(SESSION_WINDOW_HOURS + 0.5) }] });
   assert.equal(old.recommendation.kind, "review", "an offer more than 3 hours ago doesn't count");
 });
@@ -156,12 +157,13 @@ test("requested_skill: built, learned, hard prerequisites missing, focus", () =>
   const r = run(load("hard-prereq-missing"), { requested_skill: "easing.speed_graph" });
   assert.deepEqual(r.requested, {
     skill: "easing.speed_graph", skill_name: "Shape the ease in the speed graph", built: true, learned: false,
-    missing_prerequisites: [{ skill: "easing.basic", skill_name: "Easing" }], has_focus: false,
+    missing_prerequisites: [{ skill: "easing.basic", skill_name: "Easing" }], has_focus: false, review_available: true,
   });
   const unbuilt = run(load("easing-learned"), { requested_skill: "parenting.null" }).requested;
   assert.deepEqual(unbuilt, {
     skill: "parenting.null", skill_name: "Move a group with a null", built: false, learned: false,
     missing_prerequisites: [{ skill: "transform.anchor", skill_name: "Set the pivot (anchor point)" }], has_focus: false,
+    review_available: false,
   });
   assert.deepEqual(run(load("empty"), { requested_skill: "motion.sources" }).requested.missing_prerequisites, [], "skill 4: keyframes only (FR-007)");
   const byName = run(load("easing-learned"), { requested_skill: "pick the key type on purpose" }).requested;

@@ -67,7 +67,7 @@ test("AE unreachable gives a record-only answer and says the comp wasn't looked 
   assert.equal(r.recommendation.focus_layers, null);
 });
 
-test("a returned review is remembered and not offered again inside 3 hours", async () => {
+test("a returned review is remembered, and inside 3 hours the same one is offered again, not another", async () => {
   keyTypesDue();
   const first = await call();
   assert.equal(first.recommendation.kind, "review");
@@ -75,7 +75,8 @@ test("a returned review is remembered and not offered again inside 3 hours", asy
   const offers = JSON.parse(fs.readFileSync(SESSION, "utf8")).review_offers;
   assert.deepEqual(offers.map((o) => o.skill), ["keyframes.types"]);
   const second = await call();
-  assert.notEqual(second.recommendation && second.recommendation.kind, "review");
+  assert.deepEqual(second.recommendation, first.recommendation);
+  assert.deepEqual(JSON.parse(fs.readFileSync(SESSION, "utf8")).review_offers, offers, "still one offer in the window");
 });
 
 test("an unreadable record: record_readable false, and the file is left as it was", async () => {

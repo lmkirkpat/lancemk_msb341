@@ -346,6 +346,7 @@ test("fresh: true leaves other skills' lessons on the comp and this skill's othe
 
 test("a fresh lesson carries nothing from the one it replaces", () => {
   session.start(A, { ...S, skill_options: { land_hard: ["a"] } });
+  session.markChecked(true);
   session.keepLinear(A, [{ layer: "Title", property: "Position" }]);
   assert.equal(session.currentLesson().kept_linear.length, 1);
   calls.length = 0;
