@@ -105,8 +105,10 @@ whichever is longer. That floor is never shown as a target.
 
 **Layers kind:**
 1. No two focus layers start the same (counting the demo layer).
-2. Within each layer that moved, all its animated properties moved by the same amount (within half a
-   frame), unless the learner said they want them split. They can say it up front (stage 3) or in
+2. Within each layer where **any** counted property moved (not only a layer whose start moved), all
+   its counted properties moved by the same amount (within half a frame), unless the learner said
+   they want them split. Otherwise moving only a later property, such as Opacity alone, would never
+   be asked about, because the layer's start stays put (2026-10-21). They can say it up front (stage 3) or in
    answer to the "pops in" hint: the hint comes first, and if the learner says the split is on
    purpose, that layer passes on the next check. Ask, don't fail (round 1, D-2).
 
@@ -122,7 +124,7 @@ whichever is longer. That floor is never shown as a target.
 | Mistake | What the check sees | Hint (where to look, never the fix) | Evidence |
 |---|---|---|---|
 | Everything still in lockstep | Starts still the same | Name the pair: "Bar and Glow still both start at 0 s" | R, builder-only |
-| Moving one property, not the ones that belong with it (it pops in, or fades before it moves) | In a moved layer, properties moved by different amounts | A frame where it shows: "At 0.5 s Title's Opacity is already up but Position hasn't started. Scale and Opacity stayed at 0.5 s" | P |
+| Moving one property, not the ones that belong with it (it pops in, or fades before it moves) | In a layer where any counted property moved, its properties moved by different amounts | A frame where it shows: "At 0.5 s Title's Opacity is already up but Position hasn't started. Scale and Opacity stayed at 0.5 s" | P |
 | Moving the layer's in point (trimming), keys stay put, or the reverse | Key times unchanged on a layer the learner says they moved | "Title's keys still start at 0.5 s. Its bar may have moved, but the animation inside it didn't" | C, several threads |
 | A nudge too small to read (1 frame) | Starts under the floor | "Title and Subtitle still start within a frame of each other, which reads as together." No number to aim for | FR-027, C3 |
 | Pushing keys past the end of the comp | A last key after the comp's duration | "Glow's last key is now at 8.2 s, after the comp ends at 8 s, so it never finishes" | Guess |
@@ -239,3 +241,8 @@ one layer's keys).
 | Several moves in one property (FR-005) | **Confirmed:** the matching move counts, remembered per property (§ 4). | Kept |
 | Children of a moving parent in wave A | **Confirmed** as a known blind spot until R1 (§ 9). The mentor says nothing about the parent and doesn't claim the children are now fully apart on screen. | Kept |
 | Tie-break (properties kind) and rhythm threshold (FR-027's floor) | **No conflict.** The properties kind on a tie fits "one layer is a smaller lesson". Reusing the floor for "uneven" is right: no new number, and the comment is never a fail. | Kept |
+
+**2026-10-21 (as built, confirmed by the builder):** § 6 L2 now asks ("pops in") in any layer where
+**any** counted property moved, not only a layer whose start moved, so moving Opacity alone gets the
+hint. Matches FR-008 and FR-012. The "split on purpose" rule is unchanged. § 7's hint wording still
+fits (a frame where the mismatch shows); only that row's "what the check sees" was reworded to match.
