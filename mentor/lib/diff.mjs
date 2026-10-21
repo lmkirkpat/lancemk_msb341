@@ -32,7 +32,10 @@ function propsByKey(snapshot) {
   return map;
 }
 
-function unexpectedChanges(baseline, current, targets) {
+// Exported for other skills' checks (spec 004 R12): everything that changed outside `targets`, the
+// lesson's segment ids (a Set, or an array).
+export function unexpectedChanges(baseline, current, targetIds) {
+  const targets = targetIds instanceof Set ? targetIds : new Set(targetIds);
   const notes = [];
 
   // Segment ids use layer indexes, so a renamed, added or reordered layer is worth saying out loud.

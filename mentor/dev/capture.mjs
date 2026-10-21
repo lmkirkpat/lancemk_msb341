@@ -18,8 +18,9 @@ if (!flag) {
 const now = { taken_at: new Date().toISOString(), ...(await runSnippet("snapshot", {})) };
 
 if (flag === "--compare") {
-  // Everything but taken_at must match, key by key.
-  const strip = ({ taken_at, ...rest }) => JSON.stringify(rest);
+  // Everything but taken_at and host (spec 004 R0: fixtures from before it have none) must match,
+  // key by key.
+  const strip = ({ taken_at, host, ...rest }) => JSON.stringify(rest);
   const was = JSON.parse(fs.readFileSync(file, "utf8"));
   if (strip(was) === strip(now)) {
     console.log(`Matches ${file}`);

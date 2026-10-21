@@ -120,10 +120,18 @@ for (var li = 1; li <= comp.numLayers; li++) {
     });
 }
 
+// R0 (spec 004 research R10): the AE version and OS. mentor/lib/host.mjs keeps only the version
+// and OS name from these, never anything else in the strings (FR-011).
+var aeVersion = null;
+var osName = null;
+try { aeVersion = app.version; } catch (e) {}
+try { osName = $.os; } catch (e) {}
+
 return {
     // File name only: the folder path can contain a real name (Principle IV).
     project: app.project.file ? app.project.file.displayName : "Untitled Project",
     comp: { id: comp.id, name: comp.name, duration: r3(comp.duration), frame_rate: r3(comp.frameRate) },
     precomp_layers: precomps,
-    layers: layers
+    layers: layers,
+    host: { ae_version: aeVersion, os: osName }
 };

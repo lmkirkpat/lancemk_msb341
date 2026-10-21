@@ -7,6 +7,7 @@ import fs from "node:fs";
 import { LEARNER_FILE } from "../paths.mjs";
 import { MentorError } from "../errors.mjs";
 import { readJson } from "./json-file.mjs";
+import { pastTargetsIn } from "./reviews.mjs";
 
 const RESULTS = ["passed", "partial", "not_checked"];
 const TEXT_FIELDS = ["project", "comp", "attempted", "summary", "next"];
@@ -53,6 +54,32 @@ function validate(input, skills) {
 
 export function readRecord() {
   return { ...read(), path: LEARNER_FILE };
+}
+
+// For code that only needs to look (the session's past targets and marks, recommend_next): the
+// record, or null if it's there but unreadable. Unlike readRecord(), a broken file is left exactly
+// where it is, so looking never changes anything.
+export function peekRecord() {
+  let text;
+  try {
+    text = fs.readFileSync(LEARNER_FILE, "utf8");
+  } catch (e) {
+    if (e.code === "ENOENT") return empty();
+    return null;
+  }
+  try {
+    const r = JSON.parse(text);
+    return r && typeof r === "object" && r.skills && typeof r.skills === "object" && Array.isArray(r.lessons) ? r : null;
+  } catch {
+    return null;
+  }
+}
+
+// The {layer, property} targets of every lesson for this skill on this project and comp (FR-021:
+// a review needs a target not among them). Another comp or project counts as new (Edge Cases).
+// An unreadable record has none.
+export function pastTargets(skill, project, comp) {
+  return pastTargetsIn(peekRecord(), skill, project, comp);
 }
 
 // Appends the lesson and updates the skill's state. `learned` after one pass, and it stays learned:

@@ -81,7 +81,10 @@ function assertMatchesLesson({ result, demo_used }) {
   if (off.length) throw new MentorError("RECORD_MISMATCH", `The record doesn't match this lesson's checks: ${off.join("; ")}.`);
 }
 
-export function commonTools(skills) {
+// `skills`: every skill ID the tool files declare; `finders`: their FINDERS, by skill ID
+// (mentor/tools/index.mjs). A plain array is read as `skills` (the call before spec 004).
+export function commonTools(options) {
+  const { skills, finders = {} } = Array.isArray(options) ? { skills: options } : options;
   async function recordLesson(entry) {
     assertMatchesLesson(entry);
     const { skill } = learner.recordLesson(entry, skills);

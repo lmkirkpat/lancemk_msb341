@@ -27,6 +27,14 @@ export const needsEase = (state) => state === "linear" || state === "partly_ease
 
 export const segmentId = (layer, prop, i) => `${layer.index}/${prop.path}/${i}`;
 
+// "<layer index>/<match-name path>/<key index>"; the path itself contains slashes. (Moved here from
+// tools/easing.mjs in spec 004, so every skill that grades pairs reads ids the same way.)
+export function parseSegmentId(id) {
+  const first = id.indexOf("/");
+  const last = id.lastIndexOf("/");
+  return { layer_index: Number(id.slice(0, first)), property_path: id.slice(first + 1, last), key_index: Number(id.slice(last + 1)) };
+}
+
 // Every analyzable pair in layer, property and key order, plus what was skipped and why.
 export function segments(snapshot) {
   const out = [];
