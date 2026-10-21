@@ -311,6 +311,8 @@ Other edge cases:
 - **A skill passed as a review before its first lesson** (the learner said they already know it):
   recorded as passed and "already knew it"; the skill becomes learned (FR-020, `curriculum.md` › 13
   C4).
+- **A pair the learner kept linear on purpose** (FR-038): not an easing or diagnosis finding while
+  the mark applies; once its keys change, it's an ordinary pair again.
 - **Different AE version from last session:** R0 is read every session; version-dependent steps
   follow today's version.
 
@@ -448,6 +450,21 @@ Other edge cases:
 - **FR-023**: A record written before this spec (version 1, easing only) MUST still read, with no
   migration step the learner has to run. Missing review fields are worked out from
   `last_practiced`.
+- **FR-038 (linear on purpose is remembered; builder, 2026-10-20)**: When a learner says a move
+  should run at constant speed and a check sees every pair on that property linear at both ends
+  (skill 1, stage 6: `specs/009-key-types/teaching-design.md` › 5, S-2), the record MUST keep it as
+  a **kept-linear mark**: a fact about that layer and property on that comp and project (what the
+  learner said about their work and what the check saw, not a motive, FR-022), held in the record
+  at `version: 1` (data-model › Kept-linear mark). Only a passing check writes one; the model
+  can't write one directly. While a mark applies, easing (and spec 005's DX-01 and DX-05) MUST
+  NOT propose that property's pairs as a finding, target or demo, and the easing lesson MUST name it
+  once among what it's leaving out ("Logo's Rotation stays linear: you said it runs at constant
+  speed"). A mark **applies only while** the property still has the same key times and every pair
+  is linear at both ends; when the learner eases, holds, adds or moves a key on it, the mark lapses
+  for good and the next record write removes it. That is how a learner takes it back: they change
+  the keys, and the mentor says so if asked ("ease it whenever you like, and I'll stop treating it
+  as on purpose"). There is no separate "forget" tool. Naming the marked layer as the focus doesn't
+  lift the mark.
 
 ### Demonstrations and lessons
 
@@ -555,6 +572,8 @@ Other edge cases:
 - **Skill state** (in the learner record): status, last practiced, times passed, next, next review
   due, reviews passed in a row (FR-018).
 - **Lesson entry**: as spec 002, plus kind (first lesson, practice, review) and the targets.
+- **Kept-linear mark**: a layer and property on one comp the learner said runs at constant speed,
+  confirmed linear by a check, with the key times it was confirmed on (FR-038).
 - **Shared read** (R0 to R6, R8): what `curriculum.md` › 5 lists, read by fixed tools.
 - **Visibility class**: one of six, per layer (FR-013).
 - **Motion-sources map**: per layer, what moves it (FR-014).
@@ -624,6 +643,10 @@ plus reviews for 2, 1, 3**.
   meet SC-001, SC-002 and SC-007, and reviews for **2, 1 and 3** meet SC-008 and SC-009. Skills 4
   and 7 to 10, and reviews for 5 and 6, don't count against the sprint.
   *Measured by:* the usage notes and eval runs behind those criteria, listed in the sprint review.
+- **SC-013**: On saved snapshots, a property with a kept-linear mark is in easing's findings and
+  targets **0 times** while the mark applies, and is back **every time** once its keys change; with
+  no marks, easing's findings are identical to before (SC-004). *Measured by:* unit tests, and eval
+  case 12 below.
 
 ## Eval plan (outline, for the eval engineer)
 
@@ -686,6 +709,9 @@ Plus its version trap (FR-030) where the skill has one.
    history.
 11. **Plain speech:** no record IDs, field names or quoted values in anything the learner sees (on
    every case, deterministic).
+12. **Linear on purpose (FR-038):** an easing lesson on a comp whose record marks a linear
+   property as kept linear: it isn't proposed, it's named once as left out with the learner's reason,
+   and "do you want to ease it after all?" gets "ease it whenever you like", not a demo on it.
 
 Rubric additions: the recommendation gives a reason; a review is clearly a "try it yourself", not a
 lesson again.

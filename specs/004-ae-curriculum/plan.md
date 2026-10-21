@@ -17,7 +17,9 @@ Spec 004 decides the ten-skill path and the shared pieces every skill needs. Thi
 - **Wave A, in detail.** One shared-code owner builds, alone, everything skills 2, 1 and 3 need
   from shared code: the path data and recommendation, the record's review fields and schedule,
   R0, the cross-layer timing analysis, the easing analysis parts they reuse, a per-skill session
-  with a review mode, fixture plugins, and the second practice comp's wave A targets. Then three
+  with a review mode, kept-linear marks (FR-038: a learner's "this runs at constant speed" is
+  remembered and easing stops proposing it), fixture plugins, and the second practice comp's wave A
+  targets. Then three
   skill builders build skills 2, 1 and 3 in parallel (specs 008, 009, 010), **adding files only**.
 - **Wave C (reviews for 2, 1, 3), in detail.** Because wave A builds the review data, schedule,
   review mode and recommendation, wave C needs **no shared-code change**: each skill's review mode
@@ -112,15 +114,17 @@ mentor/
 ├── tools/common.mjs           # record_lesson checks and stored fields; read_learner_record review
 │                              #   fields; recommend_next
 ├── tools/easing.mjs           # takeSnapshot and parseSegmentId from shared files; FINDERS (review: false)
-├── lib/analyze.mjs            # + parseSegmentId (moved); no behaviour change
+├── lib/analyze.mjs            # + parseSegmentId (moved); kept_linear option (FR-038); no change without marks
 ├── lib/diff.mjs               # export unexpectedChanges; no behaviour change
 ├── lib/session.mjs            # per skill and comp; analyzer passed in; review mode; review_offers
-├── lib/learner-store.mjs      # kind, already_knew, targets; review_due, reviews_passed_in_row
+├── lib/learner-store.mjs      # kind, already_knew, targets; review_due, reviews_passed_in_row; marks
 ├── jsx/snapshot.jsx           # + host { ae_version, os } (R0)
 └── dev/capture.mjs            # --compare ignores host
+.claude/skills/ease-mentor/SKILL.md   # step 2: one line for a kept-linear property (FR-038)
 ```
 
-Nothing under `bridge/` changes. `.claude/skills/ease-mentor/SKILL.md` doesn't change in wave A.
+Nothing under `bridge/` changes. `.claude/skills/ease-mentor/SKILL.md` gets one line (step 2: name a
+kept-linear property among what it leaves out, FR-038).
 No existing test file is edited; if one must change, its task says why.
 
 **Adds (new files):**
@@ -133,6 +137,7 @@ mentor/
 ├── lib/recommend.mjs          # FR-004–FR-007, FR-020 limits (pure)
 ├── lib/timing.mjs             # FR-016 timing measures, clusters() (pure)
 ├── lib/host.mjs               # R0 parse and atLeast()
+├── lib/marks.mjs              # FR-038 kept-linear marks: applies(), marksFor(), isKeptLinear()
 ├── lib/snapshot.mjs           # takeSnapshot() shared by every skill
 ├── fixture/                   # (folder for skill fixture twins; set-ease stays built in)
 ├── dev/build-practice-comp-2.jsx
@@ -174,7 +179,7 @@ own new files, found by `mentor/tools/index.mjs` and `mentor/fixture.mjs`.
 
 | Step | Who | Builds | Done when |
 |---|---|---|---|
-| A1 | **One skill-builder, the wave A shared-code owner, alone** | tasks.md T001–T048: path data and recommendation (FR-001 to FR-008), record and review data (FR-018, FR-019, FR-023), review mode in the session (FR-021's no-demo and new-target rules), R0 (FR-009 to FR-011), timing analysis (FR-016, FR-017), the shared easing parts (R12), fixture plugins, `next-mentor`, Mentor Practice 2's wave A targets (FR-031) | `npm test` green; quickstart › 1–4 and 6 pass; easing evals 25/25 or within one (FR-035); merged with `/merge-worktree … --shared-owner` |
+| A1 | **One skill-builder, the wave A shared-code owner, alone** | tasks.md T001–T057: path data and recommendation (FR-001 to FR-008), record and review data (FR-018, FR-019, FR-023), review mode in the session (FR-021's no-demo and new-target rules), R0 (FR-009 to FR-011), timing analysis (FR-016, FR-017), the shared easing parts (R12), fixture plugins, `next-mentor`, Mentor Practice 2's wave A targets (FR-031) | `npm test` green; quickstart › 1–4 and 6 pass; easing evals 25/25 or within one (FR-035); merged with `/merge-worktree … --shared-owner` |
 | A2 | Panel-builder (request) | `runtime.js` links all `*-mentor` skills | Merged before A4's eval runs |
 | A3 | Spec writer, then curriculum designer as needed | Specs 008, 009, 010 (each: `/overlap-audit`, focus rule, demo tool, pass, review mode, eval cases) | Approved by the builder |
 | A4 | Three skill-builders in parallel worktrees (at most 3 Opus agents, `.claude/README.md` › 3) | Skills 2, 1, 3, adding files only | Each: its own tests, `check-branch.mjs` clean without `--shared-owner`, easing evals within one, its eval set ≥ 80% (SC-007) |
@@ -237,6 +242,7 @@ cover the deterministic parts, so evals check what the mentor *does* with them.
 | 4 Review declined: the session goes on; nothing recorded | path set | One skill with `review: true` |
 | 6 Review with no new target: no review offered; not counted as missed | path set | As 4 |
 | 8 "I already know it": runs as a review; a pass records learned and "already knew it"; never offered unprompted | path set | As 4 |
+| 12 Linear on purpose (FR-038): a marked property isn't proposed, is named once as left out, and "ease it after all?" gets "ease it whenever you like" | `product/evals/easing/` (a learner record with a mark) | The shared merge; it's an easing case |
 | 10 Unreadable record: lessons still run, one sentence, no recommendation from history | path set | — |
 | 11 Plain speech: no IDs, field names or quoted values, on every case (deterministic) | every set | — |
 | Easing regression (FR-035) | `product/evals/easing/` | Re-run after the shared merge and after each skill merge |
@@ -258,6 +264,7 @@ and 7 (review asks intent) are written with skills 2 and 1's review modes (wave 
 | The server's reworded rule 3 shifts easing behaviour | Same run | Same fix window |
 | Parallel builders find a shared gap mid-build | Hand-backs | They hand back a request; the cockpit batches requests into one owner branch, merged before the next skill merges |
 | `runtime.js` isn't updated, so no new-skill eval can run | A2 not merged | Ask the panel-builder alongside A1 |
+| A kept-linear mark hides a pair the learner later wants eased | Eval case 12; SC-013 | The mark lapses as soon as they change the keys, and the lesson names the marked property, so it's never silently missing |
 | The 3-hour session window (R8) offers too few or too many reviews | SC-009 live reviews | Change one constant; recommendation tests pin the behaviour |
 
 ## Open questions (none blocks wave A's tasks)

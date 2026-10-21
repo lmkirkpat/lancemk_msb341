@@ -249,9 +249,29 @@ interfaces wave A builds so skills 2, 1 and 3 can then be built in parallel by a
   need their own list or a wider one. The eval engineer's call.
 - **The panel's path** stays a fixed list (spec 003); the UI overhaul (spec 007) reads
   `mentor/curriculum/path.json` and the record.
-- **`ease-mentor/SKILL.md`** isn't changed in wave A (KD-001's fix in wave B changes it). Its
-  record calls work unchanged (R3). Easing reviews aren't offered this sprint: its tool file
+- **`ease-mentor/SKILL.md`** gets one change in wave A: step 2 names a kept-linear property among
+  what it leaves out (R15). KD-001's fix in wave B changes it again. Its record calls work unchanged
+  (R3). Easing reviews aren't offered this sprint: its tool file
   doesn't declare `review: true` (R1), and recommendations only offer reviews for skills that do.
+
+## R15. Linear on purpose: a mark that lapses when the keys change (FR-038)
+
+- **Decision:** a top-level `marks` array in the record (still `version: 1`), each mark tied to a
+  project, comp, layer, property path and the key times the check confirmed. Only a check writes
+  one, through `session.keepLinear()` and `record_lesson`. It applies only while those keys are
+  unchanged and all linear; any change to them lapses it for good, and the next record write
+  removes it. Easing skips a marked property (`skipped`, reason `kept_linear`) and names it once
+  among what it leaves out; `ease-mentor/SKILL.md` gets that one line. Naming it as the focus
+  doesn't lift it.
+- **Rationale:** the builder's call (2026-10-20, from `specs/009-key-types/teaching-design.md` S-2,
+  `discovery/usage-notes/mentor-practice-state-2026-10-20.md`): a learner who says "constant
+  speed" shouldn't be pushed to ease it every lesson. Tying the mark to the key times makes taking it
+  back automatic and visible on the timeline (ease it, and it's a normal pair again), with no extra
+  tool. Writing it only from a check keeps the record to what the checks showed (FR-022).
+- **Alternatives:** a "forget this" tool (one more write tool and one more rule to evaluate); a mark
+  that lasts until removed by hand (a learner who eases it later would see it skipped, then
+  un-eased by undo, inconsistently); storing it in lesson summaries only (free text easing can't
+  read reliably).
 
 ## Dependencies
 

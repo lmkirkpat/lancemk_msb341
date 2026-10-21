@@ -77,6 +77,36 @@ keeps `version: 1`.
 entry for that skill whose `comp` and `project` match the open comp. Different comp or project
 means new (Edge Cases).
 
+## Kept-linear mark (in `learner.json` › `marks[]`, FR-038)
+
+A new top-level array; the file stays `version: 1`, and readers that don't know it ignore it (the
+panel's memory view reads only `version`, `skills` and `lessons`).
+
+```json
+{ "kind": "kept_linear", "project": "Claude AE Tutor Test.aep", "comp": "Mentor Practice 2",
+  "layer": "Spinner", "path": "ADBE Transform Group/ADBE Rotate Z", "property": "Rotation",
+  "key_times": [0, 4], "skill": "keyframes.types", "date": "2026-10-21" }
+```
+
+| Field | Rule |
+|---|---|
+| `kind` | `kept_linear` (the only kind this sprint) |
+| `project`, `comp`, `layer`, `path` | Where it applies: the same project file name, comp name, layer name and property path. Anything else is a different property |
+| `property` | The display name, for reading only |
+| `key_times` | The property's key times (seconds, as the snapshot gives them) when the check confirmed it |
+| `skill`, `date` | Which skill's check wrote it, and the local date |
+
+- **Written** only by `record_lesson`, from the current lesson's `kept_linear` list, which only
+  `session.keepLinear(snapshot, refs)` fills, and only after it confirms in that snapshot that every
+  pair on each property is linear at both ends. A new mark on the same comp, layer and path replaces
+  the old one.
+- **Applies** while, in the snapshot being read, the property exists with exactly `key_times`, no
+  expression on, and every pair `linear` (`segmentState`). Otherwise it has **lapsed**.
+- **Removed** by the next `record_lesson` whose lesson baseline is that comp and shows the mark
+  lapsed. A lapsed mark that hasn't been removed yet is ignored everywhere.
+- **Not personal:** layer and property names and times only (FR-022, the email and phone check runs
+  on the names too).
+
 ## Session lesson (in `session.json` › `lessons[<skill>|<comp id>]`)
 
 Spec 002's lesson (`lesson_id`, `comp_id`, `baseline`, `focus`, `targets`, `demo_target`, `demo`,
@@ -88,6 +118,8 @@ Spec 002's lesson (`lesson_id`, `comp_id`, `baseline`, `focus`, `targets`, `demo
 | `mode` | `lesson` or `review`. Fixed when the lesson starts; a new mode on the same skill and comp starts a new lesson |
 | `target_refs` | `[{ layer, property }]` from the skill's analyzer, for the record |
 | `exclude` | Review only: the past targets the analyzer was given |
+| `kept_linear` | `[{ layer, path, property, key_times }]` confirmed by `keepLinear()` this lesson, written to `marks` by `record_lesson` |
+| `marks` | The kept-linear marks for this comp and project, read from the record at `start()` and passed to the analyzer as `kept_linear` |
 
 `session.json` also gains `review_offers: [{ skill, at }]` (research R7, R8), pruned to the last
 3 hours on each write.
@@ -102,6 +134,11 @@ Spec 002's lesson (`lesson_id`, `comp_id`, `baseline`, `focus`, `targets`, `demo
 | `no_demo_reason` | yes | `null` or a short code (`single_target`, `nothing_to_teach`, `no_new_target`, or the skill's own) |
 | `focus` | yes | The focus layer names, or `null` |
 | anything else | no | Passed through to the skill's own tool output |
+
+Analyzers also receive `kept_linear` (the applying marks for this comp) in `opts`. Easing's
+`analyze` puts each marked property in `skipped` with `reason: "kept_linear"` instead of in
+`findings` or `targets` (`counts` still count its pairs). With no marks its result is unchanged
+(SC-004). Other skills may ignore marks unless their spec says otherwise.
 
 Contract: [contracts/skill-module.md](contracts/skill-module.md).
 
