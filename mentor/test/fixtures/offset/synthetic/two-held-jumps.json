@@ -1,0 +1,159 @@
+{
+  "synthetic": "synthetic: overlap row 5, no live case (spec 010 FR-022)",
+  "taken_at": "2026-10-21T12:00:00.000Z",
+  "project": "Synthetic.aep",
+  "comp": {
+    "id": 500,
+    "name": "Two Jumps",
+    "duration": 4,
+    "frame_rate": 30
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Lamp",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Scale",
+          "display_path": "Transform › Scale",
+          "match_name": "ADBE Scale",
+          "display_name": "Scale",
+          "dimensions": 3,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "hold",
+              "out_type": "hold",
+              "value": [
+                50,
+                50,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "hold",
+              "out_type": "hold",
+              "value": [
+                100,
+                100,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "hold",
+              "out_type": "hold",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "hold",
+              "out_type": "hold",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

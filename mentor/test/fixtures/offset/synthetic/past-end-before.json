@@ -1,0 +1,251 @@
+{
+  "synthetic": "synthetic: overlap row 18, no live case (spec 010 FR-022)",
+  "taken_at": "2026-10-21T12:00:00.000Z",
+  "project": "Synthetic.aep",
+  "comp": {
+    "id": 501,
+    "name": "Past End",
+    "duration": 3,
+    "frame_rate": 30
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Card",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                100,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                300,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "A",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                100,
+                300
+              ],
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                300,
+                300
+              ],
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "B",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                100,
+                500
+              ],
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                300,
+                500
+              ],
+              "in_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 10,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

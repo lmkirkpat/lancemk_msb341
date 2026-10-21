@@ -1,0 +1,174 @@
+{
+  "about": "Spec 010's answer key, written by hand from the fixtures' build (stand-in/build.mjs) and spec 010's spec, teaching design and research, not by running the analysis. Paths are relative to this folder. 'focus' is what the analysis must find on a fixture; 'checks' is what offset_check must say for a lesson on 'baseline' checked against 'current'. When the live captures replace the stand-ins (tasks T034), the paths change and the expectations stay.",
+  "focus": {
+    "stand-in/practice-now.json": {
+      "proposed_kind": "properties",
+      "other_kind": "layers",
+      "properties": { "layer": "Title", "members": [["Position", 1], ["Scale", 1], ["Opacity", 1]], "start": 0.5, "end": 1.5 },
+      "layers": { "members": ["Bar", "Glow"], "start": 0 },
+      "all_layer_groups": [["Bar", "Glow"], ["Title", "Cursor"]],
+      "all_property_groups": [["Title", ["Position", "Scale", "Opacity"]], ["Subtitle", ["Position", "Opacity"]]],
+      "left_out": { "null": ["CTRL"], "hidden": ["Old Take"], "precomp": ["Icon"], "expression": ["Logo"] },
+      "targets": ["1/Transform › Position/1", "1/Transform › Scale/1", "1/Transform › Opacity/1"],
+      "demo_targets": [
+        { "order": null, "gap_frames": null, "demo_target": null, "no_demo_reason": "awaiting_order" },
+        { "order": ["Position", "Scale", "Opacity"], "gap_frames": 4, "demo_target": "1/Transform › Scale/1" },
+        { "order": ["Opacity", "Position", "Scale"], "gap_frames": 4, "demo_target": "1/Transform › Position/1" },
+        { "order": ["Position", "Scale", "Opacity"], "gap_frames": 1, "demo_target": null, "no_demo_reason": "gap_under_floor" },
+        { "order": ["Position", "Scale", "Opacity"], "gap_frames": null, "demo_target": null, "no_demo_reason": "awaiting_order" }
+      ]
+    },
+    "stand-in/practice2-before.json": {
+      "proposed_kind": "properties",
+      "proposed_kind_note": "A tie: Dot 2's Position, Opacity and Blurriness (3) and Dot 1 to 3 (3). FR-006 sends a tie to the properties kind, so the Dots are the other kind, offered in one sentence.",
+      "other_kind": "layers",
+      "properties": { "layer": "Dot 2", "members": [["Position", 1], ["Opacity", 1], ["Blurriness", 1]], "start": 0.5, "end": 1.5 },
+      "layers": { "members": ["Dot 1", "Dot 2", "Dot 3"], "start": 0.5 },
+      "all_layer_groups": [["Dot 1", "Dot 2", "Dot 3"], ["Chip A", "Chip B", "Chip C"]],
+      "property_group_layers": ["Dot 2", "Dot 1", "Dot 3", "Card", "Chip A", "Chip B", "Chip C", "Badge"],
+      "dot1_position_move": 2,
+      "left_out": {},
+      "layers_targets": ["layer/5", "layer/6", "layer/7"],
+      "layers_target_refs": [
+        ["Dot 1", "Position"], ["Dot 1", "Opacity"],
+        ["Dot 2", "Position"], ["Dot 2", "Opacity"], ["Dot 2", "Blurriness"],
+        ["Dot 3", "Position"], ["Dot 3", "Opacity"]
+      ],
+      "demo_targets": [
+        { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4, "demo_target": "layer/6" },
+        { "kind": "layers", "order": ["Dot 3", "Dot 1", "Dot 2"], "gap_frames": 4, "demo_target": "layer/5" },
+        { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 1, "demo_target": null, "no_demo_reason": "gap_under_floor" }
+      ],
+      "review_after_dots": { "kind": "layers", "members": ["Chip A", "Chip B", "Chip C"] }
+    },
+    "stand-in/practice2-60fps.json": {
+      "layers": { "members": ["Dot 1", "Dot 2", "Dot 3"], "start": 0.5 },
+      "demo_targets": [
+        { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 3, "demo_target": null, "no_demo_reason": "gap_under_floor" },
+        { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4, "demo_target": "layer/6" }
+      ]
+    },
+    "synthetic/two-held-jumps.json": {
+      "proposed_kind": "properties",
+      "properties": { "layer": "Lamp", "members": [["Scale", 1], ["Opacity", 1]], "start": 1, "end": 1 },
+      "no_demo_reason": "two_members"
+    },
+    "synthetic/past-end-before.json": {
+      "proposed_kind": "layers",
+      "layers": { "members": ["Card", "A", "B"], "start": 1 }
+    },
+    "synthetic/half-frame-before.json": {
+      "proposed_kind": "layers",
+      "layers": { "members": ["D1", "D2", "D3"], "start": 0.5 }
+    }
+  },
+  "checks": {
+    "props-pass-landing": {
+      "baseline": "stand-in/practice-now.json", "current": "stand-in/props-pass-landing.json",
+      "lesson": { "kind": "properties", "order": ["Position", "Opacity", "Scale"], "gap_frames": 4 },
+      "passed": true, "still_same": [], "order_differs": false
+    },
+    "props-one-frame": {
+      "baseline": "stand-in/practice-now.json", "current": "stand-in/props-one-frame.json",
+      "lesson": { "kind": "properties", "order": ["Position", "Scale", "Opacity"], "gap_frames": 4 },
+      "passed": false,
+      "still_same": [["Title › Position", "Title › Scale"], ["Title › Position", "Title › Opacity"], ["Title › Scale", "Title › Opacity"]]
+    },
+    "single-key-moved": {
+      "baseline": "stand-in/practice-now.json", "current": "stand-in/single-key-moved.json",
+      "lesson": { "kind": "properties", "order": ["Position", "Scale", "Opacity"], "gap_frames": 4 },
+      "passed": true, "still_same": [], "other_changes_match": ["Logo › Scale: its single key moved from 0 s to 0.2 s"]
+    },
+    "expression-toggled": {
+      "baseline": "stand-in/practice-now.json", "current": "stand-in/expression-toggled.json",
+      "lesson": { "kind": "properties", "order": ["Position", "Scale", "Opacity"], "gap_frames": 4 },
+      "passed": false, "other_changes_match": ["Logo › Rotation: an expression was turned off"]
+    },
+    "layers-pass": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/layers-pass.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": true, "still_same": [], "order_differs": false, "rhythm": { "uneven": false }, "gaps_frames": [4, 4]
+    },
+    "layers-uneven": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/layers-uneven.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": true, "still_same": [], "rhythm": { "uneven": true }, "gaps_frames": [4, 8]
+    },
+    "layers-one-frame": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/layers-one-frame.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": false, "still_same": [["Dot 1", "Dot 2"], ["Dot 2", "Dot 3"]], "rhythm": null
+    },
+    "pops-in": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/pops-in.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": false, "still_same": [], "split": { "Dot 1": { "moved": ["Opacity"], "stayed": ["Position"] } },
+      "with_split": ["Dot 1"], "passed_with_split": true
+    },
+    "order-differs": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/order-differs.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": true, "order_differs": true
+    },
+    "effect-with-layer": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/effect-with-layer.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": true, "moved_by": { "Dot 2": { "Position": 4, "Opacity": 4, "Blurriness": 4 } }
+    },
+    "separated-x-only": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/separated-x-only.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": false, "within_position": { "Dot 3": { "moved": ["X Position"], "stayed": ["Y Position"] } }
+    },
+    "reordered": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/reordered.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": false, "still_same": [["Dot 1", "Dot 2"], ["Dot 1", "Dot 3"], ["Dot 2", "Dot 3"]], "other_changes": []
+    },
+    "bar-dragged": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/bar-dragged.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": false, "still_same": [["Dot 1", "Dot 2"]], "start_now": { "Dot 3": 0.7 }
+    },
+    "in-point-trimmed": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/in-point-trimmed.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": false, "still_same": [["Dot 1", "Dot 2"], ["Dot 1", "Dot 3"], ["Dot 2", "Dot 3"]]
+    },
+    "hold-group": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/hold-group.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4 },
+      "passed": true, "start_now": { "Dot 1": 0.5 }, "moved_by": { "Dot 1": { "Position": 0, "Opacity": 0 } }
+    },
+    "after-demo": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/after-demo.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4, "demo": "layer/6" },
+      "passed": false, "still_same": [["Dot 1", "Dot 3"]], "credit": { "Dot 2": "demo" }, "demo_undone": false
+    },
+    "after-demo-undone": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/after-demo-undone.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4, "demo": "layer/6" },
+      "passed": false, "credit": { "Dot 2": "undone" }, "demo_undone": true
+    },
+    "after-demo-redone": {
+      "baseline": "stand-in/practice2-before.json", "current": "stand-in/after-demo-redone.json",
+      "lesson": { "kind": "layers", "order": ["Dot 1", "Dot 2", "Dot 3"], "gap_frames": 4, "demo": "layer/6" },
+      "passed": true, "credit": { "Dot 2": "learner" }, "demo_undone": false
+    },
+    "past-end-props": {
+      "baseline": "synthetic/past-end-before.json", "current": "synthetic/past-end.json",
+      "lesson": { "kind": "properties", "order": ["Position", "Opacity"], "gap_frames": 4 },
+      "passed": true, "out_of_comp": [["Card", "Opacity", 3.2]], "lands_in_comp": { "Card › Opacity": false }
+    },
+    "past-end-layers": {
+      "baseline": "synthetic/past-end-before.json", "current": "synthetic/past-end.json",
+      "lesson": { "kind": "layers", "order": ["Card", "A", "B"], "gap_frames": 4 },
+      "passed": false, "still_same": [["Card", "A"]], "out_of_comp": [["Card", "Opacity", 3.2], ["B", "Position", 3.1], ["B", "Position", 4.1]]
+    },
+    "half-frame": {
+      "baseline": "synthetic/half-frame-before.json", "current": "synthetic/half-frame.json",
+      "lesson": { "kind": "layers", "order": ["D1", "D2", "D3"], "gap_frames": 4 },
+      "passed": true, "still_same": [], "split": {}
+    }
+  }
+}
