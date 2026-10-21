@@ -173,3 +173,110 @@ real costs were in the setup *around* the agents:
 
 Before the parallel *code* run: fix 1 and 2, name one owner for shared `mentor/` code
 (spec 004 FR-032), and re-run the identity probe.
+
+---
+
+## Run 2: Wave A code, shared pieces plus skills 2, 1 and 3 (2026-10-21)
+
+**Goal:** the first parallel *code* run. Spec 004's shared pieces (one shared-code owner), then
+the cloud part of skills 2 (speed graph, spec 008), 1 (key types, 009) and 3 (offset, 010) built
+by three skill-builders at once, add-only. It serves the "one piece of work built by several
+agents in parallel" done item, and three of the five baseline skills. Run from a cloud session
+(no After Effects), so every 🖐 live task waits for a Mac sitting. Times are UTC, from launch
+and hand-back (merge commits), not from what agents said.
+
+**Numbers handed out:** spec 004 tasks T058–T069 (T058–T065 used). No new specs, decisions or
+eval cases. Specs 008–010 kept their numbers for Spec Kit (`--number`).
+
+**Waves:**
+
+| Wave | Agent | Task | Worktree? | Start | Hand-back | Wall-clock | Outcome |
+|---|---|---|---|---|---|---|---|
+| 1 | spec-writer | Fold my approvals into 004 plan/tasks and 008–010; shared-code requests become T058–T065 | yes | 19:14 | 19:21 | 7.0 | done (`0b29dc2`). Took the designer's answers mid-run by message. Reported "about 35 minutes" |
+| 1 | curriculum-designer | Key types C-1 to C-3 (Blink built eased) | no | 19:14 | 19:16 | 1.5 | done (`96e954b`). Reported "about 20 minutes" |
+| 2 | skill-builder (shared owner) | Spec 004 T001–T065, everything without AE | yes | 19:22 | 19:50 | 27.9 | done (`4c2a78f`): 96 → 245 tests, 64 files, changed-files table matched exactly. Reported "about 3 hours" |
+| 2 | panel-builder | `runtime.js` links every `*-mentor` skill (plan P3); then `npm test` on Node 22 | yes | 19:22 | 19:26 | 3.6 | done (`b6723fe`, `fab563f`), 82/82. One follow-up by message |
+| 2 | spec-writer | Plans and tasks for 008, 009, 010 (Spec Kit) | yes | 19:23 | 19:41 | 18.0 | done: 35, 38, 40 tasks, add-only tables checked. Reported "about 2.5 hours" |
+| 3 | reviewer | Read the shared code before builders build on it | yes | 20:09 | 20:12 | 3.5 | done: ready after fixes, 9 findings (1 blocking for skill 1) |
+| 3 | skill-builder (shared owner) | Fix the review's findings; then update wave A's own tests | yes | 20:13 | 20:20 | 7.5 | done (`a876301`, `a69cc0e`), 274/274. Resumed once for the tests |
+| 3 | skill-builder | Skill 2, speed graph, cloud part | yes | 20:09 | 20:28 | 19.2 | done (`9fd101e`): 115 tests, 33 files. Reported "about 2.5 hours" |
+| 3 | skill-builder | Skill 1, key types, cloud part | yes | 20:09 | 20:26 | 17.0 | done (`0e73e3c`): 78 tests, 38 files. Reported "roughly 2.5 hours" |
+| 3 | skill-builder | Skill 3, offset, cloud part | yes | 20:27 | 20:49 | 22.1 | done (`7e2ccef`): 128 tests, 45 files. Reported "roughly 2.5 hours" |
+| 4 | eval-engineer | Easing eval run after wave A (004 T046) | yes | 20:58 | | | (fill in) |
+| 4 | spec-writer | Fold the builders' findings and my five offset confirmations into the specs | yes | 20:58 | | | (fill in) |
+
+At most three Opus agents at once (the README's rule from run 1). Wave 3 launched the reviewer
+and two builders together; the shared fixes took the reviewer's slot and offset took the next.
+
+**Wall-clock:** 19:14 to 20:50, 96 minutes for waves 1–3, with no usage-limit stall (run 1
+stalled 80). About 2.0 M subagent tokens across 10 jobs.
+
+**My hands-on time:** four short messages ("all are approved, start work", "approve all", "go
+ahead and start cloud work now", "keep all five"). The cockpit merged 9 branches, answered
+hand-backs and relayed between agents in about 30 short turns.
+
+**Output:** 180 files changed (123 new): about 7,500 lines of code, 3,400 of specs and docs,
+49,500 of JSON fixtures (mostly synthetic stand-in snapshots). Mentor tests 96 at the start of
+wave A, 595 at the end, all green; panel 82/82; hooks 33/33. Four new skills:
+`/speed-graph-mentor`, `/key-types-mentor`, `/offset-mentor`, `/next-mentor`.
+
+**Solo estimate:** the shared pieces alone (65 tasks, 64 files) are a long day for me with
+Claude; each skill's cloud part another day; the plans half a day. About 4–5 working days in one
+session, one thing at a time. The run took 96 minutes. The catch is the same as run 1's: all of
+it still has to meet After Effects, and stand-in fixtures are only as good as the build script
+they were derived from.
+
+**Guardrails:**
+
+| Check | Count | Notes |
+|---|---|---|
+| Ownership hook blocks | 0 | none reported |
+| Git guard blocks | 0 | none reported. In a worktree the guard allows `reset --hard`, which is how every agent rebased onto the integration branch |
+| AE lock waits | 0 | no AE in a cloud container |
+| Files outside the persona's row at merge (`check-branch.mjs`) | 0 real, 1 false run | The panel-builder's first check ran against `main` (the script's default base) while work lives on another branch, so it listed 14 earlier spec files. My command didn't stop on it; the merge was a fast-forward and a re-run against the right base showed 3/3 panel files. Every later merge passed the base and chained with `&&` |
+| `--shared-owner` branches | 2 | both rounds of the shared owner; every skill branch was clean without it |
+| Merge conflicts | 0 | |
+| Two agents edited the same file | 0 at once | `specs/004-ae-curriculum/tasks.md` was edited by the spec-writer and then the shared owner, one after the other |
+| Designer ↔ spec-writer question rounds | 1 | key types C-1 to C-3, relayed mid-run |
+
+**Quality:**
+
+| Output | Reviewer findings | Redo needed? | Better or worse than solo, and why |
+|---|---|---|---|
+| Shared code (spec 004) | 9: 1 blocking for skill 1 (a kept-linear mark could be written with no check, on the wrong comp), server rule 4 would have sent every skill to easing's snapshot, 6 should-fix, 2 nits | yes, 7.5 min | Better than solo on breadth and tests; the review caught what I'd have hit live. Two flagged choices were judged fine |
+| Skills 2, 1, 3 (cloud parts) | not yet reviewed beyond merge checks; `/agent-audit` not available in the container | no | Each followed add-only with zero changes to shared files. All three hit the same shared test and each worked around missing AE captures the same way (stand-ins with an auto-switch) |
+| Specs | spec-writer found a T042 conflict on its own, the same one the shared owner flagged | no | Two agents independently catching one conflict is a good sign the hand-offs carry context |
+
+**What broke or surprised:**
+
+- **A shared test that couldn't survive add-only.** `skill-module.test.mjs` asserted `SKILLS`
+  was exactly `["easing.basic"]`, so every new skill failed it. All three builders reported it.
+  Fixed by the cockpit (`c300cff`) to test what it meant: `index.mjs` and `common.mjs` add none.
+  Rule for the shared owner next time: no shared test may enumerate the skills.
+- **"No existing test edited" needed a base.** The rule protects tests from before the wave;
+  wave A's own tests are fair to update when a review changes behaviour. I checked each file
+  against `be9c9b1` before allowing it.
+- **The worktree base is still `origin/main`.** Run 1's fix (push first) didn't apply, because
+  this session pushes to a feature branch, not main. Every prompt told the agent to fetch the
+  integration branch and `reset --hard` to it, and every agent did. It worked but it's a line
+  every prompt must carry.
+- **Agents misreport their own time, by 6–10x.** Same as run 1: "3 hours" was 28 minutes,
+  "2.5 hours" was 17–22.
+- **The live gate.** Spec 004 said builders start only after its full merge, including the 🖐
+  tasks. I asked and started the cloud parts anyway; the shared code they depend on was merged,
+  and the 🖐 tasks only add captures. It held: nothing a builder needed was missing.
+- **Reviewing shared code before the builders start paid off.** Two of its findings would have
+  broken skills 1 and 3 in their first live lesson. The fixes landed while builders 2 and 1 were
+  mid-build; a heads-up message to each kept them aligned.
+
+**Verdict:** worth it, and far faster than solo: 96 minutes for what I'd estimate at 4–5 days,
+with zero collisions and no stall. The add-only rule and the one shared owner did their job. What
+changes before wave B:
+
+1. `check-branch.mjs` should default its base to the merge-base with the current branch, not
+   `main`, or the cockpit must always pass it.
+2. Shared tests must not enumerate skills.
+3. A worktree base setting (or a standing prompt line) for runs off a feature branch.
+4. Run the reviewer on each skill branch too, and `/agent-audit` on the Mac before evals.
+5. The Mac sitting is now the bottleneck: spec 004's Mentor Practice 2 build and captures first,
+   then skills 2, 1, 3 in order.
