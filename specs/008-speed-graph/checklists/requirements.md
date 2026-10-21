@@ -44,3 +44,7 @@
 - Live facts (Keyframe Velocity path, Scale dimensions, shared-key coupling, the speed tolerance)
   are live checks L-1 to L-7 for the build, not guesses in the requirements.
 - Status: draft, awaiting the builder's approval. Plan and tasks come after.
+- **Approved 2026-10-21.** H1 (SR-1, now spec 004 T060 and T061, `skill_options`), H2 (FR-010d's
+  5%, tuned on L-5 toward catching a visible bump) and H3 (L-1 to L-4 first, L-5 to L-7 with the
+  captures) as recommended. The designer's round 1 answers (D-1 to D-5, S-1, all agreed) are folded
+  in; no "pending D" markers remain. Plan and tasks come next.

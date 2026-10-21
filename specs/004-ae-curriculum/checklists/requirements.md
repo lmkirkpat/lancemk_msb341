@@ -51,3 +51,8 @@
 - **Approved 2026-10-20.** The builder's answers to H1 (26.5 on macOS 27.0.1), H2 (a five-skill
   baseline: 2, 1, 3, 5, 6) and Q1 to Q3 (the defaults) are folded in. Still open: H3 to H5 and the
   FR-032 owner note. Plan and tasks come next.
+- **Plan and tasks approved 2026-10-21.** Plan P1 to P5 as recommended. Tasks T058 to T065 added
+  for the skill specs' shared-code requests (spec 010 SR-1 back-to-back moves; spec 008 SR-1
+  `skill_options`; spec 009 SR-1 `fresh` restart; spec 010 SR-2 Mentor Practice 2 targets), with
+  the contracts and data model to match. Edge Cases "Hold pair" row now says "at the second key's
+  time" (spec 010 S-2).

@@ -120,6 +120,7 @@ Spec 002's lesson (`lesson_id`, `comp_id`, `baseline`, `focus`, `targets`, `demo
 | `exclude` | Review only: the past targets the analyzer was given |
 | `kept_linear` | `[{ layer, path, property, key_times }]` confirmed by `keepLinear()` this lesson, written to `marks` by `record_lesson` |
 | `marks` | The kept-linear marks for this comp and project, read from the record at `start()` and passed to the analyzer as `kept_linear` |
+| `skill_options` | The skill's own analyzer options, as last given to `start()`; reused on a continued or resumed lesson when a call gives none (spec 008 SR-1). Not set on a new or `fresh` lesson until given |
 
 `session.json` also gains `review_offers: [{ skill, at }]` (research R7, R8), pruned to the last
 3 hours on each write.
@@ -183,7 +184,8 @@ Nothing else from the raw values is kept (FR-011).
 | Single key | `excluded: "single_key"`, no moves |
 | Hold pair | A move with `kind: "instant"`, `start` = `end` = the second key's time, duration 0 (a start, not a move with a duration) |
 | Two neighbouring keys with equal values | A pause: no move. A unit with only pauses is `excluded: "no_change"`. Unknown values (null) count as a change |
-| Separated dimensions | X, Y, Z Position on one layer are one unit. Moves from each dimension that overlap or touch in time merge into one move (earliest start, latest landing), so X and Y moving together read as one move, not two landing together |
+| Back-to-back pairs | Every key pair that isn't a pause is its own move: Title's Position with keys at 0.5, 1.5 and 3 s is two moves, not one (spec 010 SR-1, tasks T058, T059) |
+| Separated dimensions | X, Y, Z Position on one layer are one unit. A move merges only with moves from a **different** dimension that overlap or touch it in time (earliest start, latest landing), so X and Y moving together read as one move, not two landing together. Two moves of the same dimension never merge with each other, though both can join one merged move through another dimension's move that overlaps them |
 | Effect keys | Counted, like any property |
 | Expression on | `excluded: "expression"`; keys listed, not counted |
 | Precomp layer | `precomp: true`; its own transform keys counted; inner time not read |

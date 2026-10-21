@@ -6,8 +6,9 @@ designer's; linked, not copied)
 
 **Input**: Feature specification from `specs/004-ae-curriculum/spec.md`, approved 2026-10-20.
 
-**Status**: Draft, awaiting the builder's approval. Tasks ([tasks.md](tasks.md)) cover wave A's
-shared pieces only.
+**Status**: Approved 2026-10-21, with P1 to P5 as recommended (Open questions). Tasks
+([tasks.md](tasks.md)) cover wave A's shared pieces only, approved the same day with the skill specs'
+shared-code requests folded in (T058 to T065).
 
 ## Summary
 
@@ -107,7 +108,8 @@ specs/004-ae-curriculum/
 ```text
 mentor/
 ├── server.mjs                 # instructions: "teaches After Effects skills"; rule 3 generalised
-├── errors.mjs                 # DEMO_USED, NOT_DEMO_TARGET reworded; REVIEW_NO_DEMO; registerErrors()
+├── errors.mjs                 # DEMO_USED, NOT_DEMO_TARGET reworded; REVIEW_NO_DEMO, NOT_KEPT_LINEAR,
+│                              #   LESSON_UNDERWAY; registerErrors()
 ├── bridge-client.mjs          # error pattern built lazily, so registered codes are recognised
 ├── fixture.mjs                # loads mentor/fixture/<snippet>.mjs twins; edits carry `snippet`
 ├── tools/index.mjs            # collects FINDERS; passes skills and finders to commonTools
@@ -116,7 +118,8 @@ mentor/
 ├── tools/easing.mjs           # takeSnapshot and parseSegmentId from shared files; FINDERS (review: false)
 ├── lib/analyze.mjs            # + parseSegmentId (moved); kept_linear option (FR-038); no change without marks
 ├── lib/diff.mjs               # export unexpectedChanges; no behaviour change
-├── lib/session.mjs            # per skill and comp; analyzer passed in; review mode; review_offers
+├── lib/session.mjs            # per skill and comp; analyzer passed in; review mode; review_offers;
+│                              #   skill_options kept across a resumed lesson; fresh restart
 ├── lib/learner-store.mjs      # kind, already_knew, targets; review_due, reviews_passed_in_row; marks
 ├── jsx/snapshot.jsx           # + host { ae_version, os } (R0)
 └── dev/capture.mjs            # --compare ignores host
@@ -179,7 +182,7 @@ own new files, found by `mentor/tools/index.mjs` and `mentor/fixture.mjs`.
 
 | Step | Who | Builds | Done when |
 |---|---|---|---|
-| A1 | **One skill-builder, the wave A shared-code owner, alone** | tasks.md T001–T057: path data and recommendation (FR-001 to FR-008), record and review data (FR-018, FR-019, FR-023), review mode in the session (FR-021's no-demo and new-target rules), R0 (FR-009 to FR-011), timing analysis (FR-016, FR-017), the shared easing parts (R12), fixture plugins, `next-mentor`, Mentor Practice 2's wave A targets (FR-031) | `npm test` green; quickstart › 1–4 and 6 pass; easing evals 25/25 or within one (FR-035); merged with `/merge-worktree … --shared-owner` |
+| A1 | **One skill-builder, the wave A shared-code owner, alone** | tasks.md T001–T065: path data and recommendation (FR-001 to FR-008), record and review data (FR-018, FR-019, FR-023), review mode in the session (FR-021's no-demo and new-target rules), R0 (FR-009 to FR-011), timing analysis (FR-016, FR-017), the shared easing parts (R12), fixture plugins, `next-mentor`, Mentor Practice 2's wave A targets (FR-031), and the skill specs' shared-code requests (T058–T065: back-to-back moves, a skill's own analyzer options kept across a resumed lesson, a fresh restart before any demo or check, more skill 3 targets) | `npm test` green; quickstart › 1–4 and 6 pass; easing evals 25/25 or within one (FR-035); merged with `/merge-worktree … --shared-owner` |
 | A2 | Panel-builder (request) | `runtime.js` links all `*-mentor` skills | Merged before A4's eval runs |
 | A3 | Spec writer, then curriculum designer as needed | Specs 008, 009, 010 (each: `/overlap-audit`, focus rule, demo tool, pass, review mode, eval cases) | Approved by the builder |
 | A4 | Three skill-builders in parallel worktrees (at most 3 Opus agents, `.claude/README.md` › 3) | Skills 2, 1, 3, adding files only | Each: its own tests, `check-branch.mjs` clean without `--shared-owner`, easing evals within one, its eval set ≥ 80% (SC-007) |
@@ -267,21 +270,21 @@ and 7 (review asks intent) are written with skills 2 and 1's review modes (wave 
 | A kept-linear mark hides a pair the learner later wants eased | Eval case 12; SC-013 | The mark lapses as soon as they change the keys, and the lesson names the marked property, so it's never silently missing |
 | The 3-hour session window (R8) offers too few or too many reviews | SC-009 live reviews | Change one constant; recommendation tests pin the behaviour |
 
-## Open questions (none blocks wave A's tasks)
+## Open questions: all answered 2026-10-21 (the builder took every recommendation)
 
 - **P1. Practice lessons and the review schedule (research R5).** A practice lesson on a learned
-  skill, and a review stopped before any check, leave the schedule as it is. *Recommended:* yes.
+  skill, and a review stopped before any check, leave the schedule as it is. *Recommended:* yes. **Approved 2026-10-21.**
 - **P2. "One review per session" as a 3-hour window (research R8).** *Recommended:* yes; revisit
-  after SC-009.
+  after SC-009. **Approved 2026-10-21.**
 - **P3. `panel/lib/runtime.js` for new skills** is the panel-builder's: a small change, needed
-  before any new-skill eval run. *Recommended:* the cockpit sends it with wave A.
+  before any new-skill eval run. *Recommended:* the cockpit sends it with wave A. **Approved 2026-10-21.**
 - **P4. An entry skill, `next-mentor`.** Spec 005 puts diagnosis first in a session with no named
   skill, and the panel starts named skills. Until spec 005 is built, `/next-mentor` is how the
   recommendation is reached; spec 005's diagnosis then calls `recommend_next` when the comp has no
-  findings. *Recommended:* build it now, small.
+  findings. *Recommended:* build it now, small. **Approved 2026-10-21** (T029).
 - **P5. Easing reviews.** FR-023's edge case says easing's review is due from `last_practiced`, but
   easing has no review mode, so `recommend_next` won't offer one this sprint (research R14).
-  *Recommended:* add easing's review mode next sprint, a `ease-mentor` change by a shared owner.
+  *Recommended:* add easing's review mode next sprint, a `ease-mentor` change by a shared owner. **Approved 2026-10-21:** not this sprint.
 
 ## Complexity Tracking
 

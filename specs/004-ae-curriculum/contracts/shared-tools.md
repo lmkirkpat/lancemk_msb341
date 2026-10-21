@@ -110,6 +110,7 @@ rest." The other seven rules are unchanged, word for word.
 | `DEMO_USED` | "I've already shown you one in this lesson. The rest are yours to do, and I'll check them." | reworded (was "one pair") |
 | `NOT_DEMO_TARGET` | "I can only demonstrate on the one I picked for this lesson. The others are yours to do." | reworded |
 | `NOT_KEPT_LINEAR` | "That one isn't linear all the way through yet, so I can't note it as constant speed. Set its keys to linear first." | new |
+| `LESSON_UNDERWAY` | "We've already started on this one, so I'll keep checking it against where we began." | new (a `fresh` restart after a demo or check; tasks T063) |
 | `REVIEW_NO_DEMO` | "This one's a review, so it's all yours this time. Have a go and I'll check it." | new |
 | everything else | unchanged | |
 

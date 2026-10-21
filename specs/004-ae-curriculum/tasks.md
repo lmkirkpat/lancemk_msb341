@@ -4,6 +4,10 @@ description: "Task list for spec 004 wave A: the shared pieces skills 2, 1 and 3
 
 # Tasks: After Effects curriculum, wave A shared pieces
 
+**Status**: Approved 2026-10-21. T058 to T065 were added the same day from the skill specs'
+shared-code requests (spec 008 SR-1, spec 009 SR-1, spec 010 SR-1 and SR-2), all approved by the
+builder.
+
 **Input**: Design documents from `specs/004-ae-curriculum/`
 
 **Prerequisites**: [plan.md](plan.md), [spec.md](spec.md), [research.md](research.md),
@@ -38,13 +42,13 @@ back to the cockpit as a request, not into a skill branch.
 | `mentor/lib/analyze.mjs` | Add `parseSegmentId` (moved), no behaviour change; `kept_linear` option (FR-038) | T014, T052 |
 | `mentor/lib/diff.mjs` | Export `unexpectedChanges` | T014 |
 | `mentor/tools/easing.mjs` | Use the shared `takeSnapshot` and `parseSegmentId`; add `FINDERS` | T015 |
-| `mentor/lib/session.mjs` | Per skill and comp; analyzer passed in; review mode; `review_offers`; marks passed to analyzers, `keepLinear()` | T017, T053 |
+| `mentor/lib/session.mjs` | Per skill and comp; analyzer passed in; review mode; `review_offers`; marks passed to analyzers, `keepLinear()`; `skill_options` kept across a resumed lesson; `fresh` restart | T017, T053, T061, T063 |
 | `mentor/fixture.mjs` | Load `mentor/fixture/<snippet>.mjs` twins; edits carry `snippet` | T019 |
 | `mentor/tools/index.mjs` | Collect `FINDERS`; pass skills and finders to `commonTools` | T020 |
 | `mentor/server.mjs` | Instructions: "After Effects skills"; rule 3 generalised | T021 |
 | `mentor/lib/learner-store.mjs` | Lesson `kind`, `already_knew`, `targets`; skill `review_due`, `reviews_passed_in_row`; `pastTargets()` read; `marks` | T017, T034, T054 |
 | `mentor/tools/common.mjs` | `record_lesson` checks and stored fields; review fields in `read_learner_record`; `recommend_next` | T035, T036, T027, T054 |
-| `mentor/errors.mjs` (again) | `NOT_KEPT_LINEAR` | T053 |
+| `mentor/errors.mjs` (again) | `NOT_KEPT_LINEAR`; `LESSON_UNDERWAY` | T053, T063 |
 | `.claude/skills/ease-mentor/SKILL.md` | Step 2: one line for a kept-linear property (FR-038) | T055 |
 
 Nothing under `bridge/` changes; `.claude/skills/ease-mentor/SKILL.md` changes only in T055. **No existing test
@@ -110,7 +114,7 @@ parts, the per-skill session, fixture twins, finders, server text.
 - [ ] T014 [P] Move `parseSegmentId` from `mentor/tools/easing.mjs` into `mentor/lib/analyze.mjs` (exported, same code); export `unexpectedChanges` from `mentor/lib/diff.mjs` (same code). T004 and the existing analyze, diff and eval-fixture tests pass
 - [ ] T015 Create `mentor/lib/snapshot.mjs` exporting `takeSnapshot()` (moved from `mentor/tools/easing.mjs`: `runSnippet("snapshot", {})` plus `taken_at`). Update `mentor/tools/easing.mjs` to import it and `parseSegmentId`, and add `export const FINDERS = { "easing.basic": { focus: (snapshot, { exclude = [] } = {}) => ({ count, layers }), review: false } }`, where `count` is the number of pairs `needsEase` on layers and properties not in `exclude`. `snapshot_project`, `set_ease`, `diff_since_last` inputs and outputs unchanged
 - [ ] T016 [P] Add a unit test to `mentor/test/skill-module.test.mjs` (new file from T008, so not an existing test): easing's `FINDERS.focus` count on `practice-before.json` equals the number of `targets` easing's `analyze` gives with the same layers
-- [ ] T017 Rewrite `mentor/lib/session.mjs` to the contract (contracts/skill-module.md › 4, data-model › Session lesson): `start(snapshot, { skill = "easing.basic", analyze = easingAnalyze, focus_layers, mode = "lesson" })`; key `${skill}|${comp.id}`, reading old comp-id keys as easing's; lessons store `skill`, `mode`, `target_refs`, `exclude`; in review mode read past targets with `pastTargets(skill, project, comp)` from `mentor/lib/learner-store.mjs` (add that read-only export; the write changes are T034), pass them as `exclude`, force `demo_target: null`, and set `no_demo_reason: "no_new_target"` on an empty result; the session (not the analyzer) forces no demo when there's one target; `assertCanDemo` throws `REVIEW_NO_DEMO` in review mode; add `recordReviewOffer(skill)` and `reviewOffers()` with 3-hour pruning (research R8). For easing, `target_refs` come from its targets' layer and property display names (the session derives them when an analyzer doesn't return them, so easing's `analyze` stays unchanged). Existing `session.test.mjs`, `tools.test.mjs`, `fixture-mode.test.mjs` pass unchanged; T006 passes
+- [ ] T017 Rewrite `mentor/lib/session.mjs` to the contract (contracts/skill-module.md › 4, data-model › Session lesson): `start(snapshot, { skill = "easing.basic", analyze = easingAnalyze, focus_layers, mode = "lesson" })`; key `${skill}|${comp.id}`, reading old comp-id keys as easing's; lessons store `skill`, `mode`, `target_refs`, `exclude`; in review mode read past targets with `pastTargets(skill, project, comp)` from `mentor/lib/learner-store.mjs` (add that read-only export; the write changes are T034), pass them as `exclude`, force `demo_target: null`, and set `no_demo_reason: "no_new_target"` on an empty result; the session (not the analyzer) forces no demo when there's one target; `assertCanDemo` throws `REVIEW_NO_DEMO` in review mode; add `recordReviewOffer(skill)` and `reviewOffers()` with 3-hour pruning (research R8). For easing, `target_refs` come from its targets' layer and property display names (the session derives them when an analyzer doesn't return them, so easing's `analyze` stays unchanged). Existing `session.test.mjs`, `tools.test.mjs`, `fixture-mode.test.mjs` pass unchanged; T006 passes. Build T061 and T063 (Phase 5c) into this same rewrite
 - [ ] T018 [P] Write `mentor/test/fixtures/sample-skill/` twin `sample-snippet.mjs` for T007 (a no-op change recorded and replayed)
 - [ ] T019 Update `mentor/fixture.mjs` (research R9, contracts/skill-module.md › 5): keep `snapshot`, `set-ease`, `preview-frame` built in; load `mentor/fixture/<name>.mjs` (`run`, `apply`) for any other snippet; `saveEdit` stores `{ snippet, comp_id, ...edit }`; replay calls the edit's twin (`set-ease` when `snippet` is missing). Allow tests to point it at another twin folder (an env var such as `AE_MENTOR_FIXTURE_TWINS`, test-only). T007 and `fixture-mode.test.mjs` pass
 - [ ] T020 Update `mentor/tools/index.mjs`: collect `FINDERS` from every tool module into one map (refuse a finder whose ID isn't in that module's `SKILLS`); export it; call `commonTools({ skills: SKILLS, finders: FINDERS })`. Keep the duplicate checks. Allow tests to point discovery at another folder the same way as T019. T008 passes
@@ -199,13 +203,14 @@ Practice 2 (30 and 60 fps) and the synthetic timing cases, layer by layer (SC-00
 
 ### Implementation
 
-- [ ] T040 [US1] Create `mentor/lib/timing.mjs` (pure; research R11, data-model › Timing measures): `timing(snapshot)` and `clusters(events, toleranceSeconds)`. Units per layer: separated `ADBE Position_0/_1/_2` merged into one "Position" unit, every other property its own unit by `display_path`; `excluded: "expression"` when `expression_enabled`, `"single_key"` for one key, `"no_change"` when every pair is a pause; a pair whose first key's `out_type` is `hold` is `kind: "instant"` at the second key's time; equal neighbouring values (deep-equal, non-null) are a pause; frames `Math.round(time * frame_rate)`. T039 passes
+- [ ] T040 [US1] Create `mentor/lib/timing.mjs` (pure; research R11, data-model › Timing measures): `timing(snapshot)` and `clusters(events, toleranceSeconds)`. Units per layer: separated `ADBE Position_0/_1/_2` merged into one "Position" unit, every other property its own unit by `display_path`; `excluded: "expression"` when `expression_enabled`, `"single_key"` for one key, `"no_change"` when every pair is a pause; a pair whose first key's `out_type` is `hold` is `kind: "instant"` at the second key's time; equal neighbouring values (deep-equal, non-null) are a pause; frames `Math.round(time * frame_rate)`; back-to-back pairs stay separate moves (T059, Phase 5c). T039 passes
 - [ ] T041 🖐 [US1] Write `mentor/dev/build-practice-comp-2.jsx` (research R13) building "Mentor Practice 2" (1920×1080, 30 fps, 8 s) in the open project, refusing to run if it exists unless `{"replace": true}`, never touching "Mentor Practice" or "Icon Precomp". Targets, each declared next to its keys in an answer key written to `ARGS.out` (`mentor/test/fixtures/practice2-expected.json`; pass `out` on the command line rather than adding a default to `mentor/dev/assemble.mjs`, so that file stays unchanged). The answer key lists each property's expected easing pair states and its timing measures:
   - Skill 1: "Blink", 4 opacity keys alternating 100 and 0, **eased** (should be held); "Spinner", Rotation 0 → 360 over 4 s, **linear** (should stay linear); "Cut", a second on/off opacity change for skill 1's review.
   - Skill 2's review: "Card", Position and Scale pairs at Easy Ease defaults (33.33 both sides).
   - Skill 3 and its review: "Dot 1", "Dot 2", "Dot 3" whose first Position keys share 0.5 s; "Badge", Scale and Opacity starting and landing on the same frames.
   - Timing overlaps: a hold pair that starts a move ("Flag", hold then ramp); two neighbouring keys with equal values ("Pause", Position).
   - No layers for waves B or D.
+  - Plus T064's targets (Phase 5c), built in the same script.
   Run it via `node mentor/dev/assemble.mjs build-practice-comp-2 '{"out": "<abs path>/mentor/test/fixtures/practice2-expected.json"}'` and the upstream bridge's `ae_run_script` (dev chore, as spec 002 T014). The builder saves `discovery/Claude AE Tutor Test.aep`
 - [ ] T042 🖐 [US1] Capture fixtures with `mentor/dev/capture.mjs` (quickstart › 2 and 3): first `--compare mentor/test/fixtures/practice-before.json` with Mentor Practice active (must say "Matches": FR-031, and checks T012's `host` is ignored); then `mentor/test/fixtures/practice2-before.json` with Mentor Practice 2 active; then a 60 fps duplicate as `mentor/test/fixtures/practice2-60fps.json` (duplicate, change frame rate, capture, delete the duplicate, save). Record the `host` values seen and whether `app.version` marks a beta build in the PR notes (FR-030, quickstart › 2). Check no capture holds a user name or folder path
 - [ ] T043 [US1] Add Mentor Practice 2's checks to `mentor/test/timing.test.mjs` (from `practice2-expected.json`'s timing section) and a test that easing's `analyze()` on `practice2-before.json` finds exactly the pairs the answer key lists as linear (the new comp doesn't confuse easing)
@@ -243,6 +248,42 @@ easing's output equals `practice-findings-baseline.json`.
 
 ---
 
+## Phase 5c: Requests from the skill specs (approved 2026-10-21)
+
+**Purpose**: the shared changes specs 008, 009 and 010 asked for, built on this branch so the
+parallel skill builders never need to touch a shared file. Added 2026-10-21; they run before
+Phase 6 despite their numbers. Each pair is test first, then code.
+
+**Independent test**: the tests below pass, and T004 and every existing test still pass unchanged.
+
+### Back-to-back pairs are separate moves (spec 010 SR-1)
+
+- [ ] T058 [P] [US1] Add to `mentor/test/timing.test.mjs` (new in T039) and to T037's answer key: on `practice-before.json`, Title's Position (keys 0.5, 1.5, 3 s) gives **two** moves, 0.5–1.5 s and 1.5–3 s, not one 0.5–3 s move; Bar's separated X Position (keys 0, 0.6, 1.2 s, X only keyed) gives two moves. Add a synthetic `mentor/test/fixtures/timing/back-to-back.json` (marked synthetic in its comment field): a four-key Position like Title's on the builder's comp today (0.5, 1.5, 3, 4.37 s) gives three moves; a ramp, then a pause (equal values), then a ramp gives two moves; a separated Position where Y moves 0.5–1.5 s while X moves 0.5–1 s and 1–1.5 s gives one merged move (0.5–1.5 s), because each X move overlaps the Y move; X alone with the same two moves gives two
+- [ ] T059 [US1] In `mentor/lib/timing.mjs` (T040): every key pair that isn't a pause is its own move. Merging (data-model › Timing measures, Separated dimensions row) happens only between moves of **different** separated dimensions that overlap or touch in time; two moves of the same dimension, or of an unseparated property, are never merged with each other, though both can end up in one merged move through another dimension's move that overlaps them. Update nothing else. T058 passes
+
+### A lesson keeps a skill's own analyzer options (spec 008 SR-1)
+
+- [ ] T060 [P] [US1] Add to `mentor/test/session-skills.test.mjs` (new in T006), with the stub analyzer recording what it's given: `start(snapshot, { skill, analyze, skill_options: { land_hard: [<pair id>] } })` passes `opts.skill_options` to the analyzer (as well as `focus_layers`, `exclude`, `kept_linear`) and stores it on the lesson as `skill_options`; a later `start()` for the same skill and comp **without** `skill_options` (continued, and resumed after another comp) passes the stored value again, for both the current read and the baseline; a later `start()` **with** `skill_options` replaces the stored value; a new lesson (after a pass, or a change of `mode`) starts with none; easing with no `skill_options` gets exactly what it gets today; a value that isn't plain JSON data throws before any write
+- [ ] T061 [US1] In `mentor/lib/session.mjs` (part of T017's rewrite): add the `skill_options` option and lesson field per contracts/skill-module.md › 4 and data-model › Session lesson. The session stores and passes it through and never reads inside it. T060 passes
+
+### A skill can restart a lesson from the current comp before any demo or check (spec 009 SR-1)
+
+- [ ] T062 [P] [US1] Add to `mentor/test/session-skills.test.mjs`: `start(snapshot, { skill, analyze, fresh: true })` on an unpassed lesson for that skill and comp with no demo recorded and no check made starts a **new** lesson (`lesson: "new"`, a new `lesson_id`) with this snapshot as the baseline, so a target that exists only in this snapshot (a practice blink added after the first look) is in `targets`; after `recordDemo` or after `markChecked`, `fresh: true` throws `LESSON_UNDERWAY` and `session.json` is byte-identical; with no lesson to replace it's an ordinary start; it works the same in `mode: "review"`; other skills' lessons on the comp and the same skill's lessons on other comps are untouched; a fresh lesson carries nothing from the one it replaces (no `skill_options`, `kept_linear` or demo); without `fresh`, today's continue and resume behaviour is unchanged
+- [ ] T063 [US1] In `mentor/lib/session.mjs` (part of T017's rewrite): add the `fresh` option per contracts/skill-module.md › 4; add `LESSON_UNDERWAY` to `mentor/errors.mjs` with the text in contracts/shared-tools.md › Errors. T062 passes
+
+### More skill 3 targets in Mentor Practice 2 (spec 010 SR-2)
+
+- [ ] T064 🖐 [US1] In `mentor/dev/build-practice-comp-2.jsx` (T041, same script and sitting, before T042's captures), with every entry in the answer key. Keys are linear unless stated, so these layers aren't skill 2 candidates, and no Opacity on a skill 3 layer goes between 0 and 100 (use 20 → 100), so none is a skill 1 candidate (spec 009 FR-003); this applies to T041's Badge too:
+  - The **first layers group** is T041's Dot 1, Dot 2 and Dot 3, each with **two** animated properties (Position and Opacity) whose first moves start at 0.5 s. Dot 1's Position is **hold then ramp**: a hold key at 0 s, a jump at 0.5 s, then a ramp to 1.5 s (its start is the jump at 0.5 s). Dot 2 also has an **effect key** pair (Gaussian Blur's Blurriness) starting at 0.5 s. Dot 3's Position is **separated**, with X and Y both keyed from 0.5 s.
+  - A **second layers group** for reviews and evals on other layers: "Chip A", "Chip B", "Chip C", each Position and Opacity starting at 2 s.
+  - No other layer's first key is at 0.5 s or 2 s (Blink, Spinner, Cut, Card, Badge, Flag, Pause), so nothing else joins either group (spec 009 teaching-design § 14, C-3, for skill 1's layers). Cut is built eased, as Blink is (C-3).
+  The answer key lists, per new layer, its timing measures (moves, starts, landings) and its easing pair states
+- [ ] T065 [US1] After T042: add to `mentor/test/timing.test.mjs` the checks for T064's layers from `practice2-expected.json` (30 and 60 fps): Dot 1's start is 0.5 s from the hold jump, Dot 2's effect key counts in its start, Dot 3's X and Y read as one Position unit, the Dots share a start in `starts_by_frame` and so do the Chips, and no other layer's start shares a frame with either group; T043's easing check covers the new layers
+
+**Checkpoint**: T058 to T065 pass; easing's output on Mentor Practice is unchanged (T004).
+
+---
+
 ## Phase 6: User Story 6 — Easing still holds, and the hand-over (P1)
 
 **Purpose**: prove FR-035 and SC-004 on the branch, and leave the parallel builders a working
@@ -258,13 +299,15 @@ contract.
 
 ## Dependencies & execution order
 
-- **Phase 1** → **Phase 2** (blocking) → Phases 3, 4, 5 → Phase 5b → **Phase 6**. Phase 5b
+- **Phase 1** → **Phase 2** (blocking) → Phases 3, 4, 5 → Phases 5b and 5c → **Phase 6**. Phase 5b
   (T049–T057) needs T017 (session) and T034 (record writes) done, and runs before T044–T048.
+  Phase 5c: T058 → T059 with T040; T060 → T061 and T062 → T063 with T017 (write T060 and T062
+  with T006, before the rewrite); T064 with T041, before T042; T065 after T042.
 - Phases 3, 4 and 5 don't depend on each other except: T026 needs T033 (`isDue`); T017 adds
   `pastTargets` which T034 extends. Do Phase 4's T033 before T026, or stub `isDue` first.
 - Within Phase 2: tests T004 to T008 first; then T009 → T010; T011 → T012; T014 → T015 → T017 →
   T019 → T020 → T021.
-- 🖐 tasks T041, T042 and T047 need AE and the lock; batch them in one sitting after Phase 5's
+- 🖐 tasks T041, T064, T042 and T047 need AE and the lock; batch them in one sitting after Phase 5's
   pure tasks, with the cockpit off AE.
 - After Phase 6 and the merge: the cockpit runs quickstart › 6 (add-only check), then starts specs
   008 to 010's builders in parallel (at most three Opus agents).
@@ -272,7 +315,7 @@ contract.
 ## Parallel opportunities (if more than one sitting)
 
 Tests marked [P] in each phase can be written in any order. T022, T023, T024, T030, T031, T037,
-T038 are all independent new files. With one builder this only means the order is free.
+T038 are all independent new files; so are T058, T060 and T062's test additions. With one builder this only means the order is free.
 
 ## Implementation strategy
 
@@ -287,4 +330,4 @@ T038 are all independent new files. With one builder this only means the order i
 Don't merge a partial branch: the parallel builders start only from the full merge, because
 after it nothing shared can change without a new owner branch.
 
-**Task count:** 57 (T001–T057): Setup 3, Foundational 18, US2 8, US3 7, US1 16 (7 in Phase 5, 9 in Phase 5b), US6 5. Three are 🖐 live (T041, T042, T047). T049–T057 were added 2026-10-20 for FR-038; they run before Phase 6 despite their numbers.
+**Task count:** 65 (T001–T065): Setup 3, Foundational 18, US2 8, US3 7, US1 24 (7 in Phase 5, 9 in Phase 5b, 8 in Phase 5c), US6 5. Four are 🖐 live (T041, T064, T042, T047). T049–T057 were added 2026-10-20 for FR-038 and T058–T065 on 2026-10-21 for the skill specs' requests; both run before Phase 6 despite their numbers.
