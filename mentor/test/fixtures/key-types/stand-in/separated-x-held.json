@@ -1,0 +1,1513 @@
+{
+  "synthetic": "stand-in for mentor/test/fixtures/key-types/separated-x-held.json",
+  "taken_at": "2026-10-21T12:00:00.000Z",
+  "project": "Claude AE Tutor Test.aep",
+  "comp": {
+    "id": 300,
+    "name": "Mentor Practice 2",
+    "duration": 8,
+    "frame_rate": 30
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Blink",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.4,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "time": 1.8,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "time": 2.2,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Spinner",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Rotate Z",
+          "display_path": "Transform › Rotation",
+          "match_name": "ADBE Rotate Z",
+          "display_name": "Rotation",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.25,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 4.25,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 360,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Cut",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 3,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3.1,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Card",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1.2,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                400,
+                700,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2.4,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                800,
+                700,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Scale",
+          "display_path": "Transform › Scale",
+          "match_name": "ADBE Scale",
+          "display_name": "Scale",
+          "dimensions": 3,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 1.2,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                80,
+                80,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2.4,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                100,
+                100,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                },
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Dot 1",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "hold",
+              "out_type": "hold",
+              "value": [
+                300,
+                300,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                300,
+                400,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                700,
+                400,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "name": "Dot 2",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                300,
+                500,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                700,
+                500,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001",
+          "display_path": "Effects › Gaussian Blur › Blurriness",
+          "match_name": "ADBE Gaussian Blur 2-0001",
+          "display_name": "Blurriness",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 10,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "name": "Dot 3",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position_0",
+          "display_path": "Transform › X Position",
+          "match_name": "ADBE Position_0",
+          "display_name": "X Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "hold",
+              "value": 300,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 700,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Position_1",
+          "display_path": "Transform › Y Position",
+          "match_name": "ADBE Position_1",
+          "display_name": "Y Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 600,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.25,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 500,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "name": "Badge",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Scale",
+          "display_path": "Transform › Scale",
+          "match_name": "ADBE Scale",
+          "display_name": "Scale",
+          "dimensions": 3,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 3.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                60,
+                60,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 4.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                100,
+                100,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 3.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 4.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "name": "Chip A",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1200,
+                820,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1400,
+                820,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "name": "Chip B",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1200,
+                760,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1400,
+                760,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "name": "Chip C",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1200,
+                700,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1400,
+                700,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 20,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "name": "Flag",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 4,
+              "in_type": "hold",
+              "out_type": "hold",
+              "value": [
+                1500,
+                300,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 4.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1500,
+                500,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "time": 5.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1700,
+                500,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "name": "Pause",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                200,
+                900,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 5.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                500,
+                900,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "time": 6,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                500,
+                900,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "time": 6.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                800,
+                900,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "host": {
+    "ae_version": "26.5x89",
+    "os": "Macintosh OS 27.0.1/64"
+  }
+}

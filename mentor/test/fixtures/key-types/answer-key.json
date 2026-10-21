@@ -1,0 +1,349 @@
+{
+  "about": "Spec 009 answer key (tasks T003, SC-003), written by hand from the fixtures' shapes, not from the code. By fixture file name: candidates (layer › property, earliest first, all of them before the cap of 3), focus cases, constant-speed verdicts. 'checks' grades a current fixture against a lesson started on a baseline. Pair ids are '<layer index>/<property path>/<pair>'. Until the live sitting the fixtures are the stand-ins in stand-in/; the names stay the same.",
+  "fixtures": {
+    "practice2-before.json": {
+      "candidates": ["Blink › Opacity", "Cut › Opacity"],
+      "not_candidates": ["Spinner › Rotation", "Dot 1 › Opacity", "Badge › Opacity", "Chip A › Opacity", "Card › Position"],
+      "held_examples": [
+        { "layer": "Dot 1", "property": "Position", "jump_time": 0.5 },
+        { "layer": "Flag", "property": "Position", "jump_time": 4.5 }
+      ],
+      "left_out_reasons": [],
+      "focus": [
+        {
+          "name": "Blink",
+          "refs": [{ "layer": "Blink", "property": "Opacity" }],
+          "targets": ["1/ADBE Transform Group/ADBE Opacity/1", "1/ADBE Transform Group/ADBE Opacity/2", "1/ADBE Transform Group/ADBE Opacity/3"],
+          "demo_target": "1/ADBE Transform Group/ADBE Opacity/1",
+          "refused": []
+        },
+        {
+          "name": "Cut alone: one pair, no demo",
+          "refs": [{ "layer": "Cut", "property": "Opacity" }],
+          "targets": ["3/ADBE Transform Group/ADBE Opacity/1"],
+          "demo_target": null,
+          "no_demo_reason": "single_target",
+          "refused": []
+        },
+        {
+          "name": "Separated Position means each dimension (row 7)",
+          "refs": [{ "layer": "Dot 3", "property": "Position" }],
+          "targets": ["7/ADBE Transform Group/ADBE Position_0/1", "7/ADBE Transform Group/ADBE Position_1/1"],
+          "demo_target": "7/ADBE Transform Group/ADBE Position_0/1",
+          "refused": []
+        },
+        {
+          "name": "Pause pairs left out of a named property (row 16)",
+          "refs": [{ "layer": "Pause", "property": "Position" }],
+          "targets": ["13/ADBE Transform Group/ADBE Position/1", "13/ADBE Transform Group/ADBE Position/3"],
+          "demo_target": "13/ADBE Transform Group/ADBE Position/1",
+          "refused": []
+        },
+        {
+          "name": "Some pairs held already: only the others (row 5)",
+          "refs": [{ "layer": "Dot 1", "property": "Position" }],
+          "targets": ["5/ADBE Transform Group/ADBE Position/2"],
+          "demo_target": null,
+          "no_demo_reason": "single_target",
+          "refused": []
+        },
+        {
+          "name": "A Position jump the learner names is allowed (FR-005)",
+          "refs": [{ "layer": "Card", "property": "Position" }],
+          "targets": ["4/ADBE Transform Group/ADBE Position/1"],
+          "demo_target": null,
+          "no_demo_reason": "single_target",
+          "refused": []
+        },
+        {
+          "name": "Unknown names",
+          "refs": [{ "layer": "Nobody", "property": "Opacity" }, { "layer": "Blink", "property": "Scale" }],
+          "targets": [],
+          "demo_target": null,
+          "no_demo_reason": "awaiting_focus",
+          "refused": [
+            { "layer": "Nobody", "property": "Opacity", "reason": "not_found" },
+            { "layer": "Blink", "property": "Scale", "reason": "not_found" }
+          ]
+        }
+      ],
+      "should_move": { "refs": [{ "layer": "Cut", "property": "Opacity" }], "candidates": ["Blink › Opacity"] },
+      "review_exclude": {
+        "blink": { "exclude": [{ "layer": "Blink", "property": "Opacity" }], "candidates": ["Cut › Opacity"] },
+        "both": { "exclude": [{ "layer": "Blink", "property": "Opacity" }, { "layer": "Cut", "property": "Opacity" }], "candidates": [] }
+      },
+      "constant_speed": [
+        { "ref": { "layer": "Spinner", "property": "Rotation" }, "verdict": "linear" },
+        { "ref": { "layer": "Spinner" }, "verdict": "linear" },
+        { "ref": { "layer": "Dot 3", "property": "Position" }, "verdict": "linear" },
+        { "ref": { "layer": "Blink", "property": "Opacity" }, "verdict": "not_linear" },
+        { "ref": { "layer": "Flag", "property": "Position" }, "verdict": "held" },
+        { "ref": { "layer": "Logo", "property": "Rotation" }, "verdict": "not_found" }
+      ]
+    },
+    "practice-now.json": {
+      "candidates": ["Subtitle › Opacity", "Title › Opacity"],
+      "not_candidates": ["Cursor › Opacity", "Logo › Rotation"],
+      "held_examples": [
+        { "layer": "Cursor", "property": "Opacity", "jump_time": 0.5 },
+        { "layer": "Cursor", "property": "Opacity", "jump_time": 1 }
+      ],
+      "left_out": {
+        "hidden": ["Old Take"],
+        "precomp": ["Icon"],
+        "expression": ["Logo › Rotation"],
+        "already_held": ["Cursor › Opacity"]
+      },
+      "focus": [
+        {
+          "name": "Refusals (FR-005, rows 1, 3, 4, 10)",
+          "refs": [
+            { "layer": "Cursor", "property": "Opacity" },
+            { "layer": "Logo", "property": "Rotation" },
+            { "layer": "Logo", "property": "Scale" },
+            { "layer": "Icon", "property": "Opacity" }
+          ],
+          "targets": [],
+          "demo_target": null,
+          "no_demo_reason": "awaiting_focus",
+          "refused": [
+            { "layer": "Cursor", "property": "Opacity", "reason": "all_held" },
+            { "layer": "Logo", "property": "Rotation", "reason": "expression" },
+            { "layer": "Logo", "property": "Scale", "reason": "single_key" },
+            { "layer": "Icon", "property": "Opacity", "reason": "precomp_inside" }
+          ]
+        },
+        {
+          "name": "Hidden layer allowed when named, never the demo (row 11)",
+          "refs": [{ "layer": "Old Take", "property": "Position" }],
+          "targets": ["8/ADBE Transform Group/ADBE Position/1"],
+          "demo_target": null,
+          "no_demo_reason": "single_target",
+          "refused": []
+        }
+      ],
+      "should_move": { "refs": [{ "layer": "Title", "property": "Opacity" }, { "layer": "Subtitle", "property": "Opacity" }], "candidates": [], "no_demo_reason": "no_candidate" },
+      "constant_speed": [
+        { "ref": { "layer": "Logo", "property": "Rotation" }, "verdict": "expression" },
+        { "ref": { "layer": "Logo", "property": "Scale" }, "verdict": "single_key" },
+        { "ref": { "layer": "CTRL", "property": "Position" }, "verdict": "linear" },
+        { "ref": { "layer": "Cursor", "property": "Opacity" }, "verdict": "held" },
+        { "ref": { "layer": "Nobody", "property": "Position" }, "verdict": "not_found" }
+      ]
+    },
+    "spinner-eased.json": {
+      "constant_speed": [{ "ref": { "layer": "Spinner", "property": "Rotation" }, "verdict": "not_linear", "detail": [{ "from_time": 0.25, "to_time": 4.25, "side": "start" }] }]
+    },
+    "separated-x-held.json": {
+      "constant_speed": [{ "ref": { "layer": "Dot 3", "property": "Position" }, "verdict": "held" }]
+    },
+    "loopout-blink.json": {
+      "candidates": ["Blink › Opacity", "Cut › Opacity"],
+      "left_out": { "expression": ["Loop Blink › Opacity"] },
+      "focus": [{ "name": "loopOut blink (row 1)", "refs": [{ "layer": "Loop Blink", "property": "Opacity" }], "targets": [], "refused": [{ "layer": "Loop Blink", "property": "Opacity", "reason": "expression" }] }],
+      "constant_speed": [{ "ref": { "layer": "Loop Blink", "property": "Opacity" }, "verdict": "expression" }]
+    },
+    "hold-only-effect.json": {
+      "candidates": ["Blink › Opacity", "Cut › Opacity"],
+      "left_out": { "already_held": ["Toggle › Checkbox", "Label › Source Text"] },
+      "focus": [{
+        "name": "Hold-only parameters (row 8)",
+        "refs": [{ "layer": "Toggle", "property": "Checkbox" }, { "layer": "Label", "property": "Source Text" }],
+        "targets": [],
+        "refused": [{ "layer": "Toggle", "property": "Checkbox", "reason": "all_held" }, { "layer": "Label", "property": "Source Text", "reason": "all_held" }]
+      }]
+    },
+    "nested-opacity.json": {
+      "candidates": ["Blink › Opacity", "Cut › Opacity"],
+      "focus": [{
+        "name": "A shape fill's Opacity, named (row 9)",
+        "refs": [{ "layer": "Swatch", "property": "Opacity" }],
+        "targets": ["15/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Graphic - Fill#2/ADBE Vector Fill Opacity/1"],
+        "refused": []
+      }]
+    },
+    "overlap-layers.json": {
+      "candidates": ["Blink › Opacity", "Cut › Opacity", "Icon › Opacity", "Fader › Opacity"],
+      "named_candidates": ["Blink › Opacity", "Cut › Opacity", "Icon › Opacity"],
+      "more_candidates": 1,
+      "with_fader_kept_linear": { "candidates": ["Blink › Opacity", "Cut › Opacity", "Icon › Opacity"], "left_out": { "kept_linear": ["Fader › Opacity"] } },
+      "left_out": { "hidden": ["Ghost", "Matte"], "precomp": ["Icon"], "unknown_values": ["Old Values › Opacity"] },
+      "focus": [
+        {
+          "name": "Hidden layer named: allowed, never the demo (row 11)",
+          "refs": [{ "layer": "Ghost", "property": "Opacity" }],
+          "targets": ["16/ADBE Transform Group/ADBE Opacity/1", "16/ADBE Transform Group/ADBE Opacity/2"],
+          "demo_target": null,
+          "no_demo_reason": "hidden_or_null",
+          "refused": []
+        },
+        {
+          "name": "Null named: allowed, never the demo (row 14)",
+          "refs": [{ "layer": "Rig", "property": "Opacity" }, { "layer": "Rig", "property": "Position" }],
+          "targets": ["18/ADBE Transform Group/ADBE Opacity/1", "18/ADBE Transform Group/ADBE Position/1"],
+          "demo_target": null,
+          "no_demo_reason": "hidden_or_null",
+          "refused": []
+        },
+        {
+          "name": "Precomp's own keys and inside (row 10)",
+          "refs": [{ "layer": "Icon", "property": "Opacity" }, { "layer": "Icon", "property": "Scale" }],
+          "targets": ["15/ADBE Transform Group/ADBE Opacity/1"],
+          "refused": [{ "layer": "Icon", "property": "Scale", "reason": "precomp_inside" }]
+        },
+        {
+          "name": "Unknown values named: graded on types (row 22)",
+          "refs": [{ "layer": "Old Values", "property": "Opacity" }],
+          "targets": ["19/ADBE Transform Group/ADBE Opacity/1"],
+          "refused": []
+        },
+        {
+          "name": "A property that only pauses isn't a focus (row 16)",
+          "refs": [{ "layer": "Still", "property": "Position" }],
+          "targets": [],
+          "refused": [{ "layer": "Still", "property": "Position", "reason": "only_pauses" }]
+        }
+      ]
+    },
+    "practice-blink-before.json": {
+      "should_move": { "refs": [{ "layer": "Title", "property": "Opacity" }, { "layer": "Subtitle", "property": "Opacity" }], "candidates": [] }
+    },
+    "practice-blink-after.json": {
+      "should_move": { "refs": [{ "layer": "Title", "property": "Opacity" }, { "layer": "Subtitle", "property": "Opacity" }], "candidates": ["Logo › Opacity"] },
+      "focus": [{
+        "name": "The practice blink (row 17)",
+        "refs": [{ "layer": "Logo", "property": "Opacity" }],
+        "targets": ["7/ADBE Transform Group/ADBE Opacity/1", "7/ADBE Transform Group/ADBE Opacity/2", "7/ADBE Transform Group/ADBE Opacity/3"],
+        "demo_target": "7/ADBE Transform Group/ADBE Opacity/1",
+        "refused": []
+      }]
+    }
+  },
+  "checks": [
+    {
+      "name": "One Blink pair held, two still fading (KT-d)",
+      "baseline": "practice2-before.json", "current": "blink-one-held.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "not_held", "state": "eased", "frame_time": 1.2 },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "held_by_learner" },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "not_held", "state": "eased", "frame_time": 2 }
+      },
+      "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "Every Blink pair held (pass); the last key's out side and first key's in side are ignored",
+      "baseline": "practice2-before.json", "current": "blink-all-held.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "held_by_learner" },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "held_by_learner" },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "held_by_learner" }
+      },
+      "should_move_held": [], "extra_holds": [], "passed": true
+    },
+    {
+      "name": "Select all, toggle hold, with Cut said to fade (rows 16, 19, KT-f)",
+      "baseline": "practice2-before.json", "current": "select-all-hold.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "should_move": [{ "layer": "Cut", "property": "Opacity" }],
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "held_by_learner" },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "held_by_learner" },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "held_by_learner" }
+      },
+      "should_move_held": [{ "layer": "Cut", "property": "Opacity", "from_time": 3, "waits_until": 3.1 }],
+      "extra_holds": [
+        { "layer": "Card", "property": "Position", "time": 1.2 },
+        { "layer": "Card", "property": "Scale", "time": 1.2 },
+        { "layer": "Pause", "property": "Position", "time": 5 },
+        { "layer": "Pause", "property": "Position", "time": 6 }
+      ],
+      "passed": false
+    },
+    {
+      "name": "Held the wrong side (FR-011)",
+      "baseline": "practice2-before.json", "current": "wrong-side.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "wrong_side" },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "not_held", "state": "eased", "frame_time": 1.6 },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "not_held", "state": "eased", "frame_time": 2 }
+      },
+      "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "Mixed pair: linear out, hold in (row 6)",
+      "baseline": "practice2-before.json", "current": "mixed-pair.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "wrong_side" },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "not_held", "state": "eased", "frame_time": 1.6 },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "not_held", "state": "eased", "frame_time": 2 }
+      },
+      "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "Hold at Opacity 0 (row 12)",
+      "baseline": "practice2-before.json", "current": "hold-at-zero.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "not_held", "state": "eased", "frame_time": 1.2 },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "held_by_learner" },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "not_held", "state": "eased", "frame_time": 2 }
+      },
+      "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "A key moved mid-attempt (row 18)",
+      "baseline": "practice2-before.json", "current": "keys-moved.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "not_held", "state": "eased", "frame_time": 1.2 },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "removed_or_changed" },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "removed_or_changed" }
+      },
+      "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "X Position held, Y still slides (row 7)",
+      "baseline": "practice2-before.json", "current": "separated-x-held.json", "focus": [{ "layer": "Dot 3", "property": "Position" }],
+      "pairs": {
+        "7/ADBE Transform Group/ADBE Position_0/1": { "verdict": "held_by_learner" },
+        "7/ADBE Transform Group/ADBE Position_1/1": { "verdict": "not_held", "state": "linear", "frame_time": 0.867 }
+      },
+      "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "Demo in place (row 20)",
+      "baseline": "practice2-before.json", "current": "after-demo.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "demo": "1/ADBE Transform Group/ADBE Opacity/1",
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "held_by_demo" },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "not_held", "state": "eased", "frame_time": 1.6 },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "not_held", "state": "eased", "frame_time": 2 }
+      },
+      "demo_undone": false, "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "Demo undone (row 20)",
+      "baseline": "practice2-before.json", "current": "after-demo-undone.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "demo": "1/ADBE Transform Group/ADBE Opacity/1",
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "not_held", "state": "eased", "frame_time": 1.2 },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "not_held", "state": "eased", "frame_time": 1.6 },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "not_held", "state": "eased", "frame_time": 2 }
+      },
+      "demo_undone": true, "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "Re-held by the learner after a check saw the demo undone (row 20)",
+      "baseline": "practice2-before.json", "current": "after-demo-reheld.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "demo": "1/ADBE Transform Group/ADBE Opacity/1", "demo_seen_undone": true,
+      "pairs": {
+        "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "held_by_learner" },
+        "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "not_held", "state": "eased", "frame_time": 1.6 },
+        "1/ADBE Transform Group/ADBE Opacity/3": { "verdict": "not_held", "state": "eased", "frame_time": 2 }
+      },
+      "demo_undone": true, "should_move_held": [], "extra_holds": [], "passed": false
+    },
+    {
+      "name": "Another comp (row 23)",
+      "baseline": "practice2-before.json", "current": "practice-now.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "comp_matches": false, "pairs": {}, "should_move_held": [], "extra_holds": [], "passed": false
+    }
+  ]
+}
