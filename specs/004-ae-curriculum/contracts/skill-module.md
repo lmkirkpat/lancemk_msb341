@@ -54,7 +54,7 @@ A skill's tools follow easing's shape (spec 002 contract) so the six stages work
 
 | Tool | Does | Must |
 |---|---|---|
-| `<prefix>_snapshot` | Read the comp and start or continue the lesson | Call `takeSnapshot()` from `mentor/lib/snapshot.mjs`, then `session.start(snapshot, { skill, analyze, focus_layers, mode })`. Accept `mode: "lesson" \| "review"` and `focus_layers`. Return `host` (from `parseHost`), the lesson kind (`new`, `continued`, `resumed`), targets and `demo_target` as the session gives them |
+| `<prefix>_snapshot` | Read the comp and start or continue the lesson | Call `takeSnapshot()` from `mentor/lib/snapshot.mjs`, then `session.start(snapshot, { skill, analyze, focus_layers, mode })`. Accept `mode: "lesson" \| "review"` and `focus_layers`. Return `host` (from `parseHost`), the lesson kind (`new`, `continued`, `resumed`), targets and `demo_target` as the session gives them. Easing's `snapshot_project` predates this contract and is grandfathered: it returns no `host` (FR-035 keeps its output unchanged) |
 | `<prefix>_demo` | The one demonstration | `session.assertCanDemo(id)` **before** touching AE, then `runSnippet(name, args, { undo: true })`, then `session.recordDemo(id)`. Return what changed and `undo: "Edit > Undo"`. Skill 4 (and maybe 10) has none |
 | `<prefix>_check` | Check the learner's attempt | A fresh `takeSnapshot()`, the skill's own diff against `session.currentLesson().baseline`, then `session.markChecked(passed, { demoUndone })` only when the comp matches. Never changes the baseline. Lists other changes with `unexpectedChanges()` where it grades pairs |
 
