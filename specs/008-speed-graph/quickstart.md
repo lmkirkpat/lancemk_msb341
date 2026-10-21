@@ -53,7 +53,10 @@ made by hand on the duplicate. The names match `answer-key.json`.
 | `after-demo.json`, `after-demo-undone.json`, `after-demo-redone.json` | The demo (L-3), its undo, then the learner's own shape (row 18) |
 
 L-6: on 33/33, 15/80 and one in-between pair, look at where the speed graph peaks and write the
-part (first, middle, last) next to what `fastestPart` says (SC-004's 3 of 3).
+part (first, middle, last) next to what `fastestPart` says (SC-004's 3 of 3; 15/80 is expected
+in the first part, at about 0.13 of the pair). Then one pair whose two influences add up to more
+than 100 (for example 60/70): log where the graph peaks against `fastestPart`, which scales both
+down to sum to 100 (spec › Assumptions; logged, not one of SC-004's 3).
 
 Then delete the duplicate comp, check Mentor Practice is as it was (`capture.mjs --compare
 mentor/test/fixtures/speed-graph/practice-now.json` says "Matches"), check no capture holds a user

@@ -54,7 +54,7 @@ Shared changes go in **Requests** and the hand-back, never in a task. The builde
 
 ## Phase 1: Setup (cloud)
 
-- [x] T001 (2026-10-21: 274 tests green; `practice2-*.json` not captured yet, so stand-ins per the cockpit, in `mentor/test/fixtures/offset/stand-in/`) Confirm the base: `cd mentor && npm test` green (note the count); `mentor/lib/timing.mjs` exports `timing` and `clusters` and gives Title's Position two or more moves (spec 004 T058); `mentor/test/fixtures/practice2-before.json` and `practice2-60fps.json` exist with Dot 1 to 3 and Chip A to C; `registerErrors` is exported from `mentor/errors.mjs`. If any is missing, stop and hand back
+- [x] T001 (2026-10-21: 274 tests green; `practice2-*.json` not captured yet, so the precondition was met with stand-ins per the cockpit, in `mentor/test/fixtures/offset/stand-in/`, until spec 004's T042 captures them live) Confirm the base: `cd mentor && npm test` green (note the count); `mentor/lib/timing.mjs` exports `timing` and `clusters` and gives Title's Position two or more moves (spec 004 T058); `mentor/test/fixtures/practice2-before.json` and `practice2-60fps.json` exist with Dot 1 to 3 and Chip A to C; `registerErrors` is exported from `mentor/errors.mjs`. If any is missing, stop and hand back
 - [x] T002 Create `mentor/test/fixtures/offset/README.md`: every fixture, its source (live capture and sitting step, synthetic for rows 5, 18, 19, or stand-in for which live file), and the rule that stand-ins are deleted before merge (research R8)
 
 ---
@@ -140,7 +140,7 @@ method or gap.
 
 ## Phase 7: Cloud hand-back
 
-- [x] T029 Run `cd mentor && npm test` and `node --test .claude/hooks/test/`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (FR-001, SC-008)
+- [x] T029 Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (FR-001, SC-008)
 - [ ] T030 (not run 2026-10-21: `/agent-audit` isn't installed in the cloud container) Run `/agent-audit` on `.claude/skills/offset-mentor/SKILL.md` and fix what it finds in that file
 - [x] T031 Hand back for the sitting: branch and commit, test counts, T029's output, the `<!-- L-1 -->` places, RQ-1's outcome from T025, and what Phase 8 needs (quickstart › 2–5)
 

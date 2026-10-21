@@ -38,7 +38,8 @@ Saved as `mentor/test/fixtures/key-types/<name>.json`; names match `answer-key.j
 |---|---|
 | `practice-now.json` | Mentor Practice itself, as it is (FR-008: Title and Subtitle Opacity candidates, the Cursor held, Logo's expression) |
 | `blink-one-held.json`, `blink-all-held.json` | One Blink pair held; every Blink pair held (KT-d, pass) |
-| `select-all-hold.json` | Every key on Title held, including Position (rows 19, KT-f) |
+| `select-all-hold.json` | Blink, Cut, Card and Pause all held, select-all style (rows 16, 19, KT-f). Title isn't on Mentor Practice 2, so the builder's stand-in uses these layers (2026-10-21) |
+| `overlap-layers.json` | A precomp's own Opacity, hidden layers, a matte with its eye off, a null, unknown values, a linear 0 to 100 fade, a pause-only property (rows 10, 11, 13, 14, 16, 21, 22; added 2026-10-21, the builder's stand-in) |
 | `wrong-side.json` | Blink's second key held on its in side only (row 6 if L-1 says it travels; FR-011) |
 | `mixed-pair.json` | L-1's shape |
 | `separated-x-held.json` | A separated Position with X held and Y not (row 7) |

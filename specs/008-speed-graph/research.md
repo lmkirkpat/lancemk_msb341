@@ -32,8 +32,10 @@ covers only this skill's calls.
   straight-line distance). Speeds' sign follows `Δ` (AE reports magnitudes for spatial
   properties).
 - **Rationale:** spec Assumptions name this model; TD § 5 stage 2 needs only the coarse part. On
-  Easy Ease (33.33, speed 0 both) the peak is at 0.5; on 15/80 it's near 0.3, inside "first" and
-  within 0.05 of the boundary on some pairs, which the tolerance handles.
+  Easy Ease (33.33, speed 0 both) the peak is at 0.5. *Corrected 2026-10-21 from the build:* on
+  15/80 the model puts the peak at about **0.13** of the pair, well inside "first" (the first draft
+  said near 0.3). When the two influences add up to more than 100, the model scales both down to
+  sum to 100 so time never runs backwards; that's an assumption L-6 checks (spec › Assumptions).
 - **Check live:** L-6 compares three pairs with the graph's peak by eye (SC-004).
 - **Alternatives:** an analytic root of the speed's derivative (more code, same coarse answer);
   thirds of influence alone (wrong when speeds aren't 0).

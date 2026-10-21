@@ -51,7 +51,7 @@ Shared changes go in **Requests** and the hand-back, never in a task. The builde
 
 ## Phase 1: Setup (cloud)
 
-- [ ] T001 Confirm the base: `cd mentor && npm test` green (note the count); `mentor/lib/marks.mjs` exports `applies`, `marksFor`, `isKeptLinear`; `session.mjs` exports `keepLinear` and `start` accepts `skill_options` and `fresh`; `mentor/test/fixtures/practice2-before.json` exists with key values on Blink, Spinner and Cut. If any is missing, stop and hand back
+- [ ] T001 (2026-10-21: the `practice2-before.json` precondition was met with stand-ins, by the cockpit's call, until spec 004's T042 captures it live; the rest of the task stands) Confirm the base: `cd mentor && npm test` green (note the count); `mentor/lib/marks.mjs` exports `applies`, `marksFor`, `isKeptLinear`; `session.mjs` exports `keepLinear` and `start` accepts `skill_options` and `fresh`; `mentor/test/fixtures/practice2-before.json` exists with key values on Blink, Spinner and Cut. If any is missing, stop and hand back
 - [x] T002 Create `mentor/test/fixtures/key-types/README.md`: every fixture, its source (live capture and sitting step, or stand-in for which live file), and the rule that stand-ins are deleted before merge (research R8)
 
 ---
@@ -117,7 +117,7 @@ easing lesson on that comp afterwards leaves Spinner out.
 - [x] T020 [US2] Add to `mentor/test/key-types-tools.test.mjs`: `key_types_check` with `constant_speed` Spinner › Rotation → `linear`, `marked: true`, and after `record_lesson` the record has exactly one mark for it; `expression`, `not_linear`, `not_found`, and no `constant_speed` → no `keepLinear` call (spy) and 0 marks; then `snapshot_project` (easing) in fixture mode on the same comp lists Spinner Rotation in `skipped` with `kept_linear`; and `key_types_snapshot` with T019's record leaves Spinner out of candidates as `kept_linear` (FR-015)
 - [x] T021 [US2] Wire `constantSpeed` and `session.keepLinear` into `key_types_check` in `mentor/tools/key-types.mjs` (research R6: only on `linear`; a `NOT_KEPT_LINEAR` throw becomes `not_linear`). T020 passes
 - [x] T022 [US2] Confirm `mentor/tools/key-types.mjs` exposes no input that writes a mark other than `constant_speed` through the check (a test in T020 lists every tool's input schema)
-- [x] T023 [US2] Add stage 6 to `.claude/skills/key-types-mentor/SKILL.md` per TD § 5 and FR-014: ask whether a move should run at constant speed; on `not_linear`, one sentence on how (menu path only, `<!-- L-2 -->`) and check again on "done"; on `expression`, say an expression drives it and the mentor can't check the keys, no mark, not a fail; on `held`, ask which they meant; nothing named or "never mind" → item 3 doesn't apply
+- [x] T023 [US2] Add stage 6 to `.claude/skills/key-types-mentor/SKILL.md` per TD § 5 and FR-014: ask whether a move should run at constant speed; on `not_linear`, one sentence on how, with no Keyframe Interpolation path or shortcut until L-2 (as T018: the place is marked `<!-- L-2 -->` and filled in T034), and check again on "done"; on `expression`, say an expression drives it and the mentor can't check the keys, no mark, not a fail; on `held`, ask which they meant; nothing named or "never mind" → item 3 doesn't apply
 
 ---
 
@@ -143,7 +143,7 @@ offers Cut, refuses a demo and records a review.
 
 ## Phase 7: Cloud hand-back
 
-- [x] T028 Run `cd mentor && npm test` and `node --test .claude/hooks/test/`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (FR-001, SC-004)
+- [x] T028 Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (FR-001, SC-004)
 - [ ] T029 Run `/agent-audit` on `.claude/skills/key-types-mentor/SKILL.md` and fix what it finds in that file
 - [x] T030 Hand back for the sitting: branch and commit, test counts, T028's output, the `<!-- L-1 -->` and `<!-- L-2 -->` places, and what Phase 8 needs (quickstart › 2–5)
 

@@ -53,7 +53,7 @@ into a task here. `specs/008-speed-graph/tasks.md` itself may be checked off by 
 
 ## Phase 1: Setup (cloud)
 
-- [ ] T001 Confirm the base: `cd mentor && npm test` green on the untouched branch (note the count in the hand-back); `mentor/lib/snapshot.mjs`, `mentor/lib/host.mjs`, `mentor/fixture/README.md` and `mentor/test/fixtures/practice2-before.json` exist; `session.start` accepts `skill`, `analyze`, `mode`, `skill_options` (grep `mentor/lib/session.mjs`). If any is missing, stop and hand back: the shared merge isn't in
+- [ ] T001 (2026-10-21: the `practice2-before.json` precondition was met with stand-ins, by the cockpit's call, until spec 004's T042 captures it live; the rest of the task stands) Confirm the base: `cd mentor && npm test` green on the untouched branch (note the count in the hand-back); `mentor/lib/snapshot.mjs`, `mentor/lib/host.mjs`, `mentor/fixture/README.md` and `mentor/test/fixtures/practice2-before.json` exist; `session.start` accepts `skill`, `analyze`, `mode`, `skill_options` (grep `mentor/lib/session.mjs`). If any is missing, stop and hand back: the shared merge isn't in
 - [x] T002 Create `mentor/test/fixtures/speed-graph/README.md` listing every fixture this skill will use, its source (live capture, which sitting step, or stand-in for which live file), and the rule that stand-ins are deleted before merge (research R8)
 
 ---
@@ -139,7 +139,7 @@ half-eased or linear focus pair gets easing's hint.
 ## Phase 6: Overlap rows and cloud hand-back (cloud)
 
 - [x] T025 Write `mentor/test/speed-graph-overlap.test.mjs`: one named test per row 1 to 19 of spec › Edge cases where concepts overlap, each asserting what the candidate test and the check see on its fixture (stand-in for now) from `answer-key.json`: row 1 Logo Rotation skipped and its key edits in `other_changes`; 2 nothing claimed; 3 expression off → graded; 4 single key not a pair; 5 hold or linear side not a candidate and fails c; 6 half eased; 7 bezier out, hold in → not a candidate and fails c; 8 Bar X Position separate; 9 Scale's third dimension not graded; 10 Old Take left out, allowed if named, never the demo; 11 CTRL allowed if named, never the demo; 12 shared key; 13 Icon's own keys only; 14 Trim Paths End allowed if named, not default; 15 Title's own keys only; 16 pause not a candidate; 17 keys changed; 18 demo credit; 19 Easy Ease again
-- [x] T026 Run `cd mentor && npm test` and `node --test .claude/hooks/test/`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (SC-009)
+- [x] T026 Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (SC-009)
 - [ ] T027 Run `/agent-audit` on `.claude/skills/speed-graph-mentor/SKILL.md` (skill-builder persona › In this repo) and fix what it finds in that file
 - [x] T028 Hand back to the cockpit for the sitting: branch and commit, test counts, T026's output, the `<!-- L-1 -->` places, and what Phase 7 needs (quickstart › 2–5)
 

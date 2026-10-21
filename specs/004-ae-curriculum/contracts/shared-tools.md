@@ -70,7 +70,8 @@ Reads the record, tries one snapshot of the active comp, and returns:
     "skill": "parenting.null", "skill_name": "Move a group with a null",
     "built": false, "learned": false,
     "missing_prerequisites": [{ "skill": "transform.anchor", "skill_name": "Set the pivot" }],
-    "has_focus": false
+    "has_focus": false,
+    "review_available": false
   }
 }
 ```
@@ -83,6 +84,10 @@ Reads the record, tries one snapshot of the active comp, and returns:
 | `lesson` | `next_in_path_no_focus` | 4. As 3 without a focus; `offer_practice_comp: true` |
 | — | `nothing_left` | `recommendation: null`: every built skill is learned and no review is offered |
 
+- **`requested.review_available`** is true when the requested skill's `FINDERS` entry has
+  `review: true` (it has a review mode). When it's false (easing this sprint, plan › P5),
+  `/next-mentor` offers a practice lesson instead of a review, both for a learned skill and when
+  the learner says they already know an unlearned one, and doesn't mention reviews.
 - **AE unreachable or busy:** `looked_at_comp: false`; steps 2 to 4 skip the "in the comp" tests,
   step 2 offers nothing (a review needs a target), and step 3 falls to step 4's wording without
   offering the practice comp. The mentor says it hasn't looked at the comp (Edge Cases).

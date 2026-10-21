@@ -7,7 +7,9 @@ analysis is spec 004's ([research.md](../004-ae-curriculum/research.md) R11,
 ## R1. The floor, in frames (FR-008, FR-023; spec 004 FR-027)
 
 - **Decision:** `floorFrames(fps) = max(2, fps / 15)`; `isSame(a, b, fps)` is
-  `|a − b| × fps < floorFrames(fps) − 1e-6`. At 30 fps the floor is 2 frames (1 apart is the same, 2
+  `|a − b| × fps < floorFrames(fps) − 0.1`. The 0.1 frame (replacing the first draft's `1e-6`,
+  2026-10-21, as built) allows for key times read to the millisecond: 0.967 s and 1.033 s at 30
+  fps are exactly 2 frames apart but read as 1.98, and must not count as the same. At 30 fps the floor is 2 frames (1 apart is the same, 2
   isn't); at 60 fps it's 4 (3 the same, 4 not). The same function serves starts, landings, the demo
   refusal (FR-010), the stage 3 gap check (FR-007) and the rhythm sentence (FR-015). It's the only
   threshold in the skill's code.
@@ -66,8 +68,11 @@ analysis is spec 004's ([research.md](../004-ae-curriculum/research.md) R11,
   `time + shift_frames / frameRate`; sets every attribute; and removes the old key. It verifies the
   new times and returns what moved. Run with `undo: true` (one undo step). Layers kind:
   `property_paths` is every keyed property on the layer (effects, both separated dimensions, single
-  keys); properties kind: the demo property's paths. The tool repeats the comp-end and floor checks
-  from the snapshot before calling, so a refusal usually never reaches AE.
+  keys); properties kind: the demo property's paths. Before calling, the tool takes **one fresh
+  read** (not the lesson's baseline), refuses if the active comp isn't the lesson's, matches the
+  demo layer by name in that read, and repeats the refusals (whole frames, floor, lock where the
+  read shows it, comp end) on it, so a refusal usually never reaches AE and a layer moved in the
+  stack or keys the learner already pushed are seen as they are now (2026-10-21, as built).
 - **Rationale:** ExtendScript has no "move key"; re-creating keys is the only fixed way. Last to
   first is collision-free for a later shift. Locked layers aren't in the snapshot until R1, so the
   snippet reads `layer.locked` itself.
@@ -78,7 +83,11 @@ analysis is spec 004's ([research.md](../004-ae-curriculum/research.md) R11,
 - **Decision:** layers are matched baseline to now by name when names are unique in the comp, else
   by index (FR-012, row 17). Per member, start and landing before and now from `timing()` on each
   snapshot (properties kind: the remembered `move_index`; if that unit's move count changed, the
-  member is `keys_changed` and not graded). Pass per FR-008, with `split` (stored plus the check's
+  member is `keys_changed` and not graded; layers kind: `keys_changed` when the layer has no start
+  now). A `keys_changed` member doesn't block a pass as long as at least 2 members are graded;
+  with fewer than 2 graded there's no pass (2026-10-21, as built). The "pops in" split is looked
+  for in every layer where **any** counted property (or dimension) moved, not only where the
+  layer's start moved (FR-008). Pass per FR-008, with `split` (stored plus the check's
   `split` input, union) exempting a layer from L2. Demo credit: the demo member is `demo` while its
   start is within half a frame of baseline + gap, `undone` when back at the baseline (then
   `markChecked(passed, { demoUndone: true })`), else the learner's. Order: if the new start order

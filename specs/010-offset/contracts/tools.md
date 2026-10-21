@@ -44,10 +44,19 @@ the mentor can say a gap that small still reads as together, naming no number, F
 
 ## `offset_demo`
 
-Input: `{ "target": "layer/5" }`. Order: `session.assertCanDemo(target)` → the snapshot-side
-refusals (research R5) → `runSnippet("offset-demo", { comp_id, layer_index, property_paths,
-shift_frames }, { undo: true })` → `session.recordDemo(target)`. `shift_frames` is the stored
-`gap_frames`. Output: data-model › Demo result.
+Input: `{ "target": "layer/5" }`. Order (as built, 2026-10-21):
+
+1. `session.assertCanDemo(target)` (`REVIEW_NO_DEMO`, `DEMO_USED`, `NOT_DEMO_TARGET`, before AE).
+2. **One fresh read**, `takeSnapshot()`; if its comp isn't the lesson's, `NO_ACTIVE_COMP`.
+3. Match the demo layer **by name** in that read (by index when names repeat) and list its
+   property paths as they are now.
+4. The refusals on that read (research R5: not whole frames, under the floor, locked where the
+   read shows it, a key past the comp's end) → `OFFSET_REFUSED` with the reason, no snippet run.
+5. `runSnippet("offset-demo", { comp_id, layer_index, property_paths, shift_frames }, { undo: true })`;
+   the snippet repeats the lock and comp-end checks itself before any write.
+6. `session.recordDemo(target)`.
+
+`shift_frames` is the stored `gap_frames`. Output: data-model › Demo result.
 
 ## `offset_check`
 
