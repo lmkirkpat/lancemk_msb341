@@ -19,7 +19,9 @@ full-stack builder.
 - [ ] Proof the agents carry over: they're deployed in building my portfolio website
 - [ ] At least one piece of work built by several agents in parallel, with notes on time and
       quality compared with building it alone
-- [ ] 10 new After Effects teaching skills, each run as a live lesson on my comp, with eval cases
+- [ ] 5 new After Effects teaching skills (the baseline), each run as a live lesson on my comp,
+      with eval cases: key types (hold and linear), the speed graph, offset, setting the pivot
+      (anchor point), and moving a group with a null
 - [ ] Specs, developed with the agents, for:
   - [ ] the expanded After Effects curriculum
   - [ ] diagnostic tools
@@ -27,3 +29,10 @@ full-stack builder.
   - [ ] a UI overhaul
 
 **Predicted difficulty:** 4
+
+**Changes:**
+
+- Oct 20: cut the new teaching skills from 10 to a baseline of 5 (key types, the speed graph,
+  offset, setting the pivot, and moving a group with a null), to make the sprint goal feasible in
+  the time the sprint has and to make sure I can execute it with quality. I would rather cut back
+  on what I'm doing and execute well than rush and turn out low-quality work.
