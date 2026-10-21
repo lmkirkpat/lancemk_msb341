@@ -326,3 +326,23 @@ test("check-branch: lists files a branch changed outside its agent's", (t) => {
   assert.equal(dirty.status, 1);
   assert.match(dirty.stdout, /product\/evals\/x\/case.json  \(owner: eval-engineer\)/);
 });
+
+test("check-branch: a skill branch may add mentor files but only the shared owner changes existing ones", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  fs.mkdirSync(path.join(r.dir, "mentor/tools"), { recursive: true });
+  fs.writeFileSync(path.join(r.dir, "mentor/tools/common.mjs"), "a");
+  r.g("add", "mentor/tools/common.mjs"); r.g("commit", "-q", "-m", "shared");
+  r.g("checkout", "-q", "-b", "skill-y");
+  fs.writeFileSync(path.join(r.dir, "mentor/tools/speed.mjs"), "");
+  r.g("add", "mentor/tools/speed.mjs"); r.g("commit", "-q", "-m", "own tool");
+  const script = path.join(HOOKS, "check-branch.mjs");
+  const added = spawnSync("node", [script, "skill-y", "skill-builder"], { cwd: r.dir, encoding: "utf8" });
+  assert.equal(added.status, 0, added.stdout + added.stderr);
+  fs.writeFileSync(path.join(r.dir, "mentor/tools/common.mjs"), "b");
+  r.g("add", "mentor/tools/common.mjs"); r.g("commit", "-q", "-m", "edit shared");
+  const edited = spawnSync("node", [script, "skill-y", "skill-builder"], { cwd: r.dir, encoding: "utf8" });
+  assert.equal(edited.status, 1);
+  assert.match(edited.stdout, /mentor\/tools\/common.mjs  \(shared: changes go to the shared-code owner\)/);
+  const owner = spawnSync("node", [script, "skill-y", "skill-builder", "--shared-owner"], { cwd: r.dir, encoding: "utf8" });
+  assert.equal(owner.status, 0, owner.stdout + owner.stderr);
+});

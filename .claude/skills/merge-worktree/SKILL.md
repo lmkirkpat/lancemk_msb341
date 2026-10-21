@@ -26,6 +26,10 @@ If unsure what exists, run `git worktree list`.
    file the branch changed that the persona doesn't own, which catches writes made through Bash
    that the ownership hook can't see. If it lists any, stop and show them; a file outside the
    persona's row goes back to its owner. Exceptions are the human's call, not yours.
+   It also lists existing shared files (`addOnly` in `ownership.json`: `mentor/`, `bridge/`,
+   `.claude/skills/*-mentor/`) the branch changed. Add `--shared-owner` only for the one branch
+   you named shared-code owner when you launched the wave; for any other branch, those changes
+   go back to the owner as a request.
 
 3. **Check numbers.** `git diff --name-only --diff-filter=A main...<branch>` lists new files.
    Any new numbered file (`specs/NNN-*`, `decisions/NNN-*`, `discovery/interviews/NNN-*`, eval

@@ -102,19 +102,31 @@ guard should block it.
 
 1. **Plan in the cockpit.** Decide the pieces, which persona does each, and hand out any numbers
    (spec `012`, eval case `26`) in the prompt. Numbers taken by agents themselves collide.
-2. **Commit first.** `git status --short` should be empty, including the `.aep`. A worktree is a
-   fresh checkout, so uncommitted changes (a CLAUDE.md edit, say) never reach it, and a
-   subagent's edits aren't covered by `/rewind`: the commit is the way back.
-3. **Spawn every persona that has Bash in a worktree** (`isolation: "worktree"`): skill-builder,
+2. **Commit and push first.** `git status --short` should be empty, including the `.aep`. A
+   worktree is a fresh checkout of `origin/main`, not your local `main`, so unpushed commits and
+   uncommitted changes (a CLAUDE.md edit, say) never reach it, and a subagent's edits aren't
+   covered by `/rewind`: the commit is the way back.
+3. **Stagger the launches.** At most **3 Opus agents at once**; Sonnet personas (the two
+   researchers, eval-engineer) can add up to 3 more. Launch the next agent as one hands back, and
+   start anything that depends on another's output (a mockup on its spec, a spec on its teaching
+   design) only after that output is merged. Run 1 launched nine Opus agents in 13 minutes and
+   stalled for 80 on the usage limit.
+4. **Name one shared-code owner** for each build wave (spec 004 FR-032): the one branch that may
+   change existing files under `mentor/`, `bridge/` and `.claude/skills/*-mentor/`. Every other
+   builder only adds files (its own tool file, which `mentor/tools/index.mjs` finds) and hands
+   back any change it needs to a shared file as a request. Build the shared pieces first, merge
+   them, then start the parallel builders. `check-branch.mjs` enforces this at merge
+   (`addOnly` in `ownership.json`).
+5. **Spawn every persona that has Bash in a worktree** (`isolation: "worktree"`): skill-builder,
    panel-builder, eval-engineer, spec-writer, reviewer. The ownership hook can't see a write made
    through Bash; the merge check (`check-branch.mjs`) can, but only on a branch. Personas without
    Bash (researchers, designers, design-reviewer) can share the main tree, since the hook covers
    every write they can make.
-4. **Stay off the shared resource** while a builder needs it. The cockpit never stops, so if it
+6. **Stay off the shared resource** while a builder needs it. The cockpit never stops, so if it
    takes the lock, every subagent waits the full 10 idle minutes.
-5. **Merge one branch at a time** with `/merge-worktree <branch> <persona>`. It stops on conflicts
+7. **Merge one branch at a time** with `/merge-worktree <branch> <persona>`. It stops on conflicts
    and on files outside the persona's row instead of guessing.
-6. **Write down time and quality** compared with doing it alone. That's what tells you whether the
+8. **Write down time and quality** compared with doing it alone. That's what tells you whether the
    team is worth it.
 
 ## Lessons so far

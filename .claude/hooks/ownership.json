@@ -20,5 +20,9 @@
       "!discovery/curriculum-research/**",
       "!discovery/*.aep"
     ]
+  },
+  "addOnly": {
+    "about": "Shared code (spec 004 FR-032). check-branch.mjs flags a branch that changes or removes an existing file here, unless the cockpit passes --shared-owner for the one branch it named owner. Adding new files is fine: each skill adds its own tool file, which mentor/tools/index.mjs finds.",
+    "patterns": ["mentor/**", "bridge/**", ".claude/skills/*-mentor/**"]
   }
 }

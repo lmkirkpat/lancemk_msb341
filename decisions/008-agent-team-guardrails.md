@@ -161,6 +161,7 @@ all closed in one change:
 | `ae_run_script` runs ExtendScript inside AE, past every Bash guard: `system.callSystem`, saving the `.aep`, deleting or writing files | `ae-script-guard.mjs`: blocks those calls for subagents. Text match, like the git guard |
 | Bash writes in the shared tree were never checked: `check-branch` runs only on branches | Process rule (README, "Run a parallel job"): every persona with Bash runs in a worktree. No new code |
 | Subagents could remove worktrees, delete or force branches, and switch branches in the shared tree | Added to the git guard's subagent rules. The cockpit's merge cleanup still works |
+| *2026-10-20:* ownership is per persona, so two skill-builders in one wave can both edit shared `mentor/` code (spec 004 FR-032) | `addOnly` patterns in `ownership.json`: `check-branch.mjs` flags a branch that changes or removes an existing file under `mentor/`, `bridge/` or `.claude/skills/*-mentor/`, unless the cockpit passes `--shared-owner` for the one branch it named owner. Checked at merge, not per write, so it needs no new hook |
 
 **Rejected:** staying in bypass with `deny` on push (the human pushes from their own terminal).
 Safer on push alone, but leaves every other action with no prompt and no classifier.
