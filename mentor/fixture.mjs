@@ -9,7 +9,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { MENTOR_HOME } from "./paths.mjs";
+import { pathToFileURL } from "node:url";
+import { MENTOR_HOME, MENTOR_ROOT } from "./paths.mjs";
 import { MentorError } from "./errors.mjs";
 
 export const FIXTURE_STATE = process.env.AE_MENTOR_FIXTURE_STATE || null;
@@ -68,22 +69,54 @@ function applyEase(snapshot, edit) {
   return { layer, prop, from, to };
 }
 
+function saveEdit(edit) {
+  const edits = readEdits();
+  edits.push(edit);
+  fs.writeFileSync(EDITS_FILE, JSON.stringify(edits, null, 2) + "\n");
+}
+
+// A skill's fixture twin, mentor/fixture/<snippet>.mjs (spec 004 research R9, contracts/skill-module.md
+// › 5). AE_MENTOR_FIXTURE_TWINS points tests at another folder.
+const twinsDir = () => process.env.AE_MENTOR_FIXTURE_TWINS || path.join(MENTOR_ROOT, "fixture");
+async function loadTwin(name) {
+  const file = /^[\w-]+$/.test(name) ? path.join(twinsDir(), `${name}.mjs`) : null;
+  if (!file || !fs.existsSync(file)) return null;
+  const twin = await import(pathToFileURL(file).href);
+  if (typeof twin.run !== "function" || typeof twin.apply !== "function") {
+    throw new Error(`Fixture twin ${name}.mjs must export run(args, ctx) and apply(snapshot, edit)`);
+  }
+  return twin;
+}
+
+// Every saved edit for this comp, each replayed by its own snippet's twin. An edit with no snippet
+// is from before twins existed, and is an ease.
+async function applyEdits(project) {
+  for (const edit of readEdits()) {
+    if (edit.comp_id !== project.comp.id) continue;
+    if (!edit.snippet || edit.snippet === "set-ease") {
+      applyEase(project, edit);
+      continue;
+    }
+    const twin = await loadTwin(edit.snippet);
+    if (!twin) throw new Error(`Fixture mode has no twin for the saved ${edit.snippet} edit`);
+    twin.apply(project, edit);
+  }
+  return project;
+}
+
 // A state with "undo_demo": true is the learner's Edit > Undo of the demo: the demo edit is left
 // out of this snapshot (usage notes, panel session 1).
-function snapshot() {
+async function snapshot() {
   const project = loadProject();
   if (readState().undo_demo) return project;
-  for (const edit of readEdits()) if (edit.comp_id === project.comp.id) applyEase(project, edit);
-  return project;
+  return applyEdits(project);
 }
 
 function setEase(args) {
   const project = loadProject();
   if (project.comp.id !== args.comp_id) throw new MentorError("NO_ACTIVE_COMP");
   const { layer, prop, from, to } = applyEase(project, args);
-  const edits = readEdits();
-  edits.push({ comp_id: args.comp_id, layer_index: args.layer_index, property_path: args.property_path, key_index: args.key_index });
-  fs.writeFileSync(EDITS_FILE, JSON.stringify(edits, null, 2) + "\n");
+  saveEdit({ snippet: "set-ease", comp_id: args.comp_id, layer_index: args.layer_index, property_path: args.property_path, key_index: args.key_index });
   return {
     layer: layer.name,
     display_name: prop.display_name,
@@ -109,8 +142,15 @@ function previewFrame(args) {
 
 const SNIPPETS = { snapshot, "set-ease": setEase, "preview-frame": previewFrame };
 
+// Built-in snippets first; any other name is a skill's twin, given the current snapshot (with every
+// saved edit applied) and a saveEdit that records { snippet, comp_id, ...edit }.
 export async function runFixtureSnippet(name, args) {
-  const run = SNIPPETS[name];
-  if (!run) throw new Error(`Fixture mode has no snippet named ${name}`);
-  return run(args);
+  if (Object.hasOwn(SNIPPETS, name)) return SNIPPETS[name](args);
+  const twin = await loadTwin(name);
+  if (!twin) throw new Error(`Fixture mode has no snippet named ${name}`);
+  const current = await snapshot();
+  return twin.run(args, {
+    snapshot: current,
+    saveEdit: (edit) => saveEdit({ snippet: name, comp_id: current.comp.id, ...edit }),
+  });
 }

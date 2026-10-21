@@ -2,23 +2,27 @@
 // demonstrate on one pair, check the learner's attempt.
 
 import { runSnippet } from "../bridge-client.mjs";
+import { needsEase, parseSegmentId, segments } from "../lib/analyze.mjs";
 import { diff } from "../lib/diff.mjs";
 import * as session from "../lib/session.mjs";
+import { takeSnapshot } from "../lib/snapshot.mjs";
 import { json } from "../lib/reply.mjs";
 
 export const SKILLS = ["easing.basic"];
 
-async function takeSnapshot() {
-  const raw = await runSnippet("snapshot", {});
-  return { taken_at: new Date().toISOString(), ...raw };
-}
-
-// "<layer index>/<match-name path>/<key index>"; the path itself contains slashes.
-function parseSegmentId(id) {
-  const first = id.indexOf("/");
-  const last = id.lastIndexOf("/");
-  return { layer_index: Number(id.slice(0, first)), property_path: id.slice(first + 1, last), key_index: Number(id.slice(last + 1)) };
-}
+// Does this comp have pairs to ease? For recommend_next (contracts/skill-module.md › 2). Counts the
+// same pairs analyze() targets, leaving out the {layer, property} pairs in `exclude`. No review mode
+// for easing this sprint (spec 004 plan P5), so `review: false`.
+export const FINDERS = {
+  "easing.basic": {
+    focus(snapshot, { exclude = [] } = {}) {
+      const excluded = (s) => exclude.some((e) => e.layer === s.layer.name && e.property === s.prop.display_name);
+      const pairs = segments(snapshot).segments.filter((s) => needsEase(s.state) && !excluded(s));
+      return { count: pairs.length, layers: [...new Set(pairs.map((s) => s.layer.name))] };
+    },
+    review: false,
+  },
+};
 
 async function snapshotProject({ focus_layers } = {}) {
   const snapshot = await takeSnapshot();

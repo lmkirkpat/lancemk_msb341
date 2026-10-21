@@ -1,0 +1,28 @@
+{
+  "about": "Mirror of specs/004-ae-curriculum/curriculum.md › 4 and › 10. Change both in the same merge (FR-002); mentor/test/path.test.mjs compares them. IDs from research R4. A skill is built when a mentor/tools/*.mjs file declares its ID (FR-003), so that isn't stored here.",
+  "on_ramp": { "id": "keyframes", "name": "Setting keyframes" },
+  "skills": [
+    { "position": 0, "id": "easing.basic", "name": "Easing", "hard": ["keyframes"], "soft": [] },
+    { "position": 1, "id": "keyframes.types", "name": "Pick the key type on purpose", "hard": ["easing.basic"], "soft": [] },
+    { "position": 2, "id": "easing.speed_graph", "name": "Shape the ease in the speed graph", "hard": ["easing.basic"], "soft": ["keyframes.types"] },
+    { "position": 3, "id": "timing.offset", "name": "Break the lockstep with offset", "hard": ["easing.basic"], "soft": [] },
+    { "position": 4, "id": "motion.sources", "name": "Find what's moving it", "hard": ["keyframes"], "soft": ["keyframes.types", "easing.speed_graph", "timing.offset"] },
+    { "position": 5, "id": "transform.anchor", "name": "Set the pivot (anchor point)", "hard": ["keyframes"], "soft": [] },
+    { "position": 6, "id": "parenting.null", "name": "Move a group with a null", "hard": ["transform.anchor"], "soft": ["motion.sources"] },
+    { "position": 7, "id": "shape.trim_paths", "name": "Draw it on with Trim Paths", "hard": ["easing.basic"], "soft": [] },
+    { "position": 8, "id": "matte.track", "name": "Show one layer through another (track matte)", "hard": [], "needs_in_comp": "a shape or text layer to use", "soft": ["shape.trim_paths"] },
+    { "position": 9, "id": "text.animator", "name": "Animate letters with a text animator", "hard": ["easing.basic"], "soft": ["timing.offset"] },
+    { "position": 10, "id": "precomp.basic", "name": "Precompose and open the right level", "hard": ["motion.sources"], "soft": ["parenting.null", "matte.track"] }
+  ],
+  "findings": {
+    "DX-01": "easing.basic",
+    "DX-02": null,
+    "DX-03": "timing.offset",
+    "DX-04": null,
+    "DX-05": "keyframes.types",
+    "DX-06": "motion.sources",
+    "DX-07": null,
+    "DX-08": "motion.sources",
+    "DX-09": null
+  }
+}

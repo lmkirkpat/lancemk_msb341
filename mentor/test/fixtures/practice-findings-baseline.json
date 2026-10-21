@@ -1,0 +1,362 @@
+{
+  "comment": "Easing's analyze() on practice-before.json, saved before spec 004's shared branch changed any code (tasks T002). analyze-unchanged.test.mjs compares against it (SC-004).",
+  "all_layers": {
+    "findings": [
+      {
+        "layer": "Title",
+        "property": "Position",
+        "segments": [
+          {
+            "id": "1/ADBE Transform Group/ADBE Position/1",
+            "display_path": "Transform › Position",
+            "from_time": 0.5,
+            "to_time": 1.5,
+            "state": "linear"
+          },
+          {
+            "id": "1/ADBE Transform Group/ADBE Position/2",
+            "display_path": "Transform › Position",
+            "from_time": 1.5,
+            "to_time": 3,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Title",
+        "property": "Scale",
+        "segments": [
+          {
+            "id": "1/ADBE Transform Group/ADBE Scale/1",
+            "display_path": "Transform › Scale",
+            "from_time": 0.5,
+            "to_time": 1.5,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Title",
+        "property": "Opacity",
+        "segments": [
+          {
+            "id": "1/ADBE Transform Group/ADBE Opacity/1",
+            "display_path": "Transform › Opacity",
+            "from_time": 0.5,
+            "to_time": 1.5,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Subtitle",
+        "property": "Opacity",
+        "segments": [
+          {
+            "id": "2/ADBE Transform Group/ADBE Opacity/1",
+            "display_path": "Transform › Opacity",
+            "from_time": 0.3,
+            "to_time": 1.3,
+            "state": "partly_eased",
+            "linear_end": "end"
+          }
+        ]
+      },
+      {
+        "layer": "CTRL",
+        "property": "Position",
+        "segments": [
+          {
+            "id": "3/ADBE Transform Group/ADBE Position/1",
+            "display_path": "Transform › Position",
+            "from_time": 0,
+            "to_time": 1,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Bar",
+        "property": "End",
+        "segments": [
+          {
+            "id": "4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1",
+            "display_path": "Contents › Rectangle › Contents › Trim Paths 1 › End",
+            "from_time": 0.2,
+            "to_time": 1.2,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Bar",
+        "property": "X Position",
+        "segments": [
+          {
+            "id": "4/ADBE Transform Group/ADBE Position_0/1",
+            "display_path": "Transform › X Position",
+            "from_time": 0,
+            "to_time": 0.6,
+            "state": "linear"
+          },
+          {
+            "id": "4/ADBE Transform Group/ADBE Position_0/2",
+            "display_path": "Transform › X Position",
+            "from_time": 0.6,
+            "to_time": 1.2,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Glow",
+        "property": "Blurriness",
+        "segments": [
+          {
+            "id": "5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1",
+            "display_path": "Effects › Gaussian Blur › Blurriness",
+            "from_time": 0,
+            "to_time": 1,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Old Take",
+        "property": "Position",
+        "segments": [
+          {
+            "id": "8/ADBE Transform Group/ADBE Position/1",
+            "display_path": "Transform › Position",
+            "from_time": 0,
+            "to_time": 1,
+            "state": "linear"
+          }
+        ]
+      }
+    ],
+    "skipped": [
+      {
+        "layer": "Logo",
+        "layer_index": 7,
+        "property": "Scale",
+        "path": "ADBE Transform Group/ADBE Scale",
+        "display_path": "Transform › Scale",
+        "reason": "single_key"
+      },
+      {
+        "layer": "Logo",
+        "layer_index": 7,
+        "property": "Rotation",
+        "path": "ADBE Transform Group/ADBE Rotate Z",
+        "display_path": "Transform › Rotation",
+        "reason": "expression"
+      }
+    ],
+    "hidden_layers": [
+      "Old Take"
+    ],
+    "precomp_layers": [
+      "Icon"
+    ],
+    "focus": null,
+    "targets": [
+      "1/ADBE Transform Group/ADBE Position/1",
+      "1/ADBE Transform Group/ADBE Position/2",
+      "1/ADBE Transform Group/ADBE Scale/1",
+      "1/ADBE Transform Group/ADBE Opacity/1",
+      "2/ADBE Transform Group/ADBE Opacity/1",
+      "3/ADBE Transform Group/ADBE Position/1",
+      "4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1",
+      "4/ADBE Transform Group/ADBE Position_0/1",
+      "4/ADBE Transform Group/ADBE Position_0/2",
+      "5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1",
+      "8/ADBE Transform Group/ADBE Position/1"
+    ],
+    "demo_target": "1/ADBE Transform Group/ADBE Position/1",
+    "no_demo_reason": null,
+    "counts": {
+      "linear": 10,
+      "partly_eased": 1,
+      "eased": 1,
+      "held": 5
+    }
+  },
+  "focus_title": {
+    "findings": [
+      {
+        "layer": "Title",
+        "property": "Position",
+        "segments": [
+          {
+            "id": "1/ADBE Transform Group/ADBE Position/1",
+            "display_path": "Transform › Position",
+            "from_time": 0.5,
+            "to_time": 1.5,
+            "state": "linear"
+          },
+          {
+            "id": "1/ADBE Transform Group/ADBE Position/2",
+            "display_path": "Transform › Position",
+            "from_time": 1.5,
+            "to_time": 3,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Title",
+        "property": "Scale",
+        "segments": [
+          {
+            "id": "1/ADBE Transform Group/ADBE Scale/1",
+            "display_path": "Transform › Scale",
+            "from_time": 0.5,
+            "to_time": 1.5,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Title",
+        "property": "Opacity",
+        "segments": [
+          {
+            "id": "1/ADBE Transform Group/ADBE Opacity/1",
+            "display_path": "Transform › Opacity",
+            "from_time": 0.5,
+            "to_time": 1.5,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Subtitle",
+        "property": "Opacity",
+        "segments": [
+          {
+            "id": "2/ADBE Transform Group/ADBE Opacity/1",
+            "display_path": "Transform › Opacity",
+            "from_time": 0.3,
+            "to_time": 1.3,
+            "state": "partly_eased",
+            "linear_end": "end"
+          }
+        ]
+      },
+      {
+        "layer": "CTRL",
+        "property": "Position",
+        "segments": [
+          {
+            "id": "3/ADBE Transform Group/ADBE Position/1",
+            "display_path": "Transform › Position",
+            "from_time": 0,
+            "to_time": 1,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Bar",
+        "property": "End",
+        "segments": [
+          {
+            "id": "4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1",
+            "display_path": "Contents › Rectangle › Contents › Trim Paths 1 › End",
+            "from_time": 0.2,
+            "to_time": 1.2,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Bar",
+        "property": "X Position",
+        "segments": [
+          {
+            "id": "4/ADBE Transform Group/ADBE Position_0/1",
+            "display_path": "Transform › X Position",
+            "from_time": 0,
+            "to_time": 0.6,
+            "state": "linear"
+          },
+          {
+            "id": "4/ADBE Transform Group/ADBE Position_0/2",
+            "display_path": "Transform › X Position",
+            "from_time": 0.6,
+            "to_time": 1.2,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Glow",
+        "property": "Blurriness",
+        "segments": [
+          {
+            "id": "5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1",
+            "display_path": "Effects › Gaussian Blur › Blurriness",
+            "from_time": 0,
+            "to_time": 1,
+            "state": "linear"
+          }
+        ]
+      },
+      {
+        "layer": "Old Take",
+        "property": "Position",
+        "segments": [
+          {
+            "id": "8/ADBE Transform Group/ADBE Position/1",
+            "display_path": "Transform › Position",
+            "from_time": 0,
+            "to_time": 1,
+            "state": "linear"
+          }
+        ]
+      }
+    ],
+    "skipped": [
+      {
+        "layer": "Logo",
+        "layer_index": 7,
+        "property": "Scale",
+        "path": "ADBE Transform Group/ADBE Scale",
+        "display_path": "Transform › Scale",
+        "reason": "single_key"
+      },
+      {
+        "layer": "Logo",
+        "layer_index": 7,
+        "property": "Rotation",
+        "path": "ADBE Transform Group/ADBE Rotate Z",
+        "display_path": "Transform › Rotation",
+        "reason": "expression"
+      }
+    ],
+    "hidden_layers": [
+      "Old Take"
+    ],
+    "precomp_layers": [
+      "Icon"
+    ],
+    "focus": [
+      "Title"
+    ],
+    "targets": [
+      "1/ADBE Transform Group/ADBE Position/1",
+      "1/ADBE Transform Group/ADBE Position/2",
+      "1/ADBE Transform Group/ADBE Scale/1",
+      "1/ADBE Transform Group/ADBE Opacity/1"
+    ],
+    "demo_target": "1/ADBE Transform Group/ADBE Position/1",
+    "no_demo_reason": null,
+    "counts": {
+      "linear": 10,
+      "partly_eased": 1,
+      "eased": 1,
+      "held": 5
+    }
+  }
+}

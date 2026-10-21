@@ -1,0 +1,147 @@
+{
+  "comment": "Timing answer key for Mentor Practice (practice-before.json), written by hand from the key times and types in mentor/dev/build-practice-comp.jsx, not by running timing() (spec 004 tasks T037, with T058's back-to-back moves). Rules: data-model › Timing measures. Layer indexes are practice-before.json's. practice-before.json has no key values (captured before values were recorded), so no pair is a pause here.",
+  "sources": {
+    "Title": "build-practice-comp.jsx lines 172-176: Position keys 0.5, 1.5, 3 (two back-to-back moves, T058); Scale and Opacity 0.5-1.5; all linear",
+    "Subtitle": "lines 152-168: Position 0.3-1.3 eased (still a move), Opacity 0.3-1.3",
+    "CTRL": "lines 147-149: a null, Position 0-1",
+    "Bar": "lines 135-144: Trim Paths End 0.2-1.2; X Position separated, keys 0, 0.6, 1.2 (Y unkeyed): one Position unit, two moves of the same dimension, never merged (T058)",
+    "Glow": "lines 128-132: an effect key pair, Gaussian Blur Blurriness 0-1, counted",
+    "Cursor": "lines 123-125: Opacity holds at 0, 0.5, 1, 1.5, 2, 2.5: five instant moves, each at its second key's time",
+    "Logo": "lines 111-120: Rotation 0-2 with an expression (excluded, keys listed), Scale one key at 0 (single_key)",
+    "Old Take": "lines 106-108: Position 0-1 on a hidden layer, still measured",
+    "Icon": "lines 96-103: a precomp layer with no keys of its own (setValue only), listed with precomp true and no units; its inner keys aren't read"
+  },
+  "expected": {
+    "frame_rate": 30,
+    "comp_duration": 8,
+    "layers": [
+      {
+        "layer_index": 1, "layer": "Title", "kind": "text", "enabled": true, "is_null": false, "precomp": false,
+        "units": [
+          { "unit": "Transform › Position", "paths": ["ADBE Transform Group/ADBE Position"], "excluded": null, "first_key": 0.5, "last_key": 3,
+            "moves": [{ "start": 0.5, "end": 1.5, "duration": 1, "kind": "ramp" }, { "start": 1.5, "end": 3, "duration": 1.5, "kind": "ramp" }],
+            "starts": [0.5, 1.5], "landings": [1.5, 3] },
+          { "unit": "Transform › Scale", "paths": ["ADBE Transform Group/ADBE Scale"], "excluded": null, "first_key": 0.5, "last_key": 1.5,
+            "moves": [{ "start": 0.5, "end": 1.5, "duration": 1, "kind": "ramp" }], "starts": [0.5], "landings": [1.5] },
+          { "unit": "Transform › Opacity", "paths": ["ADBE Transform Group/ADBE Opacity"], "excluded": null, "first_key": 0.5, "last_key": 1.5,
+            "moves": [{ "start": 0.5, "end": 1.5, "duration": 1, "kind": "ramp" }], "starts": [0.5], "landings": [1.5] }
+        ],
+        "first_start": 0.5, "last_landing": 3
+      },
+      {
+        "layer_index": 2, "layer": "Subtitle", "kind": "text", "enabled": true, "is_null": false, "precomp": false,
+        "units": [
+          { "unit": "Transform › Position", "paths": ["ADBE Transform Group/ADBE Position"], "excluded": null, "first_key": 0.3, "last_key": 1.3,
+            "moves": [{ "start": 0.3, "end": 1.3, "duration": 1, "kind": "ramp" }], "starts": [0.3], "landings": [1.3] },
+          { "unit": "Transform › Opacity", "paths": ["ADBE Transform Group/ADBE Opacity"], "excluded": null, "first_key": 0.3, "last_key": 1.3,
+            "moves": [{ "start": 0.3, "end": 1.3, "duration": 1, "kind": "ramp" }], "starts": [0.3], "landings": [1.3] }
+        ],
+        "first_start": 0.3, "last_landing": 1.3
+      },
+      {
+        "layer_index": 3, "layer": "CTRL", "kind": "null", "enabled": true, "is_null": true, "precomp": false,
+        "units": [
+          { "unit": "Transform › Position", "paths": ["ADBE Transform Group/ADBE Position"], "excluded": null, "first_key": 0, "last_key": 1,
+            "moves": [{ "start": 0, "end": 1, "duration": 1, "kind": "ramp" }], "starts": [0], "landings": [1] }
+        ],
+        "first_start": 0, "last_landing": 1
+      },
+      {
+        "layer_index": 4, "layer": "Bar", "kind": "shape", "enabled": true, "is_null": false, "precomp": false,
+        "units": [
+          { "unit": "Contents › Rectangle › Contents › Trim Paths 1 › End",
+            "paths": ["ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End"],
+            "excluded": null, "first_key": 0.2, "last_key": 1.2,
+            "moves": [{ "start": 0.2, "end": 1.2, "duration": 1, "kind": "ramp" }], "starts": [0.2], "landings": [1.2] },
+          { "unit": "Position", "paths": ["ADBE Transform Group/ADBE Position_0"], "excluded": null, "first_key": 0, "last_key": 1.2,
+            "moves": [{ "start": 0, "end": 0.6, "duration": 0.6, "kind": "ramp" }, { "start": 0.6, "end": 1.2, "duration": 0.6, "kind": "ramp" }],
+            "starts": [0, 0.6], "landings": [0.6, 1.2] }
+        ],
+        "first_start": 0, "last_landing": 1.2
+      },
+      {
+        "layer_index": 5, "layer": "Glow", "kind": "adjustment", "enabled": true, "is_null": false, "precomp": false,
+        "units": [
+          { "unit": "Effects › Gaussian Blur › Blurriness", "paths": ["ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001"],
+            "excluded": null, "first_key": 0, "last_key": 1,
+            "moves": [{ "start": 0, "end": 1, "duration": 1, "kind": "ramp" }], "starts": [0], "landings": [1] }
+        ],
+        "first_start": 0, "last_landing": 1
+      },
+      {
+        "layer_index": 6, "layer": "Cursor", "kind": "text", "enabled": true, "is_null": false, "precomp": false,
+        "units": [
+          { "unit": "Transform › Opacity", "paths": ["ADBE Transform Group/ADBE Opacity"], "excluded": null, "first_key": 0, "last_key": 2.5,
+            "moves": [
+              { "start": 0.5, "end": 0.5, "duration": 0, "kind": "instant" },
+              { "start": 1, "end": 1, "duration": 0, "kind": "instant" },
+              { "start": 1.5, "end": 1.5, "duration": 0, "kind": "instant" },
+              { "start": 2, "end": 2, "duration": 0, "kind": "instant" },
+              { "start": 2.5, "end": 2.5, "duration": 0, "kind": "instant" }
+            ],
+            "starts": [0.5, 1, 1.5, 2, 2.5], "landings": [0.5, 1, 1.5, 2, 2.5] }
+        ],
+        "first_start": 0.5, "last_landing": 2.5
+      },
+      {
+        "layer_index": 7, "layer": "Logo", "kind": "shape", "enabled": true, "is_null": false, "precomp": false,
+        "units": [
+          { "unit": "Transform › Scale", "paths": ["ADBE Transform Group/ADBE Scale"], "excluded": "single_key", "first_key": 0, "last_key": 0,
+            "moves": [], "starts": [], "landings": [] },
+          { "unit": "Transform › Rotation", "paths": ["ADBE Transform Group/ADBE Rotate Z"], "excluded": "expression", "first_key": 0, "last_key": 2,
+            "moves": [], "starts": [], "landings": [] }
+        ],
+        "first_start": null, "last_landing": null
+      },
+      {
+        "layer_index": 8, "layer": "Old Take", "kind": "text", "enabled": false, "is_null": false, "precomp": false,
+        "units": [
+          { "unit": "Transform › Position", "paths": ["ADBE Transform Group/ADBE Position"], "excluded": null, "first_key": 0, "last_key": 1,
+            "moves": [{ "start": 0, "end": 1, "duration": 1, "kind": "ramp" }], "starts": [0], "landings": [1] }
+        ],
+        "first_start": 0, "last_landing": 1
+      },
+      {
+        "layer_index": 9, "layer": "Icon", "kind": "precomp", "enabled": null, "is_null": false, "precomp": true,
+        "units": [], "first_start": null, "last_landing": null
+      }
+    ],
+    "starts_by_frame": [
+      { "frame": 0, "time": 0, "at": [
+        { "layer_index": 3, "layer": "CTRL", "unit": "Transform › Position" },
+        { "layer_index": 4, "layer": "Bar", "unit": "Position" },
+        { "layer_index": 5, "layer": "Glow", "unit": "Effects › Gaussian Blur › Blurriness" },
+        { "layer_index": 8, "layer": "Old Take", "unit": "Transform › Position" } ] },
+      { "frame": 9, "time": 0.3, "at": [
+        { "layer_index": 2, "layer": "Subtitle", "unit": "Transform › Position" },
+        { "layer_index": 2, "layer": "Subtitle", "unit": "Transform › Opacity" } ] },
+      { "frame": 15, "time": 0.5, "at": [
+        { "layer_index": 1, "layer": "Title", "unit": "Transform › Position" },
+        { "layer_index": 1, "layer": "Title", "unit": "Transform › Scale" },
+        { "layer_index": 1, "layer": "Title", "unit": "Transform › Opacity" },
+        { "layer_index": 6, "layer": "Cursor", "unit": "Transform › Opacity" } ] },
+      { "frame": 45, "time": 1.5, "at": [
+        { "layer_index": 1, "layer": "Title", "unit": "Transform › Position" },
+        { "layer_index": 6, "layer": "Cursor", "unit": "Transform › Opacity" } ] }
+    ],
+    "landings_by_frame": [
+      { "frame": 30, "time": 1, "at": [
+        { "layer_index": 3, "layer": "CTRL", "unit": "Transform › Position" },
+        { "layer_index": 5, "layer": "Glow", "unit": "Effects › Gaussian Blur › Blurriness" },
+        { "layer_index": 6, "layer": "Cursor", "unit": "Transform › Opacity" },
+        { "layer_index": 8, "layer": "Old Take", "unit": "Transform › Position" } ] },
+      { "frame": 36, "time": 1.2, "at": [
+        { "layer_index": 4, "layer": "Bar", "unit": "Contents › Rectangle › Contents › Trim Paths 1 › End" },
+        { "layer_index": 4, "layer": "Bar", "unit": "Position" } ] },
+      { "frame": 39, "time": 1.3, "at": [
+        { "layer_index": 2, "layer": "Subtitle", "unit": "Transform › Position" },
+        { "layer_index": 2, "layer": "Subtitle", "unit": "Transform › Opacity" } ] },
+      { "frame": 45, "time": 1.5, "at": [
+        { "layer_index": 1, "layer": "Title", "unit": "Transform › Position" },
+        { "layer_index": 1, "layer": "Title", "unit": "Transform › Scale" },
+        { "layer_index": 1, "layer": "Title", "unit": "Transform › Opacity" },
+        { "layer_index": 6, "layer": "Cursor", "unit": "Transform › Opacity" } ] }
+    ],
+    "last_motion_end": 3
+  }
+}

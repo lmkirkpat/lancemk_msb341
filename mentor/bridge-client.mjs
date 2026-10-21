@@ -81,11 +81,20 @@ export function assemble(name, args) {
 }
 
 // bridge.jsx reports errors as "<Error name>: <message>". Snippets throw "CODE: message" for the
-// contract's codes, so strip the name, then look for a known code.
-const CODED = new RegExp(`^(?:[A-Za-z]*Error: )?(${CODES.join("|")}): ?(.*)$`, "s");
+// contract's codes, so strip the name, then look for a known code. Built when first needed, and
+// again after registerErrors() adds codes, so a skill's own codes are recognised too.
+let coded = null;
+let codedCount = 0;
+function codedPattern() {
+  if (!coded || codedCount !== CODES.length) {
+    coded = new RegExp(`^(?:[A-Za-z]*Error: )?(${CODES.join("|")}): ?(.*)$`, "s");
+    codedCount = CODES.length;
+  }
+  return coded;
+}
 
 export function toError(r, name, prefixLines) {
-  const m = CODED.exec(r.error || "");
+  const m = codedPattern().exec(r.error || "");
   if (m) return new MentorError(m[1], m[2] || undefined);
   const line = r.line != null ? ` (${name}.jsx line ${r.line - prefixLines})` : "";
   const logs = r.logs && r.logs.length ? `\nlog:\n${r.logs.join("\n")}` : "";

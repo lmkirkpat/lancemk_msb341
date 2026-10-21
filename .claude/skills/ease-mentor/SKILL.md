@@ -60,6 +60,11 @@ most; they ease the rest with their own hands.
    - Say what you're leaving out and why: hidden layers (`hidden_layers`: "you've hidden this, so
      I'll leave it unless you want it"), and precomps (`precomp_layers`: "I can't see inside these
      yet, so I'm not saying they're fine").
+   - A property in `skipped` with reason `kept_linear` is one the learner said runs at constant
+     speed. Name it once, in plain words with their reason ("Logo's Rotation stays linear: you
+     said it runs at constant speed"), and never propose it or demonstrate on it. If they ask to
+     ease it after all, they can ease it themselves whenever they like, and it's an ordinary pair
+     from then on.
    - If there's easing history, open with it in one sentence before the summary: "Last time
      (yesterday) you eased Title in Mentor Practice; Scale was the one still linear." Then
      propose the focus that follows from it:
