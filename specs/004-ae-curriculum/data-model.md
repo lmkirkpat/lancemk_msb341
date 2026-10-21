@@ -130,7 +130,7 @@ Spec 002's lesson (`lesson_id`, `comp_id`, `baseline`, `focus`, `targets`, `demo
 | Field | Required | Rule |
 |---|---|---|
 | `targets` | yes | Target IDs, strings, stable for the same snapshot. Skills 1 and 2 use segment IDs; skill 3 picks its own (layer-level) |
-| `target_refs` | yes | One `{layer, property}` per target, by name |
+| `target_refs` | yes | One or more `{layer, property}` per target, by name (skill 3's layers kind stores every counted property of the layer) |
 | `demo_target` | yes | One of `targets`, or `null`. The session forces `null` in review mode and when there's one target |
 | `no_demo_reason` | yes | `null` or a short code (`single_target`, `nothing_to_teach`, `no_new_target`, or the skill's own) |
 | `focus` | yes | The focus layer names, or `null` |

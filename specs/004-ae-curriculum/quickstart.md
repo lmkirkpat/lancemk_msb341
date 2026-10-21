@@ -46,8 +46,10 @@ build (FR-030, skill 5): this decides whether `host.beta` can ever be set. Then:
 node mentor/dev/capture.mjs --compare mentor/test/fixtures/practice-before.json
 ```
 
-Expect "Matches" (with Mentor Practice active and unchanged): the new `host` field is ignored, and
-nothing else in the snapshot moved.
+With Mentor Practice active, write down what it reports (T042, decided 2026-10-21). The live comp
+has changed since `practice-before.json` was captured (lessons eased properties and added keys), so
+"Matches" isn't required: the list of differences is the result, and `practice-before.json` stays
+the answer key for the comp as built. The `host` field must not appear among the differences.
 
 ## 3. The second practice comp (🖐, AE open)
 
@@ -56,7 +58,7 @@ nothing else in the snapshot moved.
    `mentor/test/fixtures/practice2-expected.json` written.
 2. Save the `.aep`. Check that **Mentor Practice** is untouched:
    `node mentor/dev/capture.mjs --compare mentor/test/fixtures/practice-before.json` with Mentor
-   Practice active still says "Matches".
+   Practice active reports the same differences as step 2, and nothing new.
 3. With Mentor Practice 2 active, capture `mentor/test/fixtures/practice2-before.json`.
 4. Duplicate Mentor Practice 2, set the duplicate to 60 fps (Composition Settings), capture it as
    `mentor/test/fixtures/practice2-60fps.json`, then delete the duplicate and save.
