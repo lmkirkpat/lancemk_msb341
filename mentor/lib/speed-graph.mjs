@@ -164,6 +164,22 @@ function readOptions(skill_options) {
   return { eased_layers: strings(so.eased_layers), land_hard: new Set(strings(so.land_hard)) };
 }
 
+// At most `max` pairs, shared across the layers in the pool (one from each in turn), so a second
+// layer the learner named isn't crowded out; returned in layer, property and time order.
+function capShared(pool, max) {
+  const byLayer = [];
+  for (const s of pool) {
+    const g = byLayer.find((x) => x[0].layer === s.layer);
+    if (g) g.push(s);
+    else byLayer.push([s]);
+  }
+  const keep = new Set();
+  for (let round = 0; keep.size < max && byLayer.some((g) => g.length > round); round++) {
+    for (const g of byLayer) if (g[round] && keep.size < max) keep.add(g[round]);
+  }
+  return pool.filter((s) => keep.has(s));
+}
+
 const refOf = (s) => ({ layer: s.layer.name, property: s.prop.display_name });
 function group(kind, refs) {
   const layers = [...new Set(refs.map((r) => r.layer))];
@@ -236,7 +252,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], kept_linear, ski
     picked = first ? pool.filter((s) => s.layer === first.layer && s.prop === first.prop).slice(0, REVIEW_PAIRS) : [];
     if (!focus) focusOut = first ? [first.layer.name] : [];
   } else {
-    picked = pool.slice(0, MAX_PAIRS);
+    picked = capShared(pool, MAX_PAIRS);
   }
 
   const targets = picked.map((s) => s.id);

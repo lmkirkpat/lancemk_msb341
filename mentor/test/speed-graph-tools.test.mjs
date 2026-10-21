@@ -272,3 +272,21 @@ test("'I already know it' on an unlearned skill is the same review call, recorde
   assert.equal(entry.already_knew, true);
   assert.deepEqual(entry.targets, [{ layer: "Title", property: "Position" }]);
 });
+
+// --- US3: sent to easing (FR-002), what the snapshot tool says (T024)
+
+test("as built, Mentor Practice has one pair to shape and no demo; a comp with nothing eased has nothing to shape", async () => {
+  setProject(path.join(FIXTURES, "practice-before.json"));
+  const one = await call("speed_graph_snapshot");
+  assert.deepEqual(one.focus, ["Subtitle"]);
+  assert.equal(one.targets.length, 1);
+  assert.equal(one.demo_target, null);
+  assert.equal(one.no_demo_reason, "single_target");
+  assert.ok(one.ease_first_count > 0);
+  setProject(path.join(FIXTURES, "synthetic", "linear-basic.json"));
+  const none = await call("speed_graph_snapshot");
+  assert.deepEqual(none.targets, []);
+  assert.equal(none.no_demo_reason, "nothing_to_shape");
+  assert.ok(none.ease_first_count > 0);
+  assert.equal(none.candidates_count, 0);
+});
