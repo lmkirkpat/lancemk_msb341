@@ -7,7 +7,9 @@
 **Status**: Approved 2026-10-21; planned and tasked. Amended 2026-10-21 (round 6) with five
 choices the builder confirmed as built: the proposal on Mentor Practice 2 (US2 #1), the 0.1-frame
 read allowance in "same" (FR-008), "pops in" on any moved property (FR-008, FR-012), members whose
-moves changed (FR-008, row 8), and the demo's fresh read (FR-010). The builder took B-3 (properties kind on
+moves changed (FR-008, row 8), and the demo's fresh read (FR-010). Amended again 2026-10-21 (round
+7, builder's decision): a member whose moves changed now holds the pass until the learner answers,
+as in spec 008 FR-014, replacing "2 or more graded members pass anyway" (FR-008, row 8). The builder took B-3 (properties kind on
 a tie) and B-4 (the rhythm threshold reuses FR-027's floor) as recommended, and both shared requests
 are tasked in spec 004 (SR-1 as T058 and T059, SR-2 as T064 and T065). The curriculum designer's
 round 1 answers (`teaching-design.md` › 14) are folded in: D-1 changed (a gap under the floor is
@@ -254,8 +256,12 @@ section). Other edge cases:
   - **Both:** nothing about the size or evenness of the gaps is graded (TD § 6; H7).
   - **Members whose moves changed:** a member whose number of moves changed since the baseline
     (properties kind: its remembered move is gone; layers kind: it has no start any more) is
-    reported as `keys_changed`, isn't graded, and doesn't block a pass, **as long as at least 2
-    members are graded**; with fewer than 2 graded, the check doesn't pass (as built, 2026-10-21).
+    reported as `keys_changed` and isn't graded; the mentor says that member's keys changed and
+    asks if that was on purpose. Such a member **holds the pass** until the learner answers: the
+    check doesn't pass while any member is `keys_changed`, however many others pass. It's never
+    graded around. This is speed graph's rule (spec 008 FR-014), so both skills treat changed keys
+    the same (decided by the builder 2026-10-21, replacing the earlier "2 or more graded members
+    pass anyway" rule).
   "Same" is spec 004 FR-027's floor everywhere, with **0.1 frame allowed for rounding**: key times
   are read to the millisecond, so two keys exactly 2 frames apart at 30 fps (0.967 s and 1.033 s)
   read as 1.98 frames, and must still count as 2 (as built, 2026-10-21; FR-023's cases don't
@@ -407,7 +413,7 @@ the check and the learner each see, and the reused filters.
 | 5 | Two held jumps on one layer at the same time | Both start and land the same → a properties group | Pass once either jump moves past the floor | As any pair | Right but surprising; pin with a synthetic test |
 | 6 | Hold jump vs. a ramp starting together | Starts same, landings differ → not a properties group (S-1); same start for the layers kind | As focus | | Right; pin with a test |
 | 7 | Separated dimensions (Bar X Position) | One "Position" unit; start is the earlier of X and Y | X shifted and Y not reads as a changed Position move, and the layer's Position start moves only if X was first; flagged as a split within Position | "Bar's Y Position didn't move with X" | **Gap**: the contract merges dimensions into one unit, so the check needs per-dimension shifts from the raw keys. Skill-local (its own diff). Test on Mentor Practice 2's separated layer |
-| 8 | Several moves in one property (Title Position: 0.5, 1.5, 3, 4.37 s) | Matches its first move against Scale and Opacity | Compares the remembered move (FR-005); if its move count changed, says so and doesn't grade that property, which doesn't block a pass while 2 or more members are graded (FR-008) | | Pinned by spec 004 T058 and T059 (SR-1): each key pair is its own move, so the matching move is found. Test on Mentor Practice |
+| 8 | Several moves in one property (Title Position: 0.5, 1.5, 3, 4.37 s) | Matches its first move against Scale and Opacity | Compares the remembered move (FR-005); if its move count changed, says so, doesn't grade that property, and asks if that was on purpose; that property holds the pass until the learner answers (FR-008, as spec 008 FR-014) | | Pinned by spec 004 T058 and T059 (SR-1): each key pair is its own move, so the matching move is found. Test on Mentor Practice |
 | 9 | Two neighbouring keys with equal values (a pause) | Not a move | A value given to a paused key makes a new move: other change | | Right with FR-013. Mentor Practice 2 "Pause" |
 | 10 | Effect keys (Glow's blur) | Count in the layer's start | Must move with the layer's other keys; moved with it = pass | | Right per contract. Test: Glow shifted with its layer passes |
 | 11 | Adjustment layer (Glow) | Eligible (renders); it's an odd "entrance" (TD § 4) | As any layer | | Right; no special case |

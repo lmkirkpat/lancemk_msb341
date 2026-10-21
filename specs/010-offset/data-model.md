@@ -60,15 +60,15 @@ per target, plan › RQ-1); properties kind, one per target.
 | `moved_by` | Per counted property (and per dimension for separated Position): frames shifted, half-frame tolerance |
 | `split` | Layers kind, in any layer where a counted property moved: properties moved by different amounts, `{ moved, stayed, within_position, on_purpose }` (`within_position` for separated X and Y moved apart; `on_purpose` when `split` exempts it) |
 | `credit` | Demo member: `demo`, `undone`, `learner` |
-| `status` | `graded`, `keys_changed` (properties kind: the move count changed, so the remembered move is gone; layers kind: no start now). A `keys_changed` member isn't graded and doesn't block a pass while at least 2 members are graded |
+| `status` | `graded`, `keys_changed` (properties kind: the move count changed, so the remembered move is gone; layers kind: no start now). A `keys_changed` member isn't graded and holds the pass until the learner answers (spec 008 FR-014's rule, 2026-10-21) |
 
 ## Check result
 
 `{ comp_matches, lesson_comp, members: [Member result], still_same: [[label, label]],
 order_differs, out_of_comp: [{ layer, property, time }], other_changes: [string], rhythm: { uneven }
 | null, passed, demo_undone }`. `still_same` lists every pair that's still the same (layers: starts;
-properties: start and landing). `passed` needs at least 2 graded members, no `still_same` pair and
-no split that isn't `on_purpose`. `markChecked(passed, { demoUndone })` only when `comp_matches`.
+properties: start and landing). `passed` needs every member `graded` (none `keys_changed`), no
+`still_same` pair and no split that isn't `on_purpose`. `markChecked(passed, { demoUndone })` only when `comp_matches`.
 
 ## Demo result (`offset_demo`)
 

@@ -5,7 +5,8 @@
 **Created**: 2026-10-20
 
 **Status**: Approved 2026-10-21; planned and tasked. Amended 2026-10-21 (round 6) from the
-builder's cloud hand-back: FR-004 (two layers share the cap), FR-014 (changed keys hold the pass),
+builder's cloud hand-back: FR-004 (two layers share the cap), FR-014 (changed keys hold the pass;
+FR-010's pass sentence reworded to match, confirmed by the builder 2026-10-21),
 the fastest-part assumption for L-6, and one optional shared-contract request (Open questions ›
 SR-2); the extra output fields are in the contract and data-model. The builder took H1 to H3 as
 recommended (SR-1 folded into spec 004 as T060 and T061; FR-010d's 5%; the live-check order), and
@@ -271,7 +272,9 @@ Other edge cases:
     can't be read, the speed must be 0 (within 0.001). The 5% is approved (2026-10-21) and tuned on L-5 before the build is
     merged; if L-5 changes it, only toward catching a visible bump, never toward passing more pairs
     (TD § 14, S-1).
-  The lesson passes when every graded focus pair passes. The demo pair counts while the demo is in
+  The lesson passes only when every focus pair is graded and passes: a focus pair whose keys
+  changed, or that's gone, holds the pass until the learner answers (FR-014; reworded 2026-10-21,
+  confirmed by the builder, so it can't be read as grading around a changed pair). The demo pair counts while the demo is in
   place, and as the learner's pair after it's undone. The check MUST read the comp fresh, never
   change the baseline, and not grade on another comp.
 - **FR-011**: A moving dimension MUST be one whose value differs between the pair's two keys;

@@ -437,7 +437,7 @@ Other edge cases:
   it", and FR-019's schedule starts from that pass (C4). A skill with no review mode yet (easing this
   sprint, plan › P5; `recommend_next`'s `review_available` false) can't run as a review, so the
   mentor offers a practice lesson instead and doesn't mention reviews (as built in `/next-mentor`,
-  2026-10-21).
+  2026-10-21; confirmed by the builder 2026-10-21).
 - **FR-021**: A review MUST have no demonstration and no walkthrough, run on a target not in the
   record for that skill on that comp, and use the skill's own pass check. It MUST still ask the
   skill's intent questions where the skill has them (1: what should snap; 3: what order; 5: where

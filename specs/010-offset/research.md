@@ -84,8 +84,9 @@ analysis is spec 004's ([research.md](../004-ae-curriculum/research.md) R11,
   by index (FR-012, row 17). Per member, start and landing before and now from `timing()` on each
   snapshot (properties kind: the remembered `move_index`; if that unit's move count changed, the
   member is `keys_changed` and not graded; layers kind: `keys_changed` when the layer has no start
-  now). A `keys_changed` member doesn't block a pass as long as at least 2 members are graded;
-  with fewer than 2 graded there's no pass (2026-10-21, as built). The "pops in" split is looked
+  now). A `keys_changed` member holds the pass: `passed` is false while any member is
+  `keys_changed`, and the mentor asks if the change was on purpose (spec 008 FR-014's rule; the
+  builder's decision 2026-10-21, replacing "at least 2 graded members pass anyway"). The "pops in" split is looked
   for in every layer where **any** counted property (or dimension) moved, not only where the
   layer's start moved (FR-008). Pass per FR-008, with `split` (stored plus the check's
   `split` input, union) exempting a layer from L2. Demo credit: the demo member is `demo` while its
