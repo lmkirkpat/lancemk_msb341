@@ -1,5 +1,6 @@
-// Tools every skill shares: showing a frame, and reading and writing the learner record. Built by
-// index.mjs from the skill IDs the skill files declare, so a new skill never edits this file.
+// Tools every skill shares: showing a frame, reading and writing the learner record, and
+// recommending what to learn next. Built by index.mjs from the skill IDs and finders the skill files
+// declare, so a new skill never edits this file.
 
 import fs from "node:fs";
 import os from "node:os";
@@ -7,6 +8,10 @@ import path from "node:path";
 import { runSnippet } from "../bridge-client.mjs";
 import * as session from "../lib/session.mjs";
 import * as learner from "../lib/learner-store.mjs";
+import * as reviews from "../lib/reviews.mjs";
+import { readPath } from "../lib/path.mjs";
+import { recommend } from "../lib/recommend.mjs";
+import { takeSnapshot } from "../lib/snapshot.mjs";
 import { json } from "../lib/reply.mjs";
 import { MentorError } from "../errors.mjs";
 
@@ -56,15 +61,22 @@ async function previewFrame({ time } = {}) {
   };
 }
 
-// Learner record tools (§5–6). These never contact AE, so they work even when it's closed.
+// Learner record tools (§5–6). These never contact AE, so they work even when it's closed. Each
+// skill comes back with its review fields worked out (spec 004 FR-023: older records have none) and
+// whether a review is due today, so the mentor never does date arithmetic. Reading never writes.
 async function readLearnerRecord() {
-  return json(learner.readRecord());
+  const record = learner.readRecord();
+  const now = new Date();
+  const skills = {};
+  for (const [id, s] of Object.entries(record.skills)) skills[id] = { ...reviews.withReviewFields(s), review_is_due: reviews.isDue(s, now) };
+  return json({ ...record, skills });
 }
 
 // The record must match what the session saw, so a wrong "passed" can't mark the skill learned:
-// passed only after a passing check, partial only after some check, not_checked only before one,
-// and demo_used only if set_ease ran. With no lesson at all, only not_checked with no demo fits.
-function assertMatchesLesson({ result, demo_used }) {
+// the current lesson's skill only, passed only after a passing check, partial only after some check,
+// not_checked only before one, demo_used only if the demonstration ran, and never in a review
+// (FR-021). With no lesson at all, only not_checked with no demo fits. Returns the lesson.
+function assertMatchesLesson({ skill, result, demo_used }) {
   let lesson = null;
   try {
     lesson = session.currentLesson();
@@ -74,11 +86,43 @@ function assertMatchesLesson({ result, demo_used }) {
   const checked = !!lesson && (lesson.checked || lesson.status === "checked");
   const demo = !!(lesson && lesson.demo);
   const off = [];
+  if (lesson && typeof skill === "string" && skill !== lesson.skill) off.push(`skill must be "${lesson.skill}": that's the lesson in progress`);
+  if (lesson && lesson.mode === "review" && demo_used === true) off.push("demo_used must be false: a review has no demonstration");
   if (result === "passed" && !(lesson && lesson.passed)) off.push('result can\'t be "passed": the last check didn\'t pass');
   if (result === "partial" && !checked) off.push('result can\'t be "partial": there was no check, so use "not_checked"');
   if (result === "not_checked" && checked) off.push(`result can't be "not_checked": there was a check, so use "${lesson.passed ? "passed" : "partial"}"`);
-  if (typeof demo_used === "boolean" && demo_used !== demo) off.push(`demo_used must be ${demo}: set_ease ${demo ? "ran" : "didn't run"} in this lesson`);
+  if (typeof demo_used === "boolean" && demo_used !== demo && !(lesson && lesson.mode === "review" && demo_used === true)) {
+    off.push(`demo_used must be ${demo}: the demonstration ${demo ? "ran" : "didn't run"} in this lesson`);
+  }
   if (off.length) throw new MentorError("RECORD_MISMATCH", `The record doesn't match this lesson's checks: ${off.join("; ")}.`);
+  return lesson;
+}
+
+// recommend_next (contracts/shared-tools.md): the record (unreadable → treated as empty, and left as
+// it is), one look at the comp if AE answers, then the deterministic rule in lib/recommend.mjs.
+async function recommendNext({ requested_skill } = {}, { skills, finders }) {
+  const record = learner.peekRecord();
+  let snapshot = null;
+  try {
+    snapshot = await takeSnapshot();
+  } catch (e) {
+    if (!(e instanceof MentorError) || !["AE_UNREACHABLE", "AE_BUSY", "NO_ACTIVE_COMP"].includes(e.code)) throw e;
+  }
+  let offers = [];
+  try {
+    offers = session.reviewOffers();
+  } catch {
+    // An unreadable session file: no offers remembered. The next lesson start sets it aside.
+  }
+  const result = recommend({ path: readPath(), record, built: skills, finders, snapshot, now: new Date(), offers, requested_skill });
+  if (result.recommendation && result.recommendation.kind === "review") {
+    try {
+      session.recordReviewOffer(result.recommendation.skill);
+    } catch {
+      // Remembering the offer is best effort; the recommendation still stands.
+    }
+  }
+  return json(result);
 }
 
 // `skills`: every skill ID the tool files declare; `finders`: their FINDERS, by skill ID
@@ -86,8 +130,8 @@ function assertMatchesLesson({ result, demo_used }) {
 export function commonTools(options) {
   const { skills, finders = {} } = Array.isArray(options) ? { skills: options } : options;
   async function recordLesson(entry) {
-    assertMatchesLesson(entry);
-    const { skill } = learner.recordLesson(entry, skills);
+    const lesson = assertMatchesLesson(entry);
+    const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     return json({ saved: true, skill: { status: skill.status, next: skill.next } });
   }
 
@@ -134,6 +178,23 @@ export function commonTools(options) {
       },
       annotations: { readOnlyHint: false, destructiveHint: false },
       handler: recordLesson,
+    },
+    {
+      name: "recommend_next",
+      title: "Recommend what to learn next",
+      description:
+        "Pick the one skill to suggest next, from the learner record and a look at the active comp: a skill in progress, " +
+        "then a review that's due, then the next skill in the path. Say skill_name, never the ID. Pass requested_skill " +
+        "when the learner asks for a skill, to learn whether it's ready and what it builds on.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          requested_skill: { type: "string", description: "A skill the learner asked for, by ID or by name." },
+        },
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true },
+      handler: (args) => recommendNext(args, { skills, finders }),
     },
   ];
 }

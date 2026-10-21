@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.speed_graph": {
+      "status": "practicing",
+      "last_practiced": "2026-10-20T16:00:00.000Z",
+      "times_passed": 0,
+      "next": "Ease the pairs first, then shape them."
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-20T16:00:00.000Z",
+      "skill": "easing.speed_graph",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Worked on the focus pairs",
+      "result": "not_checked",
+      "demo_used": false,
+      "summary": "What the check showed.",
+      "next": "Try another layer.",
+      "kind": "first",
+      "targets": []
+    }
+  ]
+}

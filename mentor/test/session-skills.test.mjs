@@ -357,6 +357,36 @@ test("a fresh lesson carries nothing from the one it replaces", () => {
   assert.equal(s.session.checked, undefined);
 });
 
+// ---- One target with several refs (spec 010's layer-level targets)
+
+const layerLevel = (snapshot, opts = {}) => {
+  calls.push(structuredClone(opts));
+  const exclude = opts.exclude || [];
+  const skip = (layer, prop) => exclude.some((e) => e.layer === layer.name && e.property === prop.display_name);
+  const layers = snapshot.layers.filter((l) => l.properties.some((p) => !skip(l, p)));
+  return {
+    targets: layers.map((l) => `layer:${l.index}`),
+    target_refs: layers.flatMap((l) => l.properties.map((p) => ({ layer: l.name, property: p.display_name }))),
+    demo_target: null, no_demo_reason: "skill_own", focus: null,
+  };
+};
+
+test("a target can carry several refs: stored as given, and a review gets all of them back as exclude", () => {
+  const s = session.start(A, { skill: "sample.layers", analyze: layerLevel });
+  assert.deepEqual(s.session.targets, ["layer:1", "layer:2"]);
+  assert.equal(s.session.target_refs.length, 4, "Title's three properties and Subtitle's one");
+  fs.writeFileSync(LEARNER, JSON.stringify({
+    version: 1, skills: {},
+    lessons: [{ date: "2026-10-15T10:00:00.000Z", skill: "sample.layers", project: "Synthetic.aep", comp: "Lower Third",
+      attempted: "x", result: "passed", demo_used: false, summary: "x", next: "x", kind: "first",
+      targets: [{ layer: "Title", property: "Position" }, { layer: "Title", property: "Scale" }, { layer: "Title", property: "Opacity" }] }],
+  }));
+  calls.length = 0;
+  const r = session.start(A, { skill: "sample.layers", analyze: layerLevel, mode: "review" });
+  assert.equal(calls[0].exclude.length, 3);
+  assert.deepEqual(r.session.targets, ["layer:2"], "every ref of Title's target is skipped");
+});
+
 test("without fresh, an unpassed lesson is still continued, keeping its baseline", () => {
   session.start(A, S);
   const s = session.start(withBlink(), S);

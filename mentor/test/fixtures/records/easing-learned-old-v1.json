@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-10-12T18:00:00.000Z",
+      "times_passed": 1,
+      "next": "Try Bar: separated X Position and Trim Paths End."
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-12T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Eased 4 Title pairs: Position x2, Scale, Opacity",
+      "result": "passed",
+      "demo_used": true,
+      "summary": "What the check showed.",
+      "next": "Try another layer."
+    }
+  ]
+}

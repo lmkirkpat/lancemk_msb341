@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-10-12T18:00:00.000Z",
+      "times_passed": 1,
+      "next": "Try Bar: separated X Position and Trim Paths End.",
+      "review_due": "2026-10-13",
+      "reviews_passed_in_row": 0
+    },
+    "keyframes.types": {
+      "status": "learned",
+      "last_practiced": "2026-10-19T16:00:00.000Z",
+      "times_passed": 1,
+      "next": "Hold a blink in your own project.",
+      "review_due": "2026-10-20",
+      "reviews_passed_in_row": 0
+    },
+    "easing.speed_graph": {
+      "status": "learned",
+      "last_practiced": "2026-10-17T16:00:00.000Z",
+      "times_passed": 2,
+      "next": "Shape Card Scale.",
+      "review_due": "2026-10-24",
+      "reviews_passed_in_row": 1
+    },
+    "timing.offset": {
+      "status": "learned",
+      "last_practiced": "2026-10-14T16:00:00.000Z",
+      "times_passed": 3,
+      "next": "Offset the Dots.",
+      "review_due": "2026-10-21",
+      "reviews_passed_in_row": 2
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-12T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Eased 4 Title pairs: Position x2, Scale, Opacity",
+      "result": "passed",
+      "demo_used": true,
+      "summary": "What the check showed.",
+      "next": "Try another layer.",
+      "kind": "first",
+      "targets": [
+        {
+          "layer": "Title",
+          "property": "Position"
+        },
+        {
+          "layer": "Title",
+          "property": "Scale"
+        },
+        {
+          "layer": "Title",
+          "property": "Opacity"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-19T16:00:00.000Z",
+      "skill": "keyframes.types",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Worked on the focus pairs",
+      "result": "passed",
+      "demo_used": false,
+      "summary": "What the check showed.",
+      "next": "Try another layer.",
+      "kind": "first",
+      "targets": [
+        {
+          "layer": "Cursor",
+          "property": "Opacity"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-14T16:00:00.000Z",
+      "skill": "easing.speed_graph",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Worked on the focus pairs",
+      "result": "passed",
+      "demo_used": false,
+      "summary": "What the check showed.",
+      "next": "Try another layer.",
+      "kind": "first",
+      "targets": [
+        {
+          "layer": "Subtitle",
+          "property": "Position"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-17T16:00:00.000Z",
+      "skill": "easing.speed_graph",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Worked on the focus pairs",
+      "result": "passed",
+      "demo_used": false,
+      "summary": "What the check showed.",
+      "next": "Try another layer.",
+      "kind": "review",
+      "targets": [
+        {
+          "layer": "Title",
+          "property": "Scale"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-04T16:00:00.000Z",
+      "skill": "timing.offset",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Worked on the focus pairs",
+      "result": "passed",
+      "demo_used": false,
+      "summary": "What the check showed.",
+      "next": "Try another layer.",
+      "kind": "first",
+      "targets": [
+        {
+          "layer": "Subtitle",
+          "property": "Position"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-07T16:00:00.000Z",
+      "skill": "timing.offset",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Worked on the focus pairs",
+      "result": "passed",
+      "demo_used": false,
+      "summary": "What the check showed.",
+      "next": "Try another layer.",
+      "kind": "review",
+      "targets": [
+        {
+          "layer": "Bar",
+          "property": "End"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-14T16:00:00.000Z",
+      "skill": "timing.offset",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Worked on the focus pairs",
+      "result": "passed",
+      "demo_used": false,
+      "summary": "What the check showed.",
+      "next": "Try another layer.",
+      "kind": "review",
+      "targets": [
+        {
+          "layer": "Glow",
+          "property": "Blurriness"
+        }
+      ]
+    }
+  ]
+}

@@ -7,7 +7,8 @@ import fs from "node:fs";
 import { LEARNER_FILE } from "../paths.mjs";
 import { MentorError } from "../errors.mjs";
 import { readJson } from "./json-file.mjs";
-import { pastTargetsIn } from "./reviews.mjs";
+import { localDate, nextState, pastTargetsIn, uniqueRefs } from "./reviews.mjs";
+import { applies } from "./marks.mjs";
 
 const RESULTS = ["passed", "partial", "not_checked"];
 const TEXT_FIELDS = ["project", "comp", "attempted", "summary", "next"];
@@ -84,19 +85,79 @@ export function pastTargets(skill, project, comp) {
 
 // Appends the lesson and updates the skill's state. `learned` after one pass, and it stays learned:
 // a later partial is practice, not forgetting.
-export function recordLesson(input, skills) {
-  const entry = { date: new Date().toISOString(), ...validate(input, skills) };
+//
+// With `context.lesson` (the session's current lesson; record_lesson always passes it), spec 004's
+// fields come from the session, never from the model: the entry's kind, already_knew and targets,
+// the skill's review schedule (reviews.nextState), and the lesson's kept-linear marks. Without it,
+// exactly the behaviour from before spec 004.
+export function recordLesson(input, skills, context = {}) {
+  const lesson = context.lesson || null;
+  const now = new Date();
+  const entry = { date: now.toISOString(), ...validate(input, skills) };
+  const newMarks = lesson ? marksToWrite(lesson, entry.skill, now) : [];
+  const targets = lesson ? uniqueRefs(lesson.target_refs) : [];
+  for (const t of targets) if (isUnsafe(t.layer) || isUnsafe(t.property)) throw new MentorError("UNSAFE_RECORD");
   const record = read();
   const prev = record.skills[entry.skill] || { status: "not_started", times_passed: 0 };
-  const times_passed = prev.times_passed + (entry.result === "passed" ? 1 : 0);
-  const skill = {
-    status: times_passed > 0 ? "learned" : "practicing",
-    last_practiced: entry.date,
-    times_passed,
-    next: entry.next,
-  };
+
+  if (!lesson) {
+    const times_passed = prev.times_passed + (entry.result === "passed" ? 1 : 0);
+    const skill = {
+      status: times_passed > 0 ? "learned" : "practicing",
+      last_practiced: entry.date,
+      times_passed,
+      next: entry.next,
+    };
+    record.lessons.push(entry);
+    record.skills[entry.skill] = skill;
+    write(record);
+    return { entry, skill };
+  }
+
+  const wasLearned = prev.status === "learned";
+  const kind = lesson.mode === "review" ? "review" : record.lessons.some((l) => l.skill === entry.skill) ? "practice" : "first";
+  entry.kind = kind;
+  if (kind === "review" && !wasLearned) entry.already_knew = true;
+  entry.targets = targets;
+  const state = nextState(prev, { kind, result: entry.result, date: now, wasLearned });
+  const skill = { status: state.status, last_practiced: entry.date, times_passed: state.times_passed, next: entry.next };
+  if (state.review_due) skill.review_due = state.review_due;
+  if (state.reviews_passed_in_row != null) skill.reviews_passed_in_row = state.reviews_passed_in_row;
+
+  updateMarks(record, lesson, newMarks);
   record.lessons.push(entry);
   record.skills[entry.skill] = skill;
   write(record);
   return { entry, skill };
+}
+
+// The lesson's kept-linear list as full marks (data-model › Kept-linear mark), checked for personal
+// details before anything is written.
+function marksToWrite(lesson, skillId, now) {
+  const base = lesson.baseline;
+  const list = Array.isArray(lesson.kept_linear) ? lesson.kept_linear : [];
+  if (!list.length) return [];
+  if (!base) throw new Error("A lesson with kept-linear marks needs its baseline.");
+  return list.map((m) => {
+    if (isUnsafe(m.layer) || isUnsafe(m.property)) throw new MentorError("UNSAFE_RECORD");
+    return {
+      kind: "kept_linear", project: base.project, comp: base.comp.name, layer: m.layer, path: m.path,
+      property: m.property, key_times: [...m.key_times], skill: skillId, date: localDate(now),
+    };
+  });
+}
+
+// Drops this comp's marks that have lapsed in the lesson's baseline, then adds the new ones, each
+// replacing a mark on the same comp, layer and path. Other comps' marks are left alone. A record
+// that never had marks only gains the field when there's one to keep.
+function updateMarks(record, lesson, newMarks) {
+  const base = lesson.baseline;
+  if (!base || (!Array.isArray(record.marks) && !newMarks.length)) return;
+  const here = (m) => m.project === base.project && m.comp === base.comp.name;
+  let marks = (Array.isArray(record.marks) ? record.marks : []).filter((m) => !(m && m.kind === "kept_linear" && here(m) && !applies(m, base)));
+  for (const m of newMarks) {
+    marks = marks.filter((x) => !(x.kind === "kept_linear" && here(x) && x.layer === m.layer && x.path === m.path));
+    marks.push(m);
+  }
+  record.marks = marks;
 }
