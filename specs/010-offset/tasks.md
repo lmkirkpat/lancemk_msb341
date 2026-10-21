@@ -165,7 +165,7 @@ during spec 008's or 009's sitting). The builder does the hand actions.
 
 - [ ] T038 Re-run T029's checks on the final branch (live fixtures, no stand-ins)
 - [ ] T039 Write the hand-back: branch and commit; test counts; L-1 to L-4 results; SC-001 and SC-002 from T036 and T037; any snippet fix; RQ-1's outcome; anything for the spec; the Requests below. The cockpit writes `discovery/usage-notes/offset-build.md` from it
-- [ ] T041 (round 7 amendment, 2026-10-21) In `mentor/test/offset-check.test.mjs` and the check, a `keys_changed` member holds the pass (FR-008, research R6, as spec 008 FR-014): with any member `keys_changed`, `passed` is false even when every other member passes, and the "2 or more graded members" rule is gone; `SKILL.md` asks if the change was on purpose rather than grading around it; `npm test` green. Before T036
+- [x] T041 (round 7 amendment, 2026-10-21) In `mentor/test/offset-check.test.mjs` and the check, a `keys_changed` member holds the pass (FR-008, research R6, as spec 008 FR-014): with any member `keys_changed`, `passed` is false even when every other member passes, and the "2 or more graded members" rule is gone; `SKILL.md` asks if the change was on purpose rather than grading around it; `npm test` green. Before T036
 - [ ] T040 🖐 [US3] Later, a day or more after the first pass: the live review on the Chips (quickstart › 6, SC-006), logged by the builder; the cockpit adds it to the usage note
 
 ---
