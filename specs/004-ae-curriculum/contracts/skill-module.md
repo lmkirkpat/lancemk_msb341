@@ -78,6 +78,11 @@ Shared tools a skill's SKILL.md also lists in `allowed-tools`: `read_learner_rec
 | `registerErrors({ CODE: "message" })` | `mentor/errors.mjs` | A skill's own codes, registered at import of its tool file |
 | `json(value)` | `mentor/lib/reply.mjs` | Tool replies |
 | `readPath()`, `skillName(id)` | `mentor/lib/path.mjs` | The path data and plain skill names |
+| `takeSnapshot({ sample_times })` | `mentor/lib/snapshot.mjs` | **Wave B** (if tasks-wave-b W1 is approved): also sample read R3 at times the skill stored (skill 6's before-read time) |
+| `layerInfo`, `byIndex`, `byName` | `mentor/lib/layer-info.mjs` | **Wave B.** Reads R1 and R3 per layer, every layer including unkeyed ones ([data-model.md](../data-model.md) › Wave B shapes). `known: false` on snapshots from before wave B |
+| `compPosition`, `footprint`, `compPoint`, `compMatrix`, `toLayerSpace` | `mentor/lib/comp-space.mjs` | **Wave B.** 2D comp-space math from sampled values; `parent_transform` measures through a stored parent (skill 6). Returns `null` with a reason, never a guess. Skills set their own tolerances |
+| `visibility`, `classOf` | `mentor/lib/visibility.mjs` | **Wave B.** FR-013's one class per layer. Every skill uses it instead of the eye switch once `layer_info` is known |
+| `motionSources`, `sourcesOf` | `mentor/lib/motion-sources.mjs` | **Wave B.** FR-014 step 1: own keys and the parent chain; expressions and precomp contents `"not_read"` |
 
 ### `session.start(snapshot, opts)`
 

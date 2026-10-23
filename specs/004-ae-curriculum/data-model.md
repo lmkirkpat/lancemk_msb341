@@ -1,8 +1,8 @@
 # Data model: After Effects curriculum (spec 004), sprint 3 baseline
 
 Shapes for what wave A builds. Snapshot, Segment and Check result for easing are unchanged from
-[spec 002's data model](../002-easing-slice/data-model.md). Wave B's shapes (layer relations, the
-visibility class, the motion-sources map) are outlined at the end. Decisions behind each shape are
+[spec 002's data model](../002-easing-slice/data-model.md). Wave B's shapes (reads R1 and R3, the
+visibility class, the motion-sources map) are at the end. Decisions behind each shape are
 in [research.md](research.md).
 
 ## Path (`mentor/curriculum/path.json`, FR-001)
@@ -194,15 +194,133 @@ Nothing else from the raw values is kept (FR-011).
 `clusters(events, toleranceSeconds)` → groups of events (each `{time, ...}`) where neighbours are
 within the tolerance, in time order. Callers set the tolerance (FR-017).
 
-## Wave B shapes (outline only; detailed in wave B's tasks)
+## Wave B shapes (reads R1 and R3, the visibility class, the motion-sources map step 1)
 
-- **Layer relations (R1)** as a separate `layer_info` array in the snapshot, one entry per layer
-  **including layers with no keys** (parent, shy, solo, guide, locked, in and out points, stretch,
-  time remap, matte target and type, is-a-matte, motion blur), so `layers` and easing's
-  `hidden_layers` don't change shape.
-- **Static transforms and bounds (R3)** in the same array: unkeyed anchor, position, scale,
-  rotation, opacity, and comp-space bounds at the current time.
-- **Visibility class** (FR-013): one of `renders`, `hidden`, `matte`, `guide`, `shy`, `null` per
-  layer, from `layer_info`.
-- **Motion-sources map, step 1** (FR-014): per layer, `own_keys`, `parents` (the chain, each with
-  shy and visibility), and `expressions: "not_read"`, `precomp_contents: "not_read"`.
+Detailed 2026-10-23 for [tasks-wave-b.md](tasks-wave-b.md). Decisions: research R16 to R22.
+
+### Snapshot additions
+
+`layers`, `precomp_layers` and `host` don't change. `comp` gains two fields and the snapshot gains
+`layer_info`:
+
+```json
+{
+  "comp": { "id": 12, "name": "Mentor Overlaps", "duration": 6, "frame_rate": 30,
+            "time": 1, "hide_shy": true },
+  "layer_info": [
+    {
+      "index": 4, "name": "Leaf 1", "kind": "solid",
+      "enabled": true, "is_null": false, "adjustment": false, "has_video": true,
+      "three_d": false, "collapse": false, "auto_orient": false,
+      "parent": 3, "shy": false, "solo": false, "guide": false, "locked": false,
+      "in_point": 0, "out_point": 6, "start_time": 0, "stretch": 100, "time_remap": false,
+      "matte": null, "is_matte": false, "motion_blur": false, "effect_count": 0,
+      "transform": { "anchor": [50, 50, 0], "position": [-120, 40, 0], "scale": [100, 100, 100],
+                     "rotation": 0, "opacity": 100 },
+      "samples": [
+        { "time": 1, "anchor": [50, 50, 0], "position": [-120, 40, 0], "scale": [100, 100, 100],
+          "rotation": 0, "rect": { "left": 0, "top": 0, "width": 100, "height": 100 },
+          "rect_extents": null }
+      ],
+      "samples_truncated": false
+    }
+  ]
+}
+```
+
+| Field | Rule |
+|---|---|
+| `comp.time` | The current time (`comp.time`), rounded to 0.001 s like key times |
+| `comp.hide_shy` | The comp's shy filter (`hideShyLayers`) |
+| `layer_info` | **One entry per layer in the active comp, keyed or not**, in index order. Never anything from another comp |
+| `kind` | As `layers[].kind` (`null`, `text`, `shape`, `camera`, `light`, `adjustment`, `precomp`, `solid`, `footage`) |
+| `three_d` | `threeDLayer` (011 B-3, 012 B-5) |
+| `collapse` | Collapse Transformations (`collapseTransformation`), on precomp and vector layers; `false` elsewhere (011 B-3) |
+| `auto_orient` | `true` when the layer's Auto-Orient isn't Off (012 B-6). Whether `rotation` includes it is a live check (tasks T128) |
+| `parent` | The parent's layer index, or `null`. Only the Parent link: an expression link isn't a parent |
+| `in_point`, `out_point`, `start_time` | Seconds, comp time |
+| `stretch` | Percent (100 = normal; negative = reversed) |
+| `time_remap` | `timeRemapEnabled` |
+| `matte` | On the layer **being matted**: `{ "layer": <index of the matte>, "type": "alpha" \| "alpha_inverted" \| "luma" \| "luma_inverted" }`, or `null`. Scripting names (`trackMatteLayer`, `trackMatteType`) are curriculum B8, checked live |
+| `is_matte` | `isTrackMatte`: this layer is used as a matte |
+| `effect_count` | Number of effects on the layer (optional, 012 B-5; lets a hint fire on an unkeyed effect). Effects themselves aren't read |
+| `transform` | Rendered values (after expressions) at `comp.time`: `anchor`, `position` (assembled from X, Y, Z when separated), `scale` (percent), `rotation` (Z rotation, degrees), `opacity` |
+| `samples` | At each **sample time**: rendered `anchor`, `position`, `scale`, `rotation`, and `rect` (`sourceRectAtTime(t, false)`, the layer's own rectangle in its own space). `rect_extents` (`sourceRectAtTime(t, true)`) on shape and text layers only, else `null` (which one matches what the learner sees is spec 011's L-1) |
+| Sample times | Union of `comp.time`; every key time on the layer's own keyed properties; each child's sample times (recursively); and the caller's `sample_times`. Sorted, deduplicated, rounded to 0.001 s, at most 64 (`samples_truncated: true` past that) |
+| Unreadable value | `null` for that field, never a failed snapshot |
+| Not read | Source names, file paths, anything about the machine or user (FR-011, Principle IV); expressions' text (read R2); what's inside precomps (read R4) |
+
+`takeSnapshot({ sample_times } = {})` passes `sample_times` to the snippet; with none, the snippet
+gets `{}` as today. In fixture mode `sample_times` is ignored (a saved capture can't be re-sampled).
+
+### `mentor/lib/layer-info.mjs`
+
+`layerInfo(snapshot)` → `{ known, layers }` (`known: false`, `layers: []` with no `layer_info`);
+`byIndex(snapshot, index)` → entry or `null`; `byName(snapshot, name)` → every entry with that name
+(AE allows duplicates; callers that need one use the index).
+
+### `mentor/lib/comp-space.mjs` (2D, pure)
+
+| Export | Returns |
+|---|---|
+| `layerMatrix({ anchor, position, scale, rotation })` | The affine matrix translate(position) · rotate(rotation) · scale(scale / 100) · translate(−anchor), as `[a, b, c, d, e, f]` |
+| `compMatrix(snapshot, index, time, { parent_transform } = {})` | `{ matrix }` composed up the parent chain from samples at `time`, or `{ matrix: null, reason }`. `parent_transform` replaces the direct parent's sampled transform (skill 6's "null at parenting"; the parent's own parents still come from samples) |
+| `compPoint(snapshot, index, point, time, opts)` | A point in the layer's own space, in comp pixels |
+| `compPosition(snapshot, index, time, opts)` | The anchor in comp space (where the layer "is") |
+| `footprint(snapshot, index, time, opts)` | `{ corners: [[x, y] × 4], bounds: { left, top, right, bottom } }` from `rect` at `time` (`{ extents: true }` uses `rect_extents`) |
+| `toLayerSpace(snapshot, index, point, time, opts)` | The inverse (for fixture twins, such as skill 6's parenting demo) |
+
+`reason` is one of `no_layer_info`, `no_layer`, `not_sampled` (a layer in the chain has no sample at
+that time, within 0.0005 s), `three_d`, `auto_orient`, `no_rect`. Values are rounded to 0.001 px.
+Callers set every tolerance (FR-028 and FR-029 are the skills' measures, not this file's).
+
+### Visibility class (`mentor/lib/visibility.mjs`, FR-013)
+
+`visibility(snapshot)` → `[{ layer_index, layer, class, known, enabled, solo, soloed_elsewhere, shy,
+timeline_hidden }]`; `classOf(snapshot, index)` → the class.
+
+| Order | Class | When |
+|---|---|---|
+| 1 | `null` | A null layer, whatever its eye |
+| 2 | `matte` | `is_matte`, whatever its eye |
+| 3 | `hidden` | Eye off ("hidden by the learner") |
+| 4 | `guide` | A guide layer |
+| 5 | `shy` | Shy (renders; `timeline_hidden` when the comp's shy filter is on) |
+| 6 | `renders` | Anything else (cameras, lights, adjustment and audio-only layers too; `kind` tells them apart) |
+
+`soloed_elsewhere` is true when another layer is soloed and this one isn't; it never changes the
+class. **Without `layer_info`:** `known: false`, one entry per keyed layer in `layers`, classed
+`null`, `hidden` (eye off) or `renders`, so every consumer behaves as before wave B.
+
+### Motion-sources map, step 1 (`mentor/lib/motion-sources.mjs`, FR-014)
+
+```text
+motionSources(snapshot) → {
+  known,                                    // false without layer_info
+  read: { own_keys: true, parents: true | "not_read", expressions: "keyed_only", precomp_contents: "not_read" },
+  layers: [{
+    layer_index, layer, class,
+    own_keys:  [{ property, path, display_path, keys, group: "transform" | "effect" | "other", expression_on }],
+    parents:   [{ layer_index, layer, class, shy, moves_children }] | null,   // nearest first
+    children:  [{ layer_index, layer }],
+    expressions: { status: "not_read", on_keyed: [{ property, path }] },
+    precomp_contents: "not_read" | "not_a_precomp",
+    static_as_read                          // no own keys and no parents, in what was read
+  }]
+}
+sourcesOf(snapshot, nameOrIndex) → one entry, or null for a layer not in the active comp
+```
+
+| Rule | How |
+|---|---|
+| `moves_children` | The parent has keys on Anchor Point, Position (or X, Y, Z), Scale or Rotation. Opacity and effects aren't inherited |
+| Hidden null with children | Class `null`, listed in each child's `parents` |
+| Shy parent | Listed with `shy: true`; class `shy` |
+| Expression on a keyed property | In `own_keys` with `expression_on: true` and in `expressions.on_keyed` |
+| Anything about unkeyed or turned-off expressions | Not known: `expressions.status` stays `"not_read"` until read R2 (wave D) |
+| Precomp layer | `precomp_contents: "not_read"` until read R4 |
+
+### KD-001 in easing
+
+`analyze()`'s `hidden_layers`: keyed layers whose class is `hidden` when `layer_info` is known; the
+eye-off list otherwise. Shape unchanged. The demo picker is unchanged (eye on, not a null).
