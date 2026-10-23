@@ -273,6 +273,183 @@ interfaces wave A builds so skills 2, 1 and 3 can then be built in parallel by a
   un-eased by undo, inconsistently); storing it in lesson summaries only (free text easing can't
   read reliably).
 
+## Wave B (added 2026-10-23, for [tasks-wave-b.md](tasks-wave-b.md))
+
+Research IDs continue at R16. Note the two numberings: "research R16" is an entry here; "read R1"
+and "read R3" are `curriculum.md` › 5's shared reads. Every entry below is about reads R1 and R3,
+the visibility class (FR-013) and the motion-sources map's first step (FR-014). Inputs: the code at
+`057b6da`, `specs/011-anchor/teaching-design.md` › 10 and › 14 (B-2, B-3), and
+`specs/012-null-parenting/teaching-design.md` › 6, › 9 and › 13 (B-3, B-5, B-6).
+
+## R16. Reads R1 and R3 go in a separate `layer_info` array, one entry per layer
+
+- **Decision:** `snapshot.jsx` keeps `layers` (keyed layers only, spec 002's fields), `precomp_layers`
+  and `host` exactly as they are, and adds a top-level `layer_info` array with **one entry for every
+  layer in the active comp**, keyed or not, in index order. It also adds two fields to `comp`:
+  `time` (the current time, rounded like key times) and `hide_shy` (the comp's shy filter). R1's
+  switches and relations and R3's values live in each entry (data-model › Wave B). Consumers read it
+  through `mentor/lib/layer-info.mjs`, which returns `{ known: false }` for a snapshot without it
+  (every fixture and eval fixture before wave B), so each consumer falls back to today's behaviour.
+- **Rationale:** easing's `hidden_layers`, `analyze()`, `diff()` and every skill's stand-in fixture
+  read `layers`. Adding unkeyed layers there would change what easing sees (SC-004) and break the
+  fixtures built from it. A separate array means old snapshots stay valid and the only code that
+  changes behaviour is code that reads `layer_info` on purpose. `comp.time` is needed by skill 5
+  (011 › 10: "the check can't tell the playhead moved") and by every sampled read (R17).
+- **Alternatives:** unkeyed layers in `layers` with an empty `properties` (changes easing's input;
+  every consumer has to learn to skip them); a second snippet `read_layers` (two reads per check that
+  can disagree if the learner changes something between them, and one more call for each skill to
+  forget).
+
+## R17. Read R3 is sampled: transforms and rectangles at a list of times, comp-space math in Node
+
+- **Decision:** one read serves skills 5 and 6 (and later skill 8). Each `layer_info` entry has
+  `transform` (anchor, position, scale, rotation, opacity at `comp.time`) and `samples`: at each
+  sample time, the layer's **rendered** anchor, position, scale and rotation (`valueAtTime(t, false)`,
+  so after expressions), and its own rectangle (`sourceRectAtTime(t, false)`; for shape and text
+  layers also with extents, since which one matches what the learner sees is spec 011's L-1). The
+  sample times for a layer are the union of:
+  1. `comp.time`;
+  2. every key time on any of the layer's own keyed properties (so skill 5's rest key and Position
+     key times, and skill 6's child key times, are always there);
+  3. the sample times of each of its children, recursively (so a parent is sampled wherever a child
+     needs composing through it);
+  4. the caller's `sample_times` (`takeSnapshot({ sample_times })`, passed to the snippet as args),
+     for a time the skill stored earlier: skill 6's before-read time (012 § 6, S-2).
+  Deduplicated, sorted, rounded to the millisecond, capped at 64 per layer (`samples_truncated:
+  true` past that). The **2D comp-space math** is pure code in `mentor/lib/comp-space.mjs`: a layer's
+  matrix is translate(position) · rotate(rotation) · scale(scale / 100) · translate(−anchor), composed
+  up the parent chain; a point in the layer's own space maps to the comp through it. It gives a
+  layer's comp-space position, its **footprint** (the four corners of its own rectangle in the comp)
+  and their axis-aligned bounds, at any sampled time, and the inverse (comp to layer space, for
+  fixture twins such as skill 6's parenting demo). It also takes a **stored parent transform** in
+  place of the parent's sampled one, which is how skill 6 measures "through the null as stored at
+  parenting" (012 § 6, S-3) without a read of its own. It returns `null` with a reason, never a
+  guess, when a needed sample is missing (`not_sampled`), a layer in the chain is 3D (`three_d`),
+  auto-orients (`auto_orient`), or the snapshot has no `layer_info` (`no_layer_info`).
+- **Rationale:** skill 6's P2 needs footprints at each child's key times and at a stored time, for
+  the child and its parent (012 › 6, B-3); skill 5's checks need the layer's own rectangle and
+  footprint at the current time, the rest key and each Position key time (011 › 10, B-2). AE gives
+  each of those values directly through `valueAtTime` and `sourceRectAtTime`, read only; doing the
+  matrix math in Node keeps it unit tested on saved snapshots (FR-012) and identical for every skill
+  (FR-032). Rule 3 means a parent never lacks a sample its child needs. Rule 4 covers the one time
+  the skill knows and the comp doesn't. Sampling only these times keeps the read small (a 20-layer
+  comp with a few keys each is a few hundred `valueAtTime` calls; the 2 s snapshot goal is checked
+  live).
+- **Fixture mode:** a saved capture can't be sampled at a new time, so `sample_times` is ignored in
+  fixture mode and a missing time gives `not_sampled`. Skill stand-ins and eval fixtures that need a
+  stored time must be captured with the CTI at that time (or with `sample_times` passed to
+  `capture.mjs`). Each skill spec says which captures it needs.
+- **Alternatives:** R3 at the current time only, as outlined (fails skill 6's P2 at every key time
+  and skill 5's rest key unless the learner moves the playhead, 011 › 10); computing values at key
+  times in Node from the key values and ease (wrong for spatial curves, expressions and holds);
+  AE's `toComp()` (only inside expressions, so it would mean writing a temporary expression into the
+  learner's project: not read only); a separate `sample_layer(times)` tool for skill 6 (skill 5 needs
+  the same read, and two reads can disagree).
+- **Open for the human (tasks-wave-b › Open questions, Q1):** this widens R3 beyond the outline, and
+  it shapes `layer_info`. Recommended: take it.
+
+## R18. One visibility class, with an order, and a fallback without `layer_info`
+
+- **Decision:** `mentor/lib/visibility.mjs` gives each layer one of FR-013's six classes, first match
+  wins: `null` (a null layer) → `matte` (used as a track matte by another layer, whatever its eye) →
+  `hidden` (eye off) → `guide` (guide layer) → `shy` → `renders`. It also returns the raw facts a
+  skill may need beside the class: `enabled`, `solo`, `soloed_elsewhere` (another layer is soloed and
+  this one isn't), `shy` and `timeline_hidden` (shy and the comp's shy filter on). Solo never changes
+  the class (Edge Cases, "Solo on another layer"). Cameras, lights, audio-only and adjustment layers
+  are classed by the same rules; `kind` tells them apart, and no skill this sprint teaches them.
+  Without `layer_info` it returns `known: false` and classes keyed layers by today's rule (`null` if
+  a null, `hidden` if eye off, else `renders`), so old fixtures behave as today.
+- **Rationale:** a null with its eye off is still a null (Edge Cases, "Hidden null with children");
+  a matte with its eye off is a matte (KD-001); a guide with its eye off is first hidden by the
+  learner. The fallback is what keeps every existing test and eval unchanged.
+- **Alternatives:** several flags and no class (each skill would combine them its own way, which
+  FR-013 forbids); `matte` before `null` (a null can't be a useful matte, and a null's children are
+  the fact that matters).
+
+## R19. The motion-sources map, step 1: own keys and the parent chain, with "not read" markers
+
+- **Decision:** `mentor/lib/motion-sources.mjs` gives, per layer: `own_keys` (each keyed property:
+  name, path, key count, `group` transform / effect / other, `expression_on`), `parents` (nearest
+  first: index, name, class, shy, and `moves_children`, true when the parent has keys on anchor,
+  position, scale or rotation; opacity and effects aren't inherited), `children` (direct),
+  `expressions: { status: "not_read", on_keyed: [...] }` (only keyed properties with an expression on
+  are known; unkeyed and turned-off expressions wait for read R2), `precomp_contents: "not_read"` for
+  a precomp layer and `"not_a_precomp"` otherwise, and `static_as_read` (no own keys and no parents,
+  meaning only what was read; consumers still check `expressions.status`). `sourcesOf(snapshot,
+  layer)` returns `null` for a layer that isn't in the active comp. Without `layer_info`, `parents`
+  is `null` and `read.parents` is `"not_read"`.
+- **Rationale:** FR-014: "never that a layer has none". The map says what it read and what it
+  didn't, so skill 6, DX-08 and later skill 4 can't mistake "not read" for "none".
+- **Alternatives:** leave `expressions` out until R2 (a consumer would read absence as none).
+
+## R20. KD-001's fix: `hidden_layers` leaves mattes out; nothing else in easing changes
+
+- **Decision:** in `analyze()`, `hidden_layers` lists keyed layers whose class is `hidden` when
+  `layer_info` is known, and today's eye-off list otherwise. The output keeps its shape (no new
+  field). The demo picker keeps `enabled && !is_null`, so an eye-off matte is still never the demo
+  (the frame wouldn't show the matte itself). `ease-mentor/SKILL.md` step 2 gets one line: a layer
+  not in `hidden_layers` is never called hidden, and a track matte is never in it.
+- **Rationale:** the smallest change that fixes KD-001. Every easing eval fixture lacks
+  `layer_info`, so the eval set sees exactly today's output (FR-035's risk is only the one
+  `SKILL.md` line). A new `matte_layers` field would add a line to every case's tool output while
+  the easing set is at 20/25.
+- **Alternatives:** a `matte_layers` field so the mentor can say "Wipe is the matte for Photo"
+  (nicer; deferred to skill 8, which teaches mattes); demo on mattes (the frame shows the reveal, not
+  the matte, so "watch this pair" is hard to follow).
+
+## R21. Skills 1 to 3 switch to the visibility class in this pass; their other R1 changes come later
+
+- **Decision:** this pass changes the eye-switch tests in `mentor/lib/key-types.mjs`,
+  `speed-graph.mjs` and `offset.mjs` to the visibility class when `layer_info` is known, as each
+  skill's spec already says (009 SR-3 and FR-023; 008 row 10; 010 FR-004, filter 2). Each skill's
+  demo rule follows its own spec (skill 1: candidate and demo filter, SR-3; skill 2: a matte is a
+  candidate, never the demo; skill 3: mattes eligible, demo rule unchanged unless spec 010 says
+  otherwise). The rest of what those specs say happens "when R1 lands" (naming a parent in one
+  sentence, frames chosen while no parent moves, precomp layers eligible through in points, stretch
+  and time remap, a locked layer as the demo target) is **teaching** change: each needs its own spec
+  update, `SKILL.md` lines and eval cases, so each is a later per-skill branch (tasks-wave-b › Later
+  per-skill branches).
+- **Rationale:** FR-013 ("No skill may filter layers by the eye switch alone") becomes checkable the
+  moment the class exists, and the switch is mechanical and unit tested. Teaching changes in three
+  skills would triple this pass's eval risk and hold up skills 5 and 6.
+- **Alternatives:** leave all three to per-skill branches (FR-013 broken until then, and three more
+  shared-owner branches for one-line filters); do everything here (see above).
+
+## R22. Live fixtures: a planted-overlaps comp, Mentor Practice 2's wave B layers, and AE's own toComp as the answer
+
+- **Decision:** two new dev scripts, each writing its own answer key:
+  - `mentor/dev/build-overlaps-b.jsx` builds **"Mentor Overlaps"** in the same `.aep`: one layer per
+    wave B Edge Cases row (a moving matte with its eye off, a hidden null with children, a shy parent,
+    a guide layer, an expression on a keyed property, an expression on unkeyed Position, a static
+    layer, precomp layers with stretch and with time remap, a locked layer, a 3D layer, an
+    auto-oriented layer, a rotated and non-uniformly scaled parent chain, a separated-Position child).
+    It isn't a lesson comp. For the comp-space answer key the script adds a temporary probe layer
+    whose Point Control expressions call AE's own `toComp()` for chosen layers, reads their values at
+    each sample time, writes them into the answer key, and deletes the probe. The solo row is a
+    second capture with Solo turned on by hand.
+  - `mentor/dev/build-practice-comp-2b.jsx` adds skills 5 and 6's targets to **Mentor Practice 2**
+    (after wave A's captures of it), never touching its existing layers.
+- **Rationale:** FR-012 wants live captures with an answer key. Planted overlaps (solo above all)
+  would wreck a lesson comp, so they get their own. AE's `toComp()` is the ground truth for the math
+  in R17, and a dev script may write to the project; the mentor's snapshot never does. Mentor
+  Practice 2's answer key and wave A's captures stay as they are because 2b runs after them and has
+  its own key.
+- **Alternatives:** synthetic snapshots for the overlaps (FR-012 forbids, except pure-math unit
+  cases marked synthetic); a fourth comp for skills 5 and 6 (plan › Wave B put them in the second
+  practice comp, so the learner opens one comp for every new skill).
+
+## R23. The easing eval gate for this pass
+
+- **Decision:** FR-035 is already open (20/25 after wave A, cases 08 and 15), and another session is
+  working on it in `product/evals/easing/`. This pass's merge condition is: the easing run on the
+  branch is **no worse than a run on its merge base the same day** (no new failing case, no
+  hard-rule failure), and FR-035 itself closes when that other work lands. The eval engineer runs
+  both.
+- **Rationale:** with no `layer_info` in any easing fixture, the only easing change the evals can see
+  is the `SKILL.md` line (R20). Holding wave B until an unrelated regression is fixed would stall
+  skills 5 and 6 for no safety gain. Open for the human (Q4).
+- **Alternatives:** wait for 25/25 or 24/25 first (FR-035 as written).
+
 ## Dependencies
 
 No new npm dependency. Node built-ins only (`node:fs`, `node:path`, `node:test`). The
