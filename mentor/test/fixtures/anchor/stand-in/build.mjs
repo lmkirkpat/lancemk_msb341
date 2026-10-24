@@ -374,10 +374,10 @@ syn("row16-before.json", "row 16: Arm (Rotation 0 → 90) parents Hand; row 13: 
 syn("row16-pass.json", "row 16: Arm's pivot moved to its left edge at its 0° key: Hand turns with it at 2 s",
   build(SYN(335, "Synthetic Family", { hide_shy: true, time: 1 }), variant(fam, (s) => { panBehind(byName(s, "Arm"), [0, 20], 1); }), [1, 2]));
 // Row 26: the playhead moved between reads; row 27: a time not sampled and a layer with no rectangle.
-syn("row26-moved-playhead.json", "row 26: edge-before.json with Door's pivot moved by Pan Behind, read with the playhead at 2 s",
-  build(SYN(331, "Synthetic Edges", { time: 2 }), variant(plain, (s) => { panBehind(byName(s, "Door"), [0, 250], 0); })));
-syn("row26-untouched.json", "row 26: edge-before.json read again with the playhead at 2 s, nothing changed",
-  build(SYN(331, "Synthetic Edges", { time: 2 }), plain));
+syn("row26-moved-playhead.json", "row 26: edge-before.json with Door's pivot moved by Pan Behind, read with the playhead at 2 s (and 0 s asked for, as anchor_check does)",
+  build(SYN(331, "Synthetic Edges", { time: 2 }), variant(plain, (s) => { panBehind(byName(s, "Door"), [0, 250], 0); }), [0]));
+syn("row26-untouched.json", "row 26: edge-before.json read again with the playhead at 2 s (and 0 s asked for), nothing changed",
+  build(SYN(331, "Synthetic Edges", { time: 2 }), plain, [0]));
 syn("row27-not-sampled.json", "row 27: Door's pivot moved, but this read has no sample at the lesson's check time (0 s)",
   build(SYN(331, "Synthetic Edges", { time: 2 }), variant(plain, (s) => { panBehind(byName(s, "Door"), [0, 250], 0); byName(s, "Door").drop_times = [0]; byName(s, "Other").drop_times = [0]; })));
 syn("row27-no-rect.json", "row 27: Door's pivot moved, but this read has no rectangle for it",

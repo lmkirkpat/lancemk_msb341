@@ -300,18 +300,19 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
   return out;
 }
 
-// FR-004's ranking, one comparator: shy, precomp and flipped or turned layers below the rest (TD § 4,
-// rows 9, 13, 18); unparented first; no Rotation or Scale keys; the pivot where AE put it; not
-// full-frame; then the comp's layer order. A review puts "no Rotation or Scale keys" first (R8).
+// FR-004's ranking, one comparator: a full-frame layer only when nothing else exists (FR-004's last
+// resort, so this key comes first); shy, precomp and flipped or turned layers below the rest (TD § 4,
+// rows 9, 13, 18); unparented first; no Rotation or Scale keys; the pivot where AE put it; then the
+// comp's layer order. A review puts "no Rotation or Scale keys" ahead of all but full-frame (R8).
 export function rankOrder({ review = false } = {}) {
   const keys = [
+    (c) => (c._large ? 1 : 0),
     (c) => (c._demoted ? 1 : 0),
     (c) => (c.parent ? 1 : 0),
     (c) => (c.keyed.rotation || c.keyed.scale ? 1 : 0),
     (c) => (c.pivot_as_placed ? 0 : 1),
-    (c) => (c._large ? 1 : 0),
   ];
-  if (review) keys.unshift(keys.splice(2, 1)[0]);
+  if (review) keys.splice(1, 0, keys.splice(3, 1)[0]);
   return (a, b) => {
     for (const k of keys) { const d = k(a) - k(b); if (d) return d; }
     return a.index - b.index;

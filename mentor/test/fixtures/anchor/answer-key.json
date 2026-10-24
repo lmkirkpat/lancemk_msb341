@@ -1,0 +1,80 @@
+{
+  "about": "Spec 011's answer key, written by hand from spec.md, teaching-design.md and the declared values in mentor/dev/build-practice-comp-2b.jsx and build-overlaps-b.jsx (never by running mentor/lib/anchor.mjs). Times in seconds at 30 fps. 'times' is the --times list each Mentor Practice 2 capture needs in the sitting (research R4).",
+  "times": {
+    "practice2b": [3.167, 3.667, 4.167, 4.3, 4.667, 5.433, 6.433],
+    "overlaps": [],
+    "why": "Gauge's rest key (3.167, Rotation 0), Pop's (4.3, full size), Sled's Position keys (3.667, 4.167, 4.667) and Gradient's (5.433, 6.433): every candidate's rest-key and Position key times, on every layer"
+  },
+  "practice2b": {
+    "proposal": { "layer": "Door", "suggested_place": "middle-left" },
+    "layers": {
+      "Door": { "bucket": "default", "reason": null, "rank": 1, "place_now": "center", "check_time": { "time": 0, "basis": "current" } },
+      "Needle": { "bucket": "default", "reason": null, "rank": 2, "place_now": "center", "check_time": { "time": 0, "basis": "current" } },
+      "Gauge": { "bucket": "default", "reason": null, "rank": 7, "place_now": "center", "check_time": { "time": 3.167, "basis": "both" } },
+      "Lid": { "bucket": "if_named", "reason": "shape_until_l1", "rank": null, "place_now": "outside", "check_time": { "time": 0, "basis": "current" } },
+      "Wobble": { "bucket": "never", "reason": "anchor_keyed", "rank": null },
+      "Tab": { "bucket": "default", "reason": null, "rank": 3, "place_now": "center" },
+      "Peg": { "bucket": "default", "reason": null, "rank": 4, "place_now": "center" },
+      "Banner": { "bucket": "if_named", "reason": "shape_until_l1", "rank": null, "place_now": "center" },
+      "Sign": { "bucket": "default", "reason": null, "rank": 5, "place_now": "between" },
+      "Plaque": { "bucket": "default", "reason": null, "rank": 6, "place_now": "center" },
+      "Flip": { "bucket": "default", "reason": null, "rank": 10, "place_now": "center" },
+      "Pop": { "bucket": "default", "reason": null, "rank": 8, "place_now": "center", "check_time": { "time": 4.3, "basis": "both" } },
+      "Sled": { "bucket": "if_named", "reason": "position_keyed", "rank": null, "place_now": "center" },
+      "Hatch Rig": { "bucket": "never", "reason": "null", "rank": null },
+      "Hatch": { "bucket": "default", "reason": null, "rank": 9, "place_now": "center" },
+      "Seal": { "bucket": "never", "reason": "collapsed", "rank": null },
+      "Reveal Matte": { "bucket": "if_named", "reason": "matte", "rank": null },
+      "Gradient": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
+      "Background": { "bucket": "if_named", "reason": "full_frame", "rank": null }
+    },
+    "ranking_why": "Unparented first (Hatch below), no Rotation or Scale keys next (Gauge and Pop below), then layer order; Flip is flipped, so it ranks last (row 18). Every pivot is where AE put it (centre, or origin for Sign)"
+  },
+  "overlaps": {
+    "layers": {
+      "Orbit": { "bucket": "never", "reason": "cant_read", "why": "auto-orient: comp-space returns auto_orient" },
+      "Depth": { "bucket": "never", "reason": "three_d" },
+      "Locked Bar": { "bucket": "if_named", "reason": "locked" },
+      "Still": { "bucket": "default", "reason": null, "rank": 1 },
+      "Gauge Dial": { "bucket": "never", "reason": "expression_rotation_scale" },
+      "Drift": { "bucket": "default", "reason": null, "rank": 2, "why": "an expression on unkeyed Position isn't read (R2); the check reads its rendered values" },
+      "Guide Grid": { "bucket": "if_named", "reason": "guide" },
+      "Rig": { "bucket": "never", "reason": "null" },
+      "Leaf 2": { "bucket": "if_named", "reason": "position_keyed" },
+      "Wipe": { "bucket": "if_named", "reason": "matte" },
+      "Photo": { "bucket": "default", "reason": null, "rank": 3 }
+    }
+  },
+  "attempts": {
+    "door-pass": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": true, "hints": [] },
+    "door-typed": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["moved_with_pivot"], "direction": "right", "item1": true, "item2": false },
+    "door-dragged": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["layer_dragged"], "direction": "down-right", "item2": false },
+    "needle-near-middle": { "focus": [{ "layer": "Needle", "place": "bottom-middle" }], "passed": false, "hints": ["not_moved_enough"], "place_now": "between" },
+    "banner-neighbour": { "focus": [{ "layer": "Banner", "place": "middle-left" }], "passed": false, "hints": ["neighbour_place"], "place_now": "bottom-left" },
+    "door-outside": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["outside"], "place_now": "outside" },
+    "wrong-layer": { "focus": [{ "layer": "Needle", "place": "bottom-middle" }], "passed": false, "hints": ["wrong_layer"], "other_changes": [{ "kind": "anchor_changed", "layer": "Background" }] },
+    "lid-group": { "focus": [{ "layer": "Lid", "place": "middle-left" }], "passed": false, "hints": ["group_anchor"] },
+    "lid-pan": { "focus": [{ "layer": "Lid", "place": "middle-left" }], "passed": true, "hints": [] },
+    "pop-shrunk": { "focus": [{ "layer": "Pop", "place": "bottom-middle" }], "passed": false, "hints": ["away_from_rest"], "check_time": 4.3 },
+    "pop-pass": { "focus": [{ "layer": "Pop", "place": "bottom-middle" }], "passed": true, "hints": [], "check_time": 4.3 },
+    "gauge-at-rest": { "focus": [{ "layer": "Gauge", "place": "bottom-middle" }], "passed": true, "hints": [], "check_time": 3.167 },
+    "gauge-away": { "focus": [{ "layer": "Gauge", "place": "bottom-middle" }], "passed": false, "hints": ["away_from_rest"], "check_time": 3.167 },
+    "sled-slid": { "focus": [{ "layer": "Sled", "place": "middle-left" }], "passed": false, "hints": ["slid_at_key"], "item2": true, "item4": false },
+    "stopwatch": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["stopwatch"] },
+    "door-locked": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["locked"] },
+    "plaque-pass": { "focus": [{ "layer": "Plaque", "place": "middle-left" }], "passed": true, "hints": [] },
+    "demo-separated": { "focus": [{ "layer": "Tab", "place": "middle-left" }], "passed": true, "hints": [] },
+    "demo-parented": { "focus": [{ "layer": "Hatch", "place": "middle-left" }], "passed": true, "hints": [] }
+  },
+  "two_focus_demos": {
+    "door_with_tab": { "focus": [{ "layer": "Door", "place": "middle-left" }, { "layer": "Tab", "place": "middle-left" }], "demo_target_layer": "Tab" },
+    "gauge_with_peg": { "focus": [{ "layer": "Gauge", "place": "bottom-middle" }, { "layer": "Peg", "place": "bottom-middle" }], "demo_target_layer": "Peg" },
+    "sled_with_door": { "focus": [{ "layer": "Door", "place": "middle-left" }, { "layer": "Sled", "place": "middle-left" }], "demo_target_layer": "Door", "why": "Sled isn't a default candidate (Position keyed), so the demo goes on entry 0" },
+    "lid_with_banner": { "focus": [{ "layer": "Lid", "place": "middle-left" }, { "layer": "Banner", "place": "middle-left" }], "demo_target_layer": null, "no_demo_reason": "not_a_default_candidate" }
+  },
+  "review": {
+    "record": "records/learned-door.json",
+    "proposal": "Tab",
+    "count_with_exclude": 8
+  }
+}
