@@ -4,9 +4,10 @@
 
 **Created**: 2026-10-23
 
-**Status**: Draft, awaiting the builder's approval. Plan and tasks come after. Written to every
-recommendation in Open questions; the FRs that depend on an unanswered one say "pending" and name
-it.
+**Status**: Approved 2026-10-23. The builder took H-1, H-3, H-4 and H-5 as recommended and, for
+H-2, approved SR-1 and **declined SR-2** (going with the designer). The designer's round 1 answers
+(TD § 14: D-1, D-2, unique names, a null with a parent) are folded in the same day. Plan and tasks
+come next, after wave B's shared pass (spec 004 tasks-wave-b.md T100 to T163).
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 6,
 Move a group with a null." Record ID `parenting.null` (in `mentor/curriculum/path.json`, position
@@ -20,11 +21,12 @@ design doesn't say, that's a question in Open questions › D.
 
 **The designer's S-1 to S-6 (TD § 13), taken:** all six, as recommended. S-1 (corners, not only the
 position), S-2 (the stored before-read time) and S-3 (through the null as stored) are FR-011 to
-FR-013; they replace spec 004 FR-029's wording for this skill, and the change to FR-029 itself is
-H-1 (this spec doesn't edit spec 004). S-4 (the move is Position, Scale or Rotation) is FR-015; S-5
+FR-013; spec 004 FR-029 now keeps only the 1 px measure and "never compare raw key values" and
+points here (H-1, made 2026-10-23). S-4 (the move is Position, Scale or Rotation) is FR-015; S-5
 (N3 on the group's bounds with FR-028's per-axis numbers, gating only a move that turns or scales)
-is FR-009 and FR-016; S-6 (ask, don't fail, for a null with a parent) is in FR-009 too. One refinement to
-S-3's timing is asked back as D-1, not taken.
+is FR-009 and FR-016; S-6 (ask, don't fail, for a null with a parent) is in FR-009 too, narrowed
+by TD § 14 to a parent that doesn't move. S-3's timing is refined by D-1, which the designer took
+(FR-012).
 
 ## Why this skill
 
@@ -61,19 +63,21 @@ S-3's timing is asked back as D-1, not taken.
   write its eval cases; numbers from the cockpit).
 - **Spec 004** (approved): FR-005, FR-009, FR-013 (one visibility class), FR-014 (the
   motion-sources map; skill 6's checks read it), FR-018 to FR-022, FR-024, FR-025, **FR-028** (the
-  region numbers, reused by N3), **FR-029** (the 1 px measure, reworded for this skill, H-1),
+  region numbers, reused by N3), **FR-029** (the 1 px measure and no raw values; it points here,
+  H-1),
   FR-030, FR-032 (add files only), FR-033 to FR-035, FR-037, its Edge Cases table; its
   [plan](../004-ae-curriculum/plan.md) › Wave B, [tasks-wave-b.md](../004-ae-curriculum/tasks-wave-b.md)
   (W1 sampled R3, W4 R1 extras, W5 auto-orient, W6 `parent_transform`, W7 and T157 Mentor Practice
-  2b, T135's parented capture), [data-model](../004-ae-curriculum/data-model.md) › Wave B shapes
+  2b, T135's parented capture, T161 to T163 for this spec's SR-1 and SR-3), [data-model](../004-ae-curriculum/data-model.md) › Wave B shapes
   and the [skill-module contract](../004-ae-curriculum/contracts/skill-module.md).
 - **Spec 002** (easing, built): the house lesson shape, the server rules, `record_lesson`'s session
   check, the demonstration rule.
 - **Spec 011** (set the pivot, written in parallel): this skill's hard prerequisite. Nothing here
   reads its files or its check; N3 reuses spec 004 FR-028's numbers directly.
 
-None needs changing except FR-029's wording (H-1). Three shared-code requests go back to spec 004's
-shared-code owner, numbered for tasks-wave-b.md T160 onward (Dependencies › Shared-code requests).
+Spec 004 FR-029 was reworded to point here (H-1). Of this spec's three shared-code requests, SR-1
+and SR-3 are approved as tasks-wave-b.md T161 to T163, and SR-2 is declined this sprint
+(Dependencies › Shared-code requests).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -205,8 +209,9 @@ section). Other edge cases:
 - **The learner names 1 layer, or more than 4**: ask what else should move with it, or which 4 to
   start with (TD § 4).
 - **Adding a null renumbers every layer below it.** Layers are matched by name, never by index, for
-  the whole lesson (FR-019). A focus layer whose name isn't unique in the comp: the mentor asks the
-  learner to rename one before the focus is set (one sentence).
+  the whole lesson (FR-019). A candidate whose name isn't unique in the comp: the mentor asks the
+  learner to rename one before the focus is set (one sentence), never renames it itself, and the
+  rename is never graded or counted as an other change (FR-004, TD § 14).
 - **Two new nulls**, or the learner names an existing null: FR-007.
 - **The lesson's null renamed** (stage 7 suggests a name): if its name is gone and exactly one null
   is the parent of every parented focus layer, that's the lesson's null; the mentor says it noticed
@@ -234,7 +239,7 @@ section). Other edge cases:
   `.claude/skills/*-mentor/`, `product/evals/` or `panel/` (spec 004 FR-032; `check-branch.mjs`).
   Anything more is a request (Dependencies › SR-1 to SR-3).
 - **FR-002**: Every comp-space measure MUST come from `mentor/lib/comp-space.mjs`
-  (`footprint`, `compPosition`, `compMatrix`, with `parent_transform`, or SR-2's option), every
+  (`footprint`, `compPosition`, `compMatrix`, with `parent_transform`), every
   parent link and "what moves it" from `mentor/lib/motion-sources.mjs`, and every visibility
   decision from `mentor/lib/visibility.mjs` (spec 004 FR-013, FR-014). The skill sets its own
   tolerances (1 px, half a frame, FR-028's 10%) in its own file and MUST NOT copy or re-derive the
@@ -256,10 +261,16 @@ section). Other edge cases:
   full-frame solid or adjustment layer is never proposed but allowed if picked. A layer that is
   itself the parent of another layer is a candidate; the mentor says once that its children come
   along. Each left-out reason gets the one sentence TD § 4 gives it.
+  **Unique names first** (TD § 14): a candidate whose name another layer in the comp shares can't
+  be in the focus yet. The mentor asks the learner in one sentence, before the focus is agreed, to
+  rename one ("two layers are both called Shape Layer 1; rename one so I can tell them apart"). The
+  mentor never renames a layer (the demo is its only change), `null_parent_snapshot` refuses to set
+  a focus while any focus name isn't unique in the comp, and the rename is never graded and never
+  an other change (FR-021).
 - **FR-005 (proposal)**: When the learner has no group in mind, the mentor MUST propose up to 4
   candidates whose comp-space bounds at the before-read time overlap or **nearly touch**, meaning
   the gap between two bounds is at most **2% of the comp's width** on both axes (38 px at 1920;
-  a number for TD § 4's Guess, H-4). Candidates link pairwise into groups; the proposal is the
+  TD § 4's Guess, approved as H-4). Candidates link pairwise into groups; the proposal is the
   largest group, a tie going to the group whose top layer is highest in the stack; past 4, the
   first 4 in stack order that still link. A matte pair counts as 2 and is never split. The rule is
   deterministic and unit tested. Nothing qualifies: say so (Edge Cases).
@@ -271,7 +282,8 @@ section). Other edge cases:
 - **FR-007 (the lesson's null)**: At stage 3 the lesson's null is, in order: the null the learner
   names; else the one null that isn't in the before read; else, with several new nulls, the mentor
   asks which. An existing null with children or keys is allowed only if the learner picks it, with
-  TD § 4's one sentence. Its name is stored on the lesson by the tool, not the model (SR-1).
+  TD § 4's one sentence. Its name is stored on the lesson by the tool with `setSkillData()`, not
+  by the model (SR-1).
 - **FR-008 (demo target)**: The demo target MUST be the first focus layer in stack order that
   renders, is 2D, isn't a matte or eye-off, and has no expression on a keyed Position, Scale or
   Rotation; one with its own transform keys is preferred over one without. None qualifies: no
@@ -283,12 +295,18 @@ section). Other edge cases:
 All of TD § 6, counting the demo layer.
 
 - **FR-009 (the null, N1 to N3)**: The check MUST pass the null when it's class `null` (N1); 2D
-  with no parent (N2), where a parent gets the hint and, **if the learner says the chain is on
-  purpose, N2 passes** and the mentor says once it checks one level only (S-6; ask, don't fail);
-  and, only when a region was named, its anchor point in comp space is in that region of the
+  with no parent (N2); and, only when a region was named, its anchor point in comp space is in that region of the
   **group's combined bounds** at the before-read time, using spec 004 FR-028's per-axis rule (10%
   of the group's width across, 10% of its height up and down) (N3, S-5). "It'll only slide" is a
   valid answer and skips N3 until FR-016.
+  **A null with a parent** (N2, TD § 14): the parent **moves** when any layer above the null in its
+  chain has `moves_children` true in the before read or the check read. Then the null is out of the
+  lesson: the mentor says in one sentence that the null follows that layer, so the lesson can't
+  check the group, and asks for a null with no parent (unparent it or add a new one). That isn't a
+  fail, nothing is graded on it, and it's never recorded as a miss. When no layer above it moves,
+  the parent gets the hint and, **if the learner says the chain is on purpose, N2 passes** and the
+  mentor says once that it checks one level only (S-6; ask, don't fail), because FR-012 can measure
+  it. There's no stored-chain option (SR-2 declined), so a moving chain is never measured.
 - **FR-010 (P1)**: Every focus layer's parent MUST be the lesson's null, read as the nearest entry
   of `sourcesOf(...).parents`. Only the Parent link counts: a layer that follows the null through an
   expression isn't parented.
@@ -301,17 +319,20 @@ All of TD § 6, counting the demo layer.
   the stroke-or-letters question (spec 011's L-1) doesn't affect a jump. A time where either read
   can't give a footprint (a `reason` from the math) is reported as "couldn't check" and P2 doesn't
   pass on it; the mentor says what it couldn't see, never that the layer stayed put.
-- **FR-012 (the stored null; S-3)**: P2's after-parenting footprint MUST compose each child's own
-  sampled values at each time **through the null as stored**, never through the null's current
-  transform. The stored null is the null's sampled anchor, position, scale and rotation **at the
-  before-read time**, taken from the read at the stage 3 check that passes N1 and N2, and taken
-  again from the demo's fresh read if a demo runs (whichever is later; TD § 6; pending D-1). In a
-  review, it's taken from the first check that sees the lesson's null (TD § 11; S-3's fallback).
-  The tool code stores it on the lesson; the model never supplies it (SR-1). When the null has a
-  parent (N2 on purpose), its whole chain is stored as one comp-space matrix at the same moment
-  (SR-2); until SR-2 lands, such a chain is accepted only if no parent above the null
-  `moves_children`, and otherwise the mentor says it can't check through a moving chain and asks
-  for an unparented null.
+- **FR-012 (the stored null; S-3, D-1)**: P2's after-parenting footprint MUST compose each child's
+  own sampled values at each time **through the null as stored** (`parent_transform`), never
+  through the null's current transform. The stored null is the null's sampled anchor, position,
+  scale and rotation **at the before-read time**, taken from the first check that passes N1 and N2
+  and **taken again at every later check, and at the demo's fresh read, while no focus layer is
+  parented to the null yet**; P2 uses the last one stored before any focus layer was parented (TD
+  § 14 D-1). So a null moved after it was placed but before parenting never reads as a jump. The
+  one case left (the null re-placed and focus layers parented with no check in between) gets TD
+  § 7's jump hint, which names a moved null. In a review, the same rule runs from the first check
+  that sees the lesson's null (TD § 11). The tool code stores it on the lesson with `setSkillData()`
+  (SR-1); the model never supplies it. For a null with a parent that doesn't move (FR-009), the
+  stored null is its own transform only, and the layers above it come from each read's samples
+  (W6: `parent_transform` replaces the direct parent only). A null whose chain moves never reaches
+  P2 (FR-009).
 - **FR-013 (P3, own animation kept)**: Each focus layer's key count and key times on every keyed
   property (transform, effects and others; separated X and Y counted apart) MUST match the before
   read within half a frame. Raw key values MUST NOT be compared (B9).
@@ -321,7 +342,9 @@ All of TD § 6, counting the demo layer.
   the null early").
 - **FR-015 (P4, the group's move; S-4)**: The null MUST have at least two keys with different values
   on **Position, Scale or Rotation** (X or Y separately counts). Keys on Opacity or an effect don't
-  count, and an expression with no keys doesn't count.
+  count, and an expression with no keys doesn't count. A null whose only keys are on **Anchor
+  Point** doesn't pass P4 and gets TD § 14 D-2's hint (FR-020); that's the only fail it causes, and
+  Anchor Point keys next to a real move are fine.
 - **FR-016 (P5)**: If the null's move includes Scale or Rotation, N3 MUST pass; if the learner
   skipped the region, the mentor asks for it before grading (S-5).
 - **Never graded** (part of FR-016's section, not a requirement of its own): the null's ease, key type, name, timing against
@@ -338,7 +361,8 @@ All of TD § 6, counting the demo layer.
   The snippet repeats the lock and parent checks itself. After writing, the tool MUST measure its
   own result with FR-011 on a second read; if the target moved more than 1 px, it says so plainly
   and points to Edit > Undo, and never retries (TD B-7). One undo step; the reply says what changed
-  and "Edit > Undo" (server rule 1). The demo's fresh read also refreshes the stored null (FR-012).
+  and "Edit > Undo" (server rule 1). The demo's fresh read also refreshes the stored null while no focus layer is parented yet
+  (FR-012).
 - **FR-018 (credit and fixture twin)**: The check MUST credit the demo layer to the demo while it's
   still parented to the null and count it in P1 to P3; once the learner undoes it and parents it
   themselves, it's theirs (`markChecked(passed, { demoUndone })`). The fixture twin MUST reproduce
@@ -354,7 +378,9 @@ All of TD § 6, counting the demo layer.
   at the worst time, the times it couldn't check, and its key counts and times before and now; and
   for the null: N1 to N3, P4, P5, and what its keys move. The skill prompt turns that into TD § 7's
   hints: name the layer, the distance and direction, the time, and where to look; never the fix and
-  never a cause it can't see (spec 002 FR-008).
+  never a cause it can't see (spec 002 FR-008). The mentor never renames a layer. If the lesson's
+  null can't be told apart by name (another layer has its name), the check says it can't tell which
+  layer is the lesson's null and asks, never guesses (D-3).
 - **FR-020 (comments, never graded)**: After a pass, one sentence each only when the read shows it:
   the null's move is linear; it's held (asked, as a question); it overlaps a focus layer's own
   Position, Scale or Rotation keys in time (stacked motion, from the map's `own_keys` and the
@@ -363,14 +389,16 @@ All of TD § 6, counting the demo layer.
   below 100 while a child's isn't; an effect on the null (only when `effect_count` or a keyed
   effect shows one). The non-uniform scale, zero scale, opacity and effect sentences also show
   before a pass when they explain a failure (TD § 7), and so does one more: when the null's only
-  keys are on Anchor Point, it says the group swings because the null's anchor moves and that the
-  group's move goes on Position, Scale or Rotation (overlap row 26). Worded for a learner who may not have met
+  keys are on Anchor Point, TD § 14 D-2's hint (its keys move its pivot, not the null, so the group
+  drifts the opposite way; the group's move goes on the null's Position, Scale or Rotation;
+  overlap row 26). Worded for a learner who may not have met
   easing (TD § 3).
 - **FR-021 (other changes)**: The check MUST report, as other changes and not graded, from the raw
   keys and `layer_info` of every layer (not from the focus filter): a layer outside the focus that's
   now parented to the null, or whose parent changed; keys added, moved or removed outside the
   focus; an expression turned on or off on a keyed property; a layer added or deleted (the null
-  aside). A visible layer's children brought along by the null (FR-004) are named once, not as a
+  aside). A rename the mentor asked for (FR-004) is never one: it happens before the focus is set,
+  so it's already in the before read. A visible layer's children brought along by the null (FR-004) are named once, not as a
   fault.
 - **FR-022 (frames)**: Frame claims follow TD § 5: where layers are on screen in a frame, never how
   far along their own move they are; for the demo, a frame at the before-read time; at stage 6,
@@ -424,7 +452,7 @@ All of TD § 6, counting the demo layer.
 - **Focus**: 2 to 4 layers, by name, and the matte pairs among them.
 - **Before read**: the lesson's baseline, taken when the focus is set; its stored time.
 - **Lesson's null**: its name, the region the learner named (or "only slides"), and the stored
-  null (its transform at the before-read time, or its chain's matrix, SR-2).
+  null (its transform at the before-read time, FR-012), kept as the lesson's `skill_data` (SR-1).
 - **Demo target**: one focus layer (FR-008), or none.
 - **Check result**: per focus layer, its parent, worst corner distance, direction and time, times
   not checked, key counts and times; for the null, N1 to N3, P4, P5; comments; other changes.
@@ -451,8 +479,8 @@ learner each see, and the reused filters.
    skill) and fixed from the baseline. Because adding a null renumbers layers, every lookup is by
    name (FR-019); nothing reads an index from the baseline against a later read.
 4. **`parent_transform` (W6)** replaces only the direct parent. Right for an unparented null; wrong
-   for a null with a moving parent, where it would read the grandparent's motion as a jump. FR-012
-   stores the whole chain (SR-2) or refuses a moving chain.
+   for a null with a moving parent, where it would read the grandparent's motion as a jump. FR-009
+   takes such a null out of the lesson (SR-2, a stored chain, was declined).
 5. **Easing's `unexpectedChanges()`** is keyed on easing pairs and never reports a parent change.
    This skill writes its own other-changes list (FR-021).
 6. **"Moves" for P4 vs. "moves children" in the map.** The map's `moves_children` counts Anchor
@@ -484,7 +512,7 @@ learner each see, and the reused filters.
 | 20 | Solo on another layer | Class unchanged (`soloed_elsewhere`) | As usual | Never "hidden" | Right. Test on `overlaps-solo.json` |
 | 21 | Non-uniform null scale | n/a | P2's corners catch any on-screen move at parenting; comment (FR-020) | One sentence, never a fail | Right. Synthetic test plus L-2 |
 | 22 | Null opacity keyed or below 100 | n/a | Never affects N or P except P4 not passing on it | TD § 7's fade hint | Right. Test |
-| 23 | The null has a parent | n/a | N2 asks; FR-012's chain rule | One level only | **Gap fixed by FR-012 and SR-2** (filter 4). Synthetic test |
+| 23 | The null has a parent | n/a | Parent moves: out of the lesson, nothing graded or recorded as a miss. Parent still: N2 asks; on purpose passes, measured through `parent_transform` (FR-009, FR-012) | Moving: one sentence, use a null with no parent. Still: one level only | **Gap fixed by FR-009** (filter 4). Synthetic tests: a still parent passes with no false jump; a moving one is refused and nothing is recorded |
 | 24 | Focus layer already parented (Title under CTRL; Shadow under Plate) | Not a candidate | Not graded | TD § 4's sentences | Right. Test on Mentor Practice and 2b |
 | 25 | 3D null or 3D child | Not a candidate; N2 says 3D is a later topic | Math returns `three_d`, never run | "3D layers are a later topic" | Right. Test on Mentor Overlaps' Depth |
 | 26 | Anchor Point keys on the null only | n/a | `moves_children` true, but P4 doesn't pass | That the null's anchor moving swings the group, and that the move goes on Position, Scale or Rotation | Right with filter 6. Synthetic test |
@@ -492,7 +520,7 @@ learner each see, and the reused filters.
 | 28 | Stacked parent and child motion (DX-08) | n/a | Comment when the null's keys overlap a child's own transform keys in time | One ungraded sentence; FR-037 hand-off only if skill 4 is learned | Right. Test |
 | 29 | Children of a moving parent (offset's blind spot) | The map lists the null as each child's source | No timing graded between children | Nothing about staggering | Right. Test that no stagger wording appears (eval) |
 | 30 | Null dragged after parenting, or keyed early | n/a | Measured through the stored null (FR-012), so not a jump | The null doing its job | Right. FR-027's tests |
-| 31 | Null re-placed between stage 3 and parenting | n/a | A false jump is possible (AE compensates against the new spot) | TD § 7's jump hint, worded so this case reads right | Right by wording (TD Guess); D-1 asks to close it. Synthetic test |
+| 31 | Null re-placed between stage 3 and parenting | n/a | Re-stored at every check before parenting (FR-012, D-1), so no false jump when a check ran in between; with none in between, a false jump is possible | TD § 7's jump hint, which names a moved null | Right. Synthetic tests for both |
 | 32 | Playhead moved between checks | n/a | Stored before-read time (FR-006) | Nothing | Right. FR-027's test |
 | 33 | Adding the null renumbers layers | n/a | Name matching (FR-019) | Nothing | **Gap fixed by FR-019**: index matching would compare the wrong layers. Live capture L-5 |
 | 34 | A child whose rect changes over time (text, animated shape) | Candidate | Same times before and after, same rect kind | | Right. Test on 2b's Caption |
@@ -591,14 +619,16 @@ case 3, the matte, KD-001).
 
 - **Learner:** the builder on After Effects 26.5 on macOS 27.0.1 (CLAUDE.md › My setup); R0 is still
   read each session.
-- **Wave B's shared pass is merged first** (spec 004 tasks-wave-b.md T100 to T158, including W1's
-  sampled read, W4, W5, W6 and T157's 2b targets as amended by SR-3), and its T136 live answer keys
+- **Wave B's shared pass is merged first** (spec 004 tasks-wave-b.md T100 to T163, including W1's
+  sampled read, W4, W5, W6, T157's 2b targets as amended by T163 (SR-3), and T161 and T162
+  (SR-1)), and its T136 live answer keys
   pass. This skill builds on them and is blocked until they land.
 - **Mentor Practice is unchanged**; its CTRL group is the stage 2 example only. The lesson and the
   review targets are on Mentor Practice 2's wave B layers (spec 004 FR-031).
-- **Layer names in a lesson are unique** among the focus and the null (Edge Cases); a stable layer
-  id isn't read in wave B.
-- **2% of the comp's width** for "nearly touch" is a starting number (H-4), checked on 2b (L-6).
+- **Layer names in a lesson are unique**: the focus by FR-004's rename ask, the null by FR-019's
+  "can't tell" (D-3); a stable layer id isn't read in wave B.
+- **2% of the comp's width** for "nearly touch" is a starting number (H-4, approved), checked on 2b
+  (L-6).
 
 ## Out of scope (build scope)
 
@@ -611,49 +641,34 @@ case 3, the matte, KD-001).
 - **Reading expressions on unkeyed properties** (R2, wave D) and inside precomps (R4).
 - **Stable layer ids** (duplicate names are asked to be renamed instead).
 - **Panel screens** for this skill (spec 007).
-- **Any change to shared files** (FR-001): requests only (SR-1 to SR-3).
-- **Editing spec 004's FR-029**: H-1 asks the builder; this spec doesn't edit it.
+- **Any change to shared files** (FR-001): requests only (SR-1 and SR-3, approved).
+- **A lesson null under a moving parent** (SR-2 declined this sprint): refused in one sentence
+  (FR-009), never measured.
 
 ## Open questions
 
-### For the human (H), each with a recommendation
+### For the human (H): answered 2026-10-23
 
-1. **H-1, spec 004 FR-029 vs. this spec.** FR-029 says a child didn't jump if "its comp-space
-   position at the current time" moved 1 px or less, and checks positions at each key time. This
-   spec measures all four corners (S-1), at the stored before-read time plus every key time (S-2),
-   through the null as stored (S-3), which FR-029 doesn't say and whose obvious reading (the
-   current null) fails every lesson at stage 6. **Recommended:** reword FR-029 to point to spec 012
-   FR-011 to FR-013 for what's measured, keeping only the 1 px measure and "never compare raw key
-   values" in spec 004. The spec writer makes that edit once you say yes.
-2. **H-2, approve SR-1 and SR-2** (Dependencies). SR-1 lets a skill's tools store their own lesson
-   data (the null's name, region, stored transform) without the model supplying it; SR-2 lets the
-   math compose through a stored parent chain. **Recommended:** approve both for tasks-wave-b.md
-   T160 to T163, before wave B's shared pass merges. If SR-1 is declined, the fallback is the
-   snapshot tool computing the stored null into `skill_options` itself (no shared change, but every
-   check that stores it must go through `null_parent_snapshot`); if SR-2 is declined, FR-012's
-   "moving chain refused" rule stands.
-3. **H-3, approve SR-3** (2b's layout and one unkeyed member). **Recommended:** approve, amending
-   T157 before T135 runs.
-4. **H-4, "nearly touch" = 2% of the comp's width** (FR-005), a number for the designer's Guess.
-   **Recommended:** approve 2%; L-6 checks it on 2b, and if beginners' groups prove looser, raise it
-   (never lower it below "overlapping").
-5. **H-5, the designer's H-1 and H-2** (TD § 13): keep the pivot question but gate it only when the
-   move turns or scales; keep the review free of "null". **Recommended:** both as the designer
-   recommends; this spec is written to them (FR-009, FR-016, FR-024, SC-004).
+1. **H-1, spec 004 FR-029 vs. this spec.** Approved: FR-029 keeps only the 1 px measure and "never
+   compare raw key values" and points to FR-011 to FR-013 here. Made in spec 004 the same day.
+2. **H-2, SR-1 and SR-2.** SR-1 approved (tasks-wave-b.md T161, T162). **SR-2 declined** this
+   sprint, going with the designer (TD § 14): a lesson null whose parent moves is refused in one
+   sentence and not recorded as a miss (FR-009, FR-012).
+3. **H-3, SR-3** (2b's layout). Approved (tasks-wave-b.md T163, amending T157).
+4. **H-4, "nearly touch" = 2% of the comp's width** (FR-005). Approved; L-6 checks it on 2b.
+5. **H-5, the designer's H-1 and H-2** (TD § 13). Approved; this spec is written to them.
 
 ### For the curriculum designer (D)
 
-1. **D-1, when the stored null is taken.** TD § 6 stores it at the stage 3 check or the demo,
-   whichever is later, and accepts a false jump if the learner re-places the null in between.
-   **Recommended:** also take it again at **every check where no focus layer is parented to the null
-   yet**, which covers the re-placement with no new rule for the learner and leaves the hint wording
-   for the rarer case (re-placed after parenting some). FR-012 is written to the design until you
-   answer.
-2. **D-2, a null animated only on Anchor Point** (overlap row 26). It swings its children (the
-   map's `moves_children` is true) but isn't a move by S-4, and TD § 7 has no row for it.
-   **Recommended:** P4 doesn't pass, and the hint says the group swings because the null's anchor
-   moves and the group's move goes on Position, Scale or Rotation (FR-020's last sentence). That
-   wording is a proposal for § 7; change it if you'd teach it differently.
+1. **D-1, when the stored null is taken.** Answered (TD § 14): re-stored at every check, and at the
+   demo, while no focus layer is parented (FR-012).
+2. **D-2, a null animated only on Anchor Point.** Answered (TD § 14): P4 doesn't pass, with the
+   designer's hint (FR-015, FR-020).
+3. **D-3, the lesson's null shares its name with another layer** (new, low stakes: AE numbers new
+   nulls, so it needs a rename by hand). TD § 14's rename ask covers candidates, not the null.
+   **Recommended:** the same one-sentence rename ask before the null is checked. Until you answer,
+   FR-019's default stands: the check says it can't tell which layer is the lesson's null and
+   asks, and never guesses. Doesn't block the build.
 
 ### Settled here
 
@@ -663,29 +678,24 @@ case 3, the matte, KD-001).
 
 ## Dependencies
 
-- **Spec 004 wave B's shared pass** (tasks-wave-b.md T100 to T158) merged, with W1, W4 to W7
-  approved.
-- **Shared-code requests** (to spec 004's shared-code owner, for tasks-wave-b.md T160 onward;
-  not this skill's work):
-  - **SR-1 (T160 tests, T161 code), skill lesson data:** `mentor/lib/session.mjs` gains one function
+- **Spec 004 wave B's shared pass** (tasks-wave-b.md T100 to T163, approved 2026-10-23) merged.
+- **Shared-code requests** (to spec 004's shared-code owner; not this skill's work):
+  - **SR-1 (approved; tasks-wave-b.md T161 tests, T162 code, `setSkillData()`), skill lesson data:** `mentor/lib/session.mjs` gains one function
     a skill's tool calls to store plain-JSON data on the current lesson (for this skill: the null's
     name, the region, the stored null), separate from the model-supplied `skill_options`, kept on
     continue and resume, refused in another skill's or comp's lesson, never read by the session.
     Why: FR-007 and FR-012 need the check and demo tools (not the model, and not only the snapshot
-    tool) to store what they measured. **Recommended:** yes; skill 5 may want the same for its rest
-    pose.
-  - **SR-2 (T162 tests, T163 code), a stored parent chain:** `compMatrix` (and so `footprint`) takes
+    tool) to store what they measured.
+  - **SR-2 (declined 2026-10-23; no task), a stored parent chain:** `compMatrix` (and so `footprint`) takes
     `parent_matrix`, a stored comp-space matrix that replaces the direct parent **and everything
-    above it**, next to W6's `parent_transform`. Why: FR-012 for a null with a parent on purpose
-    (filter 4). **Recommended:** yes; it's the same matrix code (FR-032). Synthetic tests only: a
-    null under a moving parent, parented compensated, has no jump through `parent_matrix` and a
-    false one through `parent_transform`.
-  - **SR-3 (T164, amends T157), Mentor Practice 2b's skill 6 layout:** keep T157's names (Tile,
+    above it**, next to W6's `parent_transform`. Declined, going with the designer: chains are out
+    of scope (TD § 8), so FR-009 refuses a null whose parent moves instead.
+  - **SR-3 (approved; tasks-wave-b.md T163, amending T157), Mentor Practice 2b's skill 6 layout:** keep T157's names (Tile,
     Caption, Stamp; Row A to C; Shadow under Plate; Gradient matted by Reveal Matte) and add: Tile,
     Caption and Stamp's bounds overlap at 0 s; Row A to C overlap each other; each of the four sets
     (the group, the Row group, Plate and Shadow, the matte pair) is more than 10% of the comp's width
     from the others; **Row B has no keys** (a static group member, filter 1); Tile has Position and
-    Scale keys (so a rotated null's rewrite shows on Scale, L-2). **Recommended:** yes, before T135.
+    Scale keys (so a rotated null's rewrite shows on Scale, L-2). Before T135.
 - **Spec 011**: skill 5 must be built for the prerequisite to be learnable; nothing of its code is
   read here.
 - **Eval engineer**: the Eval plan; fixtures from the live captures above.

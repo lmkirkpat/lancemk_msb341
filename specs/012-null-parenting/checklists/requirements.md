@@ -36,12 +36,12 @@
   adds), and the overlap audit has to say which shared filter each job reuses. Success criteria
   name checks (`check-branch.mjs`, unit tests, eval runs) only as the way each is measured.
 - The teaching design is linked by section, not copied (`decisions/007`). S-1 to S-6 are taken;
-  D-1 (re-store the null while nothing is parented) and D-2 (a null moved only on Anchor Point) go
-  back to the designer, and FR-012 and FR-020 say where they apply.
-- Spec 004 FR-029 conflicts with S-1 to S-3; this spec measures per S-1 to S-3 and asks the builder
-  to repoint FR-029 (H-1). Spec 004 is not edited here.
-- No [NEEDS CLARIFICATION] markers. Five builder questions (H-1 to H-5), each with a
-  recommendation; the spec is written to them.
+  the designer answered D-1, D-2, unique names and a null with a parent in TD § 14, and FR-004,
+  FR-009, FR-012, FR-015 and FR-020 carry them. D-3 (the null's own name shared) is new, low
+  stakes and doesn't block: FR-019's "can't tell, ask" is the default.
+- Spec 004 FR-029 was repointed here on 2026-10-23 (H-1).
+- No [NEEDS CLARIFICATION] markers. H-1 to H-5 answered 2026-10-23: all as recommended except SR-2
+  (declined), which FR-009 and FR-012 reflect.
 - Live facts (null defaults, Option or Shift parenting, B9 under a scaled and rotated null, the
   demo's no-jump write, auto-orient, renumbering, the proposal margin) are live checks L-1 to L-6.
-- Status: draft, awaiting the builder's approval. Plan and tasks come after.
+- Status: approved 2026-10-23. Plan and tasks come next.
