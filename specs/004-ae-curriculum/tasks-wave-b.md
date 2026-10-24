@@ -261,7 +261,7 @@ it extends (each says which).
 | W3 | 011 B-2 | Which bounds: letters for text, the stroke for shapes | **Read both** on shape and text layers (`rect`, `rect_extents`); spec 011's L-1 and L-5 decide which the skill uses |
 | W4 | 012 B-5, 011 B-3 | R1 also carries **is-null**, **is-3D**, **layer kind**, **Collapse Transformations**; an effect count is optional | **Yes**: `is_null` and `kind` are already in T110 (the visibility class needs them); add `three_d`, `collapse`, `effect_count` (one property read each) |
 | W5 | 012 B-6 | Does the rotation read include **auto-orient**? Unknown | **Read `auto_orient`** in R1, have the comp-space math return `null` (`auto_orient`) for such a chain, and **check it live** (T158). If the live check shows the rotation does include it, drop that `null` case in a later owner branch |
-| W6 | 012 S-3 | Measure "through the null as stored at parenting" | **Yes, as an option of the shared math** (`parent_transform`, the direct parent only), not a read and not in skill 6's file: it's the same matrix code (FR-032). Spec 012's SR-2 (`parent_matrix`, a whole stored chain) was declined: a lesson null whose parent moves is refused by the skill instead (spec 012 FR-012) |
+| W6 | 012 S-3 | Measure "through the null as stored at parenting" | **Yes, as an option of the shared math** (`parent_transform`, the direct parent only), not a read and not in skill 6's file: it's the same matrix code (FR-032). Spec 012's SR-2 (`parent_matrix`, a whole stored chain) was declined: a lesson null whose parent moves is refused by the skill instead (spec 012 FR-009) |
 | W7 | 011, 012 B-1 | Mentor Practice 2's wave B targets | **Yes**, T157, amended by T160 and T163 |
 
 Tasks (each test first, then code):

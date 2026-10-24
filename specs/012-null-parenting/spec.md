@@ -295,7 +295,7 @@ section). Other edge cases:
 All of TD § 6, counting the demo layer.
 
 - **FR-009 (the null, N1 to N3)**: The check MUST pass the null when it's class `null` (N1); 2D
-  with no parent (N2); and, only when a region was named, its anchor point in comp space is in that region of the
+  with no parent (N2; a null with a parent is handled below); and, only when a region was named, its anchor point in comp space is in that region of the
   **group's combined bounds** at the before-read time, using spec 004 FR-028's per-axis rule (10%
   of the group's width across, 10% of its height up and down) (N3, S-5). "It'll only slide" is a
   valid answer and skips N3 until FR-016.
