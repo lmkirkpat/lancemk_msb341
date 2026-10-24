@@ -134,6 +134,15 @@ stretch.stretch = 50;
 declare("Icon Stretch", "precomp layer: in and out points and stretch read, contents not read",
     ex({ kind: "precomp", stretch: 50 }), mo({ precomp_contents: "not_read", static_as_read: true }));
 
+// ---- Draft: a keyed solid the learner hid (eye off, not a matte or a null), so "hidden by the
+// learner" is checked live beside the matte and the eye-off null (review S2). Linear Position keys,
+// so it's an easing finding that's listed as hidden.
+var draft = solid("Draft", 200, 60, [300, 500]);
+keys(tf(draft, "ADBE Position"), [2.5, 3.5], [[300, 500], [500, 500]], LIN);
+draft.enabled = false;
+declare("Draft", "hidden by the learner (eye off, not a matte or a null)", ex({ enabled: false, "class": "hidden" }),
+    mo({ own_keys: [TR + "ADBE Position"] }), "In easing's hidden_layers, with Rig (an eye-off null); Wipe isn't");
+
 // ---- Still: no keys, no parent, no expression.
 solid("Still", 100, 100, [100, 100]);
 declare("Still", "layer with no keys, no parent, no expression", ex({}), mo({ static_as_read: true }),

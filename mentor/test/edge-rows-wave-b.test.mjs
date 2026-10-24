@@ -59,6 +59,14 @@ test("Shy parent: the child's map names the parent, marked hidden from the timel
   assert.equal(v.timeline_hidden, true);
 });
 
+test("Hidden by the learner: an eye-off layer that isn't a matte stays hidden, a null included (review S2, B1)", { skip: live }, () => {
+  assert.equal(classOf(overlaps, idx("Draft")), "hidden");
+  const hidden = analyze(overlaps).hidden_layers;
+  assert.ok(hidden.includes("Draft"));
+  assert.ok(hidden.includes("Rig"), "an eye-off keyed null is still listed as hidden");
+  assert.ok(!hidden.includes("Wipe"));
+});
+
 test("Guide layer: class guide", { skip: live }, () => {
   assert.equal(classOf(overlaps, idx("Guide Grid")), "guide");
 });

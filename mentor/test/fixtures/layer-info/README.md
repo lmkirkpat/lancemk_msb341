@@ -23,7 +23,7 @@ Each is `node mentor/dev/capture.mjs <file>` with the comp active, at the CTI gi
 | File | Comp | CTI | Built by |
 |---|---|---|---|
 | `practice-r1.json` | Mentor Practice, as it is now | as found | `mentor/dev/build-practice-comp.jsx` (spec 002), not rebuilt (T133) |
-| `overlaps.json` | Mentor Overlaps | 1 s | `mentor/dev/build-overlaps-b.jsx` (T131, T133) |
+| `overlaps.json` | Mentor Overlaps (Draft is the layer hidden by the learner) | 1 s | `mentor/dev/build-overlaps-b.jsx` (T131, T133) |
 | `overlaps-solo.json` | Mentor Overlaps, Solo on for Still by hand | 1 s | as above (T133) |
 | `practice2b.json` | Mentor Practice 2 with wave B's layers | 0 s | `mentor/dev/build-practice-comp-2b.jsx` (T132, T135) |
 | `practice2b-parented.json` | as above, Tile, Caption and Stamp parented to a new null by hand | 0 s | T135 (a) |
