@@ -4,7 +4,8 @@ description: "Task list for spec 011: skill 5, set the pivot"
 
 # Tasks: Set the pivot (curriculum skill 5)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24). No skill builder starts before it.
+**Status**: Approved 2026-10-24, with plan › Q1 (`not_at_rest`; the demo target stays entry 1) and
+SR-2 (spec 004 T164, T165). Ready for the skill builder.
 
 **Input**: Design documents from `specs/011-anchor/`
 
@@ -106,7 +107,7 @@ answer key says.
 
 - [ ] T216 [US1] In `mentor/lib/anchor.mjs`, add `demoValues(sample, rect, place)` (research R6); create `mentor/jsx/anchor-demo.jsx` (ES3) per contracts/tools.md: args `{ comp_id, layer_index, layer_name, anchor, position }`, every refusal before any write (`ANCHOR_REFUSED: <reason>`), Anchor Point then Position (or X and Y), Z kept, never a key, the values before and after returned. Don't edit any existing snippet or `mentor/jsx/lib/`
 - [ ] T217 [US1] Create `mentor/fixture/anchor-demo.mjs` (`run`, `apply`, spec 004 contract › 5). T214 passes
-- [ ] T218 [US1] Create `mentor/tools/anchor.mjs`: `registerErrors({ ANCHOR_REFUSED: … })` at import with contracts/tools.md's message; `SKILLS`, `FINDERS` (`review: false` for now); the three tools per contracts/tools.md and spec 004 contract › 3 (read 1, the second sampled read when `neededTimes` has a missing time, `session.start` with `skill`, `analyze`, `focus_layers`, `mode`, `skill_options`, `fresh`; `assertCanDemo` and the snapshot-side refusals before `runSnippet("anchor-demo", …, { undo: true })`, then `recordDemo`; the check's `sample_times` and `markChecked(passed, { demoUndone })` only when the comp matches). T215 passes
+- [ ] T218 [US1] Create `mentor/tools/anchor.mjs`: `registerErrors({ ANCHOR_REFUSED: … })` at import with contracts/tools.md's message; `SKILLS`, `FINDERS` (`review: false` for now); the three tools per contracts/tools.md and spec 004 contract › 3 (read 1, the second sampled read when `neededTimes` has a missing time, `session.start` with `skill`, `analyze`, `focus_layers`, `mode`, `skill_options`, `fresh`; `assertCanDemo` and the snapshot-side refusals, including `not_at_rest` when the target has Rotation or Scale keys and the read's `comp.time` isn't within half a frame of its rest key (plan › Q1; the demo target stays entry 1, never switched), before `runSnippet("anchor-demo", …, { undo: true })`, then `recordDemo`; the check's `sample_times` and `markChecked(passed, { demoUndone })` only when the comp matches). T215 passes
 - [ ] T219 [US1] Write `.claude/skills/anchor-mentor/SKILL.md` (draft): frontmatter `name: anchor-mentor`, a description triggering on "/anchor-mentor", "pivot", "anchor point", "it swings wide", "turn from the edge", and `allowed-tools` from contracts/tools.md. Body: TD § 5's stages: stage 1 the intent question in both forms first (FR-006), one proposal with a hinge that suits its shape when they have none (H-5), leave-outs one sentence per reason from TD § 4 (a matte never called hidden, FR-009), a parented layer named once and no "trace this one first" (FR-009); stage 2 the place repeated as "the middle of Door's left edge", where the pivot is now in place words, TD § 1's two sentences once, one frame from `preview_frame` with the layer in it, never "you can see the pivot here" (FR-022); stage 3 Pan Behind (Y), A, P, Shift+P; stage 4 no demo with one focus layer, a walkthrough in words (FR-014), with two: A then Shift+P asked first, frames before and after at the same time, "both numbers changed, and Door didn't move" (FR-017); stage 5 the check and TD § 7's hints by hint code, never a number to type or a tolerance (SC-004), never the fix or an offer, "do it for me" declined; `cant_check` said plainly, never "it didn't move" (FR-018); the understanding check after a pass, one light correction, never gating (FR-020); stage 6 the ungraded "try it" and Edit > Undo (FR-021); stage 7 `record_lesson` per FR-025 (layer and place, whether the first try moved the layer, the understanding answer; no pixels, method, motive or names). Version (FR-023): Quick Set Anchor never brought up, one or two plain sentences if asked, no steps, no refusal; Center Anchor Point marked `<!-- L-3 -->` and not named; no crosshair snapping; the Properties panel "you may also see it there". Copy the hard rules block from `.claude/skills/ease-mentor/SKILL.md` › Hard rules (reading it, not editing it)
 
 **Checkpoint**: US1 in fixture mode on stand-ins.
@@ -189,10 +190,10 @@ The builder does the hand actions.
 
 ## Requests (to the cockpit; never a task here)
 
-- **SR-2 (spec 004's shared-code owner; same as spec 012's SR-4):** `comp.width` and `comp.height`
-  in the snapshot (plan › Requests). Not blocking: the build reads them when present (T209) and
+- **SR-2 (approved 2026-10-24 as spec 004 tasks-wave-b.md T164, T165; same as spec 012's SR-4):**
+  `comp.width` and `comp.height` in the snapshot (plan › Requests). Not blocking: the build reads them when present (T209) and
   ranks by area until then. Wanted before T233 so the captures carry them.
-- Plan › Open questions Q1 is for the builder.
+- Plan › Open questions Q1: approved 2026-10-24 (`anchor_demo` refuses `not_at_rest`; T214, T216, T218, T221, T222).
 
 ## Dependencies & execution order
 

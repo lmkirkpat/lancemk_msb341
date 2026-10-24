@@ -6,8 +6,8 @@
 
 **Status**: Approved 2026-10-23. The builder took every recommendation in Open questions (H-1 to
 H-5) and SR-1; the designer's round 1 answers (TD § 15: D-1 to D-3 and H-3's condition) are folded
-in the same day. Plan and tasks come next, after wave B's shared pass (spec 004 tasks-wave-b.md
-T100 to T163).
+in the same day. Plan and tasks approved 2026-10-24 with plan › Q1 (FR-014's reading below) and
+SR-2 (the comp's size; spec 004 tasks-wave-b.md T164, T165).
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 5,
 'Set the pivot'." Record ID `transform.anchor`, short name `anchor`, tool prefix `anchor_`
@@ -317,7 +317,11 @@ Other edge cases:
   candidate (FR-004, shape layers excluded until L-1) and, if it has Rotation or Scale keys, the
   current time is on its rest key; else the other if it qualifies; else none. With **one** focus
   layer, none (the session's single-target rule already enforces it; a unit test pins it). The
-  prompt runs it only when asked or clearly stuck (TD § 4).
+  prompt runs it only when asked or clearly stuck (TD § 4). **Reading (plan › Q1, approved
+  2026-10-24):** the target is fixed when the lesson starts, so the rest-key condition is checked
+  when the demo runs: the demo target stays the second focus layer, `anchor_demo` refuses with
+  `not_at_rest` if the playhead isn't on its rest key (FR-015), and the mentor asks for the
+  playhead there.
 - **FR-015 (what the demo writes)**: The demo MUST, from **one fresh read** of the comp (matched by
   name, refusing if the active comp isn't the lesson's), set the layer's Anchor Point to the place's
   point in its own rectangle at the current time and set Position by exactly what keeps its
@@ -641,6 +645,8 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech; the matte
     Transformations on). All follow T132's rules (no clashing names, starts, Opacity or ease).
     The answer key adds each layer's anchor place (which of the nine, or none) and its rest key, so
     this skill's tests read it. Without them rows 4, 10, 17 and 18 would be synthetic only.
+  - **SR-2 (approved 2026-10-24; tasks-wave-b.md T164, T165; the same as spec 012's SR-4):** the
+    comp's `width` and `height` in the snapshot, for FR-004's full-frame bucket (plan › Requests).
 - **Spec 012** (null parenting, in parallel): shares Mentor Practice 2b and comp-space; no
   dependency either way beyond skill 5 being skill 6's hard prerequisite in the path.
 - **Eval engineer**: the Eval plan; fixtures from L-4 and T135.

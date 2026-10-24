@@ -47,7 +47,9 @@ Input: `{ "target": "anchor/7" }`. Order:
 2. **One fresh read**, `takeSnapshot({ sample_times: [rest time] })` when the layer has Rotation or
    Scale keys, else `takeSnapshot()`; its comp not the lesson's: `NO_ACTIVE_COMP`.
 3. Match the demo layer **by name** in that read; the snapshot-side refusals (data-model › Demo)
-   → `ANCHOR_REFUSED` with the reason, no snippet run.
+   → `ANCHOR_REFUSED` with the reason, no snippet run. These include `not_at_rest`: the layer has
+   Rotation or Scale keys and the read's `comp.time` isn't within half a frame of its rest key. The
+   demo target never switches to the other layer (plan › Q1, approved 2026-10-24).
 4. `demoValues()` at the read's `comp.time` for the lesson's place.
 5. `runSnippet("anchor-demo", { comp_id, layer_index, layer_name, anchor, position }, { undo: true })`;
    the snippet repeats the lock, key and expression checks before any write.
