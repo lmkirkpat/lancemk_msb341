@@ -3,6 +3,8 @@
 
 import { MentorError } from "../errors.mjs";
 import { isKeptLinear } from "./marks.mjs";
+import { layerInfo } from "./layer-info.mjs";
+import { classOf } from "./visibility.mjs";
 
 // Hold first: a hold out side means the value jumps, so there's no motion to ease, whatever the
 // next key's in side says. Both sides linear is "linear". Exactly one linear side is "partly_eased":
@@ -93,6 +95,14 @@ function withoutKeptLinear(snapshot, { focus_layers, kept_linear }) {
   return { ...result, skipped: [...result.skipped, ...keptSkips], counts: analyzeAll(snapshot, {}).counts };
 }
 
+// KD-001 (spec 004 wave B, research R20): the eye-off list as before, except that with reads R1
+// known a track matte leaves it, even with its eye off, because its motion is the reveal. Only mattes
+// leave it: an eye-off null stays (FR-015).
+function hiddenLayers(snapshot) {
+  const known = layerInfo(snapshot).known;
+  return snapshot.layers.filter((l) => !l.enabled && !(known && classOf(snapshot, l.index) === "matte")).map((l) => l.name);
+}
+
 function analyzeAll(snapshot, { focus_layers } = {}) {
   const focus = focus_layers && focus_layers.length ? [...focus_layers] : null;
   if (focus) {
@@ -134,7 +144,7 @@ function analyzeAll(snapshot, { focus_layers } = {}) {
   return {
     findings: findings.map(({ _layer, _prop, ...f }) => f),
     skipped,
-    hidden_layers: snapshot.layers.filter((l) => !l.enabled).map((l) => l.name),
+    hidden_layers: hiddenLayers(snapshot),
     precomp_layers: snapshot.precomp_layers.map((l) => l.name),
     focus,
     targets: targetSegments.map((s) => s.id),

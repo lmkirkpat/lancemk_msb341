@@ -9,6 +9,8 @@ import { needsEase, segmentState } from "./analyze.mjs";
 import { clusters, timing } from "./timing.mjs";
 import { MentorError, registerErrors } from "../errors.mjs";
 import { dimensionShifts, isMoved, matchLayer, movedApart, otherChanges, outOfComp } from "./offset-keys.mjs";
+import { layerInfo } from "./layer-info.mjs";
+import { classOf } from "./visibility.mjs";
 
 export const SKILL = "timing.offset";
 const MAX_LAYERS = 5;
@@ -97,6 +99,13 @@ const hasExpression = (snapLayer, paths) =>
 
 // ---- Groups (FR-004 to FR-006, research R2)
 
+// Spec 004 FR-013 and spec 010 FR-004 (filter 2): with reads R1 known, only a layer the learner hid
+// is left out as hidden; a track matte is eligible whatever its eye. Without them, the eye switch as
+// before. The demo pick (below) keeps the eye-on test: spec 010 doesn't say an eye-off matte may be
+// the demo, and the frame wouldn't show it.
+const hiddenByLearner = (snapshot, tl) =>
+  layerInfo(snapshot).known ? classOf(snapshot, tl.layer_index) === "hidden" : tl.enabled === false;
+
 // Every layer the comp has, with its counted units and its start under `exclude`, and why it's
 // eligible or not. `allow` names layers the learner added, which may be hidden (FR-004).
 function layerPool(snapshot, t, { exclude = [], allow = [] } = {}) {
@@ -106,7 +115,7 @@ function layerPool(snapshot, t, { exclude = [], allow = [] } = {}) {
     let why = null;
     if (tl.is_null) why = "null";
     else if (tl.precomp) why = "precomp";
-    else if (tl.enabled === false && !allow.includes(tl.layer)) why = "hidden";
+    else if (hiddenByLearner(snapshot, tl) && !allow.includes(tl.layer)) why = "hidden";
     else if (start == null) why = "no_motion";
     return { tl, units, start, why };
   });

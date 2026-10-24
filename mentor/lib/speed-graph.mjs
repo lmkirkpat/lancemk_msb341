@@ -10,6 +10,8 @@ import { needsEase, parseSegmentId, segmentId, segments } from "./analyze.mjs";
 import { unexpectedChanges } from "./diff.mjs";
 import { isKeptLinear } from "./marks.mjs";
 import { fastestPart } from "./speed-graph-bezier.mjs";
+import { layerInfo } from "./layer-info.mjs";
+import { classOf } from "./visibility.mjs";
 
 // FR-010 (spec 004 FR-026). Never said to the learner (FR-018).
 export const MIN_GAP = 20; // a: landing influence at least this many points above the start's
@@ -191,6 +193,19 @@ function group(kind, refs) {
   return { kind, layers, refs: unique };
 }
 
+// Spec 004 FR-013 and spec 008 row 10: with reads R1 known, the visibility class decides who's
+// eligible and who's left out as hidden (a track matte is eligible whatever its eye; a null isn't);
+// without them, the eye switch as before. The demo filter below stays on the eye switch: an eye-off
+// matte is a candidate but never the demo, since the frame wouldn't show it.
+const known = (snapshot) => layerInfo(snapshot).known;
+// Eye off and, once R1 is known, not a matte (only mattes leave the hidden list, as in easing).
+const isHidden = (snapshot, layer) => !layer.enabled && !(known(snapshot) && classOf(snapshot, layer.index) === "matte");
+function eligibleLayer(snapshot, layer) {
+  if (!known(snapshot)) return layer.enabled && !layer.is_null;
+  const cls = classOf(snapshot, layer.index);
+  return cls !== "hidden" && cls !== "null" && !layer.is_null;
+}
+
 // FR-003 to FR-007. Options: focus_layers, exclude (review: past targets), kept_linear (marks that
 // apply), skill_options ({ eased_layers, land_hard }), and mode ("review": one layer and property,
 // one or two pairs; the snapshot tool passes it, since the session doesn't).
@@ -235,7 +250,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], kept_linear, ski
     pool = candidates.filter((s) => focus.includes(s.layer.name));
     focusOut = focus;
   } else {
-    const eligible = candidates.filter((s) => isPositionOrScale(s.prop) && s.layer.enabled && !s.layer.is_null);
+    const eligible = candidates.filter((s) => isPositionOrScale(s.prop) && eligibleLayer(snapshot, s.layer));
     const ranked = [
       ...snapshot.layers.filter((l) => eased_layers.includes(l.name)),
       ...snapshot.layers.filter((l) => !eased_layers.includes(l.name)),
@@ -265,7 +280,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], kept_linear, ski
   // FR-005: what's left out, one entry per kind, in this order.
   const inFocus = new Set(focusOut);
   const leftOut = [];
-  const hidden = snapshot.layers.filter((l) => !l.enabled && !inFocus.has(l.name)).map((l) => l.name);
+  const hidden = snapshot.layers.filter((l) => isHidden(snapshot, l) && !inFocus.has(l.name)).map((l) => l.name);
   if (hidden.length) leftOut.push({ kind: "hidden", layers: hidden });
   const nulls = snapshot.layers.filter((l) => l.is_null && !inFocus.has(l.name)).map((l) => l.name);
   if (nulls.length) leftOut.push({ kind: "null", layers: nulls });

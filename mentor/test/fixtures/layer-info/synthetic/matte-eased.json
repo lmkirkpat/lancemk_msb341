@@ -1,0 +1,964 @@
+{
+  "comment": "SYNTHETIC (tasks-wave-b T109): synthetic/matte.json with Wipe's Position pair eased (Easy Ease), so it's a speed graph candidate. Replaced in T136 by a live capture of Mentor Overlaps with Wipe eased (or by overlaps.json if T125's live check uses an eased layer).",
+  "taken_at": "2026-10-23T12:00:00.000Z",
+  "project": "Synthetic.aep",
+  "comp": {
+    "id": 111,
+    "name": "Synthetic Matte",
+    "duration": 6,
+    "frame_rate": 30,
+    "time": 1,
+    "hide_shy": true
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Old Take",
+      "kind": "text",
+      "enabled": false,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                100,
+                100,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                300,
+                100,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Title",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Wipe",
+      "kind": "solid",
+      "enabled": false,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.6,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                400,
+                540,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.6,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                1400,
+                540,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Opacity",
+          "display_path": "Transform › Opacity",
+          "match_name": "ADBE Opacity",
+          "display_name": "Opacity",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 3,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3.5,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "time": 4,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": 100,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Card",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                100,
+                800,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                900,
+                800,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.333
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layer_info": [
+    {
+      "index": 1,
+      "name": "Old Take",
+      "kind": "text",
+      "enabled": false,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          }
+        },
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 2,
+      "name": "Title",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          }
+        },
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 3,
+      "name": "Wipe",
+      "kind": "solid",
+      "enabled": false,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": true,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          800,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            400,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 450
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            800,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 450
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1.6,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            1400,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 450
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            1400,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 450
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3.5,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            1400,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 450
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 4,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            1400,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 450
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 4,
+      "name": "Photo",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": {
+        "layer": 3,
+        "type": "alpha"
+      },
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 800,
+            "height": 450
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 5,
+      "name": "Card",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    }
+  ]
+}

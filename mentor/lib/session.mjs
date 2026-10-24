@@ -8,12 +8,16 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import { SESSION_FILE } from "../paths.mjs";
-import { MentorError } from "../errors.mjs";
+import { MentorError, registerErrors } from "../errors.mjs";
 import { analyze as easingAnalyze, segmentState } from "./analyze.mjs";
 import { readJson } from "./json-file.mjs";
 import { peekRecord, pastTargets } from "./learner-store.mjs";
 import { applies, marksFor, markFrom } from "./marks.mjs";
 import { SESSION_WINDOW_HOURS } from "./recommend.mjs";
+
+registerErrors({
+  NO_LESSON: "There's no lesson in progress on this comp yet. Take a snapshot of the comp first.",
+});
 
 const EASING = "easing.basic";
 const MODES = ["lesson", "review"];
@@ -249,6 +253,24 @@ export function keepLinear(snapshot, refs) {
     }
     lesson.kept_linear = list;
   }).kept_linear;
+}
+
+// Spec 012 SR-1 (contracts/skill-module.md › 4, data-model › Session lesson): a skill's own tools
+// store what they measured on the open (unpassed) lesson for that skill and comp, as `skill_data`,
+// replaced whole by each call. Kept on a continued or resumed lesson; a new or fresh lesson starts
+// with none. Separate from skill_options: the model never supplies it, the analyzer is never given
+// it, and the session never reads inside it. Throws before any write: on data that isn't plain JSON,
+// and NO_LESSON when that skill has no open lesson on that comp.
+export function setSkillData(skill, compId, data) {
+  if (data === undefined || !isPlainData(data)) {
+    throw new Error("skill_data must be plain JSON data (text, numbers, true/false, null, lists and objects).");
+  }
+  const state = read();
+  const lesson = state.lessons[keyFor(skill, compId)];
+  if (!lesson || lesson.passed || lesson.skill !== skill || lesson.comp_id !== compId) throw new MentorError("NO_LESSON");
+  lesson.skill_data = structuredClone(data);
+  write(state);
+  return structuredClone(lesson.skill_data);
 }
 
 // recommend_next remembers each review it offers unprompted, for FR-020's one per session (R8).
