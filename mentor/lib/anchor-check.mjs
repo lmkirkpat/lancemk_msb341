@@ -126,6 +126,11 @@ export function hintCodes(r, others = []) {
     if (r.anchor_changed && !r.position_changed) codes.push("moved_with_pivot");
     else if (r.position_changed && !r.anchor_changed) codes.push("layer_dragged");
     else if (r.rect_shifted) codes.push("group_anchor");
+    // TD § 7 "in place but moved": the pivot is where they wanted it, but the layer moved too
+    // (both values changed, or something else of its own did).
+    else if (i1.passed) codes.push("in_place_moved");
+    // Not in place and moved: the layer moved with whatever changed.
+    else codes.push(r.anchor_changed ? "moved_with_pivot" : "layer_dragged");
   }
   if (wrongLayer) codes.push("wrong_layer");
   else if (i2.passed && !i1.passed) {
@@ -135,6 +140,10 @@ export function hintCodes(r, others = []) {
   }
   if (r.item4 && !r.item4.passed && i2.passed) codes.push("slid_at_key");
   if (r.item5 && r.item5.anchor_keys_added) codes.push("stopwatch");
+  // TD § 7 "another layer moved": the focus layer holds items 1 to 4, and another layer's bounds
+  // moved (item5.moved_layers names it and which way). Separate from wrong_layer, where the focus
+  // layer's pivot never moved.
+  if (!wrongLayer && i1.passed && i2.passed && (!r.item4 || r.item4.passed) && r.item5 && r.item5.moved_layers.length) codes.push("other_layer_moved");
   if (others.some((o) => o.kind === "eye_changed" && o.was_class === "matte" && o.eye_on)) codes.push("matte_eye");
   return codes;
 }

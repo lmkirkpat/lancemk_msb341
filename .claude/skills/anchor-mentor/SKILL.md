@@ -223,6 +223,12 @@ was. Pan Behind changes both together, so nothing moves on screen.
        and the result's `time` for where the playhead was.)
      - slid at a key: "At 4.2 s Sled isn't where it was. Moving the pivot now changed where it sits
        there." Use `item4.worst.time`. <!-- L-2: the exact wording waits for live check L-2. -->
+     - in place but moved (TD § 7): "Needle's pivot is in the right place, but Needle moved too, up
+       and to the left. Edit > Undo back to where only the pivot had moved." Use `item2.direction`
+       for the way.
+     - another layer moved (TD § 7): "Needle looks good, but Background moved, down and to the
+       right. Edit > Undo that, and select Needle in the timeline before you drag." The layer and
+       the way are in `item5.moved_layers`; if it has no direction, say it moved without one.
      - Anchor Point's stopwatch: "Anchor Point has a stopwatch on now, so the pivot would move over
        time. Turn it off, and keep the pivot you set."
      - a matte's eye: "Reveal Matte is a matte, so turn its eye back off."

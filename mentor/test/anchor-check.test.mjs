@@ -269,3 +269,48 @@ test("every planted attempt in the answer key grades as it says", () => {
     if (want.other_changes) assert.deepEqual(r.other_changes, want.other_changes, `${file} other changes`);
   }
 });
+
+// ---- Review S1: two more rows, and no failed layer without a hint
+
+test("hint in_place_moved: the pivot is in its place, but the layer moved too (both values changed)", () => {
+  const cur = clone(fixture("door-pass"));
+  for (const sm of cur.layer_info.find((l) => l.name === "Door").samples) { sm.position[0] -= 30; sm.position[1] -= 20; }
+  const door = layerOf(run(P2, cur, DOOR), "Door");
+  assert.equal(door.item1.passed, true);
+  assert.equal(door.item2.passed, false);
+  assert.equal(door.anchor_changed && door.position_changed, true);
+  assert.deepEqual(door.hints, ["in_place_moved"]);
+  assert.equal(door.item2.direction, "up-left");
+});
+
+test("hint other_layer_moved: the focus holds items 1 to 4 and another layer's bounds moved, with which way", () => {
+  const r = run(synthetic("edge-before"), synthetic("edge-other-moved"), DOOR);
+  const door = layerOf(r, "Door");
+  assert.deepEqual(door.hints, ["other_layer_moved"]);
+  assert.deepEqual(door.item5.moved_layers.map((m) => [m.layer, m.direction]), [["Other", "right"]]);
+  assert.deepEqual(layerOf(run(P2, fixture("wrong-layer"), [{ layer: "Needle", place: "bottom-middle" }]), "Needle").hints, ["wrong_layer"], "not when the focus's pivot never moved");
+});
+
+test("a failed focus layer always has at least one hint", () => {
+  const cases = [];
+  for (const [file, want] of Object.entries(KEY.attempts)) cases.push([file, P2, fixture(file), want.focus]);
+  for (const name of ["door-renamed", "door-layer-added", "matte-eye-on", "hatch-rig-focus", "gauge-away", "pop-shrunk"]) {
+    for (const focus of [DOOR, [{ layer: "Gauge", place: "bottom-middle" }], [{ layer: "Pop", place: "bottom-middle" }, { layer: "Needle", place: "top-left" }]]) cases.push([name, P2, fixture(name), focus]);
+  }
+  const edge = synthetic("edge-before");
+  for (const f of ["edge-0.9", "edge-1.1", "edge-other-moved", "row26-untouched", "row27-no-rect", "row27-not-sampled"]) cases.push([f, edge, synthetic(f), DOOR]);
+  // Variants: scale or rotation changed, both values changed off place, a nudge of every kind.
+  const tweak = (change) => { const c = clone(P2); change(c.layer_info.find((l) => l.name === "Door")); return c; };
+  cases.push(["scaled", P2, tweak((d) => d.samples.forEach((s) => { s.scale = [110, 110, 100]; })), DOOR]);
+  cases.push(["rotated", P2, tweak((d) => d.samples.forEach((s) => { s.rotation = 10; })), DOOR]);
+  cases.push(["both off place", P2, tweak((d) => d.samples.forEach((s) => { s.anchor = [100, 100, 0]; s.position = [210, 290, 0]; })), DOOR]);
+  let failed = 0;
+  for (const [name, base, cur, focus] of cases) {
+    for (const l of run(base, cur, focus).layers) {
+      if (l.passed) continue;
+      failed++;
+      assert.ok(l.hints.length > 0, `${name}: ${l.layer} failed with no hint`);
+    }
+  }
+  assert.ok(failed > 20, "the sweep covers many failures");
+});
