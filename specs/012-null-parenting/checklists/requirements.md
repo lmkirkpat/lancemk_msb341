@@ -37,8 +37,8 @@
   name checks (`check-branch.mjs`, unit tests, eval runs) only as the way each is measured.
 - The teaching design is linked by section, not copied (`decisions/007`). S-1 to S-6 are taken;
   the designer answered D-1, D-2, unique names and a null with a parent in TD § 14, and FR-004,
-  FR-009, FR-012, FR-015 and FR-020 carry them. D-3 (the null's own name shared) is new, low
-  stakes and doesn't block: FR-019's "can't tell, ask" is the default.
+  FR-009, FR-012, FR-015 and FR-020 carry them. D-3 (the null's own name shared) was answered
+  in TD § 14 and folded in 2026-10-24: FR-019's rename ask, FR-007, row 40.
 - Spec 004 FR-029 was repointed here on 2026-10-23 (H-1).
 - No [NEEDS CLARIFICATION] markers. H-1 to H-5 answered 2026-10-23: all as recommended except SR-2
   (declined), which FR-009 and FR-012 reflect.

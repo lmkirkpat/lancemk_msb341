@@ -6,7 +6,8 @@
 
 **Status**: Approved 2026-10-23. The builder took H-1, H-3, H-4 and H-5 as recommended and, for
 H-2, approved SR-1 and **declined SR-2** (going with the designer). The designer's round 1 answers
-(TD § 14: D-1, D-2, unique names, a null with a parent) are folded in the same day. Plan and tasks
+(TD § 14: D-1, D-2, unique names, a null with a parent) are folded in the same day, and D-3 (the
+null's own name shared: the rename ask) on 2026-10-24 (FR-019, row 40). Plan and tasks
 come next, after wave B's shared pass (spec 004 tasks-wave-b.md T100 to T163).
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 6,
@@ -283,7 +284,8 @@ section). Other edge cases:
   names; else the one null that isn't in the before read; else, with several new nulls, the mentor
   asks which. An existing null with children or keys is allowed only if the learner picks it, with
   TD § 4's one sentence. Its name is stored on the lesson by the tool with `setSkillData()`, not
-  by the model (SR-1).
+  by the model (SR-1), and only once no other layer in the comp has it (FR-019's rename ask, TD § 14
+  D-3).
 - **FR-008 (demo target)**: The demo target MUST be the first focus layer in stack order that
   renders, is 2D, isn't a matte or eye-off, and has no expression on a keyed Position, Scale or
   Rotation; one with its own transform keys is preferred over one without. None qualifies: no
@@ -378,9 +380,15 @@ All of TD § 6, counting the demo layer.
   at the worst time, the times it couldn't check, and its key counts and times before and now; and
   for the null: N1 to N3, P4, P5, and what its keys move. The skill prompt turns that into TD § 7's
   hints: name the layer, the distance and direction, the time, and where to look; never the fix and
-  never a cause it can't see (spec 002 FR-008). The mentor never renames a layer. If the lesson's
-  null can't be told apart by name (another layer has its name), the check says it can't tell which
-  layer is the lesson's null and asks, never guesses (D-3).
+  never a cause it can't see (spec 002 FR-008). The mentor never renames a layer. **A lesson null
+  whose name another layer shares** (TD § 14 D-3): at the stage 3 check, before the null is stored,
+  the check returns that the name isn't unique and grades nothing else on the null; the mentor
+  asks in one sentence for the null just added to be renamed ("two layers are called Null 1;
+  rename the one you just added so I can tell which is yours"). The learner renames it, never the
+  mentor. The rename is never graded and never an other change (FR-021), and the tool stores no
+  null (FR-007, FR-012) and runs no parenting check (P1 to P3) until the name is unique in the comp.
+  The mentor never asks which layer is the null: the check matches by name, so the answer couldn't
+  be used.
 - **FR-020 (comments, never graded)**: After a pass, one sentence each only when the read shows it:
   the null's move is linear; it's held (asked, as a question); it overlaps a focus layer's own
   Position, Scale or Rotation keys in time (stacked motion, from the map's `own_keys` and the
@@ -397,8 +405,9 @@ All of TD § 6, counting the demo layer.
   keys and `layer_info` of every layer (not from the focus filter): a layer outside the focus that's
   now parented to the null, or whose parent changed; keys added, moved or removed outside the
   focus; an expression turned on or off on a keyed property; a layer added or deleted (the null
-  aside). A rename the mentor asked for (FR-004) is never one: it happens before the focus is set,
-  so it's already in the before read. A visible layer's children brought along by the null (FR-004) are named once, not as a
+  aside). A rename the mentor asked for is never one: a focus layer's (FR-004) happens before the
+  focus is set, so it's already in the before read; the null's (FR-019) is a rename of a layer
+  added after the before read, which is never an other change anyway. A visible layer's children brought along by the null (FR-004) are named once, not as a
   fault.
 - **FR-022 (frames)**: Frame claims follow TD § 5: where layers are on screen in a frame, never how
   far along their own move they are; for the demo, a frame at the before-read time; at stage 6,
@@ -529,6 +538,7 @@ learner each see, and the reused filters.
 | 37 | A candidate that parents other layers (Plate) | Candidate | Its children move with it and the null; named once as other changes | "Shadow follows Plate, so it'll come along" | Right with FR-021. Test on 2b |
 | 38 | A layer outside the focus parented to the null | n/a | Other change (FR-021) | Named, not graded | **Gap fixed by FR-021** (easing's list doesn't see parents). Test |
 | 39 | The demo undone, then parented by the learner | n/a | Theirs (FR-018) | | Right. Test |
+| 40 | The lesson's null shares its name with another layer (AE numbers new nulls, so a second "Null 1" is easy) | n/a | Name not unique: nothing stored, N1 to N3 and P1 to P3 not run; the rename isn't graded or an other change | One sentence: rename the null just added (TD § 14 D-3); never "which one is it?" | **Gap fixed by FR-019** (filter 3: name matching can't tell two layers of one name apart). Synthetic test: two nulls named "Null 1", then the renamed capture stores the null and checks |
 
 ## Live checks (builder, needs After Effects; not guesses)
 
@@ -626,7 +636,7 @@ case 3, the matte, KD-001).
 - **Mentor Practice is unchanged**; its CTRL group is the stage 2 example only. The lesson and the
   review targets are on Mentor Practice 2's wave B layers (spec 004 FR-031).
 - **Layer names in a lesson are unique**: the focus by FR-004's rename ask, the null by FR-019's
-  "can't tell" (D-3); a stable layer id isn't read in wave B.
+  rename ask (D-3); a stable layer id isn't read in wave B.
 - **2% of the comp's width** for "nearly touch" is a starting number (H-4, approved), checked on 2b
   (L-6).
 
@@ -664,11 +674,10 @@ case 3, the matte, KD-001).
    demo, while no focus layer is parented (FR-012).
 2. **D-2, a null animated only on Anchor Point.** Answered (TD § 14): P4 doesn't pass, with the
    designer's hint (FR-015, FR-020).
-3. **D-3, the lesson's null shares its name with another layer** (new, low stakes: AE numbers new
-   nulls, so it needs a rename by hand). TD § 14's rename ask covers candidates, not the null.
-   **Recommended:** the same one-sentence rename ask before the null is checked. Until you answer,
-   FR-019's default stands: the check says it can't tell which layer is the lesson's null and
-   asks, and never guesses. Doesn't block the build.
+3. **D-3, the lesson's null shares its name with another layer.** Answered (TD § 14, 2026-10-23):
+   the same one-sentence rename ask, for the null just added, at the stage 3 check; never graded,
+   never done by the mentor; the null isn't stored until its name is unique (FR-007, FR-019,
+   row 40). Folded in 2026-10-24.
 
 ### Settled here
 
