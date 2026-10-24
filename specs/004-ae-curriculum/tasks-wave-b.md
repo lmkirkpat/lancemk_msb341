@@ -238,11 +238,11 @@ sitting, after wave A's tasks.md T041, T064 and T042.
 
 ## Phase 7: User Story 6 — easing still holds, and the hand-over (P1)
 
-- [ ] T141 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <T100's merge base> -- mentor/test/*.test.mjs` shows only new files; `grep -rnE "SKILLS|FINDERS" mentor/test/<this branch's new tests>` finds no assertion that lists the skills (rule above)
-- [ ] T142 [US6] Run `node .claude/hooks/check-branch.mjs <this branch> skill-builder <integration branch> --shared-owner`: every changed file is the skill-builder's, and the changed existing files match this file's table exactly. Paste the output in the hand-back
+- [x] T141 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <T100's merge base> -- mentor/test/*.test.mjs` shows only new files; `grep -rnE "SKILLS|FINDERS" mentor/test/<this branch's new tests>` finds no assertion that lists the skills (rule above)
+- [x] T142 [US6] Run `node .claude/hooks/check-branch.mjs <this branch> skill-builder <integration branch> --shared-owner`: every changed file is the skill-builder's, and the changed existing files match this file's table exactly. Paste the output in the hand-back
 - [ ] T143 [US6] Hand off to the cockpit for the **eval engineer** (their run, their files; research R23): the easing set (`node product/evals/easing/run.mjs`) on this branch, after T123, **and** on its merge base the same day. **Merge gate (Q4):** the branch is no worse than the merge base: it passes at least as many cases, and no hard-rule check fails on the branch that passes on the base. A case that fails only on the branch is run once more before it counts (noise). FR-035 itself closes with the other session's easing work. If a case drops because of T123's line, fix it on this branch before merge
 - [ ] T144 [US6] Hand off to the **eval engineer**: cross-skill eval case 3 (spec › Eval plan, matte, KD-001; SC-011) using `overlaps.json` (a live capture; Wipe is the moving matte). The case and its number are theirs and the cockpit's
-- [ ] T145 [US6] Write the hand-back: branch and commit; the changed-files table with any difference from this file's; test counts; T133's matte names, eye behaviour and snapshot timings; T158's auto-orient answer; T135's B9 observation; the captures specs 011 and 012 can reuse; and the later per-skill branches below, as requests
+- [x] T145 [US6] Write the hand-back: branch and commit; the changed-files table with any difference from this file's; test counts; T133's matte names, eye behaviour and snapshot timings; T158's auto-orient answer; T135's B9 observation; the captures specs 011 and 012 can reuse; and the later per-skill branches below, as requests
 
 ---
 
