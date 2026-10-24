@@ -9,7 +9,9 @@ choices the builder confirmed as built: the proposal on Mentor Practice 2 (US2 #
 read allowance in "same" (FR-008), "pops in" on any moved property (FR-008, FR-012), members whose
 moves changed (FR-008, row 8), and the demo's fresh read (FR-010). Amended again 2026-10-21 (round
 7, builder's decision): a member whose moves changed now holds the pass until the learner answers,
-as in spec 008 FR-014, replacing "2 or more graded members pass anyway" (FR-008, row 8). The builder took B-3 (properties kind on
+as in spec 008 FR-014, replacing "2 or more graded members pass anyway" (FR-008, row 8). Amended
+2026-10-24 (builder's decision): the demo never runs on an eye-off layer, a matte included
+(FR-009, row 13), as built. The builder took B-3 (properties kind on
 a tie) and B-4 (the rhythm threshold reuses FR-027's floor) as recommended, and both shared requests
 are tasked in spec 004 (SR-1 as T058 and T059, SR-2 as T064 and T065). The curriculum designer's
 round 1 answers (`teaching-design.md` › 14) are folded in: D-1 changed (a gap under the floor is
@@ -276,6 +278,11 @@ section). Other edge cases:
   in that order, or the next one in that order if the second has an expression on a keyed
   property; **none** when the group has two members. Until the learner has given an
   order, there's no demo target. A gap the learner kept under the floor means no demo (FR-007).
+  **Eye on only (decided 2026-10-24, the builder, after wave B's visibility class):** the demo
+  target is always a member whose eye is on, never an eye-off matte or any other eye-off layer,
+  even when the learner added it to the group; the pick skips to the next member in their order
+  that qualifies, as for an expression, and with none left there's no demo. A matte stays in the
+  group and is graded like any member (as built, `mentor/lib/offset.mjs` demo pick; spec 004 T127).
 - **FR-010**: The demo MUST shift keys only (not the layer's in or out point) by a whole, positive
   number of frames equal to the learner's gap:
   - **Layers kind:** every keyed property on the demo layer, including effect keys, both separated
@@ -418,7 +425,7 @@ the check and the learner each see, and the reused filters.
 | 10 | Effect keys (Glow's blur) | Count in the layer's start | Must move with the layer's other keys; moved with it = pass | | Right per contract. Test: Glow shifted with its layer passes |
 | 11 | Adjustment layer (Glow) | Eligible (renders); it's an odd "entrance" (TD § 4) | As any layer | | Right; no special case |
 | 12 | Precomp layer (Icon) | Not eligible until R1 | Not graded | "I can't check their timing yet" | Right. Test |
-| 13 | Hidden layer (Old Take) and matte, eye off | Left out until R1 | Not graded unless added | "unless you want it" | Right for wave A (KD-001 caveat, filter 2). Test |
+| 13 | Hidden layer (Old Take) and matte, eye off | Left out until R1; with R1, a matte is a member like any layer (spec 004 T127) | Not graded unless added; a matte in the group is graded | "unless you want it"; a matte never called hidden | Right for wave A (KD-001 caveat, filter 2). **Demo: never on an eye-off layer, a matte included** (decided 2026-10-24, FR-009). Test |
 | 14 | Null (CTRL) | Not eligible; never the demo | Not graded | One sentence | Right. Test, including a learner who adds it (refused) |
 | 15 | Parenting (Title, Subtitle under CTRL, which moves 0 to 1 s) | Own keys only; a child's visible start includes the parent's motion, not read in wave A | Own keys only | Nothing about parents in wave A, and never a claim that the children no longer move together on screen (TD § 9) | Known blind spot until R1 (designer confirmed, TD § 14): staggering two children of one moving parent passes on their own keys while the parent's motion still moves them together. Stated in Out of scope |
 | 16 | Layer bar dragged vs. in point trimmed | Not read (in points are R1) | Bar drag: keys move, so the check sees it (**live check L-3**). Trim: keys unchanged, still lockstep | "Its bar may have moved, but the animation inside it didn't" | Right if L-3 confirms key times are read in comp time after a drag |
