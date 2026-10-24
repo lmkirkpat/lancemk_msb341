@@ -140,7 +140,7 @@ tool named.
 ## Phase 6: Overlap rows (cloud)
 
 - [x] T227 [P] Add to `.claude/skills/anchor-mentor/SKILL.md` the overlap wording the rows need: an expression drives it (rows 1, 2), "I can't tell where it sits at rest" and never "the expression ignores the pivot" (row 3), the precomp's frame with its size (row 9), "turn its eye back off" for a matte (row 12), nulls are skill 6's (row 14, only if built), the parent sentence (row 15), "I'll go by its own sides" (row 18), the text baseline (row 21), the group-anchor hint (row 22), "its pivot sits outside" (row 23), 3D a later topic (row 24), "select it in the timeline first" (row 25), the unlock sentence (row 28), "I can't check that one" (rows 27, 29)
-- [ ] T228 Write `mentor/test/anchor-overlap.test.mjs`: one named test per row 1 to 29 of spec › Edge cases where concepts overlap, each asserting what the focus and the check see on its fixture from `answer-key.json`; the rows marked **contract** (10, 24, 26) are asserted against `layer-info.mjs`, `comp-space.mjs` and `snapshot.jsx` as built
+- [x] T228 Write `mentor/test/anchor-overlap.test.mjs`: one named test per row 1 to 29 of spec › Edge cases where concepts overlap, each asserting what the focus and the check see on its fixture from `answer-key.json`; the rows marked **contract** (10, 24, 26) are asserted against `layer-info.mjs`, `comp-space.mjs` and `snapshot.jsx` as built
 
 ---
 
