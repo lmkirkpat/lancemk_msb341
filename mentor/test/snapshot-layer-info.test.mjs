@@ -303,3 +303,46 @@ test("a layer source's name, file and fsName are never read (FR-011)", () => {
   runSnapshot(overlapsComp(), { sample_times: [1] });
   assert.deepEqual(forbidden, []);
 });
+
+// ---- Review fixes S1, S4, N5.
+
+test("S1: a key on frame 1 at 30 fps is read at 1/30 s exactly, and stored as 0.033", () => {
+  const layer = mockLayer({ index: 1, name: "Flick", transform: { rotation: { keys: [[0, 0], [1 / 30, 90]] } } });
+  const [entry] = runSnapshot(mockComp([layer], { time: 0 })).layer_info;
+  assert.deepEqual(entry.samples.map((s) => s.time), [0, 0.033]);
+  assert.equal(entry.samples[1].rotation, 90, "not 89.1, the value 0.033 s would read");
+});
+
+test("S1: a caller time within 0.0005 s of a frame is read at that frame and is one sample with it", () => {
+  const layer = mockLayer({ index: 1, name: "Flick", transform: { rotation: { keys: [[0, 0], [1 / 30, 90]] } } });
+  const [entry] = runSnapshot(mockComp([layer], { time: 0.5 }), { sample_times: [0.0334, 0.5004, 2.3456] }).layer_info;
+  assert.deepEqual(entry.samples.map((s) => s.time), [0, 0.033, 0.5, 2.346]);
+  assert.equal(entry.samples[1].rotation, 90);
+});
+
+test("S4: transform is the comp.time sample's values, plus Opacity", () => {
+  for (const l of runSnapshot(overlapsComp()).layer_info) {
+    const now = l.samples.find((s) => s.time === 0.5);
+    assert.deepEqual(
+      { anchor: l.transform.anchor, position: l.transform.position, scale: l.transform.scale, rotation: l.transform.rotation },
+      { anchor: now.anchor, position: now.position, scale: now.scale, rotation: now.rotation }, l.name);
+    assert.equal(l.transform.opacity, 100);
+  }
+});
+
+test("S4: cameras and lights get no rectangle read", () => {
+  let called = 0;
+  const cam = mockLayer({ index: 1, name: "Camera 1", cls: CameraLayer });
+  const light = mockLayer({ index: 2, name: "Light 1", cls: LightLayer });
+  for (const l of [cam, light]) l.sourceRectAtTime = () => { called++; return { left: 0, top: 0, width: 1, height: 1 }; };
+  const info = runSnapshot(mockComp([cam, light])).layer_info;
+  assert.deepEqual(info.map((l) => l.kind), ["camera", "light"]);
+  for (const l of info) assert.ok(l.samples.every((s) => s.rect === null && s.rect_extents === null));
+  assert.equal(called, 0);
+});
+
+test("N5: auto_orient is null when the layer has no autoOrient to read", () => {
+  const layer = mockLayer({ index: 1, name: "Odd" });
+  delete layer.autoOrient;
+  assert.equal(runSnapshot(mockComp([layer])).layer_info[0].auto_orient, null);
+});
