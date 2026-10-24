@@ -71,6 +71,7 @@ Shared tools a skill's SKILL.md also lists in `allowed-tools`: `read_learner_rec
 | `segments`, `segmentState`, `segmentId`, `parseSegmentId`, `needsEase`, `linearEnd` | `mentor/lib/analyze.mjs` | Keyframe pairs and their states, the same as easing's (skills 1, 2) |
 | `unexpectedChanges(baseline, current, targetIds)`, `DEMO_INFLUENCE` | `mentor/lib/diff.mjs` | "Other changes" in a check; the easing demo's fingerprint |
 | `keepLinear(snapshot, refs)` | `mentor/lib/session.mjs` | Skill 1 only: note a confirmed constant-speed property for the record (section 6) |
+| `setSkillData(skill, compId, data)` | `mentor/lib/session.mjs` | **Wave B** (spec 012 SR-1). A skill's own tools store plain-JSON data on the current unpassed lesson for that skill and comp (read back as `currentLesson().skill_data`), replaced whole by each call, kept on continue and resume, gone on a new or `fresh` lesson. Separate from `skill_options`, which the model supplies: use this for what a tool measured (skill 6's stored null). Throws `NO_LESSON` with no such lesson, and on data that isn't plain JSON, before any write ([data-model.md](../data-model.md) › Session lesson) |
 | `marksFor`, `applies`, `isKeptLinear` | `mentor/lib/marks.mjs` | Reading kept-linear marks outside a lesson (section 6) |
 | `timing(snapshot)`, `clusters(events, tolSeconds)` | `mentor/lib/timing.mjs` | Cross-layer timing measures (skill 3; spec 005) |
 | `runSnippet(name, args, opts)` | `mentor/bridge-client.mjs` | The only way into AE |
