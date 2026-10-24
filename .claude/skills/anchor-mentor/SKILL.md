@@ -228,7 +228,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
        for the way.
      - another layer moved (TD § 7): "Needle looks good, but Background moved, down and to the
        right. Edit > Undo that, and select Needle in the timeline before you drag." The layer and
-       the way are in `item5.moved_layers`; if it has no direction, say it moved without one.
+       the way are in `item5.moved_layers`; if it has no direction (I couldn't read its edges, only
+       that its own values changed), say it moved and leave out which way.
      - Anchor Point's stopwatch: "Anchor Point has a stopwatch on now, so the pivot would move over
        time. Turn it off, and keep the pivot you set."
      - a matte's eye: "Reveal Matte is a matte, so turn its eye back off."

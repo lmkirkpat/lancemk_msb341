@@ -314,3 +314,28 @@ test("a failed focus layer always has at least one hint", () => {
   }
   assert.ok(failed > 20, "the sweep covers many failures");
 });
+
+// ---- Review S4: an unreadable other layer whose own transform changed
+
+test("the reviewer's hand-check: Needle moved 50 px with its rect nulled doesn't pass Door's lesson", () => {
+  for (const both of [false, true]) {
+    const base = clone(P2);
+    const cur = clone(fixture("door-pass"));
+    for (const snap of both ? [base, cur] : [cur]) for (const sm of snap.layer_info.find((l) => l.name === "Needle").samples) sm.rect = null;
+    for (const sm of cur.layer_info.find((l) => l.name === "Needle").samples) sm.position[0] += 50;
+    const r = check(base, cur, lessonFor(base, DOOR));
+    const door = layerOf(r, "Door");
+    assert.equal(r.passed, false, `rect nulled in ${both ? "both reads" : "the check read"}`);
+    assert.ok(door.item5.not_compared.some((n) => n.layer === "Needle"));
+    assert.deepEqual(door.item5.moved_layers.map((m) => [m.layer, m.direction, m.from_transform]), [["Needle", null, true]]);
+    assert.ok(door.hints.length > 0);
+  }
+});
+
+test("an unreadable other layer whose own transform didn't change stays not compared, and the pass holds", () => {
+  const cur = clone(fixture("door-pass"));
+  for (const sm of cur.layer_info.find((l) => l.name === "Needle").samples) sm.rect = null;
+  const r = check(P2, cur, lessonFor(P2, DOOR));
+  assert.equal(r.passed, true);
+  assert.ok(layerOf(r, "Door").item5.not_compared.some((n) => n.layer === "Needle" && n.reason === "no_rect"));
+});

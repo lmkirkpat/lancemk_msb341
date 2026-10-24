@@ -79,6 +79,17 @@ function descendantsOf(baseline, index) {
   return (ms.layers || []).filter((l) => Array.isArray(l.parents) && l.parents.some((p) => p.layer_index === index)).map((l) => l.layer_index);
 }
 
+// The layer's own sampled anchor, position, scale or rotation differ between two reads at one time.
+function rawChanged(bs, cs) {
+  if (!bs || !cs) return false;
+  for (const k of ["anchor", "position", "scale"]) {
+    const a = bs[k];
+    const b = cs[k];
+    if (Array.isArray(a) && Array.isArray(b) && a.some((v, i) => isNum(v) && isNum(b[i]) && Math.abs(v - b[i]) > VALUE_TOL)) return true;
+  }
+  return isNum(bs.rotation) && isNum(cs.rotation) && Math.abs(bs.rotation - cs.rotation) > VALUE_TOL;
+}
+
 // ---- Other changes (FR-019), from layer_info for every layer
 
 export function otherChanges(baseline, current, focusIndexes = []) {
@@ -182,12 +193,20 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
     if (!c) continue; // a removed layer is an other change
     const times = childrenAt.has(b.index) ? [childrenAt.get(b.index)] : common(timesOf(b), timesOf(c));
     let worst = null;
+    let rawMoved = null;
     for (const t of times) {
       const cmp = compare(space, baseline, b.index, current, c.index, t, b.kind);
-      if (cmp.reason) { notCompared.push({ layer: b.name, time: isNum(t) ? r3(t) : null, reason: cmp.reason }); continue; }
+      if (cmp.reason) {
+        notCompared.push({ layer: b.name, time: isNum(t) ? r3(t) : null, reason: cmp.reason });
+        // Review S4: the footprint can't be read, but the layer's own transform can. A change there
+        // means it moved (how far on screen isn't known), never "didn't move".
+        if (!rawMoved && isNum(t) && rawChanged(space.sampleAt(b, t), space.sampleAt(c, t))) rawMoved = { layer: b.name, time: r3(t) };
+        continue;
+      }
       if (cmp.moved && (!worst || cmp.max > worst.max)) worst = { layer: b.name, time: r3(t), max: cmp.max, dx: cmp.dx, dy: cmp.dy };
     }
     if (worst) moved.push({ layer: worst.layer, time: worst.time, distance_px: r3(Math.hypot(worst.dx, worst.dy)), direction: direction(worst.dx, worst.dy) });
+    else if (rawMoved) moved.push({ layer: rawMoved.layer, time: rawMoved.time, distance_px: null, direction: null, from_transform: true });
   }
 
   const layers = focusEntries.map((b) => {
