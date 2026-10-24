@@ -145,14 +145,14 @@ behaviour.
 
 ### Tests first
 
-- [ ] T107 [P] [US4] Write `mentor/test/visibility.test.mjs` (synthetic first, live in T136): each row of data-model › Visibility class's order, including the ties (a null with its eye off is `null`; a matte with its eye off is `matte`; a guide with its eye off is `hidden`; a shy guide is `guide`); solo on one layer gives `soloed_elsewhere: true` on every other layer and changes no class; shy with the comp's filter on and off (`timeline_hidden`); without `layer_info`, `known: false`, one entry per keyed layer, classed `null`, `hidden` or `renders` only
-- [ ] T108 [P] [US4] Write `mentor/test/motion-sources.test.mjs` (synthetic first, live in T136): a child of a null lists the null in `parents` with its class; a chain of two is nearest first; `children`; `moves_children` false for a parent keyed only on Opacity; a keyed property with an expression on is in `own_keys` with `expression_on: true` and in `expressions.on_keyed`; `expressions.status` is `"not_read"` on **every** layer, including layers with no keyed expression (FR-014: never "none"); `precomp_contents` `"not_read"` on a precomp layer, `"not_a_precomp"` elsewhere; a layer with no keys and no parent is `static_as_read: true`; `sourcesOf()` with a name not in the comp returns `null`; without `layer_info`, `parents: null` and `read.parents: "not_read"`
-- [ ] T109 [P] [US4] Write the synthetic fixtures T105 to T108 use in `mentor/test/fixtures/layer-info/synthetic/` (each a copy of an existing synthetic snapshot plus a hand-written `layer_info`, with a `comment` field saying it's synthetic and which live capture replaces it in T136)
+- [x] T107 [P] [US4] Write `mentor/test/visibility.test.mjs` (synthetic first, live in T136): each row of data-model › Visibility class's order, including the ties (a null with its eye off is `null`; a matte with its eye off is `matte`; a guide with its eye off is `hidden`; a shy guide is `guide`); solo on one layer gives `soloed_elsewhere: true` on every other layer and changes no class; shy with the comp's filter on and off (`timeline_hidden`); without `layer_info`, `known: false`, one entry per keyed layer, classed `null`, `hidden` or `renders` only
+- [x] T108 [P] [US4] Write `mentor/test/motion-sources.test.mjs` (synthetic first, live in T136): a child of a null lists the null in `parents` with its class; a chain of two is nearest first; `children`; `moves_children` false for a parent keyed only on Opacity; a keyed property with an expression on is in `own_keys` with `expression_on: true` and in `expressions.on_keyed`; `expressions.status` is `"not_read"` on **every** layer, including layers with no keyed expression (FR-014: never "none"); `precomp_contents` `"not_read"` on a precomp layer, `"not_a_precomp"` elsewhere; a layer with no keys and no parent is `static_as_read: true`; `sourcesOf()` with a name not in the comp returns `null`; without `layer_info`, `parents: null` and `read.parents: "not_read"`
+- [x] T109 [P] [US4] Write the synthetic fixtures T105 to T108 use in `mentor/test/fixtures/layer-info/synthetic/` (each a copy of an existing synthetic snapshot plus a hand-written `layer_info`, with a `comment` field saying it's synthetic and which live capture replaces it in T136)
 
 ### Implementation
 
-- [ ] T117 [P] [US4] Create `mentor/lib/visibility.mjs` (`visibility`, `classOf`). T107 passes
-- [ ] T118 [P] [US4] Create `mentor/lib/motion-sources.mjs` (`motionSources`, `sourcesOf`), using `layer-info.mjs` and `visibility.mjs`. T108 passes
+- [x] T117 [P] [US4] Create `mentor/lib/visibility.mjs` (`visibility`, `classOf`). T107 passes
+- [x] T118 [P] [US4] Create `mentor/lib/motion-sources.mjs` (`motionSources`, `sourcesOf`), using `layer-info.mjs` and `visibility.mjs`. T108 passes
 
 **Checkpoint**: both shared rules unit tested; nothing that existed reads them yet.
 
