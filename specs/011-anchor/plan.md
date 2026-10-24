@@ -164,9 +164,18 @@ fallbacks.
 
 ## Requests (not this skill's work)
 
-None needed for the build: every shared piece the spec relies on is on main (checked 2026-10-24
-against `mentor/lib/` and `mentor/jsx/snapshot.jsx`). See Open questions for the one spec point the
-plan reads narrowly.
+- **SR-2 (to spec 004's shared-code owner; the same request as spec 012's SR-4): the comp's size in
+  the snapshot.** Checked 2026-10-24: `mentor/jsx/snapshot.jsx` reads no comp width or height, and
+  nothing else in the snapshot gives them. Ask: `comp` gains `width` and `height` (`comp.width`,
+  `comp.height`, pixels), absent on older captures; a unit test in spec 004's snapshot tests; the
+  data-model's Snapshot additions row. **Why here:** FR-004's full-frame bucket ("allowed if named,
+  proposed only when nothing else exists"). **Without it** the build still works: full-frame layers
+  rank last by area (research R1) and `full_frame` stays `null`; the bucket turns on by itself once
+  the field appears. Not blocking for this skill; it is for spec 012's proposal. Wanted before the
+  Phase 8 captures so they carry the field.
+
+Every other shared piece the spec relies on is on main (checked 2026-10-24 against `mentor/lib/`
+and `mentor/jsx/snapshot.jsx`).
 
 ## Open questions (for the builder)
 

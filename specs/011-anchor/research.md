@@ -21,8 +21,16 @@ and answer keys) and T158 are still open, so every live task here comes after th
   0 on an axis at that time) is `never` with reason `cant_read`, never a pass later.
 - **Ranking** (FR-004, D-3): sort keys in order: unparented (`parents.length === 0`); no Rotation
   or Scale keys; pivot "where AE put it" (the anchor within 0.5 px of its `rect`'s center **or** of
-  [0, 0], either one); not full-frame (`rect` covers ≥ 95% of the comp on both axes after its own
-  scale, read from `footprint` bounds); then index. Deterministic, one comparator.
+  [0, 0], either one); smaller footprint area first (so a full-frame layer always ranks last,
+  which is FR-004's "smaller over full-frame" with no comp size needed); then index. Deterministic,
+  one comparator.
+- **Full-frame bucket** (FR-004: "allowed if named, proposed only when nothing else exists"): a
+  layer whose footprint bounds cover ≥ 95% of the comp both ways. The snapshot doesn't read the
+  comp's size (checked 2026-10-24), so this needs **shared-code request SR-2** (plan › Requests;
+  the same as spec 012's SR-4). Until it lands, `full_frame` is `null` (unknown) and such a layer
+  stays `default` but ranks last by area, so it's proposed only when nothing smaller qualifies,
+  which is the same outcome on Mentor Practice 2. Stand-ins carry `comp.width` and `comp.height`
+  (marked synthetic) so the bucket rule is tested now.
 - **Alternatives:** the keyed `layers` list (filter 2: drops every unkeyed layer), the eye switch
   (filter 3: calls a matte hidden). Rejected by the spec.
 

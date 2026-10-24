@@ -33,6 +33,7 @@ not copied. Decisions are in [research.md](research.md).
 | `bucket` | `default`, `if_named` or `never` (FR-004) |
 | `reason` | `null` for `default`; else one code: `shape_until_l1`, `position_keyed`, `hidden`, `matte`, `guide`, `locked`, `full_frame`, `anchor_keyed`, `expression_rotation_scale`, `expression_anchor_position`, `three_d`, `collapsed`, `null`, `camera`, `light`, `adjustment`, `cant_read` |
 | `rank` | 1 = first proposed, among `default` only (research R1's sort) |
+| `full_frame` | `true` or `false` when the snapshot has `comp.width` and `comp.height` (SR-2); `null` before that |
 | `place_now` | The place the anchor is in at the check time, `between` or `outside` |
 
 ## Analyzer result (adds to spec 004's)
