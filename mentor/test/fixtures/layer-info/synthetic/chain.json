@@ -1,0 +1,580 @@
+{
+  "comment": "SYNTHETIC (tasks-wave-b T109): Pivot (null, Rotation 90, Scale [200, 50], no keys) parenting Arm (solid 200x40, anchor at its centre, Position keys at 0, 1, 2 s), plus Depth (3D) and Orbit (auto-orient). Pure comp-space math only. Replaced in T136 by layer-info/overlaps.json (Pivot, Arm, Depth, Orbit) and AE's to_comp in overlaps-expected.json.",
+  "taken_at": "2026-10-23T12:00:00.000Z",
+  "project": "Synthetic.aep",
+  "comp": {
+    "id": 130,
+    "name": "Synthetic Chain",
+    "duration": 6,
+    "frame_rate": 30,
+    "time": 1,
+    "hide_shy": true
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 2,
+      "name": "Arm",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                0,
+                0,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                100,
+                0,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                100,
+                100,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layer_info": [
+    {
+      "index": 1,
+      "name": "Pivot",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          200,
+          50,
+          100
+        ],
+        "rotation": 90,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            200,
+            50,
+            100
+          ],
+          "rotation": 90,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            200,
+            50,
+            100
+          ],
+          "rotation": 90,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            200,
+            50,
+            100
+          ],
+          "rotation": 90,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 2,
+      "name": "Arm",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": 1,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          20,
+          0
+        ],
+        "position": [
+          100,
+          0,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0,
+          "anchor": [
+            100,
+            20,
+            0
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 40
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1,
+          "anchor": [
+            100,
+            20,
+            0
+          ],
+          "position": [
+            100,
+            0,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 40
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2,
+          "anchor": [
+            100,
+            20,
+            0
+          ],
+          "position": [
+            100,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 40
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 3,
+      "name": "Depth",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": true,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 4,
+      "name": "Orbit",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": true,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 5,
+      "name": "Hinge",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": 3,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    }
+  ]
+}
