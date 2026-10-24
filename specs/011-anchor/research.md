@@ -14,7 +14,7 @@ and answer keys) and T158 are still open, so every live task here comes after th
   expressions on Anchor Point, Position (and X, Y), Rotation and Scale from the snapshot's keyed
   `layers` entry for the same index (the only place keys are read). Each layer lands in exactly one
   bucket of FR-004 (`default`, `if_named`, `never`) with one reason code, so the prompt can say
-  TD § 4's sentence. Shape layers are `if_named` with reason `shape_until_l1` until T231 (L-1)
+  TD § 4's sentence. Shape layers are `if_named` with reason `shape_until_l1` until the desk block (tasks T235, from L-1)
   flips one constant, `SHAPES_DEFAULT`, in `mentor/lib/anchor.mjs`.
 - **Footprint readable** (FR-004, FR-018): a default candidate needs a `footprint()` with corners
   at its check time (R3) in the first read and a non-zero area there. A zero-area footprint (Scale
