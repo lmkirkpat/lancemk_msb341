@@ -15,6 +15,12 @@ Revised 2026-10-20 with the curriculum designer's round 1 answers (`curriculum.m
 FR-005, FR-018 to FR-021, FR-027 to FR-029 and the new FR-037 changed; the three conflicts they
 raised (Q1 to Q3) are settled.
 
+**Changes 2026-10-23** (the builder approved specs 011 H-1 and 012 H-1): FR-028 keeps only its two
+measures (per axis 10% in the layer's own space; 1 px at the check time) and points to spec 011 for
+the 3 px floor, the rest-key check time and pass items 3 to 5. FR-029 keeps only the 1 px measure
+and "never compare raw key values", and points to spec 012 FR-011 to FR-013. Wave B's shared tasks
+([tasks-wave-b.md](tasks-wave-b.md)) approved the same day.
+
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
 designer's [`curriculum.md`](curriculum.md) (same folder, `decisions/007`). This spec links to it
@@ -501,16 +507,16 @@ Other edge cases:
   half a frame**. Uneven gaps get a comment on the rhythm, never a fail (`curriculum.md` › 6).
 - **FR-028 (skill 5, anchor)**: the anchor is **in the named region** if it is within **10% of the
   layer's width** of that region's point horizontally **and within 10% of its height** vertically
-  (corner, edge center or center). Each axis uses its own size, so regions don't overlap on thin
-  layers (on an 800 × 60 bar: 80 px across, 6 px up and down). The
-  layer's footprint is **unchanged** if every edge of its comp-space bounds at the current time
-  moved by **1 pixel or less**.
-- **FR-029 (skill 6, null)**: a child **didn't jump** if its comp-space position at the current time
-  moved by **1 pixel or less**. It **kept its own animation** if its key count and key times (within
-  half a frame) match the read before, and its **comp-space position at each of its key times** is
-  within **1 pixel** of the read before. The check MUST NOT compare raw key values: parenting may
-  rewrite a child's Position into the parent's space, which would fail every correct parenting
-  (`curriculum.md` › 12, B9, unverified; › 13).
+  (corner, edge center or center), each axis measured with its own size **in the layer's own space**
+  (on an 800 × 60 bar: 80 px across, 6 px up and down, so the regions don't overlap). The layer's
+  footprint is **unchanged** if every edge of its comp-space bounds **at the check time** moved by
+  **1 pixel or less**. The 3 px floor, which time is the check time (the rest key), and pass items
+  3 to 5 are spec 011's ([FR-010 to FR-012](../011-anchor/spec.md)).
+- **FR-029 (skill 6, null)**: a child **didn't jump** if its comp-space footprint moved by **1 pixel
+  or less**. What is measured, at which times and through which null is spec 012's
+  ([FR-011 to FR-013](../012-null-parenting/spec.md)). The check MUST NOT compare raw key values:
+  parenting may rewrite a child's Position into the parent's space, which would fail every correct
+  parenting (`curriculum.md` › 12, B9, unverified; › 13).
 
 ### Version, practice comp and ownership
 

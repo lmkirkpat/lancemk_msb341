@@ -121,6 +121,7 @@ Spec 002's lesson (`lesson_id`, `comp_id`, `baseline`, `focus`, `targets`, `demo
 | `kept_linear` | `[{ layer, path, property, key_times }]` confirmed by `keepLinear()` this lesson, written to `marks` by `record_lesson` |
 | `marks` | The kept-linear marks for this comp and project, read from the record at `start()` and passed to the analyzer as `kept_linear` |
 | `skill_options` | The skill's own analyzer options, as last given to `start()`; reused on a continued or resumed lesson when a call gives none (spec 008 SR-1). Not set on a new or `fresh` lesson until given |
+| `skill_data` | **Wave B** (spec 012 SR-1; tasks-wave-b T161, T162). Plain-JSON data a skill's own tools store on the current lesson with `setSkillData()` (skill 6: the lesson's null, the named region, the stored null), as last set; replaced whole by each call. Separate from `skill_options`: the model never supplies it, the analyzer is never given it, and the session never reads inside it. Kept on a continued or resumed lesson; a new or `fresh` lesson starts with none |
 
 `session.json` also gains `review_offers: [{ skill, at }]` (research R7, R8), pruned to the last
 3 hours on each write.
@@ -264,7 +265,7 @@ gets `{}` as today. In fixture mode `sample_times` is ignored (a saved capture c
 | Export | Returns |
 |---|---|
 | `layerMatrix({ anchor, position, scale, rotation })` | The affine matrix translate(position) · rotate(rotation) · scale(scale / 100) · translate(−anchor), as `[a, b, c, d, e, f]` |
-| `compMatrix(snapshot, index, time, { parent_transform } = {})` | `{ matrix }` composed up the parent chain from samples at `time`, or `{ matrix: null, reason }`. `parent_transform` replaces the direct parent's sampled transform (skill 6's "null at parenting"; the parent's own parents still come from samples) |
+| `compMatrix(snapshot, index, time, { parent_transform } = {})` | `{ matrix }` composed up the parent chain from samples at `time`, or `{ matrix: null, reason }`. `parent_transform` replaces the direct parent's sampled transform (skill 6's "null at parenting"; the parent's own parents still come from samples). There is no option for a whole stored chain (spec 012's SR-2 was declined 2026-10-23) |
 | `compPoint(snapshot, index, point, time, opts)` | A point in the layer's own space, in comp pixels |
 | `compPosition(snapshot, index, time, opts)` | The anchor in comp space (where the layer "is") |
 | `footprint(snapshot, index, time, opts)` | `{ corners: [[x, y] × 4], bounds: { left, top, right, bottom } }` from `rect` at `time` (`{ extents: true }` uses `rect_extents`) |

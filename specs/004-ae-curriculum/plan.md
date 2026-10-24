@@ -9,8 +9,8 @@ designer's; linked, not copied)
 **Status**: Approved 2026-10-21, with P1 to P5 as recommended (Open questions). Tasks
 ([tasks.md](tasks.md)) cover wave A's shared pieces only, approved the same day with the skill specs'
 shared-code requests folded in (T058 to T065). **Wave B** is detailed 2026-10-23 in
-[tasks-wave-b.md](tasks-wave-b.md) (T100 to T158, draft, awaiting approval), with skills 5 and 6's
-read requests as T150 onward.
+[tasks-wave-b.md](tasks-wave-b.md) (T100 to T163), approved 2026-10-23 with every recommendation;
+skills 5 and 6's requests are T150 onward (specs 011 and 012's, T160 to T163; 012's SR-2 declined).
 
 ## Summary
 
@@ -215,7 +215,7 @@ Detailed 2026-10-23. Tasks: [tasks-wave-b.md](tasks-wave-b.md). Shapes: [data-mo
 
 | Step | Who | Builds | Done when |
 |---|---|---|---|
-| B1 | **One skill-builder, wave B's shared-code owner, alone** | tasks-wave-b.md T100–T158: `layer_info` (reads R1 and R3) in the snapshot, every layer including unkeyed ones, with `layers`, `precomp_layers` and easing's `hidden_layers` keeping their shape (R16); read R3 sampled at the current time, each layer's key times, its children's sample times and a caller's stored times, with the 2D comp-space math in `mentor/lib/comp-space.mjs` (R17, the skill 5 and 6 requests, T150–T153); `mentor/lib/visibility.mjs` (FR-013, R18); `mentor/lib/motion-sources.mjs` step 1 with "not read" markers (FR-014, R19); KD-001 in easing and one line in `ease-mentor/SKILL.md` (R20); skills 1, 2, 3's eye-switch filters moved to the class (R21); the planted-overlaps comp and Mentor Practice 2's wave B layers in their own scripts, captured live, with AE's own `toComp()` as the math's answer key (R22) | `npm test` green with no existing test edited; T136's live answer keys pass (SC-006); SC-004 and SC-011's unit tests pass; easing evals no worse than the merge base the same day (R23, Q4); merged with `/merge-worktree … --shared-owner`, base the integration branch |
+| B1 | **One skill-builder, wave B's shared-code owner, alone** | tasks-wave-b.md T100–T163: `layer_info` (reads R1 and R3) in the snapshot, every layer including unkeyed ones, with `layers`, `precomp_layers` and easing's `hidden_layers` keeping their shape (R16); read R3 sampled at the current time, each layer's key times, its children's sample times and a caller's stored times, with the 2D comp-space math in `mentor/lib/comp-space.mjs` (R17, the skill 5 and 6 requests, T150–T153); a skill's own lesson data in `mentor/lib/session.mjs` (spec 012 SR-1, T161, T162); `mentor/lib/visibility.mjs` (FR-013, R18); `mentor/lib/motion-sources.mjs` step 1 with "not read" markers (FR-014, R19); KD-001 in easing and one line in `ease-mentor/SKILL.md` (R20); skills 1, 2, 3's eye-switch filters moved to the class (R21); the planted-overlaps comp and Mentor Practice 2's wave B layers in their own scripts, captured live, with AE's own `toComp()` as the math's answer key (R22) | `npm test` green with no existing test edited; T136's live answer keys pass (SC-006); SC-004 and SC-011's unit tests pass; easing evals no worse than the merge base the same day (R23, Q4); merged with `/merge-worktree … --shared-owner`, base the integration branch |
 | B2 | Eval engineer (hand-off) | Easing run on the branch and its merge base (T143); cross-skill case 3, the matte (T144) | Logged with the merge |
 | B3 | Spec writer, then curriculum designer as needed | Specs 011 (set the pivot) and 012 (move a group with a null), from their teaching designs; any new shared request goes to tasks-wave-b.md T160 onward **before B1 merges** | Approved by the builder |
 | B4 | Two skill-builders in parallel worktrees | Skills 5 and 6, adding files only. Skill 5 teaches Pan Behind, never Quick Set Anchor (FR-030); skill 6 grades comp-space footprints through the shared math, never raw values (FR-029, as spec 012 words it) | Each: own tests, `check-branch.mjs` clean without `--shared-owner`, easing evals within one of the merge base, own eval set ≥ 80% (SC-007) |
@@ -230,20 +230,20 @@ demo target). Each is a later per-skill branch, one at a time with `--shared-own
 and 6 merge (tasks-wave-b.md › Later per-skill branches).
 
 **Changes (existing files; only the B1 owner may):** `mentor/jsx/snapshot.jsx`,
-`mentor/lib/snapshot.mjs`, `mentor/dev/capture.mjs`, `mentor/lib/analyze.mjs`,
+`mentor/lib/snapshot.mjs`, `mentor/lib/session.mjs`, `mentor/dev/capture.mjs`, `mentor/lib/analyze.mjs`,
 `.claude/skills/ease-mentor/SKILL.md`, `mentor/lib/key-types.mjs`, `mentor/lib/speed-graph.mjs`,
 `mentor/lib/offset.mjs` (table in tasks-wave-b.md). **Adds:** `mentor/lib/{layer-info,comp-space,
 visibility,motion-sources}.mjs`, `mentor/dev/build-overlaps-b.jsx`,
-`mentor/dev/build-practice-comp-2b.jsx`, eleven or twelve test files, `mentor/test/fixtures/layer-info/`.
+`mentor/dev/build-practice-comp-2b.jsx`, thirteen test files, `mentor/test/fixtures/layer-info/`.
 Nothing under `bridge/` changes.
 
 Waves B and C don't depend on each other.
 
-**Open questions for wave B** (each with a recommendation): tasks-wave-b.md's hand-back and the
-cockpit's list, Q1 to Q5: the sampled read R3 (yes); the planted-overlaps comp in the practice `.aep`
+**Open questions for wave B, all answered 2026-10-23 as recommended** (tasks-wave-b.md › Status),
+Q1 to Q5: the sampled read R3 (yes); the planted-overlaps comp in the practice `.aep`
 (yes); skills 1 to 3's filter switch in this pass (yes); the eval gate against the same-day merge
 base, and sequencing `ease-mentor/SKILL.md` after the easing-gate session (yes); and tick rights on
-`tasks-wave-b.md` for the skill-builder in `ownership.json` (add `specs/*/tasks-*.md`).
+`tasks-wave-b.md` for the skill-builder in `ownership.json` (`specs/*/tasks-*.md`, done by the cockpit).
 
 ### Wave D: the rest (stretch, P3) — outline
 
