@@ -10,13 +10,17 @@ W1 to W7 (Phase 8; Q1, the sampled read R3, yes), Q2 (Mentor Overlaps is saved i
 gate in T143 and T123's sequencing) and Q5 (done by the cockpit: `ownership.json` gives the
 skill-builder `specs/*/tasks-*.md`, ticks only). Specs 011 and 012 were approved the same day; their
 shared-code requests are T160 to T163 (011 SR-1, 012 SR-1 and SR-3). Spec 012's SR-2 (a stored
-parent chain, `parent_matrix`) was **declined** this sprint, so it has no task.
+parent chain, `parent_matrix`) was **declined** this sprint, so it has no task. **2026-10-24:** the
+builder approved one more shared request, spec 011's SR-2 (the same as spec 012's SR-4): the comp's
+size in the snapshot, T164 and T165.
 
 **Input**: [plan.md](plan.md) › Waves › Wave B, [spec.md](spec.md) (FR-012 to FR-015, FR-013's
 "never the eye switch alone", KD-001, SC-004, SC-006, SC-011), [research.md](research.md) R16 to
 R23, [data-model.md](data-model.md) › Wave B shapes, [contracts/skill-module.md](contracts/skill-module.md).
 Skill specs: [spec 011](../011-anchor/spec.md) › Dependencies › SR-1 and
-[spec 012](../012-null-parenting/spec.md) › Dependencies › SR-1, SR-3. Teaching designs are read
+[spec 012](../012-null-parenting/spec.md) › Dependencies › SR-1, SR-3; spec 011's
+[plan](../011-anchor/plan.md) › Requests › SR-2 and spec 012's
+[plan](../012-null-parenting/plan.md) › Requests › SR-4 (one request). Teaching designs are read
 only: [curriculum.md](curriculum.md) › 5 and › 8, specs 011 and 012's `teaching-design.md`.
 
 **Scope**: only wave B's **shared** pass (plan › Wave B, step 1). Skills 5 and 6 are specs 011 and
@@ -56,10 +60,10 @@ is compared against (T142):
 
 | File | Change | Task |
 |---|---|---|
-| `mentor/jsx/snapshot.jsx` | Add `comp.time`, `comp.hide_shy` and `layer_info` (reads R1 and R3); `layers`, `precomp_layers`, `host` unchanged; sampled times and the extra R1 fields (Phase 8) | T110, T151 |
+| `mentor/jsx/snapshot.jsx` | Add `comp.time`, `comp.hide_shy` and `layer_info` (reads R1 and R3); `layers`, `precomp_layers`, `host` unchanged; sampled times and the extra R1 fields (Phase 8); `comp.width` and `comp.height` (011 SR-2, 012 SR-4) | T110, T151, T165 |
 | `mentor/lib/snapshot.mjs` | `takeSnapshot({ sample_times } = {})` passes `sample_times` to the snippet; with none, the same call as today | T152 |
 | `mentor/lib/session.mjs` | `setSkillData()` and the lesson's `skill_data` (spec 012 SR-1); nothing else | T162 |
-| `mentor/dev/capture.mjs` | `--compare` also ignores `layer_info`, `comp.time`, `comp.hide_shy`; optional `--times` for `sample_times` | T111 |
+| `mentor/dev/capture.mjs` | `--compare` also ignores `layer_info`, `comp.time`, `comp.hide_shy` (and `comp.width`, `comp.height`, T165); optional `--times` for `sample_times` | T111, T165 |
 | `mentor/lib/analyze.mjs` | `hidden_layers` from the visibility class when known (KD-001); nothing else | T122 |
 | `.claude/skills/ease-mentor/SKILL.md` | Step 2: one line, a matte is never called hidden (KD-001) | T123 |
 | `mentor/lib/key-types.mjs` | Candidate, left-out and demo filters use the visibility class when known (spec 009 SR-3, FR-023) | T126 |
@@ -77,7 +81,7 @@ task finds one must, stop and hand back.
 |---|---|
 | `mentor/lib/layer-info.mjs`, `mentor/lib/comp-space.mjs`, `mentor/lib/visibility.mjs`, `mentor/lib/motion-sources.mjs` | T112, T113 and T153, T117, T118 |
 | `mentor/dev/build-overlaps-b.jsx`, `mentor/dev/build-practice-comp-2b.jsx` | T131, T132 (with T157, T160, T163) |
-| `mentor/test/snapshot-layer-info.test.mjs`, `layer-info.test.mjs`, `comp-space.test.mjs`, `visibility.test.mjs`, `motion-sources.test.mjs`, `analyze-matte.test.mjs`, `analyze-r1-unchanged.test.mjs`, `key-types-visibility.test.mjs`, `speed-graph-visibility.test.mjs`, `offset-visibility.test.mjs`, `edge-rows-wave-b.test.mjs`, `snapshot-times.test.mjs`, `session-skill-data.test.mjs` (all under `mentor/test/`) | T104–T108, T119–T121, T124, T125, T127, T137, T152, T161 |
+| `mentor/test/snapshot-layer-info.test.mjs`, `layer-info.test.mjs`, `comp-space.test.mjs`, `visibility.test.mjs`, `motion-sources.test.mjs`, `analyze-matte.test.mjs`, `analyze-r1-unchanged.test.mjs`, `key-types-visibility.test.mjs`, `speed-graph-visibility.test.mjs`, `offset-visibility.test.mjs`, `edge-rows-wave-b.test.mjs`, `snapshot-times.test.mjs`, `session-skill-data.test.mjs` (all under `mentor/test/`) | T104–T108, T119–T121, T124, T125, T127, T137, T152, T161 (T164 extends `snapshot-layer-info.test.mjs`) |
 | `mentor/test/fixtures/layer-info/` (`README.md`, `synthetic/*.json`, and the live captures and answer keys from Phase 6) | T101, T109, T131–T136 |
 
 **Files outside this owner's row** (requests the cockpit sends to others, not tasks here):
@@ -224,7 +228,7 @@ sitting, after wave A's tasks.md T041, T064 and T042.
   - **Orbit** (solid, Auto-Orient along path, Position keys on a curve): auto-orient (T158)
   **AE's own answer for the math:** before finishing, the script adds a temporary layer **Probe** with one Point Control per chosen layer (Arm, Leaf 1, Leaf 2, Kid, Wipe) whose expression is `thisComp.layer("<name>").toComp(thisComp.layer("<name>").anchorPoint)`, reads each one with `valueAtTime(t, false)` at 0, 1 and 2 s and at each of that layer's key times, writes them to the key as `to_comp`, then deletes Probe. It also writes each layer's own rectangle at 1 s (`sourceRectAtTime`) as `rect`. No layer's name or key time is shared with Mentor Practice 2's script
 - [x] T132 [US5] Write `mentor/dev/build-practice-comp-2b.jsx`: adds wave B's targets to **"Mentor Practice 2"** (refuses if that comp is missing, or if any 2b layer exists unless `{"replace": true}`; never changes MP2's existing layers, "Mentor Practice", "Mentor Overlaps" or "Icon Precomp"), with its own answer key at `ARGS.out` (`mentor/test/fixtures/layer-info/practice2b-expected.json`): per new layer, its `layer_info` expectations, AE's `to_comp` from a temporary Probe (as T131), its easing pair states, and its timing measures, so skills 1 to 3's answer keys can add the new layers. **Targets:** Phase 8's T157 as amended by T160 (skill 5) and T163 (skill 6). **Rules for every 2b layer**, so it doesn't become another skill's target by accident (the same care as tasks.md T064): no first key at 0.5 s or 2 s and no start within 2 frames of another layer's start (skill 3); keys bezier at a non-default influence (15/80), never linear and never Easy Ease defaults, unless the target says otherwise (easing, skill 2); no Opacity going between 0 and 100 (20 → 100) (skill 1); names not used in Mentor Practice 2 (Blink, Spinner, Cut, Card, Dot 1 to 3, Chip A to C, Badge, Flag, Pause) or Mentor Overlaps
-- [ ] T133 🖐 [US4] With Mentor Practice active (as it is now, not as built), capture `mentor/test/fixtures/layer-info/practice-r1.json` with `node mentor/dev/capture.mjs`. Run `build-overlaps-b` (`node mentor/dev/assemble.mjs build-overlaps-b '{"out": "<abs path>/mentor/test/fixtures/layer-info/overlaps-expected.json"}'`, then `ae_run_script`); capture `overlaps.json` at CTI 1 s; turn Solo on for **Still** by hand, capture `overlaps-solo.json`, turn Solo off. Record in the hand-back: which track-matte scripting names worked (curriculum B8), whether AE turned the matte's eye off itself, and how long each snapshot took (the 2 s goal, plan › Technical Context). Save the `.aep`
+- [ ] T133 🖐 [US4] (After T165, so the captures carry `comp.width` and `comp.height`.) With Mentor Practice active (as it is now, not as built), capture `mentor/test/fixtures/layer-info/practice-r1.json` with `node mentor/dev/capture.mjs`. Run `build-overlaps-b` (`node mentor/dev/assemble.mjs build-overlaps-b '{"out": "<abs path>/mentor/test/fixtures/layer-info/overlaps-expected.json"}'`, then `ae_run_script`); capture `overlaps.json` at CTI 1 s; turn Solo on for **Still** by hand, capture `overlaps-solo.json`, turn Solo off. Record in the hand-back: which track-matte scripting names worked (curriculum B8), whether AE turned the matte's eye off itself, and how long each snapshot took (the 2 s goal, plan › Technical Context). Save the `.aep`
 - [ ] T134 🖐 [US4] Run `node mentor/dev/capture.mjs --compare mentor/test/fixtures/practice-before.json` with Mentor Practice active: the differences are the same layers T042 listed (wave A), and `layer_info` and `comp.time` aren't among them (T111). Check no capture holds a user name, folder path or source file name
 - [ ] T135 🖐 [US5] After wave A's T042 is done: run `build-practice-comp-2b` on Mentor Practice 2; capture `practice2b.json` (CTI at 0 s). Then, **by hand**, the two moves skills 5 and 6 grade, each captured and then undone with Edit > Undo: (a) add a null, parent Tile, Caption and Stamp to it with the pick whip in the Parent column, capture `practice2b-parented.json`; (b) move Door's anchor to the middle of its left edge with Pan Behind (Y), capture `practice2b-anchor.json`. Record in the hand-back whether parenting changed the children's raw Position key values (curriculum B9, spec 012 L-2). Pan Behind on a Position-keyed layer (curriculum B5) is spec 011's L-2 on Sled, not this task. Save the `.aep`
 - [ ] T136 [US4] Add the live answer-key checks to the Phase 2 to 5 tests, from T133 and T135's captures and keys: `layer-info.test.mjs` (every layer present, fields as declared), `comp-space.test.mjs` (`compPosition` within **0.5 px** of AE's `to_comp` at every probed time; on `practice2b-parented.json`, each child's footprint at each sampled time equals `practice2b.json`'s within 1 px, which is what skill 6's P2 will measure; on `practice2b-anchor.json`, the hinge layer's footprint is unchanged within 1 px, skill 5's measure), `visibility.test.mjs` and `motion-sources.test.mjs` (every layer's class and entry as declared; on `practice-r1.json`, Title's map lists its own keys and CTRL, US4 scenario 2), `analyze-matte.test.mjs`, `analyze-r1-unchanged.test.mjs`, and T124, T125, T127's skill tests. Tolerances are test inputs, not constants in shared code
@@ -281,6 +285,12 @@ Tasks (each test first, then code):
 - [x] T162 [US5] **Spec 012 SR-1, code**: in `mentor/lib/session.mjs`, add `setSkillData(skill, compId, data)` and the lesson field `skill_data` per contracts/skill-module.md › 4 and data-model › Session lesson. Nothing else in the file changes. T161 and every existing session test pass unchanged
 - [x] T163 [US5] **Spec 012 SR-3, skill 6's layout in 2b** (amends T157 and T132; with T132): keep T157's skill 6 names; at 0 s Tile, Caption and Stamp's bounds overlap one another, and Row A, Row B and Row C's overlap one another; each of the four sets (the group, the Row group, Plate with Shadow, Gradient with Reveal Matte) is more than **10% of the comp's width** from every other set and from the skill 5 layers; **Row B has no keys** (a static group member); **Tile has Position and Scale keys**. The answer key declares the four sets and each layer's bounds at 0 s, so spec 012's L-6 (its 2% "nearly touch" rule) is checked against it
 
+**Spec 011 SR-2 = spec 012 SR-4 (approved 2026-10-24), the comp's size.** Wanted **before the live
+captures (T133)**, so every wave B capture carries it; neither task needs AE.
+
+- [ ] T164 [P] [US5] **Tests first**: extend `mentor/test/snapshot-layer-info.test.mjs` (T104's mock AE): give the mock comp a `width` and `height` (for example 1920 × 1080) and assert the snapshot's `comp` carries `width: 1920` and `height: 1080` (whole pixels, as AE gives them), next to `time` and `hide_shy`; `layers`, `precomp_layers`, `host` and `layer_info` are byte-identical to the same mock's result without the new fields. Fails until T165
+- [ ] T165 [US5] **Code**: in `mentor/jsx/snapshot.jsx`, add `width: comp.width, height: comp.height` to the snapshot's `comp` object (ES3; nothing else in the file changes); in `mentor/dev/capture.mjs`, `--compare` also strips `comp.width` and `comp.height`, so T134's compare against a pre-wave-B fixture still lists only wave A's layers. Older captures stay as they are (the fields are absent there, and readers treat absent as unknown, never a default; data-model › Snapshot additions). T164 and every existing test pass
+
 ---
 
 ## Later per-skill branches (not this pass; requests for the cockpit)
@@ -306,7 +316,8 @@ the curriculum designer where the teaching changes).
   `visibility.mjs`) → Phase 6's scripts (T131, T132) → the 🖐 sitting (T133, T134, T158, then T135)
   → T136, T137 → **Phase 7**.
 - Phase 8: T151 with T110; T152 after T110; T153 with T113; T157, T160 and T163 before T132's
-  targets are written; T158 in T133's sitting; T161 then T162 any time after Phase 1 (no AE).
+  targets are written; T158 in T133's sitting; T161 then T162 any time after Phase 1 (no AE);
+  T164 then T165 any time after T151, **before T133** (no AE).
 - **T123 last** before T143, once its three checks pass (Q4); T143 runs after T123.
 - 🖐 order in one Mac sitting: wave A's tasks.md T041 and T064 (build Mentor Practice 2), T042 (its
   captures), then T133, T134, T158, then T135. The cockpit stays off AE.
@@ -315,7 +326,7 @@ the curriculum designer where the teaching changes).
 ## Parallel opportunities
 
 With one builder, [P] only means order doesn't matter: T104 to T109 are independent new files;
-T117 and T118; T124, T125, T127; T131 and T132; T161 with any of them.
+T117 and T118; T124, T125, T127; T131 and T132; T161 and T164 with any of them.
 
 ## Implementation strategy
 
@@ -328,9 +339,9 @@ T117 and T118; T124, T125, T127; T131 and T132; T161 with any of them.
    skills 5 and 6 after Phases 1 to 5 merge, at the cockpit's call, but their checks aren't trusted
    until T136 passes.)
 
-**Task count:** 50, T100 to T163: Setup 4 (T100–T103), Foundational 7 (T104–T106, T110–T113),
+**Task count:** 52, T100 to T165: Setup 4 (T100–T103), Foundational 7 (T104–T106, T110–T113),
 visibility and map 5 (T107–T109, T117, T118), KD-001 5 (T119–T123), skills 1 to 3's switch 7
-(T124–T130), live captures 7 (T131–T137), hand-over 5 (T141–T145), requests 10 (T150 approval, done;
-T151–T153, T157, T158, T160–T163). Four are 🖐 live (T133, T134, T135, T158). IDs skip on purpose
-(T114–T116, T138–T140, T146–T149, T154–T156, T159) so phases keep their own ranges; T164 to T199
+(T124–T130), live captures 7 (T131–T137), hand-over 5 (T141–T145), requests 12 (T150 approval, done;
+T151–T153, T157, T158, T160–T165). Four are 🖐 live (T133, T134, T135, T158). IDs skip on purpose
+(T114–T116, T138–T140, T146–T149, T154–T156, T159) so phases keep their own ranges; T166 to T199
 are unused.

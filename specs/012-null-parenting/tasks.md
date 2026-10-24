@@ -4,7 +4,8 @@ description: "Task list for spec 012: skill 6, move a group with a null"
 
 # Tasks: Move a group with a null (curriculum skill 6)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24). No skill builder starts before it.
+**Status**: Approved 2026-10-24, with plan › Q1 (`null_not_ready`), Q2 (`null_scale_zero`) and
+SR-4 (spec 004 T164, T165). Ready for the skill builder.
 
 **Input**: Design documents from `specs/012-null-parenting/`
 
@@ -110,7 +111,7 @@ with 0 px moved, and grade each planted attempt as the answer key says.
 - [ ] T318 [US1] Create `mentor/jsx/null-parent-demo.jsx` (ES3) per contracts/tools.md: args `{ comp_id, layer_index, layer_name, null_index, null_name }`; match both by index and name, refuse before any write (locked, already parented, not found), set `layer.parent`, return what changed. Don't edit any existing snippet or `mentor/jsx/lib/`
 - [ ] T319 [US1] Create `mentor/fixture/null-parent-demo.mjs` (`run`, `apply`, spec 004 contract › 5). T316 passes
 - [ ] T320 [US1] Create `mentor/tools/null-parenting.mjs`: `registerErrors({ NULL_PARENT_REFUSED: … })` at import with contracts/tools.md's message; `SKILLS`, `FINDERS` (`review: false` for now); the three tools per contracts/tools.md and spec 004 contract › 3 (the focus restart with `fresh: true`; the check's `sample_times` from `p2Times`, `findNull`, `setSkillData`, `markChecked(passed, { demoUndone })` except on `null_parent_moves`; the demo's `assertCanDemo`, `null_not_ready`, refusals including `null_scale_zero` before `runSnippet("null-parent-demo", …, { undo: true })`, `recordDemo`, then the second read and `moved_px`). T317 passes
-- [ ] T321 [US1] Write `.claude/skills/null-parenting-mentor/SKILL.md` (draft): frontmatter `name: null-parenting-mentor`, a description triggering on "/null-parenting-mentor", "move them together", "null", "parent", "group these", and `allowed-tools` from contracts/tools.md. Body: TD § 5's stages: stage 1 ask which layers move as one; propose when they have none (or ask them to name it on `no_comp_size`); leave-outs one sentence per reason, a matte never hidden, Shadow follows Plate, children come along; the rename ask for a duplicate name (FR-004); stage 2 CTRL with Title and Subtitle when the comp has them, else one frame of the group, then position, scale and rotation pass down, not opacity or effects; stage 3 Layer > New > Null Object, ask where the group turns or scales from, never pick it, "it'll only slide" accepted; the null's rename ask on `null_name_not_unique` ("two layers are called Null 1; rename the one you just added so I can tell which is yours"), never asking which one it is, never renaming; stage 4 one demo when asked or stuck, "it moved 0 pixels" in plain words, a frame at the before-read time; stage 5 hints by code, never the fix, never a cause it can't see, never "1 pixel" as a target; ask for the move only after `parenting_passed`; a null keyed early is fine; stage 6 frames at the null's first and last keys; stage 7 comments, one sentence each, never graded; stage 8 `record_lesson` per FR-025 (layers, the null, the move, a jump and its distance, a move on Opacity or "said the group only slides"; no tolerances, method, motive or names). Version (FR-023): no Shift+F4, the Parent & Link column and how to show it, "the pick whip in the Parent column"; null defaults, Option or Shift while parenting and Quick Offset marked `<!-- L-1 -->` and not said. Copy the hard rules block from `.claude/skills/ease-mentor/SKILL.md` › Hard rules (reading it, not editing it)
+- [ ] T321 [US1] Write `.claude/skills/null-parenting-mentor/SKILL.md` (draft): frontmatter `name: null-parenting-mentor`, a description triggering on "/null-parenting-mentor", "move them together", "null", "parent", "group these", and `allowed-tools` from contracts/tools.md. Body: TD § 5's stages: stage 1 ask which layers move as one; propose when they have none (or ask them to name it on `no_comp_size`); leave-outs one sentence per reason, a matte never hidden, Shadow follows Plate, children come along; the rename ask for a duplicate name (FR-004); stage 2 CTRL with Title and Subtitle when the comp has them, else one frame of the group, then position, scale and rotation pass down, not opacity or effects; stage 3 Layer > New > Null Object, ask where the group turns or scales from, never pick it, "it'll only slide" accepted; the null's rename ask on `null_name_not_unique` ("two layers are called Null 1; rename the one you just added so I can tell which is yours"), never asking which one it is, never renaming; stage 4 one demo when asked or stuck, "it moved 0 pixels" in plain words, a frame at the before-read time; on `null_not_ready` the mentor asks for a check of the null first (no demo until it has passed, plan › Q1), and on `null_scale_zero` says in plain words that the null's Scale is 0, so nothing parented to it can stay put, never naming the code; stage 5 hints by code, never the fix, never a cause it can't see, never "1 pixel" as a target; ask for the move only after `parenting_passed`; a null keyed early is fine; stage 6 frames at the null's first and last keys; stage 7 comments, one sentence each, never graded; stage 8 `record_lesson` per FR-025 (layers, the null, the move, a jump and its distance, a move on Opacity or "said the group only slides"; no tolerances, method, motive or names). Version (FR-023): no Shift+F4, the Parent & Link column and how to show it, "the pick whip in the Parent column"; null defaults, Option or Shift while parenting and Quick Offset marked `<!-- L-1 -->` and not said. Copy the hard rules block from `.claude/skills/ease-mentor/SKILL.md` › Hard rules (reading it, not editing it)
 
 **Checkpoint**: US1 in fixture mode on stand-ins.
 
@@ -195,10 +196,11 @@ Practice 2's 2b layers; the cockpit off AE; one skill-builder holding the AE loc
 
 ## Requests (to the cockpit; never a task here)
 
-- **SR-4 (spec 004's shared-code owner; same as spec 011's SR-2):** `comp.width` and `comp.height`
-  in the snapshot (plan › Requests). The build and its tests don't wait (stand-ins carry the
+- **SR-4 (approved 2026-10-24 as spec 004 tasks-wave-b.md T164, T165, before T133; same as spec
+  011's SR-2):** `comp.width` and `comp.height` in the snapshot (plan › Requests). The build and its tests don't wait (stand-ins carry the
   fields); the live proposal, eval case 1 and L-6 do.
-- Plan › Open questions Q1 and Q2 are for the builder.
+- Plan › Open questions Q1 and Q2: approved 2026-10-24 (`null_not_ready`: T317, T320, T321;
+  `null_scale_zero`: T316, T320, T321).
 
 ## Dependencies & execution order
 

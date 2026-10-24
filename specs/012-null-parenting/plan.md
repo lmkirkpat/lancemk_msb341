@@ -7,7 +7,8 @@
 **Input**: Feature specification from `specs/012-null-parenting/spec.md`, approved 2026-10-23
 (D-3 folded in 2026-10-24).
 
-**Status**: Draft, awaiting the builder's approval.
+**Status**: Approved 2026-10-24. The builder took every recommendation: Q1 and Q2 (below) and SR-4
+(spec 004 tasks-wave-b.md T164, T165).
 
 ## Summary
 
@@ -76,11 +77,11 @@ never in a review; no stored chain (SR-2 declined)
 
 | Principle | Check | Pre-research | Post-design |
 |---|---|---|---|
-| I. Spec Before Build | Spec 012 approved 2026-10-23; this plan and tasks stop for approval | ✅ | ✅ |
+| I. Spec Before Build | Spec 012 approved 2026-10-23; this plan and tasks approved 2026-10-24 | ✅ | ✅ |
 | II. Decisions Are Recorded | **`003`/`005`**: one fixed snippet, three narrow tools. **`007`**: owners as in the spec. **`008`**: 🖐 under the AE lock; worktree; `check-branch.mjs`. **`002`**: the "why" is depth (the jump, in comp space, per corner and time) and memory. No new decision | ✅ | ✅ |
 | III. Teaching Quality Is Evaluated | The eval engineer writes `product/evals/null-parenting/` from the spec's 18 cases (HO-1); unit tests cover every overlap row and FR-027's P2 cases | ✅ | ✅ |
 | IV. Privacy by Default | Records hold layer names and what the checks showed (FR-025); shared email and phone check | ✅ | ✅ |
-| V. Simplicity and Checkpoints | No dependency, no refactor, no existing file changed; one shared request (SR-4), not built here | ✅ | ✅ |
+| V. Simplicity and Checkpoints | No dependency, no refactor, no existing file changed; one shared request (SR-4, approved as spec 004 T164, T165), not built here | ✅ | ✅ |
 | VI. One Owner per File, Independent Checks | Builder doesn't write eval cases; `/overlap-audit` re-run and a reviewer read before evals (HO-2, HO-3) | ✅ | ✅ |
 
 Active decisions: `002`, `003`, `005`, `007`, `008`. No violations.
@@ -153,7 +154,7 @@ sitting. No NEEDS CLARIFICATION is left; L-1 to L-6 settle facts with fallbacks.
 | Step | Who | Where | Does | Done when |
 |---|---|---|---|---|
 | 1 | Skill-builder | Cloud worktree, parallel with spec 011's | Phases 1–8 of tasks.md | `npm test` green; `check-branch.mjs` clean without `--shared-owner`; `/agent-audit` run; hands back |
-| 2 | Shared-code owner (spec 004) | Own branch, then Mac | SR-4 (`comp.width`, `comp.height`) if approved; T133 to T136, T158 | Merged; spec 004's live answer keys pass |
+| 2 | Shared-code owner (spec 004) | Own branch, then Mac | SR-4 (`comp.width`, `comp.height`; T164, T165, before T133); T133 to T136, T158 | Merged; spec 004's live answer keys pass |
 | 3 | The builder at the Mac, with a skill-builder holding the AE lock (🖐) | Local checkout | Phase 9: L-1 to L-6, captures, desk block, the first live lesson | Results handed back; stand-ins gone; tests green |
 | 4 | Cockpit | Main tree | Usage note from the hand-back | Committed |
 | 5 | Curriculum designer, reviewer | Read only | `/overlap-audit` re-run against the built check (HO-2), rows marked **contract** re-confirmed against wave B's code as built; `SKILL.md` read against FR-023 and FR-024 (HO-3) | No open row |
@@ -163,21 +164,22 @@ sitting. No NEEDS CLARIFICATION is left; L-1 to L-6 settle facts with fallbacks.
 
 ## Requests (not this skill's work)
 
-- **SR-4 (to spec 004's shared-code owner; the same request as spec 011's SR-2): the comp's size in
-  the snapshot.** Checked 2026-10-24: `mentor/jsx/snapshot.jsx` reads no comp width or height.
+- **SR-4 (approved 2026-10-24; spec 004 tasks-wave-b.md T164 tests, T165 code; the same request as
+  spec 011's SR-2): the comp's size in the snapshot.** Checked 2026-10-24: `mentor/jsx/snapshot.jsx` reads no comp width or height.
   FR-005's "nearly touch" is 2% of the comp's width. Ask: `comp` gains `width` and `height`
   (pixels), absent on older captures, with a unit test and the data-model row. **Without it** the
   learner-named focus works and the proposal returns `no_comp_size` (the mentor asks the learner to
   name the group), so US1 #1, eval case 1 and L-6 wait for it. The build and its tests don't: stand-ins
   carry the field. Wanted before Phase 9's captures.
 
-## Open questions (for the builder)
+## Open questions (answered 2026-10-24)
 
-- **Q1 (FR-008, "no demo target until the null passes N1 and N2"):** the session fixes the demo
+- **Q1 (FR-008, "no demo target until the null passes N1 and N2"), approved as recommended:** the session fixes the demo
   target when the lesson starts. **Recommended:** the analyzer sets it from the focus, and
   `null_parent_demo` refuses with `null_not_ready` until the null has been stored (it passed N1 and
   N2 at a check). Same outcome, no shared change.
-- **Q2 (a refusal FR-017 doesn't list):** the demo refuses `null_scale_zero` when the null's Scale
+- **Q2 (a refusal FR-017 didn't list), approved as recommended; FR-017 and contracts/tools.md now
+  list it:** the demo refuses `null_scale_zero` when the null's Scale
   is 0 on an axis at the current time, because no parenting can keep the child still under it and
   the twin's `toLayerSpace` returns `singular`. **Recommended:** yes, add it; the spec's list is
   safety refusals and this is one.
@@ -189,7 +191,7 @@ sitting. No NEEDS CLARIFICATION is left; L-1 to L-6 settle facts with fallbacks.
 | T136 shows the corner math off by more than 1 px | Spec 004 T136 | No live task here starts before it |
 | A parent's merged key times hit the 64-sample cap | Tool test on the 70-time synthetic | P2 times passed first; P2 reads the stored null, not the null's samples; `not_sampled` holds the pass |
 | `layer.parent = null` in a script doesn't compensate like the pick whip | L-3 | The tool's second read reports `jumped`; the snippet is fixed in the desk block, never retried live |
-| SR-4 isn't approved | Cockpit | The proposal stays off; the learner names the group; record the outcome for spec 004 |
+| SR-4 (approved) hasn't landed by Phase 9 | Cockpit | The proposal stays off; the learner names the group; L-6 logged as waiting |
 | The null re-placed with no check before parenting gives a false jump | Row 31's synthetic | TD § 7's jump hint names a moved null (spec, accepted) |
 
 ## Complexity Tracking

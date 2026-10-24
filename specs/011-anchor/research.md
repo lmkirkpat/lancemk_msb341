@@ -27,7 +27,7 @@ and answer keys) and T158 are still open, so every live task here comes after th
 - **Full-frame bucket** (FR-004: "allowed if named, proposed only when nothing else exists"): a
   layer whose footprint bounds cover ≥ 95% of the comp both ways. The snapshot doesn't read the
   comp's size (checked 2026-10-24), so this needs **shared-code request SR-2** (plan › Requests;
-  the same as spec 012's SR-4). Until it lands, `full_frame` is `null` (unknown) and such a layer
+  the same as spec 012's SR-4; approved 2026-10-24 as spec 004 T164, T165). Until it lands, `full_frame` is `null` (unknown) and such a layer
   stays `default` but ranks last by area, so it's proposed only when nothing smaller qualifies,
   which is the same outcome on Mentor Practice 2. Stand-ins carry `comp.width` and `comp.height`
   (marked synthetic) so the bucket rule is tested now.

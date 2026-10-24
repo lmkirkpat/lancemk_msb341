@@ -6,7 +6,8 @@
 
 **Input**: Feature specification from `specs/011-anchor/spec.md`, approved 2026-10-23.
 
-**Status**: Draft, awaiting the builder's approval.
+**Status**: Approved 2026-10-24. The builder took every recommendation: Q1 (below) and SR-2
+(spec 004 tasks-wave-b.md T164, T165).
 
 ## Summary
 
@@ -76,7 +77,7 @@ demo, never in a review, never with one focus layer; no Quick Set Anchor (FR-023
 
 | Principle | Check | Pre-research | Post-design |
 |---|---|---|---|
-| I. Spec Before Build | Spec 011 approved 2026-10-23; this plan and tasks stop for approval | ✅ | ✅ |
+| I. Spec Before Build | Spec 011 approved 2026-10-23; this plan and tasks approved 2026-10-24 | ✅ | ✅ |
 | II. Decisions Are Recorded | **`003`/`005`**: one fixed snippet, three narrow tools, no open-ended script. **`007`**: owners as in the spec. **`008`**: 🖐 under the AE lock; worktree; `check-branch.mjs`. **`002`**: the "why" is depth (comp-space, per layer, per time) and memory. No new decision | ✅ | ✅ |
 | III. Teaching Quality Is Evaluated | The eval engineer writes `product/evals/anchor/` from the spec's 18 cases (HO-1); unit tests cover every overlap row and FR-028's edges | ✅ | ✅ |
 | IV. Privacy by Default | Records hold layer names and places only (FR-025); shared email and phone check | ✅ | ✅ |
@@ -164,8 +165,8 @@ fallbacks.
 
 ## Requests (not this skill's work)
 
-- **SR-2 (to spec 004's shared-code owner; the same request as spec 012's SR-4): the comp's size in
-  the snapshot.** Checked 2026-10-24: `mentor/jsx/snapshot.jsx` reads no comp width or height, and
+- **SR-2 (approved 2026-10-24; spec 004 tasks-wave-b.md T164 tests, T165 code; the same request as
+  spec 012's SR-4): the comp's size in the snapshot.** Checked 2026-10-24: `mentor/jsx/snapshot.jsx` reads no comp width or height, and
   nothing else in the snapshot gives them. Ask: `comp` gains `width` and `height` (`comp.width`,
   `comp.height`, pixels), absent on older captures; a unit test in spec 004's snapshot tests; the
   data-model's Snapshot additions row. **Why here:** FR-004's full-frame bucket ("allowed if named,
@@ -177,9 +178,9 @@ fallbacks.
 Every other shared piece the spec relies on is on main (checked 2026-10-24 against `mentor/lib/`
 and `mentor/jsx/snapshot.jsx`).
 
-## Open questions (for the builder)
+## Open questions (answered 2026-10-24)
 
-- **Q1 (FR-014, "the current time is on its rest key"):** the session fixes the demo target when the
+- **Q1 (FR-014, "the current time is on its rest key"), approved as recommended:** the session fixes the demo target when the
   lesson starts, from the baseline's time, so it can't switch layers when the learner later moves
   the playhead. **Recommended:** keep entry 1 as the demo target; `anchor_demo` refuses with
   `not_at_rest` when the playhead isn't on its rest key, and the mentor asks for the playhead there
