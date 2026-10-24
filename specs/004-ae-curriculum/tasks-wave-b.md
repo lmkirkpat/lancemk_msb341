@@ -102,10 +102,10 @@ Test.aep` (saved by the builder at the keyboard in T133, T135), `discovery/usage
 
 **Purpose**: freeze what exists, so every later task can prove it didn't change.
 
-- [ ] T100 On a worktree cut from the integration branch, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both pass counts and the merge-base commit in the hand-back (the base for "no existing test edited", T141)
-- [ ] T101 [P] Create `mentor/test/fixtures/layer-info/` with a `README.md`: what each capture is, which script built it, the comp time it was captured at, and which files are synthetic (only under `synthetic/`)
-- [ ] T102 [P] Read `mentor/test/fixtures/practice-findings-baseline.json` and `mentor/test/analyze-unchanged.test.mjs` (wave A's SC-004 proof) and confirm they're the "before" for this pass; no new baseline file is needed, because no fixture before this pass has `layer_info`
-- [ ] T103 [P] Note in the hand-back which built skills' libraries test the eye switch today (`enabled` or `is_null` reads in `mentor/lib/*.mjs`, outside `timing.mjs`), so T126 to T130's list is complete; any file not in this task list's table goes back to the cockpit as a request
+- [x] T100 On a worktree cut from the integration branch, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both pass counts and the merge-base commit in the hand-back (the base for "no existing test edited", T141)
+- [x] T101 [P] Create `mentor/test/fixtures/layer-info/` with a `README.md`: what each capture is, which script built it, the comp time it was captured at, and which files are synthetic (only under `synthetic/`)
+- [x] T102 [P] Read `mentor/test/fixtures/practice-findings-baseline.json` and `mentor/test/analyze-unchanged.test.mjs` (wave A's SC-004 proof) and confirm they're the "before" for this pass; no new baseline file is needed, because no fixture before this pass has `layer_info`
+- [x] T103 [P] Note in the hand-back which built skills' libraries test the eye switch today (`enabled` or `is_null` reads in `mentor/lib/*.mjs`, outside `timing.mjs`), so T126 to T130's list is complete; any file not in this task list's table goes back to the cockpit as a request
 
 ---
 
