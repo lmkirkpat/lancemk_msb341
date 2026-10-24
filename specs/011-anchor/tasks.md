@@ -146,8 +146,8 @@ tool named.
 
 ## Phase 7: Cloud hand-back
 
-- [ ] T229 Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (FR-001, SC-008)
-- [ ] T230 Run `/agent-audit` on `.claude/skills/anchor-mentor/SKILL.md` and fix what it finds in that file
+- [x] T229 Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (FR-001, SC-008)
+- [x] T230 Run `/agent-audit` on `.claude/skills/anchor-mentor/SKILL.md` and fix what it finds in that file
 - [ ] T231 Hand back for the sitting: branch and commit, test counts, T229's output, the `<!-- L-2 -->` and `<!-- L-3 -->` places, and what Phase 8 needs (quickstart › 2–5)
 
 ---
