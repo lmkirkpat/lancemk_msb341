@@ -288,7 +288,7 @@ Tasks (each test first, then code):
 **Spec 011 SR-2 = spec 012 SR-4 (approved 2026-10-24), the comp's size.** Wanted **before the live
 captures (T133)**, so every wave B capture carries it; neither task needs AE.
 
-- [ ] T164 [P] [US5] **Tests first**: extend `mentor/test/snapshot-layer-info.test.mjs` (T104's mock AE): give the mock comp a `width` and `height` (for example 1920 × 1080) and assert the snapshot's `comp` carries `width: 1920` and `height: 1080` (whole pixels, as AE gives them), next to `time` and `hide_shy`; `layers`, `precomp_layers`, `host` and `layer_info` are byte-identical to the same mock's result without the new fields. Fails until T165
+- [x] T164 [P] [US5] **Tests first**: extend `mentor/test/snapshot-layer-info.test.mjs` (T104's mock AE): give the mock comp a `width` and `height` (for example 1920 × 1080) and assert the snapshot's `comp` carries `width: 1920` and `height: 1080` (whole pixels, as AE gives them), next to `time` and `hide_shy`; `layers`, `precomp_layers`, `host` and `layer_info` are byte-identical to the same mock's result without the new fields. Fails until T165
 - [ ] T165 [US5] **Code**: in `mentor/jsx/snapshot.jsx`, add `width: comp.width, height: comp.height` to the snapshot's `comp` object (ES3; nothing else in the file changes); in `mentor/dev/capture.mjs`, `--compare` also strips `comp.width` and `comp.height`, so T134's compare against a pre-wave-B fixture still lists only wave A's layers. Older captures stay as they are (the fields are absent there, and readers treat absent as unknown, never a default; data-model › Snapshot additions). T164 and every existing test pass
 
 ---
