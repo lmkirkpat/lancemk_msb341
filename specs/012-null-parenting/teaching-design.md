@@ -404,9 +404,13 @@ S-1 to S-3).
 | Layers matched by name; duplicate names renamed first | **Changes the teaching in one place.** The mentor never renames layers: the demo is the only change it makes. If two candidates share a name, the mentor asks the learner in one sentence, before the focus is agreed, to rename one ("two layers are both called Shape Layer 1; rename one so I can tell them apart"). The focus isn't set until the names are unique. A rename like this is never graded and never counts as an unexpected change. If the rename has to be the tool's, that's a second project change, and it comes back to me first. | Changed (§ 4, below) |
 | A null with a moving parent of its own is refused unless SR-2 is approved | **Changes N2.** "Ask, don't fail" can't hold if the check can't measure it. Without SR-2: if the lesson's null has a parent that moves, the mentor says in one sentence that the null follows Logo, so the lesson can't check the group, and asks the learner to use a null with no parent (unparent it, or add a new one). That isn't a fail. A null whose parent doesn't move is still "ask, don't fail" if the matrix allows it, and is otherwise treated the same as a moving one. **Recommended: don't approve SR-2 this sprint.** Chains are out of scope (§ 8), so the refusal teaches nothing wrong. | Changed (N2, below) |
 
+| D-3 Another layer shares the lesson null's name | **Agreed: the same one-sentence rename ask, never graded.** It happens at the stage 3 check, before the null is stored: "two layers are called Null 1; rename the one you just added so I can tell which is yours." The learner does it, never the mentor. The null isn't stored and nothing is parented-checked until the name is unique. Asking which layer it is wouldn't help: the check matches by name, so the answer couldn't be used. | Changed (FR-019's ask becomes the rename ask) |
+
 **Edits these answers make (read them as part of § 4 and § 6):**
 - **§ 4, focus:** before the focus is agreed, candidate names must be unique. A duplicate gets the
   one-sentence rename ask above, and the learner does it.
+- **§ 5 stage 3 and § 6, N1:** the lesson's null must have a name no other layer has. A duplicate
+  gets the rename ask from D-3 before the null is stored.
 - **§ 6, N2:** a lesson null with a moving parent is out of the lesson (one sentence, use a null with
   no parent). It isn't a fail and it isn't recorded as a miss. The "ask, don't fail" rule applies
   only where the check can measure the chain.
