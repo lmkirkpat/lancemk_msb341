@@ -319,7 +319,8 @@ approval of 011, 012 and the wave B tasks.
 | 6 | spec-writer | Plans and tasks for 011 and 012, plus spec 004 doc fixes N1, N2, S5 (resumed) | yes | 10:56 | 11:33 | 37 | done (`badbcb8`, 17 files, 8 commits): 011 T201–T240 (40), 012 T301–T343 (43), both add-only. Found one shared gap (no comp width or height in the snapshot). The git guard blocked `git merge --ff-only` for a subagent too, so it cut a fresh worktree. Reported "about 2.5 hours" |
 | 6b | spec-writer | Record my approvals of 011 and 012 plans and tasks; spec 004 T164–T165 | yes | 11:57 | 12:00 | 3.0 | done (`6600396`, 12 files). Extended T165 to `capture.mjs --compare` so T134 won't fail on the new fields |
 | 7 | skill-builder (shared owner) | T164–T165, comp width and height | yes | 12:30 | 12:31 | 1.3 | done (`0dfebc7`), 4 files, 708 tests (688 pass). Two-line diff read by the cockpit instead of a reviewer |
-| 8 | skill-builder | Skill 5, set the pivot (011 T201–T240, cloud part), add-only | yes | 12:32 | | | |
+| 8 | skill-builder | Skill 5, set the pivot (011 T201–T240, cloud part), add-only | yes | 12:32 | 12:55 | 22.8 | done (6 commits, 75 new files): 30/40 tasks, mentor 708 → 848 tests (828 pass), `check-branch.mjs` 75/75 without `--shared-owner`. Renamed its tool file to `transform-anchor.mjs` because `skill-module.test.mjs` assumes easing loads first (a wave A test that depends on load order). Reported "about 3 hours" |
+| 9 | reviewer | Read `skill-5-anchor` before merge | yes (read-only) | 12:56 | | | |
 | 4 | spec-writer | Plans and tasks for 011 and 012 (stop for approval) | yes, cut from local `main` | 19:35 | | | hit the usage limit while still reading; held until the shared owner hands back, so only one Opus agent runs |
 
 **Usage-limit stall:** about 13:10 to 16:50 (3 h 40 min). Three Opus agents at once, the README's
