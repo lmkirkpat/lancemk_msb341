@@ -77,6 +77,7 @@ test("anchor_snapshot with no skill_options proposes Door with a hinge and lists
   const r = await call("anchor_snapshot");
   assert.equal(r.lesson, "new");
   assert.deepEqual(r.proposal, { layer: "Door", suggested_place: "middle-left" });
+  assert.deepEqual(r.place_now, { Door: "center" });
   assert.deepEqual(r.targets, []);
   assert.equal(r.demo_target, null);
   assert.equal(r.no_demo_reason, "awaiting_focus");
@@ -93,6 +94,7 @@ test("with Door alone as the focus: one target and no demo (single_target, filte
   assert.equal(r.demo_target, null);
   assert.equal(r.no_demo_reason, "single_target");
   assert.deepEqual(r.places, { Door: "middle-left" });
+  assert.deepEqual(r.place_now, { Door: "center" }, "where the pivot is now, for SKILL.md's stage 2");
   await assert.rejects(call("anchor_demo", { target: `anchor/${idx("Door")}` }), { code: "NOT_DEMO_TARGET" });
   assert.equal(runs.length, 0);
 });

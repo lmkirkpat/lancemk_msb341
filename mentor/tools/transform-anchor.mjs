@@ -92,6 +92,11 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
     proposal,
     focus: s.focus,
     places: Object.fromEntries(Object.entries(base.places).map(([k, v]) => [k, v.place])),
+    // Where each focus layer's pivot is now (and the proposal's), at its check time, in the
+    // baseline: one of the nine, "between" or "outside".
+    place_now: Object.fromEntries(base.candidates
+      .filter((c) => (s.focus || []).includes(c.layer) || (proposal && c.layer === proposal.layer))
+      .map((c) => [c.layer, c.place_now])),
     check_times: base.check_times,
     already_there: base.already_there,
     focus_problems: base.focus_problems,

@@ -126,7 +126,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
    pick it for them. Then:
    - **Repeat it in plain words with the layer's name**: "So Door turns from the middle of its left
      edge."
-   - **Say where the pivot is now**, in place words from `candidates`' place now or the notes:
+   - **Say where the pivot is now**, in place words from `place_now` (one of the nine places,
+     between places, or outside the layer) and the notes:
      "Door's pivot is at its center." A text layer's pivot is on its baseline: "Sign's pivot starts
      on its baseline, under the letters, not in their middle."
    - **Already there** (`already_there`): "Card already turns from its center." Ask for another
