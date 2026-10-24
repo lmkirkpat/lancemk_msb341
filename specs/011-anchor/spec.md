@@ -4,7 +4,10 @@
 
 **Created**: 2026-10-23
 
-**Status**: Draft, awaiting approval. Plan and tasks come after the builder's yes.
+**Status**: Approved 2026-10-23. The builder took every recommendation in Open questions (H-1 to
+H-5) and SR-1; the designer's round 1 answers (TD § 15: D-1 to D-3 and H-3's condition) are folded
+in the same day. Plan and tasks come next, after wave B's shared pass (spec 004 tasks-wave-b.md
+T100 to T163).
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 5,
 'Set the pivot'." Record ID `transform.anchor`, short name `anchor`, tool prefix `anchor_`
@@ -19,7 +22,8 @@ something the design doesn't say, that's a question in Open questions › D.
 FR-011, FR-012), S-2 (the place measured in the layer's own space: FR-010), S-3 (a 3 px floor per
 axis, and off-grid places go to the nearest of the nine: FR-005, FR-010), S-4 (the understanding
 check is recorded and doesn't gate: FR-020). S-1 to S-3 go beyond spec 004 FR-028's text; this
-spec keeps FR-028's two measures and adds the rest here, and the matching edit to FR-028 is H-1.
+spec adds them here, and spec 004 FR-028 now keeps only its two measures and points here (H-1,
+made 2026-10-23).
 
 ## Why this skill
 
@@ -66,10 +70,9 @@ spec keeps FR-028's two measures and adds the rest here, and the matching edit t
 - **Spec 002** (easing, built): the house lesson shape, the server rules, `record_lesson`'s
   session check, the demonstration rule.
 
-**Assumed approved:** tasks-wave-b.md's W1 to W4 and W7 as recommended (Q1). If W1 (sampled read)
-is declined, FR-011's fallback applies and Position-keyed layers stay out entirely (TD § 10).
-**Needs changing:** spec 004 FR-028's wording (H-1). One shared-code request goes to spec 004's
-owner as T160 onward (Dependencies › SR-1).
+**Approved with it (2026-10-23):** tasks-wave-b.md's W1 to W7, including W1's sampled read, and this
+spec's one shared-code request, SR-1, as tasks-wave-b.md T160 (Dependencies). Spec 004 FR-028 was
+reworded to match (H-1).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -83,7 +86,7 @@ that Door didn't move, then asks which part will stay still when it turns, and h
 to see it swing.
 
 **Why this priority**: it's the whole skill (TD § 2), on the target set built for it (spec 004
-T157, as amended by SR-1).
+T157, as amended by T160, this spec's SR-1).
 
 **Independent Test**: on Mentor Practice 2 with the 2b layers, a lesson on Door runs from start to a
 verified pass with no demonstration, and the check agrees with a look in After Effects.
@@ -182,7 +185,8 @@ Other edge cases:
   fresh read (TD § 4). In a review: no review.
 - **The learner names a layer the table leaves out** (null, 3D, Anchor Point keyed, expression on
   Rotation or Scale, collapsed precomp, camera, light, adjustment): one sentence from TD § 4 and ask
-  for another. A hidden layer, a matte, a guide or a Position-keyed layer can be named (TD § 4).
+  for another. A hidden layer, a matte, a guide, a Position-keyed layer or a locked layer can be
+  named (TD § 4; a locked one gets the unlock sentence, D-2).
 - **The learner moves the playhead between reads**: the check compares at FR-011's check time,
   never at "the playhead now", so moving it isn't a change.
 - **The learner drags Rotation in stage 6 and forgets Edit > Undo**: the lesson has already passed;
@@ -229,12 +233,16 @@ Other edge cases:
     candidates only after live check L-1 passes; until then they're allowed if named.
   - **Allowed if named, never proposed:** shape layers before L-1; Position keyed (any count,
     including one); *hidden by the learner* (with TD § 4's sentence); *matte*; *guide*; a
-    full-frame layer (last resort, proposed only when nothing else exists).
+    **locked** layer (TD § 4's one sentence asking the learner to unlock it with the lock switch;
+    never the demo, TD § 15 D-2); a full-frame layer (last resort, proposed only when nothing else
+    exists).
   - **Never:** Anchor Point keyed; an expression on a keyed Rotation or Scale; 3D; a precomp with
     Collapse Transformations on; *null*, camera, light, adjustment layer. Each gets TD § 4's one
     sentence.
   - **Ranking** (TD § 4): unparented first; then no Rotation or Scale keys; then a pivot still at
-    the place AE put it (D-3 says how that's read); then smaller over full-frame. Ties go to the
+    the place AE put it, read as the anchor at its own rectangle's center **or** at the layer's own
+    origin (0, 0), for every layer type (TD § 15 D-3; the read can't see a layer's history); then
+    smaller over full-frame. Ties go to the
     comp's layer order. Deterministic and unit tested.
 - **FR-005 (places)**: The nine places MUST be TD § 4's grid, each a point on the layer's own
   rectangle (`rect` at the check time): left, middle or right of `left … left + width` and top,
@@ -270,14 +278,15 @@ Other edge cases:
   - for a layer with Rotation or Scale keys, its **rest key**: a key time where Rotation is 0 or a
     whole turn (within 0.5°) and Scale is at its largest key value (largest |x × y|); if no one key
     time has both, the Scale one (S-1's tie-break), and the mentor says so and asks whether that's
-    how it looks at rest; with only Rotation keyed and no key at 0 or a whole turn, D-1's rule.
+    how it looks at rest; with only Rotation keyed and no key at 0 or a whole turn (within 0.5°),
+    the key whose Rotation is closest to 0 or a whole turn, said in one sentence with the same
+    question (TD § 15 D-1).
     The learner can name another key as the rest pose instead; their answer replaces it in
     `skill_options`. Ties go to the earliest time;
   - otherwise the lesson's first read's current time.
   The mentor MUST name the rest key in plain words and ask for the playhead there before the
   learner starts (TD § 4). The check MUST measure at the check time from the sampled read (W1),
-  never at "the playhead now". If W1 is declined, the check instead requires the check read's
-  current time within half a frame of the rest key, and the hint asks for it (TD § 6 item 3).
+  never at "the playhead now" (W1, approved).
 - **FR-012 (items 2, 4 and 5, nothing moved; spec 004 FR-028 measure plus S-1)**: The check MUST pass a
   focus layer only when all hold:
   - **Item 2:** every edge of its comp-space footprint at the check time moved by **1 px or less**
@@ -338,7 +347,8 @@ Other edge cases:
   the nine, or "outside the layer", or "between"), whether the anchor and Position changed, which
   way and roughly how far the footprint moved (in comp pixels, for the hint's direction only),
   whether the layer's own rectangle shifted with the anchor unchanged (a shape group's anchor),
-  whether the read's current time is the rest key, and items 1 to 5. And, as **other changes**, not
+  whether the read's current time is the rest key, whether the layer is locked (so the hint names
+the lock when it's still locked at "done", TD § 15 D-2), and items 1 to 5. And, as **other changes**, not
   graded: any other layer whose anchor changed (Pan Behind grabbed it), any layer whose eye switch
   changed (a matte's eye left on), new keys on Anchor Point or Position anywhere, and any layer
   added, removed or renamed. These MUST be read from `layer_info` for every layer, **not** from
@@ -361,9 +371,12 @@ Other edge cases:
   no open-ended script.
 - **FR-023 (version, spec 004 FR-030)**: The mentor MUST teach Pan Behind (Y) and may name A, P, R,
   S and Shift to add a property. It MUST NOT give Quick Set Anchor as a step, pass condition or
-  hint, and in this build MUST NOT mention it at all: R0 can't tell a beta build from the release
-  (FR-030's open point), so the "only if R0 shows it" mention waits for a live check that it can.
-  A learner who uses it anyway is checked like any method. It MUST NOT name Center Anchor Point in
+  hint, and in this build MUST NOT **bring it up**: R0 can't tell a beta build from the release
+  (FR-030's open point), so the "only if R0 shows it" mention waits for a live check that it can
+  (H-3). If the learner asks about it, the mentor answers plainly in **one or two sentences** (it's
+  a beta feature, the lesson uses Pan Behind, and the check works either way), and never refuses,
+  never walks them through it, and never says they don't have it (TD § 11, § 15). A learner who
+  uses it anyway is checked like any method. It MUST NOT name Center Anchor Point in
   Layer Content until L-3 confirms the menu path at 26.5, and then by menu path only, for the center
   place. It MUST NOT teach snapping the crosshair. The Properties panel gets "you may also see it
   there", no more (TD § 11).
@@ -459,7 +472,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 15 | Parented layer | Candidate, ranked below; parent named once | Comp-space footprint includes the parent; FR-037's hand-off off | "Hatch rides on Hatch Rig; that doesn't change where its own pivot goes" | Right; never grades raw Position | 2b's Hatch; T135's anchor capture |
 | 16 | Layer with children | n/a | Children compared at the focus's check time only (FR-012 item 5) | n/a | Right; children at other times are meant to turn | 2b's Hatch Rig as focus (synthetic until L-4) |
 | 17 | Scale not 100%, non-uniform, or a parent's scale | Place in the layer's own space | Same | n/a | Right (S-2) | 2b's Plaque at 200% (SR-1) |
-| 18 | Negative scale (flipped), or a static rotation far from 0 | Ranked last | Own-space sides | "Banner is flipped, so I'll go by its own sides" | Right; the sentence is the only guard against screen words | 2b's Flip (SR-1) |
+| 18 | Negative scale (flipped), or a static rotation far from 0 | Ranked last | Own-space sides | TD § 9's sentence with the layer's name ("Flip is flipped, so I'll go by its own sides") | Right; the sentence is the only guard against screen words | 2b's Flip (SR-1) |
 | 19 | Rotation keyed | Rest key named (FR-011) | Checked at the rest key | Names the rest key | Right | 2b's Gauge |
 | 20 | Scale keyed from 0 (a pop-in) | Rest key = full-size key | At the rest key; a pivot set at Scale 0 fails | TD § 7 rest hint | Right; the case S-1 exists for | 2b's Pop, with L-4's "set while shrunk" capture |
 | 21 | Text layer | Candidate; pivot starts on the baseline | `rect` is the letters' box at the check time; Source Text keys or animators change it (R6 not read) | "Title's pivot starts on its baseline, under the letters" | Right if L-5 confirms `rect` matches the letters | 2b's Sign |
@@ -469,7 +482,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 25 | Pan Behind on the wrong layer | n/a | Focus unchanged (item 1 fails); another layer's anchor changed with its footprint still (an other change, item 5 holds) | "Needle's pivot hasn't moved, but Background's did. Select Needle in the timeline first" | **Gap fixed by FR-019** (filter 1) | L-4 capture |
 | 26 | Playhead moved between reads | n/a | Compared at the check time from samples, not at the playhead (FR-011, FR-013) | n/a | Right with FR-013; **contract** (W1) | Synthetic two reads at different `comp.time` |
 | 27 | A time not sampled in one read, a layer with no rectangle | n/a | "Can't check" (FR-018) | Says it can't check that layer | **Gap fixed by FR-018** (filter 6) | Synthetic `not_sampled` and `no_rect` |
-| 28 | Locked layer | Not a default candidate (D-2) | Demo refuses | One sentence | Right; R1 reads `locked` | Mentor Overlaps' Locked Bar |
+| 28 | Locked layer | Allowed if named, never proposed, never the demo (D-2) | Demo refuses; still locked at "done" is returned (FR-019) | The unlock sentence when named; the lock hint if still locked at "done" | Right; R1 reads `locked` | Mentor Overlaps' Locked Bar |
 | 29 | Auto-Orient on | n/a | comp-space returns `auto_orient` → can't check | Says it can't check | Right (blind spot until T158 answers) | Mentor Overlaps' Orbit |
 
 ## Live checks for the build (builder, under the AE lock; results logged, not guessed)
@@ -509,8 +522,11 @@ each row must see; this table adds what the focus, the check and the learner eac
 - **SC-004**: In every eval case, the mentor names a number to type for Anchor Point or Position,
   or a tolerance ("10%", "1 pixel"), **0 times**. *Measured by:* a judge rubric item on every case,
   plus a deterministic check on the "jumped" case.
-- **SC-005**: In every eval case, Quick Set Anchor is named **0 times**, including when the learner
-  asks for it (FR-023). *Measured by:* a deterministic check.
+- **SC-005**: In every eval case where the learner doesn't ask about it, the mentor names Quick Set
+  Anchor **0 times**; in the case where the learner asks (Eval plan 8), the mentor's answer about it
+  is **at most two sentences**, gives **no steps** for it (no shortcut, no menu path), and doesn't
+  refuse (FR-023). *Measured by:* a deterministic check on every case (the name's count, and no
+  Shift+Tab), plus a judge rubric item on case 8.
 - **SC-006**: Every overlap row and the measure edges (FR-027, FR-028) pass their unit tests:
   **100%**. *Measured by:* `npm test`.
 - **SC-007**: The easing set stays at **25/25 or within one case** with no hard-rule failure after
@@ -536,8 +552,10 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
 6. **Pan Behind on Background instead of the focus**: "select it first" hint.
 7. **Riskiest overlap, the pop-in** (Pop set at Scale 0): fails with the rest-key hint (spec 004
    FR-034).
-8. **Version trap** (spec 004 FR-030): the learner asks for Quick Set Anchor at 26.5; not walked
-   through it, not named, Pan Behind taught (SC-005).
+8. **Version trap** (spec 004 FR-030; TD § 15 H-3): the learner asks about Quick Set Anchor at 26.5;
+   the mentor answers plainly in one or two sentences (a beta feature, the lesson uses Pan Behind,
+   the check works either way), doesn't refuse, doesn't walk them through it, never says they
+   don't have it, and the lesson goes on with Pan Behind (SC-005).
 9. **Matte named as the target**: never called hidden; the eye-left-on sentence if its eye changed.
 10. **Text, "turn from the middle"**: told the pivot is on the baseline, not that it's already there.
 11. **Demonstration with two focus layers**: on the one the learner cares less about; A and
@@ -557,13 +575,13 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech; the matte
 
 - **Learner:** the builder on After Effects 26.5 on macOS 27.0.1 (CLAUDE.md › My setup); R0 is still
   read each session.
-- **Wave B's shared pass is merged first** (tasks-wave-b.md T100 to T158, plus SR-1), including W1
-  (sampled read), W2 to W4, and T136's live answer keys for comp-space. This skill builds on them;
+- **Wave B's shared pass is merged first** (tasks-wave-b.md T100 to T163, with SR-1 as T160),
+  including W1 (sampled read), W2 to W4, and T136's live answer keys for comp-space. This skill builds on them;
   its checks aren't trusted until T136 passes (tasks-wave-b.md › Implementation strategy 4).
 - **Mentor Practice is unchanged**; the lessons, reviews and evals use Mentor Practice 2 with its 2b
   layers and Mentor Overlaps (spec 004 FR-031).
 - **Pixel measures are in the layer's own space for item 1 and comp pixels for items 2, 4 and 5**,
-  per spec 004 FR-028's split once H-1 is approved.
+  per spec 004 FR-028 as amended 2026-10-23 (H-1).
 
 ## Out of scope (build scope)
 
@@ -582,37 +600,27 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech; the matte
 
 ## Open questions
 
-### For the human (H), each with a recommendation
+### For the human (H): all answered 2026-10-23, as recommended
 
-1. **H-1, spec 004 FR-028's wording** (the cockpit's known conflict). FR-028 says "10% of the
-   layer's width" without a space, and "comp-space bounds at the current time". This spec measures
-   the place in the layer's own space (S-2), adds a 3 px floor (S-3), checks at the rest key rather
-   than the current time, and adds items 4 and 5 (S-1). **Recommended:** amend FR-028 to keep only
-   its two measures (per-axis 10%, 1 px), say "in the layer's own space" for the first and "at the
-   check time" for the second, and point to spec 011 for the floor, the check time and items 3 to
-   5. A spec-writer task on spec 004, not done here.
-2. **H-2, the 3 px floor** (S-3, a guess). **Recommended:** take it now and tune it on the live run
-   (SC-002); it only matters on layers under 30 px on an axis.
-3. **H-3, Quick Set Anchor never mentioned this build** (FR-023). FR-030 allows one sentence "only
-   if R0 shows a build that has it", but R0 can't tell a beta build today. **Recommended:** never
-   mention it in this build; revisit if a live check shows R0 can tell.
-4. **H-4, a lesson this short as its own skill** (TD H-1, curriculum H6). **Recommended:** keep it
-   separate as decided; SC-001's timing on the live run says whether it feels thin.
-5. **H-5, the mentor suggests a hinge** when the learner has none in mind (TD H-2). **Recommended:**
-   keep it, as skill 1 does with a practice blink; the learner can always name another place.
+1. **H-1, spec 004 FR-028's wording.** Approved: FR-028 keeps only its two measures (per axis 10% in
+   the layer's own space; 1 px at the check time) and points here for the 3 px floor, the check
+   time and items 3 to 5. Made in spec 004 the same day.
+2. **H-2, the 3 px floor** (S-3). Approved; tuned on the live run (SC-002) if needed.
+3. **H-3, Quick Set Anchor not brought up in this build.** Approved, with the designer's condition
+   (TD § 15): if the learner asks, one or two plain sentences, no refusal, no walkthrough (FR-023,
+   SC-005, Eval plan 8). Revisit if a live check shows R0 can tell a beta build.
+4. **H-4, a lesson this short as its own skill.** Approved: kept separate; SC-001's timing says
+   whether it feels thin.
+5. **H-5, the mentor suggests a hinge** when the learner has none in mind. Approved.
 
-### For the curriculum designer (D)
+### For the curriculum designer (D): answered in TD § 15
 
-1. **D-1, a Rotation-only layer with no key at 0 or a whole turn** (say 30° → 90°). TD § 4's rest
-   rule doesn't cover it. **Recommended:** the key closest to 0 (mod 360), said in one sentence,
-   and ask whether that's how it looks at rest (as the Scale tie-break does).
-2. **D-2, locked layers.** TD § 4's table doesn't list them; Pan Behind can't drag a locked layer.
-   **Recommended:** allowed if named, with one sentence to unlock it (the lock switch), never
-   proposed and never the demo.
-3. **D-3, "a pivot still where AE put it"** (TD § 4's ranking). The read can't see a layer's
-   history. **Recommended:** read it as the anchor at the rectangle's center (solids, precomps,
-   footage) or at the text origin (0, 0) for text, which is where AE puts it; anything else ranks
-   below.
+1. **D-1, a Rotation-only layer with no key at 0 or a whole turn**: the key closest to 0 or a
+   whole turn, one sentence, "is that how it looks at rest?" (FR-011).
+2. **D-2, locked layers**: allowed if named with the unlock sentence, never proposed, never the
+   demo; the hint names the lock if it's still locked at "done" (FR-004, FR-019, row 28).
+3. **D-3, "a pivot still where AE put it"**: widened by the designer to the rectangle's center or
+   the layer's own origin (0, 0), for every layer type (FR-004's ranking).
 
 ### For the eval engineer (E)
 
@@ -620,11 +628,10 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech; the matte
 
 ## Dependencies
 
-- **Spec 004 wave B shared pass** (tasks-wave-b.md T100 to T158) merged, with W1 to W4 and W7
-  approved, and T136's live answer keys passing.
-- **Shared-code requests** (to spec 004's shared-code owner, for tasks-wave-b.md T160 onward; not
-  this skill's work):
-  - **SR-1 (T157 targets, as T160 and T161):** confirm T157's skill 5 set (Door, Needle, Banner,
+- **Spec 004 wave B shared pass** (tasks-wave-b.md T100 to T163, approved 2026-10-23) merged, and
+  T136's live answer keys passing.
+- **Shared-code requests** (to spec 004's shared-code owner; not this skill's work):
+  - **SR-1 (approved 2026-10-23; tasks-wave-b.md T160, amending T157 and T132):** confirm T157's skill 5 set (Door, Needle, Banner,
     Sign, Lid, Gauge, Pop, Sled, Hatch with Hatch Rig, Tab, Peg) with these details: Sign is a
     centred text layer; Gauge's Rotation keys are 0 → 90 (rest key at 0); Pop's Scale 0 → 100;
     Sled has three Position keys; Lid's pivot is outside its shape. And **add four layers** for
@@ -633,8 +640,7 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech; the matte
     Anchor Point keys: never a candidate), **Seal** (a layer of Icon Precomp with Collapse
     Transformations on). All follow T132's rules (no clashing names, starts, Opacity or ease).
     The answer key adds each layer's anchor place (which of the nine, or none) and its rest key, so
-    this skill's tests read it. **Recommended: yes**; four layers in an existing script, and without
-    them rows 4, 10, 17 and 18 are synthetic only.
+    this skill's tests read it. Without them rows 4, 10, 17 and 18 would be synthetic only.
 - **Spec 012** (null parenting, in parallel): shares Mentor Practice 2b and comp-space; no
   dependency either way beyond skill 5 being skill 6's hard prerequisite in the path.
 - **Eval engineer**: the Eval plan; fixtures from L-4 and T135.

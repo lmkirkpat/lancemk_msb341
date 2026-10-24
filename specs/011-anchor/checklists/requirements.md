@@ -36,11 +36,11 @@
   `unexpectedChanges()`, because spec 004's contract fixes them and the overlap audit's findings
   (filters 1 to 6) are about which shared function a job may reuse. SC-006 and SC-008 name
   `npm test` and `check-branch.mjs` as their measures.
-- **No [NEEDS CLARIFICATION] markers.** Five choices go to the human (H-1 to H-5) and three teaching
-  gaps to the curriculum designer (D-1 to D-3), each with its recommendation written into the
-  requirement as the default.
-- **Known conflict with spec 004 FR-028** (H-1): this spec keeps FR-028's two measures and adds the
-  own-space rule, the 3 px floor, the check time and items 3 to 5. Spec 004 isn't edited here.
-- **Blocked on spec 004 wave B's shared pass** (tasks-wave-b.md T100 to T158, W1 to W4 and W7
-  approved) and SR-1 (four more 2b layers); neither blocks approval of this spec.
+- **No [NEEDS CLARIFICATION] markers.** H-1 to H-5 and SR-1 were approved 2026-10-23 as
+  recommended, and the designer answered D-1 to D-3 and set H-3's condition (TD § 15); all are
+  written into the requirements.
+- **Spec 004 FR-028** was reworded the same day (H-1): it keeps the two measures and points here
+  for the own-space rule's floor, the check time and items 3 to 5.
+- **Blocked on spec 004 wave B's shared pass** (tasks-wave-b.md T100 to T163, approved, with SR-1
+  as T160) for the build; not for approval.
 - Live checks L-1 to L-5 settle facts during the build; they aren't guessed here.
