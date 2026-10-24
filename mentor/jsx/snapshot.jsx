@@ -138,7 +138,11 @@ function r3list(v) {
     return out;
 }
 
-var compTime = rd(function () { return r3(comp.time); });
+// Times stay exact for reading (a key on frame 1 at 30 fps is 1/30 s, and 0.033 s would read just
+// before it); only the stored time fields are rounded to 0.001 s.
+var compTimeRaw = rd(function () { return typeof comp.time === "number" ? comp.time : null; });
+var compTime = compTimeRaw === null ? null : r3(compTimeRaw);
+var fps = rd(function () { return comp.frameRate; });
 var hideShy = rd(function () { return !!comp.hideShyLayers; });
 
 function tprop(layer, matchName) {
@@ -179,7 +183,7 @@ function keyTimes(group, out) {
         try {
             if (p.propertyType === PropertyType.PROPERTY) {
                 if (p.canVaryOverTime && p.numKeys > 0 && inUse(p)) {
-                    for (var k = 1; k <= p.numKeys; k++) out.push(r3(p.keyTime(k)));
+                    for (var k = 1; k <= p.numKeys; k++) out.push(p.keyTime(k));
                 }
             } else {
                 keyTimes(p, out);
@@ -205,12 +209,18 @@ function matteOf(layer) {
     });
 }
 
-// The caller's stored times (takeSnapshot({ sample_times })), numbers only.
+// The caller's stored times (takeSnapshot({ sample_times })), numbers only. A stored time is rounded
+// to 0.001 s, so one within 0.0005 s of a frame is read at that frame exactly.
 var callerTimes = [];
 if (typeof ARGS !== "undefined" && ARGS && Object.prototype.toString.call(ARGS.sample_times) === "[object Array]") {
     for (var ci = 0; ci < ARGS.sample_times.length; ci++) {
         var ct = ARGS.sample_times[ci];
-        if (typeof ct === "number" && isFinite(ct)) callerTimes.push(r3(ct));
+        if (typeof ct !== "number" || !isFinite(ct)) continue;
+        if (typeof fps === "number" && fps > 0) {
+            var onFrame = Math.round(ct * fps) / fps;
+            if (Math.abs(onFrame - ct) <= 0.0005) ct = onFrame;
+        }
+        callerTimes.push(ct);
     }
 }
 var MAX_SAMPLES = 64;
@@ -237,12 +247,13 @@ for (var ui = 1; ui <= comp.numLayers; ui++) {
 }
 
 // comp.time and the caller's times first, so a cap never drops them; then the rest, earliest first.
+// Two times that round to the same millisecond are one sample, read at the first one seen.
 function sampleTimes(index) {
     var seen = {};
     var first = [];
     var rest = [];
-    function add(list, t) { var k = String(t); if (!seen[k]) { seen[k] = true; list.push(t); } }
-    if (compTime !== null) add(first, compTime);
+    function add(list, t) { var k = String(r3(t)); if (!seen[k]) { seen[k] = true; list.push(t); } }
+    if (compTimeRaw !== null) add(first, compTimeRaw);
     for (var a = 0; a < callerTimes.length; a++) add(first, callerTimes[a]);
     var own = chainTimes[index].slice(0).sort(function (x, y) { return x - y; });
     for (var b = 0; b < own.length; b++) add(rest, own[b]);
@@ -253,26 +264,37 @@ function sampleTimes(index) {
     return { times: all, truncated: truncated };
 }
 
+// One sample: rendered values read at the exact time t, stored with t rounded. Cameras and lights
+// have no rectangle; rect_extents is read on text and shape layers only.
+function sampleAt(L, t, hasRect, textOrShape) {
+    return {
+        time: r3(t),
+        anchor: valueAt(L, "ADBE Anchor Point", t),
+        position: positionAt(L, t),
+        scale: valueAt(L, "ADBE Scale", t),
+        rotation: valueAt(L, "ADBE Rotate Z", t),
+        rect: hasRect ? rectAt(L, t, false) : null,
+        rect_extents: textOrShape ? rectAt(L, t, true) : null
+    };
+}
+
 var layerInfo = [];
 for (var ii = 1; ii <= comp.numLayers; ii++) {
     var L = comp.layer(ii);
     var kind = rd(function () { return layerKind(L); });
     var textOrShape = kind === "text" || kind === "shape";
+    var hasRect = kind !== "camera" && kind !== "light";
     var st = sampleTimes(ii);
     var samples = [];
+    var nowSample = null;
     for (var si = 0; si < st.times.length; si++) {
-        var t = st.times[si];
-        samples.push({
-            time: t,
-            anchor: valueAt(L, "ADBE Anchor Point", t),
-            position: positionAt(L, t),
-            scale: valueAt(L, "ADBE Scale", t),
-            rotation: valueAt(L, "ADBE Rotate Z", t),
-            rect: rectAt(L, t, false),
-            rect_extents: textOrShape ? rectAt(L, t, true) : null
-        });
+        var sm = sampleAt(L, st.times[si], hasRect, textOrShape);
+        samples.push(sm);
+        if (compTime !== null && sm.time === compTime) nowSample = sm;
     }
-    var now = compTime !== null ? compTime : 0;
+    // transform reuses the comp.time sample (it's always kept); only Opacity is read again.
+    var now = compTimeRaw !== null ? compTimeRaw : 0;
+    if (nowSample === null) nowSample = sampleAt(L, now, hasRect, textOrShape);
     layerInfo.push({
         index: rd(function () { return L.index; }),
         name: rd(function () { return L.name; }),
@@ -283,7 +305,7 @@ for (var ii = 1; ii <= comp.numLayers; ii++) {
         has_video: rd(function () { return !!L.hasVideo; }),
         three_d: rd(function () { return !!L.threeDLayer; }),
         collapse: rd(function () { return L.collapseTransformation === true; }),
-        auto_orient: rd(function () { return L.autoOrient !== AutoOrientType.NO_AUTO_ORIENT; }),
+        auto_orient: rd(function () { return L.autoOrient === undefined ? null : L.autoOrient !== AutoOrientType.NO_AUTO_ORIENT; }),
         parent: parentOf[ii],
         shy: rd(function () { return !!L.shy; }),
         solo: rd(function () { return !!L.solo; }),
@@ -299,10 +321,10 @@ for (var ii = 1; ii <= comp.numLayers; ii++) {
         motion_blur: rd(function () { return !!L.motionBlur; }),
         effect_count: rd(function () { return L.property("ADBE Effect Parade").numProperties; }),
         transform: {
-            anchor: valueAt(L, "ADBE Anchor Point", now),
-            position: positionAt(L, now),
-            scale: valueAt(L, "ADBE Scale", now),
-            rotation: valueAt(L, "ADBE Rotate Z", now),
+            anchor: nowSample.anchor,
+            position: nowSample.position,
+            scale: nowSample.scale,
+            rotation: nowSample.rotation,
             opacity: valueAt(L, "ADBE Opacity", now)
         },
         samples: samples,
