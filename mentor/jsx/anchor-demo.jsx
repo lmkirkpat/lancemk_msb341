@@ -22,7 +22,7 @@ var layer = comp.layer(ARGS.layer_index);
 if (layer.name !== ARGS.layer_name) refuse("not_found");
 
 function num(v) { return typeof v === "number" && isFinite(v); }
-function pt(v) { return v instanceof Array && v.length >= 2 && num(v[0]) && num(v[1]); }
+function pt(v) { return v !== null && typeof v === "object" && typeof v.length === "number" && v.length >= 2 && num(v[0]) && num(v[1]); }
 if (!pt(ARGS.anchor) || !pt(ARGS.position)) throw new Error("anchor-demo needs anchor and position as [x, y].");
 
 if (layer.locked) refuse("locked");
@@ -48,7 +48,7 @@ for (var i = 0; i < written.length; i++) {
 if (num(ARGS.rest_time) && Math.abs(comp.time - ARGS.rest_time) > 0.5 / comp.frameRate + 0.000001) refuse("not_at_rest");
 
 function copy(v) {
-    if (!(v instanceof Array)) return v;
+    if (v === null || typeof v !== "object" || typeof v.length !== "number") return v;
     var out = [];
     for (var j = 0; j < v.length; j++) out.push(v[j]);
     return out;
