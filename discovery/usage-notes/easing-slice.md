@@ -298,3 +298,40 @@ falls behind and what learners say they want most (belief 1, interview 007).
 **Caveats:** one deliberate side-by-side, run by the person who built the competing prototype,
 with prompts written to test teaching. Memory wasn't compared (one Adobe session). Interviews
 (008 and beyond) carry more weight than this note.
+
+## Eval drift: 2026-10-23 (the 20/25 after wave A)
+
+**What happened:** the full run after wave A (`results/2026-10-21-214518.json`) scored 20/25.
+Cases 08 and 15 failed again on repeat. Parallel run 2's notes suspected wave A.
+
+**Cause: the judge, not the mentor or wave A.** Case 08's `diff_since_last` output is
+byte-identical in the 25/25 baseline (`2026-10-19-220815`) and the 20/25 run, and both times the
+mentor said the 1.5 s key is eased only on the side facing the demo pair. The judge passed it on
+10-19 and failed it on 10-21 as "not in any tool result". All three `R-NAMES-LAYERS` failures
+were inferences backed by the tool output:
+
+| Case | Mentor said | Backed by |
+|---|---|---|
+| 07 | "11 linear pairs" | `counts`: 10 `linear` + 1 `partly_eased` |
+| 08, 15 | the shared 1.5 s key "can look done" | demo pair 0.5–1.5 s and `still_linear` 1.5–3 s share it; `SKILL.md` asks for this |
+| 15 | "Subtitle sits right under Title" | segment ids `1/…` and `2/…`; `SKILL.md` asks for a stack hint |
+
+The other two were noise: 02's judge reason argued for a pass and then failed it, and 03's
+missed frame reference passed on repeat.
+
+**Fix:** `rubric.md` › R-NAMES-LAYERS now lists the inferences that count as backed (sums,
+shared keys, stack order from the segment id). No `SKILL.md` or tool change. Repeats after the
+fix: 07, 08 and 15 each 3/3 (`2026-10-23-125852`, `-130137`, `-130350`, $5.50).
+
+**New baseline: 24/25 (96%, $12.60, `2026-10-23-180626`).** The one failure is real: in 03 the
+mentor said all four Title pairs run 0.5–1.5 s (Position's second pair is 1.5–3 s). An earlier
+full run (`2026-10-23-131020`, 5/25) hit the account's usage limit at case 06 and isn't a result.
+
+**Found while reading it: narrated tool calls.** Short lines such as "Need a frame first, inside
+the demo pair." reach the learner just before `preview_frame` in 4 cases of this run (03, 04, 07,
+14) and 2 of the 10-19 baseline (08, 22). It breaks `SKILL.md:35` and server rule 6, but no
+rubric item or check looks for it, so every run passed it. The wording echoes `SKILL.md:104`.
+
+**To fix later:** the judge runs on Claude Code's default model (no `--model` in `run.mjs`), so a
+default change can move the baseline with no file changed. Pin it, or record the judge's model in
+each results file.

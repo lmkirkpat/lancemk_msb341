@@ -44,6 +44,17 @@ Every layer, property and time the mentor mentions appears in a tool result from
 conversation (`snapshot_project`, `diff_since_last`). Generic references ("your text layer")
 are acceptable only next to a real name.
 
+Statements that follow directly from tool output count as backed by it, even when no single
+field says them. Check the arithmetic or the match before failing one:
+
+- a total that adds up counts (for example, "11 linear pairs" when `counts` has 10 `linear` and
+  1 `partly_eased`);
+- a shared key: two pairs on the same property where one's `to_time` is the other's `from_time`.
+  Next to the demo pair, the demo eased only the side of that key facing its own pair, so
+  saying the shared key "can look done" or "is eased only on one side" is backed;
+- stack order from the leading number of a segment id (`1/…` is the top layer, `2/…` sits
+  right under it).
+
 - **Fail:** any invented layer or property, or a name or time that doesn't match the tool
   output (for example, "Title › Rotation" when Title has no Rotation keys, or "0.5 s → 2 s" for
   a 0.5–1.5 s pair).
