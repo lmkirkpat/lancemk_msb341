@@ -1,0 +1,523 @@
+{
+  "synthetic": "SYNTHETIC (spec 012 S-1: Card's Rotation not rewritten, so its corners turn 30° about its anchor). Never from AE.",
+  "taken_at": "2026-10-24T12:00:00.000Z",
+  "project": "Synthetic.aep",
+  "comp": {
+    "id": 600,
+    "name": "Synthetic Group",
+    "duration": 8,
+    "frame_rate": 30,
+    "time": 1,
+    "hide_shy": false,
+    "width": 1920,
+    "height": 1080
+  },
+  "host": {
+    "ae_version": "26.5x89",
+    "os": "Macintosh OS 27.0.1/64"
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 2,
+      "name": "Card",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                43.333,
+                38.453,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                54.88,
+                31.786,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "ADBE Transform Group/ADBE Scale",
+          "display_path": "Transform › Scale",
+          "match_name": "ADBE Scale",
+          "display_name": "Scale",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 2,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                66.667,
+                66.667,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3,
+              "in_type": "bezier",
+              "out_type": "bezier",
+              "value": [
+                73.333,
+                73.333,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 33.33
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layer_info": [
+    {
+      "index": 1,
+      "name": "Null 1",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          50,
+          50,
+          0
+        ],
+        "position": [
+          500,
+          520,
+          0
+        ],
+        "scale": [
+          150,
+          150,
+          100
+        ],
+        "rotation": 30,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            50,
+            50,
+            0
+          ],
+          "position": [
+            500,
+            520,
+            0
+          ],
+          "scale": [
+            150,
+            150,
+            100
+          ],
+          "rotation": 30,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2,
+          "anchor": [
+            50,
+            50,
+            0
+          ],
+          "position": [
+            500,
+            520,
+            0
+          ],
+          "scale": [
+            150,
+            150,
+            100
+          ],
+          "rotation": 30,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3,
+          "anchor": [
+            50,
+            50,
+            0
+          ],
+          "position": [
+            500,
+            520,
+            0
+          ],
+          "scale": [
+            150,
+            150,
+            100
+          ],
+          "rotation": 30,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 2,
+      "name": "Card",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": 1,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          50,
+          50,
+          0
+        ],
+        "position": [
+          43.333,
+          38.453,
+          0
+        ],
+        "scale": [
+          66.667,
+          66.667,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            50,
+            50,
+            0
+          ],
+          "position": [
+            43.333,
+            38.453,
+            0
+          ],
+          "scale": [
+            66.667,
+            66.667,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2,
+          "anchor": [
+            50,
+            50,
+            0
+          ],
+          "position": [
+            43.333,
+            38.453,
+            0
+          ],
+          "scale": [
+            66.667,
+            66.667,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3,
+          "anchor": [
+            50,
+            50,
+            0
+          ],
+          "position": [
+            54.88,
+            31.786,
+            0
+          ],
+          "scale": [
+            73.333,
+            73.333,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 3,
+      "name": "Label",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": 1,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          50,
+          20,
+          0
+        ],
+        "position": [
+          66.667,
+          78.868,
+          0
+        ],
+        "scale": [
+          66.667,
+          66.667,
+          100
+        ],
+        "rotation": -30,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            50,
+            20,
+            0
+          ],
+          "position": [
+            66.667,
+            78.868,
+            0
+          ],
+          "scale": [
+            66.667,
+            66.667,
+            100
+          ],
+          "rotation": -30,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 40
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2,
+          "anchor": [
+            50,
+            20,
+            0
+          ],
+          "position": [
+            66.667,
+            78.868,
+            0
+          ],
+          "scale": [
+            66.667,
+            66.667,
+            100
+          ],
+          "rotation": -30,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 40
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3,
+          "anchor": [
+            50,
+            20,
+            0
+          ],
+          "position": [
+            66.667,
+            78.868,
+            0
+          ],
+          "scale": [
+            66.667,
+            66.667,
+            100
+          ],
+          "rotation": -30,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 40
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    }
+  ]
+}
