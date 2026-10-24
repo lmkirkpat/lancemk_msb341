@@ -2,7 +2,7 @@
 
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
-**Date:** 2026-10-23. **Status:** draft, before spec round 1.
+**Date:** 2026-10-23. **Status:** draft, round 1 answered (§ 15).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -104,11 +104,14 @@ From a fresh read, using the visibility class (FR-013), never the eye switch alo
 | *shy* | Yes, ranked below the rest | "It's shy, so turn off the timeline's shy filter to see its properties" |
 | *null*, camera, light, adjustment layer | No | Nulls: "a null's pivot is skill 6's job" (only if skill 6 is built; otherwise say nothing) |
 | A full-frame solid or footage (a background) | Last resort only | n/a |
+| Locked layer | Never proposed, never the demo; allowed if the learner names it (round 1, D-2) | "Sign is locked, so unlock it first (the lock switch in the timeline)" |
 
 **Ranking among candidates:** unparented first, then no Rotation or Scale keys (the pivot set before
 any keys is the habit the review looks for), then layers whose pivot is still where AE put it (a
 learner moving a pivot they already moved is fixing, not learning), then smaller layers over
-full-frame ones.
+full-frame ones. History can't be read, so "where AE put it" means: the anchor is at the center of
+the layer's own rectangle, or at the layer's own origin (0, 0), which is where text layers and new
+shape layers start (round 1, D-3). It's only a tie-break, so a wrong guess costs nothing.
 
 ### The rest pose (layers with Rotation or Scale keys)
 
@@ -120,7 +123,9 @@ the move goes wrong at every other frame (P, Guess on how common).
 
 So for a layer with Rotation or Scale keys, the mentor names a **rest key**: a key time where
 Rotation is 0 (or a whole turn) and Scale is at its largest key value. If no one key time has both,
-it picks the Scale one, says so, and asks whether that's how the layer looks at rest. It asks the
+it picks the Scale one, says so, and asks whether that's how the layer looks at rest. If Rotation
+is the only one keyed and no key is at 0 (or a whole turn), it uses the key closest to 0, says so in
+one sentence, and asks the same question (round 1, D-1). It asks the
 learner to put the playhead there before they start, and the check uses that time (§ 6 item 3).
 
 ### Focus size and the demo target
@@ -303,8 +308,10 @@ or a precomp with Collapse Transformations on. Never keys anything.
   Shift to add one.
 - **Quick Set Anchor** (nine points, 2D only, Shift+Tab, applies to all selected layers): beta from
   25.1 and still listed as beta at 26.5 (A, the 26.5 announcement). **Never a step, a pass condition,
-  a hint or an eval need** (FR-030). The mentor mentions it in one sentence only if R0 shows a build
-  that has it, and only once the live run shows R0 can tell (FR-030); otherwise never. If the learner
+  a hint or an eval need** (FR-030). **In this build the mentor never brings it up** (spec 011 H-3:
+  R0 can't tell a beta build). If the learner asks about it, it answers plainly in one or two
+  sentences: it's a beta feature, the lesson uses Pan Behind, and the check works either way. It never
+  walks them through it or says they don't have it. If the learner
   uses it anyway, the check reads the result like any method. One difference to know: as of April
   2026 it **rewrites existing Position keys** so the move looks the same, which Pan Behind may not do
   (B5). So "my layer didn't slide with Quick Set Anchor but did with Pan Behind" is a real thing a
@@ -429,3 +436,13 @@ Point stopwatch as a mistake.
 
 **Curriculum B items this skill settles:** B1 (skill 5's targets, B-1 above); B5 stays open (B-5);
 B7 (anchor with compensation, § 10).
+
+## 15. Answers to the spec writer, round 1 (2026-10-23)
+
+| Q | Answer | Spec default |
+|---|---|---|
+| D-1 Rotation-only layer with no key at 0 | **Agreed:** the key closest to 0 (or a whole turn), said in one sentence, then "is that how it looks at rest?" (§ 4) | Kept |
+| D-2 Locked layers | **Agreed:** never proposed, never the demo, allowed if named, with one sentence asking them to unlock it (§ 4 table). Pan Behind can't move a locked layer, so if it's still locked at "done", the hint names the lock | Kept |
+| D-3 "Still where AE put it" | **Agreed, widened slightly:** the center of the layer's own rectangle, **or** the layer's own origin (0, 0). That covers text and also new shape layers, which start at their origin. It's only a tie-break (§ 4) | **Changed** (origin counts for any layer type, not only text) |
+| S-1 to S-4 taken | Confirmed, as recommended in § 14 | Kept |
+| H-3 Never mention Quick Set Anchor in this build | **Agreed; nothing I need is lost.** One condition: "never mention" means the mentor never **brings it up**. If the learner asks, it answers plainly (a beta feature, the lesson uses Pan Behind, the check works either way) and doesn't refuse or walk them through it. The FR-030 version-trap eval should be that case (§ 11) | Kept, with that condition |
