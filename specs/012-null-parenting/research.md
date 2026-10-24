@@ -39,7 +39,8 @@ are still open, so every live task here comes after them.
 - **Comp width:** checked 2026-10-24: the snapshot doesn't read the comp's size (`snapshot.jsx`'s
   `comp` holds `id`, `name`, `duration`, `frame_rate`, `time`, `hide_shy`), and nothing else gives
   it. That's a change to an existing shared file, so it's **shared-code request SR-4** (plan ›
-  Requests; the same request as spec 011's SR-2), not a task. Until it lands, the analyzer reads
+  Requests; the same request as spec 011's SR-2), not a task here (approved 2026-10-24 as spec 004
+  T164, T165). Until it lands, the analyzer reads
   `snapshot.comp.width` when present and otherwise returns `no_comp_size` and proposes nothing;
   a focus the learner names still works, and the mentor asks them to name the group (one
   sentence). Stand-ins and synthetics carry `comp.width` (marked synthetic) so the rule is tested

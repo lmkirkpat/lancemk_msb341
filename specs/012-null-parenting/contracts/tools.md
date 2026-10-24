@@ -44,8 +44,10 @@ Input: `{ "target": "parent/Tile" }`. Order:
    `skill_data.stored` absent → `NULL_PARENT_REFUSED` (`null_not_ready`).
 2. **One fresh read** with `sample_times` = the target's P2 times; comp not the lesson's:
    `NO_ACTIVE_COMP`.
-3. Find the null and the target by name; the refusals (data-model › Demo) → `NULL_PARENT_REFUSED`,
-   no snippet run. While no focus layer is parented to the null, re-store it (`setSkillData`).
+3. Find the null and the target by name; the refusals (data-model › Demo, FR-017) →
+   `NULL_PARENT_REFUSED`, no snippet run. These include `null_scale_zero`: the null's Scale is 0 on
+   an axis at the read's `comp.time`, so `toLayerSpace` would return `singular` (plan › Q2, approved
+   2026-10-24). While no focus layer is parented to the null, re-store it (`setSkillData`).
 4. `runSnippet("null-parent-demo", { comp_id, layer_index, layer_name, null_index, null_name }, {
    undo: true })`; the snippet repeats the lock and parent checks before writing.
 5. `session.recordDemo(target)`.

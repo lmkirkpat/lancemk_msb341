@@ -8,7 +8,8 @@
 H-2, approved SR-1 and **declined SR-2** (going with the designer). The designer's round 1 answers
 (TD § 14: D-1, D-2, unique names, a null with a parent) are folded in the same day, and D-3 (the
 null's own name shared: the rename ask) on 2026-10-24 (FR-019, row 40). Plan and tasks
-come next, after wave B's shared pass (spec 004 tasks-wave-b.md T100 to T163).
+approved 2026-10-24 with plan › Q1 and Q2 (FR-008's reading and FR-017's two refusals below) and
+SR-4 (the comp's size; spec 004 tasks-wave-b.md T164, T165).
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 6,
 Move a group with a null." Record ID `parenting.null` (in `mentor/curriculum/path.json`, position
@@ -290,7 +291,9 @@ section). Other edge cases:
   renders, is 2D, isn't a matte or eye-off, and has no expression on a keyed Position, Scale or
   Rotation; one with its own transform keys is preferred over one without. None qualifies: no
   demo, and the mentor walks it through in words. There is no demo target until the null has
-  passed N1 and N2 (TD § 4).
+  passed N1 and N2 (TD § 4). **Reading (plan › Q1, approved 2026-10-24):** the analyzer sets the
+  target from the focus when the lesson starts, and `null_parent_demo` refuses with `null_not_ready`
+  until the tool has stored the null (it passed N1 and N2 at a check, FR-012).
 
 ### Pass
 
@@ -358,8 +361,11 @@ All of TD § 6, counting the demo layer.
 - **FR-017**: `null_parent_demo` MUST make one change: parent the lesson's demo target to the
   lesson's null **with no jump**, once per lesson, never in a review (spec 004 FR-024, FR-021); the
   session refuses any other target before AE is touched. Before writing it MUST take one fresh read
-  and refuse, changing nothing, if: the active comp isn't the lesson's; the null or the target isn't
-  found by name; the null fails N1 or N2; the target already has a parent, is locked, or is 3D.
+  and refuse, changing nothing, if: the null hasn't been stored yet (`null_not_ready`, FR-008,
+  checked before the read); the active comp isn't the lesson's; the null or the target isn't
+  found by name; the null fails N1 or N2; the null's Scale is 0 on an axis at the current time
+  (`null_scale_zero`: no parenting can keep the target still under it; plan › Q2, approved
+  2026-10-24); the target already has a parent, is locked, or is 3D.
   The snippet repeats the lock and parent checks itself. After writing, the tool MUST measure its
   own result with FR-011 on a second read; if the target moved more than 1 px, it says so plainly
   and points to Edit > Undo, and never retries (TD B-7). One undo step; the reply says what changed
@@ -705,6 +711,9 @@ case 3, the matte, KD-001).
     (the group, the Row group, Plate and Shadow, the matte pair) is more than 10% of the comp's width
     from the others; **Row B has no keys** (a static group member, filter 1); Tile has Position and
     Scale keys (so a rotated null's rewrite shows on Scale, L-2). Before T135.
+  - **SR-4 (approved 2026-10-24; tasks-wave-b.md T164, T165, before T133; the same as spec 011's
+    SR-2):** the comp's `width` and `height` in the snapshot, for FR-005's "nearly touch" (2% of
+    the comp's width) and so the proposal (plan › Requests).
 - **Spec 011**: skill 5 must be built for the prerequisite to be learnable; nothing of its code is
   read here.
 - **Eval engineer**: the Eval plan; fixtures from the live captures above.
