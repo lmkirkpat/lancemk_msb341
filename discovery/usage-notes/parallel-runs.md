@@ -317,6 +317,9 @@ approval of 011, 012 and the wave B tasks.
 | 5 | reviewer | Read `shared-owner-b` before skills 5 and 6 build on it | yes (read-only) | 22:52 | 00:57 | 125 (it reported "about 40 minutes") | ready after fixes: 1 blocking (KD-001 also drops eye-off nulls from "hidden", untested), 5 should-fix (sample times rounded before reading; no live learner-hidden layer; 2 s goal unverified; two wave A `SKILL.md` lines), 6 nits. Hand-checked the corner math on the chain fixture: clean. The git guard blocked its `git merge-base` probe |
 | 5b | skill-builder (shared owner) | Fix B1, S1, S2, N5, cheap S4 (resumed) | yes | 01:09 | | | B1 committed (`de3dd58`); stopped by the usage limit about 01:30 and again about 03:30, each time mid-`snapshot.jsx` (uncommitted, but the hand-cut worktree kept it). Resumed 03:10 and 10:53; handed back 10:55: `9226cbc` (S1, S4, N5), `aaa4c02` (tests), `a801909` (S2). 706 tests, 686 pass. Early merge `d009d35` with `--shared-owner`, 33/33 files |
 | 6 | spec-writer | Plans and tasks for 011 and 012, plus spec 004 doc fixes N1, N2, S5 (resumed) | yes | 10:56 | 11:33 | 37 | done (`badbcb8`, 17 files, 8 commits): 011 T201–T240 (40), 012 T301–T343 (43), both add-only. Found one shared gap (no comp width or height in the snapshot). The git guard blocked `git merge --ff-only` for a subagent too, so it cut a fresh worktree. Reported "about 2.5 hours" |
+| 6b | spec-writer | Record my approvals of 011 and 012 plans and tasks; spec 004 T164–T165 | yes | 11:57 | 12:00 | 3.0 | done (`6600396`, 12 files). Extended T165 to `capture.mjs --compare` so T134 won't fail on the new fields |
+| 7 | skill-builder (shared owner) | T164–T165, comp width and height | yes | 12:30 | 12:31 | 1.3 | done (`0dfebc7`), 4 files, 708 tests (688 pass). Two-line diff read by the cockpit instead of a reviewer |
+| 8 | skill-builder | Skill 5, set the pivot (011 T201–T240, cloud part), add-only | yes | 12:32 | | | |
 | 4 | spec-writer | Plans and tasks for 011 and 012 (stop for approval) | yes, cut from local `main` | 19:35 | | | hit the usage limit while still reading; held until the shared owner hands back, so only one Opus agent runs |
 
 **Usage-limit stall:** about 13:10 to 16:50 (3 h 40 min). Three Opus agents at once, the README's
@@ -327,6 +330,8 @@ a window gets two agents, not three.
 **Second usage-limit stall:** about 19:40 to 21:50. Two Opus agents, both still reading, ran out the window that had just reset at 16:50 (it covered rounds 1–3 too). After this, one Opus agent at a time on this plan, critical path first.
 
 **Third and fourth stalls:** about 01:30 to 03:10 and 03:30 to 10:53. One Opus agent alone on the fix round still ran the window out twice. Overnight, nobody resumes at reset time, so a stall lasts until the next cockpit turn, not until the reset.
+
+**The other session's easing work landed** (`23b37e9`, committed by the cockpit on request): the 20/25 was the judge, not wave A; new easing baseline 24/25. So wave A didn't regress easing, and spec 004's gate is met for wave B.
 
 **Guard false positive (cockpit):** the git guard matched the hard-reset command's text inside a
 heredoc that only wrote these notes. It blocks by string, not by what runs. Harmless, but worth a
