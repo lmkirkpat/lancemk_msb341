@@ -282,3 +282,41 @@ changes before wave B:
    cause before wave B: run case 08 at the pre-wave commit to separate wave A from model drift.
 6. The Mac sitting is now the bottleneck: spec 004's Mentor Practice 2 build and captures first,
    then skills 2, 1, 3 in order.
+
+---
+
+## Run 3: Wave B, reads for skills 5 and 6, then skills 5 and 6 (2026-10-23)
+
+**Goal:** spec 004's wave B (plan › Waves › Wave B): the second shared-owner pass (R1, R3, the
+visibility class, the motion-sources map's first step, KD-001's fix), then skills 5 (set the
+pivot, spec 011) and 6 (move a group with a null, spec 012) in parallel, add-only. Serves the
+"5 new skills" done item (the last two of the baseline). Run from the Mac, local `main`, while
+wave A's live testing waits for a sitting. Times are local (MDT), from launch and hand-back.
+
+**Numbers handed out:** `specs/011-anchor`, `specs/012-null-parenting`; spec 004 wave B tasks
+T100–T199 in `tasks-wave-b.md` (T150 onward held for the skill specs' shared-code requests). No
+decisions or eval cases yet.
+
+**Gate:** spec 004 says wave B code starts with easing at baseline. It isn't: 20/25 after wave A
+(cases 08 and 15), and a second session was editing `product/evals/easing/rubric.md` when this
+run started. Round 1–2 are docs only, so they go ahead; code waits for the easing result and my
+approval of 011, 012 and the wave B tasks.
+
+**Waves:**
+
+| Wave | Agent | Task | Worktree? | Start | Hand-back | Wall-clock | Outcome |
+|---|---|---|---|---|---|---|---|
+| 1 | curriculum-designer | Skill 5 teaching design (`specs/011-anchor/teaching-design.md`) | no | 13:02 | 13:09 | 6.9 | done (`057b6da`, 431 lines). Adds a "rest key" pass rule beyond FR-028; asks for R3 extras (own rectangle, current time, bounds at a given time) and 3D and Collapse switches in R1. Reported "about 1.5 hours" |
+| 1 | curriculum-designer | Skill 6 teaching design (`specs/012-null-parenting/teaching-design.md`) | no | 13:02 | 16:53 | ~8 active | done (`057b6da`, which already had its one-row fix). Wrote the file before the limit hit and handed back on resume. Its main read request is R3 sampled at a list of times (each child's key times), with the on-screen corner math in the server; FR-029 to say "every corner within 1 px, through the null as stored". Reported "about an hour" |
+| 1 | spec-writer | Spec 004 wave B shared pass: plan detail, data model, `tasks-wave-b.md` | yes | 13:02 | | | hit the usage limit before committing; the worktree was cleaned up, so the work was lost. Restarted 16:52 and told to commit as it goes. Resumed run handed back 17:55 (6.4 min): 46 tasks (T100–T158) in 5 commits, merged `0e60cbb`, `check-branch.mjs` 5/5 spec-writer files. The git guard blocked the hard reset to `main` in a worktree (run 2 allowed it), so it cut a fresh worktree from local `main` by hand, which also fixes the stale-base problem. 5 open questions, one of them an `ownership.json` change (`tasks-*.md` for the skill-builder) left for me |
+| 2 | spec-writer | Spec 011, set the pivot (`spec.md`, stop for approval) | yes, cut from local `main` | 17:57 | 18:03 | 6.9 | done (`4e1e3cd`): 30 FRs, 29 overlap rows. The audit caught two reused filters that would pass wrong work (keyed-only change detection misses an unkeyed anchor; a "can't measure" null read as "didn't move"). 1 SR, 5 H-questions, 3 back to the designer (round 1, relayed). Reported "about 45 minutes" |
+| 2 | spec-writer | Spec 012, move a group with a null (`spec.md`, stop for approval) | yes, cut from local `main` | 17:57 | 18:03 | 7.0 | done (`587dbc2`): 28 FRs, 39 overlap rows. Found that adding a null renumbers layers (match by name), and that the session has nowhere for a tool to store what it measured (SR-1). 3 SRs, 5 H-questions, 2 back to the designer (round 1, relayed). Reported "about 75 minutes" |
+
+**Usage-limit stall:** about 13:10 to 16:50 (3 h 40 min). Three Opus agents at once, the README's
+cap, still used up the window, and this time a worktree agent lost uncommitted work when its
+worktree was cleaned up. Next time, worktree agents commit as they go, and a run started late in
+a window gets two agents, not three.
+
+**Guard false positive (cockpit):** the git guard matched the hard-reset command's text inside a
+heredoc that only wrote these notes. It blocks by string, not by what runs. Harmless, but worth a
+note in `decisions/008`'s signals.
