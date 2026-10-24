@@ -121,11 +121,14 @@ function mockLayer(spec) {
   return layer;
 }
 
-function mockComp(layers, { time = 0.5, hideShy = true } = {}) {
+// width and height are set only when given (T164), so the other tests' mock is unchanged.
+function mockComp(layers, { time = 0.5, hideShy = true, width, height } = {}) {
   const comp = Object.assign(new CompItem(), {
     id: 300, name: "Mock Overlaps", duration: 6, frameRate: 30, time, hideShyLayers: hideShy,
     numLayers: layers.length, layer: (i) => layers[i - 1],
   });
+  if (width !== undefined) comp.width = width;
+  if (height !== undefined) comp.height = height;
   for (const l of layers) l.containingComp = comp;
   return comp;
 }
@@ -202,6 +205,26 @@ test("comp.time and comp.hide_shy are read", () => {
   assert.equal(snap.comp.time, 1.235);
   assert.equal(snap.comp.hide_shy, false);
   assert.equal(runSnapshot(overlapsComp()).comp.hide_shy, true);
+});
+
+// T164 (spec 011 SR-2, spec 012 SR-4): the comp's size, and nothing else moves.
+test("comp.width and comp.height are read as whole pixels; the rest of the snapshot is byte-identical", () => {
+  const sized = runSnapshot(overlapsComp({ width: 1920, height: 1080 }));
+  const plain = runSnapshot(overlapsComp());
+  assert.equal(sized.comp.width, 1920);
+  assert.equal(sized.comp.height, 1080);
+  assert.deepEqual(Object.keys(sized.comp), ["id", "name", "duration", "frame_rate", "time", "hide_shy", "width", "height"]);
+  const { width, height, ...sizedRest } = sized.comp;
+  assert.equal(JSON.stringify(sizedRest), JSON.stringify(plain.comp));
+  for (const key of ["project", "layers", "precomp_layers", "host", "layer_info"]) {
+    assert.equal(JSON.stringify(sized[key]), JSON.stringify(plain[key]), key);
+  }
+});
+
+test("a comp with no size to read leaves comp.width and comp.height absent, never a default", () => {
+  const comp = runSnapshot(overlapsComp()).comp;
+  assert.equal("width" in comp, false);
+  assert.equal("height" in comp, false);
 });
 
 test("each R1 field has the mock's value", () => {

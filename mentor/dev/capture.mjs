@@ -34,10 +34,10 @@ const now = { taken_at: new Date().toISOString(), ...(await runSnippet("snapshot
 
 if (flag === "--compare") {
   // Everything but taken_at and host (spec 004 R0: fixtures from before it have none), and wave B's
-  // layer_info, comp.time and comp.hide_shy (read R1 and R3: fixtures from before wave B have none,
-  // and the playhead moves), must match, key by key.
+  // layer_info, comp.time, comp.hide_shy, comp.width and comp.height (read R1 and R3, and T165:
+  // fixtures from before wave B have none, and the playhead moves), must match, key by key.
   const strip = ({ taken_at, host, layer_info, comp, ...rest }) => {
-    const { time, hide_shy, ...compRest } = comp || {};
+    const { time, hide_shy, width, height, ...compRest } = comp || {};
     return JSON.stringify({ ...rest, comp: compRest });
   };
   const was = JSON.parse(fs.readFileSync(file, "utf8"));
