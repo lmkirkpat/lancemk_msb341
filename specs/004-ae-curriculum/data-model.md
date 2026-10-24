@@ -247,7 +247,7 @@ Detailed 2026-10-23 for [tasks-wave-b.md](tasks-wave-b.md). Decisions: research 
 | `effect_count` | Number of effects on the layer (optional, 012 B-5; lets a hint fire on an unkeyed effect). Effects themselves aren't read |
 | `transform` | Rendered values (after expressions) at `comp.time`: `anchor`, `position` (assembled from X, Y, Z when separated), `scale` (percent), `rotation` (Z rotation, degrees), `opacity` |
 | `samples` | At each **sample time**: rendered `anchor`, `position`, `scale`, `rotation`, and `rect` (`sourceRectAtTime(t, false)`, the layer's own rectangle in its own space). `rect_extents` (`sourceRectAtTime(t, true)`) on shape and text layers only, else `null` (which one matches what the learner sees is spec 011's L-1) |
-| Sample times | Union of `comp.time`; every key time on the layer's own keyed properties; each child's sample times (recursively); and the caller's `sample_times`. Sorted, deduplicated, rounded to 0.001 s, at most 64 (`samples_truncated: true` past that) |
+| Sample times | Union of `comp.time`; every key time on the layer's own keyed properties; each descendant's own key times (a parent is sampled wherever a child or grandchild has a key); and the caller's `sample_times`. Deduplicated at 0.001 s, at most 64 per layer (`samples_truncated: true` past that), then sorted. **Which 64 are kept** (added 2026-10-24, review S5): `comp.time` first, then the caller's `sample_times` in the order given, then the layer's own and its descendants' key times, earliest first. So a cap never drops `comp.time` or a caller's time, but a parent with many children's key times can drop a child's **late** key time; `compMatrix` for that child at that time then returns `not_sampled`. A skill that needs a time on every layer of a chain passes it in `sample_times`, and reads `not_sampled` as "can't check", never a guess |
 | Unreadable value | `null` for that field, never a failed snapshot |
 | Not read | Source names, file paths, anything about the machine or user (FR-011, Principle IV); expressions' text (read R2); what's inside precomps (read R4) |
 
@@ -269,10 +269,13 @@ gets `{}` as today. In fixture mode `sample_times` is ignored (a saved capture c
 | `compPoint(snapshot, index, point, time, opts)` | A point in the layer's own space, in comp pixels |
 | `compPosition(snapshot, index, time, opts)` | The anchor in comp space (where the layer "is") |
 | `footprint(snapshot, index, time, opts)` | `{ corners: [[x, y] × 4], bounds: { left, top, right, bottom } }` from `rect` at `time` (`{ extents: true }` uses `rect_extents`) |
-| `toLayerSpace(snapshot, index, point, time, opts)` | The inverse (for fixture twins, such as skill 6's parenting demo) |
+| `toLayerSpace(snapshot, index, point, time, opts)` | The inverse (for fixture twins, such as skill 6's parenting demo), or `{ point: null, reason: "singular" }` when the chain's matrix can't be inverted (a scale of 0 on any axis, such as skill 5's Pop at Scale 0) |
 
 `reason` is one of `no_layer_info`, `no_layer`, `not_sampled` (a layer in the chain has no sample at
-that time, within 0.0005 s), `three_d`, `auto_orient`, `no_rect`. Values are rounded to 0.001 px.
+that time, within 0.0005 s), `three_d`, `auto_orient`, `no_rect` (footprint only), `singular`
+(`toLayerSpace` only: a scale of 0 can't be inverted; added 2026-10-24, review N1). Every caller
+reads any of them as "can't check", never as "didn't move". Values are rounded to 0.001 px, so a
+round trip through the exported functions is within 0.002 px (the raw matrices within 1e-6).
 Callers set every tolerance (FR-028 and FR-029 are the skills' measures, not this file's).
 
 ### Visibility class (`mentor/lib/visibility.mjs`, FR-013)
