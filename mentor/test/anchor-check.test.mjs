@@ -29,6 +29,12 @@ test("item 2: 0.9 px passes and 1.1 px fails on an edge", () => {
   assert.equal(no.passed, false);
 });
 
+test("the result carries the check read's own time, for the rest hint", () => {
+  const r = run(P2, fixture("pop-shrunk"), [{ layer: "Pop", place: "bottom-middle" }]);
+  assert.equal(r.time, 3.3);
+  assert.equal(layerOf(r, "Pop").check_time, 4.3);
+});
+
 test("item 4 fails on a slide at one Position key time while item 2 passes", () => {
   const r = run(P2, fixture("sled-slid"), [{ layer: "Sled", place: "middle-left" }]);
   const sled = layerOf(r, "Sled");

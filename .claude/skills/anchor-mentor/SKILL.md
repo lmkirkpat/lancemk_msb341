@@ -219,7 +219,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
      - a group's anchor: "Lid's own pivot, under Transform, hasn't moved, and its shape shifted.
        The one inside Contents belongs to the group."
      - set away from rest: "Pop is still shrunk at 3.3 s. Put the playhead on 4.3 s, where it's
-       full size, and set the pivot there." (Use the check time and the read's own time.)
+       full size, and set the pivot there." (Use the layer's `check_time` for where it's at rest,
+       and the result's `time` for where the playhead was.)
      - slid at a key: "At 4.2 s Sled isn't where it was. Moving the pivot now changed where it sits
        there." Use `item4.worst.time`. <!-- L-2: the exact wording waits for live check L-2. -->
      - Anchor Point's stopwatch: "Anchor Point has a stopwatch on now, so the pivot would move over

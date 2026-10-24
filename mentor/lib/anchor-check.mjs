@@ -261,6 +261,8 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
 
   return {
     comp_matches: true,
+    // The check read's own time (where the playhead was), so the rest hint names a real time.
+    time: isNum(current.comp.time) ? r3(current.comp.time) : null,
     passed: layers.length > 0 && layers.every((l) => l.passed),
     layers,
     other_changes: others,
