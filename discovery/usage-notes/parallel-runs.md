@@ -313,12 +313,15 @@ approval of 011, 012 and the wave B tasks.
 | 2 | spec-writer | Spec 012, move a group with a null (`spec.md`, stop for approval) | yes, cut from local `main` | 17:57 | 18:03 | 7.0 | done (`587dbc2`): 28 FRs, 39 overlap rows. Found that adding a null renumbers layers (match by name), and that the session has nowhere for a tool to store what it measured (SR-1). 3 SRs, 5 H-questions, 2 back to the designer (round 1, relayed). Reported "about 75 minutes" |
 | 2b | curriculum-designer ×2 | Round 1 answers to specs 011 (D-1 to D-3) and 012 (D-1, D-2) (resumed) | no | 18:04 | 18:05 | <1 each | done (`5381f60`, `00e9711`). Agreed with every default; widened 011 D-3 to every layer type; 012 changed the teaching in two places (the mentor asks for renames, never makes them; a null with a moving parent is refused). Disagreed with the spec writer on 012 SR-2; I chose the designer |
 | 3 | spec-writer | Fold my approvals into 004 (wave B tasks), 011, 012; mark approved | yes, cut from local `main` | 19:26 | 19:34 | 7.9 | done (`0e6f870`), 9 files, `check-branch.mjs` clean. T100–T163. Caught that my prompt over-stated the designer's rule ("any parented null" vs "a moving parent") and wrote it to the design, flagged |
-| 4 | skill-builder (shared owner) | `tasks-wave-b.md`, everything without AE | yes, cut from local `main` | 19:35 | | | |
+| 4 | skill-builder (shared owner) | `tasks-wave-b.md`, everything without AE | yes, cut from local `main` | 19:35 | | | | hit the usage limit about 19:40 while still reading, nothing written; resumed 21:51 alone |
+| 4 | spec-writer | Plans and tasks for 011 and 012 (stop for approval) | yes, cut from local `main` | 19:35 | | | hit the usage limit while still reading; held until the shared owner hands back, so only one Opus agent runs |
 
 **Usage-limit stall:** about 13:10 to 16:50 (3 h 40 min). Three Opus agents at once, the README's
 cap, still used up the window, and this time a worktree agent lost uncommitted work when its
 worktree was cleaned up. Next time, worktree agents commit as they go, and a run started late in
 a window gets two agents, not three.
+
+**Second usage-limit stall:** about 19:40 to 21:50. Two Opus agents, both still reading, ran out the window that had just reset at 16:50 (it covered rounds 1–3 too). After this, one Opus agent at a time on this plan, critical path first.
 
 **Guard false positive (cockpit):** the git guard matched the hard-reset command's text inside a
 heredoc that only wrote these notes. It blocks by string, not by what runs. Harmless, but worth a
