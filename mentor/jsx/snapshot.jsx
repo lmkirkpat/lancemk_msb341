@@ -342,7 +342,7 @@ try { osName = $.os; } catch (e) {}
 return {
     // File name only: the folder path can contain a real name (Principle IV).
     project: app.project.file ? app.project.file.displayName : "Untitled Project",
-    comp: { id: comp.id, name: comp.name, duration: r3(comp.duration), frame_rate: r3(comp.frameRate), time: compTime, hide_shy: hideShy },
+    comp: { id: comp.id, name: comp.name, duration: r3(comp.duration), frame_rate: r3(comp.frameRate), time: compTime, hide_shy: hideShy, width: comp.width, height: comp.height },
     precomp_layers: precomps,
     layers: layers,
     layer_info: layerInfo,
