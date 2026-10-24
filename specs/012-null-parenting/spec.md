@@ -23,7 +23,7 @@ position), S-2 (the stored before-read time) and S-3 (through the null as stored
 FR-013; they replace spec 004 FR-029's wording for this skill, and the change to FR-029 itself is
 H-1 (this spec doesn't edit spec 004). S-4 (the move is Position, Scale or Rotation) is FR-015; S-5
 (N3 on the group's bounds with FR-028's per-axis numbers, gating only a move that turns or scales)
-is FR-009 and FR-016; S-6 (ask, don't fail, for a null with a parent) is FR-008. One refinement to
+is FR-009 and FR-016; S-6 (ask, don't fail, for a null with a parent) is in FR-009 too. One refinement to
 S-3's timing is asked back as D-1, not taken.
 
 ## Why this skill
