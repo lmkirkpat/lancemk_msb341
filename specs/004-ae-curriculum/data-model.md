@@ -201,13 +201,14 @@ Detailed 2026-10-23 for [tasks-wave-b.md](tasks-wave-b.md). Decisions: research 
 
 ### Snapshot additions
 
-`layers`, `precomp_layers` and `host` don't change. `comp` gains two fields and the snapshot gains
+`layers`, `precomp_layers` and `host` don't change. `comp` gains four fields (`width` and `height`
+added 2026-10-24, spec 011 SR-2 = spec 012 SR-4, tasks-wave-b.md T164, T165) and the snapshot gains
 `layer_info`:
 
 ```json
 {
   "comp": { "id": 12, "name": "Mentor Overlaps", "duration": 6, "frame_rate": 30,
-            "time": 1, "hide_shy": true },
+            "time": 1, "hide_shy": true, "width": 1920, "height": 1080 },
   "layer_info": [
     {
       "index": 4, "name": "Leaf 1", "kind": "solid",
@@ -233,6 +234,7 @@ Detailed 2026-10-23 for [tasks-wave-b.md](tasks-wave-b.md). Decisions: research 
 |---|---|
 | `comp.time` | The current time (`comp.time`), rounded to 0.001 s like key times |
 | `comp.hide_shy` | The comp's shy filter (`hideShyLayers`) |
+| `comp.width`, `comp.height` | The comp's size in pixels (`comp.width`, `comp.height`). Absent on captures from before T165; a reader treats absent as unknown, never a default size |
 | `layer_info` | **One entry per layer in the active comp, keyed or not**, in index order. Never anything from another comp |
 | `kind` | As `layers[].kind` (`null`, `text`, `shape`, `camera`, `light`, `adjustment`, `precomp`, `solid`, `footage`) |
 | `three_d` | `threeDLayer` (011 B-3, 012 B-5) |
