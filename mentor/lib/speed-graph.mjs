@@ -198,7 +198,8 @@ function group(kind, refs) {
 // without them, the eye switch as before. The demo filter below stays on the eye switch: an eye-off
 // matte is a candidate but never the demo, since the frame wouldn't show it.
 const known = (snapshot) => layerInfo(snapshot).known;
-const isHidden = (snapshot, layer) => (known(snapshot) ? classOf(snapshot, layer.index) === "hidden" : !layer.enabled);
+// Eye off and, once R1 is known, not a matte (only mattes leave the hidden list, as in easing).
+const isHidden = (snapshot, layer) => !layer.enabled && !(known(snapshot) && classOf(snapshot, layer.index) === "matte");
 function eligibleLayer(snapshot, layer) {
   if (!known(snapshot)) return layer.enabled && !layer.is_null;
   const cls = classOf(snapshot, layer.index);

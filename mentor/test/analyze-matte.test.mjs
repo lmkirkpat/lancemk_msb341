@@ -95,3 +95,22 @@ test("live overlaps.json: snapshot_project's reply has today's fields", { skip: 
 test("fixtures from before wave B are unchanged by this (hidden-layer.json)", () => {
   assert.deepEqual(analyze(fixture("hidden-layer")).hidden_layers, ["Old Take"]);
 });
+
+// Review B1: only mattes leave hidden_layers. A keyed null with its eye off stays, as before (FR-015).
+// SYNTHETIC: matte.json plus Rig, a null with its eye off and Old Take's Position keys.
+function withHiddenNull(snap) {
+  const s = structuredClone(snap);
+  const from = s.layers.find((l) => l.name === "Old Take");
+  s.layers.push({ index: 9, name: "Rig", kind: "null", enabled: false, is_null: true, properties: structuredClone(from.properties) });
+  s.layer_info.push({ ...structuredClone(s.layer_info[0]), index: 9, name: "Rig", kind: "null", enabled: false, is_null: true, is_matte: false, matte: null });
+  return s;
+}
+
+test("synthetic: a keyed null with its eye off stays in hidden_layers once layer_info is known (B1)", () => {
+  const s = withHiddenNull(matte);
+  const r = analyze(s);
+  assert.deepEqual(r.hidden_layers, ["Old Take", "Rig"]);
+  assert.ok(r.findings.some((f) => f.layer === "Rig"), "its pairs are still findings, as before");
+  assert.deepEqual(analyze(withoutInfo(s)).hidden_layers, ["Old Take", "Wipe", "Rig"]);
+  assert.ok(!onLayer(r.demo_target, s, "Rig"));
+});

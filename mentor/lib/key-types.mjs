@@ -35,7 +35,8 @@ const isHeld = (from) => from.out_type === "hold";
 // learner hid is out, a track matte is in whatever its eye, a null stays out); without them, the eye
 // switch as before.
 const known = (snapshot) => layerInfo(snapshot).known;
-const isHidden = (snapshot, layer) => (known(snapshot) ? classOf(snapshot, layer.index) === "hidden" : !layer.enabled);
+// Eye off and, once R1 is known, not a matte (only mattes leave the hidden list, as in easing).
+const isHidden = (snapshot, layer) => !layer.enabled && !(known(snapshot) && classOf(snapshot, layer.index) === "matte");
 const visibleIn = (snapshot, layer) => {
   if (!known(snapshot)) return layer.enabled && !layer.is_null;
   const cls = classOf(snapshot, layer.index);

@@ -95,12 +95,12 @@ function withoutKeptLinear(snapshot, { focus_layers, kept_linear }) {
   return { ...result, skipped: [...result.skipped, ...keptSkips], counts: analyzeAll(snapshot, {}).counts };
 }
 
-// KD-001 (spec 004 wave B, research R20): with reads R1 known, only layers the learner hid are
-// "hidden"; a track matte isn't, even with its eye off, because its motion is the reveal. Without
-// R1, the eye-off list as before.
+// KD-001 (spec 004 wave B, research R20): the eye-off list as before, except that with reads R1
+// known a track matte leaves it, even with its eye off, because its motion is the reveal. Only mattes
+// leave it: an eye-off null stays (FR-015).
 function hiddenLayers(snapshot) {
-  if (layerInfo(snapshot).known) return snapshot.layers.filter((l) => classOf(snapshot, l.index) === "hidden").map((l) => l.name);
-  return snapshot.layers.filter((l) => !l.enabled).map((l) => l.name);
+  const known = layerInfo(snapshot).known;
+  return snapshot.layers.filter((l) => !l.enabled && !(known && classOf(snapshot, l.index) === "matte")).map((l) => l.name);
 }
 
 function analyzeAll(snapshot, { focus_layers } = {}) {

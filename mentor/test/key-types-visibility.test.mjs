@@ -53,3 +53,15 @@ test("synthetic: a null stays out, whatever the class says about its eye", () =>
 test("live overlaps.json: Wipe's blink is a candidate and can be the demo", { skip: overlaps ? false : "waits for T133's live capture" }, () => {
   matteCase(overlaps, null);
 });
+
+// Review B1: a keyed null with its eye off is still left out as hidden once layer_info is known.
+// SYNTHETIC: matte.json plus Rig, a null with its eye off and Wipe's Opacity blink.
+test("synthetic: a keyed null with its eye off is still in the hidden list, and never a candidate (B1)", () => {
+  const s = structuredClone(matte);
+  s.layers.push({ index: 9, name: "Rig", kind: "null", enabled: false, is_null: true, properties: structuredClone(s.layers[2].properties) });
+  s.layer_info.push({ ...structuredClone(s.layer_info[2]), index: 9, name: "Rig", kind: "null", is_null: true, is_matte: false });
+  const a = analyze(s);
+  assert.deepEqual(hiddenOut(a), ["Old Take", "Rig"]);
+  assert.ok(!a.candidates.some((c) => c.layer === "Rig"));
+  assert.deepEqual(hiddenOut(analyze(withoutInfo(s))), ["Old Take", "Wipe", "Rig"]);
+});

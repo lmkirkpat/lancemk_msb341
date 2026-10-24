@@ -42,3 +42,17 @@ test("synthetic: without layer_info, today's result (the matte is left out as hi
   assert.deepEqual(old.focus, ["Card"]);
   assert.deepEqual(hiddenOut(old), ["Old Take", "Wipe"]);
 });
+
+// Review B1: a keyed null with its eye off is still left out as hidden (and as a null) once
+// layer_info is known. SYNTHETIC: matte-eased.json plus Rig, a null with its eye off and Wipe's eased
+// keys.
+test("synthetic: a keyed null with its eye off is still in the hidden list (B1)", () => {
+  const s = structuredClone(eased);
+  s.layers.push({ index: 9, name: "Rig", kind: "null", enabled: false, is_null: true, properties: structuredClone(s.layers[2].properties) });
+  s.layer_info.push({ ...structuredClone(s.layer_info[2]), index: 9, name: "Rig", kind: "null", is_null: true, is_matte: false });
+  const a = analyze(s);
+  assert.deepEqual(hiddenOut(a), ["Old Take", "Rig"]);
+  assert.deepEqual(a.left_out.find((x) => x.kind === "null").layers, ["Rig"]);
+  assert.deepEqual(a.focus, ["Wipe"]);
+  assert.deepEqual(hiddenOut(analyze(withoutInfo(s))), ["Old Take", "Wipe", "Rig"]);
+});
