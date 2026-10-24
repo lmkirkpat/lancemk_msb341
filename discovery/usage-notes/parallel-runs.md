@@ -315,7 +315,7 @@ approval of 011, 012 and the wave B tasks.
 | 3 | spec-writer | Fold my approvals into 004 (wave B tasks), 011, 012; mark approved | yes, cut from local `main` | 19:26 | 19:34 | 7.9 | done (`0e6f870`), 9 files, `check-branch.mjs` clean. T100–T163. Caught that my prompt over-stated the designer's rule ("any parented null" vs "a moving parent") and wrote it to the design, flagged |
 | 4 | skill-builder (shared owner) | `tasks-wave-b.md`, everything without AE | yes, cut from local `main` | 19:35 | 22:52 | 61 active (stalled 19:40–21:51) | done (8 commits). 40/50 tasks; mentor 597 → 697 tests (678 pass, 16 skip waiting on live captures, 3 todo); `check-branch.mjs --shared-owner` 33/33. T123 held (its gate checks 1 and 2 fail, as designed). Flagged 7 spec gaps, including three wave A `SKILL.md` lines that may call a matte "hidden". Reported "about 3.5 hours" |
 | 5 | reviewer | Read `shared-owner-b` before skills 5 and 6 build on it | yes (read-only) | 22:52 | 00:57 | 125 (it reported "about 40 minutes") | ready after fixes: 1 blocking (KD-001 also drops eye-off nulls from "hidden", untested), 5 should-fix (sample times rounded before reading; no live learner-hidden layer; 2 s goal unverified; two wave A `SKILL.md` lines), 6 nits. Hand-checked the corner math on the chain fixture: clean. The git guard blocked its `git merge-base` probe |
-| 5b | skill-builder (shared owner) | Fix B1, S1, S2, N5, cheap S4 (resumed) | yes | 01:09 | | | |
+| 5b | skill-builder (shared owner) | Fix B1, S1, S2, N5, cheap S4 (resumed) | yes | 01:09 | | | B1 committed (`de3dd58`); stopped by the usage limit about 01:30 and again about 03:30, each time mid-`snapshot.jsx` (uncommitted, but the hand-cut worktree kept it). Resumed 03:10 and 10:53 |
 | 4 | spec-writer | Plans and tasks for 011 and 012 (stop for approval) | yes, cut from local `main` | 19:35 | | | hit the usage limit while still reading; held until the shared owner hands back, so only one Opus agent runs |
 
 **Usage-limit stall:** about 13:10 to 16:50 (3 h 40 min). Three Opus agents at once, the README's
@@ -324,6 +324,8 @@ worktree was cleaned up. Next time, worktree agents commit as they go, and a run
 a window gets two agents, not three.
 
 **Second usage-limit stall:** about 19:40 to 21:50. Two Opus agents, both still reading, ran out the window that had just reset at 16:50 (it covered rounds 1–3 too). After this, one Opus agent at a time on this plan, critical path first.
+
+**Third and fourth stalls:** about 01:30 to 03:10 and 03:30 to 10:53. One Opus agent alone on the fix round still ran the window out twice. Overnight, nobody resumes at reset time, so a stall lasts until the next cockpit turn, not until the reset.
 
 **Guard false positive (cockpit):** the git guard matched the hard-reset command's text inside a
 heredoc that only wrote these notes. It blocks by string, not by what runs. Harmless, but worth a
