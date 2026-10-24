@@ -8,6 +8,8 @@
 import { segments, segmentState, segmentId, parseSegmentId } from "./analyze.mjs";
 import { isKeptLinear } from "./marks.mjs";
 import { unexpectedChanges } from "./diff.mjs";
+import { layerInfo } from "./layer-info.mjs";
+import { classOf } from "./visibility.mjs";
 
 export const OPACITY_PATH = "ADBE Transform Group/ADBE Opacity";
 export const VALUE_TOL = 0.5;
@@ -29,7 +31,16 @@ const isOnOff = (from, to) => (near(from.value, 0) && near(to.value, 100)) || (n
 // Both values known and equal: holding it changes nothing on screen (row 16, C-2).
 export const isPause = (from, to) => from.value != null && to.value != null && JSON.stringify(from.value) === JSON.stringify(to.value);
 const isHeld = (from) => from.out_type === "hold";
-const visible = (layer) => layer.enabled && !layer.is_null;
+// Spec 004 FR-013 and spec 009 SR-3: with reads R1 known, the visibility class decides (a layer the
+// learner hid is out, a track matte is in whatever its eye, a null stays out); without them, the eye
+// switch as before.
+const known = (snapshot) => layerInfo(snapshot).known;
+const isHidden = (snapshot, layer) => (known(snapshot) ? classOf(snapshot, layer.index) === "hidden" : !layer.enabled);
+const visibleIn = (snapshot, layer) => {
+  if (!known(snapshot)) return layer.enabled && !layer.is_null;
+  const cls = classOf(snapshot, layer.index);
+  return cls !== "hidden" && cls !== "null" && !layer.is_null;
+};
 
 const pairLabel = (layer, prop, from, to) => `${layer.name}${SEP}${prop.display_name} ${secs(from.time)}–${secs(to.time)} s`;
 
@@ -79,7 +90,7 @@ const refMatches = (refs, layer, prop) =>
 export function candidates(snapshot, { kept_linear, exclude = [], should_move = [] } = {}) {
   const groups = new Map();
   for (const s of segments(snapshot).segments) {
-    if (s.prop.path !== OPACITY_PATH || !visible(s.layer) || s.state === "held") continue;
+    if (s.prop.path !== OPACITY_PATH || !visibleIn(snapshot, s.layer) || s.state === "held") continue;
     if (!isNumber(s.from.value) || !isNumber(s.to.value) || !isOnOff(s.from, s.to)) continue;
     if (kept_linear && kept_linear.length && isKeptLinear(kept_linear, s.layer.name, s.prop.path, snapshot)) continue;
     if (refMatches(exclude, s.layer, s.prop) || refMatches(should_move, s.layer, s.prop)) continue;
@@ -110,7 +121,7 @@ function leftOut(snapshot, kept_linear) {
     if (!items.length) return;
     out.push({ reason, layers: [...new Set(items.map((i) => i.layer))], properties: items });
   };
-  const hidden = snapshot.layers.filter((l) => !l.enabled).map((l) => ({ layer: l.name }));
+  const hidden = snapshot.layers.filter((l) => isHidden(snapshot, l)).map((l) => ({ layer: l.name }));
   add("hidden", hidden);
   add("precomp", (snapshot.precomp_layers || []).map((l) => ({ layer: l.name })));
   const expression = [];
@@ -125,7 +136,7 @@ function leftOut(snapshot, kept_linear) {
         kept.push({ layer: layer.name, property: prop.display_name });
         continue;
       }
-      if (!layer.enabled) continue;
+      if (isHidden(snapshot, layer)) continue;
       const pairs = prop.keys.slice(1).map((to, i) => [prop.keys[i], to]);
       if (pairs.every(([from]) => isHeld(from))) held.push({ layer: layer.name, property: prop.display_name });
       else if (prop.path === OPACITY_PATH && !layer.is_null &&
@@ -143,7 +154,7 @@ function leftOut(snapshot, kept_linear) {
 
 function heldExamples(snapshot) {
   return segments(snapshot).segments
-    .filter((s) => s.state === "held" && visible(s.layer) && !isPause(s.from, s.to))
+    .filter((s) => s.state === "held" && visibleIn(snapshot, s.layer) && !isPause(s.from, s.to))
     .sort((a, b) => a.to_time - b.to_time || a.layer.index - b.layer.index)
     .slice(0, 2)
     .map((s) => ({ layer: s.layer.name, property: s.prop.display_name, jump_time: s.to_time }));
@@ -202,7 +213,7 @@ export function analyze(snapshot, { exclude = [], kept_linear, skill_options } =
   if (!pairs.length) noDemoReason = all.length || named.length ? "awaiting_focus" : "no_candidate";
   else if (pairs.length < 2) noDemoReason = "single_target";
   else {
-    demo = pairs.filter((p) => visible(p.layer)).sort((a, b) => a.from.time - b.from.time)[0] || null;
+    demo = pairs.filter((p) => visibleIn(snapshot, p.layer)).sort((a, b) => a.from.time - b.from.time)[0] || null;
     if (!demo) noDemoReason = "hidden_or_null";
   }
 
@@ -234,7 +245,7 @@ export function describePairs(snapshot, ids) {
     out.push({
       id, label: pairLabel(layer, prop, from, to), layer: layer.name, property: prop.display_name,
       from_time: from.time, to_time: to.time, state: segmentState(from, to),
-      layer_visible: visible(layer), values: [from.value ?? null, to.value ?? null],
+      layer_visible: visibleIn(snapshot, layer), values: [from.value ?? null, to.value ?? null],
     });
   }
   return out;
