@@ -148,7 +148,7 @@ with 0 px moved, and grade each planted attempt as the answer key says.
 ## Phase 7: Overlap rows (cloud)
 
 - [x] T331 [P] Add to `.claude/skills/null-parenting-mentor/SKILL.md` the overlap wording the rows need: an expression on a child (rows 1, 2), a move needs keys (row 4), "I can't see inside Icon, but it moves as a whole" (row 13), never "you've hidden this" for a hidden null (row 15), never claimed visible in a frame (row 16), shy is hidden in the timeline (row 18), never "hidden" for solo (row 20), the null's parent sentences (row 23), 3D a later topic (row 25), the Anchor Point-only hint (row 26), auto-orient (row 27), stacked motion one ungraded sentence (row 28), nothing about staggering (row 29), the null renamed noticed (Edge Cases), the rename ask (row 40)
-- [ ] T332 Write `mentor/test/null-parenting-overlap.test.mjs`: one named test per row 1 to 40 of spec › Edge cases where concepts overlap, each asserting what the focus and the check see on its fixture from `answer-key.json`; the rows marked **contract** (row 4) asserted against `comp-space.mjs` and `snapshot.jsx` as built
+- [x] T332 Write `mentor/test/null-parenting-overlap.test.mjs`: one named test per row 1 to 40 of spec › Edge cases where concepts overlap, each asserting what the focus and the check see on its fixture from `answer-key.json`; the rows marked **contract** (row 4) asserted against `comp-space.mjs` and `snapshot.jsx` as built
 
 ---
 
