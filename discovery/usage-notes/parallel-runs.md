@@ -325,7 +325,7 @@ approval of 011, 012 and the wave B tasks.
 | 10 | skill-builder | Skill 6, null parenting (012 T301–T343, cloud part), add-only | yes | 16:37 | | | Given skill 5's review lessons in its prompt up front. Committed Phases 1–2 part 1 (`a5301c1`), then the usage limit stopped it (the sixth stall; reset 21:30); resumed 21:40. Committed Phase 2 (`eb45f1d`, `404dcf8`), then hit the weekly limit with the demo snippet uncommitted (the seventh stall, and the first weekly one). Resumed 2026-10-25 12:10 from its transcript; nothing was lost, because the worktree kept the uncommitted files |
 | 11 | reviewer | Review `skill-6-null` | — | 15:46 | 15:53 | 7 min | 1 blocker (B1: a review ends at step 2), S1–S6, 6 nits. Confirmed L-6: the 2% link rule chains the practice comp's wave A layers together. Verdict: ready to hold after B1 |
 | 12 | curriculum-designer | Rework skill 6's group-proposal rule (H-4, L-6); the user chose this over moving layers | — | 17:54 | | | |
-| 13 | skill-builder | Skill 6 review fixes (B1, S1–S3, S5, tests, `SKILL.md` nits), in parallel with 12 | yes | 17:54 | | | |
+| 13 | skill-builder | Skill 6 review fixes (B1, S1–S3, S5, tests, `SKILL.md` nits), in parallel with 12 | yes | 17:54 | 17:57 | 3 min | One commit (`5c9de8c`, +144/−22). 894 tests, 873 pass, 0 fail. A new missing test showed a real offset under a moving visible parent had been hidden by the visible-parent hint; it now reports a jump |
 | 4 | spec-writer | Plans and tasks for 011 and 012 (stop for approval) | yes, cut from local `main` | 19:35 | | | hit the usage limit while still reading; held until the shared owner hands back, so only one Opus agent runs |
 
 **Usage-limit stall:** about 13:10 to 16:50 (3 h 40 min). Three Opus agents at once, the README's
