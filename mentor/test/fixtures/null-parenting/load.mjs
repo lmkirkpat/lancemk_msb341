@@ -13,6 +13,7 @@ const read = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
 
 // The path of a named fixture ("jumped.json", or "synthetic/row4-null-expression.json").
 export function where(name) {
+  if (path.isAbsolute(name)) return name;
   if (name.startsWith("synthetic/") || name.startsWith("records/")) return path.join(DIR, name);
   for (const p of [path.join(DIR, name), path.join(SPEC004, name), path.join(DIR, "stand-in", name)]) if (fs.existsSync(p)) return p;
   throw new Error(`No fixture called ${name} (live, spec 004's or stand-in)`);

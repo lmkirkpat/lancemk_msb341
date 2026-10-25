@@ -12,6 +12,7 @@
 // - Tolerances are this skill's: 1 px per corner, half a frame for key times, 10% of the group's
 //   width and height for the region.
 
+import { MentorError, registerErrors } from "../errors.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { compPosition, footprint, sampleAt, toLayerSpace } from "./comp-space.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
@@ -517,6 +518,28 @@ export function check(baseline, current, lesson, input = {}) {
 }
 
 // ---- The demo's refusals (FR-017), read from a fresh snapshot before any write
+
+export const REFUSED_MESSAGE = "I can't parent that one without it moving or changing something I shouldn't, so I've left it as it was.";
+registerErrors({ NULL_PARENT_REFUSED: REFUSED_MESSAGE });
+
+// One plain sentence per reason; `reason` stays on the error for tests and logs.
+const REFUSAL_TEXT = {
+  null_not_ready: "I need to check your null first.",
+  not_found: "I can't find that layer or the null by name.",
+  null_fails_n1: "The layer we're using as the handle isn't a null.",
+  null_fails_n2: "The null is 3D or follows another layer.",
+  already_parented: "That layer already follows something.",
+  locked: "That layer is locked.",
+  three_d: "That layer is 3D.",
+  null_scale_zero: "The null's Scale is 0, so nothing attached to it can stay where it is.",
+};
+export const REFUSAL_REASONS = Object.keys(REFUSAL_TEXT);
+
+export function refused(reason) {
+  const e = new MentorError("NULL_PARENT_REFUSED", `${REFUSED_MESSAGE} ${REFUSAL_TEXT[reason] || ""}`.trim());
+  e.reason = reason;
+  return e;
+}
 
 // { reason } or { reason: null, target, nul } with both layers found by name.
 export function demoRefusal(current, lesson) {
