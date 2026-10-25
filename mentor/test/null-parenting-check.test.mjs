@@ -110,12 +110,63 @@ test("N2: a moving parent takes the null out of the lesson: nothing graded, noth
 test("N2: one_level_only is said once, then never again in the lesson", () => {
   const base = load("synthetic/before.json");
   const lesson = lessonFor(base, { focus: ["Card", "Label"] });
+  lesson.skill_data = check(base, load("synthetic/row23-still-parent-placed.json"), lesson, {}).skill_data;
   const first = check(base, load("synthetic/row23-still-parent-placed.json"), lesson, { chain_on_purpose: true });
   assert.ok(first.result.codes.includes("one_level_only"));
   lesson.skill_data = first.skill_data;
   const second = check(base, load("synthetic/row23-still-parent-placed.json"), lesson, {});
   assert.ok(!second.result.codes.includes("one_level_only"));
   assert.equal(second.result.null.n2, true);
+});
+
+test("N2: chain_on_purpose counts only as the answer to an earlier hint about that same parent (S5)", () => {
+  const base = load("synthetic/before.json");
+  const lesson = lessonFor(base, { focus: ["Card", "Label"] });
+  const unasked = check(base, load("synthetic/row23-still-parent-placed.json"), lesson, { chain_on_purpose: true });
+  assert.equal(unasked.result.null.n2, false, "no hint yet, so the answer can't be taken");
+  assert.ok(unasked.result.codes.includes("null_has_parent"));
+  lesson.skill_data = unasked.skill_data;
+  // The null now follows another (still) layer: the earlier hint was about Holder, so ask again.
+  const other = load("synthetic/row23-still-parent-placed.json");
+  other.layer_info[0].name = "Stand";
+  const moved = check(base, other, lesson, { chain_on_purpose: true });
+  assert.equal(moved.result.null.n2, false);
+  lesson.skill_data = check(base, load("synthetic/row23-still-parent-placed.json"), lesson, {}).skill_data;
+  assert.equal(check(base, load("synthetic/row23-still-parent-placed.json"), lesson, { chain_on_purpose: true }).result.null.n2, true);
+});
+
+test("the null is ready only once it's stored; one that can't be read at the before-read time is couldn't check (S3)", () => {
+  const base = load("practice2b.json");
+  const read = load("null-center.json");
+  read.layer_info[0].samples = read.layer_info[0].samples.filter((s) => s.time !== 0);
+  const { result, skill_data } = check(base, read, lessonFor(base, { focus: GROUP }), { region: "slides_only" });
+  assert.ok(!result.codes.includes("null_ready"));
+  assert.ok(result.hints.some((h) => h.code === "cant_check" && h.what === "null"));
+  assert.equal(skill_data.stored, undefined);
+});
+
+test("in a lesson, parenting before any check stores the null at the first check that sees it", () => {
+  const base = load("practice2b.json");
+  const lesson = lessonFor(base, { focus: ["Row A", "Row B", "Row C"] });
+  const { result, skill_data } = check(base, load("review-rows-parented-in-one-go.json"), lesson, { region: "slides_only" });
+  assert.equal(result.null.stored_now, true);
+  assert.equal(skill_data.parented_seen, true);
+  assert.equal(result.parenting_passed, true);
+});
+
+test("a real offset at the before-read time under a moving visible parent is still a jump", () => {
+  const base = load("practice2b.json");
+  const lesson = lessonFor(base, { focus: GROUP });
+  lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
+  const read = load("visible-parent.json");
+  const cap = read.layer_info.find((l) => l.name === "Caption");
+  cap.samples.forEach((s) => { s.position = [1220, 215, 0]; }); // raw values left in comp space: it jumps under Tile
+  const { result } = check(base, read, lesson, {});
+  assert.ok(result.hints.some((h) => h.code === "visible_parent" && h.layer === "Caption"));
+  assert.ok(result.hints.some((h) => h.code === "jumped" && h.layer === "Caption"));
+  // Placed where it was, only the parent's own move offsets it later: no jump hint.
+  const r2 = check(base, load("review-rows-visible.json"), lessonFor(base, { focus: ["Row A", "Row B", "Row C"] }), {});
+  assert.ok(!r2.result.codes.includes("jumped"));
 });
 
 test("N3: the region is per axis at 10% of the group's combined bounds; slides_only skips it", () => {
@@ -309,6 +360,12 @@ test("comments show only when the read shows them, never change a result, and fo
   const op = load("one-key-null.json");
   op.layer_info[0].transform.opacity = 50;
   assert.ok(check(base, op, lesson, {}).result.comments.some((c) => c.code === "opacity"));
+  // FR-020: only while a child's opacity isn't faded too.
+  for (const n of GROUP) {
+    const l = op.layer_info.find((x) => x.name === n);
+    l.transform.opacity = 50;
+  }
+  assert.ok(!check(base, op, lesson, {}).result.comments.some((c) => c.code === "opacity"));
   const sc = load("jumped.json");
   sc.layer_info[0].transform.scale = [120, 100, 100];
   assert.ok(check(base, sc, lesson, {}).result.comments.some((c) => c.code === "non_uniform_scale"));

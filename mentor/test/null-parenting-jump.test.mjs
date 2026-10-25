@@ -98,7 +98,8 @@ test("once something is parented the stored null is never taken again", () => {
 test("a still parent above the null passes through parent_transform, its chain from samples (row 23)", () => {
   const base = load("synthetic/before.json");
   const lesson = lessonFor(base, { focus: ["Card", "Label"] });
-  lesson.skill_data = check(base, load("synthetic/row23-still-parent-placed.json"), lesson, { chain_on_purpose: true, region: "slides_only" }).skill_data;
+  lesson.skill_data = check(base, load("synthetic/row23-still-parent-placed.json"), lesson, { region: "slides_only" }).skill_data;
+  lesson.skill_data = check(base, load("synthetic/row23-still-parent-placed.json"), lesson, { chain_on_purpose: true }).skill_data;
   assert.ok(lesson.skill_data.stored, "the null's own transform stored");
   const { result } = check(base, load("synthetic/row23-still-parent.json"), lesson, {});
   assert.equal(result.parenting_passed, true);
@@ -150,6 +151,18 @@ test("every comp-space reason is couldn't check, never didn't move: 3D, auto-ori
   const z = clone(lesson);
   z.skill_data.stored.scale = [0, 100];
   assert.equal(check(base, read, z, {}).result.parenting_passed, false);
+});
+
+test("the 63-time cap always keeps the before-read time, then the earliest of the rest (S2)", () => {
+  const base = load("synthetic/cap70-before.json");
+  base.comp.time = 7.5; // later than every key
+  const extra = base.layers.find((l) => l.name === "Card").properties[0];
+  for (let i = 0; i < 30; i++) extra.keys.push({ ...extra.keys[0], index: extra.keys.length + 1, time: 3 + i * 0.1 });
+  const times = allP2Times(base, ["Card", "Label"]);
+  assert.equal(times.length, 63);
+  assert.ok(times.includes(7.5), "the before-read time is kept");
+  assert.equal(times[0], 0.2, "the earliest of the rest come next");
+  assert.deepEqual(times, [...times].sort((a, b) => a - b));
 });
 
 test("P2 times are the union of Anchor Point, Position, X, Y, Scale and Rotation key times plus the before-read time", () => {

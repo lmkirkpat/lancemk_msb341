@@ -268,6 +268,18 @@ test("the rotated-null jump, the null keyed before the check and the playhead mo
   assert.equal((await call("null_parent_check")).parenting_passed, true);
 });
 
+test("after a pass, another check still answers and stores or marks nothing (S1)", async () => {
+  await startGroup();
+  await placeNull();
+  project("rotate-null.json");
+  assert.equal((await call("null_parent_check")).passed, true);
+  const before = fs.readFileSync(SESSION, "utf8");
+  project("jumped.json");
+  const r = await call("null_parent_check");
+  assert.equal(r.passed, false);
+  assert.equal(fs.readFileSync(SESSION, "utf8"), before, "the passed lesson is left as it was");
+});
+
 test("a moving parent on the null: nothing graded and no markChecked", async () => {
   project("synthetic/before.json");
   await call("null_parent_snapshot", { skill_options: { focus: ["Card", "Label"] } });
@@ -284,6 +296,7 @@ test("review: proposes Row A to C, never Tile, Caption or Stamp, and the finder 
   const r = await call("null_parent_snapshot", { mode: "review" });
   assert.deepEqual(r.proposal, ["Row A", "Row B", "Row C"]);
   assert.equal(r.mode, "review");
+  assert.equal(r.no_demo_reason, "awaiting_focus", "a first review read with a group to offer isn't 'nothing new' (B1)");
   const exclude = GROUP.map((layer) => ({ layer, property: "Parent" }));
   assert.deepEqual(FINDERS["parenting.null"].focus(load("practice2b.json"), { exclude }).layers, ["Row A", "Row B", "Row C"]);
   const set = await call("null_parent_snapshot", { mode: "review", skill_options: { focus: ["Row A", "Row B", "Row C"] } });

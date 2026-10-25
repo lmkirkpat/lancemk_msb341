@@ -73,7 +73,9 @@ function snapshotReply(snapshot, { lesson, session: s, analysis }, extra = {}) {
     targets: s.targets,
     demo_target: s.demo_target,
     demo_used: !!s.demo,
-    no_demo_reason: s.mode === "review" ? (s.targets.length ? "review" : "no_new_target") : s.demo ? null : analysis.no_demo_reason,
+    // A review with no focus yet is waiting for one when there's a group to offer; only with no
+    // group at all is there nothing new to review.
+    no_demo_reason: s.mode === "review" ? (s.targets.length ? "review" : analysis.proposal ? "awaiting_focus" : "no_new_target") : s.demo ? null : analysis.no_demo_reason,
     before_time: s.focus && s.focus.length ? base.comp.time : null,
     null_ready: !!(s.skill_data && s.skill_data.stored),
     notes: analysis.notes,
@@ -192,8 +194,9 @@ async function nullParentCheck({ null: nullName, region, chain_on_purpose } = {}
   if (region) input.region = region;
   if (chain_on_purpose === true) input.chain_on_purpose = true;
   const { result, skill_data } = check(lesson.baseline, current, lesson, input);
-  if (result.comp_matches && skill_data) session.setSkillData(SKILL, lesson.comp_id, skill_data);
-  if (result.comp_matches && result.graded) session.markChecked(result.passed, { demoUndone: result.demo_undone });
+  // A passed lesson is closed: a later check still answers, but stores and marks nothing.
+  if (!lesson.passed && result.comp_matches && skill_data) session.setSkillData(SKILL, lesson.comp_id, skill_data);
+  if (!lesson.passed && result.comp_matches && result.graded) session.markChecked(result.passed, { demoUndone: result.demo_undone });
   return json(result);
 }
 

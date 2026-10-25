@@ -183,6 +183,9 @@ test("the demo target is never a matte, its layer or an eye-off layer, nor one w
   const x = clone(s);
   x.layers.find((l) => l.name === "Tile").properties.find((p) => p.display_name === "Position").expression_enabled = true;
   assert.equal(demoTarget(x, ["Tile", "Caption", "Stamp"]), "parent/Stamp", "row 1: an expression on Tile's keyed Position");
+  const locked = clone(s);
+  locked.layer_info.find((l) => l.name === "Tile").locked = true;
+  assert.equal(demoTarget(locked, ["Tile", "Caption", "Stamp"]), "parent/Stamp", "a locked layer is skipped");
   x.layer_info.find((l) => l.name === "Stamp").enabled = false;
   assert.equal(demoTarget(x, ["Tile", "Caption", "Stamp"]), "parent/Caption");
   assert.equal(demoTarget(x, ["Gradient", "Reveal Matte"]), null);

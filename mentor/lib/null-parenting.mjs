@@ -176,10 +176,12 @@ export function p2Times(baseline, name) {
   return [...new Set(times)].sort((a, b) => a - b);
 }
 
-// The union over the focus, at most 63 (the snapshot's cap less comp.time), earliest kept.
+// The union over the focus, at most 63 (the snapshot's cap less comp.time): the before-read time
+// always, then the earliest of the rest; sorted.
 export function allP2Times(baseline, focus) {
-  const all = [...new Set((focus || []).flatMap((n) => p2Times(baseline, n)))].sort((a, b) => a - b);
-  return all.slice(0, MAX_P2_TIMES);
+  const t0 = r3(baseline.comp.time);
+  const rest = [...new Set((focus || []).flatMap((n) => p2Times(baseline, n)))].filter((t) => t !== t0).sort((a, b) => a - b);
+  return [t0, ...rest.slice(0, MAX_P2_TIMES - 1)].sort((a, b) => a - b);
 }
 
 // ---- The focus the learner named (FR-004, FR-006)

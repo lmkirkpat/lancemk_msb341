@@ -112,10 +112,10 @@ function direction(dx, dy) {
 
 // The layer's four corners at each of its P2 times, now (through `stored` when its parent is the
 // lesson's null) against the before read. { passed, worst_px, direction, time, not_checked }.
-export function p2For(baseline, current, name, { throughNull = false, stored = null } = {}) {
+export function p2For(baseline, current, name, { throughNull = false, stored = null, times: only = null } = {}) {
   const b = uniqueLayer(baseline, name);
   const c = uniqueLayer(current, name);
-  const times = p2Times(baseline, name);
+  const times = only || p2Times(baseline, name);
   const not_checked = [];
   let worst = { px: 0, dx: 0, dy: 0, time: null };
   for (const t of times) {
@@ -231,6 +231,13 @@ function p4For(current, nullIndex) {
 
 // ---- Comments (FR-020, research R8), never graded
 
+// A layer's opacity is untouched: no Opacity keys and at 100.
+function fullOpacity(snap, name) {
+  const l = uniqueLayer(snap, name);
+  if (!l) return false;
+  return !props(snap, l.index).some((p) => p.path === OPACITY && p.keys.length) && !(l.transform && typeof l.transform.opacity === "number" && l.transform.opacity < 100);
+}
+
 function comments(baseline, current, focus, nul, moving, { explaining = null } = {}) {
   const out = [];
   const info = byIndex(current, nul.index);
@@ -257,7 +264,9 @@ function comments(baseline, current, focus, nul, moving, { explaining = null } =
   if (scales.some((s) => Math.abs(s.v[0] - s.v[1]) > 0.001)) out.push({ code: "non_uniform_scale", null: nul.name });
   const zero = scaleProp ? scaleProp.keys.find((k) => Array.isArray(k.value) && (k.value[0] === 0 || k.value[1] === 0)) : null;
   if (zero) out.push({ code: "zero_scale_at_key", null: nul.name, time: r3(zero.time) });
-  if (list.some((p) => p.path === OPACITY && p.keys.length) || (info && info.transform && typeof info.transform.opacity === "number" && info.transform.opacity < 100)) {
+  // FR-020: the null's opacity keyed or below 100 while a child's isn't.
+  const nullFades = list.some((p) => p.path === OPACITY && p.keys.length) || (info && info.transform && typeof info.transform.opacity === "number" && info.transform.opacity < 100);
+  if (nullFades && focus.some((n) => fullOpacity(current, n))) {
     out.push({ code: "opacity", null: nul.name });
   }
   if ((info && info.effect_count > 0) || list.some((p) => p.path.startsWith(EFFECTS) && p.keys.length)) out.push({ code: "effect", null: nul.name });
@@ -323,7 +332,6 @@ export function check(baseline, current, lesson, input = {}) {
   const sd = clone(lesson.skill_data) || {};
   sd.null = { ...(sd.null || {}) };
   if (input.region) sd.null.region = input.region;
-  if (input.chain_on_purpose === true) sd.null.chain_on_purpose = true;
 
   const hints = [];
   const add = (code, extra = {}) => hints.push({ code, ...extra });
@@ -365,7 +373,11 @@ export function check(baseline, current, lesson, input = {}) {
         add("null_parent_moves", { null: nul.name, parent: chain[0].layer });
         return finish({ ...base, graded: false, hints, null: nullOut, layers: [], comments: [], other_changes: [] });
       }
-      if (sd.null.chain_on_purpose) {
+      // "On purpose" counts only as an answer to the hint about this same parent (S-6): taken
+      // when an earlier check asked about it, and only while the null still follows it.
+      const parentName = chain[0].layer;
+      if (input.chain_on_purpose === true && sd.null.parent_asked === parentName) sd.null.chain_on_purpose = parentName;
+      if (sd.null.chain_on_purpose === parentName) {
         nullOut.n2 = true;
         if (!sd.null.one_level_said) {
           add("one_level_only", { null: nul.name, parent: chain[0].layer });
@@ -373,7 +385,8 @@ export function check(baseline, current, lesson, input = {}) {
         }
       } else {
         nullOut.n2 = false;
-        add("null_has_parent", { null: nul.name, parent: chain[0].layer });
+        sd.null.parent_asked = parentName;
+        add("null_has_parent", { null: nul.name, parent: parentName });
       }
     } else {
       nullOut.n2 = true;
@@ -451,7 +464,8 @@ export function check(baseline, current, lesson, input = {}) {
       else add("visible_parent", { layer: name, parent: parent.layer });
     }
     // A visible or other parent that moves explains the offset: its hint says so, not a jump's.
-    const draggedByParent = !!(parent && !p1 && parent.moves_children);
+    // Only when the layer was where it was at the before-read time; an offset there is a real jump.
+    const draggedByParent = !!(parent && !p1 && parent.moves_children && p2For(baseline, current, name, { times: [t0] }).passed);
     if (p2.worst_px > JUMP_PX && !pickwhip && !draggedByParent) add("jumped", { layer: name, px: p2.worst_px, direction: p2.direction, time: p2.time });
     if (p2.not_checked.length) add("cant_check", { layer: name, times: [...new Set(p2.not_checked.map((n) => n.time))] });
     if (!p3.passed) add("own_keys_changed", { layer: name, properties: p3.changed });
@@ -461,7 +475,10 @@ export function check(baseline, current, lesson, input = {}) {
 
   const layersOk = layers.length > 0 && layers.every((l) => l.found && l.p1 && l.p2.passed && l.p3.passed);
   const parenting_passed = !!(nullOk && n3ok && layersOk);
-  if (nullOk && n3ok && !parentedNow && focus.every((n) => !parentOfName.get(n)) && !hints.some((h) => h.code === "pickwhip_position")) add("null_ready", { null: nul.name });
+  // Ready only once the null is stored; a null that couldn't be read at the before-read time is
+  // "couldn't check", never fine.
+  if (nullOk && !sd.stored) add("cant_check", { what: "null", null: nul.name });
+  else if (nullOk && n3ok && !parentedNow && focus.every((n) => !parentOfName.get(n)) && !hints.some((h) => h.code === "pickwhip_position")) add("null_ready", { null: nul.name });
 
   // P4 and P5, only once the parenting has passed (FR-014).
   let passed = false;
@@ -552,7 +569,7 @@ export function demoRefusal(current, lesson) {
   if (!target || !nul) return { reason: "not_found" };
   if (classOf(current, nul.index) !== "null") return { reason: "null_fails_n1" };
   const chain = (sourcesOf(current, nul.index) || {}).parents || [];
-  if (nul.three_d || (chain.length && (!sd.null.chain_on_purpose || chain.some((p) => p.moves_children)))) return { reason: "null_fails_n2" };
+  if (nul.three_d || (chain.length && (sd.null.chain_on_purpose !== chain[0].layer || chain.some((p) => p.moves_children)))) return { reason: "null_fails_n2" };
   if (target.parent != null) return { reason: "already_parented" };
   if (target.locked === true) return { reason: "locked" };
   if (target.three_d) return { reason: "three_d" };
