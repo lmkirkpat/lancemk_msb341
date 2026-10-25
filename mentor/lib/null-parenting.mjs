@@ -147,16 +147,16 @@ export function proposal(snapshot, { exclude = [] } = {}) {
     .sort((a, b) => size(b) - size(a) || Math.min(...a.map((u) => u.top)) - Math.min(...b.map((u) => u.top)));
   if (!ranked.length) return { proposal: null, reason: "no_group" };
 
-  // Past 4: take units in stack order, keep each that links to one already kept, stop at 4. A matte
-  // pair is added whole or not at all.
-  const kept = [];
-  let n = 0;
-  for (const u of ranked[0]) {
-    if (n + u.members.length > MAX_FOCUS) continue;
-    if (kept.length && !kept.some((k) => linked(k, u, tol))) continue;
-    kept.push(u);
-    n += u.members.length;
-    if (n === MAX_FOCUS) break;
+  // Past 4: start from the top unit, then keep adding the first unit in stack order that links to
+  // one already kept, until 4 (so the kept set is always one linked group). A matte pair is added
+  // whole or not at all.
+  const kept = [ranked[0][0]];
+  let n = kept[0].members.length;
+  for (;;) {
+    const next = ranked[0].find((u) => !kept.includes(u) && n + u.members.length <= MAX_FOCUS && kept.some((k) => linked(k, u, tol)));
+    if (!next || n >= MAX_FOCUS) break;
+    kept.push(next);
+    n += next.members.length;
   }
   const names = kept.flatMap((u) => u.members).sort((a, b) => a.index - b.index).map((m) => m.layer);
   return names.length >= MIN_FOCUS ? { proposal: names, reason: null } : { proposal: null, reason: "no_group" };
