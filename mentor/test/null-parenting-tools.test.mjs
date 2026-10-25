@@ -344,3 +344,57 @@ test("with the pivot not learned the lesson still starts and checks the same way
   assert.ok(rec.requested.missing_prerequisites.some((p) => p.skill === "transform.anchor"));
   assert.notEqual(rec.recommendation && rec.recommendation.skill, "parenting.null");
 });
+
+// ---- SKILL.md never reads a field the tools don't return (the skill 5 review's lesson)
+
+test("every field, code and value SKILL.md names in backticks is in a tool's reply, input or errors", async () => {
+  const { MESSAGES } = await import("../errors.mjs");
+  const { check } = await import("../lib/null-parenting-check.mjs");
+  const { KEY, lessonFor } = await import("./fixtures/null-parenting/load.mjs");
+  const { analyze } = await import("../lib/null-parenting.mjs");
+  const seen = new Set();
+  const walk = (v) => {
+    if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === "object") for (const [k, x] of Object.entries(v)) { seen.add(k); walk(x); }
+    else if (typeof v === "string") seen.add(v);
+  };
+  // Every check over the answer key, and the analyzer on the fixtures.
+  for (const a of KEY.attempts) {
+    const base = load(a.baseline);
+    const lesson = lessonFor(base, { focus: a.focus, mode: a.mode || "lesson" });
+    for (const step of a.steps) {
+      const { result, skill_data } = check(base, load(step.read), lesson, step.input || {});
+      if (skill_data) lesson.skill_data = skill_data;
+      walk(result);
+    }
+  }
+  for (const f of ["practice2b.json", "practice2b-with-wave-a.json"]) walk(analyze(load(f), { skill_options: { focus: ["Plate", "Row A", "Gradient"] } }));
+  // Replies from the tools themselves.
+  walk(await call("null_parent_snapshot"));
+  walk(await call("null_parent_snapshot", { skill_options: { focus: ["Tile", "Shadow"] } }));
+  walk(await call("null_parent_snapshot", { skill_options: { focus: GROUP } }));
+  await placeNull();
+  walk(await call("null_parent_demo", { target: "parent/Tile" }));
+  project(variant("practice2b.json", (s) => delete s.layer_info), { undo_demo: true });
+  walk(await call("null_parent_snapshot"));
+  // Inputs, tool names and error codes.
+  for (const t of TOOLS) {
+    seen.add(t.name);
+    walk(t.inputSchema);
+  }
+  for (const c of Object.keys(MESSAGES)) seen.add(c);
+  // Codes the planted runs above don't reach still have to be ones the code can emit: string
+  // literals and reply keys in this skill's files (and the session's lesson kinds).
+  for (const f of ["lib/null-parenting.mjs", "lib/null-parenting-check.mjs", "tools/null-parenting.mjs", "lib/session.mjs"]) {
+    const src = fs.readFileSync(path.resolve(DIR, "../../..", f), "utf8");
+    for (const m of src.matchAll(/["']([a-z][a-z0-9_-]*)["']/g)) seen.add(m[1]);
+    for (const m of src.matchAll(/\b([a-z][a-z0-9_]*): /g)) seen.add(m[1]);
+  }
+  // Not from these tools: names the hard rules forbid, and the record's skill IDs.
+  const outside = new Set(["ae-mentor", "ae_run_script", "snapshot_project", "after-effects", "skills", "next", "parenting.null", "transform.anchor", "easing.basic"]);
+  const md = fs.readFileSync(path.resolve(DIR, "../../../../.claude/skills/null-parenting-mentor/SKILL.md"), "utf8");
+  const named = [...md.matchAll(/`([^`]+)`/g)].map((m) => m[1]).flatMap((t) => t.split(/[:,{}\s]+/)).map((t) => t.replace(/^["[(]+|["\])]+$/g, ""))
+    .filter((t) => /^[a-z][a-z0-9_.-]*$/.test(t) && t !== "true" && t !== "false" && t !== "null");
+  const missing = [...new Set(named)].filter((t) => !seen.has(t) && !outside.has(t) && !t.startsWith("mcp__"));
+  assert.deepEqual(missing, [], `SKILL.md names fields the tools never return: ${missing.join(", ")}`);
+});

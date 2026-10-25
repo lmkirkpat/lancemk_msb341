@@ -455,7 +455,8 @@ export function check(baseline, current, lesson, input = {}) {
     if (p2.worst_px > JUMP_PX && !pickwhip && !draggedByParent) add("jumped", { layer: name, px: p2.worst_px, direction: p2.direction, time: p2.time });
     if (p2.not_checked.length) add("cant_check", { layer: name, times: [...new Set(p2.not_checked.map((n) => n.time))] });
     if (!p3.passed) add("own_keys_changed", { layer: name, properties: p3.changed });
-    return { layer: name, found: true, credit, parent: parent ? parent.layer : null, p1, p2: { passed: p2.passed, worst_px: p2.worst_px, direction: p2.direction, time: p2.time }, not_checked: p2.not_checked.map((n) => n.time), p3 };
+    const expression_on_move = props(current, c.index).some((p) => MOVE_PATHS.has(p.path) && p.keys.length && p.expression_enabled);
+    return { layer: name, found: true, credit, parent: parent ? parent.layer : null, expression_on_move, p1, p2: { passed: p2.passed, worst_px: p2.worst_px, direction: p2.direction, time: p2.time }, not_checked: p2.not_checked.map((n) => n.time), p3 };
   });
 
   const layersOk = layers.length > 0 && layers.every((l) => l.found && l.p1 && l.p2.passed && l.p3.passed);

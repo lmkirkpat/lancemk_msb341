@@ -276,6 +276,8 @@ export function analyze(snapshot, opts = {}) {
     if (c.has_children) notes.push({ layer: name, note: "brings_children", children: c.children });
     if (c.matte_pair) notes.push({ layer: name, note: "matte_pair", with: c.matte_pair });
     if (c.class === "shy") notes.push({ layer: name, note: "shy" });
+    const info = layerInfo(snapshot).layers.find((l) => l.index === c.index);
+    if (info && info.kind === "precomp") notes.push({ layer: name, note: "precomp" });
   }
 
   const demo_target = focus ? demoTarget(snapshot, focus) : null;
