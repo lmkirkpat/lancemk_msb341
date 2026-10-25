@@ -292,6 +292,14 @@ test("review: proposes Row A to C, never Tile, Caption or Stamp, and the finder 
   assert.equal(set.no_demo_reason, "review");
 });
 
+test("review: a focus on a past target is refused before any lesson is written", async () => {
+  useRecord("learned-group.json");
+  const r = await call("null_parent_snapshot", { mode: "review", skill_options: { focus: ["Tile", "Row A"] } });
+  assert.equal(r.focus_set, false);
+  assert.deepEqual(r.refused, [{ layer: "Tile", reason: "past_target" }]);
+  assert.equal(fs.existsSync(SESSION), false);
+});
+
 test("review: null_parent_demo throws REVIEW_NO_DEMO with no snippet run", async () => {
   useRecord("learned-group.json");
   await call("null_parent_snapshot", { mode: "review", skill_options: { focus: ["Row A", "Row B", "Row C"] } });

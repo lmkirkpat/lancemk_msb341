@@ -105,7 +105,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
        so I can tell them apart." One sentence. They rename it, you never do. Then ask again.
        `duplicate_names` lists names two layers share; ask the same if they want one of those.
      - `focus_set` false with `refused`: say why that layer can't be in the group, as above, and ask
-       for another. `focus_size` means too few or too many: ask as above.
+       for another. In a review, a layer from an earlier lesson on this comp is refused too: ask
+       for a group you haven't used. `focus_size` means too few or too many: ask as above.
      - `matte_added`: "Gradient shows through Reveal Matte, so they should move as one: I'll count
        both."
      - `notes`: a layer that brings its own children: "Plate brings Shadow along, since Shadow
@@ -212,8 +213,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
    - Mention `other_changes` briefly, never as mistakes: a layer added or removed, another layer now
      parented to the null ("Plate follows the null now too"), a parent or keys changed elsewhere, an
      expression turned on or off. `children_brought`: "Plate brings Shadow along," once.
-   - `comp_matches` false: don't grade; ask them to switch back to `lesson_comp` and say "done"
-     again.
+   - `other_comp` (`comp_matches` false): don't grade; ask them to switch back to `lesson_comp`
+     by name and say "done" again.
    - They can fix things and say "done" as many times as they like.
 
 8. **Comments, after a pass only, never graded.** One sentence each, only for what `comments`

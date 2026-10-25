@@ -397,5 +397,6 @@ test("a comp that isn't the lesson's isn't graded", () => {
   const { result, skill_data } = check(base, read, lessonFor(base, { focus: GROUP }), {});
   assert.equal(result.comp_matches, false);
   assert.equal(result.graded, false);
+  assert.deepEqual(result.codes, ["other_comp"], "a hint even here");
   assert.equal(skill_data, null);
 });

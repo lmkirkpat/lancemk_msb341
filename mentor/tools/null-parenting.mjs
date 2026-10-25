@@ -13,6 +13,7 @@ import { runSnippet } from "../bridge-client.mjs";
 import { MentorError, registerErrors } from "../errors.mjs";
 import { parseHost } from "../lib/host.mjs";
 import { layerInfo } from "../lib/layer-info.mjs";
+import { pastTargets } from "../lib/learner-store.mjs";
 import { allP2Times, analyze, finder, focusProblems, p2Times, SKILL } from "../lib/null-parenting.mjs";
 import { check, demoRefusal, JUMP_PX, p2For, REFUSAL_REASONS, REFUSED_MESSAGE, refused, REGIONS, storeNull } from "../lib/null-parenting-check.mjs";
 import { sourcesOf } from "../lib/motion-sources.mjs";
@@ -92,10 +93,12 @@ async function nullParentSnapshot({ mode = "lesson", skill_options } = {}) {
 
   if (focus && !(open && sameList(open.focus, focus))) {
     // A new or changed focus: every name unique and every layer allowed before any lesson change.
-    const exclude = mode === "review" ? (open ? open.exclude || [] : undefined) : [];
-    const problems = focusProblems(snapshot, focus, exclude ? { exclude } : {});
+    // A review refuses past targets here, before session.start writes anything (the session
+    // fills the same list from the record).
+    const exclude = mode === "review" ? (open ? open.exclude || [] : pastTargets(SKILL, snapshot.project, snapshot.comp.name)) : [];
+    const problems = focusProblems(snapshot, focus, { exclude });
     if (problems.unknown.length) throw new MentorError("UNKNOWN_LAYER", `${problems.unknown.join(", ")} isn't in the comp. Use the layer's name exactly as it appears in the comp.`);
-    if (!problems.ok && (problems.rename_needed.length || problems.size || problems.refused.some((r) => r.reason !== "past_target"))) {
+    if (!problems.ok) {
       return json({ focus_set: false, rename_needed: problems.rename_needed, refused: problems.refused, focus_size: problems.size, comp: { name: snapshot.comp.name } });
     }
     let started;

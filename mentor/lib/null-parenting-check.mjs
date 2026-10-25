@@ -334,7 +334,7 @@ export function check(baseline, current, lesson, input = {}) {
 
   const comp_matches = !!(current.comp && current.comp.id === baseline.comp.id && (baseline.project === undefined || current.project === baseline.project));
   const base = { comp_matches, lesson_comp: baseline.comp.name, before_time: r3(t0), stage: "parenting", parenting_passed: false, passed: false, graded: true };
-  if (!comp_matches) return { result: { ...base, graded: false, codes: [], hints: [], null: null, layers: [], comments: [], other_changes: [] }, skill_data: null };
+  if (!comp_matches) return { result: { ...base, graded: false, codes: ["other_comp"], hints: [{ code: "other_comp", comp: baseline.comp.name }], null: null, layers: [], comments: [], other_changes: [] }, skill_data: null };
   if (!layerInfo(current).known) {
     return finish({ ...base, graded: false, hints: [{ code: "cant_check", what: "comp" }], null: null, layers: [], comments: [], other_changes: [] }, null);
   }

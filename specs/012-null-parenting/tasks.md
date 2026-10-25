@@ -154,8 +154,8 @@ with 0 px moved, and grade each planted attempt as the answer key says.
 
 ## Phase 8: Cloud hand-back
 
-- [ ] T333 Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (FR-001, SC-008)
-- [ ] T334 Run `/agent-audit` on `.claude/skills/null-parenting-mentor/SKILL.md` and fix what it finds in that file
+- [x] T333 Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; run `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and confirm the changed files are exactly the add-only table's, all added (FR-001, SC-008)
+- [x] T334 Run `/agent-audit` on `.claude/skills/null-parenting-mentor/SKILL.md` and fix what it finds in that file
 - [ ] T335 Hand back for the sitting: branch and commit, test counts, T333's output, the `<!-- L-1 -->` places, whether SR-4 has landed, and what Phase 9 needs (quickstart › 2–5)
 
 ---
