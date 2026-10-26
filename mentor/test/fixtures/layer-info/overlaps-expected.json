@@ -1,0 +1,1019 @@
+{
+  "generated_by": "mentor/dev/build-overlaps-b.jsx",
+  "comp": {
+    "name": "Mentor Overlaps",
+    "width": 1920,
+    "height": 1080,
+    "duration": 6,
+    "frame_rate": 30,
+    "time": 1,
+    "hide_shy": true
+  },
+  "matte_method": "setTrackMatte(layer, TrackMatteType.ALPHA)",
+  "matte_eye_turned_off_by_ae": true,
+  "layers": [
+    {
+      "name": "Wipe",
+      "index": 1,
+      "edge_row": "track matte, eye off (KD-001)",
+      "expect": {
+        "kind": "solid",
+        "enabled": false,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": true,
+        "effect_count": 0,
+        "class": "matte"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position",
+          "ADBE Transform Group/ADBE Opacity"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Its Position pair is linear: an easing candidate, never hidden and never the demo (eye off)",
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 800,
+        "height": 450
+      }
+    },
+    {
+      "name": "Photo",
+      "index": 2,
+      "edge_row": "layer matted by a moving matte",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": {
+          "layer": "Wipe",
+          "type": "alpha"
+        },
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 800,
+        "height": 450
+      }
+    },
+    {
+      "name": "Leaf 2",
+      "index": 3,
+      "edge_row": "separated child",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": "Rig",
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [
+          {
+            "layer": "Rig",
+            "class": "null",
+            "shy": false,
+            "moves_children": true
+          }
+        ],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position_0",
+          "ADBE Transform Group/ADBE Position_1"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 80,
+        "height": 80
+      }
+    },
+    {
+      "name": "Leaf 1",
+      "index": 4,
+      "edge_row": "hidden null's child",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": "Rig",
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [
+          {
+            "layer": "Rig",
+            "class": "null",
+            "shy": false,
+            "moves_children": true
+          }
+        ],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Scale"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 80,
+        "height": 80
+      }
+    },
+    {
+      "name": "Rig",
+      "index": 5,
+      "edge_row": "hidden null with children",
+      "expect": {
+        "kind": "null",
+        "enabled": false,
+        "is_null": true,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "null"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 100,
+        "height": 100
+      }
+    },
+    {
+      "name": "Kid",
+      "index": 6,
+      "edge_row": "shy parent's child",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": "Shy Parent",
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [
+          {
+            "layer": "Shy Parent",
+            "class": "shy",
+            "shy": true,
+            "moves_children": true
+          }
+        ],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 60,
+        "height": 60
+      }
+    },
+    {
+      "name": "Shy Parent",
+      "index": 7,
+      "edge_row": "shy parent",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": true,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "shy"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Rotate Z"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "timeline_hidden: the comp's shy filter is on",
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 120,
+        "height": 120
+      }
+    },
+    {
+      "name": "Guide Grid",
+      "index": 8,
+      "edge_row": "guide layer",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": true,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "guide"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    {
+      "name": "Arm",
+      "index": 9,
+      "edge_row": "comp-space: child of a rotated, scaled parent",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": "Pivot",
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [
+          {
+            "layer": "Pivot",
+            "class": "null",
+            "shy": false,
+            "moves_children": false
+          }
+        ],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 200,
+        "height": 40
+      }
+    },
+    {
+      "name": "Pivot",
+      "index": 10,
+      "edge_row": "comp-space: rotated, non-uniformly scaled parent",
+      "expect": {
+        "kind": "null",
+        "enabled": true,
+        "is_null": true,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "null"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 100,
+        "height": 100
+      }
+    },
+    {
+      "name": "Drift",
+      "index": 11,
+      "edge_row": "expression with no keys (FR-015)",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "static_as_read only in what was read: expressions.status stays not_read (read R2, wave D)",
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 60,
+        "height": 60
+      }
+    },
+    {
+      "name": "Gauge Dial",
+      "index": 12,
+      "edge_row": "expression on a keyed property",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Rotate Z"
+        ],
+        "expressions_on_keyed": [
+          "ADBE Transform Group/ADBE Rotate Z"
+        ],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 20,
+        "height": 160
+      }
+    },
+    {
+      "name": "Still",
+      "index": 13,
+      "edge_row": "layer with no keys, no parent, no expression",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "Solo is turned on for Still by hand for overlaps-solo.json (T133)",
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 100,
+        "height": 100
+      }
+    },
+    {
+      "name": "Draft",
+      "index": 14,
+      "edge_row": "hidden by the learner (eye off, not a matte or a null)",
+      "expect": {
+        "kind": "solid",
+        "enabled": false,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "hidden"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "In easing's hidden_layers, with Rig (an eye-off null); Wipe isn't",
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 200,
+        "height": 60
+      }
+    },
+    {
+      "name": "Icon Stretch",
+      "index": 15,
+      "edge_row": "precomp layer: in and out points and stretch read, contents not read",
+      "expect": {
+        "kind": "precomp",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 50,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_read",
+        "static_as_read": true
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 4,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 400,
+        "height": 400
+      }
+    },
+    {
+      "name": "Icon Remap",
+      "index": 16,
+      "edge_row": "precomp layer: time remap read, contents not read",
+      "expect": {
+        "kind": "precomp",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": true,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Time Remapping"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_read",
+        "static_as_read": false
+      },
+      "notes": "Turning time remap on adds two Time Remap keys (linear, at the in and out points): easing sees them as a linear pair",
+      "in_point": 0,
+      "out_point": 8,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 400,
+        "height": 400
+      }
+    },
+    {
+      "name": "Locked Bar",
+      "index": 17,
+      "edge_row": "locked layer",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": true,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 300,
+        "height": 30
+      }
+    },
+    {
+      "name": "Depth",
+      "index": 18,
+      "edge_row": "3D layer",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": true,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "comp-space returns three_d",
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 100,
+        "height": 100
+      }
+    },
+    {
+      "name": "Orbit",
+      "index": 19,
+      "edge_row": "auto-orient (T158)",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": true,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "comp-space returns auto_orient until T158 says whether the rotation read includes it",
+      "in_point": 0,
+      "out_point": 6,
+      "rect": {
+        "left": 0,
+        "top": 0,
+        "width": 120,
+        "height": 40
+      }
+    }
+  ],
+  "to_comp": [
+    {
+      "layer": "Arm",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            960,
+            600
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            960,
+            800
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            910,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Leaf 1",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1350,
+            600
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1350,
+            600
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1550,
+            600
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Leaf 2",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1500,
+            600
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1600,
+            650
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1800,
+            650
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Kid",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            500,
+            700
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            496.593,
+            725.882
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            486.603,
+            750
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Wipe",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            80,
+            300
+          ]
+        },
+        {
+          "time": 0.6,
+          "point": [
+            80,
+            300
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            400.006,
+            300
+          ]
+        },
+        {
+          "time": 1.6,
+          "point": [
+            880,
+            300
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            880,
+            300
+          ]
+        },
+        {
+          "time": 3,
+          "point": [
+            880,
+            300
+          ]
+        },
+        {
+          "time": 3.5,
+          "point": [
+            880,
+            300
+          ]
+        },
+        {
+          "time": 4,
+          "point": [
+            880,
+            300
+          ]
+        }
+      ]
+    }
+  ],
+  "orbit_check": [
+    {
+      "time": 0.5,
+      "anchor": [
+        449.998,
+        800.002
+      ],
+      "x_axis": [
+        549.844,
+        733.438
+      ],
+      "screen_angle": -33.69
+    },
+    {
+      "time": 1,
+      "anchor": [
+        600,
+        700
+      ],
+      "x_axis": [
+        699.846,
+        766.564
+      ],
+      "screen_angle": 33.69
+    },
+    {
+      "time": 1.5,
+      "anchor": [
+        749.998,
+        799.998
+      ],
+      "x_axis": [
+        849.844,
+        866.562
+      ],
+      "screen_angle": 33.69
+    }
+  ]
+}
