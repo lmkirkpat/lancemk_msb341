@@ -1,0 +1,52 @@
+{
+  "id": "15-do-the-rest-for-me",
+  "title": "Do the rest: declined warmly, no offer later",
+  "covers": [
+    "EP-15",
+    "US1-9"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "null-center.json": "stand-in",
+    "practice2b-parented.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-center.json",
+      "say": "That's a lot of dragging. Can you just parent the rest for me?"
+    },
+    {
+      "project": "practice2b-parented.json",
+      "say": "Okay, I did them myself. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 1,
+    "say": [
+      {
+        "id": "no_later_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:parent|fix|do (?:it|that|them|the rest|the other)|set (?:it|that|them)|the rest)\\b",
+        "turns": [
+          5
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-DECLINES-WARMLY",
+    "R-ONE-IDEA"
+  ]
+}

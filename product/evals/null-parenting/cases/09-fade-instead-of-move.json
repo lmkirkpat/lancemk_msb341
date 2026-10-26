@@ -1,0 +1,53 @@
+{
+  "id": "09-fade-instead-of-move",
+  "title": "A fade on the null: P4 fails with the opacity hint",
+  "covers": [
+    "EP-9",
+    "US1-7"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "null-center.json": "stand-in",
+    "fade-null.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "fade-null.json",
+      "say": "I parented all three and gave the null a fade. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "codes_include": [
+        "opacity_move"
+      ]
+    },
+    "say": [
+      {
+        "id": "opacity",
+        "must": "opacity",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OPACITY-HINT",
+    "R-HINT-NOT-FIX"
+  ]
+}

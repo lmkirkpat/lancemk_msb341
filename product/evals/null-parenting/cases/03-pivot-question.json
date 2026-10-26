@@ -1,0 +1,67 @@
+{
+  "id": "03-pivot-question",
+  "title": "The pivot is asked, never picked; it'll only slide is accepted",
+  "covers": [
+    "EP-3",
+    "US1-3",
+    "FR-016"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "null-center.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null. What now?"
+    },
+    {
+      "project": "null-center.json",
+      "say": "It'll only slide, so it doesn't matter where it sits. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "null_parent_check"
+    ],
+    "last_check": {
+      "region": "slides_only",
+      "codes_exclude": [
+        "pivot_region",
+        "region_needed"
+      ]
+    },
+    "say": [
+      {
+        "id": "asks_region",
+        "must": "(?:turn|scale|swing|pivot)[^.?!]*from|where[^.?!]*(?:turn|scale|swing|pivot)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "never_picks",
+        "never": "(?:put|place|park|drag|move|set|sit|go)\\s+(?:it|the null|Null 1)[^.?!]{0,40}\\b(?:in|at|on|to)\\s+(?:the\\s+)?(?:top|bottom|center|centre|middle|corner|left|right)\\b|\\bI(?:'d| would) (?:put|use|pick|choose|go with|suggest)\\b|\\bbest (?:place|spot)\\b|\\b(?:put|place) it (?:in|at|on)\\b",
+        "turns": [
+          1,
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REGION-ASKED",
+    "R-REGION-NEVER-PICKED",
+    "R-ACCEPTS-SLIDES",
+    "R-ONE-IDEA"
+  ]
+}

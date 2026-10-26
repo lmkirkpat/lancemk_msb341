@@ -1,0 +1,51 @@
+{
+  "id": "08-null-keyed-before-the-check",
+  "title": "A null keyed before the parenting check still passes; nothing asked to be undone",
+  "covers": [
+    "EP-8",
+    "US2-4",
+    "row 30"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "null-center.json": "stand-in",
+    "null-keyed-early.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-keyed-early.json",
+      "say": "I parented all three and already gave the null a move. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "no_redo",
+        "never": "\\bundo\\b|\\bredo\\b|start over|start again|wrong order",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KEYED-EARLY-OK",
+    "R-NAMES-REAL"
+  ]
+}

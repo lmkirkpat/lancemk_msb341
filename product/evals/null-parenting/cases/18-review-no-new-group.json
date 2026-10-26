@@ -1,0 +1,45 @@
+{
+  "id": "18-review-no-new-group",
+  "title": "A review with no new group: not offered, nothing recorded",
+  "covers": [
+    "EP-18",
+    "US3-3"
+  ],
+  "learner_record": "learned-group.json",
+  "fixture_sources": {
+    "synthetic/crowd-only.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/crowd-only.json",
+      "say": "/null-parenting-mentor"
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "snapshot_with": {
+      "mode": "review"
+    },
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "no_focus_set": true,
+    "record_lesson": null,
+    "say": [
+      {
+        "id": "no_crowd_names",
+        "never": "\\bBrick\\b",
+        "cs": true
+      },
+      {
+        "id": "no_crowd_count",
+        "never": "\\b(?:6|six)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-NOTHING-NEW",
+    "R-CROWD-HIDDEN"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "id": "02-explain-what-a-parent-passes",
+  "title": "Explain: position, scale and rotation pass down; not opacity or effects",
+  "covers": [
+    "EP-2",
+    "US1-2"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b-with-wave-a.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b-with-wave-a.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b-with-wave-a.json",
+      "say": "Why do I need a null at all? What does a parent actually pass down to the layers under it?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "position",
+        "must": "position",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "scale",
+        "must": "scale",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "rotation",
+        "must": "rotation",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "opacity_named",
+        "must": "opacity",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "opacity_not_passed",
+        "never": "opacity[^.?!]{0,40}\\b(?:passes|carries|is inherited|follows)\\b(?![^.?!]*(?:n't|not))"
+      }
+    ]
+  },
+  "rubric": [
+    "R-INHERITS-RIGHT",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

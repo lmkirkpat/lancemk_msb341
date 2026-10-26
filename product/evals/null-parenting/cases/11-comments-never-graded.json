@@ -1,0 +1,50 @@
+{
+  "id": "11-comments-never-graded",
+  "title": "After a pass, the comments (linear move, default name) are offered, not graded",
+  "covers": [
+    "EP-11",
+    "US1-8"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "null-center.json": "stand-in",
+    "slide-null.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null. The group will only slide, so it doesn't matter where the null sits. Done."
+    },
+    {
+      "project": "slide-null.json",
+      "say": "I parented all three and gave the null a slide. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "not_graded",
+        "never": "\\b(?:should have|mistake|wrong|you need to|you must|failed)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-COMMENTS-UNGRADED",
+    "R-NAMES-REAL"
+  ]
+}

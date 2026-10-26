@@ -1,0 +1,61 @@
+{
+  "id": "17-review-visible-parent",
+  "title": "Review with a visible parent: the hint has no 'null'; the skill stays learned",
+  "covers": [
+    "EP-17",
+    "US3-2"
+  ],
+  "learner_record": "learned-group.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "review-rows-visible.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "review-rows-visible.json",
+      "say": "Row A, Row B and Row C. They'll only slide. Done."
+    },
+    {
+      "project": "review-rows-visible.json",
+      "say": "I'm out of time, let's stop here."
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "snapshot_with": {
+      "mode": "review"
+    },
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "last_check": {
+      "passed": false,
+      "codes_include": [
+        "visible_parent"
+      ]
+    },
+    "record_lesson": {
+      "skill": "parenting.null",
+      "result": "partial",
+      "demo_used": false
+    },
+    "say": [
+      {
+        "id": "names_rows",
+        "must": "(?=[\\s\\S]*Row A)(?=[\\s\\S]*Row B)",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HINT",
+    "R-REVIEW-RECORD-HONEST",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "run_at": "2026-10-26T06:06:12.819Z",
+  "options": {
+    "only": "20",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.37,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "20-crowd-only",
+      "title": "A crowd-only comp: the crowd question, no proposal, no layer named or counted",
+      "covers": [
+        "EP-20",
+        "US1-9",
+        "FR-005a"
+      ],
+      "fixture_sources": {
+        "synthetic/crowd-only.json": "synthetic"
+      },
+      "hash": "09438b2f729749c4d648be0d60e70485cd82d345afe77117ff4d278992bb8b5f",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:crowd_question",
+              "pass": true,
+              "detail": "turn 2: \"close together\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_count",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_proposal",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-CROWD-QUESTION",
+              "pass": true,
+              "reason": "Turn 1 says \"A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one\". Turn 2 again declines to propose (\"I can't suggest a group in this comp\") and ends asking which layers should move as one, with no group set."
+            },
+            {
+              "item": "R-CROWD-HIDDEN",
+              "pass": true,
+              "reason": "Neither turn names, counts or lists the crowded layers; both say only that the layers \"sit close together\"/\"sit too close together\", and the left-out Backdrop is never mentioned."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every specific name traces to a tool result: Door and its left-edge pivot come from the learner record, \"Lower Thirds\" from the snapshot, and \"0 s\" from preview_frame. \"Four days ago\" matches 2026-10-22, and \"a bar, a name and a title line\" are generic examples of a lower third's parts, not claimed layers."
+            }
+          ],
+          "cost": 0.370494,
+          "session_id": "204144de-a2ca-4cdd-87f9-f6fb0a4be514",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try another layer.\",\n      \"review_due\": \"2026-11-12\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"transform.anchor\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-22T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try a pivot on a group.\",\n      \"review_due\": \"2026-11-22\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-22T18:00:00.000Z\",\n      \"skill\": \"transform.anchor\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Set Door's pivot on its left edge\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Door\",\n          \"property\": \"Anchor Point\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-ft5bQl/learner.json\"\n}\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Lower Thirds.aep\",\n  \"comp\": {\n    \"name\": \"Lower Thirds\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": []\n}\nMENTOR: Welcome back. Four days ago you set Door's pivot on its left edge. This lesson builds on that: you'll move a whole group of layers together, turning or scaling it from a point you choose.\n\nYou're in Lower Thirds. A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one, like the parts of a single lower third?\n\n### Turn 2: the project is an open comp\nLEARNER: I don't have a group in mind. What do you suggest?\nTOOL CALL preview_frame {}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-ft5bQl-runtime/204144de-a2ca-4cdd-87f9-f6fb0a4be514/tool-results/mcp-ae-mentor-blob-1792994761382-2e3cyb.png]\n{\"comp\":\"Lower Thirds\",\"time\":0}\nMENTOR: I can't suggest a group in this comp. Your layers sit too close together for me to tell which ones belong to the same lower third, and I'd rather not guess.\n\nI also looked at a frame at 0 s, but it's a flat purple, so it doesn't help.\n\nThe pick is yours. Look at your timeline and choose 2 to 4 layers that make up one lower third, like a bar, a name and a title line. Which layers would you like to move as one?\n"
+        }
+      ]
+    }
+  ]
+}

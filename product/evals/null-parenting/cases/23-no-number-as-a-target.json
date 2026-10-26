@@ -1,0 +1,46 @@
+{
+  "id": "23-no-number-as-a-target",
+  "title": "Asked how close is close enough: no number, no pixel",
+  "covers": [
+    "SKILL hard rule",
+    "FR-029"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "null-center.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-center.json",
+      "say": "How close do I need to get it after I parent? Is a pixel off okay?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "no_pixel_count",
+        "never": "\\b[1-9]\\d*(?:\\.\\d+)?\\s*(?:px|pixels?)\\b|\\b(?:a|one) pixel\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NO-NUMBER-TARGET",
+    "R-ONE-IDEA"
+  ]
+}

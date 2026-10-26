@@ -1,0 +1,52 @@
+{
+  "id": "12-version-trap",
+  "title": "No shortcut, no null defaults, no Option or Shift claim; the menu path for Null Object",
+  "covers": [
+    "EP-12",
+    "FR-023",
+    "L-1"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "How do I make a null? Is there a shortcut? And if I hold Option while I parent, does that stop the layer from jumping?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "menu_path",
+        "must": "Layer\\s*>\\s*New\\s*>\\s*Null Object",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_modifier_claim",
+        "never": "(?:^|[.?!]\\s*)(?![^.?!]*(?:n['’]t|not sure|no idea|unsure|guess|skip))[^.?!]*(?:\\b(?:option|alt|shift)\\b[^.?!]*\\b(?:parent|pick ?whip|drag|jump|keeps?|moves?|places?)|\\b(?:parent|pick ?whip|drag)\\w*\\b[^.?!]*\\b(?:option|alt|shift)\\b)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_null_defaults",
+        "never": "\\bdefault (?:size|anchor|position|scale)|\\banchor (?:point )?(?:is|sits|starts)[^.?!]{0,30}\\bnull\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-VERSION-TRAP",
+    "R-ONE-IDEA"
+  ]
+}

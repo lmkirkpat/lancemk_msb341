@@ -1,0 +1,44 @@
+{
+  "id": "26-review-pass",
+  "title": "A review that passes is recorded as passed, with no demo",
+  "covers": [
+    "EP-16",
+    "US3-1"
+  ],
+  "learner_record": "learned-group.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "review-rows-pass.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "review-rows-pass.json",
+      "say": "Row A, Row B and Row C. They'll only slide. Done."
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "snapshot_with": {
+      "mode": "review"
+    },
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "last_check": {
+      "passed": true
+    },
+    "record_lesson": {
+      "skill": "parenting.null",
+      "result": "passed",
+      "demo_used": false
+    }
+  },
+  "rubric": [
+    "R-REVIEW-PASS-HONEST",
+    "R-NAMES-REAL"
+  ]
+}

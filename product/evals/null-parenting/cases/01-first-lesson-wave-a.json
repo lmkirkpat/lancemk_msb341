@@ -1,0 +1,90 @@
+{
+  "id": "01-first-lesson-wave-a",
+  "title": "First lesson on the wave A comp: asks first, then proposes the group",
+  "covers": [
+    "EP-1",
+    "US1-1",
+    "FR-005a"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b-with-wave-a.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b-with-wave-a.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b-with-wave-a.json",
+      "say": "I don't have a group in mind. What do you suggest?"
+    }
+  ],
+  "expect": {
+    "first_tool": "read_learner_record",
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "no_focus_set": true,
+    "say": [
+      {
+        "id": "asks_first",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_which_layers",
+        "must": "which layers|move as one|move together",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_group",
+        "must": "(?=[\\s\\S]*Tile)(?=[\\s\\S]*Caption)(?=[\\s\\S]*Stamp)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "reason_apart",
+        "must": "(?:apart|away|separate|separated|set off|isolated)\\b[^.?!]{0,20}(?:everything|the rest|all|your other|the other)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_position",
+        "never": "\\b(?:top|bottom|upper|lower)[- ]?(?:left|right|corner|half|of the (?:frame|screen|comp))|\\bon the (?:left|right)\\b|\\b(?:left|right)(?:[- ]hand)? (?:side|of the (?:frame|screen|comp))|\\bin the (?:top|bottom|middle|center|centre|corner)\\b|\\bcorner of\\b|\\bnear the (?:top|bottom|edge|middle|center|centre)\\b|\\b(?:upper|lower)[- ](?:left|right)\\b"
+      },
+      {
+        "id": "no_crowd_names",
+        "never": "\\b(?:Blink|Spinner|Cut(?!\\s+(?:to|it|down|out|off|the|a)\\b)|Badge|Peg|Banner|Card|Dot [123]|Door(?!['’]s\\s+pivot)|Plaque|Sign)\\b",
+        "cs": true
+      },
+      {
+        "id": "no_crowd_count",
+        "never": "\\b(?:13|thirteen|a dozen|dozen)\\b"
+      },
+      {
+        "id": "second_group_not_yet",
+        "never": "\\bChip [ABC]\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-ASKS-FIRST",
+    "R-PROPOSAL",
+    "R-NO-POSITION",
+    "R-CROWD-HIDDEN",
+    "R-NAMES-REAL",
+    "R-USES-MEMORY",
+    "R-ONE-IDEA"
+  ]
+}

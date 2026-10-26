@@ -1,0 +1,60 @@
+{
+  "id": "20-crowd-only",
+  "title": "A crowd-only comp: the crowd question, no proposal, no layer named or counted",
+  "covers": [
+    "EP-20",
+    "US1-9",
+    "FR-005a"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "synthetic/crowd-only.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/crowd-only.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "synthetic/crowd-only.json",
+      "say": "I don't have a group in mind. What do you suggest?"
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "no_focus_set": true,
+    "say": [
+      {
+        "id": "crowd_question",
+        "must": "close together|sit close|crowd|packed|clustered|bunched",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_layer_names",
+        "never": "\\bBrick\\b",
+        "cs": true
+      },
+      {
+        "id": "no_count",
+        "never": "\\b(?:6|six|several|a handful)\\b"
+      },
+      {
+        "id": "no_proposal",
+        "never": "want to move those as one|how about (?:moving )?(?:those|these)",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-CROWD-QUESTION",
+    "R-CROWD-HIDDEN",
+    "R-NAMES-REAL"
+  ]
+}

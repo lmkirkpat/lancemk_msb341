@@ -1,0 +1,67 @@
+{
+  "id": "21-chain-on-purpose",
+  "title": "A null that follows another layer is asked about; the chain is checked only after the learner says so",
+  "covers": [
+    "FR-009",
+    "TD 14",
+    "row 23"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "synthetic/before.json": "synthetic",
+    "synthetic/row23-still-parent-placed.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/before.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "synthetic/before.json",
+      "say": "Card and Label should move together."
+    },
+    {
+      "project": "synthetic/row23-still-parent-placed.json",
+      "say": "I added a null and parented them. The group will only slide, so the spot doesn't matter. Done."
+    },
+    {
+      "project": "synthetic/row23-still-parent-placed.json",
+      "say": "Yes, the null follows Holder on purpose."
+    }
+  ],
+  "expect": {
+    "chain_on_purpose_from_turn": 4,
+    "last_check": {
+      "codes_include": [
+        "one_level_only"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_holder",
+        "must": "Holder",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "asks_on_purpose",
+        "must": "\\?",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "one_level",
+        "must": "one level|one link|one step|single level|one parent|chain",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-CHAIN-ASKED",
+    "R-NAMES-REAL"
+  ]
+}

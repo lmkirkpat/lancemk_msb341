@@ -1,0 +1,83 @@
+{
+  "id": "06-jump",
+  "title": "A layer that jumped: layer, distance, direction, no cause, Edit > Undo",
+  "covers": [
+    "EP-6",
+    "US2-2"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "null-center.json": "stand-in",
+    "jumped.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "jumped.json",
+      "say": "I parented all three. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "parenting_passed": false,
+      "codes_include": [
+        "jumped"
+      ]
+    },
+    "say": [
+      {
+        "id": "layer",
+        "must": "Stamp",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "distance",
+        "must": "120",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "direction",
+        "must": "left",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_cause",
+        "never": "\\b(?:because|probably|likely|must have|the reason|caused|that happens when)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-JUMP-STATED",
+    "R-NO-CAUSE",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

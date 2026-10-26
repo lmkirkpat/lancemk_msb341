@@ -1,0 +1,40 @@
+{
+  "id": "25-unreachable",
+  "title": "After Effects can't be reached: nothing claimed about the comp",
+  "covers": [
+    "SKILL step 9",
+    "US1-10"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {},
+  "turns": [
+    {
+      "project": "unreachable",
+      "say": "/null-parenting-mentor"
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "no_focus_set": true,
+    "say": [
+      {
+        "id": "says_cant_see",
+        "must": "can't see|cannot see|can’t see|not able to see|isn't responding|not answering|can't reach|isn't reachable",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_claims",
+        "never": "\\b(?:Tile|Caption|Stamp|Chip [ABC]|Row [ABC]|Plate|Hatch|Card|Label)\\b",
+        "cs": true
+      }
+    ]
+  },
+  "rubric": [
+    "R-UNREACHABLE"
+  ]
+}
