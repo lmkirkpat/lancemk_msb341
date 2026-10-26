@@ -1,0 +1,35 @@
+{
+  "id": "26-matte-eye-off",
+  "title": "A moving track matte with its eye off is taught like any layer, not called hidden",
+  "covers": [
+    "spec 004 cross-skill 3",
+    "KD-001",
+    "SC-011"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "matte",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "matte",
+      "say": "Let's do Wipe."
+    }
+  ],
+  "expect": {
+    "set_ease_max": 0,
+    "targets_include": [
+      "1/ADBE Transform Group/ADBE Position/1"
+    ],
+    "never_said_near": [
+      {
+        "layer": "Wipe",
+        "pattern": "\\bhidden\\b|\\bhid\\b|\\bhide\\b|\\bhiding\\b|turned (?:it |this )?off|switched (?:it |this )?off|\\binvisible\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-MATTE-NOT-HIDDEN"
+  ]
+}
