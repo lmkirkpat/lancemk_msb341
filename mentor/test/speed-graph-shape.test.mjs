@@ -1,6 +1,6 @@
 // Spec 008 FR-010 to FR-014: the pair check, the mistake each fail matches, shared keys, key
 // changes and demo credit. Pure: pairShape() and check() on small pairs and on the planted fixtures
-// (live captures when there, stand-ins until then; answer-key.json).
+// (live captures; answer-key.json).
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -10,12 +10,11 @@ import { FIXTURES, tempHome } from "./helpers.mjs";
 
 tempHome();
 const sg = await import("../lib/speed-graph.mjs");
-const { pairShape, check, MIN_GAP, DEFAULT_INFLUENCE, DEFAULT_TOL, REST_SHARE, REST_ABS, DEMO_OUT, DEMO_IN } = sg;
+const { pairShape, check, MIN_GAP, DEFAULT_INFLUENCE, DEFAULT_TOL, LONG_LANDING, REST_SHARE, REST_ABS, DEMO_OUT, DEMO_IN } = sg;
 
 const DIR = path.join(FIXTURES, "speed-graph");
 const load = (name) => {
-  const live = path.join(DIR, name);
-  return JSON.parse(fs.readFileSync(fs.existsSync(live) ? live : path.join(DIR, "stand-in", name), "utf8"));
+  return JSON.parse(fs.readFileSync(path.join(DIR, name), "utf8"));
 };
 const KEY = JSON.parse(fs.readFileSync(path.join(DIR, "answer-key.json"), "utf8"));
 const id = (k) => KEY.ids[k] || k;
@@ -119,13 +118,31 @@ for (const [name, want] of Object.entries(KEY.check)) {
   });
 }
 
-test("drag_sideways only when the landing influence stayed within 1 point of the baseline's", () => {
-  const cur = load("planted-dragged-up-large.json");
-  cur.layers[0].properties[0].keys[1].in_ease[0].influence = 40;
-  const r = check(baseline, cur, lessonFor());
-  const p1 = r.pairs.find((p) => p.id === id("P1"));
-  assert.equal(p1.mistake, "arrives_moving");
-  assert.equal(p1.drag_sideways, false);
+// FR-012, research R7 (decided 2026-10-26 on L-5): the "drag sideways" hint is for a landing that
+// arrives moving and isn't long yet (a fails, landing influence under LONG_LANDING), whatever the
+// baseline was. Title › Position 0.5–1.5 s moves 40 px in 1 s, so a landing speed of 10 fails d.
+function landing(out, inn, speed = 10) {
+  const cur = clone(baseline);
+  const keys = cur.layers[0].properties[0].keys;
+  keys[0].out_ease = [{ speed: 0, influence: out }];
+  keys[1].in_ease = [{ speed, influence: inn }];
+  return check(baseline, cur, lessonFor()).pairs.find((p) => p.id === id("P1"));
+}
+
+test("drag_sideways: a landing that arrives moving and isn't long yet, never compared with the baseline", () => {
+  assert.equal(LONG_LANDING, DEFAULT_INFLUENCE + MIN_GAP);
+  const easy = landing(33.33, 33.33);
+  assert.deepEqual([easy.failed, easy.mistake, easy.key_time, easy.drag_sideways], [["a", "b", "d"], "arrives_moving", 1.5, true], "Easy Ease dragged straight up");
+  const nudged = landing(33, 45);
+  assert.deepEqual([nudged.failed, nudged.drag_sideways], [["a", "d"], true], "moved off the default, still not long");
+  const gapOk = landing(10, 38);
+  assert.deepEqual([gapOk.failed, gapOk.drag_sideways], [["d"], false], "a passes, so dragging sideways isn't the fix");
+  const long = landing(60, 70);
+  assert.deepEqual([long.failed, long.mistake, long.drag_sideways], [["a", "d"], "arrives_moving", false], "the landing is already long");
+  const unread = clone(baseline);
+  unread.layers[0].properties[0].keys[1].in_ease = [{ speed: 10 }];
+  const u = check(baseline, unread, lessonFor()).pairs.find((p) => p.id === id("P1"));
+  assert.equal(u.drag_sideways, false, "an influence that can't be read never gets the hint");
 });
 
 test("back to default only once a check has seen the pair shaped; seen_shaped is returned", () => {
@@ -228,7 +245,7 @@ test("US3: a focus pair turned half eased or linear fails c, naming the linear s
 
 test("another comp isn't graded; the baseline is never changed", () => {
   const before = JSON.stringify(baseline);
-  const other = load("practice2-before.json");
+  const other = JSON.parse(fs.readFileSync(path.join(FIXTURES, "practice2-before.json"), "utf8"));
   const r = check(baseline, other, lessonFor());
   assert.equal(r.comp_matches, false);
   assert.equal(r.lesson_comp, "Mentor Practice");

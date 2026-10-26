@@ -1,5 +1,5 @@
 {
-  "about": "Spec 008's answer key, written by hand from FR-003 to FR-016 and research R2 to R7 (not from the code's output). Keyed by fixture file name without the folder, so the same key serves a stand-in and its live capture (research R8). 'analysis' is what speed_graph_snapshot's analyzer gives with no options; 'check' is what speed_graph_check gives against the baseline with the baseline's US1 targets, after any 'demo' and with any 'seen_shaped'. A target not listed under a check's 'pairs' is 'untouched'. Fastest parts by research R2 (peaks: Easy Ease 0.5, 15/80 0.13, demo 0.13, 20/85 0.16, 90/95 0.48, dragged up a little 0.52, Position dragged up a lot 1.0, Scale dragged up a lot 0.6).",
+  "about": "Spec 008's answer key, written by hand from FR-003 to FR-016 and research R2 to R7 (not from the code's output). Keyed by fixture file name; every file is a live capture from the 2026-10-26 sitting (specs/008-speed-graph/live-sitting-2026-10-26.md), and the stand-ins are gone. Changed on T031 where the live capture differs from what the stand-ins assumed and is what After Effects plays; each change says so in its entry's note. 'analysis' is what speed_graph_snapshot's analyzer gives with no options; 'check' is what speed_graph_check gives against the baseline with the baseline's US1 targets, after any 'demo' and with any 'seen_shaped'. A target not listed under a check's 'pairs' is 'untouched'. Fastest parts by research R2 on the live values (peaks: Easy Ease 0.5, 15/80 0.13, demo 0.13, the learner's own 18.49/83.63 0.15, 90/95 0.48, Position dragged up a little 0.52, Scale dragged up a little 0.56, Position dragged up a lot 0.65 (within 0.05 of the two-thirds line, so middle and last), Scale dragged up a lot 0.60, a hold landing read at its stored 33.333/16.667 0.66). Times are as AE stores them: Title Position's last key is at 4.367 s, not 4.37.",
   "ids": {
     "P1": "1/ADBE Transform Group/ADBE Position/1",
     "P2": "1/ADBE Transform Group/ADBE Position/2",
@@ -69,26 +69,34 @@
       "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b"], "mistake": "back_to_default", "parts": ["middle"] } }
     },
     "planted-dragged-up-small.json": {
+      "note": "T031, live (L-5): a hand drag straight up also moves the influence (Position 1.5 s in 32.115, Scale 26.963), so b passes and P1 and S fail a and d only; drag_sideways stays true under FR-012's rule as decided 2026-10-26 (a fails and the landing is under 53.33). The capture also has Position's 3 s and 4.367 s landings at speed 2.91 (influence 32.521 and 32.442, within 1 point of 33.33, so b fails too): the drag moved every selected key's handle, so P2 and P3 arrive moving as well.",
       "passed": false,
       "pairs": {
-        "P1": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] },
-        "S": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] }
+        "P1": { "result": "not_passed", "failed": ["a", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] },
+        "P2": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 3, "drag_sideways": true, "parts": ["middle"] },
+        "P3": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 4.367, "drag_sideways": true, "parts": ["middle"] },
+        "S": { "result": "not_passed", "failed": ["a", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] }
       }
     },
     "planted-dragged-up-large.json": {
+      "note": "T031, live (L-5): dragged further from the small drag, so the 1.5 s landings keep the small drag's influence (b passes, a and d fail, drag_sideways true under FR-012 as decided 2026-10-26), and P2 and P3 keep its speed 2.91. P1's fastest part was 'last' (research R2's 1.0 peak on the stand-in); live, its speed 36.336 peaks at 0.65, by the two-thirds line, so middle and last, and the builder saw middle third by eye.",
       "passed": false,
       "pairs": {
-        "P1": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["last"] },
-        "S": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] }
+        "P1": { "result": "not_passed", "failed": ["a", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle", "last"] },
+        "P2": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 3, "drag_sideways": true, "parts": ["middle"] },
+        "P3": { "result": "not_passed", "failed": ["a", "b", "d"], "mistake": "arrives_moving", "key_time": 4.367, "drag_sideways": true, "parts": ["middle"] },
+        "S": { "result": "not_passed", "failed": ["a", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle"] }
       }
     },
     "planted-one-scale-dim.json": {
+      "note": "T031, live (L-2, Lock Dimensions off): Title Position wasn't reset between the hand captures, so its 1.5 s landing still has the large drag (speed 36.336, influence 32.115) and P1 grades as in planted-dragged-up-large.json. This capture's subject is S.",
       "passed": false,
-      "pairs": { "S": { "result": "not_passed", "failed": ["a", "b"], "mistake": "not_shaped", "dimension": "height", "parts": ["first"] } }
+      "pairs": { "P1": { "result": "not_passed", "failed": ["a", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle", "last"] }, "S": { "result": "not_passed", "failed": ["a", "b"], "mistake": "not_shaped", "dimension": "height", "parts": ["first"] } }
     },
     "planted-hold-in.json": {
+      "note": "T031, live (L-7): AE stores influence 16.667 on the hold side, so FR-010b (both facing sides within 1 point of 33.33) doesn't fail and the pair fails a and c; the mistake is still the hold side, since c comes first. Fastest is R2 on the stored influences (0.66, middle and last); what AE plays is a still title that jumps at 1.5 s, which R2 doesn't model (raised for the spec writer).",
       "passed": false,
-      "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b", "c"], "mistake": "no_handle", "key_time": 1.5, "parts": ["middle"] } }
+      "pairs": { "P1": { "result": "not_passed", "failed": ["a", "c"], "mistake": "no_handle", "key_time": 1.5, "parts": ["middle", "last"] } }
     },
     "planted-shared-key.json": {
       "note": "Pair 1's landing is shaped; pair 2 shares the 1.5 s key and isn't credited, and its start key's in side is pair 1's landing, so it isn't 'mixed up' (FR-013, D-3).",
@@ -107,11 +115,12 @@
       "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b"], "mistake": "in_out_mixed", "parts": ["middle"] } }
     },
     "planted-easy-ease-again.json": {
+      "note": "T031, live (L-6, F9): Title Position wasn't reset between the hand captures, so its 1.5 s landing still has the large drag (speed 36.336, influence 32.115) and P1 grades as in planted-dragged-up-large.json. This capture's subject is S.",
       "file": "planted-easy-ease-again.json", "seen_shaped": ["S"], "passed": false,
-      "pairs": { "S": { "result": "not_passed", "failed": ["a", "b"], "mistake": "back_to_default", "parts": ["middle"] } }
+      "pairs": { "P1": { "result": "not_passed", "failed": ["a", "d"], "mistake": "arrives_moving", "key_time": 1.5, "drag_sideways": true, "parts": ["middle", "last"] }, "S": { "result": "not_passed", "failed": ["a", "b"], "mistake": "back_to_default", "parts": ["middle"] } }
     },
     "planted-expression-off.json": { "passed": false, "pairs": {}, "other_changes": ["Logo › Rotation expression was turned off"] },
-    "planted-key-added.json": { "passed": false, "pairs": { "S": { "result": "keys_changed" } }, "other_changes": ["Title › Scale now has 3 keys (was 2)"] },
+    "planted-key-added.json": { "note": "T031, live: AE's own added key at 1 s has speed 30 (the stand-in had 0); its pairs aren't graded either way (FR-014).", "passed": false, "pairs": { "S": { "result": "keys_changed" } }, "other_changes": ["Title › Scale now has 3 keys (was 2)"] },
     "after-demo.json": {
       "demo": "P1", "passed": false,
       "pairs": { "P1": { "result": "passed", "failed": [], "mistake": null, "credit": "demo", "parts": ["first"] } }
@@ -121,6 +130,7 @@
       "pairs": { "P1": { "result": "not_passed", "failed": ["a", "b"], "mistake": "not_shaped", "credit": "learner_after_undo", "parts": ["middle"] } }
     },
     "after-demo-redone.json": {
+      "note": "T031, live (L-3): the builder's own speed-graph drag after undoing the demo is 18.49/83.63, speeds 0 (the stand-in assumed 20/85). Still passes, fastest first (peak 0.15).",
       "demo": "P1", "passed": false,
       "pairs": { "P1": { "result": "passed", "failed": [], "mistake": null, "credit": "learner_redo", "parts": ["first"] } }
     }
