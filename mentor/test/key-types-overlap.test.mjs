@@ -1,6 +1,6 @@
 // Spec 009 T027 (FR-021, SC-003): one test per row of spec › Edge cases where concepts overlap, each
-// saying what candidates and focus see and what the check sees, on its fixture (stand-ins until the
-// live sitting; tasks T033 swaps them).
+// saying what candidates and focus see and what the check sees, on its fixture (the 2026-10-26 live
+// captures since T033; row 22 alone is synthetic, see fixtures/key-types/README.md).
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -33,11 +33,12 @@ test("row 1: expression over keys: not a candidate, refused as a focus, reported
 });
 
 test("row 2: an expression with no keys isn't read, and nothing claims there's no expression", () => {
-  const r = analyze(load("practice2-before.json"));
+  const r = analyze(load("practice2b.json"));
   const text = JSON.stringify(r);
   assert.doesNotMatch(text, /no_expression|without_expression|"none"/);
-  assert.deepEqual(r.left_out, [], "nothing is said about properties the read can't see");
-  assert.equal(focus("practice2-before.json", [{ layer: "Cut", property: "Scale" }]).refused[0].reason, "not_found");
+  assert.deepEqual(r.left_out.map((g) => g.reason), KEY.fixtures["practice2b.json"].left_out_reasons,
+    "nothing is said about properties the read can't see (the precomp Seal is left out for itself)");
+  assert.equal(focus("practice2b.json", [{ layer: "Cut", property: "Scale" }]).refused[0].reason, "not_found");
 });
 
 test("row 3: a single key isn't a pair, a candidate or a focus", () => {
@@ -60,7 +61,7 @@ test("row 5: some pairs held already: targets are the others only", () => {
 
 test("row 6: a mixed pair is not held: a candidate, never a pass, reported as wrong_side", () => {
   assert.ok(names(candidates(load("mixed-pair.json"))).includes("Blink › Opacity"));
-  const r = grade("practice2-before.json", "mixed-pair.json", BLINK);
+  const r = grade("practice2b.json", "mixed-pair.json", BLINK);
   assert.equal(verdicts(r)[B(1)], "wrong_side");
   assert.equal(r.passed, false);
 });
@@ -90,7 +91,7 @@ test("row 9: Opacity on a shape fill or text animator isn't a candidate, but is 
 test("row 10: a precomp layer's own keys can be candidates; inside isn't read", () => {
   const r = analyze(load("overlap-layers.json"));
   assert.ok(names(candidates(load("overlap-layers.json"))).includes("Icon › Opacity"));
-  assert.deepEqual(leftOut(r, "precomp").layers, ["Icon"]);
+  assert.deepEqual(leftOut(r, "precomp").layers, KEY.fixtures["overlap-layers.json"].left_out.precomp);
   assert.equal(focus("overlap-layers.json", [{ layer: "Icon", property: "Scale" }]).refused[0].reason, "precomp_inside");
   assert.equal(focus("practice-now.json", [{ layer: "Icon", property: "Opacity" }]).refused[0].reason, "precomp_inside");
 });
@@ -108,13 +109,15 @@ test("row 12: a hold at Opacity 0 is a normal layer: still enabled, graded as he
   assert.equal(snap.layers.find((l) => l.name === "Blink").enabled, true);
   const r = analyze(snap);
   assert.ok(!leftOut(r, "hidden").layers.includes("Blink"));
-  assert.equal(verdicts(grade("practice2-before.json", "hold-at-zero.json", BLINK))[B(2)], "held_by_learner");
+  assert.equal(verdicts(grade("practice2b.json", "hold-at-zero.json", BLINK))[B(2)], "held_by_learner");
 });
 
-test("row 13: a matte with its eye off is left out like any eye-off layer until wave B", () => {
+test("row 13: a track matte with its eye off is read by its visibility class (wave B, SR-3): a candidate, not left out as hidden", () => {
+  // AE turned Matte's eye off itself when it became Window's alpha matte; it still decides what shows.
   const r = analyze(load("overlap-layers.json"));
-  assert.ok(leftOut(r, "hidden").layers.includes("Matte"));
-  assert.ok(!names(candidates(load("overlap-layers.json"))).includes("Matte › Opacity"));
+  assert.equal(load("overlap-layers.json").layers.find((l) => l.name === "Matte").enabled, false);
+  assert.ok(!leftOut(r, "hidden").layers.includes("Matte"));
+  assert.ok(names(candidates(load("overlap-layers.json"))).includes("Matte › Opacity"));
   assert.equal(focus("overlap-layers.json", [{ layer: "Matte", property: "Opacity" }]).targets.length, 1);
 });
 
@@ -132,14 +135,14 @@ test("row 15: parenting: only the layer's own keys are read", () => {
   assert.deepEqual(names(r.candidates), ["Subtitle › Opacity", "Title › Opacity"]);
   const f = focus("practice-now.json", [{ layer: "Title", property: "Position" }]);
   assert.ok(f.targets.every((id) => id.startsWith("1/")), "Title's own pairs only");
-  assert.equal(f.targets.length, 2, "its 3 s to 4.37 s pair is a pause in the stand-in");
+  assert.equal(f.targets.length, 3, "live, Title's Position moves on every pair, no pause");
 });
 
 test("row 16: pause pairs are neither candidates nor targets; a held pause isn't an extra hold; a pause-only property is refused", () => {
-  assert.deepEqual(focus("practice2-before.json", [{ layer: "Pause", property: "Position" }]).targets, [
+  assert.deepEqual(focus("practice2b.json", [{ layer: "Pause", property: "Position" }]).targets, [
     `13/ADBE Transform Group/ADBE Position/1`, `13/ADBE Transform Group/ADBE Position/3`,
   ]);
-  const r = grade("practice2-before.json", "select-all-hold.json", BLINK, { should_move: [{ layer: "Cut", property: "Opacity" }] });
+  const r = grade("practice2b.json", "select-all-hold.json", BLINK, { should_move: [{ layer: "Cut", property: "Opacity" }] });
   assert.deepEqual(r.extra_holds.filter((h) => h.layer === "Pause").map((h) => h.time), [5, 6]);
   assert.equal(focus("overlap-layers.json", [{ layer: "Still", property: "Position" }]).refused[0].reason, "only_pauses");
 });
@@ -153,12 +156,12 @@ test("row 17: the practice blink's keys aren't in the first look; after the blin
 });
 
 test("row 18: a key moved mid-attempt: the affected pairs are removed or changed", () => {
-  const r = grade("practice2-before.json", "keys-moved.json", BLINK);
+  const r = grade("practice2b.json", "keys-moved.json", BLINK);
   assert.deepEqual(verdicts(r), { [B(1)]: "not_held", [B(2)]: "removed_or_changed", [B(3)]: "removed_or_changed" });
-  const added = structuredClone(load("practice2-before.json")); // in-test edit: one key added
+  const added = structuredClone(load("practice2b.json")); // in-test edit: one key added
   const keys = added.layers[0].properties[0].keys;
   keys.push({ ...keys[3], index: 5, time: 2.6 });
-  const baseline = load("practice2-before.json");
+  const baseline = load("practice2b.json");
   const lesson = { comp_id: baseline.comp.id, baseline, targets: [B(1), B(2), B(3)], skill_options: {}, demo: null };
   const g = check(baseline, added, lesson);
   assert.ok(g.pairs.every((p) => p.verdict === "removed_or_changed"));
@@ -171,13 +174,13 @@ test("row 19: select all, toggle hold: holds outside the focus are listed; edge 
   assert.deepEqual(r.extra_holds, c.extra_holds);
   assert.deepEqual(r.should_move_held, c.should_move_held);
   // Blink's last key held on its out side, and its first key on its in side, face no pair.
-  assert.equal(grade("practice2-before.json", "blink-all-held.json", BLINK).extra_holds.length, 0);
+  assert.equal(grade("practice2b.json", "blink-all-held.json", BLINK).extra_holds.length, 0);
 });
 
 test("row 20: the demo pair re-held is the demo's unless a check saw it undone", () => {
-  assert.equal(verdicts(grade("practice2-before.json", "after-demo-reheld.json", BLINK, { demo: B(1) }))[B(1)], "held_by_demo");
-  assert.equal(grade("practice2-before.json", "after-demo-undone.json", BLINK, { demo: B(1) }).demo_undone, true);
-  assert.equal(verdicts(grade("practice2-before.json", "after-demo-reheld.json", BLINK, { demo: B(1), demoUndone: true }))[B(1)], "held_by_learner");
+  assert.equal(verdicts(grade("practice2b.json", "after-demo-reheld.json", BLINK, { demo: B(1) }))[B(1)], "held_by_demo");
+  assert.equal(grade("practice2b.json", "after-demo-undone.json", BLINK, { demo: B(1) }).demo_undone, true);
+  assert.equal(verdicts(grade("practice2b.json", "after-demo-reheld.json", BLINK, { demo: B(1), demoUndone: true }))[B(1)], "held_by_learner");
 });
 
 test("row 21: a kept-linear mark on an Opacity 0 to 100 property: not a candidate, named as left out", () => {
@@ -190,11 +193,13 @@ test("row 21: a kept-linear mark on an Opacity 0 to 100 property: not a candidat
 });
 
 test("row 22: unknown values: not a candidate by value; a focus when named, graded on types", () => {
-  const r = analyze(load("overlap-layers.json"));
+  // SYNTHETIC (synthetic/unknown-values.json): a live read always has values, so this shape can't be captured.
+  const r = analyze(load("synthetic/unknown-values.json"));
   assert.deepEqual(names(leftOut(r, "unknown_values").properties), ["Old Values › Opacity"]);
-  const f = focus("overlap-layers.json", [{ layer: "Old Values", property: "Opacity" }]);
-  assert.deepEqual(f.targets, [`19/${OPACITY_PATH}/1`]);
-  const baseline = load("overlap-layers.json");
+  assert.ok(!names(r.candidates).includes("Old Values › Opacity"));
+  const f = focus("synthetic/unknown-values.json", [{ layer: "Old Values", property: "Opacity" }]);
+  assert.deepEqual(f.targets, [`41/${OPACITY_PATH}/1`]);
+  const baseline = load("synthetic/unknown-values.json");
   const now = structuredClone(baseline); // in-test edit: the learner's hold
   now.layers.find((l) => l.name === "Old Values").properties[0].keys[0].out_type = "hold";
   const g = check(baseline, now, { comp_id: baseline.comp.id, baseline, targets: f.targets, skill_options: {}, demo: null });
@@ -202,7 +207,7 @@ test("row 22: unknown values: not a candidate by value; a focus when named, grad
 });
 
 test("row 23: a check on another comp: comp_matches false", () => {
-  const r = grade("practice2-before.json", "practice-now.json", BLINK);
+  const r = grade("practice2b.json", "practice-now.json", BLINK);
   assert.equal(r.comp_matches, false);
   assert.equal(r.passed, false);
 });

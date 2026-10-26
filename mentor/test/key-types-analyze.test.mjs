@@ -29,7 +29,7 @@ test("candidates match the answer key on every fixture that lists them", () => {
 });
 
 test("Mentor Practice 2: Blink and Cut are candidates, Spinner isn't; no focus means no targets yet", () => {
-  const r = analyze(load("practice2-before.json"));
+  const r = analyze(load("practice2b.json"));
   assert.deepEqual(names(r.candidates), ["Blink › Opacity", "Cut › Opacity"]);
   assert.deepEqual(r.targets, []);
   assert.equal(r.demo_target, null);
@@ -51,7 +51,7 @@ test("Mentor Practice now (FR-008): Title and Subtitle asked about, the Cursor a
 });
 
 test("values within 0.5 of 0 and 100 qualify; 0.6 or 80 don't (H-2)", () => {
-  const base = load("practice2-before.json");
+  const base = load("practice2b.json");
   const withCut = (a, b) => {
     const s = structuredClone(base); // in-test edit of the values only
     const keys = s.layers.find((l) => l.name === "Cut").properties[0].keys;
@@ -72,10 +72,12 @@ test("a mixed pair counts as not held, so it's still a candidate (row 6)", () =>
   assert.ok(!names(candidates(load("blink-all-held.json"))).includes("Blink › Opacity"));
 });
 
-test("effect, fill and text-animator Opacity aren't candidates (row 9); hidden layers and nulls aren't either (rows 11, 14)", () => {
+test("effect, fill and text-animator Opacity aren't candidates (row 9); hidden layers and nulls aren't either (rows 11, 14), but a matte is (row 13)", () => {
   assert.deepEqual(names(candidates(load("nested-opacity.json"))), ["Blink › Opacity", "Cut › Opacity"]);
   const c = names(candidates(load("overlap-layers.json")));
-  for (const n of ["Ghost › Opacity", "Matte › Opacity", "Rig › Opacity", "Old Values › Opacity"]) assert.ok(!c.includes(n), n);
+  for (const n of ["Ghost › Opacity", "Rig › Opacity"]) assert.ok(!c.includes(n), n);
+  assert.ok(c.includes("Matte › Opacity"), "a track matte with its eye off still drives what shows (SR-3)");
+  assert.ok(!names(candidates(load("synthetic/unknown-values.json"))).includes("Old Values › Opacity"));
 });
 
 test("focus cases match the answer key: targets, demo target, refusals", () => {
@@ -93,7 +95,7 @@ test("focus cases match the answer key: targets, demo target, refusals", () => {
 });
 
 test("a named property gives all its non-held, non-pause pairs; the demo is the earliest on a visible, non-null layer", () => {
-  const snap = load("practice2-before.json");
+  const snap = load("practice2b.json");
   const r = analyze(snap, { skill_options: { focus: [{ layer: "Cut", property: "Opacity" }, { layer: "Blink", property: "Opacity" }] } });
   assert.deepEqual(r.targets, [`3/${OPACITY_PATH}/1`, B(1), B(2), B(3)]);
   assert.equal(r.demo_target, B(1), "earliest in time, not first named");
@@ -109,7 +111,7 @@ test("a held pair in a named property isn't a target; a named property that's al
 });
 
 test("names are matched by display name (any case) or by path", () => {
-  const snap = load("practice2-before.json");
+  const snap = load("practice2b.json");
   for (const property of ["Opacity", "opacity", OPACITY_PATH, "Transform › Opacity"]) {
     assert.deepEqual(analyze(snap, { skill_options: { focus: [{ layer: "Blink", property }] } }).targets, [B(1), B(2), B(3)], property);
   }
@@ -128,8 +130,8 @@ test("a property with an applying kept-linear mark isn't a candidate, and is nam
   const snap = load("overlap-layers.json");
   const key = KEY["overlap-layers.json"].with_fader_kept_linear;
   const r = analyze(snap, { kept_linear: [mark(snap, "Fader", OPACITY_PATH)] });
-  assert.deepEqual(names(r.candidates), key.candidates);
-  assert.equal(r.more_candidates, 0);
+  assert.deepEqual(names(r.candidates), key.candidates.slice(0, MAX_NAMED));
+  assert.equal(r.more_candidates, key.more_candidates);
   assert.deepEqual(names(leftOutMap(r).kept_linear.properties), key.left_out.kept_linear);
   // A lapsed mark (other key times) changes nothing.
   const lapsed = { ...mark(snap, "Fader", OPACITY_PATH), key_times: [0, 1] };
@@ -141,7 +143,9 @@ test("left out on the overlap layers: hidden, precomp, unknown values (rows 10, 
   const key = KEY["overlap-layers.json"].left_out;
   assert.deepEqual(lo.hidden.layers, key.hidden);
   assert.deepEqual(lo.precomp.layers, key.precomp);
-  assert.deepEqual(names(lo.unknown_values.properties), key.unknown_values);
+  assert.equal(lo.unknown_values, undefined, "every live read has values");
+  const synthetic = leftOutMap(analyze(load("synthetic/unknown-values.json")));
+  assert.deepEqual(names(synthetic.unknown_values.properties), KEY["synthetic/unknown-values.json"].left_out.unknown_values);
 });
 
 test("no demo with one target, on a hidden layer or on a null", () => {
@@ -151,7 +155,7 @@ test("no demo with one target, on a hidden layer or on a null", () => {
   assert.equal(one.no_demo_reason, "single_target");
   // Ghost (hidden) starts at 6 s and Rig (a null) at 6 s, both before Fader at 7 s: the demo still goes to Fader.
   const mixed = analyze(snap, { skill_options: { focus: [{ layer: "Ghost", property: "Opacity" }, { layer: "Rig", property: "Opacity" }, { layer: "Fader", property: "Opacity" }] } });
-  assert.equal(mixed.demo_target, `20/${OPACITY_PATH}/1`);
+  assert.equal(mixed.demo_target, `46/${OPACITY_PATH}/1`);
   const none = analyze(snap, { skill_options: { focus: [{ layer: "Ghost", property: "Opacity" }, { layer: "Rig", property: "Opacity" }] } });
   assert.equal(none.demo_target, null);
   assert.equal(none.no_demo_reason, "hidden_or_null");
@@ -164,8 +168,8 @@ test("no candidate and nothing named: no_candidate", () => {
 });
 
 test("exclude drops past targets from candidates and refuses them as a focus (review)", () => {
-  const snap = load("practice2-before.json");
-  const key = KEY["practice2-before.json"].review_exclude;
+  const snap = load("practice2b.json");
+  const key = KEY["practice2b.json"].review_exclude;
   for (const k of Object.values(key)) assert.deepEqual(names(analyze(snap, { exclude: k.exclude }).candidates), k.candidates);
   const r = analyze(snap, { exclude: key.blink.exclude, skill_options: { focus: [{ layer: "Blink", property: "Opacity" }] } });
   assert.deepEqual(r.targets, []);
@@ -184,12 +188,12 @@ test("the finder's count equals the candidate properties not in exclude, on ever
       assert.equal(found.count > 0, analyze(snap, { exclude }).candidates.length > 0, file);
     }
   }
-  assert.deepEqual(finder(load("practice2-before.json")), { count: 2, layers: ["Blink", "Cut"] });
+  assert.deepEqual(finder(load("practice2b.json")), { count: 2, layers: ["Blink", "Cut"] });
 });
 
 test("the finder accepts kept_linear marks and skips those properties", () => {
   const snap = load("overlap-layers.json");
   const f = FINDERS["keyframes.types"];
-  assert.equal(f.focus(snap).count, 4);
-  assert.equal(f.focus(snap, { kept_linear: [mark(snap, "Fader", OPACITY_PATH)] }).count, 3);
+  assert.equal(f.focus(snap).count, 5);
+  assert.equal(f.focus(snap, { kept_linear: [mark(snap, "Fader", OPACITY_PATH)] }).count, 4);
 });
