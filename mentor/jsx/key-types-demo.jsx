@@ -1,5 +1,6 @@
 // Spec 009 FR-010, skill 1's one demonstration: hold on the demo pair's first key, exactly as Animation >
-// Toggle Hold Keyframe writes it at 26.5 (live check L-2 decides the sides). ES3 function body with
+// Toggle Hold Keyframe writes it at 26.5 (live check L-2, 2026-10-26: the outgoing side only, and AE
+// resets that side's influence to 16.667 for the hand toggle and the demo alike). ES3 function body with
 // mentor/jsx/lib/*.jsx prepended. ARGS = { comp_id, layer_index, property_path, key_index }, where the
 // pair runs from key key_index to key_index + 1. Runs inside one undo group (undo: true).
 

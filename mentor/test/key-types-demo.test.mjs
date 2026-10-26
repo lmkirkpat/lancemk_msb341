@@ -1,5 +1,6 @@
 // Spec 009 T007: the demo snippet (mentor/jsx/key-types-demo.jsx) against a mock AE in node:vm, and its
-// fixture twin. Pins the logic before live checks L-2 and L-3; doesn't replace them.
+// fixture twin. Pins the logic; live checks L-2 and L-3 (2026-10-26) confirmed HOLD_SIDES "out" and that
+// the demo writes what the hand toggle writes (after-demo.json and after-demo-reheld.json read the same).
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -85,7 +86,7 @@ test("the snippet refuses another comp and a key pair that doesn't exist, changi
 });
 
 test("the twin's apply sets only the out side (HOLD_SIDES out) and keeps values, eases and other keys", () => {
-  const snap = load("practice2-before.json");
+  const snap = load("practice2b.json");
   const before = structuredClone(snap);
   twin.apply(snap, { layer_index: 1, property_path: OPACITY_PATH, key_index: 1 });
   const keys = snap.layers[0].properties[0].keys;
@@ -96,7 +97,7 @@ test("the twin's apply sets only the out side (HOLD_SIDES out) and keeps values,
 });
 
 test("the twin's run returns the demo result and saves the edit", () => {
-  const snap = load("practice2-before.json");
+  const snap = load("practice2b.json");
   const saved = [];
   const r = twin.run({ comp_id: snap.comp.id, layer_index: 1, property_path: OPACITY_PATH, key_index: 1 }, { snapshot: snap, saveEdit: (e) => saved.push(e) });
   assert.deepEqual(r, { layer: "Blink", property: "Opacity", display_path: "Transform › Opacity", from_time: 1, to_time: 1.4, in_type: "bezier", out_type: "hold" });
