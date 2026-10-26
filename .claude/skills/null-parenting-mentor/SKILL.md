@@ -278,8 +278,8 @@ jumps, and never the word "null"** until it passes. "I already know it" runs the
 1. Call `null_parent_snapshot` with `mode: "review"`. It leaves out what earlier lessons on this
    comp used and anything already parented.
 2. If `proposal` is null (that includes a comp where many layers crowd together), say there's
-   nothing new to review on this comp, and record nothing. A review offers its one group only:
-   never a second one, even after a "no" (ask them to name 2 to 4 layers instead).
+   nothing new to review on this comp, and record nothing. A review never offers a second group.
+   If they'd rather use other layers, ask which 2 to 4.
 3. Call `null_parent_snapshot` again with `mode: "review"` and the `focus`. Then name the layers and
    the task: "Row A, Row B and Row C should move as one. Set that up so you can move them together,
    then give them one move." Then: "Will the group turn or scale, and from where?"
