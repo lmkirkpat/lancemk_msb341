@@ -95,20 +95,21 @@ test("live practice2b.json: every layer is present: the 13 built before at their
   assert.deepEqual(layerInfo(p2b).layers.map((l) => [l.index, l.name]), want);
 });
 
-// Shape and text layers: the build script declares collapse false, but AE reads
-// collapseTransformation true for every shape and text layer (Mentor Practice 2's own shape layers
-// read true too). A finding for the cockpit, not a value to change here; see the todo below.
-const COLLAPSE_FINDING = (d) => ["shape", "text"].includes(d.expect.kind) && d.expect.collapse === false;
-
-test("live practice2b.json: every declared field and the rect at 0 s is as the build script declared (collapse on shape and text layers aside)", () => {
+test("live practice2b.json: every declared field and the rect at 0 s is as the build script declared", () => {
   for (const d of p2bKey.layers) {
     const [entry] = byName(p2b, d.name);
     for (const [field, want] of Object.entries(d.expect)) {
-      if (FIELD_SKIP.has(field) || (field === "collapse" && COLLAPSE_FINDING(d))) continue;
+      if (FIELD_SKIP.has(field)) continue;
       assert.deepEqual(declaredView(p2b, entry, field), want, `${d.name}.${field}`);
     }
     closeRect(entry.samples.find((x) => x.time === 0).rect, d.rect_at_0, `${d.name} at 0 s`);
   }
 });
 
-test.todo(`practice2b.json: collapse on shape and text layers (${p2bKey.layers.filter(COLLAPSE_FINDING).map((d) => d.name).join(", ")}): declared false by build-practice-comp-2b.jsx, read true from AE; the key or the script's default needs the cockpit's call`);
+// AE reads collapseTransformation true on every shape and text layer; the build script declared
+// false until 2026-10-26, so the key was corrected from the live read.
+test("live practice2b.json: shape and text layers read collapse on, as the key declares", () => {
+  const vector = p2bKey.layers.filter((d) => ["shape", "text"].includes(d.expect.kind));
+  assert.ok(vector.length > 0);
+  for (const d of vector) assert.equal(d.expect.collapse, true, `${d.name} in the key`);
+});
