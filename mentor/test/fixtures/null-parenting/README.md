@@ -34,6 +34,7 @@ rectangles are estimates. The group's P2 times are **0, 4.167, 4.367, 4.667, 5.1
 |---|---|---|---|
 | `practice2b.json` | spec 004's `layer-info/practice2b.json` (T135), read in place | spec 004 T135 | none |
 | `practice2b-with-wave-a.json` | the same comp with its 13 wave A layers (the live comp has them) | L-6 | none |
+| `practice2b-with-wave-a-parented.json` | that comp after the lesson: Tile, Caption and Stamp under Group Null (L6-1's review) | T343 | group |
 | `practice2b-parented.json` | spec 004's `layer-info/practice2b-parented.json` (T135 a), read in place | spec 004 T135 | group |
 | `null-center.json` | `null-center.json`; also `renumbered-after.json` (L-5) | § 3, L-5 | group |
 | `null-top-left.json` | `null-top-left.json` | § 3 | group |
@@ -70,6 +71,7 @@ keys at 2 and 3 s) and Label (100 × 40, static), touching.
 | `row40-two-nulls.json` | 40 | two new layers called Null 1 |
 | `cap70-before.json`, `cap70-parented.json`, `cap70-parented-no-times.json` | R4 | 69 child key times under one null, with and without the P2 times passed |
 | `s1-before.json`, `s1-placed.json`, `s1-parented.json`, `s1-jumped.json` | S-1 | a null at Scale 150, Rotation 30 (until L-2's `parented-rot.json`) |
+| `crowd-only.json` | amendment 1 (T352) | six layers chained within 2% into one crowd, nothing else proposable |
 | `zero-scale-null.json` | Q2 | the null at Scale 0 × 100 (the demo's `null_scale_zero`) |
 
 ## Records (`records/`)

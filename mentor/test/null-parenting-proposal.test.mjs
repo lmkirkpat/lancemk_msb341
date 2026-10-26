@@ -121,27 +121,85 @@ test("the 2% rule: a gap of exactly 2% of the comp's width links and just over d
   assert.deepEqual(proposal(comp([{ name: "A", x: 0, y: 0 }, { name: "B", x: 100 + 20, y: 0 }], { width: 1000 })).proposal, ["A", "B"], "2% of 1000 is 20");
 });
 
-test("the largest group wins; a tie goes to the highest top layer; past 4 the first 4 in stack order that still link", () => {
-  const two = [{ name: "P", x: 0, y: 0 }, { name: "Q", x: 100, y: 0 }];
-  const three = [{ name: "X", x: 1000, y: 0 }, { name: "Y", x: 1100, y: 0 }, { name: "Z", x: 1200, y: 0 }];
-  assert.deepEqual(proposal(comp([...two, ...three])).proposal, ["X", "Y", "Z"]);
-  const twoMore = [{ name: "M", x: 1000, y: 500 }, { name: "N", x: 1100, y: 500 }];
-  assert.deepEqual(proposal(comp([...twoMore, ...two])).proposal, ["M", "N"], "tie: the group with the higher top layer");
-  // A chain of 6 in stack order E, A, B, C, D, F: E links only to F, which is last.
+// ---- Groups and crowds (FR-005 as amended, research R2, TD § 15)
+
+const row = (names, { y = 0, kinds = {} } = {}) => names.map((name, i) => ({ name, x: i * 100, y, kind: kinds[name] }));
+
+test("a cluster of 2 to 4 is a group; 5 or more is a crowd, never proposed or trimmed", () => {
+  // The 6-layer chain E, A, B, C, D, F: one cluster of 6.
   const chain = comp([
     { name: "E", x: 0, y: 900 }, { name: "A", x: 0, y: 0 }, { name: "B", x: 100, y: 0 }, { name: "C", x: 200, y: 0 }, { name: "D", x: 300, y: 0 },
     { name: "F", x: 0, y: 100, h: 800 },
   ]);
-  // E first; then the first in stack order that links to what's kept: F (to E), A (to F), B (to A).
-  assert.deepEqual(proposal(chain).proposal, ["E", "A", "B", "F"]);
+  const p = proposal(chain);
+  assert.deepEqual([p.proposal, p.next_proposal, p.reason, p.crowd_size], [null, null, "crowded", 6]);
+  assert.deepEqual(proposal(comp(row(["A", "B", "C", "D"]))).proposal, ["A", "B", "C", "D"], "exactly 4 is a group");
+  assert.equal(proposal(comp(row(["A", "B", "C", "D", "E"]))).reason, "crowded", "5 is a crowd");
 });
 
-test("on practice2b.json the proposal is Tile, Caption and Stamp (L-6's expectation)", () => {
-  assert.deepEqual(proposal(load("practice2b.json")).proposal, KEY.fixtures["practice2b.json"].proposal);
+test("a matte pair counts as 2 and is never split; a lone pair is a group of 2; a lone layer is neither", () => {
+  const pairWith = (n) => {
+    const s = comp([...row(["Matte", "Fill"]), ...row(Array.from({ length: n }, (_, i) => `L${i}`), { y: 100 })]);
+    s.layer_info[0].is_matte = true;
+    s.layer_info[0].enabled = false;
+    s.layer_info[1].matte = { layer: 1, type: "alpha" };
+    return s;
+  };
+  assert.deepEqual(proposal(pairWith(0)).proposal, ["Matte", "Fill"], "a lone matte pair is a group of 2");
+  assert.equal(proposal(pairWith(2)).proposal.length, 4, "a pair and 2 more is 4");
+  assert.equal(proposal(pairWith(3)).reason, "crowded", "a pair linked to 3 layers is 5: a crowd");
+  assert.deepEqual(proposal(comp([{ name: "Solo", x: 0, y: 0 }])), { proposal: null, next_proposal: null, reason: "no_group", crowd_size: 0 });
 });
 
-test("L-6 on the comp as built, wave A's layers included", { todo: "FR-005's largest-group rule links Mentor Practice 2's wave A layers into a bigger group (Cut and Banner are 10 px apart); the layout (SR-3) or H-4 has to change, not this test" }, () => {
-  assert.deepEqual(proposal(load("practice2b-with-wave-a.json")).proposal, KEY.fixtures["practice2b-with-wave-a.json"].l6_expected);
+test("ranking: text with another kind first, then more layers, then the higher top layer", () => {
+  // (a) a 2-layer text-and-shape group beats a 4-layer all-shape group.
+  const a = comp([...row(["S1", "S2", "S3", "S4"], { kinds: { S1: "shape", S2: "shape", S3: "shape", S4: "shape" } }), ...row(["Word", "Box"], { y: 600, kinds: { Word: "text", Box: "shape" } })]);
+  assert.deepEqual(proposal(a).proposal, ["Word", "Box"]);
+  assert.deepEqual(proposal(a).next_proposal, ["S1", "S2", "S3", "S4"]);
+  // Only text layers isn't (a): size wins.
+  const t = comp([...row(["S1", "S2", "S3"], { kinds: { S1: "shape", S2: "shape", S3: "shape" } }), ...row(["T1", "T2"], { y: 600, kinds: { T1: "text", T2: "text" } })]);
+  assert.deepEqual(proposal(t).proposal, ["S1", "S2", "S3"]);
+  // (b) more layers, then (c) the higher top layer.
+  assert.deepEqual(proposal(comp([...row(["P", "Q"]), ...row(["X", "Y", "Z"], { y: 600 })])).proposal, ["X", "Y", "Z"]);
+  const c = comp([...row(["M", "N"]), ...row(["P", "Q"], { y: 600 })]);
+  assert.deepEqual([proposal(c).proposal, proposal(c).next_proposal], [["M", "N"], ["P", "Q"]]);
+});
+
+test("next_proposal is the second-ranked group, null with one group; nothing links is no_group", () => {
+  assert.equal(proposal(comp(row(["A", "B"]))).next_proposal, null);
+  assert.equal(proposal(comp([{ name: "A", x: 0, y: 0 }, { name: "B", x: 900, y: 900 }])).reason, "no_group");
+});
+
+test("on practice2b.json the proposal is Tile, Caption and Stamp, then Row A to C", () => {
+  const p = proposal(load("practice2b.json"));
+  assert.deepEqual(p.proposal, KEY.fixtures["practice2b.json"].proposal);
+  assert.deepEqual(p.next_proposal, KEY.fixtures["practice2b.json"].next_proposal);
+});
+
+test("L-6 on the comp as built, wave A's layers included: Tile, Caption and Stamp, then Chip A to C, and the 13-layer crowd named nowhere", () => {
+  const want = KEY.fixtures["practice2b-with-wave-a.json"];
+  const s = load("practice2b-with-wave-a.json");
+  const p = proposal(s);
+  assert.deepEqual(p.proposal, want.proposal);
+  assert.deepEqual(p.next_proposal, want.next_proposal);
+  assert.equal(p.crowd_size, want.crowd);
+  const a = analyze(s);
+  const named = new Set([...(a.proposal || []), ...(a.next_proposal || []), ...a.left_out.map((l) => l.layer), ...a.notes.map((n) => n.layer)]);
+  for (const n of want.crowd_layers) assert.ok(!named.has(n), `${n} is in the crowd`);
+});
+
+test("crowd-only.json: no proposal (crowded), left_out without the crowd, and a named focus of 3 still works", () => {
+  const s = load("synthetic/crowd-only.json");
+  const a = analyze(s);
+  assert.deepEqual([a.proposal, a.next_proposal, a.no_proposal_reason], [null, null, "crowded"]);
+  assert.deepEqual(a.left_out.map((l) => l.layer), ["Backdrop"]);
+  const f = analyze(s, { skill_options: { focus: ["Brick 2", "Brick 3", "Brick 4"] } });
+  assert.deepEqual(f.focus, ["Brick 2", "Brick 3", "Brick 4"]);
+});
+
+test("candidates carry kind from layer_info", () => {
+  const s = load("practice2b.json");
+  for (const c of candidates(s)) assert.equal(c.kind, s.layer_info.find((l) => l.index === c.index).kind, c.layer);
 });
 
 test("without comp.width: no_comp_size and no proposal, while a named focus still works (SR-4)", () => {
@@ -207,16 +265,27 @@ test("review: past targets and already-parented layers are dropped before propos
   assert.equal(focusProblems(s, ["Tile", "Row A"], { exclude }).refused[0].reason, "past_target");
 });
 
-test("the finder agrees with the proposal on every fixture, with the same exclude", () => {
-  const files = ["practice2b.json", "practice2b-with-wave-a.json", "null-center.json", "practice2b-parented.json", "review-rows-visible.json", "synthetic/before.json", "synthetic/row36-truncated.json"];
+test("the finder: a crowd with an empty exclude counts its size with no names; any exclude makes it 0 (L6-2)", () => {
+  const s = load("synthetic/crowd-only.json");
+  assert.deepEqual(finder(s), { count: 6, layers: [] });
+  assert.equal(finder(s, { exclude: [{ layer: "Brick 1", property: "Parent" }] }).count, 0);
+  assert.deepEqual(finder(load("practice2b.json")), { count: 3, layers: ["Tile", "Caption", "Stamp"] });
+});
+
+test("the finder agrees with the proposal on every fixture and exclude, except a crowd with an empty exclude", () => {
+  const files = ["practice2b.json", "practice2b-with-wave-a.json", "null-center.json", "practice2b-parented.json", "review-rows-visible.json", "synthetic/before.json", "synthetic/row36-truncated.json", "synthetic/crowd-only.json"];
   const excludes = [[], ["Tile", "Caption", "Stamp"].map((layer) => ({ layer, property: "Parent" }))];
   for (const f of files) {
     for (const exclude of excludes) {
       const s = load(f);
-      const p = proposal(s, { exclude }).proposal;
+      const p = proposal(s, { exclude });
       const fd = finder(s, { exclude });
-      assert.equal(fd.count, p ? p.length : 0, f);
-      assert.deepEqual(fd.layers, p || [], f);
+      if (!p.proposal && p.reason === "crowded" && !exclude.length) {
+        assert.deepEqual(fd, { count: p.crowd_size, layers: [] }, f);
+        continue;
+      }
+      assert.equal(fd.count, p.proposal ? p.proposal.length : 0, f);
+      assert.deepEqual(fd.layers, p.proposal || [], f);
     }
   }
 });

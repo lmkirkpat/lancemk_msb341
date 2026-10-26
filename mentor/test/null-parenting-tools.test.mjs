@@ -419,3 +419,80 @@ test("every field, code and value SKILL.md names in backticks is in a tool's rep
   const missing = [...new Set(named)].filter((t) => !seen.has(t) && !outside.has(t) && !t.startsWith("mcp__"));
   assert.deepEqual(missing, [], `SKILL.md names fields the tools never return: ${missing.join(", ")}`);
 });
+
+// ---- Amendment 1: groups, crowds and the second group (T354)
+
+const CROWD = ["Blink", "Spinner", "Cut", "Badge", "Peg", "Banner", "Card", "Dot 1", "Dot 2", "Dot 3", "Door", "Plaque", "Sign"];
+
+test("the snapshot reply carries next_proposal and no_proposal_reason and names no crowd layer", async () => {
+  project("practice2b-with-wave-a.json");
+  const r = await call("null_parent_snapshot");
+  assert.deepEqual(r.proposal, GROUP);
+  assert.deepEqual(r.next_proposal, ["Chip A", "Chip B", "Chip C"]);
+  assert.equal(r.no_proposal_reason, null);
+  const text = JSON.stringify(r);
+  for (const n of CROWD) assert.ok(!text.includes(`"${n}"`), `${n} isn't named`);
+});
+
+test("the second group after a no: a focus from next_proposal starts a fresh lesson at that read", async () => {
+  project("practice2b-with-wave-a.json");
+  const first = await call("null_parent_snapshot");
+  const r = await call("null_parent_snapshot", { skill_options: { focus: first.next_proposal } });
+  assert.equal(r.focus_set, true);
+  assert.equal(r.lesson, "new");
+  assert.deepEqual(r.focus, ["Chip A", "Chip B", "Chip C"]);
+  assert.equal(lesson().baseline.comp.time, 0);
+});
+
+test("crowd only: no proposal, crowded, and a review there has no_new_target", async () => {
+  project("synthetic/crowd-only.json");
+  const r = await call("null_parent_snapshot");
+  assert.deepEqual([r.proposal, r.next_proposal, r.no_proposal_reason], [null, null, "crowded"]);
+  fs.rmSync(SESSION);
+  const rv = await call("null_parent_snapshot", { mode: "review" });
+  assert.equal(rv.no_demo_reason, "no_new_target");
+});
+
+test("L6-1: on the wave A comp after the lesson, the review proposes Chip A to C, with no next_proposal", async () => {
+  useRecord("learned-group.json");
+  project("practice2b-with-wave-a-parented.json");
+  const r = await call("null_parent_snapshot", { mode: "review" });
+  assert.deepEqual(r.proposal, ["Chip A", "Chip B", "Chip C"]);
+  assert.equal(r.next_proposal, null);
+  assert.equal(r.no_demo_reason, "awaiting_focus");
+});
+
+// ---- T355: no_null with a name, not_parented, and the demo's couldnt_check
+
+test("no_null with a named null that isn't there, and not_parented when one layer is left out", async () => {
+  await startGroup();
+  project("null-center.json");
+  const r = await call("null_parent_check", { null: "Group Null" });
+  assert.ok(r.hints.some((h) => h.code === "no_null" && h.named === "Group Null"));
+  fs.rmSync(SESSION);
+  await startGroup();
+  await placeNull({ region: "slides_only" });
+  project(variant("practice2b-parented.json", (s) => {
+    const cap = s.layer_info.find((l) => l.name === "Caption");
+    cap.parent = null;
+    const orig = load("practice2b.json").layer_info.find((l) => l.name === "Caption");
+    cap.samples = orig.samples;
+    cap.transform = orig.transform;
+  }));
+  const r2 = await call("null_parent_check");
+  assert.ok(r2.hints.some((h) => h.code === "not_parented" && h.layer === "Caption"));
+});
+
+test("the demo's second read that can't place the target: moved_px null, jumped false, couldnt_check its times", async () => {
+  await startGroup();
+  await placeNull();
+  // The current read lacks Tile's samples at its P2 times (the twin still parents it).
+  project(variant("null-center.json", (s) => {
+    const tile = s.layer_info.find((l) => l.name === "Tile");
+    tile.samples = tile.samples.filter((x) => x.time === 0 || x.time === s.comp.time);
+  }));
+  const r = await call("null_parent_demo", { target: "parent/Tile" });
+  assert.equal(r.moved_px, null);
+  assert.equal(r.jumped, false);
+  assert.deepEqual(r.couldnt_check, [4.167, 4.367, 5.167, 5.367]);
+});

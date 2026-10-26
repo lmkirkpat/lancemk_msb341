@@ -279,6 +279,7 @@ export function buildStandIns() {
   const base = waveB();
   writeTo("stand-in", "practice2b.json", snapshot(base, { comp: COMP2, note: "stand-in for spec 004's mentor/test/fixtures/layer-info/practice2b.json (T135), Mentor Practice 2's wave B layers only, at 0 s" }));
   writeTo("stand-in", "practice2b-with-wave-a.json", snapshot([...waveA(), ...base], { comp: COMP2, note: "stand-in for practice2b.json with Mentor Practice 2's 13 wave A layers too, as the live comp has them (L-6)" }));
+  writeTo("stand-in", "practice2b-with-wave-a-parented.json", snapshot([...waveA(), ...withNull(nullAt("Group Null", CENTER), base, GROUP)], { comp: COMP2, callerTimes: GROUP_TIMES, note: "stand-in: the wave A comp after the lesson, Tile, Caption and Stamp parented to Group Null (L6-1's review)" }));
 
   const n1 = nullAt("Null 1", CENTER);
   standIn("null-center.json", withNull(n1, base), { why: "a null added at the group's middle, nothing parented; also renumbered-after.json (L-5)" });
@@ -389,6 +390,11 @@ export function buildSynthetics() {
   syn("s1-placed.json", withNull(rot, centred), "S-1: a null at Scale 150, Rotation 30 placed, nothing parented");
   syn("s1-parented.json", withNull(rot, centred, ["Card", "Label"]), "S-1: parented with no jump (raw Position, Scale and Rotation rewritten)");
   syn("s1-jumped.json", withNull(rot, centred, ["Card", "Label"], { jumps: { Card: (c) => { c.rotation += 30; } } }), "S-1: Card's Rotation not rewritten, so its corners turn 30° about its anchor");
+  // Amendment 1 (T352): six proposable layers chained within 2%, nothing else proposable.
+  syn("crowd-only.json", [
+    ...Array.from({ length: 6 }, (_, i) => layer(`Brick ${i + 1}`, i % 2 ? "text" : "shape", { size: [100, 60], position: [300 + i * 110, 500] })),
+    layer("Backdrop", "solid", { size: [1920, 1080], position: [960, 540] }),
+  ], "amendment 1, T352: Brick 1 to 6 chain within 2% (10 px gaps) into one crowd of 6; Backdrop is full frame");
   syn("zero-scale-null.json", withNull(nullAt("Null 1", at, { scale: [0, 100] }), base), "the null at Scale 0 × 100 (the demo's null_scale_zero)");
 }
 
