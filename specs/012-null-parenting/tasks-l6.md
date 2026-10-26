@@ -25,7 +25,7 @@ task here.
 
 ## Phase A: tests first
 
-- [ ] T350 In `mentor/test/null-parenting-proposal.test.mjs`, replace the test "the largest group
+- [x] T350 In `mentor/test/null-parenting-proposal.test.mjs`, replace the test "the largest group
   wins; a tie goes to the highest top layer; past 4 the first 4 in stack order that still link"
   with the FR-005 rule, on synthetic comps (`comp()` helper, kinds set per layer):
   - the 6-layer chain (E, A, B, C, D, F) is a **crowd**: `proposal` and `next_proposal` `null`,
@@ -39,25 +39,25 @@ task here.
     layers; (c) then the higher top layer;
   - `next_proposal` is the second-ranked group, `null` with one group;
   - nothing links: `no_group`; the 2% boundary test stays as it is.
-- [ ] T351 Make the L-6 todo a real test (drop `{ todo }`): on `stand-in/practice2b-with-wave-a.json`,
+- [x] T351 Make the L-6 todo a real test (drop `{ todo }`): on `stand-in/practice2b-with-wave-a.json`,
   `proposal` is Tile, Caption, Stamp, `next_proposal` is Chip A, Chip B, Chip C, and no layer of
   wave A's 13-layer crowd is in `proposal`, `next_proposal` or `left_out`. Update `answer-key.json`:
   that fixture's entry gets `proposal`, `next_proposal` and `crowd: 13` (the note and `l6_expected`
   go); `practice2b.json` gets `next_proposal` as the stand-in computes it (TD § 15 expects Row A to
   C) and keeps `review_proposal_after_group`. Worked by hand in TD § 15's table; if the code's
   answer differs, stop and hand back (it's a rule question for the designer, not a test edit)
-- [ ] T352 Add `mentor/test/fixtures/null-parenting/synthetic/crowd-only.json` (marked synthetic in
+- [x] T352 Add `mentor/test/fixtures/null-parenting/synthetic/crowd-only.json` (marked synthetic in
   the README): 6 proposable layers that chain within 2% and nothing else proposable. Tests:
   analyzer `proposal` `null`, `next_proposal` `null`, `no_proposal_reason: "crowded"`, `left_out`
   without them; a learner-named focus of 3 of them still sets the focus; `null_parent_snapshot`
   in review mode gives `no_demo_reason: "no_new_target"` (TD § 11)
-- [ ] T353 Finder (FR-003, L6-2), in the proposal tests: on `crowd-only.json`, `finder(s)` is
+- [x] T353 Finder (FR-003, L6-2), in the proposal tests: on `crowd-only.json`, `finder(s)` is
   `{ count: 6, layers: [] }`, and `finder(s, { exclude: [<any past target>] })` is `{ count: 0 }`;
   on a group comp it's still the proposal's size and names. Rewrite "the finder agrees with the
   proposal on every fixture, with the same exclude" to assert agreement everywhere except the
   crowd-with-empty-exclude case, which it asserts separately. `candidates()` entries carry `kind`
   equal to `layer_info.kind` (data-model › Candidate)
-- [ ] T354 In `mentor/test/null-parenting-tools.test.mjs`:
+- [x] T354 In `mentor/test/null-parenting-tools.test.mjs`:
   - the snapshot reply carries `next_proposal` and `no_proposal_reason`, and lists no crowd layer
     in any field; in review mode `next_proposal` is `null`;
   - **the second group after a "no"**: with no focus the reply's `proposal` is Tile, Caption,
@@ -67,14 +67,14 @@ task here.
   - **L6-1**: on the wave A stand-in with a record whose past targets are Tile, Caption and Stamp
     (and those three parented), review mode proposes Chip A to C; the existing "review: proposes
     Row A to C" test on `practice2b.json` stays.
-- [ ] T355 Close the three S6 codes no test asserts yet (data-model › Check result): `no_null`
+- [x] T355 Close the three S6 codes no test asserts yet (data-model › Check result): `no_null`
   (no null in the comp, and a named null not found, with `named`), `not_parented` (one focus layer
   unparented while another is parented to the null), and the demo's `couldnt_check` (a second read
   that can't place the target: `moved_px` `null`, `jumped` false), in the check and demo tests
 
 ## Phase B: code
 
-- [ ] T356 `mentor/lib/null-parenting.mjs` (FR-004, FR-005, FR-003; research R2):
+- [x] T356 `mentor/lib/null-parenting.mjs` (FR-004, FR-005, FR-003; research R2):
   - `candidates()` adds `kind` from `layer_info` (for every entry);
   - replace `proposal()`'s largest-group sort and "past 4" growth with one `clusters()` step: the
     same units and union-find, then each cluster is a group (2 to 4 layers, a matte pair as 2) or a
@@ -86,14 +86,14 @@ task here.
   - `finder()` per FR-003: a group → its size and names; no group, a crowd and an empty
     `exclude` → `{ count: crowd_size, layers: [] }`; else 0. Update the file's header comment
     (the 2 to 4 "group" and 5+ "crowd" numbers are the skill's own, FR-002).
-- [ ] T357 `mentor/tools/null-parenting.mjs`: the snapshot reply adds `next_proposal` (`null` when
+- [x] T357 `mentor/tools/null-parenting.mjs`: the snapshot reply adds `next_proposal` (`null` when
   `mode` is `review`), next to `no_proposal_reason`; the tool description says it proposes a group
   of 2 to 4 layers that sit together apart from the rest, or none when many layers crowd together.
   `FINDERS` stays `finder()`. `npm test` green with T350 to T355.
 
 ## Phase C: the skill prompt
 
-- [ ] T358 `.claude/skills/null-parenting-mentor/SKILL.md` step 1, "They don't know" (FR-005a,
+- [x] T358 `.claude/skills/null-parenting-mentor/SKILL.md` step 1, "They don't know" (FR-005a,
   TD § 4 steps 4 and 5):
   - say `proposal` in one sentence **with its reason** ("Tile, Caption and Stamp sit together at
     the top right, apart from everything else. Want to move those as one?");
@@ -105,13 +105,13 @@ task here.
     on; `no_comp_size`: ask them to name the layers;
   - the left-out sentences stay about `left_out`'s reasons and never list a crowd.
   No field name or quoted value reaches the learner (server rule 5).
-- [ ] T359 `SKILL.md` › The review, step 2: `proposal` `null` (a crowd included) means nothing new
+- [x] T359 `SKILL.md` › The review, step 2: `proposal` `null` (a crowd included) means nothing new
   to review, record nothing; a review never offers `next_proposal` (FR-024).
-- [ ] T360 Run `/agent-audit` on the changed parts of `SKILL.md` and fix what it finds in that file
+- [x] T360 Run `/agent-audit` on the changed parts of `SKILL.md` and fix what it finds in that file
 
 ## Phase D: hand back
 
-- [ ] T361 `cd mentor && npm test`; `node --test .claude/hooks/test/*.test.mjs`;
+- [x] T361 `cd mentor && npm test`; `node --test .claude/hooks/test/*.test.mjs`;
   `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`): still
   only the add-only table's files, all added (FR-001, SC-008)
 - [ ] T362 Hand back: commit, test counts, T351's answer on the wave A stand-in (proposal,

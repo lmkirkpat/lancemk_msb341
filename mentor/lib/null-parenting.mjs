@@ -5,7 +5,8 @@
 // (never the keyed `layers`, filter 1), the class from visibility.mjs (never the eye switch alone,
 // filter 2), parents and children from motion-sources.mjs, and every comp-space measure from
 // comp-space.mjs. This file only sets the skill's own numbers: the 2% "nearly touch" gap, the 95%
-// full-frame size, and 2 to 4 layers in a group. Layers are matched by name (filter 3): adding a
+// full-frame size, 2 to 4 linked layers a "group" and 5 or more a "crowd" (FR-005 as amended:
+// a crowd is never proposed and never trimmed). Layers are matched by name (filter 3): adding a
 // null renumbers every layer below it.
 
 import { MentorError } from "../errors.mjs";
@@ -19,6 +20,7 @@ export const NEAR = 0.02; // FR-005: a gap of at most 2% of the comp's width on 
 const FULL_FRAME = 0.95; // research R1: bounds this big both ways are a full-frame layer
 export const MIN_FOCUS = 2;
 export const MAX_FOCUS = 4;
+export const CROWD = 5; // a cluster this big is a crowd
 export const MAX_P2_TIMES = 63; // the snapshot keeps comp.time and 63 caller times per layer
 
 const TF = "ADBE Transform Group/";
@@ -78,7 +80,7 @@ export function candidates(snapshot) {
     else if (width && height && b.right - b.left >= FULL_FRAME * width && b.bottom - b.top >= FULL_FRAME * height) reason = "full_frame";
 
     const entry = {
-      layer: l.name, index: l.index, bucket: reason == null ? "default" : NEVER.has(reason) ? "never" : "if_named", reason, class: cls,
+      layer: l.name, index: l.index, kind: l.kind, bucket: reason == null ? "default" : NEVER.has(reason) ? "never" : "if_named", reason, class: cls,
       matte_pair: partner ? partner.name : null, bounds: b || null,
       has_children: !!(src && src.children && src.children.length),
       children: src && src.children ? src.children.map((c) => c.layer) : [],
@@ -124,42 +126,38 @@ function units(cands, exclude) {
 
 const linked = (u, v, tol) => u.members.some((a) => v.members.some((b) => gapOk(a.bounds, b.bounds, tol)));
 
-// { proposal: [names in stack order] | null, reason: null | "no_layer_info" | "no_comp_size" | "no_group" }
-export function proposal(snapshot, { exclude = [] } = {}) {
-  if (!layerInfo(snapshot).known) return { proposal: null, reason: "no_layer_info" };
-  const width = compWidth(snapshot);
-  if (!width) return { proposal: null, reason: "no_comp_size" }; // never a default size (SR-4)
-  const tol = NEAR * width;
+// The clusters of linked proposable units (union-find), each as its layers in stack order.
+function clusters(snapshot, exclude) {
+  const tol = NEAR * compWidth(snapshot);
   const us = units(candidates(snapshot), exclude);
-
-  // Linked groups by union-find over the units.
   const parent = us.map((_, i) => i);
   const find = (i) => (parent[i] === i ? i : (parent[i] = find(parent[i])));
   for (let i = 0; i < us.length; i++) for (let j = i + 1; j < us.length; j++) if (linked(us[i], us[j], tol)) parent[find(i)] = find(j);
-  const groups = new Map();
+  const byRoot = new Map();
   us.forEach((u, i) => {
     const r = find(i);
-    if (!groups.has(r)) groups.set(r, []);
-    groups.get(r).push(u);
+    if (!byRoot.has(r)) byRoot.set(r, []);
+    byRoot.get(r).push(...u.members);
   });
-  const size = (g) => g.reduce((n, u) => n + u.members.length, 0);
-  const ranked = [...groups.values()].filter((g) => size(g) >= MIN_FOCUS)
-    .sort((a, b) => size(b) - size(a) || Math.min(...a.map((u) => u.top)) - Math.min(...b.map((u) => u.top)));
-  if (!ranked.length) return { proposal: null, reason: "no_group" };
+  return [...byRoot.values()].map((m) => m.sort((a, b) => a.index - b.index));
+}
 
-  // Past 4: start from the top unit, then keep adding the first unit in stack order that links to
-  // one already kept, until 4 (so the kept set is always one linked group). A matte pair is added
-  // whole or not at all.
-  const kept = [ranked[0][0]];
-  let n = kept[0].members.length;
-  for (;;) {
-    const next = ranked[0].find((u) => !kept.includes(u) && n + u.members.length <= MAX_FOCUS && kept.some((k) => linked(k, u, tol)));
-    if (!next || n >= MAX_FOCUS) break;
-    kept.push(next);
-    n += next.members.length;
-  }
-  const names = kept.flatMap((u) => u.members).sort((a, b) => a.index - b.index).map((m) => m.layer);
-  return names.length >= MIN_FOCUS ? { proposal: names, reason: null } : { proposal: null, reason: "no_group" };
+const mixedText = (g) => g.some((m) => m.kind === "text") && g.some((m) => m.kind !== "text");
+
+// { proposal, next_proposal, reason, crowd_size }: groups of 2 to 4 ranked (a) text with another
+// kind, (b) more layers, (c) the higher top layer; a crowd of 5 or more is never proposed.
+// `reason`: null, "crowded" (no group, a crowd), "no_group", "no_layer_info" or "no_comp_size".
+export function proposal(snapshot, { exclude = [] } = {}) {
+  const none = (reason) => ({ proposal: null, next_proposal: null, reason, crowd_size: 0 });
+  if (!layerInfo(snapshot).known) return none("no_layer_info");
+  if (!compWidth(snapshot)) return none("no_comp_size"); // never a default size (SR-4)
+  const all = clusters(snapshot, exclude);
+  const crowd_size = Math.max(0, ...all.filter((c) => c.length >= CROWD).map((c) => c.length));
+  const groups = all.filter((c) => c.length >= MIN_FOCUS && c.length <= MAX_FOCUS)
+    .sort((a, b) => Number(mixedText(b)) - Number(mixedText(a)) || b.length - a.length || a[0].index - b[0].index);
+  const names = (g) => (g ? g.map((m) => m.layer) : null);
+  if (!groups.length) return { ...none(crowd_size ? "crowded" : "no_group"), crowd_size };
+  return { proposal: names(groups[0]), next_proposal: names(groups[1]), reason: null, crowd_size };
 }
 
 // ---- The P2 times (FR-011, research R4)
@@ -255,7 +253,7 @@ export function analyze(snapshot, opts = {}) {
     };
   }
   const cands = candidates(snapshot);
-  const { proposal: proposed, reason } = proposal(snapshot, { exclude });
+  const { proposal: proposed, next_proposal, reason } = proposal(snapshot, { exclude });
   const named = skill_options && Array.isArray(skill_options.focus) ? skill_options.focus : null;
 
   let focus = null;
@@ -289,6 +287,7 @@ export function analyze(snapshot, opts = {}) {
     known: true,
     candidates: cands,
     proposal: proposed,
+    next_proposal,
     no_proposal_reason: reason,
     left_out,
     rename_needed,
@@ -306,9 +305,12 @@ export function analyze(snapshot, opts = {}) {
   };
 }
 
-// The size of the group null_parent_snapshot would propose with the same `exclude`; 0 without
-// layer_info or the comp's size.
+// FR-003 (L6-2): a group gives the proposal's size and names; no group but a crowd, with an empty
+// `exclude`, gives the largest crowd's size and no names (a crowded comp still has something to
+// teach on, once the learner names a group); anything else 0.
 export function finder(snapshot, { exclude = [] } = {}) {
-  const { proposal: p } = proposal(snapshot, { exclude });
-  return { count: p ? p.length : 0, layers: p || [] };
+  const p = proposal(snapshot, { exclude });
+  if (p.proposal) return { count: p.proposal.length, layers: p.proposal };
+  if (p.reason === "crowded" && !(exclude || []).length) return { count: p.crowd_size, layers: [] };
+  return { count: 0, layers: [] };
 }

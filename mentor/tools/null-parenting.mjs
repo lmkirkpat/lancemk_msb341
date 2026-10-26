@@ -64,6 +64,7 @@ function snapshotReply(snapshot, { lesson, session: s, analysis }, extra = {}) {
     project: snapshot.project,
     comp: { name: snapshot.comp.name, duration: snapshot.comp.duration, frame_rate: snapshot.comp.frame_rate },
     proposal: analysis.proposal,
+    next_proposal: s.mode === "review" ? null : analysis.next_proposal, // a review offers one group only (FR-024)
     no_proposal_reason: analysis.no_proposal_reason,
     left_out: analysis.left_out,
     duplicate_names: analysis.duplicate_names,
@@ -206,7 +207,8 @@ export const TOOLS = [
     title: "Null: read the comp and set up the lesson",
     description:
       "Read the active comp and start or continue the lesson on moving a group with a null. With no focus it proposes a group " +
-      "of 2 to 4 layers that sit together and lists what it leaves out and why. Call again with skill_options.focus (layer " +
+      "of 2 to 4 layers that sit together apart from the rest (and a second one for a no), or none when many layers crowd " +
+      "together, and lists what it leaves out and why. Call again with skill_options.focus (layer " +
       "names) once the learner agrees a group: that read becomes the lesson's start. A name two layers share sets nothing " +
       "until the learner renames one.",
     inputSchema: {

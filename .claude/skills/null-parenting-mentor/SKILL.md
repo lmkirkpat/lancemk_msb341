@@ -84,13 +84,23 @@ at most; they add the null, place it, parent the rest and give it its move with 
    - **They name some:** call `null_parent_snapshot` again with `skill_options: { focus: [...] }`
      (their layer names). Two to four layers. One: ask what else should move with it. More than
      four: ask which four to start with.
-   - **They don't know:** name `proposal` in one sentence ("Tile, Caption and Stamp sit together at
-     the top right"). If they agree, call again with that `focus`. If `proposal` is null:
-     - because the comp's size isn't known (`no_proposal_reason`), ask them to name the layers;
-     - otherwise say nothing here sits together, and ask them to make a small group to practice on
-       (two shapes and a text layer). Never invent a grouping.
+   - **They don't know:** name `proposal` in one sentence, with its reason: "Tile, Caption and
+     Stamp sit together, apart from everything else. Want to move those as one?" Don't say where
+     on screen they are unless a frame you've shown says so: the reply gives no positions.
+     If they agree, call again with that `focus`.
+     - **On a "no"**, offer `next_proposal` once, the same way: "Or Chip A, Chip B and Chip C?" If
+       they agree, call again with that `focus`. On a second "no", or when there's no
+       `next_proposal`, ask them to name the layers. Never offer a third group.
+     - **No `proposal`**, by `no_proposal_reason`:
+       - many layers sit close together (`crowded`): "A lot of your layers sit close together, so I
+         can't tell which ones belong together. Which 2 to 4 should move as one?" Never name or
+         count the layers that crowd together;
+       - nothing sits together (`no_group`): say so, and ask them to make a small group to practice
+         on (two shapes and a text layer). Never invent a grouping;
+       - the comp's size isn't known (`no_comp_size`): ask them to name the layers.
    - **What's left out**, one short sentence per reason from `left_out`, only for layers near the
-     group or ones the learner asks about:
+     group or ones the learner asks about. It never lists the layers that crowd together, and
+     neither do you:
      a layer that already follows something (`parent` names what it follows): "Shadow follows Plate,
      so it'll come along with Plate" when Plate is in the group, otherwise "Title already follows
      CTRL" for a null parent, or "Subtitle follows Title, so moving Title drags it along" for a
@@ -267,8 +277,9 @@ jumps, and never the word "null"** until it passes. "I already know it" runs the
 
 1. Call `null_parent_snapshot` with `mode: "review"`. It leaves out what earlier lessons on this
    comp used and anything already parented.
-2. If `proposal` is null (or `no_demo_reason` says there's nothing new), say there's nothing new to
-   review on this comp, and record nothing.
+2. If `proposal` is null (that includes a comp where many layers crowd together), say there's
+   nothing new to review on this comp, and record nothing. A review offers its one group only:
+   never a second one, even after a "no" (ask them to name 2 to 4 layers instead).
 3. Call `null_parent_snapshot` again with `mode: "review"` and the `focus`. Then name the layers and
    the task: "Row A, Row B and Row C should move as one. Set that up so you can move them together,
    then give them one move." Then: "Will the group turn or scale, and from where?"

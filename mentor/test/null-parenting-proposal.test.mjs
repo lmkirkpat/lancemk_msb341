@@ -206,7 +206,7 @@ test("without comp.width: no_comp_size and no proposal, while a named focus stil
   const s = load("practice2b.json");
   delete s.comp.width;
   delete s.comp.height;
-  assert.deepEqual(proposal(s), { proposal: null, reason: "no_comp_size" });
+  assert.deepEqual(proposal(s), { proposal: null, next_proposal: null, reason: "no_comp_size", crowd_size: 0 });
   const a = analyze(s, { skill_options: { focus: ["Tile", "Caption", "Stamp"] } });
   assert.deepEqual(a.focus, ["Tile", "Caption", "Stamp"]);
   assert.equal(a.no_proposal_reason, "no_comp_size");
