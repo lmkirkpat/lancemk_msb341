@@ -151,14 +151,21 @@ a brand new session act like a colleague who already knows what you are working 
      show which shape is the focus), and offset's properties kind (T036, `offset.md`: about
      3 min 46 s, no demo, SC-002 3 of 3; ran on a stale mentor server, so Quick Offset is still open
      live; to fix: a stated gap the learner changes without saying). All three ran on a mentor
-     server from before that day's merges, so they need a note saying so. Mentor Practice matches
-     none of its captures until Title is put back (T036 left it staggered).
-     - **Now:** offset T037 (layers kind, the Dots on Mentor Practice 2, which matches
-       `practice2b.json`). Use a fresh session, and check that Quick Offset is offered and that Dot 2
-       lists Position and Opacity before Blurriness. Try the cases T036 didn't hit: a pair still
-       together, a layer that pops in, a trimmed in point. Then skill 5's sitting on
-       `skill-5-anchor` (T232 live checks, T233 captures, T234 and T235 at the desk, T236 Door,
-       T237 Gauge or Pop with one L-4 mistake on purpose). One AE user at a time.
+     server from before that day's merges, so they need a note saying so. Offset's layers kind
+     passed too (T037, `offset.md` session 2, fresh server: 2 min 5 s, no demo, first check, Quick
+     Offset offered and used, so FR-017 is met live; SC-002 4 of 4 so far, 10 needed). To fix from
+     T037: a lesson left open and never checked resumes with its old baseline and choices
+     (`mentor/lib/session.mjs:119`, a spec 004 shared-code request), and `SKILL.md` needs a
+     Quick Offset "how it works" paragraph built only from L-1 (the mentor made up a selection-order
+     claim). Mentor Practice matches none of its captures until Title is put back (T036 left it
+     staggered), and Mentor Practice 2 needs a reset to `practice2b.json` (T037 left the Dots
+     staggered).
+     - **Now:** skill 5's sitting on `skill-5-anchor` (T232 live checks, T233 captures, T234 and
+       T235 at the desk, T236 Door, T237 Gauge or Pop with one L-4 mistake on purpose). Reset
+       Mentor Practice 2 first. One AE user at a time.
+     - **Offset's remaining SC-002 checks (6 more):** run the hints neither lesson hit, on purpose,
+       on the Dots: a pair still together, a layer that pops in, a trimmed in point, a gap under
+       the floor. They can ride along with the offset review (T040) or a short extra lesson.
      - **A day or more after a first pass:** speed graph review T035, key types review T038 (on
        Cut), offset review T040 (on the Chips).
      - **Then:** skill 6 on `skill-6-null` (T336 live checks, T337 captures, T338 and T339 at the
@@ -174,8 +181,7 @@ a brand new session act like a colleague who already knows what you are working 
      hooks and workflow copied over, ten personas trimmed to seven, and a two-researcher
      parallel run with no collisions; the portfolio site came first, so it's supporting
      evidence only). Three of the five skills passed a first live lesson (speed graph, key types,
-     offset's properties kind); offset's layers kind, pivot and null haven't run live, so mark
-     those partial in `/sprint-review` and carry them, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
+     and offset in both kinds); pivot and null haven't run live, so mark those partial in `/sprint-review` and carry them, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
      overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
      cockpit cuts their worktrees from local `main` (the agent tool's worktree option starts
      from `origin/main`). The git guard blocks any command containing `merge-base`, even a read.
