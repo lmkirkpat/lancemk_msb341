@@ -82,11 +82,38 @@ function unitName(snapLayer, unit) {
 
 const snapLayerOf = (snapshot, index) => snapshot.layers.find((l) => l.index === index);
 
+// ---- Property order (builder's decision, 2026-10-26)
+
+// The learner reads a layer's properties as the timeline shows them, Transform first. AE's read
+// order can put an effect first (Mentor Practice 2's Dot 2 reads Blurriness before Position), so
+// this skill orders a layer's properties Transform first, in AE's Transform order, then everything
+// else (effects, other groups) in the order AE read them. The one ordering rule for this skill:
+// every list of a layer's properties (groups, members, target refs, the demo's paths and so its
+// result, the check's moved_by) comes through here.
+const TRANSFORM_ORDER = [
+  "ADBE Anchor Point", "ADBE Position", "ADBE Position_0", "ADBE Position_1", "ADBE Position_2",
+  "ADBE Scale", "ADBE Orientation", "ADBE Rotate X", "ADBE Rotate Y", "ADBE Rotate Z", "ADBE Opacity",
+];
+const TRANSFORM_GROUP = "ADBE Transform Group/";
+
+function transformRank(path) {
+  if (!String(path).startsWith(TRANSFORM_GROUP)) return TRANSFORM_ORDER.length + 1;
+  const i = TRANSFORM_ORDER.indexOf(path.slice(TRANSFORM_GROUP.length));
+  return i >= 0 ? i : TRANSFORM_ORDER.length; // a Transform property not listed: after the listed ones
+}
+
+// `items` in that order; `pathsOf` gives an item's property paths (a unit has several when
+// Position is separated). Stable, so ties keep AE's read order.
+export function transformFirst(items, pathsOf) {
+  const rank = (x) => Math.min(...[].concat(pathsOf(x)).map(transformRank));
+  return items.map((x, i) => ({ x, i, r: rank(x) })).sort((a, b) => a.r - b.r || a.i - b.i).map((e) => e.x);
+}
+
 // Units that count for this skill: counted by the timing analysis and not among `exclude` (a
-// review's past targets, FR-020).
+// review's past targets, FR-020), Transform first.
 function liveUnits(snapshot, tl, exclude) {
   const sl = snapLayerOf(snapshot, tl.layer_index);
-  return tl.units
+  return transformFirst(tl.units, (u) => u.paths)
     .filter((u) => !u.excluded)
     .map((u) => ({ ...u, name: unitName(sl, u) }))
     .filter((u) => !exclude.some((e) => e.layer === tl.layer && e.property === u.name));

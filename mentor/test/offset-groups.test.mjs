@@ -73,7 +73,23 @@ test("the learner can pick the other kind; the other group is then the one offer
   const a = analyze(mp2, { skill_options: { kind: "layers" } });
   assert.deepEqual(labels(a.group), keyMp2.layers.members);
   assert.deepEqual(a.targets, keyMp2.layers_targets);
-  assert.deepEqual(labels(a.other_group), ["Blurriness", "Position", "Opacity"]);
+  assert.deepEqual(labels(a.other_group), ["Position", "Opacity", "Blurriness"]);
+});
+
+test("a layer's properties list Transform first, in AE's Transform order, whatever order AE reads them in", () => {
+  // Dot 2 as AE reads it, then reversed: the effect first and Opacity before Position either way.
+  const reads = (s) => s.layers.find((l) => l.name === "Dot 2").properties.map((p) => p.display_name);
+  assert.equal(reads(mp2)[0], "Blurriness", "the live capture reads the effect first");
+  const reversed = clone(mp2);
+  reversed.layers.find((l) => l.name === "Dot 2").properties.reverse();
+  assert.deepEqual(reads(reversed), ["Opacity", "Position", "Blurriness"]);
+  for (const s of [mp2, reversed]) {
+    const want = ["Position", "Opacity", "Blurriness"];
+    assert.deepEqual(labels(analyze(s).group), want, "the properties group");
+    const layers = analyze(s, { skill_options: { kind: "layers" } });
+    assert.deepEqual(layers.group.members.find((m) => m.layer === "Dot 2").properties, want, "a layer member's properties");
+    assert.deepEqual(layers.target_refs.filter((r) => r.layer === "Dot 2").map((r) => r.property), want, "target refs");
+  }
 });
 
 test("within a kind, a tie goes to the earlier start, then the comp's layer order", () => {

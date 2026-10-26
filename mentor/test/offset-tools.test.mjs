@@ -210,7 +210,7 @@ test("layers kind: the demo shifts every keyed property on Dot 2 (effect key inc
   assert.deepEqual(r.group.members.map((m) => m.label), ["Dot 1", "Dot 2", "Dot 3"]);
   assert.equal(r.demo_target, "layer/6");
   const d = await call("offset_demo", { target: "layer/6" });
-  assert.deepEqual(d.properties, ["Blurriness", "Position", "Opacity"]);
+  assert.deepEqual(d.properties, ["Position", "Opacity", "Blurriness"]);
   assert.equal(d.from, 0.5);
   assert.equal(d.to, 0.633);
   const c = await call("offset_check");
@@ -229,7 +229,7 @@ test("layers kind: the demo on Dot 3 shifts both separated dimensions and a sing
   project(file);
   await call("offset_snapshot", { skill_options: { ...DOTS, order: ["Dot 1", "Dot 3", "Dot 2"] } });
   const d = await call("offset_demo", { target: "layer/7" });
-  assert.deepEqual(d.properties, ["X Position", "Y Position", "Opacity", "Rotation"]);
+  assert.deepEqual(d.properties, ["X Position", "Y Position", "Rotation", "Opacity"]); // Transform order, though Rotation reads last
   const snap = await (await import("../bridge-client.mjs")).runSnippet("snapshot", {});
   const dot3 = snap.layers.find((l) => l.name === "Dot 3");
   assert.deepEqual(dot3.properties.map((p) => p.keys[0].time), [0.633, 0.633, 0.633, 0.633]);
