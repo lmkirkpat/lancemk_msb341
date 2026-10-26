@@ -159,7 +159,7 @@ during spec 008's or 010's sitting). The builder does the hand actions.
 - [x] T032 🖐 [US1] Captures (quickstart › 3): every file in its table saved to `mentor/test/fixtures/key-types/` with `node mentor/dev/capture.mjs`; then delete the duplicates, confirm both practice comps match their captures, check no capture holds a user or folder name, save the `.aep`, release the lock
 - [x] T033 [US4] Desk block, part 1 (not 🖐): point every test at the live captures, delete `mentor/test/fixtures/key-types/stand-in/`, update `README.md`'s provenance; `npm test` green
 - [x] T034 [US1] Desk block, part 2 (not 🖐): set `HOLD_SIDES` from L-2 in `mentor/jsx/key-types-demo.jsx` and `mentor/lib/key-types.mjs` (and their tests); fill each `<!-- L-2 -->` in `SKILL.md` with the menu path and shortcut exactly as logged (or none), and the `<!-- L-1 -->` wrong-side hint from L-1; `npm test` green. If L-1 shows a jump, SR-2 goes in the hand-back; any result that changes a requirement goes to the spec writer before T035
-- [ ] T035 🖐 [US1] First live lesson (quickstart › 5): the builder runs `/key-types-mentor` in a plain Claude Code session on Mentor Practice 2, Blink to a verified pass, Spinner named at stage 6; time from `calls.jsonl` (SC-001); per pair, does the check match the timeline (SC-002); log for the hand-back
+- [x] T035 🖐 [US1] First live lesson (quickstart › 5): the builder runs `/key-types-mentor` in a plain Claude Code session on Mentor Practice 2, Blink to a verified pass, Spinner named at stage 6; time from `calls.jsonl` (SC-001); per pair, does the check match the timeline (SC-002); log for the hand-back
 
 ---
 

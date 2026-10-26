@@ -146,7 +146,10 @@ a brand new session act like a colleague who already knows what you are working 
      case 26 are merged, and the easing set is now 26 cases.
   2. Speed graph's first live lesson passed 2026-10-26 (T032, `discovery/usage-notes/speed-graph.md`:
      3 min 35 s, one demo, SC-002 4 of 4; to fix: a frame-number reading answer). Its review (T035)
-     is due a day or more later. Live lessons on Mentor Practice 2 for the rest, in order: key types,
+     is due a day or more later. Key types' passed the same day (T035, `discovery/usage-notes/key-types.md`:
+     3 min 58 s, one demo, SC-002 4 of 4, one Spinner mark; to fix: frames on Mentor Practice 2 don't
+     show which shape is the focus; reset Mentor Practice 2 to `practice2b.json` first). Its review
+     (T038, on Cut) is due a day or more later. Live lessons on Mentor Practice 2 for the rest, in order:
      offset, pivot, null (each spec's quickstart and 🖐 tasks; offset's L-2 now reports Dot 2 as
      Position, Opacity, Blurriness, not as `specs/010-offset/quickstart.md:27` says). Then merge
      skills 5 and 6, fix the smoke findings above, merge the eval sets and set baselines (about
