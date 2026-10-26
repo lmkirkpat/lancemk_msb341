@@ -5,7 +5,7 @@
 
 import { runSnippet } from "../bridge-client.mjs";
 import { MentorError } from "../errors.mjs";
-import { parseHost } from "../lib/host.mjs";
+import { atLeast, parseHost } from "../lib/host.mjs";
 import { analyze, check, demoRefusal, finder, refused, SKILL, transformFirst } from "../lib/offset.mjs";
 import { matchLayer } from "../lib/offset-keys.mjs";
 import { json } from "../lib/reply.mjs";
@@ -45,10 +45,14 @@ async function offsetSnapshot({ mode = "lesson", focus_layers, skill_options } =
   // from, so a continued lesson still describes the group as it was before the learner moved it.
   const base = lesson === "new" ? analysis : analyze(s.baseline, { focus_layers, exclude: s.exclude || [], skill_options: s.skill_options || {} });
   const fps = s.baseline.comp.frame_rate;
+  const host = parseHost(snapshot);
   return json({
     lesson,
     mode: s.mode,
-    host: parseHost(snapshot),
+    host,
+    // FR-017: Quick Offset may be offered only when the version is known and 25.4 or later (L-1
+    // confirmed the gesture at 26.5). Decided here, so the skill never compares versions itself.
+    quick_offset: atLeast(host, "25.4"),
     project: snapshot.project,
     comp: { name: snapshot.comp.name, duration: snapshot.comp.duration, frame_rate: snapshot.comp.frame_rate },
     group: base.group,

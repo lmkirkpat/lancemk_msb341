@@ -361,13 +361,19 @@ export function analyze(snapshot, opts = {}) {
   else if (!complete || !gapOk) no_demo_reason = "awaiting_order";
   else if (gapUnderFloor(gap, fps)) no_demo_reason = "gap_under_floor";
   else {
-    // The second in their order, or the next one with no expression on a keyed property (FR-009).
+    // The second in their order, or the next one with no expression on a keyed property, its eye on
+    // and not locked (FR-009; locked added 2026-10-26 after live check L-4, where the snapshot
+    // named a locked Dot 2 that offset_demo then refused). offset_demo's lock refusal stays as the
+    // backstop for a lock set after this read.
+    let skippedLocked = false;
     const pick = ordered.slice(1).find((m) => {
       const sl = snapLayerOf(snapshot, m.layer_index);
-      return !hasExpression(sl, m.unit ? m.paths : null) && sl.enabled !== false;
+      if (hasExpression(sl, m.unit ? m.paths : null) || sl.enabled === false) return false;
+      if (sl.locked === true) { skippedLocked = true; return false; }
+      return true;
     });
     if (pick) demo_target = targetId(pick);
-    else no_demo_reason = "expression";
+    else no_demo_reason = skippedLocked ? "locked" : "expression";
   }
 
   return {
@@ -426,12 +432,17 @@ function lessonMembers(baseline, lesson, bt) {
   });
 }
 
+// FR-011: the demo member is the demo's while its shift is in place, and the learner's once a check
+// has seen it undone (the session's demo.undone, set by markChecked) and it has moved again. Key
+// times alone can't tell the learner's own shift by the same gap from the demo's (spec 010 L-2: the
+// builder undid the demo and dragged Dot 2's bar the same 4 frames), so the undone mark decides.
 function creditFor(member, lesson, startNow, fps) {
   if (!lesson.demo || lesson.demo.segment_id !== member.id) return null;
   const gap = lesson.skill_options && lesson.skill_options.gap_frames;
   if (startNow == null) return "learner";
-  if (Number.isInteger(gap) && Math.abs((startNow - member.start) * fps - gap) < 0.5) return "demo";
   if (Math.abs((startNow - member.start) * fps) < 0.5) return "undone";
+  if (lesson.demo.undone) return "learner";
+  if (Number.isInteger(gap) && Math.abs((startNow - member.start) * fps - gap) < 0.5) return "demo";
   return "learner";
 }
 

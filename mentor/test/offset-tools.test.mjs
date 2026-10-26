@@ -87,6 +87,7 @@ test("offset_snapshot proposes Title's three properties, with no demo target unt
   assert.equal(r.lesson, "new");
   assert.equal(r.host.known, true);
   assert.equal(r.host.version, "26.5");
+  assert.equal(r.quick_offset, true, "26.5: Quick Offset may be offered (FR-017, L-1)");
   assert.equal(r.proposed_kind, "properties");
   assert.deepEqual(r.group.members.map((m) => m.label), ["Position", "Scale", "Opacity"]);
   assert.equal(r.other_kind, "layers");
@@ -95,6 +96,16 @@ test("offset_snapshot proposes Title's three properties, with no demo target unt
   assert.equal(r.no_demo_reason, "awaiting_order");
   assert.ok(r.frame_together > 0.5 && r.frame_together < 1.5);
   assert.equal(r.floor_check, undefined);
+});
+
+test("quick_offset (FR-017): false below 25.4 and when the version isn't known", async () => {
+  for (const [host, want] of [[{ ae_version: "25.4x10", os: "Macintosh OS 27.0.1/64" }, true], [{ ae_version: "25.3x40", os: "Macintosh OS 27.0.1/64" }, false], [{ ae_version: "24.6x2" }, false], [undefined, false]]) {
+    fs.rmSync(SESSION, { force: true });
+    project(variant(PRACTICE_NOW, (s) => { if (host) s.host = host; else delete s.host; }));
+    const r = await call("offset_snapshot");
+    assert.equal(r.quick_offset, want, JSON.stringify(host));
+    if (!host) assert.equal(r.host.known, false);
+  }
 });
 
 test("the call with the order and gap sets the demo target; a later call without skill_options keeps it", async () => {
@@ -145,9 +156,20 @@ test("offset_demo: a shift past the comp's end refuses (OFFSET_REFUSED) with no 
   assert.equal(session.currentLesson().demo, null, "the demo isn't used up");
 });
 
-test("offset_demo: a locked layer refuses with no snippet run when the read shows it", async () => {
+test("offset_snapshot: a locked layer is never named as the demo target (L-4)", async () => {
+  project(variant(PRACTICE2, (s) => (s.layers.find((l) => l.name === "Dot 2").locked = true)));
+  const r = await call("offset_snapshot", { skill_options: DOTS });
+  assert.equal(r.demo_target, "layer/7");
   project(variant(PRACTICE_NOW, (s) => (s.layers.find((l) => l.name === "Title").locked = true)));
+  fs.rmSync(SESSION, { force: true });
+  const t = await call("offset_snapshot", { skill_options: PROPS });
+  assert.equal(t.demo_target, null);
+  assert.equal(t.no_demo_reason, "locked");
+});
+
+test("offset_demo: a layer locked after the snapshot refuses with no snippet run when the fresh read shows it (backstop)", async () => {
   await call("offset_snapshot", { skill_options: PROPS });
+  project(variant(PRACTICE_NOW, (s) => (s.layers.find((l) => l.name === "Title").locked = true)));
   await assert.rejects(call("offset_demo", { target: "1/Transform › Scale/1" }), (e) => e.code === "OFFSET_REFUSED" && e.reason === "locked");
   assert.equal(demoRuns(), 0);
 });
@@ -169,13 +191,13 @@ test("offset_demo: the snippet's own refusal (a lock the read can't see) reaches
 test("offset_check grades as the answer key says, marks the lesson checked, and never changes the baseline", async () => {
   await call("offset_snapshot", { skill_options: { ...PROPS, order: ["Position", "Opacity", "Scale"] } });
   const before = JSON.stringify(session.currentLesson().baseline);
-  project("stand-in/props-one-frame.json");
+  project("props-one-frame.json");
   const fail = await call("offset_check");
   assert.equal(fail.passed, false);
   assert.deepEqual(fail.still_same, KEY.checks["props-one-frame"].still_same);
   assert.equal(session.currentLesson().status, "checked");
   assert.equal(session.currentLesson().passed, false);
-  project("stand-in/props-pass-landing.json");
+  project("props-pass-landing.json");
   const pass = await call("offset_check");
   assert.equal(pass.passed, true);
   assert.equal(session.currentLesson().passed, true);
@@ -221,6 +243,25 @@ test("layers kind: the demo shifts every keyed property on Dot 2 (effect key inc
   assert.deepEqual(c.still_same, [["Dot 1", "Dot 3"]]);
 });
 
+test("layers kind: the demo undone, then the learner's own 4 frames on Dot 2, is the learner's (L-2's live shape, FR-011)", async () => {
+  project(PRACTICE2);
+  await call("offset_snapshot", { skill_options: DOTS });
+  await call("offset_demo", { target: "layer/6" });
+  assert.equal((await call("offset_check")).members.find((m) => m.layer === "Dot 2").credit, "demo");
+  // Edit > Undo: the saved demo edit is gone and the comp reads as the capture after the undo.
+  fs.rmSync(EDITS, { force: true });
+  project("after-demo-undone.json");
+  const undone = await call("offset_check");
+  assert.equal(undone.members.find((m) => m.layer === "Dot 2").credit, "undone");
+  assert.ok(session.currentLesson().demo.undone, "the session remembers the undo");
+  // The builder then dragged Dot 2's bar the same 4 frames.
+  project("after-demo-redone.json");
+  const redone = await call("offset_check");
+  assert.equal(redone.members.find((m) => m.layer === "Dot 2").credit, "learner");
+  assert.equal(redone.passed, false);
+  assert.deepEqual(redone.still_same, [["Dot 1", "Dot 3"]]);
+});
+
 test("layers kind: the demo on Dot 3 shifts both separated dimensions and a single key", async () => {
   const file = variant(PRACTICE2, (s) => {
     const dot3 = s.layers.find((l) => l.name === "Dot 3");
@@ -240,7 +281,7 @@ test("layers kind: the demo on Dot 3 shifts both separated dimensions and a sing
 test("layers kind: 'pops in' fails with the split; named as on purpose on the next check, it passes", async () => {
   project(PRACTICE2);
   await call("offset_snapshot", { skill_options: DOTS });
-  project("stand-in/pops-in.json");
+  project("pops-in.json");
   const first = await call("offset_check");
   assert.equal(first.passed, false);
   assert.deepEqual(first.members.find((m) => m.layer === "Dot 1").split, { moved: ["Opacity"], stayed: ["Position"], within_position: null, on_purpose: false });
@@ -250,22 +291,22 @@ test("layers kind: 'pops in' fails with the split; named as on purpose on the ne
   fs.rmSync(SESSION, { force: true });
   project(PRACTICE2);
   await call("offset_snapshot", { skill_options: { ...DOTS, split: ["Dot 1"] } });
-  project("stand-in/pops-in.json");
+  project("pops-in.json");
   assert.equal((await call("offset_check")).passed, true);
 });
 
 test("layers kind: a changed order is flagged, never a fail; uneven gaps set the rhythm, never a fail", async () => {
   project(PRACTICE2);
   await call("offset_snapshot", { skill_options: DOTS });
-  project("stand-in/order-differs.json");
+  project("order-differs.json");
   const o = await call("offset_check");
   assert.equal(o.passed, true);
   assert.equal(o.order_differs, true);
-  project("stand-in/layers-uneven.json");
+  project("layers-uneven.json");
   const u = await call("offset_check");
   assert.equal(u.passed, true);
   assert.deepEqual(u.rhythm, { uneven: true });
-  project("stand-in/layers-pass.json");
+  project("layers-pass.json");
   assert.deepEqual((await call("offset_check")).rhythm, { uneven: false });
 });
 
@@ -277,7 +318,7 @@ test("review: gives the Chips, never a Dot; no demo, and no snippet run", async 
   const r = await call("offset_snapshot", { mode: "review" });
   assert.equal(r.mode, "review");
   assert.equal(r.group.kind, "layers");
-  assert.deepEqual(r.group.members.map((m) => m.label), KEY.focus["stand-in/practice2-before.json"].review_after_dots.members);
+  assert.deepEqual(r.group.members.map((m) => m.label), KEY.focus["../layer-info/practice2b.json"].review_after_dots.members);
   assert.ok(!r.focus.some((l) => l.startsWith("Dot")));
   assert.equal(r.demo_target, null);
   assert.equal(r.no_demo_reason, "review");
@@ -324,7 +365,7 @@ test("recommend_next offers this skill's review on Mentor Practice 2 when it's d
 test("record_lesson after a layers-kind lesson stores every counted unit of each member layer (RQ-1)", async () => {
   project(PRACTICE2);
   await call("offset_snapshot", { skill_options: DOTS });
-  project("stand-in/layers-pass.json");
+  project("layers-pass.json");
   assert.equal((await call("offset_check")).passed, true);
   await call("record_lesson", {
     skill: "timing.offset", project: "Claude AE Tutor Test.aep", comp: "Mentor Practice 2",
@@ -333,13 +374,13 @@ test("record_lesson after a layers-kind lesson stores every counted unit of each
   });
   const rec = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
   const last = rec.lessons[rec.lessons.length - 1];
-  assert.deepEqual(last.targets.map((t) => [t.layer, t.property]), KEY.focus["stand-in/practice2-before.json"].layers_target_refs);
+  assert.deepEqual(last.targets.map((t) => [t.layer, t.property]), KEY.focus["../layer-info/practice2b.json"].layers_target_refs);
   assert.equal(rec.skills["timing.offset"].status, "learned");
 });
 
 test("record_lesson after a properties-kind lesson stores Title's three properties", async () => {
   await call("offset_snapshot", { skill_options: { ...PROPS, order: ["Position", "Opacity", "Scale"] } });
-  project("stand-in/props-pass-landing.json");
+  project("props-pass-landing.json");
   await call("offset_check");
   await call("record_lesson", {
     skill: "timing.offset", project: "Claude AE Tutor Test.aep", comp: "Mentor Practice",

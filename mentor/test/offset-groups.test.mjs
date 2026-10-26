@@ -11,8 +11,8 @@ import { clone, DIR, KEY, load, PRACTICE2, PRACTICE2_60, PRACTICE_NOW } from "./
 
 const now = load(PRACTICE_NOW);
 const mp2 = load(PRACTICE2);
-const keyNow = KEY.focus["stand-in/practice-now.json"];
-const keyMp2 = KEY.focus["stand-in/practice2-before.json"];
+const keyNow = KEY.focus["practice-now.json"];
+const keyMp2 = KEY.focus["../layer-info/practice2b.json"];
 const labels = (g) => g.members.map((m) => m.label);
 const propPairs = (g) => g.members.map((m) => [m.label, m.move_index]);
 
@@ -118,7 +118,7 @@ test("demo target: none before an order, the second in the order after, none for
     assert.equal(a.demo_target, want.demo_target, JSON.stringify(want));
     if (want.no_demo_reason) assert.equal(a.no_demo_reason, want.no_demo_reason);
   }
-  for (const want of KEY.focus["stand-in/practice2-60fps.json"].demo_targets) {
+  for (const want of KEY.focus["../practice2-60fps.json"].demo_targets) {
     const a = analyze(load(PRACTICE2_60), { skill_options: { kind: want.kind, order: want.order, gap_frames: want.gap_frames } });
     assert.equal(a.demo_target, want.demo_target, `60 fps ${JSON.stringify(want)}`);
   }
@@ -132,6 +132,28 @@ test("demo target: the next in order when the second has an expression on a keye
   s.layers.find((l) => l.name === "Dot 2").properties.find((p) => p.display_name === "Blurriness").expression_enabled = true;
   const a = analyze(s, { skill_options: { kind: "layers", order: ["Dot 1", "Dot 2", "Dot 3"], gap_frames: 4 } });
   assert.equal(a.demo_target, "layer/7");
+});
+
+test("demo target: a locked member is skipped like an eye-off one; none left says locked (L-4, FR-009)", () => {
+  // Synthetic edit of the live Mentor Practice 2 capture: Dot 2 locked, as in live check L-4.
+  const s = clone(mp2);
+  s.layers.find((l) => l.name === "Dot 2").locked = true;
+  const dots = { kind: "layers", order: ["Dot 1", "Dot 2", "Dot 3"], gap_frames: 4 };
+  const a = analyze(s, { skill_options: dots });
+  assert.equal(a.demo_target, "layer/7", "Dot 2 is locked: the next in their order, Dot 3");
+  assert.equal(a.no_demo_reason, null);
+  s.layers.find((l) => l.name === "Dot 3").locked = true;
+  const none = analyze(s, { skill_options: dots });
+  assert.equal(none.demo_target, null);
+  assert.equal(none.no_demo_reason, "locked");
+  // Properties kind: the layer itself locked means no member can be the demo.
+  const t = clone(now);
+  t.layers.find((l) => l.name === "Title").locked = true;
+  const props = analyze(t, { skill_options: { order: ["Position", "Scale", "Opacity"], gap_frames: 4 } });
+  assert.equal(props.demo_target, null);
+  assert.equal(props.no_demo_reason, "locked");
+  // Unlocked, the live capture still gives Dot 2.
+  assert.equal(analyze(mp2, { skill_options: dots }).demo_target, "layer/6");
 });
 
 test("an order naming all but the last member counts; a name that isn't a member doesn't", () => {
@@ -157,10 +179,18 @@ test("exclude drops matching units before grouping; nothing left gives no group"
   assert.equal(none.no_demo_reason, "no_group");
 });
 
-test("a group already staggered isn't a group", () => {
-  const staggered = load("stand-in/layers-pass.json");
+test("a group already staggered isn't a group, keys between frames included (Quick Offset, row 19)", () => {
+  const staggered = load("layers-pass.json");
   const g = groups(staggered);
   assert.ok(!g.layers.some((x) => labels(x).includes("Dot 2") && labels(x).includes("Dot 3")));
+  const quick = KEY.focus["quick-offset.json"];
+  const q = analyze(load("quick-offset.json"));
+  assert.deepEqual(groups(load("quick-offset.json")).layers.map(labels), quick.all_layer_groups);
+  assert.equal(q.proposed_kind, quick.proposed_kind);
+  assert.equal(q.group.layer, quick.properties.layer);
+  assert.deepEqual(propPairs(q.group), quick.properties.members, "Dot 2's own properties still move together");
+  assert.deepEqual(labels(q.other_group), quick.layers.members);
+  assert.equal(q.other_group.start, quick.layers.start);
 });
 
 test("target IDs and refs: layers kind, one ID per layer and every counted unit as a ref; properties kind, one each", () => {
@@ -190,7 +220,8 @@ test("frame_together is inside the group's shared motion, on a frame", () => {
 test("FINDERS focus agrees with the analysis on every fixture, with and without exclude", async () => {
   const { FINDERS } = await import("../tools/offset.mjs");
   const f = FINDERS["timing.offset"];
-  const files = ["stand-in", "synthetic"].flatMap((d) => fs.readdirSync(path.join(DIR, d)).filter((x) => x.endsWith(".json")).map((x) => `${d}/${x}`));
+  const files = [".", "synthetic"].flatMap((d) => fs.readdirSync(path.join(DIR, d)).filter((x) => x.endsWith(".json") && x !== "answer-key.json").map((x) => (d === "." ? x : `${d}/${x}`)));
+  files.push(PRACTICE2, PRACTICE2_60);
   const dots = keyMp2.layers_target_refs.map(([layer, property]) => ({ layer, property }));
   for (const rel of files) {
     const snap = load(rel);
