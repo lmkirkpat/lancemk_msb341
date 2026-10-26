@@ -73,7 +73,7 @@ const CONFIG = {
     ],
     [
       "no_self_instructions",
-      "→|\\breview mode\\b|\\bRun (?:the )?review\\b"
+      "review (?:is )?due\\s*(?:→|->|\\.|:|,|-)\\s*(?:run(?: the)? review|review mode)|\\bRun review\\b|\\breview mode\\b|^\\s*Learned, review due"
     ],
     [
       "matte_not_hidden",
