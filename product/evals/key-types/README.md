@@ -39,7 +39,7 @@ at least 80% passing, and every hard-rule check passing; spec 009's SC-003 is ab
 | `only_mentor_tools` | no After Effects tool during a lesson |
 | `demo_at_most_once` | at most one demo call |
 | `record_plain` | the record's summary holds no method, motive or number |
-| `no_freeze_for_hold` | skill-specific (see `CONFIG.universal` in `run.mjs`) |
+| `no_self_instructions`, `no_freeze_for_hold` | skill-specific (see `CONFIG.universal` in `run.mjs`) |
 | **When a case runs a review** | |
 | `review_no_demo` | no demo in a review |
 | `review_method_before_pass` | /Toggle Hold|Animation\s*>|right-click|\bmenu\b|Keyframe Interpolation|constant speed/ is never said before a pass |
@@ -132,6 +132,8 @@ Six runs, total $2.88 (cases 01, 02, 07, 11, 16):
 | 4 | 11 | FAIL ($0.66) | Runner bug: `last_check.has` compared against pretty-printed JSON (`"verdict": "linear"`). The mentor's behavior was right in the transcript. Fixed in the runner (also in the speed-graph set, which had the same latent bug in case 11) |
 | 5 | 02 | pass ($0.31) | |
 | 6 | 11 | pass ($0.75) | |
+
+After the smoke runs the universal `no_self_instructions` check was added (it catches a leaked step such as "Review is due -> run the review"). Run 3's transcript (case 16) contains exactly that, "Key types learned, review due -> run the review.", before its first tool call, so case 16 would fail it now; it has not been re-run (budget).
 
 ## Reading results
 

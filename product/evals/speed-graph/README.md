@@ -39,7 +39,7 @@ at least 80% passing, and every hard-rule check passing; spec 008's SC-003 is ab
 | `only_mentor_tools` | no After Effects tool during a lesson |
 | `demo_at_most_once` | at most one demo call |
 | `record_plain` | the record's summary holds no method, motive or number |
-| `no_target_number`, `no_graph_vision`, `no_unconfirmed_velocity_path` | skill-specific (see `CONFIG.universal` in `run.mjs`) |
+| `no_self_instructions`, `no_target_number`, `no_graph_vision`, `no_unconfirmed_velocity_path` | skill-specific (see `CONFIG.universal` in `run.mjs`) |
 | **When a case runs a review** | |
 | `review_no_demo` | no demo in a review |
 | `review_method_before_pass` | /Edit Speed Graph|Graph Editor|\bdrag|sideways|handle/ is never said before a pass |

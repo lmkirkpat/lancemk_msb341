@@ -65,7 +65,7 @@ const CONFIG = {
     ],
     [
       "no_self_instructions",
-      "\\bRun review\\b|\\bRun the review\\b|\\bmust (?:run|do) (?:the )?review\\b"
+      "review (?:is )?due\\s*(?:→|->|\\.|:|,|-)\\s*(?:run(?: the)? review|review mode)|\\bRun review\\b|\\breview mode\\b|^\\s*Learned, review due"
     ],
     [
       "no_sequence_layers",
@@ -321,6 +321,13 @@ function said(turns, from = 1, to = turns.length) {
   return turns.slice(from - 1, to).flatMap((t) => saysOf(t).map((text) => ({ text })));
 }
 
+// Shortcuts the skill itself teaches (CONFIG.shortcutAllow, e.g. anchor's "Shift+P") are removed first.
+function shortcutCheck(turns) {
+  const allow = (CONFIG.shortcutAllow || []).map((a) => new RegExp(a, "gi"));
+  const hit = said(turns).map((s) => allow.reduce((t, re) => t.replace(re, " "), s.text).match(SHORTCUT)).find(Boolean);
+  return { check: "no_shortcuts", pass: !hit, detail: hit ? `said "${hit[0]}"` : "clean" };
+}
+
 function wordsCheck(name, re, turns) {
   const hit = said(turns).map((s) => s.text.match(re)).find(Boolean);
   return { check: name, pass: !hit, detail: hit ? `said "${hit[0]}"` : "clean" };
@@ -347,7 +354,7 @@ function check(expect, turns, c) {
   const out = [
     wordsCheck("plain_words", INTERNAL_NAME, turns),
     wordsCheck("no_narration", NARRATION, turns),
-    wordsCheck("no_shortcuts", SHORTCUT, turns),
+    shortcutCheck(turns),
     ...CONFIG.universal.map(([name, re, flags]) => wordsCheck(name, new RegExp(re, flags ?? "i"), turns)),
     wordsCheck("no_test_tell", SYNTH_TELL, turns),
   ];
@@ -365,13 +372,16 @@ function check(expect, turns, c) {
   if (reviewMode) {
     add("review_no_demo", demos.length === 0, `${demos.length} demo calls in a review`);
     // Words a review never says before a pass (CONFIG.reviewBanned, e.g. skill 6's "null" and its method).
-    const pass = firstPass(turns);
+    // "Before a pass" by default; CONFIG.reviewBannedUntil = "check" stops at the first check call instead.
+    const pass = CONFIG.reviewBannedUntil === "check"
+      ? { event: turns.flatMap(toolEvents).find((e) => e.name === CHECK) }
+      : firstPass(turns);
     for (const [name, re] of CONFIG.reviewBanned || []) {
       let hit = null;
       let seenPass = false;
       for (const t of turns) {
         for (const e of t.events) {
-          if (pass && e === pass.event) seenPass = true;
+          if (pass && pass.event && e === pass.event) seenPass = true;
           if (e.kind !== "say" || seenPass) continue;
           hit = hit || (e.text.match(new RegExp(re, "i")) || [])[0];
         }
