@@ -95,8 +95,9 @@ task here.
 
 - [x] T358 `.claude/skills/null-parenting-mentor/SKILL.md` step 1, "They don't know" (FR-005a,
   TD § 4 steps 4 and 5):
-  - say `proposal` in one sentence **with its reason** ("Tile, Caption and Stamp sit together at
-    the top right, apart from everything else. Want to move those as one?");
+  - say `proposal` in one sentence **with its reason** ("Tile, Caption and Stamp sit together,
+    apart from everything else. Want to move those as one?"; a place on screen only when a frame
+    shown says so);
   - on a "no", offer `next_proposal` once ("Or Chip A, Chip B and Chip C?"); on a second "no", or
     with no `next_proposal`, ask them to name the layers. Never a third offer;
   - `no_proposal_reason` `crowded`: TD § 4 step 5's question in plain words ("A lot of your layers
