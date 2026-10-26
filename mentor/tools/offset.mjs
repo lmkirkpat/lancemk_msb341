@@ -6,7 +6,7 @@
 import { runSnippet } from "../bridge-client.mjs";
 import { MentorError } from "../errors.mjs";
 import { parseHost } from "../lib/host.mjs";
-import { analyze, check, demoRefusal, finder, refused, SKILL } from "../lib/offset.mjs";
+import { analyze, check, demoRefusal, finder, refused, SKILL, transformFirst } from "../lib/offset.mjs";
 import { matchLayer } from "../lib/offset-keys.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
@@ -88,6 +88,7 @@ function demoPlan(lesson, current, target) {
     const inUnit = (p) => (unit === "Position" ? /^ADBE Transform Group\/ADBE Position_[012]$/.test(p.path) : p.display_path === unit);
     paths = cl.properties.filter(inUnit).map((p) => p.path);
   }
+  paths = transformFirst(paths, (p) => p); // the demo's result lists them in this order too
   const keyed = cl.properties.filter((p) => paths.includes(p.path));
   const from = Math.min(...keyed.flatMap((p) => p.keys.map((k) => k.time)));
   return { layer: cl, property_paths: paths, from };
