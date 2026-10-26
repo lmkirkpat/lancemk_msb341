@@ -11,7 +11,7 @@ null's own name shared: the rename ask) on 2026-10-24 (FR-019, row 40). Plan and
 approved 2026-10-24 with plan › Q1 and Q2 (FR-008's reading and FR-017's two refusals below) and
 SR-4 (the comp's size; spec 004 tasks-wave-b.md T164, T165).
 
-**Amendment 1 (2026-10-25, L-6): awaiting approval of this text.** The proposal rule is reworked
+**Amendment 1 (2026-10-25, L-6): approved by the human 2026-10-25, H-6 answered.** The proposal rule is reworked
 in TD § 4, § 5 stage 1, § 11 and § 15 (commit 002bf92), approved by the human word for word with
 L6-1 (Chip A to C is the review's next group on the live comp, no extra tie-break) and L6-2 (the
 finder counts a crowd for next-mentor only). Changed here: FR-003, FR-004, FR-005, FR-008, FR-009,
@@ -790,6 +790,8 @@ case 3, the matte, KD-001).
    the crowd exception can be lesson-only exactly. That's a change to `mentor/lib/recommend.mjs`,
    which this skill can't make (FR-001). Related, same owner: next-mentor's prompt names
    `focus_layers`, which is `[]` for a crowd; it should then name the skill without layers.
+   **Answered 2026-10-25: accepted for this sprint as recommended; the shared-code request goes
+   to spec 004's next shared owner.**
 5. **H-5, the designer's H-1 and H-2** (TD § 13). Approved; this spec is written to them.
 
 ### For the curriculum designer (D)

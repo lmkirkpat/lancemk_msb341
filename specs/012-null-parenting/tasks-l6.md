@@ -4,7 +4,7 @@ description: "Task list for spec 012 amendment 1: the L-6 group-and-crowd propos
 
 # Tasks: spec 012 amendment 1, the L-6 proposal rule (skill 6)
 
-**Status**: Draft 2026-10-25, awaiting approval with the spec's amendment 1. Not started.
+**Status**: Approved 2026-10-25 with the spec's amendment 1. Not started.
 
 **Why a second file**: `tasks.md` (T301 to T343) is ticked on branch `skill-6-null`; editing it on
 main would conflict at the merge. These tasks run on the same branch, after 5c9de8c, and before
