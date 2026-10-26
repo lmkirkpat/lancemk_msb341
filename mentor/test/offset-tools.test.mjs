@@ -156,9 +156,20 @@ test("offset_demo: a shift past the comp's end refuses (OFFSET_REFUSED) with no 
   assert.equal(session.currentLesson().demo, null, "the demo isn't used up");
 });
 
-test("offset_demo: a locked layer refuses with no snippet run when the read shows it", async () => {
+test("offset_snapshot: a locked layer is never named as the demo target (L-4)", async () => {
+  project(variant(PRACTICE2, (s) => (s.layers.find((l) => l.name === "Dot 2").locked = true)));
+  const r = await call("offset_snapshot", { skill_options: DOTS });
+  assert.equal(r.demo_target, "layer/7");
   project(variant(PRACTICE_NOW, (s) => (s.layers.find((l) => l.name === "Title").locked = true)));
+  fs.rmSync(SESSION, { force: true });
+  const t = await call("offset_snapshot", { skill_options: PROPS });
+  assert.equal(t.demo_target, null);
+  assert.equal(t.no_demo_reason, "locked");
+});
+
+test("offset_demo: a layer locked after the snapshot refuses with no snippet run when the fresh read shows it (backstop)", async () => {
   await call("offset_snapshot", { skill_options: PROPS });
+  project(variant(PRACTICE_NOW, (s) => (s.layers.find((l) => l.name === "Title").locked = true)));
   await assert.rejects(call("offset_demo", { target: "1/Transform › Scale/1" }), (e) => e.code === "OFFSET_REFUSED" && e.reason === "locked");
   assert.equal(demoRuns(), 0);
 });

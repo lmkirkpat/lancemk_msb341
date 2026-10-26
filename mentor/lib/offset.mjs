@@ -361,13 +361,19 @@ export function analyze(snapshot, opts = {}) {
   else if (!complete || !gapOk) no_demo_reason = "awaiting_order";
   else if (gapUnderFloor(gap, fps)) no_demo_reason = "gap_under_floor";
   else {
-    // The second in their order, or the next one with no expression on a keyed property (FR-009).
+    // The second in their order, or the next one with no expression on a keyed property, its eye on
+    // and not locked (FR-009; locked added 2026-10-26 after live check L-4, where the snapshot
+    // named a locked Dot 2 that offset_demo then refused). offset_demo's lock refusal stays as the
+    // backstop for a lock set after this read.
+    let skippedLocked = false;
     const pick = ordered.slice(1).find((m) => {
       const sl = snapLayerOf(snapshot, m.layer_index);
-      return !hasExpression(sl, m.unit ? m.paths : null) && sl.enabled !== false;
+      if (hasExpression(sl, m.unit ? m.paths : null) || sl.enabled === false) return false;
+      if (sl.locked === true) { skippedLocked = true; return false; }
+      return true;
     });
     if (pick) demo_target = targetId(pick);
-    else no_demo_reason = "expression";
+    else no_demo_reason = skippedLocked ? "locked" : "expression";
   }
 
   return {

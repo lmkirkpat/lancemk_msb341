@@ -134,6 +134,28 @@ test("demo target: the next in order when the second has an expression on a keye
   assert.equal(a.demo_target, "layer/7");
 });
 
+test("demo target: a locked member is skipped like an eye-off one; none left says locked (L-4, FR-009)", () => {
+  // Synthetic edit of the live Mentor Practice 2 capture: Dot 2 locked, as in live check L-4.
+  const s = clone(mp2);
+  s.layers.find((l) => l.name === "Dot 2").locked = true;
+  const dots = { kind: "layers", order: ["Dot 1", "Dot 2", "Dot 3"], gap_frames: 4 };
+  const a = analyze(s, { skill_options: dots });
+  assert.equal(a.demo_target, "layer/7", "Dot 2 is locked: the next in their order, Dot 3");
+  assert.equal(a.no_demo_reason, null);
+  s.layers.find((l) => l.name === "Dot 3").locked = true;
+  const none = analyze(s, { skill_options: dots });
+  assert.equal(none.demo_target, null);
+  assert.equal(none.no_demo_reason, "locked");
+  // Properties kind: the layer itself locked means no member can be the demo.
+  const t = clone(now);
+  t.layers.find((l) => l.name === "Title").locked = true;
+  const props = analyze(t, { skill_options: { order: ["Position", "Scale", "Opacity"], gap_frames: 4 } });
+  assert.equal(props.demo_target, null);
+  assert.equal(props.no_demo_reason, "locked");
+  // Unlocked, the live capture still gives Dot 2.
+  assert.equal(analyze(mp2, { skill_options: dots }).demo_target, "layer/6");
+});
+
 test("an order naming all but the last member counts; a name that isn't a member doesn't", () => {
   const a = analyze(now, { skill_options: { order: ["Opacity", "Scale"], gap_frames: 4 } });
   assert.deepEqual(a.order, ["Opacity", "Scale", "Position"]);
