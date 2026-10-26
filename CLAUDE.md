@@ -150,9 +150,11 @@ a brand new session act like a colleague who already knows what you are working 
      includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
      out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
      more).
-  3. Sprint 3 closes 2026-10-26: the portfolio-website carry-over is logged
-     (`discovery/usage-notes/portfolio-carry-over.md`: three personas rebuilt for the site, same
-     workflow, specs 001 to 009 shipped; TODOs on kit use and time), and the five
+  3. Sprint 3 closes 2026-10-26: the carry-over is logged
+     (`discovery/usage-notes/agent-carry-over.md`: on Operation Food Critic, a new project, the
+     hooks and workflow copied over, ten personas trimmed to seven, and a two-researcher
+     parallel run with no collisions; the portfolio site came first, so it's supporting
+     evidence only), and the five
      skills haven't run live, so plan to mark them partial in `/sprint-review` and carry them
      into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
      overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
