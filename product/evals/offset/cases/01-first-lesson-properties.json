@@ -1,0 +1,88 @@
+{
+  "id": "01-first-lesson-properties",
+  "title": "First lesson, properties kind, on Mentor Practice: Title's three properties, the layers kind offered once, what's left out, order and gap asked",
+  "covers": [
+    "EP-1",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Title's three properties, please."
+    }
+  ],
+  "expect": {
+    "first_tool": "read_learner_record",
+    "tools_called": [
+      "offset_snapshot",
+      "preview_frame"
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "offset_check"
+    ],
+    "say": [
+      {
+        "id": "names_properties",
+        "must": "(?=[\\s\\S]*Title)(?=[\\s\\S]*Position)(?=[\\s\\S]*Scale)(?=[\\s\\S]*Opacity)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "offers_layers_once",
+        "must": "Bar[\\s\\S]*Glow|Glow[\\s\\S]*Bar",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "left_out_null",
+        "must": "CTRL",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "left_out_hidden",
+        "must": "Old Take",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_first",
+        "must": "first|order|lead",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "asks_apart",
+        "must": "apart|gap|far",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "not_everything",
+        "never": "\\b(?:everything that moves|the whole comp|everything in the comp)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-PROPOSAL",
+    "R-OFF-LEFT-OUT",
+    "R-OFF-INTENT",
+    "R-USES-MEMORY",
+    "R-NAMES-REAL"
+  ]
+}

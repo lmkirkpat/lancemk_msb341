@@ -1,0 +1,61 @@
+{
+  "id": "13-order-differs",
+  "title": "The order differs from the stated one: asks if it was a change of mind; doesn't fail it",
+  "covers": [
+    "EP-11",
+    "FR-013"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2-before.json": "stand-in",
+    "order-differs.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2-before.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "order-differs.json",
+      "say": "I staggered them. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "has": [
+        "\"order_differs\":true"
+      ]
+    },
+    "say": [
+      {
+        "id": "asks_change_of_mind",
+        "must": "\\?",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_both",
+        "must": "(?=[\\s\\S]*Dot 3)(?=[\\s\\S]*Dot 2)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_fail",
+        "never": "\\b(?:wrong|mistake|failed|incorrect)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-ORDER",
+    "R-NAMES-REAL"
+  ]
+}

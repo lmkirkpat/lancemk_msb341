@@ -1,0 +1,55 @@
+{
+  "id": "06-floor-30fps",
+  "title": "A 1-frame gap at 30 fps still reads as together: said, no number named, asked again",
+  "covers": [
+    "EP-5",
+    "D-1"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2-before.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2-before.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, one frame apart."
+    }
+  ],
+  "expect": {
+    "snapshot_input_matches": [
+      "gap_frames\":1"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "still_together",
+        "must": "together|too small|too close|barely",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "asks_again",
+        "must": "\\?",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_number",
+        "never": "\\b(?:[2-9]|\\d\\d+)\\s*frames?\\b|\\b(?:a few|couple of)\\s*frames\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-FLOOR",
+    "R-OFF-NO-GAP"
+  ]
+}

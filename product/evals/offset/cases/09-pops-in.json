@@ -1,0 +1,71 @@
+{
+  "id": "09-pops-in",
+  "title": "Opacity moved and Position didn't: the hint shows a frame, asks if it was on purpose, no fix",
+  "covers": [
+    "EP-7",
+    "FR-012"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2-before.json": "stand-in",
+    "pops-in.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2-before.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "pops-in.json",
+      "say": "I staggered them. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "preview_frame",
+      "offset_check"
+    ],
+    "last_check": {
+      "passed": false
+    },
+    "say": [
+      {
+        "id": "names_layer",
+        "must": "Dot 1",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_props",
+        "must": "(?=[\\s\\S]*Opacity)(?=[\\s\\S]*Position)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "asks",
+        "must": "on purpose|\\?",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:stagger|shift|move|fix|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-POPS-IN",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

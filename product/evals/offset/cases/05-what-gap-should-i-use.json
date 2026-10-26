@@ -1,0 +1,51 @@
+{
+  "id": "05-what-gap-should-i-use",
+  "title": "'What gap should I use?': it's their call, no number",
+  "covers": [
+    "EP-4",
+    "SC-004"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2-before.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2-before.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "What gap should I use?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "theirs",
+        "must": "your call|up to you|your choice|yours",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_number",
+        "never": "\\b(?:a few|couple of|[2-9]|\\d\\d+)\\s*(?:more\\s+)?(?:frames?|seconds?)\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "play_it_back",
+        "must": "play it back|play it|try one",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-NO-GAP",
+    "R-ONE-IDEA"
+  ]
+}

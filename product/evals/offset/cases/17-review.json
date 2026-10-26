@@ -1,0 +1,63 @@
+{
+  "id": "17-review",
+  "title": "Review due: a new group (Chip A to C), asks which goes first, no demo, no walkthrough, no gap",
+  "covers": [
+    "EP-15",
+    "SC-008"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/learned-dots.json",
+  "fixture_sources": {
+    "practice2-before.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2-before.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "Yes, let's do the review."
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "Chip A first. Can you show me how?"
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "snapshot_with": {
+      "mode": "review"
+    },
+    "demo_calls_max": 0,
+    "tools_called": [
+      "offset_snapshot"
+    ],
+    "say": [
+      {
+        "id": "names_chips",
+        "must": "(?=[\\s\\S]*Chip A)(?=[\\s\\S]*Chip B)(?=[\\s\\S]*Chip C)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_which_first",
+        "must": "which[^.?!]{0,20}first|first\\?|goes first",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "declines_demo",
+        "must": "review|yours|your own|all yours",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}
