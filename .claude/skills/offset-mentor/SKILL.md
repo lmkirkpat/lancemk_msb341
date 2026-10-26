@@ -154,6 +154,15 @@ start.
      them, and walk them through it in words with a frame.
    - **A gap under the floor they kept:** walk it through in words.
    - **No order yet:** ask the intent question first (step 3).
+   - **Every member after the first is locked** (the reason says locked): say in one sentence
+     that you can't shift a locked layer ("Dot 2 and Dot 3 are locked, so I can't shift either
+     for you"), and walk it through in words with a frame. Don't suggest unlocking to get a demo,
+     and don't promise one later.
+   - **Every member after the first is driven by an expression or hidden** (the reason says
+     expression): say in one sentence why a shift wouldn't show ("an expression drives Dot 2, so
+     its keys aren't what you see", or "Dot 2 is hidden, so you wouldn't see it move"), and walk
+     it through in words with a frame. Don't suggest removing
+     the expression to get a demo, and don't promise one later.
 
    If `offset_demo` returns `OFFSET_REFUSED`, pass on its message in your own words (a key would
    land after the comp ends; the layer is locked; the gap is too small to read) and walk it
