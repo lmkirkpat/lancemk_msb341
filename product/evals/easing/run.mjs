@@ -77,7 +77,7 @@ function validate(c) {
   if (c.learner_record && !fs.existsSync(path.join(CASES_DIR, c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  const known = ["first_tool", "set_ease_max", "set_ease_min", "set_ease_only_on", "verdict", "tools_called", "last_turn_tools_not_called", "last_turn_tools_called", "record_lesson"];
+  const known = ["first_tool", "set_ease_max", "set_ease_min", "set_ease_only_on", "verdict", "tools_called", "last_turn_tools_not_called", "last_turn_tools_called", "record_lesson", "targets_include", "never_said_near"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   return problems;
 }
@@ -247,6 +247,20 @@ function check(expect, turns) {
   if ("last_turn_tools_called" in expect) {
     const missing = expect.last_turn_tools_called.filter((n) => !tools([turns.at(-1)]).some((e) => e.name === n && e.ok));
     add("last_turn_tools_called", missing.length === 0, missing.length ? `no successful ${missing.join(", ")} in the last turn` : "all called");
+  }
+  // Case 26 (matte, KD-001): a segment the lesson must be able to reach, read from the snapshot results.
+  if ("targets_include" in expect) {
+    const targets = new Set(calls.filter((e) => e.name === "snapshot_project" && e.ok).flatMap((e) => parse(e.result)?.targets ?? []));
+    const missing = expect.targets_include.filter((id) => !targets.has(id));
+    add("targets_include", missing.length === 0, missing.length ? `not in any snapshot's targets: ${missing.join(", ")}` : "all in targets");
+  }
+  // No sentence that names the layer also matches the pattern. [{ layer, pattern }], pattern is a regex source (case-insensitive).
+  if ("never_said_near" in expect) {
+    const said = turns.flatMap((t) => t.events.filter((e) => e.kind === "say").map((e) => e.text));
+    const sentences = said.flatMap((text) => text.split(/(?<=[.!?:])\s+|\n+/));
+    const hits = expect.never_said_near.flatMap(({ layer, pattern }) =>
+      sentences.filter((x) => x.includes(layer) && new RegExp(pattern, "i").test(x)).map((x) => x.trim()));
+    add("never_said_near", hits.length === 0, hits.length ? `said "${hits[0]}"` : "clean");
   }
   if ("record_lesson" in expect) {
     const recs = calls.filter((e) => e.name === "record_lesson" && e.ok);
