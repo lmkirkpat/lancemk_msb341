@@ -426,12 +426,17 @@ function lessonMembers(baseline, lesson, bt) {
   });
 }
 
+// FR-011: the demo member is the demo's while its shift is in place, and the learner's once a check
+// has seen it undone (the session's demo.undone, set by markChecked) and it has moved again. Key
+// times alone can't tell the learner's own shift by the same gap from the demo's (spec 010 L-2: the
+// builder undid the demo and dragged Dot 2's bar the same 4 frames), so the undone mark decides.
 function creditFor(member, lesson, startNow, fps) {
   if (!lesson.demo || lesson.demo.segment_id !== member.id) return null;
   const gap = lesson.skill_options && lesson.skill_options.gap_frames;
   if (startNow == null) return "learner";
-  if (Number.isInteger(gap) && Math.abs((startNow - member.start) * fps - gap) < 0.5) return "demo";
   if (Math.abs((startNow - member.start) * fps) < 0.5) return "undone";
+  if (lesson.demo.undone) return "learner";
+  if (Number.isInteger(gap) && Math.abs((startNow - member.start) * fps - gap) < 0.5) return "demo";
   return "learner";
 }
 
