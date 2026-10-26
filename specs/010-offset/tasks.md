@@ -152,8 +152,8 @@ method or gap.
 `discovery/Claude AE Tutor Test.aep`; the cockpit off AE; one skill-builder holding the AE lock (not
 during spec 008's or 009's sitting). The builder does the hand actions.
 
-- [ ] T032 🖐 [US2] Live checks L-1 to L-4 on a **duplicate** of Mentor Practice 2 (quickstart › 2); log each answer for the hand-back. If L-2 shows a lost attribute, note it for T035
-- [ ] T033 🖐 [US1] Captures (quickstart › 3): every file in its table saved to `mentor/test/fixtures/offset/` with `node mentor/dev/capture.mjs`, `practice-now.json` from Mentor Practice itself; then delete the duplicates, confirm both practice comps match their captures, check no capture holds a user or folder name, save the `.aep`, release the lock
+- [x] T032 🖐 [US2] Live checks L-1 to L-4 on a **duplicate** of Mentor Practice 2 (quickstart › 2); log each answer for the hand-back. If L-2 shows a lost attribute, note it for T035
+- [x] T033 🖐 [US1] Captures (quickstart › 3): every file in its table saved to `mentor/test/fixtures/offset/` with `node mentor/dev/capture.mjs`, `practice-now.json` from Mentor Practice itself; then delete the duplicates, confirm both practice comps match their captures, check no capture holds a user or folder name, save the `.aep`, release the lock
 - [ ] T034 Desk block, part 1 (not 🖐): point every test at the live captures (keeping `synthetic/` for rows 5, 18, 19, or replacing row 18 or 19 with its live capture if T033 made one), delete `mentor/test/fixtures/offset/stand-in/`, update `README.md`'s provenance; `npm test` green
 - [ ] T035 [US1] Desk block, part 2 (not 🖐): fix `mentor/jsx/offset-demo.jsx` for any attribute L-2 showed lost (and repeat L-2 before T036); fill each `<!-- L-1 -->` in `SKILL.md` (Quick Offset offered at 25.4 or later alongside dragging if L-1 confirmed the gesture, otherwise left out) and row 16's hint from L-3; `npm test` green. Any result that changes a requirement goes to the spec writer before T036
 - [ ] T036 🖐 [US1] First live lesson, properties kind on Mentor Practice (quickstart › 5.1), by the builder in a plain Claude Code session: time from `calls.jsonl` (SC-001), per check agreement with a scrub (SC-002)

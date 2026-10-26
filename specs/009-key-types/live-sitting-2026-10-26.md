@@ -79,7 +79,7 @@ Run in-process (`key_types_snapshot` with `skill_options.focus` Blink › Opacit
 | `after-demo-reheld.json` | Builder's hand toggle on key 1 | Same as `after-demo.json` |
 | `blink-one-held.json` | Script: key 1.4 s out side hold | What Toggle Hold Keyframe writes (L-2) |
 | `blink-all-held.json` | Script: every Blink side hold | |
-| `wrong-side.json` | Script: key 1.4 s in side hold | Per L-1, this pair (1.4–1.8 s) *snaps*, at 1.4 s |
+| `wrong-side.json` | Script: key 1.4 s in side hold | Per L-1, the 1–1.4 s pair *snaps*, at 1 s (corrected after the desk block caught it) |
 | `hold-at-zero.json` | Script: key 1.4 s (value 0) out side hold | Same shape as `blink-one-held.json`, as the stand-ins had it |
 | `separated-x-held.json` | Script: Dot 3 X Position key 0.5 s out hold | Y untouched |
 | `spinner-eased.json` | Script: Spinner key 0.25 s out side Easy Ease (speed 0, 33.33), in stays linear | Setting the type alone kept speed 90, which still moves at constant speed, so a real ease was planted |
