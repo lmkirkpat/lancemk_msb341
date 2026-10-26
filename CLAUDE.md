@@ -118,8 +118,9 @@ a brand new session act like a colleague who already knows what you are working 
     in 96 minutes, an estimated 4 to 5 days solo), run 3 wave B plus skills 011 and 012 (10-23 to
     10-25, seven usage-limit stalls; one Opus agent at a time after the second). Agents misreport
     their own time by 6 to 10x; times in the notes come from commits.
-  - **Skills built, not yet run live:** `/speed-graph-mentor`, `/key-types-mentor`,
-    `/offset-mentor` and `/next-mentor` are on `main`. Skills 5 and 6 are reviewed and held on
+  - **Skills built:** `/speed-graph-mentor`, `/key-types-mentor`, `/offset-mentor` and
+    `/next-mentor` are on `main`; the first three have passed a first live lesson (below). Skills
+    5 and 6 are reviewed and held on
     `skill-5-anchor` and `skill-6-null` until their live lessons. Eval sets (stand-in fixtures,
     dry-run and smoke runs only, no baselines) are on `evals-wave-a` (008 to 010), `evals-skill-5`
     and `evals-skill-6`, not merged. Smoke findings to fix before baselining: a review self-note
@@ -144,16 +145,27 @@ a brand new session act like a colleague who already knows what you are working 
      passed 2026-10-26 (branch 24/25 vs base 25/25; case 17's layer-count rubric item flaked and
      passed on re-run, see `discovery/usage-notes/easing-slice.md`); offset-order, T123 and
      case 26 are merged, and the easing set is now 26 cases.
-  2. Speed graph's first live lesson passed 2026-10-26 (T032, `discovery/usage-notes/speed-graph.md`:
-     3 min 35 s, one demo, SC-002 4 of 4; to fix: a frame-number reading answer). Its review (T035)
-     is due a day or more later. Key types' passed the same day (T035, `discovery/usage-notes/key-types.md`:
-     3 min 58 s, one demo, SC-002 4 of 4, one Spinner mark; to fix: frames on Mentor Practice 2 don't
-     show which shape is the focus; reset Mentor Practice 2 to `practice2b.json` first). Its review
-     (T038, on Cut) is due a day or more later. Live lessons on Mentor Practice 2 for the rest, in order:
-     offset, pivot, null (each spec's quickstart and 🖐 tasks; offset's L-2 now reports Dot 2 as
-     Position, Opacity, Blurriness, not as `specs/010-offset/quickstart.md:27` says). Then merge
-     skills 5 and 6, fix the smoke findings above, merge the eval sets and set baselines (about
-     $13 to $17 each). Still open from the live sitting: speed graph's "already shaped" list
+  2. Live tasks, in order. First lessons passed 2026-10-26: speed graph (T032, `speed-graph.md`:
+     3 min 35 s, one demo, SC-002 4 of 4; to fix: a frame-number reading answer), key types (T035,
+     `key-types.md`: 3 min 58 s, one demo, SC-002 4 of 4; to fix: frames on Mentor Practice 2 don't
+     show which shape is the focus), and offset's properties kind (T036, `offset.md`: about
+     3 min 46 s, no demo, SC-002 3 of 3; ran on a stale mentor server, so Quick Offset is still open
+     live; to fix: a stated gap the learner changes without saying). All three ran on a mentor
+     server from before that day's merges, so they need a note saying so. Mentor Practice matches
+     none of its captures until Title is put back (T036 left it staggered).
+     - **Now:** offset T037 (layers kind, the Dots on Mentor Practice 2, which matches
+       `practice2b.json`). Use a fresh session, and check that Quick Offset is offered and that Dot 2
+       lists Position and Opacity before Blurriness. Try the cases T036 didn't hit: a pair still
+       together, a layer that pops in, a trimmed in point. Then skill 5's sitting on
+       `skill-5-anchor` (T232 live checks, T233 captures, T234 and T235 at the desk, T236 Door,
+       T237 Gauge or Pop with one L-4 mistake on purpose). One AE user at a time.
+     - **A day or more after a first pass:** speed graph review T035, key types review T038 (on
+       Cut), offset review T040 (on the Chips).
+     - **Then:** skill 6 on `skill-6-null` (T336 live checks, T337 captures, T338 and T339 at the
+       desk, T340 and T341 first lesson with a jump on purpose, T343 review), and pivot review
+       T240 (stretch).
+     - **After the live lessons:** merge skills 5 and 6, fix the smoke findings above, merge the
+       eval sets and set baselines (about $13 to $17 each). Still open from the live sitting: speed graph's "already shaped" list
      includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
      out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
      more).
@@ -161,9 +173,9 @@ a brand new session act like a colleague who already knows what you are working 
      (`discovery/usage-notes/agent-carry-over.md`: on Operation Food Critic, a new project, the
      hooks and workflow copied over, ten personas trimmed to seven, and a two-researcher
      parallel run with no collisions; the portfolio site came first, so it's supporting
-     evidence only), and the five
-     skills haven't run live, so plan to mark them partial in `/sprint-review` and carry them
-     into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
+     evidence only). Three of the five skills passed a first live lesson (speed graph, key types,
+     offset's properties kind); offset's layers kind, pivot and null haven't run live, so mark
+     those partial in `/sprint-review` and carry them, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
      overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
      cockpit cuts their worktrees from local `main` (the agent tool's worktree option starts
      from `origin/main`). The git guard blocks any command containing `merge-base`, even a read.
