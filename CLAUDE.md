@@ -138,7 +138,9 @@ a brand new session act like a colleague who already knows what you are working 
     effects (`offset-order`). Easing case 26 (matte, eye off) passes 3/3 even without T123's
     line, because the tool already keeps mattes out of `hidden_layers` (`evals-matte`).
 - **Next steps:**
-  1. Spec 004 is done except T047 (`/next-mentor` live, quickstart › 5, needs AE). T143's gate
+  1. Spec 004 is done (T047 passed 2026-10-26 after a two-sentence fix to `next-mentor/SKILL.md`; for a
+     live test on a temp learner home, set `AE_MENTOR_HOME` in an MCP config's `env` and run
+     `claude --strict-mcp-config --mcp-config <file>`, since a shell `export` didn't reach the server). T143's gate
      passed 2026-10-26 (branch 24/25 vs base 25/25; case 17's layer-count rubric item flaked and
      passed on re-run, see `discovery/usage-notes/easing-slice.md`); offset-order, T123 and
      case 26 are merged, and the easing set is now 26 cases.
