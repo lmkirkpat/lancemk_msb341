@@ -1,0 +1,54 @@
+{
+  "id": "04-incomplete-attempt",
+  "title": "Scale and other pairs still on the default shape: named, no fix, no offer",
+  "covers": [
+    "EP-3"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "stand-in",
+    "planted-15-80.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "planted-15-80.json",
+      "say": "I shaped Title's first Position move. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "speed_graph_check"
+    ],
+    "last_check": {
+      "passed": false,
+      "has": [
+        "not_shaped"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_scale",
+        "must": "Scale",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:shape|fix|do (?:it|that|them|the rest|the other)|ease|the rest)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

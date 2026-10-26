@@ -1,0 +1,122 @@
+{
+  "run_at": "2026-10-26T06:14:45.762Z",
+  "options": {
+    "only": "08",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.24,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "08-review",
+      "title": "Review due: a new move (Card), no demo, no walkthrough, no reading step; a demo request is declined",
+      "covers": [
+        "EP-6",
+        "US2"
+      ],
+      "fixture_sources": {
+        "practice2-before.json": "stand-in"
+      },
+      "hash": "33318b724bc7799965943f32144aad29bff904eefe520ccb9be64ef012d3d31f",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_mode",
+              "pass": false,
+              "detail": "no snapshot call used mode review"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "snapshot_with",
+              "pass": false,
+              "detail": "no snapshot call with {\"mode\":\"review\"}"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:names_card",
+              "pass": false,
+              "detail": "turn 1: never matched /(?=[\\s\\S]*Card)(?=[\\s\\S]*Position)/"
+            },
+            {
+              "check": "say:declines_demo",
+              "pass": false,
+              "detail": "turn 2: never matched /review|all yours|your own|yours/"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.24219860000000004,
+          "session_id": "617907fe-d131-4f24-aa03-c2fac9652eb6",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Shape the eases on Title in the speed graph.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-15T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Shape Subtitle Position, or try a review on a new move.\",\n      \"review_due\": \"2026-10-16\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Eased every Title pair.\",\n      \"next\": \"Shape the eases on Title in the speed graph.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-15T17:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Shaped Title Position 1.5–3 s, 3–4.37 s and Scale: short start, long landing\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Said 'the middle' first time; after shaping, said 'near the start'. Scale's landing arrived moving at first, then came to rest.\",\n      \"next\": \"Shape Subtitle Position, or try a review on a new move.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-3Dzkbc/learner.json\"\n}\nMENTOR: Welcome back. About a week and a half ago you shaped Title's Position and Scale in the speed graph so they start quickly and land softly. A review is due now.\n\nIn a review you get a move you haven't shaped yet, and you shape it on your own: I don't demonstrate anything, I just check your work when you're done. Want to do the review, or would you rather have a practice lesson first?\n\n### Turn 2: the project is an open comp\nLEARNER: Can you show me how first?\nTOOL CALL speed_graph_snapshot {\"skill_options\":{\"eased_layers\":[\"Title\"],\"land_hard\":[]},\"mode\":\"lesson\"}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8\n  },\n  \"focus\": [\n    \"Card\"\n  ],\n  \"targets\": [\n    \"4/ADBE Transform Group/ADBE Position/1\",\n    \"4/ADBE Transform Group/ADBE Scale/1\"\n  ],\n  \"demo_target\": \"4/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"4/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Card › Position 1.2–2.4 s\",\n      \"layer\": \"Card\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.2,\n      \"to_time\": 2.4,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"4/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Card › Scale 1.2–2.4 s\",\n      \"layer\": \"Card\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"from_time\": 1.2,\n      \"to_time\": 2.4,\n      \"moving_dims\": [\n        \"width\",\n        \"height\"\n      ],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Spinner\",\n        \"Dot 1\",\n        \"Dot 2\",\n        \"Dot 3\",\n        \"Badge\",\n        \"Chip A\",\n        \"Chip B\",\n        \"Chip C\",\n        \"Flag\",\n        \"Pause\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Spinner\",\n          \"property\": \"Rotation\"\n        },\n        {\n          \"layer\": \"Dot 1\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Dot 1\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Blurriness\"\n        },\n        {\n          \"layer\": \"Dot 3\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Dot 3\",\n          \"property\": \"Y Position\"\n        },\n        {\n          \"layer\": \"Dot 3\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Badge\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Badge\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Chip A\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Chip A\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Chip B\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Chip B\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Chip C\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Chip C\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Flag\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Pause\",\n          \"property\": \"Position\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 21,\n  \"candidates_count\": 6,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    }\n  ]\n}\nMENTOR: Sure. That makes this a practice lesson, which can include a demonstration. This comp is Mentor Practice 2.\n\nI'd work on **Card**: its Position from 1.2 to 2.4 s, and its Scale over the same stretch. I'll shape the Position as the demonstration, and you'll shape the Scale.\n\nI've left out Spinner, the three Dots, Badge, the Chips, Flag and Pause. Their moves still need easing first, and that's the easing lesson.\n\nOne quick question before I show you: should either of Card's moves land hard, like an impact or a slam? Or should both settle softly?\n"
+        }
+      ]
+    }
+  ]
+}

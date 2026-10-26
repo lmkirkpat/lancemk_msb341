@@ -1,0 +1,39 @@
+{
+  "id": "14-lands-hard",
+  "title": "Title's last move should slam: dropped without argument",
+  "covers": [
+    "EP-12"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Title's last move should slam, it lands hard."
+    }
+  ],
+  "expect": {
+    "snapshot_input_matches": [
+      "\"land_hard\":\\[[^\\]]*Position/3"
+    ],
+    "say": [
+      {
+        "id": "no_argument",
+        "never": "\\b(?:but|however|I'd still|I would still|really should)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-LANDS-HARD",
+    "R-ONE-IDEA"
+  ]
+}
