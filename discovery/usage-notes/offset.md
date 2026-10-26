@@ -117,6 +117,111 @@ person, and is answered by its 2026-10-26 amendment.
 read Title before this, so put it back, or re-capture on purpose, before the next lesson on
 Mentor Practice. Mentor Practice 2 has to go back to `layer-info/practice2b.json` before T037.
 
+## Session 2: 2026-10-26 (T037, User Story 2, layers kind on Mentor Practice 2)
+
+One first lesson on the layers kind, in a fresh Claude Code session in the repo (the cockpit, not a
+subagent), on the real learner record. Mentor Practice 2 was reset to `layer-info/practice2b.json`
+first. Easing, speed graph, key types and offset (properties kind, session 1) were learned. This
+session's `ae-mentor` server (pid 54473) started at 16:22 local, after the last `mentor/` merge
+(`2082ef5`, 15:52), so session 1's problem 2 didn't apply: the tools matched `main`.
+
+### Steps (quickstart § 5.2)
+
+| Step | What happened | Matches the expected result? |
+|---|---|---|
+| Setup | Mentor Practice 2 active, reset to `practice2b.json`, fresh server | Yes |
+| 0. Remember | Offset learned earlier today (properties kind), not due. Mentioned the earlier Title lesson and that its note pointed to the Dots | Yes |
+| 1. Look and propose | The first snapshot came back "resumed", carrying session 1's order (Opacity, Position, Scale) and 64-frame gap, so Scale was unmatched. The mentor didn't say "resumed" and started fresh. Proposed the Dots at 0.5 s (following the record's note), with Dot 2's Position, Opacity and Blurriness offered in one sentence. Seal left out as a precomp | Mostly: **problem 1**. The tool proposed the properties kind first and the mentor led with the Dots; the quickstart expects Dot 2's properties first |
+| 2. Explain | Frame at 1 s: all three Dots mid-move, "nothing leads the eye". The frame doesn't show which shapes are the Dots (the same issue as key types' finding) | Yes |
+| 3. Order and gap | Dot 1, Dot 2, Dot 3, 6 frames. Said back with my gap and no other number. Over the floor | Yes |
+| 4. Invite | Bar drag, key drag, and **Quick Offset offered alongside** (FR-017 live) | Yes |
+| (question) | "explain how quick offset works": three steps and what to watch for | Partly: **problem 2** |
+| 5. Demo | Not asked for, none run | Yes |
+| 7. Check 1 | Dot 2 +6 frames on all three properties, Dot 3 +12 on Position (X and Y) and Opacity, even rhythm, nothing else changed. Pass | Yes |
+| 10. Record | Passed, no demo, gaps 6 and 6 as measured, next is the Chips review or Dot 2's properties | Yes, but **problem 3** |
+| Wording | No field names, no gap suggested, no announced calls | Yes |
+
+### SC-001: speed and demos
+
+| Measure | Value | Target | Pass? |
+|---|---|---|---|
+| `read_learner_record` (22:27:20) to `record_lesson` (22:29:25), wall clock | **2 min 5 s** | ≤ 15 min | ✓ |
+| Demonstrations | 0 | ≤ 1 | ✓ |
+| Checks to a pass | 1 | none | |
+| Slowest tool call | `preview_frame`, 991 ms (`offset_check` 535 ms) | none | |
+
+### SC-002: the check vs. a scrub in After Effects (9 of 10 needed across the live runs)
+
+| # | What was checked | What I did | Tool's verdict | My verdict (scrub) | Agree? |
+|---|---|---|---|---|---|
+| 4 | Dot 1 to Dot 3 | Quick Offset on the three layers (Cmd+Option drag on the bars) | Dot 1 0.5 s, Dot 2 0.7 s, Dot 3 0.9 s; each Dot's properties together (Dot 3's X and Y too); order matches; even; pass | Same | ✓ |
+
+Mix across the live runs: four apart, two out of order, one even layers pass. Still none still
+together, popped in, trimmed, under the floor, outside the comp or with changed keys. **4 of 4
+agree; 6 more checks needed.** The pass on the first check meant the hint cases didn't come up; they
+need running on purpose (see the caveat).
+
+### Findings and fixes
+
+1. **A lesson left open in session 1 resumed with stale choices (problem 1).** The first snapshot
+   came back "resumed", with session 1's `order` (Opacity, Position, Scale) and 64-frame gap, so
+   `order_unmatched` held Scale. Cause: during session 1's two-session clash (its problem 1), a
+   snapshot on Mentor Practice 2 at 22:00:57 opened `timing.offset|179` and the 64-frame options
+   were sent to it. It was never checked or passed, and `session.start` (`mentor/lib/session.mjs:119`)
+   resumes any open lesson for the same skill and comp, keeping its `skill_options` and its
+   **baseline**. So the baseline here was from 22:00:57, before the reset. It didn't change the
+   verdict: Blink and the Dots read the same in that baseline as in `practice2b.json`. But a reset
+   or hand edit between an abandoned lesson and the next would make the check compare against a
+   comp that no longer exists. The mentor also didn't say "resumed", against `SKILL.md` step 1,
+   because there was nothing real to pick up. **Fix:** see "To fix later" (a stale open lesson
+   starts fresh). No eval case: it's session state, a unit test fits better.
+2. **The Quick Offset explanation went beyond what was confirmed live (problem 2).** `SKILL.md`
+   has one sentence on the gesture, so when I asked how it works the mentor filled in. Two claims
+   aren't backed by L-1: "select Dot 1, Dot 2 and Dot 3 in that order" (L-1 found a fixed top layer
+   on layers, so stack order matters, not selection order; on keys it spread bottom-up), and "if
+   they spread the other way, Edit > Undo and drag in the other direction" (not tested). It also
+   told me to judge 6 frames by eye with no way to read the gap. It still worked: the gaps came
+   out at exactly 6 whole frames, where L-1's layer drag landed on half frames. **Fix:** a short
+   "if they ask how Quick Offset works" paragraph in `.claude/skills/offset-mentor/SKILL.md` "Where
+   things are", built only from L-1: on layers the top layer stays and the ones below spread out;
+   on keys it can spread the other way; check the order after the drag and play it back. **Eval
+   case** below.
+3. **The record's summary said how the learner worked.** "Asked how Quick Offset works before
+   trying" is in this lesson's `summary`, and `SKILL.md` step 10 says never how they did it.
+   `record_lesson` didn't catch it (its check covers personal details and fields against the
+   session, not method). **Fix:** fold into the same eval case's rubric. No tool change: method in
+   free text is a judge call.
+4. **The leave-outs and Quick Offset now work live.** Seal was named as a precomp in one sentence,
+   and Quick Offset was offered because `quick_offset` came back true on 26.5 (FR-017, open since
+   session 1). The property order fix from `45bed30` also showed live: the tool listed Dot 2 as
+   Position, Opacity, Blurriness.
+
+**Eval case proposed (offset set, case number from the cockpit):** *how does Quick Offset work.*
+State: AE 26.5 (`quick_offset` true), the Dots, order Dot 1 to Dot 3 and a 6-frame gap stated,
+invite given. Learner turn: "im confused explain how quick offset works", then "done" on a pass
+fixture (`layers-pass.json`). `expect`: no `offset_demo`; no gap number other than 6. Rubric: "The
+explanation claims nothing about which layer stays put or how selection order sets the spread
+beyond what `SKILL.md` states"; "The recorded summary says what the checks showed, not how the
+learner worked or what they asked." Offer `/eval-set` when the offset set is merged from
+`evals-wave-a`.
+
+**Caveat:** I was the learner. I built Mentor Practice 2 and ran Quick Offset on these Dots in L-1
+this morning, so I knew the gesture before asking. The 2 min 5 s is a builder's time, and the one
+check was a clean pass. The verdict agreeing with my scrub counts as evidence about the check
+whoever the learner is. It doesn't test hints, because none were needed. A target-market learner on
+their own comp is what would make SC-001 count as teaching evidence (belief 7).
+
+**Criteria after this session:** SC-001 met for both kinds (builder only). SC-002 is 4 of the 10
+checks it needs, all agreeing. FR-017 (Quick Offset offered at 25.4 or later) is met live. The
+review (T040) is due 2026-10-27 or later, on the Chips. The pops-in, still-together and
+trimmed-in-point hints have never run live. Run them on purpose as the next SC-002 checks.
+
+**Decision signals moved:** none.
+
+**Afterwards:** the Dots are left staggered (Dot 2 +6 frames, Dot 3 +12). Reset Mentor Practice 2
+to `layer-info/practice2b.json` before any lesson that reads it. Title on Mentor Practice is still
+staggered from session 1.
+
 ## To fix later
 
 - **A live lesson can run on a stale mentor server.** MCP servers start with the session and
@@ -131,6 +236,16 @@ Mentor Practice. Mentor Practice 2 has to go back to `layer-info/practice2b.json
   hash returns true.
 - **Stated gap vs. measured gap** (finding 3): the step 7 sentence above in
   `.claude/skills/offset-mentor/SKILL.md`, with the eval case.
+
+- **An abandoned open lesson resumes with its old baseline and choices** (session 2, finding 1).
+  `mentor/lib/session.mjs:119` resumes any unpassed lesson for the same skill and comp, however old
+  and whatever happened in AE since. Proposed: in `session.start`, an open lesson that was never
+  checked and has no demo starts fresh when it's from an earlier day or its baseline no longer
+  matches the comp's group members' keys, without `skill_options` unless they're sent. Test: a
+  snapshot after an unchecked lesson whose baseline differs returns `lesson: "new"` and no stale
+  `order`. That touches spec 004's shared `session.mjs`, so it's a shared-code request.
+- **Quick Offset "how does it work"** (session 2, finding 2): the paragraph above in
+  `.claude/skills/offset-mentor/SKILL.md` "Where things are", with the eval case.
 
 ## Edge cases to plan for
 
