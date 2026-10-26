@@ -138,9 +138,10 @@ a brand new session act like a colleague who already knows what you are working 
     effects (`offset-order`). Easing case 26 (matte, eye off) passes 3/3 even without T123's
     line, because the tool already keeps mattes out of `hidden_layers` (`evals-matte`).
 - **Next steps:**
-  1. Finish spec 004 (no AE): T143 (easing on `offset-order` vs `main`, same day) is running;
-     if it passes, merge `offset-order` and `evals-matte` and tick T144. T047 (`/next-mentor`,
-     quickstart › 5) needs AE.
+  1. Spec 004 is done except T047 (`/next-mentor` live, quickstart › 5, needs AE). T143's gate
+     passed 2026-10-26 (branch 24/25 vs base 25/25; case 17's layer-count rubric item flaked and
+     passed on re-run, see `discovery/usage-notes/easing-slice.md`); offset-order, T123 and
+     case 26 are merged, and the easing set is now 26 cases.
   2. Live lessons on Mentor Practice 2 for the five skills, in order: speed graph, key types,
      offset, pivot, null (each spec's quickstart and 🖐 tasks; offset's L-2 now reports Dot 2 as
      Position, Opacity, Blurriness, not as `specs/010-offset/quickstart.md:27` says). Then merge
@@ -149,13 +150,15 @@ a brand new session act like a colleague who already knows what you are working 
      includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
      out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
      more).
-  3. Sprint 3 closes 2026-10-26: the portfolio-website carry-over isn't started, and the five
+  3. Sprint 3 closes 2026-10-26: the portfolio-website carry-over is logged
+     (`discovery/usage-notes/portfolio-carry-over.md`: three personas rebuilt for the site, same
+     workflow, specs 001 to 009 shipped; TODOs on kit use and time), and the five
      skills haven't run live, so plan to mark them partial in `/sprint-review` and carry them
      into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
      overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
      cockpit cuts their worktrees from local `main` (the agent tool's worktree option starts
      from `origin/main`). The git guard blocks any command containing `merge-base`, even a read.
-  2. Carry these two caveats into the diagnosis and curriculum specs (from the 2026-10-08 Adobe
+  4. Carry these two caveats into the diagnosis and curriculum specs (from the 2026-10-08 Adobe
      side-by-side):
      - Diagnosis is its own capability, not the last step of adding skills. Adobe's answer
        came from reading the whole comp (equal durations, stacked parent motion, dead time),
@@ -165,10 +168,10 @@ a brand new session act like a colleague who already knows what you are working 
      - Restraint and a teaching focus are product choices Adobe could copy with a mode switch
        (the `decisions/002` trigger). The harder-to-copy parts are depth (per-pair checks Adobe
        can't do today) and memory and practice across sessions. Keep those in each spec's "why".
-  3. Gaps 008 left for the next interviews: learn vs. done (section 5), which Adobe AI people
+  5. Gaps 008 left for the next interviews: learn vs. done (section 5), which Adobe AI people
      mean (generative fill vs. the assistant), whether steps match their version (belief 16),
      and referrals. A target-market learner on the panel is still needed for belief 7.
-  4. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
+  6. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
 - **My setup:** After Effects 26.5 on macOS 27.0.1 (stated 2026-10-20). Version-dependent
   steps and shortcuts in specs and lessons target this.
 - **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
