@@ -73,7 +73,7 @@ test("the learner can pick the other kind; the other group is then the one offer
   const a = analyze(mp2, { skill_options: { kind: "layers" } });
   assert.deepEqual(labels(a.group), keyMp2.layers.members);
   assert.deepEqual(a.targets, keyMp2.layers_targets);
-  assert.deepEqual(labels(a.other_group), ["Position", "Opacity", "Blurriness"]);
+  assert.deepEqual(labels(a.other_group), ["Blurriness", "Position", "Opacity"]);
 });
 
 test("within a kind, a tie goes to the earlier start, then the comp's layer order", () => {

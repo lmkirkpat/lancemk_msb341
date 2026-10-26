@@ -7,8 +7,12 @@
 // Sources: Mentor Practice is mentor/test/fixtures/practice-before.json changed to its 2026-10-20
 // state (discovery/usage-notes/mentor-practice-state-2026-10-20.md: Title Position at 0.5, 1.5, 3,
 // 4.37 s, eased; Subtitle Position at 0.3, 1.3, 4.37 s). Mentor Practice 2 is built from the answer
-// key in mentor/dev/build-practice-comp-2.jsx (layer order, times, values, types), since spec 004's
-// practice2-before.json is a live capture not taken yet (its T041, T042).
+// key in mentor/dev/build-practice-comp-2.jsx (layer order, times, values, types) only while spec 004's
+// live capture is missing: once mentor/test/fixtures/practice2-before.json and practice2-60fps.json
+// exist (spec 004 T041, T042, captured 2026-10-26), every Mentor Practice 2 stand-in is derived from
+// them, so the base and the derived states agree (comp id, ease speeds, 3D values, property order,
+// layer_info). The stand-in copies of the base itself are then not written: the loader reads the live
+// files.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -18,6 +22,7 @@ import { apply } from "../../../../fixture/offset-demo.mjs";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
 const PRACTICE = path.resolve(HERE, "../../practice-before.json");
+const LIVE2 = { 30: path.resolve(HERE, "../../practice2-before.json"), 60: path.resolve(HERE, "../../practice2-60fps.json") };
 const clone = (x) => JSON.parse(JSON.stringify(x));
 const HOST = { ae_version: "26.5x89", os: "Macintosh OS 27.0.1/64" };
 
@@ -89,7 +94,25 @@ function practiceNow() {
   return s;
 }
 
-// ---- Mentor Practice 2, from mentor/dev/build-practice-comp-2.jsx (30 fps, 8 s)
+// ---- Mentor Practice 2: spec 004's live capture when it exists; else from
+// mentor/dev/build-practice-comp-2.jsx (30 fps, 8 s)
+
+const isLive2 = (fps) => fs.existsSync(LIVE2[fps]);
+const practice2Base = (fps = 30) => (isLive2(fps) ? JSON.parse(fs.readFileSync(LIVE2[fps], "utf8")) : practice2(fps, fps === 30 ? 300 : 301));
+
+// layer_info (spec 004 wave B) follows the layer edits a stand-in stands for: a moved layer bar moves
+// the layer's start, in and out points; a trimmed in point moves only the in point; a restack swaps
+// indexes. Its transform samples aren't redone (no offset or key-types check reads them).
+function infoOf(snap, name) {
+  return (snap.layer_info || []).find((l) => l.name === name) || null;
+}
+function moveBar(snap, name, frames) {
+  const i = infoOf(snap, name);
+  if (!i) return snap;
+  const by = frames / snap.comp.frame_rate;
+  for (const k of ["start_time", "in_point", "out_point"]) i[k] = r3(i[k] + by);
+  return snap;
+}
 
 function practice2(fps = 30, id = 300) {
   const shape = (index, name, properties) => layer(index, name, "shape", properties);
@@ -157,9 +180,9 @@ standIn("props-one-frame.json", shift(clone(now), "Title", 1, [pathOf(now, "Titl
   standIn("expression-toggled.json", s);
 }
 
-const mp2 = practice2();
-standIn("practice2-before.json", mp2);
-standIn("practice2-60fps.json", practice2(60, 301));
+const mp2 = practice2Base(30);
+if (!isLive2(30)) standIn("practice2-before.json", mp2);
+if (!isLive2(60)) standIn("practice2-60fps.json", practice2Base(60));
 
 standIn("layers-pass.json", shift(shift(clone(mp2), "Dot 2", 4), "Dot 3", 8));
 standIn("layers-uneven.json", shift(shift(clone(mp2), "Dot 2", 4), "Dot 3", 12));
@@ -179,11 +202,22 @@ standIn("separated-x-only.json", shift(shift(clone(mp2), "Dot 2", 4), "Dot 3", 8
   const d3 = s.layers.find((l) => l.name === "Dot 3");
   [d1.index, d3.index] = [d3.index, d1.index];
   s.layers.sort((a, b) => a.index - b.index);
+  const i1 = infoOf(s, "Dot 1");
+  const i3 = infoOf(s, "Dot 3");
+  if (i1 && i3) {
+    [i1.index, i3.index] = [i3.index, i1.index];
+    s.layer_info.sort((a, b) => a.index - b.index);
+  }
   standIn("reordered.json", s);
 }
 // L-3's two shapes (row 16): a dragged bar moves the keys; a trimmed in point doesn't.
-standIn("bar-dragged.json", shift(clone(mp2), "Dot 3", 6));
-standIn("in-point-trimmed.json", clone(mp2));
+standIn("bar-dragged.json", moveBar(shift(clone(mp2), "Dot 3", 6), "Dot 3", 6));
+{
+  const s = clone(mp2);
+  const i = infoOf(s, "Dot 3");
+  if (i) i.in_point = r3(i.in_point + 6 / s.comp.frame_rate);
+  standIn("in-point-trimmed.json", s);
+}
 // Dot 1's hold key moved, its jump not (row 4): its start is still the jump.
 {
   const s = shift(shift(clone(mp2), "Dot 2", 4), "Dot 3", 8);

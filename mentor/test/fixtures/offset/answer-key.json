@@ -22,7 +22,7 @@
       "proposed_kind": "properties",
       "proposed_kind_note": "A tie: Dot 2's Position, Opacity and Blurriness (3) and Dot 1 to 3 (3). FR-006 sends a tie to the properties kind, so the Dots are the other kind, offered in one sentence.",
       "other_kind": "layers",
-      "properties": { "layer": "Dot 2", "members": [["Position", 1], ["Opacity", 1], ["Blurriness", 1]], "start": 0.5, "end": 1.5 },
+      "properties": { "layer": "Dot 2", "members": [["Blurriness", 1], ["Position", 1], ["Opacity", 1]], "start": 0.5, "end": 1.5 },
       "layers": { "members": ["Dot 1", "Dot 2", "Dot 3"], "start": 0.5 },
       "all_layer_groups": [["Dot 1", "Dot 2", "Dot 3"], ["Chip A", "Chip B", "Chip C"]],
       "property_group_layers": ["Dot 2", "Dot 1", "Dot 3", "Card", "Chip A", "Chip B", "Chip C", "Badge"],
@@ -31,7 +31,7 @@
       "layers_targets": ["layer/5", "layer/6", "layer/7"],
       "layers_target_refs": [
         ["Dot 1", "Position"], ["Dot 1", "Opacity"],
-        ["Dot 2", "Position"], ["Dot 2", "Opacity"], ["Dot 2", "Blurriness"],
+        ["Dot 2", "Blurriness"], ["Dot 2", "Position"], ["Dot 2", "Opacity"],
         ["Dot 3", "Position"], ["Dot 3", "Opacity"]
       ],
       "demo_targets": [

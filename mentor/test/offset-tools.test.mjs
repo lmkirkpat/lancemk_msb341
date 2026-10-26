@@ -210,7 +210,7 @@ test("layers kind: the demo shifts every keyed property on Dot 2 (effect key inc
   assert.deepEqual(r.group.members.map((m) => m.label), ["Dot 1", "Dot 2", "Dot 3"]);
   assert.equal(r.demo_target, "layer/6");
   const d = await call("offset_demo", { target: "layer/6" });
-  assert.deepEqual(d.properties, ["Position", "Opacity", "Blurriness"]);
+  assert.deepEqual(d.properties, ["Blurriness", "Position", "Opacity"]);
   assert.equal(d.from, 0.5);
   assert.equal(d.to, 0.633);
   const c = await call("offset_check");

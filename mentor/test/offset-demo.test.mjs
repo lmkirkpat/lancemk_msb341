@@ -185,8 +185,8 @@ test("the twin's apply on part of a layer moves only those paths", () => {
 
 test("the twin's run saves the edit and returns what moved", () => {
   const saved = [];
-  const r = run({ comp_id: 300, layer_index: 6, property_paths: dot2(mp2).properties.map((p) => p.path), shift_frames: 4 }, { snapshot: clone(mp2), saveEdit: (e) => saved.push(e) });
-  assert.deepEqual(r, { layer: "Dot 2", properties: ["Position", "Opacity", "Blurriness"], shift_frames: 4, keys_moved: 6 });
+  const r = run({ comp_id: mp2.comp.id, layer_index: 6, property_paths: dot2(mp2).properties.map((p) => p.path), shift_frames: 4 }, { snapshot: clone(mp2), saveEdit: (e) => saved.push(e) });
+  assert.deepEqual(r, { layer: "Dot 2", properties: ["Blurriness", "Position", "Opacity"], shift_frames: 4, keys_moved: 6 });
   assert.equal(saved.length, 1);
   assert.deepEqual(saved[0].property_paths, dot2(mp2).properties.map((p) => p.path));
 });
@@ -203,7 +203,7 @@ for (const [why, args, change] of [
     const s = clone(mp2);
     if (change) change(s);
     assert.throws(
-      () => run({ comp_id: 300, layer_index: 6, property_paths: dot2(mp2).properties.map((p) => p.path), ...args }, { snapshot: s, saveEdit: (e) => saved.push(e) }),
+      () => run({ comp_id: mp2.comp.id, layer_index: 6, property_paths: dot2(mp2).properties.map((p) => p.path), ...args }, { snapshot: s, saveEdit: (e) => saved.push(e) }),
       (e) => e.code === "OFFSET_REFUSED" && e.reason === why && !/_/.test(e.message),
     );
     assert.equal(saved.length, 0);

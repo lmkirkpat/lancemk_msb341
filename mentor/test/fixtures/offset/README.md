@@ -25,8 +25,7 @@ one).
 | `records/learned-dots.json` | Synthetic record: offset learned and due, Dot 1 to 3's units as past targets on Mentor Practice 2 (T025) | Kept |
 | `stand-in/build.mjs` | Writes every stand-in and synthetic below: `node mentor/test/fixtures/offset/stand-in/build.mjs` | Deleted with `stand-in/` |
 | `stand-in/practice-now.json` | `mentor/test/fixtures/practice-before.json` changed to the 2026-10-20 state (Title Position at 0.5, 1.5, 3, 4.37 s, eased; `discovery/usage-notes/mentor-practice-state-2026-10-20.md`) | `practice-now.json`, quickstart › 3 |
-| `stand-in/practice2-before.json` | Built from `mentor/dev/build-practice-comp-2.jsx`'s answer key (layer order, times, values, types) | Spec 004's live `mentor/test/fixtures/practice2-before.json` (its T042) |
-| `stand-in/practice2-60fps.json` | The same at 60 fps | Spec 004's live `mentor/test/fixtures/practice2-60fps.json` |
+| `../practice2-before.json`, `../practice2-60fps.json` | Spec 004's live captures (2026-10-26). `build.mjs` derives every Mentor Practice 2 stand-in below from them, so ids, ease speeds, 3D values, property order (AE reads Dot 2's Blurriness before its Transform properties) and `layer_info` match the base. Without them it falls back to a base built from `mentor/dev/build-practice-comp-2.jsx` and writes it to `stand-in/` | Live already |
 | `stand-in/props-pass-landing.json` | Title's Opacity lands 4 frames early, Scale 4 frames later (US1 #3) | Live capture, quickstart › 3 |
 | `stand-in/props-one-frame.json` | Title's Scale moved 1 frame (US1 #4) | Live capture |
 | `stand-in/layers-pass.json`, `layers-uneven.json` | Dots staggered 4 and 8 frames; 4 and 12 (FR-015) | Live captures |
