@@ -1,0 +1,148 @@
+{
+  "run_at": "2026-10-26T06:21:17.704Z",
+  "options": {
+    "only": "01",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.18,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "01-first-lesson",
+      "title": "First lesson: asks what should snap before proposing; candidates as questions, at most three; real names",
+      "covers": [
+        "KT-a",
+        "US1"
+      ],
+      "fixture_sources": {
+        "practice2-before.json": "stand-in"
+      },
+      "hash": "6c07f8fd6353e0e0680b09f7987d7875e299388060016c77f9fa228e229bd8c0",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was read_learner_record"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:asks_what_snaps",
+              "pass": true,
+              "detail": "turn 1: \"snap\""
+            },
+            {
+              "check": "say:asks_question",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            },
+            {
+              "check": "say:names_candidates",
+              "pass": true,
+              "detail": "turn 1: \"blink\""
+            },
+            {
+              "check": "say:not_mistakes",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:no_see_through_hidden",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KT-INTENT-FIRST",
+              "pass": true,
+              "reason": "Before naming any candidate or setting a focus, the mentor asks \"Is anything here meant to snap, like a blink, an on/off, or a cut?\" and only gives one line of framing first."
+            },
+            {
+              "item": "R-KT-CANDIDATES-AS-QUESTIONS",
+              "pass": true,
+              "reason": "It names two candidates by layer and property, Blink Opacity and Cut Opacity, each framed as a question (\"Is it meant to blink on and off sharply, or fade?\"), never as a mistake or an instruction to hold."
+            },
+            {
+              "item": "R-USES-MEMORY",
+              "pass": true,
+              "reason": "\"Two weeks ago you eased the Title in Mentor Practice\" matches the record's 2026-10-12 easing lesson in plain words with an accurate how-long-ago, without reading out fields."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Mentor Practice 2, Blink Opacity (three pairs, first at 1 s) and Cut Opacity (one pair at 3 s) all match key_types_snapshot, and Title and Mentor Practice come from the learner record."
+            }
+          ],
+          "cost": 0.17956319999999998,
+          "session_id": "5bbd886c-c014-4588-af7d-163084d3d5a1",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-PCcPcK/learner.json\"\n}\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [],\n  \"should_move\": []\n}\nMENTOR: Welcome back. Two weeks ago you eased the Title in Mentor Practice, so you already know one way a key can travel. Today is about choosing between eased, steady, and a straight jump.\n\nYou're in Mentor Practice 2. Is anything here meant to snap, like a blink, an on/off, or a cut?\n\nTwo things change Opacity in a way that might be meant to snap:\n- **Blink**: its Opacity changes three times, starting at 1 s. Is it meant to blink on and off sharply, or fade?\n- **Cut**: its Opacity changes once, at 3 s. Should that be a hard cut, or a fade?\n\nTell me which (if any) should snap, and which are meant to fade.\n"
+        }
+      ]
+    }
+  ]
+}

@@ -154,7 +154,7 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches"];
+    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
@@ -404,6 +404,10 @@ function check(expect, turns, c) {
     const ok = snaps.some((e) => new RegExp(re).test(JSON.stringify(e.input || {})));
     add(`snapshot_input:${re.slice(0, 30)}`, ok, ok ? "ok" : `no snapshot call whose input matches /${re}/`);
   }
+  for (const re of expect.snapshot_input_lacks || []) {
+    const bad = snaps.find((e) => new RegExp(re).test(JSON.stringify(e.input || {})));
+    add(`snapshot_input_lacks:${re.slice(0, 30)}`, !bad, bad ? `a snapshot call's input matched /${re}/: ${JSON.stringify(bad.input).slice(0, 120)}` : "ok");
+  }
   if ("snapshot_calls_max" in expect) add("snapshot_calls_max", snaps.length <= expect.snapshot_calls_max, `${snaps.length} snapshot calls`);
   if ("demo_calls_min" in expect) add("demo_calls_min", demos.length >= expect.demo_calls_min, `${demos.length} demo calls`);
   if ("demo_calls_max" in expect) add("demo_calls_max", demos.length <= expect.demo_calls_max, `${demos.length} demo calls`);
@@ -421,8 +425,10 @@ function check(expect, turns, c) {
     else {
       const problems = [];
       if ("passed" in want && r.passed !== want.passed) problems.push(`passed was ${r.passed}`);
-      for (const s of want.has || []) if (!last.result.includes(s)) problems.push(`reply lacks ${s}`);
-      for (const s of want.lacks || []) if (last.result.includes(s)) problems.push(`reply has ${s}`);
+      // The reply is pretty-printed JSON; compare against it with the space after each colon removed.
+      const raw = last.result.replace(/":\s+/g, '":');
+      for (const s of want.has || []) if (!raw.includes(s)) problems.push(`reply lacks ${s}`);
+      for (const s of want.lacks || []) if (raw.includes(s)) problems.push(`reply has ${s}`);
       for (const [k, v] of Object.entries(want.input || {})) if (JSON.stringify((last.input || {})[k]) !== JSON.stringify(v)) problems.push(`input ${k} was ${JSON.stringify((last.input || {})[k])}`);
       add("last_check", problems.length === 0, problems.length ? problems.join("; ") : "matches");
     }

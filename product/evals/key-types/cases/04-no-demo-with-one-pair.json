@@ -1,0 +1,41 @@
+{
+  "id": "04-no-demo-with-one-pair",
+  "title": "One focus pair (Cut): no demonstration, a walkthrough in words",
+  "covers": [
+    "KT-c"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2-before.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2-before.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "Cut should snap."
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "Can you show me how?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "walks_through",
+        "must": "Toggle Hold Keyframe|Animation|right-click",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-WALKTHROUGH",
+    "R-NAMES-REAL"
+  ]
+}

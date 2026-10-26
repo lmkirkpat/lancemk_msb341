@@ -1,0 +1,38 @@
+{
+  "id": "10-hold-at-zero-not-hidden",
+  "title": "A layer held at Opacity 0 is vanishing, never 'hidden'",
+  "covers": [
+    "KT-h"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2-before.json": "stand-in",
+    "hold-at-zero.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2-before.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2-before.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "hold-at-zero.json",
+      "say": "I held the middle one. Done."
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "not_hidden",
+        "never": "\\bBlink\\b[^.?!]{0,60}\\bhidden\\b|\\bhidden\\b[^.?!]{0,60}\\bBlink\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-NOT-HIDDEN",
+    "R-NAMES-REAL"
+  ]
+}

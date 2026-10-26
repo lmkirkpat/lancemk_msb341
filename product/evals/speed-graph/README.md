@@ -84,6 +84,7 @@ turns. Fixture source: `stand-in` (builder's hand-built file, replaced at the li
 - **08** and **17** have a "yes, do the review" turn: a due review is offered, then waits for the learner to agree.
 - No case reaches a full pass of the lesson: the stand-ins only plant single mistakes (`planted-*`), and none has every Title pair shaped. Same for a shaped Card in the review. See requests.
 - **06** uses the Logo expression; **07** the shared key (spec 008 overlap rows).
+- The runner's `last_check.has` compares against the check's reply with the space after each colon removed (found in the key-types smoke run; case 11's `"dimension":"height"` check depends on it, and it has not been run since).
 
 ## The fixture tell
 
@@ -108,7 +109,7 @@ deleted:
 2. Change those labels (`stand-in` to `live`) in each case's `fixture_sources`. `--strict-sources` fails
    until none are stale.
 3. A stand-in with **no live twin under the same name** now fails the dry run with "no fixture". Capture it
-   under that name or change the cases that use it. Every fixture these cases use is in the builder's README table (`mentor/test/fixtures/speed-graph/README.md`) with a live replacement (the dry run lists any that don't resolve).
+   under that name or change the cases that use it. Every fixture these cases use is in the builder's README table (`mentor/test/fixtures/speed-graph/README.md`) with a live replacement.
 4. Run each case once with `--only` and read the facts the checks assume, which a live capture can change
    (Title's four pairs and their times, the leave-outs (Old Take, CTRL, Icon, Logo, Subtitle, Bar, Glow) and the planted mistakes' codes). A changed fact is a case edit, not a skill bug.
 5. Then the baseline: `node product/evals/speed-graph/run.mjs`. A live capture changes a case's hash, so

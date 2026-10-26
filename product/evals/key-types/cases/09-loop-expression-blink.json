@@ -1,0 +1,49 @@
+{
+  "id": "09-loop-expression-blink",
+  "title": "A blink with an expression on isn't a candidate; the expression is a left-out reason",
+  "covers": [
+    "KT-g"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "loopout-blink.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "loopout-blink.json",
+      "say": "/key-types-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "key_types_snapshot"
+    ],
+    "say": [
+      {
+        "id": "names_expression_layer",
+        "must": "Loop Blink",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "says_expression",
+        "must": "expression",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "not_a_question_candidate",
+        "never": "Loop Blink[^.?!]*\\b(?:meant to snap|should snap|snap on)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-LEFT-OUT",
+    "R-NAMES-REAL"
+  ]
+}
