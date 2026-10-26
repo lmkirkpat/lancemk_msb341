@@ -11,6 +11,16 @@ null's own name shared: the rename ask) on 2026-10-24 (FR-019, row 40). Plan and
 approved 2026-10-24 with plan › Q1 and Q2 (FR-008's reading and FR-017's two refusals below) and
 SR-4 (the comp's size; spec 004 tasks-wave-b.md T164, T165).
 
+**Amendment 1 (2026-10-25, L-6): awaiting approval of this text.** The proposal rule is reworked
+in TD § 4, § 5 stage 1, § 11 and § 15 (commit 002bf92), approved by the human word for word with
+L6-1 (Chip A to C is the review's next group on the live comp, no extra tie-break) and L6-2 (the
+finder counts a crowd for next-mentor only). Changed here: FR-003, FR-004, FR-005, FR-008, FR-009,
+FR-012, FR-019, FR-024, new FR-005a (saying the proposal), US1 #1 and new #8 and #9, Edge Cases,
+L-6, SC-001, the Eval plan (case 1, new 19 and 20), Assumptions and Open questions (H-4 amended,
+L6-1 and L6-2 answered, H-6 open). FR-008, FR-009, FR-012 and FR-019 also close the review's S6
+gaps (spec wording behind what `skill-6-null` already builds). The new tasks are in
+[tasks-l6.md](tasks-l6.md) (T350 on), so the builder's ticked `tasks.md` isn't edited.
+
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 6,
 Move a group with a null." Record ID `parenting.null` (in `mentor/curriculum/path.json`, position
 6, hard prerequisite `transform.anchor`, soft `motion.sources`), short name `null-parenting`, tool
@@ -100,10 +110,11 @@ verified pass with at most one demonstration, and the check agrees with a look i
 
 **Acceptance Scenarios**:
 
-1. **Given** Mentor Practice 2 with its wave B layers, **When** the lesson starts and the learner
-   has no group in mind, **Then** the mentor proposes Tile, Caption and Stamp in one sentence and
-   names what it leaves out (Shadow follows Plate; the matte pair moves as one but sits elsewhere),
-   one sentence per reason (TD § 4).
+1. **Given** Mentor Practice 2 as built (wave A's layers and wave B's), **When** the lesson starts
+   and the learner has no group in mind, **Then** the mentor proposes Tile, Caption and Stamp in one
+   sentence with its reason (they sit together, apart from everything else), names what it leaves
+   out for the candidate table's reasons (Shadow follows Plate), one sentence per reason, and never
+   lists the 13 wave A layers that crowd together (TD § 4, § 15).
 2. **Given** a focus is agreed, **When** the mentor explains, **Then** it uses CTRL with Title and
    Subtitle if the open comp has them, or one frame of the focus group otherwise, and says children
    inherit position, scale and rotation, not opacity or effects (TD § 5 stage 2).
@@ -121,6 +132,12 @@ verified pass with at most one demonstration, and the check agrees with a look i
    and says Caption still fades in on its own (TD § 5 stage 6).
 7. **Given** the learner fades the null instead of moving it, **When** they say "done", **Then** it
    doesn't pass and the hint says opacity doesn't pass from a parent to its children (TD § 7).
+8. **Given** the proposal in #1, **When** the learner says no, **Then** the mentor offers Chip A,
+   Chip B and Chip C once, and on a second no asks the learner to name the layers (TD § 4 step 4).
+9. **Given** a comp whose only linked layers are one crowd of 5 or more, **When** the learner has no
+   group in mind, **Then** the mentor proposes nothing, says in plain words that many layers sit
+   close together so it can't tell which belong together, asks which 2 to 4 should move as one, and
+   lists none of them (TD § 4 step 5).
 
 ---
 
@@ -169,16 +186,17 @@ and no "null", checks with FR-010 to FR-016, and records a review.
 
 **Acceptance Scenarios**:
 
-1. **Given** a due review and a group of 2 to 4 unparented candidates not in the record for this
-   skill on this comp, **When** offered and accepted, **Then** the mentor names the layers and the
-   task without the word "null", asks the turn-or-scale question, and gives no menu path and no
-   mention of jumps (TD § 11).
+1. **Given** a due review and a group by FR-005's rule (never a crowd) of unparented candidates not
+   in the record for this skill on this comp (on Mentor Practice 2 as built, after the lesson's
+   group: Chip A to C, L6-1; on `practice2b.json`: Row A to C), **When** offered and accepted,
+   **Then** the mentor names the layers and the task without the word "null", asks the
+   turn-or-scale question, and gives no menu path and no mention of jumps (TD § 11).
 2. **Given** the learner parents Row B and Row C to Row A, **When** checked, **Then** it doesn't
    pass, the hint names what the check sees ("Row B and Row C follow Row A, so anything you do to
    Row A drags them along") and stops there; it's recorded as a review that didn't pass and the
    skill stays learned.
-3. **Given** a due review and no unparented group on the comp, **When** the session starts,
-   **Then** no review is offered and it stays due.
+3. **Given** a due review and no unparented group on the comp (a crowd alone counts as none, TD
+   § 11), **When** the session starts, **Then** no review is offered and it stays due.
 
 ---
 
@@ -205,9 +223,12 @@ and offers it; on "go ahead", one sentence and the lesson runs (spec 004 FR-005)
 The overlap rows are in **Edge cases where concepts overlap** below (the `/overlap-audit`
 section). Other edge cases:
 
-- **No group in the comp** (no 2 candidates whose bounds overlap or nearly touch, and the learner
-  names none): say so and ask the learner to make a small group to practice on (TD § 4). Never
-  invent a grouping. In a review: no review.
+- **No group in the comp** (no cluster of 2 to 4 by FR-005, and the learner names none): with a
+  crowd, the crowd question (FR-005a); with no crowd either, say so and ask the learner to make a
+  small group to practice on (TD § 4 step 5). Never invent a grouping, and never trim a crowd to 4.
+  In a review, either way: no review (TD § 11).
+- **A group and a crowd on one comp** (Mentor Practice 2 as built): the group is proposed; the
+  crowd's layers are never listed, and a learner may still name any of them (TD § 4).
 - **The learner names 1 layer, or more than 4**: ask what else should move with it, or which 4 to
   start with (TD § 4).
 - **Adding a null renumbers every layer below it.** Layers are matched by name, never by index, for
@@ -247,10 +268,21 @@ section). Other edge cases:
   tolerances (1 px, half a frame, FR-028's 10%) in its own file and MUST NOT copy or re-derive the
   matrix math, the parent chain or the class. No layer may be filtered by the eye switch alone.
 - **FR-003**: `FINDERS["parenting.null"].focus(snapshot, { exclude })` MUST agree with the skill's
-  own proposal (FR-005) on every fixture: a count above 0 exactly when the snapshot tool would
-  propose a group with the same `exclude`. `review: true` MUST be set only once review mode passes
-  its tests (contract › 2). On a snapshot without `layer_info` (`known: false`), the count is 0:
-  the skill can't run before wave B's reads.
+  own proposal (FR-005) on every fixture, with one exception (L6-2, approved 2026-10-25):
+  - a **group** with the same `exclude`: `count` is the proposal's size and `layers` its names;
+  - **no group but a crowd** (FR-005), and `exclude` empty: `count` is the largest crowd's size and
+    `layers` is `[]`, so next-mentor can still suggest the skill (the lesson then asks, FR-005a) and
+    never names a crowd's layers (TD § 4 step 5);
+  - a crowd with a non-empty `exclude` (a review's question) counts 0, as a review never opens on a
+    crowd (TD § 11). A review on a comp with no past targets passes `exclude: []` and can't be told
+    apart from a lesson question; that gap is Open questions › H-6;
+  - neither: 0.
+
+  This is the one place the finder and the snapshot tool differ, and only for a lesson; spec 004's
+  skill-module contract › 2 ("must agree") holds for every other case. `review: true` MUST be set
+  only once review mode passes its tests (contract › 2). On a snapshot without `layer_info`
+  (`known: false`) or without the comp's width (SR-4), the count is 0: the skill can't place
+  layers.
 
 ### Focus
 
@@ -262,20 +294,49 @@ section). Other edge cases:
   (`samples_truncated` false). A layer `hidden` by the learner is in only if the learner asks. A
   full-frame solid or adjustment layer is never proposed but allowed if picked. A layer that is
   itself the parent of another layer is a candidate; the mentor says once that its children come
-  along. Each left-out reason gets the one sentence TD § 4 gives it.
+  along. Each left-out reason gets the one sentence TD § 4 gives it. A crowd's layers (FR-005) are
+  candidates, not left out: they're never in `left_out` and never listed (TD § 4). Each candidate
+  carries its layer's kind (`layer_info.kind`), which FR-005's text-plus-graphic rank reads.
   **Unique names first** (TD § 14): a candidate whose name another layer in the comp shares can't
   be in the focus yet. The mentor asks the learner in one sentence, before the focus is agreed, to
   rename one ("two layers are both called Shape Layer 1; rename one so I can tell them apart"). The
   mentor never renames a layer (the demo is its only change), `null_parent_snapshot` refuses to set
   a focus while any focus name isn't unique in the comp, and the rename is never graded and never
   an other change (FR-021).
-- **FR-005 (proposal)**: When the learner has no group in mind, the mentor MUST propose up to 4
-  candidates whose comp-space bounds at the before-read time overlap or **nearly touch**, meaning
-  the gap between two bounds is at most **2% of the comp's width** on both axes (38 px at 1920;
-  TD § 4's Guess, approved as H-4). Candidates link pairwise into groups; the proposal is the
-  largest group, a tie going to the group whose top layer is highest in the stack; past 4, the
-  first 4 in stack order that still link. A matte pair counts as 2 and is never split. The rule is
-  deterministic and unit tested. Nothing qualifies: say so (Edge Cases).
+- **FR-005 (proposal; TD § 4 steps 1 to 3, § 15; amended 2026-10-25)**: The proposal is the
+  tool's, deterministic and unit tested; the model only says it (FR-005a).
+  1. **Link.** Two proposable candidates (bucket `default`, FR-004) link when their comp-space
+     bounds at the before-read time overlap or **nearly touch**: a gap of at most **2% of the comp's
+     width** on both axes (38.4 px at 1920; H-4). A matte pair is one unit of 2 that links when
+     either member does. Layers that aren't proposable link nothing.
+  2. **Clusters.** Every unit reachable through links is in one cluster. A cluster of **2 to 4**
+     layers (a matte pair counts as 2 and is never split) is a **group**. A cluster of **5 or
+     more** is a **crowd**: never proposed and never trimmed to 4. A unit that links to nothing is
+     neither (a matte pair on its own is a group of 2).
+  3. **Rank the groups**, first difference wins: (a) a group that has a text layer (`kind` `text`)
+     and at least one layer of another kind ranks first; then (b) more layers; then (c) the group
+     whose top layer is highest in the stack (lowest index). The first is `proposal`; the second is
+     `next_proposal` (or `null` with one group), kept for a "no".
+  4. **No group.** `proposal` and `next_proposal` are `null` and `no_proposal_reason` says why:
+     `crowded` (at least one crowd), `no_group` (nothing links into a cluster of 2 or more),
+     `no_comp_size` (SR-4) or `no_layer_info`.
+
+  The old "largest group" and "past 4, keep growing in stack order" parts are gone (TD § 15).
+  The same rule, with the review's `exclude` (FR-024), gives a review's target.
+- **FR-005a (saying the proposal; TD § 4 steps 4 and 5, § 5 stage 1; added 2026-10-25)**: The
+  skill prompt MUST ask first and propose only when the learner has no group in mind, then:
+  - say `proposal` in one sentence **with its reason**, that the layers sit together apart from
+    everything else ("Tile, Caption and Stamp sit together at the top right, apart from everything
+    else. Want to move those as one?");
+  - after a "no", offer `next_proposal` **once** ("Or Chip A, Chip B and Chip C?"), and after a
+    second "no", or with no `next_proposal`, ask the learner to name the layers. No third offer;
+  - with `no_proposal_reason` `crowded`: propose nothing, say in plain words that many layers sit
+    close together so it can't tell which belong together, and ask which 2 to 4 should move as one
+    (TD § 4 step 5's line). It never lists, counts or names the crowd's layers;
+  - with `no_group`: say so and ask the learner to make a small group to practice on (two shapes
+    and a text layer); with `no_comp_size`: ask them to name the layers;
+  - never pick a focus the learner didn't name or agree to. A focus reached by the proposal, the
+    second group or the learner's own names is set the same way (FR-006).
 - **FR-006 (focus set, the before read)**: The focus is 2 to 4 candidates, named by the learner or
   agreed from the proposal. The `null_parent_snapshot` call that sets it MUST start the lesson
   again from that call's read (`fresh: true`, allowed while no demo or check has run), so the
@@ -288,8 +349,9 @@ section). Other edge cases:
   by the model (SR-1), and only once no other layer in the comp has it (FR-019's rename ask, TD § 14
   D-3).
 - **FR-008 (demo target)**: The demo target MUST be the first focus layer in stack order that
-  renders, is 2D, isn't a matte or eye-off, and has no expression on a keyed Position, Scale or
-  Rotation; one with its own transform keys is preferred over one without. None qualifies: no
+  renders, is 2D, isn't a matte or eye-off, **isn't locked** (the demo would refuse it, FR-017; S6,
+  added 2026-10-25), and has no expression on a keyed Position, Scale or Rotation; one with its own
+  transform keys is preferred over one without. None qualifies: no
   demo, and the mentor walks it through in words. There is no demo target until the null has
   passed N1 and N2 (TD § 4). **Reading (plan › Q1, approved 2026-10-24):** the analyzer sets the
   target from the focus when the lesson starts, and `null_parent_demo` refuses with `null_not_ready`
@@ -311,7 +373,11 @@ All of TD § 6, counting the demo layer.
   fail, nothing is graded on it, and it's never recorded as a miss. When no layer above it moves,
   the parent gets the hint and, **if the learner says the chain is on purpose, N2 passes** and the
   mentor says once that it checks one level only (S-6; ask, don't fail), because FR-012 can measure
-  it. There's no stored-chain option (SR-2 declined), so a moving chain is never measured.
+  it. "On purpose" (`chain_on_purpose`) counts **only as an answer to the `null_has_parent` hint
+  for that same parent**, given at an earlier check: a `chain_on_purpose` with no such hint, or
+  after the null's parent changed, is ignored and the hint is given (again) for the parent it has
+  now; the answer is stored against that parent's name and lapses if the parent changes (S5, added
+  2026-10-25). There's no stored-chain option (SR-2 declined), so a moving chain is never measured.
 - **FR-010 (P1)**: Every focus layer's parent MUST be the lesson's null, read as the nearest entry
   of `sourcesOf(...).parents`. Only the Parent link counts: a layer that follows the null through an
   expression isn't parented.
@@ -332,8 +398,12 @@ All of TD § 6, counting the demo layer.
   parented to the null yet**; P2 uses the last one stored before any focus layer was parented (TD
   § 14 D-1). So a null moved after it was placed but before parenting never reads as a jump. The
   one case left (the null re-placed and focus layers parented with no check in between) gets TD
-  § 7's jump hint, which names a moved null. In a review, the same rule runs from the first check
-  that sees the lesson's null (TD § 11). The tool code stores it on the lesson with `setSkillData()`
+  § 7's jump hint, which names a moved null. **When nothing is stored yet** (a review, or a lesson
+  where the learner parented before any check passed N1 and N2), the first check that sees the
+  lesson's null passing N1 and N2 stores it, even with focus layers already parented, from that
+  read's sample at the before-read time (so an already-keyed null gives its value there; TD § 11,
+  S-3; S6, the lesson case added 2026-10-25). Until something is stored, P2 for a layer parented to
+  the null is "couldn't check" (`not_stored`), never a pass. The tool code stores it on the lesson with `setSkillData()`
   (SR-1); the model never supplies it. For a null with a parent that doesn't move (FR-009), the
   stored null is its own transform only, and the layers above it come from each read's samples
   (W6: `parent_transform` replaces the direct parent only). A null whose chain moves never reaches
@@ -395,6 +465,15 @@ All of TD § 6, counting the demo layer.
   null (FR-007, FR-012) and runs no parenting check (P1 to P3) until the name is unique in the comp.
   The mentor never asks which layer is the null: the check matches by name, so the answer couldn't
   be used.
+  **Every hint has a code** (S6, added 2026-10-25), so the prompt has a sentence for each and never
+  improvises one: data-model › Check result lists them all, including `null_ready` (the null passed
+  and nothing is parented yet: go on to parenting), `no_null` (no lesson null found), `not_a_null`
+  (N1), `three_d` (N2, a 3D null), `not_parented` (a focus layer with no parent while others are
+  parented), `own_keys_changed` (P3), `effect_move` (P4: only an effect moves on the null),
+  `existing_null` (an existing null with children or keys, said once, TD § 4) and `other_comp` (the
+  active comp isn't the lesson's: nothing graded, `markChecked` not called). The snapshot and demo
+  replies' fields (`can_teach`, `focus_set`, `no_proposal_reason`, `next_proposal`,
+  `duplicate_names`, `matte_added`, `null_ready`, `couldnt_check`) are in data-model too.
 - **FR-020 (comments, never graded)**: After a pass, one sentence each only when the read shows it:
   the null's move is linear; it's held (asked, as a question); it overlaps a focus layer's own
   Position, Scale or Rotation keys in time (stacked motion, from the map's `own_keys` and the
@@ -432,7 +511,10 @@ All of TD § 6, counting the demo layer.
   004 FR-005.
 - **FR-024 (review)**: `null_parent_snapshot` with `mode: "review"` MUST drop every layer in the
   record's past targets for this skill on this comp and project, and every layer already parented,
-  before proposing; no group left returns `no_new_target` and no review is offered. A review MUST
+  before proposing by FR-005; its target is FR-005's first group, never a crowd and never
+  `next_proposal` (a review names its task, so it can't open with a question about which layers
+  belong together, TD § 11). No group left, including a comp with only a crowd, returns
+  `no_new_target` and no review is offered. A review MUST
   name the layers and the task **without the word "null"**, ask whether the group will turn or
   scale and from where, and give no demo, walkthrough, menu path or mention of jumps (TD § 11). Its
   before read is the read when the task is given; its stored null is FR-012's review case. A review
@@ -568,17 +650,25 @@ T135. Results go in the hand-back and the skill's fixture README.
   owner acts on it, auto-oriented layers stay out of the focus (FR-004).
 - **L-5 (new)**: adding a null with Layer > New > Null Object renumbers the layers below it, and a
   capture before and after shows name matching finds every focus layer (row 33).
-- **L-6 (new)**: on 2b, FR-005's 2% rule proposes Tile, Caption and Stamp and doesn't link them to
-  the matte pair, Plate or the Row group; if it doesn't, the layout (SR-3) changes, not the rule,
-  unless H-4 says otherwise.
+- **L-6 (new; amended 2026-10-25)**: on Mentor Practice 2 as built (wave A's layers and wave B's),
+  FR-005's rule proposes Tile, Caption and Stamp, keeps Chip A to C as `next_proposal`, and treats
+  wave A's 13 close layers as a crowd it doesn't propose or list; on `practice2b.json` (wave B
+  only) it still proposes Tile, Caption and Stamp. The first run (the builder and the reviewer,
+  2026-10-25) found the old largest-group rule chained wave A's layers into one 13-layer group;
+  the human chose to change **the rule, not the layout** (TD § 15), because a learner's real comp
+  is crowded the same way. If the live read still doesn't give TD § 15's table, it goes back to
+  the curriculum designer as a rule question; the practice comp's layers aren't moved.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: A live lesson on Mentor Practice 2 reaches a verified pass in **15 minutes or less**
-  with **at most one demonstration**. *Measured by:* the builder, usage notes, timings from the
-  call log (spec 004 SC-001).
+- **SC-001**: A live lesson on Mentor Practice 2 as built (wave A's layers and wave B's), started
+  with no group in mind so the tool proposes Tile, Caption and Stamp with its reason (TD § 15),
+  reaches a verified pass in **15 minutes or less** with **at most one demonstration**. Whether the
+  learner accepted the proposal, took the second group or named their own is logged (L6-3's first
+  evidence for the text-plus-graphic Guess). *Measured by:* the builder, usage notes, timings from
+  the call log (spec 004 SC-001).
 - **SC-002**: The jump check agrees with a look in After Effects (each focus layer scrubbed at its
   key times, before and after parenting) in **at least 9 of 10** checks across the live runs, and
   in **every** check of a deliberate jump. *Measured by:* the builder, usage notes (spec 004
@@ -605,8 +695,10 @@ The eval engineer owns the cases, their numbers and fixtures; this lists what mu
 § 13 E, spec 004's skill 6 case). Unit tests cover the measures (FR-026, FR-027); evals score the
 teaching.
 
-1. **First lesson** on Mentor Practice 2: asks first, proposes Tile, Caption and Stamp, names what's
-   left out (Shadow under Plate; the matte pair together, never "hidden"), real names (US1 #1).
+1. **First lesson** on Mentor Practice 2 as built (the stand-in `practice2b-with-wave-a.json`'s
+   layout, then its live capture; TD § 15): asks first; with no group in mind, proposes Tile, Caption and Stamp in one sentence with its reason
+   (apart from everything else); names what's left out for the table's reasons (Shadow under
+   Plate); never lists wave A's crowd; never calls the matte "hidden"; real names (US1 #1).
 2. **Explain** with CTRL on Mentor Practice: position, scale and rotation, not opacity or effects.
 3. **Pivot question**: asked, never picked for the learner; "it'll only slide" accepted.
 4. **Demonstration**: one parenting on the demo target, "moved 0 pixels" in plain words; none
@@ -627,6 +719,10 @@ teaching.
 16. **Review**: due, new group, no "null", turn-or-scale question, no demo (SC-004).
 17. **Review, visible parent**: fails without "null" in the hint; skill stays learned.
 18. **Review with no new group**: not offered, stays due.
+19. **Second group** (added 2026-10-25): the learner says no to Tile, Caption and Stamp; Chip A to C
+    offered once; a second no gets "which layers?", and no third offer (US1 #8, FR-005a).
+20. **Crowd only** (added 2026-10-25): a comp whose linked layers form one crowd; no proposal, the
+    plain-words crowd question, no layer of the crowd named or counted (US1 #9, FR-005a).
 
 Plus spec 004's cross-skill cases that touch this skill (plain speech on every case; cross-skill
 case 3, the matte, KD-001).
@@ -643,8 +739,11 @@ case 3, the matte, KD-001).
   review targets are on Mentor Practice 2's wave B layers (spec 004 FR-031).
 - **Layer names in a lesson are unique**: the focus by FR-004's rename ask, the null by FR-019's
   rename ask (D-3); a stable layer id isn't read in wave B.
-- **2% of the comp's width** for "nearly touch" is a starting number (H-4, approved), checked on 2b
-  (L-6).
+- **The proposal rule's numbers are Guesses** (TD § 13, § 15; H-4, amended 2026-10-25): 2% of the
+  comp's width for "nearly touch", the cut between a group (2 to 4) and a crowd (5 or more), and
+  ranking a text-plus-graphic group first. Checked on Mentor Practice 2 as built (L-6); the first
+  logged lesson where a learner without a group accepts or rejects the proposal is the first
+  evidence for the text preference (L6-3, SC-001).
 
 ## Out of scope (build scope)
 
@@ -672,6 +771,25 @@ case 3, the matte, KD-001).
    sentence and not recorded as a miss (FR-009, FR-012).
 3. **H-3, SR-3** (2b's layout). Approved (tasks-wave-b.md T163, amending T157).
 4. **H-4, "nearly touch" = 2% of the comp's width** (FR-005). Approved; L-6 checks it on 2b.
+   **Amended 2026-10-25:** L-6 found the largest-group rule chains wave A's layers; the human
+   approved TD § 15's group-and-crowd rule word for word (FR-005, FR-005a), keeping the 2% link.
+6. **L6-1, the review's next group on the live comp** (TD § 15). Answered 2026-10-25: Chip A to C,
+   accepted with no extra tie-break (US3 #1; tasks-l6.md supersedes T343's "Row A to C").
+7. **L6-2, the finder on a crowd-only comp** (TD § 15). Answered 2026-10-25: the finder counts a
+   crowd for next-mentor only, so the skill can still be suggested (FR-003).
+
+### For the human (H): open, from amendment 1
+
+1. **H-6, a review question on a crowd-only comp with no past targets there.** `recommend_next`
+   asks the finder the same way for a lesson and for a review whose past targets are on another
+   comp (`exclude: []`), so FR-003 can't tell them apart: on such a comp it could offer a review
+   that `null_parent_snapshot` then answers with `no_new_target`. **Recommended:** accept it for
+   this sprint (the review step already says "nothing new to review" and records nothing, so the
+   learner sees one offer withdrawn, not a wrong lesson), and log it as a shared-code request for
+   spec 004's owner: `recommend_next` passes `{ review: true }` to a finder in its review step, so
+   the crowd exception can be lesson-only exactly. That's a change to `mentor/lib/recommend.mjs`,
+   which this skill can't make (FR-001). Related, same owner: next-mentor's prompt names
+   `focus_layers`, which is `[]` for a crowd; it should then name the skill without layers.
 5. **H-5, the designer's H-1 and H-2** (TD § 13). Approved; this spec is written to them.
 
 ### For the curriculum designer (D)

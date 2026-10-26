@@ -27,7 +27,7 @@ agent reads with `node mentor/dev/capture.mjs --times <list>` and logs.
 | L-3 | `null_parent_demo` on Tile (temp `AE_MENTOR_HOME`, lesson set up first); read; one Edit > Undo. Then parent Caption by dragging the pick whip from Position, keyed and unkeyed, capture `pickwhip-position.json`; a jump, capture `jumped.json` | `moved_px` 0; one undo reverts it; what the snapshot sees for each pick whip |
 | L-4 | Spec 004 T158's answer on Orbit | Whether auto-oriented layers can join the focus |
 | L-5 | Capture before and after Layer > New > Null Object (`renumbered-before.json`, `renumbered-after.json`) | Every focus layer found by name after the renumbering |
-| L-6 | `null_parent_snapshot` with no focus on 2b (needs SR-4's `comp.width`) | The proposal is Tile, Caption and Stamp, not linked to the matte pair, Plate or the Rows |
+| L-6 | `null_parent_snapshot` with no focus on Mentor Practice 2 as built, wave A's layers included (needs SR-4's `comp.width`; amended 2026-10-25, spec › L-6) | `proposal` Tile, Caption and Stamp; `next_proposal` Chip A to C; wave A's 13 close layers a crowd, not listed. If not, it goes to the designer as a rule question; no layer is moved |
 
 ## 3. 🖐 Captures
 
@@ -59,7 +59,8 @@ from L-1, allow auto-oriented candidates if L-4 says so, fix the snippet for any
 ## 5. 🖐 First live lesson (SC-001, SC-002)
 
 The builder, in a plain Claude Code session, skill 5 learned, on Mentor Practice 2:
-`/null-parenting-mentor`, no group in mind: Tile, Caption and Stamp proposed, CTRL explained on
+`/null-parenting-mentor`, no group in mind: Tile, Caption and Stamp proposed with the reason (log
+whether you took it, the second group or your own, L6-3), CTRL explained on
 Mentor Practice if open (or one frame of the group), the null added and placed, a demo on Tile if
 asked, the rest parented, one deliberate jump on one of them (checked, then undone and redone), the
 null's move. ≤ 15 minutes, ≤ 1 demo (times from `calls.jsonl`); per check, whether it matched a
@@ -67,5 +68,6 @@ scrub of each focus layer at its key times (SC-002: 9 of 10, and every deliberat
 
 ## 6. 🖐 Live review, a day or more later (SC-009, stretch)
 
-With § 5's record: the review names Row A, Row B and Row C, never says "null", asks whether the
+With § 5's record: the review names Chip A, Chip B and Chip C (L6-1; Row A to C only on
+`practice2b.json`), never says "null", asks whether the
 group turns or scales; checked and recorded as a review.

@@ -1,6 +1,8 @@
 # Contract: skill 6's three tools (spec 012)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24). **Adds to** spec 004's
+**Status**: Approved 2026-10-24 with the plan. **Amendment 1 (2026-10-25), awaiting approval:**
+the L-6 proposal (`next_proposal`, `no_proposal_reason: "crowded"`), the finder's crowd count
+(L6-2) and the reply fields branch `skill-6-null` already returns (S6). **Adds to** spec 004's
 [skill-module.md](../../004-ae-curriculum/contracts/skill-module.md) › 3 and
 [shared-tools.md](../../004-ae-curriculum/contracts/shared-tools.md); doesn't repeat them. Shapes are
 in [data-model.md](../data-model.md).
@@ -11,7 +13,11 @@ File: `mentor/tools/null-parenting.mjs`.
 export const SKILLS = ["parenting.null"];
 export const FINDERS = {
   "parenting.null": {
-    focus(snapshot, { exclude = [] } = {}) { /* { count: size of the proposal, layers }; 0 without layer_info */ },
+    // A group: { count: the proposal's size, layers: its names }. No group but a crowd, with
+    // `exclude` empty: { count: the largest crowd's size, layers: [] } (L6-2, spec FR-003; never
+    // the crowd's names). A crowd with a non-empty exclude, or nothing: { count: 0, layers: [] }.
+    // 0 without layer_info or comp.width.
+    focus(snapshot, { exclude = [] } = {}) { /* ... */ },
     review: true,   // set once the review tests pass (FR-003, FR-024)
   },
 };
@@ -26,14 +32,20 @@ reason (data-model › Demo).
 
 Input (all optional): `{ "mode": "lesson" | "review", "skill_options": { "focus": [...] } }`.
 
-1. `takeSnapshot()`. If `layerInfo(read).known` is false, reply `no_layer_info`, start nothing.
+1. `takeSnapshot()`. If `layerInfo(read).known` is false, reply `{ can_teach: false, why:
+   "no_layer_info" }`, start nothing.
 2. If `skill_options.focus` is given and differs from the open lesson's (or there is none), check
-   every name is unique in the read (`rename_needed` otherwise, no lesson change), then
+   every name is unique, in the comp and allowed (`focusProblems`: otherwise `focus_set: false`
+   with `rename_needed`, `refused` and `focus_size`, no lesson change), then
    `session.start(read, { skill: "parenting.null", analyze, mode, skill_options, fresh: true })`
-   (`LESSON_UNDERWAY` after a demo or check). Otherwise `session.start` without `fresh`.
+   (`LESSON_UNDERWAY` after a demo or check) and reply with `focus_set: true`. Otherwise
+   `session.start` without `fresh`.
 
-Output: `host`, `lesson`, `comp`, and the analyzer result's `proposal`, `left_out`,
-`rename_needed`, `focus`, `targets`, `demo_target`, `no_demo_reason`, `before_time`, `notes`.
+Output (data-model › Snapshot reply): `host`, `lesson`, `mode`, `comp`, the analyzer result's
+`proposal`, `next_proposal` (`null` in a review), `no_proposal_reason`, `left_out`,
+`duplicate_names`, `rename_needed`, `matte_added`, `notes`, and the session's `focus`, `targets`,
+`demo_target`, `demo_used`, `no_demo_reason`, `before_time`, `null_ready`. No field lists a
+crowd's layers (FR-005a).
 `annotations: { readOnlyHint: true }`.
 
 ## `null_parent_demo`
@@ -52,14 +64,16 @@ Input: `{ "target": "parent/Tile" }`. Order:
    undo: true })`; the snippet repeats the lock and parent checks before writing.
 5. `session.recordDemo(target)`.
 6. A second read with the same `sample_times`; P2 for the target through the stored null →
-   `moved_px`, `jumped`. Never retried.
+   `moved_px`, `jumped`, `direction`, `couldnt_check` (then `moved_px` is `null`) and
+   `frame_time`. Never retried.
 
 ## `null_parent_check`
 
 Input: data-model › Check input. A fresh `takeSnapshot({ sample_times })` with the union of the
 focus's P2 times; find and store the null (research R5); `check(baseline, current, skill_data)`;
-`setSkillData` with what it stored; `session.markChecked(passed, { demoUndone })` when the comp
-matches, except on `null_parent_moves`. Never changes the baseline. `annotations: { readOnlyHint:
+`setSkillData` with what it stored; `session.markChecked(passed, { demoUndone })` only when
+`graded` (the comp matches and the result isn't `other_comp`, `null_parent_moves` or an unreadable
+comp), and never once the lesson has passed. Never changes the baseline. `annotations: { readOnlyHint:
 false }` (it writes `skill_data`; nothing in After Effects).
 
 ## `allowed-tools` for `.claude/skills/null-parenting-mentor/SKILL.md`
