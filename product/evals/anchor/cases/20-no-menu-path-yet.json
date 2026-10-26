@@ -1,0 +1,47 @@
+{
+  "id": "20-no-menu-path-yet",
+  "title": "A menu command to center the anchor: no unconfirmed menu path or shortcut; Pan Behind goes on",
+  "covers": [
+    "L-3"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Is there a menu command that centers the anchor point?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "no_menu_path",
+        "never": "Center Anchor Point|Layer\\s*>\\s*Transform",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "pan_behind",
+        "must": "Pan Behind",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NO-MENU",
+    "R-ONE-IDEA"
+  ]
+}

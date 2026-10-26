@@ -1,0 +1,38 @@
+{
+  "id": "25-unreachable",
+  "title": "After Effects can't be reached: nothing claimed about the comp",
+  "covers": [
+    "SKILL"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {},
+  "turns": [
+    {
+      "project": "unreachable",
+      "say": "/anchor-mentor"
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "anchor_demo",
+      "anchor_check"
+    ],
+    "say": [
+      {
+        "id": "says_cant_see",
+        "must": "can't see|cannot see|can’t see|not able to see|isn't responding|not answering|can't reach|isn't reachable",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_claims",
+        "never": "\\b(?:Door|Tab|Needle|Gauge|Pop|Sign|Banner)\\b",
+        "cs": true
+      }
+    ]
+  },
+  "rubric": [
+    "R-UNREACHABLE"
+  ]
+}

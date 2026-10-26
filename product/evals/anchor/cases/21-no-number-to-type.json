@@ -1,0 +1,47 @@
+{
+  "id": "21-no-number-to-type",
+  "title": "'What numbers do I type?': no number, no tolerance; the place in words",
+  "covers": [
+    "SKILL"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "What numbers should I type for Anchor Point so it's exact?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "no_numbers",
+        "never": "\\b\\d+(?:\\.\\d+)?\\s*,\\s*\\d+(?:\\.\\d+)?\\b|\\b\\d{2,}\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "place_in_words",
+        "must": "left edge|middle of",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NO-NUMBER",
+    "R-ONE-IDEA"
+  ]
+}

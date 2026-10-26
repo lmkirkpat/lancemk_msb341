@@ -1,0 +1,63 @@
+{
+  "id": "15-position-keyed-layer",
+  "title": "A layer with Position keyed: the tip once; a slide at another key fails",
+  "covers": [
+    "EP-13",
+    "L-2"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "sled-slid.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Sled should turn from the middle of its left edge."
+    },
+    {
+      "project": "sled-slid.json",
+      "say": "I set it. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "slid_at_key"
+      ]
+    },
+    "say": [
+      {
+        "id": "tip",
+        "must": "Position[^.?!]*key",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "names_sled",
+        "must": "Sled",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_time",
+        "must": "\\d(?:\\.\\d+)? s",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-POSITION-KEYED",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

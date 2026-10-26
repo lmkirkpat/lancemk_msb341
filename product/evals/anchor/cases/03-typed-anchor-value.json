@@ -1,0 +1,73 @@
+{
+  "id": "03-typed-anchor-value",
+  "title": "Anchor Point typed (the layer moved with it): doesn't pass; the 'moved with it' hint with a direction, no numbers",
+  "covers": [
+    "EP-3",
+    "SC-004"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "door-typed.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "door-typed.json",
+      "say": "I typed in a new Anchor Point. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "anchor_check"
+    ],
+    "last_check": {
+      "passed": false,
+      "has": [
+        "moved_with_pivot"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_door",
+        "must": "Door",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "direction",
+        "must": "right",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:move|set|fix|drag|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-MOVED-WITH-PIVOT",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

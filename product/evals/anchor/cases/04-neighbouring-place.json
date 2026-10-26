@@ -1,0 +1,62 @@
+{
+  "id": "04-neighbouring-place",
+  "title": "Banner one place off: fails; the hint names the place it's in",
+  "covers": [
+    "EP-4"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "banner-neighbour.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Banner should turn from the middle of its left edge."
+    },
+    {
+      "project": "banner-neighbour.json",
+      "say": "I set it. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "neighbour_place"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_banner",
+        "must": "Banner",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_place",
+        "must": "bottom[- ]left|corner",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:move|set|fix|drag|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NEIGHBOUR",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

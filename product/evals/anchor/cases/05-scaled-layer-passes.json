@@ -1,0 +1,44 @@
+{
+  "id": "05-scaled-layer-passes",
+  "title": "Pan Behind on a layer at Scale 200% (Plaque) passes",
+  "covers": [
+    "EP-5"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "plaque-pass.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Plaque should turn from the middle of its left edge."
+    },
+    {
+      "project": "plaque-pass.json",
+      "say": "I set it with Pan Behind. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "says_passed",
+        "must": "Plaque",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-PASS",
+    "R-NAMES-REAL"
+  ]
+}

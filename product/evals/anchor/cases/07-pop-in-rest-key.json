@@ -1,0 +1,70 @@
+{
+  "id": "07-pop-in-rest-key",
+  "title": "Pop set while shrunk: fails with the rest-key hint; the rest key named before they start",
+  "covers": [
+    "EP-7",
+    "FR-034"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "pop-shrunk.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Pop should turn from the middle of its bottom edge."
+    },
+    {
+      "project": "pop-shrunk.json",
+      "say": "I set it. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "away_from_rest"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_rest_before",
+        "must": "4\\.3",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "rest_hint",
+        "must": "4\\.3",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "full_size",
+        "must": "full size|full-size|at rest|rest",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:move|set|fix|drag|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-REST-KEY",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

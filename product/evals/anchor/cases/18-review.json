@@ -1,0 +1,64 @@
+{
+  "id": "18-review",
+  "title": "Review due: a new layer (Tab), the hinge asked first, no tool named before 'done', no demo; passes",
+  "covers": [
+    "EP-16",
+    "US2"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/learned-door.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "demo-separated.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tab should turn from the middle of its left edge. Can you show me how?"
+    },
+    {
+      "project": "demo-separated.json",
+      "say": "I set it. Done."
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "snapshot_with": {
+      "mode": "review"
+    },
+    "demo_calls_max": 0,
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "names_tab",
+        "must": "Tab",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_where",
+        "must": "turn from|where",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "declines_demo",
+        "must": "review|yours|your own|all yours",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "08-quick-set-anchor",
+  "title": "The learner asks about Quick Set Anchor: answered plainly, not refused, no steps; the lesson goes on with Pan Behind",
+  "covers": [
+    "EP-8",
+    "FR-030",
+    "SC-005"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Is Quick Set Anchor better than Pan Behind?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "says_beta",
+        "must": "beta",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "pan_behind",
+        "must": "Pan Behind",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_refusal",
+        "never": "\\b(?:can't|won't|not going to) (?:help|talk|tell|say)\\b|\\bdon't have (?:it|Quick)|\\bnot available (?:to you|in your)|\\byou (?:don't|do not) have",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_steps",
+        "never": "Quick Set Anchor[^.?!]{0,80}(?:Cmd|Ctrl|Option|shortcut|click|menu|press)",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-QUICK-SET",
+    "R-ONE-IDEA"
+  ]
+}

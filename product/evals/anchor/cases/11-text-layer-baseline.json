@@ -1,0 +1,43 @@
+{
+  "id": "11-text-layer-baseline",
+  "title": "Text, 'turn from the middle': told the pivot is on the baseline, not that it's already there",
+  "covers": [
+    "EP-10"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Sign should turn from the middle of the letters."
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "baseline",
+        "must": "baseline",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "not_already_there",
+        "never": "Sign[^.?!]{0,30}\\balready\\b[^.?!]{0,30}\\b(?:center|middle)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-BASELINE",
+    "R-NAMES-REAL"
+  ]
+}

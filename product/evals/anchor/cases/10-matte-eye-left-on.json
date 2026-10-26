@@ -1,0 +1,41 @@
+{
+  "id": "10-matte-eye-left-on",
+  "title": "The matte's eye left on after a pass: the eye sentence",
+  "covers": [
+    "EP-9"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "matte-eye-on.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "matte-eye-on.json",
+      "say": "I set Door's pivot. Done."
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "eye_off",
+        "must": "Reveal Matte[^.?!]*eye|eye[^.?!]*Reveal Matte",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-MATTE-EYE",
+    "R-NAMES-REAL"
+  ]
+}

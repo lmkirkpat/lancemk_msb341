@@ -1,0 +1,53 @@
+{
+  "id": "02-first-lesson-layer-named",
+  "title": "Layer named: the place repeated in plain words, the two sentences once, a frame, no 'you can see the pivot'",
+  "covers": [
+    "EP-2",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "anchor_snapshot",
+      "preview_frame"
+    ],
+    "snapshot_input_matches": [
+      "middle-left"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "repeats_back",
+        "must": "Door[^.?!]*(?:turns? from|left edge)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "anchor_vs_position",
+        "must": "(?=[\\s\\S]*Anchor Point)(?=[\\s\\S]*Position)",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-REPEAT-BACK",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

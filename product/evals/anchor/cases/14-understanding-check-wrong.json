@@ -1,0 +1,71 @@
+{
+  "id": "14-understanding-check-wrong",
+  "title": "After a pass: which part stays still. A wrong answer gets one light correction and the pass stands",
+  "covers": [
+    "EP-12"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "door-pass.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "door-pass.json",
+      "say": "I set it. Done."
+    },
+    {
+      "project": "door-pass.json",
+      "say": "The right edge stays still."
+    },
+    {
+      "project": "door-pass.json",
+      "say": "I tried the rotation and undid it. That's it for today."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "record_lesson": {
+      "skill": "transform.anchor",
+      "result": "passed",
+      "demo_used": false
+    },
+    "say": [
+      {
+        "id": "asks_what_stays",
+        "must": "stay(?:s)? still|stay(?:s)? put|stay(?:s)? where|hold(?:s)? still",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "light_correction",
+        "must": "left",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "pass_stands",
+        "never": "\\b(?:didn't pass|did not pass|failed|not a pass)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-UNDERSTANDING",
+    "R-RECORD-HONEST"
+  ]
+}

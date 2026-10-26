@@ -1,0 +1,77 @@
+{
+  "id": "01-first-lesson-no-layer",
+  "title": "First lesson, no layer in mind: intent asked first; one candidate offered with a hinge; leave-outs named once",
+  "covers": [
+    "EP-1",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I don't have a layer in mind."
+    }
+  ],
+  "expect": {
+    "first_tool": "read_learner_record",
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_check"
+    ],
+    "say": [
+      {
+        "id": "asks_intent",
+        "must": "turn|grow",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_question",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "offers_door",
+        "must": "Door",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "hinge",
+        "must": "left",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "leave_out",
+        "must": "Wobble",
+        "turns": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-INTENT-FIRST",
+    "R-AN-PROPOSAL-HINGE",
+    "R-AN-LEAVE-OUTS",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

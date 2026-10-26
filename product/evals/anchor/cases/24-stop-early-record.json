@@ -1,0 +1,41 @@
+{
+  "id": "24-stop-early-record",
+  "title": "The learner stops after a try that moved the layer: recorded partial, plain words, no method or numbers",
+  "covers": [
+    "EP-14"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "door-typed.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "door-typed.json",
+      "say": "I typed in a new Anchor Point. Done."
+    },
+    {
+      "project": "door-typed.json",
+      "say": "I'm out of time, let's stop here."
+    }
+  ],
+  "expect": {
+    "record_lesson": {
+      "skill": "transform.anchor",
+      "result": "partial",
+      "demo_used": false
+    }
+  },
+  "rubric": [
+    "R-RECORD-HONEST",
+    "R-NAMES-REAL"
+  ]
+}

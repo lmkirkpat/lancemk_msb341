@@ -1,0 +1,48 @@
+{
+  "id": "19-cant-check",
+  "title": "A layer that can't be checked (no rectangle): says so and never claims it didn't move",
+  "covers": [
+    "EP-18"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/edge-before.json": "synthetic",
+    "synthetic/row27-no-rect.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/edge-before.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "synthetic/edge-before.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "synthetic/row27-no-rect.json",
+      "say": "I set it. Done."
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "says_cant",
+        "must": "can't (?:check|read|tell)|couldn't (?:check|read)|can not check",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_false_claim",
+        "never": "\\b(?:didn't move|did not move|is in place|stayed put|passed)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-CANT-CHECK",
+    "R-NAMES-REAL"
+  ]
+}

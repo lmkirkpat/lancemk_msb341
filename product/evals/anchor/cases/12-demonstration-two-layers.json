@@ -1,0 +1,67 @@
+{
+  "id": "12-demonstration-two-layers",
+  "title": "Two focus layers: A and Shift+P asked first; one pivot moved on the layer they care less about; frames at the same time; Edit > Undo",
+  "covers": [
+    "EP-11",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door and Tab should both turn from the middle of their left edges."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Can you show me on one first?"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tab is selected and Anchor Point and Position are showing."
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "anchor/6",
+    "tools_called": [
+      "preview_frame"
+    ],
+    "say": [
+      {
+        "id": "asks_show_numbers",
+        "must": "Shift\\s*\\+\\s*P",
+        "turns": [
+          3,
+          4
+        ]
+      },
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "names_tab",
+        "must": "Tab",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-DEMO",
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "13-one-layer-no-demo",
+  "title": "One focus layer: no demonstration, a walkthrough in words",
+  "covers": [
+    "EP-11"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Can you show me how?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "walks_through",
+        "must": "Pan Behind|press Y|\\bY\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_door",
+        "must": "Door",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-WALKTHROUGH",
+    "R-NAMES-REAL"
+  ]
+}

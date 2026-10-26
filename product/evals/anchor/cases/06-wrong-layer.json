@@ -1,0 +1,55 @@
+{
+  "id": "06-wrong-layer",
+  "title": "Pan Behind on Background instead of the focus: 'select it first'",
+  "covers": [
+    "EP-6"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "stand-in",
+    "wrong-layer.json": "stand-in"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Needle should turn from the middle of its bottom edge."
+    },
+    {
+      "project": "wrong-layer.json",
+      "say": "I set it. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "wrong_layer"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_both",
+        "must": "(?=[\\s\\S]*Needle)(?=[\\s\\S]*Background)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "select_first",
+        "must": "select",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-WRONG-LAYER",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}
