@@ -1,6 +1,6 @@
 // Spec 004 wave B, tasks-wave-b T108: FR-014's motion-sources map, step 1
-// (mentor/lib/motion-sources.mjs). Synthetic first (each fixture's comment says so); the live answer
-// keys are T136's.
+// (mentor/lib/motion-sources.mjs). Synthetic first (each fixture's comment says so), then T136's live
+// answer keys at the end.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -84,4 +84,38 @@ test("without layer_info: parents null and read.parents not_read", () => {
     assert.equal(l.static_as_read, false);
     assert.equal(l.expressions.status, "not_read");
   }
+});
+
+// ---- T136: live captures against the motion entries their build scripts declared
+
+const LIVE = path.join(FIXTURES, "layer-info");
+const live = (name) => JSON.parse(fs.readFileSync(path.join(LIVE, name), "utf8"));
+
+for (const [file, keyFile] of [["overlaps.json", "overlaps-expected.json"], ["practice2b.json", "practice2b-expected.json"]]) {
+  test(`live ${file}: every declared layer's entry is as declared (parents, own keys, keyed expressions, precomp contents, static)`, () => {
+    const snap = live(file);
+    for (const d of live(keyFile).layers) {
+      const m = sourcesOf(snap, d.name);
+      assert.ok(m, d.name);
+      const view = {
+        parents: m.parents.map(({ layer, class: cls, shy, moves_children }) => ({ layer, class: cls, shy, moves_children })),
+        own_keys: m.own_keys.map((k) => k.path),
+        expressions_on_keyed: m.expressions.on_keyed.map((k) => k.path),
+        precomp_contents: m.precomp_contents,
+        static_as_read: m.static_as_read,
+      };
+      for (const [field, want] of Object.entries(d.motion)) assert.deepEqual(view[field], want, `${d.name}.${field}`);
+      assert.equal(m.expressions.status, "not_read", `${d.name}: never "none" (FR-014)`);
+    }
+  });
+}
+
+test("live practice-r1.json: Title's map lists its own keys and CTRL (US4 scenario 2)", () => {
+  const snap = live("practice-r1.json");
+  const title = sourcesOf(snap, "Title");
+  const keyed = snap.layers.find((l) => l.name === "Title").properties;
+  assert.deepEqual(title.own_keys.map((k) => [k.path, k.keys]), keyed.map((p) => [p.path, p.keys.length]));
+  assert.deepEqual(title.parents.map((p) => [p.layer, p.class]), [["CTRL", "null"]]);
+  assert.equal(title.parents[0].moves_children, true, "CTRL's Position is keyed");
+  assert.ok(sourcesOf(snap, "CTRL").children.some((c) => c.layer === "Title"));
 });

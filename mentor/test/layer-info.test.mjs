@@ -1,5 +1,6 @@
 // Spec 004 wave B, tasks-wave-b T105: mentor/lib/layer-info.mjs on synthetic snapshots (marked so in
-// each fixture's comment). The live answer-key checks are T136's.
+// each fixture's comment), then T136's live answer-key checks: Mentor Overlaps and Mentor Practice 2b
+// (captured 2026-10-26) against the fields their build scripts declared.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -44,3 +45,70 @@ test("synthetic: the entries returned are the snapshot's own, with nothing added
   }
   assert.equal(byIndex(relations, 1), relations.layer_info[0]);
 });
+
+// ---- T136: live captures against the build scripts' declared fields
+
+const LI = path.join(FIXTURES, "layer-info");
+const live = (name) => JSON.parse(fs.readFileSync(path.join(LI, name), "utf8"));
+const overlaps = live("overlaps.json");
+const overlapsKey = live("overlaps-expected.json");
+const p2b = live("practice2b.json");
+const p2bKey = live("practice2b-expected.json");
+const RECT_TOL = 0.001; // a test input: the capture rounds rects to 0.001 px; the key's text rects aren't rounded
+
+// The key names layers where the read has indexes (parent, matte layer).
+const nameAt = (snap, index) => (index == null ? null : byIndex(snap, index).name);
+function declaredView(snap, entry, field) {
+  if (field === "parent") return nameAt(snap, entry.parent);
+  if (field === "matte") return entry.matte ? { ...entry.matte, layer: nameAt(snap, entry.matte.layer) } : null;
+  return entry[field];
+}
+const closeRect = (got, want, label) => {
+  for (const k of ["left", "top", "width", "height"]) assert.ok(Math.abs(got[k] - want[k]) <= RECT_TOL, `${label} ${k}: ${got[k]} vs ${want[k]}`);
+};
+// `class` is visibility's, checked in visibility.test.mjs.
+const FIELD_SKIP = new Set(["class"]);
+
+test("live overlaps.json: every layer is in layer_info at its declared index, and nothing else", () => {
+  assert.deepEqual(layerInfo(overlaps).layers.map((l) => [l.index, l.name]), overlapsKey.layers.map((l) => [l.index, l.name]).sort((a, b) => a[0] - b[0]));
+});
+
+test("live overlaps.json: every declared field, in and out point and rect is as the build script declared", () => {
+  for (const d of overlapsKey.layers) {
+    const [entry] = byName(overlaps, d.name);
+    for (const [field, want] of Object.entries(d.expect)) {
+      if (FIELD_SKIP.has(field)) continue;
+      assert.deepEqual(declaredView(overlaps, entry, field), want, `${d.name}.${field}`);
+    }
+    assert.equal(entry.in_point, d.in_point, `${d.name} in point`);
+    assert.equal(entry.out_point, d.out_point, `${d.name} out point`);
+    assert.ok(entry.samples.length > 0, `${d.name} is sampled`);
+    for (const sample of entry.samples) closeRect(sample.rect, d.rect, `${d.name} at ${sample.time} s`);
+  }
+});
+
+test("live practice2b.json: every layer is present: the 13 built before at their old indexes, the new ones at theirs, Background last", () => {
+  const want = [
+    ...p2bKey.existing_layers.map((l) => [l.after, l.name]),
+    ...p2bKey.layers.map((l) => [l.index, l.name]),
+  ].sort((a, b) => a[0] - b[0]);
+  assert.deepEqual(layerInfo(p2b).layers.map((l) => [l.index, l.name]), want);
+});
+
+// Shape and text layers: the build script declares collapse false, but AE reads
+// collapseTransformation true for every shape and text layer (Mentor Practice 2's own shape layers
+// read true too). A finding for the cockpit, not a value to change here; see the todo below.
+const COLLAPSE_FINDING = (d) => ["shape", "text"].includes(d.expect.kind) && d.expect.collapse === false;
+
+test("live practice2b.json: every declared field and the rect at 0 s is as the build script declared (collapse on shape and text layers aside)", () => {
+  for (const d of p2bKey.layers) {
+    const [entry] = byName(p2b, d.name);
+    for (const [field, want] of Object.entries(d.expect)) {
+      if (FIELD_SKIP.has(field) || (field === "collapse" && COLLAPSE_FINDING(d))) continue;
+      assert.deepEqual(declaredView(p2b, entry, field), want, `${d.name}.${field}`);
+    }
+    closeRect(entry.samples.find((x) => x.time === 0).rect, d.rect_at_0, `${d.name} at 0 s`);
+  }
+});
+
+test.todo(`practice2b.json: collapse on shape and text layers (${p2bKey.layers.filter(COLLAPSE_FINDING).map((d) => d.name).join(", ")}): declared false by build-practice-comp-2b.jsx, read true from AE; the key or the script's default needs the cockpit's call`);
