@@ -98,7 +98,7 @@ a brand new session act like a colleague who already knows what you are working 
   - **Agent team drafted (2026-10-19, `decisions/007`):** ten personas in `.claude/agents/`, each
     owning its own files, with the main session as the cockpit. Started from
     `ai-foundry-byu/agent-team-kit`, which handles keeping agents from colliding but has no
-    personas (`discovery/agent-team-kit-assessment.md`). Not yet run in parallel.
+    personas (`discovery/agent-team-kit-assessment.md`).
   - **Agent audit and guardrails (2026-10-19):** `/agent-audit` on the personas found 10 issues;
     the prompt fixes are in (skill-builder lost `record_lesson`, Spec Kit gets the cockpit's
     `--number`, subagents hand back instead of asking). `decisions/008`: our own hooks, keyed
@@ -109,15 +109,52 @@ a brand new session act like a colleague who already knows what you are working 
     were checked live in a headless run; the AE lock too on 2026-10-19 (a subagent got AE and
     released it on stop, a second was blocked while the cockpit held it). The cockpit never
     stops, so it stays off AE while a builder needs it.
+  - **Specs (2026-10-20 to 10-24):** curriculum (`specs/004`, with `curriculum.md`), diagnosis
+    (005), installer (006) and UI overhaul (007) approved; 005 to 007 have no plan or tasks yet.
+    The five baseline skills each have a teaching design, spec, plan and tasks: speed graph (008),
+    key types (009), offset (010), set the pivot (011), move a group with a null (012).
+  - **Parallel runs** (`discovery/usage-notes/parallel-runs.md`, with its template): run 1 specs
+    and research (10-20), run 2 wave A code (10-21: spec 004's shared code plus skills 008 to 010
+    in 96 minutes, an estimated 4 to 5 days solo), run 3 wave B plus skills 011 and 012 (10-23 to
+    10-25, seven usage-limit stalls; one Opus agent at a time after the second). Agents misreport
+    their own time by 6 to 10x; times in the notes come from commits.
+  - **Skills built, not yet run live:** `/speed-graph-mentor`, `/key-types-mentor`,
+    `/offset-mentor` and `/next-mentor` are on `main`. Skills 5 and 6 are reviewed and held on
+    `skill-5-anchor` and `skill-6-null` until their live lessons. Eval sets (stand-in fixtures,
+    dry-run and smoke runs only, no baselines) are on `evals-wave-a` (008 to 010), `evals-skill-5`
+    and `evals-skill-6`, not merged. Smoke findings to fix before baselining: a review self-note
+    leaks before the first tool call (key types, offset, pivot), the pivot demo says "opposite
+    directions", and skill 6 step 1 needs "ask and stop".
+  - **Easing after wave A:** the drop to 20/25 was the judge, not the mentor (`23b37e9`); baseline
+    24/25.
+  - **Spec 004 live sitting (2026-10-26,** `specs/004-ae-curriculum/live-sitting-2026-10-26.md`**):**
+    Mentor Practice 2 (with its 2b layers) and Mentor Overlaps are built in the `.aep`, with 11
+    live captures and answer keys. Findings: the snapshot's rotation read doesn't include
+    auto-orient; parenting with the pick whip rewrites the children's raw Position keys, and
+    adding a null renumbers every layer below it; `setTrackMatte` works in 26.5 and AE turns the
+    matte's eye off itself; a snapshot takes about 0.2 s. Key-types and offset stand-ins now
+    derive from the live base; mentor tests 747 pass, 0 fail. Decided the same day: shape and
+    text layers read Collapse on (key fixed), and offset lists Transform properties before
+    effects (`offset-order`). Easing case 26 (matte, eye off) passes 3/3 even without T123's
+    line, because the tool already keeps mattes out of `hidden_layers` (`evals-matte`).
 - **Next steps:**
-  1. Sprint 3, agent team. Done 2026-10-19: the `decisions/008` hooks are loaded in the cockpit
-     (git guard blocked a probe live), and the agent-identity logging test re-ran clean (subagents
-     still carry `agent_type` and `agent_id`, and `SubagentStop` does too; re-run with
-     `node .claude/hooks/probe/identity.mjs`). Also done: `mentor/tools.mjs` split per skill into
-     `mentor/tools/`, and the setup README (`.claude/README.md`). Still to do: a template for the parallel-run notes on time and quality. Then the curriculum
-     spec, which decides the 10 skills, before building them. Run `/overlap-audit` for each new
-     skill (see "Edge cases where concepts overlap" below). Parallel agents share `SKILL.md`,
-     the eval set, and `mentor/`, so isolate them (for example, worktrees).
+  1. Finish spec 004 (no AE): T143 (easing on `offset-order` vs `main`, same day) is running;
+     if it passes, merge `offset-order` and `evals-matte` and tick T144. T047 (`/next-mentor`,
+     quickstart › 5) needs AE.
+  2. Live lessons on Mentor Practice 2 for the five skills, in order: speed graph, key types,
+     offset, pivot, null (each spec's quickstart and 🖐 tasks; offset's L-2 now reports Dot 2 as
+     Position, Opacity, Blurriness, not as `specs/010-offset/quickstart.md:27` says). Then merge
+     skills 5 and 6, fix the smoke findings above, merge the eval sets and set baselines (about
+     $13 to $17 each). Still open from the live sitting: speed graph's "already shaped" list
+     includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
+     out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
+     more).
+  3. Sprint 3 closes 2026-10-26: the portfolio-website carry-over isn't started, and the five
+     skills haven't run live, so plan to mark them partial in `/sprint-review` and carry them
+     into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
+     overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
+     cockpit cuts their worktrees from local `main` (the agent tool's worktree option starts
+     from `origin/main`). The git guard blocks any command containing `merge-base`, even a read.
   2. Carry these two caveats into the diagnosis and curriculum specs (from the 2026-10-08 Adobe
      side-by-side):
      - Diagnosis is its own capability, not the last step of adding skills. Adobe's answer
