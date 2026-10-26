@@ -164,3 +164,17 @@ and on Scale, aiming straight up.
    "Auto-Select Graph Type" as written. Shared-key hint from L-4.
 7. Quickstart › 5: the default focus leaves Opacity out; say so (L-3).
 8. `REST_SHARE` 0.05: no change; it catches the small drag on both properties.
+
+## Corrections after the hand-back (found by the skill-builder in T031, checked by the cockpit)
+
+- **Dragged up, all three landings:** in both dragged-up captures, Position's 3 s and 4.367 s
+  landings also carry speed 2.91 (influence 32.521 and 32.442), not only 1.5 s. The cockpit read
+  only pair 1 during L-5. Most likely every Position key was selected when the handle was dragged,
+  which a learner could also do. The answer key now grades P2 and P3 as arriving moving.
+- **Position not reset before H5 and H6:** `planted-one-scale-dim.json` and
+  `planted-easy-ease-again.json` still hold the large drag on Position's 1.5 s landing (32.115,
+  speed 36.336). The cockpit's "reset Position" call after re-planting the large drag for the
+  by-eye read reported influence 33.333 but didn't leave the key at Easy Ease; the cause wasn't
+  found. Each file's subject (Scale) grades as the key says; the answer key also grades P1 there.
+- **Hold side influence:** AE stores influence 16.667 on a hold side, so b doesn't fire on
+  `planted-hold-in.json` (fails a, c).
