@@ -4,9 +4,14 @@
 // sitting (tasks T033), when the tests point at the captures instead. Nothing here is read by the
 // mentor; tests read the JSON files it wrote.
 //
-// Mentor Practice 2 follows mentor/dev/build-practice-comp-2.jsx (spec 004 T041, T064), which hasn't
-// been run yet, so practice2-before.json is itself a stand-in for spec 004 T042's capture. Mentor
-// Practice follows discovery/usage-notes/mentor-practice-state-2026-10-20.md, with values added.
+// Mentor Practice 2 is spec 004's live capture, mentor/test/fixtures/practice2-before.json (T041,
+// T042, captured 2026-10-26), whenever it exists: every Mentor Practice 2 stand-in is derived from it,
+// so the base and the derived states agree (comp id, ease speeds, property order, layer_info), and no
+// stand-in copy of the base is written. Without it, the base is built from
+// mentor/dev/build-practice-comp-2.jsx as before. A stand-in that adds layers drops layer_info (the
+// added layers have no R1 read), so it reads as a snapshot from before wave B, which is what overlap
+// row 13 here tests; key-types-visibility.test.mjs covers the wave B read. Mentor Practice follows
+// discovery/usage-notes/mentor-practice-state-2026-10-20.md, with values added.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -16,6 +21,8 @@ const DIR = path.dirname(fileURLToPath(import.meta.url));
 const T = "ADBE Transform Group";
 const HOST = { ae_version: "26.5x89", os: "Macintosh OS 27.0.1/64" };
 const PROJECT = "Claude AE Tutor Test.aep";
+const LIVE2 = path.resolve(DIR, "../../practice2-before.json");
+const isLive2 = fs.existsSync(LIVE2);
 
 const easeList = (dims, influence, speed = 0) => Array.from({ length: dims }, () => ({ speed, influence }));
 
@@ -41,8 +48,9 @@ const tf = (match, display, dims, times, values, types, o) => prop(`${T}/${match
 const opacity = (times, values, types, o) => tf("ADBE Opacity", "Opacity", 1, times, values, types, o);
 const layer = (index, name, kind, properties, { enabled = true } = {}) => ({ index, name, kind, enabled, is_null: kind === "null", properties });
 
-// ---- Mentor Practice 2 as the build script makes it.
+// ---- Mentor Practice 2: the live capture, else as the build script makes it.
 function practice2() {
+  if (isLive2) return JSON.parse(fs.readFileSync(LIVE2, "utf8"));
   return {
     taken_at: "2026-10-21T12:00:00.000Z",
     project: PROJECT,
@@ -133,8 +141,10 @@ const nextIndex = (snap) => Math.max(...snap.layers.map((l) => l.index), 14) + 1
 const files = {};
 const stand = (name, liveFile, snap) => { files[name] = { synthetic: `stand-in for ${liveFile}`, ...snap }; };
 const variant = (change) => { const s = practice2(); change(s); return s; };
+// For stand-ins that add layers: no R1 read for them, so no layer_info at all (see the header).
+const withAdded = (change) => variant((s) => { change(s); delete s.layer_info; });
 
-stand("practice2-before.json", "mentor/test/fixtures/practice2-before.json (spec 004 T042, not captured yet)", practice2());
+if (!isLive2) stand("practice2-before.json", "mentor/test/fixtures/practice2-before.json (spec 004 T042)", practice2());
 stand("practice-now.json", "mentor/test/fixtures/key-types/practice-now.json", practiceNow());
 
 stand("blink-one-held.json", "mentor/test/fixtures/key-types/blink-one-held.json", variant((s) => setKey(s, "Blink", "Opacity", 2, null, "hold")));
@@ -154,10 +164,10 @@ stand("mixed-pair.json", "mentor/test/fixtures/key-types/mixed-pair.json", varia
 }));
 stand("separated-x-held.json", "mentor/test/fixtures/key-types/separated-x-held.json", variant((s) => setKey(s, "Dot 3", "X Position", 1, null, "hold")));
 stand("hold-at-zero.json", "mentor/test/fixtures/key-types/hold-at-zero.json", variant((s) => setKey(s, "Blink", "Opacity", 2, null, "hold")));
-stand("loopout-blink.json", "mentor/test/fixtures/key-types/loopout-blink.json", variant((s) => {
+stand("loopout-blink.json", "mentor/test/fixtures/key-types/loopout-blink.json", withAdded((s) => {
   s.layers.push(layer(nextIndex(s), "Loop Blink", "shape", [opacity([6, 6.25], [100, 0], "L", { expression: true })]));
 }));
-stand("hold-only-effect.json", "mentor/test/fixtures/key-types/hold-only-effect.json", variant((s) => {
+stand("hold-only-effect.json", "mentor/test/fixtures/key-types/hold-only-effect.json", withAdded((s) => {
   s.layers.push(layer(nextIndex(s), "Toggle", "shape", [
     prop("ADBE Effect Parade/ADBE Checkbox Control#1/ADBE Checkbox Control-0001", "Checkbox", "Effects › Checkbox Control › Checkbox", 1, [6, 6.5], [1, 0], "H"),
   ]));
@@ -165,7 +175,7 @@ stand("hold-only-effect.json", "mentor/test/fixtures/key-types/hold-only-effect.
     prop("ADBE Text Properties/ADBE Text Document", "Source Text", "Text › Source Text", 1, [6, 7], [null, null], "H"),
   ]));
 }));
-stand("nested-opacity.json", "mentor/test/fixtures/key-types/nested-opacity.json", variant((s) => {
+stand("nested-opacity.json", "mentor/test/fixtures/key-types/nested-opacity.json", withAdded((s) => {
   s.layers.push(layer(nextIndex(s), "Swatch", "shape", [
     prop("ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Graphic - Fill#2/ADBE Vector Fill Opacity", "Opacity",
       "Contents › Rectangle 1 › Contents › Fill 1 › Opacity", 1, [6, 6.5], [0, 100], "L"),
@@ -185,7 +195,7 @@ stand("keys-moved.json", "mentor/test/fixtures/key-types/keys-moved.json", varia
 }));
 
 // Overlap rows 10, 11, 13, 14, 16 (a named property that only pauses), 21, 22: not in quickstart › 3's table; a capture to add in the sitting.
-stand("overlap-layers.json", "mentor/test/fixtures/key-types/overlap-layers.json (to add to quickstart › 3)", variant((s) => {
+stand("overlap-layers.json", "mentor/test/fixtures/key-types/overlap-layers.json (to add to quickstart › 3)", withAdded((s) => {
   s.precomp_layers.push({ index: 15, name: "Icon" });
   s.layers.push(layer(15, "Icon", "precomp", [opacity([6, 6.2], [0, 100], "L")]));
   s.layers.push(layer(16, "Ghost", "shape", [opacity([6, 6.2, 6.4], [100, 0, 100], "L")], { enabled: false }));

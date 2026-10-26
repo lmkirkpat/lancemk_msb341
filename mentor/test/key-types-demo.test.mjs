@@ -98,7 +98,7 @@ test("the twin's apply sets only the out side (HOLD_SIDES out) and keeps values,
 test("the twin's run returns the demo result and saves the edit", () => {
   const snap = load("practice2-before.json");
   const saved = [];
-  const r = twin.run({ comp_id: 300, layer_index: 1, property_path: OPACITY_PATH, key_index: 1 }, { snapshot: snap, saveEdit: (e) => saved.push(e) });
+  const r = twin.run({ comp_id: snap.comp.id, layer_index: 1, property_path: OPACITY_PATH, key_index: 1 }, { snapshot: snap, saveEdit: (e) => saved.push(e) });
   assert.deepEqual(r, { layer: "Blink", property: "Opacity", display_path: "Transform › Opacity", from_time: 1, to_time: 1.4, in_type: "bezier", out_type: "hold" });
   assert.deepEqual(saved, [{ layer_index: 1, property_path: OPACITY_PATH, key_index: 1 }]);
   assert.throws(() => twin.run({ comp_id: 1, layer_index: 1, property_path: OPACITY_PATH, key_index: 1 }, { snapshot: snap, saveEdit: () => {} }), { code: "NO_ACTIVE_COMP" });

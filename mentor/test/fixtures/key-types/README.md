@@ -13,7 +13,7 @@ deleted from here before merge without its capture in place.
 
 | File | Shape (overlap row) | Source now | Live capture (sitting step) |
 |---|---|---|---|
-| `practice2-before.json` | Mentor Practice 2 as built | Stand-in, from `mentor/dev/build-practice-comp-2.jsx` | Spec 004 T042's `mentor/test/fixtures/practice2-before.json` (`load.mjs` reads it from there); L-4 compares |
+| `practice2-before.json` | Mentor Practice 2 as built | **Live**: spec 004 T042's `mentor/test/fixtures/practice2-before.json` (2026-10-26; `load.mjs` reads it from there). Every Mentor Practice 2 stand-in below is derived from it | L-4 compares |
 | `practice-now.json` | Mentor Practice as it is (FR-008) | Stand-in, from `discovery/usage-notes/mentor-practice-state-2026-10-20.md` with values added | quickstart › 3 |
 | `blink-one-held.json` | Blink's second pair held (KT-d) | Stand-in | quickstart › 3 |
 | `blink-all-held.json` | Every Blink key held both sides (pass) | Stand-in | quickstart › 3 |
@@ -33,8 +33,10 @@ deleted from here before merge without its capture in place.
 
 `stand-in/make-stand-ins.mjs` wrote the stand-ins and is deleted with them.
 
-Mentor Practice 2's comp id in the stand-ins is 300 (synthetic); the captures will have the real one.
-Tests never hard-code a comp id except through the fixture itself.
+Mentor Practice 2's stand-ins carry the live capture's comp id (179), ease speeds and `layer_info`.
+The four that add layers (`loopout-blink`, `hold-only-effect`, `nested-opacity`, `overlap-layers`)
+drop `layer_info`, since the added layers have no R1 read; they read as snapshots from before wave B
+(overlap row 13). Tests never hard-code a comp id except through the fixture itself.
 
 ## Other files
 

@@ -1,12 +1,16 @@
 {
   "synthetic": "stand-in for mentor/test/fixtures/key-types/nested-opacity.json",
-  "taken_at": "2026-10-21T12:00:00.000Z",
+  "taken_at": "2026-10-26T17:14:33.370Z",
   "project": "Claude AE Tutor Test.aep",
   "comp": {
-    "id": 300,
+    "id": 179,
     "name": "Mentor Practice 2",
     "duration": 8,
-    "frame_rate": 30
+    "frame_rate": 30,
+    "time": 0,
+    "hide_shy": false,
+    "width": 1920,
+    "height": 1080
   },
   "precomp_layers": [],
   "layers": [
@@ -134,7 +138,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 90,
                   "influence": 16.667
                 }
               ]
@@ -147,7 +151,7 @@
               "value": 360,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 90,
                   "influence": 16.667
                 }
               ],
@@ -428,7 +432,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 400,
                   "influence": 16.667
                 }
               ]
@@ -445,7 +449,7 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 400,
                   "influence": 16.667
                 }
               ],
@@ -480,7 +484,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ]
@@ -493,7 +497,7 @@
               "value": 100,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ],
@@ -515,6 +519,54 @@
       "enabled": true,
       "is_null": false,
       "properties": [
+        {
+          "path": "ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001",
+          "display_path": "Effects › Gaussian Blur › Blurriness",
+          "match_name": "ADBE Gaussian Blur 2-0001",
+          "display_name": "Blurriness",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 10,
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": -10,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 1.5,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": 0,
+              "in_ease": [
+                {
+                  "speed": -10,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        },
         {
           "path": "ADBE Transform Group/ADBE Position",
           "display_path": "Transform › Position",
@@ -541,7 +593,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 400,
                   "influence": 16.667
                 }
               ]
@@ -558,7 +610,7 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 400,
                   "influence": 16.667
                 }
               ],
@@ -593,7 +645,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ]
@@ -606,55 +658,7 @@
               "value": 100,
               "in_ease": [
                 {
-                  "speed": 0,
-                  "influence": 16.667
-                }
-              ],
-              "out_ease": [
-                {
-                  "speed": 0,
-                  "influence": 16.667
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "path": "ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001",
-          "display_path": "Effects › Gaussian Blur › Blurriness",
-          "match_name": "ADBE Gaussian Blur 2-0001",
-          "display_name": "Blurriness",
-          "dimensions": 1,
-          "expression_enabled": false,
-          "keys": [
-            {
-              "index": 1,
-              "time": 0.5,
-              "in_type": "linear",
-              "out_type": "linear",
-              "value": 10,
-              "in_ease": [
-                {
-                  "speed": 0,
-                  "influence": 16.667
-                }
-              ],
-              "out_ease": [
-                {
-                  "speed": 0,
-                  "influence": 16.667
-                }
-              ]
-            },
-            {
-              "index": 2,
-              "time": 1.5,
-              "in_type": "linear",
-              "out_type": "linear",
-              "value": 0,
-              "in_ease": [
-                {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ],
@@ -698,7 +702,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 400,
                   "influence": 16.667
                 }
               ]
@@ -711,7 +715,7 @@
               "value": 700,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 400,
                   "influence": 16.667
                 }
               ],
@@ -746,7 +750,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": -133.333,
                   "influence": 16.667
                 }
               ]
@@ -759,7 +763,7 @@
               "value": 500,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": -133.333,
                   "influence": 16.667
                 }
               ],
@@ -794,7 +798,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ]
@@ -807,7 +811,7 @@
               "value": 100,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ],
@@ -863,11 +867,11 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 40,
                   "influence": 16.667
                 },
                 {
-                  "speed": 0,
+                  "speed": 40,
                   "influence": 16.667
                 },
                 {
@@ -888,11 +892,11 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 40,
                   "influence": 16.667
                 },
                 {
-                  "speed": 0,
+                  "speed": 40,
                   "influence": 16.667
                 },
                 {
@@ -939,7 +943,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ]
@@ -952,7 +956,7 @@
               "value": 100,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ],
@@ -1000,7 +1004,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 200,
                   "influence": 16.667
                 }
               ]
@@ -1017,7 +1021,7 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 200,
                   "influence": 16.667
                 }
               ],
@@ -1052,7 +1056,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ]
@@ -1065,7 +1069,7 @@
               "value": 100,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ],
@@ -1113,7 +1117,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 200,
                   "influence": 16.667
                 }
               ]
@@ -1130,7 +1134,7 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 200,
                   "influence": 16.667
                 }
               ],
@@ -1165,7 +1169,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ]
@@ -1178,7 +1182,7 @@
               "value": 100,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ],
@@ -1226,7 +1230,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 200,
                   "influence": 16.667
                 }
               ]
@@ -1243,7 +1247,7 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 200,
                   "influence": 16.667
                 }
               ],
@@ -1278,7 +1282,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ]
@@ -1291,7 +1295,7 @@
               "value": 100,
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 80,
                   "influence": 16.667
                 }
               ],
@@ -1362,7 +1366,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 200,
                   "influence": 16.667
                 }
               ]
@@ -1379,7 +1383,7 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 200,
                   "influence": 16.667
                 }
               ],
@@ -1427,7 +1431,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 600,
                   "influence": 16.667
                 }
               ]
@@ -1444,7 +1448,7 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 600,
                   "influence": 16.667
                 }
               ],
@@ -1473,7 +1477,7 @@
               ],
               "out_ease": [
                 {
-                  "speed": 0,
+                  "speed": 600,
                   "influence": 16.667
                 }
               ]
@@ -1490,7 +1494,7 @@
               ],
               "in_ease": [
                 {
-                  "speed": 0,
+                  "speed": 600,
                   "influence": 16.667
                 }
               ],
