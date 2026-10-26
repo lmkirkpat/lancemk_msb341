@@ -234,6 +234,9 @@ a brand new session act like a colleague who already knows what you are working 
   - `.claude/hooks/` (`decisions/008`, wired in `.claude/settings.json`): the AE lock, file
     ownership (`ownership.json`, mirrors 007's table) and the git guard, keyed on the calling
     subagent. Tests: `node --test .claude/hooks/test/*.test.mjs`. Merge agent branches with `/merge-worktree`.
+    The AE lock keys on session plus agent (amended 2026-10-26), but AE has one active comp, so
+    run one sitting or live lesson at a time: before starting one, run `ae_status` and check
+    `.git/knack-agents/ae.lock.json` has no other holder from the last 10 minutes.
 - **How work ships:** TBD
 - **Testing and style:** AI features get an eval set in `product/evals/`.
 - **Edge cases where concepts overlap:** when adding a teaching skill, list in its spec where
