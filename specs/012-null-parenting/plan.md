@@ -160,7 +160,7 @@ sitting. No NEEDS CLARIFICATION is left; L-1 to L-6 settle facts with fallbacks.
 | 5 | Curriculum designer, reviewer | Read only | `/overlap-audit` re-run against the built check (HO-2), rows marked **contract** re-confirmed against wave B's code as built; `SKILL.md` read against FR-023 and FR-024 (HO-3) | No open row |
 | 6 | Eval engineer | Own worktree | `product/evals/null-parenting/` (HO-1); easing re-run after merge (HO-4) | SC-003, SC-004, SC-007 |
 | 7 | Cockpit | Main tree | `/merge-worktree <branch> skill-builder` | SC-008 |
-| 8 | The builder (🖐, a day or more later) | Mac | Live review on Row A to C (SC-009) | Logged |
+| 8 | The builder (🖐, a day or more later) | Mac | Live review on Chip A to C (SC-009; L6-1, 2026-10-25) | Logged |
 
 ## Requests (not this skill's work)
 

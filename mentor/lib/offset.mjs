@@ -82,11 +82,38 @@ function unitName(snapLayer, unit) {
 
 const snapLayerOf = (snapshot, index) => snapshot.layers.find((l) => l.index === index);
 
+// ---- Property order (builder's decision, 2026-10-26)
+
+// The learner reads a layer's properties as the timeline shows them, Transform first. AE's read
+// order can put an effect first (Mentor Practice 2's Dot 2 reads Blurriness before Position), so
+// this skill orders a layer's properties Transform first, in AE's Transform order, then everything
+// else (effects, other groups) in the order AE read them. The one ordering rule for this skill:
+// every list of a layer's properties (groups, members, target refs, the demo's paths and so its
+// result, the check's moved_by) comes through here.
+const TRANSFORM_ORDER = [
+  "ADBE Anchor Point", "ADBE Position", "ADBE Position_0", "ADBE Position_1", "ADBE Position_2",
+  "ADBE Scale", "ADBE Orientation", "ADBE Rotate X", "ADBE Rotate Y", "ADBE Rotate Z", "ADBE Opacity",
+];
+const TRANSFORM_GROUP = "ADBE Transform Group/";
+
+function transformRank(path) {
+  if (!String(path).startsWith(TRANSFORM_GROUP)) return TRANSFORM_ORDER.length + 1;
+  const i = TRANSFORM_ORDER.indexOf(path.slice(TRANSFORM_GROUP.length));
+  return i >= 0 ? i : TRANSFORM_ORDER.length; // a Transform property not listed: after the listed ones
+}
+
+// `items` in that order; `pathsOf` gives an item's property paths (a unit has several when
+// Position is separated). Stable, so ties keep AE's read order.
+export function transformFirst(items, pathsOf) {
+  const rank = (x) => Math.min(...[].concat(pathsOf(x)).map(transformRank));
+  return items.map((x, i) => ({ x, i, r: rank(x) })).sort((a, b) => a.r - b.r || a.i - b.i).map((e) => e.x);
+}
+
 // Units that count for this skill: counted by the timing analysis and not among `exclude` (a
-// review's past targets, FR-020).
+// review's past targets, FR-020), Transform first.
 function liveUnits(snapshot, tl, exclude) {
   const sl = snapLayerOf(snapshot, tl.layer_index);
-  return tl.units
+  return transformFirst(tl.units, (u) => u.paths)
     .filter((u) => !u.excluded)
     .map((u) => ({ ...u, name: unitName(sl, u) }))
     .filter((u) => !exclude.some((e) => e.layer === tl.layer && e.property === u.name));
@@ -334,13 +361,19 @@ export function analyze(snapshot, opts = {}) {
   else if (!complete || !gapOk) no_demo_reason = "awaiting_order";
   else if (gapUnderFloor(gap, fps)) no_demo_reason = "gap_under_floor";
   else {
-    // The second in their order, or the next one with no expression on a keyed property (FR-009).
+    // The second in their order, or the next one with no expression on a keyed property, its eye on
+    // and not locked (FR-009; locked added 2026-10-26 after live check L-4, where the snapshot
+    // named a locked Dot 2 that offset_demo then refused). offset_demo's lock refusal stays as the
+    // backstop for a lock set after this read.
+    let skippedLocked = false;
     const pick = ordered.slice(1).find((m) => {
       const sl = snapLayerOf(snapshot, m.layer_index);
-      return !hasExpression(sl, m.unit ? m.paths : null) && sl.enabled !== false;
+      if (hasExpression(sl, m.unit ? m.paths : null) || sl.enabled === false) return false;
+      if (sl.locked === true) { skippedLocked = true; return false; }
+      return true;
     });
     if (pick) demo_target = targetId(pick);
-    else no_demo_reason = "expression";
+    else no_demo_reason = skippedLocked ? "locked" : "expression";
   }
 
   return {
@@ -399,12 +432,17 @@ function lessonMembers(baseline, lesson, bt) {
   });
 }
 
+// FR-011: the demo member is the demo's while its shift is in place, and the learner's once a check
+// has seen it undone (the session's demo.undone, set by markChecked) and it has moved again. Key
+// times alone can't tell the learner's own shift by the same gap from the demo's (spec 010 L-2: the
+// builder undid the demo and dragged Dot 2's bar the same 4 frames), so the undone mark decides.
 function creditFor(member, lesson, startNow, fps) {
   if (!lesson.demo || lesson.demo.segment_id !== member.id) return null;
   const gap = lesson.skill_options && lesson.skill_options.gap_frames;
   if (startNow == null) return "learner";
-  if (Number.isInteger(gap) && Math.abs((startNow - member.start) * fps - gap) < 0.5) return "demo";
   if (Math.abs((startNow - member.start) * fps) < 0.5) return "undone";
+  if (lesson.demo.undone) return "learner";
+  if (Number.isInteger(gap) && Math.abs((startNow - member.start) * fps - gap) < 0.5) return "demo";
   return "learner";
 }
 

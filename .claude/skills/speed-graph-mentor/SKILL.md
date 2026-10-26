@@ -46,14 +46,14 @@ Rules particular to this skill:
 - **You can't see the Graph Editor.** Nothing tells you what panel is open or which graph is
   showing. Never say you can see it. When an answer about the graph sounds like a value graph
   ("it goes up and then stays flat"), ask which graph is showing and point them at **Edit Speed
-  Graph** <!-- L-1: confirm the label as written at 26.5 -->.
+  Graph**.
 - **Version steps (After Effects 26.5 on macOS).** Open the Graph Editor with its button at the
   top of the timeline panel; never quote a function-key shortcut for it. Always ask the learner to
-  choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor
-  <!-- L-1 -->: Scale and other properties open in the value graph by default. Keyframe Velocity
-  is a dialog where influence can be typed instead of dragged; name it, but give **no menu path
-  and no shortcut** for it <!-- L-1: fill in the menu path and Mac shortcut exactly as L-1 logs
-  them -->. If `host` says another version, give the menu names only.
+  choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor: Scale and
+  other properties open in the value graph by default. **Keyframe Velocity** is a dialog where
+  influence can be typed instead of dragged: with the key selected, **Animation › Keyframe
+  Velocity…**, or **⌘⇧K** (Command+Shift+K). If `host` says another version, give the
+  menu names only, with no shortcut.
 - **Frames show where, not how far.** From a frame, say only where the layer is on screen ("at
   0.7 s Title is near the top of the frame"). Never say how far along its own move it is, or a
   percentage of the distance: a parent's move shows in the frame too, and you can't see it.
@@ -158,8 +158,10 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
      `key_time`, never the fix and never an offer to do it:
      - `arrives_moving`: "At 1.5 s the move arrives still moving." With `drag_sideways`, add:
        "Drag that handle sideways, along the bottom, to make the ease longer."
-     - `no_handle`: "The key at 1.5 s is linear (or hold), so it has no handle on that side. Ease
-       it first." Then suggest the easing lesson after this one. Don't teach key types here.
+     - `no_handle`: "The key at 1.5 s isn't eased on that side, so the handle there doesn't
+       work yet. If it's a hold, the move sits still and then jumps. Ease it first." Never say the
+       key has no handle: After Effects still draws one. Then suggest the easing lesson after this
+       one. Don't teach key types here.
      - `long_both_ends`: "Both ends of Scale ease for nearly the whole move, so it floats and then
        has to rush. Make the start short."
      - `back_to_default`: "Scale is back to the default shape on both keys. Easy Ease resets it."
@@ -171,8 +173,9 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
        height of Scale still lands on the default shape").
    - **Shared keys.** Where two focus pairs share a key (one's landing is the next one's start),
      each side belongs to its own pair. If one pair passed and the next didn't, say the shared key
-     is only shaped on the side facing the first pair. <!-- L-4: if dragging one side's handle
-     changes the other side too, add how to shape the two sides separately -->
+     is only shaped on the side facing the first pair, and add: "The key at 1.5 s has two handles:
+     the left one shapes how the first move lands, the right one how the next move starts.
+     Dragging one leaves the other alone."
    - `keys_changed`: keys were added, removed or moved on that property, so you can't check those
      pairs. Ask if that was on purpose. `removed`: the pair isn't there as it was; say so and look
      at `other_changes`.

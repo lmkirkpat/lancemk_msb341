@@ -66,8 +66,12 @@ it, Claude Code treats any exit other than 0 or 2 as the hook failing and lets t
    one). Edit the deny list to fit: this repo denies the whole Vercel server and `vercel *`
    because it never deploys; a web project that deploys should switch those to `ask`.
 2. **Rewrite each persona's "In this repo" section**: where things live, how to run tests, the
-   project's rules. Leave the rest of the persona alone; that's the reusable part. Delete personas
-   you don't need (a project without a curriculum doesn't need the two curriculum agents).
+   project's rules. Leave the rest of the persona alone; that's the reusable part. Then rebuild
+   the roster for the project instead of keeping all ten: delete personas you don't need (a
+   project without a curriculum doesn't need the two curriculum agents), merge personas when
+   there's one code area (Operation Food Critic folded skill-builder and panel-builder into one
+   `app-builder`), and borrow personas from other projects (its `qa-auditor` came from the
+   portfolio site). Write down what you kept, merged, borrowed and dropped in a decision.
 3. **Rewrite `ownership.json`** to match. Patterns apply in order, the last match wins, and `!`
    takes a path back out. An unlisted persona writes nothing.
 4. **Decide about the lock.** If your project has one shared thing two agents mustn't drive at
@@ -79,7 +83,10 @@ it, Claude Code treats any exit other than 0 or 2 as the hook failing and lets t
    `agent-audit` (reviewer, skill-builder), `eval-set` and `eval-triage` (eval-engineer),
    `overlap-audit` (curriculum-designer), `interview-log`, `insights-review` and `side-by-side`
    (user-researcher). Spec Kit (`/speckit-*`, spec-writer and builders) is in `.claude/skills/`.
-6. **Restart Claude Code** (or approve the hooks in `/hooks`) so the hooks load, then run the
+6. **Check where `origin` points** (`git remote -v`). Worktrees start from `origin/main`, so in
+   a repo cloned from a template, every builder would start from the template's code. Make your
+   own repo `origin` and keep the template as a fetch-only remote.
+7. **Restart Claude Code** (or approve the hooks in `/hooks`) so the hooks load, then run the
    checks below.
 
 ## Check it works
@@ -146,3 +153,11 @@ These come from building this team, not from a general guide.
   says to stop and report what it needs instead.
 - **Test hooks with a probe, not by trusting the docs.** Each question about hook input
   (identity, `SubagentStop`) was settled by a headless run with a logging hook, for well under $1.
+- **The roles change between projects; the hooks and workflow don't.** Across Knack, the
+  portfolio site and Operation Food Critic, one owner per file, checkers that can't edit, gated
+  specs and numbers handed out by the cockpit stayed the same, and the roster changed every time.
+  Copying the team into Food Critic, with a model choosing and adapting the personas, took about
+  30 minutes, including the probe (`discovery/usage-notes/agent-carry-over.md`).
+- **Start a new project with a documents-only run.** Two researchers on separate files is a
+  cheap first test of the copied setup (Food Critic's run 1: about 4 minutes, no collisions).
+  It doesn't test shared code; that waits for the first build wave.

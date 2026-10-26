@@ -12,6 +12,10 @@ SR-2); the extra output fields are in the contract and data-model. The builder t
 recommended (SR-1 folded into spec 004 as T060 and T061; FR-010d's 5%; the live-check order), and
 the curriculum designer agreed D-1 to D-5 and S-1 (`teaching-design.md` › 14), folded in below.
 Still open: nothing for the spec; the live checks L-1 to L-7 settle facts during the build.
+Amended 2026-10-26 from the live sitting ([`live-sitting-2026-10-26.md`](live-sitting-2026-10-26.md)
+› L-5, L-7, For T031): FR-012's "drag sideways" rule no longer uses b's 1-point test (a hand drag
+"straight up" moves influence too); b keeps its 1 point; FR-010d's 5% stays; the hold-side hint
+and the fastest part of a large drag-up follow what AE showed (FR-012, rows 5 and 7, Assumptions).
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 2, the speed graph." Number 008 assigned by the cockpit. The teaching design is the
@@ -176,9 +180,9 @@ FR-025):
 | 2 | Expression with no keys | Not read (R2 not built) | Not read | Nothing; never "this layer has no expression" | Yes, as spec 004 FR-014 |
 | 3 | Expression turned off on a keyed property | Keys drive: a candidate if eased | Graded | As any pair | Yes |
 | 4 | Single key (Logo › Scale) | Not a pair | Not graded | Nothing | Yes |
-| 5 | Hold or linear facing side (Cursor › Opacity, CTRL) | Not a candidate | A focus pair turning linear or hold fails FR-010c | "The key at 1.5 s is linear, so it has no handle" (§ 7 row 3) | Yes |
+| 5 | Hold or linear facing side (Cursor › Opacity, CTRL) | Not a candidate | A focus pair turning linear or hold fails FR-010c | Linear: "The key at 1.5 s is linear, so it has no handle" (§ 7 row 3; not checked live). Hold: as row 7 | Yes |
 | 6 | Half eased (Subtitle › Opacity) | Not a candidate; counted as "ease these first" | A focus pair turning half eased fails FR-010c | Easing's hint (FR-002) | Yes |
-| 7 | Bezier out, **hold in** on the landing key | Not a candidate (this skill's own facing-sides test) | Fails FR-010c | § 7 row 3's hint | Yes here; easing calls it "eased" (observation, L-7) |
+| 7 | Bezier out, **hold in** on the landing key | Not a candidate (this skill's own facing-sides test) | Fails FR-010c (`planted-hold-in.json`) | The key is set to hold on that side, so the move sits still and then jumps; the handle there does nothing until it's eased. Never "no handle": AE still draws one (L-7, 2026-10-26) | Yes here (L-7: AE holds the move); easing calls it "eased" (observation for the shared owner) |
 | 8 | Separated dimensions (Bar › X Position) | X and Y are separate properties, separate pairs | Each graded on its own | By its own name ("X Position") | Yes |
 | 9 | Multi-dimension ease (Scale reads 3 on a 2D layer) | One pair | Every **moving** dimension graded (FR-011) | Names the dimension that's off | Yes (D-4 agreed), pending L-2 |
 | 10 | Hidden layer (Old Take) / matte before R1 | Left out unless the learner wants it; never the demo | Graded if chosen | "You've hidden this…" (a matte reads the same until R1, KD-001) | Yes until R1 |
@@ -194,6 +198,11 @@ FR-025):
 
 Other edge cases:
 
+- **Landing handle dragged up instead of sideways** (S-1, L-5): the landing speed rises and the
+  influence stays near Easy Ease's, but a hand drag aimed straight up still moves it (33.33 to
+  32.12 on Position, 26.96 on Scale). The check sees a and d fail, and b only when the influence
+  stayed within 1 point (a purely vertical drag); either way the mistake is "arrives moving" with
+  "drag sideways" (FR-012). Fixtures: `planted-dragged-up-small.json` and `-large.json`.
 - **AE busy or unreachable:** no claims, no check, no record result (spec 002 server rule 2).
 - **Learner on another comp at "done":** no grade; asks them to switch back (as easing).
 - **The learner says a move should land hard** (an impact): that pair leaves the focus without
@@ -264,14 +273,20 @@ Other edge cases:
     influence (spec 004 FR-026);
   - b. the pair's two facing sides are not both within **1 point of 33.33%** (spec 004 FR-026). Only
     the facing sides count; a key's far side belongs to the neighbouring pair (TD § 6 item 2, D-2
-    agreed). b is implied by a and stays to drive the "back to default" hint;
+    agreed). b is implied by a and stays to drive the "back to default" hint. b means "back at
+    Easy Ease's shape", so it keeps its 1 point (`DEFAULT_TOL = 1`) and is used for nothing else
+    (amended 2026-10-26). A hand drag that moves the landing's influence more than 1 point doesn't
+    fail b, and that's right: such a pair still fails a, and its hint comes from d (L-5: a drag
+    aimed straight up moved Position's landing from 33.33 to 32.12 and Scale's to 26.96);
   - c. both facing sides are bezier (spec 004 FR-026);
   - d. **still comes to rest:** the landing key's in-side speed is at most **5% of the pair's
     average speed** in that dimension (the value change divided by the pair's duration; for
     unseparated Position, the straight-line distance between the two key values). Where the value
     can't be read, the speed must be 0 (within 0.001). The 5% is approved (2026-10-21) and tuned on L-5 before the build is
     merged; if L-5 changes it, only toward catching a visible bump, never toward passing more pairs
-    (TD § 14, S-1).
+    (TD § 14, S-1). **L-5 (2026-10-26): no change.** A drag "up a little" on Position and on Scale
+    left the landing speed above 5% of the pair's average on both, so both failed d as they
+    should (the log's figures: Position about 7%).
   The lesson passes only when every focus pair is graded and passes: a focus pair whose keys
   changed, or that's gone, holds the pass until the learner answers (FR-014; reworded 2026-10-21,
   confirmed by the builder, so it can't be read as grading around a changed pair). The demo pair counts while the demo is in
@@ -282,9 +297,21 @@ Other edge cases:
   pass, the check MUST say which one is off in a way the mentor can say plainly.
 - **FR-012**: For each pair that doesn't pass, the check MUST say which of a to d failed and which
   of § 7's mistakes it matches, so the mentor gives that hint and never the fix:
-  - arrives moving (d fails; when the landing influence is also within 1 point of the baseline,
-    the hint adds "drag sideways, along the bottom");
-  - no handle (c fails: linear or hold);
+  - arrives moving (d fails). The hint adds "drag sideways, along the bottom, to make the ease
+    longer" (`drag_sideways`) only when the landing ease isn't long, on the dimension the hint
+    names (the first moving dimension that fails d): **that dimension also fails a, and its
+    landing influence is below 53.33** (`LONG_LANDING = DEFAULT_INFLUENCE + MIN_GAP`, the landing
+    a needs when the start is at Easy Ease). False when either influence can't be read. It no
+    longer compares with the baseline (amended 2026-10-26, L-5): a real drag "straight up" moves
+    influence by more than 1 point, so the old "within 1 point of the baseline" test missed the
+    learner the hint is written for. Both conditions keep it off a pair whose landing was
+    deliberately lengthened: a landing that already clears the start by 20 points passes a (15/45),
+    and a landing at 53.33 or more (60/70) is long, so its problem is the start, which
+    "long on both ends" names once the landing comes to rest;
+  - no working handle (`no_handle`; c fails: a facing side is linear or hold). The hint MUST NOT
+    say a hold side has no handle: After Effects still draws an incoming influence handle on a hold
+    side, though the move sits still and then jumps (L-7). It says the key is set to hold, so the
+    handle does nothing until the key is eased. Linear's handle wasn't checked live;
   - long on both ends (a fails and both influences are at least 50%);
   - back to default (b fails and an earlier check in this lesson saw the pair shaped);
   - in and out mixed up (the start key's in side changed from the baseline while its out side
@@ -453,8 +480,8 @@ fastest part and overlap rows; evals check what the mentor does with them.
    asks which graph is showing and to choose Edit Speed Graph; never quotes Shift+F3 or an
    unconfirmed Keyframe Velocity path.
 8. **Skill-specific (spec 004):** a 15/80 pair passes; a 33/33 pair doesn't.
-9. **Dragged up (S-1):** speed changed, influence not; doesn't pass; the hint says it arrives moving
-   and to drag sideways.
+9. **Dragged up (S-1):** landing speed raised, influence near Easy Ease's (a hand drag moves it a
+   few points, L-5); doesn't pass; the hint says it arrives moving and to drag sideways.
 10. **Scale shaped on one dimension only** (if L-2 shows it can happen): names which part is off.
 11. **Not ready:** easing not learned, or no eased pair: offers easing (US3).
 12. **Lands hard:** the learner says Title's last move should slam: dropped, no argument.
@@ -480,7 +507,12 @@ fastest part and overlap rows; evals check what the mentor does with them.
   100 so time never runs backwards; this is an assumption, and L-6 MUST check it on a pair whose
   influences add up to more than 100. On 15/80 the model puts the fastest part at about 0.13 of the
   pair, not the 0.3 research R2's first draft said; L-6 checks that against the speed graph's peak
-  too (as built, 2026-10-21).
+  too (as built, 2026-10-21). **Live 2026-10-26:** L-6 agreed on all four pairs, including 60/70
+  (so the scaling assumption holds there). A landing dragged up a lot does **not** move the peak
+  to the last third: with Position's landing speed at 36.3 (about 90% of the pair's average), the
+  builder saw the peak in the middle third and the model put it near the two-thirds line, so the
+  check returns middle and last (both count, FR-016). The fixture answer key expects
+  `["middle", "last"]` there, not `["last"]`.
 
 ## Out of scope (build scope)
 

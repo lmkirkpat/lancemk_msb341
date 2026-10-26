@@ -153,3 +153,19 @@ email or phone number.
 
 - **Fail:** records a method the learner never mentioned ("used T and F9"), a result that the
   checks don't support, or the wrong `demo_used`.
+
+---
+
+## R-MATTE-NOT-HIDDEN: a track matte with its eye off is not "hidden" (KD-001)
+
+A layer used as a track matte has its eye off because After Effects switches it off when the
+matte is set, not because the learner hid it. When the transcript's snapshot lists such a layer
+(it appears in `findings` and not in `hidden_layers`), the mentor treats it like any other layer
+with linear pairs. It never says the learner hid it, turned it off, or that it is invisible,
+off, or being left out, and it never lists it with the hidden layers. Plain facts about the
+matte ("Wipe is the matte for Photo") are fine. Added for spec 004 cross-skill 3.
+
+- **Pass:** "Wipe's Position runs 0.6 to 1.6 s and it's still linear. Let's ease that."
+- **Fail:** "Wipe is hidden, so I'll leave it", "you've turned Wipe off", "Wipe isn't showing, so
+  skip it", or any grouping of Wipe with Rig and Draft, which the learner did hide.
+- Passes as "not triggered" if the mentor never mentions Wipe.

@@ -42,7 +42,7 @@ made by hand on the duplicate. The names match `answer-key.json`.
 | `practice-now.json` | Mentor Practice itself (not the duplicate), as it is: Title eased, 4 Position keys (the lesson's first look) |
 | `planted-15-80.json` | Title Position 0.5–1.5 s at 15/80 by Keyframe Velocity |
 | `planted-33-33.json` | The same pair back at Easy Ease |
-| `planted-dragged-up-small.json`, `-large.json` (L-5) | The landing handle dragged up a little and a lot, on Position and on Scale |
+| `planted-dragged-up-small.json`, `-large.json` (L-5) | The landing handle dragged up a little and a lot, on Position and on Scale. Live: the drag also moved influence (32.12, 26.96), so both fail a and d, not b, with `drag_sideways` (FR-012) |
 | `planted-one-scale-dim.json` | Only if L-2 shows one dimension can be shaped alone |
 | `planted-hold-in.json` (L-7) | Title Position 1.5 s's in side set to hold, out of 0.5 s bezier; also note what plays |
 | `planted-shared-key.json` | 1.5 s's in side shaped for pair 1 only |
@@ -76,8 +76,10 @@ in the hand-back for the spec writer before § 5.
 
 The builder, in a plain Claude Code session in the repo (not a subagent: it writes the real
 record), with Mentor Practice active and easing learned in the record: `/speed-graph-mentor`.
-Expect: Title proposed (Position 0.5–1.5, 1.5–3, 3–4.37 s and Scale 0.5–1.5 s), leave-outs one
-sentence each, the read-the-graph step, a demo on Title Position 0.5–1.5 s only if asked, and a
+Expect: Title proposed with the default focus, Position (3 pairs: 0.5–1.5, 1.5–3, 3–4.367 s) and
+Scale 0.5–1.5 s. Title's Opacity 0.5–1.5 s is eased too, but the default focus takes only Position
+and Scale (FR-004), so Opacity is left for the learner to pick (naming Title as the focus layer
+brings it in, as L-3 saw). Then leave-outs one sentence each, the read-the-graph step, a demo on Title Position 0.5–1.5 s only if asked, and a
 check that agrees with the Graph Editor on every pair. Time it from the call log
 (`calls.jsonl`): 15 minutes or less, at most one demo. Note per pair whether the check matched
 your look (SC-002: 9 of 10 across the build, including one dragged-up landing and one Scale pair).

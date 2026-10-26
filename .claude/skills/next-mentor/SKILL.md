@@ -37,8 +37,9 @@ recommendation.)
    they want ("can I learn the speed graph?"), pass it as `requested_skill`, by its name as they
    said it or its ID.
 
-3. **Say it in at most two sentences, with the reason.** Use `recommendation.skill_name` and what
-   the `reason` means:
+3. **Say it in at most two sentences, with the reason.** Two sentences in all, the question
+   included: the skill and the layers with the reason, then the offer. Don't describe the skill
+   in a sentence of its own. Use `recommendation.skill_name` and what the `reason` means:
    - In progress: "You were partway through *Easing* last time, so let's pick that back up on
      Title."
    - A review that's due: "It's been a few days since you learned *Pick the key type on purpose*;
