@@ -326,8 +326,9 @@ section). Other edge cases:
 - **FR-005a (saying the proposal; TD § 4 steps 4 and 5, § 5 stage 1; added 2026-10-25)**: The
   skill prompt MUST ask first and propose only when the learner has no group in mind, then:
   - say `proposal` in one sentence **with its reason**, that the layers sit together apart from
-    everything else ("Tile, Caption and Stamp sit together at the top right, apart from everything
-    else. Want to move those as one?");
+    everything else ("Tile, Caption and Stamp sit together, apart from everything else. Want to move
+    those as one?"; it names a place on screen only when a frame it showed says so, since the reply
+    gives no positions);
   - after a "no", offer `next_proposal` **once** ("Or Chip A, Chip B and Chip C?"), and after a
     second "no", or with no `next_proposal`, ask the learner to name the layers. No third offer;
   - with `no_proposal_reason` `crowded`: propose nothing, say in plain words that many layers sit
