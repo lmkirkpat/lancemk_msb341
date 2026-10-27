@@ -211,6 +211,11 @@ first" with no "ask and stop"), but the one run on the live fixture asked and st
 proves nothing, so this stays a watch item: if the full run or a `--repeat 3` of case 01 fails
 `R-ASKS-FIRST` or `second_group_not_yet`, the proposal is the skill's wording, not the fixture.
 
+**2026-10-26, `--only 01 --repeat 3` ($1.10, `results/2026-10-26-203004.json`):** 3 of 3 pass;
+`R-ASKS-FIRST` and `second_group_not_yet` passed in every run (turn 1 asked and stopped each
+time). With the live-fixture smoke, 4 of 4 on `practice2b.json`; the stand-in failure is taken as
+the fixture. Still worth a look in T340's transcript.
+
 ## Reading results
 
 Same order as easing: a failed `run` check is plumbing; a failed deterministic check is a hard-rule
