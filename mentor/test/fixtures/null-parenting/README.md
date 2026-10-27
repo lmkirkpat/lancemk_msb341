@@ -71,6 +71,7 @@ read's sample list also has the layers' own key times (`snapshot.jsx`'s merge).
 | `null-keyed-early.json` | the group parented; the null keyed at 6 and 7 s before the check (row 30) | group |
 | `null-moved.json`, `null-moved-before-parenting.json` | the null dragged to (1300, 300) after the stage 3 check, then the group parented there (row 31) | group |
 | `fade-null.json`, `rotate-null.json`, `slide-null.json`, `anchor-only-null.json`, `one-key-null.json` | the null's move: Opacity keys, Rotation keys, linear Position keys, Anchor Point keys only, one Position key (P4, row 26) | group |
+| `slide-top-left.json` | Tile, Caption and Stamp parented to Null 1 at the group's top-left (1100, 100), then a linear Position-only slide at 6 to 7 s; read after `null-top-left.json` with region top-left it passes on Position with no turn check (eval 30, from usage note session 2 finding 4). Planted 2026-10-26 after T341, on a duplicate cleaned of the lesson's Null 12 that matched `practice2b.json` layer for layer | group |
 | `practice2b-null1.json`, `two-nulls-same-name.json`, `two-nulls-renamed.json` | an existing empty Null 1, a second Null 1 added, then the new one renamed Group Null (row 40) | group |
 | `null-renamed.json` | the lesson's null renamed Group Null after parenting (Edge Cases) | group |
 | `plate-parented-too.json` | Plate parented to the null too (row 38) | group |
