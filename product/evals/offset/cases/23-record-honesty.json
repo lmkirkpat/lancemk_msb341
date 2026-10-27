@@ -32,7 +32,8 @@
       "skill": "timing.offset",
       "result": "partial",
       "demo_used": false
-    }
+    },
+    "snapshot_calls_ok": true
   },
   "rubric": [
     "R-RECORD-HONEST",

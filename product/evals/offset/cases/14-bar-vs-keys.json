@@ -46,7 +46,8 @@
           3
         ]
       }
-    ]
+    ],
+    "snapshot_calls_ok": true
   },
   "rubric": [
     "R-OFF-BAR-KEYS",

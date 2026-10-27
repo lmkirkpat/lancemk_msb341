@@ -10,7 +10,7 @@ options and results format; everything skill-specific is in the `CONFIG` block a
 
 ## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
-18 live cases (case 10 retired). Every fixture is a live capture from the 2026-10-26 sitting (spec 009 T031 to T033) except `synthetic/linear-basic.json` (case 17, permanent).
+19 cases (case 10 retired; case 20 new). Every fixture is a live capture from the 2026-10-26 sitting (spec 009 T031 to T033) except `synthetic/linear-basic.json` (case 17, permanent).
 Mentor Practice 2 is now `practice2b.json` (24 layers), the comp the captures were planted on. `--dry-run --strict-sources` is clean. **Still no baseline**:
 the full run waits for one more `SKILL.md` change, then the planned smoke list below.
 
@@ -26,8 +26,8 @@ node product/evals/key-types/run.mjs --repeat 3                  # each case 3 t
 node product/evals/key-types/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 50 mentor turns plus 18 judge calls. From the smoke runs (about $0.48 a case with its judge call)
-expect **about $9**. Bar: SC-006,
+A full run is about 54 mentor turns plus 19 judge calls. From the smoke runs (about $0.48 a case with its judge call)
+expect **about $9 to $10**. Bar: SC-006,
 at least 80% passing, and every hard-rule check passing; spec 009's SC-003 is about the deterministic parts (unit tests), so this set has no SC of its own beyond SC-006.
 
 ## What every case checks (no `expect` key needed)
@@ -82,6 +82,7 @@ turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-b
 | 17 | No candidate and nothing named: no invented focus; the practice blink is offered | 2 | tools_called; snapshot_input_lacks; demo_calls_max; tools_not_called; say: must says_nothing, must offers_practice | R-KT-PRACTICE-OFFER, R-NAMES-REAL | synthetic |
 | 18 | A hold on the wrong side: never called done; points at the key at the start of the pair | 3 | last_check; say: never not_done, must points_at_key, never no_offer | R-KT-WRONG-SIDE, R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 19 | After Effects can't be reached: nothing claimed about the comp | 1 | tools_not_called; say: must says_cant_see, never no_claims | R-UNREACHABLE | none |
+| 20 | A lesson resumed on a comp that matches, with Blink's Opacity as what should snap: said back as the learner's own and confirmed before the intent question, a frame, a demo or a check (FR-046) | 4 | tools_not_called (demo, check); say: must says_focus_back, as_theirs, asks_and_stops, never intent_not_asked_fresh, no_where_kept | R-KT-STORED-CONFIRM, R-ONE-IDEA | live |
 
 - **11** and **12** go one step past the pass: the learner is asked the constant-speed question and names the Spinner. 11 expects the record `keyframes.types`, passed, no demo.
 - **14**, **15** and **16** each have a "yes, do the review" turn: a due review is offered and waits for a yes.
@@ -151,7 +152,8 @@ of that length (about $0.40 for 2 to 3 turns, $0.60 or more for 4). The cockpit'
 | `--only 01` | First run on `practice2b.json` (24 layers, Seal left out) | $0.20 |
 | `--only 05` | Premise changed: two pairs still fading | $0.40 |
 | `--only 12` | Premise changed: Blink regresses in the turn 4 check | $0.70 |
-| **Total, key types** | 6 runs | **about $2.60** |
+| `--only 20` | New case (FR-046); reaches `stored_choices` true the same way as offset 27 | $0.65 |
+| **Total, key types** | 7 runs | **about $3.25** |
 
 ### SC-014 and the `no_self_instructions` check
 

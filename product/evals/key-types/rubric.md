@@ -239,3 +239,14 @@ start of the pair ("The key at 1 s decides how the value leaves it"). It does no
 not fix it.
 
 - **Fail:** says it is done, doesn't point at the right key, or fixes it.
+
+## R-KT-STORED-CONFIRM: what should snap is said back and confirmed before the intent question
+
+Turn 4 comes back to a lesson the learner left after saying Blink's Opacity should snap (they worked on another
+comp in between; nothing was checked). The mentor says that back in plain words as the learner's own ("last time
+you said Blink's Opacity should snap"), asks whether that still holds, and stops for the answer. It does not ask
+the intent question fresh, and takes no frame, demo or check, before the answer.
+
+- **Pass:** says the focus back as theirs, asks, and waits.
+- **Fail:** asks "is anything here meant to snap" as if nothing was said, carries on with the old focus silently,
+  calls `preview_frame` or a demo or check before asking, says where it was kept or names a field.

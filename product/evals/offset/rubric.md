@@ -287,3 +287,16 @@ says it hasn't checked and suggests trying it and playing it back.
   reverses it, that one Edit > Undo reverses one drag, that the gap can be read while dragging, or
   names any key besides Command and Option; offers to do the stagger for the learner; or gives a
   gap to aim for.
+
+## R-OF-STORED-CONFIRM: the old order and gap are said back and confirmed before anything uses them
+
+Turn 4 comes back to a lesson the learner left after choosing Dot 3 first, then Dot 1, then Dot 2, six frames
+apart (they worked on another comp in between; the Dots are as they were, nothing was checked). The mentor
+says those choices back in plain words as the learner's own ("last time you had Dot 3 going first, about 6
+frames apart"), asks whether that still holds, and stops for the answer. It takes no frame, demo or check
+that uses the order or gap before the answer.
+
+- **Pass:** says the order and the gap back as theirs, asks, and waits (the turn ends on the question).
+- **Fail:** carries on with the old order or gap silently, calls `preview_frame` or any demo or check before asking, says them as the mentor's own
+  suggestion, says where they were kept or names a field, or says only "picking up where we left off" without
+  saying what the choices were.

@@ -160,7 +160,7 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks"];
+    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "snapshot_calls_ok"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
@@ -423,6 +423,11 @@ function check(expect, turns, c) {
   for (const re of expect.snapshot_input_lacks || []) {
     const bad = snaps.find((e) => new RegExp(re).test(JSON.stringify(e.input || {})));
     add(`snapshot_input_lacks:${re.slice(0, 30)}`, !bad, bad ? `a snapshot call's input matched /${re}/: ${JSON.stringify(bad.input).slice(0, 120)}` : "ok");
+  }
+  // No snapshot call came back refused (an error result): T196, offset 11, 14, 15 and 23, step 7's re-read.
+  if (expect.snapshot_calls_ok) {
+    const bad = snaps.filter((e) => e.ok === false);
+    add("snapshot_calls_ok", bad.length === 0, bad.length ? `${bad.length} refused: ${String(bad[0].result).slice(0, 100)} (input ${JSON.stringify(bad[0].input).slice(0, 120)})` : "ok");
   }
   if ("snapshot_calls_max" in expect) add("snapshot_calls_max", snaps.length <= expect.snapshot_calls_max, `${snaps.length} snapshot calls`);
   if ("demo_calls_min" in expect) add("demo_calls_min", demos.length >= expect.demo_calls_min, `${demos.length} demo calls`);
