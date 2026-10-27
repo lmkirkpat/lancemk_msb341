@@ -1,0 +1,66 @@
+{
+  "id": "25-gap-changed-after-the-fact",
+  "title": "The learner staggered by a different gap than they said: the measured gap is said back as theirs, and the lesson re-reads with it",
+  "covers": [
+    "FR-040"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "layers-pass.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, eight frames apart."
+    },
+    {
+      "project": "layers-pass.json",
+      "say": "I staggered them. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "offset_check"
+    ],
+    "demo_calls_max": 0,
+    "snapshot_input_matches": [
+      "\"gap_frames\":8",
+      "\"gap_frames\":4"
+    ],
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "says_measured_gap",
+        "must": "\\b(?:4|four)\\b[^.?!]{0,25}\\bframes?\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_picking_up",
+        "never": "\\b(?:pick(?:ing)? (?:it )?up (?:where|from)|picking up|pick(?:ing)? back up|where (?:we|I) left off)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_a_fail",
+        "never": "\\b(?:wrong|mistake|failed|incorrect|should have|supposed to)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OF-GAP-MEASURED",
+    "R-ONE-IDEA"
+  ]
+}

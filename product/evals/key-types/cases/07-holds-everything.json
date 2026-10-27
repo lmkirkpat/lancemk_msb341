@@ -6,16 +6,16 @@
   ],
   "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
   "fixture_sources": {
-    "practice2-before.json": "stand-in",
-    "select-all-hold.json": "stand-in"
+    "practice2b.json": "live",
+    "select-all-hold.json": "live"
   },
   "turns": [
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "/key-types-mentor"
     },
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "Blink should snap, but Cut is meant to fade."
     },
     {

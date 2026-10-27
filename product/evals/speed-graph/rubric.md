@@ -217,3 +217,18 @@ When the learner says a move should slam or land hard, the mentor drops that pai
 a sentence, with no argument, and carries on.
 
 - **Fail:** argues, lectures about easing, or keeps shaping that pair.
+
+## R-SG-READ-TIME: a reading answer given as a frame or a time is placed in the pair
+
+The learner answers the reading question with a frame number ("around frame 30") on the first
+Position move, which runs from 0.5 s to 1.5 s in a 30 fps comp. The mentor turns the frame into
+seconds with the comp's frame rate (frame 30 is 1 s), places it in the pair from its key times
+(the middle of 0.5 to 1.5 s), and checks it against where the move is fastest in the snapshot (the
+middle). That agrees, so it says so in a sentence and goes on to explain.
+
+- **Pass:** says the answer is right (or in words that say the same), in the middle, without asking
+  the learner to restate it as start, middle or end.
+- **Fail:** treats a frame number as a value-graph answer and asks which graph is showing, calls the
+  answer wrong, asks for start, middle or end when the frame is inside the pair, places it in the
+  wrong part, uses a frame rate other than the snapshot's, or says how far along the move the frame
+  is as a percentage.

@@ -8,9 +8,11 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
-## Status (2026-10-26): built on stand-in and synthetic fixtures
+## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
-18 cases, dry-run clean, smoke run below. **No baseline yet.** The full run waits for the live sitting (spec 008 L-1 to L-7), because the fixtures are stand-ins the builder wrote by hand.
+19 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 008 T029 to T031), except `synthetic/linear-basic.json`
+(cases 13 and 17, permanent). `--dry-run --strict-sources` is clean. **Still no baseline**: the full run waits for one more `SKILL.md` change, then the
+planned smoke list below. Case 19 (a reading answer given as a frame, FR-039) is new.
 
 ## Running
 
@@ -24,8 +26,8 @@ node product/evals/speed-graph/run.mjs --repeat 3                  # each case 3
 node product/evals/speed-graph/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 44 mentor turns plus 18 judge calls. From the smoke run
-(about $0.12 to $0.18 a turn, $0.05 to $0.10 a judge call) expect **about $5 to $7**. Bar: SC-006,
+A full run is about 47 mentor turns plus 19 judge calls. From the smoke runs (about $0.38 a case with its judge call)
+expect **about $7 to $8**. Bar: SC-006,
 at least 80% passing, and every hard-rule check passing; spec 008's SC-003 is about the pass rule (unit tests), so this set has no SC of its own beyond SC-006.
 
 ## What every case checks (no `expect` key needed)
@@ -56,33 +58,35 @@ words (1-based `turns`, default all; case-insensitive unless `cs`).
 ## Cases
 
 Numbers are mine; the spec's Eval plan item each covers is in `covers`. Turns is the number of mentor
-turns. Fixture source: `stand-in` (builder's hand-built file, replaced at the live sitting),
-`synthetic` (permanent), `live` (a capture).
+turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-built stand-ins are gone),
+`synthetic` (permanent).
 
 | # | Case | Turns | Hard-rule checks (beyond the universal ones) | Rubric | Fixture source |
 |---|---|---|---|---|---|
-| 01 | First lesson on Mentor Practice: Title, its pairs, leave-outs, a frame, then the read-the-graph step | 3 | first_tool; tools_called; demo_calls_max; snapshot_input_matches; say: must focus, must hidden_layer, must precomp, must expression, never no_expression_claim, never precomp_not_fine, must asks_hard_landing, must read_graph | R-SG-PROPOSAL, R-SG-LEAVE-OUTS, R-SG-READ-GRAPH, R-USES-MEMORY, R-NAMES-REAL | stand-in |
-| 02 | One demonstration on the demo pair only, in plain words, Edit > Undo, no numbers | 3 | demo_calls_min; demo_calls_max; demo_only_on; tools_called; say: must undo, must short_long | R-SG-DEMO, R-DEMO-PLAIN, R-NAMES-REAL | stand-in |
-| 03 | One pair in focus (Bar's Trim Paths End): no demonstration, a walkthrough in words | 3 | demo_calls_max; say: must walks_through | R-SG-WALKTHROUGH, R-NAMES-REAL | stand-in |
-| 04 | Scale and other pairs still on the default shape: named, no fix, no offer | 2 | tools_called; last_check; say: must names_scale, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL, R-ONE-IDEA | stand-in |
-| 05 | 'Do the rest': declined warmly, no offer later | 4 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | stand-in |
-| 06 | Logo's Rotation (an expression over keys) is refused kindly as a target and never graded | 2 | tools_not_called; say: must says_expression, never no_expression_claim | R-SG-EXPRESSION-REFUSED, R-NAMES-REAL | stand-in |
-| 07 | Pair 1 shaped, pair 2 not: the shared key is shaped on pair 1's side only; pair 2 isn't praised | 2 | last_check; say: must names_time, never no_offer | R-SG-SHARED-KEY, R-HINT-NOT-FIX, R-NAMES-REAL | stand-in |
-| 08 | Review due: a new move (Card), no demo, no walkthrough, no reading step; a demo request is declined | 3 | review_mode; snapshot_with; tools_called; demo_calls_max; say: must names_card, must declines_demo | R-REVIEW-HANDS-ON, R-NAMES-REAL | stand-in |
-| 09 | A value-graph answer: asks which graph; Edit Speed Graph; no shortcut, no unconfirmed Keyframe Velocity path | 3 | say: must asks_which_graph, must names_menu | R-SG-CANT-SEE, R-SG-VERSION, R-ONE-IDEA | stand-in |
-| 10 | Speed dragged up, influence not: not passed; it arrives moving and the hint says drag sideways | 2 | last_check; say: must arrives_moving, must sideways, never no_offer | R-SG-HINT-MISTAKE, R-HINT-NOT-FIX, R-NAMES-REAL | stand-in |
-| 11 | Scale shaped on one part only: says which part is off | 2 | last_check; say: must names_part, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL | stand-in |
-| 12 | Easing not learned: named and offered; on insistence one sentence | 2 | demo_calls_max; say: must names_easing, must offers, must builds_on | R-PREREQ-EASING, R-ONE-IDEA | stand-in |
+| 01 | First lesson on Mentor Practice: Title, its pairs, leave-outs, a frame, then the read-the-graph step | 3 | first_tool; tools_called; demo_calls_max; snapshot_input_matches; say: must focus, must hidden_layer, must precomp, must expression, never no_expression_claim, never precomp_not_fine, must asks_hard_landing, must read_graph | R-SG-PROPOSAL, R-SG-LEAVE-OUTS, R-SG-READ-GRAPH, R-USES-MEMORY, R-NAMES-REAL | live |
+| 02 | One demonstration on the demo pair only, in plain words, Edit > Undo, no numbers | 3 | demo_calls_min; demo_calls_max; demo_only_on; tools_called; say: must undo, must short_long | R-SG-DEMO, R-DEMO-PLAIN, R-NAMES-REAL | live |
+| 03 | One pair in focus (Bar's Trim Paths End): no demonstration, a walkthrough in words | 3 | demo_calls_max; say: must walks_through | R-SG-WALKTHROUGH, R-NAMES-REAL | live |
+| 04 | Scale and other pairs still on the default shape: named, no fix, no offer | 2 | tools_called; last_check; say: must names_scale, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL, R-ONE-IDEA | live |
+| 05 | 'Do the rest': declined warmly, no offer later | 4 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | live |
+| 06 | Logo's Rotation (an expression over keys) is refused kindly as a target and never graded | 2 | tools_not_called; say: must says_expression, never no_expression_claim | R-SG-EXPRESSION-REFUSED, R-NAMES-REAL | live |
+| 07 | Pair 1 shaped, pair 2 not: the shared key is shaped on pair 1's side only; pair 2 isn't praised | 2 | last_check; say: must names_time, never no_offer | R-SG-SHARED-KEY, R-HINT-NOT-FIX, R-NAMES-REAL | live |
+| 08 | Review due: a new move (Card), no demo, no walkthrough, no reading step; a demo request is declined | 3 | review_mode; snapshot_with; tools_called; demo_calls_max; say: must names_card, must declines_demo | R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
+| 09 | A value-graph answer: asks which graph; Edit Speed Graph; no shortcut, no unconfirmed Keyframe Velocity path | 3 | say: must asks_which_graph, must names_menu | R-SG-CANT-SEE, R-SG-VERSION, R-ONE-IDEA | live |
+| 10 | Speed dragged up, influence not: not passed; it arrives moving and the hint says drag sideways | 2 | last_check; say: must arrives_moving, must sideways, never no_offer | R-SG-HINT-MISTAKE, R-HINT-NOT-FIX, R-NAMES-REAL | live |
+| 11 | Scale shaped on one part only: says which part is off | 2 | last_check; say: must names_part, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL | live |
+| 12 | Easing not learned: named and offered; on insistence one sentence | 2 | demo_calls_max; say: must names_easing, must offers, must builds_on | R-PREREQ-EASING, R-ONE-IDEA | live |
 | 13 | No eased pair in the comp: says so and offers easing | 1 | demo_calls_max; tools_not_called; say: must offers_easing | R-PREREQ-EASING, R-NAMES-REAL | synthetic |
-| 14 | Title's last move should slam: dropped without argument | 2 | snapshot_input_matches; say: never no_argument | R-SG-LANDS-HARD, R-ONE-IDEA | stand-in |
-| 15 | A wrong reading answer: one hint, the lesson goes on | 3 | tools_called; demo_calls_max; say: must one_hint | R-SG-READ-GRAPH-WRONG, R-ONE-IDEA | stand-in |
-| 16 | The learner stops after a check that didn't pass: recorded partial, demo stated, no numbers or method | 4 | record_lesson | R-RECORD-HONEST, R-NAMES-REAL | stand-in |
+| 14 | Title's last move should slam: dropped without argument | 2 | snapshot_input_matches; say: never no_argument | R-SG-LANDS-HARD, R-ONE-IDEA | live |
+| 15 | A wrong reading answer: one hint, the lesson goes on | 3 | tools_called; demo_calls_max; say: must one_hint | R-SG-READ-GRAPH-WRONG, R-ONE-IDEA | live |
+| 16 | The learner stops after a check that didn't pass: recorded partial, demo stated, no numbers or method | 4 | record_lesson | R-RECORD-HONEST, R-NAMES-REAL | live |
 | 17 | A review with nothing new: said in a sentence, nothing recorded | 2 | review_mode; snapshot_with; demo_calls_max; record_lesson; tools_not_called | R-REVIEW-NOTHING-NEW | synthetic |
 | 18 | After Effects can't be reached: nothing claimed about the comp | 1 | tools_not_called; say: must says_cant_see, never no_claims | R-UNREACHABLE | none |
+| 19 | A reading answer given as a frame ("around frame 30" on a 0.5 to 1.5 s pair): placed in the pair from its key times, agreed with, not taken for a value-graph answer | 3 | tools_called; demo_calls_max; say: never not_a_value_graph_answer, never not_called_wrong, must places_it | R-SG-READ-TIME, R-ONE-IDEA | live |
 
 - **01** has three turns because the preview frame is only taken in the explain step, after the learner answers the reading question.
 - **08** and **17** have a "yes, do the review" turn: a due review is offered, then waits for the learner to agree.
-- No case reaches a full pass of the lesson: the stand-ins only plant single mistakes (`planted-*`), and none has every Title pair shaped. Same for a shaped Card in the review. See requests.
+- No case reaches a full pass of the lesson: no live capture has every Title pair shaped, or a shaped Card for the review. That is why case 19 asks at the first reading step (stage 2), not after a pass (stage 6, where `discovery/usage-notes/speed-graph.md` met it). Request to the builder: a capture with all four Title pairs shaped (or Card's) lets a stage 6 variant run.
+- **19** is FR-039's proof on the model side (a unit test covers `comp.frame_rate`). It uses a right answer given in frames: 30 frames is 1 s at 30 fps, the middle of Title's first Position move (0.5 to 1.5 s), where the move is fastest. A wrong frame ("frame 19") would be a separate hint case; not added, one reason per case.
 - **06** uses the Logo expression; **07** the shared key (spec 008 overlap rows).
 - The runner's `last_check.has` compares against the check's reply with the space after each colon removed (found in the key-types smoke run; case 11's `"dimension":"height"` check depends on it, and it has not been run since).
 
@@ -94,30 +98,31 @@ scrubbed copy named `comp-N.json` into a neutral temp folder: the note is remove
 `Studio Reel.aep`, "Synthetic" in a comp name becomes "Studio", and a fixture that still says
 "synthetic" or "stand-in" anywhere is refused. `--dry-run` runs the same scrub.
 
-## Fixtures and re-pointing after the live sitting
+## Fixtures
 
-Fixtures are **not copied** into this folder. A case names a fixture by the file name the builder's
-tests use, and the runner resolves it in `CONFIG.fixtureDirs` order (`mentor/test/fixtures/speed-graph`, `mentor/test/fixtures`, `mentor/test/fixtures/speed-graph/stand-in`):
-a live capture sits before the stand-in folder, so it wins. Each case carries a `fixture_sources`
-label per fixture, and `--dry-run` prints where each resolves now.
+Fixtures are **not copied** into this folder. A case names a fixture by file name and the runner resolves it in
+`CONFIG.fixtureDirs` order (`mentor/test/fixtures/speed-graph`, `mentor/test/fixtures`, `mentor/test/fixtures/layer-info`, `mentor/test/fixtures/speed-graph/stand-in`). The stand-in folder is gone; `layer-info` was added to the list on 2026-10-26 so a case can use
+`practice2b.json`, Mentor Practice 2 as built. `fixture_sources` labels are all `live` or `synthetic`, and `--strict-sources` fails if one drifts.
+The builder's table of where each capture came from is `mentor/test/fixtures/speed-graph/README.md`.
 
-After the live sitting, once the captures are saved under the stand-ins' names and the stand-in folder is
-deleted:
+### Re-pointed 2026-10-26: what each case assumes, checked against the live captures
 
-1. `node product/evals/speed-graph/run.mjs --dry-run`. It prints every stale label, for example
-   `04-...: planted-15-80.json is labelled stand-in but resolves to live`.
-2. Change those labels (`stand-in` to `live`) in each case's `fixture_sources`. `--strict-sources` fails
-   until none are stale.
-3. A stand-in with **no live twin under the same name** now fails the dry run with "no fixture". Capture it
-   under that name or change the cases that use it. Every fixture these cases use is in the builder's README table (`mentor/test/fixtures/speed-graph/README.md`) with a live replacement.
-4. Run each case once with `--only` and read the facts the checks assume, which a live capture can change
-   (Title's four pairs and their times, the leave-outs (Old Take, CTRL, Icon, Logo, Subtitle, Bar, Glow) and the planted mistakes' codes). A changed fact is a case edit, not a skill bug.
-5. Then the baseline: `node product/evals/speed-graph/run.mjs`. A live capture changes a case's hash, so
-   `--changed` re-runs exactly the re-pointed cases.
-6. The preview frame comes back as a blank placeholder in every run (the fixture folder has no `frame.png`).
-   The rubric tells the judge to ignore it. A `frame.png` next to a live capture would let the mentor see it.
+Checked by running the real tools on each capture (`speed_graph_snapshot`, then `speed_graph_check`), not by running the mentor.
 
-
+- **Held as written:** 01 to 07, 09, 12 to 15, 17, 18. Title's four pairs (Position 0.5 to 1.5 s, 1.5 to 3 s, 3 to 4.367 s; Scale 0.5 to 1.5 s)
+  and the leave-outs (Old Take, CTRL, Icon, Logo; Subtitle, Bar and Glow as ease first) are what cases 01 to 03 and 06 name. Bar's Trim Paths End is
+  one pair (0.2 to 1.2 s), so no demo (03). Logo has no targets (06). `planted-15-80` passes Position's first pair only (04); in
+  `planted-shared-key` pair 2 shares the 1.5 s key and is not shaped (07). The label "Position 1.5-3 s" carries the 1.5 that 07 looks for.
+- **08 moved to `practice2b.json`** (Mentor Practice 2 as it is now, 24 layers, id 179) from `practice2-before.json` (13 layers). The review still lands on
+  Card's Position. A precomp (Seal) and 11 already-shaped layers join the leave-outs; the case says nothing about them.
+- **10 changed meaning in degree.** In the live `planted-dragged-up-small` the hand drag also moved the influence a little (about 32, not 33.3) and moved
+  Position's 3 s and 4.367 s landings too, so all four Title pairs read "arrives moving", not two. The expectations (arrives moving, drag sideways, no
+  offer) hold. The learner says only "the first Position move and Scale", so a mentor that names the other pairs is right. Title reworded; not bent.
+- **11 changed meaning.** `planted-one-scale-dim` was captured with Title Position still dragged up from the earlier hand captures, so the check reply has
+  two failures: Position's first pair (arrives moving) and Scale (height not shaped). The subject (Scale's height) holds and the `has` check passes, but the mentor
+  may talk about Position too, which the case does not expect. Not bent. Request to the builder: re-capture with Position reset.
+- **16, watch.** The demo overlay (applied to every snapshot of comp 97) shapes Position's first pair on the dragged-up capture, so it grades as the demo's.
+  The case only needs "not passed, then stopped", which holds.
 ## Smoke run (2026-10-26)
 
 Eight runs, $3.03, cases 01, 08, 10 and 17 (the first case of each kind plus a hint case and a nothing-new review):
@@ -134,6 +139,34 @@ Eight runs, $3.03, cases 01, 08, 10 and 17 (the first case of each kind plus a h
 | 8 | 08 | pass ($0.44) | |
 
 Runs 1, 2, 4 and 5 are case or rubric changes, not skill failures, and the result files are kept.
+
+
+## Planned smoke list (for after the next `SKILL.md` change; nothing here has been run)
+
+Written 2026-10-26 when the three wave A sets were re-pointed to the live captures. **No paid run has
+happened since.** One run each unless it says `--repeat 3`. Cost is an estimate from the earlier smoke runs' per-case cost for a case
+of that length (about $0.40 for 2 to 3 turns, $0.60 or more for 4). The cockpit's hand-back adds the three sets together.
+
+| Run | Why | Est. cost |
+|---|---|---|
+| `--only 08 --repeat 3` | SC-014: `no_self_instructions` 3 of 3. Also the first run on `practice2b.json` (case 08 moved) | $1.35 |
+| `--only 19` | New case (FR-039) | $0.45 |
+| `--only 10` | Premise changed: the live drag arrives moving on all four pairs | $0.35 |
+| `--only 11` | Premise changed: a second failure (Position) is in the check reply | $0.35 |
+| **Total, speed graph** | 6 runs | **about $2.50** |
+
+### SC-014 and the `no_self_instructions` check
+
+SC-014 (spec 004, FR-042): the review-due case of each set passes this universal check **3 of 3** with `--repeat 3`. `--repeat` passes a case on a
+majority, so read each run's `no_self_instructions` line in the results file; the criterion is all three runs, not the majority.
+
+The check was widened on 2026-10-26 because Phase 9 reworded step 0 ("never narrate the branch or what you'll do next"). The old pattern
+caught only the original leak ("Review is due -> run the review", "Run review", "review mode", a line starting "Learned, review due"). It missed
+paraphrases of the same thing. It now also catches a review-due line that goes on to say what it will run, "straight to the review", the word
+"branch" next to review or lesson, and "easing isn't learned, so I'll ..." Checked by hand against 13 leak lines (all caught; the old pattern caught 4)
+and 7 lines a mentor may say (none caught, including "a review is due if you want one", which the offer step may use). It applies to every mentor
+word in every turn, so a note between tool calls is covered too, not just before the first call. What it can't see: a leak in words I didn't
+think of. The judge's R-ONE-IDEA and a read of the three transcripts cover that.
 
 ## Reading results
 

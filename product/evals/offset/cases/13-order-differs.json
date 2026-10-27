@@ -7,16 +7,16 @@
   ],
   "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
   "fixture_sources": {
-    "practice2-before.json": "stand-in",
-    "order-differs.json": "stand-in"
+    "practice2b.json": "live",
+    "order-differs.json": "live"
   },
   "turns": [
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "/offset-mentor"
     },
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
     },
     {

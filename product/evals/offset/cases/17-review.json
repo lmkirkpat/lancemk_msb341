@@ -7,19 +7,19 @@
   ],
   "learner_record": "mentor/test/fixtures/offset/records/learned-dots.json",
   "fixture_sources": {
-    "practice2-before.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "/offset-mentor"
     },
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "Yes, let's do the review."
     },
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "Chip A first. Can you show me how?"
     }
   ],

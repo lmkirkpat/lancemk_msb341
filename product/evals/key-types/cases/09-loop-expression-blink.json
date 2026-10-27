@@ -6,7 +6,7 @@
   ],
   "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
   "fixture_sources": {
-    "loopout-blink.json": "stand-in"
+    "loopout-blink.json": "live"
   },
   "turns": [
     {

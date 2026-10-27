@@ -1,0 +1,58 @@
+{
+  "id": "19-reading-answer-as-frame",
+  "title": "A reading answer given as a frame number: placed in the pair from its key times, not mistaken for a value-graph answer",
+  "covers": [
+    "FR-039"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "On Title's first Position move, it's fastest around frame 30."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "preview_frame"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "not_a_value_graph_answer",
+        "never": "\\bwhich graph\\b|\\bvalue graph\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_called_wrong",
+        "never": "\\b(?:not quite|not right|isn't right|incorrect|that's wrong)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "places_it",
+        "must": "\\b(?:middle|midway|halfway|centre|center|in the middle)\\b|\\b(?:1|one) (?:s\\b|second)",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-READ-TIME",
+    "R-ONE-IDEA"
+  ]
+}

@@ -6,20 +6,20 @@
   ],
   "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
   "fixture_sources": {
-    "practice2-before.json": "stand-in",
-    "blink-one-held.json": "stand-in"
+    "practice2b.json": "live",
+    "blink-one-held.json": "live"
   },
   "turns": [
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "/key-types-mentor"
     },
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "Blink's Opacity should snap."
     },
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "Can you hold the rest for me?"
     },
     {

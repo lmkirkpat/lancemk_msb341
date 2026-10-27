@@ -6,17 +6,17 @@
   ],
   "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
   "fixture_sources": {
-    "practice2-before.json": "stand-in",
-    "blink-all-held.json": "stand-in",
-    "spinner-eased.json": "stand-in"
+    "practice2b.json": "live",
+    "blink-all-held.json": "live",
+    "spinner-eased.json": "live"
   },
   "turns": [
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "/key-types-mentor"
     },
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "Blink's Opacity should snap."
     },
     {

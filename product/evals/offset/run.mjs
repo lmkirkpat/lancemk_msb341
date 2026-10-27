@@ -45,6 +45,7 @@ const CONFIG = {
   "fixtureDirs": [
     "mentor/test/fixtures/offset",
     "mentor/test/fixtures",
+    "mentor/test/fixtures/layer-info",
     "mentor/test/fixtures/offset/stand-in"
   ],
   "judgeLabel": "an After Effects mentor that teaches breaking the lockstep with offset (staggering layers or properties)",
@@ -65,7 +66,7 @@ const CONFIG = {
     ],
     [
       "no_self_instructions",
-      "review (?:is )?due\\s*(?:→|->|\\.|:|,|-)\\s*(?:run(?: the)? review|review mode)|\\bRun review\\b|\\breview mode\\b|^\\s*Learned, review due"
+      "review (?:is )?due\\s*(?:→|->|\\.|:|,|-)\\s*(?:run(?: the)? review|review mode)|\\bRun review\\b|\\breview mode\\b|^\\s*Learned, review due|\\breview (?:is )?due\\s*(?:→|->|[.:,;-]|so)\\s*(?:I(?:'ll| will)\\s+|we(?:'ll| will)\\s+)?(?:run|go|open|start|take)\\b|\\bstraight (?:to|into) the review\\b|\\b(?:learned|practicing)\\b[^.?!]{0,40}\\breview (?:is )?due\\b[^.?!]{0,40}(?:\\bso\\b|→|->)|\\b(?:review|lesson|restart) branch\\b|\\bbranch\\b[^.?!]{0,20}\\b(?:review|lesson)\\b|\\b(?:easing|this skill) (?:isn't|is not|hasn't been) learned,? so I(?:'ll| will)"
     ],
     [
       "no_sequence_layers",

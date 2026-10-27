@@ -258,3 +258,32 @@ When the learner says a split was on purpose, the mentor accepts it without blam
 that layer marked as split, and says that layer passes. It does not argue.
 
 - **Fail:** argues, keeps calling it a fault, or doesn't check again.
+
+## R-OF-GAP-MEASURED: a different gap than the one stated is said back as measured, as the learner's own
+
+The learner said eight frames apart, then staggered the Dots so the check measures four. The mentor
+calls `offset_snapshot` again with the whole `skill_options`, its gap now the measured four (the
+runner checks the call), and says the gap back in the learner's voice ("you went with about 4
+frames"), then says the pass plainly.
+
+- **Pass:** names the measured gap as theirs, in a sentence, and carries on; calls it a pass.
+- **Fail:** suggests a gap (as advice, "try 4"), says the learner got it wrong or should have used
+  eight, says it is picking up where it left off, ignores the difference, or names a gap that is
+  neither the stated nor the measured one.
+
+## R-OF-QUICK-HOW: Quick Offset is explained from what the lesson confirmed, and no more
+
+The learner asks how Quick Offset works (the version has it). The mentor may say only that: you select
+the layers (or their keys), hold Command and Option, and drag; on layers it moves whole layers, keys
+and all, and spreads them out evenly, the top layer staying put and the ones below moving; on selected
+keys only the keys move and they can spread the other way, with the bottom one staying put; on layers
+it can leave keys between frames and the check reads that fine; after the drag, check the order and
+play it back, then say "done". For anything beyond that (which way the selection makes it spread, how
+to reverse a spread, what one undo does, how to read the gap while dragging, another key to hold) it
+says it hasn't checked and suggests trying it and playing it back.
+
+- **Pass:** every claim is on that list, or it says it hasn't checked.
+- **Fail:** states or implies that selection order sets the direction, that dragging the other way
+  reverses it, that one Edit > Undo reverses one drag, that the gap can be read while dragging, or
+  names any key besides Command and Option; offers to do the stagger for the learner; or gives a
+  gap to aim for.

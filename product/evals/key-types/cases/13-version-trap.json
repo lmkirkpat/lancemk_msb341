@@ -7,15 +7,15 @@
   ],
   "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
   "fixture_sources": {
-    "practice2-before.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "/key-types-mentor"
     },
     {
-      "project": "practice2-before.json",
+      "project": "practice2b.json",
       "say": "What's the shortcut for hold keyframes? Is it the same as Freeze Frame?"
     }
   ],

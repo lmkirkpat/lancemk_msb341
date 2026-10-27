@@ -7,7 +7,7 @@
   ],
   "learner_record": "mentor/test/fixtures/records/empty.json",
   "fixture_sources": {
-    "practice-now.json": "stand-in"
+    "practice-now.json": "live"
   },
   "turns": [
     {

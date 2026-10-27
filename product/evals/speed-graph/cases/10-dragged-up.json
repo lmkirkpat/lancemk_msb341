@@ -1,14 +1,14 @@
 {
   "id": "10-dragged-up",
-  "title": "Speed dragged up, influence not: not passed; it arrives moving and the hint says drag sideways",
+  "title": "Speed dragged up (the drag moved influence a little too): not passed; it arrives moving and the hint says drag sideways",
   "covers": [
     "EP-9",
     "S-1"
   ],
   "learner_record": "mentor/test/fixtures/records/easing-learned.json",
   "fixture_sources": {
-    "practice-now.json": "stand-in",
-    "planted-dragged-up-small.json": "stand-in"
+    "practice-now.json": "live",
+    "planted-dragged-up-small.json": "live"
   },
   "turns": [
     {

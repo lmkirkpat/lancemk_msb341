@@ -6,8 +6,8 @@
   ],
   "learner_record": "mentor/test/fixtures/records/easing-learned.json",
   "fixture_sources": {
-    "practice-now.json": "stand-in",
-    "planted-shared-key.json": "stand-in"
+    "practice-now.json": "live",
+    "planted-shared-key.json": "live"
   },
   "turns": [
     {

@@ -7,7 +7,7 @@
   ],
   "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
   "fixture_sources": {
-    "practice2-60fps.json": "stand-in"
+    "practice2-60fps.json": "live"
   },
   "turns": [
     {

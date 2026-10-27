@@ -8,9 +8,11 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
-## Status (2026-10-26): built on stand-in and synthetic fixtures
+## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
-19 cases, dry-run clean, smoke run below. **No baseline yet.** The full run waits for the live sitting (spec 009 L-1 and L-2), because the fixtures are stand-ins the builder wrote by hand.
+19 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 009 T031 to T033) except `synthetic/linear-basic.json` (case 17, permanent).
+Mentor Practice 2 is now `practice2b.json` (24 layers), the comp the captures were planted on. `--dry-run --strict-sources` is clean. **Still no baseline**:
+the full run waits for one more `SKILL.md` change, then the planned smoke list below.
 
 ## Running
 
@@ -24,8 +26,8 @@ node product/evals/key-types/run.mjs --repeat 3                  # each case 3 t
 node product/evals/key-types/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 53 mentor turns plus 19 judge calls. From the smoke run
-(about $0.12 to $0.18 a turn, $0.05 to $0.10 a judge call) expect **about $5 to $7**. Bar: SC-006,
+A full run is about 53 mentor turns plus 19 judge calls. From the smoke runs (about $0.48 a case with its judge call)
+expect **about $9**. Bar: SC-006,
 at least 80% passing, and every hard-rule check passing; spec 009's SC-003 is about the deterministic parts (unit tests), so this set has no SC of its own beyond SC-006.
 
 ## What every case checks (no `expect` key needed)
@@ -56,35 +58,35 @@ words (1-based `turns`, default all; case-insensitive unless `cs`).
 ## Cases
 
 Numbers are mine; the spec's Eval plan item each covers is in `covers`. Turns is the number of mentor
-turns. Fixture source: `stand-in` (builder's hand-built file, replaced at the live sitting),
-`synthetic` (permanent), `live` (a capture).
+turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-built stand-ins are gone),
+`synthetic` (permanent).
 
 | # | Case | Turns | Hard-rule checks (beyond the universal ones) | Rubric | Fixture source |
 |---|---|---|---|---|---|
-| 01 | First lesson: asks what should snap before proposing; candidates as questions, at most three; real names | 1 | first_tool; tools_called; demo_calls_max; tools_not_called; say: must asks_what_snaps, must asks_question, must names_candidates, never not_mistakes, never no_see_through_hidden | R-KT-INTENT-FIRST, R-KT-CANDIDATES-AS-QUESTIONS, R-USES-MEMORY, R-NAMES-REAL | stand-in |
-| 02 | Everything is meant to fade: dropped with no argument; no invented focus; the practice blink or Mentor Practice 2 offered | 2 | tools_called; snapshot_input_matches; snapshot_input_lacks; demo_calls_max; tools_not_called; say: must offers_practice, never no_argument | R-KT-DROP-NO-ARGUMENT, R-KT-PRACTICE-OFFER | stand-in |
-| 03 | One hold on the demo target, in plain words, frames either side, Edit > Undo | 3 | demo_calls_min; demo_calls_max; demo_only_on; tools_called; say: must undo, must says_hold | R-KT-DEMO, R-DEMO-PLAIN, R-NAMES-REAL | stand-in |
-| 04 | One focus pair (Cut): no demonstration, a walkthrough in words | 3 | demo_calls_max; say: must walks_through | R-KT-WALKTHROUGH, R-NAMES-REAL | stand-in |
-| 05 | One Blink pair still fading: named with a frame inside it, no fix, no offer | 3 | tools_called; last_check; say: must names_blink, must names_time, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL, R-ONE-IDEA | stand-in |
-| 06 | 'Do the rest': declined warmly, no offer later | 4 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | stand-in |
-| 07 | Selects and holds everything: names where the should-fade layer now waits and jumps; asks about the extra holds; no fix | 3 | last_check; say: must names_cut, must names_extra, must asks, never no_offer | R-KT-SHOULD-MOVE-HELD, R-HINT-NOT-FIX, R-NAMES-REAL | stand-in |
-| 08 | Logo's Rotation named as constant speed: an expression drives it; no mark, no 'set its keys to linear' | 3 | last_check; say: must says_expression, never no_linear_advice | R-KT-EXPRESSION, R-NAMES-REAL | stand-in |
-| 09 | A blink with an expression on isn't a candidate; the expression is a left-out reason | 1 | tools_called; say: must names_expression_layer, must says_expression, never not_a_question_candidate | R-KT-LEFT-OUT, R-NAMES-REAL | stand-in |
-| 10 | A layer held at Opacity 0 is vanishing, never 'hidden' | 3 | say: never not_hidden | R-KT-NOT-HIDDEN, R-NAMES-REAL | stand-in |
-| 11 | Every pair held, then a constant-speed move named: confirmed linear, remembered | 4 | last_check; record_lesson; say: must asks_constant_speed, must confirms_linear | R-KT-LINEAR-CHECK, R-RECORD-HONEST, R-NAMES-REAL | stand-in |
-| 12 | A move meant to be constant speed is eased: one sentence on which end isn't linear; checked again | 4 | last_check; say: must names_spinner, must says_linear, never no_offer | R-KT-LINEAR-CHECK, R-HINT-NOT-FIX, R-NAMES-REAL | stand-in |
-| 13 | No Mac shortcut, no 'freeze', the menu path named | 2 | say: must menu_path, never no_freeze_frame | R-KT-VERSION, R-ONE-IDEA | stand-in |
-| 14 | Review due: intent asked first, Cut as the target, no demo, walkthrough or menu path | 3 | review_mode; snapshot_with; demo_calls_max; tools_called; say: must asks_intent, must names_cut, must make_it_snap | R-REVIEW-HANDS-ON, R-KT-INTENT-FIRST, R-NAMES-REAL | stand-in |
-| 15 | A review that doesn't pass: hints, no reteach; recorded partial with the demo stated false | 5 | review_mode; last_check; record_lesson; say: never no_offer | R-REVIEW-HINT, R-RECORD-HONEST, R-NAMES-REAL | stand-in |
-| 16 | Review, the learner says nothing should snap: the review ends and nothing is recorded | 3 | review_mode; demo_calls_max; record_lesson; tools_not_called | R-KT-REVIEW-ENDS, R-REVIEW-HANDS-ON | stand-in |
+| 01 | First lesson: asks what should snap before proposing; candidates as questions, at most three; real names | 1 | first_tool; tools_called; demo_calls_max; tools_not_called; say: must asks_what_snaps, must asks_question, must names_candidates, never not_mistakes, never no_see_through_hidden | R-KT-INTENT-FIRST, R-KT-CANDIDATES-AS-QUESTIONS, R-USES-MEMORY, R-NAMES-REAL | live |
+| 02 | Everything is meant to fade: dropped with no argument; no invented focus; the practice blink or Mentor Practice 2 offered | 2 | tools_called; snapshot_input_matches; snapshot_input_lacks; demo_calls_max; tools_not_called; say: must offers_practice, never no_argument | R-KT-DROP-NO-ARGUMENT, R-KT-PRACTICE-OFFER | live |
+| 03 | One hold on the demo target, in plain words, frames either side, Edit > Undo | 3 | demo_calls_min; demo_calls_max; demo_only_on; tools_called; say: must undo, must says_hold | R-KT-DEMO, R-DEMO-PLAIN, R-NAMES-REAL | live |
+| 04 | One focus pair (Cut): no demonstration, a walkthrough in words | 3 | demo_calls_max; say: must walks_through | R-KT-WALKTHROUGH, R-NAMES-REAL | live |
+| 05 | Two Blink pairs still fading (one held): both named, one with a frame inside it, no fix, no offer | 3 | tools_called; last_check; say: must names_blink, must names_time, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL, R-ONE-IDEA | live |
+| 06 | 'Do the rest': declined warmly, no offer later | 4 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | live |
+| 07 | Selects and holds everything: names where the should-fade layer now waits and jumps; asks about the extra holds; no fix | 3 | last_check; say: must names_cut, must names_extra, must asks, never no_offer | R-KT-SHOULD-MOVE-HELD, R-HINT-NOT-FIX, R-NAMES-REAL | live |
+| 08 | Logo's Rotation named as constant speed: an expression drives it; no mark, no 'set its keys to linear' | 3 | last_check; say: must says_expression, never no_linear_advice | R-KT-EXPRESSION, R-NAMES-REAL | live |
+| 09 | A blink with an expression on isn't a candidate; the expression is a left-out reason | 1 | tools_called; say: must names_expression_layer, must says_expression, never not_a_question_candidate | R-KT-LEFT-OUT, R-NAMES-REAL | live |
+| 10 | A layer held at Opacity 0 is vanishing, never 'hidden' | 3 | say: never not_hidden | R-KT-NOT-HIDDEN, R-NAMES-REAL | live |
+| 11 | Every pair held, then a constant-speed move named: confirmed linear, remembered | 4 | last_check; record_lesson; say: must asks_constant_speed, must confirms_linear | R-KT-LINEAR-CHECK, R-RECORD-HONEST, R-NAMES-REAL | live |
+| 12 | A move meant to be constant speed is eased: one sentence on which end isn't linear; checked again | 4 | last_check; say: must names_spinner, must says_linear, never no_offer | R-KT-LINEAR-CHECK, R-HINT-NOT-FIX, R-NAMES-REAL | live |
+| 13 | No Mac shortcut, no 'freeze', the menu path named | 2 | say: must menu_path, never no_freeze_frame | R-KT-VERSION, R-ONE-IDEA | live |
+| 14 | Review due: intent asked first, Cut as the target, no demo, walkthrough or menu path | 3 | review_mode; snapshot_with; demo_calls_max; tools_called; say: must asks_intent, must names_cut, must make_it_snap | R-REVIEW-HANDS-ON, R-KT-INTENT-FIRST, R-NAMES-REAL | live |
+| 15 | A review that doesn't pass: hints, no reteach; recorded partial with the demo stated false | 5 | review_mode; last_check; record_lesson; say: never no_offer | R-REVIEW-HINT, R-RECORD-HONEST, R-NAMES-REAL | live |
+| 16 | Review, the learner says nothing should snap: the review ends and nothing is recorded | 3 | review_mode; demo_calls_max; record_lesson; tools_not_called | R-KT-REVIEW-ENDS, R-REVIEW-HANDS-ON | live |
 | 17 | No candidate and nothing named: no invented focus; the practice blink is offered | 2 | tools_called; snapshot_input_lacks; demo_calls_max; tools_not_called; say: must says_nothing, must offers_practice | R-KT-PRACTICE-OFFER, R-NAMES-REAL | synthetic |
-| 18 | A hold on the wrong side: never called done; points at the key at the start of the pair | 3 | last_check; say: never not_done, must points_at_key, never no_offer | R-KT-WRONG-SIDE, R-HINT-NOT-FIX, R-NAMES-REAL | stand-in |
+| 18 | A hold on the wrong side: never called done; points at the key at the start of the pair | 3 | last_check; say: never not_done, must points_at_key, never no_offer | R-KT-WRONG-SIDE, R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 19 | After Effects can't be reached: nothing claimed about the comp | 1 | tools_not_called; say: must says_cant_see, never no_claims | R-UNREACHABLE | none |
 
 - **11** and **12** go one step past the pass: the learner is asked the constant-speed question and names the Spinner. 11 expects the record `keyframes.types`, passed, no demo.
 - **14**, **15** and **16** each have a "yes, do the review" turn: a due review is offered and waits for a yes.
 - **02** and **17** are the two sides of "nothing to snap": everything is meant to fade (Mentor Practice), and no candidate at all (a comp with only linear moves).
-- **09** uses the `Loop Blink` layer in the loop-blink stand-in; the unit tests prove it is never a candidate, this case checks what the mentor says about it.
+- **09** uses the `Loop Blink` layer in the live loop-blink capture; the unit tests prove it is never a candidate, this case checks what the mentor says about it.
 - **18** is the wrong-side hold, which the spec said to add once L-1 settles its wording; the case already checks the behavior, not the wording.
 - The runner's `last_check.has` compares against the check's reply with the space after each colon removed (fixed during the smoke run).
 
@@ -96,30 +98,31 @@ scrubbed copy named `comp-N.json` into a neutral temp folder: the note is remove
 `Studio Reel.aep`, "Synthetic" in a comp name becomes "Studio", and a fixture that still says
 "synthetic" or "stand-in" anywhere is refused. `--dry-run` runs the same scrub.
 
-## Fixtures and re-pointing after the live sitting
+## Fixtures
 
-Fixtures are **not copied** into this folder. A case names a fixture by the file name the builder's
-tests use, and the runner resolves it in `CONFIG.fixtureDirs` order (`mentor/test/fixtures/key-types`, `mentor/test/fixtures`, `mentor/test/fixtures/key-types/stand-in`):
-a live capture sits before the stand-in folder, so it wins. Each case carries a `fixture_sources`
-label per fixture, and `--dry-run` prints where each resolves now.
+Fixtures are **not copied** into this folder. A case names a fixture by file name and the runner resolves it in
+`CONFIG.fixtureDirs` order (`mentor/test/fixtures/key-types`, `mentor/test/fixtures`, `mentor/test/fixtures/layer-info`, `mentor/test/fixtures/key-types/stand-in`). The stand-in folder is gone; `layer-info` was added to the list on 2026-10-26 so a case can use
+`practice2b.json`, Mentor Practice 2 as built. `fixture_sources` labels are all `live` or `synthetic`, and `--strict-sources` fails if one drifts.
+The builder's table of where each capture came from is `mentor/test/fixtures/key-types/README.md`.
 
-After the live sitting, once the captures are saved under the stand-ins' names and the stand-in folder is
-deleted:
+### Re-pointed 2026-10-26: what each case assumes, checked against the live captures
 
-1. `node product/evals/key-types/run.mjs --dry-run`. It prints every stale label, for example
-   `04-...: planted-15-80.json is labelled stand-in but resolves to live`.
-2. Change those labels (`stand-in` to `live`) in each case's `fixture_sources`. `--strict-sources` fails
-   until none are stale.
-3. A stand-in with **no live twin under the same name** now fails the dry run with "no fixture". Capture it
-   under that name or change the cases that use it. `practice2-before.json` is spec 004 T042's live capture: tests prefer `mentor/test/fixtures/practice2-before.json` once it exists, and so does this runner (`mentor/test/fixtures` is searched before the stand-in folder). `practice-now.json` is Mentor Practice itself.
-4. Run each case once with `--only` and read the facts the checks assume, which a live capture can change
-   (Blink's three pairs at 1, 1.4, 1.8 and 2.2 s, Cut at 3 s, the candidate list (Blink, Cut), the left-out layers (Old Take, Icon, Logo, Cursor, Loop Blink) and the planted verdicts). A changed fact is a case edit, not a skill bug.
-5. Then the baseline: `node product/evals/key-types/run.mjs`. A live capture changes a case's hash, so
-   `--changed` re-runs exactly the re-pointed cases.
-6. The preview frame comes back as a blank placeholder in every run (the fixture folder has no `frame.png`).
-   The rubric tells the judge to ignore it. A `frame.png` next to a live capture would let the mentor see it.
+Checked by running the real tools on each capture (`key_types_snapshot`, then `key_types_check`), not by running the mentor.
 
-
+- **Mentor Practice 2 is now `practice2b.json` in every case that used `practice2-before.json`.** Every planted capture was taken on the 24-layer comp (the 2b layers
+  were added after `practice2-before.json`), so a lesson baselined on the 13-layer file would show 11 layers as changes. Candidates are still Blink and Cut. Seal (a precomp)
+  is now a leave-out.
+- **Held as written:** 01 to 04, 06 to 09, 11, 13 to 19. On `practice-now.json` (id 97) the candidates are Subtitle and Title and Logo's Rotation reads `expression` (02, 08).
+  Select-all-hold (07) lists Cut as a should-move that now waits and jumps, and Card and Pause as extra holds. Loop Blink is an expression leave-out (09).
+- **05 changed meaning in degree** (also 06 and 15, same capture). `blink-one-held` has the middle pair held (1.4 to 1.8 s) and **two** pairs still fading (1 to 1.4 s, frame at 1.2 s; and
+  1.8 to 2.2 s, frame at 2 s). The case's title said one. Title reworded; the checks (a frame time 1.2 or 2, no fix, no offer) hold.
+- **10 lost its premise (kept, flagged).** `hold-at-zero` differs from `blink-one-held` only in its `taken_at`. The held value (0) is in no tool reply and the preview
+  frame is a blank placeholder, so the mentor has nothing that says "vanishing" or "hidden". What is left is "never says Blink is hidden" on a capture identical to 05's. It still
+  runs, but it cannot fail for the reason the case exists. Request to the builder: have `key_types_snapshot` or `key_types_check` say the value a hold waits at (or a frame
+  that shows it), or retire the case.
+- **12 changed meaning.** `spinner-eased` is the base comp with only the Spinner's ease changed, so at turn 4 Blink's pairs read not held again after turn 3 showed them held. The check
+  still returns `not_linear` for the Spinner (the case's subject), but the reply also shows a regression the learner did not make. Not bent. Request to the builder: a capture with Blink held
+  and the Spinner eased.
 ## Smoke run (2026-10-26)
 
 Six runs, total $2.88 (cases 01, 02, 07, 11, 16):
@@ -134,6 +137,35 @@ Six runs, total $2.88 (cases 01, 02, 07, 11, 16):
 | 6 | 11 | pass ($0.75) | |
 
 After the smoke runs the universal `no_self_instructions` check was added (it catches a leaked step such as "Review is due -> run the review"). Run 3's transcript (case 16) contains exactly that, "Key types learned, review due -> run the review.", before its first tool call, so case 16 would fail it now; it has not been re-run (budget).
+
+
+## Planned smoke list (for after the next `SKILL.md` change; nothing here has been run)
+
+Written 2026-10-26 when the three wave A sets were re-pointed to the live captures. **No paid run has
+happened since.** One run each unless it says `--repeat 3`. Cost is an estimate from the earlier smoke runs' per-case cost for a case
+of that length (about $0.40 for 2 to 3 turns, $0.60 or more for 4). The cockpit's hand-back adds the three sets together.
+
+| Run | Why | Est. cost |
+|---|---|---|
+| `--only 16 --repeat 3` | SC-014: `no_self_instructions` 3 of 3 (the review-due case; run 3 of the first smoke leaked "Key types learned, review due -> run the review.") | $1.25 |
+| `--only 01` | First run on `practice2b.json` (24 layers, Seal left out) | $0.20 |
+| `--only 05` | Premise changed: two pairs still fading | $0.40 |
+| `--only 10` | Premise lost: identical to 05's capture; see above | $0.40 |
+| `--only 12` | Premise changed: Blink regresses in the turn 4 check | $0.70 |
+| **Total, key types** | 7 runs | **about $3.00** |
+
+### SC-014 and the `no_self_instructions` check
+
+SC-014 (spec 004, FR-042): the review-due case of each set passes this universal check **3 of 3** with `--repeat 3`. `--repeat` passes a case on a
+majority, so read each run's `no_self_instructions` line in the results file; the criterion is all three runs, not the majority.
+
+The check was widened on 2026-10-26 because Phase 9 reworded step 0 ("never narrate the branch or what you'll do next"). The old pattern
+caught only the original leak ("Review is due -> run the review", "Run review", "review mode", a line starting "Learned, review due"). It missed
+paraphrases of the same thing. It now also catches a review-due line that goes on to say what it will run, "straight to the review", the word
+"branch" next to review or lesson, and "easing isn't learned, so I'll ..." Checked by hand against 13 leak lines (all caught; the old pattern caught 4)
+and 7 lines a mentor may say (none caught, including "a review is due if you want one", which the offer step may use). It applies to every mentor
+word in every turn, so a note between tool calls is covered too, not just before the first call. What it can't see: a leak in words I didn't
+think of. The judge's R-ONE-IDEA and a read of the three transcripts cover that.
 
 ## Reading results
 
