@@ -22,7 +22,7 @@ gaps (spec wording behind what `skill-6-null` already builds). The new tasks are
 [tasks-l6.md](tasks-l6.md) (T350 on), so the builder's ticked `tasks.md` isn't edited.
 
 **Amendment 2 (2026-10-26, the live sitting, [live-sitting-2026-10-26.md](live-sitting-2026-10-26.md)):
-awaiting the human's approval.** Facts from L-1 to L-6 and the desk block (`4234c7e`, `6039c78`,
+approved by the human 2026-10-26.** Facts from L-1 to L-6 and the desk block (`4234c7e`, `6039c78`,
 `3864ac5`); nothing changes a requirement's intent, and no new task. Changed here: FR-009 (the
 null's place is its anchor, top-left of its square), FR-020 (a null's opacity counts when keyed or
 set between 0 and 100; a static 0 never does; the default name is "Null N"), FR-023 (L-1's notes:
