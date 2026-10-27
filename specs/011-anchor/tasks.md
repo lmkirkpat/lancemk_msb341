@@ -5,7 +5,8 @@ description: "Task list for spec 011: skill 5, set the pivot"
 # Tasks: Set the pivot (curriculum skill 5)
 
 **Status**: Approved 2026-10-24, with plan › Q1 (`not_at_rest`; the demo target stays entry 1) and
-SR-2 (spec 004 T164, T165). Ready for the skill builder.
+SR-2 (spec 004 T164, T165). Ready for the skill builder. **Amended 2026-10-26** (spec › Changes
+2026-10-26): Phase 8b, T241 to T244, before the live lessons; awaiting the builder's approval.
 
 **Input**: Design documents from `specs/011-anchor/`
 
@@ -168,24 +169,42 @@ The builder does the hand actions.
 
 ---
 
+## Phase 8b: Amendment of 2026-10-26 (cloud or desk, not 🖐; before T236 and T237)
+
+From the sitting and the desk block (spec › Changes 2026-10-26). Same add-only rule: every file
+below is one this branch added. T241 blocks T236; T242 to T244 block T237 and HO-1. **T236 also
+logs `anchor_snapshot`'s own time from `calls.jsonl`** (two reads on this comp, FR-013, plan ›
+Risks; over 10 s is a finding, not a fail).
+
+- [ ] T241 [US1] Ranking (FR-004, FR-024, research R1): in `mentor/lib/anchor.mjs`, add `keyed.any` to each candidate (any property with keys in the snapshot's keyed `layers` entry, Opacity, effects, masks and text animators included) and make `rankOrder`'s animation key three steps (no keys at all, then keys but none on Rotation or Scale, then Rotation or Scale keys), keeping its place after "unparented" and the review's move of it (R8). In `mentor/test/fixtures/anchor/answer-key.json`, by hand from spec FR-004: `practice2b.proposal` Door, `middle-left`; ranks Door 1 to Flip 19 as FR-004 lists; `review.proposal` Tab, `count_with_exclude` 17 (unchanged); Mentor Overlaps' ranks unchanged; replace the T234 `proposal_note` with one citing this task. Tests in `mentor/test/anchor-candidates.test.mjs`: the proposal and review pick on `practice2b.json`; a synthetic comp where an Opacity-keyed layer sits above an unkeyed one and the unkeyed one is proposed; a comp where every candidate has keys still gets a proposal (a ranking step, never a filter); a review with Door and Gauge in the record picks Needle. `npm test` green
+- [ ] T242 [P] [US1] Which side a pivot outside sits on (FR-019a): one function in `mentor/lib/anchor.mjs` that compares the anchor's comp-space point (`comp-space.mjs`'s `compPosition`, never re-derived) with the layer's comp-space bounds at the check time and returns `above`, `below`, `left`, `right`, a pair (`below-left`), or `null` when either can't be read; add it as `outside_side` on candidates with `place_now: "outside"`, as `side` on the `pivot_outside` note (for a focus layer and for the proposal), and as `item1.outside_side` in `mentor/lib/anchor-check.mjs`; `mentor/tools/transform-anchor.mjs` passes the note through. Answer key: Lid in `practice2b` below; `door-outside` left; `pop-shrunk` at 4.3 s below. Tests in `anchor-candidates.test.mjs` and `anchor-check.test.mjs`, plus a synthetic flipped layer whose side is the screen's, not its own, and an unreadable case giving `null`
+- [ ] T243 [P] [US1] Hints for row 22 (FR-019b, data-model › Hint codes): in `mentor/lib/anchor-check.mjs`, rename `group_anchor` to `content_shifted` (same field combination, any layer kind) and add `unchanged_shape` (focus kind `shape`, not passed, anchor and Position unchanged, item 2 holds, not `wrong_layer`; after the place hint). Answer key: `lid-group` hints `["outside", "unchanged_shape"]`; `live_notes.sign-left-check` names `content_shifted`. Update the row 22 test in `mentor/test/anchor-overlap.test.mjs` and the per-row hint tests in `anchor-check.test.mjs` (each code exactly once on its fixture)
+- [ ] T244 [US1] `.claude/skills/anchor-mentor/SKILL.md`, after T241 to T243: the pivot-outside line and hint say the side from `outside_side` and where to look (select the layer in the timeline), never a distance, and say "outside" with no side when it's null (FR-019a); replace the group hint with `content_shifted`'s and `unchanged_shape`'s sentences (FR-019b; spec Open questions › D, item 3 has the proposed wording, used until the designer confirms); the set-away-from-rest hint says the pivot did move though nothing showed and asks for Edit > Undo before the playhead goes to the rest key (FR-019; D item 5). No other change. Then `npm test`, `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`) and `/agent-audit` on the file; hand back the diff for HO-3
+
+---
+
 ## Phase 9: Polish and hand-back
 
 - [ ] T238 Re-run T229's checks on the final branch (live fixtures, no stand-ins)
 - [ ] T239 Write the hand-back: branch and commit; test counts; L-1 to L-5 results; SC-001 and SC-002 from T236 and T237; any snippet fix; anything for the spec; the Requests below. The cockpit writes `discovery/usage-notes/anchor-build.md` from it
-- [ ] T240 🖐 [US3] Later, a day or more after the first pass: the live review on Tab or Peg (quickstart › 6, SC-009, stretch), logged by the builder; the cockpit adds it to the usage note
+- [ ] T240 🖐 [US3] Later, a day or more after the first pass: the live review on the layer the review names, Needle after quickstart › 5's two lessons (amended 2026-10-26, was "Tab or Peg"; quickstart › 6, SC-009, stretch), logged by the builder; the cockpit adds it to the usage note
 
 ---
 
 ## Hand-offs to other owners (not builder tasks)
 
 - **HO-1 Eval engineer:** hand off to eval-engineer: `product/evals/anchor/` from spec › Eval plan.
-  After T234. Case numbers from the cockpit.
+  After T234. Case numbers from the cockpit. **2026-10-26:** after T241 to T244 too; the cases on
+  `evals-skill-5` move to the live captures (spec › Open questions › E).
 - **HO-2 Curriculum designer:** `/overlap-audit` re-run on the built branch before HO-1: TD § 9
   against T228's tests on live fixtures, the rows marked **contract** re-confirmed against wave B's
   code as built, and L-1 to L-5's results.
 - **HO-3 Reviewer:** a read of `SKILL.md` against FR-023 (Quick Set Anchor never brought up, one or
-  two sentences when asked; no Center Anchor Point before L-3) and SC-004 (no number to type, no
-  tolerance) before HO-1.
+  two sentences when asked; Center Anchor Point by menu path for the center place only, confirmed by
+  L-3) and SC-004 (no number to type, no tolerance) before HO-1; after T244, again on its diff
+  (FR-019a, FR-019b, the rest hint).
+- **HO-5 Curriculum designer (2026-10-26):** D-4 (Sled, two or more Position keys) and the TD
+  wording list in spec › Open questions › D. D-4's answer becomes tasks then.
 - **HO-4 Eval engineer, after merge:** the easing set at 25/25 or within one (SC-007), logged.
 
 ## Requests (to the cockpit; never a task here)
@@ -207,6 +226,7 @@ The builder does the hand actions.
 - Within Phase 2: T203 to T207 first; then T208 → T209 → T210, and T211 → T212 (T211 after T208).
 - Phase 4 and Phase 5 need T218. T227 after T219.
 - Phase 8 in order: T232 → T233 → T234 → T235 → T236 → T237. T240 a day or more after the first pass.
+- Phase 8b (2026-10-26): T241 → T236; T242 and T243 in parallel, then T244 → T237 and HO-1.
 - HO-2 and HO-3 after T235; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
 
 ## Parallel opportunities
@@ -223,6 +243,6 @@ The builder does the hand actions.
 3. Phases 6–7 close the cloud part; Phase 8 is one sitting after spec 004's live tasks; Phase 9
    hands back.
 
-**Task count:** 40 (T201–T240): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
-hand-back 3, live sitting 6, polish 3. **🖐 live: 5** (T232, T233, T236, T237 in the sitting; T240
-a day or more later). Hand-offs: 4; requests: 1 (SR-2).
+**Task count:** 44 (T201–T244): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
+hand-back 3, live sitting 6, amendment 4 (2026-10-26), polish 3. **🖐 live: 5** (T232, T233, T236,
+T237 in the sitting; T240 a day or more later). Hand-offs: 5; requests: 1 (SR-2).

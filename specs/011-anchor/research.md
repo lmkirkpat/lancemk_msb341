@@ -1,6 +1,7 @@
 # Research: Set the pivot (spec 011)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24).
+**Status**: Draft, awaiting the builder's approval (2026-10-24). Amended 2026-10-26 (spec ›
+Changes 2026-10-26): R1's ranking, R4's numbers.
 
 Built against what's on main after the early wave B merge (d009d35; `mentor` 686 tests):
 `mentor/lib/layer-info.mjs`, `comp-space.mjs`, `visibility.mjs`, `motion-sources.mjs`, and
@@ -14,13 +15,16 @@ and answer keys) and T158 are still open, so every live task here comes after th
   expressions on Anchor Point, Position (and X, Y), Rotation and Scale from the snapshot's keyed
   `layers` entry for the same index (the only place keys are read). Each layer lands in exactly one
   bucket of FR-004 (`default`, `if_named`, `never`) with one reason code, so the prompt can say
-  TD § 4's sentence. Shape layers are `if_named` with reason `shape_until_l1` until the desk block (tasks T235, from L-1)
-  flips one constant, `SHAPES_DEFAULT`, in `mentor/lib/anchor.mjs`.
+  TD § 4's sentence. Shape layers were `if_named` with reason `shape_until_l1` until the desk block (tasks T235, from L-1)
+  flipped one constant, `SHAPES_DEFAULT`, in `mentor/lib/anchor.mjs`; L-1 passed and it's `true`
+  (2026-10-26).
 - **Footprint readable** (FR-004, FR-018): a default candidate needs a `footprint()` with corners
   at its check time (R3) in the first read and a non-zero area there. A zero-area footprint (Scale
   0 on an axis at that time) is `never` with reason `cant_read`, never a pass later.
-- **Ranking** (FR-004, D-3): sort keys in order: unparented (`parents.length === 0`); no Rotation
-  or Scale keys; pivot "where AE put it" (the anchor within 0.5 px of its `rect`'s center **or** of
+- **Ranking** (FR-004, D-3): sort keys in order: unparented (`parents.length === 0`); **how
+  animated already, three steps: no keyed property at all (`keyed.any` false), then keys but none
+  on Rotation or Scale, then Rotation or Scale keys** (amended 2026-10-26, was two steps; the
+  review moves this whole key up, R8); pivot "where AE put it" (the anchor within 0.5 px of its `rect`'s center **or** of
   [0, 0], either one); smaller footprint area first (so a full-frame layer always ranks last,
   which is FR-004's "smaller over full-frame" with no comp size needed); then index. Deterministic,
   one comparator.

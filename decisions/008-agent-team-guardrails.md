@@ -135,6 +135,12 @@ and `ownership.json`. The hooks themselves shouldn't change.
 - **If someone copying the team needs separate terminal sessions** (for example, a second person
   working at the same time), **then** revisit the launchers and team memory, and re-test that the
   hooks key correctly when `session_id` differs.
+  - *2026-10-26, it happened with one person:* two top-level sessions drove AE at once. One ran
+    spec 011's sitting prep from the `skill-5-anchor` worktree (26 AE calls, 21:58 to 22:05 UTC,
+    13 of them `ae_run_script`); the other was the cockpit starting offset's live lesson (T036).
+    Both had no `agent_id`, so both were the holder `main` in the shared lock file, and neither
+    was blocked. Seen as the active comp flipping and an `offset_snapshot` that "resumed" on
+    Mentor Practice 2. Fixed in the amendment below.
 - **If a Claude Code update stops sending `agent_type` or `agent_id` to hooks**, subagents would
   look like the cockpit and every hook would wave them through, silently. **Then** stop parallel
   runs until it's fixed. Re-run the logging test before each sprint's first parallel run, so
@@ -163,6 +169,10 @@ all closed in one change:
 | Subagents could remove worktrees, delete or force branches, and switch branches in the shared tree | Added to the git guard's subagent rules. The cockpit's merge cleanup still works |
 | *2026-10-20:* ownership is per persona, so two skill-builders in one wave can both edit shared `mentor/` code (spec 004 FR-032) | `addOnly` patterns in `ownership.json`: `check-branch.mjs` flags a branch that changes or removes an existing file under `mentor/`, `bridge/` or `.claude/skills/*-mentor/`, unless the cockpit passes `--shared-owner` for the one branch it named owner. Checked at merge, not per write, so it needs no new hook |
 
+*2026-10-26:* `disableBypassPermissionsMode` removed on purpose to reactivate bypass mode; the
+deny rules, the push `ask` and the hooks still hold in bypass, and the settings test no longer
+checks for the line.
+
 **Rejected:** staying in bypass with `deny` on push (the human pushes from their own terminal).
 Safer on push alone, but leaves every other action with no prompt and no classifier.
 
@@ -173,3 +183,33 @@ Safer on push alone, but leaves every other action with no prompt and no classif
   builder hand it back for the cockpit.
 - **If auto mode's prompts slow a parallel run enough to matter** (counted in the run notes),
   **then** add narrow `allow` rules for the prompts that keep coming up, never bypass.
+
+## Amendment 2026-10-26: the AE lock keys on the session too
+
+**Why:** the lock keyed on `agent_id` alone, with every top-level session as `main`. That held for
+one cockpit and its subagents, but two top-level sessions (two terminals, or a cockpit plus a
+session in a worktree) shared the holder `main` and walked past each other (evidence above).
+
+**Change:**
+
+| Before | After |
+|---|---|
+| Holder is `agent_id`, or `main` with none | Holder is `session_id:agent_id`, or `session_id:main`: subagents differ by `agent_id`, top-level sessions by `session_id` |
+| Released only on `SubagentStop`, so a top-level session kept it until the 10-minute lease ran out | Also `SessionEnd` (`--end-session`), which frees a lock held by that session or any of its subagents. `SubagentStop` still frees only its own subagent |
+| Block message named the agent type | Also names the worktree it's driving from |
+
+Tests: two top-level sessions in different worktrees (the second is blocked, with where), a
+subagent blocked by its own cockpit, `SubagentStop` never freeing a top-level lock, `SessionEnd`
+freeing its own session only.
+
+**Still a rule, not a hook:** a lock spaces out calls, but AE has one active comp, so a live lesson
+and a sitting can't share it even taking turns. One sitting or live lesson at a time; before
+starting one, check `ae_status` and that no other session holds the lock (CLAUDE.md).
+
+**What would change our mind:**
+
+- **If a top-level session that's only waiting on the learner loses the lock mid-lesson** (more
+  than 10 idle minutes, then another session takes AE), **then** hold the lock for a whole sitting
+  or lesson: a skill or command takes it at the start and frees it at the end.
+- **If `SessionEnd` doesn't fire on a closed terminal or a crash** (a lock left by a dead session
+  shows up in the lock file), **then** the lease stays the backstop; shorten it only if waits add up.
