@@ -463,7 +463,7 @@ B-6 (Mentor Practice 2 is comp 179, 40 layers), L-1 (passed). Kept below for the
 - **L-7 (new, optional, information only)** With every Position key selected, does Pan Behind shift
   them all and keep the layer still at every key time? If yes, log it; D-4 is revisited for a later
   release, not this one (§ 16).
-- **L-8 (new, 2026-10-26, § 19b; number to confirm; next sitting, alongside L-6)** An expression
+- **L-8 (new, 2026-10-26, § 19b; number confirmed by the cockpit; next sitting, alongside L-6)** An expression
   on an **unkeyed** Anchor Point (an auto-center expression) and one on an unkeyed Position that
   ignores `value`: Pan Behind on each, one capture each. Does the layer move on screen, and which
   hint does the check give? HO-2's reading of the code (not seen live): the layer moves, and the
@@ -1136,7 +1136,7 @@ swing on Needle and play it back", § 13), while step 0 and § 19's practicing c
 was still off ("Last time, Pop's pivot went in while Pop was still shrunk"). The clause's example is
 a `summary`-style fact, so my lean is that the clause comes from the last entry's `summary` and
 `result`, and `next` stays an action. Not decided here because skills 2 to 4 read `next` at step 0
-the same way, so it's a shared rule for curriculum § 2 (follow-up **C-6**, number to confirm) and
+the same way, so it's a shared rule for curriculum § 2 (follow-up **C-6**, number confirmed by the cockpit) and
 may touch spec 004's record fields. Until then, `SKILL.md` stays as built.
 
 #### Items
