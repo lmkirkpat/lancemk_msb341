@@ -15,9 +15,9 @@
 //
 // Fixtures are NOT copied into this folder. A case names a fixture the way
 // mentor/test/fixtures/null-parenting/load.mjs does, and the runner finds it in the same order: a
-// live capture, then spec 004's capture, then the stand-in; "synthetic/..." and nothing else for
-// synthetics. So when a live capture lands under the same name (tasks T338), the case picks it up
-// with no edit, and --dry-run lists every label that is now out of date (see README › Re-pointing).
+// live capture, then spec 004's capture (read in place); "synthetic/..." and nothing else for
+// synthetics. The stand-ins were deleted in T338, so the stand-in fallback below finds nothing; it is
+// kept only so an old label would still be reported (see README › Fixtures).
 
 import { spawnSync } from "node:child_process";
 import crypto from "node:crypto";
@@ -279,13 +279,24 @@ const PIXEL_TARGET = /\b(?:1|one|a single)[- ]?(?:px|pixel)\b|\bwithin (?:a |an?
 // A keyboard shortcut: the skill quotes none until live check L-1 (spec 012 FR-023), and "Edit > Undo"
 // is the only way to reverse.
 const SHORTCUT = /\b(?:cmd|command|ctrl|control|shift|option|alt|opt)\s*\+\s*[a-z0-9]|\bshift\s*\+?\s*f4\b/i;
+// Never advise holding Option or Shift while parenting (SKILL.md, L-1 at 26.5: Option keeps the
+// layer's raw values and it jumps; Shift moves it onto the null). Saying what a key does, or that no
+// key should be held, is fine; telling the learner to hold one is not.
+const MODIFIER_ADVICE = /\b(?:hold|holding|press|pressing|use|using|try|add|with)\s+(?:down\s+)?(?:the\s+)?(?:option|alt|shift|opt)\b/i;
+const NEGATED = /n['\u2019]t\b|\bnot\b|\bnever\b|\bno key\b|\bwithout\b|\binstead of\b/i;
 const MATTE_HIDDEN = /matte[^.]*\bhidden\b|\bhidden\b[^.]*matte/i;
 const SYNTH_TELL = /\bsynthetic\b|\bfixture\b|\bstand-in\b|\bthe eval\b|\bthis test\b/i;
-const METHOD_WORDS = /pick ?whip|parent column|parent & link|layer\s*>\s*new|null object|drag (?:it|them|the)|\bshift\+|\boption\+/i;
+const METHOD_WORDS = /pick ?whip|parent column|parent & link|layer\s*>\s*new|null object|drag (?:it|them|the)|\bshift\+|\boption\+|\bhold(?:ing)? (?:a |any |the |down )?(?:key|option|shift)\b|\bkey (?:held|to hold)\b/i;
 const RECORD_METHOD = /pick ?whip|\bbecause\b|\bso that\b|tolerance|threshold|\b1 ?px\b|which key|which pick/i;
 
 function said(turns, from = 1, to = turns.length) {
   return turns.slice(from - 1, to).flatMap((t) => saysOf(t).map((text) => ({ text })));
+}
+
+// Like wordsCheck, but a sentence that negates the advice ("never hold Option") passes.
+function adviceCheck(name, re, turns) {
+  const hit = said(turns).flatMap((s) => s.text.split(/(?<=[.?!])\s+/)).find((sentence) => re.test(sentence) && !NEGATED.test(sentence));
+  return { check: name, pass: !hit, detail: hit ? `said "${hit.slice(0, 80)}"` : "clean" };
 }
 
 function wordsCheck(name, re, turns) {
@@ -316,6 +327,7 @@ function check(expect, turns, c) {
     wordsCheck("no_narration", NARRATION, turns),
     wordsCheck("no_pixel_target", PIXEL_TARGET, turns),
     wordsCheck("no_shortcuts", SHORTCUT, turns),
+    adviceCheck("no_modifier_advice", MODIFIER_ADVICE, turns),
     wordsCheck("matte_not_hidden", MATTE_HIDDEN, turns),
     wordsCheck("no_test_tell", SYNTH_TELL, turns),
   ];
