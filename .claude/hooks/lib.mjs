@@ -47,10 +47,14 @@ export function stateDir(cwd) {
   return dir;
 }
 
-export function inLinkedWorktree(cwd) {
-  const gitDir = git(["rev-parse", "--path-format=absolute", "--git-dir"], cwd);
-  const common = git(["rev-parse", "--path-format=absolute", "--git-common-dir"], cwd);
-  return Boolean(gitDir && common && gitDir !== common);
+// The top folder of the linked worktree `dir` is in, or null for the main checkout, a folder
+// outside any repo, or one that doesn't exist.
+export function linkedWorktreeTop(dir) {
+  if (!dir || !fs.existsSync(dir)) return null;
+  const gitDir = git(["rev-parse", "--path-format=absolute", "--git-dir"], dir);
+  const common = git(["rev-parse", "--path-format=absolute", "--git-common-dir"], dir);
+  if (!gitDir || !common || gitDir === common) return null;
+  return git(["rev-parse", "--show-toplevel"], dir);
 }
 
 // The repo a path belongs to, and the path relative to it with forward slashes.
