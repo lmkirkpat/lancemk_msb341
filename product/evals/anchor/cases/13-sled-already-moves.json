@@ -72,6 +72,13 @@
         "turns": [
           2
         ]
+      },
+      {
+        "id": "opening_has_no_leave_out",
+        "never": "\\balready moves?\\b|not in this lesson|set a pivot before you key|set the pivot before you key|which this lesson doesn['’]t cover|can['’]t check that one|leave out|leaving out",
+        "turns": [
+          1
+        ]
       }
     ]
   },

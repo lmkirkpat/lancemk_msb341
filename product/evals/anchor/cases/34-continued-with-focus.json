@@ -1,0 +1,67 @@
+{
+  "id": "34-continued-with-focus",
+  "title": "A lesson left open on Needle (middle of its bottom edge), reopened in a new session: where it left off in one sentence, handed back; no intent question, no proposal, no leave-out",
+  "covers": [
+    "EP-34",
+    "FR-006a"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor Needle should turn from the middle of its bottom edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "names_needle",
+        "must": "Needle",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "not_door",
+        "never": "\\bDoor\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_intent_question",
+        "never": "which layer do you want|somewhere other than its middle|if nothing comes to mind",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_leave_out",
+        "never": "\\balready moves?\\b|not in this lesson|set a pivot before you key|set the pivot before you key|which this lesson doesn['’]t cover|can['’]t check that one|leave out|leaving out",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_idea_statement",
+        "never": "rotation and scale turn around|turn around (?:the|a layer['’]s) anchor|the idea for today|Pan Behind",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-CONTINUED",
+    "R-NAMES-REAL"
+  ],
+  "note": "Turn 1 only sets the session up (a lesson with a focus). Turn 2 starts a new Claude session on the same learner home, so session.json is all the mentor has."
+}

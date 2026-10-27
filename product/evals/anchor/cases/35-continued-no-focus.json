@@ -1,0 +1,76 @@
+{
+  "id": "35-continued-no-focus",
+  "title": "A lesson left open before a layer and place were chosen, reopened in a new session: opens as a first lesson (Door proposed, intent question), no 'where we left off', no leave-out",
+  "covers": [
+    "EP-35",
+    "FR-006a",
+    "D-10"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "asks_intent",
+        "must": "turn|grow",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "offers_door",
+        "must": "Door",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "ends_on_choice",
+        "must": "\\?\\s*$",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_left_off",
+        "never": "left off|we were on|last time|where we stopped|pick(?:ing)? up",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_leave_out",
+        "never": "\\balready moves?\\b|not in this lesson|set a pivot before you key|set the pivot before you key|which this lesson doesn['’]t cover|can['’]t check that one|leave out|leaving out",
+        "turns": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "no_other_skill",
+        "never": "\\beas(?:e|es|ed|ing)\\b|\\bTitle\\b|speed graph|keyframes? (?:type|lesson)",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-INTENT-FIRST",
+    "R-NAMES-REAL"
+  ],
+  "note": "Turn 1 starts the lesson and the learner leaves without choosing a layer. Turn 2 is a new Claude session on the same learner home."
+}

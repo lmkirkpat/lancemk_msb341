@@ -1,0 +1,59 @@
+{
+  "id": "36-which-layers",
+  "title": "'Which layers can I use?' after the opening: up to three default candidates named, no layer that already moves, no leave-out list, ends on the choice",
+  "covers": [
+    "EP-36",
+    "TD-19"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Which layers can I use?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "named_layers": {
+      "turn": 2,
+      "only": "default",
+      "max": 3
+    },
+    "say": [
+      {
+        "id": "answers",
+        "must": "Door|Needle|Tab|Peg|Banner|Sign|Plaque|Lid|Row B",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "ends_on_choice",
+        "must": "\\?\\s*$",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_leave_out_list",
+        "never": "already moves?|not in this lesson",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-WHICH-LAYERS",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ],
+  "note": "Layer names are matched case-sensitively as whole words against the snapshot's candidates; a plain word that is also a layer name (Cut, Flip, Pop) could false-positive."
+}

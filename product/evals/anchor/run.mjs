@@ -170,7 +170,8 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "quiet_before_tool"];
+    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks",
+    "proposal_named", "named_layers"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (s.at_most !== undefined && !(s.must && Number.isInteger(s.at_most))) problems.push(`say ${s.id}: at_most needs a must regex and a whole number`);
@@ -410,12 +411,35 @@ function check(expect, turns, c) {
     add("record_plain", !m, m ? `record says "${m[0]}"` : "clean");
   }
 
-  if (expect.quiet_before_tool) {
-    // Nothing said before the turn's first tool call (a review's leaked self-note, smoke finding
-    // 2026-10-26): the learner sees every word, and the skill opens with a call.
-    const first = turns[0].events.findIndex((e) => e.kind === "tool");
-    const before = turns[0].events.slice(0, first < 0 ? turns[0].events.length : first).filter((e) => e.kind === "say");
-    add("quiet_before_tool", before.length === 0, before.length ? `said "${before[0].text.slice(0, 80)}" before the first tool call` : "clean");
+  {
+    // Universal (smoke findings 2026-10-26): nothing said between the lesson's first tool call and its
+    // first anchor_snapshot. The learner sees every word; the skill's opening is one turn that comes
+    // after the snapshot. Catches the leaked self-notes ("Review is due. Run the review.", "First
+    // lesson on this skill.") wherever they fall before the snapshot.
+    const t0 = turns.find((t) => t.events.some((e) => e.kind === "tool" && e.name === SNAP));
+    const idx = t0 ? t0.events.findIndex((e) => e.kind === "tool" && e.name === SNAP) : -1;
+    const before = idx < 0 ? [] : t0.events.slice(0, idx).filter((e) => e.kind === "say");
+    add("no_text_before_snapshot", before.length === 0, before.length ? `said "${before[0].text.slice(0, 60)}" before the first snapshot` : "clean");
+  }
+  if (expect.proposal_named) {
+    // The layer the first snapshot's `proposal` names must be named in that turn (case 32): compared to
+    // the tool output of this run, never to a fixed name.
+    const turn = expect.proposal_named.turn;
+    const snap = parse((snaps.find((e) => e.ok) || {}).result || "");
+    const want = snap && snap.proposal && snap.proposal.layer;
+    const text = said(turns, turn, turn).map((x) => x.text).join("\n");
+    add("proposal_named", !!want && new RegExp(`\\b${want.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text), want ? `snapshot proposal was ${want}` : "no proposal in the snapshot");
+  }
+  if (expect.named_layers) {
+    // Layers named in a turn (case 36), matched case-sensitively as whole words against the first
+    // snapshot's candidates: all must be `only`-bucket, at most `max`.
+    const { turn, only, max } = expect.named_layers;
+    const snap = parse((snaps.find((e) => e.ok) || {}).result || "");
+    const text = said(turns, turn, turn).map((x) => x.text).join("\n");
+    const named = ((snap && snap.candidates) || []).filter((cand) => new RegExp(`\\b${cand.layer.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text));
+    const wrong = only ? named.filter((cand) => cand.bucket !== only) : [];
+    add("named_layers", named.length <= max && wrong.length === 0,
+      `named ${named.map((cand) => `${cand.layer} (${cand.bucket}${cand.reason ? ", " + cand.reason : ""})`).join(", ") || "none"}`);
   }
   if ("first_tool" in expect) {
     const first = calls[0]?.name ?? "(none)";
@@ -559,6 +583,9 @@ function runCase(c, opts) {
       copies.set(n, to);
     }
     for (const t of c.turns) {
+      // A turn with new_session starts a fresh Claude session on the same learner home, so the
+      // mentor server's session.json is all it has: a continued lesson (cases 34, 35).
+      if (t.new_session) sessionId = null;
       const project = t.project === "unreachable" ? "unreachable" : copies.get(t.project);
       fs.writeFileSync(stateFile, JSON.stringify(t.undo_demo ? { project, undo_demo: true } : { project }));
       const { messages, result } = mentorTurn(t.say, sessionId, env, runtime);

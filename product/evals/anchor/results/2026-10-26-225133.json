@@ -1,0 +1,154 @@
+{
+  "run_at": "2026-10-27T04:51:33.277Z",
+  "options": {
+    "only": "33",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.41,
+  "fixtures_note": "Live captures of Mentor Practice 2 (comp 179) plus synthetic fixtures; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "33-named-null",
+      "title": "The learner names CTRL, a null (a Mentor Practice read): TD 19a's sentence once, then the snapshot's proposal in one sentence ending on the offer; no null lesson, no null's pivot, no check or demo",
+      "covers": [
+        "EP-33",
+        "FR-009",
+        "TD-19a"
+      ],
+      "fixture_sources": {
+        "practice-r1.json": "live"
+      },
+      "hash": "419321366e4f9d89ee5c3fb663285e402a26e49088755c32d1ef7c44ffaf4b5a",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:null_sentence",
+              "pass": true,
+              "detail": "turn 2: \"CTRL is a null, so there's nothing of its own to see turn\""
+            },
+            {
+              "check": "say:null_sentence_once",
+              "pass": true,
+              "detail": "turns 1 to 2: 1 match(es), at most 1"
+            },
+            {
+              "check": "say:no_null_lesson",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:then_proposal",
+              "pass": true,
+              "detail": "turn 2: \"Cursor\""
+            },
+            {
+              "check": "say:ends_on_offer",
+              "pass": true,
+              "detail": "turn 2: \"?\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-NAMED-NULL",
+              "pass": true,
+              "reason": "Turn 2 says once \"CTRL is a null, so there's nothing of its own to see turn in the frame,\" then offers the snapshot's proposal in one sentence ending on \"Want to try that one?\", with nothing about a null's pivot, parenting or another lesson, and no check or demo."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses is backed by the snapshot result: CTRL (reason \"null\"), Cursor, and \"the middle of its bottom edge\" (proposal suggested_place \"bottom-middle\")."
+            }
+          ],
+          "cost": 0.40648500000000004,
+          "session_id": "abc7a119-95d8-4e7b-bb13-79b234787592",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Eased every Title pair.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-NTKv0w/learner.json\"\n}\nMENTOR: First lesson on this skill.\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"time\": 3.6,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Bar\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Glow\",\n      \"bucket\": \"never\",\n      \"reason\": \"adjustment\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Cursor\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Logo\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Icon\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    },\n    {\n      \"layer\": \"Background\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Cursor\",\n    \"suggested_place\": \"bottom-middle\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Cursor\": \"between\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [\n    {\n      \"layer\": \"Cursor\",\n      \"note\": \"text_baseline\"\n    }\n  ],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Cursor could swing from the middle of its bottom edge. Want to try that one?\n\n### Turn 2: the project is an open comp\nLEARNER: CTRL should turn from its center.\nMENTOR: CTRL is a null, so there's nothing of its own to see turn in the frame. Cursor could swing from the middle of its bottom edge instead. Want to try that one?\n"
+        }
+      ]
+    }
+  ]
+}

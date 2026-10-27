@@ -1,9 +1,10 @@
 {
   "id": "01-first-lesson-no-layer",
-  "title": "First lesson, no layer in mind: intent asked first; one candidate offered with a hinge; leave-outs named once",
+  "title": "First lesson, no layer in mind: the opening asks one thing (TD 19): intent question first, one-sentence fallback proposal with a hinge, ends on the choice; no leave-out, no idea statement, no other-skill recap",
   "covers": [
     "EP-1",
-    "US1"
+    "US1",
+    "FR-006a"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
@@ -13,10 +14,6 @@
     {
       "project": "practice2b.json",
       "say": "/anchor-mentor"
-    },
-    {
-      "project": "practice2b.json",
-      "say": "I don't have a layer in mind."
     }
   ],
   "expect": {
@@ -47,31 +44,42 @@
         "id": "offers_door",
         "must": "Door",
         "turns": [
-          2
+          1
         ]
       },
       {
         "id": "hinge",
         "must": "left",
         "turns": [
-          2
+          1
         ]
       },
       {
-        "id": "leave_out",
-        "must": "already moves?|Wobble|Hatch Rig|Seal|Reveal Matte|matte|Background",
+        "id": "ends_on_choice",
+        "must": "\\?\\s*$",
         "turns": [
-          1,
-          2
+          1
         ]
       },
       {
-        "id": "leave_out_once",
-        "must": "\\balready moves?\\b",
-        "at_most": 1,
+        "id": "no_leave_out",
+        "never": "\\balready moves?\\b|not in this lesson|set a pivot before you key|set the pivot before you key|which this lesson doesn['’]t cover|can['’]t check that one|leave out|leaving out",
         "turns": [
-          1,
-          2
+          1
+        ]
+      },
+      {
+        "id": "no_idea_statement",
+        "never": "rotation and scale turn around|turn around (?:the|a layer['’]s) anchor|the idea for today|Pan Behind",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_other_skill",
+        "never": "\\beas(?:e|es|ed|ing)\\b|\\bTitle\\b|speed graph|keyframes? (?:type|lesson)",
+        "turns": [
+          1
         ]
       },
       {
@@ -83,8 +91,8 @@
   "rubric": [
     "R-AN-INTENT-FIRST",
     "R-AN-PROPOSAL-HINGE",
-    "R-AN-LEAVE-OUTS",
     "R-NAMES-REAL",
     "R-ONE-IDEA"
-  ]
+  ],
+  "note": "TD 19's reading of R-ONE-IDEA: the intent question plus a one-sentence fallback proposal is one idea; a memory clause about this skill is context. A statement of the idea, a leave-out, a recap of another skill, or ending on anything but the choice is a second idea."
 }

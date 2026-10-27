@@ -1,0 +1,67 @@
+{
+  "id": "33-named-null",
+  "title": "The learner names CTRL, a null (a Mentor Practice read): TD 19a's sentence once, then the snapshot's proposal in one sentence ending on the offer; no null lesson, no null's pivot, no check or demo",
+  "covers": [
+    "EP-33",
+    "FR-009",
+    "TD-19a"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-r1.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-r1.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice-r1.json",
+      "say": "CTRL should turn from its center."
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "null_sentence",
+        "must": "CTRL is a null, so there['’]s nothing of its own to see turn",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "null_sentence_once",
+        "must": "CTRL is a null",
+        "at_most": 1
+      },
+      {
+        "id": "no_null_lesson",
+        "never": "null lesson|skill 6|null-parenting|parenting|\\bparent\\b|null['’]s (?:own )?pivot|/null"
+      },
+      {
+        "id": "then_proposal",
+        "must": "Cursor",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "ends_on_offer",
+        "must": "\\?\\s*$",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NAMED-NULL",
+    "R-NAMES-REAL"
+  ],
+  "note": "Fixture: layer-info/practice-r1.json, a Mentor Practice read (CTRL is a null, Cursor is the proposal). Built without AE."
+}

@@ -38,6 +38,11 @@ backed by it. Generic references ("your text layer") are fine only next to a rea
 Each turn is a few sentences and moves one idea. It ends by handing the learner something to do or
 answer.
 
+**The opening turn (TD 19):** the intent question plus a one-sentence fallback proposal is **one**
+idea, and a memory clause about this skill (practicing) is context, not a second idea. A statement of
+the lesson's idea, a leave-out, a list of layers, a recap of another skill, or ending on anything but
+the choice is a second idea.
+
 - **Fail:** a wall of explanation, three ideas at once, or a turn that ends with nothing for the
   learner to do.
 
@@ -145,18 +150,17 @@ place or layer.
 
 - **Fail:** offers several, gives no hinge, or picks without asking.
 
-## R-AN-LEAVE-OUTS: says what it's leaving out, one short sentence per reason, only what matters
+## R-AN-LEAVE-OUTS: a leave-out is said on the turn the learner names that layer
 
-The mentor says what it leaves out in short sentences, and only what matters in this comp: layers that
-already move ("Sled and Card already move, so they're not in this lesson; set a pivot before you key",
-naming two at most, in one sentence for all of them), Anchor Point keyed ("Anchor Point is animated on
-Wobble, which this lesson doesn't cover"), expression-driven layers, 3D, a collapsed precomp it can't
-check, hidden or locked layers. It says nothing about a null's pivot, never lists every layer, and
-never says a layer would "jump". With no layer named, a layer with a single Position key is just one
-of the layers that already move; it gets no sentence of its own.
+The opening says none of this lesson's leave-outs (TD 19). When the learner names a layer the lesson
+leaves out, the mentor says that layer's one sentence once, on that turn ("Sled and Card already move"
+is only for a question about several layers at once): Anchor Point keyed, an expression-driven layer,
+3D, a collapsed precomp, a layer that already moves, hidden or locked. It then offers the proposal or
+the next candidate. It says nothing about a null's pivot, never lists every layer, and never says a
+layer would "jump".
 
-- **Fail:** skips a reason that matters in this comp, lists every layer, says something about a
-  null's pivot, says "jump", or gives a one-key layer its own two-frames sentence in the opening.
+- **Fail:** a leave-out in the opening, a sentence about a layer the learner did not name, "jump", or
+  the same sentence twice.
 
 ## R-AN-REPEAT-BACK: repeats the place in plain words and says where the pivot is now
 
@@ -387,3 +391,39 @@ like an expression" line.
 
 - **Fail:** claims they moved the group's pivot, says the expression line too, fixes it, or never
   says the layer's own pivot is unchanged.
+
+## R-AN-PRACTICING-PROPOSAL: practicing opens with one memory clause and the snapshot's proposal
+
+When this skill is practicing, the first turn carries one clause from the record's `next`, with how long
+ago when the record has it, then the intent question, then the **snapshot's own proposal** in one sentence
+ending on the offer. The layer `next` names is not proposed; the learner can ask for it.
+
+- **Fail:** proposes the layer `next` names instead of the snapshot's proposal, no memory clause, two
+  clauses of memory, or the turn does not end on the choice.
+
+## R-AN-NAMED-NULL: a named null gets one sentence, then the proposal
+
+When the learner names a null, a camera, a light or an adjustment layer, the mentor says once that it is
+that kind of layer, so there is nothing of its own to see turn in the frame (with its name), then offers
+the snapshot's proposal in one sentence ending on the offer. It says nothing about a null's pivot, about
+parenting, and never points at another lesson. It runs no check or demo on it.
+
+- **Fail:** a pointer to another lesson, a word about a null's pivot or parenting, teaching on the
+  layer, no proposal, or the sentence twice.
+
+## R-AN-CONTINUED: a continued lesson is handed back in one sentence
+
+When a lesson with a layer and place chosen is reopened, the mentor says where it left off in one
+sentence (the layer and its place) and hands it back ("Ready to set it?"). No intent question, no
+proposal, no leave-out, no restart.
+
+- **Fail:** asks the intent question again, proposes a layer, names a leave-out, or names a layer that
+  was not the one left open.
+
+## R-AN-WHICH-LAYERS: the question is answered
+
+Asked which layers can be used, the mentor names up to three layers the lesson can take, best first, in
+plain words, without a list of leave-outs, and ends on the choice.
+
+- **Fail:** deflects, lists every layer, names a layer that already moves, explains leave-outs, or ends
+  with nothing to choose.

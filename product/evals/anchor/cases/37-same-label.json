@@ -1,0 +1,47 @@
+{
+  "id": "37-same-label",
+  "title": "A one-key layer whose Position key and rest key are one frame apart (labels 3.67 s and 3.7 s, synthetic): both labels exactly, as two times",
+  "covers": [
+    "EP-37",
+    "B-11",
+    "FR-004"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/sled-one-key-same-label.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/sled-one-key-same-label.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "synthetic/sled-one-key-same-label.json",
+      "say": "Sled should turn from the middle of its left edge."
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "both_labels",
+        "must": "(?=[\\s\\S]*3\\.67 s)(?=[\\s\\S]*3\\.7 s)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_jump",
+        "never": "\\bjump(?:s|ed|ing)?\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-TWO-FRAMES",
+    "R-NAMES-REAL"
+  ]
+}

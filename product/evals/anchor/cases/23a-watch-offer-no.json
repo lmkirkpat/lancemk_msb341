@@ -54,7 +54,7 @@
       },
       {
         "id": "no_offer_after_check",
-        "never": "\\b(?:show you|watch (?:me|one|it|you)|like to watch|want to watch|could show)\\b",
+        "never": "\\b(?:I could|I can|want me to|would you like me to|like me to)\\b[^.?!]{0,40}\\b(?:show|watch|demonstrate)\\b",
         "turns": [
           3
         ]

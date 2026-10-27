@@ -28,7 +28,7 @@
     "say": [
       {
         "id": "two_frames",
-        "must": "(?=[\\s\\S]*3\\.7)(?=[\\s\\S]*4\\.2)(?=[\\s\\S]*\\b(?:two frames|one of those two|at rest)\\b)",
+        "must": "(?=[\\s\\S]*3\\.7 s)(?=[\\s\\S]*4\\.2 s)(?=[\\s\\S]*\\b(?:two frames|one of those two|at rest)\\b)",
         "turns": [
           2
         ]

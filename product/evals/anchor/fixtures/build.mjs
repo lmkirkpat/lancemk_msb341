@@ -57,6 +57,34 @@ write("sled-one-key-rest-on-key.json", sled(
   write("door-pass-matte-eye-on.json", pass);
 }
 
+
+// Case 37: B-11's same-label rule. One Position key at 3.667 (label "3.67 s"), rest key (largest
+// Scale) at 3.7 (label "3.7 s"): one frame apart, so a model tidying decimals would write one time
+// for two frames.
+write("sled-one-key-same-label.json", sled(
+  "Case 37 (spec 011 round 5): live sled-one-key-before with Scale keys added to Sled. One Position key at 3.667; the rest key (largest Scale) at 3.7.",
+  [
+    prop("ADBE Position", [key(1, 3.667, [320, 960, 0])]),
+    prop("ADBE Scale", [key(1, 3, [50, 50, 100]), key(2, 3.7, [100, 100, 100])]),
+  ]));
+
+// Case 32: this skill is practicing and `next` names Pop, not the read's proposal (Door).
+{
+  const rec = read("records/easing-learned.json");
+  rec.skills["transform.anchor"] = {
+    status: "practicing", last_practiced: "2026-10-25T16:00:00.000Z", times_passed: 0,
+    next: "Set Pop's pivot again with the playhead on its full-size key.",
+  };
+  rec.lessons.push({
+    date: "2026-10-25T16:00:00.000Z", skill: "transform.anchor", project: "Claude AE Tutor Test.aep", comp: "Mentor Practice 2",
+    attempted: "Set Pop's pivot to the middle of its bottom edge", result: "partial", demo_used: false,
+    summary: "First try set Pop's pivot while it was still shrunk, so it was away from its rest pose.",
+    next: "Set Pop's pivot again with the playhead on its full-size key.", kind: "first",
+    targets: [{ layer: "Pop", property: "Anchor Point" }],
+  });
+  fs.writeFileSync(path.join(HERE, "../records/anchor-practicing-pop.json"), JSON.stringify(rec, null, 2) + "\n");
+}
+
 // Case 17: a review with nothing new. The record says every default candidate on Mentor Practice 2
 // was a target of an earlier lesson (answer-key.json › practice2b: the 19 default layers).
 const key19 = read("answer-key.json").practice2b.layers;
@@ -73,4 +101,4 @@ passed.skills["transform.anchor"].review_due = "2099-01-01";
 passed.skills["transform.anchor"].last_practiced = "2026-10-24T16:00:00.000Z";
 passed.lessons.find((l) => l.skill === "transform.anchor").date = passed.skills["transform.anchor"].last_practiced;
 fs.writeFileSync(path.join(HERE, "../records/anchor-passed-not-due.json"), JSON.stringify(passed, null, 2) + "\n");
-console.log("wrote fixtures/synthetic/*, records/every-layer-done.json, records/anchor-passed-not-due.json");
+console.log("wrote fixtures/synthetic/*, records/*.json");

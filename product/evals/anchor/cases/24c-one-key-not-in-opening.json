@@ -27,6 +27,13 @@
     ],
     "say": [
       {
+        "id": "no_leave_out_turn1",
+        "never": "\\balready moves?\\b|not in this lesson|set a pivot before you key|set the pivot before you key|which this lesson doesn['’]t cover|can['’]t check that one|leave out|leaving out",
+        "turns": [
+          1
+        ]
+      },
+      {
         "id": "no_two_frames",
         "never": "one of those two frames|but it['’]s at rest at|\\btwo frames\\b"
       },
@@ -42,13 +49,13 @@
         "id": "offers_door",
         "must": "Door",
         "turns": [
-          2
+          1
         ]
       }
     ]
   },
   "rubric": [
-    "R-AN-LEAVE-OUTS",
+    "R-AN-INTENT-FIRST",
     "R-NAMES-REAL"
   ]
 }

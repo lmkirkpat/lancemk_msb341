@@ -1,0 +1,72 @@
+{
+  "id": "32-practicing-proposal",
+  "title": "Practicing, next names Pop: turn 1 proposes the snapshot's own proposal (Door), not Pop; Pop only in the one memory clause; ends on the choice",
+  "covers": [
+    "EP-32",
+    "FR-006a",
+    "TD-19a"
+  ],
+  "learner_record": "product/evals/anchor/records/anchor-practicing-pop.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "read_learner_record",
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "proposal_named": {
+      "turn": 1
+    },
+    "say": [
+      {
+        "id": "not_proposing_pop",
+        "never": "\\bPop\\b[^.?!]{0,60}\\b(?:could (?:swing|turn|grow)|want to try|how about)\\b|(?:try|start with|pick) Pop\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_intent",
+        "must": "turn|grow",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "ends_on_choice",
+        "must": "\\?\\s*$",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_leave_out",
+        "never": "\\balready moves?\\b|not in this lesson|set a pivot before you key|set the pivot before you key|which this lesson doesn['’]t cover|can['’]t check that one|leave out|leaving out",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_idea_statement",
+        "never": "rotation and scale turn around|turn around (?:the|a layer['’]s) anchor|the idea for today|Pan Behind",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-PRACTICING-PROPOSAL",
+    "R-ONE-IDEA",
+    "R-NAMES-REAL"
+  ],
+  "note": "The record's next names Pop; on the untouched practice2b the snapshot's proposal is Door. The check compares turn 1 to this run's snapshot output."
+}
