@@ -169,6 +169,27 @@ a jump and a wrong parent the way I scrubbed them, not that a learner reads the 
 things. The Option jump measuring the same 1105 px twice matches a layer left untouched between
 checks, not a second mistake.
 
+### Eval follow-up (same day, `evals-skill-6` `ad31ab8`, $2.27)
+
+The eval engineer added cases 29 and 30 from findings 1 and 4, plus two new `expect` keys in
+`run.mjs`: `preview_times_from_output` (every `preview_frame` time appears in an earlier tool
+result) and `record_lesson_never` (a field-to-regex map that the last record must not match).
+
+- **29, no invented key times: pass** ($0.84). Skipping the frames at a pass is stable, so
+  finding 1 is a missing feature, not a risk of the mentor making up times.
+- **30, the record names only the move the check saw: unproven** ($0.71 and $0.72). Run 1: no
+  capture has the group on a top-left null with a Position-only slide, and the stand-in's null sat
+  at the middle, so the check failed (pivot and a 132 px jump) and nothing was recorded. Run 2:
+  with the learner saying "the middle", the record was accurate ("placed at the group's center,
+  and slid it with Position keys"), but the regex included `center`, so it failed the case
+  anyway. The regex is now `\bturn|scal|rotat`, not re-run. The live slip, writing "turning" for a
+  slide, hasn't been reproduced yet. In session 2 the check *had* verified the top-left pivot; what
+  the check never verified was a turn (`p5` null). So the slip is about the move's kind, not the
+  place.
+- **Step 11 changed the same day** (finding 4's fix, below), so case 30 now tests the fix rather
+  than the bug. The step 11 example also had "from 6 to 7 s", key times the check never returns,
+  the same risk as case 29; that's gone too.
+
 ## To fix later
 
 - **Give the null's move times to the mentor.** At a pass, the mentor can't show the group moving
@@ -179,10 +200,15 @@ checks, not a second mistake.
   `null-parenting-check.test.mjs`, a null with Rotation keys at 1 s and 2 s gives
   `p4.from === 1` and `p4.to === 2`; with Position at 0.5 to 1 s and Scale at 1 to 3 s, it gives
   0.5 and 3.
-- **The record names a turn that didn't happen** (finding 4). `.claude/skills/null-parenting-mentor/SKILL.md`
-  step 11: say that `attempted` names the move the check saw (Position, Scale or Rotation) and
-  gives the place it turns or scales from only when the move turns or scales. **Test:** the eval
-  case in finding 4.
+- **Case 30 needs a live capture to prove itself.** On a duplicate of Mentor Practice 2: Tile,
+  Caption and Stamp parented to a null at their top-left, with a Position-only slide (say
+  `slide-top-left.json`, via `node mentor/dev/capture.mjs`). Then switch case 30's learner back to
+  "the top-left corner" and run `--only 30 --repeat 3` (about $2). Finding 4's step 11 fix is
+  already in (fixed, below), so this checks the fix; it can't show the old failure any more.
+  Fixed: **the record named a turn that didn't happen** (finding 4). `SKILL.md` step 11's
+  `attempted` now names only the move the last check found (Position slides, Rotation turns, Scale
+  scales), names a place to turn or scale from only for a Rotation or Scale move, and has no key
+  times. The example lost its "from 6 to 7 s".
 
 ## Edge cases to plan for
 
