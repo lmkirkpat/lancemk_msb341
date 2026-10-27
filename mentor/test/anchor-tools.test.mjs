@@ -200,7 +200,7 @@ test("the one-key lesson: Sled's tip carries its key's time, and anchor_check as
   assert.equal(r.layers[0].item3.now, 0);
 });
 
-test("T254: anchor_snapshot passes moves_case and both times on a one-key layer off its rest key, in candidates and focus_problems; Door has none", async () => {
+test("T254, T258: anchor_snapshot passes moves_case, both times and their labels on a one-key layer off its rest key, in candidates and focus_problems; Door has none", async () => {
   // Synthetic (marked in the file): the live sled-one-key-before with Scale keyed half size at 3 s
   // and full size (the rest key) at 4.167, so its one Position key at 3.667 is off rest.
   project(variant("sled-one-key-before", (x) => {
@@ -210,14 +210,23 @@ test("T254: anchor_snapshot passes moves_case and both times on a one-key layer 
   }));
   const s = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
   const sled = s.candidates.find((c) => c.layer === "Sled");
-  assert.deepEqual(sled, { layer: "Sled", bucket: "never", reason: "position_moves", rank: null, moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 });
-  assert.deepEqual(s.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 }]);
+  assert.deepEqual(sled, { layer: "Sled", bucket: "never", reason: "position_moves", rank: null, moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167, position_key_label: "3.7 s", rest_label: "4.2 s" });
+  assert.deepEqual(s.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167, position_key_label: "3.7 s", rest_label: "4.2 s" }]);
   for (const c of s.candidates) if (c.reason !== "position_moves") assert.ok(!("moves_case" in c) && !("position_key_time" in c) && !("rest_time" in c), c.layer);
+  // T258 (B-11): the labels ride with the times, and no other entry has them.
+  for (const c of s.candidates) if (c.layer !== "Sled") assert.ok(!("position_key_label" in c) && !("rest_label" in c), c.layer);
   project("practice2b");
   const d = await call("anchor_snapshot", { fresh: true, ...DOOR });
   assert.deepEqual(d.candidates.find((c) => c.layer === "Door"), { layer: "Door", bucket: "default", reason: null, rank: KEY.practice2b.layers.Door.rank });
   assert.deepEqual(d.candidates.find((c) => c.layer === "Sled").moves_case, "two_or_more");
   assert.deepEqual(d.focus_problems, []);
+  // T258: no labels on Sled (two_or_more) or Door, in candidates or in focus_problems.
+  for (const n of ["Sled", "Door"]) {
+    const c = d.candidates.find((x) => x.layer === n);
+    assert.ok(!("position_key_label" in c) && !("rest_label" in c), n);
+  }
+  const ds = await call("anchor_snapshot", { fresh: true, skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
+  assert.deepEqual(ds.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "two_or_more" }]);
 });
 
 test("two focus layers: the demo is on entry 1; off target, twice, or off the rest key it's refused before the snippet", async () => {

@@ -153,12 +153,12 @@ was. Pan Behind changes both together, so nothing moves on screen.
        other keys. Set the pivot before you key. Pick a layer that doesn't move yet?"
      - `one_key_off_rest`: "Sled's Position key is at 1 s, but it's at rest at 3 s, so moving its
        pivot now would shift where it sits on one of those two frames. Set the pivot before you
-       key. Pick another layer?" The first time is `position_key_time`, the second `rest_time`
-       (when they named its rest pose, that's their own time). Both times are always written as
-       this file writes times ("at 3.7 s"), even when the learner said 3.667. Say the sentence as
-       written; only the layer name and the two times change. Never "its other keys" about this
-       layer. If either time is missing, say only "Sled already moves, so it's not in this lesson;
-       set a pivot before you key. Pick another layer?"
+       key. Pick another layer?" The first time is `position_key_label`, the second `rest_label`
+       (when they named its rest pose, that's their own time, labelled the same way). Say the two
+       labels exactly as given; never round or write a time yourself. Say the sentence as
+       written; only the layer name and the two labels change. Never "its other keys" about this
+       layer. If either label is missing or null, say only "Sled already moves, so it's not in
+       this lesson; set a pivot before you key. Pick another layer?"
 
      Never say a layer would "jump".
    - one Position key that isn't a leave-out above (reason `position_keyed`): it can be named

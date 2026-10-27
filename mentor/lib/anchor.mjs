@@ -209,13 +209,33 @@ export function positionCase(snapshot, kl, { rest_time } = {}) {
   return { rule: "position_moves", moves_case: "one_key_off_rest", position_key_time: times[0], rest_time: isNum(rk.time) ? rk.time : null };
 }
 
-// The three moves_case fields of a position_moves entry, for spreading into a candidate or a
-// focus_problems entry; {} for any other reason.
+// A time in seconds as the mentor says it (FR-004 › Time labels, B-11): rounded half up to
+// `decimals` places, trailing zeros and a bare "." dropped, then " s". null for a non-number.
+export function timeLabel(t, decimals = 1) {
+  if (!isNum(t)) return null;
+  const f = 10 ** decimals;
+  const text = (Math.round(t * f + 1e-9) / f).toFixed(decimals).replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "");
+  return `${text} s`;
+}
+
+// The two labels of a one_key_off_rest entry, [position_key_label, rest_label]. When both times
+// read the same at a tenth (3.667 and 3.7), both take the fewest decimals, up to three, at which
+// they differ ("3.67 s", "3.7 s"), so the sentence never puts the two frames at one time. A label
+// is null exactly when its time is.
+export function timeLabels(keyTime, restTime) {
+  let d = 1;
+  while (d < 3 && isNum(keyTime) && isNum(restTime) && timeLabel(keyTime, d) === timeLabel(restTime, d)) d += 1;
+  return [timeLabel(keyTime, d), timeLabel(restTime, d)];
+}
+
+// The moves_case fields of a position_moves entry, for spreading into a candidate or a
+// focus_problems entry: the case, and for one_key_off_rest the two times and their labels (B-11);
+// {} for any other reason.
 export function movesFields(c) {
   if (!c || c.reason !== "position_moves" || !c.moves_case) return {};
-  return c.moves_case === "one_key_off_rest"
-    ? { moves_case: c.moves_case, position_key_time: c.position_key_time, rest_time: c.rest_time }
-    : { moves_case: c.moves_case };
+  if (c.moves_case !== "one_key_off_rest") return { moves_case: c.moves_case };
+  const [position_key_label, rest_label] = timeLabels(c.position_key_time, c.rest_time);
+  return { moves_case: c.moves_case, position_key_time: c.position_key_time, rest_time: c.rest_time, position_key_label, rest_label };
 }
 
 function uniqueTimes(list) {
