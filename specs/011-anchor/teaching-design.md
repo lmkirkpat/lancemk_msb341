@@ -3,8 +3,9 @@
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-23, amended 2026-10-26 after the live sitting (L-1 to L-5,
-`live-sitting-2026-10-26.md` on `skill-5-anchor`). **Status:** draft, round 1 answered (§ 15),
-round 2 answered (§ 16: D-4 and the wording list).
+`live-sitting-2026-10-26.md` on `skill-5-anchor`), and again 2026-10-26 after the first live
+lesson (T236, § 17). **Status:** draft, round 1 answered (§ 15), round 2 answered (§ 16: D-4 and the
+wording list), the one-layer watch offer decided (§ 17).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -145,8 +146,8 @@ learner to put the playhead there before they start, and the check uses that tim
 ### Focus size and the demo target
 
 **Focus: one or two layers, each with its own place.** The learner's layer is always in it. If the
-learner wants to practice the demo first, or a second layer clearly needs it (the mentor can offer a
-second candidate in one sentence), the focus has two.
+learner wants to watch one first (asked, or a yes to the watch offer below), or a second layer
+clearly needs it, the focus has two.
 
 **Demo target rule** (one write, FR-024):
 - With **two** focus layers, the demo goes on the one the learner cares less about: the one the mentor
@@ -154,9 +155,31 @@ second candidate in one sentence), the focus has two.
   expression on Anchor Point or Position, not a precomp with Collapse Transformations on; shape
   layers qualify), and if it has Rotation or Scale keys the playhead must be on its rest key. If
   the other layer qualifies and this one doesn't, swap; if neither does, no demo.
-- With **one** focus layer, **no demo**: the mentor walks it through in words (easing's single-pair
-  rule).
+- With **one** focus layer, **no demo on it**: the mentor walks it through in words (easing's
+  single-pair rule).
 - The demo is only when asked or clearly stuck (curriculum § 2, stage 3).
+
+**The watch offer (one focus layer; decided 2026-10-26, § 17).** With one focus layer, the mentor
+**offers** a watch on another layer, **once**, in **one sentence**, as the last sentence of the turn
+that invites the learner to try (stage 3), after the walk-through in words:
+
+> "I could show you on Needle first, if you like."
+
+- **Which layer:** the highest-ranked default candidate (§ 4's table and ranking) other than the
+  learner's that would qualify as the demo target (the demo target rule above). On Mentor Practice 2
+  with Door as the focus, that's **Needle** (rank 2), not Tab. If none qualifies, **no offer**:
+  never offer a watch the demo would refuse.
+- **When:** only when the learner hasn't passed this skill before (a first lesson, or practicing
+  without a pass). **Never in a review** (no demo there, § 12), and **not in a practice lesson after a
+  pass** (they've already set a pivot without help; the walk-through is enough, and they can still
+  ask). Not when the learner already asked to watch one, or already named a second layer: the
+  two-layer rule covers those.
+- **Yes:** the focus becomes two, theirs first; the mentor names the demo layer's place in one
+  sentence from a hinge that suits its shape ("I'll turn Needle from the middle of its bottom
+  edge"), and stage 3 runs as for two layers. Door is still theirs to do.
+- **No, or no answer** (they just try, or say "done"): the lesson goes on with one layer. **No
+  second offer**, not after a failed check either; § 7's hints carry it from there. If they ask
+  later, they get it (the one demo is still unused).
 
 **What the demo does:** moves that layer's Anchor Point to the named place and moves Position by
 exactly what keeps it still, at the current time, in one undo step. Separated X and Y Position get
@@ -191,7 +214,7 @@ the record picks **Tab** (spec FR-004's answer key). Sled (three Position keys) 
 | 0. Remember | nothing | The record for this skill (first lesson, practicing, learned: offer a review, § 12) | n/a |
 | 1. Ask and propose | names a layer and a place, or agrees to the mentor's | Fresh read (snapshot plus R1 and R3). § 4's candidate table and the intent question. Says what's left out and why in one sentence | A focus of 1 or 2 layers, each with a place that isn't already where the pivot is |
 | 2. Explain on their comp | watches | One frame from their comp with the focus layer in it, real names. The two sentences from § 1 (inside the layer vs in the comp). Where the pivot is now, in place words ("Needle's pivot is at its center"; "Title's is on its baseline"). Rest key named, if § 4 needs one | n/a |
-| 3. I do (one demo) | shows Anchor Point and Position (A, Shift+P), watches, can Edit > Undo | Only when asked or clearly stuck, on the demo target (§ 4). Frames before and after | n/a |
+| 3. I do (one demo) | shows Anchor Point and Position (A, Shift+P), watches, can Edit > Undo | Only when asked or clearly stuck, on the demo target (§ 4). Frames before and after. **With one focus layer:** the walk-through in words, then the invite to try, ending with the watch offer, once (§ 4, § 17) | n/a |
 | 4. You do | Pan Behind (Y), drags the pivot to the place on their layer, says "done" | Fresh read and diff against stage 1's read. § 6 for each focus layer, crediting the demo to the demo. Hints from § 7, never the fix | § 6 |
 | 5. Understanding check | Says which part of the layer will stay still when it turns | Their answer against the named place. Light: right after at most one hint | **Recorded, doesn't gate** (it's nearly given away by the place they named, so it only catches a real mix-up) |
 | 6. Try it (we do, ungraded) | Drags the Rotation (or Scale) value a little in the timeline, watches it swing from the hinge, then Edit > Undo | Nothing graded. The check already passed in stage 4 | n/a |
@@ -475,6 +498,16 @@ middle" on a text layer is told the pivot is on the baseline, not that it's alre
 - **C-3 (2026-10-26)** Re-pivoting a layer that already moves isn't taught anywhere in the path
   (D-4). Candidates for later: a tip in skill 5's review once L-7 is known, or a "fix the pivot on
   finished work" lesson after skill 6. Not added this sprint.
+- **C-4 (2026-10-26, § 17)** Curriculum § 2's stage 3 says only "If the focus has only one target,
+  there's no demo". Add the watch offer as the shared rule for every skill (once, one sentence, on
+  another target, first lessons only, never in a review), if the human agrees to carry it to skills
+  2 to 4.
+
+**For the builder (2026-10-26, § 17):**
+- **B-8** The watch offer needs, from the first `anchor_snapshot` with the focus, the next default
+  candidate that would qualify as the demo target (and its suggested place), or nothing when none
+  does. Today `proposal` is one layer and `candidates` carries buckets; if the ranked order and the
+  demo test aren't already there, add them rather than have the mentor rank by hand.
 
 **Guesses:** how common the "set it while shrunk or turned" mistake is (L-4 shows it's easy to do,
 not how often); how often learners drag a group's pivot (L-1 shows it happens in one drag); the 3 px
@@ -602,3 +635,52 @@ pivot before you key", and one sentence teaches that.
 
 Times in these lines are Mentor Practice 2's at 30 fps, written the way `SKILL.md` writes times;
 the mentor uses the read's own times on another comp.
+
+## 17. The watch offer with one focus layer (decided 2026-10-26, after T236)
+
+**Question.** With one focus layer there's no demo on it. § 4 said the mentor "can offer" a second
+candidate; `SKILL.md` read that as "only if they'd like to watch one first", which in practice means
+"only if they ask". In T236 (`discovery/usage-notes/anchor.md`, session 1, problem 2) the mentor never
+offered, the lesson went straight to "try it", and the builder said they'd have taken a watch. A
+first-timer doesn't know a watch exists, so can't ask for it.
+
+**Decision: "can offer" becomes "offers", once, in one sentence.** The rule and its conditions are in
+§ 4 (The watch offer). Wording:
+
+> "I could show you on Needle first, if you like."
+
+The layer is whatever the read gives as the next qualifying candidate; Needle is Mentor Practice 2's
+with Door as the focus. (The usage note's example said Tab, which is the review's pick with Door and
+Needle recorded, not the next candidate after Door.)
+
+**Why.**
+- **Restraint is about doing, not offering.** "At most one demo, on its own target only" still holds:
+  the offer runs nothing, the watch is on a layer the learner cares less about, and Door stays
+  entirely theirs. Curriculum § 2's "only when asked" is kept, because the yes *is* the ask; the
+  offer only makes asking possible for someone who doesn't know they can.
+- **Easing already does this.** `/ease-mentor` step 6: "Offer a layer with more pairs if they'd rather
+  watch a demo first", and easing case 21 has seen that offer in every run since 2026-10-06 without
+  breaking R-LEARNER-DOES. Skill 5's "can offer" was meant to follow easing; the skill drifted.
+- **Evidence it's wanted:** T236's builder would have taken it (R, builder-only). Interview 004's
+  "I would rather see a mouse on a screen moving" (R) says the same about watching first. How many
+  target-market learners take it is a guess; the usage notes should count yeses.
+- **Placement:** last sentence of the invite turn, after the walk-through. Earlier (stage 1 or 2) it
+  comes before they know what Pan Behind is; later (after a failed check) it's a rescue, and the
+  hints already do that job without taking the attempt away.
+
+**Rejected.**
+- *Keep "only if they ask"* (the build as is). A choice the learner can't see isn't a choice; T236
+  showed the path skips it even for someone who knows it's there.
+- *Always demo on a second layer with one focus* (no offer, just do it). Spends the demo every lesson,
+  lengthens the shortest lesson in the path (H-1) for learners who don't want it, and undercuts "only
+  when asked".
+- *Offer again after a failed check.* Two offers in a short lesson is pressure, and after a fail it
+  reads as "let me do it". The hints name what's off; a learner who wants the watch can ask.
+- *Offer in reviews or after a pass.* Reviews have no demo by design (§ 12); a learner who has passed
+  has shown they don't need the watch, and a practice lesson after a pass is for their hands.
+- *Name the place in the offer* ("on Needle, turning from its bottom edge"). One more clause for a
+  learner deciding yes or no; the place comes in one sentence on a yes.
+
+**What changes elsewhere** (owners' files, not edited here): `SKILL.md` moves the offer from step 5
+(which runs only on an ask) to the end of step 4; spec FR-008 and US1 #5; a new eval case; curriculum
+follow-up C-4; builder item B-8.
