@@ -31,7 +31,7 @@ to LE-3 were answered by the builder the same day (all three as recommended).
 of a built promise (choices kept across a resume: T061, T063, contracts § 4, spec 012 SR-1), and the
 builder chose "confirm + baseline": a resumed lesson starts fresh only when its comp no longer
 matches the baseline, and otherwise keeps its choices, which the skill confirms with the learner
-(new **FR-046**). **FR-040**'s re-read runs only on a passed check (a 0 gap was refused). **FR-044** now hashes only what the server runs and never starts git where there's
+(new **FR-046**). **FR-040**: no re-read after the check at all (2026-10-27: a 0 gap was refused, and a re-read after a pass started a new lesson); the mentor says a passed check's measured gap back as theirs. **FR-044** now hashes only what the server runs and never starts git where there's
 no checkout; **FR-045** gains four no-bounds reasons (precomp, effects, masks, Opacity 0) from the
 reviewer's findings on the merged code. Research R24 and R25 are amended and **R26** is new. Tasked
 as tasks-wave-b.md Phase 9 › Second pass (T186 onward). New open questions LE-4 to LE-6.
@@ -625,9 +625,22 @@ skill teaches either.
   the tool already defines as every gap at or above the floor); otherwise step 7's existing hints run
   and the stated gap stays as it is. No tool change: `passed` already implies a gap of at least the
   floor, and the schema's minimum still refuses a bad call before anything is written.
-  *Source:* `discovery/usage-notes/offset.md` › session 1 finding 3 and To fix later. *Proof:* the
-  eval case that note proposes (gap changed after the fact), and offset cases 11, 14, 15 and 23 with
-  no refused `offset_snapshot` call (T199).
+  **Amended again 2026-10-27** (the reviewer, reproduced on `phase9-pass2`): a re-read after a pass
+  breaks the lesson. `offset_check` has marked it passed, `session.start` never reopens a passed
+  lesson, so the call builds a new, unchecked lesson under the same key with the staggered comp as
+  its baseline, and `record_lesson` then refuses "passed" (`mentor/tools/common.mjs`, the result
+  check). **So the mentor MUST NOT call `offset_snapshot` again in step 7 at all.** After a pass,
+  when the measured gaps (`gaps_frames`) differ from the gap the learner stated, it says the gap back
+  from the check's own `gaps_frames`, as the learner's ("you went with about 8 frames"), never as
+  advice; a pass already means every gap is at or above the floor, so no floor hint is needed. Before
+  a pass, the existing hints run, and the stored gap stays as stated. What this gives up: a demo
+  after a failed check still shifts by the stated gap, not the measured one (accepted: the demo runs
+  at most once, on the learner's choice of gap).
+  *Source:* `discovery/usage-notes/offset.md` › session 1 finding 3 and To fix later; the reviewer's
+  finding 1 on the second pass. *Proof:* the eval case that note proposes (gap changed after the
+  fact) and a "passed, but the stated gap differs" case (T196's hand-off): one `offset_check`, no
+  later `offset_snapshot`, the measured gap said back as theirs, and `record_lesson` accepted as
+  passed; offset cases 11, 14, 15 and 23 with no refused call (T199, T199a).
 - **FR-041 (offset, how Quick Offset works)**: `.claude/skills/offset-mentor/SKILL.md` › Where things
   are MUST have a short "if they ask how Quick Offset works" paragraph whose claims are **only** these,
   each confirmed in spec 010's live sitting L-1 (`specs/010-offset/live-sitting-2026-10-26.md` › L-1)

@@ -32,7 +32,7 @@ only: [curriculum.md](curriculum.md) › 5 and › 8, specs 011 and 012's `teach
 
 **Scope**: only wave B's **shared** pass (plan › Wave B, step 1). Skills 5 and 6 are specs 011 and
 012, built after this merges, adding files only. Wave A's tasks are [tasks.md](tasks.md) (T001 to
-T069); nothing here edits them. This file uses **T100 to T199** only.
+T069); nothing here edits them. This file uses **T100 to T199** only, plus **T199a**, numbered by the cockpit on 2026-10-27 when the range was used up.
 
 **Tests**: included and written first. FR-012: every read and both shared rules have unit tests on
 saved snapshots with an answer key, from live reads. Pure math (comp-space matrices) and
@@ -385,7 +385,7 @@ built on the **second pass's** branch (below), not the first.
 
 ### Close
 
-- [ ] T182 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <T167's base> -- mentor/test/*.test.mjs` shows only the four new files; then `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: the changed existing files match this phase's table exactly, and `git diff --stat <T167's base> -- .claude/skills/null-parenting-mentor/ mentor/tools/null-parenting.mjs .claude/skills/anchor-mentor/` is empty (skill 6 is on `main` since `31fe72d`, but its files are LE-2's follow-up). Paste all of it in the hand-back **2026-10-26:** done apart from T173's test file (`session-stale.test.mjs`), which moved to the second pass with T174; T197 repeats this check for the second pass's branch, so this stays unticked until then
+- [x] T182 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <T167's base> -- mentor/test/*.test.mjs` shows only the four new files; then `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: the changed existing files match this phase's table exactly, and `git diff --stat <T167's base> -- .claude/skills/null-parenting-mentor/ mentor/tools/null-parenting.mjs .claude/skills/anchor-mentor/` is empty (skill 6 is on `main` since `31fe72d`, but its files are LE-2's follow-up). Paste all of it in the hand-back **2026-10-26:** done apart from T173's test file (`session-stale.test.mjs`), which moved to the second pass with T174; T197 repeats this check for the second pass's branch (ticked 2026-10-27 on that basis, reviewer nit 6)
 - [x] T183 [US6] Hand off to the cockpit for the **eval engineer**: the easing set (26 cases) on this branch and on its base the same day, as T143 did. **Merge gate:** at 25/26 or better with no hard-rule failure (FR-035's bar), and no worse than the base (a branch-only failure is re-run once before it counts). The changes easing can see: step 0's restart line, `read_learner_record`'s new field, and the stale-lesson rule **Passed 2026-10-26:** branch 25/26, base 25/26, branch case 08 `--repeat 3` 3/3 (`product/evals/easing/results/2026-10-26-2*phase9*.json`). It ran without T174, so the stale-lesson rule wasn't in it: T195 runs the gate again for the second pass
 - [ ] T184 [US6] Hand off to the cockpit for the **eval engineer** (their files and numbers): (a) **SC-014**: key types case 16, offset case 17 and speed graph case 08, `--repeat 3` each, on `evals-wave-a` with this branch's `SKILL.md` (the cockpit decides how: merging `main` into `evals-wave-a` after this merges, or a run from a worktree with both); (b) the cases the usage notes propose: speed graph's reading answer given as a time or a frame (`speed-graph.md`), offset's gap changed after the fact (`offset.md` session 1) and how Quick Offset works (`offset.md` session 2), for when the wave A sets merge. FR-043, FR-044 and FR-045 get no eval case: unit tests cover them, and eval fixtures don't render frames
 - [ ] T185 [US6] Write the hand-back: branch and commit; T167's and T182's counts and output; LE-1's answer as built; T171's paragraph; T172's finding for speed graph; T176's runtime-folder check; T181's results; and the follow-ups below, as requests
@@ -423,7 +423,7 @@ as T167 did (the base for T195 and T197).
 | `mentor/tools/common.mjs` | `preview_frame`'s four new no-bounds reasons; nothing else | T194 |
 | `.claude/skills/speed-graph-mentor/SKILL.md`, `.claude/skills/key-types-mentor/SKILL.md`, `.claude/skills/offset-mentor/SKILL.md` | FR-046's confirm sentence, one place each; nothing else | T188 |
 | `.claude/skills/ease-mentor/SKILL.md` | Step 0's doubled "before anything else", said once; nothing else | T191 |
-| `.claude/skills/offset-mentor/SKILL.md` (also in T188's row) | Step 7's measured-gap bullet: only on a passed check (FR-040, amended) | T199 |
+| `.claude/skills/offset-mentor/SKILL.md` (also in T188's row) | Step 7's measured-gap bullet: only on a passed check (FR-040, amended), then no re-read at all (2026-10-27) | T199, T199a |
 | `specs/004-ae-curriculum/tasks-wave-b.md` | Tick tasks only | all |
 
 **New files**, all under `mentor/test/`: `session-stale.test.mjs` (T173), `stored-choices.test.mjs`
@@ -442,6 +442,7 @@ T173 (above) and T186 are the tests; T174 (above), then T187, then T188.
 #### FR-040: the measured-gap re-read only on a pass
 
 - [ ] T199 [US1] **Prompt**, `.claude/skills/offset-mentor/SKILL.md` step 7, the bullet "the gap they stated vs. the gap the check measured" (T170): add its condition, **only when the check passed** (`passed`); otherwise the other step 7 bullets run (still together, changed keys, and so on) and `skill_options` isn't re-sent. A measured gap of 0 (members still together, offset eval cases 11, 14, 15 and 23) never reaches `gap_frames`. No tool change: `passed` already means every gap is at or above the floor (`mentor/lib/offset.mjs`, `still_same` through `isSame`), and `gap_frames`' minimum of 1 still refuses a bad call before any write. Nothing else in step 7 changes; T188's paragraph is in another step, so do the two one at a time. **Done when:** the bullet has the condition; T196's hand-off also asks the eval engineer to re-run offset cases 11, 14, 15 and 23 on this branch and confirm that no `offset_snapshot` call is refused (for when the wave A sets merge)
+- [ ] T199a [US1] **Prompt** (the cockpit's number, past this file's range; FR-040 amended 2026-10-27, reviewer finding 1 on `phase9-pass2`), `.claude/skills/offset-mentor/SKILL.md` step 7, the same bullet T199 changed: **no `offset_snapshot` call in step 7**. After a pass, when `gaps_frames` differs from the gap they stated, say the gap back from `gaps_frames` (the first one if they differ, to the nearest whole frame), as theirs, never as advice; no floor hint (a pass is at or above the floor). Before a pass, the other step 7 bullets run and nothing is re-sent. Remove the bullet's re-read, its "this re-read is part of the check" sentence and its after-the-re-read floor branch; nothing else in step 7 changes. Supersedes T199's re-read (T199's condition goes with it). **Done when:** step 7 has no `offset_snapshot` call; the hand-back pastes the bullet; T196's hand-off carries the "passed, but the stated gap differs" eval note (one `offset_check`, no later `offset_snapshot`, the measured gap said back as theirs, `record_lesson` accepted as passed)
 
 #### FR-044: hash only what the server runs; no git without a checkout
 
@@ -458,9 +459,9 @@ T173 (above) and T186 are the tests; T174 (above), then T187, then T188.
 #### Close
 
 - [ ] T195 [US6] Hand off to the cockpit for the **eval engineer**: the easing set (26 cases) on this branch and on its base the same day, as T183 did, with the same merge gate (25/26 or better, no hard-rule failure, no worse than the base; a branch-only failure re-run once). What easing can see: the stale rule (a resumed easing lesson whose keys changed starts new; one that matches resumes as before) and step 0's tidy (T191)
-- [ ] T196 [US6] Hand off to the cockpit for the **eval engineer** (their files and numbers), for when the wave A sets merge: one case per skill for FR-046 (speed graph, key types, offset): a resumed lesson on a comp that matches, with stored choices; the mentor says them back in plain words and asks before any demo or check, and names no field. Offset's is T037's case (`discovery/usage-notes/offset.md` session 2). Also (T199): offset cases 11, 14, 15 and 23 re-run on this branch, with no refused `offset_snapshot` call. FR-043's rule, FR-044 and FR-045's changes get no eval case (unit tests; eval fixtures don't render frames)
+- [ ] T196 [US6] Hand off to the cockpit for the **eval engineer** (their files and numbers), for when the wave A sets merge: one case per skill for FR-046 (speed graph, key types, offset): a resumed lesson on a comp that matches, with stored choices; the mentor says them back in plain words and asks before any demo or check, and names no field. Offset's is T037's case (`discovery/usage-notes/offset.md` session 2). Also (T199, T199a): offset cases 11, 14, 15 and 23 re-run on this branch, with no refused `offset_snapshot` call; and a **"passed, but the stated gap differs"** case: the learner states one gap, makes another that passes; expect one `offset_check`, no `offset_snapshot` after it, the measured gap said back as theirs (never as advice), and `record_lesson` accepted as passed. FR-043's rule, FR-044 and FR-045's changes get no eval case (unit tests; eval fixtures don't render frames)
 - [ ] T197 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <the base> -- mentor/test/*.test.mjs` shows only the four new files above; `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: the changed existing files match the second pass's table exactly; and `git diff --stat <the base> -- .claude/skills/null-parenting-mentor/ .claude/skills/anchor-mentor/ mentor/tools/null-parenting.mjs mentor/tools/transform-anchor.mjs` is empty. Paste all of it in the hand-back
-- [ ] T198 [US6] Write the hand-back: branch and commit; the first run's and T197's counts and output; the four named tests passing unchanged; T188's three paragraphs and its field list; T199's bullet as changed; T190's by-hand checks; how LE-4 to LE-6 were built (to the recommendations unless the builder answered otherwise); and the follow-ups in Later per-skill branches, as requests
+- [ ] T198 [US6] Write the hand-back: branch and commit; the first run's and T197's counts and output; the four named tests passing unchanged; T188's three paragraphs and its field list; T199 and T199a's bullet as changed; T190's by-hand checks; how LE-4 to LE-6 were built (to the recommendations unless the builder answered otherwise); and the follow-ups in Later per-skill branches, as requests
 
 ---
 
@@ -501,7 +502,7 @@ the curriculum designer where the teaching changes).
   merge, from `main`, with the second pass's masked-solid and Opacity rows (so after T193 and T194
   merge).
 - **Phase 9 second pass** (its own branch, cut from local `main` at or after `d4a9bd6`): the first
-  test run; then T173 → T174 → T186 → T187 → T188, then T199 (both edit `offset-mentor/SKILL.md`); T189 → T190; T191 any time; T192 → T193 → T194;
+  test run; then T173 → T174 → T186 → T187 → T188, then T199, then T199a (all edit `offset-mentor/SKILL.md`); T189 → T190; T191 any time; T192 → T193 → T194;
   T197 after every code task; T195 and T196 after T197. **Merge after T195's gate**, when no skill 5
   or 6 live lesson or sitting is running (the cockpit's call). Then T181 🖐 on `main`.
 - **T123 last** before T143, once its three checks pass (Q4); T143 runs after T123.
@@ -537,4 +538,5 @@ T151–T153, T157, T158, T160–T165). Four are 🖐 live (T133, T134, T135, T15
 **Phase 9 adds 19** (T167 to T185): setup 1, FR-039 2, FR-040 to FR-042 3, FR-043 2, FR-044 3,
 FR-045 4 (one 🖐, T181), close 4. **The second pass adds 14** (T186 to T199) and rewrites three in
 place (T173, T174, T181): FR-043 and FR-046 3 (T186 to T188), FR-040's fix 1 (T199), FR-044 3 (T189
-to T191, with easing's tidy), FR-045 3 (T192 to T194), close 4 (T195 to T198). The range is used up.
+to T191, with easing's tidy), FR-045 3 (T192 to T194), close 4 (T195 to T198). The range is used up;
+**T199a** (2026-10-27, the cockpit's number) is FR-040's second fix.
