@@ -528,3 +528,40 @@ test("T249 synthetic: a Scale-keyed next layer is offered only when its rest key
   const on = measuresWith(["Bar", "Needle", "Mirror"], (s) => { scaleKeys(s, "Bar", 1); scaleKeys(s, "Needle", 1); });
   assert.deepEqual(analyze(on, { skill_options: { focus: BAR } }).watch_offer, { layer: "Needle", suggested_place: "bottom-middle" }, "on the focus's check time: offered");
 });
+
+// ---- T255 (D-9, FR-008): the watch offer is never on a full-frame layer. Synthetic (marked here,
+// built in memory from the live practice2b): Door the one focus layer; every other layer that isn't
+// never is removed from layer_info, except Background. The never layers stay (they can't be offered).
+
+function doorAndBackground(change = () => {}) {
+  const s = clone(P2);
+  s.synthetic = "T255: practice2b with every layer but Door, Background and the never ones removed";
+  const keep = new Set(candidates(P2).filter((c) => c.bucket === "never" || c.layer === "Door" || c.layer === "Background").map((c) => c.layer));
+  s.layer_info = s.layer_info.filter((l) => keep.has(l.name));
+  change(s);
+  return s;
+}
+const DOOR_FOCUS = [{ layer: "Door", place: "middle-left" }];
+
+test("T255 synthetic: with Background (full_frame true) the only other layer that isn't never, there's no watch offer", () => {
+  const s = doorAndBackground();
+  const got = byLayer(candidates(s));
+  assert.deepEqual([got.Background.bucket, got.Background.reason, got.Background.full_frame], ["if_named", "full_frame", true]);
+  assert.deepEqual(candidates(s).filter((c) => c.bucket !== "never").map((c) => c.layer).sort(), ["Background", "Door"]);
+  const a = analyze(s, { skill_options: { focus: DOOR_FOCUS } });
+  assert.deepEqual(a.targets, [`anchor/${indexOf(s, "Door")}`]);
+  assert.equal(a.watch_offer, null);
+});
+
+test("T255 synthetic: without the comp's size (full_frame null) Background is a default candidate and is offered, middle-left", () => {
+  const s = doorAndBackground((x) => { delete x.comp.width; delete x.comp.height; });
+  const bg = byLayer(candidates(s)).Background;
+  assert.deepEqual([bg.bucket, bg.full_frame], ["default", null]);
+  assert.deepEqual(analyze(s, { skill_options: { focus: DOOR_FOCUS } }).watch_offer, { layer: "Background", suggested_place: "middle-left" });
+});
+
+test("T255: FR-008's answer-key cases on the live comp are unchanged (door, pop, door_and_needle here; review in anchor-tools)", () => {
+  for (const name of ["door", "pop", "door_and_needle"]) {
+    assert.deepEqual(analyze(P2, { skill_options: { focus: KEY.watch_offer[name].focus } }).watch_offer, KEY.watch_offer[name].watch_offer, name);
+  }
+});
