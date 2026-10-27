@@ -85,9 +85,9 @@ most; they hold the rest with their own hands.
    review's own opening; never narrate the branch or what you'll do next.
 
 1. **Look and ask.** Call `key_types_snapshot` with no focus. Then, unless `stored_choices` is
-   true (then the confirm below is the only question), ask the intent question **before proposing
-   anything**: "Is anything here meant to snap, like a blink, an on/off, or a cut?" Help them
-   answer:
+   true (then the confirm below is the only question, unless they say their choice changed but
+   not how), ask the intent question **before proposing anything**: "Is anything here meant to
+   snap, like a blink, an on/off, or a cut?" Help them answer:
    - Name the candidates (`candidates`, at most three, by layer and property) **as questions, never
      as mistakes**: "Title and Subtitle fade in from see-through. Is either meant to snap on
      instead?" Fades are usually meant to fade.
@@ -99,12 +99,13 @@ most; they hold the rest with their own hands.
      unless they ask.
    - If `lesson` is continued or resumed, say so and pick up where it left off.
    - **Their choices from last time.** When `stored_choices` is true, this takes the intent
-     question's place and comes before any frame, demo, check or hint: say back what they chose last
-     time, as their own choice, from what this reply shows: what should snap (`target_pairs`, by
-     layer and property) and what's meant to move (`should_move`), for example "Last time you said
-     Blink's Opacity should snap." Ask whether that still holds, and stop for their answer. A
-     change goes back as the whole `skill_options` (step 2); a yes carries on. Never say where it
-     was kept or name a field.
+     question's place and comes before any frame, demo, check or hint: say back what they chose
+     last time, as their own choice, from what this reply shows: what should snap (`target_pairs`,
+     by layer and property) and what's meant to move (`should_move`), for example "Last time you
+     said Blink's Opacity should snap." Ask whether that still holds, and stop for their answer. A
+     change goes back as the whole `skill_options` (step 2); a yes carries on. If they say it's
+     changed but not how, ask the intent question now. Never say where it was kept or name a
+     field.
 
 2. **Set the focus from their answer.** Call `key_types_snapshot` again with the **whole**
    `skill_options` every time it changes:

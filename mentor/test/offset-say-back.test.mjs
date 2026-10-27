@@ -70,3 +70,30 @@ test("why step 7 doesn't re-read: an offset_snapshot after a pass opens a new le
   assert.notEqual(session.currentLesson().lesson_id, passedId);
   await assert.rejects(call("record_lesson", RECORD), { code: "RECORD_MISMATCH" });
 });
+
+// The reviewer's re-review, should-fix 2: a passed check can also say the order changed. After a
+// pass nothing is re-sent; the order is recorded as they made it. Re-sending the new order (step
+// 3's rule) would open a new lesson and refuse "passed", the same failure by another route.
+const DOTS = { kind: "layers", order: ["Dot 1", "Dot 2", "Dot 3"], gap_frames: 4 };
+async function passWithOrderChanged() {
+  project(PRACTICE2);
+  await call("offset_snapshot", { skill_options: DOTS });
+  project("order-differs.json");
+  const check = await call("offset_check");
+  assert.equal(check.passed, true);
+  assert.equal(check.order_differs, true);
+}
+
+test("passed with the order changed: nothing re-sent, and record_lesson accepts passed with the order as made", async () => {
+  await passWithOrderChanged();
+  await call("record_lesson", { ...RECORD, attempted: "Staggered Dot 1, Dot 3 and Dot 2, in that order" });
+  const rec = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
+  assert.equal(rec.lessons[rec.lessons.length - 1].result, "passed");
+});
+
+test("passed with the order changed: re-sending the new order opens a new lesson, and passed is refused", async () => {
+  await passWithOrderChanged();
+  const resent = await call("offset_snapshot", { skill_options: { ...DOTS, order: ["Dot 1", "Dot 3", "Dot 2"] } });
+  assert.equal(resent.lesson, "new");
+  await assert.rejects(call("record_lesson", RECORD), { code: "RECORD_MISMATCH" });
+});
