@@ -5,6 +5,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { check, findNull, regionOf, storeNull } from "../lib/null-parenting-check.mjs";
+import { candidates } from "../lib/null-parenting.mjs";
+import { classOf } from "../lib/visibility.mjs";
 import { clone, KEY, lessonFor, load } from "./fixtures/null-parenting/load.mjs";
 
 const GROUP = ["Tile", "Caption", "Stamp"];
@@ -342,8 +344,14 @@ test("comments show only when the read shows them, never change a result, and fo
   const [, slide] = runAttempt(KEY.attempts.find((a) => a.id === "us1-slide-comments"));
   assert.equal(slide.result.passed, true);
   assert.deepEqual(slide.result.comments.map((c) => c.code).sort(), ["default_name", "linear"]);
+  // The live plant's keys are AE's default, linear; eased, the linear sentence goes.
   const [, keyed] = runAttempt(KEY.attempts.find((a) => a.id === "us2-keyed-early"));
-  assert.deepEqual(keyed.result.comments.map((c) => c.code), ["default_name"], "eased keys: not linear");
+  assert.deepEqual(keyed.result.comments.map((c) => c.code).sort(), ["default_name", "linear"]);
+  const eased = load("null-keyed-early.json");
+  eased.layers.find((l) => l.name === "Null 1").properties.forEach((p) => p.keys.forEach((k) => { k.in_type = "bezier"; k.out_type = "bezier"; }));
+  const easedLesson = lessonFor(load("practice2b.json"), { focus: GROUP });
+  easedLesson.skill_data = check(load("practice2b.json"), load("null-center.json"), easedLesson, { region: "center" }).skill_data;
+  assert.deepEqual(check(load("practice2b.json"), eased, easedLesson, {}).result.comments.map((c) => c.code), ["default_name"], "eased keys: not linear");
   // Stacked: the null's move overlaps Tile's own Position keys in time.
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
@@ -383,6 +391,35 @@ test("comments show only when the read shows them, never change a result, and fo
   assert.equal(zr.passed, true);
   assert.ok(zr.comments.some((c) => c.code === "zero_scale_at_key" && c.time === 6.5));
   assert.ok(zr.comments.some((c) => c.code === "effect"));
+});
+
+test("a null at Opacity 0, as AE 26.5 makes it (L-1): never hidden, still found and parented to, and no opacity comment (rows 15, 16, 22)", () => {
+  const base = load("practice2b.json");
+  const placed = load("null-center.json");
+  const nul = placed.layer_info.find((l) => l.name === "Null 1");
+  assert.equal(nul.transform.opacity, 0, "the live read");
+  assert.deepEqual(nul.transform.anchor.slice(0, 2), [0, 0], "its anchor on the square's top-left");
+  assert.equal(classOf(placed, nul.index), "null", "never hidden");
+  assert.equal(candidates(placed).find((c) => c.layer === "Null 1").reason, "null");
+  const lesson = lessonFor(base, { focus: GROUP });
+  const r1 = check(base, placed, lesson, { region: "slides_only" });
+  assert.deepEqual(r1.result.codes, ["null_ready"]);
+  assert.equal(r1.result.null.n1, true);
+  lesson.skill_data = r1.skill_data;
+  const parented = check(base, load("parented-center.json"), lesson, {}).result;
+  assert.equal(parented.parenting_passed, true, "it carries its children");
+  assert.deepEqual(parented.codes, ["no_move"]);
+  const slide = check(base, load("slide-null.json"), lesson, {}).result;
+  assert.equal(slide.passed, true);
+  assert.ok(!slide.comments.some((c) => c.code === "opacity"), "Opacity 0 with no keys isn't a fade");
+  const set = (v) => { const r = load("slide-null.json"); r.layer_info.find((l) => l.name === "Null 1").transform.opacity = v; return check(base, r, lesson, {}).result.comments.some((c) => c.code === "opacity"); };
+  assert.deepEqual([0, 60, 100].map(set), [false, true, false], "on a null only a value between 0 and 100 is a fade");
+  // Row 22: keyed Opacity is still the fade hint, and the only thing it changes is P4.
+  const fade = check(base, load("fade-null.json"), lesson, {}).result;
+  assert.equal(fade.parenting_passed, true);
+  assert.deepEqual(fade.codes, ["opacity_move"]);
+  // The live demo read: no frame or hint calls the null hidden.
+  assert.ok(!JSON.stringify(slide).includes("hidden"));
 });
 
 test("other changes come from every layer: parented to the null, a parent changed, keys, expressions, layers added or removed", () => {
