@@ -38,6 +38,12 @@ no checkout; **FR-045** gains four no-bounds reasons (precomp, effects, masks, O
 reviewer's findings on the merged code. Research R24 and R25 are amended and **R26** is new. Tasked
 as tasks-wave-b.md Phase 9 › Second pass (T186 onward). New open questions LE-4 to LE-6.
 
+**Changes 2026-10-27, Phase 10 (draft, awaiting the builder's approval):** FR-048 to FR-052, SC-015
+and SC-016 are new (Requirements › The opening read). The snapshot tool picks lesson or review from
+the learner record itself, so each skill's first call is its snapshot and there's no gap for a
+self-note to fall in. Tasked as tasks-wave-b.md › Phase 10 (T200 onward); contracts/skill-module.md
+§ 3 and § 4 amended. New open questions OR-1 to OR-5, with the tasks written to the recommendations.
+
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
 designer's [`curriculum.md`](curriculum.md) (same folder, `decisions/007`). This spec links to it
@@ -114,6 +120,15 @@ each turn, and its runtime folder outside the repo; FR-043 and FR-044), `decisio
 for T181) and constitution IV (FR-044 returns a yes or no, never the hash or a path; FR-046 never
 names a field). It needs no new decision: the second pass's choice ("confirm + baseline") is the
 builder's answer to a spec question, recorded in FR-043, like LE-1 before it.
+
+The opening read (FR-048 to FR-052, 2026-10-27) relies on: server rules 4 ("start with the lesson's
+own snapshot tool") and 6 ("the learner sees every word"), which it makes true in code instead of in
+prompt wording; FR-004 step 2, FR-020 and FR-021 (the review rule `recommend_next` already applies,
+now shared); FR-032 (one shared-code owner); FR-035 (`snapshot_project` and the easing bar);
+FR-044 and FR-046 (`server_current` and `stored_choices` keep working); and constitution II (the
+choice is a fixed, tested rule in a mentor tool, not a model judgement) and IV (no record ID or path
+reaches the learner). It needs no new decision: it moves a branch the prompts already describe into
+code, and the one learner-visible difference is OR-1.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -789,6 +804,159 @@ skill teaches either.
   on the reply and the two-call flow (T199b), and an eval case for a resumed speed graph lesson with a
   stored land-hard choice (T199e).
 
+### The opening read: the snapshot picks lesson or review (2026-10-27, draft)
+
+**The problem.** Every skill with a review opens the same way: `read_learner_record`, a decision
+from it (first lesson, practicing, review due), then its snapshot tool with `mode: "lesson"` or
+`"review"`. Between the two calls the mentor writes itself a note the learner sees ("First lesson on
+this skill.", "Review is due. Run the review.", "Learned and review due → review."), which breaks
+server rule 6. Prompt wording has failed twice (FR-042 and T172 for skills 1 to 3; skill 5's step 0
+and review step, `.claude/skills/anchor-mentor/SKILL.md` lines 40 and 83). *Evidence:* skill 5's
+first baseline (`product/evals/anchor/README.md` › Baseline, on `evals-skill-5` at `c853f9e`,
+`results/2026-10-27-152657.json`) failed **11 of 44 cases** on it: the first-lesson note in about 9
+of 30 first-lesson runs, the review note in every completed repeat of case 16, and in cases 09 and 15
+the record key "transform.anchor" as well, because the mentor reasoned about the record aloud.
+Skill 6's smoke round (`evals-skill-6` at `67aa8ad`, README) saw the review note in cases 17 and 33.
+*Source:* CLAUDE.md › Next steps › Skill 5 › Next 1.
+
+**The fix:** take the decision away from the model. The snapshot tool reads the record and picks the
+mode, so a lesson opens with one call and has nothing to narrate. This changes no skill's teaching:
+each branch still does and says what it does today, except where OR-1 says.
+
+**Applies to** the five snapshot tools of skills with a review: `speed_graph_snapshot`,
+`key_types_snapshot`, `offset_snapshot`, `anchor_snapshot` and `null_parent_snapshot`. **Not** to
+easing: it has no review mode (FR-020), `snapshot_project`'s output stays as it is (FR-035), and no
+easing eval has shown the leak. Not to `/next-mentor`, which needs the whole record.
+
+- **FR-048 (the snapshot picks the mode)**: Each of the five tools, when called **without** `mode`,
+  MUST choose it in this order:
+  1. **Asked.** A `mode` the call gives is used as given, exactly as today. That's how a learner who
+     asks for a review, says they already know the skill, or turns a review down gets what they said.
+  2. **In progress.** If this skill has an open lesson on this comp that `session.start` would
+     continue (not passed, not stale by FR-043) or that `fresh: true` would restart, that lesson's
+     mode, so no later call in a lesson switches it.
+  3. **Review due.** Otherwise `review` when the skill passes the same review test `recommend_next`
+     applies (FR-004 step 2, FR-020, FR-021), for this one skill: learned; due today
+     (`reviews.isDue`); no lesson on it other than a review in the session window; no other skill's
+     review offered in the window; and the skill's finder finds a new target with this skill's past
+     targets on this project and comp left out (and the marks that apply). It MUST be **one function**
+     in `mentor/lib/`, called by both `recommend_next` and the snapshot tools, never a copy (OR-4,
+     OR-5).
+     `recommend_next`'s results don't change.
+  4. **Otherwise** `lesson`. A due review with no new target on this comp is a lesson: by FR-021 it
+     isn't offered, and it stays due (OR-1).
+
+  When step 3 picks a review, the tool MUST remember it as offered, as `recommend_next` does
+  (`session.recordReviewOffer`, best effort), so FR-020's one review per session holds whichever tool
+  offered it. An unreadable record never picks a review (FR-049). The choice is made once, before
+  `session.start`, and the call then runs exactly as an explicit call with that mode does today: the
+  same session, the same analysis, the same reply fields. The choice lives in shared code
+  (`mentor/lib/`, plus one read-only export from `session.mjs` for step 2 that reuses FR-043's stale
+  test rather than repeating it); each tool file adds one call to it. *Proof:* FR-051's table, in
+  unit tests.
+
+- **FR-049 (the reply carries what step 0 needs)**: Every reply of the five tools, null's
+  `can_teach: false` reply included, MUST carry:
+  - `mode` (already there) and **`mode_source`**: `asked`, `in_progress`, `review_due` or `default`
+    (FR-048's steps 1 to 4);
+  - **`learner`**, this skill's slice of the record and nothing more:
+
+    | Field | What it holds |
+    |---|---|
+    | `readable` | `false` only when the record file is there but can't be read |
+    | `error` | Only when `readable` is false: `{ code, message }`, the same code (`RECORD_UNREADABLE`) and message `read_learner_record` gives for the same file |
+    | `status` | `not_started`, `practicing` or `learned`, from this skill's entry (none means `not_started`) |
+    | `times_passed` | As the record has it; 0 with no entry |
+    | `next` | This skill's `next` text, or `null` |
+    | `last_attempted` | The `attempted` text of this skill's most recent lesson entry, or `null` (key types' and offset's review offers, "Last week you made Blink snap") |
+    | `days_since_practiced` | Whole local calendar days since this skill's `last_practiced` (0 today, 1 yesterday), or `null`. The mentor turns it into "yesterday" or "last week"; it never does date arithmetic |
+    | `review_due` | Whether this skill's review is due today (`reviews.isDue`), even when step 3 didn't pick a review |
+    | `other_skills` | One `{ skill_name, learned, hard }` per hard prerequisite in the path data (the on-ramp left out), `hard: true`, plus any skill the tool file's `FINDERS` entry names as one its `SKILL.md` mentions (skill 6: easing), `hard: false`. Names from the path data (FR-008) |
+    | `eased_layers` | **Speed graph only:** the layers its step 0 lists today, worked out in code: the layers named in every `easing.basic` lesson's `targets`, and for an older entry with no `targets`, each layer of this comp whose exact name appears in that entry's text |
+
+  - **`server_current`** (FR-044), which `anchor_snapshot` and `null_parent_snapshot` gain here.
+
+  **Rules.** `learner` MUST NOT hold a skill ID, a record path or file name, the lesson list, or any
+  other skill's state beyond `other_skills`: the key "transform.anchor" reached the learner in cases 09
+  and 15 because the mentor read `skills["transform.anchor"]` aloud. Server rule 5 still applies to
+  every field. Reading the record MUST NOT write it.
+  **An unreadable record:** the tool reads it as `read_learner_record` does (the broken file is set
+  aside next to the original, never written over) but the call doesn't fail: `readable: false`, the
+  `error` above, the rest as for a learner with nothing recorded (`status: "not_started"`, every
+  `other_skills` entry not learned, `review_due: false`), and the mode by steps 1, 2 and 4. The next
+  call finds no file and reads as empty, so the mentor says it once.
+  *Proof:* unit tests on each tool's reply (FR-051).
+
+- **FR-050 (step 0 becomes the snapshot)**: In `speed-graph-mentor`, `key-types-mentor`,
+  `offset-mentor`, `anchor-mentor` and `null-parenting-mentor`'s `SKILL.md`:
+  - The lesson's **first tool call MUST be its snapshot tool, without `mode`**, unless the learner's
+    own words before it already ask for a review, say they know the skill, or ask for a lesson instead
+    of a due review (then that `mode`). Nothing is written before it.
+  - Step 0's branches read `mode`, `mode_source` and `learner` from that reply, in the order they read
+    the record today: the restart line (`server_current` false), then the unreadable-notes sentence
+    (from `learner.error`), then the prerequisite check (`other_skills`), then review, practicing or
+    first lesson. What each branch does and says doesn't change: key types, offset and speed graph
+    still offer a due review as their first words, anchor and null still run it; a learner who turns
+    the offer down gets a call with `mode: "lesson"`. Each review section's first call is now the
+    opening call itself; its later calls keep `mode: "review"` as they do.
+  - Speed graph's second call in step 1 (FR-047) sends `learner.eased_layers` as `eased_layers`.
+  - `read_learner_record` leaves these five files: no call, and out of `allowed-tools` (OR-2). The
+    hard rule against notes to yourself stays word for word; the "with nothing written in between"
+    instructions go, since there's no in between.
+  - `anchor-mentor` and `null-parenting-mentor` gain FR-044's restart line, from the snapshot's
+    `server_current` (OR-3); that closes their row in tasks-wave-b.md › Later per-skill branches.
+  - Nothing else in the five files changes.
+
+  `read_learner_record` itself doesn't change (contracts/shared-tools.md) and stays for `ease-mentor`,
+  `next-mentor` and anything that needs the whole record. The server instructions don't change: rule
+  4 already says to start with the lesson's own snapshot tool. *Proof:* SC-015.
+
+- **FR-051 (the overlaps the choice must get right)**: Each row MUST be a unit test on saved records
+  (`mentor/test/fixtures/records/` and each skill's own `records/`), with the time injected, for each
+  of the five tools unless the row says otherwise:
+
+  | Overlap | Mode, `mode_source` | `learner` shows | Must not |
+  |---|---|---|---|
+  | No record, or this skill not started | `lesson`, `default` | `not_started`, `times_passed` 0 | Pick a review |
+  | Practicing | `lesson`, `default` | `practicing`, `next`, `last_attempted`, `days_since_practiced` | Pick a review |
+  | Learned, not due | `lesson`, `default` | `review_due` false | Pick a review |
+  | Learned, due, a new target in this comp | `review`, `review_due`; the offer remembered | `review_due` true | |
+  | Learned, due, no new target in this comp | `lesson`, `default` | `review_due` true | Start a review that says there's nothing new (OR-1) |
+  | Learned, due, a practice lesson on it in the session window | `lesson`, `default` | `review_due` true | Pick a review (FR-020) |
+  | Learned, due, another skill's review offered in the window | `lesson`, `default` | `review_due` true | Pick a second review (FR-020) |
+  | Unreadable record | `lesson`, `default` | `readable` false, `error` equal to `read_learner_record`'s on the same file | Throw; write over the file; pick a review |
+  | Asks for a review, none due (learned) | `review`, `asked` | `review_due` false | |
+  | Asks for a review, not learned ("already knew it", FR-020) | `review`, `asked` | `not_started` or `practicing` | |
+  | Turns a due review down (`mode: "lesson"`) | `lesson`, `asked` | `review_due` true | |
+  | A review in progress, a later call without `mode` | `review`, `in_progress`, `continued` | | Switch to a lesson |
+  | A lesson in progress on a learned skill whose review is due, a later call without `mode` | `lesson`, `in_progress`, `continued` | | Switch to a review |
+  | Resumed (after another skill's or comp's lesson), its mode matching the record's choice | That mode; `resumed`; `stored_choices` as today (FR-043, FR-046) | | |
+  | An open practice lesson, resumed, on a skill now due with a new target | `review`, `review_due`, a new lesson (as an explicit review call starts one today) | | |
+  | A continued lesson from an earlier day (stale, FR-043) | By steps 3 and 4 | | Keep the stale lesson's mode |
+  | `fresh: true` (key types, anchor) | The open lesson's mode, `in_progress` | | |
+  | AE unreachable or busy | The tool's error, as today | No reply | |
+  | An unreadable session file | `SESSION_UNREADABLE`, as today | | |
+
+  And: with an explicit `mode`, every other reply field is the same as the same call made without
+  `mode` when FR-048 picks that mode; `recommend_next`'s existing tests pass unchanged (its review
+  test moved, it didn't change); and for each shared saved record, the snapshot tool picks a review
+  exactly when `recommend_next` offers this skill's review on the same comp and time.
+
+- **FR-052 (the eval sets follow the new opening)**: The eval engineer's, on each set's own branch
+  (their files and case numbers; the cockpit gives the numbers):
+  - every `first_tool` expectation of `read_learner_record` becomes the skill's snapshot tool;
+  - a universal check in all five sets that nothing is said before the first snapshot call
+    (`no_text_before_snapshot`, already in the anchor set; port it to key types, offset, speed graph
+    and null) and that `read_learner_record` isn't called in a lesson;
+  - a review case's mode is checked on the snapshot **reply** (`mode: "review"`), not the call's input
+    (`snapshot_with: { "mode": "review" }`), because the opening call sends no mode;
+  - every case that expects "nothing new to review" on a due review is rechecked against OR-1's answer;
+  - new cases, per skill or cross-skill at the eval engineer's choice, at least: an **unreadable
+    record** (one sentence about the notes, a lesson, nothing before the snapshot); **practicing** (the
+    memory clause from `learner`, no skill ID); a **resumed lesson** with stored choices (FR-046 still
+    fires); and a learner who **asks for a review when none is due** (a review runs, and nothing says
+    it was due).
+
 ### Key Entities
 
 - **Skill**: one teachable idea from `curriculum.md` › 6, with a record ID, its path position, hard
@@ -878,6 +1046,21 @@ plus reviews for 2, 1, 3**.
   `--repeat 3`, on `SKILL.md` as Phase 9 leaves it, and the easing set stays within FR-035's bar.
   *Measured by:* eval runs by the eval engineer (tasks T184, about $4 for the nine runs), logged in each
   set's README.
+- **SC-015** (FR-048 to FR-050, FR-052): In each of the five skills' eval sets (speed graph, key
+  types, offset, the pivot, null), on `SKILL.md` and the mentor as Phase 10 leaves them, these cases
+  each run with `--repeat 3`: the first-lesson case, the practicing case where the set has one, the
+  review-due case, and FR-052's unreadable-record case. Across those runs: **0 runs** with any text
+  the learner sees before the first snapshot call, **0 runs** whose first tool isn't the skill's
+  snapshot tool, and **0** skill IDs in anything the learner sees. In the next full run of each set,
+  the "nothing before the first snapshot" check fails **0 times**. *Baseline it must beat:* the pivot
+  set's 11 of 44 cases and 3 of 3 completed repeats of case 16 (`2026-10-27-152657`). A run that fails
+  on plumbing (a time-out, the judge's JSON) is re-run, not counted. *Measured by:* eval runs by the
+  eval engineer, logged in each set's README (about 60 runs, roughly $25 to $35; the full runs are the
+  baselines CLAUDE.md already plans, so they add nothing).
+- **SC-016** (FR-048, FR-049, FR-051): **Every row** of FR-051's table passes for each of the five
+  tools; `recommend_next`'s existing tests pass unchanged; the whole mentor suite passes with no
+  existing test file edited; and the easing set stays within FR-035's bar on the Phase 10 branch.
+  *Measured by:* unit tests, and the easing run by the eval engineer (tasks-wave-b.md T212).
 
 ## Eval plan (outline, for the eval engineer)
 
@@ -944,6 +1127,10 @@ Plus its version trap (FR-030) where the skill has one.
    property as kept linear: it isn't proposed, it's named once as left out with the learner's reason,
    and "do you want to ease it after all?" gets "ease it whenever you like", not a demo on it.
 
+13. **The opening read (FR-052):** in every skill with a review, the first tool call is the skill's
+   snapshot and nothing is said before it; the cases FR-052 lists (unreadable record, practicing,
+   resumed with stored choices, a review asked for when none is due). SC-015 is their bar.
+
 Rubric additions: the recommendation gives a reason; a review is clearly a "try it yourself", not a
 lesson again.
 
@@ -993,6 +1180,12 @@ lesson again.
   numbered by the cockpit). Second pass: a footage layer's transparent areas (LE-6); masks' and
   effects' actual shapes (FR-045 gives no bounds instead of working them out); and the installer's
   own handling of a missing git (spec 006, open question 6).
+- **In the opening read (FR-048 to FR-052):** easing (`snapshot_project` and `ease-mentor`'s step 0
+  keep `read_learner_record` first; revisit only if an easing eval shows text before its first
+  snapshot); `/next-mentor` and `read_learner_record` itself; the panel (its tool list and activity
+  labels are easing's only, `panel/lib/adapter-claude-code.js`); FR-046's confirm paragraph and
+  `stored_choices` for skills 5 and 6 (still Later per-skill branches); and any change to what a skill
+  teaches or says, beyond OR-1.
 
 ## Open questions
 
@@ -1119,6 +1312,40 @@ a different answer changes T173, T174 or T181 before they're built.
    row to T181 only if the practice project already has one (no new planting); give it the
    precomp's reason later if the row disagrees. Removing footage now would drop the pointer for
    every photo and video, which are accurate.
+
+### The opening read, for the builder (OR), 2026-10-27: open
+
+Phase 10's tasks are written to the recommendations, so nothing is blocked; a different answer
+changes the named FR and task before it's built.
+
+1. **OR-1: a due review with nothing new on this comp.** Today the mentor starts a review, finds no
+   new target, says "there's nothing new to review on this comp" and records nothing, and the lesson
+   ends there. With FR-048 the tool can see that first. **Recommended:** a lesson (practice), with
+   nothing said about the review: FR-021 and US3 scenario 6 already say it "isn't offered", and
+   `recommend_next` already treats it that way. The learner gets something to do instead of a dead
+   end, and the review stays due. **Alternative:** keep today's dead end (the tool picks a review,
+   the skill says there's nothing new). This is the one place a learner could see a difference, so
+   it's also a question for the curriculum designer if you want their view. Changes FR-048 step 4 and
+   FR-051's row.
+2. **OR-2: take `read_learner_record` out of the five skills' `allowed-tools`.** **Recommended:**
+   yes. Nothing in those lessons needs the whole record once FR-049 lands, and a tool the skill can't
+   call can't open the lesson. **Alternative:** keep it listed but never called in the steps (a softer
+   guard that relies on wording again).
+3. **OR-3: give skills 5 and 6 FR-044's restart line now.** Their step 0 is rewritten anyway, and
+   today they get `server_current` from `read_learner_record` (though they don't act on it yet).
+   **Recommended:** yes, in Phase 10: `server_current` in `anchor_snapshot` and `null_parent_snapshot`
+   and one restart sentence in each `SKILL.md`, closing that row of Later per-skill branches.
+   **Alternative:** add only the field and leave the sentence to their own branches.
+4. **OR-4: the step 3 rule is `recommend_next`'s, not `isDue` alone.** The task named `isDue`; FR-048
+   uses `recommend_next`'s whole review test (due, a new target, not after a practice lesson on it in
+   the session, one review per session) through one shared function. **Recommended:** the whole test,
+   so the snapshot and `/next-mentor` never disagree (a learner offered a review by `/next-mentor`
+   gets that review), and FR-020's limits hold in code. **Alternative:** `isDue` alone (simpler, but a
+   review could start twice in one session or right after practice, which FR-020 forbids).
+5. **OR-5: where the shared review test lives.** **Recommended:** exported from
+   `mentor/lib/recommend.mjs`, where it is now, and called by the new opening function, so the move is
+   an export, not a rewrite. **Alternative:** a new file both import. Either way it's one function,
+   and `recommend.test.mjs` stands unchanged.
 
 ## Dependencies
 

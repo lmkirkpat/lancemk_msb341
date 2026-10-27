@@ -250,6 +250,17 @@ pass was one shared-owner pass, same rules as B1, merged with `--shared-owner` a
 `SKILL.md` files (table in Phase 9), adds `mentor/lib/server-current.mjs` and four test files, and
 leaves skills 5 and 6's files to Later per-skill branches.
 
+**The opening read (2026-10-27, draft).** The self-note the mentor leaks between
+`read_learner_record` and its snapshot (spec FR-048 to FR-052, SC-015, SC-016) is fixed in code: each
+skill with a review gets its mode and its slice of the record from its snapshot tool, through one
+shared function. This **amends a contract**: [contracts/skill-module.md](contracts/skill-module.md)
+§ 3 (`mode` optional, three reply fields) and § 4 (`opening()`, `session.openMode()`), and a note in
+[contracts/shared-tools.md](contracts/shared-tools.md) › `recommend_next` (its review test exported,
+unchanged). Tasked as tasks-wave-b.md › Phase 10 (T200 onward): one shared-owner branch that, unlike
+Phase 9, **does** touch skills 5 and 6's tool files and `SKILL.md` (all five skills with a review), so
+it merges only when no live lesson or sitting is running, and every skill's next live lesson starts
+in a fresh session. The eval sets change on their own branches (FR-052).
+
 **Open questions for wave B, all answered 2026-10-23 as recommended** (tasks-wave-b.md › Status),
 Q1 to Q5: the sampled read R3 (yes); the planted-overlaps comp in the practice `.aep`
 (yes); skills 1 to 3's filter switch in this pass (yes); the eval gate against the same-day merge
