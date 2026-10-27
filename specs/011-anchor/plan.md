@@ -16,7 +16,12 @@ below. Round 5 (2026-10-26, spec › Changes › round 5; TD § 19 approved by t
 parts awaiting the builder) adds Phase 8f: T257 (`SKILL.md`'s opening turn, B-10, already in
 progress by the cockpit's skill-builder) and T258 (B-11: `position_key_label` and `rest_label` in
 `mentor/lib/anchor.mjs`, then `SKILL.md` uses them), plus an HO-1 update for the eval engineer. No
-new file, tool or field beyond the two labels; the constitution check below is unchanged.
+new file, tool or field beyond the two labels; the constitution check below is unchanged. Round 6
+(2026-10-26, spec › Changes › round 6; TD § 19a decided by the human, the spec's parts awaiting
+the builder) adds Phase 8g: T259 (`SKILL.md` step 1, B-12: the practicing proposal is always the
+read's; TD § 19a's sentence for a named null, camera, light or adjustment layer; already in
+progress by the cockpit's skill-builder), plus HO-1's cases 32 to 37. No tool, file or field
+change; the constitution check is unchanged.
 
 ## Summary
 
