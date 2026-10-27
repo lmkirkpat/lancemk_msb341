@@ -341,8 +341,8 @@ fields. Each is added to the reply as it is today; nothing else in a reply chang
 | `preview_frame` (with `layer`) | `comp_size`, `image_size` | `{ "width", "height" }`: the comp's (`comp.width`, `comp.height`; absent when the snapshot lacks them) and the PNG's own, from its header. Bounds are in comp pixels; scale by `image_size / comp_size` to place them on the image |
 
 **Session lesson, FR-043 (T173, T174):** no new field. `start()` decides "stale" from the lesson's
-`lesson_id` time, `checked` or `status`, `demo`, whether it's continued or resumed, and (per LE-1)
-its baseline's keys on `target_refs`. A stale lesson is replaced by a new one exactly as a lesson that
+`lesson_id` time, `checked` or `status`, `demo`, and whether it's continued or resumed (LE-1: any
+resumed one, or a continued one from an earlier day). No baseline compare. A stale lesson is replaced by a new one exactly as a lesson that
 didn't exist would be: new `lesson_id`, this snapshot as `baseline`, `skill_options` only if this call sends it, and no
 `skill_data`.
 

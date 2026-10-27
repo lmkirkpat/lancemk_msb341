@@ -14,7 +14,8 @@ parent chain, `parent_matrix`) was **declined** this sprint, so it has no task. 
 builder approved one more shared request, spec 011's SR-2 (the same as spec 012's SR-4): the comp's
 size in the snapshot, T164 and T165. **2026-10-26:** the builder approved seven loose ends on the
 merged skills 2, 1 and 3 (spec FR-039 to FR-045, SC-014): **Phase 9, T167 to T185**, for one
-shared-code owner on a branch of its own. T174 waits on spec › Open questions › LE-1.
+shared-code owner on a branch of its own. The builder answered LE-1 to LE-3 the same day (all as
+recommended), so nothing in Phase 9 is blocked.
 
 **Input**: [plan.md](plan.md) › Waves › Wave B, [spec.md](spec.md) (FR-012 to FR-015, FR-013's
 "never the eye switch alone", KD-001, SC-004, SC-006, SC-011), [research.md](research.md) R16 to
@@ -339,7 +340,7 @@ per-skill branches). On 2026-10-26, `skill-5-anchor` didn't differ from `main` i
 
 ### Setup
 
-- [ ] T167 On the worktree, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both pass counts and the worktree's base commit in the hand-back (the base for "no existing test edited" and for T183). Confirm LE-1's answer with the cockpit before T174 (spec › Open questions › LE-1)
+- [ ] T167 On the worktree, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both pass counts and the worktree's base commit in the hand-back (the base for "no existing test edited" and for T183)
 
 ### FR-039: speed graph, a reading answer given as a time or a frame
 
@@ -355,10 +356,10 @@ per-skill branches). On 2026-10-26, `skill-5-anchor` didn't differ from `main` i
 
 - [ ] T172 [US1] **Prompt fix**: read the step 0 branch text in `key-types-mentor` and `offset-mentor` (and speed graph's "Before the lesson"), which the smoke runs echoed as "Key types learned, review due -> run the review." and "Review is due → run the review.". Reword so a branch reads as what to do, never as a line to say, and add one sentence to step 0: the first words the learner sees are the lesson's or review's own opening, never which branch you took. Apply it to speed graph only if its text has the same "is due, run the review" shape; say which in the hand-back. Don't change the review steps themselves. **Done when:** none of the three files has a line the eval sets' `no_self_instructions` pattern (`git show evals-wave-a:product/evals/offset/run.mjs`) would match if echoed; SC-014's runs are in T184's hand-off
 
-### FR-043: a stale open lesson starts fresh (gated on LE-1)
+### FR-043: a stale open lesson starts fresh (LE-1 answered 2026-10-26)
 
-- [ ] T173 [P] [US1] **Tests first**: new `mentor/test/session-stale.test.mjs`, on saved snapshots with a stub analyzer (as `session-skill-data.test.mjs` does). An open lesson never checked and with no demo: (a) started on an earlier local day → the next `start()` returns `lesson: "new"`, the new snapshot as baseline, no `skill_data`, and `skill_options` only if that call sends them (so no stale `order`); (b) resumed with a baseline whose target keys differ from the snapshot now → `new`; (c) **continued** with target keys that differ (the learner's own edit before "done") → `continued`, the old baseline kept; (d) per LE-1's answer: if recommended, resumed with a baseline that still matches → `new`; if not, → `resumed` as today. A lesson that was checked, or had a demo, on an earlier day → `resumed` or `continued` as today, baseline kept. `fresh: true` on a checked lesson still throws `LESSON_UNDERWAY`. Easing's lessons follow the same rule (one case). Fails until T174
-- [ ] T174 [US1] **Code**, after LE-1 is answered: in `mentor/lib/session.mjs` `start()`, decide "stale" for an `open` lesson per FR-043 as LE-1 settles it, before `continuing` is chosen; a stale lesson is replaced as if none existed (data-model › Loose-ends pass › Session lesson). Nothing else in the file changes. **Done when:** T173 and every existing session test (including `session-skill-data.test.mjs`) pass unchanged
+- [ ] T173 [P] [US1] **Tests first**: new `mentor/test/session-stale.test.mjs`, on saved snapshots with a stub analyzer (as `session-skill-data.test.mjs` does). An open lesson never checked and with no demo: (a) **T037's case**: same day, **resumed** (another skill's or comp's lesson was current in between), baseline still matching the comp → the next `start()` returns `lesson: "new"`, the new snapshot as baseline, no `skill_data`, and `skill_options` only if that call sends them (so no stale `order` or gap); (b) resumed with target keys that differ → `new`, the same; (c) **continued** from an earlier local day → `new`; (d) **continued** the same day with target keys that differ (the learner's own edit before "done") → `continued`, the old baseline and `skill_options` kept; (e) continued the same day, nothing changed → `continued`. No case compares baselines: the rule reads only the day, continued or resumed, `checked` and `demo`. A lesson that was checked, or had a demo, on an earlier day → `resumed` or `continued` as today, baseline kept. `fresh: true` on a checked lesson still throws `LESSON_UNDERWAY`. Easing's lessons follow the same rule (one case). Fails until T174
+- [ ] T174 [US1] **Code**: in `mentor/lib/session.mjs` `start()`, before `continuing` is chosen, an `open` lesson that was never checked and has no demo is stale when it would be resumed (the current pointer is another lesson), or when it would be continued and its `lesson_id` time is from an earlier local day (FR-043); no baseline compare; a stale lesson is replaced as if none existed (data-model › Loose-ends pass › Session lesson). Nothing else in the file changes. **Done when:** T173 and every existing session test (including `session-skill-data.test.mjs`) pass unchanged
 
 ### FR-044: the mentor says when its tools are older than the repo
 
@@ -375,7 +376,7 @@ per-skill branches). On 2026-10-26, `skill-5-anchor` didn't differ from `main` i
 
 ### Close
 
-- [ ] T182 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <T167's base> -- mentor/test/*.test.mjs` shows only the four new files; then `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: the changed existing files match this phase's table exactly. Paste both in the hand-back
+- [ ] T182 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <T167's base> -- mentor/test/*.test.mjs` shows only the four new files; then `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: the changed existing files match this phase's table exactly, and `git diff --stat <T167's base> -- .claude/skills/null-parenting-mentor/ mentor/tools/null-parenting.mjs .claude/skills/anchor-mentor/` is empty (skill 6 is on `main` since `31fe72d`, but its files are LE-2's follow-up). Paste all of it in the hand-back
 - [ ] T183 [US6] Hand off to the cockpit for the **eval engineer**: the easing set (26 cases) on this branch and on its base the same day, as T143 did. **Merge gate:** at 25/26 or better with no hard-rule failure (FR-035's bar), and no worse than the base (a branch-only failure is re-run once before it counts). The changes easing can see: step 0's restart line, `read_learner_record`'s new field, and the stale-lesson rule
 - [ ] T184 [US6] Hand off to the cockpit for the **eval engineer** (their files and numbers): (a) **SC-014**: key types case 16, offset case 17 and speed graph case 08, `--repeat 3` each, on `evals-wave-a` with this branch's `SKILL.md` (the cockpit decides how: merging `main` into `evals-wave-a` after this merges, or a run from a worktree with both); (b) the cases the usage notes propose: speed graph's reading answer given as a time or a frame (`speed-graph.md`), offset's gap changed after the fact (`offset.md` session 1) and how Quick Offset works (`offset.md` session 2), for when the wave A sets merge. FR-043, FR-044 and FR-045 get no eval case: unit tests cover them, and eval fixtures don't render frames
 - [ ] T185 [US6] Write the hand-back: branch and commit; T167's and T182's counts and output; LE-1's answer as built; T171's paragraph; T172's finding for speed graph; T176's runtime-folder check; T181's results; and the follow-ups below, as requests
@@ -396,7 +397,7 @@ the curriculum designer where the teaching changes).
 | 3, offset | Name a parent's shared motion in one sentence, never grade it (the known blind spot); precomp layers eligible through in points, stretch and time remap; a locked layer as demo target refused before AE (L-4); a trimmed in point named | spec 010 rows 12, 15, 16, 21; teaching design § 9 |
 | 1, key types | None beyond SR-3 (done here, T126) | spec 009 |
 | 5, set the pivot; 6, null | FR-044's restart sentence in step 0 of `anchor-mentor` and `null-parenting-mentor`, and `server_current` in `anchor_snapshot` and `null_parent_snapshot`. Both already get the field from `read_learner_record` once Phase 9 merges; only the sentence and the snapshot field wait. Each after that skill's live lessons, on its own branch or after its merge (skill 6 merged `31fe72d`) | spec 004 FR-044, LE-2 |
-| 3, offset; 5; 6 | The frame pointer (FR-045's `layer`) in their frame steps. **Not approved**: only if the builder takes LE-3, and after T181 proves the bounds | spec 004 LE-3; `offset.md` session 2 step 2 |
+| 3, offset; 5; 6 | The frame pointer (FR-045's `layer`) in their frame steps. Not in this pass (LE-3: key types only); a request for after T181 proves the bounds | spec 004 LE-3; `offset.md` session 2 step 2 |
 | Diagnosis (spec 005) | Uses `visibility.mjs` and `motion-sources.mjs` from its first build (its Edge Cases "Track mattes" row) | spec 004 KD-001 |
 
 ---
@@ -410,7 +411,7 @@ the curriculum designer where the teaching changes).
   targets are written; T158 in T133's sitting; T161 then T162 any time after Phase 1 (no AE);
   T164 then T165 any time after T151, **before T133** (no AE).
 - **Phase 9** (its own branch, cut from local `main` after Phase 8): T167 first; then each test
-  before its code (T168 → T169, T173 → T174 once LE-1 is answered, T175 → T176 → T177, T178 → T179 →
+  before its code (T168 → T169, T173 → T174, T175 → T176 → T177, T178 → T179 →
   T180); T170, T171 and T172 in any order, one at a time (all edit `offset-mentor/SKILL.md`); T181 🖐
   after T179, one sitting at a time with the AE lock checked; T182 after every code task; T183 and
   T184 after T182. **Merge after T183's gate and T181.**
