@@ -4,7 +4,8 @@
 in the snapshot's `pivot_outside` note and in the check's `item1` (spec FR-019a); the hint codes
 `content_shifted` and `unchanged_shape` (FR-019b). Round 3: `watch_offer` (FR-008). Round 4
 (spec FR-004, B-9): `moves_case`, `position_key_time` and `rest_time` on `position_moves` entries
-in `candidates` and `focus_problems`. **Adds to** spec 004's
+in `candidates` and `focus_problems`. Round 5 (spec FR-004, B-11): `position_key_label` and
+`rest_label` beside them. **Adds to** spec 004's
 [skill-module.md](../../004-ae-curriculum/contracts/skill-module.md) › 3 and
 [shared-tools.md](../../004-ae-curriculum/contracts/shared-tools.md); doesn't repeat them. Shapes are
 in [data-model.md](../data-model.md).
@@ -44,13 +45,16 @@ Input (all optional): `{ "mode": "lesson" | "review", "focus_layers": [...], "sk
    fresh })`.
 
 Output: `host` (`parseHost`), `lesson`, `comp`, and the analyzer result's `candidates` (names,
-bucket, reason, rank, plus `moves_case` on a `position_moves` entry and `position_key_time` and
-`rest_time` when it's `one_key_off_rest`; data-model › Candidate, round 4), `focus_problems`
-(passed through, with the same three fields on a `position_moves` entry), `proposal`, `focus`, `places` (place codes only), `check_times`,
+bucket, reason, rank, plus `moves_case` on a `position_moves` entry and `position_key_time`,
+`rest_time`, `position_key_label` and `rest_label` when it's `one_key_off_rest`; data-model ›
+Candidate, rounds 4 and 5), `focus_problems` (passed through, with the same fields on a
+`position_moves` entry), `proposal`, `focus`, `places` (place codes only), `check_times`,
 `already_there`, `targets`, `demo_target`, `no_demo_reason`, `notes` (a `pivot_outside` note
 carries `side`, FR-019a), `rest_time_not_a_key`, and **`watch_offer`** (`{ layer,
 suggested_place }` or `null`, data-model › Analyzer result; spec FR-008, round 3). The tool
 nulls it in a review and once `demo_used` is true, whatever the analyzer gave.
+The labels are made in `mentor/lib/anchor.mjs` beside the times (one helper, unit tested), not
+in the tool file and never in the prompt; the tool passes them through only when present.
 `annotations: { readOnlyHint: true }`.
 
 ## `anchor_demo`
