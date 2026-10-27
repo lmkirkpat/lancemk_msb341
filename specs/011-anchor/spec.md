@@ -49,6 +49,18 @@ no pointer to the null lesson (FR-004, FR-009, US1 #9, Edge Cases, row 14); a co
 with no focus yet opens as a new one (FR-006a, the builder's call as built; Open questions ›
 D-10). Eval plan 32 to 37 (two from TD § 19a, three the builder suggested in round 5, and a
 same-label case). New task T259 (tasks.md › Phase 8g, B-12) and an HO-1 update.
+**Amended again 2026-10-26 (round 7), awaiting the builder's approval** of this spec's parts
+(TD § 19b, S-6, decided by the cockpit under the human's go-ahead the same day): a full-frame
+layer is never proposed, so with no default candidate `proposal` is null and the opening is the
+new-solid line (FR-004, FR-006a, Edge Cases); nothing is said about effects in this release
+(row 8); "own sides" is for flipped layers only, and a static rotation far from 0 ranks last with
+no sentence (row 18); live check **L-8** (an expression on an unkeyed Anchor Point or Position)
+joins L-6 at the next sitting, and row 2 stays "blind spot, stated" until it's seen; **D-10
+answered** (a continued lesson with no focus opens as a new lesson, with the practicing memory
+clause when the record says practicing; FR-006a, US1 #10). The Eval plan follows the eval
+engineer's rounds 5 and 6 (case 1 in one turn; case 34's checked turn is turn 2; the universal
+`no_text_before_snapshot` check). New tasks T260 (B-13, `SKILL.md`) and T261 (L-8, 🖐)
+(tasks.md › Phase 8h).
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 5,
 'Set the pivot'." Record ID `transform.anchor`, short name `anchor`, tool prefix `anchor_`
@@ -170,6 +182,10 @@ verified pass with no demonstration, and the check agrees with a look in After E
    layer, **When** the mentor answers, **Then** it says TD § 19a item 2's sentence once, with the
    layer's name and kind, then the proposal in one sentence, ending on the offer; no turn mentions
    a null's pivot, the null lesson or another skill (FR-009, TD § 19a item 2; round 6).
+10. **Given** a lesson left open before a layer and place were chosen (no focus in the session),
+    **When** it's continued, **Then** it opens as a new lesson, with no "where we left off" line:
+    the intent question and the proposal, preceded by one memory clause only when the record shows
+    this skill practicing (FR-006a, TD § 19b item 5c, D-10; round 7).
 
 ---
 
@@ -255,8 +271,10 @@ Other edge cases:
   already there just because its pivot looks central: its pivot is on the baseline (TD § 9).
 - **A place off the grid** (a shoulder, a hinge hole): the nearest of the nine for this lesson, and
   they can nudge it after (TD § 4, S-3).
-- **No candidate in the comp**: offer a new solid (Layer > New > Solid, a small rectangle), then a
-  fresh read (TD § 4). In a review: no review.
+- **No candidate in the comp**: no default candidate (a background doesn't count; round 7, TD
+  § 19b item 1), so `proposal` is null: offer a new solid (Layer > New > Solid, a small
+  rectangle), then a fresh read (TD § 4). A background, hidden layer or matte the learner names is
+  still handled as named (FR-004); the mentor never offers one. In a review: no review.
 - **The learner names a layer the table leaves out** (null, 3D, Anchor Point keyed, expression on
   Rotation or Scale, collapsed precomp, camera, light, adjustment): one sentence from TD § 4 and ask
   for another. A null, camera, light or adjustment layer gets TD § 19a item 2's sentence instead,
@@ -325,7 +343,14 @@ Other edge cases:
     "playhead right on it" line naming the key's time; TD § 16 D-4, adjustment 2); *hidden by
     the learner* (with TD § 4's sentence); *matte*; *guide*; a **locked** layer (TD § 4's one
     sentence asking the learner to unlock it with the lock switch; never the demo, TD § 15 D-2);
-    a full-frame layer (last resort, proposed only when nothing else exists).
+    a full-frame layer (a background): **allowed if named, never proposed** (round 7, TD § 19b
+    item 1; was "last resort, proposed only when nothing else exists"). With no default candidate
+    left, `proposal` is null and the opening is the new-solid line (FR-006a, TD § 19), even when a
+    background, a hidden layer or a matte could still be named. As built, `full_frame: true` puts
+    the layer in `if_named` and the proposal draws from `default` only, so no tool change; live
+    reads always carry the comp's size (SR-2), and `full_frame: null` happens only on an older
+    capture without it, where a large layer stays `default` and ranks last by area (research R1).
+    **Rejected (TD § 19b):** the tool proposing a background as a last resort.
   - **Never:** Position keyed at **two or more key times** (reason **`position_moves`**, D-4,
     2026-10-26); Anchor Point keyed; an expression on a keyed Rotation or Scale; 3D; a precomp
     with Collapse Transformations on; *null*, camera, light, adjustment layer. Each gets TD § 4's
@@ -450,10 +475,14 @@ Other edge cases:
   frame, US1 #2), and MUST NOT recap another skill. A continued or resumed lesson says where it
   left off in one sentence and hands it back, with no intent question or proposal. **A continued
   lesson that left off before a layer and place were chosen** (no focus in the session) has
-  nothing to hand back, so it opens as a new lesson would: the first-lesson or practicing form,
-  by the record (round 6; the builder's call as built on `skill-5-anchor`, Open questions › D-10).
-  With no candidate at all: one clause of why, then the new-solid line (TD § 4), not a list of
-  reasons and no intent question (accepted as built by the human, TD § 19a).
+  nothing to hand back, so it opens as a new lesson: the memory clause **only** when step 0 found
+  this skill practicing, then the intent question and the proposal (round 7, TD § 19b item 5c,
+  D-10 answered; the build's "open as a first lesson" dropped the practicing clause, B-13 item 6).
+  With no default candidate (`proposal` null; a background, hidden layer or matte that could still
+  be named doesn't count, FR-004): one clause of why, then the new-solid line (TD § 4), not a list
+  of reasons and no intent question (accepted as built by the human, TD § 19a; condition narrowed
+  round 7, TD § 19b item 1). "They can name it" for a practicing learner who wants another go at
+  `next`'s layer is an instruction to the mentor, not a sentence to say (TD § 19b item 5b).
   A review's opening is FR-024's and doesn't change. The wording is TD § 19's, not copied here.
   *Checked by:* Eval plan 1 (R-ONE-IDEA, with TD § 19's reading for the judge: the intent
   question plus a one-sentence proposal is one idea; a memory clause of this skill's history is
@@ -869,14 +898,14 @@ each row must see; this table adds what the focus, the check and the learner eac
 | # | Overlap | Focus sees | Check sees | Learner is told | Right? | Test |
 |---|---|---|---|---|---|---|
 | 1 | Expression on a keyed Anchor Point or Position | Not a candidate | n/a | "An expression drives Door's Position, so moving its pivot may not show" | Right | Synthetic (no capture has one); demo refuses it |
-| 2 | Expression on an unkeyed Anchor Point or Position | Not read (R2); a candidate | Rendered values (after expressions, W2), so the check grades what shows; a pivot that didn't move after "done" gets TD § 9's sentence | "If something drives it, like an expression, I can't see that yet" | Right (blind spot, stated) | Mentor Overlaps' Drift (unkeyed Position expression): the check reads the rendered value |
+| 2 | Expression on an unkeyed Anchor Point or Position | Not read (R2); a candidate | Rendered values (after expressions, W2), so the check grades what shows; a pivot that didn't move after "done" gets TD § 9's sentence | "If something drives it, like an expression, I can't see that yet" | Right (blind spot, stated), until **L-8** is seen (round 7, TD § 19b item 4): HO-2's reading of the code is that the layer moves on screen and the check gives "moved with its pivot" or "dragged the layer", which would tell a learner who did use Pan Behind to use Pan Behind. No `SKILL.md` line for it until L-8's result | Mentor Overlaps' Drift (unkeyed Position expression): the check reads the rendered value; L-8's two captures when taken |
 | 3 | Expression on Rotation or Scale | Keyed: not a candidate. Unkeyed: not read (R2) | n/a | "An expression turns Logo, so I can't tell where it sits at rest"; never "the expression ignores the pivot" | Right for keyed; unkeyed is a known blind spot (Out of scope) | Mentor Practice's Logo; Mentor Overlaps' Gauge Dial |
 | 4 | Keys on Anchor Point | Not a candidate | A key added on the focus fails item 5 | TD § 4 sentence; stopwatch hint (TD § 7) | Right | 2b's Wobble (SR-1); synthetic stopwatch-on case |
 | 5 | Position keyed at two or more times (X and Y counted together) | **Never** (`position_moves`, D-4) | n/a in a lesson. Item 4 still computes on any Position-keyed focus, unit tested | TD § 4's "already moves … set the pivot before you key" sentence, once, then another layer offered | Right: **L-2 (2026-10-26)** Pan Behind changes or adds one Position key, at the playhead, and leaves the others, so the layer slides at them and no taught move passes (TD § 16 D-4) | Leave-out: `practice2b` (Sled and the other 15), Mentor Overlaps (Leaf 2, Wipe, Locked Bar, Orbit), synthetic separated X at 1 s and Y at 2 s. Item 4 only, outside the lesson path: `sled-slid` (worst 3.667), `sled-on-key` (worst 4.167), each checked through `lessonDirect` (FR-012) |
 | 5b | Position keyed at one time | Allowed if named, only when that time is the check time (no Rotation or Scale keys, or the rest key on its frame); otherwise `position_moves` with `moves_case: "one_key_off_rest"`, `position_key_time` and `rest_time` (round 4, D-8, B-9), with `position_key_label` and `rest_label` (round 5, B-11) | Item 4 at the key time; a key added is an other change | On the check time: TD § 4's "playhead right on it" line with the key's time; the `slid_at_key` hint if they drag off it. Off it: TD § 18's two-frames sentence with both times, once, then another layer offered; never "its other keys" | Right: L-2, one key, playhead off it, AE added a key at the playhead and the layer slid at the old key. The off-rest case is L-2 plus L-4's pattern (TD § 18); no live capture | `sled-one-key` against `sled-one-key-before` (fails, `slid_at_key`). Synthetic, from `sled-one-key-before` (T246's, extended by T254): one key at 3.667 with the Scale rest key at 4.167 (`position_moves`, `one_key_off_rest`, 3.667 and 4.167) and at 3.667 (allowed, no `moves_case`); one key with Rotation's rest key on it and the learner's `rest_time` 4.167 (`focus_problems`: `one_key_off_rest`, 3.667 and 4.167, the learner's time) |
 | 6 | Hold keys on Position | Counted like any key: two or more times, never; one, as row 5b | Item 4 at each key time, not between | n/a | Right; never blames the pivot for a hold jump | Synthetic hold-key layers, one with two hold times (`position_moves`), one with one |
 | 7 | Separated X and Y Position | Footprint from bounds, so either | As focus | n/a | Right; demo writes X and Y (FR-015) | Mentor Overlaps' Leaf 2 (separated); demo twin test |
-| 8 | Effects (a glow, a Transform effect) | Footprint without effects (`rect`) | Effect points don't move; not read | Only if an effect key is a Transform effect: TD § 9 sentence | Right | Synthetic; Mentor Practice's Glow is an adjustment layer (not a candidate) |
+| 8 | Effects (a glow, a Transform effect) | Footprint without effects (`rect`) | Effect points don't move; not read | Nothing in this release (no read tells a Transform effect apart; TD § 19b item 2). TD § 9's Transform-effect sentence waits for a read that can | Right | Synthetic; Mentor Practice's Glow is an adjustment layer (not a candidate) |
 | 9 | Precomp layer | Candidate, ranked below; edges are the precomp's frame | Footprint of the frame | "Icon's edges are its precomp's frame, 400 × 400, not the square inside it" | Right | Mentor Practice's Icon |
 | 10 | Precomp with Collapse Transformations on | Not a candidate (`collapse`, W4) | n/a | One sentence | Right once W4 lands; **contract** | 2b's Seal (SR-1) |
 | 11 | Hidden by the learner | Allowed if named; never the demo | As any | TD § 4 sentence | Right | Mentor Practice's Old Take |
@@ -886,7 +915,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 15 | Parented layer | Candidate, ranked below; parent named once | Comp-space footprint includes the parent; FR-037's hand-off off | "Hatch rides on Hatch Rig; that doesn't change where its own pivot goes" | Right; never grades raw Position | 2b's Hatch; T135's anchor capture |
 | 16 | Layer with children | n/a | Children compared at the focus's check time only (FR-012 item 5) | n/a | Right; children at other times are meant to turn | `hatch-rig-focus` (live 2026-10-26; Hatch Rig's anchor starts at [0, 0]) |
 | 17 | Scale not 100%, non-uniform, or a parent's scale | Place in the layer's own space | Same | n/a | Right (S-2) | 2b's Plaque at 200% (SR-1) |
-| 18 | Negative scale (flipped), or a static rotation far from 0 | Ranked last | Own-space sides | TD § 9's sentence with the layer's name ("Flip is flipped, so I'll go by its own sides") | Right; the sentence is the only guard against screen words | 2b's Flip (SR-1) |
+| 18 | Negative scale (flipped), or a static rotation far from 0 | Ranked last (rotation: past 45°, as built) | Own-space sides | **Flipped only:** TD § 9's sentence with the layer's name ("Flip is flipped, so I'll go by its own sides"). A static rotation far from 0: no sentence in this release (round 7, TD § 9 and § 19b item 3; whether it needs one is a logged guess, TD § 14) | Right for flipped; the sentence is the only guard against screen words. Turned: a known gap, logged | 2b's Flip (SR-1) |
 | 19 | Rotation keyed | Rest key named (FR-011) | Checked at the rest key | Names the rest key | Right | 2b's Gauge |
 | 20 | Scale keyed from 0 (a pop-in) | Rest key = full-size key | At the rest key; a pivot set at Scale 0 fails, one hint (set away from rest); `place_now` outside, below | `away_from_rest`, its line from TD § 7's "shrunk to nothing" row: the drag did move the pivot though nothing showed, Edit > Undo first, then the rest key (FR-019) | Right on grading. **L-4 (2026-10-26):** AE set Pop's anchor to [120, 960], far outside, not near the place (the stand-in guessed [60, 120]); the learner saw nothing happen | `pop-shrunk` (live) |
 | 21 | Text layer | Candidate; pivot starts on the baseline | `rect` is the letters' box at the check time; Source Text keys or animators change it (R6 not read) | "Title's pivot starts on its baseline, under the letters" | Right: **L-5 (2026-10-26)** `rect` is within 1 px of the ink, centred and left-justified; left-justified, the letters start 2.45 px right of the pivot (not 0), so "the middle of the left edge" still reads between places until moved | `sign-centred`, `sign-left` |
@@ -924,6 +953,17 @@ each row must see; this table adds what the focus, the check and the learner eac
   stay default candidates. Captured as `lid-stroke.json`; the duplicate deleted after. (TD's L-7,
   Pan Behind with every Position key selected, is information only and not needed by this spec;
   run it in the same sitting only if there's time.)
+- **L-8 (TD L-8; added 2026-10-26, round 7, TD § 19b item 4; the next sitting, with L-6, not a
+  blocker)**: two captures on a **duplicate** of Mentor Practice 2. (a) A layer with an
+  expression on its **unkeyed** Anchor Point (an auto-center expression); (b) a layer with an
+  expression on its unkeyed Position that ignores `value`. On each, Pan Behind as the lesson
+  teaches it, then a read. Log, for each: does the layer move on screen, and which hint code does
+  `anchor_check` return against the read before the drag? HO-2's reading of the code (not seen
+  live) is that the layer moves and the check gives "moved with its pivot" or "dragged the
+  layer". Captured as `expr-anchor-before.json`, `expr-anchor-pan.json`,
+  `expr-position-before.json` and `expr-position-pan.json` (names the builder's to change);
+  duplicate deleted after. The result goes to the spec writer and the designer: until then row 2
+  keeps "blind spot, stated" and `SKILL.md` gets no line for it.
 - **TD B-6** (what the builder's `.aep` holds) is answered by T133's capture of Mentor Practice as
   it is; TD B-1 is spec 004 T157 plus SR-1.
 - **Results (2026-10-26,** `specs/011-anchor/live-sitting-2026-10-26.md` **on `skill-5-anchor`):**
@@ -990,10 +1030,19 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
 the learner names that layer (cases 9, 13, 24, 28 and any other that names one), never in turn 1.
 Turn 1 of a lesson is checked for saying **none** of them (FR-006a).
 
-1. **First lesson, no layer in mind** (amended round 5, TD § 19, FR-006a): intent asked first;
-   one candidate offered with a hinge, in one sentence, as the fallback; the turn ends on the
-   choice; no leave-out named, no statement of the lesson's idea, no recap of another skill; real
-   names (US1 #1). Deterministic: turn 1 holds none of the leave-out sentences ("already move",
+**Universal check `no_text_before_snapshot` (round 7, from the eval engineer's rounds 5 and 6):**
+every case fails if the mentor writes anything between its first tool call and the first
+`anchor_snapshot` (server rule 6: the learner sees every word). It's the smoke run's leaked
+self-note ("First lesson on this skill.", "Review is due. Run the review.", 7 of 11 transcripts),
+so a baseline waits for T260's fix (B-13 item 8). It replaces the per-case `quiet_before_tool`
+that cases 16 and 17 had.
+
+1. **First lesson, no layer in mind** (amended round 5, TD § 19, FR-006a; one turn since round
+   7): the learner starts the lesson without naming a layer, and **turn 1** carries the whole
+   opening: intent asked first; one candidate offered with a hinge, in one sentence, as the
+   fallback; the turn ends on the choice; no leave-out named, no statement of the lesson's idea,
+   no recap of another skill; real names (US1 #1). There's no second "I don't have a layer in
+   mind" turn: the fallback proposal is already in turn 1 (TD § 19). Deterministic: turn 1 holds none of the leave-out sentences ("already move",
    "not in this lesson", "set a pivot before you key"). Rubric: **R-ONE-IDEA is back on this
    case**, with TD § 19's reading in the case note (the intent question plus a one-sentence
    proposal is one idea; a statement of the idea, a leave-out, or ending on anything but the
@@ -1114,13 +1163,21 @@ T257 and T259 (37 for T258 too) before they're run against the build.
     (also a null) stands in, said in the case note. The eval engineer's call. An adjustment-layer
     variant (Glow, "an adjustment layer") is optional.
 34. **Continued lesson, with a focus** (FR-006a): a session left open on **Needle**, the middle
-    of its bottom edge (not the proposal, so the check can tell them apart). Deterministic: turn 1
-    names Needle and doesn't name Door. Rubric: one sentence of where it left off, handed back; no
-    intent question, no proposal, no leave-out.
+    of its bottom edge (not the proposal, so the check can tell them apart). **Two turns** (round
+    7, as the eval engineer built it): turn 1 is setup (the learner names Needle and its place, so
+    the session holds a focus); turn 2 continues it in a new Claude session on the same learner
+    home, so the session file is all the mentor has. **Turn 2 is the checked turn.**
+    Deterministic: turn 2 names Needle and doesn't name Door. Rubric: one sentence of where it
+    left off, handed back; no intent question, no proposal, no leave-out.
 35. **Continued lesson, no focus yet** (FR-006a, Open questions › D-10): a session left open
-    before a layer and place were chosen, empty record for this skill. Opens as a first lesson.
-    Deterministic: turn 1 proposes Door and holds none of the leave-out sentences (as case 1).
-    Rubric: the intent question and the proposal; no "where we left off" line.
+    before a layer and place were chosen, empty record for this skill. Opens as a new lesson
+    (D-10, answered round 7 by TD § 19b item 5c), here in the first-lesson form. Built like 34: a
+    setup turn, then the continued turn in a new session, which is the checked turn.
+    Deterministic: the checked turn proposes Door and holds none of the leave-out sentences (as
+    case 1). Rubric: the intent question and the proposal; no "where we left off" line.
+    **Optional variant (the eval engineer's call; TD § 19b says no case change is needed):** the
+    same with a practicing record for this skill, where the checked turn adds one memory clause
+    before the intent question (US1 #10).
 36. **"Which layers can I use?"** (Edge Cases, TD § 19): after the opening, the learner asks.
     Deterministic: the layers named are all `default` candidates in the snapshot, at most three,
     and no `position_moves` layer is named. Rubric: the question is answered, not deflected; no
@@ -1365,6 +1422,29 @@ approval.
    (continued with and without a focus, "which layers can I use?"), and the same-label case. The
    missing-time line stays unit-tested only (Eval plan, after 37).
 
+### 2026-10-26, round 7: TD § 19b (after HO-2 and HO-3; S-6)
+
+TD § 19b was decided by the cockpit under the human's go-ahead on 2026-10-26. This spec's wording
+awaits the builder's approval.
+
+1. **A background is never proposed (S-6 item 1; FR-004, FR-006a, Edge Cases).** The full-frame
+   bucket was "last resort, proposed only when nothing else exists", while the tool never proposed
+   one, so `SKILL.md` had two instructions. Now: allowed if named, never proposed; no default
+   candidate means `proposal` null and the new-solid line. No tool change (as built). Rejected
+   options are TD § 19b's.
+2. **Effects: nothing said (S-6 item 2; row 8).** No read tells a Transform effect apart.
+3. **"Own sides" for flipped layers only (S-6 item 3; row 18).** A static rotation far from 0
+   ranks last with no sentence; whether it needs one is TD § 14's logged guess.
+4. **L-8 (S-6 item 4; Live checks, row 2; T261).** An expression on an unkeyed Anchor Point or
+   Position, at the next sitting with L-6. Row 2 keeps "blind spot, stated" until it's seen.
+5. **D-10 answered (S-6 item 5; FR-006a, US1 #10, Eval plan 35).** A continued lesson with no
+   focus opens as a new lesson, with the practicing memory clause when the record says
+   practicing. FR-006a also notes "they can name it" is not a line to say (TD § 19b item 5b).
+6. **The Eval plan follows the eval engineer's rounds 5 and 6:** case 1 is one turn; 34 (and 35)
+   check turn 2 after a setup turn; the universal `no_text_before_snapshot` check.
+7. **Tasks (Phase 8h):** T260, B-13's seven `SKILL.md` items plus an eighth from the smoke run
+   (the record read and the snapshot back to back, nothing written in between); T261, L-8.
+
 ## Open questions
 
 ### For the human (H): all answered 2026-10-23, as recommended
@@ -1390,7 +1470,7 @@ approval.
    same-label clash can't happen there, and widening the tool now touches five fields and most of
    the eval set's time checks for a drift not yet seen.
 
-### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16, D-8 and D-9 in TD § 18, D-7 in TD § 19; D-5 and D-6 open (round 2, 2026-10-26); D-10 open (round 6)
+### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16, D-8 and D-9 in TD § 18, D-7 in TD § 19, D-10 in TD § 19b; D-5 and D-6 open (round 2, 2026-10-26)
 
 1. **D-1, a Rotation-only layer with no key at 0 or a whole turn**: the key closest to 0 or a
    whole turn, one sentence, "is that how it looks at rest?" (FR-011).
@@ -1450,7 +1530,7 @@ recommendation until answered):**
    layer (`full_frame: true`); `null` gets no extra filter. In this spec: FR-008; task T255. The
    answer key on Mentor Practice 2 is unchanged.
 
-**New, round 6 (2026-10-26; not blocking, `SKILL.md` already does the recommendation):**
+**Round 6, closed 2026-10-26 (TD § 19b; carried in as round 7):**
 
 10. **D-10, a continued lesson that left off before a layer and place were chosen.** TD § 19's
     continued form says where it left off and hands it back, with no intent question or proposal;
@@ -1458,6 +1538,10 @@ recommendation until answered):**
     (`SKILL.md` step 1 on `skill-5-anchor`): open as a first lesson. **Recommended:** confirm, with
     one widening the spec already makes: open as a new lesson *by the record*, so a practicing
     learner still gets the memory clause (FR-006a). Eval plan 35 checks it.
+    **Answered 2026-10-26 (round 7, TD § 19b item 5c), as recommended:** a new lesson, with the
+    practicing memory clause when step 0 found this skill practicing; the build's "open as a
+    first lesson" dropped it, so B-13 item 6 (T260) changes `SKILL.md`. In this spec: FR-006a,
+    US1 #10, Eval plan 35.
 
 ### For the eval engineer (E)
 
@@ -1491,6 +1575,12 @@ recommendation until answered):**
   call on the fixture), 34 and 35 a continued lesson with and without a focus, 36 "which layers
   can I use?", 37 the same-label times. Wait for T259 (and T258 for 37) before writing them
   against the build. The missing-time line is unit-tested only.
+- **2026-10-26, round 7 (TD § 19b, S-6):** no case change needed. The Eval plan now matches
+  what you built in rounds 5 and 6 (case 1 in one turn; 34 and 35 checked on turn 2 after a setup
+  turn; the universal `no_text_before_snapshot`). Two optional additions, your call: 35's
+  practicing variant (one memory clause, US1 #10), and TD § 19b's background-only comp (opens
+  with the new-solid line and never offers the background). Re-run the seven transcripts that
+  leaked a self-note once T260 lands, before a baseline.
 
 ## Dependencies
 
