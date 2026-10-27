@@ -12,7 +12,9 @@ skill-builder `specs/*/tasks-*.md`, ticks only). Specs 011 and 012 were approved
 shared-code requests are T160 to T163 (011 SR-1, 012 SR-1 and SR-3). Spec 012's SR-2 (a stored
 parent chain, `parent_matrix`) was **declined** this sprint, so it has no task. **2026-10-24:** the
 builder approved one more shared request, spec 011's SR-2 (the same as spec 012's SR-4): the comp's
-size in the snapshot, T164 and T165.
+size in the snapshot, T164 and T165. **2026-10-26:** the builder approved seven loose ends on the
+merged skills 2, 1 and 3 (spec FR-039 to FR-045, SC-014): **Phase 9, T167 to T185**, for one
+shared-code owner on a branch of its own. T174 waits on spec › Open questions › LE-1.
 
 **Input**: [plan.md](plan.md) › Waves › Wave B, [spec.md](spec.md) (FR-012 to FR-015, FR-013's
 "never the eye switch alone", KD-001, SC-004, SC-006, SC-011), [research.md](research.md) R16 to
@@ -293,6 +295,93 @@ captures (T133)**, so every wave B capture carries it; neither task needs AE.
 
 ---
 
+## Phase 9: Loose ends on the merged skills 2, 1 and 3 (T167 onward)
+
+**Approved by the builder 2026-10-26** (all seven items; a tasking pass, not a design round). From
+the first live lessons of speed graph (008), key types (009) and offset (010). Requirements:
+[spec.md](spec.md) › Loose ends in the merged skills, **FR-039 to FR-045** and **SC-014**; fields:
+[data-model.md](data-model.md) › Loose-ends pass; decisions: [research.md](research.md) R24, R25.
+Sources (read them; the requirements don't restate them): `discovery/usage-notes/speed-graph.md`,
+`key-types.md` and `offset.md` › To fix later, and the wave A eval READMEs on `evals-wave-a`.
+Teaching designs are untouched: no item changes what a skill teaches.
+
+**Who builds it:** one skill-builder, alone, as the shared-code owner (FR-032), in a worktree the
+cockpit cuts from **local `main`** (at or after `31fe72d`, skill 6's merge), merged with
+`/merge-worktree <branch> skill-builder --shared-owner`. Every task edits a file another task here
+also edits (`common.mjs`, three skills' `SKILL.md`), so **nothing in this phase is [P] except the four
+new test files**. The wave B rules above still hold: no existing test file edited, no test that lists
+the skills or pins a whole reply's key set. Easing must still hold: FR-035's bar, by T183. **Don't
+touch** `specs/011*`, `specs/012*`, `.claude/skills/anchor-mentor/`, `.claude/skills/null-parenting-mentor/`,
+`mentor/tools/null-parenting.mjs` or anything only on `skill-5-anchor` (their follow-ups are in Later
+per-skill branches). On 2026-10-26, `skill-5-anchor` didn't differ from `main` in any file below.
+
+**Existing files this phase changes** (and no others; T182 compares against this table):
+
+| File | Change | Task |
+|---|---|---|
+| `mentor/tools/speed-graph.mjs` | `comp.frame_rate` in `speed_graph_snapshot`'s `comp`; `server_current` | T169, T176 |
+| `mentor/tools/key-types.mjs`, `mentor/tools/offset.mjs` | `server_current` in the snapshot tool's reply; nothing else | T176 |
+| `mentor/tools/common.mjs` | `server_current` in `read_learner_record`; `preview_frame`'s optional `layer` and its reply fields | T176, T179 |
+| `mentor/server.mjs` | Record the `mentor/` tree hash once at start (through the new lib below) | T176 |
+| `mentor/lib/session.mjs` | `start()`: a stale open lesson starts fresh (FR-043); nothing else | T174 |
+| `.claude/skills/speed-graph-mentor/SKILL.md` | Stages 2 and 6, one sentence each (FR-039); FR-042 only if T172 finds the pattern; the restart line (FR-044) | T169, T172, T177 |
+| `.claude/skills/key-types-mentor/SKILL.md` | Step 0 wording (FR-042); the restart line (FR-044); steps 3 and 5's frames (FR-045) | T172, T177, T180 |
+| `.claude/skills/offset-mentor/SKILL.md` | Step 7's measured-gap sentence (FR-040); the Quick Offset paragraph (FR-041); step 0 wording (FR-042); the restart line (FR-044) | T170, T171, T172, T177 |
+| `.claude/skills/ease-mentor/SKILL.md`, `.claude/skills/next-mentor/SKILL.md` | The restart line in step 0 (easing) and step 1 (next) only (FR-044) | T177 |
+| `specs/004-ae-curriculum/tasks-wave-b.md` | Tick tasks only | all |
+
+`mentor/tools/easing.mjs` (`snapshot_project`) doesn't change (FR-044). Nothing under `bridge/` or
+`mentor/jsx/` changes: FR-045 reuses read R3 (R24).
+
+**New files:** `mentor/lib/server-current.mjs` (T176); `mentor/test/speed-graph-frame-rate.test.mjs`
+(T168), `session-stale.test.mjs` (T173), `server-current.test.mjs` (T175),
+`preview-frame-layer.test.mjs` (T178), all under `mentor/test/`.
+
+### Setup
+
+- [ ] T167 On the worktree, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both pass counts and the worktree's base commit in the hand-back (the base for "no existing test edited" and for T183). Confirm LE-1's answer with the cockpit before T174 (spec › Open questions › LE-1)
+
+### FR-039: speed graph, a reading answer given as a time or a frame
+
+- [ ] T168 [P] [US1] **Tests first**: new `mentor/test/speed-graph-frame-rate.test.mjs`, in fixture mode on an existing live capture (for example `practice-before.json`): `speed_graph_snapshot`'s reply has `comp.frame_rate` equal to the snapshot's `comp.frame_rate`, and its `comp.name` and `comp.duration` are as before. Fails until T169
+- [ ] T169 [US1] **Code and prompt**: in `mentor/tools/speed-graph.mjs`, add `frame_rate: snapshot.comp.frame_rate` to the reply's `comp`. In `.claude/skills/speed-graph-mentor/SKILL.md` stages 2 and 6, one sentence each: an answer given as a time or a frame is placed in the pair from its key times (a frame divided by the comp's frame rate, counted from the comp's start), then checked against `fastest.parts` as usual; an answer outside the pair gets a question. No other wording changes. **Done when:** T168 and every existing test pass; the two sentences are in stages 2 and 6 and nowhere else
+
+### FR-040 and FR-041: offset's two sentences
+
+- [ ] T170 [US1] **FR-040**, `.claude/skills/offset-mentor/SKILL.md` step 7: one bullet, "the gap they stated vs. the gap the check measured": when the measured gaps (`gaps_frames`) don't match the stated gap and `offset_demo` hasn't run, say the gap back as measured, as theirs ("you went with about 30 frames"), never as advice, and call `offset_snapshot` again with `skill_options` carrying the measured gap. Nothing else in step 7 changes. **Done when:** the bullet is there; it names no number of its own; the proposed eval case (gap changed after the fact, `offset.md` session 1) is in T184's hand-off
+- [ ] T171 [US1] **FR-041**, `.claude/skills/offset-mentor/SKILL.md` › Where things are: a short "if they ask how Quick Offset works" paragraph, still only when `quick_offset` is true, using **only** FR-041's five claims (the gesture; on layers whole layers move and spread evenly, the top layer stays; on keys only keys move and they can spread the other way; keys can land between frames on layers; check the order after the drag, play it back, then say "done"). It must not say that selection order sets the direction, that dragging the other way reverses it, that one Edit > Undo reverses one drag, any way to read the gap while dragging, or any shortcut but Command and Option. **Done when:** a reviewer can match every claim in the paragraph to FR-041's list (paste the paragraph in the hand-back); the proposed eval case (how does Quick Offset work, `offset.md` session 2) is in T184's hand-off
+
+### FR-042: no leaked self-note before the first call
+
+- [ ] T172 [US1] **Prompt fix**: read the step 0 branch text in `key-types-mentor` and `offset-mentor` (and speed graph's "Before the lesson"), which the smoke runs echoed as "Key types learned, review due -> run the review." and "Review is due → run the review.". Reword so a branch reads as what to do, never as a line to say, and add one sentence to step 0: the first words the learner sees are the lesson's or review's own opening, never which branch you took. Apply it to speed graph only if its text has the same "is due, run the review" shape; say which in the hand-back. Don't change the review steps themselves. **Done when:** none of the three files has a line the eval sets' `no_self_instructions` pattern (`git show evals-wave-a:product/evals/offset/run.mjs`) would match if echoed; SC-014's runs are in T184's hand-off
+
+### FR-043: a stale open lesson starts fresh (gated on LE-1)
+
+- [ ] T173 [P] [US1] **Tests first**: new `mentor/test/session-stale.test.mjs`, on saved snapshots with a stub analyzer (as `session-skill-data.test.mjs` does). An open lesson never checked and with no demo: (a) started on an earlier local day → the next `start()` returns `lesson: "new"`, the new snapshot as baseline, no `skill_data`, and `skill_options` only if that call sends them (so no stale `order`); (b) resumed with a baseline whose target keys differ from the snapshot now → `new`; (c) **continued** with target keys that differ (the learner's own edit before "done") → `continued`, the old baseline kept; (d) per LE-1's answer: if recommended, resumed with a baseline that still matches → `new`; if not, → `resumed` as today. A lesson that was checked, or had a demo, on an earlier day → `resumed` or `continued` as today, baseline kept. `fresh: true` on a checked lesson still throws `LESSON_UNDERWAY`. Easing's lessons follow the same rule (one case). Fails until T174
+- [ ] T174 [US1] **Code**, after LE-1 is answered: in `mentor/lib/session.mjs` `start()`, decide "stale" for an `open` lesson per FR-043 as LE-1 settles it, before `continuing` is chosen; a stale lesson is replaced as if none existed (data-model › Loose-ends pass › Session lesson). Nothing else in the file changes. **Done when:** T173 and every existing session test (including `session-skill-data.test.mjs`) pass unchanged
+
+### FR-044: the mentor says when its tools are older than the repo
+
+- [ ] T175 [P] [US1] **Tests first**: new `mentor/test/server-current.test.mjs`, with the hash read injected (no real git in the test): the same hash at start and now → `server_current: true`; a different hash now → `false`; a read that throws or times out, at start or now → `null`; `read_learner_record`'s reply carries the field, and so do `speed_graph_snapshot`, `key_types_snapshot` and `offset_snapshot` in fixture mode; `snapshot_project`'s reply doesn't have it; no reply carries the hash or a path. Fails until T176
+- [ ] T176 [US1] **Code**: new `mentor/lib/server-current.mjs` per R25 (`git rev-parse HEAD:./` with its working directory the folder holding `server.mjs`, from `import.meta.url`; a short time-out; any failure is `null`), with the read injectable for tests; `mentor/server.mjs` records the start hash once; `read_learner_record` (`common.mjs`) and the three snapshot tools add `server_current` to their replies. No reply field is removed or renamed. **Done when:** T175 and every existing test pass; from the panel's runtime folder (`panel/lib/runtime.js`'s `.mcp.json`) a fresh server returns `true`, checked once by hand and noted in the hand-back
+- [ ] T177 [US1] **Prompts**: one sentence in step 0 of `ease-mentor`, `speed-graph-mentor` ("Before the lesson"), `key-types-mentor` and `offset-mentor`, and in step 1 of `next-mentor`: when `read_learner_record` (or a later snapshot) returns `server_current` false, say once, in plain words, that the mentor's tools were updated since this session started and it needs a restart (a new Claude Code session) before the lesson, then stop. `null` and `true` say nothing. No field name in the learner's words. **Done when:** the sentence is in all five files; easing's is its only change in this phase (T183 runs the easing gate)
+
+### FR-045: point at the focus layer in a frame
+
+- [ ] T178 [P] [US1] **Tests first**: new `mentor/test/preview-frame-layer.test.mjs`, in fixture mode on live captures with `layer_info` (`layer-info/practice2b.json` and `layer-info/overlaps.json`, each at its `comp.time`): `preview_frame({ layer: "Blink" })` returns `layer_bounds` equal to `footprint()`'s bounds for that layer (`rect_extents` on a shape or text layer, else `rect`), plus `comp_size` and `image_size`; a hidden layer, a null and a matte (from `overlaps.json`) have no `layer_bounds` and the reasons `not_rendered`, `null_layer`, `not_rendered`; a name not in the comp gives `not_found`; a duplicated name gives `ambiguous`; a time with no sample gives `not_sampled`; a capture without `layer_info` gives `no_layer_info`; without `layer`, the reply is exactly today's `{ comp, time }` and no snapshot is taken. Fails until T179
+- [ ] T179 [US1] **Code**, `mentor/tools/common.mjs`: `preview_frame`'s schema gains `layer` (string, optional). With it: one `takeSnapshot({ sample_times: [t] })` (t is `time`, or the snapshot's `comp.time` when `time` is omitted), find the layer by name with `layer-info.mjs`, apply FR-045's absent cases through `visibility.mjs` and the layer's in and out points, else `footprint()`'s bounds; read the PNG's width and height from its header (IHDR, Node built-ins only). The frame is rendered exactly as today. **Done when:** T178 and every existing test pass; a call without `layer` makes the same bridge calls as before (check `calls.jsonl` or the test's call count)
+- [ ] T180 [US1] **Prompt**, `.claude/skills/key-types-mentor/SKILL.md` steps 3 and 5: pass the focus layer to `preview_frame`, and say in plain words where it is in the frame ("the small square near the top left"), scaling the bounds by the image's size over the comp's; never a pixel number. With no bounds back, point at nothing and describe the snap from the tool data, as today. **Done when:** both steps say so; nothing else in the file changes for FR-045
+- [ ] T181 🖐 [US1] **Live check of the bounds** (R24's open points), in-process from the worktree as spec 010's L-2 ran, with the AE lock and nobody else on AE (`ae_status`, then `.git/knack-agents/ae.lock.json`), on Mentor Practice 2 reset to `layer-info/practice2b.json`: `preview_frame` with `layer` on Blink, Dot 1, a text layer (Caption), a parented layer (Hatch) and, on Mentor Overlaps, the guide layer. For each, compare the bounds (scaled to the image) with where the layer is in the PNG. Record: the image's size against the comp's at Full and at Half viewer resolution; whether Caption's box matches its letters; whether the guide layer shows in the frame. Undo nothing (the tool writes nothing); check the comp still matches its capture with a strict compare. **Done when:** the results are in the hand-back; any that disagree with R24 or FR-045 (for example, guides do show) go to the spec writer before merge
+
+### Close
+
+- [ ] T182 [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <T167's base> -- mentor/test/*.test.mjs` shows only the four new files; then `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: the changed existing files match this phase's table exactly. Paste both in the hand-back
+- [ ] T183 [US6] Hand off to the cockpit for the **eval engineer**: the easing set (26 cases) on this branch and on its base the same day, as T143 did. **Merge gate:** at 25/26 or better with no hard-rule failure (FR-035's bar), and no worse than the base (a branch-only failure is re-run once before it counts). The changes easing can see: step 0's restart line, `read_learner_record`'s new field, and the stale-lesson rule
+- [ ] T184 [US6] Hand off to the cockpit for the **eval engineer** (their files and numbers): (a) **SC-014**: key types case 16, offset case 17 and speed graph case 08, `--repeat 3` each, on `evals-wave-a` with this branch's `SKILL.md` (the cockpit decides how: merging `main` into `evals-wave-a` after this merges, or a run from a worktree with both); (b) the cases the usage notes propose: speed graph's reading answer given as a time or a frame (`speed-graph.md`), offset's gap changed after the fact (`offset.md` session 1) and how Quick Offset works (`offset.md` session 2), for when the wave A sets merge. FR-043, FR-044 and FR-045 get no eval case: unit tests cover them, and eval fixtures don't render frames
+- [ ] T185 [US6] Write the hand-back: branch and commit; T167's and T182's counts and output; LE-1's answer as built; T171's paragraph; T172's finding for speed graph; T176's runtime-folder check; T181's results; and the follow-ups below, as requests
+
+---
+
 ## Later per-skill branches (not this pass; requests for the cockpit)
 
 What specs 008 to 010 say happens "when R1 lands", beyond the visibility switch above. Each is a
@@ -306,6 +395,8 @@ the curriculum designer where the teaching changes).
 | 2, speed graph | Name a parent in one sentence; choose frames where no parent moves, so frame claims can say how far along a move a layer is | spec 008 rows 15, teaching design D-5, § 5 |
 | 3, offset | Name a parent's shared motion in one sentence, never grade it (the known blind spot); precomp layers eligible through in points, stretch and time remap; a locked layer as demo target refused before AE (L-4); a trimmed in point named | spec 010 rows 12, 15, 16, 21; teaching design § 9 |
 | 1, key types | None beyond SR-3 (done here, T126) | spec 009 |
+| 5, set the pivot; 6, null | FR-044's restart sentence in step 0 of `anchor-mentor` and `null-parenting-mentor`, and `server_current` in `anchor_snapshot` and `null_parent_snapshot`. Both already get the field from `read_learner_record` once Phase 9 merges; only the sentence and the snapshot field wait. Each after that skill's live lessons, on its own branch or after its merge (skill 6 merged `31fe72d`) | spec 004 FR-044, LE-2 |
+| 3, offset; 5; 6 | The frame pointer (FR-045's `layer`) in their frame steps. **Not approved**: only if the builder takes LE-3, and after T181 proves the bounds | spec 004 LE-3; `offset.md` session 2 step 2 |
 | Diagnosis (spec 005) | Uses `visibility.mjs` and `motion-sources.mjs` from its first build (its Edge Cases "Track mattes" row) | spec 004 KD-001 |
 
 ---
@@ -318,6 +409,11 @@ the curriculum designer where the teaching changes).
 - Phase 8: T151 with T110; T152 after T110; T153 with T113; T157, T160 and T163 before T132's
   targets are written; T158 in T133's sitting; T161 then T162 any time after Phase 1 (no AE);
   T164 then T165 any time after T151, **before T133** (no AE).
+- **Phase 9** (its own branch, cut from local `main` after Phase 8): T167 first; then each test
+  before its code (T168 → T169, T173 → T174 once LE-1 is answered, T175 → T176 → T177, T178 → T179 →
+  T180); T170, T171 and T172 in any order, one at a time (all edit `offset-mentor/SKILL.md`); T181 🖐
+  after T179, one sitting at a time with the AE lock checked; T182 after every code task; T183 and
+  T184 after T182. **Merge after T183's gate and T181.**
 - **T123 last** before T143, once its three checks pass (Q4); T143 runs after T123.
 - 🖐 order in one Mac sitting: wave A's tasks.md T041 and T064 (build Mentor Practice 2), T042 (its
   captures), then T133, T134, T158, then T135. The cockpit stays off AE.
@@ -326,7 +422,8 @@ the curriculum designer where the teaching changes).
 ## Parallel opportunities
 
 With one builder, [P] only means order doesn't matter: T104 to T109 are independent new files;
-T117 and T118; T124, T125, T127; T131 and T132; T161 and T164 with any of them.
+T117 and T118; T124, T125, T127; T131 and T132; T161 and T164 with any of them. Phase 9: only the
+four new test files (T168, T173, T175, T178); every other Phase 9 task shares a file with another.
 
 ## Implementation strategy
 
@@ -343,5 +440,6 @@ T117 and T118; T124, T125, T127; T131 and T132; T161 and T164 with any of them.
 visibility and map 5 (T107–T109, T117, T118), KD-001 5 (T119–T123), skills 1 to 3's switch 7
 (T124–T130), live captures 7 (T131–T137), hand-over 5 (T141–T145), requests 12 (T150 approval, done;
 T151–T153, T157, T158, T160–T165). Four are 🖐 live (T133, T134, T135, T158). IDs skip on purpose
-(T114–T116, T138–T140, T146–T149, T154–T156, T159) so phases keep their own ranges; T166 to T199
-are unused.
+(T114–T116, T138–T140, T146–T149, T154–T156, T159) so phases keep their own ranges; T166 is unused.
+**Phase 9 adds 19** (T167 to T185): setup 1, FR-039 2, FR-040 to FR-042 3, FR-043 2, FR-044 3,
+FR-045 4 (one 🖐, T181), close 4. T186 to T199 are unused.
