@@ -152,9 +152,12 @@ was. Pan Behind changes both together, so nothing moves on screen.
      - Position keyed: "Sled's Position already has keys. Pan Behind changes only the Position
        key at the playhead, or adds one there, and leaves the others, so at those keys Sled will
        sit somewhere else. It's simplest to set the pivot before you key."
-     - pivot outside: "Lid's pivot sits outside the lid, which is why it swings wide." Then say
-       where to look: select it in the timeline to see the crosshair, and look around the shape,
-       not on it.
+     - pivot outside: the note's `side` is which side of the layer the pivot is on, as seen on
+       screen. Say it in words ("below", "above", "to its left", "below and to its left"): "Lid's
+       pivot sits outside the lid, below it, which is why it swings wide." Then say where to look:
+       "Select Lid in the timeline to see its crosshair; it's below the lid." Never a distance. If
+       `side` is null, say the pivot is outside the layer and to select it in the timeline to see
+       the crosshair, with no side and no guess.
      - shy: "It's shy, so turn off the timeline's shy filter to see its properties."
    - **Then the two sentences** from "The words the lesson uses", once.
    - **One frame.** Call `preview_frame` at the focus layer's check time, with the layer in it,
@@ -221,16 +224,27 @@ was. Pan Behind changes both together, so nothing moves on screen.
        bottom edge."
      - a neighbouring place: "Banner's pivot is at its bottom-left corner. You said the middle of
        the left edge, a little higher." (Say which way from the two places.)
-     - outside the layer: "Door's pivot sits outside Door, off to its left."
+     - outside the layer: "Door's pivot sits outside Door, off to its left. Select Door in the
+       timeline to see its crosshair." The side is `item1.outside_side`, as seen on screen; say it
+       in words, never a distance. If it's null, say outside with no side.
      - the wrong layer: "Needle's pivot hasn't moved, but Background's did. Pan Behind moves the
        pivot of whatever layer is under the cursor, so select Needle and start the drag on its
        crosshair." (The other layer is in `other_changes`.)
-     - a group's anchor: "Lid's own pivot, under Transform, hasn't moved, and its shape shifted.
-       The one inside Contents belongs to the group." On a text layer there's no group: say its
-       letters shifted and its own pivot didn't move.
-     - set away from rest: "Pop is still shrunk at 3.3 s. Put the playhead on 4.3 s, where it's
-       full size, and set the pivot there." (Use the layer's `check_time` for where it's at rest,
-       and the result's `time` for where the playhead was.)
+     - what's drawn moved, its pivot didn't: "What's drawn in Lid moved, but Lid's own pivot
+       didn't. Edit > Undo that, then drag Lid's own crosshair with Pan Behind." On a text layer
+       name no group: "Sign's letters shifted, but its own pivot didn't" (changing how the text is
+       lined up does that).
+     - its own pivot unchanged (a shape; it comes after the place hint): "Lid's own pivot, under
+       Transform, hasn't changed. If you dragged a pivot inside Contents, that one belongs to the
+       shape's group: select Lid itself in the timeline and drag its crosshair." Offer it as a
+       possibility; never say they moved the group's pivot.
+     - set away from rest: "Pop is still shrunk at 3.3 s, so nothing showed, but its pivot did
+       move, far below it. Edit > Undo, put the playhead on 4.3 s, where it's full size, and set
+       the pivot there." Always say the pivot did move, and ask for Edit > Undo before the playhead
+       goes to the rest key. Where it went comes from `item1.outside_side` when it's outside (in
+       words, never a distance; leave it out when null); on a layer that's turned rather than
+       shrunk, say it's turned at that time instead. (Use the layer's `check_time` for where it's
+       at rest, and the result's `time` for where the playhead was.)
      - slid at a key: "At 3.7 s Sled isn't where it was. Pan Behind changed only the Position key
        at the playhead, or added one there, so at its other keys Sled sits somewhere else." Use
        `item4.worst.time` for the time.
