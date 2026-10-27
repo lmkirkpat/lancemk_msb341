@@ -98,7 +98,9 @@ Shared tools a skill's SKILL.md also lists in `allowed-tools`: `read_learner_rec
 
 Returns `{ lesson: "new" | "continued" | "resumed", session, analysis }`, as today. A lesson for
 the same skill and comp that isn't passed is continued (unless `fresh` restarts it); a different
-`mode` starts a new one.
+`mode` starts a new one. **Amended 2026-10-26 (spec FR-043, tasks-wave-b.md T173, T174):** an open
+lesson never checked and with no demo starts new when it's resumed, or continued from an earlier
+day (LE-1); a continued lesson from the same day keeps its baseline, so re-snapshotting mid-lesson never resets it.
 `UNKNOWN_LAYER` is thrown before any write. In review mode, a result with no targets gets
 `no_demo_reason: "no_new_target"` and the skill tells the learner there's nothing new to review on
 (FR-021) and records nothing.

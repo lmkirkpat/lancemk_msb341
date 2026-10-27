@@ -14,6 +14,12 @@ same session. Starting state: `capture.mjs --compare` against `layer-info/practi
 "Matches" (on the first try the active comp was still Mentor Practice, so it listed every layer
 until I switched). Easing was learned and there was no key-types history.
 
+**Stale server (noted after the fact, from `offset.md` session 1 problem 2):** this lesson ran on
+an `ae-mentor` server started at 10:03 that morning, so it missed `a4a8a07` (15:08). That commit
+changed only comments in `mentor/lib/key-types.mjs` and `mentor/jsx/key-types-demo.jsx`
+(`HOLD_SIDES` stayed "out"), plus fixtures and `SKILL.md`, which is read fresh each run. The
+tools' behavior was the same as on `main`, so the four verdicts below stand.
+
 ### Steps (quickstart § 5)
 
 | Step | What happened | Matches the expected result? |

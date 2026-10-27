@@ -70,13 +70,23 @@ before § 5.1; the rest before § 5.2.
 rule), T246 (answer key and tests), T247 (`SKILL.md` from TD § 16, then `/agent-audit`). Before
 § 5.2 and the evals, not before § 5.1. T248 is L-6, at the § 5.2 sitting.
 
+**Round 5 (2026-10-26, Phase 8f):** T257 (the opening turn, TD § 19) and T258 (time labels for the
+two-frames sentence). Both before the next live lesson that opens with no layer in mind, and before
+the evals' re-run (HO-1).
+
 ## 5. 🖐 First live lessons (SC-001, SC-002)
 
 The builder, in a plain Claude Code session in the repo, easing learned, on Mentor Practice 2:
 
 1. `/anchor-mentor`, no layer in mind: Door proposed with its left edge (FR-004 as amended
    2026-10-26; without T241 it's Blink), then the lesson. Note `anchor_snapshot`'s own time in
-   `calls.jsonl`: on this comp it takes two reads (FR-013).
+   `calls.jsonl`: on this comp it takes two reads (FR-013). **The opening (round 5, after T257;
+   spec FR-006a, TD § 19):** one turn that asks which layer and where it should turn from, offers
+   Door from its left edge in one sentence, and ends on that choice. No list of what's left out,
+   no "idea for today", and no recap of other skills on a first lesson of this one. If you name a
+   layer that already moves (Sled, say), its "set the pivot before you key" sentence comes then,
+   on that turn, and another layer is offered. Watch for "what do you mean by turn from?" (TD
+   § 19's guess that the question carries the topic) and note it if it happens.
 2. `/anchor-mentor` again: Gauge (or Pop), the rest key named, the playhead asked for, the lesson.
 
 Each to a verified pass in ≤ 10 minutes with ≤ 1 demo (times from `calls.jsonl`); per check, whether

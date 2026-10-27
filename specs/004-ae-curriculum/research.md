@@ -450,6 +450,44 @@ the visibility class (FR-013) and the motion-sources map's first step (FR-014). 
   skills 5 and 6 for no safety gain. Open for the human (Q4).
 - **Alternatives:** wait for 25/25 or 24/25 first (FR-035 as written).
 
+## R24. The focus layer's bounds in a frame come from read R3, not a new read (FR-045)
+
+- **Decision:** `preview_frame` with `layer` takes one snapshot with `sample_times: [time]`, then
+  `footprint(snapshot, index, time, { extents })` from `mentor/lib/comp-space.mjs` gives the four
+  corners and the axis-aligned bounds in comp pixels. `extents` is true when the sample has a
+  `rect_extents` (shape and text layers: strokes and letters as drawn), else the layer's `rect`. The
+  snippet behind this is read R3's existing `sourceRectAtTime(t, false / true)` plus the rendered
+  transform at `t` (ES3, in `snapshot.jsx`); no new ExtendScript. The PNG's own width and height are
+  read from its header in Node (the IHDR chunk, bytes 16 to 23), so no dependency.
+- **What's proven live:** the transform math, against AE's own `toComp()` (T136); `rect` and
+  `rect_extents` both matching a shape as drawn (spec 011 L-1). **What isn't:** whether
+  `saveFrameToPng` renders at the comp's full size or at the viewer's resolution (the reply carries
+  both sizes either way); whether a text layer's `rect_extents` matches its letters on screen; whether
+  a guide layer shows in the saved frame (FR-045 treats it as not shown until checked). All three are
+  tasks-wave-b.md T181 (🖐).
+- **Rationale:** the bounds need no project change and reuse the math every wave B skill already
+  trusts. A snapshot costs about 0.2 s live (spec 004 live sitting), well inside SC-004's 10 s.
+- **Alternatives:** a second image with the other layers dimmed (solo or opacity changes the project,
+  so it would need an undo in the same step or a duplicate comp; bounds were chosen over it with the
+  seven loose ends, 2026-10-26);
+  AE's `toComp()` through an expression probe (adds and deletes a layer, which is a write; it stays a
+  dev-script answer key only).
+
+## R25. Telling a stale server from a current one (FR-044)
+
+- **Decision:** the tree hash of `mentor/` at `HEAD` (`git rev-parse HEAD:./`, run with the working
+  directory set to the folder holding `server.mjs`, found from `import.meta.url`, never
+  `process.cwd()`), read once when the server starts and again on each call that returns
+  `server_current`, with a short time-out. Any failure gives `null`, which the skills treat as current.
+- **Rationale:** a merge into `mentor/` changes the tree hash and nothing else does (a commit elsewhere
+  in the repo doesn't), so a long session isn't flagged for an unrelated commit. Resolving from the
+  server's own folder works from the panel's runtime folder, whose `.mcp.json` points at the repo's
+  `server.mjs` by an absolute path (`panel/lib/runtime.js`), and from a worktree. Uncommitted edits
+  in `mentor/` aren't seen; that's fine, because live lessons run on merged code.
+- **Alternatives:** file modification times under `mentor/` (a checkout or an editor's save changes
+  them without a code change); a version number bumped by hand (forgotten); the server process's start
+  time (every panel turn starts a new server, so it says nothing about the code).
+
 ## Dependencies
 
 No new npm dependency. Node built-ins only (`node:fs`, `node:path`, `node:test`). The
