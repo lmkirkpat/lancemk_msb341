@@ -31,7 +31,9 @@ to LE-3 were answered by the builder the same day (all three as recommended).
 of a built promise (choices kept across a resume: T061, T063, contracts § 4, spec 012 SR-1), and the
 builder chose "confirm + baseline": a resumed lesson starts fresh only when its comp no longer
 matches the baseline, and otherwise keeps its choices, which the skill confirms with the learner
-(new **FR-046**). **FR-040**: no re-read after the check at all (2026-10-27: a 0 gap was refused, and a re-read after a pass started a new lesson); the mentor says a passed check's measured gap back as theirs. **FR-044** now hashes only what the server runs and never starts git where there's
+(new **FR-046**). **FR-040**: no re-read after the check at all (2026-10-27: a 0 gap was refused, and a re-read after a pass started a new lesson); the mentor says a passed check's measured gap back as theirs. **FR-047** (2026-10-27, the reviewer's
+should-fix 2, the builder's choice): speed graph's step 1 no longer wipes a stored land-hard choice,
+and its reply names land-hard pairs in plain words. **FR-044** now hashes only what the server runs and never starts git where there's
 no checkout; **FR-045** gains four no-bounds reasons (precomp, effects, masks, Opacity 0) from the
 reviewer's findings on the merged code. Research R24 and R25 are amended and **R26** is new. Tasked
 as tasks-wave-b.md Phase 9 › Second pass (T186 onward). New open questions LE-4 to LE-6.
@@ -764,6 +766,28 @@ skill teaches either.
   *Source:* `discovery/usage-notes/offset.md` › session 2 finding 1. *Proof:* the eval cases T196
   hands off (one per skill, resumed with stored choices), and a reviewer reading the three
   sentences.
+
+- **FR-047 (speed graph keeps and names a stored land-hard choice)**: *Added 2026-10-27 (the
+  reviewer's should-fix 2 on the second pass; the builder chose to fix it now).* Speed graph's step 1
+  always sent `skill_options` with `land_hard: []`, so on a resumed lesson it wiped the pairs the
+  learner had said should land hard, `stored_choices` came back false, and FR-046 never fired (the eval
+  engineer found no reachable speed graph case for it). And `landing_hard` gives only pair ids, which
+  have no plain-words label because those pairs leave the targets. So:
+  - `speed_graph_snapshot` MUST return `landing_hard_labels`: one label per id in `landing_hard`, same
+    order, in the same form as `pairs[].label` ("Title › Position 3–4.367 s"), built from the lesson's
+    baseline; `null` for an id that names no pair there. `landing_hard` itself doesn't change.
+  - In `.claude/skills/speed-graph-mentor/SKILL.md` step 1, the mentor MUST first call
+    `speed_graph_snapshot` **without** `skill_options`. If the lesson comes back `resumed` (or
+    `continued`), it uses the stored choices, and FR-046 confirms them when `stored_choices` is true,
+    naming land-hard pairs from `landing_hard_labels`. If it comes back `new`, it calls again with
+    `skill_options` `{ "eased_layers": [...], "land_hard": [] }`, as step 1 did before; that call
+    continues the same lesson from the same snapshot, so nothing is lost. The review step's call is
+    unchanged.
+
+  The cost is one extra snapshot at the start of a new lesson (about 0.2 s live). *Source:* the
+  reviewer's should-fix 2 on `phase9-pass2`, and the eval engineer's T196 note. *Proof:* a unit test
+  on the reply and the two-call flow (T199b), and an eval case for a resumed speed graph lesson with a
+  stored land-hard choice (T199e).
 
 ### Key Entities
 
