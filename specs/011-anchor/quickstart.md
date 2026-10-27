@@ -15,7 +15,7 @@ node ../.claude/hooks/check-branch.mjs <branch> skill-builder main   # no --shar
 
 Run `/agent-audit` on `.claude/skills/anchor-mentor/SKILL.md`. Hand back.
 
-## 2. 🖐 Live checks L-1 to L-5 (and L-6 at the next sitting)
+## 2. 🖐 Live checks L-1 to L-5 (and L-6 and L-8 at the next sitting)
 
 Setup: After Effects 26.5 on `discovery/Claude AE Tutor Test.aep` with Mentor Practice 2's 2b
 layers (spec 004 T135); the cockpit off AE; one skill-builder in this branch's local worktree holds
@@ -30,6 +30,7 @@ builder does the hand actions; the agent reads with `node mentor/dev/capture.mjs
 | L-4 | The four mistakes, each captured then undone: Door with a typed Anchor Point; Door dragged with the Selection tool; Pan Behind on Background with Needle meant; Pop's pivot set at Scale 0. Then `anchor_demo` (temp `AE_MENTOR_HOME`) on a separated, a rotated and a parented layer, and on a locked one | Footprint within 1 px after each demo; one Edit > Undo reverts it; the locked one refused with no change |
 | L-5 | Sign, centred, then left-justified: `rect` at the check time vs the letters on screen | Left, top, width, height within 1 px |
 | L-6 (added 2026-10-26, round 2; **the next sitting**, with § 5.2, not before § 5.1) | On a duplicate, give Lid a stroke (any width, say 10 px) and read it as `lid-stroke.json`; delete the duplicate after | Whether `rect` includes the stroke: its edges against the shape's outer edge on screen (1 px). If not, to the spec writer |
+| L-8 (added 2026-10-26, round 7, T261; **the next sitting**, with L-6) | On a duplicate: (a) a layer with an auto-center expression on its unkeyed Anchor Point, (b) a layer with an expression on its unkeyed Position that ignores `value`. Read, Pan Behind as the lesson teaches it, read again; delete the duplicate after | For each: does the layer move on screen, and which hint the check returns (spec › Live checks › L-8). To the spec writer and the designer; no `SKILL.md` line until then |
 
 ## 3. 🖐 Captures
 

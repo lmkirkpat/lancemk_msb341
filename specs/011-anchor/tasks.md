@@ -14,7 +14,11 @@ Changes › round 4; the builder approved D-8 and D-9. **Round 5 (2026-10-26):**
 (TD § 19's opening turn, in progress; B-11's time labels), from spec › Changes › round 5; TD § 19
 and B-11 approved by the human, this phase awaiting the builder's approval. **Round 6
 (2026-10-26):** Phase 8g, T259 (TD § 19a's B-12 in `SKILL.md`, in progress), from spec › Changes ›
-round 6; TD § 19a decided by the human, this phase awaiting the builder's approval.
+round 6; TD § 19a decided by the human, this phase awaiting the builder's approval. **Round 7
+(2026-10-26):** Phase 8h, T260 (TD § 19b's B-13 in `SKILL.md`, plus the smoke run's self-note fix;
+in progress) and T261 (L-8, 🖐, listed after T248 in Phase 8c's list for the next sitting), from
+spec › Changes › round 7; TD § 19b decided by the cockpit under the human's go-ahead, this phase
+awaiting the builder's approval.
 
 **Input**: Design documents from `specs/011-anchor/`
 
@@ -203,6 +207,7 @@ running the code and copying its output.
 - [x] T246 [US2] Answer key and tests (FR-004, FR-012, FR-013, rows 5, 5b, 6): in `mentor/test/fixtures/anchor/answer-key.json`, by hand: Sled and every other Position-keyed layer of `practice2b` confirmed at two or more key times and set to `never`, `position_moves` (spec FR-004 lists 16), Leaf 2 in Mentor Overlaps by its own key count; `needed_practice2b` and its `needed_note` re-derived without those layers' Position key times and Card's and Tile's rest keys; `sled_with_gradient` replaced (both are `never` now) by a two-focus case of two `if_named` layers picked by hand, still giving no demo; `sled-one-key` as the one-key case (baseline `sled-one-key-before`, Sled `if_named`, `position_keyed`, tip time 3.667; the attempt fails with `slid_at_key`, item 2 holds at the check time, a `keys_added` on Position); `sled-slid` and `sled-on-key` kept as item 4 unit tests outside the lesson path (the check called with Sled as focus directly, its note saying a lesson can't reach it). Tests in `anchor-candidates.test.mjs` and `anchor-overlap.test.mjs`: synthetic X key at 1 s and Y key at 2 s → `position_moves`; X and Y both at 1 s → one time; two hold keys → `position_moves`; one key with Scale's rest key on another frame → `position_moves`, on the same frame → `if_named`; a learner `rest_time` off the key refused; `item3.now` on `pop-shrunk` is that capture's own `comp.time` (3.3 s by TD § 7's line; confirm from the file). Rows 5, 5b and 6 each map to one test
 - [x] T247 [US2] `.claude/skills/anchor-mentor/SKILL.md`, after T245 and T246: (1) swap in TD § 7's lines as TD § 16 rewrote them for `unchanged_shape`, `content_shifted` (text and shape wordings), `outside`, `away_from_rest` (the Pop line, with `item3.now`), `wrong_layer` and `other_layer_moved`, replacing the spec's proposed lines T244 used; (2) add TD § 4's leave-out sentence for `position_moves` (said once, then the next candidate offered; never "jump") and the one-key "put the playhead right on its key" line with the note's `time`; (3) narrow the slid hint to the one-key case (TD § 7's one-key row); (4) the leftover audit finding: on a shape with `unchanged_shape`, say that line **instead of** the general "Door's pivot didn't change. If something drives it…" line, not both (FR-019b); (5) D-5 to D-7 as the spec recommends until the designer answers. Nothing else. Then `npm test`, `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`), `/agent-audit` on the file and fix what it finds there; hand back the diff for HO-3
 - [ ] T248 🖐 L-6 at the next sitting (with T237; quickstart › 2, spec › Live checks): on a duplicate of Mentor Practice 2, a stroked Lid read as `mentor/test/fixtures/anchor/lid-stroke.json`; log whether `rect` includes the stroke (1 px); duplicate deleted, Mentor Practice 2 still matches `practice2b.json`. A "no" goes to the spec writer (filter 5, row 22); blocks nothing
+- [ ] T261 🖐 **Added round 7 (2026-10-26, TD § 19b item 4; spec › Live checks › L-8, row 2).** L-8 at the next sitting, with T248, under the AE lock: on a duplicate of Mentor Practice 2, (a) a layer with an auto-center expression on its **unkeyed** Anchor Point and (b) a layer with an expression on its unkeyed Position that ignores `value`; for each, a read, Pan Behind as the lesson teaches it, a read (four captures in `mentor/test/fixtures/anchor/`, named in spec › Live checks › L-8, the builder may rename). Log for each: does the layer move on screen, and which hint `anchor_check` returns. Duplicate deleted, Mentor Practice 2 still matches `practice2b.json` (strict compare; `capture.mjs --compare` skips `layer_info`). The result goes to the spec writer and the designer; no `SKILL.md` line until then. Blocks nothing
 
 ---
 
@@ -259,12 +264,23 @@ Same add-only rule: the file below is one this branch added. **T259 blocks HO-1'
 - [x] T259 [US1] **In progress by the cockpit's skill-builder, 2026-10-26** (started from TD § 19a's B-12 directly, before this task was written; listed here so the phase is complete). `.claude/skills/anchor-mentor/SKILL.md` step 1, per TD § 19a › Items › B-12 and spec FR-006a and FR-009: (1) practicing: the proposal is always the read's `proposal`, and `next` gives only the memory clause; a learner who wants another go at `next`'s layer names it; (2) the leave-out list's null, camera, light and adjustment line becomes TD § 19a item 2's sentence with the layer's name and kind, then the proposal as for any layer that can't be the focus; never a pointer to the null lesson or a word about a null's pivot; (3) on the two-frames line (TD § 18, T258's wording), "never round or write a time yourself" becomes "never round or write these two times yourself", so it reads as a rule about the two labels, not every time in the file (the cockpit's addition to B-12). Also confirm the continued-with-no-focus line (spec FR-006a, Open questions › D-10) opens as a new lesson **by the record** (the practicing form when this skill has history), and change it only if it doesn't. Nothing else. Then `npm test`, `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`), `/agent-audit` on the file; hand back the diff for HO-3
 - **HO-1 update (eval engineer, through the cockpit; not a builder task):** see Hand-offs › HO-1 › Round 6.
 
+## Phase 8h: Round 7 of 2026-10-26 (skill-builder on `skill-5-anchor`; desk, no 🖐 here)
+
+From spec › Changes › round 7: TD § 19b's B-13 (spec FR-004, FR-006a, US1 #10, Edge Cases) and
+the eval smoke run's leaked self-note (spec › Eval plan › `no_text_before_snapshot`). Same
+add-only rule: the file below is one this branch added. **T260 blocks HO-1's baseline** (seven of
+eleven smoke transcripts would fail `no_text_before_snapshot` without it). It doesn't block T240
+or the live lessons. No tool change. L-8 is T261, listed with T248 in Phase 8c for the next
+sitting.
+
+- [x] T260 [US1] **In progress by the cockpit's skill-builder, 2026-10-26** (started from TD § 19b's B-13 directly, before this task was written; listed here so the phase is complete). `.claude/skills/anchor-mentor/SKILL.md`, per TD § 19b › Items › B-13 (its wording, not copied here) and spec FR-004, FR-006a, FR-008: (1) step 1, the no-candidate wording fires when `proposal` is null (drop "and nothing can be named"), even if a background, hidden layer or matte could still be named; (2) step 1, after the leave-out heading, "With no proposal and no candidate left, step 1's solid line", and drop the null, camera, light, adjustment line's own "(with none left, step 1's solid line)"; (3) step 1, full-frame: it can be named, never offer it; (4) step 5, one focus layer, a watch the learner asks for on a layer they name: the demo at the place they give, else ask which of the nine before `anchor_snapshot`, never a hinge the mentor picks; (5) step 1, practicing: "No sentence for this." after "they can name it"; (6) step 1, continued with no focus: a new lesson, the memory clause only if step 0 found this skill practicing, then the intent question and the proposal (D-10); (7) step 1, the can't-read sentence for every cause ("I can't read Orbit well enough to check its pivot right now, so I'll leave it out."); (8) **from the eval smoke run (rounds 5 and 6, not in B-13):** steps 0 and 1, call `read_learner_record` and `anchor_snapshot` back to back and write nothing until the snapshot has come back, so no self-note ("First lesson on this skill.", "Review is due. Run the review.") reaches the learner; review mode too. Nothing else. Then `npm test`, `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`), `/agent-audit` on the file; hand back the diff for HO-3, then the eval engineer re-runs the cases that leaked (HO-1 › Round 7)
+
 ---
 
 ## Phase 9: Polish and hand-back
 
-- [ ] T238 Re-run T229's checks on the final branch (live fixtures, no stand-ins)
-- [ ] T239 Write the hand-back: branch and commit; test counts; L-1 to L-5 results; SC-001 and SC-002 from T236 and T237; any snippet fix; anything for the spec; the Requests below. The cockpit writes `discovery/usage-notes/anchor-build.md` from it
+- [x] T238 Re-run T229's checks on the final branch (live fixtures, no stand-ins) **Done 2026-10-26 (cockpit):** mentor 1148 pass, 0 fail, 3 todo; hooks 39/39; vs `main`, 73 files added and only `tasks.md` modified; the 2 files outside skill-builder's are the cockpit's sitting log and usage note.
+- [x] T239 Write the hand-back: branch and commit; test counts; L-1 to L-5 results; SC-001 and SC-002 from T236 and T237; any snippet fix; anything for the spec; the Requests below. The cockpit writes `discovery/usage-notes/anchor-build.md` from it **Done 2026-10-26:** `discovery/usage-notes/anchor-build.md`.
 - [ ] T240 🖐 [US3] Later, a day or more after the first pass: the live review on the layer the review names, Needle after quickstart › 5's two lessons (amended 2026-10-26, was "Tab or Peg"; quickstart › 6, SC-009, stretch), logged by the builder; the cockpit adds it to the usage note
 
 ---
@@ -296,6 +312,11 @@ Same add-only rule: the file below is one this branch added. **T259 blocks HO-1'
   layers can I use?" (up to three `default` candidates, no `position_moves` layer); 37 the
   same-label times ("3.67 s" and "3.7 s", a variant of 24's synthetic). The missing-time line
   stays unit-tested. Run each new case once before a baseline.
+  **Round 7 (2026-10-26, TD § 19b):** no case change needed (spec › Eval plan now matches the set
+  as built: case 1 in one turn, 34 and 35 checked on turn 2, universal `no_text_before_snapshot`).
+  After T260, re-run the cases whose smoke transcripts leaked a self-note (at least 01, 16, 26)
+  once each before a baseline. Optional, the eval engineer's call: 35's practicing variant and a
+  background-only comp (spec › Open questions › E › round 7).
 - **HO-2 Curriculum designer:** `/overlap-audit` re-run on the built branch before HO-1: TD § 9
   against T228's tests on live fixtures, the rows marked **contract** re-confirmed against wave B's
   code as built, and L-1 to L-5's results.
@@ -311,7 +332,9 @@ Same add-only rule: the file below is one this branch added. **T259 blocks HO-1'
   in the opening; each leave-out on the naming turn). After T258, on its diff (the labels said as
   given, no time formatted in the prompt, the missing-time line). After T259, on its diff (spec
   FR-006a: the proposal is always the read's; FR-009: TD § 19a's sentence for the four kinds, no
-  null lesson pointer, no null's pivot).
+  null lesson pointer, no null's pivot). After T260, on its diff (spec FR-004 and FR-006a: no
+  background offered, the solid line when `proposal` is null, D-10's practicing clause, a named
+  watch layer's place asked not picked, nothing written between the record read and the snapshot).
 - **HO-6 Curriculum designer (round 3, 2026-10-26):** D-8 (the "already moves" sentence on a
   one-key layer whose rest key is on another frame) and D-9 (the spec's reading of which layer
   the watch is on), spec › Open questions › D. **Done 2026-10-26** (TD § 18, `47c90bd`); tasked
@@ -353,6 +376,8 @@ Same add-only rule: the file below is one this branch added. **T259 blocks HO-1'
   blocks T240 or the merge beyond HO-1; the next no-layer-in-mind live lesson after T257.
 - Phase 8g (2026-10-26, round 6): T259 (in progress), after T257 (both edit `SKILL.md` step 1) →
   HO-1's round 6 cases. Blocks nothing else.
+- Phase 8h (2026-10-26, round 7): T260 (in progress), after T259 (both edit `SKILL.md` step 1) →
+  HO-3 → HO-1's re-run and baseline. T261 at the next sitting with T248, blocking nothing.
 - HO-2 and HO-3 after T235; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
 
 ## Parallel opportunities
@@ -369,8 +394,9 @@ Same add-only rule: the file below is one this branch added. **T259 blocks HO-1'
 3. Phases 6–7 close the cloud part; Phase 8 is one sitting after spec 004's live tasks; Phase 9
    hands back.
 
-**Task count:** 58 (T201–T258): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
+**Task count:** 61 (T201–T261): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
 hand-back 3, live sitting 6, amendment 4 (2026-10-26), round 2 4 (2026-10-26), round 3 5
-(2026-10-26), round 4 3 (2026-10-26), round 5 2 (2026-10-26), polish 3. **🖐 live: 8** (T232, T233, T236, T237 in the sitting; T248 with T237;
-T251 and T253; T240 a day or more later). Hand-offs: 6; requests: 1 (SR-2), plus SR-4 if T251
+(2026-10-26), round 4 3 (2026-10-26), round 5 2 (2026-10-26), round 6 1 (2026-10-26), round 7 2
+(2026-10-26, T260 and T261), polish 3. **🖐 live: 9** (T232, T233, T236, T237 in the sitting; T248
+and T261 at the next sitting; T251 and T253; T240 a day or more later). Hand-offs: 6; requests: 1 (SR-2), plus SR-4 if T251
 calls for it.

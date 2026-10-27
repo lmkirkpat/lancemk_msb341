@@ -398,8 +398,9 @@ was. Pan Behind changes both together, so nothing moves on screen.
 A review is hands-on and quick: **no demonstration, no watch offer, no walkthrough, and no tool or
 shortcut named before "done".** "I already know it" runs the same way.
 
-1. Call `anchor_snapshot` with `mode: "review"`. It leaves out the layers earlier lessons on this
-   comp used.
+1. Call `anchor_snapshot` with `mode: "review"`, straight after `read_learner_record` with nothing
+   written in between (no "review due" note, nothing about which path you're taking). It leaves out
+   the layers earlier lessons on this comp used.
 2. If `no_demo_reason` comes back meaning there's nothing new here, say there's nothing new to
    review on this comp, and record nothing.
 3. Name the `proposal` layer and ask where it should turn from, before anything else: "Here's Tab.
