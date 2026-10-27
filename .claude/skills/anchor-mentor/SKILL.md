@@ -97,11 +97,11 @@ was. Pan Behind changes both together, so nothing moves on screen.
 
 1. **The opening: one choice.** Call `anchor_snapshot` with no options. Your first turn asks one
    thing, which layer and where it turns from, and ends on that choice. It carries, in order:
-   1. **A memory clause**, only when step 0 found this skill practicing, or `lesson` is continued
-      or resumed. Never for a first lesson on this skill.
+   1. **A memory clause**, only when step 0 found this skill practicing, or a continued or
+      resumed lesson has a focus. Never for a first lesson on this skill.
    2. **The intent question**, before you name any place.
    3. **The proposal**, as the fallback answer to the same question: one sentence, ending on the
-      offer, when `proposal` isn't null and the lesson isn't continued or resumed. Its hinge comes
+      offer, when `proposal` isn't null and no continued or resumed lesson has a focus. Its hinge comes
       from its `suggested_place`.
 
    **Don't state the lesson's idea here; it comes in step 2, with the frame.** Name no layer this
@@ -117,8 +117,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
      its middle, and where should it turn from? Or Needle could swing from the middle of its bottom
      edge. Want to try that one?" Say how long ago in place of "Last time" when you have it
      ("Yesterday, …"). The proposal is always the read's `proposal`; `next` gives only the memory
-     clause. If they want another go at the layer `next` names, they can name it. No sentence for
-     this.
+     clause. If they want another go at the layer `next` names, they can name it. Don't say this to
+     the learner.
    - **Continued or resumed lesson:** no intent question and no proposal. Say where it left off in
      one sentence and hand it back: "We were on Door, from the middle of its left edge. Ready to set
      it?" If it left off before a layer and place were chosen (no focus in the read), open as a
