@@ -21,7 +21,13 @@ new file, tool or field beyond the two labels; the constitution check below is u
 the builder) adds Phase 8g: T259 (`SKILL.md` step 1, B-12: the practicing proposal is always the
 read's; TD § 19a's sentence for a named null, camera, light or adjustment layer; already in
 progress by the cockpit's skill-builder), plus HO-1's cases 32 to 37. No tool, file or field
-change; the constitution check is unchanged.
+change; the constitution check is unchanged. Round 7 (2026-10-26, spec › Changes › round 7; TD § 19b
+decided by the cockpit under the human's go-ahead, the spec's parts awaiting the builder) adds
+Phase 8h: T260 (`SKILL.md`, B-13's seven items plus the smoke run's "nothing written between the
+record read and the snapshot"; already in progress by the cockpit's skill-builder) and T261
+(live check L-8 at the next sitting, with T248), plus an HO-1 re-run note and an HO-3 review of
+T260's diff. FR-004's full-frame bucket becomes "never proposed", which the build already does,
+so again no tool, file or field change; the constitution check is unchanged.
 
 ## Summary
 
@@ -186,7 +192,7 @@ fallbacks.
   nothing else in the snapshot gives them. Ask: `comp` gains `width` and `height` (`comp.width`,
   `comp.height`, pixels), absent on older captures; a unit test in spec 004's snapshot tests; the
   data-model's Snapshot additions row. **Why here:** FR-004's full-frame bucket ("allowed if named,
-  proposed only when nothing else exists"). **Without it** the build still works: full-frame layers
+  never proposed", round 7; was "proposed only when nothing else exists"). **Without it** the build still works: full-frame layers
   rank last by area (research R1) and `full_frame` stays `null`; the bucket turns on by itself once
   the field appears. Not blocking for this skill; it is for spec 012's proposal. Wanted before the
   Phase 8 captures so they carry the field.
