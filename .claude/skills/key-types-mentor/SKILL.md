@@ -120,7 +120,11 @@ most; they hold the rest with their own hands.
    `preview_frame` in the middle of a focus pair: "At 1.2 s Blink is half see-through: it fades."
    If `held_examples` has a held pair, show one frame just before its `jump_time` and one just
    after (one frame is 1 / `comp.frame_rate` seconds) to show what a snap looks like on their own
-   comp. In words: hold keeps the value until the next key, then jumps. Keep it short.
+   comp. In words: hold keeps the value until the next key, then jumps. Keep it short. Pass the
+   focus layer's name as `layer` to each `preview_frame` here, and say in plain words where it is
+   in the frame ("the small square near the top left"), placing its bounds on the image by scaling
+   them by the image's size over the comp's; never a pixel number. With no bounds back, point at
+   nothing and describe the snap from the tool data.
 
 4. **Invite them to try.** Ask them to hold the focus pairs themselves and say "done". Tell them
    which pairs, by layer, property and time, and where hold lives (above). Say it's the key at
@@ -131,7 +135,8 @@ most; they hold the rest with their own hands.
    Opacity at 1 s, so it snaps at 1.4 s"), that **Edit > Undo** reverses it, and show the two
    frames it returns in `frames` with `preview_frame`. If the jump lands on Opacity 0 (the pair's
    second value is 0), say the layer vanishes there; show the "before" frame where it's visible
-   and say the jump in words rather than showing a blank frame as proof. **One demonstration per
+   and say the jump in words rather than showing a blank frame as proof. Pass the demo pair's
+   layer as `layer` to both frames and say where it is, as in step 3. **One demonstration per
    lesson.**
 
    If `demo_target` is null there's no demo. With one focus pair, say in one sentence that if you
