@@ -181,8 +181,8 @@ a brand new session act like a colleague who already knows what you are working 
             snapshot after two wording fixes): have the snapshot tool read the record and pick
             review mode itself, so the mentor makes one call with nothing to narrate. Shared code,
             so a spec item first; applies to every skill with a review.
-         2. HO-4: the easing set at 25/25 or within one (about $12), then the skill 5 baseline
-            (about $15 to $20). Add the two cases on the README's to-do first (a background-only
+         2. HO-4 met 2026-10-27 (T183's base run, 25/26, logged for specs 011 and 012). Next, the
+            skill 5 baseline (about $15 to $20). Add the two cases on the README's to-do first (a background-only
             comp; a named layer with no place given).
          3. A short first lesson on the new opening; watch for "what do you mean by turn from?".
          4. T240, the review, a day or more after T237. T248 (a stroke) and T261 (L-8, an unkeyed
