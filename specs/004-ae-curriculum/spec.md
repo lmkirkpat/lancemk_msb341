@@ -24,7 +24,7 @@ and "never compare raw key values", and points to spec 012 FR-011 to FR-013. Wav
 **Changes 2026-10-26** (the builder approved seven loose ends from the first live lessons of skills
 2, 1 and 3): FR-039 to FR-045 and SC-014 are new (Requirements › Loose ends in the merged skills),
 tasked as tasks-wave-b.md Phase 9 (T167 onward). Research R24 and R25 are new. Open questions LE-1
-to LE-3 are for the builder; LE-1 gates one task (T174).
+to LE-3 were answered by the builder the same day (all three as recommended).
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
@@ -636,14 +636,16 @@ sentence match what the tools and live sittings showed.
 - **FR-043 (a stale open lesson starts fresh)**: In `session.start` (`mentor/lib/session.mjs`), an
   open lesson for the same skill and comp that was **never checked and has no demonstration** MUST
   start as a new lesson (`lesson: "new"`, this snapshot as its baseline, no `skill_data`, and no
-  `skill_options` unless this call sends them) when it is stale:
-  - it started on an earlier calendar day (the machine's local date of its `lesson_id` time); or
-  - its baseline no longer matches the comp on its targets' keys (the key times and values of every
-    property its `target_refs` name, or a target layer or property that's gone), **and it is being
-    resumed**, not continued. A continued lesson (the same skill and comp were the last lesson
-    touched) keeps its baseline whatever its keys read, because a mismatch there is the learner's own
-    work before their first "done" (re-snapshotting never resets a lesson; contracts/skill-module.md ›
-    4, amended for this requirement). See LE-1.
+  `skill_options` unless this call sends them) when it is stale (LE-1, the builder, 2026-10-26):
+  - it is being **resumed** (picked up after another lesson or comp was in use), whatever its
+    baseline reads and whatever day it started: the learner left it before anything was checked, so
+    nothing is lost. This is the case T037 hit (same day, resumed, baseline still matching); or
+  - it is being **continued** (the same skill and comp were the last lesson touched) and it started
+    on an earlier calendar day (the machine's local date of its `lesson_id` time).
+
+  A continued lesson from the same day keeps its baseline whatever its keys read, because a change
+  there is the learner's own work before their first "done" (re-snapshotting never resets a lesson;
+  contracts/skill-module.md › 4, amended for this requirement). There is **no baseline compare**.
 
   A lesson that was checked or had a demo resumes as today, and `fresh: true` keeps its rule
   (`LESSON_UNDERWAY`). *Source:* `discovery/usage-notes/offset.md` › session 2 finding 1 and To fix
@@ -951,9 +953,13 @@ Carried from `curriculum.md` › 12 and settled in each skill's spec or the plan
 second practice comp's targets, FR-031), B2 (the Cursor), B3 (KD-001), B4 (U and expressions), B5
 (Pan Behind), B6 (FR-032), B7 (FR-024), B8 (scripting names); E1 to E4 (the Eval plan above).
 
-### Loose-ends pass, for the builder (LE), 2026-10-26
+### Loose-ends pass, for the builder (LE), 2026-10-26: answered the same day
 
-1. **LE-1: what makes an open lesson stale (FR-043; gates T174).** The approved rule ("an earlier
+The builder took all three recommendations on 2026-10-26: LE-1 is in FR-043 and T173, T174; LE-2
+keeps skills 5 and 6's restart sentence a follow-up; LE-3 keeps the frame pointer to key types in
+this pass. The questions as asked:
+
+1. **LE-1: what makes an open lesson stale (FR-043). Answered: the recommendation.** The approved rule ("an earlier
    day, or a baseline that no longer matches") has two gaps. (a) As written, it would also reset a
    lesson the learner worked on before their first "done": offset step 3 re-sends `skill_options`
    through the snapshot tool when the learner changes the order, so a stagger already made would
@@ -966,13 +972,13 @@ second practice comp's targets, FR-031), B2 (the Cursor), B3 (KD-001), B4 (U and
    lost), plus the earlier-day test for a continued one. The baseline compare is then not needed. A
    rule keyed on the server process instead would reset every panel turn (each turn starts a new
    server), so it's rejected.
-2. **LE-2: skill 6 is now on `main`** (`31fe72d`, merged after this task was set). FR-044 still leaves
+2. **LE-2 (answered: wait, as recommended): skill 6 is now on `main`** (`31fe72d`, merged after this task was set). FR-044 still leaves
    `null-parenting-mentor` and `mentor/tools/null-parenting.mjs` to a later branch, with skill 5,
    because skill 6's live lessons (T340, T341) are running in another session and editing its step 0
    would change what they test. **Recommended:** yes, keep it a follow-up. Skill 6 still gets
    `server_current` from `read_learner_record` (its step 0 calls it); only the sentence that acts on
    it waits.
-3. **LE-3: the frame pointer beyond key types.** Offset's session 2 frame had the same problem (the
+3. **LE-3 (answered: key types only, as recommended): the frame pointer beyond key types.** Offset's session 2 frame had the same problem (the
    Dots couldn't be picked out), and skills 5 and 6 lean on frames. **Recommended:** key types only in
    this pass (as approved); add one row to Later per-skill branches for offset, the pivot and the null,
    to run after T181's live check proves the bounds.
