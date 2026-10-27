@@ -12,6 +12,7 @@ import * as reviews from "../lib/reviews.mjs";
 import { readPath } from "../lib/path.mjs";
 import { recommend } from "../lib/recommend.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
+import { serverCurrent } from "../lib/server-current.mjs";
 import { json } from "../lib/reply.mjs";
 import { MentorError } from "../errors.mjs";
 
@@ -69,7 +70,8 @@ async function readLearnerRecord() {
   const now = new Date();
   const skills = {};
   for (const [id, s] of Object.entries(record.skills)) skills[id] = { ...reviews.withReviewFields(s), review_is_due: reviews.isDue(s, now) };
-  return json({ ...record, skills });
+  // FR-044: whether the code on disk is still the code this server started with (null: unknown).
+  return json({ ...record, skills, server_current: await serverCurrent() });
 }
 
 // The record must match what the session saw, so a wrong "passed" can't mark the skill learned:

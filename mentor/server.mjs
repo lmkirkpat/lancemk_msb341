@@ -8,6 +8,10 @@ import readline from "node:readline";
 import { TOOLS } from "./tools/index.mjs";
 import { CALLS_LOG } from "./paths.mjs";
 import { MentorError } from "./errors.mjs";
+import { recordStart } from "./lib/server-current.mjs";
+
+// FR-044: the mentor/ tree hash this server started with, read once (null if git can't say).
+recordStart();
 
 const SERVER_INFO = { name: "ae-mentor", title: "AE Mentor", version: "0.1.0" };
 const PROTOCOL_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"];
