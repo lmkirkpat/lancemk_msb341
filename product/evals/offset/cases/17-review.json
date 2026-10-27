@@ -37,14 +37,14 @@
         "id": "names_chips",
         "must": "(?=[\\s\\S]*Chip A)(?=[\\s\\S]*Chip B)(?=[\\s\\S]*Chip C)",
         "turns": [
-          1
+          2
         ]
       },
       {
         "id": "asks_which_first",
         "must": "which[^.?!]{0,20}first|first\\?|goes first",
         "turns": [
-          1
+          2
         ]
       },
       {

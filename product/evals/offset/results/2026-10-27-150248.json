@@ -1,0 +1,124 @@
+{
+  "run_at": "2026-10-27T21:02:48.892Z",
+  "options": {
+    "only": "11",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.62,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "11-only-landing-moved",
+      "title": "Properties kind: a landing that moved passes",
+      "covers": [
+        "EP-9",
+        "S-1"
+      ],
+      "fixture_sources": {
+        "practice-now.json": "live",
+        "props-pass-landing.json": "live"
+      },
+      "hash": "a2754429f5bbbe5721ae2781199266af149e42d3f9a2572fad259c4f84f5573e",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "snapshot_calls_ok",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:praises",
+              "pass": true,
+              "detail": "turn 3: \"Title\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-PASS",
+              "pass": false,
+              "reason": "Turn 3 opens with \"That passes,\" but then treats Opacity's moved landing as a possible fault (\"As it is now, the two start together and split apart only at the end. Was that on purpose?\"), even though the check passed with still_same and order_differs empty and flagged no problem."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time comes from the tool results: Title's Position, Scale and Opacity, Bar, Glow, CTRL, Old Take, Icon, Logo's Rotation, 0.5 s, 1.5 s, 0 s, 1 s, 0.633 s, 1.633 s and 1.367 s. 'Halfway at 1 s' and '4 frames before Position' follow directly from the check's numbers."
+            }
+          ],
+          "cost": 0.6194066,
+          "session_id": "04961644-dbc5-47bc-88d9-0e827fb4152c",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Eased every Title pair.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-YSZB0I/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": false\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: This one's about timing: motion looks designed when things don't all move at once.\n\nIn Mentor Practice, Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s, starting and landing on the same frames. I'd suggest we stagger those. If you'd rather stagger layers, Bar and Glow also both start at 0 s.\n\nA few layers are left out:\n- **CTRL** is a null. Its move only shows through what's attached to it.\n- **Old Take** is hidden, so I'll skip it unless you want it in.\n- **Icon** is a precomp, and I can't check its timing yet.\n- **Logo's** Rotation is driven by an expression, so its keys aren't what you see.\n\nDo you want to work on Title's three properties, or on Bar and Glow?\n\n### Turn 2: the project is an open comp\nLEARNER: Position first, then Opacity, then Scale, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"properties\",\"order\":[\"Position\",\"Opacity\",\"Scale\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": false\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Position\",\n    \"Opacity\",\n    \"Scale\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": \"1/Transform › Opacity/1\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-YSZB0I-runtime/04961644-dbc5-47bc-88d9-0e827fb4152c/tool-results/mcp-ae-mentor-blob-1793134942488-qog4k9.png]\n{\"comp\":\"Mentor Practice\",\"time\":1}\nMENTOR: That's the frame at 1 s. Title's Position, Scale and Opacity are all exactly halfway through their moves there. They start together at 0.5 s and land together at 1.5 s, so nothing leads the eye and the three changes blur into one.\n\n**Your plan:** Position goes first, then Opacity, then Scale, each 4 frames after the one before.\n\n**Your turn:** Keep Position where it is. Move Opacity's keys later, then Scale's keys later than that. You can do it either way:\n\n- **Drag the keys:** In the timeline, click a property's name (Opacity, for example) to select all its keys, or drag a box around them. Then drag them later in time. Only those keys move.\n- **Quick Offset:** Select the keys, hold Command and Option, and drag. After Effects spreads them out evenly as you drag. Check the order afterwards and play it back.\n\nPlay it back, and tell me \"done\" when you're happy with it.\n\n### Turn 3: the project is an open comp\nLEARNER: I staggered them. Done.\nTOOL CALL offset_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice\",\n  \"kind\": \"properties\",\n  \"members\": [\n    {\n      \"target\": \"1/Transform › Position/1\",\n      \"label\": \"Title › Position\",\n      \"layer\": \"Title\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.5,\n      \"end_before\": 1.5,\n      \"end_now\": 1.5,\n      \"lands_in_comp\": true,\n      \"moved_by\": {\n        \"start\": 0,\n        \"end\": 0\n      },\n      \"credit\": null,\n      \"status\": \"graded\"\n    },\n    {\n      \"target\": \"1/Transform › Scale/1\",\n      \"label\": \"Title › Scale\",\n      \"layer\": \"Title\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.633,\n      \"end_before\": 1.5,\n      \"end_now\": 1.633,\n      \"lands_in_comp\": true,\n      \"moved_by\": {\n        \"start\": 4,\n        \"end\": 4\n      },\n      \"credit\": null,\n      \"status\": \"graded\"\n    },\n    {\n      \"target\": \"1/Transform › Opacity/1\",\n      \"label\": \"Title › Opacity\",\n      \"layer\": \"Title\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.5,\n      \"end_before\": 1.5,\n      \"end_now\": 1.367,\n      \"lands_in_comp\": true,\n      \"moved_by\": {\n        \"start\": 0,\n        \"end\": -4\n      },\n      \"credit\": null,\n      \"status\": \"graded\"\n    }\n  ],\n  \"still_same\": [],\n  \"order_differs\": false,\n  \"out_of_comp\": [],\n  \"other_changes\": [],\n  \"rhythm\": null,\n  \"gaps_frames\": [\n    0,\n    4\n  ],\n  \"passed\": true,\n  \"demo_undone\": false\n}\nMENTOR: **That passes.** Title's three properties no longer start and land together.\n\n- **Scale** now runs from 0.633 s to 1.633 s, 4 frames after its old timing. That's exactly your gap.\n- **Opacity** is different. It still starts at 0.5 s along with Position, but it now finishes at 1.367 s, 4 frames before Position does. Its start key stayed put and its end key moved earlier, so the fade is shorter.\n\nYou'd said Opacity should come 4 frames after Position. As it is now, the two start together and split apart only at the end. Was that on purpose? Play it back and see how the start looks to you.\n"
+        }
+      ]
+    }
+  ]
+}

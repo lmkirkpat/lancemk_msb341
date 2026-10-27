@@ -172,6 +172,23 @@ Files are in `results/`. One run each unless marked.
 | 10 (`-140611`) | pass, $0.63 | |
 
 
+## Smoke re-run (2026-10-27, after `main` at `4bd5f85`; $6.33)
+
+Case 17's expectation changed: `names_chips` and `asks_which_first` moved from turn 1 to turn 2, because the mentor's first words are now the review offer and the review opens after the learner says yes. Nothing else changed.
+
+| Run | Result | Triage |
+|---|---|---|
+| 17 x3 (`2026-10-27-150208`) | **pass 3/3**, $1.52 | SC-014 met: `no_self_instructions` clean in all three |
+| 11 (`-150248`) | FAIL, $0.62 | Rubric, R-OFF-PASS: "That passes," then asks whether the split landing was on purpose. One run; the check had passed |
+| 14 (`-150327`) | pass, $0.62 | The hint no longer names a method |
+| 15 (`-150403`) | pass, $0.61 | Same |
+| 23 (`-150446`) | pass, $0.83 | |
+| 28 (`-150528`) | FAIL, $0.86 | Mechanics and gap say-back passed (no "try it at 6"). R-RECORD-HONEST: the summary adds "Stated gap was 6 frames", a number not in the check |
+| 26 (`-150614`) | FAIL, $0.84 | **FR-041's first real result:** all 22 deterministic checks passed, and R-OF-QUICK-HOW and R-RECORD-HONEST passed. The explanation used only confirmed claims. Failed on R-ONE-IDEA only (turn 2's list of three methods; turn 1 is long) |
+
+`snapshot_calls_ok` passed again in 11, 14, 15 and 23. Proposals for the baseline round, not built: a case for the review **offer** and an "I already know this" case.
+
+
 ## Planned smoke list (for after the next `SKILL.md` change; nothing here has been run)
 
 Written 2026-10-26 when the three wave A sets were re-pointed to the live captures. **No paid run has

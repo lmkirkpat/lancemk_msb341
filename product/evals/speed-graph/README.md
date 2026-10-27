@@ -156,6 +156,15 @@ Files are in `results/`. One run each unless marked.
 | 20 (`-140129`) | pass, $1.22 | FR-047 end to end on the merged tools: the first call sends no options (turns 1 and 4), no turn 4 call clears `land_hard`, the pair is named and confirmed. Both new runner checks passed |
 
 
+## Smoke re-run (2026-10-27, after `main` at `4bd5f85`; $0.43)
+
+| Run | Result | Triage |
+|---|---|---|
+| 11 (`2026-10-27-150125`) | pass, $0.43 | Replaces the ETIMEDOUT run in the table above |
+
+Speed graph smoke total: 7 of 8 cases run, 5 pass (08 x3 counted once, 10, 11, 20); 19 failed only on R-ONE-IDEA, which the next judge ignores for blank-frame remarks and the curriculum designer takes in sprint 4. Proposals for the baseline round, not built: a case for the review **offer** (the mentor's first words offer it; a learner who asks for the review skips the offer) and an "I already know this" case.
+
+
 ## Planned smoke list (for after the next `SKILL.md` change; nothing here has been run)
 
 Written 2026-10-26 when the three wave A sets were re-pointed to the live captures. **No paid run has

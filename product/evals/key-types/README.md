@@ -153,6 +153,16 @@ Files are in `results/`. Case 10 is retired and was not run.
 | 20 (`-140135`) | FAIL, $1.00 | Rubric only: R-ONE-IDEA, turn 2. R-KT-STORED-CONFIRM passed and every deterministic check passed |
 
 
+## Smoke re-run (2026-10-27, after `main` at `4bd5f85`; $2.14)
+
+| Run | Result | Triage |
+|---|---|---|
+| 16 x3 (`2026-10-27-150200`) | **pass 3/3**, $1.30 | SC-014 met: `no_self_instructions` clean in all three. The case already had a "yes, let's do the review" turn, so it expects the offer first and needed no change |
+| 12 (`-150317`) | pass, $0.84 | Replaces the judge timeout; the Blink-regression oddity in the turn 4 check did not fail it |
+
+Still open: 05 and 20 failed only on R-ONE-IDEA (see above; the curriculum designer, sprint 4). Proposals for the baseline round, not built: a case for the review **offer** and an "I already know this" case.
+
+
 ## Planned smoke list (for after the next `SKILL.md` change; nothing here has been run)
 
 Written 2026-10-26 when the three wave A sets were re-pointed to the live captures. **No paid run has
