@@ -134,10 +134,11 @@ start.
    with their names: "Here at 1 s, Title's Position, Scale and Opacity are all mid-move. When
    everything moves at once, nothing leads the eye." Keep it short.
 
-3. **Ask the intent: which goes first, and how far apart.** "Which should go first? And how far
-   apart do you want them?" If they ask what gap to use: "That's your call. Try one and play it
-   back." Then call `offset_snapshot` again with the **whole** `skill_options` every time it
-   changes:
+3. **Ask the intent: which goes first, and how far apart.** Only when `stored_choices` isn't true
+   (when it is, step 1's confirm is the only question: a yes goes on, a change is sent as below).
+   "Which should go first? And how far apart do you want them?" If they ask what gap to use:
+   "That's your call. Try one and play it back." Then call `offset_snapshot` again with the
+   **whole** `skill_options` every time it changes:
    - `kind` if they picked the other kind; `members` if they named layers themselves.
    - `order`: the members in their order, by the names in `group` (layer names, or property names
      for one layer). They can name all but the last.

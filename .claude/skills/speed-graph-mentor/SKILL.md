@@ -105,7 +105,8 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
      Scale already starts quickly and lands softly"). Never say a layer has no expression.
    - `other_candidates` are eased pairs outside the focus (an Opacity, an effect, a shape's Trim
      Paths). Mention them only if the learner asks what else they could shape; they can pick any.
-   - **Light intent check.** Ask once whether any of these moves should land hard, like an impact
+   - **Light intent check.** Only when `stored_choices` isn't true (when it is, the confirm below
+     is the only question). Ask once whether any of these moves should land hard, like an impact
      or a slam. If they name one, drop it without argument: call `speed_graph_snapshot` again with
      its pair id added to `land_hard`, and always send both lists. It stays out for the rest of the
      lesson. Overshoot and bounce aren't part of this lesson.

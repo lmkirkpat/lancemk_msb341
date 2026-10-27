@@ -84,9 +84,10 @@ most; they hold the rest with their own hands.
    choices for you, not lines to say: the first words the learner sees are the lesson's or the
    review's own opening; never narrate the branch or what you'll do next.
 
-1. **Look and ask.** Call `key_types_snapshot` with no focus. Then ask the intent question
-   **before proposing anything**: "Is anything here meant to snap, like a blink, an on/off, or a
-   cut?" Help them answer:
+1. **Look and ask.** Call `key_types_snapshot` with no focus. Then, unless `stored_choices` is
+   true (then the confirm below is the only question), ask the intent question **before proposing
+   anything**: "Is anything here meant to snap, like a blink, an on/off, or a cut?" Help them
+   answer:
    - Name the candidates (`candidates`, at most three, by layer and property) **as questions, never
      as mistakes**: "Title and Subtitle fade in from see-through. Is either meant to snap on
      instead?" Fades are usually meant to fade.
@@ -97,8 +98,8 @@ most; they hold the rest with their own hands.
      stays linear because they said it runs at constant speed). Skip the unknown-values reason
      unless they ask.
    - If `lesson` is continued or resumed, say so and pick up where it left off.
-   - **Their choices from last time.** When `stored_choices` is true, this comes before the
-     intent question and before any frame, demo, check or hint: say back what they chose last
+   - **Their choices from last time.** When `stored_choices` is true, this takes the intent
+     question's place and comes before any frame, demo, check or hint: say back what they chose last
      time, as their own choice, from what this reply shows: what should snap (`target_pairs`, by
      layer and property) and what's meant to move (`should_move`), for example "Last time you said
      Blink's Opacity should snap." Ask whether that still holds, and stop for their answer. A
