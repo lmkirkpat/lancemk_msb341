@@ -167,6 +167,37 @@ export function positionKeyTimes(kl) {
   return uniqueTimes(keyedProps(kl, POSITION_PATHS).flatMap((p) => p.keys.map((k) => k.time)));
 }
 
+// Half a frame at the read's frame rate (FR-004's "within half a frame"), or the read tolerance
+// when the frame rate is missing.
+export function halfFrame(snapshot) {
+  const fps = snapshot && snapshot.comp && snapshot.comp.frame_rate;
+  return isNum(fps) && fps > 0 ? 0.5 / fps + 1e-6 : TIME_TOL;
+}
+
+// Position's key times as FR-004 counts them (D-4): key times, not keys; separated X and Y (and Z)
+// together; hold keys like any key; a time within half a frame of the last one kept is merged into it.
+export function positionTimes(snapshot, kl) {
+  const tol = halfFrame(snapshot);
+  const all = keyedProps(kl, POSITION_PATHS).flatMap((p) => p.keys.map((k) => k.time)).filter(isNum).sort((a, b) => a - b);
+  const out = [];
+  for (const t of all) if (!out.length || t - out[out.length - 1] > tol) out.push(r3(t));
+  return out;
+}
+
+// Which Position rule applies (FR-004, D-4): null with no Position keys; "position_moves" for two
+// or more key times, or for one that isn't on the check time (the rest key, the learner's or the
+// default, more than half a frame from it); else "position_keyed". Pan Behind changes or adds one
+// Position key, at the playhead (L-2), so a layer that already moves slides at its other keys and
+// no taught move can pass.
+export function positionRule(snapshot, kl, { rest_time } = {}) {
+  const times = positionTimes(snapshot, kl);
+  if (!times.length) return null;
+  if (times.length >= 2) return "position_moves";
+  const rk = restKey(kl, { rest_time });
+  if (!rk) return "position_keyed";
+  return isNum(rk.time) && Math.abs(rk.time - times[0]) <= halfFrame(snapshot) ? "position_keyed" : "position_moves";
+}
+
 function uniqueTimes(list) {
   const out = [];
   for (const t of list.filter(isNum).sort((a, b) => a - b)) if (!out.some((u) => Math.abs(u - t) <= TIME_TOL)) out.push(r3(t));
@@ -229,8 +260,9 @@ export function checkTime(snapshot, index, opts = {}) {
 
 const DEFAULT_KINDS = new Set(["solid", "text", "footage", "precomp"]);
 
-// The bucket and reason from what's structural, before any footprint is read.
-function structural(snapshot, entry, flags, cls) {
+// The bucket and reason from what's structural, before any footprint is read. `opts.rest_time` is
+// the learner's own rest pose for this layer, if any (it decides a one-key layer, FR-004).
+function structural(snapshot, entry, flags, cls, kl = null, opts = {}) {
   const kind = entry.kind;
   if (cls === "null" || kind === "null") return ["never", "null"];
   if (kind === "camera") return ["never", "camera"];
@@ -242,6 +274,9 @@ function structural(snapshot, entry, flags, cls) {
   if (flags.expression_rotation_scale) return ["never", "expression_rotation_scale"];
   if (flags.expression_anchor_position) return ["never", "expression_anchor_position"];
   if (!kind || (!DEFAULT_KINDS.has(kind) && kind !== "shape")) return ["never", "cant_read"];
+  // Never outranks allowed-if-named: a matte, hidden, guide or locked layer that already moves can't
+  // pass either.
+  if (flags.position && positionRule(snapshot, kl, opts) === "position_moves") return ["never", "position_moves"];
   if (cls === "matte") return ["if_named", "matte"];
   if (cls === "hidden") return ["if_named", "hidden"];
   if (cls === "guide") return ["if_named", "guide"];
@@ -287,7 +322,7 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
     const ct = checkTime(snapshot, entry.index, { rest_time: rest_times[entry.name] });
     const sample = isNum(ct.time) ? sampleAt(entry, ct.time) : null;
     const rect = rectOf(sample, entry.kind);
-    let [bucket, reason] = structural(snapshot, entry, flags, cls);
+    let [bucket, reason] = structural(snapshot, entry, flags, cls, kl, { rest_time: rest_times[entry.name] });
     const fp = isNum(ct.time) ? footprint(snapshot, entry.index, ct.time, footprintOpts(entry.kind)) : { corners: null, bounds: null, reason: "not_sampled" };
     const readable = !fp.reason && fp.corners && shoelace(fp.corners) > 1e-6 && !!rect && !!pair(sample && sample.anchor);
     const ff = readable ? fullFrame(snapshot, fp.bounds) : null;
@@ -299,7 +334,7 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
       class: cls, kind: entry.kind,
       parent: parents.length ? parents[0].layer : null,
       has_children: !!(src && src.children && src.children.length),
-      keyed: { anchor: flags.anchor, position: flags.position, rotation: flags.rotation, scale: flags.scale, any: flags.any },
+      keyed: { anchor: flags.anchor, position: flags.position, rotation: flags.rotation, scale: flags.scale, any: flags.any, position_times: positionTimes(snapshot, kl) },
       pivot_as_placed: asPlaced(sample && sample.anchor, rect),
       full_frame: ff,
       place_now: readable ? placeNow(sample.anchor, rect) : null,
@@ -383,7 +418,8 @@ export const isExcluded = (layer, exclude) => (exclude || []).some((e) => e && e
 // ---- The samples each read needs (FR-013, research R4)
 
 // Every candidate's (all but the structurally never) rest-key time and Position key times, sorted,
-// at most 63, so the lesson's baseline holds every time the check compares on every layer.
+// at most 63, so the lesson's baseline holds every time the check compares on every layer. A layer
+// that already moves (position_moves, D-4) is never, so its key times drop out.
 export function neededTimes(snapshot) {
   const { known, layers } = layerInfo(snapshot);
   if (!known) return [];
@@ -391,7 +427,7 @@ export function neededTimes(snapshot) {
   for (const entry of layers) {
     const kl = keyedLayer(snapshot, entry.index);
     const flags = keyFlags(kl);
-    const [bucket] = structural(snapshot, entry, flags, classOf(snapshot, entry.index));
+    const [bucket] = structural(snapshot, entry, flags, classOf(snapshot, entry.index), kl);
     if (bucket === "never") continue;
     const rk = restKey(kl);
     if (rk && isNum(rk.time)) times.push(rk.time);
@@ -428,7 +464,9 @@ function notesFor(snapshot, c) {
     const r = rectOf(s, c.kind);
     notes.push({ layer: c.layer, note: "precomp_frame", ...(r ? { width: r3(r.width), height: r3(r.height) } : {}) });
   }
-  if (c.keyed.position) notes.push({ layer: c.layer, note: "position_keyed_tip" });
+  // A one-key layer (the only Position-keyed layer a lesson reaches, D-4), with its key's time for
+  // TD § 4's "put the playhead right on it" line.
+  if (c.keyed.position && c.keyed.position_times.length === 1) notes.push({ layer: c.layer, note: "position_keyed_tip", time: c.keyed.position_times[0] });
   if (c.class === "matte") notes.push({ layer: c.layer, note: "matte" });
   if (c.class === "hidden") notes.push({ layer: c.layer, note: "hidden" });
   if (c.class === "shy") notes.push({ layer: c.layer, note: "shy" });

@@ -175,11 +175,29 @@ test("the snapshot's second read samples every needed time on every layer, Hatch
 });
 
 test("anchor_check asks for the rest keys and Position key times of the focus", async () => {
-  await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }] } });
+  // Sled already moves (three Position key times), so it's refused (D-4) and only Pop is a target.
+  const s = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }] } });
+  assert.deepEqual(s.targets, [`anchor/${idx("Pop")}`]);
+  assert.deepEqual(s.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves" }]);
   reads.length = 0;
   await call("anchor_check");
-  assert.deepEqual(reads, [{ sample_times: [0, 3.667, 4.167, 4.3, 4.667] }]);
+  assert.deepEqual(reads, [{ sample_times: [0, 4.3] }]);
   assert.deepEqual(reads[0].sample_times, checkSampleTimes(lessonNow().baseline, lessonNow()));
+});
+
+test("the one-key lesson: Sled's tip carries its key's time, and anchor_check asks for that key's time", async () => {
+  project("sled-one-key-before");
+  const want = KEY.attempts["sled-one-key"];
+  const s = await call("anchor_snapshot", { skill_options: { focus: want.focus } });
+  assert.deepEqual(s.notes.filter((n) => n.note === "position_keyed_tip"), [{ layer: "Sled", note: "position_keyed_tip", time: want.tip_time }]);
+  assert.equal(s.targets.length, 1);
+  reads.length = 0;
+  project("sled-one-key");
+  const r = await call("anchor_check");
+  assert.deepEqual(reads, [{ sample_times: [0, 3.667] }]);
+  assert.equal(r.passed, false);
+  assert.deepEqual(r.layers[0].hints, want.hints);
+  assert.equal(r.layers[0].item3.now, 0);
 });
 
 test("two focus layers: the demo is on entry 1; off target, twice, or off the rest key it's refused before the snippet", async () => {

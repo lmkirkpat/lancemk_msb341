@@ -11,7 +11,7 @@ import { analyze, candidates, demoRefusal, placeNow } from "../lib/anchor.mjs";
 import { check } from "../lib/anchor-check.mjs";
 import { compPoint, footprint, sampleAt } from "../lib/comp-space.mjs";
 import { byIndex, layerInfo } from "../lib/layer-info.mjs";
-import { clone, fixture, indexOf, lessonFor, synthetic } from "./fixtures/anchor/load.mjs";
+import { clone, fixture, indexOf, KEY, lessonDirect, lessonFor, synthetic } from "./fixtures/anchor/load.mjs";
 
 const SNAPSHOT_JSX = fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "jsx", "snapshot.jsx"), "utf8");
 const P2 = fixture("practice2b");
@@ -66,33 +66,77 @@ test("row 4: keys on Anchor Point aren't a candidate (Wobble); a key added on th
   assert.deepEqual(layerOf(r, "Door").hints, ["stopwatch"]);
 });
 
-test("row 5: Position keyed is allowed if named; item 4 at every key time; a key added is an other change", () => {
-  assert.deepEqual([cand(P2, "Sled").bucket, cand(P2, "Sled").reason], ["if_named", "position_keyed"]);
+test("row 5: Position keyed at two or more times is never (position_moves), every one of Mentor Practice 2's 16; item 4 still computes outside the lesson path", () => {
+  const sled = cand(P2, "Sled");
+  assert.deepEqual([sled.bucket, sled.reason], ["never", "position_moves"]);
+  assert.deepEqual(sled.keyed.position_times, KEY.practice2b.layers.Sled.position_times);
+  const moving = Object.entries(KEY.practice2b.layers).filter(([, w]) => w.reason === "position_moves").map(([n]) => n);
+  assert.equal(moving.length, 16);
+  for (const n of moving) assert.equal(cand(P2, n).reason, "position_moves", n);
   const a = analyze(P2, { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
-  assert.ok(a.notes.some((n) => n.note === "position_keyed_tip"));
-  // L-2: with the playhead before the keys, Pan Behind adds a Position key there and leaves the rest.
-  const slid = run(P2, fixture("sled-slid"), [{ layer: "Sled", place: "middle-left" }]);
+  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves" }]);
+  // Synthetic, separated: one key on X at 1 s and one on Y at 2 s is two times.
+  const sep = clone(fixture("sled-one-key-before"));
+  sep.layers.find((l) => l.name === "Sled").properties = [
+    { path: "ADBE Transform Group/ADBE Position_0", expression_enabled: false, keys: [{ index: 1, time: 1, value: 320 }] },
+    { path: "ADBE Transform Group/ADBE Position_1", expression_enabled: false, keys: [{ index: 1, time: 2, value: 960 }] },
+  ];
+  assert.equal(cand(sep, "Sled").reason, "position_moves");
+  // Outside the lesson path (the check called on Sled directly): L-2, the playhead before the keys,
+  // Pan Behind adds a Position key there and leaves the rest, so Sled slides at every old key.
+  const slid = check(P2, fixture("sled-slid"), lessonDirect(P2, [{ layer: "Sled", place: "middle-left" }]));
   assert.equal(layerOf(slid, "Sled").item4.passed, false);
+  assert.equal(layerOf(slid, "Sled").item4.worst.time, KEY.attempts["sled-slid"].item4_worst_time);
   assert.ok(slid.other_changes.some((o) => o.kind === "keys_added" && o.layer === "Sled" && o.property === "Position"));
-  // The same with one Position key.
-  const base = fixture("sled-one-key-before");
-  const r = run(base, fixture("sled-one-key"), [{ layer: "Sled", place: "middle-left" }]);
-  assert.ok(r.other_changes.some((o) => o.kind === "keys_added" && o.layer === "Sled" && o.property === "Position"));
-  assert.equal(layerOf(r, "Sled").item4.passed, false, "it slides at the one old key");
 });
 
-test("row 6: hold keys on Position are checked at each key time, not between", () => {
+test("row 5b: one Position key is allowed if named with the key's time; dragged off it, item 4 fails at the key with slid_at_key and a Position key added", () => {
+  const want = KEY.attempts["sled-one-key"];
+  const base = fixture(want.baseline);
+  assert.deepEqual([cand(base, "Sled").bucket, cand(base, "Sled").reason], [want.bucket, want.reason]);
+  const a = analyze(base, { skill_options: { focus: want.focus } });
+  assert.ok(a.notes.some((n) => n.layer === "Sled" && n.note === "position_keyed_tip" && n.time === want.tip_time));
+  const r = run(base, fixture("sled-one-key"), want.focus);
+  const sled = layerOf(r, "Sled");
+  assert.equal(sled.check_time, want.check_time);
+  assert.equal(sled.item1.passed, true);
+  assert.equal(sled.item2.passed, true, "still at the check time");
+  assert.equal(sled.item4.passed, false, "it slides at the one old key");
+  assert.equal(sled.item4.worst.time, want.item4_worst_time);
+  assert.deepEqual(sled.hints, ["slid_at_key"]);
+  assert.deepEqual(r.other_changes, want.other_changes);
+  // A one-key layer whose Scale rest key is on another frame is never; on the same frame, allowed.
+  const scaled = (restTime) => {
+    const s = clone(base);
+    s.layers.find((l) => l.name === "Sled").properties.push({ path: "ADBE Transform Group/ADBE Scale", expression_enabled: false, keys: [
+      { index: 1, time: 3, value: [50, 50, 100] }, { index: 2, time: restTime, value: [100, 100, 100] }] });
+    return s;
+  };
+  assert.equal(cand(scaled(4.167), "Sled").reason, "position_moves");
+  assert.equal(cand(scaled(3.667), "Sled").reason, "position_keyed");
+});
+
+test("row 6: hold keys on Position count like any key: Hopper's three hold times are never; item 4 still checks each key time, not between", () => {
   const base = synthetic("row6-hold-before");
+  assert.deepEqual([cand(base, "Hopper").bucket, cand(base, "Hopper").reason], ["never", "position_moves"]);
   const focus = [{ layer: "Hopper", place: "middle-left" }];
-  const slid = layerOf(run(base, synthetic("row6-hold-slid"), focus), "Hopper");
+  const runDirect = (cur) => check(base, cur, lessonDirect(base, focus));
+  const slid = layerOf(runDirect(synthetic("row6-hold-slid")), "Hopper");
   assert.equal(slid.item4.passed, false);
   assert.deepEqual(slid.hints, ["slid_at_key"]);
-  assert.equal(run(base, synthetic("row6-hold-pass"), focus).passed, true);
+  assert.equal(runDirect(synthetic("row6-hold-pass")).passed, true);
+  // One hold key: allowed if named, as row 5b.
+  const one = clone(base);
+  const p = one.layers.find((l) => l.name === "Hopper").properties[0];
+  p.keys = p.keys.slice(0, 1);
+  assert.deepEqual([cand(one, "Hopper").bucket, cand(one, "Hopper").reason], ["if_named", "position_keyed"]);
 });
 
 test("row 7: separated X and Y Position: the footprint comes from bounds, so it checks either way", () => {
-  assert.deepEqual([cand(OV, "Leaf 2").bucket, cand(OV, "Leaf 2").reason], ["if_named", "position_keyed"]);
-  const r = run(OV, leaf2Pass(), [{ layer: "Leaf 2", place: "middle-left" }]);
+  // Leaf 2's X and Y are both keyed at 0 and 1: two times, so it's never (D-4) and checked directly.
+  assert.deepEqual([cand(OV, "Leaf 2").bucket, cand(OV, "Leaf 2").reason], ["never", "position_moves"]);
+  assert.deepEqual(cand(OV, "Leaf 2").keyed.position_times, [0, 1]);
+  const r = check(OV, leaf2Pass(), lessonDirect(OV, [{ layer: "Leaf 2", place: "middle-left" }]));
   assert.equal(r.passed, true);
   assert.equal(layerOf(r, "Leaf 2").item4.passed, true);
   // Live (L-4): the demo on Tab with Position separated writes X and Y; the read can't tell, and
@@ -293,11 +337,17 @@ test("row 27: a time not sampled, or a layer with no rectangle, is can't check",
 });
 
 test("row 28: a locked layer is allowed if named, never proposed or the demo; the demo refuses; still locked at done names the lock", () => {
-  assert.deepEqual([cand(OV, "Locked Bar").bucket, cand(OV, "Locked Bar").reason], ["if_named", "locked"]);
+  // Locked before the read (door-locked as the baseline): Door is allowed if named, never the demo.
+  const locked = fixture("door-locked");
+  assert.deepEqual([cand(locked, "Door").bucket, cand(locked, "Door").reason], ["if_named", "locked"]);
+  assert.equal(demoRefusal(locked, entry(locked, "Door")), "locked");
+  const a = analyze(locked, { skill_options: { focus: [{ layer: "Tab", place: "middle-left" }, { layer: "Door", place: "middle-left" }] } });
+  assert.equal(a.demo_target, `anchor/${indexOf(locked, "Tab")}`, "the demo moves to the other layer");
+  assert.ok(a.notes.some((n) => n.layer === "Door" && n.note === "locked"));
+  // Mentor Overlaps' Locked Bar also has Position keys at 3 and 4, so never comes first (D-4); the
+  // demo still refuses it as locked.
+  assert.deepEqual([cand(OV, "Locked Bar").bucket, cand(OV, "Locked Bar").reason], ["never", "position_moves"]);
   assert.equal(demoRefusal(OV, entry(OV, "Locked Bar")), "locked");
-  const a = analyze(OV, { skill_options: { focus: [{ layer: "Still", place: "top-left" }, { layer: "Locked Bar", place: "middle-left" }] } });
-  assert.equal(a.demo_target, `anchor/${indexOf(OV, "Still")}`);
-  assert.ok(a.notes.some((n) => n.layer === "Locked Bar" && n.note === "locked"));
   const r = layerOf(run(P2, fixture("door-locked"), [{ layer: "Door", place: "middle-left" }]), "Door");
   assert.equal(r.locked, true);
   assert.deepEqual(r.hints, ["locked"]);
@@ -305,7 +355,12 @@ test("row 28: a locked layer is allowed if named, never proposed or the demo; th
 
 test("row 29: Auto-Orient on: comp-space returns auto_orient, so it isn't a candidate and a focus can't be checked", () => {
   assert.equal(footprint(OV, entry(OV, "Orbit").index, 1).reason, "auto_orient");
-  assert.deepEqual([cand(OV, "Orbit").bucket, cand(OV, "Orbit").reason], ["never", "cant_read"]);
+  // Orbit's three Position keys put it in never by its keys first (D-4); on a layer with no keys,
+  // auto-orient alone gives cant_read.
+  assert.deepEqual([cand(OV, "Orbit").bucket, cand(OV, "Orbit").reason], ["never", "position_moves"]);
+  const still = clone(OV);
+  entry(still, "Still").auto_orient = true;
+  assert.deepEqual([cand(still, "Still").bucket, cand(still, "Still").reason], ["never", "cant_read"]);
   const cur = clone(OV);
   entry(cur, "Still").auto_orient = true;
   const r = run(OV, cur, [{ layer: "Still", place: "top-left" }]);

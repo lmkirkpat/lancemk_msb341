@@ -13,8 +13,8 @@ import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { motionSources } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
 import {
-  analyze, anchorKeyCount, DEMO_MATCH_PX, footprintOpts, inPlace, keyedLayer, MOVE_PX, outsideSide, placeNow, placePoint,
-  positionKeyCount, positionKeyTimes, rectOf,
+  analyze, anchorKeyCount, checkTime, DEMO_MATCH_PX, footprintOpts, inPlace, isPlace, keyedLayer, MOVE_PX, outsideSide, placeNow,
+  placePoint, positionKeyCount, positionKeyTimes, rectOf,
 } from "./anchor.mjs";
 
 const isNum = (v) => typeof v === "number" && Number.isFinite(v);
@@ -167,6 +167,27 @@ export function hintCodes(r, others = []) {
 
 // ---- The check
 
+// The analysis of the baseline, with a place and check time for every target. A lesson's targets
+// come from analyze(), so it already has them; a target analyze() refuses (a layer that already
+// moves, FR-004 position_moves) never reaches a lesson, but the check still grades one it's handed,
+// from the learner's place and the same check-time rule, so item 4 stays unit tested on Sled's three
+// keys (FR-012, T246).
+function analysisFor(baseline, lesson) {
+  const a = analyze(baseline, { exclude: lesson.exclude || [], skill_options: lesson.skill_options || {} });
+  const focus = (lesson.skill_options && Array.isArray(lesson.skill_options.focus)) ? lesson.skill_options.focus : [];
+  for (const id of lesson.targets || []) {
+    const e = byIndex(baseline, Number(String(id).split("/")[1]));
+    if (!e || a.places[e.name]) continue;
+    const f = focus.find((x) => x && x.layer === e.name);
+    if (!f || !isPlace(f.place)) continue;
+    const ct = checkTime(baseline, e.index, { rest_time: f.rest_time });
+    const r = isNum(ct.time) ? rectOf(compSpace.sampleAt(e, ct.time), e.kind) : null;
+    if (r) a.places[e.name] = { place: f.place, point: placePoint(r, f.place) };
+    a.check_times[e.name] = { time: ct.time, basis: ct.basis };
+  }
+  return a;
+}
+
 // `lesson`: { comp_id, baseline, targets, skill_options, exclude?, demo? }. `space` stands in for
 // comp-space.mjs in tests (a wrapped call returning a reason, such as singular).
 export function check(baseline, current, lesson, { space = compSpace } = {}) {
@@ -175,7 +196,7 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
   if (!compMatches) {
     return { comp_matches: false, passed: false, lesson_comp: baseline.comp.name, layers: [], other_changes: [], demo_undone: false };
   }
-  const a = analyze(baseline, { exclude: lesson.exclude || [], skill_options: lesson.skill_options || {} });
+  const a = analysisFor(baseline, lesson);
   const targets = (lesson.targets || []).map((id) => Number(String(id).split("/")[1]));
   const focusEntries = targets.map((i) => byIndex(baseline, i)).filter(Boolean);
   const focusIndexes = focusEntries.map((e) => e.index);
@@ -252,7 +273,9 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
       const atNow = compare(space, baseline, b.index, current, c.index, now, b.kind);
       away = atNow.reason ? null : !item2.passed && !cmp.reason && !atNow.moved;
     }
-    const item3 = { at_rest: atRest, set_away_from_rest: away };
+    // `now` is the check read's own time (where the playhead was at "done"), for the away_from_rest
+    // line (FR-019, round 2).
+    const item3 = { now: isNum(now) ? r3(now) : null, at_rest: atRest, set_away_from_rest: away };
 
     // Item 4: a Position-keyed layer holds still at every Position key time of the first read.
     let item4 = null;
@@ -310,7 +333,7 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
 // What anchor_check samples (FR-013): the focus layers' check times, the baseline's comp.time and
 // the focus layers' Position key times.
 export function checkSampleTimes(baseline, lesson) {
-  const a = analyze(baseline, { exclude: lesson.exclude || [], skill_options: lesson.skill_options || {} });
+  const a = analysisFor(baseline, lesson);
   const times = [];
   for (const ct of Object.values(a.check_times)) if (isNum(ct.time)) times.push(ct.time);
   if (isNum(baseline.comp.time)) times.push(baseline.comp.time);

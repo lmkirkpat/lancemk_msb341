@@ -34,8 +34,15 @@ case and FR-028's measure edges). The stand-ins and their `stand-in/build.mjs`, 
 Every Mentor Practice 2 capture is taken with
 `--times 3.167,3.667,4.167,4.3,4.667,5.433,6.433` (`answer-key.json › times.practice2b`): Gauge's
 rest key, Pop's, Sled's three Position keys and Gradient's two. On the live comp, with all 40
-layers, `neededTimes()` asks for 30 times (`times.needed_practice2b`), so a lesson's snapshot reads
-twice; the captures hold the list above, `comp.time` and each layer's own key times.
+layers, `neededTimes()` asked for 30 times until D-4; since T246 the 16 layers with Position keys at
+two or more times are never (`position_moves`) and drop out, leaving 4 (`times.needed_practice2b`:
+Spinner's, Gauge's, Pop's and Badge's rest keys). The captures hold the list above, `comp.time` and
+each layer's own key times, not 0.25 or 4.5 on every layer, so a lesson's snapshot still reads twice.
+
+`sled-slid` and `sled-on-key` are outside the lesson path since D-4 (Sled has three Position key
+times, so no lesson can target it): the tests call the check on Sled directly (`load.mjs ›
+lessonDirect`) to keep item 4 tested on three keys. `sled-one-key` against `sled-one-key-before` is
+the one-key case a lesson can reach.
 
 ## Files
 

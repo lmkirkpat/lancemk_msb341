@@ -111,7 +111,13 @@ was. Pan Behind changes both together, so nothing moves on screen.
        visible, so they may turn its eye on to drag, and should turn it back off after.
      - hidden by the learner: "You've hidden Old Take, so turn its eye on first if you want it."
      - a guide: it can be named; it doesn't render, so a frame won't show it.
-     - Position already keyed: it can be named (tip in step 2).
+     - already moves (Position keyed at two or more times, reason `position_moves`): when they
+       name one, say once: "Sled already moves, so moving its pivot now would shift where it sits
+       at its other keys. Set the pivot before you key. Pick a layer that doesn't move yet?" Then
+       offer the next candidate as usual. With no layer in mind, one sentence for all of them,
+       naming two at most: "Sled and Card already move, so they're not in this lesson; set a
+       pivot before you key." Never say a layer would "jump".
+     - one Position key: it can be named (the playhead line in step 2).
      - locked: "Sign is locked, so unlock it first (the lock switch in the timeline)." Never
        offer it.
      - full-frame (a background): offer it only if nothing else exists.
@@ -149,15 +155,15 @@ was. Pan Behind changes both together, so nothing moves on screen.
        the screen."
      - precomp's frame (with its size): "Icon's edges are its precomp's frame, 400 × 400, not the
        square inside it."
-     - Position keyed: "Sled's Position already has keys. Pan Behind changes only the Position
-       key at the playhead, or adds one there, and leaves the others, so at those keys Sled will
-       sit somewhere else. It's simplest to set the pivot before you key."
+     - one Position key (the note's `time` is the key's time): "Sled has one Position key, at
+       3.7 s. Put the playhead right on it before you drag, so the pivot change goes into that
+       key."
      - pivot outside: the note's `side` is which side of the layer the pivot is on, as seen on
        screen. Say it in words ("below", "above", "to its left", "below and to its left"): "Lid's
-       pivot sits outside the lid, below it, which is why it swings wide." Then say where to look:
-       "Select Lid in the timeline to see its crosshair; it's below the lid." Never a distance. If
-       `side` is null, say the pivot is outside the layer and to select it in the timeline to see
-       the crosshair, with no side and no guess.
+       pivot sits outside the lid, below it, which is why it would swing wide. Click Lid in the
+       timeline and its crosshair shows up below the shape; start your drag there." Never a
+       distance. If `side` is null: "Lid's pivot sits outside the lid", the same "click Lid in the
+       timeline" to find it, and no side and no guess.
      - shy: "It's shy, so turn off the timeline's shy filter to see its properties."
    - **Then the two sentences** from "The words the lesson uses", once.
    - **One frame.** Call `preview_frame` at the focus layer's check time, with the layer in it,
@@ -224,35 +230,48 @@ was. Pan Behind changes both together, so nothing moves on screen.
        bottom edge."
      - a neighbouring place: "Banner's pivot is at its bottom-left corner. You said the middle of
        the left edge, a little higher." (Say which way from the two places.)
-     - outside the layer: "Door's pivot sits outside Door, off to its left. Select Door in the
-       timeline to see its crosshair." The side is `item1.outside_side`, as seen on screen; say it
-       in words, never a distance. If it's null, say outside with no side.
+     - outside the layer: "Lid's pivot sits outside the lid, below it, which is why it would swing
+       wide. Click Lid in the timeline and its crosshair shows up below the shape; start your drag
+       there." The side is `item1.outside_side`, as seen on screen; say it in words, never a
+       distance. If it's null: "outside the lid", the same "click Lid in the timeline" to find it,
+       and no side.
      - the wrong layer: "Needle's pivot hasn't moved, but Background's did. Pan Behind moves the
-       pivot of whatever layer is under the cursor, so select Needle and start the drag on its
-       crosshair." (The other layer is in `other_changes`.)
-     - what's drawn moved, its pivot didn't: "What's drawn in Lid moved, but Lid's own pivot
-       didn't. Edit > Undo that, then drag Lid's own crosshair with Pan Behind." On a text layer
-       name no group: "Sign's letters shifted, but its own pivot didn't" (changing how the text is
-       lined up does that).
-     - its own pivot unchanged (a shape; it comes after the place hint): "Lid's own pivot, under
-       Transform, hasn't changed. If you dragged a pivot inside Contents, that one belongs to the
-       shape's group: select Lid itself in the timeline and drag its crosshair." Offer it as a
-       possibility; never say they moved the group's pivot.
-     - set away from rest: "Pop is still shrunk at 3.3 s, so nothing showed, but its pivot did
-       move, far below it. Edit > Undo, put the playhead on 4.3 s, where it's full size, and set
-       the pivot there." Always say the pivot did move, and ask for Edit > Undo before the playhead
-       goes to the rest key. Where it went comes from `item1.outside_side` when it's outside (in
-       words, never a distance; leave it out when null); on a layer that's turned rather than
-       shrunk, say it's turned at that time instead. (Use the layer's `check_time` for where it's
-       at rest, and the result's `time` for where the playhead was.)
-     - slid at a key: "At 3.7 s Sled isn't where it was. Pan Behind changed only the Position key
-       at the playhead, or added one there, so at its other keys Sled sits somewhere else." Use
-       `item4.worst.time` for the time.
+       pivot of whatever layer is under the cursor when you start dragging, even if Needle is
+       selected. Edit > Undo, then start the drag right on Needle's crosshair." (The other layer is
+       in `other_changes`.) Never give selecting the layer first as the fix.
+     - what's drawn moved, its pivot didn't: on a text layer, "Sign's letters moved, but its pivot
+       didn't: changing how text lines up moves the letters, not the pivot. Edit > Undo that, and
+       move only the pivot, with Pan Behind (Y)." On a shape or any other layer, "Lid's shape moved
+       inside the layer, but its pivot didn't, so Lid shifted on screen. Edit > Undo that, and move
+       only the pivot, with Pan Behind (Y)." Name no group on a text layer.
+     - its own pivot unchanged (a shape; it comes after the place hint): "Lid's own pivot hasn't
+       changed. If you dragged a pivot while something under Contents was selected, that one
+       belongs to a group inside Lid, not Lid itself. Click Lid's name in the timeline, then drag
+       its crosshair." Offer it as a possibility; never say they moved the group's pivot. Say this
+       **instead of** the "didn't change … like an expression" line below, never both.
+     - set away from rest, on a layer shrunk to nothing there: "Pop is shrunk to nothing at 3.3 s,
+       so the drag looked like it did nothing, but it did move Pop's pivot, far below it. Edit >
+       Undo first, then put the playhead on 4.3 s, where Pop is full size, and set the pivot
+       there." On a layer that's turned there instead: "Gauge is part-way through its turn at
+       4.2 s. Edit > Undo first, then put the playhead on its key at 3.2 s, where it's at rest, and
+       set the pivot there." The time the playhead was at is `item3.now`; where it's at rest is the
+       layer's `check_time`, said as a time, never as "its first key". Say "far below it" (or far
+       to its left, and so on) only when `item1.place_now` is outside and `item1.outside_side`
+       gives the side, in words; otherwise leave that clause out, never a guess. Always ask for
+       Edit > Undo before the playhead goes to the rest key.
+     - slid at a key (a layer with one Position key, dragged with the playhead off it): "Sled stays
+       put at 0 s, but at 3.7 s it now sits to the right of where it was. Pan Behind changed
+       Position only where the playhead was, and added a key there. Edit > Undo, put the playhead
+       right on Sled's key at 3.7 s, and drag again." The first time is the layer's `check_time`,
+       the second `item4.worst.time`; the way comes from `item4.worst` (`dx` above zero is to the
+       right, below zero to the left; `dy` above zero is lower, below zero higher), never how far.
+       Never "jump".
      - in place but moved (TD § 7): "Needle's pivot is in the right place, but Needle moved too, up
        and to the left. Edit > Undo back to where only the pivot had moved." Use `item2.direction`
        for the way.
-     - another layer moved (TD § 7): "Needle looks good, but Background moved, down and to the
-       right. Edit > Undo that, and start the drag on Needle's own crosshair." The layer and
+     - another layer moved: "Needle looks good, but Background moved too, down and to the right.
+       Edit > Undo until Background is back, then check Needle's pivot is still where you put it."
+       Name no drag start: a layer that moved on screen wasn't moved by Pan Behind. The layer and
        the way are in `item5.moved_layers`; if it has no direction (I couldn't read its edges, only
        that its own values changed), say it moved and leave out which way.
      - Anchor Point's stopwatch: "Anchor Point has a stopwatch on now, so the pivot would move over
@@ -260,8 +279,9 @@ was. Pan Behind changes both together, so nothing moves on screen.
      - a matte's eye: "Reveal Matte is a matte, so turn its eye back off."
      - locked: "Door is still locked, so Pan Behind can't move it. Unlock it first (the lock switch
        in the timeline)."
-   - **A pivot that didn't change after "done"** on a layer they say they moved: "Door's pivot
-     didn't change. If something drives it, like an expression, I can't see that yet."
+   - **A pivot that didn't change after "done"** on a layer they say they moved, when it isn't a
+     shape with the "own pivot unchanged" hint above: "Door's pivot didn't change. If something
+     drives it, like an expression, I can't see that yet." On that shape, the hint's line alone.
    - **Other changes** (`other_changes`): mention briefly, without treating them as mistakes,
      unless a hint above already covers one. Don't list layers in `not_compared` unless asked;
      never call them unchanged.

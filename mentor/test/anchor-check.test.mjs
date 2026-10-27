@@ -9,7 +9,7 @@ import { check, checkSampleTimes, hintCodes, otherChanges } from "../lib/anchor-
 import { unexpectedChanges } from "../lib/diff.mjs";
 import { analyze, demoValues, rectOf } from "../lib/anchor.mjs";
 import { apply as applyDemo } from "../fixture/anchor-demo.mjs";
-import { clone, fixture, indexOf, KEY, lessonFor, synthetic } from "./fixtures/anchor/load.mjs";
+import { clone, fixture, indexOf, KEY, lessonDirect, lessonFor, synthetic } from "./fixtures/anchor/load.mjs";
 
 const P2 = fixture("practice2b");
 const DOOR = [{ layer: "Door", place: "middle-left" }];
@@ -38,10 +38,31 @@ test("the result carries the check read's own time, for the rest hint", () => {
 // The live base with its playhead somewhere else, as a learner who started the lesson there would
 // have it (the base holds samples at every --times time).
 const at = (snap, time) => { const s = clone(snap); s.comp.time = time; return s; };
-const baseFor = (want) => (want.baseline_comp_time !== undefined ? at(P2, want.baseline_comp_time) : P2);
+const baseFor = (want) => {
+  const base = want.baseline ? fixture(want.baseline) : P2;
+  return want.baseline_comp_time !== undefined ? at(base, want.baseline_comp_time) : base;
+};
+// An answer-key attempt against its baseline: as a lesson would set it up, or, for a check a lesson
+// can't reach since D-4 (Sled with three Position keys), with the focus as targets directly.
+const runAttempt = (file, want) => {
+  const base = baseFor(want);
+  return want.outside_lesson_path ? check(base, fixture(file), lessonDirect(base, want.focus)) : run(base, fixture(file), want.focus);
+};
 
+test("item3.now is the check read's own comp.time: pop-shrunk's 3.3, where Pop is shrunk to nothing (FR-019, round 2)", () => {
+  const want = KEY.attempts["pop-shrunk"];
+  assert.equal(fixture("pop-shrunk").comp.time, want.item3_now, "the capture's own time");
+  const pop = layerOf(run(P2, fixture("pop-shrunk"), want.focus), "Pop");
+  assert.equal(pop.item3.now, want.item3_now);
+  assert.equal(pop.item3.at_rest, false);
+  assert.equal(pop.item3.set_away_from_rest, true);
+  assert.equal(layerOf(run(P2, fixture("door-pass"), DOOR), "Door").item3.now, 0);
+});
+
+// Outside the lesson path since D-4: Sled has three Position key times, so the analysis refuses it
+// and no lesson can target it. The check is called on Sled directly to keep item 4 tested on three keys.
 test("item 4 fails on a slide at the Position keys while item 2 passes (L-2, playhead before the keys: a key added at 0)", () => {
-  const r = run(P2, fixture("sled-slid"), [{ layer: "Sled", place: "middle-left" }]);
+  const r = check(P2, fixture("sled-slid"), lessonDirect(P2, [{ layer: "Sled", place: "middle-left" }]));
   const sled = layerOf(r, "Sled");
   assert.equal(sled.item2.passed, true);
   assert.equal(sled.item4.passed, false);
@@ -53,7 +74,7 @@ test("item 4 fails on a slide at the Position keys while item 2 passes (L-2, pla
 test("L-2, playhead on the first key: only that key is rewritten, Sled slides at the other two, no key added", () => {
   const want = KEY.attempts["sled-on-key"];
   const base = baseFor(want);
-  const r = run(base, fixture("sled-on-key"), want.focus);
+  const r = check(base, fixture("sled-on-key"), lessonDirect(base, want.focus));
   const sled = layerOf(r, "Sled");
   assert.equal(sled.check_time, 3.667);
   assert.equal(sled.item2.passed, true, "still at the playhead");
@@ -204,8 +225,18 @@ test("comp_matches is false on another comp, and nothing is graded", () => {
 });
 
 test("checkSampleTimes: the focus's check times, the baseline's comp.time and its Position key times", () => {
+  // In a lesson Sled is refused (D-4), so only Pop's rest key and the baseline's time are asked for.
   const l = lessonFor(P2, [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }]);
-  assert.deepEqual(checkSampleTimes(P2, l), [0, 3.667, 4.167, 4.3, 4.667]);
+  assert.deepEqual(l.targets, [`anchor/${indexOf(P2, "Pop")}`]);
+  assert.deepEqual(checkSampleTimes(P2, l), [0, 4.3]);
+  // Sled as a target directly (outside the lesson path): its three Position key times too.
+  const direct = lessonDirect(P2, [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }]);
+  assert.deepEqual(checkSampleTimes(P2, direct), [0, 3.667, 4.167, 4.3, 4.667]);
+  // The one-key lesson: Sled's key at 3.667 and the base's own time.
+  const base = fixture("sled-one-key-before");
+  const one = lessonFor(base, [{ layer: "Sled", place: "middle-left" }]);
+  assert.deepEqual(one.targets, [`anchor/${indexOf(base, "Sled")}`]);
+  assert.deepEqual(checkSampleTimes(base, one), [0, 3.667]);
 });
 
 // ---- Other changes (FR-019), from layer_info for every layer
@@ -246,14 +277,14 @@ const ROWS = [
   ["outside", "door-outside"],
   ["wrong_layer", "wrong-layer"],
   ["away_from_rest", "pop-shrunk"],
-  ["slid_at_key", "sled-slid"],
+  ["slid_at_key", "sled-one-key"],
   ["stopwatch", "stopwatch"],
   ["locked", "door-locked"],
 ];
 for (const [code, file] of ROWS) {
   test(`hint ${code}: ${file} gives exactly that code`, () => {
     const want = KEY.attempts[file];
-    const r = run(P2, fixture(file), want.focus);
+    const r = runAttempt(file, want);
     const l = layerOf(r, want.focus[0].layer);
     assert.deepEqual(l.hints, [code]);
     assert.equal(r.passed, false);
@@ -320,8 +351,11 @@ test("hint cant_check: said instead of any other hint for that layer", () => {
 
 test("every planted attempt in the answer key grades as it says", () => {
   for (const [file, want] of Object.entries(KEY.attempts)) {
-    const r = run(baseFor(want), fixture(file), want.focus);
+    const r = runAttempt(file, want);
     const l = layerOf(r, want.focus[0].layer);
+    assert.ok(l, `${file}: the focus layer is checked`);
+    if (want.item3_now !== undefined) assert.equal(l.item3.now, want.item3_now, `${file} item 3's own time`);
+    if (want.direction_at_worst === "right") assert.ok(l.item4.worst.dx > 1 && Math.abs(l.item4.worst.dy) <= 1, `${file} slid right`);
     assert.equal(r.passed, want.passed, `${file} passed`);
     assert.deepEqual(l.hints, want.hints, `${file} hints`);
     if (want.check_time !== undefined) assert.equal(l.check_time, want.check_time, `${file} check time`);
