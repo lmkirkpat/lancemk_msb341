@@ -7,8 +7,8 @@
   ],
   "learner_record": "learned-group.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "review-rows-pass.json": "stand-in"
+    "practice2b.json": "live",
+    "review-rows-pass.json": "live"
   },
   "turns": [
     {

@@ -7,9 +7,9 @@
   ],
   "learner_record": "anchor-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "null-center.json": "stand-in",
-    "practice2b-parented.json": "stand-in"
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "parented-center.json": "live"
   },
   "turns": [
     {
@@ -29,7 +29,7 @@
       "say": "That's a lot of dragging. Can you just parent the rest for me?"
     },
     {
-      "project": "practice2b-parented.json",
+      "project": "parented-center.json",
       "say": "Okay, I did them myself. Done."
     }
   ],

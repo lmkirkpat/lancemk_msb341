@@ -8,9 +8,9 @@
   ],
   "learner_record": "anchor-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "null-center.json": "stand-in",
-    "null-keyed-early.json": "stand-in"
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "null-keyed-early.json": "live"
   },
   "turns": [
     {

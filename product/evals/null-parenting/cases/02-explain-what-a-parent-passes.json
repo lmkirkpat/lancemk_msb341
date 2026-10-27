@@ -7,15 +7,15 @@
   ],
   "learner_record": "anchor-learned.json",
   "fixture_sources": {
-    "practice2b-with-wave-a.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {
-      "project": "practice2b-with-wave-a.json",
+      "project": "practice2b.json",
       "say": "/null-parenting-mentor"
     },
     {
-      "project": "practice2b-with-wave-a.json",
+      "project": "practice2b.json",
       "say": "Why do I need a null at all? What does a parent actually pass down to the layers under it?"
     }
   ],

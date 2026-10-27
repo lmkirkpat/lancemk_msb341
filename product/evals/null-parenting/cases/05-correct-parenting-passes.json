@@ -8,9 +8,9 @@
   ],
   "learner_record": "anchor-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "null-center.json": "stand-in",
-    "practice2b-parented.json": "stand-in"
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "parented-center.json": "live"
   },
   "turns": [
     {
@@ -26,7 +26,7 @@
       "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
     },
     {
-      "project": "practice2b-parented.json",
+      "project": "parented-center.json",
       "say": "I parented all three to Null 1. Done."
     }
   ],

@@ -8,23 +8,23 @@
   ],
   "learner_record": "anchor-learned.json",
   "fixture_sources": {
-    "practice2b-with-wave-a.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {
-      "project": "practice2b-with-wave-a.json",
+      "project": "practice2b.json",
       "say": "/null-parenting-mentor"
     },
     {
-      "project": "practice2b-with-wave-a.json",
+      "project": "practice2b.json",
       "say": "I don't have a group in mind. What do you suggest?"
     },
     {
-      "project": "practice2b-with-wave-a.json",
+      "project": "practice2b.json",
       "say": "No, not those."
     },
     {
-      "project": "practice2b-with-wave-a.json",
+      "project": "practice2b.json",
       "say": "No, not those either."
     }
   ],
