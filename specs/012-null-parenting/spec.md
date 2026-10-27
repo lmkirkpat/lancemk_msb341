@@ -479,8 +479,11 @@ All of TD § 6, counting the demo layer.
   the null's move is linear; it's held (asked, as a question); it overlaps a focus layer's own
   Position, Scale or Rotation keys in time (stacked motion, from the map's `own_keys` and the
   null's key times); the null still has a default name ("Null 1" and the like); the null's scale
-  isn't uniform; the null's scale is 0 on a dimension at a key; the null's opacity is keyed or
-  below 100 while a child's isn't; an effect on the null (only when `effect_count` or a keyed
+  isn't uniform; the null's scale is 0 on a dimension at a key; the null's opacity is **keyed, or
+  set between 0 and 100 (exclusive)**, while a child's isn't, and a null's static Opacity of 0
+  never counts (amended 2026-10-26 from the live sitting: AE 26.5 makes every new null at
+  Opacity 0, L-1, so the old "below 100" gave every passing lesson the fade sentence; the check
+  already does this, `6039c78`); an effect on the null (only when `effect_count` or a keyed
   effect shows one). The non-uniform scale, zero scale, opacity and effect sentences also show
   before a pass when they explain a failure (TD § 7), and so does one more: when the null's only
   keys are on Anchor Point, TD § 14 D-2's hint (its keys move its pivot, not the null, so the group
@@ -602,14 +605,14 @@ learner each see, and the reused filters.
 | 12 | Effects on the null | n/a | P4 never passes on them; comment only if `effect_count` or a keyed effect shows one | TD § 7's effects row | Right; `effect_count` is W4's optional field. Test |
 | 13 | Precomp layer as a child | Candidate as one layer | Its own transform and rect (the precomp's frame) | "I can't see inside Icon, but it moves as a whole" | Right. Test on Mentor Practice's Icon |
 | 14 | A layer inside a precomp | Not in `layer_info` (active comp only) | Not read | Not offered | Right. Test: `sourcesOf()` is `null` |
-| 15 | Hidden null (eye off) | Class `null` | Carries children; N1 passes | Never "you've hidden this" | Right. Test on Mentor Overlaps' Rig |
+| 15 | Hidden null (eye off), or a null at Opacity 0 (every new null at 26.5, L-1; amended 2026-10-26 from the live sitting) | Class `null` | Carries children; N1 passes. The class, candidates, the demo target and frames never read Opacity, so 0 isn't "hidden" | Never "you've hidden this" | Right. Test on Mentor Overlaps' Rig, and on the live null at Opacity 0 (`null-center.json`, `6039c78`) |
 | 16 | Eye-off child (hidden by the learner) | Only if asked; never the demo | P2 from bounds, not pixels | Never claimed visible in a frame | Right. Test |
 | 17 | Matte and its layer (Gradient, Reveal Matte) | Proposed together, counted as 2; never the demo | Both graded P1 to P3 | Never "hidden" (KD-001) | Right with FR-004 and FR-005. Test on 2b |
 | 18 | Shy child or shy null | Candidate; renders | As usual | One sentence: hidden in the timeline | Right. Test on Mentor Overlaps' Shy Parent |
 | 19 | Guide layer | Not a candidate | Not graded | | Right. Test |
 | 20 | Solo on another layer | Class unchanged (`soloed_elsewhere`) | As usual | Never "hidden" | Right. Test on `overlaps-solo.json` |
 | 21 | Non-uniform null scale | n/a | P2's corners catch any on-screen move at parenting; comment (FR-020) | One sentence, never a fail | Right. Synthetic test plus L-2 |
-| 22 | Null opacity keyed or below 100 | n/a | Never affects N or P except P4 not passing on it | TD § 7's fade hint | Right. Test |
+| 22 | Null opacity keyed, or set between 0 and 100 (amended 2026-10-26 from the live sitting: a new null reads Opacity 0 at 26.5, L-1, so a static 0 on a null is AE's default and never a fade) | n/a | Never affects N or P except P4 not passing on it | TD § 7's fade hint (FR-020); nothing at a static 0 | Right. Test: `fade-null.json` (keyed) gives the hint; the live null at 0 gives none, at 60 does (`6039c78`) |
 | 23 | The null has a parent | n/a | Parent moves: out of the lesson, nothing graded or recorded as a miss. Parent still: N2 asks; on purpose passes, measured through `parent_transform` (FR-009, FR-012) | Moving: one sentence, use a null with no parent. Still: one level only | **Gap fixed by FR-009** (filter 4). Synthetic tests: a still parent passes with no false jump; a moving one is refused and nothing is recorded |
 | 24 | Focus layer already parented (Title under CTRL; Shadow under Plate) | Not a candidate | Not graded | TD § 4's sentences | Right. Test on Mentor Practice and 2b |
 | 25 | 3D null or 3D child | Not a candidate; N2 says 3D is a later topic | Math returns `three_d`, never run | "3D layers are a later topic" | Right. Test on Mentor Overlaps' Depth |

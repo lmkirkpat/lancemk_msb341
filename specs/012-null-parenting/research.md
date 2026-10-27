@@ -189,8 +189,9 @@ are still open, so every live task here comes after them.
   one (the focus rename is in the baseline; the null's is of a layer added after it).
 - **Comments** (FR-020): `linear`, `held` (asked), `stacked` (the null's key time range overlaps a
   focus layer's own Position, Scale or Rotation key range, from `own_keys` and key times), `default_name`
-  (`/^Null \d+$/`), `non_uniform_scale`, `zero_scale_at_key`, `opacity` (keyed or < 100 while a
-  child's isn't), `effect` (`effect_count > 0` or a keyed effect). The last four and `anchor_only`
+  (`/^Null \d+$/`), `non_uniform_scale`, `zero_scale_at_key`, `opacity` (keyed, or static strictly
+  between 0 and 100, while a child's isn't; a null's static 0 is AE 26.5's default and never
+  counts; amended 2026-10-26 from the live sitting, L-1), `effect` (`effect_count > 0` or a keyed effect). The last four and `anchor_only`
   are also returned before a pass when they explain a failure.
 
 ## R9. Review mode
