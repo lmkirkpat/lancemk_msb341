@@ -220,6 +220,16 @@ not through the MCP server, with each read timed through `io.takeSnapshot`. So t
 
 ## To fix later
 
+- **A review writes a note to itself before its first snapshot (not started; noted 2026-10-26).**
+  Eval case 16 on `evals-skill-5` wrote "Review is due." between `read_learner_record` and the
+  review snapshot, in smoke run 4 and again after a line in The review's step 1 (results
+  `2026-10-26-230252.json`). The hard rule already bans that exact sentence, and first-lesson runs
+  are clean since B-13, so more wording is unlikely to fix it: the mentor narrates the "lesson or
+  review?" choice between two calls. Key types and offset show the same leak. **Proposed fix:**
+  the snapshot tool reads the learner record and picks review mode itself, so the mentor makes one
+  call with nothing to narrate. Shared code, so a spec item first; it applies to every skill with
+  a review, and it comes before any of their baselines.
+
 - **`anchor_snapshot` takes about 10 s on Mentor Practice 2 (problem 1).** **T251 (above):** most
   of this is AE in the background (App Nap), not the reads. Both calls in session 1
   were 9.9 s and 10.7 s, against "about a second" for the second read. **Proposed fix:** time the
