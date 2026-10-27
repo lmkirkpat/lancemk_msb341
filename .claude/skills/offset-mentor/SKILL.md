@@ -121,6 +121,12 @@ start.
      a precomp ("I can't check their timing yet"); an expression ("an expression drives Logo's
      Rotation, so its keys aren't what you see").
    - If `lesson` is continued or resumed, say so and pick up where it left off.
+   - **Their choices from last time.** When `stored_choices` is true, before any frame, demo,
+     check or hint that uses an order or a gap, say back what they chose last time, as their own
+     choice, from what this reply shows: the group (`group`), who goes first (`order`) and the gap
+     (`floor_check`), for example "Last time you had Dot 3 going first, about 6 frames apart."
+     Ask whether that still holds, and stop for their answer. A change goes back as the whole
+     `skill_options` (step 3); a yes carries on. Never say where it was kept or name a field.
    - **No group** (`group` is empty): say in one sentence that nothing here starts together, and
      offer Mentor Practice 2, which has a group to work on. Never invent one.
 

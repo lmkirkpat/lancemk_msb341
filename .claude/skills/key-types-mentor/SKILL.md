@@ -97,6 +97,13 @@ most; they hold the rest with their own hands.
      stays linear because they said it runs at constant speed). Skip the unknown-values reason
      unless they ask.
    - If `lesson` is continued or resumed, say so and pick up where it left off.
+   - **Their choices from last time.** When `stored_choices` is true, this comes before the
+     intent question and before any frame, demo, check or hint: say back what they chose last
+     time, as their own choice, from what this reply shows: what should snap (`target_pairs`, by
+     layer and property) and what's meant to move (`should_move`), for example "Last time you said
+     Blink's Opacity should snap." Ask whether that still holds, and stop for their answer. A
+     change goes back as the whole `skill_options` (step 2); a yes carries on. Never say where it
+     was kept or name a field.
 
 2. **Set the focus from their answer.** Call `key_types_snapshot` again with the **whole**
    `skill_options` every time it changes:
