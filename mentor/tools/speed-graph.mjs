@@ -59,7 +59,7 @@ async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options
     lesson,
     mode: l.mode,
     project: snapshot.project,
-    comp: { name: snapshot.comp.name, duration: snapshot.comp.duration },
+    comp: { name: snapshot.comp.name, duration: snapshot.comp.duration, frame_rate: snapshot.comp.frame_rate },
     focus: analysis.focus,
     targets: analysis.targets,
     demo_target: analysis.demo_target,

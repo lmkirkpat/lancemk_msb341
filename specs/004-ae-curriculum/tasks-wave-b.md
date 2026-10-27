@@ -340,12 +340,12 @@ per-skill branches). On 2026-10-26, `skill-5-anchor` didn't differ from `main` i
 
 ### Setup
 
-- [ ] T167 On the worktree, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both pass counts and the worktree's base commit in the hand-back (the base for "no existing test edited" and for T183)
+- [x] T167 On the worktree, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both pass counts and the worktree's base commit in the hand-back (the base for "no existing test edited" and for T183)
 
 ### FR-039: speed graph, a reading answer given as a time or a frame
 
-- [ ] T168 [P] [US1] **Tests first**: new `mentor/test/speed-graph-frame-rate.test.mjs`, in fixture mode on an existing live capture (for example `practice-before.json`): `speed_graph_snapshot`'s reply has `comp.frame_rate` equal to the snapshot's `comp.frame_rate`, and its `comp.name` and `comp.duration` are as before. Fails until T169
-- [ ] T169 [US1] **Code and prompt**: in `mentor/tools/speed-graph.mjs`, add `frame_rate: snapshot.comp.frame_rate` to the reply's `comp`. In `.claude/skills/speed-graph-mentor/SKILL.md` stages 2 and 6, one sentence each: an answer given as a time or a frame is placed in the pair from its key times (a frame divided by the comp's frame rate, counted from the comp's start), then checked against `fastest.parts` as usual; an answer outside the pair gets a question. No other wording changes. **Done when:** T168 and every existing test pass; the two sentences are in stages 2 and 6 and nowhere else
+- [x] T168 [P] [US1] **Tests first**: new `mentor/test/speed-graph-frame-rate.test.mjs`, in fixture mode on an existing live capture (for example `practice-before.json`): `speed_graph_snapshot`'s reply has `comp.frame_rate` equal to the snapshot's `comp.frame_rate`, and its `comp.name` and `comp.duration` are as before. Fails until T169
+- [x] T169 [US1] **Code and prompt**: in `mentor/tools/speed-graph.mjs`, add `frame_rate: snapshot.comp.frame_rate` to the reply's `comp`. In `.claude/skills/speed-graph-mentor/SKILL.md` stages 2 and 6, one sentence each: an answer given as a time or a frame is placed in the pair from its key times (a frame divided by the comp's frame rate, counted from the comp's start), then checked against `fastest.parts` as usual; an answer outside the pair gets a question. No other wording changes. **Done when:** T168 and every existing test pass; the two sentences are in stages 2 and 6 and nowhere else
 
 ### FR-040 and FR-041: offset's two sentences
 
