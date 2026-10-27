@@ -6,7 +6,7 @@ here and doesn't copy it. Gaps or contradictions come back as questions.
 `live-sitting-2026-10-26.md` on `skill-5-anchor`), and again 2026-10-26 after the first live
 lesson (T236, § 17). **Status:** draft, round 1 answered (§ 15), round 2 answered (§ 16: D-4 and the
 wording list), the one-layer watch offer decided (§ 17), round 3 answered (§ 18: D-8 and D-9,
-2026-10-26). § 19 (the opening turn, from HO-1's smoke run) is **proposed**, waiting for the human.
+2026-10-26). § 19 (the opening turn, from HO-1's smoke run) was **decided** 2026-10-26 by the human.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -784,10 +784,10 @@ full-frame returns `watch_offer: null`. Spec FR-008's answer key on Mentor Pract
   not a rule: if live lessons show a watch on the focus layer's parent or child confuses, leave
   those out of `watch_offer` then.
 
-## 19. The opening turn (2026-10-26, from HO-1's smoke run)
+## 19. The opening turn (decided 2026-10-26, from HO-1's smoke run)
 
-**Status: proposed, not decided.** Waiting for the human's approval. Until then § 4 and § 5 stand
-as written, and nothing below is for the builder or the spec writer to act on.
+**Status: decided 2026-10-26** (approved by the human). Where § 4 and § 5 say otherwise about the
+opening turn, this section wins.
 
 **Question.** In eval cases 13 and 24b (`evals-skill-5`, README rows 6 to 8), the mentor's first
 turn held a memory recap, "the idea for today" (§ 1's idea, in bold), a bulleted list of three
