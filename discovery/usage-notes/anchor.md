@@ -180,9 +180,48 @@ showed, but it did move" lands.
   this pass.
 - No decision's "what would change our mind" signal moved.
 
+## T251: read timings (2026-10-27 UTC, after Phase 8d's T249 and T250)
+
+Scripted by the cockpit through the bridge, with the builder switching apps on cue. Mentor
+Practice 2 reset to `practice2b.json` (strict compare), playhead at 0, on `skill-5-anchor` at
+`6ad8439`. "Whole" is `node mentor/dev/capture.mjs` as a process, including Node start-up (about
+30 ms). "In-process" is `takeSnapshot()` alone. Lesson starts ran `anchor_snapshot` in-process,
+not through the MCP server, with each read timed through `io.takeSnapshot`. So there's no
+`calls.jsonl` and no server overhead in these times (a departure from T251's wording).
+
+| AE state | Plain read | 4 needed times | Focus only (4.3) | Lesson start, 2 reads | Outside the reads |
+|---|---|---|---|---|---|
+| Just used (after the reset) | 0.50–0.73 s | 0.75–0.90 s | 0.57–0.76 s | 1.29–1.44 s | 16–19 ms |
+| **In front** (builder clicked into AE) | 0.55–0.72 s | 0.83–0.90 s | 0.66–0.80 s | 1.47–1.52 s | 11–26 ms |
+| In the background, right away | 0.57–0.73 s | 0.87–1.04 s | 0.68–0.77 s | 1.50–1.68 s | 7–23 ms |
+| **In the background, 2 min** | 3.3–3.5 s | 4.9–5.4 s | 3.8–4.4 s | | |
+| **In the background, 5 min** (two runs) | 3.0–3.3 s | 4.1–4.5 s | 3.5–4.3 s | **7.1–7.6 s** | 12–28 ms |
+| For scale: the old 30-time second read (before Phase 8c), warm | | 2.3–2.5 s | | | |
+
+**What it shows:**
+- **The cost is in After Effects, not the mentor.** The analysis outside the reads is under 30 ms
+  in every state.
+- **AE answers about 5× slower once it has sat in the background for a couple of minutes,** and it
+  stays slow for every call, not just the first. Bringing it to the front makes it fast again.
+  That fits macOS App Nap (Low Power Mode was off; there's no App Nap setting for AE's bundle,
+  `com.adobe.AfterEffects.application`). A lesson in the terminal leaves AE in the background
+  between turns, which explains 9.95 s and 11.7 s in sessions 1 and 2, on top of the old 30-time
+  read.
+- **On FR-013a's table:** the plain read alone, warm, is 0.5–0.7 s, under 3 s. So the read-level
+  cuts would save at most about 0.8 s warm. In the background, no cut in this skill reaches
+  SC-010's 3 s, since one plain read alone is 3.0–3.5 s. That's SR-4's row, except that the cause
+  is AE's background throttling, not the shared read itself. It would slow easing and every other
+  skill the same way.
+- **Not yet tested:** whether turning App Nap off for AE
+  (`defaults write com.adobe.AfterEffects.application NSAppSleepDisabled -bool YES`, then restart
+  AE) keeps it fast in the background. That's a change to the builder's system setting, so it waits
+  for their OK. A panel inside AE (spec 003) keeps AE in front while the learner types, so it may
+  not see this at all.
+
 ## To fix later
 
-- **`anchor_snapshot` takes about 10 s on Mentor Practice 2 (problem 1).** Both calls in session 1
+- **`anchor_snapshot` takes about 10 s on Mentor Practice 2 (problem 1).** **T251 (above):** most
+  of this is AE in the background (App Nap), not the reads. Both calls in session 1
   were 9.9 s and 10.7 s, against "about a second" for the second read. **Proposed fix:** time the
   two reads on their own (in `mentor/lib/anchor.mjs`'s snapshot path), then cut the second read to
   only the times it needs (only keyed candidates' Rotation and Scale keys, not every layer's), or
