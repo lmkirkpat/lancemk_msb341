@@ -268,6 +268,21 @@ test("review prefers a layer with no Rotation or Scale keys, ahead of an unparen
   assert.equal(reviewProposal(P2, { exclude }).layer, "Hatch", "a review: no Rotation or Scale keys first");
 });
 
+test("audit: a review's notes are its own proposal's, not the lesson ranking's (Hatch's parent, not Blink's nothing)", async () => {
+  const rec = JSON.parse(fs.readFileSync(path.join(DIR, KEY.review.record), "utf8"));
+  rec.lessons.at(-1).targets = ["Door", "Needle", "Tab", "Peg", "Banner", "Sign", "Plaque", "Row B", "Lid"].map((layer) => ({ layer, property: "Anchor Point" }));
+  fs.writeFileSync(LEARNER, JSON.stringify(rec));
+  const r = await call("anchor_snapshot", { mode: "review" });
+  assert.equal(r.proposal.layer, "Hatch", "a review: no keys first, so Hatch (parented) over Blink (Opacity keys)");
+  assert.deepEqual(r.notes, [{ layer: "Hatch", note: "parent", parent: "Hatch Rig" }]);
+  // Lid's pivot is outside it: the review's note carries its side.
+  rec.lessons.at(-1).targets = ["Door", "Needle", "Tab", "Peg", "Banner", "Sign", "Plaque", "Row B"].map((layer) => ({ layer, property: "Anchor Point" }));
+  fs.writeFileSync(LEARNER, JSON.stringify(rec));
+  const lid = await call("anchor_snapshot", { mode: "review", fresh: true });
+  assert.equal(lid.proposal.layer, "Lid");
+  assert.deepEqual(lid.notes, [{ layer: "Lid", note: "pivot_outside", side: "below" }]);
+});
+
 test("review with every default candidate in the record: no_new_target, and FINDERS agrees", async () => {
   const rec = JSON.parse(fs.readFileSync(path.join(DIR, KEY.review.record), "utf8"));
   const defaults = FINDERS["transform.anchor"].focus(P2).layers;

@@ -77,6 +77,12 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
   const review = s.mode === "review";
   const proposal = review ? reviewProposal(s.baseline, { exclude: s.exclude || [] }) : base.proposal;
   const noNew = review && !proposal && !s.targets.length;
+  // With no focus yet, the notes are the proposal's. A review ranks differently from a lesson (R8),
+  // so its notes come from its own proposal, never the lesson's (FR-019a's pivot_outside side included).
+  const focusSet = !!(s.skill_options && Array.isArray(s.skill_options.focus) && s.skill_options.focus.length);
+  const notes = review && !focusSet
+    ? (proposal ? analyze(s.baseline, { ...baseOpts(s), focus_layers: [proposal.layer] }).notes : [])
+    : base.notes;
   let noDemo = s.demo ? null : base.no_demo_reason;
   if (review) noDemo = noNew ? "no_new_target" : "review";
   else if (!s.demo && !s.demo_target && s.targets.length === 1 && base.demo_target) noDemo = "single_target";
@@ -104,7 +110,7 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
     demo_target: s.demo_target,
     demo_used: !!s.demo,
     no_demo_reason: noDemo,
-    notes: base.notes,
+    notes,
     ...(base.rest_time_not_a_key ? { rest_time_not_a_key: base.rest_time_not_a_key } : {}),
     reads,
   });
