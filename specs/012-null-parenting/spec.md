@@ -891,6 +891,15 @@ case 3, the matte, KD-001).
    prompt's sentence comes out and N3's misses are left to the existing hint. Also for § 10 and
    § 7's jump row: B-4 is answered (Option and Shift both jump; FR-023's notes), so "unverified"
    can go.
+   **Answered 2026-10-26 (TD § 14 D-4): yes.** One sentence at stage 3, once per lesson, after the
+   learner names a place and before they drag ("The null's pivot is the top-left corner of its
+   square, so put that corner on the spot"); not for "it'll only slide" (it goes with the
+   `region_needed` question if that comes up). The lesson's `pivot_region` hint names the pivot by
+   that corner (where, never why). Never the null's size or Opacity, and none of it in a review.
+   **Still to fold in (spec writer):** FR-023's "never describe the null's default size or anchor"
+   becomes "never its size or Opacity; its anchor only as TD § 14 D-4 says"; "(TD § 7's jump row
+   allows it once B-4 confirms)" becomes "(TD § 7's jump row)"; row 3 says an unkeyed pick whip is
+   caught by where the child lands; new row 41, Option or Shift held while parenting (TD § 9).
 
 ### Settled here
 

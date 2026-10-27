@@ -3,7 +3,9 @@
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-23. **Status:** draft, answered by the spec writer in round 1 (§ 14). Round 2
-(2026-10-25, § 15): the proposal rule reworked for L-6.
+(2026-10-25, § 15): the proposal rule reworked for L-6. 2026-10-26, after the live sitting
+(`live-sitting-2026-10-26.md`): D-4 answered (§ 14; § 5 stage 3, § 7, § 10), and HO-2's overlap
+re-run on the built branch (§ 9, last note).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 6, § 8, § 9, § 12 (B9), § 13
 (the FR-029 correction), § 14; spec 004 (approved), above all FR-005, FR-013, FR-014, FR-018 to
 FR-022, FR-024, FR-028, FR-029, FR-030, FR-037, the Edge Cases table, and plan.md › Waves › Wave B.
@@ -147,7 +149,7 @@ lesson needs the second practice comp** (B-1).
 | 0. Remember | nothing | The record for this skill | n/a |
 | 1. Look, ask, agree a focus | names 2 to 4 layers, or agrees to the proposal (or the second group), or answers the crowd question | Fresh read with R1 and R3. Asks first (§ 4). Only if the learner has no group in mind: the tool's proposal from § 4's rule, said with its reason ("apart from everything else"); a crowd gets the question, not a proposal; a "no" gets the second group once, then the question. The **before read** is taken now, when the focus is set: for each focus layer, its footprint in comp space at the current time and at each of its key times (§ 6, "the before read") | A focus of 2 to 4 candidates, however it was reached (named, proposed or second group) |
 | 2. Explain on their comp | watches | At least one frame, real names and times. If the comp has a null with children (CTRL), use it: frames at its first and last key, "CTRL rises 40 px and Title and Subtitle rise with it, while Title still runs its own keys." Otherwise one frame of the focus group and the idea in words. Then the two facts that matter: children inherit position, scale and rotation, **not opacity or effects**; and a null never renders, so it can't drag its own look into the group | n/a |
-| 3. We do: add and place the null | Adds a null (Layer > New > Null Object), says where the group should turn or scale from (a corner, an edge center, or the middle of the group), drags the null there, says "done" | Fresh read. § 6, N1 to N3 (a null exists, 2D, no parent; its pivot is in the named region of the group). The region is the learner's intent: the mentor asks, never picks. "It doesn't matter, it'll only slide" is a valid answer: the region check is then skipped until the null's move turns or scales (§ 6, P5). The null's transform is stored now (§ 6, "the null at parenting") | N1 to N3 |
+| 3. We do: add and place the null | Adds a null (Layer > New > Null Object), says where the group should turn or scale from (a corner, an edge center, or the middle of the group), drags the null there, says "done" | Once the learner has named a place, and before they drag, **one sentence on where the null's pivot is** (D-4, § 14): "The null's pivot is the top-left corner of its square, so put that corner on the spot." Once per lesson; never the null's size. Not said for "it'll only slide" (said with the region question instead, if P5 asks for one later). Then a fresh read. § 6, N1 to N3 (a null exists, 2D, no parent; its pivot is in the named region of the group). The region is the learner's intent: the mentor asks, never picks. "It doesn't matter, it'll only slide" is a valid answer: the region check is then skipped until the null's move turns or scales (§ 6, P5). The null's transform is stored now (§ 6, "the null at parenting") | N1 to N3 |
 | 4. I do (one demo) | watches, can Edit > Undo | Only when asked or clearly stuck (the mentor offers it here, the learner may decline). One write: parent the demo target to the null with no jump. Then a frame at the before-read time: "Card is exactly where it was, and its Parent column now says Group Null." The check's number goes in plain words ("it moved 0 pixels"), since two identical frames don't show much on their own | n/a |
 | 5. You do (a): parent the rest | Parents the other focus layers to the null by any method, says "done" | Fresh read and diff. § 6, P1 to P3 for every focus layer. Credit the demo layer to the demo. Hints, never the fix (§ 7). **The mentor asks for the null's move only after this check passes**, so a jump is caught on its own | P1 to P3 |
 | 6. You do (b): move the group | Gives the null one move (two keys on Position, Scale or Rotation), says "done" | Fresh read and diff. § 6, P1 to P5. Then frames at the null's first and last key times: "Card, Label and Badge all moved up together, and Label still fades in on its own" | All of § 6 |
@@ -229,12 +231,12 @@ null's move and the children's own moves, how far or which way the group moves.
 | Mistake | What the check sees | Hint (where to look, never the fix) | Evidence |
 |---|---|---|---|
 | A visible layer as the parent | A focus layer's parent is a content layer, not the null (P1) | "Label follows Card, not the null, so anything you do to Card drags Label along. Check Label's Parent column" | B, very common |
-| Child jumps when parented | P2: a footprint off by more than 1 px | Name the layer, distance and direction, no cause: "Badge is 120 px left of where it was at 0.5 s." Then where to look: "Edit > Undo and parent it again. If the null moved after you placed it, that can show up here too." Holding a key while parenting (Option, or Shift) changes how AE places the child (C; unverified at 26.5, B-4), so it's mentioned only once B-4 confirms it | B, C, very common |
+| Child jumps when parented | P2: a footprint off by more than 1 px | Name the layer, distance and direction, no cause: "Badge is 120 px left of where it was at 0.5 s." Then where to look: "Edit > Undo and parent it again. If the null moved after you placed it, that can show up here too." Then **one question, once per lesson, never as the reason**: "Were you holding a key while you parented it? Parent with no key held." If the learner says the layer flew off when they parented it, ask that question first; the fix is still Edit > Undo and parenting with no key held. Never name Option or Shift as the cause, and never teach either (§ 8). Logged at 26.5 (L-1, B-4): holding Option keeps the child's own values and only sets the parent, so it jumps by the null's place; holding Shift moves the child onto the null. Both are one Edit > Undo, like a plain parent | B, C, very common; R (L-1) |
 | Pick whip dragged from Position, not the Parent column | P1 fails (no parent); usually P2 too (the child snaps to the null's position); on a keyed Position, the snapshot also sees an expression appear | "Label's Parent column still says none, and it jumped to where the null is. There are two pick whips on a layer; the one for this is in the Parent column" | C, Adobe staff reply on two pick-whip columns |
 | Parented to the wrong row | P1: parent is another focus layer or a different layer | "Badge follows Label, not the null" | Unverified (brief); plausible from 007 |
-| Fading the null, expecting the group to fade | Null Opacity keyed, or static below 100 (R3), with children at 100 | "Opacity doesn't pass from a parent to its children, so Group Null's fade does nothing you can see. Fade each layer, or ask about precomps later" | B, very common |
+| Fading the null, expecting the group to fade | Null Opacity keyed, or set between 0 and 100 (R3), with children at 100. A static 0 never counts: AE 26.5 makes every new null at Opacity 0 (L-1), so "below 100" would fire on every lesson | "Opacity doesn't pass from a parent to its children, so Group Null's fade does nothing you can see. Fade each layer, or ask about precomps later" | B, very common |
 | The null's "move" is Opacity, an effect, or one key | P4 fails | "The null has one Position key, so it holds still" / "only Opacity moves on the null, and children don't follow that" | B, C |
-| The null's pivot far from where the group should turn | N3 fails (and the move rotates or scales) | "The null sits at the group's top-left, so the group would swing around that corner. You said the middle" | Inference from skill 5 |
+| The null's pivot far from where the group should turn | N3 fails (and the move rotates or scales) | In a lesson, where the pivot is, named by the square's corner (D-4): "Group Null's pivot, the top-left corner of its square, sits at the group's top-left, so the group would swing around that corner. You said the middle." It says where the pivot is, not why it's there. Never the null's size. In a review, the same without the square's corner and without "null" (§ 11) | Inference from skill 5; R (L-1: a square centred on the group's middle puts the pivot about 50 px up and left) |
 | Non-uniform scale on the null | Null Scale X ≠ Y at any key or static | One sentence, never a fail: "Group Null's scale isn't even, so its children stretch, and they'll skew if it rotates" | B, occasional |
 | Null Scale at 0% at a key | Null Scale 0 on a dimension | "At 1 s the null's scale is 0, so the whole group collapses to a point there" | C, occasional |
 | An effect on the null, expecting it on the group | Only if the read sees an effect property on the null (keyed effects today; § 13, B-5) | "Effects don't pass down either; the null has nothing to blur" | B |
@@ -249,7 +251,8 @@ null's move and the children's own moves, how far or which way the group moves.
 - **Stacked parent and child motion as a timing problem** (DX-08): skill 4 traces it, diagnosis hints
   it. Here it's one ungraded sentence (§ 5 stage 7, § 9).
 - **Unparenting**, Option or Shift parenting variants, right-click "select children", the Parent
-  column shortcut: not taught. Unparenting is mentioned only if the learner asks how to undo a parent
+  column shortcut: not taught. The only mention of a held key is § 7's one question after a jump
+  ("parent with no key held"), a caution, never a technique. Unparenting is mentioned only if the learner asks how to undo a parent
   (Edit > Undo first; the Parent menu's none second).
 - **Opacity for a group**: named as the mistake; "precomp the group" is skill 10's idea, mentioned
   only as "a later lesson".
@@ -266,7 +269,8 @@ not this skill's file.
 |---|---|---|
 | Expression on a child's keyed Position, Scale or Rotation | Flagged by today's snapshot. The layer can be in the focus but isn't the demo target. P2 uses values after expressions, so a jump the expression causes still shows. If it jumps, the hint names the jump and the expression in one sentence | Blame the learner's parenting for what the expression does, or skip the layer |
 | Expression on an unkeyed child property | Not read until R2 (the map's "not read" marker). If a child jumps and no keyed expression is flagged, the hint names the jump, not a cause, and says the mentor can't see expressions on unkeyed properties yet | Say the layer has no expression |
-| Pick-whip link instead of a parent | P1 fails: R1's parent is the Parent link only. The child usually snaps to the null's Position (P2). On a keyed Position the expression flag appears; on an unkeyed one it doesn't (R2) | Count an expression-linked follower as parented |
+| Pick-whip link instead of a parent | P1 fails: R1's parent is the Parent link only. The child snaps to the null's Position (P2; L-3, both cases). On a keyed Position the expression flag appears and the keys stay; on an unkeyed one there's no flag (R2), so the check names the pick whip from where the child landed (on the null's place, with no parent and a jump). § 7's two-pick-whips hint fires either way (L-3) | Count an expression-linked follower as parented |
+| Option or Shift held while parenting (L-1) | P1 passes (the parent is set). Option keeps the child's raw values, so P2 sees a jump by the null's place; Shift rewrites its Position keys onto the null, so P2 sees every such child land on one spot; P3 passes in both (times and counts kept). § 7's jump hint, with its one held-key question | Name the key as the cause, call it a pick-whip link, or teach either key |
 | Expression on the null's Position (a float, like Adobe's CTRL suggestion) | P4 is on keys only; an expression move doesn't count as "one move". The stored null transform for P2 is read after expressions, at the stored time | Pass P4 on an expression with no keys |
 | Single key on a child | Still its own animation: key count 1 and that time; P2 at that time | Treat it as a move, or skip it |
 | Hold keys on a child | Sampled at its key times like any other; the hold jumps are the child's own | Call its own hold jump a parenting jump (P2 compares the same times before and after, so it can't) |
@@ -278,34 +282,53 @@ not this skill's file.
 | Effects on the null | Not inherited; § 7 hint only if the read sees one | Pass P4 on an effect move |
 | Precomp layer as a child | A normal child: its own transform and bounds (the precomp's frame) | Say its insides moved with it correctly, or that they're fine |
 | A layer inside a precomp | Can't be parented to this comp's null (parents work within one comp) and isn't read | Offer it as a focus layer |
-| Hidden null (eye off) | Correct, class *null*; it still carries its children (Edge Cases table) | Say "you've hidden this", or drop it from the map |
+| Hidden null (eye off), or a null at Opacity 0 (every new null at 26.5, L-1) | Correct, class *null*; it still carries its children (Edge Cases table). Nothing in the class, the candidates, the demo target or frames reads Opacity | Say "you've hidden this", call it invisible because of its Opacity, or drop it from the map |
 | Eye-off child | Only if the learner wants it; P2 works from bounds, not pixels | Make it the demo target or claim it's visible in a frame |
 | Matte and its layer | Proposed together (§ 4); both must pass P1 to P3; the matte isn't "hidden" | Leave the matte behind, or call it hidden (KD-001) |
 | Shy child or shy null | Renders (or carries) as usual; one sentence that it's hidden in the timeline | Treat shy as not rendering |
 | Guide layer | Not a candidate | Count it as visible |
 | Solo on another layer | The class describes the layer itself | Call unsoloed layers hidden |
 | Non-uniform parent scale | Named (§ 7) when the read sees it; P2's corners catch any distortion that makes a child move on screen at parenting | Fail on it alone |
-| Null opacity below 100 | § 7's fade hint; never affects P1 to P5 | Pass P4 on it |
+| Null opacity keyed, or set between 0 and 100 | § 7's fade hint; never affects P1 to P5. A static 0 is AE 26.5's default for a null (L-1) and gets nothing | Pass P4 on it, or give the fade sentence for a null left at its default |
 | The null itself has a parent | N2 (ask, don't fail); the map shows the chain | Grade beyond one level |
 | Focus layer already parented | Not a candidate (§ 4) | Re-parent it silently |
 | 3D null or 3D child | N2 or the candidate rule says 3D is out | Run the 2D math on a 3D layer |
-| Auto-orient on a child | Rotation read after expressions doesn't include auto-orient (**Guess**, B-6); leave such a layer out of the focus until B-6 is checked | Run P2 on a rotation the read can't see |
+| Auto-orient on a child | Rotation read after expressions doesn't include auto-orient (confirmed live, spec 004 T158, L-4); such a layer stays out of the focus, and the math returns its auto-orient reason | Run P2 on a rotation the read can't see |
 | Stacked parent and child motion (DX-08) | When the null's move overlaps a child's own Position keys in time, one ungraded sentence: "Label's own rise and the null's move overlap from 1 to 2 s, so Label moves twice there; play it back and see." FR-037 hand-off only if skill 4 is learned (not this sprint) | Fail it, or call it a jump |
 | Children of a moving parent (offset's blind spot until R1) | Skill 6 reads R1, so it has no such blind spot: it knows every focus layer's parent, and the map lists the null as a source of each child. It doesn't teach staggering. After this lesson the group's shared move lives on the null, which is what skill 3's post-R1 rule names ("they share Group Null's move") | Grade timing between children, or claim the children move apart |
 | Dragging the null to a new spot after parenting | The group moves with it: that's the null working. P2 uses the null at parenting, so it isn't a jump | Call the group's move a jump |
 
+**HO-2 re-run (2026-10-26), on the built branch.** Checked against `mentor/lib/comp-space.mjs`,
+`mentor/jsx/snapshot.jsx`, `mentor/lib/null-parenting-check.mjs`, the overlap tests on the live
+captures, and L-1 to L-6. The table was right except where the live facts were new: the pick-whip
+row now says how the unkeyed case is caught (L-3), the Option or Shift row is new (L-1), the hidden
+null and null opacity rows take AE 26.5's Opacity 0 (L-1), and auto-orient is no longer a guess
+(L-4). The contract row (an expression on the null's Position) holds as built: the snapshot samples
+every layer, keyed or not, after expressions (`valueAtTime(t, false)`) at the current and caller
+times, so the stored null is the rendered value, and P4 reads the keyed list only. What the tests
+still miss is in the hand-back (skill-builder findings), not here.
+
 ## 10. Version notes (After Effects 26.5, macOS 27.0.1)
 
-- **Null defaults** (size, where its anchor sits, how it draws in the comp panel): CS-era text says
-  100 × 100 with the anchor at the top-left (brief, VERSION). Unverified at 26.5 (B-4). The mentor
-  doesn't describe them. It speaks of "the null's anchor point" as its pivot, and N3 measures the
-  anchor, so the defaults don't change the check.
+- **Null defaults** (logged at 26.5, L-1; B-4 answered): a new null is a 100 × 100 square, at the
+  top of the stack, with its anchor at the square's **top-left corner**, on its Position (the comp's
+  center), so the square draws down and right of that point. Its Opacity reads 0. AE names it
+  "Null" plus a number that carries on from the project's other nulls, so it's often not Null 1.
+  **What the mentor says (D-4, § 14):** where the null's pivot is, once, at stage 3 (§ 5) and in the
+  pivot hint (§ 7): the top-left corner of its square. It may say where a new null lands (top of
+  the stack, middle of the comp) and uses the null's real name from the tools. It never gives the
+  null's size and never mentions its Opacity. N3 measures the anchor, so the check doesn't change.
 - **Making a null:** Layer > New > Null Object (menu path, stable across sources). No shortcut quoted.
 - **The Parent & Link column:** name the column and how to show it (right-click a column heading,
-  Columns, Parent & Link). Don't quote Shift+F4 (function keys on a Mac may need fn). Newer layouts
-  show two pick-whip columns (C, Adobe staff): say "the pick whip in the Parent column".
-- **Option or Shift while parenting** changes whether the child keeps its place (brief, step 6; C).
-  Unverified at 26.5 (B-4); not taught.
+  Columns, Parent & Link; the header reads "Parent & Link" at 26.5, L-1). Don't quote Shift+F4
+  (function keys on a Mac may need fn). A layer has more than one pick whip: say "the pick whip in
+  the Parent column" (its tooltip at 26.5: "Parent pick whip (select layer from which to inherit
+  transforms)", L-1).
+- **Option or Shift while parenting** (logged at 26.5, L-1; B-4 answered): Option keeps the
+  child's own values and only sets the parent, so the child jumps by the null's place; Shift
+  rewrites the child's Position keys so it lands on the null. Both are one Edit > Undo, under the
+  same label as a plain parent. Not taught (§ 8); § 7's jump hint may ask once whether a key was
+  held.
 - **25.4 Quick Offset** "shifts layers without altering keyframe animations" (A, via search); with
   parented layers it's unverified. Not used in this lesson.
 - **26.5:** no parenting changes found (A, community announcement).
@@ -335,7 +358,8 @@ even though skills 5 and 6's reviews are stretch (H2).
   without being told.
 - **Not a pass:** § 7's hints, no reteach. For a visible parent, the hint names what the check sees
   and stops there ("Label and Badge follow Card, so anything you do to Card drags them along"); it
-  doesn't say "use a null". Recorded as a review that didn't pass; "learned" stays.
+  doesn't say "use a null". The pivot hint doesn't name the square's corner (D-4, § 14). Recorded as
+  a review that didn't pass; "learned" stays.
 - **"I already know it" (C4):** runs exactly as above.
 
 ## 12. What the record stores
@@ -371,13 +395,15 @@ No pixel tolerances, no method (which pick whip, which key held), no motive.
   read. The cockpit should route this to wave B's shared owner before skill 6 builds.
 - **B-4** At 26.5: the null's defaults (size, anchor, how it draws); whether holding Option or Shift
   while parenting moves the child; the two pick-whip columns' labels. **Recommended:** one short live
-  check; until then the mentor says none of it (§ 10).
+  check; until then the mentor says none of it (§ 10). **Answered 2026-10-26 (L-1):** § 10; what
+  the mentor says is D-4 (§ 14).
 - **B-5** R1 must carry **null**, **3D** and **layer kind** (text, shape, precomp, solid,
   adjustment), not only the switches listed in curriculum § 5. **Recommended:** add them to R1;
   the visibility class already needs null. An effect count per layer would let § 7's effect row fire
   on unkeyed effects; nice to have, not needed for the pass.
 - **B-6** Does a rotation read after expressions include auto-orient? **Recommended:** check once;
-  until then auto-oriented layers stay out of the focus.
+  until then auto-oriented layers stay out of the focus. **Answered 2026-10-26 (spec 004 T158,
+  L-4):** it doesn't, so they stay out.
 - **B-7 (curriculum B7)** Demo write tool: parent one layer to one null with no jump, once per
   lesson, only on the demo target, only after N1 to N2 pass. My understanding is that setting a
   layer's parent in a script keeps its place and a separate call jumps (unverified). **Recommended:**
@@ -416,14 +442,14 @@ review where the learner parents to a visible layer fails without the word "null
   the learner reaches for one unprompted.
 
 **Guesses:** the proposal rule when the learner has no group in mind: the 2% margin, the 2-to-4
-cut between a group and a crowd, and the preference for a text layer with a graphic (§ 4, § 15); "the null re-placed between stage 3 and parenting" being rare enough to handle by hint wording;
-auto-orient's interaction with the rotation read.
+cut between a group and a crowd, and the preference for a text layer with a graphic (§ 4, § 15); "the null re-placed between stage 3 and parenting" being rare enough to handle by hint wording.
+(Auto-orient's interaction with the rotation read was a guess until L-4 confirmed it, B-6.)
 
 **Curriculum items this design settles or moves:** B7 (set parent, no jump), B9 (moved to B-2, and
 no longer blocking the design), § 9's null-defaults row (B-4), § 13's FR-029 correction (refined by
 S-1 to S-3).
 
-## 14. Answers to the spec writer, round 1 (2026-10-23)
+## 14. Answers to the spec writer, round 1 (2026-10-23; D-4 added 2026-10-26)
 
 | Q | Answer | Spec default |
 |---|---|---|
@@ -433,6 +459,7 @@ S-1 to S-3).
 | A null with a moving parent of its own is refused unless SR-2 is approved | **Changes N2.** "Ask, don't fail" can't hold if the check can't measure it. Without SR-2: if the lesson's null has a parent that moves, the mentor says in one sentence that the null follows Logo, so the lesson can't check the group, and asks the learner to use a null with no parent (unparent it, or add a new one). That isn't a fail. A null whose parent doesn't move is still "ask, don't fail" if the matrix allows it, and is otherwise treated the same as a moving one. **Recommended: don't approve SR-2 this sprint.** Chains are out of scope (§ 8), so the refusal teaches nothing wrong. | Changed (N2, below) |
 
 | D-3 Another layer shares the lesson null's name | **Agreed: the same one-sentence rename ask, never graded.** It happens at the stage 3 check, before the null is stored: "two layers are called Null 1; rename the one you just added so I can tell which is yours." The learner does it, never the mentor. The null isn't stored and nothing is parented-checked until the name is unique. Asking which layer it is wouldn't help: the check matches by name, so the answer couldn't be used. | Changed (FR-019's ask becomes the rename ask) |
+| D-4 (2026-10-26, from L-1) May the mentor say where the null's anchor sits? | **Yes, as the spec writer recommended (the human's call, 2026-10-26).** L-1 logged the anchor at the square's top-left corner, on its Position, and N3 measures the anchor, so a learner who centres the square on the group's middle misses it by about 50 px each way, more than 10% of a 230 × 130 px group. The fact is about where to put the null, so it belongs in the "we do" step, not in a hint after a miss only. **Two places, the same fact:** (1) stage 3, once per lesson, after the learner names a place and before they drag: "The null's pivot is the top-left corner of its square, so put that corner on the spot." Not said for "it'll only slide"; if P5 later asks for a region, it goes with that question. (2) § 7's pivot hint, in a lesson, names the pivot by that corner: "Group Null's pivot, the top-left corner of its square, sits at the group's top-left, so the group would swing around that corner. You said the middle." That says where the pivot is, not why, so the "never a cause" rule holds. **Never** the null's size (100 × 100) or its Opacity. **Not in a review** (§ 11: no walkthrough, no "null"): the review's pivot hint says where the pivot of the layer they follow sits and what they said, nothing about the square. | Changed (§ 5 stage 3, § 7's pivot row, § 10) |
 
 **Edits these answers make (read them as part of § 4 and § 6):**
 - **§ 4, focus:** before the focus is agreed, candidate names must be unique. A duplicate gets the
@@ -446,6 +473,9 @@ S-1 to S-3).
   layer is parented yet (D-1).
 - **§ 7, new row:** null moved only on Anchor Point. The check sees that P4 fails with only Anchor
   Point keys on the null. D-2's hint applies. Evidence: inference from skill 5.
+- **§ 5 stage 3, § 7's pivot row, § 10 (D-4, 2026-10-26):** the corner sentence at stage 3 and in
+  the lesson's pivot hint; never the size or Opacity; not in a review. § 7's jump row also loses
+  "unverified": B-4 is answered (L-1), so the one held-key question is allowed.
 
 ## 15. Round 2: the proposal rule after L-6 (2026-10-25)
 
