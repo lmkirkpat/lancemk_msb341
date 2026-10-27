@@ -1,6 +1,8 @@
 # Contract: skill 5's three tools (spec 011)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24). **Adds to** spec 004's
+**Status**: Draft, awaiting the builder's approval (2026-10-24). Amended 2026-10-26: `outside_side`
+in the snapshot's `pivot_outside` note and in the check's `item1` (spec FR-019a); the hint codes
+`content_shifted` and `unchanged_shape` (FR-019b). **Adds to** spec 004's
 [skill-module.md](../../004-ae-curriculum/contracts/skill-module.md) › 3 and
 [shared-tools.md](../../004-ae-curriculum/contracts/shared-tools.md); doesn't repeat them. Shapes are
 in [data-model.md](../data-model.md).
@@ -36,7 +38,8 @@ Input (all optional): `{ "mode": "lesson" | "review", "focus_layers": [...], "sk
 
 Output: `host` (`parseHost`), `lesson`, `comp`, and the analyzer result's `candidates` (names,
 bucket, reason, rank only), `proposal`, `focus`, `places` (place codes only), `check_times`,
-`already_there`, `targets`, `demo_target`, `no_demo_reason`, `notes`, `rest_time_not_a_key`.
+`already_there`, `targets`, `demo_target`, `no_demo_reason`, `notes` (a `pivot_outside` note
+carries `side`, FR-019a), `rest_time_not_a_key`.
 `annotations: { readOnlyHint: true }`.
 
 ## `anchor_demo`

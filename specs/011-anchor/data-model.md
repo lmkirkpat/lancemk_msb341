@@ -1,6 +1,8 @@
 # Data model: Set the pivot (spec 011)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24). Shapes this skill adds; the
+**Status**: Draft, awaiting the builder's approval (2026-10-24). Amended 2026-10-26 with the spec
+(Changes 2026-10-26): `keyed.any` and the ranking, `outside_side`, `content_shifted` and
+`unchanged_shape`, `shape_until_l1` retired. Shapes this skill adds; the
 snapshot, `layer_info`, comp-space results and the session lesson are spec 004's
 [data-model.md](../004-ae-curriculum/data-model.md) › Wave B shapes and › Session lesson, linked,
 not copied. Decisions are in [research.md](research.md).
@@ -24,17 +26,19 @@ not copied. Decisions are in [research.md](research.md).
 ```json
 { "layer": "Door", "index": 7, "bucket": "default", "reason": null, "rank": 1,
   "class": "renders", "kind": "solid", "parent": null, "has_children": false,
-  "keyed": { "anchor": false, "position": false, "rotation": false, "scale": false },
-  "pivot_as_placed": true, "full_frame": false, "place_now": "center" }
+  "keyed": { "anchor": false, "position": false, "rotation": false, "scale": false, "any": false },
+  "pivot_as_placed": true, "full_frame": false, "place_now": "center", "outside_side": null }
 ```
 
 | Field | Rule |
 |---|---|
 | `bucket` | `default`, `if_named` or `never` (FR-004) |
-| `reason` | `null` for `default`; else one code: `shape_until_l1`, `position_keyed`, `hidden`, `matte`, `guide`, `locked`, `full_frame`, `anchor_keyed`, `expression_rotation_scale`, `expression_anchor_position`, `three_d`, `collapsed`, `null`, `camera`, `light`, `adjustment`, `cant_read` |
+| `reason` | `null` for `default`; else one code (`shape_until_l1` retired 2026-10-26, L-1): `position_keyed`, `hidden`, `matte`, `guide`, `locked`, `full_frame`, `anchor_keyed`, `expression_rotation_scale`, `expression_anchor_position`, `three_d`, `collapsed`, `null`, `camera`, `light`, `adjustment`, `cant_read` |
 | `rank` | 1 = first proposed, among `default` only (research R1's sort) |
+| `keyed.any` | Any property of the layer has keys in the snapshot's keyed `layers` (Opacity, effects, masks, text animators included). The ranking's first animation step (FR-004, 2026-10-26) |
 | `full_frame` | `true` or `false` when the snapshot has `comp.width` and `comp.height` (SR-2); `null` before that |
 | `place_now` | The place the anchor is in at the check time, `between` or `outside` |
+| `outside_side` | Only when `place_now` is `outside`: `above`, `below`, `left`, `right` or a pair (`below-left`), the anchor's comp-space point against the layer's comp-space bounds at the check time (FR-019a); `null` when either can't be read |
 
 ## Analyzer result (adds to spec 004's)
 
@@ -51,7 +55,7 @@ not copied. Decisions are in [research.md](research.md).
 | `demo_target` | Per research R5, or `null` |
 | `no_demo_reason` | `null`, `single_target` (the session's), `not_a_default_candidate`, `review`, `no_new_target`, `awaiting_focus` |
 | `needed_times` | Research R4's union (for the snapshot tool's second read) |
-| `notes` | `[{ layer, note }]`, each once: `parent` (with its name), `text_baseline`, `flipped`, `precomp_frame`, `position_keyed_tip`, `matte` |
+| `notes` | `[{ layer, note }]`, each once: `parent` (with its name), `text_baseline`, `flipped`, `precomp_frame`, `position_keyed_tip`, `matte`, `hidden`, `shy`, `locked`, `pivot_outside` (with `side`, FR-019a; for a focus layer and for the proposal) |
 | `rest_time_not_a_key` | Present when a learner's `rest_time` was ignored |
 
 ## Check result (`anchor_check`; FR-019)
@@ -60,7 +64,7 @@ not copied. Decisions are in [research.md](research.md).
 { "comp_matches": true, "passed": false,
   "layers": [ {
     "layer": "Door", "credit": "learner",
-    "item1": { "passed": false, "place_now": "center", "wanted": "middle-left" },
+    "item1": { "passed": false, "place_now": "center", "wanted": "middle-left", "outside_side": null },
     "item2": { "passed": false, "edges_px": { "left": 150, "top": 0, "right": 150, "bottom": 0 },
                "direction": "right", "distance_px": 150 },
     "item3": { "at_rest": true, "set_away_from_rest": false },
@@ -78,7 +82,8 @@ not copied. Decisions are in [research.md](research.md).
 | `item3.set_away_from_rest` | `true` when item 2 fails at the check time and holds at the check read's own `comp.time`; `null` when the baseline has no sample at that time |
 | `item4` | `null` unless the focus layer has Position keys; else `{ passed, worst: { time, dx, dy } }` |
 | `item5.not_compared` | `[{ layer, time, reason }]` for comparisons dropped for a comp-space reason; never read as "didn't move" |
-| `rect_shifted` | Anchor unchanged and `rect` moved in own space (a shape group's anchor) |
+| `item1.outside_side` | As the candidate's `outside_side`, from the check read (FR-019a) |
+| `rect_shifted` | Anchor unchanged and `rect` moved in own space: what's drawn moved inside the layer (text justification, an edited path, a group's own Position). **Not** a group's pivot moved with Pan Behind, which changes nothing the read holds (L-1, FR-019b) |
 | `cant_check` | `[{ what, reason }]`; any entry holds the pass (FR-018) |
 | `other_changes[].kind` | `anchor_changed`, `eye_changed`, `keys_added`, `layer_added`, `layer_removed`, `renamed` |
 
@@ -92,7 +97,8 @@ not copied. Decisions are in [research.md](research.md).
 | `neighbour_place` | item 2 passes, item 1 fails, `place_now` is another of the nine |
 | `outside` | item 1 fails with `place_now: "outside"` |
 | `wrong_layer` | `!anchor_changed` on the focus and an `anchor_changed` other change |
-| `group_anchor` | `rect_shifted` and item 2 fails |
+| `content_shifted` | `rect_shifted` and item 2 fails (renamed from `group_anchor` 2026-10-26, FR-019b) |
+| `unchanged_shape` | focus `kind` is `shape`, not passed, `!anchor_changed` and `!position_changed`, item 2 holds, and no `wrong_layer`; added after the place hint (FR-019b, 2026-10-26) |
 | `away_from_rest` | `item3.set_away_from_rest` |
 | `slid_at_key` | item 4 fails and item 2 passes |
 | `stopwatch` | `item5.anchor_keys_added` |

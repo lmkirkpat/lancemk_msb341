@@ -3,7 +3,8 @@
 **Status**: Draft, awaiting the builder's approval (2026-10-24). § 1 runs in the cloud; § 2 to § 5
 are **one sitting** at the builder's Mac (🖐), after spec 004's T133 to T136 have passed; § 6 is a
 day or more later. Spec 004's [quickstart.md](../004-ae-curriculum/quickstart.md) covers the shared
-branch.
+branch. **2026-10-26:** § 2 to § 4 are done (`live-sitting-2026-10-26.md`, T232 to T235); the spec
+was amended from them, and § 4b (T241 to T244) comes before § 5.
 
 ## 1. Cloud: everything that doesn't need After Effects
 
@@ -32,7 +33,10 @@ builder does the hand actions; the agent reads with `node mentor/dev/capture.mjs
 ## 3. 🖐 Captures
 
 Saved as `mentor/test/fixtures/anchor/<name>.json` with `--times` set to the answer key's list
-for that file; names match `answer-key.json`.
+for that file; names match `answer-key.json`. (Taken 2026-10-26 with the 7-time list. The live comp
+needs 30 times for a lesson's baseline, answer key `needed_practice2b`, so a live lesson start
+takes a second read; the captures hold the 7 plus each layer's own key times, enough for the
+tests.)
 
 | File | Shape (row, eval) |
 |---|---|
@@ -55,11 +59,19 @@ and L-5, fill the `<!-- L-2 -->` and `<!-- L-3 -->` places in `SKILL.md`, fix th
 anything L-4 showed. `npm test` green. A result that changes a requirement goes to the spec writer
 before § 5.
 
+## 4b. Amendment tasks (not 🖐, 2026-10-26)
+
+T241 (the ranking; Door proposed), T242 (the side of a pivot outside), T243 (the group and
+content hints), T244 (`SKILL.md`). `npm test` green and `check-branch.mjs` clean. T241 must land
+before § 5.1; the rest before § 5.2.
+
 ## 5. 🖐 First live lessons (SC-001, SC-002)
 
 The builder, in a plain Claude Code session in the repo, easing learned, on Mentor Practice 2:
 
-1. `/anchor-mentor`, no layer in mind: Door proposed with its left edge, then the lesson.
+1. `/anchor-mentor`, no layer in mind: Door proposed with its left edge (FR-004 as amended
+   2026-10-26; without T241 it's Blink), then the lesson. Note `anchor_snapshot`'s own time in
+   `calls.jsonl`: on this comp it takes two reads (FR-013).
 2. `/anchor-mentor` again: Gauge (or Pop), the rest key named, the playhead asked for, the lesson.
 
 Each to a verified pass in ≤ 10 minutes with ≤ 1 demo (times from `calls.jsonl`); per check, whether
@@ -68,5 +80,7 @@ them).
 
 ## 6. 🖐 Live review, a day or more later (SC-009, stretch)
 
-With § 5's record: the review names Tab or Peg, asks where it turns from, names no tool; checked and
+With § 5's record: the review names **Needle** (the first layer with no keys that isn't in the
+record, after Door and Gauge or Pop; Tab if Needle was in a lesson too), asks where it turns from,
+names no tool; checked and
 recorded as a review.
