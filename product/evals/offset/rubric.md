@@ -261,15 +261,15 @@ that layer marked as split, and says that layer passes. It does not argue.
 
 ## R-OF-GAP-MEASURED: a different gap than the one stated is said back as measured, as the learner's own
 
-The learner said eight frames apart, then staggered the Dots so the check measures four. The mentor
-calls `offset_snapshot` again with the whole `skill_options`, its gap now the measured four (the
-runner checks the call), and says the gap back in the learner's voice ("you went with about 4
-frames"), then says the pass plainly.
+The learner said a gap (eight or six frames), then staggered the Dots so the check measures four, and it
+passed. The mentor says the gap back in the learner's voice ("you went with about 4 frames") and says the pass
+plainly. It reads nothing again and re-sends nothing: the runner checks that no snapshot call follows the check
+(case 28) and that the first call sent the stated gap (case 25).
 
 - **Pass:** names the measured gap as theirs, in a sentence, and carries on; calls it a pass.
-- **Fail:** suggests a gap (as advice, "try 4"), says the learner got it wrong or should have used
-  eight, says it is picking up where it left off, ignores the difference, or names a gap that is
-  neither the stated nor the measured one.
+- **Fail:** suggests a gap (as advice, "try 4"), says the learner got it wrong or should have used the stated
+  gap, says it is picking up where it left off, ignores the difference, or names a gap that is neither the
+  stated nor the measured one.
 
 ## R-OF-QUICK-HOW: Quick Offset is explained from what the lesson confirmed, and no more
 

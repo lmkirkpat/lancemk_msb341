@@ -160,7 +160,7 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "snapshot_calls_ok"];
+    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "check_calls", "no_snapshot_after_check", "snapshot_calls_ok"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
@@ -428,6 +428,13 @@ function check(expect, turns, c) {
   if (expect.snapshot_calls_ok) {
     const bad = snaps.filter((e) => e.ok === false);
     add("snapshot_calls_ok", bad.length === 0, bad.length ? `${bad.length} refused: ${String(bad[0].result).slice(0, 100)} (input ${JSON.stringify(bad[0].input).slice(0, 120)})` : "ok");
+  }
+  // FR-040 (T199a): a passed check is answered with no snapshot after it, and exactly this many checks.
+  if ("check_calls" in expect) add("check_calls", checks.length === expect.check_calls, `${checks.length} check calls`);
+  if (expect.no_snapshot_after_check) {
+    const idx = calls.map((e) => e.name).lastIndexOf(CHECK);
+    const later = idx < 0 ? [] : calls.slice(idx + 1).filter((e) => e.name === SNAP);
+    add("no_snapshot_after_check", idx >= 0 && later.length === 0, idx < 0 ? "no check call" : later.length ? `${later.length} snapshot call(s) after the check: ${JSON.stringify(later[0].input).slice(0, 120)}` : "ok");
   }
   if ("snapshot_calls_max" in expect) add("snapshot_calls_max", snaps.length <= expect.snapshot_calls_max, `${snaps.length} snapshot calls`);
   if ("demo_calls_min" in expect) add("demo_calls_min", demos.length >= expect.demo_calls_min, `${demos.length} demo calls`);

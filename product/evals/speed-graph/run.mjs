@@ -159,7 +159,7 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks"];
+    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "first_snapshot_without_options", "snapshot_in_turn_lacks"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
@@ -422,6 +422,17 @@ function check(expect, turns, c) {
   for (const re of expect.snapshot_input_lacks || []) {
     const bad = snaps.find((e) => new RegExp(re).test(JSON.stringify(e.input || {})));
     add(`snapshot_input_lacks:${re.slice(0, 30)}`, !bad, bad ? `a snapshot call's input matched /${re}/: ${JSON.stringify(bad.input).slice(0, 120)}` : "ok");
+  }
+  // FR-047 (T199e): per turn. The first snapshot call of each listed turn sends no skill_options; and a
+  // listed turn has no snapshot call whose input matches the regex (turn is 1-based).
+  for (const n of expect.first_snapshot_without_options || []) {
+    const first = toolEvents(turns[n - 1] || { events: [] }).find((e) => e.name === SNAP);
+    const ok = !!first && !("skill_options" in (first.input || {}));
+    add(`first_snapshot_without_options:${n}`, ok, !first ? `no snapshot call in turn ${n}` : ok ? "ok" : `turn ${n}'s first call sent ${JSON.stringify(first.input).slice(0, 120)}`);
+  }
+  for (const { turn, re } of expect.snapshot_in_turn_lacks || []) {
+    const bad = toolEvents(turns[turn - 1] || { events: [] }).find((e) => e.name === SNAP && new RegExp(re).test(JSON.stringify(e.input || {})));
+    add(`snapshot_in_turn_lacks:${turn}`, !bad, bad ? `turn ${turn}: ${JSON.stringify(bad.input).slice(0, 120)}` : "ok");
   }
   if ("snapshot_calls_max" in expect) add("snapshot_calls_max", snaps.length <= expect.snapshot_calls_max, `${snaps.length} snapshot calls`);
   if ("demo_calls_min" in expect) add("demo_calls_min", demos.length >= expect.demo_calls_min, `${demos.length} demo calls`);

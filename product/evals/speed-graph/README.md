@@ -10,7 +10,7 @@ options and results format; everything skill-specific is in the `CONFIG` block a
 
 ## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
-19 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 008 T029 to T031), except `synthetic/linear-basic.json`
+20 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 008 T029 to T031), except `synthetic/linear-basic.json`
 (cases 13 and 17, permanent). `--dry-run --strict-sources` is clean. **Still no baseline**: the full run waits for one more `SKILL.md` change, then the
 planned smoke list below. Case 19 (a reading answer given as a frame, FR-039) is new.
 
@@ -26,8 +26,8 @@ node product/evals/speed-graph/run.mjs --repeat 3                  # each case 3
 node product/evals/speed-graph/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 47 mentor turns plus 19 judge calls. From the smoke runs (about $0.38 a case with its judge call)
-expect **about $7 to $8**. Bar: SC-006,
+A full run is about 51 mentor turns plus 20 judge calls. From the smoke runs (about $0.38 a case with its judge call)
+expect **about $8 to $9**. Bar: SC-006,
 at least 80% passing, and every hard-rule check passing; spec 008's SC-003 is about the pass rule (unit tests), so this set has no SC of its own beyond SC-006.
 
 ## What every case checks (no `expect` key needed)
@@ -82,11 +82,12 @@ turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-b
 | 17 | A review with nothing new: said in a sentence, nothing recorded | 2 | review_mode; snapshot_with; demo_calls_max; record_lesson; tools_not_called | R-REVIEW-NOTHING-NEW | synthetic |
 | 18 | After Effects can't be reached: nothing claimed about the comp | 1 | tools_not_called; say: must says_cant_see, never no_claims | R-UNREACHABLE | none |
 | 19 | A reading answer given as a frame ("around frame 30" on a 0.5 to 1.5 s pair): placed in the pair from its key times, agreed with, not taken for a value-graph answer | 3 | tools_called; demo_calls_max; say: never not_a_value_graph_answer, never not_called_wrong, must places_it | R-SG-READ-TIME, R-ONE-IDEA | live |
+| 20 | A resumed lesson with a stored land-hard choice (Title's last Position move): the first call sends no options, no later call in turn 4 clears the choice, the pair is named by layer, property and time as the learner's own and confirmed, nothing grades it for a soft landing (FR-047, T199e) | 4 | tools_not_called (demo, check); snapshot_input_matches; first_snapshot_without_options (turns 1, 4); snapshot_in_turn_lacks (turn 4); say: must names_pair, as_theirs, asks_and_stops, never no_grade_for_soft, no_where_kept | R-SG-STORED-CONFIRM, R-ONE-IDEA | live |
 
 - **01** has three turns because the preview frame is only taken in the explain step, after the learner answers the reading question.
 - **08** and **17** have a "yes, do the review" turn: a due review is offered, then waits for the learner to agree.
 - No case reaches a full pass of the lesson: no live capture has every Title pair shaped, or a shaped Card for the review. That is why case 19 asks at the first reading step (stage 2), not after a pass (stage 6, where `discovery/usage-notes/speed-graph.md` met it). Request to the builder: a capture with all four Title pairs shaped (or Card's) lets a stage 6 variant run.
-- **No FR-046 case (number 20 unused), and why.** `stored_choices` is true only on a resumed lesson whose call sends no `skill_options`. Speed graph's step 1 sends `skill_options` (both lists) on its first call, the intent check, a focus change and the review call, and no other step calls the snapshot, so following the skill never reaches it. Checked on the `phase9-pass2` tools: a resumed lesson with the options sent reads `stored_choices` false. A case would have to force the mentor to break its own step 1. If a later `SKILL.md` drops the options from some call, or step 1 stops sending them, write the case then (the same four-turn shape as key types 20, comp 97 then comp 179 then back).
+- **20** replaces the case I could not write for FR-046 (the old step 1 always sent `land_hard: []`, so `stored_choices` was never true). Under FR-047 step 1 snapshots without `skill_options` first. It is built from the spec and T199e's text, and has been dry-run only: **re-check it against the branch tools once `landing_hard_labels` has landed** (T199c, T199d). Turns: choose in 2, another comp (Mentor Practice 2) in 3, back in 4. Two new case-level checks, in this runner only: `first_snapshot_without_options` and `snapshot_in_turn_lacks` (the code is untested until the first run; it parses and the dry run loads it).
 - **19** is FR-039's proof on the model side (a unit test covers `comp.frame_rate`). It uses a right answer given in frames: 30 frames is 1 s at 30 fps, the middle of Title's first Position move (0.5 to 1.5 s), where the move is fastest. A wrong frame ("frame 19") would be a separate hint case; not added, one reason per case.
 - **06** uses the Logo expression; **07** the shared key (spec 008 overlap rows).
 - The runner's `last_check.has` compares against the check's reply with the space after each colon removed (found in the key-types smoke run; case 11's `"dimension":"height"` check depends on it, and it has not been run since).
@@ -154,7 +155,8 @@ of that length (about $0.40 for 2 to 3 turns, $0.60 or more for 4). The cockpit'
 | `--only 19` | New case (FR-039) | $0.45 |
 | `--only 10` | Premise changed: the live drag arrives moving on all four pairs | $0.35 |
 | `--only 11` | Premise changed: a second failure (Position) is in the check reply | $0.35 |
-| **Total, speed graph** | 6 runs | **about $2.50** |
+| `--only 20` | New case (FR-047, T199e); re-check against the branch tools first | $0.65 |
+| **Total, speed graph** | 7 runs | **about $3.15** |
 
 ### SC-014 and the `no_self_instructions` check
 

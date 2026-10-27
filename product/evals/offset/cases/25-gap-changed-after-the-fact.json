@@ -1,6 +1,6 @@
 {
   "id": "25-gap-changed-after-the-fact",
-  "title": "The learner staggered by a different gap than they said: the measured gap is said back as theirs, and the lesson re-reads with it",
+  "title": "The learner staggered by a different gap than they said and it passed: the measured gap is said back as theirs, in their voice, never as advice",
   "covers": [
     "FR-040"
   ],
@@ -29,8 +29,7 @@
     ],
     "demo_calls_max": 0,
     "snapshot_input_matches": [
-      "\"gap_frames\":8",
-      "\"gap_frames\":4"
+      "\"gap_frames\":8"
     ],
     "last_check": {
       "passed": true

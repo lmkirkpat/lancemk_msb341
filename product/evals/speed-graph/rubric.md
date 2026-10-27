@@ -232,3 +232,16 @@ middle). That agrees, so it says so in a sentence and goes on to explain.
   answer wrong, asks for start, middle or end when the frame is inside the pair, places it in the
   wrong part, uses a frame rate other than the snapshot's, or says how far along the move the frame
   is as a percentage.
+
+## R-SG-STORED-CONFIRM: a land-hard choice from last time is named in plain words and confirmed
+
+Turn 4 comes back to a lesson the learner left after saying Title's last Position move should land hard (they
+worked on another comp in between; nothing was checked). The mentor says that back as the learner's own ("last
+time you said Title's last Position move, 3 to 4.37 s, should land hard"), by layer, property and time, never
+by an id, asks whether that still holds, and stops for the answer. It does not grade that move for a soft
+landing, and takes no frame, demo or check before the answer.
+
+- **Pass:** names the pair in plain words as theirs, asks, and waits; the pair stays out of the shaping.
+- **Fail:** forgets the choice or asks the land-hard question as if nothing was said, names the pair by id or
+  says a field name, says it should land softly or grades it, calls `preview_frame`, a demo or a check
+  before asking, says where it was kept.

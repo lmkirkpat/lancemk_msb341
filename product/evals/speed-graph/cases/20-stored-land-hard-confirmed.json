@@ -1,0 +1,92 @@
+{
+  "id": "20-stored-land-hard-confirmed",
+  "title": "A resumed lesson with a stored land-hard choice: the first call sends no options, the pair is named in plain words as the learner's own and confirmed, and nothing grades it for a soft landing",
+  "covers": [
+    "FR-047",
+    "FR-046",
+    "T199e"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Title's last move should slam, it lands hard."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "speed_graph_demo",
+      "speed_graph_check"
+    ],
+    "snapshot_input_matches": [
+      "\"land_hard\":\\[[^\\]]*Position/3"
+    ],
+    "first_snapshot_without_options": [
+      1,
+      4
+    ],
+    "snapshot_in_turn_lacks": [
+      {
+        "turn": 4,
+        "re": "\"land_hard\":\\[\\]"
+      }
+    ],
+    "say": [
+      {
+        "id": "names_pair",
+        "must": "(?=[\\s\\S]*Title)(?=[\\s\\S]*Position)(?=[\\s\\S]*\\b(?:3|three)\\b)",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "as_theirs",
+        "must": "\\b(?:last time|before|earlier|you said|you had|you picked|you chose|you told)\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "asks_and_stops",
+        "must": "\\?",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_grade_for_soft",
+        "never": "\\b(?:needs?|should|ought to|could use)\\b[^.?!]{0,40}\\b(?:softer|soft landing|land softly|longer ease|ease in)\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_where_kept",
+        "never": "\\b(?:stored|session|skill options|landing hard|land hard labels|where it was kept)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-STORED-CONFIRM",
+    "R-ONE-IDEA"
+  ]
+}

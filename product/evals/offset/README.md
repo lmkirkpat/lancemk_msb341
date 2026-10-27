@@ -10,9 +10,9 @@ options and results format; everything skill-specific is in the `CONFIG` block a
 
 ## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
-27 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 010 T034) except `synthetic/linear-basic.json` (case 18, permanent). Mentor Practice 2 is now
+28 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 010 T034) except `synthetic/linear-basic.json` (case 18, permanent). Mentor Practice 2 is now
 `practice2b.json` (24 layers). `--dry-run --strict-sources` is clean. **Still no baseline**: the full run waits for one more `SKILL.md` change, then the planned smoke list below.
-Cases 25 (the gap changed after the fact, FR-040), 26 (how Quick Offset works, FR-041) and 27 (stored choices confirmed, FR-046) are new.
+Cases 25 (the gap changed after the fact, FR-040), 26 (how Quick Offset works, FR-041) 27 (stored choices confirmed, FR-046) and 28 (passed, but the stated gap differs, FR-040 as amended) are new.
 
 ## Running
 
@@ -26,8 +26,8 @@ node product/evals/offset/run.mjs --repeat 3                  # each case 3 time
 node product/evals/offset/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 79 mentor turns plus 27 judge calls. From the smoke runs (about $0.38 a case with its judge call)
-expect **about $11 to $13**. Bar: SC-006,
+A full run is about 83 mentor turns plus 28 judge calls. From the smoke runs (about $0.38 a case with its judge call)
+expect **about $12 to $14**. Bar: SC-006,
 at least 80% passing, and every hard-rule check passing; spec 010 SC-003 (at least 80%, every hard-rule check passing).
 
 ## What every case checks (no `expect` key needed)
@@ -87,16 +87,18 @@ turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-b
 | 22 | A split said on purpose, in answer to the 'pops in' hint: that layer passes on the next check; the summary says it plainly | 4 | last_check; say: never no_blame | R-OFF-SPLIT, R-NAMES-REAL | live |
 | 23 | Stops after a stagger that wasn't enough: recorded partial, gaps in plain words, no method or motive | 4 | record_lesson | R-RECORD-HONEST, R-NAMES-REAL | live |
 | 24 | After Effects can't be reached: nothing claimed about the comp | 1 | tools_not_called; say: must says_cant_see, never no_claims | R-UNREACHABLE | none |
-| 25 | The learner said eight frames, the check measures four: the gap is said back as theirs, the lesson re-reads with it, no advice, no "picking up where we left off" | 3 | tools_called; demo_calls_max; snapshot_input_matches (gap_frames 8 then 4); last_check; say: must says_measured_gap, never not_picking_up, never not_a_fail | R-OF-GAP-MEASURED, R-ONE-IDEA | live |
+| 25 | The learner said eight frames, the check measures four and it passed: the gap is said back in their voice, no advice, no "picking up where we left off" (the wording; 28 is the mechanics) | 3 | tools_called; demo_calls_max; snapshot_input_matches (gap_frames 8); last_check; say: must says_measured_gap, never not_picking_up, never not_a_fail | R-OF-GAP-MEASURED, R-ONE-IDEA | live |
 | 26 | "How does Quick Offset work?" on 26.5: only the confirmed claims, nothing about selection order, reversing, undo counts, a readout or another key; the record holds no method | 4 | tools_called; demo_calls_max; last_check; record_lesson; say: must states_the_gesture, must top_layer_stays, never no_selection_order, no_reverse_by_dragging, no_undo_count, no_gap_readout, no_other_key | R-OF-QUICK-HOW, R-RECORD-HONEST, R-ONE-IDEA | live |
 | 27 | A lesson resumed on a comp that matches, with the old order (Dot 3, Dot 1, Dot 2) and gap (6 frames): said back as the learner's own and confirmed before any frame, demo or check; no field or "stored" said (FR-046, T037's case) | 4 | tools_not_called (demo, check); snapshot_input_matches; snapshot_calls_ok; say: must says_order_back, says_gap_back, as_theirs, asks_and_stops, never no_where_kept | R-OF-STORED-CONFIRM, R-ONE-IDEA | live |
+| 28 | Passed, but the stated gap (six frames) differs from the measured (four): one `offset_check`, no `offset_snapshot` after it, the measured gap said back as theirs, `record_lesson` accepted as passed (FR-040 as amended, T199a) | 4 | demo_calls_max; check_calls; no_snapshot_after_check; last_check; record_lesson; say: must says_measured_gap, never not_a_fail | R-OF-GAP-MEASURED, R-RECORD-HONEST | live |
 
 - **01** has two turns: the mentor proposes, offers the other kind and says what's left out first, then asks order and gap after the frame.
 - **17** and **18** have a "yes, do the review" turn; in practice the mentor starts the review in turn 1 and the yes is redundant.
 - **FR-009 (the demo runs only on a layer whose eye is on) has no eval case.** The eye-off matte fixture is a unit-test variant (`offset-visibility.test.mjs`), not a saved file, and the Dots all have their eyes on in the live captures. A case needs a saved fixture whose second member is eye-off; see requests.
 - **27** reaches `stored_choices` true (checked on the `phase9-pass2` tools with these fixtures) by choosing in turn 2, starting the lesson on Mentor Practice (a different comp, so the Dots' lesson is no longer current) in turn 3, and coming back to the unchanged Dots in turn 4: resumed, baseline matching, nothing checked, no demo. The turn 4 checks are on that turn only; "no frame before asking" is the judge's, because the runner's `tools_not_called` is whole-case and turns 1 to 3 do call `preview_frame`.
 - **T196's re-runs** (11, 14, 15 and 23) carry a new case-level check, `snapshot_calls_ok`: no `offset_snapshot` call came back refused (T199: a measured gap of 0 never reaches `gap_frames`).
-- **25** states eight frames and then checks `layers-pass` (measured gaps 4 and 4), so FR-040's rule fires without a second reason. It stops at the pass; a "show me one" turn after a pass would shift an already-staggered Dot 2 and say nothing about the rule. **26** states four frames so the check agrees and FR-040 stays out of the way; the claims it forbids are FR-041's list, one regex each, with the judge on the whole explanation.
+- **25 and 28 after T199a (2026-10-27).** FR-040 no longer re-reads: step 7 has no `offset_snapshot` call and says a passed check's measured gap back from `gaps_frames`. Case 25 used to expect a snapshot call sending the measured gap (`"gap_frames":4`); that expectation is removed, and its rubric item no longer mentions a call. The two cases split the work so neither fails for two reasons: 25 is the wording (stated 8, measured 4), 28 the mechanics (stated 6, measured 4; one check, nothing after it, the record accepted). 28 has a fourth turn ("that's all for today") so a lesson recorded at the end is still caught. Two new case-level checks in this runner: `check_calls` and `no_snapshot_after_check`; they parse, and the logic is untested until the first run.
+- **25** (as first written) states eight frames and then checks `layers-pass` (measured gaps 4 and 4), so FR-040's rule fires without a second reason. It stops at the pass; a "show me one" turn after a pass would shift an already-staggered Dot 2 and say nothing about the rule. **26** states four frames so the check agrees and FR-040 stays out of the way; the claims it forbids are FR-041's list, one regex each, with the judge on the whole explanation.
 - **12** has no stricter check than the pass: whether the mentor names the held layer's start as its jump is for the judge.
 - The universal `no_self_instructions` check catches a leaked step ("Review is due -> run the review") that the mentor wrote before its first tool call; 17 fails on it (see the smoke table).
 
@@ -159,7 +161,8 @@ of that length (about $0.40 for 2 to 3 turns, $0.60 or more for 4). The cockpit'
 | Run | Why | Est. cost |
 |---|---|---|
 | `--only 17 --repeat 3` | SC-014: `no_self_instructions` 3 of 3 (the review-due case; the first smoke leaked "Review is due -> run the review." in two runs of two) | $1.20 |
-| `--only 25` | New case (FR-040) | $0.45 |
+| `--only 25` | New case (FR-040, the wording) | $0.45 |
+| `--only 28` | New case (FR-040 as amended, the mechanics: one check, no snapshot after, record passed) | $0.65 |
 | `--only 26` | New case (FR-041) | $0.60 |
 | `--only 02` | First run on `practice2b.json` (layers kind, Seal left out) | $0.30 |
 | `--only 11` | Premise changed: a gap of 0. T196 re-run: `snapshot_calls_ok` (no refused snapshot call) | $0.45 |
@@ -169,7 +172,7 @@ of that length (about $0.40 for 2 to 3 turns, $0.60 or more for 4). The cockpit'
 | `--only 27` | New case (FR-046, T037's case) | $0.65 |
 | `--only 19` | Premise lost and retargeted: version not known | $0.40 |
 | `--only 10` | Premise changed in degree: uneven rhythm | $0.45 |
-| **Total, offset** | 13 runs after the repeats | **about $5.90** |
+| **Total, offset** | 14 runs after the repeats | **about $6.55** |
 
 Still coming, not costed: **T195**, the easing gate again, after spec 004 Phase 9's second pass merges. T196's cases are written and on the list above.
 
