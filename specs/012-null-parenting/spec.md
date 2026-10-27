@@ -21,6 +21,16 @@ L6-1 and L6-2 answered, H-6 open). FR-008, FR-009, FR-012 and FR-019 also close 
 gaps (spec wording behind what `skill-6-null` already builds). The new tasks are in
 [tasks-l6.md](tasks-l6.md) (T350 on), so the builder's ticked `tasks.md` isn't edited.
 
+**Amendment 2 (2026-10-26, the live sitting, [live-sitting-2026-10-26.md](live-sitting-2026-10-26.md)):
+awaiting the human's approval.** Facts from L-1 to L-6 and the desk block (`4234c7e`, `6039c78`,
+`3864ac5`); nothing changes a requirement's intent, and no new task. Changed here: FR-009 (the
+null's place is its anchor, top-left of its square), FR-020 (a null's opacity counts when keyed or
+set between 0 and 100; a static 0 never does; the default name is "Null N"), FR-023 (L-1's notes:
+labels, the null's defaults, Option and Shift as a caution only, Quick Offset still out), rows 15,
+22 and 40, US3 #1, #2 and new #2a (the review's group is Chip A to C), Live checks › Results, Eval
+plan case 12, and new D-4 for the designer. Also quickstart § 3 and § 6, data-model's stored-null
+example and research R8 and R11.
+
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 6,
 Move a group with a null." Record ID `parenting.null` (in `mentor/curriculum/path.json`, position
 6, hard prerequisite `transform.anchor`, soft `motion.sources`), short name `null-parenting`, tool
