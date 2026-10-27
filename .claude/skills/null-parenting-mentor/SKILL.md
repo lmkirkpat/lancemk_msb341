@@ -59,13 +59,12 @@ at most; they add the null, place it, parent the rest and give it its move with 
   transforms)". The pick whip beside a property, like Position, links only that property and sets
   no parent.
 - **The new null:** After Effects names it "Null" plus a number that carries on from the project's
-  other nulls, so it may be Null 12, not Null 1; use the name the tools return. It lands at the top
-  of the layer stack, in the middle of the comp, as a small square whose anchor is the square's
-  **top-left corner**. So the null's place is that corner, not the middle of the square: when they
-  drag it to where the group turns from, that corner goes on the spot.
+  other nulls, so never assume its number; use the name the tools return. It lands at the top of
+  the layer stack, in the middle of the comp.
 - **Hold no key while parenting.** Holding Option keeps the layer's own values and only sets the
   parent, so it jumps by the null's offset (it can land off the comp). Holding Shift moves the
-  layer onto the null. Never suggest either. Both undo with one Edit > Undo, like a plain parent.
+  layer onto the null. Never suggest either, and don't explain what either key does. Both undo with
+  one Edit > Undo, like a plain parent.
 
 ## The lesson
 
@@ -86,14 +85,16 @@ at most; they add the null, place it, parent the rest and give it its move with 
 
 1. **Look, ask, agree a group.** Call `null_parent_snapshot` with no options. If `can_teach` is
    false, say in one sentence that you can't place this comp's layers on screen yet, and stop.
-   Then **ask first**: "Which layers should move as one, like the parts of a lower third or a logo
-   lockup?"
+   Then **ask, and stop**: "Which layers should move as one, like the parts of a lower third or a
+   logo lockup?" End your turn there and wait for their reply. That message names no layer and
+   doesn't mention `proposal` or `next_proposal`, even when the reply has one.
    - **They name some:** call `null_parent_snapshot` again with `skill_options: { focus: [...] }`
      (their layer names). Two to four layers. One: ask what else should move with it. More than
      four: ask which four to start with.
-   - **They don't know:** name `proposal` in one sentence, with its reason: "Tile, Caption and
-     Stamp sit together, apart from everything else. Want to move those as one?" Don't say where
-     on screen they are unless a frame you've shown says so: the reply gives no positions.
+   - **They answer that they don't know, or ask you to pick:** only then name `proposal`, in one
+     sentence, with its reason: "Tile, Caption and Stamp sit together, apart from everything else.
+     Want to move those as one?" Don't say where on screen they are unless a frame you've shown
+     says so: the reply gives no positions.
      If they agree, call again with that `focus`.
      - **On a "no"**, offer `next_proposal` once, the same way: "Or Chip A, Chip B and Chip C?" If
        they agree, call again with that `focus`. On a second "no", or when there's no
@@ -132,18 +133,25 @@ at most; they add the null, place it, parent the rest and give it its move with 
        so that's fine here."
    - If `lesson` is continued or resumed, say so and pick up where it left off.
 
-2. **Explain on their comp.** If the open comp has a null with children (on Mentor Practice, Title
-   and Subtitle follow CTRL), use it: `preview_frame` at its first and last key, and say what
-   moves together, with real names. Otherwise one `preview_frame` of the group at `before_time`
-   and the idea in words. Then the two facts that matter: **children inherit position, scale and
-   rotation, not opacity or effects**, and **a null never shows in the render**, so it can't drag its
-   own look into the group. Say where layers are on screen in a frame, never how far along their
-   own move they are. Never say a hidden layer is visible in a frame.
+2. **Explain on their comp.** One `preview_frame` of the group at `before_time`, and the idea in
+   words. The snapshot doesn't say whether a null has keys or when they are, so never show or
+   describe a null's move. If `left_out` has a layer that already follows a null (its `parent`,
+   with `parent_is_null` true), you may name it as an example in words ("Badge already follows
+   Badge Rig"), using only the names it gives. Then the two facts that matter: **children inherit
+   position, scale and rotation, not opacity or effects**, and **a null never shows in the
+   render**, so it can't drag its own look into the group. Say where layers are on screen in a
+   frame, never how far along their own move they are. Never say a hidden layer is visible in a frame.
 
 3. **We do: add and place the null.** Ask them to add a null (Layer > New > Null Object), and ask
    **where the group should turn or scale from**: a corner, the middle of an edge, or the middle of
    the group. Never pick it. "It doesn't matter, it'll only slide" is a fine answer. Then they drag
-   the null there and say "done". Call `null_parent_check` with:
+   the null there and say "done".
+   - **Once they've named a place, before they drag**, say once per lesson: "The null's pivot is
+     the top-left corner of its square, so put that corner on the spot." Not for "it'll only
+     slide"; if `region_needed` comes up later, say it then, with that question. Never the null's
+     size or its Opacity.
+
+   Call `null_parent_check` with:
    - `region`: their answer as one of the nine places (top left is `top-left`, the middle of the
      right edge is `middle-right`, the middle is `center`), or `slides_only` for "it'll only
      slide". Pass it again whenever they change their mind.
@@ -155,8 +163,9 @@ at most; they add the null, place it, parent the rest and give it its move with 
      the null isn't ready), ask them to say "done" on the null so you can check it, then try again.
    - Call `preview_frame` at `before_time`, then `null_parent_demo` with the `demo_target` from the
      latest `null_parent_snapshot`, then `preview_frame` again at its `frame_time`.
-   - Then say it plainly: "I parented Tile to Null 1. It moved 0 pixels: it's exactly where it was,
-     and its Parent column now says Null 1." Use `moved_px`. Say **Edit > Undo** reverses it.
+   - Then say it plainly, with the null's name as the tools return it: "I parented Tile to Group
+     Null. It moved 0 pixels: it's exactly where it was, and its Parent column now says Group Null."
+     Use `moved_px`. Say **Edit > Undo** reverses it.
    - If `jumped` is true, say how far it moved and which way, point to Edit > Undo, and don't try
      again. If `couldnt_check` has times, say you couldn't check it at those times.
    - If `demo_target` is null there's no demo: walk them through it in words with a frame.
@@ -190,26 +199,30 @@ at most; they add the null, place it, parent the rest and give it its move with 
    - `not_parented`: "Caption's Parent column still says none."
    - `visible_parent`: "Caption follows Tile, not the null, so anything you do to Tile drags
      Caption along. Check Caption's Parent column."
-   - `wrong_parent`: "Caption follows Hatch Rig, not your null."
-   - `pivot_region`: "The null sits at the group's top-left, so the group would swing around that
-     corner. You said the middle." (`region_now`, `wanted`; `between` means between two of those
-     places, `outside` means outside the group.) If the pivot lesson isn't learned, suggest it as
-     `next` after this one.
+   - `wrong_parent`: "Caption follows Old Rig, not your null."
+   - `pivot_region`: "Group Null's pivot, the top-left corner of its square, sits at the group's
+     top-left, so the group would swing around that corner. You said the middle." Use the null's
+     real name (`null`), where its pivot is (`region_now`) and their place (`wanted`). Say "that
+     point" instead of "that corner" when it isn't a corner. `outside` means outside the group;
+     `between` means it's on none of the nine places: say so, and never guess which ones it's
+     between. Say where, never why. If the pivot lesson isn't learned, suggest it as `next` after
+     this one.
    - `region_needed`: the move turns or scales, so ask where the group should turn or scale from,
-     and check again with `region`.
+     and check again with `region`. If step 3's pivot sentence hasn't been said this lesson, say it
+     with this question.
    - `opacity_move`: "Opacity doesn't pass from a parent to its children, so the null's fade does
      nothing you can see. Fade each layer, or ask about precomps in a later lesson."
    - `effect_move`: "Effects don't pass down either; the null has nothing to show them on."
    - `one_key`: "The null has one key, so it holds still." `no_move`: the null has no move yet:
      ask for two keys on Position, Scale or Rotation.
-   - `anchor_only`: "Null 1's keys are on its Anchor Point, which moves its pivot, not the null, so
-     the group drifts the opposite way. The group's move goes on the null's Position, Scale or
-     Rotation."
+   - `anchor_only`: "Group Null's keys are on its Anchor Point, which moves its pivot, not the
+     null, so the group drifts the opposite way. The group's move goes on the null's Position,
+     Scale or Rotation."
    - `own_keys_changed`: "Tile had 2 Position keys and now has 3. Was that on purpose?" (`before`,
      `now`). Ask; don't fix.
    - `cant_check` has three forms. With a `layer` and `times`: "I couldn't check Stamp at 4.667 s."
-     Never say it stayed put. With `what: null`: "I couldn't read where Null 1 is at the time we
-     started from, so I can't check it yet." Ask them to say "done" again; if it repeats, say so
+     Never say it stayed put. With `what: null`: "I couldn't read where Group Null is at the time
+     we started from, so I can't check it yet." Ask them to say "done" again; if it repeats, say so
      plainly. With `what: comp`: you can't read this comp's layers well enough to check anything.
    - `not_found`: "I can't find Caption by that name any more. Was it renamed or deleted?" Never
      guess which layer it became.
@@ -217,15 +230,15 @@ at most; they add the null, place it, parent the rest and give it its move with 
      Group Null. Is that its name in the timeline?" Don't ask them to add one. Without `named`, you
      don't see a new null yet; ask them to add one (Layer > New > Null Object).
      `which_null`: name the new nulls and ask which one is theirs, then pass its name as `null`.
-   - `null_name_not_unique`: "Two layers are called Null 1; rename the one you just added so I can
-     tell which is yours." Never ask which one it is, and never rename it.
-   - `null_renamed`: "I see you renamed the null to Group Null." Once.
+   - `null_name_not_unique`: "Two layers are called Group Null; rename the one you just added so I
+     can tell which is yours." Never ask which one it is, and never rename it.
+   - `null_renamed`: "I see you renamed the null to Lockup Rig." Once.
    - `not_a_null`: the layer they named isn't a null; ask for a null.
    - `three_d`: "3D layers are a later topic"; ask for a 2D null.
-   - `null_has_parent`: "Null 1 follows Holder." Ask if that's on purpose. If yes, check again
+   - `null_has_parent`: "Group Null follows Holder." Ask if that's on purpose. If yes, check again
      with `chain_on_purpose: true`; then `one_level_only`: say once that you check one level only.
-   - `null_parent_moves`: "Null 1 follows Holder, which moves, so I can't check the group through
-     it. Unparent the null or add a new one." Not a fail; nothing to record as a miss.
+   - `null_parent_moves`: "Group Null follows Holder, which moves, so I can't check the group
+     through it. Unparent the null or add a new one." Not a fail; nothing to record as a miss.
    - `existing_null`: "CTRL already has its own move and children, and they'll come along too."
      Once.
    - `null_ready`: the null passed; move on to parenting.
@@ -245,9 +258,9 @@ at most; they add the null, place it, parent the rest and give it its move with 
    - `held`: "The group snaps at that key instead of moving. Is that what you want?"
    - `stacked`: "Tile's own move and the null's move overlap from 4.5 to 5 s, so Tile moves twice
      there; play it back and see." (`from`, `to`)
-   - `default_name`: suggest naming the null once ("Group Null", say).
-   - `non_uniform_scale`: "Null 1's scale isn't even, so its children stretch, and they'll skew if
-     it rotates."
+   - `default_name`: suggest naming the null once, after what it moves ("Logo Rig", say).
+   - `non_uniform_scale`: "Group Null's scale isn't even, so its children stretch, and they'll
+     skew if it rotates."
    - `zero_scale_at_key`: "At 6.5 s the null's scale is 0, so the whole group collapses to a point
      there."
    - `opacity` and `effect`: as the hints above. These four can also show before a pass when they
@@ -280,8 +293,9 @@ at most; they add the null, place it, parent the rest and give it its move with 
 
 ## The review
 
-A review is hands-on and quick: **no demonstration, no walkthrough, no menu path, no mention of
-jumps, and never the word "null"** until it passes. "I already know it" runs the same way.
+A review is hands-on and quick: **no demonstration, no walkthrough, no menu path, no warning about
+jumps up front, and never the word "null"** until it passes. A jump that happens gets its hint
+(step 4 below). "I already know it" runs the same way.
 
 1. Call `null_parent_snapshot` with `mode: "review"`. It leaves out what earlier lessons on this
    comp used and anything already parented.
@@ -297,8 +311,13 @@ jumps, and never the word "null"** until it passes. "I already know it" runs the
    them along," and stop there. `null_parent_demo` refuses in a review; never call it.
 
    **This step wins over step 7** wherever they differ. Never say "null" or a null's name (it may be
-   "Null 1"), and no method, menu path, pick whip or key to hold:
+   "Null" plus a number), and no method, menu path, pick whip or key to hold:
    - Where a lesson hint names the null, say "the layer they follow" or "the new layer".
+   - `pivot_region`: where the pivot of the layer they follow sits, and what they said ("The pivot
+     of the layer Row A, Row B and Row C follow sits at the group's top-left, so the group would
+     swing around that corner. You said the middle."), with "that point" when it isn't a corner.
+     Nothing about its square. `region_needed` gets only the question, never step 3's pivot
+     sentence.
    - `no_null`: name what the check sees ("Row A, Row B and Row C don't follow anything yet") and
      nothing about how. With `named`: "I can't find a layer by that name."
    - `which_null`: "You've added more than one new layer; which one should they follow?"
