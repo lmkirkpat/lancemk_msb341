@@ -6,7 +6,7 @@
 
 **Input**: Feature specification from `specs/010-offset/spec.md`, approved 2026-10-21.
 
-**Status**: Approved 2026-10-21.
+**Status**: Approved 2026-10-21. Amended 2026-10-26 with the spec (L-1 to L-4 results; fixtures).
 
 ## Summary
 
@@ -52,7 +52,8 @@ The approach:
 
 **Testing**: `node:test` files `mentor/test/offset*.test.mjs`; fixtures in
 `mentor/test/fixtures/offset/`, live captures by the end except the rows the spec allows as
-synthetic (FR-022); spec 004's live `practice2-before.json` and `practice2-60fps.json`; eval cases
+synthetic (FR-022); Mentor Practice 2's base `layer-info/practice2b.json` (spec 009's L-4; it
+replaced `practice2-before.json` for this skill on 2026-10-26) and `practice2-60fps.json`; eval cases
 by the eval engineer in `product/evals/offset/` (SC-003, SC-004)
 
 **Target Platform**: After Effects 26.5 on macOS 27.0.1; R0 every session (FR-017)
@@ -122,8 +123,8 @@ mentor/
     ├── offset-overlap.test.mjs        # one test per overlap row 1–22 (FR-022)
     └── fixtures/offset/
         ├── README.md, answer-key.json, records/
-        ├── synthetic/                 # rows 5, 18, 19 only (spec allows; stay after merge)
-        ├── stand-in/                  # cloud stand-ins; deleted after the sitting
+        ├── synthetic/                 # row 5 only since T034 (rows 18, 19 read live captures)
+        ├── stand-in/                  # cloud stand-ins; deleted in T034 (2026-10-26)
         └── *.json                     # live captures from the sitting
 .claude/skills/offset-mentor/SKILL.md
 ```
@@ -182,8 +183,8 @@ is left; L-1 to L-4 settle facts with fallbacks.
 | Risk | Watch | Mitigation |
 |---|---|---|
 | Re-creating keys loses an attribute (roving, continuous, labels) | L-2 | The snippet copies every readable key attribute; L-2 compares a before and after read and AE's own look; anything lost is fixed in the snippet before merge |
-| A layer bar drag doesn't read as moved keys (L-3) | L-3 | Then row 16's hint wording changes; the check itself reads key times either way |
-| Quick Offset puts keys between frames (L-1) | L-1 | Half-frame tolerance on shifts (FR-012); row 19's synthetic test |
+| A layer bar drag doesn't read as moved keys (L-3) | L-3 | Then row 16's hint wording changes; the check itself reads key times either way. **Closed 2026-10-26:** a drag moves the keys, a trim doesn't; hint rewritten |
+| Quick Offset puts keys between frames (L-1) | L-1 | Half-frame tolerance on shifts (FR-012). **Happened 2026-10-26** (+12.5, +25 frames); row 19 tests the live `quick-offset.json` |
 | `target_refs` enforced one per target | Tool test | RQ-1's fallback |
 | Two first live lessons make the sitting long | Timings | The layers-kind lesson can move to the review sitting (open question for the builder) |
 

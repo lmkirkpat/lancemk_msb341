@@ -265,13 +265,15 @@ function uniqueSorted(list) {
 var probe = comp.layers.addNull(DUR);
 probe.name = "Probe";
 var effects = probe.property("ADBE Effect Parade");
+// Returns the control's index, not the property: adding another effect invalidates every property
+// object already held on the layer ("Object is invalid"), so readPoint fetches it again each time.
 function probePoint(expr) {
     var fx = effects.addProperty("ADBE Point Control");
-    var p = fx.property(1);
-    p.expression = expr;
-    return p;
+    fx.property(1).expression = expr;
+    return effects.numProperties;
 }
-function readPoint(p, t) {
+function readPoint(index, t) {
+    var p = effects.property(index).property(1);
     var v = p.valueAtTime(t, false);
     if (p.expressionError) throw new Error("Probe expression failed: " + p.expressionError);
     return [Math.round(v[0] * 1000) / 1000, Math.round(v[1] * 1000) / 1000];

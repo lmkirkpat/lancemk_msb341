@@ -1,0 +1,666 @@
+{
+  "generated_by": "mentor/dev/build-practice-comp-2.jsx",
+  "comp": {
+    "name": "Mentor Practice 2",
+    "width": 1920,
+    "height": 1080,
+    "duration": 8,
+    "frame_rate": 30
+  },
+  "layers": [
+    {
+      "index": 1,
+      "name": "Blink"
+    },
+    {
+      "index": 2,
+      "name": "Spinner"
+    },
+    {
+      "index": 3,
+      "name": "Cut"
+    },
+    {
+      "index": 4,
+      "name": "Card"
+    },
+    {
+      "index": 5,
+      "name": "Dot 1"
+    },
+    {
+      "index": 6,
+      "name": "Dot 2"
+    },
+    {
+      "index": 7,
+      "name": "Dot 3"
+    },
+    {
+      "index": 8,
+      "name": "Badge"
+    },
+    {
+      "index": 9,
+      "name": "Chip A"
+    },
+    {
+      "index": 10,
+      "name": "Chip B"
+    },
+    {
+      "index": 11,
+      "name": "Chip C"
+    },
+    {
+      "index": 12,
+      "name": "Flag"
+    },
+    {
+      "index": 13,
+      "name": "Pause"
+    },
+    {
+      "index": 14,
+      "name": "Background"
+    }
+  ],
+  "segments": [
+    {
+      "id": "13/ADBE Transform Group/ADBE Position/1",
+      "layer": "Pause",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "13/ADBE Transform Group/ADBE Position/2",
+      "layer": "Pause",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "13/ADBE Transform Group/ADBE Position/3",
+      "layer": "Pause",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "12/ADBE Transform Group/ADBE Position/1",
+      "layer": "Flag",
+      "display_path": "Transform › Position",
+      "state": "held"
+    },
+    {
+      "id": "12/ADBE Transform Group/ADBE Position/2",
+      "layer": "Flag",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "11/ADBE Transform Group/ADBE Position/1",
+      "layer": "Chip C",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "11/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Chip C",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    },
+    {
+      "id": "10/ADBE Transform Group/ADBE Position/1",
+      "layer": "Chip B",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "10/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Chip B",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    },
+    {
+      "id": "9/ADBE Transform Group/ADBE Position/1",
+      "layer": "Chip A",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "9/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Chip A",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    },
+    {
+      "id": "8/ADBE Transform Group/ADBE Scale/1",
+      "layer": "Badge",
+      "display_path": "Transform › Scale",
+      "state": "linear"
+    },
+    {
+      "id": "8/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Badge",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    },
+    {
+      "id": "7/ADBE Transform Group/ADBE Position_0/1",
+      "layer": "Dot 3",
+      "display_path": "Transform › X Position",
+      "state": "linear"
+    },
+    {
+      "id": "7/ADBE Transform Group/ADBE Position_1/1",
+      "layer": "Dot 3",
+      "display_path": "Transform › Y Position",
+      "state": "linear"
+    },
+    {
+      "id": "7/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Dot 3",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    },
+    {
+      "id": "6/ADBE Transform Group/ADBE Position/1",
+      "layer": "Dot 2",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "6/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Dot 2",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    },
+    {
+      "id": "6/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1",
+      "layer": "Dot 2",
+      "display_path": "Effects › Gaussian Blur › Blurriness",
+      "state": "linear"
+    },
+    {
+      "id": "5/ADBE Transform Group/ADBE Position/1",
+      "layer": "Dot 1",
+      "display_path": "Transform › Position",
+      "state": "held"
+    },
+    {
+      "id": "5/ADBE Transform Group/ADBE Position/2",
+      "layer": "Dot 1",
+      "display_path": "Transform › Position",
+      "state": "linear"
+    },
+    {
+      "id": "5/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Dot 1",
+      "display_path": "Transform › Opacity",
+      "state": "linear"
+    },
+    {
+      "id": "4/ADBE Transform Group/ADBE Position/1",
+      "layer": "Card",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    },
+    {
+      "id": "4/ADBE Transform Group/ADBE Scale/1",
+      "layer": "Card",
+      "display_path": "Transform › Scale",
+      "state": "eased"
+    },
+    {
+      "id": "3/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Cut",
+      "display_path": "Transform › Opacity",
+      "state": "eased"
+    },
+    {
+      "id": "2/ADBE Transform Group/ADBE Rotate Z/1",
+      "layer": "Spinner",
+      "display_path": "Transform › Rotation",
+      "state": "linear"
+    },
+    {
+      "id": "1/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Blink",
+      "display_path": "Transform › Opacity",
+      "state": "eased"
+    },
+    {
+      "id": "1/ADBE Transform Group/ADBE Opacity/2",
+      "layer": "Blink",
+      "display_path": "Transform › Opacity",
+      "state": "eased"
+    },
+    {
+      "id": "1/ADBE Transform Group/ADBE Opacity/3",
+      "layer": "Blink",
+      "display_path": "Transform › Opacity",
+      "state": "eased"
+    }
+  ],
+  "skipped": [],
+  "hidden_layers": [],
+  "precomp_layers": [],
+  "totals": {
+    "linear": 21,
+    "eased": 6,
+    "held": 2
+  },
+  "timing": {
+    "layers": [
+      {
+        "layer_index": 13,
+        "layer": "Pause",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 5,
+                "end": 5.5,
+                "duration": 0.5,
+                "kind": "ramp"
+              },
+              {
+                "start": 6,
+                "end": 6.5,
+                "duration": 0.5,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 5,
+        "last_landing": 6.5
+      },
+      {
+        "layer_index": 12,
+        "layer": "Flag",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 4.5,
+                "end": 4.5,
+                "duration": 0,
+                "kind": "instant"
+              },
+              {
+                "start": 4.5,
+                "end": 5.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 4.5,
+        "last_landing": 5.5
+      },
+      {
+        "layer_index": 11,
+        "layer": "Chip C",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 2,
+                "end": 3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 2,
+                "end": 3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 2,
+        "last_landing": 3
+      },
+      {
+        "layer_index": 10,
+        "layer": "Chip B",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 2,
+                "end": 3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 2,
+                "end": 3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 2,
+        "last_landing": 3
+      },
+      {
+        "layer_index": 9,
+        "layer": "Chip A",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 2,
+                "end": 3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 2,
+                "end": 3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 2,
+        "last_landing": 3
+      },
+      {
+        "layer_index": 8,
+        "layer": "Badge",
+        "units": [
+          {
+            "unit": "Transform › Scale",
+            "moves": [
+              {
+                "start": 3.5,
+                "end": 4.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 3.5,
+                "end": 4.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 3.5,
+        "last_landing": 4.5
+      },
+      {
+        "layer_index": 7,
+        "layer": "Dot 3",
+        "units": [
+          {
+            "unit": "Position",
+            "moves": [
+              {
+                "start": 0.5,
+                "end": 1.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 0.5,
+                "end": 1.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 0.5,
+        "last_landing": 1.5
+      },
+      {
+        "layer_index": 6,
+        "layer": "Dot 2",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 0.5,
+                "end": 1.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 0.5,
+                "end": 1.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Effects › Gaussian Blur › Blurriness",
+            "moves": [
+              {
+                "start": 0.5,
+                "end": 1.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 0.5,
+        "last_landing": 1.5
+      },
+      {
+        "layer_index": 5,
+        "layer": "Dot 1",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 0.5,
+                "end": 0.5,
+                "duration": 0,
+                "kind": "instant"
+              },
+              {
+                "start": 0.5,
+                "end": 1.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 0.5,
+                "end": 1.5,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 0.5,
+        "last_landing": 1.5
+      },
+      {
+        "layer_index": 4,
+        "layer": "Card",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 1.2,
+                "end": 2.4,
+                "duration": 1.2,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Scale",
+            "moves": [
+              {
+                "start": 1.2,
+                "end": 2.4,
+                "duration": 1.2,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 1.2,
+        "last_landing": 2.4
+      },
+      {
+        "layer_index": 3,
+        "layer": "Cut",
+        "units": [
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 3,
+                "end": 3.1,
+                "duration": 0.1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 3,
+        "last_landing": 3.1
+      },
+      {
+        "layer_index": 2,
+        "layer": "Spinner",
+        "units": [
+          {
+            "unit": "Transform › Rotation",
+            "moves": [
+              {
+                "start": 0.25,
+                "end": 4.25,
+                "duration": 4,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 0.25,
+        "last_landing": 4.25
+      },
+      {
+        "layer_index": 1,
+        "layer": "Blink",
+        "units": [
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 1,
+                "end": 1.4,
+                "duration": 0.4,
+                "kind": "ramp"
+              },
+              {
+                "start": 1.4,
+                "end": 1.8,
+                "duration": 0.4,
+                "kind": "ramp"
+              },
+              {
+                "start": 1.8,
+                "end": 2.2,
+                "duration": 0.4,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 1,
+        "last_landing": 2.2
+      }
+    ],
+    "groups": [
+      {
+        "time": 0.5,
+        "frame_30": 15,
+        "frame_60": 30,
+        "layers": [
+          "Dot 1",
+          "Dot 2",
+          "Dot 3"
+        ]
+      },
+      {
+        "time": 2,
+        "frame_30": 60,
+        "frame_60": 120,
+        "layers": [
+          "Chip A",
+          "Chip B",
+          "Chip C"
+        ]
+      }
+    ],
+    "same_frames": [
+      {
+        "layer": "Badge",
+        "start": 3.5,
+        "landing": 4.5,
+        "units": [
+          "Transform › Scale",
+          "Transform › Opacity"
+        ]
+      }
+    ],
+    "last_motion_end": 6.5
+  }
+}

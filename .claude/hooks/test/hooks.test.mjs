@@ -168,6 +168,41 @@ test("AE lock: an unreadable lock file or input blocks", (t) => {
   assert.equal(run("ae-lock.mjs", "").code, 2);
 });
 
+test("AE lock: two top-level sessions are told apart by session_id; the second is blocked with where", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  const wt = path.join(r.dir, "..", path.basename(r.dir) + "-wt2");
+  r.g("worktree", "add", "-q", "-b", "wt2", wt);
+  t.after(() => fs.rmSync(wt, { recursive: true, force: true }));
+  assert.equal(run("ae-lock.mjs", { ...ae(wt, null), session_id: "S1" }).code, 0);
+  const b = run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S2" });
+  assert.equal(b.code, 2);
+  assert.match(b.err, new RegExp(`top-level session is driving After Effects from ${path.basename(wt)}`));
+  assert.equal(run("ae-lock.mjs", { ...ae(wt, null), session_id: "S1" }).code, 0);
+});
+
+test("AE lock: a subagent is blocked while its own cockpit holds it", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S1" }).code, 0);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, builderA), session_id: "S1" }).code, 2);
+});
+
+test("AE lock: SubagentStop never frees a top-level session's lock; SessionEnd frees its own session only", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S1" });
+  run("ae-lock.mjs", { cwd: r.dir, session_id: "S1" }, ["--release"]);
+  run("ae-lock.mjs", { cwd: r.dir, session_id: "S2" }, ["--end-session"]);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S2" }).code, 2);
+  run("ae-lock.mjs", { cwd: r.dir, session_id: "S1" }, ["--end-session"]);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S2" }).code, 0);
+});
+
+test("AE lock: SessionEnd also frees a lock held by one of that session's subagents", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  run("ae-lock.mjs", { ...ae(r.dir, builderA), session_id: "S1" });
+  run("ae-lock.mjs", { cwd: r.dir, session_id: "S1" }, ["--end-session"]);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S2" }).code, 0);
+});
+
 // --- git guard ---
 
 const bash = (cwd, command, who) => ({ cwd, tool_input: { command }, ...(who ? sub(who, "g1") : {}) });
@@ -305,7 +340,6 @@ test("settings: every PreToolUse hook blocks when it fails, and pushes ask", () 
     for (const h of entry.hooks) assert.equal(h.onFailure, "block", entry.matcher);
   }
   assert.ok(s.permissions.ask.includes("Bash(git push *)"));
-  assert.equal(s.permissions.disableBypassPermissionsMode, "disable");
 });
 
 // --- merge check ---

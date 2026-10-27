@@ -16,7 +16,8 @@ import { classOf } from "./visibility.mjs";
 // FR-010 (spec 004 FR-026). Never said to the learner (FR-018).
 export const MIN_GAP = 20; // a: landing influence at least this many points above the start's
 export const DEFAULT_INFLUENCE = 33.33; // b: Easy Ease's influence
-export const DEFAULT_TOL = 1; // b: "within 1 point of" the default; also drag_sideways' test
+export const DEFAULT_TOL = 1; // b: "within 1 point of" the default
+export const LONG_LANDING = DEFAULT_INFLUENCE + MIN_GAP; // 53.33: below this, a landing that fails a isn't long yet (drag_sideways, R7)
 export const REST_SHARE = 0.05; // d: landing speed at most this share of the pair's average speed (tuned on L-5)
 export const REST_ABS = 0.001; // d: when values can't be read, the landing speed must be 0 within this
 // FR-008, research R1: the demo's fingerprint. Change both here only (L-3); the snippet gets them as
@@ -366,8 +367,9 @@ function mistakeFor(seg, baseSeg, shape, { seen, targetSet }) {
   if (rest) {
     out.mistake = "arrives_moving";
     out.key_time = seg.to.time;
-    const was = baseSeg && (baseSeg.to.in_ease || [])[rest.dim];
-    out.drag_sideways = !!(was && isNum(was.influence) && isNum(rest.in_influence) && Math.abs(rest.in_influence - was.influence) <= DEFAULT_TOL + SLACK);
+    // FR-012, R7 (decided 2026-10-26 on L-5): a drag straight up moves the influence a little too, so
+    // the hint keys on the landing not being long yet, never on the baseline.
+    out.drag_sideways = rest.failed.includes("a") && isNum(rest.in_influence) && isNum(rest.out_influence) && rest.in_influence < LONG_LANDING;
     return out;
   }
   if (shape.failed.includes("b") && seen.has(seg.id)) {

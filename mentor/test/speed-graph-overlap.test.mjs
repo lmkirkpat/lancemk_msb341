@@ -1,6 +1,5 @@
 // Spec 008 › Edge cases where concepts overlap, rows 1 to 19 (FR-025, spec 004 FR-034): what the
-// candidate test and the check see on each, on the fixtures (live captures when there, stand-ins
-// until then) and answer-key.json.
+// candidate test and the check see on each, on the live fixtures and answer-key.json.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -13,7 +12,7 @@ const { analyze, check } = await import("../lib/speed-graph.mjs");
 
 const DIR = path.join(FIXTURES, "speed-graph");
 const load = (name) => {
-  for (const p of [path.join(DIR, name), path.join(FIXTURES, name), path.join(DIR, "stand-in", name)]) {
+  for (const p of [path.join(DIR, name), path.join(FIXTURES, name)]) {
     if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, "utf8"));
   }
   throw new Error(`No fixture ${name}`);

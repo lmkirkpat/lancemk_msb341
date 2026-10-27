@@ -35,8 +35,8 @@ test("every check in the answer key grades as written", () => {
 });
 
 test("a not-held pair's frame_time is inside the pair, on a frame", () => {
-  const lesson = lessonFor("practice2-before.json", { focus: [{ layer: "Blink", property: "Opacity" }] });
-  const r = check(lesson.baseline, load("practice2-before.json"), lesson);
+  const lesson = lessonFor("practice2b.json", { focus: [{ layer: "Blink", property: "Opacity" }] });
+  const r = check(lesson.baseline, load("practice2b.json"), lesson);
   for (const p of r.pairs) {
     const [from, to] = p.label.match(/([\d.]+)–([\d.]+) s$/).slice(1).map(Number);
     assert.ok(p.frame_time > from && p.frame_time < to, p.label);
@@ -47,7 +47,7 @@ test("a not-held pair's frame_time is inside the pair, on a frame", () => {
 
 test("a wrong-side or mixed pair is never a pass (row 6, FR-016)", () => {
   for (const file of ["wrong-side.json", "mixed-pair.json"]) {
-    const lesson = lessonFor("practice2-before.json", { focus: [{ layer: "Blink", property: "Opacity" }] });
+    const lesson = lessonFor("practice2b.json", { focus: [{ layer: "Blink", property: "Opacity" }] });
     const r = check(lesson.baseline, load(file), lesson);
     assert.equal(r.items.held, false, file);
     assert.equal(r.passed, false, file);
@@ -55,7 +55,7 @@ test("a wrong-side or mixed pair is never a pass (row 6, FR-016)", () => {
 });
 
 test("should-move is the union of the stored list and the check's input", () => {
-  const lesson = lessonFor("practice2-before.json", { focus: [{ layer: "Blink", property: "Opacity" }], should_move: [{ layer: "Cut", property: "Opacity" }] });
+  const lesson = lessonFor("practice2b.json", { focus: [{ layer: "Blink", property: "Opacity" }], should_move: [{ layer: "Cut", property: "Opacity" }] });
   const r = check(lesson.baseline, load("select-all-hold.json"), lesson, { should_move: [{ layer: "Card", property: "Position" }] });
   assert.deepEqual(r.should_move_held.map((s) => `${s.layer} › ${s.property}`), ["Cut › Opacity", "Card › Position"]);
   assert.deepEqual(r.extra_holds.map((s) => `${s.layer} › ${s.property}`), ["Card › Scale", "Pause › Position", "Pause › Position"]);
@@ -65,14 +65,14 @@ test("should-move is the union of the stored list and the check's input", () => 
 });
 
 test("a should-move pair already held at the start isn't the learner's doing", () => {
-  const lesson = lessonFor("practice2-before.json", { focus: [{ layer: "Blink", property: "Opacity" }], should_move: [{ layer: "Flag", property: "Position" }] });
-  const r = check(lesson.baseline, load("practice2-before.json"), lesson);
+  const lesson = lessonFor("practice2b.json", { focus: [{ layer: "Blink", property: "Opacity" }], should_move: [{ layer: "Flag", property: "Position" }] });
+  const r = check(lesson.baseline, load("practice2b.json"), lesson);
   assert.deepEqual(r.should_move_held, []);
 });
 
 test("the demo pair stays the demo's until a check sees it not held, then it's the learner's (row 20)", () => {
   const focus = [{ layer: "Blink", property: "Opacity" }];
-  const lesson = lessonFor("practice2-before.json", { focus, demo: B(1) });
+  const lesson = lessonFor("practice2b.json", { focus, demo: B(1) });
   // No check in between: a hold there can't be told from the demo.
   assert.equal(check(lesson.baseline, load("after-demo-reheld.json"), lesson).pairs[0].verdict, "held_by_demo");
   const undone = check(lesson.baseline, load("after-demo-undone.json"), lesson);
@@ -83,7 +83,7 @@ test("the demo pair stays the demo's until a check sees it not held, then it's t
 });
 
 test("another comp: comp_matches false, nothing graded (row 23)", () => {
-  const lesson = lessonFor("practice2-before.json", { focus: [{ layer: "Blink", property: "Opacity" }] });
+  const lesson = lessonFor("practice2b.json", { focus: [{ layer: "Blink", property: "Opacity" }] });
   const r = check(lesson.baseline, load("practice-now.json"), lesson, { constant_speed: { layer: "Logo", property: "Rotation" } });
   assert.equal(r.comp_matches, false);
   assert.equal(r.lesson_comp, "Mentor Practice 2");
@@ -93,7 +93,7 @@ test("another comp: comp_matches false, nothing graded (row 23)", () => {
 });
 
 test("a lesson with no targets can't pass", () => {
-  const lesson = lessonFor("practice2-before.json");
+  const lesson = lessonFor("practice2b.json");
   const r = check(lesson.baseline, load("blink-all-held.json"), lesson);
   assert.deepEqual(r.pairs, []);
   assert.equal(r.passed, false);
@@ -122,7 +122,7 @@ test("constant-speed verdicts match the answer key", () => {
 });
 
 test("Spinner linear; one pair eased is not_linear with the pair and side", () => {
-  assert.equal(constantSpeed(load("practice2-before.json"), { layer: "Spinner", property: "Rotation" }).verdict, "linear");
+  assert.equal(constantSpeed(load("practice2b.json"), { layer: "Spinner", property: "Rotation" }).verdict, "linear");
   const v = constantSpeed(load("spinner-eased.json"), { layer: "Spinner", property: "Rotation" });
   assert.equal(v.verdict, "not_linear");
   assert.deepEqual(v.detail, [{ pair: "Spinner › Rotation 0.25–4.25 s", from_time: 0.25, to_time: 4.25, side: "start" }]);
@@ -130,14 +130,14 @@ test("Spinner linear; one pair eased is not_linear with the pair and side", () =
 });
 
 test("separated Position needs every dimension linear", () => {
-  const ok = constantSpeed(load("practice2-before.json"), { layer: "Dot 3", property: "Position" });
+  const ok = constantSpeed(load("practice2b.json"), { layer: "Dot 3", property: "Position" });
   assert.equal(ok.verdict, "linear");
   assert.deepEqual(ok.properties.map((p) => p.property), ["X Position", "Y Position"]);
   assert.equal(constantSpeed(load("separated-x-held.json"), { layer: "Dot 3", property: "Position" }).verdict, "held");
 });
 
 test("items.constant_speed: null when nothing is named or the verdict is expression; false blocks the pass", () => {
-  const lesson = lessonFor("practice2-before.json", { focus: [{ layer: "Blink", property: "Opacity" }] });
+  const lesson = lessonFor("practice2b.json", { focus: [{ layer: "Blink", property: "Opacity" }] });
   const all = load("blink-all-held.json");
   assert.equal(check(lesson.baseline, all, lesson).items.constant_speed, null);
   const lin = check(lesson.baseline, all, lesson, { constant_speed: { layer: "Spinner", property: "Rotation" } });
@@ -157,7 +157,7 @@ test("items.constant_speed: null when nothing is named or the verdict is express
 });
 
 test("in a review a volunteered constant-speed move doesn't change the pass (H-4)", () => {
-  const lesson = lessonFor("practice2-before.json", { focus: [{ layer: "Blink", property: "Opacity" }], mode: "review" });
+  const lesson = lessonFor("practice2b.json", { focus: [{ layer: "Blink", property: "Opacity" }], mode: "review" });
   const r = check(lesson.baseline, load("blink-all-held.json"), lesson, { constant_speed: { layer: "Blink", property: "Opacity" } });
   assert.equal(r.constant_speed.verdict, "held");
   assert.equal(r.items.constant_speed, null);

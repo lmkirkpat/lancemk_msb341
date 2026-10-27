@@ -11,7 +11,12 @@ the contract and data-model. The builder took H-1 to H-4 as
 recommended (SR-1 is tasked in spec 004 as T062 and T063, the `fresh` restart), and the curriculum
 designer's answers to C-1 to C-3 (`teaching-design.md` › 14, round 1, cockpit commit 96e954b) are
 folded in. Still open: SR-2 and SR-3 (conditional and wave B), and live checks L-1 to L-4, which
-settle facts during the build.
+settle facts during the build. **Amended 2026-10-26** from the live sitting
+([`live-sitting-2026-10-26.md`](live-sitting-2026-10-26.md)): L-1 to L-4 are logged (results under
+Live checks). A mixed pair snaps, at its first key, so row 6, FR-011, FR-022 and the classifier table
+say so and **SR-2 now applies** (not a blocker for T035, see SR-2). Mentor Practice 2 as built is
+`layer-info/practice2b.json` (FR-021). Row 22 keeps one synthetic fixture. SR-3 was done in spec 004's
+wave B shared pass (row 13, FR-023). New question H-5.
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 1, key types (hold and linear)." The teaching design is the curriculum designer's
@@ -190,10 +195,10 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 
 | Classifier (shared, spec 004) | Easing uses it to | Skill 1 uses it to | Risk |
 |---|---|---|---|
-| `segments` / `segmentState` | find pairs to ease; `held` = skip | find pairs and say whether they're held | The **mixed pair** (row 6): `segmentState` calls it `partly_eased` (first key linear) or `eased` (bezier). If After Effects actually jumps there (L-1), easing would ask to ease a pair that snaps, and skill 1 would call a snapping pair "not held". |
+| `segments` / `segmentState` | find pairs to ease; `held` = skip | find pairs and say whether they're held | The **mixed pair** (row 6): `segmentState` calls it `partly_eased` (first key linear) or `eased` (bezier), but After Effects snaps it at its first key (L-1, 2026-10-26). Easing would ask to ease a pair that snaps (SR-2). Skill 1's check tests the second key's incoming side **before** the state, so a focus pair gets `wrong_side`, never `not_held` or a pass; the extra-holds list (FR-013) still goes by the state and misses it (H-5). |
 | `segments`' skip on expression and single key | leave them out of teaching | leave them out of candidates and grading | Right for both; the change check must still report key changes under an expression (rows 1, 3) |
 | `unexpectedChanges` | list other changes | list holds outside the focus | **Not** enough for pass item 2: it says "was changed", not "now held, and you said it should move". Item 2 needs its own check (FR-012) |
-| eye switch (`layer.enabled`; the visibility class comes with R1 in wave B) | leave eye-off layers out | leave eye-off layers out of candidates and the demo | A matte with its eye off is left out (row 13; KD-001) until wave B |
+| eye switch (`layer.enabled`; the visibility class comes with R1 in wave B) | leave eye-off layers out | leave eye-off layers out of candidates and the demo | A matte with its eye off is left out (row 13; KD-001) until wave B. **Done 2026-10-26:** skill 1 reads the visibility class when R1 is known (SR-3) |
 | kept-linear marks (`applies`) | skip marked properties | skip them as candidates; write them at stage 6 | Writing a mark on an expression property would make easing skip a property the check never saw (row 1): the check rejects it first (FR-014) |
 | session baseline (`session.start` continues an unpassed lesson on its first baseline) | the baseline is the first look | the baseline is the first look, or the read after a practice blink is made (`fresh`) | **The practice blink is made after the first look**, so its keys aren't in the baseline until the skill restarts the lesson with `fresh: true` before any demo or check (row 17; SR-1, spec 004 T062 and T063) |
 
@@ -206,14 +211,14 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 | 3 | Single key | Not a pair; not a candidate; can't be the focus | Nothing to grade | "That's one key, so there's nothing to snap between" if named | Right |
 | 4 | Already held pair (the Cursor) | Not a candidate; used for the stage 2 frames | Not a target; never credited to the learner | Named once: "the Cursor already snaps" | Right |
 | 5 | Focus property with some pairs held and some not | Targets are the non-held pairs only | Grades those | The held ones aren't counted | Right |
-| 6 | Mixed pair (first key linear or bezier out, second key hold in) | Not held, so a candidate if its values qualify | Not held; never a pass on it; never "done" | The pair is named as still off; wording of the "wrong side" hint waits for L-1 | Right until L-1. If L-1 shows a jump, SR-2 |
+| 6 | Mixed pair (first key linear or bezier out, second key hold in) | Not held, so a candidate if its values qualify | Its own verdict, **wrong side** (checked before the pair's state): never a pass on it; never "done" | **2026-10-26, L-1:** After Effects snaps it, **at its first key**, to the second key's value (100 at 1.0 s, 0 from 1.001 s). So the hint never says it fades or isn't held: it snaps **too early**, and the hold belongs on the key at the start of the pair (`teaching-design.md` › 7 row 4) | Right for the focus. SR-2 applies to the shared classification (easing, and the extra-holds list, H-5) |
 | 7 | Separated dimensions | Naming Position on a separated layer means each keyed dimension's moving pairs | Each dimension checked on its own | "X Position snaps now, but Y Position still slides between 0.5 s and 1.0 s" | Right |
 | 8 | Hold-only effect parameters (checkboxes, menus) and Source Text | Their keys read as held: not candidates | Never credited as the learner's | "That one only ever jumps" if named | Right (pin with a capture) |
 | 9 | Opacity on an effect, a shape's fill or stroke, or a text animator | Not a candidate (only the layer's own Transform Opacity is) | Graded if the learner names it | Nothing unless named | Right (FR-003) |
 | 10 | Precomp layer | Its own Transform keys are read and can be candidates; inside isn't read | Its own keys only | "I can't see inside these yet" for what's inside | Right |
 | 11 | Hidden layer (eye off) | Not a candidate; can be the focus if the learner wants it; never the demo | Graded if focus | Named among what's left out | Right |
 | 12 | Hold at Opacity 0 (eye on, invisible between keys) | Not "hidden"; a normal layer | Normal | Never "hidden"; the demo's "after" frame is picked where the layer shows, or the jump to 0 is said in words | Right (FR-010) |
-| 13 | Track matte, eye off (KD-001) | Left out like an eye-off layer, "unless you want it", until R1 | Graded if focus | Never "you've hidden this" once R1 can tell; until then the generic left-out wording | Wave A right; wave B change (SR-3) |
+| 13 | Track matte, eye off (KD-001) | Left out like an eye-off layer, "unless you want it", until R1. **Since wave B (SR-3 done):** with R1 known, a matte is in whatever its eye, so its Opacity can be a candidate (Matte in `overlap-layers.json`) | Graded if focus | Never "you've hidden this" once R1 can tell; until then the generic left-out wording | Right (SR-3 done 2026-10-26) |
 | 14 | Null | Not a default candidate; can be the focus if named; never the demo | Graded if focus | Nothing unless named | Right |
 | 15 | Parenting | Opacity isn't inherited by children, and a parent's held Position moves children with no keys of their own: none of this is read at this level | Own keys only | Nothing | Right (curriculum § 8) |
 | 16 | Pause pair (both values known and equal) | Not a candidate; not a target even inside a named property; a named property whose only non-held pairs are pauses isn't a focus | Not graded; a held pause isn't listed as an extra hold | Nothing (holding it changes nothing); if named as the focus, "it holds still between those keys" | Right (C-2 agreed) |
@@ -222,7 +227,7 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 | 19 | "Select all, toggle hold" | n/a | Holds on pairs outside the focus listed, except pause pairs (row 16); the first key's incoming side and the last key's outgoing side face no pair and are ignored | `teaching-design.md` › 7 row 3, then asks whether it was meant | Right (FR-013) |
 | 20 | The demo pair undone and re-held by the learner | n/a | A hold has no fingerprint (unlike easing's influence), so it can't be told apart from the demo unless a check saw it not held in between | Credited to the demo unless a check saw it undone | Right, and said plainly (FR-011) |
 | 21 | Kept-linear mark on an Opacity 0 ↔ 100 property | Not a candidate | n/a | Named once with the learner's reason | Right (FR-015) |
-| 22 | Key values unknown (older captures, non-numeric values) | Not a candidate by value; can be the focus if named | Graded on types only | Nothing | Right; skill 1 fixtures must be live captures with values |
+| 22 | Key values unknown (older captures, non-numeric values) | Not a candidate by value; can be the focus if named | Graded on types only | Nothing | Right. **2026-10-26:** a live read always returns values, so this row's fixture is synthetic (`synthetic/unknown-values.json`, built from live files by `synthetic/make-unknown-values.mjs`, FR-021) |
 | 23 | A layer outside the active comp, or the learner switches comps mid-lesson | Not read | Comp mismatch, as easing | As easing | Right |
 
 ### Other edge cases
@@ -262,7 +267,8 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 - **FR-003 (S-1, settled)**: A pair is a **candidate** when all hold: it's on the layer's own
   Transform Opacity (not an effect's, a shape's fill or stroke, or a text animator's); one key's value
   is 0 and the other's is 100, each within 0.5, in either order; it isn't held (its first key's
-  outgoing side isn't hold; a mixed pair counts as not held); the property has two or more keys and
+  outgoing side isn't hold; a mixed pair counts as not held, and since it snaps at the wrong key
+  (L-1) it's still worth asking about); the property has two or more keys and
   no expression on; the layer's eye is on and it isn't a null; both values are known; and no
   kept-linear mark applies to the property. "Step-like values" (curriculum § 6) is not used: it has no
   readable definition. Candidates are grouped by layer and property; at most three properties are
@@ -302,8 +308,9 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 ### Demonstration
 
 - **FR-010**: `key_types_demo` MUST make one write on the demo target only: the target pair's first
-  key set to hold on its outgoing side, **exactly as Toggle Hold Keyframe writes it at 26.5** (L-2
-  decides whether that's the outgoing side only or both sides), so the demo and the learner's own
+  key set to hold on its outgoing side, **exactly as Toggle Hold Keyframe writes it at 26.5** (L-2,
+  2026-10-26: the outgoing side only; `HOLD_SIDES = "out"`. After Effects resets a side made hold to
+  influence 16.667, by hand or by the demo, L-3, so the demo has no fingerprint there either), so the demo and the learner's own
   toggles look the same on the timeline. It calls `session.assertCanDemo` before touching After
   Effects, runs one fixed snippet with undo on, records the demo, and returns what changed and
   "Edit > Undo". The demo target is the earliest focus pair in time on an eye-on, non-null layer;
@@ -317,7 +324,8 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 - **FR-011**: `key_types_check` MUST take a fresh read, compare it with the lesson's baseline pair by
   pair, and report for each focus pair one of: held by the learner, held by the demo, still not held
   (with its state, and the time of a frame inside it for the hint), held on the wrong side (second
-  key's incoming side hold, first key's outgoing side not), or removed or changed keys. Separated
+  key's incoming side hold, first key's outgoing side not; tested before the state, since After
+  Effects snaps this pair at its first key, L-1 2026-10-26), or removed or changed keys. Separated
   dimensions are reported per dimension. The demo pair counts as the demo's while it stays held; once
   a check sees it not held, it's the learner's from then on (row 20).
 - **FR-012**: The check MUST take the properties the learner said **should move** in this lesson
@@ -355,7 +363,10 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 - **FR-018 (version, spec 004 FR-030)**: The skill reads the version at the start. At 26.5 on macOS it
   MUST name the menu path and the right-click on a key, and MUST NOT quote a Mac shortcut for Toggle
   Hold Keyframe or Keyframe Interpolation until L-2 has read it off the menu; it describes menus, not
-  icons. On another version it names the menu path only.
+  icons. On another version it names the menu path only. **L-2, 2026-10-26:** at 26.5 on macOS the
+  mentor may quote exactly two: Animation › Toggle Hold Keyframe **⌃⌥⌘H** (also on a key's right-click
+  menu) and Animation › Keyframe Interpolation… **⌥⌘K** (also on the right-click menu), whose top
+  dropdown, Temporal Interpolation, has Linear. No other shortcut.
 
 ### Record
 
@@ -376,13 +387,19 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 - **FR-021**: Every row of the overlap matrix MUST have a unit test on a saved snapshot. Fixtures are
   live captures with key values (rows 8 and 22): Mentor Practice 2 (spec 004 T042) and planted
   overlaps captured live. Synthetic edits of a capture are allowed only where spec 004 already allows
-  them, each marked as such.
+  them, each marked as such. **2026-10-26:** Mentor Practice 2 as built is
+  `mentor/test/fixtures/layer-info/practice2b.json` (spec 004's capture with its 2b layers; L-4
+  matched it, not `practice2-before.json`), the baseline for every Mentor Practice 2 check. Row 22 is
+  the one synthetic fixture (`synthetic/unknown-values.json`, made by `synthetic/make-unknown-values.mjs`
+  from live files only), because unknown values can't be planted in After Effects.
 - **FR-022**: The skill MUST use the shared pair classification as it is; a mixed pair is not held.
   If L-1 shows After Effects jumps on a mixed pair, that's a request to the shared-code owner (SR-2),
-  not a change in this skill.
+  not a change in this skill. **L-1, 2026-10-26:** it jumps, at the pair's first key, to the second
+  key's value. SR-2 applies. Until it lands, the skill's own check gives a focus pair in this shape
+  the **wrong side** verdict (FR-011), never a pass (FR-016), and the hint says it snaps too early.
 - **FR-023**: In wave A the skill uses the eye switch for candidates and the demo. Moving it to the
   visibility class (spec 004 FR-013) when R1 lands changes this skill's merged file, so it's a wave B
-  shared-owner change (SR-3).
+  shared-owner change (SR-3). **Done 2026-10-26** in spec 004's wave B shared pass (T124 to T130).
 - **FR-024**: Before `SKILL.md`'s version wording and the demo snippet are final, the builder MUST
   run the live checks L-1 to L-4 (below) on After Effects 26.5 and log them in
   `discovery/usage-notes/`. No step, eval case or snippet may depend on a guess at their answer.
@@ -395,6 +412,19 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 | L-2 | design B-3 | Toggle Hold Keyframe: what it writes (outgoing only or both sides, read back by the snapshot); its place in the Animation menu and the key's right-click menu; the Mac shortcut shown on the menu; where Keyframe Interpolation lives and its Temporal Interpolation: Linear option | FR-010's write, FR-018's wording |
 | L-3 | design B-3 | The demo snippet's result next to a hand toggle on the same comp: same key icon, same snapshot types | FR-010 |
 | L-4 | design B-1, spec 004 T041 to T042 | Mentor Practice 2 has Blink, Spinner and Cut as built, and its capture has key values; Mentor Practice's capture matches | Fixtures (FR-021), SC-001 |
+
+**Results, 2026-10-26** ([`live-sitting-2026-10-26.md`](live-sitting-2026-10-26.md)):
+
+- **L-1:** it jumps, at the first key: linear out and hold in, 100 at 1.0 s and 0 from 1.001 s; bezier
+  out, the same at 1.8 s. Row 6, FR-011, FR-022; SR-2 applies.
+- **L-2:** Toggle Hold Keyframe holds the **outgoing side only** (`HOLD_SIDES = "out"`). Shortcuts on
+  the Animation menu: Toggle Hold Keyframe ⌃⌥⌘H, Keyframe Interpolation… ⌥⌘K; both also on a key's
+  right-click menu. Temporal Interpolation is the dialog's top dropdown (FR-018).
+- **L-3:** the demo and a hand toggle read the same (types, icon, and influence 16.667 on the held
+  side, which After Effects sets itself); one Edit › Undo restores Blink exactly (FR-010).
+- **L-4:** Mentor Practice 2 matches `layer-info/practice2b.json`, not `practice2-before.json` (the
+  2b layers came after it); Blink, Spinner and Cut unchanged, with values. Mentor Practice matches
+  `practice-now.json` (FR-021).
 
 ### Key Entities
 
@@ -419,10 +449,17 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
   merge, since nothing shared changes after it.
 - **SR-2 (only if L-1 shows a jump): the mixed pair is held.** `segmentState` would then call a
   snapping pair `partly_eased` or `eased`, so easing would ask to ease it and diagnosis's DX-05 would
-  misread it. The fix is the shared owner's, with easing's evals re-run.
+  misread it. The fix is the shared owner's, with easing's evals re-run. **Applies, 2026-10-26 (L-1):**
+  After Effects snaps a mixed pair at its first key. Ask: `segmentState` treats it as held, or gives
+  it its own state that callers don't ease; easing's evals re-run. **Not a blocker for T035 or this
+  skill's merge:** skill 1's check gives a focus pair in this shape `wrong_side` before it reads the
+  state, so it never calls one done (FR-016), and Mentor Practice 2 has no mixed pair as built. Outside
+  the focus, the should-move check (FR-012) and the extra-holds list (FR-013) don't see a mixed pair
+  as snapping today; that's H-5, a question about this skill, not part of SR-2.
 - **SR-3 (wave B): skill 1 reads the visibility class.** When R1 and the visibility class land, the
   owner switches this skill's candidate and demo filter from the eye switch, so a matte's Opacity can
-  be a candidate (row 13).
+  be a candidate (row 13). **Done 2026-10-26** (spec 004 wave B shared pass, T124 to T130; Matte in
+  `overlap-layers.json` is a candidate in the answer key).
 
 Not a request: `NOT_KEPT_LINEAR` has one message for every reason; FR-014's pre-check avoids
 showing it in the wrong case, so no shared change is needed.
@@ -475,7 +512,7 @@ At least these, on saved snapshots of Mentor Practice and Mentor Practice 2:
 | KT-g Riskiest overlap: expression over keys | Logo's Rotation named as constant speed: says an expression drives it, no mark, no "set its keys to linear"; a `loopOut` blink isn't a candidate |
 | KT-h Hold at Opacity 0 | Never called hidden |
 | KT-i Linear on purpose | Spinner named: confirmed and one mark in the record (deterministic); an eased move: one sentence on how, checked again |
-| KT-j Version trap | No Mac shortcut (until L-2 confirms one), no "freeze" or Freeze Frame, the menu path named (deterministic) |
+| KT-j Version trap | No Mac shortcut (until L-2 confirms one), no "freeze" or Freeze Frame, the menu path named (deterministic). **2026-10-26:** L-2 confirmed ⌃⌥⌘H and ⌥⌘K at 26.5 on macOS; any other shortcut, or either one on another version, fails (FR-018) |
 | KT-k Review | Learned and due, Blink in the record: intent asked first, Cut as the target, no demo, walkthrough or menu path (spec 004 cross-skill 7) |
 | KT-l Review not passed | Hints, no reteach; "next" names what's off (spec 004 cross-skill 5) |
 | KT-m Review, nothing snaps | The learner says nothing should snap: the review ends and nothing is recorded |
@@ -483,7 +520,9 @@ At least these, on saved snapshots of Mentor Practice and Mentor Practice 2:
 
 KT-a to KT-g and KT-k are the spec 004 minimum (first lesson, demo, incomplete, "do the rest",
 riskiest overlap, review). "Held the wrong side" (design § 7 row 4) gets a case after L-1 settles its
-wording. Needs: the runtime linking every `*-mentor` skill (spec 004 plan A2) and the Mentor
+wording. **2026-10-26:** L-1 settled it: on `wrong-side.json` the mentor says the pair snaps too early
+(just after the key at the start of the pair, instead of at the key at its end), never that it fades or isn't held, and never
+calls it done. Needs: the runtime linking every `*-mentor` skill (spec 004 plan A2) and the Mentor
 Practice 2 capture (spec 004 T042).
 
 ## Assumptions
@@ -514,8 +553,9 @@ Practice 2 capture (spec 004 T042).
 
 ## Open questions
 
-All answered: the builder on 2026-10-21, the designer in `teaching-design.md` › 14. Kept with their
-answers for the record.
+H-1 to H-4 and C-1 to C-3 answered: the builder on 2026-10-21, the designer in
+`teaching-design.md` › 14. Kept with their answers for the record. **Open (2026-10-26, from the
+live sitting):** H-5 and C-4. Neither blocks T035.
 
 ### For the builder (H), each with a recommendation
 
@@ -539,6 +579,14 @@ answers for the record.
    a mark), so a review that doesn't pass leaves no mark. **Recommended:** yes; it's the same fact, checked the same way. **Approved 2026-10-21**
    (FR-014); the narrowing (no mark from a review that doesn't pass) **confirmed by the builder
    2026-10-21**.
+5. **H-5 (open, 2026-10-26). A mixed pair outside the focus.** L-1 shows it snaps, but the
+   should-move check (FR-012) reads only the first key's outgoing side, and the extra-holds list
+   (FR-013) goes by the shared state, so a should-move property or a pair outside the focus that the
+   learner makes mixed (for example the end key set to Hold in Keyframe Interpolation…) isn't named
+   there; at most it shows as a generic "was changed". **Recommended:** yes, count a pair whose second
+   key's incoming side is hold as snapping in both lists, in this skill's own file (no shared change,
+   no wait on SR-2), with a unit test on `mixed-pair.json`; built after T035, since T035's Mentor
+   Practice 2 has no mixed pair and Toggle Hold Keyframe writes the outgoing side only (L-2).
 
 ### For the curriculum designer (C)
 
@@ -557,13 +605,23 @@ answers for the record.
    Either works here; settle one with the shared-code owner so the answer key and eval wording agree.
    **Answered:** eased, as T041 says; Cut eased too, and their first keys off the skill 3 group
    times (spec 004 T064) (Assumptions).
+4. **C-4 (open, 2026-10-26). B-2 is answered; § 6's mixed-pair note and § 7 row 4 still say
+   "guess".** L-1: a mixed pair snaps at its first key, to the second key's value. § 6 still says the
+   check treats it as not held (the check now gives it its own "wrong side" verdict, FR-011), and § 7
+   row 4's hint ("The jump happens from the key at 0.5 s, so that's the key to hold…") reads oddly
+   when the learner *sees* the jump at 0.5 s already, just too soon. `SKILL.md` now says the pair
+   "snaps too early" and the jump should come at the end key. Does the design take L-1's answer and
+   that wording? **Recommended:** yes: close B-2 with L-1's result, say in § 6 that it's never a pass
+   because it snaps at the wrong key, and give row 4 the "too early" framing, so the design,
+   `SKILL.md` and the eval case agree.
 
 ## Dependencies
 
 - [`teaching-design.md`](teaching-design.md) (curriculum designer, round 1 answered): the source of
   what is taught. If it changes, this spec follows.
 - Spec 004 wave A tasks: T006 and T017 (session, review mode), T062 and T063 (SR-1's `fresh`), T019 (fixture twins), T020
-  (finders), T041 and T042 (Mentor Practice 2 and captures), T049 to T054 (marks and `keepLinear`);
+  (finders), T041 and T042 (Mentor Practice 2 and captures; since 2026-10-26 the base is wave B's
+  `layer-info/practice2b.json`, T132 and T135), T049 to T054 (marks and `keepLinear`);
   plan A2 (runtime linking for evals).
 - `discovery/usage-notes/mentor-practice-state-2026-10-20.md` (the Cursor, Logo, what Mentor Practice
   lacks) and `discovery/usage-notes/adobe-assistant-2026-10-08.md` (the "why").

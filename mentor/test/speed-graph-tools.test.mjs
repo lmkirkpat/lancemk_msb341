@@ -1,5 +1,5 @@
 // Spec 008 contracts/tools.md: the three speed graph tools in fixture mode (no After Effects), on
-// the stand-ins until the live captures replace them. US1 (lesson), US2 (review) and the rules the
+// the live captures. US1 (lesson), US2 (review) and the rules the
 // session enforces before After Effects is touched.
 
 import { test, beforeEach } from "node:test";
@@ -14,7 +14,7 @@ process.env.AE_MENTOR_FIXTURE_STATE = stateFile;
 
 const DIR = path.join(FIXTURES, "speed-graph");
 const fixturePath = (name) => {
-  for (const p of [path.join(DIR, name), path.join(FIXTURES, name), path.join(DIR, "stand-in", name)]) if (fs.existsSync(p)) return p;
+  for (const p of [path.join(DIR, name), path.join(FIXTURES, name)]) if (fs.existsSync(p)) return p;
   throw new Error(`No fixture ${name}`);
 };
 const load = (name) => JSON.parse(fs.readFileSync(fixturePath(name), "utf8"));
@@ -65,7 +65,7 @@ test("snapshot: host, new then continued, and US1's focus on Mentor Practice", a
   assert.deepEqual(first.targets, US1);
   assert.equal(first.demo_target, id("P1"));
   assert.equal(first.no_demo_reason, null);
-  assert.deepEqual(first.pairs.map((p) => p.label), ["Title › Position 0.5–1.5 s", "Title › Position 1.5–3 s", "Title › Position 3–4.37 s", "Title › Scale 0.5–1.5 s"]);
+  assert.deepEqual(first.pairs.map((p) => p.label), ["Title › Position 0.5–1.5 s", "Title › Position 1.5–3 s", "Title › Position 3–4.367 s", "Title › Scale 0.5–1.5 s"]);
   assert.ok(first.pairs.every((p) => p.fastest.parts.includes("middle")));
   assert.deepEqual(first.left_out.map((x) => x.kind), ["hidden", "null", "precomp", "expression", "ease_first"]);
   assert.equal(first.comp.name, "Mentor Practice");

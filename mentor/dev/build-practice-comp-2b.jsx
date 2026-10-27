@@ -150,6 +150,8 @@ function ex(o) {
         matte: null, is_matte: false, effect_count: 0, "class": "renders"
     };
     for (var k in o) if (o.hasOwnProperty(k)) base[k] = o[k];
+    // AE reads collapseTransformation true on every shape and text layer (live, 2026-10-26).
+    if ((base.kind === "shape" || base.kind === "text") && !o.hasOwnProperty("collapse")) base.collapse = true;
     return base;
 }
 function mo(o) {

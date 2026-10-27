@@ -10,17 +10,19 @@ export const DIR = path.dirname(fileURLToPath(import.meta.url));
 export const load = (rel) => JSON.parse(fs.readFileSync(path.join(DIR, rel), "utf8"));
 export const KEY = load("answer-key.json");
 
-// The two practice comps: the live captures once they exist (tasks T034), the stand-ins until then.
-const firstThere = (...rels) => rels.find((r) => fs.existsSync(path.join(DIR, r)));
-export const PRACTICE_NOW = firstThere("practice-now.json", "stand-in/practice-now.json");
-export const PRACTICE2 = fs.existsSync(path.join(DIR, "..", "practice2-before.json")) ? "../practice2-before.json" : "stand-in/practice2-before.json";
-export const PRACTICE2_60 = fs.existsSync(path.join(DIR, "..", "practice2-60fps.json")) ? "../practice2-60fps.json" : "stand-in/practice2-60fps.json";
+// The practice comps, all live captures (2026-10-26). Mentor Practice 2 as built is spec 004's
+// practice2b.json (its wave B layers included): the offset captures were taken on a duplicate of it.
+export const PRACTICE_NOW = "practice-now.json";
+export const PRACTICE2 = "../layer-info/practice2b.json";
+export const PRACTICE2_60 = "../practice2-60fps.json";
 
-export function lessonFor(baseline, { demo = null, exclude = [], ...skill_options } = {}) {
+// demo_undone: a check has already seen the demo undone (session markChecked, FR-011).
+export function lessonFor(baseline, { demo = null, demo_undone = false, exclude = [], ...skill_options } = {}) {
   const a = analyze(baseline, { exclude, skill_options });
   return {
     comp_id: baseline.comp.id, skill: "timing.offset", mode: "lesson", baseline, targets: a.targets, target_refs: a.target_refs,
-    skill_options, exclude, demo: demo ? { segment_id: demo, at: "2026-10-21T12:00:00.000Z" } : null,
+    skill_options, exclude,
+    demo: demo ? { segment_id: demo, at: "2026-10-21T12:00:00.000Z", ...(demo_undone ? { undone: "2026-10-21T12:05:00.000Z" } : {}) } : null,
   };
 }
 

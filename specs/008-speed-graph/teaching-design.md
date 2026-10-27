@@ -40,7 +40,7 @@ where in the move it's fastest.
 | Kind | Skill | If it's missing (C1, FR-005) |
 |---|---|---|
 | Hard | Easing (`easing.basic`) | Name it and offer it first. If the learner insists, the lesson runs after one sentence ("this builds on easing: it reshapes an ease you've already applied"). No reteach. If the focus rule finds no eased pair, say so and offer easing instead (this is FR-005's example). If the learner's focus pair turns out half eased or linear, give easing's hint ("the key at 1.5 s is still linear, so there's no handle on that side") and suggest easing after this lesson. |
-| Soft | Key types (skill 1) | Never blocks. If the learner hits "there's nothing to drag", the hint says the key is linear or hold and has no handles. No key-type lesson inside this one. |
+| Soft | Key types (skill 1) | Never blocks. If the learner hits "there's nothing to drag", the hint says the key is linear or hold on that side, so there's no ease to shape until it's eased. Never say a hold side has no handle: at 26.5 the speed graph still draws one, it just does nothing until the key is eased (live sitting L-7). No key-type lesson inside this one. |
 
 ## 4. Focus and demo target
 
@@ -110,8 +110,10 @@ All three, counting the demo pair (FR-026 sets the measures):
 3. **Still eased:** both facing sides are still bezier.
 4. **Still comes to rest:** the landing key's incoming speed is close to 0, small next to the pair's
    average speed (spec 008 FR-010d sets the tolerance). Dragging a speed-graph handle up instead of
-   sideways changes speed, not influence, and the layer arrives moving, a bump instead of a soft
-   landing (graph-editor brief, C, "common"). Without this check, that mistake passes. (Was S-1;
+   sideways raises the landing speed and leaves influence near Easy Ease's (a hand drag "straight
+   up" still nudges it, 33.3 to 32.1 on Position and 27.0 on Scale in live sitting L-5), and the
+   layer arrives moving, a bump instead of a soft landing (graph-editor brief, C, "common"). With
+   every key selected, one drag raises all the landings at once. Without this check, that mistake passes. (Was S-1;
    taken.)
 
 **Every moving dimension.** For a property with more than one ease dimension (Scale reads three on
@@ -128,8 +130,8 @@ says "make the landing ease clearly longer than the start".
 | Mistake | What the check sees | Hint (where to look, never the fix) | Evidence |
 |---|---|---|---|
 | Not knowing which graph is showing (value vs speed), so a handle "goes the wrong way" | A shape that doesn't match the ask, or a reading answer that fits a value graph ("it goes up and stays") | "Check the graph menu at the bottom of the Graph Editor says Edit Speed Graph. In the value graph the same drag means something else" | C, common |
-| Dragging the handle up or down instead of sideways | Landing incoming speed no longer 0; influence barely changed | "At 1.5 s the move arrives still moving. Drag that handle sideways, along the bottom, to make the ease longer" | C, inference |
-| No handles because the keys are linear or hold | A focus pair has a linear or hold side | "The key at 1.5 s is linear, so it has no handle. Ease it first" (skill 1 and easing words, no lesson) | C, "often" |
+| Dragging the handle up or down instead of sideways | Landing incoming speed no longer 0; influence near Easy Ease's (a hand drag nudges it a few points, L-5). With every key selected, several landings at once | "At 1.5 s the move arrives still moving. Drag that handle sideways, along the bottom, to make the ease longer" | C, inference |
+| No working handle because the keys are linear or hold | A focus pair has a linear or hold side | Hold: "The key at 1.5 s is set to hold on that side, so the move sits still and then jumps. The handle there does nothing until you ease the key. Ease it first." Linear: "The key at 1.5 s is linear on that side, so there's no ease to shape yet. Ease it first." Never say a hold side has no handle: AE 26.5 still draws one (live sitting L-7). Linear's handle wasn't checked live, so the linear hint says nothing about a handle (skill 1 and easing words, no lesson) | C, "often" |
 | Long ease on both ends (near 100% each) | Both influences high, landing not 20 points longer | "Both ends of Scale ease for nearly the whole move, so it floats and then has to rush. Make the start short" | inference |
 | Applying Easy Ease again after shaping | Both keys back within 1 point of 33.33% | "Scale is back to the default shape on both keys. Easy Ease resets it" | Guess |
 | In and out mixed up (shaping the start key's incoming side) | Start key's in side changed, out side default, and that in side isn't another focus pair's landing (on a shared key it may be the earlier pair's correct landing) | "On the first key it's the outgoing side that matters: that's the side facing the move" | R, Adobe: "the names trip people up" |
@@ -231,7 +233,7 @@ No influence numbers the learner never saw, no method (which panel or drag), no 
   last part) is yours.
 
 **For the eval engineer (E):** an expression-over-keys pair the learner names (it must be refused as
-a target, kindly); a "dragged up" pair (speed changed, influence not) that must not pass if S-1 is
+a target, kindly); a "dragged up" pair (speed raised, influence near Easy Ease's, as a real hand drag leaves it, L-5) that must not pass if S-1 is
 taken; a Scale pair shaped on one dimension only; a 15/80 pair passes and a 33/33 pair fails.
 
 **Guesses:** "Applying Easy Ease again resets it" as a common mistake; demo values fixed at 15/80
