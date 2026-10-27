@@ -172,9 +172,11 @@ distance and direction; with the null already keyed, the first still passes.
 
 ### User Story 3 - Review the skill in a later session (Priority: P2)
 
-A day or more after I learned it, Knack names a new group on my comp ("Row A, Row B and Row C
+A day or more after I learned it, Knack names a new group on my comp ("Chip A, Chip B and Chip C
 should move as one; set that up so you can move them together, then give them one move"), asks if
-the group will turn or scale and from where, and checks the same way. It never says "null".
+the group will turn or scale and from where, and checks the same way. It never says "null". (The
+example is the live comp's review group, amended 2026-10-26 from the live sitting; it named Row A
+to C.)
 
 **Why this priority**: spec 004 H2 makes reviews for skills 5 and 6 stretch this sprint, but
 plan.md says each skill's first build includes its review mode (`check-branch.mjs` flags a later
@@ -188,13 +190,21 @@ and no "null", checks with FR-010 to FR-016, and records a review.
 
 1. **Given** a due review and a group by FR-005's rule (never a crowd) of unparented candidates not
    in the record for this skill on this comp (on Mentor Practice 2 as built, after the lesson's
-   group: Chip A to C, L6-1; on `practice2b.json`: Row A to C), **When** offered and accepted,
+   group: Chip A to C, L6-1; `practice2b.json` is now the live read of the comp as built, so it's
+   Chip A to C there too, amended 2026-10-26 from the live sitting), **When** offered and accepted,
    **Then** the mentor names the layers and the task without the word "null", asks the
    turn-or-scale question, and gives no menu path and no mention of jumps (TD § 11).
-2. **Given** the learner parents Row B and Row C to Row A, **When** checked, **Then** it doesn't
-   pass, the hint names what the check sees ("Row B and Row C follow Row A, so anything you do to
-   Row A drags them along") and stops there; it's recorded as a review that didn't pass and the
-   skill stays learned.
+2. **Given** the review's group is Chip A to C (#1, on Mentor Practice 2 as built) and the
+   learner parents Chip B and Chip C to Chip A, **When** checked, **Then** it doesn't pass, the
+   hint names what the check sees ("Chip B and Chip C follow Chip A, so anything you do to Chip A
+   drags them along") and stops there; it's recorded as a review that didn't pass and the skill
+   stays learned. (Amended 2026-10-26 from the live sitting: the live base is the comp as built, so
+   the review's own group is Chip A to C, L6-1; it said Row A to C.)
+2a. **Given** a review whose focus is Row A to C (set by name, as the unit tests set it on
+   `review-rows-visible.json`, the answer key's "US3 #2" entry; a review proposes them only when
+   FR-005 makes them its first group), **When** the learner parents Row B and Row C to Row A,
+   **Then** the same as #2 with their names. This pins the hint on a group with a static member
+   (Row B), not which group a review picks (added 2026-10-26 from the live sitting).
 3. **Given** a due review and no unparented group on the comp (a crowd alone counts as none, TD
    § 11), **When** the session starts, **Then** no review is offered and it stays due.
 
@@ -706,7 +716,9 @@ the facts below change how FR-009, FR-020, FR-023 and rows 15, 22 and 40 are wor
 - **L-4**: answered by spec 004 T158 (rotation read excludes auto-orient); auto-oriented layers
   stay out (FR-004).
 - **L-5**: passes; every focus layer found by name after the renumbering.
-- **L-6**: passes; TD § 15's table on the live comp.
+- **L-6**: passes; TD § 15's table on the live comp. Spec 004's live `practice2b.json` is the
+  comp as built (wave A included), so there's no wave-B-only read any more: L-6's
+  `practice2b.json` half and the stand-in `practice2b-with-wave-a.json` are the same live file.
 
 ## Success Criteria *(mandatory)*
 
