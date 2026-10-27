@@ -1,0 +1,58 @@
+{
+  "id": "27-null-place-top-left",
+  "title": "Asked which part of the null counts as its place: the top-left corner, not the middle of the square",
+  "covers": [
+    "L-1",
+    "FR-023",
+    "N3"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and it's a little square. Which part of the square counts as where the null sits: its middle?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "names_corner",
+        "must": "top[- ]left|upper[- ]left",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "says_corner",
+        "must": "corner",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_middle_of_square",
+        "never": "(?<!not )(?<!n['’]t )\\b(?:place|position|spot|sits?)\\b[^.?!]{0,40}\\b(?:is|at)\\b[^.?!]{0,20}\\b(?:middle|center|centre) of (?:the |its )?(?:null|square|box)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-CORNER",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

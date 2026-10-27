@@ -1,0 +1,91 @@
+{
+  "id": "28-jump-key-question",
+  "title": "A layer flew off when parented: may ask once whether a key was held, never as the cause, never Option or Shift",
+  "covers": [
+    "L-1",
+    "FR-023",
+    "US2-2"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "jumped.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "jumped.json",
+      "say": "I parented all three, and Stamp flew off to the side when I did it. Done."
+    },
+    {
+      "project": "jumped.json",
+      "say": "I undid it and parented Stamp again, but it still moved. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false
+    },
+    "say": [
+      {
+        "id": "asks_key_once",
+        "must": "\\b(?:holding|held|hold)\\b[^.?!]*\\bkey\\b[^.?!]*\\?|\\?[^.?!]*\\b(?:holding|held)\\b[^.?!]*\\bkey\\b|\\bwere you (?:holding|pressing)\\b[^.?!]*\\?",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "key_not_repeated",
+        "never": "\\b(?:holding|held|hold|pressing|pressed)\\b[^.?!]*\\b(?:key|option|shift)\\b|\\b(?:key|option|shift)\\b[^.?!]*\\b(?:holding|held|pressing|pressed)\\b",
+        "turns": [
+          5
+        ]
+      },
+      {
+        "id": "key_not_the_cause",
+        "never": "\\b(?:because|since|that['’]s why|which is why|caused by|the reason|must have|probably|likely)\\b[^.?!]*\\b(?:key|option|shift|held|holding)\\b|\\b(?:key|option|shift|held|holding)\\b[^.?!]*\\b(?:caused|is why|was the reason)\\b",
+        "turns": [
+          4,
+          5
+        ]
+      },
+      {
+        "id": "no_option_or_shift_named",
+        "never": "\\b(?:Option|Shift|Alt|Opt)\\b|⌥|⇧",
+        "cs": true
+      },
+      {
+        "id": "states_jump",
+        "must": "Stamp[^.?!]*\\b120\\b|\\b120\\b[^.?!]*Stamp",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-JUMP-STATED",
+    "R-KEY-QUESTION-ONLY",
+    "R-NO-CAUSE",
+    "R-NAMES-REAL"
+  ]
+}

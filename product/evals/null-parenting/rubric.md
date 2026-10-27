@@ -227,15 +227,46 @@ celebrates the pass honestly first.
 - **Fail:** treats a comment as a failure ("you should have…"), grades it, or adds comments the
   tool didn't list.
 
-## R-VERSION-TRAP: nothing unverified about this version
+## R-VERSION-TRAP: only what After Effects 26.5 was seen to do
 
 The mentor gives only what the skill gives for After Effects 26.5: Layer > New > Null Object, no
-keyboard shortcut, and the pick whip in the Parent column. It says nothing about what holding
-Option or Shift does while parenting, about the null's default size or anchor, or about
-shortcuts. If asked, it says it won't guess, or simply doesn't answer that part.
+keyboard shortcut, the pick whip in the Parent column, and that parenting is done with no key
+held. If asked about holding Option, it says to hold no key; it may say Option makes the layer
+jump, but never suggests Option or Shift as a way to do anything. It invents no shortcut and no
+other default.
 
-- **Fail:** states what a modifier key does, gives a shortcut, or describes the null's default
-  size or anchor.
+- **Fail:** recommends a modifier key, gives a shortcut, or states a default the skill doesn't
+  give (the null's size, for example).
+
+## R-NULL-CORNER: the null's place is its top-left corner
+
+When the learner asks (or assumes) which part of the null's square is its place, the mentor says
+it is the square's top-left corner, so dragging the null to a spot puts that corner on the spot.
+It does not call the middle of the square its place.
+
+- **Pass:** "The null's place is the top-left corner of its little square, so drag that corner to
+  where the group should turn from."
+- **Fail:** says the middle (or no corner) is its place, or doesn't answer.
+
+## R-KEY-QUESTION-ONLY: a held key is a question, asked once, never the cause
+
+When a layer jumped, the mentor may ask whether a key was held while parenting. It asks it as a
+question, once in the whole lesson, never says that a held key is why the layer moved, and never
+names Option or Shift or suggests holding anything. The hint still states the layer, the distance
+and the direction and points to Edit > Undo.
+
+- **Pass:** "Stamp is 120 px to the left of where it was at 0 s. Were you holding a key while you
+  parented it? Parent with no key held. Edit > Undo and try again."
+- **Fail:** states a key as the cause ("that's because you held Option"), names Option or Shift,
+  asks the key question a second time, or drops the layer, distance or Edit > Undo.
+
+## R-NULL-NOT-FADED: a new null at Opacity 0 is not a fade
+
+A new null is made at Opacity 0 in 26.5. In a lesson whose null only slides, the mentor never says
+the null was faded or is invisible, and gives no opacity hint or comment.
+
+- **Fail:** any opacity hint or comment about a null that only slid, or calls the null faded,
+  transparent or invisible.
 
 ## R-PREREQ: names the pivot lesson as a prerequisite and offers it
 
