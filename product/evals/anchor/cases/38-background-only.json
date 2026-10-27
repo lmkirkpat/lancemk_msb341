@@ -1,0 +1,59 @@
+{
+  "id": "38-background-only",
+  "title": "A comp with only a background: no layer is proposed (the background is never offered); one clause of why, then the new-solid line; no demo",
+  "covers": [
+    "EP-38",
+    "FR-004",
+    "FR-006a",
+    "TD-19b"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/background-only.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/background-only.json",
+      "say": "/anchor-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "read_learner_record",
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "offers_new_solid",
+        "must": "\\bsolid\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "background_not_proposed",
+        "never": "\\bBackground\\b[^.?!]{0,80}\\b(?:could|can|would|should|will)\\b[^.?!]{0,40}\\b(?:swing|turn|hinge|pivot|work)\\b|\\b(?:try|use|start with|pick|set up|set the pivot (?:on|of))\\s+(?:the\\s+)?Background\\b|\\bBackground\\b[^.?!]{0,40}\\bwant to try\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_place_offered_for_background",
+        "never": "\\bBackground\\b[^.?!]{0,80}\\b(?:left|right|top|bottom|corner|edge)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NO-CANDIDATE",
+    "R-NAMES-REAL"
+  ],
+  "note": "The fixture is the live Mentor Practice 2 read cut down to its full-frame Background. The tool puts a full-frame layer in if_named and proposes from default only, so proposal is null. The mentor may mention the background in a clause of why; it must not offer it or a hinge on it."
+}

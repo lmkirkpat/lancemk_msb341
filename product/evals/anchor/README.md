@@ -8,13 +8,14 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
-## Status (2026-10-26, HO-1 rounds 1 to 6): live captures, 42 case files (spec cases 1 to 37), no baseline yet
+## Status (2026-10-27): baseline taken, 27/44 (61%), SC-006 not met
 
-The set now runs on the live captures of Mentor Practice 2 (comp 179, `mentor/test/fixtures/anchor/`,
-`practice2b.json` the base) plus a few synthetic fixtures. Nothing points at the stand-ins or comp 300
-(deleted on `skill-5-anchor`). Case numbers are the spec's Eval plan (spec 011 > Eval plan, now 1 to 37); 21, 23 and 24
-have variants (a, b, c). Seven cases from the first set are not in the Eval plan and are numbered 25 to 31 (assigned by the cockpit). **No baseline**: that waits until skill 5 merges after the review
-lesson (T240). The smoke run of the changed and added cases is at the end of this file.
+The set runs on the live captures of Mentor Practice 2 (comp 179, `mentor/test/fixtures/anchor/`,
+`practice2b.json` the base) plus a few synthetic fixtures. 44 case files (spec cases 1 to 37, the cockpit's 38 and 39,
+and the cases from the first set numbered 25 to 31); 21, 23 and 24 have variants (a, b, c). **First baseline, 2026-10-27, on
+skill 5 as merged (`f6effae`) plus `main` at `d48b31e`: 27 of 44 (61%), $26.70.** SC-006 needs 80% and every
+hard-rule check passing; it fails on both, almost wholly because of one real hard-rule break (text said before the first
+snapshot). See "Baseline (2026-10-27)" at the end.
 
 ## Running
 
@@ -28,8 +29,8 @@ node product/evals/anchor/run.mjs --repeat 3                  # each case 3 time
 node product/evals/anchor/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 109 mentor turns plus 42 judge calls. From the smoke runs
-(about $0.35 to $0.75 a case) expect **about $18 to $24**. Bar: SC-006,
+A full run is about 109 mentor turns plus up to 44 judge calls. The 2026-10-27 baseline cost **$26.70**.
+**`--only` is a prefix match:** `--only 24` also runs 24b and 24c (three cases, about $1.4 a repeat). Bar: SC-006,
 at least 80% passing, and every hard-rule check passing; spec 011's SC-004 (no numbers) and SC-005 (Quick Set Anchor) are covered by the universal number check and case 08.
 
 ## What every case checks (no `expect` key needed)
@@ -106,6 +107,8 @@ the number of mentor turns. Fixtures: `live` (a capture) or `synthetic` (derived
 | 35 | A lesson left open before a layer was chosen, reopened in a new session: opens as a first lesson (Door, intent question), no "left off", no leave-out | 2 | live | R-AN-INTENT-FIRST |
 | 36 | "Which layers can I use?": at most three layers named, all `default` candidates in this run's snapshot, none that already moves; ends on the choice | 2 | live | R-AN-WHICH-LAYERS, R-ONE-IDEA |
 | 37 | A one-key layer whose Position key and rest key are one frame apart (synthetic): both labels, "3.67 s" and "3.7 s" | 2 | synthetic | R-AN-TWO-FRAMES |
+| 38 | A comp with only a background (a full-frame layer): no layer proposed, the new-solid line instead; the background never offered, no place on it, no demo | 1 | synthetic | R-AN-NO-CANDIDATE, R-NAMES-REAL |
+| 39 | A layer named with no place given (Needle, whose own hinge is the bottom middle): the mentor asks where it should turn from, picks none, no snapshot call carries a place, no demo or check | 2 | live | R-AN-ASKS-PLACE, R-NAMES-REAL |
 
 Dropped from the first set: the Sled-slid case (old 15). Since D-4 no lesson can reach Sled with three keys
 (`sled-slid` is a unit-test fixture), so cases 13 and 22 replace it.
@@ -116,7 +119,7 @@ Dropped from the first set: the Sled-slid case (old 15). Since D-4 no lesson can
   (25: the live `door-pass.json` with the one field `matte-eye-on.json` changes), and two records
   (`every-layer-done.json` for 17, `anchor-passed-not-due.json` for 23b). Mentor Practice 2 has no one-key
   layer, so 24 has no live evidence yet (spec 011 round 4). `synthetic/edge-before.json` and `row27-no-rect.json`
-  (18) are the builder's.
+  (18) are the builder's. `background-only.json` (38) is the live `practice2b.json` cut down to its Background layer.
 - **`no_text_before_snapshot`** (every case): nothing said between the first tool call and the first
   `anchor_snapshot`. It is the smoke finding of a leaked self-note ("Review is due. Run the review.",
   "First lesson on this skill."). `no_self_instructions` also looks for the known review phrasings.
@@ -234,13 +237,66 @@ The first-lesson leak is gone in all five first-lesson runs. The review path sti
 Smallest skill fix: the same sentence in The review (step 0's "run The review below"): say nothing between
 `read_learner_record` and the review snapshot.
 
-## To do in the baseline round (not built)
+## To do
 
-- A background-only comp: nothing but a full-frame layer, so the proposal is empty or a solid (the builder's suggestion; B-13's "full-frame is never offered").
-- A layer named with no place given: the demo goes at the place they give, else the mentor asks which of the nine.
+- Cases 38 and 39 were built on 2026-10-27 (the two bullets that were here). Case 39 covers the naming turn only;
+  the demo-at-the-place-given rule (SKILL.md step 5) has no case of its own yet.
+- After the fixes in the baseline's proposals: re-run `--changed`, then the failing cases with `--repeat 3`.
 
 ## Reading results
 
 Same order as easing: a failed `run` check is plumbing; a failed deterministic check is a hard-rule
 break; a failed rubric item is teaching quality. Re-run a flipping case with `--repeat 3` before
 changing `SKILL.md`. Rubric items are in `rubric.md`.
+
+## Baseline (2026-10-27)
+
+Run on `evals-skill-5` after the merge of `main` (`d48b31e`; skill 5 at `f6effae`). Results file:
+`results/2026-10-27-152657.json` (the full run). Cases 38 and 39 were smoked first
+(`2026-10-27-150723.json`, `2026-10-27-150742.json`).
+
+**Score: 27 of 44 (61%), $26.70.** SC-006 (at least 80%, every hard-rule check passing) is **not met**, on both
+counts. The universal `no_text_before_snapshot` check failed in 11 cases (9 first lesson, 2 review) and is the real
+cause of 11 of the 17 failures. Cases 16 and 17 are the known review leak (a planned shared tool change). The other 9
+leaks are the **first-lesson** self-note ("First lesson on this skill." / "First lesson on transform.anchor."): the
+README's earlier note said it was gone after B-13, and in the five first-lesson runs of smoke run 4 it was; here it is
+back in about 9 of 30 first-lesson runs. Without the leak (and case 18's regex bug, fixed below) the same run would
+be about 38 of 44 (86%).
+
+| Case | Failed check | Call | Real or noise | Smallest fix |
+|---|---|---|---|---|
+| 01, 02, 05, 20, 21b, 24 | `no_text_before_snapshot`: "First lesson on this skill." | **Hard rule** | Real, intermittent. Repeats: 01 2 of 3 passed, 24 1 of 3, 24c 2 of 3, 39 2 of 3 (24b and 38: no leak in 3). Also seen in smoke on 38 and 39 | Same change as 16: have the snapshot tool read the record and pick the mode, so the mentor makes one call with nothing to narrate (shared code, spec item first). Prompt-only stopgap: none that has held |
+| 09, 15 | `plain_words` ("transform.anchor") plus `no_text_before_snapshot` | **Hard rule**, one cause | Real. The same self-note, this time with the skill's internal id, so it breaks two checks | Same as above |
+| 16 | `no_text_before_snapshot`: "Review is due." (baseline); "Review is due → review mode" and "Learned and review due → review." (repeats) | **Hard rule** | Real, known. Repeat x3: run 1 plumbing (`claude ETIMEDOUT`, not a mentor result), runs 2 and 3 both leaked, so 3 of 3 completed runs. Run 2 also failed turn 2's `review|yours|your own` check, a follow-on | The shared tool change above. **This case alone breaks the "every hard-rule check" half of SC-006**, and so do the first-lesson leaks |
+| 17 | `no_self_instructions` ("Review is due → review mode") plus `no_text_before_snapshot` | **Hard rule**, one cause | Real, same as 16 | Same |
+| 18 | `no_text_before_snapshot` plus `say:no_false_claim` ("stayed put") | Leak: hard rule. `no_false_claim`: **my regex bug** | The mentor said "I can't tell ... whether Door stayed put", a hedge, which the regex took as a claim | Regex fixed (a lookbehind for "whether", "if", "can't tell"); checked on sample sentences, not re-run. The leak is real |
+| 21a | `say:no_menu_path`: turn 3 said "Layer > Transform > Center Anchor Point in Layer Content" | **Hard rule**, arguably | Real by SKILL.md's letter ("never for any other place"); the mentor did say it only reaches the center and sent the learner to Pan Behind. One sample, not repeated | If the cockpit reads that as allowed (the learner asked about the command), loosen 21a to "never recommends it for a left edge"; else one line in SKILL.md: when asked, say there is a center command and name the path only when the place is the center |
+| 30 | `record_plain`: the record says "because" | **Hard rule** | Real, one sample: "Door slid to the right with it because only Anchor Point changed" (a reason in the record) | Rubric-level: SKILL.md's `record_lesson` line already bans motive; add "no because" to the example summary, or make the tool refuse it |
+| 04 | R-AN-NEIGHBOUR, R-HINT-NOT-FIX | Rubric | Probably real, one sample: the hint named both places correctly, then gave the fix ("Drag the crosshair up along that left end until it's halfway ...") | Not repeated. If it repeats: SKILL.md's hint wording for a neighbour place says what is off and where, no drag steps |
+| 19 | R-ONE-IDEA | Rubric | Noisy-looking: turn 2 packs repeat-back, outside pivot, the two sentences, a walkthrough and the watch offer | Repeat first; the fix, if real, is to drop the walkthrough from the outside-pivot turn |
+| 26 | R-AN-DEMO | Rubric | Real wording, small: "Position moved to make up for it" explains how the numbers changed (the same family as the old "opposite directions") | Add "make up for it" to `no_opposite_directions`, and a SKILL.md line: say both numbers changed, nothing more |
+| 29 | R-ONE-IDEA | Rubric | One sample: an unrequested second idea about typing into Anchor Point alone | Repeat first |
+
+Nothing in the plumbing: no `run` check failed except one `ETIMEDOUT` on a repeat of 16, and the judge's JSON held every time.
+
+**Repeats** (every run, $8.07, over the $5 plan because `--only 24` also ran 24b and 24c, $4.12 of it):
+
+| Case | Runs | Result |
+|---|---|---|
+| 01 | 3 | pass, fail (first-lesson leak), pass: 2 of 3 |
+| 16 | 3 | fail (ETIMEDOUT), fail (review leak), fail (review leak): 0 of 3 |
+| 38 | 3 | 3 of 3 |
+| 24 | 3 | pass, fail (leak), fail (leak): 1 of 3 |
+| 24b | 3 | 3 of 3 |
+| 24c | 3 | pass, pass, fail (leak): 2 of 3 |
+| 39 | 3 | fail (leak), pass, pass: 2 of 3 |
+
+**Cost:** smoke $0.50 (38, 39) + baseline $26.70 + repeats $8.07 = **$35.27**.
+
+**New cases.** 38 passed in the baseline and 3 of 3 on repeat; in smoke it failed once on the first-lesson leak, nothing
+else. 39 passed in the baseline and 2 of 3 on repeat (the other: the leak); in smoke it failed once on the same leak.
+Neither new case has failed for a case reason; both fail only when the mentor leaks. What the spec left unclear:
+(1) 38: whether the opening should still ask the intent question when `proposal` is null. SKILL.md says the solid line
+replaces it; the case checks the solid line and not the question. (2) 39: the task text joined "no place given" with "any demo goes at the
+place they give", which are two rules in SKILL.md (step 2 asks for the missing place; step 5 asks for a place before a demo
+on another layer). Case 39 tests step 2 only; a demo-request case needs its own number.

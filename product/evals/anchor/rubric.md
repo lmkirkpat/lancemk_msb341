@@ -427,3 +427,22 @@ plain words, without a list of leave-outs, and ends on the choice.
 
 - **Fail:** deflects, lists every layer, names a layer that already moves, explains leave-outs, or ends
   with nothing to choose.
+
+## R-AN-NO-CANDIDATE: a comp with no candidate gets one clause of why and the new-solid line
+
+When the snapshot's proposal is null (the comp holds only a background, which is allowed if named and never
+proposed), the mentor says in one clause why nothing here is a clean first pivot, then asks the learner to make a
+small solid (Layer > New > Solid) and tell it when it's there. It never offers the background, a hinge on it, or a
+list of reasons, and runs no check or demo.
+
+- **Fail:** proposes the background (or any layer), names a place on it, lists several reasons, gives no
+  way forward, or runs a demo or check.
+
+## R-AN-ASKS-PLACE: a layer named with no place is asked for its place
+
+When the learner names a layer and gives no place, the mentor asks where it should turn from (a corner, the
+middle of an edge, or the center) before anything else. It doesn't pick a place for them, doesn't repeat a place
+back as if chosen, and doesn't demonstrate or check. Saying where the layer's pivot is now, while still asking, is fine.
+
+- **Fail:** chooses a place (even the layer's natural hinge), says "so Needle turns from ...", never asks, or
+  demonstrates.

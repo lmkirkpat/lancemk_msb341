@@ -101,4 +101,16 @@ passed.skills["transform.anchor"].review_due = "2099-01-01";
 passed.skills["transform.anchor"].last_practiced = "2026-10-24T16:00:00.000Z";
 passed.lessons.find((l) => l.skill === "transform.anchor").date = passed.skills["transform.anchor"].last_practiced;
 fs.writeFileSync(path.join(HERE, "../records/anchor-passed-not-due.json"), JSON.stringify(passed, null, 2) + "\n");
+// Case 38: a comp with only a background. The live practice2b.json with every layer but Background
+// removed (layers, layer_info, precomp_layers); the comp is renamed and the playhead stays at 0.
+{
+  const b = read("practice2b.json");
+  b.layers = b.layers.filter((l) => l.name === "Background");
+  b.layer_info = b.layer_info.filter((l) => l.name === "Background");
+  b.precomp_layers = [];
+  b.comp = { ...b.comp, name: "Synthetic Backdrop Only" };
+  b.synthetic = "Case 38 (spec 011 round 7, TD 19b): live practice2b.json cut down to its Background layer (full frame, 1920 x 1080), so the comp has no candidate.";
+  write("background-only.json", b);
+}
+
 console.log("wrote fixtures/synthetic/*, records/*.json");

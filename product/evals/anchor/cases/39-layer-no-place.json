@@ -1,0 +1,61 @@
+{
+  "id": "39-layer-no-place",
+  "title": "A layer named with no place given (Needle, whose own hinge would be the bottom middle): the mentor asks where it should turn from; it picks no place, repeats none back, and runs no demo or check",
+  "covers": [
+    "EP-39",
+    "FR-004",
+    "TD-4"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Let's do Needle."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "snapshot_input_lacks": [
+      "\"place\""
+    ],
+    "say": [
+      {
+        "id": "asks_where",
+        "must": "\\bwhere\\b[^.?!]*\\b(?:turn|swing|hinge|pivot|pivot)\\b[^.?!]*\\?|\\bwhich (?:corner|edge|place|spot|side)\\b[^.?!]*\\?|corner[^.?!]*edge[^.?!]*middle[^.?!]*\\?",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "ends_on_question",
+        "must": "\\?\\s*$",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_place_chosen",
+        "never": "\\bso Needle turns from\\b|\\bNeedle (?:will|can|could) (?:turn|swing) from\\b|\\bNeedle(?:'s pivot)? (?:starts|is) (?:at|in) its\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-ASKS-PLACE",
+    "R-NAMES-REAL"
+  ],
+  "note": "SKILL.md step 2: no layer or no place given, ask for the one that's missing; step 5: a demo on a layer they name goes at the place they give, else ask which of the nine, never pick a hinge. This case covers the naming turn only. snapshot_input_lacks fails if any snapshot call carries a place key, since the learner gave none. The mentor may say where Needle's pivot is now only if it also asks; the third check catches a chosen place."
+}
