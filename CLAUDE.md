@@ -180,11 +180,15 @@ a brand new session act like a colleague who already knows what you are working 
          wording in `SKILL.md`; the snapshot's needed sample times went from 30 to 4. Subagents can't
          merge (git guard), so the cockpit merges `main` into the branch.
        - **Phase 8d specced (round 3), building:** T249 `watch_offer` in the snapshot and T250 the
-         offer in `SKILL.md` (skill-builder; they block the evals hand-off HO-1). Then T251 🖐: time
-         each read on its own, live. Then T252: the cuts FR-013a's table picks from those timings,
-         or shared request SR-4 if the plain read alone is over 3 s. T253 🖐 measures SC-010 (each
-         `anchor_snapshot` ≤ 3 s) at the next lesson. The speed tasks block nothing. Designer: D-8
-         (the "already moves" sentence for a one-key layer) and D-9 (what qualifies for a watch).
+         offer in `SKILL.md`, both built and merged (`6ad8439`). T251 (`e2819dd`, usage note
+         `anchor.md`): a warm lesson start is 1.3 to 1.7 s, with under 30 ms of it in the mentor; the
+         10 to 12 s is AE throttled after a couple of minutes in the background (App Nap; about 5×
+         slower). T252 and T253 are deferred: check whether the panel, which keeps AE in front,
+         still shows it, before touching the reads or the system setting. D-8 (a two-frames line
+         for a one-key layer) and D-9 (no watch offer on a full-frame layer) are approved in
+         teaching design § 18 (`47c90bd`). Next: a spec writer pass (D-8, D-9 and B-9: the tool
+         tells the two `position_moves` cases apart), then a skill-builder pass, then the evals
+         hand-off (HO-1).
          Not yet scheduled: session 2's "set away from rest, place right" fix, which needs a live
          capture. Background, from the round that specced this:
          - teaching design § 17 (`f7545e2`): with one focus layer, offer a watch on the next

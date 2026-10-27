@@ -5,7 +5,8 @@ here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-23, amended 2026-10-26 after the live sitting (L-1 to L-5,
 `live-sitting-2026-10-26.md` on `skill-5-anchor`), and again 2026-10-26 after the first live
 lesson (T236, § 17). **Status:** draft, round 1 answered (§ 15), round 2 answered (§ 16: D-4 and the
-wording list), the one-layer watch offer decided (§ 17).
+wording list), the one-layer watch offer decided (§ 17), round 3 answered (§ 18: D-8 and D-9,
+2026-10-26).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -97,7 +98,7 @@ From a fresh read, using the visibility class (FR-013), never the eye switch alo
 | Precomp layer | Yes, ranked below the others | "Icon's edges are its precomp's frame, 400 × 400, not the square inside it." Collapse Transformations on: not a candidate once R1 reads it (open item B-3); until then, say once that it's not checked |
 | Parented layer | Yes, ranked below unparented ones | Names the parent in one sentence ("Title rides on CTRL; that doesn't change where its own pivot goes"). FR-037's hand-off doesn't fire: the parent's motion can't change this check (§ 9) |
 | Position keyed at **two or more times** (X and Y counted together; hold keys too) | **No** (D-4, § 16). Pan Behind at 26.5 changes or adds one Position key, at the playhead, so the layer always slides at its other keys and no taught move can pass | "Sled already moves, so moving its pivot now would shift where it sits at its other keys. Set the pivot before you key. Pick a layer that doesn't move yet?" |
-| Position keyed at **one** time | **Not a default candidate.** Allowed if named, only when that key's time is also the check time (no Rotation or Scale keys, or the rest key is on the same frame). Otherwise treated as the row above | "Sled has one Position key, at 3.7 s. Put the playhead right on it before you drag, so the pivot change goes into that key" |
+| Position keyed at **one** time | **Not a default candidate.** Allowed if named, only when that key's time is also the check time (no Rotation or Scale keys, or the rest key is on the same frame). Otherwise treated as the row above, but with its own sentence (D-8, § 18) | On the check time: "Sled has one Position key, at 3.7 s. Put the playhead right on it before you drag, so the pivot change goes into that key". Rest key on another frame: "Sled's Position key is at 1 s, but it's at rest at 3 s, so moving its pivot now would shift where it sits on one of those two frames. Set the pivot before you key. Pick another layer?" |
 | Rotation or Scale has keys | Ranked below layers with none; allowed | The rest-pose rule below |
 | Rotation or Scale under an expression (Logo in Mentor Practice) | No | "An expression turns Logo, so I can't tell where it sits at rest" |
 | Anchor Point has keys | No (an animated pivot is out of scope) | "Anchor Point is animated on Badge, which this lesson doesn't cover" |
@@ -168,7 +169,9 @@ that invites the learner to try (stage 3), after the walk-through in words:
 - **Which layer:** the highest-ranked default candidate (§ 4's table and ranking) other than the
   learner's that would qualify as the demo target (the demo target rule above). On Mentor Practice 2
   with Door as the focus, that's **Needle** (rank 2), not Tab. If none qualifies, **no offer**:
-  never offer a watch the demo would refuse.
+  never offer a watch the demo would refuse. "Would qualify" means (D-9, § 18): a default candidate,
+  never a full-frame layer, not already at its suggested place, and, if it has Rotation or Scale
+  keys, its rest key on the focus layer's check time.
 - **When:** only when the learner hasn't passed this skill before (a first lesson, or practicing
   without a pass). **Never in a review** (no demo there, § 12), and **not in a practice lesson after a
   pass** (they've already set a pivot without help; the walk-through is enough, and they can still
@@ -508,11 +511,17 @@ middle" on a text layer is told the pivot is on the baseline, not that it's alre
   candidate that would qualify as the demo target (and its suggested place), or nothing when none
   does. Today `proposal` is one layer and `candidates` carries buckets; if the ranked order and the
   demo test aren't already there, add them rather than have the mentor rank by hand.
+- **B-9 (2026-10-26, § 18 D-8)** The leave-out for a layer that already moves needs to tell the
+  mentor which of the two cases it is (two or more Position key times, or one key time off the rest
+  key), and for the second, both times (the Position key's and the rest key's, the learner's
+  `rest_time` when they named one). Today both return `position_moves` with no times. The builder
+  names the field or reason; the mentor must never count keys itself.
 
 **Guesses:** how common the "set it while shrunk or turned" mistake is (L-4 shows it's easy to do,
 not how often); how often learners drag a group's pivot (L-1 shows it happens in one drag); the 3 px
 floor; ranking unparented layers first; the off-grid rule; the accidental Anchor
-Point stopwatch as a mistake.
+Point stopwatch as a mistake; how often a learner names a one-key layer whose rest key is on
+another frame (§ 18 D-8); whether a watch on the focus layer's parent or child confuses (§ 18 D-9).
 
 **Curriculum B items this skill settles:** B1 (skill 5's targets, B-1 above); B5 (answered by L-2:
 "set the pivot before you key" is a rule for layers that already move, § 16); B7 (anchor with
@@ -684,3 +693,93 @@ Needle recorded, not the next candidate after Door.)
 **What changes elsewhere** (owners' files, not edited here): `SKILL.md` moves the offer from step 5
 (which runs only on an ask) to the end of step 4; spec FR-008 and US1 #5; a new eval case; curriculum
 follow-up C-4; builder item B-8.
+
+## 18. Answers to the spec writer, round 3 (2026-10-26)
+
+### D-8: the "already moves" sentence on a one-key layer
+
+**Answer: a second sentence, about the two frames.** The spec writer is right that § 4's Sled line
+reads wrong on a one-key layer: there are no "other keys" on Position, and what actually conflicts
+is two frames, the Position key's and the rest key's. Pan Behind can only set the pivot on one of
+them. Set it on the rest key and AE adds a second Position key there (L-2), so the layer sits wrong
+at the first key and now drifts between the two. Set it on the Position key and the compensation is
+worked out for the turned or shrunk pose, so the layer sits wrong at rest (L-4's pattern). Either way
+it shifts on one of the frames, so it's still a leave-out; only the sentence changes.
+
+**The sentence** (times from the read, written the way `SKILL.md` writes times):
+
+> "Sled's Position key is at 1 s, but it's at rest at 3 s, so moving its pivot now would shift where
+> it sits on one of those two frames. Set the pivot before you key. Pick another layer?"
+
+**When each is used:**
+
+| The layer | Sentence |
+|---|---|
+| Position keyed at **two or more** times (X and Y together, hold keys too) | § 4's Sled line, unchanged: "Sled already moves, so moving its pivot now would shift where it sits at its other keys. Set the pivot before you key. Pick a layer that doesn't move yet?" |
+| Position keyed at **one** time, rest key (the tool's, or the learner's own `rest_time`) more than half a frame away | The two-frames sentence above. "At rest" is the rest key's time; when the learner named the rest pose, it's their time, which they'll recognize |
+| Position keyed at one time, on the check time | Not a leave-out: § 4's "playhead right on it" line |
+
+Both leave-out sentences are said once, when the learner names that layer, and then the next
+candidate is offered as usual (§ 16 D-4, adjustment 3). In the opening, with no layer named, a
+one-key layer is just one of the layers that already move, under whatever D-7's general sentence
+becomes; the two-frames sentence is only for a learner who names it.
+
+**Rejected:**
+- *The spec writer's draft*, "so I can't set its pivot without it shifting at one of them". Right
+  idea, and the two frames are kept from it. But "I can't set" makes it the mentor's limit and
+  implies the mentor would be the one setting it; the learner does the setting, and the limit is how
+  Pan Behind writes Position. Mine keeps the Sled line's shape ("moving its pivot now would shift
+  where it sits") so the two read as one rule, and keeps "Set the pivot before you key", the habit
+  this case teaches too.
+- *One sentence for both*, e.g. "would shift where it sits at another frame". Vaguer for the common
+  case (two or more keys), where "its other keys" is what the learner sees in the timeline.
+- *Leave the D-4 line as is.* "Its other keys" points at Position, which has one key, so a learner
+  who looks finds nothing to match, and the sentence loses them.
+- *Make the case passable*: ask the learner to move the Position key onto the rest key first. That
+  edits their animation, a second idea in a one-idea lesson, and § 8 leaves re-pivoting animated
+  work out (C-3).
+- *Keep "Pick a layer that doesn't move yet?" as the ending.* A one-key layer whose only Rotation or
+  Scale key holds still may not move on screen at all, and the next candidate offered may well move
+  (Gauge does). "Pick another layer?" is true in every case. (The Sled line keeps its ending: there
+  the layer does move.)
+
+**Evidence:** none from a learner; Mentor Practice 2 has no one-key layer (spec FR-004), and L-2's
+`sled-one-key-before` has no Rotation or Scale keys. The mechanics are L-2 and L-4. How often a
+learner names such a layer is a guess (rare: it needs a single Position key plus Rotation or Scale
+keys off that frame).
+
+### D-9: which layer the watch is on
+
+**Answer: the spec's reading is confirmed, with one clarification.** "Would qualify as the demo
+target" means all of:
+1. A **default candidate** (§ 4's table), other than the focus layer, ranked by § 4's lesson
+   ranking. (As the spec reads it.)
+2. **Not already at its suggested place** (§ 4, "The pivot is already there"): the demo would set no
+   target. (As the spec reads it.)
+3. **With Rotation or Scale keys, only when its rest key is within half a frame of the focus layer's
+   check time** (as the spec reads it). The check time is the current one: if the learner named
+   their own rest pose (`rest_time`), that's the time used. Reason, beyond "the demo would refuse":
+   a watch that asks the learner to move the playhead somewhere else, then back for their own
+   layer, puts a second time into the shortest lesson in the path for a first-timer.
+4. **Clarification: never a full-frame layer.** § 4's table says a background is "last resort
+   only", meaning proposed only when nothing else exists, so it isn't in the pool a watch is chosen
+   from. A watch on the background is also the one layer § 7's wrong-layer hint teaches them not
+   to move. This applies when the read says the layer is full-frame (`full_frame` true); when that's
+   unknown (`null`, before SR-2), no extra filter, since it ranks last by area anyway and the read
+   is never assumed.
+
+**What this changes in the build:** only item 4, and only if `watch_offer` doesn't already leave
+out `full_frame: true` layers (the spec's "default candidate" puts full-frame under "allowed if
+named", so the builder may already have it). One unit test: a comp whose only other candidate is
+full-frame returns `watch_offer: null`. Spec FR-008's answer key on Mentor Practice 2 is unchanged
+(Door → Needle, `bottom-middle`; Pop → Door, `middle-left`; two layers or a review → null).
+
+**Rejected:**
+- *Any default candidate, keyed or not, and ask for the playhead on its rest key on a yes.* Two
+  playhead times in one short first lesson, for a watch that's meant to make the idea plain.
+- *No Rotation- or Scale-keyed layers at all.* Simpler, but on a comp where every other layer turns
+  or scales it removes the offer even when the rest keys line up, and the demo handles that case.
+- *Also leave out the focus layer's parent or children.* A guess with no case behind it: a demo on
+  a parent moves its pivot, not its motion, so the child stays put. Logged under § 14's guesses,
+  not a rule: if live lessons show a watch on the focus layer's parent or child confuses, leave
+  those out of `watch_offer` then.

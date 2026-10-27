@@ -25,7 +25,12 @@ questions for the designer (D-5 to D-7). Approved by the builder; T245 to T247 b
 the watch offer with one focus layer (TD § 17, `f7545e2`: FR-008, US1 #5 and #7, a new
 `watch_offer` field, Eval plan 11 and 23) and the lesson-start speed after T236 and T237's
 10 to 12 s snapshots (FR-013a, SC-010); plus FR-004's precedence rule and rows 12, 28 and 29 from
-Phase 8c's hand-back. New tasks T249 to T253 (tasks.md › Phase 8d).
+Phase 8c's hand-back. New tasks T249 to T253 (tasks.md › Phase 8d). **Amended again 2026-10-26
+(round 4)** from the designer's answers to D-8 and D-9 (TD § 18, `47c90bd`, approved by the
+builder): a one-key layer whose rest key is on another frame stays `position_moves` but gets
+TD § 18's two-frames sentence, and the tool says which case it is with both times (new
+`moves_case`, FR-004, B-9; US2 #6, row 5b, Eval plan 24); `watch_offer` never picks a full-frame
+layer (FR-008, D-9). D-8 and D-9 closed. New tasks T254 to T256 (tasks.md › Phase 8e).
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 5,
 'Set the pivot'." Record ID `transform.anchor`, short name `anchor`, tool prefix `anchor_`
@@ -169,6 +174,12 @@ rest key and fails one set away from it, with the rest-key hint.
    playhead right on it before the drag (TD § 4); **When** the learner drags with the playhead off
    the key, **Then** it doesn't pass (FR-012 item 4) and the slid hint asks for Edit > Undo
    (FR-019).
+6. **Given** the learner names a layer with one Position key whose rest key (the tool's, or their
+   own `rest_time`) is more than half a frame from it (round 4, D-8), **When** the mentor answers,
+   **Then** it says TD § 18's two-frames sentence once, with both times from the tool
+   (`position_key_time`, `rest_time`), runs no lesson on it, and offers another layer as usual
+   (FR-004 `moves_case`). It never says "its other keys" or "jump" about that layer. Synthetic
+   only: Mentor Practice 2 has no such layer (FR-004).
 
 ---
 
@@ -218,7 +229,8 @@ Other edge cases:
 - **The learner names a layer the table leaves out** (null, 3D, Anchor Point keyed, expression on
   Rotation or Scale, collapsed precomp, camera, light, adjustment): one sentence from TD § 4 and ask
   for another. A layer whose Position is keyed at two or more times is left out the same way
-  (TD § 4's "already moves" sentence, D-4). A hidden layer, a matte, a guide, a layer with one
+  (TD § 4's "already moves" sentence, D-4), and so is a one-key layer whose rest key is on another
+  frame, with TD § 18's two-frames sentence instead (D-8, FR-004 `moves_case`). A hidden layer, a matte, a guide, a layer with one
   Position key (on the check time, FR-004) or a locked layer can be named (TD § 4; a locked one
   gets the unlock sentence, D-2), unless it already moves: "never" comes first (FR-004
   precedence).
@@ -279,7 +291,8 @@ Other edge cases:
     2026-10-26); Anchor Point keyed; an expression on a keyed Rotation or Scale; 3D; a precomp
     with Collapse Transformations on; *null*, camera, light, adjustment layer. Each gets TD § 4's
     one sentence; for `position_moves` that's the "already moves … set the pivot before you key"
-    sentence, said once, then the next candidate is offered as usual (TD § 16 D-4, adjustment 3).
+    sentence, or TD § 18's two-frames sentence for a one-key layer (`moves_case`, below), said
+    once, then the next candidate is offered as usual (TD § 16 D-4, adjustment 3; TD § 18 D-8).
   - **Precedence (round 3, 2026-10-26):** a layer that meets a "never" condition is `never` even
     when it's also a matte, hidden, a guide or locked. A matte or locked layer that already moves
     can't pass either, so it gets `position_moves`, not `matte` or `locked` (as built in T245:
@@ -295,6 +308,33 @@ Other edge cases:
     playhead, and leaves the others, so on a layer that already moves the layer always slides at
     its other keys and no taught move passes item 4 (TD § 16 D-4, which also lists the options
     rejected).
+  - **Which `position_moves` case (round 4, D-8, B-9):** the two cases get different sentences
+    (TD § 18's table), so the tool MUST say which one it is, and the mentor MUST NOT count keys or
+    compare times itself. Every candidate entry and every `focus_problems` entry whose reason is
+    `position_moves` carries **`moves_case`**:
+    - `"two_or_more"`: Position keyed at two or more key times. The mentor says TD § 4's Sled line.
+    - `"one_key_off_rest"`: one Position key time, and the rest key more than half a frame from
+      it. The entry also carries **`position_key_time`** (that key's time) and **`rest_time`**
+      (the time the rule compared against: the learner's own `rest_time` when the focus entry
+      gave one and it's used (FR-011), else the tool's rest key). Seconds, as the read gives them.
+      The mentor says TD § 18's two-frames sentence with both times, written the way `SKILL.md`
+      writes times.
+
+    Entries with any other reason carry none of the three. A layer that's `position_moves` and
+    also a matte, hidden, a guide or locked (the precedence rule) still carries its case. In the
+    opening, with no layer named, `moves_case` changes nothing: a one-key layer is one of the
+    layers that already move, under D-7's general sentence (TD § 18). Unit tested on the
+    synthetics row 5b lists. **Why one reason with a sub-field, not a split reason:** TD § 18
+    keeps it one leave-out with one rule, only the sentence differs; `position_moves` already
+    drives the precedence rule, `neededTimes`, the answer key's 16 layers on Mentor Practice 2,
+    four on Mentor Overlaps, `SKILL.md` and Eval plan 13, and an added field changes none of
+    them. Round 2 rejected two codes because the sentence was the same; it isn't any more, but
+    the bucket and the rule still are. **Rejected:** *a split reason* (`position_one_key_off_rest`;
+    every `=== "position_moves"` test and the precedence line would need a second name, for no
+    change in behaviour); *the times alone, with the case read from whether they're present* (an
+    implicit rule the mentor must know; one named field is plainer to the prompt and the evals);
+    *the mentor reads `keyed.position_times` and `check_times`* (not in the tool's output, and
+    that's counting keys by hand, which B-9 rules out).
   - **Ranking** (TD § 4): unparented first; then **how animated the layer already is, in three
     steps: no keyed property at all, then keys but none on Rotation or Scale, then Rotation or
     Scale keys** (amended 2026-10-26; was "no Rotation or Scale keys", two steps); then a pivot
@@ -325,7 +365,8 @@ Other edge cases:
     matte), **Locked Bar** (locked) and **Orbit** (auto-orient) all have Position keys at two or
     more times, so all are `position_moves` by the precedence rule above. Rows 12, 28 and 29 use
     other fixtures for that reason. T246 confirms each by hand. Mentor Practice 2 has no one-key layer; the one-key case is
-    L-2's `sled-one-key-before` (T246).
+    L-2's `sled-one-key-before` (T246). It has no Rotation or Scale keys, so `one_key_off_rest`
+    exists only in synthetics built from it (row 5b; T254), never in a live capture.
 - **FR-005 (places)**: The nine places MUST be TD § 4's grid, each a point on the layer's own
   rectangle (`rect` at the check time): left, middle or right of `left … left + width` and top,
   middle or bottom of `top … top + height`. The mentor repeats the place in plain words with the
@@ -360,17 +401,23 @@ Other edge cases:
   already at its suggested place (FR-007, or it would set no target); and has no Rotation or Scale
   keys **or** has its rest key within half a frame of the focus layer's check time (so the
   playhead the learner already has is on it, and `anchor_demo` won't refuse with `not_at_rest`;
-  TD § 17's "never offer a watch the demo would refuse"). `suggested_place` uses the proposal's
-  hinge rule (tall and thin: `bottom-middle`; else `middle-left`). Null when none qualifies.
-  Whether the record shows a pass stays with the prompt, which reads the record at step 0.
-  **Answer key (by hand, Mentor Practice 2, empty record):** Door as the focus → Needle,
+  TD § 17's "never offer a watch the demo would refuse"). **Never a full-frame layer** (round 4,
+  D-9 item 4): a layer with `full_frame: true` is never picked; with `full_frame: null` (the
+  comp's size unknown) there's no extra filter, since it ranks last by area anyway and the read is
+  never assumed. As built, `watch_offer` draws only from `default` candidates and `full_frame:
+  true` makes a layer `if_named`, so this holds today; T255 pins it with a test.
+  `suggested_place` uses the proposal's hinge rule (tall and thin: `bottom-middle`; else
+  `middle-left`). Null when none qualifies. Whether the record shows a pass stays with the
+  prompt, which reads the record at step 0.
+  **Answer key (by hand, Mentor Practice 2, empty record; unchanged by round 4):** Door as the focus → Needle,
   `bottom-middle` (rank 2; TD § 17); Pop as the focus (check time 4.3 s) → Door, `middle-left`
   (rank 1, unkeyed); Door and Needle as the focus → null (two layers); review → null.
 - **FR-009 (what's said about leave-outs)**: Hidden layers, mattes, parents, precomp frames, text
   baselines, flipped layers and Position keys MUST each get TD § 4 or § 9's sentence, once, in
   plain words. For a one-key layer that's TD § 4's "playhead right on it" line with the key's
   time (the `position_keyed_tip` note carries it); for `position_moves`, TD § 4's leave-out
-  sentence. A matte MUST never be called hidden. A parented focus layer gets one sentence naming
+  sentence when `moves_case` is `two_or_more`, TD § 18's two-frames sentence when it's
+  `one_key_off_rest` (FR-004). A matte MUST never be called hidden. A parented focus layer gets one sentence naming
   the parent, and spec 004 FR-037's "trace this one first" hand-off MUST NOT fire for it (the
   parent can't change this check, TD § 9).
 
@@ -733,7 +780,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 3 | Expression on Rotation or Scale | Keyed: not a candidate. Unkeyed: not read (R2) | n/a | "An expression turns Logo, so I can't tell where it sits at rest"; never "the expression ignores the pivot" | Right for keyed; unkeyed is a known blind spot (Out of scope) | Mentor Practice's Logo; Mentor Overlaps' Gauge Dial |
 | 4 | Keys on Anchor Point | Not a candidate | A key added on the focus fails item 5 | TD § 4 sentence; stopwatch hint (TD § 7) | Right | 2b's Wobble (SR-1); synthetic stopwatch-on case |
 | 5 | Position keyed at two or more times (X and Y counted together) | **Never** (`position_moves`, D-4) | n/a in a lesson. Item 4 still computes on any Position-keyed focus, unit tested | TD § 4's "already moves … set the pivot before you key" sentence, once, then another layer offered | Right: **L-2 (2026-10-26)** Pan Behind changes or adds one Position key, at the playhead, and leaves the others, so the layer slides at them and no taught move passes (TD § 16 D-4) | Leave-out: `practice2b` (Sled and the other 15), Mentor Overlaps (Leaf 2, Wipe, Locked Bar, Orbit), synthetic separated X at 1 s and Y at 2 s. Item 4 only, outside the lesson path: `sled-slid` (worst 3.667), `sled-on-key` (worst 4.167), each checked through `lessonDirect` (FR-012) |
-| 5b | Position keyed at one time | Allowed if named, only when that time is the check time (no Rotation or Scale keys, or the rest key on its frame); otherwise `position_moves` | Item 4 at the key time; a key added is an other change | TD § 4's "playhead right on it" line with the key's time; the `slid_at_key` hint if they drag off it | Right: L-2, one key, playhead off it, AE added a key at the playhead and the layer slid at the old key | `sled-one-key` against `sled-one-key-before` (fails, `slid_at_key`); synthetic one key with the Scale rest key on another frame (`position_moves`) and on the same frame (allowed) |
+| 5b | Position keyed at one time | Allowed if named, only when that time is the check time (no Rotation or Scale keys, or the rest key on its frame); otherwise `position_moves` with `moves_case: "one_key_off_rest"`, `position_key_time` and `rest_time` (round 4, D-8, B-9) | Item 4 at the key time; a key added is an other change | On the check time: TD § 4's "playhead right on it" line with the key's time; the `slid_at_key` hint if they drag off it. Off it: TD § 18's two-frames sentence with both times, once, then another layer offered; never "its other keys" | Right: L-2, one key, playhead off it, AE added a key at the playhead and the layer slid at the old key. The off-rest case is L-2 plus L-4's pattern (TD § 18); no live capture | `sled-one-key` against `sled-one-key-before` (fails, `slid_at_key`). Synthetic, from `sled-one-key-before` (T246's, extended by T254): one key at 3.667 with the Scale rest key at 4.167 (`position_moves`, `one_key_off_rest`, 3.667 and 4.167) and at 3.667 (allowed, no `moves_case`); one key with Rotation's rest key on it and the learner's `rest_time` 4.167 (`focus_problems`: `one_key_off_rest`, 3.667 and 4.167, the learner's time) |
 | 6 | Hold keys on Position | Counted like any key: two or more times, never; one, as row 5b | Item 4 at each key time, not between | n/a | Right; never blames the pivot for a hold jump | Synthetic hold-key layers, one with two hold times (`position_moves`), one with one |
 | 7 | Separated X and Y Position | Footprint from bounds, so either | As focus | n/a | Right; demo writes X and Y (FR-015) | Mentor Overlaps' Leaf 2 (separated); demo twin test |
 | 8 | Effects (a glow, a Transform effect) | Footprint without effects (`rect`) | Effect points don't move; not read | Only if an effect key is a Transform effect: TD § 9 sentence | Right | Synthetic; Mentor Practice's Glow is an adjustment layer (not a candidate) |
@@ -913,6 +960,14 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
       second; Needle's place named in one sentence; A and Shift+P asked before `anchor_demo`;
       the demo's target is Needle's, never Door's. Deterministic: `anchor_demo` called once, on
       Needle's target; rubric: Door is left for the learner.
+24. **A one-key layer named, rest key on another frame** (added round 4, TD § 18 D-8, FR-004
+    `moves_case`, US2 #6; for HO-1). **Synthetic fixture:** Mentor Practice 2 has no such layer,
+    so the eval engineer builds one from `practice2b` with Sled given one Position key and Scale
+    keys whose rest key is on another frame (T254's 3.667 and 4.167 are fine), marked synthetic.
+    The learner names Sled. Deterministic: no `anchor_check` on Sled and no `anchor_demo` in the
+    run; neither "other keys" nor "jump" in the turn. Rubric: TD § 18's two-frames sentence once,
+    naming both times; "set the pivot before you key"; another layer offered. Optional variant: the
+    learner names Sled with their own rest pose off the key (the sentence uses their time).
 
 **Fixtures for `sled-slid` and `sled-on-key`:** not eval fixtures. Since D-4 no lesson can reach
 Sled, so they're unit tests only, run through `lessonDirect` (FR-012).
@@ -1062,6 +1117,27 @@ builder.
    capture and is the cockpit's to schedule; it changes no requirement here (FR-019's
    `away_from_rest` already covers it, with `item2.direction` for the side).
 
+### 2026-10-26, round 4: D-8 and D-9 answered (TD § 18, `47c90bd`)
+
+Both answers approved by the builder on 2026-10-26. No live evidence: Mentor Practice 2 has no
+one-key layer, so the one-key case rests on L-2 and L-4's mechanics and synthetic fixtures only.
+
+1. **D-8 and B-9 (FR-004, FR-009, US2 #6, Edge Cases, row 5b, Eval plan 24; data-model ›
+   Candidate; contracts › `anchor_snapshot`).** A one-key layer whose rest key is more than half a
+   frame away stays `position_moves` (bucket, precedence and `neededTimes` unchanged). The mentor
+   says TD § 18's two-frames sentence for it instead of the Sled line. **Chosen:** `moves_case`
+   (`two_or_more` or `one_key_off_rest`) on each `position_moves` entry, with
+   `position_key_time` and `rest_time` for the second, on candidate entries and on
+   `focus_problems` entries alike, because a learner's own rest pose only reaches the tool
+   through the focus and comes back in `focus_problems` (as built in T245). The rejected shapes
+   are in FR-004.
+2. **D-9 (FR-008).** `watch_offer` never picks a `full_frame: true` layer; `null` gets no extra
+   filter. The built `watchOffer()` draws only from `default` candidates through `proposalFrom()`,
+   and `candidates()` moves a full-frame layer to `if_named` with reason `full_frame`, so the code
+   already does this; T255 is the test that pins it, with code only if the test fails. FR-008's
+   answer key on Mentor Practice 2 is unchanged.
+3. **Closed:** Open questions › D-8 and D-9. D-5 to D-7 stay open, with the recommendations in use.
+
 ## Open questions
 
 ### For the human (H): all answered 2026-10-23, as recommended
@@ -1077,7 +1153,7 @@ builder.
    whether it feels thin.
 5. **H-5, the mentor suggests a hinge** when the learner has none in mind. Approved.
 
-### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16; D-5 to D-9 open (D-5 to D-7 round 2, D-8 and D-9 round 3, 2026-10-26)
+### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16, D-8 and D-9 in TD § 18; D-5 to D-7 open (round 2, 2026-10-26)
 
 1. **D-1, a Rotation-only layer with no key at 0 or a whole turn**: the key closest to 0 or a
    whole turn, one sentence, "is that how it looks at rest?" (FR-011).
@@ -1117,20 +1193,21 @@ recommendation until answered):**
    general sentence naming at most two of them ("Sled and Card already move, so they're not in
    this lesson; set a pivot before you key"), designer's wording.
 
-**New, round 3 (wording only; none blocks anything):**
+**Round 3, closed 2026-10-26 (TD § 18, `47c90bd`; carried in as round 4):**
 
-8. **D-8, the "already moves" sentence on a one-key layer.** TD § 4's line, "Sled already moves,
-   so moving its pivot now would shift where it sits at its other keys", is also what the mentor
-   says for a layer with **one** Position key whose rest key is on another frame (`position_moves`
-   too, FR-004). That layer has no "other keys" on Position, and it may not move at all on screen
-   (one key holds still), so the sentence reads oddly there. **Recommended:** a second sentence
-   for that case, about the two frames (for a one-key Sled turning to rest at another key: "Sled's Position is keyed at 1 s but
-   it's at rest at 3 s, so I can't set its pivot without it shifting at one of them"), designer's wording;
-   `SKILL.md` keeps the current line until then.
-9. **D-9, which layer the watch is on (FR-008, a reading, not a change).** TD § 17 says "would
-   qualify as the demo target". The spec reads that as: also not already at its suggested place,
-   and a Rotation- or Scale-keyed layer only when its rest key is on the focus's check time (else
-   the demo refuses `not_at_rest`). **Recommended:** confirm, or say otherwise.
+8. **D-8, the "already moves" sentence on a one-key layer: answered.** A second sentence, about
+   the two frames, for a layer with one Position key whose rest key (the tool's, or the
+   learner's `rest_time`) is more than half a frame away; the Sled line stays for two or more key
+   times. Both are said once when the learner names the layer; in the opening a one-key layer
+   falls under D-7's general sentence. The designer rewrote this spec's draft ("I can't set its
+   pivot" made it the mentor's limit). In this spec: FR-004 (`moves_case`), FR-009, US2 #6, the
+   Edge Cases list, row 5b, Eval plan 24; tasks T254 and T256. The sentence is TD § 18's, not
+   copied here.
+9. **D-9, which layer the watch is on: confirmed, with one clarification.** The spec's reading
+   stands (a default candidate other than the focus, not already at its place, a Rotation- or
+   Scale-keyed layer only with its rest key on the focus's check time), plus: never a full-frame
+   layer (`full_frame: true`); `null` gets no extra filter. In this spec: FR-008; task T255. The
+   answer key on Mentor Practice 2 is unchanged.
 
 ### For the eval engineer (E)
 
@@ -1148,6 +1225,11 @@ recommendation until answered):**
   comes from T236's problem 2. The cases read `watch_offer` from the tool, so wait for T249 and
   T250 before writing 11 and 23 against the build, and before a baseline. FR-013a (T251 to T253)
   doesn't touch the evals: fixture mode doesn't time AE or take sampled reads.
+- **2026-10-26, round 4:** case 24 (a one-key layer named, its rest key on another frame: TD
+  § 18's two-frames sentence) is new, on a synthetic fixture since no live capture has such a
+  layer. It reads `moves_case`, `position_key_time` and `rest_time` from the tool, so wait for
+  T254 and T256 before writing it against the build, and before a baseline. Case 13's Sled
+  (three key times) is `two_or_more` and doesn't change. D-9 changes no case.
 
 ## Dependencies
 
