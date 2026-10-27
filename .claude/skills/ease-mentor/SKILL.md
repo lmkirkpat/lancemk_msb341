@@ -38,7 +38,7 @@ most; they ease the rest with their own hands.
 ## The lesson
 
 0. **Remember first.** Call `read_learner_record` before anything else.
-   Before anything else (this comes before every branch below): if `read_learner_record` (or a
+   This check comes before every branch below: if `read_learner_record` (or a
    later snapshot) returns `server_current` false, say once, in plain words, that your tools were
    updated since this session started and you need a restart (a new Claude Code session) before the
    lesson, then stop; true or null says nothing.

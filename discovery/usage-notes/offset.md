@@ -255,3 +255,8 @@ Overlaps found in live use that future features must test (see `/overlap-audit`)
   from speed graph's lesson). Staggering its first move to 1.5 to 2.5 s put it alongside the next
   move's start, and the check still graded it with the right key count. Worth a fixture where a
   shifted first move overlaps or passes the second move's keys.
+- **A measured gap of 0 vs. the gap say-back (2026-10-26, from the eval engineer's live-capture
+  pass).** Step 7's re-read (spec 004 FR-040) sends the first measured gap as `gap_frames`, but
+  pairs still together measure 0 and `gap_frames` must be at least 1 (offset eval cases 11, 14,
+  15 and 23 on the live captures). Found by checking the captures against the rule, not yet seen
+  in a mentor run. Sent to spec 004's Phase 9 second pass: re-read only when the check passed.

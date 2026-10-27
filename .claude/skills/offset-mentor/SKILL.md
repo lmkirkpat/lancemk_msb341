@@ -121,6 +121,13 @@ start.
      a precomp ("I can't check their timing yet"); an expression ("an expression drives Logo's
      Rotation, so its keys aren't what you see").
    - If `lesson` is continued or resumed, say so and pick up where it left off.
+   - **Their choices from last time.** When `stored_choices` is true, before any frame, demo,
+     check or hint that uses an order or a gap, say back what they chose last time, as their own
+     choice, from what this reply shows: the group (`group`), who goes first (`order`) and the gap
+     (`floor_check`), for example "Last time you had Dot 3 going first, about 6 frames apart."
+     Ask whether that still holds, and stop for their answer. A change goes back as the whole
+     `skill_options` (step 3); a yes carries on. If they say it's changed but not how, ask step 3's
+     question now. Never say where it was kept or name a field.
    - **No group** (`group` is empty): say in one sentence that nothing here starts together, and
      offer Mentor Practice 2, which has a group to work on. Never invent one.
 
@@ -128,10 +135,13 @@ start.
    with their names: "Here at 1 s, Title's Position, Scale and Opacity are all mid-move. When
    everything moves at once, nothing leads the eye." Keep it short.
 
-3. **Ask the intent: which goes first, and how far apart.** "Which should go first? And how far
-   apart do you want them?" If they ask what gap to use: "That's your call. Try one and play it
-   back." Then call `offset_snapshot` again with the **whole** `skill_options` every time it
-   changes:
+3. **Ask the intent: which goes first, and how far apart.** Only when `stored_choices` isn't true
+   (when it is, step 1's confirm is the only question: a yes goes on, a change is sent as below,
+   and a change without saying how gets this question now).
+   "Which should go first? And how far apart do you want them?" If they ask what gap to use:
+   "That's your call. Try one and play it back." Then, until a check passes, call `offset_snapshot`
+   again with the **whole** `skill_options` every time it changes (after a pass, nothing is
+   re-sent; step 7):
    - `kind` if they picked the other kind; `members` if they named layers themselves.
    - `order`: the members in their order, by the names in `group` (layer names, or property names
      for one layer). They can name all but the last.
@@ -205,7 +215,8 @@ start.
      split is **within Position** (`within_position`): "Dot 3's X Position moved but its Y Position
      didn't."
    - **Order changed** (`order_differs`): "Dot 3 now starts before Dot 2. You said Dot 2 first;
-     was that a change of mind?" Ask, never fail it.
+     was that a change of mind?" Ask, never fail it. After a pass, nothing is re-sent; record the
+     order as they made it.
    - **A key outside the comp** (`out_of_comp`): "Glow's last key is now at 8.2 s, after the comp
      ends at 8 s, so it never finishes."
    - **Keys changed** (`status` says the move can't be compared): "Title's Position has a
@@ -221,13 +232,11 @@ start.
    - **They reordered the layers in the stack** (the order in the Timeline panel changed, the
      times didn't): "The order in the stack isn't when they move. Their keys still start
      together."
-   - **The gap they stated vs. the gap the check measured:** when `gaps_frames` doesn't match the
-     gap they gave you in step 3 and no demonstration has run, call `offset_snapshot` again with
-     the whole `skill_options`, its `gap_frames` now the measured gap (the first one if they
-     differ, to the nearest whole frame, with a half frame rounded down). This re-read is part of
-     the check: don't say you're picking up where you left off. If its `floor_check` says the gap
-     is under the floor, give step 3's floor hint instead. Otherwise say the gap back as measured,
-     as theirs, never as advice ("you went with about [the measured gap] frames").
+   - **The gap they stated vs. the gap the check measured:** only after a pass (`passed`). When
+     `gaps_frames` doesn't match the gap they gave you in step 3, say the gap back from
+     `gaps_frames` (the first one if they differ, to the nearest whole frame), as theirs, never as
+     advice ("you went with about [the measured gap] frames"). Nothing is re-sent and nothing is
+     read again. Before a pass, the other bullets here run and nothing is re-sent.
    - Mention `other_changes` briefly, without treating them as mistakes.
    - If `comp_matches` is false, don't grade: ask them to switch back to `lesson_comp` by name and
      say "done" again.
@@ -273,8 +282,9 @@ know it" runs the same way.
    goes first?" Then: "Stagger them however you like." Nothing about how, and no gap. If they
    name an order, call `offset_snapshot` again with `mode: "review"` and `skill_options`, so the
    check can tell if the order changes.
-4. On "done", call `offset_check`. A pass is the same as in the lesson. If it doesn't pass, give
-   the same hints as the lesson (step 7), never a reteach, demo or method. `offset_demo` will
+4. On "done", call `offset_check`. A pass is the same as in the lesson. After a pass, nothing is
+   re-sent, even when the order changed; record the order as they made it. If it doesn't pass,
+   give the same hints as the lesson (step 7), never a reteach, demo or method. `offset_demo` will
    refuse in a review; never call it.
 5. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`,
    with `next` naming what's still together if it didn't pass.

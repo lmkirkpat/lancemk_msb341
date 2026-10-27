@@ -94,7 +94,7 @@ specs/004-ae-curriculum/
 ├── spec.md              # Approved 2026-10-20
 ├── curriculum.md        # Curriculum designer's teaching design (read only here)
 ├── plan.md              # This file
-├── research.md          # R1–R23: the shared interfaces and the plan's calls (R16–R23 wave B)
+├── research.md          # R1–R26: the shared interfaces and the plan's calls (R16–R23 wave B, R24–R26 loose ends)
 ├── data-model.md        # Path, skill state, lesson entry, session lesson, analyzer result, host, timing
 ├── quickstart.md        # Validating wave A's shared branch
 ├── contracts/
@@ -240,8 +240,12 @@ Nothing under `bridge/` changes.
 Waves B and C don't depend on each other.
 
 **Loose ends on skills 2, 1 and 3 (2026-10-26).** Seven fixes from their first live lessons (spec
-FR-039 to FR-045, SC-014; research R24, R25), tasked in tasks-wave-b.md › Phase 9 (T167 to T185):
-one more shared-owner pass, same rules as B1, merged with `--shared-owner` after the easing gate
+FR-039 to FR-045, SC-014; research R24, R25), tasked in tasks-wave-b.md › Phase 9 (T167 to T185;
+merged 2026-10-26 as `d4a9bd6` without T173 and T174, and before T181 at the builder's call). A second
+pass the same day (FR-043 rewritten, FR-046, FR-040, FR-044 and FR-045 amended; R24 and R25 amended, R26) is
+Phase 9 › Second pass (T186 to T199), one more shared-owner branch under the same rules, which also
+changes `mentor/jsx/snapshot.jsx` (two reads) and adds four test files (table there). The first
+pass was one shared-owner pass, same rules as B1, merged with `--shared-owner` after the easing gate
 (T183). It changes `common.mjs`, `session.mjs`, `server.mjs`, three skills' tool files and five
 `SKILL.md` files (table in Phase 9), adds `mentor/lib/server-current.mjs` and four test files, and
 leaves skills 5 and 6's files to Later per-skill branches.

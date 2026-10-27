@@ -273,6 +273,7 @@ function sampleAt(L, t, hasRect, textOrShape) {
         position: positionAt(L, t),
         scale: valueAt(L, "ADBE Scale", t),
         rotation: valueAt(L, "ADBE Rotate Z", t),
+        opacity: valueAt(L, "ADBE Opacity", t),
         rect: hasRect ? rectAt(L, t, false) : null,
         rect_extents: textOrShape ? rectAt(L, t, true) : null
     };
@@ -320,6 +321,7 @@ for (var ii = 1; ii <= comp.numLayers; ii++) {
         is_matte: rd(function () { return !!L.isTrackMatte; }),
         motion_blur: rd(function () { return !!L.motionBlur; }),
         effect_count: rd(function () { return L.property("ADBE Effect Parade").numProperties; }),
+        mask_count: rd(function () { return L.property("ADBE Mask Parade").numProperties; }),
         transform: {
             anchor: nowSample.anchor,
             position: nowSample.position,

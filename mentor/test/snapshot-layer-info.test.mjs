@@ -177,7 +177,7 @@ function overlapsComp(opts) {
 const SPEC_002_FIELDS = ["enabled", "index", "is_null", "kind", "name", "properties"];
 const INFO_FIELDS = [
   "adjustment", "auto_orient", "collapse", "effect_count", "enabled", "has_video", "in_point", "index",
-  "is_matte", "is_null", "kind", "locked", "matte", "motion_blur", "name", "out_point", "parent",
+  "is_matte", "is_null", "kind", "locked", "mask_count", "matte", "motion_blur", "name", "out_point", "parent",
   "samples", "samples_truncated", "shy", "solo", "start_time", "stretch", "three_d", "time_remap",
   "transform", "guide",
 ].sort();
@@ -280,7 +280,7 @@ test("samples: comp.time and own key times, each with rect; rect_extents on text
   const info = Object.fromEntries(runSnapshot(overlapsComp()).layer_info.map((l) => [l.name, l]));
   assert.deepEqual(info.Title.samples.map((s) => s.time), [0, 0.5, 1]);
   assert.deepEqual(info.Title.samples[2], {
-    time: 1, anchor: [0, 0, 0], position: [300, 200, 0], scale: [100, 100, 100], rotation: 0,
+    time: 1, anchor: [0, 0, 0], position: [300, 200, 0], scale: [100, 100, 100], rotation: 0, opacity: 100,
     rect: { left: -50, top: -50, width: 100, height: 100 }, rect_extents: { left: -52, top: -50, width: 104, height: 100 },
   });
   assert.equal(info.Box.samples[0].rect_extents, null);

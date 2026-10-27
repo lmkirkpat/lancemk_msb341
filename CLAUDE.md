@@ -120,8 +120,8 @@ a brand new session act like a colleague who already knows what you are working 
     their own time by 6 to 10x; times in the notes come from commits.
   - **Skills built:** `/speed-graph-mentor`, `/key-types-mentor`, `/offset-mentor`,
     `/next-mentor`, `/null-parenting-mentor` (skill 6, merged `31fe72d`) and `/anchor-mentor`
-    (skill 5, merged 2026-10-26 `f6effae`) are on `main`; all but null have passed a first live
-    lesson (below). Eval sets (dry-run and smoke runs only, no baselines) are on `evals-wave-a`
+    (skill 5, merged 2026-10-26 `f6effae`) are on `main`; all six have passed a first live
+    lesson (below; null in `discovery/usage-notes/null-parenting.md`). Eval sets (dry-run and smoke runs only, no baselines) are on `evals-wave-a`
     (008 to 010), `evals-skill-5` (live captures, 42 case files for spec cases 1 to 37) and
     `evals-skill-6`, not merged. Smoke findings to fix before baselining: a self-note leaks before
     the first snapshot in reviews (key types, offset, pivot; prompt wording didn't fix it for the
@@ -200,9 +200,11 @@ a brand new session act like a colleague who already knows what you are working 
        the floor. They can ride along with the offset review (T040) or a short extra lesson.
      - **A day or more after a first pass:** speed graph review T035, key types review T038 (on
        Cut), offset review T040 (on the Chips).
-     - **Then:** skill 6 on `skill-6-null` (T336 live checks, T337 captures, T338 and T339 at the
-       desk, T340 and T341 first lesson with a jump on purpose, T343 review), and pivot review
-       T240 (stretch).
+     - **Skill 6 (move a group with a null, spec 012): merged 2026-10-26 (`31fe72d`).** Hand-back
+       in `discovery/usage-notes/null-parenting-build.md`. T340 (3 min 51 s, one demo) and T341
+       (4 min 28 s, no demo, Tile, Caption and Stamp proposed and taken) passed: SC-001 met,
+       SC-002 8 of 8 plus 2 of 2 deliberate jumps, 10 needed. **Then:** review T343 (SC-009,
+       stretch; it carries the last 2 SC-002 checks), and pivot review T240 (stretch).
      - **After the live lessons:** skills 5 and 6 are merged; fix the smoke findings above, merge the
        eval sets and set baselines (about $13 to $17 each). Still open from the live sitting: speed graph's "already shaped" list
      includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
@@ -212,8 +214,10 @@ a brand new session act like a colleague who already knows what you are working 
      (`discovery/usage-notes/agent-carry-over.md`: on Operation Food Critic, a new project, the
      hooks and workflow copied over, ten personas trimmed to seven, and a two-researcher
      parallel run with no collisions; the portfolio site came first, so it's supporting
-     evidence only). Four of the five skills passed a first live lesson (speed graph, key types,
-     offset in both kinds, and the pivot on Door and Pop); null hasn't run live (the pivot merged 2026-10-26 after HO-2 and HO-3), so mark null partial in `/sprint-review` and carry them, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
+     evidence only). All five skills are merged and passed a first live lesson (speed graph, key
+     types, offset in both kinds, the pivot on Door and Pop, and null in T340 and T341). What's
+     partial is "with eval cases": every set is built but none is merged or baselined, so mark
+     that partial in `/sprint-review` and carry the baselines, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
      overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
      cockpit cuts their worktrees from local `main` (the agent tool's worktree option starts
      from `origin/main`). The git guard blocks any command containing `merge-base`, even a read.

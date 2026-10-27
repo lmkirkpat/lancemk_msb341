@@ -43,6 +43,16 @@ function cleanOptions(o) {
   return { eased_layers: strings(o && o.eased_layers), land_hard: strings(o && o.land_hard) };
 }
 
+// FR-047: the land-hard pairs in plain words, in pairs[].label's form, from the lesson's baseline
+// (they leave the targets, so pairs never names them). Same order as landing_hard; null for an id
+// that names no pair there.
+function landingHardLabels(lesson) {
+  const ids = cleanOptions(lesson.skill_options).land_hard;
+  if (!ids.length) return [];
+  const byId = new Map(pairsFor(lesson.baseline, ids).map((p) => [p.id, p.label]));
+  return ids.map((id) => byId.get(id) ?? null);
+}
+
 async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options } = {}) {
   const snapshot = await takeSnapshot();
   const opts = {
@@ -53,7 +63,7 @@ async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options
     mode,
   };
   if (skill_options !== undefined) opts.skill_options = cleanOptions(skill_options);
-  const { lesson, session: l, analysis } = session.start(snapshot, opts);
+  const { lesson, session: l, analysis, stored_choices } = session.start(snapshot, opts);
   const noDemoReason = analysis.demo_target ? null : l.demo ? "demo_used" : analysis.no_demo_reason;
   return json({
     host: parseHost(snapshot),
@@ -67,11 +77,13 @@ async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options
     no_demo_reason: noDemoReason,
     pairs: pairsFor(snapshot, l.targets, l.baseline),
     landing_hard: cleanOptions(l.skill_options).land_hard,
+    landing_hard_labels: landingHardLabels(l), // FR-047
     left_out: analysis.left_out,
     ease_first_count: analysis.ease_first_count,
     candidates_count: analysis.candidates_count,
     other_candidates: analysis.other_candidates,
     server_current: await serverCurrent(), // FR-044
+    stored_choices, // FR-043, FR-046
   });
 }
 
