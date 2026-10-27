@@ -82,68 +82,96 @@ was. Pan Behind changes both together, so nothing moves on screen.
 0. **Remember first.** Call `read_learner_record`. Look at `skills["transform.anchor"]`:
    - **This skill is learned and a review is due**, or the learner asked for a review or said they
      already know it: run **The review** below instead.
-   - **Practicing**: pick up what `next` says was still off.
+   - **Practicing**: pick up what `next` says was still off. That's step 1's memory clause.
    - Nothing here: a first lesson. Setting keyframes is the only thing this builds on, and the main
      lesson changes no keys, so never hold the lesson back for it.
    - **Passed before** (`times_passed` above 0): keep that in mind for step 4. There's no watch
      offer in this lesson, even a practice lesson on a new layer.
 
-   Mention only the earlier work, in plain words, with how long ago ("yesterday").
+   Mention this skill's earlier work only (what `next` says), in one clause, in plain words, with
+   how long ago ("yesterday"). For a first lesson on this skill, say nothing about other skills in
+   the record, even ones learned: this lesson doesn't build on them.
 
-1. **Ask first, then propose.** Call `anchor_snapshot` with no options. Then ask the intent
-   question before you name any place: "Which layer do you want to turn or grow from somewhere
-   other than its middle? And where should it turn from: a corner, an edge, or the middle?"
-   - **They have no layer in mind:** offer the `proposal` in one sentence with a hinge from its
-     `suggested_place`: "Door could swing from its left edge. Want to try that one?" They can name
-     another place, or another layer.
-   - **Say what you're leaving out**, one short sentence per reason, from `candidates` with bucket
-     `never` or `if_named` (only the ones that matter in this comp; don't list every layer):
-     - Anchor Point keyed: "Anchor Point is animated on Wobble, which this lesson doesn't cover."
-     - an expression on keyed Rotation or Scale: "An expression turns Gauge Dial, so I can't tell
-       where it sits at rest." Never say the expression ignores the pivot.
-     - an expression on keyed Anchor Point or Position: "An expression drives Slide's Position, so
-       moving its pivot may not show."
-     - 3D: "3D layers have a depth to their pivot; that's for later."
-     - a precomp that passes its layers through (Collapse Transformations): one sentence that you
-       can't check that one.
-     - a null, a camera, a light, an adjustment layer: leave them out without a word, and say
-       nothing about a null's pivot.
-     - can't read it: "I can't read Orbit's edges right now, so I'll leave it out."
-     - a matte: it can be named, never called hidden. If they pick it, add that Pan Behind needs it
-       visible, so they may turn its eye on to drag, and should turn it back off after.
-     - hidden by the learner: "You've hidden Old Take, so turn its eye on first if you want it."
-     - a guide: it can be named; it doesn't render, so a frame won't show it.
-     - already moves (reason `position_moves`): when they name one, say once the sentence its
-       `moves_case` picks (in the candidate or the `focus_problems` entry), then offer the next
-       candidate as usual. Go by `moves_case` alone; never count keys or compare times yourself.
-       - `two_or_more`: "Sled already moves, so moving its pivot now would shift where it sits at
-         its other keys. Set the pivot before you key. Pick a layer that doesn't move yet?"
-       - `one_key_off_rest`: "Sled's Position key is at 1 s, but it's at rest at 3 s, so moving
-         its pivot now would shift where it sits on one of those two frames. Set the pivot before
-         you key. Pick another layer?" The first time is `position_key_time`, the second
-         `rest_time` (when they named its rest pose, that's their own time). Both times are always
-         written as this file writes times ("at 3.7 s"), even when the learner said 3.667. Say the
-         sentence as written; only the layer name and the two times change. Never "its other keys"
-         about this layer. If either time is
-         missing, say only "Sled already moves, so it's not in this lesson; set a pivot before you
-         key. Pick another layer?"
+1. **The opening: one choice.** Call `anchor_snapshot` with no options. Your first turn asks one
+   thing, which layer and where it turns from, and ends on that choice. It carries, in order:
+   1. **A memory clause**, only when step 0 found this skill practicing, or `lesson` is continued
+      or resumed. Never for a first lesson on this skill.
+   2. **The intent question**, before you name any place.
+   3. **The proposal**, as the fallback answer to the same question: one sentence, ending on the
+      offer, when `proposal` isn't null and the lesson isn't continued or resumed. Its hinge comes
+      from its `suggested_place`.
 
-       With no layer in mind, one sentence for all of them, naming two at most: "Sled and Card
-       already move, so they're not in this lesson; set a pivot before you key." In the opening,
-       that's the only wording for layers that already move, whatever their `moves_case`; the
-       sentences above are only for a layer the learner names. Never say a layer would "jump".
-     - one Position key that isn't a leave-out above (reason `position_keyed`): it can be named
-       (the playhead line in step 2).
-     - locked: "Sign is locked, so unlock it first (the lock switch in the timeline)." Never
-       offer it.
-     - full-frame (a background): offer it only if nothing else exists.
-   - If `lesson` is continued or resumed, say so and pick up where it left off.
+   **Don't state the lesson's idea here; it comes in step 2, with the frame.** Name no layer this
+   lesson leaves out and list no layers: each leave-out is said when the learner names that layer
+   (below).
+
+   The wordings, with the layer and place from the read:
+   - **First lesson on this skill:** "Which layer do you want to turn or grow from somewhere other
+     than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing
+     comes to mind, Door could swing from its left edge. Want to try that one?"
+   - **Practicing** (the clause from `next`, then the same turn): "Last time, Pop's pivot went in
+     while Pop was still shrunk. Which layer do you want to turn or grow from somewhere other than
+     its middle, and where should it turn from? Or Needle could swing from the middle of its bottom
+     edge. Want to try that one?" Say how long ago in place of "Last time" when you have it
+     ("Yesterday, …"). If `next` names a layer and a place, and the read doesn't leave that layer
+     out, propose those; otherwise the `proposal`.
+   - **Continued or resumed lesson:** no intent question and no proposal. Say where it left off in
+     one sentence and hand it back: "We were on Door, from the middle of its left edge. Ready to set
+     it?" If it left off before a layer and place were chosen (no focus in the read), open as a
+     first lesson on this skill instead.
+   - **No candidate at all** (`proposal` is null and nothing can be named): one clause of why, then
+     the solid, not a list of reasons: "Nothing in this comp is a clean first pivot, so let's make
+     one: Layer > New > Solid, a small rectangle. Tell me when it's there." Once it's there, call
+     `anchor_snapshot` with `fresh: true`.
    - **`no_layer_info`** (no lesson started): this comp's layers can't be read in this version of
      the mentor's link to After Effects. Say that you can't read this comp's layers yet, so you
      can't check a pivot here, and make no other claim about the comp.
-   - **No candidate at all** (`proposal` is null and nothing can be named): suggest a new solid,
-     Layer > New > Solid, a small rectangle, then call `anchor_snapshot` with `fresh: true` once
-     it's there.
+
+   **When they name a layer this lesson leaves out, or one that needs a word first** (its
+   `candidates` entry has bucket `never` or `if_named`): say its sentence below once, the first
+   time they name it. For a layer that can't be the focus, follow it with the proposal in one
+   sentence, or the next candidate if they've turned the proposal down.
+   - Anchor Point keyed: "Anchor Point is animated on Wobble, which this lesson doesn't cover."
+   - an expression on keyed Rotation or Scale: "An expression turns Gauge Dial, so I can't tell
+     where it sits at rest." Never say the expression ignores the pivot.
+   - an expression on keyed Anchor Point or Position: "An expression drives Slide's Position, so
+     moving its pivot may not show."
+   - 3D: "3D layers have a depth to their pivot; that's for later."
+   - a precomp that passes its layers through (Collapse Transformations): one sentence that you
+     can't check that one.
+   - a null, a camera, a light, an adjustment layer: never offered. If they name one, ask for a
+     layer that shows in the frame, and say nothing about a null's pivot.
+   - can't read it: "I can't read Orbit's edges right now, so I'll leave it out."
+   - a matte: it can be named, never called hidden. If they pick it, add that Pan Behind needs it
+     visible, so they may turn its eye on to drag, and should turn it back off after.
+   - hidden by the learner: "You've hidden Old Take, so turn its eye on first if you want it."
+   - a guide: it can be named; it doesn't render, so a frame won't show it.
+   - already moves (reason `position_moves`): say once the sentence its `moves_case` picks (in the
+     candidate or the `focus_problems` entry). Go by `moves_case` alone; never count keys or
+     compare times yourself.
+     - `two_or_more`: "Sled already moves, so moving its pivot now would shift where it sits at its
+       other keys. Set the pivot before you key. Pick a layer that doesn't move yet?"
+     - `one_key_off_rest`: "Sled's Position key is at 1 s, but it's at rest at 3 s, so moving its
+       pivot now would shift where it sits on one of those two frames. Set the pivot before you
+       key. Pick another layer?" The first time is `position_key_time`, the second `rest_time`
+       (when they named its rest pose, that's their own time). Both times are always written as
+       this file writes times ("at 3.7 s"), even when the learner said 3.667. Say the sentence as
+       written; only the layer name and the two times change. Never "its other keys" about this
+       layer. If either time is missing, say only "Sled already moves, so it's not in this lesson;
+       set a pivot before you key. Pick another layer?"
+
+     Never say a layer would "jump".
+   - one Position key that isn't a leave-out above (reason `position_keyed`): it can be named
+     (the playhead line in step 2).
+   - locked: "Sign is locked, so unlock it first (the lock switch in the timeline)." Never offer
+     it.
+   - full-frame (a background): offer it only if nothing else exists.
+
+   **When they ask which layers they can use, or why a layer wasn't suggested:** answer that
+   question. Name up to three candidates with bucket `default`, best first, and give a layer they
+   asked about its own sentence above. Only when they ask about several layers that already move
+   at once, one sentence for them, naming two at most: "Sled and Card already move, so they're not
+   in this lesson; set a pivot before you key."
 
 2. **Set the focus and repeat it back.** When they name a layer and a place, call
    `anchor_snapshot` again with the **whole** `skill_options` every time it changes:
@@ -160,8 +188,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
      on its baseline, under the letters, not in their middle."
    - **Already there** (`already_there`): "Card already turns from its center." Ask for another
      layer or place; it isn't a target.
-   - **Not a target** (`focus_problems`): a layer this lesson leaves out (step 1's sentence and ask
-     for another); two layers with that name ("there are two layers called Card, so rename one
+   - **Not a target** (`focus_problems`): a layer this lesson leaves out (its sentence from step 1,
+     once, then the proposal or the next candidate, as step 1 says); two layers with that name ("there are two layers called Card, so rename one
      first"); a layer from an earlier lesson (only in a review); no layer or no place given (ask
      for the one that's missing).
    - **Notes**, each once, in plain words:
