@@ -279,7 +279,7 @@ sitting.
 
 ## Phase 9: Polish and hand-back
 
-- [ ] T238 Re-run T229's checks on the final branch (live fixtures, no stand-ins)
+- [x] T238 Re-run T229's checks on the final branch (live fixtures, no stand-ins) **Done 2026-10-26 (cockpit):** mentor 1148 pass, 0 fail, 3 todo; hooks 39/39; vs `main`, 73 files added and only `tasks.md` modified; the 2 files outside skill-builder's are the cockpit's sitting log and usage note.
 - [ ] T239 Write the hand-back: branch and commit; test counts; L-1 to L-5 results; SC-001 and SC-002 from T236 and T237; any snippet fix; anything for the spec; the Requests below. The cockpit writes `discovery/usage-notes/anchor-build.md` from it
 - [ ] T240 🖐 [US3] Later, a day or more after the first pass: the live review on the layer the review names, Needle after quickstart › 5's two lessons (amended 2026-10-26, was "Tab or Peg"; quickstart › 6, SC-009, stretch), logged by the builder; the cockpit adds it to the usage note
 
