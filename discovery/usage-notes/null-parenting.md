@@ -189,6 +189,12 @@ result) and `record_lesson_never` (a field-to-regex map that the last record mus
 - **Step 11 changed the same day** (finding 4's fix, below), so case 30 now tests the fix rather
   than the bug. The step 11 example also had "from 6 to 7 s", key times the check never returns,
   the same risk as case 29; that's gone too.
+- **30 re-run on a live capture** (`slide-top-left.json`, planted the same day, `128e086`; cases on
+  `evals-skill-6` `402afb9`, $2.54): **2 of 3 pass** on the fixed step 11, every deterministic
+  check passing in all three, including `record_lesson_never`. The one failure was the judge on
+  R-NAMES-REAL: it said "Parent & Link" and "Columns > Parent & Link" appear in no tool result. That's a
+  false flag, because `SKILL.md` › Where things are gives both, so it's noise for case 30. Eval set
+  total for both cases: $4.81.
 
 ## To fix later
 
@@ -200,11 +206,13 @@ result) and `record_lesson_never` (a field-to-regex map that the last record mus
   `null-parenting-check.test.mjs`, a null with Rotation keys at 1 s and 2 s gives
   `p4.from === 1` and `p4.to === 2`; with Position at 0.5 to 1 s and Scale at 1 to 3 s, it gives
   0.5 and 3.
-- **Case 30 needs a live capture to prove itself.** On a duplicate of Mentor Practice 2: Tile,
-  Caption and Stamp parented to a null at their top-left, with a Position-only slide (say
-  `slide-top-left.json`, via `node mentor/dev/capture.mjs`). Then switch case 30's learner back to
-  "the top-left corner" and run `--only 30 --repeat 3` (about $2). Finding 4's step 11 fix is
-  already in (fixed, below), so this checks the fix; it can't show the old failure any more.
+- **The judge flags menu and column names from `SKILL.md` as invented.** Case 30 run 2 failed
+  R-NAMES-REAL on "Parent & Link", which `SKILL.md` › Where things are gives. If it shows up in
+  another case (07 and 28 name the Parent column too), say in
+  `product/evals/null-parenting/rubric.md` under R-NAMES-REAL that menu paths and column names from
+  the skill's Where things are section count as real. The eval engineer owns the change; it needs no
+  new test beyond re-running the case that flagged.
+- Done: **case 30 on a live capture** (`slide-top-left.json`), 2 of 3 on the fixed step 11.
   Fixed: **the record named a turn that didn't happen** (finding 4). `SKILL.md` step 11's
   `attempted` now names only the move the last check found (Position slides, Rotation turns, Scale
   scales), names a place to turn or scale from only for a Rotation or Scale move, and has no key
