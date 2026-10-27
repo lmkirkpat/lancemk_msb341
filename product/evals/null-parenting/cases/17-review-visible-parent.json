@@ -16,8 +16,12 @@
       "say": "/null-parenting-mentor"
     },
     {
+      "project": "practice2b.json",
+      "say": "Not those, I'd rather use Row A, Row B and Row C."
+    },
+    {
       "project": "review-rows-visible.json",
-      "say": "Not those, I'd rather use Row A, Row B and Row C. They'll only slide. Done."
+      "say": "They'll only slide. Done."
     },
     {
       "project": "review-rows-visible.json",
@@ -48,7 +52,7 @@
         "id": "names_rows",
         "must": "(?=[\\s\\S]*Row A)(?=[\\s\\S]*Row B)",
         "turns": [
-          2
+          3
         ]
       }
     ]

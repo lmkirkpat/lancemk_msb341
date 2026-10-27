@@ -386,3 +386,37 @@ turns from, when the check's move was Position only. They may say the null slid.
 - **Pass:** "Parented Tile, Caption and Stamp to Null 1 and slid it on its Position."
 - **Fail:** "slid it on its Position, turning from the group's top-left corner", or any turn, scale
   or pivot place the check did not see.
+
+## R-CORNER-ONCE: the null's corner is said once, before the learner drags
+
+After the learner names a place the group should turn or scale from, the mentor says once, before
+the learner drags, where the null's pivot is: the top-left corner of its square. It doesn't say
+that sentence again later in the lesson unless a hint about the pivot needs it, and it never gives
+the square's size or Opacity.
+
+- **Pass:** turn 3: "The null's pivot is the top-left corner of its square, so put that corner on
+  the spot." Turn 4 (after the learner placed it): moves on to parenting, no repeat.
+- **Fail:** no corner sentence at turn 3 after a place was named; the same sentence repeated at
+  turn 4 with nothing wrong with the pivot; or the square's size or Opacity.
+
+## R-NO-NULL-MOVE: the explanation never describes how a null moves
+
+At the explain step the snapshot doesn't say whether a null has keys or when. When the learner
+asks how a null already in the comp moves, the mentor doesn't describe that move (slides, spins,
+scales, where, when). It may name the null as an example of a layer that already follows one, and
+say it can't see that from here.
+
+- **Pass:** "Hatch already follows Hatch Rig. I can't tell from here how Hatch Rig moves, if it does;
+  your group is Tile, Caption and Stamp." Or it just doesn't answer that part.
+- **Fail:** "Hatch Rig slides across the screen", "it spins at the start", or any claim about a null's
+  move that no tool result gave.
+
+## R-REVIEW-NO-SQUARE: a review's pivot hint says nothing about the null's square
+
+In a review, the pivot hint says where the pivot of the layer the rows follow sits and what the
+learner said. It doesn't mention a square, a layer's size, or give the corner sentence from the
+lesson. It doesn't name the layer as a null. "That corner" for the group's corner is fine.
+
+- **Pass:** "The pivot of the layer Row A, Row B and Row C follow sits at the rows' middle, so they
+  would swing around that point. You said the top-left."
+- **Fail:** "its square", "the top-left corner of its square", "a null", or a walkthrough of placing it.

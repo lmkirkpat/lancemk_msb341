@@ -48,14 +48,14 @@
       },
       {
         "id": "key_not_repeated",
-        "never": "\\b(?:holding|held|hold|pressing|pressed)\\b[^.?!]*\\b(?:key|option|shift)\\b|\\b(?:key|option|shift)\\b[^.?!]*\\b(?:holding|held|pressing|pressed)\\b",
+        "never": "\\b(?:were|are|did|have|had) you\\b[^.?!]*\\b(?:holding|held|hold|pressing|pressed)\\b[^.?!]*\\?|\\b(?:holding|held|pressing|pressed)\\b[^.?!]*\\b(?:key|option|shift)\\b[^.?!]*\\?",
         "turns": [
           5
         ]
       },
       {
         "id": "key_not_the_cause",
-        "never": "\\b(?:because|since|that['’]s why|which is why|caused by|the reason|must have|probably|likely)\\b[^.?!]*\\b(?:key|option|shift|held|holding)\\b|\\b(?:key|option|shift|held|holding)\\b[^.?!]*\\b(?:caused|is why|was the reason)\\b",
+        "never": "\\b(?:because|since|that['\u2019]s why|which is why|caused by|the reason|must have|probably|likely)\\b[^.?!]*\\b(?:key|option|shift|held|holding)\\b|\\b(?:key|option|shift|held|holding)\\b[^.?!]*\\b(?:caused|is why|was the reason)\\b",
         "turns": [
           4,
           5
@@ -63,7 +63,7 @@
       },
       {
         "id": "no_option_or_shift_named",
-        "never": "\\b(?:Option|Shift|Alt|Opt)\\b|⌥|⇧",
+        "never": "\\b(?:Option|Shift|Alt|Opt)\\b|\u2325|\u21e7",
         "cs": true
       },
       {

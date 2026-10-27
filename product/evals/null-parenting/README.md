@@ -11,13 +11,20 @@ tests (`cd mentor && npm test`); evals don't repeat them.
 Built by copying `product/evals/easing/run.mjs`, not sharing it, so easing's files stay untouched.
 Same options and results format.
 
-## Status (2026-10-26): re-pointed at the live captures, before the first live lesson
+## Status (2026-10-27): 33 cases, skill 6 merged, ready for the first baseline
 
-30 cases, dry-run clean (`--strict-sources` too). **No baseline yet.** The set was re-pointed after
-spec 012's sitting and desk block (T336 to T339): every stand-in fixture is now a live capture or
-spec 004's read in place, and `stand-in/` is gone. The baseline waits for the first live lesson
-(T340, T341) and the merge into `main`, because the mentor server and `SKILL.md` can still change.
-Smoke runs so far: $1.99 (6 runs, before the sitting) and $2.91 (5 runs, after; see "Smoke runs").
+33 cases, dry-run clean (`--strict-sources` too). **No baseline yet.** Skill 6 is merged (`31fe72d`), so the
+server and `SKILL.md` are the ones the baseline will score. Cases 31 to 33 (2026-10-27) close the two gaps the
+README listed: D-4's corner sentence (once per lesson, never in a review) and step 2 never describing a null's
+move. Smoke this round: 7 cases run in 12 runs, 6 pass, 1 fails on the mentor (17); $7.56. Cases 17, 26 and 33 had a
+design bug (the learner named the rows and said "Done" in one turn, so the mentor's snapshot was taken on the
+already-parented comp); fixed, see "Smoke round 2026-10-27".
+
+**Blocks the baseline:** nothing in the plumbing. Known before it: case 01 and 16 (self-note "Review is due.
+Run the review." before the first snapshot in a review; the cross-skill tool change, not this set), and case 17
+(real, minor, see below). **Never run since the re-pointing:** 02, 03, 04, 06 to 10, 13 to 15, 18, 19, 21 to 25.
+The first full run is also their first run, so expect a few check bugs there; the cost of a failed case is
+about $0.5.
 
 ## Running
 
@@ -34,9 +41,9 @@ node product/evals/null-parenting/run.mjs --repeat 3                  # each cas
 node product/evals/null-parenting/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 100 mentor turns plus 30 judge calls. From the smoke run (about $0.15 a turn,
-$0.05 to $0.10 a judge call) expect **$14 to $18**. Bar: SC-006, at least 80% passing, and every
-hard-rule check passing. SC-003 (at least 12 cases): met, 30.
+A full run is about 111 mentor turns plus 33 judge calls. From the smokes (cases run at $0.31 to $1.13, mean
+about $0.65; about $0.15 a turn, $0.05 to $0.10 a judge call) expect **$17 to $21**. Bar: SC-006, at least 80% passing, and every
+hard-rule check passing. SC-003 (at least 12 cases): met, 33.
 
 ## What every case checks (no `expect` key needed)
 
@@ -71,7 +78,8 @@ inputs), `snapshot_focus_excludes`, `no_focus_set`, `demo_calls_min` / `demo_cal
 
 Numbers 1 to 20 are the numbers in spec 012's Eval plan; 21 to 26 cover the prompt-only rules
 the builder flagged and the spec's cross-cases; 27 and 28 were added 2026-10-26 for the live
-sitting's findings (L-1); 29 and 30 for the first lessons' findings 1 and 4 (`null-parenting.md`). Turns is the number of mentor turns. Fixture
+sitting's findings (L-1); 29 and 30 for the first lessons' findings 1 and 4 (`null-parenting.md`); 31 to 33
+(2026-10-27) for D-4's corner sentence and step 2's "never describe a null's move". Turns is the number of mentor turns. Fixture
 source: `live` (a capture on Mentor Practice 2, by hand or by script per its `captured_from`, or
 spec 004's read in place) or `synthetic` (permanent, only for the overlap rows the spec allows).
 
@@ -93,7 +101,7 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | 14 | An incomplete attempt: says what's still off and where; doesn't fix or offer to | 4 | last_check; say: must names_layers, must names_where, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 15 | Do the rest: declined warmly, no offer later | 5 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | live |
 | 16 | Review on the wave A comp: Chip A to C, no 'null', no method, no demo | 2 | review_mode; snapshot_with; tools_called; tools_not_called; last_check; snapshot_focus_excludes; say: must names_chips, must turn_or_scale | R-REVIEW-HANDS-ON, R-REVIEW-HINT, R-NAMES-REAL | live |
-| 17 | Review with a visible parent (the learner names Row A to C, not the offered Chips): the hint has no 'null'; the skill stays learned | 3 | review_mode; snapshot_with; tools_not_called; last_check; record_lesson; say: must names_rows | R-REVIEW-HINT, R-REVIEW-RECORD-HONEST, R-NAMES-REAL | live |
+| 17 | Review with a visible parent (the learner names Row A to C, not the offered Chips): the hint has no 'null'; the skill stays learned | 4 | review_mode; snapshot_with; tools_not_called; last_check; record_lesson; say: must names_rows | R-REVIEW-HINT, R-REVIEW-RECORD-HONEST, R-NAMES-REAL | live |
 | 18 | A review with no new group: not offered, nothing recorded | 1 | review_mode; snapshot_with; tools_not_called; no_focus_set; record_lesson; say: never no_crowd_names, never no_crowd_count | R-REVIEW-NOTHING-NEW, R-CROWD-HIDDEN | synthetic |
 | 19 | After a no: Chip A to C once, then the mentor asks; never a third offer | 4 | no_focus_set; tools_not_called; say: never chips_not_early, must chips_offered, never no_third_offer, never no_rows_offered, must asks_which_layers, must asks_to_name | R-SECOND-GROUP-ONCE, R-NAMES-REAL | live |
 | 20 | A crowd-only comp: the crowd question, no proposal, no layer named or counted | 2 | tools_not_called; no_focus_set; say: must crowd_question, never no_layer_names, never no_count, never no_proposal | R-CROWD-QUESTION, R-CROWD-HIDDEN, R-NAMES-REAL | synthetic |
@@ -102,11 +110,14 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | 23 | Asked how close is close enough: no number, no pixel | 4 | say: never no_pixel_count | R-NO-NUMBER-TARGET, R-ONE-IDEA | live |
 | 24 | A second demonstration is declined; the one demo stays on its target | 5 | demo_calls_min; demo_calls_max; demo_only_on | R-ONE-DEMO-ONLY, R-NAMES-REAL | live |
 | 25 | After Effects can't be reached: nothing claimed about the comp | 1 | tools_not_called; no_focus_set; say: must says_cant_see, never no_claims | R-UNREACHABLE | none |
-| 26 | A review that passes (the learner names Row A to C) is recorded as passed, with no demo | 2 | review_mode; snapshot_with; tools_not_called; last_check; record_lesson | R-REVIEW-PASS-HONEST, R-NAMES-REAL | live |
+| 26 | A review that passes (the learner names Row A to C) is recorded as passed, with no demo | 3 | review_mode; snapshot_with; tools_not_called; last_check; record_lesson | R-REVIEW-PASS-HONEST, R-NAMES-REAL | live |
 | 27 | Asked which part of the null's square is its place: the top-left corner, not the middle | 3 | say: must names_corner, must says_corner, never not_middle_of_square | R-NULL-CORNER, R-NAMES-REAL | live |
 | 28 | A layer flew off when parented: may ask once whether a key was held, never as the cause, never Option or Shift | 5 | last_check; say: must asks_key_once, never key_not_repeated, never key_not_the_cause, never no_option_or_shift_named, must states_jump, must undo | R-JUMP-STATED, R-KEY-QUESTION-ONLY, R-NO-CAUSE, R-NAMES-REAL | live |
 | 29 | At a pass on a Rotation move the check gives no key times: no preview frame at a time no tool output held | 4 | last_check; preview_times_from_output | R-NO-GUESSED-TIME, R-NAMES-REAL | live |
 | 30 | The learner says the group turns but only slid the null: the record doesn't say it turned or scaled | 4 | last_check; tools_called; record_lesson_never | R-RECORD-SEEN-MOVE, R-NAMES-REAL | live |
+| 31 | The null's corner sentence is said once, at the place question (turn 3), and not again once the learner placed it (turn 4); never the square's size or Opacity | 4 | say: must corner_said, never corner_not_repeated, never no_size_or_opacity | R-CORNER-ONCE, R-NAMES-REAL | live |
+| 32 | Asked how the null Hatch already follows moves: the explain step never describes a null's move | 2 | tools_not_called; say: never no_rig_move_claim | R-NO-NULL-MOVE, R-NAMES-REAL | live |
+| 33 | A review whose pivot misses the place the learner named (rows' middle, said top-left): the hint has no square, no corner sentence | 3 | review_mode; snapshot_with; tools_not_called; last_check (pivot_region); say: never no_square, must names_rows | R-REVIEW-NO-SQUARE, R-NAMES-REAL | live |
 
 ### Case notes
 
@@ -138,6 +149,17 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 - **19** takes four turns: open, "no group in mind" (proposal), "no" (Chip A to C once), "no"
   (the mentor asks; nothing offered).
 - **21** is the only case on `synthetic/before.json` and Holder (the null under a still parent).
+- **31 to 33** (2026-10-27). 31: the check is the sentence's shape (`corner ... square`), so a pivot hint that
+  names the corner of the square would also match; turn 4 uses `null-top-left.json` (the null already placed), so
+  no pivot hint is due and any corner talk is a repeat. 32 uses the live `Hatch` / `Hatch Rig` pair (a layer that
+  follows a null; the snapshot carries no keys for it). Its `never` bans a verb right after "Hatch Rig"; generic
+  talk ("anything Hatch Rig does to its Position") and "I can't tell whether Hatch Rig has keys" pass.
+  33 plants the one review branch where a pivot hint is due (`review-rows-pass.json`: the rows parented, the null
+  at their middle) and bans the word "square" across the whole case.
+- **Review cases need the learner's rows named while the comp is still the before comp** (17, 26, 33): turn 2 on
+  `practice2b.json` names the rows, turn 3 on the after fixture says "Done". The first form of 17 and 26 sent both
+  in one turn on the after fixture, so the mentor's focus snapshot saw rows that already followed a layer and
+  said it couldn't review them (case 33's first run, and case 26's run, `check: no successful null_parent_check`).
 - **24** is case 04's flow plus "show me again on Caption".
 
 - **29** guards a regression (passes today, 1 of 1, $0.84). **30** was written to fail until `SKILL.md`
@@ -225,9 +247,38 @@ the fixture. Still worth a look in T340's transcript.
 
 **2026-10-26, after the pre-T340 `SKILL.md` pass (`5bfdbd3`: ask and stop, step 2 frame only,
 invented example names, D-4's corner sentence at stage 3, review jump hint), $2.13:** 01, 11, 12
-and 27 each pass once (`results/2026-10-26-203846.json` to `-204021.json`). Not yet covered by
-any case: the corner sentence's once-per-lesson and never-in-a-review rules, and step 2 never
-describing a null's move (the skill-builder's hand-off list).
+and 27 each pass once (`results/2026-10-26-203846.json` to `-204021.json`). The corner sentence's once-per-lesson and
+never-in-a-review rules and step 2's "never describe a null's move" are now cases 31, 33 and 32.
+
+## Smoke round 2026-10-27 ($7.56, 12 runs, 7 cases, mentor on `main` at `79eb6ed`)
+
+Cases that already had a pass since the re-pointing (01, 11, 12, 16, 27, 29, 30) were not re-run. Triage:
+
+| Run | Case | Result | Cost | Triage |
+|---|---|---|---|---|
+| 1 | 31 | pass | $0.80 | corner sentence at turn 3, none at turn 4 |
+| 2 | 32 | FAIL | $0.31 | check bug: `Hatch Rig has keys` matched "I can't tell whether Hatch Rig has keys". Verb list narrowed (dropped keys) |
+| 3 | 33 | FAIL | $0.33 | case bug: rows named and "Done" in one turn on the parented comp; mentor said it couldn't review rows that already follow a layer. Turns split |
+| 4 | 28 | FAIL | $0.96 | check bug: `key_not_repeated` matched the instruction "with no key held". The mentor asked the question once at turn 4 and the other checks passed. Never now bans a question form only |
+| 5 | 26 | FAIL | $0.33 | same case bug as run 3. Turns split |
+| 6 | 32 | FAIL | $0.31 | check bug: "anything Hatch Rig does to its Position, Scale" is the generic explanation. Regex now needs a verb right after "Hatch Rig" |
+| 7 | 33 | pass | $0.63 | after the split |
+| 8 | 26 | pass | $0.64 | after the split |
+| 9 | 28 | pass | $1.13 | after the regex fix (first pass of the held-key case) |
+| 10 | 17 | FAIL | $0.86 | **mentor, minor, real?** all checks passed; judge failed R-REVIEW-RECORD-HONEST: the record's summary says "followed Row A, a visible layer, rather than a separate handle", which names the fix. One run, not repeated |
+| 11 | 32 | pass | $0.41 | after the second fix |
+| 12 | 05 | pass | $0.85 | B9, a correct parenting passes though raw values changed |
+
+Files: `results/2026-10-27-150943.json` to `-151638.json`.
+Runs 2 to 6 are failures of my cases or checks, not the mentor (run 6 is the second fix of 32), and are kept as the runner recorded them.
+
+**Real mentor findings.**
+1. Case 17: the review's partial record puts the fix in the summary. Smallest fix: in `SKILL.md` step 11 (and the
+   review's step 5), "`summary` says what the learner did and what the check saw, never what they should have
+   done instead." Repeat 17 three times first (`--only 17 --repeat 3`, about $2.50) before changing anything.
+2. Self-note leak ("Review is due. Run the review." before the first snapshot) appeared again in case 33's first run and in
+   case 17 (turn 1 of each review); the known cross-skill item (snapshot reads the record and picks review mode),
+   not new. The universal `no_narration` did not flag it.
 
 ## Reading results
 

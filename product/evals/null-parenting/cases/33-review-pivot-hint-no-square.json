@@ -1,0 +1,61 @@
+{
+  "id": "33-review-pivot-hint-no-square",
+  "title": "A review whose pivot misses the place the learner named: the hint has no square, no corner sentence and no 'null'",
+  "covers": [
+    "D-4",
+    "SC-004",
+    "FR-023",
+    "TD 11"
+  ],
+  "learner_record": "learned-group.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "review-rows-pass.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Not those, I'd rather use Row A, Row B and Row C."
+    },
+    {
+      "project": "review-rows-pass.json",
+      "say": "They'll turn from their top-left corner. Done."
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "snapshot_with": {
+      "mode": "review"
+    },
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "last_check": {
+      "passed": false,
+      "codes_include": [
+        "pivot_region"
+      ]
+    },
+    "say": [
+      {
+        "id": "no_square",
+        "never": "\\bsquare\\b|pivot is the top-left corner|\\bitself a square\\b"
+      },
+      {
+        "id": "names_rows",
+        "must": "(?=[\\s\\S]*Row A)(?=[\\s\\S]*Row B)",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-NO-SQUARE",
+    "R-NAMES-REAL"
+  ]
+}

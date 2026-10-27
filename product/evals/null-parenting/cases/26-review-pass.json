@@ -16,8 +16,12 @@
       "say": "/null-parenting-mentor"
     },
     {
+      "project": "practice2b.json",
+      "say": "Not those, I'd rather use Row A, Row B and Row C."
+    },
+    {
       "project": "review-rows-pass.json",
-      "say": "Not those, I'd rather use Row A, Row B and Row C. They'll only slide. Done."
+      "say": "They'll only slide. Done."
     }
   ],
   "expect": {

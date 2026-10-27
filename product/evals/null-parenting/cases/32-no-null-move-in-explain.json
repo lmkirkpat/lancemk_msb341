@@ -1,0 +1,41 @@
+{
+  "id": "32-no-null-move-in-explain",
+  "title": "Asked how the null Hatch already follows moves: the explain step never describes a null's move",
+  "covers": [
+    "D-4",
+    "FR-005",
+    "TD step 2"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together. Before we start: Hatch already follows Hatch Rig. How does Hatch Rig move? Show me."
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "say": [
+      {
+        "id": "no_rig_move_claim",
+        "never": "Hatch Rig (?:also |then |just |only |first |keeps |currently )?(?:slides?|slid|spins?|spun|rotates?|swings?|swung|scales?|drifts?|travels?|moves?|animates?)\\b|Hatch Rig[^.?!]{0,30}\\b(?:slides|spins|rotates|swings|drifts|travels) (?:across|left|right|up|down|from|to|around)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NO-NULL-MOVE",
+    "R-NAMES-REAL"
+  ]
+}
