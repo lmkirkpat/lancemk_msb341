@@ -53,7 +53,7 @@ async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options
     mode,
   };
   if (skill_options !== undefined) opts.skill_options = cleanOptions(skill_options);
-  const { lesson, session: l, analysis } = session.start(snapshot, opts);
+  const { lesson, session: l, analysis, stored_choices } = session.start(snapshot, opts);
   const noDemoReason = analysis.demo_target ? null : l.demo ? "demo_used" : analysis.no_demo_reason;
   return json({
     host: parseHost(snapshot),
@@ -72,6 +72,7 @@ async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options
     candidates_count: analysis.candidates_count,
     other_candidates: analysis.other_candidates,
     server_current: await serverCurrent(), // FR-044
+    stored_choices, // FR-043, FR-046
   });
 }
 
