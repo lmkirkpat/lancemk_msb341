@@ -13,6 +13,9 @@ import { readPath } from "../lib/path.mjs";
 import { recommend } from "../lib/recommend.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
+import { footprint, sampleAt } from "../lib/comp-space.mjs";
+import { byName, layerInfo } from "../lib/layer-info.mjs";
+import { visibility } from "../lib/visibility.mjs";
 import { json } from "../lib/reply.mjs";
 import { MentorError } from "../errors.mjs";
 
@@ -45,19 +48,71 @@ async function waitForFile(file, timeoutMs) {
   throw new Error(`After Effects did not write the frame within ${timeoutMs / 1000} s.`);
 }
 
-async function previewFrame({ time } = {}) {
+// FR-045 (research R24): where a layer is in the frame, in comp pixels, from read R3 at time `t`.
+// Absent, with a reason, whenever the layer isn't drawn there or its place can't be worked out.
+const isNum = (v) => typeof v === "number" && Number.isFinite(v);
+const TIME_TOL = 0.0005;
+
+function locateLayer(snapshot, name, t) {
+  const c = snapshot.comp || {};
+  const out = isNum(c.width) && isNum(c.height) ? { comp_size: { width: c.width, height: c.height } } : {};
+  const absent = (reason) => ({ layer_bounds_reason: reason, ...out });
+  if (!layerInfo(snapshot).known) return absent("no_layer_info");
+  const matches = byName(snapshot, name);
+  if (matches.length === 0) return absent("not_found");
+  if (matches.length > 1) return absent("ambiguous");
+  const entry = matches[0];
+  const vis = visibility(snapshot).find((v) => v.layer_index === entry.index);
+  if (!vis) return absent("not_found");
+  if (vis.class === "null") return absent("null_layer");
+  if (["hidden", "matte", "guide"].includes(vis.class) || vis.soloed_elsewhere) return absent("not_rendered");
+  if (entry.adjustment) return absent("adjustment");
+  if ((isNum(entry.in_point) && t < entry.in_point - TIME_TOL) || (isNum(entry.out_point) && t > entry.out_point - TIME_TOL)) return absent("not_on_screen");
+  const sample = sampleAt(entry, t);
+  const { bounds, reason } = footprint(snapshot, entry.index, t, { extents: !!(sample && sample.rect_extents) });
+  if (!bounds) return absent(reason);
+  if (out.comp_size && (bounds.right <= 0 || bounds.bottom <= 0 || bounds.left >= c.width || bounds.top >= c.height)) return absent("not_on_screen");
+  return { layer_bounds: bounds, ...out };
+}
+
+// The PNG's own width and height, from its IHDR chunk (bytes 16 to 23). Null if it isn't a PNG.
+function pngSize(file) {
+  try {
+    const fd = fs.openSync(file, "r");
+    const b = Buffer.alloc(24);
+    try {
+      fs.readSync(fd, b, 0, 24, 0);
+    } finally {
+      fs.closeSync(fd);
+    }
+    if (b.readUInt32BE(0) !== 0x89504e47 || b.toString("ascii", 12, 16) !== "IHDR") return null;
+    return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
+  } catch {
+    return null;
+  }
+}
+
+async function previewFrame({ time, layer } = {}) {
+  // With `layer`: one read of the comp first, sampled at the frame's time (the playhead's samples
+  // when no time is given). Without it, nothing but the frame, as before.
+  const snapshot = typeof layer === "string" ? await takeSnapshot(time != null ? { sample_times: [time] } : {}) : null;
   fs.mkdirSync(FRAME_DIR, { recursive: true });
   pruneFrames();
   const file = path.join(FRAME_DIR, `frame-${Date.now()}.png`);
   const r = await runSnippet("preview-frame", { file: file.replace(/\\/g, "/"), time: time ?? null });
   const bytes = await waitForFile(file, 30000);
+  let reply = r;
+  if (snapshot) {
+    const image = pngSize(file);
+    reply = { ...r, ...locateLayer(snapshot, layer, time ?? snapshot.comp.time), ...(image ? { image_size: image } : {}) };
+  }
   if (bytes > MAX_IMAGE_BYTES) {
-    return json({ ...r, file, note: `The PNG is ${(bytes / 1048576).toFixed(1)} MB, too large to return inline. Open the file instead.` });
+    return json({ ...reply, file, note: `The PNG is ${(bytes / 1048576).toFixed(1)} MB, too large to return inline. Open the file instead.` });
   }
   return {
     content: [
       { type: "image", data: fs.readFileSync(file).toString("base64"), mimeType: "image/png" },
-      { type: "text", text: JSON.stringify(r) },
+      { type: "text", text: JSON.stringify(reply) },
     ],
   };
 }
@@ -143,10 +198,16 @@ export function commonTools(options) {
     {
       name: "preview_frame",
       title: "Preview a frame",
-      description: "Render one frame of the active comp as an image, to show the learner their own animation. Defaults to the current time.",
+      description:
+        "Render one frame of the active comp as an image, to show the learner their own animation. Defaults to the current time. " +
+        "Pass layer to also get where that layer is in the frame: its bounds in comp pixels, the comp's size and the image's " +
+        "size (scale by image over comp to place them on the image), or the reason there are none.",
       inputSchema: {
         type: "object",
-        properties: { time: { type: "number", minimum: 0, description: "Seconds from the start of the comp." } },
+        properties: {
+          time: { type: "number", minimum: 0, description: "Seconds from the start of the comp." },
+          layer: { type: "string", description: "A layer's name, exactly as it appears in the comp." },
+        },
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true },
