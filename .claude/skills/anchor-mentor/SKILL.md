@@ -113,8 +113,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
      while Pop was still shrunk. Which layer do you want to turn or grow from somewhere other than
      its middle, and where should it turn from? Or Needle could swing from the middle of its bottom
      edge. Want to try that one?" Say how long ago in place of "Last time" when you have it
-     ("Yesterday, …"). If `next` names a layer and a place, and the read doesn't leave that layer
-     out, propose those; otherwise the `proposal`.
+     ("Yesterday, …"). The proposal is always the read's `proposal`; `next` gives only the memory
+     clause. If they want another go at the layer `next` names, they can name it.
    - **Continued or resumed lesson:** no intent question and no proposal. Say where it left off in
      one sentence and hand it back: "We were on Door, from the middle of its left edge. Ready to set
      it?" If it left off before a layer and place were chosen (no focus in the read), open as a
@@ -139,8 +139,11 @@ was. Pan Behind changes both together, so nothing moves on screen.
    - 3D: "3D layers have a depth to their pivot; that's for later."
    - a precomp that passes its layers through (Collapse Transformations): one sentence that you
      can't check that one.
-   - a null, a camera, a light, an adjustment layer: never offered. If they name one, ask for a
-     layer that shows in the frame, and say nothing about a null's pivot.
+   - a null, a camera, a light, an adjustment layer: never offered. If they name one: "CTRL is a
+     null, so there's nothing of its own to see turn in the frame." Only the layer's name and its
+     kind change ("a null", "a camera", "a light" or "an adjustment layer"); then straight into the
+     proposal, or the next candidate, as above (with none left, step 1's solid line). Nothing else
+     about that layer, and no pointer to another lesson.
    - can't read it: "I can't read Orbit's edges right now, so I'll leave it out."
    - a matte: it can be named, never called hidden. If they pick it, add that Pan Behind needs it
      visible, so they may turn its eye on to drag, and should turn it back off after.
@@ -155,7 +158,7 @@ was. Pan Behind changes both together, so nothing moves on screen.
        pivot now would shift where it sits on one of those two frames. Set the pivot before you
        key. Pick another layer?" The first time is `position_key_label`, the second `rest_label`
        (when they named its rest pose, that's their own time, labelled the same way). Say the two
-       labels exactly as given; never round or write a time yourself. Say the sentence as
+       labels exactly as given; never round or write these two times yourself. Say the sentence as
        written; only the layer name and the two labels change. Never "its other keys" about this
        layer. If either label is missing or null, say only "Sled already moves, so it's not in
        this lesson; set a pivot before you key. Pick another layer?"
