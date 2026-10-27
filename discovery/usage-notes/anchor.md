@@ -90,6 +90,96 @@ demo offer properly.
 - **SC-009 (stretch):** open, a day or more after T237.
 - No decision's "what would change our mind" signal moved.
 
+## Session 2: 2026-10-26 (T237, User Story 2, Pop on Mentor Practice 2)
+
+A first lesson on a keyed layer, run in the same plain Claude Code session as session 1, on the
+same server, right after it (`/clear` in between). The record now held session 1's Door pass, with
+no review due. I chose Pop myself, not the proposal, and set it away from rest on purpose as the
+L-4 mistake.
+
+### Steps (quickstart § 5.2)
+
+| Step | What happened | Matches the expected result? |
+|---|---|---|
+| 0. Remember | The anchor skill was learned with no review due, so it ran as a lesson. Named Door's pass "earlier today" | Yes |
+| 1. Ask, then propose | Asked which layer and where. Offered Needle from the middle of its bottom edge (the record's `next`, and the proposal). Left out Wobble and Seal again, one sentence each | Yes |
+| 1. Reads | The first snapshot took 11.7 s | Yes, but **problem 1 again** |
+| 2. Focus | I said "pop". The mentor asked for the place only, and I said "bottom middle, so it grows up from the floor". It repeated that back, said the pivot is at Pop's center now, and gave the two sentences once | Yes |
+| 2. Rest key | Named 4.3 s as full size and asked for the playhead there first. No "is that how it looks at rest?" question, since the key has both Rotation and Scale at rest | Yes |
+| 2. Frame | One frame at 4.3 s. It didn't point at a shape, and it didn't claim the pivot shows | Yes |
+| 3. Show where | Y, select Pop, start the drag on the crosshair; A, then Shift+P | Yes |
+| 5. Demo | One focus layer, so none, with the one sentence on why, **and it offered to show one on Needle first** without being asked | Yes (problem 2 didn't happen this time) |
+| 7. Check 1 | Set at 3.7 s on purpose. The pivot's place passed, but at 4.3 s Pop had jumped up. The hint said the playhead was at 3.7 s, that Pop is still shrunk there so nothing showed, that the pivot did move, and that at full size Pop sits higher. It asked for Edit > Undo, then the playhead on 4.3 s. No numbers | Yes, see the note below |
+| 7. Check 2 | After Edit > Undo, I set it at 4.3 s. Pass | Yes |
+| 8. Understanding | "Which part of it will stay still?" I said the bottom edge stays on the floor. It agreed | Yes |
+| 9. Try it | Scale is keyed, so it said to play it back and watch it grow from the floor. Not checked | Yes |
+| 11. Record | Passed, no demo, the set-away-from-rest first try and my answer noted, next is Needle's bottom edge and a keyed swing. No method or motive | Yes |
+| Wording | No field names, numbers, tolerances, announced calls or Quick Set Anchor | Yes |
+
+**Note on check 1:** the SKILL.md example for this hint ("its pivot did move, far below it") is
+written for a pivot that ends up *outside* the layer, like the `pop-shrunk` fixture. Here the pivot
+landed on the right place, and Pop itself jumped up, so the result had the place passing and
+`outside_side` null. The mentor adapted: it left out where the pivot went and used the jump's
+direction instead ("sits higher"). I thought it read fine, but SKILL.md doesn't describe this kind,
+and no fixture covers it (see "To fix later" and "Edge cases to plan for").
+
+### SC-001: speed and demos (keyed layer)
+
+| Measure | Value | Target | Pass? |
+|---|---|---|---|
+| `read_learner_record` (01:12:36.6) to `record_lesson` (01:16:30.3), wall clock | **3 min 54 s** | ≤ 10 min | ✓ |
+| Demonstrations | 0 | ≤ 1 | ✓ |
+| Checks to a pass | 2 | none | |
+| `anchor_snapshot`, no options (two reads) | **11,733 ms** | ≤ 10 s a turn (finding) | **✗ problem 1** |
+| `anchor_snapshot` with the focus | **2,726 ms** | same | ✓ (it was 10.7 s in session 1) |
+| `anchor_check` | 878 ms, 791 ms | none | |
+| `preview_frame` | 520 ms | none | |
+
+### SC-002: the check vs. a look in After Effects
+
+| # | What was checked | What I did | Tool's verdict | My verdict (crosshair and Pop's place at 4.3 s) | Agree? |
+|---|---|---|---|---|---|
+| 3 | Pop, middle of the bottom edge | Pan Behind at 3.7 s, on purpose (L-4: set away from rest) | Place right, but Pop moved up at its rest key; set away from rest; nothing else moved | Same | ✓ |
+| 4 | Pop, middle of the bottom edge | Edit > Undo, then Pan Behind at 4.3 s | Place right, Pop didn't move, nothing else moved; pass | Same | ✓ |
+
+**4 of 4 agree across sessions 1 and 2, with one L-4 mistake (set away from rest).** That meets
+SC-002's "one L-4 mistake" part. Six more checks are needed for 10, ideally covering the other L-4
+kinds: the layer dragged, the pivot moved with the layer, and the wrong layer.
+
+### Findings and fixes
+
+- **Problem 1, again: the first `anchor_snapshot` took 11.7 s.** The focus snapshot took 2.7 s
+  this time, against 10.7 s in session 1, so the slow part is probably the first, full read, not
+  the focus one. Session 1 ran its focus snapshot on a cold lesson, though, so that's a guess.
+  **Fix:** the "To fix later" entry, now with these numbers.
+- **Problem 2 didn't happen this time.** The SKILL.md was the same, and this time the mentor
+  offered to show one on Needle before I asked. So the offer isn't reliable either way, which makes
+  the proposed eval case more useful, not less. No change to the fix.
+- **New: set away from rest with the place passing isn't described in SKILL.md, and no fixture
+  covers it.** On a layer keyed by Scale, Pan Behind at a smaller scale puts the anchor right in the
+  layer's own space, but Position is worked out at that scale, so at full size the layer sits
+  elsewhere. The check got it right (place passed, moved, `away_from_rest`), and the mentor's words
+  were right, but they came from improvising. **Fix:** see "To fix later". **Eval case proposed:**
+  "away from rest, place right": a stand-in where Pop's place is bottom-middle at 4.3 s and its
+  rect moved up, with `time` 3.667. Expect: `anchor_demo` never called; the reply says Edit > Undo
+  and names 4.3 s; no "outside" and no "below". Rubric: says the pivot moved even though nothing
+  showed at 3.7 s, and says which way Pop sits at full size, in words.
+
+**Caveat:** I was the learner again, I built the skill, and I made the mistake on purpose knowing
+what the hint should say. This counts for SC-001's second half and SC-002's L-4 requirement, not for
+belief 7. A learner who sets it away from rest by accident is the real test of whether "nothing
+showed, but it did move" lands.
+
+### Criteria after session 2
+
+- **SC-001:** **met** (unkeyed Door 2 min 56 s, keyed Pop 3 min 54 s, no demo in either), as
+  builder-only evidence.
+- **SC-002:** 4 of 4 agree, with the L-4 mistake included. Open until 10 checks.
+- **SC-003 to SC-008:** not touched by a live run.
+- **SC-009 (stretch):** open. The review should name Needle (quickstart § 6), a day or more after
+  this pass.
+- No decision's "what would change our mind" signal moved.
+
 ## To fix later
 
 - **`anchor_snapshot` takes about 10 s on Mentor Practice 2 (problem 1).** Both calls in session 1
@@ -99,15 +189,29 @@ demo offer properly.
   read the layers' rects once and sample only transform values per time. **Test:** a unit test that
   the second read's time list on `practice2b.json` holds only what the check needs, and a live
   timing on Mentor Practice 2 under 3 s. A spec 011 desk task, before T237 if it's cheap, since
-  T237's keyed layer will hit the same two reads.
+  T237's keyed layer will hit the same two reads. **Session 2:** the first snapshot took 11.7 s and
+  the focus snapshot 2.7 s, so time the no-options path first.
 - **The one-layer demo offer is easy to skip (problem 2).** `SKILL.md:185` to 186. **Proposed
   fix:** "With one focus layer, offer a watch on another layer once, in one sentence, after the
   walk-through: name the `proposal`'s next default candidate ('I could show you on Tab first, if you
   like'). Don't offer it again." Ask the curriculum designer first whether the TD's "can offer"
   should be "offers", since it changes stage 5 for every one-layer lesson. **Test:** the eval case
   above (expect: one offer naming a default candidate; no `anchor_demo` call before the learner
-  agrees; rubric: the offer is one sentence and comes before "try it").
+  agrees; rubric: the offer is one sentence and comes before "try it"). **Session 2:** the offer
+  happened without the fix, so the behavior varies from run to run. Still worth the case.
+- **Set away from rest with the place passing (session 2).** SKILL.md's away-from-rest hint
+  (`.claude/skills/anchor-mentor/SKILL.md`, step 7's "set away from rest") only shows the pivot
+  ending up outside. **Proposed fix (skill builder):** add one clause: "If the pivot's place is
+  right, say it's in the right place, but at full size the layer sits elsewhere, and which way
+  (`item2.direction`)." **Test:** capture this state live (Pop, bottom-middle, Pan Behind at
+  3.667 s) as `mentor/test/fixtures/anchor/pop-away-inside.json`, with a test in
+  `anchor-check.test.mjs` that `item1.passed` is true, `outside_side` is null, `item2.direction` is
+  `up` and the hints are exactly `["away_from_rest"]`. Plus the eval case in session 2.
 
 ## Edge cases to plan for
 
-None new from session 1.
+- **Scale keys and the pivot (session 2).** Pan Behind away from a layer's full-size key can leave
+  the pivot on the right place in the layer's own space while the layer jumps at its rest key. So
+  "place right" and "set at rest" are separate facts, and the check needs both (it has them:
+  item 1 and item 3). Only the outside kind has a fixture today (`pop-shrunk`). Run
+  `/overlap-audit` on Scale-keyed layers to cover the inside kind too.

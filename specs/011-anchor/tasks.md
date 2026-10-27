@@ -165,7 +165,7 @@ The builder does the hand actions.
 - [x] T234 Desk block, part 1 (not 🖐): point every test at the live captures and spec 004's (keeping `synthetic/`), delete `mentor/test/fixtures/anchor/stand-in/`, update `README.md`'s provenance; `npm test` green
 - [x] T235 [US1] Desk block, part 2 (not 🖐): from L-1, set `SHAPES_DEFAULT` and `RECT_KIND.shape` in `mentor/lib/anchor.mjs`; from L-5, `RECT_KIND.text`; fix `mentor/jsx/anchor-demo.jsx` for anything L-4 showed (and repeat that L-4 run before T236); fill each `<!-- L-2 -->` and `<!-- L-3 -->` in `SKILL.md` (Center Anchor Point by menu path for the center place only if L-3 confirmed it, otherwise left out); `npm test` green. Any result that changes a requirement goes to the spec writer before T236
 - [x] T236 🖐 [US1] First live lesson, Door on Mentor Practice 2 (quickstart › 5.1), by the builder in a plain Claude Code session: time from `calls.jsonl` (SC-001), per check agreement with the crosshair and the layer's place on screen (SC-002)
-- [ ] T237 🖐 [US2] First live lesson, Gauge or Pop (quickstart › 5.2), same measures; at least one L-4 mistake made on purpose and checked (SC-002)
+- [x] T237 🖐 [US2] First live lesson, Gauge or Pop (quickstart › 5.2), same measures; at least one L-4 mistake made on purpose and checked (SC-002)
 
 ---
 
