@@ -21,6 +21,23 @@ the 3 px floor, the rest-key check time and pass items 3 to 5. FR-029 keeps only
 and "never compare raw key values", and points to spec 012 FR-011 to FR-013. Wave B's shared tasks
 ([tasks-wave-b.md](tasks-wave-b.md)) approved the same day.
 
+**Changes 2026-10-26** (the builder approved seven loose ends from the first live lessons of skills
+2, 1 and 3): FR-039 to FR-045 and SC-014 are new (Requirements › Loose ends in the merged skills),
+tasked as tasks-wave-b.md Phase 9 (T167 onward). Research R24 and R25 are new. Open questions LE-1
+to LE-3 were answered by the builder the same day (all three as recommended).
+
+**Changes 2026-10-26, second pass** (approved by the builder; a tasking pass after Phase 9 merged as
+`d4a9bd6` without T173 and T174): **FR-043 rewritten**. LE-1's first rule failed four existing tests
+of a built promise (choices kept across a resume: T061, T063, contracts § 4, spec 012 SR-1), and the
+builder chose "confirm + baseline": a resumed lesson starts fresh only when its comp no longer
+matches the baseline, and otherwise keeps its choices, which the skill confirms with the learner
+(new **FR-046**). **FR-040**: no re-read after the check at all (2026-10-27: a 0 gap was refused, and a re-read after a pass started a new lesson); the mentor says a passed check's measured gap back as theirs. **FR-047** (2026-10-27, the reviewer's
+should-fix 2, the builder's choice): speed graph's step 1 no longer wipes a stored land-hard choice,
+and its reply names land-hard pairs in plain words. **FR-044** now hashes only what the server runs and never starts git where there's
+no checkout; **FR-045** gains four no-bounds reasons (precomp, effects, masks, Opacity 0) from the
+reviewer's findings on the merged code. Research R24 and R25 are amended and **R26** is new. Tasked
+as tasks-wave-b.md Phase 9 › Second pass (T186 onward). New open questions LE-4 to LE-6.
+
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
 designer's [`curriculum.md`](curriculum.md) (same folder, `decisions/007`). This spec links to it
@@ -90,6 +107,13 @@ sets only what every skill spec must meet.
 
 None needs changing. One may need a note: see Open questions › H5 (shared code ownership when two
 skill builders run at once).
+
+The loose-ends pass (FR-039 to FR-046, 2026-10-26) relies on the same ones: FR-032 (one shared-code
+owner), FR-035 (the easing bar), `decisions/005` (the panel's headless runs, which start a new server
+each turn, and its runtime folder outside the repo; FR-043 and FR-044), `decisions/008` (the AE lock
+for T181) and constitution IV (FR-044 returns a yes or no, never the hash or a path; FR-046 never
+names a field). It needs no new decision: the second pass's choice ("confirm + baseline") is the
+builder's answer to a spec question, recorded in FR-043, like LE-1 before it.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -573,6 +597,198 @@ Other edge cases:
   eval case (Eval plan 3). Spec 005's Edge Cases "Track mattes" row has the same issue for
   diagnosis.
 
+### Loose ends in the merged skills (2026-10-26)
+
+Approved by the builder on 2026-10-26, from the first live lessons of skills 2, 1 and 3. Each item's
+source holds the finding; these requirements don't restate it. All seven are one shared-code
+owner's pass (FR-032), tasked in [tasks-wave-b.md](tasks-wave-b.md) › Phase 9. None changes what a
+skill teaches: each one makes a tool report something it already could, or makes a `SKILL.md`
+sentence match what the tools and live sittings showed. The second pass (2026-10-26) adds FR-046,
+which adds one question on a resumed lesson ("is that still the plan?"); it doesn't change what a
+skill teaches either.
+
+- **FR-039 (speed graph, a reading answer given as a time or a frame)**: `speed_graph_snapshot` MUST
+  return the comp's frame rate as `comp.frame_rate` (the snapshot's own value, as `key_types_snapshot`
+  and `offset_snapshot` already return it). In stages 2 and 6 of
+  `.claude/skills/speed-graph-mentor/SKILL.md`, an answer given as a time or a frame MUST be placed in
+  the pair from its key times (a frame turned into seconds with that frame rate, counted from the
+  comp's start) and then checked against `fastest.parts` like a start, middle or end answer. An answer
+  that lands outside the pair gets a question, never a guess. *Source:*
+  `discovery/usage-notes/speed-graph.md` › To fix later. *Proof:* a unit test on the tool's reply,
+  and the eval case that note proposes (the eval engineer's).
+- **FR-040 (offset, a stated gap the check doesn't match)**: In step 7 of
+  `.claude/skills/offset-mentor/SKILL.md`, when a check's measured gaps differ from the gap the
+  learner stated and no demonstration has run, the mentor MUST say the gap back as measured (as the
+  learner's own, never as a suggestion) and re-send `skill_options` with it, so a later demo shifts by
+  what the learner actually did. **Amended 2026-10-26, second pass** (the eval engineer, on the merged
+  step 7: a measured gap can be 0 when members are still together, as in offset eval cases 11, 14, 15
+  and 23 on live captures, and `gap_frames` has a minimum of 1, so the re-read was refused): the
+  re-read MUST run only when the check **passed** (`passed`: every member compared and apart, which
+  the tool already defines as every gap at or above the floor); otherwise step 7's existing hints run
+  and the stated gap stays as it is. No tool change: `passed` already implies a gap of at least the
+  floor, and the schema's minimum still refuses a bad call before anything is written.
+  **Amended again 2026-10-27** (the reviewer, reproduced on `phase9-pass2`): a re-read after a pass
+  breaks the lesson. `offset_check` has marked it passed, `session.start` never reopens a passed
+  lesson, so the call builds a new, unchecked lesson under the same key with the staggered comp as
+  its baseline, and `record_lesson` then refuses "passed" (`mentor/tools/common.mjs`, the result
+  check). **So the mentor MUST NOT call `offset_snapshot` again in step 7 at all.** After a pass,
+  when the measured gaps (`gaps_frames`) differ from the gap the learner stated, it says the gap back
+  from the check's own `gaps_frames`, as the learner's ("you went with about 8 frames"), never as
+  advice; a pass already means every gap is at or above the floor, so no floor hint is needed. Before
+  a pass, the existing hints run, and the stored gap stays as stated. What this gives up: a demo
+  after a failed check still shifts by the stated gap, not the measured one (accepted: the demo runs
+  at most once, on the learner's choice of gap).
+  *Source:* `discovery/usage-notes/offset.md` › session 1 finding 3 and To fix later; the reviewer's
+  finding 1 on the second pass. *Proof:* the eval case that note proposes (gap changed after the
+  fact) and a "passed, but the stated gap differs" case (T196's hand-off): one `offset_check`, no
+  later `offset_snapshot`, the measured gap said back as theirs, and `record_lesson` accepted as
+  passed; offset cases 11, 14, 15 and 23 with no refused call (T199, T199a).
+- **FR-041 (offset, how Quick Offset works)**: `.claude/skills/offset-mentor/SKILL.md` › Where things
+  are MUST have a short "if they ask how Quick Offset works" paragraph whose claims are **only** these,
+  each confirmed in spec 010's live sitting L-1 (`specs/010-offset/live-sitting-2026-10-26.md` › L-1)
+  or already in that section:
+  1. Select the layers (or their keys), hold Command and Option, and drag.
+  2. On layers, it moves whole layers, keys and all (effect keys too), and spreads them out evenly;
+     the top layer stays where it is and the ones below move.
+  3. On selected keys, only the keys move, and they can spread the other way (the bottom one staying
+     put).
+  4. On layers it can leave keys between frames; the check reads that fine.
+  5. After the drag, check the order and play it back; then say "done" and the mentor checks where
+     they landed.
+
+  It MUST NOT claim: that selection order sets which way they spread; that dragging the other way
+  reverses the spread; that one Edit > Undo reverses one drag (L-1 left that unknown; "Edit > Undo"
+  alone, per the server rules, is fine); any way to read the gap while dragging; or any shortcut other
+  than holding Command and Option. A claim not on the list waits for a live check. *Source:*
+  `discovery/usage-notes/offset.md` › session 2 finding 2. *Proof:* the eval case that note proposes
+  (how does Quick Offset work), and a reviewer reading the paragraph against this list.
+- **FR-042 (no leaked self-note before the first call)**: In every merged skill, nothing the mentor
+  writes before its first tool call, or between calls, MAY state which branch of step 0 it took or
+  what it will run next ("Key types learned, review due -> run the review."). Its first words to the
+  learner are the lesson's or the review's own opening. This is a `SKILL.md` wording fix in
+  `key-types-mentor` and `offset-mentor`, and in `speed-graph-mentor` if its "Before the lesson" text
+  has the same pattern. *Source:* `product/evals/key-types/README.md` and
+  `product/evals/offset/README.md` › Smoke run, on branch `evals-wave-a`. *Proof:* SC-014.
+- **FR-043 (a resumed lesson whose comp changed starts fresh; otherwise it keeps its choices)**:
+  *Rewritten 2026-10-26, second pass: the builder chose "confirm + baseline" after LE-1's first rule
+  broke a built promise.* In `session.start` (`mentor/lib/session.mjs`), an open lesson for the same
+  skill and comp that was **never checked and has no demonstration**:
+  - when it is **resumed** (picked up after another lesson or comp was current) and its **baseline no
+    longer matches the comp** (research R26: the layers its targets and focus name have different
+    keys, timing or parent in this snapshot than in the baseline, for example after a reset to some
+    other state), MUST start as a new lesson: `lesson: "new"`, this snapshot as its baseline, no
+    `skill_data`, and no `skill_options` unless this call sends them;
+  - when it is **resumed** and its baseline still matches (T037's case: same day, the reset put the
+    Dots back), MUST stay `resumed` with its baseline, `skill_options` and `skill_data` kept, as
+    today (T061, T063; contracts/skill-module.md › 4; spec 012 SR-1). The four tests that guard this
+    stand unchanged: `key-types-tools.test.mjs:73`, `session-skill-data.test.mjs:42`,
+    `session-skills.test.mjs:224`, `speed-graph-tools.test.mjs:77`;
+  - when it is **continued** (the same skill and comp were the last lesson touched) on the same
+    local day, MUST keep its baseline and choices whatever its keys read, because a change there is
+    the learner's own work before their first "done";
+  - when it is **continued** and it started on an earlier local day (the machine's local date of its
+    `lesson_id` time), starts new, as approved with LE-1 (unchanged; LE-4).
+
+  A lesson that was checked or had a demo resumes or continues as today, whatever its keys read, and
+  `fresh: true` keeps its rule (`LESSON_UNDERWAY`). `session.start` MUST also return whether the
+  lesson came back holding the learner's earlier choices (R26: `stored_choices`, true only when it's
+  `resumed`, it kept `skill_options` from an earlier call, and this call sent none), and
+  `speed_graph_snapshot`, `key_types_snapshot` and `offset_snapshot` MUST pass it through in their
+  replies, so FR-046 can act on it. `snapshot_project` (easing) doesn't get it (FR-035).
+
+  **Known cost** (LE-5): a learner who changes a target's keys, works on another lesson or comp, and
+  comes back before saying "done" gets a new lesson whose baseline already holds their change.
+  *Source:* `discovery/usage-notes/offset.md` › session 2 finding 1 and To fix later; the builder's
+  Phase 9 hand-back (the four failing tests). *Proof:* unit tests on saved snapshots (tasks T173,
+  T174, T186, T187).
+- **FR-044 (the mentor says when its tools are older than the repo)**: When the server starts it
+  MUST record a hash of **only what the server runs** at `HEAD`: the entries of the folder that
+  holds `server.mjs` (`git ls-tree HEAD`, run in that folder), **leaving out `test/` and `dev/`**,
+  hashed in Node (research R25, amended 2026-10-26 second pass: hashing the whole `mentor/` tree
+  gave a false restart warning on every commit of captures or tests, which the sitting method makes
+  mid-session). Git MUST run only when a `.git` folder or file exists in that folder or one above it;
+  otherwise both reads are `null` without starting git (on a Mac without the command-line tools,
+  `/usr/bin/git` is a stub that opens an install dialog on every call). `read_learner_record` and each lesson
+  snapshot tool (`speed_graph_snapshot`, `key_types_snapshot`, `offset_snapshot`) MUST return
+  `server_current`: `true` when the hash on disk now is the same, `false` when it differs, and `null`
+  (unknown) when either read fails (no git, not a git checkout, a time-out). **Unknown is never
+  stale**: the panel's runtime folder runs the mentor from outside the repo, and an installed copy
+  (spec 006) may have no git, so `null` MUST behave like `true`. The hash itself is never returned.
+  `snapshot_project` (easing) doesn't change: its output stays as it is (contracts/skill-module.md,
+  FR-035), and easing reads the field from `read_learner_record`. In every merged skill's step 0
+  (easing, speed graph, key types, offset) and in `next-mentor`'s first step, `server_current: false`
+  MUST make the mentor say, once and in plain words, that its tools were updated since this session
+  started and it needs a restart (a new Claude Code session) before the lesson, and then stop. Skills
+  5 and 6 get the same line in a later per-skill branch (tasks-wave-b.md › Later per-skill branches).
+  *Source:* `discovery/usage-notes/offset.md` › To fix later, first bullet; the reviewer's findings
+  on `mentor/lib/server-current.mjs`, 2026-10-26. *Proof:* unit tests with the hash read injected
+  (same, changed, failing; T175), on a tree listing that changes only in `test/` or `dev/`, and with
+  no `.git` above the folder (T189).
+- **FR-045 (point at the focus layer in a frame)**: `preview_frame` (`mentor/tools/common.mjs`) MUST
+  take an optional `layer` (the layer's name exactly as in the comp, as `focus_layers` takes it). With
+  it, the reply MUST carry the layer's on-screen bounds at that time, in comp pixels, next to the
+  image, plus the comp's size and the image's own size in pixels, so the two can be matched if AE
+  renders the frame smaller. The bounds come from the snapshot's read R3 sampled at the frame's time
+  (`sourceRectAtTime` plus the transform chain, through `comp-space.mjs`'s `footprint`, research R24);
+  the project is never changed (no solo, no dimming). Bounds MUST be absent, with a reason, for a null,
+  any layer whose visibility class is `hidden`, `matte` or `guide` (a shy layer still renders) or that's
+  off because another layer is soloed, an adjustment layer, a layer not on screen at that time (outside its in and
+  out points, or wholly outside the comp), and whatever `footprint` can't compute (3D, auto-orient, no
+  rectangle, not sampled); and when the name matches no layer or more than one. **Added 2026-10-26,
+  second pass** (the reviewer: `sourceRectAtTime` ignores masks and effects, and a precomp's
+  rectangle is its whole comp, so a small masked square could be said to "fill the frame"; research
+  R24, amended): bounds MUST also be absent, with a reason, for a **precomp** layer, a layer with
+  **any effect** (`effect_count` above 0, or unreadable), a layer with **any mask** (a new read,
+  `mask_count`, above 0 or unreadable), and a layer whose **rendered Opacity** at that time is under
+  1% (a new per-sample read). On a capture from before those reads, an absent `mask_count` or sample
+  Opacity isn't a reason (today's behaviour). Key types' steps 3 and 5 need no change for these: no
+  bounds already means point at nothing. Without `layer`, the
+  tool behaves exactly as today. In `.claude/skills/key-types-mentor/SKILL.md`, the frames in step 3
+  (explain) and step 5 (the demo's frames) MUST pass the focus layer and say in plain words where it is
+  in the frame ("the small square near the top left"), never a pixel number; with no bounds, the
+  mentor points at nothing and describes the snap from the tool data, as today. *Source:*
+  `discovery/usage-notes/key-types.md` › To fix later. *Proof:* unit tests on saved snapshots (bounds
+  for a visible layer, absent for a hidden layer and a null; T178; the four added reasons, T192), and
+  a 🖐 live check of the bounds against the rendered frame, with a masked solid and Blink at Opacity
+  0 (T181).
+- **FR-046 (confirm stored choices on a resumed lesson)**: In `speed-graph-mentor`,
+  `key-types-mentor` and `offset-mentor`, when the lesson's snapshot returns `stored_choices` true,
+  the mentor MUST, before acting on any stored choice (a demo, a check, a frame, a hint that uses an
+  order or a gap), say back in plain words, as the learner's own, what they chose last time ("last
+  time you had Dot 3 going first, about 6 frames apart"), ask whether that still holds, and stop for
+  the answer. It reads the choices from the reply's own fields that already show them (for example
+  offset's order, focus and gap, key types' focus and what should move, speed graph's landing-hard
+  pairs and eased layers); no new field. A change goes back through the snapshot tool's
+  `skill_options`, as each skill already does; a yes goes on with the lesson. The mentor never names
+  a field, a session or "stored". This is the harm T037 showed: the old order and gap were used
+  silently. Easing stores no choices (`focus_layers` is sent on every call), so it gets no sentence;
+  skills 5 and 6 get theirs in a later per-skill branch (tasks-wave-b.md › Later per-skill branches).
+  *Source:* `discovery/usage-notes/offset.md` › session 2 finding 1. *Proof:* the eval cases T196
+  hands off (one per skill, resumed with stored choices), and a reviewer reading the three
+  sentences.
+
+- **FR-047 (speed graph keeps and names a stored land-hard choice)**: *Added 2026-10-27 (the
+  reviewer's should-fix 2 on the second pass; the builder chose to fix it now).* Speed graph's step 1
+  always sent `skill_options` with `land_hard: []`, so on a resumed lesson it wiped the pairs the
+  learner had said should land hard, `stored_choices` came back false, and FR-046 never fired (the eval
+  engineer found no reachable speed graph case for it). And `landing_hard` gives only pair ids, which
+  have no plain-words label because those pairs leave the targets. So:
+  - `speed_graph_snapshot` MUST return `landing_hard_labels`: one label per id in `landing_hard`, same
+    order, in the same form as `pairs[].label` ("Title › Position 3–4.367 s"), built from the lesson's
+    baseline; `null` for an id that names no pair there. `landing_hard` itself doesn't change.
+  - In `.claude/skills/speed-graph-mentor/SKILL.md` step 1, the mentor MUST first call
+    `speed_graph_snapshot` **without** `skill_options`. If the lesson comes back `resumed` (or
+    `continued`), it uses the stored choices, and FR-046 confirms them when `stored_choices` is true,
+    naming land-hard pairs from `landing_hard_labels`. If it comes back `new`, it calls again with
+    `skill_options` `{ "eased_layers": [...], "land_hard": [] }`, as step 1 did before; that call
+    continues the same lesson from the same snapshot, so nothing is lost. The review step's call is
+    unchanged.
+
+  The cost is one extra snapshot at the start of a new lesson (about 0.2 s live). *Source:* the
+  reviewer's should-fix 2 on `phase9-pass2`, and the eval engineer's T196 note. *Proof:* a unit test
+  on the reply and the two-call flow (T199b), and an eval case for a resumed speed graph lesson with a
+  stored land-hard choice (T199e).
+
 ### Key Entities
 
 - **Skill**: one teachable idea from `curriculum.md` › 6, with a record ID, its path position, hard
@@ -657,6 +873,11 @@ plus reviews for 2, 1, 3**.
   targets **0 times** while the mark applies, and is back **every time** once its keys change; with
   no marks, easing's findings are identical to before (SC-004). *Measured by:* unit tests, and eval
   case 12 below.
+- **SC-014** (FR-042): The review-due cases in the wave A eval sets (key types case 16, offset case
+  17, speed graph case 08) pass the universal `no_self_instructions` check **3 of 3** each with
+  `--repeat 3`, on `SKILL.md` as Phase 9 leaves it, and the easing set stays within FR-035's bar.
+  *Measured by:* eval runs by the eval engineer (tasks T184, about $4 for the nine runs), logged in each
+  set's README.
 
 ## Eval plan (outline, for the eval engineer)
 
@@ -764,6 +985,14 @@ lesson again.
 - **The panel's screens** for the path, reviews and recommendations (UI overhaul spec).
 - **Other apps,** accounts, sync of the record across machines, pricing and analytics.
 - **A setting-keyframes skill** (an on-ramp only, pending H4).
+- **In the loose-ends pass (FR-039 to FR-046):** the frame pointer in any skill but key types (offset's
+  and the pivot's frames have the same problem; a later request, LE-3); dimming or soloing other
+  layers in a frame (a project change); skills 5 and 6's `SKILL.md` and tool files (their own
+  branches and live lessons are running; Later per-skill branches); restarting the server for the
+  learner (the mentor only says so); and the eval cases these findings propose (the eval engineer's,
+  numbered by the cockpit). Second pass: a footage layer's transparent areas (LE-6); masks' and
+  effects' actual shapes (FR-045 gives no bounds instead of working them out); and the installer's
+  own handling of a missing git (spec 006, open question 6).
 
 ## Open questions
 
@@ -830,6 +1059,67 @@ Carried from `curriculum.md` › 12 and settled in each skill's spec or the plan
 second practice comp's targets, FR-031), B2 (the Cursor), B3 (KD-001), B4 (U and expressions), B5
 (Pan Behind), B6 (FR-032), B7 (FR-024), B8 (scripting names); E1 to E4 (the Eval plan above).
 
+### Loose-ends pass, for the builder (LE), 2026-10-26: answered the same day
+
+The builder took all three recommendations on 2026-10-26: LE-1 is in FR-043 and T173, T174; LE-2
+keeps skills 5 and 6's restart sentence a follow-up; LE-3 keeps the frame pointer to key types in
+this pass. The questions as asked:
+
+1. **LE-1: what makes an open lesson stale (FR-043). Answered: the recommendation.** The approved rule ("an earlier
+   day, or a baseline that no longer matches") has two gaps. (a) As written, it would also reset a
+   lesson the learner worked on before their first "done": offset step 3 re-sends `skill_options`
+   through the snapshot tool when the learner changes the order, so a stagger already made would
+   become the new baseline and the group would vanish. FR-043 therefore applies the baseline test
+   only to a **resumed** lesson, never a continued one. (b) It wouldn't catch the case that was
+   seen: session 2's stale lesson was from the same day and its baseline still matched (the reset put
+   the Dots back), so neither test fires and the old order and gap come back. **Recommended:** keep
+   (a)'s guard, and make **any resumed lesson that was never checked and had no demo** start fresh,
+   whatever its baseline (the learner left it before doing anything the mentor checked, so nothing is
+   lost), plus the earlier-day test for a continued one. The baseline compare is then not needed. A
+   rule keyed on the server process instead would reset every panel turn (each turn starts a new
+   server), so it's rejected.
+   **Superseded 2026-10-26, second pass:** built, this rule failed four existing tests that guard
+   choices kept across a resume (T061, T063, contracts § 4, spec 012 SR-1). The builder chose
+   "confirm + baseline" instead: FR-043 as rewritten, plus FR-046. The earlier-day test for a
+   continued lesson stays (LE-4).
+2. **LE-2 (answered: wait, as recommended): skill 6 is now on `main`** (`31fe72d`, merged after this task was set). FR-044 still leaves
+   `null-parenting-mentor` and `mentor/tools/null-parenting.mjs` to a later branch, with skill 5,
+   because skill 6's live lessons (T340, T341) are running in another session and editing its step 0
+   would change what they test. **Recommended:** yes, keep it a follow-up. Skill 6 still gets
+   `server_current` from `read_learner_record` (its step 0 calls it); only the sentence that acts on
+   it waits.
+3. **LE-3 (answered: key types only, as recommended): the frame pointer beyond key types.** Offset's session 2 frame had the same problem (the
+   Dots couldn't be picked out), and skills 5 and 6 lean on frames. **Recommended:** key types only in
+   this pass (as approved); add one row to Later per-skill branches for offset, the pivot and the null,
+   to run after T181's live check proves the bounds.
+
+### Loose-ends second pass, for the builder (LE), 2026-10-26: open
+
+Each changes FR-043 or FR-045. The tasks are written to the recommendation, so nothing is blocked;
+a different answer changes T173, T174 or T181 before they're built.
+
+4. **LE-4: a continued lesson from an earlier day.** FR-043 keeps LE-1's approved rule: continued,
+   never checked, no demo, started on an earlier local day → new, whatever its keys read. The
+   alternative is to treat it like a resumed one (new only if the comp changed, else kept and
+   confirmed through FR-046). **Recommended: keep it as approved.** It doesn't touch the four tests
+   (all same-day), a new lesson asks for the choices again anyway, and it keeps "continued" meaning
+   one sitting. The cost: a learner who comes back the next day to the same comp is asked again
+   instead of being reminded.
+5. **LE-5: the known cost of the baseline test.** A learner who changes a target's keys, opens
+   another lesson or comp, and comes back before "done" gets a new lesson whose baseline already
+   holds their change, so that work can't earn the pass (for offset, the group may no longer be
+   proposed at all). **Recommended: accept it for now** (the builder's choice; the one resume
+   before a first check seen live, T037, had a matching comp), and log every live case in the
+   skill's usage note;
+   if one is seen, revisit with a direction-aware test (fresh only when the targets moved *away*
+   from what the learner was asked to make). Changes FR-043 only if answered differently.
+6. **LE-6: footage with transparent areas.** A footage layer's rectangle is its whole image, so a
+   small logo on a transparent PNG has the same "fills the frame" problem as a precomp. FR-045 (as
+   asked) leaves footage in. **Recommended: leave it in this pass**, and add a footage-with-alpha
+   row to T181 only if the practice project already has one (no new planting); give it the
+   precomp's reason later if the row disagrees. Removing footage now would drop the pointer for
+   every photo and video, which are accurate.
+
 ## Dependencies
 
 - **`curriculum.md`** (this folder, the curriculum designer's, draft 2026-10-20): the source for
@@ -837,7 +1127,8 @@ second practice comp's targets, FR-031), B2 (the Cursor), B3 (KD-001), B4 (U and
   test and this spec follow.
 - **Spec 002** (built): the lesson shape, the record, `record_lesson`, the server rules, the easing
   analysis and its evals.
-- **Spec 003** (built): the panel, which reads the record for its path section.
+- **Spec 003** (built): the panel, which reads the record for its path section. Its runtime folder
+  (`panel/lib/runtime.js`) runs the mentor from outside the repo, which FR-044 must allow for.
 - **Spec 005** (diagnosis, approved): uses FR-001's finding map, FR-014's map and FR-016's analysis;
   its FR-020 triggers reviews here.
 - **Spec 007** (UI overhaul, approved): shows the path, recommendations and reviews.

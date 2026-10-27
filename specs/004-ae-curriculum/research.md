@@ -450,6 +450,115 @@ the visibility class (FR-013) and the motion-sources map's first step (FR-014). 
   skills 5 and 6 for no safety gain. Open for the human (Q4).
 - **Alternatives:** wait for 25/25 or 24/25 first (FR-035 as written).
 
+## R24. The focus layer's bounds in a frame come from read R3, not a new read (FR-045)
+
+- **Decision:** `preview_frame` with `layer` takes one snapshot with `sample_times: [time]`, then
+  `footprint(snapshot, index, time, { extents })` from `mentor/lib/comp-space.mjs` gives the four
+  corners and the axis-aligned bounds in comp pixels. `extents` is true when the sample has a
+  `rect_extents` (shape and text layers: strokes and letters as drawn), else the layer's `rect`. The
+  snippet behind this is read R3's existing `sourceRectAtTime(t, false / true)` plus the rendered
+  transform at `t` (ES3, in `snapshot.jsx`); no new ExtendScript. The PNG's own width and height are
+  read from its header in Node (the IHDR chunk, bytes 16 to 23), so no dependency.
+- **What's proven live:** the transform math, against AE's own `toComp()` (T136); `rect` and
+  `rect_extents` both matching a shape as drawn (spec 011 L-1). **What isn't:** whether
+  `saveFrameToPng` renders at the comp's full size or at the viewer's resolution (the reply carries
+  both sizes either way); whether a text layer's `rect_extents` matches its letters on screen; whether
+  a guide layer shows in the saved frame (FR-045 treats it as not shown until checked). All three are
+  tasks-wave-b.md T181 (🖐).
+- **Rationale:** the bounds need no project change and reuse the math every wave B skill already
+  trusts. A snapshot costs about 0.2 s live (spec 004 live sitting), well inside SC-004's 10 s.
+- **Alternatives:** a second image with the other layers dimmed (solo or opacity changes the project,
+  so it would need an undo in the same step or a duplicate comp; bounds were chosen over it with the
+  seven loose ends, 2026-10-26);
+  AE's `toComp()` through an expression probe (adds and deletes a layer, which is a write; it stays a
+  dev-script answer key only).
+- **Amended 2026-10-26, second pass (the reviewer, on the merged code):** `sourceRectAtTime` is the
+  layer's own rectangle before masks and effects, and a precomp's is its whole comp size, so the
+  bounds can be far larger than what shows (a small masked square "fills the frame"). The prompt
+  can't stop this, because key types' `target_pairs` carries no layer kind or effect count. **Fix in
+  the tool:** `preview_frame` gives no bounds, with a reason, for these, in this order after the
+  existing class and timing checks and before `footprint()`: `precomp` (`layer_info.kind`),
+  `effects` (`effect_count` above 0, or `null`), `masked` (a new `layer_info.mask_count`, above 0 or
+  `null`) and `transparent` (a new per-sample `opacity`, the rendered Opacity at that time, under
+  1). The two new reads are one ES3 line each in `snapshot.jsx`, read the same guarded way as
+  `effect_count` (`property("ADBE Mask Parade").numProperties`; `transform.opacity.valueAtTime(t,
+  false)`). Any mask counts, whatever its mode, and any effect counts, even one that doesn't move
+  pixels (Fill, Tint): no bounds only costs the pointer, and the mentor then describes the frame as
+  it did before FR-045, which is safe; a wrong pointer isn't. Opacity under 1% rather than exactly 0,
+  because a layer fading in at 0.4% can't be seen either. A field absent from an older capture is
+  unknown and gives no reason, so T178's tests on those captures hold. Footage with transparent
+  areas has the same flaw and is left in (spec LE-6). **Alternatives:** reading each mask's path and
+  each effect's output to clip the bounds (masks are readable, but feathers, expansion, modes and
+  every effect's own geometry aren't, without a render); sending the kind and effect count to the
+  prompt (it would still guess the shape, and the field list would reach every skill's reply).
+
+## R25. Telling a stale server from a current one (FR-044)
+
+- **Decision:** the tree hash of `mentor/` at `HEAD` (`git rev-parse HEAD:./`, run with the working
+  directory set to the folder holding `server.mjs`, found from `import.meta.url`, never
+  `process.cwd()`), read once when the server starts and again on each call that returns
+  `server_current`, with a short time-out. Any failure gives `null`, which the skills treat as current.
+- **Rationale:** a merge into `mentor/` changes the tree hash and nothing else does (a commit elsewhere
+  in the repo doesn't), so a long session isn't flagged for an unrelated commit. Resolving from the
+  server's own folder works from the panel's runtime folder, whose `.mcp.json` points at the repo's
+  `server.mjs` by an absolute path (`panel/lib/runtime.js`), and from a worktree. Uncommitted edits
+  in `mentor/` aren't seen; that's fine, because live lessons run on merged code.
+- **Alternatives:** file modification times under `mentor/` (a checkout or an editor's save changes
+  them without a code change); a version number bumped by hand (forgotten); the server process's start
+  time (every panel turn starts a new server, so it says nothing about the code).
+- **Amended 2026-10-26, second pass (the reviewer, on the merged code):**
+  - **Hash only what the server runs.** The whole-tree hash changes on every commit to `mentor/test/`
+    or `mentor/dev/`, and the sitting method commits captures in the middle of a session, so the
+    mentor told the learner to restart for nothing. Now: `git ls-tree HEAD` run in the folder
+    holding `server.mjs` (it lists that folder's entries, each with its object hash, with paths
+    relative to that folder), the `test` and `dev` lines dropped, and the rest hashed in Node
+    (`node:crypto`, sha256 of the listing as text). Everything else counts, including `fixture/`
+    and `fixture.mjs` (evals run them) and `package.json`, so a new runtime folder is covered
+    without a list to keep up; a new non-runtime folder at the top costs a false warning, never a
+    missed one. **Alternatives:** a list of what to include (a new runtime folder would be missed
+    silently); one `git rev-parse` per runtime entry (several processes per call for the same
+    answer); hashing the files on disk (that sees uncommitted edits, so a builder's save mid-lesson
+    would flag; and it reads every file on every call).
+  - **Don't start git where there's no checkout.** On a Mac without the command-line tools,
+    `/usr/bin/git` is a stub that opens an install dialog, on every call, so the learner would see
+    a dialog with each snapshot. Git runs only when a `.git` folder or file (a worktree's) exists in
+    the server's folder or any folder above it, checked with `fs.existsSync` on each read before
+    spawning; otherwise the read is `null` and nothing starts. An installed copy (spec 006) has no
+    `.git`, so it never runs git. **Alternatives:** `xcode-select -p` first (another process, and
+    it's Mac-only); `git --version` first (that's the call that opens the dialog).
+
+## R26. A resumed lesson: compare the targets' layers, and say when choices came back (FR-043, FR-046)
+
+- **Decision:** in `session.start`, for an open lesson that was never checked and has no demo, and
+  is about to be **resumed**, compare its `baseline` with this snapshot on **the layers its targets
+  and focus name**: every name in the stored `target_refs[].layer`, and in `focus` when that's a
+  list of names. For each name, the layers with that name, in index order, must have in both
+  snapshots: the same keyed properties (`path`), each with the same `expression_enabled` and the
+  same `keys` exactly as the snapshot reports them (times, values, interpolation, temporal ease; the
+  snapshot's own rounding, no further tolerance); and, when both snapshots have `layer_info`, the
+  same `in_point`, `out_point`, `start_time` and `parent`. A name found in neither snapshot matches
+  (nothing to compare); found in one and not the other, it doesn't. Any difference makes the lesson
+  stale, and it's replaced as if it didn't exist. A lesson with no targets and no focus yet (key
+  types before the learner names one) always matches.
+- **`stored_choices`:** `start()` returns it with `lesson`, `session` and `analysis`: `true` only when
+  the result is `resumed`, the lesson already held `skill_options` from an earlier call, and this
+  call sent none; `false` otherwise (new, continued, or a call that sent its own). It's not stored.
+  The three merged lesson snapshot tools add it to their replies as it is; the prompt reads the
+  choices themselves from fields each reply already has (FR-046).
+- **Rationale:** the four tests that failed (T061, T063, spec 012 SR-1) resume on the same capture,
+  so they match and keep their choices; T037's case matches too, and is now caught by the confirm
+  question instead of a reset. Comparing only the named layers means an edit elsewhere in the comp
+  doesn't throw a lesson away; comparing timing and parent too catches offset (whole layers moved)
+  and the null (parenting rewrites keys and the parent link). Names, not indexes, because adding a
+  layer (a null) renumbers everything below it (spec 004 live sitting). The rule stays in the
+  session, so no skill's analyzer changes, and it applies to every skill, easing included.
+- **Alternatives:** comparing the whole comp (any edit anywhere, even a new guide layer, would reset
+  the lesson); comparing target ids only (offset's targets and key types before a focus name none);
+  a per-skill "is this stale" hook in each analyzer (five files for one rule, and skills 5 and 6
+  are out of this pass); a stored "the learner confirmed" flag (the confirm is a conversation step,
+  and a later resume should ask again); returning the choices themselves in a new field (each reply
+  already shows them, in the skill's own words).
+
 ## Dependencies
 
 No new npm dependency. Node built-ins only (`node:fs`, `node:path`, `node:test`). The

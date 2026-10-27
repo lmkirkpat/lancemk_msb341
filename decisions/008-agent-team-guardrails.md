@@ -3,7 +3,8 @@
 **Date:** 2026-10-19
 **Status:** Active. Drafted before the hooks are built or any parallel run; revisit after the first one.
 Amended 2026-10-20 (see the end): permission rules, auto mode, fail-closed on crash, more git
-rules, and an ExtendScript guard.
+rules, and an ExtendScript guard. Amended 2026-10-26 twice: the AE lock keys on the session too,
+and the git guard judges where git acts.
 **Amends `decisions/007`:** 007 waited for a violation before enforcing file ownership in tools.
 This enforces it before the first parallel run.
 
@@ -213,3 +214,74 @@ starting one, check `ae_status` and that no other session holds the lock (CLAUDE
   or lesson: a skill or command takes it at the start and frees it at the end.
 - **If `SessionEnd` doesn't fire on a closed terminal or a crash** (a lock left by a dead session
   shows up in the lock file), **then** the lease stays the backstop; shorten it only if waits add up.
+
+## Amendment 2026-10-26: the git guard judges where git acts
+
+**Why:** writing up parallel run 3 (`discovery/usage-notes/parallel-runs.md` › Run 3 ›
+Guardrails), a hard reset was blocked in run 3 but not in run 2, with no change to the guard in
+between. A probe with five payloads showed why: the guard chose its shared-tree rules from the
+agent's working folder (`p.cwd`), not from the folder git acts on. So it blocked a reset of an
+agent's own worktree from the main tree with `git -C`, and let a subagent standing in a worktree
+reset, stash or clean **the main tree** with `git -C <main>` or `cd <main> &&`. The shared tree is
+what the guard exists to protect. Two smaller gaps turned up while testing the fix: any git option
+before the subcommand (`--no-pager`, `--work-tree=x`, `-p`) hid it from every rule, and
+`merge\b` also blocked `git merge-base`, a read.
+
+**Change:**
+
+| Before | After |
+|---|---|
+| Shared-tree rules apply unless the agent's folder is a linked worktree | They apply to each git call unless that call lands in **the same** linked worktree the agent is standing in, worked out from any `cd` before it and its own `-C` paths. Reaching the main tree or another agent's worktree from a worktree is blocked |
+| No notion of "can't tell" | A subshell, `$(...)`, backticks, `pushd`, `eval`, `env`, `xargs`, `sh -c`, `GIT_DIR`, `--git-dir`, `--work-tree`, or a `cd` to a variable makes the target unknown, and unknown counts as shared |
+| Rules matched `git`, then only `-C`/`-c`, then the subcommand | Any global option may sit in between (`--no-pager`, `--git-dir x`, `--work-tree=x`, `-p`) |
+| Subagents couldn't run `git merge-base` | Allowed; `merge` and `rebase` still blocked |
+
+Still blocked on purpose: from the main tree, a reset of any worktree, even one the agent cut
+itself. The guard can't tell a worktree an agent cut from another agent's. The way through is to
+`cd` into the worktree in one call and run git from there in the next.
+
+Tests (`.claude/hooks/test/hooks.test.mjs`, 39 pass): its own worktree from inside it (`-C` to
+itself, `cd sub`); the main tree and another worktree from inside a worktree, by `-C`, `cd`, quoted
+paths and two `cd`s; five unknown-target forms; the main tree reaching into a worktree; global
+options before the subcommand; `merge-base` against `merge` and `merge --ff-only`.
+
+**Still a text match:** the guard reads the command string, so a heredoc that only *writes* a
+destructive git command is blocked (run 3's cockpit, and twice while writing this amendment).
+Harmless: a false block, not a false pass.
+
+**What would change our mind:**
+
+- **If the "can't tell" list blocks ordinary work in worktrees more than twice in a run** (counted
+  in the run notes), **then** narrow it (most likely `env` or `xargs`), never drop the
+  unknown-means-shared rule.
+- **If a destructive git command reaches the shared tree some other way** (an alias, a script
+  file, `make`), **then** the string guard has hit its limit: move the protection to the tree
+  itself (commit before every wave, or give each agent a worktree so the main tree holds no
+  agent's uncommitted work).
+
+**Known gaps, not fixed yet** (2026-10-26, held back so the change doesn't land under other
+sessions mid-run; fix between runs, with tests, in this order):
+
+1. **The stash is shared across worktrees.** `refs/stash` lives in the common git dir: a stash
+   made in worktree A is listed, and can be popped or dropped, from worktree B and from `main`
+   (checked in a throwaway repo). The guard allows `git stash` inside an agent's own worktree,
+   so one agent's `stash pop` or `stash drop` can take or delete another's work. Fix: block
+   `stash` (except `list` and `show`) everywhere for subagents, not only in the shared tree.
+2. **Not verified: does a subagent's `cd` carry over to its next call's `cwd`?** The README's
+   hand-cut worktree method depends on it (step 2: `cd` into the worktree in the first call). If
+   it doesn't, a hand-cut worktree's agent stands in the main tree on every call: its destructive
+   commands are blocked (safe), but so are `git add -A` and branch switches in its own tree.
+   Check with the identity probe's method (a logging hook on two Bash calls) before the next run.
+3. **Destructive commands with no rule:** `git rm -f` and `git rm -r` (delete working-tree files,
+   modified ones included), `git checkout -f <branch>` and `git switch --discard-changes` for the
+   cockpit in the shared tree, `git checkout <ref> -- <dir>` (overwrites a folder), and
+   `git reflog expire` or `git gc --prune=now` (the object store is shared, so this removes every
+   worktree's way back). Fix: add them to the shared-tree rules, the last two to ALWAYS.
+4. **Text inside strings is matched as commands.** A heredoc, an `echo`, or a commit message that
+   mentions a destructive git command is blocked; three times on 2026-10-26. Fix: strip heredoc
+   bodies and quoted arguments before matching. The README's load check
+   (`echo "git reset --hard"` should be blocked) depends on this false positive, so replace that
+   check in the same change.
+5. **`git config` and aliases.** A subagent can write `alias.x = reset --hard` into the shared
+   config and run `git x`, and config is shared across worktrees. Fix: block `git config` writes
+   for subagents (`--get` and `--list` stay allowed).

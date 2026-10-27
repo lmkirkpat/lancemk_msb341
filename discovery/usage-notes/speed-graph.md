@@ -13,6 +13,13 @@ Title eased by Easy Ease and no speed-graph history in the record. Easing counte
 (6 passes; its review has been due since 2026-10-13). The record's easing lessons have no
 `targets`, so the eased layers came from the lesson text: Title, Subtitle, Glow, Bar.
 
+**Stale server (noted after the fact, from `offset.md` session 1 problem 2):** this lesson ran on
+an `ae-mentor` server started at 10:03 that morning, so it missed `1bfe235` (14:49), the only
+later commit that changed speed graph's logic: `drag_sideways` now keys on a landing that fails a
+and is under 53.33 influence, not on the baseline. No pair in this lesson arrived moving, so that
+rule never ran, and the four verdicts below stand. The other later `mentor/` commits changed only
+fixtures and tests. `SKILL.md` is read fresh each run, so the prompt was current.
+
 ### Steps (quickstart § 5)
 
 | Step | What happened | Matches the expected result? |

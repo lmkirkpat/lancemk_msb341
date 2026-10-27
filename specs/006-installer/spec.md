@@ -513,3 +513,11 @@ Each changes the spec. Recommended answer first.
    editing After Effects' own preferences file while AE is closed, which changes between AE
    versions and could damage the person's AE settings. Guiding costs one click-through in SC-001's
    15 minutes.
+6. **A Mac without git** (added 2026-10-26 from spec 004 FR-044 and research R25, amended). The
+   mentor's "tools updated, restart" check runs git only when a `.git` folder is at or above its own
+   folder, because on a Mac without the command-line tools `/usr/bin/git` is a stub that opens an
+   install dialog on every call. An installed copy has no `.git`, so the check is always unknown
+   there and never warns. Does the installer need its own version check in its place (for example
+   comparing the running mentor's version with the installed one after an update, User Story 3)?
+   *Recommended: yes, from the release's recorded version (FR-025), with no git at all;* decide it
+   in this spec's plan. Never install or prompt for the command-line tools.

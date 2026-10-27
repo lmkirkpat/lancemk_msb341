@@ -9,6 +9,7 @@ import { parseHost } from "../lib/host.mjs";
 import { analyze, check, describePairs, finder, grade } from "../lib/key-types.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
+import { serverCurrent } from "../lib/server-current.mjs";
 import { json } from "../lib/reply.mjs";
 
 const SKILL = "keyframes.types";
@@ -52,7 +53,7 @@ async function keyTypesSnapshot({ mode = "lesson", fresh = false, skill_options 
   const opts = { skill: SKILL, analyze, mode, fresh };
   if (focus_layers) opts.focus_layers = focus_layers;
   if (skill_options !== undefined) opts.skill_options = skill_options;
-  const { lesson, session: les, analysis } = session.start(snapshot, opts); // LESSON_UNDERWAY passes through
+  const { lesson, session: les, analysis, stored_choices } = session.start(snapshot, opts); // LESSON_UNDERWAY passes through
   return json({
     host: parseHost(snapshot),
     lesson,
@@ -70,6 +71,8 @@ async function keyTypesSnapshot({ mode = "lesson", fresh = false, skill_options 
     held_examples: analysis.held_examples,
     left_out: analysis.left_out,
     should_move: (les.skill_options && les.skill_options.should_move) || [],
+    server_current: await serverCurrent(), // FR-044
+    stored_choices, // FR-043, FR-046
   });
 }
 

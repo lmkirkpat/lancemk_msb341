@@ -1,6 +1,7 @@
 # Research: Set the pivot (spec 011)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24).
+**Status**: Draft, awaiting the builder's approval (2026-10-24). Amended 2026-10-26 (spec ›
+Changes 2026-10-26): R1's ranking, R4's numbers.
 
 Built against what's on main after the early wave B merge (d009d35; `mentor` 686 tests):
 `mentor/lib/layer-info.mjs`, `comp-space.mjs`, `visibility.mjs`, `motion-sources.mjs`, and
@@ -14,17 +15,20 @@ and answer keys) and T158 are still open, so every live task here comes after th
   expressions on Anchor Point, Position (and X, Y), Rotation and Scale from the snapshot's keyed
   `layers` entry for the same index (the only place keys are read). Each layer lands in exactly one
   bucket of FR-004 (`default`, `if_named`, `never`) with one reason code, so the prompt can say
-  TD § 4's sentence. Shape layers are `if_named` with reason `shape_until_l1` until the desk block (tasks T235, from L-1)
-  flips one constant, `SHAPES_DEFAULT`, in `mentor/lib/anchor.mjs`.
+  TD § 4's sentence. Shape layers were `if_named` with reason `shape_until_l1` until the desk block (tasks T235, from L-1)
+  flipped one constant, `SHAPES_DEFAULT`, in `mentor/lib/anchor.mjs`; L-1 passed and it's `true`
+  (2026-10-26).
 - **Footprint readable** (FR-004, FR-018): a default candidate needs a `footprint()` with corners
   at its check time (R3) in the first read and a non-zero area there. A zero-area footprint (Scale
   0 on an axis at that time) is `never` with reason `cant_read`, never a pass later.
-- **Ranking** (FR-004, D-3): sort keys in order: unparented (`parents.length === 0`); no Rotation
-  or Scale keys; pivot "where AE put it" (the anchor within 0.5 px of its `rect`'s center **or** of
+- **Ranking** (FR-004, D-3): sort keys in order: unparented (`parents.length === 0`); **how
+  animated already, three steps: no keyed property at all (`keyed.any` false), then keys but none
+  on Rotation or Scale, then Rotation or Scale keys** (amended 2026-10-26, was two steps; the
+  review moves this whole key up, R8); pivot "where AE put it" (the anchor within 0.5 px of its `rect`'s center **or** of
   [0, 0], either one); smaller footprint area first (so a full-frame layer always ranks last,
   which is FR-004's "smaller over full-frame" with no comp size needed); then index. Deterministic,
   one comparator.
-- **Full-frame bucket** (FR-004: "allowed if named, proposed only when nothing else exists"): a
+- **Full-frame bucket** (FR-004: "allowed if named, never proposed", round 7, TD § 19b; was "proposed only when nothing else exists"): a
   layer whose footprint bounds cover ≥ 95% of the comp both ways. The snapshot doesn't read the
   comp's size (checked 2026-10-24), so this needs **shared-code request SR-2** (plan › Requests;
   the same as spec 012's SR-4; approved 2026-10-24 as spec 004 T164, T165). Until it lands, `full_frame` is `null` (unknown) and such a layer
@@ -84,6 +88,9 @@ and answer keys) and T158 are still open, so every live task here comes after th
 - **Fixture mode** ignores `sample_times` (a capture can't be re-sampled), so live captures in the
   sitting are taken with `node mentor/dev/capture.mjs --times <list>` and the answer key records
   the list.
+- **Round 3 (2026-10-26):** live lesson starts took 10 to 12 s (T236, T237). Spec FR-013a
+  times each read first (T251), then may narrow `needed` to the focus's times, skip read 2 with no
+  focus, and pass the focus's times in read 1 (T252). This entry stands until T252 lands.
 
 ## R5. Focus, targets and the demo target
 
@@ -142,6 +149,9 @@ and answer keys) and T158 are still open, so every live task here comes after th
   pivot may have been set away from rest (TD § 7 rest row): `set_away_from_rest` is true when item
   2 fails at the check time **and** passes at the current read's time.
 - **Item 4:** for a Position-keyed focus layer, item 2 at every baseline Position key time.
+  (2026-10-26, D-4: a layer with Position keys at two or more times is `never`, so a lesson
+  reaches item 4 only on a one-key layer; the function is unchanged and stays unit tested on
+  three keys, spec FR-012.)
 - **Item 5:** every other layer's footprint at every time sampled in both reads (children of a
   focus layer only at that layer's check time, `sourcesOf().children`), ≤ 1 px per edge; and no
   new Anchor Point keys on the focus.

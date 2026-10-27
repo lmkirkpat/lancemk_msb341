@@ -118,13 +118,14 @@ a brand new session act like a colleague who already knows what you are working 
     in 96 minutes, an estimated 4 to 5 days solo), run 3 wave B plus skills 011 and 012 (10-23 to
     10-25, seven usage-limit stalls; one Opus agent at a time after the second). Agents misreport
     their own time by 6 to 10x; times in the notes come from commits.
-  - **Skills built:** `/speed-graph-mentor`, `/key-types-mentor`, `/offset-mentor` and
-    `/next-mentor` are on `main`; the first three have passed a first live lesson (below). Skills
-    5 and 6 are reviewed and held on
-    `skill-5-anchor` and `skill-6-null` until their live lessons. Eval sets (stand-in fixtures,
-    dry-run and smoke runs only, no baselines) are on `evals-wave-a` (008 to 010), `evals-skill-5`
-    and `evals-skill-6`, not merged. Smoke findings to fix before baselining: a review self-note
-    leaks before the first tool call (key types, offset, pivot), the pivot demo says "opposite
+  - **Skills built:** `/speed-graph-mentor`, `/key-types-mentor`, `/offset-mentor`,
+    `/next-mentor`, `/null-parenting-mentor` (skill 6, merged `31fe72d`) and `/anchor-mentor`
+    (skill 5, merged 2026-10-26 `f6effae`) are on `main`; all six have passed a first live
+    lesson (below; null in `discovery/usage-notes/null-parenting.md`). Eval sets (dry-run and smoke runs only, no baselines) are on `evals-wave-a`
+    (008 to 010), `evals-skill-5` (live captures, 42 case files for spec cases 1 to 37) and
+    `evals-skill-6`, not merged. Smoke findings to fix before baselining: a self-note leaks before
+    the first snapshot in reviews (key types, offset, pivot; prompt wording didn't fix it for the
+    pivot, so the fix is a cross-skill tool change, below), the pivot demo says "opposite
     directions", and skill 6 step 1 needs "ask and stop".
   - **Easing after wave A:** the drop to 20/25 was the judge, not the mentor (`23b37e9`); baseline
     24/25.
@@ -160,18 +161,51 @@ a brand new session act like a colleague who already knows what you are working 
      claim). Mentor Practice matches none of its captures until Title is put back (T036 left it
      staggered), and Mentor Practice 2 needs a reset to `practice2b.json` (T037 left the Dots
      staggered).
-     - **Now:** skill 5's sitting on `skill-5-anchor` (T232 live checks, T233 captures, T234 and
-       T235 at the desk, T236 Door, T237 Gauge or Pop with one L-4 mistake on purpose). Reset
-       Mentor Practice 2 first. One AE user at a time.
+     - **Skill 5 (set the pivot, spec 011): merged 2026-10-26 (`f6effae`).** Hand-back in
+       `discovery/usage-notes/anchor-build.md`; lessons and timings in `anchor.md`; sitting in
+       `specs/011-anchor/live-sitting-2026-10-26.md`. Mentor tests 1148 pass, hooks 39/39.
+       - **Lessons:** T236 Door (2 min 56 s) and T237 Pop (3 min 54 s), no demo in either. SC-001
+         met; SC-002 4 of 4, 10 needed. Both ran on the old opening.
+       - **Built after the lessons** (spec rounds 2 to 7, teaching design § 16 to § 19b): layers
+         with Position keys at two or more times are left out (`position_moves`), and a one-key
+         layer gets a two-frames sentence with ready-to-say time labels; one watch offer on a
+         one-layer lesson; the opening asks one thing (no idea, no leave-out list; each leave-out
+         said when the learner names that layer); practicing always proposes the snapshot's
+         proposal; a background is never proposed. HO-2 (overlaps) and HO-3 (review) passed.
+       - **Live findings:** Pan Behind on a shape's group is invisible to the snapshot; with Position
+         keyed it changes or adds one key at the playhead; it acts on the layer under the cursor.
+         A lesson start's 10 s was AE throttled in the background (App Nap), not the reads; T252
+         and T253 are deferred until the panel shows whether it still matters.
+       - **Next:**
+         1. The review self-note leak (eval case 16 still writes "Review is due." before the first
+            snapshot after two wording fixes): have the snapshot tool read the record and pick
+            review mode itself, so the mentor makes one call with nothing to narrate. Shared code,
+            so a spec item first; applies to every skill with a review.
+         2. HO-4 met 2026-10-27 (T183's base run, 25/26, logged for specs 011 and 012). Next, the
+            skill 5 baseline (about $15 to $20). Add the two cases on the README's to-do first (a background-only
+            comp; a named layer with no place given).
+         3. A short first lesson on the new opening; watch for "what do you mean by turn from?".
+         4. T240, the review, a day or more after T237. T248 (a stroke) and T261 (L-8, an unkeyed
+            expression on Anchor Point or Position) at the next sitting.
+         Open: H-6 (label the other times the mentor says, if one drifts); C-6 (where the practicing
+         memory clause comes from, every skill); C-4 (the watch offer for skills 2 to 4); SR-3 (the
+         tool file stays `transform-anchor.mjs`).
+     - **Sitting method** (from skill 5, worth copying):
+         - plant by script on the real comp and reset;
+         - use duplicates only for hand moves, so the builder can do several in a row;
+         - check every reset with a strict compare, because `capture.mjs --compare` skips
+           `layer_info` (static layers).
      - **Offset's remaining SC-002 checks (6 more):** run the hints neither lesson hit, on purpose,
        on the Dots: a pair still together, a layer that pops in, a trimmed in point, a gap under
        the floor. They can ride along with the offset review (T040) or a short extra lesson.
      - **A day or more after a first pass:** speed graph review T035, key types review T038 (on
        Cut), offset review T040 (on the Chips).
-     - **Then:** skill 6 on `skill-6-null` (T336 live checks, T337 captures, T338 and T339 at the
-       desk, T340 and T341 first lesson with a jump on purpose, T343 review), and pivot review
-       T240 (stretch).
-     - **After the live lessons:** merge skills 5 and 6, fix the smoke findings above, merge the
+     - **Skill 6 (move a group with a null, spec 012): merged 2026-10-26 (`31fe72d`).** Hand-back
+       in `discovery/usage-notes/null-parenting-build.md`. T340 (3 min 51 s, one demo) and T341
+       (4 min 28 s, no demo, Tile, Caption and Stamp proposed and taken) passed: SC-001 met,
+       SC-002 8 of 8 plus 2 of 2 deliberate jumps, 10 needed. **Then:** review T343 (SC-009,
+       stretch; it carries the last 2 SC-002 checks), and pivot review T240 (stretch).
+     - **After the live lessons:** skills 5 and 6 are merged; fix the smoke findings above, merge the
        eval sets and set baselines (about $13 to $17 each). Still open from the live sitting: speed graph's "already shaped" list
      includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
      out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
@@ -180,8 +214,10 @@ a brand new session act like a colleague who already knows what you are working 
      (`discovery/usage-notes/agent-carry-over.md`: on Operation Food Critic, a new project, the
      hooks and workflow copied over, ten personas trimmed to seven, and a two-researcher
      parallel run with no collisions; the portfolio site came first, so it's supporting
-     evidence only). Three of the five skills passed a first live lesson (speed graph, key types,
-     and offset in both kinds); pivot and null haven't run live, so mark those partial in `/sprint-review` and carry them, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
+     evidence only). All five skills are merged and passed a first live lesson (speed graph, key
+     types, offset in both kinds, the pivot on Door and Pop, and null in T340 and T341). What's
+     partial is "with eval cases": every set is built but none is merged or baselined, so mark
+     that partial in `/sprint-review` and carry the baselines, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
      overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
      cockpit cuts their worktrees from local `main` (the agent tool's worktree option starts
      from `origin/main`). The git guard blocks any command containing `merge-base`, even a read.

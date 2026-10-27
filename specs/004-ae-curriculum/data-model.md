@@ -247,8 +247,9 @@ added 2026-10-24, spec 011 SR-2 = spec 012 SR-4, tasks-wave-b.md T164, T165) and
 | `matte` | On the layer **being matted**: `{ "layer": <index of the matte>, "type": "alpha" \| "alpha_inverted" \| "luma" \| "luma_inverted" }`, or `null`. Scripting names (`trackMatteLayer`, `trackMatteType`) are curriculum B8, checked live |
 | `is_matte` | `isTrackMatte`: this layer is used as a matte |
 | `effect_count` | Number of effects on the layer (optional, 012 B-5; lets a hint fire on an unkeyed effect). Effects themselves aren't read |
+| `mask_count` | **Added 2026-10-26, second pass** (spec FR-045, research R24; tasks-wave-b.md T193): the number of masks on the layer (`property("ADBE Mask Parade").numProperties`), whatever their mode; `null` if unreadable. Masks themselves aren't read. Absent on older captures (unknown) |
 | `transform` | Rendered values (after expressions) at `comp.time`: `anchor`, `position` (assembled from X, Y, Z when separated), `scale` (percent), `rotation` (Z rotation, degrees), `opacity` |
-| `samples` | At each **sample time**: rendered `anchor`, `position`, `scale`, `rotation`, and `rect` (`sourceRectAtTime(t, false)`, the layer's own rectangle in its own space). `rect_extents` (`sourceRectAtTime(t, true)`) on shape and text layers only, else `null` (which one matches what the learner sees is spec 011's L-1) |
+| `samples` | At each **sample time**: rendered `anchor`, `position`, `scale`, `rotation`, `opacity` (percent, `transform.opacity.valueAtTime(t, false)`; **added 2026-10-26, second pass**, T193; absent on older captures), and `rect` (`sourceRectAtTime(t, false)`, the layer's own rectangle in its own space). `rect_extents` (`sourceRectAtTime(t, true)`) on shape and text layers only, else `null` (which one matches what the learner sees is spec 011's L-1) |
 | Sample times | Union of `comp.time`; every key time on the layer's own keyed properties; each descendant's own key times (a parent is sampled wherever a child or grandchild has a key); and the caller's `sample_times`. Deduplicated at 0.001 s, at most 64 per layer (`samples_truncated: true` past that), then sorted. **Which 64 are kept** (added 2026-10-24, review S5): `comp.time` first, then the caller's `sample_times` in the order given, then the layer's own and its descendants' key times, earliest first. So a cap never drops `comp.time` or a caller's time, but a parent with many children's key times can drop a child's **late** key time; `compMatrix` for that child at that time then returns `not_sampled`. A skill that needs a time on every layer of a chain passes it in `sample_times`, and reads `not_sampled` as "can't check", never a guess |
 | Unreadable value | `null` for that field, never a failed snapshot |
 | Not read | Source names, file paths, anything about the machine or user (FR-011, Principle IV); expressions' text (read R2); what's inside precomps (read R4) |
@@ -325,6 +326,34 @@ sourcesOf(snapshot, nameOrIndex) → one entry, or null for a layer not in the a
 | Expression on a keyed property | In `own_keys` with `expression_on: true` and in `expressions.on_keyed` |
 | Anything about unkeyed or turned-off expressions | Not known: `expressions.status` stays `"not_read"` until read R2 (wave D) |
 | Precomp layer | `precomp_contents: "not_read"` until read R4 |
+
+### Loose-ends pass: tool reply fields (2026-10-26, tasks-wave-b.md Phase 9)
+
+No snapshot field changes: `comp.frame_rate` is already in every snapshot. These are **tool reply**
+fields. Each is added to the reply as it is today; nothing else in a reply changes.
+
+| Tool | Field | Rule |
+|---|---|---|
+| `speed_graph_snapshot` | `comp.frame_rate` | The snapshot's `comp.frame_rate`, as `key_types_snapshot` and `offset_snapshot` return it (FR-039; T168, T169) |
+| `read_learner_record`, `speed_graph_snapshot`, `key_types_snapshot`, `offset_snapshot` | `server_current` | `true` when the `mentor/` tree hash on disk equals the one read at server start, `false` when it differs, `null` when either read failed (unknown, treated as current). Never the hash, never a path (FR-044, R25; T175 to T177). `snapshot_project` doesn't get it |
+| `preview_frame` | argument `layer` | Optional. The layer's name exactly as in the comp. Without it, the reply is today's `{ comp, time }` and no snapshot is taken (FR-045, R24; T178, T179) |
+| `preview_frame` (with `layer`) | `layer_bounds` | `{ "left", "top", "right", "bottom" }` in comp pixels at `time`, rounded to 0.001, from `footprint()`. **Absent** (no key) when it can't be given; then `layer_bounds_reason` says why |
+| `preview_frame` (with `layer`) | `layer_bounds_reason` | One of `not_found` (no layer by that name), `ambiguous` (more than one), `null_layer`, `not_rendered` (class `hidden`, `matte` or `guide`, or `soloed_elsewhere`), `adjustment`, `not_on_screen` (the time is outside its in and out points, or the bounds are wholly outside the comp), **second pass:** `precomp` (`kind` is `precomp`), `effects` (`effect_count` above 0 or `null`), `masked` (`mask_count` above 0 or `null`), `transparent` (the sample's `opacity` at that time under 1), checked in that order after `not_on_screen`'s time test and before `footprint()`; an absent `mask_count` or sample `opacity` (older capture) is no reason; or `footprint()`'s own reason (`three_d`, `auto_orient`, `no_rect`, `not_sampled`, `no_layer_info`). Only when `layer_bounds` is absent |
+| `speed_graph_snapshot` | `landing_hard_labels` | **Added 2026-10-27** (FR-047; T199b, T199c): one label per id in `landing_hard`, same order, in `pairs[].label`'s form, from the lesson's baseline; `null` for an id that names no pair there. `landing_hard` is unchanged |
+| `speed_graph_snapshot`, `key_types_snapshot`, `offset_snapshot` | `stored_choices` | **Second pass** (FR-043, FR-046, R26; T186, T187): `session.start`'s value as it is. `true` only when the lesson is `resumed`, kept `skill_options` from an earlier call, and this call sent none; else `false`. `snapshot_project` doesn't get it |
+| `preview_frame` (with `layer`) | `comp_size`, `image_size` | `{ "width", "height" }`: the comp's (`comp.width`, `comp.height`; absent when the snapshot lacks them) and the PNG's own, from its header. Bounds are in comp pixels; scale by `image_size / comp_size` to place them on the image |
+
+**Session lesson, FR-043 (T173, T174), rewritten 2026-10-26 second pass:** no new stored field.
+For an open lesson never checked (`checked`, or `status` `"checked"`) and with no `demo`, `start()`
+decides "stale" two ways: **resumed** and its `baseline` no longer matches this snapshot on the layers
+its `target_refs` and `focus` name (research R26: keys, `expression_enabled`, and `layer_info`'s
+`in_point`, `out_point`, `start_time` and `parent` when both have it); or **continued** and its
+`lesson_id` time is from an earlier local day (LE-1, kept; LE-4). A resumed lesson that matches, and
+any continued lesson from the same day, keep `baseline`, `skill_options` and `skill_data` as before.
+A stale lesson is replaced by a new one exactly as a lesson that didn't exist would be: new
+`lesson_id`, this snapshot as `baseline`, `skill_options` only if this call sends it, and no
+`skill_data`. `start()` returns `stored_choices` (above) next to `lesson`, `session` and `analysis`;
+it isn't written to `session.json`.
 
 ### KD-001 in easing
 

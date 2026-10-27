@@ -178,7 +178,7 @@ Practice 2's 2b layers; the cockpit off AE; one skill-builder holding the AE loc
 
 ## Phase 10: Polish and hand-back
 
-- [ ] T342 Re-run T333's checks on the final branch (live fixtures, no stand-ins), and write the hand-back: branch and commit; test counts; L-1 to L-6 results; SC-001, SC-002 and SC-006; any snippet fix; anything for the spec; the Requests below. The cockpit writes `discovery/usage-notes/null-parenting-build.md` from it
+- [x] T342 Re-run T333's checks on the final branch (live fixtures, no stand-ins), and write the hand-back: branch and commit; test counts; L-1 to L-6 results; SC-001, SC-002 and SC-006; any snippet fix; anything for the spec; the Requests below. The cockpit writes `discovery/usage-notes/null-parenting-build.md` from it. Done 2026-10-26 (`discovery/usage-notes/null-parenting-build.md`: 955 pass, 0 fail; hooks 37 of 37; no shared file touched)
 - [ ] T343 🖐 [US3] Later, a day or more after the first pass: the live review on Row A to C (quickstart › 6, SC-009, stretch), logged by the builder; the cockpit adds it to the usage note
 
 ---
