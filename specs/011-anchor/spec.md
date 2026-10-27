@@ -31,6 +31,16 @@ builder): a one-key layer whose rest key is on another frame stays `position_mov
 TD § 18's two-frames sentence, and the tool says which case it is with both times (new
 `moves_case`, FR-004, B-9; US2 #6, row 5b, Eval plan 24); `watch_offer` never picks a full-frame
 layer (FR-008, D-9). D-8 and D-9 closed. New tasks T254 to T256 (tasks.md › Phase 8e).
+**Amended again 2026-10-26 (round 5), awaiting the builder's approval** of this spec's parts
+(TD § 19 itself was approved by the human the same day): the opening turn carries one choice
+(memory clause only for this skill's history, the intent question, the proposal) and no
+leave-outs or statement of the idea; each leave-out's sentence is said when the learner names that
+layer (TD § 19, S-5: new FR-006a, FR-009, US1 #1, Edge Cases, Eval plan 1); D-7 is withdrawn
+from the opening. The `one_key_off_rest` entry gets ready-to-say time labels, so the mentor never
+rounds a time itself (new **`position_key_label`** and **`rest_label`**, FR-004, B-11), and the
+short fallback when a time can't be read is written down (FR-004, accepted by the human). The Eval
+plan lists cases 25 to 31 (kept by the eval engineer) and splits 11 (the one-focus watch offer)
+from 26 (the two-layer demo). New tasks T257 and T258 (tasks.md › Phase 8f) and an HO-1 update.
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 5,
 'Set the pivot'." Record ID `transform.anchor`, short name `anchor`, tool prefix `anchor_`
@@ -117,8 +127,11 @@ verified pass with no demonstration, and the check agrees with a look in After E
 **Acceptance Scenarios**:
 
 1. **Given** Mentor Practice 2 with the 2b layers, **When** the lesson starts and the learner has
-   no layer in mind, **Then** the mentor offers one default candidate with a hinge that suits its
-   shape in one sentence (TD § 4), and names what it leaves out in one sentence per reason.
+   no layer in mind, **Then** the mentor's first turn asks the intent question, offers one default
+   candidate with a hinge that suits its shape in one sentence as the fallback (TD § 4), and ends
+   on the learner's choice. It names no leave-outs, doesn't state the lesson's idea, and recaps no
+   other skill (FR-006a, TD § 19, amended round 5). A leave-out's sentence comes only on the turn
+   the learner names that layer (FR-009).
 2. **Given** the learner names Door and "the left edge", **When** the mentor repeats it back,
    **Then** it says "the middle of Door's left edge", says where the pivot is now in place words,
    and gives TD § 1's two sentences once, with one frame from the comp (TD § 5 stage 2).
@@ -176,10 +189,11 @@ rest key and fails one set away from it, with the rest-key hint.
    (FR-019).
 6. **Given** the learner names a layer with one Position key whose rest key (the tool's, or their
    own `rest_time`) is more than half a frame from it (round 4, D-8), **When** the mentor answers,
-   **Then** it says TD § 18's two-frames sentence once, with both times from the tool
-   (`position_key_time`, `rest_time`), runs no lesson on it, and offers another layer as usual
-   (FR-004 `moves_case`). It never says "its other keys" or "jump" about that layer. Synthetic
-   only: Mentor Practice 2 has no such layer (FR-004).
+   **Then** it says TD § 18's two-frames sentence once, with both times as the tool's labels
+   give them (`position_key_label`, `rest_label`; round 5, B-11), runs no lesson on it, and offers
+   another layer as usual (FR-004 `moves_case`). It never says "its other keys" or "jump" about
+   that layer. If either time is missing, it says FR-004's short "already moves" line instead.
+   Synthetic only: Mentor Practice 2 has no such layer (FR-004).
 
 ---
 
@@ -233,7 +247,13 @@ Other edge cases:
   frame, with TD § 18's two-frames sentence instead (D-8, FR-004 `moves_case`). A hidden layer, a matte, a guide, a layer with one
   Position key (on the check time, FR-004) or a locked layer can be named (TD § 4; a locked one
   gets the unlock sentence, D-2), unless it already moves: "never" comes first (FR-004
-  precedence).
+  precedence). Each of these sentences is said on the turn the learner names the layer, never in
+  the opening (FR-009, TD § 19).
+- **The learner asks which layers they can use, or why a layer wasn't suggested** (round 5,
+  TD § 19): the mentor answers that question, naming up to three default candidates, and gives an
+  asked-about layer its own TD § 4 sentence. D-7's general sentence ("Sled and Card already move,
+  so they're not in this lesson; set a pivot before you key") is used only when the learner asks
+  about several animated layers at once.
 - **The learner moves the playhead between reads**: the check compares at FR-011's check time,
   never at "the playhead now", so moving it isn't a change.
 - **The learner drags Rotation in stage 6 and forgets Edit > Undo**: the lesson has already passed;
@@ -317,13 +337,31 @@ Other edge cases:
       it. The entry also carries **`position_key_time`** (that key's time) and **`rest_time`**
       (the time the rule compared against: the learner's own `rest_time` when the focus entry
       gave one and it's used (FR-011), else the tool's rest key). Seconds, as the read gives them.
-      The mentor says TD § 18's two-frames sentence with both times, written the way `SKILL.md`
-      writes times.
+      The mentor says TD § 18's two-frames sentence with both times, using the labels below.
+      **Time labels (round 5, B-11):** the entry also carries **`position_key_label`** and
+      **`rest_label`**, ready-to-say strings for the two times, and the mentor MUST use them as
+      given and MUST NOT round or format a time itself (in the smoke run the mentor wrote the
+      learner's "3.667 s" and "4.167 s" where the file says "3.7 s" and "4.2 s"). Format: seconds
+      rounded to the nearest tenth (a half rounds up), a trailing ".0" dropped, a space, then "s":
+      1 → "1 s", 3.667 → "3.7 s", 4.167 → "4.2 s", 2.95 → "3 s". **When the two labels would read
+      the same** (3.667 and 3.7 at 30 fps are a frame apart but both "3.7 s"), both use the fewest
+      decimals, up to three, at which they differ, trailing zeros dropped ("3.67 s" and "3.7 s"),
+      so the sentence never says a layer is on "two frames" at one time. A label is `null` exactly
+      when its time is `null`. The learner's own `rest_time` is labelled the same way, so "4.167"
+      said by the learner comes back as "4.2 s". Unit tested (T258).
+      **Missing time (round 5, accepted by the human 2026-10-26, as built in `SKILL.md` on
+      `skill-5-anchor`):** when `moves_case` is `one_key_off_rest` but `rest_time` or
+      `position_key_time` is `null` (the rest key can't be read), the mentor MUST NOT guess a time
+      and says only the short line "Sled already moves, so it's not in this lesson; set a pivot
+      before you key. Pick another layer?" (the layer's name changing), once, then offers another
+      layer as usual. The line is the builder's, not the designer's; the designer may reword it.
 
-    Entries with any other reason carry none of the three. A layer that's `position_moves` and
+    Entries with any other reason carry none of the five fields (`moves_case`, the two times, the
+    two labels). A layer that's `position_moves` and
     also a matte, hidden, a guide or locked (the precedence rule) still carries its case. In the
-    opening, with no layer named, `moves_case` changes nothing: a one-key layer is one of the
-    layers that already move, under D-7's general sentence (TD § 18). Unit tested on the
+    opening, with no layer named, no leave-out is said (TD § 19, FR-006a), so `moves_case` isn't
+    used there. When the learner asks about several animated layers at once, D-7's general
+    sentence covers them whatever their `moves_case` (TD § 18, § 19). Unit tested on the
     synthetics row 5b lists. **Why one reason with a sub-field, not a split reason:** TD § 18
     keeps it one leave-out with one rule, only the sentence differs; `position_moves` already
     drives the precedence rule, `neededTimes`, the answer key's 16 layers on Mentor Practice 2,
@@ -376,6 +414,22 @@ Other edge cases:
 - **FR-006 (intent first)**: The mentor MUST ask TD § 4's intent question before proposing a
   place, in both forms (layer in mind, or not), and MUST NOT grade a place the learner didn't name
   or agree to (spec 004 FR-021).
+- **FR-006a (the opening turn; round 5, TD § 19, which wins over TD § 4 and § 5 here)**: The
+  mentor's first turn in a lesson MUST carry one choice for the learner and end on it. In order:
+  (1) a memory clause, **only** when this skill has history (practicing: what the record's `next`
+  said was still off) or the lesson is continued or resumed, one clause in plain words with how
+  long ago; never for a first lesson on this skill, whatever other skills the record holds;
+  (2) the intent question (FR-006); (3) when `proposal` isn't null and the lesson isn't
+  continued, the proposal in one sentence, ending on the offer. The turn MUST NOT name a
+  leave-out, MUST NOT state the lesson's idea (TD § 1's two sentences come in stage 2 with the
+  frame, US1 #2), and MUST NOT recap another skill. A continued or resumed lesson says where it
+  left off in one sentence and hands it back, with no intent question or proposal. With no
+  candidate at all: one clause of why, then the new-solid line (TD § 4), not a list of reasons.
+  A review's opening is FR-024's and doesn't change. The wording is TD § 19's, not copied here.
+  *Checked by:* Eval plan 1 (R-ONE-IDEA, with TD § 19's reading for the judge: the intent
+  question plus a one-sentence proposal is one idea; a memory clause of this skill's history is
+  context; a statement of the idea, a leave-out, or a turn ending on anything but the choice is a
+  second idea), and a deterministic check that turn 1 says none of the leave-out sentences.
 - **FR-007 (already there)**: A layer whose anchor already meets FR-010's measure for the named
   place on the lesson's first read MUST NOT be a target; the mentor says so in one sentence and
   asks for another layer or place. Unit tested on Sign (text, "the middle": not already there).
@@ -414,7 +468,8 @@ Other edge cases:
   (rank 1, unkeyed); Door and Needle as the focus → null (two layers); review → null.
 - **FR-009 (what's said about leave-outs)**: Hidden layers, mattes, parents, precomp frames, text
   baselines, flipped layers and Position keys MUST each get TD § 4 or § 9's sentence, once, in
-  plain words. For a one-key layer that's TD § 4's "playhead right on it" line with the key's
+  plain words, **when the learner names that layer** (round 5, TD § 19; never in the opening,
+  FR-006a). For a one-key layer that's TD § 4's "playhead right on it" line with the key's
   time (the `position_keyed_tip` note carries it); for `position_moves`, TD § 4's leave-out
   sentence when `moves_case` is `two_or_more`, TD § 18's two-frames sentence when it's
   `one_key_off_rest` (FR-004). A matte MUST never be called hidden. A parented focus layer gets one sentence naming
@@ -679,7 +734,8 @@ the lock when it's still locked at "done", TD § 15 D-2), and items 1 to 5. And,
 
 ### Lesson, version and record
 
-- **FR-022**: The skill prompt MUST follow TD § 5's stages and spec 004 FR-025's server rules: a
+- **FR-022**: The skill prompt MUST follow TD § 5's stages (stage 1's opening as TD § 19 and
+  FR-006a amend it, round 5) and spec 004 FR-025's server rules: a
   fresh read; one frame from the learner's comp with the focus layer in it; the pivot described in
   place words from the read, never claimed as visible in a frame; no `after-effects` bridge tool,
   no open-ended script.
@@ -780,7 +836,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 3 | Expression on Rotation or Scale | Keyed: not a candidate. Unkeyed: not read (R2) | n/a | "An expression turns Logo, so I can't tell where it sits at rest"; never "the expression ignores the pivot" | Right for keyed; unkeyed is a known blind spot (Out of scope) | Mentor Practice's Logo; Mentor Overlaps' Gauge Dial |
 | 4 | Keys on Anchor Point | Not a candidate | A key added on the focus fails item 5 | TD § 4 sentence; stopwatch hint (TD § 7) | Right | 2b's Wobble (SR-1); synthetic stopwatch-on case |
 | 5 | Position keyed at two or more times (X and Y counted together) | **Never** (`position_moves`, D-4) | n/a in a lesson. Item 4 still computes on any Position-keyed focus, unit tested | TD § 4's "already moves … set the pivot before you key" sentence, once, then another layer offered | Right: **L-2 (2026-10-26)** Pan Behind changes or adds one Position key, at the playhead, and leaves the others, so the layer slides at them and no taught move passes (TD § 16 D-4) | Leave-out: `practice2b` (Sled and the other 15), Mentor Overlaps (Leaf 2, Wipe, Locked Bar, Orbit), synthetic separated X at 1 s and Y at 2 s. Item 4 only, outside the lesson path: `sled-slid` (worst 3.667), `sled-on-key` (worst 4.167), each checked through `lessonDirect` (FR-012) |
-| 5b | Position keyed at one time | Allowed if named, only when that time is the check time (no Rotation or Scale keys, or the rest key on its frame); otherwise `position_moves` with `moves_case: "one_key_off_rest"`, `position_key_time` and `rest_time` (round 4, D-8, B-9) | Item 4 at the key time; a key added is an other change | On the check time: TD § 4's "playhead right on it" line with the key's time; the `slid_at_key` hint if they drag off it. Off it: TD § 18's two-frames sentence with both times, once, then another layer offered; never "its other keys" | Right: L-2, one key, playhead off it, AE added a key at the playhead and the layer slid at the old key. The off-rest case is L-2 plus L-4's pattern (TD § 18); no live capture | `sled-one-key` against `sled-one-key-before` (fails, `slid_at_key`). Synthetic, from `sled-one-key-before` (T246's, extended by T254): one key at 3.667 with the Scale rest key at 4.167 (`position_moves`, `one_key_off_rest`, 3.667 and 4.167) and at 3.667 (allowed, no `moves_case`); one key with Rotation's rest key on it and the learner's `rest_time` 4.167 (`focus_problems`: `one_key_off_rest`, 3.667 and 4.167, the learner's time) |
+| 5b | Position keyed at one time | Allowed if named, only when that time is the check time (no Rotation or Scale keys, or the rest key on its frame); otherwise `position_moves` with `moves_case: "one_key_off_rest"`, `position_key_time` and `rest_time` (round 4, D-8, B-9), with `position_key_label` and `rest_label` (round 5, B-11) | Item 4 at the key time; a key added is an other change | On the check time: TD § 4's "playhead right on it" line with the key's time; the `slid_at_key` hint if they drag off it. Off it: TD § 18's two-frames sentence with both times, once, then another layer offered; never "its other keys" | Right: L-2, one key, playhead off it, AE added a key at the playhead and the layer slid at the old key. The off-rest case is L-2 plus L-4's pattern (TD § 18); no live capture | `sled-one-key` against `sled-one-key-before` (fails, `slid_at_key`). Synthetic, from `sled-one-key-before` (T246's, extended by T254): one key at 3.667 with the Scale rest key at 4.167 (`position_moves`, `one_key_off_rest`, 3.667 and 4.167) and at 3.667 (allowed, no `moves_case`); one key with Rotation's rest key on it and the learner's `rest_time` 4.167 (`focus_problems`: `one_key_off_rest`, 3.667 and 4.167, the learner's time) |
 | 6 | Hold keys on Position | Counted like any key: two or more times, never; one, as row 5b | Item 4 at each key time, not between | n/a | Right; never blames the pivot for a hold jump | Synthetic hold-key layers, one with two hold times (`position_moves`), one with one |
 | 7 | Separated X and Y Position | Footprint from bounds, so either | As focus | n/a | Right; demo writes X and Y (FR-015) | Mentor Overlaps' Leaf 2 (separated); demo twin test |
 | 8 | Effects (a glow, a Transform effect) | Footprint without effects (`rect`) | Effect points don't move; not read | Only if an effect key is a Transform effect: TD § 9 sentence | Right | Synthetic; Mentor Practice's Glow is an adjustment layer (not a candidate) |
@@ -893,8 +949,18 @@ each row must see; this table adds what the focus, the check and the learner eac
 The eval engineer owns the cases, their numbers and fixtures; this lists what must be covered,
 including TD § 14 › E. Unit tests cover the measures; evals score the teaching.
 
-1. **First lesson, no layer in mind**: one candidate offered with a hinge, intent asked first,
-   leave-outs named once each, real names (US1 #1).
+**Where leave-outs are checked (round 5, TD § 19):** a leave-out's sentence is checked on the turn
+the learner names that layer (cases 9, 13, 24, 28 and any other that names one), never in turn 1.
+Turn 1 of a lesson is checked for saying **none** of them (FR-006a).
+
+1. **First lesson, no layer in mind** (amended round 5, TD § 19, FR-006a): intent asked first;
+   one candidate offered with a hinge, in one sentence, as the fallback; the turn ends on the
+   choice; no leave-out named, no statement of the lesson's idea, no recap of another skill; real
+   names (US1 #1). Deterministic: turn 1 holds none of the leave-out sentences ("already move",
+   "not in this lesson", "set a pivot before you key"). Rubric: **R-ONE-IDEA is back on this
+   case**, with TD § 19's reading in the case note (the intent question plus a one-sentence
+   proposal is one idea; a statement of the idea, a leave-out, or ending on anything but the
+   choice is a second).
 2. **First lesson, layer named**: the place repeated in plain words; TD § 1's two sentences once;
    no "you can see the pivot" about a frame.
 3. **Typed Anchor Point value (jumped)**: doesn't pass; "moved with it" hint with a direction; no
@@ -913,12 +979,11 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
    don't have it, and the lesson goes on with Pan Behind (SC-005).
 9. **Matte named as the target**: never called hidden; the eye-left-on sentence if its eye changed.
 10. **Text, "turn from the middle"**: told the pivot is on the baseline, not that it's already there.
-11. **Demonstration: none on the learner's layer; one offer on another** (amended round 3, TD
-    § 17). With two focus layers: on the one the learner cares less about; A and Shift+P asked
-    first; frames before and after. With one focus layer: no demo on it (walks it through), and on
-    a first lesson the invite turn ends with one offer of a watch on `watch_offer`'s layer, in one
+11. **One focus layer: no demo on it, and one watch offer** (amended round 3, TD § 17; split round
+    5, as the eval engineer built it). No demo on the learner's layer (walks it through), and on a
+    first lesson the invite turn ends with one offer of a watch on `watch_offer`'s layer, in one
     sentence (deterministic: no `anchor_demo` call in the turn; rubric: one offer, last sentence,
-    names the offered layer).
+    names the offered layer). The two-focus-layer demo is case 26.
 12. **Understanding check**: a wrong answer gets one light correction and the pass stands.
 13. **Sled named** (Position keys at three times, D-4): TD § 4's "already moves" sentence once,
     no lesson on Sled, another layer offered, never "jump" (deterministic: no `jump` in the
@@ -968,15 +1033,37 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
     run; neither "other keys" nor "jump" in the turn. Rubric: TD § 18's two-frames sentence once,
     naming both times; "set the pivot before you key"; another layer offered. Optional variant: the
     learner names Sled with their own rest pose off the key (the sentence uses their time).
+    **Round 5 (B-11, after T258):** the times said are the tool's labels exactly (3.667 and 4.167
+    → "3.7 s" and "4.2 s", the learner's "4.167" included), deterministic, so the regex no longer
+    needs to accept "3.667 s". The no-layer-named variant (24c on `evals-skill-5`) checks that
+    turn 1 holds no leave-out sentence at all (FR-006a), not only no two-frames sentence.
+25. **A matte's eye left on after a pass** (kept from the first set, numbered by the cockpit round
+    5): the matte-eye sentence ("turn its eye back off"), never "hidden" (FR-019 `matte_eye`, row
+    12).
+26. **Two focus layers, the demo** (moved here from 11, round 5; US2 #3, FR-013, FR-014, FR-017):
+    Door and Tab; the demo on the one the learner cares less about (Tab), A and Shift+P asked first,
+    frames before and after at the same time, "both numbers changed" and the layer didn't move,
+    Edit > Undo named; never on Door.
+27. **Anchor Point's stopwatch turned on** (kept, round 5): the stopwatch hint (FR-019 `stopwatch`,
+    row 4); no pass.
+28. **Door locked** (kept, round 5; D-2, row 28): the unlock sentence when Door is named, on that
+    turn; the lock hint if it's still locked at "done"; no demo on it.
+29. **"What numbers do I type?"** (kept, round 5; SC-004): no number for Anchor Point or Position
+    and no tolerance; the lesson goes on with Pan Behind.
+30. **Stops early after a failed try** (kept, round 5; FR-025): recorded as partial, not passed, in plain
+    words, no method, motive or number.
+31. **After Effects can't be reached** (kept, round 5; server rule 2, Edge Cases): nothing claimed
+    about the comp; the fix passed on.
 
 **Fixtures for `sled-slid` and `sled-on-key`:** not eval fixtures. Since D-4 no lesson can reach
 Sled, so they're unit tests only, run through `lessonDirect` (FR-012).
 
 **Fixtures (2026-10-26):** cases run on the live captures (comp 179, 40 layers, `practice2b.json`
 and the L-1 to L-5 files), not the stand-ins (comp 300, 19 layers), which are deleted. On the live
-comp with T241, case 1's proposal is still Door, the middle of its left edge, and the leave-outs
-are many more (16 Position-keyed layers, all `position_moves` after T245, Wobble, Hatch Rig,
-Seal, Reveal Matte, Background).
+comp with T241, case 1's proposal is still Door, the middle of its left edge. The leave-outs are
+many more (16 Position-keyed layers, all `position_moves` after T245, Wobble, Hatch Rig, Seal,
+Reveal Matte, Background), which is why TD § 19 moved them out of the opening (round 5): each is
+said only if the learner names it.
 
 Plus spec 004's cross-skill cases that touch this skill (plain speech; the matte, cross-skill 3).
 
@@ -1138,6 +1225,41 @@ one-key layer, so the one-key case rests on L-2 and L-4's mechanics and syntheti
    answer key on Mentor Practice 2 is unchanged.
 3. **Closed:** Open questions › D-8 and D-9. D-5 to D-7 stay open, with the recommendations in use.
 
+### 2026-10-26, round 5: the opening turn (TD § 19), time labels, the Eval plan's numbers
+
+TD § 19 was approved by the human on 2026-10-26; the fallback line (item 3) was accepted by the
+human the same day; B-11 (item 4) was approved for the next build. This spec's wording of them
+awaits the builder's approval.
+
+1. **The opening turn (TD § 19, S-5; new FR-006a, FR-009, FR-022, US1 #1, Edge Cases, Eval plan 1
+   and the note above it, Fixtures).** The opening carries one choice: a memory clause only for
+   this skill's own history, the intent question, and the proposal as its fallback, ending on the
+   offer. No leave-outs, no statement of the idea, no recap of other skills. Each leave-out
+   sentence is said, and checked, on the turn the learner names that layer. Rejected options are
+   TD § 19's, not repeated here.
+2. **D-7 withdrawn from the opening.** Its general sentence is kept only for a learner who asks
+   about several moving layers at once (Edge Cases; FR-004's note on `moves_case`). Open questions
+   › D-7 is closed.
+3. **The missing-time fallback (FR-004, US2 #6).** `one_key_off_rest` with `rest_time` or
+   `position_key_time` null gets the short "already moves, so it's not in this lesson" line, as
+   built in `SKILL.md` on `skill-5-anchor`. Already built; T258 keeps it, keyed on the labels.
+4. **Time labels (B-11; FR-004, US2 #6, row 5b, Eval plan 24; data-model › Candidate; contracts ›
+   `anchor_snapshot`).** `position_key_label` and `rest_label` on every `one_key_off_rest` entry
+   (candidates and `focus_problems`), so the prompt never rounds a time. **Chosen:** labels next
+   to the raw times, not instead of them (the raw times stay for the tests, the evals'
+   `rest_time` checks and any later comparison). **Same-label rule:** when two times a frame or
+   more apart round to the same tenth, both get more decimals (up to three), since "at 3.7 s, but
+   at rest at 3.7 s" would contradict the sentence. **Rejected:** *a rounding instruction in
+   `SKILL.md`* (what drifted in 24b's smoke run); *frames instead of seconds* (the file and every
+   other skill say seconds); *one label for the whole sentence* (puts TD § 18's wording in the
+   tool, where the designer can't change it); *labels on every time the tool returns* (the
+   playhead line's `position_keyed_tip.time`, `check_times`, the hints' times): not seen drifting
+   yet; Open questions › H-6.
+5. **The Eval plan (items 11, 24 to 31).** The eval set on `evals-skill-5` kept seven cases the
+   plan didn't list; the cockpit numbered them 25 to 31 and they're listed now. Item 11 is now the
+   one-focus case with the watch offer, and the two-layer demo is 26, as the eval engineer built
+   them.
+
 ## Open questions
 
 ### For the human (H): all answered 2026-10-23, as recommended
@@ -1153,7 +1275,17 @@ one-key layer, so the one-key case rests on L-2 and L-4's mechanics and syntheti
    whether it feels thin.
 5. **H-5, the mentor suggests a hinge** when the learner has none in mind. Approved.
 
-### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16, D-8 and D-9 in TD § 18; D-5 to D-7 open (round 2, 2026-10-26)
+**New, round 5 (2026-10-26):**
+
+6. **H-6, labels on the other times the tool returns.** B-11 labels only the two
+   `one_key_off_rest` times, where the drift was seen. The prompt still writes other times itself:
+   the playhead line (`position_keyed_tip`'s time, "at 3.7 s"), the rest key (`check_times`), and
+   the slid and rest hints. **Recommended:** not now; add the same labels to those, with the same
+   helper, only if an eval or live lesson shows one drifting. Each is a single time, so the
+   same-label clash can't happen there, and widening the tool now touches five fields and most of
+   the eval set's time checks for a drift not yet seen.
+
+### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16, D-8 and D-9 in TD § 18, D-7 in TD § 19; D-5 and D-6 open (round 2, 2026-10-26)
 
 1. **D-1, a Rotation-only layer with no key at 0 or a whole turn**: the key closest to 0 or a
    whole turn, one sentence, "is that how it looks at rest?" (FR-011).
@@ -1192,6 +1324,10 @@ recommendation until answered):**
    leave-outs once per reason, and on Mentor Practice 2 that's 16 layers. **Recommended:** one
    general sentence naming at most two of them ("Sled and Card already move, so they're not in
    this lesson; set a pivot before you key"), designer's wording.
+   **Closed 2026-10-26 (round 5, TD § 19): withdrawn from the opening.** The opening names no
+   leave-outs; each layer's sentence is said when the learner names it (FR-006a, FR-009). The
+   general sentence is kept only for a learner who asks about several moving layers at once (Edge
+   Cases).
 
 **Round 3, closed 2026-10-26 (TD § 18, `47c90bd`; carried in as round 4):**
 
@@ -1230,6 +1366,12 @@ recommendation until answered):**
   layer. It reads `moves_case`, `position_key_time` and `rest_time` from the tool, so wait for
   T254 and T256 before writing it against the build, and before a baseline. Case 13's Sled
   (three key times) is `two_or_more` and doesn't change. D-9 changes no case.
+- **2026-10-26, round 5 (TD § 19, B-11):** cases that look for a leave-out sentence in turn 1
+  move that check to the turn the layer is named, and turn 1 is checked for none (case 1, 24c);
+  R-ONE-IDEA goes back on case 1 with TD § 19's reading in its case note; case 24's time checks
+  take the tool's labels exactly once T258 lands; cases 25 to 31 and the 11/26 split are now in
+  the Eval plan as built. Wait for T257 (and T258 for case 24) before re-running them, and before
+  a baseline.
 
 ## Dependencies
 

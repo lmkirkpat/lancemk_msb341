@@ -22,10 +22,13 @@ copied. Decisions are in [research.md](research.md).
 ```json
 { "null": { "name": "Group Null", "region": "center", "parent_asked": null,
             "chain_on_purpose": null, "one_level_said": false, "existing_said": false },
-  "stored": { "anchor": [50, 50], "position": [960, 540], "scale": [100, 100], "rotation": 0,
+  "stored": { "anchor": [0, 0], "position": [960, 540], "scale": [100, 100], "rotation": 0,
               "time": 3, "from": "check" },
   "parented_seen": false, "children_named": [] }
 ```
+
+The example's `stored.anchor` is `[0, 0]`, AE 26.5's default for a new null (its square's top-left,
+on its Position; spec › L-1, amended 2026-10-26 from the live sitting; it was `[50, 50]`).
 
 | Field | Rule |
 |---|---|

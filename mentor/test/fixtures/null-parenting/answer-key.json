@@ -1,0 +1,1318 @@
+{
+  "about": "Spec 012's answer key, written by hand from mentor/dev/build-practice-comp-2b.jsx's declared layout (T157, T163), TD § 15's table and the planted attempts (the recipes the sitting followed, README › Live captures), never by running the skill's code. Fixture names resolve through load.mjs (a live capture here, else spec 004's read in place). practice2b.json is Mentor Practice 2 as built, wave A's 13 layers included (spec 004 T135). Each attempt is a lesson: a baseline, a focus, and checks in order, each with the learner's input and what the check must return. Lesson chains read parented-center.json (the group under the lesson's own Null 1), never spec 004's practice2b-parented.json (a different null, Null 11 at the comp's center). codes are compared as sets; layers lists the per-layer facts that must hold.",
+  "fixtures": {
+    "practice2b.json": {
+      "proposal": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "demo_target_for_group": "parent/Tile",
+      "left_out": {
+        "Hatch Rig": "null",
+        "Hatch": "parented",
+        "Shadow": "parented",
+        "Background": "full_frame"
+      },
+      "matte_pair": [
+        "Gradient",
+        "Reveal Matte"
+      ],
+      "brings_children": {
+        "Plate": [
+          "Shadow"
+        ]
+      },
+      "review_proposal_after_group": [
+        "Chip A",
+        "Chip B",
+        "Chip C"
+      ],
+      "p2_times": {
+        "Tile": [
+          0,
+          4.167,
+          4.367,
+          5.167,
+          5.367
+        ],
+        "Caption": [
+          0
+        ],
+        "Stamp": [
+          0,
+          4.667,
+          5.667
+        ]
+      },
+      "next_proposal": [
+        "Chip A",
+        "Chip B",
+        "Chip C"
+      ],
+      "crowd": 13,
+      "crowd_layers": [
+        "Blink",
+        "Spinner",
+        "Cut",
+        "Badge",
+        "Peg",
+        "Banner",
+        "Card",
+        "Dot 1",
+        "Dot 2",
+        "Dot 3",
+        "Door",
+        "Plaque",
+        "Sign"
+      ],
+      "worked": "By hand in TD § 15's table (amendment 1): the only group with text, then the Chips (3, top index 9) ahead of the Rows (3, top index 33); wave A's 13 layers chain into one crowd. The review after the group is Chip A to C too (L6-1)."
+    },
+    "synthetic/before.json": {
+      "proposal": [
+        "Card",
+        "Label"
+      ],
+      "demo_target_for_group": "parent/Card"
+    }
+  },
+  "attempts": [
+    {
+      "id": "us1-pivot-region",
+      "story": "US1 #3",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-top-left.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "stage": "parenting",
+            "parenting_passed": false,
+            "passed": false,
+            "codes": [
+              "pivot_region"
+            ],
+            "null": {
+              "name": "Null 1",
+              "n1": true,
+              "n2": true,
+              "n3": {
+                "passed": false,
+                "region_now": "top-left",
+                "wanted": "center"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "us1-null-placed",
+      "story": "US1 stage 3",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "stage": "parenting",
+            "parenting_passed": false,
+            "passed": false,
+            "codes": [
+              "null_ready"
+            ],
+            "stored": true,
+            "null": {
+              "name": "Null 1",
+              "n1": true,
+              "n2": true,
+              "n3": {
+                "passed": true,
+                "region_now": "center",
+                "wanted": "center"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "us1-pickwhip",
+      "story": "US1 #5",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "pickwhip-position.json",
+          "input": {},
+          "expect": {
+            "stage": "parenting",
+            "parenting_passed": false,
+            "codes": [
+              "pickwhip_position"
+            ],
+            "layers": {
+              "Caption": {
+                "parent": null,
+                "p1": false
+              },
+              "Tile": {
+                "p1": true
+              },
+              "Stamp": {
+                "p1": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "us1-all-parented",
+      "story": "US1, US2 #1 (B9)",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "parented-center.json",
+          "input": {},
+          "expect": {
+            "stage": "move",
+            "parenting_passed": true,
+            "passed": false,
+            "codes": [
+              "no_move"
+            ],
+            "layers": {
+              "Tile": {
+                "p1": true,
+                "p2": true,
+                "p3": true
+              },
+              "Caption": {
+                "p1": true,
+                "p2": true,
+                "p3": true
+              },
+              "Stamp": {
+                "p1": true,
+                "p2": true,
+                "p3": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "us1-rotate-pass",
+      "story": "US1 #6",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "parented-center.json",
+          "input": {},
+          "expect": {
+            "codes": [
+              "no_move"
+            ]
+          }
+        },
+        {
+          "read": "rotate-null.json",
+          "input": {},
+          "expect": {
+            "stage": "move",
+            "parenting_passed": true,
+            "passed": true,
+            "codes": [],
+            "null": {
+              "p4": {
+                "passed": true,
+                "on": [
+                  "Rotation"
+                ]
+              },
+              "p5": {
+                "passed": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "us1-rotate-slides-only",
+      "story": "FR-016",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "rotate-null.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "passed": false,
+            "codes": [
+              "region_needed"
+            ],
+            "null": {
+              "p5": {
+                "passed": false,
+                "region_needed": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "us1-fade",
+      "story": "US1 #7",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "fade-null.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "passed": false,
+            "codes": [
+              "opacity_move"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "us1-slide-comments",
+      "story": "US1 stage 7",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "slide-null.json",
+          "input": {},
+          "expect": {
+            "passed": true,
+            "codes": [],
+            "comments": [
+              "linear",
+              "default_name"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "us2-jumped",
+      "story": "US2 #2",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "jumped.json",
+          "input": {},
+          "expect": {
+            "stage": "parenting",
+            "parenting_passed": false,
+            "passed": false,
+            "codes": [
+              "jumped"
+            ],
+            "null": {
+              "p4": null,
+              "p5": null
+            },
+            "layers": {
+              "Stamp": {
+                "p1": true,
+                "p2": false,
+                "worst_px": 120,
+                "direction": "left",
+                "time": 0
+              },
+              "Tile": {
+                "p2": true
+              },
+              "Caption": {
+                "p2": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "us2-keyed-early",
+      "story": "US2 #4, row 30",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "null-keyed-early.json",
+          "input": {},
+          "expect": {
+            "stage": "move",
+            "parenting_passed": true,
+            "passed": true,
+            "codes": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "us2-playhead-moved",
+      "story": "US2 #5, row 32",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "playhead-moved.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "no_move"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "visible-parent",
+      "story": "TD § 7",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "visible-parent.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": false,
+            "codes": [
+              "visible_parent"
+            ],
+            "layers": {
+              "Caption": {
+                "parent": "Tile",
+                "p1": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "anchor-only",
+      "story": "row 26, D-2",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "anchor-only-null.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "passed": false,
+            "codes": [
+              "anchor_only"
+            ],
+            "null": {
+              "p4": {
+                "passed": false,
+                "anchor_only": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "one-key",
+      "story": "row 7",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "one-key-null.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "passed": false,
+            "codes": [
+              "one_key"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "row31-with-check",
+      "story": "row 31, D-1",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "null-moved.json",
+          "input": {},
+          "expect": {
+            "codes": [
+              "null_ready"
+            ],
+            "stored": true
+          }
+        },
+        {
+          "read": "null-moved-before-parenting.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "no_move"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "row31-no-check",
+      "story": "row 31",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "null-moved-before-parenting.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": false,
+            "codes": [
+              "jumped"
+            ],
+            "layers": {
+              "Tile": {
+                "p2": false
+              },
+              "Caption": {
+                "p2": false
+              },
+              "Stamp": {
+                "p2": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "row40-duplicate-null-name",
+      "story": "row 40, D-3",
+      "baseline": "practice2b-null1.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "two-nulls-same-name.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": false,
+            "codes": [
+              "null_name_not_unique"
+            ],
+            "stored": false,
+            "layers_graded": false
+          }
+        },
+        {
+          "read": "two-nulls-renamed.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ],
+            "stored": true,
+            "null": {
+              "name": "Group Null"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "null-renamed",
+      "story": "Edge Cases",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "parented-center.json",
+          "input": {},
+          "expect": {
+            "codes": [
+              "no_move"
+            ]
+          }
+        },
+        {
+          "read": "null-renamed.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "null_renamed",
+              "no_move"
+            ],
+            "null": {
+              "name": "Group Null",
+              "renamed_from": "Null 1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "row38-plate-parented-too",
+      "story": "row 38",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "null-center.json",
+          "input": {
+            "region": "center"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "plate-parented-too.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "no_move"
+            ],
+            "other_changes": [
+              {
+                "kind": "parented_to_null",
+                "layer": "Plate"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "no-null-yet",
+      "story": "stage 3",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "steps": [
+        {
+          "read": "practice2b.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": false,
+            "codes": [
+              "no_null"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "review-visible-parent",
+      "story": "US3 #2",
+      "mode": "review",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Row A",
+        "Row B",
+        "Row C"
+      ],
+      "steps": [
+        {
+          "read": "review-rows-visible.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": false,
+            "codes": [
+              "no_null",
+              "visible_parent"
+            ],
+            "layers": {
+              "Row B": {
+                "parent": "Row A"
+              },
+              "Row C": {
+                "parent": "Row A"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "review-pass",
+      "story": "US3",
+      "mode": "review",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Row A",
+        "Row B",
+        "Row C"
+      ],
+      "steps": [
+        {
+          "read": "review-rows-null.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "review-rows-pass.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "passed": true,
+            "codes": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "review-parented-in-one-go",
+      "story": "TD § 11",
+      "mode": "review",
+      "baseline": "practice2b.json",
+      "focus": [
+        "Row A",
+        "Row B",
+        "Row C"
+      ],
+      "steps": [
+        {
+          "read": "review-rows-parented-in-one-go.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "no_move"
+            ],
+            "stored": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "row4-expression-null",
+      "story": "row 4",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row4-null-expression.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "parenting_passed": true,
+            "passed": false,
+            "codes": [
+              "no_move"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "row10-separated-null",
+      "story": "row 10",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row10-null-separated.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "passed": true,
+            "codes": [],
+            "null": {
+              "p4": {
+                "passed": true,
+                "on": [
+                  "Position"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "row21-uneven-scale",
+      "story": "row 21",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row21-nonuniform.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "passed": true,
+            "codes": [],
+            "comments_include": [
+              "non_uniform_scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "row23-still-parent",
+      "story": "row 23, FR-009",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row23-still-parent-placed.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_has_parent"
+            ],
+            "null": {
+              "n2": false
+            }
+          }
+        },
+        {
+          "read": "synthetic/row23-still-parent-placed.json",
+          "input": {
+            "chain_on_purpose": true
+          },
+          "expect": {
+            "codes": [
+              "one_level_only",
+              "null_ready"
+            ],
+            "null": {
+              "n2": true
+            },
+            "stored": true
+          }
+        },
+        {
+          "read": "synthetic/row23-still-parent.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "no_move"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "row23-moving-parent",
+      "story": "row 23, FR-009",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row23-moving-parent.json",
+          "input": {
+            "chain_on_purpose": true
+          },
+          "expect": {
+            "graded": false,
+            "codes": [
+              "null_parent_moves"
+            ],
+            "null": {
+              "n2": "moves"
+            },
+            "stored": false,
+            "layers_graded": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "row26-anchor-only",
+      "story": "row 26",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row26-anchor-only.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "anchor_only"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "row31-synthetic-with-check",
+      "story": "row 31",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row31-placed.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "synthetic/row31-moved.json",
+          "input": {},
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "synthetic/row31-parented.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "no_move"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "row31-synthetic-no-check",
+      "story": "row 31",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row31-placed.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "synthetic/row31-parented.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": false,
+            "codes": [
+              "jumped"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "row40-synthetic",
+      "story": "row 40",
+      "baseline": "synthetic/before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/row40-two-nulls.json",
+          "input": {},
+          "expect": {
+            "codes": [
+              "null_name_not_unique"
+            ],
+            "stored": false,
+            "layers_graded": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "s1-parented",
+      "story": "S-1, FR-027",
+      "baseline": "synthetic/s1-before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/s1-placed.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "synthetic/s1-parented.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": true,
+            "codes": [
+              "no_move"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "s1-jumped",
+      "story": "S-1, FR-027",
+      "baseline": "synthetic/s1-before.json",
+      "focus": [
+        "Card",
+        "Label"
+      ],
+      "steps": [
+        {
+          "read": "synthetic/s1-placed.json",
+          "input": {
+            "region": "slides_only"
+          },
+          "expect": {
+            "codes": [
+              "null_ready"
+            ]
+          }
+        },
+        {
+          "read": "synthetic/s1-jumped.json",
+          "input": {},
+          "expect": {
+            "parenting_passed": false,
+            "codes": [
+              "jumped"
+            ],
+            "layers": {
+              "Card": {
+                "p2": false
+              },
+              "Label": {
+                "p2": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

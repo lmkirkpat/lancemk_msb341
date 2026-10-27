@@ -1,6 +1,7 @@
 # Quickstart: validating skill 6, move a group with a null (spec 012)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24). § 1 runs in the cloud; § 2 to § 5
+**Status**: Draft, awaiting the builder's approval (2026-10-24). § 2 and § 3 ran 2026-10-26
+(T336, T337) and § 4 the same day (T338, T339); § 5 is next. § 1 runs in the cloud; § 2 to § 5
 are **one sitting** at the builder's Mac (🖐), after spec 004's T133 to T136 and T158, and not
 during spec 011's sitting; § 6 is a day or more later.
 
@@ -34,9 +35,28 @@ agent reads with `node mentor/dev/capture.mjs --times <list>` and logs.
 Saved as `mentor/test/fixtures/null-parenting/<name>.json` with `--times` set to the answer key's
 list; names match `answer-key.json`.
 
+**How the sitting made them (amended 2026-10-26 from the live sitting,
+[live-sitting-2026-10-26.md](live-sitting-2026-10-26.md) › Captures):** only L-1 to L-3 need the
+builder's hands. Every other capture is **planted by script**:
+
+- a **fresh duplicate of Mentor Practice 2 for each** capture, deleted after it;
+- the plant follows the old stand-in recipe exactly (names, places, key times and values), with
+  AE's own parenting (`layer.parent = null`, which keeps the child in place like the Parent pick
+  whip), not arithmetic;
+- read with the mentor's own `snapshot.jsx` at the listed times (the group's times, or the row's,
+  as in the fixtures README);
+- planted keys are **AE's default linear** unless the plant eases them (the stand-in recipe's
+  eased null keys weren't carried over, so a test that needs an eased null eases the keys itself,
+  `6039c78`);
+- the lesson's null is **renamed "Null 1"** so the hand-written answer key holds (AE's own name is
+  "Null N", N counting the project's other nulls);
+- every file gets a top-level **`captured_from`**: the duplicate's id and name, the plant, and
+  "hand" or "script";
+- **`comp.id` and `comp.name` normalized to 179** and "Mentor Practice 2".
+
 | File | Shape (row, eval) |
 |---|---|
-| `parented-rot.json`, `jumped.json`, `pickwhip-position.json` | L-2, L-3 (FR-027, eval 5, 6, 7) |
+| `parented-rot.json`, `jumped.json`, `pickwhip-position.json` | L-2, L-3 (FR-027, eval 5, 6, 7). At the sitting `jumped.json` and `pickwhip-position.json` (Tile and Stamp parented, Caption by expression) were planted; the hand captures are the extras below |
 | `null-top-left.json`, `null-center.json` | The null placed at the group's top-left and middle (US1 #3, N3) |
 | `visible-parent.json` | Caption parented to Tile (eval 10) |
 | `null-keyed-early.json` | The null keyed before the parenting check (eval 8, row 30) |
@@ -45,7 +65,13 @@ list; names match `answer-key.json`.
 | `two-nulls-same-name.json` | Two layers called "Null 1" (row 40) |
 | `demo-done.json`, `demo-undone.json` | The demo and its undo (FR-018, row 39) |
 | `renumbered-before.json`, `renumbered-after.json` | L-5 (row 33) |
-| `review-rows-visible.json` | Row B and Row C parented to Row A (US3 #2, eval 17) |
+| `review-rows-visible.json` | Row B and Row C parented to Row A (US3 #2a, eval 17) |
+| **Extras (added 2026-10-26 from the live sitting)** | |
+| `parented-center.json` | The group parented to the lesson's Null 1 at the group's middle; lesson chains from `null-center.json` read it, since spec 004's `practice2b-parented.json` has Null 11 at the comp's center |
+| `pickwhip-position-hand.json` | By hand (L-3): Caption's Position pick-whipped to the null, unkeyed, nothing else parented |
+| `pickwhip-position-keyed-hand.json` | By hand (L-3): Tile's keyed Position pick-whipped to the null |
+| Planted replacements for every former stand-in | `slide-null.json`, `one-key-null.json`, `null-moved.json`, `practice2b-null1.json`, `two-nulls-renamed.json`, `null-renamed.json`, `plate-parented-too.json`, `playhead-moved.json`, `practice2b-with-wave-a-parented.json`, `review-rows-null.json`, `review-rows-pass.json`, `review-rows-parented-in-one-go.json` |
+| Not captured | `practice2b.json` and `practice2b-with-wave-a.json`: spec 004's live `layer-info/practice2b.json` is the comp as built, wave A included |
 
 Then delete the duplicates, confirm Mentor Practice 2 matches `practice2b.json`, check no capture
 holds a user or folder name, save, release the lock.
@@ -68,6 +94,7 @@ scrub of each focus layer at its key times (SC-002: 9 of 10, and every deliberat
 
 ## 6. 🖐 Live review, a day or more later (SC-009, stretch)
 
-With § 5's record: the review names Chip A, Chip B and Chip C (L6-1; Row A to C only on
-`practice2b.json`), never says "null", asks whether the
+With § 5's record: the review names Chip A, Chip B and Chip C (L6-1; spec 004's live
+`practice2b.json` is the comp as built, so Chip A to C there too; amended 2026-10-26 from the live
+sitting), never says "null", asks whether the
 group turns or scales; checked and recorded as a review.

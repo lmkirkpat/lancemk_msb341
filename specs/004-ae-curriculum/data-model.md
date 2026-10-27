@@ -326,6 +326,26 @@ sourcesOf(snapshot, nameOrIndex) → one entry, or null for a layer not in the a
 | Anything about unkeyed or turned-off expressions | Not known: `expressions.status` stays `"not_read"` until read R2 (wave D) |
 | Precomp layer | `precomp_contents: "not_read"` until read R4 |
 
+### Loose-ends pass: tool reply fields (2026-10-26, tasks-wave-b.md Phase 9)
+
+No snapshot field changes: `comp.frame_rate` is already in every snapshot. These are **tool reply**
+fields. Each is added to the reply as it is today; nothing else in a reply changes.
+
+| Tool | Field | Rule |
+|---|---|---|
+| `speed_graph_snapshot` | `comp.frame_rate` | The snapshot's `comp.frame_rate`, as `key_types_snapshot` and `offset_snapshot` return it (FR-039; T168, T169) |
+| `read_learner_record`, `speed_graph_snapshot`, `key_types_snapshot`, `offset_snapshot` | `server_current` | `true` when the `mentor/` tree hash on disk equals the one read at server start, `false` when it differs, `null` when either read failed (unknown, treated as current). Never the hash, never a path (FR-044, R25; T175 to T177). `snapshot_project` doesn't get it |
+| `preview_frame` | argument `layer` | Optional. The layer's name exactly as in the comp. Without it, the reply is today's `{ comp, time }` and no snapshot is taken (FR-045, R24; T178, T179) |
+| `preview_frame` (with `layer`) | `layer_bounds` | `{ "left", "top", "right", "bottom" }` in comp pixels at `time`, rounded to 0.001, from `footprint()`. **Absent** (no key) when it can't be given; then `layer_bounds_reason` says why |
+| `preview_frame` (with `layer`) | `layer_bounds_reason` | One of `not_found` (no layer by that name), `ambiguous` (more than one), `null_layer`, `not_rendered` (class `hidden`, `matte` or `guide`, or `soloed_elsewhere`), `adjustment`, `not_on_screen` (the time is outside its in and out points, or the bounds are wholly outside the comp), or `footprint()`'s own reason (`three_d`, `auto_orient`, `no_rect`, `not_sampled`, `no_layer_info`). Only when `layer_bounds` is absent |
+| `preview_frame` (with `layer`) | `comp_size`, `image_size` | `{ "width", "height" }`: the comp's (`comp.width`, `comp.height`; absent when the snapshot lacks them) and the PNG's own, from its header. Bounds are in comp pixels; scale by `image_size / comp_size` to place them on the image |
+
+**Session lesson, FR-043 (T173, T174):** no new field. `start()` decides "stale" from the lesson's
+`lesson_id` time, `checked` or `status`, `demo`, whether it's continued or resumed, and (per LE-1)
+its baseline's keys on `target_refs`. A stale lesson is replaced by a new one exactly as a lesson that
+didn't exist would be: new `lesson_id`, this snapshot as `baseline`, `skill_options` only if this call sends it, and no
+`skill_data`.
+
 ### KD-001 in easing
 
 `analyze()`'s `hidden_layers`: keyed layers whose class is `hidden` when `layer_info` is known; the
