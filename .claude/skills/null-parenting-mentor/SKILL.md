@@ -55,10 +55,17 @@ at most; they add the null, place it, parent the rest and give it its move with 
   and choose Columns > Parent & Link. Never quote a keyboard shortcut for it.
 - **Parenting:** "the pick whip in the Parent column": drag it from the layer onto the null, or
   pick the null from the column's menu. A layer has more than one pick whip; the one for this is in
-  the Parent column.
-<!-- L-1: the null's default size and where its anchor sits, whether holding Option or Shift while
-     parenting moves the child, the two pick-whip columns' labels, and Quick Offset with parented
-     layers. Say none of it until live check L-1 logs each at 26.5 (spec 012 FR-023). -->
+  the Parent column. Its tooltip reads "Parent pick whip (select layer from which to inherit
+  transforms)". The pick whip beside a property, like Position, links only that property and sets
+  no parent.
+- **The new null:** After Effects names it "Null" plus a number that carries on from the project's
+  other nulls, so it may be Null 12, not Null 1; use the name the tools return. It lands at the top
+  of the layer stack, in the middle of the comp, as a small square whose anchor is the square's
+  **top-left corner**. So the null's place is that corner, not the middle of the square: when they
+  drag it to where the group turns from, that corner goes on the spot.
+- **Hold no key while parenting.** Holding Option keeps the layer's own values and only sets the
+  parent, so it jumps by the null's offset (it can land off the comp). Holding Shift moves the
+  layer onto the null. Never suggest either. Both undo with one Edit > Undo, like a plain parent.
 
 ## The lesson
 
@@ -174,9 +181,10 @@ at most; they add the null, place it, parent the rest and give it its move with 
    sentences each, real names, never the fix. In a lesson:
    - `jumped`: "Stamp is 120 px to the left of where it was at 0 s." Use `px`, `direction` and
      `time`. Then: "Edit > Undo and parent it again. If the null moved after you placed it, that
-     can show up here too." Never a cause.
-     <!-- L-1: only once live check L-1 confirms it at 26.5, add that holding Option or Shift while
-          parenting changes how After Effects places the layer. -->
+     can show up here too." Never a cause. You may add one question: "Were you holding a key while
+     you parented it? Parent with no key held." Ask it once, not as the reason. If they say the
+     layer flew off when they parented it, ask that question first; the fix is still Edit > Undo
+     and parenting again with no key held.
    - `pickwhip_position`: "Caption's Parent column still says none, and it jumped to where the
      null is. There are two pick whips on a layer; the one for this is in the Parent column."
    - `not_parented`: "Caption's Parent column still says none."
@@ -289,7 +297,7 @@ jumps, and never the word "null"** until it passes. "I already know it" runs the
    them along," and stop there. `null_parent_demo` refuses in a review; never call it.
 
    **This step wins over step 7** wherever they differ. Never say "null" or a null's name (it may be
-   "Null 1"), and no method, menu path or pick whip:
+   "Null 1"), and no method, menu path, pick whip or key to hold:
    - Where a lesson hint names the null, say "the layer they follow" or "the new layer".
    - `no_null`: name what the check sees ("Row A, Row B and Row C don't follow anything yet") and
      nothing about how. With `named`: "I can't find a layer by that name."
