@@ -1,5 +1,5 @@
 {
-  "about": "Spec 012's answer key, written by hand from mentor/dev/build-practice-comp-2b.jsx's declared layout (T157, T163) and the planted attempts in stand-in/build.mjs, never by running the skill's code. Fixture names resolve through load.mjs (live, then spec 004's, then the stand-in). Each attempt is a lesson: a baseline, a focus, and checks in order, each with the learner's input and what the check must return. codes are compared as sets; layers lists the per-layer facts that must hold.",
+  "about": "Spec 012's answer key, written by hand from mentor/dev/build-practice-comp-2b.jsx's declared layout (T157, T163), TD § 15's table and the planted attempts (the recipes the sitting followed, README › Live captures), never by running the skill's code. Fixture names resolve through load.mjs (a live capture here, else spec 004's read in place). practice2b.json is Mentor Practice 2 as built, wave A's 13 layers included (spec 004 T135). Each attempt is a lesson: a baseline, a focus, and checks in order, each with the learner's input and what the check must return. Lesson chains read parented-center.json (the group under the lesson's own Null 1), never spec 004's practice2b-parented.json (a different null, Null 11 at the comp's center). codes are compared as sets; layers lists the per-layer facts that must hold.",
   "fixtures": {
     "practice2b.json": {
       "proposal": [
@@ -24,9 +24,9 @@
         ]
       },
       "review_proposal_after_group": [
-        "Row A",
-        "Row B",
-        "Row C"
+        "Chip A",
+        "Chip B",
+        "Chip C"
       ],
       "p2_times": {
         "Tile": [
@@ -45,18 +45,6 @@
           5.667
         ]
       },
-      "next_proposal": [
-        "Row A",
-        "Row B",
-        "Row C"
-      ]
-    },
-    "practice2b-with-wave-a.json": {
-      "proposal": [
-        "Tile",
-        "Caption",
-        "Stamp"
-      ],
       "next_proposal": [
         "Chip A",
         "Chip B",
@@ -78,7 +66,7 @@
         "Plaque",
         "Sign"
       ],
-      "worked": "By hand in TD § 15's table (amendment 1): the only group with text, then the Chips (3, top index 9) ahead of the Rows (3, top index 33); wave A's 13 layers chain into one crowd."
+      "worked": "By hand in TD § 15's table (amendment 1): the only group with text, then the Chips (3, top index 9) ahead of the Rows (3, top index 33); wave A's 13 layers chain into one crowd. The review after the group is Chip A to C too (L6-1)."
     },
     "synthetic/before.json": {
       "proposal": [
@@ -230,7 +218,7 @@
           }
         },
         {
-          "read": "practice2b-parented.json",
+          "read": "parented-center.json",
           "input": {},
           "expect": {
             "stage": "move",
@@ -282,7 +270,7 @@
           }
         },
         {
-          "read": "practice2b-parented.json",
+          "read": "parented-center.json",
           "input": {},
           "expect": {
             "codes": [
@@ -803,7 +791,7 @@
           }
         },
         {
-          "read": "practice2b-parented.json",
+          "read": "parented-center.json",
           "input": {},
           "expect": {
             "codes": [

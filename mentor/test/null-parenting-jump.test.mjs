@@ -8,7 +8,7 @@ import { check, p2For, storeNull } from "../lib/null-parenting-check.mjs";
 import { allP2Times, p2Times } from "../lib/null-parenting.mjs";
 import { compPosition } from "../lib/comp-space.mjs";
 import { clone, lessonFor, load } from "./fixtures/null-parenting/load.mjs";
-import { sampleList } from "./fixtures/null-parenting/stand-in/build.mjs";
+import { sampleList } from "./fixtures/null-parenting/synthetic/build.mjs";
 
 const GROUP = ["Tile", "Caption", "Stamp"];
 
@@ -20,18 +20,49 @@ function placed(baseFile, placedFile, focus, input = { region: "slides_only" }) 
   return { base, lesson };
 }
 
-test("practice2b-parented.json passes P2 with 0 false jumps: raw values changed, footprints didn't (SC-006, B9)", () => {
-  const { base, lesson } = placed("practice2b.json", "null-center.json", GROUP);
+// SC-006 (B9) on both live parented reads: AE's own parenting rewrites raw values, and the
+// footprints don't move. The null there is still, so its own sample at the before-read time is
+// where it was when the children were parented.
+function storedFrom(read, nullName) {
+  const n = read.layer_info.find((l) => l.name === nullName);
+  return { null: { name: nullName, region: "slides_only" }, stored: storeNull(read, n.index, read.comp.time), parented_seen: false };
+}
+const rawOf = (snap, layer, prop) => snap.layers.find((l) => l.name === layer).properties.find((p) => p.display_name === prop).keys.map((k) => k.value);
+
+test("SC-006: spec 004's practice2b-parented.json (Null 11 at the comp's center) passes P2 with 0 false jumps", () => {
+  const base = load("practice2b.json");
   const read = load("practice2b-parented.json");
-  const before = base.layers.find((l) => l.name === "Tile").properties.find((p) => p.display_name === "Position").keys[0].value;
-  const after = read.layers.find((l) => l.name === "Tile").properties.find((p) => p.display_name === "Position").keys[0].value;
-  assert.notDeepEqual(after, before, "the raw Position values were rewritten");
+  assert.notDeepEqual(rawOf(read, "Tile", "Position"), rawOf(base, "Tile", "Position"), "the raw Position values were rewritten");
+  const lesson = lessonFor(base, { focus: GROUP });
+  lesson.skill_data = storedFrom(read, "Null 11");
   const { result } = check(base, read, lesson, {});
-  for (const l of result.layers) assert.equal(l.p2.passed, true, l.layer);
+  for (const l of result.layers) {
+    assert.equal(l.p1, true, l.layer);
+    assert.equal(l.p2.passed, true, l.layer);
+    assert.ok(l.p2.worst_px < 0.01, `${l.layer} ${l.p2.worst_px}`);
+  }
   assert.equal(result.codes.includes("jumped"), false);
+  assert.equal(result.parenting_passed, true);
 });
 
-test("a jumped stand-in fails with the right layer, distance, direction and time", () => {
+test("SC-006: parented-rot.json (L-2: Tile under a null at Scale 150 and Rotation 30) passes P2 with 0 false jumps", () => {
+  const base = load("practice2b.json");
+  const read = load("parented-rot.json");
+  assert.notDeepEqual(rawOf(read, "Tile", "Position"), rawOf(base, "Tile", "Position"), "Position rewritten");
+  assert.notDeepEqual(rawOf(read, "Tile", "Scale"), rawOf(base, "Tile", "Scale"), "Scale rewritten");
+  assert.equal(read.layer_info.find((l) => l.name === "Tile").transform.rotation, -30, "the static Rotation rewritten");
+  const lesson = lessonFor(base, { focus: GROUP });
+  lesson.skill_data = storedFrom(read, "Null 12");
+  const { result } = check(base, read, lesson, {});
+  const tile = result.layers.find((l) => l.layer === "Tile");
+  assert.equal(tile.p1, true);
+  assert.equal(tile.p2.passed, true);
+  assert.ok(tile.p2.worst_px < 0.01, String(tile.p2.worst_px));
+  assert.equal(result.codes.includes("jumped"), false);
+  assert.ok(result.codes.includes("not_parented"), "Caption and Stamp were left unparented in L-2");
+});
+
+test("a jumped capture fails with the right layer, distance, direction and time", () => {
   const { base, lesson } = placed("practice2b.json", "null-center.json", GROUP);
   const { result } = check(base, load("jumped.json"), lesson, {});
   const h = result.hints.find((x) => x.code === "jumped");
@@ -86,7 +117,7 @@ test("row 31: a null moved after a check, before parenting, isn't a jump; with n
 
 test("once something is parented the stored null is never taken again", () => {
   const { base, lesson } = placed("practice2b.json", "null-center.json", GROUP);
-  const r = check(base, load("practice2b-parented.json"), lesson, {});
+  const r = check(base, load("parented-center.json"), lesson, {});
   assert.equal(r.result.null.stored_now, false);
   assert.equal(r.skill_data.parented_seen, true);
   lesson.skill_data = r.skill_data;
@@ -138,7 +169,7 @@ test("every comp-space reason is couldn't check, never didn't move: 3D, auto-ori
     ["auto_orient", (l) => (l.auto_orient = true)],
     ["no_rect", (l) => l.samples.forEach((s) => (s.rect = null))],
   ]) {
-    const read = load("practice2b-parented.json");
+    const read = load("parented-center.json");
     change(read.layer_info.find((l) => l.name === "Caption"));
     const r = check(base, read, lesson, {}).result;
     const cap = r.layers.find((l) => l.layer === "Caption");
@@ -147,7 +178,7 @@ test("every comp-space reason is couldn't check, never didn't move: 3D, auto-ori
     assert.equal(r.parenting_passed, false, why);
   }
   // A stored null with Scale 0: compMatrix can still compose it, but the footprint collapses, so it reads as moved.
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const z = clone(lesson);
   z.skill_data.stored.scale = [0, 100];
   assert.equal(check(base, read, z, {}).result.parenting_passed, false);

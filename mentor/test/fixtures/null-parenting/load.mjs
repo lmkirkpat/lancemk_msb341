@@ -1,6 +1,6 @@
 // Loading spec 012's fixtures in its tests: a live capture in this folder first, then spec 004's
-// capture read in place (mentor/test/fixtures/layer-info/), then the stand-in. Synthetics are
-// read from synthetic/ by name. Also builds a lesson the way the session would.
+// capture read in place (mentor/test/fixtures/layer-info/). Synthetics and records are read from
+// synthetic/ and records/ by name. Also builds a lesson the way the session would.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -15,8 +15,8 @@ const read = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
 export function where(name) {
   if (path.isAbsolute(name)) return name;
   if (name.startsWith("synthetic/") || name.startsWith("records/")) return path.join(DIR, name);
-  for (const p of [path.join(DIR, name), path.join(SPEC004, name), path.join(DIR, "stand-in", name)]) if (fs.existsSync(p)) return p;
-  throw new Error(`No fixture called ${name} (live, spec 004's or stand-in)`);
+  for (const p of [path.join(DIR, name), path.join(SPEC004, name)]) if (fs.existsSync(p)) return p;
+  throw new Error(`No fixture called ${name} (live, or spec 004's)`);
 }
 
 export const load = (name) => read(where(name));

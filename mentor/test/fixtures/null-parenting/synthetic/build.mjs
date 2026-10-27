@@ -1,17 +1,17 @@
-// Writes the cloud stand-ins for spec 012's live captures (quickstart › 3, T135's parented
-// capture) and the permanent synthetics the spec allows (overlap rows 4, 10, 21, 23, 26, 31, 35,
-// 36, 40, the 70-time cap case and the Scale 150 / Rotation 30 null for S-1). Run from the repo
-// root:
-//   node mentor/test/fixtures/null-parenting/stand-in/build.mjs
-// stand-in/ is deleted once the live captures replace it (tasks T338); ../synthetic/ stays.
+// Writes spec 012's permanent synthetics, the only fixtures the spec allows that aren't from AE
+// (FR-026): overlap rows 4, 10, 21, 23, 26, 31, 35, 36, 40, the 70-time cap case, the Scale 150 /
+// Rotation 30 null for S-1, amendment 1's crowd-only comp and the zero-scale null. Run from the
+// repo root:
+//   node mentor/test/fixtures/null-parenting/synthetic/build.mjs
+// Moved here from stand-in/build.mjs when the live captures replaced the stand-ins (tasks T338);
+// the synthetic part is unchanged, so it rewrites synthetic/ byte for byte.
 //
-// Sources: Mentor Practice 2's wave B layers as declared in mentor/dev/build-practice-comp-2b.jsx
-// (T157 with T163's layout: names, sizes, positions, key times and values), its wave A layers as in
-// mentor/dev/build-practice-comp-2.jsx (only in practice2b-with-wave-a.json), and the snapshot's
-// shape and sampling order as in mentor/jsx/snapshot.jsx (comp.time and the caller's times first,
-// then each layer's own and its descendants' key times, at most 64). Text rectangles are estimates
-// (no font metrics without AE). Parented variants rewrite raw values with plain arithmetic here,
-// never with the skill's own code or its fixture twin, so the tests aren't circular.
+// The snapshot's shape and sampling order follow mentor/jsx/snapshot.jsx (comp.time and the
+// caller's times first, then each layer's own and its descendants' key times, at most 64).
+// Parented variants rewrite raw values with plain arithmetic here, never with the skill's own code
+// or its fixture twin, so the tests aren't circular. Synthetic nulls keep this file's defaults
+// (Opacity 100, anchor at the square's middle), not AE 26.5's (Opacity 0, anchor at the top-left);
+// the live captures cover AE's.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -22,7 +22,6 @@ const ROOT = path.resolve(HERE, "..");
 const HOST = { ae_version: "26.5x89", os: "Macintosh OS 27.0.1/64" };
 const TF = "ADBE Transform Group/";
 const r3 = (v) => Math.round(v * 1000) / 1000 + 0;
-const F = (frame) => frame / 30;
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
 // ---- Properties
@@ -202,126 +201,15 @@ function parentTo(child, parentSpec, { jump = null, time = 0 } = {}) {
   return c;
 }
 
-// ---- Mentor Practice 2 with its wave B layers (build-practice-comp-2b.jsx)
+// ---- Helpers the synthetics share
 
-const COMP2 = { id: 300, name: "Mentor Practice 2", duration: 8, frame_rate: 30, time: 0, hide_shy: false, width: 1920, height: 1080 };
-
-function waveB() {
-  return [
-    layer("Door", "solid", { size: [300, 500], position: [200, 300] }),
-    layer("Needle", "solid", { size: [30, 400], position: [420, 250] }),
-    layer("Gauge", "solid", { size: [40, 200], position: [500, 150], keys: { rotation: [[F(95), 0], [F(125), 90]] } }),
-    layer("Lid", "shape", { size: [160, 60], position: [640, 450], anchor: [0, 150] }),
-    layer("Wobble", "solid", { size: [80, 80], position: [800, 120], keys: { anchor: [[F(114), [40, 40]], [F(144), [60, 40]]] } }),
-    layer("Tab", "solid", { size: [200, 50], position: [620, 480] }),
-    layer("Peg", "solid", { size: [30, 30], position: [820, 480] }),
-    layer("Banner", "shape", { size: [800, 60], position: [450, 640] }),
-    layer("Sign", "text", { size: [130, 70], position: [200, 780] }),
-    layer("Plaque", "solid", { size: [100, 60], position: [480, 790], scale: [200, 200] }),
-    layer("Flip", "solid", { size: [100, 60], position: [720, 790], scale: [-100, 100] }),
-    layer("Pop", "solid", { size: [120, 120], position: [120, 960], keys: { scale: [[F(99), [0, 0]], [F(129), [100, 100]]] } }),
-    layer("Sled", "solid", { size: [100, 60], position: [320, 960], keys: { position: [[F(110), [320, 960]], [F(125), [420, 960]], [F(140), [420, 900]]] } }),
-    layer("Hatch Rig", "null", { position: [640, 960] }),
-    layer("Hatch", "solid", { size: [150, 80], position: [50, 50], parent: "Hatch Rig" }), // [640, 960] in comp space, under the rig at [640, 960] with anchor [50, 50]
-    layer("Seal", "precomp", { size: [200, 200], position: [840, 960], scale: [30, 30] }),
-    layer("Tile", "shape", { size: [200, 100], position: [1200, 150], keys: { position: [[F(125), [1200, 150]], [F(155), [1240, 150]]], scale: [[F(131), [100, 100]], [F(161), [110, 110]]] } }),
-    layer("Caption", "text", { size: [130, 34], position: [1220, 215], keys: { opacity: [[F(129), 20], [F(159), 100]] } }),
-    layer("Stamp", "solid", { size: [80, 80], position: [1290, 190], keys: { x: [[F(140), 1290], [F(170), 1310]], y: [[F(140), 190], [F(170), 200]] } }),
-    layer("Row A", "solid", { size: [240, 60], position: [1740, 120], keys: { position: [[F(144), [1740, 120]], [F(174), [1760, 120]]] } }),
-    layer("Row B", "solid", { size: [240, 60], position: [1740, 145] }),
-    layer("Row C", "solid", { size: [240, 60], position: [1740, 170], keys: { position: [[F(155), [1740, 170]], [F(185), [1760, 170]]] } }),
-    layer("Plate", "solid", { size: [200, 120], position: [1200, 560], keys: { position: [[F(159), [1200, 560]], [F(189), [1230, 560]]] } }),
-    layer("Shadow", "solid", { size: [200, 120], position: [115, 75], parent: "Plate" }), // [1215, 575] in comp space
-    layer("Reveal Matte", "solid", { size: [240, 140], position: [1740, 560], is_matte: true, enabled: false }),
-    layer("Gradient", "solid", { size: [240, 140], position: [1740, 560], matte: "Reveal Matte", keys: { position: [[F(163), [1740, 560]], [F(193), [1760, 560]]] } }),
-    layer("Background", "solid", { size: [1920, 1080], position: [960, 540] }),
-  ];
-}
-
-function waveA() {
-  return [
-    layer("Blink", "shape", { size: [40, 120], keys: { opacity: [[1, 100], [1.4, 0], [1.8, 100], [2.2, 0]] } }),
-    layer("Spinner", "shape", { size: [120, 20], keys: { rotation: [[0.25, 0], [4.25, 360]] }, type: "linear" }),
-    layer("Cut", "shape", { size: [200, 200], keys: { opacity: [[3, 100], [3.1, 0]] } }),
-    layer("Card", "shape", { size: [300, 180], position: [400, 700], keys: { position: [[1.2, [400, 700]], [2.4, [800, 700]]], scale: [[1.2, [80, 80]], [2.4, [100, 100]]] } }),
-    layer("Dot 1", "shape", { size: [50, 50], position: [300, 300], keys: { position: [[0, [300, 300]], [0.5, [300, 400]], [1.5, [700, 400]]] } }),
-    layer("Dot 2", "shape", { size: [50, 50], position: [300, 500], keys: { position: [[0.5, [300, 500]], [1.5, [700, 500]]] } }),
-    layer("Dot 3", "shape", { size: [50, 50], position: [300, 600], keys: { x: [[0.5, 300], [1.5, 700]], y: [[0.5, 600], [1.25, 500]] } }),
-    layer("Badge", "shape", { size: [100, 100], keys: { scale: [[3.5, [60, 60]], [4.5, [100, 100]]] } }),
-    layer("Chip A", "shape", { size: [120, 40], position: [1200, 820], keys: { position: [[2, [1200, 820]], [3, [1400, 820]]] } }),
-    layer("Chip B", "shape", { size: [120, 40], position: [1200, 760], keys: { position: [[2, [1200, 760]], [3, [1400, 760]]] } }),
-    layer("Chip C", "shape", { size: [120, 40], position: [1200, 700], keys: { position: [[2, [1200, 700]], [3, [1400, 700]]] } }),
-    layer("Flag", "shape", { size: [60, 100], position: [1500, 300], keys: { position: [[4, [1500, 300]], [4.5, [1500, 500]], [5.5, [1700, 500]]] } }),
-    layer("Pause", "shape", { size: [80, 80], position: [200, 900], keys: { position: [[5, [200, 900]], [5.5, [500, 900]], [6, [500, 900]], [6.5, [800, 900]]] } }),
-  ];
-}
-
-// The group's combined bounds at 0 s: Tile 1100..1300 × 100..200, Caption 1155..1285 × 187.8..221.8,
-// Stamp 1250..1330 × 150..230, so 1100..1330 × 100..230; its middle is (1215, 165).
-const CENTER = [1215, 165];
-const TOP_LEFT = [1100, 100];
 const nullAt = (name, position, o = {}) => layer(name, "null", { position, ...o });
-const GROUP = ["Tile", "Caption", "Stamp"];
-const ROWS = ["Row A", "Row B", "Row C"];
-// The P2 times of the group, passed by null_parent_check (quickstart › 3's --times).
-export const GROUP_TIMES = [0, 4.167, 4.367, 4.667, 5.167, 5.367, 5.667];
-
 const withNull = (nul, specs, parented = [], { jumps = {}, time = 0 } = {}) =>
   [nul, ...specs.map((s) => (parented.includes(s.name) ? parentTo(s, nul, { jump: jumps[s.name], time }) : s))];
 
 function writeTo(dir, name, snap) {
   fs.mkdirSync(path.join(ROOT, dir), { recursive: true });
   fs.writeFileSync(path.join(ROOT, dir, name), JSON.stringify(snap, null, 2) + "\n");
-}
-const standIn = (name, specs, o = {}) => writeTo("stand-in", name, snapshot(specs, { comp: { ...COMP2, ...(o.comp || {}) }, callerTimes: o.times ?? GROUP_TIMES, note: `stand-in for mentor/test/fixtures/null-parenting/${name} (live capture, spec 012 quickstart › 3${o.why ? `; ${o.why}` : ""})` }));
-
-export function buildStandIns() {
-  const base = waveB();
-  writeTo("stand-in", "practice2b.json", snapshot(base, { comp: COMP2, note: "stand-in for spec 004's mentor/test/fixtures/layer-info/practice2b.json (T135), Mentor Practice 2's wave B layers only, at 0 s" }));
-  writeTo("stand-in", "practice2b-with-wave-a.json", snapshot([...waveA(), ...base], { comp: COMP2, note: "stand-in for practice2b.json with Mentor Practice 2's 13 wave A layers too, as the live comp has them (L-6)" }));
-  writeTo("stand-in", "practice2b-with-wave-a-parented.json", snapshot([...waveA(), ...withNull(nullAt("Group Null", CENTER), base, GROUP)], { comp: COMP2, callerTimes: GROUP_TIMES, note: "stand-in: the wave A comp after the lesson, Tile, Caption and Stamp parented to Group Null (L6-1's review)" }));
-
-  const n1 = nullAt("Null 1", CENTER);
-  standIn("null-center.json", withNull(n1, base), { why: "a null added at the group's middle, nothing parented; also renumbered-after.json (L-5)" });
-  standIn("null-top-left.json", withNull(nullAt("Null 1", TOP_LEFT), base), { why: "the null at the group's top-left (US1 #3)" });
-  writeTo("stand-in", "practice2b-parented.json", snapshot(withNull(n1, base, GROUP), { comp: COMP2, callerTimes: GROUP_TIMES, note: "stand-in for spec 004's practice2b-parented.json (T135 a): Tile, Caption and Stamp parented to Null 1 with no jump, raw values rewritten, footprints unchanged" }));
-  standIn("jumped.json", withNull(n1, base, GROUP, { jumps: { Stamp: (c) => { c.keys.x = c.keys.x.map(([t, v]) => [t, v - 120]); c.position[0] -= 120; } } }), { why: "Stamp parented 120 px left of where it was (L-3)" });
-  // A copy: the base specs are shared by every stand-in.
-  const snapped = (c) => ({ ...clone(c), rendered: () => ({ position: CENTER }), expr: { position: true } });
-  const pick = withNull(n1, base, ["Tile", "Stamp"]).map((s) => (s.name === "Caption" ? snapped(s) : s));
-  standIn("pickwhip-position.json", pick, { why: "Caption linked by the pick whip dragged from Position: no parent, snapped to the null (L-3)" });
-  const tile = base.find((s) => s.name === "Tile");
-  standIn("visible-parent.json", withNull(n1, base, ["Tile", "Stamp"]).map((s) => (s.name === "Caption" ? parentTo(s, tile) : s)), { why: "Caption parented to Tile, a visible layer" });
-  const keyed = (o) => withNull(nullAt("Null 1", CENTER, o), base, GROUP);
-  standIn("null-keyed-early.json", keyed({ keys: { position: [[6, CENTER], [7, [CENTER[0], CENTER[1] + 200]]] } }), { why: "the null keyed before the parenting check (row 30)" });
-  standIn("fade-null.json", keyed({ keys: { opacity: [[6, 100], [7, 0]] } }), { why: "the null faded instead of moved (P4)" });
-  standIn("rotate-null.json", keyed({ keys: { rotation: [[6, 0], [7, 90]] } }), { why: "the null given two Rotation keys (P4 passes)" });
-  standIn("slide-null.json", keyed({ keys: { position: [[6, CENTER], [7, [CENTER[0] + 300, CENTER[1]]]] }, type: "linear" }), { why: "the null slides, linear keys (P4, comments)" });
-  standIn("anchor-only-null.json", keyed({ keys: { anchor: [[6, [50, 50]], [7, [150, 50]]] } }), { why: "the null keyed on Anchor Point only (row 26)" });
-  standIn("one-key-null.json", keyed({ keys: { position: [[6, CENTER]] } }), { why: "one Position key on the null (P4)" });
-  // Row 31: the null moved after a check, before parenting; then parented against the new spot.
-  const moved = nullAt("Null 1", [1300, 300]);
-  standIn("null-moved.json", withNull(moved, base), { why: "the null dragged to a new spot after the stage 3 check (row 31)" });
-  standIn("null-moved-before-parenting.json", withNull(moved, base, GROUP), { why: "the group parented to the null at its new spot (row 31)" });
-  // Row 40: an existing "Null 1" in the before read, then a second one, then the new one renamed.
-  const spare = nullAt("Null 1", [1800, 1000]);
-  writeTo("stand-in", "practice2b-null1.json", snapshot([spare, ...base], { comp: COMP2, note: "stand-in: practice2b.json with an existing, empty null called Null 1 (row 40's before read)" }));
-  standIn("two-nulls-same-name.json", [nullAt("Null 1", CENTER), spare, ...base], { why: "a second layer called Null 1 added at the group's middle (row 40)" });
-  standIn("two-nulls-renamed.json", [nullAt("Group Null", CENTER), spare, ...base], { why: "the new null renamed Group Null (row 40)" });
-  // The null renamed after parenting (Edge Cases).
-  const renamed = nullAt("Group Null", CENTER);
-  standIn("null-renamed.json", withNull(renamed, base, GROUP), { why: "the lesson's null renamed after parenting" });
-  // Row 38: a layer outside the focus parented to the null as well.
-  standIn("plate-parented-too.json", withNull(n1, base, [...GROUP, "Plate"]), { why: "Plate parented to the null too (row 38)" });
-  // S-2: the playhead moved since the before read.
-  standIn("playhead-moved.json", withNull(n1, base, GROUP), { comp: { time: 2.5 }, why: "the playhead at 2.5 s (S-2)" });
-  // US3: the review group.
-  const rowA = base.find((s) => s.name === "Row A");
-  standIn("review-rows-visible.json", base.map((s) => (s.name === "Row B" || s.name === "Row C" ? parentTo(s, rowA) : s)), { times: [0, 4.8, 5.167, 5.8, 6.167], why: "Row B and Row C parented to Row A (US3 #2)" });
-  const rowNull = nullAt("Null 1", [1740, 145]);
-  standIn("review-rows-null.json", withNull(rowNull, base), { times: [0, 4.8, 5.167, 5.8, 6.167], why: "a null added at the rows' middle, nothing parented (review)" });
-  standIn("review-rows-pass.json", withNull(nullAt("Null 1", [1740, 145], { keys: { position: [[6.5, [1740, 145]], [7.5, [1740, 300]]] } }), base, ROWS), { times: [0, 4.8, 5.167, 5.8, 6.167], why: "Row A to C parented to a null that slides (review pass)" });
-  standIn("review-rows-parented-in-one-go.json", withNull(nullAt("Null 1", [1740, 145]), base, ROWS), { times: [0, 4.8, 5.167, 5.8, 6.167], why: "the null added and the rows parented before any check (review, TD § 11)" });
 }
 
 // ---- Permanent synthetics (spec 012 FR-026: only rows the spec allows)
@@ -399,7 +287,6 @@ export function buildSynthetics() {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  buildStandIns();
   buildSynthetics();
-  console.log("Wrote stand-in/ and synthetic/ under", path.relative(process.cwd(), ROOT));
+  console.log("Wrote synthetic/ under", path.relative(process.cwd(), ROOT));
 }

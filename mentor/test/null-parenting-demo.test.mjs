@@ -135,7 +135,7 @@ test("a null at Scale 0 on an axis: the twin refuses null_scale_zero and saves n
 test("the twin refuses a locked or already-parented target, by name and index", () => {
   const s = load("null-center.json");
   const tile = s.layer_info.find((l) => l.name === "Tile");
-  const args = { comp_id: 300, layer_index: tile.index, layer_name: "Tile", null_index: 1, null_name: "Null 1" };
+  const args = { comp_id: s.comp.id, layer_index: tile.index, layer_name: "Tile", null_index: 1, null_name: "Null 1" };
   const lockedSnap = clone(s);
   lockedSnap.layer_info.find((l) => l.name === "Tile").locked = true;
   assert.throws(() => run(args, { snapshot: lockedSnap, saveEdit: () => assert.fail("saved") }), (e) => e.reason === "locked");

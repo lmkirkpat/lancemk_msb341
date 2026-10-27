@@ -210,7 +210,7 @@ test("a keyed Position with a new expression and no parent reads as the pick whi
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const tile = read.layer_info.find((l) => l.name === "Tile");
   tile.parent = null;
   read.layers.find((l) => l.name === "Tile").properties.find((p) => p.display_name === "Position").expression_enabled = true;
@@ -224,7 +224,7 @@ test("P3 compares key counts and times within half a frame, never raw values (B9
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const tilePos = read.layers.find((l) => l.name === "Tile").properties.find((p) => p.display_name === "Position");
   tilePos.keys[0].time += 0.016; // under half a frame at 30 fps
   assert.equal(check(base, read, lesson, {}).result.parenting_passed, true);
@@ -238,12 +238,12 @@ test("P3 counts separated X and Y apart, and effect keys too", () => {
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const stamp = read.layers.find((l) => l.name === "Stamp");
   stamp.properties.find((p) => p.display_name === "Y Position").keys.pop();
   const r1 = check(base, read, lesson, {}).result;
   assert.deepEqual(r1.layers.find((l) => l.layer === "Stamp").p3.changed, [{ property: "Y Position", before: 2, now: 1 }]);
-  const read2 = load("practice2b-parented.json");
+  const read2 = load("parented-center.json");
   read2.layers.find((l) => l.name === "Caption").properties.push({ path: "ADBE Effect Parade/ADBE Gaussian Blur 2/ADBE Gaussian Blur 2-0001", display_path: "Effects › Gaussian Blur › Blurriness", match_name: "ADBE Gaussian Blur 2-0001", display_name: "Blurriness", dimensions: 1, expression_enabled: false, keys: [{ index: 1, time: 1, in_type: "linear", out_type: "linear", value: 5, in_ease: [], out_ease: [] }] });
   assert.equal(check(base, read2, lesson, {}).result.layers.find((l) => l.layer === "Caption").p3.passed, false);
 });
@@ -258,7 +258,7 @@ test("P4 counts Position, X, Y, Scale or Rotation with two different values; nev
   const pos = same.layers.find((l) => l.name === "Null 1").properties[0];
   pos.keys.push({ ...pos.keys[0], index: 2, time: 7 });
   assert.deepEqual(check(base, same, lesson, {}).result.codes, ["one_key"], "two keys with the same value hold still");
-  const fx = load("practice2b-parented.json");
+  const fx = load("parented-center.json");
   fx.layers.unshift({ index: 1, name: "Null 1", kind: "null", enabled: true, is_null: true, properties: [{ path: "ADBE Effect Parade/ADBE Slider Control/ADBE Slider Control-0001", display_path: "Effects › Slider Control › Slider", match_name: "ADBE Slider Control-0001", display_name: "Slider", dimensions: 1, expression_enabled: false, keys: [{ index: 1, time: 6, in_type: "linear", out_type: "linear", value: 0, in_ease: [], out_ease: [] }, { index: 2, time: 7, in_type: "linear", out_type: "linear", value: 9, in_ease: [], out_ease: [] }] }] });
   assert.deepEqual(check(base, fx, lesson, {}).result.codes, ["effect_move"]);
 });
@@ -331,7 +331,8 @@ test("a focus layer renamed or deleted is not_found, never guessed", () => {
 
 test("the stored null is the null's own sample at the before-read time", () => {
   const read = load("null-center.json");
-  assert.deepEqual(storeNull(read, 1, 0, "demo"), { anchor: [50, 50], position: [1215, 165], scale: [100, 100], rotation: 0, time: 0, from: "demo" });
+  // AE 26.5 puts a new null's anchor on its square's top-left (L-1), so the anchor is (0, 0).
+  assert.deepEqual(storeNull(read, 1, 0, "demo"), { anchor: [0, 0], position: [1215, 165], scale: [100, 100], rotation: 0, time: 0, from: "demo" });
   assert.equal(storeNull(read, 1, 9.9), null, "a time that wasn't sampled stores nothing");
 });
 
@@ -388,7 +389,7 @@ test("other changes come from every layer: parented to the null, a parent change
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const shadow = read.layer_info.find((l) => l.name === "Shadow");
   shadow.parent = read.layer_info.find((l) => l.name === "Row A").index;
   read.layers.find((l) => l.name === "Gauge").properties[0].keys.pop();
@@ -436,7 +437,7 @@ test("TD § 7: wrong_parent when a focus layer follows another null", () => {
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   read.layer_info.find((l) => l.name === "Caption").parent = read.layer_info.find((l) => l.name === "Hatch Rig").index;
   const { result } = check(base, read, lesson, {});
   assert.ok(result.hints.some((h) => h.code === "wrong_parent" && h.layer === "Caption" && h.parent === "Hatch Rig"));

@@ -8,6 +8,9 @@ import { analyze, candidates, demoTarget, finder, focusProblems, proposal } from
 import { clone, KEY, load } from "./fixtures/null-parenting/load.mjs";
 
 const byLayer = (snap) => new Map(candidates(snap).map((c) => [c.layer, c]));
+// Mentor Practice 2 as built has these groups besides the matte pair (and Pause with Sled, from
+// wave A); wave A's other 13 layers are one crowd.
+const GROUPS_BUT_MATTE = ["Tile", "Caption", "Stamp", "Chip A", "Chip B", "Chip C", "Row A", "Row B", "Row C"];
 
 // A small hand-made comp: solids at time 0, one sample each, 1920 wide unless told otherwise.
 function comp(layers, { width = 1920, height = 1080 } = {}) {
@@ -45,8 +48,8 @@ test("a matte and its layer are one pair, counted as 2, never split, never calle
   assert.deepEqual(p.focus, ["Row A", "Reveal Matte", "Gradient"], "naming one brings the other");
   assert.deepEqual(p.matte_added, ["Reveal Matte"]);
   assert.equal(focusProblems(s, ["Gradient", "Row A", "Row B", "Row C"]).size, "too_many", "the pair counts as 2 toward the 4");
-  // Proposed together: drop everything else nearby, and the pair is the group.
-  const only = proposal(s, { exclude: ["Tile", "Caption", "Stamp", "Row A", "Row B", "Row C"].map((layer) => ({ layer, property: "Parent" })) });
+  // Proposed together: drop the comp's other groups, and the pair is the group.
+  const only = proposal(s, { exclude: [...GROUPS_BUT_MATTE, "Pause", "Sled"].map((layer) => ({ layer, property: "Parent" })) });
   assert.deepEqual(only.proposal, ["Reveal Matte", "Gradient"]);
 });
 
@@ -83,8 +86,8 @@ test("a hidden layer is if_named; a full-frame solid and an adjustment layer are
   assert.deepEqual([c.get("Caption").reason, c.get("Caption").bucket], ["hidden", "if_named"]);
   assert.deepEqual([c.get("Background").reason, c.get("Background").bucket], ["full_frame", "if_named"]);
   assert.deepEqual([c.get("Tab").reason, c.get("Tab").bucket], ["adjustment", "if_named"]);
-  const rows = ["Row A", "Row B", "Row C"].map((layer) => ({ layer, property: "Parent" }));
-  assert.deepEqual(proposal(x, { exclude: rows }).proposal, ["Tile", "Stamp"], "hidden Caption isn't proposed");
+  const others = ["Row A", "Row B", "Row C", "Chip A", "Chip B", "Chip C", "Pause", "Sled", "Reveal Matte", "Gradient"].map((layer) => ({ layer, property: "Parent" }));
+  assert.deepEqual(proposal(x, { exclude: others }).proposal, ["Tile", "Stamp"], "hidden Caption isn't proposed");
   assert.ok(focusProblems(x, ["Caption", "Tile"]).ok, "but it's allowed when named");
   assert.ok(focusProblems(x, ["Background", "Tile"]).ok);
 });
@@ -170,15 +173,9 @@ test("next_proposal is the second-ranked group, null with one group; nothing lin
   assert.equal(proposal(comp([{ name: "A", x: 0, y: 0 }, { name: "B", x: 900, y: 900 }])).reason, "no_group");
 });
 
-test("on practice2b.json the proposal is Tile, Caption and Stamp, then Row A to C", () => {
-  const p = proposal(load("practice2b.json"));
-  assert.deepEqual(p.proposal, KEY.fixtures["practice2b.json"].proposal);
-  assert.deepEqual(p.next_proposal, KEY.fixtures["practice2b.json"].next_proposal);
-});
-
-test("L-6 on the comp as built, wave A's layers included: Tile, Caption and Stamp, then Chip A to C, and the 13-layer crowd named nowhere", () => {
-  const want = KEY.fixtures["practice2b-with-wave-a.json"];
-  const s = load("practice2b-with-wave-a.json");
+test("L-6 on practice2b.json, the comp as built with wave A's layers: Tile, Caption and Stamp, then Chip A to C, and the 13-layer crowd named nowhere", () => {
+  const want = KEY.fixtures["practice2b.json"];
+  const s = load("practice2b.json");
   const p = proposal(s);
   assert.deepEqual(p.proposal, want.proposal);
   assert.deepEqual(p.next_proposal, want.next_proposal);
@@ -273,7 +270,7 @@ test("the finder: a crowd with an empty exclude counts its size with no names; a
 });
 
 test("the finder agrees with the proposal on every fixture and exclude, except a crowd with an empty exclude", () => {
-  const files = ["practice2b.json", "practice2b-with-wave-a.json", "null-center.json", "practice2b-parented.json", "review-rows-visible.json", "synthetic/before.json", "synthetic/row36-truncated.json", "synthetic/crowd-only.json"];
+  const files = ["practice2b.json", "null-center.json", "practice2b-parented.json", "parented-center.json", "review-rows-visible.json", "synthetic/before.json", "synthetic/row36-truncated.json", "synthetic/crowd-only.json"];
   const excludes = [[], ["Tile", "Caption", "Stamp"].map((layer) => ({ layer, property: "Parent" }))];
   for (const f of files) {
     for (const exclude of excludes) {

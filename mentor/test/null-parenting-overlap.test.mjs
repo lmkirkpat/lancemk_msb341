@@ -1,7 +1,7 @@
 // Spec 012 FR-026: one named test per row of spec › Edge cases where concepts overlap (rows 1 to
-// 40), asserting what the focus and the check see. Fixtures from load.mjs (stand-ins until the
-// sitting, synthetics where the spec allows); rows marked contract are asserted against
-// comp-space.mjs and the snapshot's shape as built.
+// 40), asserting what the focus and the check see. Fixtures from load.mjs (live captures and spec
+// 004's reads, synthetics where the spec allows); rows marked contract are asserted against
+// comp-space.mjs and the snapshot's shape as built. Lesson chains read parented-center.json.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -66,7 +66,7 @@ test("row 5: a single key on a child: still a candidate; P3 counts 1 at that tim
   const base = load("practice2b.json");
   const p = keyedProp(base, "Tile", "Scale");
   p.keys = [p.keys[0]];
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const rp = keyedProp(read, "Tile", "Scale");
   rp.keys = [rp.keys[0]];
   assert.equal(cand(base, "Tile").bucket, "default");
@@ -80,7 +80,7 @@ test("row 6: hold keys on a child: the same times before and after, so its own h
   const hold = (s) => s.layers.find((l) => l.name === "Tile").properties.forEach((p) => p.keys.forEach((k) => { k.in_type = "hold"; k.out_type = "hold"; }));
   const base = load("practice2b.json");
   hold(base);
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   hold(read);
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
@@ -101,9 +101,9 @@ test("row 8: hold keys on the null: P4 passes and the held comment asks once", (
 
 test("row 9: separated Position on a child (Stamp): P2 at X and Y's key times; P3 counts X and Y apart", () => {
   assert.deepEqual(p2Times(load("practice2b.json"), "Stamp"), [0, 4.667, 5.667]);
-  const { result } = after("practice2b-parented.json");
+  const { result } = after("parented-center.json");
   assert.equal(result.layers.find((l) => l.layer === "Stamp").p2.passed, true);
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   keyedProp(read, "Stamp", "X Position").keys.pop();
   assert.deepEqual(after(read).result.layers.find((l) => l.layer === "Stamp").p3.changed.map((c) => c.property), ["X Position"]);
 });
@@ -120,7 +120,7 @@ const blur = (time) => ({ path: "ADBE Effect Parade/ADBE Gaussian Blur 2/ADBE Ga
 test("row 11: effects on a child: counted in P3, not moved by parenting, not P2 times", () => {
   const base = load("practice2b.json");
   base.layers.find((l) => l.name === "Tile").properties.push(blur(1));
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   read.layers.find((l) => l.name === "Tile").properties.push(blur(1));
   assert.ok(!p2Times(base, "Tile").includes(1));
   const lesson = lessonFor(base, { focus: GROUP });
@@ -131,7 +131,7 @@ test("row 11: effects on a child: counted in P3, not moved by parenting, not P2 
 });
 
 test("row 12: effects on the null: P4 never passes on them; the effect comment when the read shows one", () => {
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   read.layers.unshift({ index: 1, name: "Null 1", kind: "null", enabled: true, is_null: true, properties: [blur(6)] });
   const { result } = after(read);
   assert.deepEqual(result.codes, ["effect_move"]);
@@ -292,13 +292,13 @@ test("row 33: adding the null renumbers the layers; matching by name finds every
   const base = load("practice2b.json");
   const read = load("null-center.json");
   for (const n of GROUP) assert.equal(read.layer_info.find((l) => l.name === n).index, base.layer_info.find((l) => l.name === n).index + 1);
-  const { result } = after("practice2b-parented.json");
+  const { result } = after("parented-center.json");
   assert.ok(result.layers.every((l) => l.found));
 });
 
 test("row 34: a child whose rect changes over time compares the same times and rect kind", () => {
   const base = load("practice2b.json");
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   for (const s of [base, read]) s.layer_info.find((l) => l.name === "Caption").samples.forEach((x) => { x.rect = { ...x.rect, width: 130 + x.time * 10 }; });
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
@@ -335,11 +335,11 @@ test("row 39: the demo undone, then parented by the learner, is the learner's", 
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP, demo: "parent/Tile" });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  assert.equal(check(base, load("practice2b-parented.json"), lesson, {}).result.layers[0].credit, "demo");
+  assert.equal(check(base, load("parented-center.json"), lesson, {}).result.layers[0].credit, "demo");
   const undone = check(base, load("null-center.json"), lesson, {}).result;
   assert.equal(undone.demo_undone, true);
   lesson.demo.undone = "2026-10-24T12:05:00.000Z";
-  assert.equal(check(base, load("practice2b-parented.json"), lesson, {}).result.layers[0].credit, "learner");
+  assert.equal(check(base, load("parented-center.json"), lesson, {}).result.layers[0].credit, "learner");
 });
 
 test("row 40: two layers with the null's name: nothing stored, nothing graded; after the rename it's stored", () => {
