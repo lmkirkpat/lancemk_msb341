@@ -210,6 +210,7 @@ const bash = (cwd, command, who) => ({ cwd, tool_input: { command }, ...(who ? s
 test("git guard: shared-tree commands are blocked for everyone on main", (t) => {
   const r = makeRepo(); t.after(r.done);
   for (const c of ["git add -A", "git add .", "cd x && git add --all", "git -C . add -u", "git commit -am wip", "git reset --hard",
+    "git --no-pager reset --hard", "git -c core.pager=cat stash", "git --git-dir .git clean -fd", "git -p checkout -- .",
     "git clean -fd", "git stash", "git checkout -- .", "git restore ."]) {
     assert.equal(run("git-guard.mjs", bash(r.dir, c)).code, 2, c);
   }
@@ -289,6 +290,42 @@ test("git guard: inside its own worktree an agent may stage everything", (t) => 
   t.after(() => fs.rmSync(wt, { recursive: true, force: true }));
   assert.equal(run("git-guard.mjs", bash(wt, "git add -A", "skill-builder")).code, 0);
   assert.equal(run("git-guard.mjs", bash(wt, "git push", "skill-builder")).code, 2);
+});
+
+test("git guard: shared-tree rules follow where git acts, not where the agent stands", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  const wtA = path.join(r.dir, "..", path.basename(r.dir) + "-wtA");
+  const wtB = path.join(r.dir, "..", path.basename(r.dir) + "-wtB");
+  r.g("worktree", "add", "-q", "-b", "a", wtA);
+  r.g("worktree", "add", "-q", "-b", "b", wtB);
+  fs.mkdirSync(path.join(wtA, "sub"));
+  t.after(() => { fs.rmSync(wtA, { recursive: true, force: true }); fs.rmSync(wtB, { recursive: true, force: true }); });
+  // Its own worktree, however it's reached from inside it.
+  for (const c of ["git reset --hard main", `git -C ${wtA} reset --hard main`, "cd sub && git add -A", "git -C sub clean -fd"]) {
+    assert.equal(run("git-guard.mjs", bash(wtA, c, "skill-builder")).code, 0, c);
+  }
+  // The main tree or another agent's worktree, reached from inside a worktree.
+  for (const c of [`git -C ${r.dir} reset --hard`, `cd ${r.dir} && git reset --hard`, `cd .. && cd ${r.dir} && git stash`,
+    `git -C '${wtB}' reset --hard`, `cd "${wtB}"; git clean -fd`, `cd ${r.dir} && git checkout main`]) {
+    assert.equal(run("git-guard.mjs", bash(wtA, c, "skill-builder")).code, 2, c);
+  }
+  // Where git acts can't be worked out, so it counts as the shared tree.
+  for (const c of [`(cd ${r.dir} && git reset --hard)`, `GIT_DIR=${r.dir}/.git git reset --hard`, "cd $HOME && git stash",
+    `git --work-tree=${r.dir} reset --hard`, `bash -c 'cd ${r.dir}; git reset --hard'`]) {
+    assert.equal(run("git-guard.mjs", bash(wtA, c, "skill-builder")).code, 2, c);
+  }
+  // From the main tree, a worktree isn't the caller's own: it may hold another agent's work.
+  for (const c of [`git -C ${wtA} reset --hard`, `cd ${wtA} && git reset --hard`]) {
+    assert.equal(run("git-guard.mjs", bash(r.dir, c, "skill-builder")).code, 2, c);
+    assert.equal(run("git-guard.mjs", bash(r.dir, c)).code, 2, c);
+  }
+});
+
+test("git guard: a subagent may read with merge-base, but not merge", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  assert.equal(run("git-guard.mjs", bash(r.dir, "git merge-base main HEAD", "reviewer")).code, 0);
+  assert.equal(run("git-guard.mjs", bash(r.dir, "git merge main", "reviewer")).code, 2);
+  assert.equal(run("git-guard.mjs", bash(r.dir, "git merge --ff-only main", "reviewer")).code, 2);
 });
 
 test("git guard: unreadable input blocks", () => {
