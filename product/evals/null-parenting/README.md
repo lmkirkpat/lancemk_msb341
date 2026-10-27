@@ -216,6 +216,12 @@ proves nothing, so this stays a watch item: if the full run or a `--repeat 3` of
 time). With the live-fixture smoke, 4 of 4 on `practice2b.json`; the stand-in failure is taken as
 the fixture. Still worth a look in T340's transcript.
 
+**2026-10-26, after the pre-T340 `SKILL.md` pass (`5bfdbd3`: ask and stop, step 2 frame only,
+invented example names, D-4's corner sentence at stage 3, review jump hint), $2.13:** 01, 11, 12
+and 27 each pass once (`results/2026-10-26-203846.json` to `-204021.json`). Not yet covered by
+any case: the corner sentence's once-per-lesson and never-in-a-review rules, and step 2 never
+describing a null's move (the skill-builder's hand-off list).
+
 ## Reading results
 
 Same order as easing: a failed `run` check is plumbing; a failed deterministic check is a hard-rule
