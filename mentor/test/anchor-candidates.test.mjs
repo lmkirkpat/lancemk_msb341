@@ -3,7 +3,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { analyze, candidates, finder, neededTimes, SHAPES_DEFAULT, MAX_NEEDED_TIMES } from "../lib/anchor.mjs";
+import { analyze, candidates, finder, neededTimes, reviewProposal, SHAPES_DEFAULT, MAX_NEEDED_TIMES } from "../lib/anchor.mjs";
 import { clone, fixture, indexOf, KEY, synthetic } from "./fixtures/anchor/load.mjs";
 
 const P2 = fixture("practice2b");
@@ -156,12 +156,68 @@ test("demo target: entry 1 when it's default, else entry 0, else not_a_default_c
   }
 });
 
-test("no focus: the proposal is the answer key's (Blink, tall, so from its bottom edge), and the demo waits for a focus", () => {
+test("no focus: the proposal is the answer key's (Door, from the middle of its left edge), and the demo waits for a focus", () => {
   const a = analyze(P2);
   assert.deepEqual(a.proposal, KEY.practice2b.proposal);
   assert.deepEqual(a.targets, []);
   assert.equal(a.no_demo_reason, "awaiting_focus");
   assert.deepEqual(analyze(P2, { focus_layers: ["Needle"] }).proposal, { layer: "Needle", suggested_place: "bottom-middle" }, "tall and thin turns from its bottom");
+});
+
+// ---- T241: how animated a layer already is, three steps (FR-004, FR-024, amended 2026-10-26)
+
+test("T241: keyed.any counts any keyed property: Opacity on Blink and Caption, Rotation on Spinner, none on Door", () => {
+  const got = byLayer(candidates(P2));
+  assert.equal(got.Blink.keyed.any, true);
+  assert.equal(got.Caption.keyed.any, true);
+  assert.equal(got.Spinner.keyed.any, true);
+  assert.equal(got.Door.keyed.any, false);
+  assert.equal(got.Lid.keyed.any, false);
+});
+
+test("T241: on Mentor Practice 2 the lesson proposes Door and the review (Door and Needle recorded) picks Tab", () => {
+  assert.deepEqual(analyze(P2).proposal, { layer: "Door", suggested_place: "middle-left" });
+  const exclude = [{ layer: "Door", property: "Anchor Point" }, { layer: "Needle", property: "Anchor Point" }];
+  assert.equal(reviewProposal(P2, { exclude }).layer, KEY.review.proposal);
+  assert.equal(finder(P2, { exclude }).count, KEY.review.count_with_exclude);
+});
+
+test("T241: a review with Door and Gauge in the record (quickstart 5's two lessons) picks Needle", () => {
+  for (const second of ["Gauge", "Pop"]) {
+    const exclude = [{ layer: "Door", property: "Anchor Point" }, { layer: second, property: "Anchor Point" }];
+    assert.equal(reviewProposal(P2, { exclude }).layer, KEY.review.with_door_and_gauge, `Door and ${second}`);
+  }
+});
+
+test("T241: an Opacity-keyed layer above an unkeyed one: the unkeyed one is proposed", () => {
+  const s = clone(synthetic("measures"));
+  const bar = s.layer_info.find((l) => l.name === "Bar");
+  assert.equal(analyze(s).proposal.layer, "Bar", "with no keys anywhere, layer order decides");
+  s.layers.push({
+    index: bar.index, name: bar.name,
+    properties: [{ path: "ADBE Transform Group/ADBE Opacity", name: "Opacity", expression_enabled: false, keys: [
+      { index: 1, time: 0, value: 0 }, { index: 2, time: 1, value: 100 },
+    ] }],
+  });
+  const got = byLayer(candidates(s));
+  assert.equal(got.Bar.bucket, "default", "a ranking step, never a filter");
+  assert.ok(got.Bar.rank > got.Needle.rank, "Bar drops below the unkeyed Needle");
+  assert.equal(analyze(s).proposal.layer, "Needle");
+});
+
+test("T241: when every candidate has keys there's still a proposal (a ranking step, never a filter)", () => {
+  const s = clone(P2);
+  for (const e of s.layer_info) {
+    if (s.layers.some((l) => l.index === e.index)) continue;
+    s.layers.push({ index: e.index, name: e.name, properties: [{ path: "ADBE Transform Group/ADBE Opacity", name: "Opacity", expression_enabled: false, keys: [
+      { index: 1, time: 0, value: 0 }, { index: 2, time: 1, value: 100 },
+    ] }] });
+  }
+  const list = candidates(s);
+  assert.ok(list.filter((c) => c.bucket === "default").every((c) => c.keyed.any));
+  assert.equal(list.filter((c) => c.bucket === "default").length, candidates(P2).filter((c) => c.bucket === "default").length);
+  // Every one keyed: the keys-but-no-Rotation-or-Scale step leads, by layer order, so Blink again.
+  assert.equal(analyze(s).proposal.layer, "Blink");
 });
 
 test("FINDERS' count is above 0 exactly when a default candidate not in exclude exists, and 0 without layer_info", async () => {

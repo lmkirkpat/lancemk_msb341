@@ -8,12 +8,12 @@
     "needed_note": "T234, live: the live Mentor Practice 2 has 40 layers, not the stand-in's wave B 19, so what neededTimes() asks for is longer than the --times list. By hand, every layer that isn't structurally never (all but Wobble, Hatch Rig, Seal): rest keys Spinner 0.25 (Rotation 0), Card 2.4 (largest Scale), Badge 4.5, Gauge 3.167, Pop 4.3, Tile 5.367; Position keys Card 1.2, 2.4; Dot 1 0, 0.5, 1.5; Dot 2 0.5, 1.5; Dot 3 0.5, 1.25, 1.5; Chip A to C 2, 3; Flag 4, 4.5, 5.5; Pause 5, 5.5, 6, 6.5; Sled 3.667, 4.167, 4.667; Tile 4.167, 5.167; Stamp 4.667, 5.667; Row A 4.8, 5.8; Row C 5.167, 6.167; Plate 5.3, 6.3; Gradient 5.433, 6.433. 30 times, under the 63 cap. The captures hold the --times list, comp.time and each layer's own key times, so a lesson on this comp takes a second read (R4)"
   },
   "practice2b": {
-    "proposal": { "layer": "Blink", "suggested_place": "bottom-middle" },
-    "proposal_note": "T234, live: was Door, middle-left. With shapes default since L-1, the live comp's older shapes rank too: Blink (index 1, key types' shape, 40 x 120, no Position, Rotation or Scale keys, unparented, its anchor at [0, 0]) ranks first by layer order, and it's tall, so it turns from the middle of its bottom edge. Door is 3rd, after Cut",
+    "proposal": { "layer": "Door", "suggested_place": "middle-left" },
+    "proposal_note": "T241 (spec 011 FR-004, amended 2026-10-26): Door, middle-left, as the quickstart expects. The ranking now has three animation steps after unparented: no keyed property at all, then keys but none on Rotation or Scale, then Rotation or Scale keys. Door (index 14, a 300 x 500 solid, no keys, unparented, pivot at its centre) is the first unkeyed layer by layer order, and it isn't tall (500 is less than twice 300), so it turns from the middle of its left edge. Blink, Cut and Caption (Opacity keys only) drop to the second step. T234 had Blink first",
     "layers": {
-      "Blink": { "bucket": "default", "reason": null, "rank": 1, "place_now": "center" },
+      "Blink": { "bucket": "default", "reason": null, "rank": 10, "place_now": "center" },
       "Spinner": { "bucket": "default", "reason": null, "rank": 13, "check_time": { "time": 0.25, "basis": "both" } },
-      "Cut": { "bucket": "default", "reason": null, "rank": 2, "place_now": "center" },
+      "Cut": { "bucket": "default", "reason": null, "rank": 11, "place_now": "center" },
       "Card": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
       "Dot 1": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
       "Dot 2": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
@@ -24,16 +24,16 @@
       "Chip C": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
       "Flag": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
       "Pause": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
-      "Door": { "bucket": "default", "reason": null, "rank": 3, "place_now": "center", "check_time": { "time": 0, "basis": "current" } },
-      "Needle": { "bucket": "default", "reason": null, "rank": 4, "place_now": "center", "check_time": { "time": 0, "basis": "current" } },
+      "Door": { "bucket": "default", "reason": null, "rank": 1, "place_now": "center", "check_time": { "time": 0, "basis": "current" } },
+      "Needle": { "bucket": "default", "reason": null, "rank": 2, "place_now": "center", "check_time": { "time": 0, "basis": "current" } },
       "Gauge": { "bucket": "default", "reason": null, "rank": 15, "place_now": "center", "check_time": { "time": 3.167, "basis": "both" } },
-      "Lid": { "bucket": "default", "reason": null, "rank": 12, "place_now": "outside", "check_time": { "time": 0, "basis": "current" }, "note": "T234 (L-1): was if_named, shape_until_l1. A default candidate now; its anchor isn't at its centre or [0, 0], so it ranks after every unkeyed layer whose pivot is where AE put it" },
+      "Lid": { "bucket": "default", "reason": null, "rank": 9, "place_now": "outside", "check_time": { "time": 0, "basis": "current" }, "note": "T234 (L-1): was if_named, shape_until_l1. A default candidate now; its anchor isn't at its centre or [0, 0], so it ranks after every unkeyed layer whose pivot is where AE put it" },
       "Wobble": { "bucket": "never", "reason": "anchor_keyed", "rank": null },
-      "Tab": { "bucket": "default", "reason": null, "rank": 5, "place_now": "center" },
-      "Peg": { "bucket": "default", "reason": null, "rank": 6, "place_now": "center" },
-      "Banner": { "bucket": "default", "reason": null, "rank": 7, "place_now": "center", "note": "T234 (L-1): was if_named, shape_until_l1" },
-      "Sign": { "bucket": "default", "reason": null, "rank": 8, "place_now": "between" },
-      "Plaque": { "bucket": "default", "reason": null, "rank": 9, "place_now": "center" },
+      "Tab": { "bucket": "default", "reason": null, "rank": 3, "place_now": "center" },
+      "Peg": { "bucket": "default", "reason": null, "rank": 4, "place_now": "center" },
+      "Banner": { "bucket": "default", "reason": null, "rank": 5, "place_now": "center", "note": "T234 (L-1): was if_named, shape_until_l1" },
+      "Sign": { "bucket": "default", "reason": null, "rank": 6, "place_now": "between" },
+      "Plaque": { "bucket": "default", "reason": null, "rank": 7, "place_now": "center" },
       "Flip": { "bucket": "default", "reason": null, "rank": 19, "place_now": "center" },
       "Pop": { "bucket": "default", "reason": null, "rank": 16, "place_now": "center", "check_time": { "time": 4.3, "basis": "both" } },
       "Sled": { "bucket": "if_named", "reason": "position_keyed", "rank": null, "place_now": "center" },
@@ -41,10 +41,10 @@
       "Hatch": { "bucket": "default", "reason": null, "rank": 17, "place_now": "center" },
       "Seal": { "bucket": "never", "reason": "collapsed", "rank": null },
       "Tile": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
-      "Caption": { "bucket": "default", "reason": null, "rank": 10, "place_now": "between" },
+      "Caption": { "bucket": "default", "reason": null, "rank": 12, "place_now": "between" },
       "Stamp": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
       "Row A": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
-      "Row B": { "bucket": "default", "reason": null, "rank": 11, "place_now": "center" },
+      "Row B": { "bucket": "default", "reason": null, "rank": 8, "place_now": "center" },
       "Row C": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
       "Plate": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
       "Shadow": { "bucket": "default", "reason": null, "rank": 18, "place_now": "center" },
@@ -52,7 +52,7 @@
       "Gradient": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
       "Background": { "bucket": "if_named", "reason": "full_frame", "rank": null }
     },
-    "ranking_why": "Unparented first (Hatch, Shadow below), no Rotation or Scale keys next (Spinner, Badge, Gauge, Pop below), a pivot where AE put it next (Lid below), then layer order; Flip is flipped, so it ranks last (row 18). T234: the live comp has the older layers (Blink to Pause, key types' and offset's) and skill 6's (Tile to Shadow) as well as the wave B ones, and shapes are default since L-1, so every rank moved; ranks 1 to 19 by hand from the captured keys and parents"
+    "ranking_why": "FR-004 as amended 2026-10-26 (T241): unparented first (Hatch, Shadow below); then how animated already, three steps: no keyed property at all (Door, Needle, Lid, Tab, Peg, Banner, Sign, Plaque, Row B), then keys but none on Rotation or Scale (Blink, Cut and Caption: Opacity keys), then Rotation or Scale keys (Spinner, Badge, Gauge, Pop); then a pivot where AE put it (Lid, at [0, 150] on a rectangle centred on [0, 0], below the other unkeyed ones); then layer order. Flip is flipped, so it ranks last (row 18). Ranks 1 to 19 by hand from the captured keys and parents, as spec FR-004 lists them. T234 had Blink 1 to Lid 12 with two steps"
   },
   "overlaps": {
     "layers": {
@@ -101,9 +101,11 @@
   },
   "review": {
     "record": "records/learned-door.json",
-    "proposal": "Blink",
+    "proposal": "Tab",
     "count_with_exclude": 17,
-    "note": "T234, live: was Tab and 8. With Door and Needle in the record, the review's pick is the first default candidate with no Rotation or Scale keys, unparented, by layer order: Blink. 19 default candidates on the live comp, less Door and Needle"
+    "note": "T241 (FR-004, FR-024, amended 2026-10-26): Tab again. A review goes by the animation step first (R8): with Door and Needle in the record, the unkeyed, unflipped, unparented layers with their pivot where AE put it are Tab, Peg, Banner, Sign, Plaque and Row B, and Tab (index 19) is first by layer order. 19 default candidates on the live comp, less Door and Needle, is 17. T234 had Blink",
+    "with_door_and_gauge": "Needle",
+    "with_door_and_gauge_why": "Quickstart 5's two lessons (Door, then Gauge or Pop, one focus layer each): Needle (index 15) is the first unkeyed default candidate left by layer order (FR-024); the same with Door and Pop"
   },
   "live_notes": {
     "comp_id": "Mentor Practice 2 is comp 179 in the project (the stand-in used 300). Captures taken on duplicates carry captured_from, with their comp id and name set to 179's",

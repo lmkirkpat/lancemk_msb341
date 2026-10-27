@@ -131,6 +131,9 @@ export function keyFlags(kl) {
     scale: has([SCALE]),
     expression_anchor_position: expr([ANCHOR, ...POSITION_PATHS]),
     expression_rotation_scale: expr([ROTATION, SCALE]),
+    // FR-004's ranking: any property with keys at all (Opacity, an effect, a mask or a text
+    // animator counts, not only Transform).
+    any: !!kl && kl.properties.some((p) => p.keys.length > 0),
   };
 }
 
@@ -273,7 +276,7 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
       class: cls, kind: entry.kind,
       parent: parents.length ? parents[0].layer : null,
       has_children: !!(src && src.children && src.children.length),
-      keyed: { anchor: flags.anchor, position: flags.position, rotation: flags.rotation, scale: flags.scale },
+      keyed: { anchor: flags.anchor, position: flags.position, rotation: flags.rotation, scale: flags.scale, any: flags.any },
       pivot_as_placed: asPlaced(sample && sample.anchor, rect),
       full_frame: ff,
       place_now: readable ? placeNow(sample.anchor, rect) : null,
@@ -303,16 +306,22 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
   return out;
 }
 
+// How animated a layer already is (FR-004, amended 2026-10-26), three steps: 0 no keyed property at
+// all, 1 keys but none on Rotation or Scale, 2 Rotation or Scale keys. A ranking step, never a
+// filter: a comp where every layer has keys still gets a proposal.
+export const animationStep = (c) => (c.keyed.rotation || c.keyed.scale ? 2 : c.keyed.any ? 1 : 0);
+
 // FR-004's ranking, one comparator: a full-frame layer only when nothing else exists (FR-004's last
 // resort, so this key comes first); shy, precomp and flipped or turned layers below the rest (TD § 4,
-// rows 9, 13, 18); unparented first; no Rotation or Scale keys; the pivot where AE put it; then the
-// comp's layer order. A review puts "no Rotation or Scale keys" ahead of all but full-frame (R8).
+// rows 9, 13, 18); unparented first; how animated it already is (animationStep); the pivot where AE
+// put it; then the comp's layer order. A review puts the animation step ahead of all but full-frame
+// (R8), so "no Rotation or Scale keys" still comes first there, and no keys at all within that.
 export function rankOrder({ review = false } = {}) {
   const keys = [
     (c) => (c._large ? 1 : 0),
     (c) => (c._demoted ? 1 : 0),
     (c) => (c.parent ? 1 : 0),
-    (c) => (c.keyed.rotation || c.keyed.scale ? 1 : 0),
+    animationStep,
     (c) => (c.pivot_as_placed ? 0 : 1),
   ];
   if (review) keys.splice(1, 0, keys.splice(3, 1)[0]);
@@ -338,7 +347,8 @@ export function proposalFrom(list, { exclude = [], review = false, only = null }
   return { layer: best.layer, suggested_place: best._tall ? "bottom-middle" : "middle-left" };
 }
 
-// The review's pick (FR-024): default candidates not in the record, no Rotation or Scale keys first.
+// The review's pick (FR-024): default candidates not in the record, no Rotation or Scale keys first,
+// and within that no keys at all first.
 export function reviewProposal(snapshot, { exclude = [] } = {}) {
   return layerInfo(snapshot).known ? proposalFrom(candidates(snapshot), { exclude, review: true }) : null;
 }
