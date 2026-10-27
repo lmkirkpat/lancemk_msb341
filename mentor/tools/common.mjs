@@ -72,10 +72,13 @@ function locateLayer(snapshot, name, t) {
   // FR-045, second pass: sourceRectAtTime ignores masks and effects, and a precomp's rectangle is its
   // whole comp, so none of these gets bounds. Unreadable (null) counts; absent (an older capture)
   // doesn't.
+  // A camera, light or audio-only layer has no masks, effects or pixels to hide (its reads are
+  // null), so it skips these and gets footprint()'s own reason.
+  const drawsPixels = entry.kind !== "camera" && entry.kind !== "light" && entry.has_video !== false;
   if (entry.kind === "precomp") return absent("precomp");
-  if (entry.effect_count === null || (isNum(entry.effect_count) && entry.effect_count > 0)) return absent("effects");
-  if (entry.mask_count === null || (isNum(entry.mask_count) && entry.mask_count > 0)) return absent("masked");
-  if (sample && isNum(sample.opacity) && sample.opacity < 1) return absent("transparent");
+  if (drawsPixels && (entry.effect_count === null || (isNum(entry.effect_count) && entry.effect_count > 0))) return absent("effects");
+  if (drawsPixels && (entry.mask_count === null || (isNum(entry.mask_count) && entry.mask_count > 0))) return absent("masked");
+  if (drawsPixels && sample && isNum(sample.opacity) && sample.opacity < 1) return absent("transparent");
   const { bounds, reason } = footprint(snapshot, entry.index, t, { extents: !!(sample && sample.rect_extents) });
   if (!bounds) return absent(reason);
   if (out.comp_size && (bounds.right <= 0 || bounds.bottom <= 0 || bounds.left >= c.width || bounds.top >= c.height)) return absent("not_on_screen");

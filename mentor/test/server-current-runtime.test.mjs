@@ -34,12 +34,23 @@ const ENTRIES = {
 const listing = (changed = null) =>
   Object.entries(ENTRIES).map(([name, line]) => (name === changed ? line.replace(/ ([0-9a-f]{40})\t/, ` ${h("f")}\t`) : line)).join("\n") + "\n";
 
+// A folder with a `.git` file two levels up, as in a worktree, so the read starts its (injected)
+// process wherever this test runs, a copy with no checkout included.
+function checkoutDir() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "ae-mentor-checkout-"));
+  const dir = path.join(root, "a", "mentor");
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(root, ".git"), "gitdir: /somewhere/.git/worktrees/x\n");
+  return dir;
+}
+const CHECKOUT = checkoutDir();
+
 // A server started on `atStart`, then asked with `now`, through the real default read on the
-// mentor folder (inside this checkout), with only the process start replaced.
+// folder above, with only the process start replaced.
 async function verdict(atStart, now) {
   let text = atStart;
   const run = async () => text;
-  current.setHashReader(current.listingReader({ run }), { timeoutMs: 200 });
+  current.setHashReader(current.listingReader({ dir: CHECKOUT, run }), { timeoutMs: 200 });
   await current.recordStart();
   text = now;
   return current.serverCurrent();
@@ -69,16 +80,16 @@ for (const [what, bad] of [["empty", ""], ["malformed", "fatal: not a tree objec
 }
 
 test("a process start that fails: null", async () => {
-  current.setHashReader(current.listingReader({ run: async () => { throw new Error("git: command not found"); } }), { timeoutMs: 200 });
+  current.setHashReader(current.listingReader({ dir: CHECKOUT, run: async () => { throw new Error("git: command not found"); } }), { timeoutMs: 200 });
   await current.recordStart();
   assert.equal(await current.serverCurrent(), null);
 });
 
-test("git is started in the server's folder, with ls-tree HEAD", async () => {
+test("git is started in the reader's folder (the server's by default), with ls-tree HEAD", async () => {
   const seen = [];
-  const reader = current.listingReader({ run: async (args, opts) => { seen.push({ args, cwd: opts.cwd }); return listing(); } });
+  const reader = current.listingReader({ dir: CHECKOUT, run: async (args, opts) => { seen.push({ args, cwd: opts.cwd }); return listing(); } });
   assert.match(await reader(), /^[0-9a-f]{64}$/);
-  assert.deepEqual(seen, [{ args: ["ls-tree", "HEAD"], cwd: current.MENTOR_DIR }]);
+  assert.deepEqual(seen, [{ args: ["ls-tree", "HEAD"], cwd: CHECKOUT }]);
 });
 
 const tmpInCheckout = current.hasCheckoutAbove(os.tmpdir());
@@ -110,7 +121,7 @@ test("a .git file two levels up, as in a worktree: git is started", { skip: tmpI
 
 test("no reply carries the hash, the listing or a path", async () => {
   let text = listing();
-  current.setHashReader(current.listingReader({ run: async () => text }), { timeoutMs: 200 });
+  current.setHashReader(current.listingReader({ dir: CHECKOUT, run: async () => text }), { timeoutMs: 200 });
   await current.recordStart();
   text = listing("lib");
   const hashes = [listing(), listing("lib")].map((l) => current.listingHash(l));
@@ -119,6 +130,6 @@ test("no reply carries the hash, the listing or a path", async () => {
     assert.equal(JSON.parse(out).server_current, false, name);
     for (const hash of hashes) assert.ok(!out.includes(hash), `${name} has no hash`);
     assert.ok(!out.includes(h("5")) && !out.includes("ls-tree"), `${name} has no listing`);
-    assert.ok(!out.includes(current.MENTOR_DIR), `${name} has no path`);
+    assert.ok(!out.includes(current.MENTOR_DIR) && !out.includes(CHECKOUT), `${name} has no path`);
   }
 });

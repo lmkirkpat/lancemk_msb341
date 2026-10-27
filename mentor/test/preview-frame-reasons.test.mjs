@@ -104,3 +104,28 @@ test("order: a precomp with effects → precomp; effects come before masks, mask
   noBounds(await blink(blinkVariant((b) => { b.effect_count = 1; b.mask_count = 1; })), "effects");
   noBounds(await blink(blinkVariant((b) => { b.mask_count = 1; sampleAt(b, 1.4).opacity = 0; }), 1.4), "masked");
 });
+
+// Reviewer finding 5: a camera, light or audio-only layer reads no masks or effects (null), and has
+// no pixels, so it gets footprint()'s own reason, never effects, masked or transparent.
+const noPixels = {
+  camera: (b) => { b.kind = "camera"; },
+  light: (b) => { b.kind = "light"; },
+  "audio-only footage": (b) => { b.kind = "footage"; b.has_video = false; },
+};
+for (const [what, make] of Object.entries(noPixels)) {
+  test(`a ${what} layer with unreadable masks and effects and Opacity 0: footprint()'s own reason`, async () => {
+    const file = blinkVariant((b) => {
+      make(b);
+      b.effect_count = null;
+      b.mask_count = null;
+      for (const s of b.samples) { s.rect = null; s.rect_extents = null; s.opacity = 0; }
+    });
+    const snap = load(file);
+    const entry = snap.layer_info.find((l) => l.name === "Blink");
+    const want = footprint(snap, entry.index, saved.comp.time, { extents: false }).reason;
+    const reply = await blink(file);
+    assert.ok(!("layer_bounds" in reply));
+    assert.ok(!["effects", "masked", "transparent"].includes(reply.layer_bounds_reason), reply.layer_bounds_reason);
+    assert.equal(reply.layer_bounds_reason, want);
+  });
+}
