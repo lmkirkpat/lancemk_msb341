@@ -1,0 +1,44 @@
+{
+  "id": "29-no-invented-key-times",
+  "title": "At a pass on a Rotation move, the check gives no key times: no preview frame at a guessed time",
+  "covers": [
+    "live-1",
+    "FR-020",
+    "US1-6"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "rotate-null.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "rotate-null.json",
+      "say": "I parented all three and turned the null on its Rotation. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "preview_times_from_output": true
+  },
+  "rubric": [
+    "R-NO-GUESSED-TIME",
+    "R-NAMES-REAL"
+  ],
+  "notes": "Guards a regression. SKILL.md step 6 says to show preview_frame at the null's first and last key times, but null_parent_check returns only the move names (p4.on), no times. In the live run (usage notes, session 1, finding 1) the mentor skipped the frames and passed. Expected to pass today. The deterministic check allows a preview_frame time only if the number appears in an earlier mentor tool result (before_time is in the snapshot)."
+}

@@ -117,7 +117,7 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "snapshot_focus_excludes", "no_focus_set", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "demo_after_null_ready", "last_check", "chain_on_purpose_from_turn", "say", "record_lesson", "review_mode"];
+    "demo_after_null_ready", "last_check", "chain_on_purpose_from_turn", "say", "record_lesson", "record_lesson_never", "preview_times_from_output", "review_mode"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
@@ -451,6 +451,31 @@ function check(expect, turns, c) {
       const wrong = last ? Object.entries(expect.record_lesson).filter(([k, v]) => last.input[k] !== v) : [];
       add("record_lesson", !!last && wrong.length === 0,
         !last ? "never recorded" : wrong.length ? wrong.map(([k, v]) => `${k} was ${JSON.stringify(last.input[k])}, expected ${JSON.stringify(v)}`).join("; ") : "matches");
+    }
+  }
+  if (expect.preview_times_from_output) {
+    // No preview_frame at a time that no earlier tool result held (other than a call with no time).
+    // A time "appears" if any number in an earlier result equals it. before_time is in the snapshot.
+    const seen = [];
+    const bad = [];
+    for (const e of turns.flatMap(toolEvents)) {
+      if (e.name === "preview_frame" && e.input && typeof e.input.time === "number") {
+        if (!seen.some((n) => Math.abs(n - e.input.time) < 0.0005)) bad.push(e.input.time);
+      }
+      if (MENTOR_TOOLS.includes(e.name)) for (const m of String(e.result ?? "").matchAll(/-?\d+(?:\.\d+)?/g)) seen.push(parseFloat(m[0]));
+    }
+    add("preview_times_from_output", bad.length === 0, bad.length ? `preview_frame at ${bad.join(", ")}, in no tool output so far` : "every preview time came from a tool output");
+  }
+  if (expect.record_lesson_never) {
+    // Regexes (case-insensitive) that a field of the last record_lesson must not match: { field: regex }.
+    const last = calls.filter((e) => e.name === "record_lesson" && e.ok).at(-1);
+    if (!last) add("record_lesson_never", false, "never recorded");
+    else {
+      const hits = Object.entries(expect.record_lesson_never).flatMap(([k, v]) => {
+        const m = String(last.input[k] ?? "").match(new RegExp(v, "i"));
+        return m ? [`${k} says "${m[0]}"`] : [];
+      });
+      add("record_lesson_never", hits.length === 0, hits.length ? hits.join("; ") : "clean");
     }
   }
   return out;

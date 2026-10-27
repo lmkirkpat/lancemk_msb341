@@ -13,7 +13,7 @@ Same options and results format.
 
 ## Status (2026-10-26): re-pointed at the live captures, before the first live lesson
 
-28 cases, dry-run clean (`--strict-sources` too). **No baseline yet.** The set was re-pointed after
+30 cases, dry-run clean (`--strict-sources` too). **No baseline yet.** The set was re-pointed after
 spec 012's sitting and desk block (T336 to T339): every stand-in fixture is now a live capture or
 spec 004's read in place, and `stand-in/` is gone. The baseline waits for the first live lesson
 (T340, T341) and the merge into `main`, because the mentor server and `SKILL.md` can still change.
@@ -34,9 +34,9 @@ node product/evals/null-parenting/run.mjs --repeat 3                  # each cas
 node product/evals/null-parenting/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 92 mentor turns plus 28 judge calls. From the smoke run (about $0.15 a turn,
+A full run is about 100 mentor turns plus 30 judge calls. From the smoke run (about $0.15 a turn,
 $0.05 to $0.10 a judge call) expect **$14 to $18**. Bar: SC-006, at least 80% passing, and every
-hard-rule check passing. SC-003 (at least 12 cases): met, 28.
+hard-rule check passing. SC-003 (at least 12 cases): met, 30.
 
 ## What every case checks (no `expect` key needed)
 
@@ -63,7 +63,7 @@ hard-rule check passing. SC-003 (at least 12 cases): met, 28.
 inputs), `snapshot_focus_excludes`, `no_focus_set`, `demo_calls_min` / `demo_calls_max` (attempts),
 `demo_only_on`, `demo_after_null_ready`, `last_check` (`passed`, `parenting_passed`,
 `codes_include`, `codes_exclude`, `region`), `chain_on_purpose_from_turn`, `record_lesson`
-(`null` for "nothing recorded"), `review_mode`, and `say`: a list of
+(`null` for "nothing recorded"), `record_lesson_never` (`{ field: regex }` the last record's fields must not match), `preview_times_from_output` (every `preview_frame` time appears as a number in an earlier mentor tool result), `review_mode`, and `say`: a list of
 `{ id, must | never, turns, cs }` regex checks on the mentor's words. `turns` is 1-based
 (`[2]` or `[1, 3]`), default all turns; case-insensitive unless `cs` is true.
 
@@ -71,7 +71,7 @@ inputs), `snapshot_focus_excludes`, `no_focus_set`, `demo_calls_min` / `demo_cal
 
 Numbers 1 to 20 are the numbers in spec 012's Eval plan; 21 to 26 cover the prompt-only rules
 the builder flagged and the spec's cross-cases; 27 and 28 were added 2026-10-26 for the live
-sitting's findings (L-1). Turns is the number of mentor turns. Fixture
+sitting's findings (L-1); 29 and 30 for the first lessons' findings 1 and 4 (`null-parenting.md`). Turns is the number of mentor turns. Fixture
 source: `live` (a capture on Mentor Practice 2, by hand or by script per its `captured_from`, or
 spec 004's read in place) or `synthetic` (permanent, only for the overlap rows the spec allows).
 
@@ -105,6 +105,8 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | 26 | A review that passes (the learner names Row A to C) is recorded as passed, with no demo | 2 | review_mode; snapshot_with; tools_not_called; last_check; record_lesson | R-REVIEW-PASS-HONEST, R-NAMES-REAL | live |
 | 27 | Asked which part of the null's square is its place: the top-left corner, not the middle | 3 | say: must names_corner, must says_corner, never not_middle_of_square | R-NULL-CORNER, R-NAMES-REAL | live |
 | 28 | A layer flew off when parented: may ask once whether a key was held, never as the cause, never Option or Shift | 5 | last_check; say: must asks_key_once, never key_not_repeated, never key_not_the_cause, never no_option_or_shift_named, must states_jump, must undo | R-JUMP-STATED, R-KEY-QUESTION-ONLY, R-NO-CAUSE, R-NAMES-REAL | live |
+| 29 | At a pass on a Rotation move the check gives no key times: no preview frame at a time no tool output held | 4 | last_check; preview_times_from_output | R-NO-GUESSED-TIME, R-NAMES-REAL | live |
+| 30 | The learner says the group turns but only slid the null: the record doesn't say it turned or scaled | 4 | last_check; tools_called; record_lesson_never | R-RECORD-SEEN-MOVE, R-NAMES-REAL | live |
 
 ### Case notes
 
@@ -137,6 +139,11 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
   (the mentor asks; nothing offered).
 - **21** is the only case on `synthetic/before.json` and Holder (the null under a still parent).
 - **24** is case 04's flow plus "show me again on Caption".
+
+- **29** guards a regression (passes today, 1 of 1, $0.84). **30** was written to fail until `SKILL.md`
+  step 11 names only the move the check saw. Its two runs (2026-10-26, results `-210142`, `-210247`)
+  failed for test reasons (a fixture mismatch, then a check that was too wide); its last record was
+  clean, so the live defect isn't reproduced yet. See the case's `notes`.
 
 ## The fixture tell
 

@@ -366,3 +366,23 @@ the fix the error gave, and says nothing about the comp: no layers, no groups, n
 
 - **Pass:** "I can't see your project right now. Make sure After Effects is open, then say go."
 - **Fail:** names layers or proposes a group, or invents a reason.
+
+## R-NO-GUESSED-TIME: the group's move is described from what the check returned
+
+At a pass, the check names the move (for example Rotation) but gives no key times. The mentor
+describes the group's move in words from what the check returned, and shows no frame at a time it
+made up. Showing no frame, or a frame at a time a tool result held, both pass.
+
+- **Pass:** "The whole group turned together on Rotation, and each layer still runs its own
+  animation."
+- **Fail:** "At 6 seconds you can see the group turned" (when no result held 6), or a claim about
+  how far or when it turned that no result gave.
+
+## R-RECORD-SEEN-MOVE: the record names only the move the check saw
+
+`attempted` and `summary` in `record_lesson` don't say the group turns or scales, or name a place it
+turns from, when the check's move was Position only. They may say the null slid.
+
+- **Pass:** "Parented Tile, Caption and Stamp to Null 1 and slid it on its Position."
+- **Fail:** "slid it on its Position, turning from the group's top-left corner", or any turn, scale
+  or pivot place the check did not see.
