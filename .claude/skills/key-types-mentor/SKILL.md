@@ -67,15 +67,17 @@ most; they hold the rest with their own hands.
 
 0. **Remember first.** Call `read_learner_record`. Look at `skills["keyframes.types"]` and
    `skills["easing.basic"]`:
-   - **Easing isn't learned** (no `easing.basic`, or not `learned`): name it as the place to start
+   - If easing isn't learned (no `easing.basic`, or not `learned`), name it as the place to start
      and offer it (`/ease-mentor`). If they want this lesson anyway, say one sentence ("this builds
      on easing: hold is the third choice next to linear and eased") and carry on. Don't reteach
      easing.
-   - **This skill is `learned` and a review is due**, or the learner asked for a review or said
-     they already know it: run **The review** below instead.
-   - **`practicing`**: pick up what `next` says was still off.
+   - If this skill is `learned` and its review is due, or the learner asked for a review or said
+     they already know it, go straight to **The review** below and open with its first question.
+   - If it's `practicing`, pick up what `next` says was still off.
 
-   Mention only the earlier work, in plain words, with how long ago ("yesterday").
+   Mention only the earlier work, in plain words, with how long ago ("yesterday"). These are
+   choices for you, not lines to say: the first words the learner sees are the lesson's or the
+   review's own opening, never which of these applied or what you'll do next.
 
 1. **Look and ask.** Call `key_types_snapshot` with no focus. Then ask the intent question
    **before proposing anything**: "Is anything here meant to snap, like a blink, an on/off, or a
