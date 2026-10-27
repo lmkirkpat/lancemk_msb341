@@ -12,7 +12,11 @@ second read is the usual case on Mentor Practice 2, and tasks T241 to T244 befor
 Rounds 2 to 4 (2026-10-26, spec › Changes) add tasks.md › Phases 8c (T245 to T248), 8d (T249 to
 T253) and 8e (T254 to T256: `moves_case` for D-8, the full-frame test for D-9, and `SKILL.md`'s
 two-frames sentence), all skill-builder work on the build branch, in step 3's place in the table
-below.
+below. Round 5 (2026-10-26, spec › Changes › round 5; TD § 19 approved by the human, the spec's
+parts awaiting the builder) adds Phase 8f: T257 (`SKILL.md`'s opening turn, B-10, already in
+progress by the cockpit's skill-builder) and T258 (B-11: `position_key_label` and `rest_label` in
+`mentor/lib/anchor.mjs`, then `SKILL.md` uses them), plus an HO-1 update for the eval engineer. No
+new file, tool or field beyond the two labels; the constitution check below is unchanged.
 
 ## Summary
 

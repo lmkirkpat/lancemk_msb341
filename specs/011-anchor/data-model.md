@@ -7,7 +7,8 @@
 `in_place_moved` and `other_layer_moved` (built, now listed). Round 3 (TD § 17, B-8; spec
 FR-008, FR-013a): `watch_offer`, the focus's needed times, and "never" first in `reason`. Round 4
 (TD § 18, D-8, D-9, B-9): `moves_case`, `position_key_time` and `rest_time` on `position_moves`
-entries, and `watch_offer` never full-frame. Shapes this skill adds; the
+entries, and `watch_offer` never full-frame. Round 5 (B-11): `position_key_label` and
+`rest_label` on `one_key_off_rest` entries. Shapes this skill adds; the
 snapshot, `layer_info`, comp-space results and the session lesson are spec 004's
 [data-model.md](../004-ae-curriculum/data-model.md) › Wave B shapes and › Session lesson, linked,
 not copied. Decisions are in [research.md](research.md).
@@ -43,6 +44,8 @@ not copied. Decisions are in [research.md](research.md).
 | `moves_case` | Only when `reason` is `position_moves` (round 4, spec FR-004, B-9): `two_or_more` (Position keyed at two or more key times) or `one_key_off_rest` (one key time, the rest key more than half a frame from it). The mentor picks TD § 4's Sled line or TD § 18's two-frames sentence from it and never counts keys itself |
 | `position_key_time` | Only with `moves_case: "one_key_off_rest"`: the one Position key's time, in seconds (the same value as `keyed.position_times[0]`) |
 | `rest_time` | Only with `moves_case: "one_key_off_rest"`: the time the Position rule compared against, in seconds: the learner's own `rest_time` when the focus entry gave one and it was used (FR-011), else the tool's rest key |
+| `position_key_label` | Only with `moves_case: "one_key_off_rest"` (round 5, spec FR-004, B-11): `position_key_time` as the mentor says it, a string: seconds rounded to the nearest tenth (a half rounds up), a trailing ".0" dropped, a space, "s" ("1 s", "3.7 s"). If it would equal `rest_label`, both use the fewest decimals, up to three, at which they differ, trailing zeros dropped (3.667 and 3.7 → "3.67 s" and "3.7 s"). `null` exactly when `position_key_time` is `null`. The mentor says it as given and never formats a time itself |
+| `rest_label` | Only with `moves_case: "one_key_off_rest"`: `rest_time` labelled by the same rule (the learner's 4.167 → "4.2 s"). `null` exactly when `rest_time` is `null`; with either label `null` the mentor says spec FR-004's short "already moves" line, no time |
 | `rank` | 1 = first proposed, among `default` only (research R1's sort) |
 | `keyed.position_times` | Position's key times in seconds, sorted, X and Y counted together when separated, hold keys included, times within half a frame merged (spec FR-004, D-4). Its length decides `position_moves` (2 or more) against `position_keyed` (1, on the check time) |
 | `keyed.any` | Any property of the layer has keys in the snapshot's keyed `layers` (Opacity, effects, masks, text animators included). The ranking's first animation step (FR-004, 2026-10-26) |
@@ -67,7 +70,7 @@ not copied. Decisions are in [research.md](research.md).
 | `needed_times` | Research R4's union (for the snapshot tool's second read). **After T252 (spec FR-013a, if T251's table says so):** with a focus, only each focus layer's check time and Position key times; with no focus, unused (one read) |
 | `watch_offer` | `{ layer, suggested_place }` or `null` (spec FR-008, TD § 17, B-8). Set only in a lesson, with exactly one focus target and the demo unused: the highest-ranked `default` candidate (lesson ranking) that isn't the focus, isn't already at `suggested_place`, and has no Rotation or Scale keys or its rest key within half a frame of the focus's check time; never a `full_frame: true` layer (round 4, D-9; it's `if_named`, so never in the pool), with no extra filter on `full_frame: null`. `suggested_place` by `proposal`'s hinge rule (tall and thin `bottom-middle`, else `middle-left`). `null` in a review, with two focus layers, with no focus, once the demo is used, or when none qualifies. The record condition (no pass yet) and "once" are the prompt's |
 | `notes` | `[{ layer, note }]`, each once: `parent` (with its name), `text_baseline`, `flipped`, `precomp_frame`, `position_keyed_tip` (with `time`, the one Position key's time, for TD § 4's "playhead right on it" line), `matte`, `hidden`, `shy`, `locked`, `pivot_outside` (with `side`, FR-019a; for a focus layer and for the proposal) |
-| `focus_problems` | `[{ layer, problem, reason? }]`, problem `no_layer`, `name_not_unique`, `no_place`, `not_a_candidate` (with the candidate's `reason`) or `past_target`. A `not_a_candidate` entry with reason `position_moves` also carries `moves_case`, and for `one_key_off_rest` `position_key_time` and `rest_time`, as the candidate entry (round 4) |
+| `focus_problems` | `[{ layer, problem, reason? }]`, problem `no_layer`, `name_not_unique`, `no_place`, `not_a_candidate` (with the candidate's `reason`) or `past_target`. A `not_a_candidate` entry with reason `position_moves` also carries `moves_case`, and for `one_key_off_rest` `position_key_time`, `rest_time`, `position_key_label` and `rest_label`, as the candidate entry (round 4; labels round 5) |
 | `rest_time_not_a_key` | Present when a learner's `rest_time` was ignored |
 
 ## Check result (`anchor_check`; FR-019)
