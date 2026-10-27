@@ -12,7 +12,9 @@ spec › Changes › round 3; the builder approved both items. **Round 4 (2026-1
 T254 to T256 (D-8's two-frames sentence with `moves_case`; D-9's full-frame test), from spec ›
 Changes › round 4; the builder approved D-8 and D-9. **Round 5 (2026-10-26):** Phase 8f, T257 and T258
 (TD § 19's opening turn, in progress; B-11's time labels), from spec › Changes › round 5; TD § 19
-and B-11 approved by the human, this phase awaiting the builder's approval.
+and B-11 approved by the human, this phase awaiting the builder's approval. **Round 6
+(2026-10-26):** Phase 8g, T259 (TD § 19a's B-12 in `SKILL.md`, in progress), from spec › Changes ›
+round 6; TD § 19a decided by the human, this phase awaiting the builder's approval.
 
 **Input**: Design documents from `specs/011-anchor/`
 
@@ -248,6 +250,15 @@ hand from the spec, never copied from the code's output.
 - [x] T258 [US2] Time labels (B-11; spec FR-004 › Time labels; data-model › Candidate; contracts › `anchor_snapshot`), after T257 (both edit `SKILL.md`). In `mentor/lib/anchor.mjs`, one helper beside `positionCase()` makes **`position_key_label`** and **`rest_label`** for every `one_key_off_rest` entry, candidates and `focus_problems` alike (through the same spread as the three round 4 fields), and `mentor/tools/transform-anchor.mjs` passes them through only when present. Tests in `anchor-candidates.test.mjs` on T254's synthetics, values by hand: 3.667 and 4.167 → "3.7 s" and "4.2 s"; 1 and 3 → "1 s" and "3 s"; 2.95 → "3 s"; 3.667 and 3.7 → "3.67 s" and "3.7 s" (the same-label rule); the learner's `rest_time` 4.167 → `rest_label` "4.2 s" on the candidate and the `focus_problems` entry; `rest_time` null → `rest_label` null, `position_key_label` still set; `two_or_more` and every other reason → neither label. In `anchor-tools.test.mjs`: both labels in `anchor_snapshot`'s output on the synthetic, absent on Sled (`two_or_more`) and Door. Then `SKILL.md`: the two-frames sentence uses the two labels as given and the line "Both times are always written as this file writes times … even when the learner said 3.667" becomes "say the two labels exactly as given; never round or write a time yourself"; the missing-time line (spec FR-004 › Missing time) keys on either label being missing. Nothing else. Then `npm test`, `check-branch.mjs` as T257, `/agent-audit` on the `SKILL.md` diff; hand back the diff for HO-3
 - **HO-1 update (eval engineer, through the cockpit; not a builder task):** see Hand-offs › HO-1 › Round 5.
 
+## Phase 8g: Round 6 of 2026-10-26 (skill-builder on `skill-5-anchor`; desk, no 🖐)
+
+From spec › Changes › round 6: TD § 19a's B-12 (spec FR-006a, FR-009, US1 #8 and #9, row 14).
+Same add-only rule: the file below is one this branch added. **T259 blocks HO-1's round 6 cases
+(32 to 36).** It doesn't block T240 or the live lessons. No tool change.
+
+- [ ] T259 [US1] **In progress by the cockpit's skill-builder, 2026-10-26** (started from TD § 19a's B-12 directly, before this task was written; listed here so the phase is complete). `.claude/skills/anchor-mentor/SKILL.md` step 1, per TD § 19a › Items › B-12 and spec FR-006a and FR-009: (1) practicing: the proposal is always the read's `proposal`, and `next` gives only the memory clause; a learner who wants another go at `next`'s layer names it; (2) the leave-out list's null, camera, light and adjustment line becomes TD § 19a item 2's sentence with the layer's name and kind, then the proposal as for any layer that can't be the focus; never a pointer to the null lesson or a word about a null's pivot; (3) on the two-frames line (TD § 18, T258's wording), "never round or write a time yourself" becomes "never round or write these two times yourself", so it reads as a rule about the two labels, not every time in the file (the cockpit's addition to B-12). Also confirm the continued-with-no-focus line (spec FR-006a, Open questions › D-10) opens as a new lesson **by the record** (the practicing form when this skill has history), and change it only if it doesn't. Nothing else. Then `npm test`, `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`), `/agent-audit` on the file; hand back the diff for HO-3
+- **HO-1 update (eval engineer, through the cockpit; not a builder task):** see Hand-offs › HO-1 › Round 6.
+
 ---
 
 ## Phase 9: Polish and hand-back
@@ -276,6 +287,15 @@ hand from the spec, never copied from the code's output.
   case 24's time checks take the labels exactly ("3.7 s", "4.2 s"), dropping the "3.667"
   alternative; the README's case table follows spec › Eval plan 11 (one focus, the watch offer)
   and 25 to 31 (26 the two-layer demo). Re-run 1, 13, 24, 24b, 24c once each before a baseline.
+  **Round 6 (2026-10-26, TD § 19a, B-12):** after T259 (and T258 for 37). New cases from spec ›
+  Eval plan › Round 6: 32 practicing (the proposed layer equals the snapshot's `proposal`,
+  whatever `next` names); 33 the learner names CTRL (TD § 19a's sentence; no turn mentions a
+  null's pivot or the null lesson; Hatch Rig on `practice2b` stands in if no Mentor Practice read
+  can be built without AE); 34 a continued lesson with a focus (Needle; handed back, no intent
+  question or proposal); 35 a continued lesson with no focus (opens as a first lesson); 36 "which
+  layers can I use?" (up to three `default` candidates, no `position_moves` layer); 37 the
+  same-label times ("3.67 s" and "3.7 s", a variant of 24's synthetic). The missing-time line
+  stays unit-tested. Run each new case once before a baseline.
 - **HO-2 Curriculum designer:** `/overlap-audit` re-run on the built branch before HO-1: TD § 9
   against T228's tests on live fixtures, the rows marked **contract** re-confirmed against wave B's
   code as built, and L-1 to L-5's results.
@@ -289,7 +309,9 @@ hand from the spec, never copied from the code's output.
   `one_key_off_rest`, once, never in the opening, never "its other keys" or "jump").
   After T257, on its diff (spec FR-006a: one choice, no leave-out, no idea, no other-skill recap
   in the opening; each leave-out on the naming turn). After T258, on its diff (the labels said as
-  given, no time formatted in the prompt, the missing-time line).
+  given, no time formatted in the prompt, the missing-time line). After T259, on its diff (spec
+  FR-006a: the proposal is always the read's; FR-009: TD § 19a's sentence for the four kinds, no
+  null lesson pointer, no null's pivot).
 - **HO-6 Curriculum designer (round 3, 2026-10-26):** D-8 (the "already moves" sentence on a
   one-key layer whose rest key is on another frame) and D-9 (the spec's reading of which layer
   the watch is on), spec › Open questions › D. **Done 2026-10-26** (TD § 18, `47c90bd`); tasked
@@ -329,6 +351,8 @@ hand from the spec, never copied from the code's output.
   blocks T240, the live lessons or the merge beyond HO-1.
 - Phase 8f (2026-10-26, round 5): T257 (in progress) → T258 → HO-1's round 5 re-run. Neither
   blocks T240 or the merge beyond HO-1; the next no-layer-in-mind live lesson after T257.
+- Phase 8g (2026-10-26, round 6): T259 (in progress), after T257 (both edit `SKILL.md` step 1) →
+  HO-1's round 6 cases. Blocks nothing else.
 - HO-2 and HO-3 after T235; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
 
 ## Parallel opportunities
