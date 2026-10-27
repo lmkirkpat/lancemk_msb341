@@ -385,7 +385,7 @@ Parallel work still saved days, but on this plan the limit, not coordination, se
 | Check | Count | Notes |
 |---|---|---|
 | Ownership hook blocks | 0 | none reported |
-| Git guard blocks | 3 real, 1 false | Blocked: a spec writer's hard reset to `main` in a worktree, the reviewer's `git merge-base` read, a spec writer's `git merge --ff-only`. Each agent worked around it by cutting a fresh worktree or reading the main tree. Run 2 allowed the hard reset, so the guard got stricter between runs. False: the cockpit's heredoc above |
+| Git guard blocks | 3 real, 1 false | Blocked: a spec writer's hard reset to `main` in a worktree, the reviewer's `git merge-base` read, a spec writer's `git merge --ff-only`. Each agent worked around it by cutting a fresh worktree or reading the main tree. The guard didn't change between runs (`.claude/hooks/` has no commit from 10-20 to 10-26). It picks its rules from the agent's working folder, not the repo the command touches, so the same reset passes when run from inside the worktree (run 2) and is blocked when run from the main tree with `-C` or `cd` (most likely run 3). The other way round is a hole: a subagent sitting in a worktree can hard-reset the main tree (probed 2026-10-26). False: the cockpit's heredoc above |
 | AE lock waits | 0 | no AE in the build. The lock's gap showed up later, in offset's live lesson (two sessions on AE, fixed in `35acf9c`) |
 | Files outside the persona's row at merge (`check-branch.mjs`) | 0 | Clean on every branch: spec writer 5/5 and 9/9, shared owner 33/33 with `--shared-owner`, skill 5 75/75 without it, skill 6 84 files with no shared file touched (SC-008). One file landed in the wrong *tree*, not the wrong row: the designer wrote the L-6 rule into the skill 6 worktree, and the cockpit moved it to main (`002bf92`) |
 | `--shared-owner` branches | 2 | `shared-owner-b` and `shared-owner-b2` |
@@ -411,9 +411,16 @@ Parallel work still saved days, but on this plan the limit, not coordination, se
   minutes; after the second stall, one at a time still did it five more times. This run was
   parallel in its plan but mostly serial in practice. Staggering waves isn't enough on this plan;
   a run with this much code needs Sonnet for anything that isn't building, or a bigger plan.
-- **Hand-cut worktrees beat the tool's.** The git guard blocked the hard reset that run 2 used,
-  so agents cut their own worktrees from local `main`. That fixed run 1's stale-base problem for
-  good, and those worktrees kept uncommitted files through every later stall.
+- **Hand-cut worktrees beat the tool's.** The git guard blocked the reset-to-`main` move run 2
+  used (see Guardrails: same guard, different working folder), so agents cut their own worktrees
+  from local `main`. That fixed run 1's stale-base problem for good, and those worktrees kept
+  uncommitted files through every later stall.
+- **The git guard judges by working folder, and that cuts both ways.** Probed 2026-10-26 with
+  five payloads: a subagent can reset its own worktree from inside it, can't reset it from the
+  main tree with `git -C`, *can* reset the main tree from inside a worktree (with `git -C` or
+  `cd`), and can't run `git merge-base`, a read. The hole is the one that matters: the shared
+  tree is the thing the guard exists to protect. Fix: decide "shared or not" from the folder git
+  will act on (`-C`, a leading `cd`), and block when that can't be worked out.
 - **Holding a branch is a real option.** Skill 5's reviewer said merging would put an untested
   lesson in `/next-mentor`. Holding it until the sitting meant the cockpit merges `main` into the
   branch for every spec change, which is extra merges, but nothing a learner could open was
