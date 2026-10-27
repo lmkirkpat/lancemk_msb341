@@ -1,48 +1,73 @@
 {
-  "about": "Spec 011's answer key, written by hand from spec.md, teaching-design.md and the declared values in mentor/dev/build-practice-comp-2b.jsx and build-overlaps-b.jsx (never by running mentor/lib/anchor.mjs). Times in seconds at 30 fps. 'times' is the --times list each Mentor Practice 2 capture needs in the sitting (research R4).",
+  "about": "Spec 011's answer key, written by hand from spec.md, teaching-design.md and the declared values in mentor/dev/build-practice-comp-2b.jsx and build-overlaps-b.jsx (never by running mentor/lib/anchor.mjs). Times in seconds at 30 fps. 'times' is the --times list each Mentor Practice 2 capture needs in the sitting (research R4). T234 (2026-10-26) checked every value against the live captures of the 2026-10-26 sitting (specs/011-anchor/live-sitting-2026-10-26.md); every value the live comp shows differently has a 'note' next to it, or in 'live_notes'. Ranks and needed times are FR-004's and R4's rules applied by hand to the captured raw facts (keys, parents, rectangles), with shapes as default candidates since L-1 (SHAPES_DEFAULT true).",
   "times": {
     "practice2b": [3.167, 3.667, 4.167, 4.3, 4.667, 5.433, 6.433],
     "overlaps": [],
-    "why": "Gauge's rest key (3.167, Rotation 0), Pop's (4.3, full size), Sled's Position keys (3.667, 4.167, 4.667) and Gradient's (5.433, 6.433): every candidate's rest-key and Position key times, on every layer"
+    "why": "The --times list every Mentor Practice 2 capture was taken with: Gauge's rest key (3.167, Rotation 0), Pop's (4.3, full size), Sled's Position keys (3.667, 4.167, 4.667) and Gradient's (5.433, 6.433)",
+    "needed_practice2b": [0.25, 3.167, 4.3, 4.5],
+    "needed_note": "T246 (D-4), by hand: the 16 Position-keyed layers (Card, Dot 1 to 3, Chip A to C, Flag, Pause, Sled, Tile, Stamp, Row A, Row C, Plate, Gradient) each have Position keys at two or more times (their position_times above), so they're never (position_moves) and drop out with their Position key times and Card's and Tile's rest keys (2.4, 5.367). What's left are the rest keys of the layers with Rotation or Scale keys and no Position keys: Spinner 0.25 (Rotation 0), Gauge 3.167 (Rotation 0), Pop 4.3 (largest Scale), Badge 4.5 (largest Scale). 4 times, down from 30. No layer left in a lesson's reach has Position keys, so none adds a time. The captures hold 3.167 and 4.3 (the --times list) but not 0.25 or 4.5 on every layer, so a lesson start on this comp still reads twice, with 4 times instead of 30. Before T246: T234, live: the live Mentor Practice 2 has 40 layers, not the stand-in's wave B 19, so what neededTimes() asks for is longer than the --times list. By hand, every layer that isn't structurally never (all but Wobble, Hatch Rig, Seal): rest keys Spinner 0.25 (Rotation 0), Card 2.4 (largest Scale), Badge 4.5, Gauge 3.167, Pop 4.3, Tile 5.367; Position keys Card 1.2, 2.4; Dot 1 0, 0.5, 1.5; Dot 2 0.5, 1.5; Dot 3 0.5, 1.25, 1.5; Chip A to C 2, 3; Flag 4, 4.5, 5.5; Pause 5, 5.5, 6, 6.5; Sled 3.667, 4.167, 4.667; Tile 4.167, 5.167; Stamp 4.667, 5.667; Row A 4.8, 5.8; Row C 5.167, 6.167; Plate 5.3, 6.3; Gradient 5.433, 6.433. 30 times, under the 63 cap. The captures hold the --times list, comp.time and each layer's own key times, so a lesson on this comp takes a second read (R4)"
   },
   "practice2b": {
+    "moves_case_note": "T254 (D-8, B-9), by hand from position_times: every position_moves layer here has Position keys at two or more times (Card 2, Dot 1 3, Dot 2 2, Dot 3 3, Chip A to C 2 each, Flag 3, Pause 4, Sled 3, Tile 2, Stamp 2, Row A 2, Row C 2, Plate 2, Gradient 2), so all 16 are two_or_more and carry no position_key_time or rest_time. Mentor Practice 2 has no one-key layer, so one_key_off_rest exists only in synthetics built from sled-one-key-before. On Mentor Overlaps, Orbit (3 times), Locked Bar (2), Leaf 2 (2) and Wipe (2) are two_or_more too (Leaf 2 separated, X and Y counted together); Locked Bar and Wipe keep their case under the precedence rule (locked, a matte)",
     "proposal": { "layer": "Door", "suggested_place": "middle-left" },
+    "proposal_note": "T241 (spec 011 FR-004, amended 2026-10-26): Door, middle-left, as the quickstart expects. The ranking now has three animation steps after unparented: no keyed property at all, then keys but none on Rotation or Scale, then Rotation or Scale keys. Door (index 14, a 300 x 500 solid, no keys, unparented, pivot at its centre) is the first unkeyed layer by layer order, and it isn't tall (500 is less than twice 300), so it turns from the middle of its left edge. Blink, Cut and Caption (Opacity keys only) drop to the second step. T234 had Blink first",
     "layers": {
+      "Blink": { "bucket": "default", "reason": null, "rank": 10, "place_now": "center" },
+      "Spinner": { "bucket": "default", "reason": null, "rank": 13, "check_time": { "time": 0.25, "basis": "both" } },
+      "Cut": { "bucket": "default", "reason": null, "rank": 11, "place_now": "center" },
+      "Card": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [1.2, 2.4] },
+      "Dot 1": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [0, 0.5, 1.5] },
+      "Dot 2": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [0.5, 1.5] },
+      "Dot 3": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [0.5, 1.25, 1.5], "position_times_why": "separated: X keys at 0.5 and 1.5, Y keys at 0.5 and 1.25, counted together" },
+      "Badge": { "bucket": "default", "reason": null, "rank": 14, "check_time": { "time": 4.5, "basis": "both" } },
+      "Chip A": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [2, 3] },
+      "Chip B": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [2, 3] },
+      "Chip C": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [2, 3] },
+      "Flag": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [4, 4.5, 5.5] },
+      "Pause": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [5, 5.5, 6, 6.5] },
       "Door": { "bucket": "default", "reason": null, "rank": 1, "place_now": "center", "check_time": { "time": 0, "basis": "current" } },
       "Needle": { "bucket": "default", "reason": null, "rank": 2, "place_now": "center", "check_time": { "time": 0, "basis": "current" } },
-      "Gauge": { "bucket": "default", "reason": null, "rank": 7, "place_now": "center", "check_time": { "time": 3.167, "basis": "both" } },
-      "Lid": { "bucket": "if_named", "reason": "shape_until_l1", "rank": null, "place_now": "outside", "check_time": { "time": 0, "basis": "current" } },
+      "Gauge": { "bucket": "default", "reason": null, "rank": 15, "place_now": "center", "check_time": { "time": 3.167, "basis": "both" } },
+      "Lid": { "bucket": "default", "reason": null, "rank": 9, "place_now": "outside", "outside_side": "below", "outside_side_why": "T242 (FR-019a), by hand: anchor [0, 150] is 120 px below the rectangle's bottom edge (30) and level with its middle across, at Scale 100 and Rotation 0, so on screen it's below", "check_time": { "time": 0, "basis": "current" }, "note": "T234 (L-1): was if_named, shape_until_l1. A default candidate now; its anchor isn't at its centre or [0, 0], so it ranks after every unkeyed layer whose pivot is where AE put it" },
       "Wobble": { "bucket": "never", "reason": "anchor_keyed", "rank": null },
       "Tab": { "bucket": "default", "reason": null, "rank": 3, "place_now": "center" },
       "Peg": { "bucket": "default", "reason": null, "rank": 4, "place_now": "center" },
-      "Banner": { "bucket": "if_named", "reason": "shape_until_l1", "rank": null, "place_now": "center" },
-      "Sign": { "bucket": "default", "reason": null, "rank": 5, "place_now": "between" },
-      "Plaque": { "bucket": "default", "reason": null, "rank": 6, "place_now": "center" },
-      "Flip": { "bucket": "default", "reason": null, "rank": 10, "place_now": "center" },
-      "Pop": { "bucket": "default", "reason": null, "rank": 8, "place_now": "center", "check_time": { "time": 4.3, "basis": "both" } },
-      "Sled": { "bucket": "if_named", "reason": "position_keyed", "rank": null, "place_now": "center" },
+      "Banner": { "bucket": "default", "reason": null, "rank": 5, "place_now": "center", "note": "T234 (L-1): was if_named, shape_until_l1" },
+      "Sign": { "bucket": "default", "reason": null, "rank": 6, "place_now": "between" },
+      "Plaque": { "bucket": "default", "reason": null, "rank": 7, "place_now": "center" },
+      "Flip": { "bucket": "default", "reason": null, "rank": 19, "place_now": "center" },
+      "Pop": { "bucket": "default", "reason": null, "rank": 16, "place_now": "center", "check_time": { "time": 4.3, "basis": "both" } },
+      "Sled": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "place_now": "center", "position_times": [3.667, 4.167, 4.667], "note": "T246 (D-4): was if_named, position_keyed. Three Position key times, so it already moves and is left out with TD § 4's sentence" },
       "Hatch Rig": { "bucket": "never", "reason": "null", "rank": null },
-      "Hatch": { "bucket": "default", "reason": null, "rank": 9, "place_now": "center" },
+      "Hatch": { "bucket": "default", "reason": null, "rank": 17, "place_now": "center" },
       "Seal": { "bucket": "never", "reason": "collapsed", "rank": null },
+      "Tile": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [4.167, 5.167] },
+      "Caption": { "bucket": "default", "reason": null, "rank": 12, "place_now": "between" },
+      "Stamp": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [4.667, 5.667], "position_times_why": "separated: X and Y both keyed at 4.667 and 5.667, so two times, not four" },
+      "Row A": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [4.8, 5.8] },
+      "Row B": { "bucket": "default", "reason": null, "rank": 8, "place_now": "center" },
+      "Row C": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [5.167, 6.167] },
+      "Plate": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [5.3, 6.3] },
+      "Shadow": { "bucket": "default", "reason": null, "rank": 18, "place_now": "center" },
       "Reveal Matte": { "bucket": "if_named", "reason": "matte", "rank": null },
-      "Gradient": { "bucket": "if_named", "reason": "position_keyed", "rank": null },
+      "Gradient": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "rank": null, "position_times": [5.433, 6.433] },
       "Background": { "bucket": "if_named", "reason": "full_frame", "rank": null }
     },
-    "ranking_why": "Unparented first (Hatch below), no Rotation or Scale keys next (Gauge and Pop below), then layer order; Flip is flipped, so it ranks last (row 18). Every pivot is where AE put it (centre, or origin for Sign)"
+    "ranking_why": "FR-004 as amended 2026-10-26 (T241): unparented first (Hatch, Shadow below); then how animated already, three steps: no keyed property at all (Door, Needle, Lid, Tab, Peg, Banner, Sign, Plaque, Row B), then keys but none on Rotation or Scale (Blink, Cut and Caption: Opacity keys), then Rotation or Scale keys (Spinner, Badge, Gauge, Pop); then a pivot where AE put it (Lid, at [0, 150] on a rectangle centred on [0, 0], below the other unkeyed ones); then layer order. Flip is flipped, so it ranks last (row 18). Ranks 1 to 19 by hand from the captured keys and parents, as spec FR-004 lists them. T234 had Blink 1 to Lid 12 with two steps"
   },
   "overlaps": {
     "layers": {
-      "Orbit": { "bucket": "never", "reason": "cant_read", "why": "auto-orient: comp-space returns auto_orient" },
+      "Orbit": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "position_times": [0, 1, 2], "why": "T246 (D-4): was cant_read (auto-orient: comp-space returns auto_orient). Three Position key times put it in never by its keys first, before its footprint is read; row 29 keeps the auto_orient path on an unkeyed layer" },
       "Depth": { "bucket": "never", "reason": "three_d" },
-      "Locked Bar": { "bucket": "if_named", "reason": "locked" },
-      "Still": { "bucket": "default", "reason": null, "rank": 1 },
+      "Locked Bar": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "position_times": [3, 4], "why": "T246 (D-4): was if_named, locked. Position keys at 3 and 4, and never outranks allowed-if-named: unlocked, it still couldn't pass. Row 28's locked case uses door-locked" },
+      "Still": { "bucket": "default", "reason": null, "rank": 3, "note": "T234, live (spec 004's layer-info/overlaps.json): was 1. Photo (index 2) and Drift (11) come first by layer order; all three are unparented, unkeyed, pivot at the centre" },
       "Gauge Dial": { "bucket": "never", "reason": "expression_rotation_scale" },
       "Drift": { "bucket": "default", "reason": null, "rank": 2, "why": "an expression on unkeyed Position isn't read (R2); the check reads its rendered values" },
       "Guide Grid": { "bucket": "if_named", "reason": "guide" },
       "Rig": { "bucket": "never", "reason": "null" },
-      "Leaf 2": { "bucket": "if_named", "reason": "position_keyed" },
-      "Wipe": { "bucket": "if_named", "reason": "matte" },
-      "Photo": { "bucket": "default", "reason": null, "rank": 3 }
+      "Leaf 2": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "position_times": [0, 1], "why": "T246 (D-4), by its own key count: X keyed at 0 and 1, Y keyed at 0 and 1, counted together, two times" },
+      "Wipe": { "bucket": "never", "reason": "position_moves", "moves_case": "two_or_more", "position_times": [0.6, 1.6], "why": "T246 (D-4): was if_named, matte. Position keys at 0.6 and 1.6; never outranks allowed-if-named. The matte case uses Mentor Practice 2's Reveal Matte (no keys)" },
+      "Photo": { "bucket": "default", "reason": null, "rank": 1, "note": "T234, live: was 3; first by layer order (index 2)" }
     }
   },
   "attempts": {
@@ -51,30 +76,50 @@
     "door-dragged": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["layer_dragged"], "direction": "down-right", "item2": false },
     "needle-near-middle": { "focus": [{ "layer": "Needle", "place": "bottom-middle" }], "passed": false, "hints": ["not_moved_enough"], "place_now": "between" },
     "banner-neighbour": { "focus": [{ "layer": "Banner", "place": "middle-left" }], "passed": false, "hints": ["neighbour_place"], "place_now": "bottom-left" },
-    "door-outside": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["outside"], "place_now": "outside" },
+    "door-outside": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["outside"], "place_now": "outside", "outside_side": "left", "outside_side_why": "T242 (FR-019a), by hand: anchor [-200, 250] is 200 px left of the rectangle's left edge (0) and level with its middle (250 of 500), at Scale 100 and Rotation 0" },
     "wrong-layer": { "focus": [{ "layer": "Needle", "place": "bottom-middle" }], "passed": false, "hints": ["wrong_layer"], "other_changes": [{ "kind": "anchor_changed", "layer": "Background" }] },
-    "lid-group": { "focus": [{ "layer": "Lid", "place": "middle-left" }], "passed": false, "hints": ["group_anchor"] },
+    "lid-group": { "focus": [{ "layer": "Lid", "place": "middle-left" }], "passed": false, "hints": ["outside", "unchanged_shape"], "place_now": "outside", "item2": true, "other_changes": [], "note": "T243 (FR-019b): hints outside, then unchanged_shape (Lid is a shape, not passed, its own Anchor Point and Position unchanged, item 2 holds, no other layer's anchor changed). T234, live (L-1): was hints group_anchor. AE moved the group's own Anchor and Position together, so the rectangle didn't shift in layer space and the snapshot strict-matches the base: nothing this skill reads changed. Lid's own pivot is still where it was, outside the shape, so the check says outside" },
     "lid-pan": { "focus": [{ "layer": "Lid", "place": "middle-left" }], "passed": true, "hints": [] },
-    "pop-shrunk": { "focus": [{ "layer": "Pop", "place": "bottom-middle" }], "passed": false, "hints": ["away_from_rest"], "check_time": 4.3 },
+    "pop-shrunk": { "focus": [{ "layer": "Pop", "place": "bottom-middle" }], "passed": false, "hints": ["away_from_rest"], "check_time": 4.3, "item3_now": 3.3, "item3_now_why": "T246: the capture's own comp.time, 3.3 (TD § 7's Pop line says 3.3 s; the capture's comp.time is 3.3)", "item1": false, "place_now": "outside", "outside_side": "below", "outside_side_why": "T242 (FR-019a), by hand: at 4.3 s, full size, Position [120, 960] puts the rectangle at 0 to 120 across and 0 to 120 down on screen, and the anchor at [120, 960]: far below, and level with the right edge (not past it), so below", "note": "T234, live (L-4): AE set Pop's anchor to [120, 960] (Pop's Position read as a layer point), not the stand-in's [60, 120], with Position unchanged. Nothing shows at 3.3 s; at full size Pop draws far off its place, its pivot far outside it. The check grades it set away from rest (item 3) and the one hint is away_from_rest; item 1 reads outside, which the hint order doesn't add" },
     "pop-pass": { "focus": [{ "layer": "Pop", "place": "bottom-middle" }], "passed": true, "hints": [], "check_time": 4.3 },
     "gauge-at-rest": { "focus": [{ "layer": "Gauge", "place": "bottom-middle" }], "passed": true, "hints": [], "check_time": 3.167 },
     "gauge-away": { "focus": [{ "layer": "Gauge", "place": "bottom-middle" }], "passed": false, "hints": ["away_from_rest"], "check_time": 3.167 },
-    "sled-slid": { "focus": [{ "layer": "Sled", "place": "middle-left" }], "passed": false, "hints": ["slid_at_key"], "item2": true, "item4": false },
+    "sled-one-key": { "focus": [{ "layer": "Sled", "place": "middle-left" }], "baseline": "sled-one-key-before", "bucket": "if_named", "reason": "position_keyed", "tip_time": 3.667, "passed": false, "hints": ["slid_at_key"], "check_time": 0, "item1": true, "item2": true, "item4": false, "item4_worst_time": 3.667, "direction_at_worst": "right", "other_changes": [{ "kind": "keys_added", "layer": "Sled", "property": "Position" }], "why": "T246 (D-4), by hand from the two captures: Sled has one Position key, at 3.667, and no Rotation or Scale keys, so it's allowed if named and the tip names 3.667. The check time is the base's own time, 0. Pan Behind at 0 set the anchor from [50, 30] to [0, 30] (the middle of the left edge of its 100 x 60 rectangle, item 1) and added a Position key at 0 of [270, 960], so at 0 its left edge stays at 270 (item 2 holds). At 3.667 the old key still says [320, 960] while the anchor is [0, 30], so the left edge is at 320, 50 px right of where it was: item 4 fails there, and the added key is an other change" },
+    "sled-slid": { "outside_lesson_path": "T246 (D-4): Sled has three Position key times, so a lesson never reaches it (it's never, position_moves). Kept as item 4's unit test on three keys, with the check called on Sled as its target directly", "focus": [{ "layer": "Sled", "place": "middle-left" }], "passed": false, "hints": ["slid_at_key"], "item2": true, "item4": false, "item4_worst_time": 3.667, "other_changes": [{ "kind": "keys_added", "layer": "Sled", "property": "Position" }], "note": "T234, live (L-2): AE added a Position key at frame 0 (the playhead) and left the three keys as they were; the stand-in guessed it rewrote the first. Sled holds still at 0 s and slides the same 50 px at every old key, so the worst key is the first one, 3.667, and the added key is an other change" },
+    "sled-on-key": { "outside_lesson_path": "T246 (D-4): as sled-slid, a lesson never reaches it; item 4's unit test only, the check called on Sled directly", "focus": [{ "layer": "Sled", "place": "middle-left" }], "baseline_comp_time": 3.667, "passed": false, "hints": ["slid_at_key"], "item2": true, "item4": false, "item4_worst_time": 4.167, "other_changes": [], "note": "T234, live extra (L-2): the playhead on the first key (3.667). AE rewrote only that key; the other two stay, so Sled slides 50 px at 4.167 and 4.667 and no key is added. The baseline is the live base with its playhead at 3.667, where the learner started (the base holds samples there)" },
     "stopwatch": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["stopwatch"] },
     "door-locked": { "focus": [{ "layer": "Door", "place": "middle-left" }], "passed": false, "hints": ["locked"] },
     "plaque-pass": { "focus": [{ "layer": "Plaque", "place": "middle-left" }], "passed": true, "hints": [] },
     "demo-separated": { "focus": [{ "layer": "Tab", "place": "middle-left" }], "passed": true, "hints": [] },
+    "demo-separated-xy": { "focus": [{ "layer": "Tab", "place": "middle-left" }], "passed": true, "hints": [], "note": "T234, live extra (L-4): the demo on Tab with Position separated, written as X and Y. The read can't tell separated from not, and the check passes it the same way" },
     "demo-parented": { "focus": [{ "layer": "Hatch", "place": "middle-left" }], "passed": true, "hints": [] }
   },
   "two_focus_demos": {
     "door_with_tab": { "focus": [{ "layer": "Door", "place": "middle-left" }, { "layer": "Tab", "place": "middle-left" }], "demo_target_layer": "Tab" },
     "gauge_with_peg": { "focus": [{ "layer": "Gauge", "place": "bottom-middle" }, { "layer": "Peg", "place": "bottom-middle" }], "demo_target_layer": "Peg" },
-    "sled_with_door": { "focus": [{ "layer": "Door", "place": "middle-left" }, { "layer": "Sled", "place": "middle-left" }], "demo_target_layer": "Door", "why": "Sled isn't a default candidate (Position keyed), so the demo goes on entry 0" },
-    "lid_with_banner": { "focus": [{ "layer": "Lid", "place": "middle-left" }, { "layer": "Banner", "place": "middle-left" }], "demo_target_layer": null, "no_demo_reason": "not_a_default_candidate" }
+    "sled_with_door": { "focus": [{ "layer": "Door", "place": "middle-left" }, { "layer": "Sled", "place": "middle-left" }], "demo_target_layer": "Door", "focus_problem": { "layer": "Sled", "problem": "not_a_candidate", "reason": "position_moves", "moves_case": "two_or_more" }, "why": "T246 (D-4): Sled is refused (three Position key times, never), so Door is the only target and the analysis names it; with one target the session's single-target rule then gives no demo. Was: Sled isn't a default candidate (Position keyed), so the demo goes on entry 0" },
+    "lid_with_banner": { "focus": [{ "layer": "Lid", "place": "middle-left" }, { "layer": "Banner", "place": "middle-left" }], "demo_target_layer": "Banner", "note": "T234 (L-1): was null with not_a_default_candidate; shapes are default candidates now, so Banner (entry 1) takes the demo" },
+    "matte_with_background": { "focus": [{ "layer": "Reveal Matte", "place": "middle-left" }, { "layer": "Background", "place": "middle-left" }], "demo_target_layer": null, "no_demo_reason": "not_a_default_candidate", "why": "T246 (D-4): replaces sled_with_gradient (both are never now, so neither is a target). Picked by hand: Reveal Matte is if_named (matte) and Background if_named (full_frame); both pivots are at their centres ([120, 70] on 240 x 140, [960, 540] on 1920 x 1080), so neither is already at the middle of its left edge and both are targets. Neither is a default candidate, so no demo" }
+  },
+  "watch_offer": {
+    "door": { "focus": [{ "layer": "Door", "place": "middle-left" }], "watch_offer": { "layer": "Needle", "suggested_place": "bottom-middle" }, "why": "T249 (spec FR-008, TD § 17), by hand: Door is rank 1 and the focus, so the next default candidate is Needle (rank 2): no keys at all, so no rest key to match; its pivot is at its centre (place_now center), not at the middle of its bottom edge; and it's tall and thin (the hinge rule, as the proposal gives it with focus_layers Needle), so bottom-middle" },
+    "pop": { "focus": [{ "layer": "Pop", "place": "bottom-middle" }], "focus_check_time": 4.3, "watch_offer": { "layer": "Door", "suggested_place": "middle-left" }, "why": "T249, by hand: Pop's check time is its rest key, 4.3 s (largest Scale). Door is rank 1, isn't the focus, has no keys (so the rest-key condition doesn't apply), its pivot is at its centre, and it isn't tall (500 is less than twice 300), so middle-left, as the lesson's proposal" },
+    "door_and_needle": { "focus": [{ "layer": "Door", "place": "middle-left" }, { "layer": "Needle", "place": "bottom-middle" }], "watch_offer": null, "why": "Two focus layers: the second already takes the demo (FR-008)" },
+    "review": { "record": "records/learned-door.json", "watch_offer": null, "why": "No demo in a review, so no offer (FR-008, TD § 12); the tool nulls it whatever the analysis gives" }
   },
   "review": {
-    "record": "records/learned-door.json",
+    "record":"records/learned-door.json",
     "proposal": "Tab",
-    "count_with_exclude": 8
+    "count_with_exclude": 17,
+    "note": "T241 (FR-004, FR-024, amended 2026-10-26): Tab again. A review goes by the animation step first (R8): with Door and Needle in the record, the unkeyed, unflipped, unparented layers with their pivot where AE put it are Tab, Peg, Banner, Sign, Plaque and Row B, and Tab (index 19) is first by layer order. 19 default candidates on the live comp, less Door and Needle, is 17. T234 had Blink",
+    "with_door_and_gauge": "Needle",
+    "with_door_and_gauge_why": "Quickstart 5's two lessons (Door, then Gauge or Pop, one focus layer each): Needle (index 15) is the first unkeyed default candidate left by layer order (FR-024); the same with Door and Pop"
+  },
+  "live_notes": {
+    "comp_id": "Mentor Practice 2 is comp 179 in the project (the stand-in used 300). Captures taken on duplicates carry captured_from, with their comp id and name set to 179's",
+    "hatch": "Hatch Rig's anchor is [0, 0] at [640, 960] (the stand-in had [50, 50]); Hatch's own Position is [0, 0] under its parent (the stand-in had [50, 50]). Hatch's footprint is the same either way: left 565, top 920, right 715, bottom 1000",
+    "hatch-rig-focus": "Hatch Rig's anchor moved from [0, 0] to [50, 50] with Pan Behind (Position by the same), so neither it nor Hatch moved on screen",
+    "sign-left": "Sign left-justified: its letters' rectangle starts 2.455 px right of its pivot (the log rounds it to 2.45) (the stand-in had 0), and the pivot is on the baseline, so it reads between places. Centred, the rectangle is 145.628 wide from -73.393 (the stand-in had 128 from -64). L-5: within 1 px of the ink both ways",
+    "sign-left-check": "Graded against the base with Sign as the focus, the justification change shifts Sign's rectangle (its anchor and Position unchanged), so item 2 fails and the hint is content_shifted (T243, FR-019b: renamed from group_anchor, whose wording was about a shape's group; the new one names no group on a text layer). Sign is text, so unchanged_shape doesn't fire"
   }
 }

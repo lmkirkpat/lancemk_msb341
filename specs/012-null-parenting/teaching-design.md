@@ -2,7 +2,8 @@
 
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
-**Date:** 2026-10-23. **Status:** draft, not yet answered by the spec writer.
+**Date:** 2026-10-23. **Status:** draft, answered by the spec writer in round 1 (§ 14). Round 2
+(2026-10-25, § 15): the proposal rule reworked for L-6.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 6, § 8, § 9, § 12 (B9), § 13
 (the FR-029 correction), § 14; spec 004 (approved), above all FR-005, FR-013, FR-014, FR-018 to
 FR-022, FR-024, FR-028, FR-029, FR-030, FR-037, the Edge Cases table, and plan.md › Waves › Wave B.
@@ -65,11 +66,36 @@ stage 7).
 move as one, like the parts of a lower third or a logo lockup?" The learner names 2 to 4 layers, or
 agrees to the mentor's proposal.
 
-**Proposal, when the learner has no answer** (**Guess**: no evidence on how beginners group): up to 4
-**candidate** layers (below) whose comp-space bounds at the current time overlap or nearly touch (R3
-bounds). Name them in one sentence ("Card, Label and Badge sit together at the bottom left"). If
-nothing qualifies, say so and ask the learner to make a small group to practice on (two shapes and a
-text layer). Never invent a grouping.
+**Proposal, when the learner has no answer** (the proposal rule, spec 012's H-4; revised
+2026-10-25 for L-6, § 15). It answers the question an instructor asks looking at the frame: which
+layers read as one thing? The parts of one thing sit together **and apart from the rest**. Closeness
+alone can't tell that on a busy comp, because near neighbours chain into one crowd (R, L-6). The
+rule is the tool's and deterministic; the model only says it.
+
+1. **Link.** Two **candidate** layers (the table below, proposable ones only) link when their
+   comp-space bounds at the before-read time overlap or nearly touch: a gap of at most 2% of the
+   comp's width on both axes (unchanged, **Guess**). Layers that aren't proposable (hidden, parented,
+   nulls, full-frame, 3D and the rest) don't link anything.
+2. **Groups and crowds.** Follow the links: every layer reachable from another is in its cluster. A
+   cluster of **2 to 4** layers (a matte pair counts as 2 and is never split) sits apart from the
+   rest, so it's a **group**. A cluster of **5 or more** is a **crowd**: never proposed and never
+   trimmed to 4, because any 4 the mentor took from it would be a guess about the learner's design.
+   A layer that links to nothing is neither.
+3. **Pick among groups**, in this order: (a) a group that mixes a text layer with at least one
+   non-text layer, a label on something, as in a lower third, a lockup or a card with a label
+   (**Guess**); then (b) more layers; then (c) the group whose top layer is highest in the stack.
+   The first is the proposal; the second is kept in case the learner says no.
+4. **Say it with the reason**, in one sentence: "Tile, Caption and Stamp sit together at the top
+   right, apart from everything else. Want to move those as one?" If the learner says no, offer the
+   second group once ("Or Chip A, Chip B and Chip C?"), then ask them to name the layers.
+5. **When the signal is weak, ask.** No group but a crowd: don't propose. Say why in plain words and
+   ask: "A lot of your layers sit close together, so I can't tell which ones belong together. Which
+   2 to 4 should move as one?" Don't list the crowd. No group and no crowd: say so and ask the
+   learner to make a small group to practice on (two shapes and a text layer). Never invent a
+   grouping.
+
+A crowd's layers aren't "left out": they're candidates the learner may name, so the left-out
+sentence (below) stays about the table's reasons, and never lists them.
 
 **Candidates** (by FR-013's visibility class, never by the eye switch alone):
 
@@ -119,7 +145,7 @@ lesson needs the second practice comp** (B-1).
 | Stage | Learner does | Mentor checks | What passes |
 |---|---|---|---|
 | 0. Remember | nothing | The record for this skill | n/a |
-| 1. Look, ask, agree a focus | names or agrees to 2 to 4 layers | Fresh read with R1 and R3. § 4. The **before read** is taken now, when the focus is set: for each focus layer, its footprint in comp space at the current time and at each of its key times (§ 6, "the before read") | A focus of 2 to 4 candidates |
+| 1. Look, ask, agree a focus | names 2 to 4 layers, or agrees to the proposal (or the second group), or answers the crowd question | Fresh read with R1 and R3. Asks first (§ 4). Only if the learner has no group in mind: the tool's proposal from § 4's rule, said with its reason ("apart from everything else"); a crowd gets the question, not a proposal; a "no" gets the second group once, then the question. The **before read** is taken now, when the focus is set: for each focus layer, its footprint in comp space at the current time and at each of its key times (§ 6, "the before read") | A focus of 2 to 4 candidates, however it was reached (named, proposed or second group) |
 | 2. Explain on their comp | watches | At least one frame, real names and times. If the comp has a null with children (CTRL), use it: frames at its first and last key, "CTRL rises 40 px and Title and Subtitle rise with it, while Title still runs its own keys." Otherwise one frame of the focus group and the idea in words. Then the two facts that matter: children inherit position, scale and rotation, **not opacity or effects**; and a null never renders, so it can't drag its own look into the group | n/a |
 | 3. We do: add and place the null | Adds a null (Layer > New > Null Object), says where the group should turn or scale from (a corner, an edge center, or the middle of the group), drags the null there, says "done" | Fresh read. § 6, N1 to N3 (a null exists, 2D, no parent; its pivot is in the named region of the group). The region is the learner's intent: the mentor asks, never picks. "It doesn't matter, it'll only slide" is a valid answer: the region check is then skipped until the null's move turns or scales (§ 6, P5). The null's transform is stored now (§ 6, "the null at parenting") | N1 to N3 |
 | 4. I do (one demo) | watches, can Edit > Undo | Only when asked or clearly stuck (the mentor offers it here, the learner may decline). One write: parent the demo target to the null with no jump. Then a frame at the before-read time: "Card is exactly where it was, and its Parent column now says Group Null." The check's number goes in plain words ("it moved 0 pixels"), since two identical frames don't show much on their own | n/a |
@@ -292,8 +318,10 @@ even though skills 5 and 6's reviews are stretch (H2).
 
 - **When:** spec 004 FR-019 to FR-021.
 - **New target:** 2 to 4 candidates (§ 4) that aren't parented and aren't in the record for this
-  skill on this comp, that look like a group (the § 4 proposal rule) or that the learner names. No
-  group, no review offered; it stays due. A group already parented to a null isn't a target
+  skill on this comp, that look like a group (the § 4 proposal rule: the first group, never a
+  crowd) or that the learner names. No group, no review offered; it stays due. A comp with only a
+  crowd counts as no group: the review names its task, so it can't open with a question about
+  which layers belong together. A group already parented to a null isn't a target
   (mention it, don't grade).
 - **What it asks:** names the layers and the task, **without the word "null"**: "Card, Label and
   Badge should move as one. Set that up so you can move them together, then give them one move."
@@ -387,8 +415,8 @@ review where the learner parents to a visible layer fails without the word "null
 - **H-2** The review never says "null". **Recommended:** keep it; the point of the review is whether
   the learner reaches for one unprompted.
 
-**Guesses:** the proposal rule (bounds that overlap or nearly touch) when the learner has no group in
-mind; "the null re-placed between stage 3 and parenting" being rare enough to handle by hint wording;
+**Guesses:** the proposal rule when the learner has no group in mind: the 2% margin, the 2-to-4
+cut between a group and a crowd, and the preference for a text layer with a graphic (§ 4, § 15); "the null re-placed between stage 3 and parenting" being rare enough to handle by hint wording;
 auto-orient's interaction with the rotation read.
 
 **Curriculum items this design settles or moves:** B7 (set parent, no jump), B9 (moved to B-2, and
@@ -418,3 +446,73 @@ S-1 to S-3).
   layer is parented yet (D-1).
 - **§ 7, new row:** null moved only on Anchor Point. The check sees that P4 fails with only Anchor
   Point keys on the null. D-2's hint applies. Evidence: inference from skill 5.
+
+## 15. Round 2: the proposal rule after L-6 (2026-10-25)
+
+**What happened (R, L-6).** The builder and the reviewer found that on Mentor Practice 2 as built
+(`practice2b-with-wave-a.json`, wave A's 13 layers plus wave B's), the old rule (link within 2%,
+propose the **largest** linked group, past 4 keep growing in stack order) proposed Blink, Spinner,
+Cut and Badge. Wave A's layers sit close: Cut and Banner are 10 px apart, Dot 3 is 3 px from Card,
+Peg 25 px from Cut, and Dot 1 and Dot 2 sit inside Door, so 13 layers chain into one cluster, and
+"largest" rewards exactly that. The human chose to rework the rule rather than move layers in the
+practice comp, because a learner's real comp is crowded the same way.
+
+**What changed (§ 4, § 5 stage 1, § 11, § 13's guesses).**
+- The link stays (overlap or within 2% of the comp's width on both axes).
+- A cluster of 2 to 4 is a **group**; 5 or more is a **crowd**, never proposed or trimmed. This is
+  the fix: a crowd is the signal that closeness can't tell the parts apart.
+- Groups are ranked: text with a graphic first, then more layers, then highest in the stack. The
+  "largest group" and "past 4, keep growing" parts are gone.
+- The mentor says the reason ("apart from everything else"), offers the second group once after a
+  "no", and with only a crowd asks the learner instead of proposing.
+- What the lesson teaches, the stages, the pass and the hard rules are unchanged. The model still
+  never picks the group's pivot region, never picks a focus the learner didn't name or agree to,
+  and the proposal is still the tool's.
+
+**What it gives on the fixture (worked by hand from `stand-in/build.mjs`'s declared layout, at
+0 s, 1920 wide, so 38.4 px).**
+
+| Cluster | Size | Kind | Top layer | What it is |
+|---|---|---|---|---|
+| Blink, Spinner, Cut, Badge, Peg, Banner, Card, Dot 1, Dot 2, Dot 3, Door, Plaque, Sign | 13 | | Blink (1) | Crowd: not proposed |
+| **Tile, Caption, Stamp** | 3 | text with graphics | Tile (30) | **Group, proposed** (the only one with text) |
+| Chip A, Chip B, Chip C (20 px apart) | 3 | shapes | Chip A (9) | Group, second (kept for a "no") |
+| Row A, Row B, Row C | 3 | solids | Row A (33) | Group, third |
+| Pause, Sled (30 px apart) | 2 | | Pause (13) | Group |
+| Reveal Matte, Gradient | 2 (one pair) | | Reveal Matte | Group |
+| Flag, Lid, Tab, Needle, Gauge, Wobble, Flip, Pop, Seal, Plate | 1 each | | | Neither |
+
+Tile, Caption and Stamp's nearest proposable neighbours are Flag (140 px across), Row A (290 px)
+and Plate (270 px down), so nothing chains into them. On `practice2b.json` (wave B only) the
+proposal is still Tile, Caption and Stamp, and with them excluded it's still Row A to C, then the
+matte pair, as the answer key has it. The hidden-Caption test still gives Tile and Stamp.
+
+**Options weighed and not taken.**
+- **A tighter or relative distance.** The links that make the crowd are 3 to 25 px; any margin
+  that keeps a label padded a few pixels off its card keeps those too. Rejected.
+- **Layers that move together or share key times.** The intended group doesn't share a key time
+  (Tile 4.17 to 5.37 s, Caption 4.3 to 5.3 s, Stamp 4.67 to 5.67 s); the layers that share them
+  exactly are Chip A to C (2 and 3 s), which are offset's lockstep, and Spinner's 4-second turn
+  overlaps every centre layer in time. It would also make the rule harder to say in one sentence.
+  Kept as a possible later tie-break (§ 13's guesses, open below).
+- **Every pair in a group must touch** (a stricter cluster). Gives the same answer here, but it
+  splits an evenly spaced stack (Chip A to C) for no teaching reason, and "sit together, apart from
+  the rest" is easier to explain. Rejected.
+- **Always ask, never propose.** Safe, but the design asks first anyway; the proposal is only for a
+  learner with no answer, who is the one who most needs a starting point. Asking stays the fallback
+  for a crowd.
+- **Move layers in the practice comp.** The human's call: no, since it hides the problem.
+
+**Open, from this round (recommended answers in the hand-back to the cockpit):**
+- **L6-1** The review's new target on the live comp, after the lesson's group is parented, is now
+  Chip A to C (higher in the stack than Row A to C), not Row A to C. Rows stays the answer on
+  `practice2b.json`. **Recommended:** accept it; Chip A to C is a fair group to move together. If
+  the human wants Rows, add "a group whose moving layers all share one move ranks after one whose
+  layers move differently" as tie-break (b2), which also says why: the children keeping their own
+  animation is what the lesson shows.
+- **L6-2** The finder (skill 6's count for next-mentor) on a comp with only a crowd: counts 0 if it
+  matches the proposal, so the skill wouldn't be suggested on a crowded comp. **Recommended:** count
+  a crowd as "a group may be here" for the finder only, so the suggestion stays; the lesson then
+  asks. The spec writer decides how.
+- **L6-3** The text preference is a **Guess**. A first logged lesson where a learner without a group
+  in mind accepts or rejects the proposal is the first evidence; log it in the usage notes.

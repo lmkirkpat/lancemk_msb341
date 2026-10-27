@@ -9,7 +9,7 @@ import { check, checkSampleTimes, hintCodes, otherChanges } from "../lib/anchor-
 import { unexpectedChanges } from "../lib/diff.mjs";
 import { analyze, demoValues, rectOf } from "../lib/anchor.mjs";
 import { apply as applyDemo } from "../fixture/anchor-demo.mjs";
-import { clone, fixture, indexOf, KEY, lessonFor, synthetic } from "./fixtures/anchor/load.mjs";
+import { clone, fixture, indexOf, KEY, lessonDirect, lessonFor, synthetic } from "./fixtures/anchor/load.mjs";
 
 const P2 = fixture("practice2b");
 const DOOR = [{ layer: "Door", place: "middle-left" }];
@@ -35,13 +35,53 @@ test("the result carries the check read's own time, for the rest hint", () => {
   assert.equal(layerOf(r, "Pop").check_time, 4.3);
 });
 
-test("item 4 fails on a slide at one Position key time while item 2 passes", () => {
-  const r = run(P2, fixture("sled-slid"), [{ layer: "Sled", place: "middle-left" }]);
+// The live base with its playhead somewhere else, as a learner who started the lesson there would
+// have it (the base holds samples at every --times time).
+const at = (snap, time) => { const s = clone(snap); s.comp.time = time; return s; };
+const baseFor = (want) => {
+  const base = want.baseline ? fixture(want.baseline) : P2;
+  return want.baseline_comp_time !== undefined ? at(base, want.baseline_comp_time) : base;
+};
+// An answer-key attempt against its baseline: as a lesson would set it up, or, for a check a lesson
+// can't reach since D-4 (Sled with three Position keys), with the focus as targets directly.
+const runAttempt = (file, want) => {
+  const base = baseFor(want);
+  return want.outside_lesson_path ? check(base, fixture(file), lessonDirect(base, want.focus)) : run(base, fixture(file), want.focus);
+};
+
+test("item3.now is the check read's own comp.time: pop-shrunk's 3.3, where Pop is shrunk to nothing (FR-019, round 2)", () => {
+  const want = KEY.attempts["pop-shrunk"];
+  assert.equal(fixture("pop-shrunk").comp.time, want.item3_now, "the capture's own time");
+  const pop = layerOf(run(P2, fixture("pop-shrunk"), want.focus), "Pop");
+  assert.equal(pop.item3.now, want.item3_now);
+  assert.equal(pop.item3.at_rest, false);
+  assert.equal(pop.item3.set_away_from_rest, true);
+  assert.equal(layerOf(run(P2, fixture("door-pass"), DOOR), "Door").item3.now, 0);
+});
+
+// Outside the lesson path since D-4: Sled has three Position key times, so the analysis refuses it
+// and no lesson can target it. The check is called on Sled directly to keep item 4 tested on three keys.
+test("item 4 fails on a slide at the Position keys while item 2 passes (L-2, playhead before the keys: a key added at 0)", () => {
+  const r = check(P2, fixture("sled-slid"), lessonDirect(P2, [{ layer: "Sled", place: "middle-left" }]));
   const sled = layerOf(r, "Sled");
   assert.equal(sled.item2.passed, true);
   assert.equal(sled.item4.passed, false);
-  assert.ok([4.167, 4.667].includes(sled.item4.worst.time));
+  assert.equal(sled.item4.worst.time, KEY.attempts["sled-slid"].item4_worst_time, "every old key slid the same, so the first is the worst");
+  assert.deepEqual(r.other_changes, [{ kind: "keys_added", layer: "Sled", property: "Position" }], "AE added a key at the playhead");
   assert.equal(r.passed, false);
+});
+
+test("L-2, playhead on the first key: only that key is rewritten, Sled slides at the other two, no key added", () => {
+  const want = KEY.attempts["sled-on-key"];
+  const base = baseFor(want);
+  const r = check(base, fixture("sled-on-key"), lessonDirect(base, want.focus));
+  const sled = layerOf(r, "Sled");
+  assert.equal(sled.check_time, 3.667);
+  assert.equal(sled.item2.passed, true, "still at the playhead");
+  assert.equal(sled.item4.passed, false);
+  assert.equal(sled.item4.worst.time, want.item4_worst_time);
+  assert.deepEqual(sled.hints, ["slid_at_key"]);
+  assert.deepEqual(r.other_changes, []);
 });
 
 test("item 5 fails when another layer moved 2 px", () => {
@@ -185,8 +225,18 @@ test("comp_matches is false on another comp, and nothing is graded", () => {
 });
 
 test("checkSampleTimes: the focus's check times, the baseline's comp.time and its Position key times", () => {
+  // In a lesson Sled is refused (D-4), so only Pop's rest key and the baseline's time are asked for.
   const l = lessonFor(P2, [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }]);
-  assert.deepEqual(checkSampleTimes(P2, l), [0, 3.667, 4.167, 4.3, 4.667]);
+  assert.deepEqual(l.targets, [`anchor/${indexOf(P2, "Pop")}`]);
+  assert.deepEqual(checkSampleTimes(P2, l), [0, 4.3]);
+  // Sled as a target directly (outside the lesson path): its three Position key times too.
+  const direct = lessonDirect(P2, [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }]);
+  assert.deepEqual(checkSampleTimes(P2, direct), [0, 3.667, 4.167, 4.3, 4.667]);
+  // The one-key lesson: Sled's key at 3.667 and the base's own time.
+  const base = fixture("sled-one-key-before");
+  const one = lessonFor(base, [{ layer: "Sled", place: "middle-left" }]);
+  assert.deepEqual(one.targets, [`anchor/${indexOf(base, "Sled")}`]);
+  assert.deepEqual(checkSampleTimes(base, one), [0, 3.667]);
 });
 
 // ---- Other changes (FR-019), from layer_info for every layer
@@ -226,16 +276,15 @@ const ROWS = [
   ["neighbour_place", "banner-neighbour"],
   ["outside", "door-outside"],
   ["wrong_layer", "wrong-layer"],
-  ["group_anchor", "lid-group"],
   ["away_from_rest", "pop-shrunk"],
-  ["slid_at_key", "sled-slid"],
+  ["slid_at_key", "sled-one-key"],
   ["stopwatch", "stopwatch"],
   ["locked", "door-locked"],
 ];
 for (const [code, file] of ROWS) {
   test(`hint ${code}: ${file} gives exactly that code`, () => {
     const want = KEY.attempts[file];
-    const r = run(P2, fixture(file), want.focus);
+    const r = runAttempt(file, want);
     const l = layerOf(r, want.focus[0].layer);
     assert.deepEqual(l.hints, [code]);
     assert.equal(r.passed, false);
@@ -243,6 +292,50 @@ for (const [code, file] of ROWS) {
     if (want.place_now) assert.equal(l.item1.place_now, want.place_now);
   });
 }
+
+// Row 22's hints (FR-019b, T243). Live (L-1), AE moves a group's anchor and position together, so
+// nothing this skill reads changes: on a shape that gives unchanged_shape after the place hint.
+// content_shifted (was group_anchor) fires when a layer's rectangle shifts with its anchor unchanged:
+// live, a text layer whose justification changed (sign-left), and a shape's shifted rectangle, kept
+// as a clone here.
+test("hint content_shifted: what's drawn moved, its pivot didn't, on any layer kind; exactly that code", () => {
+  const sign = layerOf(run(P2, fixture("sign-left"), [{ layer: "Sign", place: "middle-left" }]), "Sign");
+  assert.deepEqual([sign.anchor_changed, sign.position_changed, sign.rect_shifted], [false, false, true]);
+  assert.deepEqual(sign.hints, ["content_shifted"], "a text layer: a justification change (L-5)");
+  const shifted = clone(P2);
+  for (const sm of shifted.layer_info.find((l) => l.name === "Lid").samples) sm.rect = { ...sm.rect, left: sm.rect.left - 40 };
+  const r = layerOf(run(P2, shifted, [{ layer: "Lid", place: "middle-left" }]), "Lid");
+  assert.equal(r.rect_shifted, true);
+  assert.deepEqual(r.hints, ["content_shifted"], "a shape whose rectangle shifted: item 2 fails, so no unchanged_shape");
+  assert.ok(!hintCodes({ ...r, rect_shifted: false }).includes("content_shifted"));
+  assert.ok(!["group_anchor"].some((c) => r.hints.includes(c) || sign.hints.includes(c)), "the old code is gone");
+});
+
+test("hint unchanged_shape: live lid-group (nothing the read holds changed) gives the place hint, then unchanged_shape", () => {
+  const want = KEY.attempts["lid-group"];
+  const live = layerOf(run(P2, fixture("lid-group"), want.focus), "Lid");
+  assert.deepEqual(live.hints, want.hints);
+  assert.deepEqual(live.hints, ["outside", "unchanged_shape"]);
+  assert.equal(live.hints.filter((c) => c === "unchanged_shape").length, 1);
+  assert.deepEqual([live.kind, live.anchor_changed, live.position_changed, live.item2.passed, live.rect_shifted], ["shape", false, false, true, false]);
+});
+
+test("unchanged_shape fires only on a shape that didn't pass, own pivot and Position unchanged, item 2 holding, not wrong_layer", () => {
+  const lid = layerOf(run(P2, fixture("lid-group"), [{ layer: "Lid", place: "middle-left" }]), "Lid");
+  const has = (r, o = []) => hintCodes(r, o).includes("unchanged_shape");
+  assert.equal(has(lid), true);
+  assert.equal(has({ ...lid, kind: "solid" }), false, "a solid: not a shape");
+  assert.equal(has({ ...lid, kind: "text" }), false, "a text layer: not a shape");
+  assert.equal(has({ ...lid, passed: true }), false, "passed");
+  assert.equal(has({ ...lid, anchor_changed: true }), false, "its own pivot changed");
+  assert.equal(has({ ...lid, position_changed: true }), false, "its Position changed");
+  assert.equal(has({ ...lid, item2: { ...lid.item2, passed: false } }), false, "item 2 fails");
+  assert.equal(has(lid, [{ kind: "anchor_changed", layer: "Background" }]), false, "another layer's pivot moved: wrong_layer instead");
+  assert.deepEqual(hintCodes(lid, [{ kind: "anchor_changed", layer: "Background" }]), ["wrong_layer"]);
+  // A solid with nothing changed (Door untouched): the place hint only.
+  const door = layerOf(run(P2, P2, [{ layer: "Door", place: "middle-left" }]), "Door");
+  assert.deepEqual(door.hints, ["not_moved_enough"]);
+});
 
 test("hint matte_eye: a pass with a matte's eye left on gives exactly that code", () => {
   const r = run(P2, passMatteEyeOn(), DOOR);
@@ -258,16 +351,54 @@ test("hint cant_check: said instead of any other hint for that layer", () => {
 
 test("every planted attempt in the answer key grades as it says", () => {
   for (const [file, want] of Object.entries(KEY.attempts)) {
-    const r = run(P2, fixture(file), want.focus);
+    const r = runAttempt(file, want);
     const l = layerOf(r, want.focus[0].layer);
+    assert.ok(l, `${file}: the focus layer is checked`);
+    if (want.item3_now !== undefined) assert.equal(l.item3.now, want.item3_now, `${file} item 3's own time`);
+    if (want.direction_at_worst === "right") assert.ok(l.item4.worst.dx > 1 && Math.abs(l.item4.worst.dy) <= 1, `${file} slid right`);
     assert.equal(r.passed, want.passed, `${file} passed`);
     assert.deepEqual(l.hints, want.hints, `${file} hints`);
     if (want.check_time !== undefined) assert.equal(l.check_time, want.check_time, `${file} check time`);
     if (want.item1 !== undefined) assert.equal(l.item1.passed, want.item1, `${file} item 1`);
+    if (want.place_now !== undefined) assert.equal(l.item1.place_now, want.place_now, `${file} place now`);
+    if (want.outside_side !== undefined) assert.equal(l.item1.outside_side, want.outside_side, `${file} outside side`);
     if (want.item2 !== undefined) assert.equal(l.item2.passed, want.item2, `${file} item 2`);
     if (want.item4 !== undefined) assert.equal(l.item4.passed, want.item4, `${file} item 4`);
+    if (want.item4_worst_time !== undefined) assert.equal(l.item4.worst.time, want.item4_worst_time, `${file} item 4's worst key`);
     if (want.other_changes) assert.deepEqual(r.other_changes, want.other_changes, `${file} other changes`);
   }
+});
+
+// ---- T242: item 1 says which side a pivot outside sits on, on screen (FR-019a)
+
+test("T242: item1.outside_side: door-outside left, pop-shrunk below at its rest key, lid-group below", () => {
+  const door = layerOf(run(P2, fixture("door-outside"), DOOR), "Door");
+  assert.equal(door.item1.place_now, "outside");
+  assert.equal(door.item1.outside_side, KEY.attempts["door-outside"].outside_side);
+  const pop = layerOf(run(P2, fixture("pop-shrunk"), [{ layer: "Pop", place: "bottom-middle" }]), "Pop");
+  assert.equal(pop.check_time, 4.3);
+  assert.equal(pop.item1.outside_side, KEY.attempts["pop-shrunk"].outside_side);
+  assert.deepEqual(pop.hints, ["away_from_rest"], "the side is a fact, not a second hint");
+  const lid = layerOf(run(P2, fixture("lid-group"), [{ layer: "Lid", place: "middle-left" }]), "Lid");
+  assert.equal(lid.item1.outside_side, "below");
+  const pass = layerOf(run(P2, fixture("door-pass"), DOOR), "Door");
+  assert.equal(pass.item1.outside_side, null, "only when the pivot is outside");
+});
+
+test("T242: a flipped focus layer's side is the screen's; an unreadable one is null, never a guess", () => {
+  const flipped = clone(P2);
+  for (const sm of flipped.layer_info.find((l) => l.name === "Flip").samples) sm.anchor = [150, 30, 0];
+  const flip = layerOf(run(P2, flipped, [{ layer: "Flip", place: "middle-left" }]), "Flip");
+  assert.equal(flip.item1.place_now, "outside");
+  assert.equal(flip.item1.outside_side, "left", "past its own right edge, which is the screen's left");
+  // No Position in the read: item 1 still reads the anchor in its own rectangle, but comp space
+  // can't be read, so no side (and the layer can't be checked).
+  const noPos = clone(fixture("door-outside"));
+  for (const sm of noPos.layer_info.find((l) => l.name === "Door").samples) delete sm.position;
+  const d = layerOf(run(P2, noPos, DOOR), "Door");
+  assert.equal(d.item1.place_now, "outside");
+  assert.equal(d.item1.outside_side, null);
+  assert.deepEqual(d.hints, ["cant_check"]);
 });
 
 // ---- Review S1: two more rows, and no failed layer without a hint
@@ -293,7 +424,7 @@ test("hint other_layer_moved: the focus holds items 1 to 4 and another layer's b
 
 test("a failed focus layer always has at least one hint", () => {
   const cases = [];
-  for (const [file, want] of Object.entries(KEY.attempts)) cases.push([file, P2, fixture(file), want.focus]);
+  for (const [file, want] of Object.entries(KEY.attempts)) cases.push([file, baseFor(want), fixture(file), want.focus]);
   for (const name of ["door-renamed", "door-layer-added", "matte-eye-on", "hatch-rig-focus", "gauge-away", "pop-shrunk"]) {
     for (const focus of [DOOR, [{ layer: "Gauge", place: "bottom-middle" }], [{ layer: "Pop", place: "bottom-middle" }, { layer: "Needle", place: "top-left" }]]) cases.push([name, P2, fixture(name), focus]);
   }

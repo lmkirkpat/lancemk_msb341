@@ -1,6 +1,8 @@
 # Research: Move a group with a null (spec 012)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24).
+**Status**: Approved 2026-10-24 with the plan. **Amendment 1 (2026-10-25), awaiting approval:**
+R2 rewritten for L-6 (TD § 15); R5, R6, R7 and R9 name what branch `skill-6-null` already does for
+the review's S5 and S6.
 
 Built against what's on main after the early wave B merge (d009d35; `mentor` 686 tests):
 `mentor/lib/layer-info.mjs`, `comp-space.mjs` (with `parent_transform`), `visibility.mjs`,
@@ -25,17 +27,38 @@ are still open, so every live task here comes after them.
 - **Alternatives:** the keyed `layers` list (filter 1: drops a static group member, Row B); the eye
   switch (filter 2: drops a matte and a hidden null that carries children). Rejected by the spec.
 
-## R2. The proposal: "overlap or nearly touch"
+## R2. The proposal: groups and crowds (amended 2026-10-25, TD § 15)
 
 - **Decision:** each candidate's bounds are `footprint(snapshot, i, t).bounds` at the before-read
-  time `t` (the read's `comp.time`). Two candidates **link** when the gap between their bounds is at
-  most `0.02 · comp.width` on both axes (a negative gap is an overlap). Components by union-find;
-  a matte pair is one unit of 2 that links when either member does. The proposal is the largest
-  component (counting layers), a tie going to the one whose top layer has the lowest index; past 4,
-  the first 4 in stack order that still form one linked set (take layers in index order, keep each
-  that links to one already kept, stop at 4; a matte pair is added whole or not at all). A
-  candidate whose footprint has a `reason` at `t` can't be placed, so it isn't proposed (it stays
-  `if_named` with `cant_read`). Deterministic; unit tested; L-6 checks it on 2b.
+  time `t` (the read's `comp.time`). Two proposable units (bucket `default`; a matte pair is one
+  unit of 2 that links when either member does) **link** when the gap between their bounds is at
+  most `0.02 · comp.width` on both axes (a negative gap is an overlap). **Clusters** by union-find,
+  as before. Then, new:
+  - a cluster of 2 to 4 layers (counting a matte pair as 2) is a **group**; 5 or more is a
+    **crowd**, never proposed and never trimmed; a lone unit is neither (a lone matte pair is a
+    group of 2);
+  - groups are sorted by (a) has a `kind: "text"` member and a member of another kind, first;
+    (b) more layers; (c) lowest top index. `proposal` = the first, `next_proposal` = the second
+    (or `null`), each in stack order;
+  - no group: `no_proposal_reason` is `crowded` when any crowd exists, else `no_group`.
+
+  A candidate whose footprint has a `reason` at `t` can't be placed, so it isn't proposed (it stays
+  `if_named` with `cant_read`). Deterministic; unit tested; L-6 checks it on Mentor Practice 2 as
+  built.
+- **Worked on the stand-in** (TD § 15's table): `practice2b-with-wave-a.json` gives `proposal`
+  Tile, Caption, Stamp (the only group with text), `next_proposal` Chip A, Chip B, Chip C (3,
+  top index 9) ahead of Row A to C (3, top index 33), and wave A's 13 layers as one crowd. On
+  `practice2b.json` the proposal is still Tile, Caption, Stamp, and with them excluded Row A to C,
+  then the matte pair.
+- **The finder** (FR-003, L6-2): the same function's clusters. A group: the proposal's size and
+  names. No group, a crowd, and `exclude` empty: the largest crowd's size and `layers: []`. Else 0.
+  It's the one deliberate disagreement with the snapshot tool (lesson only); spec › H-6 is the
+  review case it can't tell apart.
+- **Rejected** (TD § 15): the largest-group rule with "past 4, keep growing" (it chains a busy
+  comp into one crowd and then guesses 4 of it); a tighter or relative margin (the chaining links
+  are 3 to 25 px); shared key times (the intended group shares none); every pair must touch (splits
+  an evenly spaced stack); always asking (the proposal is for the learner with no answer); moving
+  the practice comp's layers (the human's call: it hides the problem).
 - **Comp width:** checked 2026-10-24: the snapshot doesn't read the comp's size (`snapshot.jsx`'s
   `comp` holds `id`, `name`, `duration`, `frame_rate`, `time`, `hide_shy`), and nothing else gives
   it. That's a change to an existing shared file, so it's **shared-code request SR-4** (plan ›
@@ -85,12 +108,17 @@ are still open, so every live task here comes after them.
   input `null`), else the one null (class `null`) not in the baseline, else `which_null` with the
   new nulls' names. **Duplicate name** (FR-019, TD § 14 D-3): if another layer has the null's name,
   return `null_name_not_unique`, store nothing, grade nothing else on the null and run no P1 to P3.
-  An existing null with children or keys only if the learner named it (`existing_null` note).
+  An existing null with children or keys only if the learner named it (`existing_null` hint, said
+  once). No null found and none named: `no_null`; a named one not in the comp: `no_null` with
+  `named`.
 - **Storing** (FR-012, D-1): at each check and at the demo's fresh read, while no focus layer's
   parent is the null and N1 and N2 pass, the tool stores the null's sampled anchor, position, scale
   and rotation **at the before-read time** (from that read's samples; the time was passed) with
   `from: "check" | "demo"`. Once any focus layer is parented, `parented_seen: true` and it's never
-  re-stored. In a review, the same from the first check that sees the lesson's null.
+  re-stored. **With nothing stored yet** (a review, or a lesson where the learner parented before
+  any check passed N1 and N2), the first check that sees the null passing N1 and N2 stores it, from
+  that read's sample at the before-read time, even with focus layers parented (S6). Until then a
+  layer parented to the null is `not_stored` in `not_checked`.
 - **Renamed null** (Edge Cases): the stored name is gone and exactly one null is the parent of every
   parented focus layer → that's the null; its new name is stored and `null_renamed` is returned.
 - **Region and "only slides"**: the learner's answer travels as `null_parent_check` input `region`
@@ -102,8 +130,10 @@ are still open, so every live task here comes after them.
 - **N1:** `classOf === "null"`. **N2:** `three_d` false and `parent` null; with a parent, moving
   when any entry of `sourcesOf(read, null).parents` has `moves_children` in the baseline **or** the
   check read → `null_parent_moves` (out of the lesson: nothing graded, `markChecked` not called, no
-  record of a miss); still → `null_has_parent` hint, and with input `chain_on_purpose: true` N2
-  passes (stored) and `one_level_only` is returned once.
+  record of a miss); still → `null_has_parent` hint (storing `parent_asked`), and with input
+  `chain_on_purpose: true` **at a later check whose parent is still `parent_asked`** N2 passes
+  (stored as that parent's name) and `one_level_only` is returned once (S5). An "on purpose" with no
+  earlier hint for that parent is ignored. A 3D null: `three_d`; not class `null`: `not_a_null`.
 - **N3** (S-5): the null's anchor in comp space at the before-read time (`compPosition`) against
   the named region of the **group's combined bounds** (the union of the focus footprints' bounds in
   the baseline at that time), within 10% of the group's width across and 10% of its height up and
@@ -129,7 +159,8 @@ are still open, so every live task here comes after them.
 ## R7. Demo: parent one layer, measure it, never retry
 
 - **Decision:** demo target (FR-008), set by the analyzer from the baseline: the first focus layer
-  in index order of class `renders` or `shy` (never `matte` or eye off), 2D, with no expression on a
+  in index order of class `renders` or `shy` (never `matte` or eye off), 2D, not locked (S6), with
+  no expression on a
   keyed Position, Scale or Rotation, preferring one with its own transform keys. The rule "no demo
   until the null passes N1 and N2" is enforced by `null_parent_demo`, which refuses with
   `null_not_ready` while `skill_data.stored` is absent (the session fixes the target at the start).
@@ -166,9 +197,11 @@ are still open, so every live task here comes after them.
 
 - **Decision:** `mode: "review"`: `exclude` from the record's past targets (`{ layer, property:
   "Parent" }`); the analyzer drops those layers and every already-parented layer, then proposes as
-  R2. None: `no_new_target`. The review's before read is the read when the task is given (`fresh:
+  R2, taking `proposal` only (never `next_proposal`). None, including a crowd only:
+  `no_new_target`. The review's before read is the read when the task is given (`fresh:
   true` with the focus, as R3). `FINDERS["parenting.null"].focus` returns the proposal's size with
-  the same `exclude` (FR-003), 0 without `layer_info`; `review: true` after the review tests pass.
+  the same `exclude` (FR-003), or a crowd's size with `layers: []` only when `exclude` is empty
+  (R2, L6-2), 0 without `layer_info`; `review: true` after the review tests pass.
 
 ## R10. Fixtures
 

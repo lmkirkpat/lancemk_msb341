@@ -7,7 +7,12 @@
 **Input**: Feature specification from `specs/011-anchor/spec.md`, approved 2026-10-23.
 
 **Status**: Approved 2026-10-24. The builder took every recommendation: Q1 (below) and SR-2
-(spec 004 tasks-wave-b.md T164, T165).
+(spec 004 tasks-wave-b.md T164, T165). Amended 2026-10-26 with the spec (Changes 2026-10-26): the
+second read is the usual case on Mentor Practice 2, and tasks T241 to T244 before the live lessons.
+Rounds 2 to 4 (2026-10-26, spec › Changes) add tasks.md › Phases 8c (T245 to T248), 8d (T249 to
+T253) and 8e (T254 to T256: `moves_case` for D-8, the full-frame test for D-9, and `SKILL.md`'s
+two-frames sentence), all skill-builder work on the build branch, in step 3's place in the table
+below.
 
 ## Summary
 
@@ -30,6 +35,8 @@ The approach:
 - **Three tools** in `mentor/tools/anchor.mjs`. The learner's layer, place and rest pose travel in
   `skill_options`. The snapshot tool takes a second, sampled read when a needed time is missing, so
   the baseline holds every time the check compares (FR-013); the check passes those times again.
+  On the live Mentor Practice 2 (40 layers, 30 needed times, 2026-10-26) that's every lesson
+  start, not the exception the stand-ins (19 layers, 7 times) suggested.
 - **One demo snippet** (`mentor/jsx/anchor-demo.jsx`) writes Anchor Point and Position (or X and Y)
   from values the server computed, as one undo step, never keying. Its fixture twin writes the same
   values into a saved snapshot (FR-029).
@@ -191,10 +198,11 @@ and `mentor/jsx/snapshot.jsx`).
 | Risk | Watch | Mitigation |
 |---|---|---|
 | T136 shows the corner math off by more than 1 px | Spec 004 T136 | No live task here starts before it; the cloud build doesn't depend on it |
-| `rect` doesn't match shapes or text on screen | L-1, L-5 | `RECT_KIND` per kind, one constant; shapes stay `if_named` until L-1 |
+| `rect` doesn't match shapes or text on screen | L-1, L-5 | `RECT_KIND` per kind, one constant. **Closed 2026-10-26:** both `rect`; shapes default |
 | Pan Behind rewrites Position keys (L-2) | L-2 | Item 4 grades either way; only the tip's wording changes |
 | A busy comp hits the 64-sample cap | Tool test on the 70-key synthetic | Caller times are kept first; `not_sampled` is "can't check" |
-| Two reads per snapshot feel slow | SC-001 timings | The second read only when a needed time is missing |
+| Two reads per snapshot feel slow | SC-001 timings; **T236 logs `anchor_snapshot`'s own time** | The second read only when a needed time is missing, which on Mentor Practice 2 is every lesson start (30 times, 2026-10-26). Over 10 s is logged as a finding; if it is, narrow the second read to the times the check can compare (a spec change, not a build call). **Happened (T236, T237: 9.95 s to 11.7 s):** spec FR-013a and SC-010 (round 3), Phase 8d T251 to T253: time each read first, then cut where the time is |
+| With shapes on, the proposal lands on another skill's layer | Answer key ranks | **Seen 2026-10-26** (Blink): FR-004's three-step animation key (T241) |
 
 ## Complexity Tracking
 

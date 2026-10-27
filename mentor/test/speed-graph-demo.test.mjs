@@ -14,8 +14,7 @@ const { DEMO_IN, DEMO_OUT } = await import("../lib/speed-graph.mjs");
 
 const DIR = path.join(FIXTURES, "speed-graph");
 const load = (name) => {
-  const live = path.join(DIR, name);
-  return JSON.parse(fs.readFileSync(fs.existsSync(live) ? live : path.join(DIR, "stand-in", name), "utf8"));
+  return JSON.parse(fs.readFileSync(path.join(DIR, name), "utf8"));
 };
 const POS = "ADBE Transform Group/ADBE Position";
 const SCALE = "ADBE Transform Group/ADBE Scale";
@@ -61,11 +60,12 @@ test("apply sets only the two facing sides, on every dimension, keeping speeds, 
   before.layers[0].properties[0].keys[1].out_ease = [{ speed: 3, influence: 47 }];
   before.layers[0].properties[0].keys[0].out_ease = [{ speed: 5, influence: 33.333 }];
   before.layers[0].properties[0].keys[0].in_type = "linear";
+  const landingSpeed = before.layers[0].properties[0].keys[1].in_ease[0].speed; // dragged up (L-5)
   const after = JSON.parse(JSON.stringify(before));
   twin.apply(after, { layer_index: 1, property_path: POS, key_index: 1 });
   const [k1, k2, k3] = after.layers[0].properties[0].keys;
   assert.deepEqual(k1.out_ease, [{ speed: 5, influence: DEMO_OUT }]);
-  assert.deepEqual(k2.in_ease, [{ speed: 8, influence: DEMO_IN }], "the landing speed is kept");
+  assert.deepEqual(k2.in_ease, [{ speed: landingSpeed, influence: DEMO_IN }], "the landing speed is kept");
   assert.deepEqual(k2.out_ease, [{ speed: 3, influence: 47 }], "the shared key's far side is untouched");
   assert.equal(k1.in_type, "linear");
   assert.deepEqual(k3, before.layers[0].properties[0].keys[2]);

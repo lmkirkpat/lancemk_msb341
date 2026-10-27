@@ -1,6 +1,10 @@
 # Contract: skill 5's three tools (spec 011)
 
-**Status**: Draft, awaiting the builder's approval (2026-10-24). **Adds to** spec 004's
+**Status**: Draft, awaiting the builder's approval (2026-10-24). Amended 2026-10-26: `outside_side`
+in the snapshot's `pivot_outside` note and in the check's `item1` (spec FR-019a); the hint codes
+`content_shifted` and `unchanged_shape` (FR-019b). Round 3: `watch_offer` (FR-008). Round 4
+(spec FR-004, B-9): `moves_case`, `position_key_time` and `rest_time` on `position_moves` entries
+in `candidates` and `focus_problems`. **Adds to** spec 004's
 [skill-module.md](../../004-ae-curriculum/contracts/skill-module.md) › 3 and
 [shared-tools.md](../../004-ae-curriculum/contracts/shared-tools.md); doesn't repeat them. Shapes are
 in [data-model.md](../data-model.md).
@@ -31,12 +35,22 @@ Input (all optional): `{ "mode": "lesson" | "review", "focus_layers": [...], "sk
    start nothing (the skill can't run before wave B's reads).
 2. `needed = neededTimes(read1)`; if any needed time is missing from any layer's samples,
    `takeSnapshot({ sample_times: needed })` (read 2). The lesson read is read 2, else read 1.
+   **Round 3 (spec FR-013a; T252 applies whichever cuts T251's table calls for):** with no
+   `skill_options.focus`, read 1 only; with a focus, `needed` is the focus layers' check times
+   and Position key times only, passed as read 1's `sample_times` when the session holds a
+   baseline of the same comp, and read 2 only if one is still missing. `reads` in the output
+   says which happened.
 3. `session.start(read, { skill: "transform.anchor", analyze, focus_layers, mode, skill_options,
    fresh })`.
 
 Output: `host` (`parseHost`), `lesson`, `comp`, and the analyzer result's `candidates` (names,
-bucket, reason, rank only), `proposal`, `focus`, `places` (place codes only), `check_times`,
-`already_there`, `targets`, `demo_target`, `no_demo_reason`, `notes`, `rest_time_not_a_key`.
+bucket, reason, rank, plus `moves_case` on a `position_moves` entry and `position_key_time` and
+`rest_time` when it's `one_key_off_rest`; data-model › Candidate, round 4), `focus_problems`
+(passed through, with the same three fields on a `position_moves` entry), `proposal`, `focus`, `places` (place codes only), `check_times`,
+`already_there`, `targets`, `demo_target`, `no_demo_reason`, `notes` (a `pivot_outside` note
+carries `side`, FR-019a), `rest_time_not_a_key`, and **`watch_offer`** (`{ layer,
+suggested_place }` or `null`, data-model › Analyzer result; spec FR-008, round 3). The tool
+nulls it in a review and once `demo_used` is true, whatever the analyzer gave.
 `annotations: { readOnlyHint: true }`.
 
 ## `anchor_demo`

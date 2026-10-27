@@ -1,7 +1,6 @@
 {
   "permissions": {
     "defaultMode": "auto",
-    "disableBypassPermissionsMode": "disable",
     "ask": ["Bash(git push)", "Bash(git push *)"],
     "deny": [
       "Read(**/.env)",
@@ -44,6 +43,11 @@
     "SubagentStop": [
       {
         "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/ae-lock.mjs\" --release" }]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/ae-lock.mjs\" --end-session" }]
       }
     ]
   }

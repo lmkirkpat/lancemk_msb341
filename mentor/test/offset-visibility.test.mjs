@@ -2,8 +2,8 @@
 // R1, the visibility class includes mattes by default"): a matte with a start is eligible and joins a
 // layers group; a layer the learner hid is still left out "unless you want it"; without layer_info,
 // today's result. The demo pick keeps the eye-on test: spec 010 FR-009 and FR-010 don't say an
-// eye-off matte may be the demo. Synthetic (derived from synthetic/matte.json in this file); a live
-// case is T136's.
+// eye-off matte may be the demo. Synthetic (derived from synthetic/matte.json in this file), then
+// T136's live case on overlaps.json.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -52,4 +52,19 @@ test("synthetic: without layer_info, today's result (the matte is left out as hi
   const old = analyze(withoutInfo(withMates()));
   assert.deepEqual(hiddenOut(old), ["Old Take", "Wipe"]);
   assert.deepEqual(memberNames(old), ["Card", "Chip"]);
+});
+
+// ---- T136: live overlaps.json. Wipe (the matte, eye off) starts alone at 0.6 s, so it joins no group,
+// but it's eligible: never left out as hidden. Draft (hidden by the learner) is.
+const overlaps = JSON.parse(fs.readFileSync(path.join(FIXTURES, "layer-info", "overlaps.json"), "utf8"));
+
+test("live overlaps.json: the matte isn't left out as hidden; the learner's hidden layer is; the eye-off null is left out as a null", () => {
+  const a = analyze(overlaps);
+  assert.deepEqual(hiddenOut(a), ["Draft"]);
+  assert.deepEqual(a.left_out.find((x) => x.reason === "null").layers, ["Rig"]);
+  assert.ok(!a.left_out.some((x) => x.layers.includes("Wipe")));
+});
+
+test("live overlaps.json: without layer_info, today's result (Wipe is left out as hidden)", () => {
+  assert.deepEqual(hiddenOut(analyze(withoutInfo(overlaps))), ["Wipe", "Draft"]);
 });

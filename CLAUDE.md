@@ -98,7 +98,7 @@ a brand new session act like a colleague who already knows what you are working 
   - **Agent team drafted (2026-10-19, `decisions/007`):** ten personas in `.claude/agents/`, each
     owning its own files, with the main session as the cockpit. Started from
     `ai-foundry-byu/agent-team-kit`, which handles keeping agents from colliding but has no
-    personas (`discovery/agent-team-kit-assessment.md`). Not yet run in parallel.
+    personas (`discovery/agent-team-kit-assessment.md`).
   - **Agent audit and guardrails (2026-10-19):** `/agent-audit` on the personas found 10 issues;
     the prompt fixes are in (skill-builder lost `record_lesson`, Spec Kit gets the cockpit's
     `--number`, subagents hand back instead of asking). `decisions/008`: our own hooks, keyed
@@ -109,16 +109,130 @@ a brand new session act like a colleague who already knows what you are working 
     were checked live in a headless run; the AE lock too on 2026-10-19 (a subagent got AE and
     released it on stop, a second was blocked while the cockpit held it). The cockpit never
     stops, so it stays off AE while a builder needs it.
+  - **Specs (2026-10-20 to 10-24):** curriculum (`specs/004`, with `curriculum.md`), diagnosis
+    (005), installer (006) and UI overhaul (007) approved; 005 to 007 have no plan or tasks yet.
+    The five baseline skills each have a teaching design, spec, plan and tasks: speed graph (008),
+    key types (009), offset (010), set the pivot (011), move a group with a null (012).
+  - **Parallel runs** (`discovery/usage-notes/parallel-runs.md`, with its template): run 1 specs
+    and research (10-20), run 2 wave A code (10-21: spec 004's shared code plus skills 008 to 010
+    in 96 minutes, an estimated 4 to 5 days solo), run 3 wave B plus skills 011 and 012 (10-23 to
+    10-25, seven usage-limit stalls; one Opus agent at a time after the second). Agents misreport
+    their own time by 6 to 10x; times in the notes come from commits.
+  - **Skills built:** `/speed-graph-mentor`, `/key-types-mentor`, `/offset-mentor` and
+    `/next-mentor` are on `main`; the first three have passed a first live lesson (below). Skill
+    5 (`/anchor-mentor`) has passed both first live lessons and is still held on `skill-5-anchor`
+    (see "Skill 5" below); skill 6 is held on `skill-6-null` until its live lessons. Eval sets (stand-in fixtures,
+    dry-run and smoke runs only, no baselines) are on `evals-wave-a` (008 to 010), `evals-skill-5`
+    and `evals-skill-6`, not merged. Smoke findings to fix before baselining: a review self-note
+    leaks before the first tool call (key types, offset, pivot), the pivot demo says "opposite
+    directions", and skill 6 step 1 needs "ask and stop".
+  - **Easing after wave A:** the drop to 20/25 was the judge, not the mentor (`23b37e9`); baseline
+    24/25.
+  - **Spec 004 live sitting (2026-10-26,** `specs/004-ae-curriculum/live-sitting-2026-10-26.md`**):**
+    Mentor Practice 2 (with its 2b layers) and Mentor Overlaps are built in the `.aep`, with 11
+    live captures and answer keys. Findings: the snapshot's rotation read doesn't include
+    auto-orient; parenting with the pick whip rewrites the children's raw Position keys, and
+    adding a null renumbers every layer below it; `setTrackMatte` works in 26.5 and AE turns the
+    matte's eye off itself; a snapshot takes about 0.2 s. Key-types and offset stand-ins now
+    derive from the live base; mentor tests 747 pass, 0 fail. Decided the same day: shape and
+    text layers read Collapse on (key fixed), and offset lists Transform properties before
+    effects (`offset-order`). Easing case 26 (matte, eye off) passes 3/3 even without T123's
+    line, because the tool already keeps mattes out of `hidden_layers` (`evals-matte`).
 - **Next steps:**
-  1. Sprint 3, agent team. Done 2026-10-19: the `decisions/008` hooks are loaded in the cockpit
-     (git guard blocked a probe live), and the agent-identity logging test re-ran clean (subagents
-     still carry `agent_type` and `agent_id`, and `SubagentStop` does too; re-run with
-     `node .claude/hooks/probe/identity.mjs`). Also done: `mentor/tools.mjs` split per skill into
-     `mentor/tools/`, and the setup README (`.claude/README.md`). Still to do: a template for the parallel-run notes on time and quality. Then the curriculum
-     spec, which decides the 10 skills, before building them. Run `/overlap-audit` for each new
-     skill (see "Edge cases where concepts overlap" below). Parallel agents share `SKILL.md`,
-     the eval set, and `mentor/`, so isolate them (for example, worktrees).
-  2. Carry these two caveats into the diagnosis and curriculum specs (from the 2026-10-08 Adobe
+  1. Spec 004 is done (T047 passed 2026-10-26 after a two-sentence fix to `next-mentor/SKILL.md`; for a
+     live test on a temp learner home, set `AE_MENTOR_HOME` in an MCP config's `env` and run
+     `claude --strict-mcp-config --mcp-config <file>`, since a shell `export` didn't reach the server). T143's gate
+     passed 2026-10-26 (branch 24/25 vs base 25/25; case 17's layer-count rubric item flaked and
+     passed on re-run, see `discovery/usage-notes/easing-slice.md`); offset-order, T123 and
+     case 26 are merged, and the easing set is now 26 cases.
+  2. Live tasks, in order. First lessons passed 2026-10-26: speed graph (T032, `speed-graph.md`:
+     3 min 35 s, one demo, SC-002 4 of 4; to fix: a frame-number reading answer), key types (T035,
+     `key-types.md`: 3 min 58 s, one demo, SC-002 4 of 4; to fix: frames on Mentor Practice 2 don't
+     show which shape is the focus), and offset's properties kind (T036, `offset.md`: about
+     3 min 46 s, no demo, SC-002 3 of 3; ran on a stale mentor server, so Quick Offset is still open
+     live; to fix: a stated gap the learner changes without saying). All three ran on a mentor
+     server from before that day's merges, so they need a note saying so. Offset's layers kind
+     passed too (T037, `offset.md` session 2, fresh server: 2 min 5 s, no demo, first check, Quick
+     Offset offered and used, so FR-017 is met live; SC-002 4 of 4 so far, 10 needed). To fix from
+     T037: a lesson left open and never checked resumes with its old baseline and choices
+     (`mentor/lib/session.mjs:119`, a spec 004 shared-code request), and `SKILL.md` needs a
+     Quick Offset "how it works" paragraph built only from L-1 (the mentor made up a selection-order
+     claim). Mentor Practice matches none of its captures until Title is put back (T036 left it
+     staggered), and Mentor Practice 2 needs a reset to `practice2b.json` (T037 left the Dots
+     staggered).
+     - **Skill 5 (set the pivot, spec 011, on `skill-5-anchor`):**
+       - **Done 2026-10-26:** the sitting (T232, T233: L-1 to L-5 and 34 live captures,
+         `specs/011-anchor/live-sitting-2026-10-26.md`) and the desk block (T234, T235: stand-ins
+         deleted, shapes on).
+       - **Spec amended twice and built** (T241 to T244): ranking by how animated a layer already is,
+         so Door is proposed again; the side a pivot outside sits on; hints for a group pivot moved.
+       - **Lessons:** T236 Door passed (2 min 56 s, no demo) and T237 Pop passed (3 min 54 s, no demo,
+         the set-away-from-rest mistake caught), both in `discovery/usage-notes/anchor.md`. SC-001
+         met; SC-002 4 of 4, 10 needed.
+       - **Live findings:**
+         - Pan Behind on a shape's group is invisible to the snapshot.
+         - With Position keyed, it changes or adds one key at the playhead, so layers with Position
+           keys at two or more times can't pass. Teaching design D-4 now leaves them out
+           (`position_moves`).
+         - Pan Behind acts on the layer under the cursor, not the selected one.
+       - **Phase 8c merged** (T245 to T247, `1582467`; mentor tests 927 pass, 0 fail): D-4's
+         leave-out, with 16 layers on Mentor Practice 2 now `position_moves`; teaching design § 16's
+         wording in `SKILL.md`; the snapshot's needed sample times went from 30 to 4. Subagents can't
+         merge (git guard), so the cockpit merges `main` into the branch.
+       - **Phase 8d specced (round 3), building:** T249 `watch_offer` in the snapshot and T250 the
+         offer in `SKILL.md`, both built and merged (`6ad8439`). T251 (`e2819dd`, usage note
+         `anchor.md`): a warm lesson start is 1.3 to 1.7 s, with under 30 ms of it in the mentor; the
+         10 to 12 s is AE throttled after a couple of minutes in the background (App Nap; about 5×
+         slower). T252 and T253 are deferred: check whether the panel, which keeps AE in front,
+         still shows it, before touching the reads or the system setting. D-8 (a two-frames line
+         for a one-key layer) and D-9 (no watch offer on a full-frame layer) are approved in
+         teaching design § 18 (`47c90bd`). Next: a spec writer pass (D-8, D-9 and B-9: the tool
+         tells the two `position_moves` cases apart), then a skill-builder pass, then the evals
+         hand-off (HO-1).
+         Not yet scheduled: session 2's "set away from rest, place right" fix, which needs a live
+         capture. Background, from the round that specced this:
+         - teaching design § 17 (`f7545e2`): with one focus layer, offer a watch on the next
+           qualifying layer, once (the offer only happened by chance in T237);
+         - a speed task: the first `anchor_snapshot` takes 10 to 12 s on Mentor Practice 2 against
+           "about a second", while the focus snapshot takes 2.7 s. Use Phase 8c's count of needed
+           sample times (30 before).
+         Then one skill-builder pass for both. Open:
+         - D-5 to D-7: small wording calls, the spec writer's recommendations in use;
+         - C-4: should speed graph, key types and offset get the same watch offer? The builder's
+           call;
+         - T248 (L-6, does a stroke change the rectangle) at the next sitting;
+         - the eval set on `evals-skill-5` is built on stand-ins (comp 300, Door) and needs moving
+           to the live captures before a baseline;
+         - review T240, a day or more after T237.
+       - **Sitting method** (worth copying for skill 6):
+         - plant by script on the real comp and reset;
+         - use duplicates only for hand moves, so the builder can do several in a row;
+         - check every reset with a strict compare, because `capture.mjs --compare` skips
+           `layer_info` (static layers).
+     - **Offset's remaining SC-002 checks (6 more):** run the hints neither lesson hit, on purpose,
+       on the Dots: a pair still together, a layer that pops in, a trimmed in point, a gap under
+       the floor. They can ride along with the offset review (T040) or a short extra lesson.
+     - **A day or more after a first pass:** speed graph review T035, key types review T038 (on
+       Cut), offset review T040 (on the Chips).
+     - **Then:** skill 6 on `skill-6-null` (T336 live checks, T337 captures, T338 and T339 at the
+       desk, T340 and T341 first lesson with a jump on purpose, T343 review), and pivot review
+       T240 (stretch).
+     - **After the live lessons:** merge skills 5 and 6, fix the smoke findings above, merge the
+       eval sets and set baselines (about $13 to $17 each). Still open from the live sitting: speed graph's "already shaped" list
+     includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
+     out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
+     more).
+  3. Sprint 3 closes 2026-10-26: the carry-over is logged
+     (`discovery/usage-notes/agent-carry-over.md`: on Operation Food Critic, a new project, the
+     hooks and workflow copied over, ten personas trimmed to seven, and a two-researcher
+     parallel run with no collisions; the portfolio site came first, so it's supporting
+     evidence only). Four of the five skills passed a first live lesson (speed graph, key types,
+     offset in both kinds, and the pivot on Door and Pop); null hasn't run live, and the pivot isn't
+     merged, so mark those partial in `/sprint-review` and carry them, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
+     overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
+     cockpit cuts their worktrees from local `main` (the agent tool's worktree option starts
+     from `origin/main`). The git guard blocks any command containing `merge-base`, even a read.
+  4. Carry these two caveats into the diagnosis and curriculum specs (from the 2026-10-08 Adobe
      side-by-side):
      - Diagnosis is its own capability, not the last step of adding skills. Adobe's answer
        came from reading the whole comp (equal durations, stacked parent motion, dead time),
@@ -128,10 +242,10 @@ a brand new session act like a colleague who already knows what you are working 
      - Restraint and a teaching focus are product choices Adobe could copy with a mode switch
        (the `decisions/002` trigger). The harder-to-copy parts are depth (per-pair checks Adobe
        can't do today) and memory and practice across sessions. Keep those in each spec's "why".
-  3. Gaps 008 left for the next interviews: learn vs. done (section 5), which Adobe AI people
+  5. Gaps 008 left for the next interviews: learn vs. done (section 5), which Adobe AI people
      mean (generative fill vs. the assistant), whether steps match their version (belief 16),
      and referrals. A target-market learner on the panel is still needed for belief 7.
-  4. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
+  6. After Nov 2026, re-run the spec 001 table against the AE UXP beta.
 - **My setup:** After Effects 26.5 on macOS 27.0.1 (stated 2026-10-20). Version-dependent
   steps and shortcuts in specs and lessons target this.
 - **Where to see it:** Run `/ease-mentor` in Claude Code from this repo, with AE open on
@@ -185,6 +299,10 @@ a brand new session act like a colleague who already knows what you are working 
   - `.claude/hooks/` (`decisions/008`, wired in `.claude/settings.json`): the AE lock, file
     ownership (`ownership.json`, mirrors 007's table) and the git guard, keyed on the calling
     subagent. Tests: `node --test .claude/hooks/test/*.test.mjs`. Merge agent branches with `/merge-worktree`.
+    The AE lock keys on session plus agent (amended 2026-10-26), but AE has one active comp, so
+    run one sitting or live lesson at a time: before starting one, run `ae_status` and check
+    `.git/knack-agents/ae.lock.json` has no other holder from the last 10 minutes. MCP servers
+    survive `/clear`, so after any merge into `mentor/`, run a live lesson in a fresh session.
 - **How work ships:** TBD
 - **Testing and style:** AI features get an eval set in `product/evals/`.
 - **Edge cases where concepts overlap:** when adding a teaching skill, list in its spec where

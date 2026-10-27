@@ -73,11 +73,11 @@ test("tool names start with anchor_, SKILLS is the one record ID, and ANCHOR_REF
 
 // ---- US1: Door
 
-test("anchor_snapshot with no skill_options proposes Door with a hinge and lists leave-outs with reasons", async () => {
+test("anchor_snapshot with no skill_options proposes the answer key's layer with a hinge and lists leave-outs with reasons", async () => {
   const r = await call("anchor_snapshot");
   assert.equal(r.lesson, "new");
-  assert.deepEqual(r.proposal, { layer: "Door", suggested_place: "middle-left" });
-  assert.deepEqual(r.place_now, { Door: "center" });
+  assert.deepEqual(r.proposal, KEY.practice2b.proposal);
+  assert.deepEqual(r.place_now, { [KEY.practice2b.proposal.layer]: KEY.practice2b.layers[KEY.practice2b.proposal.layer].place_now });
   assert.deepEqual(r.targets, []);
   assert.equal(r.demo_target, null);
   assert.equal(r.no_demo_reason, "awaiting_focus");
@@ -85,7 +85,10 @@ test("anchor_snapshot with no skill_options proposes Door with a hinge and lists
   assert.deepEqual(by.Wobble, { layer: "Wobble", bucket: "never", reason: "anchor_keyed", rank: null });
   assert.equal(by["Reveal Matte"].reason, "matte");
   assert.equal(r.host.version, "26.5");
-  assert.equal(r.reads, 1, "the stand-in already has every needed time");
+  // The live capture holds the --times list, comp.time and each layer's own keys, not every other
+  // layer's key times, so the snapshot reads again for the rest (R4).
+  assert.equal(r.reads, 2);
+  assert.deepEqual(reads, [{}, { sample_times: KEY.times.needed_practice2b }]);
 });
 
 test("with Door alone as the focus: one target and no demo (single_target, filter 4)", async () => {
@@ -94,7 +97,8 @@ test("with Door alone as the focus: one target and no demo (single_target, filte
   assert.equal(r.demo_target, null);
   assert.equal(r.no_demo_reason, "single_target");
   assert.deepEqual(r.places, { Door: "middle-left" });
-  assert.deepEqual(r.place_now, { Door: "center" }, "where the pivot is now, for SKILL.md's stage 2");
+  const proposed = KEY.practice2b.proposal.layer;
+  assert.deepEqual(r.place_now, { Door: "center", [proposed]: KEY.practice2b.layers[proposed].place_now }, "where the pivot is now, for SKILL.md's stage 2 (the focus's, and the proposal's)");
   await assert.rejects(call("anchor_demo", { target: `anchor/${idx("Door")}` }), { code: "NOT_DEMO_TARGET" });
   assert.equal(runs.length, 0);
 });
@@ -166,16 +170,54 @@ test("the snapshot's second read samples every needed time on every layer, Hatch
   }));
   const r = await call("anchor_snapshot");
   assert.equal(r.reads, 2);
-  assert.deepEqual(reads, [{}, { sample_times: KEY.times.practice2b }]);
-  assert.ok(KEY.times.practice2b.includes(4.3) && KEY.times.practice2b.includes(3.167));
+  assert.deepEqual(reads, [{}, { sample_times: KEY.times.needed_practice2b }]);
+  assert.ok(KEY.times.needed_practice2b.includes(4.3) && KEY.times.needed_practice2b.includes(3.167));
 });
 
 test("anchor_check asks for the rest keys and Position key times of the focus", async () => {
-  await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }] } });
+  // Sled already moves (three Position key times), so it's refused (D-4) and only Pop is a target.
+  const s = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }] } });
+  assert.deepEqual(s.targets, [`anchor/${idx("Pop")}`]);
+  assert.deepEqual(s.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "two_or_more" }]);
   reads.length = 0;
   await call("anchor_check");
-  assert.deepEqual(reads, [{ sample_times: [0, 3.667, 4.167, 4.3, 4.667] }]);
+  assert.deepEqual(reads, [{ sample_times: [0, 4.3] }]);
   assert.deepEqual(reads[0].sample_times, checkSampleTimes(lessonNow().baseline, lessonNow()));
+});
+
+test("the one-key lesson: Sled's tip carries its key's time, and anchor_check asks for that key's time", async () => {
+  project("sled-one-key-before");
+  const want = KEY.attempts["sled-one-key"];
+  const s = await call("anchor_snapshot", { skill_options: { focus: want.focus } });
+  assert.deepEqual(s.notes.filter((n) => n.note === "position_keyed_tip"), [{ layer: "Sled", note: "position_keyed_tip", time: want.tip_time }]);
+  assert.equal(s.targets.length, 1);
+  reads.length = 0;
+  project("sled-one-key");
+  const r = await call("anchor_check");
+  assert.deepEqual(reads, [{ sample_times: [0, 3.667] }]);
+  assert.equal(r.passed, false);
+  assert.deepEqual(r.layers[0].hints, want.hints);
+  assert.equal(r.layers[0].item3.now, 0);
+});
+
+test("T254: anchor_snapshot passes moves_case and both times on a one-key layer off its rest key, in candidates and focus_problems; Door has none", async () => {
+  // Synthetic (marked in the file): the live sled-one-key-before with Scale keyed half size at 3 s
+  // and full size (the rest key) at 4.167, so its one Position key at 3.667 is off rest.
+  project(variant("sled-one-key-before", (x) => {
+    x.synthetic = "T254: sled-one-key-before with Scale keys at 3 (50%) and 4.167 (100%), so Sled's one Position key at 3.667 is off its rest key";
+    x.layers.find((l) => l.name === "Sled").properties.push({ path: "ADBE Transform Group/ADBE Scale", name: "Scale", expression_enabled: false,
+      keys: [{ index: 1, time: 3, value: [50, 50, 100] }, { index: 2, time: 4.167, value: [100, 100, 100] }] });
+  }));
+  const s = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
+  const sled = s.candidates.find((c) => c.layer === "Sled");
+  assert.deepEqual(sled, { layer: "Sled", bucket: "never", reason: "position_moves", rank: null, moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 });
+  assert.deepEqual(s.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 }]);
+  for (const c of s.candidates) if (c.reason !== "position_moves") assert.ok(!("moves_case" in c) && !("position_key_time" in c) && !("rest_time" in c), c.layer);
+  project("practice2b");
+  const d = await call("anchor_snapshot", { fresh: true, ...DOOR });
+  assert.deepEqual(d.candidates.find((c) => c.layer === "Door"), { layer: "Door", bucket: "default", reason: null, rank: KEY.practice2b.layers.Door.rank });
+  assert.deepEqual(d.candidates.find((c) => c.layer === "Sled").moves_case, "two_or_more");
+  assert.deepEqual(d.focus_problems, []);
 });
 
 test("two focus layers: the demo is on entry 1; off target, twice, or off the rest key it's refused before the snippet", async () => {
@@ -233,9 +275,15 @@ test("anchor_demo on a layer locked since the lesson started: ANCHOR_REFUSED loc
   assert.equal(runs.length, 0);
 });
 
+test("T242: anchor_snapshot passes the pivot_outside note through with its side on screen (FR-019a)", async () => {
+  const r = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Lid", place: "middle-left" }] } });
+  assert.equal(r.place_now.Lid, "outside");
+  assert.deepEqual(r.notes.find((n) => n.note === "pivot_outside"), { layer: "Lid", note: "pivot_outside", side: "below" });
+});
+
 // ---- US3: the review
 
-test("review: proposes Tab, never Door or Needle; no demo, nothing run", async () => {
+test("review: proposes the answer key's layer, never Door or Needle; no demo, nothing run", async () => {
   useRecord(KEY.review.record);
   const r = await call("anchor_snapshot", { mode: "review" });
   assert.equal(r.mode, "review");
@@ -256,6 +304,21 @@ test("review prefers a layer with no Rotation or Scale keys, ahead of an unparen
   const exclude = P2.layer_info.filter((l) => !only.includes(l.name)).map((l) => ({ layer: l.name, property: "Anchor Point" }));
   assert.equal(analyze(P2, { exclude }).proposal.layer, "Gauge", "a lesson: unparented first");
   assert.equal(reviewProposal(P2, { exclude }).layer, "Hatch", "a review: no Rotation or Scale keys first");
+});
+
+test("audit: a review's notes are its own proposal's, not the lesson ranking's (Hatch's parent, not Blink's nothing)", async () => {
+  const rec = JSON.parse(fs.readFileSync(path.join(DIR, KEY.review.record), "utf8"));
+  rec.lessons.at(-1).targets = ["Door", "Needle", "Tab", "Peg", "Banner", "Sign", "Plaque", "Row B", "Lid"].map((layer) => ({ layer, property: "Anchor Point" }));
+  fs.writeFileSync(LEARNER, JSON.stringify(rec));
+  const r = await call("anchor_snapshot", { mode: "review" });
+  assert.equal(r.proposal.layer, "Hatch", "a review: no keys first, so Hatch (parented) over Blink (Opacity keys)");
+  assert.deepEqual(r.notes, [{ layer: "Hatch", note: "parent", parent: "Hatch Rig" }]);
+  // Lid's pivot is outside it: the review's note carries its side.
+  rec.lessons.at(-1).targets = ["Door", "Needle", "Tab", "Peg", "Banner", "Sign", "Plaque", "Row B"].map((layer) => ({ layer, property: "Anchor Point" }));
+  fs.writeFileSync(LEARNER, JSON.stringify(rec));
+  const lid = await call("anchor_snapshot", { mode: "review", fresh: true });
+  assert.equal(lid.proposal.layer, "Lid");
+  assert.deepEqual(lid.notes, [{ layer: "Lid", note: "pivot_outside", side: "below" }]);
 });
 
 test("review with every default candidate in the record: no_new_target, and FINDERS agrees", async () => {
@@ -287,4 +350,37 @@ test("record_lesson after a lesson stores { layer, property: \"Anchor Point\" } 
   });
   const rec = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
   assert.deepEqual(rec.lessons.at(-1).targets, [{ layer: "Door", property: "Anchor Point" }, { layer: "Plaque", property: "Anchor Point" }]);
+});
+
+// ---- T249: the watch offer (spec FR-008, contracts › anchor_snapshot)
+
+test("T249: anchor_snapshot carries watch_offer: Needle for Door, Door for Pop, null with two focus layers or no focus", async () => {
+  assert.equal((await call("anchor_snapshot")).watch_offer, null, "no focus yet");
+  const door = await call("anchor_snapshot", { skill_options: { focus: KEY.watch_offer.door.focus } });
+  assert.deepEqual(door.watch_offer, KEY.watch_offer.door.watch_offer);
+  const both = await call("anchor_snapshot", { skill_options: { focus: KEY.watch_offer.door_and_needle.focus } });
+  assert.equal(both.watch_offer, KEY.watch_offer.door_and_needle.watch_offer);
+  assert.equal(both.demo_target, `anchor/${idx("Needle")}`, "after a yes, the demo goes on the offered layer");
+  const pop = await call("anchor_snapshot", { skill_options: { focus: KEY.watch_offer.pop.focus } });
+  assert.deepEqual(pop.watch_offer, KEY.watch_offer.pop.watch_offer);
+  assert.equal(runs.length, 0, "the offer runs nothing");
+});
+
+test("T249: watch_offer is null in a review and once anchor_demo has run", async () => {
+  useRecord(KEY.watch_offer.review.record);
+  const review = await call("anchor_snapshot", { mode: "review", skill_options: { focus: [{ layer: "Tab", place: "middle-left" }] } });
+  assert.deepEqual(review.targets, [`anchor/${idx("Tab")}`]);
+  assert.equal(review.watch_offer, KEY.watch_offer.review.watch_offer);
+
+  for (const f of [SESSION, LEARNER]) fs.rmSync(f, { force: true });
+  useRecord("records/easing-learned.json");
+  await call("anchor_snapshot", { skill_options: { focus: KEY.two_focus_demos.gauge_with_peg.focus } });
+  await call("anchor_demo", { target: `anchor/${idx("Peg")}` });
+  // Back to one focus layer after the demo: the analysis alone would offer one; the tool says null.
+  const { analyze } = await import("../lib/anchor.mjs");
+  const gauge = [{ layer: "Gauge", place: "bottom-middle" }];
+  assert.notEqual(analyze(P2, { skill_options: { focus: gauge } }).watch_offer, null);
+  const after = await call("anchor_snapshot", { skill_options: { focus: gauge } });
+  assert.equal(after.demo_used, true);
+  assert.equal(after.watch_offer, null);
 });

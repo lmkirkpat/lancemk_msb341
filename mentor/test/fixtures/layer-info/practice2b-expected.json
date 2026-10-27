@@ -1,0 +1,2560 @@
+{
+  "generated_by": "mentor/dev/build-practice-comp-2b.jsx",
+  "comp": {
+    "name": "Mentor Practice 2",
+    "width": 1920,
+    "height": 1080,
+    "duration": 8,
+    "frame_rate": 30,
+    "time_at_capture": 0
+  },
+  "matte_method": "setTrackMatte(layer, TrackMatteType.ALPHA)",
+  "existing_layers": [
+    {
+      "name": "Blink",
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "Spinner",
+      "before": 2,
+      "after": 2
+    },
+    {
+      "name": "Cut",
+      "before": 3,
+      "after": 3
+    },
+    {
+      "name": "Card",
+      "before": 4,
+      "after": 4
+    },
+    {
+      "name": "Dot 1",
+      "before": 5,
+      "after": 5
+    },
+    {
+      "name": "Dot 2",
+      "before": 6,
+      "after": 6
+    },
+    {
+      "name": "Dot 3",
+      "before": 7,
+      "after": 7
+    },
+    {
+      "name": "Badge",
+      "before": 8,
+      "after": 8
+    },
+    {
+      "name": "Chip A",
+      "before": 9,
+      "after": 9
+    },
+    {
+      "name": "Chip B",
+      "before": 10,
+      "after": 10
+    },
+    {
+      "name": "Chip C",
+      "before": 11,
+      "after": 11
+    },
+    {
+      "name": "Flag",
+      "before": 12,
+      "after": 12
+    },
+    {
+      "name": "Pause",
+      "before": 13,
+      "after": 13
+    },
+    {
+      "name": "Background",
+      "before": 14,
+      "after": 40
+    }
+  ],
+  "layers": [
+    {
+      "name": "Door",
+      "index": 14,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "Hinge on its left edge. T135 (b): move its anchor to the middle of its left edge with Pan Behind (Y), capture practice2b-anchor.json, then Edit > Undo",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 300,
+        "height": 500
+      },
+      "bounds_at_0": {
+        "left": 50,
+        "top": 50,
+        "right": 350,
+        "bottom": 550
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Needle",
+      "index": 15,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "Hinge at the middle of its bottom edge",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 30,
+        "height": 400
+      },
+      "bounds_at_0": {
+        "left": 405,
+        "top": 50,
+        "right": 435,
+        "bottom": 450
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Gauge",
+      "index": 16,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Rotate Z"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Rotation 0 → 90: the rest key is the one at 0",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 40,
+        "height": 200
+      },
+      "bounds_at_0": {
+        "left": 480,
+        "top": 50,
+        "right": 520,
+        "bottom": 250
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": 3.167
+    },
+    {
+      "name": "Lid",
+      "index": 17,
+      "role": "skill5",
+      "expect": {
+        "kind": "shape",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": true,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "Its pivot sits outside the shape (row 23)",
+      "rect_at_0": {
+        "left": -80,
+        "top": -30,
+        "width": 160,
+        "height": 60
+      },
+      "bounds_at_0": {
+        "left": 560,
+        "top": 270,
+        "right": 720,
+        "bottom": 330
+      },
+      "anchor_place": null,
+      "rest_key_time": null
+    },
+    {
+      "name": "Wobble",
+      "index": 18,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Anchor Point"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Anchor Point keys: never a candidate (row 4); its place is at 0 s, before the keys move it",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 80,
+        "height": 80
+      },
+      "bounds_at_0": {
+        "left": 760,
+        "top": 80,
+        "right": 840,
+        "bottom": 160
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Tab",
+      "index": 19,
+      "role": "skill5_review",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": null,
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 200,
+        "height": 50
+      },
+      "bounds_at_0": {
+        "left": 520,
+        "top": 455,
+        "right": 720,
+        "bottom": 505
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Peg",
+      "index": 20,
+      "role": "skill5_review",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": null,
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 30,
+        "height": 30
+      },
+      "bounds_at_0": {
+        "left": 805,
+        "top": 465,
+        "right": 835,
+        "bottom": 495
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Banner",
+      "index": 21,
+      "role": "skill5",
+      "expect": {
+        "kind": "shape",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": true,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "800 × 60: left-middle vs the corners",
+      "rect_at_0": {
+        "left": -400,
+        "top": -30,
+        "width": 800,
+        "height": 60
+      },
+      "bounds_at_0": {
+        "left": 50,
+        "top": 610,
+        "right": 850,
+        "bottom": 670
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Sign",
+      "index": 22,
+      "role": "skill5",
+      "expect": {
+        "kind": "text",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": true,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "Centred text: its pivot starts on the baseline, between places (the baseline case)",
+      "rect_at_0": {
+        "left": -73.3934616744518,
+        "top": -54.5369353294373,
+        "width": 145.627572506666,
+        "height": 70.0823900699615
+      },
+      "bounds_at_0": {
+        "left": 126.607,
+        "top": 725.463,
+        "right": 272.234,
+        "bottom": 795.545
+      },
+      "anchor_place": null,
+      "rest_key_time": null
+    },
+    {
+      "name": "Plaque",
+      "index": 23,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "Scale 200%: places in its own space (row 17)",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 100,
+        "height": 60
+      },
+      "bounds_at_0": {
+        "left": 380,
+        "top": 730,
+        "right": 580,
+        "bottom": 850
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Flip",
+      "index": 24,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "Scale [-100, 100]: its own sides (row 18)",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 100,
+        "height": 60
+      },
+      "bounds_at_0": {
+        "left": 670,
+        "top": 760,
+        "right": 770,
+        "bottom": 820
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Pop",
+      "index": 25,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Scale"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Scale 0 → 100: the rest key is the one at 100 (the shrunk case)",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 120,
+        "height": 120
+      },
+      "bounds_at_0": {
+        "left": 120,
+        "top": 960,
+        "right": 120,
+        "bottom": 960
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": 4.3
+    },
+    {
+      "name": "Sled",
+      "index": 26,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Three Position keys (B5; spec 011 L-2)",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 100,
+        "height": 60
+      },
+      "bounds_at_0": {
+        "left": 270,
+        "top": 930,
+        "right": 370,
+        "bottom": 990
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Hatch Rig",
+      "index": 27,
+      "role": "skill5",
+      "expect": {
+        "kind": "null",
+        "enabled": true,
+        "is_null": true,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "null"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "Hatch's parent",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 100,
+        "height": 100
+      },
+      "bounds_at_0": {
+        "left": 640,
+        "top": 960,
+        "right": 740,
+        "bottom": 1060
+      },
+      "anchor_place": null,
+      "rest_key_time": null
+    },
+    {
+      "name": "Hatch",
+      "index": 28,
+      "role": "skill5",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": "Hatch Rig",
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [
+          {
+            "layer": "Hatch Rig",
+            "class": "null",
+            "shy": false,
+            "moves_children": false
+          }
+        ],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Parented to a null (row 15)",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 150,
+        "height": 80
+      },
+      "bounds_at_0": {
+        "left": 565,
+        "top": 920,
+        "right": 715,
+        "bottom": 1000
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Seal",
+      "index": 29,
+      "role": "skill5",
+      "expect": {
+        "kind": "precomp",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": true,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_read",
+        "static_as_read": true
+      },
+      "notes": "Collapse Transformations on: never a candidate (row 10)",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 400,
+        "height": 400
+      },
+      "bounds_at_0": {
+        "left": 780,
+        "top": 900,
+        "right": 900,
+        "bottom": 1020
+      },
+      "anchor_place": {
+        "x": "middle",
+        "y": "middle"
+      },
+      "rest_key_time": null
+    },
+    {
+      "name": "Tile",
+      "index": 30,
+      "role": "skill6_group",
+      "expect": {
+        "kind": "shape",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": true,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position",
+          "ADBE Transform Group/ADBE Scale"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Position and Scale keys, starting 6 frames apart so they aren't a skill 3 properties group",
+      "rect_at_0": {
+        "left": -100,
+        "top": -50,
+        "width": 200,
+        "height": 100
+      },
+      "bounds_at_0": {
+        "left": 1100,
+        "top": 100,
+        "right": 1300,
+        "bottom": 200
+      }
+    },
+    {
+      "name": "Caption",
+      "index": 31,
+      "role": "skill6_group",
+      "expect": {
+        "kind": "text",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": true,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Opacity"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Opacity 20 → 100, so it isn't a skill 1 candidate",
+      "rect_at_0": {
+        "left": -65.2244344949722,
+        "top": -27.2684676647186,
+        "width": 130.789640545845,
+        "height": 34.6321045160294
+      },
+      "bounds_at_0": {
+        "left": 1154.776,
+        "top": 187.732,
+        "right": 1285.565,
+        "bottom": 222.364
+      }
+    },
+    {
+      "name": "Stamp",
+      "index": 32,
+      "role": "skill6_group",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position_0",
+          "ADBE Transform Group/ADBE Position_1"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Separated Position keys",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 80,
+        "height": 80
+      },
+      "bounds_at_0": {
+        "left": 1250,
+        "top": 150,
+        "right": 1330,
+        "bottom": 230
+      }
+    },
+    {
+      "name": "Row A",
+      "index": 33,
+      "role": "skill6_rows",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 240,
+        "height": 60
+      },
+      "bounds_at_0": {
+        "left": 1620,
+        "top": 90,
+        "right": 1860,
+        "bottom": 150
+      }
+    },
+    {
+      "name": "Row B",
+      "index": 34,
+      "role": "skill6_rows",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": "No keys: a static group member (filter 1)",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 240,
+        "height": 60
+      },
+      "bounds_at_0": {
+        "left": 1620,
+        "top": 115,
+        "right": 1860,
+        "bottom": 175
+      }
+    },
+    {
+      "name": "Row C",
+      "index": 35,
+      "role": "skill6_rows",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 240,
+        "height": 60
+      },
+      "bounds_at_0": {
+        "left": 1620,
+        "top": 140,
+        "right": 1860,
+        "bottom": 200
+      }
+    },
+    {
+      "name": "Plate",
+      "index": 36,
+      "role": "skill6_mistake",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": "Shadow's parent, a visible layer",
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 200,
+        "height": 120
+      },
+      "bounds_at_0": {
+        "left": 1100,
+        "top": 500,
+        "right": 1300,
+        "bottom": 620
+      }
+    },
+    {
+      "name": "Shadow",
+      "index": 37,
+      "role": "skill6_mistake",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": "Plate",
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [
+          {
+            "layer": "Plate",
+            "class": "renders",
+            "shy": false,
+            "moves_children": true
+          }
+        ],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 200,
+        "height": 120
+      },
+      "bounds_at_0": {
+        "left": 1115,
+        "top": 515,
+        "right": 1315,
+        "bottom": 635
+      }
+    },
+    {
+      "name": "Reveal Matte",
+      "index": 38,
+      "role": "skill6_matte",
+      "expect": {
+        "kind": "solid",
+        "enabled": false,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": null,
+        "is_matte": true,
+        "effect_count": 0,
+        "class": "matte"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": true
+      },
+      "notes": null,
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 240,
+        "height": 140
+      },
+      "bounds_at_0": {
+        "left": 1620,
+        "top": 490,
+        "right": 1860,
+        "bottom": 630
+      }
+    },
+    {
+      "name": "Gradient",
+      "index": 39,
+      "role": "skill6_matte",
+      "expect": {
+        "kind": "solid",
+        "enabled": true,
+        "is_null": false,
+        "three_d": false,
+        "collapse": false,
+        "auto_orient": false,
+        "parent": null,
+        "shy": false,
+        "guide": false,
+        "locked": false,
+        "time_remap": false,
+        "stretch": 100,
+        "matte": {
+          "layer": "Reveal Matte",
+          "type": "alpha"
+        },
+        "is_matte": false,
+        "effect_count": 0,
+        "class": "renders"
+      },
+      "motion": {
+        "parents": [],
+        "own_keys": [
+          "ADBE Transform Group/ADBE Position"
+        ],
+        "expressions_on_keyed": [],
+        "precomp_contents": "not_a_precomp",
+        "static_as_read": false
+      },
+      "notes": null,
+      "rect_at_0": {
+        "left": 0,
+        "top": 0,
+        "width": 240,
+        "height": 140
+      },
+      "bounds_at_0": {
+        "left": 1620,
+        "top": 490,
+        "right": 1860,
+        "bottom": 630
+      }
+    }
+  ],
+  "segments": [
+    {
+      "id": "16/ADBE Transform Group/ADBE Rotate Z/1",
+      "layer": "Gauge",
+      "display_path": "Transform › Rotation",
+      "state": "eased"
+    },
+    {
+      "id": "18/ADBE Transform Group/ADBE Anchor Point/1",
+      "layer": "Wobble",
+      "display_path": "Transform › Anchor Point",
+      "state": "eased"
+    },
+    {
+      "id": "25/ADBE Transform Group/ADBE Scale/1",
+      "layer": "Pop",
+      "display_path": "Transform › Scale",
+      "state": "eased"
+    },
+    {
+      "id": "26/ADBE Transform Group/ADBE Position/1",
+      "layer": "Sled",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    },
+    {
+      "id": "26/ADBE Transform Group/ADBE Position/2",
+      "layer": "Sled",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    },
+    {
+      "id": "30/ADBE Transform Group/ADBE Position/1",
+      "layer": "Tile",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    },
+    {
+      "id": "30/ADBE Transform Group/ADBE Scale/1",
+      "layer": "Tile",
+      "display_path": "Transform › Scale",
+      "state": "eased"
+    },
+    {
+      "id": "31/ADBE Transform Group/ADBE Opacity/1",
+      "layer": "Caption",
+      "display_path": "Transform › Opacity",
+      "state": "eased"
+    },
+    {
+      "id": "32/ADBE Transform Group/ADBE Position_0/1",
+      "layer": "Stamp",
+      "display_path": "Transform › X Position",
+      "state": "eased"
+    },
+    {
+      "id": "32/ADBE Transform Group/ADBE Position_1/1",
+      "layer": "Stamp",
+      "display_path": "Transform › Y Position",
+      "state": "eased"
+    },
+    {
+      "id": "33/ADBE Transform Group/ADBE Position/1",
+      "layer": "Row A",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    },
+    {
+      "id": "35/ADBE Transform Group/ADBE Position/1",
+      "layer": "Row C",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    },
+    {
+      "id": "36/ADBE Transform Group/ADBE Position/1",
+      "layer": "Plate",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    },
+    {
+      "id": "39/ADBE Transform Group/ADBE Position/1",
+      "layer": "Gradient",
+      "display_path": "Transform › Position",
+      "state": "eased"
+    }
+  ],
+  "timing": {
+    "layers": [
+      {
+        "layer_index": 16,
+        "layer": "Gauge",
+        "units": [
+          {
+            "unit": "Transform › Rotation",
+            "moves": [
+              {
+                "start": 3.167,
+                "end": 4.167,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 3.167,
+        "last_landing": 4.167
+      },
+      {
+        "layer_index": 18,
+        "layer": "Wobble",
+        "units": [
+          {
+            "unit": "Transform › Anchor Point",
+            "moves": [
+              {
+                "start": 3.8,
+                "end": 4.8,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 3.8,
+        "last_landing": 4.8
+      },
+      {
+        "layer_index": 25,
+        "layer": "Pop",
+        "units": [
+          {
+            "unit": "Transform › Scale",
+            "moves": [
+              {
+                "start": 3.3,
+                "end": 4.3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 3.3,
+        "last_landing": 4.3
+      },
+      {
+        "layer_index": 26,
+        "layer": "Sled",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 3.667,
+                "end": 4.167,
+                "duration": 0.5,
+                "kind": "ramp"
+              },
+              {
+                "start": 4.167,
+                "end": 4.667,
+                "duration": 0.5,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 3.667,
+        "last_landing": 4.667
+      },
+      {
+        "layer_index": 30,
+        "layer": "Tile",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 4.167,
+                "end": 5.167,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          },
+          {
+            "unit": "Transform › Scale",
+            "moves": [
+              {
+                "start": 4.367,
+                "end": 5.367,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 4.167,
+        "last_landing": 5.367
+      },
+      {
+        "layer_index": 31,
+        "layer": "Caption",
+        "units": [
+          {
+            "unit": "Transform › Opacity",
+            "moves": [
+              {
+                "start": 4.3,
+                "end": 5.3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 4.3,
+        "last_landing": 5.3
+      },
+      {
+        "layer_index": 32,
+        "layer": "Stamp",
+        "units": [
+          {
+            "unit": "Position",
+            "moves": [
+              {
+                "start": 4.667,
+                "end": 5.667,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 4.667,
+        "last_landing": 5.667
+      },
+      {
+        "layer_index": 33,
+        "layer": "Row A",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 4.8,
+                "end": 5.8,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 4.8,
+        "last_landing": 5.8
+      },
+      {
+        "layer_index": 35,
+        "layer": "Row C",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 5.167,
+                "end": 6.167,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 5.167,
+        "last_landing": 6.167
+      },
+      {
+        "layer_index": 36,
+        "layer": "Plate",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 5.3,
+                "end": 6.3,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 5.3,
+        "last_landing": 6.3
+      },
+      {
+        "layer_index": 39,
+        "layer": "Gradient",
+        "units": [
+          {
+            "unit": "Transform › Position",
+            "moves": [
+              {
+                "start": 5.433,
+                "end": 6.433,
+                "duration": 1,
+                "kind": "ramp"
+              }
+            ]
+          }
+        ],
+        "first_start": 5.433,
+        "last_landing": 6.433
+      }
+    ]
+  },
+  "sets": [
+    {
+      "set": "group",
+      "layers": [
+        "Tile",
+        "Caption",
+        "Stamp"
+      ],
+      "bounds_at_0": {
+        "left": 1100,
+        "top": 100,
+        "right": 1330,
+        "bottom": 230
+      }
+    },
+    {
+      "set": "rows",
+      "layers": [
+        "Row A",
+        "Row B",
+        "Row C"
+      ],
+      "bounds_at_0": {
+        "left": 1620,
+        "top": 90,
+        "right": 1860,
+        "bottom": 200
+      }
+    },
+    {
+      "set": "mistake",
+      "layers": [
+        "Plate",
+        "Shadow"
+      ],
+      "bounds_at_0": {
+        "left": 1100,
+        "top": 500,
+        "right": 1315,
+        "bottom": 635
+      }
+    },
+    {
+      "set": "matte_pair",
+      "layers": [
+        "Gradient",
+        "Reveal Matte"
+      ],
+      "bounds_at_0": {
+        "left": 1620,
+        "top": 490,
+        "right": 1860,
+        "bottom": 630
+      }
+    }
+  ],
+  "set_gap_min_px": 192,
+  "to_comp": [
+    {
+      "layer": "Door",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            200,
+            300
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            200,
+            300
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            200,
+            300
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Needle",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            420,
+            250
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            420,
+            250
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            420,
+            250
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Gauge",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            500,
+            150
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            500,
+            150
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            500,
+            150
+          ]
+        },
+        {
+          "time": 3.167,
+          "point": [
+            500,
+            150
+          ]
+        },
+        {
+          "time": 4.167,
+          "point": [
+            500,
+            150
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Lid",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            640,
+            450
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            640,
+            450
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            640,
+            450
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Wobble",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            800,
+            120
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            800,
+            120
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            800,
+            120
+          ]
+        },
+        {
+          "time": 3.8,
+          "point": [
+            800,
+            120
+          ]
+        },
+        {
+          "time": 4.8,
+          "point": [
+            800,
+            120
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Tab",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            620,
+            480
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            620,
+            480
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            620,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Peg",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            820,
+            480
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            820,
+            480
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            820,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Banner",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            450,
+            640
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            450,
+            640
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            450,
+            640
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Sign",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            200,
+            780
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            200,
+            780
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            200,
+            780
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Plaque",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            480,
+            790
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            480,
+            790
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            480,
+            790
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Flip",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            720,
+            790
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            720,
+            790
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            720,
+            790
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Pop",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            120,
+            960
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            120,
+            960
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            120,
+            960
+          ]
+        },
+        {
+          "time": 3.3,
+          "point": [
+            120,
+            960
+          ]
+        },
+        {
+          "time": 4.3,
+          "point": [
+            120,
+            960
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Sled",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            320,
+            960
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            320,
+            960
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            320,
+            960
+          ]
+        },
+        {
+          "time": 3.667,
+          "point": [
+            320,
+            960
+          ]
+        },
+        {
+          "time": 4.167,
+          "point": [
+            420,
+            960
+          ]
+        },
+        {
+          "time": 4.667,
+          "point": [
+            420,
+            900
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Hatch Rig",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            640,
+            960
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            640,
+            960
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            640,
+            960
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Hatch",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            640,
+            960
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            640,
+            960
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            640,
+            960
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Seal",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            840,
+            960
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            840,
+            960
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            840,
+            960
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Tile",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1200,
+            150
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1200,
+            150
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1200,
+            150
+          ]
+        },
+        {
+          "time": 4.167,
+          "point": [
+            1200,
+            150
+          ]
+        },
+        {
+          "time": 4.367,
+          "point": [
+            1215.356,
+            150
+          ]
+        },
+        {
+          "time": 5.167,
+          "point": [
+            1240,
+            150
+          ]
+        },
+        {
+          "time": 5.367,
+          "point": [
+            1240,
+            150
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Caption",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1220,
+            215
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1220,
+            215
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1220,
+            215
+          ]
+        },
+        {
+          "time": 4.3,
+          "point": [
+            1220,
+            215
+          ]
+        },
+        {
+          "time": 5.3,
+          "point": [
+            1220,
+            215
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Stamp",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1290,
+            190
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1290,
+            190
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1290,
+            190
+          ]
+        },
+        {
+          "time": 4.667,
+          "point": [
+            1290,
+            190
+          ]
+        },
+        {
+          "time": 5.667,
+          "point": [
+            1310,
+            200
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Row A",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1740,
+            120
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1740,
+            120
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1740,
+            120
+          ]
+        },
+        {
+          "time": 4.8,
+          "point": [
+            1740,
+            120
+          ]
+        },
+        {
+          "time": 5.8,
+          "point": [
+            1760,
+            120
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Row B",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1740,
+            145
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1740,
+            145
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1740,
+            145
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Row C",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1740,
+            170
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1740,
+            170
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1740,
+            170
+          ]
+        },
+        {
+          "time": 5.167,
+          "point": [
+            1740,
+            170
+          ]
+        },
+        {
+          "time": 6.167,
+          "point": [
+            1760,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Plate",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1200,
+            560
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1200,
+            560
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1200,
+            560
+          ]
+        },
+        {
+          "time": 5.3,
+          "point": [
+            1200,
+            560
+          ]
+        },
+        {
+          "time": 6.3,
+          "point": [
+            1230,
+            560
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Shadow",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1215,
+            575
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1215,
+            575
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1215,
+            575
+          ]
+        },
+        {
+          "time": 5.3,
+          "point": [
+            1215,
+            575
+          ]
+        },
+        {
+          "time": 6.3,
+          "point": [
+            1245,
+            575
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Reveal Matte",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1740,
+            560
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1740,
+            560
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1740,
+            560
+          ]
+        }
+      ]
+    },
+    {
+      "layer": "Gradient",
+      "points": [
+        {
+          "time": 0,
+          "point": [
+            1740,
+            560
+          ]
+        },
+        {
+          "time": 1,
+          "point": [
+            1740,
+            560
+          ]
+        },
+        {
+          "time": 2,
+          "point": [
+            1740,
+            560
+          ]
+        },
+        {
+          "time": 5.433,
+          "point": [
+            1740,
+            560
+          ]
+        },
+        {
+          "time": 6.433,
+          "point": [
+            1760,
+            560
+          ]
+        }
+      ]
+    }
+  ],
+  "by_hand": {
+    "parented": "T135 (a): add a null, parent Tile, Caption and Stamp to it with the pick whip in the Parent column, capture practice2b-parented.json at 0 s, then Edit > Undo",
+    "anchor": "T135 (b): move Door's anchor to the middle of its left edge with Pan Behind (Y), capture practice2b-anchor.json at 0 s, then Edit > Undo"
+  }
+}

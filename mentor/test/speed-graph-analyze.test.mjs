@@ -13,7 +13,7 @@ const { FINDERS } = await import("../tools/speed-graph.mjs");
 
 const DIR = path.join(FIXTURES, "speed-graph");
 const load = (name) => {
-  for (const p of [path.join(DIR, name), path.join(FIXTURES, name), path.join(DIR, "stand-in", name)]) {
+  for (const p of [path.join(DIR, name), path.join(FIXTURES, name)]) {
     if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, "utf8"));
   }
   throw new Error(`No fixture ${name}`);
@@ -41,7 +41,7 @@ for (const [name, want] of Object.entries(KEY.analysis)) {
 test("US1 on Mentor Practice now: Title's Position and Scale, Opacity left for the learner to pick", () => {
   const a = analyze(now);
   assert.deepEqual(a.target_refs.map((r) => `${r.layer} ${r.property}`), ["Title Position", "Title Position", "Title Position", "Title Scale"]);
-  assert.deepEqual(a.pairs.map((p) => [p.from_time, p.to_time]), [[0.5, 1.5], [1.5, 3], [3, 4.37], [0.5, 1.5]]);
+  assert.deepEqual(a.pairs.map((p) => [p.from_time, p.to_time]), [[0.5, 1.5], [1.5, 3], [3, 4.367], [0.5, 1.5]]);
   assert.equal(a.pairs[0].label, "Title › Position 0.5–1.5 s");
   assert.deepEqual(a.pairs[3].moving_dims, ["width", "height"], "Scale's third dimension doesn't move");
   assert.deepEqual(a.other_candidates.map((c) => `${c.layer} ${c.property} ${c.pairs}`), ["Title Opacity 1", "Subtitle Position 2", "Bar End 1"]);
@@ -157,13 +157,10 @@ test("a comp with nothing eased: nothing to shape, and some pairs to ease first"
 });
 
 test("FINDERS agrees with analyze() on every fixture, with and without exclude", () => {
-  const files = [
-    ...fs.readdirSync(path.join(DIR, "stand-in")).filter((f) => f.endsWith(".json")),
-    ...fs.readdirSync(DIR).filter((f) => f.endsWith(".json") && f !== "answer-key.json"),
-  ];
+  const files = fs.readdirSync(DIR).filter((f) => f.endsWith(".json") && f !== "answer-key.json");
   const excludes = [[], [{ layer: "Title", property: "Position" }], [{ layer: "Title", property: "Position" }, { layer: "Title", property: "Scale" }, { layer: "Subtitle", property: "Position" }], [{ layer: "Card", property: "Position" }, { layer: "Card", property: "Scale" }]];
   const f = FINDERS["easing.speed_graph"];
-  for (const file of [...new Set(files), "practice-before.json"]) {
+  for (const file of [...files, "practice-before.json", "practice2-before.json"]) {
     const snap = load(file);
     if (!Array.isArray(snap.layers)) continue; // the learner record, not a snapshot
     for (const exclude of excludes) {

@@ -16,7 +16,7 @@ import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import {
-  analyze, demoRefusal, demoValues, finder, missingTimes, neededTimes, PLACES, rectOf, refused,
+  analyze, demoRefusal, demoValues, finder, missingTimes, movesFields, neededTimes, PLACES, rectOf, refused,
   REFUSED_MESSAGE, reviewProposal, SKILL,
 } from "../lib/anchor.mjs";
 import { check, checkSampleTimes } from "../lib/anchor-check.mjs";
@@ -77,6 +77,12 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
   const review = s.mode === "review";
   const proposal = review ? reviewProposal(s.baseline, { exclude: s.exclude || [] }) : base.proposal;
   const noNew = review && !proposal && !s.targets.length;
+  // With no focus yet, the notes are the proposal's. A review ranks differently from a lesson (R8),
+  // so its notes come from its own proposal, never the lesson's (FR-019a's pivot_outside side included).
+  const focusSet = !!(s.skill_options && Array.isArray(s.skill_options.focus) && s.skill_options.focus.length);
+  const notes = review && !focusSet
+    ? (proposal ? analyze(s.baseline, { ...baseOpts(s), focus_layers: [proposal.layer] }).notes : [])
+    : base.notes;
   let noDemo = s.demo ? null : base.no_demo_reason;
   if (review) noDemo = noNew ? "no_new_target" : "review";
   else if (!s.demo && !s.demo_target && s.targets.length === 1 && base.demo_target) noDemo = "single_target";
@@ -88,7 +94,7 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
     host: parseHost(read),
     project: s.baseline.project,
     comp: { name: s.baseline.comp.name, time: s.baseline.comp.time, frame_rate: fps, width: s.baseline.comp.width ?? null, height: s.baseline.comp.height ?? null },
-    candidates: base.candidates.map(({ layer, bucket, reason, rank }) => ({ layer, bucket, reason, rank })),
+    candidates: base.candidates.map((c) => ({ layer: c.layer, bucket: c.bucket, reason: c.reason, rank: c.rank, ...movesFields(c) })),
     proposal,
     focus: s.focus,
     places: Object.fromEntries(Object.entries(base.places).map(([k, v]) => [k, v.place])),
@@ -104,8 +110,11 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
     demo_target: s.demo_target,
     demo_used: !!s.demo,
     no_demo_reason: noDemo,
-    notes: base.notes,
+    notes,
     ...(base.rest_time_not_a_key ? { rest_time_not_a_key: base.rest_time_not_a_key } : {}),
+    // FR-008: the one layer to offer a watch on, with one focus layer; never in a review or once
+    // the demo is spent, whatever the analysis gave.
+    watch_offer: review || s.demo ? null : base.watch_offer ?? null,
     reads,
   });
 }
@@ -195,7 +204,8 @@ export const TOOLS = [
     description:
       "Read the active comp and start or continue the pivot lesson. Returns every layer's candidacy with a reason, one " +
       "proposal with a suggested place, the focus layers' places, check times (the rest key on a layer with Rotation or " +
-      "Scale keys), what's already in place, the targets, the demo_target and notes. Call again with skill_options when " +
+      "Scale keys), what's already in place, the targets, the demo_target, notes, and watch_offer (with one focus layer in " +
+      "a lesson, the other layer to offer a watch on and its place, or null). Call again with skill_options when " +
       "the learner names a layer and a place. fresh: true restarts the lesson before any demo or check.",
     inputSchema: {
       type: "object",

@@ -335,3 +335,17 @@ rubric item or check looks for it, so every run passed it. The wording echoes `S
 **To fix later:** the judge runs on Claude Code's default model (no `--model` in `run.mjs`), so a
 default change can move the baseline with no file changed. Pin it, or record the judge's model in
 each results file.
+
+## T143 gate: 2026-10-26 (spec 004 wave B, T123's matte line)
+
+Branch `offset-order` (T123's sentence in step 2, plus offset-only code) 24/25 against its merge
+base `2bcfb54` 25/25, run the same day one after the other ($12.62 each). The only failure was case
+17 (button-check-partial), rubric item R-NAMES-LAYERS: the opening said "6 visible layers" and the
+judge counted 5, leaving out hidden Old Take. All six deterministic checks passed; the `--only 17`
+re-run passed. Read as judge noise on layer-count wording, not T123 (which is about track mattes),
+but case 17 wasn't repeated on the base. If it fails again, run `--repeat 3` on both before
+touching `SKILL.md`; the smallest fix would be the rubric's "visible layers" wording.
+
+New case 26 (matte, eye off) passes 3/3 with or without T123's line: the tool keeps the matte out of
+`hidden_layers`, so the line is insurance. A harder variant ("isn't Wipe hidden?") would test the
+prompt itself.

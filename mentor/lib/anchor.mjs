@@ -8,7 +8,7 @@
 // tolerances, and reads any comp-space `reason` as "can't read", never as a value (filter 6).
 
 import { MentorError, registerErrors } from "../errors.mjs";
-import { footprint, layerMatrix, sampleAt } from "./comp-space.mjs";
+import { compPosition, footprint, layerMatrix, sampleAt } from "./comp-space.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
@@ -30,11 +30,14 @@ const TIME_TOL = 0.0005;
 
 // ---- Live-check switches (desk block, tasks T235)
 
-// L-1: until Pan Behind is confirmed to move a shape layer's own anchor and its bounds match what's
-// drawn, shapes are allowed if named, never proposed.
-export const SHAPES_DEFAULT = false;
+// L-1 (passed 2026-10-26 at 26.5): Pan Behind moves a shape layer's own anchor and Position
+// together, and its bounds match what's drawn, so shapes are default candidates. While false, they
+// were allowed if named, never proposed (reason shape_until_l1).
+export const SHAPES_DEFAULT = true;
 // Which rectangle item 1 (where the place is) and item 2 (did it move) both use, per layer kind
-// (filter 5): "rect" or "rect_extents". L-1 decides shapes, L-5 text.
+// (filter 5): "rect" or "rect_extents". L-1 (shapes: rect and rect_extents both read the shape as
+// drawn, no stroke) and L-5 (text: rect within 1 px of the ink, centred and left-justified) kept
+// "rect" for both.
 export const RECT_KIND = { shape: "rect", text: "rect", default: "rect" };
 
 export const rectKind = (kind) => (Object.hasOwn(RECT_KIND, kind) ? RECT_KIND[kind] : RECT_KIND.default);
@@ -106,6 +109,29 @@ export function placeNow(anchor, rect) {
   return "between";
 }
 
+// Which side of the layer a pivot outside it sits on, as seen on screen (FR-019a): the anchor's
+// comp-space point (compPosition) against the layer's comp-space bounds (footprint) at `time`.
+// "above", "below", "left", "right" or a pair ("below-left"). An axis counts when the point is past
+// that edge by more than item 1's tolerance on the bounds (so a pivot far below and level with the
+// right edge is "below"), else by more than 1 px. Null when either can't be read (FR-018), or when the
+// point sits within the bounds on screen (a turned layer), so the mentor never guesses a side.
+export function outsideSide(snapshot, index, time, kind) {
+  if (!isNum(time)) return null;
+  const pos = compPosition(snapshot, index, time);
+  const fp = footprint(snapshot, index, time, footprintOpts(kind));
+  const p = pos && !pos.reason ? pair(pos.position) : null;
+  const b = fp && !fp.reason ? fp.bounds : null;
+  if (!p || !b || ![b.left, b.top, b.right, b.bottom].every(isNum)) return null;
+  const [tx, ty] = tolerance({ width: b.right - b.left, height: b.bottom - b.top });
+  let v = p[1] < b.top - ty ? "above" : p[1] > b.bottom + ty ? "below" : null;
+  let h = p[0] < b.left - tx ? "left" : p[0] > b.right + tx ? "right" : null;
+  if (!v && !h) {
+    v = p[1] < b.top - MOVE_PX ? "above" : p[1] > b.bottom + MOVE_PX ? "below" : null;
+    h = p[0] < b.left - MOVE_PX ? "left" : p[0] > b.right + MOVE_PX ? "right" : null;
+  }
+  return v && h ? `${v}-${h}` : v || h || null;
+}
+
 // ---- Keys, from the snapshot's keyed `layers` (the only place keys are read)
 
 const TR = "ADBE Transform Group/";
@@ -128,6 +154,9 @@ export function keyFlags(kl) {
     scale: has([SCALE]),
     expression_anchor_position: expr([ANCHOR, ...POSITION_PATHS]),
     expression_rotation_scale: expr([ROTATION, SCALE]),
+    // FR-004's ranking: any property with keys at all (Opacity, an effect, a mask or a text
+    // animator counts, not only Transform).
+    any: !!kl && kl.properties.some((p) => p.keys.length > 0),
   };
 }
 
@@ -136,6 +165,57 @@ export const positionKeyCount = (kl) => propsOf(kl, POSITION_PATHS).reduce((n, p
 
 export function positionKeyTimes(kl) {
   return uniqueTimes(keyedProps(kl, POSITION_PATHS).flatMap((p) => p.keys.map((k) => k.time)));
+}
+
+// Half a frame at the read's frame rate (FR-004's "within half a frame"), or the read tolerance
+// when the frame rate is missing.
+export function halfFrame(snapshot) {
+  const fps = snapshot && snapshot.comp && snapshot.comp.frame_rate;
+  return isNum(fps) && fps > 0 ? 0.5 / fps + 1e-6 : TIME_TOL;
+}
+
+// Position's key times as FR-004 counts them (D-4): key times, not keys; separated X and Y (and Z)
+// together; hold keys like any key; a time within half a frame of the last one kept is merged into it.
+export function positionTimes(snapshot, kl) {
+  const tol = halfFrame(snapshot);
+  const all = keyedProps(kl, POSITION_PATHS).flatMap((p) => p.keys.map((k) => k.time)).filter(isNum).sort((a, b) => a - b);
+  const out = [];
+  for (const t of all) if (!out.length || t - out[out.length - 1] > tol) out.push(r3(t));
+  return out;
+}
+
+// Which Position rule applies (FR-004, D-4): null with no Position keys; "position_moves" for two
+// or more key times, or for one that isn't on the check time (the rest key, the learner's or the
+// default, more than half a frame from it); else "position_keyed". Pan Behind changes or adds one
+// Position key, at the playhead (L-2), so a layer that already moves slides at its other keys and
+// no taught move can pass.
+export function positionRule(snapshot, kl, opts = {}) {
+  const pc = positionCase(snapshot, kl, opts);
+  return pc ? pc.rule : null;
+}
+
+// The Position rule with its case (FR-004 › Which position_moves case, B-9), so the rule lives in
+// one place: null with no Position keys; { rule: "position_keyed" }; or { rule: "position_moves",
+// moves_case }, where moves_case is "two_or_more", or "one_key_off_rest" with position_key_time (the
+// one key's time) and rest_time (the time it was compared against: the learner's rest_time when
+// restKey used it, else the tool's rest key).
+export function positionCase(snapshot, kl, { rest_time } = {}) {
+  const times = positionTimes(snapshot, kl);
+  if (!times.length) return null;
+  if (times.length >= 2) return { rule: "position_moves", moves_case: "two_or_more" };
+  const rk = restKey(kl, { rest_time });
+  if (!rk) return { rule: "position_keyed" };
+  if (isNum(rk.time) && Math.abs(rk.time - times[0]) <= halfFrame(snapshot)) return { rule: "position_keyed" };
+  return { rule: "position_moves", moves_case: "one_key_off_rest", position_key_time: times[0], rest_time: isNum(rk.time) ? rk.time : null };
+}
+
+// The three moves_case fields of a position_moves entry, for spreading into a candidate or a
+// focus_problems entry; {} for any other reason.
+export function movesFields(c) {
+  if (!c || c.reason !== "position_moves" || !c.moves_case) return {};
+  return c.moves_case === "one_key_off_rest"
+    ? { moves_case: c.moves_case, position_key_time: c.position_key_time, rest_time: c.rest_time }
+    : { moves_case: c.moves_case };
 }
 
 function uniqueTimes(list) {
@@ -200,8 +280,9 @@ export function checkTime(snapshot, index, opts = {}) {
 
 const DEFAULT_KINDS = new Set(["solid", "text", "footage", "precomp"]);
 
-// The bucket and reason from what's structural, before any footprint is read.
-function structural(snapshot, entry, flags, cls) {
+// The bucket and reason from what's structural, before any footprint is read. `opts.rest_time` is
+// the learner's own rest pose for this layer, if any (it decides a one-key layer, FR-004).
+function structural(snapshot, entry, flags, cls, kl = null, opts = {}) {
   const kind = entry.kind;
   if (cls === "null" || kind === "null") return ["never", "null"];
   if (kind === "camera") return ["never", "camera"];
@@ -213,6 +294,9 @@ function structural(snapshot, entry, flags, cls) {
   if (flags.expression_rotation_scale) return ["never", "expression_rotation_scale"];
   if (flags.expression_anchor_position) return ["never", "expression_anchor_position"];
   if (!kind || (!DEFAULT_KINDS.has(kind) && kind !== "shape")) return ["never", "cant_read"];
+  // Never outranks allowed-if-named: a matte, hidden, guide or locked layer that already moves can't
+  // pass either.
+  if (flags.position && positionRule(snapshot, kl, opts) === "position_moves") return ["never", "position_moves"];
   if (cls === "matte") return ["if_named", "matte"];
   if (cls === "hidden") return ["if_named", "hidden"];
   if (cls === "guide") return ["if_named", "guide"];
@@ -258,19 +342,20 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
     const ct = checkTime(snapshot, entry.index, { rest_time: rest_times[entry.name] });
     const sample = isNum(ct.time) ? sampleAt(entry, ct.time) : null;
     const rect = rectOf(sample, entry.kind);
-    let [bucket, reason] = structural(snapshot, entry, flags, cls);
+    let [bucket, reason] = structural(snapshot, entry, flags, cls, kl, { rest_time: rest_times[entry.name] });
     const fp = isNum(ct.time) ? footprint(snapshot, entry.index, ct.time, footprintOpts(entry.kind)) : { corners: null, bounds: null, reason: "not_sampled" };
     const readable = !fp.reason && fp.corners && shoelace(fp.corners) > 1e-6 && !!rect && !!pair(sample && sample.anchor);
     const ff = readable ? fullFrame(snapshot, fp.bounds) : null;
     if (bucket !== "never" && !readable) [bucket, reason] = ["never", "cant_read"];
     else if (bucket === "default" && ff === true) [bucket, reason] = ["if_named", "full_frame"];
     const b = readable ? fp.bounds : null;
+    const moves = reason === "position_moves" ? movesFields({ reason, ...positionCase(snapshot, kl, { rest_time: rest_times[entry.name] }) }) : {};
     return {
-      layer: entry.name, index: entry.index, bucket, reason, rank: null,
+      layer: entry.name, index: entry.index, bucket, reason, rank: null, ...moves,
       class: cls, kind: entry.kind,
       parent: parents.length ? parents[0].layer : null,
       has_children: !!(src && src.children && src.children.length),
-      keyed: { anchor: flags.anchor, position: flags.position, rotation: flags.rotation, scale: flags.scale },
+      keyed: { anchor: flags.anchor, position: flags.position, rotation: flags.rotation, scale: flags.scale, any: flags.any, position_times: positionTimes(snapshot, kl) },
       pivot_as_placed: asPlaced(sample && sample.anchor, rect),
       full_frame: ff,
       place_now: readable ? placeNow(sample.anchor, rect) : null,
@@ -296,20 +381,28 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
     c._large = c.full_frame === true || (c.full_frame === null && coversUnion && out.filter((x) => x._bounds).length > 1);
   }
   out.filter((c) => c.bucket === "default").sort(rankOrder()).forEach((c, i) => { c.rank = i + 1; });
+  // FR-019a: where a pivot outside its layer sits, on screen, at the check time (else null).
+  for (const c of out) c.outside_side = c.place_now === "outside" ? outsideSide(snapshot, c.index, c.check_time.time, c.kind) : null;
   for (const c of out) { delete c._bounds; }
   return out;
 }
 
+// How animated a layer already is (FR-004, amended 2026-10-26), three steps: 0 no keyed property at
+// all, 1 keys but none on Rotation or Scale, 2 Rotation or Scale keys. A ranking step, never a
+// filter: a comp where every layer has keys still gets a proposal.
+export const animationStep = (c) => (c.keyed.rotation || c.keyed.scale ? 2 : c.keyed.any ? 1 : 0);
+
 // FR-004's ranking, one comparator: a full-frame layer only when nothing else exists (FR-004's last
 // resort, so this key comes first); shy, precomp and flipped or turned layers below the rest (TD § 4,
-// rows 9, 13, 18); unparented first; no Rotation or Scale keys; the pivot where AE put it; then the
-// comp's layer order. A review puts "no Rotation or Scale keys" ahead of all but full-frame (R8).
+// rows 9, 13, 18); unparented first; how animated it already is (animationStep); the pivot where AE
+// put it; then the comp's layer order. A review puts the animation step ahead of all but full-frame
+// (R8), so "no Rotation or Scale keys" still comes first there, and no keys at all within that.
 export function rankOrder({ review = false } = {}) {
   const keys = [
     (c) => (c._large ? 1 : 0),
     (c) => (c._demoted ? 1 : 0),
     (c) => (c.parent ? 1 : 0),
-    (c) => (c.keyed.rotation || c.keyed.scale ? 1 : 0),
+    animationStep,
     (c) => (c.pivot_as_placed ? 0 : 1),
   ];
   if (review) keys.splice(1, 0, keys.splice(3, 1)[0]);
@@ -335,7 +428,8 @@ export function proposalFrom(list, { exclude = [], review = false, only = null }
   return { layer: best.layer, suggested_place: best._tall ? "bottom-middle" : "middle-left" };
 }
 
-// The review's pick (FR-024): default candidates not in the record, no Rotation or Scale keys first.
+// The review's pick (FR-024): default candidates not in the record, no Rotation or Scale keys first,
+// and within that no keys at all first.
 export function reviewProposal(snapshot, { exclude = [] } = {}) {
   return layerInfo(snapshot).known ? proposalFrom(candidates(snapshot), { exclude, review: true }) : null;
 }
@@ -345,7 +439,8 @@ export const isExcluded = (layer, exclude) => (exclude || []).some((e) => e && e
 // ---- The samples each read needs (FR-013, research R4)
 
 // Every candidate's (all but the structurally never) rest-key time and Position key times, sorted,
-// at most 63, so the lesson's baseline holds every time the check compares on every layer.
+// at most 63, so the lesson's baseline holds every time the check compares on every layer. A layer
+// that already moves (position_moves, D-4) is never, so its key times drop out.
 export function neededTimes(snapshot) {
   const { known, layers } = layerInfo(snapshot);
   if (!known) return [];
@@ -353,7 +448,7 @@ export function neededTimes(snapshot) {
   for (const entry of layers) {
     const kl = keyedLayer(snapshot, entry.index);
     const flags = keyFlags(kl);
-    const [bucket] = structural(snapshot, entry, flags, classOf(snapshot, entry.index));
+    const [bucket] = structural(snapshot, entry, flags, classOf(snapshot, entry.index), kl);
     if (bucket === "never") continue;
     const rk = restKey(kl);
     if (rk && isNum(rk.time)) times.push(rk.time);
@@ -380,7 +475,7 @@ function resolveFocus(snapshot, focus) {
   });
 }
 
-function notesFor(snapshot, c, focusEntry) {
+function notesFor(snapshot, c) {
   const notes = [];
   if (c.parent) notes.push({ layer: c.layer, note: "parent", parent: c.parent });
   if (c.kind === "text") notes.push({ layer: c.layer, note: "text_baseline" });
@@ -390,13 +485,44 @@ function notesFor(snapshot, c, focusEntry) {
     const r = rectOf(s, c.kind);
     notes.push({ layer: c.layer, note: "precomp_frame", ...(r ? { width: r3(r.width), height: r3(r.height) } : {}) });
   }
-  if (c.keyed.position) notes.push({ layer: c.layer, note: "position_keyed_tip" });
+  // A one-key layer (the only Position-keyed layer a lesson reaches, D-4), with its key's time for
+  // TD § 4's "put the playhead right on it" line.
+  if (c.keyed.position && c.keyed.position_times.length === 1) notes.push({ layer: c.layer, note: "position_keyed_tip", time: c.keyed.position_times[0] });
   if (c.class === "matte") notes.push({ layer: c.layer, note: "matte" });
   if (c.class === "hidden") notes.push({ layer: c.layer, note: "hidden" });
   if (c.class === "shy") notes.push({ layer: c.layer, note: "shy" });
   if (c.locked) notes.push({ layer: c.layer, note: "locked" });
-  if (focusEntry && c.place_now === "outside") notes.push({ layer: c.layer, note: "pivot_outside" });
+  // A focus layer's or the proposal's pivot outside it, with the side it's on as seen on screen
+  // (FR-019a; null when it can't be read, and then the mentor names no side).
+  if (c.place_now === "outside") notes.push({ layer: c.layer, note: "pivot_outside", side: c.outside_side ?? null });
   return notes;
+}
+
+// The watch offer with one focus layer (spec FR-008, TD § 17, B-8): the highest-ranked default
+// candidate by the lesson ranking that isn't the focus layer, has a name no other layer shares,
+// isn't already at its suggested place (FR-007, or it would set no target), and has no Rotation or
+// Scale keys or its rest key within half a frame of the focus's check time (else the demo would
+// refuse not_at_rest, or the learner would move the playhead twice). The place is proposalFrom's
+// hinge rule. Null when none qualifies. Whether this is a first lesson is the prompt's (the record).
+export function watchOffer(snapshot, list, focusLayer, focusTime, { exclude = [] } = {}) {
+  const tol = halfFrame(snapshot);
+  const skip = [...exclude, { layer: focusLayer, property: "Anchor Point" }];
+  for (;;) {
+    const offer = proposalFrom(list, { exclude: skip });
+    if (!offer) return null;
+    skip.push({ layer: offer.layer, property: "Anchor Point" });
+    if (byName(snapshot, offer.layer).length !== 1) continue;
+    const c = list.find((x) => x.layer === offer.layer);
+    const t = c.check_time.time;
+    if (c.keyed.rotation || c.keyed.scale) {
+      if (!isNum(t) || !isNum(focusTime) || Math.abs(t - focusTime) > tol) continue;
+    }
+    const sample = isNum(t) ? sampleAt(byIndex(snapshot, c.index), t) : null;
+    const rect = rectOf(sample, c.kind);
+    if (!sample || !rect || !pair(sample.anchor)) continue;
+    if (inPlace(sample.anchor, rect, offer.suggested_place)) continue;
+    return offer;
+  }
 }
 
 // The analyzer session.start() calls (spec 004 contract › 4). `skill_options.focus`: one or two
@@ -407,6 +533,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
     known: info.known, candidates: [], proposal: null, focus: null, places: {}, check_times: {},
     already_there: [], targets: [], target_refs: [], demo_target: null,
     no_demo_reason: info.known ? "awaiting_focus" : "no_layer_info", needed_times: [], notes: [], focus_problems: [],
+    watch_offer: null,
   };
   if (!info.known) return empty;
 
@@ -433,7 +560,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
   };
 
   if (!focus || !focus.length) {
-    if (proposal) result.notes = notesFor(snapshot, list.find((c) => c.layer === proposal.layer), null);
+    if (proposal) result.notes = notesFor(snapshot, list.find((c) => c.layer === proposal.layer));
     result.candidates = list.map(publicCandidate);
     return result;
   }
@@ -447,14 +574,14 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
     if (matches.length > 1) { result.focus_problems.push({ layer: name, problem: "name_not_unique" }); continue; }
     const c = list.find((x) => x.index === matches[0].index);
     if (!isPlace(entry.place)) { result.focus_problems.push({ layer: name, problem: "no_place" }); continue; }
-    if (WHY_NOT_TARGET.has(c.bucket)) { result.focus_problems.push({ layer: name, problem: "not_a_candidate", reason: c.reason }); continue; }
+    if (WHY_NOT_TARGET.has(c.bucket)) { result.focus_problems.push({ layer: name, problem: "not_a_candidate", reason: c.reason, ...movesFields(c) }); continue; }
     if (isExcluded(name, exclude)) { result.focus_problems.push({ layer: name, problem: "past_target" }); continue; }
     if (entry.rest_time !== undefined && c.check_time.rest_time_not_a_key) result.rest_time_not_a_key = [...(result.rest_time_not_a_key || []), name];
     const sample = sampleAt(byIndex(snapshot, c.index), c.check_time.time);
     const rect = rectOf(sample, c.kind);
     result.places[name] = { place: entry.place, point: placePoint(rect, entry.place) };
     result.check_times[name] = { time: c.check_time.time, basis: c.check_time.basis };
-    result.notes.push(...notesFor(snapshot, c, entry));
+    result.notes.push(...notesFor(snapshot, c));
     if (inPlace(sample.anchor, rect, entry.place)) {
       result.already_there.push({ layer: name, place: entry.place });
       continue;
@@ -471,6 +598,12 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
   const demo = ordered.find(isDefault) || null;
   result.demo_target = demo ? `anchor/${demo.index}` : null;
   result.no_demo_reason = demo ? null : targetEntries.length ? "not_a_default_candidate" : "awaiting_focus";
+  // One focus layer that is a target: the watch offer (FR-008). Two focus layers, or one that's
+  // already there or refused: none.
+  if (focus.length === 1 && targetEntries.length === 1) {
+    const f = targetEntries[0];
+    result.watch_offer = watchOffer(snapshot, list, f.layer, f.check_time.time, { exclude });
+  }
   result.candidates = list.map(publicCandidate);
   return result;
 }

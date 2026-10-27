@@ -104,6 +104,8 @@ function runJsx(ae, args) {
   return vm.runInContext(`(function () {\n${code}\n})()`, ctx);
 }
 const ARGS = { comp_id: 300, layer_index: 1, layer_name: "Door", anchor: [0, 250], position: [50, 300], rest_time: null };
+// The twin runs on the live captures: Mentor Practice 2 is comp 179 in the project.
+const TWIN = { ...ARGS, comp_id: fixture("practice2b").comp.id };
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
 test("the snippet writes Anchor Point then Position, keeps Z, adds no key, and reports before and after", () => {
@@ -165,7 +167,7 @@ test("the twin's apply writes anchor and position into transform and every sampl
 test("the twin's run saves the edit and returns what the snippet returns", () => {
   const saved = [];
   const s = fixture("practice2b");
-  const r = run({ ...ARGS, layer_index: indexOf(s, "Door") }, { snapshot: s, saveEdit: (e) => saved.push(e) });
+  const r = run({ ...TWIN, layer_index: indexOf(s, "Door") }, { snapshot: s, saveEdit: (e) => saved.push(e) });
   assert.deepEqual(r, { layer: "Door", anchor_before: [150, 250], anchor_after: [0, 250], position_before: [200, 300], position_after: [50, 300], separated: false });
   assert.deepEqual(saved, [{ layer_index: indexOf(s, "Door"), anchor: [0, 250], position: [50, 300] }]);
 });
@@ -174,7 +176,7 @@ const twinCase = (name, change, extra = {}) => {
   const s = clone(fixture("practice2b"));
   const entry = s.layer_info.find((l) => l.name === name);
   change(s, entry);
-  return { snapshot: s, args: { ...ARGS, layer_index: entry.index, layer_name: name, ...extra } };
+  return { snapshot: s, args: { ...TWIN, layer_index: entry.index, layer_name: name, ...extra } };
 };
 for (const [why, make] of [
   ["locked", () => twinCase("Door", (s, e) => { e.locked = true; })],
@@ -197,6 +199,6 @@ for (const [why, make] of [
 test("the twin's run at the rest key goes ahead", () => {
   const s = fixture("gauge-before-at-rest");
   const saved = [];
-  run({ ...ARGS, layer_index: indexOf(s, "Gauge"), layer_name: "Gauge", anchor: [20, 200], position: [500, 250], rest_time: 3.167 }, { snapshot: s, saveEdit: (e) => saved.push(e) });
+  run({ ...TWIN, layer_index: indexOf(s, "Gauge"), layer_name: "Gauge", anchor: [20, 200], position: [500, 250], rest_time: 3.167 }, { snapshot: s, saveEdit: (e) => saved.push(e) });
   assert.equal(saved.length, 1);
 });
