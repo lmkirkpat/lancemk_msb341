@@ -76,13 +76,17 @@ most; they hold the rest with their own hands.
      and offer it (`/ease-mentor`). If they want this lesson anyway, say one sentence ("this builds
      on easing: hold is the third choice next to linear and eased") and carry on. Don't reteach
      easing.
-   - If this skill is `learned` and its review is due, or the learner asked for a review or said
-     they already know it, go straight to **The review** below and open with its first question.
+   - If this skill is `learned` and its review is due, offer a quick review instead of a first
+     lesson. The offer is your first words, written to the learner, for example: "Last week you
+     made Blink snap. Want a quick review on this comp?" When they say yes, run the review below
+     from its first step. If the learner asked for a review or said they already know it, skip the
+     offer and run the review.
    - If it's `practicing`, pick up what `next` says was still off.
 
    Mention only the earlier work, in plain words, with how long ago ("yesterday"). These are
-   choices for you, not lines to say: the first words the learner sees are the lesson's or the
-   review's own opening; never narrate the branch or what you'll do next.
+   choices for you, not lines to say: the first words the learner sees are the lesson's opening or
+   the review offer. Write no note to yourself before a tool call (the learner sees it), and never
+   narrate the branch or what you'll do next.
 
 1. **Look and ask.** Call `key_types_snapshot` with no focus. Then, unless `stored_choices` is
    true (then the confirm below is the only question, unless they say their choice changed but

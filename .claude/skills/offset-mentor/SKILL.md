@@ -99,13 +99,17 @@ start.
      and offer it first (`/ease-mentor`). If they want this lesson anyway, say one sentence ("this
      builds on easing: offsetting moves that are still linear still looks mechanical") and carry
      on. Don't reteach easing, and don't grade ease. Remember to mention it once at "done" (step 7).
-   - If this skill is learned and its review is due, or the learner asked for a review or said they
-     already know it, go straight to **The review** below and open with its first question.
+   - If this skill is learned and its review is due, offer a quick review instead of a first
+     lesson. The offer is your first words, written to the learner, for example: "Last week you
+     staggered the Dots. Want a quick review on this comp?" When they say yes, run the review below
+     from its first step. If the learner asked for a review or said they already know it, skip the
+     offer and run the review.
    - If it's practicing, pick up what `next` says was still off.
 
    Mention only the earlier work, in plain words, with how long ago ("yesterday"). These are
-   choices for you, not lines to say: the first words the learner sees are the lesson's or the
-   review's own opening; never narrate the branch or what you'll do next.
+   choices for you, not lines to say: the first words the learner sees are the lesson's opening or
+   the review offer. Write no note to yourself before a tool call (the learner sees it), and never
+   narrate the branch or what you'll do next.
 
 1. **Look and propose.** Call `offset_snapshot` with no options. Then, in a few sentences:
    - **Name the group in one sentence**, with real names and the shared time from `group`:
@@ -227,16 +231,16 @@ start.
    - **Nothing moved on a layer they say they moved:** they may have trimmed the start of its bar
      instead of dragging the whole bar. Dragging the bar moves its keys with it, so that's a real
      shift the check sees; trimming the in point doesn't move the keys. "Dot 3's keys still start
-     at 0.5 s. Trimming the start of its bar doesn't move the animation inside it; dragging the
-     whole bar does."
+     at 0.5 s. Trimming the start of its bar doesn't move the animation inside it." The hint stops
+     there: don't say what to do instead (no method, no gap, no undo); they work that out.
    - **They reordered the layers in the stack** (the order in the Timeline panel changed, the
      times didn't): "The order in the stack isn't when they move. Their keys still start
      together."
    - **The gap they stated vs. the gap the check measured:** only after a pass (`passed`). When
      `gaps_frames` doesn't match the gap they gave you in step 3, say the gap back from
      `gaps_frames` (the first one if they differ, to the nearest whole frame), as theirs, never as
-     advice ("you went with about [the measured gap] frames"). Nothing is re-sent and nothing is
-     read again. Before a pass, the other bullets here run and nothing is re-sent.
+     advice ("you went with about [the measured gap] frames"). Don't suggest the stated gap or any
+     other; it's their choice. Nothing is re-sent and nothing is read again. Before a pass, the other bullets here run and nothing is re-sent.
    - Mention `other_changes` briefly, without treating them as mistakes.
    - If `comp_matches` is false, don't grade: ask them to switch back to `lesson_comp` by name and
      say "done" again.
