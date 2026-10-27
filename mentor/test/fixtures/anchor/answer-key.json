@@ -100,8 +100,14 @@
     "lid_with_banner": { "focus": [{ "layer": "Lid", "place": "middle-left" }, { "layer": "Banner", "place": "middle-left" }], "demo_target_layer": "Banner", "note": "T234 (L-1): was null with not_a_default_candidate; shapes are default candidates now, so Banner (entry 1) takes the demo" },
     "matte_with_background": { "focus": [{ "layer": "Reveal Matte", "place": "middle-left" }, { "layer": "Background", "place": "middle-left" }], "demo_target_layer": null, "no_demo_reason": "not_a_default_candidate", "why": "T246 (D-4): replaces sled_with_gradient (both are never now, so neither is a target). Picked by hand: Reveal Matte is if_named (matte) and Background if_named (full_frame); both pivots are at their centres ([120, 70] on 240 x 140, [960, 540] on 1920 x 1080), so neither is already at the middle of its left edge and both are targets. Neither is a default candidate, so no demo" }
   },
+  "watch_offer": {
+    "door": { "focus": [{ "layer": "Door", "place": "middle-left" }], "watch_offer": { "layer": "Needle", "suggested_place": "bottom-middle" }, "why": "T249 (spec FR-008, TD § 17), by hand: Door is rank 1 and the focus, so the next default candidate is Needle (rank 2): no keys at all, so no rest key to match; its pivot is at its centre (place_now center), not at the middle of its bottom edge; and it's tall and thin (the hinge rule, as the proposal gives it with focus_layers Needle), so bottom-middle" },
+    "pop": { "focus": [{ "layer": "Pop", "place": "bottom-middle" }], "focus_check_time": 4.3, "watch_offer": { "layer": "Door", "suggested_place": "middle-left" }, "why": "T249, by hand: Pop's check time is its rest key, 4.3 s (largest Scale). Door is rank 1, isn't the focus, has no keys (so the rest-key condition doesn't apply), its pivot is at its centre, and it isn't tall (500 is less than twice 300), so middle-left, as the lesson's proposal" },
+    "door_and_needle": { "focus": [{ "layer": "Door", "place": "middle-left" }, { "layer": "Needle", "place": "bottom-middle" }], "watch_offer": null, "why": "Two focus layers: the second already takes the demo (FR-008)" },
+    "review": { "record": "records/learned-door.json", "watch_offer": null, "why": "No demo in a review, so no offer (FR-008, TD § 12); the tool nulls it whatever the analysis gives" }
+  },
   "review": {
-    "record": "records/learned-door.json",
+    "record":"records/learned-door.json",
     "proposal": "Tab",
     "count_with_exclude": 17,
     "note": "T241 (FR-004, FR-024, amended 2026-10-26): Tab again. A review goes by the animation step first (R8): with Door and Needle in the record, the unkeyed, unflipped, unparented layers with their pivot where AE put it are Tab, Peg, Banner, Sign, Plaque and Row B, and Tab (index 19) is first by layer order. 19 default candidates on the live comp, less Door and Needle, is 17. T234 had Blink",

@@ -331,3 +331,36 @@ test("record_lesson after a lesson stores { layer, property: \"Anchor Point\" } 
   const rec = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
   assert.deepEqual(rec.lessons.at(-1).targets, [{ layer: "Door", property: "Anchor Point" }, { layer: "Plaque", property: "Anchor Point" }]);
 });
+
+// ---- T249: the watch offer (spec FR-008, contracts › anchor_snapshot)
+
+test("T249: anchor_snapshot carries watch_offer: Needle for Door, Door for Pop, null with two focus layers or no focus", async () => {
+  assert.equal((await call("anchor_snapshot")).watch_offer, null, "no focus yet");
+  const door = await call("anchor_snapshot", { skill_options: { focus: KEY.watch_offer.door.focus } });
+  assert.deepEqual(door.watch_offer, KEY.watch_offer.door.watch_offer);
+  const both = await call("anchor_snapshot", { skill_options: { focus: KEY.watch_offer.door_and_needle.focus } });
+  assert.equal(both.watch_offer, KEY.watch_offer.door_and_needle.watch_offer);
+  assert.equal(both.demo_target, `anchor/${idx("Needle")}`, "after a yes, the demo goes on the offered layer");
+  const pop = await call("anchor_snapshot", { skill_options: { focus: KEY.watch_offer.pop.focus } });
+  assert.deepEqual(pop.watch_offer, KEY.watch_offer.pop.watch_offer);
+  assert.equal(runs.length, 0, "the offer runs nothing");
+});
+
+test("T249: watch_offer is null in a review and once anchor_demo has run", async () => {
+  useRecord(KEY.watch_offer.review.record);
+  const review = await call("anchor_snapshot", { mode: "review", skill_options: { focus: [{ layer: "Tab", place: "middle-left" }] } });
+  assert.deepEqual(review.targets, [`anchor/${idx("Tab")}`]);
+  assert.equal(review.watch_offer, KEY.watch_offer.review.watch_offer);
+
+  for (const f of [SESSION, LEARNER]) fs.rmSync(f, { force: true });
+  useRecord("records/easing-learned.json");
+  await call("anchor_snapshot", { skill_options: { focus: KEY.two_focus_demos.gauge_with_peg.focus } });
+  await call("anchor_demo", { target: `anchor/${idx("Peg")}` });
+  // Back to one focus layer after the demo: the analysis alone would offer one; the tool says null.
+  const { analyze } = await import("../lib/anchor.mjs");
+  const gauge = [{ layer: "Gauge", place: "bottom-middle" }];
+  assert.notEqual(analyze(P2, { skill_options: { focus: gauge } }).watch_offer, null);
+  const after = await call("anchor_snapshot", { skill_options: { focus: gauge } });
+  assert.equal(after.demo_used, true);
+  assert.equal(after.watch_offer, null);
+});

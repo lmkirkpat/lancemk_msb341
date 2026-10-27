@@ -477,6 +477,33 @@ function notesFor(snapshot, c) {
   return notes;
 }
 
+// The watch offer with one focus layer (spec FR-008, TD § 17, B-8): the highest-ranked default
+// candidate by the lesson ranking that isn't the focus layer, has a name no other layer shares,
+// isn't already at its suggested place (FR-007, or it would set no target), and has no Rotation or
+// Scale keys or its rest key within half a frame of the focus's check time (else the demo would
+// refuse not_at_rest, or the learner would move the playhead twice). The place is proposalFrom's
+// hinge rule. Null when none qualifies. Whether this is a first lesson is the prompt's (the record).
+export function watchOffer(snapshot, list, focusLayer, focusTime, { exclude = [] } = {}) {
+  const tol = halfFrame(snapshot);
+  const skip = [...exclude, { layer: focusLayer, property: "Anchor Point" }];
+  for (;;) {
+    const offer = proposalFrom(list, { exclude: skip });
+    if (!offer) return null;
+    skip.push({ layer: offer.layer, property: "Anchor Point" });
+    if (byName(snapshot, offer.layer).length !== 1) continue;
+    const c = list.find((x) => x.layer === offer.layer);
+    const t = c.check_time.time;
+    if (c.keyed.rotation || c.keyed.scale) {
+      if (!isNum(t) || !isNum(focusTime) || Math.abs(t - focusTime) > tol) continue;
+    }
+    const sample = isNum(t) ? sampleAt(byIndex(snapshot, c.index), t) : null;
+    const rect = rectOf(sample, c.kind);
+    if (!sample || !rect || !pair(sample.anchor)) continue;
+    if (inPlace(sample.anchor, rect, offer.suggested_place)) continue;
+    return offer;
+  }
+}
+
 // The analyzer session.start() calls (spec 004 contract › 4). `skill_options.focus`: one or two
 // { layer, place, rest_time? }, entry 0 the learner's layer, entry 1 the one they care less about.
 export function analyze(snapshot, { focus_layers, exclude = [], skill_options = {} } = {}) {
@@ -485,6 +512,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
     known: info.known, candidates: [], proposal: null, focus: null, places: {}, check_times: {},
     already_there: [], targets: [], target_refs: [], demo_target: null,
     no_demo_reason: info.known ? "awaiting_focus" : "no_layer_info", needed_times: [], notes: [], focus_problems: [],
+    watch_offer: null,
   };
   if (!info.known) return empty;
 
@@ -549,6 +577,12 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
   const demo = ordered.find(isDefault) || null;
   result.demo_target = demo ? `anchor/${demo.index}` : null;
   result.no_demo_reason = demo ? null : targetEntries.length ? "not_a_default_candidate" : "awaiting_focus";
+  // One focus layer that is a target: the watch offer (FR-008). Two focus layers, or one that's
+  // already there or refused: none.
+  if (focus.length === 1 && targetEntries.length === 1) {
+    const f = targetEntries[0];
+    result.watch_offer = watchOffer(snapshot, list, f.layer, f.check_time.time, { exclude });
+  }
   result.candidates = list.map(publicCandidate);
   return result;
 }

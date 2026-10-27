@@ -112,6 +112,9 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
     no_demo_reason: noDemo,
     notes,
     ...(base.rest_time_not_a_key ? { rest_time_not_a_key: base.rest_time_not_a_key } : {}),
+    // FR-008: the one layer to offer a watch on, with one focus layer; never in a review or once
+    // the demo is spent, whatever the analysis gave.
+    watch_offer: review || s.demo ? null : base.watch_offer ?? null,
     reads,
   });
 }
@@ -201,7 +204,8 @@ export const TOOLS = [
     description:
       "Read the active comp and start or continue the pivot lesson. Returns every layer's candidacy with a reason, one " +
       "proposal with a suggested place, the focus layers' places, check times (the rest key on a layer with Rotation or " +
-      "Scale keys), what's already in place, the targets, the demo_target and notes. Call again with skill_options when " +
+      "Scale keys), what's already in place, the targets, the demo_target, notes, and watch_offer (with one focus layer in " +
+      "a lesson, the other layer to offer a watch on and its place, or null). Call again with skill_options when " +
       "the learner names a layer and a place. fresh: true restarts the lesson before any demo or check.",
     inputSchema: {
       type: "object",

@@ -395,3 +395,70 @@ test("T245: neededTimes leaves out every layer that already moves, so Mentor Pra
   assert.deepEqual([...new Set(rest)].sort((x, y) => x - y), got);
   assert.ok(!got.includes(2.4) && !got.includes(5.367), "Card's and Tile's rest keys drop out with them");
 });
+
+// ---- T249: the watch offer with one focus layer (spec FR-008, TD § 17, B-8)
+
+test("T249: watch_offer is the answer key's for Door (Needle) and Pop (Door), and null with two focus layers or none", () => {
+  for (const name of ["door", "pop", "door_and_needle"]) {
+    const want = KEY.watch_offer[name];
+    const a = analyze(P2, { skill_options: { focus: want.focus } });
+    assert.deepEqual(a.watch_offer, want.watch_offer, name);
+    if (want.focus_check_time !== undefined) assert.equal(a.check_times[want.focus[0].layer].time, want.focus_check_time, `${name}'s check time`);
+  }
+  assert.equal(analyze(P2).watch_offer, null, "no focus yet");
+  assert.equal(analyze(P2, { skill_options: { focus: [{ layer: "Door", place: "center" }] } }).watch_offer, null, "the one focus layer is already there: no target, no offer");
+  assert.equal(analyze(P2, { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } }).watch_offer, null, "the one focus layer is refused: no offer");
+});
+
+// Synthetic Measures (unkeyed solids at time 0): Bar 800 x 60, Needle 30 x 400 (tall), Line, Big,
+// and Mirror (flipped, so it ranks last). `keep` names the layers left; the rest are dropped.
+function measuresWith(keep, change = () => {}) {
+  const s = clone(synthetic("measures"));
+  s.layer_info = s.layer_info.filter((l) => keep.includes(l.name));
+  change(s);
+  return s;
+}
+// Scale keys at 1 s and 2 s, full size at `restTime` and half size at the other, with samples there.
+function scaleKeys(s, name, restTime) {
+  const e = s.layer_info.find((l) => l.name === name);
+  const other = restTime === 1 ? 2 : 1;
+  e.samples.push({ ...clone(e.samples[0]), time: restTime });
+  e.samples.push({ ...clone(e.samples[0]), time: other, scale: [50, 50, 100] });
+  const keys = [{ time: other, value: [50, 50, 100] }, { time: restTime, value: [100, 100, 100] }]
+    .sort((x, y) => x.time - y.time).map((k, i) => ({ index: i + 1, ...k }));
+  s.layers.push({ index: e.index, name, properties: [{ path: "ADBE Transform Group/ADBE Scale", name: "Scale", expression_enabled: false, keys }] });
+}
+const BAR = [{ layer: "Bar", place: "middle-left" }];
+
+test("T249 synthetic: the focus the only default candidate gives no offer", () => {
+  const s = measuresWith(["Bar"]);
+  const a = analyze(s, { skill_options: { focus: BAR } });
+  assert.deepEqual(a.targets, [`anchor/${indexOf(s, "Bar")}`]);
+  assert.equal(a.watch_offer, null);
+});
+
+test("T249 synthetic: the next-ranked layer already at its suggested place is passed over for the one after it", () => {
+  const plain = measuresWith(["Bar", "Needle", "Line"]);
+  assert.deepEqual(analyze(plain, { skill_options: { focus: BAR } }).watch_offer, { layer: "Needle", suggested_place: "bottom-middle" });
+  // Needle's rectangle drawn up from [0, 0], with the pivot at [0, 0]: still where AE put it (D-3), so
+  // still rank 2, but already at the middle of its bottom edge.
+  const there = measuresWith(["Bar", "Needle", "Line"], (s) => {
+    const n = s.layer_info.find((l) => l.name === "Needle").samples[0];
+    n.rect = { left: -15, top: -400, width: 30, height: 400 };
+    n.anchor = [0, 0, 0];
+  });
+  assert.equal(candidates(there).find((c) => c.layer === "Needle").rank, 2);
+  assert.deepEqual(analyze(there, { skill_options: { focus: BAR } }).watch_offer, { layer: "Line", suggested_place: "middle-left" });
+});
+
+test("T249 synthetic: a Scale-keyed next layer is offered only when its rest key is on the focus's check time", () => {
+  // Bar (the focus) rests at 1 s; Needle's Scale rests at 2 s or 1 s; Mirror (flipped, unkeyed) ranks after.
+  const off = measuresWith(["Bar", "Needle", "Mirror"], (s) => { scaleKeys(s, "Bar", 1); scaleKeys(s, "Needle", 2); });
+  const offA = analyze(off, { skill_options: { focus: BAR } });
+  assert.equal(offA.check_times.Bar.time, 1);
+  const ranked = candidates(off).filter((c) => c.bucket === "default").sort((x, y) => x.rank - y.rank).map((c) => c.layer);
+  assert.deepEqual(ranked, ["Bar", "Needle", "Mirror"]);
+  assert.deepEqual(offA.watch_offer, { layer: "Mirror", suggested_place: "middle-left" }, "Needle's rest key is at another time: skipped");
+  const on = measuresWith(["Bar", "Needle", "Mirror"], (s) => { scaleKeys(s, "Bar", 1); scaleKeys(s, "Needle", 1); });
+  assert.deepEqual(analyze(on, { skill_options: { focus: BAR } }).watch_offer, { layer: "Needle", suggested_place: "bottom-middle" }, "on the focus's check time: offered");
+});
