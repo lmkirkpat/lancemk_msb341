@@ -366,7 +366,12 @@ All of TD § 6, counting the demo layer.
   with no parent (N2; a null with a parent is handled below); and, only when a region was named, its anchor point in comp space is in that region of the
   **group's combined bounds** at the before-read time, using spec 004 FR-028's per-axis rule (10%
   of the group's width across, 10% of its height up and down) (N3, S-5). "It'll only slide" is a
-  valid answer and skips N3 until FR-016.
+  valid answer and skips N3 until FR-016. **The null's place is its anchor point** (for an
+  unparented null, its Position), never the middle of its square: at 26.5 a new null's anchor is
+  the square's top-left corner (L-1), so a square centred on the group's middle puts the anchor
+  50 px up and left of it, and N3 reads that as missed (amended 2026-10-26 from the live sitting;
+  the check already reads the anchor, and the stored null's anchor is (0, 0) in the tests,
+  `4234c7e`).
   **A null with a parent** (N2, TD § 14): the parent **moves** when any layer above the null in its
   chain has `moves_children` true in the before read or the check read. Then the null is out of the
   lesson: the mentor says in one sentence that the null follows that layer, so the lesson can't
@@ -478,7 +483,9 @@ All of TD § 6, counting the demo layer.
 - **FR-020 (comments, never graded)**: After a pass, one sentence each only when the read shows it:
   the null's move is linear; it's held (asked, as a question); it overlaps a focus layer's own
   Position, Scale or Rotation keys in time (stacked motion, from the map's `own_keys` and the
-  null's key times); the null still has a default name ("Null 1" and the like); the null's scale
+  null's key times); the null still has a default name ("Null" and a number: AE carries the number
+  on from the project's other nulls, so it's often not 1, L-1; amended 2026-10-26 from the live
+  sitting); the null's scale
   isn't uniform; the null's scale is 0 on a dimension at a key; the null's opacity is **keyed, or
   set between 0 and 100 (exclusive)**, while a child's isn't, and a null's static Opacity of 0
   never counts (amended 2026-10-26 from the live sitting: AE 26.5 makes every new null at
@@ -513,6 +520,25 @@ All of TD § 6, counting the demo layer.
   default size or anchor, never teach Option or Shift while parenting, and never mention Quick
   Offset, until L-1 has logged each at 26.5. The missing-prerequisite behaviour is TD § 3 and spec
   004 FR-005.
+  **L-1's notes (amended 2026-10-26 from the live sitting):**
+  - *Logged at 26.5:* the column reads "Parent & Link"; the Parent pick whip's tooltip reads
+    "Parent pick whip (select layer from which to inherit transforms)". A new null is a 100 × 100
+    square at the comp's center, at the top of the stack, with its **anchor at the square's
+    top-left corner, on its Position** (so the null's place is that corner, not the square's
+    middle; FR-009), **Opacity 0** (FR-020), and the name "Null N", where N carries on from the
+    project's other nulls (Null 12, 13 and 41 in the sitting), 1 only in a project with no nulls.
+    The prompt uses the null's name from the tools, never an assumed "Null 1".
+  - *Option and Shift, a caution only:* holding Option while parenting keeps the child's raw
+    values and only sets the parent, so the child jumps by the null's place (off the comp in the
+    sitting); holding Shift rewrites the child's Position keys so its first key sits on the null,
+    so it snaps onto the null. Both undo as one step under the same label as a plain parent. The
+    prompt MAY warn against holding a key while parenting and MAY ask once, in the jumped hint,
+    whether a key was held (TD § 7's jump row allows it once B-4 confirms); it MUST NOT suggest
+    either key, name either as the cause, or teach them as a technique (TD § 8, § 10). P1 to P3
+    catch both jumps as they are; nothing in the check changes.
+  - *Still out:* **Quick Offset** wasn't logged at L-1, so it stays out of the lesson.
+  - *Open:* whether the mentor may tell the learner where the null's anchor sits (TD § 10 says the
+    mentor doesn't describe the null's defaults) is the designer's call: Open questions › D-4.
 - **FR-024 (review)**: `null_parent_snapshot` with `mode: "review"` MUST drop every layer in the
   record's past targets for this skill on this comp and project, and every layer already parented,
   before proposing by FR-005; its target is FR-005's first group, never a crowd and never
@@ -630,7 +656,7 @@ learner each see, and the reused filters.
 | 37 | A candidate that parents other layers (Plate) | Candidate | Its children move with it and the null; named once as other changes | "Shadow follows Plate, so it'll come along" | Right with FR-021. Test on 2b |
 | 38 | A layer outside the focus parented to the null | n/a | Other change (FR-021) | Named, not graded | **Gap fixed by FR-021** (easing's list doesn't see parents). Test |
 | 39 | The demo undone, then parented by the learner | n/a | Theirs (FR-018) | | Right. Test |
-| 40 | The lesson's null shares its name with another layer (AE numbers new nulls, so a second "Null 1" is easy) | n/a | Name not unique: nothing stored, N1 to N3 and P1 to P3 not run; the rename isn't graded or an other change | One sentence: rename the null just added (TD § 14 D-3); never "which one is it?" | **Gap fixed by FR-019** (filter 3: name matching can't tell two layers of one name apart). Synthetic test: two nulls named "Null 1", then the renamed capture stores the null and checks |
+| 40 | The lesson's null shares its name with another layer (amended 2026-10-26 from the live sitting: AE 26.5 carries a new null's number on from the project's other nulls, L-1, so AE's own naming rarely repeats one in a comp; a shared name comes another way, a rename for one, and the row stays) | n/a | Name not unique: nothing stored, N1 to N3 and P1 to P3 not run; the rename isn't graded or an other change | One sentence: rename the null just added (TD § 14 D-3); never "which one is it?" | **Gap fixed by FR-019** (filter 3: name matching can't tell two layers of one name apart). Synthetic test: two nulls named "Null 1", then the renamed capture stores the null and checks |
 
 ## Live checks (builder, needs After Effects; not guesses)
 
@@ -662,6 +688,25 @@ T135. Results go in the hand-back and the skill's fixture README.
   the human chose to change **the rule, not the layout** (TD § 15), because a learner's real comp
   is crowded the same way. If the live read still doesn't give TD § 15's table, it goes back to
   the curriculum designer as a rule question; the practice comp's layers aren't moved.
+
+**Results (amended 2026-10-26 from the live sitting,
+[live-sitting-2026-10-26.md](live-sitting-2026-10-26.md)):** nothing found changes a requirement;
+the facts below change how FR-009, FR-020, FR-023 and rows 15, 22 and 40 are worded.
+
+- **L-1**: logged; the facts are in FR-023's notes (the null's square, anchor top-left on its
+  Position, Opacity 0, "Null N"; "Parent & Link"; Option keeps raw values and jumps, Shift snaps
+  onto the null, both one undo). Quick Offset not logged.
+- **L-2**: Position, Scale and the unkeyed Rotation were all rewritten (Scale ÷ 1.5, Rotation
+  −30°); key times and counts unchanged; footprints within 0.001 px. SC-006 on
+  `parented-rot.json` passes.
+- **L-3**: the demo moved Tile 0 px, one Edit > Undo ("Undo AE Mentor: null-parent-demo"); no
+  snippet fix. The Position pick whip, unkeyed and keyed, reads as an expression on Position with
+  no parent, so row 3's hint fires either way (`pickwhip-position-hand.json`,
+  `pickwhip-position-keyed-hand.json`).
+- **L-4**: answered by spec 004 T158 (rotation read excludes auto-orient); auto-oriented layers
+  stay out (FR-004).
+- **L-5**: passes; every focus layer found by name after the renumbering.
+- **L-6**: passes; TD § 15's table on the live comp.
 
 ## Success Criteria *(mandatory)*
 
@@ -716,7 +761,10 @@ teaching.
 10. **Visible parent**: the hint names who drags whom.
 11. **Comments**: linear move, held move (asked), stacked motion, default name; never graded.
 12. **Version trap** (spec 004 FR-030): no Shift+F4, no null defaults, no Option/Shift parenting
-    before L-1; the menu path for Null Object.
+    before L-1; the menu path for Null Object. After L-1 (amended 2026-10-26 from the live
+    sitting): never suggests holding Option or Shift and never names a held key as the cause (one
+    question in the jumped hint is fine, FR-023); never Quick Offset; uses the null's real name
+    from the tools, not an assumed "Null 1"; the null's defaults only as D-4 settles.
 13. **Missing prerequisite**: skill 5 not learned; named and offered; on insistence one sentence.
 14. **Incomplete attempt**: names what's still off and where; doesn't fix or offer to.
 15. **"Do the rest"**: declined warmly, no offer later.
@@ -808,6 +856,19 @@ case 3, the matte, KD-001).
    the same one-sentence rename ask, for the null just added, at the stage 3 check; never graded,
    never done by the mentor; the null isn't stored until its name is unique (FR-007, FR-019,
    row 40). Folded in 2026-10-24.
+4. **D-4, telling the learner where the null's anchor sits** (open; raised 2026-10-26 from the
+   live sitting). TD § 10 says the mentor doesn't describe the null's defaults, and B-4 says "until
+   then [L-1] the mentor says none of it". L-1 has now logged them: a new null's anchor is its
+   square's **top-left corner**, on its Position. N3 measures the anchor, so a learner who centres
+   the square on the group's middle puts the anchor 50 px up and left, which misses the middle on
+   a group the size of Tile, Caption and Stamp (230 × 130 px: 10% is 23 px across). The skill
+   prompt (`3864ac5`) already says the null's place is that corner when they drag it. Should
+   § 10 let the mentor say so? **Recommended: yes, one sentence at stage 3**, when the learner
+   places the null ("the null's pivot is the top-left corner of its square, so put that corner
+   on the spot"), and in the `pivot_region` hint; never its size. If the designer says no, the
+   prompt's sentence comes out and N3's misses are left to the existing hint. Also for § 10 and
+   § 7's jump row: B-4 is answered (Option and Shift both jump; FR-023's notes), so "unverified"
+   can go.
 
 ### Settled here
 

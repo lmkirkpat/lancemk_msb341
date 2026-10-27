@@ -219,6 +219,10 @@ are still open, so every live task here comes after them.
   it (right-click a column heading, Columns); "the pick whip in the Parent column"; never Shift+F4;
   no null defaults, no Option or Shift while parenting, no Quick Offset until L-1 logs each
   (`<!-- L-1 -->` places).
+  **Amended 2026-10-26 from the live sitting:** L-1 logged the null's defaults (anchor top-left on
+  its Position, Opacity 0, "Null N"), the column and tooltip labels, and Option and Shift (both
+  jump); the prompt uses them as spec FR-023's notes say (Option and Shift a caution only, the
+  anchor pending D-4). Quick Offset wasn't logged and stays out.
 
 ## R12. The live sitting
 
