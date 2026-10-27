@@ -1,14 +1,14 @@
 {
-  "id": "x03-stopwatch-on",
-  "title": "Anchor Point's stopwatch left on: the hint says to turn it off and keep the pivot",
+  "id": "28-locked-layer",
+  "title": "A locked layer: unlock it first",
   "covers": [
     "EXTRA",
-    "FR-019"
+    "FR-014"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
     "practice2b.json": "live",
-    "stopwatch.json": "live"
+    "door-locked.json": "live"
   },
   "turns": [
     {
@@ -20,21 +20,21 @@
       "say": "Door should turn from the middle of its left edge."
     },
     {
-      "project": "stopwatch.json",
-      "say": "I set it. Done."
+      "project": "door-locked.json",
+      "say": "I tried. Done."
     }
   ],
   "expect": {
     "last_check": {
       "passed": false,
       "has": [
-        "stopwatch"
+        "locked"
       ]
     },
     "say": [
       {
-        "id": "stopwatch",
-        "must": "stopwatch",
+        "id": "unlock",
+        "must": "unlock|locked",
         "turns": [
           3
         ]
@@ -49,7 +49,7 @@
     ]
   },
   "rubric": [
-    "R-AN-STOPWATCH",
+    "R-AN-LOCKED",
     "R-HINT-NOT-FIX"
   ]
 }

@@ -13,8 +13,7 @@ options and results format; everything skill-specific is in the `CONFIG` block a
 The set now runs on the live captures of Mentor Practice 2 (comp 179, `mentor/test/fixtures/anchor/`,
 `practice2b.json` the base) plus a few synthetic fixtures. Nothing points at the stand-ins or comp 300
 (deleted on `skill-5-anchor`). Case numbers are the spec's Eval plan (spec 011 > Eval plan); 21, 23 and 24
-have variants (a, b, c). Seven cases from the first set are not in the Eval plan and carry `x01` to
-`x07` until the cockpit assigns numbers. **No baseline**: that waits until skill 5 merges after the review
+have variants (a, b, c). Seven cases from the first set are not in the Eval plan and are numbered 25 to 31 (assigned by the cockpit). **No baseline**: that waits until skill 5 merges after the review
 lesson (T240). The smoke run of the changed and added cases is at the end of this file.
 
 ## Running
@@ -60,7 +59,7 @@ words (1-based `turns`, default all; case-insensitive unless `cs`).
 
 ## Cases
 
-Numbers are the spec's Eval plan; `x` cases are kept from the first set and have no number yet. Turns is
+Numbers are the spec's Eval plan; cases 25 to 31 are kept from the first set (not in the Eval plan). Turns is
 the number of mentor turns. Fixtures: `live` (a capture) or `synthetic` (derived, see below).
 
 | # | Case | Turns | Fixtures | Rubric |
@@ -94,13 +93,13 @@ the number of mentor turns. Fixtures: `live` (a capture) or `synthetic` (derived
 | 24 | A one-key layer named, rest key on another frame (round 4): the two-frames sentence once with both times (3.7, 4.2), "set the pivot before you key", another layer offered; no check or demo; never "other keys" or "jump" | 2 | synthetic | R-AN-TWO-FRAMES |
 | 24b | Same, but the learner names their own rest pose (4.167 s) while the tool's rest key is on the Position key: the sentence uses their time and passes `rest_time` | 2 | synthetic | R-AN-TWO-FRAMES |
 | 24c | No layer named: the two-frames sentence never appears in the opening; never "other keys" about Sled or "jump" | 2 | synthetic | R-AN-LEAVE-OUTS |
-| x01 | A matte's eye left on after a pass: the eye sentence | 3 | live + synthetic | R-AN-MATTE-EYE |
-| x02 | Two focus layers (Door, Tab): A and Shift+P, one demo on Tab, frames at the same time, Edit > Undo | 4 | live | R-AN-DEMO, R-DEMO-PLAIN |
-| x03 | Anchor Point's stopwatch on | 3 | live | R-AN-STOPWATCH |
-| x04 | Door locked | 3 | live | R-AN-LOCKED |
-| x05 | 'What numbers do I type?': no number, no tolerance | 3 | live | R-AN-NO-NUMBER |
-| x06 | Stops early after a failed try: recorded partial, plain words | 4 | live | R-RECORD-HONEST |
-| x07 | After Effects can't be reached: nothing claimed | 1 | none | R-UNREACHABLE |
+| 25 | A matte's eye left on after a pass: the eye sentence | 3 | live + synthetic | R-AN-MATTE-EYE |
+| 26 | Two focus layers (Door, Tab): A and Shift+P, one demo on Tab, frames at the same time, Edit > Undo | 4 | live | R-AN-DEMO, R-DEMO-PLAIN |
+| 27 | Anchor Point's stopwatch on | 3 | live | R-AN-STOPWATCH |
+| 28 | Door locked | 3 | live | R-AN-LOCKED |
+| 29 | 'What numbers do I type?': no number, no tolerance | 3 | live | R-AN-NO-NUMBER |
+| 30 | Stops early after a failed try: recorded partial, plain words | 4 | live | R-RECORD-HONEST |
+| 31 | After Effects can't be reached: nothing claimed | 1 | none | R-UNREACHABLE |
 
 Dropped from the first set: the Sled-slid case (old 15). Since D-4 no lesson can reach Sled with three keys
 (`sled-slid` is a unit-test fixture), so cases 13 and 22 replace it.
@@ -108,7 +107,7 @@ Dropped from the first set: the Sled-slid case (old 15). Since D-4 no lesson can
 - **Synthetic fixtures** are built from live files by `fixtures/build.mjs` (run it to regenerate them; the
   output is committed): `sled-one-key-rest-away.json` and `sled-one-key-rest-on-key.json` (24, 24b, 24c: the live
   `sled-one-key-before.json` with Scale or Rotation keys written onto Sled), `door-pass-matte-eye-on.json`
-  (x01: the live `door-pass.json` with the one field `matte-eye-on.json` changes), and two records
+  (25: the live `door-pass.json` with the one field `matte-eye-on.json` changes), and two records
   (`every-layer-done.json` for 17, `anchor-passed-not-due.json` for 23b). Mentor Practice 2 has no one-key
   layer, so 24 has no live evidence yet (spec 011 round 4). `synthetic/edge-before.json` and `row27-no-rect.json`
   (18) are the builder's.
@@ -120,7 +119,7 @@ Dropped from the first set: the Sled-slid case (old 15). Since D-4 no lesson can
 - **Wording drift.** The two-frames sentence is said verbatim in TD section 18; the model sometimes
   paraphrases ("before you add keys", "two times"). Case 24b accepts a few variants of "before you key", 24 does not.
 - **Watch offers** are detected with `ANY_OFFER` ("show you", "watch me/one/it", "could show") in 16, 17, 23b
-  and x02, and with `Needle` next to "show" or "watch" in 11, 23a.
+  and 26, and with `Needle` next to "show" or "watch" in 11, 23a.
 
 ## The fixture tell
 
@@ -177,7 +176,7 @@ Only five of the 36 cases ran; the other cases are dry-run clean and were not ru
 | 8 | 13 | FAIL ($0.45) | **Rubric, real, not about Sled.** R-ONE-IDEA: turn 1 packs the memory recap, the pivot idea, the intent question, a proposal and a three-bullet list. All deterministic checks passed. R-ONE-IDEA removed from 13 and 24 (one reason per case); not re-run |
 | 9 | 11 | pass ($0.74) | One offer, last sentence of the invite turn, on Needle; no demo; a walk-through on turn 3 |
 
-Not run: 23a, 23b, 23c, 22, 19, 20, 21a, 21b, 17, 16 (with `quiet_before_tool`), 06, 07, x01, x02 and the rest. Their
+Not run: 23a, 23b, 23c, 22, 19, 20, 21a, 21b, 17, 16 (with `quiet_before_tool`), 06, 07, 25, 26 and the rest. Their
 checks are dry-run validated only.
 
 ## Reading results

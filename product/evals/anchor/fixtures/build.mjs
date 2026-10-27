@@ -43,7 +43,7 @@ write("sled-one-key-rest-on-key.json", sled(
     prop("ADBE Rotate Z", [key(1, 3.667, 0), key(2, 4.167, 90)]),
   ]));
 
-// Extra x01: a pass with the matte's eye left on. The live matte-eye-on.json has the eye change
+// Case 25: a pass with the matte's eye left on. The live matte-eye-on.json has the eye change
 // only (Door untouched), so this is the live door-pass.json with the one field matte-eye-on changed
 // (Reveal Matte's `enabled`, false to true) copied across.
 {
@@ -53,7 +53,7 @@ write("sled-one-key-rest-on-key.json", sled(
   const i = base.layer_info.findIndex((l, n) => l.enabled !== eye.layer_info[n].enabled);
   if (base.layer_info[i].name !== "Reveal Matte") throw new Error("expected the eye change on Reveal Matte");
   pass.layer_info[i].enabled = eye.layer_info[i].enabled;
-  pass.synthetic = "Extra x01: live door-pass.json with Reveal Matte's eye switched on, as live matte-eye-on.json has it.";
+  pass.synthetic = "Case 25: live door-pass.json with Reveal Matte's eye switched on, as live matte-eye-on.json has it.";
   write("door-pass-matte-eye-on.json", pass);
 }
 
