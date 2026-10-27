@@ -227,15 +227,11 @@ start.
    - **They reordered the layers in the stack** (the order in the Timeline panel changed, the
      times didn't): "The order in the stack isn't when they move. Their keys still start
      together."
-   - **The gap they stated vs. the gap the check measured:** only when the check passed
-     (`passed`); otherwise the other bullets here run and their stated gap stays as it is. When
-     `gaps_frames` doesn't match the gap they gave you in step 3 and no demonstration has run,
-     call `offset_snapshot` again with the whole `skill_options`, its `gap_frames` now the
-     measured gap (the first one if they differ, to the nearest whole frame, with a half frame
-     rounded down). This re-read is part of the check: don't say you're picking up where you left
-     off. If its `floor_check` says the gap is under the floor, give step 3's floor hint instead.
-     Otherwise say the gap back as measured, as theirs, never as advice ("you went with about
-     [the measured gap] frames").
+   - **The gap they stated vs. the gap the check measured:** only after a pass (`passed`). When
+     `gaps_frames` doesn't match the gap they gave you in step 3, say the gap back from
+     `gaps_frames` (the first one if they differ, to the nearest whole frame), as theirs, never as
+     advice ("you went with about [the measured gap] frames"). Nothing is re-sent and nothing is
+     read again. Before a pass, the other bullets here run and nothing is re-sent.
    - Mention `other_changes` briefly, without treating them as mistakes.
    - If `comp_matches` is false, don't grade: ask them to switch back to `lesson_comp` by name and
      say "done" again.
