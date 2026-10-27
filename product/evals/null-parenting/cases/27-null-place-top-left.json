@@ -52,7 +52,6 @@
   },
   "rubric": [
     "R-NULL-CORNER",
-    "R-NAMES-REAL",
-    "R-ONE-IDEA"
+    "R-NAMES-REAL"
   ]
 }
