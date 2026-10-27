@@ -9,6 +9,10 @@
 **Status**: Approved 2026-10-24. The builder took every recommendation: Q1 (below) and SR-2
 (spec 004 tasks-wave-b.md T164, T165). Amended 2026-10-26 with the spec (Changes 2026-10-26): the
 second read is the usual case on Mentor Practice 2, and tasks T241 to T244 before the live lessons.
+Rounds 2 to 4 (2026-10-26, spec › Changes) add tasks.md › Phases 8c (T245 to T248), 8d (T249 to
+T253) and 8e (T254 to T256: `moves_case` for D-8, the full-frame test for D-9, and `SKILL.md`'s
+two-frames sentence), all skill-builder work on the build branch, in step 3's place in the table
+below.
 
 ## Summary
 

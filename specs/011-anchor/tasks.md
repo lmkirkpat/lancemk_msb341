@@ -8,7 +8,9 @@ description: "Task list for spec 011: skill 5, set the pivot"
 SR-2 (spec 004 T164, T165). Ready for the skill builder. **Amended 2026-10-26** (spec › Changes
 2026-10-26): Phase 8b, T241 to T244, before the live lessons; awaiting the builder's approval.
 **Round 3 (2026-10-26):** Phase 8d, T249 to T253 (the watch offer; the lesson-start speed), from
-spec › Changes › round 3; the builder approved both items.
+spec › Changes › round 3; the builder approved both items. **Round 4 (2026-10-26):** Phase 8e,
+T254 to T256 (D-8's two-frames sentence with `moves_case`; D-9's full-frame test), from spec ›
+Changes › round 4; the builder approved D-8 and D-9.
 
 **Input**: Design documents from `specs/011-anchor/`
 
@@ -217,6 +219,22 @@ and the captures, never copied from the code's output.
 
 ---
 
+## Phase 8e: Round 4 of 2026-10-26 (skill-builder on `skill-5-anchor`; desk, no 🖐)
+
+From spec › Changes › round 4: D-8 and B-9 (TD § 18; spec FR-004 `moves_case`, FR-009, US2 #6,
+row 5b) and D-9 (TD § 18; spec FR-008). Same add-only rule: every file below is one this branch
+added. **T254 and T256 block HO-1** (case 24 reads `moves_case`). **T255 blocks nothing.** None
+blocks T240 or the live lessons. No live evidence exists for the one-key case (Mentor Practice 2
+has none): its fixtures are synthetic, built from `sled-one-key-before` like T246's, and marked
+so. Answer-key values are derived by hand from the spec and the fixtures, never copied from the
+code's output.
+
+- [ ] T254 [US2] `moves_case` (spec FR-004 › Which `position_moves` case, B-9; data-model › Candidate and › Analyzer result `focus_problems`; contracts › `anchor_snapshot`): in `mentor/lib/anchor.mjs`, every candidate entry with reason `position_moves` carries `moves_case`, `"two_or_more"` or `"one_key_off_rest"`; the second also carries `position_key_time` (the one key's time) and `rest_time` (the time the rule compared against: the learner's `rest_time` when the focus gave one and it was used, else the tool's rest key). `focus_problems` entries with reason `position_moves` carry the same fields. No entry with another reason carries any of them; bucket, reason, precedence and `neededTimes` unchanged. Have `positionRule()` (or a helper beside it) give the case, so the rule lives in one place. `mentor/tools/transform-anchor.mjs` adds the three fields to its `candidates` output only when present. Answer key (`answer-key.json`), by hand: Sled on `practice2b` and every other `position_moves` layer there → `two_or_more`; Mentor Overlaps' Wipe (a matte) and Locked Bar → `two_or_more` (the precedence case). Tests in `anchor-candidates.test.mjs`, extending T246's synthetics on `sled-one-key-before`: one key at 3.667 with Scale's rest key at 4.167 → `one_key_off_rest`, 3.667, 4.167; with the rest key at 3.667 → `position_keyed`, none of the fields; Rotation's rest key on the key and the learner's `rest_time` 4.167 → the candidate (with that `rest_time`) and `focus_problems` both `one_key_off_rest`, 3.667, 4.167; separated X at 1 s and Y at 2 s, and two hold keys → `two_or_more`, no times; Sled on `practice2b` as a focus → `focus_problems` with `two_or_more`; Door, Background (`full_frame`) and a matte → no `moves_case`. In `anchor-tools.test.mjs`: the fields in `anchor_snapshot`'s `candidates` and `focus_problems` on the synthetic, and absent on Door. Then `npm test`, `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`)
+- [ ] T255 [P] [US1] `watch_offer` never full-frame (spec FR-008, TD § 18 D-9): a test in `anchor-candidates.test.mjs` on a synthetic built from `practice2b` (marked synthetic): Door the one focus layer, and every other layer that isn't `never` removed or made `never` (say which), except Background (`full_frame: true`) → `watch_offer: null`; the same comp without `comp.width` and `comp.height` (`full_frame: null`) → Background, `middle-left` (no extra filter on `null`); FR-008's four answer-key cases still pass unchanged. The built `watchOffer()` already draws only from `default` candidates, so expect no code change; change `mentor/lib/anchor.mjs` only if the test fails, and say which in the hand-back. Then `npm test`, `check-branch.mjs` as T254
+- [ ] T256 [US2] `.claude/skills/anchor-mentor/SKILL.md`, after T254 (spec FR-004, FR-009, US2 #6; TD § 18 D-8): in the leave-out list, split the "already moves" line by `moves_case`: `two_or_more` keeps TD § 4's Sled line; `one_key_off_rest` gets TD § 18's two-frames sentence, verbatim, with `position_key_time` and `rest_time` written the way the file writes times ("at rest" is `rest_time`, which is the learner's own time when they named the rest pose). Both said once, when the learner names that layer; then offer the next candidate as usual. In the opening, with no layer named, a one-key layer stays under the general "already move" sentence (D-7), not the two-frames one. Never "its other keys" or "jump" about a one-key layer; never count keys or compare times in the prompt. Nothing else. Then `npm test`, `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`), `/agent-audit` on the file and fix what it finds there; hand back the diff for HO-3
+
+---
+
 ## Phase 9: Polish and hand-back
 
 - [ ] T238 Re-run T229's checks on the final branch (live fixtures, no stand-ins)
@@ -233,7 +251,9 @@ and the captures, never copied from the code's output.
   to T247 too (case 13 is now Sled as a leave-out; case 22, one key dragged off it, is new).
   **Round 3:** after T249 and T250 too (case 11 is now "none on the learner's layer; one offer on
   another"; case 16 adds no offer; case 23, the watch offer with variants no, already passed and
-  yes, is new). Not after T251 to T253.
+  yes, is new). Not after T251 to T253. **Round 4:** after T254 and T256 too (case 24, a one-key
+  layer named with its rest key on another frame, TD § 18's two-frames sentence, is new, on a
+  synthetic fixture built from `practice2b`; spec › Eval plan 24). Not after T255.
 - **HO-2 Curriculum designer:** `/overlap-audit` re-run on the built branch before HO-1: TD § 9
   against T228's tests on live fixtures, the rows marked **contract** re-confirmed against wave B's
   code as built, and L-1 to L-5's results.
@@ -243,10 +263,12 @@ and the captures, never copied from the code's output.
   (FR-019a, FR-019b, the rest hint); after T247, again on its diff (TD § 16's lines, the
   `position_moves` sentence, never "jump", and FR-019b's "not both lines"); after T250, on its diff
   (FR-008: one offer, one sentence, last in the invite turn; none after a pass, in a review, or a
-  second time).
+  second time); after T256, on its diff (TD § 18's sentence verbatim and only for
+  `one_key_off_rest`, once, never in the opening, never "its other keys" or "jump").
 - **HO-6 Curriculum designer (round 3, 2026-10-26):** D-8 (the "already moves" sentence on a
   one-key layer whose rest key is on another frame) and D-9 (the spec's reading of which layer
-  the watch is on), spec › Open questions › D. Wording and confirmation only; nothing waits.
+  the watch is on), spec › Open questions › D. **Done 2026-10-26** (TD § 18, `47c90bd`); tasked
+  as Phase 8e.
 - **HO-5 Curriculum designer (2026-10-26):** D-4 (Sled, two or more Position keys) and the TD
   wording list in spec › Open questions › D. **Done 2026-10-26** (TD § 16, `8ab6adc`); tasked as
   Phase 8c. New: D-5 to D-7 (wording only, spec › Open questions › D), not blocking; T247 uses
@@ -273,6 +295,8 @@ and the captures, never copied from the code's output.
 - Phase 8d (2026-10-26, round 3): T249 → T250 → HO-1. T251 → T252 → T253, blocking nothing (not
   HO-1, not T240, not the merge). The two chains can run in parallel; T251 needs the AE lock.
   T240 waits on nothing in Phase 8d.
+- Phase 8e (2026-10-26, round 4): T254 → T256 → HO-1. T255 any time, blocking nothing. None
+  blocks T240, the live lessons or the merge beyond HO-1.
 - HO-2 and HO-3 after T235; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
 
 ## Parallel opportunities
@@ -289,8 +313,8 @@ and the captures, never copied from the code's output.
 3. Phases 6–7 close the cloud part; Phase 8 is one sitting after spec 004's live tasks; Phase 9
    hands back.
 
-**Task count:** 53 (T201–T253): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
+**Task count:** 56 (T201–T256): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
 hand-back 3, live sitting 6, amendment 4 (2026-10-26), round 2 4 (2026-10-26), round 3 5
-(2026-10-26), polish 3. **🖐 live: 8** (T232, T233, T236, T237 in the sitting; T248 with T237;
+(2026-10-26), round 4 3 (2026-10-26), polish 3. **🖐 live: 8** (T232, T233, T236, T237 in the sitting; T248 with T237;
 T251 and T253; T240 a day or more later). Hand-offs: 6; requests: 1 (SR-2), plus SR-4 if T251
 calls for it.
