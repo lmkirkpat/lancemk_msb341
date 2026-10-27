@@ -152,6 +152,26 @@ Eight runs, total $3.02 (cases 01, 03, 06, 09, 17):
 Runs 1, 4 and 5 are case or check changes, not skill failures. Run 8 (and run 5's text) is a skill finding: see the hand-back.
 
 
+## Smoke results (2026-10-27, `main` at `e09012c` merged in; $8.08)
+
+Files are in `results/`. One run each unless marked.
+
+| Run | Result | Triage |
+|---|---|---|
+| 17 x3 (`2026-10-27-134132`) | **FAIL 0/3**, $1.28 | Hard rule, SC-014: `no_self_instructions` failed every run ("Review is due -> review mode" twice, "Learned and review due ->" once). Real |
+| 25 (`-134211`) | FAIL, $0.63 | Rubric only: R-ONE-IDEA, turn 2 (plan, why a stagger leads the eye, three methods). `gap_frames` 8 check passed |
+| 28 (`-135032`) | FAIL, $0.78 | The mechanics passed (one check, no snapshot after it, record accepted as passed). Rubric: R-OF-GAP-MEASURED, real: the mentor said the measured gap, then "if not, try it at 6 and compare", advice back to the stated gap. R-RECORD-HONEST: **my rubric bug**, it banned numbers while `SKILL.md` step 10 prescribes measured gaps; fixed (not re-run) |
+| 26 (`-140034`) | FAIL, $0.00 | Plumbing: `claude` timed out before the first turn. Not run; FR-041 is still untested |
+| 02 (`-140111`) | pass, $0.44 | First run on `practice2b.json` |
+| 11 (`-140142`) | FAIL, $0.53 | **My check bug**: `praises` wanted "Title"; the mentor named Scale and Position without the layer and said the pass. Widened (not re-run); the judge didn't run. `snapshot_calls_ok` passed |
+| 15 (`-140233`) | FAIL, $0.65 | Rubric, real: R-HINT-NOT-FIX and R-OFF-STILL-TOGETHER, the hint ends with "Dragging the whole bar, or selecting its keys and dragging them, does". `snapshot_calls_ok` passed |
+| 14 (`-140315`) | FAIL, $0.62 | Rubric, real: R-OFF-BAR-KEYS and R-HINT-NOT-FIX, the hint spells out dragging the bar or keys, a shift of "your 4 frames" and Edit > Undo. `snapshot_calls_ok` passed |
+| 23 (`-140415`) | FAIL, $0.84 | R-RECORD-HONEST only, the same rubric bug as 28 (measured gaps in the summary, as `SKILL.md` says). Fixed (not re-run). `snapshot_calls_ok` passed |
+| 27 (`-140458`) | FAIL, $1.09 | Rubric only: R-ONE-IDEA, turn 2. R-OF-STORED-CONFIRM passed and every deterministic check passed |
+| 19 (`-140532`) | pass, $0.59 | |
+| 10 (`-140611`) | pass, $0.63 | |
+
+
 ## Planned smoke list (for after the next `SKILL.md` change; nothing here has been run)
 
 Written 2026-10-26 when the three wave A sets were re-pointed to the live captures. **No paid run has

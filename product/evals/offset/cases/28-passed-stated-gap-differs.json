@@ -54,6 +54,13 @@
         "turns": [
           3
         ]
+      },
+      {
+        "id": "no_try_at_stated",
+        "never": "\\btry\\b[^.?!]{0,20}\\b(?:at|with|it at)\\s+(?:a\\s+)?(?:6|six|8|eight)\\b",
+        "turns": [
+          3
+        ]
       }
     ]
   },

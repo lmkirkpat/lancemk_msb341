@@ -143,6 +143,19 @@ Eight runs, $3.03, cases 01, 08, 10 and 17 (the first case of each kind plus a h
 Runs 1, 2, 4 and 5 are case or rubric changes, not skill failures, and the result files are kept.
 
 
+## Smoke results (2026-10-27, `main` at `e09012c` merged in; $3.72)
+
+Files are in `results/`. One run each unless marked.
+
+| Run | Result | Triage |
+|---|---|---|
+| 08 x3 (`2026-10-27-134155`) | **3/3 pass**, $1.49 | SC-014: `no_self_instructions` clean in all three. First runs on `practice2b.json` |
+| 19 (`-134230`) | FAIL, $0.59 | Rubric only: R-ONE-IDEA, turn 3 is a lecture (reading confirmation, a blank-frame aside, a "how shaping works" block, a drag-sideways warning and the task). The new rubric item R-SG-READ-TIME passed and every deterministic check passed |
+| 10 (`-135037`) | pass, $0.42 | |
+| 11 (`-140041`) | FAIL, $0.00 | Plumbing: `claude` timed out (ETIMEDOUT) before the first turn. Not run; needs a re-run |
+| 20 (`-140129`) | pass, $1.22 | FR-047 end to end on the merged tools: the first call sends no options (turns 1 and 4), no turn 4 call clears `land_hard`, the pair is named and confirmed. Both new runner checks passed |
+
+
 ## Planned smoke list (for after the next `SKILL.md` change; nothing here has been run)
 
 Written 2026-10-26 when the three wave A sets were re-pointed to the live captures. **No paid run has

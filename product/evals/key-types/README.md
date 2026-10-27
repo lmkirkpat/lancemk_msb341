@@ -140,6 +140,19 @@ Six runs, total $2.88 (cases 01, 02, 07, 11, 16):
 After the smoke runs the universal `no_self_instructions` check was added (it catches a leaked step such as "Review is due -> run the review"). Run 3's transcript (case 16) contains exactly that, "Key types learned, review due -> run the review.", before its first tool call, so case 16 would fail it now; it has not been re-run (budget).
 
 
+## Smoke results (2026-10-27, `main` at `e09012c` merged in; $3.64)
+
+Files are in `results/`. Case 10 is retired and was not run.
+
+| Run | Result | Triage |
+|---|---|---|
+| 16 x3 (`2026-10-27-134116`) | **FAIL 0/3**, $1.14 | Hard rule, SC-014: `no_self_instructions` failed every run: "Review is due. Go to review." (twice) and "Review is due -> review mode", written between `read_learner_record` and the first snapshot. Real. See the hand-back |
+| 01 (`-134135`) | pass, $0.19 | First run on `practice2b.json` |
+| 05 (`-134221`) | FAIL, $0.61 | Rubric only: R-ONE-IDEA, turn 2 recaps the three pairs, mentions the failed frames, teaches what a hold looks like and gives two methods. Deterministic checks passed |
+| 12 (`-140047`) | FAIL, $0.70 | Plumbing: the judge timed out. Every deterministic check passed (not_linear, names the Spinner). Needs a judge re-run; the Blink regression question is still open |
+| 20 (`-140135`) | FAIL, $1.00 | Rubric only: R-ONE-IDEA, turn 2. R-KT-STORED-CONFIRM passed and every deterministic check passed |
+
+
 ## Planned smoke list (for after the next `SKILL.md` change; nothing here has been run)
 
 Written 2026-10-26 when the three wave A sets were re-pointed to the live captures. **No paid run has

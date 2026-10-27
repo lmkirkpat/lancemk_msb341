@@ -1,0 +1,52 @@
+{
+  "run_at": "2026-10-27T20:00:34.462Z",
+  "options": {
+    "only": "26",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "26-how-does-quick-offset-work",
+      "title": "\"How does Quick Offset work?\" on 26.5: only what the lesson confirmed live; nothing about selection order, reversing, undo counts or other keys",
+      "covers": [
+        "FR-041"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "layers-pass.json": "live"
+      },
+      "hash": "4bae8ca72a45ff927296429e2ecb7d09cd5e945eedb78e0cd26252dd2ab1fef0",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "claude failed to run: spawnSync claude ETIMEDOUT"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": null,
+          "transcript": ""
+        }
+      ]
+    }
+  ]
+}

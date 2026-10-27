@@ -31,7 +31,7 @@
     "say": [
       {
         "id": "praises",
-        "must": "Title",
+        "must": "Title|Scale|Opacity|Position",
         "turns": [
           3
         ]

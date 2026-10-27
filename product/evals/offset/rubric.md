@@ -114,11 +114,12 @@ something new, and records nothing.
 
 After a lesson that stopped early, the mentor records it as partial (if it checked) or not checked
 (if it never did), with demo use stated truthfully, and tells the learner in a short line that it has
-noted it. The record is about the work only: no numbers from tool output, no method, no motive, no
-names.
+noted it. The record is about the work only: no method, no motive, no names. This skill's `SKILL.md` step
+10 has the summary give the gaps as measured ("gaps about 4 and 8 frames") and any split kept on purpose, so
+those numbers are allowed; a number to aim for, or a number that isn't in the checks, is not.
 
-- **Fail:** records a pass that didn't happen, hides a demo, or puts method, motive or numbers in
-  the summary.
+- **Fail:** records a pass that didn't happen, hides a demo, or puts method, motive, a number to aim for
+  or an invented number in the summary.
 
 ## R-REVIEW-HINT: a review that doesn't pass gets hints, not a reteach
 
