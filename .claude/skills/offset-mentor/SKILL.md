@@ -227,8 +227,9 @@ start.
    - **They reordered the layers in the stack** (the order in the Timeline panel changed, the
      times didn't): "The order in the stack isn't when they move. Their keys still start
      together."
-   - **The gap they stated vs. the gap the check measured:** when `gaps_frames` doesn't match the
-     gap they gave you in step 3 and no demonstration has run, call `offset_snapshot` again with
+   - **The gap they stated vs. the gap the check measured:** only when the check passed
+     (`passed`); otherwise the other bullets here run and their stated gap stays as it is. When
+     `gaps_frames` doesn't match the gap they gave you in step 3 and no demonstration has run, call `offset_snapshot` again with
      the whole `skill_options`, its `gap_frames` now the measured gap (the first one if they
      differ, to the nearest whole frame, with a half frame rounded down). This re-read is part of
      the check: don't say you're picking up where you left off. If its `floor_check` says the gap
