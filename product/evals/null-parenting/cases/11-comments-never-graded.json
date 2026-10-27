@@ -45,7 +45,11 @@
       },
       {
         "id": "null_not_faded",
-        "never": "\\b(?:null|Null \\d+|Group Null)\\b[^.?!]{0,60}\\b(?:fade[ds]?|fading|invisible|transparent|see-through)\\b|\\b(?:fade[ds]?|fading)\\b[^.?!]{0,30}\\b(?:null|Null \\d+)\\b|\\bopacity\\s+(?:of|at|is)\\s+(?:0|zero)\\b"
+        "never": "\\b(?:null|Null \\d+|Group Null)(?:['’]s)?\\s+(?:is|was|looks|seems|got|has been|is now)\\s+(?:faded|fading|transparent|invisible|see-through)\\b|\\byou(?:['’]ve| have)?\\s+(?:faded|set)\\s+(?:the |your )?(?:null|opacity)\\b|\\bopacity\\s+(?:of|at|is)\\s+(?:0|zero)\\b",
+        "turns": [
+          3,
+          4
+        ]
       },
       {
         "id": "no_opacity_after_pass",
