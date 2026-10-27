@@ -1,6 +1,6 @@
 {
   "id": "30-record-names-only-seen-move",
-  "title": "The learner says the group turns from the null's place but only slid it: the record doesn't say it turned",
+  "title": "The learner says the group turns from the top-left corner but only slid the null: the record doesn't say it turned",
   "covers": [
     "live-4",
     "FR-020",
@@ -9,8 +9,8 @@
   "learner_record": "anchor-learned.json",
   "fixture_sources": {
     "practice2b.json": "live",
-    "null-center.json": "live",
-    "slide-null.json": "live"
+    "null-top-left.json": "live",
+    "slide-top-left.json": "live"
   },
   "turns": [
     {
@@ -22,11 +22,11 @@
       "say": "Tile, Caption and Stamp should move together."
     },
     {
-      "project": "null-center.json",
-      "say": "I added a null and put it in the middle of the group, since the group turns from there. Done."
+      "project": "null-top-left.json",
+      "say": "I added a null and put it on the group's top-left corner, since the group turns from there. Done."
     },
     {
-      "project": "slide-null.json",
+      "project": "slide-top-left.json",
       "say": "I parented all three and gave the null a slide. Done."
     }
   ],
@@ -46,5 +46,5 @@
     "R-RECORD-SEEN-MOVE",
     "R-NAMES-REAL"
   ],
-  "notes": "Expected to FAIL on the current SKILL.md until step 11 is changed. In the live run (usage notes, session 2, finding 4) the learner said the group turns from the top-left corner, then keyed only the null's Position, so no region was needed (p5 is null) and the pass was on Position; record_lesson's attempted still said 'slid it on its Position, turning from the group's top-left corner'. Nothing turned. The record check also bans 'corner': the check never saw a place the group turns from. Proposed fix: step 11 says the record's attempted and summary name only the move the check returned (p4 moves), never the learner's stated pivot when no region was checked. Fixture note: no live capture has the group parented to a top-left null with a Position-only move (slide-null.json's null sits at the middle, and a top-left claim made the check fail on the pivot in run 2026-10-26-210142), so the learner here says 'the middle', which fits slide-null.json. The failure mode is the same: a stated turn that was never keyed. Run history: 210142 failed on a fixture mismatch (a top-left claim against slide-null.json); 210247 failed on a check that was too wide (it matched 'center', a true place the null was put, in a record that did not claim a turn), so the regex was narrowed to turn, scale and rotate. The narrowed check was not re-run (budget). The live defect (the mentor copying the learner's stated top-left corner into the record) is not yet reproduced here; it needs a capture of the group parented to a top-left null with a Position-only move."
+  "notes": "Live finding: usage notes, session 2, finding 4. The learner said the group turns from the top-left corner but keyed only the null's Position, so the pass is on Position (p4.on is Position, p5 is null) and record_lesson's attempted said 'slid it on its Position, turning from the group's top-left corner'. Nothing turned. The fix landed before this case could fail: SKILL.md step 11 (commit 00ae274) now names only the move the check found. So a pass shows the fix holds, not that the old text failed; the case would have failed on the text before 00ae274. Fixture slide-top-left.json: group parented to Null 1 at the top-left, then a Position-only slide, checked with the real check (passed, p5 null, 0 px). Run history before this version: 210142 failed on a fixture mismatch (a top-left claim against slide-null.json); 210247 failed on a check that was too wide, since narrowed to turn, scale and rotate."
 }
