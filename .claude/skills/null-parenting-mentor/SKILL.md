@@ -281,7 +281,10 @@ at most; they add the null, place it, parent the rest and give it its move with 
       `"not_checked"` before any check.
     - `project` and `comp` from `null_parent_snapshot`; `demo_used`: whether `null_parent_demo` ran.
     - `attempted`: the layers, the null's name and the move ("Parented Tile, Caption and Stamp to
-      Group Null and turned it from 6 to 7 s").
+      Group Null and turned it on its Rotation"). The move is only what the last check found it on:
+      Position slides, Rotation turns, Scale scales. Say it turns or scales, or name the place it
+      does so from, only when the check found a Rotation or Scale move, never because of what the
+      learner said earlier. No key times; the check doesn't give them.
     - `summary`: what the checks showed: a jump and its distance ("Stamp jumped 120 px on the
       first try, then stayed put"), a first move on Opacity, or "said the group only slides". No
       tolerances, never how they did it (which pick whip, which key), never why.
