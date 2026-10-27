@@ -165,6 +165,8 @@ of that length (about $0.40 for 2 to 3 turns, $0.60 or more for 4). The cockpit'
 | `--only 10` | Premise changed in degree: uneven rhythm | $0.45 |
 | **Total, offset** | 10 runs after the repeats | **about $4.30** |
 
+Coming after spec 004 Phase 9's second pass merges (not on the list yet, not costed): **T196**, a re-run of offset 11, 14, 15 and 23 to check that step 7's re-read makes no refused call on a 0 gap, and **T195**, the easing gate again.
+
 ### SC-014 and the `no_self_instructions` check
 
 SC-014 (spec 004, FR-042): the review-due case of each set passes this universal check **3 of 3** with `--repeat 3`. `--repeat` passes a case on a

@@ -10,7 +10,7 @@ options and results format; everything skill-specific is in the `CONFIG` block a
 
 ## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
-19 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 009 T031 to T033) except `synthetic/linear-basic.json` (case 17, permanent).
+18 live cases (case 10 retired). Every fixture is a live capture from the 2026-10-26 sitting (spec 009 T031 to T033) except `synthetic/linear-basic.json` (case 17, permanent).
 Mentor Practice 2 is now `practice2b.json` (24 layers), the comp the captures were planted on. `--dry-run --strict-sources` is clean. **Still no baseline**:
 the full run waits for one more `SKILL.md` change, then the planned smoke list below.
 
@@ -26,7 +26,7 @@ node product/evals/key-types/run.mjs --repeat 3                  # each case 3 t
 node product/evals/key-types/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 53 mentor turns plus 19 judge calls. From the smoke runs (about $0.48 a case with its judge call)
+A full run is about 50 mentor turns plus 18 judge calls. From the smoke runs (about $0.48 a case with its judge call)
 expect **about $9**. Bar: SC-006,
 at least 80% passing, and every hard-rule check passing; spec 009's SC-003 is about the deterministic parts (unit tests), so this set has no SC of its own beyond SC-006.
 
@@ -72,7 +72,7 @@ turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-b
 | 07 | Selects and holds everything: names where the should-fade layer now waits and jumps; asks about the extra holds; no fix | 3 | last_check; say: must names_cut, must names_extra, must asks, never no_offer | R-KT-SHOULD-MOVE-HELD, R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 08 | Logo's Rotation named as constant speed: an expression drives it; no mark, no 'set its keys to linear' | 3 | last_check; say: must says_expression, never no_linear_advice | R-KT-EXPRESSION, R-NAMES-REAL | live |
 | 09 | A blink with an expression on isn't a candidate; the expression is a left-out reason | 1 | tools_called; say: must names_expression_layer, must says_expression, never not_a_question_candidate | R-KT-LEFT-OUT, R-NAMES-REAL | live |
-| 10 | A layer held at Opacity 0 is vanishing, never 'hidden' | 3 | say: never not_hidden | R-KT-NOT-HIDDEN, R-NAMES-REAL | live |
+| 10 | **Retired 2026-10-27** (was: a layer held at Opacity 0 is vanishing, never "hidden"). See below | | | | |
 | 11 | Every pair held, then a constant-speed move named: confirmed linear, remembered | 4 | last_check; record_lesson; say: must asks_constant_speed, must confirms_linear | R-KT-LINEAR-CHECK, R-RECORD-HONEST, R-NAMES-REAL | live |
 | 12 | A move meant to be constant speed is eased: one sentence on which end isn't linear; checked again | 4 | last_check; say: must names_spinner, must says_linear, never no_offer | R-KT-LINEAR-CHECK, R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 13 | No Mac shortcut, no 'freeze', the menu path named | 2 | say: must menu_path, never no_freeze_frame | R-KT-VERSION, R-ONE-IDEA | live |
@@ -116,7 +116,7 @@ Checked by running the real tools on each capture (`key_types_snapshot`, then `k
   Select-all-hold (07) lists Cut as a should-move that now waits and jumps, and Card and Pause as extra holds. Loop Blink is an expression leave-out (09).
 - **05 changed meaning in degree** (also 06 and 15, same capture). `blink-one-held` has the middle pair held (1.4 to 1.8 s) and **two** pairs still fading (1 to 1.4 s, frame at 1.2 s; and
   1.8 to 2.2 s, frame at 2 s). The case's title said one. Title reworded; the checks (a frame time 1.2 or 2, no fix, no offer) hold.
-- **10 lost its premise (kept, flagged).** `hold-at-zero` differs from `blink-one-held` only in its `taken_at`. The held value (0) is in no tool reply and the preview
+- **10 retired 2026-10-27** (Lance's call). `hold-at-zero` differs from `blink-one-held` only in `taken_at`, and no tool reply carries the held value (the frame is a blank placeholder), so the case cannot fail for the reason it exists. The file is in `cases/retired/`, which the runner does not read. **Bring it back if a spec adds the held value to the replies**: move it to `cases/`, check it against a capture that shows the value, and re-add it to the smoke list.
   frame is a blank placeholder, so the mentor has nothing that says "vanishing" or "hidden". What is left is "never says Blink is hidden" on a capture identical to 05's. It still
   runs, but it cannot fail for the reason the case exists. Request to the builder: have `key_types_snapshot` or `key_types_check` say the value a hold waits at (or a frame
   that shows it), or retire the case.
@@ -150,9 +150,8 @@ of that length (about $0.40 for 2 to 3 turns, $0.60 or more for 4). The cockpit'
 | `--only 16 --repeat 3` | SC-014: `no_self_instructions` 3 of 3 (the review-due case; run 3 of the first smoke leaked "Key types learned, review due -> run the review.") | $1.25 |
 | `--only 01` | First run on `practice2b.json` (24 layers, Seal left out) | $0.20 |
 | `--only 05` | Premise changed: two pairs still fading | $0.40 |
-| `--only 10` | Premise lost: identical to 05's capture; see above | $0.40 |
 | `--only 12` | Premise changed: Blink regresses in the turn 4 check | $0.70 |
-| **Total, key types** | 7 runs | **about $3.00** |
+| **Total, key types** | 6 runs | **about $2.60** |
 
 ### SC-014 and the `no_self_instructions` check
 
