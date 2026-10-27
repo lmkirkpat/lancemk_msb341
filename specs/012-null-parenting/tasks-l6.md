@@ -115,8 +115,8 @@ task here.
 - [x] T361 `cd mentor && npm test`; `node --test .claude/hooks/test/*.test.mjs`;
   `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`): still
   only the add-only table's files, all added (FR-001, SC-008)
-- [ ] T362 Hand back: commit, test counts, T351's answer on the wave A stand-in (proposal,
-  `next_proposal`, crowd size), and whether anything in TD § 15's table didn't hold
+- [x] T362 Hand back: commit, test counts, T351's answer on the wave A stand-in (proposal,
+  `next_proposal`, crowd size), and whether anything in TD § 15's table didn't hold *(superseded 2026-10-26: L-6 at the sitting answered both on the live comp, live-sitting-2026-10-26.md)*
 
 ## What changes for `tasks.md`'s live tasks (read, not edited there)
 
