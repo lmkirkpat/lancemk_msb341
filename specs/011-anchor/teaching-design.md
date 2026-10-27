@@ -107,7 +107,7 @@ From a fresh read, using the visibility class (FR-013), never the eye switch alo
 | *matte* | Not a default candidate; allowed if named (its pivot shapes the reveal). Never the demo | Never "you've hidden this". If they turn its eye on to drag and leave it on, one sentence: "it's a matte, so turn its eye back off" |
 | *guide* | Not a default candidate; allowed if named | n/a (it doesn't render, so frames can't show it) |
 | *shy* | Yes, ranked below the rest | "It's shy, so turn off the timeline's shy filter to see its properties" |
-| *null*, camera, light, adjustment layer | No | Nulls: "a null's pivot is skill 6's job" (only if skill 6 is built; otherwise say nothing). **Proposed change, § 19a item 2:** one sentence for all four, no pointer to skill 6 |
+| *null*, camera, light, adjustment layer | No | Nulls: "a null's pivot is skill 6's job" (only if skill 6 is built; otherwise say nothing). **Changed by § 19a item 2 (decided 2026-10-26):** one sentence for all four, no pointer to skill 6 |
 | A full-frame solid or footage (a background) | Last resort only | n/a |
 | Locked layer | Never proposed, never the demo; allowed if the learner names it (round 1, D-2) | "Sign is locked, so unlock it first (the lock switch in the timeline)" |
 
@@ -825,8 +825,8 @@ now saves the first-timer a turn (T236 and T237 both opened this way and passed 
   > grow from somewhere other than its middle, and where should it turn from? Or Needle could
   > swing from the middle of its bottom edge. Want to try that one?"
 
-  (If `next` names a layer, that layer is the proposal; otherwise the read's.) **Proposed change,
-  § 19a item 1:** the proposal is always the read's; `next` gives only the memory clause.
+  (If `next` names a layer, that layer is the proposal; otherwise the read's.) **Changed by
+  § 19a item 1 (decided 2026-10-26):** the proposal is always the read's; `next` gives only the memory clause.
 - **Continued or resumed lesson:** no intent question and no proposal; say where it left off in one
   sentence and hand it back ("We were on Door, from the middle of its left edge. Ready to set it?").
 - **No candidate at all** (`proposal` null, nothing can be named): one clause of why, then the solid
@@ -959,9 +959,9 @@ opening) gets R-ONE-IDEA back, with the reading above in its case note.
   the mentor proposes the focus from a scan (honesty), otherwise when the learner names that layer".
   Skills 2 to 4 already fit it. Skill 6 (null) should be checked against it before its live lesson.
 
-### 19a. Follow-ups after B-10 (2026-10-26)
+### 19a. Follow-ups after B-10 (decided 2026-10-26)
 
-**Status: proposed** (for the human). The skill-builder built § 19 into `SKILL.md` (steps 0 to 2 on
+**Status: decided 2026-10-26** (approved by the human). The skill-builder built § 19 into `SKILL.md` (steps 0 to 2 on
 `skill-5-anchor`) and made four calls where § 19 was unclear. The human accepted two as built (no
 candidate: no intent question; practicing: "Yesterday, …" in place of "Last time" when the record
 has it). These are the other two.
@@ -1063,7 +1063,7 @@ lessons show that's common, revisit the pointer at stage 8, not here.
 #### Items, if approved
 
 **For the builder:**
-- **B-12 (2026-10-26, § 19a; number to confirm with the cockpit)** `SKILL.md` on `skill-5-anchor`:
+- **B-12 (2026-10-26, § 19a; number confirmed by the cockpit)** `SKILL.md` on `skill-5-anchor`:
   1. Step 1, practicing: replace "If `next` names a layer and a place, and the read doesn't leave
      that layer out, propose those; otherwise the `proposal`." with "The proposal is always the
      read's `proposal`; `next` gives only the memory clause. If they want another go at the layer
