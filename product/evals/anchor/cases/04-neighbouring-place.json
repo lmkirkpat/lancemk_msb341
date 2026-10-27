@@ -6,8 +6,8 @@
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "banner-neighbour.json": "stand-in"
+    "practice2b.json": "live",
+    "banner-neighbour.json": "live"
   },
   "turns": [
     {

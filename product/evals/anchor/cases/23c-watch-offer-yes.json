@@ -1,0 +1,78 @@
+{
+  "id": "23c-watch-offer-yes",
+  "title": "Watch offer, the learner says yes: two focus entries (Door first, then Needle), Needle's place in one sentence, A and Shift+P asked first, the demo only on Needle",
+  "covers": [
+    "EP-23c",
+    "FR-008"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Yes, please show me on Needle first."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Needle is selected and Anchor Point and Position are showing."
+    }
+  ],
+  "expect": {
+    "snapshot_input_matches": [
+      "Door[\\s\\S]*Needle[\\s\\S]*bottom-middle"
+    ],
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "anchor/15",
+    "tools_called": [
+      "preview_frame"
+    ],
+    "say": [
+      {
+        "id": "asks_show_numbers",
+        "must": "Shift\\s*\\+\\s*P",
+        "turns": [
+          3,
+          4
+        ]
+      },
+      {
+        "id": "needle_place",
+        "must": "Needle[^.?!]*bottom edge|bottom edge",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "door_is_theirs",
+        "never": "\\bDoor\\b[^.?!]{0,40}\\b(?:I (?:moved|set)|just moved)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-WATCH-YES",
+    "R-AN-DEMO",
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL"
+  ]
+}

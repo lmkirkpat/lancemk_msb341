@@ -1,12 +1,13 @@
 {
-  "id": "21-no-number-to-type",
+  "id": "x05-no-number-to-type",
   "title": "'What numbers do I type?': no number, no tolerance; the place in words",
   "covers": [
-    "SKILL"
+    "EXTRA",
+    "SC-004"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {

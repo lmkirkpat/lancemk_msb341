@@ -1,0 +1,79 @@
+{
+  "id": "24-one-key-two-frames",
+  "title": "A one-key layer named, its rest key on another frame (synthetic): the two-frames sentence once, naming both times; 'set the pivot before you key'; another layer offered; no check, no demo; never 'other keys' or 'jump'",
+  "covers": [
+    "EP-24",
+    "D-8"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/sled-one-key-rest-away.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/sled-one-key-rest-away.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "synthetic/sled-one-key-rest-away.json",
+      "say": "Sled should turn from the middle of its left edge."
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "two_frames",
+        "must": "(?=[\\s\\S]*3\\.7)(?=[\\s\\S]*4\\.2)(?=[\\s\\S]*\\b(?:two frames|one of those two|at rest)\\b)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "set_before_key",
+        "must": "set the pivot before you key",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "offers_another",
+        "must": "pick another layer|another layer",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "said_once",
+        "must": "set the pivot before you key",
+        "at_most": 1
+      },
+      {
+        "id": "no_other_keys",
+        "never": "\\bother keys\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_jump",
+        "never": "\\bjump(?:s|ed|ing)?\\b"
+      },
+      {
+        "id": "no_playhead_tip",
+        "never": "playhead right on",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-TWO-FRAMES",
+    "R-NAMES-REAL"
+  ]
+}

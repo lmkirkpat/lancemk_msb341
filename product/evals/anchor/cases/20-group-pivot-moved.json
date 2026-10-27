@@ -1,0 +1,70 @@
+{
+  "id": "20-group-pivot-moved",
+  "title": "Lid's own pivot didn't change (a group's did): says Lid's pivot is unchanged, offers the Contents possibility without claiming it, and not the 'expression' line too",
+  "covers": [
+    "EP-20",
+    "FR-019b"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "lid-group.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Lid should turn from the middle of its left edge."
+    },
+    {
+      "project": "lid-group.json",
+      "say": "I set it. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "unchanged_shape"
+      ]
+    },
+    "say": [
+      {
+        "id": "own_pivot",
+        "must": "Lid['’]s own pivot|own pivot|Lid['’]s pivot (?:hasn|didn)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "group_possibility",
+        "must": "Contents|group|inside Lid",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_both_lines",
+        "never": "expression|something drives it",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_claim",
+        "never": "\\byou (?:moved|dragged|set) (?:the |a )?(?:group|Contents)",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-GROUP-PIVOT",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

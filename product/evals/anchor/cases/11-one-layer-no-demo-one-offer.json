@@ -1,0 +1,69 @@
+{
+  "id": "11-one-layer-no-demo-one-offer",
+  "title": "One focus layer: no demo on it, a walk-through in words, and one offer of a watch on another layer as the last sentence of the invite turn",
+  "covers": [
+    "EP-11",
+    "FR-008"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Can you show me how to do it on Door?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "offers_needle",
+        "must": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b|\\bNeedle\\b[^.?!]{0,50}\\b(?:first|watch)\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "offer_is_last",
+        "must": "Needle[^.?!]*[.?!]*\\s*$",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "offered_once",
+        "must": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b|\\bNeedle\\b[^.?!]{0,50}\\b(?:first|watch)\\b",
+        "at_most": 1
+      },
+      {
+        "id": "walks_through",
+        "must": "Pan Behind|press Y|\\bY\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_door",
+        "must": "Door",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-WATCH-OFFER",
+    "R-AN-WALKTHROUGH",
+    "R-NAMES-REAL"
+  ]
+}

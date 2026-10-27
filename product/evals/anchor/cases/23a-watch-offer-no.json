@@ -1,0 +1,69 @@
+{
+  "id": "23a-watch-offer-no",
+  "title": "Watch offer, the learner just tries: one offer in the invite turn and none after, including after a failed check; no demo",
+  "covers": [
+    "EP-23a",
+    "FR-008"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "door-outside.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "door-outside.json",
+      "say": "No thanks, I'll just try it. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_demo"
+    ],
+    "last_check": {
+      "passed": false
+    },
+    "say": [
+      {
+        "id": "offers_needle",
+        "must": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b|\\bNeedle\\b[^.?!]{0,50}\\b(?:first|watch)\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "offer_is_last",
+        "must": "Needle[^.?!]*[.?!]*\\s*$",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "offered_once",
+        "must": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b|\\bNeedle\\b[^.?!]{0,50}\\b(?:first|watch)\\b",
+        "at_most": 1
+      },
+      {
+        "id": "no_offer_after_check",
+        "never": "\\b(?:show you|watch (?:me|one|it|you)|like to watch|want to watch|could show)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-WATCH-OFFER",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

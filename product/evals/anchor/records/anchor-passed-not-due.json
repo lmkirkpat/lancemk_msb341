@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-10-12T18:00:00.000Z",
+      "times_passed": 1,
+      "next": "Try Bar: separated X Position and Trim Paths End.",
+      "review_due": "2026-10-13",
+      "reviews_passed_in_row": 0
+    },
+    "transform.anchor": {
+      "status": "learned",
+      "last_practiced": "2026-10-24T16:00:00.000Z",
+      "times_passed": 1,
+      "next": "Key a swing on Needle and play it back.",
+      "review_due": "2099-01-01",
+      "reviews_passed_in_row": 0
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-12T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Eased 4 Title pairs: Position x2, Scale, Opacity",
+      "result": "passed",
+      "demo_used": true,
+      "summary": "Eased every Title pair.",
+      "next": "Try another layer.",
+      "kind": "first",
+      "targets": [
+        {
+          "layer": "Title",
+          "property": "Position"
+        },
+        {
+          "layer": "Title",
+          "property": "Scale"
+        },
+        {
+          "layer": "Title",
+          "property": "Opacity"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-24T16:00:00.000Z",
+      "skill": "transform.anchor",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice 2",
+      "attempted": "Set Door's pivot to the middle of its left edge, and Needle's to the middle of its bottom edge",
+      "result": "passed",
+      "demo_used": true,
+      "summary": "First try moved Door with its pivot; then set both without a jump. Said the left edge stays still.",
+      "next": "Key a swing on Needle and play it back.",
+      "kind": "first",
+      "targets": [
+        {
+          "layer": "Door",
+          "property": "Anchor Point"
+        },
+        {
+          "layer": "Needle",
+          "property": "Anchor Point"
+        }
+      ]
+    }
+  ]
+}

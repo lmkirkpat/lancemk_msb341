@@ -1,13 +1,13 @@
 {
-  "id": "12-demonstration-two-layers",
-  "title": "Two focus layers: A and Shift+P asked first; one pivot moved on the layer they care less about; frames at the same time; Edit > Undo",
+  "id": "x02-demonstration-two-layers",
+  "title": "Two focus layers named: A and Shift+P asked first; one pivot moved on the layer they care less about; frames at the same time; Edit > Undo",
   "covers": [
-    "EP-11",
-    "US1"
+    "EXTRA",
+    "EP-11"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {
@@ -30,7 +30,7 @@
   "expect": {
     "demo_calls_min": 1,
     "demo_calls_max": 1,
-    "demo_only_on": "anchor/6",
+    "demo_only_on": "anchor/19",
     "tools_called": [
       "preview_frame"
     ],
@@ -55,6 +55,13 @@
         "must": "Tab",
         "turns": [
           4
+        ]
+      },
+      {
+        "id": "no_watch_offer",
+        "never": "\\b(?:show you|watch (?:me|one|it|you)|like to watch|want to watch|could show)\\b",
+        "turns": [
+          2
         ]
       }
     ]

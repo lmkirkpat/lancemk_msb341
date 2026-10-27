@@ -2,12 +2,11 @@
   "id": "09-matte-named",
   "title": "A matte named as the target: never called hidden; Pan Behind needs it visible",
   "covers": [
-    "EP-9",
-    "cross 3"
+    "EP-9"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {

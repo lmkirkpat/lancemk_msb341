@@ -147,13 +147,16 @@ place or layer.
 
 ## R-AN-LEAVE-OUTS: says what it's leaving out, one short sentence per reason, only what matters
 
-The mentor says what it leaves out in short sentences: Anchor Point keyed ("Anchor Point is
-animated on Wobble, which this lesson doesn't cover"), expression-driven layers, 3D, a collapsed
-precomp it can't check, hidden or locked layers. It says nothing about a null's pivot and never
-lists every layer.
+The mentor says what it leaves out in short sentences, and only what matters in this comp: layers that
+already move ("Sled and Card already move, so they're not in this lesson; set a pivot before you key",
+naming two at most, in one sentence for all of them), Anchor Point keyed ("Anchor Point is animated on
+Wobble, which this lesson doesn't cover"), expression-driven layers, 3D, a collapsed precomp it can't
+check, hidden or locked layers. It says nothing about a null's pivot, never lists every layer, and
+never says a layer would "jump". With no layer named, a layer with a single Position key is just one
+of the layers that already move; it gets no sentence of its own.
 
-- **Fail:** skips a reason that matters in this comp, lists every layer, or says something about a
-  null's pivot.
+- **Fail:** skips a reason that matters in this comp, lists every layer, says something about a
+  null's pivot, says "jump", or gives a one-key layer its own two-frames sentence in the opening.
 
 ## R-AN-REPEAT-BACK: repeats the place in plain words and says where the pivot is now
 
@@ -188,18 +191,25 @@ When the check passes the mentor says so plainly, by layer and place, and does n
 
 ## R-AN-WRONG-LAYER: the pivot moved on the wrong layer
 
-When another layer's pivot moved instead, the mentor says the focus layer's pivot hasn't moved but the
-other layer's did, and to select the focus layer in the timeline first. It does not fix it.
+When another layer's pivot moved instead, the mentor names both: the focus layer's pivot hasn't moved
+and the other layer's did. It says Pan Behind moves the pivot of whatever layer is under the cursor
+when the drag starts, so to Edit > Undo and start the drag right on the focus layer's own crosshair.
+Selecting the layer first is never given as the fix (the learner may have had it selected). It does
+not fix it.
 
-- **Fail:** misses the other layer, or fixes it.
+- **Fail:** misses the other layer, says selecting the focus layer first is the fix, gives no
+  Edit > Undo, or fixes it.
 
 ## R-AN-REST-KEY: a pivot set away from the layer's rest pose
 
 For a layer with a rest key, the mentor names the rest key and the time before the learner starts
 ("Pop is full size at 4.3 s. Put the playhead there first"). If the pivot was set away from it, the
-hint says the layer is still shrunk at the time they set it and to put the playhead on the rest key.
+hint says the pivot did move though nothing may have shown (the layer is shrunk, or part-way through a
+turn, at the time they set it), asks for Edit > Undo first, and only then for the playhead on the rest
+key's time. The time the playhead was at is the one the check read; the rest time is the layer's own.
+It says "far below it" (or another side) only when the tool gave the side; never a guess.
 
-- **Fail:** no rest time, a wrong time, or a fix.
+- **Fail:** no rest time, a wrong time, the playhead before Edit > Undo, says nothing moved, or a fix.
 
 ## R-AN-QUICK-SET: Quick Set Anchor is answered plainly, once, and the lesson goes on
 
@@ -235,17 +245,19 @@ baseline, under the letters, not in their middle, and never says it is already t
 The mentor asks the learner to select the demo layer and press A then Shift+P, takes a frame, moves
 that one pivot, takes a frame at the same time, and says both numbers changed and the layer didn't
 move (the two frames look the same, on purpose), and that Edit > Undo reverses it. It never reads out
-the values.
+the values, and it adds no claim past what the tool showed: it never says the two numbers changed "in
+opposite directions" or "by the same amount" (the 2026-10-26 smoke run did).
 
-- **Fail:** reads out values, moves two pivots, shows a rotated frame, or names an undo label.
+- **Fail:** reads out values, moves two pivots, shows a rotated frame, names an undo label, or
+  describes how the numbers changed beyond "both changed".
 
 ## R-AN-WALKTHROUGH: with one focus layer there is no demo, only words
 
 With one focus layer the mentor says that if it moved it there would be nothing left for the learner,
 and walks them through it: select the layer, press Y, drag the crosshair to the place, and watch the
-layer stay put. It may offer a second layer to watch one first.
+layer stay put. A second offer of a watch is not made (see R-AN-WATCH-OFFER).
 
-- **Fail:** demonstrates, or gives no walkthrough.
+- **Fail:** demonstrates, gives no walkthrough, or offers a watch a second time.
 
 ## R-AN-UNDERSTANDING: after a pass, which part stays still; a mix-up gets one light correction
 
@@ -255,13 +267,15 @@ now"). Either way the pass stands.
 
 - **Fail:** doesn't ask, lectures, or takes back the pass.
 
-## R-AN-POSITION-KEYED: a keyed Position is mentioned once; a slide at a key is named
+## R-AN-SLID: one Position key, dragged with the playhead off it
 
-For a layer whose Position is keyed, the mentor says once that moving the pivot can change where it sits
-at other times, and that it is simplest to set the pivot before keying. If a key time slid, the hint
-names the layer and the time.
+When a layer with a single Position key was dragged with the playhead off that key, the hint names the
+layer, says where it now sits at its key's time (in words: to the right, lower), that Pan Behind
+changed Position only where the playhead was (and added a key there), and asks for Edit > Undo and the
+playhead right on the key's time before dragging again. Never how far, and never "jump". Before the
+try, the mentor said once that the playhead should be on that key.
 
-- **Fail:** says nothing, says it more than once, or gives no time.
+- **Fail:** no time, no Edit > Undo, no playhead on the key, a distance, "jump", or a fix.
 
 ## R-AN-DRAGGED: the layer was dragged, not the pivot
 
@@ -291,12 +305,14 @@ It never says it didn't move, is in place, or passed.
 
 - **Fail:** claims anything about the layer's pivot, or passes it.
 
-## R-AN-NO-MENU: no menu path before it is confirmed
+## R-AN-CENTER-MENU: a menu path for the center place only, never a shortcut
 
-The mentor gives no menu command, path or shortcut for centering the anchor point until its live
-check has confirmed one. It carries on with Pan Behind.
+If asked for a menu command to center the anchor point, the mentor may give Layer > Transform > Center
+Anchor Point in Layer Content by menu path **only when the learner's place is the center**. It never
+gives a keyboard shortcut. For any other place it gives no menu path and carries on with Pan Behind.
 
-- **Fail:** names Layer > Transform > Center Anchor Point or a shortcut.
+- **Fail:** gives the path for a place that isn't the center, gives a shortcut, refuses the center
+  path when the place is the center, or drops Pan Behind for a non-center place.
 
 ## R-AN-NO-NUMBER: never a number to type, never a tolerance
 
@@ -304,3 +320,70 @@ When asked what numbers to type, the mentor gives none: it names the place in wo
 the layer moving". It gives no tolerance, no pixel count.
 
 - **Fail:** any number to type, any tolerance.
+
+## R-AN-WATCH-OFFER: one offer of a watch, the last sentence of the invite turn
+
+With one focus layer on a first lesson, after the walk-through in words and the invite to try, the
+mentor ends that turn with one sentence offering to show the learner on another layer ("I could show
+you on Needle first, if you like."), naming only the layer, never its place, and says nothing after
+it. The offer runs nothing. It is made once: not after "no", not after a failed check, not later.
+
+- **Fail:** no offer on a first lesson with one focus layer, two sentences of offer, anything after
+  it in the turn, naming the place, a second offer, or running the demo before a yes.
+
+## R-AN-NO-WATCH-OFFER: no watch offer where the skill says there is none
+
+Where this skill has already been passed, in a review, or with two focus layers, the mentor makes no
+offer to watch a demonstration at all and does not mention one.
+
+- **Fail:** any offer or mention of showing the learner on another layer.
+
+## R-AN-WATCH-YES: a yes to the watch offer runs the two-layer demo on the offered layer only
+
+After a yes the mentor sets up two focus layers (the learner's first, the offered layer second), says
+the offered layer's place in one sentence, asks for that layer to be selected with Anchor Point and
+Position showing (A, then Shift+P) before it moves anything, then demonstrates on the offered layer
+only. The learner's own layer is left for them.
+
+- **Fail:** demonstrates on the learner's layer, skips the A and Shift+P ask, or names no place.
+
+## R-AN-ALREADY-MOVES: a layer that already moves is left out, once, and another is offered
+
+When the learner names a layer whose Position is keyed at two or more times, the mentor says once that
+it already moves, so moving its pivot now would shift where it sits at its other keys, to set the pivot
+before keying, and asks for a layer that doesn't move yet. It teaches no lesson on that layer, runs no
+check or demo, and never says the layer would "jump".
+
+- **Fail:** teaches on the layer, says "jump", says the sentence more than once, or offers no other
+  layer.
+
+## R-AN-TWO-FRAMES: a one-key layer with its rest on another frame gets the two-frames sentence
+
+When the learner names a layer with a single Position key whose rest pose is at a different time, the
+mentor says: its Position key is at one time but it is at rest at another, so moving its pivot now
+would shift where it sits on one of those two frames; set the pivot before you key; pick another
+layer. The two times are real and, when the learner named their own rest pose, the second is theirs.
+It is said once, only because they named the layer. It is never "its other keys" (there are none) and
+never "jump". It teaches no lesson on that layer and runs no check or demo.
+
+- **Fail:** the Sled sentence ("its other keys"), a wrong or missing time, the tool's time when the
+  learner gave their own, "jump", teaching on the layer, or no other layer offered.
+
+## R-AN-OUTSIDE: a pivot outside the shape says which side and where to look
+
+When the learner's layer has its pivot outside the shape, the mentor says it sits outside, on which
+side as seen on screen (in words), that this is why it would swing wide, and to click the layer in the
+timeline so its crosshair shows and start the drag there. No distance.
+
+- **Fail:** no side where one is known, a side guessed, a distance, or no instruction on where to look.
+
+## R-AN-GROUP-PIVOT: a shape's own pivot unchanged; a group's may have moved
+
+When a shape layer's own pivot hasn't changed after "done", the mentor says so by layer name and offers
+one possibility, that a pivot dragged while something under Contents was selected belongs to a group
+inside the layer, and to click the layer's name in the timeline and drag its crosshair. It offers it
+as a possibility, never as what they did, and does not also say the general "if something drives it,
+like an expression" line.
+
+- **Fail:** claims they moved the group's pivot, says the expression line too, fixes it, or never
+  says the layer's own pivot is unchanged.

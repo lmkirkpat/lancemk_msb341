@@ -1,0 +1,45 @@
+{
+  "id": "23b-watch-offer-already-passed",
+  "title": "Watch offer, this skill passed before: no offer at all, no demo",
+  "covers": [
+    "EP-23b",
+    "FR-008"
+  ],
+  "learner_record": "product/evals/anchor/records/anchor-passed-not-due.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tab should turn from the middle of its left edge."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_demo"
+    ],
+    "say": [
+      {
+        "id": "no_watch_offer",
+        "never": "\\b(?:show you|watch (?:me|one|it|you)|like to watch|want to watch|could show)\\b"
+      },
+      {
+        "id": "names_tab",
+        "must": "Tab",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NO-WATCH-OFFER",
+    "R-NAMES-REAL"
+  ]
+}

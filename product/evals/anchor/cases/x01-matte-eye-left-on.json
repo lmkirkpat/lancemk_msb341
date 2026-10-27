@@ -1,12 +1,14 @@
 {
-  "id": "13-one-layer-no-demo",
-  "title": "One focus layer: no demonstration, a walkthrough in words",
+  "id": "x01-matte-eye-left-on",
+  "title": "A matte's eye left on after a pass: the eye sentence",
   "covers": [
-    "EP-11"
+    "EXTRA",
+    "FR-014"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in"
+    "practice2b.json": "live",
+    "synthetic/door-pass-matte-eye-on.json": "synthetic"
   },
   "turns": [
     {
@@ -18,23 +20,15 @@
       "say": "Door should turn from the middle of its left edge."
     },
     {
-      "project": "practice2b.json",
-      "say": "Can you show me how?"
+      "project": "synthetic/door-pass-matte-eye-on.json",
+      "say": "I set Door's pivot. Done."
     }
   ],
   "expect": {
-    "demo_calls_max": 0,
     "say": [
       {
-        "id": "walks_through",
-        "must": "Pan Behind|press Y|\\bY\\b",
-        "turns": [
-          3
-        ]
-      },
-      {
-        "id": "names_door",
-        "must": "Door",
+        "id": "eye_off",
+        "must": "Reveal Matte[^.?!]*eye|eye[^.?!]*Reveal Matte",
         "turns": [
           3
         ]
@@ -42,7 +36,7 @@
     ]
   },
   "rubric": [
-    "R-AN-WALKTHROUGH",
+    "R-AN-MATTE-EYE",
     "R-NAMES-REAL"
   ]
 }

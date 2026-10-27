@@ -1,13 +1,13 @@
 {
   "id": "06-wrong-layer",
-  "title": "Pan Behind on Background instead of the focus: 'select it first'",
+  "title": "Pan Behind started on Background instead of Needle: start the drag on Needle's own crosshair; selecting it first is not the fix",
   "covers": [
     "EP-6"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "wrong-layer.json": "stand-in"
+    "practice2b.json": "live",
+    "wrong-layer.json": "live"
   },
   "turns": [
     {
@@ -39,8 +39,22 @@
         ]
       },
       {
-        "id": "select_first",
-        "must": "select",
+        "id": "starts_on_crosshair",
+        "must": "under the cursor|right on Needle|on Needle['’]s (?:own )?crosshair|Needle['’]s (?:own )?crosshair",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "select_first_not_fix",
+        "never": "\\bselect(?:ing)?\\s+(?:Needle|it|the layer)\\s+first\\b|\\bfirst\\b[^.?!]{0,20}\\bselect(?:ing)?\\b",
         "turns": [
           3
         ]

@@ -1,8 +1,9 @@
 {
-  "id": "25-unreachable",
+  "id": "x07-unreachable",
   "title": "After Effects can't be reached: nothing claimed about the comp",
   "covers": [
-    "SKILL"
+    "EXTRA",
+    "UNREACHABLE"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {},

@@ -1,0 +1,48 @@
+{
+  "id": "21b-menu-path-for-centre",
+  "title": "Asked for a menu command to centre the anchor, with the centre as the place: the menu path may be given, never a shortcut",
+  "covers": [
+    "EP-21",
+    "FR-023"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Lid should turn from its center."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Is there a menu command that centers the anchor point?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "menu_path",
+        "must": "Layer\\s*>\\s*Transform\\s*>\\s*Center Anchor Point in Layer Content",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_key_combo",
+        "never": "\\b(?:Cmd|Ctrl|Command|Control|Option|Alt)\\s*\\+",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-CENTER-MENU",
+    "R-ONE-IDEA"
+  ]
+}

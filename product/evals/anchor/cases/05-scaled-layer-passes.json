@@ -6,8 +6,8 @@
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "plaque-pass.json": "stand-in"
+    "practice2b.json": "live",
+    "plaque-pass.json": "live"
   },
   "turns": [
     {

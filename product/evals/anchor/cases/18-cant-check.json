@@ -1,5 +1,5 @@
 {
-  "id": "19-cant-check",
+  "id": "18-cant-check",
   "title": "A layer that can't be checked (no rectangle): says so and never claims it didn't move",
   "covers": [
     "EP-18"

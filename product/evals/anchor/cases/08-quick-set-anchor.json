@@ -3,12 +3,11 @@
   "title": "The learner asks about Quick Set Anchor: answered plainly, not refused, no steps; the lesson goes on with Pan Behind",
   "covers": [
     "EP-8",
-    "FR-030",
     "SC-005"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {

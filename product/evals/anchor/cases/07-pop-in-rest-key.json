@@ -1,14 +1,13 @@
 {
   "id": "07-pop-in-rest-key",
-  "title": "Pop set while shrunk: fails with the rest-key hint; the rest key named before they start",
+  "title": "Pop set while shrunk: fails; the rest key is named before they start; the hint says the pivot did move, Edit > Undo first, then the rest key's time",
   "covers": [
-    "EP-7",
-    "FR-034"
+    "EP-7"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "pop-shrunk.json": "stand-in"
+    "practice2b.json": "live",
+    "pop-shrunk.json": "live"
   },
   "turns": [
     {
@@ -47,8 +46,29 @@
         ]
       },
       {
+        "id": "names_now",
+        "must": "3\\.3",
+        "turns": [
+          3
+        ]
+      },
+      {
         "id": "full_size",
         "must": "full size|full-size|at rest|rest",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "did_move",
+        "must": "did move|has moved|moved Pop['’]s pivot|pivot (?:did )?move|it moved",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "undo_then_time",
+        "must": "Edit\\s*>\\s*Undo[\\s\\S]*4\\.3",
         "turns": [
           3
         ]

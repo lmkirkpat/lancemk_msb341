@@ -3,12 +3,12 @@
   "title": "Anchor Point typed (the layer moved with it): doesn't pass; the 'moved with it' hint with a direction, no numbers",
   "covers": [
     "EP-3",
-    "SC-004"
+    "US1"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "door-typed.json": "stand-in"
+    "practice2b.json": "live",
+    "door-typed.json": "live"
   },
   "turns": [
     {

@@ -1,0 +1,62 @@
+{
+  "id": "19-pivot-outside",
+  "title": "Lid named, its pivot outside the shape: says which side, to click Lid in the timeline and start the drag on its crosshair; no distance",
+  "covers": [
+    "EP-19",
+    "FR-019a"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Lid should turn from the middle of its left edge."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "say": [
+      {
+        "id": "says_outside",
+        "must": "outside",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "says_side",
+        "must": "below",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "click_in_timeline",
+        "must": "timeline",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "names_lid",
+        "must": "Lid",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-OUTSIDE",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

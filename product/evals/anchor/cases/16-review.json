@@ -1,14 +1,14 @@
 {
-  "id": "18-review",
-  "title": "Review due: a new layer (Tab), the hinge asked first, no tool named before 'done', no demo; passes",
+  "id": "16-review",
+  "title": "Review due: a new layer (Tab), the hinge asked first, nothing said before the first call, no tool named before 'done', no demo, no watch offer; passes",
   "covers": [
     "EP-16",
-    "US2"
+    "US3"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/learned-door.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "demo-separated.json": "stand-in"
+    "practice2b.json": "live",
+    "demo-separated.json": "live"
   },
   "turns": [
     {
@@ -30,6 +30,7 @@
       "mode": "review"
     },
     "demo_calls_max": 0,
+    "quiet_before_tool": true,
     "last_check": {
       "passed": true
     },
@@ -54,11 +55,16 @@
         "turns": [
           2
         ]
+      },
+      {
+        "id": "no_watch_offer",
+        "never": "\\b(?:show you|watch (?:me|one|it|you)|like to watch|want to watch|could show)\\b"
       }
     ]
   },
   "rubric": [
     "R-REVIEW-HANDS-ON",
+    "R-AN-NO-WATCH-OFFER",
     "R-NAMES-REAL"
   ]
 }

@@ -1,13 +1,14 @@
 {
-  "id": "24-stop-early-record",
+  "id": "x06-stop-early-record",
   "title": "The learner stops after a try that moved the layer: recorded partial, plain words, no method or numbers",
   "covers": [
-    "EP-14"
+    "EXTRA",
+    "SC-008"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "door-typed.json": "stand-in"
+    "practice2b.json": "live",
+    "door-typed.json": "live"
   },
   "turns": [
     {

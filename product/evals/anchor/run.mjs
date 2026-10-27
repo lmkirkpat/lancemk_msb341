@@ -14,9 +14,8 @@
 //   node product/evals/anchor/run.mjs --dry-run --strict-sources   also fail on a stale source label
 //
 // Fixtures are NOT copied into this folder. A case names a fixture the way the builder's tests do and
-// the runner finds it in CONFIG.fixtureDirs order (a live capture before its stand-in), so when a
-// live capture lands under the same name the case picks it up. --dry-run lists every label that is
-// out of date (see README > Re-pointing).
+// the runner finds it in CONFIG.fixtureDirs order. --dry-run lists every label that is out of date
+// (see README > Fixtures).
 
 import { spawnSync } from "node:child_process";
 import crypto from "node:crypto";
@@ -45,8 +44,8 @@ const CONFIG = {
   "fixtureDirs": [
     "mentor/test/fixtures/anchor",
     "mentor/test/fixtures/layer-info",
-    "mentor/test/fixtures/anchor/stand-in",
-    "mentor/test/fixtures/anchor/synthetic"
+    "mentor/test/fixtures/anchor/synthetic",
+    "product/evals/anchor/fixtures"
   ],
   "judgeLabel": "an After Effects mentor that teaches setting a layer's pivot (anchor point) with Pan Behind so the layer doesn't move",
   "recordMethod": "\\bPan Behind\\b|\\bpixels?\\b|\\b\\d+ ?px\\b|\\bbecause\\b|\\bshortcut\\b|\\bcrosshair\\b|\\bso that\\b",
@@ -74,6 +73,10 @@ const CONFIG = {
     [
       "no_self_instructions",
       "review (?:is )?due\\s*(?:→|->|\\.|:|,|-)\\s*(?:run(?: the)? review|review mode)|\\bRun review\\b|\\breview mode\\b|^\\s*Learned, review due"
+    ],
+    [
+      "no_opposite_directions",
+      "\\bopposite (?:directions|ways)\\b|\\bsame amount\\b"
     ],
     [
       "matte_not_hidden",
@@ -128,18 +131,18 @@ function parseArgs(argv) {
 function loadCases() {
   return fs
     .readdirSync(CASES_DIR)
-    .filter((f) => /^\d\d-.*\.json$/.test(f))
+    .filter((f) => /^(?:\d\d[a-z]?|x\d\d)-.*\.json$/.test(f))
     .sort()
     .map((f) => ({ file: path.join(CASES_DIR, f), ...JSON.parse(fs.readFileSync(path.join(CASES_DIR, f), "utf8")) }));
 }
 
-// → { file, source } for a fixture name, or null. Searches CONFIG.fixtureDirs in order, so a live
-// capture (listed before its stand-in's folder) wins. `source` comes from the path:
-// "synthetic" (a synthetic folder), "stand-in" (a stand-in folder) or "live".
+// → { file, source } for a fixture name, or null. Searches CONFIG.fixtureDirs in order. `source`
+// comes from the path: "synthetic" (a synthetic folder) or "live" (a capture). The stand-ins are gone
+// (deleted on skill-5-anchor, T234); nothing here may point at one.
 function resolveFixture(name) {
   for (const dir of FIXTURE_DIRS) {
     const f = path.join(dir, name);
-    if (fs.existsSync(f)) return { file: f, source: /[\\/]stand-in[\\/]/.test(f) ? "stand-in" : /[\\/]synthetic[\\/]/.test(f) ? "synthetic" : "live" };
+    if (fs.existsSync(f)) return { file: f, source: /[\\/]synthetic[\\/]/.test(f) ? "synthetic" : "live" };
   }
   return null;
 }
@@ -148,7 +151,7 @@ function resolveFixture(name) {
 const recordFile = (name) => path.join(REPO, name);
 const fixtureNames = (c) => [...new Set(c.turns.filter((t) => t.project !== "unreachable").map((t) => t.project))];
 
-const SOURCES = ["stand-in", "synthetic", "live"];
+const SOURCES = ["synthetic", "live"];
 
 function validate(c) {
   const problems = [];
@@ -167,9 +170,10 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks"];
+    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "quiet_before_tool"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
+    if (s.at_most !== undefined && !(s.must && Number.isInteger(s.at_most))) problems.push(`say ${s.id}: at_most needs a must regex and a whole number`);
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
     try { new RegExp(s.must || s.never); } catch (e) { problems.push(`say ${s.id}: bad regex`); }
     for (const t of Array.isArray(s.turns) ? s.turns : []) if (!Number.isInteger(t) || t < 1 || t > c.turns.length) problems.push(`say ${s.id}: turn ${t} is out of range`);
@@ -195,7 +199,7 @@ function caseHash(c) {
   const h = crypto.createHash("sha256");
   const files = [...SHARED_INPUTS.map((f) => path.join(REPO, f)), c.file];
   if (c.learner_record) files.push(recordFile(c.learner_record));
-  // The resolved fixture: a live capture replacing a stand-in changes the hash, so --changed reruns.
+  // The resolved fixture, so a re-captured file changes the hash and --changed reruns the case.
   for (const n of fixtureNames(c)) files.push(resolveFixture(n).file);
   for (const f of [...new Set(files)]) h.update(f.slice(REPO.length)).update(fs.readFileSync(f));
   return h.digest("hex");
@@ -406,6 +410,13 @@ function check(expect, turns, c) {
     add("record_plain", !m, m ? `record says "${m[0]}"` : "clean");
   }
 
+  if (expect.quiet_before_tool) {
+    // Nothing said before the turn's first tool call (a review's leaked self-note, smoke finding
+    // 2026-10-26): the learner sees every word, and the skill opens with a call.
+    const first = turns[0].events.findIndex((e) => e.kind === "tool");
+    const before = turns[0].events.slice(0, first < 0 ? turns[0].events.length : first).filter((e) => e.kind === "say");
+    add("quiet_before_tool", before.length === 0, before.length ? `said "${before[0].text.slice(0, 80)}" before the first tool call` : "clean");
+  }
   if ("first_tool" in expect) {
     const first = calls[0]?.name ?? "(none)";
     add("first_tool", first === expect.first_tool, `first tool was ${first}`);
@@ -461,7 +472,11 @@ function check(expect, turns, c) {
     const text = said(turns, from, to).map((x) => x.text).join("\n");
     const m = text.match(rx(s));
     const where = from === to ? `turn ${from}` : `turns ${from} to ${to}`;
-    if (s.must) add(`say:${s.id}`, !!m, m ? `${where}: "${m[0]}"` : `${where}: never matched /${s.must}/`);
+    if (s.at_most !== undefined) {
+      // How many times the words appear across the range: "the offer is made once".
+      const n = (text.match(new RegExp(s.must, s.cs ? "g" : "gi")) || []).length;
+      add(`say:${s.id}`, n <= s.at_most, `${where}: ${n} match(es), at most ${s.at_most}`);
+    } else if (s.must) add(`say:${s.id}`, !!m, m ? `${where}: "${m[0]}"` : `${where}: never matched /${s.must}/`);
     else add(`say:${s.id}`, !m, m ? `${where} said "${m[0]}"` : `${where}: clean`);
   }
   if ("record_lesson" in expect) {
@@ -592,7 +607,7 @@ function newResultsFile() {
 }
 
 // Dry run: where each fixture resolves now against what the case says it is. A label that is stale
-// (a live capture now exists under a stand-in's name) is the re-pointing to-do list.
+// (a capture now exists where a case says synthetic, or the reverse) is the to-do list.
 function sourceReport(cases) {
   const stale = [];
   const table = new Map();
@@ -601,7 +616,7 @@ function sourceReport(cases) {
       const now = resolveFixture(n).source;
       const row = table.get(n) || { now, labels: new Set(), cases: [] };
       row.labels.add(c.fixture_sources[n]);
-      row.cases.push(c.id.slice(0, 2));
+      row.cases.push(c.id.split("-")[0]);
       table.set(n, row);
       if (c.fixture_sources[n] !== now) stale.push(`${c.id}: ${n} is labelled ${c.fixture_sources[n]} but resolves to ${now}`);
     }
@@ -662,7 +677,7 @@ function main() {
   const passed = results.filter((r) => r.pass).length;
   const pct = Math.round((passed / results.length) * 100);
   const out = { run_at: new Date().toISOString(), options: opts, partial: !!opts.only, cost_usd: Number(cost.toFixed(2)),
-    fixtures_note: "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+    fixtures_note: "Live captures of Mentor Practice 2 (comp 179) plus synthetic fixtures; see fixture_sources per case.",
     summary: { passed, total: results.length, percent: pct, target_percent: TARGET * 100 }, cases: results };
   fs.mkdirSync(RESULTS_DIR, { recursive: true });
   const file = newResultsFile();
@@ -673,7 +688,7 @@ function main() {
   let change = "";
   if (prev) {
     const was = new Map(prev.cases.map((c) => [c.id, c.pass]));
-    const flips = results.filter((r) => was.has(r.id) && was.get(r.id) !== r.pass).map((r) => `${r.id.slice(0, 2)} now ${r.pass ? "passes" : "fails"}`);
+    const flips = results.filter((r) => was.has(r.id) && was.get(r.id) !== r.pass).map((r) => `${r.id.split("-")[0]} now ${r.pass ? "passes" : "fails"}`);
     const delta = passed - prev.cases.filter((c) => results.some((r) => r.id === c.id) && c.pass).length;
     change = ` | vs ${prev.file}: ${delta >= 0 ? "+" : ""}${delta} pass${flips.length ? "; " + flips.join(", ") : ""}`;
   }

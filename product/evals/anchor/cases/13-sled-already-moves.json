@@ -1,0 +1,82 @@
+{
+  "id": "13-sled-already-moves",
+  "title": "Sled named (Position keyed at three times): the 'already moves' sentence once, no lesson on Sled, another layer offered, never 'jump'",
+  "covers": [
+    "EP-13",
+    "D-4"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Sled should turn from the middle of its left edge."
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "already_moves",
+        "must": "Sled already moves",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "already_moves_once",
+        "must": "\\balready moves?\\b",
+        "at_most": 1,
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "set_before_key",
+        "must": "set the pivot before you key",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "other_keys",
+        "must": "its other keys",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "offers_another",
+        "must": "pick (?:a|another) layer|another layer|doesn['’]t move yet",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_jump",
+        "never": "\\bjump(?:s|ed|ing)?\\b"
+      },
+      {
+        "id": "no_playhead_tip",
+        "never": "playhead right on",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-ALREADY-MOVES",
+    "R-NAMES-REAL"
+  ]
+}

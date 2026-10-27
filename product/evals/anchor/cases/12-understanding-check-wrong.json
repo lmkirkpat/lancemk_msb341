@@ -1,13 +1,13 @@
 {
-  "id": "14-understanding-check-wrong",
+  "id": "12-understanding-check-wrong",
   "title": "After a pass: which part stays still. A wrong answer gets one light correction and the pass stands",
   "covers": [
     "EP-12"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "door-pass.json": "stand-in"
+    "practice2b.json": "live",
+    "door-pass.json": "live"
   },
   "turns": [
     {

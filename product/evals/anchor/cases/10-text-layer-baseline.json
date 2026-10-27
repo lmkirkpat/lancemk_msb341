@@ -1,12 +1,12 @@
 {
-  "id": "11-text-layer-baseline",
+  "id": "10-text-layer-baseline",
   "title": "Text, 'turn from the middle': told the pivot is on the baseline, not that it's already there",
   "covers": [
     "EP-10"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {

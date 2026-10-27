@@ -1,0 +1,63 @@
+{
+  "id": "24b-one-key-learners-rest-time",
+  "title": "A one-key layer whose tool-picked rest key is on the Position key, but the learner names their own rest pose on another frame (synthetic): the sentence uses their time",
+  "covers": [
+    "EP-24",
+    "D-8"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/sled-one-key-rest-on-key.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/sled-one-key-rest-on-key.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "synthetic/sled-one-key-rest-on-key.json",
+      "say": "Sled should turn from the middle of its left edge. Its rest pose is at 4.167 s."
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "demo_calls_max": 0,
+    "snapshot_input_matches": [
+      "4\\.167"
+    ],
+    "say": [
+      {
+        "id": "two_frames_their_time",
+        "must": "(?=[\\s\\S]*3\\.(?:7|66\\d*))(?=[\\s\\S]*4\\.(?:2|16\\d*))",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "set_before_key",
+        "must": "set the pivot before you (?:key|add (?:any |more )?keys|keyframe)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_other_keys",
+        "never": "\\bother keys\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_jump",
+        "never": "\\bjump(?:s|ed|ing)?\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-TWO-FRAMES",
+    "R-NAMES-REAL"
+  ]
+}

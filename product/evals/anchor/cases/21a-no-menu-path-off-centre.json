@@ -1,12 +1,13 @@
 {
-  "id": "20-no-menu-path-yet",
-  "title": "A menu command to center the anchor: no unconfirmed menu path or shortcut; Pan Behind goes on",
+  "id": "21a-no-menu-path-off-centre",
+  "title": "Asked for a menu command to centre the anchor, with a left-edge place: no Center Anchor Point, no path; Pan Behind goes on",
   "covers": [
-    "L-3"
+    "EP-21",
+    "FR-023"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {
@@ -41,7 +42,7 @@
     ]
   },
   "rubric": [
-    "R-AN-NO-MENU",
+    "R-AN-CENTER-MENU",
     "R-ONE-IDEA"
   ]
 }

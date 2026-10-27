@@ -1,0 +1,54 @@
+{
+  "id": "24c-one-key-not-in-opening",
+  "title": "No layer named, a one-key layer in the comp (synthetic): the two-frames sentence never appears in the opening; never 'other keys' or 'jump'",
+  "covers": [
+    "EP-24",
+    "D-7"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/sled-one-key-rest-away.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/sled-one-key-rest-away.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "synthetic/sled-one-key-rest-away.json",
+      "say": "I don't have a layer in mind."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "say": [
+      {
+        "id": "no_two_frames",
+        "never": "one of those two frames|but it['’]s at rest at|\\btwo frames\\b"
+      },
+      {
+        "id": "no_other_keys",
+        "never": "Sled[^.?!]{0,80}\\bother keys\\b"
+      },
+      {
+        "id": "no_jump",
+        "never": "\\bjump(?:s|ed|ing)?\\b"
+      },
+      {
+        "id": "offers_door",
+        "must": "Door",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-LEAVE-OUTS",
+    "R-NAMES-REAL"
+  ]
+}

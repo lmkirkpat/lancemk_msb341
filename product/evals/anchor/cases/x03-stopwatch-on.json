@@ -1,13 +1,14 @@
 {
-  "id": "16-layer-dragged",
-  "title": "The layer was dragged, not the pivot: names what's off, no fix, no offer",
+  "id": "x03-stopwatch-on",
+  "title": "Anchor Point's stopwatch left on: the hint says to turn it off and keep the pivot",
   "covers": [
-    "EP-14"
+    "EXTRA",
+    "FR-019"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in",
-    "door-dragged.json": "stand-in"
+    "practice2b.json": "live",
+    "stopwatch.json": "live"
   },
   "turns": [
     {
@@ -19,7 +20,7 @@
       "say": "Door should turn from the middle of its left edge."
     },
     {
-      "project": "door-dragged.json",
+      "project": "stopwatch.json",
       "say": "I set it. Done."
     }
   ],
@@ -27,20 +28,13 @@
     "last_check": {
       "passed": false,
       "has": [
-        "layer_dragged"
+        "stopwatch"
       ]
     },
     "say": [
       {
-        "id": "names_door",
-        "must": "Door",
-        "turns": [
-          3
-        ]
-      },
-      {
-        "id": "names_tool",
-        "must": "Pan Behind",
+        "id": "stopwatch",
+        "must": "stopwatch",
         "turns": [
           3
         ]
@@ -55,8 +49,7 @@
     ]
   },
   "rubric": [
-    "R-AN-DRAGGED",
-    "R-HINT-NOT-FIX",
-    "R-NAMES-REAL"
+    "R-AN-STOPWATCH",
+    "R-HINT-NOT-FIX"
   ]
 }

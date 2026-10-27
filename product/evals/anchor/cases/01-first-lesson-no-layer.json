@@ -7,7 +7,7 @@
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
-    "practice2b.json": "stand-in"
+    "practice2b.json": "live"
   },
   "turns": [
     {
@@ -59,11 +59,24 @@
       },
       {
         "id": "leave_out",
-        "must": "Wobble",
+        "must": "already moves?|Wobble|Hatch Rig|Seal|Reveal Matte|matte|Background",
         "turns": [
           1,
           2
         ]
+      },
+      {
+        "id": "leave_out_once",
+        "must": "\\balready moves?\\b",
+        "at_most": 1,
+        "turns": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "no_jump",
+        "never": "\\bjump(?:s|ed|ing)?\\b"
       }
     ]
   },
