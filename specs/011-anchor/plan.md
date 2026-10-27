@@ -197,7 +197,7 @@ and `mentor/jsx/snapshot.jsx`).
 | `rect` doesn't match shapes or text on screen | L-1, L-5 | `RECT_KIND` per kind, one constant. **Closed 2026-10-26:** both `rect`; shapes default |
 | Pan Behind rewrites Position keys (L-2) | L-2 | Item 4 grades either way; only the tip's wording changes |
 | A busy comp hits the 64-sample cap | Tool test on the 70-key synthetic | Caller times are kept first; `not_sampled` is "can't check" |
-| Two reads per snapshot feel slow | SC-001 timings; **T236 logs `anchor_snapshot`'s own time** | The second read only when a needed time is missing, which on Mentor Practice 2 is every lesson start (30 times, 2026-10-26). Over 10 s is logged as a finding; if it is, narrow the second read to the times the check can compare (a spec change, not a build call) |
+| Two reads per snapshot feel slow | SC-001 timings; **T236 logs `anchor_snapshot`'s own time** | The second read only when a needed time is missing, which on Mentor Practice 2 is every lesson start (30 times, 2026-10-26). Over 10 s is logged as a finding; if it is, narrow the second read to the times the check can compare (a spec change, not a build call). **Happened (T236, T237: 9.95 s to 11.7 s):** spec FR-013a and SC-010 (round 3), Phase 8d T251 to T253: time each read first, then cut where the time is |
 | With shapes on, the proposal lands on another skill's layer | Answer key ranks | **Seen 2026-10-26** (Blink): FR-004's three-step animation key (T241) |
 
 ## Complexity Tracking
