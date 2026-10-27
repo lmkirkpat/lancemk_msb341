@@ -88,8 +88,11 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
    long ago" from `last_practiced` ("Last week you shaped Title's Position; Scale still arrived
    moving").
 
-1. **Look and propose.** Call `speed_graph_snapshot` with `skill_options` set to
-   `{ "eased_layers": [...], "land_hard": [] }`. Then, in a few sentences:
+1. **Look and propose.** Call `speed_graph_snapshot` first **without** `skill_options`. If
+   `lesson` is `resumed` or `continued`, go on with the choices it already holds (the paragraph on
+   their choices from last time, below, confirms them when `stored_choices` is true). If it's
+   `new`, call it again with `skill_options` set to `{ "eased_layers": [...], "land_hard": [] }`.
+   Then, in a few sentences:
    - Propose the `focus` (one layer, two at most) and name its pairs from `pairs` by property and
      time ("Title's Position, 0.5 to 1.5 s, 1.5 to 3 s and 3 to 4.37 s, and its Scale"). If the
      layer is one they eased before, say so.
@@ -112,10 +115,10 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
    - **Their choices from last time.** When `stored_choices` is true, before any frame, demo,
      check or hint that uses them, say back what they chose last time, as their own choice, from
      what this reply shows: the layers they're shaping (`focus`) and any move they said should land
-     hard (`landing_hard`, named by layer, property and time, never by id), for example "Last time
-     you were shaping Title, and its last Position move was meant to land hard." Ask whether that
-     still holds, and stop for their answer. A change goes back through `skill_options` with both
-     lists, as in the intent check; a yes carries on. Never say where it was kept or name a field.
+     hard (`landing_hard_labels`, in plain words, never by id), for example "Last time you were
+     shaping Title, and its last Position move was meant to land hard." Ask whether that still
+     holds, and stop for their answer. A change goes back through `skill_options` with both lists,
+     as in the intent check; a yes carries on. Never say where it was kept or name a field.
 
    **When there's nothing to shape:** `no_demo_reason` is `nothing_to_shape` when nothing in the
    comp is eased yet. Say there's nothing eased to shape, and offer easing instead (`ease_first_count`
