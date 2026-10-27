@@ -69,6 +69,10 @@ This skill builds on easing. Call `read_learner_record` first, before anything e
   reteach easing.
 - **Key types** (`keyframes.types`) never blocks this lesson; don't bring it up.
 
+If `read_learner_record` (or a later snapshot) returns `server_current` false, say once, in plain
+words, that your tools were updated since this session started and you need a restart (a new
+Claude Code session) before the lesson, then stop; true or null says nothing.
+
 Also note, for the focus: the layer names that easing lessons targeted (each `easing.basic`
 lesson's `targets`; for older entries with no targets, a layer whose exact name appears in the
 entry's text). These are `eased_layers`. Never read the record file yourself.

@@ -102,6 +102,10 @@ start.
    choices for you, not lines to say: the first words the learner sees are the lesson's or the
    review's own opening, never which of these applied or what you'll do next.
 
+   If `read_learner_record` (or a later snapshot) returns `server_current` false, say once, in plain
+   words, that your tools were updated since this session started and you need a restart (a new
+   Claude Code session) before the lesson, then stop; true or null says nothing.
+
 1. **Look and propose.** Call `offset_snapshot` with no options. Then, in a few sentences:
    - **Name the group in one sentence**, with real names and the shared time from `group`:
      "Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s" (properties), or "Dot 1,

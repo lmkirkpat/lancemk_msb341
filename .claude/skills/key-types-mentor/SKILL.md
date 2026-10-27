@@ -79,6 +79,10 @@ most; they hold the rest with their own hands.
    choices for you, not lines to say: the first words the learner sees are the lesson's or the
    review's own opening, never which of these applied or what you'll do next.
 
+   If `read_learner_record` (or a later snapshot) returns `server_current` false, say once, in plain
+   words, that your tools were updated since this session started and you need a restart (a new
+   Claude Code session) before the lesson, then stop; true or null says nothing.
+
 1. **Look and ask.** Call `key_types_snapshot` with no focus. Then ask the intent question
    **before proposing anything**: "Is anything here meant to snap, like a blink, an on/off, or a
    cut?" Help them answer:
