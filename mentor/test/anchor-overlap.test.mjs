@@ -241,14 +241,16 @@ test("row 21: text: a candidate whose pivot starts on its baseline; its rectangl
   assert.equal(placeNow(left.anchor, left.rect), "between", "left-justified: its pivot on the left of the baseline");
 });
 
-test("row 22: a shape is a default candidate since L-1; a group's anchor moved shows no change at all (L-1)", () => {
+test("row 22: a shape is a default candidate since L-1; a group's anchor moved shows no change at all (L-1), so FR-019b's unchanged_shape follows the place hint", () => {
   assert.deepEqual([cand(P2, "Lid").bucket, cand(P2, "Lid").reason], ["default", null]);
   const group = fixture("lid-group");
   for (const k of ["layer_info", "layers", "comp"]) assert.deepEqual(group[k], P2[k], `lid-group's ${k} is the base's`);
   const r = layerOf(run(P2, group, [{ layer: "Lid", place: "middle-left" }]), "Lid");
   assert.equal(r.rect_shifted, false);
   assert.equal(r.anchor_changed, false);
-  assert.deepEqual(r.hints, ["outside"], "Lid's own pivot, still outside it; the group hint can't fire (for the spec writer)");
+  assert.equal(r.position_changed, false);
+  assert.deepEqual(r.hints, ["outside", "unchanged_shape"], "Lid's own pivot, still outside it, then the possibility of a group's pivot; never content_shifted");
+  assert.equal(r.item1.outside_side, "below");
 });
 
 test("row 23: a shape whose pivot sits outside it reads outside the layer", () => {

@@ -262,24 +262,48 @@ for (const [code, file] of ROWS) {
   });
 }
 
-// Row 22's hint: live (L-1), AE moves a group's anchor and position together, so nothing this skill
-// reads changes, and the check says where Lid's own pivot still is. The code fires only when a
-// layer's rectangle shifts with its anchor unchanged: the stand-in's guess, kept as a clone here,
-// and, live, a text layer whose justification changed (sign-left).
-test("hint group_anchor: live, lid-group shows no change, so it can't fire; it fires on a shifted rectangle", () => {
+// Row 22's hints (FR-019b, T243). Live (L-1), AE moves a group's anchor and position together, so
+// nothing this skill reads changes: on a shape that gives unchanged_shape after the place hint.
+// content_shifted (was group_anchor) fires when a layer's rectangle shifts with its anchor unchanged:
+// live, a text layer whose justification changed (sign-left), and a shape's shifted rectangle, kept
+// as a clone here.
+test("hint content_shifted: what's drawn moved, its pivot didn't, on any layer kind; exactly that code", () => {
+  const sign = layerOf(run(P2, fixture("sign-left"), [{ layer: "Sign", place: "middle-left" }]), "Sign");
+  assert.deepEqual([sign.anchor_changed, sign.position_changed, sign.rect_shifted], [false, false, true]);
+  assert.deepEqual(sign.hints, ["content_shifted"], "a text layer: a justification change (L-5)");
+  const shifted = clone(P2);
+  for (const sm of shifted.layer_info.find((l) => l.name === "Lid").samples) sm.rect = { ...sm.rect, left: sm.rect.left - 40 };
+  const r = layerOf(run(P2, shifted, [{ layer: "Lid", place: "middle-left" }]), "Lid");
+  assert.equal(r.rect_shifted, true);
+  assert.deepEqual(r.hints, ["content_shifted"], "a shape whose rectangle shifted: item 2 fails, so no unchanged_shape");
+  assert.ok(!hintCodes({ ...r, rect_shifted: false }).includes("content_shifted"));
+  assert.ok(!["group_anchor"].some((c) => r.hints.includes(c) || sign.hints.includes(c)), "the old code is gone");
+});
+
+test("hint unchanged_shape: live lid-group (nothing the read holds changed) gives the place hint, then unchanged_shape", () => {
   const want = KEY.attempts["lid-group"];
   const live = layerOf(run(P2, fixture("lid-group"), want.focus), "Lid");
   assert.deepEqual(live.hints, want.hints);
-  assert.equal(live.item1.place_now, "outside");
-  assert.equal(live.rect_shifted, false);
-  const shifted = clone(P2);
-  for (const sm of shifted.layer_info.find((l) => l.name === "Lid").samples) sm.rect = { ...sm.rect, left: sm.rect.left - 40 };
-  const r = layerOf(run(P2, shifted, want.focus), "Lid");
-  assert.equal(r.rect_shifted, true);
-  assert.deepEqual(r.hints, ["group_anchor"]);
-  const sign = layerOf(run(P2, fixture("sign-left"), [{ layer: "Sign", place: "middle-left" }]), "Sign");
-  assert.deepEqual([sign.anchor_changed, sign.position_changed, sign.rect_shifted], [false, false, true]);
-  assert.deepEqual(sign.hints, ["group_anchor"], "a text layer gets the group hint too (for the spec writer)");
+  assert.deepEqual(live.hints, ["outside", "unchanged_shape"]);
+  assert.equal(live.hints.filter((c) => c === "unchanged_shape").length, 1);
+  assert.deepEqual([live.kind, live.anchor_changed, live.position_changed, live.item2.passed, live.rect_shifted], ["shape", false, false, true, false]);
+});
+
+test("unchanged_shape fires only on a shape that didn't pass, own pivot and Position unchanged, item 2 holding, not wrong_layer", () => {
+  const lid = layerOf(run(P2, fixture("lid-group"), [{ layer: "Lid", place: "middle-left" }]), "Lid");
+  const has = (r, o = []) => hintCodes(r, o).includes("unchanged_shape");
+  assert.equal(has(lid), true);
+  assert.equal(has({ ...lid, kind: "solid" }), false, "a solid: not a shape");
+  assert.equal(has({ ...lid, kind: "text" }), false, "a text layer: not a shape");
+  assert.equal(has({ ...lid, passed: true }), false, "passed");
+  assert.equal(has({ ...lid, anchor_changed: true }), false, "its own pivot changed");
+  assert.equal(has({ ...lid, position_changed: true }), false, "its Position changed");
+  assert.equal(has({ ...lid, item2: { ...lid.item2, passed: false } }), false, "item 2 fails");
+  assert.equal(has(lid, [{ kind: "anchor_changed", layer: "Background" }]), false, "another layer's pivot moved: wrong_layer instead");
+  assert.deepEqual(hintCodes(lid, [{ kind: "anchor_changed", layer: "Background" }]), ["wrong_layer"]);
+  // A solid with nothing changed (Door untouched): the place hint only.
+  const door = layerOf(run(P2, P2, [{ layer: "Door", place: "middle-left" }]), "Door");
+  assert.deepEqual(door.hints, ["not_moved_enough"]);
 });
 
 test("hint matte_eye: a pass with a matte's eye left on gives exactly that code", () => {

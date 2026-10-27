@@ -136,7 +136,9 @@ export function hintCodes(r, others = []) {
   else if (!i2.passed) {
     if (r.anchor_changed && !r.position_changed) codes.push("moved_with_pivot");
     else if (r.position_changed && !r.anchor_changed) codes.push("layer_dragged");
-    else if (r.rect_shifted) codes.push("group_anchor");
+    // What's drawn moved inside the layer while its own pivot didn't (a text layer's justification,
+    // an edited path, a shape group's own Position), any layer kind (FR-019b; was group_anchor).
+    else if (r.rect_shifted) codes.push("content_shifted");
     // TD § 7 "in place but moved": the pivot is where they wanted it, but the layer moved too
     // (both values changed, or something else of its own did).
     else if (i1.passed) codes.push("in_place_moved");
@@ -149,6 +151,10 @@ export function hintCodes(r, others = []) {
     else if (i1.place_now === "between" || (i1.place_now === "center" && i1.wanted !== "center")) codes.push("not_moved_enough");
     else if (i1.place_now) codes.push("neighbour_place");
   }
+  // FR-019b (row 22): a shape whose own Anchor Point and Position are both as they were, though it
+  // didn't pass. A pivot dragged inside Contents (the group's) changes nothing the read holds, so
+  // this can't tell that from not having tried yet; the hint offers it as a possibility only.
+  if (r.kind === "shape" && !wrongLayer && !r.anchor_changed && !r.position_changed && i2.passed) codes.push("unchanged_shape");
   if (r.item4 && !r.item4.passed && i2.passed) codes.push("slid_at_key");
   if (r.item5 && r.item5.anchor_keys_added) codes.push("stopwatch");
   // TD § 7 "another layer moved": the focus layer holds items 1 to 4, and another layer's bounds
@@ -282,7 +288,7 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
 
     const r = {
       ...out, item1, item2, item3, item4, item5,
-      anchor_changed: anchorChanged, position_changed: positionChanged, rect_shifted: rectShifted,
+      kind: b.kind, anchor_changed: anchorChanged, position_changed: positionChanged, rect_shifted: rectShifted,
       locked: c.locked === true, cant_check: cant,
     };
     r.passed = cant.length === 0 && item1.passed && item2.passed && (!item4 || item4.passed) && item5.passed;
