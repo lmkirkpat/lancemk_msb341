@@ -37,6 +37,11 @@ covers only this skill's calls.
   said near 0.3). When the two influences add up to more than 100, the model scales both down to
   sum to 100 so time never runs backwards; that's an assumption L-6 checks (spec › Assumptions).
 - **Check live:** L-6 compares three pairs with the graph's peak by eye (SC-004).
+- **Live (2026-10-26, L-5 and L-6):** all four L-6 pairs agreed, 60/70 included. A landing dragged
+  up a lot doesn't peak in the last third: Position with landing speed 36.3 (about 90% of the
+  pair's average) peaks near the two-thirds line, so `fastestPart` returns middle and last, and
+  the builder saw the middle third. The answer key's `["last"]` for `planted-dragged-up-large.json` P1
+  becomes `["middle", "last"]`; the model doesn't change.
 - **Alternatives:** an analytic root of the speed's derivative (more code, same coarse answer);
   thirds of influence alone (wrong when speeds aren't 0).
 
@@ -49,7 +54,7 @@ covers only this skill's calls.
 - **Rationale:** spec FR-010d, approved 2026-10-21. Easy Ease and the demo write speed 0, so both
   pass with any share.
 - **Check live:** L-5 (small and large upward drags on Position and Scale). The constant may only
-  get stricter (spec).
+  get stricter (spec). **L-5 (2026-10-26): no change;** 0.05 caught the small drag on both.
 
 ## R4. Moving dimensions (FR-011)
 
@@ -94,11 +99,22 @@ covers only this skill's calls.
 ## R7. Which mistake a failing pair matches (FR-012)
 
 - **Decision:** checked in this order, first match wins: keys changed (FR-014) → no handle (c) →
-  arrives moving (d; adds "drag sideways" when the landing influence is within 1 point of the
-  baseline's) → back to default (b, and an earlier check this lesson saw the pair passing or
+  arrives moving (d; adds "drag sideways" by the rule below) → back to default (b, and an earlier check this lesson saw the pair passing or
   shaped) → long on both ends (a fails, both ≥ 50) → in and out mixed up (start key's in side
   changed since baseline, out side didn't, and that in side isn't another focus pair's landing) →
-  not shaped yet. The check stores which pairs it has seen shaped in its own result history:
+  not shaped yet.
+  **`drag_sideways` (amended 2026-10-26, L-5):** on `rest`, the first moving dimension that fails
+  d, `drag_sideways = rest.failed.includes("a") && isNum(rest.in_influence) &&
+  isNum(rest.out_influence) && rest.in_influence < LONG_LANDING`, with a new named constant
+  `LONG_LANDING = DEFAULT_INFLUENCE + MIN_GAP` (53.33). No baseline. `DEFAULT_TOL` (1) stays and
+  is used only by b.
+  *Why:* the old test ("within 1 point of the baseline's landing influence") was b's test reused,
+  and a hand drag aimed straight up moved influence by 1.2 (Position) and 6.4 (Scale), so the hint
+  missed the learner it's written for. The hint's words ("drag sideways … to make the ease
+  longer") are the fix for a, so it fires only when a fails; the absolute ceiling stops it on a
+  pair whose landing is already long (60/70: the problem is the start). A flat "under 40" was
+  rejected: it would fire on 10/38 (a passes) and miss 33/45 (a fails, landing still short).
+  The check stores which pairs it has seen shaped in its own result history:
   `speed_graph_check` returns `seen_shaped` and the prompt passes it back on the next check
   (`seen_shaped` input). The session isn't asked to hold it.
 - **Rationale:** a broken handle explains every other symptom, so it comes first; "back to

@@ -7,7 +7,7 @@ import { check } from "../lib/offset.mjs";
 import { matchLayer, otherChanges, shifts } from "../lib/offset-keys.mjs";
 import { clone, KEY, load, lessonFor, PRACTICE2, PRACTICE_NOW } from "./fixtures/offset/load.mjs";
 
-const resolve = (rel) => (rel === "stand-in/practice-now.json" ? PRACTICE_NOW : rel === "stand-in/practice2-before.json" ? PRACTICE2 : rel);
+const resolve = (rel) => (rel === "practice-now.json" ? PRACTICE_NOW : rel === "../layer-info/practice2b.json" ? PRACTICE2 : rel);
 
 function run(name, extra = {}) {
   const k = KEY.checks[name];
@@ -73,15 +73,27 @@ test("layers kind: a split named in the check's split, or stored in skill_option
   assert.equal(member(withInput, "Dot 1").split.on_purpose, true);
   const base = load(PRACTICE2);
   const stored = lessonFor(base, { ...KEY.checks["pops-in"].lesson, split: ["Dot 1"] });
-  assert.equal(check(base, load("stand-in/pops-in.json"), stored).passed, true);
+  assert.equal(check(base, load("pops-in.json"), stored).passed, true);
 });
 
-test("per-property shifts are measured within half a frame (row 19)", () => {
-  const { r } = run("half-frame");
-  const d2 = member(r, "D2");
-  assert.equal(d2.split, null);
-  assert.ok(Math.abs(d2.moved_by.Position - 2.5) < 0.05);
-  assert.ok(Math.abs(d2.moved_by.Opacity - 2.7) < 0.05);
+test("per-property shifts are measured in frames, keys between frames included (row 19, Quick Offset)", () => {
+  // Capture times are rounded to 3 decimals (0.917 s is 27.51 frames): compared in frames.
+  const { r } = run("quick-offset");
+  const d3 = member(r, "Dot 3");
+  assert.equal(d3.split, null);
+  assert.ok(Math.abs(d3.moved_by.Position - 25) < 0.05);
+  assert.ok(Math.abs(d3.moved_by.Opacity - 25) < 0.05);
+});
+
+test("demo credit: shifted by the gap is the demo's; once a check has seen it undone, the same shift is the learner's (FR-011, L-2)", () => {
+  assert.equal(member(run("after-demo").r, "Dot 2").credit, "demo");
+  assert.equal(member(run("after-demo-undone").r, "Dot 2").credit, "undone");
+  assert.equal(member(run("after-demo-redone").r, "Dot 2").credit, "learner");
+  assert.equal(member(run("after-demo-redone-unseen").r, "Dot 2").credit, "demo", "no check between undo and redo: key times can't tell");
+  // Undone again after a redo: back in step, named like any other.
+  const k = KEY.checks["after-demo-redone"];
+  const base = load(PRACTICE2);
+  assert.equal(member(check(base, load("after-demo-undone.json"), lessonFor(base, k.lesson)), "Dot 2").credit, "undone");
 });
 
 test("a member whose remembered move is gone is keys_changed, isn't graded, and holds the pass", () => {
@@ -146,7 +158,7 @@ test("another comp: comp_matches false, nothing graded", () => {
 
 test("layers are matched by unique name, by index when names repeat (row 17)", () => {
   const base = load(PRACTICE2);
-  const reordered = load("stand-in/reordered.json");
+  const reordered = load("reordered.json");
   const dot1 = base.layers.find((l) => l.name === "Dot 1");
   assert.equal(matchLayer(base, reordered, dot1).index, 7, "found by name at its new place in the stack");
   const twins = clone(base);
@@ -160,7 +172,7 @@ test("layers are matched by unique name, by index when names repeat (row 17)", (
 
 test("shifts: the first key's shift in frames, and whether every key moved by it", () => {
   const base = load(PRACTICE2);
-  const now = load("stand-in/layers-pass.json");
+  const now = load("layers-pass.json");
   const p = (s, layer, name) => s.layers.find((l) => l.name === layer).properties.find((x) => x.display_name === name);
   assert.deepEqual(shifts(p(base, "Dot 2", "Blurriness"), p(now, "Dot 2", "Blurriness"), 30), { frames: 4, moved: true, uniform: true });
   assert.deepEqual(shifts(p(base, "Dot 1", "Opacity"), p(now, "Dot 1", "Opacity"), 30), { frames: 0, moved: false, uniform: true });
@@ -215,7 +227,7 @@ test("other changes: a pause given a new value (timing() doesn't count a pause a
 });
 
 test("other changes: key changes inside the group aren't listed (they're the check's to grade)", () => {
-  assert.deepEqual(otherChanges(base, load("stand-in/props-pass-landing.json"), titleGroup), []);
+  assert.deepEqual(otherChanges(base, load("props-pass-landing.json"), titleGroup), []);
 });
 
 test("other changes in the check itself, on a stagger that passes", () => {

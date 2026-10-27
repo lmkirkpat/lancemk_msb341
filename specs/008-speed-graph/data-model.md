@@ -70,9 +70,9 @@ session's.
 | `result` | `passed`, `not_passed`, `keys_changed`, `removed` |
 | `failed` | Subset of `["a", "b", "c", "d"]` (FR-010) |
 | `mistake` | One of `arrives_moving`, `no_handle`, `long_both_ends`, `back_to_default`, `in_out_mixed`, `not_shaped`, or `null` when passed (research R7) |
-| `drag_sideways` | `true` with `arrives_moving` when the landing influence is within 1 point of the baseline's |
+| `drag_sideways` | `true` with `arrives_moving` when, on the dimension that fails d, a also fails and the landing influence is below `LONG_LANDING` (53.33); `false` when an influence can't be read (FR-012, research R7; amended 2026-10-26, no baseline) |
 | `dimension` | The failing moving dimension's plain label ("height"), when only some dimensions fail |
-| `key_time` | The key the hint names (the landing for `arrives_moving`, the linear or hold side for `no_handle`) |
+| `key_time` | The key the hint names (the landing for `arrives_moving`, the linear or hold side for `no_handle`; a hold side still shows a handle in AE, L-7) |
 | `fastest` | `{ parts }` on the current shape (stage 6's "read again") |
 | `credit` | Demo pair only: `demo`, `learner_after_undo`, `learner_redo`, `unknown` (FR-008) |
 

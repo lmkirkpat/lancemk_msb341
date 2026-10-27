@@ -11,12 +11,16 @@ moves changed (FR-008, row 8), and the demo's fresh read (FR-010). Amended again
 7, builder's decision): a member whose moves changed now holds the pass until the learner answers,
 as in spec 008 FR-014, replacing "2 or more graded members pass anyway" (FR-008, row 8). Amended
 2026-10-24 (builder's decision): the demo never runs on an eye-off layer, a matte included
-(FR-009, row 13), as built. The builder took B-3 (properties kind on
+(FR-009, row 13), as built. Amended 2026-10-26 after live checks L-1 to L-4 and the desk block
+(T034, T035): the demo target skips locked layers (builder's decision, FR-009, row 21);
+`offset_snapshot` decides Quick Offset (FR-017); row 16's hint from L-3; FR-011's limit when the
+demo is undone and redone with no check between; rows 18 and 19 read live captures. One new open
+question, B-5 (FR-014). The builder took B-3 (properties kind on
 a tie) and B-4 (the rhythm threshold reuses FR-027's floor) as recommended, and both shared requests
 are tasked in spec 004 (SR-1 as T058 and T059, SR-2 as T064 and T065). The curriculum designer's
 round 1 answers (`teaching-design.md` › 14) are folded in: D-1 changed (a gap under the floor is
-caught at the intent step), D-2 agreed plus the up-front case. Still open: nothing for the spec;
-live checks L-1 to L-4 settle facts during the build.
+caught at the intent step), D-2 agreed plus the up-front case. Still open: B-5 (Open questions);
+live checks L-1 to L-4 are done (`live-sitting-2026-10-26.md`).
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 3, offset." Record ID `timing.offset`, short name `offset`, tool prefix `offset_`
@@ -283,6 +287,13 @@ section). Other edge cases:
   even when the learner added it to the group; the pick skips to the next member in their order
   that qualifies, as for an expression, and with none left there's no demo. A matte stays in the
   group and is graded like any member (as built, `mentor/lib/offset.mjs` demo pick; spec 004 T127).
+  **Not locked (decided 2026-10-26, the builder, after live check L-4):** the pick skips a locked
+  member the same way, so the skip reasons are three: an expression on a keyed property, the eye
+  off, a lock. With none left, there's no demo, and `no_demo_reason` says `locked` when a lock was
+  what ruled the last one out (`expression` otherwise). L-4 found `offset_snapshot` naming a locked
+  Dot 2 as the demo target, which `offset_demo` then refused, so a lesson could offer a demo it
+  can't give. `offset_demo`'s lock refusal (FR-010) stays as the backstop for a lock set after the
+  snapshot.
 - **FR-010**: The demo MUST shift keys only (not the layer's in or out point) by a whole, positive
   number of frames equal to the learner's gap:
   - **Layers kind:** every keyed property on the demo layer, including effect keys, both separated
@@ -301,7 +312,14 @@ section). Other edge cases:
   1).
 - **FR-011 (credit)**: The check MUST credit the demo member to the demo while its shift is still in
   place, count it in "no two start the same", and treat it as the learner's once they've undone it
-  and moved it themselves (`markChecked(passed, { demoUndone })`, contract › 3).
+  and moved it themselves (`markChecked(passed, { demoUndone })`, contract › 3). Once a check has
+  marked the demo undone, the member is the learner's whatever it moved by, including the demo's
+  own gap (as built 2026-10-26, T034: `creditFor` honours the session's undone mark).
+  **Known limit (2026-10-26, L-2):** if the learner undoes the demo and makes the same shift
+  themselves with **no check in between**, key times alone can't tell it from the demo, so it's
+  credited to the demo (answer key `after-demo-redone-unseen`). Accepted: the member still counts
+  in "no two start the same", so pass or fail is unchanged; only the credit is off, and the mentor
+  may call that shift the demo's.
 
 ### Checking the learner's attempt
 
@@ -321,7 +339,10 @@ section). Other edge cases:
   change from checking).
 - **FR-014**: The check MUST flag, as a hint and not a pass condition, any key of a group member
   that now sits before 0 s or after the comp's end ("it never finishes"), and MUST NOT count such a
-  landing as a landing the comp plays (TD § 7, § 9).
+  landing as a landing the comp plays (TD § 7, § 9). Open 2026-10-26 (B-5): as built, two group
+  properties that start the same and **both** land past the comp's end are never "together", so a
+  properties lesson on such a pair passes with nothing changed, while the focus proposes the same
+  pair as lockstep (`past-end.json`, Chip C).
 - **FR-015 (rhythm, layers kind)**: After a pass with 3 or more layers, the mentor MUST add one
   sentence on the rhythm when the gaps between consecutive starts (in time order) differ by the
   floor or more (largest gap minus smallest), and say nothing about rhythm otherwise. Never a fail
@@ -338,7 +359,11 @@ section). Other edge cases:
 - **FR-017 (version, spec 004 FR-030)**: The mentor MUST teach dragging keys and dragging layer bars
   on every version. It MUST NOT mention Quick Offset until the builder's live run has confirmed the
   gesture on 26.5 (Live run L-1) and then only when R0 reads 25.4 or later (`atLeast(host,
-  "25.4")`); with an unknown version (`host.known: false`) it isn't mentioned. It MUST NOT quote
+  "25.4")`); with an unknown version (`host.known: false`) it isn't mentioned. **L-1 confirmed it
+  2026-10-26** (Command+Option drag, on layers and on selected keys). The version check lives in the
+  tool: `offset_snapshot` returns `quick_offset`, true only when the version is known and 25.4 or
+  later, and the skill prompt offers Quick Offset, alongside dragging and never instead of it, only
+  when it's true; the prompt never compares versions itself (as built, T035). It MUST NOT quote
   nudge shortcuts (TD § 10). It MUST NOT teach Sequence Layers, but a check after it is graded the
   same.
 - **FR-018**: On a missing easing prerequisite the mentor MUST follow TD § 3 and spec 004 FR-005,
@@ -428,12 +453,12 @@ the check and the learner each see, and the reused filters.
 | 13 | Hidden layer (Old Take) and matte, eye off | Left out until R1; with R1, a matte is a member like any layer (spec 004 T127) | Not graded unless added; a matte in the group is graded | "unless you want it"; a matte never called hidden | Right for wave A (KD-001 caveat, filter 2). **Demo: never on an eye-off layer, a matte included** (decided 2026-10-24, FR-009). Test |
 | 14 | Null (CTRL) | Not eligible; never the demo | Not graded | One sentence | Right. Test, including a learner who adds it (refused) |
 | 15 | Parenting (Title, Subtitle under CTRL, which moves 0 to 1 s) | Own keys only; a child's visible start includes the parent's motion, not read in wave A | Own keys only | Nothing about parents in wave A, and never a claim that the children no longer move together on screen (TD § 9) | Known blind spot until R1 (designer confirmed, TD § 14): staggering two children of one moving parent passes on their own keys while the parent's motion still moves them together. Stated in Out of scope |
-| 16 | Layer bar dragged vs. in point trimmed | Not read (in points are R1) | Bar drag: keys move, so the check sees it (**live check L-3**). Trim: keys unchanged, still lockstep | "Its bar may have moved, but the animation inside it didn't" | Right if L-3 confirms key times are read in comp time after a drag |
+| 16 | Layer bar dragged vs. in point trimmed | Not read (in points are R1) | Bar drag: keys move, so the check sees it (**live check L-3**). Trim: keys unchanged, still lockstep | When nothing moved on a layer they say they moved: trimming the start of its bar doesn't move the animation inside it; dragging the whole bar does (rewritten 2026-10-26 from L-3; the old "Its bar may have moved, but the animation inside it didn't" was wrong, as a dragged bar is a real shift) | Right: **L-3 confirmed 2026-10-26** a dragged bar's keys read +6 frames in comp time and a trim left them unchanged. Tests on `bar-dragged.json`, `in-point-trimmed.json` |
 | 17 | Layer reordered in the stack | n/a | Matched by name (FR-012); key times unchanged → still lockstep | "The order in the stack isn't when they move" | **Gap fixed by FR-012** (index matching would see a different layer). Test |
-| 18 | Keys before 0 s or after the comp's end | n/a | Flag (FR-014); not a landing the comp plays | TD § 7 hint | Right with FR-014. Synthetic test |
-| 19 | Sub-frame key times (Quick Offset's even spacing, B-2) | Floor compares in seconds | Half-frame tolerance on per-property shifts | | **Live check L-1**; test with a synthetic half-frame case |
+| 18 | Keys before 0 s or after the comp's end | n/a | Flag (FR-014); not a landing the comp plays | TD § 7 hint | Right with FR-014, except two members both landing past the end (**B-5**, open). Live case `past-end.json` (2026-10-26: AE keeps a key past the end); the properties-kind case is a marked edit of `practice-now.json` |
+| 19 | Sub-frame key times (Quick Offset's even spacing, B-2) | Floor compares in seconds | Half-frame tolerance on per-property shifts | | Right: **L-1 confirmed 2026-10-26** Quick Offset on layers puts keys between frames (+12.5, +25). Live case `quick-offset.json`; the over-half-frame split is a marked edit of it |
 | 20 | 60 fps comp | Floor = 1/15 s = 4 frames | 3 frames is still the same | Same hint, no number | Right per spec 004 FR-027. Test on the 60 fps capture |
-| 21 | Locked layer as demo target | n/a (lock not read until R1) | Demo refuses, nothing changed (FR-010) | Plain sentence | **Live check L-4** |
+| 21 | Locked layer as demo target | Skipped by the demo pick, like an eye-off layer (FR-009, decided 2026-10-26); still a member and graded | Demo refuses, nothing changed (FR-010), kept as the backstop for a lock set after the snapshot | Plain sentence | **L-4 (2026-10-26)**: the refusal held, but the snapshot named the locked Dot 2 as the demo target, hence the skip. Test: a locked second member isn't the demo target |
 | 22 | Text animator, mask path, shape keys | Counted like any keyed property | Counted | | Right; no special case |
 
 **Trap layers in Mentor Practice 2** (spec 004 T064, from SR-2): Dot 2 with an effect key, Dot 3
@@ -452,6 +477,13 @@ reviews.
 - **L-3 (new)**: after dragging a layer bar, the snapshot's key times are the new comp times; after
   trimming the in point, they're unchanged.
 - **L-4 (new)**: the demo on a locked layer refuses without a partial change.
+- **Results (2026-10-26,** [live-sitting-2026-10-26.md](live-sitting-2026-10-26.md)**):** L-1:
+  Command+Option drag works at 26.5; on layers it moves whole layers (effect keys too) with even
+  spacing and keys between frames, on selected keys it moves keys only, on whole frames (FR-017,
+  row 19). L-2: every key moved exactly 4 frames, nothing lost, one undo restores it; no snippet
+  change. L-3: as above (row 16). L-4: refused with nothing changed, but the snapshot had named the
+  locked layer as the demo target (FR-009, row 21). Base for Mentor Practice 2 is
+  `mentor/test/fixtures/layer-info/practice2b.json` (spec 009's L-4), not `practice2-before.json`.
 - **TD B-4** is answered by `discovery/usage-notes/mentor-practice-state-2026-10-20.md`: Title's
   Position now has 4 keys (0.5, 1.5, 3, 4.37 s), so fixtures and tests MUST NOT assume three.
 - **TD B-1** (the second practice comp) is spec 004 T041 plus T064.
@@ -550,8 +582,8 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech on every c
 
 ## Open questions
 
-All answered (designer 2026-10-20, `teaching-design.md` › 14; builder 2026-10-21). Kept with their
-answers for the record.
+D-1 to B-4 answered (designer 2026-10-20, `teaching-design.md` › 14; builder 2026-10-21), kept with
+their answers for the record. B-5 is open (2026-10-26).
 
 ### For the curriculum designer (D)
 
@@ -574,6 +606,21 @@ answers for the record.
    **Approved 2026-10-21.**
 4. **Rhythm threshold (FR-015).** **Recommended:** reuse FR-027's floor for "uneven" (largest minus
    smallest gap), so no new number enters the product. **Approved 2026-10-21.**
+5. **B-5, two landings both past the comp's end (FR-014, row 18; open 2026-10-26).** In
+   `past-end.json`, Chip C's Position and Opacity both run 7.5 s to 8.5 s; the comp ends at 8 s.
+   The focus proposes them as a properties group (start and landing the same by key time), but the
+   check never calls two landings the comp doesn't play "the same", so a properties lesson on that
+   pair passes with **nothing changed** (checked on the branch 2026-10-26). On screen they start
+   together and move together until the comp cuts, which is lockstep. FR-014's "not a landing the
+   comp plays" was written for one landing pushed past the end, so it no longer lands with the
+   others; it wasn't meant to unlock a pair that moves together. **Recommended:** two landings that
+   are **both** past the end compare by key time like any other (same time, same landing); a
+   played landing and an unplayed one are never the same, as now; the out-of-comp flag stays a
+   hint, and the mentor never says such a key "lands". That makes the check agree with the focus
+   (FR-003's spirit) and changes no live answer-key case. Alternative: the focus leaves out a group
+   whose landings are past the end; rejected as a bigger change that hides real lockstep from
+   teaching. **Not a T036 blocker** (Mentor Practice's Title lands at 1.5 s), but it needs an
+   answer before review mode's baseline, since a review could pick such a pair.
 
 ### Settled here
 

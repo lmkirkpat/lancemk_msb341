@@ -5,6 +5,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { check, findNull, regionOf, storeNull } from "../lib/null-parenting-check.mjs";
+import { candidates } from "../lib/null-parenting.mjs";
+import { classOf } from "../lib/visibility.mjs";
 import { clone, KEY, lessonFor, load } from "./fixtures/null-parenting/load.mjs";
 
 const GROUP = ["Tile", "Caption", "Stamp"];
@@ -210,7 +212,7 @@ test("a keyed Position with a new expression and no parent reads as the pick whi
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const tile = read.layer_info.find((l) => l.name === "Tile");
   tile.parent = null;
   read.layers.find((l) => l.name === "Tile").properties.find((p) => p.display_name === "Position").expression_enabled = true;
@@ -224,7 +226,7 @@ test("P3 compares key counts and times within half a frame, never raw values (B9
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const tilePos = read.layers.find((l) => l.name === "Tile").properties.find((p) => p.display_name === "Position");
   tilePos.keys[0].time += 0.016; // under half a frame at 30 fps
   assert.equal(check(base, read, lesson, {}).result.parenting_passed, true);
@@ -238,12 +240,12 @@ test("P3 counts separated X and Y apart, and effect keys too", () => {
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const stamp = read.layers.find((l) => l.name === "Stamp");
   stamp.properties.find((p) => p.display_name === "Y Position").keys.pop();
   const r1 = check(base, read, lesson, {}).result;
   assert.deepEqual(r1.layers.find((l) => l.layer === "Stamp").p3.changed, [{ property: "Y Position", before: 2, now: 1 }]);
-  const read2 = load("practice2b-parented.json");
+  const read2 = load("parented-center.json");
   read2.layers.find((l) => l.name === "Caption").properties.push({ path: "ADBE Effect Parade/ADBE Gaussian Blur 2/ADBE Gaussian Blur 2-0001", display_path: "Effects › Gaussian Blur › Blurriness", match_name: "ADBE Gaussian Blur 2-0001", display_name: "Blurriness", dimensions: 1, expression_enabled: false, keys: [{ index: 1, time: 1, in_type: "linear", out_type: "linear", value: 5, in_ease: [], out_ease: [] }] });
   assert.equal(check(base, read2, lesson, {}).result.layers.find((l) => l.layer === "Caption").p3.passed, false);
 });
@@ -258,7 +260,7 @@ test("P4 counts Position, X, Y, Scale or Rotation with two different values; nev
   const pos = same.layers.find((l) => l.name === "Null 1").properties[0];
   pos.keys.push({ ...pos.keys[0], index: 2, time: 7 });
   assert.deepEqual(check(base, same, lesson, {}).result.codes, ["one_key"], "two keys with the same value hold still");
-  const fx = load("practice2b-parented.json");
+  const fx = load("parented-center.json");
   fx.layers.unshift({ index: 1, name: "Null 1", kind: "null", enabled: true, is_null: true, properties: [{ path: "ADBE Effect Parade/ADBE Slider Control/ADBE Slider Control-0001", display_path: "Effects › Slider Control › Slider", match_name: "ADBE Slider Control-0001", display_name: "Slider", dimensions: 1, expression_enabled: false, keys: [{ index: 1, time: 6, in_type: "linear", out_type: "linear", value: 0, in_ease: [], out_ease: [] }, { index: 2, time: 7, in_type: "linear", out_type: "linear", value: 9, in_ease: [], out_ease: [] }] }] });
   assert.deepEqual(check(base, fx, lesson, {}).result.codes, ["effect_move"]);
 });
@@ -331,7 +333,8 @@ test("a focus layer renamed or deleted is not_found, never guessed", () => {
 
 test("the stored null is the null's own sample at the before-read time", () => {
   const read = load("null-center.json");
-  assert.deepEqual(storeNull(read, 1, 0, "demo"), { anchor: [50, 50], position: [1215, 165], scale: [100, 100], rotation: 0, time: 0, from: "demo" });
+  // AE 26.5 puts a new null's anchor on its square's top-left (L-1), so the anchor is (0, 0).
+  assert.deepEqual(storeNull(read, 1, 0, "demo"), { anchor: [0, 0], position: [1215, 165], scale: [100, 100], rotation: 0, time: 0, from: "demo" });
   assert.equal(storeNull(read, 1, 9.9), null, "a time that wasn't sampled stores nothing");
 });
 
@@ -341,8 +344,14 @@ test("comments show only when the read shows them, never change a result, and fo
   const [, slide] = runAttempt(KEY.attempts.find((a) => a.id === "us1-slide-comments"));
   assert.equal(slide.result.passed, true);
   assert.deepEqual(slide.result.comments.map((c) => c.code).sort(), ["default_name", "linear"]);
+  // The live plant's keys are AE's default, linear; eased, the linear sentence goes.
   const [, keyed] = runAttempt(KEY.attempts.find((a) => a.id === "us2-keyed-early"));
-  assert.deepEqual(keyed.result.comments.map((c) => c.code), ["default_name"], "eased keys: not linear");
+  assert.deepEqual(keyed.result.comments.map((c) => c.code).sort(), ["default_name", "linear"]);
+  const eased = load("null-keyed-early.json");
+  eased.layers.find((l) => l.name === "Null 1").properties.forEach((p) => p.keys.forEach((k) => { k.in_type = "bezier"; k.out_type = "bezier"; }));
+  const easedLesson = lessonFor(load("practice2b.json"), { focus: GROUP });
+  easedLesson.skill_data = check(load("practice2b.json"), load("null-center.json"), easedLesson, { region: "center" }).skill_data;
+  assert.deepEqual(check(load("practice2b.json"), eased, easedLesson, {}).result.comments.map((c) => c.code), ["default_name"], "eased keys: not linear");
   // Stacked: the null's move overlaps Tile's own Position keys in time.
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
@@ -384,11 +393,40 @@ test("comments show only when the read shows them, never change a result, and fo
   assert.ok(zr.comments.some((c) => c.code === "effect"));
 });
 
+test("a null at Opacity 0, as AE 26.5 makes it (L-1): never hidden, still found and parented to, and no opacity comment (rows 15, 16, 22)", () => {
+  const base = load("practice2b.json");
+  const placed = load("null-center.json");
+  const nul = placed.layer_info.find((l) => l.name === "Null 1");
+  assert.equal(nul.transform.opacity, 0, "the live read");
+  assert.deepEqual(nul.transform.anchor.slice(0, 2), [0, 0], "its anchor on the square's top-left");
+  assert.equal(classOf(placed, nul.index), "null", "never hidden");
+  assert.equal(candidates(placed).find((c) => c.layer === "Null 1").reason, "null");
+  const lesson = lessonFor(base, { focus: GROUP });
+  const r1 = check(base, placed, lesson, { region: "slides_only" });
+  assert.deepEqual(r1.result.codes, ["null_ready"]);
+  assert.equal(r1.result.null.n1, true);
+  lesson.skill_data = r1.skill_data;
+  const parented = check(base, load("parented-center.json"), lesson, {}).result;
+  assert.equal(parented.parenting_passed, true, "it carries its children");
+  assert.deepEqual(parented.codes, ["no_move"]);
+  const slide = check(base, load("slide-null.json"), lesson, {}).result;
+  assert.equal(slide.passed, true);
+  assert.ok(!slide.comments.some((c) => c.code === "opacity"), "Opacity 0 with no keys isn't a fade");
+  const set = (v) => { const r = load("slide-null.json"); r.layer_info.find((l) => l.name === "Null 1").transform.opacity = v; return check(base, r, lesson, {}).result.comments.some((c) => c.code === "opacity"); };
+  assert.deepEqual([0, 60, 100].map(set), [false, true, false], "on a null only a value between 0 and 100 is a fade");
+  // Row 22: keyed Opacity is still the fade hint, and the only thing it changes is P4.
+  const fade = check(base, load("fade-null.json"), lesson, {}).result;
+  assert.equal(fade.parenting_passed, true);
+  assert.deepEqual(fade.codes, ["opacity_move"]);
+  // The live demo read: no frame or hint calls the null hidden.
+  assert.ok(!JSON.stringify(slide).includes("hidden"));
+});
+
 test("other changes come from every layer: parented to the null, a parent changed, keys, expressions, layers added or removed", () => {
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   const shadow = read.layer_info.find((l) => l.name === "Shadow");
   shadow.parent = read.layer_info.find((l) => l.name === "Row A").index;
   read.layers.find((l) => l.name === "Gauge").properties[0].keys.pop();
@@ -436,7 +474,7 @@ test("TD § 7: wrong_parent when a focus layer follows another null", () => {
   const base = load("practice2b.json");
   const lesson = lessonFor(base, { focus: GROUP });
   lesson.skill_data = check(base, load("null-center.json"), lesson, {}).skill_data;
-  const read = load("practice2b-parented.json");
+  const read = load("parented-center.json");
   read.layer_info.find((l) => l.name === "Caption").parent = read.layer_info.find((l) => l.name === "Hatch Rig").index;
   const { result } = check(base, read, lesson, {});
   assert.ok(result.hints.some((h) => h.code === "wrong_parent" && h.layer === "Caption" && h.parent === "Hatch Rig"));

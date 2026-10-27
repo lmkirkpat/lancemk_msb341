@@ -264,8 +264,12 @@ function comments(baseline, current, focus, nul, moving, { explaining = null } =
   if (scales.some((s) => Math.abs(s.v[0] - s.v[1]) > 0.001)) out.push({ code: "non_uniform_scale", null: nul.name });
   const zero = scaleProp ? scaleProp.keys.find((k) => Array.isArray(k.value) && (k.value[0] === 0 || k.value[1] === 0)) : null;
   if (zero) out.push({ code: "zero_scale_at_key", null: nul.name, time: r3(zero.time) });
-  // FR-020: the null's opacity keyed or below 100 while a child's isn't.
-  const nullFades = list.some((p) => p.path === OPACITY && p.keys.length) || (info && info.transform && typeof info.transform.opacity === "number" && info.transform.opacity < 100);
+  // FR-020: the null's opacity keyed or below 100 while a child's isn't. AE 26.5 makes every new
+  // null at Opacity 0 (spec 012 L-1; older versions at 100), so on a null a static 0 is AE's
+  // default, not a fade: only a value between 0 and 100 counts there.
+  const op = info && info.transform ? info.transform.opacity : null;
+  const staticFade = typeof op === "number" && op < 100 && !(info.is_null === true && op <= 0);
+  const nullFades = list.some((p) => p.path === OPACITY && p.keys.length) || staticFade;
   if (nullFades && focus.some((n) => fullOpacity(current, n))) {
     out.push({ code: "opacity", null: nul.name });
   }

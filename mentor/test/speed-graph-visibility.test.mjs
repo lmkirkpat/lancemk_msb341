@@ -1,7 +1,7 @@
 // Spec 004 wave B, tasks-wave-b T125 (spec 008 row 10, teaching design's Matte row): skill 2 reads the
 // visibility class once layer_info is known. A matte's eased Position pair is a candidate and in the
 // focus when proposed, never the demo while its eye is off, and not left out as hidden; without
-// layer_info, today's result. Synthetic (its comment says so); a live case is T136's.
+// layer_info, today's result. Synthetic (its comment says so), then T136's live case on overlaps.json.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -55,4 +55,24 @@ test("synthetic: a keyed null with its eye off is still in the hidden list (B1)"
   assert.deepEqual(a.left_out.find((x) => x.kind === "null").layers, ["Rig"]);
   assert.deepEqual(a.focus, ["Wipe"]);
   assert.deepEqual(hiddenOut(analyze(withoutInfo(s))), ["Old Take", "Wipe", "Rig"]);
+});
+
+// ---- T136: live overlaps.json. Wipe (the matte, eye off) has a linear Position pair and an Opacity
+// blink the build script shaped (80/15), so it's read as eligible: its pairs are sorted by easing state
+// (ease first, already shaped), never left out as hidden; Draft (hidden by the learner) and Rig (an
+// eye-off null) are.
+const overlaps = JSON.parse(fs.readFileSync(path.join(FIXTURES, "layer-info", "overlaps.json"), "utf8"));
+const kindOf = (a, kind) => (a.left_out.find((x) => x.kind === kind) || { layers: [], refs: [] });
+
+test("live overlaps.json: the matte isn't left out as hidden; its pairs are read like any visible layer's; the learner's hidden layer and the eye-off null are", () => {
+  const a = analyze(overlaps);
+  assert.deepEqual(hiddenOut(a), ["Rig", "Draft"]);
+  assert.ok(kindOf(a, "ease_first").refs.some((r) => r.layer === "Wipe" && r.property === "Position"));
+  assert.ok(kindOf(a, "already_shaped").refs.some((r) => r.layer === "Wipe" && r.property === "Opacity"));
+});
+
+test("live overlaps.json: without layer_info, today's result (Wipe is left out as hidden)", () => {
+  const old = analyze(withoutInfo(overlaps));
+  assert.ok(hiddenOut(old).includes("Wipe"));
+  assert.ok(!kindOf(old, "ease_first").refs.some((r) => r.layer === "Wipe"), "a hidden layer's linear pair isn't offered to ease first");
 });

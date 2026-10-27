@@ -163,9 +163,11 @@ The cloud phase runs alongside specs 008 and 010; the sitting doesn't (one agent
 
 - **SR-2 (spec's own, conditional):** if L-1 shows After Effects jumps on a mixed pair, the shared
   owner changes `segmentState` and re-runs easing's evals. This skill keeps treating it as not held
-  until then (FR-022).
+  until then (FR-022). **Applies, 2026-10-26:** L-1 showed the jump, at the pair's first key. Not a
+  blocker for T035 or the merge (spec › SR-2).
 - **SR-3 (spec's own, wave B):** switch this skill's candidate and demo filter from the eye switch
-  to the visibility class when R1 lands; a shared-owner change to this skill's merged file.
+  to the visibility class when R1 lands; a shared-owner change to this skill's merged file. **Done
+  2026-10-26** (spec 004 wave B shared pass, T124 to T130).
 - **Note (spec 004 contract, no change asked):** contract › 6 says `keepLinear` throws
   `NOT_KEPT_LINEAR` for "any pair not linear at both ends". This skill pre-checks (FR-014) so the
   throw shouldn't happen; if a race does throw it, the tool returns the verdict `not_linear`
@@ -178,8 +180,8 @@ The cloud phase runs alongside specs 008 and 010; the sitting doesn't (one agent
 
 | Risk | Watch | Mitigation |
 |---|---|---|
-| Toggle Hold writes both sides (L-2), so the demo differs from a hand toggle | L-2, L-3 | `HOLD_SIDES` is one constant in the snippet and twin; set it from L-2 in the desk block |
-| Mixed pairs jump (L-1) | L-1 | SR-2; until merged the check never calls a mixed pair done (FR-016), which is still honest |
+| Toggle Hold writes both sides (L-2), so the demo differs from a hand toggle | L-2, L-3 | `HOLD_SIDES` is one constant in the snippet and twin; set it from L-2 in the desk block. **Closed 2026-10-26:** out side only; the demo reads the same as a hand toggle |
+| Mixed pairs jump (L-1) | L-1 | SR-2; until merged the check never calls a mixed pair done (FR-016), which is still honest. **Happened 2026-10-26:** the jump comes at the first key; the check's `wrong_side` verdict and "snaps too early" hint cover the focus; outside it, H-5 |
 | A resumed turn forgets the should-move list | Tool test | Stored in `skill_options`; the check also accepts it as input and takes the union |
 | `fresh` refused after a demo or check | Tool test | The tool passes `LESSON_UNDERWAY` through and the prompt doesn't retry (FR-007) |
 | Mentor Practice's fades make a review nag (H-1) | SC-007 live review | Accepted this sprint; a "meant to fade" mark next sprint would be shared work |

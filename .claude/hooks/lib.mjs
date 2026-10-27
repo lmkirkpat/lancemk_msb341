@@ -1,7 +1,8 @@
 // Shared helpers for the agent team's hooks (decisions/008). Node built-ins only.
 //
 // Hooks tell agents apart by `agent_type` and `agent_id`, which Claude Code sends only for
-// subagent calls. Subagents share the cockpit's `session_id`, so never key on that.
+// subagent calls. Subagents share the cockpit's `session_id`, so never key on that alone; two
+// top-level sessions share no `agent_id`, so never key on that alone either (the AE lock keys on both).
 
 import fs from "node:fs";
 import os from "node:os";

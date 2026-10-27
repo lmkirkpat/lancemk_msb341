@@ -10,7 +10,7 @@ import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { tempHome } from "./helpers.mjs";
-import { DIR, load, where } from "./fixtures/null-parenting/load.mjs";
+import { DIR, KEY, load, where } from "./fixtures/null-parenting/load.mjs";
 
 const home = tempHome();
 const stateFile = path.join(home, "fixture-state.json");
@@ -204,7 +204,7 @@ test("the demo layer is credited to the demo, then the learner's after an undo a
   const r2 = await call("null_parent_check");
   assert.equal(r2.demo_undone, true);
   assert.ok(lesson().demo.undone);
-  project("practice2b-parented.json", { undo_demo: true });
+  project("parented-center.json", { undo_demo: true });
   const r3 = await call("null_parent_check");
   assert.equal(r3.layers.find((l) => l.layer === "Tile").credit, "learner");
   assert.equal(r3.parenting_passed, true);
@@ -291,14 +291,16 @@ test("a moving parent on the null: nothing graded and no markChecked", async () 
 
 // ---- US3: review
 
-test("review: proposes Row A to C, never Tile, Caption or Stamp, and the finder agrees", async () => {
+test("review: on the comp as built proposes Chip A to C (L6-1), never Tile, Caption or Stamp, and the finder agrees", async () => {
   useRecord("learned-group.json");
   const r = await call("null_parent_snapshot", { mode: "review" });
-  assert.deepEqual(r.proposal, ["Row A", "Row B", "Row C"]);
+  assert.deepEqual(r.proposal, KEY.fixtures["practice2b.json"].review_proposal_after_group);
+  assert.equal(r.next_proposal, null, "a review never offers a second group");
   assert.equal(r.mode, "review");
   assert.equal(r.no_demo_reason, "awaiting_focus", "a first review read with a group to offer isn't 'nothing new' (B1)");
   const exclude = GROUP.map((layer) => ({ layer, property: "Parent" }));
-  assert.deepEqual(FINDERS["parenting.null"].focus(load("practice2b.json"), { exclude }).layers, ["Row A", "Row B", "Row C"]);
+  assert.deepEqual(FINDERS["parenting.null"].focus(load("practice2b.json"), { exclude }).layers, r.proposal);
+  // The learner can still name another group, here Row A to C.
   const set = await call("null_parent_snapshot", { mode: "review", skill_options: { focus: ["Row A", "Row B", "Row C"] } });
   assert.equal(set.focus_set, true);
   assert.equal(set.demo_target, null);
@@ -343,7 +345,11 @@ test("review: with no unparented group left, no_new_target", async () => {
   useRecord("learned-group.json");
   const none = variant("practice2b.json", (s) => {
     s.layer_info = s.layer_info.filter((l) => !["Gradient", "Reveal Matte"].includes(l.name));
-    for (const n of ["Row B", "Row C"]) s.layer_info.find((l) => l.name === n).parent = s.layer_info.find((l) => l.name === "Row A").index;
+    // Every other group on the comp as built parented within itself; wave A's crowd is left, and a
+    // crowd is never a review's group (TD § 11).
+    for (const [kids, parent] of [[["Row B", "Row C"], "Row A"], [["Chip B", "Chip C"], "Chip A"], [["Sled"], "Pause"]]) {
+      for (const n of kids) s.layer_info.find((l) => l.name === n).parent = s.layer_info.find((l) => l.name === parent).index;
+    }
   });
   project(none);
   const r = await call("null_parent_snapshot", { mode: "review" });
@@ -371,7 +377,7 @@ test("with the pivot not learned the lesson still starts and checks the same way
 test("every field, code and value SKILL.md names in backticks is in a tool's reply, input or errors", async () => {
   const { MESSAGES } = await import("../errors.mjs");
   const { check } = await import("../lib/null-parenting-check.mjs");
-  const { KEY, lessonFor } = await import("./fixtures/null-parenting/load.mjs");
+  const { lessonFor } = await import("./fixtures/null-parenting/load.mjs");
   const { analyze } = await import("../lib/null-parenting.mjs");
   const seen = new Set();
   const walk = (v) => {
@@ -389,7 +395,7 @@ test("every field, code and value SKILL.md names in backticks is in a tool's rep
       walk(result);
     }
   }
-  for (const f of ["practice2b.json", "practice2b-with-wave-a.json"]) walk(analyze(load(f), { skill_options: { focus: ["Plate", "Row A", "Gradient"] } }));
+  walk(analyze(load("practice2b.json"), { skill_options: { focus: ["Plate", "Row A", "Gradient"] } }));
   // Replies from the tools themselves.
   walk(await call("null_parent_snapshot"));
   walk(await call("null_parent_snapshot", { skill_options: { focus: ["Tile", "Shadow"] } }));
@@ -425,7 +431,7 @@ test("every field, code and value SKILL.md names in backticks is in a tool's rep
 const CROWD = ["Blink", "Spinner", "Cut", "Badge", "Peg", "Banner", "Card", "Dot 1", "Dot 2", "Dot 3", "Door", "Plaque", "Sign"];
 
 test("the snapshot reply carries next_proposal and no_proposal_reason and names no crowd layer", async () => {
-  project("practice2b-with-wave-a.json");
+  project("practice2b.json");
   const r = await call("null_parent_snapshot");
   assert.deepEqual(r.proposal, GROUP);
   assert.deepEqual(r.next_proposal, ["Chip A", "Chip B", "Chip C"]);
@@ -435,7 +441,7 @@ test("the snapshot reply carries next_proposal and no_proposal_reason and names 
 });
 
 test("the second group after a no: a focus from next_proposal starts a fresh lesson at that read", async () => {
-  project("practice2b-with-wave-a.json");
+  project("practice2b.json");
   const first = await call("null_parent_snapshot");
   const r = await call("null_parent_snapshot", { skill_options: { focus: first.next_proposal } });
   assert.equal(r.focus_set, true);
@@ -472,7 +478,7 @@ test("no_null with a named null that isn't there, and not_parented when one laye
   fs.rmSync(SESSION);
   await startGroup();
   await placeNull({ region: "slides_only" });
-  project(variant("practice2b-parented.json", (s) => {
+  project(variant("parented-center.json", (s) => {
     const cap = s.layer_info.find((l) => l.name === "Caption");
     cap.parent = null;
     const orig = load("practice2b.json").layer_info.find((l) => l.name === "Caption");

@@ -1,5 +1,5 @@
 // Spec 004 wave B, tasks-wave-b T107: FR-013's visibility class (mentor/lib/visibility.mjs). Synthetic
-// first (each fixture's comment says so); the live answer keys are T136's.
+// first (each fixture's comment says so), then T136's live answer keys at the end.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -81,4 +81,43 @@ test("without layer_info: known false, one entry per keyed layer, classed null, 
 test("classOf() is null for a layer that isn't there", () => {
   assert.equal(classOf(relations, 99), null);
   assert.equal(classOf(fixture("hidden-layer"), 99), null);
+});
+
+// ---- T136: live captures against the classes their build scripts declared
+
+const LIVE = path.join(FIXTURES, "layer-info");
+const live = (name) => JSON.parse(fs.readFileSync(path.join(LIVE, name), "utf8"));
+const declared = (keyFile) => Object.fromEntries(live(keyFile).layers.map((l) => [l.name, l.expect.class]));
+
+for (const [file, keyFile] of [["overlaps.json", "overlaps-expected.json"], ["practice2b.json", "practice2b-expected.json"]]) {
+  test(`live ${file}: every declared layer's class is as declared, read from layer_info`, () => {
+    const snap = live(file);
+    const want = declared(keyFile);
+    const got = Object.fromEntries(visibility(snap).filter((v) => v.layer in want).map((v) => [v.layer, v.class]));
+    assert.deepEqual(got, want);
+    assert.ok(visibility(snap).every((v) => v.known === true));
+  });
+}
+
+test("live overlaps.json: comp's shy filter is on, so Shy Parent is timeline-hidden; no layer is soloed", () => {
+  const snap = live("overlaps.json");
+  assert.equal(snap.comp.hide_shy, live("overlaps-expected.json").comp.hide_shy);
+  const v = visibility(snap);
+  assert.deepEqual(v.filter((e) => e.timeline_hidden).map((e) => e.layer), ["Shy Parent"]);
+  assert.ok(v.every((e) => e.soloed_elsewhere === false));
+});
+
+test("live overlaps-solo.json: Still soloed by hand: every other layer is soloed_elsewhere, and no class changes", () => {
+  const solo = live("overlaps-solo.json");
+  const v = visibility(solo);
+  for (const e of v) assert.equal(e.soloed_elsewhere, e.layer !== "Still", e.layer);
+  assert.deepEqual(classes(solo), classes(live("overlaps.json")));
+  assert.deepEqual(classes(solo), { ...declared("overlaps-expected.json") });
+});
+
+test("live practice-r1.json: Mentor Practice as it is: CTRL is a null, Old Take hidden, everything else renders", () => {
+  const c = classes(live("practice-r1.json"));
+  assert.equal(c.CTRL, "null");
+  assert.equal(c["Old Take"], "hidden");
+  for (const name of ["Title", "Subtitle", "Bar", "Glow", "Cursor", "Logo", "Icon"]) assert.equal(c[name], "renders", name);
 });

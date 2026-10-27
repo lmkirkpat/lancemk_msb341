@@ -24,11 +24,15 @@ the agent reads with `node mentor/dev/capture.mjs` and logs.
 | Check | Do | Log |
 |---|---|---|
 | L-1 | Quick Offset at 26.5: Cmd+Option drag on Dot 1 to Dot 3's layers, then on selected keys across them; read after each | The gesture that works; whether effect keys move; whether in points move or keys only; whether any key lands between frames (row 19) |
-| L-2 | `offset_demo` on Dot 2 (temp `AE_MENTOR_HOME`; `offset_snapshot` with an order and a 4-frame gap first); read; compare with the read before | Every key on every property (Blurriness, Position, Opacity) moved by exactly 4 frames; values, types, temporal ease, spatial tangents unchanged; one Edit > Undo restores it |
+| L-2 | `offset_demo` on Dot 2 (temp `AE_MENTOR_HOME`; `offset_snapshot` with an order and a 4-frame gap first); read; compare with the read before | Every key on every property (the mentor lists them Position, Opacity, Blurriness, Transform before effects; the raw read lists Blurriness first) moved by exactly 4 frames; values, types, temporal ease, spatial tangents unchanged; one Edit > Undo restores it |
 | L-3 | Drag Dot 3's layer bar 6 frames later; read. Then trim Dot 3's in point; read | Key times are the new comp times after the drag; unchanged after the trim (row 16) |
-| L-4 | Lock Dot 2; `offset_demo` on it | Refused, nothing changed (read before and after) |
+| L-4 | Lock Dot 2; `offset_demo` on it | Refused, nothing changed (read before and after). Since 2026-10-26 `offset_snapshot` also skips a locked Dot 2 as the demo target (FR-009), so on a re-run it names Dot 3 |
 
 If L-2 shows an attribute lost, fix the snippet in the desk block (§ 4) and repeat L-2 then.
+
+Done 2026-10-26 ([live-sitting-2026-10-26.md](live-sitting-2026-10-26.md)): L-1 confirmed Quick
+Offset at 26.5, L-2 lost nothing, L-3 as expected, L-4 refused. Mentor Practice 2's base is
+`mentor/test/fixtures/layer-info/practice2b.json` (spec 009's L-4).
 
 ## 3. 🖐 Captures (duplicates of Mentor Practice and Mentor Practice 2)
 
@@ -50,6 +54,7 @@ Saved as `mentor/test/fixtures/offset/<name>.json`; names match `answer-key.json
 | `past-end.json` | Chip C's last key pushed after the comp's end (row 18's live case, if it can be made) |
 | `hold-group.json` | Dot 1's hold-then-ramp in a staggered group (row 4) |
 | `quick-offset.json` | L-1's result (row 19's live case if keys land between frames) |
+| `quick-offset-keys.json` | L-1 on selected keys (added 2026-10-26: whole frames, spread bottom-up; a pass in another order) |
 | `after-demo.json`, `after-demo-undone.json`, `after-demo-redone.json` | The demo, its undo, the learner's own shift (FR-011) |
 | `single-key-moved.json`, `expression-toggled.json` | Logo's single Scale key moved; Logo's expression turned off (rows 1, 3, FR-013) |
 
@@ -59,12 +64,17 @@ user or folder name, save, release the lock.
 ## 4. Desk block (AE open, lock released, not 🖐)
 
 ```bash
-cd mentor && npm test     # on live captures; stand-in folder deleted, synthetic/ kept for rows 5, 18, 19
+cd mentor && npm test     # on live captures; stand-in folder deleted; synthetic/ keeps row 5 only
 ```
 
 Fill `SKILL.md`'s `<!-- L-1 -->` places: if L-1 confirmed the gesture, Quick Offset is offered at
 25.4 or later alongside dragging; if not, it stays out. Write row 16's hint from L-3. Any result
 that changes a requirement goes in the hand-back for the spec writer before § 5.
+
+Done 2026-10-26 (T034, T035): rows 18 and 19 read the live `past-end.json` and `quick-offset.json`;
+Quick Offset is offered when `offset_snapshot`'s `quick_offset` is true; row 16's hint says a
+trimmed in point doesn't move the keys and a dragged bar does. The spec was amended the same day
+(FR-009, FR-011, FR-017, rows 16, 18, 19, 21; B-5 open).
 
 ## 5. 🖐 First live lessons (SC-001, SC-002)
 
