@@ -7,6 +7,7 @@ here and doesn't copy it. Gaps or contradictions come back as questions.
 lesson (T236, § 17). **Status:** draft, round 1 answered (§ 15), round 2 answered (§ 16: D-4 and the
 wording list), the one-layer watch offer decided (§ 17), round 3 answered (§ 18: D-8 and D-9,
 2026-10-26). § 19 (the opening turn, from HO-1's smoke run) was **decided** 2026-10-26 by the human.
+§ 19b (after HO-2 and HO-3, 2026-10-26): gap 1 agreed by the cockpit; the rest are row edits and logs.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -71,8 +72,9 @@ review). Two forms:
   than its middle?" then "Where should it turn from: a corner, an edge, or the middle?"
 - **They don't:** the mentor offers one candidate in one sentence, from § 4's ranking, with a hinge
   that suits its shape ("Door could swing from its left edge. Want to try that one?"). The learner
-  can name another place. If there's no candidate at all, it offers a new solid (Layer > New >
-  Solid, a small rectangle), since a solid's anchor and bounds are the simplest case.
+  can name another place. If there's no candidate to propose (no default candidate; a background
+  doesn't count, § 19b), it offers a new solid (Layer > New > Solid, a small rectangle), since a
+  solid's anchor and bounds are the simplest case.
 
 **The nine places** (curriculum § 6; they also match Quick Set Anchor's grid): top-left corner,
 middle of the top edge, top-right corner, middle of the left edge, center, middle of the right edge,
@@ -108,7 +110,7 @@ From a fresh read, using the visibility class (FR-013), never the eye switch alo
 | *guide* | Not a default candidate; allowed if named | n/a (it doesn't render, so frames can't show it) |
 | *shy* | Yes, ranked below the rest | "It's shy, so turn off the timeline's shy filter to see its properties" |
 | *null*, camera, light, adjustment layer | No | Nulls: "a null's pivot is skill 6's job" (only if skill 6 is built; otherwise say nothing). **Changed by § 19a item 2 (decided 2026-10-26):** one sentence for all four, no pointer to skill 6 |
-| A full-frame solid or footage (a background) | Last resort only | n/a |
+| A full-frame solid or footage (a background) | **Can be named; never offered by the mentor** (changed by § 19b, 2026-10-26; was "last resort only"). With only a background left, `proposal` is null and the opening is the new-solid line (§ 19) | n/a |
 | Locked layer | Never proposed, never the demo; allowed if the learner names it (round 1, D-2) | "Sign is locked, so unlock it first (the lock switch in the timeline)" |
 
 **Ranking among candidates:** unparented first; then **how animated the layer already is, in three
@@ -314,7 +316,7 @@ Hints name the layer, what moved and where to look, never the numbers to type.
 | One Position key (the stopwatch is on, so a drag off that key adds a second one, L-2) | Allowed if named, when the key is on the check time; § 6 item 4 | § 4's "playhead right on it" line; § 7's slid hint if they drag off it | Grade only the current time on a keyed Position |
 | Hold keys on Position | Counted like any key: two or more times, not a candidate; one, as above | n/a | Treat a hold jump as the pivot's fault |
 | Separated dimensions (Bar's X Position) | Footprint from bounds, so separated or not doesn't matter. The demo writes X and Y | n/a | Read "Position" as one value and miss a dimension |
-| Effects | Bounds read without effects (what the layer itself occupies). Effect points don't move with Pan Behind. Unkeyed effects aren't read in wave B | Only if an effect key shows a Transform effect: "Door's Transform effect has its own pivot, which this doesn't move" | Count a glow's spread as the layer's edges |
+| Effects | Bounds read without effects (what the layer itself occupies). Effect points don't move with Pan Behind. Unkeyed effects aren't read in wave B, and no effect is read by kind (HO-2) | **Nothing, in this release** (changed by § 19b, 2026-10-26: the build has no read that tells a Transform effect apart). Later, once a read can: "Door's Transform effect has its own pivot, which this doesn't move" | Count a glow's spread as the layer's edges |
 | Precomp layer | Regions from the precomp's frame (its own size), not its contents (R4 isn't read) | "Icon's edges are its precomp's frame, 400 × 400, not the square inside it" | Promise the pivot sits on what's drawn inside |
 | Precomp with Collapse Transformations on | Needs R1 to read the switch (B-3). Not a candidate once read | Until read: "I can't check precomps that pass their layers through yet" only if Pan Behind fails for them | Grade it |
 | Hidden layer (eye off) | Visibility class *hidden by the learner*: not a candidate unless wanted; never the demo | § 4 | Make it the demo target |
@@ -323,7 +325,8 @@ Hints name the layer, what moved and where to look, never the numbers to type.
 | Parented layer | Comp-space bounds already include the parent. The compensation is in the parent's space, which the check never needs | One sentence naming the parent | Fire FR-037's hand-off (the parent can't change this check); grade raw Position values |
 | Layer with children | Children's bounds unchanged (§ 6 item 5) | n/a | Miss a child that moved |
 | Scale not 100% (including non-uniform, or a parent's scale) | Place measured in the layer's own space (§ 6 item 1) | n/a | Measure the place in comp pixels |
-| Negative scale (flipped) or a static rotation far from 0 | The layer's own left may be the screen's right | Ranked last. If chosen: "Banner is flipped, so I'll go by its own sides: its own left edge is on the right of the screen" | Grade the learner's screen words against the layer's own sides without saying so |
+| Negative scale (flipped) | The layer's own left is the screen's right | Ranked last. If chosen: "Banner is flipped, so I'll go by its own sides: its own left edge is on the right of the screen" | Grade the learner's screen words against the layer's own sides without saying so |
+| A static rotation far from 0 (not keyed) | Ranked last (the build demotes it past 45°). **No sentence in this release** (narrowed by § 19b, 2026-10-26); its own sides vs the screen's is a logged guess (§ 14) | n/a | n/a |
 | Rotation already keyed | The rest key (§ 4); check at that time (§ 6 item 3) | Names the rest key | Pass a pivot set mid-turn |
 | Scale keyed from 0 (a pop-in) | Rest key is the full-size key | § 7 hint | Check at a frame where the layer is a dot |
 | Text layer | Pivot starts on the baseline (where it sits along the baseline depends on justification). Bounds are the letters' box at the check time, within 1 px of the ink, centred or left-justified (L-5). Left-justified, the letters start about 2.45 px right of the pivot, not on it, so the middle of the left edge is never "already there" (it's on the baseline, below the middle, and a hair to the left). Changing justification moves the letters, not the pivot (§ 7). Source Text keys or text animators change the box over time (R6 isn't read) | "Title's pivot starts on its baseline, under the letters, not in their middle" | Call a baseline pivot "the center", or the left end of the baseline "the left edge" |
@@ -460,6 +463,12 @@ B-6 (Mentor Practice 2 is comp 179, 40 layers), L-1 (passed). Kept below for the
 - **L-7 (new, optional, information only)** With every Position key selected, does Pan Behind shift
   them all and keep the layer still at every key time? If yes, log it; D-4 is revisited for a later
   release, not this one (§ 16).
+- **L-8 (new, 2026-10-26, § 19b; number to confirm; next sitting, alongside L-6)** An expression
+  on an **unkeyed** Anchor Point (an auto-center expression) and one on an unkeyed Position that
+  ignores `value`: Pan Behind on each, one capture each. Does the layer move on screen, and which
+  hint does the check give? HO-2's reading of the code (not seen live): the layer moves, and the
+  check gives "moved with its pivot" or "dragged the layer", which tells a learner who did use Pan
+  Behind to use Pan Behind. No `SKILL.md` line until it's seen.
 
 **For the spec writer (S):**
 - **S-1** § 6 items 3 to 5 (rest key, Position key times, nothing else moved) aren't in FR-028. They're
@@ -521,7 +530,10 @@ middle" on a text layer is told the pivot is on the baseline, not that it's alre
 not how often); how often learners drag a group's pivot (L-1 shows it happens in one drag); the 3 px
 floor; ranking unparented layers first; the off-grid rule; the accidental Anchor
 Point stopwatch as a mistake; how often a learner names a one-key layer whose rest key is on
-another frame (§ 18 D-8); whether a watch on the focus layer's parent or child confuses (§ 18 D-9).
+another frame (§ 18 D-8); whether a watch on the focus layer's parent or child confuses (§ 18 D-9);
+whether a layer turned far from 0 (not keyed) needs an "own sides" sentence like a flipped one: at
+180° "a little higher" in the neighbouring-place hint points the wrong way on screen, but the layer
+ranks last and no lesson has met one (§ 9, § 19b).
 
 **Curriculum B items this skill settles:** B1 (skill 5's targets, B-1 above); B5 (answered by L-2:
 "set the pivot before you key" is a rule for layers that already move, § 16); B7 (anchor with
@@ -763,7 +775,7 @@ target" means all of:
    layer, puts a second time into the shortest lesson in the path for a first-timer.
 4. **Clarification: never a full-frame layer.** § 4's table says a background is "last resort
    only", meaning proposed only when nothing else exists, so it isn't in the pool a watch is chosen
-   from. A watch on the background is also the one layer § 7's wrong-layer hint teaches them not
+   from. (Since § 19b it's never proposed at all; this item stands.) A watch on the background is also the one layer § 7's wrong-layer hint teaches them not
    to move. This applies when the read says the layer is full-frame (`full_frame` true); when that's
    unknown (`null`, before SR-2), no extra filter, since it ranks last by area anyway and the read
    is never assumed.
@@ -829,7 +841,8 @@ now saves the first-timer a turn (T236 and T237 both opened this way and passed 
   § 19a item 1 (decided 2026-10-26):** the proposal is always the read's; `next` gives only the memory clause.
 - **Continued or resumed lesson:** no intent question and no proposal; say where it left off in one
   sentence and hand it back ("We were on Door, from the middle of its left edge. Ready to set it?").
-- **No candidate at all** (`proposal` null, nothing can be named): one clause of why, then the solid
+- **No candidate at all** (`proposal` null, nothing can be named; **changed by § 19b:** whenever
+  `proposal` is null, even if a background or other layers could still be named): one clause of why, then the solid
   (§ 4): "Nothing in this comp is a clean first pivot, so let's make one: Layer > New > Solid, a
   small rectangle. Tell me when it's there." Not a list of reasons.
 - **Review:** unchanged (§ 12); its opening is already one question.
@@ -1082,3 +1095,92 @@ item 2's sentence; and wherever FR-006a or US1 describes the practicing proposal
 **For the eval engineer (through the cockpit):** a practicing case checks the proposed layer equals
 the snapshot's `proposal`, whatever `next` names; a case where the learner names CTRL (Mentor
 Practice) checks the sentence and that no turn mentions a null's pivot or the null lesson.
+
+### 19b. After HO-2 and HO-3 (2026-10-26)
+
+**Status:** gap 1 agreed by the cockpit 2026-10-26 (the reviewer's HO-3 reached it independently);
+items 2 to 4 are narrowing and logging, no new teaching; item 5 takes HO-3's four `SKILL.md` points.
+HO-2 itself passed (every § 9 row has a named unit test, and the contract rows hold against the build).
+
+1. **A background is never offered (HO-2 gap 1).** `SKILL.md` said "offer it only if nothing else
+   exists" while the tool never proposes a full-frame layer (`proposalFrom` takes default
+   candidates only), so with only a background left the mentor had two instructions and would pick
+   a layer itself. **The solid wins:** it follows from § 19 (the no-candidate line) and § 19a item 1
+   (the proposal is always the read's). A background is also the worst first pivot (its edges are
+   the frame's) and the layer § 7's wrong-layer hint teaches them not to grab. § 4's row now reads
+   "can be named; never offered". **Rejected:** have the tool propose a background as a last resort
+   (a worse first lesson than a fresh solid, and a tool change for it).
+2. **Effects say nothing in this release (gap 2).** § 9's Transform-effect sentence needs a read
+   that tells effects apart by kind; the build has none, so the mentor says nothing about effects,
+   as § 10 already allowed for unkeyed ones. The sentence stays in § 9 for when a read exists.
+3. **"Own sides" is for flipped layers only (gap 4).** § 9's row is split: flipped keeps its
+   sentence; a layer turned far from 0 ranks last (as built) with no sentence, and whether it needs
+   one is a guess (§ 14). **Rejected for now:** a `turned` note, since no lesson or comp has one.
+4. **Unkeyed expressions get a live check first (gap 3).** L-8 in § 14, at the next sitting with
+   L-6. No `SKILL.md` line until it's seen: the reading is from code, and the right wording depends
+   on what the read actually shows.
+5. **HO-3's points: all four agreed**, as B-13 items 4 to 7 below.
+   - (a) A watch on a layer the learner names goes at **their** place; if they don't give one, ask
+     which of the nine. The tool gives a suggested place only for the proposal and `watch_offer`,
+     so a hinge the mentor picks for any other layer would be a guess.
+   - (b) "They can name it" (§ 19a item 1) was an instruction to the mentor, not a line to say:
+     said aloud it's a second thing in a one-choice opening.
+   - (c) **D-10**: a continued lesson that stopped before a layer was chosen opens as a new lesson,
+     but keeps the practicing memory clause when step 0 found practicing. § 19's table already says
+     the clause belongs to practicing; the build's "open as a first lesson" dropped it.
+   - (d) The "can't read" sentence becomes true for every cause (no rectangle, nothing sampled,
+     Auto-Orient), since the read gives one reason, `cant_read`, for all of them.
+
+**Open, not decided (for later; curriculum-level):** step 11 writes `next` as an action ("Key a
+swing on Needle and play it back", § 13), while step 0 and § 19's practicing clause read it as what
+was still off ("Last time, Pop's pivot went in while Pop was still shrunk"). The clause's example is
+a `summary`-style fact, so my lean is that the clause comes from the last entry's `summary` and
+`result`, and `next` stays an action. Not decided here because skills 2 to 4 read `next` at step 0
+the same way, so it's a shared rule for curriculum § 2 (follow-up **C-6**, number to confirm) and
+may touch spec 004's record fields. Until then, `SKILL.md` stays as built.
+
+#### Items
+
+**For the builder:**
+- **B-13 (2026-10-26, § 19b; number confirmed by the cockpit)** `SKILL.md` on `skill-5-anchor`. No tool
+  change.
+  1. Step 1, the **No candidate at all** wording: the condition becomes "`proposal` is null" (drop
+     "and nothing can be named"). It fires even if a background, a hidden layer or a matte could
+     still be named.
+  2. Step 1, the paragraph after the leave-out heading ("For a layer that can't be the focus, follow
+     it with the proposal in one sentence, or the next candidate if they've turned the proposal
+     down."): add "With no proposal and no candidate left, step 1's solid line." Then drop the null,
+     camera, light, adjustment line's own parenthetical "(with none left, step 1's solid line)".
+  3. Step 1, the full-frame line: "full-frame (a background): it can be named; never offer it."
+  4. Step 5, one focus layer, "If they ask to watch one on another layer … that's a yes: step 4's yes,
+     on the layer they name, else `watch_offer`'s": add "On a layer they name, the demo goes at the
+     place they give; if they don't give one, ask which of the nine before calling `anchor_snapshot`.
+     Never pick a hinge for it yourself."
+  5. Step 1, practicing: after "If they want another go at the layer `next` names, they can name it."
+     add "No sentence for this."
+  6. Step 1, continued or resumed: replace "If it left off before a layer and place were chosen (no
+     focus in the read), open as a first lesson on this skill instead." with "If it left off before
+     a layer and place were chosen (no focus in the read), open as a new lesson: the memory clause
+     only if step 0 found this skill practicing, then the intent question and the proposal."
+  7. Step 1, "can't read it": "I can't read Orbit well enough to check its pivot right now, so I'll
+     leave it out." (Replaces "I can't read Orbit's edges right now", which is wrong for an
+     Auto-Orient layer.)
+
+**For the spec writer:**
+- **S-6 (2026-10-26, § 19b; number confirmed by the cockpit)**
+  1. FR-004 (spec.md, the full-frame bucket, "last resort, proposed only when nothing else
+     exists"): a full-frame layer is allowed if named and **never proposed**; with no default
+     candidate, `proposal` is null and the opening is the new-solid line (FR-009 / TD § 19). Edge
+     Cases' "No candidate in the comp" follows: "no default candidate (a background doesn't count)".
+  2. Overlap table row 8 (Effects), "Learner is told": "Nothing in this release (no read tells a
+     Transform effect apart; TD § 19b)."
+  3. Overlap table row 18: flipped only for the sentence; a static rotation far from 0 ranks last
+     with no sentence (TD § 9, logged guess).
+  4. Live checks: add L-8 (TD § 14) for the next sitting, with L-6; row 2 keeps "blind spot,
+     stated" until it's seen.
+  5. Wherever US1 or FR-009 describes a continued lesson with no focus, D-10 (TD § 19b item 5c):
+     opens as a new lesson, with the practicing memory clause when the record says practicing.
+
+**For the eval engineer (through the cockpit):** no case change needed now. If one is added: a
+comp whose only non-never layer is a background opens with the solid line and never names the
+background as an offer.
