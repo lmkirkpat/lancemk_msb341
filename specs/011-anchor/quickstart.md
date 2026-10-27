@@ -15,7 +15,7 @@ node ../.claude/hooks/check-branch.mjs <branch> skill-builder main   # no --shar
 
 Run `/agent-audit` on `.claude/skills/anchor-mentor/SKILL.md`. Hand back.
 
-## 2. 🖐 Live checks L-1 to L-5
+## 2. 🖐 Live checks L-1 to L-5 (and L-6 at the next sitting)
 
 Setup: After Effects 26.5 on `discovery/Claude AE Tutor Test.aep` with Mentor Practice 2's 2b
 layers (spec 004 T135); the cockpit off AE; one skill-builder in this branch's local worktree holds
@@ -29,6 +29,7 @@ builder does the hand actions; the agent reads with `node mentor/dev/capture.mjs
 | L-3 | Pan Behind clicked on another layer; a selected eye-off matte (Reveal Matte); Layer > Transform > Center Anchor Point in Layer Content; a new shape layer's pivot | Each answer, as seen at 26.5 |
 | L-4 | The four mistakes, each captured then undone: Door with a typed Anchor Point; Door dragged with the Selection tool; Pan Behind on Background with Needle meant; Pop's pivot set at Scale 0. Then `anchor_demo` (temp `AE_MENTOR_HOME`) on a separated, a rotated and a parented layer, and on a locked one | Footprint within 1 px after each demo; one Edit > Undo reverts it; the locked one refused with no change |
 | L-5 | Sign, centred, then left-justified: `rect` at the check time vs the letters on screen | Left, top, width, height within 1 px |
+| L-6 (added 2026-10-26, round 2; **the next sitting**, with § 5.2, not before § 5.1) | On a duplicate, give Lid a stroke (any width, say 10 px) and read it as `lid-stroke.json`; delete the duplicate after | Whether `rect` includes the stroke: its edges against the shape's outer edge on screen (1 px). If not, to the spec writer |
 
 ## 3. 🖐 Captures
 
@@ -64,6 +65,10 @@ before § 5.
 T241 (the ranking; Door proposed), T242 (the side of a pivot outside), T243 (the group and
 content hints), T244 (`SKILL.md`). `npm test` green and `check-branch.mjs` clean. T241 must land
 before § 5.1; the rest before § 5.2.
+
+**Round 2 (2026-10-26, Phase 8c):** T245 (two or more Position key times left out, the one-key
+rule), T246 (answer key and tests), T247 (`SKILL.md` from TD § 16, then `/agent-audit`). Before
+§ 5.2 and the evals, not before § 5.1. T248 is L-6, at the § 5.2 sitting.
 
 ## 5. 🖐 First live lessons (SC-001, SC-002)
 

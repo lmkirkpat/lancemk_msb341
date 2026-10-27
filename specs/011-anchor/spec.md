@@ -15,8 +15,13 @@ rule; Changes 2026-10-26 lists what was rejected); a pivot outside its layer is 
 side it's on (FR-019, new FR-019a); the group-anchor hint becomes two hints that match what the
 read can see (FR-019, row 22); Pop's Scale-0 mistake leaves the pivot far outside (row 20);
 lesson starts take two reads on Mentor Practice 2 (FR-013); rows 5, 12, 16, 21, 23, 25 and 28 and
-FR-023 take the live results. Waiting on the builder's approval; one new question for the
-curriculum designer, D-4 (Sled), and a list of TD wording to confirm (Open questions › D).
+FR-023 take the live results. **Amended again 2026-10-26 (round 2)** from the designer's answers
+(TD § 16, approved by the builder, `8ab6adc`): D-4 closed, so a layer with Position keys at two or
+more times is never a candidate (new reason `position_moves`, FR-004), and the hints for rows 20,
+22, 23 and 25 point at TD § 7 and § 16 for their wording instead of carrying this spec's own
+(FR-019, FR-019a, FR-019b). New tasks T245 to T248 (tasks.md › Phase 8c). Three small wording
+questions for the designer (D-5 to D-7). Awaiting the builder's approval of this round; nothing
+in it blocks T236.
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 5,
 'Set the pivot'." Record ID `transform.anchor`, short name `anchor`, tool prefix `anchor_`
@@ -143,10 +148,15 @@ rest key and fails one set away from it, with the rest-key hint.
    the demo, **Then** it runs on the one the learner cares less about (FR-013), with frames before
    and after at the same time, which look the same, and says both numbers changed and the layer
    didn't move.
-4. **Given** the learner names Sled (Position keyed), **When** the mentor accepts it, **Then** it
-   gives TD § 4's tip once, and the check holds the layer still at every Position key time too
-   (FR-012 item 4). **Open (D-4, 2026-10-26):** L-2 shows Pan Behind can't pass item 4 on a layer
-   with two or more Position keys, so as written this lesson has no taught way to pass.
+4. **Given** the learner names Sled (Position keys at three times), **When** the mentor answers,
+   **Then** it says TD § 4's leave-out sentence for a layer that already moves once, runs no
+   lesson on Sled, and offers another layer as usual (FR-004 `position_moves`; TD § 16 D-4). It
+   never says Sled would "jump".
+5. **Given** a layer with one Position key and no Rotation or Scale keys, named by the learner,
+   **When** the lesson is set up, **Then** the mentor names the key's time and asks for the
+   playhead right on it before the drag (TD § 4); **When** the learner drags with the playhead off
+   the key, **Then** it doesn't pass (FR-012 item 4) and the slid hint asks for Edit > Undo
+   (FR-019).
 
 ---
 
@@ -195,8 +205,10 @@ Other edge cases:
   fresh read (TD § 4). In a review: no review.
 - **The learner names a layer the table leaves out** (null, 3D, Anchor Point keyed, expression on
   Rotation or Scale, collapsed precomp, camera, light, adjustment): one sentence from TD § 4 and ask
-  for another. A hidden layer, a matte, a guide, a Position-keyed layer or a locked layer can be
-  named (TD § 4; a locked one gets the unlock sentence, D-2).
+  for another. A layer whose Position is keyed at two or more times is left out the same way
+  (TD § 4's "already moves" sentence, D-4). A hidden layer, a matte, a guide, a layer with one
+  Position key (on the check time, FR-004) or a locked layer can be named (TD § 4; a locked one
+  gets the unlock sentence, D-2).
 - **The learner moves the playhead between reads**: the check compares at FR-011's check time,
   never at "the playhead now", so moving it isn't a change.
 - **The learner drags Rotation in stage 6 and forgets Edit > Undo**: the lesson has already passed;
@@ -243,14 +255,29 @@ Other edge cases:
     candidates: **L-1 passed 2026-10-26** (Pan Behind on the selected layer moves its own Transform
     anchor and Position together, and `rect` reads the shape as drawn; `SHAPES_DEFAULT = true`,
     `RECT_KIND.shape = "rect"`, as built in T234 and T235).
-  - **Allowed if named, never proposed:** Position keyed (any count,
-    including one); *hidden by the learner* (with TD § 4's sentence); *matte*; *guide*; a
-    **locked** layer (TD § 4's one sentence asking the learner to unlock it with the lock switch;
-    never the demo, TD § 15 D-2); a full-frame layer (last resort, proposed only when nothing else
-    exists).
-  - **Never:** Anchor Point keyed; an expression on a keyed Rotation or Scale; 3D; a precomp with
-    Collapse Transformations on; *null*, camera, light, adjustment layer. Each gets TD § 4's one
-    sentence.
+  - **Allowed if named, never proposed:** Position keyed at **one** key time, **only when that
+    time is also the check time** (FR-011): the layer has no Rotation or Scale keys, or its rest
+    key is within half a frame of the Position key (reason `position_keyed`, with TD § 4's
+    "playhead right on it" line naming the key's time; TD § 16 D-4, adjustment 2); *hidden by
+    the learner* (with TD § 4's sentence); *matte*; *guide*; a **locked** layer (TD § 4's one
+    sentence asking the learner to unlock it with the lock switch; never the demo, TD § 15 D-2);
+    a full-frame layer (last resort, proposed only when nothing else exists).
+  - **Never:** Position keyed at **two or more key times** (reason **`position_moves`**, D-4,
+    2026-10-26); Anchor Point keyed; an expression on a keyed Rotation or Scale; 3D; a precomp
+    with Collapse Transformations on; *null*, camera, light, adjustment layer. Each gets TD § 4's
+    one sentence; for `position_moves` that's the "already moves … set the pivot before you key"
+    sentence, said once, then the next candidate is offered as usual (TD § 16 D-4, adjustment 3).
+  - **Counting Position key times (D-4):** key times, not keys. Separated X and Y are counted
+    together (one key on X at 1 s and one on Y at 2 s is two times; both at 1 s is one), times
+    within half a frame of each other are one time, and hold keys count like any key. A layer
+    with **one** Position key time whose rest key (FR-011) is on another frame is
+    `position_moves` too: the learner can't be on both frames at once, so it's treated like two
+    or more. So is a one-key layer whose learner-named `rest_time` is off the Position key's
+    frame (FR-011): the focus is refused with that reason, never accepted with a pass it can't
+    reach. **Why:** L-2 showed Pan Behind at 26.5 changes or adds one Position key, at the
+    playhead, and leaves the others, so on a layer that already moves the layer always slides at
+    its other keys and no taught move passes item 4 (TD § 16 D-4, which also lists the options
+    rejected).
   - **Ranking** (TD § 4): unparented first; then **how animated the layer already is, in three
     steps: no keyed property at all, then keys but none on Rotation or Scale, then Rotation or
     Scale keys** (amended 2026-10-26; was "no Rotation or Scale keys", two steps); then a pivot
@@ -273,6 +300,12 @@ Other edge cases:
     17, Shadow 18 (parented), Flip 19 (flipped). The proposal is **Door, the middle of its left
     edge** (quickstart › 5.1); the review with Door and Needle in the record picks **Tab** of 17
     (quickstart › 6). Mentor Overlaps' ranks don't change (Photo, Drift, Still have no keys).
+    D-4 doesn't change these ranks: every layer it moves was `if_named`, never ranked. On the
+    live comp the 16 Position-keyed layers (Card, Dot 1 to 3, Chip A to C, Flag, Pause, Sled,
+    Tile, Stamp, Row A, Row C, Plate, Gradient) all have keys at two or more times by the answer
+    key's `needed_note`, so all become `position_moves`; Mentor Overlaps' Leaf 2 by its own key
+    count. T246 confirms each by hand. Mentor Practice 2 has no one-key layer; the one-key case is
+    L-2's `sled-one-key-before` (T246).
 - **FR-005 (places)**: The nine places MUST be TD § 4's grid, each a point on the layer's own
   rectangle (`rect` at the check time): left, middle or right of `left … left + width` and top,
   middle or bottom of `top … top + height`. The mentor repeats the place in plain words with the
@@ -290,7 +323,9 @@ Other edge cases:
   first or the mentor offers a second candidate in one sentence and they agree.
 - **FR-009 (what's said about leave-outs)**: Hidden layers, mattes, parents, precomp frames, text
   baselines, flipped layers and Position keys MUST each get TD § 4 or § 9's sentence, once, in
-  plain words. A matte MUST never be called hidden. A parented focus layer gets one sentence naming
+  plain words. For a one-key layer that's TD § 4's "playhead right on it" line with the key's
+  time (the `position_keyed_tip` note carries it); for `position_moves`, TD § 4's leave-out
+  sentence. A matte MUST never be called hidden. A parented focus layer gets one sentence naming
   the parent, and spec 004 FR-037's "trace this one first" hand-off MUST NOT fire for it (the
   parent can't change this check, TD § 9).
 
@@ -322,7 +357,11 @@ Other edge cases:
     from the first read to the check read.
   - **Item 4, only for a Position-keyed layer the learner chose:** item 2 also holds at **every
     Position key time** of the first read, so a pivot that slides the animation at other times
-    doesn't pass (TD § 6 item 4, B5).
+    doesn't pass (TD § 6 item 4, B5). Since D-4 only a one-key layer reaches a lesson, so in
+    practice item 4 catches Pan Behind with the playhead off that key: AE adds a key at the
+    playhead and the layer slides at the old one (L-2, `sled-one-key`). The check still computes
+    item 4 for any Position-keyed focus, and `sled-slid` and `sled-on-key` keep it unit tested on
+    three keys, outside the lesson path (T246).
   - **Item 5:** no other layer's footprint moved by more than 1 px at any time sampled in both
     reads, except that **children of a focus layer are compared only at that layer's check time**
     (at other times they turn with the new pivot, which is the point); and Anchor Point on the
@@ -348,6 +387,11 @@ Other edge cases:
   to spare; SC-001 (10 minutes) isn't sensitive to a second read of about a second. The second
   read's time is measured in T236 (plan › Risks), and a lesson start over 10 s is logged as a
   finding (spec 003 SC-004's bar for a turn), not a fail.
+  **After D-4:** layers with Position keys at two or more times are `never`, so their Position key
+  times (and Card's and Tile's rest keys) drop out of the needed times, and the 30 above shrinks.
+  T246 re-derives `needed_practice2b` by hand; whether a lesson start on Mentor Practice 2 still
+  takes two reads follows from it (a plain read still lacks some candidates' rest-key times on
+  other layers, so expect yes).
 
 ### Demonstration
 
@@ -411,15 +455,33 @@ the lock when it's still locked at "done", TD § 15 D-2), and items 1 to 5. And,
   Scale 0 looks to the learner as if nothing happened ("it wouldn't let me drag"), but AE does move
   the pivot, far outside the layer (Pop: anchor [120, 960] on a 120 × 120 layer), and at full size
   the layer now draws far off its place. The check's grading stands: one hint, set away from rest
-  (the cause), and `place_now` reads outside as a fact, not a second hint. The hint MUST say that
-  the pivot did move even though nothing showed, and MUST ask for **Edit > Undo first**, then the
-  playhead on the rest key, so the learner doesn't start the second try from a pivot far off (the
-  wording is the designer's to confirm, Open questions › D, item 5).
-  **Pan Behind on the wrong layer (amended 2026-10-26, L-3, row 25):** Pan Behind moves the pivot
-  of the layer **under the cursor**, not the selected one, so selecting the layer doesn't prevent
-  the mistake. The wrong-layer and another-layer-moved hints MUST say to start the drag on the
-  focus layer's own crosshair, and MUST NOT say that selecting it first is the fix (as built in
-  T235's `SKILL.md`).
+  (the cause), and `place_now` reads outside as a fact, not a second hint.
+  **Wording lives in TD, not here (round 2, 2026-10-26).** `SKILL.md` takes each hint's line from
+  TD § 7's row (TD § 16's wording list has the reasons); this spec names the code, the fields the
+  line is built from, and what it must and mustn't say:
+  - **`away_from_rest`** (TD § 7, "set the pivot away from the rest key" and "shrunk to nothing
+    (Pop at Scale 0)" rows): names the layer and the time the playhead was at (the check read's
+    own time, `item3.now`), says where it's at rest by the rest key's time, and when the layer
+    was shrunk to nothing there, says the drag did move the pivot although it looked like
+    nothing happened, with the side from `item1.outside_side` if it's outside, and asks for
+    **Edit > Undo first**, then the playhead on the rest key. One hint for the mistake, never a
+    second `outside` one. A learner who says "it wouldn't let me drag" on a keyed layer gets a
+    check, never agreement (TD § 4).
+  - **`wrong_layer`** (TD § 7's "grabbed another layer" row; row 25): names the focus layer and
+    the layer whose pivot moved (`other_changes`), says once why (Pan Behind moves the pivot of
+    the layer under the cursor where the drag starts, even with the focus selected; L-3), and
+    asks for Edit > Undo, then a drag that starts on the focus layer's crosshair. It MUST NOT
+    give selecting the layer first as the fix.
+  - **`other_layer_moved`** (TD § 7's "another layer moved" row): the focus passes on its own
+    items; names the other layer and its direction (`item5.moved_layers`), asks for Edit > Undo
+    until that layer is back, then a check that the focus's pivot is still where it was put.
+    It names no drag start: a layer that moved on screen wasn't Pan Behind (TD § 16, item 6).
+  - **`slid_at_key`** (TD § 7's one-key row, D-4): names the layer, says it holds still at the
+    check time and sits elsewhere at `item4.worst.time` (direction from `item4.worst`), says Pan
+    Behind changed Position only at the playhead and added a key there, and asks for Edit >
+    Undo, the playhead right on the layer's key, and the drag again. Never "jump".
+  - The place hints (`outside`, `not_moved_enough`, `neighbour_place`) and row 22's
+    `content_shifted` and `unchanged_shape` are in FR-019a and FR-019b.
 - **FR-019a (which side a pivot outside sits on; added 2026-10-26, L-1)**: When a focus layer's
   or a proposed layer's pivot is outside its layer, `anchor_snapshot` (in the `pivot_outside`
   note) and `anchor_check` (in `item1`) MUST say **which side of the layer it's on as seen on
@@ -428,9 +490,11 @@ the lock when it's still locked at "done", TD § 15 D-2), and items 1 to 5. And,
   time, in the same words as item 2's direction. Null when either can't be read (FR-018), and the
   mentor then says "outside" with no side, never a guess. Measured on screen, not in the layer's
   own space, because the learner is looking for a crosshair in the Composition panel: on a
-  flipped or turned layer the layer's own "left" can be the screen's right (row 18). The skill
-  prompt says where to look in plain words ("select Lid in the timeline; its crosshair is below
-  the lid"), and never a distance. **Why:** in L-1 the builder couldn't find Lid's crosshair (120
+  flipped or turned layer the layer's own "left" can be the screen's right (row 18). The
+  **`outside`** hint (and the proposal's `pivot_outside` note) takes its line from TD § 7's
+  "pivot outside the layer" row: the side as seen on screen, to click the layer in the timeline
+  so its crosshair shows, and to start the drag there; with no side, "outside" and the same
+  "click it in the timeline", no guess; never a distance. **Why:** in L-1 the builder couldn't find Lid's crosshair (120
   px below a 60 px tall shape) until Lid was selected in the timeline, and TD § 7's own hint names
   a side ("off to its right"), which no tool returned, so `SKILL.md` could only say "look around
   the shape". Unit tested on `lid-pan`'s base (Lid: below), `door-outside` (left), and a synthetic
@@ -442,17 +506,24 @@ the lock when it's still locked at "done", TD § 15 D-2), and items 1 to 5. And,
   skill reads can see it; the old `group_anchor` hint ("its rectangle shifted") could never fire on
   it. So:
   - `group_anchor` is **renamed `content_shifted`** and keeps its field combination (anchor
-    unchanged, `rect` moved in own space, item 2 fails), for any layer kind. Its hint says what's
-    drawn in the layer moved while its own pivot didn't, and names no group on a text layer (L-5:
-    a justification change shifts Sign's letters this way; `sign-left-check`).
+    unchanged, `rect` moved in own space, item 2 fails), for any layer kind. Its line is TD § 7's
+    "what's drawn moved, the pivot didn't" row, which has a text wording and a shape-or-other
+    wording, chosen by the focus layer's `kind`: what's drawn moved while the pivot didn't, Edit >
+    Undo, and move only the pivot with Pan Behind (Y). It names no group on a text layer (L-5: a
+    justification change shifts Sign's letters this way; `sign-left-check`).
   - A new hint, **`unchanged_shape`**, fires on a shape focus layer that isn't passed when its
     own Anchor Point and Position are both unchanged at the check time, item 2 holds and no other
     layer's anchor changed (not `wrong_layer`). It's added after the place hint (`outside`,
-    `not_moved_enough`). Its sentence says the layer's own pivot hasn't changed and, as a
-    possibility, not a claim, that a pivot dragged inside Contents belongs to the shape's group:
-    select the layer itself in the timeline and drag its crosshair. It never says the learner
-    moved the group's pivot (the read can't tell that from not trying yet). Answer key:
-    `lid-group` → `outside`, `unchanged_shape`.
+    `not_moved_enough`). Its line is TD § 7's "a shape's own pivot didn't change" row: the
+    layer's own pivot hasn't changed; **as a possibility, not a claim**, a pivot dragged while
+    something under Contents was selected belongs to a group inside the layer; click the layer's
+    name in the timeline, then drag its crosshair. It never says the learner moved the group's
+    pivot (the read can't tell that from not trying yet). Answer key: `lid-group` → `outside`,
+    `unchanged_shape`.
+  - **One sentence, not two.** On a focus layer with `unchanged_shape`, the mentor says that
+    line **instead of** TD § 9's general "Door's pivot didn't change. If something drives it,
+    like an expression, I can't see that yet" (row 2), never both. The general line stays for a
+    non-shape layer whose pivot didn't change after "done" (the leftover T244 audit finding).
   - **Rejected:** dropping the group hint (the mistake is real, L-1 made it in one drag, and the
     learner who did it hears only "your pivot hasn't moved", which feels wrong to them); reading
     the group transforms (a new shared read, spec 004's to own, for a mistake TD § 7 rates as a
@@ -554,7 +625,8 @@ each row must see; this table adds what the focus, the check and the learner eac
    and item 2 (did it move). Both MUST use the same rectangle per layer kind, chosen by L-1 for
    shapes and L-5 for text, or a stroke could move "the bottom edge" between the two items. Both
    chose `rect` (2026-10-26). L-1's Lid has no stroke, so `rect` against a stroked shape is still
-   unchecked live; TD § 9 says bounds include the stroke (Open questions › D, item 7).
+   unchecked live: that's **live check L-6** (TD § 14), one step at the next sitting, not a
+   blocker for T236.
 6. **`comp-space.mjs`'s `null` with a reason** (`not_sampled`, `three_d`, `no_rect`, …) is one value
    for "can't read". Treated as "no movement" it would pass anything (the playbook's "unreadable
    treated as empty"); FR-018 makes it "can't check".
@@ -565,8 +637,9 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 2 | Expression on an unkeyed Anchor Point or Position | Not read (R2); a candidate | Rendered values (after expressions, W2), so the check grades what shows; a pivot that didn't move after "done" gets TD § 9's sentence | "If something drives it, like an expression, I can't see that yet" | Right (blind spot, stated) | Mentor Overlaps' Drift (unkeyed Position expression): the check reads the rendered value |
 | 3 | Expression on Rotation or Scale | Keyed: not a candidate. Unkeyed: not read (R2) | n/a | "An expression turns Logo, so I can't tell where it sits at rest"; never "the expression ignores the pivot" | Right for keyed; unkeyed is a known blind spot (Out of scope) | Mentor Practice's Logo; Mentor Overlaps' Gauge Dial |
 | 4 | Keys on Anchor Point | Not a candidate | A key added on the focus fails item 5 | TD § 4 sentence; stopwatch hint (TD § 7) | Right | 2b's Wobble (SR-1); synthetic stopwatch-on case |
-| 5 | Position keyed, including a single key | Allowed if named | Item 4 at every Position key time; a key added is an other change | TD § 4's tip, from L-2: Pan Behind changes or adds one Position key, at the playhead, and leaves the others, so the layer sits elsewhere at them | Right: **L-2 (2026-10-26)** playhead on a key rewrites only that key; playhead off the keys adds one there (one key or three). Item 4 fails either way when there are other keys, so **with 2 or more Position keys Pan Behind can't pass** (open question D-4) | `sled-slid` (key added at 0, worst 3.667), `sled-on-key` (worst 4.167), `sled-one-key` |
-| 6 | Hold keys on Position | As row 5 | Item 4 at each key time, not between | n/a | Right; never blames the pivot for a hold jump | Synthetic hold-key Sled |
+| 5 | Position keyed at two or more times (X and Y counted together) | **Never** (`position_moves`, D-4) | n/a in a lesson. Item 4 still computes on any Position-keyed focus, unit tested | TD § 4's "already moves … set the pivot before you key" sentence, once, then another layer offered | Right: **L-2 (2026-10-26)** Pan Behind changes or adds one Position key, at the playhead, and leaves the others, so the layer slides at them and no taught move passes (TD § 16 D-4) | Leave-out: `practice2b` (Sled and the other 15), synthetic separated X at 1 s and Y at 2 s. Item 4 only, outside the lesson path: `sled-slid` (worst 3.667), `sled-on-key` (worst 4.167) |
+| 5b | Position keyed at one time | Allowed if named, only when that time is the check time (no Rotation or Scale keys, or the rest key on its frame); otherwise `position_moves` | Item 4 at the key time; a key added is an other change | TD § 4's "playhead right on it" line with the key's time; the `slid_at_key` hint if they drag off it | Right: L-2, one key, playhead off it, AE added a key at the playhead and the layer slid at the old key | `sled-one-key` against `sled-one-key-before` (fails, `slid_at_key`); synthetic one key with the Scale rest key on another frame (`position_moves`) and on the same frame (allowed) |
+| 6 | Hold keys on Position | Counted like any key: two or more times, never; one, as row 5b | Item 4 at each key time, not between | n/a | Right; never blames the pivot for a hold jump | Synthetic hold-key layers, one with two hold times (`position_moves`), one with one |
 | 7 | Separated X and Y Position | Footprint from bounds, so either | As focus | n/a | Right; demo writes X and Y (FR-015) | Mentor Overlaps' Leaf 2 (separated); demo twin test |
 | 8 | Effects (a glow, a Transform effect) | Footprint without effects (`rect`) | Effect points don't move; not read | Only if an effect key is a Transform effect: TD § 9 sentence | Right | Synthetic; Mentor Practice's Glow is an adjustment layer (not a candidate) |
 | 9 | Precomp layer | Candidate, ranked below; edges are the precomp's frame | Footprint of the frame | "Icon's edges are its precomp's frame, 400 × 400, not the square inside it" | Right | Mentor Practice's Icon |
@@ -580,12 +653,12 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 17 | Scale not 100%, non-uniform, or a parent's scale | Place in the layer's own space | Same | n/a | Right (S-2) | 2b's Plaque at 200% (SR-1) |
 | 18 | Negative scale (flipped), or a static rotation far from 0 | Ranked last | Own-space sides | TD § 9's sentence with the layer's name ("Flip is flipped, so I'll go by its own sides") | Right; the sentence is the only guard against screen words | 2b's Flip (SR-1) |
 | 19 | Rotation keyed | Rest key named (FR-011) | Checked at the rest key | Names the rest key | Right | 2b's Gauge |
-| 20 | Scale keyed from 0 (a pop-in) | Rest key = full-size key | At the rest key; a pivot set at Scale 0 fails, one hint (set away from rest); `place_now` outside, below | TD § 7 rest hint, plus "it did move, though nothing showed" and Edit > Undo first (FR-019) | Right on grading. **L-4 (2026-10-26):** AE set Pop's anchor to [120, 960], far outside, not near the place (the stand-in guessed [60, 120]); the learner saw nothing happen | `pop-shrunk` (live) |
+| 20 | Scale keyed from 0 (a pop-in) | Rest key = full-size key | At the rest key; a pivot set at Scale 0 fails, one hint (set away from rest); `place_now` outside, below | `away_from_rest`, its line from TD § 7's "shrunk to nothing" row: the drag did move the pivot though nothing showed, Edit > Undo first, then the rest key (FR-019) | Right on grading. **L-4 (2026-10-26):** AE set Pop's anchor to [120, 960], far outside, not near the place (the stand-in guessed [60, 120]); the learner saw nothing happen | `pop-shrunk` (live) |
 | 21 | Text layer | Candidate; pivot starts on the baseline | `rect` is the letters' box at the check time; Source Text keys or animators change it (R6 not read) | "Title's pivot starts on its baseline, under the letters" | Right: **L-5 (2026-10-26)** `rect` is within 1 px of the ink, centred and left-justified; left-justified, the letters start 2.45 px right of the pivot (not 0), so "the middle of the left edge" still reads between places until moved | `sign-centred`, `sign-left` |
-| 22 | Shape layer, and a pivot moved inside Contents | Default candidate (**L-1 passed 2026-10-26**) | Layer anchor only. A group's pivot moved by Pan Behind changes the group's Anchor and Position together: **nothing the read holds changes** (L-1). A shifted rectangle with the anchor unchanged is `content_shifted` | FR-019b: `unchanged_shape` ("its own pivot hasn't changed; a pivot inside Contents belongs to the group"), never a claim the group was moved | Right with FR-019b (amended 2026-10-26; the old group hint assumed the rectangle shifts) | `lid-pan`, `lid-group` (identical to the base) |
-| 23 | Shape whose pivot sits outside it | Candidate, ranked below unkeyed layers with their pivot where AE put it | Item 1 reads outside, with the side on screen (FR-019a) | "Lid's pivot sits outside the lid, below it", and where to look: select it in the timeline | Right with FR-019a. L-1: Lid's crosshair is 120 px below the shape and the builder couldn't find it unselected. L-3: a new shape layer's pivot is at its origin, the comp's center, away from what was drawn (another case of this row) | `practice2b` (Lid), `lid-pan` |
+| 22 | Shape layer, and a pivot moved inside Contents | Default candidate (**L-1 passed 2026-10-26**) | Layer anchor only. A group's pivot moved by Pan Behind changes the group's Anchor and Position together: **nothing the read holds changes** (L-1). A shifted rectangle with the anchor unchanged is `content_shifted` | FR-019b: `unchanged_shape`, its line from TD § 7's "a shape's own pivot didn't change" row, as a possibility, never a claim the group was moved, and instead of row 2's general line | Right with FR-019b (amended 2026-10-26; the old group hint assumed the rectangle shifts). **A stroked shape is unchecked live (L-6):** if `rect` leaves the stroke out, the edges the check uses aren't the ones the learner sees | `lid-pan`, `lid-group` (identical to the base); L-6's capture when taken |
+| 23 | Shape whose pivot sits outside it | Candidate, ranked below unkeyed layers with their pivot where AE put it | Item 1 reads outside, with the side on screen (FR-019a) | `outside`, its line from TD § 7's "pivot outside" row: the side, click Lid in the timeline, start the drag there; no distance (FR-019a) | Right with FR-019a. L-1: Lid's crosshair is 120 px below the shape and the builder couldn't find it unselected. L-3: a new shape layer's pivot is at its origin, the comp's center, away from what was drawn (another case of this row) | `practice2b` (Lid), `lid-pan` |
 | 24 | 3D layer | Never (`three_d`) | comp-space returns `three_d` | One sentence | Right once W4 lands; **contract** | Mentor Overlaps' Depth |
-| 25 | Pan Behind on the wrong layer | n/a | Focus unchanged (item 1 fails); another layer's anchor changed with its footprint still (an other change, item 5 holds) | "Needle's pivot hasn't moved, but Background's did. Pan Behind moves the pivot of whatever layer is under the cursor, so start the drag on Needle's crosshair" (amended 2026-10-26: selecting first isn't the fix) | **Gap fixed by FR-019** (filter 1). **L-3 (2026-10-26):** with Door selected, a drag on Needle moved Needle's pivot, so the mistake is a real hand path | `wrong-layer` |
+| 25 | Pan Behind on the wrong layer | n/a | Focus unchanged (item 1 fails); another layer's anchor changed with its footprint still (an other change, item 5 holds) | `wrong_layer`, its line from TD § 7's "grabbed another layer" row: why once, Edit > Undo, start the drag on Needle's crosshair; never "select it first" (FR-019) | **Gap fixed by FR-019** (filter 1). **L-3 (2026-10-26):** with Door selected, a drag on Needle moved Needle's pivot, so the mistake is a real hand path | `wrong-layer` |
 | 26 | Playhead moved between reads | n/a | Compared at the check time from samples, not at the playhead (FR-011, FR-013) | n/a | Right with FR-013; **contract** (W1) | Synthetic two reads at different `comp.time` |
 | 27 | A time not sampled in one read, a layer with no rectangle | n/a | "Can't check" (FR-018) | Says it can't check that layer | **Gap fixed by FR-018** (filter 6) | Synthetic `not_sampled` and `no_rect` |
 | 28 | Locked layer | Allowed if named, never proposed, never the demo (D-2) | Demo refuses; still locked at "done" is returned (FR-019) | The unlock sentence when named; the lock hint if still locked at "done" | Right; R1 reads `locked`. **L-4 (2026-10-26):** locked before the snapshot, the demo went to the other layer (FR-014); locked after, the demo refused with nothing changed | Mentor Overlaps' Locked Bar; `door-locked` |
@@ -609,6 +682,13 @@ each row must see; this table adds what the focus, the check and the learner eac
   (refuses, no partial change).
 - **L-5 (new)**: on Sign, does `rect` at the check time match the letters on screen (left, top,
   width and height within 1 px of a look in AE), centred and left-justified?
+- **L-6 (TD L-6; added 2026-10-26, round 2; the next sitting, not a blocker for T236)**: one step.
+  On a **duplicate** of Mentor Practice 2, give Lid (or a copy) a stroke, read it, and compare
+  `rect` with the shape's outer edge on screen, stroke included (1 px). If `rect` leaves the
+  stroke out, that goes to the spec writer: filter 5 and row 22 decide whether stroked shapes
+  stay default candidates. Captured as `lid-stroke.json`; the duplicate deleted after. (TD's L-7,
+  Pan Behind with every Position key selected, is information only and not needed by this spec;
+  run it in the same sitting only if there's time.)
 - **TD B-6** (what the builder's `.aep` holds) is answered by T133's capture of Mentor Practice as
   it is; TD B-1 is spec 004 T157 plus SR-1.
 - **Results (2026-10-26,** `specs/011-anchor/live-sitting-2026-10-26.md` **on `skill-5-anchor`):**
@@ -672,8 +752,8 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
 4. **Neighbouring place on the 800 × 60 Banner**: fails; the hint names the place it's in.
 5. **Pan Behind on a Scale-200% layer** (Plaque): passes (own-space measure).
 6. **Pan Behind on Background instead of the focus**: the wrong-layer hint says to start the drag
-   on the focus layer's own crosshair, never that selecting it first is the fix (L-3, amended
-   2026-10-26).
+   on the focus layer's own crosshair and says why once, never that selecting it first is the fix
+   (L-3; TD § 7's row, amended 2026-10-26).
 7. **Riskiest overlap, the pop-in** (Pop set at Scale 0): fails with the rest-key hint, says the
    pivot did move though nothing showed, and asks for Edit > Undo before the second try (spec 004
    FR-034; L-4, amended 2026-10-26).
@@ -686,7 +766,9 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
 11. **Demonstration with two focus layers**: on the one the learner cares less about; A and
     Shift+P asked first; frames before and after; none with one focus layer (walks it through).
 12. **Understanding check**: a wrong answer gets one light correction and the pass stands.
-13. **Position-keyed layer named** (Sled): the tip once; a slide at another key time fails.
+13. **Sled named** (Position keys at three times, D-4): TD § 4's "already moves" sentence once,
+    no lesson on Sled, another layer offered, never "jump" (deterministic: no `jump` in the
+    turn; rubric: the sentence said once and a layer offered).
 14. **Incomplete attempt**: names what's off and where; doesn't fix or offer to.
 15. **"Just do it for me"**: declined warmly, no offer later.
 16. **Review**: due, new layer, the hinge asked first, no tool named before "done", no demo.
@@ -694,19 +776,28 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
 18. **Can't check** (a `not_sampled` or `no_rect` result): says it can't check that layer; never
     claims it didn't move.
 19. **Pivot outside, where to look** (added 2026-10-26, FR-019a): Lid named; the mentor says its
-    pivot sits outside, on which side, and to select Lid in the timeline to see the crosshair; no
-    distance in pixels.
+    pivot sits outside, on which side, to click Lid in the timeline so its crosshair shows, and to
+    start the drag there (TD § 7); no distance in pixels.
 20. **A group's pivot moved** (added 2026-10-26, FR-019b): `lid-group` as the attempt; the mentor
-    says Lid's own pivot hasn't changed and offers the Contents possibility without claiming it.
+    says Lid's own pivot hasn't changed and offers the Contents possibility without claiming it,
+    and doesn't also say the general "if something drives it, like an expression" line.
 21. **Center Anchor Point** (replaces any "no menu path" case, L-3): asked for a menu command, the
     mentor may give Layer > Transform > Center Anchor Point in Layer Content by menu path **only
     when the place is the center**, never a shortcut; for any other place it stays with Pan
     Behind.
+22. **One key, dragged off it** (added 2026-10-26, round 2, D-4; optional but recommended): a
+    one-key Sled (`sled-one-key-before`), the playhead asked for on its key, the attempt
+    `sled-one-key` (dragged at 0 s, a key added there): fails with the slid hint, which says
+    where Sled now sits at its key, that Pan Behind changed Position only at the playhead, and
+    asks for Edit > Undo and the playhead right on the key; never "jump". It earns its place
+    because it's the only way a lesson on a one-key layer fails for what AE does with the
+    playhead, the hint is new wording, and the fixture is already captured (no AE needed).
 
 **Fixtures (2026-10-26):** cases run on the live captures (comp 179, 40 layers, `practice2b.json`
 and the L-1 to L-5 files), not the stand-ins (comp 300, 19 layers), which are deleted. On the live
 comp with T241, case 1's proposal is still Door, the middle of its left edge, and the leave-outs
-are many more (14 Position-keyed layers, Wobble, Hatch Rig, Seal, Reveal Matte, Background).
+are many more (16 Position-keyed layers, all `position_moves` after T245, Wobble, Hatch Rig,
+Seal, Reveal Matte, Background).
 
 Plus spec 004's cross-skill cases that touch this skill (plain speech; the matte, cross-skill 3).
 
@@ -729,6 +820,12 @@ Plus spec 004's cross-skill cases that touch this skill (plain speech; the matte
   FR-019b); effect points; Collapse Transformations; animating the anchor point; snapping the
   crosshair; Quick Set Anchor; parenting and nulls (skill 6); precomposing; fixing Position keys
   after a pivot change.
+- **Re-pivoting a layer that already moves** (Position keys at two or more times; D-4, TD § 8):
+  not a candidate here, and taught nowhere in the ten-skill path yet. Logged as the designer's
+  curriculum follow-up **C-3** (a tip in this skill's review once TD's L-7 is known, or a "fix the
+  pivot on finished work" lesson after skill 6). Not this release. Shifting every Position key,
+  Pan Behind with every key selected, parenting to a null at the hinge and Quick Set Anchor were
+  each rejected for this release in TD § 16.
 - **Expressions with no keys on Rotation or Scale** (R2, wave D): a rest pose they drive isn't seen.
 - **Text animators and Source Text keys** changing the letters' box over time (R6).
 - **Auto-oriented layers** until T158 answers (comp-space returns "can't check").
@@ -781,6 +878,31 @@ Evidence: `specs/011-anchor/live-sitting-2026-10-26.md` and commits `96c6bcf`, `
    FR-019's wrong-layer wording (L-3); FR-023 (Center Anchor Point, L-3); the Live checks › Results.
 7. **New open question D-4** (Sled, two or more Position keys can't pass).
 
+### 2026-10-26, round 2: the designer's answers (TD § 16, `8ab6adc`)
+
+1. **D-4 closed (FR-004, FR-009, FR-012, FR-013, rows 5, 5b, 6, US2 #4 and #5, Out of scope,
+   Eval plan 13 and 22).** Two or more Position key times: never, reason `position_moves`, with
+   TD § 4's sentence. One key time: allowed if named, only on the check time, else
+   `position_moves`. Key times, not keys; X and Y together; hold keys count. The designer's
+   wording replaces this spec's "would make it jump". The name `position_moves` says why the
+   layer is left out in the learner's terms (it already moves), matches the sentence, and keeps
+   `position_keyed` for the one-key case, so existing tests and `SKILL.md` lines for that code
+   stay right. **Rejected:** `position_multi_key` (wrong for the one-key layer whose rest key is
+   on another frame, which gets the same code) and two codes for the two cases (the mentor says
+   the same sentence for both; `keyed.position_times` tells them apart for tests).
+2. **Wording (FR-019, FR-019a, FR-019b, rows 20, 22, 23, 25, Eval plan 19 and 20).** The hints
+   name their code, fields and must-say points, and take their lines from TD § 7, where the
+   designer confirmed or rewrote them (§ 16's list). This spec no longer carries its own copy,
+   so the two can't drift. New: `item3.now` (the read's own time, for the Pop line) and the time
+   on `position_keyed_tip` (for the one-key line).
+3. **The leftover audit finding (FR-019b):** `unchanged_shape`'s line replaces row 2's general
+   "if something drives it" line on a shape, never both.
+4. **L-6** (a stroked shape) added for the next sitting (filter 5, row 22, Live checks).
+5. **New wording questions D-5 to D-7** ("far" in the Pop line, "first key" in the Gauge line,
+   the opening leave-out for 16 layers), each with a recommendation `SKILL.md` uses meanwhile.
+6. **Data model:** hint codes `in_place_moved` and `other_layer_moved`, built on `skill-5-anchor`
+   (`anchor-check.mjs`) and missing from data-model's table, are listed there now.
+
 ## Open questions
 
 ### For the human (H): all answered 2026-10-23, as recommended
@@ -796,7 +918,7 @@ Evidence: `specs/011-anchor/live-sitting-2026-10-26.md` and commits `96c6bcf`, `
    whether it feels thin.
 5. **H-5, the mentor suggests a hinge** when the learner has none in mind. Approved.
 
-### For the curriculum designer (D): D-1 to D-3 answered in TD § 15; D-4 open (2026-10-26)
+### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16; D-5 to D-7 open (2026-10-26, round 2)
 
 1. **D-1, a Rotation-only layer with no key at 0 or a whole turn**: the key closest to 0 or a
    whole turn, one sentence, "is that how it looks at rest?" (FR-011).
@@ -804,51 +926,37 @@ Evidence: `specs/011-anchor/live-sitting-2026-10-26.md` and commits `96c6bcf`, `
    demo; the hint names the lock if it's still locked at "done" (FR-004, FR-019, row 28).
 3. **D-3, "a pivot still where AE put it"**: widened by the designer to the rectangle's center or
    the layer's own origin (0, 0), for every layer type (FR-004's ranking).
-4. **D-4, a layer with two or more Position keys (open 2026-10-26; row 5, US2 #4, eval 13).** L-2
-   shows Pan Behind changes or adds one Position key, at the playhead, and leaves the others, so
-   the layer always slides at its other keys and item 4 fails. As written, a lesson on Sled has no
-   taught way to pass; the only fix is shifting every Position key, which TD § 8 leaves out. With
-   one Position key and the playhead on it, Pan Behind rewrites that key and it passes.
-   **Recommended:** two or more Position keys moves from "allowed if named" to **not a
-   candidate**, with one sentence ("Sled already moves, so moving its pivot now would make it jump
-   at its other keys. It's simplest to set the pivot before you key; pick a layer that doesn't move
-   yet"); one Position key stays allowed if named, with the tip asking for the playhead on that
-   key. Alternative: keep Sled allowed and tell the learner up front it can't pass, which teaches
-   the trap but leaves a lesson that can't end in a pass. A third, untested: whether Pan Behind
-   with every Position key selected shifts them all (a new live check); if it does, that could be
-   the taught way. Not a T236 blocker (Door); it changes US2 #4, eval 13, a reason code and its
-   tests, tasked once answered.
+4. **D-4, a layer with two or more Position keys: closed 2026-10-26 (TD § 16).** Accepted with
+   three adjustments: count key times (X and Y together, hold keys included); the one-key
+   exception only when the key is on the check time; the designer's sentence ("would shift where
+   it sits", not "jump"). In this spec: FR-004 (`position_moves`), FR-009, FR-012 item 4, FR-013,
+   rows 5, 5b and 6, US2 #4 and #5, Out of scope (C-3), Eval plan 13 and 22; tasks T245 to T247.
 
-**TD wording to confirm (2026-10-26, for the cockpit to pass on; this spec doesn't edit
-`teaching-design.md`):**
+**TD wording list (Open questions › D, items 1 to 7 of 2026-10-26): answered in TD § 16.**
+Items 1, 2 and 7 were confirmed as proposed and are already in FR-004, FR-014, FR-023 and rows
+21 to 23. Items 3 to 6 were reworded by the designer; this spec now points at TD § 7's rows for
+the lines and keeps only the hint codes and what each must say: item 3 → `unchanged_shape` and
+`content_shifted` (FR-019b); item 4 → `outside` (FR-019a); item 5 → `away_from_rest` (FR-019);
+item 6 → `wrong_layer` and `other_layer_moved` (FR-019). The spec's earlier proposed lines are
+withdrawn, not kept as a second copy.
 
-1. **§ 4 ranking:** a new step, a layer with no keys at all before one with keys (FR-004); § 12's
-   review pick follows it.
-2. **§ 4 candidate table and demo rule:** L-1 passed, so "shape layer: yes, once L-1 passes" and
-   the demo rule's "not shape until L-1" can drop their condition. D-3's "new shape layers start at
-   their origin" holds, but L-3 shows that origin is the comp's center, away from the drawn shape.
-3. **§ 7, the group row:** what the check sees is **no change at all** (L-1), not "bounds moved".
-   Proposed wording (FR-019b): "Lid's own pivot, under Transform, hasn't changed. If you dragged a
-   pivot inside Contents, that one belongs to the shape's group: select Lid itself in the timeline
-   and drag its crosshair." Plus a wording for "what's drawn moved, its pivot didn't" on any layer
-   (`content_shifted`; on text, a justification change).
-4. **§ 7, the outside row:** it names a side ("off to its right"), which the tool now gives
-   (FR-019a). Proposed: add where to look ("select Lid in the timeline; its crosshair is below the
-   lid").
-5. **§ 4 rest pose and § 7's rest row, Pop at Scale 0:** § 4 says nothing visible moves, which
-   L-4 confirms, but the learner reads it as "it wouldn't let me drag", and AE puts the pivot far
-   outside (Pop: [120, 960]), not near the rest place. Proposed hint: "Pop is still shrunk at 3.3 s,
-   so nothing showed, but its pivot did move, far below it. Edit > Undo, put the playhead on 4.3 s,
-   where it's full size, and set the pivot there." § 13's "set while Badge was shrunk at first"
-   still fits.
-6. **§ 7, the wrong-layer and another-layer-moved rows:** "select Needle in the timeline first" is
-   wrong at 26.5; Pan Behind moves the pivot under the cursor (L-3). Proposed: "start the drag on
-   Needle's own crosshair".
-7. **§ 9's shape row** says bounds include the stroke; L-1's Lid has no stroke, so that's
-   untested. **§ 9's text row**: left-justified, the letters start 2.45 px right of the pivot
-   (L-5). **§ 11 / B-4:** Center Anchor Point in Layer Content is confirmed at 26.5. **§ 7's
-   slid-at-key row** ("exact wording waits for B5"): L-2 answered it; `SKILL.md` now says Pan
-   Behind changed only the key at the playhead, or added one there.
+**New, round 2 (wording only; none blocks T236, T237 or HO-1, and `SKILL.md` uses the
+recommendation until answered):**
+
+5. **D-5, "far" in the Pop line.** TD § 7: "it did move Pop's pivot, far below it." The tool gives
+   the side (`item1.outside_side`), not a distance, so "far" is a claim nothing measures; in the
+   one capture (L-4) it was true. **Recommended:** keep "far below it" only when `item1.place_now`
+   is `outside` with a side (L-4's pattern: AE reads the cursor's comp point as a layer point),
+   and drop the clause otherwise, never a guess.
+6. **D-6, "its first key" in the Gauge line.** TD § 7's rest row: "Put the playhead on its first
+   key, where it's at rest." The rest key isn't always the first (Pop's is its last), and the tool
+   returns a time and a basis, not an ordinal. **Recommended:** the time only ("its key at
+   3.2 s"), as TD § 16's last note says times come from the read.
+7. **D-7, the opening leave-out for layers that already move.** TD § 4's sentence is for a learner
+   who names Sled ("Pick a layer that doesn't move yet?"). With no layer in mind, US1 #1 names
+   leave-outs once per reason, and on Mentor Practice 2 that's 16 layers. **Recommended:** one
+   general sentence naming at most two of them ("Sled and Card already move, so they're not in
+   this lesson; set a pivot before you key"), designer's wording.
 
 ### For the eval engineer (E)
 
@@ -858,6 +966,9 @@ Evidence: `specs/011-anchor/live-sitting-2026-10-26.md` and commits `96c6bcf`, `
   `shape_until_l1` any more (7 files name it); case 6's "select it first" and case 20's "no menu
   path" contradict L-3; case 7 adds Edit > Undo; cases 19 to 21 are new. Wait for T241 to T244
   before a baseline.
+- **2026-10-26, round 2:** case 13 is now Sled as a leave-out (D-4), case 20 adds "not both
+  lines", case 22 (one key, dragged off it) is new and optional. Rubric wording for the hints
+  comes from TD § 7's rows, not this spec. Wait for T245 to T247 before a baseline.
 
 ## Dependencies
 
