@@ -146,6 +146,9 @@ and answer keys) and T158 are still open, so every live task here comes after th
   pivot may have been set away from rest (TD § 7 rest row): `set_away_from_rest` is true when item
   2 fails at the check time **and** passes at the current read's time.
 - **Item 4:** for a Position-keyed focus layer, item 2 at every baseline Position key time.
+  (2026-10-26, D-4: a layer with Position keys at two or more times is `never`, so a lesson
+  reaches item 4 only on a one-key layer; the function is unchanged and stays unit tested on
+  three keys, spec FR-012.)
 - **Item 5:** every other layer's footprint at every time sampled in both reads (children of a
   focus layer only at that layer's check time, `sourcesOf().children`), ≤ 1 px per edge; and no
   new Anchor Point keys on the focus.

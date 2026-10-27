@@ -183,6 +183,21 @@ Risks; over 10 s is a finding, not a fail).
 
 ---
 
+## Phase 8c: Round 2 of 2026-10-26 (skill-builder on `skill-5-anchor`; cloud or desk, not 🖐 except T248)
+
+From TD § 16 (D-4 and the wording list, `8ab6adc`) and spec › Changes › round 2. Same add-only
+rule: every file below is one this branch added. **None blocks T236** (Door has no keys; its
+lesson runs on Phase 8b as built). **T245 to T247 block T237 and HO-1.** T248 doesn't block
+anything. The answer key's values are derived by hand from the spec and the captures, never by
+running the code and copying its output.
+
+- [ ] T245 [US2] Leave-out for layers that already move (FR-004, FR-009, FR-013; data-model › Candidate): in `mentor/lib/anchor.mjs`, add `keyed.position_times` to each candidate (Position's key times, X and Y counted together when separated, hold keys included, times within half a frame merged); two or more times → `never` with reason `position_moves`; one time → `if_named` with `position_keyed` only when the layer has no Rotation or Scale keys or its rest key is within half a frame of that time, else `position_moves`; a focus whose learner `rest_time` is off its one Position key's frame is refused in `focus_problems` with `position_moves`; `position_keyed_tip` carries `time`. `neededTimes` follows (never-bucket layers drop out, unchanged code path). In `mentor/lib/anchor-check.mjs`, add `item3.now` (the check read's `comp.time`). The demo and review are unchanged (they already take default candidates only). `npm test` green after T246
+- [ ] T246 [US2] Answer key and tests (FR-004, FR-012, FR-013, rows 5, 5b, 6): in `mentor/test/fixtures/anchor/answer-key.json`, by hand: Sled and every other Position-keyed layer of `practice2b` confirmed at two or more key times and set to `never`, `position_moves` (spec FR-004 lists 16), Leaf 2 in Mentor Overlaps by its own key count; `needed_practice2b` and its `needed_note` re-derived without those layers' Position key times and Card's and Tile's rest keys; `sled_with_gradient` replaced (both are `never` now) by a two-focus case of two `if_named` layers picked by hand, still giving no demo; `sled-one-key` as the one-key case (baseline `sled-one-key-before`, Sled `if_named`, `position_keyed`, tip time 3.667; the attempt fails with `slid_at_key`, item 2 holds at the check time, a `keys_added` on Position); `sled-slid` and `sled-on-key` kept as item 4 unit tests outside the lesson path (the check called with Sled as focus directly, its note saying a lesson can't reach it). Tests in `anchor-candidates.test.mjs` and `anchor-overlap.test.mjs`: synthetic X key at 1 s and Y key at 2 s → `position_moves`; X and Y both at 1 s → one time; two hold keys → `position_moves`; one key with Scale's rest key on another frame → `position_moves`, on the same frame → `if_named`; a learner `rest_time` off the key refused; `item3.now` on `pop-shrunk` is that capture's own `comp.time` (3.3 s by TD § 7's line; confirm from the file). Rows 5, 5b and 6 each map to one test
+- [ ] T247 [US2] `.claude/skills/anchor-mentor/SKILL.md`, after T245 and T246: (1) swap in TD § 7's lines as TD § 16 rewrote them for `unchanged_shape`, `content_shifted` (text and shape wordings), `outside`, `away_from_rest` (the Pop line, with `item3.now`), `wrong_layer` and `other_layer_moved`, replacing the spec's proposed lines T244 used; (2) add TD § 4's leave-out sentence for `position_moves` (said once, then the next candidate offered; never "jump") and the one-key "put the playhead right on its key" line with the note's `time`; (3) narrow the slid hint to the one-key case (TD § 7's one-key row); (4) the leftover audit finding: on a shape with `unchanged_shape`, say that line **instead of** the general "Door's pivot didn't change. If something drives it…" line, not both (FR-019b); (5) D-5 to D-7 as the spec recommends until the designer answers. Nothing else. Then `npm test`, `node .claude/hooks/check-branch.mjs <branch> skill-builder main` (no `--shared-owner`), `/agent-audit` on the file and fix what it finds there; hand back the diff for HO-3
+- [ ] T248 🖐 L-6 at the next sitting (with T237; quickstart › 2, spec › Live checks): on a duplicate of Mentor Practice 2, a stroked Lid read as `mentor/test/fixtures/anchor/lid-stroke.json`; log whether `rect` includes the stroke (1 px); duplicate deleted, Mentor Practice 2 still matches `practice2b.json`. A "no" goes to the spec writer (filter 5, row 22); blocks nothing
+
+---
+
 ## Phase 9: Polish and hand-back
 
 - [ ] T238 Re-run T229's checks on the final branch (live fixtures, no stand-ins)
@@ -195,16 +210,20 @@ Risks; over 10 s is a finding, not a fail).
 
 - **HO-1 Eval engineer:** hand off to eval-engineer: `product/evals/anchor/` from spec › Eval plan.
   After T234. Case numbers from the cockpit. **2026-10-26:** after T241 to T244 too; the cases on
-  `evals-skill-5` move to the live captures (spec › Open questions › E).
+  `evals-skill-5` move to the live captures (spec › Open questions › E). **Round 2:** after T245
+  to T247 too (case 13 is now Sled as a leave-out; case 22, one key dragged off it, is new).
 - **HO-2 Curriculum designer:** `/overlap-audit` re-run on the built branch before HO-1: TD § 9
   against T228's tests on live fixtures, the rows marked **contract** re-confirmed against wave B's
   code as built, and L-1 to L-5's results.
 - **HO-3 Reviewer:** a read of `SKILL.md` against FR-023 (Quick Set Anchor never brought up, one or
   two sentences when asked; Center Anchor Point by menu path for the center place only, confirmed by
   L-3) and SC-004 (no number to type, no tolerance) before HO-1; after T244, again on its diff
-  (FR-019a, FR-019b, the rest hint).
+  (FR-019a, FR-019b, the rest hint); after T247, again on its diff (TD § 16's lines, the
+  `position_moves` sentence, never "jump", and FR-019b's "not both lines").
 - **HO-5 Curriculum designer (2026-10-26):** D-4 (Sled, two or more Position keys) and the TD
-  wording list in spec › Open questions › D. D-4's answer becomes tasks then.
+  wording list in spec › Open questions › D. **Done 2026-10-26** (TD § 16, `8ab6adc`); tasked as
+  Phase 8c. New: D-5 to D-7 (wording only, spec › Open questions › D), not blocking; T247 uses
+  the spec's recommendations until answered.
 - **HO-4 Eval engineer, after merge:** the easing set at 25/25 or within one (SC-007), logged.
 
 ## Requests (to the cockpit; never a task here)
@@ -222,6 +241,8 @@ Risks; over 10 s is a finding, not a fail).
 - Phase 4 and Phase 5 need T218. T227 after T219.
 - Phase 8 in order: T232 → T233 → T234 → T235 → T236 → T237. T240 a day or more after the first pass.
 - Phase 8b (2026-10-26): T241 → T236; T242 and T243 in parallel, then T244 → T237 and HO-1.
+- Phase 8c (2026-10-26, round 2): T245 → T246 → T247 → T237 and HO-1. None blocks T236. T248 at
+  T237's sitting, blocking nothing.
 - HO-2 and HO-3 after T235; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
 
 ## Parallel opportunities
@@ -238,6 +259,6 @@ Risks; over 10 s is a finding, not a fail).
 3. Phases 6–7 close the cloud part; Phase 8 is one sitting after spec 004's live tasks; Phase 9
    hands back.
 
-**Task count:** 44 (T201–T244): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
-hand-back 3, live sitting 6, amendment 4 (2026-10-26), polish 3. **🖐 live: 5** (T232, T233, T236,
-T237 in the sitting; T240 a day or more later). Hand-offs: 5; requests: 1 (SR-2).
+**Task count:** 48 (T201–T248): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
+hand-back 3, live sitting 6, amendment 4 (2026-10-26), round 2 4 (2026-10-26), polish 3. **🖐
+live: 6** (T232, T233, T236, T237 in the sitting; T248 with T237; T240 a day or more later). Hand-offs: 5; requests: 1 (SR-2).
