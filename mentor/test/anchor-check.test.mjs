@@ -35,13 +35,32 @@ test("the result carries the check read's own time, for the rest hint", () => {
   assert.equal(layerOf(r, "Pop").check_time, 4.3);
 });
 
-test("item 4 fails on a slide at one Position key time while item 2 passes", () => {
+// The live base with its playhead somewhere else, as a learner who started the lesson there would
+// have it (the base holds samples at every --times time).
+const at = (snap, time) => { const s = clone(snap); s.comp.time = time; return s; };
+const baseFor = (want) => (want.baseline_comp_time !== undefined ? at(P2, want.baseline_comp_time) : P2);
+
+test("item 4 fails on a slide at the Position keys while item 2 passes (L-2, playhead before the keys: a key added at 0)", () => {
   const r = run(P2, fixture("sled-slid"), [{ layer: "Sled", place: "middle-left" }]);
   const sled = layerOf(r, "Sled");
   assert.equal(sled.item2.passed, true);
   assert.equal(sled.item4.passed, false);
-  assert.ok([4.167, 4.667].includes(sled.item4.worst.time));
+  assert.equal(sled.item4.worst.time, KEY.attempts["sled-slid"].item4_worst_time, "every old key slid the same, so the first is the worst");
+  assert.deepEqual(r.other_changes, [{ kind: "keys_added", layer: "Sled", property: "Position" }], "AE added a key at the playhead");
   assert.equal(r.passed, false);
+});
+
+test("L-2, playhead on the first key: only that key is rewritten, Sled slides at the other two, no key added", () => {
+  const want = KEY.attempts["sled-on-key"];
+  const base = baseFor(want);
+  const r = run(base, fixture("sled-on-key"), want.focus);
+  const sled = layerOf(r, "Sled");
+  assert.equal(sled.check_time, 3.667);
+  assert.equal(sled.item2.passed, true, "still at the playhead");
+  assert.equal(sled.item4.passed, false);
+  assert.equal(sled.item4.worst.time, want.item4_worst_time);
+  assert.deepEqual(sled.hints, ["slid_at_key"]);
+  assert.deepEqual(r.other_changes, []);
 });
 
 test("item 5 fails when another layer moved 2 px", () => {
@@ -226,7 +245,6 @@ const ROWS = [
   ["neighbour_place", "banner-neighbour"],
   ["outside", "door-outside"],
   ["wrong_layer", "wrong-layer"],
-  ["group_anchor", "lid-group"],
   ["away_from_rest", "pop-shrunk"],
   ["slid_at_key", "sled-slid"],
   ["stopwatch", "stopwatch"],
@@ -244,6 +262,26 @@ for (const [code, file] of ROWS) {
   });
 }
 
+// Row 22's hint: live (L-1), AE moves a group's anchor and position together, so nothing this skill
+// reads changes, and the check says where Lid's own pivot still is. The code fires only when a
+// layer's rectangle shifts with its anchor unchanged: the stand-in's guess, kept as a clone here,
+// and, live, a text layer whose justification changed (sign-left).
+test("hint group_anchor: live, lid-group shows no change, so it can't fire; it fires on a shifted rectangle", () => {
+  const want = KEY.attempts["lid-group"];
+  const live = layerOf(run(P2, fixture("lid-group"), want.focus), "Lid");
+  assert.deepEqual(live.hints, want.hints);
+  assert.equal(live.item1.place_now, "outside");
+  assert.equal(live.rect_shifted, false);
+  const shifted = clone(P2);
+  for (const sm of shifted.layer_info.find((l) => l.name === "Lid").samples) sm.rect = { ...sm.rect, left: sm.rect.left - 40 };
+  const r = layerOf(run(P2, shifted, want.focus), "Lid");
+  assert.equal(r.rect_shifted, true);
+  assert.deepEqual(r.hints, ["group_anchor"]);
+  const sign = layerOf(run(P2, fixture("sign-left"), [{ layer: "Sign", place: "middle-left" }]), "Sign");
+  assert.deepEqual([sign.anchor_changed, sign.position_changed, sign.rect_shifted], [false, false, true]);
+  assert.deepEqual(sign.hints, ["group_anchor"], "a text layer gets the group hint too (for the spec writer)");
+});
+
 test("hint matte_eye: a pass with a matte's eye left on gives exactly that code", () => {
   const r = run(P2, passMatteEyeOn(), DOOR);
   assert.equal(r.passed, true);
@@ -258,14 +296,16 @@ test("hint cant_check: said instead of any other hint for that layer", () => {
 
 test("every planted attempt in the answer key grades as it says", () => {
   for (const [file, want] of Object.entries(KEY.attempts)) {
-    const r = run(P2, fixture(file), want.focus);
+    const r = run(baseFor(want), fixture(file), want.focus);
     const l = layerOf(r, want.focus[0].layer);
     assert.equal(r.passed, want.passed, `${file} passed`);
     assert.deepEqual(l.hints, want.hints, `${file} hints`);
     if (want.check_time !== undefined) assert.equal(l.check_time, want.check_time, `${file} check time`);
     if (want.item1 !== undefined) assert.equal(l.item1.passed, want.item1, `${file} item 1`);
+    if (want.place_now !== undefined) assert.equal(l.item1.place_now, want.place_now, `${file} place now`);
     if (want.item2 !== undefined) assert.equal(l.item2.passed, want.item2, `${file} item 2`);
     if (want.item4 !== undefined) assert.equal(l.item4.passed, want.item4, `${file} item 4`);
+    if (want.item4_worst_time !== undefined) assert.equal(l.item4.worst.time, want.item4_worst_time, `${file} item 4's worst key`);
     if (want.other_changes) assert.deepEqual(r.other_changes, want.other_changes, `${file} other changes`);
   }
 });
@@ -293,7 +333,7 @@ test("hint other_layer_moved: the focus holds items 1 to 4 and another layer's b
 
 test("a failed focus layer always has at least one hint", () => {
   const cases = [];
-  for (const [file, want] of Object.entries(KEY.attempts)) cases.push([file, P2, fixture(file), want.focus]);
+  for (const [file, want] of Object.entries(KEY.attempts)) cases.push([file, baseFor(want), fixture(file), want.focus]);
   for (const name of ["door-renamed", "door-layer-added", "matte-eye-on", "hatch-rig-focus", "gauge-away", "pop-shrunk"]) {
     for (const focus of [DOOR, [{ layer: "Gauge", place: "bottom-middle" }], [{ layer: "Pop", place: "bottom-middle" }, { layer: "Needle", place: "top-left" }]]) cases.push([name, P2, fixture(name), focus]);
   }

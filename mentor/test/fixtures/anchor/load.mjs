@@ -1,9 +1,9 @@
 // Loading spec 011's fixtures and answer key in its tests, and building a lesson the way the session
 // would (targets from the baseline's analysis, the learner's focus as skill_options).
 //
-// fixture(name) prefers a live capture in this folder (the sitting, tasks T233), then spec 004's
-// own capture of the same name in ../layer-info/ (practice2b.json, overlaps.json, after its T133 and
-// T135), then the stand-in. synthetic(name) reads synthetic/, which stays after merge.
+// fixture(name) reads a live capture: this folder first (the 2026-10-26 sitting, tasks T233), then
+// spec 004's own capture of the same name in ../layer-info/ (overlaps.json). synthetic(name) reads
+// synthetic/. The stand-ins are gone (T234).
 
 import fs from "node:fs";
 import path from "node:path";
@@ -17,7 +17,7 @@ export const clone = (x) => JSON.parse(JSON.stringify(x));
 
 export function fixturePath(name) {
   const file = `${name}.json`;
-  for (const rel of [file, path.join("..", "layer-info", file), path.join("stand-in", file)]) {
+  for (const rel of [file, path.join("..", "layer-info", file)]) {
     if (fs.existsSync(path.join(DIR, rel))) return rel;
   }
   throw new Error(`No anchor fixture named ${name}`);

@@ -41,10 +41,13 @@ test("on Mentor Overlaps, the rows this skill reads land as the answer key says"
   }
 });
 
-test("shapes are allowed if named with shape_until_l1 while SHAPES_DEFAULT is false", () => {
-  assert.equal(SHAPES_DEFAULT, false);
+test("shapes are default candidates since L-1 (SHAPES_DEFAULT true): Lid and Banner, and no shape_until_l1 left", () => {
+  assert.equal(SHAPES_DEFAULT, true);
   const got = byLayer(candidates(P2));
-  for (const n of ["Lid", "Banner"]) assert.deepEqual([got[n].bucket, got[n].reason], ["if_named", "shape_until_l1"]);
+  for (const n of ["Lid", "Banner", "Blink", "Cut"]) assert.deepEqual([got[n].bucket, got[n].reason], ["default", null], n);
+  assert.ok(!Object.values(got).some((c) => c.reason === "shape_until_l1"));
+  // A keyed shape still lands by its keys: Dot 1 has Position keys.
+  assert.deepEqual([got["Dot 1"].bucket, got["Dot 1"].reason], ["if_named", "position_keyed"]);
 });
 
 test("a matte is if_named with reason matte, never hidden, though its eye is off (filter 3)", () => {
@@ -82,8 +85,10 @@ test("Hatch ranks below the unparented ones and gets the parent note", () => {
 
 test("a full-frame solid: if_named with full_frame when the comp's size is known; null without, and it still ranks last", () => {
   assert.equal(byLayer(candidates(P2)).Background.full_frame, true);
-  const noSize = fixture("practice2b-no-size");
-  assert.equal(noSize.comp.width, undefined);
+  // A read from before spec 004 T165: the live base without the comp's size.
+  const noSize = clone(P2);
+  delete noSize.comp.width;
+  delete noSize.comp.height;
   const got = byLayer(candidates(noSize));
   assert.equal(got.Background.full_frame, null, "unknown, never a default size");
   assert.equal(got.Background.bucket, "default");
@@ -151,7 +156,7 @@ test("demo target: entry 1 when it's default, else entry 0, else not_a_default_c
   }
 });
 
-test("no focus: the proposal is Door with its left edge, and the demo waits for a focus", () => {
+test("no focus: the proposal is the answer key's (Blink, tall, so from its bottom edge), and the demo waits for a focus", () => {
   const a = analyze(P2);
   assert.deepEqual(a.proposal, KEY.practice2b.proposal);
   assert.deepEqual(a.targets, []);
@@ -176,7 +181,7 @@ test("FINDERS' count is above 0 exactly when a default candidate not in exclude 
 });
 
 test("neededTimes lists every candidate's rest-key and Position key times, at most 63", () => {
-  assert.deepEqual(neededTimes(P2), KEY.times.practice2b);
+  assert.deepEqual(neededTimes(P2), KEY.times.needed_practice2b);
   const many = clone(P2);
   const sled = many.layers.find((l) => l.name === "Sled").properties[0];
   sled.keys = Array.from({ length: 80 }, (_, i) => ({ ...sled.keys[0], index: i + 1, time: Math.round((0.1 + i * 0.05) * 1000) / 1000 }));

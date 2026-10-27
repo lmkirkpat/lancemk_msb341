@@ -27,11 +27,29 @@ test("row 1: an expression on keyed Position isn't a candidate, and the demo ref
   assert.equal(demoRefusal(s, entry(s, "Slide")), "expression");
 });
 
+// Pan Behind on the live Mentor Overlaps, written by hand (no capture of these in the sitting):
+// Still (100 x 100, anchor [50, 50] at [100, 100], unturned, 100%) to its top-left corner, so
+// anchor [0, 0] and Position [50, 50]; Leaf 2 (80 x 80, anchor [40, 40], X and Y keyed) to the
+// middle of its left edge, every X key and sample moved left by the same 40.
+function stillPass() {
+  const s = clone(OV);
+  for (const sm of entry(s, "Still").samples) { sm.anchor = [0, 0, 0]; sm.position = [50, 50, 0]; }
+  Object.assign(entry(s, "Still").transform, { anchor: [0, 0, 0], position: [50, 50, 0] });
+  return s;
+}
+function leaf2Pass() {
+  const s = clone(OV);
+  const leaf = entry(s, "Leaf 2");
+  for (const sm of [...leaf.samples, leaf.transform]) { sm.anchor = [0, 40, 0]; sm.position = [sm.position[0] - 40, sm.position[1], 0]; }
+  for (const k of s.layers.find((l) => l.name === "Leaf 2").properties.find((p) => p.path.endsWith("ADBE Position_0")).keys) k.value -= 40;
+  return s;
+}
+
 test("row 2: an expression on unkeyed Position (Drift) is a candidate, and the check reads its rendered values", () => {
   assert.equal(cand(OV, "Drift").bucket, "default");
   const d = entry(OV, "Drift");
   assert.deepEqual(sampleAt(d, 1).position, [1010, 300, 0], "the rendered Position (after the expression), not the static 960");
-  const r = run(OV, fixture("overlaps-still-pass"), [{ layer: "Still", place: "top-left" }]);
+  const r = run(OV, stillPass(), [{ layer: "Still", place: "top-left" }]);
   assert.equal(r.passed, true);
   assert.ok(!layerOf(r, "Still").item5.moved_layers.some((m) => m.layer === "Drift"), "compared at the same times, Drift didn't move");
 });
@@ -52,10 +70,15 @@ test("row 5: Position keyed is allowed if named; item 4 at every key time; a key
   assert.deepEqual([cand(P2, "Sled").bucket, cand(P2, "Sled").reason], ["if_named", "position_keyed"]);
   const a = analyze(P2, { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
   assert.ok(a.notes.some((n) => n.note === "position_keyed_tip"));
-  assert.equal(layerOf(run(P2, fixture("sled-slid"), [{ layer: "Sled", place: "middle-left" }]), "Sled").item4.passed, false);
+  // L-2: with the playhead before the keys, Pan Behind adds a Position key there and leaves the rest.
+  const slid = run(P2, fixture("sled-slid"), [{ layer: "Sled", place: "middle-left" }]);
+  assert.equal(layerOf(slid, "Sled").item4.passed, false);
+  assert.ok(slid.other_changes.some((o) => o.kind === "keys_added" && o.layer === "Sled" && o.property === "Position"));
+  // The same with one Position key.
   const base = fixture("sled-one-key-before");
   const r = run(base, fixture("sled-one-key"), [{ layer: "Sled", place: "middle-left" }]);
   assert.ok(r.other_changes.some((o) => o.kind === "keys_added" && o.layer === "Sled" && o.property === "Position"));
+  assert.equal(layerOf(r, "Sled").item4.passed, false, "it slides at the one old key");
 });
 
 test("row 6: hold keys on Position are checked at each key time, not between", () => {
@@ -69,9 +92,16 @@ test("row 6: hold keys on Position are checked at each key time, not between", (
 
 test("row 7: separated X and Y Position: the footprint comes from bounds, so it checks either way", () => {
   assert.deepEqual([cand(OV, "Leaf 2").bucket, cand(OV, "Leaf 2").reason], ["if_named", "position_keyed"]);
-  const r = run(OV, fixture("leaf2-pass"), [{ layer: "Leaf 2", place: "middle-left" }]);
+  const r = run(OV, leaf2Pass(), [{ layer: "Leaf 2", place: "middle-left" }]);
   assert.equal(r.passed, true);
   assert.equal(layerOf(r, "Leaf 2").item4.passed, true);
+  // Live (L-4): the demo on Tab with Position separated writes X and Y; the read can't tell, and
+  // the check passes it as it does the unseparated run.
+  const xy = run(P2, fixture("demo-separated-xy"), [{ layer: "Tab", place: "middle-left" }]);
+  assert.equal(xy.passed, true);
+  assert.deepEqual(layerOf(xy, "Tab").hints, []);
+  const tab = (f) => entry(fixture(f), "Tab").transform;
+  assert.deepEqual(tab("demo-separated-xy"), tab("demo-separated"));
 });
 
 test("row 8: a layer with an effect: a candidate, its footprint from its own rectangle", () => {
@@ -153,9 +183,13 @@ test("row 16: a focus layer's children are compared only at its check time", () 
   const a = analyze(P2, { skill_options: { focus: [{ layer: "Hatch Rig", place: "center" }] } });
   assert.deepEqual(a.targets, []);
   assert.deepEqual(a.focus_problems, [{ layer: "Hatch Rig", problem: "not_a_candidate", reason: "null" }]);
-  // Hatch Rig's pivot moved with nothing moving: Hatch, its child, didn't move.
+  // Hatch Rig's pivot moved with nothing moving (live: [0, 0] to [50, 50]; Hatch's own Position is
+  // [0, 0] under it): Hatch, its child, didn't move.
+  assert.deepEqual([entry(P2, "Hatch Rig").transform.anchor, entry(P2, "Hatch").transform.position], [[0, 0, 0], [0, 0, 0]]);
+  assert.deepEqual(entry(fixture("hatch-rig-focus"), "Hatch Rig").transform.anchor, [50, 50, 0]);
   const h = run(P2, fixture("hatch-rig-focus"), [{ layer: "Door", place: "center" }, { layer: "Tab", place: "middle-left" }]);
   assert.ok(!layerOf(h, "Tab").item5.moved_layers.some((m) => m.layer === "Hatch"));
+  assert.deepEqual(h.other_changes, [{ kind: "anchor_changed", layer: "Hatch Rig" }]);
 });
 
 test("row 17: Scale 200% measures the place in the layer's own space (Plaque)", () => {
@@ -186,8 +220,12 @@ test("row 19: Rotation keyed: the rest key is named and the check is at it", () 
 test("row 20: Scale keyed from 0: the rest key is the full-size key; a pivot set at Scale 0 fails", () => {
   assert.deepEqual(cand(P2, "Pop").check_time, { time: 4.3, basis: "both" });
   const focus = [{ layer: "Pop", place: "bottom-middle" }];
+  // Live (L-4): AE set the anchor at Scale 0 to Pop's Position read as a layer point, far outside
+  // Pop; nothing shows at 3.3 s. Graded as set away from rest, one hint.
   const shrunk = layerOf(run(P2, fixture("pop-shrunk"), focus), "Pop");
+  assert.deepEqual(entry(fixture("pop-shrunk"), "Pop").transform.anchor, [120, 960, 0]);
   assert.equal(shrunk.item3.set_away_from_rest, true);
+  assert.equal(shrunk.item1.place_now, "outside");
   assert.deepEqual(shrunk.hints, ["away_from_rest"]);
   assert.equal(run(P2, fixture("pop-pass"), focus).passed, true);
 });
@@ -199,15 +237,18 @@ test("row 21: text: a candidate whose pivot starts on its baseline; its rectangl
   assert.deepEqual(a.already_there, []);
   assert.ok(a.notes.some((n) => n.note === "text_baseline"));
   const left = sampleAt(entry(fixture("sign-left"), "Sign"), 0);
+  assert.equal(left.rect.left, 2.455, "live (L-5): the letters start just right of the pivot, not on it");
   assert.equal(placeNow(left.anchor, left.rect), "between", "left-justified: its pivot on the left of the baseline");
 });
 
-test("row 22: a shape is allowed if named until L-1; a group's anchor (the rectangle shifted) gives the group hint", () => {
-  assert.deepEqual([cand(P2, "Lid").bucket, cand(P2, "Lid").reason], ["if_named", "shape_until_l1"]);
-  const r = layerOf(run(P2, fixture("lid-group"), [{ layer: "Lid", place: "middle-left" }]), "Lid");
-  assert.equal(r.rect_shifted, true);
+test("row 22: a shape is a default candidate since L-1; a group's anchor moved shows no change at all (L-1)", () => {
+  assert.deepEqual([cand(P2, "Lid").bucket, cand(P2, "Lid").reason], ["default", null]);
+  const group = fixture("lid-group");
+  for (const k of ["layer_info", "layers", "comp"]) assert.deepEqual(group[k], P2[k], `lid-group's ${k} is the base's`);
+  const r = layerOf(run(P2, group, [{ layer: "Lid", place: "middle-left" }]), "Lid");
+  assert.equal(r.rect_shifted, false);
   assert.equal(r.anchor_changed, false);
-  assert.deepEqual(r.hints, ["group_anchor"]);
+  assert.deepEqual(r.hints, ["outside"], "Lid's own pivot, still outside it; the group hint can't fire (for the spec writer)");
 });
 
 test("row 23: a shape whose pivot sits outside it reads outside the layer", () => {

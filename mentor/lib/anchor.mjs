@@ -30,11 +30,14 @@ const TIME_TOL = 0.0005;
 
 // ---- Live-check switches (desk block, tasks T235)
 
-// L-1: until Pan Behind is confirmed to move a shape layer's own anchor and its bounds match what's
-// drawn, shapes are allowed if named, never proposed.
-export const SHAPES_DEFAULT = false;
+// L-1 (passed 2026-10-26 at 26.5): Pan Behind moves a shape layer's own anchor and Position
+// together, and its bounds match what's drawn, so shapes are default candidates. While false, they
+// were allowed if named, never proposed (reason shape_until_l1).
+export const SHAPES_DEFAULT = true;
 // Which rectangle item 1 (where the place is) and item 2 (did it move) both use, per layer kind
-// (filter 5): "rect" or "rect_extents". L-1 decides shapes, L-5 text.
+// (filter 5): "rect" or "rect_extents". L-1 (shapes: rect and rect_extents both read the shape as
+// drawn, no stroke) and L-5 (text: rect within 1 px of the ink, centred and left-justified) kept
+// "rect" for both.
 export const RECT_KIND = { shape: "rect", text: "rect", default: "rect" };
 
 export const rectKind = (kind) => (Object.hasOwn(RECT_KIND, kind) ? RECT_KIND[kind] : RECT_KIND.default);
