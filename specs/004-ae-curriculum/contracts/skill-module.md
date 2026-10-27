@@ -96,11 +96,17 @@ Shared tools a skill's SKILL.md also lists in `allowed-tools`: `read_learner_rec
 | `skill_options` | none | The skill's own analyzer options (plain JSON data; for example skill 2's pairs the learner said land hard). Passed to the analyzer as `opts.skill_options` and stored on the lesson. On a continued or resumed lesson, a call without it reuses the stored value; a call with it replaces it. The session never reads inside it (spec 008 SR-1; tasks T060, T061) |
 | `fresh` | `false` | `true`: start this skill's lesson on this comp again from this snapshot, as a new lesson, when no demo has run and no check has been made (for example after the learner builds a practice blink, spec 009 SR-1). Refused with `LESSON_UNDERWAY`, changing nothing, after a demo or a check (tasks T062, T063) |
 
-Returns `{ lesson: "new" | "continued" | "resumed", session, analysis }`, as today. A lesson for
+Returns `{ lesson: "new" | "continued" | "resumed", session, analysis, stored_choices }`.
+`stored_choices` (**added 2026-10-26, second pass**; spec FR-043, FR-046, research R26) is `true`
+only when the lesson is `resumed`, kept `skill_options` from an earlier call, and this call sent
+none; each lesson snapshot tool that a `SKILL.md` confirms choices from passes it into its reply. A lesson for
 the same skill and comp that isn't passed is continued (unless `fresh` restarts it); a different
-`mode` starts a new one. **Amended 2026-10-26 (spec FR-043, tasks-wave-b.md T173, T174):** an open
-lesson never checked and with no demo starts new when it's resumed, or continued from an earlier
-day (LE-1); a continued lesson from the same day keeps its baseline, so re-snapshotting mid-lesson never resets it.
+`mode` starts a new one. **Amended 2026-10-26 (spec FR-043, tasks-wave-b.md T173, T174; rewritten
+the same day, second pass):** an open lesson never checked and with no demo starts new when it's
+**resumed and its baseline no longer matches the comp** on the layers its targets and focus name
+(R26), or continued from an earlier day (LE-1, kept). A resumed lesson that matches keeps its
+baseline, `skill_options` and `skill_data` (T061, T063, spec 012 SR-1), and a continued lesson from
+the same day keeps its baseline whatever its keys read, so re-snapshotting mid-lesson never resets it.
 `UNKNOWN_LAYER` is thrown before any write. In review mode, a result with no targets gets
 `no_demo_reason: "no_new_target"` and the skill tells the learner there's nothing new to review on
 (FR-021) and records nothing.

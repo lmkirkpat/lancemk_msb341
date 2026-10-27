@@ -26,6 +26,16 @@ and "never compare raw key values", and points to spec 012 FR-011 to FR-013. Wav
 tasked as tasks-wave-b.md Phase 9 (T167 onward). Research R24 and R25 are new. Open questions LE-1
 to LE-3 were answered by the builder the same day (all three as recommended).
 
+**Changes 2026-10-26, second pass** (approved by the builder; a tasking pass after Phase 9 merged as
+`d4a9bd6` without T173 and T174): **FR-043 rewritten**. LE-1's first rule failed four existing tests
+of a built promise (choices kept across a resume: T061, T063, contracts § 4, spec 012 SR-1), and the
+builder chose "confirm + baseline": a resumed lesson starts fresh only when its comp no longer
+matches the baseline, and otherwise keeps its choices, which the skill confirms with the learner
+(new **FR-046**). **FR-040**'s re-read runs only on a passed check (a 0 gap was refused). **FR-044** now hashes only what the server runs and never starts git where there's
+no checkout; **FR-045** gains four no-bounds reasons (precomp, effects, masks, Opacity 0) from the
+reviewer's findings on the merged code. Research R24 and R25 are amended and **R26** is new. Tasked
+as tasks-wave-b.md Phase 9 › Second pass (T186 onward). New open questions LE-4 to LE-6.
+
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
 designer's [`curriculum.md`](curriculum.md) (same folder, `decisions/007`). This spec links to it
@@ -96,11 +106,12 @@ sets only what every skill spec must meet.
 None needs changing. One may need a note: see Open questions › H5 (shared code ownership when two
 skill builders run at once).
 
-The loose-ends pass (FR-039 to FR-045, 2026-10-26) relies on the same ones: FR-032 (one shared-code
+The loose-ends pass (FR-039 to FR-046, 2026-10-26) relies on the same ones: FR-032 (one shared-code
 owner), FR-035 (the easing bar), `decisions/005` (the panel's headless runs, which start a new server
 each turn, and its runtime folder outside the repo; FR-043 and FR-044), `decisions/008` (the AE lock
-for T181) and constitution IV (FR-044 returns a yes or no, never the hash or a path). It needs no new
-decision.
+for T181) and constitution IV (FR-044 returns a yes or no, never the hash or a path; FR-046 never
+names a field). It needs no new decision: the second pass's choice ("confirm + baseline") is the
+builder's answer to a spec question, recorded in FR-043, like LE-1 before it.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -590,7 +601,9 @@ Approved by the builder on 2026-10-26, from the first live lessons of skills 2, 
 source holds the finding; these requirements don't restate it. All seven are one shared-code
 owner's pass (FR-032), tasked in [tasks-wave-b.md](tasks-wave-b.md) › Phase 9. None changes what a
 skill teaches: each one makes a tool report something it already could, or makes a `SKILL.md`
-sentence match what the tools and live sittings showed.
+sentence match what the tools and live sittings showed. The second pass (2026-10-26) adds FR-046,
+which adds one question on a resumed lesson ("is that still the plan?"); it doesn't change what a
+skill teaches either.
 
 - **FR-039 (speed graph, a reading answer given as a time or a frame)**: `speed_graph_snapshot` MUST
   return the comp's frame rate as `comp.frame_rate` (the snapshot's own value, as `key_types_snapshot`
@@ -605,8 +618,16 @@ sentence match what the tools and live sittings showed.
   `.claude/skills/offset-mentor/SKILL.md`, when a check's measured gaps differ from the gap the
   learner stated and no demonstration has run, the mentor MUST say the gap back as measured (as the
   learner's own, never as a suggestion) and re-send `skill_options` with it, so a later demo shifts by
-  what the learner actually did. *Source:* `discovery/usage-notes/offset.md` › session 1 finding 3 and
-  To fix later. *Proof:* the eval case that note proposes (gap changed after the fact).
+  what the learner actually did. **Amended 2026-10-26, second pass** (the eval engineer, on the merged
+  step 7: a measured gap can be 0 when members are still together, as in offset eval cases 11, 14, 15
+  and 23 on live captures, and `gap_frames` has a minimum of 1, so the re-read was refused): the
+  re-read MUST run only when the check **passed** (`passed`: every member compared and apart, which
+  the tool already defines as every gap at or above the floor); otherwise step 7's existing hints run
+  and the stated gap stays as it is. No tool change: `passed` already implies a gap of at least the
+  floor, and the schema's minimum still refuses a bad call before anything is written.
+  *Source:* `discovery/usage-notes/offset.md` › session 1 finding 3 and To fix later. *Proof:* the
+  eval case that note proposes (gap changed after the fact), and offset cases 11, 14, 15 and 23 with
+  no refused `offset_snapshot` call (T199).
 - **FR-041 (offset, how Quick Offset works)**: `.claude/skills/offset-mentor/SKILL.md` › Where things
   are MUST have a short "if they ask how Quick Offset works" paragraph whose claims are **only** these,
   each confirmed in spec 010's live sitting L-1 (`specs/010-offset/live-sitting-2026-10-26.md` › L-1)
@@ -633,26 +654,46 @@ sentence match what the tools and live sittings showed.
   `key-types-mentor` and `offset-mentor`, and in `speed-graph-mentor` if its "Before the lesson" text
   has the same pattern. *Source:* `product/evals/key-types/README.md` and
   `product/evals/offset/README.md` › Smoke run, on branch `evals-wave-a`. *Proof:* SC-014.
-- **FR-043 (a stale open lesson starts fresh)**: In `session.start` (`mentor/lib/session.mjs`), an
-  open lesson for the same skill and comp that was **never checked and has no demonstration** MUST
-  start as a new lesson (`lesson: "new"`, this snapshot as its baseline, no `skill_data`, and no
-  `skill_options` unless this call sends them) when it is stale (LE-1, the builder, 2026-10-26):
-  - it is being **resumed** (picked up after another lesson or comp was in use), whatever its
-    baseline reads and whatever day it started: the learner left it before anything was checked, so
-    nothing is lost. This is the case T037 hit (same day, resumed, baseline still matching); or
-  - it is being **continued** (the same skill and comp were the last lesson touched) and it started
-    on an earlier calendar day (the machine's local date of its `lesson_id` time).
+- **FR-043 (a resumed lesson whose comp changed starts fresh; otherwise it keeps its choices)**:
+  *Rewritten 2026-10-26, second pass: the builder chose "confirm + baseline" after LE-1's first rule
+  broke a built promise.* In `session.start` (`mentor/lib/session.mjs`), an open lesson for the same
+  skill and comp that was **never checked and has no demonstration**:
+  - when it is **resumed** (picked up after another lesson or comp was current) and its **baseline no
+    longer matches the comp** (research R26: the layers its targets and focus name have different
+    keys, timing or parent in this snapshot than in the baseline, for example after a reset to some
+    other state), MUST start as a new lesson: `lesson: "new"`, this snapshot as its baseline, no
+    `skill_data`, and no `skill_options` unless this call sends them;
+  - when it is **resumed** and its baseline still matches (T037's case: same day, the reset put the
+    Dots back), MUST stay `resumed` with its baseline, `skill_options` and `skill_data` kept, as
+    today (T061, T063; contracts/skill-module.md › 4; spec 012 SR-1). The four tests that guard this
+    stand unchanged: `key-types-tools.test.mjs:73`, `session-skill-data.test.mjs:42`,
+    `session-skills.test.mjs:224`, `speed-graph-tools.test.mjs:77`;
+  - when it is **continued** (the same skill and comp were the last lesson touched) on the same
+    local day, MUST keep its baseline and choices whatever its keys read, because a change there is
+    the learner's own work before their first "done";
+  - when it is **continued** and it started on an earlier local day (the machine's local date of its
+    `lesson_id` time), starts new, as approved with LE-1 (unchanged; LE-4).
 
-  A continued lesson from the same day keeps its baseline whatever its keys read, because a change
-  there is the learner's own work before their first "done" (re-snapshotting never resets a lesson;
-  contracts/skill-module.md › 4, amended for this requirement). There is **no baseline compare**.
+  A lesson that was checked or had a demo resumes or continues as today, whatever its keys read, and
+  `fresh: true` keeps its rule (`LESSON_UNDERWAY`). `session.start` MUST also return whether the
+  lesson came back holding the learner's earlier choices (R26: `stored_choices`, true only when it's
+  `resumed`, it kept `skill_options` from an earlier call, and this call sent none), and
+  `speed_graph_snapshot`, `key_types_snapshot` and `offset_snapshot` MUST pass it through in their
+  replies, so FR-046 can act on it. `snapshot_project` (easing) doesn't get it (FR-035).
 
-  A lesson that was checked or had a demo resumes as today, and `fresh: true` keeps its rule
-  (`LESSON_UNDERWAY`). *Source:* `discovery/usage-notes/offset.md` › session 2 finding 1 and To fix
-  later. *Proof:* unit tests on saved snapshots (tasks T173, T174).
+  **Known cost** (LE-5): a learner who changes a target's keys, works on another lesson or comp, and
+  comes back before saying "done" gets a new lesson whose baseline already holds their change.
+  *Source:* `discovery/usage-notes/offset.md` › session 2 finding 1 and To fix later; the builder's
+  Phase 9 hand-back (the four failing tests). *Proof:* unit tests on saved snapshots (tasks T173,
+  T174, T186, T187).
 - **FR-044 (the mentor says when its tools are older than the repo)**: When the server starts it
-  MUST record the `mentor/` tree's git hash (`git rev-parse HEAD:./`, run in the folder that holds
-  `server.mjs`, the same as `HEAD:mentor` from the repo root). `read_learner_record` and each lesson
+  MUST record a hash of **only what the server runs** at `HEAD`: the entries of the folder that
+  holds `server.mjs` (`git ls-tree HEAD`, run in that folder), **leaving out `test/` and `dev/`**,
+  hashed in Node (research R25, amended 2026-10-26 second pass: hashing the whole `mentor/` tree
+  gave a false restart warning on every commit of captures or tests, which the sitting method makes
+  mid-session). Git MUST run only when a `.git` folder or file exists in that folder or one above it;
+  otherwise both reads are `null` without starting git (on a Mac without the command-line tools,
+  `/usr/bin/git` is a stub that opens an install dialog on every call). `read_learner_record` and each lesson
   snapshot tool (`speed_graph_snapshot`, `key_types_snapshot`, `offset_snapshot`) MUST return
   `server_current`: `true` when the hash on disk now is the same, `false` when it differs, and `null`
   (unknown) when either read fails (no git, not a git checkout, a time-out). **Unknown is never
@@ -664,8 +705,10 @@ sentence match what the tools and live sittings showed.
   MUST make the mentor say, once and in plain words, that its tools were updated since this session
   started and it needs a restart (a new Claude Code session) before the lesson, and then stop. Skills
   5 and 6 get the same line in a later per-skill branch (tasks-wave-b.md › Later per-skill branches).
-  *Source:* `discovery/usage-notes/offset.md` › To fix later, first bullet. *Proof:* unit tests with
-  the hash read injected (same, changed, failing).
+  *Source:* `discovery/usage-notes/offset.md` › To fix later, first bullet; the reviewer's findings
+  on `mentor/lib/server-current.mjs`, 2026-10-26. *Proof:* unit tests with the hash read injected
+  (same, changed, failing; T175), on a tree listing that changes only in `test/` or `dev/`, and with
+  no `.git` above the folder (T189).
 - **FR-045 (point at the focus layer in a frame)**: `preview_frame` (`mentor/tools/common.mjs`) MUST
   take an optional `layer` (the layer's name exactly as in the comp, as `focus_layers` takes it). With
   it, the reply MUST carry the layer's on-screen bounds at that time, in comp pixels, next to the
@@ -676,14 +719,38 @@ sentence match what the tools and live sittings showed.
   any layer whose visibility class is `hidden`, `matte` or `guide` (a shy layer still renders) or that's
   off because another layer is soloed, an adjustment layer, a layer not on screen at that time (outside its in and
   out points, or wholly outside the comp), and whatever `footprint` can't compute (3D, auto-orient, no
-  rectangle, not sampled); and when the name matches no layer or more than one. Without `layer`, the
+  rectangle, not sampled); and when the name matches no layer or more than one. **Added 2026-10-26,
+  second pass** (the reviewer: `sourceRectAtTime` ignores masks and effects, and a precomp's
+  rectangle is its whole comp, so a small masked square could be said to "fill the frame"; research
+  R24, amended): bounds MUST also be absent, with a reason, for a **precomp** layer, a layer with
+  **any effect** (`effect_count` above 0, or unreadable), a layer with **any mask** (a new read,
+  `mask_count`, above 0 or unreadable), and a layer whose **rendered Opacity** at that time is under
+  1% (a new per-sample read). On a capture from before those reads, an absent `mask_count` or sample
+  Opacity isn't a reason (today's behaviour). Key types' steps 3 and 5 need no change for these: no
+  bounds already means point at nothing. Without `layer`, the
   tool behaves exactly as today. In `.claude/skills/key-types-mentor/SKILL.md`, the frames in step 3
   (explain) and step 5 (the demo's frames) MUST pass the focus layer and say in plain words where it is
   in the frame ("the small square near the top left"), never a pixel number; with no bounds, the
   mentor points at nothing and describes the snap from the tool data, as today. *Source:*
   `discovery/usage-notes/key-types.md` › To fix later. *Proof:* unit tests on saved snapshots (bounds
-  for a visible layer, absent for a hidden layer and a null), and a 🖐 live check of the bounds
-  against the rendered frame (T181).
+  for a visible layer, absent for a hidden layer and a null; T178; the four added reasons, T192), and
+  a 🖐 live check of the bounds against the rendered frame, with a masked solid and Blink at Opacity
+  0 (T181).
+- **FR-046 (confirm stored choices on a resumed lesson)**: In `speed-graph-mentor`,
+  `key-types-mentor` and `offset-mentor`, when the lesson's snapshot returns `stored_choices` true,
+  the mentor MUST, before acting on any stored choice (a demo, a check, a frame, a hint that uses an
+  order or a gap), say back in plain words, as the learner's own, what they chose last time ("last
+  time you had Dot 3 going first, about 6 frames apart"), ask whether that still holds, and stop for
+  the answer. It reads the choices from the reply's own fields that already show them (for example
+  offset's order, focus and gap, key types' focus and what should move, speed graph's landing-hard
+  pairs and eased layers); no new field. A change goes back through the snapshot tool's
+  `skill_options`, as each skill already does; a yes goes on with the lesson. The mentor never names
+  a field, a session or "stored". This is the harm T037 showed: the old order and gap were used
+  silently. Easing stores no choices (`focus_layers` is sent on every call), so it gets no sentence;
+  skills 5 and 6 get theirs in a later per-skill branch (tasks-wave-b.md › Later per-skill branches).
+  *Source:* `discovery/usage-notes/offset.md` › session 2 finding 1. *Proof:* the eval cases T196
+  hands off (one per skill, resumed with stored choices), and a reviewer reading the three
+  sentences.
 
 ### Key Entities
 
@@ -881,12 +948,14 @@ lesson again.
 - **The panel's screens** for the path, reviews and recommendations (UI overhaul spec).
 - **Other apps,** accounts, sync of the record across machines, pricing and analytics.
 - **A setting-keyframes skill** (an on-ramp only, pending H4).
-- **In the loose-ends pass (FR-039 to FR-045):** the frame pointer in any skill but key types (offset's
+- **In the loose-ends pass (FR-039 to FR-046):** the frame pointer in any skill but key types (offset's
   and the pivot's frames have the same problem; a later request, LE-3); dimming or soloing other
   layers in a frame (a project change); skills 5 and 6's `SKILL.md` and tool files (their own
   branches and live lessons are running; Later per-skill branches); restarting the server for the
   learner (the mentor only says so); and the eval cases these findings propose (the eval engineer's,
-  numbered by the cockpit).
+  numbered by the cockpit). Second pass: a footage layer's transparent areas (LE-6); masks' and
+  effects' actual shapes (FR-045 gives no bounds instead of working them out); and the installer's
+  own handling of a missing git (spec 006, open question 6).
 
 ## Open questions
 
@@ -972,6 +1041,10 @@ this pass. The questions as asked:
    lost), plus the earlier-day test for a continued one. The baseline compare is then not needed. A
    rule keyed on the server process instead would reset every panel turn (each turn starts a new
    server), so it's rejected.
+   **Superseded 2026-10-26, second pass:** built, this rule failed four existing tests that guard
+   choices kept across a resume (T061, T063, contracts § 4, spec 012 SR-1). The builder chose
+   "confirm + baseline" instead: FR-043 as rewritten, plus FR-046. The earlier-day test for a
+   continued lesson stays (LE-4).
 2. **LE-2 (answered: wait, as recommended): skill 6 is now on `main`** (`31fe72d`, merged after this task was set). FR-044 still leaves
    `null-parenting-mentor` and `mentor/tools/null-parenting.mjs` to a later branch, with skill 5,
    because skill 6's live lessons (T340, T341) are running in another session and editing its step 0
@@ -982,6 +1055,33 @@ this pass. The questions as asked:
    Dots couldn't be picked out), and skills 5 and 6 lean on frames. **Recommended:** key types only in
    this pass (as approved); add one row to Later per-skill branches for offset, the pivot and the null,
    to run after T181's live check proves the bounds.
+
+### Loose-ends second pass, for the builder (LE), 2026-10-26: open
+
+Each changes FR-043 or FR-045. The tasks are written to the recommendation, so nothing is blocked;
+a different answer changes T173, T174 or T181 before they're built.
+
+4. **LE-4: a continued lesson from an earlier day.** FR-043 keeps LE-1's approved rule: continued,
+   never checked, no demo, started on an earlier local day → new, whatever its keys read. The
+   alternative is to treat it like a resumed one (new only if the comp changed, else kept and
+   confirmed through FR-046). **Recommended: keep it as approved.** It doesn't touch the four tests
+   (all same-day), a new lesson asks for the choices again anyway, and it keeps "continued" meaning
+   one sitting. The cost: a learner who comes back the next day to the same comp is asked again
+   instead of being reminded.
+5. **LE-5: the known cost of the baseline test.** A learner who changes a target's keys, opens
+   another lesson or comp, and comes back before "done" gets a new lesson whose baseline already
+   holds their change, so that work can't earn the pass (for offset, the group may no longer be
+   proposed at all). **Recommended: accept it for now** (the builder's choice; the one resume
+   before a first check seen live, T037, had a matching comp), and log every live case in the
+   skill's usage note;
+   if one is seen, revisit with a direction-aware test (fresh only when the targets moved *away*
+   from what the learner was asked to make). Changes FR-043 only if answered differently.
+6. **LE-6: footage with transparent areas.** A footage layer's rectangle is its whole image, so a
+   small logo on a transparent PNG has the same "fills the frame" problem as a precomp. FR-045 (as
+   asked) leaves footage in. **Recommended: leave it in this pass**, and add a footage-with-alpha
+   row to T181 only if the practice project already has one (no new planting); give it the
+   precomp's reason later if the row disagrees. Removing footage now would drop the pointer for
+   every photo and video, which are accurate.
 
 ## Dependencies
 
