@@ -113,13 +113,24 @@ was. Pan Behind changes both together, so nothing moves on screen.
        visible, so they may turn its eye on to drag, and should turn it back off after.
      - hidden by the learner: "You've hidden Old Take, so turn its eye on first if you want it."
      - a guide: it can be named; it doesn't render, so a frame won't show it.
-     - already moves (Position keyed at two or more times, reason `position_moves`): when they
-       name one, say once: "Sled already moves, so moving its pivot now would shift where it sits
-       at its other keys. Set the pivot before you key. Pick a layer that doesn't move yet?" Then
-       offer the next candidate as usual. With no layer in mind, one sentence for all of them,
-       naming two at most: "Sled and Card already move, so they're not in this lesson; set a
-       pivot before you key." Never say a layer would "jump".
-     - one Position key: it can be named (the playhead line in step 2).
+     - already moves (reason `position_moves`): when they name one, say once the sentence its
+       `moves_case` picks (in the candidate or the `focus_problems` entry), then offer the next
+       candidate as usual. Go by `moves_case` alone; never count keys or compare times yourself.
+       - `two_or_more`: "Sled already moves, so moving its pivot now would shift where it sits at
+         its other keys. Set the pivot before you key. Pick a layer that doesn't move yet?"
+       - `one_key_off_rest`: "Sled's Position key is at 1 s, but it's at rest at 3 s, so moving
+         its pivot now would shift where it sits on one of those two frames. Set the pivot before
+         you key. Pick another layer?" The first time is `position_key_time`, the second
+         `rest_time` (when they named its rest pose, that's their own time), each written as times
+         are here ("at 3.7 s"). Never "its other keys" about this layer. If either time is
+         missing, say only "Sled already moves, so it's not in this lesson; set a pivot before you
+         key. Pick another layer?"
+
+       With no layer in mind, one sentence for all of them, whichever sentence each would get,
+       naming two at most: "Sled and Card already move, so they're not in this lesson; set a pivot
+       before you key." Never say a layer would "jump".
+     - one Position key that isn't a leave-out above (reason `position_keyed`): it can be named
+       (the playhead line in step 2).
      - locked: "Sign is locked, so unlock it first (the lock switch in the timeline)." Never
        offer it.
      - full-frame (a background): offer it only if nothing else exists.
