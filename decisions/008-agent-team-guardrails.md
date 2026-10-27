@@ -258,3 +258,30 @@ Harmless: a false block, not a false pass.
   file, `make`), **then** the string guard has hit its limit: move the protection to the tree
   itself (commit before every wave, or give each agent a worktree so the main tree holds no
   agent's uncommitted work).
+
+**Known gaps, not fixed yet** (2026-10-26, held back so the change doesn't land under other
+sessions mid-run; fix between runs, with tests, in this order):
+
+1. **The stash is shared across worktrees.** `refs/stash` lives in the common git dir: a stash
+   made in worktree A is listed, and can be popped or dropped, from worktree B and from `main`
+   (checked in a throwaway repo). The guard allows `git stash` inside an agent's own worktree,
+   so one agent's `stash pop` or `stash drop` can take or delete another's work. Fix: block
+   `stash` (except `list` and `show`) everywhere for subagents, not only in the shared tree.
+2. **Not verified: does a subagent's `cd` carry over to its next call's `cwd`?** The README's
+   hand-cut worktree method depends on it (step 2: `cd` into the worktree in the first call). If
+   it doesn't, a hand-cut worktree's agent stands in the main tree on every call: its destructive
+   commands are blocked (safe), but so are `git add -A` and branch switches in its own tree.
+   Check with the identity probe's method (a logging hook on two Bash calls) before the next run.
+3. **Destructive commands with no rule:** `git rm -f` and `git rm -r` (delete working-tree files,
+   modified ones included), `git checkout -f <branch>` and `git switch --discard-changes` for the
+   cockpit in the shared tree, `git checkout <ref> -- <dir>` (overwrites a folder), and
+   `git reflog expire` or `git gc --prune=now` (the object store is shared, so this removes every
+   worktree's way back). Fix: add them to the shared-tree rules, the last two to ALWAYS.
+4. **Text inside strings is matched as commands.** A heredoc, an `echo`, or a commit message that
+   mentions a destructive git command is blocked; three times on 2026-10-26. Fix: strip heredoc
+   bodies and quoted arguments before matching. The README's load check
+   (`echo "git reset --hard"` should be blocked) depends on this false positive, so replace that
+   check in the same change.
+5. **`git config` and aliases.** A subagent can write `alias.x = reset --hard` into the shared
+   config and run `git x`, and config is shared across worktrees. Fix: block `git config` writes
+   for subagents (`--get` and `--list` stay allowed).

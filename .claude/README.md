@@ -45,7 +45,7 @@ personas run on Opus and three on Sonnet (the `model:` line in each file).
 | `agents/*.md` | The ten personas. Each ends with an **In this repo** section: the only part that's project-specific |
 | `hooks/ae-lock.mjs` | One agent at a time on After Effects. 10-minute idle lease, freed on `SubagentStop` |
 | `hooks/ownership.mjs` + `ownership.json` | Blocks a subagent's `Write`/`Edit` outside its row. The cockpit isn't restricted |
-| `hooks/git-guard.mjs` | Blocks blanket `git add`, `commit -a`, `reset --hard`, `clean -f`, `stash` and force-push for everyone; push, merge, rebase, removing worktrees, deleting branches, and switching branches in the shared tree for subagents. Makes every cockpit push ask you |
+| `hooks/git-guard.mjs` | Blocks blanket `git add`, `commit -a`, `reset --hard`, `clean -f`, `stash` and force-push for everyone, unless the git call acts on the worktree the agent is standing in (worked out from `cd` and `-C`; when it can't tell, it blocks); push, merge, rebase, removing worktrees, deleting branches, and switching branches in the shared tree for subagents. Makes every cockpit push ask you |
 | `hooks/ae-script-guard.mjs` | Blocks a subagent's `ae_run_script` from reaching past the comp: shell (`callSystem`), saving the `.aep`, deleting or writing files, quitting AE |
 | `hooks/check-branch.mjs` | Run at merge: lists files a branch changed outside its persona's row (catches writes through Bash, which the ownership hook can't see) |
 | `hooks/probe/identity.mjs` | Checks that hooks can still tell agents apart (see "Check it works") |
@@ -109,10 +109,14 @@ guard should block it.
 
 1. **Plan in the cockpit.** Decide the pieces, which persona does each, and hand out any numbers
    (spec `012`, eval case `26`) in the prompt. Numbers taken by agents themselves collide.
-2. **Commit and push first.** `git status --short` should be empty, including the `.aep`. A
-   worktree is a fresh checkout of `origin/main`, not your local `main`, so unpushed commits and
-   uncommitted changes (a CLAUDE.md edit, say) never reach it, and a subagent's edits aren't
-   covered by `/rewind`: the commit is the way back.
+2. **Commit first, and give each agent a worktree cut from local `main`.** `git status --short`
+   should be empty, including the `.aep`: a subagent's edits aren't covered by `/rewind`, so the
+   commit is the way back. The agent tool's `isolation: "worktree"` checks out `origin/main`, not
+   your local `main`, so unpushed commits never reach it. Unless you've just pushed, the cockpit
+   cuts the worktree itself (`git worktree add -b <branch> .claude/worktrees/<branch> main`) and
+   tells the agent to `cd` into it in its first call and work only there. Don't tell agents to
+   hard-reset their worktree to another branch to fix the base (run 2 did): it works only from
+   inside the worktree, and a hand-cut worktree from `main` doesn't need it.
 3. **Stagger the launches.** At most **3 Opus agents at once**; Sonnet personas (the two
    researchers, eval-engineer) can add up to 3 more. Launch the next agent as one hands back, and
    start anything that depends on another's output (a mockup on its spec, a spec on its teaching
@@ -124,7 +128,7 @@ guard should block it.
    back any change it needs to a shared file as a request. Build the shared pieces first, merge
    them, then start the parallel builders. `check-branch.mjs` enforces this at merge
    (`addOnly` in `ownership.json`).
-5. **Spawn every persona that has Bash in a worktree** (`isolation: "worktree"`): skill-builder,
+5. **Spawn every persona that has Bash in a worktree** (step 2's, or `isolation: "worktree"` right after a push): skill-builder,
    panel-builder, eval-engineer, spec-writer, reviewer. The ownership hook can't see a write made
    through Bash; the merge check (`check-branch.mjs`) can, but only on a branch. Personas without
    Bash (researchers, designers, design-reviewer) can share the main tree, since the hook covers
