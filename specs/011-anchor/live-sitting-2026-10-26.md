@@ -44,10 +44,9 @@ their comp id and name were set to Mentor Practice 2's. `capture.mjs --compare` 
 | Playhead at **0**, before the keys | **Added a key at frame 0** (270, 960); the three keys unchanged. Still at 0; 50 px right at every old key | `sled-slid.json` |
 | One Position key (110), playhead at 0 | **Added a key at frame 0** (270, 960); the old key unchanged | `sled-one-key-before.json`, `sled-one-key.json` |
 
-The builder reported Sled "does sit still" when scrubbed after the drag at 0. By the values it
-doesn't: with the anchor 50 px left and Position unchanged after frame 0, Sled draws 50 px right
-at 3;20 onward. Worth a look in the first lesson. It's also the case the check's item 4 exists
-for, since the move is hard to see by eye.
+After the drag at 0, Sled sits still at frame 0 and draws 50 px right from 3;20 onward (the
+anchor is 50 px left, and Position after frame 0 is unchanged). The builder confirmed this on
+screen; their first note said "sits still" by a typo. This is the slide the check's item 4 is for.
 
 **For `<!-- L-2 -->`:** with Position keyed, Pan Behind changes or adds **one** Position key, at
 the playhead. Other keys stay put, so the layer slides at them. The stand-in's guess (first key
