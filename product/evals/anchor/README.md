@@ -215,6 +215,30 @@ baseline needs the fix first. Smallest skill fix: step 0 and step 1, one sentenc
 and `anchor_snapshot` back to back and say nothing until the snapshot has come back." Not run since the check was
 added (budget). (2) The demo, the pivot idea and the two-sentence lines in 26's turn 2 are as designed.
 
+## Smoke run 4 (2026-10-26, after B-13, `skill-5-anchor` 7741b29): $4.23
+
+`no_text_before_snapshot` on. One repeat each, except 26 (re-run once after a judge plumbing failure).
+
+| Case | Result | Cost | Text before the first snapshot? |
+|---|---|---|---|
+| 01 | pass | $0.27 | none |
+| 16 | FAIL | $0.62 | **yes**: "Learned and review due → review." (the review's self-note, a changed wording of the old one). Hard rule, real |
+| 26 | FAIL | $1.04 | none. Plumbing: the judge's reply was not valid JSON; not a mentor failure (the regex fix itself held: no false offer) |
+| 26 (repeat) | pass | $1.03 | none |
+| 35 | pass | $0.33 | none |
+| 13 | pass | $0.44 | none |
+| 24b | pass | $0.50 | none |
+
+The first-lesson leak is gone in all five first-lesson runs. The review path still leaks once in one run (16);
+`no_self_instructions` did not match this wording ("Learned and review due → review."), `no_text_before_snapshot` did.
+Smallest skill fix: the same sentence in The review (step 0's "run The review below"): say nothing between
+`read_learner_record` and the review snapshot.
+
+## To do in the baseline round (not built)
+
+- A background-only comp: nothing but a full-frame layer, so the proposal is empty or a solid (the builder's suggestion; B-13's "full-frame is never offered").
+- A layer named with no place given: the demo goes at the place they give, else the mentor asks which of the nine.
+
 ## Reading results
 
 Same order as easing: a failed `run` check is plumbing; a failed deterministic check is a hard-rule

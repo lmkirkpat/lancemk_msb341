@@ -1,0 +1,199 @@
+{
+  "run_at": "2026-10-27T04:58:37.380Z",
+  "options": {
+    "only": "01-",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.27,
+  "fixtures_note": "Live captures of Mentor Practice 2 (comp 179) plus synthetic fixtures; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "01-first-lesson-no-layer",
+      "title": "First lesson, no layer in mind: the opening asks one thing (TD 19): intent question first, one-sentence fallback proposal with a hinge, ends on the choice; no leave-out, no idea statement, no other-skill recap",
+      "covers": [
+        "EP-1",
+        "US1",
+        "FR-006a"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "9f60a803f4c71159d97a2e852a7410da4286b7bc04aafca555bd5f7910b92b76",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was read_learner_record"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:asks_intent",
+              "pass": true,
+              "detail": "turn 1: \"turn\""
+            },
+            {
+              "check": "say:asks_question",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            },
+            {
+              "check": "say:offers_door",
+              "pass": true,
+              "detail": "turn 1: \"Door\""
+            },
+            {
+              "check": "say:hinge",
+              "pass": true,
+              "detail": "turn 1: \"left\""
+            },
+            {
+              "check": "say:ends_on_choice",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            },
+            {
+              "check": "say:no_leave_out",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:no_idea_statement",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:no_other_skill",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:no_jump",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-INTENT-FIRST",
+              "pass": true,
+              "reason": "The reply opens with a real question, \"Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle?\", and names no place before asking it."
+            },
+            {
+              "item": "R-AN-PROPOSAL-HINGE",
+              "pass": true,
+              "reason": "It offers one layer with a hinge as the fallback, \"Door could swing from the middle of its left edge. Want to try that one?\", matching the snapshot's proposal (Door, middle-left), and leaves the choice to the learner."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The only layer named is Door, and its place (middle of its left edge) matches the snapshot's proposal of layer \"Door\" with suggested_place \"middle-left\"."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The opening turn holds only the intent question and a one-sentence fallback proposal, with no leave-out, idea statement or easing recap, and it ends on the choice \"Want to try that one?\""
+            }
+          ],
+          "cost": 0.2744652,
+          "session_id": "44ba8946-059c-44e4-89c4-6c54e1a9b915",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Eased every Title pair.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-pMaawA/learner.json\"\n}\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"time\": 0,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 10\n    },\n    {\n      \"layer\": \"Spinner\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 13\n    },\n    {\n      \"layer\": \"Cut\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 11\n    },\n    {\n      \"layer\": \"Card\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 1\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 2\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 3\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Badge\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 14\n    },\n    {\n      \"layer\": \"Chip A\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Chip B\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Chip C\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Flag\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Pause\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Door\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Needle\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    },\n    {\n      \"layer\": \"Gauge\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 15\n    },\n    {\n      \"layer\": \"Lid\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 9\n    },\n    {\n      \"layer\": \"Wobble\",\n      \"bucket\": \"never\",\n      \"reason\": \"anchor_keyed\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Tab\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3\n    },\n    {\n      \"layer\": \"Peg\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 4\n    },\n    {\n      \"layer\": \"Banner\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 5\n    },\n    {\n      \"layer\": \"Sign\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 6\n    },\n    {\n      \"layer\": \"Plaque\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 7\n    },\n    {\n      \"layer\": \"Flip\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 19\n    },\n    {\n      \"layer\": \"Pop\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 16\n    },\n    {\n      \"layer\": \"Sled\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Hatch Rig\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 17\n    },\n    {\n      \"layer\": \"Seal\",\n      \"bucket\": \"never\",\n      \"reason\": \"collapsed\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Tile\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Caption\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 12\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Row A\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Row B\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 8\n    },\n    {\n      \"layer\": \"Row C\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Plate\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 18\n    },\n    {\n      \"layer\": \"Reveal Matte\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"matte\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Gradient\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Background\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Door\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Door\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 2\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Door could swing from the middle of its left edge. Want to try that one?\n"
+        }
+      ]
+    }
+  ]
+}

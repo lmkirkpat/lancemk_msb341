@@ -1,0 +1,163 @@
+{
+  "run_at": "2026-10-27T04:59:15.736Z",
+  "options": {
+    "only": "16",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.62,
+  "fixtures_note": "Live captures of Mentor Practice 2 (comp 179) plus synthetic fixtures; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "16-review",
+      "title": "Review due: a new layer (Tab), the hinge asked first, nothing said before the first call, no tool named before 'done', no demo, no watch offer; passes",
+      "covers": [
+        "EP-16",
+        "US3"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "demo-separated.json": "live"
+      },
+      "hash": "6f00c29955637dd859f250a6177656baa4923370b4ac6119f7715c376b179eb2",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "record_plain",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": false,
+              "detail": "said \"Learned and review due → review.\" before the first snapshot"
+            },
+            {
+              "check": "snapshot_with",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_tab",
+              "pass": true,
+              "detail": "turn 1: \"Tab\""
+            },
+            {
+              "check": "say:asks_where",
+              "pass": true,
+              "detail": "turn 1: \"Where\""
+            },
+            {
+              "check": "say:declines_demo",
+              "pass": true,
+              "detail": "turn 2: \"review\""
+            },
+            {
+              "check": "say:no_watch_offer",
+              "pass": true,
+              "detail": "turns 1 to 3: clean"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.6228772,
+          "session_id": "8d9a8edb-4ae7-4d31-b38c-3238996e5b89",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"transform.anchor\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-20T16:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Key a swing on Needle and play it back.\",\n      \"review_due\": \"2026-10-21\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Eased every Title pair.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-20T16:00:00.000Z\",\n      \"skill\": \"transform.anchor\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Set Door's pivot to the middle of its left edge, and Needle's to the middle of its bottom edge\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"First try moved Door with its pivot; then set both without a jump. Said the left edge stays still.\",\n      \"next\": \"Key a swing on Needle and play it back.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Door\",\n          \"property\": \"Anchor Point\"\n        },\n        {\n          \"layer\": \"Needle\",\n          \"property\": \"Anchor Point\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-GCsmXt/learner.json\"\n}\nMENTOR: Learned and review due → review.\nTOOL CALL anchor_snapshot {\"mode\":\"review\"}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"time\": 0,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 10\n    },\n    {\n      \"layer\": \"Spinner\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 13\n    },\n    {\n      \"layer\": \"Cut\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 11\n    },\n    {\n      \"layer\": \"Card\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 1\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 2\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 3\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Badge\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 14\n    },\n    {\n      \"layer\": \"Chip A\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Chip B\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Chip C\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Flag\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Pause\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Door\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Needle\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    },\n    {\n      \"layer\": \"Gauge\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 15\n    },\n    {\n      \"layer\": \"Lid\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 9\n    },\n    {\n      \"layer\": \"Wobble\",\n      \"bucket\": \"never\",\n      \"reason\": \"anchor_keyed\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Tab\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3\n    },\n    {\n      \"layer\": \"Peg\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 4\n    },\n    {\n      \"layer\": \"Banner\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 5\n    },\n    {\n      \"layer\": \"Sign\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 6\n    },\n    {\n      \"layer\": \"Plaque\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 7\n    },\n    {\n      \"layer\": \"Flip\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 19\n    },\n    {\n      \"layer\": \"Pop\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 16\n    },\n    {\n      \"layer\": \"Sled\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Hatch Rig\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 17\n    },\n    {\n      \"layer\": \"Seal\",\n      \"bucket\": \"never\",\n      \"reason\": \"collapsed\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Tile\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Caption\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 12\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Row A\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Row B\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 8\n    },\n    {\n      \"layer\": \"Row C\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Plate\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 18\n    },\n    {\n      \"layer\": \"Reveal Matte\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"matte\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Gradient\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Background\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Tab\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Tab\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 2\n}\nMENTOR: Here's Tab. Where should it turn from?\n\n### Turn 2: the project is an open comp\nLEARNER: Tab should turn from the middle of its left edge. Can you show me how?\nTOOL CALL anchor_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[{\"layer\":\"Tab\",\"place\":\"middle-left\"}]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"time\": 0,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 10\n    },\n    {\n      \"layer\": \"Spinner\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 13\n    },\n    {\n      \"layer\": \"Cut\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 11\n    },\n    {\n      \"layer\": \"Card\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 1\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 2\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Dot 3\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Badge\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 14\n    },\n    {\n      \"layer\": \"Chip A\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Chip B\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Chip C\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Flag\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Pause\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Door\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Needle\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    },\n    {\n      \"layer\": \"Gauge\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 15\n    },\n    {\n      \"layer\": \"Lid\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 9\n    },\n    {\n      \"layer\": \"Wobble\",\n      \"bucket\": \"never\",\n      \"reason\": \"anchor_keyed\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Tab\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3\n    },\n    {\n      \"layer\": \"Peg\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 4\n    },\n    {\n      \"layer\": \"Banner\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 5\n    },\n    {\n      \"layer\": \"Sign\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 6\n    },\n    {\n      \"layer\": \"Plaque\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 7\n    },\n    {\n      \"layer\": \"Flip\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 19\n    },\n    {\n      \"layer\": \"Pop\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 16\n    },\n    {\n      \"layer\": \"Sled\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Hatch Rig\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 17\n    },\n    {\n      \"layer\": \"Seal\",\n      \"bucket\": \"never\",\n      \"reason\": \"collapsed\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Tile\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Caption\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 12\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Row A\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Row B\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 8\n    },\n    {\n      \"layer\": \"Row C\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Plate\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 18\n    },\n    {\n      \"layer\": \"Reveal Matte\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"matte\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Gradient\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Background\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Tab\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": [\n    \"Tab\"\n  ],\n  \"places\": {\n    \"Tab\": \"middle-left\"\n  },\n  \"place_now\": {\n    \"Tab\": \"center\"\n  },\n  \"check_times\": {\n    \"Tab\": {\n      \"time\": 0,\n      \"basis\": \"current\"\n    }\n  },\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [\n    \"anchor/19\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 2\n}\nMENTOR: So Tab turns from the middle of its left edge. Its pivot is at its center right now.\n\nThis is a review, so I won't show you this time. You did the same thing on Door last week, and trying it from memory is how a review works. Set Tab's pivot at the middle of its left edge without Tab moving, then say \"done\". I'll check it, and if anything's off I'll tell you what and where.\n\n### Turn 3: the project is an open comp\nLEARNER: I set it. Done.\nTOOL CALL anchor_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"time\": 0,\n  \"passed\": true,\n  \"layers\": [\n    {\n      \"layer\": \"Tab\",\n      \"credit\": \"learner\",\n      \"check_time\": 0,\n      \"basis\": \"current\",\n      \"item1\": {\n        \"passed\": true,\n        \"place_now\": \"middle-left\",\n        \"wanted\": \"middle-left\",\n        \"outside_side\": null\n      },\n      \"item2\": {\n        \"passed\": true,\n        \"edges_px\": {\n          \"left\": 0,\n          \"top\": 0,\n          \"right\": 0,\n          \"bottom\": 0\n        },\n        \"direction\": null,\n        \"distance_px\": 0\n      },\n      \"item3\": {\n        \"now\": 0,\n        \"at_rest\": true,\n        \"set_away_from_rest\": false\n      },\n      \"item4\": null,\n      \"item5\": {\n        \"passed\": true,\n        \"moved_layers\": [],\n        \"anchor_keys_added\": false,\n        \"not_compared\": []\n      },\n      \"kind\": \"solid\",\n      \"anchor_changed\": true,\n      \"position_changed\": true,\n      \"rect_shifted\": false,\n      \"locked\": false,\n      \"cant_check\": [],\n      \"passed\": true,\n      \"hints\": []\n    }\n  ],\n  \"other_changes\": [],\n  \"demo_undone\": false\n}\nTOOL CALL record_lesson {\"skill\":\"transform.anchor\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice 2\",\"attempted\":\"Review: set Tab's pivot to the middle of its left edge\",\"result\":\"passed\",\"demo_used\":false,\"summary\":\"Review passed on the first try: Tab's pivot set at the middle of its left edge, Tab didn't move, nothing else changed. Asked to be shown first, then did it from memory.\",\"next\":\"Key a swing on Tab or Needle and play it back.\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Key a swing on Tab or Needle and play it back.\"\n  }\n}\nMENTOR: You passed. Tab's pivot is at the middle of its left edge, Tab didn't move at all, and nothing else in the comp changed. You got it on the first try, from memory.\n\nIf you want to see it work, drag Tab's Rotation a little in the timeline and watch it swing from its left edge, then use Edit > Undo to put it back.\n\nI've noted this review for next time.\n"
+        }
+      ]
+    }
+  ]
+}
