@@ -292,7 +292,8 @@ export function analyze(snapshot, { focus_layers, exclude = [], kept_linear, ski
   const hiddenOrNull = new Set([...hidden, ...nulls]);
   const ef = easeFirst.filter((s) => !hiddenOrNull.has(s.layer.name)).map(refOf);
   if (ef.length) leftOut.push(group("ease_first", ef));
-  if (alreadyShaped.length) leftOut.push(group("already_shaped", alreadyShaped.map(refOf)));
+  const shaped = alreadyShaped.filter((s) => !hiddenOrNull.has(s.layer.name)).map(refOf);
+  if (shaped.length) leftOut.push(group("already_shaped", shaped));
 
   // Candidates outside the focus, so the mentor can offer them by name.
   const targetSet = new Set(targets);

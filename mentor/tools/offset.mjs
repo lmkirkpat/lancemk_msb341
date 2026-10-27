@@ -11,6 +11,7 @@ import { matchLayer } from "../lib/offset-keys.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
+import { serverCurrent } from "../lib/server-current.mjs";
 
 export const SKILLS = [SKILL];
 
@@ -39,7 +40,7 @@ async function offsetSnapshot({ mode = "lesson", focus_layers, skill_options } =
   const opts = { skill: SKILL, analyze, mode };
   if (focus_layers) opts.focus_layers = focus_layers;
   if (skill_options !== undefined) opts.skill_options = skill_options;
-  const { lesson, session: s, analysis } = session.start(snapshot, opts);
+  const { lesson, session: s, analysis, stored_choices } = session.start(snapshot, opts);
 
   // The group and the learner's choices are read on the lesson's baseline, which the targets come
   // from, so a continued lesson still describes the group as it was before the learner moved it.
@@ -70,6 +71,8 @@ async function offsetSnapshot({ mode = "lesson", focus_layers, skill_options } =
     no_demo_reason: s.mode === "review" ? (s.targets.length ? "review" : "no_new_target") : s.demo ? null : base.no_demo_reason,
     frame_together: base.frame_together,
     ...(base.gap_frames != null ? { floor_check: { gap_frames: base.gap_frames, gap_seconds: r3(base.gap_frames / fps), gap_under_floor: base.gap_under_floor } } : {}),
+    server_current: await serverCurrent(), // FR-044
+    stored_choices, // FR-043, FR-046
   });
 }
 

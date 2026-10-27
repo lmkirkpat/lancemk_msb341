@@ -100,6 +100,70 @@ function refsFromSegmentIds(snapshot, ids) {
 
 const kept = (marks, snapshot) => marks.filter((m) => applies(m, snapshot));
 
+// FR-043, research R26: does the comp still match a lesson's baseline on the layers its targets and
+// focus name? Per name, the layers with that name in index order must have the same keyed
+// properties (path, expression on or off, keys as the snapshot reports them) and, when both
+// snapshots have layer_info, the same in point, out point, start time and parent. The parent is
+// compared by its name, not its index, because adding a layer renumbers everything below it.
+function sameData(a, b) {
+  if (a === b) return true;
+  if (Array.isArray(a) || Array.isArray(b)) {
+    return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((x, i) => sameData(x, b[i]));
+  }
+  if (a && b && typeof a === "object" && typeof b === "object") {
+    const ka = Object.keys(a).filter((k) => a[k] !== undefined);
+    const kb = Object.keys(b).filter((k) => b[k] !== undefined);
+    return ka.length === kb.length && ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && sameData(a[k], b[k]));
+  }
+  return false;
+}
+
+const byIndexOrder = (list) => [...list].sort((x, y) => x.index - y.index);
+const keyedShape = (layer) => (layer.properties || []).map((p) => ({ path: p.path, expression_enabled: p.expression_enabled, keys: p.keys }));
+
+function timingShape(info, all) {
+  const parent = info.parent == null ? null : all.find((l) => l.index === info.parent);
+  return { in_point: info.in_point, out_point: info.out_point, start_time: info.start_time, parent: info.parent == null ? null : parent ? parent.name : info.parent };
+}
+
+function baselineMatches(lesson, snapshot) {
+  const names = new Set((Array.isArray(lesson.target_refs) ? lesson.target_refs : []).map((r) => r && r.layer).filter((n) => typeof n === "string"));
+  if (Array.isArray(lesson.focus)) for (const n of lesson.focus) if (typeof n === "string") names.add(n);
+  const base = lesson.baseline;
+  if (!base || !Array.isArray(base.layers)) return true;
+  const withInfo = Array.isArray(base.layer_info) && Array.isArray(snapshot.layer_info);
+  for (const name of names) {
+    const keyedA = byIndexOrder(base.layers.filter((l) => l.name === name));
+    const keyedB = byIndexOrder((snapshot.layers || []).filter((l) => l.name === name));
+    const infoA = withInfo ? byIndexOrder(base.layer_info.filter((l) => l.name === name)) : [];
+    const infoB = withInfo ? byIndexOrder(snapshot.layer_info.filter((l) => l.name === name)) : [];
+    const inA = keyedA.length + infoA.length > 0;
+    const inB = keyedB.length + infoB.length > 0;
+    if (!inA && !inB) continue; // nothing to compare
+    if (inA !== inB) return false;
+    if (!sameData(keyedA.map(keyedShape), keyedB.map(keyedShape))) return false;
+    if (withInfo && !sameData(infoA.map((l) => timingShape(l, base.layer_info)), infoB.map((l) => timingShape(l, snapshot.layer_info)))) return false;
+  }
+  return true;
+}
+
+// FR-043 (LE-1, kept; LE-4): the machine's local day of a lesson id's time. The id is an ISO time,
+// sometimes with a short suffix added on a collision. Unreadable gives null, which is never stale.
+function localDayOf(lessonId) {
+  const m = typeof lessonId === "string" ? lessonId.match(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?Z/) : null;
+  const t = m ? Date.parse(m[0]) : NaN;
+  return Number.isFinite(t) ? new Date(t).toDateString() : null;
+}
+
+// FR-043: an open lesson never checked and with no demo is stale when it would be resumed and the
+// comp no longer matches its baseline, or continued and it started on an earlier local day.
+function isStale(open, resuming, snapshot) {
+  if (open.demo || open.checked || open.status === "checked") return false;
+  if (resuming) return !baselineMatches(open, snapshot);
+  const day = localDayOf(open.lesson_id);
+  return day !== null && day !== new Date().toDateString();
+}
+
 // Called by each skill's snapshot tool. Continues (same skill and comp) or resumes (after working
 // elsewhere) an unfinished lesson in the same mode, keeping its baseline and demo so re-snapshotting
 // can't reset either. Otherwise starts a new lesson with this snapshot as the baseline. Findings
@@ -118,7 +182,7 @@ export function start(snapshot, opts = {}) {
   const existing = state.lessons[key];
   const open = existing && !existing.passed && (existing.mode || "lesson") === mode ? existing : null;
   if (open && fresh && (open.demo || open.checked || open.status === "checked")) throw new MentorError("LESSON_UNDERWAY");
-  const continuing = open && !fresh ? open : null;
+  const continuing = open && !fresh && !isStale(open, currentKey(state) !== key, snapshot) ? open : null;
 
   // What the learner record says, read without changing it: an unreadable record means no marks
   // and no past targets, never an error from here.
@@ -188,7 +252,9 @@ export function start(snapshot, opts = {}) {
   write(state);
   const analysis = { ...now, focus: lesson.focus, targets: lesson.targets, demo_target: lesson.demo_target };
   if (noDemoReason !== now.no_demo_reason) analysis.no_demo_reason = noDemoReason;
-  return { lesson: kind, session: lesson, analysis };
+  // R26: the lesson came back holding the learner's earlier choices. Returned, never stored.
+  const stored_choices = kind === "resumed" && continuing.skill_options !== undefined && skill_options === undefined;
+  return { lesson: kind, session: lesson, analysis, stored_choices };
 }
 
 // FR-006 and FR-021, enforced in code (research R3). A skill's demo tool calls this before touching AE.

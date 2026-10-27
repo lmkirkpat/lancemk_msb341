@@ -39,7 +39,7 @@ snippet fix was needed (L-3).
 | SC-004 | Covered by the review cases' deterministic check; it gets graded at the baseline |
 | SC-005 | Met: the overlap rows and FR-027's P2 cases are in `npm test`, all passing |
 | SC-006 | Met: `null-parenting-jump.test.mjs` on `practice2b-parented.json` and `parented-rot.json`, 0 false jumps |
-| SC-007 | **After the merge** (HO-4): the easing set at 25/25 or within one, about $12 |
+| SC-007 | **Met** (HO-4, 2026-10-27): T183's base run (`product/evals/easing/results/2026-10-26-233056-phase9-base.json`) ran on `main` after both skill 5 (`f6effae`) and skill 6 (`31fe72d`) merged: **25/26**, $13.05, no hard-rule failure. The one miss was case 09's R-FOCUS rubric item (the opening named more than 5 pairs), which also went 2 of 3 in T195, so it looks flaky. One shared run covers specs 011 and 012 |
 | SC-008 | Met (above) |
 | SC-009 | Open, stretch: T343, a day or more after the first pass |
 
