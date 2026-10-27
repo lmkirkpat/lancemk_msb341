@@ -38,3 +38,12 @@ export function lessonFor(baseline, focus, { demo = null, demoUndone = false, ex
     demo: demo ? { segment_id: demo, at: "2026-10-24T12:00:00.000Z", ...(demoUndone ? { undone: "2026-10-24T12:05:00.000Z" } : {}) } : null,
   };
 }
+
+// A lesson with `focus`'s layers as targets directly, whatever the analysis says: for checks a
+// lesson can't reach (Sled with three Position keys, never since D-4), kept as item 4's unit tests.
+export function lessonDirect(baseline, focus) {
+  const lesson = lessonFor(baseline, focus);
+  lesson.targets = focus.map((f) => `anchor/${indexOf(baseline, f.layer)}`);
+  lesson.target_refs = focus.map((f) => ({ layer: f.layer, property: "Anchor Point" }));
+  return lesson;
+}

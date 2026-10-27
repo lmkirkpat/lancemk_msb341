@@ -3,7 +3,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { analyze, candidates, finder, neededTimes, outsideSide, reviewProposal, SHAPES_DEFAULT, MAX_NEEDED_TIMES } from "../lib/anchor.mjs";
+import { analyze, candidates, finder, neededTimes, outsideSide, positionRule, reviewProposal, SHAPES_DEFAULT, MAX_NEEDED_TIMES } from "../lib/anchor.mjs";
 import { clone, fixture, indexOf, KEY, synthetic } from "./fixtures/anchor/load.mjs";
 
 const P2 = fixture("practice2b");
@@ -20,6 +20,7 @@ test("on Mentor Practice 2, every layer's bucket, reason, rank and place now are
     assert.equal(c.rank, want.rank, `${name} rank`);
     if (want.place_now !== undefined) assert.equal(c.place_now, want.place_now, `${name} place now`);
     if (want.check_time) assert.deepEqual(c.check_time, want.check_time, `${name} check time`);
+    if (want.position_times) assert.deepEqual(c.keyed.position_times, want.position_times, `${name} Position key times`);
   }
   assert.equal(Object.keys(got).length, P2.layer_info.length, "one entry per layer of layer_info");
 });
@@ -38,6 +39,7 @@ test("on Mentor Overlaps, the rows this skill reads land as the answer key says"
     assert.equal(got[name].bucket, want.bucket, `${name} bucket`);
     assert.equal(got[name].reason, want.reason, `${name} reason`);
     if (want.rank !== undefined) assert.equal(got[name].rank, want.rank, `${name} rank`);
+    if (want.position_times) assert.deepEqual(got[name].keyed.position_times, want.position_times, `${name} Position key times`);
   }
 });
 
@@ -46,20 +48,25 @@ test("shapes are default candidates since L-1 (SHAPES_DEFAULT true): Lid and Ban
   const got = byLayer(candidates(P2));
   for (const n of ["Lid", "Banner", "Blink", "Cut"]) assert.deepEqual([got[n].bucket, got[n].reason], ["default", null], n);
   assert.ok(!Object.values(got).some((c) => c.reason === "shape_until_l1"));
-  // A keyed shape still lands by its keys: Dot 1 has Position keys.
-  assert.deepEqual([got["Dot 1"].bucket, got["Dot 1"].reason], ["if_named", "position_keyed"]);
+  // A keyed shape still lands by its keys: Dot 1 has Position keys at three times (D-4).
+  assert.deepEqual([got["Dot 1"].bucket, got["Dot 1"].reason], ["never", "position_moves"]);
 });
 
 test("a matte is if_named with reason matte, never hidden, though its eye is off (filter 3)", () => {
   const got = byLayer(candidates(P2));
   assert.equal(P2.layer_info.find((l) => l.name === "Reveal Matte").enabled, false);
   assert.deepEqual([got["Reveal Matte"].bucket, got["Reveal Matte"].reason], ["if_named", "matte"]);
-  assert.equal(byLayer(candidates(OV)).Wipe.reason, "matte");
+  // Never outranks allowed-if-named (D-4): Wipe is a matte whose Position is keyed at two times.
+  assert.equal(OV.layer_info.find((l) => l.name === "Wipe").enabled, false);
+  assert.deepEqual([byLayer(candidates(OV)).Wipe.bucket, byLayer(candidates(OV)).Wipe.reason], ["never", "position_moves"]);
 });
 
-test("Locked Bar is if_named with locked; Wobble, Seal, Depth, nulls and adjustment layers are never", () => {
+test("a locked layer is if_named with locked (door-locked's Door); Wobble, Seal, Depth, nulls and adjustment layers are never", () => {
+  const locked = byLayer(candidates(fixture("door-locked")));
+  assert.deepEqual([locked.Door.bucket, locked.Door.reason], ["if_named", "locked"]);
+  // Locked Bar is locked too, but its Position keys at 3 and 4 put it in never first (D-4).
   const ov = byLayer(candidates(OV));
-  assert.deepEqual([ov["Locked Bar"].bucket, ov["Locked Bar"].reason], ["if_named", "locked"]);
+  assert.deepEqual([ov["Locked Bar"].bucket, ov["Locked Bar"].reason], ["never", "position_moves"]);
   assert.equal(ov.Depth.reason, "three_d");
   const p2 = byLayer(candidates(P2));
   assert.equal(p2.Wobble.reason, "anchor_keyed");
@@ -153,7 +160,88 @@ test("demo target: entry 1 when it's default, else entry 0, else not_a_default_c
     const layer = want.demo_target_layer;
     assert.equal(a.demo_target, layer ? `anchor/${indexOf(P2, layer)}` : null, name);
     if (want.no_demo_reason) assert.equal(a.no_demo_reason, want.no_demo_reason, name);
+    if (want.focus_problem) assert.deepEqual(a.focus_problems, [want.focus_problem], name);
   }
+});
+
+// ---- D-4 (T245, T246): counting Position key times. Built on the live one-key capture, where Sled
+// has one Position key, at 3.667, no Rotation or Scale keys, and samples at every --times time.
+
+const ONE = fixture("sled-one-key-before");
+const POS = "ADBE Transform Group/ADBE Position";
+const key = (time, value, hold = false) => ({ index: 1, time, value, ...(hold ? { in_type: "hold", out_type: "hold" } : {}) });
+function sledWith(props) {
+  const s = clone(ONE);
+  s.layers.find((l) => l.name === "Sled").properties = props.map((p) => ({ expression_enabled: false, ...p }));
+  return s;
+}
+const sledOf = (s, opts) => candidates(s, opts).find((c) => c.layer === "Sled");
+
+test("D-4 base: the live one-key Sled is if_named with position_keyed, and its tip carries the key's time", () => {
+  const want = KEY.attempts["sled-one-key"];
+  const c = sledOf(ONE);
+  assert.deepEqual([c.bucket, c.reason], [want.bucket, want.reason]);
+  assert.deepEqual(c.keyed.position_times, [want.tip_time]);
+  const a = analyze(ONE, { skill_options: { focus: want.focus } });
+  assert.deepEqual(a.targets, [`anchor/${indexOf(ONE, "Sled")}`]);
+  assert.deepEqual(a.notes.filter((n) => n.note === "position_keyed_tip"), [{ layer: "Sled", note: "position_keyed_tip", time: want.tip_time }]);
+});
+
+test("D-4: separated X keyed at 1 s and Y at 2 s is two times (position_moves); both at 1 s is one", () => {
+  const two = sledWith([{ path: `${POS}_0`, keys: [key(1, 320)] }, { path: `${POS}_1`, keys: [key(2, 960)] }]);
+  assert.deepEqual(sledOf(two).keyed.position_times, [1, 2]);
+  assert.deepEqual([sledOf(two).bucket, sledOf(two).reason], ["never", "position_moves"]);
+  const one = sledWith([{ path: `${POS}_0`, keys: [key(1, 320)] }, { path: `${POS}_1`, keys: [key(1, 960)] }]);
+  assert.deepEqual(sledOf(one).keyed.position_times, [1]);
+  assert.deepEqual([sledOf(one).bucket, sledOf(one).reason], ["if_named", "position_keyed"]);
+  // Within half a frame (1/60 s at 30 fps) is one time; a whole frame apart is two.
+  const near = sledWith([{ path: `${POS}_0`, keys: [key(1, 320)] }, { path: `${POS}_1`, keys: [key(1.01, 960)] }]);
+  assert.deepEqual(sledOf(near).keyed.position_times, [1]);
+  const frame = sledWith([{ path: `${POS}_0`, keys: [key(1, 320)] }, { path: `${POS}_1`, keys: [key(1.033, 960)] }]);
+  assert.equal(sledOf(frame).reason, "position_moves");
+});
+
+test("D-4: hold keys count like any key: two hold times are position_moves, one is position_keyed", () => {
+  const two = sledWith([{ path: POS, keys: [key(3.667, [320, 960, 0], true), { ...key(4.167, [420, 960, 0], true), index: 2 }] }]);
+  assert.deepEqual([sledOf(two).bucket, sledOf(two).reason], ["never", "position_moves"]);
+  const one = sledWith([{ path: POS, keys: [key(3.667, [320, 960, 0], true)] }]);
+  assert.deepEqual([sledOf(one).bucket, sledOf(one).reason], ["if_named", "position_keyed"]);
+});
+
+test("D-4: one Position key with Scale's rest key on another frame is position_moves; on the same frame (or within half a frame) it's allowed", () => {
+  const pos = { path: POS, keys: [key(3.667, [320, 960, 0])] };
+  const scale = (restTime) => ({ path: "ADBE Transform Group/ADBE Scale", keys: [key(3, [50, 50, 100]), { ...key(restTime, [100, 100, 100]), index: 2 }] });
+  const off = sledWith([pos, scale(4.167)]);
+  assert.deepEqual([sledOf(off).bucket, sledOf(off).reason], ["never", "position_moves"]);
+  assert.ok(!neededTimes(off).includes(3.667), "a never layer adds no needed time");
+  const on = sledWith([pos, scale(3.667)]);
+  assert.deepEqual([sledOf(on).bucket, sledOf(on).reason], ["if_named", "position_keyed"]);
+  assert.deepEqual(sledOf(on).check_time, { time: 3.667, basis: "both" });
+  // 0.013 s off is within half a frame (1/60 s). The capture has no sample at 3.68, so the footprint
+  // can't be read there (cant_read); the Position rule itself is what's tested.
+  const near = sledWith([pos, scale(3.68)]);
+  assert.equal(positionRule(near, near.layers.find((l) => l.name === "Sled")), "position_keyed");
+  const far = sledWith([pos, scale(3.7)]);
+  assert.equal(positionRule(far, far.layers.find((l) => l.name === "Sled")), "position_moves", "a whole frame off");
+});
+
+test("D-4: a learner rest_time off the one Position key's frame is refused with position_moves", () => {
+  const rot = { path: "ADBE Transform Group/ADBE Rotate Z", keys: [key(3.667, 0), { ...key(4.167, 90), index: 2 }] };
+  const s = sledWith([{ path: POS, keys: [key(3.667, [320, 960, 0])] }, rot]);
+  assert.equal(sledOf(s).reason, "position_keyed", "the default rest key (Rotation 0) is on the Position key");
+  const off = analyze(s, { skill_options: { focus: [{ layer: "Sled", place: "middle-left", rest_time: 4.167 }] } });
+  assert.deepEqual(off.targets, []);
+  assert.deepEqual(off.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves" }]);
+  const on = analyze(s, { skill_options: { focus: [{ layer: "Sled", place: "middle-left", rest_time: 3.667 }] } });
+  assert.deepEqual(on.targets, [`anchor/${indexOf(s, "Sled")}`]);
+});
+
+test("D-4: Sled on Mentor Practice 2 (three times) is refused with position_moves, gets no tip, and isn't a target", () => {
+  const a = analyze(P2, { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
+  assert.deepEqual(a.targets, []);
+  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves" }]);
+  assert.ok(!a.notes.some((n) => n.note === "position_keyed_tip"));
+  assert.equal(finder(P2).layers.includes("Sled"), false);
 });
 
 test("no focus: the proposal is the answer key's (Door, from the middle of its left edge), and the demo waits for a focus", () => {
@@ -278,8 +366,32 @@ test("FINDERS' count is above 0 exactly when a default candidate not in exclude 
 
 test("neededTimes lists every candidate's rest-key and Position key times, at most 63", () => {
   assert.deepEqual(neededTimes(P2), KEY.times.needed_practice2b);
-  const many = clone(P2);
-  const sled = many.layers.find((l) => l.name === "Sled").properties[0];
+  // Since D-4 a layer with many Position keys is never, so it adds nothing: 80 keys on Sled change nothing.
+  const sledMany = clone(P2);
+  const sled = sledMany.layers.find((l) => l.name === "Sled").properties[0];
   sled.keys = Array.from({ length: 80 }, (_, i) => ({ ...sled.keys[0], index: i + 1, time: Math.round((0.1 + i * 0.05) * 1000) / 1000 }));
+  assert.deepEqual(neededTimes(sledMany), KEY.times.needed_practice2b);
+  // The cap: 70 one-key layers (each allowed if named), every key at its own time.
+  const many = clone(P2);
+  const door = many.layer_info.find((l) => l.name === "Door");
+  let index = Math.max(...many.layer_info.map((l) => l.index));
+  for (let i = 0; i < 70; i++) {
+    index += 1;
+    many.layer_info.push({ ...clone(door), index, name: `One Key ${i}` });
+    many.layers.push({ index, name: `One Key ${i}`, properties: [{ path: "ADBE Transform Group/ADBE Position", expression_enabled: false, keys: [{ index: 1, time: Math.round((0.1 + i * 0.05) * 1000) / 1000, value: [0, 0, 0] }] }] });
+  }
+  assert.equal(candidates(many).find((c) => c.layer === "One Key 0").reason, "position_keyed");
   assert.equal(neededTimes(many).length, MAX_NEEDED_TIMES);
+});
+
+test("T245: neededTimes leaves out every layer that already moves, so Mentor Practice 2 needs 4 times, not 30", () => {
+  const got = neededTimes(P2);
+  assert.equal(got.length, 4);
+  const moving = candidates(P2).filter((c) => c.reason === "position_moves");
+  assert.equal(moving.length, 16, "spec FR-004's 16 Position-keyed layers");
+  // What's left is the rest keys of layers a lesson can reach (Flag's key at 4.5 shares Badge's rest key).
+  const rest = candidates(P2).filter((c) => c.bucket !== "never" && c.check_time.basis !== "current").map((c) => c.check_time.time);
+  for (const c of moving) for (const t of c.keyed.position_times) assert.ok(!got.includes(t) || rest.includes(t), `${c.layer}'s key at ${t} isn't needed`);
+  assert.deepEqual([...new Set(rest)].sort((x, y) => x - y), got);
+  assert.ok(!got.includes(2.4) && !got.includes(5.367), "Card's and Tile's rest keys drop out with them");
 });
