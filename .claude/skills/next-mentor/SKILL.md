@@ -29,12 +29,12 @@ recommendation.)
 
 ## Steps
 
-1. **Remember.** Call `read_learner_record`. It's for your own planning; don't recite it. If it
-   returns `RECORD_UNREADABLE`, say once, in the error's words, that you couldn't read your notes
-   from before, and carry on. If `read_learner_record` (or a later snapshot) returns
-   `server_current` false, say once, in plain words, that your tools were updated since this
-   session started and you need a restart (a new Claude Code session) before going on, then stop;
-   true or null says nothing.
+1. **Remember.** Call `read_learner_record`. Before anything else (this comes before every branch
+   below): if it (or a later snapshot) returns `server_current` false, say once, in plain words,
+   that your tools were updated since this session started and you need a restart (a new Claude
+   Code session) before going on, then stop; true or null says nothing. The record is for your own
+   planning; don't recite it. If it returns `RECORD_UNREADABLE`, say once, in the error's words,
+   that you couldn't read your notes from before, and carry on.
 
 2. **Ask for the recommendation.** Call `recommend_next`. If the learner already named a skill
    they want ("can I learn the speed graph?"), pass it as `requested_skill`, by its name as they

@@ -37,17 +37,18 @@ most; they ease the rest with their own hands.
 
 ## The lesson
 
-0. **Remember first.** Call `read_learner_record` before anything else. Look at
-   `skills["easing.basic"]` and the most recent lesson in `lessons`:
+0. **Remember first.** Call `read_learner_record` before anything else.
+   Before anything else (this comes before every branch below): if `read_learner_record` (or a
+   later snapshot) returns `server_current` false, say once, in plain words, that your tools were
+   updated since this session started and you need a restart (a new Claude Code session) before the
+   lesson, then stop; true or null says nothing.
+
+   Then look at `skills["easing.basic"]` and the most recent lesson in `lessons`:
    - **No easing history** (no `easing.basic` entry): a first lesson. Teach the whole thing below.
    - **`practicing`** (the last result was `partial` or `not_checked`): pick up what was still
      wrong. Its `next` says what that was.
    - **`learned`**: don't re-teach the basics. Either do a short review on keyframes they haven't
      eased before, or move on to the focus in `next`.
-
-   If `read_learner_record` (or a later snapshot) returns `server_current` false, say once, in plain
-   words, that your tools were updated since this session started and you need a restart (a new
-   Claude Code session) before the lesson, then stop; true or null says nothing.
 
    The record is for your own planning. Mention only the earlier lesson's work, never the file
    or its fields, and say how long ago it was in plain words ("yesterday", "last week") using

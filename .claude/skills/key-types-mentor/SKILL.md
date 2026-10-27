@@ -65,8 +65,13 @@ most; they hold the rest with their own hands.
 
 ## The lesson
 
-0. **Remember first.** Call `read_learner_record`. Look at `skills["keyframes.types"]` and
-   `skills["easing.basic"]`:
+0. **Remember first.** Call `read_learner_record`.
+   Before anything else (this comes before every branch below): if `read_learner_record` (or a
+   later snapshot) returns `server_current` false, say once, in plain words, that your tools were
+   updated since this session started and you need a restart (a new Claude Code session) before the
+   lesson, then stop; true or null says nothing.
+
+   Then look at `skills["keyframes.types"]` and `skills["easing.basic"]`:
    - If easing isn't learned (no `easing.basic`, or not `learned`), name it as the place to start
      and offer it (`/ease-mentor`). If they want this lesson anyway, say one sentence ("this builds
      on easing: hold is the third choice next to linear and eased") and carry on. Don't reteach
@@ -77,11 +82,7 @@ most; they hold the rest with their own hands.
 
    Mention only the earlier work, in plain words, with how long ago ("yesterday"). These are
    choices for you, not lines to say: the first words the learner sees are the lesson's or the
-   review's own opening, never which of these applied or what you'll do next.
-
-   If `read_learner_record` (or a later snapshot) returns `server_current` false, say once, in plain
-   words, that your tools were updated since this session started and you need a restart (a new
-   Claude Code session) before the lesson, then stop; true or null says nothing.
+   review's own opening; never narrate the branch or what you'll do next.
 
 1. **Look and ask.** Call `key_types_snapshot` with no focus. Then ask the intent question
    **before proposing anything**: "Is anything here meant to snap, like a blink, an on/off, or a
@@ -123,8 +124,9 @@ most; they hold the rest with their own hands.
    comp. In words: hold keeps the value until the next key, then jumps. Keep it short. Pass the
    focus layer's name as `layer` to each `preview_frame` here, and say in plain words where it is
    in the frame ("the small square near the top left"), placing its bounds on the image by scaling
-   them by the image's size over the comp's; never a pixel number. With no bounds back, point at
-   nothing and describe the snap from the tool data.
+   them by the image's size over the comp's; never a pixel number. Say where it is only on a
+   frame where it shows, never on one where it's at Opacity 0 (a blink's "after" frame). With no
+   bounds back, point at nothing and describe the snap from the tool data.
 
 4. **Invite them to try.** Ask them to hold the focus pairs themselves and say "done". Tell them
    which pairs, by layer, property and time, and where hold lives (above). Say it's the key at
@@ -136,8 +138,8 @@ most; they hold the rest with their own hands.
    frames it returns in `frames` with `preview_frame`. If the jump lands on Opacity 0 (the pair's
    second value is 0), say the layer vanishes there; show the "before" frame where it's visible
    and say the jump in words rather than showing a blank frame as proof. Pass the demo pair's
-   layer as `layer` to both frames and say where it is, as in step 3. **One demonstration per
-   lesson.**
+   layer as `layer` to both frames and say where it is, as in step 3, only on the frame where it
+   shows, never on the one where it's at Opacity 0. **One demonstration per lesson.**
 
    If `demo_target` is null there's no demo. With one focus pair, say in one sentence that if you
    held it there'd be nothing left for them, and walk them through it in words with a frame. No
