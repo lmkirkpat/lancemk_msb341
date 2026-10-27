@@ -264,7 +264,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
        Position only where the playhead was, and added a key there. Edit > Undo, put the playhead
        right on Sled's key at 3.7 s, and drag again." The first time is the layer's `check_time`,
        the second `item4.worst.time`; the way comes from `item4.worst` (`dx` above zero is to the
-       right, below zero to the left; `dy` above zero is lower, below zero higher). Never "jump".
+       right, below zero to the left; `dy` above zero is lower, below zero higher), never how far.
+       Never "jump".
      - in place but moved (TD § 7): "Needle's pivot is in the right place, but Needle moved too, up
        and to the left. Edit > Undo back to where only the pivot had moved." Use `item2.direction`
        for the way.
