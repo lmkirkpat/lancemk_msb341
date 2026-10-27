@@ -9,6 +9,7 @@ import { parseHost } from "../lib/host.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
+import { serverCurrent } from "../lib/server-current.mjs";
 import { DEMO_IN, DEMO_OUT, analyze, check, finder, pairsFor } from "../lib/speed-graph.mjs";
 
 const SKILL = "easing.speed_graph";
@@ -59,7 +60,7 @@ async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options
     lesson,
     mode: l.mode,
     project: snapshot.project,
-    comp: { name: snapshot.comp.name, duration: snapshot.comp.duration },
+    comp: { name: snapshot.comp.name, duration: snapshot.comp.duration, frame_rate: snapshot.comp.frame_rate },
     focus: analysis.focus,
     targets: analysis.targets,
     demo_target: analysis.demo_target,
@@ -70,6 +71,7 @@ async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options
     ease_first_count: analysis.ease_first_count,
     candidates_count: analysis.candidates_count,
     other_candidates: analysis.other_candidates,
+    server_current: await serverCurrent(), // FR-044
   });
 }
 

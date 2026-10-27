@@ -1,11 +1,13 @@
 // Spec 004 wave B, tasks-wave-b T106 and T153: mentor/lib/comp-space.mjs. Every case here is
-// SYNTHETIC (pure math, allowed by FR-012); the live checks against AE's own toComp() are T136's.
+// SYNTHETIC (pure math, allowed by FR-012), except T136's live checks at the end: AE's own toComp()
+// from the build scripts' Probe layers, and the footprints skills 5 and 6 will measure.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { layerMatrix, compMatrix, compPoint, compPosition, footprint, toLayerSpace, apply, invert } from "../lib/comp-space.mjs";
+import { layerMatrix, compMatrix, compPoint, compPosition, footprint, toLayerSpace, apply, invert, sampleAt } from "../lib/comp-space.mjs";
+import { byName } from "../lib/layer-info.mjs";
 import { FIXTURES, fixture } from "./helpers.mjs";
 
 const synthetic = (name) => JSON.parse(fs.readFileSync(path.join(FIXTURES, "layer-info", "synthetic", `${name}.json`), "utf8"));
@@ -162,4 +164,103 @@ test("synthetic: deterministic, and the snapshot isn't changed", () => {
   assert.deepEqual(footprint(chain, 2, 2), footprint(chain, 2, 2));
   assert.deepEqual(compMatrix(chain, 2, 2), compMatrix(chain, 2, 2));
   assert.equal(JSON.stringify(chain), before);
+});
+
+// ---- T136: live captures. Tolerances are test inputs (FR-017), not constants in comp-space.mjs.
+
+const LIVE = path.join(FIXTURES, "layer-info");
+const live = (name) => JSON.parse(fs.readFileSync(path.join(LIVE, name), "utf8"));
+const TO_COMP_PX = 0.5;
+const FOOTPRINT_PX = 1;
+const only = (snap, name) => {
+  const found = byName(snap, name);
+  assert.equal(found.length, 1, `exactly one layer named ${name}`);
+  return found[0];
+};
+const boundsOff = (a, b) => Math.max(...["left", "top", "right", "bottom"].map((k) => Math.abs(a[k] - b[k])));
+
+for (const [file, keyFile] of [["overlaps.json", "overlaps-expected.json"], ["practice2b.json", "practice2b-expected.json"]]) {
+  test(`live ${file}: compPosition is within ${TO_COMP_PX} px of AE's to_comp at every probed time the capture sampled; unsampled times say not_sampled`, () => {
+    const snap = live(file);
+    let compared = 0;
+    for (const probe of live(keyFile).to_comp) {
+      const entry = only(snap, probe.layer);
+      for (const { time, point } of probe.points) {
+        const r = compPosition(snap, entry.index, time);
+        if (!sampleAt(entry, time)) {
+          assert.deepEqual(r, { position: null, reason: "not_sampled" }, `${probe.layer} at ${time} s`);
+          continue;
+        }
+        assert.ok(r.position, `${probe.layer} at ${time} s: ${r.reason}`);
+        const off = Math.hypot(r.position[0] - point[0], r.position[1] - point[1]);
+        assert.ok(off <= TO_COMP_PX, `${probe.layer} at ${time} s: ${r.position} vs AE ${point} (${off.toFixed(3)} px)`);
+        compared++;
+      }
+    }
+    assert.ok(compared >= live(keyFile).to_comp.length, `compared ${compared} points`);
+  });
+}
+
+test("live overlaps.json: the to_comp check above goes through a Parent chain (Arm, Leaf 1, Leaf 2 and Kid are probed and parented)", () => {
+  const probed = live("overlaps-expected.json").to_comp.map((p) => p.layer);
+  const snap = live("overlaps.json");
+  for (const name of ["Arm", "Leaf 1", "Leaf 2", "Kid"]) {
+    assert.ok(probed.includes(name), `${name} is probed`);
+    assert.notEqual(only(snap, name).parent, null, `${name} has a parent`);
+  }
+});
+
+test(`live practice2b-parented.json: Tile, Caption and Stamp's footprints at each sampled time equal practice2b.json's within ${FOOTPRINT_PX} px (skill 6's P2)`, () => {
+  const before = live("practice2b.json");
+  const after = live("practice2b-parented.json");
+  const nul = after.layer_info.find((l) => l.is_null && !byName(before, l.name).length);
+  assert.ok(nul, "the new null is in the parented capture");
+  for (const name of ["Tile", "Caption", "Stamp"]) {
+    const a = only(before, name);
+    const b = only(after, name);
+    assert.equal(b.parent, nul.index, `${name} is parented to the new null`);
+    assert.ok(a.samples.length > 0);
+    for (const { time } of a.samples) {
+      const fa = footprint(before, a.index, time);
+      const fb = footprint(after, b.index, time);
+      assert.ok(fa.bounds && fb.bounds, `${name} at ${time} s: ${fa.reason || fb.reason}`);
+      assert.ok(boundsOff(fa.bounds, fb.bounds) <= FOOTPRINT_PX, `${name} at ${time} s: ${JSON.stringify(fa.bounds)} vs ${JSON.stringify(fb.bounds)}`);
+      fa.corners.forEach((c, i) => assert.ok(Math.hypot(c[0] - fb.corners[i][0], c[1] - fb.corners[i][1]) <= FOOTPRINT_PX, `${name} corner ${i} at ${time} s`));
+    }
+  }
+});
+
+test(`live practice2b-anchor.json: Door's footprint is unchanged within ${FOOTPRINT_PX} px after Pan Behind (skill 5's measure)`, () => {
+  const before = live("practice2b.json");
+  const after = live("practice2b-anchor.json");
+  const a = only(before, "Door");
+  const b = only(after, "Door");
+  assert.notDeepEqual(sampleAt(b, 0).anchor, sampleAt(a, 0).anchor, "the anchor did move");
+  for (const { time } of a.samples) {
+    const fa = footprint(before, a.index, time);
+    const fb = footprint(after, b.index, time);
+    assert.ok(boundsOff(fa.bounds, fb.bounds) <= FOOTPRINT_PX, `Door at ${time} s`);
+  }
+});
+
+test(`live practice2b.json: each built layer's footprint at 0 s is its declared bounds_at_0 within ${FOOTPRINT_PX} px, and each set's union is the set's`, () => {
+  const snap = live("practice2b.json");
+  const key = live("practice2b-expected.json");
+  const at0 = (name) => footprint(snap, only(snap, name).index, 0).bounds;
+  for (const d of key.layers) {
+    const b = at0(d.name);
+    assert.ok(b, d.name);
+    assert.ok(boundsOff(b, d.bounds_at_0) <= FOOTPRINT_PX, `${d.name}: ${JSON.stringify(b)} vs ${JSON.stringify(d.bounds_at_0)}`);
+  }
+  for (const set of key.sets) {
+    const bs = set.layers.map(at0);
+    const union = { left: Math.min(...bs.map((b) => b.left)), top: Math.min(...bs.map((b) => b.top)), right: Math.max(...bs.map((b) => b.right)), bottom: Math.max(...bs.map((b) => b.bottom)) };
+    assert.ok(boundsOff(union, set.bounds_at_0) <= FOOTPRINT_PX, set.set);
+  }
+});
+
+test("live overlaps.json: Depth (3D) and Orbit (auto-orient) give their reasons, never a guess", () => {
+  const snap = live("overlaps.json");
+  assert.equal(compPosition(snap, only(snap, "Depth").index, 1).reason, "three_d");
+  assert.equal(compPosition(snap, only(snap, "Orbit").index, 1).reason, "auto_orient");
 });

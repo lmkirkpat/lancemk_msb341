@@ -36,3 +36,10 @@ full-stack builder.
   offset, setting the pivot, and moving a group with a null), to make the sprint goal feasible in
   the time the sprint has and to make sure I can execute it with quality. I would rather cut back
   on what I'm doing and execute well than rush and turn out low-quality work.
+- Oct 26: the carry-over proof moved from the portfolio website to Operation Food Critic, a new
+  personal project. The portfolio's agents were set up on Oct 12, before this team existed
+  (Oct 19), so they show the same pattern but can't show carry-over. In Food Critic I copied the
+  hooks, `/merge-worktree` and Spec Kit, cut the ten personas to seven (kept, merged, borrowed
+  and dropped, in its `decisions/001`), and ran a two-researcher parallel run with no collisions
+  (`discovery/usage-notes/agent-carry-over.md`). Caveat: that run was documents only, so parallel
+  building in a second project is still untested.

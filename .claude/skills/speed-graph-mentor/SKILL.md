@@ -46,22 +46,27 @@ Rules particular to this skill:
 - **You can't see the Graph Editor.** Nothing tells you what panel is open or which graph is
   showing. Never say you can see it. When an answer about the graph sounds like a value graph
   ("it goes up and then stays flat"), ask which graph is showing and point them at **Edit Speed
-  Graph** <!-- L-1: confirm the label as written at 26.5 -->.
+  Graph**.
 - **Version steps (After Effects 26.5 on macOS).** Open the Graph Editor with its button at the
   top of the timeline panel; never quote a function-key shortcut for it. Always ask the learner to
-  choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor
-  <!-- L-1 -->: Scale and other properties open in the value graph by default. Keyframe Velocity
-  is a dialog where influence can be typed instead of dragged; name it, but give **no menu path
-  and no shortcut** for it <!-- L-1: fill in the menu path and Mac shortcut exactly as L-1 logs
-  them -->. If `host` says another version, give the menu names only.
+  choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor: Scale and
+  other properties open in the value graph by default. **Keyframe Velocity** is a dialog where
+  influence can be typed instead of dragged: with the key selected, **Animation › Keyframe
+  Velocity…**, or **⌘⇧K** (Command+Shift+K). If `host` says another version, give the
+  menu names only, with no shortcut.
 - **Frames show where, not how far.** From a frame, say only where the layer is on screen ("at
   0.7 s Title is near the top of the frame"). Never say how far along its own move it is, or a
   percentage of the distance: a parent's move shows in the frame too, and you can't see it.
 
 ## Before the lesson: is easing there?
 
-This skill builds on easing. Call `read_learner_record` first, before anything else, and look at
-`skills["easing.basic"]`:
+This skill builds on easing. Call `read_learner_record` first, before anything else.
+Before anything else (this comes before every branch below): if `read_learner_record` (or a
+later snapshot) returns `server_current` false, say once, in plain words, that your tools were
+updated since this session started and you need a restart (a new Claude Code session) before the
+lesson, then stop; true or null says nothing.
+
+Then look at `skills["easing.basic"]`:
 
 - **Easing isn't learned** (no entry, or not learned): name easing and offer it first, in one or
   two sentences ("This builds on easing: it reshapes an ease you've already applied. Want to do
@@ -115,7 +120,12 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
 2. **Read the graph (we do).** Ask them to select one focus pair's layer, open the Graph Editor,
    choose Edit Speed Graph, and tell you where the move is fastest: near the start, in the middle,
    or near the end. Check the answer against that pair's `fastest.parts` (`first`: near the start;
-   `middle`; `last`: near the end; two parts means either is right).
+   `middle`; `last`: near the end; two parts means either is right). If they answer with a time
+   or a frame ("at 19 frames", "about 0.6 s"), first place it in the pair from its key times (a
+   frame number divided by the comp's `frame_rate` is seconds from the comp's start; the pair's
+   first third is near the start, its last third near the end), then check it against
+   `fastest.parts` the same way, and if it falls outside the pair, ask which part of the move they
+   meant rather than guess.
    - Right: say so in a sentence and move on.
    - Not right: give **one** hint ("look for the highest point of the curve; is it closer to the
      first key or the second?"). If the answer sounds like a value graph, ask which graph is
@@ -158,8 +168,10 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
      `key_time`, never the fix and never an offer to do it:
      - `arrives_moving`: "At 1.5 s the move arrives still moving." With `drag_sideways`, add:
        "Drag that handle sideways, along the bottom, to make the ease longer."
-     - `no_handle`: "The key at 1.5 s is linear (or hold), so it has no handle on that side. Ease
-       it first." Then suggest the easing lesson after this one. Don't teach key types here.
+     - `no_handle`: "The key at 1.5 s isn't eased on that side, so the handle there doesn't
+       work yet. If it's a hold, the move sits still and then jumps. Ease it first." Never say the
+       key has no handle: After Effects still draws one. Then suggest the easing lesson after this
+       one. Don't teach key types here.
      - `long_both_ends`: "Both ends of Scale ease for nearly the whole move, so it floats and then
        has to rush. Make the start short."
      - `back_to_default`: "Scale is back to the default shape on both keys. Easy Ease resets it."
@@ -171,8 +183,9 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
        height of Scale still lands on the default shape").
    - **Shared keys.** Where two focus pairs share a key (one's landing is the next one's start),
      each side belongs to its own pair. If one pair passed and the next didn't, say the shared key
-     is only shaped on the side facing the first pair. <!-- L-4: if dragging one side's handle
-     changes the other side too, add how to shape the two sides separately -->
+     is only shaped on the side facing the first pair, and add: "The key at 1.5 s has two handles:
+     the left one shapes how the first move lands, the right one how the next move starts.
+     Dragging one leaves the other alone."
    - `keys_changed`: keys were added, removed or moved on that property, so you can't check those
      pairs. Ask if that was on purpose. `removed`: the pair isn't there as it was; say so and look
      at `other_changes`.
@@ -183,7 +196,10 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
 
 6. **Read again.** After the pass, ask once more where the move is fastest now, on the pair from
    stage 2. Check it against that pair's `fastest.parts` in the last check: it should have moved
-   toward the start. At most one hint; it never blocks.
+   toward the start. An answer given as a time or a frame is placed in the pair from its key times,
+   as in stage 2 (a frame divided by the comp's `frame_rate`, counted from the comp's start), then
+   checked against `fastest.parts`; if it falls outside the pair, ask rather than guess. At most one
+   hint; it never blocks.
 
 7. **Record the lesson.** Call `record_lesson` once per lesson (below).
 

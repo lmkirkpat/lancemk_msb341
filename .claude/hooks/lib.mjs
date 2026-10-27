@@ -1,7 +1,8 @@
 // Shared helpers for the agent team's hooks (decisions/008). Node built-ins only.
 //
 // Hooks tell agents apart by `agent_type` and `agent_id`, which Claude Code sends only for
-// subagent calls. Subagents share the cockpit's `session_id`, so never key on that.
+// subagent calls. Subagents share the cockpit's `session_id`, so never key on that alone; two
+// top-level sessions share no `agent_id`, so never key on that alone either (the AE lock keys on both).
 
 import fs from "node:fs";
 import os from "node:os";
@@ -46,10 +47,14 @@ export function stateDir(cwd) {
   return dir;
 }
 
-export function inLinkedWorktree(cwd) {
-  const gitDir = git(["rev-parse", "--path-format=absolute", "--git-dir"], cwd);
-  const common = git(["rev-parse", "--path-format=absolute", "--git-common-dir"], cwd);
-  return Boolean(gitDir && common && gitDir !== common);
+// The top folder of the linked worktree `dir` is in, or null for the main checkout, a folder
+// outside any repo, or one that doesn't exist.
+export function linkedWorktreeTop(dir) {
+  if (!dir || !fs.existsSync(dir)) return null;
+  const gitDir = git(["rev-parse", "--path-format=absolute", "--git-dir"], dir);
+  const common = git(["rev-parse", "--path-format=absolute", "--git-common-dir"], dir);
+  if (!gitDir || !common || gitDir === common) return null;
+  return git(["rev-parse", "--show-toplevel"], dir);
 }
 
 // The repo a path belongs to, and the path relative to it with forward slashes.

@@ -45,7 +45,7 @@ personas run on Opus and three on Sonnet (the `model:` line in each file).
 | `agents/*.md` | The ten personas. Each ends with an **In this repo** section: the only part that's project-specific |
 | `hooks/ae-lock.mjs` | One agent at a time on After Effects. 10-minute idle lease, freed on `SubagentStop` |
 | `hooks/ownership.mjs` + `ownership.json` | Blocks a subagent's `Write`/`Edit` outside its row. The cockpit isn't restricted |
-| `hooks/git-guard.mjs` | Blocks blanket `git add`, `commit -a`, `reset --hard`, `clean -f`, `stash` and force-push for everyone; push, merge, rebase, removing worktrees, deleting branches, and switching branches in the shared tree for subagents. Makes every cockpit push ask you |
+| `hooks/git-guard.mjs` | Blocks blanket `git add`, `commit -a`, `reset --hard`, `clean -f`, `stash` and force-push for everyone, unless the git call acts on the worktree the agent is standing in (worked out from `cd` and `-C`; when it can't tell, it blocks); push, merge, rebase, removing worktrees, deleting branches, and switching branches in the shared tree for subagents. Makes every cockpit push ask you |
 | `hooks/ae-script-guard.mjs` | Blocks a subagent's `ae_run_script` from reaching past the comp: shell (`callSystem`), saving the `.aep`, deleting or writing files, quitting AE |
 | `hooks/check-branch.mjs` | Run at merge: lists files a branch changed outside its persona's row (catches writes through Bash, which the ownership hook can't see) |
 | `hooks/probe/identity.mjs` | Checks that hooks can still tell agents apart (see "Check it works") |
@@ -66,8 +66,12 @@ it, Claude Code treats any exit other than 0 or 2 as the hook failing and lets t
    one). Edit the deny list to fit: this repo denies the whole Vercel server and `vercel *`
    because it never deploys; a web project that deploys should switch those to `ask`.
 2. **Rewrite each persona's "In this repo" section**: where things live, how to run tests, the
-   project's rules. Leave the rest of the persona alone; that's the reusable part. Delete personas
-   you don't need (a project without a curriculum doesn't need the two curriculum agents).
+   project's rules. Leave the rest of the persona alone; that's the reusable part. Then rebuild
+   the roster for the project instead of keeping all ten: delete personas you don't need (a
+   project without a curriculum doesn't need the two curriculum agents), merge personas when
+   there's one code area (Operation Food Critic folded skill-builder and panel-builder into one
+   `app-builder`), and borrow personas from other projects (its `qa-auditor` came from the
+   portfolio site). Write down what you kept, merged, borrowed and dropped in a decision.
 3. **Rewrite `ownership.json`** to match. Patterns apply in order, the last match wins, and `!`
    takes a path back out. An unlisted persona writes nothing.
 4. **Decide about the lock.** If your project has one shared thing two agents mustn't drive at
@@ -79,7 +83,10 @@ it, Claude Code treats any exit other than 0 or 2 as the hook failing and lets t
    `agent-audit` (reviewer, skill-builder), `eval-set` and `eval-triage` (eval-engineer),
    `overlap-audit` (curriculum-designer), `interview-log`, `insights-review` and `side-by-side`
    (user-researcher). Spec Kit (`/speckit-*`, spec-writer and builders) is in `.claude/skills/`.
-6. **Restart Claude Code** (or approve the hooks in `/hooks`) so the hooks load, then run the
+6. **Check where `origin` points** (`git remote -v`). Worktrees start from `origin/main`, so in
+   a repo cloned from a template, every builder would start from the template's code. Make your
+   own repo `origin` and keep the template as a fetch-only remote.
+7. **Restart Claude Code** (or approve the hooks in `/hooks`) so the hooks load, then run the
    checks below.
 
 ## Check it works
@@ -102,10 +109,14 @@ guard should block it.
 
 1. **Plan in the cockpit.** Decide the pieces, which persona does each, and hand out any numbers
    (spec `012`, eval case `26`) in the prompt. Numbers taken by agents themselves collide.
-2. **Commit and push first.** `git status --short` should be empty, including the `.aep`. A
-   worktree is a fresh checkout of `origin/main`, not your local `main`, so unpushed commits and
-   uncommitted changes (a CLAUDE.md edit, say) never reach it, and a subagent's edits aren't
-   covered by `/rewind`: the commit is the way back.
+2. **Commit first, and give each agent a worktree cut from local `main`.** `git status --short`
+   should be empty, including the `.aep`: a subagent's edits aren't covered by `/rewind`, so the
+   commit is the way back. The agent tool's `isolation: "worktree"` checks out `origin/main`, not
+   your local `main`, so unpushed commits never reach it. Unless you've just pushed, the cockpit
+   cuts the worktree itself (`git worktree add -b <branch> .claude/worktrees/<branch> main`) and
+   tells the agent to `cd` into it in its first call and work only there. Don't tell agents to
+   hard-reset their worktree to another branch to fix the base (run 2 did): it works only from
+   inside the worktree, and a hand-cut worktree from `main` doesn't need it.
 3. **Stagger the launches.** At most **3 Opus agents at once**; Sonnet personas (the two
    researchers, eval-engineer) can add up to 3 more. Launch the next agent as one hands back, and
    start anything that depends on another's output (a mockup on its spec, a spec on its teaching
@@ -117,7 +128,7 @@ guard should block it.
    back any change it needs to a shared file as a request. Build the shared pieces first, merge
    them, then start the parallel builders. `check-branch.mjs` enforces this at merge
    (`addOnly` in `ownership.json`).
-5. **Spawn every persona that has Bash in a worktree** (`isolation: "worktree"`): skill-builder,
+5. **Spawn every persona that has Bash in a worktree** (step 2's, or `isolation: "worktree"` right after a push): skill-builder,
    panel-builder, eval-engineer, spec-writer, reviewer. The ownership hook can't see a write made
    through Bash; the merge check (`check-branch.mjs`) can, but only on a branch. Personas without
    Bash (researchers, designers, design-reviewer) can share the main tree, since the hook covers
@@ -146,3 +157,11 @@ These come from building this team, not from a general guide.
   says to stop and report what it needs instead.
 - **Test hooks with a probe, not by trusting the docs.** Each question about hook input
   (identity, `SubagentStop`) was settled by a headless run with a logging hook, for well under $1.
+- **The roles change between projects; the hooks and workflow don't.** Across Knack, the
+  portfolio site and Operation Food Critic, one owner per file, checkers that can't edit, gated
+  specs and numbers handed out by the cockpit stayed the same, and the roster changed every time.
+  Copying the team into Food Critic, with a model choosing and adapting the personas, took about
+  30 minutes, including the probe (`discovery/usage-notes/agent-carry-over.md`).
+- **Start a new project with a documents-only run.** Two researchers on separate files is a
+  cheap first test of the copied setup (Food Critic's run 1: about 4 minutes, no collisions).
+  It doesn't test shared code; that waits for the first build wave.

@@ -1,14 +1,15 @@
 {
-  "about": "Spec 009 answer key (tasks T003, SC-003), written by hand from the fixtures' shapes, not from the code. By fixture file name: candidates (layer › property, earliest first, all of them before the cap of 3), focus cases, constant-speed verdicts. 'checks' grades a current fixture against a lesson started on a baseline. Pair ids are '<layer index>/<property path>/<pair>'. Until the live sitting the fixtures are the stand-ins in stand-in/; the names stay the same.",
+  "about": "Spec 009 answer key (tasks T003, SC-003), written by hand from the fixtures' shapes, not from the code. By fixture file name: candidates (layer › property, earliest first, all of them before the cap of 3), focus cases, constant-speed verdicts. 'checks' grades a current fixture against a lesson started on a baseline. Pair ids are '<layer index>/<property path>/<pair>'. Since T033 every fixture is a live capture from the 2026-10-26 sitting except synthetic/unknown-values.json (row 22); entries changed for the live comp carry a 'note'.",
   "fixtures": {
-    "practice2-before.json": {
+    "practice2b.json": {
       "candidates": ["Blink › Opacity", "Cut › Opacity"],
       "not_candidates": ["Spinner › Rotation", "Dot 1 › Opacity", "Badge › Opacity", "Chip A › Opacity", "Card › Position"],
       "held_examples": [
         { "layer": "Dot 1", "property": "Position", "jump_time": 0.5 },
         { "layer": "Flag", "property": "Position", "jump_time": 4.5 }
       ],
-      "left_out_reasons": [],
+      "left_out_reasons": ["precomp"],
+      "note": "T033: Mentor Practice 2 as built is practice2b.json (spec 004 wave B layers), whose precomp layer Seal is left out as a precomp. Was [] on practice2-before.json.",
       "focus": [
         {
           "name": "Blink",
@@ -158,21 +159,23 @@
       "focus": [{
         "name": "A shape fill's Opacity, named (row 9)",
         "refs": [{ "layer": "Swatch", "property": "Opacity" }],
-        "targets": ["15/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Graphic - Fill#2/ADBE Vector Fill Opacity/1"],
+        "note": "T033: Swatch is layer 41 live (added below Mentor Practice 2's 40 layers), was 15.",
+        "targets": ["41/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Graphic - Fill#2/ADBE Vector Fill Opacity/1"],
         "refused": []
       }]
     },
     "overlap-layers.json": {
-      "candidates": ["Blink › Opacity", "Cut › Opacity", "Icon › Opacity", "Fader › Opacity"],
+      "note": "T033, live: the added layers are 41 (Icon) to 47 (Still), with Window (44) as the layer Matte mattes; was 15 to 21. Every added layer has layer_info, so the visibility class applies (spec 004 FR-013, spec 009 SR-3, landed in wave B): Matte, a track matte with its eye off, is a candidate and not left out as hidden (row 13). Mentor Practice 2's precomp Seal is left out with Icon. No Old Values layer: row 22 moved to synthetic/unknown-values.json.",
+      "candidates": ["Blink › Opacity", "Cut › Opacity", "Icon › Opacity", "Matte › Opacity", "Fader › Opacity"],
       "named_candidates": ["Blink › Opacity", "Cut › Opacity", "Icon › Opacity"],
-      "more_candidates": 1,
-      "with_fader_kept_linear": { "candidates": ["Blink › Opacity", "Cut › Opacity", "Icon › Opacity"], "left_out": { "kept_linear": ["Fader › Opacity"] } },
-      "left_out": { "hidden": ["Ghost", "Matte"], "precomp": ["Icon"], "unknown_values": ["Old Values › Opacity"] },
+      "more_candidates": 2,
+      "with_fader_kept_linear": { "candidates": ["Blink › Opacity", "Cut › Opacity", "Icon › Opacity", "Matte › Opacity"], "more_candidates": 1, "left_out": { "kept_linear": ["Fader › Opacity"] } },
+      "left_out": { "hidden": ["Ghost"], "precomp": ["Seal", "Icon"] },
       "focus": [
         {
           "name": "Hidden layer named: allowed, never the demo (row 11)",
           "refs": [{ "layer": "Ghost", "property": "Opacity" }],
-          "targets": ["16/ADBE Transform Group/ADBE Opacity/1", "16/ADBE Transform Group/ADBE Opacity/2"],
+          "targets": ["42/ADBE Transform Group/ADBE Opacity/1", "42/ADBE Transform Group/ADBE Opacity/2"],
           "demo_target": null,
           "no_demo_reason": "hidden_or_null",
           "refused": []
@@ -180,7 +183,7 @@
         {
           "name": "Null named: allowed, never the demo (row 14)",
           "refs": [{ "layer": "Rig", "property": "Opacity" }, { "layer": "Rig", "property": "Position" }],
-          "targets": ["18/ADBE Transform Group/ADBE Opacity/1", "18/ADBE Transform Group/ADBE Position/1"],
+          "targets": ["45/ADBE Transform Group/ADBE Opacity/1", "45/ADBE Transform Group/ADBE Position/1"],
           "demo_target": null,
           "no_demo_reason": "hidden_or_null",
           "refused": []
@@ -188,13 +191,15 @@
         {
           "name": "Precomp's own keys and inside (row 10)",
           "refs": [{ "layer": "Icon", "property": "Opacity" }, { "layer": "Icon", "property": "Scale" }],
-          "targets": ["15/ADBE Transform Group/ADBE Opacity/1"],
+          "targets": ["41/ADBE Transform Group/ADBE Opacity/1"],
           "refused": [{ "layer": "Icon", "property": "Scale", "reason": "precomp_inside" }]
         },
         {
-          "name": "Unknown values named: graded on types (row 22)",
-          "refs": [{ "layer": "Old Values", "property": "Opacity" }],
-          "targets": ["19/ADBE Transform Group/ADBE Opacity/1"],
+          "name": "A track matte with its eye off, named: one pair, graded (row 13, SR-3)",
+          "refs": [{ "layer": "Matte", "property": "Opacity" }],
+          "targets": ["43/ADBE Transform Group/ADBE Opacity/1"],
+          "demo_target": null,
+          "no_demo_reason": "single_target",
           "refused": []
         },
         {
@@ -202,6 +207,19 @@
           "refs": [{ "layer": "Still", "property": "Position" }],
           "targets": [],
           "refused": [{ "layer": "Still", "property": "Position", "reason": "only_pauses" }]
+        }
+      ]
+    },
+    "synthetic/unknown-values.json": {
+      "note": "T033: row 22 can't be planted live (a live read always has values), so it keeps one synthetic fixture: Mentor Practice 2 as built plus Old Values at 41.",
+      "candidates": ["Blink › Opacity", "Cut › Opacity"],
+      "left_out": { "unknown_values": ["Old Values › Opacity"] },
+      "focus": [
+        {
+          "name": "Unknown values named: graded on types (row 22)",
+          "refs": [{ "layer": "Old Values", "property": "Opacity" }],
+          "targets": ["41/ADBE Transform Group/ADBE Opacity/1"],
+          "refused": []
         }
       ]
     },
@@ -222,7 +240,7 @@
   "checks": [
     {
       "name": "One Blink pair held, two still fading (KT-d)",
-      "baseline": "practice2-before.json", "current": "blink-one-held.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "blink-one-held.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "not_held", "state": "eased", "frame_time": 1.2 },
         "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "held_by_learner" },
@@ -232,7 +250,7 @@
     },
     {
       "name": "Every Blink pair held (pass); the last key's out side and first key's in side are ignored",
-      "baseline": "practice2-before.json", "current": "blink-all-held.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "blink-all-held.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "held_by_learner" },
         "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "held_by_learner" },
@@ -242,7 +260,7 @@
     },
     {
       "name": "Select all, toggle hold, with Cut said to fade (rows 16, 19, KT-f)",
-      "baseline": "practice2-before.json", "current": "select-all-hold.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "select-all-hold.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "should_move": [{ "layer": "Cut", "property": "Opacity" }],
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "held_by_learner" },
@@ -260,7 +278,7 @@
     },
     {
       "name": "Held the wrong side (FR-011)",
-      "baseline": "practice2-before.json", "current": "wrong-side.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "wrong-side.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "wrong_side" },
         "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "not_held", "state": "eased", "frame_time": 1.6 },
@@ -270,7 +288,7 @@
     },
     {
       "name": "Mixed pair: linear out, hold in (row 6)",
-      "baseline": "practice2-before.json", "current": "mixed-pair.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "mixed-pair.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "wrong_side" },
         "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "not_held", "state": "eased", "frame_time": 1.6 },
@@ -280,7 +298,7 @@
     },
     {
       "name": "Hold at Opacity 0 (row 12)",
-      "baseline": "practice2-before.json", "current": "hold-at-zero.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "hold-at-zero.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "not_held", "state": "eased", "frame_time": 1.2 },
         "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "held_by_learner" },
@@ -290,7 +308,7 @@
     },
     {
       "name": "A key moved mid-attempt (row 18)",
-      "baseline": "practice2-before.json", "current": "keys-moved.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "keys-moved.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "not_held", "state": "eased", "frame_time": 1.2 },
         "1/ADBE Transform Group/ADBE Opacity/2": { "verdict": "removed_or_changed" },
@@ -300,7 +318,7 @@
     },
     {
       "name": "X Position held, Y still slides (row 7)",
-      "baseline": "practice2-before.json", "current": "separated-x-held.json", "focus": [{ "layer": "Dot 3", "property": "Position" }],
+      "baseline": "practice2b.json", "current": "separated-x-held.json", "focus": [{ "layer": "Dot 3", "property": "Position" }],
       "pairs": {
         "7/ADBE Transform Group/ADBE Position_0/1": { "verdict": "held_by_learner" },
         "7/ADBE Transform Group/ADBE Position_1/1": { "verdict": "not_held", "state": "linear", "frame_time": 0.867 }
@@ -309,7 +327,7 @@
     },
     {
       "name": "Demo in place (row 20)",
-      "baseline": "practice2-before.json", "current": "after-demo.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "after-demo.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "demo": "1/ADBE Transform Group/ADBE Opacity/1",
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "held_by_demo" },
@@ -320,7 +338,7 @@
     },
     {
       "name": "Demo undone (row 20)",
-      "baseline": "practice2-before.json", "current": "after-demo-undone.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "after-demo-undone.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "demo": "1/ADBE Transform Group/ADBE Opacity/1",
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "not_held", "state": "eased", "frame_time": 1.2 },
@@ -331,7 +349,7 @@
     },
     {
       "name": "Re-held by the learner after a check saw the demo undone (row 20)",
-      "baseline": "practice2-before.json", "current": "after-demo-reheld.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "after-demo-reheld.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "demo": "1/ADBE Transform Group/ADBE Opacity/1", "demo_seen_undone": true,
       "pairs": {
         "1/ADBE Transform Group/ADBE Opacity/1": { "verdict": "held_by_learner" },
@@ -342,7 +360,7 @@
     },
     {
       "name": "Another comp (row 23)",
-      "baseline": "practice2-before.json", "current": "practice-now.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
+      "baseline": "practice2b.json", "current": "practice-now.json", "focus": [{ "layer": "Blink", "property": "Opacity" }],
       "comp_matches": false, "pairs": {}, "should_move_held": [], "extra_holds": [], "passed": false
     }
   ]

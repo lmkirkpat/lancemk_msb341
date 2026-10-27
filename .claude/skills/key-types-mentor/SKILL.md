@@ -42,9 +42,10 @@ most; they hold the rest with their own hands.
   speak from what it returned.
 - **Never say "freeze" for hold**, and never name Layer > Time > Freeze Frame: that's a different
   feature. Say "hold", "snap" or "jump".
-- **No keyboard shortcuts for hold or interpolation.** Name the menu and the right-click on a key
-  only. A shortcut is named here only once it has been read off the menu in After Effects 26.5.
-  <!-- L-2: add the Mac shortcut for Toggle Hold Keyframe exactly as the menu shows it at 26.5, or none. -->
+- **Only the two shortcuts below, and only on 26.5.** They were read off the Animation menu in
+  After Effects 26.5 on a Mac: **Toggle Hold Keyframe ⌃⌥⌘H** (Control+Option+Command+H) and
+  **Keyframe Interpolation… ⌥⌘K** (Option+Command+K). Name no other shortcut, and on any other
+  version name the menu and the right-click only.
 - **Never call a layer "hidden" because it's see-through.** A layer held at Opacity 0 has its eye
   on; it vanishes there. "Hidden" is only for a layer whose eye is off.
 
@@ -52,27 +53,36 @@ most; they hold the rest with their own hands.
 
 `key_types_snapshot` returns `host`. Read it at the start.
 
-- **Hold:** select the key at the start of the pair, then **Animation > Toggle Hold Keyframe**, or
-  right-click the key and choose **Toggle Hold Keyframe**. <!-- L-2: confirm both places at 26.5. -->
-- **Linear:** set the key's temporal interpolation to Linear. <!-- L-2: add the Keyframe
-  Interpolation menu path exactly as logged; until then, no path. -->
+- **Hold:** select the key at the start of the pair, then **Animation > Toggle Hold Keyframe**
+  (⌃⌥⌘H), or right-click the key and choose **Toggle Hold Keyframe**. It holds the key's way out
+  only, which is all the pair needs.
+- **Linear:** select the keys, then **Animation > Keyframe Interpolation…** (⌥⌘K), or right-click a
+  key and choose **Keyframe Interpolation…**. In the dialog, set the **Temporal Interpolation**
+  dropdown (the top one) to **Linear**.
 - Describe the menus, not icons: older tutorials' keyframe icons look different.
-- On another version (or when `host` isn't known), name the menu only, and say menus may differ
-  slightly in their version.
+- On another version (or when `host` isn't known), name the menu only, with no shortcut, and say
+  menus may differ slightly in their version.
 
 ## The lesson
 
-0. **Remember first.** Call `read_learner_record`. Look at `skills["keyframes.types"]` and
-   `skills["easing.basic"]`:
-   - **Easing isn't learned** (no `easing.basic`, or not `learned`): name it as the place to start
+0. **Remember first.** Call `read_learner_record`.
+   Before anything else (this comes before every branch below): if `read_learner_record` (or a
+   later snapshot) returns `server_current` false, say once, in plain words, that your tools were
+   updated since this session started and you need a restart (a new Claude Code session) before the
+   lesson, then stop; true or null says nothing.
+
+   Then look at `skills["keyframes.types"]` and `skills["easing.basic"]`:
+   - If easing isn't learned (no `easing.basic`, or not `learned`), name it as the place to start
      and offer it (`/ease-mentor`). If they want this lesson anyway, say one sentence ("this builds
      on easing: hold is the third choice next to linear and eased") and carry on. Don't reteach
      easing.
-   - **This skill is `learned` and a review is due**, or the learner asked for a review or said
-     they already know it: run **The review** below instead.
-   - **`practicing`**: pick up what `next` says was still off.
+   - If this skill is `learned` and its review is due, or the learner asked for a review or said
+     they already know it, go straight to **The review** below and open with its first question.
+   - If it's `practicing`, pick up what `next` says was still off.
 
-   Mention only the earlier work, in plain words, with how long ago ("yesterday").
+   Mention only the earlier work, in plain words, with how long ago ("yesterday"). These are
+   choices for you, not lines to say: the first words the learner sees are the lesson's or the
+   review's own opening; never narrate the branch or what you'll do next.
 
 1. **Look and ask.** Call `key_types_snapshot` with no focus. Then ask the intent question
    **before proposing anything**: "Is anything here meant to snap, like a blink, an on/off, or a
@@ -111,7 +121,12 @@ most; they hold the rest with their own hands.
    `preview_frame` in the middle of a focus pair: "At 1.2 s Blink is half see-through: it fades."
    If `held_examples` has a held pair, show one frame just before its `jump_time` and one just
    after (one frame is 1 / `comp.frame_rate` seconds) to show what a snap looks like on their own
-   comp. In words: hold keeps the value until the next key, then jumps. Keep it short.
+   comp. In words: hold keeps the value until the next key, then jumps. Keep it short. Pass the
+   focus layer's name as `layer` to each `preview_frame` here, and say in plain words where it is
+   in the frame ("the small square near the top left"), placing its bounds on the image by scaling
+   them by the image's size over the comp's; never a pixel number. Say where it is only on a
+   frame where it shows, never on one where it's at Opacity 0 (a blink's "after" frame). With no
+   bounds back, point at nothing and describe the snap from the tool data.
 
 4. **Invite them to try.** Ask them to hold the focus pairs themselves and say "done". Tell them
    which pairs, by layer, property and time, and where hold lives (above). Say it's the key at
@@ -122,8 +137,9 @@ most; they hold the rest with their own hands.
    Opacity at 1 s, so it snaps at 1.4 s"), that **Edit > Undo** reverses it, and show the two
    frames it returns in `frames` with `preview_frame`. If the jump lands on Opacity 0 (the pair's
    second value is 0), say the layer vanishes there; show the "before" frame where it's visible
-   and say the jump in words rather than showing a blank frame as proof. **One demonstration per
-   lesson.**
+   and say the jump in words rather than showing a blank frame as proof. Pass the demo pair's
+   layer as `layer` to both frames and say where it is, as in step 3, only on the frame where it
+   shows, never on the one where it's at Opacity 0. **One demonstration per lesson.**
 
    If `demo_target` is null there's no demo. With one focus pair, say in one sentence that if you
    held it there'd be nothing left for them, and walk them through it in words with a frame. No
@@ -140,9 +156,12 @@ most; they hold the rest with their own hands.
      the demo pair shows the demo was undone and they held it again, it's theirs.
    - **Not held:** a hint, not a fix: the layer, property and time, and `preview_frame` at its
      `frame_time`: "At 2 s Blink is still half see-through, so 1.8 s to 2.2 s still fades."
-   - **Wrong side:** never call that pair done. Point at the key at the start of the pair: "That
-     pair still fades. The key at 1 s decides how the value leaves it, so that's the one to look
-     at." <!-- L-1: replace with the wrong-side hint written from L-1's result. -->
+   - **Wrong side:** the learner will see a snap here, so never say it still fades and never say it
+     isn't held. Say it snaps **too early**, and never call that pair done. The hold sits on the
+     key at the end of the pair, so the value jumps to that key's value as soon as the start key
+     passes, instead of waiting for the end key: "That pair snaps now, but too soon: Blink drops to
+     0 just after 1 s instead of staying at 100 until 1.4 s. The jump should come at 1.4 s, so it's
+     the key at 1 s, at the start of the pair, that holds." Use their layer, values and times.
    - **Removed or changed:** say the keys there moved or changed and ask if that was meant.
    - **Should move but now held** (`should_move_held`): fail it gently: "Cut doesn't fade between
      3 s and 3.1 s now; it waits and then jumps. The key at 3 s is a hold." No fix.

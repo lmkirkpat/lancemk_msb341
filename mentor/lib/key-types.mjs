@@ -14,8 +14,10 @@ import { classOf } from "./visibility.mjs";
 export const OPACITY_PATH = "ADBE Transform Group/ADBE Opacity";
 export const VALUE_TOL = 0.5;
 export const MAX_NAMED = 3;
-// What Toggle Hold Keyframe writes at 26.5: "out" (the key's outgoing side only) or "both". Set from
-// live check L-2 (spec 009 T034); mentor/jsx/key-types-demo.jsx has the same constant.
+// What Toggle Hold Keyframe writes at 26.5: "out" (the key's outgoing side only) or "both". Live check
+// L-2 (2026-10-26, specs/009-key-types/live-sitting-2026-10-26.md) confirmed "out": Animation › Toggle
+// Hold Keyframe on Blink's 1 s key read in Bezier, out Hold. mentor/jsx/key-types-demo.jsx has the same
+// constant.
 export const HOLD_SIDES = "out";
 
 const POSITION_PATH = "ADBE Transform Group/ADBE Position";

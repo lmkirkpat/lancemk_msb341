@@ -30,7 +30,7 @@ test("row 1: an expression on a keyed property (Logo's Rotation) is left out, an
   assert.equal(pool(now, "Logo").start, null, "Logo's only counted motion is under an expression: no start");
   assert.deepEqual(leftOut(now, "expression"), ["Logo"]);
   assert.ok(!allInGroups(now).includes("Logo"));
-  const r = check(now, load("stand-in/expression-toggled.json"), lessonFor(now, PROPS));
+  const r = check(now, load("expression-toggled.json"), lessonFor(now, PROPS));
   assert.ok(r.other_changes.includes("Logo › Rotation: an expression was turned off"));
 });
 
@@ -44,7 +44,7 @@ test("row 2: an expression with no keys isn't read, so a layer with no keys is n
 test("row 3: a single key (Logo's Scale) is no start; moving it is an other change, not graded", () => {
   const logo = timing(now).layers.find((l) => l.layer === "Logo");
   assert.equal(logo.units.find((u) => u.unit === "Transform › Scale").excluded, "single_key");
-  const r = check(now, load("stand-in/single-key-moved.json"), lessonFor(now, PROPS));
+  const r = check(now, load("single-key-moved.json"), lessonFor(now, PROPS));
   assert.equal(r.passed, true);
   assert.deepEqual(r.other_changes, ["Logo › Scale: its single key moved from 0 s to 0.2 s"]);
 });
@@ -53,11 +53,11 @@ test("row 4 (contract): a hold pair starts at its jump: the Cursor at 0.5 s, not
   const t = timing(now);
   assert.equal(t.layers.find((l) => l.layer === "Cursor").first_start, 0.5);
   assert.equal(pool(now, "Cursor").start, 0.5);
-  assert.deepEqual(groups(now).layers.map((g) => g.members.map((m) => m.layer)), KEY.focus["stand-in/practice-now.json"].all_layer_groups);
+  assert.deepEqual(groups(now).layers.map((g) => g.members.map((m) => m.layer)), KEY.focus["practice-now.json"].all_layer_groups);
   assert.equal(pool(mp2, "Dot 1").start, 0.5);
   assert.equal(pool(mp2, "Flag").start, 4.5);
   // The shift is measured at the jump: moving only Dot 1's hold key leaves its start at 0.5 s.
-  const r = check(mp2, load("stand-in/hold-group.json"), lessonFor(mp2, DOTS));
+  const r = check(mp2, load("hold-group.json"), lessonFor(mp2, DOTS));
   assert.equal(member(r, "Dot 1").start_now, 0.5);
   assert.deepEqual(member(r, "Dot 1").moved_by, { Position: 0, Opacity: 0 });
 });
@@ -98,7 +98,7 @@ test("row 7: separated X and Y are one Position unit starting at the earlier; X 
   const pos = dot3.units.find((u) => u.unit === "Position");
   assert.deepEqual(pos.paths, ["ADBE Transform Group/ADBE Position_0", "ADBE Transform Group/ADBE Position_1"]);
   assert.equal(pos.moves[0].start, 0.5);
-  const r = check(mp2, load("stand-in/separated-x-only.json"), lessonFor(mp2, DOTS));
+  const r = check(mp2, load("separated-x-only.json"), lessonFor(mp2, DOTS));
   assert.equal(r.passed, false);
   assert.deepEqual(member(r, "Dot 3").split.within_position, { moved: ["X Position"], stayed: ["Y Position"] });
   assert.deepEqual(member(r, "Dot 3").dimensions, { "X Position": 8, "Y Position": 0 });
@@ -127,7 +127,7 @@ test("row 9: a pause isn't a move; a pause given a new value is an other change"
 
 test("row 10: effect keys count in the layer's start; moved with the layer, it passes", () => {
   assert.ok(pool(mp2, "Dot 2").units.some((u) => u.name === "Blurriness"));
-  const r = check(mp2, load("stand-in/effect-with-layer.json"), lessonFor(mp2, DOTS));
+  const r = check(mp2, load("effect-with-layer.json"), lessonFor(mp2, DOTS));
   assert.equal(r.passed, true);
   assert.equal(member(r, "Dot 2").moved_by.Blurriness, 4);
   // Moving the layer's other keys but not the effect is a split.
@@ -167,38 +167,67 @@ test("row 14: a null (CTRL) is left out, is never a demo, and is refused if the 
 test("row 15: parenting: a child's start is its own keys (Title at 0.5 s while CTRL moves from 0 s)", () => {
   assert.equal(pool(now, "Title").start, 0.5);
   assert.equal(pool(now, "CTRL").why, "null");
-  const r = check(now, load("stand-in/props-pass-landing.json"), lessonFor(now, { ...PROPS, order: ["Position", "Opacity", "Scale"] }));
+  const r = check(now, load("props-pass-landing.json"), lessonFor(now, { ...PROPS, order: ["Position", "Opacity", "Scale"] }));
   assert.equal(r.passed, true, "graded on Title's own keys");
 });
 
 test("row 16: a dragged layer bar moves the keys (seen); a trimmed in point doesn't (still in lockstep)", () => {
-  const dragged = check(mp2, load("stand-in/bar-dragged.json"), lessonFor(mp2, DOTS));
+  const dragged = check(mp2, load("bar-dragged.json"), lessonFor(mp2, DOTS));
   assert.equal(member(dragged, "Dot 3").start_now, 0.7);
-  const trimmed = check(mp2, load("stand-in/in-point-trimmed.json"), lessonFor(mp2, DOTS));
+  const trimmed = check(mp2, load("in-point-trimmed.json"), lessonFor(mp2, DOTS));
   assert.equal(trimmed.passed, false);
   assert.equal(trimmed.still_same.length, 3);
 });
 
 test("row 17: layers reordered in the stack are matched by name: still in lockstep, nothing else changed", () => {
-  const r = check(mp2, load("stand-in/reordered.json"), lessonFor(mp2, DOTS));
+  const r = check(mp2, load("reordered.json"), lessonFor(mp2, DOTS));
   assert.equal(r.passed, false);
   assert.deepEqual(r.still_same, KEY.checks.reordered.still_same);
   assert.deepEqual(r.other_changes, []);
 });
 
-test("row 18: keys past the comp's end are flagged, and such a landing isn't a landing", () => {
-  const before = load("synthetic/past-end-before.json");
-  const after = load("synthetic/past-end.json");
-  const props = check(before, after, lessonFor(before, { kind: "properties", order: ["Position", "Opacity"], gap_frames: 4 }));
-  assert.equal(props.members.find((m) => m.label === "Card › Opacity").lands_in_comp, false);
-  assert.equal(props.passed, true, "a landing the comp never plays doesn't land with Position");
-  assert.deepEqual(props.out_of_comp, [{ layer: "Card", property: "Opacity", time: 3.2 }]);
+test("row 18 (live): keys past the comp's end are flagged, not failed (Chip C's keys at 8.5 s, the comp ends at 8 s)", () => {
+  const chips = { kind: "layers", members: ["Chip A", "Chip B", "Chip C"], order: ["Chip A", "Chip B", "Chip C"], gap_frames: 4 };
+  const r = check(mp2, load("past-end.json"), lessonFor(mp2, chips));
+  assert.equal(r.passed, true);
+  assert.deepEqual(r.out_of_comp, [{ layer: "Chip C", property: "Position", time: 8.5 }, { layer: "Chip C", property: "Opacity", time: 8.5 }]);
+  assert.equal(member(r, "Chip C").start_now, 7.5, "its start is in the comp, so it's graded like any start");
 });
 
-test("row 19: keys between frames: shifts within half a frame are one shift", () => {
-  const r = check(load("synthetic/half-frame-before.json"), load("synthetic/half-frame.json"), lessonFor(load("synthetic/half-frame-before.json"), { kind: "layers", order: ["D1", "D2", "D3"], gap_frames: 4 }));
+test("row 18: a landing past the comp's end isn't a landing the comp plays (synthetic edit of the live Mentor Practice)", () => {
+  // No live case for the properties kind: Title's Opacity landing moved from 1.5 s to 8.2 s (the
+  // comp ends at 8 s), and its Scale shifted 4 frames, here in the test.
+  const s = clone(now);
+  const opacity = prop(s, "Title", "Opacity");
+  opacity.keys[opacity.keys.length - 1].time = 8.2;
+  for (const k of prop(s, "Title", "Scale").keys) k.time = Math.round((k.time + 4 / 30) * 1000) / 1000;
+  const r = check(now, s, lessonFor(now, PROPS));
+  assert.equal(r.members.find((m) => m.label === "Title › Opacity").lands_in_comp, false);
+  assert.deepEqual(r.out_of_comp, [{ layer: "Title", property: "Opacity", time: 8.2 }]);
+  assert.equal(r.passed, true, "Opacity still starts with Position, but its landing never plays, so it doesn't land with it");
+});
+
+test("row 19 (live): Quick Offset on layers leaves keys between frames; whole layers moved 12.5 and 25 frames pass", () => {
+  const r = check(mp2, load("quick-offset.json"), lessonFor(mp2, DOTS));
   assert.equal(r.passed, true);
-  assert.equal(member(r, "D2").split, null);
+  assert.equal(member(r, "Dot 2").split, null);
+  assert.deepEqual(member(r, "Dot 2").moved_by, { Position: 12.5, Opacity: 12.5, Blurriness: 12.5 });
+  assert.deepEqual(r.gaps_frames, [12.5, 12.5]);
+});
+
+test("row 19: per-property shifts within half a frame are one shift; more is a split (synthetic edit of the live capture)", () => {
+  const nudge = (frames) => {
+    const s = load("quick-offset.json");
+    for (const k of prop(s, "Dot 2", "Opacity").keys) k.time = Math.round((k.time + frames / 30) * 1000) / 1000;
+    return check(mp2, s, lessonFor(mp2, DOTS));
+  };
+  const within = nudge(0.2);
+  assert.equal(within.passed, true);
+  assert.equal(member(within, "Dot 2").split, null);
+  const beyond = nudge(0.7);
+  assert.equal(beyond.passed, false);
+  assert.ok(member(beyond, "Dot 2").split, "Opacity moved 0.7 frames more than the rest: not one shift");
+  assert.deepEqual(member(beyond, "Dot 2").split.stayed, []);
 });
 
 test("row 20: at 60 fps the floor is 4 frames: 3 frames apart is still together, 4 isn't", () => {

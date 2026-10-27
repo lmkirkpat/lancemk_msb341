@@ -12,7 +12,7 @@ import { recordPath, source } from "./fixtures/key-types/load.mjs";
 const home = tempHome();
 const stateFile = path.join(home, "fixture-state.json");
 const setProject = (name) => fs.writeFileSync(stateFile, JSON.stringify({ project: source(name) }));
-setProject("practice2-before.json");
+setProject("practice2b.json");
 process.env.AE_MENTOR_FIXTURE_STATE = stateFile;
 
 const KT = await import("../tools/key-types.mjs");
@@ -40,7 +40,7 @@ const entry = (over = {}) => ({
 
 beforeEach(() => {
   for (const f of [LEARNER, SESSION, EDITS]) fs.rmSync(f, { force: true });
-  setProject("practice2-before.json");
+  setProject("practice2b.json");
   useRecord("easing-learned.json");
 });
 
@@ -77,7 +77,7 @@ test("a later call without skill_options keeps the focus, continued and resumed"
   assert.deepEqual(again.targets, [B(1), B(2), B(3)]);
   setProject("practice-now.json");
   await snap(); // a key types lesson on Mentor Practice
-  setProject("practice2-before.json");
+  setProject("practice2b.json");
   const back = await snap();
   assert.equal(back.lesson, "resumed");
   assert.deepEqual(back.targets, [B(1), B(2), B(3)]);
@@ -105,7 +105,7 @@ test("the check grades per the answer key, marks the check only when the comp ma
   assert.equal(other.comp_matches, false);
   assert.equal(session.currentLesson().checked, undefined, "no markChecked on another comp");
 
-  setProject("practice2-before.json");
+  setProject("practice2b.json");
   await demo(B(1));
   setProject("blink-one-held.json");
   const r = await check();
@@ -120,7 +120,7 @@ test("the check grades per the answer key, marks the check only when the comp ma
 test("Edit > Undo of the demo, then the learner's own hold: credited to the learner (row 20)", async () => {
   await snap({ skill_options: BLINK });
   await demo(B(1));
-  fs.writeFileSync(stateFile, JSON.stringify({ project: source("practice2-before.json"), undo_demo: true }));
+  fs.writeFileSync(stateFile, JSON.stringify({ project: source("practice2b.json"), undo_demo: true }));
   const undone = await check();
   assert.equal(undone.pairs[0].verdict, "not_held");
   assert.equal(undone.demo_undone, true);
@@ -190,8 +190,8 @@ test("expression, not linear, not found, withdrawn: nothing noted, 0 marks", asy
   const cases = [
     ["practice-now.json", { focus: [{ layer: "Title", property: "Opacity" }] }, { layer: "Logo", property: "Rotation" }, "expression"],
     ["spinner-eased.json", BLINK, { layer: "Spinner", property: "Rotation" }, "not_linear"],
-    ["practice2-before.json", BLINK, { layer: "Nobody", property: "Rotation" }, "not_found"],
-    ["practice2-before.json", BLINK, null, null],
+    ["practice2b.json", BLINK, { layer: "Nobody", property: "Rotation" }, "not_found"],
+    ["practice2b.json", BLINK, null, null],
   ];
   for (const [file, opts, cs, verdict] of cases) {
     for (const f of [LEARNER, SESSION, EDITS]) fs.rmSync(f, { force: true });

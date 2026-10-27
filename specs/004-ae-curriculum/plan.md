@@ -239,6 +239,13 @@ Nothing under `bridge/` changes.
 
 Waves B and C don't depend on each other.
 
+**Loose ends on skills 2, 1 and 3 (2026-10-26).** Seven fixes from their first live lessons (spec
+FR-039 to FR-045, SC-014; research R24, R25), tasked in tasks-wave-b.md › Phase 9 (T167 to T185):
+one more shared-owner pass, same rules as B1, merged with `--shared-owner` after the easing gate
+(T183). It changes `common.mjs`, `session.mjs`, `server.mjs`, three skills' tool files and five
+`SKILL.md` files (table in Phase 9), adds `mentor/lib/server-current.mjs` and four test files, and
+leaves skills 5 and 6's files to Later per-skill branches.
+
 **Open questions for wave B, all answered 2026-10-23 as recommended** (tasks-wave-b.md › Status),
 Q1 to Q5: the sampled read R3 (yes); the planted-overlaps comp in the practice `.aep`
 (yes); skills 1 to 3's filter switch in this pass (yes); the eval gate against the same-day merge

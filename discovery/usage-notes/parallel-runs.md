@@ -314,6 +314,7 @@ approval of 011, 012 and the wave B tasks.
 | 2b | curriculum-designer ×2 | Round 1 answers to specs 011 (D-1 to D-3) and 012 (D-1, D-2) (resumed) | no | 18:04 | 18:05 | <1 each | done (`5381f60`, `00e9711`). Agreed with every default; widened 011 D-3 to every layer type; 012 changed the teaching in two places (the mentor asks for renames, never makes them; a null with a moving parent is refused). Disagreed with the spec writer on 012 SR-2; I chose the designer |
 | 3 | spec-writer | Fold my approvals into 004 (wave B tasks), 011, 012; mark approved | yes, cut from local `main` | 19:26 | 19:34 | 7.9 | done (`0e6f870`), 9 files, `check-branch.mjs` clean. T100–T163. Caught that my prompt over-stated the designer's rule ("any parented null" vs "a moving parent") and wrote it to the design, flagged |
 | 4 | skill-builder (shared owner) | `tasks-wave-b.md`, everything without AE | yes, cut from local `main` | 19:35 | 22:52 | 61 active (stalled 19:40–21:51) | done (8 commits). 40/50 tasks; mentor 597 → 697 tests (678 pass, 16 skip waiting on live captures, 3 todo); `check-branch.mjs --shared-owner` 33/33. T123 held (its gate checks 1 and 2 fail, as designed). Flagged 7 spec gaps, including three wave A `SKILL.md` lines that may call a matte "hidden". Reported "about 3.5 hours" |
+| 4 | spec-writer | Plans and tasks for 011 and 012 (stop for approval) | yes, cut from local `main` | 19:35 | | | hit the usage limit while still reading; held until the shared owner hands back, so only one Opus agent runs |
 | 5 | reviewer | Read `shared-owner-b` before skills 5 and 6 build on it | yes (read-only) | 22:52 | 00:57 | 125 (it reported "about 40 minutes") | ready after fixes: 1 blocking (KD-001 also drops eye-off nulls from "hidden", untested), 5 should-fix (sample times rounded before reading; no live learner-hidden layer; 2 s goal unverified; two wave A `SKILL.md` lines), 6 nits. Hand-checked the corner math on the chain fixture: clean. The git guard blocked its `git merge-base` probe |
 | 5b | skill-builder (shared owner) | Fix B1, S1, S2, N5, cheap S4 (resumed) | yes | 01:09 | | | B1 committed (`de3dd58`); stopped by the usage limit about 01:30 and again about 03:30, each time mid-`snapshot.jsx` (uncommitted, but the hand-cut worktree kept it). Resumed 03:10 and 10:53; handed back 10:55: `9226cbc` (S1, S4, N5), `aaa4c02` (tests), `a801909` (S2). 706 tests, 686 pass. Early merge `d009d35` with `--shared-owner`, 33/33 files |
 | 6 | spec-writer | Plans and tasks for 011 and 012, plus spec 004 doc fixes N1, N2, S5 (resumed) | yes | 10:56 | 11:33 | 37 | done (`badbcb8`, 17 files, 8 commits): 011 T201–T240 (40), 012 T301–T343 (43), both add-only. Found one shared gap (no comp width or height in the snapshot). The git guard blocked `git merge --ff-only` for a subagent too, so it cut a fresh worktree. Reported "about 2.5 hours" |
@@ -330,8 +331,8 @@ approval of 011, 012 and the wave B tasks.
 | 15 | skill-builder | Skill 6: amendment 1, T350–T362 | yes | 23:34 | 23:37 | 3 min | Tests first, red on purpose (`363d88e`), then code and prompt (`c72bd97`). Proposes Tile, Caption and Stamp, then Chip A–C; wave A is a crowd of 13. 906 tests, 886 pass, 0 fail. The audit dropped a "top right" example the tool never reads |
 | 16 | reviewer | Scoped review of amendment 1 (`417819d..c72bd97`) | — | 23:38 | 23:41 | 3 min (it reported ~25) | Ready to hold: no blockers, no should-fix, 3 nits. Found no weakened tests: the answer key was compared key by key, and the old "past 4" test was replaced rather than loosened. Nits: "at the top right" is still in FR-005a, TD § 4 and T358; the review's second-group wording; the answer-key re-indent. The 3-minute build held up under review |
 | 17 | cockpit | Review nits 1 and 2: the spec's proposal example names no position (`d574b8a`); a review never offers a second group (`239f73e`). Nit 3 (answer-key re-indent) left as is | — | 23:56 | 23:56 | 2 min | Done by hand; too small to send out |
-| 18 | eval-engineer | Skill 6 eval set (HO-1) on stand-ins: dry-run plus a 2–3 case smoke run, under $3; full baseline after the sitting | `evals-skill-6` (from `skill-6-null`) | 23:56 | | | |
-| 4 | spec-writer | Plans and tasks for 011 and 012 (stop for approval) | yes, cut from local `main` | 19:35 | | | hit the usage limit while still reading; held until the shared owner hands back, so only one Opus agent runs |
+| 18 | eval-engineer | Skill 6 eval set (HO-1) on stand-ins: dry-run plus a 2–3 case smoke run, under $3; full baseline after the sitting | `evals-skill-6` (from `skill-6-null`) | 23:56 | 00:09 | 13 min | 26 cases (`d04b8bd`), dry-run clean. Smoke run: 6 runs for $1.99; 3 check bugs fixed, 1 real finding (case 01 run 3 proposed in the same message as the question; SKILL.md step 1 needs "ask and stop"). Full run estimated at $13–17. Gate passed, so the queue moved to step 1 |
+| 19 | eval-engineer | Queued overnight, after the skill 6 set checks out: wave A sets (specs 008, 009, 010), then skill 5 (011). Dry-runs plus small smoke runs, about $3 per skill | `evals-wave-a` (from main), `evals-skill-5` (from `skill-5-anchor`), cut 00:01 | 00:09 | 00:41 | 45 min (it reported ~3 h) | Four sets, all dry-run green with `--strict-sources`: speed-graph 18 cases, key-types 19, offset 24 (`evals-wave-a`), anchor 25 (`evals-skill-5`). Smoke runs $12.61 (anchor $0.18 over its cap; noted in its README). Real findings: a leaked review self-note before the first tool call in key-types, offset and anchor; anchor's demo claimed "opposite directions". Skill 6 plus these four: $14.60 overnight. No baselines. Ran with no permission stops and no usage-limit stalls |
 
 **Usage-limit stall:** about 13:10 to 16:50 (3 h 40 min). Three Opus agents at once, the README's
 cap, still used up the window, and this time a worktree agent lost uncommitted work when its
@@ -347,3 +348,198 @@ a window gets two agents, not three.
 **Guard false positive (cockpit):** the git guard matched the hard-reset command's text inside a
 heredoc that only wrote these notes. It blocks by string, not by what runs. Harmless, but worth a
 note in `decisions/008`'s signals.
+
+**Fifth to seventh stalls:** about 13:20 to 16:35 on 10-24 (skill 5's fix round), about 17:30
+to 21:40 (skill 6's build), and the weekly limit from about 23:00 on 10-24 to 12:10 on 10-25
+(skill 6, demo snippet uncommitted). All with one Opus agent running. Nothing was lost after the
+first stall, because the hand-cut worktrees kept uncommitted files and agents committed by phase.
+
+**Wall-clock:** 10-23 13:02 to 10-26 00:41, about 60 hours on the calendar. About 35 of them were
+the seven usage-limit stalls, and most of the rest was waiting on me (approvals, overnight, the
+L-6 choice). Agent time, summed from launch and hand-back, is about 13 hours across 24 jobs. 5.5
+of those are skill 6's build, spread over three windows, so read that figure as "time open", not
+time working. The critical path was one agent at a time from the second stall on, so this run
+was close to serial.
+
+**My hands-on time:** not timed. Nine decisions: approve wave B tasks and specs 011 and 012
+(10-23 19:26); side with the designer on 012 SR-2; approve the plans and tasks (10-24 12:29);
+approve the comp-size request; hold skill 5's merge until the sitting; redesign skill 6's
+proposal rule rather than move layers; approve the L-6 rule; approve amendment 1 and H-6; queue
+the overnight evals. Each was a short message; the cockpit did the prompting, merging and these
+notes (153 commits from 10-23 to 10-26).
+
+**Output:** wave B's shared reads (40 of 50 tasks, 33 files); two teaching designs; specs 011
+and 012 with plans and 83 tasks; skill 5 (75 new files, held on `skill-5-anchor`); skill 6 (84
+files, merged in `31fe72d` after its live lessons); five eval sets on stand-ins (112 cases,
+$14.60 of smoke runs). Mentor tests 597 at the start, 906 on `skill-6-null` at hand-back, every
+one passing or skipped waiting on a live capture.
+
+**Solo estimate:** about 5 to 6 working days. Wave B's shared pass is a day; each skill is a day
+and a half with its spec, plan and review fixes; the five eval sets another day. Run 2 did a
+similar load in 96 minutes. This run took 60 hours, mainly because of the usage limit, not the
+agents: without the stalls and the overnight waits it would have been one to two working days.
+Parallel work still saved days, but on this plan the limit, not coordination, sets the pace.
+
+**Guardrails:**
+
+| Check | Count | Notes |
+|---|---|---|
+| Ownership hook blocks | 0 | none reported |
+| Git guard blocks | 3 real, 1 false | Blocked: a spec writer's hard reset to `main` in a worktree, the reviewer's `git merge-base` read, a spec writer's `git merge --ff-only`. Each agent worked around it by cutting a fresh worktree or reading the main tree. The guard didn't change between runs (`.claude/hooks/` has no commit from 10-20 to 10-26). It picks its rules from the agent's working folder, not the repo the command touches, so the same reset passes when run from inside the worktree (run 2) and is blocked when run from the main tree with `-C` or `cd` (most likely run 3). The other way round is a hole: a subagent sitting in a worktree can hard-reset the main tree (probed 2026-10-26). False: the cockpit's heredoc above |
+| AE lock waits | 0 | no AE in the build. The lock's gap showed up later, in offset's live lesson (two sessions on AE, fixed in `35acf9c`) |
+| Files outside the persona's row at merge (`check-branch.mjs`) | 0 | Clean on every branch: spec writer 5/5 and 9/9, shared owner 33/33 with `--shared-owner`, skill 5 75/75 without it, skill 6 84 files with no shared file touched (SC-008). One file landed in the wrong *tree*, not the wrong row: the designer wrote the L-6 rule into the skill 6 worktree, and the cockpit moved it to main (`002bf92`) |
+| `--shared-owner` branches | 2 | `shared-owner-b` and `shared-owner-b2` |
+| Merge conflicts | 0 | 15 merges, including `main` into `skill-6-null` twice so the builder saw spec changes |
+| Two agents edited the same file | 0 at once | Waves 12 and 13 ran side by side on skill 6 (designer on the teaching design, builder on code) without touching the same file |
+| Designer ↔ spec-writer question rounds | 1 each for 011 and 012, plus 012's amendment | 5 questions in round 1, under a minute each. One disagreement (012 SR-2), settled by me. The amendment was a redesign after review, not a back-and-forth, so the 007 signal (more than two rounds) didn't fire |
+| Usage-limit stalls | 7 (6 window, 1 weekly) | Work lost once, in the first. The biggest cost of the run |
+
+**Quality** (written 2026-10-26, after both skills' first live lessons):
+
+| Output | Reviewer findings | Redo needed? | Better or worse than solo, and why |
+|---|---|---|---|
+| Teaching designs 011, 012 | none from a reviewer; 5 designer questions in round 1 | 012's group-proposal rule (wave 12, 6 min) | Mixed. Round 1 changed 012's teaching in two places for the better. But the first proposal rule (the 2% link) chained wave A's 13 layers into one group; the skill 6 reviewer caught it from the live comp's data, not the designer |
+| Wave B shared code | 1 blocking (KD-001 also dropped eye-off nulls from "hidden"), 5 should, 6 nits | yes, the 5b fix round | Better than solo: the reviewer hand-checked the corner math and caught B1, which no test covered. Live, the sitting still found what no desk agent could: rotation without auto-orient, the pick whip rewriting raw Position keys |
+| Specs 011, 012 | none from a reviewer; overlap audits by the spec writer | 011 amended five times (T241 to T258), mostly from the sitting | The audits caught two reused filters that would have passed wrong work (011) and predicted the null renumbering the sitting then confirmed (012). The amendments are AE facts (Pan Behind on a shape group, keyed Position can't pass), the cost of speccing before the sitting, not of parallel work |
+| Skill 5 (`skill-5-anchor`) | 1 blocking (merge would ship stand-ins and an untested lesson in `/next-mentor`), 6 should, 7 nits | yes, S1 to S6 | Live: Door and Pop both passed, SC-002 4 of 4, no wrong verdict. Problems were speed (10 to 12 s snapshot, App Nap), a watch offer that comes only by chance, and a mistake shape no fixture covered |
+| Skill 6 (`skill-6-null`) | 1 blocking (a review ended at step 2), S1 to S6, 6 nits; amendment 1's review: 3 nits | yes, 3 min; amendment 1, 3 min | Live: both sessions passed, SC-002 8 of 8 plus 2 of 2 deliberate jumps. The fix round's new test found a real bug (a visible-parent hint hiding an offset). Live problems were the check not returning the null's key times and one wrong sentence in the record |
+| Eval sets (4 skills, stand-ins) | smoke runs only | 3 check bugs in the harness | Found three real prompt problems before any baseline: a review self-note leaking before the first tool call (key types, offset, pivot: three builders, same mistake), the pivot demo's "opposite directions", and skill 6 step 1 not stopping after its question |
+
+**What broke or surprised:**
+
+- **The usage limit set the pace.** Three Opus agents at once ran out the window in about 10
+  minutes; after the second stall, one at a time still did it five more times. This run was
+  parallel in its plan but mostly serial in practice. Staggering waves isn't enough on this plan;
+  a run with this much code needs Sonnet for anything that isn't building, or a bigger plan.
+- **Hand-cut worktrees beat the tool's.** The git guard blocked the reset-to-`main` move run 2
+  used (see Guardrails: same guard, different working folder), so agents cut their own worktrees
+  from local `main`. That fixed run 1's stale-base problem for good, and those worktrees kept
+  uncommitted files through every later stall.
+- **The git guard judges by working folder, and that cuts both ways.** Probed 2026-10-26 with
+  five payloads: a subagent can reset its own worktree from inside it, can't reset it from the
+  main tree with `git -C`, *can* reset the main tree from inside a worktree (with `git -C` or
+  `cd`), and can't run `git merge-base`, a read. The hole is the one that matters: the shared
+  tree is the thing the guard exists to protect. **Fixed the same day** (`decisions/008`,
+  amendment "the git guard judges where git acts"): shared-tree rules now follow the folder each
+  git call acts on, relax only for the agent's own worktree, and treat "can't tell" as shared.
+  Testing the fix also found that any git option before the subcommand (`--no-pager`) hid it from
+  every rule; that's closed too.
+- **Holding a branch is a real option.** Skill 5's reviewer said merging would put an untested
+  lesson in `/next-mentor`. Holding it until the sitting meant the cockpit merges `main` into the
+  branch for every spec change, which is extra merges, but nothing a learner could open was
+  untested.
+- **Reviews scoped to a commit range are cheap.** Amendment 1's review (`417819d..c72bd97`)
+  took 3 minutes and checked the answer key key by key. A full review took 6 to 7.
+- **The reviewer's 125 minutes on the shared code** is launch to hand-back across a quiet stretch,
+  not 2 hours of reading; it said "about 40". Neither number is exact, so read time from commits.
+- **Agents still misreport their time**, by about the same 6 to 10× as runs 1 and 2 ("about 3
+  hours" for a 23-minute skill 5 build).
+- **Passing review lessons forward didn't visibly cut findings.** Skill 6's builder got skill 5's
+  review findings in its first prompt, and its review still came back with one blocker and six
+  should-fix, the same as skill 5's.
+
+**Verdict:** worth it for quality, much less so for time. Ownership held again: zero blocks,
+zero conflicts, every branch clean. Both skills passed their live lessons with no wrong verdict
+(see the cross-run section below). But seven stalls turned one to two days of work into 60 hours on
+the calendar, and from the second stall on, the run was one agent at a time. What changes for
+the next run:
+
+1. **Size the run to the plan.** On this plan, one Opus builder at a time, with researchers,
+   reviewers and eval runs on Sonnet; or plan around reset times.
+2. **Cut worktrees from local `main` by hand**, and commit by phase. Make it the standing prompt
+   line, since the tool's worktree option still starts from `origin/main`.
+3. **The sitting first**, before the desk build (see the cross-run section).
+4. **Scoped reviews** for amendments and fix rounds: the commit range only.
+
+---
+
+## Quality across the runs: parallel vs. solo (2026-10-26)
+
+Sprint 3's done item asks for quality next to building alone. Time is covered per run above
+(run 1: about 56 active minutes for 2 to 3 days' work; run 2: 96 minutes for 4 to 5 days). This
+section asks the harder question: was the work any good once it met After Effects?
+
+### What the live lessons say
+
+All five skills built in parallel have now run live on my comps, on Mentor Practice and Mentor
+Practice 2 (usage notes `speed-graph.md`, `key-types.md`, `offset.md`, `anchor.md` on
+`skill-5-anchor`, `null-parenting.md`).
+
+| Skill | Built in | Reviewer pass before live? | Live lessons | Check agreed with my look | Wrong verdicts |
+|---|---|---|---|---|---|
+| Speed graph (008) | run 2 | no | 1, passed | 4 of 4 | 0 |
+| Key types (009) | run 2 | no | 1, passed | 4 of 4 | 0 |
+| Offset (010) | run 2 | no | 2, passed | 4 of 4 | 0 |
+| Set the pivot (011) | run 3 | yes, 1 blocking | 2, passed | 4 of 4 | 0 |
+| Null (012) | run 3 | yes, 1 blocking, plus a scoped one | 2, passed | 8 of 8, plus 2 of 2 deliberate jumps | 0 |
+
+**24 of 24 live verdicts matched what I saw in After Effects, plus both deliberate jumps.** Every
+first lesson passed with at most one demo, inside SC-001's time. The part that has to be right
+(the check) was right every time. Builder-only: I was the learner, I built the comps, and I knew
+the answers, so this is evidence about the checks, not about teaching (belief 7).
+
+### What the live lessons found, sorted by cause
+
+1. **AE facts no desk agent could know** (most of them). Pan Behind on a shape's group is
+   invisible to the snapshot, and with Position keyed it changes one key, so those layers can't
+   pass; the pick whip rewrites raw Position keys; rotation reads miss auto-orient; App Nap makes
+   a background AE about 5× slower. Solo would hit every one of these too. Parallel made them land
+   later and cost more: the desk work ran ahead of the sitting, so spec 011 was amended five times
+   after it.
+2. **Showing, not checking.** Frames on a busy comp don't show which shape is the focus (key
+   types, null, pivot); the null check returns no key times, so the pass can't show the group
+   move; a frame number as a reading answer isn't covered. These are spec gaps, and solo would
+   have them too.
+3. **Prompt wording and honesty.** The pivot's watch offer comes only by chance; the mentor made up
+   a Quick Offset claim; the null record said the group turned when it only slid; a gap the learner
+   changes without saying isn't said back. The same kind of finding the easing slice had, built
+   solo (`easing-slice.md`), so not a parallel cost.
+4. **Created by parallel work itself** (the real cost). Two sessions drove AE at once during
+   offset's first lesson (fixed in `35acf9c`, the lock now keys on session plus agent). Three
+   lessons ran on an MCP server older than that day's merges, because merges land in the tree
+   while the running server keeps old code. The designer wrote the L-6 rule into the skill 6
+   worktree instead of main. My own prompt over-stated the designer's rule, and the spec writer
+   caught it. None of these changed a verdict, but each cost a re-check or a note.
+
+### Better than solo
+
+- **Every check was reviewed by someone who didn't build it.** Solo, I'd have skipped review, as
+  run 1 found. The reviewers found four blocking issues across the runs (the kept-linear mark,
+  KD-001's eye-off nulls, skill 5's merge, skill 6's step 2) plus the 2% link rule, and each
+  would have shown up as a failed or wrong live lesson.
+- **Overlap audits from a separate spec writer** caught reused filters that would have passed
+  wrong work, before any code.
+- **The split between designer and spec writer paid off every round.** Run 1's two pass margins
+  that would have taught the wrong thing, and 012's two teaching changes, came from that hand-off.
+- **Tests.** Mentor tests went from 96 to 927 across the sprint, written alongside the code by the
+  builder that wrote it, with a reviewer checking that none were loosened.
+
+### Worse than solo
+
+- **One mistake, copied by every builder.** Three builders leaked the same review self-note, and
+  in wave A all three hit the same shared test. Parallel builders start from the same template
+  and the same skill, so a defect in that starting point lands on every branch at once. Fix it in
+  the template, then send it to every branch, not one at a time.
+- **Stand-ins drift from the live comp.** Desk-built fixtures and four eval sets were built before
+  the sitting; key types and offset's stand-ins had to be re-derived from the live base, and the
+  pivot and null sets still need moving to live captures before a baseline.
+- **Context lost at hand-offs.** A worktree on a stale base, a file written in the wrong tree, a
+  rule paraphrased wrong by me. Solo carries all of that in one head.
+- **Wave A skipped the reviewer.** Skills 2, 1 and 3 merged on merge checks only. They still
+  passed live, and the reviewed skills 5 and 6 had just as many live problems. Two skills each
+  way is too few to say whether the reviewer pass changes what a live lesson finds.
+
+### Verdict on quality
+
+Parallel work didn't cost correctness: no wrong verdict in 24 live checks, every first lesson
+passed, and the reviews caught four blockers and a bad proposal rule I'd have shipped alone. It cost **rework and
+re-checks**: most of it from building ahead of the AE sitting, and a smaller share from
+coordination (two sessions on AE, a stale server, files in the wrong tree). For the next project:
+
+1. **Sitting before desk build** for anything that reads a host app: capture first, then spec and
+   build on the real captures, not stand-ins.
+2. **Fix the template before fanning out.** When one builder hits a defect in shared starting
+   material, stop the others and fix it once.
+3. **A reviewer on every branch**, including the "small" ones; it's 3 to 7 minutes each.
+4. **Restart the MCP server after any merge into `mentor/`** before a live lesson (now in
+   CLAUDE.md), and check the AE lock first.

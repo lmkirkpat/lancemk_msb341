@@ -11,6 +11,7 @@ import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { assemble } from "../bridge-client.mjs";
 import { apply, run } from "../fixture/offset-demo.mjs";
+import { transformFirst } from "../lib/offset.mjs";
 import { clone, load, PRACTICE2 } from "./fixtures/offset/load.mjs";
 
 const JSX = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "jsx", "offset-demo.jsx");
@@ -183,12 +184,15 @@ test("the twin's apply on part of a layer moves only those paths", () => {
   assert.equal(dot2(s).properties.find((p) => p.display_name === "Position").keys[0].time, 0.5);
 });
 
-test("the twin's run saves the edit and returns what moved", () => {
+test("the twin's run saves the edit and returns what moved, in the order the tool sends (Transform first)", () => {
   const saved = [];
-  const r = run({ comp_id: 300, layer_index: 6, property_paths: dot2(mp2).properties.map((p) => p.path), shift_frames: 4 }, { snapshot: clone(mp2), saveEdit: (e) => saved.push(e) });
+  // The tool sends the paths Transform first (lib/offset.mjs › transformFirst); the twin, like the
+  // snippet, keeps the order it's given.
+  const paths = transformFirst(dot2(mp2).properties.map((p) => p.path), (p) => p);
+  const r = run({ comp_id: mp2.comp.id, layer_index: 6, property_paths: paths, shift_frames: 4 }, { snapshot: clone(mp2), saveEdit: (e) => saved.push(e) });
   assert.deepEqual(r, { layer: "Dot 2", properties: ["Position", "Opacity", "Blurriness"], shift_frames: 4, keys_moved: 6 });
   assert.equal(saved.length, 1);
-  assert.deepEqual(saved[0].property_paths, dot2(mp2).properties.map((p) => p.path));
+  assert.deepEqual(saved[0].property_paths, paths);
 });
 
 for (const [why, args, change] of [
@@ -203,7 +207,7 @@ for (const [why, args, change] of [
     const s = clone(mp2);
     if (change) change(s);
     assert.throws(
-      () => run({ comp_id: 300, layer_index: 6, property_paths: dot2(mp2).properties.map((p) => p.path), ...args }, { snapshot: s, saveEdit: (e) => saved.push(e) }),
+      () => run({ comp_id: mp2.comp.id, layer_index: 6, property_paths: dot2(mp2).properties.map((p) => p.path), ...args }, { snapshot: s, saveEdit: (e) => saved.push(e) }),
       (e) => e.code === "OFFSET_REFUSED" && e.reason === why && !/_/.test(e.message),
     );
     assert.equal(saved.length, 0);

@@ -86,6 +86,8 @@ the learner says. `expect` holds the deterministic checks:
 | `tools_called` | each tool was called at least once |
 | `last_turn_tools_not_called` | none of these were called in the last turn |
 | `last_turn_tools_called` | each of these was called **successfully** in the last turn (spec 003, case 20) |
+| `targets_include` | each segment id is in the `targets` of some successful `snapshot_project` (case 26) |
+| `never_said_near` | no sentence naming the `layer` matches the `pattern` regex, e.g. Wipe and "hidden" (case 26) |
 | `record_lesson` | `null`: nothing was recorded. Otherwise, the last recorded lesson has these field values |
 
 In eval turns the mentor gets only `ToolSearch` and the six `ae-mentor` tools (`--tools
@@ -140,6 +142,9 @@ cost $0.27 and took 13 s. The cost per turn grows with the conversation. At ~$0.
 That's why the runner skips the judge after a deterministic failure and supports `--changed`
 (research R6).
 
+**Case 26 · matte, eye off** (spec 004, cross-skill 3, KD-001) is the regression check for a
+track matte being called "hidden". Turn 2 asks for Wipe so the matte is the lesson's focus.
+
 ## Fixtures (T037, 2026-10-05)
 
 These are raw snapshots of the live project, captured with `node mentor/dev/capture.mjs <out>`.
@@ -159,6 +164,7 @@ re-capture.
 | `half-eased.json` | **Derived, not captured** (2026-10-06): `after-demo.json` plus F9 on the shared 1.5 s Position key only. Position 1.5–3 s is eased at 1.5 s and still linear at 3 s | demo eased, 1 half eased, 2 still linear |
 | `title-done.json` | Demo, plus every other Title pair eased | pass |
 | `redone.json` | **Derived, not captured** (2026-10-06): `title-done.json` with the demo pair's 0.5 s side changed from the demo's 33.33 to F9's 33.333, as if the learner undid the demo and eased it with F9. Use with `"undo_demo": true` so fixture mode doesn't re-apply the demo | pass, all 4 the learner's |
+| `matte.json` | **Mentor Overlaps**, live capture of 2026-10-26 (a copy of `mentor/test/fixtures/layer-info/overlaps.json`, so it doesn't change if that moves). Wipe is a track matte with its eye off and linear Position keys 0.6–1.6 s; Rig and Draft are hidden by the learner; 12 linear pairs | Wipe is in the findings and targets, not in the hidden layers (case 26) |
 | `all-eased.json` | "Comp 1", the original comp: 4 eased pairs, nothing linear | nothing to ease |
 | `other-comp.json` | Same capture as `all-eased.json`, used as "a different comp is active" | `comp_matches: false` |
 

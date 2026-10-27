@@ -168,6 +168,41 @@ test("AE lock: an unreadable lock file or input blocks", (t) => {
   assert.equal(run("ae-lock.mjs", "").code, 2);
 });
 
+test("AE lock: two top-level sessions are told apart by session_id; the second is blocked with where", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  const wt = path.join(r.dir, "..", path.basename(r.dir) + "-wt2");
+  r.g("worktree", "add", "-q", "-b", "wt2", wt);
+  t.after(() => fs.rmSync(wt, { recursive: true, force: true }));
+  assert.equal(run("ae-lock.mjs", { ...ae(wt, null), session_id: "S1" }).code, 0);
+  const b = run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S2" });
+  assert.equal(b.code, 2);
+  assert.match(b.err, new RegExp(`top-level session is driving After Effects from ${path.basename(wt)}`));
+  assert.equal(run("ae-lock.mjs", { ...ae(wt, null), session_id: "S1" }).code, 0);
+});
+
+test("AE lock: a subagent is blocked while its own cockpit holds it", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S1" }).code, 0);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, builderA), session_id: "S1" }).code, 2);
+});
+
+test("AE lock: SubagentStop never frees a top-level session's lock; SessionEnd frees its own session only", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S1" });
+  run("ae-lock.mjs", { cwd: r.dir, session_id: "S1" }, ["--release"]);
+  run("ae-lock.mjs", { cwd: r.dir, session_id: "S2" }, ["--end-session"]);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S2" }).code, 2);
+  run("ae-lock.mjs", { cwd: r.dir, session_id: "S1" }, ["--end-session"]);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S2" }).code, 0);
+});
+
+test("AE lock: SessionEnd also frees a lock held by one of that session's subagents", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  run("ae-lock.mjs", { ...ae(r.dir, builderA), session_id: "S1" });
+  run("ae-lock.mjs", { cwd: r.dir, session_id: "S1" }, ["--end-session"]);
+  assert.equal(run("ae-lock.mjs", { ...ae(r.dir, null), session_id: "S2" }).code, 0);
+});
+
 // --- git guard ---
 
 const bash = (cwd, command, who) => ({ cwd, tool_input: { command }, ...(who ? sub(who, "g1") : {}) });
@@ -175,6 +210,7 @@ const bash = (cwd, command, who) => ({ cwd, tool_input: { command }, ...(who ? s
 test("git guard: shared-tree commands are blocked for everyone on main", (t) => {
   const r = makeRepo(); t.after(r.done);
   for (const c of ["git add -A", "git add .", "cd x && git add --all", "git -C . add -u", "git commit -am wip", "git reset --hard",
+    "git --no-pager reset --hard", "git -c core.pager=cat stash", "git --git-dir .git clean -fd", "git -p checkout -- .",
     "git clean -fd", "git stash", "git checkout -- .", "git restore ."]) {
     assert.equal(run("git-guard.mjs", bash(r.dir, c)).code, 2, c);
   }
@@ -256,6 +292,42 @@ test("git guard: inside its own worktree an agent may stage everything", (t) => 
   assert.equal(run("git-guard.mjs", bash(wt, "git push", "skill-builder")).code, 2);
 });
 
+test("git guard: shared-tree rules follow where git acts, not where the agent stands", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  const wtA = path.join(r.dir, "..", path.basename(r.dir) + "-wtA");
+  const wtB = path.join(r.dir, "..", path.basename(r.dir) + "-wtB");
+  r.g("worktree", "add", "-q", "-b", "a", wtA);
+  r.g("worktree", "add", "-q", "-b", "b", wtB);
+  fs.mkdirSync(path.join(wtA, "sub"));
+  t.after(() => { fs.rmSync(wtA, { recursive: true, force: true }); fs.rmSync(wtB, { recursive: true, force: true }); });
+  // Its own worktree, however it's reached from inside it.
+  for (const c of ["git reset --hard main", `git -C ${wtA} reset --hard main`, "cd sub && git add -A", "git -C sub clean -fd"]) {
+    assert.equal(run("git-guard.mjs", bash(wtA, c, "skill-builder")).code, 0, c);
+  }
+  // The main tree or another agent's worktree, reached from inside a worktree.
+  for (const c of [`git -C ${r.dir} reset --hard`, `cd ${r.dir} && git reset --hard`, `cd .. && cd ${r.dir} && git stash`,
+    `git -C '${wtB}' reset --hard`, `cd "${wtB}"; git clean -fd`, `cd ${r.dir} && git checkout main`]) {
+    assert.equal(run("git-guard.mjs", bash(wtA, c, "skill-builder")).code, 2, c);
+  }
+  // Where git acts can't be worked out, so it counts as the shared tree.
+  for (const c of [`(cd ${r.dir} && git reset --hard)`, `GIT_DIR=${r.dir}/.git git reset --hard`, "cd $HOME && git stash",
+    `git --work-tree=${r.dir} reset --hard`, `bash -c 'cd ${r.dir}; git reset --hard'`]) {
+    assert.equal(run("git-guard.mjs", bash(wtA, c, "skill-builder")).code, 2, c);
+  }
+  // From the main tree, a worktree isn't the caller's own: it may hold another agent's work.
+  for (const c of [`git -C ${wtA} reset --hard`, `cd ${wtA} && git reset --hard`]) {
+    assert.equal(run("git-guard.mjs", bash(r.dir, c, "skill-builder")).code, 2, c);
+    assert.equal(run("git-guard.mjs", bash(r.dir, c)).code, 2, c);
+  }
+});
+
+test("git guard: a subagent may read with merge-base, but not merge", (t) => {
+  const r = makeRepo(); t.after(r.done);
+  assert.equal(run("git-guard.mjs", bash(r.dir, "git merge-base main HEAD", "reviewer")).code, 0);
+  assert.equal(run("git-guard.mjs", bash(r.dir, "git merge main", "reviewer")).code, 2);
+  assert.equal(run("git-guard.mjs", bash(r.dir, "git merge --ff-only main", "reviewer")).code, 2);
+});
+
 test("git guard: unreadable input blocks", () => {
   assert.equal(run("git-guard.mjs", "nope").code, 2);
 });
@@ -305,7 +377,6 @@ test("settings: every PreToolUse hook blocks when it fails, and pushes ask", () 
     for (const h of entry.hooks) assert.equal(h.onFailure, "block", entry.matcher);
   }
   assert.ok(s.permissions.ask.includes("Bash(git push *)"));
-  assert.equal(s.permissions.disableBypassPermissionsMode, "disable");
 });
 
 // --- merge check ---

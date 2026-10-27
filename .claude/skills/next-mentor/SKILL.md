@@ -29,16 +29,20 @@ recommendation.)
 
 ## Steps
 
-1. **Remember.** Call `read_learner_record`. It's for your own planning; don't recite it. If it
-   returns `RECORD_UNREADABLE`, say once, in the error's words, that you couldn't read your notes
-   from before, and carry on.
+1. **Remember.** Call `read_learner_record`. Before anything else (this comes before every branch
+   below): if it (or a later snapshot) returns `server_current` false, say once, in plain words,
+   that your tools were updated since this session started and you need a restart (a new Claude
+   Code session) before going on, then stop; true or null says nothing. The record is for your own
+   planning; don't recite it. If it returns `RECORD_UNREADABLE`, say once, in the error's words,
+   that you couldn't read your notes from before, and carry on.
 
 2. **Ask for the recommendation.** Call `recommend_next`. If the learner already named a skill
    they want ("can I learn the speed graph?"), pass it as `requested_skill`, by its name as they
    said it or its ID.
 
-3. **Say it in at most two sentences, with the reason.** Use `recommendation.skill_name` and what
-   the `reason` means:
+3. **Say it in at most two sentences, with the reason.** Two sentences in all, the question
+   included: the skill and the layers with the reason, then the offer. Don't describe the skill
+   in a sentence of its own. Use `recommendation.skill_name` and what the `reason` means:
    - In progress: "You were partway through *Easing* last time, so let's pick that back up on
      Title."
    - A review that's due: "It's been a few days since you learned *Pick the key type on purpose*;

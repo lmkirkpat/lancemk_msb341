@@ -5,12 +5,13 @@
 
 import { runSnippet } from "../bridge-client.mjs";
 import { MentorError } from "../errors.mjs";
-import { parseHost } from "../lib/host.mjs";
-import { analyze, check, demoRefusal, finder, refused, SKILL } from "../lib/offset.mjs";
+import { atLeast, parseHost } from "../lib/host.mjs";
+import { analyze, check, demoRefusal, finder, refused, SKILL, transformFirst } from "../lib/offset.mjs";
 import { matchLayer } from "../lib/offset-keys.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
+import { serverCurrent } from "../lib/server-current.mjs";
 
 export const SKILLS = [SKILL];
 
@@ -45,10 +46,14 @@ async function offsetSnapshot({ mode = "lesson", focus_layers, skill_options } =
   // from, so a continued lesson still describes the group as it was before the learner moved it.
   const base = lesson === "new" ? analysis : analyze(s.baseline, { focus_layers, exclude: s.exclude || [], skill_options: s.skill_options || {} });
   const fps = s.baseline.comp.frame_rate;
+  const host = parseHost(snapshot);
   return json({
     lesson,
     mode: s.mode,
-    host: parseHost(snapshot),
+    host,
+    // FR-017: Quick Offset may be offered only when the version is known and 25.4 or later (L-1
+    // confirmed the gesture at 26.5). Decided here, so the skill never compares versions itself.
+    quick_offset: atLeast(host, "25.4"),
     project: snapshot.project,
     comp: { name: snapshot.comp.name, duration: snapshot.comp.duration, frame_rate: snapshot.comp.frame_rate },
     group: base.group,
@@ -66,6 +71,7 @@ async function offsetSnapshot({ mode = "lesson", focus_layers, skill_options } =
     no_demo_reason: s.mode === "review" ? (s.targets.length ? "review" : "no_new_target") : s.demo ? null : base.no_demo_reason,
     frame_together: base.frame_together,
     ...(base.gap_frames != null ? { floor_check: { gap_frames: base.gap_frames, gap_seconds: r3(base.gap_frames / fps), gap_under_floor: base.gap_under_floor } } : {}),
+    server_current: await serverCurrent(), // FR-044
   });
 }
 
@@ -88,6 +94,7 @@ function demoPlan(lesson, current, target) {
     const inUnit = (p) => (unit === "Position" ? /^ADBE Transform Group\/ADBE Position_[012]$/.test(p.path) : p.display_path === unit);
     paths = cl.properties.filter(inUnit).map((p) => p.path);
   }
+  paths = transformFirst(paths, (p) => p); // the demo's result lists them in this order too
   const keyed = cl.properties.filter((p) => paths.includes(p.path));
   const from = Math.min(...keyed.flatMap((p) => p.keys.map((k) => k.time)));
   return { layer: cl, property_paths: paths, from };
