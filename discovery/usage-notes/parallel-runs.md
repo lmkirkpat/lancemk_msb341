@@ -419,8 +419,11 @@ Parallel work still saved days, but on this plan the limit, not coordination, se
   five payloads: a subagent can reset its own worktree from inside it, can't reset it from the
   main tree with `git -C`, *can* reset the main tree from inside a worktree (with `git -C` or
   `cd`), and can't run `git merge-base`, a read. The hole is the one that matters: the shared
-  tree is the thing the guard exists to protect. Fix: decide "shared or not" from the folder git
-  will act on (`-C`, a leading `cd`), and block when that can't be worked out.
+  tree is the thing the guard exists to protect. **Fixed the same day** (`decisions/008`,
+  amendment "the git guard judges where git acts"): shared-tree rules now follow the folder each
+  git call acts on, relax only for the agent's own worktree, and treat "can't tell" as shared.
+  Testing the fix also found that any git option before the subcommand (`--no-pager`) hid it from
+  every rule; that's closed too.
 - **Holding a branch is a real option.** Skill 5's reviewer said merging would put an untested
   lesson in `/next-mentor`. Holding it until the sitting meant the cockpit merges `main` into the
   branch for every spec change, which is extra merges, but nothing a learner could open was
