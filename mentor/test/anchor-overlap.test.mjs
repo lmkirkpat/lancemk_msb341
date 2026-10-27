@@ -74,7 +74,7 @@ test("row 5: Position keyed at two or more times is never (position_moves), ever
   assert.equal(moving.length, 16);
   for (const n of moving) assert.equal(cand(P2, n).reason, "position_moves", n);
   const a = analyze(P2, { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
-  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves" }]);
+  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "two_or_more" }]);
   // Synthetic, separated: one key on X at 1 s and one on Y at 2 s is two times.
   const sep = clone(fixture("sled-one-key-before"));
   sep.layers.find((l) => l.name === "Sled").properties = [

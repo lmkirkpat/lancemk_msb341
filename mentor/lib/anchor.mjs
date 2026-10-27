@@ -189,13 +189,33 @@ export function positionTimes(snapshot, kl) {
 // default, more than half a frame from it); else "position_keyed". Pan Behind changes or adds one
 // Position key, at the playhead (L-2), so a layer that already moves slides at its other keys and
 // no taught move can pass.
-export function positionRule(snapshot, kl, { rest_time } = {}) {
+export function positionRule(snapshot, kl, opts = {}) {
+  const pc = positionCase(snapshot, kl, opts);
+  return pc ? pc.rule : null;
+}
+
+// The Position rule with its case (FR-004 › Which position_moves case, B-9), so the rule lives in
+// one place: null with no Position keys; { rule: "position_keyed" }; or { rule: "position_moves",
+// moves_case }, where moves_case is "two_or_more", or "one_key_off_rest" with position_key_time (the
+// one key's time) and rest_time (the time it was compared against: the learner's rest_time when
+// restKey used it, else the tool's rest key).
+export function positionCase(snapshot, kl, { rest_time } = {}) {
   const times = positionTimes(snapshot, kl);
   if (!times.length) return null;
-  if (times.length >= 2) return "position_moves";
+  if (times.length >= 2) return { rule: "position_moves", moves_case: "two_or_more" };
   const rk = restKey(kl, { rest_time });
-  if (!rk) return "position_keyed";
-  return isNum(rk.time) && Math.abs(rk.time - times[0]) <= halfFrame(snapshot) ? "position_keyed" : "position_moves";
+  if (!rk) return { rule: "position_keyed" };
+  if (isNum(rk.time) && Math.abs(rk.time - times[0]) <= halfFrame(snapshot)) return { rule: "position_keyed" };
+  return { rule: "position_moves", moves_case: "one_key_off_rest", position_key_time: times[0], rest_time: isNum(rk.time) ? rk.time : null };
+}
+
+// The three moves_case fields of a position_moves entry, for spreading into a candidate or a
+// focus_problems entry; {} for any other reason.
+export function movesFields(c) {
+  if (!c || c.reason !== "position_moves" || !c.moves_case) return {};
+  return c.moves_case === "one_key_off_rest"
+    ? { moves_case: c.moves_case, position_key_time: c.position_key_time, rest_time: c.rest_time }
+    : { moves_case: c.moves_case };
 }
 
 function uniqueTimes(list) {
@@ -329,8 +349,9 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
     if (bucket !== "never" && !readable) [bucket, reason] = ["never", "cant_read"];
     else if (bucket === "default" && ff === true) [bucket, reason] = ["if_named", "full_frame"];
     const b = readable ? fp.bounds : null;
+    const moves = reason === "position_moves" ? movesFields({ reason, ...positionCase(snapshot, kl, { rest_time: rest_times[entry.name] }) }) : {};
     return {
-      layer: entry.name, index: entry.index, bucket, reason, rank: null,
+      layer: entry.name, index: entry.index, bucket, reason, rank: null, ...moves,
       class: cls, kind: entry.kind,
       parent: parents.length ? parents[0].layer : null,
       has_children: !!(src && src.children && src.children.length),
@@ -553,7 +574,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
     if (matches.length > 1) { result.focus_problems.push({ layer: name, problem: "name_not_unique" }); continue; }
     const c = list.find((x) => x.index === matches[0].index);
     if (!isPlace(entry.place)) { result.focus_problems.push({ layer: name, problem: "no_place" }); continue; }
-    if (WHY_NOT_TARGET.has(c.bucket)) { result.focus_problems.push({ layer: name, problem: "not_a_candidate", reason: c.reason }); continue; }
+    if (WHY_NOT_TARGET.has(c.bucket)) { result.focus_problems.push({ layer: name, problem: "not_a_candidate", reason: c.reason, ...movesFields(c) }); continue; }
     if (isExcluded(name, exclude)) { result.focus_problems.push({ layer: name, problem: "past_target" }); continue; }
     if (entry.rest_time !== undefined && c.check_time.rest_time_not_a_key) result.rest_time_not_a_key = [...(result.rest_time_not_a_key || []), name];
     const sample = sampleAt(byIndex(snapshot, c.index), c.check_time.time);

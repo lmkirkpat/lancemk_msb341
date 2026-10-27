@@ -178,7 +178,7 @@ test("anchor_check asks for the rest keys and Position key times of the focus", 
   // Sled already moves (three Position key times), so it's refused (D-4) and only Pop is a target.
   const s = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Pop", place: "bottom-middle" }, { layer: "Sled", place: "middle-left" }] } });
   assert.deepEqual(s.targets, [`anchor/${idx("Pop")}`]);
-  assert.deepEqual(s.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves" }]);
+  assert.deepEqual(s.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "two_or_more" }]);
   reads.length = 0;
   await call("anchor_check");
   assert.deepEqual(reads, [{ sample_times: [0, 4.3] }]);
@@ -198,6 +198,26 @@ test("the one-key lesson: Sled's tip carries its key's time, and anchor_check as
   assert.equal(r.passed, false);
   assert.deepEqual(r.layers[0].hints, want.hints);
   assert.equal(r.layers[0].item3.now, 0);
+});
+
+test("T254: anchor_snapshot passes moves_case and both times on a one-key layer off its rest key, in candidates and focus_problems; Door has none", async () => {
+  // Synthetic (marked in the file): the live sled-one-key-before with Scale keyed half size at 3 s
+  // and full size (the rest key) at 4.167, so its one Position key at 3.667 is off rest.
+  project(variant("sled-one-key-before", (x) => {
+    x.synthetic = "T254: sled-one-key-before with Scale keys at 3 (50%) and 4.167 (100%), so Sled's one Position key at 3.667 is off its rest key";
+    x.layers.find((l) => l.name === "Sled").properties.push({ path: "ADBE Transform Group/ADBE Scale", name: "Scale", expression_enabled: false,
+      keys: [{ index: 1, time: 3, value: [50, 50, 100] }, { index: 2, time: 4.167, value: [100, 100, 100] }] });
+  }));
+  const s = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
+  const sled = s.candidates.find((c) => c.layer === "Sled");
+  assert.deepEqual(sled, { layer: "Sled", bucket: "never", reason: "position_moves", rank: null, moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 });
+  assert.deepEqual(s.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 }]);
+  for (const c of s.candidates) if (c.reason !== "position_moves") assert.ok(!("moves_case" in c) && !("position_key_time" in c) && !("rest_time" in c), c.layer);
+  project("practice2b");
+  const d = await call("anchor_snapshot", { fresh: true, ...DOOR });
+  assert.deepEqual(d.candidates.find((c) => c.layer === "Door"), { layer: "Door", bucket: "default", reason: null, rank: KEY.practice2b.layers.Door.rank });
+  assert.deepEqual(d.candidates.find((c) => c.layer === "Sled").moves_case, "two_or_more");
+  assert.deepEqual(d.focus_problems, []);
 });
 
 test("two focus layers: the demo is on entry 1; off target, twice, or off the rest key it's refused before the snippet", async () => {

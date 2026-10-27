@@ -21,6 +21,8 @@ test("on Mentor Practice 2, every layer's bucket, reason, rank and place now are
     if (want.place_now !== undefined) assert.equal(c.place_now, want.place_now, `${name} place now`);
     if (want.check_time) assert.deepEqual(c.check_time, want.check_time, `${name} check time`);
     if (want.position_times) assert.deepEqual(c.keyed.position_times, want.position_times, `${name} Position key times`);
+    assert.equal(c.moves_case, want.moves_case, `${name} moves_case`);
+    if (c.moves_case === "two_or_more") assert.ok(!("position_key_time" in c) && !("rest_time" in c), `${name}: no times with two_or_more`);
   }
   assert.equal(Object.keys(got).length, P2.layer_info.length, "one entry per layer of layer_info");
 });
@@ -40,6 +42,7 @@ test("on Mentor Overlaps, the rows this skill reads land as the answer key says"
     assert.equal(got[name].reason, want.reason, `${name} reason`);
     if (want.rank !== undefined) assert.equal(got[name].rank, want.rank, `${name} rank`);
     if (want.position_times) assert.deepEqual(got[name].keyed.position_times, want.position_times, `${name} Position key times`);
+    assert.equal(got[name].moves_case, want.moves_case, `${name} moves_case`);
   }
 });
 
@@ -231,7 +234,7 @@ test("D-4: a learner rest_time off the one Position key's frame is refused with 
   assert.equal(sledOf(s).reason, "position_keyed", "the default rest key (Rotation 0) is on the Position key");
   const off = analyze(s, { skill_options: { focus: [{ layer: "Sled", place: "middle-left", rest_time: 4.167 }] } });
   assert.deepEqual(off.targets, []);
-  assert.deepEqual(off.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves" }]);
+  assert.deepEqual(off.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 }]);
   const on = analyze(s, { skill_options: { focus: [{ layer: "Sled", place: "middle-left", rest_time: 3.667 }] } });
   assert.deepEqual(on.targets, [`anchor/${indexOf(s, "Sled")}`]);
 });
@@ -239,9 +242,72 @@ test("D-4: a learner rest_time off the one Position key's frame is refused with 
 test("D-4: Sled on Mentor Practice 2 (three times) is refused with position_moves, gets no tip, and isn't a target", () => {
   const a = analyze(P2, { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
   assert.deepEqual(a.targets, []);
-  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves" }]);
+  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "two_or_more" }]);
   assert.ok(!a.notes.some((n) => n.note === "position_keyed_tip"));
   assert.equal(finder(P2).layers.includes("Sled"), false);
+});
+
+// ---- T254 (D-8, B-9): which position_moves case. Synthetic (marked here, built in memory from the
+// live sled-one-key-before, as T246's): Mentor Practice 2 has no one-key layer. Values by hand from
+// spec FR-004 and row 5b.
+
+const SCALE = "ADBE Transform Group/ADBE Scale";
+const ROT = "ADBE Transform Group/ADBE Rotate Z";
+const oneKey = { path: POS, keys: [key(3.667, [320, 960, 0])] };
+// Scale half size at 3 s and full size (the rest key, FR-011) at `restTime`.
+const scaleRest = (restTime) => ({ path: SCALE, keys: [key(3, [50, 50, 100]), { ...key(restTime, [100, 100, 100]), index: 2 }] });
+const MOVES_FIELDS = ["moves_case", "position_key_time", "rest_time"];
+const noMovesFields = (c, label) => { for (const f of MOVES_FIELDS) assert.ok(!(f in c), `${label}: no ${f}`); };
+
+test("T254 synthetic: one Position key at 3.667 with Scale's rest key at 4.167 is one_key_off_rest, with both times", () => {
+  const s = sledWith([oneKey, scaleRest(4.167)]);
+  const c = sledOf(s);
+  assert.deepEqual([c.bucket, c.reason, c.moves_case, c.position_key_time, c.rest_time], ["never", "position_moves", "one_key_off_rest", 3.667, 4.167]);
+  const a = analyze(s, { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
+  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 }]);
+  // Bucket, reason and neededTimes are as before (D-4): a never layer adds no time.
+  assert.ok(!neededTimes(s).includes(3.667) && !neededTimes(s).includes(4.167));
+});
+
+test("T254 synthetic: with Scale's rest key on the Position key (3.667) it's position_keyed, with none of the three fields", () => {
+  const c = sledOf(sledWith([oneKey, scaleRest(3.667)]));
+  assert.deepEqual([c.bucket, c.reason], ["if_named", "position_keyed"]);
+  noMovesFields(c, "on the key");
+});
+
+test("T254 synthetic: Rotation's rest key on the key and the learner's rest_time 4.167: the candidate and focus_problems are one_key_off_rest with the learner's time", () => {
+  const rot = { path: ROT, keys: [key(3.667, 0), { ...key(4.167, 90), index: 2 }] };
+  const s = sledWith([oneKey, rot]);
+  noMovesFields(sledOf(s), "the tool's rest key is on the Position key");
+  const c = sledOf(s, { rest_times: { Sled: 4.167 } });
+  assert.deepEqual([c.reason, c.moves_case, c.position_key_time, c.rest_time], ["position_moves", "one_key_off_rest", 3.667, 4.167]);
+  const a = analyze(s, { skill_options: { focus: [{ layer: "Sled", place: "middle-left", rest_time: 4.167 }] } });
+  const ac = a.candidates.find((x) => x.layer === "Sled");
+  assert.deepEqual([ac.moves_case, ac.position_key_time, ac.rest_time], ["one_key_off_rest", 3.667, 4.167]);
+  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "one_key_off_rest", position_key_time: 3.667, rest_time: 4.167 }]);
+});
+
+test("T254 synthetic: separated X at 1 s and Y at 2 s, and two hold keys, are two_or_more with no times", () => {
+  const sep = sledOf(sledWith([{ path: `${POS}_0`, keys: [key(1, 320)] }, { path: `${POS}_1`, keys: [key(2, 960)] }]));
+  const hold = sledOf(sledWith([{ path: POS, keys: [key(3.667, [320, 960, 0], true), { ...key(4.167, [420, 960, 0], true), index: 2 }] }]));
+  for (const [label, c] of [["separated", sep], ["hold", hold]]) {
+    assert.deepEqual([c.reason, c.moves_case], ["position_moves", "two_or_more"], label);
+    assert.ok(!("position_key_time" in c) && !("rest_time" in c), `${label}: no times`);
+  }
+});
+
+test("T254: Sled on Mentor Practice 2 as a focus is two_or_more in focus_problems; Door, Background (full_frame) and a matte carry no moves_case", () => {
+  const a = analyze(P2, { skill_options: { focus: [{ layer: "Sled", place: "middle-left" }] } });
+  assert.deepEqual(a.focus_problems, [{ layer: "Sled", problem: "not_a_candidate", reason: "position_moves", moves_case: "two_or_more" }]);
+  const got = byLayer(candidates(P2));
+  assert.equal(got.Background.reason, "full_frame");
+  assert.equal(got["Reveal Matte"].reason, "matte");
+  for (const n of ["Door", "Background", "Reveal Matte"]) noMovesFields(got[n], n);
+  // No entry with another reason carries any of the three, on either comp.
+  for (const c of [...candidates(P2), ...candidates(OV)]) if (c.reason !== "position_moves") noMovesFields(c, c.layer);
+  // A matte refused for its own reason (Reveal Matte is if_named, so named it's a target, not a problem).
+  const m = analyze(OV, { skill_options: { focus: [{ layer: "Wipe", place: "middle-left" }] } });
+  assert.deepEqual(m.focus_problems, [{ layer: "Wipe", problem: "not_a_candidate", reason: "position_moves", moves_case: "two_or_more" }], "a matte that already moves keeps its case (precedence)");
 });
 
 test("no focus: the proposal is the answer key's (Door, from the middle of its left edge), and the demo waits for a focus", () => {

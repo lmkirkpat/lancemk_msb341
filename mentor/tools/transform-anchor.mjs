@@ -16,7 +16,7 @@ import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import {
-  analyze, demoRefusal, demoValues, finder, missingTimes, neededTimes, PLACES, rectOf, refused,
+  analyze, demoRefusal, demoValues, finder, missingTimes, movesFields, neededTimes, PLACES, rectOf, refused,
   REFUSED_MESSAGE, reviewProposal, SKILL,
 } from "../lib/anchor.mjs";
 import { check, checkSampleTimes } from "../lib/anchor-check.mjs";
@@ -94,7 +94,7 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
     host: parseHost(read),
     project: s.baseline.project,
     comp: { name: s.baseline.comp.name, time: s.baseline.comp.time, frame_rate: fps, width: s.baseline.comp.width ?? null, height: s.baseline.comp.height ?? null },
-    candidates: base.candidates.map(({ layer, bucket, reason, rank }) => ({ layer, bucket, reason, rank })),
+    candidates: base.candidates.map((c) => ({ layer: c.layer, bucket: c.bucket, reason: c.reason, rank: c.rank, ...movesFields(c) })),
     proposal,
     focus: s.focus,
     places: Object.fromEntries(Object.entries(base.places).map(([k, v]) => [k, v.place])),
