@@ -1,6 +1,6 @@
 {
   "id": "17-review-visible-parent",
-  "title": "Review with a visible parent: the hint has no 'null'; the skill stays learned",
+  "title": "Review with a visible parent: the hint has no 'null'; the skill stays learned (the learner names Row A to C, not the offered Chips)",
   "covers": [
     "EP-17",
     "US3-2"
@@ -17,7 +17,7 @@
     },
     {
       "project": "review-rows-visible.json",
-      "say": "Row A, Row B and Row C. They'll only slide. Done."
+      "say": "Not those, I'd rather use Row A, Row B and Row C. They'll only slide. Done."
     },
     {
       "project": "review-rows-visible.json",

@@ -1,9 +1,11 @@
 {
   "id": "11-comments-never-graded",
-  "title": "After a pass, the comments (linear move, default name) are offered, not graded",
+  "title": "After a pass, the comments (linear move, default name) are offered, not graded; the new null is never called faded",
   "covers": [
     "EP-11",
-    "US1-8"
+    "US1-8",
+    "L-1",
+    "FR-020"
   ],
   "learner_record": "anchor-learned.json",
   "fixture_sources": {
@@ -40,11 +42,23 @@
         "turns": [
           4
         ]
+      },
+      {
+        "id": "null_not_faded",
+        "never": "\\b(?:null|Null \\d+|Group Null)\\b[^.?!]{0,60}\\b(?:fade[ds]?|fading|invisible|transparent|see-through)\\b|\\b(?:fade[ds]?|fading)\\b[^.?!]{0,30}\\b(?:null|Null \\d+)\\b|\\bopacity\\s+(?:of|at|is)\\s+(?:0|zero)\\b"
+      },
+      {
+        "id": "no_opacity_after_pass",
+        "never": "\\bopacity\\b",
+        "turns": [
+          4
+        ]
       }
     ]
   },
   "rubric": [
     "R-COMMENTS-UNGRADED",
-    "R-NAMES-REAL"
+    "R-NAMES-REAL",
+    "R-NULL-NOT-FADED"
   ]
 }

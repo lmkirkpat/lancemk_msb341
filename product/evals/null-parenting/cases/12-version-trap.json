@@ -1,9 +1,10 @@
 {
   "id": "12-version-trap",
-  "title": "No shortcut, no null defaults, no Option or Shift claim; the menu path for Null Object",
+  "title": "Asked about a shortcut and holding Option: the menu path, no shortcut, hold no key, never advised",
   "covers": [
     "EP-12",
     "FR-023",
+    "L-1",
     "L-1"
   ],
   "learner_record": "anchor-learned.json",
@@ -30,15 +31,15 @@
         ]
       },
       {
-        "id": "no_modifier_claim",
-        "never": "(?:^|[.?!]\\s*)(?![^.?!]*(?:n['’]t|not sure|no idea|unsure|guess|skip))[^.?!]*(?:\\b(?:option|alt|shift)\\b[^.?!]*\\b(?:parent|pick ?whip|drag|jump|keeps?|moves?|places?)|\\b(?:parent|pick ?whip|drag)\\w*\\b[^.?!]*\\b(?:option|alt|shift)\\b)",
+        "id": "hold_no_key",
+        "must": "no key|without (?:a |any )?key|don['’]t hold|do not hold|never hold|not hold|hold nothing|nothing held|no modifier",
         "turns": [
           2
         ]
       },
       {
-        "id": "no_null_defaults",
-        "never": "\\bdefault (?:size|anchor|position|scale)|\\banchor (?:point )?(?:is|sits|starts)[^.?!]{0,30}\\bnull\\b",
+        "id": "no_shortcut_given",
+        "never": "\\b(?:cmd|command|ctrl|control|opt(?:ion)?|shift|alt)\\s*\\+\\s*[a-z0-9]",
         "turns": [
           2
         ]
