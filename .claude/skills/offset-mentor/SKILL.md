@@ -75,20 +75,37 @@ start.
   On layers it can leave keys between frames; the check reads that fine, so it's not a mistake to
   point out. When `quick_offset` is false, don't mention it at all, even if asked about shortcuts:
   describe the drags above.
+- **If they ask how Quick Offset works** (still only when `quick_offset` is true), say only this:
+  select the layers (or their keys), hold Command and Option, and drag. On layers it moves whole
+  layers, keys and all (effect keys too), and spreads them out evenly: the top layer stays where it
+  is and the ones below move. On selected keys only the keys move, and they can spread the other
+  way, with the bottom one staying put. On layers it can leave keys between frames, and the check
+  reads that fine. After the drag, they check the order and play it back, then say "done" and you
+  check where they landed. Claim nothing else about it (not which way the selection makes it
+  spread, how to reverse a spread, what one undo does, how to read the gap while dragging, or any
+  other key to hold); if they ask, say you haven't checked that, and suggest they try it and play
+  it back.
 
 ## The lesson
 
-0. **Remember first.** Call `read_learner_record`. Look at `skills["timing.offset"]` and
-   `skills["easing.basic"]`:
-   - **Easing isn't learned** (no `easing.basic`, or not learned): this builds on easing. Name it
+0. **Remember first.** Call `read_learner_record`.
+   Before anything else (this comes before every branch below): if `read_learner_record` (or a
+   later snapshot) returns `server_current` false, say once, in plain words, that your tools were
+   updated since this session started and you need a restart (a new Claude Code session) before the
+   lesson, then stop; true or null says nothing.
+
+   Then look at `skills["timing.offset"]` and `skills["easing.basic"]`:
+   - If easing isn't learned (no `easing.basic`, or not learned), this builds on easing. Name it
      and offer it first (`/ease-mentor`). If they want this lesson anyway, say one sentence ("this
      builds on easing: offsetting moves that are still linear still looks mechanical") and carry
      on. Don't reteach easing, and don't grade ease. Remember to mention it once at "done" (step 7).
-   - **This skill is learned and a review is due**, or the learner asked for a review or said they
-     already know it: run **The review** below instead.
-   - **Practicing**: pick up what `next` says was still off.
+   - If this skill is learned and its review is due, or the learner asked for a review or said they
+     already know it, go straight to **The review** below and open with its first question.
+   - If it's practicing, pick up what `next` says was still off.
 
-   Mention only the earlier work, in plain words, with how long ago ("yesterday").
+   Mention only the earlier work, in plain words, with how long ago ("yesterday"). These are
+   choices for you, not lines to say: the first words the learner sees are the lesson's or the
+   review's own opening; never narrate the branch or what you'll do next.
 
 1. **Look and propose.** Call `offset_snapshot` with no options. Then, in a few sentences:
    - **Name the group in one sentence**, with real names and the shared time from `group`:
@@ -204,6 +221,13 @@ start.
    - **They reordered the layers in the stack** (the order in the Timeline panel changed, the
      times didn't): "The order in the stack isn't when they move. Their keys still start
      together."
+   - **The gap they stated vs. the gap the check measured:** when `gaps_frames` doesn't match the
+     gap they gave you in step 3 and no demonstration has run, call `offset_snapshot` again with
+     the whole `skill_options`, its `gap_frames` now the measured gap (the first one if they
+     differ, to the nearest whole frame, with a half frame rounded down). This re-read is part of
+     the check: don't say you're picking up where you left off. If its `floor_check` says the gap
+     is under the floor, give step 3's floor hint instead. Otherwise say the gap back as measured,
+     as theirs, never as advice ("you went with about [the measured gap] frames").
    - Mention `other_changes` briefly, without treating them as mistakes.
    - If `comp_matches` is false, don't grade: ask them to switch back to `lesson_comp` by name and
      say "done" again.

@@ -60,8 +60,13 @@ Rules particular to this skill:
 
 ## Before the lesson: is easing there?
 
-This skill builds on easing. Call `read_learner_record` first, before anything else, and look at
-`skills["easing.basic"]`:
+This skill builds on easing. Call `read_learner_record` first, before anything else.
+Before anything else (this comes before every branch below): if `read_learner_record` (or a
+later snapshot) returns `server_current` false, say once, in plain words, that your tools were
+updated since this session started and you need a restart (a new Claude Code session) before the
+lesson, then stop; true or null says nothing.
+
+Then look at `skills["easing.basic"]`:
 
 - **Easing isn't learned** (no entry, or not learned): name easing and offer it first, in one or
   two sentences ("This builds on easing: it reshapes an ease you've already applied. Want to do
@@ -115,7 +120,12 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
 2. **Read the graph (we do).** Ask them to select one focus pair's layer, open the Graph Editor,
    choose Edit Speed Graph, and tell you where the move is fastest: near the start, in the middle,
    or near the end. Check the answer against that pair's `fastest.parts` (`first`: near the start;
-   `middle`; `last`: near the end; two parts means either is right).
+   `middle`; `last`: near the end; two parts means either is right). If they answer with a time
+   or a frame ("at 19 frames", "about 0.6 s"), first place it in the pair from its key times (a
+   frame number divided by the comp's `frame_rate` is seconds from the comp's start; the pair's
+   first third is near the start, its last third near the end), then check it against
+   `fastest.parts` the same way, and if it falls outside the pair, ask which part of the move they
+   meant rather than guess.
    - Right: say so in a sentence and move on.
    - Not right: give **one** hint ("look for the highest point of the curve; is it closer to the
      first key or the second?"). If the answer sounds like a value graph, ask which graph is
@@ -186,7 +196,10 @@ And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`,
 
 6. **Read again.** After the pass, ask once more where the move is fastest now, on the pair from
    stage 2. Check it against that pair's `fastest.parts` in the last check: it should have moved
-   toward the start. At most one hint; it never blocks.
+   toward the start. An answer given as a time or a frame is placed in the pair from its key times,
+   as in stage 2 (a frame divided by the comp's `frame_rate`, counted from the comp's start), then
+   checked against `fastest.parts`; if it falls outside the pair, ask rather than guess. At most one
+   hint; it never blocks.
 
 7. **Record the lesson.** Call `record_lesson` once per lesson (below).
 
