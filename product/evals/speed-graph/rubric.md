@@ -19,6 +19,9 @@ entry per item in the case's `rubric`, in the same order.
   verdict, what was recorded) are checked by the runner, not the judge. Use them as context.
 - A preview frame may come back as an empty placeholder in these runs. Never fail an item because
   a frame looked blank or because the mentor said little about it.
+- A mentor remark about a blank, empty or placeholder frame ("the frame came back blank", "I can't see
+  it in the preview") is a fixture artifact. Ignore it for every item, including R-ONE-IDEA: don't count
+  it as an idea, as length, or as a lecture, and don't fail an item for it or for how the mentor words it.
 - Memory mentions are fine: the mentor may name layers from the learner's earlier lessons in the
   record, in plain words with how long ago. That is not an invented layer.
 - The skill's own example wording (in its SKILL.md) is allowed.
