@@ -107,7 +107,7 @@ From a fresh read, using the visibility class (FR-013), never the eye switch alo
 | *matte* | Not a default candidate; allowed if named (its pivot shapes the reveal). Never the demo | Never "you've hidden this". If they turn its eye on to drag and leave it on, one sentence: "it's a matte, so turn its eye back off" |
 | *guide* | Not a default candidate; allowed if named | n/a (it doesn't render, so frames can't show it) |
 | *shy* | Yes, ranked below the rest | "It's shy, so turn off the timeline's shy filter to see its properties" |
-| *null*, camera, light, adjustment layer | No | Nulls: "a null's pivot is skill 6's job" (only if skill 6 is built; otherwise say nothing) |
+| *null*, camera, light, adjustment layer | No | Nulls: "a null's pivot is skill 6's job" (only if skill 6 is built; otherwise say nothing). **Proposed change, § 19a item 2:** one sentence for all four, no pointer to skill 6 |
 | A full-frame solid or footage (a background) | Last resort only | n/a |
 | Locked layer | Never proposed, never the demo; allowed if the learner names it (round 1, D-2) | "Sign is locked, so unlock it first (the lock switch in the timeline)" |
 
@@ -825,7 +825,8 @@ now saves the first-timer a turn (T236 and T237 both opened this way and passed 
   > grow from somewhere other than its middle, and where should it turn from? Or Needle could
   > swing from the middle of its bottom edge. Want to try that one?"
 
-  (If `next` names a layer, that layer is the proposal; otherwise the read's.)
+  (If `next` names a layer, that layer is the proposal; otherwise the read's.) **Proposed change,
+  § 19a item 1:** the proposal is always the read's; `next` gives only the memory clause.
 - **Continued or resumed lesson:** no intent question and no proposal; say where it left off in one
   sentence and hand it back ("We were on Door, from the middle of its left edge. Ready to set it?").
 - **No candidate at all** (`proposal` null, nothing can be named): one clause of why, then the solid
@@ -957,3 +958,127 @@ opening) gets R-ONE-IDEA back, with the reading above in its case note.
   choice for the learner; the idea comes with the first frame; leave-outs are said up front only when
   the mentor proposes the focus from a scan (honesty), otherwise when the learner names that layer".
   Skills 2 to 4 already fit it. Skill 6 (null) should be checked against it before its live lesson.
+
+### 19a. Follow-ups after B-10 (2026-10-26)
+
+**Status: proposed** (for the human). The skill-builder built § 19 into `SKILL.md` (steps 0 to 2 on
+`skill-5-anchor`) and made four calls where § 19 was unclear. The human accepted two as built (no
+candidate: no intent question; practicing: "Yesterday, …" in place of "Last time" when the record
+has it). These are the other two.
+
+#### Item 1. Practicing: which layer to propose
+
+**Question.** § 19 says "If `next` names a layer, that layer is the proposal", but its own practicing
+example names Pop in the memory clause and proposes Needle, and only the snapshot's `proposal` comes
+with a suggested place. Built: propose `next`'s layer only if `next` also gives a place and the read
+doesn't leave that layer out; otherwise the snapshot's `proposal`.
+
+**Answer: change. The proposal is always the read's `proposal`. `next` gives the memory clause and
+nothing else.** If the learner wants another go at the layer `next` names, the intent question is
+right there and they name it; step 2's checks then apply to it as to any named layer. § 19's
+parenthetical ("If `next` names a layer, that layer is the proposal") is withdrawn; the practicing
+example already reads this way.
+
+**Wording.** Unchanged from § 19's practicing line: the clause from `next`, the intent question, then
+the read's proposal ("Or Needle could swing from the middle of its bottom edge. Want to try that
+one?").
+
+**Why.**
+- **The opening reads only the proposal's pivot.** `anchor_snapshot` with no focus returns
+  `place_now` for the proposal alone (`mentor/tools/transform-anchor.mjs`, the `place_now` filter),
+  so the mentor can't see whether `next`'s layer is already at the place `next` names. A practicing
+  learner's layer is often exactly that: they set it, or half set it, last time. Proposing it and
+  then saying "Pop already turns from its center" in step 2 is the mentor contradicting itself, and
+  the hard rule is "never claim anything about the project you didn't just read".
+- **`next` is free text from an earlier session** (§ 13: "Key a swing on Needle and play it back").
+  Pulling a layer and a place out of a sentence is the mentor's guess, made against a comp that may
+  have been renamed, keyed or moved since. The read's `proposal` has already been through § 4's table,
+  D-4's leave-outs, the ranking and the place suggestion.
+- **What practice is for.** The one idea is "set the pivot without the layer moving", and a fresh
+  layer practices it as well as the old one. The mistake `next` names (set while shrunk, dragged the
+  wrong layer) gets its practice through the memory clause and § 7's hints, on whatever layer they
+  pick.
+- **One rule is easier to build and to check.** The eval can compare the proposed layer to the
+  snapshot's `proposal`, with no free-text parsing to judge.
+
+**Rejected.**
+- *As built* (`next`'s layer when it gives a place and the read keeps it). Better than § 19's line,
+  but it still proposes a layer whose current pivot wasn't read, and it rests on the mentor parsing
+  `next`. The gain, practicing on the same layer, is one the learner can take by naming it.
+- *§ 19 as written* (`next`'s layer whenever it names one). No place to propose, and the same
+  unread-pivot problem.
+- *Have the tool read `next`'s layer too.* A tool change for a case no learner has hit yet, and the
+  tool would still be parsing free text.
+
+**Evidence and guesses.** R: the `place_now` filter in `transform-anchor.mjs` (read 2026-10-26).
+No practicing lesson has run live or in the evals with `next` naming a layer. **Guess:** that a
+practicing learner would rather be offered a fresh layer than their last one; watch the first live
+practice lesson for "can I redo Pop?". If that's common, the next thing to try is the tool returning
+`place_now` for a layer `next` names, not the mentor guessing.
+
+#### Item 2. The learner names a null, camera, light or adjustment layer
+
+**Question.** Neither § 4 nor § 19 has a sentence for this. § 4's table says "a null's pivot is
+skill 6's job (only if skill 6 is built)", and the old "leave them out without a word" only made
+sense inside the opening's list, which § 19 removed. Built: ask for a layer that shows in the frame,
+and say nothing about a null's pivot.
+
+**Answer: confirm the build, with an exact sentence.** One sentence for all four kinds, said once,
+the first time they name the layer, then the proposal as step 1 already says for any layer that
+can't be the focus (or the next candidate if they've turned the proposal down; the solid line if
+there's none). No pointer to skill 6 and nothing about a null's pivot.
+
+**Wording** (the layer's name and its kind from the read; Mentor Practice's CTRL and Glow as
+examples):
+
+> "CTRL is a null, so there's nothing of its own to see turn in the frame. Door could swing from its
+> left edge. Want to try that one?"
+
+The kind is said as "a null", "a camera", "a light" or "an adjustment layer"; the first sentence is
+otherwise fixed: "{Layer} is {kind}, so there's nothing of its own to see turn in the frame." The
+second is the proposal's own sentence.
+
+**Why.**
+- **It's the true reason in the learner's terms.** None of the four has a shape of its own to swing
+  from a hinge, which is the thing this lesson's check and frame show. "Shows in the frame" (the
+  build's phrase) is close, but an adjustment layer does change the frame; "nothing of its own to see
+  turn" is true of all four.
+- **No skill 6 pointer here.** § 9 already lists "teach a null's pivot here" under "must never do",
+  and the place for the skill 6 pointer is the lesson's last line (§ 5, stage 8), after the pivot
+  idea has landed. Mid-opening it's a second idea, and skill 6 hasn't passed a live lesson yet.
+- **Ends on the choice**, as § 19 requires, by handing straight to the proposal.
+
+**Rejected.**
+- *§ 4's "a null's pivot is skill 6's job".* Names a skill number the learner never sees, adds a
+  second topic to a one-choice turn, and contradicts § 9.
+- *"Pick a layer that shows in the frame"* (the build's gist, with no reason). Reads as a refusal
+  with no why, and an adjustment layer arguably does show.
+- *A different sentence for each kind.* Four sentences for a rare case, with the same reason in each.
+- *Say nothing and just re-propose.* The learner named it; ignoring that reads as not listening.
+
+**Evidence and guesses.** No learner has named one of these in a skill 5 lesson (T236, T237, evals).
+**Guess:** a learner who names a null is thinking of turning a group, which is skill 6. If live
+lessons show that's common, revisit the pointer at stage 8, not here.
+
+#### Items, if approved
+
+**For the builder:**
+- **B-12 (2026-10-26, § 19a; number to confirm with the cockpit)** `SKILL.md` on `skill-5-anchor`:
+  1. Step 1, practicing: replace "If `next` names a layer and a place, and the read doesn't leave
+     that layer out, propose those; otherwise the `proposal`." with "The proposal is always the
+     read's `proposal`; `next` gives only the memory clause. If they want another go at the layer
+     `next` names, they can name it."
+  2. Step 1, the leave-out list: replace the null, camera, light, adjustment line's "ask for a layer
+     that shows in the frame, and say nothing about a null's pivot" with item 2's sentence ("{Layer}
+     is {kind}, so there's nothing of its own to see turn in the frame."), then the proposal as for
+     any layer that can't be the focus. Never a pointer to the null lesson here.
+
+  No tool change.
+
+**For the spec writer:** spec's overlap row 14 ("Nulls: skill 6's job, only if built") changes to
+item 2's sentence; and wherever FR-006a or US1 describes the practicing proposal, it's the read's
+`proposal`.
+
+**For the eval engineer (through the cockpit):** a practicing case checks the proposed layer equals
+the snapshot's `proposal`, whatever `next` names; a case where the learner names CTRL (Mentor
+Practice) checks the sentence and that no turn mentions a null's pivot or the null lesson.
