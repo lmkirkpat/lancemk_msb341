@@ -6,7 +6,7 @@ here and doesn't copy it. Gaps or contradictions come back as questions.
 `live-sitting-2026-10-26.md` on `skill-5-anchor`), and again 2026-10-26 after the first live
 lesson (T236, § 17). **Status:** draft, round 1 answered (§ 15), round 2 answered (§ 16: D-4 and the
 wording list), the one-layer watch offer decided (§ 17), round 3 answered (§ 18: D-8 and D-9,
-2026-10-26).
+2026-10-26). § 19 (the opening turn, from HO-1's smoke run) was **decided** 2026-10-26 by the human.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -783,3 +783,177 @@ full-frame returns `watch_offer: null`. Spec FR-008's answer key on Mentor Pract
   a parent moves its pivot, not its motion, so the child stays put. Logged under § 14's guesses,
   not a rule: if live lessons show a watch on the focus layer's parent or child confuses, leave
   those out of `watch_offer` then.
+
+## 19. The opening turn (decided 2026-10-26, from HO-1's smoke run)
+
+**Status: decided 2026-10-26** (approved by the human). Where § 4 and § 5 say otherwise about the
+opening turn, this section wins.
+
+**Question.** In eval cases 13 and 24b (`evals-skill-5`, README rows 6 to 8), the mentor's first
+turn held a memory recap, "the idea for today" (§ 1's idea, in bold), a bulleted list of three
+leave-outs (already moving, Anchor Point keyed, Collapse Transformations), the intent question and,
+in 13, the Door proposal. The judge failed 13 on R-ONE-IDEA: "packs a memory recap, the pivot
+concept, the intent question, a Door proposal and a three-bullet list of exclusions". The eval
+engineer is right that this is the design's, not the mentor's: § 5 stage 1 says "Says what's left
+out and why", D-7's general sentence added another leave-out line, and nothing said where the idea
+is *not* stated.
+
+**Answer: the opening carries one decision, which layer and where, and nothing else.** No
+leave-out list, no statement of the idea, and a memory clause only when it changes what happens in
+this lesson.
+
+### What the opening turn carries, in order
+
+| # | Part | When | Length |
+|---|---|---|---|
+| 1 | **Memory clause** | Only when this skill has history (practicing: what `next` said was still off) or a lesson is continued or resumed. **Not** for a first lesson on this skill, whatever other skills the record holds: this skill's only hard prerequisite is setting keyframes, which isn't a skill (§ 3), so "you eased Title two weeks ago, and this doesn't depend on it" tells the learner nothing they can use | One clause, in plain words, with how long ago |
+| 2 | **The intent question** | Always (§ 4: it comes first) | One sentence, two parts |
+| 3 | **The proposal**, as the fallback to the same question | When `proposal` isn't null and the lesson isn't continued | One sentence, ending on the offer |
+
+The turn ends on the learner's choice. That's the one idea: pick a layer and a hinge. The proposal
+isn't a second idea; it's the same question answered for someone with nothing in mind, and saying it
+now saves the first-timer a turn (T236 and T237 both opened this way and passed live).
+
+**The exact wording** (Mentor Practice 2, from the read):
+
+- **First lesson on this skill:**
+  > "Which layer do you want to turn or grow from somewhere other than its middle, and where should
+  > it turn from: a corner, an edge, or the middle? If nothing comes to mind, Door could swing from
+  > its left edge. Want to try that one?"
+- **Practicing** (the clause from `next`, then the same turn):
+  > "Last time, Pop's pivot went in while Pop was still shrunk. Which layer do you want to turn or
+  > grow from somewhere other than its middle, and where should it turn from? Or Needle could
+  > swing from the middle of its bottom edge. Want to try that one?"
+
+  (If `next` names a layer, that layer is the proposal; otherwise the read's.)
+- **Continued or resumed lesson:** no intent question and no proposal; say where it left off in one
+  sentence and hand it back ("We were on Door, from the middle of its left edge. Ready to set it?").
+- **No candidate at all** (`proposal` null, nothing can be named): one clause of why, then the solid
+  (§ 4): "Nothing in this comp is a clean first pivot, so let's make one: Layer > New > Solid, a
+  small rectangle. Tell me when it's there." Not a list of reasons.
+- **Review:** unchanged (§ 12); its opening is already one question.
+
+### What moves out of the opening, and where it goes
+
+- **"The idea for today" is dropped from the opening.** § 1's idea and its two sentences belong to
+  stage 2, with a frame from their comp and their layer named, where they mean something (§ 5). The
+  intent question already names the topic in the learner's terms ("turn or grow from somewhere other
+  than its middle"), which is all they need to answer it. Stated before a layer is chosen, the idea is
+  a lecture, and stage 2 then says it a second time.
+- **Leave-outs wait until the learner names that layer.** Every leave-out in § 4's table already has
+  its own sentence for a learner who names it (§ 4, § 16 D-4, § 18 D-8). In the opening they're said
+  about nothing the learner has chosen. This includes D-7's general "Sled and Card already move"
+  sentence: **D-7 is withdrawn from the opening** (see "For the spec writer" below).
+- **Where the general sentence still has a use:** if the learner asks which layers they *can* use, or
+  why a layer wasn't suggested, answer that question: name up to three default candidates, and give
+  the asked-about layer its own § 4 sentence. D-7's two-layer sentence is kept only for a learner who
+  asks about several animated layers at once.
+
+### Why leave-outs are up front in skills 2 to 4 but not here
+
+Speed graph, key types and offset open with their leave-out sentences, and passed live. The
+difference is who picks the focus. There, the mentor proposes the focus **from a scan of the
+comp**, so a layer it skipped without a word would read as "that one's fine" (a hidden layer, a
+precomp it can't see inside); the leave-out sentence is about honesty, not teaching. Here the
+question is open: the learner can name any layer, and the one proposal is a suggestion, not a
+verdict on the rest of the comp. Saying nothing about Wobble claims nothing about Wobble, and if they
+name it they get its sentence. Skill 5's leave-out list also grew after the live lessons: T236 and
+T237 had two leave-outs (Wobble, Seal); Phase 8c's `position_moves` added 16 on Mentor Practice 2,
+which is what turned two sentences into a bulleted list.
+
+### Cost, said plainly
+
+On a learner's own finished comp, most layers may already move, so the first layer they name may be
+a leave-out. That's one extra turn: they name it, hear the "set the pivot before you key" sentence
+about **their** layer, and pick again (the proposal follows that sentence, as now). I think that's
+the better place for that habit anyway: said about a layer they care about, at the moment it
+applies, rather than as a line in a list before they've chosen anything. How often it happens on real
+comps is a guess (below).
+
+### What R-ONE-IDEA should see (the eval engineer's to change; this is only the intent)
+
+- **The design means the opening to pass R-ONE-IDEA as written**, not to be judged more loosely.
+  Asking for a looser opening would hide exactly what failed.
+- For the judge, the intended reading of "one idea" in the opening: **the intent question plus a
+  one-sentence proposal as its fallback is one idea** (one choice for the learner), and a memory
+  clause of this skill's history is context, not an idea. A statement of the pivot idea, a
+  leave-out list, or a turn that ends on anything but the choice is a second idea.
+- R-ONE-IDEA was removed from cases 13 and 24 (README row 8: "one reason per case"). If § 19 is
+  approved, the design would like it back on one opening case (case 1, first lesson, no layer in
+  mind, is the natural one), so the opening is judged somewhere.
+
+### Rejected
+
+- *The eval engineer's smallest fix: at most the leave-outs that matter, in one sentence, and don't
+  restate the idea.* Close, and it would likely pass the judge. But "the ones that matter" is a call
+  the mentor can't make before it knows the learner's layer, so it would either list the biggest
+  group (16 "already moves" layers, two named) or guess. And one leave-out sentence is still a second
+  subject in a turn whose job is a choice. Its "don't restate the idea" half is kept.
+- *Keep D-7's one general sentence for layers that already move, drop the rest.* The best of the
+  leave-outs to keep, because "set the pivot before you key" is a habit worth teaching. Rejected
+  because it teaches that habit before the learner has a layer, and because the named-layer
+  sentence (§ 4, § 18) teaches it better when it's needed.
+- *Split the turn: intent question alone, proposal only after "I don't know".* Cleanest for the
+  judge, but costs every first-timer a turn for nothing; § 4's two forms were always meant as one
+  turn's either/or, and the live openings that did this passed.
+- *State the idea first, then ask.* What easing does with its first frame, but there the frame comes
+  with it. Here there's no layer yet to show it on, and stage 2 says it again with one.
+- *A recap of other skills for a first lesson* (what 13 and 24b did). Memory is worth showing when it
+  changes the lesson (this skill's `next`, a review); "this doesn't depend on that" is the record
+  talking, not the mentor teaching. Key types and offset mention easing because it's their
+  prerequisite; this skill has none in the record.
+- *Leave § 5 as is and let the judge pass it.* The judge was right: the turn was a wall, and it ended
+  on a list.
+
+### Evidence and guesses
+
+- **R:** case 13, run 8 (`results/2026-10-26-211156.json`): judge's R-ONE-IDEA fail, quoted above;
+  every deterministic check passed. Case 24b (`results/2026-10-26-211046.json`, turn 1): the same
+  shape, with "The idea for today", a three-bullet leave-out list, and the recap "this lesson doesn't
+  depend on any of that". T236 and T237 (`discovery/usage-notes/anchor.md` on `skill-5-anchor`):
+  intent question, proposal and two leave-out sentences in one opening, passed live, before Phase
+  8c's 16 `position_moves` layers. Skills 2 to 4 `SKILL.md` step 1 on `main`: leave-outs up front,
+  with the mentor proposing from a scan.
+- **Guess:** that a first-timer can answer the intent question without the idea stated first (its
+  words carry the topic; no learner has tried it this way). Watch the next live lesson for "what do
+  you mean by turn from?".
+- **Guess:** how often a learner on their own comp names a layer that already moves first. If live
+  lessons show it's most first answers, revisit: one clause before the question ("most of this comp
+  already moves, so pick one that doesn't yet") would be the next thing to try.
+- **Guess (H-2, already open):** whether the proposal in the same turn pulls a learner away from
+  their own layer. T236 and T237 are builder-only.
+
+### Items, if approved
+
+**For the builder:**
+- **B-10 (2026-10-26, § 19)** `SKILL.md` step 1 (on `skill-5-anchor`): the opening is the memory
+  clause (only as in the table above), the intent question, and the proposal, ending on the offer.
+  Move "Say what you're leaving out" out of the opening: each leave-out sentence is said when the
+  learner names that layer (step 2's `focus_problems` already carries this for `position_moves`; the
+  others need the same "when named" wording). Drop the "In the opening, that's the only wording for
+  layers that already move" line and D-7's sentence from the opening; keep it only for a learner who
+  asks about several moving layers. Add to step 1: "Don't state the lesson's idea here; it comes in
+  step 2, with the frame." Step 0: "Mention only the earlier work" becomes "mention this skill's
+  earlier work only (`next`), in one clause; for a first lesson, say nothing about other skills". No
+  tool change: the snapshot still returns `candidates` with buckets, which step 2 and the
+  "which can I use?" answer need.
+
+**For the spec writer:**
+- **S-5 (2026-10-26, § 19)** US1 #1 ("names what it leaves out in one sentence per reason")
+  becomes: asks the intent question, offers the proposal in one sentence, and names no leave-outs
+  until the learner names one; the turn ends on the choice. Eval plan item 1 ("leave-outs named once
+  each") changes the same way, and a leave-out's sentence is checked on the turn the layer is named.
+  FR-009 stands ("once, in plain words") with "when the learner names that layer" added for the
+  leave-out sentences. **D-7 closes as withdrawn from the opening**, kept only for a learner who asks
+  about several moving layers. Quickstart § 5.1's step 1 expected result (leave-outs said in the
+  opening) changes to match.
+
+**For the eval engineer (through the cockpit):** cases that look for a leave-out sentence in turn 1
+move that check to the turn the layer is named; case 1 (or whichever is the plain first-lesson
+opening) gets R-ONE-IDEA back, with the reading above in its case note.
+
+**For me (curriculum follow-up, not edited here):**
+- **C-5 (2026-10-26, § 19)** A shared opening rule for curriculum § 2's stage 1: "the opening is one
+  choice for the learner; the idea comes with the first frame; leave-outs are said up front only when
+  the mentor proposes the focus from a scan (honesty), otherwise when the learner names that layer".
+  Skills 2 to 4 already fit it. Skill 6 (null) should be checked against it before its live lesson.
