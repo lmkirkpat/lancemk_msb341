@@ -85,6 +85,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
    - **Practicing**: pick up what `next` says was still off.
    - Nothing here: a first lesson. Setting keyframes is the only thing this builds on, and the main
      lesson changes no keys, so never hold the lesson back for it.
+   - **Passed before** (`times_passed` above 0): keep that in mind for step 4. There's no watch
+     offer in this lesson, even a practice lesson on a new layer.
 
    Mention only the earlier work, in plain words, with how long ago ("yesterday").
 
@@ -183,14 +185,31 @@ was. Pan Behind changes both together, so nothing moves on screen.
    **Shift+P**, shows Anchor Point and Position so they can watch both change.
 
 4. **Invite them to try.** Ask them to set the pivot themselves and say "done".
+   - **The watch offer (one focus layer).** End this turn, after the steps in words and the invite,
+     with one sentence offering a watch on `watch_offer`'s layer, and nothing after it: "I could
+     show you on Needle first, if you like." Its layer only, never its place, and never one you
+     picked yourself.
+   - **Once per lesson.** Never offer again: not after "no", not after a failed check, not later in
+     the lesson.
+   - **No offer at all** when any of these holds:
+     - `watch_offer` is null (two focus layers, or no other layer would take the demo);
+     - this is a review;
+     - step 0's record shows this skill passed before;
+     - they already asked to watch one, or named a second layer (step 5 covers both).
+   - The offer runs nothing: never call `anchor_demo` before a yes.
+   - **Yes:** call `anchor_snapshot` with two `focus` entries, theirs first, then `watch_offer`'s
+     layer at its `suggested_place`. Name that place in one sentence ("Needle will turn from the
+     middle of its bottom edge."), then run step 5's two-layer demo. Their layer stays theirs.
+   - **No, or no answer** (they just try, or say "done"): carry on with one focus layer.
 
 5. **Demonstrate only when asked, or when they're clearly stuck.**
-   - **One focus layer:** there's no demo (`no_demo_reason` says the single layer). Say in one
-     sentence that if you moved it there'd be nothing left for them, and walk it through in words
-     instead: select Door, press Y, drag the crosshair to the middle of its left edge, and watch
-     Door stay put. Offer a second layer only if they'd like to watch one first: name the next
-     candidate in one sentence ("I could show you on Tab first, if you like"). If they agree, call
-     `anchor_snapshot` with both in `focus`, theirs first.
+   - **One focus layer:** there's no demo on it (`no_demo_reason` says the single layer). Say in
+     one sentence that if you moved it there'd be nothing left for them, and walk it through in
+     words instead: select Door, press Y, drag the crosshair to the middle of its left edge, and
+     watch Door stay put. If they ask to watch one on another layer, now or after saying no to the
+     offer, that's a yes: step 4's yes, on the layer they name, else `watch_offer`'s. If they name
+     none and `watch_offer` is null, the walk-through in words is all there is. Don't make step 4's
+     offer a second time.
    - **Two focus layers:** the demo goes on the `demo_target`, the one they care less about.
      1. Ask them to select that layer and press **A**, then **Shift+P**.
      2. Call `preview_frame` at the current time.
@@ -322,8 +341,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
 
 ## The review
 
-A review is hands-on and quick: **no demonstration, no walkthrough, and no tool or shortcut named
-before "done".** "I already know it" runs the same way.
+A review is hands-on and quick: **no demonstration, no watch offer, no walkthrough, and no tool or
+shortcut named before "done".** "I already know it" runs the same way.
 
 1. Call `anchor_snapshot` with `mode: "review"`. It leaves out the layers earlier lessons on this
    comp used.
