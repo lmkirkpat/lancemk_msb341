@@ -3,7 +3,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { analyze, candidates, finder, neededTimes, reviewProposal, SHAPES_DEFAULT, MAX_NEEDED_TIMES } from "../lib/anchor.mjs";
+import { analyze, candidates, finder, neededTimes, outsideSide, reviewProposal, SHAPES_DEFAULT, MAX_NEEDED_TIMES } from "../lib/anchor.mjs";
 import { clone, fixture, indexOf, KEY, synthetic } from "./fixtures/anchor/load.mjs";
 
 const P2 = fixture("practice2b");
@@ -218,6 +218,46 @@ test("T241: when every candidate has keys there's still a proposal (a ranking st
   assert.equal(list.filter((c) => c.bucket === "default").length, candidates(P2).filter((c) => c.bucket === "default").length);
   // Every one keyed: the keys-but-no-Rotation-or-Scale step leads, by layer order, so Blink again.
   assert.equal(analyze(s).proposal.layer, "Blink");
+});
+
+// ---- T242: which side a pivot outside its layer sits on, as seen on screen (FR-019a)
+
+test("T242: Lid's pivot is outside it, below, on the candidate and in the pivot_outside note for a focus and a proposal", () => {
+  const got = byLayer(candidates(P2));
+  assert.equal(got.Lid.place_now, "outside");
+  assert.equal(got.Lid.outside_side, KEY.practice2b.layers.Lid.outside_side);
+  assert.equal(got.Door.outside_side, null, "only on a pivot outside");
+  const focus = analyze(P2, { skill_options: { focus: [{ layer: "Lid", place: "middle-left" }] } });
+  assert.deepEqual(focus.notes.find((n) => n.note === "pivot_outside"), { layer: "Lid", note: "pivot_outside", side: "below" });
+  const proposed = analyze(P2, { focus_layers: ["Lid"] });
+  assert.equal(proposed.proposal.layer, "Lid");
+  assert.deepEqual(proposed.notes.find((n) => n.note === "pivot_outside"), { layer: "Lid", note: "pivot_outside", side: "below" });
+  assert.ok(!analyze(P2).notes.some((n) => n.note === "pivot_outside"), "Door's pivot is inside it");
+});
+
+test("T242: a flipped layer's side is the screen's, not its own (row 18)", () => {
+  const s = clone(P2);
+  // Past Flip's own right edge (its rectangle is 0 to 100 across); at Scale [-100, 100] that's the
+  // screen's left.
+  for (const sm of s.layer_info.find((l) => l.name === "Flip").samples) sm.anchor = [150, 30, 0];
+  const flip = byLayer(candidates(s)).Flip;
+  assert.equal(flip.place_now, "outside");
+  assert.equal(flip.outside_side, "left");
+});
+
+test("T242: a pair when the pivot is past two edges, and null when it can't be read", () => {
+  const s = clone(P2);
+  for (const sm of s.layer_info.find((l) => l.name === "Plaque").samples) sm.anchor = [-100, 200, 0];
+  assert.equal(byLayer(candidates(s)).Plaque.outside_side, "below-left");
+  const lid = indexOf(P2, "Lid");
+  assert.equal(outsideSide(P2, lid, 99, "shape"), null, "not sampled at that time");
+  assert.equal(outsideSide(P2, lid, null, "shape"), null);
+  const flat = clone(P2);
+  for (const sm of flat.layer_info.find((l) => l.name === "Lid").samples) delete sm.position;
+  assert.equal(outsideSide(flat, lid, 0, "shape"), null, "no Position read: no matrix");
+  const noRect = clone(P2);
+  for (const sm of noRect.layer_info.find((l) => l.name === "Lid").samples) sm.rect = null;
+  assert.equal(outsideSide(noRect, lid, 0, "shape"), null, "no rectangle");
 });
 
 test("FINDERS' count is above 0 exactly when a default candidate not in exclude exists, and 0 without layer_info", async () => {

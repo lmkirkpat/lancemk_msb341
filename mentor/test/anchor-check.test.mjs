@@ -303,11 +303,44 @@ test("every planted attempt in the answer key grades as it says", () => {
     if (want.check_time !== undefined) assert.equal(l.check_time, want.check_time, `${file} check time`);
     if (want.item1 !== undefined) assert.equal(l.item1.passed, want.item1, `${file} item 1`);
     if (want.place_now !== undefined) assert.equal(l.item1.place_now, want.place_now, `${file} place now`);
+    if (want.outside_side !== undefined) assert.equal(l.item1.outside_side, want.outside_side, `${file} outside side`);
     if (want.item2 !== undefined) assert.equal(l.item2.passed, want.item2, `${file} item 2`);
     if (want.item4 !== undefined) assert.equal(l.item4.passed, want.item4, `${file} item 4`);
     if (want.item4_worst_time !== undefined) assert.equal(l.item4.worst.time, want.item4_worst_time, `${file} item 4's worst key`);
     if (want.other_changes) assert.deepEqual(r.other_changes, want.other_changes, `${file} other changes`);
   }
+});
+
+// ---- T242: item 1 says which side a pivot outside sits on, on screen (FR-019a)
+
+test("T242: item1.outside_side: door-outside left, pop-shrunk below at its rest key, lid-group below", () => {
+  const door = layerOf(run(P2, fixture("door-outside"), DOOR), "Door");
+  assert.equal(door.item1.place_now, "outside");
+  assert.equal(door.item1.outside_side, KEY.attempts["door-outside"].outside_side);
+  const pop = layerOf(run(P2, fixture("pop-shrunk"), [{ layer: "Pop", place: "bottom-middle" }]), "Pop");
+  assert.equal(pop.check_time, 4.3);
+  assert.equal(pop.item1.outside_side, KEY.attempts["pop-shrunk"].outside_side);
+  assert.deepEqual(pop.hints, ["away_from_rest"], "the side is a fact, not a second hint");
+  const lid = layerOf(run(P2, fixture("lid-group"), [{ layer: "Lid", place: "middle-left" }]), "Lid");
+  assert.equal(lid.item1.outside_side, "below");
+  const pass = layerOf(run(P2, fixture("door-pass"), DOOR), "Door");
+  assert.equal(pass.item1.outside_side, null, "only when the pivot is outside");
+});
+
+test("T242: a flipped focus layer's side is the screen's; an unreadable one is null, never a guess", () => {
+  const flipped = clone(P2);
+  for (const sm of flipped.layer_info.find((l) => l.name === "Flip").samples) sm.anchor = [150, 30, 0];
+  const flip = layerOf(run(P2, flipped, [{ layer: "Flip", place: "middle-left" }]), "Flip");
+  assert.equal(flip.item1.place_now, "outside");
+  assert.equal(flip.item1.outside_side, "left", "past its own right edge, which is the screen's left");
+  // No Position in the read: item 1 still reads the anchor in its own rectangle, but comp space
+  // can't be read, so no side (and the layer can't be checked).
+  const noPos = clone(fixture("door-outside"));
+  for (const sm of noPos.layer_info.find((l) => l.name === "Door").samples) delete sm.position;
+  const d = layerOf(run(P2, noPos, DOOR), "Door");
+  assert.equal(d.item1.place_now, "outside");
+  assert.equal(d.item1.outside_side, null);
+  assert.deepEqual(d.hints, ["cant_check"]);
 });
 
 // ---- Review S1: two more rows, and no failed layer without a hint

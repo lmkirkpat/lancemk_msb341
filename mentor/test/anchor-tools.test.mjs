@@ -237,6 +237,12 @@ test("anchor_demo on a layer locked since the lesson started: ANCHOR_REFUSED loc
   assert.equal(runs.length, 0);
 });
 
+test("T242: anchor_snapshot passes the pivot_outside note through with its side on screen (FR-019a)", async () => {
+  const r = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Lid", place: "middle-left" }] } });
+  assert.equal(r.place_now.Lid, "outside");
+  assert.deepEqual(r.notes.find((n) => n.note === "pivot_outside"), { layer: "Lid", note: "pivot_outside", side: "below" });
+});
+
 // ---- US3: the review
 
 test("review: proposes the answer key's layer, never Door or Needle; no demo, nothing run", async () => {

@@ -13,7 +13,7 @@ import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { motionSources } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
 import {
-  analyze, anchorKeyCount, DEMO_MATCH_PX, footprintOpts, inPlace, keyedLayer, MOVE_PX, placeNow, placePoint,
+  analyze, anchorKeyCount, DEMO_MATCH_PX, footprintOpts, inPlace, keyedLayer, MOVE_PX, outsideSide, placeNow, placePoint,
   positionKeyCount, positionKeyTimes, rectOf,
 } from "./anchor.mjs";
 
@@ -228,6 +228,9 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
 
     // Item 1, in the layer's own space at the check time.
     const item1 = cs && cRect && place ? { passed: inPlace(cs.anchor, cRect, place), place_now: placeNow(cs.anchor, cRect), wanted: place } : { passed: false, place_now: null, wanted: place };
+    // FR-019a: outside, which side on screen; null otherwise, or when it can't be read (the mentor
+    // then names no side).
+    item1.outside_side = item1.place_now === "outside" ? outsideSide(current, c.index, t, c.kind) : null;
 
     // Item 2, comp space at the check time.
     const cmp = compare(space, baseline, b.index, current, c.index, t, b.kind);

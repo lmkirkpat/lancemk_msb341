@@ -8,7 +8,7 @@
 // tolerances, and reads any comp-space `reason` as "can't read", never as a value (filter 6).
 
 import { MentorError, registerErrors } from "../errors.mjs";
-import { footprint, layerMatrix, sampleAt } from "./comp-space.mjs";
+import { compPosition, footprint, layerMatrix, sampleAt } from "./comp-space.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
@@ -107,6 +107,29 @@ export function placeNow(anchor, rect) {
   const bottom = Math.max(rect.top, rect.top + rect.height);
   if (a[0] < left - tx - 1e-6 || a[0] > right + tx + 1e-6 || a[1] < top - ty - 1e-6 || a[1] > bottom + ty + 1e-6) return "outside";
   return "between";
+}
+
+// Which side of the layer a pivot outside it sits on, as seen on screen (FR-019a): the anchor's
+// comp-space point (compPosition) against the layer's comp-space bounds (footprint) at `time`.
+// "above", "below", "left", "right" or a pair ("below-left"). An axis counts when the point is past
+// that edge by more than item 1's tolerance on the bounds (so a pivot far below and level with the
+// right edge is "below"), else by more than 1 px. Null when either can't be read (FR-018), or when the
+// point sits within the bounds on screen (a turned layer), so the mentor never guesses a side.
+export function outsideSide(snapshot, index, time, kind) {
+  if (!isNum(time)) return null;
+  const pos = compPosition(snapshot, index, time);
+  const fp = footprint(snapshot, index, time, footprintOpts(kind));
+  const p = pos && !pos.reason ? pair(pos.position) : null;
+  const b = fp && !fp.reason ? fp.bounds : null;
+  if (!p || !b || ![b.left, b.top, b.right, b.bottom].every(isNum)) return null;
+  const [tx, ty] = tolerance({ width: b.right - b.left, height: b.bottom - b.top });
+  let v = p[1] < b.top - ty ? "above" : p[1] > b.bottom + ty ? "below" : null;
+  let h = p[0] < b.left - tx ? "left" : p[0] > b.right + tx ? "right" : null;
+  if (!v && !h) {
+    v = p[1] < b.top - MOVE_PX ? "above" : p[1] > b.bottom + MOVE_PX ? "below" : null;
+    h = p[0] < b.left - MOVE_PX ? "left" : p[0] > b.right + MOVE_PX ? "right" : null;
+  }
+  return v && h ? `${v}-${h}` : v || h || null;
 }
 
 // ---- Keys, from the snapshot's keyed `layers` (the only place keys are read)
@@ -302,6 +325,8 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
     c._large = c.full_frame === true || (c.full_frame === null && coversUnion && out.filter((x) => x._bounds).length > 1);
   }
   out.filter((c) => c.bucket === "default").sort(rankOrder()).forEach((c, i) => { c.rank = i + 1; });
+  // FR-019a: where a pivot outside its layer sits, on screen, at the check time (else null).
+  for (const c of out) c.outside_side = c.place_now === "outside" ? outsideSide(snapshot, c.index, c.check_time.time, c.kind) : null;
   for (const c of out) { delete c._bounds; }
   return out;
 }
@@ -393,7 +418,7 @@ function resolveFocus(snapshot, focus) {
   });
 }
 
-function notesFor(snapshot, c, focusEntry) {
+function notesFor(snapshot, c) {
   const notes = [];
   if (c.parent) notes.push({ layer: c.layer, note: "parent", parent: c.parent });
   if (c.kind === "text") notes.push({ layer: c.layer, note: "text_baseline" });
@@ -408,7 +433,9 @@ function notesFor(snapshot, c, focusEntry) {
   if (c.class === "hidden") notes.push({ layer: c.layer, note: "hidden" });
   if (c.class === "shy") notes.push({ layer: c.layer, note: "shy" });
   if (c.locked) notes.push({ layer: c.layer, note: "locked" });
-  if (focusEntry && c.place_now === "outside") notes.push({ layer: c.layer, note: "pivot_outside" });
+  // A focus layer's or the proposal's pivot outside it, with the side it's on as seen on screen
+  // (FR-019a; null when it can't be read, and then the mentor names no side).
+  if (c.place_now === "outside") notes.push({ layer: c.layer, note: "pivot_outside", side: c.outside_side ?? null });
   return notes;
 }
 
@@ -446,7 +473,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
   };
 
   if (!focus || !focus.length) {
-    if (proposal) result.notes = notesFor(snapshot, list.find((c) => c.layer === proposal.layer), null);
+    if (proposal) result.notes = notesFor(snapshot, list.find((c) => c.layer === proposal.layer));
     result.candidates = list.map(publicCandidate);
     return result;
   }
@@ -467,7 +494,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], skill_options = 
     const rect = rectOf(sample, c.kind);
     result.places[name] = { place: entry.place, point: placePoint(rect, entry.place) };
     result.check_times[name] = { time: c.check_time.time, basis: c.check_time.basis };
-    result.notes.push(...notesFor(snapshot, c, entry));
+    result.notes.push(...notesFor(snapshot, c));
     if (inPlace(sample.anchor, rect, entry.place)) {
       result.already_there.push({ layer: name, place: entry.place });
       continue;
