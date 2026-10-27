@@ -212,7 +212,8 @@ start.
    - **Still together** (`still_same`): name the pair and where: "Bar and Glow still both start at
      0 s." If they moved it but not far enough: "Title and Subtitle still start within a frame of
      each other, which reads as together." Never a number to aim for.
-   - **Pops in** (layers kind, a member with `split` that isn't on purpose): show a frame where it
+   - **Pops in** (layers kind, a member with `split` that isn't on purpose, and only while
+     `passed` is false; after a pass, don't ask about a split): show a frame where it
      shows (`preview_frame` between the two starts) and say it: "At 0.6 s Dot 1's Opacity is
      already up but its Position hasn't started. Was that on purpose?" If they say yes, call
      `offset_check` again with that layer in `split`, and pass it on every later check too. If a
@@ -265,7 +266,7 @@ start.
     - `attempted`: the kind and the members in their order ("Staggered Title's Position, Scale
       and Opacity, in that order"; "Staggered Dot 1, Dot 2 and Dot 3, in that order").
     - `summary`: what the checks showed, with the gaps as measured from `gaps_frames` ("gaps
-      about 4 and 8 frames"), and any split they kept on purpose ("split Dot 1's Opacity on
+      about 4 and 8 frames"), never the gap they stated, and any split they kept on purpose ("split Dot 1's Opacity on
       purpose"). Never how they did it, and never why.
     - `next`: one concrete thing.
 
