@@ -88,6 +88,9 @@ and answer keys) and T158 are still open, so every live task here comes after th
 - **Fixture mode** ignores `sample_times` (a capture can't be re-sampled), so live captures in the
   sitting are taken with `node mentor/dev/capture.mjs --times <list>` and the answer key records
   the list.
+- **Round 3 (2026-10-26):** live lesson starts took 10 to 12 s (T236, T237). Spec FR-013a
+  times each read first (T251), then may narrow `needed` to the focus's times, skip read 2 with no
+  focus, and pass the focus's times in read 1 (T252). This entry stands until T252 lands.
 
 ## R5. Focus, targets and the demo target
 

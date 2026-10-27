@@ -20,8 +20,12 @@ FR-023 take the live results. **Amended again 2026-10-26 (round 2)** from the de
 more times is never a candidate (new reason `position_moves`, FR-004), and the hints for rows 20,
 22, 23 and 25 point at TD § 7 and § 16 for their wording instead of carrying this spec's own
 (FR-019, FR-019a, FR-019b). New tasks T245 to T248 (tasks.md › Phase 8c). Three small wording
-questions for the designer (D-5 to D-7). Awaiting the builder's approval of this round; nothing
-in it blocks T236.
+questions for the designer (D-5 to D-7). Approved by the builder; T245 to T247 built on
+`skill-5-anchor`. **Amended again 2026-10-26 (round 3)**, both items approved by the builder:
+the watch offer with one focus layer (TD § 17, `f7545e2`: FR-008, US1 #5 and #7, a new
+`watch_offer` field, Eval plan 11 and 23) and the lesson-start speed after T236 and T237's
+10 to 12 s snapshots (FR-013a, SC-010); plus FR-004's precedence rule and rows 12, 28 and 29 from
+Phase 8c's hand-back. New tasks T249 to T253 (tasks.md › Phase 8d).
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 5,
 'Set the pivot'." Record ID `transform.anchor`, short name `anchor`, tool prefix `anchor_`
@@ -120,9 +124,17 @@ verified pass with no demonstration, and the check agrees with a look in After E
    it doesn't pass, and the hint says Door moved with its pivot and in which direction, and names
    Pan Behind (Y), never the numbers (TD § 7).
 5. **Given** a focus of one layer, **When** the learner asks for a demonstration, **Then** there
-   isn't one; the mentor walks it through in words (FR-014).
+   isn't one on their layer; the mentor walks it through in words (FR-014) and, on a first lesson,
+   offers a watch on another layer once (FR-008, TD § 17); a yes runs it there, never on theirs.
 6. **Given** a pass, **When** the mentor asks which part stays still when it turns, **Then** a wrong
    answer gets one light correction and the pass stands (FR-020).
+7. **Given** a first lesson (no pass of this skill in the record) with Door as the one focus layer
+   on Mentor Practice 2, **When** the mentor invites the learner to try, **Then** the turn's last
+   sentence offers a watch on Needle (`watch_offer`) once, in one sentence, and `anchor_demo` isn't
+   called; **When** the learner says no, just tries, or says "done", **Then** there's no second
+   offer, not after a failed check either; **When** they say yes, **Then** the focus becomes Door
+   then Needle, the mentor names Needle's place in one sentence, and the demo runs on Needle only
+   (FR-008, FR-014).
 
 ---
 
@@ -208,7 +220,8 @@ Other edge cases:
   for another. A layer whose Position is keyed at two or more times is left out the same way
   (TD § 4's "already moves" sentence, D-4). A hidden layer, a matte, a guide, a layer with one
   Position key (on the check time, FR-004) or a locked layer can be named (TD § 4; a locked one
-  gets the unlock sentence, D-2).
+  gets the unlock sentence, D-2), unless it already moves: "never" comes first (FR-004
+  precedence).
 - **The learner moves the playhead between reads**: the check compares at FR-011's check time,
   never at "the playhead now", so moving it isn't a change.
 - **The learner drags Rotation in stage 6 and forgets Edit > Undo**: the lesson has already passed;
@@ -267,6 +280,10 @@ Other edge cases:
     with Collapse Transformations on; *null*, camera, light, adjustment layer. Each gets TD § 4's
     one sentence; for `position_moves` that's the "already moves … set the pivot before you key"
     sentence, said once, then the next candidate is offered as usual (TD § 16 D-4, adjustment 3).
+  - **Precedence (round 3, 2026-10-26):** a layer that meets a "never" condition is `never` even
+    when it's also a matte, hidden, a guide or locked. A matte or locked layer that already moves
+    can't pass either, so it gets `position_moves`, not `matte` or `locked` (as built in T245:
+    `structural()` tests `position_moves` before the allowed-if-named reasons).
   - **Counting Position key times (D-4):** key times, not keys. Separated X and Y are counted
     together (one key on X at 1 s and one on Y at 2 s is two times; both at 1 s is one), times
     within half a frame of each other are one time, and hold keys count like any key. A layer
@@ -303,8 +320,11 @@ Other edge cases:
     D-4 doesn't change these ranks: every layer it moves was `if_named`, never ranked. On the
     live comp the 16 Position-keyed layers (Card, Dot 1 to 3, Chip A to C, Flag, Pause, Sled,
     Tile, Stamp, Row A, Row C, Plate, Gradient) all have keys at two or more times by the answer
-    key's `needed_note`, so all become `position_moves`; Mentor Overlaps' Leaf 2 by its own key
-    count. T246 confirms each by hand. Mentor Practice 2 has no one-key layer; the one-key case is
+    key's `needed_note`, so all become `position_moves`. On Mentor Overlaps, **four** layers
+    change, not only Leaf 2 (amended round 3, from Phase 8c's hand-back): Leaf 2, **Wipe** (a
+    matte), **Locked Bar** (locked) and **Orbit** (auto-orient) all have Position keys at two or
+    more times, so all are `position_moves` by the precedence rule above. Rows 12, 28 and 29 use
+    other fixtures for that reason. T246 confirms each by hand. Mentor Practice 2 has no one-key layer; the one-key case is
     L-2's `sled-one-key-before` (T246).
 - **FR-005 (places)**: The nine places MUST be TD § 4's grid, each a point on the layer's own
   rectangle (`rect` at the check time): left, middle or right of `left … left + width` and top,
@@ -318,9 +338,34 @@ Other edge cases:
 - **FR-007 (already there)**: A layer whose anchor already meets FR-010's measure for the named
   place on the lesson's first read MUST NOT be a target; the mentor says so in one sentence and
   asks for another layer or place. Unit tested on Sign (text, "the middle": not already there).
-- **FR-008 (focus size)**: The focus MUST be one or two layers, each with its own place (TD § 4).
-  The learner's layer is always in it; a second only if the learner wants to practice the demo
-  first or the mentor offers a second candidate in one sentence and they agree.
+- **FR-008 (focus size and the watch offer)**: The focus MUST be one or two layers, each with its
+  own place (TD § 4). The learner's layer is always in it; a second only if the learner asks to
+  watch one first, names a second layer, or says yes to the watch offer.
+  **The watch offer (round 3, 2026-10-26; TD § 4 › The watch offer, § 17):** with **one** focus
+  layer, the mentor MUST offer a watch on another layer **once**, in **one sentence**, as the
+  **last sentence of the turn that invites the learner to try** (after the walk-through in words),
+  naming the layer from `watch_offer` (below), in TD § 17's wording. It MUST NOT offer when
+  `watch_offer` is null; in a review; when the record shows this skill passed before (a practice
+  lesson after a pass); or when the learner already asked to watch or named a second layer. The
+  offer runs nothing: `anchor_demo` MUST NOT be called before a yes. **Yes:** the mentor resends
+  `skill_options` with two focus entries (theirs first, the offered layer second at
+  `watch_offer.suggested_place`), names that place in one sentence, and stage 3 runs as for two
+  layers (FR-014, FR-017); the learner's layer stays theirs. **No, or no answer** (they just try,
+  or say "done"): one focus layer, and **no second offer**, not after a failed check either; a
+  later ask still gets the demo (FR-014).
+  **`watch_offer` (B-8):** the mentor MUST NOT rank layers itself. `anchor_snapshot` MUST return
+  `watch_offer: { layer, suggested_place }` or `null`. It's set only in a lesson (not a review),
+  with exactly one focus target and the demo unused, and names the
+  highest-ranked default candidate by FR-004's lesson ranking that: isn't the focus layer; isn't
+  already at its suggested place (FR-007, or it would set no target); and has no Rotation or Scale
+  keys **or** has its rest key within half a frame of the focus layer's check time (so the
+  playhead the learner already has is on it, and `anchor_demo` won't refuse with `not_at_rest`;
+  TD § 17's "never offer a watch the demo would refuse"). `suggested_place` uses the proposal's
+  hinge rule (tall and thin: `bottom-middle`; else `middle-left`). Null when none qualifies.
+  Whether the record shows a pass stays with the prompt, which reads the record at step 0.
+  **Answer key (by hand, Mentor Practice 2, empty record):** Door as the focus → Needle,
+  `bottom-middle` (rank 2; TD § 17); Pop as the focus (check time 4.3 s) → Door, `middle-left`
+  (rank 1, unkeyed); Door and Needle as the focus → null (two layers); review → null.
 - **FR-009 (what's said about leave-outs)**: Hidden layers, mattes, parents, precomp frames, text
   baselines, flipped layers and Position keys MUST each get TD § 4 or § 9's sentence, once, in
   plain words. For a one-key layer that's TD § 4's "playhead right on it" line with the key's
@@ -361,7 +406,10 @@ Other edge cases:
     practice item 4 catches Pan Behind with the playhead off that key: AE adds a key at the
     playhead and the layer slides at the old one (L-2, `sled-one-key`). The check still computes
     item 4 for any Position-keyed focus, and `sled-slid` and `sled-on-key` keep it unit tested on
-    three keys, outside the lesson path (T246).
+    three keys, outside the lesson path (T246): `session.start` would refuse Sled as a focus, so
+    those two tests build the lesson with the fixtures' `lessonDirect` helper
+    (`mentor/test/fixtures/anchor/load.mjs`), which sets Sled's target without the analyzer.
+    Neither fixture is an eval fixture.
   - **Item 5:** no other layer's footprint moved by more than 1 px at any time sampled in both
     reads, except that **children of a focus layer are compared only at that layer's check time**
     (at other times they turn with the new pivot, which is the point); and Anchor Point on the
@@ -391,7 +439,53 @@ Other edge cases:
   times (and Card's and Tile's rest keys) drop out of the needed times, and the 30 above shrinks.
   T246 re-derives `needed_practice2b` by hand; whether a lesson start on Mentor Practice 2 still
   takes two reads follows from it (a plain read still lacks some candidates' rest-key times on
-  other layers, so expect yes).
+  other layers, so expect yes). **As built (T246):** 4 needed times (0.25, 3.167, 4.3, 4.5), down
+  from 30, and still two reads. FR-013a changes which times and how many reads; until T252 lands,
+  this paragraph is what's built.
+- **FR-013a (the cost of a lesson start; added round 3, 2026-10-26)**: Live, `anchor_snapshot`
+  took **9.95 s and 11.7 s** with no focus and **10.7 s and 2.7 s** with the focus (T236, T237,
+  before Phase 8c), against "about a second" planned for the second read; `anchor_check`, one
+  sampled read, took 0.7 to 0.9 s. Nobody knows yet which read costs what, or whether the time
+  is outside the reads. So:
+  1. **Measure first (T251, 🖐).** Each read timed on its own, live, on Mentor Practice 2, on the
+     branch after Phase 8c: the plain read, the second read with today's needed times, and a read
+     with the focus's times only; three runs each, the first after AE has sat idle logged apart
+     (session 2's 11.7 s against 2.7 s on the same code suggests a cold first call). Plus
+     `anchor_snapshot`'s own `ms` from `calls.jsonl` in one lesson start, to see time outside the
+     reads (the analyzer runs `candidates()` more than once per call).
+  2. **Then cut where the time is (T252), by this table:**
+
+     | T251 shows | The fix |
+     |---|---|
+     | The two reads cost about the same, or the second costs more | The cuts below: fewer and smaller reads |
+     | The plain read alone is over SC-010's 3 s | No cut in this skill reaches it: request **SR-4** to spec 004's shared-code owner (what in `snapshot.jsx` costs on a 40-layer comp), log it, and SC-010 waits on SR-4. The cuts below still go in if they save a read |
+     | Time outside the reads is over 1 s | Compute `candidates()` once per call and reuse it (this skill's own files) |
+
+  3. **The cuts (when the table says so):**
+     - **A call with no focus takes one read.** It sets no targets, so no check compares against
+       its baseline, and every candidate's own rest key and Position key times are already in a
+       plain read (a plain read samples each layer at its own key times and up its parent chain,
+       spec 004 W1). So FR-013's second read is skipped when `skill_options.focus` is absent. A
+       unit test pins that `analyze()` gives the same candidates (bucket, reason, rank), proposal
+       and notes on spec 004's plain `layer-info/practice2b.json` as on this skill's sampled
+       `practice2b.json`; if it doesn't, this cut isn't taken and the hand-back says why.
+     - **A call with a focus asks only for the focus's times**: each focus layer's check time and
+       Position key times (FR-011, FR-012), not every candidate's. Those are the only times
+       `anchor_check` compares (contracts › `anchor_check`), and `sample_times` applies to every
+       layer, so children and other layers are still sampled at them (FR-012 item 5).
+     - **Ask for them in the first read** when the session already holds a baseline of the same
+       comp (the no-focus call just before it): compute the focus's times from that baseline and
+       `skill_options` and pass them as read 1's `sample_times`; take a second read only if a time
+       is still missing from the new read (keys may have changed between turns). A lesson start
+       is then two calls of one read each.
+  **Rejected:** *sample only candidate layers* (`snapshot.jsx` samples every layer; a subset needs
+  a shared change, FR-001, and children and parents outside the candidates still need samples for
+  item 5, so it saves less than the cuts above); *skip the second read when the needed times are
+  already sampled* as the fix on its own (built already, and on a real comp a plain read never
+  samples other layers at a keyed candidate's rest key, so it almost never fires); *reuse the
+  no-focus baseline for the focus call* (the learner may change the comp between turns, and FR-022
+  wants a fresh read); *a time cap that drops samples* (a missing time is "can't check", FR-018, so
+  it trades speed for checks that can't run).
 
 ### Demonstration
 
@@ -403,7 +497,8 @@ Other edge cases:
   it has Rotation or Scale keys, the
   current time is on its rest key; else the other if it qualifies; else none. With **one** focus
   layer, none (the session's single-target rule already enforces it; a unit test pins it). The
-  prompt runs it only when asked or clearly stuck (TD § 4). **Reading (plan › Q1, approved
+  prompt runs it only when asked or clearly stuck (TD § 4); a yes to the watch offer (FR-008) is
+  an ask, and turns the focus into two before the demo runs. **Reading (plan › Q1, approved
   2026-10-24):** the target is fixed when the lesson starts, so the rest-key condition is checked
   when the demo runs: the demo target stays the second focus layer, `anchor_demo` refuses with
   `not_at_rest` if the playhead isn't on its rest key (FR-015), and the mentor asks for the
@@ -637,7 +732,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 2 | Expression on an unkeyed Anchor Point or Position | Not read (R2); a candidate | Rendered values (after expressions, W2), so the check grades what shows; a pivot that didn't move after "done" gets TD § 9's sentence | "If something drives it, like an expression, I can't see that yet" | Right (blind spot, stated) | Mentor Overlaps' Drift (unkeyed Position expression): the check reads the rendered value |
 | 3 | Expression on Rotation or Scale | Keyed: not a candidate. Unkeyed: not read (R2) | n/a | "An expression turns Logo, so I can't tell where it sits at rest"; never "the expression ignores the pivot" | Right for keyed; unkeyed is a known blind spot (Out of scope) | Mentor Practice's Logo; Mentor Overlaps' Gauge Dial |
 | 4 | Keys on Anchor Point | Not a candidate | A key added on the focus fails item 5 | TD § 4 sentence; stopwatch hint (TD § 7) | Right | 2b's Wobble (SR-1); synthetic stopwatch-on case |
-| 5 | Position keyed at two or more times (X and Y counted together) | **Never** (`position_moves`, D-4) | n/a in a lesson. Item 4 still computes on any Position-keyed focus, unit tested | TD § 4's "already moves … set the pivot before you key" sentence, once, then another layer offered | Right: **L-2 (2026-10-26)** Pan Behind changes or adds one Position key, at the playhead, and leaves the others, so the layer slides at them and no taught move passes (TD § 16 D-4) | Leave-out: `practice2b` (Sled and the other 15), synthetic separated X at 1 s and Y at 2 s. Item 4 only, outside the lesson path: `sled-slid` (worst 3.667), `sled-on-key` (worst 4.167) |
+| 5 | Position keyed at two or more times (X and Y counted together) | **Never** (`position_moves`, D-4) | n/a in a lesson. Item 4 still computes on any Position-keyed focus, unit tested | TD § 4's "already moves … set the pivot before you key" sentence, once, then another layer offered | Right: **L-2 (2026-10-26)** Pan Behind changes or adds one Position key, at the playhead, and leaves the others, so the layer slides at them and no taught move passes (TD § 16 D-4) | Leave-out: `practice2b` (Sled and the other 15), Mentor Overlaps (Leaf 2, Wipe, Locked Bar, Orbit), synthetic separated X at 1 s and Y at 2 s. Item 4 only, outside the lesson path: `sled-slid` (worst 3.667), `sled-on-key` (worst 4.167), each checked through `lessonDirect` (FR-012) |
 | 5b | Position keyed at one time | Allowed if named, only when that time is the check time (no Rotation or Scale keys, or the rest key on its frame); otherwise `position_moves` | Item 4 at the key time; a key added is an other change | TD § 4's "playhead right on it" line with the key's time; the `slid_at_key` hint if they drag off it | Right: L-2, one key, playhead off it, AE added a key at the playhead and the layer slid at the old key | `sled-one-key` against `sled-one-key-before` (fails, `slid_at_key`); synthetic one key with the Scale rest key on another frame (`position_moves`) and on the same frame (allowed) |
 | 6 | Hold keys on Position | Counted like any key: two or more times, never; one, as row 5b | Item 4 at each key time, not between | n/a | Right; never blames the pivot for a hold jump | Synthetic hold-key layers, one with two hold times (`position_moves`), one with one |
 | 7 | Separated X and Y Position | Footprint from bounds, so either | As focus | n/a | Right; demo writes X and Y (FR-015) | Mentor Overlaps' Leaf 2 (separated); demo twin test |
@@ -645,7 +740,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 9 | Precomp layer | Candidate, ranked below; edges are the precomp's frame | Footprint of the frame | "Icon's edges are its precomp's frame, 400 × 400, not the square inside it" | Right | Mentor Practice's Icon |
 | 10 | Precomp with Collapse Transformations on | Not a candidate (`collapse`, W4) | n/a | One sentence | Right once W4 lands; **contract** | 2b's Seal (SR-1) |
 | 11 | Hidden by the learner | Allowed if named; never the demo | As any | TD § 4 sentence | Right | Mentor Practice's Old Take |
-| 12 | Matte, eye off | Allowed if named; never the demo | Its eye switch compared: left on is an other change | Never "hidden"; turn its eye on to drag, then "turn its eye back off" | Right: **L-3 (2026-10-26)** a selected eye-off matte shows no crosshair, so the eye-on sentence is needed | Mentor Overlaps' Wipe; 2b's Reveal Matte; `matte-eye-on` |
+| 12 | Matte, eye off | Allowed if named; never the demo | Its eye switch compared: left on is an other change | Never "hidden"; turn its eye on to drag, then "turn its eye back off" | Right: **L-3 (2026-10-26)** a selected eye-off matte shows no crosshair, so the eye-on sentence is needed | 2b's Reveal Matte (`if_named`, `matte`); `matte-eye-on`. **Not** Mentor Overlaps' Wipe: its Position keys at two or more times make it `never`, `position_moves` (FR-004 precedence), tested as that |
 | 13 | Guide, shy | Guide allowed if named; shy a candidate, ranked below | As any | TD § 4 | Right | Mentor Overlaps' Guide Grid; synthetic shy candidate |
 | 14 | Null, camera, light, adjustment | Never | n/a | Nulls: skill 6's job, only if built | Right | Mentor Practice's CTRL, Glow |
 | 15 | Parented layer | Candidate, ranked below; parent named once | Comp-space footprint includes the parent; FR-037's hand-off off | "Hatch rides on Hatch Rig; that doesn't change where its own pivot goes" | Right; never grades raw Position | 2b's Hatch; T135's anchor capture |
@@ -661,8 +756,8 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 25 | Pan Behind on the wrong layer | n/a | Focus unchanged (item 1 fails); another layer's anchor changed with its footprint still (an other change, item 5 holds) | `wrong_layer`, its line from TD § 7's "grabbed another layer" row: why once, Edit > Undo, start the drag on Needle's crosshair; never "select it first" (FR-019) | **Gap fixed by FR-019** (filter 1). **L-3 (2026-10-26):** with Door selected, a drag on Needle moved Needle's pivot, so the mistake is a real hand path | `wrong-layer` |
 | 26 | Playhead moved between reads | n/a | Compared at the check time from samples, not at the playhead (FR-011, FR-013) | n/a | Right with FR-013; **contract** (W1) | Synthetic two reads at different `comp.time` |
 | 27 | A time not sampled in one read, a layer with no rectangle | n/a | "Can't check" (FR-018) | Says it can't check that layer | **Gap fixed by FR-018** (filter 6) | Synthetic `not_sampled` and `no_rect` |
-| 28 | Locked layer | Allowed if named, never proposed, never the demo (D-2) | Demo refuses; still locked at "done" is returned (FR-019) | The unlock sentence when named; the lock hint if still locked at "done" | Right; R1 reads `locked`. **L-4 (2026-10-26):** locked before the snapshot, the demo went to the other layer (FR-014); locked after, the demo refused with nothing changed | Mentor Overlaps' Locked Bar; `door-locked` |
-| 29 | Auto-Orient on | n/a | comp-space returns `auto_orient` → can't check | Says it can't check | Right (blind spot until T158 answers) | Mentor Overlaps' Orbit |
+| 28 | Locked layer | Allowed if named, never proposed, never the demo (D-2) | Demo refuses; still locked at "done" is returned (FR-019) | The unlock sentence when named; the lock hint if still locked at "done" | Right; R1 reads `locked`. **L-4 (2026-10-26):** locked before the snapshot, the demo went to the other layer (FR-014); locked after, the demo refused with nothing changed | `door-locked` (Door locked: `if_named`, `locked`; the demo refuses). **Not** Mentor Overlaps' Locked Bar for the bucket: its Position keys at 3 s and 4 s make it `never`, `position_moves` (FR-004 precedence); it still pins `demoRefusal`'s `locked` |
+| 29 | Auto-Orient on | n/a | comp-space returns `auto_orient` → can't check | Says it can't check | Right (blind spot until T158 answers) | Mentor Overlaps' Orbit for comp-space's `auto_orient` only (it's `never`, `position_moves`, by its keys first); the bucket and the check on a **synthetic clone of Mentor Overlaps' Still** with `auto_orient` set (`cant_read`; a focus gets "can't check"), marked synthetic |
 
 ## Live checks for the build (builder, under the AE lock; results logged, not guessed)
 
@@ -737,6 +832,14 @@ each row must see; this table adds what the focus, the check and the learner eac
   `check-branch.mjs` and `/merge-worktree` notes.
 - **SC-009 (stretch)**: One live review at least one day after the first pass, with the check
   agreeing with After Effects. *Measured by:* the builder, usage notes.
+- **SC-010 (added round 3, 2026-10-26)**: On Mentor Practice 2, every `anchor_snapshot` call in a
+  live lesson start takes **3 s or less**, so the first turn (record, snapshot, the mentor's reply)
+  stays inside spec 003 SC-004's **10 s** turn bar. **Why 3 s:** one sampled read already runs in
+  0.7 to 0.9 s (`anchor_check`), a two-read call has run in 2.7 s, and 3 s leaves the record read
+  and the model most of the 10 s. If T251 shows a plain read alone is over 3 s, SC-010 can't be met
+  in this skill: it waits on SR-4 and is logged as a finding, not a fail. *Measured by:* the
+  builder, `calls.jsonl`'s `ms` for each `anchor_snapshot` in the next live lesson start after
+  T252 (T253), in usage notes.
 
 ## Eval plan (cases the eval engineer writes and numbers)
 
@@ -763,15 +866,20 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
    don't have it, and the lesson goes on with Pan Behind (SC-005).
 9. **Matte named as the target**: never called hidden; the eye-left-on sentence if its eye changed.
 10. **Text, "turn from the middle"**: told the pivot is on the baseline, not that it's already there.
-11. **Demonstration with two focus layers**: on the one the learner cares less about; A and
-    Shift+P asked first; frames before and after; none with one focus layer (walks it through).
+11. **Demonstration: none on the learner's layer; one offer on another** (amended round 3, TD
+    § 17). With two focus layers: on the one the learner cares less about; A and Shift+P asked
+    first; frames before and after. With one focus layer: no demo on it (walks it through), and on
+    a first lesson the invite turn ends with one offer of a watch on `watch_offer`'s layer, in one
+    sentence (deterministic: no `anchor_demo` call in the turn; rubric: one offer, last sentence,
+    names the offered layer).
 12. **Understanding check**: a wrong answer gets one light correction and the pass stands.
 13. **Sled named** (Position keys at three times, D-4): TD § 4's "already moves" sentence once,
     no lesson on Sled, another layer offered, never "jump" (deterministic: no `jump` in the
     turn; rubric: the sentence said once and a layer offered).
 14. **Incomplete attempt**: names what's off and where; doesn't fix or offer to.
 15. **"Just do it for me"**: declined warmly, no offer later.
-16. **Review**: due, new layer, the hinge asked first, no tool named before "done", no demo.
+16. **Review**: due, new layer, the hinge asked first, no tool named before "done", no demo, and
+    no watch offer (round 3).
 17. **Review with no new candidate**: not offered, stays due.
 18. **Can't check** (a `not_sampled` or `no_rect` result): says it can't check that layer; never
     claims it didn't move.
@@ -792,6 +900,22 @@ including TD § 14 › E. Unit tests cover the measures; evals score the teachin
     asks for Edit > Undo and the playhead right on the key; never "jump". It earns its place
     because it's the only way a lesson on a one-key layer fails for what AE does with the
     playhead, the hint is new wording, and the fixture is already captured (no AE needed).
+23. **The watch offer, one focus layer** (added round 3, TD § 17, FR-008; from T236's problem 2):
+    Door as the focus on `practice2b`, `watch_offer` Needle. Three variants:
+    - **a. No** (the learner just tries, or says "no thanks"): one offer in the invite turn, none
+      after, including after a failed check (`door-outside` as the attempt). Deterministic:
+      `anchor_demo` never called; "show you" (or the offer's phrasing) at most once across the
+      run. Rubric: the offer is one sentence and the last of the invite turn.
+    - **b. Already passed** (a record with this skill passed on Door, a practice lesson on Needle
+      or Tab): no offer at all. Deterministic: no `anchor_demo` call; rubric: no offer to watch.
+      (Live session 2 offered after a pass; TD § 17 now says it mustn't.)
+    - **c. Yes**: the next `anchor_snapshot` carries two focus entries, Door first and Needle
+      second; Needle's place named in one sentence; A and Shift+P asked before `anchor_demo`;
+      the demo's target is Needle's, never Door's. Deterministic: `anchor_demo` called once, on
+      Needle's target; rubric: Door is left for the learner.
+
+**Fixtures for `sled-slid` and `sled-on-key`:** not eval fixtures. Since D-4 no lesson can reach
+Sled, so they're unit tests only, run through `lessonDirect` (FR-012).
 
 **Fixtures (2026-10-26):** cases run on the live captures (comp 179, 40 layers, `practice2b.json`
 and the L-1 to L-5 files), not the stand-ins (comp 300, 19 layers), which are deleted. On the live
@@ -903,6 +1027,41 @@ Evidence: `specs/011-anchor/live-sitting-2026-10-26.md` and commits `96c6bcf`, `
 6. **Data model:** hint codes `in_place_moved` and `other_layer_moved`, built on `skill-5-anchor`
    (`anchor-check.mjs`) and missing from data-model's table, are listed there now.
 
+### 2026-10-26, round 3: the watch offer, the lesson-start speed, Phase 8c's hand-back
+
+Evidence: `discovery/usage-notes/anchor.md` sessions 1 and 2 and "To fix later" (on
+`skill-5-anchor`), TD § 17 (`f7545e2`), and Phase 8c's hand-back. Both items approved by the
+builder.
+
+1. **The watch offer (FR-008, FR-014, US1 #5 and #7, Eval plan 11, 16 and 23; data-model and
+   contracts › `watch_offer`).** TD § 17's "offers, once" carried into requirements. B-8: the
+   branch's `anchor_snapshot` returns `candidates` with `rank` and one `proposal`, but with a
+   focus set the proposal is still the rank-1 layer (often the focus itself), and neither the
+   next candidate's suggested place nor whether the demo would take it is returned. So a new
+   field, `watch_offer`. **Chosen:** the tool picks the layer and its place; the prompt keeps the
+   record condition (first lesson) and "once". **Rejected:** *the mentor reads the next rank from
+   `candidates`* (that's ranking by hand: it has no suggested place and can't see the rest-key or
+   already-there conditions; session 2 got it right by luck, session 1 didn't offer at all);
+   *reuse `proposal` with the focus excluded* (changes a field the opening line and review already
+   use); *the tool reads the record to decide "first lesson"* (couples the comp read to the
+   record; the prompt reads it at step 0 already, and Eval plan 23b checks it); *a watch on a
+   Rotation- or Scale-keyed layer whose rest key isn't at the focus's check time* (the demo would
+   refuse `not_at_rest` or the learner would move the playhead twice; TD § 17 says never offer a
+   watch the demo would refuse).
+2. **Lesson-start speed (FR-013a, SC-010).** Measure first, then cut where the time is, by a
+   table. The likely cuts (one read with no focus; the focus's times only; asked for in read 1)
+   are fixed in the spec now so T252 doesn't have to decide them; which go in follows T251. The
+   rejected options are in FR-013a.
+3. **Precedence and Mentor Overlaps (FR-004, rows 12, 28, 29).** "Never" outranks "allowed if
+   named", as T245 built it. Wipe, Locked Bar and Orbit are `position_moves`, so rows 12, 28 and
+   29 name the fixtures the build used: Reveal Matte, `door-locked`, a synthetic clone of Still.
+4. **`lessonDirect` (FR-012, row 5, Eval plan fixtures).** `sled-slid` and `sled-on-key` are unit
+   tests outside the lesson path, not eval fixtures.
+5. **Not taken this round:** session 2's "set away from rest with the place passing" (usage notes
+   › To fix later, third item: `pop-away-inside.json` and one `SKILL.md` clause). It needs a live
+   capture and is the cockpit's to schedule; it changes no requirement here (FR-019's
+   `away_from_rest` already covers it, with `item2.direction` for the side).
+
 ## Open questions
 
 ### For the human (H): all answered 2026-10-23, as recommended
@@ -918,7 +1077,7 @@ Evidence: `specs/011-anchor/live-sitting-2026-10-26.md` and commits `96c6bcf`, `
    whether it feels thin.
 5. **H-5, the mentor suggests a hinge** when the learner has none in mind. Approved.
 
-### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16; D-5 to D-7 open (2026-10-26, round 2)
+### For the curriculum designer (D): D-1 to D-3 answered in TD § 15, D-4 and the wording list in TD § 16; D-5 to D-9 open (D-5 to D-7 round 2, D-8 and D-9 round 3, 2026-10-26)
 
 1. **D-1, a Rotation-only layer with no key at 0 or a whole turn**: the key closest to 0 or a
    whole turn, one sentence, "is that how it looks at rest?" (FR-011).
@@ -958,6 +1117,21 @@ recommendation until answered):**
    general sentence naming at most two of them ("Sled and Card already move, so they're not in
    this lesson; set a pivot before you key"), designer's wording.
 
+**New, round 3 (wording only; none blocks anything):**
+
+8. **D-8, the "already moves" sentence on a one-key layer.** TD § 4's line, "Sled already moves,
+   so moving its pivot now would shift where it sits at its other keys", is also what the mentor
+   says for a layer with **one** Position key whose rest key is on another frame (`position_moves`
+   too, FR-004). That layer has no "other keys" on Position, and it may not move at all on screen
+   (one key holds still), so the sentence reads oddly there. **Recommended:** a second sentence
+   for that case, about the two frames (for a one-key Sled turning to rest at another key: "Sled's Position is keyed at 1 s but
+   it's at rest at 3 s, so I can't set its pivot without it shifting at one of them"), designer's wording;
+   `SKILL.md` keeps the current line until then.
+9. **D-9, which layer the watch is on (FR-008, a reading, not a change).** TD § 17 says "would
+   qualify as the demo target". The spec reads that as: also not already at its suggested place,
+   and a Rotation- or Scale-keyed layer only when its rest key is on the focus's check time (else
+   the demo refuses `not_at_rest`). **Recommended:** confirm, or say otherwise.
+
 ### For the eval engineer (E)
 
 - The Eval plan, with fixtures from L-4's captures and T135's anchor capture.
@@ -969,6 +1143,11 @@ recommendation until answered):**
 - **2026-10-26, round 2:** case 13 is now Sled as a leave-out (D-4), case 20 adds "not both
   lines", case 22 (one key, dragged off it) is new and optional. Rubric wording for the hints
   comes from TD § 7's rows, not this spec. Wait for T245 to T247 before a baseline.
+- **2026-10-26, round 3:** case 11 is now "none on the learner's layer; one offer on another";
+  case 16 adds "no watch offer"; case 23 (the watch offer: no, already passed, yes) is new and
+  comes from T236's problem 2. The cases read `watch_offer` from the tool, so wait for T249 and
+  T250 before writing 11 and 23 against the build, and before a baseline. FR-013a (T251 to T253)
+  doesn't touch the evals: fixture mode doesn't time AE or take sampled reads.
 
 ## Dependencies
 
@@ -987,6 +1166,11 @@ recommendation until answered):**
     this skill's tests read it. Without them rows 4, 10, 17 and 18 would be synthetic only.
   - **SR-2 (approved 2026-10-24; tasks-wave-b.md T164, T165; the same as spec 012's SR-4):** the
     comp's `width` and `height` in the snapshot, for FR-004's full-frame bucket (plan › Requests).
+  - **SR-4 (conditional, round 3; raised only if T251 shows a plain read alone is over 3 s):**
+    find what a plain `snapshot.jsx` read costs on a 40-layer comp (per-layer samples at every key
+    time, `layer_info`, the bridge) and make it cheaper, for SC-010. The same read serves every
+    skill, so easing's `snapshot_project` would gain too. (SR-3 is the branch's tool-file order
+    request.)
 - **Spec 012** (null parenting, in parallel): shares Mentor Practice 2b and comp-space; no
   dependency either way beyond skill 5 being skill 6's hard prerequisite in the path.
 - **Eval engineer**: the Eval plan; fixtures from L-4 and T135.
