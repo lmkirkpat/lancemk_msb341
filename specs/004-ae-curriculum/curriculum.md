@@ -13,7 +13,9 @@ spec 004's Q1 to Q3 answered; sections 3, 5, 6, 9, 12 and 13).
   2026-10-28. The human chose to make it the rule now rather than wait for wave A's baselines. § 2
   also says which skills already fit and which have a pacing proposal waiting. Easing has no
   teaching design of its own, so its proposal is in § 6 (skill 0). Stage 2's row in the table now
-  ends on something to do.
+  ends on something to do. Later the same day the human approved all four proposals as written
+  (easing in § 6, key types, speed graph and offset in their designs' § 15), with their open
+  questions answered there; § 2's audit table says so.
 **Inputs:** the 15 briefs in `discovery/curriculum-research/`, `discovery/diagnosis-evidence.md`,
 `specs/005-diagnosis/spec.md` (draft, branch `worktree-agent-a4ba74721dd169ee2`),
 `discovery/usage-notes/adobe-assistant-2026-10-08.md`, interviews 007 and 008, `discovery/insights.md`,
@@ -116,14 +118,15 @@ question.
 **Where each built skill stands (audit, 2026-10-28).** None of the four wave A or slice skills fits
 as built. Each one's explanation stage ends with the learner watching, so it gets folded into the
 invite turn with the how-to, and the turn becomes a lecture (the same failure skills 5 and 6 had).
-Each has a dated pacing proposal, for the human to approve:
+Each got a pacing proposal, and the human **approved all four as written on 2026-10-28**, including
+joining the explanation and the task in one turn. Each fits once its items are built:
 
 | Skill | Verdict | Where | "Do it for me" and the one offer |
 |---|---|---|---|
-| Easing (0) | Proposal | § 6 skill 0, below (easing has no teaching design file) | **Already fits.** Before the demo, "do it for me" is the ask and the demo runs (spec 002 US1 #5); after it, a decline with no new offer (step 7). Its offer ("a layer with more pairs if you'd rather watch", and the build's "just ask") is made once. No change |
-| Key types (1) | Proposal | `specs/009-key-types/teaching-design.md` § 15 | **Fits, wording to make explicit.** No standing offer (C-4, a watch offer for the wave A skills, is still open), so there's nothing to keep. `SKILL.md` says "demonstrate only when asked" and "decline 'do the rest'", but not that a "do it for me" before any demo is the ask. One line, in § 15's items |
-| Speed graph (2) | Proposal | `specs/008-speed-graph/teaching-design.md` § 15 | Same as key types: one line, in § 15's items |
-| Offset (3) | Proposal | `specs/010-offset/teaching-design.md` § 15 | Same as key types: one line, in § 15's items |
+| Easing (0) | Fits once built | § 6 skill 0, below (easing has no teaching design file), approved 2026-10-28 | **Already fits.** Before the demo, "do it for me" is the ask and the demo runs (spec 002 US1 #5); after it, a decline with no new offer (step 7). Its one offer ("a layer with more pairs if you'd rather watch", on a one-pair focus) is made once. No change. Easing's rubric gets R-ONE-IDEA (answered 2026-10-28) |
+| Key types (1) | Fits once built | `specs/009-key-types/teaching-design.md` § 15, approved 2026-10-28 | **Fits, wording to make explicit.** No standing offer (C-4, a watch offer for the wave A skills, is still open), so there's nothing to keep. `SKILL.md` says "demonstrate only when asked" and "decline 'do the rest'", but not that a "do it for me" before any demo is the ask. One line, in § 15's items. An already-held pair is one clause, frames on request (answered 2026-10-28) |
+| Speed graph (2) | Fits once built | `specs/008-speed-graph/teaching-design.md` § 15, approved 2026-10-28 | Same as key types: one line, in § 15's items |
+| Offset (3) | Fits once built | `specs/010-offset/teaching-design.md` § 15, approved 2026-10-28 | Same as key types: one line, in § 15's items. The opening's easing reminder stays (answered 2026-10-28: the opening is out of scope) |
 | Set the pivot (5) | Fits once built | § 20, approved 2026-10-28 | Answered there (the watch offer stays once, turn 4) |
 | Null (6) | Fits once built | § 16, approved 2026-10-28 | Applied there (the demo offer stays once, turn 4) |
 
@@ -328,14 +331,21 @@ Each skill: the idea, why, outcome, focus, steps, pass, mistakes, what it doesn'
 review. Overlaps are in section 8, version traps in section 9. The record IDs are suggestions. The
 skill builder names them in `mentor/tools/`.
 
-### 0. Easing (built, `easing.basic`): pacing proposal (proposed 2026-10-28)
+### 0. Easing (built, `easing.basic`): pacing (approved 2026-10-28)
 
-**Status: proposed 2026-10-28, for the human to approve.** Easing has no teaching design file: its
-lesson lives in `specs/002-easing-slice/spec.md` (the spec writer's) and
-`.claude/skills/ease-mentor/SKILL.md` (the builder's). So its audit against § 2's turn rule is here.
-Nothing below changes `SKILL.md`, the spec or the evals until it's approved. The opening doesn't
-change, and neither do "I do, we do, you do", the one demonstration and its target, the hints or the
-record.
+**Status: approved 2026-10-28 by the human, as written**, including joining the explanation and the
+task in one turn. Proposed the same day. Easing has no teaching design file: its lesson lives in
+`specs/002-easing-slice/spec.md` (the spec writer's) and `.claude/skills/ease-mentor/SKILL.md` (the
+builder's). So its audit against § 2's turn rule is here. The items at the end say who changes what.
+The opening doesn't change, and neither do "I do, we do, you do", the one demonstration and its
+target, the hints or the record.
+
+**Answered 2026-10-28.**
+
+| Question | Answer |
+|---|---|
+| Does easing's rubric get R-ONE-IDEA? | **Yes.** The eval engineer adds it, with the reading below |
+| Approve this section as written? | **Yes** |
 
 **Verdict: doesn't fit.** `SKILL.md` step 4 (explain) asks for the frame, what linear is, what
 easing does, where to do it (F9) and how to check it in the Graph Editor; step 5 then asks them to
@@ -383,8 +393,8 @@ one-pair focus) is unchanged, with the hand-back in one sentence. US1 #2 still h
 `SKILL.md` step 4 (no Graph Editor tip; how-to in one sentence) and step 5 (merged into step 4's
 turn, pairs in a sentence).
 
-**What R-ONE-IDEA should see in easing (the eval engineer's to add; this is only the intent).**
-Easing's rubric has no R-ONE-IDEA, so the eval engineer adds one in the same words as the other
+**What R-ONE-IDEA should see in easing (the eval engineer's to add, answered 2026-10-28; this is
+only the intent).** Easing's rubric has no R-ONE-IDEA, so the eval engineer adds one in the same words as the other
 sets' ("each turn is a few sentences and moves one idea, ends by handing the learner something to
 do"), with easing's reading: the opening's count, proposal and leave-outs are one choice (§ 2's
 opening rule); turn 2's frame, idea and one-sentence how-to are one task and pass if the turn ends
@@ -411,10 +421,32 @@ passes as the answer plus the pending step.
   live lessons show "how do I select the keys?", rule 3 answers it in a sentence; if it's common,
   add the box-drag as a clause, not a list.
 
-**Items, if approved** (numbers `NNN`, the cockpit's):
-- **Builder (B-NNN), `ease-mentor/SKILL.md` only:** step 4 becomes turn 2 above (frame, the idea on
-  their timing, the how-to in one sentence, no Graph Editor tip) and ends with step 5's ask, pairs in
-  one sentence; step 6 after the demo hands the rest back in one sentence; a "Style" line for rule 3.
+**Items (approved 2026-10-28)** (numbers `NNN`, the cockpit's):
+- **Builder (B-NNN), `ease-mentor/SKILL.md` only, no tool change** (tightened 2026-10-28 so each
+  line says where and what):
+  1. **Step 4 and step 5 become one turn.** Step 4's body is replaced with: confirm the focus layer
+     in one clause; call `preview_frame` inside a focus pair, with at most one clause about where
+     the layer is in it, and nothing about the frame itself (blank, small); the idea in two
+     sentences on their timing (turn 2's example); the how-to in one sentence ("With Title's keys
+     showing (U), select both keys of a pair and choose Animation > Keyframe Assistant > Easy Ease
+     (F9); the diamonds turn into hourglasses."). Delete "and how to check it in the Graph Editor"
+     and "Keep it short: linear means… each key" (the two idea sentences replace it). Step 5 then
+     ends the same turn: the pairs in one sentence by layer, property and time, never a list, and
+     "say done". No turn ends between them.
+  2. **No new watch offer.** Easing's one offer stays where it is (step 6's one-pair paragraph). If
+     it's made in this turn, it's the last sentence, once.
+  3. **Step 4's `learned` paragraph:** unchanged; the one-line reminder and frame are this turn's
+     context, and it ends on step 5's ask the same way.
+  4. **Step 6's one-pair walk-through** (`no_demo_reason` `"single_pair"`): the reason in one
+     sentence, then the walk-through as turn 2's how-to sentence, in prose. Drop "and check the
+     curve" (it's the Graph Editor tip). Then "a layer with more pairs if you'd rather watch", and
+     "say done".
+  5. **Step 6, after `set_ease` runs:** after what changed and Edit > Undo, hand the rest back in one
+     sentence, naming how many are left ("The other three are yours; say done."). Don't repeat the
+     how-to.
+  6. **Style:** add, word for word: "A question or a request in place of the step gets its answer in
+     one or two sentences, then the step that was pending, again, in one sentence. Never the next
+     step's content in that turn, and never the walk-through a second time."
 - **Spec writer (S-NNN):** no FR text change. Optionally, a line in spec 002 under FR-004 pointing at
   this section.
 - **Eval engineer:** add R-ONE-IDEA to `product/evals/easing/rubric.md` (reading above) and to cases

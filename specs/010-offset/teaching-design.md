@@ -3,7 +3,8 @@
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-20. **Status:** draft, round 1 answered (§ 14). § 15 (pacing, one idea per turn)
-**proposed 2026-10-28, not approved**: until the human approves it, § 5 stands as written.
+**approved 2026-10-28** by the human, as written, with its question answered (§ 15, "Answered
+2026-10-28"). Where § 5 cuts the lesson into turns differently, § 15 wins.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 3, § 8, § 9, § 13 (C3, H7);
 spec 004 (approved), above all FR-004, FR-005, FR-016, FR-017, FR-018 to FR-022, FR-024, FR-027,
 FR-030, FR-037; spec 005's DX-02, DX-03, DX-07. Research:
@@ -248,10 +249,10 @@ one layer's keys).
 hint. Matches FR-008 and FR-012. The "split on purpose" rule is unchanged. § 7's hint wording still
 fits (a frame where the mismatch shows); only that row's "what the check sees" was reworded to match.
 
-## 15. Pacing: one idea per turn (proposed 2026-10-28)
+## 15. Pacing: one idea per turn (approved 2026-10-28)
 
-**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
-spec or the evals until it's approved; the items at the end say who changes what. This is the audit
+**Status: approved 2026-10-28 by the human, as written**, including joining the explanation and the
+task in one turn. Proposed the same day. The items at the end say who changes what. This is the audit
 against curriculum § 2's turn rule (approved 2026-10-28, from skill 5's § 20 and skill 6's § 16).
 The opening (the snapshot decides lesson or review; the group, the other kind, the leave-outs)
 doesn't change, and neither do "I do, we do, you do", the one demo, the intent question (order and
@@ -314,13 +315,20 @@ them however you like".
 | Quick Offset's "the top layer stays, the ones below move" | Stage 4 (as built) | **On request** (`SKILL.md`'s "if they ask how Quick Offset works" paragraph, unchanged) | The gesture is the task; how it spreads is a second subject. The check reads the order, and § 7's order hint catches a surprise |
 | "Dot 2's properties should move as one unless you split them" | Seen in 25 | Said back **only if they asked for a split** (FR-007); otherwise the "pops in" hint (§ 7 row 2) | A rule about a mistake they haven't made |
 | "A stagger gives the eye a path: one, two, three" | Seen in 25 | **Goes** | A second wording of the same idea |
-| The easing callback in a first lesson when easing is learned | Seen in 26's turn 1 | Unchanged here: the opening is out of scope, and T415's openings passed with it. Logged as an open question | |
+| The easing callback in a first lesson when easing is learned | Seen in 26's turn 1 | Unchanged: the opening is out of scope, and T415's openings passed with it (answered 2026-10-28: it stays as is) | |
 | Any comment on the frame itself | Seen in 27 | **Goes** | A frame that's no use gets no sentence |
 | The walk-through after a demo or a side question | Possible under stage 4 | **Goes** | Rule 3 |
 
 **Kept exactly:** the opening, the intent question and FR-007's say-back and floor, "never name a
 gap", "I do, we do, you do", the one demo and its target rule, the hints (§ 7), the rhythm comment,
 the measured-gap say-back, the record, the review.
+
+### Answered 2026-10-28
+
+| Question | Answer |
+|---|---|
+| Does a first lesson's opening keep its reminder of the easing lesson (case 26's turn 1)? | **Yes, as is.** The opening is out of scope for this section; nothing here changes it |
+| Approve § 15 as written? | **Yes** |
 
 ### What R-ONE-IDEA should see (the eval engineer's to change; this is only the intent)
 
@@ -350,23 +358,52 @@ the measured-gap say-back, the record, the review.
 - **Guess:** that a learner who has never dragged keys can follow "select a Dot's keys and drag them"
   as a clause. If live lessons show "how do I select its keys?", rule 3 answers it in a sentence.
 
-### Items, if approved
+### Items (approved 2026-10-28)
 
 Numbers are `NNN`: the cockpit assigns them.
 
-**For the builder (B-NNN), `offset-mentor/SKILL.md` only, no tool change:**
-1. Step 2 ends on step 3's question: the frame, at most one clause, the idea sentence, then "which
-   should go first, and how far apart?" When the order and gap came with the choice, step 2 runs
-   into step 4 in the same turn.
-2. Step 4: the plan said back in one sentence (a split only if they asked for one), the how-to in one
-   or two sentences with alternatives as clauses, "play it back and say done". No bullets, no trim
-   warning, no "the top layer stays" (that stays in the "if they ask how Quick Offset works"
-   paragraph).
-3. Step 5: after the demo, hand the rest back in one sentence; no walk-through. One line for
-   curriculum § 2's "do it for me" rule (before any demo, with an order, it's the ask; before an
-   order, the decline and the intent question; after the demo, the decline and the pending step, no
-   new offer).
-4. A "Style" line for rule 3.
+**For the builder (B-NNN), `offset-mentor/SKILL.md` only, no tool change** (tightened 2026-10-28 so
+each item says where and what):
+1. **Steps 2 and 3 are one turn.** Step 2: confirm the group in one clause; one `preview_frame` at
+   `frame_together` with at most one clause on it ("Here at 1 s all three Dots are mid-move"), and
+   nothing about the frame itself; the idea in one sentence ("When everything moves at once,
+   nothing leads the eye."); then step 3's question as the turn's last sentence. Step 3's rules
+   (the `skill_options` calls, `order_unmatched`, `refused_members`) run on the learner's answer,
+   in the next turn.
+2. **When the turn after the opening has nothing to ask**, step 2's frame, clause and idea sentence
+   open step 4's turn instead, and no turn ends between them. That's when the learner gave order
+   and gap with their choice, or when `stored_choices` was true and they confirmed it (step 1's
+   confirm was the question).
+3. **Step 3's repeat-back opens step 4's turn**, in one sentence, with a split only if they asked
+   for one. When `floor_check` says the gap is under the floor, the turn is step 3's floor bullet
+   instead (their order said back, "a gap that small still reads as together", "what gap would you
+   like instead?"), and step 4 waits for their answer. If they keep it, step 4's how-to is the
+   walk-through in words, with no demo.
+4. **Step 4 is replaced with:** the how-to in one or two sentences, alternatives as clauses, naming
+   who stays put and who moves. Layers kind: "select a Dot's keys and drag them later, or drag the
+   middle of its bar", plus, only when `quick_offset` is true, "Quick Offset does all of them in one
+   drag: select them, hold Command and Option, and drag." Properties kind: the keys clause only
+   (dragging the bar moves every property together, so it can't stagger them), plus Quick Offset on
+   selected keys when `quick_offset` is true. Then "Play it back and say done." No bullets. Never in
+   this turn: "dragging an end of the bar trims it" (step 7's "Nothing moved" hint only), "the top
+   layer stays" (the "if they ask how Quick Offset works" paragraph only), or a rule that a layer's
+   properties should move together (the "Pops in" hint only).
+5. **Step 5, after `offset_demo` runs:** after the two frames, what moved and Edit > Undo, hand the
+   rest back in one sentence ("Dot 3 is yours; say done."). Don't repeat the how-to. Step 5's
+   two-member and kept-floor paragraphs: the reason in one sentence, then step 4's how-to as the
+   walk-through, then "say done".
+6. **Step 6 ("do it for me"), replace its first sentence with:** before any demo, once there's an
+   order (a `demo_target` exists), "do it for me" is the ask: run step 5's one demo, then item 5's
+   hand-back. Before an order, decline warmly and ask step 3's question again. After the demo,
+   decline warmly (staggering the next one themselves is how it sticks, and you'll check it) and
+   repeat the pending step in one sentence, with no new offer. Offset makes no standing watch offer
+   (C-4 is open), so there's no offer to keep after a decline.
+7. **Step 7's pass bullet and step 8:** "That passes", the measured-gap say-back and the rhythm
+   sentence (when uneven) are one turn, ending on "I've noted that for next time" and the next step
+   from the record.
+8. **Style:** add, word for word: "A question or a request in place of the step gets its answer in
+   one or two sentences, then the step that was pending, again, in one sentence. Never the next
+   step's content in that turn, and never the walk-through a second time."
 
 **For the spec writer (S-NNN):**
 - **FR-016:** no text change; it follows § 5's stages, which § 15 re-cuts into turns. Worth a line

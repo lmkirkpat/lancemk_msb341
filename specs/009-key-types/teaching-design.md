@@ -3,8 +3,8 @@
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-20; round 1 answers 2026-10-21 (§ 14). **Status:** draft, round 1 answered.
-§ 15 (pacing, one idea per turn) **proposed 2026-10-28, not approved**: until the human approves it,
-§ 5 stands as written.
+§ 15 (pacing, one idea per turn) **approved 2026-10-28** by the human, as written, with its question
+answered (§ 15, "Answered 2026-10-28"). Where § 5 cuts the lesson into turns differently, § 15 wins.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 1, § 8, § 9, § 12 (B1, B2), § 13;
 spec 004 (approved), above all FR-004, FR-005, FR-018 to FR-022, FR-024, FR-025, FR-030, FR-031.
 Research: `discovery/curriculum-research/keyframe-types-hold-and-linear.md`. Evidence:
@@ -250,14 +250,21 @@ layer-start groups, so their first keys should not land on 0.5 s, or the Dots gr
 three. The answer key (T041) lists whatever's built, so this is a build note, not a design change.
 Neither file needs editing.
 
-## 15. Pacing: one idea per turn (proposed 2026-10-28)
+## 15. Pacing: one idea per turn (approved 2026-10-28)
 
-**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
-spec or the evals until it's approved; the items at the end say who changes what. This is the audit
+**Status: approved 2026-10-28 by the human, as written**, including joining the explanation and the
+task in one turn. Proposed the same day. The items at the end say who changes what. This is the audit
 against curriculum § 2's turn rule (approved 2026-10-28, from skill 5's § 20 and skill 6's § 16).
 The opening (the snapshot decides lesson or review; the intent question with the candidates, fixed
 in `e82a7d2`) doesn't change, and neither do "I do, we do, you do", the one demo, the hints, the
 linear question or the review.
+
+### Answered 2026-10-28
+
+| Question | Answer |
+|---|---|
+| Does an already-held pair (Dot 1, the Cursor) become one spoken clause in turn 2, with its frames only on request? | **Yes.** The clause names it; the frames either side of its jump come only when the learner asks to see a snap |
+| Approve § 15 as written? | **Yes** |
 
 ### The problem
 
@@ -299,7 +306,7 @@ one-sentence reason there's no demo; it still ends on "say done".
 
 | Piece | Was | Now | Why |
 |---|---|---|---|
-| Frames either side of a held pair's jump (`held_examples`) | Stage 2 | A clause naming it ("the way Dot 1 already jumps at 0.5 s"); the two frames **on request** ("what does a snap look like?") | Their own pair's fade frame is the evidence the lesson needs; three frames and a paragraph about another layer made a second subject. The demo's frames show a snap on their own pair when they ask for one |
+| Frames either side of a held pair's jump (`held_examples`) | Stage 2 | A clause naming it ("the way Dot 1 already jumps at 0.5 s"); the two frames **on request** ("what does a snap look like?"; confirmed 2026-10-28) | Their own pair's fade frame is the evidence the lesson needs; three frames and a paragraph about another layer made a second subject. The demo's frames show a snap on their own pair when they ask for one |
 | A recap of every focus pair with its values | Seen in 05 and 20 | **Goes**; the pairs are named once, by their start times, in the how-to | The times are what they act on; the values are in the timeline |
 | Two bulleted methods (menu, right-click) | Stage 4 (as built) | One sentence, the right-click as a clause | FR-018 needs both named; it doesn't need a list |
 | "You can select all three and do them together" | Seen in 05 | **Goes** (on request) | It sets up § 7 row 3's mistake, and nothing in the task needs it |
@@ -342,24 +349,43 @@ the linear check (stage 6), the record, the review.
   rule 3 answers with the held-example frames (they're on request), and if that's common, the
   frames come back into turn 2 in place of the clause.
 
-### Items, if approved
+### Items (approved 2026-10-28)
 
 Numbers are `NNN`: the cockpit assigns them.
 
-**For the builder (B-NNN), `key-types-mentor/SKILL.md` only, no tool change:**
-1. Step 3 becomes turn 2's first half: the focus in one clause, one frame mid-pair with at most one
-   clause, the idea sentence, the held example as a clause (frames only when asked); nothing about
-   the frame itself.
-2. Step 4 ends the same turn: the how-to in one sentence (menu, shortcut on 26.5, right-click as a
-   clause), the pairs by start time, "say done". No bullets, no "select all three".
-3. Step 5: after the demo, hand the rest back in one sentence; no walk-through.
-4. Step 7: the toggle sentence only as a hint, when a pair that was held is no longer held.
-5. Step 8: ask the linear question at the end of the pass turn.
-6. A "Style" line for rule 3.
-7. Step 5 or 6, one line for curriculum § 2's shared "do it for me" rule: before any demo, on a focus
-   with a demo target, "do it for me" is the ask (the one demo runs; the rest is theirs); after the
-   demo, the warm decline and the pending step, with no new offer. Key types makes no standing watch
-   offer (C-4 is open), so there's no offer to keep after a decline.
+**For the builder (B-NNN), `key-types-mentor/SKILL.md` only, no tool change** (tightened
+2026-10-28 so each item says where and what):
+1. **Step 3 becomes turn 2's first half.** Confirm the focus in one clause, by layer and property,
+   with no values. One `preview_frame` mid-pair; the "say where it is in the frame" sentence is the
+   one clause allowed about the frame, and nothing else is said about the frame. The idea in one
+   sentence: "A hold keeps the value until the next key, then jumps." When `held_examples` has a
+   pair, one clause from its layer and `jump_time` ("the way Dot 1 already jumps at 0.5 s"); the two
+   frames either side of its jump move to a new line: only when the learner asks what a snap looks
+   like, using the existing frame rules (one frame is 1 / `comp.frame_rate` seconds; say where it
+   is only where it shows).
+2. **Step 4 ends the same turn; no turn ends between steps 3 and 4.** The how-to in one sentence
+   from "Where things are": the start key of each pair, named by time, then Animation > Toggle Hold
+   Keyframe with its shortcut when `host` is 26.5 (menu only otherwise, as that section says), and
+   the right-click as a clause. Then "Hold [layer]'s [n] pairs and say done." No bullets, no list of
+   methods, no "select all of them and do them together", no recap of each pair's values.
+3. **Step 5, after `key_types_demo` runs:** after what changed, Edit > Undo and the two frames, hand
+   the rest back in one sentence by start time ("The 1.4 s and 1.8 s pairs are yours; say done.").
+   Don't repeat the how-to. Step 5's one-pair paragraph: the reason in one sentence, then step 4's
+   how-to sentence as the walk-through, then "say done".
+4. **Step 7, a new bullet:** "**Was held, now isn't:** when a pair an earlier check this lesson (or
+   your demo) showed as held now shows as not held, say Toggle Hold Keyframe is a toggle, so using it
+   again on a held key turns the hold off. Never say this before it happens." It replaces nothing;
+   the not-held hint still gives the layer, property, time and frame.
+5. **Step 8:** ask the linear question in the same turn as "that passes" (what they held, in one
+   clause), as that turn's last sentence. Not a turn of its own.
+6. **Style:** add, word for word: "A question or a request in place of the step gets its answer in
+   one or two sentences, then the step that was pending, again, in one sentence. Never the next
+   step's content in that turn, and never the walk-through a second time."
+7. **Step 6 ("do it for me"), replace its first sentence with:** before any demo, on a focus with a
+   `demo_target`, "do it for me" (or "do the rest") is the ask: run step 5's one demo, then hand the
+   rest back as in item 3. After the demo, decline warmly (holding the next pair themselves is how it
+   sticks, and you'll check it) and repeat the pending step in one sentence, with no new offer. Key
+   types makes no standing watch offer (C-4 is open), so there's no offer to keep after a decline.
 
 **For the spec writer (S-NNN):**
 - **FR-008:** "name the Cursor once as already snapping (and use it for the stage 2 frames)" becomes

@@ -3,7 +3,8 @@
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-20. **Status:** draft, round 1 answered (§ 14). § 15 (pacing, one idea per turn)
-**proposed 2026-10-28, not approved**: until the human approves it, § 5 stands as written.
+**approved 2026-10-28** by the human, as written. Where § 5 cuts the lesson into turns differently,
+§ 15 wins.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2 (the lesson shape), § 6 skill 2, § 8,
 § 9, § 13; spec 004 (approved), above all FR-004, FR-005, FR-018 to FR-022, FR-024 to FR-026,
 FR-030, FR-037. Research: `discovery/curriculum-research/graph-editor.md`. Evidence:
@@ -253,10 +254,11 @@ rather than chosen per move.
 | D-5 Frames while a parent moves | **Agreed:** frame claims say only where the layer is on screen, never how far along its move, until R1 (§ 5, § 9). | Kept |
 | S-1 tolerance (FR-010d: landing speed ≤ 5% of the pair's average speed, tuned on L-5) | **Matches my intent.** "Comes to rest" means the arrival speed is small next to the move's own speed, so a relative measure is right, and 0 within 0.001 where the value can't be read is fine. If L-5 tunes it, tune toward catching a visible bump, not toward passing more pairs. | Kept |
 
-## 15. Pacing: one idea per turn (proposed 2026-10-28)
+## 15. Pacing: one idea per turn (approved 2026-10-28)
 
-**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
-spec or the evals until it's approved; the items at the end say who changes what. This is the audit
+**Status: approved 2026-10-28 by the human, as written**, including joining the explanation and the
+task in one turn. Proposed the same day; it raised no questions of its own. The items at the end say
+who changes what. This is the audit
 against curriculum § 2's turn rule (approved 2026-10-28, from skill 5's § 20 and skill 6's § 16).
 The opening (the snapshot decides lesson or review; the proposal, leave-outs and light intent check)
 doesn't change, and neither do "I do, we do, you do", the one demo, the reading steps, the hints or
@@ -347,20 +349,49 @@ the record, the review.
   live lessons show the drag-up mistake on most first attempts, add "not up" as two words in the task
   sentence, not a sentence of its own.
 
-### Items, if approved
+### Items (approved 2026-10-28)
 
 Numbers are `NNN`: the cockpit assigns them.
 
-**For the builder (B-NNN), `speed-graph-mentor/SKILL.md` only, no tool change:**
-1. Step 3 becomes turn 3: the reading confirmed in a clause, one frame (where the layer is, at most
-   one clause), the two idea sentences, the task sentence; no bullets, no drag-up warning, nothing
-   about the peak moving. Step 5's ask ends the same turn ("do that on … and say done").
-2. Step 4: after the demo, hand the rest back in one sentence; no walk-through. One line for
-   curriculum § 2's "do it for me" rule (before any demo it's the ask; after it, the decline and the
-   pending step, no new offer).
-3. Step 5: "Play it back at full speed" moves to the close; the pass turn ends on step 6's question.
-4. "Version steps": Keyframe Velocity only when they ask to type values.
-5. A "Style" line for rule 3.
+**For the builder (B-NNN), `speed-graph-mentor/SKILL.md` only, no tool change** (tightened
+2026-10-28 so each item says where and what):
+1. **Step 2's "Right" bullet:** no turn of its own. The confirmation ("Right, the middle: that's
+   where Easy Ease puts it") is the first clause of step 3's turn. After the one hint on a wrong
+   reading, step 3's turn follows the learner's next answer whatever it is, opening with a clause on
+   that answer.
+2. **Step 3 is replaced** with turn 3: the confirmation clause (item 1); one `preview_frame` inside
+   a focus pair, with at most one clause, saying only where the layer is (the "Frames show where"
+   rule), and nothing about the frame itself; the two idea sentences ("The handle's sideways reach
+   is influence, how long the ease lasts. Easy Ease gives every key the same reach, so every move
+   feels the same."); the task sentence ("Make each move start quickly and land softly: drag the
+   landing key's handle sideways along the bottom to make it longer, and shorten the start key's.").
+   Delete "A short reach out of the first key… land softly" and "The landing handle stays on the
+   bottom: dragging it up makes the layer arrive still moving" (step 5's `arrives_moving` hint
+   already says it). Never say where the peak will move.
+3. **Step 5's first sentence ends the same turn; no turn ends between steps 3 and 5.** "Do that on
+   [the focus pairs in one sentence, by layer and property] and say done." A demo offer ("if you'd
+   like to see me shape one first, just ask") may follow as the last sentence, once per lesson.
+4. **Step 4, after `speed_graph_demo` runs:** after the frames, what changed, Edit > Undo and the
+   look at the peak (unchanged), hand the rest back in one sentence naming how many are left ("The
+   other three are yours; say done."). Don't repeat the how-to. Step 4's one-pair walk-through
+   (`single_target`): the reason in one sentence, then turn 3's task sentence as the walk-through,
+   then "say done".
+5. **Step 4's "do the rest" bullet, replace with:** before any demo, on a focus with a
+   `demo_target`, "do it for me" is the ask: run the one demo, then item 4's hand-back. After the
+   demo, decline warmly (shaping the next pair themselves is how it sticks, and you'll check it)
+   and repeat the pending step in one sentence, with no new offer. If the "just ask" offer (item 3)
+   was made, it isn't made again.
+6. **Step 5's pass bullet:** "That passes", with the passed pairs in one clause, then step 6's
+   read-again question as the turn's last sentence. Move "Play it back at full speed to judge it;
+   scrubbing doesn't show the feel." out of step 5.
+7. **Step 6, add the close:** after their answer, one clause on it (or step 6's one hint), "I've
+   noted that for next time", and the play-back sentence (from item 6) as the last sentence. Then
+   step 7's record.
+8. **"Version steps", Keyframe Velocity:** add "Say this only when the learner asks to type values,
+   and never with a number."
+9. **Style:** add, word for word: "A question or a request in place of the step gets its answer in
+   one or two sentences, then the step that was pending, again, in one sentence. Never the next
+   step's content in that turn, and never the walk-through a second time."
 
 **For the spec writer (S-NNN):**
 - **FR-001:** no text change; it follows § 5's stages, which § 15 re-cuts into turns. Worth a line
