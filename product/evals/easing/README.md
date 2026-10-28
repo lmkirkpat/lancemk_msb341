@@ -7,6 +7,10 @@ need to be open**. Whether the detection and grading are *correct* is covered by
 (`cd mentor && npm test`), which are free and instant. Evals cost real usage, so they don't
 repeat what the unit tests already prove.
 
+## Pacing evals (T421, 2026-10-28; mentor from the T420 branch)
+
+Dry run only so far (26 cases valid). `R-ONE-IDEA` now carries curriculum § 6, skill 0's reading (the opening's count, proposal and leave-outs are one choice; the explanation turn is one task ending on "ease them and say done", with no numbered list, bulleted list of pairs or Graph Editor tip; the demo turn hands the rest back in one sentence; a side question is the answer plus the pending step). Cases 02, 03, 05 and 21 list it (case 01 already did); no other expectation changed (US1 #5's demo-on-ask in case 05 stays). The T422 repeats are 02, 03, 04, 05, 19, 21.
+
 ## Running
 
 From the repo root:

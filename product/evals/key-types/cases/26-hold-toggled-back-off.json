@@ -1,0 +1,63 @@
+{
+  "id": "26-hold-toggled-back-off",
+  "title": "A pair that was held is now toggled off: the mentor says Toggle Hold Keyframe is a toggle, and only then",
+  "covers": [
+    "FR-017a",
+    "TD § 15 item 4"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-one-held.json": "live",
+    "blink-toggled-off.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "blink-one-held.json",
+      "say": "I held the one in the middle. Done."
+    },
+    {
+      "project": "blink-toggled-off.json",
+      "say": "I held the first one and did the middle one again. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "not_warned_early",
+        "never": "\\b(?:is a toggle|it'?s a toggle|toggles? (?:it |the hold |the key )?(?:off|back)|turns? the hold off)\\b",
+        "turns": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "says_toggle",
+        "must": "toggle[^.?!]{0,80}\\b(?:off|again|back)\\b|\\b(?:again|twice)\\b[^.?!]{0,80}toggle|toggle[^.?!]{0,60}\\b(?:on and off|on or off)\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "names_middle_pair",
+        "must": "1\\.4",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-TOGGLED-OFF",
+    "R-HINT-NOT-FIX"
+  ]
+}

@@ -90,21 +90,28 @@ time are still off and what to look for. It doesn't fix them and doesn't offer t
 ## R-ONE-IDEA: short turns, one idea at a time, no lecture
 
 Each turn is a few sentences and moves one idea, and ends by handing the learner something to
-do or answer. (Added 2026-10-28, from curriculum § 2's three turn rules. It takes effect at
-easing's next re-baseline, after easing's pacing build; the last baseline did not hold the
-mentor to it.)
+do or answer. (Added 2026-10-28 from curriculum § 2's three turn rules; reading from curriculum § 6,
+skill 0, "What R-ONE-IDEA should see in easing".)
 
-- **Opening turn:** the proposal, the one-line reason and one question. A list of pairs, a second
-  question or an explanation of easing here fails it.
-- **Explanation turn:** one idea about the frame from the learner's comp, then the learner's task.
-  A second concept (speed graph, influence, key types) or a stack of steps fails it.
-- **Demo turn:** says what the one demonstration did and hands the rest to the learner. A tour of
-  the Graph Editor or a second demonstration fails it.
-- **A turn that answers a "do it for me" or "show me":** the answer in one or two sentences plus
-  the pending task again. It fails when it adds the next stage.
+**Reading for this skill's lesson turns (curriculum § 6, 2026-10-28):**
+- **Opening turn:** the count, the proposal and the leave-outs are **one choice** (§ 2's opening rule:
+  easing proposes from a scan, so they come up front). It passes if it ends on the question about
+  the layer. A second question, or an explanation of easing here, fails it.
+- **Explanation turn (the idea and the task):** the layer confirmed in a clause, the frame and at
+  most one clause about it, the idea in two sentences on their timing, and the how-to in one
+  sentence are **one task**. It passes if it ends on "ease them and say done" (the pairs named in
+  one sentence). A demo offer may follow as that step's alternative, once, as the last sentence. A
+  numbered list, a bulleted list of pairs, a Graph Editor tip or a general line about easing fails it.
+- **Demo turn:** says what the one demonstration changed, Edit > Undo, and hands the rest back in
+  one sentence naming how many are left. It fails on a second walk-through, a tour of the Graph
+  Editor or a second demonstration.
+- **A turn that answers a side question or a "do it for me":** passes as the answer in one or two
+  sentences plus the pending step again in one sentence. It fails when it adds the next stage or
+  the walk-through a second time.
 
 - **Fail:** a wall of explanation, three ideas at once, or a turn that ends with nothing for the
   learner to do.
+
 
 ## R-HALF-EASED: explains a pair that's eased at one end only
 

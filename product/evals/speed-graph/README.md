@@ -73,6 +73,13 @@ Watched for a stall (`eased_layers` is empty on an unreadable record): none. All
 
 **Ready for T415?** Yes for this case. The mentor-side finding below is fixed (Fix A); it is kept for the record.
 
+## Pacing evals (T429, 2026-10-28; mentor from the T428 branch)
+
+Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
+- **Rubric:** `R-ONE-IDEA` takes TD § 15 › What R-ONE-IDEA should see (explanation turn ends on "do that on [the pairs] and say done", a demo offer may follow once; a drag-up warning, a bulleted block or the peak giveaway fails it; the pass turn carries the read-again question; a side question is the answer plus the pending step).
+- **Cases:** none change. Case 10 still looks for "sideways" in turn 2's hint (`sideways` check, unchanged). Case 05 already asks "do the rest" after a demo, so it keeps its warm decline; the before-demo ask has no case here (see the hand-back).
+- **No new cases.** The T430 repeats are 01, 02, 03, 05, 09, 10, 15, 19. Cases 01, 02, 03 and 10 don't list `R-ONE-IDEA`, so TD § 15 items 3 and 4 (the demo hand-back) are only judged where a case lists it.
+
 ## Running
 
 ```sh

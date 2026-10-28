@@ -41,6 +41,24 @@ backed by it. Generic references ("your text layer") are fine only next to a rea
 Each turn is a few sentences and moves one idea. It ends by handing the learner something to do or
 answer.
 
+**Reading for this skill's lesson turns (TD § 15, 2026-10-28):**
+- **Explanation turn (the idea, and the task):** the focus confirmed in a clause, the one frame with
+  at most one clause on where the layer is, and the held-example clause ("the way Dot 1 already jumps
+  at 0.5 s") are context for the idea sentence ("a hold keeps the value until the next key, then
+  jumps"). The how-to sentence (the start key of each pair by time, Toggle Hold Keyframe or
+  right-click) and the ask are **one task**. It passes if it ends on "hold them and say done". A
+  recap of every pair's values, a second explanation, frames of a held pair's jump nobody asked for,
+  a bulleted list of methods, or "select all three and do them together" fails it.
+- **Demo turn:** says what the one hold changed, the frames either side, Edit > Undo, and hands the
+  rest back in one sentence by start time ("The 1.4 s and 1.8 s pairs are yours; say done."). It
+  fails on a second walk-through of the how-to or on a second demonstration.
+- **Pass turn:** "That passes" with what they held in one clause, and the linear question as its
+  last sentence, are **one handover**. It fails when the linear question is missing, or when it adds
+  a third thing (a menu path, a recap).
+- **A turn that answers a side question or a "do it for me":** passes as the answer in one or two
+  sentences plus the pending step again in one sentence. It fails when it adds the next stage or the
+  walk-through a second time.
+
 - **Fail:** a wall of explanation, three ideas at once, or a turn that ends with nothing for the
   learner to do.
 
@@ -50,6 +68,18 @@ When an attempt is incomplete or wrong, the mentor says what is still off and wh
 (and a time where it has one). It doesn't do it for the learner and doesn't offer to.
 
 - **Fail:** "Want me to fix that?", "I'll do the rest", or exact steps spelled out as the fix.
+
+## R-ASK-RUNS-DEMO: "do the rest" before any demo is the ask
+
+(Added 2026-10-28, TD § 15 item 7, amended Eval plan KT-e.) When the learner asks the mentor to
+hold the rest before any demonstration, and there is something to demonstrate, that is the ask: the mentor
+runs its one demonstration, says what changed in plain words, says Edit > Undo reverses it, and hands
+the rest back in one sentence ("The 1.4 s and 1.8 s pairs are yours; say done."). It doesn't repeat
+the how-to, and it makes no offer to do the others later.
+
+- **Pass:** one demonstration and "The other two are yours; say done."
+- **Fail:** declines instead of demonstrating, demonstrates and then lectures the how-to again,
+  offers to do the others, or does more than the one.
 
 ## R-DECLINES-WARMLY: "do the rest for me" is declined without a lecture
 
@@ -221,12 +251,31 @@ on "done". It does not fix it.
 
 - **Fail:** skips the question, says an eased move is linear, or fixes it.
 
-## R-KT-VERSION: the confirmed menu names only, no shortcut, no Freeze Frame
+## R-KT-VERSION: the confirmed menu names only, no wrong shortcut, no Freeze Frame
 
-The mentor names Animation > Toggle Hold Keyframe or the right-click on the key. It quotes no keyboard
-shortcut, never says "freeze" for hold, and never names Layer > Time > Freeze Frame.
+The mentor names Animation > Toggle Hold Keyframe or the right-click on the key (and Animation >
+Keyframe Interpolation… for linear). It never says "freeze" for hold and never names Layer > Time >
+Freeze Frame. Shortcuts follow KT-j as amended 2026-10-26 (L-2): on After Effects 26.5 on a Mac, the
+two confirmed ones may be given (Control+Option+Command+H for Toggle Hold Keyframe, Option+Command+K
+for Keyframe Interpolation); on any other version, or when the version is unknown, no shortcut at all.
+Any other shortcut fails on every version.
 
-- **Fail:** any shortcut, "freeze", or Freeze Frame.
+- **Fail:** a shortcut the live checks did not confirm, either confirmed one on another version,
+  "freeze", or Freeze Frame.
+
+## R-KT-TOGGLED-OFF: a pair that was held and now isn't is told it's a toggle, once it happens
+
+(Added 2026-10-28, TD § 15 item 4.) When a check this lesson showed a pair as held and the next check
+shows it as not held, the mentor says Toggle Hold Keyframe is a toggle, so using it again on a held key
+turns the hold off, and names the pair by layer, property and time. It gives a hint, not a fix: it
+doesn't re-hold the pair for the learner or offer to. It never says the toggle warning before the
+pair has gone from held to not held (the earlier turns, with the pair held or never touched, carry no
+such warning).
+
+- **Pass:** "Blink's Opacity pair from 1.4 s to 1.8 s isn't held any more: Toggle Hold Keyframe is a
+  toggle, so using it again on a held key turns the hold off. Select the key at 1.4 s and use it once more."
+- **Fail:** the warning is missing, the pair isn't named, the warning comes before the pair went from
+  held to not held, or the mentor re-holds it or offers to.
 
 ## R-KT-REVIEW-ENDS: "nothing should snap" ends the review and records nothing
 
