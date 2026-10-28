@@ -307,10 +307,12 @@ export function analyze(snapshot, opts = {}) {
 
 // FR-003 (L6-2): a group gives the proposal's size and names; no group but a crowd, with an empty
 // `exclude`, gives the largest crowd's size and no names (a crowded comp still has something to
-// teach on, once the learner names a group); anything else 0.
-export function finder(snapshot, { exclude = [] } = {}) {
+// teach on, once the learner names a group); anything else 0. `for_review` (reviewFor passes it):
+// a review needs a group to propose, so a crowd counts 0 there, and a due review with nothing new
+// is a lesson (OR-1; Phase 10 round 2, fix B). recommend_next's lesson path keeps the crowd.
+export function finder(snapshot, { exclude = [], for_review = false } = {}) {
   const p = proposal(snapshot, { exclude });
   if (p.proposal) return { count: p.proposal.length, layers: p.proposal };
-  if (p.reason === "crowded" && !(exclude || []).length) return { count: p.crowd_size, layers: [] };
+  if (p.reason === "crowded" && !(exclude || []).length && !for_review) return { count: p.crowd_size, layers: [] };
   return { count: 0, layers: [] };
 }

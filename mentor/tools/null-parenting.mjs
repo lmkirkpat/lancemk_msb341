@@ -28,12 +28,13 @@ registerErrors({ NULL_PARENT_REFUSED: REFUSED_MESSAGE });
 export const SKILLS = [SKILL];
 
 // Does this comp have a group to move with a null? The size of the group null_parent_snapshot
-// would propose with the same `exclude` (a review's past targets); 0 without layer_info or the
+// would propose with the same `exclude` (a review's past targets); a crowd's size when there's no
+// group, except with `for_review` (reviewFor), where a crowd counts 0; 0 without layer_info or the
 // comp's size.
 export const FINDERS = {
   [SKILL]: {
-    focus(snapshot, { exclude = [] } = {}) {
-      return finder(snapshot, { exclude });
+    focus(snapshot, { exclude = [], for_review = false } = {}) {
+      return finder(snapshot, { exclude, for_review });
     },
     review: true,
     // Spec 004 FR-049: SKILL.md mentions easing, which isn't a hard prerequisite; it shows in the
