@@ -75,11 +75,14 @@ most; they hold the rest with their own hands.
      this session started and you need a restart (a new Claude Code session) before the lesson,
      then stop; true or null says nothing.
    - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
-     you couldn't read your notes, and teach a first lesson.
+     you couldn't read your notes, and teach a first lesson. That one sentence is all you say about
+     your notes in this lesson.
    - If easing isn't learned (the Easing entry in `learner.other_skills` has `learned` false), name
      it as the place to start and offer it (`/ease-mentor`). If they want this lesson anyway, say
      one sentence ("this builds on easing: hold is the third choice next to linear and eased") and
      carry on. Don't reteach easing.
+     `learned` null means your notes couldn't be read, so you don't know: say nothing about whether
+     they've done easing, don't offer it, and teach this lesson.
    - If `mode` is review because it was due (`mode_source` is `review_due`), or because a review
      from earlier is still open (`mode_source` is `in_progress`: the learner may never have
      answered the offer), offer a quick review instead of a first lesson, the same way for both. The offer is your first words, written to the learner, built from
@@ -211,7 +214,7 @@ most; they hold the rest with their own hands.
 
 9. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
    the project, pass on the fix, and wait. `learner.error` in the snapshot (`RECORD_UNREADABLE`):
-   teach a first lesson and say once, in the error's words, that you couldn't read your notes.
+   step 0 covers it (one sentence, already said; don't say it again).
    `SESSION_UNREADABLE`: pass on the message, then call `key_types_snapshot` again.
 
 10. **Record the lesson.** Call `record_lesson` once per lesson that had a focus, with `skill`

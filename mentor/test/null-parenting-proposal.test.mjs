@@ -269,6 +269,16 @@ test("the finder: a crowd with an empty exclude counts its size with no names; a
   assert.deepEqual(finder(load("practice2b.json")), { count: 3, layers: ["Tile", "Caption", "Stamp"] });
 });
 
+test("the finder for a review: a crowd counts 0 with no proposal; a group counts as before (spec 004 Phase 10 round 2, fix B)", () => {
+  const crowd = load("synthetic/crowd-only.json");
+  assert.deepEqual(finder(crowd, { for_review: true }), { count: 0, layers: [] });
+  assert.deepEqual(finder(crowd), { count: 6, layers: [] }, "the lesson path still counts the crowd");
+  const p2b = load("practice2b.json");
+  assert.deepEqual(finder(p2b, { for_review: true }), finder(p2b));
+  const exclude = ["Tile", "Caption", "Stamp"].map((layer) => ({ layer, property: "Parent" }));
+  assert.deepEqual(finder(p2b, { exclude, for_review: true }), finder(p2b, { exclude }));
+});
+
 test("the finder agrees with the proposal on every fixture and exclude, except a crowd with an empty exclude", () => {
   const files = ["practice2b.json", "null-center.json", "practice2b-parented.json", "parented-center.json", "review-rows-visible.json", "synthetic/before.json", "synthetic/row36-truncated.json", "synthetic/crowd-only.json"];
   const excludes = [[], ["Tile", "Caption", "Stamp"].map((layer) => ({ layer, property: "Parent" }))];

@@ -204,7 +204,9 @@ for (const skill of FIVE) {
     assert.equal(o.learner.error.code, "RECORD_UNREADABLE");
     assert.equal(o.learner.status, "not_started");
     assert.equal(o.learner.review_due, false);
-    assert.ok(o.learner.other_skills.every((s) => s.learned === false));
+    // Phase 10 round 2, fix A: unknown (null), not "not learned" (false). Amends FR-049's "every
+    // other_skills entry not learned".
+    assert.ok(o.learner.other_skills.every((s) => s.learned === null));
     assert.equal(o.record, null);
     assert.equal(fs.existsSync(LEARNER), false, "set aside, never written over");
     const aside = fs.readdirSync(home).filter((f) => f.startsWith("learner.json.unreadable-"));
