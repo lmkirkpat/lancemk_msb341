@@ -8,6 +8,8 @@ lesson (T236, § 17). **Status:** draft, round 1 answered (§ 15), round 2 answe
 wording list), the one-layer watch offer decided (§ 17), round 3 answered (§ 18: D-8 and D-9,
 2026-10-26). § 19 (the opening turn, from HO-1's smoke run) was **decided** 2026-10-26 by the human.
 § 19b (after HO-2 and HO-3, 2026-10-26): gap 1 agreed by the cockpit; the rest are row edits and logs.
+§ 20 (pacing, one idea per turn) **proposed 2026-10-28, not approved**: until the human approves it,
+§ 5 and § 19 stand as written.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -1184,3 +1186,177 @@ may touch spec 004's record fields. Until then, `SKILL.md` stays as built.
 **For the eval engineer (through the cockpit):** no case change needed now. If one is added: a
 comp whose only non-never layer is a background opens with the solid line and never names the
 background as an offer.
+
+## 20. Pacing: one idea per turn (proposed 2026-10-28)
+
+**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
+spec or the evals until it's approved; the items at the end say who changes what. The opening
+turn (§ 19, spec 004 Phase 10) doesn't change.
+
+### The problem
+
+R-ONE-IDEA ("each turn is a few sentences and moves one idea, ends by handing the learner something
+to do") failed in most runs of cases 02, 15, 21a, 21b and 29 (`product/evals/anchor/README.md`,
+"Re-baseline after Phase 10" and "Fix re-runs 2026-10-28"). The design caused it, not the wording:
+§ 5 stage 2 asks for the repeat-back, where the pivot is now, § 1's sentences (three, counting the
+slide sentence), a frame and the rest key in one turn, and stage 3 then adds the walk-through, the
+A/Shift+P tip, the invite and the watch offer. The wording trim (`e82a7d2`) fixed turn 2 (case 02,
+3/3) by moving the walk-through, the tip and the watch offer into turn 3, which now fails instead
+(15, 21b and 29: 0/3; 21a: 1/3). Read for this section:
+- `results/2026-10-28-133419.json` (15), turn 2: repeat-back, pivot now, the bold sentence, the slide
+  sentence, a note about the frame, "Ready for how to move it?". Turn 3: the decline, three numbered
+  steps, "Before you drag, press A, then Shift+P…", "say done", the watch offer.
+- `-133539` (21b) and `-132126` (21a), turn 3: the menu answer, a comparison with Pan Behind, three
+  or four steps, the A/Shift+P tip, the watch offer. The one 21a pass had a one-line answer leading
+  straight into the steps.
+- `-133714` (29), turn 3: no numbers, the slide sentence again (already said in turn 2), the steps,
+  the offer.
+
+Two things are wrong in the design: turn 2 **ends on "Ready?"**, which hands the learner nothing to
+do, so the next real step has to carry everything; and **a learner's question in turn 3 gets the
+answer plus the whole next stage**, because nothing says it shouldn't.
+
+### The rule (three parts)
+
+1. **Every turn ends on one action or one answer, and carries only what that action needs.** A
+   repeat-back, where the pivot is now and a one-clause note are context for that action, not
+   ideas of their own. "Ready?" or "Shall we go on?" is not an action.
+2. **A fact goes in the turn where the learner acts on it.** If no turn acts on it, it's on request.
+3. **A question or a request in place of the action gets its answer, in one or two sentences,
+   then the same pending action again, in one sentence.** Never the next stage's content in that
+   turn. If the pending action already carried the watch offer, the offer isn't repeated (§ 17).
+
+### The new sequence (a lesson, one focus layer)
+
+| Turn | The one idea | Carries | Ends on |
+|---|---|---|---|
+| 1. Opening | which layer and where | Unchanged (§ 19) | The choice |
+| 2. Where to stand (**only** when `check_times` names a rest key, or the layer has one Position key) | the pivot is set where the layer is at rest | The repeat-back; the rest key's time ("Pop is full size at 4.3 s"), or the Position key's time (§ 4's "playhead right on it" line); when the rest key was picked by Scale or closest to level, the one sentence saying so | "Put the playhead on 4.3 s and tell me when it's there." With the picked-by-Scale case: "Is that how it looks at rest?" |
+| 3. What the pivot is | the pivot is two numbers | The repeat-back (if turn 2 didn't run); where the pivot is now in place words, with at most one note (parent, flipped, precomp frame, text baseline, pivot outside with its side, shy); one frame at the check time, not described; **§ 1's first sentence only**: "Anchor Point is where the pivot sits inside Door; Position is where that pivot sits in the comp." | "Select Door in the timeline and press A, then Shift+P, so both show." |
+| 4. The move (we do, then you do) | Pan Behind moves both together | Two steps in prose, no numbered list: "Press Y for Pan Behind, start your drag right on Door's crosshair, and take it to the middle of its left edge. It changes both numbers together, so Door stays put." For a pivot outside: "Its crosshair is below the shape; start there." | "Say done when it's there." Then, on a first lesson, the watch offer as the last sentence (§ 17, FR-008) |
+| 5. Check | pass, or one hint | § 6, § 7 (unchanged). A pass, then the understanding question (stage 5) | Their answer, or "say done again" |
+| 6. Try it | the swing from the hinge | Stage 6, plus stage 7's play-back sentence when keyed | Edit > Undo |
+| 7. Record | | "I've noted that for next time" | |
+
+The same number of turns as now for an unkeyed layer: the old turn 2 ended on "Ready for how to
+move it?", a round trip that carried nothing; now that round trip is the learner showing the two
+numbers they're about to watch change. A keyed layer gets one turn more (turn 2), and its frame is
+then taken at the rest time, which is where it should have been taken anyway.
+
+**A yes to the watch offer** (two turns, not one):
+- **W1:** "Needle will turn from the middle of its bottom edge. Select Needle and press A, then
+  Shift+P, and tell me when both show." (FR-017's ask, now with a wait, so the learner is looking at
+  the numbers when they change.)
+- **W2:** the frames and the demo (stage 3, unchanged), then: "Both numbers changed, and Needle
+  didn't move. Edit > Undo reverses it. Now Door's yours: say done when its pivot is on the left
+  edge." No second walk-through: turn 4 already gave it.
+
+**An ask to watch with no layer to watch on** (step 5, one focus layer, `watch_offer` null and none
+named): one sentence that moving theirs would leave nothing for them, and the pending action again.
+Don't repeat turn 4's steps if they've had them.
+
+**Two focus layers** (named by the learner): turns 2 to 4 are about the learner's layer; the demo
+runs only when asked or stuck, as W1 and W2.
+
+**The review** (§ 12) is unchanged: it's already one question, then one task.
+
+### What moved, what's on request, what goes
+
+| Piece | Was | Now | Why |
+|---|---|---|---|
+| The slide sentence ("Change Anchor Point alone and the layer slides…") | Stage 2 | **On request**, and as the answer when the learner asks for numbers to type or asks why typing moved it (case 29's moment) | It's needed when they're tempted to type. Said earlier, it's a warning about a mistake they haven't thought of; said twice (29), it's a lecture. § 7's typed-value hint already says what happened |
+| "Pan Behind changes both together, so nothing moves on screen" | Stage 2 | Turn 4, with the tool | It's what the tool does, said as they pick it up |
+| A, then Shift+P | Stage 3's tip | Turn 3's action | It makes "two numbers" something they see, and turns the "Ready?" round trip into a doing |
+| "Select the layer in the timeline" | Stage 3's walk-through | Turn 3 (needed for A/Shift+P) | The walk-through drops to two steps |
+| The numbered walk-through | Three or four numbered steps | Two steps in prose | Y and the drag are one motion; the selection's done |
+| Pivot outside: "click Lid in the timeline… start your drag there" | Stage 2's note | Turn 4 | It's about where the drag starts. The side stays in turn 3 (FR-019a) |
+| The rest key, and the one-key playhead line | Stage 2 | Turn 2, its own turn | It needs an answer, and the frame belongs at the rest time |
+| "Ready for how to move it?" | Stage 2's last line | **Goes** | Hands the learner nothing |
+| Anything about the frame itself (what it shows, that it came back small) | Seen in 15 and the judge's notes | **Goes** | § 5 already says don't describe it; a frame that's no use gets no sentence |
+| Repeating the walk-through after a side question or an ask to watch | Steps 5 and 6 | **Goes** | Rule 3 |
+
+**Kept exactly:** the opening (§ 19), the intent question, "I do, we do, you do", the one demo and
+its target rule, the watch offer's wording, once-only rule and place (last sentence of the invite
+turn, FR-008), the hints (§ 7), the understanding check, "try it", the record, the review.
+
+### What R-ONE-IDEA should see (the eval engineer's to change; this is only the intent)
+
+- Turn 3: the repeat-back, where the pivot is now, one note and the frame are context for § 1's
+  first sentence; the turn passes if it ends on the A/Shift+P ask. A second explanatory sentence
+  (the slide) fails it.
+- Turn 4: the two steps and the tool's one sentence are one idea; **the watch offer is the same
+  action's alternative** (do it, or watch one first), as the proposal is the intent question's
+  fallback in § 19. A numbered list, a tip, or a repeat of turn 3 fails it.
+- A turn that answers a side question passes when it's the answer plus the pending action, and
+  fails when it adds the next stage.
+
+### Rejected
+
+- **Cap it in wording again.** Tried (`e82a7d2`): the pile moved from turn 2 to turn 3. The cause is
+  where the design puts things.
+- **Split the move into two turns** (Y, then the drag). Two round trips for one motion, and it reads
+  as being talked down to.
+- **Drop the A/Shift+P tip.** It's what makes the idea visible (both numbers change, nothing moves),
+  FR-017 needs it before a demo, and as an action it costs no turn.
+- **Move the watch offer earlier** (turn 3) **or later** (after a failed check). § 17 rejected both:
+  before they know Pan Behind, or as a rescue.
+- **Drop the slide sentence entirely.** It's the one sentence that answers "why not just type it?";
+  it stays, at the moment that question comes up.
+- **Read the invite turn more loosely in the judge.** § 19's reasoning: the judge was right that the
+  turn was a wall.
+
+### Evidence and guesses
+
+- **R:** the result files above; `product/evals/anchor/README.md` (both sections); the one passing
+  21a run (`-132126`, run 3), whose turn 3 was "a one-line answer that leads straight into" the steps,
+  which is rule 3 with the pending action already being the steps.
+- **R, live:** T236 and T237 passed with no demo and the old pacing, builder-only. The new pacing
+  hasn't run live.
+- **Guess:** that a first-timer does the A/Shift+P step without asking why. Watch the next live
+  lesson for "what are these for?". If it's common, the fix is half a clause on the ask ("so you can
+  watch both change"), not a turn.
+- **Guess:** that W1's wait is worth the extra turn on a yes. No learner has said yes live yet
+  (§ 17); count yeses in the usage notes.
+- **Guess:** that the slide sentence on request loses nothing for a learner who never asks. § 7's
+  typed-value hint is the backstop; if live lessons show learners typing first and not getting why,
+  bring the sentence back into turn 4 as Pan Behind's contrast.
+
+### Items, if approved
+
+Numbers are `NNN`: the cockpit assigns them.
+
+**For the builder (B-NNN), `SKILL.md` only, no tool change:**
+1. "The words the lesson uses": keep the bold sentence as step 2's; mark the slide sentence "only when
+   they ask for numbers to type, or why typing moved it"; move the Pan Behind sentence to step 3.
+2. Step 2: split off the rest key and the one-Position-key line as their own turn before the
+   explanation (ends on the playhead ask, or "is that how it looks at rest?"); take the frame at the
+   check time after that. End the explanation turn on "Select Door in the timeline and press A, then
+   Shift+P, so both show." Drop "Then the two sentences"; the pivot-outside note says the side only.
+3. Step 3: two steps in prose (Y, start on the crosshair, drag to the place), the tool's sentence,
+   "say done", and the outside layer's "start there". No numbered list, no A/Shift+P (said in step 2).
+4. Step 4: unchanged, except "after the steps in words" now means step 3's turn.
+5. Step 5, two layers: on a yes, ask for A/Shift+P on the demo layer and wait; run the demo on the
+   next turn; then hand Door back in one sentence with no walk-through.
+6. A new line under "Style": rule 3 (a question gets its answer and the same pending action; never the
+   next stage), with "don't repeat the walk-through" for steps 5 and 6.
+
+**For the spec writer (S-NNN):**
+- **US1 #2:** "gives TD § 1's two sentences once, with one frame" becomes "gives TD § 1's first
+  sentence (inside the layer, in the comp) once, with one frame, and ends by asking the learner to show
+  Anchor Point and Position (A, then Shift+P); Pan Behind's sentence comes with the move (TD § 20)".
+  A note that the slide sentence is on request.
+- **FR-022:** no text change, but it follows TD § 5's stages, which § 20 re-cuts into turns; worth a
+  line pointing at § 20.
+- **FR-017:** no text change. Reading: on a yes, the mentor asks for A/Shift+P and waits for the
+  learner before `anchor_demo` runs.
+- **FR-008, FR-011 (US2 #1, #5), FR-019a, FR-006a:** no change. The watch offer stays the last sentence
+  of the invite turn (now turn 4); the playhead ask gets its own turn; the outside side is still said
+  (turn 3); the opening is untouched.
+- **Eval plan 1:** the R-ONE-IDEA reading for turns 3 and 4 above.
+
+**For the eval engineer (through the cockpit):** the readings above in the R-ONE-IDEA rubric; cases
+15, 21a, 21b and 29 then re-run as they are (their learner lines still fit: the side question lands
+on turn 3 or 4, and rule 3 decides the reply). Case 02 should be re-run too, since its turn 2 changes.
+
+**For me (curriculum follow-up, C-NNN):** rules 1 to 3 as a shared turn rule in curriculum § 2, next
+to C-5's opening rule, after checking skills 2 to 4's baselines for the same failure.
