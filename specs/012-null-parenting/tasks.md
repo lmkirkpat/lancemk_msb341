@@ -5,7 +5,10 @@ description: "Task list for spec 012: skill 6, move a group with a null"
 # Tasks: Move a group with a null (curriculum skill 6)
 
 **Status**: Approved 2026-10-24, with plan › Q1 (`null_not_ready`), Q2 (`null_scale_zero`) and
-SR-4 (spec 004 T164, T165). Ready for the skill builder.
+SR-4 (spec 004 T164, T165). Ready for the skill builder. **Phase 11 (2026-10-28):** T344 to T347,
+TD § 16's pacing in `SKILL.md`, then the eval re-runs and a re-baseline, from spec › Amendment 3;
+TD § 16 approved by the human, this phase awaiting the human's approval. (T350 to T362 are in
+[tasks-l6.md](tasks-l6.md), so this phase takes T344 to T347.)
 
 **Input**: Design documents from `specs/012-null-parenting/`
 
@@ -183,6 +186,37 @@ Practice 2's 2b layers; the cockpit off AE; one skill-builder holding the AE loc
 
 ---
 
+## Phase 11: Pacing, 2026-10-28 (TD § 16; desk, no 🖐)
+
+From spec › Amendment 3: TD § 16 (spec US1 #2 and #3, FR-023, new FR-023a; the shared pacing rule
+in spec 004 curriculum.md § 2). No tool change. `SKILL.md` is on `main` now (`31fe72d`), so T344
+edits an existing file and isn't add-only: the cockpit cuts its branch from local `main` and runs
+the merge check accordingly. T345 to T347 are the eval engineer's, on `evals-skill-6` or the branch
+the cockpit names.
+
+- [ ] T344 [US1] `.claude/skills/null-parenting-mentor/SKILL.md`, per TD § 16 › Items › the
+  builder's items 1 to 6 (its wording, not copied here): step 2 one frame and the idea sentence,
+  no rig unless asked, ending on the turn-or-scale question; step 3 the add-the-null task with the
+  step 2 answer passed as `region`; step 5 the Parent column named, how to show it only when they
+  can't find it, the two-pick-whips and held-key lines only through their hints; step 4 the rest
+  handed back in one sentence after the demo; the shy note split; rule 3 under "Style". Nothing
+  else. Then `npm test`, `/agent-audit` on the file, and hand back the diff for HO-3 (spec FR-023,
+  FR-023a). **Done when:** the diff matches TD § 16's six items and nothing else
+- [ ] T345 [eval-engineer] `product/evals/null-parenting/`: R-ONE-IDEA's rubric takes TD § 16 ›
+  What R-ONE-IDEA should see (turn 2: frame, group, idea sentence and the turn-or-scale question
+  are one idea; turn 3: one task; turn 4: the demo offer is the action's alternative). Case 02's
+  expectations as spec › Eval plan 2 (amended 2026-10-28: no CTRL unless asked). Dry run. **Done
+  when:** the dry run passes its plumbing and the README names the changed rubric and cases
+- [ ] T346 [eval-engineer] After T344 and T345: cases 02, 03, 04, 15 and 23, each with `--repeat 3`,
+  mentor from the T344 branch. Triage with `/eval-triage`; case 03's `never_picks` break should be
+  gone (TD § 16, the eval engineer's note). **Done when:** each passes on a majority, or a failure is
+  triaged and logged in the README as prompt, rubric or noise, with the cost (about 15 runs)
+- [ ] T347 [eval-engineer] After T346 passes: a full re-baseline of the set, logged in the README
+  with score and cost. SC-003 (≥ 80%, every hard-rule check passing). **Done when:** logged; a new failure
+  outside the five cases is triaged before the merge
+
+---
+
 ## Hand-offs to other owners (not builder tasks)
 
 - **HO-1 Eval engineer:** hand off to eval-engineer: `product/evals/null-parenting/` from spec ›
@@ -210,6 +244,11 @@ Practice 2's 2b layers; the cockpit off AE; one skill-builder holding the AE loc
 - Phases 4 to 6 need T320. T331 after T321.
 - Phase 9 in order: T336 → T337 → T338 → T339 → T340 → T341. T343 a day or more after the first pass.
 - HO-2 and HO-3 after T339; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
+- Phase 11 (2026-10-28): T344 and T345 in parallel → T346 → T347 → merge. Blocks nothing live; the
+  next live lesson after the merge watches TD § 16's guesses ("what do you mean, from where?", and
+  whether the learner finds the Parent column unaided).
+- After T344: HO-3 again on its diff (FR-023a and TD § 16: every turn ends on one action, no rig
+  unless asked, no up-front held-key or two-pick-whips line, the column shown only when asked).
 
 ## Parallel opportunities
 
@@ -225,6 +264,7 @@ Practice 2's 2b layers; the cockpit off AE; one skill-builder holding the AE loc
 3. Phases 7–8 close the cloud part; Phase 9 is one sitting after spec 004's live tasks; Phase 10
    hands back.
 
-**Task count:** 43 (T301–T343): Setup 2, Foundational 11, US1 8, US2 3, US3 4, US4 2, overlap 2,
-cloud hand-back 3, live sitting 6, polish 2. **🖐 live: 5** (T336, T337, T340, T341 in the sitting;
+**Task count:** 47 (T301–T347; T350 to T362 are in tasks-l6.md): Setup 2, Foundational 11, US1 8,
+US2 3, US3 4, US4 2, overlap 2, cloud hand-back 3, live sitting 6, polish 2, pacing 4 (2026-10-28,
+T344 to T347). **🖐 live: 5** (T336, T337, T340, T341 in the sitting;
 T343 a day or more later). Hand-offs: 4; requests: 1 (SR-4).

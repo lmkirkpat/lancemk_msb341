@@ -18,7 +18,9 @@ round 6; TD § 19a decided by the human, this phase awaiting the builder's appro
 (2026-10-26):** Phase 8h, T260 (TD § 19b's B-13 in `SKILL.md`, plus the smoke run's self-note fix;
 in progress) and T261 (L-8, 🖐, listed after T248 in Phase 8c's list for the next sitting), from
 spec › Changes › round 7; TD § 19b decided by the cockpit under the human's go-ahead, this phase
-awaiting the builder's approval.
+awaiting the builder's approval. **Round 8 (2026-10-28):** Phase 8i, T262 to T265 (TD § 20's
+pacing in `SKILL.md`, then the eval re-runs and a re-baseline), from spec › Changes › round 8;
+TD § 20 approved by the human, this phase awaiting the human's approval.
 
 **Input**: Design documents from `specs/011-anchor/`
 
@@ -277,6 +279,38 @@ sitting.
 
 ---
 
+## Phase 8i: Round 8 of 2026-10-28, pacing (TD § 20; desk, no 🖐)
+
+From spec › Changes › round 8: TD § 20 (spec US1 #2 and #7, FR-006a, FR-008, FR-017, FR-022, new
+FR-022a; the shared pacing rule in spec 004 curriculum.md § 2). No tool change. `SKILL.md` is on
+`main` now (`f6effae`), so T262 edits an existing file and isn't add-only: the cockpit cuts its
+branch from local `main` and runs the merge check accordingly. T263 to T265 are the eval
+engineer's, on `evals-skill-5` or the branch the cockpit names.
+
+- [ ] T262 [US1] `.claude/skills/anchor-mentor/SKILL.md`, per TD § 20 › Items › the builder's items
+  1 to 6 (its wording, not copied here), with the human's answers of 2026-10-28: the slide
+  sentence only when asked (for numbers to type, or why typing moved it); after a "do it for me"
+  refusal, the same pending action and the watch offer still made once in the invite turn; a yes
+  to the watch asks for A, then Shift+P on the watch layer and waits, the demo on the next turn,
+  then the learner's layer handed back in one sentence. Nothing else. Then `npm test`, `/agent-audit`
+  on the file, and hand back the diff for HO-3 (spec FR-022a, FR-017). **Done when:** the diff
+  matches TD § 20's six items and nothing else
+- [ ] T263 [eval-engineer] `product/evals/anchor/`: R-ONE-IDEA's rubric takes TD § 20 › What
+  R-ONE-IDEA should see (the explanation turn ends on A, then Shift+P; the move turn's two steps
+  and the watch offer are one action and its alternative; a side question passes as the answer
+  plus the pending action). Case 15's and 23c's expectations as spec › Eval plan 15 and 23c
+  (amended 2026-10-28). Dry run. **Done when:** the dry run passes its plumbing and the README
+  names the changed rubric and cases
+- [ ] T264 [eval-engineer] After T262 and T263: cases 02, 15, 21a, 21b and 29, each with
+  `--repeat 3` (`--only 02`, `--only 15`, `--only 21`, `--only 29`), mentor from the T262 branch.
+  Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and
+  logged in the README as prompt, rubric or noise, with the cost (about 15 runs)
+- [ ] T265 [eval-engineer] After T264 passes: a full re-baseline of the set, logged in the README
+  next to "Re-baseline after Phase 10" with score and cost. SC-003 (≥ 80%, every hard-rule check
+  passing). **Done when:** logged; a new failure outside the five cases is triaged before the merge
+
+---
+
 ## Phase 9: Polish and hand-back
 
 - [x] T238 Re-run T229's checks on the final branch (live fixtures, no stand-ins) **Done 2026-10-26 (cockpit):** mentor 1148 pass, 0 fail, 3 todo; hooks 39/39; vs `main`, 73 files added and only `tasks.md` modified; the 2 files outside skill-builder's are the cockpit's sitting log and usage note.
@@ -335,6 +369,9 @@ sitting.
   null lesson pointer, no null's pivot). After T260, on its diff (spec FR-004 and FR-006a: no
   background offered, the solid line when `proposal` is null, D-10's practicing clause, a named
   watch layer's place asked not picked, nothing written between the record read and the snapshot).
+  After T262, on its diff (spec FR-022a and TD § 20: every turn ends on one action, the slide
+  sentence only when asked, no numbered walk-through, a side question gets the answer and the
+  same action, the watch's A, then Shift+P turn before the demo).
 - **HO-6 Curriculum designer (round 3, 2026-10-26):** D-8 (the "already moves" sentence on a
   one-key layer whose rest key is on another frame) and D-9 (the spec's reading of which layer
   the watch is on), spec › Open questions › D. **Done 2026-10-26** (TD § 18, `47c90bd`); tasked
@@ -378,6 +415,9 @@ sitting.
   HO-1's round 6 cases. Blocks nothing else.
 - Phase 8h (2026-10-26, round 7): T260 (in progress), after T259 (both edit `SKILL.md` step 1) →
   HO-3 → HO-1's re-run and baseline. T261 at the next sitting with T248, blocking nothing.
+- Phase 8i (2026-10-28, round 8): T262 and T263 in parallel → T264 → T265 → merge. Blocks
+  nothing live; the next live lesson after the merge watches TD § 20's guesses ("what are these
+  for?" at the A, then Shift+P ask; any yes to the watch).
 - HO-2 and HO-3 after T235; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
 
 ## Parallel opportunities
@@ -394,9 +434,9 @@ sitting.
 3. Phases 6–7 close the cloud part; Phase 8 is one sitting after spec 004's live tasks; Phase 9
    hands back.
 
-**Task count:** 61 (T201–T261): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
+**Task count:** 65 (T201–T265): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
 hand-back 3, live sitting 6, amendment 4 (2026-10-26), round 2 4 (2026-10-26), round 3 5
 (2026-10-26), round 4 3 (2026-10-26), round 5 2 (2026-10-26), round 6 1 (2026-10-26), round 7 2
-(2026-10-26, T260 and T261), polish 3. **🖐 live: 9** (T232, T233, T236, T237 in the sitting; T248
+(2026-10-26, T260 and T261), round 8 4 (2026-10-28, T262 to T265), polish 3. **🖐 live: 9** (T232, T233, T236, T237 in the sitting; T248
 and T261 at the next sitting; T251 and T253; T240 a day or more later). Hand-offs: 6; requests: 1 (SR-2), plus SR-4 if T251
 calls for it.

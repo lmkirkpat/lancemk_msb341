@@ -31,6 +31,20 @@ labels, the null's defaults, Option and Shift as a caution only, Quick Offset st
 plan case 12, and new D-4 for the designer. Also quickstart § 3 and § 6, data-model's stored-null
 example and research R8 and R11.
 
+**Amendment 3 (2026-10-28, pacing, S-7): awaiting the human's approval** of this spec's parts. TD
+§ 16, "Pacing: one idea per turn", was approved by the human on 2026-10-28 as written. Evidence:
+R-ONE-IDEA failed 7 of 9 runs of cases 02, 03 and 04 after `e82a7d2`, and 02, 04, 15 and 23 in the
+baseline (`product/evals/null-parenting/README.md` › "First full baseline" and "Fix re-runs
+2026-10-28"). Changed here: US1's story and #2 (one frame of the focus group; an existing rig such
+as CTRL or Hatch Rig as the example **only when the learner asks**; "not opacity or effects"
+stays, as a clause of the idea), US1 #3 and Eval plan 3 (the turn-or-scale question ends the
+explanation turn), FR-023 (the Parent column named, how to show it only when the learner can't
+find it; the held-key line narrowed to the jump hint's one question; with it, D-4's anchor
+sentence folded in), new FR-023a (the shared pacing rule in spec 004 curriculum.md § 2, by link),
+Eval plan 2 and the pacing reading, Assumptions (CTRL). **No change** (TD § 16): FR-014, FR-016
+(P5 still asks for the region before grading if it was skipped), FR-020, FR-022; no tool change.
+New tasks T344 to T347 (tasks.md › Phase 11).
+
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 6,
 Move a group with a null." Record ID `parenting.null` (in `mentor/curriculum/path.json`, position
 6, hard prerequisite `transform.anchor`, soft `motion.sources`), short name `null-parenting`, tool
@@ -94,6 +108,9 @@ by TD § 14 to a parent that doesn't move. S-3's timing is refined by D-1, which
   and the [skill-module contract](../004-ae-curriculum/contracts/skill-module.md).
 - **Spec 002** (easing, built): the house lesson shape, the server rules, `record_lesson`'s session
   check, the demonstration rule.
+- **The shared pacing rule** (one idea per turn; added 2026-10-28): spec 004's
+  [curriculum.md](../004-ae-curriculum/curriculum.md) § 2, next to the opening rule. This skill's
+  turns under it are TD § 16 (FR-023a). Linked, not copied.
 - **Spec 011** (set the pivot, written in parallel): this skill's hard prerequisite. Nothing here
   reads its files or its check; N3 reuses spec 004 FR-028's numbers directly.
 
@@ -107,8 +124,9 @@ and SR-3 are approved as tasks-wave-b.md T161 to T163, and SR-2 is declined this
 
 I've learned to set the pivot. I start this lesson on Mentor Practice 2. The mentor asks which
 layers should move as one, and when I don't know, it proposes Tile, Caption and Stamp because they
-sit together. It shows me on Mentor Practice how CTRL carries Title and Subtitle. I add a null, say
-the group should turn from its middle, drag the null there, and say "done". It parents Tile for me
+sit together. It shows me a frame of the three, says what a parent passes down, and asks whether
+they'll turn or scale and from where. I say from the middle of the group, add a null, drag it there,
+and say "done". It parents Tile for me
 if I ask, and shows Tile didn't move. I parent the other two and say "done"; then I give the null
 one move. It checks that nothing jumped, every layer kept its own animation, and the group moved.
 
@@ -125,10 +143,15 @@ verified pass with at most one demonstration, and the check agrees with a look i
    sentence with its reason (they sit together, apart from everything else), names what it leaves
    out for the candidate table's reasons (Shadow follows Plate), one sentence per reason, and never
    lists the 13 wave A layers that crowd together (TD § 4, § 15).
-2. **Given** a focus is agreed, **When** the mentor explains, **Then** it uses CTRL with Title and
-   Subtitle if the open comp has them, or one frame of the focus group otherwise, and says children
-   inherit position, scale and rotation, not opacity or effects (TD § 5 stage 2).
-3. **Given** the learner adds a null and says the group turns from its middle, **When** the null
+2. **Given** a focus is agreed, **When** the mentor explains, **Then** it uses one frame of the focus
+   group and says, in one sentence, that children take on the parent's position, scale and
+   rotation, not opacity or effects, and keep their own animation; an existing rig (CTRL with
+   Title and Subtitle, Hatch Rig with Hatch) is named as an example **only when the learner asks**
+   for one ("what does that look like?"), in words from the read. The turn ends on whether the
+   group will turn or scale and from where, with no null, menu path or second explanatory
+   sentence (TD § 16 turn 2; amended 2026-10-28).
+3. **Given** the learner said the group turns from its middle (at the end of the explanation turn,
+   TD § 16) and adds a null, **When** the null
    sits at the group's top-left and they say "done", **Then** it doesn't pass and the hint names
    where the null is and what they said (TD § 7, pivot row).
 4. **Given** the null passed, **When** the learner asks for the demo, **Then** the mentor parents
@@ -536,10 +559,13 @@ All of TD § 6, counting the demo layer.
 
 - **FR-023 (stages and version)**: The skill prompt MUST follow TD § 5's stages and spec 004
   FR-025's server rules. Version (spec 004 FR-030; TD § 10): name Layer > New > Null Object (no
-  shortcut); name the Parent & Link column and how to show it (right-click a column heading,
-  Columns), never Shift+F4; say "the pick whip in the Parent column"; never describe the null's
-  default size or anchor, never teach Option or Shift while parenting, and never mention Quick
-  Offset, until L-1 has logged each at 26.5. The missing-prerequisite behaviour is TD § 3 and spec
+  shortcut); name the Parent column, and say how to show it (right-click a column heading,
+  Columns, Parent & Link) **only when the learner can't find it**: they say so, or a check finds no
+  parent and they say they looked (TD § 16; amended 2026-10-28); never Shift+F4; say "the pick whip
+  in the Parent column"; never describe the null's size or Opacity, and its anchor only as TD § 14
+  D-4 says (one sentence, after the learner names a place, before they drag; TD § 16 turn 3);
+  never teach Option or Shift while parenting, and never mention Quick Offset, until L-1 has
+  logged each at 26.5. The missing-prerequisite behaviour is TD § 3 and spec
   004 FR-005.
   **L-1's notes (amended 2026-10-26 from the live sitting):**
   - *Logged at 26.5:* the column reads "Parent & Link"; the Parent pick whip's tooltip reads
@@ -553,13 +579,26 @@ All of TD § 6, counting the demo layer.
     values and only sets the parent, so the child jumps by the null's place (off the comp in the
     sitting); holding Shift rewrites the child's Position keys so its first key sits on the null,
     so it snaps onto the null. Both undo as one step under the same label as a plain parent. The
-    prompt MAY warn against holding a key while parenting and MAY ask once, in the jumped hint,
-    whether a key was held (TD § 7's jump row allows it once B-4 confirms); it MUST NOT suggest
-    either key, name either as the cause, or teach them as a technique (TD § 8, § 10). P1 to P3
+    only mention of a held key is **the jump hint's one question**, once per lesson, after a jump
+    (TD § 7's jump row, § 8; narrowed 2026-10-28, TD § 16: no up-front warning). The
+    "two pick whips, not the one beside Position" line likewise comes only through its hint
+    (`pickwhip_position`, TD § 7). The prompt MUST NOT suggest either key, name either as the
+    cause, or teach them as a technique (TD § 8, § 10). P1 to P3
     catch both jumps as they are; nothing in the check changes.
   - *Still out:* **Quick Offset** wasn't logged at L-1, so it stays out of the lesson.
   - *Open:* whether the mentor may tell the learner where the null's anchor sits (TD § 10 says the
     mentor doesn't describe the null's defaults) is the designer's call: Open questions › D-4.
+- **FR-023a (pacing; added 2026-10-28, S-7)**: The skill prompt MUST follow the shared pacing rule
+  (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2) as TD § 16 applies it: every
+  turn ends on one action or one answer; a fact comes in the turn the learner acts on it, or only
+  on request (TD § 16 › What moved, what's on request, what goes); a question or a request in place
+  of the pending action gets its answer in one or two sentences and the same pending action again
+  in one sentence, never the next stage's content and never the walk-through again (so after the
+  demo, the rest is handed back in one sentence). TD § 16's turn sequence governs where it groups
+  things differently from § 5's stages; the opening, the proposal turns, the hints, the comments,
+  the record and the review don't change. The words are TD § 16's, not copied here.
+  *Checked by:* R-ONE-IDEA with TD § 16's reading (Eval plan › Pacing), on cases 02, 03, 04, 15 and
+  23 with `--repeat 3`, then the full set (tasks.md T345 to T347).
 - **FR-024 (review)**: `null_parent_snapshot` with `mode: "review"` MUST drop every layer in the
   record's past targets for this skill on this comp and project, and every layer already parented,
   before proposing by FR-005; its target is FR-005's first group, never a crowd and never
@@ -767,12 +806,22 @@ The eval engineer owns the cases, their numbers and fixtures; this lists what mu
 § 13 E, spec 004's skill 6 case). Unit tests cover the measures (FR-026, FR-027); evals score the
 teaching.
 
+**Pacing: R-ONE-IDEA's reading (2026-10-28, TD § 16, FR-023a):** the reading is TD § 16 › What
+R-ONE-IDEA should see, not restated here. In short: the explanation turn passes as the frame, the
+confirmed group, the idea sentence and the turn-or-scale question, and a second explanatory
+sentence (why a null, an example rig) fails it; the add-the-null turn is one task (menu path, the
+never-renders sentence, the corner sentence), and a second ask fails it; the parenting turn's demo
+offer is that action's alternative. Cases 02, 03, 04, 15 and 23 are re-run as they are.
+
 1. **First lesson** on Mentor Practice 2 as built (the stand-in `practice2b-with-wave-a.json`'s
    layout, then its live capture; TD § 15): asks first; with no group in mind, proposes Tile, Caption and Stamp in one sentence with its reason
    (apart from everything else); names what's left out for the table's reasons (Shadow under
    Plate); never lists wave A's crowd; never calls the matte "hidden"; real names (US1 #1).
-2. **Explain** with CTRL on Mentor Practice: position, scale and rotation, not opacity or effects.
-3. **Pivot question**: asked, never picked for the learner; "it'll only slide" accepted.
+2. **Explain** on the focus group's frame: position, scale and rotation, not opacity or effects,
+   as one sentence; CTRL or another rig only if the learner asks for an example (amended
+   2026-10-28, US1 #2). What's tested is unchanged (TD § 16).
+3. **Pivot question**: asked at the end of the explanation turn (TD § 16), never picked for the
+   learner; "it'll only slide" accepted.
 4. **Demonstration**: one parenting on the demo target, "moved 0 pixels" in plain words; none
    before the null passes.
 5. **Riskiest overlap, B9**: a correct parenting where the child's raw Position values changed
@@ -810,7 +859,8 @@ case 3, the matte, KD-001).
   sampled read, W4, W5, W6, T157's 2b targets as amended by T163 (SR-3), and T161 and T162
   (SR-1)), and its T136 live answer keys
   pass. This skill builds on them and is blocked until they land.
-- **Mentor Practice is unchanged**; its CTRL group is the stage 2 example only. The lesson and the
+- **Mentor Practice is unchanged**; its CTRL group is an example only when the learner asks for one
+  (TD § 16). The lesson and the
   review targets are on Mentor Practice 2's wave B layers (spec 004 FR-031).
 - **Layer names in a lesson are unique**: the focus by FR-004's rename ask, the null by FR-019's
   rename ask (D-3); a stable layer id isn't read in wave B.
@@ -900,9 +950,10 @@ case 3, the matte, KD-001).
    square, so put that corner on the spot"); not for "it'll only slide" (it goes with the
    `region_needed` question if that comes up). The lesson's `pivot_region` hint names the pivot by
    that corner (where, never why). Never the null's size or Opacity, and none of it in a review.
-   **Still to fold in (spec writer):** FR-023's "never describe the null's default size or anchor"
-   becomes "never its size or Opacity; its anchor only as TD § 14 D-4 says"; "(TD § 7's jump row
-   allows it once B-4 confirms)" becomes "(TD § 7's jump row)"; row 3 says an unkeyed pick whip is
+   **Still to fold in (spec writer):** ~~FR-023's "never describe the null's default size or
+   anchor" becomes "never its size or Opacity; its anchor only as TD § 14 D-4 says"; "(TD § 7's
+   jump row allows it once B-4 confirms)" becomes "(TD § 7's jump row)"~~ (folded in 2026-10-28,
+   amendment 3); row 3 says an unkeyed pick whip is
    caught by where the child lands; new row 41, Option or Shift held while parenting (TD § 9).
 
 ### Settled here
