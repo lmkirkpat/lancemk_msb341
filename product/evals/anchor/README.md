@@ -8,7 +8,13 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
-## Status (2026-10-27): baseline taken, 27/44 (61%), SC-006 not met
+## Status (2026-10-27, evening): updated for the opening read (T413, T414); ready for SC-015's repeats and the re-baseline
+
+The set now has 46 case files (44 + 40 and 41; case 17 renamed). Changes and smoke results are in "Opening read changes"
+at the end. The score below is the baseline **before** those changes (27/44, 61%, SC-006 not met); it is not the
+current state.
+
+### Earlier status: baseline taken, 27/44 (61%), SC-006 not met
 
 The set runs on the live captures of Mentor Practice 2 (comp 179, `mentor/test/fixtures/anchor/`,
 `practice2b.json` the base) plus a few synthetic fixtures. 44 case files (spec cases 1 to 37, the cockpit's 38 and 39,
@@ -42,6 +48,8 @@ at least 80% passing, and every hard-rule check passing; spec 011's SC-004 (no n
 | `no_shortcuts` | no keyboard shortcut (the skill quotes none until its live check logs it) |
 | `no_test_tell` | never "synthetic", "fixture", "stand-in" |
 | `only_mentor_tools` | no After Effects tool during a lesson |
+| `no_read_learner_record` | `read_learner_record` is never called (FR-052, OR-2); it is also out of the runner's `--allowedTools` |
+| `no_text_before_snapshot` | nothing is said before the first `anchor_snapshot` call |
 | `demo_at_most_once` | at most one demo call |
 | `record_plain` | the record's summary holds no method, motive or number |
 | `no_number_or_tolerance`, `no_place_codes`, `no_pivot_in_frame`, `no_self_instructions`, `matte_not_hidden` | skill-specific (see `CONFIG.universal` in `run.mjs`) |
@@ -55,7 +63,7 @@ at least 80% passing, and every hard-rule check passing; spec 011's SC-004 (no n
 `snapshot_input_matches` (regexes over a snapshot call's input), `snapshot_calls_max`,
 `demo_calls_min` / `demo_calls_max` (attempts), `demo_only_on`, `last_check` (`passed`, `has` and `lacks`:
 substrings of the check's reply, `input`), `record_lesson` (`null` for "nothing recorded"),
-`review_mode`, and `say`: a list of `{ id, must | never, turns, cs }` regex checks on the mentor's
+`review_mode` (the first snapshot reply's `mode` is review, or a call asked for one), `first_snapshot_mode` (the first snapshot reply's `mode` is `lesson` or `review`), and `say`: a list of `{ id, must | never, turns, cs }` regex checks on the mentor's
 words (1-based `turns`, default all; case-insensitive unless `cs`).
 
 ## Cases
@@ -237,7 +245,7 @@ The first-lesson leak is gone in all five first-lesson runs. The review path sti
 Smallest skill fix: the same sentence in The review (step 0's "run The review below"): say nothing between
 `read_learner_record` and the review snapshot.
 
-## To do
+## To do (older; see "Opening read changes" for the current list)
 
 - Cases 38 and 39 were built on 2026-10-27 (the two bullets that were here). Case 39 covers the naming turn only;
   the demo-at-the-place-given rule (SKILL.md step 5) has no case of its own yet.
@@ -300,3 +308,58 @@ Neither new case has failed for a case reason; both fail only when the mentor le
 replaces it; the case checks the solid line and not the question. (2) 39: the task text joined "no place given" with "any demo goes at the
 place they give", which are two rules in SKILL.md (step 2 asks for the missing place; step 5 asks for a place before a demo
 on another layer). Case 39 tests step 2 only; a demo-request case needs its own number.
+
+## Opening read changes (2026-10-27, spec 004 T413 and T414; FR-052, SC-015)
+
+Phase 10 (`1a28b1d`): `anchor_snapshot` reads the learner record and picks lesson or review itself; `/anchor-mentor` opens
+with it and never calls `read_learner_record`. Dry run with `--strict-sources`: 46 cases valid, exit 0.
+
+**Runner (`run.mjs`).**
+- `read_learner_record` is out of `--allowedTools` (OR-2); it stays in the list the runner watches, so an attempt is seen.
+- New universal check `no_read_learner_record` (never called, in any case).
+- A review is detected from the first snapshot **reply's** `mode` (or a call that sent `mode: "review"` because the learner asked), so the
+  review-only universal checks (`review_no_demo`, `review_method_before_pass`) still key on the right cases.
+- New expect key `first_snapshot_mode` (`"lesson"` or `"review"`, on the first snapshot reply).
+- `no_text_before_snapshot` was already there (unchanged).
+
+**Changed cases.**
+
+| Case | Change |
+|---|---|
+| 01, 32, 38 | `first_tool` `read_learner_record` becomes `anchor_snapshot` |
+| 16 | `snapshot_with: { mode: review }` becomes `first_snapshot_mode: "review"`, plus `first_tool: anchor_snapshot` |
+| 17 | **Renamed** `17-due-review-nothing-new-lesson` (was `17-review-nothing-new`). OR-1: a due review with nothing new starts a lesson; checks `first_snapshot_mode: "lesson"`, no `review`, `nothing new` or `due` in turn 1, the intent question, no record, no demo. Rubric item `R-AN-DUE-NOTHING-NEW-LESSON` (the old `R-REVIEW-NOTHING-NEW` is marked retired in `rubric.md`) |
+| 18 | No change this round; its regex fix from the baseline was re-run once and held (below) |
+
+**New cases** (numbers 40 and 41 of the cockpit's 40 to 43; 42 and 43 are not used).
+
+| Case | What it is for | Rubric |
+|---|---|---|
+| 40 `unreadable-record` | An unreadable `learner.json` (the builder's `mentor/test/fixtures/records/unreadable.json`, used by path, no new fixture needed): snapshot first, nothing before it, the notes sentence once in the error's words, then the first-lesson question. Covers SC-015's unreadable-record case for this set | `R-AN-UNREADABLE-RECORD` |
+| 41 `review-asked-none-due` | The learner asks for a review while none is due (`anchor-passed-not-due.json`): a review runs, hinge asked first, no demo, and nothing says it wasn't due | `R-REVIEW-ASKED-NONE-DUE` |
+
+**Not added, and why.** *Practicing with a memory clause:* case 32 already is it (one memory clause, the snapshot's own proposal, no
+skill ID), so only its `first_tool` changed. *A resumed lesson with stored choices:* FR-046's confirm sentence is only for
+speed graph, key types and offset (the spec says skills 5 and 6 get theirs in a later per-skill branch), so there is no sentence to
+check here; cases 34 and 35 already cover a lesson left open and reopened in a new session. A true "resumed" (a different comp in between)
+needs a second fixture and a second record state; add it when the anchor skill gets the FR-046 sentence.
+
+**Smoke, 2026-10-27, one run each** (`results/2026-10-27-203543.json` to `-204610.json`; about $5.0 in all, judge included except where the checks failed first):
+
+| Case | Result | Text before the first snapshot? |
+|---|---|---|
+| 40 | FAIL then pass. Run 1 failed on **my own** regexes (the mentor repeated the tool's sentence "I couldn't read my notes from your earlier lessons", and I had counted `notes` twice and banned `earlier lesson`). Fixed the case; run 2 passes ($0.27). Mentor behavior was right both times | none |
+| 41 | pass | none |
+| 17 | pass (lesson starts, review never mentioned) | none |
+| 16 | pass (review mode read from the reply; was 0 of 3 on this check in the baseline) | none |
+| 01 | pass | none |
+| 18 | pass (the lookbehind regex fix held) | none |
+| 32, 38, 39 | pass | none |
+| 24, 24b, 24c | pass | none |
+
+`no_text_before_snapshot` and `no_read_learner_record` passed in every smoked run (12 runs on 11 cases, plus 40's second run). **One run each is
+not SC-015's bar**, which needs repeats: the baseline leak was intermittent (about 9 of 30 first-lesson runs), so a clean single run
+on 01, 16, 24 and 39 only says the self-note is probably gone, not that it is.
+
+**Next:** ready for SC-015's repeats (`--repeat 3` on 01, 16, 17, 24, 39, 40, 41, about $10 to $12) and the re-baseline (about $27 for 46 cases).
+Nothing blocks them. Unchanged and still open from the baseline: 21a (menu path wording), 30 (`because` in a record), 04, 19, 26, 29.

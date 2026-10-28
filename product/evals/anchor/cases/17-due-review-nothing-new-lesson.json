@@ -1,0 +1,55 @@
+{
+  "id": "17-due-review-nothing-new-lesson",
+  "title": "Review due but every layer that could take the lesson was used before (OR-1): a lesson starts instead, the review is never mentioned, the intent question is asked; no demo",
+  "covers": [
+    "EP-17",
+    "US3"
+  ],
+  "learner_record": "product/evals/anchor/records/every-layer-done.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "anchor_snapshot",
+    "first_snapshot_mode": "lesson",
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_check",
+      "anchor_demo"
+    ],
+    "record_lesson": null,
+    "say": [
+      {
+        "id": "no_review_mentioned",
+        "never": "\\breview\\b|nothing new|\\bdue\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_intent",
+        "must": "turn|grow",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "ends_on_choice",
+        "must": "\\?\\s*$",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-DUE-NOTHING-NEW-LESSON",
+    "R-NAMES-REAL"
+  ]
+}

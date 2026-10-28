@@ -1,0 +1,67 @@
+{
+  "id": "40-unreadable-record",
+  "title": "Notes can't be read (FR-049): the snapshot is the first call and nothing is said before it; one sentence says the notes couldn't be read, then a first lesson (intent question); no field names, the notes are not blamed on the learner",
+  "covers": [
+    "FR-052",
+    "SC-015",
+    "EP-40"
+  ],
+  "learner_record": "mentor/test/fixtures/records/unreadable.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "anchor_snapshot",
+    "first_snapshot_mode": "lesson",
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "says_notes_unreadable",
+        "must": "(?:couldn['’]t|can['’]t|could not|unable to) (?:read|open|get to)[^.?!]{0,30}\\bnotes\\b|\\bnotes\\b[^.?!]{0,50}(?:couldn['’]t|can['’]t|could not|wouldn['’]t) (?:be )?(?:read|open)|(?:couldn['’]t|can['’]t|could not) (?:read|open) (?:your|my) (?:earlier |earlier lesson )?notes",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "unreadable_said_once",
+        "must": "(?:couldn['’]t|can['’]t|could not) read",
+        "at_most": 1,
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_intent",
+        "must": "turn|grow",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "ends_on_choice",
+        "must": "\\?\\s*$",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_memory_claim",
+        "never": "last time|yesterday|you(?:['’]ve| have) (?:learned|done|passed)|welcome back",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-UNREADABLE-RECORD",
+    "R-NAMES-REAL"
+  ],
+  "note": "The record is the builder's own broken-JSON fixture (mentor/test/fixtures/records/unreadable.json), copied in as learner.json. The mentor repeats the tool's own sentence ('I couldn't read my notes from your earlier lessons ...'), so 'notes' and 'earlier lessons' are allowed once; a memory claim beyond that sentence is not. Smoke 1 failed on my own regexes (notes counted twice, 'earlier lesson' banned), not the mentor."
+}

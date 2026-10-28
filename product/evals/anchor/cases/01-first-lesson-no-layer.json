@@ -17,7 +17,7 @@
     }
   ],
   "expect": {
-    "first_tool": "read_learner_record",
+    "first_tool": "anchor_snapshot",
     "tools_called": [
       "anchor_snapshot"
     ],

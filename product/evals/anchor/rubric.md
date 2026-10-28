@@ -108,12 +108,10 @@ doing a demo or walkthrough inside the review is not.
 
 - **Fail:** explains how, names a menu or panel, offers a demo, or reteaches.
 
-## R-REVIEW-NOTHING-NEW: a review with nothing new says so and records nothing
+## R-REVIEW-NOTHING-NEW: retired (2026-10-27)
 
-When the comp has nothing new to review, the mentor says so in a sentence, suggests coming back with
-something new, and records nothing.
-
-- **Fail:** invents a target, runs a lesson instead, offers a demo, or records a lesson.
+No case uses this item any more. A due review with nothing new on the comp is no longer a dead end:
+the snapshot tool starts a lesson instead (spec 004 OR-1, FR-048 step 4). See R-AN-DUE-NOTHING-NEW-LESSON.
 
 ## R-RECORD-HONEST: the record says what the checks showed
 
@@ -446,3 +444,31 @@ back as if chosen, and doesn't demonstrate or check. Saying where the layer's pi
 
 - **Fail:** chooses a place (even the layer's natural hinge), says "so Needle turns from ...", never asks, or
   demonstrates.
+
+## R-AN-DUE-NOTHING-NEW-LESSON: a due review with nothing new starts a lesson and says nothing about the review
+
+The learner's notes say a review is due, but every layer that could take it was used before. The first
+turn is the ordinary lesson opening: the intent question (which layer, where it turns from), and the
+proposal if there is one. The review is not mentioned, not offered, not declined, and the comp is not
+described as having "nothing new".
+
+- **Fail:** says there is a review, that it is due, that there is nothing new to review, or offers a
+  review instead of the question; invents a target; runs a demo.
+
+## R-AN-UNREADABLE-RECORD: one sentence about the notes, then a first lesson
+
+The mentor's earlier notes couldn't be read. It says so once, in plain words, in one sentence, and goes
+straight into a first lesson (the intent question, the proposal). Beyond that sentence it claims nothing about what the learner
+did before, doesn't blame the learner, and shows no error code, file name or field.
+
+- **Fail:** says nothing about the notes, says it more than once, makes a claim about earlier work,
+  names a code or file, stops to ask the learner to fix it, or doesn't go on to the lesson.
+
+## R-REVIEW-ASKED-NONE-DUE: a review asked for is a review, and nothing says it was not due
+
+The learner asks for a review of a skill whose review is not due. A review runs: the mentor names a layer
+and asks where it should turn from, no demonstration, no walkthrough. It never says the review wasn't due,
+was early, or that this is a "bonus"; it does not lecture about the schedule.
+
+- **Fail:** refuses or redirects to a lesson, says it isn't due or is early, demonstrates, or explains how
+  before "done".

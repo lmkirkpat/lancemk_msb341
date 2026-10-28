@@ -102,7 +102,10 @@ const CHECK = `${T}check`;
 const TARGET = 0.8; // SC-006
 const MAX_TURNS = "12";
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
+// read_learner_record stays in MENTOR_TOOLS so an attempt to call it is seen (and fails the universal
+// check below), but it is not allowed: FR-052 / OR-2, the skill no longer lists it in allowed-tools.
 const MENTOR_TOOLS = ["read_learner_record", SNAP, DEMO, CHECK, "preview_frame", "record_lesson", "recommend_next"];
+const ALLOWED_TOOLS = MENTOR_TOOLS.filter((t) => t !== "read_learner_record");
 const PREFIX = "mcp__ae-mentor__";
 // The repo's local settings may set a builder output style (Explanatory adds "★ Insight" notes).
 // CLI settings outrank local ones, so every headless run here uses the default voice (usage notes,
@@ -171,7 +174,7 @@ function validate(c) {
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
     "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks",
-    "proposal_named", "named_layers"];
+    "proposal_named", "named_layers", "first_snapshot_mode"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (s.at_most !== undefined && !(s.must && Number.isInteger(s.at_most))) problems.push(`say ${s.id}: at_most needs a must regex and a whole number`);
@@ -273,7 +276,7 @@ function claude(args, env, cwd) {
 
 function mentorTurn(say, sessionId, env, cwd) {
   const args = ["-p", say, "--mcp-config", ".mcp.json", "--strict-mcp-config", "--output-format", "json", "--verbose",
-    "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t), ...SETTINGS];
+    "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...ALLOWED_TOOLS.map((t) => PREFIX + t), ...SETTINGS];
   if (sessionId) args.push("--resume", sessionId);
   return claude(args, env, cwd);
 }
@@ -381,7 +384,18 @@ function check(expect, turns, c) {
   const foreign = turns.flatMap(toolEvents).filter((e) => !MENTOR_TOOLS.includes(e.name) && e.name !== "ToolSearch");
   add("only_mentor_tools", foreign.length === 0, foreign.length ? `used ${foreign.map((e) => e.name).join(", ")}` : "ok");
   add("demo_at_most_once", demos.length <= 1, `${demos.length} demo calls`);
-  const reviewMode = snaps.some((e) => e.input && e.input.mode === "review");
+  // FR-052: the mode is the first snapshot reply's `mode` (the opening call sends none); a call that
+  // asked for a review itself (the learner's own words) also counts.
+  const firstSnapReply = parse((snaps.find((e) => e.ok) || {}).result || "");
+  const reviewMode = (firstSnapReply && firstSnapReply.mode === "review") || snaps.some((e) => e.input && e.input.mode === "review");
+  {
+    const called = calls.filter((e) => e.name === "read_learner_record");
+    add("no_read_learner_record", called.length === 0, called.length ? `called read_learner_record ${called.length}x` : "never called");
+  }
+  if ("first_snapshot_mode" in expect) {
+    const m = firstSnapReply && firstSnapReply.mode;
+    add("first_snapshot_mode", m === expect.first_snapshot_mode, `first snapshot reply mode was ${m}`);
+  }
   if (reviewMode) {
     add("review_no_demo", demos.length === 0, `${demos.length} demo calls in a review`);
     // Words a review never says before a pass (CONFIG.reviewBanned, e.g. skill 6's "null" and its method).

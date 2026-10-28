@@ -1,0 +1,52 @@
+{
+  "id": "41-review-asked-none-due",
+  "title": "The learner asks for a review of a skill that isn't due: a review runs (the hinge asked first, no demo), and nothing says it wasn't due",
+  "covers": [
+    "FR-052",
+    "SC-015",
+    "EP-41"
+  ],
+  "learner_record": "product/evals/anchor/records/anchor-passed-not-due.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor I'd like a review of the pivot please."
+    }
+  ],
+  "expect": {
+    "first_tool": "anchor_snapshot",
+    "review_mode": true,
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_demo"
+    ],
+    "say": [
+      {
+        "id": "asks_where",
+        "must": "turn from|where",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "not_due_unsaid",
+        "never": "not (?:yet )?due|isn['’]t due|aren['’]t due|wasn['’]t due|too soon|come back later|no review is due|not time for",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_watch_offer",
+        "never": "\\b(?:I could|I can|want me to|would you like me to|like me to)\\b[^.?!]{0,40}\\b(?:show|watch|demonstrate)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-ASKED-NONE-DUE",
+    "R-NAMES-REAL"
+  ],
+  "note": "The record has the pivot learned two days ago with its review due in 2099, Door and Needle already used. The opening call may carry a review mode (the learner's own words ask for one) or not; either way the reply's mode is review, which the universal review checks key on."
+}

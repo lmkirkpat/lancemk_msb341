@@ -26,9 +26,6 @@
   ],
   "expect": {
     "review_mode": true,
-    "snapshot_with": {
-      "mode": "review"
-    },
     "demo_calls_max": 0,
     "last_check": {
       "passed": true
@@ -59,7 +56,9 @@
         "id": "no_watch_offer",
         "never": "\\b(?:I could|I can|want me to|would you like me to|like me to)\\b[^.?!]{0,40}\\b(?:show|watch|demonstrate)\\b"
       }
-    ]
+    ],
+    "first_snapshot_mode": "review",
+    "first_tool": "anchor_snapshot"
   },
   "rubric": [
     "R-REVIEW-HANDS-ON",
