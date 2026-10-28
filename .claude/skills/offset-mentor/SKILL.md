@@ -209,7 +209,10 @@ start.
    0.633 s"), that **Edit > Undo** reverses it, and what to look at in the two frames. Then hand
    the rest back in one sentence ("Dot 3 is yours; say done."). Don't repeat the how-to.
    **One demonstration per lesson.** The first member in their order stays put; the demo moves
-   the second.
+   the second. If they ask for the demo before step 2's idea has been said (once there's an
+   order, so a `demo_target` exists), that turn opens with one idea sentence on the group ("When
+   everything moves at once, nothing leads the eye."), then the demo, then the one-sentence
+   hand-back, and no how-to.
 
    If `demo_target` is null, there's no demo:
    - **Two members:** say in one sentence that if you shifted one there'd be nothing left for
