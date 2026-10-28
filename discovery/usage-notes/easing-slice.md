@@ -349,3 +349,21 @@ touching `SKILL.md`; the smallest fix would be the rubric's "visible layers" wor
 New case 26 (matte, eye off) passes 3/3 with or without T123's line: the tool keeps the matte out of
 `hidden_layers`, so the line is insurance. A harder variant ("isn't Wipe hidden?") would test the
 prompt itself.
+
+## T412 gate: 2026-10-27 (spec 004 Phase 10, the snapshot picks lesson or review)
+
+Branch `phase10-opening-read` (`f2eb790`) against its base `main` `11eb80b`, both full runs started
+together, 26 cases each.
+
+| Run | Result | Cost | Notes |
+|---|---|---|---|
+| `2026-10-27-202146-phase10-base.json` (base `11eb80b`) | 26/26 (100%) | $13.30 | No failures |
+| `2026-10-27-202038-phase10-branch.json` (branch `f2eb790`) | 24/26 (92%) | $13.24 | All deterministic checks passed. Case 03 failed R-SHOWS (frame looked at, reply never says what it shows). Case 07 failed R-NAMES-LAYERS (opening: "10 pairs over 5 layers" with Subtitle counted inside, snapshot has 11 pairs over 6 layers) |
+| `2026-10-27-202350-phase10-branch-case03x3.json` | case 03: 2/3 | $1.21 | Run 2 failed R-NAMES-LAYERS ("11 pairs over 7 layers", snapshot shows 6). Runs 1 and 3 passed |
+| `2026-10-27-202605-phase10-branch-case07x3.json` | case 07: 3/3 | $1.85 | |
+
+Read: branch is 2 cases under the base, so the "within one case" bar is not met on the first full run.
+Both failures are rubric items, not hard rules. Across the 7 branch runs of cases 03 and 07, 2 were the same
+layer or pair count error in the opening (R-NAMES-LAYERS); case 03's first-run R-SHOWS failure did not
+repeat in 3 runs. The base had one run of each and no repeats, so whether the count error is new to the
+branch is not shown. Case 17 hit the same rubric item on 2026-10-26 on the branch and passed on re-run.
