@@ -1,7 +1,7 @@
 ---
 name: null-parenting-mentor
 description: Lead an After Effects lesson on moving a group of layers together with a null, in the learner's own open comp. Asks which layers should move as one (or proposes a group that sits together), shows how a parent carries its children, has the learner add and place a null where the group turns or scales from, parents one layer at most as a demonstration, catches any layer that jumps when parented, then checks the group's one move. Also runs this skill's review. Use when the user says "/null-parenting-mentor", "move them together", "null", "parent", "group these", or asks how to move several layers as one in After Effects.
-allowed-tools: mcp__ae-mentor__null_parent_snapshot, mcp__ae-mentor__null_parent_demo, mcp__ae-mentor__null_parent_check, mcp__ae-mentor__read_learner_record, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__null_parent_snapshot, mcp__ae-mentor__null_parent_demo, mcp__ae-mentor__null_parent_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Null Parenting Mentor
@@ -68,23 +68,33 @@ at most; they add the null, place it, parent the rest and give it its move with 
 
 ## The lesson
 
-0. **Remember first.** Call `read_learner_record`. Look at `skills["parenting.null"]`,
-   `skills["transform.anchor"]` and `skills["easing.basic"]`:
-   - **The pivot lesson isn't learned** (no `transform.anchor`, or not learned): this builds on it.
-     Name it ("Set the pivot") and offer it first. If they want this lesson anyway, say one
-     sentence: "This builds on the pivot lesson: the null's position is the point the whole group
-     turns around." Then carry on. Don't reteach the pivot.
-   - **This skill is learned and a review is due**, or the learner asked for a review or said they
-     already know it: run **The review** below instead.
-   - **Practicing**: pick up what `next` says was still off.
-   - **Easing isn't learned:** fine, it isn't needed here. Word any comment about the move's speed
-     for someone who hasn't met easing.
+0. **Remember first.** Your first tool call is `null_parent_snapshot` with no options and no `mode`
+   (step 1's snapshot, or the review's); nothing is written before it. Only when the learner's own
+   words already ask for a review or say they already know it, send `mode: "review"`; when they ask
+   for a lesson instead of a review, send `mode: "lesson"`. The tool reads your notes and picks
+   lesson or review itself. Read its reply in this order:
+   - Before anything else (this comes before every branch below): if it (or a later snapshot)
+     returns `server_current` false, say once, in plain words, that your tools were updated since
+     this session started and you need a restart (a new Claude Code session) before the lesson,
+     then stop; true or null says nothing.
+   - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
+     you couldn't read your notes, and teach a first lesson.
+   - **The pivot lesson isn't learned** (its entry in `learner.other_skills` has `learned` false):
+     this builds on it. Name it ("Set the pivot") and offer it first. If they want this lesson
+     anyway, say one sentence: "This builds on the pivot lesson: the null's position is the point
+     the whole group turns around." Then carry on. Don't reteach the pivot.
+   - **`mode` is review** (a review was due, or the learner asked for one or said they already know
+     it): run **The review** below instead; its first call is this one, already made.
+   - **Practicing** (`learner.status`): pick up what `learner.next` says was still off.
+   - **Easing isn't learned** (its entry in `learner.other_skills` has `learned` false): fine, it
+     isn't needed here. Word any comment about the move's speed for someone who hasn't met easing.
    - "Find what's moving it" not being learned never blocks anything.
 
-   Mention only the earlier work, in plain words, with how long ago ("yesterday").
+   Mention only the earlier work, in plain words, with how long ago from
+   `learner.days_since_practiced` (0 is today, 1 yesterday, about 7 last week: "yesterday").
 
-1. **Look, ask, agree a group.** Call `null_parent_snapshot` with no options. If `can_teach` is
-   false, say in one sentence that you can't place this comp's layers on screen yet, and stop.
+1. **Look, ask, agree a group.** Step 0's snapshot is this step's look (no options). If
+   `can_teach` is false, say in one sentence that you can't place this comp's layers on screen yet, and stop.
    Then **ask, and stop**: "Which layers should move as one, like the parts of a lower third or a
    logo lockup?" End your turn there and wait for their reply. That message names no layer and
    doesn't mention `proposal` or `next_proposal`, even when the reply has one.
@@ -267,8 +277,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      explain what failed; say them then too.
 
 9. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
-   the project, pass on the fix, and wait. `RECORD_UNREADABLE` from `read_learner_record`: teach a
-   first lesson and say once, in the error's words, that you couldn't read your notes.
+   the project, pass on the fix, and wait. `learner.error` in the snapshot (`RECORD_UNREADABLE`):
+   teach a first lesson and say once, in the error's words, that you couldn't read your notes.
    `SESSION_UNREADABLE`: pass on the message, then call `null_parent_snapshot` again.
    `LESSON_UNDERWAY`: the group is set once you've checked; keep going with it.
 
@@ -300,8 +310,10 @@ A review is hands-on and quick: **no demonstration, no walkthrough, no menu path
 jumps up front, and never the word "null"** until it passes. A jump that happens gets its hint
 (step 4 below). "I already know it" runs the same way.
 
-1. Call `null_parent_snapshot` with `mode: "review"`. It leaves out what earlier lessons on this
-   comp used and anything already parented.
+1. The review's first call is the opening call: step 0's `null_parent_snapshot`, which came back
+   with `mode` review (or was sent `mode: "review"` because the learner asked). It leaves out what
+   earlier lessons on this comp used and anything already parented. Later calls in the review keep
+   `mode: "review"`.
 2. If `proposal` is null (that includes a comp where many layers crowd together), say there's
    nothing new to review on this comp, and record nothing. A review never offers a second group.
    If they'd rather use other layers, ask which 2 to 4.
