@@ -304,10 +304,14 @@ at most; they add the null, place it, parent the rest and give it its move with 
       Position slides, Rotation turns, Scale scales. Say it turns or scales, or name the place it
       does so from, only when the check found a Rotation or Scale move, never because of what the
       learner said earlier. No key times; the check doesn't give them.
-    - `summary`: what the checks showed: a jump and its distance ("Stamp jumped 120 px on the
-      first try, then stayed put"), a first move on Opacity, or "said the group only slides". No
-      tolerances, never how they did it (which pick whip, which key), never why.
-    - `next`: one thing ("ease Group Null's move", "try a group that turns").
+    - `summary`: what the learner did and what the checks saw: a jump and its distance ("Stamp
+      jumped 120 px on the first try, then stayed put"), a first move on Opacity, or "said the
+      group only slides". No tolerances, never how they did it (which pick whip, which key), never
+      why, and never what they should have done or how to fix it ("follow one control layer",
+      "parent them to the null" are fixes, not what happened).
+    - `next`: one thing: what the check saw still off ("Caption still didn't follow Group Null"),
+      or after a pass what's left to try ("a group that turns", "easing Group Null's move"). Never
+      what they should have done or how to do it.
 
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short "I've
@@ -351,7 +355,9 @@ jumps up front, and never the word "null"** until it passes. A jump that happens
      about pick whips or columns.
    - `not_parented`: "Row C doesn't follow anything yet."
 5. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`. A
-   review that doesn't pass leaves the skill learned.
+   review that doesn't pass leaves the skill learned. `summary` and `next` follow step 11: what the
+   learner did and what the check saw ("Row B and Row C followed Row A"), never what they should
+   have done or how ("follow one invisible control layer" is a fix: leave it out).
 
 ## Style
 
