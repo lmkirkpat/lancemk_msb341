@@ -194,7 +194,7 @@ edits an existing file and isn't add-only: the cockpit cuts its branch from loca
 the merge check accordingly. T345 to T347 are the eval engineer's, on `evals-skill-6` or the branch
 the cockpit names.
 
-- [ ] T344 [US1] `.claude/skills/null-parenting-mentor/SKILL.md`, per TD § 16 › Items › the
+- [x] T344 [US1] `.claude/skills/null-parenting-mentor/SKILL.md`, per TD § 16 › Items › the
   builder's items 1 to 6 (its wording, not copied here): step 2 one frame and the idea sentence,
   no rig unless asked, ending on the turn-or-scale question; step 3 the add-the-null task with the
   step 2 answer passed as `region`; step 5 the Parent column named, how to show it only when they
@@ -202,7 +202,7 @@ the cockpit names.
   handed back in one sentence after the demo; after a "do it for me" refusal the one demo offer
   still made once if not made yet, never twice (spec FR-023a, 2026-10-28); the shy note split; rule 3 under "Style". Nothing
   else. Then `npm test`, `/agent-audit` on the file, and hand back the diff for HO-3 (spec FR-023,
-  FR-023a). **Done when:** the diff matches TD § 16's six items and nothing else
+  FR-023a). **Done when:** the diff matches TD § 16's six items and nothing else. **Done 2026-10-28:** approved at HO-3 2026-10-28 (`0bd87a9`, plus the two Style and demo-offer wording fixes)
 - [ ] T345 [eval-engineer] `product/evals/null-parenting/`: R-ONE-IDEA's rubric takes TD § 16 ›
   What R-ONE-IDEA should see (turn 2: frame, group, idea sentence and the turn-or-scale question
   are one idea; turn 3: one task; turn 4: the demo offer is the action's alternative). Case 02's

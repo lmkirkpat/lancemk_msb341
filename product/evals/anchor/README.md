@@ -488,3 +488,16 @@ the T262 branch.
 - **Runner.** The judge sees each tool result up to 16000 characters (was 6000). The 6000 cap hid the snapshot's side note
   from the judge and produced a false 'guessed the side' failure (cases 19 and 23c); earlier results were judged on the cut.
 - **Not changed.** Cases 02, 21 and 29 keep their checks; T264 re-runs them with `R-ONE-IDEA` read by the new rubric text.
+
+## T264 pacing re-runs (2026-10-28, `--repeat 3` each, $11.97 in all)
+
+On the pivot `SKILL.md` with T262's pacing edits. Results: `results/2026-10-28-142947.json` (02, $1.60),
+`-143149` (15, $3.72), `-143433` (21a and 21b, $4.53), `-143550` (29, $2.12). Majority passes.
+
+| Case | Result | Triage |
+|---|---|---|
+| 02 | 3/3 | |
+| 15 | 3/3 | |
+| 21a | 3/3 | |
+| 21b | 3/3 | |
+| 29 | 0/3 | Run 1 and 3: **R-ONE-IDEA, prompt, real.** The "what numbers should I type" answer adds an unasked sentence ("If you change Anchor Point by itself, the layer slides...") to the decline. Run 2: **check, too strict** (`place_in_words` wants "left edge" or "middle of" in the short answer; the pacing rule makes the answer shorter and it didn't repeat the place; the answer itself was fine). Fix the check to drop `place_in_words` or accept turn 3 without the place; not changed here |

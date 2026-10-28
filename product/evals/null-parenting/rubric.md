@@ -380,6 +380,10 @@ move as one, does not propose another group, and does not restart the explanatio
 
 - **Pass:** "We left off with Tile, Caption and Stamp as the group. Add a null and tell me where the group should turn or scale from."
 - **Fail:** asks which layers should move as one, proposes a different group, or starts over.
+- **When the turn-or-scale question was never answered (case 40; SKILL.md step 2, picked up again):**
+  the next step is that question, asked on its own after the one-sentence "where it left off".
+  Asking it first passes; a null task before it, or a recap of the idea, fails. (The pass example
+  above is for a lesson where the question was already answered.)
 
 ## R-REVIEW-PASS-HONEST: a review that passes is recorded as passed
 

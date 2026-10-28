@@ -68,6 +68,11 @@ Each run writes `results/<YYYY-MM-DD-HHMMSS>.json` (never overwritten):
 Turn real failures into a `SKILL.md` fix or a new task, and log what changed in
 `discovery/usage-notes/easing-slice.md`.
 
+**R-ONE-IDEA (added 2026-10-28, not yet run).** Cases 01, 02, 03, 05 and 21 now list `R-ONE-IDEA`
+(curriculum § 2's three turn rules; wording in `rubric.md`). It takes effect at easing's next re-baseline,
+which happens after easing's pacing build; the 24/25 and 25/26 baselines above did not hold the mentor
+to it, so expect those five cases to fail it until the build lands. `--dry-run` only so far.
+
 ## Cases
 
 16 cases in `cases/NN-name.json` (data-model.md › Eval case): the 14 from T039, plus
