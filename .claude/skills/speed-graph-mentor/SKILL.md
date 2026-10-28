@@ -1,7 +1,7 @@
 ---
 name: speed-graph-mentor
 description: Lead an After Effects lesson on shaping an ease in the speed graph, on the learner's own open comp - a quick start and a soft landing that still comes to rest. Picks eased pairs the learner made earlier, asks them to read the speed graph, explains influence with a frame from their comp, demonstrates on one pair only, and checks every pair they shape. Also runs this skill's review. Use when the user says "/speed-graph-mentor", "shape my ease", "speed graph", "make it land softly", or asks to learn the Graph Editor's speed graph in After Effects.
-allowed-tools: mcp__ae-mentor__speed_graph_snapshot, mcp__ae-mentor__speed_graph_demo, mcp__ae-mentor__speed_graph_check, mcp__ae-mentor__read_learner_record, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__speed_graph_snapshot, mcp__ae-mentor__speed_graph_demo, mcp__ae-mentor__speed_graph_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Speed Graph Mentor
@@ -60,39 +60,49 @@ Rules particular to this skill:
 
 ## Before the lesson: is easing there?
 
-This skill builds on easing. Call `read_learner_record` first, before anything else.
-Before anything else (this comes before every branch below): if `read_learner_record` (or a
-later snapshot) returns `server_current` false, say once, in plain words, that your tools were
-updated since this session started and you need a restart (a new Claude Code session) before the
-lesson, then stop; true or null says nothing.
+This skill builds on easing. Your first tool call is `speed_graph_snapshot` without
+`skill_options` and without `mode` (step 1's first call); nothing is written before it. Only when
+the learner's own words already ask for a review or say they know this skill, send
+`mode: "review"`; when they ask for a lesson instead of a due review, send `mode: "lesson"`. The
+tool reads your notes and picks lesson or review itself. Read its reply in this order.
 
-Then look at `skills["easing.basic"]`:
+Before anything else (this comes before every branch below): if it (or a later snapshot) returns
+`server_current` false, say once, in plain words, that your tools were updated since this session
+started and you need a restart (a new Claude Code session) before the lesson, then stop; true or
+null says nothing.
 
-- **Easing isn't learned** (no entry, or not learned): name easing and offer it first, in one or
+Then, if `learner.error` is there, your notes couldn't be read (the paragraph on unreadable notes
+after step 7 says what to do). Then look at the Easing entry in `learner.other_skills`:
+
+- **Easing isn't learned** (`learned` false): name easing and offer it first, in one or
   two sentences ("This builds on easing: it reshapes an ease you've already applied. Want to do
   easing first?"). If they'd rather go ahead, say once that it builds on easing and go on. Don't
   reteach easing.
-- **Key types** (`keyframes.types`) never blocks this lesson; don't bring it up.
+- **Key types** never blocks this lesson; don't bring it up.
 
-Also note, for the focus: the layer names that easing lessons targeted (each `easing.basic`
-lesson's `targets`; for older entries with no targets, a layer whose exact name appears in the
-entry's text). These are `eased_layers`. Never read the record file yourself.
+Also note, for the focus: `learner.eased_layers`, the layers easing lessons worked on. Step 1's
+second call sends them as `eased_layers`. Never read the record file yourself.
 
-And look at `skills["easing.speed_graph"]`: if it's learned and `review_is_due`, offer the review
-(below) instead of a first lesson. If the learner says they already know this, run the review.
+And look at `mode`: if it's review because it was due (`mode_source` is `review_due`), or because a
+review from earlier is still open (`mode_source` is `in_progress`: the learner may never have
+answered the offer), offer the review (below) instead of a first lesson, the same way for both.
+When they say yes, run the review; its first call is this one, already made. When they say no, call
+`speed_graph_snapshot` with `mode: "lesson"` and use that reply as step 1's first. If the learner says they already know this, run the review.
 
 ## The lesson
 
-0. **Remember first** (done above). If this skill has history (`practicing`), its `next` says
-   what was still off. Mention the earlier lesson in one sentence, in plain words and with "how
-   long ago" from `last_practiced` ("Last week you shaped Title's Position; Scale still arrived
+0. **Remember first** (done above). If this skill has history (`learner.status` is
+   `practicing`), `learner.next` says what was still off. Mention the earlier lesson in one
+   sentence, in plain words and with "how long ago" from `learner.days_since_practiced` (0 is today,
+   1 yesterday, about 7 last week) ("Last week you shaped Title's Position; Scale still arrived
    moving").
 
-1. **Look and propose.** Call `speed_graph_snapshot` first **without** `skill_options`, and read
-   `lesson` and `stored_choices` from this first reply. If `stored_choices` is true, go on with
-   the choices it holds (the paragraph on their choices from last time, below, confirms them).
-   Otherwise, if `landing_hard` is empty, call it again with `skill_options` set to
-   `{ "eased_layers": [...], "land_hard": [] }` (a new lesson, or one an earlier lone first call
+1. **Look and propose.** The first call is the opening call, `speed_graph_snapshot` **without**
+   `skill_options`; read `lesson` and `stored_choices` from this first reply. If `stored_choices`
+   is true, go on with the choices it holds (the paragraph on their choices from last time, below,
+   confirms them). Otherwise, if `landing_hard` is empty, call it again with `skill_options` set to
+   `{ "eased_layers": [...], "land_hard": [] }`, with `learner.eased_layers` from the first reply
+   (a new lesson, or one an earlier lone first call
    started); if `landing_hard` isn't empty, go on with it. Then, in a few sentences:
    - Propose the `focus` (one layer, two at most) and name its pairs from `pairs` by property and
      time ("Title's Position, 0.5 to 1.5 s, 1.5 to 3 s and 3 to 4.37 s, and its Scale"). If the
@@ -224,18 +234,20 @@ If `speed_graph_check` returns `comp_matches: false`, don't grade: ask them to s
 `lesson_comp` by name and say "done" again. If AE can't be reached at any step, stop, say you
 can't see the project, pass on the fix, and wait.
 
-`RECORD_UNREADABLE` from `read_learner_record` means teach a first lesson and say once, in the
+`learner.error` in the snapshot (`RECORD_UNREADABLE`) means teach a first lesson and say once, in the
 error's words, that you couldn't read your notes from before; easing then counts as not known, so
 ask whether they've done easing. `SESSION_UNREADABLE` means the lesson in progress was lost (the
 project wasn't): pass on the message and call `speed_graph_snapshot` again.
 
 ## Review
 
-A review checks the skill days later on a new move. Run it when a review is due (and the learner
-agrees), or when they say they already know this skill.
+A review checks the skill days later on a new move. Run it when a review is due or one from earlier
+is still open (and the learner agrees), or when they say they already know this skill.
 
-- Call `speed_graph_snapshot` with `mode: "review"` and the same `skill_options`. It picks one or
-  two eased pairs on a layer and property this skill hasn't worked on in this comp.
+- The review's first call is the opening call: the first `speed_graph_snapshot`, which came back
+  with `mode` review (or was sent `mode: "review"` because the learner said they know this). It
+  picks one or two eased pairs on a layer and property this skill hasn't worked on in this comp.
+  Later calls in the review keep `mode: "review"`.
 - If `no_demo_reason` is `no_new_target`, there's nothing new to review here: say so in a sentence,
   suggest they come back with a new eased move, and **record nothing**.
 - Ask for the shape in one or two sentences: "Here's Card's Position, 1.2 to 2.4 s. Make it start

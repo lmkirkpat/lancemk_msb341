@@ -47,6 +47,12 @@ lapsed in the lesson's baseline (data-model › Kept-linear mark). `read_learner
 
 ## `recommend_next` (new)
 
+**Amended 2026-10-27, draft (spec FR-048, OR-4, OR-5):** the review test it applies to one skill
+(learned, due, not practiced in the window, no other review offered in the window, a new target) is
+exported from `mentor/lib/recommend.mjs` and also called by the snapshot tools' opening function
+([skill-module.md](skill-module.md) § 4). Input, output and results don't change. `read_learner_record`
+doesn't change either; the skills with a review stop calling it (FR-050).
+
 ```json
 { "requested_skill": "easing.speed_graph" }      // optional: a skill the learner asked for
 ```

@@ -61,6 +61,32 @@ A skill's tools follow easing's shape (spec 002 contract) so the six stages work
 Shared tools a skill's SKILL.md also lists in `allowed-tools`: `read_learner_record`,
 `preview_frame`, `record_lesson`, `recommend_next` ([shared-tools.md](shared-tools.md)).
 
+**Amended 2026-10-27, draft (spec FR-048 to FR-051; tasks-wave-b.md Phase 10).** For a skill with a
+review (`FINDERS[id].review` true), the snapshot tool's `mode` is **optional with no default**:
+
+1. First thing after `takeSnapshot()`, the tool calls the shared opening function (§ 4,
+   `opening(...)`) with the skill ID, the `mode` the call gave (or none), the snapshot, `fresh` if the
+   tool takes it, and its own finder. It returns `{ mode, mode_source, learner }` (spec FR-048,
+   FR-049).
+2. The tool then runs exactly as it does today with that `mode`: `session.start(snapshot, { ..., mode })`
+   and the same reply.
+3. The reply adds `mode_source` and `learner` next to `mode`, and `server_current` (FR-044) if the
+   tool didn't return it yet. Every other field is unchanged. An early reply (skill 6's
+   `can_teach: false`) carries the three as well.
+
+`learner`'s fields are spec FR-049's table. A skill whose `SKILL.md` mentions a skill that isn't a
+hard prerequisite adds it to its `FINDERS` entry as `mentions: ["<id>", ...]` (skill 6:
+`["easing.basic"]`); it appears in `learner.other_skills` with `hard: false`. Speed graph's
+`eased_layers` is worked out by the speed graph tool file from the record the opening function read
+(passed back to it as `record`, never re-read), so no other skill carries it. A `speed_graph_snapshot`
+call whose `skill_options` hold no `eased_layers` (none sent, none stored, or an empty list) uses
+`learner.eased_layers` for its analysis only; the lesson's stored `skill_options`, `land_hard`
+included, don't change (spec FR-050; Phase 10 review, should-fix 2).
+
+A skill with a review drops `read_learner_record` from its `allowed-tools` and calls its snapshot
+first (spec FR-050, OR-2). Easing's `snapshot_project` is unchanged and grandfathered (FR-035): easing
+has no review mode and keeps `read_learner_record` first.
+
 ## 4. What the shared code gives a skill
 
 | Import | From | Use |
@@ -84,6 +110,8 @@ Shared tools a skill's SKILL.md also lists in `allowed-tools`: `read_learner_rec
 | `compPosition`, `footprint`, `compPoint`, `compMatrix`, `toLayerSpace` | `mentor/lib/comp-space.mjs` | **Wave B.** 2D comp-space math from sampled values; `parent_transform` measures through a stored parent (skill 6). Returns `null` with a reason, never a guess. Skills set their own tolerances |
 | `visibility`, `classOf` | `mentor/lib/visibility.mjs` | **Wave B.** FR-013's one class per layer. Every skill uses it instead of the eye switch once `layer_info` is known |
 | `motionSources`, `sourcesOf` | `mentor/lib/motion-sources.mjs` | **Wave B.** FR-014 step 1: own keys and the parent chain; expressions and precomp contents `"not_read"` |
+| `opening({ skill, mode, snapshot, fresh, finder, now })` | `mentor/lib/opening.mjs` (new; the builder may rename it and says so in the hand-back) | **Phase 10, draft** (spec FR-048, FR-049). Returns `{ mode, mode_source, learner, record }`: the mode by FR-048's four steps, this skill's slice of the record, and the record as read (for a tool that needs more of it, such as speed graph's `eased_layers`; never put in a reply). Reads the record the way `read_learner_record` does (an unreadable file set aside, never written over) without throwing `RECORD_UNREADABLE`. Step 2 asks `session.openMode(skill, compId, snapshot, { fresh })`; step 3 calls the review test exported from `mentor/lib/recommend.mjs`, the same function `recommend()` uses (OR-4, OR-5). When step 3 picks a review it calls `session.recordReviewOffer(skill)`, best effort |
+| `openMode(skill, compId, snapshot, { fresh })` | `mentor/lib/session.mjs` | **Phase 10, draft.** Read only: the mode of the open lesson `start()` would continue (same key, not passed, not stale by FR-043's test) or that `fresh` would restart, else `null`. Reuses `isStale`; writes nothing |
 
 ### `session.start(snapshot, opts)`
 
