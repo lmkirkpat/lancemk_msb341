@@ -48,6 +48,11 @@ review the snapshot picks while `recommend_next` ranks another skill in progress
 any read error as `RECORD_UNREADABLE` (follow-up PR-1, open); FR-048 says a declined review uses the
 session's offer, FR-049's table that `eased_layers` matches whole names; FR-050 gives speed graph's
 `eased_layers` default (should-fix 2).
+**Phase 10 round 2, 2026-10-28 (approved by the human, from the T413/T414 smoke runs):** FR-049 and
+FR-051's unreadable row report other skills' `learned` as `null` (unknown) on an unreadable record;
+FR-048 step 3 counts no target for null's review when there's no proposal (a crowd counts only for
+`recommend_next`'s lesson path), with a new FR-051 row; FR-050 lists round 2's four step 0 changes;
+contracts/skill-module.md § 2 and § 3 follow. Spec 012's FR-003 and H-6 mark their gap closed.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
@@ -844,7 +849,10 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
      applies (FR-004 step 2, FR-020, FR-021), for this one skill: learned; due today
      (`reviews.isDue`); no lesson on it other than a review in the session window; no other skill's
      review offered in the window; and the skill's finder finds a new target with this skill's past
-     targets on this project and comp left out (and the marks that apply). It MUST be **one function**
+     targets on this project and comp left out (and the marks that apply). A crowd is not a new
+     target here: null's finder counts 0 when it has no proposal, even with nothing to leave out;
+     only `recommend_next`'s lesson path keeps the crowd's count (spec 012 FR-003; Phase 10 round 2,
+     2026-10-28). It MUST be **one function**
      in `mentor/lib/`, called by both `recommend_next` and the snapshot tools, never a copy (OR-4,
      OR-5).
      `recommend_next`'s results don't change. Because the test is for this one skill, the snapshot for
@@ -881,7 +889,7 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
     | `last_attempted` | The `attempted` text of this skill's most recent lesson entry, or `null` (key types' and offset's review offers, "Last week you made Blink snap") |
     | `days_since_practiced` | Whole local calendar days since this skill's `last_practiced` (0 today, 1 yesterday), or `null`. The mentor turns it into "yesterday" or "last week"; it never does date arithmetic |
     | `review_due` | Whether this skill's review is due today (`reviews.isDue`), even when step 3 didn't pick a review |
-    | `other_skills` | One `{ skill_name, learned, hard }` per hard prerequisite in the path data (the on-ramp left out), `hard: true`, plus any skill the tool file's `FINDERS` entry names as one its `SKILL.md` mentions (skill 6: easing), `hard: false`. Names from the path data (FR-008) |
+    | `other_skills` | One `{ skill_name, learned, hard }` per hard prerequisite in the path data (the on-ramp left out), `hard: true`, plus any skill the tool file's `FINDERS` entry names as one its `SKILL.md` mentions (skill 6: easing), `hard: false`. Names from the path data (FR-008). `learned` is `true` or `false`, or `null` (unknown) when the record is unreadable; step 0 makes no claim and no offer from a `null` (Phase 10 round 2, 2026-10-28) |
     | `eased_layers` | **Speed graph only:** the layers its step 0 lists today, worked out in code: the layers named in every `easing.basic` lesson's `targets`, and for an older entry with no `targets`, each layer of this comp whose exact name appears in that entry's text as a whole name, never inside a longer one ("Title" doesn't match "Subtitle"; accepted as built, 2026-10-27) |
 
   - **`server_current`** (FR-044), which `anchor_snapshot` and `null_parent_snapshot` gain here.
@@ -892,8 +900,11 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
   every field. Reading the record MUST NOT write it.
   **An unreadable record:** the tool reads it as `read_learner_record` does (the broken file is set
   aside next to the original, never written over) but the call doesn't fail: `readable: false`, the
-  `error` above, the rest as for a learner with nothing recorded (`status: "not_started"`, every
-  `other_skills` entry not learned, `review_due: false`), and the mode by steps 1, 2 and 4. The next
+  `error` above, the rest as for a learner with nothing recorded (`status: "not_started"`,
+  `review_due: false`), except that every `other_skills` entry has `learned: null`, since the record
+  can't say; and the mode by steps 1, 2 and 4. Each skill's step 0 then makes no claim and no offer
+  from `other_skills` ("you haven't learned easing yet" was seen in key types 21, offset 29, speed
+  graph 21 and null 34; Phase 10 round 2, 2026-10-28). The next
   call finds no file and reads as empty, so the mentor says it once.
   **Any read error** on the record file (a permissions error, for example), not only JSON that won't
   parse, is reported this way, with `RECORD_UNREADABLE` and its standard message (accepted as built,
@@ -912,7 +923,12 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
     first lesson. What each branch does and says doesn't change: key types, offset and speed graph
     still offer a due review as their first words, anchor and null still run it; a learner who turns
     the offer down gets a call with `mode: "lesson"`. Each review section's first call is now the
-    opening call itself; its later calls keep `mode: "review"` as they do.
+    opening call itself; its later calls keep `mode: "review"` as they do. Four exceptions, made on
+    purpose (Phase 10 round 2, 2026-10-28): a new step 0 branch for an `other_skills` entry with
+    `learned: null`, which makes no claim and no offer; the "couldn't read my notes" sentence is said
+    once per lesson, and step 9 no longer repeats it; speed graph no longer asks whether the learner
+    has done easing on an unreadable record; and null's step 2 is skipped when a lesson is picked up
+    again with its group already set.
   - Speed graph's second call in step 1 (FR-047) sends `learner.eased_layers` as `eased_layers`. A
     `speed_graph_snapshot` call whose `skill_options` hold no `eased_layers` (none sent and none stored
     on the lesson, or an empty list) uses `learner.eased_layers` for its analysis only, so every call
@@ -940,9 +956,10 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
   | Learned, not due | `lesson`, `default` | `review_due` false | Pick a review |
   | Learned, due, a new target in this comp | `review`, `review_due`; the offer remembered | `review_due` true | |
   | Learned, due, no new target in this comp | `lesson`, `default` | `review_due` true | Start a review that says there's nothing new (OR-1) |
+| Learned, due, crowd only, no proposal (null only; Phase 10 round 2, fix B, 2026-10-28) | `lesson`, `default`; no review offered | `review_due` true | Count the crowd as a new target. Tests: `null-parenting-tools.test.mjs` "fix B: learned and due on a crowd with nothing new → lesson, default, no review offer" and "fix B: reviewFor finds no target on the crowd; recommend's lesson path still counts it"; `null-parenting-proposal.test.mjs` "the finder for a review: a crowd counts 0 with no proposal; a group counts as before" |
   | Learned, due, a practice lesson on it in the session window | `lesson`, `default` | `review_due` true | Pick a review (FR-020) |
   | Learned, due, another skill's review offered in the window | `lesson`, `default` | `review_due` true | Pick a second review (FR-020) |
-  | Unreadable record | `lesson`, `default` | `readable` false, `error` equal to `read_learner_record`'s on the same file | Throw; write over the file; pick a review |
+  | Unreadable record | `lesson`, `default` | `readable` false, `error` equal to `read_learner_record`'s on the same file, every `other_skills` entry `learned: null` | Throw; write over the file; pick a review; report another skill as not learned |
   | Asks for a review, none due (learned) | `review`, `asked` | `review_due` false | |
   | Asks for a review, not learned ("already knew it", FR-020) | `review`, `asked` | `not_started` or `practicing` | |
   | Turns a due review down (`mode: "lesson"`) | `lesson`, `asked` | `review_due` true | |
