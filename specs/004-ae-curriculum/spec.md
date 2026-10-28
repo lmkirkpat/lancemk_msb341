@@ -915,8 +915,9 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
     opening call itself; its later calls keep `mode: "review"` as they do.
   - Speed graph's second call in step 1 (FR-047) sends `learner.eased_layers` as `eased_layers`. A
     `speed_graph_snapshot` call whose `skill_options` hold no `eased_layers` (none sent and none stored
-    on the lesson) uses `learner.eased_layers`, so every call in a lesson or review ranks the same way
-    (Phase 10 review, should-fix 2, 2026-10-27).
+    on the lesson, or an empty list) uses `learner.eased_layers` for its analysis only, so every call
+    in a lesson or review ranks the same way; the lesson's stored `skill_options`, `land_hard`
+    included, don't change (Phase 10 review, should-fix 2, 2026-10-27).
   - `read_learner_record` leaves these five files: no call, and out of `allowed-tools` (OR-2). The
     hard rule against notes to yourself stays word for word; the "with nothing written in between"
     instructions go, since there's no in between.

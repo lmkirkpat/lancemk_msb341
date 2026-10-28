@@ -79,8 +79,9 @@ hard prerequisite adds it to its `FINDERS` entry as `mentions: ["<id>", ...]` (s
 `["easing.basic"]`); it appears in `learner.other_skills` with `hard: false`. Speed graph's
 `eased_layers` is worked out by the speed graph tool file from the record the opening function read
 (passed back to it as `record`, never re-read), so no other skill carries it. A `speed_graph_snapshot`
-call whose `skill_options` hold no `eased_layers` (none sent, none stored) uses `learner.eased_layers`
-(spec FR-050; Phase 10 review, should-fix 2).
+call whose `skill_options` hold no `eased_layers` (none sent, none stored, or an empty list) uses
+`learner.eased_layers` for its analysis only; the lesson's stored `skill_options`, `land_hard`
+included, don't change (spec FR-050; Phase 10 review, should-fix 2).
 
 A skill with a review drops `read_learner_record` from its `allowed-tools` and calls its snapshot
 first (spec FR-050, OR-2). Easing's `snapshot_project` is unchanged and grandfathered (FR-035): easing
