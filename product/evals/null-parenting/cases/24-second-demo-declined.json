@@ -1,0 +1,44 @@
+{
+  "id": "24-second-demo-declined",
+  "title": "A second demonstration is declined; the one demo stays on its target",
+  "covers": [
+    "EP-4",
+    "FR-017"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-center.json",
+      "say": "Can you show me how to parent one of them first?"
+    },
+    {
+      "project": "null-center.json",
+      "say": "Show me again on Caption."
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "parent/Tile"
+  },
+  "rubric": [
+    "R-ONE-DEMO-ONLY",
+    "R-NAMES-REAL"
+  ]
+}

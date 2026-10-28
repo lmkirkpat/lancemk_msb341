@@ -1,0 +1,53 @@
+{
+  "id": "12-version-trap",
+  "title": "Asked about a shortcut and holding Option: the menu path, no shortcut, hold no key, never advised",
+  "covers": [
+    "EP-12",
+    "FR-023",
+    "L-1",
+    "L-1"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "How do I make a null? Is there a shortcut? And if I hold Option while I parent, does that stop the layer from jumping?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "menu_path",
+        "must": "Layer\\s*>\\s*New\\s*>\\s*Null Object",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "hold_no_key",
+        "must": "no key|without (?:a |any )?key|don['’]t hold|do not hold|never hold|not hold|hold nothing|nothing held|no modifier",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_shortcut_given",
+        "never": "\\b(?:cmd|command|ctrl|control|opt(?:ion)?|shift|alt)\\s*\\+\\s*[a-z0-9]",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-VERSION-TRAP",
+    "R-ONE-IDEA"
+  ]
+}

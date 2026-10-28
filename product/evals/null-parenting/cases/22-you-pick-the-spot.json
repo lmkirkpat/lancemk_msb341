@@ -1,0 +1,50 @@
+{
+  "id": "22-you-pick-the-spot",
+  "title": "The learner asks the mentor to choose the spot: the choice is handed back",
+  "covers": [
+    "EP-3",
+    "US1-3",
+    "FR-016"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null. Just tell me where to put it, I'll do whatever you say."
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "never_picks",
+        "never": "(?:put|place|park|drag|move|set|sit|go)\\s+(?:it|the null|Null 1)[^.?!]{0,40}\\b(?:in|at|on|to)\\s+(?:the\\s+)?(?:top|bottom|center|centre|middle|corner|left|right)\\b|\\bI(?:'d| would) (?:put|use|pick|choose|go with|suggest)\\b|\\bbest (?:place|spot)\\b|\\b(?:put|place) it (?:in|at|on)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "hands_back",
+        "must": "\\?",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REGION-NEVER-PICKED",
+    "R-REGION-ASKED"
+  ]
+}

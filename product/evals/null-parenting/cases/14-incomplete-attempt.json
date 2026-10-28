@@ -1,0 +1,64 @@
+{
+  "id": "14-incomplete-attempt",
+  "title": "An incomplete attempt: says what's still off and where; doesn't fix or offer to",
+  "covers": [
+    "EP-14",
+    "FR-019"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I parented all three to the null. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "parenting_passed": false
+    },
+    "say": [
+      {
+        "id": "names_layers",
+        "must": "Tile|Caption|Stamp",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "names_where",
+        "must": "Parent column|follow|parent",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:parent|fix|do (?:it|that|them|the rest|the other)|set (?:it|that|them)|the rest)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

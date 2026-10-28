@@ -1,0 +1,414 @@
+{
+  "run_at": "2026-10-28T02:40:40.165Z",
+  "options": {
+    "only": "17",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 2.55,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "17-review-visible-parent",
+      "title": "Review with a visible parent: the hint has no 'null'; the skill stays learned (the learner names Row A to C, not the offered Chips)",
+      "covers": [
+        "EP-17",
+        "US3-2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "review-rows-visible.json": "live"
+      },
+      "hash": "63270b27790d28fe5c60e99ac358bb2306d4da3d8878fbdc8edcb25a144367c6",
+      "pass": true,
+      "passes": 2,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_no_null_before_pass",
+              "pass": true,
+              "detail": "0 uses before a pass"
+            },
+            {
+              "check": "review_no_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "record_plain",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_rows",
+              "pass": true,
+              "detail": "turn 3: \"\""
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "matches"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HINT",
+              "pass": true,
+              "reason": "Turn 3 hint reads \"Row B and Row C follow Row A, so anything you do to Row A drags them along. Change that\": it says who follows whom and what gets dragged, with no 'null', no menu path, no pick whip and no reteach."
+            },
+            {
+              "item": "R-REVIEW-RECORD-HONEST",
+              "pass": true,
+              "reason": "Turn 4's record_lesson has result \"partial\" and demo_used false, and its summary only states what was said and what the check found (Row B and Row C following Row A, Row C 20 px right at 6.167 s), with no motive or claim of a pass; the mentor says \"I've noted where you left off.\""
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and number comes from tool output: Tile, Caption and Stamp, \"Four days ago\" and 'a group that turns' are from the learner record; Chip A–C and Row A–C, Mentor Practice 2, and 20 px right at 6.167 s are from the snapshot and check results."
+            }
+          ],
+          "cost": 0.8416224000000001,
+          "session_id": "5c03a05d-e095-4152-a07e-9d0aada8c4ad",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL null_parent_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[\"Chip A\",\"Chip B\",\"Chip C\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Chip A\",\n    \"parent/Chip B\",\n    \"parent/Chip C\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: Four days ago you moved Tile, Caption and Stamp as one group, so this is a quick review on the same comp, Mentor Practice 2.\n\nChip A, Chip B and Chip C should move as one. Set that up so you can move them together, then give them one move. Your notes from last time suggested a group that turns, if you'd like to try that.\n\nBefore you start: will the group turn or scale, and from where? Or will it only slide? Tell me, then say \"done\" when it's set up.\n\n### Turn 2: the project is an open comp\nLEARNER: Not those, I'd rather use Row A, Row B and Row C.\nTOOL CALL null_parent_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[\"Row A\",\"Row B\",\"Row C\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Row A\",\n    \"Row B\",\n    \"Row C\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Row A\",\n    \"parent/Row B\",\n    \"parent/Row C\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: Row A, Row B and Row C it is. Set them up so you can move them together, then give them one move.\n\nWill the group turn or scale, and from where? Or will it only slide? Tell me, then say \"done\" when it's ready.\n\n### Turn 3: the project is an open comp\nLEARNER: They'll only slide. Done.\nTOOL CALL null_parent_check {\"region\":\"slides_only\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"no_null\"\n    },\n    {\n      \"code\": \"visible_parent\",\n      \"layer\": \"Row B\",\n      \"parent\": \"Row A\"\n    },\n    {\n      \"code\": \"visible_parent\",\n      \"layer\": \"Row C\",\n      \"parent\": \"Row A\"\n    }\n  ],\n  \"null\": {\n    \"name\": null,\n    \"found\": false,\n    \"name_unique\": true,\n    \"n1\": null,\n    \"n2\": null,\n    \"n3\": null,\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": false\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Row A\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Row B\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Row A\",\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Row C\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Row A\",\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": false,\n        \"worst_px\": 20,\n        \"direction\": \"right\",\n        \"time\": 6.167\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"no_null\",\n    \"visible_parent\"\n  ]\n}\nMENTOR: Not quite yet. Row B and Row C follow Row A, so anything you do to Row A drags them along.\n\nChange that, then say \"done\" again.\n\n### Turn 4: the project is an open comp\nLEARNER: I'm out of time, let's stop here.\nTOOL CALL record_lesson {\"skill\":\"parenting.null\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice 2\",\"attempted\":\"Review on Row A, Row B and Row C: Row B and Row C were parented to Row A; no null was added yet and the group had no move\",\"result\":\"partial\",\"demo_used\":false,\"summary\":\"Said the group only slides. The check found Row B and Row C following Row A instead of a null, and Row C 20 px to the right of where it was at 6.167 s.\",\"next\":\"Parent Row A, Row B and Row C to one null and give the null a move\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Parent Row A, Row B and Row C to one null and give the null a move\"\n  }\n}\nMENTOR: We'll stop there. I've noted where you left off. Next time, start with Row A, Row B and Row C: make them all follow the same thing, then give the group its move. Last time's lesson still counts as learned.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_no_null_before_pass",
+              "pass": true,
+              "detail": "0 uses before a pass"
+            },
+            {
+              "check": "review_no_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "record_plain",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_rows",
+              "pass": true,
+              "detail": "turn 3: \"\""
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "matches"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HINT",
+              "pass": true,
+              "reason": "Turn 3 says \"Row B and Row C follow Row A, so anything you do to Row A drags them along\" and adds Row C's 20 px shift, with no \"null\", no menu path, no pick whip and no reteach."
+            },
+            {
+              "item": "R-REVIEW-RECORD-HONEST",
+              "pass": true,
+              "reason": "Turn 4's record_lesson uses result \"partial\" and demo_used false, and its summary plainly describes the state of the work (Row B and Row C followed Row A, no handle layer yet, Row C 20 px right at 6.167 s) without claiming a pass or giving a cause."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and value the mentor uses (Chip A to C, Row A to C, Tile, Caption, Stamp, Mentor Practice 2, four days, 20 px right at 6.167 s) appears in the snapshot, check or record tool results."
+            }
+          ],
+          "cost": 0.858325,
+          "session_id": "5538a97d-8665-46c9-bc0d-0379ed79746e",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL null_parent_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[\"Chip A\",\"Chip B\",\"Chip C\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Chip A\",\n    \"parent/Chip B\",\n    \"parent/Chip C\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: Welcome back. Four days ago you got Tile, Caption and Stamp moving together as one group, so today is a quick review on a new comp, Mentor Practice 2.\n\nChip A, Chip B and Chip C should move as one. Set that up so you can move them together, then give them one move.\n\nBefore you start: will the group turn or scale, and from where? Or will it only slide?\n\n### Turn 2: the project is an open comp\nLEARNER: Not those, I'd rather use Row A, Row B and Row C.\nTOOL CALL null_parent_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[\"Row A\",\"Row B\",\"Row C\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Row A\",\n    \"Row B\",\n    \"Row C\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Row A\",\n    \"parent/Row B\",\n    \"parent/Row C\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: Sure, we'll use Row A, Row B and Row C as the group instead.\n\nThey should move as one. Set that up so you can move them together, then give them one move.\n\nWill the group turn or scale, and from where? Or will it only slide? Say \"done\" when it's set up.\n\n### Turn 3: the project is an open comp\nLEARNER: They'll only slide. Done.\nTOOL CALL null_parent_check {\"region\":\"slides_only\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"no_null\"\n    },\n    {\n      \"code\": \"visible_parent\",\n      \"layer\": \"Row B\",\n      \"parent\": \"Row A\"\n    },\n    {\n      \"code\": \"visible_parent\",\n      \"layer\": \"Row C\",\n      \"parent\": \"Row A\"\n    }\n  ],\n  \"null\": {\n    \"name\": null,\n    \"found\": false,\n    \"name_unique\": true,\n    \"n1\": null,\n    \"n2\": null,\n    \"n3\": null,\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": false\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Row A\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Row B\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Row A\",\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Row C\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Row A\",\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": false,\n        \"worst_px\": 20,\n        \"direction\": \"right\",\n        \"time\": 6.167\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"no_null\",\n    \"visible_parent\"\n  ]\n}\nMENTOR: Not there yet. Row B and Row C follow Row A, so anything you do to Row A drags them along.\n\nRow C has also shifted: at 6.167 s it's 20 px to the right of where it was before.\n\nFix whatever you need to, then say \"done\" again.\n\n### Turn 4: the project is an open comp\nLEARNER: I'm out of time, let's stop here.\nTOOL CALL record_lesson {\"skill\":\"parenting.null\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice 2\",\"attempted\":\"Review: set up Row A, Row B and Row C to move as one, a group that only slides\",\"result\":\"partial\",\"demo_used\":false,\"summary\":\"Said the group only slides. On the one check, Row B and Row C followed Row A rather than a separate handle, there was no handle layer for the group yet, and Row C was 20 px to the right of where it was at 6.167 s. Stopped before a second check.\",\"next\":\"Have Row A, Row B and Row C all follow one new handle layer, with no layer jumping\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Have Row A, Row B and Row C all follow one new handle layer, with no layer jumping\"\n  }\n}\nMENTOR: No problem, we'll stop here. I've noted where you got to, and it still counts as learned. Next time we can start with Row B and Row C, which follow Row A right now, and Row C's 20 px shift at 6.167 s.\n"
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_no_null_before_pass",
+              "pass": true,
+              "detail": "0 uses before a pass"
+            },
+            {
+              "check": "review_no_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "record_plain",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_rows",
+              "pass": true,
+              "detail": "turn 3: \"\""
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "matches"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HINT",
+              "pass": true,
+              "reason": "Turn 3's hint, \"Row B and Row C follow Row A, so anything you do to Row A drags them along. Row A itself doesn't follow anything yet.\", says who follows whom and what gets dragged, with no \"null\", menu path, pick whip or reteach."
+            },
+            {
+              "item": "R-REVIEW-RECORD-HONEST",
+              "pass": false,
+              "reason": "Turn 4's record_lesson correctly logs result \"partial\" and demo_used false, but its summary and next field put method in (\"no separate control layer yet\", \"follow one invisible control layer\") instead of only describing the work."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and number the mentor uses (Chip A to C, Row A to C, Tile, Caption, Stamp, Mentor Practice 2, four days ago, 20 px right at 6.167 s) appears in or follows directly from the snapshot and check results."
+            }
+          ],
+          "cost": 0.8546034,
+          "session_id": "ae8ddbc0-26b1-49f1-b834-b879467e39bd",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL null_parent_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[\"Chip A\",\"Chip B\",\"Chip C\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Chip A\",\n    \"parent/Chip B\",\n    \"parent/Chip C\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: Four days ago you set up Tile, Caption and Stamp so they'd move as one group, so this is a quick review on Mentor Practice 2.\n\nChip A, Chip B and Chip C should move as one. Set that up so you can move them together, then give them one move.\n\nWill the group turn or scale, and from where? Last time the group only slid, so a turn would be good practice this time. Say \"done\" when it's ready.\n\n### Turn 2: the project is an open comp\nLEARNER: Not those, I'd rather use Row A, Row B and Row C.\nTOOL CALL null_parent_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[\"Row A\",\"Row B\",\"Row C\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Row A\",\n    \"Row B\",\n    \"Row C\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Row A\",\n    \"parent/Row B\",\n    \"parent/Row C\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 4,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: Sure, let's use those. Row A, Row B and Row C should move as one. Set that up so you can move them together, then give them one move.\n\nWill the group turn or scale, and from where? Say \"done\" when it's ready.\n\n### Turn 3: the project is an open comp\nLEARNER: They'll only slide. Done.\nTOOL CALL null_parent_check {\"region\":\"slides_only\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"no_null\"\n    },\n    {\n      \"code\": \"visible_parent\",\n      \"layer\": \"Row B\",\n      \"parent\": \"Row A\"\n    },\n    {\n      \"code\": \"visible_parent\",\n      \"layer\": \"Row C\",\n      \"parent\": \"Row A\"\n    }\n  ],\n  \"null\": {\n    \"name\": null,\n    \"found\": false,\n    \"name_unique\": true,\n    \"n1\": null,\n    \"n2\": null,\n    \"n3\": null,\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": false\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Row A\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Row B\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Row A\",\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Row C\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Row A\",\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": false,\n        \"worst_px\": 20,\n        \"direction\": \"right\",\n        \"time\": 6.167\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"no_null\",\n    \"visible_parent\"\n  ]\n}\nMENTOR: Row B and Row C follow Row A, so anything you do to Row A drags them along. Row A itself doesn't follow anything yet.\n\nSay \"done\" again once you've changed it.\n\n### Turn 4: the project is an open comp\nLEARNER: I'm out of time, let's stop here.\nTOOL CALL record_lesson {\"skill\":\"parenting.null\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice 2\",\"attempted\":\"Review on Row A, Row B and Row C, said the group only slides; parented Row B and Row C to Row A\",\"result\":\"partial\",\"demo_used\":false,\"summary\":\"Row B and Row C followed Row A, a visible layer, and Row A followed nothing; no separate control layer yet. Row C was 20 px to the right of where it started at 6.167 s. Stopped before a second check.\",\"next\":\"Finish the review on Row A, Row B and Row C so they follow one invisible control layer\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Finish the review on Row A, Row B and Row C so they follow one invisible control layer\"\n  }\n}\nMENTOR: Okay, we'll stop here. I've noted where you got to, so next time we can pick up with Row A, Row B and Row C.\n\nOne more thing from the check: at 6.167 s, Row C sits 20 px to the right of where it started. Take a look at that when you come back.\n\nThe skill still counts as learned.\n"
+        }
+      ]
+    }
+  ]
+}

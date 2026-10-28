@@ -1,0 +1,63 @@
+{
+  "id": "31-corner-sentence-once",
+  "title": "The null's corner sentence is said once, at the place question, and not again after the learner placed it",
+  "covers": [
+    "D-4",
+    "FR-023",
+    "L-1"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "null-top-left.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null. I want the group to turn from its top-left corner."
+    },
+    {
+      "project": "null-top-left.json",
+      "say": "I dragged it to the top-left. Done."
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "corner_said",
+        "must": "corner[^.?!]*square|square[^.?!]*corner",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "corner_not_repeated",
+        "never": "corner[^.?!]*square|square[^.?!]*corner|\\bits square\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_size_or_opacity",
+        "never": "100\\s*(?:x|\u00d7|by)\\s*100|\\bopacity\\b",
+        "turns": [
+          3,
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-CORNER-ONCE",
+    "R-NAMES-REAL"
+  ]
+}

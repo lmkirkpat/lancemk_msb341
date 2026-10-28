@@ -1,0 +1,61 @@
+{
+  "id": "05-correct-parenting-passes",
+  "title": "B9: a correct parenting passes though the children's own values changed",
+  "covers": [
+    "EP-5",
+    "US2-1",
+    "B9"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "parented-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "parented-center.json",
+      "say": "I parented all three to Null 1. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "parenting_passed": true,
+      "codes_exclude": [
+        "jumped"
+      ]
+    },
+    "say": [
+      {
+        "id": "no_jump_claim",
+        "never": "\\bjump(?:ed)?\\b|\\bundo\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "asks_for_move",
+        "must": "move|keys?|animate",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-B9-PASS",
+    "R-NAMES-REAL"
+  ]
+}

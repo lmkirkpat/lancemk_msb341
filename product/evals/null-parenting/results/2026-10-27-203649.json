@@ -1,0 +1,175 @@
+{
+  "run_at": "2026-10-28T02:36:49.249Z",
+  "options": {
+    "only": "35",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.23,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "35-practicing-memory-clause",
+      "title": "Practicing (a partial lesson yesterday): one memory clause in plain words with how long ago, no skill ID, no review, then it asks which layers",
+      "covers": [
+        "FR-049",
+        "FR-052",
+        "SC-015",
+        "EP-35"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "518e086ef9ec2b910391ac3e3c31c4c91be0f7f4ec8f40ac3bc0c8ebb3084744",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was null_parent_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:memory_clause",
+              "pass": true,
+              "detail": "turn 1: \"Yesterday\""
+            },
+            {
+              "check": "say:names_earlier_work",
+              "pass": true,
+              "detail": "turn 1: \"group\""
+            },
+            {
+              "check": "say:asks_which_layers",
+              "pass": true,
+              "detail": "turn 1: \"Which layers\""
+            },
+            {
+              "check": "say:no_review",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:no_skill_name_or_status",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-USES-MEMORY",
+              "pass": true,
+              "reason": "The mentor says \"Yesterday you parented two layers to a null\" in plain words, which matches days_since_practiced 1 and last_attempted, and it paraphrases the 'next' note without reading out record fields."
+            },
+            {
+              "item": "R-ASKS-FIRST",
+              "pass": true,
+              "reason": "Before any setup or proposal, the mentor's only question is \"Which layers should move as one, like the parts of a lower third or a logo lockup?\""
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn is three short sentences: a brief memory note, then a single question that hands the learner something to answer."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The mentor names no layers or properties, and \"yesterday\" and \"two layers to a null\" follow directly from the snapshot's learner record."
+            }
+          ],
+          "cost": 0.2258342,
+          "session_id": "f4ebcd89-a8e8-43cf-80ba-8c54be1affcc",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"practicing\",\n    \"times_passed\": 0,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile and Caption to Group Null\",\n    \"days_since_practiced\": 1,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: Welcome back. Yesterday you parented two layers to a null, and the next step from there was to try a group that **turns**, not just one that slides.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n"
+        }
+      ]
+    }
+  ]
+}

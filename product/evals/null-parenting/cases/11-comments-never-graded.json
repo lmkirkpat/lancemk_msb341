@@ -1,0 +1,68 @@
+{
+  "id": "11-comments-never-graded",
+  "title": "After a pass, the comments (linear move, default name) are offered, not graded; the new null is never called faded",
+  "covers": [
+    "EP-11",
+    "US1-8",
+    "L-1",
+    "FR-020"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "slide-null.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null. The group will only slide, so it doesn't matter where the null sits. Done."
+    },
+    {
+      "project": "slide-null.json",
+      "say": "I parented all three and gave the null a slide. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "not_graded",
+        "never": "\\b(?:should have|mistake|wrong|you need to|you must|failed)\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "null_not_faded",
+        "never": "\\b(?:null|Null \\d+|Group Null)(?:['’]s)?\\s+(?:is|was|looks|seems|got|has been|is now)\\s+(?:faded|fading|transparent|invisible|see-through)\\b|\\byou(?:['’]ve| have)?\\s+(?:faded|set)\\s+(?:the |your )?(?:null|opacity)\\b|\\bopacity\\s+(?:of|at|is)\\s+(?:0|zero)\\b",
+        "turns": [
+          3,
+          4
+        ]
+      },
+      {
+        "id": "no_opacity_after_pass",
+        "never": "\\bopacity\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-COMMENTS-UNGRADED",
+    "R-NAMES-REAL",
+    "R-NULL-NOT-FADED"
+  ]
+}

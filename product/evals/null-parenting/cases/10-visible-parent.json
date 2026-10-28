@@ -1,0 +1,61 @@
+{
+  "id": "10-visible-parent",
+  "title": "A visible parent: the hint names who drags whom",
+  "covers": [
+    "EP-10",
+    "TD 7"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "visible-parent.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "visible-parent.json",
+      "say": "I parented them. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "codes_include": [
+        "visible_parent"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_both",
+        "must": "(?=[\\s\\S]*Caption)(?=[\\s\\S]*Tile)",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "says_follows",
+        "must": "follow",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-VISIBLE-PARENT",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

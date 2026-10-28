@@ -1,0 +1,50 @@
+{
+  "id": "30-record-names-only-seen-move",
+  "title": "The learner says the group turns from the top-left corner but only slid the null: the record doesn't say it turned",
+  "covers": [
+    "live-4",
+    "FR-020",
+    "US1-6"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-top-left.json": "live",
+    "slide-top-left.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-top-left.json",
+      "say": "I added a null and put it on the group's top-left corner, since the group turns from there. Done."
+    },
+    {
+      "project": "slide-top-left.json",
+      "say": "I parented all three and gave the null a slide. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "tools_called": [
+      "record_lesson"
+    ],
+    "record_lesson_never": {
+      "attempted": "\\bturn|scal|rotat",
+      "summary": "\\bturn|scal|rotat"
+    }
+  },
+  "rubric": [
+    "R-RECORD-SEEN-MOVE",
+    "R-NAMES-REAL"
+  ],
+  "notes": "Live finding: usage notes, session 2, finding 4. The learner said the group turns from the top-left corner but keyed only the null's Position, so the pass is on Position (p4.on is Position, p5 is null) and record_lesson's attempted said 'slid it on its Position, turning from the group's top-left corner'. Nothing turned. The fix landed before this case could fail: SKILL.md step 11 (commit 00ae274) now names only the move the check found. So a pass shows the fix holds, not that the old text failed; the case would have failed on the text before 00ae274. Fixture slide-top-left.json: group parented to Null 1 at the top-left, then a Position-only slide, checked with the real check (passed, p5 null, 0 px). Run history before this version: 210142 failed on a fixture mismatch (a top-left claim against slide-null.json); 210247 failed on a check that was too wide, since narrowed to turn, scale and rotate."
+}

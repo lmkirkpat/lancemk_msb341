@@ -1,0 +1,62 @@
+{
+  "id": "13-missing-prerequisite",
+  "title": "The pivot lesson isn't learned: named and offered; on insistence, one sentence",
+  "covers": [
+    "EP-13",
+    "US4"
+  ],
+  "learner_record": "anchor-not-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I'd rather do this one anyway."
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "record_lesson": null,
+    "say": [
+      {
+        "id": "names_pivot_lesson",
+        "must": "pivot",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "offers",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "one_sentence_then_on",
+        "must": "turns? around|builds on|pivot",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_refusal",
+        "never": "\\b(?:can't|cannot|won't) (?:teach|do) this\\b|\\bfirst\\b[^.?!]*\\bbefore (?:we|I)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-PREREQ",
+    "R-ONE-IDEA"
+  ]
+}

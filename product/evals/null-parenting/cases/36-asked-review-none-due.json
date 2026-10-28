@@ -1,0 +1,69 @@
+{
+  "id": "36-asked-review-none-due",
+  "title": "A review the learner asks for when none is due: it runs (names the layers and the task) and nothing says it was early or not due",
+  "covers": [
+    "FR-048",
+    "FR-051",
+    "FR-052",
+    "SC-015",
+    "EP-36"
+  ],
+  "learner_record": "product/evals/null-parenting/records/null-learned-not-due.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor I think I already know this one. Can you quiz me on it?"
+    }
+  ],
+  "expect": {
+    "first_tool": "null_parent_snapshot",
+    "review_mode": true,
+    "first_snapshot_reply": {
+      "mode": "review",
+      "mode_source": "asked"
+    },
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "snapshot_focus_excludes": [
+      "Tile",
+      "Caption",
+      "Stamp"
+    ],
+    "say": [
+      {
+        "id": "names_chips",
+        "must": "(?=[\\s\\S]*Chip A)(?=[\\s\\S]*Chip B)(?=[\\s\\S]*Chip C)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "turn_or_scale",
+        "must": "turn|scale",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "nothing_about_schedule",
+        "never": "\\bdue\\b|\\boverdue\\b|\\bearly\\b|\\bschedule|since you asked|isn['’]t (?:due|time)|not (?:due|yet)|\\bnot scheduled",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-ASKED-REVIEW-QUIET",
+    "R-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}

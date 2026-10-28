@@ -1,0 +1,75 @@
+{
+  "id": "35-practicing-memory-clause",
+  "title": "Practicing (a partial lesson yesterday): one memory clause in plain words with how long ago, no skill ID, no review, then it asks which layers",
+  "covers": [
+    "FR-049",
+    "FR-052",
+    "SC-015",
+    "EP-35"
+  ],
+  "learner_record": "product/evals/null-parenting/records/null-practicing.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "null_parent_snapshot",
+    "first_snapshot_reply": {
+      "mode": "lesson",
+      "mode_source": "default"
+    },
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "no_focus_set": true,
+    "say": [
+      {
+        "id": "memory_clause",
+        "must": "yesterday|last time|earlier|before|ago|other day|last week",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_earlier_work",
+        "must": "Tile|Caption|Stamp|jump|group",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_which_layers",
+        "must": "which layers|move as one|move together",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_review",
+        "never": "\\breview(?:s|ed|ing)?\\b|\\bdue\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_skill_name_or_status",
+        "never": "\\bparenting\\b[^.?!]{0,10}\\bnull\\b[^.?!]{0,10}\\bskill\\b|\\bstatus\\b|\\btimes passed\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-USES-MEMORY",
+    "R-ASKS-FIRST",
+    "R-ONE-IDEA",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "04-demonstration",
+  "title": "One demonstration on the target only, moved 0 pixels, none before the null passes",
+  "covers": [
+    "EP-4",
+    "US1-4",
+    "FR-017"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-center.json",
+      "say": "Can you show me how to parent one of them first?"
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "parent/Tile",
+    "demo_after_null_ready": true,
+    "say": [
+      {
+        "id": "moved_zero",
+        "must": "(?:\\b0|zero) (?:px|pixels)|exactly where it was|stayed (?:put|where)",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

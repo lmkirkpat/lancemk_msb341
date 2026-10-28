@@ -1,0 +1,67 @@
+{
+  "id": "16-review-wave-a",
+  "title": "Review on the wave A comp: Chip A to C, no 'null', no method, no demo",
+  "covers": [
+    "EP-16",
+    "SC-004",
+    "L6-1",
+    "US3-1"
+  ],
+  "learner_record": "learned-group.json",
+  "fixture_sources": {
+    "practice2b-with-wave-a-parented.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b-with-wave-a-parented.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b-with-wave-a-parented.json",
+      "say": "Chip A, Chip B and Chip C. They'll only slide. Done."
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "first_snapshot_reply": {
+      "mode": "review",
+      "mode_source": "review_due"
+    },
+    "tools_called": [
+      "null_parent_snapshot",
+      "null_parent_check"
+    ],
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "last_check": {
+      "passed": false
+    },
+    "snapshot_focus_excludes": [
+      "Tile",
+      "Caption",
+      "Stamp"
+    ],
+    "say": [
+      {
+        "id": "names_chips",
+        "must": "(?=[\\s\\S]*Chip A)(?=[\\s\\S]*Chip B)(?=[\\s\\S]*Chip C)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "turn_or_scale",
+        "must": "turn|scale",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HANDS-ON",
+    "R-REVIEW-HINT",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "id": "07-pick-whip-from-position",
+  "title": "The wrong pick whip is not a parent; the Parent column is named",
+  "covers": [
+    "EP-7",
+    "US1-5"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "pickwhip-position.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "pickwhip-position.json",
+      "say": "I parented all three. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "parenting_passed": false,
+      "codes_include": [
+        "pickwhip_position"
+      ]
+    },
+    "say": [
+      {
+        "id": "parent_column",
+        "must": "Parent column|Parent & Link",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "not_called_parented",
+        "never": "Caption (?:is|now|was) (?:parented|following the null)",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-PICKWHIP-COLUMN",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

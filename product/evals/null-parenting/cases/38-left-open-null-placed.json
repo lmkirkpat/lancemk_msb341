@@ -1,0 +1,101 @@
+{
+  "id": "38-left-open-null-placed",
+  "title": "A lesson left open with the null placed, reopened in a new session: one sentence on where it left off (group, null placed), then step 5 (parent the group); no recap, no second null",
+  "covers": [
+    "FR-043",
+    "FR-052",
+    "SC-015",
+    "R2-C"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor Tile, Caption and Stamp should move as one."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-center.json",
+      "say": "/null-parenting-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "say": [
+      {
+        "id": "names_group",
+        "must": "(?=[\\s\\S]*Tile)(?=[\\s\\S]*Caption)(?=[\\s\\S]*Stamp)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "says_null_placed",
+        "must": "null[^.?!]{0,40}(?:placed|in place|there|ready|set|added)|(?:placed|added|put)[^.?!]{0,30}null",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_which_layers",
+        "never": "which layers (?:should|do you want)|which (?:2|two) to (?:4|four)|move as one, like",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_new_proposal",
+        "never": "\\bChip [ABC]\\b|\\bRow [ABC]\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_recap",
+        "never": "recap|refresher|reminder|children inherit|inherit|position, scale and rotation|not opacity|never shows in the render|carries? (?:its|the) children",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_second_null",
+        "never": "add (?:a|another|the) (?:new )?null|new null object|where (?:the group|it) should (?:turn|scale)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "goes_to_parenting",
+        "must": "parent",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_review",
+        "never": "\\breview(?:s|ed|ing)?\\b|\\bdue\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-CONTINUED",
+    "R-NAMES-REAL"
+  ],
+  "note": "Round 2 C (2026-10-28), the placed branch. Turn 2 places the null (the check stores it, so null_ready is true); turn 3 starts a new session on the same learner home. Expect one sentence naming the group and the placed null, then step 5."
+}
