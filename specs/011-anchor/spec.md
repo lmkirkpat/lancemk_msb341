@@ -31,7 +31,7 @@ builder): a one-key layer whose rest key is on another frame stays `position_mov
 TD § 18's two-frames sentence, and the tool says which case it is with both times (new
 `moves_case`, FR-004, B-9; US2 #6, row 5b, Eval plan 24); `watch_offer` never picks a full-frame
 layer (FR-008, D-9). D-8 and D-9 closed. New tasks T254 to T256 (tasks.md › Phase 8e).
-**Amended again 2026-10-26 (round 5), awaiting the builder's approval** of this spec's parts
+**Amended again 2026-10-26 (round 5), approved by the builder 2026-10-28** of this spec's parts
 (TD § 19 itself was approved by the human the same day): the opening turn carries one choice
 (memory clause only for this skill's history, the intent question, the proposal) and no
 leave-outs or statement of the idea; each leave-out's sentence is said when the learner names that
@@ -41,7 +41,7 @@ rounds a time itself (new **`position_key_label`** and **`rest_label`**, FR-004,
 short fallback when a time can't be read is written down (FR-004, accepted by the human). The Eval
 plan lists cases 25 to 31 (kept by the eval engineer) and splits 11 (the one-focus watch offer)
 from 26 (the two-layer demo). New tasks T257 and T258 (tasks.md › Phase 8f) and an HO-1 update.
-**Amended again 2026-10-26 (round 6), awaiting the builder's approval** of this spec's parts
+**Amended again 2026-10-26 (round 6), approved by the builder 2026-10-28** of this spec's parts
 (TD § 19a itself was decided by the human the same day): a practicing lesson always proposes the
 read's `proposal`, and the record's `next` gives only the memory clause (FR-006a, US1 #8); a
 named null, camera, light or adjustment layer gets TD § 19a's sentence, then the proposal, with
@@ -49,7 +49,7 @@ no pointer to the null lesson (FR-004, FR-009, US1 #9, Edge Cases, row 14); a co
 with no focus yet opens as a new one (FR-006a, the builder's call as built; Open questions ›
 D-10). Eval plan 32 to 37 (two from TD § 19a, three the builder suggested in round 5, and a
 same-label case). New task T259 (tasks.md › Phase 8g, B-12) and an HO-1 update.
-**Amended again 2026-10-26 (round 7), awaiting the builder's approval** of this spec's parts
+**Amended again 2026-10-26 (round 7), approved by the builder 2026-10-28** of this spec's parts
 (TD § 19b, S-6, decided by the cockpit under the human's go-ahead the same day): a full-frame
 layer is never proposed, so with no default candidate `proposal` is null and the opening is the
 new-solid line (FR-004, FR-006a, Edge Cases); nothing is said about effects in this release
