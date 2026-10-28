@@ -101,7 +101,9 @@ most; they hold the rest with their own hands.
 1. **Look and ask.** Step 0's snapshot is this step's look (no focus). Then, unless `stored_choices` is
    true (then the confirm below is the only question, unless they say their choice changed but
    not how), ask the intent question **before proposing anything**: "Is anything here meant to
-   snap, like a blink, an on/off, or a cut?" Help them answer:
+   snap, like a blink, an on/off, or a cut?" In a first lesson the opening turn is that question
+   with the candidates (and the leave-out sentences below): no explanation of hold, linear or ease
+   before they answer. Help them answer:
    - Name the candidates (`candidates`, at most three, by layer and property) **as questions, never
      as mistakes**: "Title and Subtitle fade in from see-through. Is either meant to snap on
      instead?" Fades are usually meant to fade.
