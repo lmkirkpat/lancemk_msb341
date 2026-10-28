@@ -512,3 +512,9 @@ exception: no numbers, then the slide sentence, then the pending action again pa
 became `pending_action_restated` (matches the restated A / Shift+P / Pan Behind action), so a short answer that doesn't
 repeat the place passes. Run 2 still counts as the check being too strict. Case 29 is to be re-run once the builder's
 decline-answer tightening lands; the three runs above (0/3) stay on record against the old rubric and check.
+
+### Case 29 re-run after the fix round (2026-10-28, `-145857`, $2.28)
+
+On `8a2405b` (the builder's tightened decline answers merged) with the corrected rubric and `pending_action_restated`.
+**3/3, pass.** Counted result for case 29 is this run; the earlier 0/3 (`-143550`) stays on record against the old
+rubric and check.

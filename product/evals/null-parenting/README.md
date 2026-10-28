@@ -504,3 +504,19 @@ Cases 39 and 40 (added the same day) are dry-run only.
 `goes_to_null_step` (must "null") contradicted it. It is now `next_step_null_or_region`: the reopened turn passes if it
 goes to the null step or asks the question first. Case 40 holds the strict form (the question on its own, no null task,
 no "say done"). `does_not_say_null_placed`, no recap, no new proposal and no review are unchanged. Not run.
+
+### Fix-round re-runs (2026-10-28, `--repeat 3`, `8a2405b`, $7.42 in all)
+
+On the null `SKILL.md` with the two-sentence cap at line 326, the fixed case 02 check and the fixed case 15 offer
+regex. All three pass; these are the counted results for 15, 02 and 23.
+
+| Case | Result | File | Cost |
+|---|---|---|---|
+| 15 | 3/3 | `-145617` | $3.41 |
+| 02 | 3/3 | `-145732` | $1.33 |
+| 23 | 3/3 | `-150110` | $2.68 |
+
+No failures to triage. Earlier runs for these cases (15: 1/3 twice; 02: 0/3 twice on the old check; 23: 2/3) stay in the
+section above; the 15 failures were a check bug and then the prompt's three-sentence decline, fixed by the cap; 23's one
+failure was the same three-sentence pattern. Three-run passes are a small sample, so the cap holding is likely, not proven.
+Case 02 now has a runner-scored result for the first time.
