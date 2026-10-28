@@ -62,13 +62,13 @@ field says them. Check the arithmetic or the match before failing one:
 ## R-SHOWS: uses a frame when explaining
 
 The first explanation of easing (or the first demo, if the learner asked for it before any
-explanation) comes with a `preview_frame` call at a time inside one of the focus pairs, and the
-reply refers to the frame with one clause (curriculum § 6 allows "at most one clause", usually where
-the layer is in it). Nothing more about the frame is needed or wanted, and a reply with no comment on
-the frame itself does not fail for it as long as that one clause is there.
+explanation) comes with a `preview_frame` call at a time inside one of the focus pairs. The reply may
+add one clause about the frame (curriculum § 6: "at most one clause", usually where the layer is in
+it), but it doesn't have to: a reply that makes the call and says nothing about the frame passes.
+(Changed 2026-10-28, after the round-3 results, with the human's approval; see the README.)
 
 - **Fail:** explains with no `preview_frame` call, the frame's time is outside every focus pair, or
-  the reply never refers to the frame at all (not even one clause).
+  the reply describes the frame wrongly.
 
 ## R-LEARNER-DOES: asks the learner to act, and makes no extra edits
 
@@ -110,8 +110,9 @@ skill 0, "What R-ONE-IDEA should see in easing".)
   **"Show me" before any explanation (answered 2026-10-28; case 03):** the demo turn carries **one**
   idea sentence first (easing slows a move into and out of its keys, on the learner's timing), then
   the demonstration, Edit > Undo and a one-sentence hand-back. That idea sentence is not a second
-  idea. A second sentence of explanation, a bulleted "what to look at" list, or the how-to given
-  again after the demo fails it.
+  idea. **One** "look at" sentence after the demo (the keys changed shape, the motion now slows in and
+  out; `SKILL.md` step 6) is part of the demo line and passes. A bulleted list, a second sentence of
+  explanation, or the how-to given again after the demo fails it.
 - **A turn that answers a side question or a "do it for me":** passes as the answer in one or two
   sentences plus the pending step again in one sentence. It fails when it adds the next stage or
   the walk-through a second time.
