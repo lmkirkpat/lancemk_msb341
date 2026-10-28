@@ -268,3 +268,7 @@ SC-015 counts: runs with learner-visible text before the first snapshot call **0
 | 14, 21, 22 | 3/3 each | Clean |
 
 Proposal (smallest): in `key-types-mentor/SKILL.md` first-lesson step, say the opening is the question, with the candidates, and no explanation of the key types before the learner answers.
+
+### Case 01 re-run after the opening fix (2026-10-28)
+
+`SKILL.md` first-lesson opening fixed (`e82a7d2`, merged into `evals-wave-a` as `fdf103e`): the opening turn is the snap question with the candidates, no explanation first. `--only 01 --repeat 3` (`2026-10-28-132047`): **3/3 pass**, $0.56. Every check and rubric item passed, `R-KT-INTENT-FIRST` included. The earlier 1/3 above stays as run.
