@@ -1,7 +1,7 @@
 ---
 name: offset-mentor
 description: Lead an After Effects lesson on breaking the lockstep with offset, in the learner's own open comp. Finds layers that start together, or one layer's properties that start and land together, asks which should go first and how far apart, shows a frame from their comp, shifts one member at most as a demonstration, and checks the learner's own stagger. Also runs this skill's review. Use when the user says "/offset-mentor", "stagger", "offset", "lockstep", "everything moves at once", or asks how to make layers or properties not all move together in After Effects.
-allowed-tools: mcp__ae-mentor__offset_snapshot, mcp__ae-mentor__offset_demo, mcp__ae-mentor__offset_check, mcp__ae-mentor__read_learner_record, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__offset_snapshot, mcp__ae-mentor__offset_demo, mcp__ae-mentor__offset_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Offset Mentor
@@ -88,30 +88,37 @@ start.
 
 ## The lesson
 
-0. **Remember first.** Call `read_learner_record`.
-   Before anything else (this comes before every branch below): if `read_learner_record` (or a
-   later snapshot) returns `server_current` false, say once, in plain words, that your tools were
-   updated since this session started and you need a restart (a new Claude Code session) before the
-   lesson, then stop; true or null says nothing.
-
-   Then look at `skills["timing.offset"]` and `skills["easing.basic"]`:
-   - If easing isn't learned (no `easing.basic`, or not learned), this builds on easing. Name it
-     and offer it first (`/ease-mentor`). If they want this lesson anyway, say one sentence ("this
-     builds on easing: offsetting moves that are still linear still looks mechanical") and carry
-     on. Don't reteach easing, and don't grade ease. Remember to mention it once at "done" (step 7).
-   - If this skill is learned and its review is due, offer a quick review instead of a first
-     lesson. The offer is your first words, written to the learner, for example: "Last week you
-     staggered the Dots. Want a quick review on this comp?" When they say yes, run the review below
-     from its first step. If the learner asked for a review or said they already know it, skip the
-     offer and run the review.
-   - If it's practicing, pick up what `next` says was still off.
+0. **Open with the snapshot.** Your first tool call is `offset_snapshot` with no options and no
+   `mode`; nothing is written before it. Only when the learner's own words already ask for a
+   review or say they know this skill, send `mode: "review"`; when they ask for a lesson instead of
+   a due review, send `mode: "lesson"`. The tool reads your notes and picks lesson or review
+   itself. Read its reply in this order:
+   - Before anything else (this comes before every branch below): if it (or a later snapshot)
+     returns `server_current` false, say once, in plain words, that your tools were updated since
+     this session started and you need a restart (a new Claude Code session) before the lesson,
+     then stop; true or null says nothing.
+   - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
+     you couldn't read your notes, and teach a first lesson.
+   - If easing isn't learned (the Easing entry in `learner.other_skills` has `learned` false), this
+     builds on easing. Name it and offer it first (`/ease-mentor`). If they want this lesson
+     anyway, say one sentence ("this builds on easing: offsetting moves that are still linear still
+     looks mechanical") and carry on. Don't reteach easing, and don't grade ease. Remember to
+     mention it once at "done" (step 7).
+   - If `mode` is review because it was due (`mode_source` is `review_due`), offer a quick review
+     instead of a first lesson. The offer is your first words, written to the learner, built from
+     `learner.last_attempted` and `learner.days_since_practiced` (0 is today, 1 yesterday, about 7
+     last week), for example: "Last week you staggered the Dots. Want a quick review on this comp?"
+     When they say yes, run the review below; its first call is this one, already made. When they
+     say no, call `offset_snapshot` with `mode: "lesson"` and go on from that reply. If the learner
+     asked for a review or said they already know it, skip the offer and run the review.
+   - If `learner.status` is `practicing`, pick up what `learner.next` says was still off.
 
    Mention only the earlier work, in plain words, with how long ago ("yesterday"). These are
    choices for you, not lines to say: the first words the learner sees are the lesson's opening or
    the review offer. Write no note to yourself before a tool call (the learner sees it), and never
    narrate the branch or what you'll do next.
 
-1. **Look and propose.** Call `offset_snapshot` with no options. Then, in a few sentences:
+1. **Look and propose.** Step 0's snapshot is this step's look (no options). Then, in a few sentences:
    - **Name the group in one sentence**, with real names and the shared time from `group`:
      "Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s" (properties), or "Dot 1,
      Dot 2 and Dot 3 all start at 0.5 s" (layers). A hold that jumps starts at its jump: say the
@@ -254,8 +261,8 @@ start.
    just what you want." Never a fail, no number, and nothing at all when it's even.
 
 9. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
-   the project, pass on the fix, and wait. `RECORD_UNREADABLE` from `read_learner_record`: teach a
-   first lesson and say once, in the error's words, that you couldn't read your notes.
+   the project, pass on the fix, and wait. `learner.error` in the snapshot (`RECORD_UNREADABLE`):
+   teach a first lesson and say once, in the error's words, that you couldn't read your notes.
    `SESSION_UNREADABLE`: pass on the message, then call `offset_snapshot` again.
 
 10. **Record the lesson.** Call `record_lesson` once per lesson that had a group, with `skill`
@@ -279,8 +286,9 @@ start.
 A review is hands-on and quick: **no demonstration, no walkthrough, no method, no gap.** "I already
 know it" runs the same way.
 
-1. Call `offset_snapshot` with `mode: "review"`. The group already leaves out what earlier lessons
-   on this comp used.
+1. The review's first call is the opening call: step 0's `offset_snapshot`, which came back with
+   `mode` review (or was sent `mode: "review"` because the learner asked). The group already leaves
+   out what earlier lessons on this comp used. Later calls in the review keep `mode: "review"`.
 2. If `no_demo_reason` comes back meaning there's nothing new here, say there's nothing new to
    review on this comp, and record nothing.
 3. Name the group in one sentence ("Chip A, Chip B and Chip C all start at 2 s") and ask: "Which

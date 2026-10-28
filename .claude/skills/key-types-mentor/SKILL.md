@@ -1,7 +1,7 @@
 ---
 name: key-types-mentor
 description: Lead an After Effects lesson on picking the key type on purpose (hold and linear) in the learner's own open comp. Asks what's meant to snap, shows a frame from their comp, holds one pair at most as a demonstration, checks the learner's own holds pair by pair, and asks what should run at constant speed. Use when the user says "/key-types-mentor", "make it snap", "hold keyframes", "key types", or asks why a blink or cut fades instead of snapping.
-allowed-tools: mcp__ae-mentor__key_types_snapshot, mcp__ae-mentor__key_types_demo, mcp__ae-mentor__key_types_check, mcp__ae-mentor__read_learner_record, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__key_types_snapshot, mcp__ae-mentor__key_types_demo, mcp__ae-mentor__key_types_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Key Types Mentor
@@ -65,30 +65,36 @@ most; they hold the rest with their own hands.
 
 ## The lesson
 
-0. **Remember first.** Call `read_learner_record`.
-   Before anything else (this comes before every branch below): if `read_learner_record` (or a
-   later snapshot) returns `server_current` false, say once, in plain words, that your tools were
-   updated since this session started and you need a restart (a new Claude Code session) before the
-   lesson, then stop; true or null says nothing.
-
-   Then look at `skills["keyframes.types"]` and `skills["easing.basic"]`:
-   - If easing isn't learned (no `easing.basic`, or not `learned`), name it as the place to start
-     and offer it (`/ease-mentor`). If they want this lesson anyway, say one sentence ("this builds
-     on easing: hold is the third choice next to linear and eased") and carry on. Don't reteach
-     easing.
-   - If this skill is `learned` and its review is due, offer a quick review instead of a first
-     lesson. The offer is your first words, written to the learner, for example: "Last week you
-     made Blink snap. Want a quick review on this comp?" When they say yes, run the review below
-     from its first step. If the learner asked for a review or said they already know it, skip the
-     offer and run the review.
-   - If it's `practicing`, pick up what `next` says was still off.
+0. **Open with the snapshot.** Your first tool call is `key_types_snapshot` with no focus and no
+   `mode`; nothing is written before it. Only when the learner's own words already ask for a
+   review or say they know this skill, send `mode: "review"`; when they ask for a lesson instead of
+   a due review, send `mode: "lesson"`. The tool reads your notes and picks lesson or review
+   itself. Read its reply in this order:
+   - Before anything else (this comes before every branch below): if it (or a later snapshot)
+     returns `server_current` false, say once, in plain words, that your tools were updated since
+     this session started and you need a restart (a new Claude Code session) before the lesson,
+     then stop; true or null says nothing.
+   - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
+     you couldn't read your notes, and teach a first lesson.
+   - If easing isn't learned (the Easing entry in `learner.other_skills` has `learned` false), name
+     it as the place to start and offer it (`/ease-mentor`). If they want this lesson anyway, say
+     one sentence ("this builds on easing: hold is the third choice next to linear and eased") and
+     carry on. Don't reteach easing.
+   - If `mode` is review because it was due (`mode_source` is `review_due`), offer a quick review
+     instead of a first lesson. The offer is your first words, written to the learner, built from
+     `learner.last_attempted` and `learner.days_since_practiced` (0 is today, 1 yesterday, about 7
+     last week), for example: "Last week you made Blink snap. Want a quick review on this comp?"
+     When they say yes, run the review below; its first call is this one, already made. When they
+     say no, call `key_types_snapshot` with `mode: "lesson"` and go on from that reply. If the
+     learner asked for a review or said they already know it, skip the offer and run the review.
+   - If `learner.status` is `practicing`, pick up what `learner.next` says was still off.
 
    Mention only the earlier work, in plain words, with how long ago ("yesterday"). These are
    choices for you, not lines to say: the first words the learner sees are the lesson's opening or
    the review offer. Write no note to yourself before a tool call (the learner sees it), and never
    narrate the branch or what you'll do next.
 
-1. **Look and ask.** Call `key_types_snapshot` with no focus. Then, unless `stored_choices` is
+1. **Look and ask.** Step 0's snapshot is this step's look (no focus). Then, unless `stored_choices` is
    true (then the confirm below is the only question, unless they say their choice changed but
    not how), ask the intent question **before proposing anything**: "Is anything here meant to
    snap, like a blink, an on/off, or a cut?" Help them answer:
@@ -203,8 +209,8 @@ most; they hold the rest with their own hands.
    - They name none, or say "never mind": this part doesn't apply. Move on.
 
 9. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
-   the project, pass on the fix, and wait. `RECORD_UNREADABLE` from `read_learner_record`: teach a
-   first lesson and say once, in the error's words, that you couldn't read your notes.
+   the project, pass on the fix, and wait. `learner.error` in the snapshot (`RECORD_UNREADABLE`):
+   teach a first lesson and say once, in the error's words, that you couldn't read your notes.
    `SESSION_UNREADABLE`: pass on the message, then call `key_types_snapshot` again.
 
 10. **Record the lesson.** Call `record_lesson` once per lesson that had a focus, with `skill`
@@ -228,8 +234,10 @@ most; they hold the rest with their own hands.
 A review is hands-on and quick: **no demonstration, no walkthrough, no menu path, no constant-speed
 question.** "I already know it" runs the same way.
 
-1. Call `key_types_snapshot` with `mode: "review"`. Candidates already leave out what earlier
-   lessons on this comp used.
+1. The review's first call is the opening call: step 0's `key_types_snapshot`, which came back
+   with `mode` review (or was sent `mode: "review"` because the learner asked). Candidates already
+   leave out what earlier lessons on this comp used. Later calls in the review keep
+   `mode: "review"`.
 2. Ask the intent question first, exactly as in the lesson, naming the candidates as questions.
    If `no_demo_reason` comes back meaning there's nothing new here (no candidates), say there's
    nothing new to review on this comp and record nothing.

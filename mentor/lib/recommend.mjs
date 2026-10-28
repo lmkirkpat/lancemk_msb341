@@ -9,13 +9,42 @@ import { applies, marksFor } from "./marks.mjs";
 // long, and so does a practice lesson on the same skill.
 export const SESSION_WINDOW_HOURS = 3;
 
+// FR-004 step 2 and FR-020, for one skill (spec FR-048 step 3, OR-4, OR-5): may this skill's review
+// be offered now? Learned, built, with a review mode, due today, no practice lesson on it in the
+// session window, no other skill's review offered in the window, and a new target in the comp (this
+// skill's past targets on this project and comp left out, with the kept-linear marks that apply).
+// Returns the finder's focus ({ count, layers }) when it may, else null. recommend() and the snapshot
+// tools' opening function (opening.mjs) both call this, so they never disagree. `built` defaults to
+// this skill alone; `offers` are the session's recent review offers.
+export function reviewFor({ skill, record, built = [skill], finders = {}, snapshot = null, now, offers = [] }) {
+  if (!snapshot || !record) return null;
+  const skills = record.skills || {};
+  const lessons = Array.isArray(record.lessons) ? record.lessons : [];
+  const windowStart = now.getTime() - SESSION_WINDOW_HOURS * 3600 * 1000;
+  // Once a review has been offered in this window, only that one can come back.
+  const offered = offers.find((o) => o && Date.parse(o.at) >= windowStart);
+  if (offered && offered.skill !== skill) return null;
+  const f = finders[skill];
+  if (!built.includes(skill) || !(skills[skill] && skills[skill].status === "learned") || !f || f.review !== true) return null;
+  if (!isDue(skills[skill], now)) return null;
+  if (lessons.some((l) => l.skill === skill && l.kind !== "review" && Date.parse(l.date) >= windowStart)) return null;
+  if (typeof f.focus !== "function") return null;
+  const kept_linear = marksFor(record, snapshot.project, snapshot.comp.name).filter((m) => applies(m, snapshot));
+  let focus;
+  try {
+    const r = f.focus(snapshot, { exclude: pastTargetsIn(record, skill, snapshot.project, snapshot.comp.name), kept_linear });
+    focus = { count: r.count || 0, layers: r.layers || [] };
+  } catch {
+    return null;
+  }
+  return focus.count > 0 ? focus : null;
+}
+
 // `record` is the learner record, or null when it can't be read (every skill then counts as not
 // started). `built` is every skill ID a tool file declares; `finders` their FINDERS; `snapshot` the
 // active comp, or null when AE couldn't be reached; `offers` the session's recent review offers.
 export function recommend({ path, record, built, finders = {}, snapshot = null, now, offers = [], requested_skill }) {
   const skills = (record && record.skills) || {};
-  const lessons = (record && Array.isArray(record.lessons)) ? record.lessons : [];
-  const windowStart = now.getTime() - SESSION_WINDOW_HOURS * 3600 * 1000;
   const ordered = [...path.skills].sort((a, b) => a.position - b.position);
   const nameOf = (id) => (id === path.on_ramp.id ? path.on_ramp.name : (path.skills.find((s) => s.id === id) || {}).name ?? null);
   const learned = (id) => id === path.on_ramp.id || (skills[id] && skills[id].status === "learned");
@@ -51,13 +80,9 @@ export function recommend({ path, record, built, finders = {}, snapshot = null, 
   //    this window, only that one can come back: a repeat call offers it again while it still
   //    qualifies, and never another.
   if (!recommendation && snapshot) {
-    const offered = offers.find((o) => o && Date.parse(o.at) >= windowStart);
-    const practicedRecently = (id) => lessons.some((l) => l.skill === id && l.kind !== "review" && Date.parse(l.date) >= windowStart);
-    for (const s of offered ? ordered.filter((x) => x.id === offered.skill) : ordered) {
-      if (!isBuilt(s.id) || !learned(s.id) || !finders[s.id] || finders[s.id].review !== true) continue;
-      if (!isDue(skills[s.id], now) || practicedRecently(s.id)) continue;
-      const focus = focusOf(s.id, pastTargetsIn(record, s.id, snapshot.project, snapshot.comp.name));
-      if (focus && focus.count > 0) {
+    for (const s of ordered) {
+      const focus = reviewFor({ skill: s.id, record, built, finders, snapshot, now, offers });
+      if (focus) {
         recommendation = result(s, "review", "review_due", focus);
         break;
       }

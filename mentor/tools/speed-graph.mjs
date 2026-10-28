@@ -10,6 +10,7 @@ import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
+import { opening } from "../lib/opening.mjs";
 import { DEMO_IN, DEMO_OUT, analyze, check, finder, pairsFor } from "../lib/speed-graph.mjs";
 
 const SKILL = "easing.speed_graph";
@@ -53,8 +54,37 @@ function landingHardLabels(lesson) {
   return ids.map((id) => byId.get(id) ?? null);
 }
 
-async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options } = {}) {
+// Spec 004 FR-049: the layers easing lessons worked on, for the focus (skill_options.eased_layers):
+// every easing lesson's targets, and for an older entry with no targets, each layer of this comp
+// whose exact name appears in its text (not inside a longer word). From the record opening() read.
+const isWordChar = (c) => c !== undefined && /[\p{L}\p{N}_]/u.test(c);
+function namedIn(text, name) {
+  for (let i = text.indexOf(name); i >= 0; i = text.indexOf(name, i + 1)) {
+    if (!isWordChar(text[i - 1]) && !isWordChar(text[i + name.length])) return true;
+  }
+  return false;
+}
+function easedLayers(record, snapshot) {
+  const out = [];
+  const add = (n) => { if (typeof n === "string" && n && !out.includes(n)) out.push(n); };
+  const here = [...new Set([...(snapshot.layers || []), ...(Array.isArray(snapshot.layer_info) ? snapshot.layer_info : [])].map((l) => l.name))];
+  for (const l of record && Array.isArray(record.lessons) ? record.lessons : []) {
+    if (!l || l.skill !== "easing.basic") continue;
+    if (Array.isArray(l.targets)) {
+      for (const t of l.targets) add(t && t.layer);
+      continue;
+    }
+    const text = [l.attempted, l.summary, l.next].filter((x) => typeof x === "string").join("\n");
+    for (const n of here) if (namedIn(text, n)) add(n);
+  }
+  return out;
+}
+
+async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } = {}) {
   const snapshot = await takeSnapshot();
+  // FR-048: without a mode, the tool picks lesson or review (spec 004 › The opening read).
+  const open = opening({ skill: SKILL, mode: asked, snapshot, finder: FINDERS[SKILL] });
+  const mode = open.mode;
   const opts = {
     skill: SKILL,
     // The session doesn't pass the mode to the analyzer; a review picks one or two pairs (FR-021).
@@ -69,6 +99,8 @@ async function speedGraphSnapshot({ focus_layers, mode = "lesson", skill_options
     host: parseHost(snapshot),
     lesson,
     mode: l.mode,
+    mode_source: open.mode_source,
+    learner: { ...open.learner, eased_layers: easedLayers(open.record, snapshot) },
     project: snapshot.project,
     comp: { name: snapshot.comp.name, duration: snapshot.comp.duration, frame_rate: snapshot.comp.frame_rate },
     focus: analysis.focus,
@@ -125,17 +157,21 @@ export const TOOLS = [
     description:
       "Read the active comp and start or continue the speed graph lesson for it. Returns the focus (eased pairs to shape), " +
       "each pair's label and where its move is fastest now, the demo target, what was left out and why, and whether the " +
-      "lesson is new, continued or resumed. Pass focus_layers when the learner picks layers, mode \"review\" for a review, " +
-      "and skill_options with both lists every time you send it.",
+      "lesson is new, continued or resumed, plus mode (lesson or review), why, and what the learner record says about this " +
+      "skill (learner). Pass focus_layers when the learner picks layers, and skill_options with both lists every time you " +
+      "send it. Leave mode out unless the learner asked for a review or a lesson: the tool chooses.",
     inputSchema: {
       type: "object",
       properties: {
         focus_layers: { ...strings, description: "Layer names exactly as they appear in the comp. Omit for the default focus." },
-        mode: { type: "string", enum: ["lesson", "review"], description: "\"review\": a new target, no demonstration." },
+        mode: {
+          type: "string", enum: ["lesson", "review"],
+          description: "\"review\": a new target, no demonstration. Leave it out to let the tool choose (a review when one is due).",
+        },
         skill_options: {
           type: "object",
           properties: {
-            eased_layers: { ...strings, description: "Layers the learner's easing lessons targeted, from the learner record." },
+            eased_layers: { ...strings, description: "Layers the learner's easing lessons targeted: learner.eased_layers from the first reply." },
             land_hard: { ...strings, description: "Pair ids the learner said should land hard. They leave the focus." },
           },
           additionalProperties: false,

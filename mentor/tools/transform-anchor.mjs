@@ -15,6 +15,8 @@ import { byIndex, byName, layerInfo } from "../lib/layer-info.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
+import { serverCurrent } from "../lib/server-current.mjs";
+import { opening } from "../lib/opening.mjs";
 import {
   analyze, demoRefusal, demoValues, finder, missingTimes, movesFields, neededTimes, PLACES, rectOf, refused,
   REFUSED_MESSAGE, reviewProposal, SKILL,
@@ -60,11 +62,15 @@ async function lessonRead() {
   return { read: await io.takeSnapshot({ sample_times: needed }), reads: 2 };
 }
 
-async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fresh } = {}) {
+async function anchorSnapshot({ mode: asked, focus_layers, skill_options, fresh } = {}) {
   const { read, reads } = await lessonRead();
+  // FR-048, FR-049: without a mode, the tool picks lesson or review (spec 004 › The opening read).
+  const open = opening({ skill: SKILL, mode: asked, snapshot: read, fresh: !!fresh, finder: FINDERS[SKILL] });
+  const mode = open.mode;
+  const opening_fields = { mode_source: open.mode_source, learner: open.learner, server_current: await serverCurrent() }; // FR-044
   if (!layerInfo(read).known) {
     // Before wave B's reads there's nothing this skill can check, so no lesson starts.
-    return json({ lesson: null, no_layer_info: true, host: parseHost(read), comp: { name: read.comp.name } });
+    return json({ lesson: null, no_layer_info: true, mode, ...opening_fields, host: parseHost(read), comp: { name: read.comp.name } });
   }
   const opts = { skill: SKILL, analyze, mode };
   if (focus_layers) opts.focus_layers = focus_layers;
@@ -91,6 +97,7 @@ async function anchorSnapshot({ mode = "lesson", focus_layers, skill_options, fr
   return json({
     lesson,
     mode: s.mode,
+    ...opening_fields,
     host: parseHost(read),
     project: s.baseline.project,
     comp: { name: s.baseline.comp.name, time: s.baseline.comp.time, frame_rate: fps, width: s.baseline.comp.width ?? null, height: s.baseline.comp.height ?? null },
@@ -205,12 +212,17 @@ export const TOOLS = [
       "Read the active comp and start or continue the pivot lesson. Returns every layer's candidacy with a reason, one " +
       "proposal with a suggested place, the focus layers' places, check times (the rest key on a layer with Rotation or " +
       "Scale keys), what's already in place, the targets, the demo_target, notes, and watch_offer (with one focus layer in " +
-      "a lesson, the other layer to offer a watch on and its place, or null). Call again with skill_options when " +
-      "the learner names a layer and a place. fresh: true restarts the lesson before any demo or check.",
+      "a lesson, the other layer to offer a watch on and its place, or null), plus mode (lesson or review), why, and what the " +
+      "learner record says about this skill (learner). Call again with skill_options when the learner names a layer and a " +
+      "place. fresh: true restarts the lesson before any demo or check. Leave mode out unless the learner asked for a " +
+      "review or a lesson: the tool chooses.",
     inputSchema: {
       type: "object",
       properties: {
-        mode: { type: "string", enum: ["lesson", "review"], description: "\"review\" for a review: no demo, a new layer only." },
+        mode: {
+          type: "string", enum: ["lesson", "review"],
+          description: "\"review\" for a review: no demo, a new layer only. Leave it out to let the tool choose (a review when one is due).",
+        },
         focus_layers: { type: "array", items: { type: "string" }, description: "Limit the proposal to these layers, by name." },
         skill_options: SKILL_OPTIONS,
         fresh: { type: "boolean", description: "Start again from this read (for example after adding a solid). Refused after a demo or check." },
