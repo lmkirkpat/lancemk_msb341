@@ -226,12 +226,11 @@ was. Pan Behind changes both together, so nothing moves on screen.
      - one Position key (the note's `time` is the key's time): "Sled has one Position key, at
        3.7 s. Put the playhead right on it before you drag, so the pivot change goes into that
        key."
-     - pivot outside: the note's `side` is which side of the layer the pivot is on, as seen on
-       screen. Say it in words ("below", "above", "to its left", "below and to its left"): "Lid's
-       pivot sits outside the lid, below it, which is why it would swing wide. Click Lid in the
-       timeline and its crosshair shows up below the shape; start your drag there." Never a
-       distance. If only `place_now` says outside (no note), or `side` is null: "Lid's pivot sits
-       outside the lid", the same "click Lid in the timeline" to find it, and no side and no guess.
+     - pivot outside: "Lid's pivot sits outside the lid, which is why it would swing wide. Click
+       Lid in the timeline and its crosshair shows up; start your drag there." Never a distance.
+       Only when the note's `side` gives a side (as seen on screen), add it in words: "Lid's pivot
+       sits outside the lid, below it, … its crosshair shows up below the shape". No note, or
+       `side` null: the line without a side, and no guess.
      - shy: "It's shy, so turn off the timeline's shy filter to see its properties."
    - **Then the two sentences** from "The words the lesson uses", once.
    - **One frame.** Call `preview_frame` at the focus layer's check time, with the layer in it.
@@ -268,7 +267,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
    - The offer runs nothing: never call `anchor_demo` before a yes.
    - **Yes:** call `anchor_snapshot` with two `focus` entries, theirs first, then `watch_offer`'s
      layer at its `suggested_place`. Name that place in one sentence ("Needle will turn from the
-     middle of its bottom edge."), then run step 5's two-layer demo. Their layer stays theirs.
+     middle of its bottom edge."), then run step 5's two-layer demo with that snapshot's
+     `demo_target` (its id, not a layer name). Their layer stays theirs.
    - **No, or no answer** (they just try, or say "done"): carry on with one focus layer.
 
 5. **Demonstrate only when asked, or when they're clearly stuck.**
@@ -284,7 +284,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
    - **Two focus layers:** the demo goes on the `demo_target`, the one they care less about.
      1. Ask them to select that layer and press **A**, then **Shift+P**.
      2. Call `preview_frame` at the current time.
-     3. Call `anchor_demo` with the `demo_target`.
+     3. Call `anchor_demo` with the `demo_target` exactly as the latest `anchor_snapshot` gives
+        it: that id, never the layer's name. Never say or show the id.
      4. Call `preview_frame` again **at the same time**.
      Then: "Both numbers changed, and Tab didn't move." Nothing about how they changed: never
      "opposite directions" or "the same amount". The two frames look the same; that's the
@@ -322,11 +323,11 @@ was. Pan Behind changes both together, so nothing moves on screen.
        bottom edge."
      - a neighbouring place: "Banner's pivot is at its bottom-left corner. You said the middle of
        the left edge, a little higher." (Say which way from the two places.)
-     - outside the layer: "Lid's pivot sits outside the lid, below it, which is why it would swing
-       wide. Click Lid in the timeline and its crosshair shows up below the shape; start your drag
-       there." The side is `item1.outside_side`, as seen on screen; say it in words, never a
-       distance. If it's null: "outside the lid", the same "click Lid in the timeline" to find it,
-       and no side.
+     - outside the layer: "Lid's pivot sits outside the lid, which is why it would swing wide.
+       Click Lid in the timeline and its crosshair shows up; start your drag there." Never a
+       distance. Only when `item1.outside_side` gives a side (as seen on screen), add it in words:
+       "outside the lid, below it, … shows up below the shape". If it's null: the line without a
+       side, and no guess.
      - the wrong layer: "Needle's pivot hasn't moved, but Background's did. Pan Behind moves the
        pivot of whatever layer is under the cursor when you start dragging, even if Needle is
        selected. Edit > Undo, then start the drag right on Needle's crosshair." (The other layer is
@@ -342,14 +343,14 @@ was. Pan Behind changes both together, so nothing moves on screen.
        its crosshair." Offer it as a possibility; never say they moved the group's pivot. Say this
        **instead of** the "didn't change … like an expression" line below, never both.
      - set away from rest, on a layer shrunk to nothing there: "Pop is shrunk to nothing at 3.3 s,
-       so the drag looked like it did nothing, but it did move Pop's pivot, far below it. Edit >
+       so the drag looked like it did nothing, but it did move Pop's pivot. Edit >
        Undo first, then put the playhead on 4.3 s, where Pop is full size, and set the pivot
        there." On a layer that's turned there instead: "Gauge is part-way through its turn at
        4.2 s. Edit > Undo first, then put the playhead on its key at 3.2 s, where it's at rest, and
        set the pivot there." The time the playhead was at is `item3.now`; where it's at rest is the
-       layer's `check_time`, said as a time, never as "its first key". Say "far below it" (or far
-       to its left, and so on) only when `item1.place_now` is outside and `item1.outside_side`
-       gives the side, in words; otherwise leave that clause out, never a guess. Always ask for
+       layer's `check_time`, said as a time, never as "its first key". Only when `item1.place_now`
+       is outside and `item1.outside_side` gives the side, add it in words ("moved Pop's pivot,
+       far below it"); otherwise no side, never a guess. Always ask for
        Edit > Undo before the playhead goes to the rest key.
      - slid at a key (a layer with one Position key, dragged with the playhead off it): "Sled stays
        put at 0 s, but at 3.7 s it now sits to the right of where it was. Pan Behind changed
