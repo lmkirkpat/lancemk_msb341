@@ -9,7 +9,8 @@ repeat what the unit tests already prove.
 
 ## Pacing evals (T421, 2026-10-28; mentor from the T420 branch)
 
-Dry run only so far (26 cases valid). `R-ONE-IDEA` now carries curriculum § 6, skill 0's reading (the opening's count, proposal and leave-outs are one choice; the explanation turn is one task ending on "ease them and say done", with no numbered list, bulleted list of pairs or Graph Editor tip; the demo turn hands the rest back in one sentence; a side question is the answer plus the pending step). Cases 02, 03, 05 and 21 list it (case 01 already did); no other expectation changed (US1 #5's demo-on-ask in case 05 stays). The T422 repeats are 02, 03, 04, 05, 19, 21.
+**T422 repeats (2026-10-28, `--repeat 3` per case, mentor from the T420 branch, $7.75 in all):** 02 **0/3**, 03 **1/3**, 04 3/3, 05 **1/3**, 19 3/3, 21 2/3. Every failure is a `R-ONE-IDEA` item (03 run 3 and 21 run 3 also `R-SHOWS`); no hard-rule check failed. Stopped after easing, as the gate says: three cases failed on a majority. Triage in the hand-back (results `2026-10-28-145828` to `-150724`). T423 not started.
+Before the runs: dry run only (26 cases valid). `R-ONE-IDEA` now carries curriculum § 6, skill 0's reading (the opening's count, proposal and leave-outs are one choice; the explanation turn is one task ending on "ease them and say done", with no numbered list, bulleted list of pairs or Graph Editor tip; the demo turn hands the rest back in one sentence; a side question is the answer plus the pending step). Cases 02, 03, 05 and 21 list it (case 01 already did); no other expectation changed (US1 #5's demo-on-ask in case 05 stays). The T422 repeats are 02, 03, 04, 05, 19, 21.
 
 ## Running
 
