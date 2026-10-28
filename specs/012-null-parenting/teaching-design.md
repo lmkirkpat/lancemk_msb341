@@ -5,7 +5,8 @@ here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-23. **Status:** draft, answered by the spec writer in round 1 (§ 14). Round 2
 (2026-10-25, § 15): the proposal rule reworked for L-6. 2026-10-26, after the live sitting
 (`live-sitting-2026-10-26.md`): D-4 answered (§ 14; § 5 stage 3, § 7, § 10), and HO-2's overlap
-re-run on the built branch (§ 9, last note).
+re-run on the built branch (§ 9, last note). § 16 (pacing, one idea per turn) **proposed
+2026-10-28, not approved**: until the human approves it, § 5 stands as written.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 6, § 8, § 9, § 12 (B9), § 13
 (the FR-029 correction), § 14; spec 004 (approved), above all FR-005, FR-013, FR-014, FR-018 to
 FR-022, FR-024, FR-028, FR-029, FR-030, FR-037, the Edge Cases table, and plan.md › Waves › Wave B.
@@ -546,3 +547,154 @@ matte pair, as the answer key has it. The hidden-Caption test still gives Tile a
   asks. The spec writer decides how.
 - **L6-3** The text preference is a **Guess**. A first logged lesson where a learner without a group
   in mind accepts or rejects the proposal is the first evidence; log it in the usage notes.
+
+## 16. Pacing: one idea per turn (proposed 2026-10-28)
+
+**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
+spec or the evals until it's approved; the items at the end say who changes what. The opening turn
+(stage 1's question, spec 004 Phase 10) and the proposal turns don't change.
+
+### The problem
+
+R-ONE-IDEA ("each turn is a few sentences and moves one idea, ends by handing the learner something
+to do") failed 7 of 9 runs of cases 02, 03 and 04 after the wording fix (`e82a7d2`), and 02, 04, 15
+and 23 in the baseline (`product/evals/null-parenting/README.md`, "First full baseline" and "Fix
+re-runs 2026-10-28"). The design caused it: § 5 stage 2 asks for a frame, the idea, an existing rig
+as an example, what passes down and what doesn't, and why a null, and the build then ends that turn
+on stage 3's two asks (add a null, and where the group turns from). "Keep it to a few sentences"
+in `SKILL.md` can't hold six items. Read for this section:
+- `results/2026-10-28-132609.json` (04), run 1, turn 2: a comment on the frame, the parent idea, "a
+  null is an invisible layer…", Hatch follows Hatch Rig, not opacity or effects, never in the render,
+  the menu path, the region question. Run 3, turn 3: the pick whip in the Parent & Link column, how to
+  show the column, "not the one next to Position", "don't hold any key", the demo offer. Turn 4 (run
+  2, per the judge): a pick-whip walk-through on top of the demo.
+- `-132344` (03): "two tasks at once (add a null and choose the pivot)"; a claimed screen position.
+- `-132156` (02): the one pass answered only the learner's two-part question and ended on a question.
+
+Two of those pieces were already out by this design and leaked in anyway: § 8 says the only mention
+of a held key is § 7's one question after a jump, and § 5 stage 2 never asked for the menu path.
+
+### The rule (three parts, the same as skill 5's § 20)
+
+1. **Every turn ends on one action or one answer, and carries only what that action needs.**
+   Confirming the group, a one-clause note and the frame are context, not ideas.
+2. **A fact goes in the turn where the learner acts on it.** If no turn acts on it, it's on request.
+3. **A question or a request in place of the action gets its answer, in one or two sentences, then
+   the same pending action again, in one sentence.** Never the next stage's content in that turn.
+
+### The new sequence (a lesson)
+
+| Turn | The one idea | Carries | Ends on |
+|---|---|---|---|
+| 1. Opening, and the proposal turns | which layers | Unchanged (§ 4, § 15, stage 1) | The question, or the offer |
+| 2. The idea, on their group | a parent carries its children | The group confirmed in one clause, with at most the focus notes (a matte counted, a layer bringing its child, a precomp), one clause each; one frame of the group at the before-read time, saying where layers sit only if the frame shows it; the idea in one sentence: "A layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and keeps its own animation on top." | "Will Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?" |
+| 3. The handle (we do) | a null is a handle you park at the pivot | "Add a null with Layer > New > Null Object. A null never shows in the render, so it's a handle with no look of its own." Then D-4's corner sentence (§ 14), only when they named a place: "Its pivot is the top-left corner of its square, so put that corner on the middle of the group." For "only slides": "Since the group only slides, anywhere near it is fine." | "Say done when it's there." |
+| Check | the null passes, or one hint | § 6 N1 to N3, § 7 (unchanged) | "Say done again", or turn 4 |
+| 4. Parent the rest (you do, a) | parent to the handle | "Group Null's in place. Now parent Tile, Caption and Stamp to it with the pick whip in the Parent column, and say done." | Done. Then the demo offer as the last sentence: "I can parent Tile first so you can watch, if you like." |
+| 4a. The demo (on a yes) | watch one | Stage 4, unchanged: frames, the demo, "It moved 0 pixels: it's exactly where it was, and its Parent column now says Group Null," Edit > Undo | "Now Caption and Stamp are yours; say done." No second walk-through |
+| 5. Move the group (you do, b) | one move on the handle | The parenting pass in one clause ("None of them moved when you parented them") | "Now give Group Null one move: two keys on its Position, Scale or Rotation, and say done." |
+| 6. The pass | they move as one, each with its own animation | Stage 6's frames and sentence; stage 7's comments (FR-020, unchanged) | Play it back, or the held question |
+| 7. Record | | Unchanged | |
+
+The same number of turns as now. The region question moves from the "add a null" turn to the end of
+the idea turn, which takes away the two-asks turn (03) and gives the idea turn a real question to end
+on. The learner has just seen what a parent carries, so "will it turn, and from where?" is the idea
+put to use; it's the question skill 5 taught them to ask, and the review asks it the same way (§ 11).
+
+**Picked up again, the review, and the missing-prerequisite sentence:** unchanged.
+
+### What moved, what's on request, what goes
+
+| Piece | Was | Now | Why |
+|---|---|---|---|
+| "A null never shows in the render, so it can't drag its own look into the group" | Stage 2 | Turn 3, with the menu path | It's the reason for the thing they're about to add |
+| What a null is ("an invisible layer you add just to be that parent") | Stage 2 (the build) | Turn 3, folded into the sentence above | Same |
+| Where the group turns or scales from | Stage 3, after "add a null" | The end of turn 2 | Ends the idea turn on an answer; turn 3 becomes one task |
+| D-4's corner sentence | Stage 3, after the place is named | Turn 3 (still after the place is named, before they drag) | Unchanged in meaning |
+| The existing rig as an example (CTRL; Hatch follows Hatch Rig) | Stage 2, alongside the frame | **On request** ("what does that look like?", "show me one"), named in words from the read | The frame of their own group already carries the idea; the rig doubled it. § 5 stage 2's frames at CTRL's keys were never buildable (the snapshot gives no null key times) |
+| Not opacity or effects | Stage 2 | Turn 2, as a clause of the idea sentence | It's the idea's edge, and US1 #2 and eval 2 depend on it. Not a separate sentence |
+| How to show the Parent & Link column (right-click a heading, Columns) | Stage 5 (the build) | **On request**: when they say they can't find the column, or a check finds no parent and they say they looked | Most timelines show it; said up front it's a second task |
+| "There are two pick whips; not the one beside Position" | Stage 5 (the build) | **Hint only** (`pickwhip_position`, § 7) | A warning about a mistake they haven't made |
+| "Hold no key while parenting" | Stage 5 (the build) | **Hint only** (§ 7's jump row, once) | § 8 already says so; the build leaked it |
+| The shy note's "turn shy off to see its Parent column" | Stage 1 | Turn 4 | It's about the Parent column; turn 2 keeps "Badge is shy" |
+| Any comment on the frame itself (too small, can't make it out) | Seen in 04 | **Goes** | A frame that's no use gets no sentence |
+| A screen position the frame doesn't show | Seen in 03 | **Goes** (the hard rule already bans it) | |
+| "Today's idea is…" before the opening question | Seen in 20 (unjudged) | Not changed here (the opening is out of scope); logged for C-5's check of skill 6 | |
+
+**Kept exactly:** the opening and the proposal rule, "I do, we do, you do" (the learner adds and
+places the null, the mentor parents one layer at most, the learner parents the rest and moves it),
+the one demo and its target and timing (only after the null passes), "ask for the move only after
+parenting passes" (FR-014), the hints (§ 7), the comments, the record and the review.
+
+### What R-ONE-IDEA should see (the eval engineer's to change; this is only the intent)
+
+- Turn 2: the frame and the confirmed group are context; the idea sentence (with its "not fade or
+  effects" clause) plus the turn-or-scale question is one idea put to use. A second explanatory
+  sentence (why a null, an example rig) fails it.
+- Turn 3: the menu path, the never-renders sentence and the corner sentence are one task (add the
+  handle and park it). A second ask fails it.
+- Turn 4: the demo offer is the same action's alternative, as skill 5's watch offer.
+
+### Rejected
+
+- **Cap it in wording.** Tried (`e82a7d2`, "few sentences, no bullets"): 7 of 9 runs still failed.
+- **Two explanation turns** (the parent, then the null, with "ready?" between). A "ready?" turn hands
+  nothing to do; the null's sentence belongs with adding one.
+- **"Not opacity or effects" only at the move** (stage 6, where the fade mistake happens). Tempting,
+  since it's the moment of need, but it's the edge of the idea, US1 #2 and eval plan 2 test it in the
+  explanation, and as a clause it costs nothing. The `opacity_move` hint covers the moment.
+- **Keep the region question with "add a null".** Two asks in one turn (the judge's 03 note), and the
+  learner answers one and forgets the other.
+- **Ask the region after the null is added** (add; then where; then drag). One turn more for every
+  learner, for no gain over asking it while the idea is fresh.
+
+### Evidence and guesses
+
+- **R:** the result files above; `product/evals/null-parenting/README.md` (both sections); the one 02
+  pass (`-132156`, run 1), which answered one question and ended on a question.
+- **R, live:** T340 and T341 passed with the old pacing, builder-only.
+- **Guess:** that "will it turn or scale, or only slide?" makes sense before the null exists. Its
+  words don't need the null; skill 5 is the hard prerequisite, so the question is familiar. Watch the
+  next live lesson for "what do you mean, from where?".
+- **Guess:** that most learners find the Parent column without being told. If live lessons show they
+  don't, add "(right-click a column heading, Columns, Parent & Link, if you don't see it)" as a clause
+  in turn 4, not a sentence.
+
+### Items, if approved
+
+Numbers are `NNN`: the cockpit assigns them.
+
+**For the builder (B-NNN), `SKILL.md` only, no tool change:**
+1. Step 2: one frame of the group; the idea sentence above; no rig example (name one only when
+   asked, from `left_out`'s names); no null, no menu path; end on the turn-or-scale question. Nothing
+   about the frame itself.
+2. Step 3: no region question (asked in step 2); the menu path, the never-renders sentence, then the
+   corner sentence or the "only slides" line, then "say done". Pass the step 2 answer as `region`.
+3. Step 5: "parent the rest with the pick whip in the Parent column, and say done", then step 4's
+   offer as the last sentence. Showing the column only when asked or after a check with no parent
+   and "I looked"; the two-pick-whips and held-key lines only through their hints.
+   "Where things are": mark the Parent & Link and hold-no-key lines "say only when asked, or in a
+   hint", so they aren't read as things to say up front.
+4. Step 4: after the demo, hand the rest back in one sentence; no walk-through.
+5. Step 1's shy note: "Badge is shy" at the focus; "turn shy off to see its Parent column" at step 5.
+6. A new line under "Style": rule 3, as in skill 5.
+
+**For the spec writer (S-NNN):**
+- **US1 #2:** "uses CTRL with Title and Subtitle if the open comp has them, or one frame of the focus
+  group otherwise" becomes "one frame of the focus group; an existing rig only when the learner asks
+  for an example". "Not opacity or effects" stays.
+- **FR-023:** "name the Parent & Link column and how to show it" becomes "name the Parent column; how
+  to show it only when the learner can't find it (TD § 16)". "MAY warn against holding a key while
+  parenting" narrows to the jump hint's one question (TD § 8 already says so).
+- **FR-014, FR-016 (P5), FR-020, FR-022:** no change. The region is asked earlier, still never picked,
+  and P5 still asks for it before grading if they skipped it.
+- **Eval plan 2 and 3:** no change in what's tested; 3's question now comes at the end of the
+  explanation.
+
+**For the eval engineer (through the cockpit):** the readings above in the R-ONE-IDEA rubric; cases
+02, 03, 04, 15 and 23 then re-run as they are. Case 03's `never_picks` break (run 1, "put it on")
+came from the same pile: turn 2's general description of a null ("You put it on the spot the group
+should turn or scale from…", `-132344`), said before the learner had named a place. With the null's
+sentence moved to turn 3, after the learner names the place, that line has no reason to appear.
+Turn 3's "put that corner on the middle of the group" uses the learner's own place and doesn't
+match the check's "put it on".
