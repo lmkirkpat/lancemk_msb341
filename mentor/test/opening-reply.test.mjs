@@ -149,6 +149,8 @@ for (const skill of FIVE) {
     assert.equal(r.learner.readable, false);
     assert.deepEqual(r.learner.error, expected);
     assert.equal(r.learner.status, "not_started");
+    // Fix A (spec 004 Phase 10 round 2): a record that can't be read says nothing about other skills.
+    for (const o of r.learner.other_skills) assert.equal(o.learned, null, `${name}: ${o.skill_name} is unknown, not unlearned`);
     assert.equal(fs.existsSync(LEARNER), false, "set aside");
     const next = await call(name);
     assert.equal(next.learner.readable, true, "said once: the next call reads as empty");
@@ -236,6 +238,20 @@ test("null_parent_snapshot: other_skills has the pivot (hard) and easing (not ha
   const l = await call("null_parent_snapshot");
   assert.deepEqual(l.learner.other_skills.map((s) => s.learned), [true, true]);
   assert.deepEqual(FINDERS["parenting.null"].mentions, ["easing.basic"]);
+});
+
+test("fix A: an unreadable record → every other skill's learned is null, hard or not", async () => {
+  fs.copyFileSync(UNREADABLE, LEARNER);
+  const r = await call("null_parent_snapshot");
+  assert.deepEqual(r.learner.other_skills, [
+    { skill_name: "Set the pivot (anchor point)", learned: null, hard: true },
+    { skill_name: "Easing", learned: null, hard: false },
+  ]);
+  for (const name of ["key_types_snapshot", "offset_snapshot", "speed_graph_snapshot"]) {
+    clear();
+    fs.copyFileSync(UNREADABLE, LEARNER);
+    assert.deepEqual((await call(name)).learner.other_skills, [{ skill_name: "Easing", learned: null, hard: true }], name);
+  }
 });
 
 test("null_parent_snapshot: the can_teach false reply carries mode, mode_source, learner and server_current", async () => {

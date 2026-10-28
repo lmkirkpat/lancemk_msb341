@@ -40,6 +40,8 @@ const { TOOLS, FINDERS } = await import("../tools/index.mjs");
 const nullTools = await import("../tools/null-parenting.mjs");
 const session = await import("../lib/session.mjs");
 const { proposal } = await import("../lib/null-parenting.mjs");
+const { recommend, reviewFor } = await import("../lib/recommend.mjs");
+const { readPath } = await import("../lib/path.mjs");
 
 const tool = (name) => TOOLS.find((t) => t.name === name);
 const call = async (name, args = {}) => JSON.parse((await tool(name).handler(args)).content[0].text);
@@ -501,4 +503,27 @@ test("the demo's second read that can't place the target: moved_px null, jumped 
   assert.equal(r.moved_px, null);
   assert.equal(r.jumped, false);
   assert.deepEqual(r.couldnt_check, [4.167, 4.367, 5.167, 5.367]);
+});
+
+// ---- Spec 004 Phase 10 round 2, fix B (OR-1, FR-051 row 5): a due review on a crowded comp with
+// nothing new is a lesson. The crowd counts for recommend_next's lesson path, not for a review.
+
+test("fix B: learned and due on a crowd with nothing new → lesson, default, no review offer", async () => {
+  useRecord("learned-group.json");
+  project("synthetic/crowd-only.json");
+  const r = await call("null_parent_snapshot");
+  assert.deepEqual([r.mode, r.mode_source], ["lesson", "default"]);
+  assert.equal(r.learner.review_due, true);
+  assert.deepEqual(session.reviewOffers(), []);
+});
+
+test("fix B: reviewFor finds no target on the crowd; recommend's lesson path still counts it", () => {
+  const record = JSON.parse(fs.readFileSync(path.join(DIR, "records", "learned-group.json"), "utf8"));
+  const snapshot = load("synthetic/crowd-only.json");
+  const now = new Date("2026-10-28T18:00:00.000Z");
+  assert.equal(reviewFor({ skill: "parenting.null", record, finders: FINDERS, snapshot, now }), null);
+  const fresh = { ...record, skills: { ...record.skills, "parenting.null": undefined } };
+  delete fresh.skills["parenting.null"];
+  const out = recommend({ path: readPath(), record: fresh, built: ["transform.anchor", "parenting.null"], finders: FINDERS, snapshot, now });
+  assert.deepEqual([out.recommendation.skill, out.recommendation.kind, out.recommendation.reason], ["parenting.null", "lesson", "next_in_path"]);
 });

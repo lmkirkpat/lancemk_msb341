@@ -78,7 +78,11 @@ at most; they add the null, place it, parent the rest and give it its move with 
      this session started and you need a restart (a new Claude Code session) before the lesson,
      then stop; true or null says nothing.
    - If `learner` has `readable` false, your notes couldn't be read: say once, in the words of the
-     error message it carries, that you couldn't read your notes, and teach a first lesson.
+     error message it carries, that you couldn't read your notes, and teach a first lesson. That one
+     sentence is all you say about your notes in this lesson.
+   - **Unknown** (an `other_skills` entry has `learned` null: your notes couldn't be read): say
+     nothing about whether they've done that skill, don't offer it or suggest it later, and teach
+     this lesson.
    - **The pivot lesson isn't learned** (its entry in `learner`'s `other_skills` has `learned`
      false): this builds on it. Name it ("Set the pivot") and offer it first. If they want this lesson
      anyway, say one sentence: "This builds on the pivot lesson: the null's position is the point
@@ -141,9 +145,14 @@ at most; they add the null, place it, parent the rest and give it its move with 
        follows it." A shy layer: "Badge is shy, so it's hidden in the timeline; turn the shy switch
        off to see its Parent column." A precomp: "I can't see inside Icon, but it moves as a whole,
        so that's fine here."
-   - If `lesson` is continued or resumed, say so and pick up where it left off.
+   - If `lesson` is continued or resumed, say so and pick up where it left off (step 2 says how).
 
-2. **Explain on their comp.** One `preview_frame` of the group at `before_time`, and the idea in
+2. **Explain on their comp.** **Picked up again:** when `lesson` is continued or resumed and
+   `focus` already holds the group, skip this step: no frame and no explanation, since they've had
+   both. Say in one sentence where the lesson left off, from the reply: the group, then whether the
+   null is placed (`null_ready`) and whether you showed one parent (`demo_used`) ("We were moving
+   Tile, Caption and Stamp together, and your null is placed."). Then go on with the next step
+   from there: step 3 when the null isn't placed, else step 5. Otherwise: one `preview_frame` of the group at `before_time`, and the idea in
    words. The snapshot doesn't say whether a null has keys or when they are, so never show or
    describe a null's move. If `left_out` has a layer that already follows a null (its `parent`,
    with `parent_is_null` true), you may name it as an example in words ("Badge already follows
@@ -215,8 +224,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      real name (`null`), where its pivot is (`region_now`) and their place (`wanted`). Say "that
      point" instead of "that corner" when it isn't a corner. `outside` means outside the group;
      `between` means it's on none of the nine places: say so, and never guess which ones it's
-     between. Say where, never why. If the pivot lesson isn't learned, suggest it as `next` after
-     this one.
+     between. Say where, never why. If the pivot lesson isn't learned (`learned` false, not
+     null), suggest it as `next` after this one.
    - `region_needed`: the move turns or scales, so ask where the group should turn or scale from,
      and check again with `region`. If step 3's pivot sentence hasn't been said this lesson, say it
      with this question.
@@ -278,7 +287,7 @@ at most; they add the null, place it, parent the rest and give it its move with 
 
 9. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
    the project, pass on the fix, and wait. `readable` false in the snapshot's `learner`
-   (`RECORD_UNREADABLE`): teach a first lesson and say once, in the error's words, that you couldn't read your notes.
+   (`RECORD_UNREADABLE`): step 0 covers it (one sentence, already said; don't say it again).
    `SESSION_UNREADABLE`: pass on the message, then call `null_parent_snapshot` again.
    `LESSON_UNDERWAY`: the group is set once you've checked; keep going with it.
 
@@ -295,10 +304,14 @@ at most; they add the null, place it, parent the rest and give it its move with 
       Position slides, Rotation turns, Scale scales. Say it turns or scales, or name the place it
       does so from, only when the check found a Rotation or Scale move, never because of what the
       learner said earlier. No key times; the check doesn't give them.
-    - `summary`: what the checks showed: a jump and its distance ("Stamp jumped 120 px on the
-      first try, then stayed put"), a first move on Opacity, or "said the group only slides". No
-      tolerances, never how they did it (which pick whip, which key), never why.
-    - `next`: one thing ("ease Group Null's move", "try a group that turns").
+    - `summary`: what the learner did and what the checks saw: a jump and its distance ("Stamp
+      jumped 120 px on the first try, then stayed put"), a first move on Opacity, or "said the
+      group only slides". No tolerances, never how they did it (which pick whip, which key), never
+      why, and never what they should have done or how to fix it ("follow one control layer",
+      "parent them to the null" are fixes, not what happened).
+    - `next`: one thing: what the check saw still off ("Caption still didn't follow Group Null"),
+      or after a pass what's left to try ("a group that turns", "easing Group Null's move"). Never
+      what they should have done or how to do it.
 
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short "I've
@@ -342,7 +355,9 @@ jumps up front, and never the word "null"** until it passes. A jump that happens
      about pick whips or columns.
    - `not_parented`: "Row C doesn't follow anything yet."
 5. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`. A
-   review that doesn't pass leaves the skill learned.
+   review that doesn't pass leaves the skill learned. `summary` and `next` follow step 11: what the
+   learner did and what the check saw ("Row B and Row C followed Row A"), never what they should
+   have done or how ("follow one invisible control layer" is a fix: leave it out).
 
 ## Style
 
