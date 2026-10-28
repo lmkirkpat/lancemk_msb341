@@ -170,6 +170,22 @@ during spec 008's or 009's sitting). The builder does the hand actions.
 
 ---
 
+## Phase 10: Pacing, 2026-10-28 (TD § 15; desk, no 🖐; approved 2026-10-28)
+
+From spec › Amended 2026-10-28: TD § 15 (the pointer under FR-016, new FR-016a, FR-017's bar
+clause, Eval plan 14 and the pacing reading; the shared pacing rule in spec 004 curriculum.md § 2).
+No tool change. `SKILL.md` is on `main`, so the builder's task edits an existing file and isn't
+add-only: the cockpit cuts its branch from local `main` and runs the merge check accordingly. The
+eval tasks are the eval engineer's, on the branch the cockpit names. The full re-baseline waits for
+easing's (spec 002 T423), which is the base every merge is checked against (spec 004 T143).
+
+- [ ] T432 [US1] Apply TD § 15 › Items › the builder's items 1 to 8 to `offset-mentor/SKILL.md` only. No tool change. Then `npm test`, `/agent-audit` on the file, and hand back the diff (spec FR-007, FR-016a, FR-017). **Done when:** the reviewer approves the diff (HO-3): it matches TD § 15's eight items and nothing else
+- [ ] T433 [eval-engineer] `product/evals/offset/`: R-ONE-IDEA's rubric takes TD § 15 › What R-ONE-IDEA should see (spec › Eval plan › Pacing). Case 16's expectations as Eval plan 14 (amended 2026-10-28: "stagger the rest for me" after an order, before any demo, is the ask, so the one demo runs; no later offer). Case 01's `asks_first` and `asks_apart` are looked for on turn 2, as built. Dry run. **Done when:** the dry run passes its plumbing and the README names the changed rubric and cases
+- [ ] T434 [eval-engineer] After T432 and T433: cases 01, 02, 03, 04, 05, 06, 16, 19, 25, 26 and 27, each with `--repeat 3`, mentor from the T432 branch. Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and logged in the README as prompt, rubric or noise, with the cost (about 33 runs)
+- [ ] T435 [eval-engineer] After T434 passes and after spec 002 T423: a full re-baseline of the set, logged in the README with score and cost (≥ 80%, every hard-rule check passing). **Done when:** logged; a new failure outside the eleven cases is triaged before the merge
+
+---
+
 ## Hand-offs to other owners (not builder tasks)
 
 - **HO-1 Eval engineer:** `product/evals/offset/` from spec › Eval plan (20 cases; SC-003 ≥ 80% on
@@ -200,6 +216,8 @@ during spec 008's or 009's sitting). The builder does the hand actions.
 - Phase 4 and Phase 5 need T018. T027 after T019.
 - Phase 8 in order: T032 → T033 → T034 → T035 → T036 → T037. T040 a day or more after the first pass.
 - HO-2 and HO-3 after T035; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
+- Phase 10 (2026-10-28): T432 and T433 in parallel → T434 → T435 (after spec 002 T423) → merge.
+  HO-3 again on T432's diff (FR-016a and TD § 15).
 
 ## Parallel opportunities
 
@@ -213,6 +231,6 @@ during spec 008's or 009's sitting). The builder does the hand actions.
 2. Phases 4 and 5 (layers kind and review mode both ship in this first build).
 3. Phases 6–7 close the cloud part; Phase 8 is one sitting; Phase 9 hands back.
 
-**Task count:** 40 (T001–T040): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap 2, cloud
-hand-back 3, live sitting 6, polish 3. **🖐 live: 5** (T032, T033, T036, T037 in the sitting; T040
+**Task count:** 44 (T001–T040, T432–T435): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap
+2, cloud hand-back 3, live sitting 6, polish 3, pacing 4 (2026-10-28). **🖐 live: 5** (T032, T033, T036, T037 in the sitting; T040
 a day or more later). Hand-offs: 4; requests: 3.

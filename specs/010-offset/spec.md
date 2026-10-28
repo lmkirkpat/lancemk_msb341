@@ -21,6 +21,11 @@ are tasked in spec 004 (SR-1 as T058 and T059, SR-2 as T064 and T065). The curri
 round 1 answers (`teaching-design.md` › 14) are folded in: D-1 changed (a gap under the floor is
 caught at the intent step), D-2 agreed plus the up-front case. Still open: B-5 (Open questions);
 live checks L-1 to L-4 are done (`live-sitting-2026-10-26.md`).
+**Amended 2026-10-28 (pacing), approved 2026-10-28:** `teaching-design.md` § 15 and the shared pacing
+rule (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2). Changed: a pointer under
+FR-016, new FR-016a (the pacing rule, by link), FR-017 (dragging the bar taught in the layers kind
+only, as TD § 15 item 4 says), Eval plan 14 and the R-ONE-IDEA reading. No change (TD § 15): FR-007,
+FR-012, FR-015; no tool change. New tasks T432 to T435 (tasks.md › Phase 10).
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 3, offset." Record ID `timing.offset`, short name `offset`, tool prefix `offset_`
@@ -356,8 +361,34 @@ section). Other edge cases:
   frames before and after at the same time for the demo (stage 4); "done" checks by any method, as
   the check reads key times only (Quick Offset, dragging layer bars, dragging keys, Sequence
   Layers). No `after-effects` bridge tool, no open-ended script.
-- **FR-017 (version, spec 004 FR-030)**: The mentor MUST teach dragging keys and dragging layer bars
-  on every version. It MUST NOT mention Quick Offset until the builder's live run has confirmed the
+  *Pacing (2026-10-28, approved 2026-10-28):* TD § 15 › The new sequence re-cuts § 5's stages into
+  turns (FR-016a); where they group things differently, § 15 governs.
+- **FR-016a (pacing; added 2026-10-28, approved 2026-10-28)**: The skill prompt MUST follow the
+  shared pacing rule (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2) as TD § 15
+  applies it: every turn ends on one action or one answer; the opening explains nothing; the
+  explanation (stage 2: the frame, one clause, the idea sentence) ends on FR-007's intent question,
+  and when there's nothing left to ask (order and gap given with the choice, or stored choices
+  confirmed) it opens the task turn instead; the task turn says the plan back in one sentence and
+  gives the how-to in one or two sentences, alternatives as clauses (FR-017), ending on "play it back
+  and say done"; a fact comes in the turn the learner acts on it, or only on request (TD § 15 › What
+  moved, what's on request, what goes): the trim warning is only row 16's hint, how Quick Offset
+  spreads is only on request, a rule that a layer's properties move together is only the "pops in"
+  hint (unless the learner asked for a split, FR-007); a question or a request in place of the
+  pending step gets its answer in one or two sentences and the same pending step again in one
+  sentence, never the next stage's content and never the walk-through again (so after the demo, the
+  rest is handed back in one sentence). **"Do it for me"** (curriculum § 2's shared rule; TD § 15
+  item 6): before any demo, once there's an order (a demo target exists), the request is the ask, so
+  the one demo runs and the rest is handed back; before an order, a warm decline and the intent
+  question again; after the demo, a warm decline and the pending step, with no new offer. Offset
+  makes no standing watch offer (C-4 open), so there's no offer to keep. The opening (its easing
+  reminder included), FR-007's say-back and floor, "never name a gap", the one demo and its target,
+  the hints, the rhythm comment, the record and the review don't change. The words are TD § 15's, not
+  copied here. *Checked by:* R-ONE-IDEA with TD § 15's reading (Eval plan › Pacing), on cases 01 to
+  06, 16, 19, 25, 26 and 27 with `--repeat 3`, then the full set (tasks.md T433 to T435).
+- **FR-017 (version, spec 004 FR-030)**: The mentor MUST teach dragging keys on every version, and
+  dragging layer bars on every version in the layers kind (amended 2026-10-28, approved 2026-10-28:
+  in the properties kind dragging the bar moves every property together, so it can't stagger them
+  and isn't taught there, TD § 15 item 4). It MUST NOT mention Quick Offset until the builder's live run has confirmed the
   gesture on 26.5 (Live run L-1) and then only when R0 reads 25.4 or later (`atLeast(host,
   "25.4")`); with an unknown version (`host.known: false`) it isn't mentioned. **L-1 confirmed it
   2026-10-26** (Command+Option drag, on layers and on selected keys). The version check lives in the
@@ -519,6 +550,15 @@ reviews.
 The eval engineer owns the cases, their numbers and fixtures; this lists what must be covered.
 Unit tests cover the measures (FR-022, FR-023); evals score the teaching.
 
+**Pacing: R-ONE-IDEA's reading (2026-10-28, TD § 15, FR-016a; approved 2026-10-28):** the reading is
+TD § 15 › What R-ONE-IDEA should see, not restated here. In short: turn 2's frame and clause are
+context, and the idea sentence and the intent question are one idea put to use; turn 3's plan said
+back is context, and the how-to (keys or bar, Quick Offset as a clause) and "say done" are one task,
+while a bulleted list of methods, the trim warning or a split rule nobody asked for fails it; when
+order and gap came with the choice, turns 2 and 3 as one pass if they end on the task; a
+side-question turn passes as the answer plus the pending step. Cases 01 to 06, 16, 19, 25, 26 and 27
+are re-run as they are; case 01's intent checks are looked for on turn 2.
+
 1. **First lesson, properties kind** on Mentor Practice: proposes Title's three properties, offers
    the layers kind once, names what's left out, asks order and gap, real names (US1 #1).
 2. **First lesson, layers kind** on Mentor Practice 2: Dot 2's properties proposed first (the tie),
@@ -537,7 +577,9 @@ Unit tests cover the measures (FR-022, FR-023); evals score the teaching.
 11. **Order differs from the stated one**: asks, doesn't fail.
 12. **Trimmed in point, keys unchanged**: the bar-vs-keys hint.
 13. **Incomplete attempt**: names what's still the same and where; doesn't fix or offer to.
-14. **"Do the rest"**: declined warmly, no offer later.
+14. **"Do the rest"**: after the demo, declined warmly with the pending step, no offer later; before
+    any demo, once there's an order, the request is the ask and the one demo runs; before an order,
+    declined with the intent question again (amended 2026-10-28, FR-016a).
 15. **Review**: due, new group, no demo or walkthrough, asks which goes first (SC-008 of spec 004).
 16. **Review with no new group**: not offered, stays due.
 17. **Version trap** (spec 004 FR-030): unknown or pre-25.4 version never mentions Quick Offset;

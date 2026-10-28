@@ -171,6 +171,21 @@ during spec 008's or 010's sitting). The builder does the hand actions.
 
 ---
 
+## Phase 10: Pacing, 2026-10-28 (TD § 15; desk, no 🖐; approved 2026-10-28)
+
+From spec › Amended 2026-10-28: TD § 15 (FR-008, overlap row 4, FR-017, new FR-017a, Eval plan KT-e
+and the pacing reading; the shared pacing rule in spec 004 curriculum.md § 2). No tool change. `SKILL.md` is on `main`, so the builder's task edits an existing file and isn't
+add-only: the cockpit cuts its branch from local `main` and runs the merge check accordingly. The
+eval tasks are the eval engineer's, on the branch the cockpit names. The full re-baseline waits for
+easing's (spec 002 T423), which is the base every merge is checked against (spec 004 T143).
+
+- [ ] T424 [US1] Apply TD § 15 › Items › the builder's items 1 to 7 to `key-types-mentor/SKILL.md` only. No tool change. Then `npm test`, `/agent-audit` on the file, and hand back the diff (spec FR-008, FR-017, FR-017a). **Done when:** the reviewer approves the diff (HO-3): it matches TD § 15's seven items and nothing else
+- [ ] T425 [eval-engineer] `product/evals/key-types/`: R-ONE-IDEA's rubric takes TD § 15 › What R-ONE-IDEA should see (spec › Eval plan › Pacing). Case 06's expectations as KT-e (amended 2026-10-28: "hold the rest for me" before any demo is the ask, so the one demo runs; no later offer). Dry run. **Done when:** the dry run passes its plumbing and the README names the changed rubric and cases
+- [ ] T426 [eval-engineer] After T424 and T425: cases 03, 04, 05, 06, 11, 13 and 20, each with `--repeat 3`, mentor from the T424 branch. Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and logged in the README as prompt, rubric or noise, with the cost (about 21 runs)
+- [ ] T427 [eval-engineer] After T426 passes and after spec 002 T423: a full re-baseline of the set, logged in the README with score and cost. SC-005 (≥ 80%, every hard-rule check passing). **Done when:** logged; a new failure outside the seven cases is triaged before the merge
+
+---
+
 ## Hand-offs to other owners (not builder tasks)
 
 - **HO-1 Eval engineer:** `product/evals/key-types/` from spec › Eval plan (KT-a to KT-n; SC-005
@@ -201,6 +216,8 @@ during spec 008's or 010's sitting). The builder does the hand actions.
 - Phase 4 needs T017; T021 needs T011. Phase 5 needs T017.
 - Phase 8 in order: T031 → T032 → T033 → T034 → T035. T038 a day or more after T035's pass.
 - HO-2 and HO-3 after T034; HO-1 after them; merge after HO-1's first run; HO-4 after merge.
+- Phase 10 (2026-10-28): T424 and T425 in parallel → T426 → T427 (after spec 002 T423) → merge.
+  HO-3 again on T424's diff (FR-017a and TD § 15).
 
 ## Parallel opportunities
 
@@ -213,6 +230,6 @@ during spec 008's or 010's sitting). The builder does the hand actions.
 2. Phases 4 and 5 (the mark and review mode both ship in this first build).
 3. Phases 6–7 close the cloud part; Phase 8 is one sitting; Phase 9 hands back.
 
-**Task count:** 38 (T001–T038): Setup 2, Foundational 9, US1 7, US2 5, US3 3, US4 overlap 1, cloud
-hand-back 3, live sitting 5, polish 3. **🖐 live: 4** (T031, T032, T035 in the sitting; T038 a day
+**Task count:** 42 (T001–T038, T424–T427): Setup 2, Foundational 9, US1 7, US2 5, US3 3, US4
+overlap 1, cloud hand-back 3, live sitting 5, polish 3, pacing 4 (2026-10-28). **🖐 live: 4** (T031, T032, T035 in the sitting; T038 a day
 or more later). Hand-offs: 4; requests: 3.

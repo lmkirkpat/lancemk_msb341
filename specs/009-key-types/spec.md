@@ -17,6 +17,12 @@ Live checks). A mixed pair snaps, at its first key, so row 6, FR-011, FR-022 and
 say so and **SR-2 now applies** (not a blocker for T035, see SR-2). Mentor Practice 2 as built is
 `layer-info/practice2b.json` (FR-021). Row 22 keeps one synthetic fixture. SR-3 was done in spec 004's
 wave B shared pass (row 13, FR-023). New question H-5.
+**Amended 2026-10-28 (pacing), approved 2026-10-28:** `teaching-design.md` § 15 and the shared pacing
+rule (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2). Changed: FR-008 (the Cursor
+named in the stage 2 explanation; its frames only on request), overlap row 4 (the same), FR-017 (a
+"do the rest" before any demo is the ask), new FR-017a (the pacing rule, by link), Eval plan KT-e and
+the R-ONE-IDEA reading. No change (TD § 15): FR-006, FR-010, FR-014, FR-018; no tool change. New tasks
+T424 to T427 (tasks.md › Phase 10).
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 1, key types (hold and linear)." The teaching design is the curriculum designer's
@@ -209,7 +215,7 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 | 1 | Expression over keys (a `loopOut` blink; Logo's Rotation) | Not a candidate; can't be the focus | Not graded; key changes under it still listed as other changes, with the "may not change the motion" note | "An expression drives this, so the key types may not be what you see" | Right. At stage 6, named as constant speed: reported as `expression`, no mark (FR-014) |
 | 2 | Expression with no keys | Not read until R2 | Not read | Never "there's none"; never claims everything that changes is the focus | Right (pin) |
 | 3 | Single key | Not a pair; not a candidate; can't be the focus | Nothing to grade | "That's one key, so there's nothing to snap between" if named | Right |
-| 4 | Already held pair (the Cursor) | Not a candidate; used for the stage 2 frames | Not a target; never credited to the learner | Named once: "the Cursor already snaps" | Right |
+| 4 | Already held pair (the Cursor) | Not a candidate; named in the stage 2 explanation, its frames only on request (TD § 15, 2026-10-28) | Not a target; never credited to the learner | Named once: "the Cursor already snaps" | Right |
 | 5 | Focus property with some pairs held and some not | Targets are the non-held pairs only | Grades those | The held ones aren't counted | Right |
 | 6 | Mixed pair (first key linear or bezier out, second key hold in) | Not held, so a candidate if its values qualify | Its own verdict, **wrong side** (checked before the pair's state): never a pass on it; never "done" | **2026-10-26, L-1:** After Effects snaps it, **at its first key**, to the second key's value (100 at 1.0 s, 0 from 1.001 s). So the hint never says it fades or isn't held: it snaps **too early**, and the hold belongs on the key at the start of the pair (`teaching-design.md` › 7 row 4) | Right for the focus. SR-2 applies to the shared classification (easing, and the extra-holds list, H-5) |
 | 7 | Separated dimensions | Naming Position on a separated layer means each keyed dimension's moving pairs | Each dimension checked on its own | "X Position snaps now, but Y Position still slides between 0.5 s and 1.0 s" | Right |
@@ -298,8 +304,9 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
   and the skill doesn't retry. If the learner declines both, the lesson ends and nothing is
   recorded.
 - **FR-008**: On Mentor Practice as it is (2026-10-20 read), the mentor MUST name Title Opacity and
-  Subtitle Opacity as candidates, asked about as a question (C-1), name the Cursor once as already snapping (and use it for the stage 2
-  frames), name Logo's Rotation as driven by an expression, and never call the fades mistakes. A
+  Subtitle Opacity as candidates, asked about as a question (C-1), name the Cursor once as already snapping (and name it in the stage 2
+  explanation; frames either side of its jump only when the learner asks to see a snap, TD § 15;
+  amended 2026-10-28, approved 2026-10-28), name Logo's Rotation as driven by an expression, and never call the fades mistakes. A
   "meant to fade" answer leads to FR-007.
 - **FR-009**: The skill MUST declare `FINDERS["keyframes.types"].focus(snapshot, { exclude })`,
   returning the number of candidate properties (FR-003) not in `exclude` and their layers, agreeing
@@ -358,8 +365,27 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
 ### Wording and version
 
 - **FR-017**: Hints MUST follow `teaching-design.md` › 7: where to look, never the fix, never an offer
-  to fix; "do the rest" is declined. The mentor MUST NOT say "freeze" for hold or name Layer > Time >
+  to fix; "do the rest" is declined once the demo has run (before any demo, on a focus with a demo
+  target, it's the ask: FR-017a; amended 2026-10-28, approved 2026-10-28). The mentor MUST NOT say "freeze" for hold or name Layer > Time >
   Freeze Frame.
+- **FR-017a (pacing; added 2026-10-28, approved 2026-10-28)**: The skill prompt MUST follow the shared
+  pacing rule (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2) as TD § 15 applies
+  it: every turn ends on one action or one answer; the explanation (stage 2) and the invite (stage 4)
+  are one turn that ends on "hold them and say done", with the pairs named once by their start times
+  and the menu path and right-click (FR-018) in one sentence, never a list; a fact comes in the turn
+  the learner acts on it, or only on request (TD § 15 › What moved, what's on request, what goes: the
+  held example's frames on request, the "it's a toggle" warning only as the hint when a held pair
+  comes back not held); the linear question (FR-014) ends the pass turn; a question or a request in
+  place of the pending step gets its answer in one or two sentences and the same pending step again
+  in one sentence, never the next stage's content and never the walk-through again (so after the
+  demo, the rest is handed back in one sentence). **"Do it for me"** (curriculum § 2's shared rule;
+  TD § 15 item 7): before any demo, on a focus with a demo target, "do it for me" or "do the rest" is
+  the ask, so the one demo runs and the rest is handed back; after the demo, a warm decline and the
+  pending step, with no new offer. Key types makes no standing watch offer (C-4 open), so there's no
+  offer to keep. The opening and intent question, the one demo and its target, the hints, the linear
+  check, the record and the review don't change. The words are TD § 15's, not copied here.
+  *Checked by:* R-ONE-IDEA with TD § 15's reading (Eval plan › Pacing), on cases 03, 04, 05, 06, 11,
+  13 and 20 with `--repeat 3`, then the full set (tasks.md T425 to T427).
 - **FR-018 (version, spec 004 FR-030)**: The skill reads the version at the start. At 26.5 on macOS it
   MUST name the menu path and the right-click on a key, and MUST NOT quote a Mac shortcut for Toggle
   Hold Keyframe or Keyframe Interpolation until L-2 has read it off the menu; it describes menus, not
@@ -501,13 +527,21 @@ The eval engineer owns the cases, their numbering and fixtures (constitution VI)
 deterministic parts (candidates, check verdicts, marks); evals check what the mentor does with them.
 At least these, on saved snapshots of Mentor Practice and Mentor Practice 2:
 
+**Pacing: R-ONE-IDEA's reading (2026-10-28, TD § 15, FR-017a; approved 2026-10-28):** the reading is
+TD § 15 › What R-ONE-IDEA should see, not restated here. In short: turn 2's confirmed focus, frame and
+held-example clause are context for the idea sentence, and the how-to and the ask are one task; it
+passes if it ends on "hold them and say done", and a recap of every pair's values, a second
+explanation or a bulleted list of methods fails it; the pass turn's praise and linear question are one
+handover; a side-question turn passes as the answer plus the pending step. Cases 03, 04, 05, 06, 11,
+13 and 20 are re-run as they are.
+
 | Name | What it checks |
 |---|---|
 | KT-a First lesson | Asks what should snap before proposing; names at most three candidates; says what's left out and why; real names |
 | KT-b "It's meant to fade" | On Mentor Practice, Title Opacity dropped with no argument; then the practice blink or Mentor Practice 2 is offered (spec 004 skill-specific intent case) |
 | KT-c Demonstration | One hold on the demo target only, frames either side, Edit > Undo; with one focus pair, no demo and a walkthrough in words |
 | KT-d Incomplete attempt | One Blink pair still fading: names it with a frame inside it, doesn't fix or offer to |
-| KT-e "Do the rest" | Declined warmly, no later offer |
+| KT-e "Do the rest" | Before any demo, on a focus with a demo target: it's the ask, the one demo runs and the rest is handed back in one sentence; after the demo: declined warmly; no later offer either way (amended 2026-10-28, FR-017a) |
 | KT-f Holds everything | Including a property they said should move: names where it now waits and jumps, asks about the extra holds, no fix |
 | KT-g Riskiest overlap: expression over keys | Logo's Rotation named as constant speed: says an expression drives it, no mark, no "set its keys to linear"; a `loopOut` blink isn't a candidate |
 | KT-h Hold at Opacity 0 | Never called hidden |

@@ -275,6 +275,22 @@ pass or fail per case with reasons, and saves dated results that can be compared
 
 ---
 
+## Phase 7: Pacing, 2026-10-28 (curriculum § 6 skill 0; desk, no 🖐; approved 2026-10-28)
+
+From spec › Amended 2026-10-28: FR-006a (the shared pacing rule in spec 004 curriculum.md § 2, as
+§ 6 › skill 0 applies it), the pointer under FR-004, US3's R-ONE-IDEA reading. No FR text change;
+no tool change. `SKILL.md` is on `main`, so T420 edits an existing file: the cockpit cuts its branch
+from local `main`. T421 to T423 are the eval engineer's, on the branch the cockpit names.
+**Easing gates every other skill's merge (spec 004 T143), so T423 comes before the re-baselines of
+key types (T427), speed graph (T431) and offset (T435).**
+
+- [ ] T420 [US1] Apply curriculum § 6 › skill 0 › Items › Builder items 1 to 6 to `ease-mentor/SKILL.md` only. No tool change. Then `/agent-audit` on the file and hand back the diff (spec FR-004, FR-006a). **Done when:** the reviewer approves the diff (HO-3, as in specs 008 to 012): it matches items 1 to 6 and nothing else
+- [ ] T421 [eval-engineer] `product/evals/easing/`: **case expectations only** (R-ONE-IDEA's rubric item is on another branch, with § 6 skill 0's reading, spec US3 › Pacing). Cases 02, 03, 05 and 21 take R-ONE-IDEA; no other expectation changes (US1 #5's demo-on-ask in case 05 stays). Dry run. **Done when:** the dry run passes its plumbing and the README names the changed cases
+- [ ] T422 [eval-engineer] After T420, T421 and the R-ONE-IDEA rubric branch: cases 02, 03, 04, 05, 19 and 21, each with `--repeat 3`, mentor from the T420 branch. Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and logged in the README as prompt, rubric or noise, with the cost (about 18 runs)
+- [ ] T423 [eval-engineer] After T422 passes: a full re-baseline of the set (26 cases), logged in the README with score and cost; SC-006 (≥ 80%, every hard-rule check passing). This is the new T143 base, so it runs before T427, T431 and T435. **Done when:** logged; a new failure outside the six cases is triaged before the merge
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase dependencies
@@ -286,6 +302,8 @@ pass or fail per case with reasons, and saves dated results that can be compared
 - **US3 (Phase 5)** depends on US1's tools (T024). Case 09/10 and memory rubric items need US2
   (T031–T032). Fixture mode (T034–T035) and the risk check (T036) can start as soon as T024 is done.
 - **Polish (Phase 6)** after the stories you intend to ship.
+- **Pacing (Phase 7, 2026-10-28):** T420 and T421 in parallel → T422 → T423 → merge. T423 is the
+  easing base every other skill's merge is checked against (spec 004 T143), so it comes first.
 
 ### Within each story
 

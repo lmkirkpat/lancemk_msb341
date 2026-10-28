@@ -168,6 +168,21 @@ half-eased or linear focus pair gets easing's hint.
 
 ---
 
+## Phase 9: Pacing, 2026-10-28 (TD § 15; desk, no 🖐; approved 2026-10-28)
+
+From spec › Amended 2026-10-28: TD § 15 (the pointer under FR-001, new FR-001a, FR-012's last line,
+Eval plan 4 and the pacing reading; the shared pacing rule in spec 004 curriculum.md § 2). No tool change. `SKILL.md` is on `main`, so the builder's task edits an existing file and isn't
+add-only: the cockpit cuts its branch from local `main` and runs the merge check accordingly. The
+eval tasks are the eval engineer's, on the branch the cockpit names. The full re-baseline waits for
+easing's (spec 002 T423), which is the base every merge is checked against (spec 004 T143).
+
+- [ ] T428 [US1] Apply TD § 15 › Items › the builder's items 1 to 9 to `speed-graph-mentor/SKILL.md` only. No tool change. Then `npm test`, `/agent-audit` on the file, and hand back the diff (spec FR-001a, FR-012, FR-020). **Done when:** the reviewer approves the diff (HO-3): it matches TD § 15's nine items and nothing else
+- [ ] T429 [eval-engineer] `product/evals/speed-graph/`: R-ONE-IDEA's rubric takes TD § 15 › What R-ONE-IDEA should see (spec › Eval plan › Pacing). Case 10's expectations still look for "sideways" in the hint now that the warning is gone from turn 3. Dry run. **Done when:** the dry run passes its plumbing and the README names the changed rubric and cases
+- [ ] T430 [eval-engineer] After T428 and T429: cases 01, 02, 03, 05, 09, 10, 15 and 19, each with `--repeat 3`, mentor from the T428 branch. Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and logged in the README as prompt, rubric or noise, with the cost (about 24 runs)
+- [ ] T431 [eval-engineer] After T430 passes and after spec 002 T423: a full re-baseline of the set, logged in the README with score and cost (≥ 80%, every hard-rule check passing). **Done when:** logged; a new failure outside the eight cases is triaged before the merge
+
+---
+
 ## Hand-offs to other owners (not builder tasks)
 
 - **HO-1 Eval engineer:** `product/evals/speed-graph/` from spec › Eval plan (14 cases; SC-005 ≥ 80%
@@ -201,6 +216,8 @@ half-eased or linear focus pair gets easing's hint.
 - Phase 7 in order: T029 → T030 → T031 → T032. T035 a day or more after T032's pass.
 - HO-2 and HO-3 after T031; HO-1 after HO-2 and HO-3; the merge after HO-1's first run; HO-4 after
   the merge.
+- Phase 9 (2026-10-28): T428 and T429 in parallel → T430 → T431 (after spec 002 T423) → merge.
+  HO-3 again on T428's diff (FR-001a and TD § 15).
 
 ## Parallel opportunities
 
@@ -216,6 +233,6 @@ half-eased or linear focus pair gets easing's hint.
 3. Phase 6 closes the cloud part and hands back.
 4. Phase 7 is one sitting; Phase 8 hands back for evals and merge.
 
-**Task count:** 35 (T001–T035): Setup 2, Foundational 9, US1 6, US2 4, US3 3, overlap and cloud
-hand-back 4, live sitting 4, polish 3. **🖐 live: 4** (T029, T030, T032 in the sitting; T035 a day
+**Task count:** 39 (T001–T035, T428–T431): Setup 2, Foundational 9, US1 6, US2 4, US3 3, overlap
+and cloud hand-back 4, live sitting 4, polish 3, pacing 4 (2026-10-28). **🖐 live: 4** (T029, T030, T032 in the sitting; T035 a day
 or more later). Hand-offs: 4; requests: 2.

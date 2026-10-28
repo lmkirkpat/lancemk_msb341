@@ -16,6 +16,11 @@ Amended 2026-10-26 from the live sitting ([`live-sitting-2026-10-26.md`](live-si
 › L-5, L-7, For T031): FR-012's "drag sideways" rule no longer uses b's 1-point test (a hand drag
 "straight up" moves influence too); b keeps its 1 point; FR-010d's 5% stays; the hold-side hint
 and the fastest part of a large drag-up follow what AE showed (FR-012, rows 5 and 7, Assumptions).
+**Amended 2026-10-28 (pacing), approved 2026-10-28:** `teaching-design.md` § 15 and the shared pacing
+rule (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2). Changed: a pointer under
+FR-001, new FR-001a (the pacing rule, by link), FR-012's last line (the play-back sentence moves to
+the close), Eval plan 4 and the R-ONE-IDEA reading. No change (TD § 15): FR-009, FR-016, FR-020's
+text; no tool change. New tasks T428 to T431 (tasks.md › Phase 9).
 
 **Input**: Cockpit task, Sprint 3 wave A planning, round 2: "Write the build spec for curriculum
 skill 2, the speed graph." Number 008 assigned by the cockpit. The teaching design is the
@@ -220,6 +225,28 @@ Other edge cases:
   skill-module contract lists (`mentor/tools/speed-graph.mjs`, its lib, demo snippet and fixture
   twin, tests and fixtures, `.claude/skills/speed-graph-mentor/SKILL.md`), with `SKILLS =
   ["easing.speed_graph"]` and the three tools named in the contract.
+  *Pacing (2026-10-28, approved 2026-10-28):* TD § 15 › The new sequence re-cuts § 5's stages into
+  turns (FR-001a); where they group things differently, § 15 governs.
+- **FR-001a (pacing; added 2026-10-28, approved 2026-10-28)**: The skill prompt MUST follow the
+  shared pacing rule (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2) as TD § 15
+  applies it: every turn ends on one action or one answer; the reading answer is confirmed in one
+  clause that opens the explanation turn, and the explanation (stage 3) and the task are one turn
+  that ends on "say done", with the focus pairs in one sentence; a fact comes in the turn the learner
+  acts on it, or only on request (TD § 15 › What moved, what's on request, what goes): the drag-up
+  warning is only FR-012's hint, where the peak will move is never said before the read-again
+  question, and Keyframe Velocity (FR-020) is said only when the learner asks to type values; the
+  pass turn ends on the read-again question (FR-016), and the close ends on the play-back sentence;
+  a question or a request in place of the pending step gets its answer in one or two sentences and
+  the same pending step again in one sentence, never the next stage's content and never the
+  walk-through again (so after the demo, the rest is handed back in one sentence). **"Do it for me"**
+  (curriculum § 2's shared rule; TD § 15 item 5): before any demo, on a focus with a demo target, the
+  request is the ask, so the one demo runs and the rest is handed back; after the demo, a warm
+  decline and the pending step, with no new offer. Speed graph makes no standing watch offer (C-4
+  open); the optional "just ask" sentence at the end of the task turn is said at most once per lesson
+  and never again after a decline. The opening, the reading step and its one hint, the one demo and
+  its target, the hints, the record and the review don't change. The words are TD § 15's, not copied
+  here. *Checked by:* R-ONE-IDEA with TD § 15's reading (Eval plan › Pacing), on cases 01, 02, 03,
+  05, 09, 10, 15 and 19 with `--repeat 3`, then the full set (tasks.md T429 to T431).
 - **FR-002**: Prerequisites MUST follow § 3 and spec 004 FR-005: easing is hard (name it, offer it
   first; if the learner insists, one sentence and no reteach; no candidate in the comp → say so and
   offer easing; a focus pair that's half eased or linear → easing's hint and a suggestion to take
@@ -317,7 +344,8 @@ Other edge cases:
   - in and out mixed up (the start key's in side changed from the baseline while its out side
     didn't, and that in side isn't another focus pair's landing);
   - otherwise, not shaped yet.
-  Judging by scrubbing (§ 7 last row) isn't checkable; the mentor says it once at "done".
+  Judging by scrubbing (§ 7 last row) isn't checkable; the mentor says it once, as the close's last
+  sentence after the read-again answer (TD § 15 turn 6; amended 2026-10-28, approved 2026-10-28).
 - **FR-013**: On a shared middle key, the in side MUST belong to the earlier pair and the out side
   to the later one; a change to one side MUST NOT count for the other pair.
 - **FR-014**: If a focus property's key count or key times change during the lesson, its pairs
@@ -464,13 +492,23 @@ to this spec.
 The eval engineer owns the cases, their numbers and fixtures. Unit tests cover the pass rule,
 fastest part and overlap rows; evals check what the mentor does with them.
 
+**Pacing: R-ONE-IDEA's reading (2026-10-28, TD § 15, FR-001a; approved 2026-10-28):** the reading is
+TD § 15 › What R-ONE-IDEA should see, not restated here. In short: turn 3's reading confirmation,
+frame and clause are context, and the two idea sentences and the task sentence are one task; it
+passes if it ends on "say done" (a demo offer may follow), and a drag-up warning, a bulleted block or
+the peak giveaway fails it; turn 5's "that passes" and the read-again question are one handover; a
+side-question turn passes as the answer plus the pending step. Cases 01, 02, 03, 05, 09, 10, 15 and
+19 are re-run as they are; case 10 checks the hint still says "sideways".
+
 1. **First lesson on Mentor Practice:** proposes Title (Position and Scale, 4 pairs), names the
    leave-outs one sentence each (Old Take hidden, Icon precomp, Logo expression, the linear pairs
    as easing's), a frame inside the focus, real names, then the read-the-graph step.
 2. **Demonstration:** one write on Title Position 0.5–1.5 s only, frames after, Edit > Undo; and
    none when the focus has one pair (Bar's Trim Paths End picked alone).
 3. **Incomplete attempt:** Scale still at default; names it, no fix, no offer.
-4. **"Do the rest":** declined warmly, no offer to do it later.
+4. **"Do the rest":** after the demo, declined warmly, with the pending step in one sentence and no
+   offer to do it later; before any demo, on a focus with a demo target, the request is the ask and
+   the one demo runs (amended 2026-10-28, FR-001a).
 5. **Riskiest overlap:** the learner names Logo's Rotation (expression over keys): refused kindly as
    a target, never graded. Second overlap: a shared key shaped for pair 1 only isn't praised as
    pair 2.

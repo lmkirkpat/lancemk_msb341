@@ -8,6 +8,15 @@
 SC-007 are in `discovery/usage-notes/easing-slice.md`, SC-005 from T033, and SC-006 from the
 evals (24/24, `product/evals/easing/results/2026-10-08-1220.json`).
 
+**Amended 2026-10-28 (pacing), approved 2026-10-28.** The shared pacing rule (spec 004
+[curriculum.md](../004-ae-curriculum/curriculum.md) § 2) as curriculum § 6 › skill 0 applies it to
+easing (easing has no teaching design file, so its pacing lives there). No FR text changes: checked
+against § 6 skill 0, FR-004 is met in its turn 2, FR-005 is that turn's ending, FR-006 is
+unchanged with the hand-back in one sentence, and US1 #2 and #5 still hold. Added: a pointer under
+FR-004, new FR-006a (the pacing rule, by link), and US3's R-ONE-IDEA reading. New tasks T420 to
+T423 (tasks.md › Phase 7). Easing's re-baseline (T423) comes before any other skill's, since easing
+gates their merges (spec 004 T143).
+
 **Input**: User description: "Easing test slice. A mentor session in which Claude, connected to
 my open After Effects project, leads a lesson on easing: takes a snapshot of my comp and spots
 linear keyframes; explains ease and shows it with a preview frame; has me apply it myself, then
@@ -114,6 +123,14 @@ open.
 3. **Given** a change to the mentor's teaching behavior, **When** I re-run the eval set,
    **Then** I can compare the result to the previous run.
 
+**Pacing: R-ONE-IDEA's reading (2026-10-28, curriculum § 6 skill 0, FR-006a; approved
+2026-10-28):** the reading is § 6 skill 0 › What R-ONE-IDEA should see in easing, not restated
+here. In short: the opening's count, proposal and leave-outs are one choice; turn 2's frame, idea
+and one-sentence how-to are one task and pass if the turn ends on easing the pairs and "say done"
+(a demo offer may follow as that step's alternative); a numbered list, a bulleted list of pairs or
+a Graph Editor tip fails it; a turn answering a side question passes as the answer plus the pending
+step. The rubric item comes from another branch; cases 02, 03, 05 and 21 take it (T421).
+
 ---
 
 ### Edge Cases
@@ -159,6 +176,8 @@ open.
   and on the learner record, not by waiting for a question.
 - **FR-004**: The mentor MUST explain easing in terms of the learner's own layers and timing,
   and MUST show at least one rendered frame from the learner's comp during the explanation.
+  *Pacing (2026-10-28, approved 2026-10-28):* the explanation and the ask are one turn, cut as
+  curriculum § 6 › skill 0 › The new sequence, turn 2 (FR-006a).
 - **FR-005**: The mentor MUST ask the learner to apply the easing themselves, and MUST NOT
   change the project except as allowed by FR-006.
 - **FR-006**: The mentor MAY demonstrate easing by changing the project, following "I do, we
@@ -171,6 +190,21 @@ open.
   pair. When the lesson's focus has a single pair, there's no demonstration, and the mentor walks
   the learner through it with a frame instead. If a check shows the learner undid the
   demonstration, that pair is the learner's from then on, and easing it again counts as their work.
+- **FR-006a (pacing; added 2026-10-28, approved 2026-10-28)**: The skill prompt MUST follow the
+  shared pacing rule (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2) as § 6 ›
+  skill 0 applies it: every turn ends on one action or one answer; the explanation (FR-004) and the
+  ask (FR-005) are one turn that ends on the ask, with the pairs named in one sentence and never a
+  list; a fact comes in the turn the learner acts on it, or only on request (§ 6 skill 0 › What
+  moved, what's on request, what goes: the Graph Editor tip is on request); a question or a request
+  in place of the pending step gets its answer in one or two sentences and the same pending step
+  again in one sentence, never the next step's content and never the walk-through again (so after
+  the demonstration, the rest is handed back in one sentence). "Do it for me" already fits § 2's
+  shared rule and doesn't change: before the demonstration the request is the ask (US1 #5, FR-006);
+  after it, a warm decline and the pending step with no new offer; the one-pair offer ("a layer with
+  more pairs if you'd rather watch") is made once. The opening, the one demonstration and its
+  target, the hints and the record don't change. The words are § 6 skill 0's, not copied here.
+  *Checked by:* R-ONE-IDEA with § 6 skill 0's reading (US3 › Pacing), on cases 02, 03, 04, 05, 19
+  and 21 with `--repeat 3`, then the full set (tasks.md T421 to T423).
 - **FR-007**: When the learner says they're done, the mentor MUST compare the project with its
   earlier snapshot and report, per keyframe it pointed to, whether it is now eased. *Amended
   2026-10-06:* a pair eased at one end only is reported as half eased, naming the key that's
