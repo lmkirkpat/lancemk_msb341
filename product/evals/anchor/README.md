@@ -420,3 +420,30 @@ snapshot's output for an outside pivot, or tell the mentor to say "outside" and 
 the extra slide explanation, and the hint should say what is off and where, not the drag to fix it.
 
 Total for the day: T415 $4.33 + baseline $27.50 + repeats $4.21 = $36.04. The baseline plus repeats came to $31.71.
+
+## Fix re-runs 2026-10-28
+
+After the skill-builder's wording fixes (`e82a7d2`, merged into this branch as `21a0a10`), `--repeat 3` on the eight failing
+cases, each its own invocation. **Cost $18.13, over the $10 stop line**: my cost guard mis-parsed the runner's output
+and never tripped, so the whole list ran. Every run is below.
+
+| Case | Result | Files | What failed, and whether it is the same problem |
+|---|---|---|---|
+| 21a | 1/3 | `2026-10-28-132126` | The hard check `no_menu_path` now passes 3/3 (fix worked). The 2 failures are R-ONE-IDEA on **turn 3** (menu answer + walkthrough + A/Shift+P tip + watch offer): a new problem, not the old one. |
+| 23c | 2/3 | `2026-10-28-132339` | "same amount" did not recur (fix worked). Run 3 made **2 demo calls** (`demo_at_most_once`, hard rule, demo on Needle): **new**, 1 of 3. |
+| 19 | 0/3 | `2026-10-28-132503` | `says_outside` passes. **Same problem:** R-AN-OUTSIDE, "below it" is a guess because the tool gives no side (3/3); plus R-ONE-IDEA. The wording fix did not touch this; it needs the snapshot to carry the side. |
+| 04 | 2/3 | `2026-10-28-132631` | Run 2 is a **plumbing failure** (the judge's reply was not parseable JSON; the item it did show, R-AN-NEIGHBOUR, passed). Not re-run. The hint-not-fix finding did not recur. |
+| 02 | 3/3 | `2026-10-28-133218` | Fixed. |
+| 15 | 0/3 | `2026-10-28-133419` | R-ONE-IDEA, now on **turn 3** (decline + three steps + A/Shift+P aside + watch offer), plus turn 2's extra slide sentence. Same rubric item, moved. |
+| 21b | 0/3 | `2026-10-28-133539` | R-ONE-IDEA, mostly turn 3 (menu answer + comparison + four steps + tip + watch offer). Same item. |
+| 29 | 0/3 | `2026-10-28-133714` | R-ONE-IDEA, turn 3 (refusal + repeat of the slide + three or four steps + offer). Same item. |
+
+Reading: the specific fixes landed (menu path, "same amount", 04's drag, 02's turn 2). What is left is R-ONE-IDEA
+in the turn after the walkthrough was already given (turn 3 stacks the answer, a second walkthrough, the A/Shift+P tip
+and the watch offer), which the skill-builder flagged as a design change; and 19's guessed side. New: 23c's double demo
+(1 of 3).
+
+SC-006 at a full re-baseline: the 80% line looks reachable (this would flip 02, 04 and 21a's hard check, and 36 and 23c
+are mostly noise, for about 39 to 40 of 46 if nothing else moves). **Every hard-rule check passing is less certain**:
+23c's double demo is intermittent and unexplained, and 19's guessed side is a rubric item that will keep failing until
+the snapshot or the wording changes. Treat a clean hard-rule run as a coin flip until 23c's double demo is understood.
