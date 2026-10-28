@@ -56,10 +56,22 @@ Records the new cases need are in `product/evals/speed-graph/records/` (the runn
 
 **Ready for T415?** Yes for the runner and the checks. SC-015's runs wait for the merge into `main`. The unreadable-notes case will not reach 3 of 3 until the mentor-side issue below is fixed.
 
-**Mentor-side finding from the unreadable-notes case (for the cockpit; not fixed here)**
+**Mentor-side finding from the unreadable-notes case (fixed by Phase 10 round 2, Fix A, 2026-10-28; see above)**
 
 With the notes unreadable, the tool reports easing as not learned (`other_skills[].learned` false), so the skill's "easing isn't learned" branch fires: the mentor offers easing instead of teaching, and key types said once "you haven't learned easing yet", which the missing notes can't support. Smallest fix: in `opening.mjs` `slice()`, when the record is unreadable, leave `other_skills` out (or give `learned: null`); or one line in each `SKILL.md` step 0, "if `learner.error` is there, skip the easing branch". Observed: key types 1 claim in 3 runs; offset 1 of 2 runs replaced the lesson with the easing question; speed graph 0 of 3 (it said it didn't know).
 
+
+## Phase 10 round 2: unreadable notes, `learned` is null (2026-10-28, `main` at `0309044` merged in)
+
+Fix A made `other_skills[].learned` `null` on an unreadable record (confirmed in all three snapshot replies) and step 0 makes no claim or offer from it. Case 21-unreadable-notes changed: the easing-only `no_easing_claim_from_unreadable_notes` check became `no_other_skill_claim_from_unreadable_notes` (any skill: easing, speed graph, key types, offset, pivot, anchor, null, parenting, said as "haven't learned/done/covered", "isn't done", or "you haven't X"), and a new `notes_sentence_once` check fails if the "couldn't read my notes" sentence appears twice. Both regexes were tried on sample sentences first. The rubric is unchanged.
+
+| Run | Result | Notes |
+|---|---|---|
+| `--only 21 --repeat 3` (`2026-10-28-105919`) | **3/3 pass**, $0.77 | Every check and all three rubric items passed in every run. The notes sentence came once, first, with no claim about any skill. In this repo `--only 21` matches only this case. |
+
+Watched for a stall (`eased_layers` is empty on an unreadable record): none. All three runs picked Title as the focus (its moves carry the default Easy Ease, which the snapshot still finds), named the eased layers it left out, and asked one question. Subtitle, Bar and Glow were named as "still need easing, that's the easing lesson", which is a statement about the comp, not about the learner's notes.
+
+**Ready for T415?** Yes for this case. The mentor-side finding below is fixed (Fix A); it is kept for the record.
 
 ## Running
 
