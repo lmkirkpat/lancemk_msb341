@@ -44,7 +44,9 @@ Rules:
   `speed_graph_check`). `index.mjs` refuses to start on a duplicate tool or skill ID.
 - `FINDERS[id].focus` must agree with the skill's own `analyze()`: a count above 0 means the
   snapshot tool would find at least one target with the same `exclude`. A unit test per skill
-  checks this on its fixtures.
+  checks this on its fixtures. The one exception is skill 6's crowd (spec 012 FR-003): a count for a
+  lesson question only. The review test (spec FR-048 step 3) gets 0 from null's finder when there's
+  no proposal, even with an empty `exclude` (Phase 10 round 2, 2026-10-28).
 - `review: true` is what lets `recommend_next` offer the skill's review (research R14). Set it when
   the skill's review mode passes its tests.
 
@@ -76,7 +78,8 @@ review (`FINDERS[id].review` true), the snapshot tool's `mode` is **optional wit
 
 `learner`'s fields are spec FR-049's table. A skill whose `SKILL.md` mentions a skill that isn't a
 hard prerequisite adds it to its `FINDERS` entry as `mentions: ["<id>", ...]` (skill 6:
-`["easing.basic"]`); it appears in `learner.other_skills` with `hard: false`. Speed graph's
+`["easing.basic"]`); it appears in `learner.other_skills` with `hard: false`. An entry's `learned`
+is `null` (unknown), never `false`, when the record is unreadable (Phase 10 round 2, 2026-10-28). Speed graph's
 `eased_layers` is worked out by the speed graph tool file from the record the opening function read
 (passed back to it as `record`, never re-read), so no other skill carries it. A `speed_graph_snapshot`
 call whose `skill_options` hold no `eased_layers` (none sent, none stored, or an empty list) uses
