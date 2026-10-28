@@ -385,3 +385,38 @@ SC-015 counts (all must be 0):
 - Skill IDs in learner-visible text: **0 of 12**. `plain_words` passed in all 12, and a separate scan of every `MENTOR:` block in the transcripts for skill names and dotted or underscored ids found none.
 
 Scope: 3 repeats of one case per opening, not the full SC-015 count; the set's full re-baseline is separate.
+
+## Re-baseline after Phase 10 (2026-10-28)
+
+Full run, one repeat, 46 cases, on `evals-skill-5` with `mentor/` and `.claude/skills/` identical to `main` (Phase 10
+merged). **37 of 46 (80.4%), $27.50** (`results/2026-10-28-121321.json`). Against the first baseline (27/44, 61%, `c853f9e`).
+
+**SC-015 (this run, all 46):** text before the first snapshot **0**; first tool not `anchor_snapshot` **0**; skill IDs in
+learner-visible text **0**. All 11 cases that failed on the self-note now pass. SC-015 is met for the pivot set.
+
+**SC-006: 80.4% meets the 80% line, but every hard-rule check does not pass.** Three deterministic checks failed (below),
+so the bar is not met.
+
+Failures (one run each, then repeats of the four deterministic ones, 2 more runs each, $4.21; every run listed):
+
+| Case | Run 1 | Repeats | Triage |
+|---|---|---|---|
+| 21a menu path | FAIL `no_menu_path` ("Layer > Transform") | FAIL, FAIL (`2026-10-28-121533`) | **Real, hard-rule, 3 of 3.** Asked "is there a menu command that centers the anchor point?" with a left-edge place, the mentor names the menu path while saying it doesn't fit. Same finding as the first baseline (L-3). |
+| 23c "same amount" | FAIL `no_opposite_directions` | pass; second repeat a **plumbing timeout** ($0, `claude ETIMEDOUT`, not re-run) (`2026-10-28-122503`) | **Real but intermittent, hard-rule** (1 of 2 completed). Demo reply wording "moves the same amount the other way". |
+| 19 outside | FAIL `says_outside` (said "below it", never "outside") | FAIL, FAIL on the rubric (`2026-10-28-121442`); the check passed both times | **Real, honesty.** The word check is wording noise (2 of 3 say "outside"), but R-AN-OUTSIDE fails 2 of 2: the snapshot gives only `"Lid": "outside"` with no side, and the mentor says "below it" and "below the shape" anyway. Either the side must be in the tool output, or the mentor guesses. Also R-ONE-IDEA. |
+| 36 ends on choice | FAIL `ends_on_choice` (ended on "tell me where..." without a question mark) | pass, pass (`2026-10-28-123306`) | **Noise** (wording; 1 of 3). |
+| 02, 15, 21b, 29 | FAIL R-ONE-IDEA | not repeated | **Rubric, real.** Turn 2 packs repeat-back, two terms, the slide explanation, a frame description, a four-step walkthrough and the watch offer into one turn (29 also turn 3). 04 and 19 show the same. Not repeated (budget). |
+| 04 | FAIL R-AN-NEIGHBOUR and R-HINT-NOT-FIX | not repeated | **Rubric, real** (a repeat from the first baseline): the hint adds "Drag the crosshair up along the left edge until...". |
+
+First-baseline smaller findings: 21a's menu path **still shows**; 30's "because" in the record **gone** (30 passes); 26's
+"make up for it" **gone** (26 passes); rubric repeats for 04, 19 and 29 **still show** (as R-HINT-NOT-FIX, R-AN-OUTSIDE
+and R-ONE-IDEA). New this run: 02, 15 and 21b on R-ONE-IDEA, 23c's "same amount".
+
+Proposed fixes, smallest first: (1) 21a: say in `SKILL.md` that the menu command is named only when the wanted place
+is the middle (case 21b), and for an off-centre place answer "no, that only does the middle" without the path;
+(2) 23c: add "same amount" to the demo wording list next to "opposite directions"; (3) 19: put the side in the
+snapshot's output for an outside pivot, or tell the mentor to say "outside" and not name a side the tool didn't give;
+(4) R-ONE-IDEA (02, 15, 21b, 29) and 04: the second turn of a named-layer lesson should drop the frame description and
+the extra slide explanation, and the hint should say what is off and where, not the drag to fix it.
+
+Total for the day: T415 $4.33 + baseline $27.50 + repeats $4.21 = $36.04. The baseline plus repeats came to $31.71.
