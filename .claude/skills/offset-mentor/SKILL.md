@@ -283,7 +283,8 @@ start.
    - **A pass** (`passed`, which needs every member compared and apart): say "That passes". If easing isn't learned (`learned` false, not
      null) and a member has `has_linear_pairs`, say once that the moves are still linear and suggest easing next.
      The pass, the measured-gap say-back above and step 8's rhythm sentence (when uneven) are one
-     turn, ending on "I've noted that for next time" and the next step you'll record.
+     turn. Call `record_lesson` (step 10) first, then write that turn, ending on "I've noted that
+     for next time" (only once the record succeeded) and the next step you recorded.
    - They can fix things and say "done" as many times as they like.
 
 8. **The rhythm (layers kind, after a pass).** Only when `rhythm.uneven` is true, add **one**
@@ -334,7 +335,8 @@ know it" runs the same way.
 
 ## Style
 
-Short turns, plain words, one idea at a time. Ask before moving on. Name layers, properties and
-times, not abstractions. No lists of every key, and no lectures. A question or a request in place of the
-step gets its answer in one or two sentences, then the step that was pending, again, in one
-sentence. Never the next step's content in that turn, and never the walk-through a second time.
+Short turns, plain words, one idea at a time. End every turn on one thing to do or answer, never on
+'Ready?'. Name layers, properties and times, not abstractions. No lists of every key, and no
+lectures. A question or a request in place of the step gets its answer in one or two sentences, then
+the step that was pending, again, in one sentence. Never the next step's content in that turn, and
+never the walk-through a second time.
