@@ -61,6 +61,14 @@ clause when the record says practicing; FR-006a, US1 #10). The Eval plan follows
 engineer's rounds 5 and 6 (case 1 in one turn; case 34's checked turn is turn 2; the universal
 `no_text_before_snapshot` check). New tasks T260 (B-13, `SKILL.md`) and T261 (L-8, 🖐)
 (tasks.md › Phase 8h).
+**Amended again 2026-10-28 (round 8, S-7), approved 2026-10-28** of this spec's parts
+(TD § 20, "Pacing: one idea per turn", approved by the human on 2026-10-28 with its four open
+questions answered yes): the explanation gives TD § 1's first sentence only and ends on the A, then
+Shift+P ask, and the slide sentence is said only when asked (US1 #2, FR-006a); FR-022 follows TD
+§ 20's turns, and the shared pacing rule (new FR-022a); a yes to the watch offer takes two turns,
+the A, then Shift+P ask and then the demo (FR-008, FR-017, US1 #7); a "do it for me" refusal
+keeps the one watch offer (US1 #7, Eval plan 15). Eval plan 2, 15, 23c and 26 and R-ONE-IDEA's
+reading for turns 3 and 4. New tasks T262 to T265 (tasks.md › Phase 8i). Changes › round 8.
 
 **Input**: Cockpit task, Sprint 3 wave B, round 2: "Write the build spec for curriculum skill 5,
 'Set the pivot'." Record ID `transform.anchor`, short name `anchor`, tool prefix `anchor_`
@@ -122,6 +130,9 @@ made 2026-10-23).
   shared-tools contracts.
 - **Spec 002** (easing, built): the house lesson shape, the server rules, `record_lesson`'s
   session check, the demonstration rule.
+- **The shared pacing rule** (one idea per turn; added 2026-10-28): spec 004's
+  [curriculum.md](../004-ae-curriculum/curriculum.md) § 2, next to the opening rule. This skill's
+  turns under it are TD § 20 (FR-022, FR-022a). Linked, not copied.
 
 **Approved with it (2026-10-23):** tasks-wave-b.md's W1 to W7, including W1's sampled read, and this
 spec's one shared-code request, SR-1, as tasks-wave-b.md T160 (Dependencies). Spec 004 FR-028 was
@@ -133,8 +144,9 @@ reworded to match (H-1).
 
 I want my door to swing from its left edge. I start the lesson on Mentor Practice 2. The mentor asks
 which layer I want to turn from somewhere other than its middle and where it should turn from,
-shows me a frame from my comp, and tells me Door's pivot is at its center. I press Y, drag the
-crosshair to Door's left edge, and say "done". It checks that the pivot is on the left edge and
+shows me a frame from my comp, tells me Door's pivot is at its center, and has me press A, then
+Shift+P so I can see Anchor Point and Position. I press Y, drag the crosshair to Door's left edge,
+and say "done". It checks that the pivot is on the left edge and
 that Door didn't move, then asks which part will stay still when it turns, and has me drag Rotation
 to see it swing.
 
@@ -154,7 +166,12 @@ verified pass with no demonstration, and the check agrees with a look in After E
    the learner names that layer (FR-009).
 2. **Given** the learner names Door and "the left edge", **When** the mentor repeats it back,
    **Then** it says "the middle of Door's left edge", says where the pivot is now in place words,
-   and gives TD § 1's two sentences once, with one frame from the comp (TD § 5 stage 2).
+   gives TD § 1's first sentence (inside the layer, in the comp) once, with one frame from the
+   comp, and ends by asking the learner to show Anchor Point and Position (A, then Shift+P), with
+   nothing after the ask; Pan Behind's sentence comes with the move (TD § 20, turns 3 and 4;
+   amended 2026-10-28). The slide sentence ("Change Anchor Point alone and the layer slides…") is
+   **only said when asked**: when the learner asks for numbers to type, or why typing moved it
+   (TD § 20 › What moved; the human, 2026-10-28).
 3. **Given** the learner moves the pivot with Pan Behind, **When** they say "done", **Then** it
    passes (FR-010 to FR-012), and the mentor never says "you can see the pivot here" about a frame
    (TD § 5).
@@ -171,8 +188,13 @@ verified pass with no demonstration, and the check agrees with a look in After E
    sentence offers a watch on Needle (`watch_offer`) once, in one sentence, and `anchor_demo` isn't
    called; **When** the learner says no, just tries, or says "done", **Then** there's no second
    offer, not after a failed check either; **When** they say yes, **Then** the focus becomes Door
-   then Needle, the mentor names Needle's place in one sentence, and the demo runs on Needle only
-   (FR-008, FR-014).
+   then Needle, the mentor names Needle's place in one sentence and asks for A, then Shift+P on
+   Needle, and stops; on the learner's next turn the demo runs on Needle only, then Door is handed
+   back in one sentence with no second walk-through (FR-008, FR-014, FR-017; TD § 20 W1 and W2,
+   amended 2026-10-28). **When** the learner says "do it for me" in place of trying, **Then** the
+   mentor declines in one or two sentences and gives the pending action again, and the watch
+   offer is still made once, as the last sentence of the invite turn; if that turn already made
+   it, it isn't repeated (TD § 20 rule 3, § 17; the human, 2026-10-28).
 8. **Given** a practicing lesson (this skill has history, and the record's `next` names a layer,
    say Pop), **When** the lesson starts, **Then** the first turn opens with one memory clause from
    `next`, asks the intent question, and proposes the snapshot's `proposal` layer at its
@@ -471,8 +493,8 @@ Other edge cases:
   clause and nothing else, and the mentor MUST NOT propose a layer or place taken from `next`'s
   text. A learner who wants another go at that layer names it, and it's handled like any named
   layer. The turn MUST NOT name a
-  leave-out, MUST NOT state the lesson's idea (TD § 1's two sentences come in stage 2 with the
-  frame, US1 #2), and MUST NOT recap another skill. A continued or resumed lesson says where it
+  leave-out, MUST NOT state the lesson's idea (TD § 1's first sentence comes in the explanation turn
+  with the frame, US1 #2; TD § 20), and MUST NOT recap another skill. A continued or resumed lesson says where it
   left off in one sentence and hands it back, with no intent question or proposal. **A continued
   lesson that left off before a layer and place were chosen** (no focus in the session) has
   nothing to hand back, so it opens as a new lesson: the memory clause **only** when step 0 found
@@ -504,8 +526,10 @@ Other edge cases:
   lesson after a pass); or when the learner already asked to watch or named a second layer. The
   offer runs nothing: `anchor_demo` MUST NOT be called before a yes. **Yes:** the mentor resends
   `skill_options` with two focus entries (theirs first, the offered layer second at
-  `watch_offer.suggested_place`), names that place in one sentence, and stage 3 runs as for two
-  layers (FR-014, FR-017); the learner's layer stays theirs. **No, or no answer** (they just try,
+  `watch_offer.suggested_place`), names that place in one sentence, asks for A, then Shift+P on
+  that layer and waits, and stage 3 runs on the next turn as for two layers (FR-014, FR-017; TD
+  § 20 W1 and W2, 2026-10-28); the learner's layer stays theirs. The invite turn is TD § 20's
+  turn 4; a "do it for me" or a side question in its place doesn't use up the offer (US1 #7). **No, or no answer** (they just try,
   or say "done"): one focus layer, and **no second offer**, not after a failed check either; a
   later ask still gets the demo (FR-014).
   **`watch_offer` (B-8):** the mentor MUST NOT rank layers itself. `anchor_snapshot` MUST return
@@ -689,6 +713,12 @@ Other edge cases:
 - **FR-017 (what the demo shows)**: Before it runs, the mentor asks the learner to select the demo
   layer and press A, then Shift+P; after it, a frame before and a frame after at the same time, with
   "both numbers changed, and Door didn't move." No rotated frame (TD § 4; B-7 not built).
+  **Reading (2026-10-28, TD § 20 W1 and W2; the human's answer to its fourth question):** the ask
+  and the demo are **two turns**. The mentor asks for A, then Shift+P on the demo layer and stops;
+  `anchor_demo` MUST NOT be called in the turn that asks, only after the learner's reply. After
+  the demo, the learner's layer is handed back in one sentence, with no second walk-through. The
+  acceptance (Eval plan 23c and 26: A and Shift+P asked before `anchor_demo`) still holds, now
+  with the ask in an earlier turn than the call.
 
 ### Checking the learner's attempt
 
@@ -757,7 +787,8 @@ the lock when it's still locked at "done", TD § 15 D-2), and items 1 to 5. And,
   **`outside`** hint (and the proposal's `pivot_outside` note) takes its line from TD § 7's
   "pivot outside the layer" row: the side as seen on screen, to click the layer in the timeline
   so its crosshair shows, and to start the drag there; with no side, "outside" and the same
-  "click it in the timeline", no guess; never a distance. **Why:** in L-1 the builder couldn't find Lid's crosshair (120
+  "click it in the timeline", no guess; never a distance. In a lesson the side is said in turn 3
+  and "start the drag there" in turn 4 (TD § 20, FR-022a). **Why:** in L-1 the builder couldn't find Lid's crosshair (120
   px below a 60 px tall shape) until Lid was selected in the timeline, and TD § 7's own hint names
   a side ("off to its right"), which no tool returned, so `SKILL.md` could only say "look around
   the shape". Unit tested on `lid-pan`'s base (Lid: below), `door-outside` (left), and a synthetic
@@ -804,7 +835,19 @@ the lock when it's still locked at "done", TD § 15 D-2), and items 1 to 5. And,
   FR-006a amend it, round 5) and spec 004 FR-025's server rules: a
   fresh read; one frame from the learner's comp with the focus layer in it; the pivot described in
   place words from the read, never claimed as visible in a frame; no `after-effects` bridge tool,
-  no open-ended script.
+  no open-ended script. **Turns (2026-10-28):** TD § 20 re-cuts stages 2 to 4 into turns (the
+  rest-key turn, the explanation ending on A, then Shift+P, the move, the check); where § 20 and
+  § 5 group things differently, § 20's turns govern. The opening (TD § 19), the hints (TD § 7), the
+  review (TD § 12) and the record don't change.
+- **FR-022a (pacing; added 2026-10-28, S-7)**: The skill prompt MUST follow the shared pacing rule
+  (spec 004 [curriculum.md](../004-ae-curriculum/curriculum.md) § 2) as TD § 20 › The rule applies
+  it: every turn ends on one action or one answer, never on "Ready?"; a fact comes in the turn the
+  learner acts on it, or only on request (TD § 20 › What moved, what's on request, what goes);
+  a question or a request in place of the pending action gets its answer in one or two sentences
+  and the same pending action again in one sentence, never the next stage's content, and never
+  the walk-through again. The words are TD § 20's, not copied here.
+  *Checked by:* R-ONE-IDEA with TD § 20's reading (Eval plan › Pacing), on cases 02, 15, 21a,
+  21b and 29 with `--repeat 3`, then the full set (tasks.md T263 to T265).
 - **FR-023 (version, spec 004 FR-030)**: The mentor MUST teach Pan Behind (Y) and may name A, P, R,
   S and Shift to add a property. It MUST NOT give Quick Set Anchor as a step, pass condition or
   hint, and in this build MUST NOT **bring it up**: R0 can't tell a beta build from the release
@@ -920,7 +963,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 20 | Scale keyed from 0 (a pop-in) | Rest key = full-size key | At the rest key; a pivot set at Scale 0 fails, one hint (set away from rest); `place_now` outside, below | `away_from_rest`, its line from TD § 7's "shrunk to nothing" row: the drag did move the pivot though nothing showed, Edit > Undo first, then the rest key (FR-019) | Right on grading. **L-4 (2026-10-26):** AE set Pop's anchor to [120, 960], far outside, not near the place (the stand-in guessed [60, 120]); the learner saw nothing happen | `pop-shrunk` (live) |
 | 21 | Text layer | Candidate; pivot starts on the baseline | `rect` is the letters' box at the check time; Source Text keys or animators change it (R6 not read) | "Title's pivot starts on its baseline, under the letters" | Right: **L-5 (2026-10-26)** `rect` is within 1 px of the ink, centred and left-justified; left-justified, the letters start 2.45 px right of the pivot (not 0), so "the middle of the left edge" still reads between places until moved | `sign-centred`, `sign-left` |
 | 22 | Shape layer, and a pivot moved inside Contents | Default candidate (**L-1 passed 2026-10-26**) | Layer anchor only. A group's pivot moved by Pan Behind changes the group's Anchor and Position together: **nothing the read holds changes** (L-1). A shifted rectangle with the anchor unchanged is `content_shifted` | FR-019b: `unchanged_shape`, its line from TD § 7's "a shape's own pivot didn't change" row, as a possibility, never a claim the group was moved, and instead of row 2's general line | Right with FR-019b (amended 2026-10-26; the old group hint assumed the rectangle shifts). **A stroked shape is unchecked live (L-6):** if `rect` leaves the stroke out, the edges the check uses aren't the ones the learner sees | `lid-pan`, `lid-group` (identical to the base); L-6's capture when taken |
-| 23 | Shape whose pivot sits outside it | Candidate, ranked below unkeyed layers with their pivot where AE put it | Item 1 reads outside, with the side on screen (FR-019a) | `outside`, its line from TD § 7's "pivot outside" row: the side, click Lid in the timeline, start the drag there; no distance (FR-019a) | Right with FR-019a. L-1: Lid's crosshair is 120 px below the shape and the builder couldn't find it unselected. L-3: a new shape layer's pivot is at its origin, the comp's center, away from what was drawn (another case of this row) | `practice2b` (Lid), `lid-pan` |
+| 23 | Shape whose pivot sits outside it | Candidate, ranked below unkeyed layers with their pivot where AE put it | Item 1 reads outside, with the side on screen (FR-019a) | `outside`, its line from TD § 7's "pivot outside" row: the side, click Lid in the timeline, start the drag there (in a lesson, the side in turn 3 and "start there" in turn 4, TD § 20); no distance (FR-019a) | Right with FR-019a. L-1: Lid's crosshair is 120 px below the shape and the builder couldn't find it unselected. L-3: a new shape layer's pivot is at its origin, the comp's center, away from what was drawn (another case of this row) | `practice2b` (Lid), `lid-pan` |
 | 24 | 3D layer | Never (`three_d`) | comp-space returns `three_d` | One sentence | Right once W4 lands; **contract** | Mentor Overlaps' Depth |
 | 25 | Pan Behind on the wrong layer | n/a | Focus unchanged (item 1 fails); another layer's anchor changed with its footprint still (an other change, item 5 holds) | `wrong_layer`, its line from TD § 7's "grabbed another layer" row: why once, Edit > Undo, start the drag on Needle's crosshair; never "select it first" (FR-019) | **Gap fixed by FR-019** (filter 1). **L-3 (2026-10-26):** with Door selected, a drag on Needle moved Needle's pivot, so the mistake is a real hand path | `wrong-layer` |
 | 26 | Playhead moved between reads | n/a | Compared at the check time from samples, not at the playhead (FR-011, FR-013) | n/a | Right with FR-013; **contract** (W1) | Synthetic two reads at different `comp.time` |
@@ -1037,6 +1080,14 @@ self-note ("First lesson on this skill.", "Review is due. Run the review.", 7 of
 so a baseline waits for T260's fix (B-13 item 8). It replaces the per-case `quiet_before_tool`
 that cases 16 and 17 had.
 
+**Pacing: R-ONE-IDEA's reading for turns 3 and 4 (2026-10-28, TD § 20, FR-022a):** the reading is
+TD § 20 › What R-ONE-IDEA should see, not restated here. In short: the explanation turn passes
+when it ends on the A, then Shift+P ask, and a second explanatory sentence (the slide) fails it;
+the move turn's two steps and the watch offer are one action and its alternative, and a numbered
+list, a tip or a repeat of the explanation fails it; a turn that answers a side question passes
+as the answer plus the pending action, and fails if it adds the next stage. Cases 02, 15, 21a,
+21b and 29 are re-run as they are (their learner lines still fit).
+
 1. **First lesson, no layer in mind** (amended round 5, TD § 19, FR-006a; one turn since round
    7): the learner starts the lesson without naming a layer, and **turn 1** carries the whole
    opening: intent asked first; one candidate offered with a hinge, in one sentence, as the
@@ -1047,8 +1098,9 @@ that cases 16 and 17 had.
    case**, with TD § 19's reading in the case note (the intent question plus a one-sentence
    proposal is one idea; a statement of the idea, a leave-out, or ending on anything but the
    choice is a second).
-2. **First lesson, layer named**: the place repeated in plain words; TD § 1's two sentences once;
-   no "you can see the pivot" about a frame.
+2. **First lesson, layer named**: the place repeated in plain words; TD § 1's first sentence once,
+   ending on the A, then Shift+P ask; no slide sentence unasked; no "you can see the pivot" about
+   a frame (amended 2026-10-28, US1 #2).
 3. **Typed Anchor Point value (jumped)**: doesn't pass; "moved with it" hint with a direction; no
    numbers (SC-004).
 4. **Neighbouring place on the 800 × 60 Banner**: fails; the hint names the place it's in.
@@ -1075,7 +1127,9 @@ that cases 16 and 17 had.
     no lesson on Sled, another layer offered, never "jump" (deterministic: no `jump` in the
     turn; rubric: the sentence said once and a layer offered).
 14. **Incomplete attempt**: names what's off and where; doesn't fix or offer to.
-15. **"Just do it for me"**: declined warmly, no offer later.
+15. **"Just do it for me"**: declined warmly, no offer to do it later; the decline is one or two
+    sentences, then the same invite, with no second walk-through, and on a first lesson the watch
+    offer is still made once (amended 2026-10-28, US1 #7, FR-022a).
 16. **Review**: due, new layer, the hinge asked first, no tool named before "done", no demo, and
     no watch offer (round 3).
 17. **Review with no new candidate**: not offered, stays due.
@@ -1083,7 +1137,8 @@ that cases 16 and 17 had.
     claims it didn't move.
 19. **Pivot outside, where to look** (added 2026-10-26, FR-019a): Lid named; the mentor says its
     pivot sits outside, on which side, to click Lid in the timeline so its crosshair shows, and to
-    start the drag there (TD § 7); no distance in pixels.
+    start the drag there (TD § 7; in a lesson the side comes in turn 3 and "start there" in turn 4,
+    TD § 20); no distance in pixels.
 20. **A group's pivot moved** (added 2026-10-26, FR-019b): `lid-group` as the attempt; the mentor
     says Lid's own pivot hasn't changed and offers the Contents possibility without claiming it,
     and doesn't also say the general "if something drives it, like an expression" line.
@@ -1108,8 +1163,9 @@ that cases 16 and 17 had.
       or Tab): no offer at all. Deterministic: no `anchor_demo` call; rubric: no offer to watch.
       (Live session 2 offered after a pass; TD § 17 now says it mustn't.)
     - **c. Yes**: the next `anchor_snapshot` carries two focus entries, Door first and Needle
-      second; Needle's place named in one sentence; A and Shift+P asked before `anchor_demo`;
-      the demo's target is Needle's, never Door's. Deterministic: `anchor_demo` called once, on
+      second; Needle's place named in one sentence; A and Shift+P asked before `anchor_demo`,
+      in the turn before it (no `anchor_demo` in the asking turn; 2026-10-28, FR-017); the
+      demo's target is Needle's, never Door's, and Door handed back with no second walk-through. Deterministic: `anchor_demo` called once, on
       Needle's target; rubric: Door is left for the learner.
 24. **A one-key layer named, rest key on another frame** (added round 4, TD § 18 D-8, FR-004
     `moves_case`, US2 #6; for HO-1). **Synthetic fixture:** Mentor Practice 2 has no such layer,
@@ -1127,7 +1183,8 @@ that cases 16 and 17 had.
     5): the matte-eye sentence ("turn its eye back off"), never "hidden" (FR-019 `matte_eye`, row
     12).
 26. **Two focus layers, the demo** (moved here from 11, round 5; US2 #3, FR-013, FR-014, FR-017):
-    Door and Tab; the demo on the one the learner cares less about (Tab), A and Shift+P asked first,
+    Door and Tab; the demo on the one the learner cares less about (Tab), A and Shift+P asked first
+    in their own turn (2026-10-28, FR-017),
     frames before and after at the same time, "both numbers changed" and the layer didn't move,
     Edit > Undo named; never on Door.
 27. **Anchor Point's stopwatch turned on** (kept, round 5): the stopwatch hint (FR-019 `stopwatch`,
@@ -1135,7 +1192,8 @@ that cases 16 and 17 had.
 28. **Door locked** (kept, round 5; D-2, row 28): the unlock sentence when Door is named, on that
     turn; the lock hint if it's still locked at "done"; no demo on it.
 29. **"What numbers do I type?"** (kept, round 5; SC-004): no number for Anchor Point or Position
-    and no tolerance; the lesson goes on with Pan Behind.
+    and no tolerance; the lesson goes on with Pan Behind. The slide sentence is the answer here,
+    said once, then the pending action (2026-10-28, US1 #2, FR-022a).
 30. **Stops early after a failed try** (kept, round 5; FR-025): recorded as partial, not passed, in plain
     words, no method, motive or number.
 31. **After Effects can't be reached** (kept, round 5; server rule 2, Edge Cases): nothing claimed
@@ -1445,6 +1503,28 @@ awaits the builder's approval.
 7. **Tasks (Phase 8h):** T260, B-13's seven `SKILL.md` items plus an eighth from the smoke run
    (the record read and the snapshot back to back, nothing written in between); T261, L-8.
 
+### 2026-10-28, round 8: pacing (TD § 20; S-7)
+
+TD § 20 was approved by the human on 2026-10-28 as written, with its four open questions answered
+yes (the slide sentence only when asked; the watch offer still made once after a "do it for me"
+refusal; a yes to the watch gets an extra turn, A, then Shift+P, then the demo). This spec's
+wording awaits the human's approval. Evidence: `product/evals/anchor/README.md` › "Re-baseline
+after Phase 10" and "Fix re-runs 2026-10-28" (R-ONE-IDEA failed in most runs of 02, 15, 21a, 21b
+and 29).
+
+1. **US1 #2, FR-006a, Eval plan 2.** TD § 1's first sentence only, ending on the A, then Shift+P
+   ask; the slide sentence on request (and as case 29's answer).
+2. **FR-022, new FR-022a.** FR-022 points at TD § 20's turns; FR-022a carries the shared pacing
+   rule (spec 004 curriculum.md § 2) by link.
+3. **FR-008, FR-017, US1 #7, Eval plan 23c and 26.** A yes to the watch is two turns; `anchor_demo`
+   never in the asking turn. FR-017's text is unchanged; its reading is added.
+4. **US1 #7, Eval plan 15.** A "do it for me" refusal keeps the one watch offer.
+5. **No change:** FR-008's once-only rule and place (the invite turn, now TD § 20's turn 4), FR-011
+   and US2 #1 and #5 (the playhead ask, now its own turn), FR-019a (the side said in turn 3), the
+   opening (FR-006a's content), the hints, the review. No tool change.
+6. **Tasks (Phase 8i):** T262 (`SKILL.md`, TD § 20's builder items 1 to 6), T263 (the R-ONE-IDEA
+   reading, eval engineer), T264 (the five re-runs with `--repeat 3`), T265 (the full re-baseline).
+
 ## Open questions
 
 ### For the human (H): all answered 2026-10-23, as recommended
@@ -1581,6 +1661,10 @@ recommendation until answered):**
   practicing variant (one memory clause, US1 #10), and TD § 19b's background-only comp (opens
   with the new-solid line and never offers the background). Re-run the seven transcripts that
   leaked a self-note once T260 lands, before a baseline.
+- **2026-10-28, round 8 (TD § 20, S-7):** put TD § 20's R-ONE-IDEA reading in the rubric (T263);
+  cases 02, 15, 21a, 21b and 29 then re-run as they are with `--repeat 3` once T262 lands (T264),
+  then a full re-baseline (T265). Case 15's and 23c's expectations change as the Eval plan says;
+  case 29's answer may now be the slide sentence.
 
 ## Dependencies
 
