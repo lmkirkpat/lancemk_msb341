@@ -1,7 +1,7 @@
 ---
 name: anchor-mentor
 description: Lead an After Effects lesson on setting a layer's pivot (its anchor point) where it should turn from, without the layer moving, in the learner's own open comp. Asks which layer should turn or grow from somewhere other than its middle and where, shows a frame from their comp, moves one pivot at most as a demonstration, and checks the learner's own Pan Behind, including on layers that are already animated. Also runs this skill's review. Use when the user says "/anchor-mentor", "pivot", "anchor point", "it swings wide", "turn from the edge", "rotate from the corner", or asks why a layer spins in place or swings around when it should hinge.
-allowed-tools: mcp__ae-mentor__anchor_snapshot, mcp__ae-mentor__anchor_demo, mcp__ae-mentor__anchor_check, mcp__ae-mentor__read_learner_record, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__anchor_snapshot, mcp__ae-mentor__anchor_demo, mcp__ae-mentor__anchor_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Anchor Mentor
@@ -80,23 +80,34 @@ was. Pan Behind changes both together, so nothing moves on screen.
 
 ## The lesson
 
-0. **Remember first.** Call `read_learner_record`, then the snapshot (step 1's, or the review's)
-   straight after it, with nothing written in between: your first words come after the snapshot
-   returns. Look at `skills["transform.anchor"]`:
-   - **This skill is learned and a review is due**, or the learner asked for a review or said they
-     already know it: run **The review** below instead.
-   - **Practicing**: pick up what `next` says was still off. That's step 1's memory clause.
+0. **Remember first.** Your first tool call is `anchor_snapshot` with no options and no `mode`
+   (step 1's snapshot, or the review's): your first words come after the snapshot returns. Only
+   when the learner's own words already ask for a review or say they already know it, send
+   `mode: "review"`; when they ask for a lesson instead of a review, send `mode: "lesson"`. The tool
+   reads your notes and picks lesson or review itself. Read its reply in this order:
+   - Before anything else (this comes before every branch below): if it (or a later snapshot)
+     returns `server_current` false, say once, in plain words, that your tools were updated since
+     this session started and you need a restart (a new Claude Code session) before the lesson,
+     then stop; true or null says nothing.
+   - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
+     you couldn't read your notes, and teach a first lesson.
+   - **`mode` is review** (a review was due, or the learner asked for one or said they already know
+     it): run **The review** below instead; its first call is this one, already made.
+   - **Practicing** (`learner.status`): pick up what `learner.next` says was still off. That's step
+     1's memory clause.
    - Nothing here: a first lesson. Setting keyframes is the only thing this builds on, and the main
      lesson changes no keys, so never hold the lesson back for it.
-   - **Passed before** (`times_passed` above 0): keep that in mind for step 4. There's no watch
-     offer in this lesson, even a practice lesson on a new layer.
+   - **Passed before** (`learner.times_passed` above 0): keep that in mind for step 4. There's no
+     watch offer in this lesson, even a practice lesson on a new layer.
 
-   Mention this skill's earlier work only (what `next` says), in one clause, in plain words, with
-   how long ago ("yesterday"). For a first lesson on this skill, say nothing about other skills in
+   Mention this skill's earlier work only (what `learner.next` says), in one clause, in plain words,
+   with how long ago from `learner.days_since_practiced` (0 is today, 1 yesterday, about 7 last
+   week: "yesterday"). For a first lesson on this skill, say nothing about other skills in
    the record, even ones learned: this lesson doesn't build on them.
 
-1. **The opening: one choice.** Call `anchor_snapshot` with no options. Your first turn asks one
-   thing, which layer and where it turns from, and ends on that choice. It carries, in order:
+1. **The opening: one choice.** Step 0's snapshot is this step's read (no options). Your first
+   turn asks one thing, which layer and where it turns from, and ends on that choice. It carries,
+   in order:
    1. **A memory clause**, only when step 0 found this skill practicing, or a continued or
       resumed lesson has a focus. Never for a first lesson on this skill.
    2. **The intent question**, before you name any place.
@@ -372,8 +383,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
    one sentence: play it back and watch it turn from the new place.
 
 10. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
-    the project, pass on the fix, and wait. `RECORD_UNREADABLE` from `read_learner_record`: teach
-    a first lesson and say once, in the error's words, that you couldn't read your notes.
+    the project, pass on the fix, and wait. `learner.error` in the snapshot (`RECORD_UNREADABLE`):
+    teach a first lesson and say once, in the error's words, that you couldn't read your notes.
     `SESSION_UNREADABLE`: pass on the message, then call `anchor_snapshot` again.
 
 11. **Record the lesson.** Call `record_lesson` once per lesson that had a focus, with `skill`
@@ -398,9 +409,9 @@ was. Pan Behind changes both together, so nothing moves on screen.
 A review is hands-on and quick: **no demonstration, no watch offer, no walkthrough, and no tool or
 shortcut named before "done".** "I already know it" runs the same way.
 
-1. Call `anchor_snapshot` with `mode: "review"`, straight after `read_learner_record` with nothing
-   written in between (no "review due" note, nothing about which path you're taking). It leaves out
-   the layers earlier lessons on this comp used.
+1. The review's first call is the opening call: step 0's `anchor_snapshot`, which came back with
+   `mode` review (or was sent `mode: "review"` because the learner asked). It leaves out the layers
+   earlier lessons on this comp used. Later calls in the review keep `mode: "review"`.
 2. If `no_demo_reason` comes back meaning there's nothing new here, say there's nothing new to
    review on this comp, and record nothing.
 3. Name the `proposal` layer and ask where it should turn from, before anything else: "Here's Tab.

@@ -38,7 +38,9 @@ All optional. `mode` is `"lesson"` (default) or `"review"`. Calls `takeSnapshot(
 skill_options })`. The session doesn't pass `mode` to the analyzer, so the tool passes a wrapper,
 `analyze: (snap, o) => analyze(snap, { ...o, mode })`, so a review picks its one layer and property
 (as built, 2026-10-21; spec › Open questions asks the shared owner whether the session should pass
-it).
+it). Since 2026-10-27 the wrapper also fills in `eased_layers` from the learner record when neither
+the call nor the stored lesson has any (or the list is empty), for the analysis only (spec 004
+FR-050, Phase 10 review, should-fix 2).
 
 Output: `host` (from `parseHost`), `lesson` (`new`, `continued`, `resumed`), `mode`, `comp`, and
 the analyzer result's `focus`, `targets`, `demo_target`, `no_demo_reason` (`demo_used` once the

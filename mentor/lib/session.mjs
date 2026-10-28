@@ -164,6 +164,22 @@ function isStale(open, resuming, snapshot) {
   return day !== null && day !== new Date().toDateString();
 }
 
+// Spec 004 FR-048 step 2 (contracts/skill-module.md § 4): the mode of this skill's open lesson on
+// this comp when a snapshot without `mode` would carry it on: the lesson start() would continue
+// (the current lesson, not passed, not stale by FR-043's test), or the one `fresh` would restart.
+// A lesson that would be resumed isn't carried on here: the record decides its mode (FR-048 steps 3
+// and 4, FR-051's resumed rows), and start() resumes it when that mode matches. Otherwise null.
+// Read only: an unreadable session file is reported as SESSION_UNREADABLE, as start() would.
+export function openMode(skill, compId, snapshot, { fresh = false } = {}) {
+  const state = read();
+  const key = keyFor(skill, compId);
+  const open = state.lessons[key];
+  if (!open || open.passed) return null;
+  if (fresh) return open.mode;
+  if (currentKey(state) !== key) return null;
+  return isStale(open, false, snapshot) ? null : open.mode;
+}
+
 // Called by each skill's snapshot tool. Continues (same skill and comp) or resumes (after working
 // elsewhere) an unfinished lesson in the same mode, keeping its baseline and demo so re-snapshotting
 // can't reset either. Otherwise starts a new lesson with this snapshot as the baseline. Findings

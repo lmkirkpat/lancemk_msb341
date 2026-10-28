@@ -24,11 +24,22 @@ const FRAME_DIR = path.join(os.tmpdir(), "ae-mentor-frames");
 const MAX_IMAGE_BYTES = 4.5 * 1024 * 1024;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-function pruneFrames() {
+// Several mentor processes can share FRAME_DIR (tests, eval runs, the panel and the CLI at once).
+// Each frame gets a name unique to its process and call, so two calls in the same millisecond, in
+// one process or two, never write or read the same file.
+let frameCount = 0;
+export function newFrameFile(dir = FRAME_DIR) {
+  const rand = Math.random().toString(36).slice(2, 8);
+  return path.join(dir, `frame-${process.pid}-${Date.now()}-${++frameCount}-${rand}.png`);
+}
+
+// Prunes only frames older than a day, far past waitForFile's 30 s, so it never deletes a frame
+// another live process is still waiting on.
+export function pruneFrames(dir = FRAME_DIR, now = Date.now()) {
   try {
-    const cutoff = Date.now() - 24 * 3600 * 1000;
-    for (const f of fs.readdirSync(FRAME_DIR)) {
-      const p = path.join(FRAME_DIR, f);
+    const cutoff = now - 24 * 3600 * 1000;
+    for (const f of fs.readdirSync(dir)) {
+      const p = path.join(dir, f);
       if (fs.statSync(p).mtimeMs < cutoff) fs.unlinkSync(p);
     }
   } catch {}
@@ -108,7 +119,7 @@ async function previewFrame({ time, layer } = {}) {
   const snapshot = typeof layer === "string" ? await takeSnapshot(time != null ? { sample_times: [time] } : {}) : null;
   fs.mkdirSync(FRAME_DIR, { recursive: true });
   pruneFrames();
-  const file = path.join(FRAME_DIR, `frame-${Date.now()}.png`);
+  const file = newFrameFile();
   const r = await runSnippet("preview-frame", { file: file.replace(/\\/g, "/"), time: time ?? null });
   const bytes = await waitForFile(file, 30000);
   let reply = r;
