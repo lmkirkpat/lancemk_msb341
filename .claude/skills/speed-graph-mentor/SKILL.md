@@ -83,10 +83,11 @@ after step 7 says what to do). Then look at the Easing entry in `learner.other_s
 Also note, for the focus: `learner.eased_layers`, the layers easing lessons worked on. Step 1's
 second call sends them as `eased_layers`. Never read the record file yourself.
 
-And look at `mode`: if it's review because it was due (`mode_source` is `review_due`), offer the
-review (below) instead of a first lesson. When they say yes, run the review; its first call is this
-one, already made. When they say no, call `speed_graph_snapshot` with `mode: "lesson"` and use that
-reply as step 1's first. If the learner says they already know this, run the review.
+And look at `mode`: if it's review because it was due (`mode_source` is `review_due`), or because a
+review from earlier is still open (`mode_source` is `in_progress`: the learner may never have
+answered the offer), offer the review (below) instead of a first lesson, the same way for both.
+When they say yes, run the review; its first call is this one, already made. When they say no, call
+`speed_graph_snapshot` with `mode: "lesson"` and use that reply as step 1's first. If the learner says they already know this, run the review.
 
 ## The lesson
 
@@ -240,8 +241,8 @@ project wasn't): pass on the message and call `speed_graph_snapshot` again.
 
 ## Review
 
-A review checks the skill days later on a new move. Run it when a review is due (and the learner
-agrees), or when they say they already know this skill.
+A review checks the skill days later on a new move. Run it when a review is due or one from earlier
+is still open (and the learner agrees), or when they say they already know this skill.
 
 - The review's first call is the opening call: the first `speed_graph_snapshot`, which came back
   with `mode` review (or was sent `mode: "review"` because the learner said they know this). It

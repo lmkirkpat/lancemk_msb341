@@ -80,8 +80,9 @@ most; they hold the rest with their own hands.
      it as the place to start and offer it (`/ease-mentor`). If they want this lesson anyway, say
      one sentence ("this builds on easing: hold is the third choice next to linear and eased") and
      carry on. Don't reteach easing.
-   - If `mode` is review because it was due (`mode_source` is `review_due`), offer a quick review
-     instead of a first lesson. The offer is your first words, written to the learner, built from
+   - If `mode` is review because it was due (`mode_source` is `review_due`), or because a review
+     from earlier is still open (`mode_source` is `in_progress`: the learner may never have
+     answered the offer), offer a quick review instead of a first lesson, the same way for both. The offer is your first words, written to the learner, built from
      `learner.last_attempted` and `learner.days_since_practiced` (0 is today, 1 yesterday, about 7
      last week), for example: "Last week you made Blink snap. Want a quick review on this comp?"
      When they say yes, run the review below; its first call is this one, already made. When they
