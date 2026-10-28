@@ -183,3 +183,5 @@ snapshots, the way Edit > Undo would (case 23).
 Fixture mode's fake `set_ease` was compared with the real `after-demo.json`. Both change only
 the inner sides of the pair (Bezier at 33.33%) and leave the outer sides and all other layers as
 they were.
+
+**Judge input (2026-10-28):** `run.mjs` now gives the judge each tool result up to 16000 characters (was 6000). The cap hid the snapshot's side note from the judge in the anchor set and produced a false "guessed" failure; the same cut could hide long snapshot replies here. Results taken before this date were judged on the shorter cut.

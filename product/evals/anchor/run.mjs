@@ -174,7 +174,7 @@ function validate(c) {
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
     "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks",
-    "proposal_named", "named_layers", "first_snapshot_mode"];
+    "proposal_named", "named_layers", "first_snapshot_mode", "demo_not_in_turns"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (s.at_most !== undefined && !(s.must && Number.isInteger(s.at_most))) problems.push(`say ${s.id}: at_most needs a must regex and a whole number`);
@@ -483,6 +483,11 @@ function check(expect, turns, c) {
   if ("snapshot_calls_max" in expect) add("snapshot_calls_max", snaps.length <= expect.snapshot_calls_max, `${snaps.length} snapshot calls`);
   if ("demo_calls_min" in expect) add("demo_calls_min", demos.length >= expect.demo_calls_min, `${demos.length} demo calls`);
   if ("demo_calls_max" in expect) add("demo_calls_max", demos.length <= expect.demo_calls_max, `${demos.length} demo calls`);
+  if ("demo_not_in_turns" in expect) {
+    // The asking turn must not also run the demo (TD 20 W1, FR-017): the demo waits for the next turn.
+    const bad = expect.demo_not_in_turns.filter((n) => toolEvents(turns[n - 1] || { events: [] }).some((e) => e.name === DEMO));
+    add("demo_not_in_turns", bad.length === 0, bad.length ? `demo called in turn ${bad.join(", ")}` : "no demo in those turns");
+  }
   if ("demo_only_on" in expect) {
     const other = demos.filter((e) => (e.input || {})[CONFIG.demoKey] !== expect.demo_only_on);
     add("demo_only_on", other.length === 0, other.length ? `demo on ${other.map((e) => e.input[CONFIG.demoKey]).join(", ")}` : "only the demo target");

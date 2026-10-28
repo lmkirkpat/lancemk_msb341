@@ -1,9 +1,11 @@
 {
   "id": "23c-watch-offer-yes",
-  "title": "Watch offer, the learner says yes: two focus entries (Door first, then Needle), Needle's place in one sentence, A and Shift+P asked first, the demo only on Needle",
+  "title": "Watch offer, the learner says yes: two focus entries (Door first, then Needle), Needle's place in one sentence, A and Shift+P asked in the turn before the demo (no demo in it), the demo only on Needle, Door handed back with no second walk-through",
   "covers": [
     "EP-23c",
-    "FR-008"
+    "FR-008",
+    "FR-017",
+    "TD20-W1-W2"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
@@ -42,8 +44,7 @@
         "id": "asks_show_numbers",
         "must": "Shift\\s*\\+\\s*P",
         "turns": [
-          3,
-          4
+          3
         ]
       },
       {
@@ -66,13 +67,31 @@
         "turns": [
           4
         ]
+      },
+      {
+        "id": "door_no_second_walkthrough",
+        "never": "\\b(?:press Y|Pan Behind|start your drag|take it to)\\b|^\\s*\\d\\.",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "door_handed_back",
+        "must": "\\bDoor\\b",
+        "turns": [
+          4
+        ]
       }
+    ],
+    "demo_not_in_turns": [
+      3
     ]
   },
   "rubric": [
     "R-AN-WATCH-YES",
     "R-AN-DEMO",
     "R-DEMO-PLAIN",
-    "R-NAMES-REAL"
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
   ]
 }

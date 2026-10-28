@@ -499,7 +499,7 @@ function renderTranscript(turns) {
       if (e.kind === "say") lines.push(`MENTOR: ${e.text}`);
       else if (MENTOR_TOOLS.includes(e.name)) {
         lines.push(`TOOL CALL ${e.name} ${JSON.stringify(e.input)}`);
-        lines.push(`TOOL RESULT (${e.ok ? "ok" : "error"}): ${(e.result ?? "").slice(0, 6000)}`);
+        lines.push(`TOOL RESULT (${e.ok ? "ok" : "error"}): ${(e.result ?? "").slice(0, 16000)}`);
       }
     }
     lines.push("");

@@ -1,9 +1,10 @@
 {
   "id": "02-explain-what-a-parent-passes",
-  "title": "Explain: position, scale and rotation pass down; not opacity or effects",
+  "title": "Explain: position, scale and rotation pass down, not opacity or effects, in one sentence; no rig example unless asked; ends on the turn-or-scale question",
   "covers": [
     "EP-2",
-    "US1-2"
+    "US1-2",
+    "FR-023a"
   ],
   "learner_record": "anchor-learned.json",
   "fixture_sources": {
@@ -16,7 +17,7 @@
     },
     {
       "project": "practice2b.json",
-      "say": "Why do I need a null at all? What does a parent actually pass down to the layers under it?"
+      "say": "Tile, Caption and Stamp should move together."
     }
   ],
   "expect": {
@@ -52,6 +53,34 @@
       {
         "id": "opacity_not_passed",
         "never": "opacity[^.?!]{0,40}\\b(?:passes|carries|is inherited|follows)\\b(?![^.?!]*(?:n't|not))"
+      },
+      {
+        "id": "no_rig_example_unasked",
+        "never": "\\b(?:CTRL|Hatch Rig)\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_null_task_in_explain",
+        "never": "Layer\\s*>\\s*New|\\bNull Object\\b|\\b(?:add|make|create|new) (?:a |the )?null\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "asks_region",
+        "must": "(?:turn|scale|swing|pivot)[^.?!]*from|where[^.?!]*(?:turn|scale|swing|pivot)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "ends_on_question",
+        "must": "\\?[\"\u201d\u2019']?\\s*$",
+        "turns": [
+          2
+        ]
       }
     ]
   },

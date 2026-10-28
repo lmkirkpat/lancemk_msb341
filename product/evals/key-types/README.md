@@ -272,3 +272,5 @@ Proposal (smallest): in `key-types-mentor/SKILL.md` first-lesson step, say the o
 ### Case 01 re-run after the opening fix (2026-10-28)
 
 `SKILL.md` first-lesson opening fixed (`e82a7d2`, merged into `evals-wave-a` as `fdf103e`): the opening turn is the snap question with the candidates, no explanation first. `--only 01 --repeat 3` (`2026-10-28-132047`): **3/3 pass**, $0.56. Every check and rubric item passed, `R-KT-INTENT-FIRST` included. The earlier 1/3 above stays as run.
+
+**Judge input (2026-10-28):** `run.mjs` now gives the judge each tool result up to 16000 characters (was 6000). The cap hid the snapshot's side note from the judge in the anchor set and produced a false "guessed" failure; the same cut could hide long snapshot replies here. Results taken before this date were judged on the shorter cut.
