@@ -49,7 +49,9 @@ function slice({ skill, record, error, finder, now }) {
   const mine = (record && Array.isArray(record.lessons) ? record.lessons : []).filter((l) => l && l.skill === skill);
   let newest = null;
   for (const l of mine) if (!newest || String(l.date || "") >= String(newest.date || "")) newest = l;
-  const learnedId = (id) => !!(skills[id] && skills[id].status === "learned");
+  // An unreadable record can't say whether another skill is learned: null (unknown), never false,
+  // so no skill's SKILL.md tells the learner they haven't learned it (Phase 10 round 2, fix A).
+  const learnedId = (id) => (error ? null : !!(skills[id] && skills[id].status === "learned"));
   const own = path.skills.find((s) => s.id === skill);
   const hard = own ? own.hard.filter((id) => id !== path.on_ramp.id) : [];
   const mentions = finder && Array.isArray(finder.mentions) ? finder.mentions.filter((id) => !hard.includes(id)) : [];

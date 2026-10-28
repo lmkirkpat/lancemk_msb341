@@ -78,7 +78,11 @@ at most; they add the null, place it, parent the rest and give it its move with 
      this session started and you need a restart (a new Claude Code session) before the lesson,
      then stop; true or null says nothing.
    - If `learner` has `readable` false, your notes couldn't be read: say once, in the words of the
-     error message it carries, that you couldn't read your notes, and teach a first lesson.
+     error message it carries, that you couldn't read your notes, and teach a first lesson. That one
+     sentence is all you say about your notes in this lesson.
+   - **Unknown** (an `other_skills` entry has `learned` null: your notes couldn't be read): say
+     nothing about whether they've done that skill, don't offer it or suggest it later, and teach
+     this lesson.
    - **The pivot lesson isn't learned** (its entry in `learner`'s `other_skills` has `learned`
      false): this builds on it. Name it ("Set the pivot") and offer it first. If they want this lesson
      anyway, say one sentence: "This builds on the pivot lesson: the null's position is the point
@@ -215,8 +219,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      real name (`null`), where its pivot is (`region_now`) and their place (`wanted`). Say "that
      point" instead of "that corner" when it isn't a corner. `outside` means outside the group;
      `between` means it's on none of the nine places: say so, and never guess which ones it's
-     between. Say where, never why. If the pivot lesson isn't learned, suggest it as `next` after
-     this one.
+     between. Say where, never why. If the pivot lesson isn't learned (`learned` false, not
+     null), suggest it as `next` after this one.
    - `region_needed`: the move turns or scales, so ask where the group should turn or scale from,
      and check again with `region`. If step 3's pivot sentence hasn't been said this lesson, say it
      with this question.
@@ -278,7 +282,7 @@ at most; they add the null, place it, parent the rest and give it its move with 
 
 9. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
    the project, pass on the fix, and wait. `readable` false in the snapshot's `learner`
-   (`RECORD_UNREADABLE`): teach a first lesson and say once, in the error's words, that you couldn't read your notes.
+   (`RECORD_UNREADABLE`): step 0 covers it (one sentence, already said; don't say it again).
    `SESSION_UNREADABLE`: pass on the message, then call `null_parent_snapshot` again.
    `LESSON_UNDERWAY`: the group is set once you've checked; keep going with it.
 
