@@ -45,15 +45,22 @@
       },
       {
         "id": "no_claim_from_unread_record",
-        "never": "haven['’]t (?:done|learned|met|taken)|hasn['’]t|isn['’]t learned|not learned yet|builds on (?:another|the pivot)|Set the pivot|pivot lesson",
+        "never": "haven['’]t (?:done|learned|met|taken|tried)|hasn['’]t|isn['’]t (?:learned|done)|not (?:learned|done) yet|builds on (?:another|the pivot|easing)|Set the pivot|pivot lesson|\\b(?:easing|ease-mentor)\\b|\\bpivot\\b",
         "turns": [
           1,
           2
         ]
       },
       {
+        "id": "notes_sentence_once_in_turn_1",
+        "never": "(?:couldn['’]t|can['’]t|unable to|wasn['’]t able to) (?:read|open|get at|load)[\\s\\S]*(?:couldn['’]t|can['’]t|unable to|wasn['’]t able to) (?:read|open|get at|load)",
+        "turns": [
+          1
+        ]
+      },
+      {
         "id": "notes_said_once",
-        "never": "\\bnotes\\b|couldn['’]t read|can['’]t read",
+        "never": "\\bnotes\\b|couldn['’]t read|can['’]t read|couldn['’]t (?:open|get at|load)",
         "turns": [
           2
         ]
@@ -89,5 +96,5 @@
     "R-NAMES-REAL",
     "R-ONE-IDEA"
   ],
-  "note": "First smoke (2026-10-27): the mentor said the notes sentence, then offered the pivot lesson as 'which you haven't done yet' from an unread record. no_claim_from_unread_record is that finding as a hard check; the case's reason is that an unreadable record gives no claims about earlier work."
+  "note": "First smoke (2026-10-27): the mentor said the notes sentence, then offered the pivot lesson as 'which you haven't done yet' from an unread record. no_claim_from_unread_record is that finding as a hard check; the case's reason is that an unreadable record gives no claims about earlier work. Round 2 (2026-10-28): other skills' learned is null (unknown). no_claim_from_unread_record now also bans any word about easing or the pivot (turns 1 and 2); notes_sentence_once_in_turn_1 bans a second notes sentence inside turn 1."
 }

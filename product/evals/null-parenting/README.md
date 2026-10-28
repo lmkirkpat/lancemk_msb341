@@ -11,7 +11,15 @@ tests (`cd mentor && npm test`); evals don't repeat them.
 Built by copying `product/evals/easing/run.mjs`, not sharing it, so easing's files stay untouched.
 Same options and results format.
 
-## Status (2026-10-27): 37 cases, Phase 10 checks in, not ready for SC-015's repeats yet
+## Status (2026-10-28): 38 cases, round 2 fixes verified, ready for T415 and the baseline
+
+**Round 2 re-run (2026-10-28, after `phase10-round2`, each `--repeat 3`, $7.43 in all):** 34 3/3, 18 3/3, 38 (new) 3/3,
+17 3/3, 37 3/3 on the second pass. The first 37 pass was 1/3, and both fails were my regex (`does_not_say_null_placed`
+matched "haven't placed the null" and "Your null isn't"); fixed to a positive claim only, rerun 3/3. All three earlier
+mentor failures (18, 34, 37) and case 17's record wording are gone; no mentor failure open. Unrun since the
+re-pointing are still the cases listed below, so expect check bugs in the first full run. Full run now about $20.
+
+Status as of 2026-10-27 (kept for the history): 37 cases, Phase 10 checks in, not ready for SC-015's repeats yet
 
 37 cases, dry-run clean (`--strict-sources` too). **No baseline yet.** Skill 6 is merged (`31fe72d`) and so is
 Phase 10 (`1a28b1d`, "The opening read"); T413 and T414 (spec 004) are done on this branch: see "Phase 10 changes
@@ -121,6 +129,11 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | 35 | Practicing (a partial lesson yesterday): one memory clause in plain words, no review, then it asks which layers | 1 | first_tool; first_snapshot_reply (lesson, default); tools_called; tools_not_called; no_focus_set; say: must memory_clause, must names_earlier_work, must asks_which_layers, never no_review, never no_skill_name_or_status | R-USES-MEMORY, R-ASKS-FIRST, R-ONE-IDEA, R-NAMES-REAL | live |
 | 36 | A review asked for when none is due: it runs, and nothing says it was early or not due | 1 | first_tool; review_mode; first_snapshot_reply (review, asked); tools_called; tools_not_called; snapshot_focus_excludes; say: must names_chips, must turn_or_scale, never nothing_about_schedule | R-ASKED-REVIEW-QUIET, R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
 | 37 | A lesson left open on Tile, Caption and Stamp, reopened in a new session: where it left off, no "which layers" question, no new proposal | 2 | tools_called; tools_not_called; say: must names_group, never no_which_layers, never no_new_proposal, never no_review | R-NULL-CONTINUED, R-NAMES-REAL | live |
+| 38 | A lesson left open with the null placed, reopened in a new session (round 2 C): where it left off (group, null placed), then parenting; no recap, no second null | 3 | tools_called; tools_not_called; say: must names_group, must says_null_placed, must goes_to_parenting, never no_which_layers, never no_new_proposal, never no_recap, never no_second_null, never no_review | R-NULL-CONTINUED, R-NAMES-REAL | live |
+
+Round 2 (2026-10-28): 34 gained `notes_sentence_once_in_turn_1` and a wider `no_claim_from_unread_record` (any word about
+easing or the pivot). 37 is now the null-not-placed branch (adds `no_recap`, `goes_to_null_step`, `does_not_say_null_placed`).
+38 is the placed branch. 18 and 17 unchanged (18 already expected a lesson).
 
 ### Case notes
 
@@ -331,6 +344,9 @@ the results files above are the record.
 
 **Self-note.** `no_text_before_snapshot` and `first_tool` passed in all 14 runs, including the review runs (16, 17 x3,
 26, 33, 36). "Review is due." never appeared before a snapshot. The self-note is gone in every smoked case.
+
+**Round 2 results (2026-10-28, `results/2026-10-28-*.json`).** 34: 3/3 ($1.12). 18: 3/3 ($0.69). 37: 1/3 first pass
+(my regex, $0.98), then 3/3 ($1.20). 38: 3/3 ($1.82). 17: 3/3 ($2.60). The Case 17 and earlier tables below are the 10-27 smoke.
 
 **Case 17 (`--only 17 --repeat 3`, $2.55).** 2 of 3 pass. The failing run's record put method in the summary and
 next ("no separate control layer yet", "follow one invisible control layer"). With the earlier smoke run

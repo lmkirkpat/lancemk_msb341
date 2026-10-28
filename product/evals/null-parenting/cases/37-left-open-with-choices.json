@@ -1,6 +1,6 @@
 {
   "id": "37-left-open-with-choices",
-  "title": "A lesson left open on Tile, Caption and Stamp, reopened in a new session: where it left off in one sentence, handed back; no 'which layers' question, no new proposal",
+  "title": "A lesson left open on Tile, Caption and Stamp with no null placed, reopened in a new session: one sentence on where it left off, then the null step (round 2 C); no recap, no 'which layers', no new proposal",
   "covers": [
     "FR-043",
     "FR-046",
@@ -58,6 +58,27 @@
         "turns": [
           2
         ]
+      },
+      {
+        "id": "no_recap",
+        "never": "recap|refresher|reminder|children inherit|inherit|position, scale and rotation|not opacity|never shows in the render|carries? (?:its|the) children",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "goes_to_null_step",
+        "must": "\\bnull\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "does_not_say_null_placed",
+        "never": "\\bnull (?:is|has been|was) (?:placed|in place|ready|set)\\b|\\bnull['’]s (?:placed|in place|ready|set)\\b|\\byour null is (?:placed|in place|ready|set)\\b",
+        "turns": [
+          2
+        ]
       }
     ]
   },
@@ -65,5 +86,5 @@
     "R-NULL-CONTINUED",
     "R-NAMES-REAL"
   ],
-  "note": "Turn 1 only sets the session up (a lesson with a focus). Turn 2 starts a new Claude session on the same learner home, so session.json is all the mentor has. This is the continued form of FR-046; a resumed lesson after another comp's lesson has no case yet."
+  "note": "Turn 1 only sets the session up (a lesson with a focus). Turn 2 starts a new Claude session on the same learner home, so session.json is all the mentor has. This is the continued form of FR-046; a resumed lesson after another comp's lesson has no case yet. Round 2 C (2026-10-28): the not-placed branch. Turn 1 sets the focus only, so the null is not placed; the reopened lesson names the group, goes to step 3 (add a null) and skips step 2. Case 38 is the placed branch. First run of does_not_say_null_placed was my regex bug (it matched 'haven't placed the null' and 'Your null isn't'); rewritten to match only a positive claim."
 }
