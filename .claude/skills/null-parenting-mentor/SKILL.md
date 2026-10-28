@@ -77,21 +77,21 @@ at most; they add the null, place it, parent the rest and give it its move with 
      returns `server_current` false, say once, in plain words, that your tools were updated since
      this session started and you need a restart (a new Claude Code session) before the lesson,
      then stop; true or null says nothing.
-   - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
-     you couldn't read your notes, and teach a first lesson.
-   - **The pivot lesson isn't learned** (its entry in `learner.other_skills` has `learned` false):
-     this builds on it. Name it ("Set the pivot") and offer it first. If they want this lesson
+   - If `learner` has `readable` false, your notes couldn't be read: say once, in the words of the
+     error message it carries, that you couldn't read your notes, and teach a first lesson.
+   - **The pivot lesson isn't learned** (its entry in `learner`'s `other_skills` has `learned`
+     false): this builds on it. Name it ("Set the pivot") and offer it first. If they want this lesson
      anyway, say one sentence: "This builds on the pivot lesson: the null's position is the point
      the whole group turns around." Then carry on. Don't reteach the pivot.
    - **`mode` is review** (a review was due, or the learner asked for one or said they already know
      it): run **The review** below instead; its first call is this one, already made.
-   - **Practicing** (`learner.status`): pick up what `learner.next` says was still off.
-   - **Easing isn't learned** (its entry in `learner.other_skills` has `learned` false): fine, it
+   - **Practicing** (the `status` in `learner`): pick up what its `next` says was still off.
+   - **Easing isn't learned** (its entry in `other_skills` has `learned` false): fine, it
      isn't needed here. Word any comment about the move's speed for someone who hasn't met easing.
    - "Find what's moving it" not being learned never blocks anything.
 
-   Mention only the earlier work, in plain words, with how long ago from
-   `learner.days_since_practiced` (0 is today, 1 yesterday, about 7 last week: "yesterday").
+   Mention only the earlier work, in plain words, with how long ago from `learner`'s
+   `days_since_practiced` (0 is today, 1 yesterday, about 7 last week: "yesterday").
 
 1. **Look, ask, agree a group.** Step 0's snapshot is this step's look (no options). If
    `can_teach` is false, say in one sentence that you can't place this comp's layers on screen yet, and stop.
@@ -277,8 +277,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      explain what failed; say them then too.
 
 9. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
-   the project, pass on the fix, and wait. `learner.error` in the snapshot (`RECORD_UNREADABLE`):
-   teach a first lesson and say once, in the error's words, that you couldn't read your notes.
+   the project, pass on the fix, and wait. `readable` false in the snapshot's `learner`
+   (`RECORD_UNREADABLE`): teach a first lesson and say once, in the error's words, that you couldn't read your notes.
    `SESSION_UNREADABLE`: pass on the message, then call `null_parent_snapshot` again.
    `LESSON_UNDERWAY`: the group is set once you've checked; keep going with it.
 

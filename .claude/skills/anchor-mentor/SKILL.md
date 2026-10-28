@@ -106,7 +106,8 @@ was. Pan Behind changes both together, so nothing moves on screen.
    the record, even ones learned: this lesson doesn't build on them.
 
 1. **The opening: one choice.** Step 0's snapshot is this step's read (no options). Your first
-   turn asks one thing, which layer and where it turns from, and ends on that choice. It carries, in order:
+   turn asks one thing, which layer and where it turns from, and ends on that choice. It carries,
+   in order:
    1. **A memory clause**, only when step 0 found this skill practicing, or a continued or
       resumed lesson has a focus. Never for a first lesson on this skill.
    2. **The intent question**, before you name any place.
