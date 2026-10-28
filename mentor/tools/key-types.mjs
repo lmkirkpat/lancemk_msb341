@@ -11,6 +11,7 @@ import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { json } from "../lib/reply.mjs";
+import { opening } from "../lib/opening.mjs";
 
 const SKILL = "keyframes.types";
 export const SKILLS = [SKILL];
@@ -46,8 +47,11 @@ function noDemoReason(lesson, analysis) {
   return analysis.no_demo_reason;
 }
 
-async function keyTypesSnapshot({ mode = "lesson", fresh = false, skill_options } = {}) {
+async function keyTypesSnapshot({ mode: asked, fresh = false, skill_options } = {}) {
   const snapshot = await takeSnapshot();
+  // FR-048: without a mode, the tool picks lesson or review (spec 004 › The opening read).
+  const open = opening({ skill: SKILL, mode: asked, snapshot, fresh, finder: FINDERS[SKILL] });
+  const mode = open.mode;
   const focus = skill_options && Array.isArray(skill_options.focus) ? skill_options.focus : [];
   const focus_layers = focus.length ? [...new Set(focus.map((r) => r.layer))] : undefined;
   const opts = { skill: SKILL, analyze, mode, fresh };
@@ -58,6 +62,8 @@ async function keyTypesSnapshot({ mode = "lesson", fresh = false, skill_options 
     host: parseHost(snapshot),
     lesson,
     mode: les.mode,
+    mode_source: open.mode_source,
+    learner: open.learner,
     project: snapshot.project,
     comp: { name: snapshot.comp.name, duration: snapshot.comp.duration, frame_rate: snapshot.comp.frame_rate },
     focus: les.focus,
@@ -129,11 +135,12 @@ export const TOOLS = [
       "that aren't held), what's left out and why, held pairs to show, and, once the learner has named a focus, its " +
       "targets and demo_target. Send skill_options whole whenever the learner names a focus or says something should " +
       "move. fresh: true restarts the lesson from this read (after the learner builds a practice blink), only before " +
-      "any demonstration or check.",
+      "any demonstration or check. Also returns mode (lesson or review), why, and what the learner record says about this " +
+      "skill (learner). Leave mode out unless the learner asked for a review or a lesson: the tool chooses.",
     inputSchema: {
       type: "object",
       properties: {
-        mode: { type: "string", enum: ["lesson", "review"] },
+        mode: { type: "string", enum: ["lesson", "review"], description: "Leave it out to let the tool choose (a review when one is due)." },
         fresh: { type: "boolean" },
         skill_options: {
           type: "object",

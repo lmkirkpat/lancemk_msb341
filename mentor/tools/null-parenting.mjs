@@ -20,6 +20,8 @@ import { sourcesOf } from "../lib/motion-sources.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
+import { serverCurrent } from "../lib/server-current.mjs";
+import { opening } from "../lib/opening.mjs";
 
 registerErrors({ NULL_PARENT_REFUSED: REFUSED_MESSAGE });
 
@@ -34,6 +36,9 @@ export const FINDERS = {
       return finder(snapshot, { exclude });
     },
     review: true,
+    // Spec 004 FR-049: SKILL.md mentions easing, which isn't a hard prerequisite; it shows in the
+    // snapshot's learner.other_skills with hard false.
+    mentions: ["easing.basic"],
   },
 };
 
@@ -84,11 +89,17 @@ function snapshotReply(snapshot, { lesson, session: s, analysis }, extra = {}) {
   });
 }
 
-async function nullParentSnapshot({ mode = "lesson", skill_options } = {}) {
+async function nullParentSnapshot({ mode: asked, skill_options } = {}) {
   const snapshot = await takeSnapshot();
+  // FR-048, FR-049: without a mode, the tool picks lesson or review (spec 004 › The opening read),
+  // before openLesson(), which needs it. Every reply below carries what step 0 reads.
+  const opened = opening({ skill: SKILL, mode: asked, snapshot, finder: FINDERS[SKILL] });
+  const mode = opened.mode;
+  const fields = { mode_source: opened.mode_source, learner: opened.learner, server_current: await serverCurrent() }; // FR-044
+  const said = { mode, ...fields };
   if (!layerInfo(snapshot).known) {
     // A read from before wave B can't place layers on screen; start nothing.
-    return json({ can_teach: false, why: "no_layer_info", comp: { name: snapshot.comp.name } });
+    return json({ can_teach: false, why: "no_layer_info", ...said, comp: { name: snapshot.comp.name } });
   }
   const focus = skill_options && Array.isArray(skill_options.focus) ? skill_options.focus : null;
   const open = openLesson(snapshot.comp.id, mode);
@@ -102,7 +113,7 @@ async function nullParentSnapshot({ mode = "lesson", skill_options } = {}) {
     const problems = focusProblems(snapshot, focus, { exclude });
     if (problems.unknown.length) throw new MentorError("UNKNOWN_LAYER", `${problems.unknown.join(", ")} isn't in the comp. Use the layer's name exactly as it appears in the comp.`);
     if (!problems.ok) {
-      return json({ focus_set: false, rename_needed: problems.rename_needed, refused: problems.refused, focus_size: problems.size, comp: { name: snapshot.comp.name } });
+      return json({ focus_set: false, rename_needed: problems.rename_needed, refused: problems.refused, focus_size: problems.size, ...said, comp: { name: snapshot.comp.name } });
     }
     let started;
     try {
@@ -115,11 +126,11 @@ async function nullParentSnapshot({ mode = "lesson", skill_options } = {}) {
       started = resumed;
     }
     if (started.session.focus === null || !started.session.focus) {
-      return json({ focus_set: false, refused: started.analysis.focus_problems ? started.analysis.focus_problems.refused : [], comp: { name: snapshot.comp.name } });
+      return json({ focus_set: false, refused: started.analysis.focus_problems ? started.analysis.focus_problems.refused : [], ...said, comp: { name: snapshot.comp.name } });
     }
-    return snapshotReply(snapshot, started, { focus_set: true });
+    return snapshotReply(snapshot, started, { focus_set: true, ...fields });
   }
-  return snapshotReply(snapshot, session.start(snapshot, opts));
+  return snapshotReply(snapshot, session.start(snapshot, opts), fields);
 }
 
 // The target's P2 times in the baseline (the demo's reads ask for them).
@@ -210,11 +221,15 @@ export const TOOLS = [
       "of 2 to 4 layers that sit together apart from the rest (and a second one for a no), or none when many layers crowd " +
       "together, and lists what it leaves out and why. Call again with skill_options.focus (layer " +
       "names) once the learner agrees a group: that read becomes the lesson's start. A name two layers share sets nothing " +
-      "until the learner renames one.",
+      "until the learner renames one. Every reply also has mode (lesson or review), why, and what the learner record says " +
+      "about this skill (learner). Leave mode out unless the learner asked for a review or a lesson: the tool chooses.",
     inputSchema: {
       type: "object",
       properties: {
-        mode: { type: "string", enum: ["lesson", "review"], description: "\"review\" for a review: no demo, a new group only." },
+        mode: {
+          type: "string", enum: ["lesson", "review"],
+          description: "\"review\" for a review: no demo, a new group only. Leave it out to let the tool choose (a review when one is due).",
+        },
         skill_options: {
           type: "object",
           properties: { focus: { type: "array", items: { type: "string" }, minItems: 1, description: "The group's layer names, 2 to 4." } },

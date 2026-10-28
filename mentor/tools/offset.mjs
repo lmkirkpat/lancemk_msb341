@@ -12,6 +12,7 @@ import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
+import { opening } from "../lib/opening.mjs";
 
 export const SKILLS = [SKILL];
 
@@ -35,8 +36,11 @@ function ownLesson() {
   return lesson;
 }
 
-async function offsetSnapshot({ mode = "lesson", focus_layers, skill_options } = {}) {
+async function offsetSnapshot({ mode: asked, focus_layers, skill_options } = {}) {
   const snapshot = await takeSnapshot();
+  // FR-048: without a mode, the tool picks lesson or review (spec 004 › The opening read).
+  const open = opening({ skill: SKILL, mode: asked, snapshot, finder: FINDERS[SKILL] });
+  const mode = open.mode;
   const opts = { skill: SKILL, analyze, mode };
   if (focus_layers) opts.focus_layers = focus_layers;
   if (skill_options !== undefined) opts.skill_options = skill_options;
@@ -50,6 +54,8 @@ async function offsetSnapshot({ mode = "lesson", focus_layers, skill_options } =
   return json({
     lesson,
     mode: s.mode,
+    mode_source: open.mode_source,
+    learner: open.learner,
     host,
     // FR-017: Quick Offset may be offered only when the version is known and 25.4 or later (L-1
     // confirmed the gesture at 26.5). Decided here, so the skill never compares versions itself.
@@ -163,11 +169,15 @@ export const TOOLS = [
       "Read the active comp and start or continue the offset lesson. Returns the group that moves in lockstep (layers that " +
       "start together, or one layer's properties that start and land together), the other kind if there is one, what's " +
       "left out, the lesson's targets and demo_target, and frame_together. Call again with skill_options when the learner " +
-      "picks the kind, the order or the gap.",
+      "picks the kind, the order or the gap. Also returns mode (lesson or review), why, and what the learner record says " +
+      "about this skill (learner). Leave mode out unless the learner asked for a review or a lesson: the tool chooses.",
     inputSchema: {
       type: "object",
       properties: {
-        mode: { type: "string", enum: ["lesson", "review"], description: "\"review\" for a review: no demo, new group only." },
+        mode: {
+          type: "string", enum: ["lesson", "review"],
+          description: "\"review\" for a review: no demo, new group only. Leave it out to let the tool choose (a review when one is due).",
+        },
         focus_layers: { type: "array", items: { type: "string" }, description: "Limit the search to these layers, by name." },
         skill_options: SKILL_OPTIONS,
       },
