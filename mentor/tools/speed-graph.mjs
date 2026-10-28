@@ -85,10 +85,19 @@ async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } =
   // FR-048: without a mode, the tool picks lesson or review (spec 004 › The opening read).
   const open = opening({ skill: SKILL, mode: asked, snapshot, finder: FINDERS[SKILL] });
   const mode = open.mode;
+  const eased = easedLayers(open.record, snapshot);
+  // The focus ranks layers from easing lessons first. A call (or a stored lesson) with no eased_layers
+  // ranks by the record's, the list the reply gives as learner.eased_layers, so the opening call and a
+  // later call that sends them pick the same target, even when the baseline is analyzed again
+  // (spec 004 Phase 10 review). Only the analysis sees the default; the lesson's stored options don't.
+  const withEased = (so) => {
+    const o = so && typeof so === "object" ? so : {};
+    return Array.isArray(o.eased_layers) && o.eased_layers.length ? o : { ...o, eased_layers: eased };
+  };
   const opts = {
     skill: SKILL,
     // The session doesn't pass the mode to the analyzer; a review picks one or two pairs (FR-021).
-    analyze: (snap, o) => analyze(snap, { ...o, mode }),
+    analyze: (snap, o) => analyze(snap, { ...o, skill_options: withEased(o.skill_options), mode }),
     focus_layers,
     mode,
   };
@@ -100,7 +109,7 @@ async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } =
     lesson,
     mode: l.mode,
     mode_source: open.mode_source,
-    learner: { ...open.learner, eased_layers: easedLayers(open.record, snapshot) },
+    learner: { ...open.learner, eased_layers: eased },
     project: snapshot.project,
     comp: { name: snapshot.comp.name, duration: snapshot.comp.duration, frame_rate: snapshot.comp.frame_rate },
     focus: analysis.focus,

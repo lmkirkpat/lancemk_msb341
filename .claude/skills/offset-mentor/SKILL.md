@@ -104,8 +104,9 @@ start.
      anyway, say one sentence ("this builds on easing: offsetting moves that are still linear still
      looks mechanical") and carry on. Don't reteach easing, and don't grade ease. Remember to
      mention it once at "done" (step 7).
-   - If `mode` is review because it was due (`mode_source` is `review_due`), offer a quick review
-     instead of a first lesson. The offer is your first words, written to the learner, built from
+   - If `mode` is review because it was due (`mode_source` is `review_due`), or because a review
+     from earlier is still open (`mode_source` is `in_progress`: the learner may never have
+     answered the offer), offer a quick review instead of a first lesson, the same way for both. The offer is your first words, written to the learner, built from
      `learner.last_attempted` and `learner.days_since_practiced` (0 is today, 1 yesterday, about 7
      last week), for example: "Last week you staggered the Dots. Want a quick review on this comp?"
      When they say yes, run the review below; its first call is this one, already made. When they
