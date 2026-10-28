@@ -11,6 +11,38 @@ tests (`cd mentor && npm test`); evals don't repeat them.
 Built by copying `product/evals/easing/run.mjs`, not sharing it, so easing's files stay untouched.
 Same options and results format.
 
+## First full baseline (2026-10-28, 38 cases, `results/2026-10-28-125016.json`)
+
+On `main`'s mentor, Phase 10 as merged. **23/38 (61%)** in the one full run, $23.45. Three plumbing reruns (05 timed out
+with `claude` ETIMEDOUT; 09 and 10 had unreadable judge replies) cost $2.39: 05 pass (`-125611`), 09 pass (`-125650`),
+10 FAIL on a hard rule (`-125719`). With the reruns: **25/38 (66%), $25.84 in all. SC-006 not met** (needs 80% and every
+hard-rule check passing).
+
+**SC-015 over the 38 runs (37 with a tool call; 05's first run timed out before any, and its rerun is clean):** text before
+the first snapshot **0**; first tool not `null_parent_snapshot` **0**; skill IDs in learner-visible text **0**. The
+"nothing before the first snapshot" check failed 0 times. Met.
+
+T415 slips today: 01 skipped the memory clause again (fail, R-USES-MEMORY); 35 and 34 passed this time (no repeat of
+the slide claim or the two notes sentences).
+
+Failures (not repeated beyond the plumbing reruns: the $26 budget left no room):
+
+| Case | Kind | Triage |
+|---|---|---|
+| 03, 10 | hard rule, `no_pixel_target` | **Mentor, real.** "a single pixel" in both (10 on its rerun). `SKILL.md:42` bans "1 pixel" only |
+| 20 | hard rule, `say:no_count` | Mentor, likely real: "several layers" in the lesson's intro before the crowd question. Check may be too strict; one run |
+| 32 | hard rule, `say:no_rig_move_claim` | Mentor, one run: "I can't show you how Hatch Rig moves" matched a check that bans the claim, not the denial. **Check bug, likely** |
+| 04, 11, 28, 30 | rubric R-NAMES-REAL | **Mentor, real.** "Parent & Link" column and "Columns > Parent & Link" are named but in no tool result (`SKILL.md` carries it). 4 of 38, a pattern |
+| 02, 04, 15, 23 | rubric R-ONE-IDEA | Mentor, real: the step 2 explanation runs long (bullets, null, example, menu path, question) |
+| 01 | rubric R-USES-MEMORY | Mentor, noise-prone (same as T415, 2 of 4 runs today) |
+| 11 | rubric R-COMMENTS-UNGRADED | Mentor, one run: a third note the tool never listed |
+| 18 | rubric R-DUE-NO-NEW-LESSON | Mentor/check: crowded comp asked "which layers" rather than the crowd question. Judge may be right; one run |
+
+Proposed fixes, smallest first: (1) `SKILL.md:42` ban "a single pixel" along with every pixel wording (fixes 03, 10);
+(2) drop or source the "Parent & Link" menu path (fixes 4 R-NAMES-REAL fails); (3) cap step 2's explanation at a few
+sentences with no bullets (4 R-ONE-IDEA fails); (4) fix check `no_rig_move_claim` to ignore "can't show you how X moves"
+and decide whether "several" is a count in 20 (eval side).
+
 ## T415 (2026-10-28): SC-015's repeats, 12 runs, $4.26
 
 Spec 004 T415, `--repeat 3` on four cases, on `main`'s mentor (this worktree's `mentor/` and skills match `main`).
