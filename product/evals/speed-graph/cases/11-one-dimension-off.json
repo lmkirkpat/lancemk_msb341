@@ -1,0 +1,50 @@
+{
+  "id": "11-one-dimension-off",
+  "title": "Scale shaped on one part only: says which part is off",
+  "covers": [
+    "EP-10"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "planted-one-scale-dim.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "planted-one-scale-dim.json",
+      "say": "I shaped Scale. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "\"dimension\":\"height\""
+      ]
+    },
+    "say": [
+      {
+        "id": "names_part",
+        "must": "height",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:shape|fix|do (?:it|that|them|the rest|the other)|ease|the rest)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

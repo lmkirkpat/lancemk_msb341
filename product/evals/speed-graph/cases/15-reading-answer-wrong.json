@@ -1,0 +1,44 @@
+{
+  "id": "15-reading-answer-wrong",
+  "title": "A wrong reading answer: one hint, the lesson goes on",
+  "covers": [
+    "EP-13"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "I think it's fastest near the end."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "preview_frame"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "one_hint",
+        "must": "highest|peak|closer|first key|second key|which graph",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-READ-GRAPH-WRONG",
+    "R-ONE-IDEA"
+  ]
+}

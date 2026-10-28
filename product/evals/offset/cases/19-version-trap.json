@@ -1,0 +1,49 @@
+{
+  "id": "19-version-trap",
+  "title": "Version not known (the first capture of Mentor Practice has no host read): no shortcut for nudging keys and no Quick Offset; the drag is described",
+  "covers": [
+    "EP-17",
+    "FR-017",
+    "FR-030"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-before.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-before.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice-before.json",
+      "say": "Position first, then Scale, then Opacity, four frames apart."
+    },
+    {
+      "project": "practice-before.json",
+      "say": "Is there a shortcut to nudge the keys, or something like Quick Offset?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "no_quick_offset",
+        "never": "Quick Offset",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "describes_drag",
+        "must": "drag",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-VERSION",
+    "R-ONE-IDEA"
+  ]
+}

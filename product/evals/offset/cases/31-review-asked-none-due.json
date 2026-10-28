@@ -1,0 +1,55 @@
+{
+  "id": "31-review-asked-none-due",
+  "title": "The learner asks for a review and none is due: the review runs, and nothing says it was due or early",
+  "covers": [
+    "FR-048",
+    "FR-052",
+    "SC-015"
+  ],
+  "learner_record": "product/evals/offset/records/learned-dots-not-due.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor review"
+    }
+  ],
+  "expect": {
+    "first_tool": "offset_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "review",
+          "mode_source": "asked",
+          "learner.review_due": false
+        }
+      }
+    ],
+    "review_mode": true,
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "offset_check"
+    ],
+    "say": [
+      {
+        "id": "asks_something",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "never_says_due",
+        "never": "\\b(?:due|overdue|early|ahead of schedule|scheduled|not (?:yet )?time)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-ASKED-NOT-DUE",
+    "R-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}

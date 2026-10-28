@@ -1,0 +1,67 @@
+{
+  "id": "01-first-lesson",
+  "title": "First lesson: asks what should snap before proposing; candidates as questions, at most three; real names",
+  "covers": [
+    "KT-a",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "key_types_snapshot",
+    "tools_called": [
+      "key_types_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "key_types_check"
+    ],
+    "say": [
+      {
+        "id": "asks_what_snaps",
+        "must": "snap",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_question",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_candidates",
+        "must": "Blink",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "not_mistakes",
+        "never": "\\b(?:mistake|wrong|should be held|needs? to be held|you should hold|you need to hold)\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_see_through_hidden",
+        "never": "\\b(?:Blink|Cut)\\b[^.?!]{0,60}\\bhidden\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-INTENT-FIRST",
+    "R-KT-CANDIDATES-AS-QUESTIONS",
+    "R-NAMES-REAL"
+  ]
+}

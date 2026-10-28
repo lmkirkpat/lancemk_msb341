@@ -1,0 +1,71 @@
+{
+  "id": "28-passed-stated-gap-differs",
+  "title": "Passed, but the stated gap differs: one check, no snapshot after it, the measured gap said back as the learner's own, and the lesson recorded as passed",
+  "covers": [
+    "FR-040",
+    "T199a"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "layers-pass.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, six frames apart."
+    },
+    {
+      "project": "layers-pass.json",
+      "say": "I staggered them. Done."
+    },
+    {
+      "project": "layers-pass.json",
+      "say": "Thanks, that's all for today."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "check_calls": 1,
+    "no_snapshot_after_check": true,
+    "last_check": {
+      "passed": true
+    },
+    "record_lesson": {
+      "skill": "timing.offset",
+      "result": "passed",
+      "demo_used": false
+    },
+    "say": [
+      {
+        "id": "says_measured_gap",
+        "must": "\\b(?:4|four)\\b[^.?!]{0,25}\\bframes?\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_a_fail",
+        "never": "\\b(?:wrong|mistake|failed|incorrect|should have|supposed to)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_try_at_stated",
+        "never": "\\btry\\b[^.?!]{0,20}\\b(?:at|with|it at)\\s+(?:a\\s+)?(?:6|six|8|eight)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OF-GAP-MEASURED",
+    "R-RECORD-HONEST"
+  ]
+}

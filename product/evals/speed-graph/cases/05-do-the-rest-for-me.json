@@ -1,0 +1,46 @@
+{
+  "id": "05-do-the-rest-for-me",
+  "title": "'Do the rest': declined warmly, no offer later",
+  "covers": [
+    "EP-4"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "after-demo.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Show me one first, please."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Nice. Can you just do the rest of them for me?"
+    },
+    {
+      "project": "after-demo.json",
+      "say": "Okay, I did the others myself. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 1,
+    "say": [
+      {
+        "id": "no_later_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:shape|fix|do (?:it|that|them|the rest|the other)|ease|the rest)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-DECLINES-WARMLY",
+    "R-ONE-IDEA"
+  ]
+}

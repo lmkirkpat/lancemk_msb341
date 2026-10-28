@@ -1,0 +1,153 @@
+{
+  "run_at": "2026-10-28T02:40:51.846Z",
+  "options": {
+    "only": "08",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.47,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "08-review",
+      "title": "Review due: a new move (Card), no demo, no walkthrough, no reading step; a demo request is declined",
+      "covers": [
+        "EP-6",
+        "US2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "4286d5904d995c3fb617f9afce52a5728c0e3db0b5568be210da96e3770797e4",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:names_card",
+              "pass": true,
+              "detail": "turn 2: \"\""
+            },
+            {
+              "check": "say:declines_demo",
+              "pass": true,
+              "detail": "turn 3: \"review\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HANDS-ON",
+              "pass": true,
+              "reason": "Turn 2 gives the task in a sentence (\"Make it start quickly and land softly, then say 'done'\") with no menu, panel or how-to, and Turn 3 declines the demo request (\"it's all yours. No demo this time\"), mentioning only the allowed option of a separate practice lesson."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time matches the tool result or record: Title's Position and Scale come from last_attempted, \"about two weeks\" matches days_since_practiced 12, and \"Card's Position, from 1.2 to 2.4 s\" matches the pair label \"Card › Position 1.2–2.4 s\"."
+            }
+          ],
+          "cost": 0.4734060000000001,
+          "session_id": "54d8a7da-93ac-462c-87b5-da843b621e6a",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL speed_graph_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Shape Subtitle Position, or try a review on a new move.\",\n    \"last_attempted\": \"Shaped Title Position 1.5–3 s, 3–4.37 s and Scale: short start, long landing\",\n    \"days_since_practiced\": 12,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Card\"\n  ],\n  \"targets\": [\n    \"4/ADBE Transform Group/ADBE Position/1\"\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"review\",\n  \"pairs\": [\n    {\n      \"id\": \"4/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Card › Position 1.2–2.4 s\",\n      \"layer\": \"Card\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.2,\n      \"to_time\": 2.4,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Spinner\",\n        \"Dot 1\",\n        \"Dot 2\",\n        \"Dot 3\",\n        \"Badge\",\n        \"Chip A\",\n        \"Chip B\",\n        \"Chip C\",\n        \"Flag\",\n        \"Pause\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Spinner\",\n          \"property\": \"Rotation\"\n        },\n        {\n          \"layer\": \"Dot 1\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Dot 1\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Blurriness\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Dot 3\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Dot 3\",\n          \"property\": \"Y Position\"\n        },\n        {\n          \"layer\": \"Dot 3\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Badge\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Badge\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Chip A\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Chip A\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Chip B\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Chip B\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Chip C\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Chip C\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Flag\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Pause\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"already_shaped\",\n      \"layers\": [\n        \"Gauge\",\n        \"Wobble\",\n        \"Pop\",\n        \"Sled\",\n        \"Tile\",\n        \"Caption\",\n        \"Stamp\",\n        \"Row A\",\n        \"Row C\",\n        \"Plate\",\n        \"Gradient\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Gauge\",\n          \"property\": \"Rotation\"\n        },\n        {\n          \"layer\": \"Wobble\",\n          \"property\": \"Anchor Point\"\n        },\n        {\n          \"layer\": \"Pop\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Sled\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Tile\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Tile\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Caption\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Stamp\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Stamp\",\n          \"property\": \"Y Position\"\n        },\n        {\n          \"layer\": \"Row A\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Row C\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Plate\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Gradient\",\n          \"property\": \"Position\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 21,\n  \"candidates_count\": 6,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Card\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: It's been about two weeks since you shaped Title's Position and Scale, so a quick review is due. It's one new move in this comp that you shape on your own, with no demo.\n\nWant to do the review now, or would you rather have a regular lesson?\n\n### Turn 2: the project is an open comp\nLEARNER: Yes, let's do the review.\nMENTOR: This one's Card's Position, from 1.2 to 2.4 s. Make it start quickly and land softly, then say \"done\".\n\nOne question first: should Card land hard, like a slam or an impact? If so, I'll pick a different move for the review.\n\n### Turn 3: the project is an open comp\nLEARNER: Can you show me how first?\nMENTOR: Since this is a review, it's all yours. No demo this time. That's how we find out if the skill stuck since last time.\n\nIf you'd rather have some guidance, we can switch to a practice lesson, and that can include a demo. Otherwise, go ahead with Card's Position from 1.2 to 2.4 s, and say \"done\" when you're ready.\n"
+        }
+      ]
+    }
+  ]
+}

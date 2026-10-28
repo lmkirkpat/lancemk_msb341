@@ -1,0 +1,70 @@
+{
+  "id": "14-review",
+  "title": "Review due: intent asked first, Cut as the target, no demo, walkthrough or menu path",
+  "covers": [
+    "KT-k",
+    "US2"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/learned-blink.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Yes, let's do the review."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Cut should snap."
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "demo_calls_max": 0,
+    "tools_called": [
+      "key_types_snapshot"
+    ],
+    "say": [
+      {
+        "id": "asks_intent",
+        "must": "snap",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "names_cut",
+        "must": "Cut",
+        "turns": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "make_it_snap",
+        "must": "snap",
+        "turns": [
+          3
+        ]
+      }
+    ],
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "review"
+        }
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HANDS-ON",
+    "R-KT-INTENT-FIRST",
+    "R-NAMES-REAL"
+  ]
+}

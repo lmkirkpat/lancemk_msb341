@@ -1,0 +1,82 @@
+{
+  "id": "27-stored-choices-confirmed",
+  "title": "A lesson resumed on a comp that matches, with the old order and gap: said back as the learner's own and confirmed before any frame, demo or check uses them",
+  "covers": [
+    "FR-046",
+    "T037"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 3 first, then Dot 1, then Dot 2, six frames apart."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "offset_demo",
+      "offset_check"
+    ],
+    "snapshot_input_matches": [
+      "\"gap_frames\":6"
+    ],
+    "snapshot_calls_ok": true,
+    "say": [
+      {
+        "id": "says_order_back",
+        "must": "Dot 3[^.?!]{0,80}\\b(?:first|before|ahead|leading|goes)\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "says_gap_back",
+        "must": "\\b(?:6|six)\\b[^.?!]{0,25}\\bframes?\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "as_theirs",
+        "must": "\\b(?:last time|before|earlier|you had|you chose|you picked|you went with|you said)\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "asks_and_stops",
+        "must": "\\?",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_where_kept",
+        "never": "\\b(?:stored|session|skill options|where it was kept|remembered it)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OF-STORED-CONFIRM",
+    "R-ONE-IDEA"
+  ]
+}

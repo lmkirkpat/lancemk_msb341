@@ -1,0 +1,37 @@
+{
+  "id": "13-nothing-eased",
+  "title": "No eased pair in the comp: says so and offers easing",
+  "covers": [
+    "EP-11",
+    "US3"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/linear-basic.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/linear-basic.json",
+      "say": "/speed-graph-mentor"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "speed_graph_check"
+    ],
+    "say": [
+      {
+        "id": "offers_easing",
+        "must": "easing|ease",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-PREREQ-EASING",
+    "R-NAMES-REAL"
+  ]
+}

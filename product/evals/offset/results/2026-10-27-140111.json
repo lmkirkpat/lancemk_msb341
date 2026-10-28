@@ -1,0 +1,143 @@
+{
+  "run_at": "2026-10-27T20:01:11.214Z",
+  "options": {
+    "only": "02",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.44,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "02-first-lesson-layers",
+      "title": "First lesson, layers kind, on Mentor Practice 2: Dot 2's properties first (the tie), the Dots offered in one sentence, the learner picks them",
+      "covers": [
+        "EP-2",
+        "US2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "88ccd3a01301a448472950a073e148c240970a4e2751ce5ac429f5afe97409fe",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "snapshot_input:layers",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:proposes_dot2",
+              "pass": true,
+              "detail": "turn 1: \"Dot 2\""
+            },
+            {
+              "check": "say:offers_dots",
+              "pass": true,
+              "detail": "turn 1: \"Dot 1, Dot 2 and Dot 3\""
+            },
+            {
+              "check": "say:asks_order",
+              "pass": true,
+              "detail": "turn 2: \"first\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-PROPOSAL",
+              "pass": true,
+              "reason": "Turn 1 names the group with real members and the shared time ('Dot 2's Position, Opacity and Blurriness all run from 0.5 s to 1.5 s'), offers the other kind in one sentence ('Dot 1, Dot 2 and Dot 3 also all start at 0.5 s'), and lets the learner choose; the follow-up 'They start on the same frame and finish on the same frame' only restates the same group and never calls it everything that moves."
+            },
+            {
+              "item": "R-OFF-INTENT",
+              "pass": true,
+              "reason": "Both turns ask 'which should go first, and how far apart do you want them' as the learner's call, and the mentor never picks an order or gap; the learner hasn't answered yet, so there was nothing to repeat back."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time is backed: Dot 1/2/3, Position, Opacity, Blurriness, 0.5 s, 1.5 s and Seal (precomp) come from offset_snapshot, 1 s matches the preview_frame call and frame_together, and Title, Mentor Practice and 'about two weeks ago' come from the learner record (2026-10-12)."
+            }
+          ],
+          "cost": 0.43958700000000006,
+          "session_id": "cb8d303a-19ce-46bf-945c-25305fbff7d7",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Eased every Title pair.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-bEt7Od/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 2\"\n  ],\n  \"targets\": [\n    \"6/Transform › Position/1\",\n    \"6/Transform › Opacity/1\",\n    \"6/Effects › Gaussian Blur › Blurriness/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1,\"layer\":\"Dot 2\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-bEt7Od-runtime/cb8d303a-19ce-46bf-945c-25305fbff7d7/tool-results/mcp-ae-mentor-blob-1793131245889-kpu1oa.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1,\"layer_bounds_reason\":\"effects\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Last time, about two weeks ago, you eased Title's moves in Mentor Practice. This time we're in **Mentor Practice 2**, and we're working on timing: motion looks designed when things don't all move together.\n\n**Here's what moves together:** Dot 2's Position, Opacity and Blurriness all run from 0.5 s to 1.5 s. They start on the same frame and finish on the same frame.\n\nIf you'd rather work with whole layers, Dot 1, Dot 2 and Dot 3 also all start at 0.5 s, so you could stagger those instead.\n\nI'm leaving Seal out because it's a precomp, and I can't check the timing inside it yet.\n\nI tried to grab a frame at 1 s, but the image came back too small to show anything. Move the playhead to 1 s yourself and look at Dot 2. Its slide, its fade and its blur are all mid-move at that moment. When everything changes at once, nothing leads the eye, and the move reads as one flat event instead of something designed.\n\nDo you want to stay with Dot 2's three properties, or switch to the three dots? Once you've picked, tell me **which should go first, and how far apart you want them.**\n\n### Turn 2: the project is an open comp\nLEARNER: Let's stagger the layers instead.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"layers\"}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"targets\": [\n    \"layer/5\",\n    \"layer/6\",\n    \"layer/7\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Layers it is. Dot 1, Dot 2 and Dot 3 all start at 0.5 s, so at 1 s all three dots are partway through their moves at the same moment.\n\nWhen you shift a layer, its properties go together. Dot 2's Position, Opacity and Blurriness all shift as a unit, and so do Dot 1's and Dot 3's Position and Opacity. If you want to split one on purpose, just tell me.\n\n**Which dot should go first, and how far apart do you want them?**\n"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "16-review-nothing-snaps",
+  "title": "Review, the learner says nothing should snap: the review ends and nothing is recorded",
+  "covers": [
+    "KT-m"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/learned-blink.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Yes, let's do the review."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Nothing here should snap."
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "demo_calls_max": 0,
+    "record_lesson": null,
+    "tools_not_called": [
+      "key_types_check"
+    ]
+  },
+  "rubric": [
+    "R-KT-REVIEW-ENDS",
+    "R-REVIEW-HANDS-ON"
+  ]
+}

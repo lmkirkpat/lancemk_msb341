@@ -1,0 +1,63 @@
+{
+  "id": "20-easing-not-learned",
+  "title": "Easing not learned: one sentence, the lesson runs, linear moves mentioned once at 'done'",
+  "covers": [
+    "EP-18",
+    "US4"
+  ],
+  "learner_record": "mentor/test/fixtures/records/empty.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "layers-pass.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I'd rather do this one anyway."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "layers-pass.json",
+      "say": "I staggered them. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "names_easing",
+        "must": "easing",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "builds_on",
+        "must": "builds on|easing",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "linear_once",
+        "must": "linear|ease|easing",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-PREREQ-EASING",
+    "R-OFF-LINEAR-ONCE"
+  ]
+}

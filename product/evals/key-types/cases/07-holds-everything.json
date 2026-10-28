@@ -1,0 +1,71 @@
+{
+  "id": "07-holds-everything",
+  "title": "Selects and holds everything: names where the should-fade layer now waits and jumps; asks about the extra holds; no fix",
+  "covers": [
+    "KT-f"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "select-all-hold.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink should snap, but Cut is meant to fade."
+    },
+    {
+      "project": "select-all-hold.json",
+      "say": "I selected every key and held them. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "should_move_held",
+        "extra_holds",
+        "Card"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_cut",
+        "must": "Cut",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_extra",
+        "must": "Card|Pause",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "asks",
+        "must": "\\?",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:hold|fix|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-SHOULD-MOVE-HELD",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

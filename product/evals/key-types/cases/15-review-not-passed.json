@@ -1,0 +1,62 @@
+{
+  "id": "15-review-not-passed",
+  "title": "A review that doesn't pass: hints, no reteach; recorded partial with the demo stated false",
+  "covers": [
+    "KT-l"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/learned-blink.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-one-held.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Yes, let's do the review."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Cut should snap."
+    },
+    {
+      "project": "blink-one-held.json",
+      "say": "I think it snaps now. Done."
+    },
+    {
+      "project": "blink-one-held.json",
+      "say": "I'm out of time, let's stop here."
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "last_check": {
+      "passed": false,
+      "has": [
+        "not_held"
+      ]
+    },
+    "record_lesson": {
+      "skill": "keyframes.types",
+      "result": "partial",
+      "demo_used": false
+    },
+    "say": [
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:hold|fix|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HINT",
+    "R-RECORD-HONEST",
+    "R-NAMES-REAL"
+  ]
+}

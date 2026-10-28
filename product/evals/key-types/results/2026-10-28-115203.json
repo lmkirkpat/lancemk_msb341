@@ -1,0 +1,383 @@
+{
+  "run_at": "2026-10-28T17:52:03.057Z",
+  "options": {
+    "only": "14",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 1.33,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "14-review",
+      "title": "Review due: intent asked first, Cut as the target, no demo, walkthrough or menu path",
+      "covers": [
+        "KT-k",
+        "US2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "c7815c5b8351ed3d22a07239810122f0fc67b794a77f871b0efcef15c25f4c72",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:asks_intent",
+              "pass": true,
+              "detail": "turn 2: \"snap\""
+            },
+            {
+              "check": "say:names_cut",
+              "pass": true,
+              "detail": "turns 2 to 3: \"cut\""
+            },
+            {
+              "check": "say:make_it_snap",
+              "pass": true,
+              "detail": "turn 3: \"snap\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HANDS-ON",
+              "pass": true,
+              "reason": "Turn 3 gives only the task (\"The pair to fix is Cut's Opacity between 3 s and 3.1 s. Make it snap, then say \"done\".\") with no menu path, demo offer, walkthrough or reteach."
+            },
+            {
+              "item": "R-KT-INTENT-FIRST",
+              "pass": true,
+              "reason": "Turn 2 opens with the real question \"Is anything here meant to snap, like a blink, an on/off, or a cut?\" and raises Cut only as a follow-up question; it sets no focus until the learner answers in turn 3."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time matches tool output: Blink and Opacity from the record, Cut/Opacity at 3 s and Seal as a precomp from the first snapshot, and 3–3.1 s from the second snapshot's target_pairs."
+            }
+          ],
+          "cost": 0.4443256,
+          "session_id": "aaa5c25e-8001-4722-8246-a2bd83af4842",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: About a week and a half ago you held two of Blink's Opacity pairs so they snap. Want a quick review on this comp?\n\n### Turn 2: the project is an open comp\nLEARNER: Yes, let's do the review.\nMENTOR: Is anything here meant to snap, like a blink, an on/off, or a cut?\n\nCut's Opacity changes at 3 s, and right now it fades. Is that one meant to snap on instead?\n\nI can't see inside Seal yet because it's a precomp, so I'm not saying it's fine either way.\n\n### Turn 3: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"review\",\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"review\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: The pair to fix is Cut's Opacity between 3 s and 3.1 s. Make it snap, then say \"done\".\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:asks_intent",
+              "pass": true,
+              "detail": "turn 2: \"snap\""
+            },
+            {
+              "check": "say:names_cut",
+              "pass": true,
+              "detail": "turns 2 to 3: \"cut\""
+            },
+            {
+              "check": "say:make_it_snap",
+              "pass": true,
+              "detail": "turn 3: \"snap\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HANDS-ON",
+              "pass": true,
+              "reason": "Turn 3 gives only the task (\"Make it snap, and say \"done\" when you're finished.\") with no menu path, demo, tips or reteach."
+            },
+            {
+              "item": "R-KT-INTENT-FIRST",
+              "pass": true,
+              "reason": "Turn 2 opens with the real question \"Is anything here meant to snap, like a blink, an on/off, or a cut?\", and the Cut candidate follows only as a question, not as a focus the mentor set."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time matches tool output or the record: Blink from last_attempted (9 days ago, so \"last week\"), Cut's Opacity at 3 s, 100 to 0 between 3 s and 3.1 s from target_pairs, and Seal as a precomp from left_out."
+            }
+          ],
+          "cost": 0.43979979999999996,
+          "session_id": "c121b744-3827-43f5-91d0-151bd6009af2",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Last week you made Blink snap. Want a quick review on this comp?\n\n### Turn 2: the project is an open comp\nLEARNER: Yes, let's do the review.\nMENTOR: Is anything here meant to snap, like a blink, an on/off, or a cut?\n\nCut's Opacity changes at 3 s. Is that meant to snap, or to fade?\n\nI'm leaving out Seal. It's a precomp and I can't see inside those yet, so I'm not saying it's fine.\n\n### Turn 3: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"review\",\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"review\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Got it. Cut's Opacity goes from 100 to 0 between 3 s and 3.1 s. Make it snap, and say \"done\" when you're finished.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:asks_intent",
+              "pass": true,
+              "detail": "turn 2: \"snap\""
+            },
+            {
+              "check": "say:names_cut",
+              "pass": true,
+              "detail": "turns 2 to 3: \"cut\""
+            },
+            {
+              "check": "say:make_it_snap",
+              "pass": true,
+              "detail": "turn 3: \"snap\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HANDS-ON",
+              "pass": true,
+              "reason": "Turn 3 gives the task in two sentences (\"Make it snap, then say \\\"done\\\".\") with no demo, menu path, walkthrough or reteach."
+            },
+            {
+              "item": "R-KT-INTENT-FIRST",
+              "pass": true,
+              "reason": "Turn 2 opens with the real question \"Is anything here meant to snap, like a blink, an on/off or a cut?\" and only then raises Cut as a question, without setting a focus or proposing what to hold."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Blink's Opacity and the demo/learner split come from the record's last_attempted, 'a week and a half ago' matches days_since_practiced 9, and Cut Opacity at 3 s, 100 to 0 between 3 s and 3.1 s, and the Seal precomp all match the tool results."
+            }
+          ],
+          "cost": 0.448174,
+          "session_id": "8bab925b-c7c3-4422-b99f-e1db872c6621",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: About a week and a half ago you made Blink's Opacity snap: I held the first pair and you held the second. Want to do a quick review on this comp?\n\n### Turn 2: the project is an open comp\nLEARNER: Yes, let's do the review.\nMENTOR: Is anything here meant to snap, like a blink, an on/off or a cut?\n\nCut's Opacity changes at 3 s. Is it meant to snap, or should it fade?\n\nI can't see inside the Seal precomp yet, so I'm not saying anything about it either way.\n\n### Turn 3: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"review\",\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"review\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Right now Cut's Opacity fades from 100 to 0 between 3 s and 3.1 s.\n\nMake it snap, then say \"done\".\n"
+        }
+      ]
+    }
+  ]
+}

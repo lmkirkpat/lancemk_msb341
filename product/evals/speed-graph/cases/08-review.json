@@ -1,0 +1,61 @@
+{
+  "id": "08-review",
+  "title": "Review due: a new move (Card), no demo, no walkthrough, no reading step; a demo request is declined",
+  "covers": [
+    "EP-6",
+    "US2"
+  ],
+  "learner_record": "mentor/test/fixtures/speed-graph/record-learned-title.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Yes, let's do the review."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Can you show me how first?"
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "tools_called": [
+      "speed_graph_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "names_card",
+        "must": "(?=[\\s\\S]*Card)(?=[\\s\\S]*Position)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "declines_demo",
+        "must": "review|all yours|your own|yours",
+        "turns": [
+          3
+        ]
+      }
+    ],
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "review"
+        }
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}

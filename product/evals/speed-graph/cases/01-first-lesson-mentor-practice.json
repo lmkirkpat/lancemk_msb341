@@ -1,0 +1,96 @@
+{
+  "id": "01-first-lesson-mentor-practice",
+  "title": "First lesson on Mentor Practice: Title, its pairs, leave-outs, a frame, then the read-the-graph step",
+  "covers": [
+    "EP-1",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "I think it's fastest in the middle."
+    }
+  ],
+  "expect": {
+    "first_tool": "speed_graph_snapshot",
+    "tools_called": [
+      "speed_graph_snapshot",
+      "preview_frame"
+    ],
+    "demo_calls_max": 0,
+    "snapshot_input_matches": [
+      "eased_layers"
+    ],
+    "say": [
+      {
+        "id": "focus",
+        "must": "(?=[\\s\\S]*Title)(?=[\\s\\S]*Position)(?=[\\s\\S]*Scale)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "hidden_layer",
+        "must": "Old Take",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "precomp",
+        "must": "Icon",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "expression",
+        "must": "Logo",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_expression_claim",
+        "never": "\\b(?:no|without an?|doesn't have an?|has no) expression"
+      },
+      {
+        "id": "precomp_not_fine",
+        "never": "Icon[^.?!]*\\b(?:is fine|are fine|works fine|no problem)"
+      },
+      {
+        "id": "asks_hard_landing",
+        "must": "slam|land hard|lands hard|impact|hit hard",
+        "turns": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "read_graph",
+        "must": "fastest",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-PROPOSAL",
+    "R-SG-LEAVE-OUTS",
+    "R-SG-READ-GRAPH",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "run_at": "2026-10-27T20:01:35.271Z",
+  "options": {
+    "only": "20",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 1,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "20-stored-choices-confirmed",
+      "title": "A lesson resumed on a comp that matches, with what should snap: said back as the learner's own and confirmed before the intent question, a frame, a demo or a check",
+      "covers": [
+        "FR-046"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "practice-now.json": "live"
+      },
+      "hash": "ef247d79285a3c65fcd75073910b886fa4c3be686434071b32d4b9b778136920",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:says_focus_back",
+              "pass": true,
+              "detail": "turn 4: \"\""
+            },
+            {
+              "check": "say:as_theirs",
+              "pass": true,
+              "detail": "turn 4: \"Last time\""
+            },
+            {
+              "check": "say:asks_and_stops",
+              "pass": true,
+              "detail": "turn 4: \"?\""
+            },
+            {
+              "check": "say:intent_not_asked_fresh",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "say:no_where_kept",
+              "pass": true,
+              "detail": "turn 4: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KT-STORED-CONFIRM",
+              "pass": true,
+              "reason": "Turn 4 says the focus back as the learner's own (\"Last time you said **Blink's Opacity** should snap. Is that still what you want?\"), makes no preview_frame, demo or check call, does not ask the intent question fresh, and stops for the answer."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": false,
+              "reason": "Turn 2 is a wall covering several ideas at once: the failed frames, a 'What happens now' explanation of the eased pairs, a 'What hold does' explanation with the Dot 1 and Flag examples, then the full task list with which keys to hold and the menu path."
+            }
+          ],
+          "cost": 1.0009270000000001,
+          "session_id": "106756b2-62af-4ccd-84bf-1b3074720ece",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-hLjFGq/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: You eased the Title in Mentor Practice about two weeks ago. This lesson adds a third choice next to linear and eased: **hold**, where the value stays put and then jumps.\n\nIn **Mentor Practice 2**, is anything meant to snap, like a blink, an on/off, or a cut?\n\nTwo layers might be:\n- **Blink**'s Opacity changes between on and off across three pairs, starting at 1 s. Is it meant to snap on and off, or fade?\n- **Cut**'s Opacity changes once, at 3 s. Should that snap, or fade?\n\nI've left out **Seal** because it's a precomp. I can't see inside it yet, so I'm not saying it's fine.\n\nWhich of these should snap?\n\n### Turn 2: the project is an open comp\nLEARNER: Blink's Opacity should snap.\nTOOL CALL key_types_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"Blink\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Blink\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/2\",\n    \"1/ADBE Transform Group/ADBE Opacity/3\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1,\n      \"to_time\": 1.4,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.4,\n      \"to_time\": 1.8,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        0,\n        100\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.8,\n      \"to_time\": 2.2,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n  \"no_demo_reason\": null,\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1.2,\"layer\":\"Blink\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-hLjFGq-runtime/106756b2-62af-4ccd-84bf-1b3074720ece/tool-results/mcp-ae-mentor-blob-1793131265825-00jhr0.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1.2,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nTOOL CALL preview_frame {\"time\":0.4667,\"layer\":\"Blink\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-hLjFGq-runtime/106756b2-62af-4ccd-84bf-1b3074720ece/tool-results/mcp-ae-mentor-blob-1793131266324-blhnyu.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.4667,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nTOOL CALL preview_frame {\"time\":0.5333,\"layer\":\"Blink\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-hLjFGq-runtime/106756b2-62af-4ccd-84bf-1b3074720ece/tool-results/mcp-ae-mentor-blob-1793131266665-2q6vss.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.5333,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Got it: Blink's Opacity is the focus.\n\nI tried to show you frames from your comp, but they came back too small to see anything, so I'll explain from the keys instead.\n\n**What happens now:** Blink goes from 100 to 0 between 1 s and 1.4 s, back to 100 by 1.8 s, and down to 0 again by 2.2 s. All three pairs are eased, so at 1.2 s Blink is part-way see-through. It fades instead of blinking.\n\n**What hold does:** a held key keeps its value all the way to the next key, then jumps. Your comp already has two: Dot 1's Position jumps at 0.5 s and Flag's Position jumps at 4.5 s. Neither one slides. Each stays put, then lands in its new spot in a single frame.\n\n**Your turn.** Hold Blink's three Opacity pairs:\n- 1 s to 1.4 s\n- 1.4 s to 1.8 s\n- 1.8 s to 2.2 s\n\nThe hold goes on the key at the **start** of each pair, so that's the keys at 1 s, 1.4 s and 1.8 s. Leave the key at 2.2 s alone.\n\nTo add it, select a key, then choose **Animation > Toggle Hold Keyframe** (⌃⌥⌘H). You can also right-click the key and choose **Toggle Hold Keyframe**.\n\nSay \"done\" when you've held them, or tell me if you get stuck.\n\n### Turn 3: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-hLjFGq/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"first_time\": 0.3,\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"first_time\": 0.5,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Cursor\",\n      \"property\": \"Opacity\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Cursor\",\n      \"property\": \"Opacity\",\n      \"jump_time\": 1\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Old Take\"\n        }\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Icon\"\n        }\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"reason\": \"already_held\",\n      \"layers\": [\n        \"Cursor\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: You've switched to **Mentor Practice**, so this starts a new lesson in that comp. If you'd rather finish Blink, switch back to **Mentor Practice 2** and tell me.\n\nIf you want to stay here: is anything in Mentor Practice meant to snap, like a blink, an on/off, or a cut?\n\n- **Subtitle** fades in from see-through starting at 0.3 s, and **Title** at 0.5 s. Is either meant to snap on instead?\n\nA few layers are left out:\n- **Old Take**: you've hidden this, so I'll leave it unless you want it.\n- **Icon** is a precomp. I can't see inside it yet, so I'm not saying it's fine.\n- **Logo**'s Rotation: an expression drives this, so its key types may not match what you see.\n- **Cursor**'s Opacity already snaps.\n\nWhich would you like: stay here, or go back to Blink?\n\n### Turn 4: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-hLjFGq/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"resumed\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Blink\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/2\",\n    \"1/ADBE Transform Group/ADBE Opacity/3\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1,\n      \"to_time\": 1.4,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.4,\n      \"to_time\": 1.8,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        0,\n        100\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.8,\n      \"to_time\": 2.2,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n  \"no_demo_reason\": null,\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": true\n}\nMENTOR: You're back in **Mentor Practice 2**, so we'll pick up the lesson where it stopped.\n\nLast time you said **Blink's Opacity** should snap. Is that still what you want?\n"
+        }
+      ]
+    }
+  ]
+}

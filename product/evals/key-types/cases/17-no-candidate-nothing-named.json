@@ -1,0 +1,55 @@
+{
+  "id": "17-no-candidate-nothing-named",
+  "title": "No candidate and nothing named: no invented focus; the practice blink is offered",
+  "covers": [
+    "KT-n"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/linear-basic.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/linear-basic.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "synthetic/linear-basic.json",
+      "say": "I'm not sure. Nothing comes to mind."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "key_types_snapshot"
+    ],
+    "snapshot_input_lacks": [
+      "\"focus\":\\[\\{"
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "key_types_check"
+    ],
+    "say": [
+      {
+        "id": "says_nothing",
+        "must": "nothing|no candidate|nothing here|isn't anything|aren't any",
+        "turns": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "offers_practice",
+        "must": "practice|Mentor Practice 2|blink",
+        "turns": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-PRACTICE-OFFER",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "02-first-lesson-layers",
+  "title": "First lesson, layers kind, on Mentor Practice 2: Dot 2's properties first (the tie), the Dots offered in one sentence, the learner picks them",
+  "covers": [
+    "EP-2",
+    "US2"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Let's stagger the layers instead."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "offset_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "snapshot_input_matches": [
+      "layers"
+    ],
+    "say": [
+      {
+        "id": "proposes_dot2",
+        "must": "Dot 2",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "offers_dots",
+        "must": "Dot 1[\\s\\S]*Dot 3",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_order",
+        "must": "first",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-PROPOSAL",
+    "R-OFF-INTENT",
+    "R-NAMES-REAL"
+  ]
+}

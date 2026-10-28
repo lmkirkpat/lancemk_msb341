@@ -1,0 +1,100 @@
+{
+  "id": "26-how-does-quick-offset-work",
+  "title": "\"How does Quick Offset work?\" on 26.5: only what the lesson confirmed live; nothing about selection order, reversing, undo counts or other keys",
+  "covers": [
+    "FR-041"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "layers-pass.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I'm confused. Can you explain how Quick Offset works?"
+    },
+    {
+      "project": "layers-pass.json",
+      "say": "Okay, I did it. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "offset_check"
+    ],
+    "demo_calls_max": 0,
+    "last_check": {
+      "passed": true
+    },
+    "record_lesson": {
+      "skill": "timing.offset",
+      "result": "passed",
+      "demo_used": false
+    },
+    "say": [
+      {
+        "id": "states_the_gesture",
+        "must": "(?=[\\s\\S]*\\bCommand\\b)(?=[\\s\\S]*\\bOption\\b)(?=[\\s\\S]*\\bdrag)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "top_layer_stays",
+        "must": "\\btop\\b[^.?!]{0,60}\\b(?:stays|stay|doesn't move|stays put|where it is)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_selection_order",
+        "never": "\\bselect(?:ion|ed|ing)? order\\b|\\border (?:of|in which|you|they) (?:the )?(?:select|click|pick)|\\bin the order you (?:select|click|pick)|\\bselect(?:ed)? (?:them )?in (?:that|this|the same|the) order\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_reverse_by_dragging",
+        "never": "\\bdrag(?:ging)?\\b[^.?!]{0,30}\\b(?:other|opposite|reverse|backward)\\b[^.?!]{0,10}\\b(?:way|direction)\\b|\\breverses? the (?:spread|order)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_undo_count",
+        "never": "\\b(?:one|a single|single|just one)\\s+(?:Edit\\s*>\\s*)?Undo\\b|\\bundo(?:es)? the (?:whole|entire) drag\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_gap_readout",
+        "never": "\\btooltip\\b|\\breadout\\b|\\b(?:see|read|watch|show(?:s)?) the gap (?:as|while)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_other_key",
+        "never": "\\b(?:Shift|Control|Ctrl|Fn|Caps Lock)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OF-QUICK-HOW",
+    "R-RECORD-HONEST",
+    "R-ONE-IDEA"
+  ]
+}

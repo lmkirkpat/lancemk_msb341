@@ -1,0 +1,56 @@
+{
+  "id": "15-incomplete-attempt",
+  "title": "An incomplete stagger: names what's still the same and where; no fix, no offer",
+  "covers": [
+    "EP-13"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "bar-dragged.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "bar-dragged.json",
+      "say": "I staggered them. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "still_same"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_pair",
+        "must": "(?=[\\s\\S]*Dot 1)(?=[\\s\\S]*Dot 2)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:stagger|shift|move|fix|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ],
+    "snapshot_calls_ok": true
+  },
+  "rubric": [
+    "R-OFF-STILL-TOGETHER",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

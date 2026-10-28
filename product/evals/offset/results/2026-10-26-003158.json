@@ -1,0 +1,137 @@
+{
+  "run_at": "2026-10-26T06:31:58.095Z",
+  "options": {
+    "only": "17",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.4,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "17-review",
+      "title": "Review due: a new group (Chip A to C), asks which goes first, no demo, no walkthrough, no gap",
+      "covers": [
+        "EP-15",
+        "SC-008"
+      ],
+      "fixture_sources": {
+        "practice2-before.json": "stand-in"
+      },
+      "hash": "b847d64bc7e513c414aeb2162c35be983ada2857ded26c80ac1f3fd7a5e40375",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": false,
+              "detail": "said \"run the review\""
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "snapshot_with",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:names_chips",
+              "pass": true,
+              "detail": "turn 1: \"\""
+            },
+            {
+              "check": "say:asks_which_first",
+              "pass": true,
+              "detail": "turn 1: \"Which one goes first\""
+            },
+            {
+              "check": "say:declines_demo",
+              "pass": true,
+              "detail": "turn 3: \"review\""
+            }
+          ],
+          "rubric": [],
+          "cost": 0.398111,
+          "session_id": "ddb1dce6-9cf5-4893-8a5b-03849ed5048e",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-14T16:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Stagger the Chips.\",\n      \"review_due\": \"2026-10-15\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Eased every Title pair.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Staggered Dot 1, Dot 2 and Dot 3, in that order\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"Gaps about 4 frames each; Dot 3's Y Position stayed behind at first.\",\n      \"next\": \"Stagger the Chips.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Dot 1\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Dot 1\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Dot 2\",\n          \"property\": \"Blurriness\"\n        },\n        {\n          \"layer\": \"Dot 3\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Dot 3\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-pzkVNZ/learner.json\"\n}\nMENTOR: Review is due → run the review.\nTOOL CALL offset_snapshot {\"mode\":\"review\"}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 2,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 9,\n        \"layer\": \"Chip A\",\n        \"label\": \"Chip A\",\n        \"start\": 2,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/9\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 10,\n        \"layer\": \"Chip B\",\n        \"label\": \"Chip B\",\n        \"start\": 2,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/10\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 11,\n        \"layer\": \"Chip C\",\n        \"label\": \"Chip C\",\n        \"start\": 2,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/11\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"layers\",\n  \"other_kind\": \"properties\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Card\",\n    \"start\": 1.2,\n    \"end\": 2.4,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Card\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 1.2,\n        \"end\": 2.4,\n        \"target\": \"4/Transform › Position/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Card\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 1.2,\n        \"end\": 2.4,\n        \"target\": \"4/Transform › Scale/1\",\n        \"has_linear_pairs\": false\n      }\n    ]\n  },\n  \"left_out\": [],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"targets\": [\n    \"layer/9\",\n    \"layer/10\",\n    \"layer/11\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"frame_together\": 2.5\n}\nMENTOR: Welcome back. Almost two weeks ago you staggered Dot 1, Dot 2 and Dot 3 here in Mentor Practice 2, so this time is a quick review: you do it, and I check it.\n\nChip A, Chip B and Chip C all start at 2 s.\n\nWhich one goes first? Then stagger them however you like, and say \"done\" when you're ready.\n\n### Turn 2: the project is an open comp\nLEARNER: Yes, let's do the review.\nMENTOR: The review's already set up. Chip A, Chip B and Chip C all start at 2 s.\n\nWhich one should go first? Once you've picked, stagger them however you like and say \"done\".\n\n### Turn 3: the project is an open comp\nLEARNER: Chip A first. Can you show me how?\nTOOL CALL offset_snapshot {\"mode\":\"review\",\"skill_options\":{\"order\":[\"Chip A\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"review\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 2,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 9,\n        \"layer\": \"Chip A\",\n        \"label\": \"Chip A\",\n        \"start\": 2,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/9\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 10,\n        \"layer\": \"Chip B\",\n        \"label\": \"Chip B\",\n        \"start\": 2,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/10\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 11,\n        \"layer\": \"Chip C\",\n        \"label\": \"Chip C\",\n        \"start\": 2,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/11\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"layers\",\n  \"other_kind\": \"properties\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Card\",\n    \"start\": 1.2,\n    \"end\": 2.4,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Card\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 1.2,\n        \"end\": 2.4,\n        \"target\": \"4/Transform › Position/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Card\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 1.2,\n        \"end\": 2.4,\n        \"target\": \"4/Transform › Scale/1\",\n        \"has_linear_pairs\": false\n      }\n    ]\n  },\n  \"left_out\": [],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"targets\": [\n    \"layer/9\",\n    \"layer/10\",\n    \"layer/11\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"review\",\n  \"frame_together\": 2.5\n}\nMENTOR: I'm not showing it in a review. This one is about what your hands remember from the Dots, and it's fine to experiment. Edit > Undo takes back anything you don't like.\n\nChip A goes first. Which comes next, Chip B or Chip C? Once you've decided, stagger them and say \"done\".\n"
+        }
+      ]
+    }
+  ]
+}

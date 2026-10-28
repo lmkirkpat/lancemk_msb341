@@ -1,0 +1,63 @@
+{
+  "id": "18-wrong-side",
+  "title": "A hold on the wrong side: never called done; points at the key at the start of the pair",
+  "covers": [
+    "design 7 row 4",
+    "FR-011"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "wrong-side.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "wrong-side.json",
+      "say": "I held the first pair. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "wrong_side"
+      ]
+    },
+    "say": [
+      {
+        "id": "not_done",
+        "never": "\\b(?:first pair|that pair|it)\\b[^.?!]{0,20}\\b(?:is done|looks good|is held|snaps now|works now)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "points_at_key",
+        "must": "key",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:hold|fix|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-WRONG-SIDE",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

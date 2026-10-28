@@ -1,0 +1,114 @@
+{
+  "run_at": "2026-10-27T20:00:47.109Z",
+  "options": {
+    "only": "12",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.7,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "12-eased-not-linear",
+      "title": "A move meant to be constant speed is eased: one sentence on which end isn't linear; checked again",
+      "covers": [
+        "KT-i"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "blink-all-held.json": "live",
+        "spinner-eased.json": "live"
+      },
+      "hash": "49b534d556c749019fffc3c9d0b6d4ba1b4e7ab7471e7a2c90f3bc0af9f57056",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_spinner",
+              "pass": true,
+              "detail": "turn 4: \"Spinner\""
+            },
+            {
+              "check": "say:says_linear",
+              "pass": true,
+              "detail": "turn 4: \"Linear\""
+            },
+            {
+              "check": "say:no_offer",
+              "pass": true,
+              "detail": "turn 4: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "judge",
+              "pass": false,
+              "reason": "judge failed to run: claude failed to run: spawnSync claude ETIMEDOUT"
+            }
+          ],
+          "cost": 0.6974484000000001,
+          "session_id": "75206b66-00b0-47d2-82e7-11fc638733cb",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-dYYXoA/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Two weeks ago you eased Title's moves in Mentor Practice, so this builds straight on that. Easing and linear are two ways for a value to travel between keys. Hold is the third: the value doesn't travel at all. It stays put, then jumps to the next key.\n\nI'm looking at **Mentor Practice 2**. Is anything here meant to snap, like a blink, an on/off or a cut?\n\nTwo things stand out as questions, not mistakes:\n- **Blink's Opacity** changes between on and off three times, starting at 1 s. Is it meant to snap on and off, or fade?\n- **Cut's Opacity** changes once, at 3 s. Should that one snap, or is it a quick fade?\n\nI'm leaving out Seal because I can't see inside precomps yet, so I'm not saying it's fine.\n\nWhat should snap?\n\n### Turn 2: the project is an open comp\nLEARNER: Blink's Opacity should snap.\nTOOL CALL key_types_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"Blink\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Blink\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/2\",\n    \"1/ADBE Transform Group/ADBE Opacity/3\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1,\n      \"to_time\": 1.4,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.4,\n      \"to_time\": 1.8,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        0,\n        100\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.8,\n      \"to_time\": 2.2,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n  \"no_demo_reason\": null,\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1.2,\"layer\":\"Blink\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-dYYXoA-runtime/75206b66-00b0-47d2-82e7-11fc638733cb/tool-results/mcp-ae-mentor-blob-1793130346225-z7mxvd.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1.2,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nTOOL CALL preview_frame {\"time\":0.4667,\"layer\":\"Dot 1\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-dYYXoA-runtime/75206b66-00b0-47d2-82e7-11fc638733cb/tool-results/mcp-ae-mentor-blob-1793130346227-sig6fz.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.4667,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nTOOL CALL preview_frame {\"time\":0.5333,\"layer\":\"Dot 1\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-dYYXoA-runtime/75206b66-00b0-47d2-82e7-11fc638733cb/tool-results/mcp-ae-mentor-blob-1793130346603-s7dpaa.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.5333,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Got it: Blink's Opacity should snap.\n\nBlink has three pairs, all eased right now:\n- **1 s → 1.4 s**: 100 down to 0\n- **1.4 s → 1.8 s**: 0 back up to 100\n- **1.8 s → 2.2 s**: 100 down to 0\n\nSince each pair is eased, Blink passes through every value in between. At 1.2 s it's partly see-through, partway through a fade rather than a blink. I tried to show you that frame, but the preview only came back as a single pixel, so I can't point anything out in it. You can check it yourself by scrubbing the timeline between 1 s and 1.4 s and watching Blink fade.\n\nYour comp already has two holds that show the difference. **Dot 1's Position** and **Flag's Position** both have a held key. Dot 1 stays in one place until 0.5 s and then jumps to its next position in a single frame, with nothing in between. That's what hold does: **it keeps the value until the next key, then jumps.**\n\n**Your turn:** hold all three Blink Opacity pairs. The hold goes on the key at the **start** of each pair, which here means the keys at **1 s, 1.4 s and 1.8 s**. Select a key, then either:\n- choose **Animation > Toggle Hold Keyframe** (⌃⌥⌘H), or\n- right-click the key and choose **Toggle Hold Keyframe**.\n\nSay \"done\" when you're ready and I'll check it.\n\n### Turn 3: the project is an open comp\nLEARNER: I held all of them. Done.\nTOOL CALL key_types_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"verdict\": \"held_by_learner\"\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"verdict\": \"held_by_learner\"\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"verdict\": \"held_by_learner\"\n    }\n  ],\n  \"should_move_held\": [],\n  \"extra_holds\": [],\n  \"other_changes\": [],\n  \"constant_speed\": null,\n  \"demo_undone\": false,\n  \"items\": {\n    \"held\": true,\n    \"none_should_move_held\": true,\n    \"constant_speed\": null\n  },\n  \"passed\": true\n}\nMENTOR: You got all three pairs. Blink now stays fully on until 1.4 s and drops straight to 0, comes back on at 1.8 s, and goes off again at 2.2 s, with no fades between them. You held each one yourself, it was on the right key every time, and nothing else in the comp changed.\n\nOne last question: is there a move here that should run at constant speed, like a steady spin?\n\n### Turn 4: the project is an open comp\nLEARNER: Spinner's Rotation should run at constant speed. Done.\nTOOL CALL key_types_check {\"constant_speed\":{\"layer\":\"Spinner\",\"property\":\"Rotation\"}}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"verdict\": \"not_held\",\n      \"state\": \"eased\",\n      \"frame_time\": 1.2\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"verdict\": \"not_held\",\n      \"state\": \"eased\",\n      \"frame_time\": 1.6\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"verdict\": \"not_held\",\n      \"state\": \"eased\",\n      \"frame_time\": 2\n    }\n  ],\n  \"should_move_held\": [],\n  \"extra_holds\": [],\n  \"other_changes\": [\n    \"Spinner › Rotation was changed (not part of this lesson)\"\n  ],\n  \"constant_speed\": {\n    \"ref\": {\n      \"layer\": \"Spinner\",\n      \"property\": \"Rotation\"\n    },\n    \"verdict\": \"not_linear\",\n    \"detail\": [\n      {\n        \"pair\": \"Spinner › Rotation 0.25–4.25 s\",\n        \"from_time\": 0.25,\n        \"to_time\": 4.25,\n        \"side\": \"start\"\n      }\n    ],\n    \"properties\": [\n      {\n        \"layer\": \"Spinner\",\n        \"property\": \"Rotation\"\n      }\n    ],\n    \"marked\": false\n  },\n  \"demo_undone\": false,\n  \"items\": {\n    \"held\": false,\n    \"none_should_move_held\": true,\n    \"constant_speed\": false\n  },\n  \"passed\": false\n}\nTOOL CALL preview_frame {\"time\":1.2,\"layer\":\"Blink\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-dYYXoA-runtime/75206b66-00b0-47d2-82e7-11fc638733cb/tool-results/mcp-ae-mentor-blob-1793130629313-nw0a0d.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1.2,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Something changed after the last check. **Blink's three pairs aren't held anymore.** All three are eased again, so at 1.2 s, 1.6 s and 2 s Blink is partway through a fade instead of jumping. (The frame preview is still coming back as a single pixel, so I can't show you.) Edit > Undo while you worked on Spinner can take the holds back off, and so can choosing Toggle Hold Keyframe again on a key that's already held. Look at the keys at 1 s, 1.4 s and 1.8 s.\n\n**Spinner's Rotation** has two keys, at 0.25 s and 4.25 s, and you've changed it since the start of the lesson. It doesn't run at constant speed yet: the key at 0.25 s eases out, so it starts slowly. To fix it, select the Spinner Rotation keys and choose **Animation > Keyframe Interpolation…** (⌥⌘K), or right-click a key and choose **Keyframe Interpolation…**. Then set the top dropdown, **Temporal Interpolation**, to **Linear**.\n\nFix both, then say \"done\" and I'll check again.\n"
+        }
+      ]
+    }
+  ]
+}

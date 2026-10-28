@@ -1,0 +1,46 @@
+{
+  "id": "12-hold-pair",
+  "title": "A group with a held layer: its start is its jump time, and the jump is graded",
+  "covers": [
+    "EP-10",
+    "FR-034"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "hold-group.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "hold-group.json",
+      "say": "I staggered them. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "never_first_key",
+        "never": "\\bfirst key\\b[^.?!]{0,40}\\bDot 1\\b",
+        "turns": [
+          1,
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-HOLD",
+    "R-NAMES-REAL"
+  ]
+}

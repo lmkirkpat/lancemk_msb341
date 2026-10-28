@@ -1,0 +1,178 @@
+{
+  "run_at": "2026-10-26T06:16:13.486Z",
+  "options": {
+    "only": "01",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.5,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "01-first-lesson-mentor-practice",
+      "title": "First lesson on Mentor Practice: Title, its pairs, leave-outs, a frame, then the read-the-graph step",
+      "covers": [
+        "EP-1",
+        "US1"
+      ],
+      "fixture_sources": {
+        "practice-now.json": "stand-in"
+      },
+      "hash": "ad604dc80ef9cd018e3cc295ff09ec4697870699275aba7d63504a1e3d053992",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was read_learner_record"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "snapshot_input:eased_layers",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:focus",
+              "pass": true,
+              "detail": "turn 1: \"\""
+            },
+            {
+              "check": "say:hidden_layer",
+              "pass": true,
+              "detail": "turn 1: \"Old Take\""
+            },
+            {
+              "check": "say:precomp",
+              "pass": true,
+              "detail": "turn 1: \"Icon\""
+            },
+            {
+              "check": "say:expression",
+              "pass": true,
+              "detail": "turn 1: \"Logo\""
+            },
+            {
+              "check": "say:no_expression_claim",
+              "pass": true,
+              "detail": "turns 1 to 3: clean"
+            },
+            {
+              "check": "say:precomp_not_fine",
+              "pass": true,
+              "detail": "turns 1 to 3: clean"
+            },
+            {
+              "check": "say:asks_hard_landing",
+              "pass": true,
+              "detail": "turns 1 to 2: \"land hard\""
+            },
+            {
+              "check": "say:read_graph",
+              "pass": true,
+              "detail": "turn 2: \"fastest\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SG-PROPOSAL",
+              "pass": true,
+              "reason": "Turn 1 proposes only Title as the focus, names its pairs from the snapshot (\"Position from 0.5 to 1.5 s, 1.5 to 3 s, and 3 to 4.37 s\" and \"Scale from 0.5 to 1.5 s\"), and says \"You eased this layer in your easing lesson.\""
+            },
+            {
+              "item": "R-SG-LEAVE-OUTS",
+              "pass": true,
+              "reason": "Turn 1 gives one short line per left_out kind: hidden Old Take, null CTRL, \"I can't see inside Icon yet\", \"An expression drives Logo's Rotation\", and the ease-first pairs. It never calls a precomp fine or claims a layer has no expression, and it asks once whether any move should land hard."
+            },
+            {
+              "item": "R-SG-READ-GRAPH",
+              "pass": true,
+              "reason": "Turn 2 has the learner open the Graph Editor, choose Edit Speed Graph and say where the 0.5–1.5 s move is fastest. Turn 3 uses the frame at 1 s inside that pair to explain influence in plain words (\"short reach out of the key at 0.5 s\", \"long reach into the key at 1.5 s\"), with no influence or speed numbers and no claim to see the graph."
+            },
+            {
+              "item": "R-USES-MEMORY",
+              "pass": false,
+              "reason": "The record holds a relevant easing lesson on Title from 2026-10-12, but Turn 1 only says \"You eased this layer in your easing lesson\" and never says how long ago (about two weeks)."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time the mentor uses appears in the snapshot or preview tool output: Title, Position, Scale, 0.5/1.5/3/4.37 s, Old Take, CTRL, Icon, Logo's Rotation, Subtitle's Opacity, Bar's X Position, Glow's Blurriness, and the frame at 1 s."
+            }
+          ],
+          "cost": 0.5019904000000001,
+          "session_id": "e3675004-28d1-4b3b-8a07-fa243f694a20",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-FyX15O/learner.json\"\n}\nTOOL CALL speed_graph_snapshot {\"skill_options\":{\"eased_layers\":[\"Title\"],\"land_hard\":[]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Position/3\",\n    \"1/ADBE Transform Group/ADBE Scale/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.5,\n      \"to_time\": 3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.37 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 3,\n      \"to_time\": 4.37,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [\n        \"width\",\n        \"height\"\n      ],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 2\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ]\n}\nMENTOR: Let's shape some eases in **Mentor Practice**. So far, every ease you've added starts as Easy Ease, which gives every move the same feel. In this lesson you'll change how long each ease lasts.\n\n**Focus: Title.** You eased this layer in your easing lesson. You'll be reshaping:\n- **Position** from 0.5 to 1.5 s, 1.5 to 3 s, and 3 to 4.37 s\n- **Scale** from 0.5 to 1.5 s\n\nHere's what I'm leaving out:\n- You've hidden Old Take, so I'll leave it unless you want it.\n- CTRL is a null, so its move can't be seen in a frame.\n- I can't see inside Icon yet.\n- An expression drives Logo's Rotation, so graph edits won't show.\n- Subtitle's Opacity, Bar's X Position and Glow's Blurriness still need easing; that's the easing lesson.\n\nOne question before we start: should any of Title's moves land hard, like an impact or a slam? Or should they all land softly?\n\n### Turn 2: the project is an open comp\nLEARNER: Sounds good, let's start.\nMENTOR: Good, we'll land them all softly.\n\nFirst, let's read the graph:\n\n1. Select **Title** in the timeline and click its **Position** keyframes at 0.5 and 1.5 s.\n2. Open the Graph Editor with its button at the top of the timeline panel.\n3. In the graph type menu at the bottom of the Graph Editor, choose **Edit Speed Graph**.\n\nLook at the curve between 0.5 and 1.5 s. Where is the move fastest: near the start, in the middle, or near the end?\n\n### Turn 3: the project is an open comp\nLEARNER: I think it's fastest in the middle.\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-FyX15O-runtime/e3675004-28d1-4b3b-8a07-fa243f694a20/tool-results/mcp-ae-mentor-blob-1792995356503-nh879z.png]\n{\"comp\":\"Mentor Practice\",\"time\":1}\nMENTOR: That's right. Easy Ease puts the peak in the middle: the move starts slowly, speeds up, and slows down by the same amount at the end.\n\nI grabbed a frame at 1 s, the middle of that move, but it came back as plain purple, so I can't point out where Title is. You'll be able to see it on your screen.\n\n**How to change the shape.** In the speed graph, each key has a handle, and how far it reaches sideways is the **influence**: how long the ease lasts.\n- Easy Ease gives every key the same reach, so every move feels the same.\n- A **short reach out of the key at 0.5 s** makes Title start quickly.\n- A **long reach into the key at 1.5 s** makes it land softly.\n- Keep the landing handle **on the bottom** of the graph. Dragging it up makes Title arrive still moving.\n\nYou can also type influence into a dialog instead of dragging. It's called Keyframe Velocity.\n\nYour turn: shape all four pairs on Title so each one starts quickly and lands softly. That's Position 0.5–1.5 s, 1.5–3 s and 3–4.37 s, plus Scale. Say \"done\" when you're finished, and I'll check them.\n"
+        }
+      ]
+    }
+  ]
+}

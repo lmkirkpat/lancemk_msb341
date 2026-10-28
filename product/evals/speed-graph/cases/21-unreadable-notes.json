@@ -1,0 +1,69 @@
+{
+  "id": "21-unreadable-notes",
+  "title": "The notes can't be read: one sentence about it, then a first lesson, nothing said before the snapshot",
+  "covers": [
+    "FR-049",
+    "FR-052",
+    "SC-015"
+  ],
+  "learner_record": "mentor/test/fixtures/records/unreadable.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "speed_graph_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "learner.readable": false,
+          "mode": "lesson"
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "speed_graph_check",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "says_notes_unreadable",
+        "must": "\\b(?:couldn.t|can.t|could not|unable to) read\\b[^.?!]{0,60}\\bnotes\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "notes_plain",
+        "never": "\\b(?:file|corrupt\\w*|broken|JSON|parse|learner record)\\b"
+      },
+      {
+        "id": "goes_on_to_lesson",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_other_skill_claim_from_unreadable_notes",
+        "never": "\\b(?:haven.t|have not|never|not yet|hasn.t been|isn.t|is not|wasn.t)\\b[^.?!]{0,40}\\b(?:learned|done|covered|practiced|finished|started)\\b[^.?!]{0,40}\\b(?:easing|speed graph|key types?|offset|pivot|anchor|null|parenting)\\b|\\b(?:easing|speed graph|key types?|offset|pivot|anchor|null|parenting)\\b[^.?!]{0,30}\\b(?:haven.t|hasn.t|isn.t|is not|not yet|wasn.t|not)\\b[^.?!]{0,15}\\b(?:learned|done|covered|practiced|finished|started)\\b|\\byou(?:'ve| have)?\\s+(?:haven.t|have not|not yet|never)\\b[^.?!]{0,30}\\b(?:easing|speed graph|key types?|offset|pivot|anchor|null|parenting)\\b"
+      },
+      {
+        "id": "notes_sentence_once",
+        "never": "(?:couldn.t|can.t|could not|unable to) read\\b[^.?!]{0,60}\\bnotes\\b[\\s\\S]*(?:couldn.t|can.t|could not|unable to) read\\b[^.?!]{0,60}\\bnotes\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-UNREADABLE-NOTES",
+    "R-NAMES-REAL",
+    "R-UNREADABLE-NOT-A-CLAIM"
+  ]
+}

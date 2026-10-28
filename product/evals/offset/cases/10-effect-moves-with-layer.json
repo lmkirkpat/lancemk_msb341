@@ -1,0 +1,45 @@
+{
+  "id": "10-effect-moves-with-layer",
+  "title": "An effect's key moved with its layer passes",
+  "covers": [
+    "EP-8",
+    "row 10"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "effect-with-layer.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "effect-with-layer.json",
+      "say": "I staggered them. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "no_fault",
+        "never": "\\bBlurriness\\b[^.?!]{0,50}\\b(?:still|didn't move|isn't moving|stuck)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-PASS",
+    "R-NAMES-REAL"
+  ]
+}

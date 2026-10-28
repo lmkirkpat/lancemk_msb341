@@ -1,0 +1,77 @@
+{
+  "id": "20-stored-choices-confirmed",
+  "title": "A lesson resumed on a comp that matches, with what should snap: said back as the learner's own and confirmed before the intent question, a frame, a demo or a check",
+  "covers": [
+    "FR-046"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "key_types_demo",
+      "key_types_check"
+    ],
+    "say": [
+      {
+        "id": "says_focus_back",
+        "must": "(?=[\\s\\S]*Blink)(?=[\\s\\S]*\\bsnap)",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "as_theirs",
+        "must": "\\b(?:last time|before|earlier|you had|you said|you chose|you picked)\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "asks_and_stops",
+        "must": "\\?",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "intent_not_asked_fresh",
+        "never": "\\b(?:is|are) (?:anything|either|any of)\\b[^.?!]{0,60}\\bmeant to snap\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_where_kept",
+        "never": "\\b(?:stored|session|skill options|where it was kept|remembered it)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-STORED-CONFIRM",
+    "R-ONE-IDEA"
+  ]
+}

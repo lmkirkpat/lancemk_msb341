@@ -1,0 +1,55 @@
+{
+  "id": "07-floor-60fps",
+  "title": "A 3-frame gap at 60 fps still reads as together: same, on the 60 fps comp",
+  "covers": [
+    "EP-5",
+    "D-1"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2-60fps.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2-60fps.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2-60fps.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, three frames apart."
+    }
+  ],
+  "expect": {
+    "snapshot_input_matches": [
+      "gap_frames\":3"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "still_together",
+        "must": "together|too small|too close|barely",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "asks_again",
+        "must": "\\?",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_number",
+        "never": "\\b(?:[4-9]|\\d\\d+)\\s*frames?\\b|\\b(?:a few|couple of)\\s*frames\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-FLOOR",
+    "R-OFF-NO-GAP"
+  ]
+}

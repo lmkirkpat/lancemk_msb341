@@ -1,0 +1,44 @@
+{
+  "id": "13-version-trap",
+  "title": "No Mac shortcut, no 'freeze', the menu path named",
+  "covers": [
+    "KT-j",
+    "FR-023"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "What's the shortcut for hold keyframes? Is it the same as Freeze Frame?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "menu_path",
+        "must": "Toggle Hold Keyframe",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_freeze_frame",
+        "never": "Freeze Frame|Layer\\s*>\\s*Time",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-VERSION",
+    "R-ONE-IDEA"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "id": "05-incomplete-attempt",
+  "title": "Two Blink pairs still fading (one held): both named, one with a frame inside it, no fix, no offer",
+  "covers": [
+    "KT-d"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-one-held.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "blink-one-held.json",
+      "say": "I held them. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "key_types_check",
+      "preview_frame"
+    ],
+    "last_check": {
+      "passed": false,
+      "has": [
+        "not_held"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_blink",
+        "must": "Blink",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_time",
+        "must": "1\\.2|2 s|1\\.8",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:hold|fix|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

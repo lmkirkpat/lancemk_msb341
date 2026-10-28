@@ -1,0 +1,55 @@
+{
+  "id": "02-demonstration",
+  "title": "One demonstration on the demo pair only, in plain words, Edit > Undo, no numbers",
+  "covers": [
+    "EP-2",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Can you show me on one pair first?"
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "1/ADBE Transform Group/ADBE Position/1",
+    "tools_called": [
+      "preview_frame"
+    ],
+    "say": [
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "short_long",
+        "must": "short|long|quick|soft",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-DEMO",
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL"
+  ]
+}

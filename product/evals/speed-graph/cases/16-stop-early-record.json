@@ -1,0 +1,41 @@
+{
+  "id": "16-stop-early-record",
+  "title": "The learner stops after a check that didn't pass: recorded partial, demo stated, no numbers or method",
+  "covers": [
+    "EP-14"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "planted-dragged-up-small.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Show me one first."
+    },
+    {
+      "project": "planted-dragged-up-small.json",
+      "say": "I tried the others. Done."
+    },
+    {
+      "project": "planted-dragged-up-small.json",
+      "say": "I'm out of time, let's stop here."
+    }
+  ],
+  "expect": {
+    "record_lesson": {
+      "skill": "easing.speed_graph",
+      "result": "partial",
+      "demo_used": true
+    }
+  },
+  "rubric": [
+    "R-RECORD-HONEST",
+    "R-NAMES-REAL"
+  ]
+}

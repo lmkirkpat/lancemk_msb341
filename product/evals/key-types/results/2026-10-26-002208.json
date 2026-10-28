@@ -1,0 +1,123 @@
+{
+  "run_at": "2026-10-26T06:22:08.756Z",
+  "options": {
+    "only": "07",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.56,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "07-holds-everything",
+      "title": "Selects and holds everything: names where the should-fade layer now waits and jumps; asks about the extra holds; no fix",
+      "covers": [
+        "KT-f"
+      ],
+      "fixture_sources": {
+        "practice2-before.json": "stand-in",
+        "select-all-hold.json": "stand-in"
+      },
+      "hash": "bb18c8ea5d41b4f80d1fc0e856fd8de587c0aa8d405994fbbefe40907f48d552",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_cut",
+              "pass": true,
+              "detail": "turn 3: \"Cut\""
+            },
+            {
+              "check": "say:names_extra",
+              "pass": true,
+              "detail": "turn 3: \"Card\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 3: \"?\""
+            },
+            {
+              "check": "say:no_offer",
+              "pass": true,
+              "detail": "turn 3: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KT-SHOULD-MOVE-HELD",
+              "pass": true,
+              "reason": "Turn 3 says Cut \"doesn't fade between 3 s and 3.1 s anymore. It waits, then jumps,\" and asks \"Did you mean for Card and Pause to change?\" about the extra holds. It gives no fix and doesn't offer one, only \"check the keys at those times.\""
+            },
+            {
+              "item": "R-HINT-NOT-FIX",
+              "pass": true,
+              "reason": "Turn 3 points at what is off and where with real names and times (Cut at 3 s, Card Position and Scale at 1.2 s, Pause Position at 5 s and 6 s), hands it back with \"Say 'done' when you've had a look,\" and never offers to fix it or spells out fix steps."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time matches the tool results: Blink Opacity at 1, 1.4, 1.8 and 2.2 s; Cut at 3 s to 3.1 s; Dot 1's jump at 0.5 s; Card Position and Scale at 1.2 s; Pause Position at 5 s and 6 s. \"Two weeks ago you eased Title's moves in Mentor Practice\" matches the record dated 2026-10-12."
+            }
+          ],
+          "cost": 0.5586092,
+          "session_id": "b71e0668-29f0-4832-a8eb-d84d16063925",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-B8mU0A/learner.json\"\n}\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [],\n  \"should_move\": []\n}\nMENTOR: Welcome back. Two weeks ago you eased Title's moves in Mentor Practice. This lesson builds on that: next to linear and eased, a key can also be a **hold**.\n\nYou're in **Mentor Practice 2** now. Before I suggest anything:\n\n**Is anything here meant to snap, like a blink, an on/off, or a cut?**\n\nTwo things change Opacity and fade right now:\n- **Blink**'s Opacity changes three times, starting at 1 s. Is it meant to snap on and off?\n- **Cut**'s Opacity changes once, at 3 s. Is that meant to snap, or is it a fade?\n\n### Turn 2: the project is an open comp\nLEARNER: Blink should snap, but Cut is meant to fade.\nTOOL CALL key_types_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"Blink\",\"property\":\"Opacity\"}],\"should_move\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Blink\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/2\",\n    \"1/ADBE Transform Group/ADBE Opacity/3\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1,\n      \"to_time\": 1.4,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.4,\n      \"to_time\": 1.8,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        0,\n        100\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.8,\n      \"to_time\": 2.2,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n  \"no_demo_reason\": null,\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [],\n  \"should_move\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\"\n    }\n  ]\n}\nMENTOR: Got it, Cut stays a fade. Here's what Blink does now, halfway through its first pair:\nTOOL CALL preview_frame {\"time\":1.2}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-B8mU0A-runtime/b71e0668-29f0-4832-a8eb-d84d16063925/tool-results/mcp-ae-mentor-blob-1792995698349-wnilj8.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1.2}\nTOOL CALL preview_frame {\"time\":0.4667}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-B8mU0A-runtime/b71e0668-29f0-4832-a8eb-d84d16063925/tool-results/mcp-ae-mentor-blob-1792995698702-wd9lij.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.4667}\nTOOL CALL preview_frame {\"time\":0.5333}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-B8mU0A-runtime/b71e0668-29f0-4832-a8eb-d84d16063925/tool-results/mcp-ae-mentor-blob-1792995698955-1rd0h2.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.5333}\nMENTOR: The frames I just pulled came back as tiny solid purple images, too small to show Blink or Dot 1. So I'm not going to use them as proof. This part comes from the keys themselves:\n\n- **Blink › Opacity** goes from 100 at 1 s to 0 at 1.4 s, and the keys are eased. That means at 1.2 s it's partway see-through. **It fades.**\n- **Dot 1's Position** already has a hold. It keeps its value until the next key, then **jumps** at 0.5 s, with no in-between frames.\n\nThat jump is what you want for Blink: **hold keeps the value until the next key, then jumps.**\n\n**Your turn.** Blink has three pairs to hold:\n- 1 s to 1.4 s\n- 1.4 s to 1.8 s\n- 1.8 s to 2.2 s\n\nThe hold goes on the key at the **start** of each pair, so that's the keys at **1 s, 1.4 s and 1.8 s**. Leave the key at 2.2 s alone. To set a hold, select a key, then go to **Animation > Toggle Hold Keyframe**, or right-click the key and choose **Toggle Hold Keyframe**.\n\nSay \"done\" when you've held them, and I'll check.\n\n### Turn 3: the project is an open comp\nLEARNER: I selected every key and held them. Done.\nTOOL CALL key_types_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"verdict\": \"held_by_learner\"\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"verdict\": \"held_by_learner\"\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"verdict\": \"held_by_learner\"\n    }\n  ],\n  \"should_move_held\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"waits_until\": 3.1\n    }\n  ],\n  \"extra_holds\": [\n    {\n      \"layer\": \"Card\",\n      \"property\": \"Position\",\n      \"time\": 1.2\n    },\n    {\n      \"layer\": \"Card\",\n      \"property\": \"Scale\",\n      \"time\": 1.2\n    },\n    {\n      \"layer\": \"Pause\",\n      \"property\": \"Position\",\n      \"time\": 5\n    },\n    {\n      \"layer\": \"Pause\",\n      \"property\": \"Position\",\n      \"time\": 6\n    }\n  ],\n  \"other_changes\": [],\n  \"constant_speed\": null,\n  \"demo_undone\": false,\n  \"items\": {\n    \"held\": true,\n    \"none_should_move_held\": false,\n    \"constant_speed\": null\n  },\n  \"passed\": false\n}\nMENTOR: You held all three Blink pairs yourself: 1 s, 1.4 s and 1.8 s all snap now. Nice work.\n\nBut selecting every key put holds on more than Blink:\n\n- **Cut** doesn't fade between 3 s and 3.1 s anymore. It waits, then jumps, because the key at 3 s is a hold. You said Cut is meant to fade, so that one needs another look.\n- **Card**'s Position and Scale have holds on their keys at 1.2 s, so Card jumps there now too.\n- **Pause**'s Position has holds on its keys at 5 s and 6 s.\n\nDid you mean for Card and Pause to change? If you didn't, check the keys at those times. Toggle Hold Keyframe works both ways, and it only touches the keys you have selected.\n\nSay \"done\" when you've had a look, and I'll check again.\n"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "08-expression-over-keys",
+  "title": "Logo's Rotation named as constant speed: an expression drives it; no mark, no 'set its keys to linear'",
+  "covers": [
+    "KT-g"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Subtitle's Opacity should snap."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Logo's Rotation should run at constant speed. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "has": [
+        "\"verdict\":\"expression\""
+      ]
+    },
+    "say": [
+      {
+        "id": "says_expression",
+        "must": "expression",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_linear_advice",
+        "never": "set (?:its|the|those|these)[^.?!]{0,20}keys?[^.?!]{0,20}linear|make (?:it|them) linear",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-EXPRESSION",
+    "R-NAMES-REAL"
+  ]
+}

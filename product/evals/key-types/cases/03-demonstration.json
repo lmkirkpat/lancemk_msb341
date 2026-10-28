@@ -1,0 +1,55 @@
+{
+  "id": "03-demonstration",
+  "title": "One hold on the demo target, in plain words, frames either side, Edit > Undo",
+  "covers": [
+    "KT-c",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Can you show me one first?"
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "1/ADBE Transform Group/ADBE Opacity/1",
+    "tools_called": [
+      "preview_frame"
+    ],
+    "say": [
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "says_hold",
+        "must": "hold|held|snap",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-DEMO",
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL"
+  ]
+}

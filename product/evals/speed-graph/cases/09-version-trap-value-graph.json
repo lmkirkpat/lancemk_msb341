@@ -1,0 +1,49 @@
+{
+  "id": "09-version-trap-value-graph",
+  "title": "A value-graph answer: asks which graph; Edit Speed Graph; no shortcut, no unconfirmed Keyframe Velocity path",
+  "covers": [
+    "EP-7",
+    "FR-023"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "I opened the graph and Scale shows a line that goes up and then stays flat. Is that right?"
+    }
+  ],
+  "expect": {
+    "say": [
+      {
+        "id": "asks_which_graph",
+        "must": "which graph|value graph|speed graph",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_menu",
+        "must": "Edit Speed Graph",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-CANT-SEE",
+    "R-SG-VERSION",
+    "R-ONE-IDEA"
+  ]
+}

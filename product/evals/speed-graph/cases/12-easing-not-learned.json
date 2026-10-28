@@ -1,0 +1,52 @@
+{
+  "id": "12-easing-not-learned",
+  "title": "Easing not learned: named and offered; on insistence one sentence",
+  "covers": [
+    "EP-11",
+    "US3"
+  ],
+  "learner_record": "mentor/test/fixtures/records/empty.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "I'd rather do this one anyway."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "names_easing",
+        "must": "easing",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "offers",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "builds_on",
+        "must": "builds on|easing",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-PREREQ-EASING",
+    "R-ONE-IDEA"
+  ]
+}

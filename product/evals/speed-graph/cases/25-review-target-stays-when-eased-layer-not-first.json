@@ -1,0 +1,53 @@
+{
+  "id": "25-review-target-stays-when-eased-layer-not-first",
+  "title": "A review where the easing lesson's layer (Subtitle) isn't first in the comp: the target named in the first turn is the target the later calls and the check use",
+  "covers": [
+    "FR-050",
+    "Phase10-review-2"
+  ],
+  "learner_record": "product/evals/speed-graph/records/learned-subtitle-eased.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Yes, let's do the review."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Okay, that's the one. I've shaped it, done."
+    }
+  ],
+  "expect": {
+    "first_tool": "speed_graph_snapshot",
+    "review_mode": true,
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "review",
+          "mode_source": "review_due",
+          "learner.eased_layers.0": "Subtitle"
+        }
+      }
+    ],
+    "focus_stable": true,
+    "focus_named": {
+      "turn": 2
+    },
+    "demo_calls_max": 0,
+    "tools_called": [
+      "speed_graph_check"
+    ]
+  },
+  "rubric": [
+    "R-SG-TARGET-STAYS",
+    "R-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}

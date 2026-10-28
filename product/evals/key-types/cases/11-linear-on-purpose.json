@@ -1,0 +1,64 @@
+{
+  "id": "11-linear-on-purpose",
+  "title": "Every pair held, then a constant-speed move named: confirmed linear, remembered",
+  "covers": [
+    "KT-i"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-all-held.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "blink-all-held.json",
+      "say": "I held all of them. Done."
+    },
+    {
+      "project": "blink-all-held.json",
+      "say": "Spinner's Rotation should run at constant speed."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true,
+      "has": [
+        "\"verdict\":\"linear\""
+      ]
+    },
+    "record_lesson": {
+      "skill": "keyframes.types",
+      "result": "passed",
+      "demo_used": false
+    },
+    "say": [
+      {
+        "id": "asks_constant_speed",
+        "must": "constant speed|steady",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "confirms_linear",
+        "must": "linear|constant speed",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-LINEAR-CHECK",
+    "R-RECORD-HONEST",
+    "R-NAMES-REAL"
+  ]
+}

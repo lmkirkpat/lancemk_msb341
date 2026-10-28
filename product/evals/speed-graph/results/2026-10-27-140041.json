@@ -1,0 +1,52 @@
+{
+  "run_at": "2026-10-27T20:00:41.629Z",
+  "options": {
+    "only": "11",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "11-one-dimension-off",
+      "title": "Scale shaped on one part only: says which part is off",
+      "covers": [
+        "EP-10"
+      ],
+      "fixture_sources": {
+        "practice-now.json": "live",
+        "planted-one-scale-dim.json": "live"
+      },
+      "hash": "1c865574454ee517da9b7dbafa77a535ebac5a61548f5b8dfc1af086cef631f5",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "claude failed to run: spawnSync claude ETIMEDOUT"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": null,
+          "transcript": ""
+        }
+      ]
+    }
+  ]
+}

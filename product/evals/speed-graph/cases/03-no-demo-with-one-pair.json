@@ -1,0 +1,42 @@
+{
+  "id": "03-no-demo-with-one-pair",
+  "title": "One pair in focus (Bar's Trim Paths End): no demonstration, a walkthrough in words",
+  "covers": [
+    "EP-2",
+    "US1"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "I'd like to work on Bar's Trim Paths End."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Can you show me how?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "walks_through",
+        "must": "Graph Editor|speed graph|Edit Speed Graph",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-WALKTHROUGH",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "04-two-members-no-demo",
+  "title": "A two-member group: no demonstration, a walkthrough in words",
+  "covers": [
+    "EP-3"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Just Dot 1 and Dot 2, Dot 1 first, five frames apart."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Can you show me how?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "walks_through",
+        "must": "drag|keys|bar",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-WALKTHROUGH",
+    "R-NAMES-REAL"
+  ]
+}

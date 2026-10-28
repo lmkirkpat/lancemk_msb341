@@ -1,0 +1,44 @@
+{
+  "id": "06-expression-over-keys",
+  "title": "Logo's Rotation (an expression over keys) is refused kindly as a target and never graded",
+  "covers": [
+    "EP-5"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Can we shape Logo's Rotation instead?"
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "speed_graph_check",
+      "speed_graph_demo"
+    ],
+    "say": [
+      {
+        "id": "says_expression",
+        "must": "expression",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_expression_claim",
+        "never": "\\b(?:no|without an?|doesn't have an?) expression"
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-EXPRESSION-REFUSED",
+    "R-NAMES-REAL"
+  ]
+}

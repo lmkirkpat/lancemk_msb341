@@ -1,0 +1,57 @@
+{
+  "id": "02-meant-to-fade",
+  "title": "Everything is meant to fade: dropped with no argument; no invented focus; the practice blink or Mentor Practice 2 offered",
+  "covers": [
+    "KT-b",
+    "KT-n"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Title and Subtitle are both meant to fade."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "key_types_snapshot"
+    ],
+    "snapshot_input_matches": [
+      "should_move"
+    ],
+    "snapshot_input_lacks": [
+      "\"focus\":\\[\\{"
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "key_types_check"
+    ],
+    "say": [
+      {
+        "id": "offers_practice",
+        "must": "practice|Mentor Practice 2|blink",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_argument",
+        "never": "\\b(?:but|however|really should)\\b[^.?!]{0,40}\\bsnap",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-DROP-NO-ARGUMENT",
+    "R-KT-PRACTICE-OFFER"
+  ]
+}

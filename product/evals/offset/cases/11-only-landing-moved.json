@@ -1,0 +1,46 @@
+{
+  "id": "11-only-landing-moved",
+  "title": "Properties kind: a landing that moved passes",
+  "covers": [
+    "EP-9",
+    "S-1"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "props-pass-landing.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Position first, then Opacity, then Scale, four frames apart."
+    },
+    {
+      "project": "props-pass-landing.json",
+      "say": "I staggered them. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "praises",
+        "must": "Title|Scale|Opacity|Position",
+        "turns": [
+          3
+        ]
+      }
+    ],
+    "snapshot_calls_ok": true
+  },
+  "rubric": [
+    "R-OFF-PASS",
+    "R-NAMES-REAL"
+  ]
+}
