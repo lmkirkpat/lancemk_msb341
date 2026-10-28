@@ -1,0 +1,83 @@
+{
+  "id": "39-rig-example-only-when-asked",
+  "title": "The existing rig (Hatch follows Hatch Rig) stays out of the explanation turn and is named in words, from the read, only when the learner asks what it looks like; then the turn-or-scale question again, no null task, no claim about how the rig moves",
+  "covers": [
+    "FR-023",
+    "FR-023a",
+    "TD 012 § 16",
+    "US1-2"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "What does that look like? Is there one already in my comp?"
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "say": [
+      {
+        "id": "no_rig_in_explain",
+        "never": "\\b(?:CTRL|Hatch Rig)\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "names_rig_when_asked",
+        "must": "Hatch[^.?!]{0,40}(?:follows?|is parented to|parent)[^.?!]{0,30}Hatch Rig|Hatch Rig[^.?!]{0,40}(?:parent|carries|drags|brings)[^.?!]{0,30}Hatch",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_rig_move_claim",
+        "never": "(?<!(?:can['’]?t|cannot|can not|don['’]t|do not|won['’]t|unable to|not|never|no way to|n['’]t)[^.?!]{0,60})(?:Hatch Rig (?:also |then |just |only |first |keeps |currently )?(?:slides?|slid|spins?|spun|rotates?|swings?|swung|scales?|drifts?|travels?|moves?|animates?)\\b|Hatch Rig[^.?!]{0,30}\\b(?:slides|spins|rotates|swings|drifts|travels) (?:across|left|right|up|down|from|to|around)\\b)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_null_task",
+        "never": "Layer\\s*>\\s*New|\\bNull Object\\b|\\b(?:add|make|create|new) (?:a |the )?null\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "asks_region_again",
+        "must": "(?:turn|scale|swing|pivot)[^.?!]*from|where[^.?!]*(?:turn|scale|swing|pivot)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "ends_on_question",
+        "must": "\\?[\"”’']?\\s*$",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NO-NULL-MOVE",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ],
+  "note": "2026-10-28, number assigned by the cockpit. Turn 2 is case 02's explanation turn (checked here too: no rig named unasked). Turn 3 asks for an example, the only trigger FR-023 allows. Hatch follows Hatch Rig in practice2b.json (case 32 uses it). names_rig_when_asked is a guess at the wording ('Hatch already follows Hatch Rig'); check it against the first transcript before counting a miss as the mentor's. Not run."
+}

@@ -1,0 +1,99 @@
+{
+  "id": "40-left-open-region-unanswered",
+  "title": "A lesson picked up in a new session after the group was agreed but before the turn-or-scale question was answered: the mentor asks that question first, on its own, with no null task and no recap",
+  "covers": [
+    "FR-043",
+    "FR-046",
+    "FR-052",
+    "TD 012 § 16",
+    "SKILL.md step 2 (picked up again)"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor Tile, Caption and Stamp should move as one."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "say": [
+      {
+        "id": "names_group",
+        "must": "(?=[\\s\\S]*Tile)(?=[\\s\\S]*Caption)(?=[\\s\\S]*Stamp)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "asks_region_first",
+        "must": "(?:turn|scale|swing|pivot)[^.?!]*from|where[^.?!]*(?:turn|scale|swing|pivot)|only slide",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "ends_on_question",
+        "must": "\\?[\"”’']?\\s*$",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_null_task",
+        "never": "Layer\\s*>\\s*New|\\bNull Object\\b|\\b(?:add|make|create|new) (?:a |the )?null\\b|say done|never (?:shows|renders)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_which_layers",
+        "never": "which layers (?:should|do you want)|which (?:2|two) to (?:4|four)|move as one, like",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_new_proposal",
+        "never": "\\bChip [ABC]\\b|\\bRow [ABC]\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_recap",
+        "never": "recap|refresher|reminder|children inherit|inherit|position, scale and rotation|not opacity|carries? (?:its|the) children",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_review",
+        "never": "\\breview(?:s|ed|ing)?\\b|\\bdue\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-CONTINUED",
+    "R-ONE-IDEA",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-28, number assigned by the cockpit. Modelled on 37/38. Turn 1 sets the focus and the mentor asks the region question, but the learner never answers and null_parent_check is never called, so the session holds no region. Turn 2 reopens in a new session: one sentence on where it left off, then the question on its own (SKILL.md ~:162). Overlap with 37: 37 expects the null step (must 'null') for the same fixture and now conflicts with this branch; see README. Not run."
+}

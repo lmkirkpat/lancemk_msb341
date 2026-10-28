@@ -11,6 +11,12 @@ tests (`cd mentor && npm test`); evals don't repeat them.
 Built by copying `product/evals/easing/run.mjs`, not sharing it, so easing's files stay untouched.
 Same options and results format.
 
+**Cases 39 and 40 (added 2026-10-28, dry-run only so far).** 39 is FR-023 (rig example only on request); 40 is the
+resumed-before-the-region-question branch (SKILL.md ~:162). Known overlap: **case 37** (same fixture, same shape) expects
+`must \bnull\b` on the reopened turn, which the new branch contradicts if the region was never answered. Expect 37 to fail
+`goes_to_null_step` or `R-NULL-CONTINUED` until it is re-pointed (it should pass the region question first, or answer it in
+turn 1). Not changed here: 37 was not in this task's runs. `R-NULL-CONTINUED` now says asking the region question first passes.
+
 ## First full baseline (2026-10-28, 38 cases, `results/2026-10-28-125016.json`)
 
 On `main`'s mentor, Phase 10 as merged. **23/38 (61%)** in the one full run, $23.45. Three plumbing reruns (05 timed out
@@ -182,6 +188,8 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | 36 | A review asked for when none is due: it runs, and nothing says it was early or not due | 1 | first_tool; review_mode; first_snapshot_reply (review, asked); tools_called; tools_not_called; snapshot_focus_excludes; say: must names_chips, must turn_or_scale, never nothing_about_schedule | R-ASKED-REVIEW-QUIET, R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
 | 37 | A lesson left open on Tile, Caption and Stamp, reopened in a new session: where it left off, no "which layers" question, no new proposal | 2 | tools_called; tools_not_called; say: must names_group, never no_which_layers, never no_new_proposal, never no_review | R-NULL-CONTINUED, R-NAMES-REAL | live |
 | 38 | A lesson left open with the null placed, reopened in a new session (round 2 C): where it left off (group, null placed), then parenting; no recap, no second null | 3 | tools_called; tools_not_called; say: must names_group, must says_null_placed, must goes_to_parenting, never no_which_layers, never no_new_proposal, never no_recap, never no_second_null, never no_review | R-NULL-CONTINUED, R-NAMES-REAL | live |
+| 39 | The rig example (Hatch follows Hatch Rig) stays out of the explanation turn and is named only when asked (2026-10-28, FR-023, TD 012 § 16) | 3 | tools_not_called; say: never no_rig_in_explain, must names_rig_when_asked, never no_rig_move_claim, never no_null_task, must asks_region_again, must ends_on_question | R-NO-NULL-MOVE, R-NAMES-REAL, R-ONE-IDEA | live |
+| 40 | A lesson reopened in a new session before the turn-or-scale question was answered: that question first, on its own, no null task, no recap (SKILL.md step 2 picked up again) | 2 | tools_called; tools_not_called (demo, check); say: must names_group, must asks_region_first, must ends_on_question, never no_null_task, no_which_layers, no_new_proposal, no_recap, no_review | R-NULL-CONTINUED, R-ONE-IDEA, R-NAMES-REAL | live |
 
 Round 2 (2026-10-28): 34 gained `notes_sentence_once_in_turn_1` and a wider `no_claim_from_unread_record` (any word about
 easing or the pivot). 37 is now the null-not-placed branch (adds `no_recap`, `goes_to_null_step`, `does_not_say_null_placed`).
@@ -471,3 +479,20 @@ Written on `pacing-evals`; no paid run yet. T346 runs 02, 03, 04, 15 and 23 (and
   (TD § 16, the eval engineer's note); T346 checks it.
 - **Runner.** The judge sees each tool result up to 16000 characters (was 6000). New: a `say` check may carry `at_most`
   with `must` (counts matches, as in the anchor set).
+
+## T346 pacing re-runs (2026-10-28, `--repeat 3` each, 8 commands, $21.74 in all)
+
+On the null `SKILL.md` with T344's pacing edits. Majority passes. Counted result per case is the last line of each row.
+
+| Case | Runs | Counted | Triage |
+|---|---|---|---|
+| 03 | `-143926` 3/3 ($2.65) | **3/3** | |
+| 04 | `-144115` 3/3 ($2.91) | **3/3** | |
+| 10 | `-144641` 3/3 ($2.73) | **3/3** | |
+| 23 | `-144508` 2/3 ($2.69) | **2/3, pass** | Run 2 R-ONE-IDEA, prompt, real but one of three: the side-question answer ran three sentences before the pending action |
+| 02 | `-143705` 0/3 ($1.01); `-144732` 0/3 ($1.01) | **not scored by the runner; hand-scored 6/6 offline** | **Check bug, mine.** `opacity_named` wanted the word "opacity"; the skill's sanctioned sentence says "fade". Both runs failed it 3/3 and the judge never ran. My first two fixes never landed: I used `sed -i 'script' file`, which BSD sed on macOS reads as a backup suffix and fails, so the `&&` chain stopped (the second 02 run therefore went against the old check, $1.01 wasted). Fixed with a Python edit so the check accepts "opacity" or "fade" (diff below). Offline: all six turn-2 replies contain "fade", name no rig, have no null task, end on the question, and are the frame sentence, the idea sentence and the question. Rubric items not judged (no paid run) |
+| 15 | `-144253` 1/3 ($3.19); `-144952` 1/3 ($3.49) | **1/3, FAIL** | First run: both failures were `demo_offer_once` (2 matches), **check bug**: one offer sentence ("If you'd like to watch one first, I can parent Tile for you") matched two alternatives of the regex, so one offer counted twice. Now one match per sentence. Second run (fixed regex): all checks pass; runs 1 and 2 fail **R-ONE-IDEA, prompt, real**: the do-it-for-me decline in turn 4 runs three sentences. The offer regex held (it was a guess; now confirmed against six transcripts) |
+
+The diff of the 02 check: `-"must": "opacity",` `+"must": "opacity|fade",`.
+
+Cases 39 and 40 (added the same day) are dry-run only.

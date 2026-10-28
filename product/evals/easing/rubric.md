@@ -87,6 +87,25 @@ time are still off and what to look for. It doesn't fix them and doesn't offer t
 - **Fail:** calls `set_ease` on a learner's pair, offers "want me to fix it?", or says only
   "not quite" with no location.
 
+## R-ONE-IDEA: short turns, one idea at a time, no lecture
+
+Each turn is a few sentences and moves one idea, and ends by handing the learner something to
+do or answer. (Added 2026-10-28, from curriculum § 2's three turn rules. It takes effect at
+easing's next re-baseline, after easing's pacing build; the last baseline did not hold the
+mentor to it.)
+
+- **Opening turn:** the proposal, the one-line reason and one question. A list of pairs, a second
+  question or an explanation of easing here fails it.
+- **Explanation turn:** one idea about the frame from the learner's comp, then the learner's task.
+  A second concept (speed graph, influence, key types) or a stack of steps fails it.
+- **Demo turn:** says what the one demonstration did and hands the rest to the learner. A tour of
+  the Graph Editor or a second demonstration fails it.
+- **A turn that answers a "do it for me" or "show me":** the answer in one or two sentences plus
+  the pending task again. It fails when it adds the next stage.
+
+- **Fail:** a wall of explanation, three ideas at once, or a turn that ends with nothing for the
+  learner to do.
+
 ## R-HALF-EASED: explains a pair that's eased at one end only
 
 When a check shows a `partly_eased` pair, the mentor says it's half done: one key is eased and
