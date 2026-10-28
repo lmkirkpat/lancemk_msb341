@@ -51,7 +51,8 @@ session's offer, FR-049's table that `eased_layers` matches whole names; FR-050 
 **Phase 10 round 2, 2026-10-28 (approved by the human, from the T413/T414 smoke runs):** FR-049 and
 FR-051's unreadable row report other skills' `learned` as `null` (unknown) on an unreadable record;
 FR-048 step 3 counts no target for null's review when there's no proposal (a crowd counts only for
-`recommend_next`'s lesson path); contracts/skill-module.md § 2 and § 3 follow.
+`recommend_next`'s lesson path), with a new FR-051 row; FR-050 lists round 2's four step 0 changes;
+contracts/skill-module.md § 2 and § 3 follow. Spec 012's FR-003 and H-6 mark their gap closed.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
@@ -922,7 +923,12 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
     first lesson. What each branch does and says doesn't change: key types, offset and speed graph
     still offer a due review as their first words, anchor and null still run it; a learner who turns
     the offer down gets a call with `mode: "lesson"`. Each review section's first call is now the
-    opening call itself; its later calls keep `mode: "review"` as they do.
+    opening call itself; its later calls keep `mode: "review"` as they do. Four exceptions, made on
+    purpose (Phase 10 round 2, 2026-10-28): a new step 0 branch for an `other_skills` entry with
+    `learned: null`, which makes no claim and no offer; the "couldn't read my notes" sentence is said
+    once per lesson, and step 9 no longer repeats it; speed graph no longer asks whether the learner
+    has done easing on an unreadable record; and null's step 2 is skipped when a lesson is picked up
+    again with its group already set.
   - Speed graph's second call in step 1 (FR-047) sends `learner.eased_layers` as `eased_layers`. A
     `speed_graph_snapshot` call whose `skill_options` hold no `eased_layers` (none sent and none stored
     on the lesson, or an empty list) uses `learner.eased_layers` for its analysis only, so every call
@@ -950,6 +956,7 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
   | Learned, not due | `lesson`, `default` | `review_due` false | Pick a review |
   | Learned, due, a new target in this comp | `review`, `review_due`; the offer remembered | `review_due` true | |
   | Learned, due, no new target in this comp | `lesson`, `default` | `review_due` true | Start a review that says there's nothing new (OR-1) |
+| Learned, due, crowd only, no proposal (null only; Phase 10 round 2, fix B, 2026-10-28) | `lesson`, `default`; no review offered | `review_due` true | Count the crowd as a new target. Tests: `null-parenting-tools.test.mjs` "fix B: learned and due on a crowd with nothing new → lesson, default, no review offer" and "fix B: reviewFor finds no target on the crowd; recommend's lesson path still counts it"; `null-parenting-proposal.test.mjs` "the finder for a review: a crowd counts 0 with no proposal; a group counts as before" |
   | Learned, due, a practice lesson on it in the session window | `lesson`, `default` | `review_due` true | Pick a review (FR-020) |
   | Learned, due, another skill's review offered in the window | `lesson`, `default` | `review_due` true | Pick a second review (FR-020) |
   | Unreadable record | `lesson`, `default` | `readable` false, `error` equal to `read_learner_record`'s on the same file, every `other_skills` entry `learned: null` | Throw; write over the file; pick a review; report another skill as not learned |

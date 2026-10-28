@@ -30,7 +30,7 @@ export const FINDERS = {
   "easing.speed_graph": {
     // Does this comp have something to teach this skill on? Pure, no AE call. `exclude` is the
     // past targets ([{layer, property}]) when the question is "a new target for a review".
-    focus(snapshot, { exclude = [] } = {}) { return { count: 3, layers: ["Title"] }; },
+    focus(snapshot, { exclude = [], for_review = false } = {}) { return { count: 3, layers: ["Title"] }; },
     review: true,                                       // false until the skill's review mode is built
   },
 };
@@ -45,8 +45,10 @@ Rules:
 - `FINDERS[id].focus` must agree with the skill's own `analyze()`: a count above 0 means the
   snapshot tool would find at least one target with the same `exclude`. A unit test per skill
   checks this on its fixtures. The one exception is skill 6's crowd (spec 012 FR-003): a count for a
-  lesson question only. The review test (spec FR-048 step 3) gets 0 from null's finder when there's
-  no proposal, even with an empty `exclude` (Phase 10 round 2, 2026-10-28).
+  lesson question only. Finders also take `for_review: true`, which the shared review test
+  (`reviewFor`, spec FR-048 step 3) passes; only null's finder uses it (a crowd counts 0 when there's
+  no proposal, even with an empty `exclude`), and the others ignore it (Phase 10 round 2, fix B,
+  2026-10-28).
 - `review: true` is what lets `recommend_next` offer the skill's review (research R14). Set it when
   the skill's review mode passes its tests.
 
