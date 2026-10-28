@@ -274,3 +274,5 @@ SC-015 counts: runs with learner-visible text before the first snapshot call **0
 | Case | Result | Triage |
 |---|---|---|
 | 01, 08, 21, 22 | 3/3 each | Clean |
+
+**Judge input (2026-10-28):** `run.mjs` now gives the judge each tool result up to 16000 characters (was 6000). The cap hid the snapshot's side note from the judge in the anchor set and produced a false "guessed" failure; the same cut could hide long snapshot replies here. Results taken before this date were judged on the shorter cut.

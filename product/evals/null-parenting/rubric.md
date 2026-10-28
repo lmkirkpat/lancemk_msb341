@@ -102,6 +102,22 @@ It does not claim memory the record doesn't hold.
 Each turn is a few sentences and moves one idea. It ends by handing the learner something to
 do or answer.
 
+**Reading for this skill's lesson turns (TD § 16, 2026-10-28):**
+- **Explanation turn (after the group is agreed):** the frame and the confirmed group are context.
+  The idea sentence (children take on the parent's position, scale and rotation, not opacity or
+  effects, and keep their own animation) plus the question "will it turn or scale, and from where,
+  or only slide?" are **one idea put to use**, and the turn passes when it ends on that question.
+  A second explanatory sentence (why a null, what a null is, an example rig such as CTRL or Hatch
+  Rig the learner did not ask for) fails it, and so does a null, a menu path or a task in this turn.
+- **Add-the-null turn (after the learner answers the region question):** the menu path, the sentence
+  that a null never renders and the corner sentence are **one task** (add the handle and park it
+  where they said). A second ask (a second task, or the region question again) fails it.
+- **Parenting turn:** parenting the layers and the demo offer are one action and its alternative
+  (do it, or watch one first). The offer passes as the turn's last sentence; a list of steps beyond
+  the one task, or a second offer, fails it.
+- **A turn that answers a side question or a "do it for me":** passes as the answer or the warm decline
+  in one or two sentences plus the pending action again. It fails when it adds the next stage.
+
 - **Fail:** a wall of explanation, three ideas at once, or a turn that ends with nothing for the
   learner to do.
 

@@ -302,3 +302,5 @@ SC-015 counts: runs with learner-visible text before the first snapshot call **0
 |---|---|---|
 | 01, 29, 30 | 3/3 each | Clean |
 | 17 | 2 of 3 counted, 1 plumbing | Run 2: **plumbing**, the judge's reply could not be parsed ("unreadable judge reply"); every deterministic check passed and the visible judge text marked R-REVIEW-HANDS-ON as passing. Re-run once as 1 run (`-115906`): pass, $0.47. Counted in the SC-015 totals as 13 runs (the plumbing run included, it had clean transcripts) |
+
+**Judge input (2026-10-28):** `run.mjs` now gives the judge each tool result up to 16000 characters (was 6000). The cap hid the snapshot's side note from the judge in the anchor set and produced a false "guessed" failure; the same cut could hide long snapshot replies here. Results taken before this date were judged on the shorter cut.

@@ -145,7 +145,7 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | # | Case | Turns | Hard-rule checks (beyond the universal ones) | Rubric | Fixture source |
 |---|---|---|---|---|---|
 | 01 | First lesson on the wave A comp: asks first, then proposes the group | 2 | first_tool (null_parent_snapshot); tools_called; tools_not_called; no_focus_set; say: must asks_first, must asks_which_layers, must names_group, must reason_apart, never no_position, never no_crowd_names, never no_crowd_count, never second_group_not_yet | R-ASKS-FIRST, R-PROPOSAL, R-NO-POSITION, R-CROWD-HIDDEN, R-NAMES-REAL, R-USES-MEMORY, R-ONE-IDEA | live |
-| 02 | Explain: position, scale and rotation pass down; not opacity or effects | 2 | say: must position, must scale, must rotation, must opacity_named, never opacity_not_passed | R-INHERITS-RIGHT, R-NAMES-REAL, R-ONE-IDEA | live |
+| 02 | Explain (pacing, 2026-10-28): the learner names the group; position, scale and rotation pass down, not opacity or effects, in one sentence; no CTRL or Hatch Rig unless asked; no null task; ends on the turn-or-scale question | 2 | say: must position, must scale, must rotation, must opacity_named, never opacity_not_passed, never no_rig_example_unasked, never no_null_task_in_explain, must asks_region, must ends_on_question | R-INHERITS-RIGHT, R-NAMES-REAL, R-ONE-IDEA | live |
 | 03 | The pivot is asked, never picked; it'll only slide is accepted | 4 | tools_called; last_check; say: must asks_region, never never_picks | R-REGION-ASKED, R-REGION-NEVER-PICKED, R-ACCEPTS-SLIDES, R-ONE-IDEA | live |
 | 04 | One demonstration on the target only, moved 0 pixels, none before the null passes | 4 | demo_calls_min; demo_calls_max; demo_only_on; demo_after_null_ready; say: must moved_zero, must undo | R-DEMO-PLAIN, R-NAMES-REAL, R-ONE-IDEA | live |
 | 05 | B9: a correct parenting passes though the children's own values changed | 4 | last_check; say: never no_jump_claim, must asks_for_move | R-B9-PASS, R-NAMES-REAL | live |
@@ -158,7 +158,7 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | 12 | Asked for a shortcut and about holding Option: the menu path, no shortcut, hold no key, never advised | 2 | say: must menu_path, must hold_no_key, never no_shortcut_given | R-VERSION-TRAP, R-ONE-IDEA | live |
 | 13 | The pivot lesson isn't learned: named and offered; on insistence, one sentence | 2 | tools_not_called; record_lesson; say: must names_pivot_lesson, must offers, must one_sentence_then_on, never no_refusal | R-PREREQ, R-ONE-IDEA | live |
 | 14 | An incomplete attempt: says what's still off and where; doesn't fix or offer to | 4 | last_check; say: must names_layers, must names_where, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL | live |
-| 15 | Do the rest: declined warmly, no offer later | 5 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | live |
+| 15 | Do the rest (pacing, 2026-10-28): declined warmly, no offer to do it later; the one demo offer made once (turns 3 to 4) and never twice (turns 3 to 5) | 5 | demo_calls_max 0; say: never no_later_offer, must demo_offer_made, at_most 1 demo_offer_once | R-DECLINES-WARMLY, R-ONE-IDEA | live |
 | 16 | Review on the wave A comp: Chip A to C, no 'null', no method, no demo | 2 | review_mode; first_snapshot_reply; tools_called; tools_not_called; last_check; snapshot_focus_excludes; say: must names_chips, must turn_or_scale | R-REVIEW-HANDS-ON, R-REVIEW-HINT, R-NAMES-REAL | live |
 | 17 | Review with a visible parent (the learner names Row A to C, not the offered Chips): the hint has no 'null'; the skill stays learned | 4 | review_mode; first_snapshot_reply; tools_not_called; last_check; record_lesson; say: must names_rows | R-REVIEW-HINT, R-REVIEW-RECORD-HONEST, R-NAMES-REAL | live |
 | 18 | A due review with no new group (OR-1): a lesson starts, no review mentioned, nothing recorded | 1 | first_tool; first_snapshot_reply (lesson, default); tools_called; tools_not_called; no_focus_set; record_lesson; say: never no_review_mentioned, must asks_group, never no_crowd_names, never no_crowd_count | R-DUE-NO-NEW-LESSON, R-CROWD-HIDDEN | synthetic |
@@ -451,3 +451,23 @@ Not fixed: step 2 is still too long for R-ONE-IDEA (02, 03, 04 = 7 of 9 runs fai
   mentor stops commenting on the image is untested. `mentor/` is untouched. The anchor set has the same 1 x 1
   placeholder.
 - **Re-runs not done:** the budget guard stopped before cases 03 and 10 (see the hand-back for the spend).
+
+## Pacing changes (2026-10-28, T345; TD § 16, spec 012 Eval plan 2 and 15, FR-023a)
+
+Written on `pacing-evals`; no paid run yet. T346 runs 02, 03, 04, 15 and 23 (and 10) with the mentor from `pacing-skills`.
+
+- **Rubric.** `R-ONE-IDEA` takes TD § 16 › What R-ONE-IDEA should see: the explanation turn (frame, group, idea sentence
+  and the turn-or-scale question) is one idea and passes when it ends on the question, and a second explanatory sentence
+  (why a null, an example rig nobody asked for) or any null task fails it; the add-the-null turn (menu path, never-renders,
+  corner) is one task; the parenting turn's demo offer is the action's alternative; a side-question or 'do it for me' turn
+  passes as the answer plus the pending action.
+- **Case 02.** The learner now names the group (as in 03) instead of asking 'why do I need a null'; that question invited the
+  rig example. New checks on turn 2: `no_rig_example_unasked` (never CTRL or Hatch Rig), `no_null_task_in_explain` (no menu
+  path, 'add a null', Null Object), `asks_region`, `ends_on_question`. The 'rig only when asked' half has no case yet (proposal in the hand-back).
+- **Case 15.** `demo_calls_max` is 0 (the learner never says yes). New `demo_offer_made` (turns 3 to 4) and `demo_offer_once`
+  (`at_most` 1, turns 3 to 5). **The offer pattern is a guess**: the current `SKILL.md` has no fixed offer wording, so
+  check it against the first `pacing-skills` transcripts and tighten it. Rubric stays `R-DECLINES-WARMLY` and `R-ONE-IDEA`.
+- **Case 03** unchanged: its `never_picks` break should go because the null sentence moved to the add-the-null turn
+  (TD § 16, the eval engineer's note); T346 checks it.
+- **Runner.** The judge sees each tool result up to 16000 characters (was 6000). New: a `say` check may carry `at_most`
+  with `must` (counts matches, as in the anchor set).
