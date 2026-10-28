@@ -177,13 +177,26 @@ a brand new session act like a colleague who already knows what you are working 
          A lesson start's 10 s was AE throttled in the background (App Nap), not the reads; T252
          and T253 are deferred until the panel shows whether it still matters.
        - **Next:**
-         1. The review self-note leak (eval case 16 still writes "Review is due." before the first
-            snapshot after two wording fixes): have the snapshot tool read the record and pick
-            review mode itself, so the mentor makes one call with nothing to narrate. Shared code,
-            so a spec item first; applies to every skill with a review.
-         2. HO-4 met 2026-10-27 (T183's base run, 25/26, logged for specs 011 and 012). Next, the
-            skill 5 baseline (about $15 to $20). Add the two cases on the README's to-do first (a background-only
-            comp; a named layer with no place given).
+         1. **The self-note fix (spec 004 Phase 10, approved 2026-10-27, every OR recommendation
+            taken):** the snapshot tool reads the record and picks lesson or review itself
+            (FR-048 to FR-052, SC-015, SC-016; tasks T400 to T416, in the T400s because spec 011's
+            tasks use T201 to T261). Built on `phase10-opening-read` (`f2eb790`, not merged):
+            `mentor/lib/opening.mjs`, `reviewFor()` exported from `recommend.mjs`, the five
+            `SKILL.md` files open with the snapshot and no longer list `read_learner_record`.
+            Mentor tests 1418 (1415 pass, 3 todo, 0 fail), hooks 39/39, all 16 files the
+            skill-builder's. Choices to watch: a declined review still uses the session's one
+            review; the panel's "Remembering…" label is easing-only (a panel-builder request).
+            **Next:** T412 (easing gate, branch and base, about $26) and a reviewer pass, then
+            merge; then T413 and T414 (eval checks and cases, on the eval branches), T415
+            (SC-015's repeats, about $25 to $35) and T416 (live first lesson and review).
+         2. **Baselines (HO-4 met 2026-10-27, T183's base run, 25/26).** Skill 5's first baseline
+            (`evals-skill-5`, `c853f9e`, not merged): **27/44 (61%), $35.27 in all**, with cases 38
+            (background only) and 39 (layer named, no place). SC-006 not met: 11 cases fail on the
+            self-note before the first snapshot. Without it, about 38/44. Smaller findings: 21a's
+            menu path, 30's "because" in the record, 26's "make up for it", rubric repeats for 04,
+            19 and 29. Skill 6's set (`evals-skill-6`, `67aa8ad`) is ready at 33 cases (about $17 to
+            $21), with case 17's record naming the fix still to repeat. Both baselines re-run after
+            Phase 10 merges.
          3. A short first lesson on the new opening; watch for "what do you mean by turn from?".
          4. T240, the review, a day or more after T237. T248 (a stroke) and T261 (L-8, an unkeyed
             expression on Anchor Point or Position) at the next sitting.
@@ -205,8 +218,9 @@ a brand new session act like a colleague who already knows what you are working 
        (4 min 28 s, no demo, Tile, Caption and Stamp proposed and taken) passed: SC-001 met,
        SC-002 8 of 8 plus 2 of 2 deliberate jumps, 10 needed. **Then:** review T343 (SC-009,
        stretch; it carries the last 2 SC-002 checks), and pivot review T240 (stretch).
-     - **After the live lessons:** skills 5 and 6 are merged; fix the smoke findings above, merge the
-       eval sets and set baselines (about $13 to $17 each). Still open from the live sitting: speed graph's "already shaped" list
+     - **After the live lessons:** skills 5 and 6 are merged; the self-note fix and baselines are
+       under skill 5's Next (items 1 and 2), and the wave A sets (`evals-wave-a`) still need
+       theirs. Still open from the live sitting: speed graph's "already shaped" list
      includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
      out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
      more).
