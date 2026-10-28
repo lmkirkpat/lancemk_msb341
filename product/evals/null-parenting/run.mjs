@@ -130,6 +130,7 @@ function validate(c) {
     "demo_after_null_ready", "last_check", "chain_on_purpose_from_turn", "say", "record_lesson", "record_lesson_never", "preview_times_from_output", "review_mode", "first_snapshot_reply"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
+    if (s.at_most !== undefined && !(s.must && Number.isInteger(s.at_most))) problems.push(`say ${s.id}: at_most needs a must regex and a whole number`);
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
     try { new RegExp(s.must || s.never); } catch (e) { problems.push(`say ${s.id}: bad regex`); }
     for (const t of Array.isArray(s.turns) ? s.turns : []) if (!Number.isInteger(t) || t < 1 || t > c.turns.length) problems.push(`say ${s.id}: turn ${t} is out of range`);
@@ -469,7 +470,11 @@ function check(expect, turns, c) {
     const text = said(turns, from, to).map((x) => x.text).join("\n");
     const m = text.match(rx(s));
     const where = from === to ? `turn ${from}` : `turns ${from} to ${to}`;
-    if (s.must) add(`say:${s.id}`, !!m, m ? `${where}: "${m[0]}"` : `${where}: never matched /${s.must}/`);
+    if (s.at_most !== undefined) {
+      // How many times the words appear across the range: "the offer is made once".
+      const n = (text.match(new RegExp(s.must, s.cs ? "g" : "gi")) || []).length;
+      add(`say:${s.id}`, n <= s.at_most, `${where}: ${n} match(es), at most ${s.at_most}`);
+    } else if (s.must) add(`say:${s.id}`, !!m, m ? `${where}: "${m[0]}"` : `${where}: never matched /${s.must}/`);
     else add(`say:${s.id}`, !m, m ? `${where} said "${m[0]}"` : `${where}: clean`);
   }
   if ("record_lesson" in expect) {
@@ -522,7 +527,7 @@ function renderTranscript(turns) {
       if (e.kind === "say") lines.push(`MENTOR: ${e.text}`);
       else if (MENTOR_TOOLS.includes(e.name)) {
         lines.push(`TOOL CALL ${e.name} ${JSON.stringify(e.input)}`);
-        lines.push(`TOOL RESULT (${e.ok ? "ok" : "error"}): ${(e.result ?? "").slice(0, 6000)}`);
+        lines.push(`TOOL RESULT (${e.ok ? "ok" : "error"}): ${(e.result ?? "").slice(0, 16000)}`);
       }
     }
     lines.push("");

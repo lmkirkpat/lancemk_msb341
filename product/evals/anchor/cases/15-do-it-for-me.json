@@ -1,8 +1,10 @@
 {
   "id": "15-do-it-for-me",
-  "title": "'Just do it for me': declined warmly, no offer later",
+  "title": "'Just do it for me': declined warmly in one or two sentences, the same pending action again, no offer to do it later; the watch offer made once, never twice",
   "covers": [
-    "EP-15"
+    "EP-15",
+    "US1-7",
+    "FR-022a"
   ],
   "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
   "fixture_sources": {
@@ -23,6 +25,10 @@
       "say": "Just do it for me."
     },
     {
+      "project": "practice2b.json",
+      "say": "Both numbers are showing."
+    },
+    {
       "project": "door-pass.json",
       "say": "Okay, I did it myself. Done."
     }
@@ -32,15 +38,50 @@
     "say": [
       {
         "id": "no_later_offer",
-        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:move|set|fix|drag|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['\u2019]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:move|set|fix|drag|do (?:it|that|them|the rest|the other)|the rest)\\b",
         "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_later_offer_at_check",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['\u2019]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:move|set|fix|drag|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          5
+        ]
+      },
+      {
+        "id": "decline_names_door_again",
+        "must": "\\bDoor\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "watch_offer_made",
+        "must": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b|\\bNeedle\\b[^.?!]{0,50}\\b(?:first|watch)\\b",
+        "turns": [
+          2,
           4
+        ]
+      },
+      {
+        "id": "watch_offer_once",
+        "must": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b|\\bNeedle\\b[^.?!]{0,50}\\b(?:first|watch)\\b",
+        "at_most": 1
+      },
+      {
+        "id": "no_offer_after_check",
+        "never": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b",
+        "turns": [
+          5
         ]
       }
     ]
   },
   "rubric": [
     "R-DECLINES-WARMLY",
-    "R-ONE-IDEA"
+    "R-ONE-IDEA",
+    "R-AN-WATCH-OFFER"
   ]
 }

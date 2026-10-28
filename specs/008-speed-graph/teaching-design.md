@@ -2,7 +2,8 @@
 
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
-**Date:** 2026-10-20. **Status:** draft, round 1 answered (§ 14).
+**Date:** 2026-10-20. **Status:** draft, round 1 answered (§ 14). § 15 (pacing, one idea per turn)
+**proposed 2026-10-28, not approved**: until the human approves it, § 5 stands as written.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2 (the lesson shape), § 6 skill 2, § 8,
 § 9, § 13; spec 004 (approved), above all FR-004, FR-005, FR-018 to FR-022, FR-024 to FR-026,
 FR-030, FR-037. Research: `discovery/curriculum-research/graph-editor.md`. Evidence:
@@ -251,3 +252,123 @@ rather than chosen per move.
 | D-4 "Every dimension" | **Agreed: every moving dimension**, pending L-2 (§ 6, § 9). | Kept |
 | D-5 Frames while a parent moves | **Agreed:** frame claims say only where the layer is on screen, never how far along its move, until R1 (§ 5, § 9). | Kept |
 | S-1 tolerance (FR-010d: landing speed ≤ 5% of the pair's average speed, tuned on L-5) | **Matches my intent.** "Comes to rest" means the arrival speed is small next to the move's own speed, so a relative measure is right, and 0 within 0.001 where the value can't be read is fine. If L-5 tunes it, tune toward catching a visible bump, not toward passing more pairs. | Kept |
+
+## 15. Pacing: one idea per turn (proposed 2026-10-28)
+
+**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
+spec or the evals until it's approved; the items at the end say who changes what. This is the audit
+against curriculum § 2's turn rule (approved 2026-10-28, from skill 5's § 20 and skill 6's § 16).
+The opening (the snapshot decides lesson or review; the proposal, leave-outs and light intent check)
+doesn't change, and neither do "I do, we do, you do", the one demo, the reading steps, the hints or
+the review.
+
+### The problem
+
+**Verdict: doesn't fit.** Stage 2 (read the graph) already fits: it ends on a question. Stage 3
+(explain) has the learner only watching, so the build folds it into the invite, and that turn is
+the one R-ONE-IDEA fails:
+- Case 19 (`product/evals/speed-graph/results/2026-10-27-134230.json`), turn 3: the reading answer
+  confirmed, a note about the frame, a bold "How shaping works" block with two bullets, "that moves
+  the peak toward the start", a warning to keep the landing handle on the bottom ("dragging it up
+  makes Title arrive still moving"), the task on four moves, and a demo offer. The judge: "a lecture
+  (reading confirmation, a blank-frame aside, a 'how shaping works' block, a drag-sideways warning
+  and the task)".
+- T415 (cases 01, 08, 21, 22, 3/3 each on 2026-10-28) shows the opening and the review are clean; the
+  failure is all in the explain-and-invite turn.
+
+One line in that turn works against the lesson: "that moves the peak toward the start" gives away the
+answer to stage 6's read-again question before they've shaped anything.
+
+### The new sequence (a first lesson)
+
+| Turn | The one idea | Carries | Ends on |
+|---|---|---|---|
+| 1. Opening | which moves to shape | Unchanged (§ 4; `SKILL.md` step 1): the focus and its pairs, the leave-outs (proposed from a scan, so up front), the light intent check as part of the same choice | Their choice (and any move that should land hard) |
+| 2. Read the graph (we do) | where is it fastest? | Unchanged (stage 2): select the layer, the Graph Editor button, Edit Speed Graph, which pair | "Where is it fastest: near the start, in the middle, or near the end?" |
+| 2h. A wrong reading | | The one hint (stage 2) | Their next answer; then turn 3 whatever it is |
+| 3. The idea, and the task (you do) | the handle's sideways reach is how long the ease lasts | The reading confirmed in one clause ("Right, the middle: that's where Easy Ease puts it"). One frame inside the pair, at most one clause, saying only where the layer is (§ 5). The idea in two sentences: "The handle's sideways reach is influence, how long the ease lasts. Easy Ease gives every key the same reach, so every move feels the same." The task in one sentence, with the how as its clause: "Make each move start quickly and land softly: drag the landing key's handle sideways along the bottom to make it longer, and shorten the start key's." | "Do that on Title's three Position moves and its Scale, and say done." |
+| 3a. Demo (on an ask, or clearly stuck) | watch one | Stage 4, unchanged: frames early and late in the pair, what changed in words, Edit > Undo, look at the speed graph | "The other three are yours; say done." No second walk-through |
+| 4. Check | each pair passes, or a hint | § 6, § 7, unchanged | "Say done again", or turn 5 |
+| 5. Pass, and read again | where is it fastest now? | "That passes": the pairs in one clause | "In the speed graph, where's the 0.5 to 1.5 s move fastest now?" |
+| 6. Close | | The reading answer in one clause (or the one hint), "I've noted that for next time" | "Play it back at full speed to judge it; scrubbing doesn't show the feel." |
+
+**One focus pair** (no demo): turn 3's task sentence is the walk-through in words, after the
+one-sentence reason there's no demo.
+
+**"Do it for me"** (curriculum § 2's shared rule): before any demo, on a focus with a demo target,
+the request is the ask (turn 3a); after the demo, the warm decline and the pending step, with no new
+offer. Speed graph makes no standing watch offer (C-4 is open), so there's no offer to keep after a
+decline. The build's "if you'd like to see me shape one first, just ask" (case 19) is allowed by the
+turn rule as the task's alternative, said once.
+
+**The review** (§ 11) is unchanged: one ask, then the check.
+
+### What moved, what's on request, what goes
+
+| Piece | Was | Now | Why |
+|---|---|---|---|
+| "Dragging it up makes the layer arrive still moving" | `SKILL.md` step 3 | **Hint only** (`arrives_moving`, with "drag sideways") | A warning about a mistake they haven't made; the check catches it and the hint names the time. "Sideways, along the bottom" stays, as the how of the task |
+| "That moves the peak toward the start" | Seen in 19 | **Goes** | It's the answer to turn 5's question. The demo, if they ask for one, still says to look at the peak (stage 4) |
+| The short-reach and long-reach bullets | Stage 3 (as built, a bulleted block) | One task sentence in turn 3 | The idea and the task say the same thing; one sentence carries both |
+| Keyframe Velocity ("the way to type exact numbers", § 5 stage 5) | Stage 5 | **On request** (they ask to type values) | No turn needs it. It never comes with a number (§ 6) |
+| "Play it back at full speed" | Said once at the pass | The close (turn 6) | The pass turn ends on the read-again question; the close needs a last thing to do, and this is it |
+| The shared-key two-handles sentence | Step 5's hint | Unchanged, **hint only** | Already where it belongs |
+| Any comment on the frame itself | Seen in 19 | **Goes** | A frame that's no use gets no sentence |
+| The walk-through after a demo or a side question | Possible under stage 4 | **Goes** | Rule 3 |
+
+**Kept exactly:** the opening and the light intent check, the reading step and its one hint, "I do,
+we do, you do", the one demo and its target rule, § 6's pass, the hints (§ 7), the read-again step,
+the record, the review.
+
+### What R-ONE-IDEA should see (the eval engineer's to change; this is only the intent)
+
+- Turn 3: the reading confirmation, the frame and its clause are context; the two idea sentences
+  and the task sentence are one task. It passes if it ends on "say done" (a demo offer may follow as
+  the task's alternative). A warning about dragging up, a bulleted block, or the peak giveaway
+  fails it.
+- Turn 5: "that passes" and the read-again question are one handover.
+- A turn answering a side question passes as the answer plus the pending step.
+
+### Rejected
+
+- **Keep the drag-up warning as a clause.** It's the most common mistake (C, § 7), so it's tempting
+  to warn early. But "sideways, along the bottom" is already in the task, the check catches the
+  mistake every time (§ 6 item 4), and the hint names the key. Said up front, it's a second idea.
+- **Put the idea in its own turn after the reading, ending on "ready to shape?"** Rule 1.
+- **Merge the reading answer and the idea into the reading turn.** The reading has to come first;
+  the idea is what makes sense of what they just read.
+
+### Evidence and guesses
+
+- **R:** case 19 above; T415's clean openings; `SKILL.md` steps 3 to 6; T032 live
+  (`discovery/usage-notes/speed-graph.md`: 3 min 35 s, one demo, SC-002 4 of 4), with the old pacing,
+  builder-only.
+- **Guess:** that "drag sideways, along the bottom" in the task is enough without the warning. If
+  live lessons show the drag-up mistake on most first attempts, add "not up" as two words in the task
+  sentence, not a sentence of its own.
+
+### Items, if approved
+
+Numbers are `NNN`: the cockpit assigns them.
+
+**For the builder (B-NNN), `speed-graph-mentor/SKILL.md` only, no tool change:**
+1. Step 3 becomes turn 3: the reading confirmed in a clause, one frame (where the layer is, at most
+   one clause), the two idea sentences, the task sentence; no bullets, no drag-up warning, nothing
+   about the peak moving. Step 5's ask ends the same turn ("do that on … and say done").
+2. Step 4: after the demo, hand the rest back in one sentence; no walk-through. One line for
+   curriculum § 2's "do it for me" rule (before any demo it's the ask; after it, the decline and the
+   pending step, no new offer).
+3. Step 5: "Play it back at full speed" moves to the close; the pass turn ends on step 6's question.
+4. "Version steps": Keyframe Velocity only when they ask to type values.
+5. A "Style" line for rule 3.
+
+**For the spec writer (S-NNN):**
+- **FR-001:** no text change; it follows § 5's stages, which § 15 re-cuts into turns. Worth a line
+  pointing at § 15.
+- **FR-009, FR-012, FR-016, FR-020:** no text change. The drag-up words live only in FR-012's hint;
+  the read-again question ends the pass turn; Keyframe Velocity is quoted (in L-1's form) only when
+  asked.
+
+**For the eval engineer (through the cockpit):** the readings above in the R-ONE-IDEA rubric; then
+re-run 01, 02, 03, 05, 09, 10, 15 and 19 as they are. Case 10 checks that the hint still says
+"sideways" now that the warning is gone from turn 3.

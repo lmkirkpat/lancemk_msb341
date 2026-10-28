@@ -2,7 +2,8 @@
 
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
-**Date:** 2026-10-20. **Status:** draft, round 1 answered (§ 14).
+**Date:** 2026-10-20. **Status:** draft, round 1 answered (§ 14). § 15 (pacing, one idea per turn)
+**proposed 2026-10-28, not approved**: until the human approves it, § 5 stands as written.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 3, § 8, § 9, § 13 (C3, H7);
 spec 004 (approved), above all FR-004, FR-005, FR-016, FR-017, FR-018 to FR-022, FR-024, FR-027,
 FR-030, FR-037; spec 005's DX-02, DX-03, DX-07. Research:
@@ -246,3 +247,134 @@ one layer's keys).
 **any** counted property moved, not only a layer whose start moved, so moving Opacity alone gets the
 hint. Matches FR-008 and FR-012. The "split on purpose" rule is unchanged. § 7's hint wording still
 fits (a frame where the mismatch shows); only that row's "what the check sees" was reworded to match.
+
+## 15. Pacing: one idea per turn (proposed 2026-10-28)
+
+**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
+spec or the evals until it's approved; the items at the end say who changes what. This is the audit
+against curriculum § 2's turn rule (approved 2026-10-28, from skill 5's § 20 and skill 6's § 16).
+The opening (the snapshot decides lesson or review; the group, the other kind, the leave-outs)
+doesn't change, and neither do "I do, we do, you do", the one demo, the intent question (order and
+gap, never a number from the mentor), the hints, the rhythm comment or the review.
+
+### The problem
+
+**Verdict: doesn't fit.** Stage 2 (explain) has the learner only watching, and stage 4 (invite) names
+the methods. The build folds the explanation into whichever turn is next, so either the opening or
+the invite becomes a lecture:
+- Case 25 (`product/evals/offset/results/2026-10-27-134211.json`), turn 2 (the learner gave order and
+  gap with their choice): the plan said back, "Dot 2's properties should move as one unless you
+  choose to split them", the lockstep explanation with "one, two, three", then three bulleted methods
+  (drag the keys; drag the bar, with the trim warning; Quick Offset, with which layer stays). The
+  judge: "restates the plan and the rule about Dot 2's properties, explains why a stagger leads the
+  eye, then lists three ways to do it".
+- Case 27 (`-140458`), turn 2: the same, after the stored choices are confirmed.
+- Case 26 (`-150614`): turn 2's three-method list, and turn 1 carrying the explanation and the
+  easing callback with two numbered questions.
+- T415 (01, 17, 29, 30 on 2026-10-28) shows the opening passes when it stays the choice; the judge
+  passed it as "one idea: picking which group to stagger".
+
+### The new sequence (a first lesson)
+
+| Turn | The one idea | Carries | Ends on |
+|---|---|---|---|
+| 1. Opening | which group | Unchanged (§ 4; `SKILL.md` step 1): the group in one sentence, the other kind in one, the leave-outs (proposed from a scan, so up front). No explanation of lockstep | Their choice |
+| 1s. Their choices from last time (`stored_choices`) | confirm | Unchanged (spec 004 FR-046's confirm) | Yes, or the change |
+| 2. The idea, put to use | when everything moves at once, nothing leads the eye | The group confirmed in one clause. One frame at `frame_together`, at most one clause: "Here at 1 s all three Dots are mid-move." The idea in one sentence: "When everything moves at once, nothing leads the eye." | The intent question (FR-007): "Which should go first, and how far apart?" |
+| 3. The task (you do) | stagger them | Their order and gap said back in one sentence, with a split only if they asked for one (FR-007). How, in one or two sentences, alternatives as clauses: "Leave Dot 1 where it is and move Dot 2 and Dot 3 later: select a Dot's keys and drag them, or drag the middle of its bar. Quick Offset does all three in one drag: select them, hold Command and Option, and drag." (Quick Offset only when the tool says so, FR-017) | "Play it back and say done." |
+| 3f. A gap under the floor | | Their order said back; "a gap that small still reads as together"; no number (FR-007, D-1) | "What gap would you like instead?" If they keep it: turn 3, walked through in words, no demo |
+| 3a. Demo (on an ask, or clearly stuck) | watch one | Stage 4, unchanged: frames before and after at the same time, what moved, Edit > Undo | "Dot 3 is yours; say done." No second walk-through |
+| 4. Check | apart, or a hint | § 6, § 7, unchanged | "Say done again", or the pass |
+| 5. Pass | | "That passes", their measured gap said back as theirs (spec 004 FR-040), the rhythm sentence when uneven (FR-015) | "I've noted that for next time" and the next step from the record |
+
+**Order and gap given with the choice** (case 25: "the Dots, Dot 1 first, then Dot 2, then Dot 3,
+eight frames apart"): turn 2 has nothing left to ask, so turns 2 and 3 become one. The frame with its
+clause and the idea sentence are context for the plan said back, and the turn ends on turn 3's task.
+That's still one handover; what made 25 a lecture was the three-method list, the trim warning and the
+split rule, not the frame.
+
+**Two members** (no demo): turn 3's how-to is the walk-through in words, after the one-sentence
+reason there's no demo.
+
+**"Do it for me"** (curriculum § 2's shared rule): before any demo, once there's an order (a demo
+target exists), the request is the ask (turn 3a); before an order, the decline and the intent
+question again; after the demo, the warm decline and the pending step, with no new offer. Offset
+makes no standing watch offer (C-4 is open), so there's no offer to keep after a decline.
+
+**The review** (§ 11) is unchanged: one sentence naming the group, "which goes first?", then "stagger
+them however you like".
+
+### What moved, what's on request, what goes
+
+| Piece | Was | Now | Why |
+|---|---|---|---|
+| The lockstep explanation | Stage 2, folded into the opening (26) or the invite (25, 27) | Turn 2, with the frame, ending on the intent question | It's the reason for the question: who leads the eye |
+| Three bulleted methods | Stage 4 (as built) | One or two sentences in turn 3, alternatives as clauses | FR-017 needs both drags taught and Quick Offset offered alongside; it doesn't need a list |
+| "Dragging an end of the bar trims it and leaves the keys" | Stage 4 (as built) | **Hint only** (§ 7 row 3: "its keys still start at 0.5 s…") | A warning about a mistake they haven't made |
+| Quick Offset's "the top layer stays, the ones below move" | Stage 4 (as built) | **On request** (`SKILL.md`'s "if they ask how Quick Offset works" paragraph, unchanged) | The gesture is the task; how it spreads is a second subject. The check reads the order, and § 7's order hint catches a surprise |
+| "Dot 2's properties should move as one unless you split them" | Seen in 25 | Said back **only if they asked for a split** (FR-007); otherwise the "pops in" hint (§ 7 row 2) | A rule about a mistake they haven't made |
+| "A stagger gives the eye a path: one, two, three" | Seen in 25 | **Goes** | A second wording of the same idea |
+| The easing callback in a first lesson when easing is learned | Seen in 26's turn 1 | Unchanged here: the opening is out of scope, and T415's openings passed with it. Logged as an open question | |
+| Any comment on the frame itself | Seen in 27 | **Goes** | A frame that's no use gets no sentence |
+| The walk-through after a demo or a side question | Possible under stage 4 | **Goes** | Rule 3 |
+
+**Kept exactly:** the opening, the intent question and FR-007's say-back and floor, "never name a
+gap", "I do, we do, you do", the one demo and its target rule, the hints (§ 7), the rhythm comment,
+the measured-gap say-back, the record, the review.
+
+### What R-ONE-IDEA should see (the eval engineer's to change; this is only the intent)
+
+- Turn 2: the frame and its clause are context; the idea sentence and the intent question are one
+  idea put to use (as skill 6's turn 2).
+- Turn 3: the plan said back is context; the how-to (keys or bar, Quick Offset as a clause) and
+  "say done" are one task. A bulleted list of methods, the trim warning, or a split rule nobody asked
+  for fails it.
+- When order and gap came with the choice, turn 2 and 3 as one passes if it ends on the task.
+- A turn answering a side question ("what gap should I use?") passes as the answer plus the pending
+  step ("That's your call. Try one and play it back.").
+
+### Rejected
+
+- **Put the lockstep explanation in the opening**, before the choice (what 26 did). The opening is one
+  choice (curriculum § 2), and the idea needs the frame.
+- **Name one method and leave the others for when asked.** FR-017 requires both drags on every
+  version and Quick Offset offered when it's there; as clauses they cost a sentence.
+- **Ask the order and the gap in two turns.** FR-007 asks both; they're one plan, as skill 5's intent
+  question has two parts and passes.
+
+### Evidence and guesses
+
+- **R:** cases 25, 26 and 27 above; T415's clean openings; `SKILL.md` steps 2 to 5; T036 and T037
+  live (`discovery/usage-notes/offset.md`, no demo, Quick Offset offered and used in T037), with the
+  old pacing, builder-only.
+- **Guess:** that a learner who has never dragged keys can follow "select a Dot's keys and drag them"
+  as a clause. If live lessons show "how do I select its keys?", rule 3 answers it in a sentence.
+
+### Items, if approved
+
+Numbers are `NNN`: the cockpit assigns them.
+
+**For the builder (B-NNN), `offset-mentor/SKILL.md` only, no tool change:**
+1. Step 2 ends on step 3's question: the frame, at most one clause, the idea sentence, then "which
+   should go first, and how far apart?" When the order and gap came with the choice, step 2 runs
+   into step 4 in the same turn.
+2. Step 4: the plan said back in one sentence (a split only if they asked for one), the how-to in one
+   or two sentences with alternatives as clauses, "play it back and say done". No bullets, no trim
+   warning, no "the top layer stays" (that stays in the "if they ask how Quick Offset works"
+   paragraph).
+3. Step 5: after the demo, hand the rest back in one sentence; no walk-through. One line for
+   curriculum § 2's "do it for me" rule (before any demo, with an order, it's the ask; before an
+   order, the decline and the intent question; after the demo, the decline and the pending step, no
+   new offer).
+4. A "Style" line for rule 3.
+
+**For the spec writer (S-NNN):**
+- **FR-016:** no text change; it follows § 5's stages, which § 15 re-cuts into turns. Worth a line
+  pointing at § 15.
+- **FR-007, FR-017:** no text change. FR-007's question now ends the explanation turn; FR-017's two
+  drags and Quick Offset are one or two sentences, not a list.
+- **FR-012, FR-015:** no change; the trim warning lives in § 7's hint only.
+
+**For the eval engineer (through the cockpit):** the readings above in the R-ONE-IDEA rubric; then
+re-run 01, 02, 03, 04, 05, 06, 16, 19, 25, 26 and 27 as they are. Case 01's `asks_first` and
+`asks_apart` must be looked for on the turn after the choice (turn 2), as the build already has it.

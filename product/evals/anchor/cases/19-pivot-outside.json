@@ -1,6 +1,6 @@
 {
   "id": "19-pivot-outside",
-  "title": "Lid named, its pivot outside the shape: says which side, to click Lid in the timeline and start the drag on its crosshair; no distance",
+  "title": "Lid named, its pivot outside the shape: the side and 'click Lid in the timeline' in the what-the-pivot-is turn (TD 20 turn 3), 'start there' on the crosshair in the move turn; no distance",
   "covers": [
     "EP-19",
     "FR-019a"
@@ -17,6 +17,10 @@
     {
       "project": "practice2b.json",
       "say": "Lid should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Lid is selected and Anchor Point and Position are showing."
     }
   ],
   "expect": {
@@ -50,6 +54,13 @@
         "must": "Lid",
         "turns": [
           2
+        ]
+      },
+      {
+        "id": "start_there",
+        "must": "start (?:your drag |the drag )?(?:there|right on|on)|crosshair",
+        "turns": [
+          3
         ]
       }
     ]

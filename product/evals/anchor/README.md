@@ -61,7 +61,7 @@ at least 80% passing, and every hard-rule check passing; spec 011's SC-004 (no n
 
 `first_tool`, `tools_called`, `tools_not_called`, `snapshot_with` (a snapshot call with these inputs),
 `snapshot_input_matches` (regexes over a snapshot call's input), `snapshot_calls_max`,
-`demo_calls_min` / `demo_calls_max` (attempts), `demo_only_on`, `last_check` (`passed`, `has` and `lacks`:
+`demo_calls_min` / `demo_calls_max` (attempts), `demo_only_on`, `demo_not_in_turns` (1-based turns in which `anchor_demo` must not be called; added 2026-10-28 for 23c's asking turn), `last_check` (`passed`, `has` and `lacks`:
 substrings of the check's reply, `input`), `record_lesson` (`null` for "nothing recorded"),
 `review_mode` (the first snapshot reply's `mode` is review, or a call asked for one), `first_snapshot_mode` (the first snapshot reply's `mode` is `lesson` or `review`), and `say`: a list of `{ id, must | never, turns, cs }` regex checks on the mentor's
 words (1-based `turns`, default all; case-insensitive unless `cs`).
@@ -87,18 +87,18 @@ the number of mentor turns. Fixtures: `live` (a capture) or `synthetic` (derived
 | 12 | After a pass: which part stays still; a wrong answer gets one light correction; recorded passed | 5 | live | R-AN-UNDERSTANDING, R-RECORD-HONEST |
 | 13 | Sled named (three Position key times; leave-out checked on the naming turn, none in turn 1): "already moves" once, its other keys, set the pivot before you key, another layer offered; no check or demo; never "jump" (round 2) | 2 | live | R-AN-ALREADY-MOVES |
 | 14 | The layer was dragged, not the pivot: no fix, no offer | 3 | live | R-AN-DRAGGED |
-| 15 | 'Just do it for me': declined warmly, no demo, no offer later | 4 | live | R-DECLINES-WARMLY |
+| 15 | 'Just do it for me' (pacing, 2026-10-28): declined in one or two sentences, the same A and Shift+P ask again, no offer to do it later; the watch offer made once in turns 2 to 4 (an extra turn, 'Both numbers are showing', reaches the invite turn), never twice | 5 | live | R-DECLINES-WARMLY, R-ONE-IDEA, R-AN-WATCH-OFFER |
 | 16 | Review due: Tab, hinge asked first, **nothing said before the first call**, no tool named before 'done', no demo, no watch offer | 3 | live | R-REVIEW-HANDS-ON, R-AN-NO-WATCH-OFFER |
 | 17 | Review with no new candidate (record lists every default layer): says nothing new, records nothing, no demo | 1 | live + synthetic record | R-REVIEW-NOTHING-NEW |
 | 18 | A layer that can't be checked (no rectangle): says so, never claims it didn't move | 3 | synthetic | R-AN-CANT-CHECK |
-| 19 | Lid named, pivot outside (round 1): says outside, below, click Lid in the timeline; no distance | 2 | live | R-AN-OUTSIDE |
+| 19 | Lid named, pivot outside (round 1): the side and 'click Lid in the timeline' in the what-the-pivot-is turn, 'start there' on the crosshair in the move turn (a third turn, 'Lid is selected and both show', added 2026-10-28, FR-019a); no distance | 3 | live | R-AN-OUTSIDE, R-NAMES-REAL, R-ONE-IDEA |
 | 20 | `lid-group` as the attempt (round 1): Lid's own pivot unchanged, the Contents possibility, **not** the expression line too, never claims they moved the group | 3 | live | R-AN-GROUP-PIVOT |
 | 21a | Menu command asked for with a left-edge place: no Center Anchor Point, Pan Behind goes on (L-3) | 3 | live | R-AN-CENTER-MENU |
 | 21b | Same question with the center as the place: the menu path by name, never a key combination | 3 | live | R-AN-CENTER-MENU |
 | 22 | One Position key, dragged with the playhead off it (round 2): slid hint with the key's time, Edit > Undo, playhead on the key; never "jump" | 3 | live | R-AN-SLID |
 | 23a | Watch offer, "no, I'll just try" then a failed check: one offer, none after, no demo | 3 | live | R-AN-WATCH-OFFER |
 | 23b | Watch offer, this skill passed before (record): no offer at all | 2 | live + synthetic record | R-AN-NO-WATCH-OFFER |
-| 23c | Watch offer, yes: two focus entries (Door, then Needle at the bottom edge), A and Shift+P asked, demo only on Needle | 4 | live | R-AN-WATCH-YES, R-AN-DEMO |
+| 23c | Watch offer, yes (pacing, 2026-10-28): two focus entries (Door, then Needle at the bottom edge), A and Shift+P asked in turn 3 with **no demo in that turn** (`demo_not_in_turns`), the demo in turn 4 on Needle only, Door handed back with no second walk-through | 4 | live | R-AN-WATCH-YES, R-AN-DEMO, R-DEMO-PLAIN, R-NAMES-REAL, R-ONE-IDEA |
 | 24 | A one-key layer named, rest key on another frame (round 4): the two-frames sentence once with the labels exactly ("3.7 s", "4.2 s"), "set the pivot before you key", another layer offered; no check or demo; never "other keys" or "jump" | 2 | synthetic | R-AN-TWO-FRAMES |
 | 24b | Same, but the learner names their own rest pose (4.167 s) while the tool's rest key is on the Position key: the sentence uses their time, written "4.2 s" (never 4.167), and passes `rest_time` | 2 | synthetic | R-AN-TWO-FRAMES |
 | 24c | No layer named: turn 1 holds no leave-out sentence at all (not only the two-frames one); Door proposed in turn 1 | 2 | synthetic | R-AN-INTENT-FIRST |
@@ -464,3 +464,27 @@ the snapshot or the wording changes. Treat a clean hard-rule run as a coin flip 
   (same item as before). That sentence is in `SKILL.md` "The words the lesson uses", so the rubric item and the
   prompt disagree.
 - **23c** (`2026-10-28-141230`): 3/3, $3.35.
+
+## Pacing changes (2026-10-28, T263; TD § 20, spec 011 Eval plan 15, 19 and 23c)
+
+Written on `pacing-evals`; no paid run yet. Dry run: 46 cases valid. T264 runs the five cases (below) with the mentor from
+the T262 branch.
+
+- **Rubric.** `R-ONE-IDEA` takes TD § 20 › What R-ONE-IDEA should see: the turn that says what the pivot is passes when it
+  ends on the A, then Shift+P ask and fails on a second explanatory sentence (the slide sentence, unasked); the move turn is
+  two steps in prose, and **the watch offer is the same action's alternative** (last sentence); a side-question turn passes as
+  the answer plus the pending action and fails when it adds the next stage. `R-AN-WATCH-YES` now says the asking turn runs
+  nothing and Door is handed back with no second walk-through.
+- **Case 15** (5 turns now). Turn 3 is the refusal, turn 4 'Both numbers are showing.' reaches the invite turn, turn 5 is the check.
+  Checks: `no_later_offer` on turns 3 and 5 (as before, plus the decline turn); `decline_names_door_again` (turn 3 says Door,
+  the same pending action); `watch_offer_made` (turns 2 to 4) and `watch_offer_once` (`at_most` 1 over the whole run), using
+  case 23a's Needle offer pattern; `no_offer_after_check` (turn 5). Rubric adds `R-ONE-IDEA` and `R-AN-WATCH-OFFER`. A mentor that makes no offer
+  at all fails `watch_offer_made`; one that repeats it fails `watch_offer_once`.
+- **Case 19** (3 turns now). Turn 2 (TD turn 3) must say outside, the side (below), 'timeline' and Lid; the new turn 3 (TD turn
+  4) must say 'start there' or name the crosshair. Rubric adds `R-ONE-IDEA`.
+- **Case 23c.** `asks_show_numbers` is turn 3 only (was 3 to 4); new `demo_not_in_turns: [3]` (a runner key added for this);
+  turn 4 must name Door and must not repeat the steps (`door_no_second_walkthrough`: no 'press Y', 'Pan Behind', 'start your
+  drag', 'take it to', no numbered line). Rubric adds `R-ONE-IDEA`.
+- **Runner.** The judge sees each tool result up to 16000 characters (was 6000). The 6000 cap hid the snapshot's side note
+  from the judge and produced a false 'guessed the side' failure (cases 19 and 23c); earlier results were judged on the cut.
+- **Not changed.** Cases 02, 21 and 29 keep their checks; T264 re-runs them with `R-ONE-IDEA` read by the new rubric text.

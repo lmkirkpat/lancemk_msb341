@@ -43,6 +43,20 @@ idea, and a memory clause about this skill (practicing) is context, not a second
 the lesson's idea, a leave-out, a list of layers, a recap of another skill, or ending on anything but
 the choice is a second idea.
 
+**The explanation turns (TD 20, 2026-10-28):** read by TD § 20 › What R-ONE-IDEA should see.
+- The turn that says what the pivot is (the repeat-back, where the pivot is now, one note, the
+  frame, and the first sentence "Anchor Point is where the pivot sits inside the layer; Position is
+  where that pivot sits in the comp") is one idea if it **ends on the ask to select the layer and
+  press A, then Shift+P**. A second explanatory sentence (the slide sentence, "Change Anchor Point
+  alone and the layer slides…", unasked) fails it. "Ready for how to move it?" is not an ask.
+- The move turn (Pan Behind, start the drag on the crosshair, take it to the place, the layer stays
+  put) is one idea in two steps in prose. **The watch offer is the same action's alternative** (do
+  it, or watch one first) and passes as its last sentence. A numbered list, a tip, or a repeat of the
+  previous turn fails it.
+- A turn that answers a side question (a menu command, numbers to type, a "do it for me") passes
+  when it is the answer in one or two sentences plus the pending action again. It fails when it adds
+  the next stage (the steps, the tip, the offer when the pending action had not carried it).
+
 - **Fail:** a wall of explanation, three ideas at once, or a turn that ends with nothing for the
   learner to do.
 
@@ -345,7 +359,9 @@ offer to watch a demonstration at all and does not mention one.
 After a yes the mentor sets up two focus layers (the learner's first, the offered layer second), says
 the offered layer's place in one sentence, asks for that layer to be selected with Anchor Point and
 Position showing (A, then Shift+P) before it moves anything, then demonstrates on the offered layer
-only. The learner's own layer is left for them.
+only. The learner's own layer is left for them in one sentence, with no second walk-through of the
+steps (TD 20: the move turn already gave them). The ask for A and Shift+P comes in the turn **before**
+the demo; the asking turn itself runs nothing.
 
 - **Fail:** demonstrates on the learner's layer, skips the A and Shift+P ask, or names no place.
 

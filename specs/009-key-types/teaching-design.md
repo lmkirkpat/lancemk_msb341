@@ -3,6 +3,8 @@
 **Owner:** curriculum designer (`decisions/007`). The spec writer's `spec.md` in this folder links
 here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-20; round 1 answers 2026-10-21 (§ 14). **Status:** draft, round 1 answered.
+§ 15 (pacing, one idea per turn) **proposed 2026-10-28, not approved**: until the human approves it,
+§ 5 stands as written.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 1, § 8, § 9, § 12 (B1, B2), § 13;
 spec 004 (approved), above all FR-004, FR-005, FR-018 to FR-022, FR-024, FR-025, FR-030, FR-031.
 Research: `discovery/curriculum-research/keyframe-types-hold-and-linear.md`. Evidence:
@@ -247,3 +249,126 @@ teaching edge to watch, not a change now. Offset (010): Blink, Spinner and Cut a
 layer-start groups, so their first keys should not land on 0.5 s, or the Dots group grows past
 three. The answer key (T041) lists whatever's built, so this is a build note, not a design change.
 Neither file needs editing.
+
+## 15. Pacing: one idea per turn (proposed 2026-10-28)
+
+**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
+spec or the evals until it's approved; the items at the end say who changes what. This is the audit
+against curriculum § 2's turn rule (approved 2026-10-28, from skill 5's § 20 and skill 6's § 16).
+The opening (the snapshot decides lesson or review; the intent question with the candidates, fixed
+in `e82a7d2`) doesn't change, and neither do "I do, we do, you do", the one demo, the hints, the
+linear question or the review.
+
+### The problem
+
+**Verdict: doesn't fit.** § 5 stage 2 (explain) has the learner only watching: a frame mid-pair,
+frames either side of a held pair's jump, and the words. Stage 4 (the invite) is a separate stage
+that names the pairs and where hold lives. With nothing to hand over at stage 2, the build folds the
+two into one turn, and that turn is the one R-ONE-IDEA fails:
+- Case 05 (`product/evals/key-types/results/2026-10-27-134221.json`), turn 2: a recap of all three
+  Blink pairs with their values, a note about the frames, a paragraph on Dot 1 as what a hold looks
+  like, the bold rule, the task, two bulleted methods, and "you can select all three keys and do
+  them together". The judge: "a recap of all three pairs and their values, the failed previews, a
+  teaching aside on what hold looks like using Dot 1, and two methods for the task."
+- Case 20 (`-140135`): the same, on turn 2 after the stored choice is confirmed.
+- The opening passes now (case 01, 3/3 after `e82a7d2`, and T415's 14, 21 and 22 at 3/3), so the
+  failure is all in the explain-and-invite turn.
+
+One thing in that turn works against the lesson: "select all three keys and do them together" is
+the setup for § 7 row 3's mistake (holds landing on more than the blink).
+
+### The new sequence (a first lesson)
+
+| Turn | The one idea | Carries | Ends on |
+|---|---|---|---|
+| 1. Opening | what should snap | Unchanged (§ 4; `SKILL.md` step 1 as fixed): the question, the candidates as questions, the leave-outs | Their answer |
+| 1s. Their choices from last time (`stored_choices`) | confirm | Unchanged (spec 004 FR-046's confirm) | Yes, or the change |
+| 2. The idea, and the task (we do, you do) | hold keeps the value, then jumps | The focus confirmed in one clause, by layer and property (no recap of every pair's values). One frame mid-pair, at most one clause: "At 1.2 s Blink is half see-through: it fades." The idea in one sentence: "A hold keeps the value until the next key, then jumps." When `held_examples` has one, a clause, not frames: "the way Dot 1 already jumps at 0.5 s." How, in one sentence, with the pair starts as times: "Select the key at the start of each pair (1 s, 1.4 s and 1.8 s) and choose Animation > Toggle Hold Keyframe (⌃⌥⌘H), or right-click it." | "Hold Blink's three pairs and say done." |
+| 2a. Demo (on an ask, or clearly stuck) | watch one | Stage 3, unchanged: one hold on the demo target, frames one before and one after the jump, Edit > Undo | "The 1.4 s and 1.8 s pairs are yours; say done." No second walk-through |
+| 3. Check | each pair held, or a hint | § 6, § 7, unchanged | "Say done again", or turn 4 |
+| 4. Pass, and linear on purpose | is anything meant to run at constant speed? | "That passes": what they held, in one clause | "Is there a move here that should run at constant speed, like a steady spin?" |
+| 5. The linear check | it stays linear, or one sentence on how | Stage 6, unchanged (one sentence on Keyframe Interpolation only when it isn't linear) | "Say done" when it isn't linear; otherwise the close |
+| 6. Record | | "I've noted that for next time" | |
+
+**One focus pair** (no demo): turn 2's how-to sentence is the walk-through in words, after the
+one-sentence reason there's no demo; it still ends on "say done".
+
+**The review** (§ 11) is unchanged: one question, then "make it snap".
+
+### What moved, what's on request, what goes
+
+| Piece | Was | Now | Why |
+|---|---|---|---|
+| Frames either side of a held pair's jump (`held_examples`) | Stage 2 | A clause naming it ("the way Dot 1 already jumps at 0.5 s"); the two frames **on request** ("what does a snap look like?") | Their own pair's fade frame is the evidence the lesson needs; three frames and a paragraph about another layer made a second subject. The demo's frames show a snap on their own pair when they ask for one |
+| A recap of every focus pair with its values | Seen in 05 and 20 | **Goes**; the pairs are named once, by their start times, in the how-to | The times are what they act on; the values are in the timeline |
+| Two bulleted methods (menu, right-click) | Stage 4 (as built) | One sentence, the right-click as a clause | FR-018 needs both named; it doesn't need a list |
+| "You can select all three and do them together" | Seen in 05 | **Goes** (on request) | It sets up § 7 row 3's mistake, and nothing in the task needs it |
+| "Toggle Hold Keyframe is a toggle, so using it on a held key turns it off" | Seen in 05's check turn | **Hint only**: when a check finds a pair that was held is no longer held | A warning about a mistake they haven't made |
+| Any comment on the frame itself | Seen in 05 | **Goes** | A frame that's no use gets no sentence |
+| The walk-through after a demo or a side question | Possible under stages 3 and 4 | **Goes** | Rule 3 |
+| The linear question | After the pass, its own step | The end of the pass turn | It's the pass turn's one handover; without it that turn ends on nothing |
+
+**Kept exactly:** the opening and the intent question, the candidates as questions, "meant to fade"
+dropped with no argument, "I do, we do, you do", the one demo and its target rule, the hints (§ 7),
+the linear check (stage 6), the record, the review.
+
+### What R-ONE-IDEA should see (the eval engineer's to change; this is only the intent)
+
+- Turn 2: the confirmed focus, the frame and the held-example clause are context for the idea
+  sentence; the how-to sentence and the ask are one task. It passes if it ends on "hold them and say
+  done". A recap of every pair's values, a second explanation, or a bulleted list of methods fails it.
+- The pass turn: the praise and the linear question are one handover.
+- A turn answering a side question passes as the answer plus the pending step, and fails when it
+  adds the next stage.
+
+### Rejected
+
+- **Keep the held-example frames and drop the fade frame.** The snap is the target, but US1 is "it
+  shows me, with a frame from my comp, that the pair is fading where I wanted a jump": the frame
+  belongs on their own pair.
+- **A turn of its own for the explanation, ending on "ready?"** Rule 1.
+- **Name the menu only and drop the right-click.** FR-018 names both, and as a clause it costs
+  nothing.
+- **Ask the linear question in its own turn after the pass.** One extra round trip for a turn that
+  would carry only "that passes".
+
+### Evidence and guesses
+
+- **R:** cases 05 and 20 above; T415 and case 01's re-run (the opening passes); `SKILL.md` steps 3
+  and 4; T035 live (`discovery/usage-notes/key-types.md`: 3 min 58 s, one demo, SC-002 4 of 4), with
+  the old pacing, builder-only.
+- **Guess:** that a learner who has never seen a hold gets the idea from one fade frame and one
+  sentence, without seeing a snap first. If live lessons show "what's it supposed to look like?",
+  rule 3 answers with the held-example frames (they're on request), and if that's common, the
+  frames come back into turn 2 in place of the clause.
+
+### Items, if approved
+
+Numbers are `NNN`: the cockpit assigns them.
+
+**For the builder (B-NNN), `key-types-mentor/SKILL.md` only, no tool change:**
+1. Step 3 becomes turn 2's first half: the focus in one clause, one frame mid-pair with at most one
+   clause, the idea sentence, the held example as a clause (frames only when asked); nothing about
+   the frame itself.
+2. Step 4 ends the same turn: the how-to in one sentence (menu, shortcut on 26.5, right-click as a
+   clause), the pairs by start time, "say done". No bullets, no "select all three".
+3. Step 5: after the demo, hand the rest back in one sentence; no walk-through.
+4. Step 7: the toggle sentence only as a hint, when a pair that was held is no longer held.
+5. Step 8: ask the linear question at the end of the pass turn.
+6. A "Style" line for rule 3.
+7. Step 5 or 6, one line for curriculum § 2's shared "do it for me" rule: before any demo, on a focus
+   with a demo target, "do it for me" is the ask (the one demo runs; the rest is theirs); after the
+   demo, the warm decline and the pending step, with no new offer. Key types makes no standing watch
+   offer (C-4 is open), so there's no offer to keep after a decline.
+
+**For the spec writer (S-NNN):**
+- **FR-008:** "name the Cursor once as already snapping (and use it for the stage 2 frames)" becomes
+  "…(and name it in the stage 2 explanation; frames either side of its jump only when the learner
+  asks to see a snap, TD § 15)".
+- **FR-006:** no text change; `held_examples` is still returned (the clause and the on-request frames
+  use it).
+- **FR-010, FR-014, FR-017, FR-018:** no text change. FR-018's menu path and right-click are one
+  sentence; FR-014's question ends the pass turn.
+
+**For the eval engineer (through the cockpit):** the readings above in the R-ONE-IDEA rubric; then
+re-run 03, 04, 05, 06, 11, 13 and 20 as they are.
