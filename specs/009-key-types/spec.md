@@ -292,7 +292,8 @@ test on a saved snapshot (FR-021). "Candidate" is FR-003; "check" is `key_types_
   precomp) is refused in one sentence saying why (rows 1, 3, 4, 10).
 - **FR-006**: `key_types_snapshot` MUST accept a focus by **layer and property** (not only layer) and
   `mode` (`lesson` or `review`), and return: the candidates; the targets and demo target the session
-  gives; the held pairs available for the stage 2 explanation frame; and what's left out, each with
+  gives; the held pairs, for the stage 2 clause (their frames shown only on request, FR-008, TD § 15;
+  answered 2026-10-28); and what's left out, each with
   its reason (hidden, precomp, expression, already held, kept linear, unknown values). The property
   focus is passed to the skill's own analyzer; it needs no shared change.
 - **FR-007**: With no candidate and nothing named, the mentor MUST offer the practice blink

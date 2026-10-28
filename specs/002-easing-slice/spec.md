@@ -60,8 +60,9 @@ keyframes, I apply easing in AE myself, and the check correctly reports what I d
    explanation refers to my own layer and timing and includes at least one rendered frame
    from my comp.
 3. **Given** the mentor has asked me to apply easing, **When** I ease the keyframes it pointed
-   to and say I'm done, **Then** it confirms which keyframes are now eased and explains what
-   the change does to the motion.
+   to and say I'm done, **Then** it confirms which keyframes are now eased. It may say what the
+   change does to the motion as one clause of context, never as a sentence of its own
+   (curriculum § 6 skill 0, FR-006a; answered 2026-10-28).
 4. **Given** I only eased some of the keyframes, or eased the wrong property, **When** I say
    I'm done, **Then** it says specifically which keyframes are still linear or what changed
    that it didn't ask for, and gives me a hint rather than fixing it.
