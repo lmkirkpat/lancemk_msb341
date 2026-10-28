@@ -1,0 +1,460 @@
+{
+  "run_at": "2026-10-28T17:52:46.608Z",
+  "options": {
+    "only": "34",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 1.12,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "34-unreadable-record",
+      "title": "An unreadable record: one sentence about the notes (said once), then a first lesson with no claim about what the learner has or hasn't done, no review, nothing before the snapshot",
+      "covers": [
+        "FR-049",
+        "FR-052",
+        "SC-015",
+        "EP-34"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "b5851e4f3c925734048bae1900d0cdb1c44fd99bb15682d541e886db02730744",
+      "pass": true,
+      "passes": 2,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was null_parent_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:says_notes_unreadable",
+              "pass": true,
+              "detail": "turn 1: \"couldn't read my notes from your earlier lessons\""
+            },
+            {
+              "check": "say:no_claim_from_unread_record",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:notes_sentence_once_in_turn_1",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:notes_said_once",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_review",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_memory_claim",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_file_or_code",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-UNREADABLE-ONCE",
+              "pass": true,
+              "reason": "Turn 1 says in plain words \"I couldn't read my notes from your earlier lessons\" (with a short follow-on that names no file, path or error code), then asks \"Which layers should move as one\"; turn 2 doesn't repeat it, claim memory, or mention a review."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The only names used, \"Mentor Practice 2\" (turn 1) and Tile, Caption and Stamp (turn 2), all appear in the snapshot's comp name and proposal."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Both turns are a few short sentences moving one idea each and end with a question for the learner (\"Which layers should move as one…?\" and \"Want to move those as one?\")."
+            }
+          ],
+          "cost": 0.3727184,
+          "session_id": "45f820df-9912-4db7-a49c-7f1e3ebee607",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": false,\n    \"error\": {\n      \"code\": \"RECORD_UNREADABLE\",\n      \"message\": \"I couldn't read my notes from your earlier lessons. They're kept as they were, and I'll start new notes from this lesson.\"\n    },\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": null,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": null,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: I couldn't read my notes from your earlier lessons. They're kept as they were, and I'll start new notes from this lesson.\n\nToday's lesson is moving a group of layers as one, inside your comp \"Mentor Practice 2\".\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: I don't have a group in mind. What do you suggest?\nMENTOR: Tile, Caption and Stamp sit together, apart from everything else. Want to move those as one?\n"
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was null_parent_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:says_notes_unreadable",
+              "pass": true,
+              "detail": "turn 1: \"couldn't read my notes from your earlier lessons\""
+            },
+            {
+              "check": "say:no_claim_from_unread_record",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:notes_sentence_once_in_turn_1",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:notes_said_once",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_review",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_memory_claim",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_file_or_code",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-UNREADABLE-ONCE",
+              "pass": false,
+              "reason": "Turn 1 does say it once, names no file or error, makes no claim about memory and goes on to ask which layers should move as one, but it uses two sentences about the notes ('I couldn't read my notes from your earlier lessons. They're kept as they were, and I'll start new notes from this lesson.') where the item requires one."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses ('Mentor Practice 2', 'Tile', 'Caption', 'Stamp') appears in the snapshot result."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Both turns are short and move one idea each, and each ends with a question for the learner ('Which layers should move as one…?' and 'Want to move those as one?')."
+            }
+          ],
+          "cost": 0.3756904,
+          "session_id": "4ef92ab3-1fa5-4a48-81f0-97b51fb90eb9",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": false,\n    \"error\": {\n      \"code\": \"RECORD_UNREADABLE\",\n      \"message\": \"I couldn't read my notes from your earlier lessons. They're kept as they were, and I'll start new notes from this lesson.\"\n    },\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": null,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": null,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: I couldn't read my notes from your earlier lessons. They're kept as they were, and I'll start new notes from this lesson.\n\nToday we're working in **Mentor Practice 2**, and the idea is to move several layers as one group while each keeps its own animation.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: I don't have a group in mind. What do you suggest?\nMENTOR: Tile, Caption and Stamp sit together, apart from everything else. Want to move those as one?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was null_parent_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:says_notes_unreadable",
+              "pass": true,
+              "detail": "turn 1: \"couldn't read my notes from your earlier lessons\""
+            },
+            {
+              "check": "say:no_claim_from_unread_record",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:notes_sentence_once_in_turn_1",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:notes_said_once",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_review",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_memory_claim",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_file_or_code",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-UNREADABLE-ONCE",
+              "pass": true,
+              "reason": "Turn 1 states it once in plain words (\"I couldn't read my notes from your earlier lessons...\"), with no file, path or error code and no claim of memory or review, then asks \"Which layers should move as one\"; turn 2 doesn't repeat it."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name used (Mentor Practice 2, Tile, Caption, Stamp) appears in the null_parent_snapshot result."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Both turns are a few sentences moving one idea and end with a question for the learner (\"Which layers should move as one...?\", \"Want to move those three as one?\")."
+            }
+          ],
+          "cost": 0.37425339999999996,
+          "session_id": "02eeca83-0391-48ee-8cc0-3959ad81f4c3",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": false,\n    \"error\": {\n      \"code\": \"RECORD_UNREADABLE\",\n      \"message\": \"I couldn't read my notes from your earlier lessons. They're kept as they were, and I'll start new notes from this lesson.\"\n    },\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": null,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": null,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: I couldn't read my notes from your earlier lessons. They're kept as they were, and I'll start new notes from this lesson.\n\nSo let's start fresh in **Mentor Practice 2**. Today's idea is moving a group of layers as one by attaching them to an invisible handle.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: I don't have a group in mind. What do you suggest?\nMENTOR: Tile, Caption and Stamp sit together, apart from everything else. Want to move those three as one?\n"
+        }
+      ]
+    }
+  ]
+}

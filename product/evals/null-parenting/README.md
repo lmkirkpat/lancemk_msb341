@@ -11,6 +11,26 @@ tests (`cd mentor && npm test`); evals don't repeat them.
 Built by copying `product/evals/easing/run.mjs`, not sharing it, so easing's files stay untouched.
 Same options and results format.
 
+## T415 (2026-10-28): SC-015's repeats, 12 runs, $4.26
+
+Spec 004 T415, `--repeat 3` on four cases, on `main`'s mentor (this worktree's `mentor/` and skills match `main`).
+Cases: **01** (first lesson), **35** (practicing), **16** (review due), **34** (unreadable record). Results:
+`results/2026-10-28-115040.json` (01), `-115153` (16), `-115246` (34), `-115338` (35). No plumbing failures.
+
+| SC-015 count over the 12 runs | Result |
+|---|---|
+| Runs with learner-visible text before the first snapshot call | **0** |
+| Runs whose first tool isn't `null_parent_snapshot` | **0** |
+| Skill IDs in learner-visible text | **0** |
+
+Cases passed (majority): 01 2/3, 16 3/3, 34 2/3, 35 2/3. The three rubric failures do not count against SC-015:
+- 01 run 3, R-USES-MEMORY: the mentor never mentions the earlier pivot lesson. Mentor wording (a memory clause
+  skipped), judgment item, one of three.
+- 34 run 2, R-UNREADABLE-ONCE: two sentences about the notes where the item wants one. Mentor wording, one of three.
+- 35 run 3, R-USES-MEMORY: "instead of just a slide" claims earlier work the record doesn't hold. Mentor, honesty
+  in the memory clause, one of three. Watch item: not repeated.
+The full baseline is not run.
+
 ## Status (2026-10-28): 38 cases, round 2 fixes verified, ready for T415 and the baseline
 
 **Round 2 re-run (2026-10-28, after `phase10-round2`, each `--repeat 3`, $7.43 in all):** 34 3/3, 18 3/3, 38 (new) 3/3,
