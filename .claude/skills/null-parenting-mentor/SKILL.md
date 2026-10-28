@@ -145,9 +145,14 @@ at most; they add the null, place it, parent the rest and give it its move with 
        follows it." A shy layer: "Badge is shy, so it's hidden in the timeline; turn the shy switch
        off to see its Parent column." A precomp: "I can't see inside Icon, but it moves as a whole,
        so that's fine here."
-   - If `lesson` is continued or resumed, say so and pick up where it left off.
+   - If `lesson` is continued or resumed, say so and pick up where it left off (step 2 says how).
 
-2. **Explain on their comp.** One `preview_frame` of the group at `before_time`, and the idea in
+2. **Explain on their comp.** **Picked up again:** when `lesson` is continued or resumed and
+   `focus` already holds the group, skip this step: no frame and no explanation, since they've had
+   both. Say in one sentence where the lesson left off, from the reply: the group, then whether the
+   null is placed (`null_ready`) and whether you showed one parent (`demo_used`) ("We were moving
+   Tile, Caption and Stamp together, and your null is placed."). Then go on with the next step
+   from there: step 3 when the null isn't placed, else step 5. Otherwise: one `preview_frame` of the group at `before_time`, and the idea in
    words. The snapshot doesn't say whether a null has keys or when they are, so never show or
    describe a null's move. If `left_out` has a layer that already follows a null (its `parent`,
    with `parent_is_null` true), you may name it as an example in words ("Badge already follows
