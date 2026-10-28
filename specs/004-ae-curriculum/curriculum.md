@@ -99,6 +99,8 @@ What follows from the rules, so every design cuts its turns the same way:
   as clauses ("drag its keys, or the middle of its bar"). No numbered walk-through, no bulleted list
   of methods, no tips about shortcuts the step doesn't need.
 - **After a demonstration, the rest is handed back in one sentence.** The walk-through isn't repeated.
+- **A demonstration asked for before the explanation gets one idea sentence first** (from easing,
+  answered 2026-10-28): the idea on their layer, then the demo, then the one-sentence hand-back.
 - **Shared rule: a "do it for me" decline keeps the one offer (approved by the human 2026-10-28).**
   When the learner asks the mentor to do the work and the mentor declines, the reply is the warm
   decline and the pending step (rule 3). The lesson's one offer to watch a demonstration is still made
@@ -346,6 +348,7 @@ target, the hints or the record.
 |---|---|
 | Does easing's rubric get R-ONE-IDEA? | **Yes.** The eval engineer adds it, with the reading below |
 | Approve this section as written? | **Yes** |
+| A "show me" before any explanation (case 03, turn 2): what does the demo turn carry? | **One idea sentence first, then the demo, then the one-sentence hand-back.** Otherwise the learner watches a change without being told its point |
 
 **Verdict: doesn't fit.** `SKILL.md` step 4 (explain) asks for the frame, what linear is, what
 easing does, where to do it (F9) and how to check it in the Graph Editor; step 5 then asks them to
@@ -362,7 +365,7 @@ the same pile skills 1 to 3 and 5 to 6 were failed for.
 |---|---|---|---|
 | 1. Opening | which layer | Unchanged: the count, one layer (two at most) with no more than 5 pairs, the leave-outs (§ 2's opening rule: easing proposes from a scan, so they're up front) | "Does Title sound good, or would you like another layer?" |
 | 2. The idea, and the task (we do, you do) | easing slows a move into and out of its keys | The layer confirmed in one clause. One frame inside a focus pair, at most one clause about it. The idea in two sentences, on their timing: "From 0.5 s to 1.5 s Title moves at one speed the whole way, then stops dead at 3 s: that's linear, and it's why it looks mechanical. Easing slows it out of each key and into the next." How, in one sentence: "With Title's keys showing (U), select both keys of a pair and choose Animation > Keyframe Assistant > Easy Ease (F9); the diamonds turn into hourglasses." The pairs in one sentence, not a list | "Ease Title's two Position moves, its Scale and its Opacity, and say done." Then the demo offer, if made, as the last sentence |
-| 2a. Demo (on an ask or a yes) | watch one | `SKILL.md` step 6, unchanged: a frame first if none yet, the one `set_ease`, what changed, Edit > Undo | "The other three are yours; say done." No second walk-through |
+| 2a. Demo (on an ask or a yes) | watch one | `SKILL.md` step 6: a frame first if none yet, the one `set_ease`, what changed, Edit > Undo. If the ask comes before turn 2's explanation (a "show me" right after the opening, case 03), one idea sentence first, on their timing, then the demo (answered 2026-10-28) | "The other three are yours; say done." No second walk-through |
 | 3. Check | pass, or one hint per pair | Step 8, unchanged | "Say done again", or the pass |
 | 4. Pass | the next focus | "That passes" and the next focus from the remaining findings. What the change does to the motion may come as one clause of context, never a sentence of its own (answered 2026-10-28; matches spec 002 US1 #3) | Their choice of the next focus, or a stop |
 | 5. Record | | Unchanged | |
@@ -443,7 +446,9 @@ passes as the answer plus the pending step.
      "say done".
   5. **Step 6, after `set_ease` runs:** after what changed and Edit > Undo, hand the rest back in one
      sentence, naming how many are left ("The other three are yours; say done."). Don't repeat the
-     how-to.
+     how-to. If the ask comes before step 4 has run (a "show me" right after the opening), the turn
+     opens with one idea sentence on their timing (turn 2's second sentence, "Easing slows it out of
+     each key and into the next", with their layer), then the demo, then this hand-back; no how-to.
   6. **Style:** add, word for word: "A question or a request in place of the step gets its answer in
      one or two sentences, then the step that was pending, again, in one sentence. Never the next
      step's content in that turn, and never the walk-through a second time."
