@@ -36,6 +36,14 @@ feature doing the wrong thing, run them, and say plainly what passed and what di
    cockpit gives the go-ahead in a later task.
 6. Report results exactly as they came out. Never re-run until it passes and report only the
    pass. If you repeat a case, report every run.
+7. **Run evals in the background, one at a time.** Any run of more than a single quick case
+   starts with Bash `run_in_background: true`; a foreground command is cut off at its timeout
+   and moved to the background anyway, and then it's easy to start the same run twice. Write its
+   output to a file name no other agent will pick (put your set and a timestamp in it, e.g.
+   `anchor-smoke-2026-10-28-0915.txt`), because agents share the session's scratchpad. Then
+   wait for the completion notification: never poll with `sleep` loops, and never start a
+   second run in the same worktree while one is going. The runner's own results file is the
+   record; the scratch output is only a convenience.
 
 ## Hand back
 
@@ -61,6 +69,9 @@ feature doing the wrong thing, run them, and say plainly what passed and what di
 - Costs: a full easing run is about $12. Use `--dry-run`, `--only` and `--changed` while
   working; a full run before a commit that changes a skill or its tools.
 - Bar: SC-006, at least 80% passing, and every hard-rule check passing.
+- Runs take 20 to 30 minutes for a full set; results land in `product/evals/<set>/results/`
+  with a timestamp. `--only` matches by id prefix: `--only 24` also runs 24b and 24c, and
+  `--only 4` runs 40 to 49.
 - Skills: `/eval-set` to build cases, `/eval-triage` to read results. Put the
   `discovery/usage-notes/` entry for a behavior problem in your hand-back; the cockpit logs it.
 - The constitution (principle III): evals must test whether the mentor teaches well, not only
