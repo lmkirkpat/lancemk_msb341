@@ -43,6 +43,11 @@ and SC-016 are new (Requirements › The opening read). The snapshot tool picks 
 the learner record itself, so each skill's first call is its snapshot and there's no gap for a
 self-note to fall in. Tasked as tasks-wave-b.md › Phase 10 (T400 onward); contracts/skill-module.md
 § 3 and § 4 amended. New open questions OR-1 to OR-5, with the tasks written to the recommendations.
+**Phase 10 review, 2026-10-27 (the human's decisions):** FR-048 step 3 and FR-051's last line allow a
+review the snapshot picks while `recommend_next` ranks another skill in progress first; FR-049 reports
+any read error as `RECORD_UNREADABLE` (follow-up PR-1, open); FR-048 says a declined review uses the
+session's offer, FR-049's table that `eased_layers` matches whole names; FR-050 gives speed graph's
+`eased_layers` default (should-fix 2).
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
@@ -842,13 +847,18 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
      targets on this project and comp left out (and the marks that apply). It MUST be **one function**
      in `mentor/lib/`, called by both `recommend_next` and the snapshot tools, never a copy (OR-4,
      OR-5).
-     `recommend_next`'s results don't change.
+     `recommend_next`'s results don't change. Because the test is for this one skill, the snapshot for
+     skill X can pick X's review where `recommend_next` would offer another skill in progress first
+     (FR-004 step 1 outranks reviews); a review `recommend_next` does offer is always the one the
+     snapshot picks (FR-051's last line; Phase 10 review, 2026-10-27).
   4. **Otherwise** `lesson`. A due review with no new target on this comp is a lesson: by FR-021 it
      isn't offered, and it stays due (OR-1).
 
   When step 3 picks a review, the tool MUST remember it as offered, as `recommend_next` does
   (`session.recordReviewOffer`, best effort), so FR-020's one review per session holds whichever tool
-  offered it. An unreadable record never picks a review (FR-049). The choice is made once, before
+  offered it. A review picked here and then turned down has still used the session's one review offer
+  (FR-020), so a later call in that session doesn't pick another (accepted as built, 2026-10-27). An
+  unreadable record never picks a review (FR-049). The choice is made once, before
   `session.start`, and the call then runs exactly as an explicit call with that mode does today: the
   same session, the same analysis, the same reply fields. The choice lives in shared code
   (`mentor/lib/`, plus one read-only export from `session.mjs` for step 2 that reuses FR-043's stale
@@ -872,7 +882,7 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
     | `days_since_practiced` | Whole local calendar days since this skill's `last_practiced` (0 today, 1 yesterday), or `null`. The mentor turns it into "yesterday" or "last week"; it never does date arithmetic |
     | `review_due` | Whether this skill's review is due today (`reviews.isDue`), even when step 3 didn't pick a review |
     | `other_skills` | One `{ skill_name, learned, hard }` per hard prerequisite in the path data (the on-ramp left out), `hard: true`, plus any skill the tool file's `FINDERS` entry names as one its `SKILL.md` mentions (skill 6: easing), `hard: false`. Names from the path data (FR-008) |
-    | `eased_layers` | **Speed graph only:** the layers its step 0 lists today, worked out in code: the layers named in every `easing.basic` lesson's `targets`, and for an older entry with no `targets`, each layer of this comp whose exact name appears in that entry's text |
+    | `eased_layers` | **Speed graph only:** the layers its step 0 lists today, worked out in code: the layers named in every `easing.basic` lesson's `targets`, and for an older entry with no `targets`, each layer of this comp whose exact name appears in that entry's text as a whole name, never inside a longer one ("Title" doesn't match "Subtitle"; accepted as built, 2026-10-27) |
 
   - **`server_current`** (FR-044), which `anchor_snapshot` and `null_parent_snapshot` gain here.
 
@@ -885,6 +895,10 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
   `error` above, the rest as for a learner with nothing recorded (`status: "not_started"`, every
   `other_skills` entry not learned, `review_due: false`), and the mode by steps 1, 2 and 4. The next
   call finds no file and reads as empty, so the mentor says it once.
+  **Any read error** on the record file (a permissions error, for example), not only JSON that won't
+  parse, is reported this way, with `RECORD_UNREADABLE` and its standard message (accepted as built,
+  2026-10-27). Open for a later pass, not Phase 10: that message promises new notes, but
+  `record_lesson` would fail on the same file (Open questions › PR-1).
   *Proof:* unit tests on each tool's reply (FR-051).
 
 - **FR-050 (step 0 becomes the snapshot)**: In `speed-graph-mentor`, `key-types-mentor`,
@@ -899,7 +913,10 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
     still offer a due review as their first words, anchor and null still run it; a learner who turns
     the offer down gets a call with `mode: "lesson"`. Each review section's first call is now the
     opening call itself; its later calls keep `mode: "review"` as they do.
-  - Speed graph's second call in step 1 (FR-047) sends `learner.eased_layers` as `eased_layers`.
+  - Speed graph's second call in step 1 (FR-047) sends `learner.eased_layers` as `eased_layers`. A
+    `speed_graph_snapshot` call whose `skill_options` hold no `eased_layers` (none sent and none stored
+    on the lesson) uses `learner.eased_layers`, so every call in a lesson or review ranks the same way
+    (Phase 10 review, should-fix 2, 2026-10-27).
   - `read_learner_record` leaves these five files: no call, and out of `allowed-tools` (OR-2). The
     hard rule against notes to yourself stays word for word; the "with nothing written in between"
     instructions go, since there's no in between.
@@ -940,7 +957,9 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
   And: with an explicit `mode`, every other reply field is the same as the same call made without
   `mode` when FR-048 picks that mode; `recommend_next`'s existing tests pass unchanged (its review
   test moved, it didn't change); and for each shared saved record, the snapshot tool picks a review
-  exactly when `recommend_next` offers this skill's review on the same comp and time.
+  exactly when `recommend_next` offers this skill's review on the same comp and time, except where
+  `recommend_next` ranks another skill in progress first (FR-048 step 3); a review `recommend_next`
+  does offer is always the one the snapshot picks.
 
 - **FR-052 (the eval sets follow the new opening)**: The eval engineer's, on each set's own branch
   (their files and case numbers; the cockpit gives the numbers):
@@ -1348,6 +1367,15 @@ changes the named FR and task before it's built.
    `mentor/lib/recommend.mjs`, where it is now, and called by the new opening function, so the move is
    an export, not a rewrite. **Alternative:** a new file both import. Either way it's one function,
    and `recommend.test.mjs` stands unchanged.
+
+### Phase 10 review, for a later pass (PR), 2026-10-27: open
+
+1. **PR-1: `RECORD_UNREADABLE` on a read error that isn't bad JSON.** FR-049 reports any read error
+   (a permissions error, for example) with the standard message, which promises new notes. But
+   `record_lesson` would fail on the same file, and the broken file may not be set aside, so the "next
+   call reads as empty" line may not hold either. Not Phase 10's to fix. **Recommended:** a later pass
+   gives non-parse errors their own message that promises nothing (or makes `record_lesson` able to
+   start a new file), with a unit test on a file the process can't read.
 
 ## Dependencies
 

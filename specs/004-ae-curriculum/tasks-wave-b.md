@@ -576,6 +576,22 @@ Each task: the first tool call is the snapshot without `mode` unless the learner
 
 - [ ] T416 🖐 [US1] In a fresh Claude Code session, with the AE lock checked: one short first lesson on the pivot (the "new opening" lesson CLAUDE.md › Skill 5 › Next 3 already plans), and one review on a skill with a review due, run on a temp learner home with a due record (`AE_MENTOR_HOME` in an MCP config's `env`, `claude --strict-mcp-config --mcp-config <file>`, as T047 did). Expect: the first thing in each is the snapshot call, nothing said before it, and the opening the skill's own. Logged in that skill's usage note
 
+### Phase 10 review (2026-10-27)
+
+The reviewer checked the build; the human decided the same day. Two approved should-fixes, built on
+`phase10-fixes` (no new task numbers; cite them as below):
+
+- **Phase 10 review, should-fix 1:** key types, offset and speed graph's step 0 gain a branch for a
+  review already in progress (`mode_source` `in_progress`).
+- **Phase 10 review, should-fix 2:** `speed_graph_snapshot` uses `learner.eased_layers` when a call's
+  `skill_options` hold none, so every call in a lesson or review ranks the same way (spec FR-050,
+  contracts/skill-module.md § 3).
+
+Spec-only changes the same day: FR-048 step 3 and FR-051's last line (T401's "exactly when" test
+allows a review picked while `recommend()` offers another skill in progress); accepted as built, any
+read error as `RECORD_UNREADABLE` (FR-049; follow-up PR-1, open), a declined review using the
+session's offer (FR-048), and `eased_layers` matching whole names (FR-049).
+
 ---
 
 ## Later per-skill branches (not this pass; requests for the cockpit)
