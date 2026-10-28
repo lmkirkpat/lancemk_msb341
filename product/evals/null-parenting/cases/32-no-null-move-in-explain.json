@@ -27,7 +27,7 @@
     "say": [
       {
         "id": "no_rig_move_claim",
-        "never": "Hatch Rig (?:also |then |just |only |first |keeps |currently )?(?:slides?|slid|spins?|spun|rotates?|swings?|swung|scales?|drifts?|travels?|moves?|animates?)\\b|Hatch Rig[^.?!]{0,30}\\b(?:slides|spins|rotates|swings|drifts|travels) (?:across|left|right|up|down|from|to|around)\\b",
+        "never": "(?<!(?:can['’]?t|cannot|can not|don['’]t|do not|won['’]t|unable to|not|never|no way to|n['’]t)[^.?!]{0,60})(?:Hatch Rig (?:also |then |just |only |first |keeps |currently )?(?:slides?|slid|spins?|spun|rotates?|swings?|swung|scales?|drifts?|travels?|moves?|animates?)\\b|Hatch Rig[^.?!]{0,30}\\b(?:slides|spins|rotates|swings|drifts|travels) (?:across|left|right|up|down|from|to|around)\\b)",
         "turns": [
           2
         ]

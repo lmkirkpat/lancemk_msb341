@@ -80,6 +80,12 @@ Every layer, property and time the mentor mentions appears in a tool result from
 conversation. Statements that follow directly from tool output count as backed by it. Generic
 references ("your text layer") are fine only next to a real name.
 
+After Effects interface names (panels, columns, menus, commands, such as the "Parent & Link"
+column reached from the column header's Columns menu, or Layer > New > Null Object) don't need to
+appear in tool output; they are checked against the app, not the snapshot. Layer, property and
+time names still must come from tool output. Judge only whether an interface name is plausible
+and used as the skill's step says; don't fail it for being absent from a tool result.
+
 - **Fail:** any invented layer or property, or a name or time that doesn't match the tool output.
 
 ## R-USES-MEMORY: mentions earlier work in plain words, with how long ago

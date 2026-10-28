@@ -30,9 +30,9 @@ Failures (not repeated beyond the plumbing reruns: the $26 budget left no room):
 | Case | Kind | Triage |
 |---|---|---|
 | 03, 10 | hard rule, `no_pixel_target` | **Mentor, real.** "a single pixel" in both (10 on its rerun). `SKILL.md:42` bans "1 pixel" only |
-| 20 | hard rule, `say:no_count` | Mentor, likely real: "several layers" in the lesson's intro before the crowd question. Check may be too strict; one run |
-| 32 | hard rule, `say:no_rig_move_claim` | Mentor, one run: "I can't show you how Hatch Rig moves" matched a check that bans the claim, not the denial. **Check bug, likely** |
-| 04, 11, 28, 30 | rubric R-NAMES-REAL | **Mentor, real.** "Parent & Link" column and "Columns > Parent & Link" are named but in no tool result (`SKILL.md` carries it). 4 of 38, a pattern |
+| 20 | hard rule, `say:no_count` | **Check bug (fixed 2026-10-28).** "several layers" is the lesson's generic intro; spec 012 FR-005a bans listing, counting or naming the crowd, and the sanctioned line says "many layers". `no_count` now bans numerals and number words only (2 to 4 allowed: the question itself) |
+| 32 | hard rule, `say:no_rig_move_claim` | **Check bug (fixed 2026-10-28).** "I can't show you how Hatch Rig moves" matched a check that bans the claim, not the denial; the regex now skips a match after a denial word in the same sentence |
+| 04, 11, 28, 30 | rubric R-NAMES-REAL | **Rubric too wide (fixed 2026-10-28).** "Parent & Link" is the real column label in AE 26.5 (Columns menu, confirmed by the builder); R-NAMES-REAL now exempts After Effects interface names, layer and property names still need tool output |
 | 02, 04, 15, 23 | rubric R-ONE-IDEA | Mentor, real: the step 2 explanation runs long (bullets, null, example, menu path, question) |
 | 01 | rubric R-USES-MEMORY | Mentor, noise-prone (same as T415, 2 of 4 runs today) |
 | 11 | rubric R-COMMENTS-UNGRADED | Mentor, one run: a third note the tool never listed |
@@ -41,7 +41,7 @@ Failures (not repeated beyond the plumbing reruns: the $26 budget left no room):
 Proposed fixes, smallest first: (1) `SKILL.md:42` ban "a single pixel" along with every pixel wording (fixes 03, 10);
 (2) drop or source the "Parent & Link" menu path (fixes 4 R-NAMES-REAL fails); (3) cap step 2's explanation at a few
 sentences with no bullets (4 R-ONE-IDEA fails); (4) fix check `no_rig_move_claim` to ignore "can't show you how X moves"
-and decide whether "several" is a count in 20 (eval side).
+and decide whether "several" is a count in 20 (eval side; both done 2026-10-28, and (2) is now rubric-side: the menu path is real).
 
 ## T415 (2026-10-28): SC-015's repeats, 12 runs, $4.26
 
