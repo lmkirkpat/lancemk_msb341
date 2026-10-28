@@ -33,8 +33,8 @@
         ]
       },
       {
-        "id": "place_in_words",
-        "must": "left edge|middle of",
+        "id": "pending_action_restated",
+        "must": "Shift\\+P|press A\\b|Pan Behind|crosshair|drag",
         "turns": [
           3
         ]
@@ -44,5 +44,6 @@
   "rubric": [
     "R-AN-NO-NUMBER",
     "R-ONE-IDEA"
-  ]
+  ],
+  "note": "2026-10-28: place_in_words (needed 'left edge' or 'middle of' in the answer) became pending_action_restated; a short answer need not repeat the place. TD 011 § 20 makes the slide sentence the sanctioned answer here."
 }

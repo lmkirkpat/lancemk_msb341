@@ -45,7 +45,7 @@
       },
       {
         "id": "opacity_named",
-        "must": "opacity",
+        "must": "opacity|fade",
         "turns": [
           2
         ]

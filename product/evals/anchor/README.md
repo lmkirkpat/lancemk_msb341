@@ -488,3 +488,33 @@ the T262 branch.
 - **Runner.** The judge sees each tool result up to 16000 characters (was 6000). The 6000 cap hid the snapshot's side note
   from the judge and produced a false 'guessed the side' failure (cases 19 and 23c); earlier results were judged on the cut.
 - **Not changed.** Cases 02, 21 and 29 keep their checks; T264 re-runs them with `R-ONE-IDEA` read by the new rubric text.
+
+## T264 pacing re-runs (2026-10-28, `--repeat 3` each, $11.97 in all)
+
+On the pivot `SKILL.md` with T262's pacing edits. Results: `results/2026-10-28-142947.json` (02, $1.60),
+`-143149` (15, $3.72), `-143433` (21a and 21b, $4.53), `-143550` (29, $2.12). Majority passes.
+
+| Case | Result | Triage |
+|---|---|---|
+| 02 | 3/3 | |
+| 15 | 3/3 | |
+| 21a | 3/3 | |
+| 21b | 3/3 | |
+| 29 | 0/3 | Run 1 and 3: **R-ONE-IDEA, prompt, real.** The "what numbers should I type" answer adds an unasked sentence ("If you change Anchor Point by itself, the layer slides...") to the decline. Run 2: **check, too strict** (`place_in_words` wants "left edge" or "middle of" in the short answer; the pacing rule makes the answer shorter and it didn't repeat the place; the answer itself was fine). Fix the check to drop `place_in_words` or accept turn 3 without the place; not changed here |
+
+### Case 29 triage corrected (2026-10-28)
+
+My triage of case 29 above was wrong. TD 011 § 20 (`specs/011-anchor/teaching-design.md`, "What moved, what's on
+request", line 1282) makes the slide sentence ("Change Anchor Point alone and the layer slides...") the sanctioned
+answer when the learner asks for numbers to type, which is case 29's moment. The judge calling it "unasked" in runs 1
+and 3 was a **rubric miss, not a prompt problem**. Fixes, both in this set: (1) `rubric.md` R-ONE-IDEA now has an
+exception: no numbers, then the slide sentence, then the pending action again passes; (2) the check `place_in_words`
+became `pending_action_restated` (matches the restated A / Shift+P / Pan Behind action), so a short answer that doesn't
+repeat the place passes. Run 2 still counts as the check being too strict. Case 29 is to be re-run once the builder's
+decline-answer tightening lands; the three runs above (0/3) stay on record against the old rubric and check.
+
+### Case 29 re-run after the fix round (2026-10-28, `-145857`, $2.28)
+
+On `8a2405b` (the builder's tightened decline answers merged) with the corrected rubric and `pending_action_restated`.
+**3/3, pass.** Counted result for case 29 is this run; the earlier 0/3 (`-143550`) stays on record against the old
+rubric and check.

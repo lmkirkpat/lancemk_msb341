@@ -53,6 +53,11 @@ the choice is a second idea.
   put) is one idea in two steps in prose. **The watch offer is the same action's alternative** (do
   it, or watch one first) and passes as its last sentence. A numbered list, a tip, or a repeat of the
   previous turn fails it.
+- **Exception (TD 011 § 20, "What moved", 2026-10-28):** when the learner asks for numbers to type, or
+  why typing moved the layer (case 29's moment), the slide sentence ("Change Anchor Point alone and the
+  layer slides so the new pivot lands where the old one was") is the **sanctioned answer**. No numbers,
+  then the slide sentence, then the pending action again passes. Do not call that sentence unasked or a
+  second idea there. It still fails if it also adds the next stage or a second explanation.
 - A turn that answers a side question (a menu command, numbers to type, a "do it for me") passes
   when it is the answer in one or two sentences plus the pending action again. It fails when it adds
   the next stage (the steps, the tip, the offer when the pending action had not carried it).
