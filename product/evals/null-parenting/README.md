@@ -11,18 +11,15 @@ tests (`cd mentor && npm test`); evals don't repeat them.
 Built by copying `product/evals/easing/run.mjs`, not sharing it, so easing's files stay untouched.
 Same options and results format.
 
-## Status (2026-10-27): 33 cases, skill 6 merged, ready for the first baseline
+## Status (2026-10-27): 37 cases, Phase 10 checks in, not ready for SC-015's repeats yet
 
-33 cases, dry-run clean (`--strict-sources` too). **No baseline yet.** Skill 6 is merged (`31fe72d`), so the
-server and `SKILL.md` are the ones the baseline will score. Cases 31 to 33 (2026-10-27) close the two gaps the
-README listed: D-4's corner sentence (once per lesson, never in a review) and step 2 never describing a null's
-move. Smoke this round: 7 cases run in 12 runs, 6 pass, 1 fails on the mentor (17); $7.56. Cases 17, 26 and 33 had a
-design bug (the learner named the rows and said "Done" in one turn, so the mentor's snapshot was taken on the
-already-parented comp); fixed, see "Smoke round 2026-10-27".
-
-**Blocks the baseline:** nothing in the plumbing. Known before it: case 01 and 16 (self-note "Review is due.
-Run the review." before the first snapshot in a review; the cross-skill tool change, not this set), and case 17
-(real, minor, see below). **Never run since the re-pointing:** 02, 03, 04, 06 to 10, 13 to 15, 18, 19, 21 to 25.
+37 cases, dry-run clean (`--strict-sources` too). **No baseline yet.** Skill 6 is merged (`31fe72d`) and so is
+Phase 10 (`1a28b1d`, "The opening read"); T413 and T414 (spec 004) are done on this branch: see "Phase 10 changes
+(T413, T414)" below. Smoke on the new and changed cases: 8 of 12 cases passed once or more, 3 fail on the mentor (18,
+34, 37) and 1 flips (17). **Blocks SC-015's repeats and the baseline:** three mentor items for the cockpit to route
+(case 18: the snapshot picks a review on a crowded comp; case 34: the pivot lesson offered as "not done" from an
+unread record; case 37: the explanation is repeated on a lesson left open), and case 17's record wording. Nothing in
+the plumbing blocks. **Never run since the re-pointing:** 02, 03, 04, 06 to 10, 13 to 15, 19, 21 to 25.
 The first full run is also their first run, so expect a few check bugs there; the cost of a failed case is
 about $0.5.
 
@@ -41,9 +38,9 @@ node product/evals/null-parenting/run.mjs --repeat 3                  # each cas
 node product/evals/null-parenting/run.mjs --judge-always             # judge even after a failed check
 ```
 
-A full run is about 111 mentor turns plus 33 judge calls. From the smokes (cases run at $0.31 to $1.13, mean
-about $0.65; about $0.15 a turn, $0.05 to $0.10 a judge call) expect **$17 to $21**. Bar: SC-006, at least 80% passing, and every
-hard-rule check passing. SC-003 (at least 12 cases): met, 33.
+A full run is about 117 mentor turns plus 37 judge calls. From the smokes (cases run at $0.13 to $1.13, mean
+about $0.55; about $0.15 a turn, $0.05 to $0.10 a judge call) expect **$18 to $22**. Bar: SC-006, at least 80% passing, and every
+hard-rule check passing. SC-003 (at least 12 cases): met, 37.
 
 ## What every case checks (no `expect` key needed)
 
@@ -58,6 +55,8 @@ hard-rule check passing. SC-003 (at least 12 cases): met, 33.
 | `no_test_tell` | never "synthetic", "fixture", "stand-in" |
 | `only_mentor_tools` | no After Effects tool during a lesson |
 | `demo_at_most_once` | at most one `null_parent_demo` call |
+| `no_text_before_snapshot` | nothing said between the first tool call and the first `null_parent_snapshot` (FR-052; catches the leaked "Review is due." self-note) |
+| `read_learner_record_never_called` | the opening reads the record through the snapshot, so `read_learner_record` is never called (FR-052). It is not in the runner's `--allowedTools` either (OR-2) |
 | `record_plain` | the record's summary holds no method or motive |
 | **When a case runs a review** | |
 | `review_no_demo` | no demo in a review |
@@ -66,11 +65,11 @@ hard-rule check passing. SC-003 (at least 12 cases): met, 33.
 
 ## Case-level `expect` keys
 
-`first_tool`, `tools_called`, `tools_not_called`, `snapshot_with` (a snapshot call with these
-inputs), `snapshot_focus_excludes`, `no_focus_set`, `demo_calls_min` / `demo_calls_max` (attempts),
+`first_tool`, `first_snapshot_reply` (fields of the first successful snapshot **reply**, e.g. `{ "mode": "review", "mode_source": "review_due" }`; replaces `snapshot_with` for the opening call, which sends no mode), `tools_called`, `tools_not_called`, `snapshot_with` (a snapshot call with these
+inputs; now unused by any case), `snapshot_focus_excludes`, `no_focus_set`, `demo_calls_min` / `demo_calls_max` (attempts),
 `demo_only_on`, `demo_after_null_ready`, `last_check` (`passed`, `parenting_passed`,
 `codes_include`, `codes_exclude`, `region`), `chain_on_purpose_from_turn`, `record_lesson`
-(`null` for "nothing recorded"), `record_lesson_never` (`{ field: regex }` the last record's fields must not match), `preview_times_from_output` (every `preview_frame` time appears as a number in an earlier mentor tool result), `review_mode`, and `say`: a list of
+(`null` for "nothing recorded"), `record_lesson_never` (`{ field: regex }` the last record's fields must not match), `preview_times_from_output` (every `preview_frame` time appears as a number in an earlier mentor tool result), `review_mode` (a snapshot reply said `mode` review), and `say`: a list of
 `{ id, must | never, turns, cs }` regex checks on the mentor's words. `turns` is 1-based
 (`[2]` or `[1, 3]`), default all turns; case-insensitive unless `cs` is true.
 
@@ -79,13 +78,13 @@ inputs), `snapshot_focus_excludes`, `no_focus_set`, `demo_calls_min` / `demo_cal
 Numbers 1 to 20 are the numbers in spec 012's Eval plan; 21 to 26 cover the prompt-only rules
 the builder flagged and the spec's cross-cases; 27 and 28 were added 2026-10-26 for the live
 sitting's findings (L-1); 29 and 30 for the first lessons' findings 1 and 4 (`null-parenting.md`); 31 to 33
-(2026-10-27) for D-4's corner sentence and step 2's "never describe a null's move". Turns is the number of mentor turns. Fixture
+(2026-10-27) for D-4's corner sentence and step 2's "never describe a null's move"; 34 to 37 (2026-10-27) for Phase 10's new cases (T414). Turns is the number of mentor turns. Fixture
 source: `live` (a capture on Mentor Practice 2, by hand or by script per its `captured_from`, or
 spec 004's read in place) or `synthetic` (permanent, only for the overlap rows the spec allows).
 
 | # | Case | Turns | Hard-rule checks (beyond the universal ones) | Rubric | Fixture source |
 |---|---|---|---|---|---|
-| 01 | First lesson on the wave A comp: asks first, then proposes the group | 2 | first_tool; tools_called; tools_not_called; no_focus_set; say: must asks_first, must asks_which_layers, must names_group, must reason_apart, never no_position, never no_crowd_names, never no_crowd_count, never second_group_not_yet | R-ASKS-FIRST, R-PROPOSAL, R-NO-POSITION, R-CROWD-HIDDEN, R-NAMES-REAL, R-USES-MEMORY, R-ONE-IDEA | live |
+| 01 | First lesson on the wave A comp: asks first, then proposes the group | 2 | first_tool (null_parent_snapshot); tools_called; tools_not_called; no_focus_set; say: must asks_first, must asks_which_layers, must names_group, must reason_apart, never no_position, never no_crowd_names, never no_crowd_count, never second_group_not_yet | R-ASKS-FIRST, R-PROPOSAL, R-NO-POSITION, R-CROWD-HIDDEN, R-NAMES-REAL, R-USES-MEMORY, R-ONE-IDEA | live |
 | 02 | Explain: position, scale and rotation pass down; not opacity or effects | 2 | say: must position, must scale, must rotation, must opacity_named, never opacity_not_passed | R-INHERITS-RIGHT, R-NAMES-REAL, R-ONE-IDEA | live |
 | 03 | The pivot is asked, never picked; it'll only slide is accepted | 4 | tools_called; last_check; say: must asks_region, never never_picks | R-REGION-ASKED, R-REGION-NEVER-PICKED, R-ACCEPTS-SLIDES, R-ONE-IDEA | live |
 | 04 | One demonstration on the target only, moved 0 pixels, none before the null passes | 4 | demo_calls_min; demo_calls_max; demo_only_on; demo_after_null_ready; say: must moved_zero, must undo | R-DEMO-PLAIN, R-NAMES-REAL, R-ONE-IDEA | live |
@@ -100,9 +99,9 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | 13 | The pivot lesson isn't learned: named and offered; on insistence, one sentence | 2 | tools_not_called; record_lesson; say: must names_pivot_lesson, must offers, must one_sentence_then_on, never no_refusal | R-PREREQ, R-ONE-IDEA | live |
 | 14 | An incomplete attempt: says what's still off and where; doesn't fix or offer to | 4 | last_check; say: must names_layers, must names_where, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 15 | Do the rest: declined warmly, no offer later | 5 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | live |
-| 16 | Review on the wave A comp: Chip A to C, no 'null', no method, no demo | 2 | review_mode; snapshot_with; tools_called; tools_not_called; last_check; snapshot_focus_excludes; say: must names_chips, must turn_or_scale | R-REVIEW-HANDS-ON, R-REVIEW-HINT, R-NAMES-REAL | live |
-| 17 | Review with a visible parent (the learner names Row A to C, not the offered Chips): the hint has no 'null'; the skill stays learned | 4 | review_mode; snapshot_with; tools_not_called; last_check; record_lesson; say: must names_rows | R-REVIEW-HINT, R-REVIEW-RECORD-HONEST, R-NAMES-REAL | live |
-| 18 | A review with no new group: not offered, nothing recorded | 1 | review_mode; snapshot_with; tools_not_called; no_focus_set; record_lesson; say: never no_crowd_names, never no_crowd_count | R-REVIEW-NOTHING-NEW, R-CROWD-HIDDEN | synthetic |
+| 16 | Review on the wave A comp: Chip A to C, no 'null', no method, no demo | 2 | review_mode; first_snapshot_reply; tools_called; tools_not_called; last_check; snapshot_focus_excludes; say: must names_chips, must turn_or_scale | R-REVIEW-HANDS-ON, R-REVIEW-HINT, R-NAMES-REAL | live |
+| 17 | Review with a visible parent (the learner names Row A to C, not the offered Chips): the hint has no 'null'; the skill stays learned | 4 | review_mode; first_snapshot_reply; tools_not_called; last_check; record_lesson; say: must names_rows | R-REVIEW-HINT, R-REVIEW-RECORD-HONEST, R-NAMES-REAL | live |
+| 18 | A due review with no new group (OR-1): a lesson starts, no review mentioned, nothing recorded | 1 | first_tool; first_snapshot_reply (lesson, default); tools_called; tools_not_called; no_focus_set; record_lesson; say: never no_review_mentioned, must asks_group, never no_crowd_names, never no_crowd_count | R-DUE-NO-NEW-LESSON, R-CROWD-HIDDEN | synthetic |
 | 19 | After a no: Chip A to C once, then the mentor asks; never a third offer | 4 | no_focus_set; tools_not_called; say: never chips_not_early, must chips_offered, never no_third_offer, never no_rows_offered, must asks_which_layers, must asks_to_name | R-SECOND-GROUP-ONCE, R-NAMES-REAL | live |
 | 20 | A crowd-only comp: the crowd question, no proposal, no layer named or counted | 2 | tools_not_called; no_focus_set; say: must crowd_question, never no_layer_names, never no_count, never no_proposal | R-CROWD-QUESTION, R-CROWD-HIDDEN, R-NAMES-REAL | synthetic |
 | 21 | A null that follows another layer is asked about; the chain is checked only after the learner says so | 4 | chain_on_purpose_from_turn; last_check; say: must names_holder, must asks_on_purpose, must one_level | R-CHAIN-ASKED, R-NAMES-REAL | synthetic |
@@ -110,14 +109,18 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
 | 23 | Asked how close is close enough: no number, no pixel | 4 | say: never no_pixel_count | R-NO-NUMBER-TARGET, R-ONE-IDEA | live |
 | 24 | A second demonstration is declined; the one demo stays on its target | 5 | demo_calls_min; demo_calls_max; demo_only_on | R-ONE-DEMO-ONLY, R-NAMES-REAL | live |
 | 25 | After Effects can't be reached: nothing claimed about the comp | 1 | tools_not_called; no_focus_set; say: must says_cant_see, never no_claims | R-UNREACHABLE | none |
-| 26 | A review that passes (the learner names Row A to C) is recorded as passed, with no demo | 3 | review_mode; snapshot_with; tools_not_called; last_check; record_lesson | R-REVIEW-PASS-HONEST, R-NAMES-REAL | live |
+| 26 | A review that passes (the learner names Row A to C) is recorded as passed, with no demo | 3 | review_mode; first_snapshot_reply; tools_not_called; last_check; record_lesson | R-REVIEW-PASS-HONEST, R-NAMES-REAL | live |
 | 27 | Asked which part of the null's square is its place: the top-left corner, not the middle | 3 | say: must names_corner, must says_corner, never not_middle_of_square | R-NULL-CORNER, R-NAMES-REAL | live |
 | 28 | A layer flew off when parented: may ask once whether a key was held, never as the cause, never Option or Shift | 5 | last_check; say: must asks_key_once, never key_not_repeated, never key_not_the_cause, never no_option_or_shift_named, must states_jump, must undo | R-JUMP-STATED, R-KEY-QUESTION-ONLY, R-NO-CAUSE, R-NAMES-REAL | live |
 | 29 | At a pass on a Rotation move the check gives no key times: no preview frame at a time no tool output held | 4 | last_check; preview_times_from_output | R-NO-GUESSED-TIME, R-NAMES-REAL | live |
 | 30 | The learner says the group turns but only slid the null: the record doesn't say it turned or scaled | 4 | last_check; tools_called; record_lesson_never | R-RECORD-SEEN-MOVE, R-NAMES-REAL | live |
 | 31 | The null's corner sentence is said once, at the place question (turn 3), and not again once the learner placed it (turn 4); never the square's size or Opacity | 4 | say: must corner_said, never corner_not_repeated, never no_size_or_opacity | R-CORNER-ONCE, R-NAMES-REAL | live |
 | 32 | Asked how the null Hatch already follows moves: the explain step never describes a null's move | 2 | tools_not_called; say: never no_rig_move_claim | R-NO-NULL-MOVE, R-NAMES-REAL | live |
-| 33 | A review whose pivot misses the place the learner named (rows' middle, said top-left): the hint has no square, no corner sentence | 3 | review_mode; snapshot_with; tools_not_called; last_check (pivot_region); say: never no_square, must names_rows | R-REVIEW-NO-SQUARE, R-NAMES-REAL | live |
+| 33 | A review whose pivot misses the place the learner named (rows' middle, said top-left): the hint has no square, no corner sentence | 3 | review_mode; first_snapshot_reply; tools_not_called; last_check (pivot_region); say: never no_square, must names_rows | R-REVIEW-NO-SQUARE, R-NAMES-REAL | live |
+| 34 | An unreadable record (FR-049): one sentence about the notes, said once; a first lesson; no claim from the unread record; no review | 2 | first_tool; first_snapshot_reply (lesson, default); tools_called; tools_not_called; no_focus_set; say: must says_notes_unreadable, never no_claim_from_unread_record, never notes_said_once (turn 2), never no_review, never no_memory_claim, never no_file_or_code | R-UNREADABLE-ONCE, R-NAMES-REAL, R-ONE-IDEA | live |
+| 35 | Practicing (a partial lesson yesterday): one memory clause in plain words, no review, then it asks which layers | 1 | first_tool; first_snapshot_reply (lesson, default); tools_called; tools_not_called; no_focus_set; say: must memory_clause, must names_earlier_work, must asks_which_layers, never no_review, never no_skill_name_or_status | R-USES-MEMORY, R-ASKS-FIRST, R-ONE-IDEA, R-NAMES-REAL | live |
+| 36 | A review asked for when none is due: it runs, and nothing says it was early or not due | 1 | first_tool; review_mode; first_snapshot_reply (review, asked); tools_called; tools_not_called; snapshot_focus_excludes; say: must names_chips, must turn_or_scale, never nothing_about_schedule | R-ASKED-REVIEW-QUIET, R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
+| 37 | A lesson left open on Tile, Caption and Stamp, reopened in a new session: where it left off, no "which layers" question, no new proposal | 2 | tools_called; tools_not_called; say: must names_group, never no_which_layers, never no_new_proposal, never no_review | R-NULL-CONTINUED, R-NAMES-REAL | live |
 
 ### Case notes
 
@@ -138,7 +141,7 @@ spec 004's read in place) or `synthetic` (permanent, only for the overlap rows t
   use Row A, Row B and Row C", so they are the cases where the learner names Rows. There is no live
   Chip A to C read with a visible parent or a pass yet; capture `review-chips-visible` and
   `review-chips-pass` to move 17 and 26 onto the Chips. **18** uses the crowd-only comp, where a
-  review has nothing new.
+  due review has nothing new to review on (now: a lesson starts, OR-1).
 - **12** changed with L-1: the skill now says what Option and Shift do and to hold no key, so the old
   "never claim anything about a modifier" check would fail a correct answer. It now requires "hold
   no key" and bans a shortcut; the universal `no_modifier_advice` bans telling the learner to hold
@@ -279,6 +282,65 @@ Runs 2 to 6 are failures of my cases or checks, not the mentor (run 6 is the sec
 2. Self-note leak ("Review is due. Run the review." before the first snapshot) appeared again in case 33's first run and in
    case 17 (turn 1 of each review); the known cross-skill item (snapshot reads the record and picks review mode),
    not new. The universal `no_narration` did not flag it.
+
+## Phase 10 changes (T413, T414; 2026-10-27)
+
+Spec 004 FR-052, on the mentor as `1a28b1d` leaves it (`null_parent_snapshot` reads the record and picks lesson
+or review; `SKILL.md` never calls `read_learner_record`).
+
+**Runner (T413).** New universal checks `no_text_before_snapshot` (copied from the pivot set's `run.mjs`) and
+`read_learner_record_never_called`; `read_learner_record` is out of `--allowedTools` (OR-2) but stays in the list of
+tool names the runner recognises, so a call to it is reported by the check rather than as a foreign tool. A review
+is now whatever a snapshot **reply** says (`mode` review), not a call's input. New `expect.first_snapshot_reply`;
+`first_snapshot_reply` replaces `snapshot_with` in the four review cases. Two small runner additions the new cases
+needed: a turn can set `new_session` (as in the pivot set), and `learner_record` may be a path from the repo root
+(this set's own `records/`) or a name in the shared `mentor/test/fixtures/records/`.
+
+**Changed cases (T413).**
+
+| Case | Change |
+|---|---|
+| 01 | `first_tool` is `null_parent_snapshot` |
+| 16, 17, 26, 33 | `snapshot_with: { mode: review }` replaced by `first_snapshot_reply: { mode: review, mode_source: review_due }` |
+| 18 | Renamed `18-due-review-no-new-group`. Was "a review with nothing new: says so, records nothing"; now OR-1: a lesson starts (`first_snapshot_reply` lesson, default), no word about a review (`no_review_mentioned`), nothing recorded. Rubric `R-REVIEW-NOTHING-NEW` replaced by `R-DUE-NO-NEW-LESSON` |
+
+**New cases (T414).** Four of the cockpit's numbers (34 to 37) are used, one per FR-052 bullet. Three records:
+`unreadable.json` (shared, from `mentor/test/fixtures/records/`), and two this set owns in `records/`:
+`null-practicing.json` (a partial lesson yesterday, status practicing) and `null-learned-not-due.json` (learned,
+review due in December 2027). New rubric items: `R-UNREADABLE-ONCE`, `R-ASKED-REVIEW-QUIET`, `R-NULL-CONTINUED`,
+`R-DUE-NO-NEW-LESSON`. **37 is the continued form of FR-046** (a lesson left open, reopened in a new session); a
+lesson resumed after another comp's lesson has no case yet. The practicing record's dates are fixed, so 35's
+`memory_clause` accepts any plain "how long ago" wording rather than "yesterday" only.
+
+**Smoke, 2026-10-27, 20:36 to 20:45 (about 9 minutes), $6.61, 14 runs** (results `2026-10-27-203633` to
+`-204413`). The first run's output file was overwritten by a neighbouring agent writing to the same scratch name;
+the results files above are the record.
+
+| Case | Runs | Result | Triage |
+|---|---|---|---|
+| 35 | 1 | pass | |
+| 36 | 1 | pass | review ran on request, nothing about the schedule |
+| 01 | 1 | pass | |
+| 16 | 1 | pass | |
+| 26 | 1 | pass | |
+| 33 | 1 | pass | |
+| 17 | 3 | **2 pass, 1 FAIL** | `R-REVIEW-RECORD-HONEST`, mentor, real (below) |
+| 18 | 1 | FAIL | **mentor, real.** The snapshot picked `review` (`review_due`) on the crowded comp: `finder()` in `mentor/lib/null-parenting.mjs:314` returns the crowd's size as a count when nothing is excluded, so `reviewFor` sees a target, though `proposal` is null. The mentor then said "nothing new to review". OR-1 / FR-051 row 5 not met for a crowded comp |
+| 34 | 2 | FAIL, FAIL | Run 1: three of my check bugs (`asks_which_layers` was wrong for this case, `earlier lesson` and `kept as they were` are the error's own words); fixed. Run 2: **mentor, real.** After the right notes sentence it says "Set the pivot, which you haven't done yet" from a record it couldn't read |
+| 37 | 2 | FAIL, FAIL | `R-NULL-CONTINUED`, mentor, judgment, 2 of 2: says where it left off and names the group, then re-explains ("Here's a quick recap. A parent carries ...") |
+
+**Self-note.** `no_text_before_snapshot` and `first_tool` passed in all 14 runs, including the review runs (16, 17 x3,
+26, 33, 36). "Review is due." never appeared before a snapshot. The self-note is gone in every smoked case.
+
+**Case 17 (`--only 17 --repeat 3`, $2.55).** 2 of 3 pass. The failing run's record put method in the summary and
+next ("no separate control layer yet", "follow one invisible control layer"). With the earlier smoke run
+(`2026-10-27-151638`, "followed Row A, a visible layer, rather than a separate handle") that is 2 failures in 4
+runs on this item. Real, minor. Smallest fix: `SKILL.md` step 11, and the review's step 5, add "`summary` and
+`next` say what the learner did and what the check saw, never what they should have done or how."
+
+**Ready for SC-015's repeats and the baseline?** The plumbing is. The mentor items below should be routed first, or
+SC-015 will count them: the repeats of 18, 34 and 37 would fail 3 of 3 as the mentor stands. 35, 36, 01, 16, 26 and
+33 can start now.
 
 ## Reading results
 

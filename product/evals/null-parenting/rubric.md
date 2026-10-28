@@ -320,13 +320,44 @@ for next time" is enough.
 
 - **Fail:** records a pass, records a demo, or puts method or motive in the summary.
 
-## R-REVIEW-NOTHING-NEW: a review with no new group says so and records nothing
+## R-DUE-NO-NEW-LESSON: a due review with no new group starts a lesson and says nothing about a review
 
-When the comp has no new group to review on, the mentor says there is nothing new to review on this
-comp, offers no demonstration and no walkthrough, and records nothing. If the learner would rather
-use other layers it asks which two to four. It does not offer a second group.
+When the learner's review is due but the comp has no new group to review on, the opening is a
+lesson (spec 004 OR-1). The mentor never says a review was due, that there is nothing new to
+review, or that it is skipping one. It opens the lesson as for any learner: asks which layers
+should move as one, or the crowd question when many layers sit close together. It does not offer a
+demonstration, invents no group, and records nothing.
 
-- **Fail:** invents a group, runs a lesson instead, offers a demo, or records a lesson.
+- **Pass:** "A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one?"
+- **Fail:** "Your review is due, but there's nothing new in this comp", any mention of a review, an invented group, a demo, or a recorded lesson.
+
+## R-UNREADABLE-ONCE: an unreadable record is said once, in one sentence, and the lesson goes on
+
+When the mentor's notes couldn't be read, it says so once, in plain words (it couldn't read its
+notes from earlier lessons), and teaches a first lesson: it asks which layers should move as one.
+It doesn't mention the file, a path or an error name, doesn't repeat the sentence in later turns,
+doesn't claim to remember anything, and doesn't mention a review.
+
+- **Pass:** "I couldn't read my notes from your earlier lessons, so we'll start fresh. Which layers should move as one?"
+- **Fail:** says nothing about the notes, says it again in a later turn, names the file or an error code, claims memory ("last time you..."), says a lesson "hasn't been done yet" (an unread record shows nothing either way), or mentions a review.
+
+## R-ASKED-REVIEW-QUIET: a review the learner asked for runs without saying whether it was due
+
+When the learner asks for a review (or says they already know it) and none is due, the review runs
+as any review does: it names the layers and the task and asks whether the group will turn or scale.
+It never says the review wasn't due, was early, or that it is doing it because they asked.
+
+- **Pass:** "Chip A, Chip B and Chip C should move as one. Set that up, then give them one move. Will the group turn or scale, and from where?"
+- **Fail:** "Your review isn't due yet, but sure", "since you asked", or any remark about the schedule; also a walkthrough or a demo.
+
+## R-NULL-CONTINUED: a lesson left open is picked up where it left off
+
+When a lesson was left open with a group already chosen, the mentor says in one sentence where it
+left off, names that group, and hands the next step back. It does not ask again which layers should
+move as one, does not propose another group, and does not restart the explanation.
+
+- **Pass:** "We left off with Tile, Caption and Stamp as the group. Add a null and tell me where the group should turn or scale from."
+- **Fail:** asks which layers should move as one, proposes a different group, or starts over.
 
 ## R-REVIEW-PASS-HONEST: a review that passes is recorded as passed
 

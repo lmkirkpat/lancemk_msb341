@@ -45,7 +45,10 @@ const SPEC004_DIR = path.join(REPO, "mentor", "test", "fixtures", "layer-info");
 const TARGET = 0.8; // SC-006
 const MAX_TURNS = "12";
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
+// read_learner_record stays in MENTOR_TOOLS only so a call to it is recognised and reported by the
+// universal read_learner_record_never_called check; it is not in ALLOWED_TOOLS (spec 004 OR-2, FR-052).
 const MENTOR_TOOLS = ["read_learner_record", "null_parent_snapshot", "null_parent_demo", "null_parent_check", "preview_frame", "record_lesson", "recommend_next"];
+const ALLOWED_TOOLS = MENTOR_TOOLS.filter((t) => t !== "read_learner_record");
 const PREFIX = "mcp__ae-mentor__";
 const SKILL_CMD = "/null-parenting-mentor";
 // The repo's local settings may set a builder output style (Explanatory adds "★ Insight" notes).
@@ -95,7 +98,13 @@ function resolveFixture(name) {
   return null;
 }
 
-const recordFile = (name) => path.join(FIX_DIR, "records", name);
+// A record is named bare (the builder's mentor/test/fixtures/null-parenting/records/, then the shared
+// mentor/test/fixtures/records/) or by a path from the repo root (this set's own records/, FR-052).
+const recordFile = (name) => {
+  if (name.includes("/")) return path.join(REPO, name);
+  const own = path.join(FIX_DIR, "records", name);
+  return fs.existsSync(own) ? own : path.join(REPO, "mentor", "test", "fixtures", "records", name);
+};
 const fixtureNames = (c) => [...new Set(c.turns.filter((t) => t.project !== "unreachable").map((t) => t.project))];
 
 const SOURCES = ["stand-in", "synthetic", "live"];
@@ -117,7 +126,7 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "snapshot_focus_excludes", "no_focus_set", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "demo_after_null_ready", "last_check", "chain_on_purpose_from_turn", "say", "record_lesson", "record_lesson_never", "preview_times_from_output", "review_mode"];
+    "demo_after_null_ready", "last_check", "chain_on_purpose_from_turn", "say", "record_lesson", "record_lesson_never", "preview_times_from_output", "review_mode", "first_snapshot_reply"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
@@ -221,7 +230,7 @@ function claude(args, env, cwd) {
 
 function mentorTurn(say, sessionId, env, cwd) {
   const args = ["-p", say, "--mcp-config", ".mcp.json", "--strict-mcp-config", "--output-format", "json", "--verbose",
-    "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t), ...SETTINGS];
+    "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...ALLOWED_TOOLS.map((t) => PREFIX + t), ...SETTINGS];
   if (sessionId) args.push("--resume", sessionId);
   return claude(args, env, cwd);
 }
@@ -341,7 +350,10 @@ function check(expect, turns, c) {
   const foreign = turns.flatMap(toolEvents).filter((e) => !MENTOR_TOOLS.includes(e.name) && e.name !== "ToolSearch");
   add("only_mentor_tools", foreign.length === 0, foreign.length ? `used ${foreign.map((e) => e.name).join(", ")}` : "ok");
   add("demo_at_most_once", demos.length <= 1, `${demos.length} demo calls`);
-  const reviewMode = snaps.some((e) => e.input && e.input.mode === "review");
+  // The opening call sends no mode (spec 004 FR-048): a review is what the snapshot's reply says it is.
+  const replyOf = (e) => parse(e.result || "") || {};
+  const firstReply = replyOf(snaps.find((e) => e.ok) || {});
+  const reviewMode = snaps.some((e) => replyOf(e).mode === "review");
   if (reviewMode) {
     add("review_no_demo", demos.length === 0, `${demos.length} demo calls in a review`);
     // SC-004: "null" is said 0 times before a pass, and no method either (SKILL.md › The review).
@@ -360,7 +372,7 @@ function check(expect, turns, c) {
     add("review_no_null_before_pass", !hit, hit ? `said "${hit}" before a pass` : "0 uses before a pass");
     add("review_no_method_before_pass", !methodHit, methodHit ? `said "${methodHit}" before a pass` : "clean");
   } else if ("review_mode" in expect) {
-    add("review_mode", false, "no null_parent_snapshot call used mode review");
+    add("review_mode", false, "no null_parent_snapshot reply had mode review");
   }
   // The record never holds method or motive (SKILL.md step 11; agent audit).
   for (const r of calls.filter((e) => e.name === "record_lesson" && e.ok)) {
@@ -369,6 +381,23 @@ function check(expect, turns, c) {
     add("record_plain", !m, m ? `record says "${m[0]}"` : "clean");
   }
 
+  if ("first_snapshot_reply" in expect) {
+    // Fields of the first successful snapshot reply, e.g. { "mode": "review", "mode_source": "review_due" }.
+    const bad = Object.entries(expect.first_snapshot_reply).filter(([k, v]) => firstReply[k] !== v);
+    add("first_snapshot_reply", bad.length === 0, bad.length ? bad.map(([k, v]) => `${k} was ${JSON.stringify(firstReply[k])}, expected ${JSON.stringify(v)}`).join("; ") : "matches");
+  }
+  {
+    // Universal (spec 004 FR-052; smoke findings 2026-10-26): nothing said between the lesson's first tool
+    // call and its first null_parent_snapshot. The learner sees every word; the opening comes after the
+    // snapshot. Catches the leaked self-notes ("Review is due.") wherever they fall before it.
+    const t0 = turns.find((t) => t.events.some((e) => e.kind === "tool" && e.name === "null_parent_snapshot"));
+    const idx = t0 ? t0.events.findIndex((e) => e.kind === "tool" && e.name === "null_parent_snapshot") : -1;
+    const before = idx < 0 ? [] : t0.events.slice(0, idx).filter((e) => e.kind === "say");
+    add("no_text_before_snapshot", before.length === 0, before.length ? `said "${before[0].text.slice(0, 60)}" before the first snapshot` : "clean");
+    // Universal: the opening reads the record through the snapshot, so read_learner_record is never called.
+    const reads = turns.flatMap(toolEvents).filter((e) => e.name === "read_learner_record");
+    add("read_learner_record_never_called", reads.length === 0, reads.length ? `called read_learner_record ${reads.length} time(s)` : "not called");
+  }
   if ("first_tool" in expect) {
     const first = calls[0]?.name ?? "(none)";
     add("first_tool", first === expect.first_tool, `first tool was ${first}`);
@@ -547,6 +576,9 @@ function runCase(c, opts) {
       copies.set(n, to);
     }
     for (const t of c.turns) {
+      // A turn with new_session starts a fresh Claude session on the same learner home, so the mentor
+      // server's session.json is all it has (a lesson left open, case 35).
+      if (t.new_session) sessionId = null;
       const project = t.project === "unreachable" ? "unreachable" : copies.get(t.project);
       fs.writeFileSync(stateFile, JSON.stringify(t.undo_demo ? { project, undo_demo: true } : { project }));
       const { messages, result } = mentorTurn(t.say, sessionId, env, runtime);

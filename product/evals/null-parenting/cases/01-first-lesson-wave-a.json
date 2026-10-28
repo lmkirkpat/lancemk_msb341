@@ -21,7 +21,7 @@
     }
   ],
   "expect": {
-    "first_tool": "read_learner_record",
+    "first_tool": "null_parent_snapshot",
     "tools_called": [
       "null_parent_snapshot"
     ],

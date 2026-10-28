@@ -1,0 +1,69 @@
+{
+  "id": "37-left-open-with-choices",
+  "title": "A lesson left open on Tile, Caption and Stamp, reopened in a new session: where it left off in one sentence, handed back; no 'which layers' question, no new proposal",
+  "covers": [
+    "FR-043",
+    "FR-046",
+    "FR-052",
+    "SC-015",
+    "EP-37"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor Tile, Caption and Stamp should move as one."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "say": [
+      {
+        "id": "names_group",
+        "must": "(?=[\\s\\S]*Tile)(?=[\\s\\S]*Caption)(?=[\\s\\S]*Stamp)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_which_layers",
+        "never": "which layers (?:should|do you want)|which (?:2|two) to (?:4|four)|move as one, like",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_new_proposal",
+        "never": "\\bChip [ABC]\\b|\\bRow [ABC]\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_review",
+        "never": "\\breview(?:s|ed|ing)?\\b|\\bdue\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-CONTINUED",
+    "R-NAMES-REAL"
+  ],
+  "note": "Turn 1 only sets the session up (a lesson with a focus). Turn 2 starts a new Claude session on the same learner home, so session.json is all the mentor has. This is the continued form of FR-046; a resumed lesson after another comp's lesson has no case yet."
+}

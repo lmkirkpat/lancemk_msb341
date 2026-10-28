@@ -1,0 +1,93 @@
+{
+  "id": "34-unreadable-record",
+  "title": "An unreadable record: one sentence about the notes (said once), then a first lesson with no claim about what the learner has or hasn't done, no review, nothing before the snapshot",
+  "covers": [
+    "FR-049",
+    "FR-052",
+    "SC-015",
+    "EP-34"
+  ],
+  "learner_record": "unreadable.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I don't have a group in mind. What do you suggest?"
+    }
+  ],
+  "expect": {
+    "first_tool": "null_parent_snapshot",
+    "first_snapshot_reply": {
+      "mode": "lesson",
+      "mode_source": "default"
+    },
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "no_focus_set": true,
+    "say": [
+      {
+        "id": "says_notes_unreadable",
+        "must": "(?:couldn['’]t|can['’]t|unable to|wasn['’]t able to) (?:read|open|get at|load)[^.?!]{0,40}(?:notes|record|earlier lessons|past lessons)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_claim_from_unread_record",
+        "never": "haven['’]t (?:done|learned|met|taken)|hasn['’]t|isn['’]t learned|not learned yet|builds on (?:another|the pivot)|Set the pivot|pivot lesson",
+        "turns": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "notes_said_once",
+        "never": "\\bnotes\\b|couldn['’]t read|can['’]t read",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_review",
+        "never": "\\breview(?:s|ed|ing)?\\b|\\bdue\\b",
+        "turns": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "no_memory_claim",
+        "never": "last time|you did before|yesterday|last week|days? ago|you (?:set|made|parented|eased|learned)\\b",
+        "turns": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "no_file_or_code",
+        "never": "learner\\.json|\\.json\\b|RECORD_UNREADABLE|\\bpath\\b|set aside",
+        "turns": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-UNREADABLE-ONCE",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ],
+  "note": "First smoke (2026-10-27): the mentor said the notes sentence, then offered the pivot lesson as 'which you haven't done yet' from an unread record. no_claim_from_unread_record is that finding as a hard check; the case's reason is that an unreadable record gives no claims about earlier work."
+}

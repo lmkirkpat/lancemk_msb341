@@ -28,8 +28,9 @@
   ],
   "expect": {
     "review_mode": true,
-    "snapshot_with": {
-      "mode": "review"
+    "first_snapshot_reply": {
+      "mode": "review",
+      "mode_source": "review_due"
     },
     "tools_not_called": [
       "null_parent_demo"

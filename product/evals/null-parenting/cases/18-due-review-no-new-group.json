@@ -1,0 +1,66 @@
+{
+  "id": "18-due-review-no-new-group",
+  "title": "A due review with no new group (OR-1): a lesson starts, and no review is mentioned; nothing recorded",
+  "covers": [
+    "EP-18",
+    "US3-3",
+    "OR-1",
+    "FR-048",
+    "FR-052"
+  ],
+  "learner_record": "learned-group.json",
+  "fixture_sources": {
+    "synthetic/crowd-only.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/crowd-only.json",
+      "say": "/null-parenting-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "null_parent_snapshot",
+    "first_snapshot_reply": {
+      "mode": "lesson",
+      "mode_source": "default"
+    },
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "no_focus_set": true,
+    "record_lesson": null,
+    "say": [
+      {
+        "id": "no_review_mentioned",
+        "never": "\\breview(?:s|ed|ing)?\\b|\\bnothing new\\b|\\bdue\\b|\\bquiz",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_group",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_crowd_names",
+        "never": "\\bBrick\\b",
+        "cs": true
+      },
+      {
+        "id": "no_crowd_count",
+        "never": "\\b(?:6|six)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-DUE-NO-NEW-LESSON",
+    "R-CROWD-HIDDEN"
+  ]
+}
