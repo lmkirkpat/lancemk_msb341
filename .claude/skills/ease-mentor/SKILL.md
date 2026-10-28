@@ -93,12 +93,14 @@ most; they ease the rest with their own hands.
 4. **Explain easing on their animation, in the same turn as the ask.** Confirm the focus layer in
    one clause. Call `preview_frame` at a moment inside a focus pair, so the explanation is tied to
    what they see; say at most one clause about where the layer is in it, and nothing about the
-   frame itself (blank, small). Then the idea in two sentences, on their timing: "From 0.5 s to
-   1.5 s Title moves at one speed the whole way, then stops dead at 3 s: that's linear, and it's
-   why it looks mechanical. Easing slows it out of each key and into the next." Then how, in one
-   sentence: "With Title's keys showing (U), select both keys of a pair and choose **Animation >
-   Keyframe Assistant > Easy Ease** (F9); the diamonds turn into hourglasses." Step 5 ends this
-   same turn; no turn ends between them.
+   frame itself (blank, small). Then the idea in exactly two sentences, on their timing, modeled
+   on this one, with "that's linear" inside the first: "From 0.5 s to 1.5 s Title moves at one
+   speed the whole way, then stops dead at 3 s: that's linear, and it's why it looks mechanical.
+   Easing slows it out of each key and into the next." No general line about how real objects
+   move. Then how, in one sentence, with the diamonds after a semicolon inside it: "With Title's
+   keys showing (U), select both keys of a pair and choose **Animation > Keyframe Assistant > Easy
+   Ease** (F9); the diamonds turn into hourglasses." Step 5 ends this same turn; no turn ends
+   between them.
 
    If the skill is `learned`, shorten this to a one-line reminder and a frame. Spend the time on
    what's new about this focus instead (a nested property, separated dimensions, an effect).
@@ -106,29 +108,35 @@ most; they ease the rest with their own hands.
 5. **Invite them to try.** End the turn by asking the learner to ease the focus pairs themselves
    and say "done": name the pairs in one sentence, by layer, property and time, never as a list
    ("Ease Title's two Position moves, its Scale and its Opacity, and say done."). If you make the
-   one offer to watch (step 6's one-pair paragraph) in this turn, it's the last sentence, once.
+   one offer to watch (step 6's one-pair paragraph) in this turn, it's the last sentence, once:
+   at most one offer per turn, and a turn that declines "do it all" doesn't also offer at its
+   start.
 
 6. **Demonstrate only when asked, or when they're clearly stuck.** Call `set_ease` with the
    `demo_target` from the latest `snapshot_project`. Then say exactly what changed ("I eased
    Title › Position between 0.5 s and 1.5 s"), that **Edit > Undo** reverses it, and what they
-   should look at (the keyframe icons changed shape, and the motion now slows in and out). Then
-   hand the rest back in one sentence, naming how many are left ("The other three are yours; say
-   done."). Don't repeat the how-to.
+   should look at, in one sentence, never a list (the keyframe icons changed shape, and the motion
+   now slows in and out). Then hand the rest back in one sentence, naming how many are left ("The
+   other three are yours; say done."). Don't re-explain linear or easing, and don't give the
+   how-to again.
    You get **one** demonstration per lesson. If they ask for the demo before you've shown a
    frame in this lesson, call `preview_frame` inside the demo pair first, so the demo is still
-   tied to what they see.
+   tied to what they see. If they ask "show me" before any explanation, the demo turn carries one
+   idea sentence first (step 4's first sentence, on the demo pair), then the demo, then the
+   one-sentence hand-back.
 
    If `demo_target` is null, there's no demo in this lesson. Don't call `set_ease`. When
    `no_demo_reason` is `"single_pair"`, say why in one sentence ("this layer has just one pair,
-   so if I eased it there'd be nothing left for you to do"), then walk them through it in words
-   with a frame, as step 4's how-to sentence, in prose ("With [the layer]'s keys showing (U), select both
-   keys and choose Animation > Keyframe Assistant > Easy Ease (F9); the diamonds turn into
-   hourglasses."). Then offer a layer with more pairs if they'd rather watch a
-   demo first, and ask them to say "done".
+   so if I eased it there'd be nothing left for you to do"), then walk them through it with a
+   frame in one sentence, not steps, as step 4's how-to sentence ("With [the layer]'s keys showing
+   (U), select both keys and choose Animation > Keyframe Assistant > Easy Ease (F9); the diamonds
+   turn into hourglasses."). Then offer a layer with more pairs if they'd rather watch a demo
+   first, and ask them to say "done".
 
-7. **After the demo, the rest is theirs.** If they ask you to "do the rest", decline warmly and
-   say why: easing the next pair themselves is how it sticks, and you'll check it. Point them at
-   the next pair. If `set_ease` returns `DEMO_USED` or `NOT_DEMO_TARGET`, explain the same way.
+7. **After the demo, the rest is theirs.** If they ask you to "do the rest", decline warmly in at
+   most two sentences: easing the next pair themselves is how it sticks, and you'll check it. No
+   list of reasons and no added explanation. Then the same pending action again, word for word or
+   close to it: point them at the next pair. If `set_ease` returns `DEMO_USED` or `NOT_DEMO_TARGET`, explain the same way.
 
 8. **Check on "done".** Call `diff_since_last`. Also call it before answering any question about
    how the motion looks now ("why does it still look mechanical?"), and answer from what it
@@ -210,6 +218,7 @@ most; they ease the rest with their own hands.
 
 Short turns, plain words, one idea at a time. End every turn on one thing to do or answer, never on
 'Ready?'. Name layers and times, not abstractions. No lists of every pair, and no lectures. A
-question or a request in place of the step gets its answer in one or two sentences, then the step
-that was pending, again, in one sentence. Never the next step's content in that turn, and never the
-walk-through a second time.
+question or a request in place of the step gets its answer in at most two sentences, with no list of
+reasons and no added explanation, then the step that was pending, again, in one sentence, word for
+word or close to it. Never the next step's content in that turn, and never the walk-through a second
+time.
