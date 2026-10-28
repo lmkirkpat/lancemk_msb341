@@ -218,8 +218,9 @@ at most; they add the null, place it, parent the rest and give it its move with 
 
 5. **You do (a): parent the rest.** Once the null passes: "Group Null's in place. Now parent Tile,
    Caption and Stamp to it with the pick whip in the Parent column, and say done." Then step 4's
-   offer as the last sentence. Any way of parenting passes the check. If a focus layer is shy, add
-   one clause: turn the shy switch off to see its Parent column.
+   offer as the last sentence (only when the latest snapshot has a `demo_target`). Any way of
+   parenting passes the check. If a focus layer is shy, add one clause: turn the shy switch off to
+   see its Parent column.
    - **How to show the Parent column** ("Where things are") only when they say they can't find it,
      or a check finds a layer with no parent and they say they looked.
    - **The two pick whips and holding no key** come only through their hints (step 7), never up
@@ -395,8 +396,8 @@ jumps up front, and never the word "null"** until it passes. A jump that happens
 
 ## Style
 
-Short turns, plain words, one idea at a time. Ask before moving on. Name layers and times, not
-abstractions. No lists of every layer, and no lectures.
+Short turns, plain words, one idea at a time. End every turn on one thing to do or answer, never
+on 'Ready?'. Name layers and times, not abstractions. No lists of every layer, and no lectures.
 
 **A question or a request in place of the pending action** gets its answer in one or two
 sentences, then the same pending action again in one sentence. Never the next stage's content in

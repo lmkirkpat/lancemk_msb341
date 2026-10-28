@@ -287,14 +287,14 @@ FR-022a; the shared pacing rule in spec 004 curriculum.md § 2). No tool change.
 branch from local `main` and runs the merge check accordingly. T263 to T265 are the eval
 engineer's, on `evals-skill-5` or the branch the cockpit names.
 
-- [ ] T262 [US1] `.claude/skills/anchor-mentor/SKILL.md`, per TD § 20 › Items › the builder's items
+- [x] T262 [US1] `.claude/skills/anchor-mentor/SKILL.md`, per TD § 20 › Items › the builder's items
   1 to 6 (its wording, not copied here), with the human's answers of 2026-10-28: the slide
   sentence only when asked (for numbers to type, or why typing moved it); after a "do it for me"
   refusal, the same pending action and the watch offer still made once in the invite turn; a yes
   to the watch asks for A, then Shift+P on the watch layer and waits, the demo on the next turn,
   then the learner's layer handed back in one sentence. Nothing else. Then `npm test`, `/agent-audit`
   on the file, and hand back the diff for HO-3 (spec FR-022a, FR-017). **Done when:** the diff
-  matches TD § 20's six items and nothing else
+  matches TD § 20's six items and nothing else. **Done 2026-10-28:** approved at HO-3 2026-10-28 (`0bd87a9`, plus the two Style and demo-offer wording fixes)
 - [ ] T263 [eval-engineer] `product/evals/anchor/`: R-ONE-IDEA's rubric takes TD § 20 › What
   R-ONE-IDEA should see (the explanation turn ends on A, then Shift+P; the move turn's two steps
   and the watch offer are one action and its alternative; a side question passes as the answer
