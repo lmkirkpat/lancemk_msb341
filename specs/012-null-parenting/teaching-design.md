@@ -5,8 +5,9 @@ here and doesn't copy it. Gaps or contradictions come back as questions.
 **Date:** 2026-10-23. **Status:** draft, answered by the spec writer in round 1 (§ 14). Round 2
 (2026-10-25, § 15): the proposal rule reworked for L-6. 2026-10-26, after the live sitting
 (`live-sitting-2026-10-26.md`): D-4 answered (§ 14; § 5 stage 3, § 7, § 10), and HO-2's overlap
-re-run on the built branch (§ 9, last note). § 16 (pacing, one idea per turn) **proposed
-2026-10-28, not approved**: until the human approves it, § 5 stands as written.
+re-run on the built branch (§ 9, last note). § 16 (pacing, one idea per turn) **approved
+2026-10-28** by the human, as written: where § 5 cuts the lesson into turns differently, § 16 wins.
+The rule is now shared by every skill (curriculum § 2).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 6, § 8, § 9, § 12 (B9), § 13
 (the FR-029 correction), § 14; spec 004 (approved), above all FR-005, FR-013, FR-014, FR-018 to
 FR-022, FR-024, FR-028, FR-029, FR-030, FR-037, the Edge Cases table, and plan.md › Waves › Wave B.
@@ -548,11 +549,17 @@ matte pair, as the answer key has it. The hidden-Caption test still gives Tile a
 - **L6-3** The text preference is a **Guess**. A first logged lesson where a learner without a group
   in mind accepts or rejects the proposal is the first evidence; log it in the usage notes.
 
-## 16. Pacing: one idea per turn (proposed 2026-10-28)
+## 16. Pacing: one idea per turn (approved 2026-10-28)
 
-**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
-spec or the evals until it's approved; the items at the end say who changes what. The opening turn
-(stage 1's question, spec 004 Phase 10) and the proposal turns don't change.
+**Status: approved 2026-10-28 by the human, as written.** Proposed the same day. The items at the end
+say who changes what. The opening turn (stage 1's question, spec 004 Phase 10) and the proposal turns
+don't change. The three rules below are now curriculum § 2's shared turn rule for every skill.
+
+**Answered 2026-10-28.** The human approved this section and skill 5's § 20 together, and answered
+skill 5's three questions yes. One of them carries over here: a "do it for me" refusal doesn't
+cancel the demo offer. A learner who asks before turn 4 gets the warm decline and the pending
+action (rule 3), and turn 4 still ends on the offer, once. The other two (the slide sentence, the
+A-then-Shift+P wait) are skill 5's own and don't apply here.
 
 ### The problem
 
@@ -581,6 +588,8 @@ of a held key is § 7's one question after a jump, and § 5 stage 2 never asked 
 2. **A fact goes in the turn where the learner acts on it.** If no turn acts on it, it's on request.
 3. **A question or a request in place of the action gets its answer, in one or two sentences, then
    the same pending action again, in one sentence.** Never the next stage's content in that turn.
+   "Do it for me" gets the warm decline and the pending action; the demo offer is still made once,
+   at the end of turn 4, if it hasn't been yet (answered 2026-10-28).
 
 ### The new sequence (a lesson)
 
@@ -660,7 +669,7 @@ parenting passes" (FR-014), the hints (§ 7), the comments, the record and the r
   don't, add "(right-click a column heading, Columns, Parent & Link, if you don't see it)" as a clause
   in turn 4, not a sentence.
 
-### Items, if approved
+### Items (approved 2026-10-28)
 
 Numbers are `NNN`: the cockpit assigns them.
 
@@ -677,7 +686,8 @@ Numbers are `NNN`: the cockpit assigns them.
    hint", so they aren't read as things to say up front.
 4. Step 4: after the demo, hand the rest back in one sentence; no walk-through.
 5. Step 1's shy note: "Badge is shy" at the focus; "turn shy off to see its Parent column" at step 5.
-6. A new line under "Style": rule 3, as in skill 5.
+6. A new line under "Style": rule 3, as in skill 5, with the "do it for me" clause (the decline and
+   the pending action; the demo offer still made once at the end of step 5's turn if it hasn't been).
 
 **For the spec writer (S-NNN):**
 - **US1 #2:** "uses CTRL with Title and Subtitle if the open comp has them, or one frame of the focus

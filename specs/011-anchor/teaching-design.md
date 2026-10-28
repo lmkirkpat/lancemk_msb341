@@ -8,8 +8,9 @@ lesson (T236, § 17). **Status:** draft, round 1 answered (§ 15), round 2 answe
 wording list), the one-layer watch offer decided (§ 17), round 3 answered (§ 18: D-8 and D-9,
 2026-10-26). § 19 (the opening turn, from HO-1's smoke run) was **decided** 2026-10-26 by the human.
 § 19b (after HO-2 and HO-3, 2026-10-26): gap 1 agreed by the cockpit; the rest are row edits and logs.
-§ 20 (pacing, one idea per turn) **proposed 2026-10-28, not approved**: until the human approves it,
-§ 5 and § 19 stand as written.
+§ 20 (pacing, one idea per turn) **approved 2026-10-28** by the human, as written, with its three
+questions answered (§ 20, "Answered 2026-10-28"). Where § 5 cuts the lesson into turns differently,
+§ 20 wins; § 19 (the opening) is unchanged. The rule is now shared by every skill (curriculum § 2).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -1187,11 +1188,22 @@ may touch spec 004's record fields. Until then, `SKILL.md` stays as built.
 comp whose only non-never layer is a background opens with the solid line and never names the
 background as an offer.
 
-## 20. Pacing: one idea per turn (proposed 2026-10-28)
+## 20. Pacing: one idea per turn (approved 2026-10-28)
 
-**Status: proposed 2026-10-28, for the human to approve.** Nothing below changes `SKILL.md`, the
-spec or the evals until it's approved; the items at the end say who changes what. The opening
-turn (§ 19, spec 004 Phase 10) doesn't change.
+**Status: approved 2026-10-28 by the human, as written.** Proposed the same day. The items at the end
+say who changes what. The opening turn (§ 19, spec 004 Phase 10) doesn't change. The three rules
+below are now curriculum § 2's shared turn rule for every skill.
+
+### Answered 2026-10-28
+
+The human answered yes to each question this section raised. They're folded into the text below.
+
+| Question | Answer |
+|---|---|
+| Is the slide sentence said only when the learner asks (for numbers to type, or why typing moved it)? | **Yes.** It's on request; § 7's typed-value hint is the backstop |
+| After a "do it for me" refusal, is the watch offer still made once? | **Yes.** The refusal doesn't use up or cancel the offer. If it hasn't been made yet, it's made once, as the last sentence of the invite turn (turn 4), as usual |
+| Does a yes to the watch get the extra turn (A, then Shift+P, and wait) before the demo? | **Yes.** W1, then W2 |
+| Approve § 20 as written? | **Yes** (and skill 6's § 16) |
 
 ### The problem
 
@@ -1225,6 +1237,9 @@ answer plus the whole next stage**, because nothing says it shouldn't.
 3. **A question or a request in place of the action gets its answer, in one or two sentences,
    then the same pending action again, in one sentence.** Never the next stage's content in that
    turn. If the pending action already carried the watch offer, the offer isn't repeated (§ 17).
+   **"Do it for me"** is such a request: the warm decline (one or two sentences) and the pending
+   action. It doesn't cancel the watch offer: if the offer hasn't been made yet, it's still made
+   once, as the last sentence of turn 4 (answered 2026-10-28).
 
 ### The new sequence (a lesson, one focus layer)
 
@@ -1243,7 +1258,7 @@ move it?", a round trip that carried nothing; now that round trip is the learner
 numbers they're about to watch change. A keyed layer gets one turn more (turn 2), and its frame is
 then taken at the rest time, which is where it should have been taken anyway.
 
-**A yes to the watch offer** (two turns, not one):
+**A yes to the watch offer** (two turns, not one; confirmed 2026-10-28):
 - **W1:** "Needle will turn from the middle of its bottom edge. Select Needle and press A, then
   Shift+P, and tell me when both show." (FR-017's ask, now with a wait, so the learner is looking at
   the numbers when they change.)
@@ -1264,7 +1279,7 @@ runs only when asked or stuck, as W1 and W2.
 
 | Piece | Was | Now | Why |
 |---|---|---|---|
-| The slide sentence ("Change Anchor Point alone and the layer slides…") | Stage 2 | **On request**, and as the answer when the learner asks for numbers to type or asks why typing moved it (case 29's moment) | It's needed when they're tempted to type. Said earlier, it's a warning about a mistake they haven't thought of; said twice (29), it's a lecture. § 7's typed-value hint already says what happened |
+| The slide sentence ("Change Anchor Point alone and the layer slides…") | Stage 2 | **On request only** (confirmed 2026-10-28), and as the answer when the learner asks for numbers to type or asks why typing moved it (case 29's moment) | It's needed when they're tempted to type. Said earlier, it's a warning about a mistake they haven't thought of; said twice (29), it's a lecture. § 7's typed-value hint already says what happened |
 | "Pan Behind changes both together, so nothing moves on screen" | Stage 2 | Turn 4, with the tool | It's what the tool does, said as they pick it up |
 | A, then Shift+P | Stage 3's tip | Turn 3's action | It makes "two numbers" something they see, and turns the "Ready?" round trip into a doing |
 | "Select the layer in the timeline" | Stage 3's walk-through | Turn 3 (needed for A/Shift+P) | The walk-through drops to two steps |
@@ -1315,13 +1330,14 @@ turn, FR-008), the hints (§ 7), the understanding check, "try it", the record, 
 - **Guess:** that a first-timer does the A/Shift+P step without asking why. Watch the next live
   lesson for "what are these for?". If it's common, the fix is half a clause on the ask ("so you can
   watch both change"), not a turn.
-- **Guess:** that W1's wait is worth the extra turn on a yes. No learner has said yes live yet
-  (§ 17); count yeses in the usage notes.
-- **Guess:** that the slide sentence on request loses nothing for a learner who never asks. § 7's
-  typed-value hint is the backstop; if live lessons show learners typing first and not getting why,
-  bring the sentence back into turn 4 as Pan Behind's contrast.
+- **Guess (decided anyway, 2026-10-28):** that W1's wait is worth the extra turn on a yes. The human
+  chose the wait. No learner has said yes live yet (§ 17); count yeses in the usage notes.
+- **Guess (decided anyway, 2026-10-28):** that the slide sentence on request loses nothing for a
+  learner who never asks. The human chose "on request only". § 7's typed-value hint is the
+  backstop; if live lessons show learners typing first and not getting why, bring the sentence back
+  into turn 4 as Pan Behind's contrast.
 
-### Items, if approved
+### Items (approved 2026-10-28)
 
 Numbers are `NNN`: the cockpit assigns them.
 
@@ -1338,7 +1354,9 @@ Numbers are `NNN`: the cockpit assigns them.
 5. Step 5, two layers: on a yes, ask for A/Shift+P on the demo layer and wait; run the demo on the
    next turn; then hand Door back in one sentence with no walk-through.
 6. A new line under "Style": rule 3 (a question gets its answer and the same pending action; never the
-   next stage), with "don't repeat the walk-through" for steps 5 and 6.
+   next stage), with "don't repeat the walk-through" for steps 5 and 6. Step 6's "do it for me"
+   decline: the decline and the pending action; if the watch offer hasn't been made yet, it's still
+   made once, at the end of step 3's turn (answered 2026-10-28).
 
 **For the spec writer (S-NNN):**
 - **US1 #2:** "gives TD § 1's two sentences once, with one frame" becomes "gives TD § 1's first
@@ -1357,6 +1375,12 @@ Numbers are `NNN`: the cockpit assigns them.
 **For the eval engineer (through the cockpit):** the readings above in the R-ONE-IDEA rubric; cases
 15, 21a, 21b and 29 then re-run as they are (their learner lines still fit: the side question lands
 on turn 3 or 4, and rule 3 decides the reply). Case 02 should be re-run too, since its turn 2 changes.
+Case 15 ("just do it for me", "no offer later"): when the request comes before turn 4, the one watch
+offer now still comes at the end of turn 4 (answered 2026-10-28). If its `no_later_offer` check
+would catch that first offer, it needs to allow it; a second offer, or any offer to do the work,
+still fails.
 
-**For me (curriculum follow-up, C-NNN):** rules 1 to 3 as a shared turn rule in curriculum § 2, next
-to C-5's opening rule, after checking skills 2 to 4's baselines for the same failure.
+**For me (curriculum follow-up): done 2026-10-28.** Rules 1 to 3 are curriculum § 2's shared turn
+rule, next to C-5's opening rule. The human chose not to wait for skills 2 to 4's baselines; those
+skills were audited against the rule the same day (their teaching designs, and easing in curriculum
+§ 6).

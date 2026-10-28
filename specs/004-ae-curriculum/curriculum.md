@@ -5,6 +5,15 @@ here and doesn't copy it. Questions or contradictions come back as questions; th
 only by its owner.
 **Date:** 2026-10-20. **Status:** caught up with spec 004 as approved on 2026-10-20 (H1, H2 and
 spec 004's Q1 to Q3 answered; sections 3, 5, 6, 9, 12 and 13).
+
+**Changes:**
+- **2026-10-28: pacing is a shared rule.** § 2 gains two rules for every skill: the opening rule
+  (C-5, from skill 5's § 19, decided 2026-10-26 and not written here until now) and the turn rule
+  (one idea per turn), from skill 5's § 20 and skill 6's § 16, both approved by the human
+  2026-10-28. The human chose to make it the rule now rather than wait for wave A's baselines. § 2
+  also says which skills already fit and which have a pacing proposal waiting. Easing has no
+  teaching design of its own, so its proposal is in § 6 (skill 0). Stage 2's row in the table now
+  ends on something to do.
 **Inputs:** the 15 briefs in `discovery/curriculum-research/`, `discovery/diagnosis-evidence.md`,
 `specs/005-diagnosis/spec.md` (draft, branch `worktree-agent-a4ba74721dd169ee2`),
 `discovery/usage-notes/adobe-assistant-2026-10-08.md`, interviews 007 and 008, `discovery/insights.md`,
@@ -49,10 +58,77 @@ one runs. Per skill (section 6), this file fills in only what changes.
 |---|---|---|
 | 0. Remember | nothing | The learner record for this skill: first lesson, practicing (pick up what was still off), or learned (offer a review, below). |
 | 1. Look and propose a focus | agrees to a focus or picks another | The skill's focus rule finds candidates in a fresh read. It proposes one layer (two at most) and says what it's leaving out and why (hidden, inside precomps, can't read). |
-| 2. Explain on their comp | watches | Explains with at least one frame from inside the focus, using real layer names and times. Asks about intent wherever intent can't be read (section 6 marks these). |
+| 2. Explain on their comp | watches the frame, then does or answers the one thing the turn ends on | Explains with at least one frame from inside the focus, using real layer names and times. Asks about intent wherever intent can't be read (section 6 marks these). The explanation never has a turn of its own that ends on "ready?": it ends on the first step that puts the idea to use (the turn rule, below). |
 | 3. I do (one demonstration) | watches, can Edit > Undo | Only when asked or clearly stuck. One change, on the skill's demo target. If the focus has only one target, there's no demo: the mentor walks it through in words (the easing rule for a single pair). |
 | 4. We do / you do | does the rest with their own hands, says "done" | A fresh read and diff. Credits the demo to the demo. For anything still off, gives a hint (which layer, property, time, what to look for), never the fix. Declines "do the rest" warmly. |
 | 5. Record | nothing | One lesson entry: what was attempted, what the checks showed, one "next". No method, no motive, no personal details. |
+
+**The opening rule (C-5, decided 2026-10-26 in skill 5's § 19; written here 2026-10-28).** Which
+opening runs (lesson, review offer, practicing) is the snapshot's call (spec 004 FR-048 to FR-052).
+Whatever it is, the opening turn gives the learner one choice to make. The skill's idea isn't stated
+there; it comes with the first frame, on the layer they chose. Leave-outs are said up front only when
+the mentor proposes the focus from a scan of the comp, because then a layer skipped without a word
+would read as "that one's fine" (easing, skills 1 to 3). When the learner names the focus (skills 5
+and 6), a leave-out is said when they name that layer. A memory clause goes in only when it changes
+what happens in this lesson.
+
+**The turn rule: one idea per turn (approved 2026-10-28, from skill 5's § 20 and skill 6's § 16).**
+Every turn after the opening follows three rules:
+
+1. **Hand over one thing.** A turn ends on one thing for the learner to do or answer, and carries
+   only what that needs. Saying back their choice, a one-clause note and a frame are context, not
+   ideas of their own. "Ready?" or "shall we go on?" hands over nothing, so it never ends a turn. An
+   offer to watch a demonstration is the same step's alternative ("do it, or watch one first"), so
+   it may be the last sentence of the turn that asks them to try.
+2. **Say a fact where it's used.** A fact goes in the turn where the learner acts on it. A fact no
+   turn acts on is said only if they ask. A warning about a mistake they haven't made is a hint:
+   it waits until the check sees that mistake (section 6 and each design's § 7 list the hints).
+3. **Answer, then hand the same step back.** A side question, or a request in place of the step
+   ("just do it for me", "what's the menu?"), gets an answer of one or two sentences, then the step
+   that was pending, again, in one sentence. Never the next step's content in that turn, and never
+   the walk-through a second time.
+
+What follows from the rules, so every design cuts its turns the same way:
+- **The explanation ends on the first step that uses it.** That's an intent question (skill 6: "will
+  it turn or scale, and from where?"; skill 3: "which goes first?"), the task itself (easing, skills
+  1 and 2), or a step that makes the idea visible before the task (skill 5: A, then Shift+P, so both
+  numbers show).
+- **How-to is in prose and short.** The way to do the step, in a sentence or two, with alternatives
+  as clauses ("drag its keys, or the middle of its bar"). No numbered walk-through, no bulleted list
+  of methods, no tips about shortcuts the step doesn't need.
+- **After a demonstration, the rest is handed back in one sentence.** The walk-through isn't repeated.
+- **Shared rule: a "do it for me" decline keeps the one offer (approved by the human 2026-10-28).**
+  When the learner asks the mentor to do the work and the mentor declines, the reply is the warm
+  decline and the pending step (rule 3). The lesson's one offer to watch a demonstration is still made
+  once, where it normally goes, if it hasn't been made yet. It's never made a second time, and it's
+  never an offer to do the work. Answered for skill 5 (§ 20) and applied to skill 6 (§ 16); each
+  skill's audit below says how it stands. Where a skill makes no standing offer and the learner's
+  "do it for me" comes before any demonstration on a focus with a demo target, that request **is**
+  the ask: the one demonstration runs on its target, and the rest is theirs (easing's US1 #5).
+- Unchanged by the rule: the opening (above), "I do, we do, you do", the one demonstration and its
+  target, the hints, the review (already one question, then one task).
+
+**For every new skill:** its teaching design must lay out the lesson turn by turn this way: for each
+turn, the one idea, what it carries, and what it ends on (skill 5's § 20 table is the model). The
+eval sets check it with R-ONE-IDEA, on every case whose turns explain, invite or answer a side
+question.
+
+**Where each built skill stands (audit, 2026-10-28).** None of the four wave A or slice skills fits
+as built. Each one's explanation stage ends with the learner watching, so it gets folded into the
+invite turn with the how-to, and the turn becomes a lecture (the same failure skills 5 and 6 had).
+Each has a dated pacing proposal, for the human to approve:
+
+| Skill | Verdict | Where | "Do it for me" and the one offer |
+|---|---|---|---|
+| Easing (0) | Proposal | § 6 skill 0, below (easing has no teaching design file) | **Already fits.** Before the demo, "do it for me" is the ask and the demo runs (spec 002 US1 #5); after it, a decline with no new offer (step 7). Its offer ("a layer with more pairs if you'd rather watch", and the build's "just ask") is made once. No change |
+| Key types (1) | Proposal | `specs/009-key-types/teaching-design.md` § 15 | **Fits, wording to make explicit.** No standing offer (C-4, a watch offer for the wave A skills, is still open), so there's nothing to keep. `SKILL.md` says "demonstrate only when asked" and "decline 'do the rest'", but not that a "do it for me" before any demo is the ask. One line, in § 15's items |
+| Speed graph (2) | Proposal | `specs/008-speed-graph/teaching-design.md` § 15 | Same as key types: one line, in § 15's items |
+| Offset (3) | Proposal | `specs/010-offset/teaching-design.md` § 15 | Same as key types: one line, in § 15's items |
+| Set the pivot (5) | Fits once built | § 20, approved 2026-10-28 | Answered there (the watch offer stays once, turn 4) |
+| Null (6) | Fits once built | § 16, approved 2026-10-28 | Applied there (the demo offer stays once, turn 4) |
+
+If C-4 (a standing watch offer for the wave A skills) is approved later, the shared rule above already
+says where their offer goes after a decline: once, at the end of the invite turn.
 
 **Review across sessions (the practice part).** Each skill defines a **review check**: in a later
 session, on a target the learner hasn't done before, the mentor asks them to apply the skill with no
@@ -251,6 +327,99 @@ Mentor Practice (25/25 baseline). Unkeyed expression properties must not become 
 Each skill: the idea, why, outcome, focus, steps, pass, mistakes, what it doesn't teach, reads, and
 review. Overlaps are in section 8, version traps in section 9. The record IDs are suggestions. The
 skill builder names them in `mentor/tools/`.
+
+### 0. Easing (built, `easing.basic`): pacing proposal (proposed 2026-10-28)
+
+**Status: proposed 2026-10-28, for the human to approve.** Easing has no teaching design file: its
+lesson lives in `specs/002-easing-slice/spec.md` (the spec writer's) and
+`.claude/skills/ease-mentor/SKILL.md` (the builder's). So its audit against § 2's turn rule is here.
+Nothing below changes `SKILL.md`, the spec or the evals until it's approved. The opening doesn't
+change, and neither do "I do, we do, you do", the one demonstration and its target, the hints or the
+record.
+
+**Verdict: doesn't fit.** `SKILL.md` step 4 (explain) asks for the frame, what linear is, what
+easing does, where to do it (F9) and how to check it in the Graph Editor; step 5 then asks them to
+try. Step 4 hands over nothing, so the build folds both into one turn. Easing case 02
+(`product/evals/easing/results/2026-10-27-202038-phase10-branch.json`, turn 2): a frame, a paragraph
+on linear, a paragraph on easing, three numbered steps, the diamonds-to-hourglasses note, a Graph
+Editor tip, a bulleted list of four pairs, "say done", and a demo offer. It passed, because easing's
+rubric has no R-ONE-IDEA item (`product/evals/easing/rubric.md`), so nothing has ever judged it. It's
+the same pile skills 1 to 3 and 5 to 6 were failed for.
+
+**The new sequence (a first lesson):**
+
+| Turn | The one idea | Carries | Ends on |
+|---|---|---|---|
+| 1. Opening | which layer | Unchanged: the count, one layer (two at most) with no more than 5 pairs, the leave-outs (§ 2's opening rule: easing proposes from a scan, so they're up front) | "Does Title sound good, or would you like another layer?" |
+| 2. The idea, and the task (we do, you do) | easing slows a move into and out of its keys | The layer confirmed in one clause. One frame inside a focus pair, at most one clause about it. The idea in two sentences, on their timing: "From 0.5 s to 1.5 s Title moves at one speed the whole way, then stops dead at 3 s: that's linear, and it's why it looks mechanical. Easing slows it out of each key and into the next." How, in one sentence: "With Title's keys showing (U), select both keys of a pair and choose Animation > Keyframe Assistant > Easy Ease (F9); the diamonds turn into hourglasses." The pairs in one sentence, not a list | "Ease Title's two Position moves, its Scale and its Opacity, and say done." Then the demo offer, if made, as the last sentence |
+| 2a. Demo (on an ask or a yes) | watch one | `SKILL.md` step 6, unchanged: a frame first if none yet, the one `set_ease`, what changed, Edit > Undo | "The other three are yours; say done." No second walk-through |
+| 3. Check | pass, or one hint per pair | Step 8, unchanged | "Say done again", or the pass |
+| 4. Pass | the next focus | "That passes" and the next focus from the remaining findings | Their choice of the next focus, or a stop |
+| 5. Record | | Unchanged | |
+
+**"Do it for me" (§ 2's shared rule): already fits, no change.** Before the demo, the request is
+the ask and the one `set_ease` runs (spec 002 US1 #5, `SKILL.md` step 6); after it, the warm decline
+and the next pair (step 7), with no second offer.
+
+A `learned` learner (step 4's "one-line reminder and a frame") already fits: the reminder is the
+context for the task, and turn 2 ends on it the same way. A one-pair focus: turn 2's how-to sentence
+is the walk-through in words (no demo, FR-006), plus the existing "a layer with more pairs if you'd
+rather watch".
+
+**What moved, what's on request, what goes:**
+
+| Piece | Was | Now | Why |
+|---|---|---|---|
+| How to check it in the Graph Editor | Step 4 | **On request** | No turn here acts on it. It's skill 2's subject, and the record's `next` leads there |
+| The numbered how-to (U, select, F9) | Step 4, three or four steps | One sentence in turn 2 | It's one motion; the list made it read as a lesson of its own |
+| The pairs to ease | Step 5, a bulleted list | One sentence, the end of turn 2 | Four pairs read fine in a sentence; the list was the turn's longest part |
+| "The way real objects move", and other general lines about easing | Step 4 (as built) | **Goes** | The frame and their own timing carry the idea; a second explanation is a lecture |
+| A comment on the frame itself (blank, too small) | Seen in other sets | **Goes** | A frame that's no use gets no sentence |
+| The walk-through after a demo or a side question | Possible under step 6 and 7 | **Goes** | Rule 3 |
+
+**FRs touched (spec 002):** none needs new text. FR-004 (explain on their layers with a frame) is met
+in turn 2. FR-005 (they ease it themselves) is turn 2's ending. FR-006 (the one demo; none on a
+one-pair focus) is unchanged, with the hand-back in one sentence. US1 #2 still holds. What changes is
+`SKILL.md` step 4 (no Graph Editor tip; how-to in one sentence) and step 5 (merged into step 4's
+turn, pairs in a sentence).
+
+**What R-ONE-IDEA should see in easing (the eval engineer's to add; this is only the intent).**
+Easing's rubric has no R-ONE-IDEA, so the eval engineer adds one in the same words as the other
+sets' ("each turn is a few sentences and moves one idea, ends by handing the learner something to
+do"), with easing's reading: the opening's count, proposal and leave-outs are one choice (§ 2's
+opening rule); turn 2's frame, idea and one-sentence how-to are one task and pass if the turn ends
+on "ease them and say done" (the demo offer may follow as the same step's alternative); a numbered
+list, a bulleted list of pairs, or a Graph Editor tip fails it; a turn answering a side question
+passes as the answer plus the pending step.
+
+**Rejected:**
+- *A turn of its own for "show the keys (U), and tell me when you see them"*, as skill 5 has for A
+  and Shift+P. It would make the diamonds visible before the change, but it adds a round trip to
+  every easing lesson, and pressing U is a clause of the task. Skill 5 needed its step because "two
+  numbers" is the idea; here the idea shows when the diamonds change.
+- *Keep the Graph Editor tip as one clause.* It's a second thing to look at in a turn whose job is
+  one task, and skill 2 teaches it properly.
+- *Leave easing alone because it passed every live lesson.* Easing's live lessons (T046, panel
+  session 1) were builder-only, and its judge never looked for this. Every other skill has the rule
+  now; easing is the first lesson a learner meets.
+
+**Evidence and guesses:**
+- **R:** case 02's turn 2 above; `SKILL.md` steps 4 and 5; easing's rubric (no R-ONE-IDEA).
+- **R, live:** T046 (3.7 min, a to f) and the panel sessions passed with the old pacing,
+  builder-only.
+- **Guess:** that a first-timer can follow the how-to from one sentence without numbered steps. If
+  live lessons show "how do I select the keys?", rule 3 answers it in a sentence; if it's common,
+  add the box-drag as a clause, not a list.
+
+**Items, if approved** (numbers `NNN`, the cockpit's):
+- **Builder (B-NNN), `ease-mentor/SKILL.md` only:** step 4 becomes turn 2 above (frame, the idea on
+  their timing, the how-to in one sentence, no Graph Editor tip) and ends with step 5's ask, pairs in
+  one sentence; step 6 after the demo hands the rest back in one sentence; a "Style" line for rule 3.
+- **Spec writer (S-NNN):** no FR text change. Optionally, a line in spec 002 under FR-004 pointing at
+  this section.
+- **Eval engineer:** add R-ONE-IDEA to `product/evals/easing/rubric.md` (reading above) and to cases
+  02, 03, 05 and 21; then re-run 02, 03, 04, 05, 19 and 21, and the full set before the next
+  baseline (easing is the gate for every other skill's merge).
 
 ### 1. Pick the key type on purpose (suggested `keyframes.types`)
 
