@@ -496,3 +496,11 @@ On the null `SKILL.md` with T344's pacing edits. Majority passes. Counted result
 The diff of the 02 check: `-"must": "opacity",` `+"must": "opacity|fade",`.
 
 Cases 39 and 40 (added the same day) are dry-run only.
+
+### Case 37 reconciled with case 40 (2026-10-28)
+
+37 and 40 share the same two turns (a lesson with a focus, region never answered, reopened in a new session). The design
+(SKILL.md step 2, picked up again) asks the turn-or-scale question first on its own when it was never answered, so 37's
+`goes_to_null_step` (must "null") contradicted it. It is now `next_step_null_or_region`: the reopened turn passes if it
+goes to the null step or asks the question first. Case 40 holds the strict form (the question on its own, no null task,
+no "say done"). `does_not_say_null_placed`, no recap, no new proposal and no review are unchanged. Not run.

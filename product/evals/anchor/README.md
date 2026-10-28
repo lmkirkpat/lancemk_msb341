@@ -501,3 +501,14 @@ On the pivot `SKILL.md` with T262's pacing edits. Results: `results/2026-10-28-1
 | 21a | 3/3 | |
 | 21b | 3/3 | |
 | 29 | 0/3 | Run 1 and 3: **R-ONE-IDEA, prompt, real.** The "what numbers should I type" answer adds an unasked sentence ("If you change Anchor Point by itself, the layer slides...") to the decline. Run 2: **check, too strict** (`place_in_words` wants "left edge" or "middle of" in the short answer; the pacing rule makes the answer shorter and it didn't repeat the place; the answer itself was fine). Fix the check to drop `place_in_words` or accept turn 3 without the place; not changed here |
+
+### Case 29 triage corrected (2026-10-28)
+
+My triage of case 29 above was wrong. TD 011 § 20 (`specs/011-anchor/teaching-design.md`, "What moved, what's on
+request", line 1282) makes the slide sentence ("Change Anchor Point alone and the layer slides...") the sanctioned
+answer when the learner asks for numbers to type, which is case 29's moment. The judge calling it "unasked" in runs 1
+and 3 was a **rubric miss, not a prompt problem**. Fixes, both in this set: (1) `rubric.md` R-ONE-IDEA now has an
+exception: no numbers, then the slide sentence, then the pending action again passes; (2) the check `place_in_words`
+became `pending_action_restated` (matches the restated A / Shift+P / Pan Behind action), so a short answer that doesn't
+repeat the place passes. Run 2 still counts as the check being too strict. Case 29 is to be re-run once the builder's
+decline-answer tightening lands; the three runs above (0/3) stay on record against the old rubric and check.
