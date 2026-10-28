@@ -175,7 +175,9 @@ most; they hold the rest with their own hands.
    layer as `layer` to both frames and say where it is, as in step 3, only on the frame where it
    shows, never on the one where it's at Opacity 0. Then hand the rest back in one sentence by
    start time ("The 1.4 s and 1.8 s pairs are yours; say done."). Don't repeat the how-to.
-   **One demonstration per lesson.**
+   **One demonstration per lesson.** If they ask for the demo before step 3's turn has run, that
+   turn opens with one idea sentence on the demo pair ("A hold keeps the value until the next key,
+   then jumps."), then the demo, then the one-sentence hand-back, and no how-to.
 
    If `demo_target` is null there's no demo. With one focus pair, say in one sentence that if you
    held it there'd be nothing left for them, then walk them through it with step 4's how-to

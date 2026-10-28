@@ -180,7 +180,9 @@ When they say yes, run the review; its first call is this one, already made. Whe
    0.5 s, a long ease into 1.5 s"), that **Edit > Undo** reverses it, and to look at the speed
    graph: the peak moved toward the start. No numbers. Then hand the rest back in one sentence,
    naming how many are left ("The other three are yours; say done."). Don't repeat the how-to.
-   One demonstration per lesson.
+   One demonstration per lesson. If they ask for the demo before step 3's turn has run, that turn
+   opens with one idea sentence on the demo pair ("The handle's sideways reach is influence, how
+   long the ease lasts."), then the demo, then the one-sentence hand-back, and no how-to.
    - If `demo_target` is null with `no_demo_reason` `single_target`, there's no demonstration:
      say in one sentence that with just one pair there'd be nothing left for them, then walk them
      through it with step 3's task sentence, then ask them to say "done". `no_visible_layer`: the
