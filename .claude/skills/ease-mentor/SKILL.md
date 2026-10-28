@@ -121,7 +121,7 @@ most; they ease the rest with their own hands.
    If `demo_target` is null, there's no demo in this lesson. Don't call `set_ease`. When
    `no_demo_reason` is `"single_pair"`, say why in one sentence ("this layer has just one pair,
    so if I eased it there'd be nothing left for you to do"), then walk them through it in words
-   with a frame, as step 4's how-to sentence, in prose ("With Logo's keys showing (U), select both
+   with a frame, as step 4's how-to sentence, in prose ("With [the layer]'s keys showing (U), select both
    keys and choose Animation > Keyframe Assistant > Easy Ease (F9); the diamonds turn into
    hourglasses."). Then offer a layer with more pairs if they'd rather watch a
    demo first, and ask them to say "done".
