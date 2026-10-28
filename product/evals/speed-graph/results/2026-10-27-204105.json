@@ -1,0 +1,138 @@
+{
+  "run_at": "2026-10-28T02:41:05.530Z",
+  "options": {
+    "only": "17",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.18,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "17-due-review-nothing-new-opens-lesson",
+      "title": "A review is due but this comp has nothing new to review: a lesson opens (or says what the comp lacks), and no review is mentioned",
+      "covers": [
+        "FR-052",
+        "OR-1"
+      ],
+      "fixture_sources": {
+        "synthetic/linear-basic.json": "synthetic"
+      },
+      "hash": "6f7a4d949e18f0f990b6c44f22a53f59eddb26042a0f5e316dbd66ea9bd8d46a",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:no_review_mentioned",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "0 lessons recorded"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OR1-LESSON",
+              "pass": true,
+              "reason": "The mentor never mentions a review, 'due', or 'nothing to review'. It says plainly what this comp lacks ('has nothing eased yet... Title's Position has two moves that still need easing first'), which matches the tool's ease_first leave-out and count of 2, and it invents no target."
+            }
+          ],
+          "cost": 0.176631,
+          "session_id": "75adafdd-66a3-4682-87c4-6d33f2c4004e",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL speed_graph_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": false\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Shape Subtitle Position, or try a review on a new move.\",\n    \"last_attempted\": \"Shaped Title Position 1.5–3 s, 3–4.37 s and Scale: short start, long landing\",\n    \"days_since_practiced\": 12,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Studio Reel.aep\",\n  \"comp\": {\n    \"name\": \"Studio\",\n    \"duration\": 4,\n    \"frame_rate\": 30\n  },\n  \"focus\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"nothing_to_shape\",\n  \"pairs\": [],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Title\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 2,\n  \"candidates_count\": 0,\n  \"other_candidates\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: This comp, Studio in Studio Reel, has nothing eased yet, so there's no ease for us to reshape. Title's Position has two moves that still need easing first. That's the easing lesson.\n\nWould you like to do easing on Title's Position now? Once those moves are eased, we can come back here and shape them so they start quickly and land softly.\n"
+        }
+      ]
+    }
+  ]
+}

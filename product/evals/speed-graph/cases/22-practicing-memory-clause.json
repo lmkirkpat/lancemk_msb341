@@ -1,0 +1,60 @@
+{
+  "id": "22-practicing-memory-clause",
+  "title": "Practicing: the lesson opens by picking up what was still off, in plain words with how long ago, no skill ID",
+  "covers": [
+    "FR-049",
+    "FR-052",
+    "SC-015"
+  ],
+  "learner_record": "mentor/test/fixtures/records/speed-graph-practicing.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "speed_graph_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "learner.status": "practicing",
+          "mode": "lesson"
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "speed_graph_check"
+    ],
+    "say": [
+      {
+        "id": "picks_up_where_it_was",
+        "must": "Title",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "says_when",
+        "must": "\\b(?:last time|yesterday|earlier|days? ago|last week|a (?:few|couple of) days|this week|the other day|before)\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_skill_name_as_id",
+        "never": "\\b(?:easing|keyframes|timing)[ .](?:basic|types|speed_graph|offset)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-PRACTICING-MEMORY",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

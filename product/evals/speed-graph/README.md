@@ -10,9 +10,56 @@ options and results format; everything skill-specific is in the `CONFIG` block a
 
 ## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
-20 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 008 T029 to T031), except `synthetic/linear-basic.json`
+25 cases after Phase 10 (21 to 25 new). Every fixture is a live capture from the 2026-10-26 sitting (spec 008 T029 to T031), except `synthetic/linear-basic.json`
 (cases 13 and 17, permanent). `--dry-run --strict-sources` is clean. **Still no baseline**: the full run waits for one more `SKILL.md` change, then the
 planned smoke list below. Case 19 (a reading answer given as a frame, FR-039) is new.
+
+## Phase 10: the opening read (T413, T414; 2026-10-27, `main` at `1a28b1d` merged in)
+
+The snapshot tool now reads the learner record and picks lesson or review itself (spec 004 FR-048 to FR-052), and the skill opens with
+`speed_graph_snapshot`, never calling `read_learner_record`. This set follows it. **25 cases.**
+
+**Runner changes** (`run.mjs`):
+- Universal `no_text_before_snapshot` (copied from the pivot set): nothing the learner sees between the lesson's first tool call and its first `speed_graph_snapshot`.
+- Universal `no_read_learner_record`: the tool is never called. It is also out of `--allowedTools` (OR-2: `ALLOWED_TOOLS`), but stays in `MENTOR_TOOLS` so an attempted call is still seen and fails this check instead of reading as a foreign tool.
+- A review is recognised from a snapshot **reply** (`mode: "review"`), not the call's input (the opening call sends no mode). `review_mode` and the review-only checks use it.
+- New expect key `snapshot_reply`: `[{ turn?, equals: { "mode": "review", "learner.readable": false } }]`, compared with the first successful snapshot reply (of that turn). New turn key `new_session: true`: the learner comes back in a fresh conversation; the mentor's files persist.
+- New expect keys `focus_stable` (every snapshot reply focuses on the same layer) and `focus_named` (`{ turn }`: that layer is named in the turn).
+
+**Changed cases**
+- **01**: `first_tool` is now `speed_graph_snapshot`; `R-USES-MEMORY` dropped (same reason as key types 01; it passed in the one smoke run, so this is the consistent change, not a fix).
+- **08**: `snapshot_with` became `snapshot_reply` (turn 1, `mode: "review"`).
+- **17** (was `17-review-nothing-new`, now `17-due-review-nothing-new-opens-lesson`): OR-1, as offset 18. A lesson opens on `linear-basic`, nothing is recorded, no review mentioned. Rubric `R-OR1-LESSON`.
+
+**New cases** (numbers from the cockpit; 21 to 25, all five used)
+- **21** unreadable notes (as key types 21).
+- **22** practicing: Title's landing still needed to be longer, said in plain words with when.
+- **23** a review asked for with none due: it runs on a new move (Card), nothing says due.
+- **24** a review offered and left open, then a new session: offered again, no lesson, no demo.
+- **25** the Phase 10 review's second should-fix: the easing lesson's layer (Subtitle) isn't first in the comp (record `learned-subtitle-eased.json`), a review runs, and every snapshot reply focuses on the layer the first one did, named in turn 2. **Caveat:** in the smoke run the mentor made one snapshot call, so `focus_stable` had only one reply to compare; the case checks the opening call's pick (Subtitle, not Title) but only catches the later-call bug if the mentor makes a later call. The unit test is the real guard for that.
+- Case 20 (stored land-hard choice, FR-046) is the resumed-lesson case.
+
+Records the new cases need are in `product/evals/speed-graph/records/` (the runner takes any repo path). The "not due" records have `review_due` of 2099-12-31, because the saved ones are dated in October 2026 and a "none due" record built from them is due forever once the date passes.
+
+**Smoke results (2026-10-27, one run each unless noted; $3.10 including re-runs)**
+
+| Case | Result | Notes |
+|---|---|---|
+| 21 (`-203849`, then x2 `-204445`) | pass x3 | The mentor said it didn't know whether easing was done and asked: the honest form |
+| 22 (`-203912`) | pass | |
+| 23 (`-203929`) | pass | |
+| 24 (`-203954`) | pass | |
+| 25 (`-204033`) | pass | See the caveat on one snapshot reply, above |
+| 08 (`-204051`) | pass | |
+| 17 (`-204105`) | pass | The mentor said the comp has nothing eased yet and offered easing; no review mentioned |
+| 01 (`-204144`) | pass | |
+
+**Ready for T415?** Yes for the runner and the checks. SC-015's runs wait for the merge into `main`. The unreadable-notes case will not reach 3 of 3 until the mentor-side issue below is fixed.
+
+**Mentor-side finding from the unreadable-notes case (for the cockpit; not fixed here)**
+
+With the notes unreadable, the tool reports easing as not learned (`other_skills[].learned` false), so the skill's "easing isn't learned" branch fires: the mentor offers easing instead of teaching, and key types said once "you haven't learned easing yet", which the missing notes can't support. Smallest fix: in `opening.mjs` `slice()`, when the record is unreadable, leave `other_skills` out (or give `learned: null`); or one line in each `SKILL.md` step 0, "if `learner.error` is there, skip the easing branch". Observed: key types 1 claim in 3 runs; offset 1 of 2 runs replaced the lesson with the easing question; speed graph 0 of 3 (it said it didn't know).
+
 
 ## Running
 
@@ -40,6 +87,8 @@ at least 80% passing, and every hard-rule check passing; spec 008's SC-003 is ab
 | `no_test_tell` | never "synthetic", "fixture", "stand-in" |
 | `only_mentor_tools` | no After Effects tool during a lesson |
 | `demo_at_most_once` | at most one demo call |
+| `no_text_before_snapshot` | nothing said before the first snapshot call (FR-052) |
+| `no_read_learner_record` | the skill never calls `read_learner_record` (FR-052, OR-2) |
 | `record_plain` | the record's summary holds no method, motive or number |
 | `no_self_instructions`, `no_target_number`, `no_graph_vision`, `no_unconfirmed_velocity_path` | skill-specific (see `CONFIG.universal` in `run.mjs`) |
 | **When a case runs a review** | |
@@ -52,7 +101,7 @@ at least 80% passing, and every hard-rule check passing; spec 008's SC-003 is ab
 `snapshot_input_matches` (regexes over a snapshot call's input), `snapshot_calls_max`,
 `demo_calls_min` / `demo_calls_max` (attempts), `demo_only_on`, `last_check` (`passed`, `has` and `lacks`:
 substrings of the check's reply, `input`), `record_lesson` (`null` for "nothing recorded"),
-`review_mode`, and `say`: a list of `{ id, must | never, turns, cs }` regex checks on the mentor's
+`review_mode`, `snapshot_reply` (values of a snapshot reply: `[{ turn?, equals }]`), and `say`: a list of `{ id, must | never, turns, cs }` regex checks on the mentor's
 words (1-based `turns`, default all; case-insensitive unless `cs`).
 
 ## Cases
@@ -70,7 +119,7 @@ turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-b
 | 05 | 'Do the rest': declined warmly, no offer later | 4 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | live |
 | 06 | Logo's Rotation (an expression over keys) is refused kindly as a target and never graded | 2 | tools_not_called; say: must says_expression, never no_expression_claim | R-SG-EXPRESSION-REFUSED, R-NAMES-REAL | live |
 | 07 | Pair 1 shaped, pair 2 not: the shared key is shaped on pair 1's side only; pair 2 isn't praised | 2 | last_check; say: must names_time, never no_offer | R-SG-SHARED-KEY, R-HINT-NOT-FIX, R-NAMES-REAL | live |
-| 08 | Review due: a new move (Card), no demo, no walkthrough, no reading step; a demo request is declined | 3 | review_mode; snapshot_with; tools_called; demo_calls_max; say: must names_card, must declines_demo | R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
+| 08 | Review due: a new move (Card), no demo, no walkthrough, no reading step; a demo request is declined | 3 | review_mode; snapshot_reply; tools_called; demo_calls_max; say: must names_card, must declines_demo | R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
 | 09 | A value-graph answer: asks which graph; Edit Speed Graph; no shortcut, no unconfirmed Keyframe Velocity path | 3 | say: must asks_which_graph, must names_menu | R-SG-CANT-SEE, R-SG-VERSION, R-ONE-IDEA | live |
 | 10 | Speed dragged up, influence not: not passed; it arrives moving and the hint says drag sideways | 2 | last_check; say: must arrives_moving, must sideways, never no_offer | R-SG-HINT-MISTAKE, R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 11 | Scale shaped on one part only: says which part is off | 2 | last_check; say: must names_part, never no_offer | R-HINT-NOT-FIX, R-NAMES-REAL | live |
@@ -79,10 +128,15 @@ turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-b
 | 14 | Title's last move should slam: dropped without argument | 2 | snapshot_input_matches; say: never no_argument | R-SG-LANDS-HARD, R-ONE-IDEA | live |
 | 15 | A wrong reading answer: one hint, the lesson goes on | 3 | tools_called; demo_calls_max; say: must one_hint | R-SG-READ-GRAPH-WRONG, R-ONE-IDEA | live |
 | 16 | The learner stops after a check that didn't pass: recorded partial, demo stated, no numbers or method | 4 | record_lesson | R-RECORD-HONEST, R-NAMES-REAL | live |
-| 17 | A review with nothing new: said in a sentence, nothing recorded | 2 | review_mode; snapshot_with; demo_calls_max; record_lesson; tools_not_called | R-REVIEW-NOTHING-NEW | synthetic |
+| 17 | A review is due but the comp has nothing new: a lesson opens, nothing recorded, no review mentioned (OR-1) | 1 | snapshot_reply (lesson); record_lesson null; tools_not_called; say: never no_review_mentioned | R-OR1-LESSON | synthetic |
 | 18 | After Effects can't be reached: nothing claimed about the comp | 1 | tools_not_called; say: must says_cant_see, never no_claims | R-UNREACHABLE | none |
 | 19 | A reading answer given as a frame ("around frame 30" on a 0.5 to 1.5 s pair): placed in the pair from its key times, agreed with, not taken for a value-graph answer | 3 | tools_called; demo_calls_max; say: never not_a_value_graph_answer, never not_called_wrong, must places_it | R-SG-READ-TIME, R-ONE-IDEA | live |
-| 20 | A resumed lesson with a stored land-hard choice (Title's last Position move): the first call sends no options, no later call in turn 4 clears the choice, the pair is named by layer, property and time as the learner's own and confirmed, nothing grades it for a soft landing (FR-047, T199e) | 4 | tools_not_called (demo, check); snapshot_input_matches; first_snapshot_without_options (turns 1, 4); snapshot_in_turn_lacks (turn 4); say: must names_pair, as_theirs, asks_and_stops, never no_grade_for_soft, no_where_kept | R-SG-STORED-CONFIRM, R-ONE-IDEA | live |
+| 20 | A resumed lesson with a stored land-hard choice (Title's last Position move): the first call sends no options, no later call in turn 4 clears the choice, the pair is named by layer, property and time as the learner's own and confirmed, nothing grades it for a soft landing (FR-047, T199e) | 4 | tools_not_called (demo, check); snapshot_input_matches; first_snapshot_replyout_options (turns 1, 4); snapshot_in_turn_lacks (turn 4); say: must names_pair, as_theirs, asks_and_stops, never no_grade_for_soft, no_where_kept | R-SG-STORED-CONFIRM, R-ONE-IDEA | live |
+| 21 | Unreadable notes: one sentence about it, a lesson follows, nothing before the snapshot, no easing claim from missing notes | 1 | first_tool; snapshot_reply (learner.readable false, mode lesson); say: must says_notes_unreadable, must goes_on_to_lesson, never notes_plain, never no_easing_claim_from_unreadable_notes | R-UNREADABLE-NOTES, R-UNREADABLE-NOT-A-CLAIM, R-NAMES-REAL | live |
+| 22 | Practicing: picks up Title's landing that was still too short, plain words and when, no skill ID | 1 | first_tool; snapshot_reply (practicing, lesson); say: must picks_up_where_it_was, must says_when, never no_skill_name_as_id | R-PRACTICING-MEMORY, R-NAMES-REAL, R-ONE-IDEA | live |
+| 23 | A review asked for with none due: it runs on a new move; nothing says due or early | 1 | first_tool; snapshot_reply (review, asked, review_due false); review_mode; say: never never_says_due | R-REVIEW-ASKED-NOT-DUE, R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
+| 24 | A review offered and never answered, then a new session: offered again, no lesson, no demo | 2 | snapshot_reply (turn 1 review_due, turn 2 in_progress); snapshot_input_lacks; tools_not_called; say: must offers_review_again, never no_lesson_started | R-REVIEW-REOFFER, R-NAMES-REAL | live |
+| 25 | Review where the easing lesson's layer (Subtitle) isn't first in the comp: the target named stays the target | 3 | first_tool; review_mode; snapshot_reply (review, review_due, learner.eased_layers.0 Subtitle); focus_stable; focus_named turn 2; demo_calls_max; tools_called | R-SG-TARGET-STAYS, R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
 
 - **01** has three turns because the preview frame is only taken in the explain step, after the learner answers the reading question.
 - **08** and **17** have a "yes, do the review" turn: a due review is offered, then waits for the learner to agree.

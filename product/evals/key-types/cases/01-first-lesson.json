@@ -16,7 +16,7 @@
     }
   ],
   "expect": {
-    "first_tool": "read_learner_record",
+    "first_tool": "key_types_snapshot",
     "tools_called": [
       "key_types_snapshot"
     ],
@@ -62,7 +62,6 @@
   "rubric": [
     "R-KT-INTENT-FIRST",
     "R-KT-CANDIDATES-AS-QUESTIONS",
-    "R-USES-MEMORY",
     "R-NAMES-REAL"
   ]
 }

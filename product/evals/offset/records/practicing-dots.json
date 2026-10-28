@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-10-12T18:00:00.000Z",
+      "times_passed": 1,
+      "next": "Try Bar: separated X Position and Trim Paths End.",
+      "review_due": "2026-10-13",
+      "reviews_passed_in_row": 0
+    },
+    "timing.offset": {
+      "status": "practicing",
+      "last_practiced": "2026-10-24T17:00:00.000Z",
+      "times_passed": 0,
+      "next": "Move Dot 3 later so it starts after Dot 2."
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-12T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice",
+      "attempted": "Eased 4 Title pairs: Position x2, Scale, Opacity",
+      "result": "passed",
+      "demo_used": true,
+      "summary": "Eased every Title pair.",
+      "next": "Try another layer.",
+      "kind": "first",
+      "targets": [
+        {
+          "layer": "Title",
+          "property": "Position"
+        },
+        {
+          "layer": "Title",
+          "property": "Scale"
+        },
+        {
+          "layer": "Title",
+          "property": "Opacity"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-24T17:00:00.000Z",
+      "skill": "timing.offset",
+      "project": "Claude AE Tutor Test.aep",
+      "comp": "Mentor Practice 2",
+      "attempted": "Staggered Dot 1 and Dot 2; Dot 3 stayed with Dot 2",
+      "result": "partial",
+      "demo_used": false,
+      "summary": "Dot 3 still started with Dot 2.",
+      "next": "Move Dot 3 later so it starts after Dot 2.",
+      "kind": "first",
+      "targets": [
+        {
+          "layer": "Dot 1",
+          "property": "Position"
+        },
+        {
+          "layer": "Dot 1",
+          "property": "Opacity"
+        },
+        {
+          "layer": "Dot 2",
+          "property": "Position"
+        },
+        {
+          "layer": "Dot 2",
+          "property": "Opacity"
+        },
+        {
+          "layer": "Dot 2",
+          "property": "Blurriness"
+        },
+        {
+          "layer": "Dot 3",
+          "property": "Position"
+        },
+        {
+          "layer": "Dot 3",
+          "property": "Opacity"
+        }
+      ]
+    }
+  ]
+}

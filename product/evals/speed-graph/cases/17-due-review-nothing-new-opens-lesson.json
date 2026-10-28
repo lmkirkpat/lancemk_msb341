@@ -1,0 +1,42 @@
+{
+  "id": "17-due-review-nothing-new-opens-lesson",
+  "title": "A review is due but this comp has nothing new to review: a lesson opens (or says what the comp lacks), and no review is mentioned",
+  "covers": [
+    "FR-052",
+    "OR-1"
+  ],
+  "learner_record": "mentor/test/fixtures/speed-graph/record-learned-title.json",
+  "fixture_sources": {
+    "synthetic/linear-basic.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/linear-basic.json",
+      "say": "/speed-graph-mentor"
+    }
+  ],
+  "expect": {
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "record_lesson": null,
+    "tools_not_called": [
+      "speed_graph_check"
+    ],
+    "say": [
+      {
+        "id": "no_review_mentioned",
+        "never": "\\b(?:review|reviewing|due|catch(?:ing)? up|refresher|quick check-in)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-OR1-LESSON"
+  ]
+}

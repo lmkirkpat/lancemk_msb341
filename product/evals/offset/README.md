@@ -10,9 +10,53 @@ options and results format; everything skill-specific is in the `CONFIG` block a
 
 ## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
-28 cases. Every fixture is a live capture from the 2026-10-26 sitting (spec 010 T034) except `synthetic/linear-basic.json` (case 18, permanent). Mentor Practice 2 is now
+32 cases after Phase 10 (29 to 32 new). Every fixture is a live capture from the 2026-10-26 sitting (spec 010 T034) except `synthetic/linear-basic.json` (case 18, permanent). Mentor Practice 2 is now
 `practice2b.json` (24 layers). `--dry-run --strict-sources` is clean. **Still no baseline**: the full run waits for one more `SKILL.md` change, then the planned smoke list below.
 Cases 25 (the gap changed after the fact, FR-040), 26 (how Quick Offset works, FR-041) 27 (stored choices confirmed, FR-046) and 28 (passed, but the stated gap differs, FR-040 as amended) are new.
+
+## Phase 10: the opening read (T413, T414; 2026-10-27, `main` at `1a28b1d` merged in)
+
+The snapshot tool now reads the learner record and picks lesson or review itself (spec 004 FR-048 to FR-052), and the skill opens with
+`offset_snapshot`, never calling `read_learner_record`. This set follows it. **32 cases.**
+
+**Runner changes** (`run.mjs`):
+- Universal `no_text_before_snapshot` (copied from the pivot set): nothing the learner sees between the lesson's first tool call and its first `offset_snapshot`.
+- Universal `no_read_learner_record`: the tool is never called. It is also out of `--allowedTools` (OR-2: `ALLOWED_TOOLS`), but stays in `MENTOR_TOOLS` so an attempted call is still seen and fails this check instead of reading as a foreign tool.
+- A review is recognised from a snapshot **reply** (`mode: "review"`), not the call's input (the opening call sends no mode). `review_mode` and the review-only checks use it.
+- New expect key `snapshot_reply`: `[{ turn?, equals: { "mode": "review", "learner.readable": false } }]`, compared with the first successful snapshot reply (of that turn). New turn key `new_session: true`: the learner comes back in a fresh conversation; the mentor's files persist.
+
+**Changed cases**
+- **01**: `first_tool` is now `offset_snapshot`; `R-USES-MEMORY` dropped (same reason as key types 01).
+- **17**: `snapshot_with` became `snapshot_reply` (turn 1, `mode: "review"`).
+- **18** (was `18-review-nothing-new`, now `18-due-review-nothing-new-opens-lesson`): OR-1. The record has a due review and the comp (`linear-basic`) has no new group; a **lesson** opens (`mode: "lesson"`), nothing is recorded, and no review, "due" or catch-up is mentioned. One turn now (no "yes, do the review"); rubric `R-OR1-LESSON` replaces `R-REVIEW-NOTHING-NEW` (left in `rubric.md`, unused here).
+
+**New cases** (numbers from the cockpit; 29 to 32, all four used)
+- **29** unreadable notes (as key types 21).
+- **30** practicing: the opening picks up the unfinished Dot 3 stagger in plain words with when.
+- **31** a review asked for with none due: it runs on the Chips, nothing says due.
+- **32** a review offered and left open, then a new session: offered again, no lesson, no demo.
+- Case 27 (stored choices, FR-046) already exists and is the resumed-lesson case.
+
+Records the new cases need are in `product/evals/offset/records/` (the runner takes any repo path). The "not due" records have `review_due` of 2099-12-31, because the saved ones are dated in October 2026 and a "none due" record built from them is due forever once the date passes.
+
+**Smoke results (2026-10-27, one run each unless noted; $3.12 including re-runs)**
+
+| Case | Result | Notes |
+|---|---|---|
+| 29 (`-203846`, then x2 `-204441`) | pass, pass, **FAIL** | The failure (R-UNREADABLE-NOTES): the notice came in two sentences, notes cited again ("your notes don't show easing as learned yet"), and a prerequisite question replaced the lesson. Mentor (below) |
+| 30 (`-203905`) | pass | |
+| 31 (`-203922`) | pass | |
+| 32 (`-203940`) | pass | |
+| 17 (`-204008`) | pass | |
+| 18 (`-204023`) | pass | The mentor opened with "About two weeks ago you staggered Dot 1, Dot 2 and Dot 3" and pointed the learner at Mentor Practice 2. No review mentioned |
+| 01 (`-204055`) | FAIL, $0.37 | R-USES-MEMORY (stale; dropped). Re-run x2 (`-204347`): FAIL then pass. The failure was R-OFF-PROPOSAL: the group was given in two sentences ("...all run from 0.5 s to 1.5 s." then "They start on the same frame and land on the same frame."). Rubric judgment, one in three, not touched |
+
+**Ready for T415?** Yes for the runner and the checks. SC-015's runs wait for the merge into `main`. The unreadable-notes case will not reach 3 of 3 until the mentor-side issue below is fixed.
+
+**Mentor-side finding from the unreadable-notes case (for the cockpit; not fixed here)**
+
+With the notes unreadable, the tool reports easing as not learned (`other_skills[].learned` false), so the skill's "easing isn't learned" branch fires: the mentor offers easing instead of teaching, and key types said once "you haven't learned easing yet", which the missing notes can't support. Smallest fix: in `opening.mjs` `slice()`, when the record is unreadable, leave `other_skills` out (or give `learned: null`); or one line in each `SKILL.md` step 0, "if `learner.error` is there, skip the easing branch". Observed: key types 1 claim in 3 runs; offset 1 of 2 runs replaced the lesson with the easing question; speed graph 0 of 3 (it said it didn't know).
+
 
 ## Running
 
@@ -40,6 +84,8 @@ at least 80% passing, and every hard-rule check passing; spec 010 SC-003 (at lea
 | `no_test_tell` | never "synthetic", "fixture", "stand-in" |
 | `only_mentor_tools` | no After Effects tool during a lesson |
 | `demo_at_most_once` | at most one demo call |
+| `no_text_before_snapshot` | nothing said before the first snapshot call (FR-052) |
+| `no_read_learner_record` | the skill never calls `read_learner_record` (FR-052, OR-2) |
 | `record_plain` | the record's summary holds no method, motive or number |
 | `no_gap_named`, `no_parents`, `no_self_instructions`, `no_sequence_layers` | skill-specific (see `CONFIG.universal` in `run.mjs`) |
 | **When a case runs a review** | |
@@ -52,7 +98,7 @@ at least 80% passing, and every hard-rule check passing; spec 010 SC-003 (at lea
 `snapshot_input_matches` (regexes over a snapshot call's input), `snapshot_calls_max`, `snapshot_calls_ok` (no snapshot call refused; offset only),
 `demo_calls_min` / `demo_calls_max` (attempts), `demo_only_on`, `last_check` (`passed`, `has` and `lacks`:
 substrings of the check's reply, `input`), `record_lesson` (`null` for "nothing recorded"),
-`review_mode`, and `say`: a list of `{ id, must | never, turns, cs }` regex checks on the mentor's
+`review_mode`, `snapshot_reply` (values of a snapshot reply: `[{ turn?, equals }]`), and `say`: a list of `{ id, must | never, turns, cs }` regex checks on the mentor's
 words (1-based `turns`, default all; case-insensitive unless `cs`).
 
 ## Cases
@@ -79,8 +125,8 @@ turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-b
 | 14 | Trimmed in point, keys unchanged: the bar-versus-keys hint | 3 | last_check; say: must keys_unchanged, never no_offer | R-OFF-BAR-KEYS, R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 15 | An incomplete stagger: names what's still the same and where; no fix, no offer | 3 | last_check; say: must names_pair, never no_offer | R-OFF-STILL-TOGETHER, R-HINT-NOT-FIX, R-NAMES-REAL | live |
 | 16 | 'Do the rest': declined warmly, no offer later | 4 | demo_calls_max; say: never no_later_offer | R-DECLINES-WARMLY, R-ONE-IDEA | live |
-| 17 | Review due: a new group (Chip A to C), asks which goes first, no demo, no walkthrough, no gap | 3 | review_mode; snapshot_with; demo_calls_max; tools_called; say: must names_chips, must asks_which_first, must declines_demo | R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
-| 18 | A review with no new group: said in a sentence, nothing recorded | 2 | review_mode; snapshot_with; demo_calls_max; record_lesson; tools_not_called | R-REVIEW-NOTHING-NEW | synthetic |
+| 17 | Review due: a new group (Chip A to C), asks which goes first, no demo, no walkthrough, no gap | 3 | review_mode; snapshot_reply; demo_calls_max; tools_called; say: must names_chips, must asks_which_first, must declines_demo | R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
+| 18 | A review is due but the comp has nothing new: a lesson opens, nothing recorded, no review mentioned (OR-1) | 1 | snapshot_reply (lesson); record_lesson null; tools_not_called; say: never no_review_mentioned | R-OR1-LESSON | synthetic |
 | 19 | Version not known (the first capture of Mentor Practice has no host read): no shortcut for nudging keys and no Quick Offset; the drag is described | 3 | say: never no_quick_offset, must describes_drag | R-OFF-VERSION, R-ONE-IDEA | live |
 | 20 | Easing not learned: one sentence, the lesson runs, linear moves mentioned once at 'done' | 4 | last_check; say: must names_easing, must builds_on, must linear_once | R-PREREQ-EASING, R-OFF-LINEAR-ONCE | live |
 | 21 | The learner keeps a gap under the floor and asks for the demo: there is none; walked through in words | 3 | demo_calls_max; say: must walks_through, never no_number | R-OFF-FLOOR, R-OFF-WALKTHROUGH | live |
@@ -91,6 +137,10 @@ turns. Fixture source: `live` (a capture from the 2026-10-26 sitting; the hand-b
 | 26 | "How does Quick Offset work?" on 26.5: only the confirmed claims, nothing about selection order, reversing, undo counts, a readout or another key; the record holds no method | 4 | tools_called; demo_calls_max; last_check; record_lesson; say: must states_the_gesture, must top_layer_stays, never no_selection_order, no_reverse_by_dragging, no_undo_count, no_gap_readout, no_other_key | R-OF-QUICK-HOW, R-RECORD-HONEST, R-ONE-IDEA | live |
 | 27 | A lesson resumed on a comp that matches, with the old order (Dot 3, Dot 1, Dot 2) and gap (6 frames): said back as the learner's own and confirmed before any frame, demo or check; no field or "stored" said (FR-046, T037's case) | 4 | tools_not_called (demo, check); snapshot_input_matches; snapshot_calls_ok; say: must says_order_back, says_gap_back, as_theirs, asks_and_stops, never no_where_kept | R-OF-STORED-CONFIRM, R-ONE-IDEA | live |
 | 28 | Passed, but the stated gap (six frames) differs from the measured (four): one `offset_check`, no `offset_snapshot` after it, the measured gap said back as theirs, `record_lesson` accepted as passed (FR-040 as amended, T199a) | 4 | demo_calls_max; check_calls; no_snapshot_after_check; last_check; record_lesson; say: must says_measured_gap, never not_a_fail | R-OF-GAP-MEASURED, R-RECORD-HONEST | live |
+| 29 | Unreadable notes: one sentence about it, a lesson follows, nothing before the snapshot, no easing claim from missing notes | 1 | first_tool; snapshot_reply (learner.readable false, mode lesson); say: must says_notes_unreadable, must goes_on_to_lesson, never notes_plain, never no_easing_claim_from_unreadable_notes | R-UNREADABLE-NOTES, R-UNREADABLE-NOT-A-CLAIM, R-NAMES-REAL | live |
+| 30 | Practicing: picks up the unfinished Dot 3 stagger, plain words and when, no skill ID | 1 | first_tool; snapshot_reply (practicing, lesson); say: must picks_up_where_it_was, must says_when, never no_skill_name_as_id | R-PRACTICING-MEMORY, R-NAMES-REAL, R-ONE-IDEA | live |
+| 31 | A review asked for with none due: it runs on the Chips; nothing says due or early | 1 | first_tool; snapshot_reply (review, asked, review_due false); review_mode; say: never never_says_due | R-REVIEW-ASKED-NOT-DUE, R-REVIEW-HANDS-ON, R-NAMES-REAL | live |
+| 32 | A review offered and never answered, then a new session: offered again, no lesson, no demo | 2 | snapshot_reply (turn 1 review_due, turn 2 in_progress); snapshot_input_lacks; tools_not_called; say: must offers_review_again, never no_lesson_started | R-REVIEW-REOFFER, R-NAMES-REAL | live |
 
 - **01** has two turns: the mentor proposes, offers the other kind and says what's left out first, then asks order and gap after the frame.
 - **17** and **18** have a "yes, do the review" turn; in practice the mentor starts the review in turn 1 and the yes is redundant.

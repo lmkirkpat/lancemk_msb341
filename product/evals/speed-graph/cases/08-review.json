@@ -25,9 +25,6 @@
   ],
   "expect": {
     "review_mode": true,
-    "snapshot_with": {
-      "mode": "review"
-    },
     "tools_called": [
       "speed_graph_snapshot"
     ],
@@ -46,6 +43,14 @@
         "turns": [
           3
         ]
+      }
+    ],
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "review"
+        }
       }
     ]
   },

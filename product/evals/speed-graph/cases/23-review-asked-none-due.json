@@ -1,0 +1,55 @@
+{
+  "id": "23-review-asked-none-due",
+  "title": "The learner asks for a review and none is due: the review runs, and nothing says it was due or early",
+  "covers": [
+    "FR-048",
+    "FR-052",
+    "SC-015"
+  ],
+  "learner_record": "product/evals/speed-graph/records/learned-title-not-due.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/speed-graph-mentor review"
+    }
+  ],
+  "expect": {
+    "first_tool": "speed_graph_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "review",
+          "mode_source": "asked",
+          "learner.review_due": false
+        }
+      }
+    ],
+    "review_mode": true,
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "speed_graph_check"
+    ],
+    "say": [
+      {
+        "id": "asks_something",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "never_says_due",
+        "never": "\\b(?:due|overdue|early|ahead of schedule|scheduled|not (?:yet )?time)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-ASKED-NOT-DUE",
+    "R-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}

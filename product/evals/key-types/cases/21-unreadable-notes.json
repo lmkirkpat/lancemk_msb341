@@ -1,0 +1,65 @@
+{
+  "id": "21-unreadable-notes",
+  "title": "The notes can't be read: one sentence about it, then a first lesson, nothing said before the snapshot",
+  "covers": [
+    "FR-049",
+    "FR-052",
+    "SC-015"
+  ],
+  "learner_record": "mentor/test/fixtures/records/unreadable.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "key_types_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "learner.readable": false,
+          "mode": "lesson"
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "key_types_check",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "says_notes_unreadable",
+        "must": "\\b(?:couldn.t|can.t|could not|unable to) read\\b[^.?!]{0,60}\\bnotes\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "notes_plain",
+        "never": "\\b(?:file|corrupt\\w*|broken|JSON|parse|learner record)\\b"
+      },
+      {
+        "id": "goes_on_to_lesson",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_easing_claim_from_unreadable_notes",
+        "never": "\\byou(?:'ve| have)?\\s+(?:haven.t|have not|not yet|never)\\b[^.?!]{0,30}\\beasing\\b|\\beasing (?:isn.t|is not|hasn.t been) (?:learned|done)\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-UNREADABLE-NOTES",
+    "R-NAMES-REAL",
+    "R-UNREADABLE-NOT-A-CLAIM"
+  ]
+}

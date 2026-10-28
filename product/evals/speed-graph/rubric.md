@@ -248,3 +248,59 @@ landing, and takes no frame, demo or check before the answer.
 - **Fail:** forgets the choice or asks the land-hard question as if nothing was said, names the pair by id or
   says a field name, says it should land softly or grades it, calls `preview_frame`, a demo or a check
   before asking, says where it was kept.
+
+## R-UNREADABLE-NOTES: an unreadable record is said once, plainly, and a first lesson follows
+
+The snapshot reply says the notes couldn't be read. The mentor says so once, in one sentence and in
+plain words ("I couldn't read my notes from your earlier lessons..."), and teaches a first lesson on
+this comp as if there were no history. Nothing is said before the snapshot call.
+
+- **Fail:** says nothing about the notes, says it more than once, blames the learner, names a file,
+  a field or an error code, pretends to remember earlier lessons, or stops instead of teaching.
+
+## R-PRACTICING-MEMORY: a practicing skill picks up what was still off, in plain words
+
+The snapshot reply shows the skill is being practiced and what was still off. The opening mentions
+the earlier work in one sentence, in plain words and with how long ago, and goes on with this lesson.
+It never names a skill ID or a field.
+
+- **Fail:** ignores the earlier work, invents work that isn't in the reply, gives no sense of when,
+  or says a skill ID or field name.
+
+## R-OR1-LESSON: a due review with nothing new on this comp opens a lesson and never mentions the review
+
+The learner's record says a review is due, but this comp has nothing new for it. The tool opens a
+lesson; the mentor teaches it (or says plainly what this comp lacks for the lesson) and never says
+a review was due, offers one or says there is nothing to review.
+
+- **Fail:** mentions a review, "due", or "nothing to review"; or invents a target.
+
+## R-REVIEW-ASKED-NOT-DUE: a review the learner asked for runs, and nothing says it wasn't due
+
+The learner asked for a review and none was due. The review runs the usual way: the first words ask
+for the move or give the task, hands-on, no demonstration.
+
+- **Fail:** says the review wasn't due, was early or wasn't scheduled; refuses; or turns it into a lesson.
+
+## R-REVIEW-REOFFER: a review left open is offered again, not replaced by a lesson
+
+The learner came back in a new session after a review was offered and never answered. The first
+words offer the review again, built from the earlier work and how long ago, then stop for the answer.
+
+- **Fail:** starts a lesson, calls a demo, asks the lesson's first question before the offer is
+  accepted, or doesn't mention a review at all.
+
+## R-SG-TARGET-STAYS: the review's target is the one named in the first turn
+
+The mentor names the review's pair in the turn after the learner agrees, and nothing later changes
+it: the check is on that layer and property. (The runner checks that every snapshot reply focuses on the
+same layer and that the first reply's layer is named; this item is for the wording.)
+
+- **Fail:** names one layer, then asks about or checks another, or swaps the target without saying why.
+
+## R-UNREADABLE-NOT-A-CLAIM: with unreadable notes, nothing is claimed about what the learner has or hasn't done
+
+When the notes couldn't be read, the mentor doesn't know whether easing (or anything else) was learned.
+It may ask, or say it doesn't know or has nothing marked, or just teach. It never says they haven't done it.
+
+- **Fail:** "you haven't learned easing", or any other statement about earlier work taken from the missing notes.

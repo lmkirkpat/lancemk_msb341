@@ -84,6 +84,10 @@ const TARGET = 0.8; // SC-006
 const MAX_TURNS = "12";
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
 const MENTOR_TOOLS = ["read_learner_record", SNAP, DEMO, CHECK, "preview_frame", "record_lesson", "recommend_next"];
+// FR-052 / OR-2: the lesson opens with the snapshot, so read_learner_record is no longer allowed here.
+// It stays in MENTOR_TOOLS so a call to it is still seen (and fails no_read_learner_record) instead of
+// reading as a foreign tool.
+const ALLOWED_TOOLS = MENTOR_TOOLS.filter((t) => t !== "read_learner_record");
 const PREFIX = "mcp__ae-mentor__";
 // The repo's local settings may set a builder output style (Explanatory adds "★ Insight" notes).
 // CLI settings outrank local ones, so every headless run here uses the default voice (usage notes,
@@ -151,7 +155,7 @@ function validate(c) {
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
   const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
-    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks"];
+    "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "snapshot_reply"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
@@ -252,7 +256,7 @@ function claude(args, env, cwd) {
 
 function mentorTurn(say, sessionId, env, cwd) {
   const args = ["-p", say, "--mcp-config", ".mcp.json", "--strict-mcp-config", "--output-format", "json", "--verbose",
-    "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t), ...SETTINGS];
+    "--max-turns", MAX_TURNS, "--tools", "ToolSearch", "--allowedTools", ...ALLOWED_TOOLS.map((t) => PREFIX + t), ...SETTINGS];
   if (sessionId) args.push("--resume", sessionId);
   return claude(args, env, cwd);
 }
@@ -360,7 +364,9 @@ function check(expect, turns, c) {
   const foreign = turns.flatMap(toolEvents).filter((e) => !MENTOR_TOOLS.includes(e.name) && e.name !== "ToolSearch");
   add("only_mentor_tools", foreign.length === 0, foreign.length ? `used ${foreign.map((e) => e.name).join(", ")}` : "ok");
   add("demo_at_most_once", demos.length <= 1, `${demos.length} demo calls`);
-  const reviewMode = snaps.some((e) => e.input && e.input.mode === "review");
+  // FR-052: the mode is read from a snapshot's reply (the opening call sends none), never from its input.
+  const replyOf = (e) => (e.ok ? parse(e.result) : null) || {};
+  const reviewMode = snaps.some((e) => replyOf(e).mode === "review");
   if (reviewMode) {
     add("review_no_demo", demos.length === 0, `${demos.length} demo calls in a review`);
     // Words a review never says before a pass (CONFIG.reviewBanned, e.g. skill 6's "null" and its method).
@@ -381,7 +387,7 @@ function check(expect, turns, c) {
       add(`review_${name}_before_pass`, !hit, hit ? `said "${hit}" before a pass` : "clean");
     }
   } else if ("review_mode" in expect) {
-    add("review_mode", false, "no snapshot call used mode review");
+    add("review_mode", false, "no snapshot reply had mode review");
   }
   // The record never holds method or motive (SKILL.md step 11; agent audit).
   for (const r of calls.filter((e) => e.name === "record_lesson" && e.ok)) {
@@ -390,6 +396,17 @@ function check(expect, turns, c) {
     add("record_plain", !m, m ? `record says "${m[0]}"` : "clean");
   }
 
+  {
+    // Universal (FR-052, smoke findings 2026-10-26): nothing said between the lesson's first tool call
+    // and its first snapshot. The learner sees every word; the opening is one turn after the snapshot.
+    const t0 = turns.find((t) => t.events.some((e) => e.kind === "tool" && e.name === SNAP));
+    const idx = t0 ? t0.events.findIndex((e) => e.kind === "tool" && e.name === SNAP) : -1;
+    const before = idx < 0 ? [] : t0.events.slice(0, idx).filter((e) => e.kind === "say");
+    add("no_text_before_snapshot", before.length === 0, before.length ? `said "${before[0].text.slice(0, 60)}" before the first snapshot` : "clean");
+    // Universal (FR-052, OR-2): the snapshot reads the record; the skill never calls read_learner_record.
+    const reads = calls.filter((e) => e.name === "read_learner_record");
+    add("no_read_learner_record", reads.length === 0, reads.length ? `called read_learner_record ${reads.length} time(s)` : "none called");
+  }
   if ("first_tool" in expect) {
     const first = calls[0]?.name ?? "(none)";
     add("first_tool", first === expect.first_tool, `first tool was ${first}`);
@@ -406,6 +423,15 @@ function check(expect, turns, c) {
     const want = expect.snapshot_with;
     const ok = snaps.some((e) => Object.entries(want).every(([k, v]) => (e.input || {})[k] === v));
     add("snapshot_with", ok, ok ? "ok" : `no snapshot call with ${JSON.stringify(want)}`);
+  }
+  // The first successful snapshot reply (of one turn, when `turn` is given) holds these values;
+  // `equals` keys may be dotted (learner.readable).
+  for (const w of expect.snapshot_reply || []) {
+    const pool = (w.turn ? toolEvents(turns[w.turn - 1] || { events: [] }) : snaps).filter((e) => e.name === SNAP && e.ok);
+    const r = pool.length ? parse(pool[0].result) : null;
+    const at = (o, k) => k.split(".").reduce((x, p) => (x == null ? undefined : x[p]), o);
+    const wrong = !r ? ["no successful snapshot reply"] : Object.entries(w.equals || {}).filter(([k, v]) => at(r, k) !== v).map(([k]) => `${k} was ${JSON.stringify(at(r, k))}`);
+    add(`snapshot_reply${w.turn ? "@" + w.turn : ""}`, wrong.length === 0, wrong.length ? wrong.join("; ") : "ok");
   }
   for (const re of expect.snapshot_input_matches || []) {
     const ok = snaps.some((e) => new RegExp(re).test(JSON.stringify(e.input || {})));
@@ -530,7 +556,8 @@ function runCase(c, opts) {
     for (const t of c.turns) {
       const project = t.project === "unreachable" ? "unreachable" : copies.get(t.project);
       fs.writeFileSync(stateFile, JSON.stringify(t.undo_demo ? { project, undo_demo: true } : { project }));
-      const { messages, result } = mentorTurn(t.say, sessionId, env, runtime);
+      // `new_session` starts a fresh conversation (the learner comes back later); the mentor's files stay.
+      const { messages, result } = mentorTurn(t.say, t.new_session ? null : sessionId, env, runtime);
       sessionId = result.session_id;
       cost += result.total_cost_usd || 0;
       turns.push({ project: t.project, say: t.say, events: transcriptOf(messages), denials: result.permission_denials || [] });

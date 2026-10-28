@@ -20,7 +20,7 @@
     }
   ],
   "expect": {
-    "first_tool": "read_learner_record",
+    "first_tool": "offset_snapshot",
     "tools_called": [
       "offset_snapshot",
       "preview_frame"
@@ -82,7 +82,6 @@
     "R-OFF-PROPOSAL",
     "R-OFF-LEFT-OUT",
     "R-OFF-INTENT",
-    "R-USES-MEMORY",
     "R-NAMES-REAL"
   ]
 }

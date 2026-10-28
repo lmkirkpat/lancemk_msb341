@@ -1,0 +1,72 @@
+{
+  "id": "32-review-still-open-offered-again",
+  "title": "A review offered and never answered, then the learner comes back in a new session: the review is offered again, no lesson, no demo",
+  "covers": [
+    "FR-048",
+    "FR-052",
+    "review-in-progress"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/learned-dots.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "first_tool": "offset_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "review",
+          "mode_source": "review_due"
+        }
+      },
+      {
+        "turn": 2,
+        "equals": {
+          "mode": "review",
+          "mode_source": "in_progress"
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "offset_demo",
+      "offset_check",
+      "record_lesson"
+    ],
+    "snapshot_input_lacks": [
+      "\"mode\":\"lesson\""
+    ],
+    "say": [
+      {
+        "id": "offers_review_again",
+        "must": "\\breview\\b[\\s\\S]*\\?|\\?[\\s\\S]*\\breview\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_lesson_started",
+        "never": "\\b(?:meant to snap|which (?:one )?(?:goes|should go) first|where is it fastest|fastest)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-REOFFER",
+    "R-NAMES-REAL"
+  ]
+}

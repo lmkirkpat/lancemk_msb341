@@ -24,7 +24,7 @@
     }
   ],
   "expect": {
-    "first_tool": "read_learner_record",
+    "first_tool": "speed_graph_snapshot",
     "tools_called": [
       "speed_graph_snapshot",
       "preview_frame"
@@ -91,7 +91,6 @@
     "R-SG-PROPOSAL",
     "R-SG-LEAVE-OUTS",
     "R-SG-READ-GRAPH",
-    "R-USES-MEMORY",
     "R-NAMES-REAL"
   ]
 }

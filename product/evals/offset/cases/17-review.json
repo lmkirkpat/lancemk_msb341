@@ -25,9 +25,6 @@
   ],
   "expect": {
     "review_mode": true,
-    "snapshot_with": {
-      "mode": "review"
-    },
     "demo_calls_max": 0,
     "tools_called": [
       "offset_snapshot"
@@ -53,6 +50,14 @@
         "turns": [
           3
         ]
+      }
+    ],
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "review"
+        }
       }
     ]
   },
