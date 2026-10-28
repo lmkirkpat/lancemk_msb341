@@ -113,7 +113,9 @@ for (const skill of FIVE) {
     assert.equal(o.learner.days_since_practiced, null);
     assert.equal(o.learner.review_due, false);
     assert.equal("error" in o.learner, false);
-    writeRecord({ version: 1, skills: structuredClone(LEARNED_PREREQS), lessons: [] });
+    const others = structuredClone(LEARNED_PREREQS);
+    delete others[skill];
+    writeRecord({ version: 1, skills: others, lessons: [] });
     o = pick(skill);
     assert.equal(o.mode, "lesson");
     assert.equal(o.mode_source, "default");
