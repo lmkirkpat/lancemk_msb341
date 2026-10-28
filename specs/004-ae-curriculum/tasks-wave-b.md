@@ -592,6 +592,23 @@ allows a review picked while `recommend()` offers another skill in progress); ac
 read error as `RECORD_UNREADABLE` (FR-049; follow-up PR-1, open), a declined review using the
 session's offer (FR-048), and `eased_layers` matching whole names (FR-049).
 
+### Phase 10 round 2 (2026-10-28)
+
+The eval sets' T413/T414 smoke runs found four problems; the human approved the fixes the same day,
+built on `phase10-round2` (no new task numbers; cite them as below):
+
+- **Round 2, A (spec FR-049, FR-051's unreadable row; contracts/skill-module.md § 3):** on an
+  unreadable record, every `other_skills` entry reports `learned: null`, not `false`, and each skill's
+  step 0 makes no claim and no offer from it (seen in key types 21, offset 29, speed graph 21 and
+  null 34).
+- **Round 2, B (spec FR-048 step 3; contracts/skill-module.md § 2):** null's review test counts 0
+  targets when there's no proposal, so a crowded comp no longer starts a due review where OR-1 and
+  FR-051's row 5 say a lesson; `recommend_next`'s lesson path keeps the crowd count.
+- **Round 2, C (null's `SKILL.md`, no spec change):** a lesson picked up again doesn't repeat step 2's
+  explanation.
+- **Round 2, D (null's `SKILL.md`, no spec change):** the record's `summary` says what the learner did
+  and what the check saw, never how to fix it (spec 012 FR-025).
+
 ---
 
 ## Later per-skill branches (not this pass; requests for the cockpit)

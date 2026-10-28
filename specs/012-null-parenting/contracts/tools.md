@@ -15,9 +15,10 @@ export const FINDERS = {
   "parenting.null": {
     // A group: { count: the proposal's size, layers: its names }. No group but a crowd, with
     // `exclude` empty: { count: the largest crowd's size, layers: [] } (L6-2, spec FR-003; never
-    // the crowd's names). A crowd with a non-empty exclude, or nothing: { count: 0, layers: [] }.
-    // 0 without layer_info or comp.width.
-    focus(snapshot, { exclude = [] } = {}) { /* ... */ },
+    // the crowd's names). A crowd with a non-empty exclude, or with for_review: true (passed by
+    // spec 004's shared review test, Phase 10 round 2 fix B, 2026-10-28; closes H-6's gap), or
+    // nothing: { count: 0, layers: [] }. 0 without layer_info or comp.width.
+    focus(snapshot, { exclude = [], for_review = false } = {}) { /* ... */ },
     review: true,   // set once the review tests pass (FR-003, FR-024)
   },
 };

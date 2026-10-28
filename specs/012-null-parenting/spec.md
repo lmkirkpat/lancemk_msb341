@@ -293,9 +293,10 @@ section). Other edge cases:
   - **no group but a crowd** (FR-005), and `exclude` empty: `count` is the largest crowd's size and
     `layers` is `[]`, so next-mentor can still suggest the skill (the lesson then asks, FR-005a) and
     never names a crowd's layers (TD § 4 step 5);
-  - a crowd with a non-empty `exclude` (a review's question) counts 0, as a review never opens on a
-    crowd (TD § 11). A review on a comp with no past targets passes `exclude: []` and can't be told
-    apart from a lesson question; that gap is Open questions › H-6;
+  - a crowd with a non-empty `exclude`, or with `for_review: true` (a review's question), counts 0,
+    as a review never opens on a crowd (TD § 11). The gap H-6 named (a review on a comp with no past
+    targets passing `exclude: []`, which looked like a lesson question) is **closed** by spec 004
+    Phase 10 round 2, fix B (2026-10-28): the shared review test passes `for_review: true`;
   - neither: 0.
 
   This is the one place the finder and the snapshot tool differ, and only for a lesson; spec 004's
@@ -865,7 +866,10 @@ case 3, the matte, KD-001).
    which this skill can't make (FR-001). Related, same owner: next-mentor's prompt names
    `focus_layers`, which is `[]` for a crowd; it should then name the skill without layers.
    **Answered 2026-10-25: accepted for this sprint as recommended; the shared-code request goes
-   to spec 004's next shared owner.**
+   to spec 004's next shared owner.** **The review-vs-lesson gap is closed (2026-10-28)** by spec 004
+   Phase 10 round 2, fix B: the shared review test passes `for_review: true` and null's finder
+   counts a crowd 0 then (FR-003). **Still open:** next-mentor naming the skill without layers when
+   `focus_layers` is `[]`.
 5. **H-5, the designer's H-1 and H-2** (TD § 13). Approved; this spec is written to them.
 
 ### For the curriculum designer (D)
