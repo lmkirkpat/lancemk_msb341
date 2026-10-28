@@ -363,3 +363,25 @@ on 01, 16, 24 and 39 only says the self-note is probably gone, not that it is.
 
 **Next:** ready for SC-015's repeats (`--repeat 3` on 01, 16, 17, 24, 39, 40, 41, about $10 to $12) and the re-baseline (about $27 for 46 cases).
 Nothing blocks them. Unchanged and still open from the baseline: 21a (menu path wording), 30 (`because` in a record), 04, 19, 26, 29.
+
+## T415: SC-015's counted runs (2026-10-28)
+
+Spec 004 T415, on `evals-skill-5` with `mentor/` and `.claude/skills/` identical to `main` (Phase 10 merged, `1a28b1d`).
+`--repeat 3` on the four opening situations, one case each, one invocation per case. Cost approved for the day.
+
+| Opening | Case | Runs | Result | Cost | Results file |
+|---|---|---|---|---|---|
+| First lesson | 01 | 3 | 3/3 pass | $0.62 | `results/2026-10-28-115000.json` |
+| Practicing | 32 | 3 | 3/3 pass | $0.84 | `results/2026-10-28-115059.json` |
+| Review due | 16 | 3 | 3/3 pass | $2.24 | `results/2026-10-28-115239.json` |
+| Unreadable record | 40 | 3 | 3/3 pass | $0.63 | `results/2026-10-28-115320.json` |
+
+12 runs, 12 passes, **$4.33**. No plumbing failures, no re-runs, no rubric failures.
+
+SC-015 counts (all must be 0):
+
+- Runs with learner-visible text before the first snapshot call: **0 of 12** (`no_text_before_snapshot` passed in all 12).
+- Runs whose first tool isn't `anchor_snapshot`: **0 of 12** (`first_tool` passed in all 12).
+- Skill IDs in learner-visible text: **0 of 12**. `plain_words` passed in all 12, and a separate scan of every `MENTOR:` block in the transcripts for skill names and dotted or underscored ids found none.
+
+Scope: 3 repeats of one case per opening, not the full SC-015 count; the set's full re-baseline is separate.
