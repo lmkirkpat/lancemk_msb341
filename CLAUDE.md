@@ -180,14 +180,17 @@ a brand new session act like a colleague who already knows what you are working 
          1. **The self-note fix (spec 004 Phase 10, approved 2026-10-27, every OR recommendation
             taken):** the snapshot tool reads the record and picks lesson or review itself
             (FR-048 to FR-052, SC-015, SC-016; tasks T400 to T416, in the T400s because spec 011's
-            tasks use T201 to T261). Built on `phase10-opening-read` (`f2eb790`, not merged):
+            tasks use T201 to T261). Merged to `main` 2026-10-27 (`1a28b1d`):
             `mentor/lib/opening.mjs`, `reviewFor()` exported from `recommend.mjs`, the five
             `SKILL.md` files open with the snapshot and no longer list `read_learner_record`.
-            Mentor tests 1418 (1415 pass, 3 todo, 0 fail), hooks 39/39, all 16 files the
-            skill-builder's. Choices to watch: a declined review still uses the session's one
-            review; the panel's "Remembering…" label is easing-only (a panel-builder request).
-            **Next:** T412 (easing gate, branch and base, about $26) and a reviewer pass, then
-            merge; then T413 and T414 (eval checks and cases, on the eval branches), T415
+            The reviewer's two should-fixes are in (a review still open is offered again in key
+            types, offset and speed graph; speed graph ranks by the record's eased layers on every
+            call). Mentor tests 1430 (1427 pass, 3 todo, 0 fail), hooks 39/39. T412: branch 24/26 vs
+            base 26/26, rubric only (the opening miscounting layers, as case 17 did on 10-26), both
+            passed on repeat; easing's code path is unchanged, so taken as met. Choices to watch: a
+            declined review still uses the session's one review; the panel's "Remembering…" label
+            is easing-only (a panel-builder request); PR-1 (the unreadable-notes message) is open.
+            **Next:** T413 and T414 (eval checks and cases, on the eval branches), T415
             (SC-015's repeats, about $25 to $35) and T416 (live first lesson and review).
          2. **Baselines (HO-4 met 2026-10-27, T183's base run, 25/26).** Skill 5's first baseline
             (`evals-skill-5`, `c853f9e`, not merged): **27/44 (61%), $35.27 in all**, with cases 38
