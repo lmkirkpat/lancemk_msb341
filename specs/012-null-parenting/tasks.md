@@ -199,13 +199,15 @@ the cockpit names.
   no rig unless asked, ending on the turn-or-scale question; step 3 the add-the-null task with the
   step 2 answer passed as `region`; step 5 the Parent column named, how to show it only when they
   can't find it, the two-pick-whips and held-key lines only through their hints; step 4 the rest
-  handed back in one sentence after the demo; the shy note split; rule 3 under "Style". Nothing
+  handed back in one sentence after the demo; after a "do it for me" refusal the one demo offer
+  still made once if not made yet, never twice (spec FR-023a, 2026-10-28); the shy note split; rule 3 under "Style". Nothing
   else. Then `npm test`, `/agent-audit` on the file, and hand back the diff for HO-3 (spec FR-023,
   FR-023a). **Done when:** the diff matches TD § 16's six items and nothing else
 - [ ] T345 [eval-engineer] `product/evals/null-parenting/`: R-ONE-IDEA's rubric takes TD § 16 ›
   What R-ONE-IDEA should see (turn 2: frame, group, idea sentence and the turn-or-scale question
   are one idea; turn 3: one task; turn 4: the demo offer is the action's alternative). Case 02's
-  expectations as spec › Eval plan 2 (amended 2026-10-28: no CTRL unless asked). Dry run. **Done
+  expectations as spec › Eval plan 2 (amended 2026-10-28: no CTRL unless asked); case 15's as Eval
+  plan 15 (amended 2026-10-28: the one demo offer still made once after the refusal). Dry run. **Done
   when:** the dry run passes its plumbing and the README names the changed rubric and cases
 - [ ] T346 [eval-engineer] After T344 and T345: cases 02, 03, 04, 15 and 23, each with `--repeat 3`,
   mentor from the T344 branch. Triage with `/eval-triage`; case 03's `never_picks` break should be

@@ -31,7 +31,7 @@ labels, the null's defaults, Option and Shift as a caution only, Quick Offset st
 plan case 12, and new D-4 for the designer. Also quickstart § 3 and § 6, data-model's stored-null
 example and research R8 and R11.
 
-**Amendment 3 (2026-10-28, pacing, S-7): awaiting the human's approval** of this spec's parts. TD
+**Amendment 3 (2026-10-28, pacing, S-7): approved 2026-10-28** of this spec's parts. TD
 § 16, "Pacing: one idea per turn", was approved by the human on 2026-10-28 as written. Evidence:
 R-ONE-IDEA failed 7 of 9 runs of cases 02, 03 and 04 after `e82a7d2`, and 02, 04, 15 and 23 in the
 baseline (`product/evals/null-parenting/README.md` › "First full baseline" and "Fix re-runs
@@ -594,7 +594,9 @@ All of TD § 6, counting the demo layer.
   on request (TD § 16 › What moved, what's on request, what goes); a question or a request in place
   of the pending action gets its answer in one or two sentences and the same pending action again
   in one sentence, never the next stage's content and never the walk-through again (so after the
-  demo, the rest is handed back in one sentence). TD § 16's turn sequence governs where it groups
+  demo, the rest is handed back in one sentence). After a "do it for me" refusal, the one demo offer
+  is still made once if it hasn't been made yet, never a second time (the human's answer of
+  2026-10-28, as for the pivot's watch offer in spec 011 FR-008). TD § 16's turn sequence governs where it groups
   things differently from § 5's stages; the opening, the proposal turns, the hints, the comments,
   the record and the review don't change. The words are TD § 16's, not copied here.
   *Checked by:* R-ONE-IDEA with TD § 16's reading (Eval plan › Pacing), on cases 02, 03, 04, 15 and
@@ -839,7 +841,8 @@ offer is that action's alternative. Cases 02, 03, 04, 15 and 23 are re-run as th
     from the tools, not an assumed "Null 1"; the null's defaults only as D-4 settles.
 13. **Missing prerequisite**: skill 5 not learned; named and offered; on insistence one sentence.
 14. **Incomplete attempt**: names what's still off and where; doesn't fix or offer to.
-15. **"Do the rest"**: declined warmly, no offer later.
+15. **"Do the rest"**: declined warmly, and the one demo offer is still made once if it hasn't been
+    made yet (never a second time; amended 2026-10-28, FR-023a).
 16. **Review**: due, new group, no "null", turn-or-scale question, no demo (SC-004).
 17. **Review, visible parent**: fails without "null" in the hint; skill stays learned.
 18. **Review with no new group**: not offered, stays due.

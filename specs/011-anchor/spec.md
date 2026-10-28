@@ -61,7 +61,7 @@ clause when the record says practicing; FR-006a, US1 #10). The Eval plan follows
 engineer's rounds 5 and 6 (case 1 in one turn; case 34's checked turn is turn 2; the universal
 `no_text_before_snapshot` check). New tasks T260 (B-13, `SKILL.md`) and T261 (L-8, 🖐)
 (tasks.md › Phase 8h).
-**Amended again 2026-10-28 (round 8, S-7), awaiting the human's approval** of this spec's parts
+**Amended again 2026-10-28 (round 8, S-7), approved 2026-10-28** of this spec's parts
 (TD § 20, "Pacing: one idea per turn", approved by the human on 2026-10-28 with its four open
 questions answered yes): the explanation gives TD § 1's first sentence only and ends on the A, then
 Shift+P ask, and the slide sentence is said only when asked (US1 #2, FR-006a); FR-022 follows TD
@@ -787,7 +787,8 @@ the lock when it's still locked at "done", TD § 15 D-2), and items 1 to 5. And,
   **`outside`** hint (and the proposal's `pivot_outside` note) takes its line from TD § 7's
   "pivot outside the layer" row: the side as seen on screen, to click the layer in the timeline
   so its crosshair shows, and to start the drag there; with no side, "outside" and the same
-  "click it in the timeline", no guess; never a distance. **Why:** in L-1 the builder couldn't find Lid's crosshair (120
+  "click it in the timeline", no guess; never a distance. In a lesson the side is said in turn 3
+  and "start the drag there" in turn 4 (TD § 20, FR-022a). **Why:** in L-1 the builder couldn't find Lid's crosshair (120
   px below a 60 px tall shape) until Lid was selected in the timeline, and TD § 7's own hint names
   a side ("off to its right"), which no tool returned, so `SKILL.md` could only say "look around
   the shape". Unit tested on `lid-pan`'s base (Lid: below), `door-outside` (left), and a synthetic
@@ -962,7 +963,7 @@ each row must see; this table adds what the focus, the check and the learner eac
 | 20 | Scale keyed from 0 (a pop-in) | Rest key = full-size key | At the rest key; a pivot set at Scale 0 fails, one hint (set away from rest); `place_now` outside, below | `away_from_rest`, its line from TD § 7's "shrunk to nothing" row: the drag did move the pivot though nothing showed, Edit > Undo first, then the rest key (FR-019) | Right on grading. **L-4 (2026-10-26):** AE set Pop's anchor to [120, 960], far outside, not near the place (the stand-in guessed [60, 120]); the learner saw nothing happen | `pop-shrunk` (live) |
 | 21 | Text layer | Candidate; pivot starts on the baseline | `rect` is the letters' box at the check time; Source Text keys or animators change it (R6 not read) | "Title's pivot starts on its baseline, under the letters" | Right: **L-5 (2026-10-26)** `rect` is within 1 px of the ink, centred and left-justified; left-justified, the letters start 2.45 px right of the pivot (not 0), so "the middle of the left edge" still reads between places until moved | `sign-centred`, `sign-left` |
 | 22 | Shape layer, and a pivot moved inside Contents | Default candidate (**L-1 passed 2026-10-26**) | Layer anchor only. A group's pivot moved by Pan Behind changes the group's Anchor and Position together: **nothing the read holds changes** (L-1). A shifted rectangle with the anchor unchanged is `content_shifted` | FR-019b: `unchanged_shape`, its line from TD § 7's "a shape's own pivot didn't change" row, as a possibility, never a claim the group was moved, and instead of row 2's general line | Right with FR-019b (amended 2026-10-26; the old group hint assumed the rectangle shifts). **A stroked shape is unchecked live (L-6):** if `rect` leaves the stroke out, the edges the check uses aren't the ones the learner sees | `lid-pan`, `lid-group` (identical to the base); L-6's capture when taken |
-| 23 | Shape whose pivot sits outside it | Candidate, ranked below unkeyed layers with their pivot where AE put it | Item 1 reads outside, with the side on screen (FR-019a) | `outside`, its line from TD § 7's "pivot outside" row: the side, click Lid in the timeline, start the drag there; no distance (FR-019a) | Right with FR-019a. L-1: Lid's crosshair is 120 px below the shape and the builder couldn't find it unselected. L-3: a new shape layer's pivot is at its origin, the comp's center, away from what was drawn (another case of this row) | `practice2b` (Lid), `lid-pan` |
+| 23 | Shape whose pivot sits outside it | Candidate, ranked below unkeyed layers with their pivot where AE put it | Item 1 reads outside, with the side on screen (FR-019a) | `outside`, its line from TD § 7's "pivot outside" row: the side, click Lid in the timeline, start the drag there (in a lesson, the side in turn 3 and "start there" in turn 4, TD § 20); no distance (FR-019a) | Right with FR-019a. L-1: Lid's crosshair is 120 px below the shape and the builder couldn't find it unselected. L-3: a new shape layer's pivot is at its origin, the comp's center, away from what was drawn (another case of this row) | `practice2b` (Lid), `lid-pan` |
 | 24 | 3D layer | Never (`three_d`) | comp-space returns `three_d` | One sentence | Right once W4 lands; **contract** | Mentor Overlaps' Depth |
 | 25 | Pan Behind on the wrong layer | n/a | Focus unchanged (item 1 fails); another layer's anchor changed with its footprint still (an other change, item 5 holds) | `wrong_layer`, its line from TD § 7's "grabbed another layer" row: why once, Edit > Undo, start the drag on Needle's crosshair; never "select it first" (FR-019) | **Gap fixed by FR-019** (filter 1). **L-3 (2026-10-26):** with Door selected, a drag on Needle moved Needle's pivot, so the mistake is a real hand path | `wrong-layer` |
 | 26 | Playhead moved between reads | n/a | Compared at the check time from samples, not at the playhead (FR-011, FR-013) | n/a | Right with FR-013; **contract** (W1) | Synthetic two reads at different `comp.time` |
@@ -1136,7 +1137,8 @@ as the answer plus the pending action, and fails if it adds the next stage. Case
     claims it didn't move.
 19. **Pivot outside, where to look** (added 2026-10-26, FR-019a): Lid named; the mentor says its
     pivot sits outside, on which side, to click Lid in the timeline so its crosshair shows, and to
-    start the drag there (TD § 7); no distance in pixels.
+    start the drag there (TD § 7; in a lesson the side comes in turn 3 and "start there" in turn 4,
+    TD § 20); no distance in pixels.
 20. **A group's pivot moved** (added 2026-10-26, FR-019b): `lid-group` as the attempt; the mentor
     says Lid's own pivot hasn't changed and offers the Contents possibility without claiming it,
     and doesn't also say the general "if something drives it, like an expression" line.
