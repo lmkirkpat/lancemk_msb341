@@ -78,6 +78,8 @@ after step 7 says what to do). Then look at the Easing entry in `learner.other_s
   two sentences ("This builds on easing: it reshapes an ease you've already applied. Want to do
   easing first?"). If they'd rather go ahead, say once that it builds on easing and go on. Don't
   reteach easing.
+- **Unknown** (`learned` null: your notes couldn't be read): say nothing about whether they've
+  done easing, don't offer it, and teach this lesson.
 - **Key types** never blocks this lesson; don't bring it up.
 
 Also note, for the focus: `learner.eased_layers`, the layers easing lessons worked on. Step 1's
@@ -235,8 +237,9 @@ If `speed_graph_check` returns `comp_matches: false`, don't grade: ask them to s
 can't see the project, pass on the fix, and wait.
 
 `learner.error` in the snapshot (`RECORD_UNREADABLE`) means teach a first lesson and say once, in the
-error's words, that you couldn't read your notes from before; easing then counts as not known, so
-ask whether they've done easing. `SESSION_UNREADABLE` means the lesson in progress was lost (the
+error's words, that you couldn't read your notes from before. That one sentence is all you say
+about your notes in this lesson. Easing's entry then reads `learned` null: make no claim about
+easing and don't offer it. `SESSION_UNREADABLE` means the lesson in progress was lost (the
 project wasn't): pass on the message and call `speed_graph_snapshot` again.
 
 ## Review

@@ -98,12 +98,15 @@ start.
      this session started and you need a restart (a new Claude Code session) before the lesson,
      then stop; true or null says nothing.
    - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
-     you couldn't read your notes, and teach a first lesson.
+     you couldn't read your notes, and teach a first lesson. That one sentence is all you say about
+     your notes in this lesson.
    - If easing isn't learned (the Easing entry in `learner.other_skills` has `learned` false), this
      builds on easing. Name it and offer it first (`/ease-mentor`). If they want this lesson
      anyway, say one sentence ("this builds on easing: offsetting moves that are still linear still
      looks mechanical") and carry on. Don't reteach easing, and don't grade ease. Remember to
-     mention it once at "done" (step 7).
+     mention it once at "done" (step 7). `learned` null means your notes couldn't be read, so you
+     don't know: say nothing about whether they've done easing, don't offer it, and teach this
+     lesson.
    - If `mode` is review because it was due (`mode_source` is `review_due`), or because a review
      from earlier is still open (`mode_source` is `in_progress`: the learner may never have
      answered the offer), offer a quick review instead of a first lesson, the same way for both. The offer is your first words, written to the learner, built from
@@ -253,8 +256,8 @@ start.
    - Mention `other_changes` briefly, without treating them as mistakes.
    - If `comp_matches` is false, don't grade: ask them to switch back to `lesson_comp` by name and
      say "done" again.
-   - **A pass** (`passed`, which needs every member compared and apart): say so plainly. If easing isn't learned and a member has
-     `has_linear_pairs`, say once that the moves are still linear and suggest easing next.
+   - **A pass** (`passed`, which needs every member compared and apart): say so plainly. If easing isn't learned (`learned` false, not
+     null) and a member has `has_linear_pairs`, say once that the moves are still linear and suggest easing next.
    - They can fix things and say "done" as many times as they like.
 
 8. **The rhythm (layers kind, after a pass).** Only when `rhythm.uneven` is true, add **one**
@@ -263,7 +266,7 @@ start.
 
 9. **If AE can't be reached** (`AE_UNREACHABLE`, `AE_BUSY`) at any step: stop, say you can't see
    the project, pass on the fix, and wait. `learner.error` in the snapshot (`RECORD_UNREADABLE`):
-   teach a first lesson and say once, in the error's words, that you couldn't read your notes.
+   step 0 covers it (one sentence, already said; don't say it again).
    `SESSION_UNREADABLE`: pass on the message, then call `offset_snapshot` again.
 
 10. **Record the lesson.** Call `record_lesson` once per lesson that had a group, with `skill`

@@ -13,7 +13,8 @@ export const SESSION_WINDOW_HOURS = 3;
 // be offered now? Learned, built, with a review mode, due today, no practice lesson on it in the
 // session window, no other skill's review offered in the window, and a new target in the comp (this
 // skill's past targets on this project and comp left out, with the kept-linear marks that apply).
-// Returns the finder's focus ({ count, layers }) when it may, else null. recommend() and the snapshot
+// Returns the finder's focus ({ count, layers }) when it may, else null. The finder is asked with
+// `for_review: true`. recommend() and the snapshot
 // tools' opening function (opening.mjs) both call this, so they never disagree. `built` defaults to
 // this skill alone; `offers` are the session's recent review offers.
 export function reviewFor({ skill, record, built = [skill], finders = {}, snapshot = null, now, offers = [] }) {
@@ -32,7 +33,9 @@ export function reviewFor({ skill, record, built = [skill], finders = {}, snapsh
   const kept_linear = marksFor(record, snapshot.project, snapshot.comp.name).filter((m) => applies(m, snapshot));
   let focus;
   try {
-    const r = f.focus(snapshot, { exclude: pastTargetsIn(record, skill, snapshot.project, snapshot.comp.name), kept_linear });
+    // for_review: a finder whose count can mean "something to teach once the learner names it"
+    // (skill 6's crowd) counts only what a review would propose (Phase 10 round 2, fix B).
+    const r = f.focus(snapshot, { exclude: pastTargetsIn(record, skill, snapshot.project, snapshot.comp.name), kept_linear, for_review: true });
     focus = { count: r.count || 0, layers: r.layers || [] };
   } catch {
     return null;
