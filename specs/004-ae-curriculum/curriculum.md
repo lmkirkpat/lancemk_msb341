@@ -364,7 +364,7 @@ the same pile skills 1 to 3 and 5 to 6 were failed for.
 | 2. The idea, and the task (we do, you do) | easing slows a move into and out of its keys | The layer confirmed in one clause. One frame inside a focus pair, at most one clause about it. The idea in two sentences, on their timing: "From 0.5 s to 1.5 s Title moves at one speed the whole way, then stops dead at 3 s: that's linear, and it's why it looks mechanical. Easing slows it out of each key and into the next." How, in one sentence: "With Title's keys showing (U), select both keys of a pair and choose Animation > Keyframe Assistant > Easy Ease (F9); the diamonds turn into hourglasses." The pairs in one sentence, not a list | "Ease Title's two Position moves, its Scale and its Opacity, and say done." Then the demo offer, if made, as the last sentence |
 | 2a. Demo (on an ask or a yes) | watch one | `SKILL.md` step 6, unchanged: a frame first if none yet, the one `set_ease`, what changed, Edit > Undo | "The other three are yours; say done." No second walk-through |
 | 3. Check | pass, or one hint per pair | Step 8, unchanged | "Say done again", or the pass |
-| 4. Pass | the next focus | "That passes" and the next focus from the remaining findings | Their choice of the next focus, or a stop |
+| 4. Pass | the next focus | "That passes" and the next focus from the remaining findings. What the change does to the motion may come as one clause of context, never a sentence of its own (answered 2026-10-28; matches spec 002 US1 #3) | Their choice of the next focus, or a stop |
 | 5. Record | | Unchanged | |
 
 **"Do it for me" (§ 2's shared rule): already fits, no change.** Before the demo, the request is
