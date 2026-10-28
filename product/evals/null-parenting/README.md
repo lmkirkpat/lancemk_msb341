@@ -436,3 +436,18 @@ budget limit ($15) would have been passed.
 Not fixed: step 2 is still too long for R-ONE-IDEA (02, 03, 04 = 7 of 9 runs failed on it). Result files:
 `results/2026-10-28-132042.json` (01), `-132156` (02), `-132344` (03), `-132609` (04), `-133243` (10), `-133512` (11),
 `-133607` (20), `-133728` (32).
+
+## Check fixes and re-runs, 2026-10-28, round 2
+
+- **Case 03 `never_picks`:** the last part now needs a place word after "put it in/at/on" (top, bottom,
+  center, middle, corner, left, right), so "You put it on the spot the group should turn or scale from" no
+  longer matches. Checked offline: it passes all three runs of `2026-10-28-132344` (the old pattern failed run
+  1 on "put it on"), and still fails "Put it at the top-left", "Place it in the center" and "Park it on the left
+  edge". Not re-run live (see below).
+- **Case 10 preview image:** the fixture server returns a 1 x 1 placeholder unless a `frame.png` sits beside the
+  snapshot copies. The runner now writes a flat dark 1920 x 1080 PNG (`blankFrame()`, about 8 KB, valid PNG)
+  there for every run. It isn't the easing set's `frame.png`, which shows another comp ("An easing lesson")
+  that doesn't match Tile, Caption and Stamp. Dry run is clean; no live run has seen it yet, so whether the
+  mentor stops commenting on the image is untested. `mentor/` is untouched. The anchor set has the same 1 x 1
+  placeholder.
+- **Re-runs not done:** the budget guard stopped before cases 03 and 10 (see the hand-back for the spend).

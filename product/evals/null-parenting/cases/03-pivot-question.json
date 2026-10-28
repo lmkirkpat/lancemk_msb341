@@ -50,7 +50,7 @@
       },
       {
         "id": "never_picks",
-        "never": "(?:put|place|park|drag|move|set|sit|go)\\s+(?:it|the null|Null 1)[^.?!]{0,40}\\b(?:in|at|on|to)\\s+(?:the\\s+)?(?:top|bottom|center|centre|middle|corner|left|right)\\b|\\bI(?:'d| would) (?:put|use|pick|choose|go with|suggest)\\b|\\bbest (?:place|spot)\\b|\\b(?:put|place) it (?:in|at|on)\\b",
+        "never": "(?:put|place|park|drag|move|set|sit|go)\\s+(?:it|the null|Null 1)[^.?!]{0,40}\\b(?:in|at|on|to)\\s+(?:the\\s+)?(?:top|bottom|center|centre|middle|corner|left|right)\\b|\\bI(?:'d| would) (?:put|use|pick|choose|go with|suggest)\\b|\\bbest (?:place|spot)\\b|\\b(?:put|place) it (?:in|at|on)\\s+(?:the\\s+)?(?:top|bottom|center|centre|middle|corner|left|right)\\b",
         "turns": [
           1,
           3

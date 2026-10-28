@@ -447,3 +447,20 @@ SC-006 at a full re-baseline: the 80% line looks reachable (this would flip 02, 
 are mostly noise, for about 39 to 40 of 46 if nothing else moves). **Every hard-rule check passing is less certain**:
 23c's double demo is intermittent and unexplained, and 19's guessed side is a rubric item that will keep failing until
 the snapshot or the wording changes. Treat a clean hard-rule run as a coin flip until 23c's double demo is understood.
+
+## Check fixes and re-runs, 2026-10-28, round 2
+
+- **Case 19's `says_side` stays as it was (`must: below`).** The brief assumed the snapshot gives Lid no
+  side. It does: `analyze` on `practice2b.json` returns `{"note":"pivot_outside","side":"below"}`
+  (FR-019a, `outsideSide`). The mentor saying "below" is right, and the "guessed side" findings from earlier
+  today were a judge artifact: the runner cut each tool result at 6000 characters, and the `notes` array comes
+  after that cut, so the judge never saw the side. The runner now keeps 16000 characters
+  of a tool result (`renderTranscript`); this affects the judge's view in every case, so re-judge before
+  comparing with older baselines.
+- **Run A** (check changed to fail any side word, 6000-char cap; `2026-10-28-140802`): 0/3, `names_no_side`
+  failed on "below" 3 of 3, $1.14. Kept as the record of why the change was reverted; the checks were wrong.
+- **Run B** (original check, 16000-char cap; `2026-10-28-141004`): 19 is 0/3, $1.56. `R-AN-OUTSIDE` now
+  passes; `R-ONE-IDEA` fails 3 of 3 on the sentence "If you change Anchor Point by itself, the layer slides..."
+  (same item as before). That sentence is in `SKILL.md` "The words the lesson uses", so the rubric item and the
+  prompt disagree.
+- **23c** (`2026-10-28-141230`): 3/3, $3.35.
