@@ -256,7 +256,7 @@ skill with a review gets its mode and its slice of the record from its snapshot 
 shared function. This **amends a contract**: [contracts/skill-module.md](contracts/skill-module.md)
 § 3 (`mode` optional, three reply fields) and § 4 (`opening()`, `session.openMode()`), and a note in
 [contracts/shared-tools.md](contracts/shared-tools.md) › `recommend_next` (its review test exported,
-unchanged). Tasked as tasks-wave-b.md › Phase 10 (T200 onward): one shared-owner branch that, unlike
+unchanged). Tasked as tasks-wave-b.md › Phase 10 (T400 onward): one shared-owner branch that, unlike
 Phase 9, **does** touch skills 5 and 6's tool files and `SKILL.md` (all five skills with a review), so
 it merges only when no live lesson or sitting is running, and every skill's next live lesson starts
 in a fresh session. The eval sets change on their own branches (FR-052).

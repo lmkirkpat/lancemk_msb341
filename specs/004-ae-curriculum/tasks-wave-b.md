@@ -32,7 +32,7 @@ only: [curriculum.md](curriculum.md) › 5 and › 8, specs 011 and 012's `teach
 
 **Scope**: only wave B's **shared** pass (plan › Wave B, step 1). Skills 5 and 6 are specs 011 and
 012, built after this merges, adding files only. Wave A's tasks are [tasks.md](tasks.md) (T001 to
-T069); nothing here edits them. This file uses **T100 to T199** only, plus **T199a to T199e**, numbered by the cockpit on 2026-10-27 when the range was used up (letters after T199), and **Phase 10's T200 to T216** (the cockpit's numbers, 2026-10-27; `specs/011-anchor/tasks.md` also has T201 to T261, so cite these as "spec 004 T2xx").
+T069); nothing here edits them. This file uses **T100 to T199** only, plus **T199a to T199e**, numbered by the cockpit on 2026-10-27 when the range was used up (letters after T199), and **Phase 10's T400 to T416** (the cockpit's numbers, 2026-10-27; in the T400s because `specs/011-anchor/tasks.md` uses T201 to T261 and spec 012 the T300s).
 
 **Tests**: included and written first. FR-012: every read and both shared rules have unit tests on
 saved snapshots with an answer key, from live reads. Pure math (comp-space matrices) and
@@ -476,9 +476,9 @@ The cockpit's numbers, past this file's range. T199b is the test; then T199c, th
 
 ---
 
-## Phase 10: The opening read, the snapshot picks lesson or review (T200 onward)
+## Phase 10: The opening read, the snapshot picks lesson or review (T400 onward)
 
-**Draft 2026-10-27, awaiting the builder's approval.** Requirements: [spec.md](spec.md) › The opening
+**Approved 2026-10-27** (every OR recommendation taken). Requirements: [spec.md](spec.md) › The opening
 read, **FR-048 to FR-052**, **SC-015** and **SC-016**; contract: [contracts/skill-module.md](contracts/skill-module.md)
 § 3 and § 4 (amended) and [contracts/shared-tools.md](contracts/shared-tools.md) › `recommend_next`.
 Written to the recommended answers of **OR-1 to OR-5**; a different answer changes the task it names.
@@ -486,13 +486,12 @@ Source: the pivot baseline (`git show evals-skill-5:product/evals/anchor/README.
 skill 6's smoke round (`git show evals-skill-6:product/evals/null-parenting/README.md`). Teaching
 designs are untouched; OR-1 is the one learner-visible difference.
 
-**Task numbers:** the cockpit's, T200 onward. `specs/011-anchor/tasks.md` also uses **T201 to T261**
-(CLAUDE.md names T236, T237, T240 and others from it), so in notes and commits cite these as
-"spec 004 T2xx".
+**Task numbers:** the cockpit's, T400 to T416. They are in the T400s because `specs/011-anchor/tasks.md`
+uses T201 to T261 (CLAUDE.md names T236, T237, T240 and others from it) and spec 012 the T300s.
 
 **Who builds it.** Two owners, split by file:
 
-- **skill-builder** (T200 to T211): one builder, alone, as the shared-code owner (FR-032), in a
+- **skill-builder** (T400 to T411): one builder, alone, as the shared-code owner (FR-032), in a
   worktree the cockpit cuts from **local `main`** at or after `599634c`, merged with
   `/merge-worktree <branch> skill-builder --shared-owner`. Unlike Phase 9, this phase **does** change
   skills 5 and 6's tool files and `SKILL.md` (every skill with a review), so **no other branch may touch
@@ -500,38 +499,38 @@ designs are untouched; OR-1 is the one learner-visible difference.
   lesson or sitting is running (`ae_status`, then `.git/knack-agents/ae.lock.json`). Every skill's next
   live lesson after the merge starts in a fresh Claude Code session (MCP servers survive `/clear`) and
   its usage note says it ran on the new opening.
-- **eval-engineer** (T212 to T215): on each eval set's own branch (`evals-wave-a`, `evals-skill-5`,
+- **eval-engineer** (T412 to T415): on each eval set's own branch (`evals-wave-a`, `evals-skill-5`,
   `evals-skill-6`), their files and case numbers only; new case numbers come from the cockpit. The
-  check changes (T213) can start as soon as this phase is approved, because FR-049's field names are
-  fixed in the contract; runs that count (T215) wait for the merge.
-- **builder at the keyboard** (T216, 🖐): one live check after the merge.
+  check changes (T413) can start as soon as this phase is approved, because FR-049's field names are
+  fixed in the contract; runs that count (T415) wait for the merge.
+- **builder at the keyboard** (T416, 🖐): one live check after the merge.
 
 The wave B rules hold: **no existing test file edited** (measured against the worktree's base), no test
 that lists the skills or pins a whole reply's key set. If an existing test fails because it called a
 snapshot tool without `mode` on a record where FR-048 now picks a review, **stop and hand back** which
 test and line; the cockpit decides (a one-off exception, as T193 had, or a change to FR-048).
 
-**Existing files the skill-builder changes** (and no others; T210 compares against this table):
+**Existing files the skill-builder changes** (and no others; T410 compares against this table):
 
 | File | Change | Task |
 |---|---|---|
-| `mentor/lib/recommend.mjs` | Export the one-skill review test `recommend()` already applies; `recommend()` calls the export. No result changes | T203 |
-| `mentor/lib/session.mjs` | `openMode()`, read only, reusing `isStale`; nothing else | T203 |
-| `mentor/tools/speed-graph.mjs`, `mentor/tools/key-types.mjs`, `mentor/tools/offset.mjs` | Call `opening()` after `takeSnapshot()`; `mode_source` and `learner` in the reply; speed graph's `learner.eased_layers` | T204 |
-| `mentor/tools/transform-anchor.mjs`, `mentor/tools/null-parenting.mjs` | The same, plus `server_current` (FR-044, OR-3); null's `FINDERS` entry gets `mentions: ["easing.basic"]`; its `can_teach: false` reply carries the three fields | T204 |
-| `.claude/skills/key-types-mentor/SKILL.md` | Step 0 and the review's first step (FR-050); `allowed-tools` without `read_learner_record` | T205 |
-| `.claude/skills/offset-mentor/SKILL.md` | The same | T206 |
-| `.claude/skills/speed-graph-mentor/SKILL.md` | "Before the lesson", step 0, the review's first call, step 1's second call sends `learner.eased_layers`; `allowed-tools` | T207 |
-| `.claude/skills/anchor-mentor/SKILL.md` | Step 0, step 10's unreadable-notes line, the review's step 1; the restart line (OR-3); `allowed-tools` | T208 |
-| `.claude/skills/null-parenting-mentor/SKILL.md` | Step 0, the unreadable-notes line, the review's step 1; the restart line (OR-3); `allowed-tools` | T209 |
+| `mentor/lib/recommend.mjs` | Export the one-skill review test `recommend()` already applies; `recommend()` calls the export. No result changes | T403 |
+| `mentor/lib/session.mjs` | `openMode()`, read only, reusing `isStale`; nothing else | T403 |
+| `mentor/tools/speed-graph.mjs`, `mentor/tools/key-types.mjs`, `mentor/tools/offset.mjs` | Call `opening()` after `takeSnapshot()`; `mode_source` and `learner` in the reply; speed graph's `learner.eased_layers` | T404 |
+| `mentor/tools/transform-anchor.mjs`, `mentor/tools/null-parenting.mjs` | The same, plus `server_current` (FR-044, OR-3); null's `FINDERS` entry gets `mentions: ["easing.basic"]`; its `can_teach: false` reply carries the three fields | T404 |
+| `.claude/skills/key-types-mentor/SKILL.md` | Step 0 and the review's first step (FR-050); `allowed-tools` without `read_learner_record` | T405 |
+| `.claude/skills/offset-mentor/SKILL.md` | The same | T406 |
+| `.claude/skills/speed-graph-mentor/SKILL.md` | "Before the lesson", step 0, the review's first call, step 1's second call sends `learner.eased_layers`; `allowed-tools` | T407 |
+| `.claude/skills/anchor-mentor/SKILL.md` | Step 0, step 10's unreadable-notes line, the review's step 1; the restart line (OR-3); `allowed-tools` | T408 |
+| `.claude/skills/null-parenting-mentor/SKILL.md` | Step 0, the unreadable-notes line, the review's step 1; the restart line (OR-3); `allowed-tools` | T409 |
 | `specs/004-ae-curriculum/tasks-wave-b.md` | Tick tasks only | all |
 
-**Unchanged, checked in T210:** `mentor/tools/common.mjs` (`read_learner_record`, `recommend_next`),
+**Unchanged, checked in T410:** `mentor/tools/common.mjs` (`read_learner_record`, `recommend_next`),
 `mentor/tools/easing.mjs`, `mentor/server.mjs`, `mentor/lib/learner-store.mjs` (read through its
 existing exports), `.claude/skills/ease-mentor/`, `.claude/skills/next-mentor/`, `bridge/`, `panel/`.
 
-**New files:** `mentor/lib/opening.mjs` (T203; the builder may rename it, and says so);
-`mentor/test/opening-mode.test.mjs` (T201) and `mentor/test/opening-reply.test.mjs` (T202). Records
+**New files:** `mentor/lib/opening.mjs` (T403; the builder may rename it, and says so);
+`mentor/test/opening-mode.test.mjs` (T401) and `mentor/test/opening-reply.test.mjs` (T402). Records
 for tests are the saved ones in `mentor/test/fixtures/records/` and each skill's `records/` (among them
 `unreadable.json`, `review-due-practiced-today.json`, `first-three-learned-review-due.json`,
 `learned-door.json`, `learned-group.json`), copied to a temp `AE_MENTOR_HOME`; a state no saved record
@@ -539,43 +538,43 @@ has (learned and not due, another skill's review offered) is a temp copy the tes
 
 ### Setup
 
-- [ ] T200 [skill-builder] On the worktree, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both counts and the base commit in the hand-back (the base for "no existing test edited" and for T212). For reference, `599634c` gave 1263 mentor tests: 1260 pass, 3 todo, 0 fail
+- [ ] T400 [skill-builder] On the worktree, run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; note both counts and the base commit in the hand-back (the base for "no existing test edited" and for T412). For reference, `599634c` gave 1263 mentor tests: 1260 pass, 3 todo, 0 fail
 
 ### Tests first
 
-- [ ] T201 [P] [skill-builder] [US3] New `mentor/test/opening-mode.test.mjs`, on the opening function with the time injected: **every row of spec FR-051's table** that isn't about a reply's other fields, for each of the five skill IDs with that skill's own finder and a capture it has a target on (and, for "no new target", a capture or exclude list that leaves none). Also: for each shared saved record in `mentor/test/fixtures/records/` and each skill's `records/`, at a fixed time and comp, the function picks `review` for a skill **exactly when** `recommend()` offers that skill's review (FR-051's last line); a picked review appears in `session.reviewOffers()` once; an unreadable record is set aside next to the original (the original bytes intact) and the function returns, never throws. `recommend.test.mjs` and `recommend-review-offers.test.mjs` stand unchanged. Fails until T203
-- [ ] T202 [P] [skill-builder] [US3] New `mentor/test/opening-reply.test.mjs`, the five tools in fixture mode, each called **without `mode`** on: no record, a practicing record, a learned-and-due record with a new target, and `unreadable.json`. Per reply: `mode`, `mode_source` and `learner` as FR-049's table says (`days_since_practiced` against an injected or computed local date; `last_attempted` from the newest entry for that skill); `server_current` present on all five; `learner.error` equal, code and message, to what `read_learner_record` gives on another copy of the same file; **no skill ID** from `mentor/curriculum/path.json`, no `learner.json` and no path anywhere in `learner`. Speed graph: `learner.eased_layers` from a record with easing `targets`, and from an older entry with no `targets` whose text names a layer exactly (a temp copy). Skill 6: `other_skills` has the pivot (`hard: true`) and easing (`hard: false`); its `can_teach: false` reply (a capture without `layer_info`) carries the three fields. And for each tool, a call with an explicit `mode` gives the same reply, field for field, as a call without `mode` where FR-048 picks that mode, apart from `mode_source`. Fails until T204
+- [ ] T401 [P] [skill-builder] [US3] New `mentor/test/opening-mode.test.mjs`, on the opening function with the time injected: **every row of spec FR-051's table** that isn't about a reply's other fields, for each of the five skill IDs with that skill's own finder and a capture it has a target on (and, for "no new target", a capture or exclude list that leaves none). Also: for each shared saved record in `mentor/test/fixtures/records/` and each skill's `records/`, at a fixed time and comp, the function picks `review` for a skill **exactly when** `recommend()` offers that skill's review (FR-051's last line); a picked review appears in `session.reviewOffers()` once; an unreadable record is set aside next to the original (the original bytes intact) and the function returns, never throws. `recommend.test.mjs` and `recommend-review-offers.test.mjs` stand unchanged. Fails until T403
+- [ ] T402 [P] [skill-builder] [US3] New `mentor/test/opening-reply.test.mjs`, the five tools in fixture mode, each called **without `mode`** on: no record, a practicing record, a learned-and-due record with a new target, and `unreadable.json`. Per reply: `mode`, `mode_source` and `learner` as FR-049's table says (`days_since_practiced` against an injected or computed local date; `last_attempted` from the newest entry for that skill); `server_current` present on all five; `learner.error` equal, code and message, to what `read_learner_record` gives on another copy of the same file; **no skill ID** from `mentor/curriculum/path.json`, no `learner.json` and no path anywhere in `learner`. Speed graph: `learner.eased_layers` from a record with easing `targets`, and from an older entry with no `targets` whose text names a layer exactly (a temp copy). Skill 6: `other_skills` has the pivot (`hard: true`) and easing (`hard: false`); its `can_teach: false` reply (a capture without `layer_info`) carries the three fields. And for each tool, a call with an explicit `mode` gives the same reply, field for field, as a call without `mode` where FR-048 picks that mode, apart from `mode_source`. Fails until T404
 
 ### Code
 
-- [ ] T203 [skill-builder] [US3] **Shared code** (FR-048, FR-049; contract § 4): `mentor/lib/opening.mjs` with `opening()`; `session.openMode()` in `session.mjs` (read only, reusing `isStale`); the one-skill review test exported from `recommend.mjs` and called by `recommend()` itself (OR-4, OR-5). The record is read once per call through `learner-store.mjs`'s existing exports, with `read_learner_record`'s set-aside behaviour and without its throw. **Done when:** T201 passes and every existing test passes, `recommend*.test.mjs` unchanged
-- [ ] T204 [skill-builder] [US3] **The five tool files** (FR-048, FR-049; contract § 3): each snapshot tool calls `opening()` right after `takeSnapshot()` (skill 6: before `openLesson()`, which needs the mode), passes the chosen `mode` on as it passes the given one today, and adds `mode_source` and `learner` to its reply; `anchor_snapshot` and `null_parent_snapshot` add `server_current` (OR-3). Speed graph builds `learner.eased_layers` from the `record` `opening()` returns. Skill 6's `FINDERS` entry gets `mentions: ["easing.basic"]`. `mode` stays in each `inputSchema` with the same enum; only its description says that leaving it out lets the tool choose. Change the tool descriptions only as far as needed to say so. **Done when:** T202 and every existing test pass (or the hand-back names the existing test that stops it, per the rule above)
+- [ ] T403 [skill-builder] [US3] **Shared code** (FR-048, FR-049; contract § 4): `mentor/lib/opening.mjs` with `opening()`; `session.openMode()` in `session.mjs` (read only, reusing `isStale`); the one-skill review test exported from `recommend.mjs` and called by `recommend()` itself (OR-4, OR-5). The record is read once per call through `learner-store.mjs`'s existing exports, with `read_learner_record`'s set-aside behaviour and without its throw. **Done when:** T401 passes and every existing test passes, `recommend*.test.mjs` unchanged
+- [ ] T404 [skill-builder] [US3] **The five tool files** (FR-048, FR-049; contract § 3): each snapshot tool calls `opening()` right after `takeSnapshot()` (skill 6: before `openLesson()`, which needs the mode), passes the chosen `mode` on as it passes the given one today, and adds `mode_source` and `learner` to its reply; `anchor_snapshot` and `null_parent_snapshot` add `server_current` (OR-3). Speed graph builds `learner.eased_layers` from the `record` `opening()` returns. Skill 6's `FINDERS` entry gets `mentions: ["easing.basic"]`. `mode` stays in each `inputSchema` with the same enum; only its description says that leaving it out lets the tool choose. Change the tool descriptions only as far as needed to say so. **Done when:** T402 and every existing test pass (or the hand-back names the existing test that stops it, per the rule above)
 
-### Prompts (after T204; different files, so any order)
+### Prompts (after T404; different files, so any order)
 
 Each task: the first tool call is the snapshot without `mode` unless the learner already said which they want; step 0 reads `mode`, `mode_source` and `learner` in the order FR-050 gives (restart line, unreadable notes from `learner.error`, prerequisites from `other_skills`, then review, practicing or first lesson); each branch does and says what it does today; turning down an offered review calls the snapshot with `mode: "lesson"`; the review's first call is the opening call, its later calls keep `mode: "review"`; under OR-1, a due review with nothing new isn't mentioned (the lesson runs); every "with nothing written in between" instruction goes, the hard rule against notes to yourself stays word for word; `read_learner_record` appears nowhere in the file, `allowed-tools` included (OR-2). Nothing else in the file changes. **Done when** (each): `grep read_learner_record` on the file finds nothing; the hand-back pastes the new step 0 and the review's first step.
 
-- [ ] T205 [P] [skill-builder] [US1] `.claude/skills/key-types-mentor/SKILL.md`. Its review offer ("Last week you made Blink snap") reads `learner.last_attempted` and `days_since_practiced`
-- [ ] T206 [P] [skill-builder] [US1] `.claude/skills/offset-mentor/SKILL.md`. The same offer shape; the easing check reads `other_skills`
-- [ ] T207 [P] [skill-builder] [US1] `.claude/skills/speed-graph-mentor/SKILL.md`: "Before the lesson: is easing there?" reads `other_skills` and `learner.eased_layers` instead of the record; step 1's second call (FR-047) sends `learner.eased_layers`; the review's first call is the opening call (it no longer needs "the same `skill_options`" to start)
-- [ ] T208 [P] [skill-builder] [US5] `.claude/skills/anchor-mentor/SKILL.md`: step 0 (lines ~83 to 98), step 10's `RECORD_UNREADABLE` line, The review's step 1 (line ~401), and the hard rule's examples keep their wording. Add FR-044's restart line as the other skills have it (OR-3)
-- [ ] T209 [P] [skill-builder] [US5] `.claude/skills/null-parenting-mentor/SKILL.md`: step 0 (reads `other_skills` for the pivot and easing), the unreadable-notes line, The review's step 1; FR-044's restart line (OR-3)
+- [ ] T405 [P] [skill-builder] [US1] `.claude/skills/key-types-mentor/SKILL.md`. Its review offer ("Last week you made Blink snap") reads `learner.last_attempted` and `days_since_practiced`
+- [ ] T406 [P] [skill-builder] [US1] `.claude/skills/offset-mentor/SKILL.md`. The same offer shape; the easing check reads `other_skills`
+- [ ] T407 [P] [skill-builder] [US1] `.claude/skills/speed-graph-mentor/SKILL.md`: "Before the lesson: is easing there?" reads `other_skills` and `learner.eased_layers` instead of the record; step 1's second call (FR-047) sends `learner.eased_layers`; the review's first call is the opening call (it no longer needs "the same `skill_options`" to start)
+- [ ] T408 [P] [skill-builder] [US5] `.claude/skills/anchor-mentor/SKILL.md`: step 0 (lines ~83 to 98), step 10's `RECORD_UNREADABLE` line, The review's step 1 (line ~401), and the hard rule's examples keep their wording. Add FR-044's restart line as the other skills have it (OR-3)
+- [ ] T409 [P] [skill-builder] [US5] `.claude/skills/null-parenting-mentor/SKILL.md`: step 0 (reads `other_skills` for the pivot and easing), the unreadable-notes line, The review's step 1; FR-044's restart line (OR-3)
 
 ### Close (skill-builder)
 
-- [ ] T210 [skill-builder] [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <the base> -- mentor/test/*.test.mjs` shows only T201 and T202's files; `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: the changed existing files match this phase's table exactly; `git diff --stat <the base> --` on the "Unchanged" list above is empty. Paste all of it in the hand-back
-- [ ] T211 [skill-builder] Write the hand-back: branch and commit; T200's and T210's counts; the opening function's file and names if renamed; each `SKILL.md`'s new step 0 and review step 1; any existing test that stopped T204; and how OR-1 to OR-5 were built (to the recommendations unless the builder answered otherwise)
+- [ ] T410 [skill-builder] [US6] Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`: all green; `git diff --stat <the base> -- mentor/test/*.test.mjs` shows only T401 and T402's files; `node .claude/hooks/check-branch.mjs <this branch> skill-builder main --shared-owner`: the changed existing files match this phase's table exactly; `git diff --stat <the base> --` on the "Unchanged" list above is empty. Paste all of it in the hand-back
+- [ ] T411 [skill-builder] Write the hand-back: branch and commit; T400's and T410's counts; the opening function's file and names if renamed; each `SKILL.md`'s new step 0 and review step 1; any existing test that stopped T404; and how OR-1 to OR-5 were built (to the recommendations unless the builder answered otherwise)
 
 ### Evals (eval-engineer, on the eval branches)
 
-- [ ] T212 [eval-engineer] [US6] The easing gate (FR-035, SC-016) on the Phase 10 branch and on its base the same day, as T195 did: within one of the base's score, no hard-rule failure, a branch-only failure re-run once. Easing's files don't change, so this checks the shared code only (`session.mjs`, `recommend.mjs`). **Before the merge**
-- [ ] T213 [P] [eval-engineer] [US6] **Check changes** (FR-052), one set at a time per branch, sets in parallel: in key types, offset and speed graph (`evals-wave-a`), the pivot (`evals-skill-5`) and null (`evals-skill-6`): `first_tool` expectations of `read_learner_record` become the snapshot tool; the universal "nothing before the first snapshot" check (`no_text_before_snapshot`, as in the pivot set's `run.mjs`) in the four sets that lack it, plus a universal check that `read_learner_record` isn't called; review cases check `mode` on the first snapshot's reply instead of `snapshot_with: { "mode": "review" }`; each case that expects "nothing new to review" on a due review is changed to OR-1's answer (a lesson starts, no review mentioned). Dry-run each set. **Done when:** each set's dry run passes its plumbing; the README lists the changed cases
-- [ ] T214 [eval-engineer] [US6] **New cases** (FR-052), after T213 on the same set (sets in parallel), numbers from the cockpit: an unreadable record, practicing with a memory clause, a resumed lesson with stored choices (FR-046 still fires), and a review asked for when none is due. Per skill or cross-skill, the eval engineer's call, but SC-015 needs an unreadable-record case in each of the five sets. A record fixture the cases need that isn't in `mentor/test/fixtures/` goes to the cockpit as a request for the skill-builder (or lives in the set's own folder, if the runner allows it)
-- [ ] T215 [eval-engineer] [US6] **SC-015's runs, after the merge** (the sets run against `main`'s mentor): per set, `--repeat 3` on the first-lesson case, the practicing case where there is one, the review-due case and the unreadable-record case; count runs with text before the first snapshot, a first tool other than the snapshot, and a skill ID in learner-visible text (all must be 0; plumbing failures re-run). Log in each README with cost. The full runs SC-015 also counts are the baselines already planned for each set
+- [ ] T412 [eval-engineer] [US6] The easing gate (FR-035, SC-016) on the Phase 10 branch and on its base the same day, as T195 did: within one of the base's score, no hard-rule failure, a branch-only failure re-run once. Easing's files don't change, so this checks the shared code only (`session.mjs`, `recommend.mjs`). **Before the merge**
+- [ ] T413 [P] [eval-engineer] [US6] **Check changes** (FR-052), one set at a time per branch, sets in parallel: in key types, offset and speed graph (`evals-wave-a`), the pivot (`evals-skill-5`) and null (`evals-skill-6`): `first_tool` expectations of `read_learner_record` become the snapshot tool; the universal "nothing before the first snapshot" check (`no_text_before_snapshot`, as in the pivot set's `run.mjs`) in the four sets that lack it, plus a universal check that `read_learner_record` isn't called; review cases check `mode` on the first snapshot's reply instead of `snapshot_with: { "mode": "review" }`; each case that expects "nothing new to review" on a due review is changed to OR-1's answer (a lesson starts, no review mentioned). Dry-run each set. **Done when:** each set's dry run passes its plumbing; the README lists the changed cases
+- [ ] T414 [eval-engineer] [US6] **New cases** (FR-052), after T413 on the same set (sets in parallel), numbers from the cockpit: an unreadable record, practicing with a memory clause, a resumed lesson with stored choices (FR-046 still fires), and a review asked for when none is due. Per skill or cross-skill, the eval engineer's call, but SC-015 needs an unreadable-record case in each of the five sets. A record fixture the cases need that isn't in `mentor/test/fixtures/` goes to the cockpit as a request for the skill-builder (or lives in the set's own folder, if the runner allows it)
+- [ ] T415 [eval-engineer] [US6] **SC-015's runs, after the merge** (the sets run against `main`'s mentor): per set, `--repeat 3` on the first-lesson case, the practicing case where there is one, the review-due case and the unreadable-record case; count runs with text before the first snapshot, a first tool other than the snapshot, and a skill ID in learner-visible text (all must be 0; plumbing failures re-run). Log in each README with cost. The full runs SC-015 also counts are the baselines already planned for each set
 
 ### Live (builder at the keyboard, after the merge)
 
-- [ ] T216 🖐 [US1] In a fresh Claude Code session, with the AE lock checked: one short first lesson on the pivot (the "new opening" lesson CLAUDE.md › Skill 5 › Next 3 already plans), and one review on a skill with a review due, run on a temp learner home with a due record (`AE_MENTOR_HOME` in an MCP config's `env`, `claude --strict-mcp-config --mcp-config <file>`, as T047 did). Expect: the first thing in each is the snapshot call, nothing said before it, and the opening the skill's own. Logged in that skill's usage note
+- [ ] T416 🖐 [US1] In a fresh Claude Code session, with the AE lock checked: one short first lesson on the pivot (the "new opening" lesson CLAUDE.md › Skill 5 › Next 3 already plans), and one review on a skill with a review due, run on a temp learner home with a due record (`AE_MENTOR_HOME` in an MCP config's `env`, `claude --strict-mcp-config --mcp-config <file>`, as T047 did). Expect: the first thing in each is the snapshot call, nothing said before it, and the opening the skill's own. Logged in that skill's usage note
 
 ---
 
@@ -592,7 +591,7 @@ the curriculum designer where the teaching changes).
 | 2, speed graph | Name a parent in one sentence; choose frames where no parent moves, so frame claims can say how far along a move a layer is | spec 008 rows 15, teaching design D-5, § 5 |
 | 3, offset | Name a parent's shared motion in one sentence, never grade it (the known blind spot); precomp layers eligible through in points, stretch and time remap; a locked layer as demo target refused before AE (L-4); a trimmed in point named | spec 010 rows 12, 15, 16, 21; teaching design § 9 |
 | 1, key types | None beyond SR-3 (done here, T126) | spec 009 |
-| 5, set the pivot; 6, null | **Moved into Phase 10 (T204, T208, T209) if OR-3 is answered as recommended; otherwise stays here.** FR-044's restart sentence in step 0 of `anchor-mentor` and `null-parenting-mentor`, and `server_current` in `anchor_snapshot` and `null_parent_snapshot`. Both already get the field from `read_learner_record` once Phase 9 merges; only the sentence and the snapshot field wait. Each after that skill's live lessons, on its own branch or after its merge (skill 6 merged `31fe72d`) | spec 004 FR-044, LE-2 |
+| 5, set the pivot; 6, null | **Moved into Phase 10 (T404, T408, T409) if OR-3 is answered as recommended; otherwise stays here.** FR-044's restart sentence in step 0 of `anchor-mentor` and `null-parenting-mentor`, and `server_current` in `anchor_snapshot` and `null_parent_snapshot`. Both already get the field from `read_learner_record` once Phase 9 merges; only the sentence and the snapshot field wait. Each after that skill's live lessons, on its own branch or after its merge (skill 6 merged `31fe72d`) | spec 004 FR-044, LE-2 |
 | 5, set the pivot; 6, null | **Second pass:** FR-046's confirm paragraph in `anchor-mentor` and `null-parenting-mentor`, and `stored_choices` in `anchor_snapshot` and `null_parent_snapshot` (both send `skill_options`; skill 6's `skill_data` is the null's stored state, not a choice, and its spec writer pass says whether it's confirmed too). FR-043's rule reaches their lessons through `session.mjs` when T174 merges, with no change to their files; their next live lesson after that merge says so in its usage note. Each after that skill's live lessons, on its own branch | spec 004 FR-043, FR-046 |
 | 6, null (with every skill's session) | **R26 and layer order (reviewer should-fix 3, 2026-10-27; carried to sprint 4 by the builder).** R26 matches a resumed lesson's layers by name, so a layer added above the targets counts as matching, but speed graph, key types, offset and easing key their targets and checks by layer index, so `diff` then misreads the resumed lesson. **Recommended fix:** R26 also requires each named layer's index to be unchanged (a renumbered target makes the lesson stale, so it starts fresh), with a `session.start` option to skip that test for a skill whose check matches by name. Only skill 6 sends it (`mentor/tools/null-parenting.mjs`): its own lesson adds a null, which renumbers the layers below, and its check already matches by name (`mentor/lib/null-parenting-check.mjs`). Without the option, every resumed skill 6 lesson would start fresh after the null was added, losing its `skill_data`. **The session change and skill 6's opt-out merge together, on skill 6's branch**, never one without the other. **Size:** small. In `session.mjs`, one comparison and one option; about four test cases in a new test file (a layer added above a speed graph target → new; the same with the option → resumed; skill 6 resumed after adding a null → resumed; a target moved down the stack → new); one line in skill 6's tool file; and a note in skill 6's next live lesson. About 1 to 2 builder hours. Needs a spec writer pass first (R26 and FR-043 amended) | spec 004 R26, FR-043; the reviewer's should-fix 3 on `phase9-pass2` |
 | 3, offset; 5; 6 | The frame pointer (FR-045's `layer`) in their frame steps. Not in this pass (LE-3: key types only); a request for after T181 proves the bounds | spec 004 LE-3; `offset.md` session 2 step 2 |
@@ -620,7 +619,7 @@ the curriculum designer where the teaching changes).
   test run; then T173 → T174 → T186 → T187 → T188, then T199, then T199a (all edit `offset-mentor/SKILL.md`); T199b → T199c → T199d (after T188: both edit `speed-graph-mentor/SKILL.md`); T199e with T196; T189 → T190; T191 any time; T192 → T193 → T194;
   T197 after every code task; T195 and T196 after T197. **Merge after T195's gate**, when no skill 5
   or 6 live lesson or sitting is running (the cockpit's call). Then T181 🖐 on `main`.
-- **Phase 10** (its own branch, cut from local `main` at or after `599634c`, after approval): T200; T201 and T202 in either order; T203 → T204; then T205 to T209 in any order (one file each); T210 → T211. T212 (the easing gate) after T210, **before the merge**. **Merge after T212**, when no live lesson or sitting is running; then T215 and T216. The eval engineer's T213 can start at approval, on each eval branch (dry runs only), T214 after T213 on the same set; T215's counted runs after the merge.
+- **Phase 10** (its own branch, cut from local `main` at or after `599634c`, after approval): T400; T401 and T402 in either order; T403 → T404; then T405 to T409 in any order (one file each); T410 → T411. T412 (the easing gate) after T410, **before the merge**. **Merge after T412**, when no live lesson or sitting is running; then T415 and T416. The eval engineer's T413 can start at approval, on each eval branch (dry runs only), T414 after T413 on the same set; T415's counted runs after the merge.
 - **T123 last** before T143, once its three checks pass (Q4); T143 runs after T123.
 - 🖐 order in one Mac sitting: wave A's tasks.md T041 and T064 (build Mentor Practice 2), T042 (its
   captures), then T133, T134, T158, then T135. The cockpit stays off AE.
@@ -634,7 +633,7 @@ four new test files (T168, T173, T175, T178); every other Phase 9 task shares a 
 Second pass: only its four new test files (T173, T186, T189, T192); T174, T187 and T188 run in order
 (T187 needs T174's return value), and T190, T191 and T193 touch files nothing else in the pass does,
 so they could go in any order.
-Phase 10: T201 and T202 (new test files); T205 to T209 (one `SKILL.md` each, after T204); and the eval engineer's work per set (T213, then T214, on `evals-wave-a`, `evals-skill-5` and `evals-skill-6` in parallel), which runs alongside the skill-builder's branch.
+Phase 10: T401 and T402 (new test files); T405 to T409 (one `SKILL.md` each, after T404); and the eval engineer's work per set (T413, then T414, on `evals-wave-a`, `evals-skill-5` and `evals-skill-6` in parallel), which runs alongside the skill-builder's branch.
 
 ## Implementation strategy
 
@@ -657,4 +656,4 @@ FR-045 4 (one 🖐, T181), close 4. **The second pass adds 14** (T186 to T199) a
 place (T173, T174, T181): FR-043 and FR-046 3 (T186 to T188), FR-040's fix 1 (T199), FR-044 3 (T189
 to T191, with easing's tidy), FR-045 3 (T192 to T194), close 4 (T195 to T198). The range is used up;
 **T199a** (2026-10-27, the cockpit's number) is FR-040's second fix; **T199b to T199e** (the same day)
-are FR-047: test, code, prompt, eval hand-off. **Phase 10 adds 17** (T200 to T216, draft): setup 1, tests 2, code 2, prompts 5, close 2 (skill-builder); evals 4 (eval-engineer); one 🖐 live check (the builder).
+are FR-047: test, code, prompt, eval hand-off. **Phase 10 adds 17** (T400 to T416, approved 2026-10-27): setup 1, tests 2, code 2, prompts 5, close 2 (skill-builder); evals 4 (eval-engineer); one 🖐 live check (the builder).

@@ -38,10 +38,10 @@ no checkout; **FR-045** gains four no-bounds reasons (precomp, effects, masks, O
 reviewer's findings on the merged code. Research R24 and R25 are amended and **R26** is new. Tasked
 as tasks-wave-b.md Phase 9 › Second pass (T186 onward). New open questions LE-4 to LE-6.
 
-**Changes 2026-10-27, Phase 10 (draft, awaiting the builder's approval):** FR-048 to FR-052, SC-015
+**Changes 2026-10-27, Phase 10 (approved 2026-10-27):** FR-048 to FR-052, SC-015
 and SC-016 are new (Requirements › The opening read). The snapshot tool picks lesson or review from
 the learner record itself, so each skill's first call is its snapshot and there's no gap for a
-self-note to fall in. Tasked as tasks-wave-b.md › Phase 10 (T200 onward); contracts/skill-module.md
+self-note to fall in. Tasked as tasks-wave-b.md › Phase 10 (T400 onward); contracts/skill-module.md
 § 3 and § 4 amended. New open questions OR-1 to OR-5, with the tasks written to the recommendations.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
@@ -804,7 +804,7 @@ skill teaches either.
   on the reply and the two-call flow (T199b), and an eval case for a resumed speed graph lesson with a
   stored land-hard choice (T199e).
 
-### The opening read: the snapshot picks lesson or review (2026-10-27, draft)
+### The opening read: the snapshot picks lesson or review (2026-10-27, approved)
 
 **The problem.** Every skill with a review opens the same way: `read_learner_record`, a decision
 from it (first lesson, practicing, review due), then its snapshot tool with `mode: "lesson"` or
@@ -1060,7 +1060,7 @@ plus reviews for 2, 1, 3**.
 - **SC-016** (FR-048, FR-049, FR-051): **Every row** of FR-051's table passes for each of the five
   tools; `recommend_next`'s existing tests pass unchanged; the whole mentor suite passes with no
   existing test file edited; and the easing set stays within FR-035's bar on the Phase 10 branch.
-  *Measured by:* unit tests, and the easing run by the eval engineer (tasks-wave-b.md T212).
+  *Measured by:* unit tests, and the easing run by the eval engineer (tasks-wave-b.md T412).
 
 ## Eval plan (outline, for the eval engineer)
 
@@ -1313,7 +1313,9 @@ a different answer changes T173, T174 or T181 before they're built.
    precomp's reason later if the row disagrees. Removing footage now would drop the pointer for
    every photo and video, which are accurate.
 
-### The opening read, for the builder (OR), 2026-10-27: open
+### The opening read, for the builder (OR), 2026-10-27: answered
+
+**Answered 2026-10-27:** the builder took every recommendation (OR-1 a practice lesson, OR-2 yes, OR-3 yes, OR-4 the whole test, OR-5 export from `recommend.mjs`).
 
 Phase 10's tasks are written to the recommendations, so nothing is blocked; a different answer
 changes the named FR and task before it's built.
