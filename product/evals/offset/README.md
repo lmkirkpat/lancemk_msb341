@@ -291,3 +291,14 @@ think of. The judge's R-ONE-IDEA and a read of the three transcripts cover that.
 Same order as easing: a failed `run` check is plumbing; a failed deterministic check is a hard-rule
 break; a failed rubric item is teaching quality. Re-run a flipping case with `--repeat 3` before
 changing `SKILL.md`. Rubric items are in `rubric.md`.
+
+## T415: SC-015's repeats (2026-10-28)
+
+Cases 01 (first lesson, properties kind), 17 (review due), 29 (unreadable record), 30 (practicing); each `--only <id> --repeat 3`, 12 runs plus one plumbing re-run, **$4.33** (results `2026-10-28-115526`, `-115629`, `-115727`, `-115827`, and the re-run `-115906`). Case 18 is the OR-1 "due review, nothing new" case, so 17 is the review-due case.
+
+SC-015 counts: runs with learner-visible text before the first snapshot call **0**; runs whose first tool was not the snapshot tool **0**; skill IDs in learner-visible text **0**. Counted from the saved transcripts (every `MENTOR:` block before the first snapshot call; the first tool call; a regex for skill IDs in every `MENTOR:` block), and agreeing with the runner's own `no_text_before_snapshot`, `first_tool`, `plain_words` and `no_read_learner_record` checks, which passed in every run. Not baselines; not whole-set runs. Run against the worktree's `mentor/` and `.claude/skills/`, which match `main`.
+
+| Case | Result | Triage |
+|---|---|---|
+| 01, 29, 30 | 3/3 each | Clean |
+| 17 | 2 of 3 counted, 1 plumbing | Run 2: **plumbing**, the judge's reply could not be parsed ("unreadable judge reply"); every deterministic check passed and the visible judge text marked R-REVIEW-HANDS-ON as passing. Re-run once as 1 run (`-115906`): pass, $0.47. Counted in the SC-015 totals as 13 runs (the plumbing run included, it had clean transcripts) |

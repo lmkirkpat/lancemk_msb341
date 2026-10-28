@@ -255,3 +255,16 @@ think of. The judge's R-ONE-IDEA and a read of the three transcripts cover that.
 Same order as easing: a failed `run` check is plumbing; a failed deterministic check is a hard-rule
 break; a failed rubric item is teaching quality. Re-run a flipping case with `--repeat 3` before
 changing `SKILL.md`. Rubric items are in `rubric.md`.
+
+## T415: SC-015's repeats (2026-10-28)
+
+Cases 01 (first lesson), 14 (review due), 21 (unreadable record), 22 (practicing); each `--only <id> --repeat 3`, 12 runs, **$3.04** (results `2026-10-28-115058`, `-115203`, `-115257`, `-115346`). There is no separate "memory" case beyond 22.
+
+SC-015 counts: runs with learner-visible text before the first snapshot call **0**; runs whose first tool was not the snapshot tool **0**; skill IDs in learner-visible text **0**. Counted from the saved transcripts (every `MENTOR:` block before the first snapshot call; the first tool call; a regex for skill IDs in every `MENTOR:` block), and agreeing with the runner's own `no_text_before_snapshot`, `first_tool`, `plain_words` and `no_read_learner_record` checks, which passed in every run. Not baselines; not whole-set runs. Run against the worktree's `mentor/` and `.claude/skills/`, which match `main`.
+
+| Case | Result | Triage |
+|---|---|---|
+| 01 | 1/3 (runs 2 and 3 FAIL) | Rubric only: R-KT-INTENT-FIRST. Both runs opened with a lead-in explaining hold, linear and ease before the question ("With hold, it waits and then jumps..."). No hard-rule check failed. Real, a teaching-quality judgment; the same item failed once in three on 2026-10-27 (see the smoke table). Does not count against SC-015. Proposal for the builder below |
+| 14, 21, 22 | 3/3 each | Clean |
+
+Proposal (smallest): in `key-types-mentor/SKILL.md` first-lesson step, say the opening is the question, with the candidates, and no explanation of the key types before the learner answers.

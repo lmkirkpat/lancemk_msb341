@@ -1,0 +1,473 @@
+{
+  "run_at": "2026-10-28T17:55:26.206Z",
+  "options": {
+    "only": "01",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 1.12,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "01-first-lesson-properties",
+      "title": "First lesson, properties kind, on Mentor Practice: Title's three properties, the layers kind offered once, what's left out, order and gap asked",
+      "covers": [
+        "EP-1",
+        "US1"
+      ],
+      "fixture_sources": {
+        "practice-now.json": "live"
+      },
+      "hash": "874fdab983f04bd564904751b0ecaa9f8da107d9193cfe2b587f389a089ba878",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was offset_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:names_properties",
+              "pass": true,
+              "detail": "turn 1: \"\""
+            },
+            {
+              "check": "say:offers_layers_once",
+              "pass": true,
+              "detail": "turn 1: \"Bar and Glow also both start at 0 s.\n\nI'm leaving a few things out:\n- CTRL is a null. Its move only shows through what's attached to it.\n- You've hidden Old Take, so I'll skip it unless you want it in.\n- Icon is a precomp, and I can't check the timing inside it yet.\n- An expression drives Logo's Rotation, so its keys aren't what you see on screen.\n\nShould we work on Title's three properties, or would you rather do Bar and Glow\""
+            },
+            {
+              "check": "say:left_out_null",
+              "pass": true,
+              "detail": "turn 1: \"CTRL\""
+            },
+            {
+              "check": "say:left_out_hidden",
+              "pass": true,
+              "detail": "turn 1: \"Old Take\""
+            },
+            {
+              "check": "say:asks_first",
+              "pass": true,
+              "detail": "turn 2: \"lead\""
+            },
+            {
+              "check": "say:asks_apart",
+              "pass": true,
+              "detail": "turn 2: \"far\""
+            },
+            {
+              "check": "say:not_everything",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-PROPOSAL",
+              "pass": true,
+              "reason": "Turn 1 names the group with real names and the shared time from the snapshot: \"Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s\". The next sentence only restates that and adds no members. It offers the other kind in one sentence (\"Bar and Glow also both start at 0 s\", which matches other_group start 0) and lets the learner choose."
+            },
+            {
+              "item": "R-OFF-LEFT-OUT",
+              "pass": true,
+              "reason": "Turn 1 lists all four left_out reasons from the tool, each as its own short bullet: CTRL the null, the hidden Old Take, the Icon precomp, and the expression on Logo's Rotation."
+            },
+            {
+              "item": "R-OFF-INTENT",
+              "pass": true,
+              "reason": "Turn 2 asks \"Which of the three should go first? And how far apart do you want them?\" and leaves both to the learner. The learner hasn't answered yet, so no repeat-back was due."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time the mentor uses appears in the snapshot or preview_frame results: Mentor Practice, Title, Position/Scale/Opacity, 0.5 s–1.5 s, Bar, Glow, 0 s, CTRL, Old Take, Icon, Logo's Rotation, and the frame at 1 s. \"Halfway\" at 1 s follows directly from the 0.5–1.5 s span."
+            }
+          ],
+          "cost": 0.37650880000000003,
+          "session_id": "ba59a92c-fe02-41b4-ac56-23b460fc9a73",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": false\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: In Mentor Practice, Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s. They start on the same frame and land on the same frame.\n\nIf you'd rather stagger layers, Bar and Glow also both start at 0 s.\n\nI'm leaving a few things out:\n- CTRL is a null. Its move only shows through what's attached to it.\n- You've hidden Old Take, so I'll skip it unless you want it in.\n- Icon is a precomp, and I can't check the timing inside it yet.\n- An expression drives Logo's Rotation, so its keys aren't what you see on screen.\n\nShould we work on Title's three properties, or would you rather do Bar and Glow?\n\n### Turn 2: the project is an open comp\nLEARNER: Title's three properties, please.\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-ylWyO6-runtime/ba59a92c-fe02-41b4-ac56-23b460fc9a73/tool-results/mcp-ae-mentor-blob-1793210051500-9b6m5i.png]\n{\"comp\":\"Mentor Practice\",\"time\":1}\nMENTOR: This is the frame at 1 s. Title's Position, Scale and Opacity are all halfway through their moves. They started together at 0.5 s and they'll land together at 1.5 s. When everything moves at once, nothing leads the eye, so the move reads as one flat event instead of something designed.\n\nWhich of the three should go first? And how far apart do you want them?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was offset_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:names_properties",
+              "pass": true,
+              "detail": "turn 1: \"\""
+            },
+            {
+              "check": "say:offers_layers_once",
+              "pass": true,
+              "detail": "turn 1: \"Bar and Glow both start at 0 s.\n\nA few layers are staying out of this lesson:\n- **CTRL** is a null. Its move only shows through what's attached to it.\n- **Old Take** is hidden, so I'll skip it unless you want it in.\n- **Icon** is a precomp, and I can't check its timing yet.\n- **Logo's** Rotation is driven by an expression, so its keys aren't what you actually see.\n\nWould you like to stagger Title's three properties, or Bar and Glow\""
+            },
+            {
+              "check": "say:left_out_null",
+              "pass": true,
+              "detail": "turn 1: \"CTRL\""
+            },
+            {
+              "check": "say:left_out_hidden",
+              "pass": true,
+              "detail": "turn 1: \"Old Take\""
+            },
+            {
+              "check": "say:asks_first",
+              "pass": true,
+              "detail": "turn 2: \"lead\""
+            },
+            {
+              "check": "say:asks_apart",
+              "pass": true,
+              "detail": "turn 2: \"far\""
+            },
+            {
+              "check": "say:not_everything",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-PROPOSAL",
+              "pass": true,
+              "reason": "Turn 1 names the group with real names and the shared time ('Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s'); the follow-up sentence only restates it. It offers the other kind once ('Bar and Glow both start at 0 s') and lets the learner choose."
+            },
+            {
+              "item": "R-OFF-LEFT-OUT",
+              "pass": true,
+              "reason": "Turn 1 covers all four left_out reasons the tool listed, one short line each: CTRL is a null, Old Take is hidden, Icon is a precomp, and Logo's Rotation is driven by an expression."
+            },
+            {
+              "item": "R-OFF-INTENT",
+              "pass": true,
+              "reason": "Turn 2 asks 'Which should go first?' and 'How far apart do you want them?' and leaves both to the learner without picking an order or gap; the learner hasn't answered yet, so the repeat-back isn't triggered."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time (Mentor Practice, Title, Position/Scale/Opacity, 0.5 s to 1.5 s, Bar, Glow at 0 s, CTRL, Old Take, Icon, Logo's Rotation, the frame at 1 s) appears in the snapshot or preview_frame results, and 'halfway through' at 1 s follows directly from them."
+            }
+          ],
+          "cost": 0.37306480000000003,
+          "session_id": "ae0f1148-16fc-40f5-b9ec-6f43be1ee552",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": false\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: In your Mentor Practice comp, Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s. They start and land on exactly the same frames.\n\nThere's also a group of layers if you'd rather work on that: Bar and Glow both start at 0 s.\n\nA few layers are staying out of this lesson:\n- **CTRL** is a null. Its move only shows through what's attached to it.\n- **Old Take** is hidden, so I'll skip it unless you want it in.\n- **Icon** is a precomp, and I can't check its timing yet.\n- **Logo's** Rotation is driven by an expression, so its keys aren't what you actually see.\n\nWould you like to stagger Title's three properties, or Bar and Glow?\n\n### Turn 2: the project is an open comp\nLEARNER: Title's three properties, please.\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-Zc078G-runtime/ae0f1148-16fc-40f5-b9ec-6f43be1ee552/tool-results/mcp-ae-mentor-blob-1793210081091-p254sb.png]\n{\"comp\":\"Mentor Practice\",\"time\":1}\nMENTOR: Here's the frame at 1 s. At this moment Title's Position, Scale and Opacity are all halfway through their moves, because all three began together at 0.5 s and will all land together at 1.5 s. When everything moves at once, nothing leads the eye, and the title arrives as one stiff block.\n\nTwo questions:\n1. **Which should go first?** Position, Scale or Opacity?\n2. **How far apart do you want them?**\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was offset_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:names_properties",
+              "pass": true,
+              "detail": "turn 1: \"\""
+            },
+            {
+              "check": "say:offers_layers_once",
+              "pass": true,
+              "detail": "turn 1: \"Bar and Glow also both start at 0 s.\n\nA few things I'm leaving out:\n- CTRL is a null. Its move only shows through what's attached to it, so I'll leave it out.\n- You've hidden Old Take, so I'll leave it unless you want it.\n- Icon is a precomp, and I can't check its timing yet.\n- An expression drives Logo's Rotation, so its keys aren't what you see.\n\nWant to work on Title's three properties, or on Bar and Glow\""
+            },
+            {
+              "check": "say:left_out_null",
+              "pass": true,
+              "detail": "turn 1: \"CTRL\""
+            },
+            {
+              "check": "say:left_out_hidden",
+              "pass": true,
+              "detail": "turn 1: \"Old Take\""
+            },
+            {
+              "check": "say:asks_first",
+              "pass": true,
+              "detail": "turn 2: \"lead\""
+            },
+            {
+              "check": "say:asks_apart",
+              "pass": true,
+              "detail": "turn 2: \"far\""
+            },
+            {
+              "check": "say:not_everything",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-PROPOSAL",
+              "pass": true,
+              "reason": "Turn 1 names the group in one sentence with real names and the shared time ('Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s'); the follow-up 'They start together and land together' only restates it. It offers the layers kind in one sentence ('Bar and Glow also both start at 0 s') and lets the learner choose ('Want to work on Title's three properties, or on Bar and Glow?')."
+            },
+            {
+              "item": "R-OFF-LEFT-OUT",
+              "pass": true,
+              "reason": "Turn 1 gives each of the four listed reasons its own short bullet: CTRL as a null, Old Take hidden, Icon a precomp, and the expression on Logo's Rotation. None is skipped or run together."
+            },
+            {
+              "item": "R-OFF-INTENT",
+              "pass": true,
+              "reason": "Turn 2 asks 'which of the three should go first? And how far apart do you want them?' as the learner's plan, and suggests no order or gap; the learner hasn't answered yet, so there was nothing to repeat back."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time mentioned (Mentor Practice, Title's Position/Scale/Opacity at 0.5–1.5 s, Bar and Glow at 0 s, CTRL, Old Take, Icon, Logo's Rotation, the frame at 1 s) matches offset_snapshot or the preview_frame result."
+            }
+          ],
+          "cost": 0.370057,
+          "session_id": "317a255f-72ca-49a8-88a9-f76766ea483f",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": false\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": false\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Here in your **Mentor Practice** comp, Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s. They start together and land together.\n\nIf you'd rather stagger layers, Bar and Glow also both start at 0 s.\n\nA few things I'm leaving out:\n- CTRL is a null. Its move only shows through what's attached to it, so I'll leave it out.\n- You've hidden Old Take, so I'll leave it unless you want it.\n- Icon is a precomp, and I can't check its timing yet.\n- An expression drives Logo's Rotation, so its keys aren't what you see.\n\nWant to work on Title's three properties, or on Bar and Glow?\n\n### Turn 2: the project is an open comp\nLEARNER: Title's three properties, please.\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-s0QQJ6-runtime/317a255f-72ca-49a8-88a9-f76766ea483f/tool-results/mcp-ae-mentor-blob-1793210108393-g0p4je.png]\n{\"comp\":\"Mentor Practice\",\"time\":1}\nMENTOR: Here's your comp at 1 s. That's right in the middle of Title's move, so its Position, Scale and Opacity are all partway through together. When everything moves at once, nothing leads the eye. It reads as one flat change, not a move someone designed.\n\nSo what's your plan: which of the three should go first? And how far apart do you want them?\n"
+        }
+      ]
+    }
+  ]
+}

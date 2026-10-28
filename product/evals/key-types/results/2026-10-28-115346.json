@@ -1,0 +1,369 @@
+{
+  "run_at": "2026-10-28T17:53:46.008Z",
+  "options": {
+    "only": "22",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.57,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "22-practicing-memory-clause",
+      "title": "Practicing: the lesson opens by picking up what was still off, in plain words with how long ago, no skill ID",
+      "covers": [
+        "FR-049",
+        "FR-052",
+        "SC-015"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "2fda232af39628ba599b831eee08af552bac858f3e85afd2180aa655f1615b97",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was key_types_snapshot"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:picks_up_where_it_was",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            },
+            {
+              "check": "say:says_when",
+              "pass": true,
+              "detail": "turn 1: \"days ago\""
+            },
+            {
+              "check": "say:no_skill_name_as_id",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-PRACTICING-MEMORY",
+              "pass": true,
+              "reason": "The opening line \"Four days ago you held one of Blink's pairs, and the others still faded\" matches last_attempted and days_since_practiced: 4 in plain words with how long ago, names no skill ID or field, and goes on with the lesson."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time comes from the snapshot: Mentor Practice 2, Blink's Opacity with three pairs, Cut's Opacity starting at 3 s, and Seal as a precomp."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn is short and moves one idea, what is meant to snap, framed by the candidates and the required left-out note, and it ends by asking the learner \"What should snap?\""
+            }
+          ],
+          "cost": 0.1902954,
+          "session_id": "21656a3c-9512-4db1-8c21-72bdeeae9afb",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"practicing\",\n    \"times_passed\": 0,\n    \"next\": \"Hold the second Blink pair so it snaps.\",\n    \"last_attempted\": \"Held one Blink pair; the other pairs still fade\",\n    \"days_since_practiced\": 4,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Four days ago you held one of Blink's pairs, and the others still faded. Let's pick that up here in Mentor Practice 2.\n\nFirst, a question: **is anything in this comp meant to snap, like a blink, an on/off, or a cut?**\n\nThere are two places you could check:\n- **Blink's Opacity** goes on and off three times, and right now each change fades. Is it meant to snap instead?\n- **Cut's Opacity** changes once, starting at 3 s. Is that meant to snap, or to fade?\n\nI'm leaving out **Seal**. It's a precomp, and I can't see inside it yet, so I'm not saying it's fine.\n\nWhat should snap?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was key_types_snapshot"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:picks_up_where_it_was",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            },
+            {
+              "check": "say:says_when",
+              "pass": true,
+              "detail": "turn 1: \"days ago\""
+            },
+            {
+              "check": "say:no_skill_name_as_id",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-PRACTICING-MEMORY",
+              "pass": true,
+              "reason": "The opening line \"Four days ago you held one of Blink's pairs, but the others still faded\" restates last_attempted in plain words, uses days_since_practiced (4) for when, names no skill ID or field, and goes straight on to the lesson."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time matches the snapshot: Mentor Practice 2, Blink's Opacity with three pairs from 1 s, Cut's Opacity with one pair at 3 s, and Seal as a precomp in left_out."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn is short and moves one idea, which is whether Blink or Cut is meant to snap, with the memory line and the Seal note as brief framing; it ends with a direct question for the learner."
+            }
+          ],
+          "cost": 0.1876166,
+          "session_id": "0ebeeb90-2d7c-43b7-a29e-fe4aeea95945",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"practicing\",\n    \"times_passed\": 0,\n    \"next\": \"Hold the second Blink pair so it snaps.\",\n    \"last_attempted\": \"Held one Blink pair; the other pairs still fade\",\n    \"days_since_practiced\": 4,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Welcome back. Four days ago you held one of Blink's pairs, but the others still faded, so let's pick up there.\n\nIn **Mentor Practice 2**, two things change Opacity without snapping:\n\n- **Blink's Opacity** has three pairs, starting at 1 s.\n- **Cut's Opacity** has one pair, at 3 s.\n\nSeal is a precomp. I can't see inside it yet, so I'm not saying it's fine.\n\n**Is anything here meant to snap, like a blink, an on/off, or a cut?** Is Blink meant to snap on and off? What about Cut: should it snap or fade?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was key_types_snapshot"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:picks_up_where_it_was",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            },
+            {
+              "check": "say:says_when",
+              "pass": true,
+              "detail": "turn 1: \"days ago\""
+            },
+            {
+              "check": "say:no_skill_name_as_id",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-PRACTICING-MEMORY",
+              "pass": true,
+              "reason": "The opening says 'Four days ago you held one of Blink's pairs, but the others still faded.' This matches last_attempted and days_since_practiced: 4 in the snapshot, uses plain words, names no skill ID or field, and moves straight on to the lesson."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time the mentor uses appears in the snapshot result: Mentor Practice 2, Blink › Opacity from 1 s with three changes (3 pairs), Cut › Opacity at 3 s (1 pair), and Seal as a precomp in left_out."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The turn stays on one idea, which parts here should snap. The two candidates and the short Seal note serve that question, and the turn ends by handing the learner a question: 'Which of these should snap?'"
+            }
+          ],
+          "cost": 0.1920286,
+          "session_id": "af5df4e3-0698-4aec-95e7-213039c75db0",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"practicing\",\n    \"times_passed\": 0,\n    \"next\": \"Hold the second Blink pair so it snaps.\",\n    \"last_attempted\": \"Held one Blink pair; the other pairs still fade\",\n    \"days_since_practiced\": 4,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Welcome back. Four days ago you held one of Blink's pairs, but the others still faded. Let's pick that up on Mentor Practice 2.\n\nFirst, a question: **is anything here meant to snap, like a blink, an on/off, or a cut?**\n\nA couple of things to think about:\n\n- **Blink › Opacity** changes three times, starting at 1 s, and right now each change fades. Is it meant to snap on and off instead?\n- **Cut › Opacity** changes once, at 3 s, and that fades too. Is it meant to snap, or is that one a fade?\n\nI'm leaving **Seal** alone for now. It's a precomp, and I can't see inside it yet, so I'm not saying it's fine either way.\n\nWhich of these should snap?\n"
+        }
+      ]
+    }
+  ]
+}
