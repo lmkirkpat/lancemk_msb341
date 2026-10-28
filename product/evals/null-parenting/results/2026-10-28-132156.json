@@ -1,0 +1,353 @@
+{
+  "run_at": "2026-10-28T19:21:56.657Z",
+  "options": {
+    "only": "02",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 1.15,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "02-explain-what-a-parent-passes",
+      "title": "Explain: position, scale and rotation pass down; not opacity or effects",
+      "covers": [
+        "EP-2",
+        "US1-2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "345ad9362696895a7996b7f47127f0dd0abc7d0568eb605ceb259bdad1635244",
+      "pass": false,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "say:position",
+              "pass": true,
+              "detail": "turn 2: \"position\""
+            },
+            {
+              "check": "say:scale",
+              "pass": true,
+              "detail": "turn 2: \"scale\""
+            },
+            {
+              "check": "say:rotation",
+              "pass": true,
+              "detail": "turn 2: \"rotation\""
+            },
+            {
+              "check": "say:opacity_named",
+              "pass": true,
+              "detail": "turn 2: \"opacity\""
+            },
+            {
+              "check": "say:opacity_not_passed",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-INHERITS-RIGHT",
+              "pass": true,
+              "reason": "Turn 2 says \"A parent passes its position, scale and rotation down\" and \"Two things don't pass down: opacity and effects.\" It adds that a null never shows in the render, states nothing false, and uses the comp's real Hatch/Hatch Rig pair as the example."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The only layers named are Hatch and Hatch Rig (Turn 2), and the snapshot's left_out shows Hatch parented to Hatch Rig; the pivot-lesson reference in Turn 1 matches other_skills, and no invented layers, properties or times appear."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 is three short lines ending in the which-layers question. Turn 2 is longer, but it answers only the learner's two-part question about what a parent passes and why a null, and it ends by asking \"Which layers in this comp should move as one?\""
+            }
+          ],
+          "cost": 0.3807716,
+          "session_id": "a1502914-766b-4e53-8644-df9389bb86b5",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nIn this lesson you'll move several layers as one group by attaching them to a single invisible handle.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Why do I need a null at all? What does a parent actually pass down to the layers under it?\nMENTOR: A parent passes its position, scale and rotation down to every layer under it. If the parent slides, turns or grows, its children do too, and each child still plays its own animation on top. Hatch in this comp already works this way: it follows Hatch Rig. Two things don't pass down: opacity and effects. A parent's fade or blur never reaches its children. You use a null as the parent because a null never shows in the render, so it can't add its own look to the group. It's an invisible handle you put exactly where the group should turn or scale from.\n\nWhich layers in this comp should move as one?\n"
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "say:position",
+              "pass": true,
+              "detail": "turn 2: \"Position\""
+            },
+            {
+              "check": "say:scale",
+              "pass": true,
+              "detail": "turn 2: \"Scale\""
+            },
+            {
+              "check": "say:rotation",
+              "pass": true,
+              "detail": "turn 2: \"Rotation\""
+            },
+            {
+              "check": "say:opacity_named",
+              "pass": true,
+              "detail": "turn 2: \"Opacity\""
+            },
+            {
+              "check": "say:opacity_not_passed",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-INHERITS-RIGHT",
+              "pass": true,
+              "reason": "Turn 2 says \"A parent passes its Position, Scale and Rotation down to its children\" and \"It doesn't pass down Opacity or effects\". It adds that \"A null never shows in the render\" and uses the comp's real example, \"Hatch follows Hatch Rig\", which the snapshot's left_out confirms."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses comes from the snapshot: Mentor Practice 2, Hatch, Hatch Rig, and the pivot lesson from other_skills. Position, Scale, Rotation and Opacity are standard After Effects property names used correctly."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": false,
+              "reason": "Turn 2 packs several ideas into one turn: what passes down, why a visible parent drags the rest, that a null doesn't render and where to place it, plus the existing Hatch/Hatch Rig example. That is more than the one idea per turn the item asks for, though the turn does end with a question."
+            }
+          ],
+          "cost": 0.3863676,
+          "session_id": "719421c3-04d2-4b4c-8603-13fae6683f94",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this builds on it.\n\nToday's idea is moving a group of layers as one by parenting them to an invisible handle. Which layers in Mentor Practice 2 should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Why do I need a null at all? What does a parent actually pass down to the layers under it?\nMENTOR: A parent passes its Position, Scale and Rotation down to its children, so when the parent slides, grows or turns, they all go with it and keep their own animation on top. It doesn't pass down Opacity or effects, so fading or blurring the parent does nothing to the children. You could parent everything to one of the visible layers, but then anything you do to that layer drags the rest along. A null never shows in the render, so it's a clean handle with no look of its own, and you put it exactly where the group should turn or scale from. Your comp already has one: Hatch follows Hatch Rig.\n\nSo which layers should move as one?\n"
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "say:position",
+              "pass": true,
+              "detail": "turn 2: \"Position\""
+            },
+            {
+              "check": "say:scale",
+              "pass": true,
+              "detail": "turn 2: \"Scale\""
+            },
+            {
+              "check": "say:rotation",
+              "pass": true,
+              "detail": "turn 2: \"Rotation\""
+            },
+            {
+              "check": "say:opacity_named",
+              "pass": true,
+              "detail": "turn 2: \"Opacity\""
+            },
+            {
+              "check": "say:opacity_not_passed",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-INHERITS-RIGHT",
+              "pass": true,
+              "reason": "Turn 2 says \"A parent passes down its Position, Scale and Rotation\" and \"Opacity and effects don't pass down,\" adds that a null \"never shows in the render,\" and uses the comp's real Hatch / Hatch Rig pair from the snapshot as the example."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The only layers named (Hatch following Hatch Rig) match the snapshot's left_out entry, the pivot lesson reference matches other_skills, and Position/Scale/Rotation/Opacity are used only as the generic properties this explanation calls for, with no invented layer, property or time."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": false,
+              "reason": "Turn 2 runs seven sentences and covers several ideas at once: what passes down, a Hatch/Hatch Rig example, the visible-parent alternative, why a null avoids it, and placing and animating the null, which makes it a lecture rather than one idea before the closing question."
+            }
+          ],
+          "cost": 0.38301660000000004,
+          "session_id": "b98aba28-67ea-4a9c-8a0b-2085533ce35d",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Why do I need a null at all? What does a parent actually pass down to the layers under it?\nMENTOR: A parent passes down its Position, Scale and Rotation, so when it moves, turns or grows, the layers under it go along while their own animation keeps running. In this comp, Hatch already follows Hatch Rig. Opacity and effects don't pass down, so fading or blurring a parent does nothing to its children. You could parent the group to one of its own visible layers, but then every change to that layer would drag the rest along. A null avoids that because it never shows in the render. You put it where the group should turn or scale from and animate it, and it has no look of its own to pass on.\n\nWhich layers should move as one?\n"
+        }
+      ]
+    }
+  ]
+}

@@ -415,3 +415,24 @@ SC-015 will count them: the repeats of 18, 34 and 37 would fail 3 of 3 as the me
 Same order as easing: a failed `run` check is plumbing; a failed deterministic check is a hard-rule
 break; a failed rubric item is teaching quality. Re-run a flipping case with `--repeat 3` before
 changing `SKILL.md`. Rubric items are in `rubric.md`.
+
+## Fix re-runs 2026-10-28
+
+After the check and rubric fixes (`5ec8553`) and the `SKILL.md` wording fixes (`e82a7d2`), eight cases were
+re-run with `--repeat 3`, one invocation each, $14.37 in all. Cases 15, 18, 23, 28 and 30 were not run: the
+budget limit ($15) would have been passed.
+
+| Case | Passed | Result |
+|---|---|---|
+| 01 | 3/3 | Fixed (R-USES-MEMORY; the memory clause is in the opening) |
+| 02 | 1/3 | Same problem: R-ONE-IDEA, step 2 still packs several ideas |
+| 03 | 0/3 | Run 1 a new hard-rule break (`never_picks`, "put it on"); runs 2 and 3 the same R-ONE-IDEA |
+| 04 | 0/3 | Same problem: R-ONE-IDEA in turns 2 to 4 (a hard-rule pass, the judge fails them) |
+| 10 | 2/3 | Run 3 `no_pixel_target` on "one-pixel" (hyphenated; the skill ban may not cover it) |
+| 11 | 3/3 | Fixed (comments) |
+| 20 | 3/3 | Fixed (check; the lead-in "Today's idea is..." still appears once, unjudged) |
+| 32 | 3/3 | Fixed (check) |
+
+Not fixed: step 2 is still too long for R-ONE-IDEA (02, 03, 04 = 7 of 9 runs failed on it). Result files:
+`results/2026-10-28-132042.json` (01), `-132156` (02), `-132344` (03), `-132609` (04), `-133243` (10), `-133512` (11),
+`-133607` (20), `-133728` (32).

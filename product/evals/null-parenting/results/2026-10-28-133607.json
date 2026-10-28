@@ -1,0 +1,369 @@
+{
+  "run_at": "2026-10-28T19:36:07.392Z",
+  "options": {
+    "only": "20",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 1.1,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "20-crowd-only",
+      "title": "A crowd-only comp: the crowd question, no proposal, no layer named or counted",
+      "covers": [
+        "EP-20",
+        "US1-9",
+        "FR-005a"
+      ],
+      "fixture_sources": {
+        "synthetic/crowd-only.json": "synthetic"
+      },
+      "hash": "4b575e8240d28dd7c5268de102ee5647905940605f47ab61500e47207ef1fdab",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:crowd_question",
+              "pass": true,
+              "detail": "turn 2: \"sit close\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_count",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_proposal",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-CROWD-QUESTION",
+              "pass": true,
+              "reason": "In turn 2, with no_proposal_reason \"crowded\", the mentor says \"A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one?\" and makes no proposal."
+            },
+            {
+              "item": "R-CROWD-HIDDEN",
+              "pass": true,
+              "reason": "The turn 2 reply says only that \"a lot of your layers sit close together\" and never names, counts or lists the crowded layers."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The only specific names used are the comp \"Lower Thirds\" and the pivot lesson, both in the snapshot result; \"parts of a lower third or a logo lockup\" are generic examples, not invented layer names."
+            }
+          ],
+          "cost": 0.3645334,
+          "session_id": "931bb17a-1941-4d45-975a-eeba6f033b19",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Lower Thirds.aep\",\n  \"comp\": {\n    \"name\": \"Lower Thirds\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nWhich layers in Lower Thirds should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: I don't have a group in mind. What do you suggest?\nMENTOR: A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:crowd_question",
+              "pass": true,
+              "detail": "turn 2: \"sit close\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_count",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_proposal",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-CROWD-QUESTION",
+              "pass": true,
+              "reason": "Turn 2 says 'A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one?' with no proposal and no group set."
+            },
+            {
+              "item": "R-CROWD-HIDDEN",
+              "pass": true,
+              "reason": "Turn 2 names no crowd layers, gives no count and lists nothing left out; it says only that a lot of layers sit close together."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The only names used, the 'Lower Thirds' comp in turn 1 and the pivot lesson, match the snapshot's comp.name and other_skills, and no layer or property is invented."
+            }
+          ],
+          "cost": 0.3637144,
+          "session_id": "a39ca1c0-5b0c-4bc3-b05b-35fe2fd491a7",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Lower Thirds.aep\",\n  \"comp\": {\n    \"name\": \"Lower Thirds\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this builds on it.\n\nIn your Lower Thirds comp, which layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: I don't have a group in mind. What do you suggest?\nMENTOR: A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:crowd_question",
+              "pass": true,
+              "detail": "turn 2: \"sit close\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_count",
+              "pass": true,
+              "detail": "turns 1 to 2: clean"
+            },
+            {
+              "check": "say:no_proposal",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-CROWD-QUESTION",
+              "pass": true,
+              "reason": "With no_proposal_reason \"crowded\", turn 2 says \"A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one?\" and makes no proposal."
+            },
+            {
+              "item": "R-CROWD-HIDDEN",
+              "pass": true,
+              "reason": "Turn 2 says only that \"a lot of your layers sit close together\", with no layer named, no count, and nothing listed as left out (Backdrop is not mentioned)."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "The mentor names no layer, property or time; the \"pivot lesson\" in turn 1 matches \"Set the pivot (anchor point)\" in the snapshot's other_skills, and \"a lower third or a logo lockup\" are generic examples, not layer names."
+            }
+          ],
+          "cost": 0.36724239999999997,
+          "session_id": "8f1a3a1e-21c2-4082-b21a-3bf82b71a62c",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Lower Thirds.aep\",\n  \"comp\": {\n    \"name\": \"Lower Thirds\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it. Today's idea is moving several layers as one group from a single invisible handle.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: I don't have a group in mind. What do you suggest?\nMENTOR: A lot of your layers sit close together, so I can't tell which ones belong together. Which 2 to 4 should move as one?\n"
+        }
+      ]
+    }
+  ]
+}
