@@ -11,7 +11,8 @@ import { runSnippet } from "../bridge-client.mjs";
 import { MentorError, registerErrors } from "../errors.mjs";
 import { sampleAt } from "../lib/comp-space.mjs";
 import { parseHost } from "../lib/host.mjs";
-import { byIndex, byName, layerInfo } from "../lib/layer-info.mjs";
+import { byIndex, layerInfo } from "../lib/layer-info.mjs";
+import { layerNow } from "../lib/renumber.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
@@ -140,8 +141,10 @@ async function anchorDemo({ target }) {
   if (read.comp.id !== lesson.comp_id) {
     throw new MentorError("NO_ACTIVE_COMP", `The active comp isn't ${lesson.baseline.comp.name}. Switch back to it, then ask for the demonstration again.`);
   }
-  const matches = byName(read, bEntry.name);
-  const entry = matches.length === 1 ? matches[0] : matches.find((m) => m.index === bEntry.index) || null;
+  // T467: the layer matched as the checks match it (renumber.mjs): a same-name copy that can't be told
+  // apart is not_found, never the layer now at the old index.
+  const now = layerNow(lesson.baseline, read, bEntry.index);
+  const entry = now.reason ? null : byIndex(read, now.index);
   const reason = demoRefusal(read, entry, { rest_time: rest });
   if (reason) throw refused(reason);
   const sample = sampleAt(entry, read.comp.time);

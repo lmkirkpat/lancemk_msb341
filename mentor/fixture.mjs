@@ -115,6 +115,9 @@ async function snapshot() {
 function setEase(args) {
   const project = loadProject();
   if (project.comp.id !== args.comp_id) throw new MentorError("NO_ACTIVE_COMP");
+  // T467: the layer at that index must still be the one the server read (mentor/lib/demo-layer.mjs).
+  const at = project.layers.find((l) => l.index === args.layer_index);
+  if (typeof args.layer_name === "string" && (!at || at.name !== args.layer_name)) throw new MentorError("DEMO_LAYER_MOVED");
   const { layer, prop, from, to } = applyEase(project, args);
   saveEdit({ snippet: "set-ease", comp_id: args.comp_id, layer_index: args.layer_index, property_path: args.property_path, key_index: args.key_index });
   return {

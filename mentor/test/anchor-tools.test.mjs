@@ -284,6 +284,40 @@ test("anchor_demo on a layer locked since the lesson started: ANCHOR_REFUSED loc
   assert.equal(runs.length, 0);
 });
 
+// T467: Edit > Duplicate puts the copy at the layer's own index and moves the layer down one. The demo
+// used to fall back to the old index for a repeated name, so it wrote to the copy.
+test("T467: anchor_demo after the target was duplicated with its name: ANCHOR_REFUSED not_found, nothing run", async () => {
+  const s = await call("anchor_snapshot", { skill_options: { focus: KEY.two_focus_demos.door_with_tab.focus } });
+  const tab = idx("Tab");
+  assert.equal(s.demo_target, `anchor/${tab}`);
+  project(variant("practice2b", (x) => {
+    const shift = (i) => (typeof i === "number" && i >= tab ? i + 1 : i);
+    for (const l of x.layers) l.index = shift(l.index);
+    for (const l of x.precomp_layers || []) l.index = shift(l.index);
+    const copy = clone(x.layer_info.find((l) => l.name === "Tab"));
+    for (const l of x.layer_info) { l.index = shift(l.index); l.parent = shift(l.parent); }
+    x.layer_info.push({ ...copy, index: tab });
+    x.layer_info.sort((a, b) => a.index - b.index);
+  }));
+  await assert.rejects(call("anchor_demo", { target: s.demo_target }), (e) => e.code === "ANCHOR_REFUSED" && e.reason === "not_found");
+  assert.equal(runs.length, 0);
+});
+
+test("T467: anchor_demo after a null was added on top: runs on the target at its new index", async () => {
+  const s = await call("anchor_snapshot", { skill_options: { focus: KEY.two_focus_demos.door_with_tab.focus } });
+  const tab = idx("Tab");
+  project(variant("practice2b", (x) => {
+    for (const l of x.layers) l.index += 1;
+    for (const l of x.precomp_layers || []) l.index += 1;
+    for (const l of x.layer_info) { l.index += 1; if (typeof l.parent === "number") l.parent += 1; if (l.matte && typeof l.matte.layer === "number") l.matte.layer += 1; }
+    x.layer_info.unshift({ ...clone(x.layer_info[0]), index: 1, name: "Group Null", is_null: true, kind: "null", parent: null, matte: null, is_matte: false });
+  }));
+  const d = await call("anchor_demo", { target: s.demo_target });
+  assert.equal(d.layer, "Tab");
+  assert.equal(runs[0].args.layer_index, tab + 1);
+  assert.equal(runs[0].args.layer_name, "Tab");
+});
+
 test("T242: anchor_snapshot passes the pivot_outside note through with its side on screen (FR-019a)", async () => {
   const r = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Lid", place: "middle-left" }] } });
   assert.equal(r.place_now.Lid, "outside");

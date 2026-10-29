@@ -1,6 +1,6 @@
 // FR-006, the one demonstration: Easy Ease (speed 0, influence 33.33%) on key i out and key i+1 in,
 // keeping each key's other side as it was. ES3 function body with mentor/jsx/lib/*.jsx prepended.
-// ARGS = { comp_id, layer_index, property_path, key_index }. Runs inside one undo group.
+// ARGS = { comp_id, layer_index, layer_name, property_path, key_index }. Runs inside one undo group.
 
 var comp = app.project.activeItem;
 if (!(comp && comp instanceof CompItem)) throw new Error("NO_ACTIVE_COMP: Open the lesson's composition first.");
@@ -10,6 +10,9 @@ if (comp.id !== ARGS.comp_id) {
 if (ARGS.layer_index < 1 || ARGS.layer_index > comp.numLayers) throw new Error("Layer " + ARGS.layer_index + " isn't in this comp.");
 
 var layer = comp.layer(ARGS.layer_index);
+// T467: the server read the comp just before and names the layer it means. Another name at this index
+// means the layers moved since that read: refuse before any write.
+if (typeof ARGS.layer_name === "string" && layer.name !== ARGS.layer_name) throw new Error("DEMO_LAYER_MOVED:");
 var prop = propByPath(layer, ARGS.property_path);
 var i = ARGS.key_index;
 if (i < 1 || i + 1 > prop.numKeys) throw new Error("Keys " + i + " and " + (i + 1) + " don't exist on " + displayPath(prop) + ".");

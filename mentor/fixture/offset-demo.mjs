@@ -4,6 +4,7 @@
 // the snippet, before anything is saved.
 
 import { MentorError } from "../errors.mjs";
+import "../lib/demo-layer.mjs"; // registers DEMO_LAYER_MOVED
 import { demoRefusal, refused } from "../lib/offset.mjs";
 
 const r3 = (t) => Math.round(t * 1000) / 1000;
@@ -14,6 +15,8 @@ export function run(args, { snapshot, saveEdit }) {
   }
   const layer = snapshot.layers.find((l) => l.index === args.layer_index);
   if (!layer) throw new Error(`Layer ${args.layer_index} isn't in this comp.`);
+  // T467: the layer at that index must still be the one the server read.
+  if (typeof args.layer_name === "string" && layer.name !== args.layer_name) throw new MentorError("DEMO_LAYER_MOVED");
   const props = args.property_paths.map((p) => {
     const prop = layer.properties.find((x) => x.path === p);
     if (!prop) throw new Error(`Fixture has no property ${args.layer_index}/${p}`);

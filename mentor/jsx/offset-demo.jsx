@@ -1,7 +1,7 @@
 // Spec 010 FR-010, the one demonstration for skill 3: shift every key on the given properties of
 // one layer later by a whole number of frames, keys only (never the layer's in or out point). ES3
 // function body with mentor/jsx/lib/*.jsx prepended; run with undo, so it's one Edit > Undo.
-// ARGS = { comp_id, layer_index, property_paths, shift_frames }.
+// ARGS = { comp_id, layer_index, layer_name, property_paths, shift_frames }.
 //
 // ExtendScript has no "move key", so each key is re-created at its new time with every attribute
 // copied, then the old one is removed, from the last key to the first so a moved key never lands
@@ -16,6 +16,9 @@ if (comp.id !== ARGS.comp_id) {
 if (ARGS.layer_index < 1 || ARGS.layer_index > comp.numLayers) throw new Error("Layer " + ARGS.layer_index + " isn't in this comp.");
 
 var layer = comp.layer(ARGS.layer_index);
+// T467: the server read the comp just before and names the layer it means. Another name at this index
+// means the layers moved since that read: refuse before any write.
+if (typeof ARGS.layer_name === "string" && layer.name !== ARGS.layer_name) throw new Error("DEMO_LAYER_MOVED:");
 var shift = ARGS.shift_frames;
 var fps = comp.frameRate;
 

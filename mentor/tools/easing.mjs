@@ -4,6 +4,7 @@
 import { runSnippet } from "../bridge-client.mjs";
 import { needsEase, parseSegmentId, segments } from "../lib/analyze.mjs";
 import { diff } from "../lib/diff.mjs";
+import { demoLayer } from "../lib/demo-layer.mjs";
 import { isKeptLinear } from "../lib/marks.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
@@ -48,7 +49,10 @@ async function snapshotProject({ focus_layers } = {}) {
 
 async function setEase({ segment_id }) {
   const lesson = session.assertCanDemo(segment_id); // DEMO_USED / NOT_DEMO_TARGET / NO_SESSION, before AE
-  const r = await runSnippet("set-ease", { comp_id: lesson.comp_id, ...parseSegmentId(segment_id) }, { undo: true });
+  // T467: the pair's layer where it is now (a null added above it renumbers it), with its name.
+  const pair = parseSegmentId(segment_id);
+  const layer = demoLayer(lesson, await takeSnapshot(), pair.layer_index);
+  const r = await runSnippet("set-ease", { comp_id: lesson.comp_id, ...pair, ...layer }, { undo: true });
   session.recordDemo(segment_id);
   return json({
     eased: `${r.layer} › ${r.display_name}, ${r.from_time.toFixed(3)} s → ${r.to_time.toFixed(3)} s`,

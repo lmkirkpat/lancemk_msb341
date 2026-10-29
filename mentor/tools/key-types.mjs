@@ -6,6 +6,7 @@
 import { runSnippet } from "../bridge-client.mjs";
 import { parseSegmentId } from "../lib/analyze.mjs";
 import { parseHost } from "../lib/host.mjs";
+import { demoLayer } from "../lib/demo-layer.mjs";
 import { analyze, check, describePairs, finder, grade } from "../lib/key-types.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
@@ -84,7 +85,10 @@ async function keyTypesSnapshot({ mode: asked, fresh = false, skill_options } = 
 
 async function keyTypesDemo({ segment_id }) {
   const lesson = session.assertCanDemo(segment_id); // REVIEW_NO_DEMO / DEMO_USED / NOT_DEMO_TARGET / NO_SESSION, before AE
-  const r = await runSnippet("key-types-demo", { comp_id: lesson.comp_id, ...parseSegmentId(segment_id) }, { undo: true });
+  // T467: the pair's layer where it is now (a null added above it renumbers it), with its name.
+  const pair = parseSegmentId(segment_id);
+  const layer = demoLayer(lesson, await takeSnapshot(), pair.layer_index);
+  const r = await runSnippet("key-types-demo", { comp_id: lesson.comp_id, ...pair, ...layer }, { undo: true });
   session.recordDemo(segment_id);
   const fps = lesson.baseline.comp.frame_rate || 30;
   return json({

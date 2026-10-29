@@ -85,6 +85,14 @@ test("the snippet refuses another comp and a key pair that doesn't exist, changi
   assert.equal(prop.keys[0].outT, KIT.BEZIER);
 });
 
+// T467: the server names the layer it read; another name at that index means the layers moved.
+test("the snippet refuses when the layer at the index has another name, changing nothing", () => {
+  const prop = blink();
+  assert.throws(() => run(prop, { layer_name: "Cut" }), /^Error: DEMO_LAYER_MOVED:$/);
+  assert.equal(prop.keys[0].outT, KIT.BEZIER);
+  assert.equal(run(prop, { layer_name: "Blink" }).layer, "Blink");
+});
+
 test("the twin's apply sets only the out side (HOLD_SIDES out) and keeps values, eases and other keys", () => {
   const snap = load("practice2b.json");
   const before = structuredClone(snap);

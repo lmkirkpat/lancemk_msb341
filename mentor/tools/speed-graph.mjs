@@ -3,6 +3,7 @@
 // The analysis and check are pure, in mentor/lib/speed-graph.mjs.
 
 import { runSnippet } from "../bridge-client.mjs";
+import { demoLayer } from "../lib/demo-layer.mjs";
 import { MentorError } from "../errors.mjs";
 import { parseSegmentId } from "../lib/analyze.mjs";
 import { parseHost } from "../lib/host.mjs";
@@ -131,8 +132,11 @@ async function speedGraphSnapshot({ focus_layers, mode: asked, skill_options } =
 async function speedGraphDemo({ segment_id }) {
   ownLesson();
   const lesson = session.assertCanDemo(segment_id); // REVIEW_NO_DEMO / DEMO_USED / NOT_DEMO_TARGET, before AE
+  // T467: the pair's layer where it is now (a null added above it renumbers it), with its name.
+  const pair = parseSegmentId(segment_id);
+  const layer = demoLayer(lesson, await takeSnapshot(), pair.layer_index);
   const r = await runSnippet("speed-graph-demo", {
-    comp_id: lesson.comp_id, ...parseSegmentId(segment_id), out_influence: DEMO_OUT, in_influence: DEMO_IN,
+    comp_id: lesson.comp_id, ...pair, ...layer, out_influence: DEMO_OUT, in_influence: DEMO_IN,
   }, { undo: true });
   session.recordDemo(segment_id);
   return json({
