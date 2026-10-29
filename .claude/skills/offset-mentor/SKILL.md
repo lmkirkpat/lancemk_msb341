@@ -322,7 +322,8 @@ start.
       `attempted`), never how they did it (no method words: shortened, shifted, dragged, trimmed,
       the bar, Quick Offset), and never why.
     - `next`: one concrete thing, with no method words and no why ("so that", "because"). After a
-      pass, never a fault the check didn't report.
+      pass, never a fault the check didn't report. End it at the thing itself: "Stagger the
+      properties within a single layer.", not "... so that no two start or land together."
 
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short
