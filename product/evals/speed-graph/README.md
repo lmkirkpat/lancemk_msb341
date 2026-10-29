@@ -86,6 +86,8 @@ Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
 
 **Fix-round repeat (2026-10-28, mentor at `86fc67f`; $1.77):** 15 **0/3**, all `R-SG-READ-GRAPH-WRONG`: the judge fails the hint for ending on the reading question again. That is TD § 15 row 2h (the hint ends on their next answer; turn 3 follows it), and the rubric's own pass example is that hint, so the rubric wording "goes on / doesn't repeat the question" is stale (rubric, mine). Proposed: reword to "one hint, then waits for the next answer; turn 3 follows whatever it is".
 
+**Changed after seeing results (2026-10-28, human-approved):** `R-SG-READ-GRAPH-WRONG` reworded: one hint, then the mentor waits for the next answer, and ending the hint on the reading question is the design. Design line: TD § 15 table row 2h ("the one hint; their next answer; then turn 3 whatever it is") and builder item 1. The 0/3 for case 15 in the fix-round repeats was on the old wording.
+
 ## Running
 
 ```sh

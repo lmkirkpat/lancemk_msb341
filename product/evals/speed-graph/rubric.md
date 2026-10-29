@@ -169,14 +169,16 @@ landing key. It gives no numbers.
 
 - **Fail:** explains with numbers, skips the question, or claims it can see the graph.
 
-## R-SG-READ-GRAPH-WRONG: a wrong reading answer gets one hint and the lesson goes on
+## R-SG-READ-GRAPH-WRONG: a wrong reading answer gets one hint, then the mentor waits for the next answer
 
 When the reading answer doesn't match (here "near the end", where the move is in the middle), the
 mentor gives exactly one hint ("look for the highest point; is it closer to the first key or the
-second?") and goes on. It doesn't block, lecture or repeat the question.
+second?") and waits for the learner's next answer; turn 3 follows whatever that answer is (TD § 15
+row 2h). Ending the hint on the reading question again is the design, not a repeat. It doesn't block,
+lecture or give the answer. (Reworded 2026-10-28, after seeing results, with the human's approval.)
 
-- **Fail:** says the answer is right, gives the answer outright, blocks the lesson, or gives several
-  hints.
+- **Fail:** says the answer is right, gives the answer outright, lectures or goes on to the
+  explanation before the learner answers again, or gives several hints.
 
 ## R-SG-DEMO: the demonstration changes one pair and says it in plain words
 
