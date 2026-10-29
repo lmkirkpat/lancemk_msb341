@@ -84,6 +84,8 @@ Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
 
 **Changed after seeing results (2026-10-28, human-approved):** case 15 no longer expects `preview_frame` (`tools_called` removed). Design line: TD § 15 table, row 2h: a wrong reading gets the one hint, and the frame comes in turn 3 after the learner's next answer, which this case does not have. The 0/3 for case 15 in the pacing repeats was on the old expectation. The `one_hint` check is unchanged.
 
+**Fix-round repeat (2026-10-28, mentor at `86fc67f`; $1.77):** 15 **0/3**, all `R-SG-READ-GRAPH-WRONG`: the judge fails the hint for ending on the reading question again. That is TD § 15 row 2h (the hint ends on their next answer; turn 3 follows it), and the rubric's own pass example is that hint, so the rubric wording "goes on / doesn't repeat the question" is stale (rubric, mine). Proposed: reword to "one hint, then waits for the next answer; turn 3 follows whatever it is".
+
 ## Running
 
 ```sh

@@ -1,0 +1,309 @@
+{
+  "run_at": "2026-10-29T00:54:59.452Z",
+  "options": {
+    "only": "19",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 1.81,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "19-version-trap",
+      "title": "Version not known (the first capture of Mentor Practice has no host read): no shortcut for nudging keys and no Quick Offset; the drag is described",
+      "covers": [
+        "EP-17",
+        "FR-017",
+        "FR-030"
+      ],
+      "fixture_sources": {
+        "practice-before.json": "live"
+      },
+      "hash": "d3189ce342056de32efc5a0c97bd2d9fc85e6d55dce8decffd7c92d14da63c0f",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:no_quick_offset",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:describes_drag",
+              "pass": true,
+              "detail": "turn 3: \"drag\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-VERSION",
+              "pass": true,
+              "reason": "In turn 3 the learner asked about a shortcut or Quick Offset, and the mentor gave neither, replying 'I'll stick to dragging here... select a property's keys and drag them later in the timeline', which fits host.known false and quick_offset false."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 ends on the one choice; turn 2 gives the frame, the lockstep sentence, their plan said back and a short drag how-to, ending on 'Play it back and say done.'; turn 3 answers the side question in one sentence and restates the pending step."
+            }
+          ],
+          "cost": 0.6038426,
+          "session_id": "1c580362-eee2-447f-81a0-c3a5d53ded9b",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s. If you'd rather stagger layers, Bar and Glow also both start at 0 s.\n\nI've left a few things out:\n- **CTRL** is a null. Its move only shows through what's attached to it.\n- You've hidden **Old Take**, so I'll skip it unless you want it.\n- **Icon** is a precomp, and I can't check its timing yet.\n- An expression drives Logo's Rotation, so its keys aren't what you see.\n\nDo you want to stagger Title's three properties, or Bar and Glow?\n\n### Turn 2: the project is an open comp\nLEARNER: Position first, then Scale, then Opacity, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"properties\",\"order\":[\"Position\",\"Scale\",\"Opacity\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Position\",\n    \"Scale\",\n    \"Opacity\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": \"1/Transform › Scale/1\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-tyk5Dm-runtime/1c580362-eee2-447f-81a0-c3a5d53ded9b/tool-results/mcp-ae-mentor-blob-1793235228925-855koa.png]\n{\"comp\":\"Mentor Practice\",\"time\":1}\nMENTOR: So we're working with Title's three properties. At 1 s, Title's Position, Scale and Opacity are all halfway through their moves at once. When everything moves at once, nothing leads the eye.\n\nYour plan: Position goes first, then Scale, then Opacity, each 4 frames after the one before. Leave Position's keys where they are. Then click Scale's name to select all its keys, or drag a box around them, and drag them later. Do the same with Opacity.\n\nPlay it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Is there a shortcut to nudge the keys, or something like Quick Offset?\nMENTOR: I'll stick to dragging here, since that works the same on every setup: select a property's keys and drag them later in the timeline.\n\nMove Scale's keys, then Opacity's, then play it back and say done.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:no_quick_offset",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:describes_drag",
+              "pass": true,
+              "detail": "turn 3: \"Drag\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-VERSION",
+              "pass": true,
+              "reason": "Turn 2 describes the drag ('click a property's name to select all its keys... and drag them later in the timeline'), and Turn 3 declines nudge keys ('I won't give you nudge keys') without quoting any shortcut or bringing up Quick Offset, which is correct since the tool returned host.known false and quick_offset false."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 gives the group, the other kind and the leave-outs as one choice and ends on 'Do you want to stagger Title's properties, or Bar and Glow?'. Turn 2 gives the frame, the lockstep sentence, the plan said back and a one-sentence how-to with alternatives as clauses, ending on 'Play it back and say done.' Turn 3 answers the side question in two sentences and restates the pending step ending on 'say done'."
+            }
+          ],
+          "cost": 0.6059254,
+          "session_id": "fe174e44-61b3-4386-9a58-446160e391e0",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: In Mentor Practice, Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s, starting and landing on the same frames. Bar and Glow also both start at 0 s, if you'd rather stagger layers.\n\nA few layers are staying out of this:\n- CTRL is a null. Its move only shows through what's attached to it, so I'll leave it out.\n- You've hidden Old Take, so I'll leave it out unless you want it in.\n- Icon is a precomp, and I can't check its timing yet.\n- An expression drives Logo's Rotation, so its keys aren't what you see.\n\nDo you want to stagger Title's properties, or Bar and Glow?\n\n### Turn 2: the project is an open comp\nLEARNER: Position first, then Scale, then Opacity, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"properties\",\"order\":[\"Position\",\"Scale\",\"Opacity\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Position\",\n    \"Scale\",\n    \"Opacity\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": \"1/Transform › Scale/1\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-CJA0qE-runtime/fe174e44-61b3-4386-9a58-446160e391e0/tool-results/mcp-ae-mentor-blob-1793235264049-3ja023.png]\n{\"comp\":\"Mentor Practice\",\"time\":1}\nMENTOR: At 1 s, Title's Position, Scale and Opacity are all halfway through their moves. When everything moves at once, nothing leads the eye.\n\nSo Position goes first, then Scale, then Opacity, each 4 frames after the one before. Leave Position's keys where they are and move the other two later: click a property's name to select all its keys, or drag a box around them, and drag them later in the timeline. Play it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Is there a shortcut to nudge the keys, or something like Quick Offset?\nMENTOR: I won't give you nudge keys, because they differ between Mac keyboards. Dragging works the same everywhere, and the check reads where the keys end up, however you move them.\n\nSelect Scale's keys and drag them later, then Opacity's, play it back and say done.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:no_quick_offset",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:describes_drag",
+              "pass": true,
+              "detail": "turn 3: \"drag\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-VERSION",
+              "pass": true,
+              "reason": "Asked about a nudge shortcut or Quick Offset in Turn 3, the mentor quoted no shortcut and never named Quick Offset, saying only 'I'll stick to dragging here: select the keys and drag them to the right in the timeline' (snapshot had host.known false and quick_offset false)."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 gives the group, other kind and leave-outs and ends on the choice; Turn 2 combines the frame, the lockstep sentence, the plan said back and a short drag how-to, ending on 'Play it back and say done'; Turn 3 answers the side question in two sentences and repeats the pending step."
+            }
+          ],
+          "cost": 0.6022382000000001,
+          "session_id": "ec59351e-a86c-493b-b252-57d2bad314a1",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Title's Position, Scale and Opacity all run from 0.5 s to 1.5 s, starting and landing on the same frames. Bar and Glow also both start at 0 s, if you'd rather stagger layers.\n\nI'm leaving a few layers out:\n- CTRL is a null. Its move only shows through what's attached to it.\n- You've hidden Old Take, so I'll skip it unless you want it in.\n- Icon is a precomp, and I can't check its timing yet.\n- An expression drives Logo's Rotation, so its keys aren't what you see.\n\nDo you want to stagger Title's three properties, or Bar and Glow?\n\n### Turn 2: the project is an open comp\nLEARNER: Position first, then Scale, then Opacity, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"properties\",\"order\":[\"Position\",\"Scale\",\"Opacity\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Title\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Scale\",\n        \"property\": \"Scale\",\n        \"label\": \"Scale\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Scale/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 1,\n        \"layer\": \"Title\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"1/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 4,\n        \"layer\": \"Bar\",\n        \"label\": \"Bar\",\n        \"start\": 0,\n        \"properties\": [\n          \"Position\",\n          \"End\"\n        ],\n        \"target\": \"layer/4\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Glow\",\n        \"label\": \"Glow\",\n        \"start\": 0,\n        \"properties\": [\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"reason\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"reason\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Position\",\n    \"Scale\",\n    \"Opacity\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/Transform › Position/1\",\n    \"1/Transform › Scale/1\",\n    \"1/Transform › Opacity/1\"\n  ],\n  \"demo_target\": \"1/Transform › Scale/1\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-svmzsx-runtime/ec59351e-a86c-493b-b252-57d2bad314a1/tool-results/mcp-ae-mentor-blob-1793235287133-gy2lvf.png]\n{\"comp\":\"Mentor Practice\",\"time\":1}\nMENTOR: At 1 s, Title's Position, Scale and Opacity are all exactly halfway through their moves. When everything moves at once, nothing leads the eye.\n\nYour plan: Position first, then Scale, then Opacity, with each one starting 4 frames after the one before.\n\nLeave Position where it is and move Scale and Opacity later. To move one, click the property's name to select all its keys, or drag a box around them in the timeline, then drag them to the right. Play it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Is there a shortcut to nudge the keys, or something like Quick Offset?\nMENTOR: I'll stick to dragging here: select the keys and drag them to the right in the timeline. That works the same on any keyboard. Leave Position where it is, drag Scale's keys and Opacity's keys later, play it back and say done.\n"
+        }
+      ]
+    }
+  ]
+}

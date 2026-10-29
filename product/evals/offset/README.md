@@ -78,6 +78,8 @@ Dry run only so far (`--dry-run --strict-sources`: 33 cases valid).
 
 **Pacing repeats (2026-10-28, mentor at `df6efdb`; $11.17, stopped at the $50 limit):** 01 3/3, 02 3/3, 03 3/3, 04 2/3, 05 3/3, 06 3/3, 16 3/3. Not run: 19, 25, 26, 27 (and the new 33). 04 run 2: the "Can you show me how?" answer walks the drag through a second time (TD § 15 rule 3, "never the walk-through a second time"; minor prompt). 16 passes 3/3 with the demo-on-ask.
 
+**Fix-round repeats (2026-10-28, mentor at `86fc67f`; $7.87, stopped at the $15 limit):** 04 1/3, 19 3/3, 25 3/3, 26 2/3 (27 not run). 04 run 1: "show me how" repeats the full how-to with Quick Offset (prompt, TD § 15 rule 3); run 3: answers in one sentence and the pending step, which is the design, but fails the `walks_through` check (check, mine: the answer to a side question carries no drag/keys/bar). 26 run 1: `top_layer_stays` wants "stays" and the mentor said "staying put" (check bug, mine).
+
 ## Running
 
 ```sh
