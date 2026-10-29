@@ -77,6 +77,8 @@ Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
 
 **Pacing repeats (2026-10-28, mentor at `df6efdb`; $13.23):** 03 3/3, 04 **0/3**, 05 3/3, 06 2/3, 11 3/3, 13 **0/3**, 20 2/3. 04 runs 1 and 3 fail `R-KT-WALKTHROUGH` on "no shortcut", a stale rubric wording (same as the `R-KT-VERSION` one fixed on 2026-10-28; at 26.5 the confirmed shortcut is allowed); run 2 is real (the walk-through omits the menu path; TD § 15 item 3). 13 fails the universal `no_shortcuts` check on the spelled-out "Control+Option+Command+H", which the mentor is right to say at 26.5 (check bug: `shortcutAllow` lacks the spelled form). 06 run 3: the pass turn adds a recap sentence (prompt, TD § 15 item 5). 20 run 3: a new-comp turn with two asks (prompt, minor). Not yet re-run; cases 25 and 26 not run.
 
+**Changed after seeing results (2026-10-28, human-approved):** (1) `shortcutAllow` in `run.mjs` now lists the spelled-out Control+Option+Command+H and Option+Command+K, so the universal `no_shortcuts` check no longer fails case 13 for the mentor's correct answer at 26.5; design line: KT-j as amended 2026-10-26 (L-2 confirmed both at 26.5), spec 009 FR-018. Case 25's own `no_shortcut` check still forbids them on another version. (2) `R-KT-WALKTHROUGH` no longer says "no shortcut"; it follows `R-KT-VERSION` and now fails a walk-through with no menu path or right-click (TD § 15 item 3). Pacing-repeat scores for 04 and 13 (0/3 each) were on the old wording.
+
 ## Running
 
 ```sh

@@ -82,6 +82,8 @@ Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
 
 **Pacing repeats (2026-10-28, mentor at `df6efdb`; $15.65):** 01 3/3, 02 3/3, 03 3/3, 05 2/3, 09 3/3, 10 3/3, 15 **0/3**, 19 3/3. 15 fails the `tools_called: preview_frame` check on every run: TD § 15 moves the frame to the turn after the learner's next reading answer, so a wrong reading gets one hint and no frame (stale case expectation, mine). 05 run 1: a bulleted per-pair hint list plus a troubleshooting aside in the check turn (noise or minor prompt; TD § 15 leaves the check turn unchanged). New R-ONE-IDEA on 02 and 03 held 3/3.
 
+**Changed after seeing results (2026-10-28, human-approved):** case 15 no longer expects `preview_frame` (`tools_called` removed). Design line: TD § 15 table, row 2h: a wrong reading gets the one hint, and the frame comes in turn 3 after the learner's next answer, which this case does not have. The 0/3 for case 15 in the pacing repeats was on the old expectation. The `one_hint` check is unchanged.
+
 ## Running
 
 ```sh

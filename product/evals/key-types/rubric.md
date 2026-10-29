@@ -206,9 +206,11 @@ the layer vanishes there. It hands the rest to the learner.
 
 With one focus pair the mentor says that if it held it there would be nothing left for the learner,
 and walks them through it in words, with the menu named (Animation > Toggle Hold Keyframe, or
-right-click the key) and no shortcut.
+right-click the key). A shortcut follows `R-KT-VERSION`: the two confirmed ones may be given on
+After Effects 26.5 on a Mac, none elsewhere. (Changed 2026-10-28, after seeing results.)
 
-- **Fail:** demonstrates, gives a shortcut, or gives no walkthrough.
+- **Fail:** demonstrates, gives a shortcut the checks did not confirm (or one on another version),
+  gives no walkthrough, or leaves out the menu path and the right-click.
 
 ## R-KT-SHOULD-MOVE-HELD: a property that should fade but now holds is named, gently
 

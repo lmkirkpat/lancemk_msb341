@@ -50,6 +50,10 @@ const CONFIG = {
     "product/evals/key-types/fixtures/synthetic"
   ],
   "judgeLabel": "an After Effects mentor that teaches picking the key type on purpose (hold and linear)",
+  "shortcutAllow": [
+    "Control\\s*\\+\\s*Option\\s*\\+\\s*Command\\s*\\+\\s*H",
+    "Option\\s*\\+\\s*Command\\s*\\+\\s*K"
+  ],
   "recordMethod": "\\bmenu\\b|Toggle Hold|right-click|\\bbecause\\b|\\bso that\\b|\\bstopwatch\\b|\\bshortcut\\b",
   "internalExtra": [
     "\\b\\d+\\/ADBE\\b",
