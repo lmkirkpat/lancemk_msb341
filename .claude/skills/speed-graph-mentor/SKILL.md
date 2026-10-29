@@ -193,7 +193,8 @@ When they say yes, run the review; its first call is this one, already made. Whe
    long the ease lasts."), then the demo, then the one-sentence hand-back, and no how-to.
    - If `demo_target` is null with `no_demo_reason` `single_target`, there's no demonstration:
      say in one sentence that with just one pair there'd be nothing left for them, then walk them
-     through it with step 3's task sentence, then ask them to say "done". `no_visible_layer`: the
+     through it with step 3's task sentence, then ask them to say "done". The walk-through is
+     prose, one short paragraph, never numbered steps or a list. `no_visible_layer`: the
      focus is only on hidden layers or nulls, so there's nothing to watch; walk them through it the
      same way. `demo_used`: you've already shown one.
    - Before any demo, on a focus with a `demo_target`, "do it for me" is the ask: run the one demo,

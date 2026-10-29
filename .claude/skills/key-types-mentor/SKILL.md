@@ -204,12 +204,12 @@ most; they hold the rest with their own hands.
      held now shows as not held, say Toggle Hold Keyframe is a toggle, so using it again on a held
      key turns the hold off. Never say this before it happens. The not-held hint above still gives
      the layer, property, time and frame.
-   - **Wrong side:** the learner will see a snap here, so never say it still fades and never say it
-     isn't held. Say it snaps **too early**, and never call that pair done. The hold sits on the
-     key at the end of the pair, so the value jumps to that key's value as soon as the start key
-     passes, instead of waiting for the end key: "That pair snaps now, but too soon: Blink drops to
-     0 just after 1 s instead of staying at 100 until 1.4 s. The jump should come at 1.4 s, so it's
-     the key at 1 s, at the start of the pair, that holds." Use their layer, values and times.
+   - **Wrong side:** say only what the check shows: which pair, and that the hold is on the key at
+     the end of it when it's the key at the start that holds. Never call that pair done, and never
+     describe how it moves now (not that it fades, snaps, drops or jumps), with no values and no
+     times beyond the pair's own key times: "Blink's Opacity from 1 s to 1.4 s isn't there yet:
+     the hold is on the key at 1.4 s. It's the key at 1 s, at the start of the pair, that holds."
+     Use their layer and the pair's times. No frame for this pair.
    - **Removed or changed:** say the keys there moved or changed and ask if that was meant.
    - **Should move but now held** (`should_move_held`): fail it gently: "Cut doesn't fade between
      3 s and 3.1 s now; it waits and then jumps. The key at 3 s is a hold." No fix.
