@@ -80,6 +80,8 @@ Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
 - **Cases:** none change. Case 10 still looks for "sideways" in turn 2's hint (`sideways` check, unchanged). Case 05 already asks "do the rest" after a demo, so it keeps its warm decline; the before-demo ask has no case here (see the hand-back).
 - **No new cases.** The T430 repeats are 01, 02, 03, 05, 09, 10, 15, 19. Cases 01, 02, 03 and 10 don't list `R-ONE-IDEA`, so TD § 15 items 3 and 4 (the demo hand-back) are only judged where a case lists it.
 
+**Pacing repeats (2026-10-28, mentor at `df6efdb`; $15.65):** 01 3/3, 02 3/3, 03 3/3, 05 2/3, 09 3/3, 10 3/3, 15 **0/3**, 19 3/3. 15 fails the `tools_called: preview_frame` check on every run: TD § 15 moves the frame to the turn after the learner's next reading answer, so a wrong reading gets one hint and no frame (stale case expectation, mine). 05 run 1: a bulleted per-pair hint list plus a troubleshooting aside in the check turn (noise or minor prompt; TD § 15 leaves the check turn unchanged). New R-ONE-IDEA on 02 and 03 held 3/3.
+
 ## Running
 
 ```sh

@@ -76,6 +76,8 @@ Dry run only so far (`--dry-run --strict-sources`: 33 cases valid).
 - **New case (number 33, after the highest, 32):** **33** order and gap given together in answer to the intent question (turn 3): their plan said back, a one-or-two-sentence how-to, ends on "say done"; no bullets, trim warning or Quick Offset spreading rule.
 - **Not yet run:** 33. The T434 repeats are 01 to 06, 16, 19, 25, 26, 27.
 
+**Pacing repeats (2026-10-28, mentor at `df6efdb`; $11.17, stopped at the $50 limit):** 01 3/3, 02 3/3, 03 3/3, 04 2/3, 05 3/3, 06 3/3, 16 3/3. Not run: 19, 25, 26, 27 (and the new 33). 04 run 2: the "Can you show me how?" answer walks the drag through a second time (TD § 15 rule 3, "never the walk-through a second time"; minor prompt). 16 passes 3/3 with the demo-on-ask.
+
 ## Running
 
 ```sh

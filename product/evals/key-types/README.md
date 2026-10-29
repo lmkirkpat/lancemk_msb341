@@ -75,6 +75,8 @@ Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
 - **New cases (numbers 25 and 26, after the highest, 24):** **25** host not 26.5 (`host-25.json`, synthetic: `practice2b.json` with another `host.ae_version`): the how-to names Toggle Hold Keyframe and says no shortcut, no Freeze Frame. **26** a pair that was held is toggled off (`blink-toggled-off.json`, synthetic from `blink-one-held.json`): the toggle warning comes on the turn it happens and not before. Synthetic fixtures are built by `fixtures/synthetic/make-synthetic.mjs` from live captures only; `run.mjs` lists the folder in `fixtureDirs`.
 - **Not yet run:** 25 and 26 (first paid runs come in the re-baseline, T427). The T426 repeats are 03, 04, 05, 06, 11, 13, 20.
 
+**Pacing repeats (2026-10-28, mentor at `df6efdb`; $13.23):** 03 3/3, 04 **0/3**, 05 3/3, 06 2/3, 11 3/3, 13 **0/3**, 20 2/3. 04 runs 1 and 3 fail `R-KT-WALKTHROUGH` on "no shortcut", a stale rubric wording (same as the `R-KT-VERSION` one fixed on 2026-10-28; at 26.5 the confirmed shortcut is allowed); run 2 is real (the walk-through omits the menu path; TD § 15 item 3). 13 fails the universal `no_shortcuts` check on the spelled-out "Control+Option+Command+H", which the mentor is right to say at 26.5 (check bug: `shortcutAllow` lacks the spelled form). 06 run 3: the pass turn adds a recap sentence (prompt, TD § 15 item 5). 20 run 3: a new-comp turn with two asks (prompt, minor). Not yet re-run; cases 25 and 26 not run.
+
 ## Running
 
 ```sh
