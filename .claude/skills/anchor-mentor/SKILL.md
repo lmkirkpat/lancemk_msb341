@@ -439,7 +439,9 @@ comp.** This is step 2's sentence, the explanation turn's only one.
       check ("first try moved the layer with its pivot; then set it without a jump; said the edge it
       hinges on stays still"). No times, no layer or property names (those belong in `attempted`),
       no pixel numbers, no tool or method, never why.
-    - `next`: one concrete thing ("Key a swing on Needle and play it back").
+    - `next`: one concrete thing, and like `summary` it names no tool or method (never Pan Behind):
+      "Key a swing on Needle and play it back", or after a stop that didn't pass, "Set Door's pivot
+      on its left edge without Door moving".
 
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short

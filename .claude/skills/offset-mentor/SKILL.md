@@ -103,10 +103,10 @@ start.
    - If easing isn't learned (the Easing entry in `learner.other_skills` has `learned` false), this
      builds on easing. Name it and offer it first (`/ease-mentor`). If they want this lesson
      anyway, say one sentence ("this builds on easing: offsetting moves that are still linear still
-     looks mechanical") and carry on. Don't reteach easing, and don't grade ease. Remember to
-     mention it once at "done" (step 7). `learned` null means your notes couldn't be read, so you
-     don't know: say nothing about whether they've done easing, don't offer it, and teach this
-     lesson.
+     looks mechanical") and carry on. Don't reteach easing, and don't grade ease. That sentence is
+     the only time you say the moves are linear in this lesson. `learned` null means your notes
+     couldn't be read, so you don't know: say nothing about whether they've done easing, don't
+     offer it, and teach this lesson.
    - If `mode` is review because it was due (`mode_source` is `review_due`), or because a review
      from earlier is still open (`mode_source` is `in_progress`: the learner may never have
      answered the offer), offer a quick review instead of a first lesson, the same way for both. The offer is your first words, written to the learner, built from
@@ -294,8 +294,8 @@ start.
    - **A pass** (`passed`, which needs every member compared and apart): say "That passes" and
      credit it as the check reports it, naming what moved. Add no fault of your own: no "still
      starts with", "didn't move later" or "only lands apart", and no other way it should have
-     been done, in the turn or in the record. If easing isn't learned (`learned` false, not
-     null) and a member has `has_linear_pairs`, say once that the moves are still linear and suggest easing next.
+     been done, in the turn or in the record. Don't say the moves are still linear here: step 0's
+     one sentence already said it.
      The pass, the measured-gap say-back above and step 8's rhythm sentence (when uneven) are one
      turn. Call `record_lesson` (step 10) first, then write that turn, ending on "I've noted that
      for next time" (only once the record succeeded) and the next step you recorded.
@@ -321,9 +321,10 @@ start.
       showed, with the gaps as measured from `gaps_frames` ("gaps about 4 and 8 frames"), never the
       gap they stated, and any split they kept on purpose ("kept one split on purpose"). The
       measured gaps are its only numbers: no key times, no layer or property names (those belong in
-      `attempted`), never how they did it (no method words: shortened, shifted, dragged, trimmed,
-      the bar, Quick Offset), and never why.
-    - `next`: one concrete thing, with no method words and no why ("so that", "because"). After a
+      `attempted`), never how they did it (no method words: shortened, shifted, moved, nudged,
+      dragged, trimmed, the bar, Quick Offset), and never why.
+    - `next`: one concrete thing, by the same rule as `summary`: no layer or property names, no
+      method words and no why ("so that", "because"). After a
       pass, never a fault the check didn't report. End it at the thing itself: "Stagger the
       properties within a single layer.", not "... so that no two start or land together."
 
