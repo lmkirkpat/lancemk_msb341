@@ -15,7 +15,11 @@
     },
     {
       "project": "practice2b.json",
-      "say": "Reveal Matte should turn from its center."
+      "say": "Reveal Matte should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Reveal Matte is selected and both numbers are showing."
     }
   ],
   "expect": {
@@ -27,7 +31,8 @@
         "id": "eye",
         "must": "eye|visible",
         "turns": [
-          2
+          2,
+          3
         ]
       }
     ]
@@ -35,5 +40,6 @@
   "rubric": [
     "R-AN-MATTE",
     "R-NAMES-REAL"
-  ]
+  ],
+  "note": "2026-10-29 (human-approved): the learner now names an off-centre place (was 'center', which the mentor rightly answers with 'already there'), and the eye note is read over turns 2 to 3, since TD 011 \u00a7 20 moves the move turn to turn 3."
 }

@@ -1,6 +1,6 @@
 {
   "id": "11-one-layer-no-demo-one-offer",
-  "title": "One focus layer: no demo on it, a walk-through in words, and one offer of a watch on another layer as the last sentence of the invite turn",
+  "title": "One focus layer: no demo on it; the move turn (turn 3) walks through in words and ends on one offer of a watch on another layer; a later ask to see it on Door gets no demo and no second offer",
   "covers": [
     "EP-11",
     "FR-008"
@@ -20,6 +20,10 @@
     },
     {
       "project": "practice2b.json",
+      "say": "Door is selected and both numbers are showing."
+    },
+    {
+      "project": "practice2b.json",
       "say": "Can you show me how to do it on Door?"
     }
   ],
@@ -30,14 +34,14 @@
         "id": "offers_needle",
         "must": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b|\\bNeedle\\b[^.?!]{0,50}\\b(?:first|watch)\\b",
         "turns": [
-          2
+          3
         ]
       },
       {
         "id": "offer_is_last",
         "must": "Needle[^.?!]*[.?!]*\\s*$",
         "turns": [
-          2
+          3
         ]
       },
       {
@@ -56,7 +60,7 @@
         "id": "names_door",
         "must": "Door",
         "turns": [
-          3
+          4
         ]
       }
     ]
@@ -65,5 +69,6 @@
     "R-AN-WATCH-OFFER",
     "R-AN-WALKTHROUGH",
     "R-NAMES-REAL"
-  ]
+  ],
+  "note": "2026-10-29 (human-approved): re-scripted for TD 011 \u00a7 20. The offer and walk-through are turn 3 (after the learner shows both numbers); the 'show me on Door' ask is turn 4."
 }

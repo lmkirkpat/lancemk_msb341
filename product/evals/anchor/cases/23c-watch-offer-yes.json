@@ -22,6 +22,10 @@
     },
     {
       "project": "practice2b.json",
+      "say": "Door is selected and both numbers are showing."
+    },
+    {
+      "project": "practice2b.json",
       "say": "Yes, please show me on Needle first."
     },
     {
@@ -44,47 +48,47 @@
         "id": "asks_show_numbers",
         "must": "Shift\\s*\\+\\s*P",
         "turns": [
-          3
+          4
         ]
       },
       {
         "id": "needle_place",
         "must": "Needle[^.?!]*bottom edge|bottom edge",
         "turns": [
-          3
+          4
         ]
       },
       {
         "id": "undo",
         "must": "Edit\\s*>\\s*Undo",
         "turns": [
-          4
+          5
         ]
       },
       {
         "id": "door_is_theirs",
         "never": "\\bDoor\\b[^.?!]{0,40}\\b(?:I (?:moved|set)|just moved)\\b",
         "turns": [
-          4
+          5
         ]
       },
       {
         "id": "door_no_second_walkthrough",
         "never": "\\b(?:press Y|Pan Behind|start your drag|take it to)\\b|^\\s*\\d\\.",
         "turns": [
-          4
+          5
         ]
       },
       {
         "id": "door_handed_back",
         "must": "\\bDoor\\b",
         "turns": [
-          4
+          5
         ]
       }
     ],
     "demo_not_in_turns": [
-      3
+      4
     ]
   },
   "rubric": [
@@ -93,5 +97,6 @@
     "R-DEMO-PLAIN",
     "R-NAMES-REAL",
     "R-ONE-IDEA"
-  ]
+  ],
+  "note": "2026-10-29 (human-approved): re-scripted for TD 011 \u00a7 20. Turn 3 is the move turn with the offer; yes is turn 4 (W1: A and Shift+P asked, no demo); the demo is turn 5 (W2)."
 }

@@ -94,6 +94,8 @@ Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
 
 **Changed after seeing results (2026-10-28, human-approved):** `R-SG-READ-GRAPH-WRONG` reworded: one hint, then the mentor waits for the next answer, and ending the hint on the reading question is the design. Design line: TD § 15 table row 2h ("the one hint; their next answer; then turn 3 whatever it is") and builder item 1. The 0/3 for case 15 in the fix-round repeats was on the old wording.
 
+**Changed after seeing results (2026-10-29, human-approved, fix round 4):** case 03's `walks_through` say check (turn 4) is removed; `demo_calls_max` 0 stays. Design line: pacing rule 3 (curriculum § 2 and TD § 15) and `SKILL.md`: the walk-through is turn 3's answer to "Can you show me how?" and is not repeated, so a walk-through at turn 3 or none at turn 4 are both correct, and any speed-graph-naming pattern would fail a correct run. `R-SG-WALKTHROUGH` (rubric, unchanged) judges whether the mentor walks through when asked; it says "gives no walkthrough" fails, so watch it at the next run.
+
 ## Running
 
 ```sh

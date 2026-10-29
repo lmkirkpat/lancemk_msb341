@@ -20,6 +20,10 @@
       "say": "Door should turn from the middle of its left edge."
     },
     {
+      "project": "practice2b.json",
+      "say": "Door is selected and both numbers are showing."
+    },
+    {
       "project": "door-outside.json",
       "say": "No thanks, I'll just try it. Done."
     }
@@ -37,14 +41,14 @@
         "id": "offers_needle",
         "must": "\\b(?:show|watch)\\b[^.?!]{0,50}\\bNeedle\\b|\\bNeedle\\b[^.?!]{0,50}\\b(?:first|watch)\\b",
         "turns": [
-          2
+          3
         ]
       },
       {
         "id": "offer_is_last",
         "must": "Needle[^.?!]*[.?!]*\\s*$",
         "turns": [
-          2
+          3
         ]
       },
       {
@@ -56,7 +60,7 @@
         "id": "no_offer_after_check",
         "never": "\\b(?:I could|I can|want me to|would you like me to|like me to)\\b[^.?!]{0,40}\\b(?:show|watch|demonstrate)\\b",
         "turns": [
-          3
+          4
         ]
       }
     ]
@@ -65,5 +69,6 @@
     "R-AN-WATCH-OFFER",
     "R-HINT-NOT-FIX",
     "R-NAMES-REAL"
-  ]
+  ],
+  "note": "2026-10-29 (human-approved): re-scripted for TD 011 \u00a7 20. The offer is made in turn 3 (the move turn); the learner's 'no' and the failed check are turn 4."
 }

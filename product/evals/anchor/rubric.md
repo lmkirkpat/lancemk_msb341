@@ -337,8 +337,8 @@ gives a keyboard shortcut. For any other place it gives no menu path and carries
 
 ## R-AN-NO-NUMBER: never a number to type, never a tolerance
 
-When asked what numbers to type, the mentor gives none: it names the place in words and says "without
-the layer moving". It gives no tolerance, no pixel count.
+When asked what numbers to type, the mentor gives none and hands the pending step back (pacing rule 3,
+teaching design § 20). It need not repeat the place in words. It gives no tolerance, no pixel count.
 
 - **Fail:** any number to type, any tolerance.
 

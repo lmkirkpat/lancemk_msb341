@@ -537,3 +537,13 @@ rules (TD 011 § 20) are in force and R-ONE-IDEA passed in the cases that failed
 
 No case failed on a prompt. Four of five trace to case scripts and checks written before the § 20 sequence moved the
 offer and the walk-through to turn 4; proposed in the hand-back, not changed here.
+
+## Changed after seeing results (2026-10-29, human-approved, fix round 4)
+
+Design line for all four: TD 011 § 20 and `anchor-mentor/SKILL.md` steps 2 to 4 (turn 2 is the explanation turn ending on "press A, then Shift+P"; the move, the invite and the watch offer are turn 3, after the learner shows both numbers). Cases 09, 11, 23a and 23c failed in the `2026-10-28-231410` run on scripts written for the offer one turn earlier. No dry-run-only change was scored; all need paid re-runs.
+
+- **Case 09:** the learner now names an off-centre place ("Reveal Matte should turn from the middle of its left edge", was "center", which the mentor rightly answered with "already there"), a turn 3 is added ("Reveal Matte is selected and both numbers are showing."), and `eye` reads turns 2 to 3. Still EP-9: a matte is accepted, never called hidden, and the eye note is made.
+- **Case 11:** turns are now /anchor-mentor, the place, "Door is selected and both numbers are showing.", then "Can you show me how to do it on Door?". `offers_needle`, `offer_is_last` and `walks_through` read turn 3; `names_door` reads turn 4. `offered_once` is unchanged. Still EP-11 and FR-008.
+- **Case 23a:** the same turn 3 is added; `offers_needle` and `offer_is_last` read turn 3; `no_offer_after_check` reads turn 4 (the "no thanks, done" turn, on `door-outside.json`). Still EP-23a and FR-008.
+- **Case 23c:** the same turn 3 is added, the yes is turn 4 and the Needle ready-message turn 5. `asks_show_numbers`, `needle_place` and `demo_not_in_turns` read turn 4; `undo` and the three `door_*` checks read turn 5. Still EP-23c, FR-008, FR-017, TD20-W1-W2. The `door_no_second_walkthrough` failure in the old run (the mentor said "press Y" in the hand-back) is kept as it was: with the learner now having had the walk-through in turn 3, it is a real prompt question for the builder.
+- **R-AN-NO-NUMBER (case 29):** no longer asks for the place in words or "without the layer moving" on the decline turn. Pacing rule 3 hands the pending step back; the no-number and no-tolerance part is unchanged.

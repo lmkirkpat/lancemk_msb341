@@ -25,6 +25,7 @@ import os from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { recordPlainHit } from "./record-plain.mjs";
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
 // with no builder CLAUDE.md or auto-memory in context (agent audit 2026-10-12, lesson 4.5).
@@ -49,7 +50,7 @@ const CONFIG = {
     "mentor/test/fixtures/offset/stand-in"
   ],
   "judgeLabel": "an After Effects mentor that teaches breaking the lockstep with offset (staggering layers or properties)",
-  "recordMethod": "\\bdrag(?:ged|ging)?\\b|\\bbar\\b|\\bbecause\\b|\\bso that\\b|\\bQuick Offset\\b|\\bshortcut\\b",
+  "recordMethod": "\\bdrag(?:ged|ging)?\\b|\\b(?:the|a|its|each|layer) bar\\b|\\bbecause\\b|\\bso that\\b|\\bQuick Offset\\b|\\bshortcut\\b",
   "internalExtra": [
     "\\blayer\\/\\d+\\b",
     "\\b\\d+\\/(?:Transform|Effects)\\b",
@@ -76,7 +77,7 @@ const CONFIG = {
   "reviewBanned": [
     [
       "method",
-      "\\bdrag\\b|\\bbar\\b|\\bgap\\b|\\bframes?\\b|select the keys|Quick Offset"
+      "\\bdrag\\b|\\b(?:the|a|its|each|layer) bar\\b|\\bgap\\b|\\bframes?\\b|select the keys|Quick Offset"
     ]
   ],
   "name": "offset"
@@ -400,9 +401,8 @@ function check(expect, turns, c) {
   }
   // The record never holds method or motive (SKILL.md step 11; agent audit).
   for (const r of calls.filter((e) => e.name === "record_lesson" && e.ok)) {
-    const text = [r.input.summary, r.input.attempted, r.input.next].filter(Boolean).join(" | ");
-    const m = text.match(RECORD_METHOD);
-    add("record_plain", !m, m ? `record says "${m[0]}"` : "clean");
+    const m = recordPlainHit(r.input);
+    add("record_plain", !m, m ? `record says "${m}"` : "clean");
   }
 
   {

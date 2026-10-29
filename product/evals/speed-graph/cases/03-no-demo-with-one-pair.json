@@ -28,20 +28,12 @@
     }
   ],
   "expect": {
-    "demo_calls_max": 0,
-    "say": [
-      {
-        "id": "walks_through",
-        "must": "Graph Editor|speed graph|Edit Speed Graph",
-        "turns": [
-          4
-        ]
-      }
-    ]
+    "demo_calls_max": 0
   },
   "rubric": [
     "R-SG-WALKTHROUGH",
     "R-NAMES-REAL",
     "R-ONE-IDEA"
-  ]
+  ],
+  "note": "2026-10-29 (human-approved): the turn-4 `walks_through` say check is removed. SKILL.md puts the walk-through at turn 3 ('Can you show me how?') and forbids repeating it, and pacing rule 3 lets a side question get one or two sentences and the same pending step, so a walk-through at turn 3 or none at turn 4 are both correct. `demo_calls_max` 0 stays; R-SG-WALKTHROUGH (rubric) judges the walk-through."
 }
