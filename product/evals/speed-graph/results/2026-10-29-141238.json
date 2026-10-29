@@ -1,0 +1,148 @@
+{
+  "run_at": "2026-10-29T20:12:38.489Z",
+  "options": {
+    "only": "29",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.42,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "29-guide-layer-not-default-focus",
+      "title": "Title is a guide layer: the lesson picks another eased layer (Subtitle) as the focus, and Title is never the proposal or the demo",
+      "covers": [
+        "D-OA-1",
+        "T463"
+      ],
+      "fixture_sources": {
+        "title-guide.json": "synthetic"
+      },
+      "hash": "39dfe7b99a0ec321f13ab0e4c763f3ba4bc3ea1db5517293d392314a26936ac6",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was speed_graph_snapshot"
+            },
+            {
+              "check": "focus_named",
+              "pass": true,
+              "detail": "names Subtitle"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:focus_subtitle",
+              "pass": true,
+              "detail": "turn 1: \"Subtitle\""
+            },
+            {
+              "check": "say:title_not_the_focus",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SG-GUIDE-NOT-FOCUS",
+              "pass": true,
+              "reason": "Turn 1 proposes only Subtitle and its two Position moves (\"0.3 to 1.3 s, and 1.3 to 4.37 s\"), and no frame or demo is run on Title, so Title is never the focus."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time matches the snapshot or the record: Subtitle's Position 0.3–1.3 s and 1.3–4.367 s (shown as 4.37), Old Take, CTRL, Icon, Logo's Rotation, Subtitle's Opacity, Bar's X Position and Glow's Blurriness, and \"you eased in an earlier lesson\" is backed by eased_layers."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 is the proposal with one short line per left-out kind and ends on the land-hard question, and turn 2 gives one step (open Edit Speed Graph) and ends on the reading question \"where is the move fastest\"."
+            }
+          ],
+          "cost": 0.4177848,
+          "session_id": "b189a60a-ee23-4412-bb2c-2f7c3f00fdd6",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL speed_graph_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\",\n      \"Subtitle\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Subtitle\"\n  ],\n  \"targets\": [\n    \"2/ADBE Transform Group/ADBE Position/1\",\n    \"2/ADBE Transform Group/ADBE Position/2\"\n  ],\n  \"demo_target\": \"2/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Subtitle › Position 0.3–1.3 s\",\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.3,\n      \"to_time\": 1.3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Subtitle › Position 1.3–4.367 s\",\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL speed_graph_snapshot {\"skill_options\":{\"eased_layers\":[\"Title\",\"Subtitle\"],\"land_hard\":[]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\",\n      \"Subtitle\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Subtitle\"\n  ],\n  \"targets\": [\n    \"2/ADBE Transform Group/ADBE Position/1\",\n    \"2/ADBE Transform Group/ADBE Position/2\"\n  ],\n  \"demo_target\": \"2/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Subtitle › Position 0.3–1.3 s\",\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.3,\n      \"to_time\": 1.3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Subtitle › Position 1.3–4.367 s\",\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Let's shape eases today in **Mentor Practice**. I'd suggest we work on **Subtitle**, which you eased in an earlier lesson. It has two Position moves: 0.3 to 1.3 s, and 1.3 to 4.37 s.\n\nHere's what I've left out:\n- You've hidden Old Take, so I'll leave it alone unless you want it.\n- CTRL is a null, so its move can't be seen in a frame.\n- I can't see inside Icon yet.\n- An expression drives Logo's Rotation, so changes in the graph won't show.\n- Subtitle's Opacity, Bar's X Position and Glow's Blurriness still need easing; that's the easing lesson.\n\nBefore we start: should either of Subtitle's Position moves land hard, like an impact or a slam?\n\n### Turn 2: the project is an open comp\nLEARNER: Sounds good, let's start.\nMENTOR: Select Subtitle and open the Graph Editor with its button at the top of the timeline panel. Then choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor. On Subtitle's Position from 0.3 to 1.3 s, where is the move fastest: near the start, in the middle, or near the end?\n"
+        }
+      ]
+    }
+  ]
+}

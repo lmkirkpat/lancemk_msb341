@@ -44,6 +44,7 @@ const CONFIG = {
   "demoKey": "segment_id",
   "fixtureDirs": [
     "mentor/test/fixtures/speed-graph",
+    "product/evals/speed-graph/fixtures/synthetic",
     "mentor/test/fixtures",
     "mentor/test/fixtures/layer-info",
     "mentor/test/fixtures/speed-graph/stand-in"

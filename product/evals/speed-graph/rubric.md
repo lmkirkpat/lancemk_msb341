@@ -324,3 +324,46 @@ When the notes couldn't be read, the mentor doesn't know whether easing (or anyt
 It may ask, or say it doesn't know or has nothing marked, or just teach. It never says they haven't done it.
 
 - **Fail:** "you haven't learned easing", or any other statement about earlier work taken from the missing notes.
+
+## R-SG-RENUMBER-OK: a null added mid-lesson doesn't change which layer is graded
+
+The learner added a null at the top, so Title moved down one place, then shaped Title's moves. The
+check graded Title (the tool result is the truth). The mentor says the moves pass as it would
+without the null, names Title and its pairs, and doesn't treat the null or the new layer order as a
+problem or a change to look at.
+
+- **Pass:** "That passes" with Title's pairs, then the read-again question; a plain mention of the
+  null is fine.
+- **Fail:** says Title's pairs weren't shaped or can't be checked, blames the null, talks about layer
+  numbers or order, or grades a different layer.
+
+## R-SG-UNMATCHED: two layers with one name: asks for a rename or an undo, grades nothing
+
+The learner duplicated Title, so two layers are named Title and the check can't tell which to grade
+(`unmatched`). The mentor says so in plain words in one or two sentences, asks them to rename the copy
+(or undo the duplicate) and say "done" again.
+
+- **Pass:** that ask, and no verdict on any pair.
+- **Fail:** says the pairs passed, says they need more shaping, hints at a drag or an influence, offers
+  to rename or fix it itself, or ignores the problem and talks about something else.
+
+## R-SG-LANDS-HARD-EDIT: an edit to a land-hard pair is named once, not graded, not taught
+
+The learner said a move should land hard, then changed that move as well. The check lists it as an
+other change. The mentor says it saw that change in a clause or one sentence and goes on. The other
+pairs pass.
+
+- **Pass:** a plain "I saw you changed Title's last move" (or the same in other words), no verdict on it,
+  no advice about it, no offer to undo it, and the turn still says the others pass. Not mentioning it
+  at all is a **fail**: the rule is to say it was seen.
+- **Fail:** grades the pair, says it should be harder or softer, asks to put it back, explains why
+  easing helps there, or mentions it more than once.
+
+## R-SG-GUIDE-NOT-FOCUS: a guide layer is not the default focus
+
+Title is a guide layer, which never shows in the render. The snapshot picks another eased layer, so
+the mentor proposes that layer (Subtitle) and its pairs, not Title. It may mention Title only as a
+layer it isn't using, in plain words ("Title is a guide layer, so it never shows in the render").
+
+- **Pass:** proposes Subtitle's Position moves; no demo or frame is made on Title.
+- **Fail:** proposes Title or its pairs, or runs a demo or frame on Title.

@@ -1,0 +1,54 @@
+{
+  "id": "37-whole-bar-drag-not-double-reported",
+  "title": "Dots dragged as whole bars, so Dot 3's Scale and Rotation keys moved with them: the pass names no other change",
+  "covers": [
+    "OA-1",
+    "T450"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "dots-extras.json": "synthetic",
+    "dots-extras-bars-dragged.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "dots-extras.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "dots-extras.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "dots-extras-bars-dragged.json",
+      "say": "I dragged each Dot's whole bar over. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_called": [
+      "offset_check"
+    ],
+    "last_check": {
+      "passed": true,
+      "lacks": [
+        "single key moved",
+        "its key at"
+      ]
+    },
+    "say": [
+      {
+        "id": "no_other_change_talk",
+        "never": "\\b(?:Scale|Rotation)\\b[^.?!]{0,60}\\b(?:moved|changed|nudged|shifted|also)\\b|\\b(?:also|other|else|besides)\\b[^.?!]{0,40}\\b(?:moved|changed|keys?)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OF-NO-OTHER-CHANGES",
+    "R-OFF-PASS",
+    "R-NAMES-REAL"
+  ]
+}

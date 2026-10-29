@@ -8,6 +8,25 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
+## Re-baseline rb3 (2026-10-29, after the overlap-audit fixes; mentor at `df65d41`)
+
+**33/37 (89%), $21.38**, results `2026-10-29-144419.json` (rb2 was 29/33, 88%). SC-006 met on the score, but **one hard-rule check failed** (23 `record_plain`), so the bar is not clean. Failures were repeated once with `--repeat 3` ($8.74: `-144627` case 13, `-144824` case 20, `-145024` case 23, `-145202` case 33).
+
+**New cases (numbers from the cockpit: 34 to 37, all four used; all four passed first time).** Fixtures are synthetic, built from `practice2b.json` by script into `fixtures/synthetic/` (the runner now searches that folder); the mentor wasn't edited.
+- **34 member-single-and-expression-keys-moved** (OA-1): Dot 3 has a single Scale key and an expression-driven Rotation; the stagger passes and both keys also moved. Rubric `R-OF-OTHER-CHANGES`.
+- **35 key-added-on-dot-1** (OA-2): a key added on Dot 1's Position. Same rubric.
+- **36 guide-layer-left-out** (guide wording): Dot 3 is a guide layer; one opening turn. Rubric `R-OFF-GUIDE-LEFT-OUT`.
+- **37 whole-bar-drag-not-double-reported** (OA-1): each Dot's whole bar dragged, so the keys the stagger doesn't count moved with it; the pass mentions no other change. Rubric `R-OF-NO-OTHER-CHANGES`.
+
+**Failures and verdicts**
+
+| Case | Full run | Repeat x3 | Verdict |
+|---|---|---|---|
+| 13 order-differs | FAIL, `asks_change_of_mind` (no question mark in turn 3: "that's fine if you meant it") | 3/3 pass | Noise (watch list; the mentor sometimes states instead of asks) |
+| 20 easing-not-learned | FAIL, `builds_on` (turn 2 never says easing) | **0/3**: `R-OFF-LINEAR-ONCE` twice (linear said at the opt-in and again at "done"), `builds_on` once | **Mentor / skill text**. SKILL.md lines 105 to 108 say to give the "still linear" sentence when they opt in, and then "mention it once at done"; the rubric and line 298 say once. Smallest fix: drop one of the two (the opt-in sentence, keeping "builds on easing" for `builds_on`, or the done mention, and then change the rubric). Needs the cockpit's call |
+| 23 record-honesty | FAIL, hard rule `record_plain` (`next`: "Start Dot 2 later than Dot 1.") | 2/3 pass; run 1 `record_plain` "Moved" (summary: "Moved the last layer ...") | **Mentor**. Real, 2 of 4 runs. SKILL.md step 10 lists method words "shortened, shifted, dragged, trimmed" but not "moved", and it bars layer names only for `summary`. Smallest fix: add "moved, nudged" to that list and say `next` holds no layer or property names either |
+| 33 order-and-gap-in-one-answer | FAIL, `R-ONE-IDEA` (three-sentence how-to after the plan) | 3/3 pass | Noise (rubric judgment; the 10-28 failure was this case's check) |
+
 ## Re-baseline rb2 (T435, 2026-10-28, mentor at `a8e34ef`)
 
 **29/33 (88%), $18.83**, results `2026-10-28-221447.json`. SC-006 met on the score; two deterministic say checks failed (04 `no_second_walkthrough`, 33 `ends_on_task`). No demo, tool-count or record check failed. Rubric failures: 08 `R-OFF-RHYTHM`, 11 `R-OFF-PASS`. New cases 27 and 33: 27 passed, 33 failed (check). 
