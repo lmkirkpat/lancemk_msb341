@@ -994,6 +994,37 @@ easing eval has shown the leak. Not to `/next-mentor`, which needs the whole rec
     fires); and a learner who **asks for a review when none is due** (a review runs, and nothing says
     it was due).
 
+### Overlap audit 2026-10-29 (shared code)
+
+From [`discovery/usage-notes/overlap-audit-2026-10-29.md`](../../discovery/usage-notes/overlap-audit-2026-10-29.md),
+the audit of skills 2, 1, 3, 5 and 6 after they merged. The audit's one shared root cause: pair IDs
+carry the layer index (`mentor/lib/analyze.mjs`), and adding a null (what skill 6 teaches) or
+duplicating a layer renumbers every layer below it. Each skill's own rows are in its spec's "Edge
+cases where concepts overlap" matrix (008 rows 21 to 23, 009 rows 26 to 28, 010 rows 25 and 26, 011
+rows 30 and 36, 012 rows 33 and 45). Neither requirement changes what a skill teaches.
+
+- **FR-053 (a renumbered comp is matched by name, never graded by index; OA-5, built 2026-10-29 as
+  T440)**: Before the easing, speed graph and key types checks look a pair up, they MUST match the
+  baseline's layers to the comp now (`alignLayers`, `mentor/lib/renumber.mjs`): by a name on one
+  layer in both reads; for a repeated name, by keyed properties and key times; for a renamed layer, by
+  key times, then by index. The check grades the comp now at the baseline's indexes, so stored pair
+  IDs (session and record) keep their format. A target whose layer shares its name with another that
+  can't be told apart MUST be `unmatched`: never graded, no pass, and one plain other-change note
+  that more than one layer has that name now. With nothing renumbered, the comp now is used as it is.
+  **Proof:** `mentor/test/renumber.test.mjs` (12 tests: a null added above a held Blink grades held
+  with no notes; Twin plus an inserted layer grades Title's pairs on Title; easing gives the same
+  results with a null on top; a same-name duplicate is `unmatched` in all three). Offset (T452) and
+  the pivot (T459) keep their own `matchLayer`, now taking the k-th layer of a repeated name; null
+  parenting matches by name already (spec 012 FR-019).
+- **FR-054 (a demonstration acts on the layer the lesson means; requested 2026-10-29, being built as
+  T467)**: The demonstration tools still send the **starting** layer index to AE, so a layer added or
+  duplicated between the snapshot and the demo could put the demo on another layer. Every
+  demonstration MUST act on the layer the lesson means, matched as FR-053 (or the skill's own
+  `matchLayer`) matches it, or refuse with nothing changed and say so in plain words. The pivot's and
+  null parenting's snippets already check the name and refuse (`not_found`); easing's, speed graph's,
+  key types' and offset's don't. **Proof:** a unit test per demo tool with a layer added above the
+  demo target after the snapshot (T467's). Open until T467 merges.
+
 ### Key Entities
 
 - **Skill**: one teachable idea from `curriculum.md` › 6, with a record ID, its path position, hard

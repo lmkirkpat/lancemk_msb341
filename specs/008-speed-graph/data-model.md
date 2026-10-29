@@ -80,8 +80,15 @@ session's.
 
 `{ comp_matches, lesson_comp, pairs: [Pair result], other_changes: [string], passed, demo_undone,
 seen_shaped: [pair ID] }`. `other_changes` is the shared `unexpectedChanges(baseline, current,
-targetSet)`, where `targetSet` is the lesson's targets **plus the pairs the learner said should land
-hard** (`land_hard`), so a dropped pair the learner then changes isn't reported as an other change.
+targetSet)`, where `targetSet` is the lesson's targets **only**. A pair the learner said should land
+hard (`land_hard`) is still never graded (FR-006), but a reshaped ease or a moved key time on it is
+reported like any other non-target pair: changed, decided 2026-10-29 (overlap audit), OA-3, built as
+T466. (Until 2026-10-29 the set was "targets plus `land_hard`", on purpose, so those two edits were
+silent while key values and key count were still reported; `speed-graph-overlap-audit.test.mjs`
+pins that old behaviour until T466 flips it.) Both snapshots are first aligned by
+`alignLayers` (spec 004 FR-053, OA-5): a pair whose layer can't be told apart from a same-named
+duplicate gets `result: "unmatched"`, is never graded and holds the pass, and `other_changes` starts
+with one plain note naming the shared name.
 `passed` is true when every focus pair (dropped pairs aren't focus pairs) was graded and passed: a
 pair whose keys changed (`keys_changed`) or that's gone (`removed`) **holds the pass** until the
 learner answers whether that was on purpose (FR-014; as built, 2026-10-21).
