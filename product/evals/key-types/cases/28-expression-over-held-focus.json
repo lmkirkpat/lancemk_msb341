@@ -1,0 +1,56 @@
+{
+  "id": "28-expression-over-held-focus",
+  "title": "An expression turned on over the held focus: named, not graded, not passed",
+  "covers": [
+    "OA-10",
+    "TD 9"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-held-expression-on.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap. I'll hold them myself, no demo."
+    },
+    {
+      "project": "blink-held-expression-on.json",
+      "say": "I held all of Blink's pairs. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "last_check": {
+      "passed": false,
+      "has": [
+        "expression"
+      ]
+    },
+    "say": [
+      {
+        "id": "says_expression",
+        "must": "expression",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_remove_advice",
+        "never": "\\b(?:delete|remove|turn off|take out|get rid of)\\b[^.?!]{0,30}\\bexpression",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-EXPRESSION-FOCUS",
+    "R-NAMES-REAL"
+  ]
+}

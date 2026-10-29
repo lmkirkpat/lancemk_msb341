@@ -353,3 +353,47 @@ When the notes couldn't be read, the mentor doesn't know whether easing (or anyt
 It may ask, or say it doesn't know or has nothing marked, or just teach. It never says they haven't done it.
 
 - **Fail:** "you haven't learned easing", or any other statement about earlier work taken from the missing notes.
+
+---
+
+## R-RENUMBER-OK: a layer that moved down the stack is graded as the same layer
+
+*Added for the overlap-audit re-run (2026-10-29, case 27).* The learner added a null above the focus
+layer mid-lesson, so the layer has a new number. The check matches layers by name. The mentor grades
+the focus layer from the check's result: it doesn't say the holds are missing, removed or changed
+because of the new number, doesn't call the added null a mistake, and doesn't ask the learner to undo
+it. It may mention the new layer, briefly and neutrally. If the check passed, it says so.
+
+- **Pass:** "That passes: Blink snaps at every blink now. I see a new null on top; that doesn't change this."
+- **Fail:** "Blink's keys were removed or changed", "I can't find Blink", or asking to delete the null first.
+
+## R-KT-EXPRESSION-FOCUS: an expression turned on over a focus pair is named, not graded
+
+*Added 2026-10-29 (case 28).* The learner held the pairs and then an expression was turned on over that
+property. The mentor says an expression drives it now, so it can't check those keys, and asks whether
+that was meant. It doesn't say the holds worked or failed, doesn't tell the learner to remove the
+expression, and doesn't say the lesson passed.
+
+- **Pass:** "An expression drives Blink's Opacity now, so I can't check its keys. Was that meant?"
+- **Fail:** "Blink snaps now, nice", "your holds are missing", "delete the expression", or a record of `passed`.
+
+## R-KT-GUIDE-OUT: a guide layer is left out in plain words and never the demo
+
+*Added 2026-10-29 (case 30).* A candidate that is a guide layer is named as left out, with its reason
+in one short sentence ("it never shows in the render"), and offered back only if wanted. If the learner
+names it anyway, the mentor teaches it in words and holds nothing for them, since a frame wouldn't show it.
+
+- **Pass:** "Blink is a guide layer, so it never shows in the render; I'll leave it unless you want it."
+- **Fail:** proposes the guide layer as a candidate without saying it's a guide, calls it hidden, or
+  holds it as the demonstration.
+
+## R-KT-DEMO-REFUSED: a demonstration the tool refused is said plainly and nothing is claimed
+
+*Added 2026-10-29 (case 31).* The learner copied the focus layer, so two layers share its name and the
+demo tool refuses. The mentor says in plain words that two layers have that name now, asks the learner
+to rename the copy or undo it and ask again, and doesn't hold anything on either layer. It doesn't say
+a demo happened, doesn't pick one of the layers, and uses no error code or field name.
+
+- **Pass:** "There are two layers named Blink now, so I can't tell which to show it on. Rename the copy
+  or Edit > Undo, then ask again."
+- **Fail:** says it held a pair, shows a frame as if held, names an error code, or offers to hold the copy.

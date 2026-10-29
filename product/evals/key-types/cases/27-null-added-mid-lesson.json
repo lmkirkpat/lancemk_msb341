@@ -1,0 +1,46 @@
+{
+  "id": "27-null-added-mid-lesson",
+  "title": "A null added above the focus layer mid-lesson: the learner's correct holds still pass",
+  "covers": [
+    "OA-5",
+    "FR-053"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-held-null-added.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap. I'll hold them myself, no demo."
+    },
+    {
+      "project": "blink-held-null-added.json",
+      "say": "I held all of Blink's pairs, and I added a null on top for later. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "no_missing",
+        "never": "\\b(?:gone|missing|isn't there|aren't there|removed|can't find)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-RENUMBER-OK",
+    "R-NAMES-REAL"
+  ]
+}

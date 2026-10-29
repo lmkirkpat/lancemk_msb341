@@ -159,7 +159,7 @@ function validate(c) {
   if (c.learner_record && !fs.existsSync(recordFile(c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
+  const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_ok_max", "demo_only_on",
     "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "snapshot_reply"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
   for (const s of (c.expect || {}).say || []) {
@@ -449,6 +449,8 @@ function check(expect, turns, c) {
   if ("snapshot_calls_max" in expect) add("snapshot_calls_max", snaps.length <= expect.snapshot_calls_max, `${snaps.length} snapshot calls`);
   if ("demo_calls_min" in expect) add("demo_calls_min", demos.length >= expect.demo_calls_min, `${demos.length} demo calls`);
   if ("demo_calls_max" in expect) add("demo_calls_max", demos.length <= expect.demo_calls_max, `${demos.length} demo calls`);
+  // Successful demos only: a demo the tool refused (a same-name copy) changed nothing.
+  if ("demo_ok_max" in expect) { const ok = demos.filter((e) => e.ok).length; add("demo_ok_max", ok <= expect.demo_ok_max, `${ok} successful demo calls`); }
   if ("demo_only_on" in expect) {
     const other = demos.filter((e) => (e.input || {})[CONFIG.demoKey] !== expect.demo_only_on);
     add("demo_only_on", other.length === 0, other.length ? `demo on ${other.map((e) => e.input[CONFIG.demoKey]).join(", ")}` : "only the demo target");

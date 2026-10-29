@@ -7,6 +7,12 @@ need to be open**. Whether the detection and grading are *correct* is covered by
 (`cd mentor && npm test`), which are free and instant. Evals cost real usage, so they don't
 repeat what the unit tests already prove.
 
+## Overlap-audit re-run (2026-10-29, mentor at `df65d41`)
+
+**27/28 (96%), $14.89**, results `2026-10-29-142512.json` (last baseline 25/26 on 2026-10-28). SC-006 met; no hard-rule check failed. New cases (numbers from the cockpit): **27** a null added above the focus layer mid-lesson, then the learner's correct ease (passes, graded on the right layer; new item `R-RENUMBER-OK`; fixture `null-added-title-done.json`) and **28** a same-name copy of the focus layer (verdict `fail`, plain words, no pass, the word "unmatched" never said; new item `R-UNMATCHED-PLAIN`; fixture `title-copied.json`). 28 passed; both fixtures derive from `title-done.json`.
+One failure: 27 `R-NAMES-LAYERS` (the opening said Title's Position moves "all run from 0.5 s to 1.5 s", but the second Position pair is 1.5 to 3 s). That is the opening, not the renumber behavior (`R-RENUMBER-OK` passed). `--only 27 --repeat 3` (`2026-10-29-144158.json`, $1.92): 3/3 pass. Verdict: noise (the known opening-wording flake, as case 07 and 17 earlier). Total easing cost $16.81.
+
+
 ## Re-baseline rb2 (T423, 2026-10-28, mentor at `a8e34ef`)
 
 **25/26 (96%), $13.40**, results `2026-10-28-213609.json`. SC-006 met; no hard-rule check failed. Earlier baselines: 24/25, 25/26 (2026-10-27), 26/26. `R-ONE-IDEA` is now scored (cases 01, 02, 03, 05, 21 all passed it), so this is a stricter bar than those three. The one failure is 07 `R-NAMES-LAYERS`: the opening said "6 visible layers" for pairs on 5 layers (the same layer-count miscount seen in case 17 on 2026-10-26 and 10-27). Judge was right; a mentor wording fault, not a hard rule. An earlier attempt the same evening died on `spawnSync claude ETIMEDOUT` (about $0.44, no results file).

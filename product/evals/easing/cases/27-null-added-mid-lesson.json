@@ -1,0 +1,33 @@
+{
+  "id": "27-null-added-mid-lesson",
+  "title": "A null added above the focus layer mid-lesson doesn't stop the learner's correct ease from passing",
+  "covers": [
+    "OA-5",
+    "FR-053",
+    "spec 004 cross-skill (renumber)"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. I'll do it all myself, no demo."
+    },
+    {
+      "project": "null-added-title-done",
+      "say": "I eased all of Title's keys, and I added a null on top for later. done"
+    }
+  ],
+  "expect": {
+    "verdict": "pass",
+    "set_ease_max": 0
+  },
+  "rubric": [
+    "R-RENUMBER-OK",
+    "R-NAMES-LAYERS",
+    "R-RECORD-HONEST"
+  ]
+}

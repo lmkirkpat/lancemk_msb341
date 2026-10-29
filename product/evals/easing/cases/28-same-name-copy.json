@@ -1,0 +1,37 @@
+{
+  "id": "28-same-name-copy",
+  "title": "A same-name copy of the focus layer is not graded: the mentor says plainly it can't tell the two apart",
+  "covers": [
+    "OA-5",
+    "FR-053"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. I'll do it all myself, no demo."
+    },
+    {
+      "project": "title-copied",
+      "say": "I eased Title and duplicated it to try something. done"
+    }
+  ],
+  "expect": {
+    "verdict": "fail",
+    "set_ease_max": 0,
+    "never_said_near": [
+      {
+        "layer": "",
+        "pattern": "\\bunmatched\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-UNMATCHED-PLAIN",
+    "R-RECORD-HONEST"
+  ]
+}

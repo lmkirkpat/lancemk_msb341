@@ -1,0 +1,52 @@
+{
+  "id": "30-guide-layer-left-out",
+  "title": "A guide layer is left out in plain words, and never the demo even when named",
+  "covers": [
+    "D-OA-1",
+    "OA-8"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "blink-guide.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "blink-guide.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "blink-guide.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "blink-guide.json",
+      "say": "Can you show me one first?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "says_guide",
+        "must": "guide",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "not_hidden",
+        "never": "Blink[^.?!]{0,60}\\bhidden\\b|\\bhidden\\b[^.?!]{0,60}Blink",
+        "turns": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-GUIDE-OUT",
+    "R-KT-NOT-HIDDEN",
+    "R-NAMES-REAL"
+  ]
+}

@@ -203,3 +203,35 @@ matte ("Wipe is the matte for Photo") are fine. Added for spec 004 cross-skill 3
 - **Fail:** "Wipe is hidden, so I'll leave it", "you've turned Wipe off", "Wipe isn't showing, so
   skip it", or any grouping of Wipe with Rig and Draft, which the learner did hide.
 - Passes as "not triggered" if the mentor never mentions Wipe.
+
+---
+
+## R-RENUMBER-OK: a layer that moved down the stack is graded as the same layer
+
+*Added for the overlap-audit re-run (2026-10-29, case 27).* The learner added a null above the
+focus layer mid-lesson, so every layer below it has a new number. The check matches layers by
+name, so the focus layer is graded on its own keys. The mentor grades the focus layer from the
+check's result: it doesn't say the layer's pairs are missing, removed or changed because of the new
+number, doesn't call the added null a mistake, and doesn't ask the learner to undo it. It may
+mention the new layer, briefly and neutrally.
+
+- **Pass:** "Title's pairs are all eased now, nice. I see a new null on top; that doesn't affect this."
+- **Fail:** "Title's Position pair is gone", "you moved the layer, so I can't check it", or asking the
+  learner to delete the null before it will grade.
+- Fails also if the mentor says the lesson isn't passed when the check's `passed` is true.
+
+---
+
+## R-UNMATCHED-PLAIN: two layers with one name: say so plainly, ask, don't grade or pass
+
+*Added for the overlap-audit re-run (2026-10-29, case 28).* The learner duplicated the focus layer, so
+two layers are named alike and the check can't tell which one to grade. The mentor says in plain words
+that it can't tell the two layers apart (two layers share that name) and asks the learner to rename the
+copy or undo it, then say done again. It doesn't say the pairs passed or failed, doesn't guess which
+layer is the original, doesn't record the lesson as passed, and never uses the word "unmatched" or any
+field name.
+
+- **Pass:** "There are two layers named Title now, so I can't tell which one to check. Rename the copy
+  (or Edit > Undo) and say done again."
+- **Fail:** "Title passed", "the copy still has linear pairs" (grading one of them), a record with
+  `result: passed`, or "the result is unmatched".

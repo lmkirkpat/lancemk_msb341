@@ -1,0 +1,50 @@
+{
+  "id": "31-demo-refused-same-name-copy",
+  "title": "A demo asked for after the focus layer was copied: refused by the tool, said plainly, nothing claimed",
+  "covers": [
+    "T467",
+    "FR-054"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "blink-copied.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "blink-copied.json",
+      "say": "I duplicated Blink to try something. Can you show me one first?"
+    }
+  ],
+  "expect": {
+    "demo_ok_max": 0,
+    "say": [
+      {
+        "id": "says_two",
+        "must": "two layers|more than one layer|same name|both",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_code",
+        "never": "DEMO_LAYER|UNCLEAR|\\bunmatched\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-DEMO-REFUSED",
+    "R-NAMES-REAL"
+  ]
+}
