@@ -350,9 +350,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
       why, and never what they should have done or how to fix it ("follow one control layer",
       "parent them to the null" are fixes, not what happened). The move is only the one the last
       check found, as in `attempted`: never a turn, scale or rotation the learner only planned or
-      named, and the null's spot is the group's pivot, never where it "turns from" or "scales
-      from". For a slide: "Placed a null at the group's pivot, parented the group to it, and slid
-      the group with one move."
+      named. A slide-only summary never says "pivot" and never names a place the group turns or
+      scales from. For a slide: "Parented the group to a null and slid it with one move."
     - `next`: one thing: what the check saw still off ("Caption still didn't follow Group Null"),
       or after a pass what's left to try ("a group that turns", "easing Group Null's move"). Never
       what they should have done or how to do it.
