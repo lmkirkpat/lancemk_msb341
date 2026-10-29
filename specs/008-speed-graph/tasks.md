@@ -181,6 +181,10 @@ easing's (spec 002 T423), which is the base every merge is checked against (spec
 - [ ] T430 [eval-engineer] After T428 and T429: cases 01, 02, 03, 05, 09, 10, 15 and 19, each with `--repeat 3`, mentor from the T428 branch. Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and logged in the README as prompt, rubric or noise, with the cost (about 24 runs)
 - [x] T431 [eval-engineer] After T430 passes and after spec 002 T423: a full re-baseline of the set, logged in the README with score and cost (≥ 80%, every hard-rule check passing). **Done when:** logged; a new failure outside the eight cases is triaged before the merge. **Done (21/25 (84%), rb2 2026-10-28; failures triaged and fixed in rounds 3 and 4):** SC-006 met, every hard-rule check passing.
 
+## Overlap audit 2026-10-29 (`discovery/usage-notes/overlap-audit-2026-10-29.md`; branch `overlap-shared`)
+
+- [x] T441 OA-3: check whether a land-hard pair's edits going unreported is a bug, and pin the behaviour in `mentor/test/speed-graph-overlap-audit.test.mjs`. **Result:** not a bug as specified: data-model.md › Check result adds `land_hard` to the other-changes exclude set on purpose; only a new shape or moved key time on that pair is silent (key values and key count are still reported, pinned). No code change; changing it is a spec call (FR-006, data-model › Check result).
+
 ---
 
 ## Hand-offs to other owners (not builder tasks)
