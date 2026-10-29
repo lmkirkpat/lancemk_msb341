@@ -85,3 +85,26 @@ pick whip on an unkeyed Position reads as `jumped`; non-focus layers that share 
 - 012 row 23 (moving parent) catches keyed motion only (OA-14); row 36 is per layer, not the
   focus total (OA-15); row 3's pick-whip hint doesn't fire for an offset pick whip.
 - CLAUDE.md's open item on speed graph's "already shaped" list was already fixed (`95b8a94`).
+
+## Outcome (2026-10-29, same day)
+
+Built in two waves of agents, merged to `main` (`03f66ff`, `a5d5aee`); mentor tests 1494 pass,
+0 fail, 3 todo (from 1431), hooks 39/39.
+
+- **Fixed:** OA-1, OA-2, OA-4 to OA-16 (T440, T442 to T445, T450 to T452, T455 to T462). OA-5 added
+  `mentor/lib/renumber.mjs` and an `unmatched` result (FR-053).
+- **OA-3:** the code matched the spec (`data-model.md:84`); the builder changed the rule: a land-hard
+  pair's edits are now other changes (T466).
+- **Decided:** D-OA-1 guide layers out of the default focus and never the demo (key types, speed
+  graph, offset; T463 to T465); D-OA-3 a layer hidden by another's solo is never the demo (T463,
+  T464); D-OA-2 (locked child) waits for a live check.
+- **Demos after a renumber (T467, FR-054):** easing, key types and speed graph demos read the comp
+  and send the current index and name; the pivot demo no longer writes to a same-name copy; four
+  jsx snippets refuse when the name at the index differs. **Needs a live check in AE.**
+- **Specs:** all five matrices updated (`456a591`); 8 right-but-surprising rows still have no
+  pinning test.
+- **Still open:** the pivot rows held for T261/T248; key types has no rule for a locked layer
+  (spec 009 row 32); offset's later landing moved alone isn't listed (same class as OA-2).
+- **Evals:** every skill's `SKILL.md` changed, so all six sets need a re-run, plus new cases the
+  builders listed (renumber after a null, same-name copy, guide leave-out, land-hard note, masked
+  or off-screen pivot focus, a duplicated null group layer, an unkeyed change outside the focus).

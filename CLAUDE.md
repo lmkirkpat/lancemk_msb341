@@ -137,6 +137,12 @@ a brand new session act like a colleague who already knows what you are working 
     - **Cost:** about $224 in all.
     - **Main lesson:** the model copies a prompt's example sentence word for word, so take examples
       from the rubric's Pass line.
+  - **Overlap audit (2026-10-29,** `discovery/usage-notes/overlap-audit-2026-10-29.md`**):** all five new
+    skills audited; 16 misses fixed (the worst: adding a null renumbered layers and broke the easing,
+    speed graph and key types checks), guide and solo-hidden layers never the demo, land-hard edits
+    reported, demos safe after a renumber, all five spec matrices updated. Mentor tests 1494 pass.
+    **Next:** re-run all six eval sets (every `SKILL.md` changed) with the new cases; a live check of
+    the demo guard in AE; the locked-child and locked-layer rules.
   - **Easing after wave A:** the drop to 20/25 was the judge, not the mentor (`23b37e9`); baseline
     24/25.
   - **Spec 004 live sitting (2026-10-26,** `specs/004-ae-curriculum/live-sitting-2026-10-26.md`**):**
