@@ -86,6 +86,8 @@ Dry run only so far (`--dry-run --strict-sources`: 33 cases valid).
 
 **Changed after seeing results (2026-10-28, human-approved):** (1) case 26's `top_layer_stays` now accepts "staying" (`stay(?:s|ing)`); the mentor said "the top layer staying put", which is correct (check bug; design line: the `SKILL.md` "if they ask how Quick Offset works" paragraph, L-1). (2) case 04 turn 3: the `walks_through` check (drag, keys or bar) is replaced by `no_second_walkthrough`, a `never` on "Quick Offset" or "drag the middle"; design line: TD § 15 rule 3, a side question gets one or two sentences plus the pending step, "never the walk-through a second time". Case 04 still lists `R-OFF-WALKTHROUGH`; its fixture's turn 2 already carried the walk-through, so watch that item at the next run. The 1/3 and 2/3 scores for 04 and 26 in the fix-round repeats were on the old checks.
 
+**Changed after seeing results (2026-10-28, human-approved, batch 1 re-baseline):** case 33's `ends_on_task` now allows quotes around the word (`say "?done"?`); the mentor wrote `say "done"`. Design line: TD § 15 turn 3 (end on the task and the word to say). Tested on the logged line and a line with no task.
+
 ## Running
 
 ```sh

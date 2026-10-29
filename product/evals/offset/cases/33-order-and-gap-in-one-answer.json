@@ -42,7 +42,7 @@
       },
       {
         "id": "ends_on_task",
-        "must": "say done|tell me when|let me know when",
+        "must": "say \"?done\"?|tell me when|let me know when",
         "turns": [
           3
         ]

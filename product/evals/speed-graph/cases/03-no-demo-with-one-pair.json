@@ -21,6 +21,10 @@
     {
       "project": "practice-now.json",
       "say": "Can you show me how?"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Arrive softly."
     }
   ],
   "expect": {
@@ -30,7 +34,7 @@
         "id": "walks_through",
         "must": "Graph Editor|speed graph|Edit Speed Graph",
         "turns": [
-          3
+          4
         ]
       }
     ]

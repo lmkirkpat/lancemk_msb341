@@ -83,6 +83,8 @@ Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
 
 **Changed after seeing results (2026-10-28, human-approved):** (1) `shortcutAllow` in `run.mjs` now lists the spelled-out Control+Option+Command+H and Option+Command+K, so the universal `no_shortcuts` check no longer fails case 13 for the mentor's correct answer at 26.5; design line: KT-j as amended 2026-10-26 (L-2 confirmed both at 26.5), spec 009 FR-018. Case 25's own `no_shortcut` check still forbids them on another version. (2) `R-KT-WALKTHROUGH` no longer says "no shortcut"; it follows `R-KT-VERSION` and now fails a walk-through with no menu path or right-click (TD § 15 item 3). Pacing-repeat scores for 04 and 13 (0/3 each) were on the old wording.
 
+**Changed after seeing results (2026-10-28, human-approved, batch 1 re-baseline):** case 18's `not_done` no longer fires when the done-word is followed by "but" or by "too soon/early/late" in the same sentence, so the honest "The first pair snaps now, but too soon" passes; "that pair is done" and "it works now" still fail. Design line: TD § 7 row 4 and FR-011 (a wrong-side hold is never called done; saying it holds but lands on the wrong side is the hint). Tested both ways on the logged turn 3 and bad examples.
+
 **Fix-round repeats (2026-10-28, mentor at `86fc67f`; $4.93):** 04 3/3, 06 3/3, 13 3/3. The `shortcutAllow`, `R-KT-WALKTHROUGH` and skill fixes hold.
 
 ## Running

@@ -34,7 +34,7 @@
     "say": [
       {
         "id": "not_done",
-        "never": "\\b(?:first pair|that pair|it)\\b[^.?!]{0,20}\\b(?:is done|looks good|is held|snaps now|works now)\\b",
+        "never": "\\b(?:first pair|that pair|it)\\b[^.?!]{0,20}\\b(?:is done|looks good|is held|snaps now|works now)\\b(?!,?\\s+but\\b|[^.?!]{0,30}\\btoo (?:soon|early|late)\\b)",
         "turns": [
           3
         ]
