@@ -52,8 +52,9 @@ a brand new session act like a colleague who already knows what you are working 
     (`bridge/`), the `ae-mentor` MCP server (`mentor/`), the `/ease-mentor` skill
     ("I do, we do, you do": the mentor eases one pair, the learner eases the rest), and the
     learner record. Usage sessions are in `discovery/usage-notes/easing-slice.md`.
-  - **Eval set** (`product/evals/easing/`, now 25 cases, about $12 per full run, no AE needed;
-    latest 25/25 on 2026-10-19, the new baseline after the `mentor/tools/` split; 25/25 on
+  - **Eval set** (`product/evals/easing/`, now 26 cases, about $12 per full run, no AE needed;
+    latest 25/26 on 2026-10-28 under the pacing rules; 25/25 on 2026-10-19 after the
+    `mentor/tools/` split; 25/25 on
     2026-10-12 after the agent audit): first baseline 14/16, then 15/16 (94%) after `SKILL.md` fixes. SC-006 (≥ 80%) passes. Every
     hard-rule check passed; the failures were about wording and honesty in the learner record.
   - **Panel decided** (`decisions/005`, amends 003): the AE panel drives headless Claude Code
@@ -121,12 +122,21 @@ a brand new session act like a colleague who already knows what you are working 
   - **Skills built:** `/speed-graph-mentor`, `/key-types-mentor`, `/offset-mentor`,
     `/next-mentor`, `/null-parenting-mentor` (skill 6, merged `31fe72d`) and `/anchor-mentor`
     (skill 5, merged 2026-10-26 `f6effae`) are on `main`; all six have passed a first live
-    lesson (below; null in `discovery/usage-notes/null-parenting.md`). Eval sets (dry-run and smoke runs only, no baselines) are on `evals-wave-a`
-    (008 to 010), `evals-skill-5` (live captures, 42 case files for spec cases 1 to 37) and
-    `evals-skill-6`, not merged. Smoke findings to fix before baselining: a self-note leaks before
-    the first snapshot in reviews (key types, offset, pivot; prompt wording didn't fix it for the
-    pivot, so the fix is a cross-skill tool change, below), the pivot demo says "opposite
-    directions", and skill 6 step 1 needs "ask and stop".
+    lesson (below; null in `discovery/usage-notes/null-parenting.md`). All six eval sets are on
+    `main` under `product/evals/` (easing 26 cases, key types 25, speed graph 25, offset 33, pivot
+    46, null 40).
+  - **Pacing rules in every skill and all six sets re-baselined (2026-10-28 to 10-29,**
+    `discovery/usage-notes/pacing-rebaselines.md`**):**
+    - **Rules:** curriculum § 2's opening rule, three turn rules, "do it for me", show-me-first, and
+      the two-sentence cap are in all six `SKILL.md` files. Record summaries use general terms: no
+      times, names, method or motive, though offset keeps its measured gaps.
+    - **Results:** every set meets SC-006 with every hard-rule check passing. Easing 25/26, key
+      types 23/25, speed graph 21/25, offset 29/33, pivot 41/46 (it was 27/44), null 39/40. Failures
+      were fixed in rounds 3 to 5 and re-run 3/3, and T265, T347, T423, T427, T431 and T435 are
+      ticked.
+    - **Cost:** about $224 in all.
+    - **Main lesson:** the model copies a prompt's example sentence word for word, so take examples
+      from the rubric's Pass line.
   - **Easing after wave A:** the drop to 20/25 was the judge, not the mentor (`23b37e9`); baseline
     24/25.
   - **Spec 004 live sitting (2026-10-26,** `specs/004-ae-curriculum/live-sitting-2026-10-26.md`**):**
@@ -190,16 +200,14 @@ a brand new session act like a colleague who already knows what you are working 
             passed on repeat; easing's code path is unchanged, so taken as met. Choices to watch: a
             declined review still uses the session's one review; the panel's "Remembering…" label
             is easing-only (a panel-builder request); PR-1 (the unreadable-notes message) is open.
-            **Next:** T413 and T414 (eval checks and cases, on the eval branches), T415
-            (SC-015's repeats, about $25 to $35) and T416 (live first lesson and review).
-         2. **Baselines (HO-4 met 2026-10-27, T183's base run, 25/26).** Skill 5's first baseline
-            (`evals-skill-5`, `c853f9e`, not merged): **27/44 (61%), $35.27 in all**, with cases 38
-            (background only) and 39 (layer named, no place). SC-006 not met: 11 cases fail on the
-            self-note before the first snapshot. Without it, about 38/44. Smaller findings: 21a's
-            menu path, 30's "because" in the record, 26's "make up for it", rubric repeats for 04,
-            19 and 29. Skill 6's set (`evals-skill-6`, `67aa8ad`) is ready at 33 cases (about $17 to
-            $21), with case 17's record naming the fix still to repeat. Both baselines re-run after
-            Phase 10 merges.
+            **Next:** T413 to T415 are unticked in `specs/004-ae-curriculum/tasks-wave-b.md`. The
+            2026-10-28/29 re-baselines show no self-note failures, so check whether they can be
+            ticked. T416 (the live first lesson and review) is open.
+         2. **Baselines: done.** The pivot went from 27/44 (61%) on 10-27 to 41/46 (89%) on 10-28,
+            and null is 39/40 (98%) on 10-29. See "Pacing rules" under Progress. Watch list (2/3,
+            no prompt change yet): pivot 09, speed graph 03, offset 20 and 28. Coverage to restore:
+            pivot case 09 (a matte already there) and case 11 (turning down a show-me before the
+            walk-through).
          3. A short first lesson on the new opening; watch for "what do you mean by turn from?".
          4. T240, the review, a day or more after T237. T248 (a stroke) and T261 (L-8, an unkeyed
             expression on Anchor Point or Position) at the next sitting.
@@ -221,9 +229,8 @@ a brand new session act like a colleague who already knows what you are working 
        (4 min 28 s, no demo, Tile, Caption and Stamp proposed and taken) passed: SC-001 met,
        SC-002 8 of 8 plus 2 of 2 deliberate jumps, 10 needed. **Then:** review T343 (SC-009,
        stretch; it carries the last 2 SC-002 checks), and pivot review T240 (stretch).
-     - **After the live lessons:** skills 5 and 6 are merged; the self-note fix and baselines are
-       under skill 5's Next (items 1 and 2), and the wave A sets (`evals-wave-a`) still need
-       theirs. Still open from the live sitting: speed graph's "already shaped" list
+     - **After the live lessons:** skills 5 and 6 are merged, and every eval set is merged and
+       baselined (see "Pacing rules" under Progress). Still open from the live sitting: speed graph's "already shaped" list
      includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
      out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
      more).
@@ -232,9 +239,10 @@ a brand new session act like a colleague who already knows what you are working 
      hooks and workflow copied over, ten personas trimmed to seven, and a two-researcher
      parallel run with no collisions; the portfolio site came first, so it's supporting
      evidence only). All five skills are merged and passed a first live lesson (speed graph, key
-     types, offset in both kinds, the pivot on Door and Pop, and null in T340 and T341). What's
-     partial is "with eval cases": every set is built but none is merged or baselined, so mark
-     that partial in `/sprint-review` and carry the baselines, and the reviews, into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
+     types, offset in both kinds, the pivot on Door and Pop, and null in T340 and T341). "With eval
+     cases" was partial at close: every set was built but none was merged or baselined. All six were
+     merged and baselined by 2026-10-29, so `/sprint-review` should note that the baselines landed
+     after close. Carry the reviews into sprint 4. Run `/overlap-audit` for each new skill (see "Edge cases where concepts
      overlap" below). Parallel agents share `SKILL.md`, the eval set, and `mentor/`, so the
      cockpit cuts their worktrees from local `main` (the agent tool's worktree option starts
      from `origin/main`). The git guard blocks any command containing `merge-base`, even a read.
