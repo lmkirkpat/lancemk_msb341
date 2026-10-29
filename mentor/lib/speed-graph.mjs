@@ -12,7 +12,7 @@ import { alignLayers } from "./renumber.mjs";
 import { isKeptLinear } from "./marks.mjs";
 import { fastestPart } from "./speed-graph-bezier.mjs";
 import { layerInfo } from "./layer-info.mjs";
-import { classOf } from "./visibility.mjs";
+import { classOf, visibility } from "./visibility.mjs";
 
 // FR-010 (spec 004 FR-026). Never said to the learner (FR-018).
 export const MIN_GAP = 20; // a: landing influence at least this many points above the start's
@@ -202,10 +202,20 @@ function group(kind, refs) {
 const known = (snapshot) => layerInfo(snapshot).known;
 // Eye off and, once R1 is known, not a matte (only mattes leave the hidden list, as in easing).
 const isHidden = (snapshot, layer) => !layer.enabled && !(known(snapshot) && classOf(snapshot, layer.index) === "matte");
+// Overlap audit D-OA-1 (T464): a guide layer never renders, so it isn't the default focus (named, it
+// is, and it stays in other_candidates).
 function eligibleLayer(snapshot, layer) {
   if (!known(snapshot)) return layer.enabled && !layer.is_null;
   const cls = classOf(snapshot, layer.index);
-  return cls !== "hidden" && cls !== "null" && !layer.is_null;
+  return cls !== "hidden" && cls !== "null" && cls !== "guide" && !layer.is_null;
+}
+// D-OA-1 and D-OA-3 (T464): the demo needs a layer the frame shows: eye on, not a null, not a guide,
+// and not hidden by another layer's solo.
+function canDemo(snapshot, layer) {
+  if (!layer.enabled || layer.is_null) return false;
+  if (!known(snapshot)) return true;
+  if (classOf(snapshot, layer.index) === "guide") return false;
+  return !visibility(snapshot).some((v) => v.layer_index === layer.index && v.soloed_elsewhere === true);
 }
 
 // FR-003 to FR-007. Options: focus_layers, exclude (review: past targets), kept_linear (marks that
@@ -273,7 +283,7 @@ export function analyze(snapshot, { focus_layers, exclude = [], kept_linear, ski
   }
 
   const targets = picked.map((s) => s.id);
-  const visible = picked.find((s) => s.layer.enabled && !s.layer.is_null);
+  const visible = picked.find((s) => canDemo(snapshot, s.layer));
   const demo = picked.length >= 2 && visible ? visible : null;
   const noDemoReason = picked.length === 0
     ? (candidates.length === 0 ? "nothing_to_shape" : "none_in_focus")
@@ -449,7 +459,9 @@ export function check(baseline, now0, lesson, { seen_shaped = [] } = {}) {
     comp_matches: true,
     lesson_comp: baseline.comp.name,
     pairs,
-    other_changes: [...aligned.notes, ...unexpectedChanges(aligned.baseline, current, new Set([...(lesson.targets || []), ...landHard]))],
+    // T466 (overlap audit OA-3, changed by the builder): only the graded targets; a pair the learner
+    // said should land hard is reported like any other pair outside them.
+    other_changes: [...aligned.notes, ...unexpectedChanges(aligned.baseline, current, targetSet)],
     // Every focus pair graded and passed: keys changed or a pair gone holds the pass until the
     // learner says whether that was on purpose (FR-014).
     passed: graded.length > 0 && graded.length === pairs.length && graded.every((p) => p.result === "passed"),

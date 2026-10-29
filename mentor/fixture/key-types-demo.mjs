@@ -3,6 +3,7 @@
 // its incoming side too only when HOLD_SIDES is "both". Values, eases and every other key stay.
 
 import { MentorError } from "../errors.mjs";
+import "../lib/demo-layer.mjs"; // registers DEMO_LAYER_MOVED
 import { HOLD_SIDES } from "../lib/key-types.mjs";
 
 function findKey(snapshot, { layer_index, property_path, key_index }) {
@@ -22,8 +23,12 @@ export function apply(snapshot, edit) {
   return snapshot;
 }
 
+// T467: the layer at that index must still be the one the server read (named in args.layer_name).
+const moved = (layer, args) => typeof args.layer_name === "string" && (!layer || layer.name !== args.layer_name);
+
 export function run(args, { snapshot, saveEdit }) {
   if (snapshot.comp.id !== args.comp_id) throw new MentorError("NO_ACTIVE_COMP");
+  if (moved(snapshot.layers.find((l) => l.index === args.layer_index), args)) throw new MentorError("DEMO_LAYER_MOVED");
   const edit = { layer_index: args.layer_index, property_path: args.property_path, key_index: args.key_index };
   apply(snapshot, edit);
   const { layer, prop, from, to } = findKey(snapshot, edit);

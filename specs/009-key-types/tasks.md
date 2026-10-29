@@ -193,6 +193,7 @@ Tests first in `mentor/test/key-types-overlap-audit.test.mjs` (each seen failing
 - [x] T443 OA-8 (H-5): the extra-holds list uses the same either-side rule. **Result:** a mixed Blink pair outside a Cut focus is an extra hold, and the generic "was changed" note for it is gone.
 - [x] T444 OA-9 (row 16): the focus properties' pause pairs count as targets for the other-changes list only. **Result:** holding every Pause key leaves no note about Pause › Position.
 - [x] T445 OA-10 (row 1, TD § 9): an expression turned on over a focus pair since the baseline gives the verdict `expression` (no pass); `SKILL.md` step 7 has a line for it. **Result:** a held Blink with its expression on grades `expression`, `passed` false.
+- [x] T463 D-OA-1 and D-OA-3 (branch `overlap-wave2`): a guide layer's on-off pair isn't a candidate (left out with the reason `guide`; still the focus when named), and neither a guide layer nor one another layer's solo hides is the demo. **Result:** `mentor/test/guide-solo-demo.test.mjs`, seen failing first: a guide Title leaves the candidates and moves the demo to Wipe; a soloed Wipe takes the demo from Title; shy unchanged. `SKILL.md`: a guide leave-out sentence and the no-demo line.
 
 ---
 

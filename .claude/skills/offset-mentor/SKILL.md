@@ -133,7 +133,8 @@ start.
    - **Say what's left out**, one short sentence per reason in `left_out`:
      a null ("CTRL is a null: its move only shows through what's attached to it, so I'll leave
      it out"); a hidden layer ("you've hidden Old Take, so I'll leave it unless you want it");
-     a precomp ("I can't check their timing yet"); an expression ("an expression drives Logo's
+     a guide layer ("Grid is a guide layer, so it never shows in the render; I'll leave it unless
+     you want it"); a precomp ("I can't check their timing yet"); an expression ("an expression drives Logo's
      Rotation, so its keys aren't what you see").
    - If `lesson` is continued or resumed, say so and pick up where it left off.
    - **Their choices from last time.** When `stored_choices` is true, before any frame, demo,
@@ -229,9 +230,10 @@ start.
      that you can't shift a locked layer ("Dot 2 and Dot 3 are locked, so I can't shift either
      for you"), and walk it through in words with a frame. Don't suggest unlocking to get a demo,
      and don't promise one later.
-   - **Every member after the first is driven by an expression or hidden** (the reason says
+   - **Every member after the first is driven by an expression, hidden or a guide layer** (the reason says
      expression): say in one sentence why a shift wouldn't show ("an expression drives Dot 2, so
-     its keys aren't what you see", or "Dot 2 is hidden, so you wouldn't see it move"), and walk
+     its keys aren't what you see", "Dot 2 is hidden, so you wouldn't see it move", or "Dot 2 is a
+     guide layer, so it never shows in the render"), and walk
      it through in words with a frame. Don't suggest removing
      the expression to get a demo, and don't promise one later.
 

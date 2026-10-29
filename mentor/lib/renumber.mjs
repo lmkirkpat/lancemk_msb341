@@ -55,14 +55,13 @@ function without(snapshot, drop) {
   return remap(snapshot, new Map(), drop);
 }
 
-// → { baseline, current, unmatched: [{ index, name }], notes: [string] }. `baseline` and `current` are
-// what to compare: the comp now at the baseline's indexes, and both without unmatched layers. `notes`
-// are for the other-changes list.
-export function alignLayers(baseline, current) {
+// The matching above: → { B, C, same, map (baseline index → current index), claimed (current
+// indexes), ambiguous (baseline indexes) }. With `same`, nothing was renumbered and map is empty.
+function matchLayers(baseline, current) {
   const B = layerList(baseline);
   const C = layerList(current);
   const same = B.length === C.length && B.every((b, i) => C[i].index === b.index && C[i].name === b.name);
-  if (same) return { baseline, current, unmatched: [], notes: [] };
+  if (same) return { B, C, same, map: new Map(), claimed: new Set(), ambiguous: new Set() };
 
   const map = new Map(); // baseline index → current index
   const claimed = new Set();
@@ -101,6 +100,29 @@ export function alignLayers(baseline, current) {
     const atIndex = open.find((c) => c.index === b.index);
     if (atIndex) claim(b.index, atIndex.index);
   }
+  return { B, C, same, map, claimed, ambiguous };
+}
+
+// T467 (overlap audit, demo renumbering): where the baseline's layer `index` is in the comp now, for
+// a demo that writes to one layer. → { index, name } of the layer now; { reason: "not_unique" } when
+// more than one layer has its name and they can't be told apart; { reason: "gone" } when it isn't
+// there.
+export function layerNow(baseline, current, index) {
+  const { B, C, same, map, ambiguous } = matchLayers(baseline, current);
+  if (!B.some((b) => b.index === index)) return { reason: "gone" };
+  if (same) return { ...C.find((c) => c.index === index) };
+  if (ambiguous.has(index)) return { reason: "not_unique" };
+  if (!map.has(index)) return { reason: "gone" };
+  return { ...C.find((c) => c.index === map.get(index)) };
+}
+
+// → { baseline, current, unmatched: [{ index, name }], notes: [string] }. `baseline` and `current` are
+// what to compare: the comp now at the baseline's indexes, and both without unmatched layers. `notes`
+// are for the other-changes list.
+export function alignLayers(baseline, current) {
+  const { B, C, same, map, claimed, ambiguous } = matchLayers(baseline, current);
+  if (same) return { baseline, current, unmatched: [], notes: [] };
+  const baseNames = new Set(B.map((b) => b.name));
 
   if (!ambiguous.size && [...map].every(([b, c]) => b === c)) return { baseline, current, unmatched: [], notes: [] };
 

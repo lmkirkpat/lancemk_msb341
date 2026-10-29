@@ -193,6 +193,7 @@ From `discovery/usage-notes/overlap-audit-2026-10-29.md`, offset's rows. Tests i
 - [x] T450 [US2] OA-1: on the layers kind, only a member's counted units are inside the group; its single keys, expression-driven keys and pauses are compared like anything outside, and keys that moved with the member's own graded shift aren't listed again. **Done:** Dot 3's moved single Scale key and expression Rotation key are other changes; a whole-bar drag lists nothing.
 - [x] T451 [US2] OA-2: on the layers kind, a key added or removed, a pause given a value, or a new key value on a member's counted property is an other change (the start is still graded). **Done:** a key added on Dot 1's Position and a pause given a value both listed; the properties kind unchanged.
 - [x] T452 [US2] OA-6 (offset only): `matchLayer` picks the k-th layer with a repeated name in stack order, not the raw index. **Done:** a rename to "Dot 1" plus a renumber matches the first Dot 1; two same-named layers renumbered each keep their own.
+- [x] T465 [US2] D-OA-1 (branch `overlap-wave2`): a guide layer that moves is left out of the proposed group (reason `guide`), is a member when the learner names it, and is never the demo. **Done:** `mentor/test/guide-solo-demo.test.mjs`, seen failing first: a guide Chip leaves the Wipe, Card, Chip group; named, it's back with no refusal; second in their order, the demo goes to the next member. `SKILL.md`: a guide leave-out sentence and the no-demo bullet.
 
 ---
 

@@ -115,7 +115,9 @@ async function offsetDemo({ target }) {
     throw new MentorError("NO_ACTIVE_COMP", `The active comp isn't ${lesson.baseline.comp.name}. Switch back to it, then ask for the demonstration again.`);
   }
   const plan = demoPlan(lesson, current, target);
-  const args = { comp_id: lesson.comp_id, layer_index: plan.layer.index, property_paths: plan.property_paths, shift_frames: gap };
+  // matchLayer already found the layer by name in this read (OA-6); T467 sends the name too, so the
+  // snippet refuses if the layer at that index changed since.
+  const args = { comp_id: lesson.comp_id, layer_index: plan.layer.index, layer_name: plan.layer.name, property_paths: plan.property_paths, shift_frames: gap };
   const reason = demoRefusal(current, args); // what the read already shows: no snippet run
   if (reason) throw refused(reason);
   let r;

@@ -1,8 +1,8 @@
 // Spec 009 FR-010, skill 1's one demonstration: hold on the demo pair's first key, exactly as Animation >
 // Toggle Hold Keyframe writes it at 26.5 (live check L-2, 2026-10-26: the outgoing side only, and AE
 // resets that side's influence to 16.667 for the hand toggle and the demo alike). ES3 function body with
-// mentor/jsx/lib/*.jsx prepended. ARGS = { comp_id, layer_index, property_path, key_index }, where the
-// pair runs from key key_index to key_index + 1. Runs inside one undo group (undo: true).
+// mentor/jsx/lib/*.jsx prepended. ARGS = { comp_id, layer_index, layer_name, property_path, key_index },
+// where the pair runs from key key_index to key_index + 1. Runs inside one undo group (undo: true).
 
 // "out": the key's outgoing side only, its incoming side as it was. "both": both sides. Keep in step
 // with HOLD_SIDES in mentor/lib/key-types.mjs (its fixture twin reads that one).
@@ -16,6 +16,9 @@ if (comp.id !== ARGS.comp_id) {
 if (ARGS.layer_index < 1 || ARGS.layer_index > comp.numLayers) throw new Error("Layer " + ARGS.layer_index + " isn't in this comp.");
 
 var layer = comp.layer(ARGS.layer_index);
+// T467: the server read the comp just before and names the layer it means. Another name at this index
+// means the layers moved since that read: refuse before any write.
+if (typeof ARGS.layer_name === "string" && layer.name !== ARGS.layer_name) throw new Error("DEMO_LAYER_MOVED:");
 var prop = propByPath(layer, ARGS.property_path);
 var i = ARGS.key_index;
 if (i < 1 || i + 1 > prop.numKeys) throw new Error("Keys " + i + " and " + (i + 1) + " don't exist on " + displayPath(prop) + ".");

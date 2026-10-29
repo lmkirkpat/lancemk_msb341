@@ -1,8 +1,6 @@
-// Overlap audit 2026-10-29, OA-3 (spec 008 tasks T441): a pair the learner said should land hard.
-// The audit proposed reporting its edits as other changes. Spec 008 data-model.md › Check result says
-// the opposite on purpose ("so a dropped pair the learner then changes isn't reported as an other
-// change"), so this pins what the check does: a new shape on a land-hard pair isn't an other change,
-// but its key values and key count still are, as for any property.
+// Overlap audit 2026-10-29, OA-3 (spec 008 tasks T441, changed by the builder in T466): a pair the
+// learner said should land hard. It isn't graded, and since T466 its edits are other changes like any
+// pair outside the lesson's targets: a new shape, its key values and its key count.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -21,14 +19,14 @@ function lessonFor(baseline, landHard) {
   return { comp_id: baseline.comp.id, targets: [...a.targets, ...landHard], skill_options, demo: null };
 }
 
-test("OA-3 (pinned, spec 008 data-model › Check result): reshaping a land-hard pair isn't an other change", () => {
+test("OA-3 (T466): reshaping a land-hard pair is an other change, and the pair isn't graded", () => {
   const was = sg("practice-now.json");
   const r = check(was, sg("planted-shared-key.json"), lessonFor(was, [P1]));
   assert.ok(!r.pairs.some((p) => p.id === P1), "the land-hard pair isn't graded");
-  assert.deepEqual(r.other_changes, []);
+  assert.ok(r.other_changes.some((n) => n.startsWith("Title › Position")), r.other_changes.join("; "));
 });
 
-test("OA-3 (pinned): a land-hard pair's key values and key count are still reported", () => {
+test("OA-3: a land-hard pair's key values and key count are still reported", () => {
   const was = sg("practice-now.json");
   const moved = structuredClone(sg("planted-shared-key.json"));
   moved.layers.find((l) => l.name === "Title").properties.find((p) => p.display_name === "Position").keys[0].value = [0, -40, 0];

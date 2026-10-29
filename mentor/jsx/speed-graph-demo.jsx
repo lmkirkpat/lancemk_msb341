@@ -2,8 +2,8 @@
 // short ease out of the start key and a long ease into the landing key: key i's out-side influence
 // and key i+1's in-side influence set on every dimension, speeds kept, each key's other side and both
 // keys' types left as they were. ES3 function body with mentor/jsx/lib/*.jsx prepended.
-// ARGS = { comp_id, layer_index, property_path, key_index, out_influence, in_influence }; the two
-// influences are DEMO_OUT and DEMO_IN from mentor/lib/speed-graph.mjs (the fingerprint, FR-008).
+// ARGS = { comp_id, layer_index, layer_name, property_path, key_index, out_influence, in_influence };
+// the two influences are DEMO_OUT and DEMO_IN from mentor/lib/speed-graph.mjs (the fingerprint, FR-008).
 // Runs inside one undo group.
 
 var comp = app.project.activeItem;
@@ -17,6 +17,9 @@ if (typeof ARGS.out_influence !== "number" || typeof ARGS.in_influence !== "numb
 }
 
 var layer = comp.layer(ARGS.layer_index);
+// T467: the server read the comp just before and names the layer it means. Another name at this index
+// means the layers moved since that read: refuse before any write.
+if (typeof ARGS.layer_name === "string" && layer.name !== ARGS.layer_name) throw new Error("DEMO_LAYER_MOVED:");
 var prop = propByPath(layer, ARGS.property_path);
 var i = ARGS.key_index;
 if (i < 1 || i + 1 > prop.numKeys) throw new Error("Keys " + i + " and " + (i + 1) + " don't exist on " + displayPath(prop) + ".");
