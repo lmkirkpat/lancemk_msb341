@@ -1,0 +1,76 @@
+{
+  "id": "33-order-and-gap-in-one-answer",
+  "title": "The learner answers the intent question with order and gap together: their plan said back in one sentence, the how-to in one or two, ending on the task",
+  "covers": [
+    "FR-007",
+    "FR-016a",
+    "TD § 15 turn 3"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Let's stagger the layers instead."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "The Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "offset_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "snapshot_input_matches": [
+      "\"gap_frames\":4"
+    ],
+    "say": [
+      {
+        "id": "says_plan_back",
+        "must": "Dot 1[\\s\\S]*Dot 2[\\s\\S]*Dot 3",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "ends_on_task",
+        "must": "say done|tell me when|let me know when",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_bullets",
+        "never": "(?:^|\\n)\\s*(?:[-*\\u2022]|\\d+[.)])\\s",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_trim_warning",
+        "never": "\\btrim(?:s|med|ming)?\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_how_quick_offset_spreads",
+        "never": "top layer (?:stays|doesn.t move|is the anchor)|layers? below (?:it )?(?:move|shift)",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-ONE-IDEA"
+  ]
+}

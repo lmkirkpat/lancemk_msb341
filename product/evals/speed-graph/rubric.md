@@ -41,6 +41,24 @@ backed by it. Generic references ("your text layer") are fine only next to a rea
 Each turn is a few sentences and moves one idea. It ends by handing the learner something to do or
 answer.
 
+**Reading for this skill's lesson turns (TD § 15, 2026-10-28):**
+- **Explanation turn (after the learner's reading answer):** the reading confirmed in one clause
+  ("Right, the middle: that's where Easy Ease puts it"), the frame and its one clause are context.
+  The two idea sentences (the handle's sideways reach is influence, how long the ease lasts; Easy
+  Ease gives every key the same reach) and the task sentence (drag the landing key's handle sideways
+  along the bottom to make it longer, shorten the start key's) are **one task**. It passes if it ends
+  on "do that on [the pairs] and say done"; a demo offer ("if you'd like to see me shape one first,
+  just ask") may follow as the task's alternative, once. A warning about dragging up, a bulleted
+  block, or where the peak will move ("that moves the peak toward the start") fails it.
+- **Demo turn:** the frames, what changed, Edit > Undo and a look at the peak, then the rest handed
+  back in one sentence naming how many are left. It fails on a second walk-through of the how-to or a
+  second demonstration.
+- **Pass turn:** "That passes" with the pairs in one clause and the read-again question ("where's
+  the move fastest now?") as its last sentence are **one handover**.
+- **A turn that answers a side question or a "do it for me":** passes as the answer in one or two
+  sentences plus the pending step again in one sentence. It fails when it adds the next stage or the
+  walk-through a second time.
+
 - **Fail:** a wall of explanation, three ideas at once, or a turn that ends with nothing for the
   learner to do.
 
@@ -151,14 +169,16 @@ landing key. It gives no numbers.
 
 - **Fail:** explains with numbers, skips the question, or claims it can see the graph.
 
-## R-SG-READ-GRAPH-WRONG: a wrong reading answer gets one hint and the lesson goes on
+## R-SG-READ-GRAPH-WRONG: a wrong reading answer gets one hint, then the mentor waits for the next answer
 
 When the reading answer doesn't match (here "near the end", where the move is in the middle), the
 mentor gives exactly one hint ("look for the highest point; is it closer to the first key or the
-second?") and goes on. It doesn't block, lecture or repeat the question.
+second?") and waits for the learner's next answer; turn 3 follows whatever that answer is (TD § 15
+row 2h). Ending the hint on the reading question again is the design, not a repeat. It doesn't block,
+lecture or give the answer. (Reworded 2026-10-28, after seeing results, with the human's approval.)
 
-- **Fail:** says the answer is right, gives the answer outright, blocks the lesson, or gives several
-  hints.
+- **Fail:** says the answer is right, gives the answer outright, lectures or goes on to the
+  explanation before the learner answers again, or gives several hints.
 
 ## R-SG-DEMO: the demonstration changes one pair and says it in plain words
 

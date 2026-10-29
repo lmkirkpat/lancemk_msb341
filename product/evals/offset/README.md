@@ -68,6 +68,20 @@ Fix A made `other_skills[].learned` `null` on an unreadable record (confirmed in
 
 **Ready for T415?** Yes for this case. The mentor-side finding below is fixed (Fix A); it is kept for the record.
 
+## Pacing evals (T433, 2026-10-28; mentor from the T432 branch)
+
+Dry run only so far (`--dry-run --strict-sources`: 33 cases valid).
+- **Rubric:** `R-ONE-IDEA` takes TD § 15 › What R-ONE-IDEA should see (explanation turn ends on the intent question; task turn ends on "play it back and say done" with no bulleted methods, trim warning, "top layer stays" or properties rule unasked; order and gap given with the choice make turns 2 and 3 one; a side question is the answer plus the pending step). New item `R-ASK-RUNS-DEMO`.
+- **Changed case:** 16 (Eval plan 14, amended 2026-10-28): "stagger the rest for me" after an order, before any demo, is the ask, so the one demo runs (`demo_calls_min` 1, `demo_only_on` `layer/6`, `undo` said in turn 3) and the rest is handed back; `no_later_offer` still holds on turn 4, whose project is now `layers-pass.json`. Rubric: `R-ASK-RUNS-DEMO`, `R-DEMO-PLAIN`, `R-ONE-IDEA` (was `R-DECLINES-WARMLY`). Case 01's `asks_first` and `asks_apart` stay on turn 2, as built.
+- **New case (number 33, after the highest, 32):** **33** order and gap given together in answer to the intent question (turn 3): their plan said back, a one-or-two-sentence how-to, ends on "say done"; no bullets, trim warning or Quick Offset spreading rule.
+- **Not yet run:** 33. The T434 repeats are 01 to 06, 16, 19, 25, 26, 27.
+
+**Pacing repeats (2026-10-28, mentor at `df6efdb`; $11.17, stopped at the $50 limit):** 01 3/3, 02 3/3, 03 3/3, 04 2/3, 05 3/3, 06 3/3, 16 3/3. Not run: 19, 25, 26, 27 (and the new 33). 04 run 2: the "Can you show me how?" answer walks the drag through a second time (TD § 15 rule 3, "never the walk-through a second time"; minor prompt). 16 passes 3/3 with the demo-on-ask.
+
+**Fix-round repeats (2026-10-28, mentor at `86fc67f`; $7.87, stopped at the $15 limit):** 04 1/3, 19 3/3, 25 3/3, 26 2/3 (27 not run). 04 run 1: "show me how" repeats the full how-to with Quick Offset (prompt, TD § 15 rule 3); run 3: answers in one sentence and the pending step, which is the design, but fails the `walks_through` check (check, mine: the answer to a side question carries no drag/keys/bar). 26 run 1: `top_layer_stays` wants "stays" and the mentor said "staying put" (check bug, mine).
+
+**Changed after seeing results (2026-10-28, human-approved):** (1) case 26's `top_layer_stays` now accepts "staying" (`stay(?:s|ing)`); the mentor said "the top layer staying put", which is correct (check bug; design line: the `SKILL.md` "if they ask how Quick Offset works" paragraph, L-1). (2) case 04 turn 3: the `walks_through` check (drag, keys or bar) is replaced by `no_second_walkthrough`, a `never` on "Quick Offset" or "drag the middle"; design line: TD § 15 rule 3, a side question gets one or two sentences plus the pending step, "never the walk-through a second time". Case 04 still lists `R-OFF-WALKTHROUGH`; its fixture's turn 2 already carried the walk-through, so watch that item at the next run. The 1/3 and 2/3 scores for 04 and 26 in the fix-round repeats were on the old checks.
+
 ## Running
 
 ```sh

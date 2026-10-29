@@ -7,6 +7,18 @@ need to be open**. Whether the detection and grading are *correct* is covered by
 (`cd mentor && npm test`), which are free and instant. Evals cost real usage, so they don't
 repeat what the unit tests already prove.
 
+## Pacing evals (T421, 2026-10-28; mentor from the T420 branch)
+
+**T422 repeats (2026-10-28, `--repeat 3` per case, mentor from the T420 branch, $7.75 in all):** 02 **0/3**, 03 **1/3**, 04 3/3, 05 **1/3**, 19 3/3, 21 2/3. Every failure is a `R-ONE-IDEA` item (03 run 3 and 21 run 3 also `R-SHOWS`); no hard-rule check failed. Stopped after easing, as the gate says: three cases failed on a majority. Triage in the hand-back (results `2026-10-28-145828` to `-150724`). T423 not started.
+Before the runs: dry run only (26 cases valid).
+**Round 2 repeats (2026-10-28, mentor at `071502e`, ledger $3.11; results `2026-10-28-152734`, `-162156`, `-162335`, `-162406`):** 02 1/3, 03 0/3, 05 2/3, 21 0/3 as scored. Five of the twelve runs are plumbing, not the mentor: four `ETIMEDOUT` (02 run 2, 03 run 1, and the judge of 03 run 2) and the 5-hour usage limit (21 runs 2 and 3, "You've hit your 5-hour limit"). Not re-run; the valid runs are 7 of 12. Triage in the hand-back.
+
+**Round 3 repeats (2026-10-28, mentor at `df6efdb`, $4.87; results `2026-10-28-170401`, `-170549`, `-170722`, `-170913`):** 02 3/3, 03 **0/3**, 05 3/3, 21 2/3. No plumbing failures. Every 03 run fails `R-SHOWS` (no clause about the frame in the demo turn) and `R-ONE-IDEA` (the judge counts step 6's one "look at" sentence as a second explanation); the turns match `SKILL.md` step 6 and the "show me first" shape line for line. Read as a rubric conflict with the design, not a prompt fault (hand-back). 21 run 2 fails `R-SHOWS` the same way. Stopped at the easing gate; key types, speed graph and offset not started.
+
+**Rubric changed after seeing results (2026-10-28, human-approved):** after round 3 (03 0/3, 21 2/3 on `R-SHOWS`/`R-ONE-IDEA`), `R-SHOWS` no longer requires a clause about the frame: a `preview_frame` call inside a focus pair passes, a clause is allowed, a wrong description fails. Design line: curriculum § 6 allows "at most one clause" about the frame, and `SKILL.md` steps 4 and 6 say nothing about the frame itself. Case 03's `R-ONE-IDEA` reading now passes one "look at" sentence after the demo (`SKILL.md` step 6, § 6 row 2a "unchanged"); a list, a second explanation sentence or a repeated how-to still fails. Rounds 1 to 3 were scored on the older wording, so their 03 and 21 scores are not comparable.
+
+**Fix round (2026-10-28, human-approved, unpaid):** `R-SHOWS` now passes a frame shown with one clause about it (curriculum § 6's "at most one clause"; it failed 03 run 3 and 21 run 3 for the clause being missing), and fails only with no `preview_frame`, a frame outside every focus pair, or no reference to the frame at all. No other set's `R-SHOWS` exists. Case 03's `R-ONE-IDEA` reading now says a "show me" before any explanation gets one idea sentence, the demo and a one-sentence hand-back. Speed graph 02 and 03 and offset 01 to 04 now list `R-ONE-IDEA`. `R-ONE-IDEA` now carries curriculum § 6, skill 0's reading (the opening's count, proposal and leave-outs are one choice; the explanation turn is one task ending on "ease them and say done", with no numbered list, bulleted list of pairs or Graph Editor tip; the demo turn hands the rest back in one sentence; a side question is the answer plus the pending step). Cases 02, 03, 05 and 21 list it (case 01 already did); no other expectation changed (US1 #5's demo-on-ask in case 05 stays). The T422 repeats are 02, 03, 04, 05, 19, 21.
+
 ## Running
 
 From the repo root:

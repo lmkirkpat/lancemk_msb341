@@ -1,0 +1,277 @@
+{
+  "run_at": "2026-10-29T00:47:14.647Z",
+  "options": {
+    "only": "04",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 1.6,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "04-no-demo-with-one-pair",
+      "title": "One focus pair (Cut): no demonstration, a walkthrough in words",
+      "covers": [
+        "KT-c"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "58afdf64f71ef12b1d76bb73b4ab7a848aaca37d60c3c6f73ab84b05dcbf408d",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:walks_through",
+              "pass": true,
+              "detail": "turn 3: \"Animation\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KT-WALKTHROUGH",
+              "pass": true,
+              "reason": "In turn 3 the mentor says \"If I held it myself, there'd be nothing left for you to do, since Cut has just this one pair\" and walks through it in words: click the Opacity key at 3 s, Animation > Toggle Hold Keyframe or right-click; the only shortcut given (⌃⌥⌘H) is a confirmed one, on 26.5 on a Mac."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time the mentor mentions appears in the snapshot or preview results (Blink, Cut, Opacity, Seal as a precomp, the key at 3 s, the preview at 3.05 s, Dot 1's jump at 0.5 s), and \"partway see-through\" at 3.05 s follows from the eased 100→0 pair from 3 to 3.1 s."
+            }
+          ],
+          "cost": 0.5299394,
+          "session_id": "50afc911-e9da-493d-8d90-48621624833c",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Blink's Opacity and Cut's Opacity both change between see-through and solid. Is either one meant to snap on and off instead of fading? Seal is a precomp, and I can't see inside precomps yet, so I'm not saying it's fine.\n\nIs anything here meant to snap, like a blink, an on/off, or a cut?\n\n### Turn 2: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_target\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":3.05,\"layer\":\"Cut\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-3ML9pZ-runtime/50afc911-e9da-493d-8d90-48621624833c/tool-results/mcp-ae-mentor-blob-1793234756264-7i5i8a.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":3.05,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Cut's Opacity it is. At 3.05 s Cut is partway see-through, so right now it fades out instead of cutting. A hold keeps the value until the next key, then jumps, the way Dot 1 already jumps at 0.5 s.\n\nSelect the key at the start of the pair (3 s) and choose Animation > Toggle Hold Keyframe (⌃⌥⌘H), or right-click it. Hold Cut's pair and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Can you show me how?\nMENTOR: If I held it myself, there'd be nothing left for you to do, since Cut has just this one pair. In the timeline, click the Opacity key at 3 s on Cut, then choose Animation > Toggle Hold Keyframe (⌃⌥⌘H) or right-click the key and pick Toggle Hold Keyframe.\n\nHold Cut's pair and say done.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:walks_through",
+              "pass": true,
+              "detail": "turn 3: \"Animation\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KT-WALKTHROUGH",
+              "pass": true,
+              "reason": "In turn 3 the mentor runs no demo and says \"if I held it for you there'd be nothing left for you to do\". It then walks through it in words with Animation > Toggle Hold Keyframe and the right-click, and gives only the confirmed ⌃⌥⌘H on After Effects 26.5 on a Mac."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time comes from the snapshot results: Blink and Cut Opacity from 1 s and 3 s, the Cut pair from 3 s to 3.1 s, Seal as a precomp, and Dot 1 jumping at 0.5 s. \"Half see-through at 3.05 s\" follows from the eased 100→0 values between 3 s and 3.1 s."
+            }
+          ],
+          "cost": 0.5366514,
+          "session_id": "125d7d85-6878-4059-b01f-d35c00326976",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: In this comp, Blink's Opacity turns on and off from 1 s, and Cut's Opacity changes once at 3 s. I can't see inside Seal because it's a precomp, so I'm not saying it's fine.\n\nIs anything here meant to snap, like a blink, an on/off or a cut? Should Blink or Cut snap instead of fading?\n\n### Turn 2: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_target\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":3.05,\"layer\":\"Cut\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-QoeJY6-runtime/125d7d85-6878-4059-b01f-d35c00326976/tool-results/mcp-ae-mentor-blob-1793234783918-i90a3z.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":3.05,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Cut's Opacity it is. At 3.05 s, Cut is half see-through, partway through a fade from 3 s to 3.1 s. A hold keeps the value until the next key and then jumps, the way Dot 1 already jumps at 0.5 s.\n\nSelect the key at 3 s and choose Animation > Toggle Hold Keyframe (⌃⌥⌘H), or right-click the key and choose Toggle Hold Keyframe. Hold Cut's pair and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Can you show me how?\nMENTOR: Cut only has one pair, so if I held it for you there'd be nothing left for you to do. In the timeline, click the Opacity key on Cut at 3 s, then choose Animation > Toggle Hold Keyframe (⌃⌥⌘H), or right-click that key and choose Toggle Hold Keyframe. Say done when you've held it.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:walks_through",
+              "pass": true,
+              "detail": "turn 3: \"Animation\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KT-WALKTHROUGH",
+              "pass": true,
+              "reason": "With the single Cut pair (no_demo_reason \"single_target\"), Turn 2 says \"if I held it for you there'd be nothing left for you to do\" and walks through it in words with \"Animation > Toggle Hold Keyframe (⌃⌥⌘H), or right-click the key\". The shortcut is the confirmed Control+Option+Command+H on 26.5 Mac. Turn 3 declines the demo and repeats the walkthrough."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time comes from the snapshot results or follows from them: Mentor Practice 2, Blink Opacity from 1 s, Cut Opacity at 3 s and the 3–3.1 s pair with values 100 and 0, the Seal precomp, and Dot 1 jumping at 0.5 s. \"Halfway between 100 and 0\" at 3.05 s follows from the eased pair's values and times."
+            }
+          ],
+          "cost": 0.533148,
+          "session_id": "1bb6a085-ebb2-4e0d-bba1-b8de27bc9f6b",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: In Mentor Practice 2, Blink's Opacity changes from 1 s, and Cut's Opacity changes at 3 s. I can't see inside the Seal precomp yet, so I'm not saying it's fine.\n\nIs anything here meant to snap, like a blink, an on/off, or a cut?\n\n### Turn 2: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_target\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":3.05,\"layer\":\"Cut\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-h71lRH-runtime/1bb6a085-ebb2-4e0d-bba1-b8de27bc9f6b/tool-results/mcp-ae-mentor-blob-1793234820085-gcup0l.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":3.05,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Cut's Opacity is the focus. At 3.05 s Cut is halfway between 100 and 0, so right now it fades instead of cutting. A hold keeps the value until the next key and then jumps, the way Dot 1 already jumps at 0.5 s.\n\nThere's only one pair here, so if I held it for you there'd be nothing left for you to do. Select Cut's key at 3 s, at the start of the pair, and choose Animation > Toggle Hold Keyframe (⌃⌥⌘H), or right-click the key and choose Toggle Hold Keyframe. Hold Cut's pair and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Can you show me how?\nMENTOR: There's just one pair on Cut, so if I did it there'd be nothing left for you, and doing it yourself is how it sticks. I'll check it as soon as you're done.\n\nSelect Cut's key at 3 s and choose Animation > Toggle Hold Keyframe (⌃⌥⌘H), or right-click it, then say done.\n"
+        }
+      ]
+    }
+  ]
+}

@@ -50,7 +50,7 @@
       },
       {
         "id": "top_layer_stays",
-        "must": "\\btop\\b[^.?!]{0,60}\\b(?:stays|stay|doesn't move|stays put|where it is)\\b",
+        "must": "\\btop\\b[^.?!]{0,60}\\b(?:stay(?:s|ing)|doesn't move|stays put|staying put|where it is)\\b",
         "turns": [
           3
         ]

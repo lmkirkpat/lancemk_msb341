@@ -26,8 +26,8 @@
     "demo_calls_max": 0,
     "say": [
       {
-        "id": "walks_through",
-        "must": "drag|keys|bar",
+        "id": "no_second_walkthrough",
+        "never": "Quick Offset|drag the middle",
         "turns": [
           3
         ]
@@ -36,6 +36,7 @@
   },
   "rubric": [
     "R-OFF-WALKTHROUGH",
-    "R-NAMES-REAL"
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
   ]
 }

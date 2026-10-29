@@ -50,6 +50,7 @@
   "rubric": [
     "R-OFF-DEMO",
     "R-DEMO-PLAIN",
-    "R-NAMES-REAL"
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
   ]
 }

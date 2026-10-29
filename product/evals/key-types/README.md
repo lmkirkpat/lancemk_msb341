@@ -67,6 +67,20 @@ Fix A made `other_skills[].learned` `null` on an unreadable record (confirmed in
 
 **Ready for T415?** Yes for this case. The mentor-side finding below is fixed (Fix A); it is kept for the record.
 
+## Pacing evals (T425, 2026-10-28; mentor from the T424 branch)
+
+Dry run only so far (`--dry-run --strict-sources`: 25 cases valid).
+- **Rubric:** `R-ONE-IDEA` takes TD § 15 › What R-ONE-IDEA should see (explanation turn ends on "hold them and say done"; demo turn hands the rest back in one sentence; pass turn carries the linear question; a side question is the answer plus the pending step). New item `R-ASK-RUNS-DEMO`. `R-KT-VERSION` now follows KT-j as amended 2026-10-26: the two confirmed shortcuts are fine at 26.5 on a Mac, none elsewhere (the old wording, "no shortcut ever", contradicted `SKILL.md` and case 13). New item `R-KT-TOGGLED-OFF`.
+- **Changed case:** 06 (KT-e amended): "Can you hold the rest for me?" before any demo is the ask, so the one demo runs (`demo_calls_min` 1, `demo_only_on` Blink's Opacity, `undo` said in turn 3), the rest is handed back, and `no_later_offer` still holds on turn 4. Turn 4's project is `blink-all-held.json` (they did the others). Rubric: `R-ASK-RUNS-DEMO`, `R-DEMO-PLAIN`, `R-ONE-IDEA` (was `R-DECLINES-WARMLY`).
+- **New cases (numbers 25 and 26, after the highest, 24):** **25** host not 26.5 (`host-25.json`, synthetic: `practice2b.json` with another `host.ae_version`): the how-to names Toggle Hold Keyframe and says no shortcut, no Freeze Frame. **26** a pair that was held is toggled off (`blink-toggled-off.json`, synthetic from `blink-one-held.json`): the toggle warning comes on the turn it happens and not before. Synthetic fixtures are built by `fixtures/synthetic/make-synthetic.mjs` from live captures only; `run.mjs` lists the folder in `fixtureDirs`.
+- **Not yet run:** 25 and 26 (first paid runs come in the re-baseline, T427). The T426 repeats are 03, 04, 05, 06, 11, 13, 20.
+
+**Pacing repeats (2026-10-28, mentor at `df6efdb`; $13.23):** 03 3/3, 04 **0/3**, 05 3/3, 06 2/3, 11 3/3, 13 **0/3**, 20 2/3. 04 runs 1 and 3 fail `R-KT-WALKTHROUGH` on "no shortcut", a stale rubric wording (same as the `R-KT-VERSION` one fixed on 2026-10-28; at 26.5 the confirmed shortcut is allowed); run 2 is real (the walk-through omits the menu path; TD § 15 item 3). 13 fails the universal `no_shortcuts` check on the spelled-out "Control+Option+Command+H", which the mentor is right to say at 26.5 (check bug: `shortcutAllow` lacks the spelled form). 06 run 3: the pass turn adds a recap sentence (prompt, TD § 15 item 5). 20 run 3: a new-comp turn with two asks (prompt, minor). Not yet re-run; cases 25 and 26 not run.
+
+**Changed after seeing results (2026-10-28, human-approved):** (1) `shortcutAllow` in `run.mjs` now lists the spelled-out Control+Option+Command+H and Option+Command+K, so the universal `no_shortcuts` check no longer fails case 13 for the mentor's correct answer at 26.5; design line: KT-j as amended 2026-10-26 (L-2 confirmed both at 26.5), spec 009 FR-018. Case 25's own `no_shortcut` check still forbids them on another version. (2) `R-KT-WALKTHROUGH` no longer says "no shortcut"; it follows `R-KT-VERSION` and now fails a walk-through with no menu path or right-click (TD § 15 item 3). Pacing-repeat scores for 04 and 13 (0/3 each) were on the old wording.
+
+**Fix-round repeats (2026-10-28, mentor at `86fc67f`; $4.93):** 04 3/3, 06 3/3, 13 3/3. The `shortcutAllow`, `R-KT-WALKTHROUGH` and skill fixes hold.
+
 ## Running
 
 ```sh

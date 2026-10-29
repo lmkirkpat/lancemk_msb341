@@ -1,0 +1,55 @@
+{
+  "id": "25-host-not-265-no-shortcut",
+  "title": "The host isn't 26.5: the how-to names the menu and the right-click and says no shortcut",
+  "covers": [
+    "KT-j",
+    "FR-018",
+    "FR-023"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "host-25.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "host-25.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "host-25.json",
+      "say": "Blink's Opacity should snap."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "menu_path",
+        "must": "Toggle Hold Keyframe",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_shortcut",
+        "never": "⌃|⌥|⌘|\\b(?:Ctrl|Control|Cmd|Command|Option|Alt)\\b\\s*\\+|\\b(?:Ctrl|Control|Cmd|Command)\\b[^.?!]{0,20}\\b(?:Option|Alt)\\b",
+        "turns": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "no_freeze",
+        "never": "Freeze Frame|\\bfreeze\\b",
+        "turns": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-VERSION",
+    "R-ONE-IDEA"
+  ]
+}
