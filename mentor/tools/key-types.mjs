@@ -176,7 +176,7 @@ export const TOOLS = [
     title: "Key types: check the attempt",
     description:
       "Compare the comp now with the lesson's start. Reports each focus pair as held_by_learner, held_by_demo, " +
-      "not_held, wrong_side or removed_or_changed; pairs the learner said should move that are now held; holds " +
+      "not_held, wrong_side, removed_or_changed or expression; pairs the learner said should move that are now held; holds " +
       "outside the focus; other changes; and whether the lesson passed. Pass constant_speed with the move the learner " +
       "says runs at constant speed to check it's linear. Doesn't change the starting point.",
     inputSchema: {

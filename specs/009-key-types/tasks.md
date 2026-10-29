@@ -184,6 +184,16 @@ easing's (spec 002 T423), which is the base every merge is checked against (spec
 - [ ] T426 [eval-engineer] After T424 and T425: cases 03, 04, 05, 06, 11, 13 and 20, each with `--repeat 3`, mentor from the T424 branch. Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and logged in the README as prompt, rubric or noise, with the cost (about 21 runs)
 - [x] T427 [eval-engineer] After T426 passes and after spec 002 T423: a full re-baseline of the set, logged in the README with score and cost. SC-005 (≥ 80%, every hard-rule check passing). **Done when:** logged; a new failure outside the seven cases is triaged before the merge. **Done (23/25 (92%), rb2 2026-10-28; case 18 3/3 after fix round 4, 2026-10-29):** SC-006 met, every hard-rule check passing.
 
+## Overlap audit 2026-10-29 (`discovery/usage-notes/overlap-audit-2026-10-29.md`; branch `overlap-shared`)
+
+Tests first in `mentor/test/key-types-overlap-audit.test.mjs` (each seen failing), then the fix in
+`mentor/lib/key-types.mjs`. The `SKILL.md` lines need an eval re-run.
+
+- [x] T442 OA-7 (H-5): a should-move pair counts as held when either facing side is hold, so a mixed pair fails item 2; its entry carries `hold_on_end`, and `SKILL.md` step 7 says it jumps at once. **Result:** `mixed-pair.json` with Blink said to move gives one `should_move_held` entry and no pass.
+- [x] T443 OA-8 (H-5): the extra-holds list uses the same either-side rule. **Result:** a mixed Blink pair outside a Cut focus is an extra hold, and the generic "was changed" note for it is gone.
+- [x] T444 OA-9 (row 16): the focus properties' pause pairs count as targets for the other-changes list only. **Result:** holding every Pause key leaves no note about Pause › Position.
+- [x] T445 OA-10 (row 1, TD § 9): an expression turned on over a focus pair since the baseline gives the verdict `expression` (no pass); `SKILL.md` step 7 has a line for it. **Result:** a held Blink with its expression on grades `expression`, `passed` false.
+
 ---
 
 ## Hand-offs to other owners (not builder tasks)

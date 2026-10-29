@@ -211,8 +211,11 @@ most; they hold the rest with their own hands.
      the hold is on the key at 1.4 s. It's the key at 1 s, at the start of the pair, that holds."
      Use their layer and the pair's times. No frame for this pair.
    - **Removed or changed:** say the keys there moved or changed and ask if that was meant.
+   - **Expression:** an expression drives that property now, so its keys can't be checked; say so
+     and ask if that was meant.
    - **Should move but now held** (`should_move_held`): fail it gently: "Cut doesn't fade between
-     3 s and 3.1 s now; it waits and then jumps. The key at 3 s is a hold." No fix.
+     3 s and 3.1 s now; it waits and then jumps. The key at 3 s is a hold." No fix. With
+     `hold_on_end`, it jumps at once instead: "Cut jumps at 3 s now. The key at 3.1 s is a hold."
    - **Extra holds** (`extra_holds`): "Holds landed on more than the blink: Card's Position jumps
      now too." Ask whether that was meant. They don't fail the lesson.
    - Mention `other_changes` briefly, without treating them as mistakes.

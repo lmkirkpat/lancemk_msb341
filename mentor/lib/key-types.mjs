@@ -33,6 +33,10 @@ const isOnOff = (from, to) => (near(from.value, 0) && near(to.value, 100)) || (n
 // Both values known and equal: holding it changes nothing on screen (row 16, C-2).
 export const isPause = (from, to) => from.value != null && to.value != null && JSON.stringify(from.value) === JSON.stringify(to.value);
 const isHeld = (from) => from.out_type === "hold";
+// A pair that snaps: held at its first key, or a mixed pair (hold on the second key's in side), which
+// After Effects also snaps, at its first key (L-1). For the should-move and extra-holds lists (H-5,
+// overlap audit OA-7 and OA-8); the focus check keeps its own wrong-side verdict.
+const snaps = (from, to) => isHeld(from) || to.in_type === "hold";
 // Spec 004 FR-013 and spec 009 SR-3: with reads R1 known, the visibility class decides (a layer the
 // learner hid is out, a track matte is in whatever its eye, a null stays out); without them, the eye
 // switch as before.
@@ -300,6 +304,23 @@ const frameTime = (from, to, fps) => {
   return fps ? r3(Math.round(mid * fps) / fps) : r3(mid);
 };
 
+// The pause pairs on the properties the targets are on (from the baseline), as pair ids.
+function pausesBeside(baseline, targets) {
+  const out = [];
+  const seen = new Set();
+  for (const id of targets) {
+    const { layer_index, property_path } = parseSegmentId(id);
+    const key = `${layer_index}/${property_path}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const found = propAt(baseline, layer_index, property_path);
+    if (!found) continue;
+    const { layer, prop } = found;
+    for (let i = 1; i < prop.keys.length; i++) if (isPause(prop.keys[i - 1], prop.keys[i])) out.push(segmentId(layer, prop, i));
+  }
+  return out;
+}
+
 // Items and pass from a check result (data-model › Check result). In a review, a volunteered
 // constant-speed move doesn't count towards the pass (H-4).
 export function grade(result, { mode = "lesson" } = {}) {
@@ -341,6 +362,12 @@ export function check(baseline, current, lesson, { should_move = [], constant_sp
       if (id === demoId) demoUndone = true;
       return out;
     }
+    // TD § 9: keys under an expression aren't graded, also when it's turned on mid-lesson (OA-10).
+    if (now.prop.expression_enabled && !was.prop.expression_enabled) {
+      out.verdict = "expression";
+      if (id === demoId) demoUndone = true;
+      return out;
+    }
     const from = now.prop.keys[i - 1];
     const to = now.prop.keys[i];
     if (isHeld(from)) {
@@ -379,8 +406,11 @@ export function check(baseline, current, lesson, { should_move = [], constant_sp
       for (let i = 1; i < prop.keys.length && i < was.prop.keys.length; i++) {
         const from = prop.keys[i - 1];
         const to = prop.keys[i];
-        if (targetSet.has(segmentId(layer, prop, i)) || !isHeld(from) || isHeld(was.prop.keys[i - 1]) || isPause(from, to)) continue;
-        shouldMoveHeld.push({ layer: layer.name, property: prop.display_name, from_time: from.time, waits_until: to.time });
+        if (targetSet.has(segmentId(layer, prop, i)) || !snaps(from, to) || snaps(was.prop.keys[i - 1], was.prop.keys[i]) || isPause(from, to)) continue;
+        const entry = { layer: layer.name, property: prop.display_name, from_time: from.time, waits_until: to.time };
+        // A mixed pair: the hold is on the end key and it jumps at once, at from_time (L-1, OA-7).
+        if (!isHeld(from)) entry.hold_on_end = true;
+        shouldMoveHeld.push(entry);
       }
     }
   }
@@ -394,14 +424,17 @@ export function check(baseline, current, lesson, { should_move = [], constant_sp
     if (targetSet.has(s.id) || moveProps.has(`${s.layer.index}/${s.prop.path}`)) continue;
     const was = before.get(s.id);
     if (!was || was.prop.keys.length !== s.prop.keys.length) continue;
-    if (s.state !== "held" || was.state === "held" || isPause(s.from, s.to)) continue;
+    if (!snaps(s.from, s.to) || snaps(was.from, was.to) || isPause(s.from, s.to)) continue;
     extra.push({ layer: s.layer.name, property: s.prop.display_name, time: s.from_time });
     extraProps.add(`${s.layer.name}${SEP}${s.prop.display_name}`);
   }
   for (const s of shouldMoveHeld) extraProps.add(`${s.layer}${SEP}${s.property}`);
 
-  // Everything else that changed, without repeating what the lists above already say.
-  const other = unexpectedChanges(baseline, current, targetSet).filter((note) => {
+  // Everything else that changed, without repeating what the lists above already say. The focus's
+  // pause pairs aren't targets but are the learner's to hold (row 16, OA-9), so they count as targets
+  // here.
+  const notedTargets = new Set([...targetSet, ...pausesBeside(baseline, targets)]);
+  const other = unexpectedChanges(baseline, current, notedTargets).filter((note) => {
     const m = /^(.*) was changed \(not part of this lesson\)$/.exec(note);
     return !(m && extraProps.has(m[1]));
   });
