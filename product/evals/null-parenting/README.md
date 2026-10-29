@@ -528,3 +528,32 @@ each case) and anchor's full run $28.89, so $50.98 was spent, and the $25 estima
 $70 cap. Earlier baseline stands: 25/38 (66%) on 2026-10-28 (`-125016` plus reruns, $25.84), then the pacing and
 fix-round re-runs above. R-ONE-IDEA and the pacing rules (TD 012 § 16) are in force. Cases 37, 39 and 40 still have no
 full-run result. Anchor's rb3 for comparison: 41/46 (89%).
+
+## Re-run after the overlap-audit fixes, with cases 41 to 44 (2026-10-29, mentor at `df65d41`)
+
+**42 of 44 (95%), $31.77** (`results/2026-10-29-150257.json`; last baseline 39/40, $28.16). **SC-006 met**, and every
+universal (hard-rule) check passed in all 44 cases. The two failures were repeated `--repeat 3` once (`-151206`,
+`-151346`, $4.03). Total for the set with the new-case smoke runs ($2.76 plus $1.04 after fixing two checks): about $39.6.
+
+The set's own synthetics now live in `fixtures/synthetic/` (built by `fixtures/build.mjs` from the mentor's live captures
+and synthetics) and cases name them `eval-synthetic/<file>`; `run.mjs` `resolveFixture` gained that one branch.
+
+**New cases** (all passed in the full run):
+
+| Case | Covers | Result |
+|---|---|---|
+| 41 duplicated group layer | OA-16: two Captions; "rename one so I can tell which is in the group", not "can't find" | pass |
+| 42 other layer changed, no keys | OA-4: "Background's Position changed", once, not a mistake | pass |
+| 43 too many keys to check | OA-15: the 70-time comp; plain refusal, asks for a smaller group, no demo or check | pass |
+| 44 grandparent moved by expression | OA-14: Holder moves with no keys; "Holder moves now, so I can't check ... through it", no "jump" | pass |
+
+Two checks were mine to fix before the full run (each case's first smoke run): 41's `no_which_one` also matched the
+skill's own "so I can tell which one is in the group" (now only a question), and 43 used `no_focus_set`, which fires when
+the mentor passes the names to the snapshot even though the tool refuses them (removed; the mentor's behavior was right).
+
+**Failures**
+
+| Case | Failed on | Repeats | Verdict |
+|---|---|---|---|
+| 02 explain what a parent passes | judge: R-ONE-IDEA (turn 1 adds "a null is an invisible layer ...") | pass, pass, pass | **Noise.** |
+| 06 jump | judge: R-NO-CAUSE (and R-JUMP-STATED once): "I can't see expressions on properties that have no keys yet, so I can't rule one out" | FAIL, pass, plumbing (usage limit, "turn 4 ended with success") | **Rubric / skill conflict, not new.** `SKILL.md:303-305` tells the mentor to say exactly this when `expression_on_move` is false; the judge reads it as a guessed cause. Proposed smallest fix (rubric, needs the human's OK): R-NO-CAUSE accepts that one sentence as an honesty note. Alternative on the skill side: drop the sentence. 1 of 3 judged runs passed, so it is unstable either way. |

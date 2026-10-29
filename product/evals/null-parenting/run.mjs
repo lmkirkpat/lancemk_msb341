@@ -88,6 +88,11 @@ function loadCases() {
 // load.mjs: "synthetic/…" is permanent; otherwise a live capture, spec 004's capture, then the
 // stand-in. `source` is what the file is: "synthetic", "live" or "stand-in".
 function resolveFixture(name) {
+  // This set's own synthetics (overlap audit, 2026-10-29): product/evals/null-parenting/fixtures/synthetic/.
+  if (name.startsWith("eval-synthetic/")) {
+    const f = path.join(EVAL_DIR, "fixtures", "synthetic", name.slice("eval-synthetic/".length));
+    return fs.existsSync(f) ? { file: f, source: "synthetic" } : null;
+  }
   if (name.startsWith("synthetic/")) {
     const f = path.join(FIX_DIR, name);
     return fs.existsSync(f) ? { file: f, source: "synthetic" } : null;

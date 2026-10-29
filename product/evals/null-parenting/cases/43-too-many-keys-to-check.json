@@ -1,0 +1,63 @@
+{
+  "id": "43-too-many-keys-to-check",
+  "title": "A group whose keys together are more than one read can sample: refused at the focus in plain words and a smaller group asked for; no focus set, no demo",
+  "covers": [
+    "OA-15",
+    "FR-005"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "synthetic/cap70-before.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/cap70-before.json",
+      "say": "/null-parenting-mentor Card, Label and Extra should move as one."
+    }
+  ],
+  "expect": {
+    "first_tool": "null_parent_snapshot",
+    "tools_called": [
+      "null_parent_snapshot"
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "say": [
+      {
+        "id": "plain_refusal",
+        "must": "more keys|too many keys|too many|in one go|can['\u2019]t check",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks_smaller",
+        "must": "smaller|fewer|a different (?:group|set)|another (?:group|set)|which (?:two|2)|fewer layers",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_number",
+        "never": "\\b(?:64|70|\\d{2,}) (?:keys|times|keyframes|samples)\\b|\\bsample",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-TOO-MANY-KEYS",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-29 (overlap audit OA-15). The 70-time synthetic comp: Card and Label fit together, adding Extra does not. SKILL.md: 'Those layers have more keys between them than I can check in one go.' Ask for a smaller group. The mentor may pass the focus to the snapshot; the tool refuses it, so the case does not use no_focus_set."
+}

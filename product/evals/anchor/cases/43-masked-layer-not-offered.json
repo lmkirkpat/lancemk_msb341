@@ -1,0 +1,50 @@
+{
+  "id": "43-masked-layer-not-offered",
+  "title": "A masked layer is never the mentor's own proposal: practicing opens on a different layer than the masked Door",
+  "covers": [
+    "OA-12",
+    "FR-006a"
+  ],
+  "learner_record": "product/evals/anchor/records/anchor-practicing-pop.json",
+  "fixture_sources": {
+    "synthetic/door-masked.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/door-masked.json",
+      "say": "/anchor-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "anchor_snapshot",
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "demo_calls_max": 0,
+    "proposal_named": {
+      "turn": 1
+    },
+    "say": [
+      {
+        "id": "door_not_offered",
+        "never": "\\bDoor\\b",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "ends_on_choice",
+        "must": "\\?\\s*$",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-MASKED-NOT-OFFERED",
+    "R-ONE-IDEA",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-29 (OA-12). On the untouched practice2b the snapshot's proposal is Door (case 32). With Door masked it is a different layer; the check compares turn 1 to this run's snapshot output."
+}

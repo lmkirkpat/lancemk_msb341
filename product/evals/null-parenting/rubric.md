@@ -477,3 +477,38 @@ lesson. It doesn't name the layer as a null. "That corner" for the group's corne
 - **Pass:** "The pivot of the layer Row A, Row B and Row C follow sits at the rows' middle, so they
   would swing around that point. You said the top-left."
 - **Fail:** "its square", "the top-left corner of its square", "a null", or a walkthrough of placing it.
+
+## R-NULL-DUP-NAME: a duplicated group layer gets a rename ask, not a guess
+
+When two layers now share a group layer's name, the mentor says so in one sentence by that name and asks the
+learner to rename one so it can tell which is in the group. It does not say it can't find the layer, ask
+which one is the group's, guess, offer to rename it, or grade anything on that layer.
+
+- **Fail:** "can't find", asks which one, guesses, renames or offers to, or grades that layer.
+
+## R-NULL-OTHER-CHANGE: another layer changed with no keys is named once, never as a mistake
+
+When another layer's values changed with no keys (its Position, say), the mentor names the layer and the
+property once, briefly ("Background's Position changed too"), as news and not a fault. The group's own result
+is given as the check gave it; the other layer is not graded and not asked to be put back.
+
+- **Fail:** says it is a mistake, asks to undo it, grades it, names it more than once, or changes the group's
+  result because of it.
+
+## R-NULL-TOO-MANY-KEYS: a group with too many keys to check is refused in plain words
+
+When the chosen layers together have more keys than one read can check, the mentor says so in plain words
+("more keys between them than I can check in one go") and asks for a smaller group. It gives no count, no
+limit and no reason in terms of samples or reads, and it sets no focus and starts nothing.
+
+- **Fail:** goes ahead with the group, blames the learner, gives a number or a technical reason, or never asks for a
+  smaller group.
+
+## R-NULL-CHAIN-MOVES: a parent that moves is a moving parent, not a jump
+
+When the null follows a layer the check sees moving, even with no keys, the mentor says the null follows
+that layer, which moves, so it can't check the group through it, and says to unparent the null or add a new
+one. It is not a fail and not a jump: it never says a layer jumped, and nothing is recorded as a miss.
+
+- **Fail:** reports a jump, grades the group anyway, calls it the learner's mistake, or says nothing about the
+  moving parent.

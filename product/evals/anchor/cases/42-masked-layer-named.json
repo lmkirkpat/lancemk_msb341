@@ -1,0 +1,62 @@
+{
+  "id": "42-masked-layer-named",
+  "title": "A masked layer the learner names is taught, not refused: one sentence says its places come from the whole layer, not the part that shows",
+  "covers": [
+    "OA-12",
+    "FR-004"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/door-masked.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/door-masked.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "synthetic/door-masked.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "synthetic/door-masked.json",
+      "say": "Door is selected and both numbers are showing."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "say": [
+      {
+        "id": "mask_note",
+        "must": "\\bmask",
+        "turns": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "whole_layer",
+        "must": "whole|entire|full layer|all of (?:the|its)|not just",
+        "turns": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "not_refused",
+        "never": "\\b(?:can't|cannot|won't|unable to) (?:use|teach|do|work with|take) (?:Door|it|that)\\b|pick (?:another|a different) layer",
+        "turns": [
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-MASKED",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-29 (overlap audit OA-12). Door gets a mask count of 1 on the live Mentor Practice 2 read. SKILL.md step 3 notes: 'Door has a mask, so I'll go by the whole layer's edges, not just the part that shows.'"
+}

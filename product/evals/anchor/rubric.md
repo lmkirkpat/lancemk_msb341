@@ -493,3 +493,26 @@ was early, or that this is a "bonus"; it does not lecture about the schedule.
 
 - **Fail:** refuses or redirects to a lesson, says it isn't due or is early, demonstrates, or explains how
   before "done".
+
+## R-AN-MASKED: a masked layer the learner names is taught, with one sentence about the mask
+
+When the learner names a layer that has a mask, the mentor takes it and teaches as usual. It says once, in one
+sentence, that it goes by the whole layer's edges, not just the part that shows. It does not refuse the layer,
+ask for another, or lecture about masks.
+
+- **Fail:** refuses the layer or asks for another, says nothing about the mask, or explains masks at length.
+
+## R-AN-MASKED-NOT-OFFERED: a masked layer is not the mentor's own proposal
+
+When the mentor proposes a layer itself, it is not the masked one (the snapshot ranks a masked layer as
+"only if named"). The proposal is the snapshot's own, named by its real layer name.
+
+- **Fail:** proposes or suggests the masked layer, or names a layer the snapshot didn't propose.
+
+## R-AN-NOT-ON-SCREEN: a focus layer not drawn at its check time gets one plain sentence
+
+If the layer isn't showing at the time the check will read, the mentor says so once in plain words (its
+crosshair won't show either) and tells the learner to move the playhead into the layer's bar first. It says
+no more than that and gives no time or number the tool didn't give.
+
+- **Fail:** no mention, blames the learner, a long explanation, or a guessed time.

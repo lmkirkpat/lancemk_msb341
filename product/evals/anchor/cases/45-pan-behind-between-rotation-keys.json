@@ -1,0 +1,64 @@
+{
+  "id": "45-pan-behind-between-rotation-keys",
+  "title": "Gauge's pivot set away from its rest key with the playhead between its Rotation keys: the away-from-rest hint (rest time named), not 'moved with the pivot'",
+  "covers": [
+    "OA-11",
+    "EP-7"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "synthetic/gauge-away-between-keys.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Gauge should turn from the middle of its bottom edge."
+    },
+    {
+      "project": "synthetic/gauge-away-between-keys.json",
+      "say": "I set it. Done."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "has": [
+        "away_from_rest"
+      ]
+    },
+    "say": [
+      {
+        "id": "rest_hint",
+        "must": "rest|3\\.2|3\\.1",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_dragged",
+        "never": "you (?:dragged|moved) the layer|layer (?:was )?dragged|typed",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['\u2019]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:move|set|fix|drag|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-REST-KEY",
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-29 (OA-11). Live gauge-away.json with the playhead moved to 3.6 s, between the Rotation keys at 3.167 s and 4.167 s (as mentor/test/anchor-audit.test.mjs does)."
+}
