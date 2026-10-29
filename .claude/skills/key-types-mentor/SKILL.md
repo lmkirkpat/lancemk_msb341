@@ -213,6 +213,8 @@ most; they hold the rest with their own hands.
    - **Removed or changed:** say the keys there moved or changed and ask if that was meant.
    - **Expression:** an expression drives that property now, so its keys can't be checked; say so
      and ask if that was meant.
+   - **Unmatched:** more than one layer has that name now, so you can't tell which to check; ask
+     them to rename the copy (or undo it) and say "done" again.
    - **Should move but now held** (`should_move_held`): fail it gently: "Cut doesn't fade between
      3 s and 3.1 s now; it waits and then jumps. The key at 3 s is a hold." No fix. With
      `hold_on_end`, it jumps at once instead: "Cut jumps at 3 s now. The key at 3.1 s is a hold."

@@ -1,7 +1,8 @@
 // FR-007: compare the comp now with the lesson baseline, by segment id (data-model.md › Check result).
 // Only the lesson's targets are graded; anything else that changed is listed in plain language.
 
-import { segments, linearEnd } from "./analyze.mjs";
+import { segments, linearEnd, parseSegmentId } from "./analyze.mjs";
+import { alignLayers } from "./renumber.mjs";
 
 const SEP = " › ";
 const secs = (t) => String(Number(t.toFixed(3)));
@@ -105,8 +106,13 @@ function demoState(seg) {
 // on, so easing it again counts as their work (usage notes, panel session 1).
 export function diff(baseline, current, session) {
   const demoSeg = session.demo ? session.demo.segment_id : null;
-  const nowSegs = new Map(segments(current).segments.map((s) => [s.id, s]));
   const sameComp = current.comp.id === session.comp_id;
+  // OA-5: a layer added or duplicated mid-lesson renumbers the ones below it. Compare against the
+  // comp now at the baseline's layer indexes; a target whose layer can't be told apart is "unmatched".
+  const aligned = sameComp ? alignLayers(baseline, current) : null;
+  const lost = new Set(aligned ? aligned.unmatched.map((u) => u.index) : []);
+  const cur = aligned ? aligned.current : current;
+  const nowSegs = new Map(segments(cur).segments.map((s) => [s.id, s]));
   const demoNow = demoSeg && sameComp && nowSegs.has(demoSeg) ? demoState(nowSegs.get(demoSeg)) : null;
   const demoUndone = !!(demoSeg && (session.demo.undone || demoNow === "gone" || demoNow === "redone"));
   const demoId = demoUndone ? null : demoSeg;
@@ -129,7 +135,8 @@ export function diff(baseline, current, session) {
   const targets = session.targets.map((id) => {
     const after = now.get(id);
     let result;
-    if (!after) result = "removed";
+    if (lost.has(parseSegmentId(id).layer_index)) result = "unmatched";
+    else if (!after) result = "removed";
     else if (after.state === "linear") result = "still_linear"; // includes an undone demo: it needs easing again
     else if (after.state === "partly_eased") result = "partly_eased";
     else result = id === demoId ? "eased_by_demo" : "eased_by_learner";
@@ -159,10 +166,11 @@ export function diff(baseline, current, session) {
     comp_matches: true,
     lesson_comp: baseline.comp.name,
     targets,
-    unexpected_changes: unexpectedChanges(baseline, current, new Set(session.targets)),
+    unexpected_changes: [...aligned.notes, ...unexpectedChanges(aligned.baseline, cur, new Set(session.targets))],
     summary,
-    // A lesson with no targets (a focus with nothing linear) has nothing to pass.
-    passed: targets.length > 0 && summary.still_linear === 0 && summary.partly_eased === 0,
+    // A lesson with no targets (a focus with nothing linear) has nothing to pass, and an unmatched
+    // target isn't checked.
+    passed: targets.length > 0 && summary.still_linear === 0 && summary.partly_eased === 0 && !targets.some((t) => t.result === "unmatched"),
     demo_undone: demoUndone,
   };
 }

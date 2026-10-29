@@ -609,6 +609,12 @@ built on `phase10-round2` (no new task numbers; cite them as below):
 - **Round 2, D (null's `SKILL.md`, no spec change):** the record's `summary` says what the learner did
   and what the check saw, never how to fix it (spec 012 FR-025).
 
+### Overlap audit 2026-10-29
+
+From `discovery/usage-notes/overlap-audit-2026-10-29.md` (shared-code owner: branch `overlap-shared`).
+
+- [x] T440 OA-5: a layer added or duplicated mid-lesson renumbers the layers below it, and the easing, speed graph and key types checks looked pairs up by index. New `mentor/lib/renumber.mjs` (`alignLayers`) matches the baseline's layers to the comp now by name, repeats told apart by key times, renames by key times, then by index; each check grades the comp now at the baseline's indexes, so stored pair ids (session, record) keep their format. A target whose layer shares its name with another that can't be told apart is `unmatched` (no pass) with one plain other-change note; one `SKILL.md` line each in easing, speed graph and key types. **Result:** `mentor/test/renumber.test.mjs` (12 tests, 10 seen failing first): a null added above a held Blink grades held with no notes; Twin plus an inserted layer grades Title's pairs on Title; easing gives the same results with a null on top; a same-name duplicate is `unmatched` in all three.
+
 ---
 
 ## Later per-skill branches (not this pass; requests for the cockpit)

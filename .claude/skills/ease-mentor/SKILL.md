@@ -179,6 +179,8 @@ most; they ease the rest with their own hands.
      - Next to a pair **the learner** eased, F9 eased both sides of that key, so only the far
        key is still linear.
    - For `removed`, say the pair isn't there anymore and ask if that was on purpose.
+   - For `unmatched`, more than one layer has that name now, so you can't tell which to check: ask
+     them to rename the copy (or undo it) and say "done" again.
    - Mention `unexpected_changes` briefly, without treating them as mistakes. If a change could
      be a mix-up (the same property on a nearby layer), give a short hint about where the focus
      layer sits in the stack.

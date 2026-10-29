@@ -8,6 +8,7 @@
 import { segments, segmentState, segmentId, parseSegmentId } from "./analyze.mjs";
 import { isKeptLinear } from "./marks.mjs";
 import { unexpectedChanges } from "./diff.mjs";
+import { alignLayers } from "./renumber.mjs";
 import { layerInfo } from "./layer-info.mjs";
 import { classOf } from "./visibility.mjs";
 
@@ -335,7 +336,8 @@ export function grade(result, { mode = "lesson" } = {}) {
 
 // `lesson`: the session's lesson (targets, demo, comp_id, skill_options, mode). `opts.should_move` is
 // added to the stored list (union); `opts.constant_speed` is stage 6's named move, or null.
-export function check(baseline, current, lesson, { should_move = [], constant_speed = null } = {}) {
+export function check(baseline, now0, lesson, { should_move = [], constant_speed = null } = {}) {
+  let current = now0;
   const demoId = lesson.demo ? lesson.demo.segment_id : null;
   const mode = lesson.mode || "lesson";
   if (current.comp.id !== lesson.comp_id) {
@@ -344,6 +346,11 @@ export function check(baseline, current, lesson, { should_move = [], constant_sp
       constant_speed: null, demo_undone: !!(lesson.demo && lesson.demo.undone),
     }, { mode });
   }
+  // OA-5: the comp now at the baseline's layer indexes (a layer added or duplicated renumbers the
+  // ones below it); a pair whose layer can't be told apart is "unmatched", never graded.
+  const aligned = alignLayers(baseline, current);
+  const lost = new Set(aligned.unmatched.map((u) => u.index));
+  current = aligned.current;
   const fps = current.comp.frame_rate;
   const targets = lesson.targets || [];
   const targetSet = new Set(targets);
@@ -355,6 +362,10 @@ export function check(baseline, current, lesson, { should_move = [], constant_sp
     const now = propAt(current, layer_index, property_path);
     const label = was && was.prop.keys[i] ? pairLabel(was.layer, was.prop, was.prop.keys[i - 1], was.prop.keys[i]) : id;
     const out = { id, label };
+    if (lost.has(layer_index)) {
+      out.verdict = "unmatched";
+      return out;
+    }
     const changed = !was || !now || now.prop.keys.length !== was.prop.keys.length ||
       now.prop.keys[i - 1].time !== was.prop.keys[i - 1].time || now.prop.keys[i].time !== was.prop.keys[i].time;
     if (changed) {
@@ -417,7 +428,7 @@ export function check(baseline, current, lesson, { should_move = [], constant_sp
 
   // Extra holds (FR-013): pairs outside the focus and the should-move list that became held since the
   // baseline, except pauses. Properties whose keys were added or removed are left to other_changes.
-  const before = new Map(segments(baseline).segments.map((s) => [s.id, s]));
+  const before = new Map(segments(aligned.baseline).segments.map((s) => [s.id, s]));
   const extra = [];
   const extraProps = new Set();
   for (const s of segments(current).segments) {
@@ -434,10 +445,10 @@ export function check(baseline, current, lesson, { should_move = [], constant_sp
   // pause pairs aren't targets but are the learner's to hold (row 16, OA-9), so they count as targets
   // here.
   const notedTargets = new Set([...targetSet, ...pausesBeside(baseline, targets)]);
-  const other = unexpectedChanges(baseline, current, notedTargets).filter((note) => {
+  const other = [...aligned.notes, ...unexpectedChanges(aligned.baseline, current, notedTargets).filter((note) => {
     const m = /^(.*) was changed \(not part of this lesson\)$/.exec(note);
     return !(m && extraProps.has(m[1]));
-  });
+  })];
 
   return grade({
     comp_matches: true,
@@ -446,7 +457,7 @@ export function check(baseline, current, lesson, { should_move = [], constant_sp
     should_move_held: shouldMoveHeld,
     extra_holds: extra,
     other_changes: other,
-    constant_speed: constant_speed ? constantSpeed(current, constant_speed) : null,
+    constant_speed: constant_speed ? constantSpeed(now0, constant_speed) : null, // by name, on the comp as it is
     demo_undone: demoUndone,
   }, { mode });
 }

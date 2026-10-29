@@ -8,6 +8,7 @@
 import { MentorError } from "../errors.mjs";
 import { needsEase, parseSegmentId, segmentId, segments } from "./analyze.mjs";
 import { unexpectedChanges } from "./diff.mjs";
+import { alignLayers } from "./renumber.mjs";
 import { isKeptLinear } from "./marks.mjs";
 import { fastestPart } from "./speed-graph-bezier.mjs";
 import { layerInfo } from "./layer-info.mjs";
@@ -394,7 +395,8 @@ function mistakeFor(seg, baseSeg, shape, { seen, targetSet }) {
 
 // FR-010 to FR-015 (data-model › Check result). `lesson` is the session's current lesson. Never
 // changes anything: the tool calls markChecked.
-export function check(baseline, current, lesson, { seen_shaped = [] } = {}) {
+export function check(baseline, now0, lesson, { seen_shaped = [] } = {}) {
+  let current = now0;
   const landHard = readOptions(lesson.skill_options).land_hard;
   const targets = (lesson.targets || []).filter((id) => !landHard.has(id));
   const seen = new Set(Array.isArray(seen_shaped) ? seen_shaped.filter((x) => typeof x === "string") : []);
@@ -407,6 +409,11 @@ export function check(baseline, current, lesson, { seen_shaped = [] } = {}) {
     };
   }
 
+  // OA-5: the comp now at the baseline's layer indexes (a layer added or duplicated renumbers the
+  // ones below it); a pair whose layer can't be told apart is "unmatched", never graded.
+  const aligned = alignLayers(baseline, current);
+  const lost = new Set(aligned.unmatched.map((u) => u.index));
+  current = aligned.current;
   const was = new Map(segments(baseline).segments.map((s) => [s.id, s]));
   const now = new Map(segments(current).segments.map((s) => [s.id, s]));
   const propsBefore = propsByKey(baseline);
@@ -417,6 +424,7 @@ export function check(baseline, current, lesson, { seen_shaped = [] } = {}) {
   const pairs = targets.map((id) => {
     const baseSeg = was.get(id);
     const label = baseSeg ? pairLabel(baseSeg) : id;
+    if (lost.has(parseSegmentId(id).layer_index)) return { id, label, result: "unmatched" };
     const before = propsBefore.get(propKey(id));
     const after = propsNow.get(propKey(id));
     if (!after || !before) return { id, label, result: "removed" };
@@ -441,7 +449,7 @@ export function check(baseline, current, lesson, { seen_shaped = [] } = {}) {
     comp_matches: true,
     lesson_comp: baseline.comp.name,
     pairs,
-    other_changes: unexpectedChanges(baseline, current, new Set([...(lesson.targets || []), ...landHard])),
+    other_changes: [...aligned.notes, ...unexpectedChanges(aligned.baseline, current, new Set([...(lesson.targets || []), ...landHard]))],
     // Every focus pair graded and passed: keys changed or a pair gone holds the pass until the
     // learner says whether that was on purpose (FR-014).
     passed: graded.length > 0 && graded.length === pairs.length && graded.every((p) => p.result === "passed"),

@@ -246,7 +246,8 @@ When they say yes, run the review; its first call is this one, already made. Whe
      place (`credit` `demo`): then the pair that didn't pass gets only its hint.
    - `keys_changed`: keys were added, removed or moved on that property, so you can't check those
      pairs. Ask if that was on purpose. `removed`: the pair isn't there as it was; say so and look
-     at `other_changes`.
+     at `other_changes`. `unmatched`: more than one layer has that name now, so you can't tell which
+     to check; ask them to rename the copy (or undo it) and say "done" again.
    - Mention `other_changes` briefly, without treating them as mistakes.
    - When every focus pair passes (`passed` is true), say "That passes", with the passed pairs in
      one clause, then step 6's read-again question as the turn's last sentence.

@@ -107,7 +107,7 @@ export const TOOLS = [
     title: "Check the learner's attempt",
     description:
       "Compare the comp now with the lesson's baseline. Reports each target as eased_by_learner, eased_by_demo, " +
-      "still_linear or removed, plus other changes, and whether the lesson passed. Doesn't change the baseline.",
+      "still_linear, removed or unmatched (two layers share its name), plus other changes, and whether the lesson passed. Doesn't change the baseline.",
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
     annotations: { readOnlyHint: true },
     handler: diffSinceLast,
