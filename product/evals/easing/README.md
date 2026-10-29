@@ -7,6 +7,10 @@ need to be open**. Whether the detection and grading are *correct* is covered by
 (`cd mentor && npm test`), which are free and instant. Evals cost real usage, so they don't
 repeat what the unit tests already prove.
 
+## Re-baseline rb2 (T423, 2026-10-28, mentor at `a8e34ef`)
+
+**25/26 (96%), $13.40**, results `2026-10-28-213609.json`. SC-006 met; no hard-rule check failed. Earlier baselines: 24/25, 25/26 (2026-10-27), 26/26. `R-ONE-IDEA` is now scored (cases 01, 02, 03, 05, 21 all passed it), so this is a stricter bar than those three. The one failure is 07 `R-NAMES-LAYERS`: the opening said "6 visible layers" for pairs on 5 layers (the same layer-count miscount seen in case 17 on 2026-10-26 and 10-27). Judge was right; a mentor wording fault, not a hard rule. An earlier attempt the same evening died on `spawnSync claude ETIMEDOUT` (about $0.44, no results file).
+
 ## Pacing evals (T421, 2026-10-28; mentor from the T420 branch)
 
 **T422 repeats (2026-10-28, `--repeat 3` per case, mentor from the T420 branch, $7.75 in all):** 02 **0/3**, 03 **1/3**, 04 3/3, 05 **1/3**, 19 3/3, 21 2/3. Every failure is a `R-ONE-IDEA` item (03 run 3 and 21 run 3 also `R-SHOWS`); no hard-rule check failed. Stopped after easing, as the gate says: three cases failed on a majority. Triage in the hand-back (results `2026-10-28-145828` to `-150724`). T423 not started.

@@ -8,6 +8,10 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
+## Re-baseline rb2 (T431, 2026-10-28, mentor at `a8e34ef`)
+
+**21/25 (84%), $12.09**, results `2026-10-28-215903.json`. SC-006 met on the score; two deterministic say checks failed (03 `walks_through`, 23 `asks_something`), both triaged as checks that predate the pacing rules. No demo, tool-count or record check failed. Rubric failures: 05 `R-ONE-IDEA`, 16 `R-RECORD-HONEST`.
+
 ## Status (2026-10-26): re-pointed to the live captures; no baseline yet
 
 25 cases after Phase 10 (21 to 25 new). Every fixture is a live capture from the 2026-10-26 sitting (spec 008 T029 to T031), except `synthetic/linear-basic.json`
