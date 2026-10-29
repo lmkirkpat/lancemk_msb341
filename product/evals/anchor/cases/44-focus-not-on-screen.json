@@ -1,0 +1,54 @@
+{
+  "id": "44-focus-not-on-screen",
+  "title": "A focus layer not drawn at its check time: one plain sentence says its crosshair won't show and to move the playhead into its bar first",
+  "covers": [
+    "OA-13",
+    "FR-019a"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/door-off-screen.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/door-off-screen.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "synthetic/door-off-screen.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "synthetic/door-off-screen.json",
+      "say": "Door is selected and both numbers are showing."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "say": [
+      {
+        "id": "not_showing",
+        "must": "isn['\u2019]t (?:showing|on screen|visible|in the frame|there)|not (?:showing|on screen|visible)|doesn['\u2019]t show|not drawn",
+        "turns": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "move_playhead",
+        "must": "playhead",
+        "turns": [
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NOT-ON-SCREEN",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-29 (OA-13). Door's in point is 2 s, so it is not drawn at the check time. SKILL.md: 'Door isn't showing at this time, so its crosshair won't either; move the playhead into Door's bar first.'"
+}

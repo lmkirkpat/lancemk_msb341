@@ -1,0 +1,148 @@
+{
+  "run_at": "2026-10-29T20:18:08.196Z",
+  "options": {
+    "only": "43",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 0.26,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "43-too-many-keys-to-check",
+      "title": "A group whose keys together are more than one read can sample: refused at the focus in plain words and a smaller group asked for; no focus set, no demo",
+      "covers": [
+        "OA-15",
+        "FR-005"
+      ],
+      "fixture_sources": {
+        "synthetic/cap70-before.json": "synthetic"
+      },
+      "hash": "bb9cb4bf6d2b4d3ed2f415f20d71dde72710291de63031c4907b53f8334aee42",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was null_parent_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:plain_refusal",
+              "pass": true,
+              "detail": "turn 1: \"more keys\""
+            },
+            {
+              "check": "say:asks_smaller",
+              "pass": true,
+              "detail": "turn 1: \"smaller\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            },
+            {
+              "check": "say:no_number",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-TOO-MANY-KEYS",
+              "pass": true,
+              "reason": "After the focus call returned focus_size \"too_many_times\" with focus_set false, the mentor said \"Between them those three layers have more keys than I can check at once\" and asked \"Which smaller group would you like to move as one instead?\", giving no count, limit or sampling reason and starting nothing."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Card and Label appear in the snapshot's proposal, and Extra was the learner's own name, which the focus call accepted with refused [] and rename_needed []; \"the pivot lesson\" matches \"Set the pivot (anchor point)\" in the learner record, and no property or time was named."
+            }
+          ],
+          "cost": 0.2611346,
+          "session_id": "9dfe4624-9c2f-4ecd-acd7-b4fabcddaa24",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Card, Label and Extra should move as one.\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Lower Thirds.aep\",\n  \"comp\": {\n    \"name\": \"Lower Thirds\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Card\",\n    \"Label\"\n  ],\n  \"next_proposal\": null,\n  \"no_proposal_reason\": null,\n  \"left_out\": [],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Card\",\"Label\",\"Extra\"]}}\nTOOL RESULT (ok): {\n  \"focus_set\": false,\n  \"rename_needed\": [],\n  \"refused\": [],\n  \"focus_size\": \"too_many_times\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true,\n  \"comp\": {\n    \"name\": \"Lower Thirds\"\n  }\n}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nI can't use Card, Label and Extra as the group, though. Between them those three layers have more keys than I can check at once. Which smaller group would you like to move as one instead?\n"
+        }
+      ]
+    }
+  ]
+}

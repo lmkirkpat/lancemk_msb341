@@ -113,4 +113,31 @@ fs.writeFileSync(path.join(HERE, "../records/anchor-passed-not-due.json"), JSON.
   write("background-only.json", b);
 }
 
+// Cases 42 and 43 (overlap audit OA-12, 2026-10-29): the live practice2b.json with one mask on Door.
+// The mask count is the only change; the places still come from the whole layer.
+{
+  const b = read("practice2b.json");
+  b.layer_info.find((l) => l.name === "Door").mask_count = 1;
+  b.synthetic = "Cases 42 and 43 (OA-12): live practice2b.json with Door's mask count set to 1.";
+  write("door-masked.json", b);
+}
+
+// Case 44 (OA-13): Door's bar starts at 2 s, so it is not drawn at its check time.
+{
+  const b = read("practice2b.json");
+  b.layer_info.find((l) => l.name === "Door").in_point = 2;
+  b.synthetic = "Case 44 (OA-13): live practice2b.json with Door's in point moved to 2 s.";
+  write("door-off-screen.json", b);
+}
+
+// Case 45 (OA-11): Gauge's pivot set away from its rest key with the playhead between its Rotation
+// keys (3.6 s; keys at 3.167 s and 4.167 s), where the first read holds no sample. Live gauge-away.json
+// with the playhead time moved, as mentor/test/anchor-audit.test.mjs does.
+{
+  const b = read("gauge-away.json");
+  b.comp.time = 3.6;
+  b.synthetic = "Case 45 (OA-11): live gauge-away.json with the playhead at 3.6 s, between Gauge's Rotation keys.";
+  write("gauge-away-between-keys.json", b);
+}
+
 console.log("wrote fixtures/synthetic/*, records/*.json");

@@ -1,0 +1,84 @@
+{
+  "id": "41-duplicated-group-layer",
+  "title": "A group layer duplicated mid-lesson: two layers called Caption. One sentence asks for a rename so the mentor can tell which is in the group; not 'can't find', no guessing, no offer to rename",
+  "covers": [
+    "OA-16",
+    "FR-021"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "eval-synthetic/parented-center-dup-caption.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor Tile, Caption and Stamp should move as one."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "eval-synthetic/parented-center-dup-caption.json",
+      "say": "I parented the three to the null. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "null_parent_snapshot",
+      "null_parent_check"
+    ],
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "last_check": {
+      "codes_include": [
+        "focus_name_not_unique"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_caption",
+        "must": "Caption",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "asks_rename",
+        "must": "rename|call(?:ed)? one|different name|two layers (?:are )?(?:called|named)|same name",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_missing",
+        "never": "can['\u2019]t find|deleted|no longer (?:there|in)|missing",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_which_one",
+        "never": "which (?:one|Caption)[^.!]*\\?|is it the (?:top|first|second|lower|upper)",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['\u2019]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:rename|fix|delete|remove|undo|do (?:it|that|them|the rest))\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-DUP-NAME",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-29 (overlap audit OA-16). SKILL.md: 'Two layers are called Caption now; rename one so I can tell which is in the group.' Never ask which, never rename."
+}

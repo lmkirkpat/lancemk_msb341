@@ -549,3 +549,30 @@ Design line for all four: TD 011 § 20 and `anchor-mentor/SKILL.md` steps 2 to 4
 - **R-AN-NO-NUMBER (case 29):** no longer asks for the place in words or "without the layer moving" on the decline turn. Pacing rule 3 hands the pending step back; the no-number and no-tolerance part is unchanged.
 
 Coverage notes (accepted by the builder 2026-10-29, to restore later): case 09 no longer covers "matte already there" (its learner now names an off-centre place), and case 11 no longer covers refusing a show-me before the walk-through (the walk-through now comes first in the script).
+
+## Re-run after the overlap-audit fixes, with cases 42 to 45 (2026-10-29, mentor at `df65d41`)
+
+**48 of 50 (96%), $33.15** (`results/2026-10-29-143900.json`; last baseline 41/46, 89%, $28.89). **SC-006 met on the score.**
+One universal (hard-rule) check failed: `record_plain` in case 30, see below. The full run was one pass; the
+two failures were then repeated `--repeat 3` once (`-150633`, `-150753`, $5.22). Total for the set with the four
+new-case smoke runs ($2.63): about $41.
+
+**New cases** (builder's OA rows, fixtures built by `fixtures/build.mjs` from live captures; each passed on its
+first run and again in the full run):
+
+| Case | Covers | Result |
+|---|---|---|
+| 42 masked layer named | OA-12: Door has a mask; taught, one sentence on the whole layer's edges | pass |
+| 43 masked layer not offered | OA-12: practicing proposes Needle, not the masked Door | pass |
+| 44 focus not on screen | OA-13: Door starts at 2 s; "isn't showing at this time ... move the playhead into Door's bar" | pass |
+| 45 Pan Behind between rotation keys | OA-11: Gauge set at 3.6 s; away-from-rest hint, rest time 3.2 s, Edit > Undo first | pass |
+
+Not covered: the same-name copy (OA-6 and T467's demo guard). The only mentor-visible part is a demo that writes to the
+right layer; the unit tests (`anchor-audit`, `demo-renumber`) own it.
+
+**Failures**
+
+| Case | Failed on | Repeats | Verdict |
+|---|---|---|---|
+| 20 group pivot moved | judge: R-HINT-NOT-FIX (turn 3 restates the Pan Behind steps; once also offered to show Door first) | pass, FAIL, pass (2 of 4 runs pass) | **Noise**, watch list. Checks all passed; the earlier baseline passed. Not from the audit changes. |
+| 30 stop early record | `record_plain`: record says "Pan Behind" (hard rule) | FAIL, FAIL, pass (1 of 4) | **Mentor** (prompt gap). The `next` field names the method ("... with Pan Behind"); `SKILL.md` step 11 says "no tool or method" only for `summary`. Proposed smallest fix: add "no tool or method" to the `next` line too, with an example in the Pass-line style ("Set Door's pivot on its left edge without Door moving"). Passed in the 10-28 baseline, so it is variance on an unconstrained field, not a new regression. |

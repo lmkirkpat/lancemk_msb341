@@ -1,0 +1,79 @@
+{
+  "id": "44-grandparent-moved-by-expression",
+  "title": "The null follows a layer (Holder) that moves through an expression with no keys: read as a moving parent, not a jump; nothing graded, nothing counted as a miss",
+  "covers": [
+    "OA-14",
+    "FR-009"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "synthetic/before.json": "synthetic",
+    "synthetic/row23-still-parent-placed.json": "synthetic",
+    "eval-synthetic/row23-expression-grandparent.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "synthetic/before.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "synthetic/before.json",
+      "say": "Card and Label should move together."
+    },
+    {
+      "project": "synthetic/row23-still-parent-placed.json",
+      "say": "I added a null and parented them. The group will only slide, so the spot doesn't matter. Done."
+    },
+    {
+      "project": "synthetic/row23-still-parent-placed.json",
+      "say": "Yes, the null follows Holder on purpose."
+    },
+    {
+      "project": "eval-synthetic/row23-expression-grandparent.json",
+      "say": "I gave the null its slide. Done."
+    }
+  ],
+  "expect": {
+    "chain_on_purpose_from_turn": 4,
+    "last_check": {
+      "codes_include": [
+        "null_parent_moves"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_holder",
+        "must": "Holder",
+        "turns": [
+          5
+        ]
+      },
+      {
+        "id": "says_moves",
+        "must": "moves|moving|moved|in motion",
+        "turns": [
+          5
+        ]
+      },
+      {
+        "id": "not_a_jump",
+        "never": "\\bjump(?:s|ed)?\\b|\\bsnapp?(?:s|ed)\\b|\\bpopp?(?:s|ed)\\b",
+        "turns": [
+          5
+        ]
+      },
+      {
+        "id": "cant_check",
+        "must": "can['\u2019]t check|cannot check|can['\u2019]t grade|can['\u2019]t tell|can['\u2019]t see",
+        "turns": [
+          5
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-CHAIN-MOVES",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-29 (overlap audit OA-14). Holder has no keys; its sampled Position differs at 3 s. SKILL.md: 'Group Null follows Holder, which moves, so I can't check the group through it. Unparent the null or add a new one.' Not a fail."
+}

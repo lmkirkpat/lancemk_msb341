@@ -1,0 +1,79 @@
+{
+  "id": "42-other-layer-changed-no-keys",
+  "title": "Another layer's values changed with no keys (Background's Position): named once as an other change, never as a mistake, the group's own result stands",
+  "covers": [
+    "OA-4",
+    "FR-021"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "eval-synthetic/parented-center-background-changed.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor Tile, Caption and Stamp should move as one."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "eval-synthetic/parented-center-background-changed.json",
+      "say": "I parented the three to the null. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "null_parent_snapshot",
+      "null_parent_check"
+    ],
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "say": [
+      {
+        "id": "names_background",
+        "must": "Background",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "says_changed",
+        "must": "changed|moved|different",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "named_once",
+        "never": "Background[\\s\\S]*Background",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_a_mistake",
+        "never": "mistake|wrong|shouldn['\u2019]t have|accident|undo|put (?:it )?back|oops",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "keeps_going",
+        "must": "parent|move|slide|turn|scale|key",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-OTHER-CHANGE",
+    "R-NAMES-REAL"
+  ],
+  "note": "2026-10-29 (overlap audit OA-4). Background has no keys; its sampled Position differs by 40 px. SKILL.md: 'Background's Position changed too.' The group's parenting still passes (the fixture is the live parented-center)."
+}
