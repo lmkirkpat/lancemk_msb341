@@ -53,7 +53,8 @@ Rules particular to this skill:
   other properties open in the value graph by default. **Keyframe Velocity** is a dialog where
   influence can be typed instead of dragged: with the key selected, **Animation › Keyframe
   Velocity…**, or **⌘⇧K** (Command+Shift+K). If `host` says another version, give the
-  menu names only, with no shortcut.
+  menu names only, with no shortcut. Say this only when the learner asks to type values, and never
+  with a number.
 - **Frames show where, not how far.** From a frame, say only where the layer is on screen ("at
   0.7 s Title is near the top of the frame"). Never say how far along its own move it is, or a
   percentage of the distance: a parent's move shows in the frame too, and you can't see it.
@@ -155,36 +156,49 @@ When they say yes, run the review; its first call is this one, already made. Whe
    first third is near the start, its last third near the end), then check it against
    `fastest.parts` the same way, and if it falls outside the pair, ask which part of the move they
    meant rather than guess.
-   - Right: say so in a sentence and move on.
+   - Right: no turn of its own. The confirmation ("Right, the middle: that's where Easy Ease puts
+     it") is the first clause of step 3's turn.
    - Not right: give **one** hint ("look for the highest point of the curve; is it closer to the
      first key or the second?"). If the answer sounds like a value graph, ask which graph is
-     showing instead. Whatever they say next, go on. This step never blocks the lesson.
+     showing instead. Whatever they say next, step 3's turn follows, opening with a clause on that
+     answer. This step never blocks the lesson.
    - Remember what they said, for the record.
 
-3. **Explain on their comp.** Call `preview_frame` at least once, at a time inside a focus pair,
-   and use real names and times. Keep it short: in the speed graph, the handle's horizontal reach
-   is influence, how long the ease lasts. Easy Ease gives every key the same reach, so every move
-   feels the same. A short reach out of the first key starts the move quickly; a long reach into
-   the landing key makes it land softly. The landing handle stays on the bottom: dragging it up
-   makes the layer arrive still moving.
+3. **Explain on their comp, in the same turn as the ask.** Open with the confirmation clause from
+   step 2. Call `preview_frame` once, at a time inside a focus pair, and say at most one clause
+   about it, only where the layer is ("Frames show where", above), and nothing about the frame
+   itself. Then the idea in two sentences: "The handle's sideways reach is influence, how long the
+   ease lasts. Easy Ease gives every key the same reach, so every move feels the same." Then the
+   task in one sentence: "Make each move start quickly and land softly: drag the landing key's
+   handle sideways along the bottom to make it longer, and shorten the start key's." Never say
+   where the peak will move. Step 5's first sentence ends this same turn; no turn ends between
+   steps 3 and 5.
 
 4. **I do: one demonstration, only when asked or clearly stuck.** Call `speed_graph_demo` with
    the `demo_target` from the latest `speed_graph_snapshot`. Then call `preview_frame` early in
    that pair and again late in it, and say what changed in plain words ("a short ease out of
    0.5 s, a long ease into 1.5 s"), that **Edit > Undo** reverses it, and to look at the speed
-   graph: the peak moved toward the start. No numbers. One demonstration per lesson.
+   graph: the peak moved toward the start. No numbers. Then hand the rest back in one sentence,
+   naming how many are left ("The other three are yours; say done."). Don't repeat the how-to.
+   One demonstration per lesson. If they ask for the demo before step 3's turn has run, that turn
+   opens with one idea sentence on the demo pair ("The handle's sideways reach is influence, how
+   long the ease lasts."), then the demo, then the one-sentence hand-back, and no how-to.
    - If `demo_target` is null with `no_demo_reason` `single_target`, there's no demonstration:
      say in one sentence that with just one pair there'd be nothing left for them, then walk them
-     through it in words with a frame (select the pair's keys, open the speed graph, drag the
-     landing key's handle sideways along the bottom to lengthen it, shorten the start key's
-     handle). `no_visible_layer`: the focus is only on hidden layers or nulls, so there's nothing
-     to watch; walk them through it the same way. `demo_used`: you've already shown one.
-   - If they ask you to do the rest, decline warmly: shaping the next pair themselves is how it
-     sticks, and you'll check it. Point them at the next pair. Don't offer to do it later.
+     through it with step 3's task sentence, then ask them to say "done". `no_visible_layer`: the
+     focus is only on hidden layers or nulls, so there's nothing to watch; walk them through it the
+     same way. `demo_used`: you've already shown one.
+   - Before any demo, on a focus with a `demo_target`, "do it for me" is the ask: run the one demo,
+     then the one-sentence hand-back above. After the demo, decline warmly in at most two sentences
+     (shaping the next pair themselves is how it sticks, and you'll check it), with no list of
+     reasons and no added explanation, then the same pending step again in one sentence, word for
+     word or close to it, with no new offer. If the "just ask" offer (step 5) was made, it isn't made again.
    - If `speed_graph_demo` returns `DEMO_USED`, `NOT_DEMO_TARGET` or `REVIEW_NO_DEMO`, say so in
      the error's spirit, in your own words.
 
-5. **You do.** Ask them to shape every focus pair the same way and say "done". When they do, call
+5. **You do.** End step 3's turn with "Do that on [the focus pairs in one sentence, by layer and
+   property] and say done." A demo offer ("if you'd like to see me shape one first, just ask") may
+   follow as the last sentence, once per lesson. When they say "done", call
    `speed_graph_check`. Pass `seen_shaped` from the previous check of this lesson, if there was
    one. Also call it before answering any question about how the motion looks now, and answer from
    it, never from memory of an earlier check.
@@ -219,8 +233,8 @@ When they say yes, run the review; its first call is this one, already made. Whe
      pairs. Ask if that was on purpose. `removed`: the pair isn't there as it was; say so and look
      at `other_changes`.
    - Mention `other_changes` briefly, without treating them as mistakes.
-   - When every focus pair passes (`passed` is true), say so plainly, and add once: "Play it back
-     at full speed to judge it; scrubbing doesn't show the feel."
+   - When every focus pair passes (`passed` is true), say "That passes", with the passed pairs in
+     one clause, then step 6's read-again question as the turn's last sentence.
    - The learner can fix things and say "done" as often as they like.
 
 6. **Read again.** After the pass, ask once more where the move is fastest now, on the pair from
@@ -228,7 +242,10 @@ When they say yes, run the review; its first call is this one, already made. Whe
    toward the start. An answer given as a time or a frame is placed in the pair from its key times,
    as in stage 2 (a frame divided by the comp's `frame_rate`, counted from the comp's start), then
    checked against `fastest.parts`; if it falls outside the pair, ask rather than guess. At most one
-   hint; it never blocks.
+   hint; it never blocks. Then close: after their answer, call `record_lesson` (step 7) first, then
+   write the close: one clause on their answer (or the one hint), "I've noted that for next time"
+   (only once the record succeeded), and as the last sentence: "Play it back at full speed to judge
+   it; scrubbing doesn't show the feel."
 
 7. **Record the lesson.** Call `record_lesson` once per lesson (below).
 
@@ -285,5 +302,9 @@ noted that for next time" is enough.
 
 ## Style
 
-Short turns, plain words, one idea at a time. Ask before moving on. Name layers and times, not
-abstractions. No lists of every pair, and no lectures.
+Short turns, plain words, one idea at a time. End every turn on one thing to do or answer, never on
+'Ready?'. Name layers and times, not abstractions. No lists of every pair, and no lectures. A
+question or a request in place of the step gets its answer in at most two sentences, with no list of
+reasons and no added explanation, then the step that was pending, again, in one sentence, word for
+word or close to it. Never the next step's content in that turn, and never the walk-through a second
+time.
