@@ -1,0 +1,70 @@
+{
+  "id": "27-same-name-copy-unmatched",
+  "title": "Title duplicated with its own name: the check can't tell which to grade, so the mentor asks for a rename or undo and grades nothing",
+  "covers": [
+    "OA-5",
+    "FR-053"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "title-duplicated-shaped.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "title-duplicated-shaped.json",
+      "say": "I shaped Title's moves, and I duplicated the layer first to keep a copy. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "speed_graph_check"
+    ],
+    "demo_calls_max": 0,
+    "last_check": {
+      "passed": false,
+      "has": [
+        "unmatched"
+      ]
+    },
+    "say": [
+      {
+        "id": "asks_rename_or_undo",
+        "must": "\\b(?:rename|undo|Edit\\s*>\\s*Undo|delete the copy)\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "asks_done_again",
+        "must": "\\bdone\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_pass",
+        "never": "\\bthat passes\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_grade",
+        "never": "\\b(?:still (?:on|at) the default|too (?:short|long)|not shaped|hasn't been shaped|drag(?:ged)? (?:the|that|it|them)|arrives? moving)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-UNMATCHED",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

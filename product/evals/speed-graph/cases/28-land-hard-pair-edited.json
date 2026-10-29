@@ -1,0 +1,67 @@
+{
+  "id": "28-land-hard-pair-edited",
+  "title": "An edit to a pair the learner said should land hard: the mentor says it saw it, nothing more; the pair is not graded or taught",
+  "covers": [
+    "OA-3",
+    "T466"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "landhard-pair-edited.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Title's last move should slam, it lands hard."
+    },
+    {
+      "project": "landhard-pair-edited.json",
+      "say": "I shaped the other moves, and I fiddled with the last one a bit too. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "speed_graph_check"
+    ],
+    "demo_calls_max": 0,
+    "snapshot_input_matches": [
+      "\"land_hard\":\\[[^\\]]*Position/3"
+    ],
+    "last_check": {
+      "passed": true
+    },
+    "say": [
+      {
+        "id": "passes",
+        "must": "passes",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_undo_land_hard",
+        "never": "\\b(?:undo|put (?:it|that) back|change (?:it|that) back|revert|reset (?:it|that))\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_grade_land_hard",
+        "never": "\\b(?:too (?:soft|slow|long|short)|should (?:be|land|come)|needs? to|try (?:making|dragging|shaping))\\b[^.?!]{0,60}\\b(?:last|slam|landing|3 ?s|4\\.4)",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-LANDS-HARD-EDIT",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

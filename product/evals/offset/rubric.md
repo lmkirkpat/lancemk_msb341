@@ -386,3 +386,34 @@ When the notes couldn't be read, the mentor doesn't know whether easing (or anyt
 It may ask, or say it doesn't know or has nothing marked, or just teach. It never says they haven't done it.
 
 - **Fail:** "you haven't learned easing", or any other statement about earlier work taken from the missing notes.
+
+## R-OF-OTHER-CHANGES: a stagger that passes, with something else changed on a member, names it briefly and doesn't mistake it for a mistake
+
+The Dots' start times were graded and pass. The check also lists another change on a member layer
+(Dot 3's single Scale key and expression-driven Rotation key moved, or a key was added on Dot 1's
+Position). The tool result is the truth about what changed.
+
+- **Pass:** credits the stagger by name, and says in one clause or sentence that it saw the other change,
+  by layer and property, as what it is (a key moved, a key added) and without judging it. No fix is
+  asked for or offered. It need not name every item if there are several, but must name at least one.
+- **Fail:** never mentions the other change; calls it a mistake or asks to undo or restore it; offers
+  to fix it; or grades it as part of the stagger (says the stagger fails because of it).
+
+## R-OF-NO-OTHER-CHANGES: a pass with nothing else changed mentions no other changes
+
+The learner dragged each Dot's whole bar, so the keys the stagger doesn't count (Dot 3's Scale and
+Rotation) moved with the layer. The check lists no other change.
+
+- **Pass:** credits the stagger by name and says nothing about other keys or properties moving.
+- **Fail:** says Scale, Rotation or any other key also moved or changed, or asks about them.
+
+## R-OFF-GUIDE-LEFT-OUT: a guide layer is left out with its reason, in plain words
+
+Dot 3 is a guide layer. In the opening the mentor says, in one short sentence, that Dot 3 is a guide
+layer so it never shows in the render, that it's left out, and that it can be put back in if the
+learner wants. The sentence is one of the leave-outs (one sentence per reason), not a lecture.
+
+- **Pass:** names Dot 3, says it is a guide layer and that it doesn't show in the render, and leaves it
+  out unless asked.
+- **Fail:** doesn't mention it, includes Dot 3 in the proposed group without saying, calls it fine or
+  hidden (the wrong reason), or explains what guide layers are for at length.

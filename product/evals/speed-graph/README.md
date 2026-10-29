@@ -8,6 +8,18 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
+## Re-baseline rb3 (2026-10-29, after the overlap-audit fixes; mentor at `df65d41`)
+
+**29/29 (100%), $14.91**, results `2026-10-29-142640.json` (rb2 was 21/25, 84%). SC-006 met, every hard-rule check passing, no failures, so no repeats. The watch-list case 03 passed.
+
+**New cases (numbers from the cockpit: 26 to 29; smoke runs `-141111`, `-141141`, `-141209`, `-141238`, $2.01, all passed first time, and passed again in the full run).** Fixtures are synthetic, built from `practice-now.json` by script into `fixtures/synthetic/` (the runner now searches that folder). The mentor wasn't edited.
+- **26 null-added-then-shaped** (OA-5): a null is added at the top and Title is fully shaped; Title moved to layer 2, the check still grades Title and passes. Rubric `R-SG-RENUMBER-OK`. The mentor mentioned the null in one plain sentence.
+- **27 same-name-copy-unmatched** (OA-5, FR-053): Title duplicated with its own name; every pair `unmatched`. The mentor asked for a rename or Edit > Undo and "done" again, with no verdict. Rubric `R-SG-UNMATCHED`.
+- **28 land-hard-pair-edited** (OA-3, T466): the learner says Title's last move lands hard, then shapes the rest and also changes that move. The mentor said it saw the change, "yours to shape however you want", once. Rubric `R-SG-LANDS-HARD-EDIT`.
+- **29 guide-layer-not-default-focus** (D-OA-1): Title is a guide layer; the record eases Title and Subtitle (`records/learned-title-subtitle-eased.json`). The focus is Subtitle and the opening names it. Rubric `R-SG-GUIDE-NOT-FOCUS`.
+
+Caveats: case 29 checks the proposal (`focus_named` plus the rubric), not a demo on a guide layer, since it never asks for one. Case 26's mentor sentence about the null ("moves Title from above") is the mentor's guess about parenting, not something the tool said; it passed `R-NAMES-REAL` and is harmless here.
+
 ## Re-baseline rb2 (T431, 2026-10-28, mentor at `a8e34ef`)
 
 **21/25 (84%), $12.09**, results `2026-10-28-215903.json`. SC-006 met on the score; two deterministic say checks failed (03 `walks_through`, 23 `asks_something`), both triaged as checks that predate the pacing rules. No demo, tool-count or record check failed. Rubric failures: 05 `R-ONE-IDEA`, 16 `R-RECORD-HONEST`.

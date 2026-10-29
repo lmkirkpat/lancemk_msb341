@@ -1,0 +1,50 @@
+{
+  "id": "36-guide-layer-left-out",
+  "title": "Dot 3 is a guide layer: it is left out in one plain sentence that says it never shows in the render, offered back, never called fine",
+  "covers": [
+    "OA-guide",
+    "T465"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "dots-dot3-guide.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "dots-dot3-guide.json",
+      "say": "/offset-mentor"
+    }
+  ],
+  "expect": {
+    "first_tool": "offset_snapshot",
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "names_guide",
+        "must": "(?=[\\s\\S]*Dot 3)(?=[\\s\\S]*guide)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "says_why",
+        "must": "never (?:shows?|renders?|appears?|plays?)|doesn't (?:show|render|appear)|not (?:in|part of) the render|won't (?:show|render)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "never_fine",
+        "never": "\\b(?:that's fine|it's fine|is fine|no problem|nothing wrong|doesn't matter)\\b[^.?!]{0,30}\\bguide|\\bguide\\b[^.?!]{0,60}\\b(?:is fine|it's fine|no problem|nothing wrong)",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OFF-GUIDE-LEFT-OUT",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

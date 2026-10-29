@@ -45,6 +45,7 @@ const CONFIG = {
   "demoKey": "target",
   "fixtureDirs": [
     "mentor/test/fixtures/offset",
+    "product/evals/offset/fixtures/synthetic",
     "mentor/test/fixtures",
     "mentor/test/fixtures/layer-info",
     "mentor/test/fixtures/offset/stand-in"

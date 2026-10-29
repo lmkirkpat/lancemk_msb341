@@ -1,0 +1,63 @@
+{
+  "id": "26-null-added-then-shaped",
+  "title": "A null added at the top mid-lesson renumbers Title; shaping it is still graded on Title and passes",
+  "covers": [
+    "OA-5",
+    "T440"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "null-added-shaped.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "null-added-shaped.json",
+      "say": "I added a null on top to move the title with, and shaped all of Title's moves. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "speed_graph_check"
+    ],
+    "demo_calls_max": 0,
+    "last_check": {
+      "passed": true,
+      "lacks": [
+        "unmatched"
+      ]
+    },
+    "say": [
+      {
+        "id": "passes",
+        "must": "passes",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_renumber_talk",
+        "never": "\\b(?:unmatched|renumber\\w*|moved down|shifted|layer [0-9]+|can't tell which|couldn't tell which)\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_not_shaped",
+        "never": "\\b(?:still (?:on|at) the default|hasn't been shaped|aren't shaped|isn't shaped|not shaped)\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-RENUMBER-OK",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

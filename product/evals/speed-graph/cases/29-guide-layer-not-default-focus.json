@@ -1,0 +1,50 @@
+{
+  "id": "29-guide-layer-not-default-focus",
+  "title": "Title is a guide layer: the lesson picks another eased layer (Subtitle) as the focus, and Title is never the proposal or the demo",
+  "covers": [
+    "D-OA-1",
+    "T463"
+  ],
+  "learner_record": "product/evals/speed-graph/records/learned-title-subtitle-eased.json",
+  "fixture_sources": {
+    "title-guide.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "title-guide.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "title-guide.json",
+      "say": "Sounds good, let's start."
+    }
+  ],
+  "expect": {
+    "first_tool": "speed_graph_snapshot",
+    "demo_calls_max": 0,
+    "focus_named": {
+      "turn": 1
+    },
+    "say": [
+      {
+        "id": "focus_subtitle",
+        "must": "Subtitle",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "title_not_the_focus",
+        "never": "\\bTitle\\b[^.?!]{0,40}\\b(?:Position|moves?|pairs?)\\b[^.?!]{0,30}\\b(?:fastest|to start|first|focus)",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-GUIDE-NOT-FOCUS",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

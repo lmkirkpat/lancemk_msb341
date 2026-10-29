@@ -1,0 +1,67 @@
+{
+  "id": "35-key-added-on-dot-1",
+  "title": "Dots stagger passes; a key was added on Dot 1's Position: named as an other change, stagger still graded, not a mistake",
+  "covers": [
+    "OA-2",
+    "T451"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "dots-staggered-key-added.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "dots-staggered-key-added.json",
+      "say": "I staggered them, and added a key on Dot 1's Position along the way. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_called": [
+      "offset_check"
+    ],
+    "last_check": {
+      "passed": true,
+      "has": [
+        "Dot 1"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_key_added",
+        "must": "Dot 1[^.?!]{0,80}\\bPosition\\b[^.?!]{0,80}\\b(?:key|4|four)\\b|\\bPosition\\b[^.?!]{0,60}Dot 1[^.?!]{0,60}\\b(?:key|4|four)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_a_mistake",
+        "never": "\\b(?:wrong|mistake|failed|incorrect|shouldn't have|undo|delete (?:it|that|the key)|remove (?:it|that|the key))\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['\u2019]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:fix|move|shift|delete|remove|change|restore)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-OF-OTHER-CHANGES",
+    "R-OFF-PASS",
+    "R-NAMES-REAL"
+  ]
+}
