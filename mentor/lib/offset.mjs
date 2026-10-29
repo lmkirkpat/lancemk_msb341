@@ -133,6 +133,11 @@ const hasExpression = (snapLayer, paths) =>
 const hiddenByLearner = (snapshot, tl) =>
   layerInfo(snapshot).known ? classOf(snapshot, tl.layer_index) === "hidden" : tl.enabled === false;
 
+// Overlap audit D-OA-1 (T465): a guide layer never renders, so one that moves is left out of the
+// proposed group (said as a guide) and is never the demo; a layer the learner names is in. Shy layers
+// render and stay as they were.
+const isGuide = (snapshot, index) => layerInfo(snapshot).known && classOf(snapshot, index) === "guide";
+
 // Every layer the comp has, with its counted units and its start under `exclude`, and why it's
 // eligible or not. `allow` names layers the learner added, which may be hidden (FR-004).
 function layerPool(snapshot, t, { exclude = [], allow = [] } = {}) {
@@ -144,6 +149,7 @@ function layerPool(snapshot, t, { exclude = [], allow = [] } = {}) {
     else if (tl.precomp) why = "precomp";
     else if (hiddenByLearner(snapshot, tl) && !allow.includes(tl.layer)) why = "hidden";
     else if (start == null) why = "no_motion";
+    else if (isGuide(snapshot, tl.layer_index) && !allow.includes(tl.layer)) why = "guide";
     return { tl, units, start, why };
   });
 }
@@ -210,16 +216,16 @@ export function groups(snapshot, { exclude = [], focus_layers, allow = [] } = {}
   return { layers: layerGroups(pool, fps), properties: propertyGroups(pool, fps), pool, timing: t };
 }
 
-// What the mentor names as left out (TD § 4): nulls, hidden layers, precomps, and properties an
-// expression drives.
+// What the mentor names as left out (TD § 4): nulls, hidden layers, guide layers that move (T465),
+// precomps, and properties an expression drives.
 function leftOut(pool) {
   const by = (why) => pool.filter((p) => p.why === why).map((p) => p.tl.layer);
   const out = [];
-  for (const reason of ["null", "hidden", "precomp"]) {
+  for (const reason of ["null", "hidden", "guide", "precomp"]) {
     const layers = by(reason);
     if (layers.length) out.push({ reason, layers });
   }
-  const expr = pool.filter((p) => p.why !== "null" && p.why !== "precomp" && p.why !== "hidden")
+  const expr = pool.filter((p) => !["null", "precomp", "hidden", "guide"].includes(p.why))
     .flatMap((p) => p.tl.units.filter((u) => u.excluded === "expression").map((u) => ({ layer: p.tl.layer, unit: u })));
   if (expr.length) {
     out.push({
@@ -361,14 +367,14 @@ export function analyze(snapshot, opts = {}) {
   else if (!complete || !gapOk) no_demo_reason = "awaiting_order";
   else if (gapUnderFloor(gap, fps)) no_demo_reason = "gap_under_floor";
   else {
-    // The second in their order, or the next one with no expression on a keyed property, its eye on
-    // and not locked (FR-009; locked added 2026-10-26 after live check L-4, where the snapshot
-    // named a locked Dot 2 that offset_demo then refused). offset_demo's lock refusal stays as the
-    // backstop for a lock set after this read.
+    // The second in their order, or the next one with no expression on a keyed property, its eye on,
+    // not a guide layer (T465) and not locked (FR-009; locked added 2026-10-26 after live check L-4,
+    // where the snapshot named a locked Dot 2 that offset_demo then refused). offset_demo's lock
+    // refusal stays as the backstop for a lock set after this read.
     let skippedLocked = false;
     const pick = ordered.slice(1).find((m) => {
       const sl = snapLayerOf(snapshot, m.layer_index);
-      if (hasExpression(sl, m.unit ? m.paths : null) || sl.enabled === false) return false;
+      if (hasExpression(sl, m.unit ? m.paths : null) || sl.enabled === false || isGuide(snapshot, m.layer_index)) return false;
       if (sl.locked === true) { skippedLocked = true; return false; }
       return true;
     });

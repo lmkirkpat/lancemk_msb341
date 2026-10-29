@@ -184,6 +184,8 @@ easing's (spec 002 T423), which is the base every merge is checked against (spec
 ## Overlap audit 2026-10-29 (`discovery/usage-notes/overlap-audit-2026-10-29.md`; branch `overlap-shared`)
 
 - [x] T441 OA-3: check whether a land-hard pair's edits going unreported is a bug, and pin the behaviour in `mentor/test/speed-graph-overlap-audit.test.mjs`. **Result:** not a bug as specified: data-model.md › Check result adds `land_hard` to the other-changes exclude set on purpose; only a new shape or moved key time on that pair is silent (key values and key count are still reported, pinned). No code change; changing it is a spec call (FR-006, data-model › Check result).
+- [x] T464 D-OA-1 and D-OA-3 (branch `overlap-wave2`): a guide layer isn't the default focus (still in `other_candidates`, still the focus when named), and neither a guide layer nor one another layer's solo hides is the demo. **Result:** `mentor/test/guide-solo-demo.test.mjs`, seen failing first: a guide Wipe gives the focus to Card, named it gets no demo (`no_visible_layer`); a soloed Card takes the demo from Wipe; shy unchanged. One `SKILL.md` clause (`no_visible_layer` covers guide and solo).
+- [x] T466 OA-3 changed by the builder: a land-hard pair's edits are other changes (the check passes the graded targets, not targets plus land-hard, to `unexpectedChanges`). **Result:** the T441 test now expects "Title › Position was changed (not part of this lesson)" for a reshaped land-hard P1; one `SKILL.md` clause says such a note is theirs to shape.
 
 ---
 

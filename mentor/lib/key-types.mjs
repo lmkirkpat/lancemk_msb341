@@ -10,7 +10,7 @@ import { isKeptLinear } from "./marks.mjs";
 import { unexpectedChanges } from "./diff.mjs";
 import { alignLayers } from "./renumber.mjs";
 import { layerInfo } from "./layer-info.mjs";
-import { classOf } from "./visibility.mjs";
+import { classOf, visibility } from "./visibility.mjs";
 
 export const OPACITY_PATH = "ADBE Transform Group/ADBE Opacity";
 export const VALUE_TOL = 0.5;
@@ -49,6 +49,14 @@ const visibleIn = (snapshot, layer) => {
   const cls = classOf(snapshot, layer.index);
   return cls !== "hidden" && cls !== "null" && !layer.is_null;
 };
+
+// Overlap audit D-OA-1 and D-OA-3 (T463): a guide layer never renders, so it's left out of the
+// candidates (named, it's still the focus); neither it nor a layer another layer's solo hides is ever
+// the demo, since the frame wouldn't show it. Shy layers render and stay as they were.
+const isGuide = (snapshot, layer) => known(snapshot) && classOf(snapshot, layer.index) === "guide";
+const soloedElsewhere = (snapshot, layer) =>
+  known(snapshot) && visibility(snapshot).some((v) => v.layer_index === layer.index && v.soloed_elsewhere === true);
+const canDemo = (snapshot, layer) => visibleIn(snapshot, layer) && !isGuide(snapshot, layer) && !soloedElsewhere(snapshot, layer);
 
 const pairLabel = (layer, prop, from, to) => `${layer.name}${SEP}${prop.display_name} ${secs(from.time)}–${secs(to.time)} s`;
 
@@ -95,10 +103,15 @@ const refMatches = (refs, layer, prop) =>
 
 // Every candidate property, earliest first key time first, then layer order. Not capped: the
 // analyzer names at most MAX_NAMED of them; the finder counts them all.
-export function candidates(snapshot, { kept_linear, exclude = [], should_move = [] } = {}) {
+export function candidates(snapshot, opts = {}) {
+  return onOffGroups(snapshot, opts, (s) => !isGuide(snapshot, s.layer));
+}
+
+// The on-off groups that pass every filter but the guide one, kept when `keep(segment)` says so.
+function onOffGroups(snapshot, { kept_linear, exclude = [], should_move = [] } = {}, keep) {
   const groups = new Map();
   for (const s of segments(snapshot).segments) {
-    if (s.prop.path !== OPACITY_PATH || !visibleIn(snapshot, s.layer) || s.state === "held") continue;
+    if (s.prop.path !== OPACITY_PATH || !visibleIn(snapshot, s.layer) || s.state === "held" || !keep(s)) continue;
     if (!isNumber(s.from.value) || !isNumber(s.to.value) || !isOnOff(s.from, s.to)) continue;
     if (kept_linear && kept_linear.length && isKeptLinear(kept_linear, s.layer.name, s.prop.path, snapshot)) continue;
     if (refMatches(exclude, s.layer, s.prop) || refMatches(should_move, s.layer, s.prop)) continue;
@@ -123,7 +136,7 @@ export function finder(snapshot, { exclude = [], kept_linear } = {}) {
 
 // ---- What's left out, and the held pairs stage 2 can show (FR-006)
 
-function leftOut(snapshot, kept_linear) {
+function leftOut(snapshot, kept_linear, opts) {
   const out = [];
   const add = (reason, items) => {
     if (!items.length) return;
@@ -131,6 +144,8 @@ function leftOut(snapshot, kept_linear) {
   };
   const hidden = snapshot.layers.filter((l) => isHidden(snapshot, l)).map((l) => ({ layer: l.name }));
   add("hidden", hidden);
+  // A guide layer that would otherwise be a candidate (T463).
+  add("guide", onOffGroups(snapshot, opts, (s) => isGuide(snapshot, s.layer)).map((c) => ({ layer: c.layer, property: c.property })));
   add("precomp", (snapshot.precomp_layers || []).map((l) => ({ layer: l.name })));
   const expression = [];
   const held = [];
@@ -221,7 +236,7 @@ export function analyze(snapshot, { exclude = [], kept_linear, skill_options } =
   if (!pairs.length) noDemoReason = all.length || named.length ? "awaiting_focus" : "no_candidate";
   else if (pairs.length < 2) noDemoReason = "single_target";
   else {
-    demo = pairs.filter((p) => visibleIn(snapshot, p.layer)).sort((a, b) => a.from.time - b.from.time)[0] || null;
+    demo = pairs.filter((p) => canDemo(snapshot, p.layer)).sort((a, b) => a.from.time - b.from.time)[0] || null;
     if (!demo) noDemoReason = "hidden_or_null";
   }
 
@@ -235,7 +250,7 @@ export function analyze(snapshot, { exclude = [], kept_linear, skill_options } =
     more_candidates: Math.max(0, all.length - MAX_NAMED),
     refused,
     held_examples: heldExamples(snapshot),
-    left_out: leftOut(snapshot, kept_linear),
+    left_out: leftOut(snapshot, kept_linear, { kept_linear, exclude, should_move: opts.should_move }),
   };
 }
 

@@ -108,7 +108,8 @@ most; they hold the rest with their own hands.
      as mistakes**: "Title and Subtitle fade in from see-through. Is either meant to snap on
      instead?" Fades are usually meant to fade.
    - Say what's left out, one short sentence per reason in `left_out`: hidden layers ("you've
-     hidden this, so I'll leave it unless you want it"), precomps ("I can't see inside these yet,
+     hidden this, so I'll leave it unless you want it"), guide layers ("Grid is a guide layer, so
+     it never shows in the render; I'll leave it unless you want it"), precomps ("I can't see inside these yet,
      so I'm not saying they're fine"), an expression ("an expression drives this, so the key types
      may not be what you see"), already held ("the Cursor already snaps"), kept linear (say it
      stays linear because they said it runs at constant speed). Skip the unknown-values reason
@@ -182,8 +183,8 @@ most; they hold the rest with their own hands.
    If `demo_target` is null there's no demo. With one focus pair, say in one sentence that if you
    held it there'd be nothing left for them, then walk them through it with step 4's how-to
    sentence, which always names where hold lives (Animation > Toggle Hold Keyframe, or the
-   right-click), then ask them to say "done". No demo on a hidden layer or a null either: walk through
-   it in words.
+   right-click), then ask them to say "done". No demo on a hidden layer, a guide layer, a null, or a
+   layer another layer's solo hides either: walk through it in words.
 
 6. **The rest is theirs.** Before any demo, on a focus with a `demo_target`, "do it for me" (or "do
    the rest") is the ask: run step 5's one demo, then hand the rest back as step 5 says. After the
