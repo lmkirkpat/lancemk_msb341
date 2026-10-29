@@ -213,9 +213,9 @@ the cockpit names.
   mentor from the T344 branch. Triage with `/eval-triage`; case 03's `never_picks` break should be
   gone (TD § 16, the eval engineer's note). **Done when:** each passes on a majority, or a failure is
   triaged and logged in the README as prompt, rubric or noise, with the cost (about 15 runs)
-- [ ] T347 [eval-engineer] After T346 passes: a full re-baseline of the set, logged in the README
+- [x] T347 [eval-engineer] After T346 passes: a full re-baseline of the set, logged in the README
   with score and cost. SC-003 (≥ 80%, every hard-rule check passing). **Done when:** logged; a new failure
-  outside the five cases is triaged before the merge
+  outside the five cases is triaged before the merge. **Done (39/40 (98%), $28.16, 2026-10-29):** SC-006 met, every hard-rule check passing.
 
 ---
 

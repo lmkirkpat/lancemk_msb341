@@ -305,9 +305,9 @@ engineer's, on `evals-skill-5` or the branch the cockpit names.
   `--repeat 3` (`--only 02`, `--only 15`, `--only 21`, `--only 29`), mentor from the T262 branch.
   Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and
   logged in the README as prompt, rubric or noise, with the cost (about 15 runs)
-- [ ] T265 [eval-engineer] After T264 passes: a full re-baseline of the set, logged in the README
+- [x] T265 [eval-engineer] After T264 passes: a full re-baseline of the set, logged in the README
   next to "Re-baseline after Phase 10" with score and cost. SC-003 (≥ 80%, every hard-rule check
-  passing). **Done when:** logged; a new failure outside the five cases is triaged before the merge
+  passing). **Done when:** logged; a new failure outside the five cases is triaged before the merge. **Done (41/46 (89%), $28.89, 2026-10-28; the five failures re-scripted and 3/3 or 2/3 in round 4, 2026-10-29):** SC-006 met, every hard-rule check passing.
 
 ---
 
