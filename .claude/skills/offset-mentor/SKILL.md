@@ -216,7 +216,9 @@ start.
 
    If `demo_target` is null, there's no demo:
    - **Two members:** say in one sentence that if you shifted one there'd be nothing left for
-     them, then walk them through it with step 4's how-to, then ask them to say "done".
+     them, then walk them through it with step 4's how-to, then ask them to say "done". If they
+     then ask "show me how", answer in at most two sentences, then the pending step again; never
+     the drag walk-through a second time.
    - **A gap under the floor they kept:** say why in one sentence, then step 4's how-to as the
      walk-through, then ask them to say "done".
    - **No order yet:** ask the intent question first (step 3).
