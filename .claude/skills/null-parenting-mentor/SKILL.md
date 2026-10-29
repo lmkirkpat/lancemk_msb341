@@ -339,9 +339,11 @@ at most; they add the null, place it, parent the rest and give it its move with 
       Position slides, Rotation turns, Scale scales. Say it turns or scales, or name the place it
       does so from, only when the check found a Rotation or Scale move, never because of what the
       learner said earlier. No key times; the check doesn't give them.
-    - `summary`: what the learner did and what the checks saw: a jump and its distance ("Stamp
-      jumped 120 px on the first try, then stayed put"), a first move on Opacity, or "said the
-      group only slides". No tolerances, never how they did it (which pick whip, which key), never
+    - `summary`: what the learner can now do or still needs, in general terms: what the checks saw,
+      such as a jump and its distance ("one layer jumped 120 px on the first try, then stayed put"),
+      a first move the children can't follow, or "said the group only slides". No times, no layer,
+      null or property names (those belong in `attempted`), no tolerances, never how they did it
+      (which pick whip, which key), never
       why, and never what they should have done or how to fix it ("follow one control layer",
       "parent them to the null" are fixes, not what happened).
     - `next`: one thing: what the check saw still off ("Caption still didn't follow Group Null"),
@@ -391,7 +393,8 @@ jumps up front, and never the word "null"** until it passes. A jump that happens
    - `not_parented`: "Row C doesn't follow anything yet."
 5. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`. A
    review that doesn't pass leaves the skill learned. `summary` and `next` follow step 11: what the
-   learner did and what the check saw ("Row B and Row C followed Row A"), never what they should
+   learner did and what the check saw, in general terms ("the group followed one of its own
+   layers"), never what they should
    have done or how ("follow one invisible control layer" is a fix: leave it out).
 
 ## Style

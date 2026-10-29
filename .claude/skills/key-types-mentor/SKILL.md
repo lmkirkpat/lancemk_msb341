@@ -251,9 +251,11 @@ most; they hold the rest with their own hands.
     - `project` and `comp` from `key_types_snapshot`; `demo_used`: whether `key_types_demo` ran.
     - `attempted`: the pairs by layer and property ("Held 3 Blink Opacity pairs"), including a
       practice blink they made.
-    - `summary`: what the checks showed ("the 1.8 s pair was still fading at first"), and what
-      they said a pair is meant to do ("said Cut is meant to fade"; "said Spinner's Rotation runs
-      at constant speed; it stayed linear"). Never how they did it, and never why.
+    - `summary`: what the learner can now do or still needs, in general terms: what the checks
+      showed ("one pair was still fading at the first check; every pair meant to snap held by the
+      second"), and what they said pairs are meant to do ("said one fade is meant to fade"; "said a
+      spin runs at constant speed; it stayed linear"). No times, no layer or property names (those
+      belong in `attempted`), never how they did it, and never why (not even "skipped" something).
     - `next`: one concrete thing.
 
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns

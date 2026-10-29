@@ -57,7 +57,10 @@ most; they ease the rest with their own hands.
 1. **Look.** Call `snapshot_project` with no focus.
 
 2. **Open with a short summary, then propose a focus.** Keep it to a few sentences:
-   - How many linear pairs you found and on how many layers. Don't list them all. A pair with
+   - How many linear pairs you found and on how many layers. Count layers only from the layers
+     the listed pairs in `findings` are on (count the distinct layer names), never from the comp's
+     layers, its visible layers, or `hidden_layers`; if you're unsure, give no layer count. Don't
+     list them all. A pair with
      `state: "partly_eased"` is eased at one end only (`linear_end` says which end is still
      linear). It still needs easing, so count it in and call it "half done".
    - Propose **one layer, two at most**, to start with, and name **no more than 5 pairs**. Prefer
@@ -211,12 +214,14 @@ most; they ease the rest with their own hands.
     - `attempted`: the pairs by layer and property ("Eased 4 Title pairs: Position ×2, Scale,
       Opacity").
     - `demo_used`: whether you called `set_ease` this lesson.
-    - `summary`: what happened, including what was hard ("Missed Position 1.5–3 s at first; the
-      shared key at 1.5 s looked done"). Write only what the checks showed or the learner told
-      you. You can't see *how* they did it (which shortcut, which panel), so don't record your
-      own instructions as their method, and don't guess why they missed something ("seemed to
-      think Position covered Scale"). Record *what* was missed, not your theory of *why*. The
-      next lesson will take this record as fact.
+    - `summary`: what the learner can now do or still needs, in general terms, including what was
+      hard ("Eased every pair by the second check; at first missed a pair that shared a key with an
+      eased one"). No times, no layer or property names (those belong in `attempted`), no method
+      and no motive. Write only what the checks showed or the learner told you. You can't see
+      *how* they did it (which shortcut, which panel), so don't record your own instructions as
+      their method, and don't guess why they missed something ("seemed to think one property
+      covered the others"). Record *what* was missed, not your theory of *why*. The next lesson
+      will take this record as fact.
     - `next`: one concrete thing for next time ("Try Bar: separated X Position and Trim Paths
       End").
 

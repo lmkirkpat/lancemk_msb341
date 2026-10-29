@@ -429,10 +429,11 @@ comp.** This is step 2's sentence, the explanation turn's only one.
     - `project` and `comp` from `anchor_snapshot`; `demo_used`: whether `anchor_demo` ran.
     - `attempted`: the layer and the place in words ("Set Needle's pivot to the middle of its
       bottom edge").
-    - `summary`: what the checks showed, in plain words: whether the first try moved the layer,
-      whether it was set away from rest, and their answer to the understanding check ("first try
-      moved Needle with its pivot; then set it without a jump; said the bottom edge stays still").
-      No pixel numbers, no tool or method, never why.
+    - `summary`: what the learner can now do or still needs, in general terms: whether the first try
+      moved the layer, whether it was set away from rest, and their answer to the understanding
+      check ("first try moved the layer with its pivot; then set it without a jump; said the edge it
+      hinges on stays still"). No times, no layer or property names (those belong in `attempted`),
+      no pixel numbers, no tool or method, never why.
     - `next`: one concrete thing ("Key a swing on Needle and play it back").
 
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
