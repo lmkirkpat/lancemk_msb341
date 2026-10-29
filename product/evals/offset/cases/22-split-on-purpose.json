@@ -25,7 +25,7 @@
     },
     {
       "project": "pops-in.json",
-      "say": "Yes, Dot 1's Opacity going before its Position was on purpose."
+      "say": "Yes, Dot 1's Position going before its Opacity was on purpose."
     }
   ],
   "expect": {
