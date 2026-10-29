@@ -300,6 +300,14 @@ export function checkTime(snapshot, index, opts = {}) {
 
 const DEFAULT_KINDS = new Set(["solid", "text", "footage", "precomp"]);
 
+// OA-12: masks hide part of the layer, but its places come from the whole, unmasked rectangle. An
+// unreadable count (null) counts, as in the frame tool; an older read without it (undefined) doesn't.
+const masked = (entry) => !!entry && (entry.mask_count === null || (isNum(entry.mask_count) && entry.mask_count > 0));
+// OA-13: the layer isn't drawn at time t (before its in point, or at or after its out point), so
+// neither is its crosshair.
+const offScreen = (entry, t) => !!entry && isNum(t) &&
+  ((isNum(entry.in_point) && t < entry.in_point - TIME_TOL) || (isNum(entry.out_point) && t > entry.out_point - TIME_TOL));
+
 // The bucket and reason from what's structural, before any footprint is read. `opts.rest_time` is
 // the learner's own rest pose for this layer, if any (it decides a one-key layer, FR-004).
 function structural(snapshot, entry, flags, cls, kl = null, opts = {}) {
@@ -321,6 +329,7 @@ function structural(snapshot, entry, flags, cls, kl = null, opts = {}) {
   if (cls === "hidden") return ["if_named", "hidden"];
   if (cls === "guide") return ["if_named", "guide"];
   if (entry.locked === true) return ["if_named", "locked"];
+  if (masked(entry)) return ["if_named", "masked"];
   if (kind === "shape" && !SHAPES_DEFAULT) return ["if_named", "shape_until_l1"];
   if (flags.position) return ["if_named", "position_keyed"];
   return ["default", null];
@@ -512,6 +521,9 @@ function notesFor(snapshot, c) {
   if (c.class === "hidden") notes.push({ layer: c.layer, note: "hidden" });
   if (c.class === "shy") notes.push({ layer: c.layer, note: "shy" });
   if (c.locked) notes.push({ layer: c.layer, note: "locked" });
+  const entry = byIndex(snapshot, c.index);
+  if (masked(entry)) notes.push({ layer: c.layer, note: "masked" });
+  if (offScreen(entry, c.check_time.time)) notes.push({ layer: c.layer, note: "not_on_screen" });
   // A focus layer's or the proposal's pivot outside it, with the side it's on as seen on screen
   // (FR-019a; null when it can't be read, and then the mentor names no side).
   if (c.place_now === "outside") notes.push({ layer: c.layer, note: "pivot_outside", side: c.outside_side ?? null });

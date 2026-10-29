@@ -145,7 +145,9 @@ at most; they add the null, place it, parent the rest and give it its move with 
        `duplicate_names` lists names two layers share; ask the same if they want one of those.
      - `focus_set` false with `refused`: say why that layer can't be in the group, as above, and ask
        for another. In a review, a layer from an earlier lesson on this comp is refused too: ask
-       for a group you haven't used. `focus_size` means too few or too many: ask as above.
+       for a group you haven't used. `focus_size` means too few or too many: ask as above. With
+       `too_many_times`: "Those layers have more keys between them than I can check in one go."
+       Ask for a smaller group.
      - `matte_added`: "Gradient shows through Reveal Matte, so they should move as one: I'll count
        both."
      - `notes`: a layer that brings its own children: "Plate brings Shadow along, since Shadow
@@ -280,6 +282,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      plainly. With `what: comp`: you can't read this comp's layers well enough to check anything.
    - `not_found`: "I can't find Caption by that name any more. Was it renamed or deleted?" Never
      guess which layer it became.
+   - `focus_name_not_unique`: "Two layers are called Caption now; rename one so I can tell which is
+     in the group." Never ask which one it is, and never rename it.
    - `no_null`: with `named`, you can't find a layer called that: "I can't find a layer called
      Group Null. Is that its name in the timeline?" Don't ask them to add one. Without `named`, you
      don't see a new null yet; ask them to add one (Layer > New > Null Object).
@@ -301,7 +305,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      that you can't see expressions on properties without keys yet.
    - Mention `other_changes` briefly, never as mistakes: a layer added or removed, another layer now
      parented to the null ("Plate follows the null now too"), a parent or keys changed elsewhere, an
-     expression turned on or off. `children_brought`: "Plate brings Shadow along," once.
+     expression turned on or off, or `value_changed`, another layer's values changed with no keys
+     ("Background's Position changed too"). `children_brought`: "Plate brings Shadow along," once.
    - `other_comp` (`comp_matches` false): don't grade; ask them to switch back to `lesson_comp`
      by name and say "done" again.
    - They can fix things and say "done" as many times as they like.

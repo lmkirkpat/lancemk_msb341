@@ -13,7 +13,7 @@ import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { motionSources } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
 import {
-  analyze, anchorKeyCount, checkTime, DEMO_MATCH_PX, footprintOpts, inPlace, isPlace, keyedLayer, MOVE_PX, outsideSide, placeNow,
+  analyze, anchorKeyCount, checkTime, DEMO_MATCH_PX, footprintOpts, inPlace, isPlace, keyedLayer, keyFlags, MOVE_PX, outsideSide, placeNow,
   placePoint, positionKeyCount, positionKeyTimes, rectOf,
 } from "./anchor.mjs";
 
@@ -26,12 +26,18 @@ const differ = (a, b) => {
   return Math.abs(a[0] - b[0]) > VALUE_TOL || Math.abs(a[1] - b[1]) > VALUE_TOL;
 };
 
-// ---- Matching (FR-019): by name when it's unique in both reads, else by index
+// ---- Matching (FR-019): by name when it's unique in both reads; when the same number of layers
+// share it in both, the k-th of them in stack order (OA-6: adding a layer renumbers them all, so
+// the raw index can be the wrong one); else by index
 
 export function matchLayer(baseline, current, entry) {
   const b = byName(baseline, entry.name);
   const c = byName(current, entry.name);
   if (b.length === 1 && c.length === 1) return c[0];
+  if (b.length > 1 && b.length === c.length) {
+    const order = (list) => [...list].sort((x, y) => x.index - y.index);
+    return order(c)[order(b).findIndex((x) => x.index === entry.index)] || null;
+  }
   if (c.length >= 1) return c.find((x) => x.index === entry.index) || null;
   // The name is gone: the same index and kind, with a name the baseline doesn't have, when no layer
   // was added or removed, is this layer renamed.
@@ -297,6 +303,14 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
     const anchorChanged = !!(bs && cs) && differ(bs.anchor, cs.anchor);
     const positionChanged = !!(bs && cs) && differ(bs.position, cs.position);
     const rectShifted = !anchorChanged && !!(bRect && cRect) && (Math.abs(bRect.left - cRect.left) > VALUE_TOL || Math.abs(bRect.top - cRect.top) > VALUE_TOL);
+    // OA-11: Pan Behind between Rotation or Scale keys, where the first read has no sample to compare
+    // with. Both values changed, the layer moved at its rest key and the read isn't at rest: set away
+    // from rest, not "in place but moved".
+    if (item3.set_away_from_rest === null && !atRest && !cmp.reason && !item2.passed && anchorChanged && positionChanged &&
+      isNum(now) && !space.sampleAt(b, now)) {
+      const f = keyFlags(keyedLayer(baseline, b.index));
+      if (f.rotation || f.scale) item3.set_away_from_rest = true;
+    }
 
     // Credit (FR-016): the demo's while its anchor is as the demo wrote it.
     if (demoIndex === b.index) {
