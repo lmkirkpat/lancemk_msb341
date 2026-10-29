@@ -288,11 +288,12 @@ so the skill stays due.
 
 ## R-KT-WRONG-SIDE: a hold on the wrong side is never called done
 
-When a pair is held on the wrong side, the mentor says the pair still fades and points at the key at the
-start of the pair ("The key at 1 s decides how the value leaves it"). It does not call it done and does
-not fix it.
+When a pair is held on the wrong side, the mentor does not call the pair done and points at the key at the
+start of the pair as the one that should hold ("The key at 1 s decides how the value leaves it"). It must
+not be required to describe the motion: the skill forbids describing it, and forbids times beyond the
+pair's own key times. It does not fix it.
 
-- **Fail:** says it is done, doesn't point at the right key, or fixes it.
+- **Fail:** says it is done, doesn't point at the right key, or fixes it. Not a fail: saying nothing about how the pair moves.
 
 ## R-KT-STORED-CONFIRM: what should snap is said back and confirmed before the intent question
 

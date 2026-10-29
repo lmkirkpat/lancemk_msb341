@@ -303,3 +303,7 @@ Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, spee
 |---|---|---|
 | 15 | 3/3 (`-223954`, $2.55) | Clean |
 | 18 | **0/3** (`-224151`, $1.76) | **Prompt.** The check gave `wrong_side` for Blink's first pair (hold on the end key). All three runs said "The first pair snaps now, but too soon" and described a drop "just after 1 s" instead of 1.4 s; no tool result says that. The reply points at the right key (1 s), but it contradicts the verdict (R-KT-WRONG-SIDE, 3/3) and states an invented behaviour (R-NAMES-REAL, 2/3). Design line: TD 009 § 7 row 4 (wrong side: say which key holds, never call the pair done). The 18 check fix works (the deterministic checks passed in all three); the rubric is what fails. |
+
+## Changed after seeing results (2026-10-29, human-approved)
+
+- **R-KT-WRONG-SIDE (`rubric.md`):** no longer requires "says the pair still fades". It now requires that the mentor does not call the pair done and points at the key at the start of the pair as the one that should hold; any description of the motion is not required (the skill now forbids describing it, and forbids times beyond the pair's own key times). "Never called done" is kept. Reason: case 18 failed 0/3 on 2026-10-28 because the rubric asked for what fix round 4 made the skill withhold. Needs a paid re-run (case 18).
