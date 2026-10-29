@@ -67,7 +67,7 @@ session's.
 | Field | Rule |
 |---|---|
 | `id`, `label` | Pair ID and "Title › Position 0.5–1.5 s" |
-| `result` | `passed`, `not_passed`, `keys_changed`, `removed` |
+| `result` | `passed`, `not_passed`, `keys_changed`, `removed`, `unmatched` (FR-053) |
 | `failed` | Subset of `["a", "b", "c", "d"]` (FR-010) |
 | `mistake` | One of `arrives_moving`, `no_handle`, `long_both_ends`, `back_to_default`, `in_out_mixed`, `not_shaped`, or `null` when passed (research R7) |
 | `drag_sideways` | `true` with `arrives_moving` when, on the dimension that fails d, a also fails and the landing influence is below `LONG_LANDING` (53.33); `false` when an influence can't be read (FR-012, research R7; amended 2026-10-26, no baseline) |
