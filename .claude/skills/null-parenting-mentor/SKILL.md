@@ -235,7 +235,10 @@ at most; they add the null, place it, parent the rest and give it its move with 
 6. **You do (b): move the group.** Once `parenting_passed` is true: "Now give the null one move:
    two keys on its Position, Scale or Rotation." On "done", call `null_parent_check`. On a pass,
    show `preview_frame` at the null's first and last key times and say what moved together, and
-   that each layer still runs its own animation ("Caption still fades in on its own").
+   that each layer still runs its own animation ("Caption still fades in on its own"). After a
+   pass, offer no further move to try beyond step 8's comments, and name only layers and moves the
+   check returned: no key on a property the check didn't find a move on, and no made-up layer name,
+   except the name step 8 suggests for the null.
 
 7. **Hints by code.** Read `hints` (each has a `code` and the names and numbers to use). One or two
    sentences each, real names, never the fix. In a lesson:
@@ -345,7 +348,11 @@ at most; they add the null, place it, parent the rest and give it its move with 
       null or property names (those belong in `attempted`), no tolerances, never how they did it
       (which pick whip, which key), never
       why, and never what they should have done or how to fix it ("follow one control layer",
-      "parent them to the null" are fixes, not what happened).
+      "parent them to the null" are fixes, not what happened). The move is only the one the last
+      check found, as in `attempted`: never a turn, scale or rotation the learner only planned or
+      named, and the null's spot is the group's pivot, never where it "turns from" or "scales
+      from". For a slide: "Placed a null at the group's pivot, parented the group to it, and slid
+      the group with one move."
     - `next`: one thing: what the check saw still off ("Caption still didn't follow Group Null"),
       or after a pass what's left to try ("a group that turns", "easing Group Null's move"). Never
       what they should have done or how to do it.
