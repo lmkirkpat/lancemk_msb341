@@ -36,7 +36,7 @@
     "say": [
       {
         "id": "asks_something",
-        "must": "\\?",
+        "must": "\\?|\\b(?:tell me|let me know)\\b",
         "turns": [
           1
         ]
