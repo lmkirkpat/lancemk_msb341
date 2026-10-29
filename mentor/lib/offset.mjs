@@ -553,7 +553,12 @@ export function check(baseline, current, lesson, { split = [] } = {}) {
     const m = members.find((x) => x.id === r.target);
     return { layer_index: r.layer_index_now, ...(m.paths ? { paths: m.paths } : {}) };
   });
-  const groupRefs = members.map((m) => ({ layer_index: m.layer_index, ...(m.paths ? { paths: m.paths } : {}) }));
+  // The layers kind: only the units the timing analysis counted are inside (overlap audit OA-1),
+  // their key counts and values still reported (OA-2), and the member's graded shift passed on so
+  // its left-out keys moving with it aren't reported twice.
+  const groupRefs = members.map((m, i) => (m.kind === "layers"
+    ? { layer_index: m.layer_index, paths: m.units.flatMap((u) => u.paths), starts_only: true, shift: results[i].start_now != null && m.start != null ? results[i].start_now - m.start : null }
+    : { layer_index: m.layer_index, paths: m.paths }));
 
   return {
     comp_matches: true,
