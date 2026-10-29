@@ -86,7 +86,7 @@ as belief 7). As a check on the tools, the 4-of-4 agreement holds no matter who 
 
 ## To fix later
 
-- **A time or frame reading answer.** `SKILL.md` stage 2 and stage 6 check the answer only against
+- **A time or frame reading answer.** **Done 2026-10-26 (`16d4648`, spec 004 T167 to T169).** `SKILL.md` stage 2 and stage 6 check the answer only against
   start, middle or end. Proposed fix: one sentence in stages 2 and 6, "If they answer with a time
   or a frame, place it in the pair from its key times", and add the comp's frame rate to
   `speed_graph_snapshot`'s `comp` block (`mentor/tools/speed-graph.mjs`) so frames can be turned

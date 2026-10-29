@@ -20,9 +20,10 @@ testing with real users.
 - [ ] The option A runtime built, with the evals moved onto it
 - [ ] Knack installed with the installer on a fresh macOS user account with only After Effects
       installed (spec 006 SC-002)
-- [ ] Carry-overs from Sprint 3: eval baselines for the five new skills (key types, speed graph,
-      offset, set the pivot, move a group with a null), and their reviews (T035, T038, T040,
-      T240, T343)
+- [x] Carry-over from Sprint 3: eval baselines for the five new skills (key types, speed graph,
+      offset, set the pivot, move a group with a null). Done 2026-10-28 to 10-29, every set meets
+      SC-006 (`discovery/usage-notes/pacing-rebaselines.md`)
+- [ ] Carry-over from Sprint 3: the five skills' live reviews (T035, T038, T040, T240, T343)
 - [ ] Stretch: an outside tester downloads and installs Knack on their own device with the
       installer
 

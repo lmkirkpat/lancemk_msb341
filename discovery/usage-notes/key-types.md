@@ -87,7 +87,7 @@ what would make SC-001 count as teaching evidence (belief 7).
 
 ## To fix later
 
-- **Point at the focus layer in a frame.** `preview_frame` (`mentor/tools/common.mjs`) renders
+- **Point at the focus layer in a frame.** **Done 2026-10-26 (`a13fea8` and `e0039cd`, spec 004 T178 to T180: `preview_frame` takes an optional layer and returns its bounds).** `preview_frame` (`mentor/tools/common.mjs`) renders
   the whole comp. Proposed: an optional `layer` argument that returns the layer's on-screen
   bounds alongside the image, or a second image with the other layers dimmed (solo is a
   project change, so it would have to be undone in the same step, or rendered from a duplicate).

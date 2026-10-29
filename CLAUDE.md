@@ -157,20 +157,16 @@ a brand new session act like a colleague who already knows what you are working 
      passed on re-run, see `discovery/usage-notes/easing-slice.md`); offset-order, T123 and
      case 26 are merged, and the easing set is now 26 cases.
   2. Live tasks, in order. First lessons passed 2026-10-26: speed graph (T032, `speed-graph.md`:
-     3 min 35 s, one demo, SC-002 4 of 4; to fix: a frame-number reading answer), key types (T035,
-     `key-types.md`: 3 min 58 s, one demo, SC-002 4 of 4; to fix: frames on Mentor Practice 2 don't
-     show which shape is the focus), and offset's properties kind (T036, `offset.md`: about
-     3 min 46 s, no demo, SC-002 3 of 3; ran on a stale mentor server, so Quick Offset is still open
-     live; to fix: a stated gap the learner changes without saying). All three ran on a mentor
+     3 min 35 s, one demo, SC-002 4 of 4), key types (T035, `key-types.md`: 3 min 58 s, one demo,
+     SC-002 4 of 4), and offset's properties kind (T036, `offset.md`: about 3 min 46 s, no demo,
+     SC-002 3 of 3; ran on a stale mentor server). All three ran on a mentor
      server from before that day's merges, so they need a note saying so. Offset's layers kind
      passed too (T037, `offset.md` session 2, fresh server: 2 min 5 s, no demo, first check, Quick
-     Offset offered and used, so FR-017 is met live; SC-002 4 of 4 so far, 10 needed). To fix from
-     T037: a lesson left open and never checked resumes with its old baseline and choices
-     (`mentor/lib/session.mjs:119`, a spec 004 shared-code request), and `SKILL.md` needs a
-     Quick Offset "how it works" paragraph built only from L-1 (the mentor made up a selection-order
-     claim). Mentor Practice matches none of its captures until Title is put back (T036 left it
-     staggered), and Mentor Practice 2 needs a reset to `practice2b.json` (T037 left the Dots
-     staggered).
+     Offset offered and used, so FR-017 is met live; SC-002 4 of 4 so far, 10 needed). Every "to
+     fix" from these four lessons is on `main` (spec 004 wave B, 2026-10-26/27; marked in each usage
+     note). Comps checked 2026-10-29: Mentor Practice 2 matches `practice2b.json` (strict compare),
+     and Mentor Practice's key times match its captures; Title keeps the ease influences shaped in
+     T032, on purpose, for the speed graph review.
      - **Skill 5 (set the pivot, spec 011): merged 2026-10-26 (`f6effae`).** Hand-back in
        `discovery/usage-notes/anchor-build.md`; lessons and timings in `anchor.md`; sitting in
        `specs/011-anchor/live-sitting-2026-10-26.md`. Mentor tests 1148 pass, hooks 39/39.
@@ -200,9 +196,8 @@ a brand new session act like a colleague who already knows what you are working 
             passed on repeat; easing's code path is unchanged, so taken as met. Choices to watch: a
             declined review still uses the session's one review; the panel's "Remembering…" label
             is easing-only (a panel-builder request); PR-1 (the unreadable-notes message) is open.
-            **Next:** T413 to T415 are unticked in `specs/004-ae-curriculum/tasks-wave-b.md`. The
-            2026-10-28/29 re-baselines show no self-note failures, so check whether they can be
-            ticked. T416 (the live first lesson and review) is open.
+            T413 to T415 checked and ticked 2026-10-29. **Next:** T416 (the live first lesson and
+            review) is open.
          2. **Baselines: done.** The pivot went from 27/44 (61%) on 10-27 to 41/46 (89%) on 10-28,
             and null is 39/40 (98%) on 10-29. See "Pacing rules" under Progress. Watch list (2/3,
             no prompt change yet): pivot 09, speed graph 03, offset 20 and 28. Coverage to restore:
@@ -230,10 +225,8 @@ a brand new session act like a colleague who already knows what you are working 
        SC-002 8 of 8 plus 2 of 2 deliberate jumps, 10 needed. **Then:** review T343 (SC-009,
        stretch; it carries the last 2 SC-002 checks), and pivot review T240 (stretch).
      - **After the live lessons:** skills 5 and 6 are merged, and every eval set is merged and
-       baselined (see "Pacing rules" under Progress). Still open from the live sitting: speed graph's "already shaped" list
-     includes hidden layers (`mentor/lib/speed-graph.mjs:294`) while "ease first" leaves them
-     out, and snapshots are sampled only at the playhead and key times (skills 5 and 6 may need
-     more).
+       baselined (see "Pacing rules" under Progress). Still open from the live sitting: snapshots
+     are sampled only at the playhead and key times (skills 5 and 6 may need more).
   3. Sprint 3 closes 2026-10-26: the carry-over is logged
      (`discovery/usage-notes/agent-carry-over.md`: on Operation Food Critic, a new project, the
      hooks and workflow copied over, ten personas trimmed to seven, and a two-researcher

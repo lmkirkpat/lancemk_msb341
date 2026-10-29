@@ -224,7 +224,7 @@ staggered from session 1.
 
 ## To fix later
 
-- **A live lesson can run on a stale mentor server.** MCP servers start with the session and
+- **A live lesson can run on a stale mentor server.** **Done 2026-10-26 (`8364e1d`, spec 004 T175 and T176: every snapshot tool returns `server_current`).** MCP servers start with the session and
   survive `/clear`, while `SKILL.md` is read fresh, so merges during a long session leave the
   prompt and tools out of step. Proposed: `mentor/server.mjs` records the `mentor/` tree's git
   hash when it starts (`git rev-parse HEAD:mentor`). Each lesson's snapshot tool returns
@@ -234,17 +234,17 @@ staggered from session 1.
   CLAUDE.md's pre-lesson check: start a fresh session for a live lesson after any merge into
   `mentor/`. Test: a unit test where a changed hash returns `server_current: false`, and the same
   hash returns true.
-- **Stated gap vs. measured gap** (finding 3): the step 7 sentence above in
+- **Stated gap vs. measured gap** (finding 3): **Done 2026-10-26 (`2d15859`, spec 004 T170 to T172).** the step 7 sentence above in
   `.claude/skills/offset-mentor/SKILL.md`, with the eval case.
 
-- **An abandoned open lesson resumes with its old baseline and choices** (session 2, finding 1).
+- **An abandoned open lesson resumes with its old baseline and choices** (session 2, finding 1). **Done 2026-10-27 (`06ca1be`, spec 004 T173 and T174).**
   `mentor/lib/session.mjs:119` resumes any unpassed lesson for the same skill and comp, however old
   and whatever happened in AE since. Proposed: in `session.start`, an open lesson that was never
   checked and has no demo starts fresh when it's from an earlier day or its baseline no longer
   matches the comp's group members' keys, without `skill_options` unless they're sent. Test: a
   snapshot after an unchecked lesson whose baseline differs returns `lesson: "new"` and no stale
   `order`. That touches spec 004's shared `session.mjs`, so it's a shared-code request.
-- **Quick Offset "how does it work"** (session 2, finding 2): the paragraph above in
+- **Quick Offset "how does it work"** (session 2, finding 2): **Done 2026-10-26 (`2d15859`, spec 004 T170 to T172).** the paragraph above in
   `.claude/skills/offset-mentor/SKILL.md` "Where things are", with the eval case.
 
 ## Edge cases to plan for
