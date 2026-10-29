@@ -319,6 +319,20 @@ engineer's, on `evals-skill-5` or the branch the cockpit names.
 
 ---
 
+### Overlap audit 2026-10-29
+
+From `discovery/usage-notes/overlap-audit-2026-10-29.md`; tests in `mentor/test/anchor-audit.test.mjs`.
+SKILL.md changed, so the eval set needs a re-run.
+
+- [x] T459 OA-6: when the same number of layers share a name in both reads, `matchLayer` takes the
+  k-th of them in stack order, not the raw index (`anchor-check.mjs`).
+- [x] T460 OA-11: Pan Behind between Rotation or Scale keys (no first-read sample at the read's time,
+  both values changed, not at rest) reads `away_from_rest`, not `in_place_moved`.
+- [x] T461 OA-12: a layer with a mask (or an unreadable mask count) is `if_named` with reason and note
+  `masked`; SKILL.md says its places come from the whole layer.
+- [x] T462 OA-13: a focus or proposed layer outside its in and out points at its check time gets a
+  `not_on_screen` note; SKILL.md asks them to move the playhead into its bar.
+
 ## Hand-offs to other owners (not builder tasks)
 
 - **HO-1 Eval engineer:** hand off to eval-engineer: `product/evals/anchor/` from spec › Eval plan.

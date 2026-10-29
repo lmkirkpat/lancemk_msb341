@@ -187,7 +187,8 @@ export function allP2Times(baseline, focus) {
 // What stops `names` from being the focus: names another layer shares (`rename_needed`), names not
 // in the comp (`unknown`), layers that can't be in a group (`refused`, with the reason), and a size
 // outside 2 to 4 once matte partners are added (`size`). `focus` is the names with partners added,
-// in stack order.
+// in stack order. `too_many_times`: the group's P2 times together are more than one read can
+// sample (allP2Times would drop some), so it could never pass.
 export function focusProblems(snapshot, names, { exclude = [] } = {}) {
   const cands = candidates(snapshot);
   const byLayer = new Map(cands.map((c) => [c.layer, c]));
@@ -215,8 +216,11 @@ export function focusProblems(snapshot, names, { exclude = [] } = {}) {
     }
   }
   const ordered = [...focus].sort((a, b) => byLayer.get(a).index - byLayer.get(b).index);
+  // OA-15: more P2 times in all than one read can sample would leave a layer never checkable.
+  const timesCount = () => new Set(ordered.flatMap((n) => p2Times(snapshot, n))).size;
   const size = rename_needed.length || unknown.length || refused.length ? null
-    : ordered.length < MIN_FOCUS ? "too_few" : ordered.length > MAX_FOCUS ? "too_many" : null;
+    : ordered.length < MIN_FOCUS ? "too_few" : ordered.length > MAX_FOCUS ? "too_many"
+      : timesCount() > MAX_P2_TIMES ? "too_many_times" : null;
   const ok = !rename_needed.length && !unknown.length && !refused.length && !size;
   return { ok, focus: ok ? ordered : null, rename_needed, unknown, refused, size, matte_added: added };
 }

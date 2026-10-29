@@ -45,6 +45,18 @@ const props = (snap, index) => {
   const k = keyedLayer(snap, index);
   return k ? k.properties : [];
 };
+// OA-14: a parent with no keys can still move (an expression on an unkeyed property, which the
+// reads don't reach yet), so its own samples differing across the times read count as moving.
+const SAMPLED = ["anchor", "position", "scale", "rotation"];
+const valuesDiffer = (a, b) => (Array.isArray(a) && Array.isArray(b)
+  ? a.some((v, i) => typeof v === "number" && typeof b[i] === "number" && Math.abs(v - b[i]) > 0.01)
+  : typeof a === "number" && typeof b === "number" && Math.abs(a - b) > 0.01);
+function samplesMove(snap, index) {
+  const e = byIndex(snap, index);
+  const ss = e && Array.isArray(e.samples) ? e.samples : [];
+  return ss.some((x) => SAMPLED.some((k) => valuesDiffer(ss[0][k], x[k])));
+}
+const parentMoves = (snap) => (p) => p.moves_children || samplesMove(snap, p.layer_index);
 const distinctValues = (p) => new Set(p.keys.map((k) => JSON.stringify(k.value))).size >= 2;
 
 // ---- Finding the lesson's null (FR-007, FR-019, research R5)
@@ -287,6 +299,21 @@ function nameCounts(snap) {
   return m;
 }
 
+const SAMPLED_NAMES = { anchor: "Anchor Point", position: "Position", scale: "Scale", rotation: "Rotation" };
+
+// The transform values that differ between the two reads at the before-read time; Opacity only when
+// both reads are at that time (it isn't sampled at other times). Nothing when either isn't sampled.
+function valuesChanged(baseline, b, current, c) {
+  const t0 = baseline.comp.time;
+  const bs = sampleAt(b, t0);
+  const cs = sampleAt(c, t0);
+  if (!bs || !cs) return [];
+  const out = SAMPLED.filter((k) => valuesDiffer(bs[k], cs[k])).map((k) => SAMPLED_NAMES[k]);
+  const sameTime = current.comp && typeof current.comp.time === "number" && Math.abs(current.comp.time - t0) < 0.0005;
+  if (sameTime && b.transform && c.transform && valuesDiffer(b.transform.opacity, c.transform.opacity)) out.push("Opacity");
+  return out;
+}
+
 function otherChanges(baseline, current, focus, nullName, alreadyNamed = []) {
   const out = [];
   const bc = nameCounts(baseline);
@@ -306,6 +333,12 @@ function otherChanges(baseline, current, focus, nullName, alreadyNamed = []) {
       if (from !== to) out.push(to && to === nullName ? { kind: "parented_to_null", layer: n } : { kind: "parent_changed", layer: n, from, to });
       const p3 = p3For(baseline, current, n);
       if (!p3.passed) out.push({ kind: "keys_changed", layer: n, properties: p3.changed.map((x) => x.property) });
+      // OA-4: what it renders at the before-read time changed with no key or parent change (an
+      // expression on a property with no keys, say). Reported only, never graded (FR-021).
+      if (from === to && p3.passed) {
+        const changed = valuesChanged(baseline, b, current, c);
+        if (changed.length) out.push({ kind: "value_changed", layer: n, properties: changed });
+      }
     }
     // Expressions on keyed properties: a focus layer's Position belongs to the pick-whip hint.
     const bp = props(baseline, b.index);
@@ -371,7 +404,7 @@ export function check(baseline, current, lesson, input = {}) {
       nullOut.n2 = false;
       add("three_d", { null: nul.name });
     } else if (chain.length) {
-      if (chain.some((p) => p.moves_children) || chainBefore.some((p) => p.moves_children)) {
+      if (chain.some(parentMoves(current)) || chainBefore.some(parentMoves(baseline))) {
         // FR-009: out of the lesson. Nothing graded, nothing recorded as a miss, no markChecked.
         nullOut.n2 = "moves";
         add("null_parent_moves", { null: nul.name, parent: chain[0].layer });
@@ -441,6 +474,12 @@ export function check(baseline, current, lesson, input = {}) {
   const nullPos = nul.found && nul.index != null ? compPosition(current, nul.index, t0).position : null;
   const layers = found.map(({ name, c }) => {
     if (!c) {
+      // OA-16, D-3 for a focus layer: two layers share its name now, so ask for the rename and
+      // grade nothing on it.
+      if (byName(current, name).length > 1) {
+        add("focus_name_not_unique", { layer: name });
+        return { layer: name, found: true, name_unique: false };
+      }
       add("not_found", { layer: name });
       return { layer: name, found: false };
     }
@@ -573,7 +612,7 @@ export function demoRefusal(current, lesson) {
   if (!target || !nul) return { reason: "not_found" };
   if (classOf(current, nul.index) !== "null") return { reason: "null_fails_n1" };
   const chain = (sourcesOf(current, nul.index) || {}).parents || [];
-  if (nul.three_d || (chain.length && (sd.null.chain_on_purpose !== chain[0].layer || chain.some((p) => p.moves_children)))) return { reason: "null_fails_n2" };
+  if (nul.three_d || (chain.length && (sd.null.chain_on_purpose !== chain[0].layer || chain.some(parentMoves(current))))) return { reason: "null_fails_n2" };
   if (target.parent != null) return { reason: "already_parented" };
   if (target.locked === true) return { reason: "locked" };
   if (target.three_d) return { reason: "three_d" };

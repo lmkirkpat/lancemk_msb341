@@ -219,6 +219,20 @@ the cockpit names.
 
 ---
 
+### Overlap audit 2026-10-29
+
+From `discovery/usage-notes/overlap-audit-2026-10-29.md`; tests in
+`mentor/test/null-parenting-audit.test.mjs`. SKILL.md changed, so the eval set needs a re-run.
+
+- [x] T455 OA-4: a non-focus layer whose values change at the before-read time with no key or parent
+  change is reported as `value_changed` (never graded), in `null-parenting-check.mjs` `otherChanges`.
+- [x] T456 OA-14: a parent in the null's chain whose own samples differ across the read times counts
+  as moving (`null_parent_moves`, not `jumped`), in the check's chain branch and the demo's refusal.
+- [x] T457 OA-15: a focus whose P2 times total more than 63 is refused at focus time
+  (`focus_size: too_many_times`, `focusProblems`); SKILL.md asks for a smaller group.
+- [x] T458 OA-16: a focus layer whose name two layers now share gives `focus_name_not_unique` (D-3's
+  rename ask), not `not_found`; nothing graded on it.
+
 ## Hand-offs to other owners (not builder tasks)
 
 - **HO-1 Eval engineer:** hand off to eval-engineer: `product/evals/null-parenting/` from spec ›
