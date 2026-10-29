@@ -184,6 +184,16 @@ easing's (spec 002 T423), which is the base every merge is checked against (spec
 - [ ] T434 [eval-engineer] After T432 and T433: cases 01, 02, 03, 04, 05, 06, 16, 19, 25, 26 and 27, each with `--repeat 3`, mentor from the T432 branch. Triage with `/eval-triage`. **Done when:** each passes on a majority, or a failure is triaged and logged in the README as prompt, rubric or noise, with the cost (about 33 runs)
 - [x] T435 [eval-engineer] After T434 passes and after spec 002 T423: a full re-baseline of the set, logged in the README with score and cost (≥ 80%, every hard-rule check passing). **Done when:** logged; a new failure outside the eleven cases is triaged before the merge. **Done (29/33 (88%), rb2 2026-10-28; failures triaged and fixed in rounds 3 and 4):** SC-006 met, every hard-rule check passing.
 
+### Overlap audit 2026-10-29
+
+From `discovery/usage-notes/overlap-audit-2026-10-29.md`, offset's rows. Tests in
+`mentor/test/offset-overlap-audit.test.mjs`. No `SKILL.md` change: the new sentences come through
+`other_changes`, which step 7 already covers.
+
+- [x] T450 [US2] OA-1: on the layers kind, only a member's counted units are inside the group; its single keys, expression-driven keys and pauses are compared like anything outside, and keys that moved with the member's own graded shift aren't listed again. **Done:** Dot 3's moved single Scale key and expression Rotation key are other changes; a whole-bar drag lists nothing.
+- [x] T451 [US2] OA-2: on the layers kind, a key added or removed, a pause given a value, or a new key value on a member's counted property is an other change (the start is still graded). **Done:** a key added on Dot 1's Position and a pause given a value both listed; the properties kind unchanged.
+- [x] T452 [US2] OA-6 (offset only): `matchLayer` picks the k-th layer with a repeated name in stack order, not the raw index. **Done:** a rename to "Dot 1" plus a renumber matches the first Dot 1; two same-named layers renumbered each keep their own.
+
 ---
 
 ## Hand-offs to other owners (not builder tasks)
@@ -231,6 +241,6 @@ easing's (spec 002 T423), which is the base every merge is checked against (spec
 2. Phases 4 and 5 (layers kind and review mode both ship in this first build).
 3. Phases 6–7 close the cloud part; Phase 8 is one sitting; Phase 9 hands back.
 
-**Task count:** 44 (T001–T040, T432–T435): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap
-2, cloud hand-back 3, live sitting 6, polish 3, pacing 4 (2026-10-28). **🖐 live: 5** (T032, T033, T036, T037 in the sitting; T040
+**Task count:** 47 (T001–T040, T432–T435, T450–T452): Setup 2, Foundational 10, US1 7, US2 4, US3 3, overlap
+2, cloud hand-back 3, live sitting 6, polish 3, pacing 4 (2026-10-28), overlap audit 3 (2026-10-29). **🖐 live: 5** (T032, T033, T036, T037 in the sitting; T040
 a day or more later). Hand-offs: 4; requests: 3.

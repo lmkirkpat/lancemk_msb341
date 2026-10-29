@@ -19,19 +19,21 @@ const known = (v) => v !== undefined && v !== null;
 
 const named = (snap, name) => snap.layers.filter((l) => l.name === name);
 
+const byIndex = (a, b) => a.index - b.index;
+
 // The current layer for a baseline layer (FR-012, overlap row 17): by name when the name is unique
-// in both reads, so reordering the stack doesn't swap layers; by index otherwise (two layers share
-// the name, or it was renamed). Null when the layer has no keys now.
+// in both reads, so reordering the stack doesn't swap layers. When a name repeats (in either read),
+// the k-th layer with that name in stack order, so a renumber (a layer added above) doesn't pick a
+// neighbour (overlap audit OA-6). Renamed in place: by index. Null when the layer has no keys now.
 export function matchLayer(baseline, current, baseLayer) {
-  const inBase = named(baseline, baseLayer.name).length;
-  const now = named(current, baseLayer.name);
-  if (inBase === 1 && now.length === 1) return now[0];
+  const inBase = named(baseline, baseLayer.name).sort(byIndex);
+  const now = named(current, baseLayer.name).sort(byIndex);
+  if (inBase.length === 1 && now.length === 1) return now[0];
+  const k = inBase.findIndex((l) => l.index === baseLayer.index);
+  if (k >= 0 && now[k]) return now[k];
+  // Renamed in place: the layer at its index now has a name the baseline didn't use.
   const atIndex = current.layers.find((l) => l.index === baseLayer.index) || null;
-  if (inBase === 1 && now.length === 0) {
-    // Renamed in place: the layer at its index now has a name the baseline didn't use.
-    return atIndex && named(baseline, atIndex.name).length === 0 ? atIndex : null;
-  }
-  return atIndex;
+  return atIndex && named(baseline, atIndex.name).length === 0 ? atIndex : null;
 }
 
 // How far a property's keys moved, in frames: the first key's shift, and whether every key moved
@@ -92,24 +94,36 @@ function pauseGivenValue(base, cur) {
 const fmt = (t) => `${r2(t)} s`;
 
 // Changes outside the group that the timing analysis would hide (FR-013), as plain sentences for
-// the mentor. `groupRefs` is [{ layer_index, paths }] on the baseline (paths omitted: the whole
-// layer). Key changes inside the group are the check's to grade, so they aren't listed; an
-// expression turned on or off and a property newly animated are listed everywhere.
+// the mentor. `groupRefs` is [{ layer_index, paths, starts_only, shift }] on the baseline (paths
+// omitted: the whole layer). Key times inside the group are the check's to grade, so they aren't
+// listed; an expression turned on or off and a property newly animated are listed everywhere.
+// Only the properties the timing analysis counted belong in `paths` (overlap audit OA-1): a
+// member's single keys, expression-driven keys and pauses are compared like anything outside.
+// `starts_only` (the layers kind, which grades only where each member starts): a key added or
+// removed, a pause given a value, or a new value inside is listed too (OA-2). `shift` (seconds):
+// the member's own graded shift, so its left-out keys moving with it by that much aren't listed.
 export function otherChanges(baseline, current, groupRefs) {
-  const inGroup = (layer, path) => groupRefs.some((g) => g.layer_index === layer.index && (!g.paths || g.paths.includes(path)));
-  const wholeLayer = (layer) => groupRefs.some((g) => g.layer_index === layer.index);
+  const fps = baseline.comp.frame_rate;
+  const refOf = (layer, path) => groupRefs.find((g) => g.layer_index === layer.index && (!g.paths || g.paths.includes(path)));
+  const wholeLayer = (layer) => groupRefs.some((g) => g.layer_index === layer.index && !g.paths);
+  const layerShift = (layer) => {
+    const g = groupRefs.find((x) => x.layer_index === layer.index && x.shift != null);
+    return g && isMoved(g.shift * fps) ? g.shift : null;
+  };
   const out = [];
   const matched = new Set();
   for (const bl of baseline.layers) {
     const cl = matchLayer(baseline, current, bl);
     if (!cl) {
-      if (!wholeLayer(bl)) out.push(`${bl.name} has no keys now`);
+      if (!wholeLayer(bl) && !groupRefs.some((g) => g.layer_index === bl.index && g.starts_only)) out.push(`${bl.name} has no keys now`);
       continue;
     }
     matched.add(cl.index);
+    const shift = layerShift(bl);
     for (const bp of bl.properties) {
       const cp = cl.properties.find((p) => p.path === bp.path);
-      const inside = inGroup(bl, bp.path);
+      const ref = refOf(bl, bp.path);
+      const inside = !!ref;
       if (!cp) {
         if (!inside) out.push(`${label(bl, bp)} is no longer animated`);
         continue;
@@ -117,12 +131,13 @@ export function otherChanges(baseline, current, groupRefs) {
       if (!!bp.expression_enabled !== !!cp.expression_enabled) {
         out.push(`${label(bl, bp)}: an expression was turned ${cp.expression_enabled ? "on" : "off"}`);
       }
-      if (inside) continue;
+      if (inside && !ref.starts_only) continue;
       if (bp.keys.length !== cp.keys.length) {
         out.push(`${label(bl, bp)} has ${cp.keys.length} keys now (it had ${bp.keys.length})`);
         continue;
       }
-      const moved = bp.keys.some((k, i) => Math.abs(k.time - cp.keys[i].time) > EPS);
+      const withLayer = shift != null && bp.keys.every((k, i) => Math.abs((cp.keys[i].time - k.time - shift) * fps) < HALF_FRAME);
+      const moved = !inside && !withLayer && bp.keys.some((k, i) => Math.abs(k.time - cp.keys[i].time) > EPS);
       if (moved && bp.keys.length === 1) {
         out.push(`${label(bl, bp)}: its single key moved from ${fmt(bp.keys[0].time)} to ${fmt(cp.keys[0].time)}`);
         continue;
