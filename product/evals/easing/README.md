@@ -206,3 +206,11 @@ the inner sides of the pair (Bezier at 33.33%) and leave the outer sides and all
 they were.
 
 **Judge input (2026-10-28):** `run.mjs` now gives the judge each tool result up to 16000 characters (was 6000). The cap hid the snapshot's side note from the judge in the anchor set and produced a false "guessed" failure; the same cut could hide long snapshot replies here. Results taken before this date were judged on the shorter cut.
+
+## Fix round 3 re-run (2026-10-28, `-223733`, $1.85)
+
+Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, speed graph's demo turn, easing's layer count, four check fixes). `--repeat 3` per command, majority passes. R-ONE-IDEA and the pacing rules (curriculum § 2) are in force. Results in the files named; no check or rubric was changed after seeing results.
+
+| Case | Result | Triage |
+|---|---|---|
+| 07 | 3/3 | Clean. The rb2 failure (`R-NAMES-LAYER`) did not recur, which is the layer-count fix working. |

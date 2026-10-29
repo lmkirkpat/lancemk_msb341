@@ -518,3 +518,22 @@ decline-answer tightening lands; the three runs above (0/3) stay on record again
 On `8a2405b` (the builder's tightened decline answers merged) with the corrected rubric and `pending_action_restated`.
 **3/3, pass.** Counted result for case 29 is this run; the earlier 0/3 (`-143550`) stays on record against the old
 rubric and check.
+
+## Re-baseline rb3 (T265, 2026-10-28, mentor at `7de3cc2`)
+
+One full run, no `--only`, 46 cases, mentor `7de3cc2` (fix round 3 on `main`). **41 of 46 (89%), $28.89**
+(`results/2026-10-28-231410.json`). Earlier: 27/44 (61%, 2026-10-27, `c853f9e`), then 37/46 (80.4%, `-121321`, after
+Phase 10). **SC-006 met:** above 80%, and every universal (hard-rule) check passed in all 46 cases, including
+`no_text_before_snapshot`, `no_pivot_in_frame`, `matte_not_hidden` and `no_number_or_tolerance`. R-ONE-IDEA and the pacing
+rules (TD 011 § 20) are in force and R-ONE-IDEA passed in the cases that failed otherwise. One run per case, no repeats.
+
+| Case | Failed on | Triage | Design line |
+|---|---|---|---|
+| 09 matte named | `say:eye` (turn 2 must match eye or visible) | **Check** (case script). The learner says "Reveal Matte should turn from its center", and the matte already does, so the mentor said so and asked for another place. The turn where the eye is mentioned is never reached. The case needs an off-centre place. | TD 011, the already-at-the-place case (section not checked) |
+| 11 one layer, one offer | `offers_needle`, `offer_is_last` (turn 2), `walks_through` (turn 3) | **Check** (stale turn numbers). § 20 moved the walk-through and the offer to turn 4. Turn 2 now ends on "press A, then Shift+P", and in turn 3 ("show me how") the mentor declined and handed the pending step back in one sentence, which is rule 3. | TD 011 § 20 sequence, curriculum § 2 rule 3 |
+| 23a watch offer, no | `offers_needle`, `offer_is_last` (turn 2) | **Check**, same cause as 11. `offered_once` and `no_offer_after_check` pass. | TD 011 § 20 turn 4 |
+| 23c watch offer, yes | `door_no_second_walkthrough` (turn 4 said "press Y") | **Check, with a small prompt question.** The script has the learner say yes in turn 3, before the offer exists (it is now in turn 4), so Door's walk-through had not been given yet and turn 4 is its first, not its second. But after a demo § 20 says the rest is handed back in one sentence, and turn 4 gave four. Fix the script first, then see whether it recurs. | TD 011 § 20 (W1, W2), curriculum § 2 "after a demonstration" |
+| 29 no number to type | R-AN-NO-NUMBER (place in words not repeated) | **Rubric.** The reply answered in one sentence, gave no number and handed A, Shift+P back. That is rule 3. The item asks for the place in words, which the pending step doesn't carry. R-ONE-IDEA passed. Case 29 passed 3/3 on the earlier rubric (`-145857`). | curriculum § 2 rule 3; TD 011 § 20 answered question 1 |
+
+No case failed on a prompt. Four of five trace to case scripts and checks written before the § 20 sequence moved the
+offer and the walk-through to turn 4; proposed in the hand-back, not changed here.

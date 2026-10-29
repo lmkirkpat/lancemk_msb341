@@ -324,3 +324,14 @@ SC-015 counts: runs with learner-visible text before the first snapshot call **0
 | 17 | 2 of 3 counted, 1 plumbing | Run 2: **plumbing**, the judge's reply could not be parsed ("unreadable judge reply"); every deterministic check passed and the visible judge text marked R-REVIEW-HANDS-ON as passing. Re-run once as 1 run (`-115906`): pass, $0.47. Counted in the SC-015 totals as 13 runs (the plumbing run included, it had clean transcripts) |
 
 **Judge input (2026-10-28):** `run.mjs` now gives the judge each tool result up to 16000 characters (was 6000). The cap hid the snapshot's side note from the judge in the anchor set and produced a false "guessed" failure; the same cut could hide long snapshot replies here. Results taken before this date were judged on the shorter cut.
+
+## Fix round 3 re-runs (2026-10-28, $7.49 in all)
+
+Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, speed graph's demo turn, easing's layer count, four check fixes). `--repeat 3` per command, majority passes. R-ONE-IDEA and the pacing rules (curriculum § 2) are in force. Results in the files named; no check or rubric was changed after seeing results.
+
+| Case | Result | Triage |
+|---|---|---|
+| 04 | 3/3 (`-225004`, $1.90) | Clean |
+| 08 | 2/3 (`-225142`, $1.82) | Run 2 failed `record_plain` ("so that" in the record). **Noise at this rate, but real leakage**: the record summaries in the other runs still carry "about 4 and 8 frames", which the record-summary rule (no times) rules out and the check doesn't see. Prompt, TD 010 § 15 / curriculum § 2 stage 5. |
+| 11 | **0/3** (`-225340`, $1.87) | Run 1 failed `record_plain` (the record's `next` names "Bar and Glow"). Runs 2 and 3 failed R-OFF-PASS: the check passed with `still_same` empty and the mentor credited the pass, then added a fault the check didn't list (Opacity "still starts at 0.5 s along with Position"), and the record's `next` says to stagger the starts. **Prompt.** The records also say "about 0 and 4 frames" and describe the method ("shortened", "shifted"). The mentor adds to the check's verdict instead of reporting it. |
+| 33 | 2/3 (`-225517`, $1.90) | Run 1: R-ONE-IDEA, the how-to ran to three sentences and Quick Offset was its own sentence rather than a clause. Borderline wording on the one-how-to rule; passes by majority. Rubric judgment, treat as noise until it repeats. |

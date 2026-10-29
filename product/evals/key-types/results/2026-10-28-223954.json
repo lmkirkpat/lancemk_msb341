@@ -1,0 +1,353 @@
+{
+  "run_at": "2026-10-29T04:39:54.303Z",
+  "options": {
+    "only": "15",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false
+  },
+  "partial": true,
+  "cost_usd": 2.55,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "15-review-not-passed",
+      "title": "A review that doesn't pass: hints, no reteach; recorded partial with the demo stated false",
+      "covers": [
+        "KT-l"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "blink-one-held.json": "live"
+      },
+      "hash": "9f424bbde63c8959066044d2f87905ee85a2357ab048889bff1a71614c0d009c",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "record_plain",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:no_offer",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "matches"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HINT",
+              "pass": true,
+              "reason": "In turn 4, after the check returned passed:false, the mentor said what was off and where (\"At about 3.07 s Cut is still partway see-through, so it still fades from 3 s to 3.1 s\") and asked the learner to look again; it gave no menu path, reteach, demo or offer to fix."
+            },
+            {
+              "item": "R-RECORD-HONEST",
+              "pass": true,
+              "reason": "In turn 5, record_lesson saved result \"partial\" with demo_used false (no demo ran in the review), the summary describes only the work with no numbers, method or names, and the mentor told the learner \"I've noted that for next time.\""
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time the mentor used is backed by tool results or the record: Cut's Opacity 3–3.1 s, frame_time 3.067, Blink Opacity at 1.4 s in extra_holds, Seal as a precomp, and \"a bit over a week ago\" for days_since_practiced 9."
+            }
+          ],
+          "cost": 0.8481036,
+          "session_id": "8c5a513d-abf0-44b9-b779-b4e07e599538",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: A bit over a week ago you held two of Blink's Opacity pairs so they snap. Want a quick review on this comp?\n\n### Turn 2: the project is an open comp\nLEARNER: Yes, let's do the review.\nMENTOR: Is anything here meant to snap, like a blink, an on/off, or a cut? Cut's Opacity changes at 3 s. Is that meant to snap on, or to fade? I can't see inside Seal yet because it's a precomp, so I'm not saying it's fine.\n\n### Turn 3: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"review\",\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"review\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Got it: Cut's Opacity, from 3 s to 3.1 s. Make it snap, then say done.\n\n### Turn 4: the project is an open comp\nLEARNER: I think it snaps now. Done.\nTOOL CALL key_types_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"verdict\": \"not_held\",\n      \"state\": \"eased\",\n      \"frame_time\": 3.067\n    }\n  ],\n  \"should_move_held\": [],\n  \"extra_holds\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"time\": 1.4\n    }\n  ],\n  \"other_changes\": [],\n  \"constant_speed\": null,\n  \"demo_undone\": false,\n  \"items\": {\n    \"held\": false,\n    \"none_should_move_held\": true,\n    \"constant_speed\": null\n  },\n  \"passed\": false\n}\nTOOL CALL preview_frame {\"time\":3.067,\"layer\":\"Cut\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-UdquUB-runtime/8c5a513d-abf0-44b9-b779-b4e07e599538/tool-results/mcp-ae-mentor-blob-1793248671402-3ja86f.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":3.067,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Not yet. At about 3.07 s Cut is still partway see-through, so it still fades from 3 s to 3.1 s.\n\nA hold also landed on Blink's Opacity at 1.4 s. Was that meant? Then have another look at Cut's pair and say done.\n\n### Turn 5: the project is an open comp\nLEARNER: I'm out of time, let's stop here.\nTOOL CALL record_lesson {\"skill\":\"keyframes.types\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice 2\",\"attempted\":\"Review: tried to hold 1 Cut Opacity pair\",\"result\":\"partial\",\"demo_used\":false,\"summary\":\"Picked the right on/off change to snap. At the one check the pair meant to snap was still fading, and a hold had landed on a different, already-practiced pair instead. Stopped before checking again.\",\"next\":\"Make Cut's Opacity pair snap by holding the key at the start of the pair, and check the extra hold on Blink's Opacity at 1.4 s was meant.\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Make Cut's Opacity pair snap by holding the key at the start of the pair, and check the extra hold on Blink's Opacity at 1.4 s was meant.\"\n  }\n}\nMENTOR: That's fine. You picked the right one to snap: Cut's Opacity at 3 s. Next time we'll start with that pair, which still fades, and the hold that landed on Blink at 1.4 s. I've noted that for next time.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "record_plain",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:no_offer",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "matches"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HINT",
+              "pass": true,
+              "reason": "After the check returned passed:false, Turn 4 says what is off and where ('Cut isn't snapping yet... 3 s to 3.1 s still fades. Look at the key at 3 s') with no reteach, no menu path, no demo and no offer to fix."
+            },
+            {
+              "item": "R-RECORD-HONEST",
+              "pass": true,
+              "reason": "Turn 5 records result 'partial' with demo_used false (no demo ran), the summary has no numbers, method, motive or layer names ('picked out an on/off change that should snap, but at the check it still faded'), and the learner is told 'I've noted that for next time.'"
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time used (Cut, Opacity, 3 s, 3.1 s, 3.07 s from frame_time 3.067, Seal, Blink at 1.4 s, Blink from the record) appears in the snapshot, check results or the learner record."
+            }
+          ],
+          "cost": 0.8466416,
+          "session_id": "007c12c8-67b8-461f-b48c-7d7302a4f985",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Last week you made Blink snap, holding both of its pairs. Want a quick review on this comp?\n\n### Turn 2: the project is an open comp\nLEARNER: Yes, let's do the review.\nMENTOR: Is anything here meant to snap, like a blink, an on/off, or a cut? Cut's Opacity changes at 3 s. Is that meant to snap, or to fade? I can't see inside Seal yet, so I'm not saying it's fine.\n\n### Turn 3: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"review\",\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"review\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Got it: Cut's Opacity, from 3 s to 3.1 s. Make it snap, then say done.\n\n### Turn 4: the project is an open comp\nLEARNER: I think it snaps now. Done.\nTOOL CALL key_types_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"verdict\": \"not_held\",\n      \"state\": \"eased\",\n      \"frame_time\": 3.067\n    }\n  ],\n  \"should_move_held\": [],\n  \"extra_holds\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"time\": 1.4\n    }\n  ],\n  \"other_changes\": [],\n  \"constant_speed\": null,\n  \"demo_undone\": false,\n  \"items\": {\n    \"held\": false,\n    \"none_should_move_held\": true,\n    \"constant_speed\": null\n  },\n  \"passed\": false\n}\nTOOL CALL preview_frame {\"time\":3.067,\"layer\":\"Cut\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-5pp3mq-runtime/007c12c8-67b8-461f-b48c-7d7302a4f985/tool-results/mcp-ae-mentor-blob-1793248728098-v13xd4.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":3.067,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: I couldn't get a usable picture of that frame, but your comp says Cut isn't snapping yet. At 3.07 s it's still partway see-through, so 3 s to 3.1 s still fades. Look at the key at 3 s.\n\nI also found a new hold on Blink's Opacity at 1.4 s. Did you mean to put that there?\n\n### Turn 5: the project is an open comp\nLEARNER: I'm out of time, let's stop here.\nTOOL CALL record_lesson {\"skill\":\"keyframes.types\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice 2\",\"attempted\":\"Review: tried to hold 1 Cut Opacity pair; a hold landed on a Blink Opacity key outside the focus\",\"result\":\"partial\",\"demo_used\":false,\"summary\":\"Review: picked out an on/off change that should snap, but at the check it still faded. A hold landed on a different key instead, and it's not yet clear whether that was meant.\",\"next\":\"Hold the key at the start of the Cut pair so it snaps, and check whether the extra Blink hold was meant.\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Hold the key at the start of the Cut pair so it snaps, and check whether the extra Blink hold was meant.\"\n  }\n}\nMENTOR: We can stop here. Cut still fades from 3 s to 3.1 s, so next time we'll start by making it snap and checking the extra hold on Blink. I've noted that for next time.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "review_no_demo",
+              "pass": true,
+              "detail": "0 demo calls in a review"
+            },
+            {
+              "check": "review_method_before_pass",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "record_plain",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:no_offer",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "matches"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REVIEW-HINT",
+              "pass": true,
+              "reason": "After the check returned passed:false, turn 4 names what is off and where ('Cut's Opacity still fades between 3 s and 3.1 s, so the key at 3 s isn't holding') and flags the extra hold on Blink's Opacity at 1.4 s. It does not reteach, name a menu path, demonstrate, offer to fix, or claim a pass."
+            },
+            {
+              "item": "R-RECORD-HONEST",
+              "pass": true,
+              "reason": "Turn 5's record_lesson call uses result 'partial' after the failed check and demo_used false, which is true because the review ran no demo. The summary has no numbers, method, motive or names ('the pair meant to snap still faded, and a hold had landed on a different layer's key'), and the mentor tells the learner 'I've noted where we left off.'"
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time matches tool output or the record: Cut's Opacity 3–3.1 s from target_pairs, Blink's Opacity at 1.4 s from extra_holds, the Seal precomp from left_out, and Blink's held Opacity pairs about a week ago from last_attempted and days_since_practiced 9."
+            }
+          ],
+          "cost": 0.8533698000000001,
+          "session_id": "ec2cb121-745e-4c3f-8ec8-dc18297d2167",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"mode_source\": \"review_due\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Last week you held Blink's Opacity pairs here so it snapped. Want a quick review on this comp?\n\n### Turn 2: the project is an open comp\nLEARNER: Yes, let's do the review.\nMENTOR: Cut's Opacity changes at 3 s. Is that meant to snap, like a blink, an on/off or a cut, or is it meant to fade? I can't see inside the Seal precomp yet, so I'm not saying it's fine.\n\n### Turn 3: the project is an open comp\nLEARNER: Cut should snap.\nTOOL CALL key_types_snapshot {\"mode\":\"review\",\"skill_options\":{\"focus\":[{\"layer\":\"Cut\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"review\",\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 9,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Cut\"\n  ],\n  \"targets\": [\n    \"3/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"from_time\": 3,\n      \"to_time\": 3.1,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"review\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Got it: Cut's Opacity, the pair from 3 s to 3.1 s. Make it snap, then say done.\n\n### Turn 4: the project is an open comp\nLEARNER: I think it snaps now. Done.\nTOOL CALL key_types_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"pairs\": [\n    {\n      \"id\": \"3/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Cut › Opacity 3–3.1 s\",\n      \"verdict\": \"not_held\",\n      \"state\": \"eased\",\n      \"frame_time\": 3.067\n    }\n  ],\n  \"should_move_held\": [],\n  \"extra_holds\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"time\": 1.4\n    }\n  ],\n  \"other_changes\": [],\n  \"constant_speed\": null,\n  \"demo_undone\": false,\n  \"items\": {\n    \"held\": false,\n    \"none_should_move_held\": true,\n    \"constant_speed\": null\n  },\n  \"passed\": false\n}\nTOOL CALL preview_frame {\"time\":3.067,\"layer\":\"Cut\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-Bau4TO-runtime/ec2cb121-745e-4c3f-8ec8-dc18297d2167/tool-results/mcp-ae-mentor-blob-1793248774420-bvrsoi.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":3.067,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: That one doesn't snap yet: Cut's Opacity still fades between 3 s and 3.1 s, so the key at 3 s isn't holding. A hold did land on Blink's Opacity at 1.4 s, so it looks like it went on Blink instead of Cut. Was that meant? If not, put the hold on Cut's key at 3 s and say done.\n\n### Turn 5: the project is an open comp\nLEARNER: I'm out of time, let's stop here.\nTOOL CALL record_lesson {\"skill\":\"keyframes.types\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice 2\",\"attempted\":\"Review: tried to hold 1 Cut Opacity pair; a hold landed on a Blink Opacity key instead\",\"result\":\"partial\",\"demo_used\":false,\"summary\":\"Picked out the on/off change that should snap. At the one check, the pair meant to snap still faded, and a hold had landed on a different layer's key instead.\",\"next\":\"Hold the key at the start of Cut's Opacity pair so it snaps, and check that no other layer picked up a hold by mistake.\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Hold the key at the start of Cut's Opacity pair so it snaps, and check that no other layer picked up a hold by mistake.\"\n  }\n}\nMENTOR: No problem, we'll stop here. Cut's Opacity still fades from 3 s to 3.1 s. There's also an extra hold on Blink's Opacity at 1.4 s, so check whether you meant to add it. I've noted where we left off. Next time, make Cut snap at 3 s.\n"
+        }
+      ]
+    }
+  ]
+}

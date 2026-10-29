@@ -297,3 +297,14 @@ SC-015 counts: runs with learner-visible text before the first snapshot call **0
 | 01, 08, 21, 22 | 3/3 each | Clean |
 
 **Judge input (2026-10-28):** `run.mjs` now gives the judge each tool result up to 16000 characters (was 6000). The cap hid the snapshot's side note from the judge in the anchor set and produced a false "guessed" failure; the same cut could hide long snapshot replies here. Results taken before this date were judged on the shorter cut.
+
+## Fix round 3 re-runs (2026-10-28, $8.44 in all)
+
+Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, speed graph's demo turn, easing's layer count, four check fixes). `--repeat 3` per command, majority passes. R-ONE-IDEA and the pacing rules (curriculum § 2) are in force. Results in the files named; no check or rubric was changed after seeing results. Case 03's turn 4 ("Arrive softly.") ran for the first time here.
+
+| Case | Result | Triage |
+|---|---|---|
+| 03 | **1/3** (`-224325`, $2.44) | Runs 1 and 3 failed `say:walks_through` (turn 4 must match Graph Editor / speed graph / Edit Speed Graph). Turn 3 ("Can you show me how?") answered with the walk-through (a numbered list in run 1, four numbered steps in run 3, with a preview frame), so turn 4 handed the step back without repeating it: "Shape Bar's End that way and say done". That is curriculum § 2 rule 3 (answer, then hand the same step back; never the walk-through a second time). Run 2 gave a reading question in turn 3 and the check matched in turn 4. **Check** (turn 4's requirement contradicts rule 3; it passes only when turn 3 did not carry the how-to). **Prompt** (smaller): turn 3 used numbered steps in 2 of 3 runs, where § 2 says how-to is prose, no numbered walk-through. The rubric was not judged on the failed runs. |
+| 05 | 3/3 (`-224515`, $2.61) | Clean |
+| 16 | 3/3 (`-224730`, $2.73) | Clean |
+| 23 | 3/3 (`-224821`, $0.66) | Clean |

@@ -294,3 +294,12 @@ Proposal (smallest): in `key-types-mentor/SKILL.md` first-lesson step, say the o
 `SKILL.md` first-lesson opening fixed (`e82a7d2`, merged into `evals-wave-a` as `fdf103e`): the opening turn is the snap question with the candidates, no explanation first. `--only 01 --repeat 3` (`2026-10-28-132047`): **3/3 pass**, $0.56. Every check and rubric item passed, `R-KT-INTENT-FIRST` included. The earlier 1/3 above stays as run.
 
 **Judge input (2026-10-28):** `run.mjs` now gives the judge each tool result up to 16000 characters (was 6000). The cap hid the snapshot's side note from the judge in the anchor set and produced a false "guessed" failure; the same cut could hide long snapshot replies here. Results taken before this date were judged on the shorter cut.
+
+## Fix round 3 re-runs (2026-10-28, $4.31 in all)
+
+Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, speed graph's demo turn, easing's layer count, four check fixes). `--repeat 3` per command, majority passes. R-ONE-IDEA and the pacing rules (curriculum § 2) are in force. Results in the files named; no check or rubric was changed after seeing results.
+
+| Case | Result | Triage |
+|---|---|---|
+| 15 | 3/3 (`-223954`, $2.55) | Clean |
+| 18 | **0/3** (`-224151`, $1.76) | **Prompt.** The check gave `wrong_side` for Blink's first pair (hold on the end key). All three runs said "The first pair snaps now, but too soon" and described a drop "just after 1 s" instead of 1.4 s; no tool result says that. The reply points at the right key (1 s), but it contradicts the verdict (R-KT-WRONG-SIDE, 3/3) and states an invented behaviour (R-NAMES-REAL, 2/3). Design line: TD 009 § 7 row 4 (wrong side: say which key holds, never call the pair done). The 18 check fix works (the deterministic checks passed in all three); the rubric is what fails. |

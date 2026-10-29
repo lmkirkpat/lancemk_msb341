@@ -520,3 +520,11 @@ No failures to triage. Earlier runs for these cases (15: 1/3 twice; 02: 0/3 twic
 section above; the 15 failures were a check bug and then the prompt's three-sentence decline, fixed by the cap; 23's one
 failure was the same three-sentence pattern. Three-run passes are a small sample, so the cap holding is likely, not proven.
 Case 02 now has a runner-scored result for the first time.
+
+## Re-baseline rb3 (T347, 2026-10-28): not run
+
+The full run was not started. Fix round 3's part 1 cost $22.09 (about double the $10 estimate, since `--repeat 3` triples
+each case) and anchor's full run $28.89, so $50.98 was spent, and the $25 estimate for this set would have passed the
+$70 cap. Earlier baseline stands: 25/38 (66%) on 2026-10-28 (`-125016` plus reruns, $25.84), then the pacing and
+fix-round re-runs above. R-ONE-IDEA and the pacing rules (TD 012 § 16) are in force. Cases 37, 39 and 40 still have no
+full-run result. Anchor's rb3 for comparison: 41/46 (89%).
