@@ -1,0 +1,237 @@
+// A local stand-in for the Claude Messages API, for the helper's tests only (spec 013 T005). It
+// speaks the streaming events from scripted responses and records every request, so tests can
+// check what the helper sent without a key or a network. The SDK reaches it through `baseURL`.
+//
+//   const svc = await startFakeService();
+//   svc.script(reply([thinking("…"), text("Hi."), toolUse("snapshot_project", {})], { stop_reason: "tool_use" }));
+//   … svc.requests[0].body …
+//   await svc.close();
+//
+// Scripted entries, consumed one per HTTP request (the SDK's own retries consume one each):
+//   reply(content, opts)            a streamed message; opts: stop_reason, stop_details, model, usage,
+//                                   delayMs (before headers), hang (never answer)
+//   failure(status, type, message)  a JSON error with that status (401, 403, 429, 529, billing …)
+//   drop(content, afterBlocks)      streams the first blocks, then cuts the connection
+//   errorEvent(type, content)       streams the blocks, then an SSE `error` event
+// An unscripted request gets a 500 the SDK won't retry, so a missing script fails loudly.
+
+import http from "node:http";
+
+let ids = 0;
+const nextId = (prefix) => `${prefix}_fake_${++ids}`;
+
+// ---------- content blocks ----------
+
+export const text = (t) => ({ type: "text", text: t });
+export const thinking = (t, signature) => ({ type: "thinking", thinking: t || "", signature: signature || `sig_${++ids}` });
+export const toolUse = (name, input, id) => ({ type: "tool_use", id: id || nextId("toolu"), name, input: input || {} });
+export const fallbackBlock = (from, to) => ({ type: "fallback", from: { model: from }, to: { model: to } });
+
+// ---------- scripted entries ----------
+
+const DEFAULT_USAGE = { input_tokens: 1000, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 50 };
+
+export function reply(content, opts = {}) {
+  return { kind: "reply", content, ...opts };
+}
+export function failure(status, type, message, headers) {
+  return { kind: "failure", status, type, message: message || type, headers: headers || {} };
+}
+export function drop(content, afterBlocks) {
+  return { kind: "drop", content, afterBlocks: afterBlocks || 0 };
+}
+export function errorEvent(type, content) {
+  return { kind: "error_event", type, content: content || [] };
+}
+
+// ---------- SSE ----------
+
+function sse(event, data) {
+  return `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+}
+
+function chunks(s, size) {
+  const out = [];
+  for (let i = 0; i < s.length; i += size) out.push(s.slice(i, i + size));
+  return out.length ? out : [""];
+}
+
+// → the SSE strings for one block at `index`.
+function blockEvents(block, index) {
+  const out = [];
+  if (block.type === "text") {
+    out.push(sse("content_block_start", { type: "content_block_start", index, content_block: { type: "text", text: "" } }));
+    for (const c of chunks(block.text, 8)) out.push(sse("content_block_delta", { type: "content_block_delta", index, delta: { type: "text_delta", text: c } }));
+  } else if (block.type === "thinking") {
+    out.push(sse("content_block_start", { type: "content_block_start", index, content_block: { type: "thinking", thinking: "", signature: "" } }));
+    if (block.thinking) out.push(sse("content_block_delta", { type: "content_block_delta", index, delta: { type: "thinking_delta", thinking: block.thinking } }));
+    out.push(sse("content_block_delta", { type: "content_block_delta", index, delta: { type: "signature_delta", signature: block.signature } }));
+  } else if (block.type === "tool_use") {
+    out.push(sse("content_block_start", { type: "content_block_start", index, content_block: { type: "tool_use", id: block.id, name: block.name, input: {} } }));
+    const json = JSON.stringify(block.input);
+    const half = Math.ceil(json.length / 2);
+    for (const part of [json.slice(0, half), json.slice(half)]) {
+      if (part) out.push(sse("content_block_delta", { type: "content_block_delta", index, delta: { type: "input_json_delta", partial_json: part } }));
+    }
+  } else {
+    out.push(sse("content_block_start", { type: "content_block_start", index, content_block: block }));
+  }
+  out.push(sse("content_block_stop", { type: "content_block_stop", index }));
+  return out;
+}
+
+function messageStart(entry, model) {
+  const usage = { ...DEFAULT_USAGE, ...(entry.usage || {}) };
+  return sse("message_start", {
+    type: "message_start",
+    message: {
+      id: nextId("msg"),
+      type: "message",
+      role: "assistant",
+      model,
+      content: [],
+      stop_reason: null,
+      stop_sequence: null,
+      usage: {
+        input_tokens: usage.input_tokens,
+        cache_creation_input_tokens: usage.cache_creation_input_tokens,
+        cache_read_input_tokens: usage.cache_read_input_tokens,
+        output_tokens: 1,
+      },
+    },
+  });
+}
+
+function messageEnd(entry) {
+  const usage = { ...DEFAULT_USAGE, ...(entry.usage || {}) };
+  const deltaUsage = { output_tokens: usage.output_tokens };
+  if (usage.iterations) deltaUsage.iterations = usage.iterations;
+  return [
+    sse("message_delta", {
+      type: "message_delta",
+      delta: { stop_reason: entry.stop_reason || "end_turn", stop_sequence: null, stop_details: entry.stop_details || null },
+      usage: deltaUsage,
+    }),
+    sse("message_stop", { type: "message_stop" }),
+  ];
+}
+
+// ---------- server ----------
+
+export async function startFakeService(opts = {}) {
+  const defaultModel = opts.model || "claude-opus-5-5";
+  const queue = [];
+  const requests = [];
+  const open = new Set();
+  const timers = new Set();
+
+  const server = http.createServer((req, res) => {
+    let raw = "";
+    req.on("data", (c) => (raw += c));
+    req.on("end", () => {
+      let body = null;
+      try {
+        body = raw ? JSON.parse(raw) : null;
+      } catch {
+        body = raw;
+      }
+      const path = req.url.split("?")[0];
+      requests.push({
+        method: req.method,
+        path,
+        headers: {
+          "anthropic-beta": req.headers["anthropic-beta"] || null,
+          "anthropic-version": req.headers["anthropic-version"] || null,
+          authorization: req.headers.authorization || null,
+          "x-api-key": req.headers["x-api-key"] || null,
+        },
+        body,
+        raw,
+      });
+      handle(req, res, path, body);
+    });
+  });
+
+  function sendJsonError(res, status, type, message, headers) {
+    res.writeHead(status, { "content-type": "application/json", "request-id": nextId("req"), ...headers });
+    res.end(JSON.stringify({ type: "error", error: { type, message }, request_id: nextId("req") }));
+  }
+
+  function later(ms, fn) {
+    const t = setTimeout(() => {
+      timers.delete(t);
+      fn();
+    }, ms);
+    timers.add(t);
+  }
+
+  function handle(req, res, path, body) {
+    if (req.method === "GET" && path.startsWith("/v1/models/")) {
+      const head = queue[0];
+      if (head && head.forModels) {
+        queue.shift();
+        if (head.kind === "failure") return sendJsonError(res, head.status, head.type, head.message, head.headers);
+      }
+      const id = decodeURIComponent(path.slice("/v1/models/".length));
+      res.writeHead(200, { "content-type": "application/json", "request-id": nextId("req") });
+      return res.end(JSON.stringify({ type: "model", id, display_name: id, created_at: "2026-01-01T00:00:00Z" }));
+    }
+    if (req.method !== "POST" || !path.startsWith("/v1/messages")) {
+      return sendJsonError(res, 404, "not_found_error", `fake service: no route ${req.method} ${path}`, { "x-should-retry": "false" });
+    }
+    const entry = queue.shift();
+    if (!entry) return sendJsonError(res, 500, "api_error", "fake service: no scripted response", { "x-should-retry": "false" });
+    if (entry.kind === "failure") return sendJsonError(res, entry.status, entry.type, entry.message, entry.headers);
+    if (entry.hang) return; // never answers; closed by close()
+
+    const model = entry.model || (body && body.model) || defaultModel;
+    const go = () => {
+      res.writeHead(200, { "content-type": "text/event-stream", "cache-control": "no-cache", "request-id": nextId("req") });
+      const parts = [messageStart(entry, model)];
+      const content = entry.content || [];
+      if (entry.kind === "drop") {
+        content.slice(0, entry.afterBlocks).forEach((b, i) => parts.push(...blockEvents(b, i)));
+        res.write(parts.join(""));
+        // Let the client read what was sent, then cut the connection mid-answer.
+        return later(20, () => res.socket && res.socket.destroy());
+      }
+      content.forEach((b, i) => parts.push(...blockEvents(b, i)));
+      if (entry.kind === "error_event") {
+        parts.push(sse("error", { type: "error", error: { type: entry.type, message: entry.type } }));
+        res.write(parts.join(""));
+        return res.end();
+      }
+      parts.push(...messageEnd(entry));
+      res.write(parts.join(""));
+      res.end();
+    };
+    if (entry.delayMs) later(entry.delayMs, go);
+    else go();
+  }
+
+  server.on("connection", (s) => {
+    open.add(s);
+    s.on("close", () => open.delete(s));
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const { port } = server.address();
+
+  return {
+    url: `http://127.0.0.1:${port}`,
+    requests,
+    // The message requests only (not key checks), in order.
+    get messageRequests() {
+      return requests.filter((r) => r.method === "POST" && r.path.startsWith("/v1/messages"));
+    },
+    script(...entries) {
+      queue.push(...entries);
+      return this;
+    },
+    pending: () => queue.length,
+    async close() {
+      for (const t of timers) clearTimeout(t);
+      for (const s of open) s.destroy();
+      await new Promise((resolve) => server.close(resolve));
+    },
+  };
+}
