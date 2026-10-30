@@ -1,0 +1,13 @@
+{
+  "name": "Skill",
+  "description": "Hand the lesson over to another mentor skill. Give the skill's name (for example ease-mentor) and, optionally, its arguments (for example review, or the layer names to focus on).",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "skill": { "type": "string", "description": "The mentor skill's name, such as ease-mentor." },
+      "args": { "type": "string", "description": "Optional arguments for the skill, such as review." }
+    },
+    "required": ["skill"],
+    "additionalProperties": false
+  }
+}
