@@ -95,3 +95,10 @@ test("the hash covers the settings, preamble, hand-over tool, main.mjs and lib/"
   }
   assert.equal(copyHash(), h0);
 });
+
+test("display updates isn't documented for Haiku 5.5: forced to omitted there; summarized is kept (S7)", () => {
+  assert.equal(validateSettings({ ...base(), model: "claude-haiku-5-5" }, prices).thinking_display, "omitted");
+  assert.equal(validateSettings({ ...base(), model: "claude-haiku-5-5", thinking_display: "summarized" }, prices).thinking_display, "summarized");
+  assert.equal(validateSettings({ ...base(), model: "claude-sonnet-5-5" }, prices).thinking_display, "updates");
+  assert.equal(validateSettings(base(), prices).thinking_display, "updates");
+});

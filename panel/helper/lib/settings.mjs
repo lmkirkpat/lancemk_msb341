@@ -15,8 +15,11 @@ export const DEFAULT_SETTINGS = path.join(HELPER_DIR, "settings.json");
 
 const EFFORTS = ["low", "medium", "high", "xhigh", "max"];
 const DISPLAYS = ["omitted", "summarized", "updates"];
-// Claude Haiku 5.5 has no server-side refusal fallback (research R10).
+// Claude Haiku 5.5 has no server-side refusal fallback (research R10), and the claude-api
+// reference doesn't list it for thinking display "updates" (Fable 5.1, Mythos 5.1, Fable 5,
+// Opus 5.5 and Sonnet 5.5 only); "summarized" and "omitted" are documented for it.
 const NO_FALLBACK = /^claude-haiku-5-5$/;
+const NO_UPDATES = /^claude-haiku-5-5$/;
 
 export class SettingsError extends Error {
   constructor(message) {
@@ -52,6 +55,7 @@ export function validateSettings(raw, prices) {
   }
   const s = { ...raw };
   if (NO_FALLBACK.test(s.model)) s.fallbacks = null;
+  if (NO_UPDATES.test(s.model) && s.thinking_display === "updates") s.thinking_display = "omitted";
   return Object.freeze(s);
 }
 
