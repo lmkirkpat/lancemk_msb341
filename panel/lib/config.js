@@ -25,6 +25,7 @@ function isExecutable(fs, p) {
 
 const RUNTIMES = ["b1", "a"];
 
+// opts: { fs, home, runtime } (runtime: overrides panel.json's, for dev/drive.js --runtime only).
 // → { ok: true, runtime, claude_path (B1 only), node_path, repo_path } or { ok: false, fix }
 function loadConfig(opts) {
   const fs = (opts && opts.fs) || nodeFs;
@@ -37,7 +38,8 @@ function loadConfig(opts) {
     return { ok: false, fix: `The panel isn't set up yet. ${FIX}` };
   }
   if (!cfg || cfg.version !== 1) return { ok: false, fix: `The panel's settings are from a different version. ${FIX}` };
-  const runtime = cfg.runtime === undefined ? "b1" : cfg.runtime;
+  const chosen = opts && opts.runtime !== undefined ? opts.runtime : cfg.runtime;
+  const runtime = chosen === undefined ? "b1" : chosen;
   if (!RUNTIMES.includes(runtime)) return { ok: false, fix: `The panel's settings aren't ones it knows. ${FIX}` };
   if (runtime === "b1" && (typeof cfg.claude_path !== "string" || !isExecutable(fs, cfg.claude_path))) {
     return { ok: false, fix: `The panel can't find Claude Code. Check that \`claude\` works in Terminal, then ${FIX.charAt(0).toLowerCase()}${FIX.slice(1)}` };

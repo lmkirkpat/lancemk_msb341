@@ -103,3 +103,12 @@ test("childPath puts the claude and node folders first", () => {
     "/a/b:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin",
   );
 });
+
+test("a runtime given to loadConfig overrides panel.json's (dev/drive.js --runtime)", () => {
+  const { home, good } = setup((g) => ({ version: 1, node_path: g.node_path, repo_path: g.repo_path }));
+  assert.equal(loadConfig({ home }).ok, false, "B1 by default: no claude_path");
+  assert.deepEqual(loadConfig({ home, runtime: "a" }), { ok: true, runtime: "a", node_path: good.node_path, repo_path: good.repo_path });
+  const b = setup((g) => ({ ...g, runtime: "a" }));
+  assert.equal(loadConfig({ home: b.home, runtime: "b1" }).runtime, "b1");
+  assert.equal(loadConfig({ home: b.home, runtime: "z" }).ok, false);
+});
