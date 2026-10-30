@@ -9,7 +9,8 @@
 //   - every tool is a server tool (unchanged, optionally `defer_loading: true`) or the hand-over tool;
 //   - every message is learner or panel text, a tool result, a tool use or the model's own block,
 //     or a `role: "system"` message holding a skill body or tool_addition / tool_removal blocks;
-//   - the runtime's own tool-result texts are exactly the five in FR-012 (items 3 to 6);
+//   - the runtime's own tool-result texts are exactly the six in FR-012 (items 3 to 6), and the two
+//     "didn't run" / "didn't finish" texts only ever carry is_error: true;
 //   - no text that isn't an allowlisted source mentions CLAUDE.md, a sprint or eval-fixture path,
 //     or anything under .claude/.
 // Node built-ins only.
@@ -22,6 +23,7 @@ export const SKILL_PATTERN = /^[a-z0-9][a-z0-9-]*-mentor$/;
 export const NOT_AVAILABLE = "That tool isn't available in this lesson.";
 export const NO_SUCH_SKILL = "That skill isn't available.";
 export const NOT_RUN = "That call didn't run.";
+export const NOT_FINISHED = "That call didn't finish, so it may or may not have changed the project.";
 export const HAND_OVER = "Skill";
 
 // Text that must never reach the model from anywhere but an allowlisted source.
@@ -142,11 +144,12 @@ export function checkBody(body, allow, { learnerTexts } = {}) {
           const texts = parts.filter((p) => p.type === "text").map((p) => p.text);
           const use = uses.get(b.tool_use_id);
           if (!use) fail(w, "a tool result with no matching tool use before it");
+          if (!b.is_error && texts.some((t) => t === NOT_RUN || t === NOT_FINISHED)) fail(w, "a didn't-run or didn't-finish text without is_error: true");
           const only = texts.length === 1 && parts.length === 1 ? texts[0] : null;
           if (use && use.name === HAND_OVER) {
             const name = String(use.input.skill || "").trim().replace(/^\//, "");
             const args = typeof use.input.args === "string" ? use.input.args.trim() : "";
-            const ok = only === NO_SUCH_SKILL || only === NOT_AVAILABLE || only === NOT_RUN || (allow.skillBodies.has(name) && only === loadedText(name, args));
+            const ok = only === NO_SUCH_SKILL || only === NOT_AVAILABLE || only === NOT_RUN || only === NOT_FINISHED || (allow.skillBodies.has(name) && only === loadedText(name, args));
             if (!ok) fail(w, "the hand-over tool's result isn't one of its fixed texts for this call");
           } else {
             for (const t of texts) scan(w, t);

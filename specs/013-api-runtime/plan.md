@@ -224,6 +224,16 @@ D3 changed the spec (spec › Amendments); three tasks were added:
 
 The amended contract (contracts/helper-protocol.md) is what T017 builds against.
 
+## Amendments after the evals and adapter merge (2026-10-30)
+
+`013-evals` (T022 to T029) and `013-adapter` (T017 to T020, T059, T061, and the review's fixes) are
+on `main` (`5963fef`). No task added. The spec, data model and both contracts now match the merged
+code (spec › Amendments after the merge): a call in flight when a turn fails is kept with a seventh
+fixed text (S1), the learner's text joins a history-ending user message (M1), the test-only
+`keychain: false`, `during: "start"`, the adapter's `turn_end` extras and backstop, and the eval
+contract's request-field list, hash files and README baseline line. T060 now also owes the eval
+engineer the real tool-change block shape.
+
 ## Complexity Tracking
 
 None.

@@ -35,11 +35,34 @@ command, and removed from every child's environment (helper, `claude` mentor on 
 5. Before deleting the temp home, the request log is checked by `lib/allowlist-check.mjs` (SC-008);
    a failure fails the case with check `allowlist`.
 
+*Amended 2026-10-30 (as merged, `5963fef`):*
+
+- A `tool_call` with no `tool_result` (a call the turn's failure answered with "That call didn't
+  run." or "That call didn't finish, …", helper-protocol › Events) stays in the transcript with
+  `ok` and `result` null; the turn has failed, so the case fails with check `run` anyway.
+- **The request-field allowlist.** A logged request may hold only these top-level fields: `model`,
+  `max_tokens`, `system`, `tools`, `messages`, `thinking`, `output_config`, `fallbacks`, `stream`,
+  `input_transformations`. Any other fails the check. A helper change that adds a request field
+  (T060's included) must add it here and in `lib/allowlist-check.mjs` in the same change, through
+  the eval engineer.
+- **Fixed runtime texts in tool results**: exactly FR-012 items 3 to 7. "That call didn't run." and
+  "That call didn't finish, so it may or may not have changed the project." pass only with
+  `is_error: true`.
+- **Mid-conversation tool changes** (`tool_addition` / `tool_removal` in a `role: "system"`
+  message) pass when every tool they name is a server tool or `Skill`. Until T060 settles the
+  service's block shape, the check reads a name from `name`, `tool_name`, `names` or `tools`. Once
+  T060 lands, the real shape goes into this contract and the allowlist test, and the other readings
+  come out.
+
 ## Results file
 
 Adds the fields in [data-model.md](../data-model.md) › Eval results. `--changed`'s hash adds
 `panel/helper/main.mjs`, `panel/helper/lib/*`, `settings.json`, `preamble.md` and `prices.json` on
 A runs only, so a model change invalidates earlier A passes and B1 hashes are unchanged.
+
+*Amended 2026-10-30 (as merged):* the hash also covers `skill-tool.json` (the hand-over tool's
+definition, FR-012 item 2), and on a `--settings` run it covers that file in place of
+`settings.json` (`product/evals/lib/runtime-a.mjs` `helperHashFiles`).
 
 ## Summary line
 
@@ -51,3 +74,8 @@ other-model turns: 0
 
 The baseline is the newest full (not `--only`) results file with `runtime` b1 or no `runtime`, unless
 the set's README names a different file, which wins.
+
+*Amended 2026-10-30 (as merged, `product/evals/lib/compare.mjs`):* the README names it with one
+line anywhere in the file, `A-comparison baseline: results/<file>.json` (backticks and the
+`results/` prefix optional). If the named file isn't in the set's `results/`, the newest full B1
+file is used. A `--settings` run (`non_baseline: true`) is never picked as the newest.

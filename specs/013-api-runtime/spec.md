@@ -9,7 +9,10 @@ recommended (see Resolved Questions). Q1 is recorded in `decisions/010`. Plan an
 2026-10-30 ([plan.md](plan.md), [tasks.md](tasks.md)); the preamble approved the same day. Amended
 2026-10-30 after the `013-helper` build and review (merged `d934115`): the builder's decisions D1 to
 D3 and the review's smaller items, listed under [Amendments](#amendments-2026-10-30-after-the-013-helper-review);
-four follow-up questions answered the same day (Resolved Questions 6 to 9).
+four follow-up questions answered the same day (Resolved Questions 6 to 9). Amended again
+2026-10-30 after `013-evals` and `013-adapter` merged (`5963fef`): the builder's decisions on review
+S1 and M1 and the merged code's protocol, listed under
+[Amendments after the merge](#amendments-2026-10-30-after-the-013-evals-and-013-adapter-merge).
 
 **Input**: Cockpit task, sprint 4 (`sprints/sprint-4-plan.md` › Done looks like: "The option A
 runtime built, with the evals moved onto it"). "The panel calls the Claude API directly instead of
@@ -244,10 +247,14 @@ both match their results before this feature.
   back only the incomplete tail (FR-015, D1, amended 2026-10-30), so a retry never sends half an
   answer back, and a demonstration or a `record_lesson` that already ran stays in the history: the
   mentor still knows it demonstrated, and the one-demo rule holds after a failed turn. A turn that
-  ends at the step limit keeps everything, as it already did.
+  ends at the step limit keeps everything, as it already did. A call still running when the turn
+  fails (a timeout, or `ae-mentor` exiting mid-call) is answered "That call didn't finish, so it may
+  or may not have changed the project." and kept, even as the answer's first call (amended
+  2026-10-30, review S1).
 - **The model's answer is cut off inside a tool call** (`max_tokens` reached while a call's input
   was being written). The call is never run, the incomplete answer is taken back, and the turn ends
   failed with no error event, as the step limit does (added 2026-10-30, `panel/helper/lib/loop.mjs`).
+  An answer with no tool call cut off at `max_tokens` is kept and the turn ends `ok` (FR-015).
 - **The service refuses a request** (a safety refusal). The turn ends with a plain "the mentor
   couldn't answer that; try rephrasing" message, and the refusal is logged with its category, never
   the learner's text.
@@ -335,10 +342,14 @@ both match their results before this feature.
      <args>" (the skill's name and the arguments the model itself passed);
   4. "That skill isn't available." (a hand-over to a skill that can't be loaded);
   5. "That tool isn't available in this lesson." (a call to a tool that isn't available, FR-005);
-  6. "That call didn't run." (a call that didn't run because the turn failed after an earlier call
-     in the same answer ran, FR-015).
+  6. "That call didn't run." (a call that never started because the turn failed after an earlier
+     call in the same answer ran or was in flight, FR-015);
+  7. "That call didn't finish, so it may or may not have changed the project." (a call that was
+     sent to `ae-mentor` and was still running when the turn failed, FR-015).
 
-  Items 2 to 5 approved 2026-10-30 (D3, review S8); item 6 approved 2026-10-30 (resolved question 7). None of it may hold a teaching rule (what to
+  Items 6 and 7 always go back with `is_error: true`. Items 2 to 5 approved 2026-10-30 (D3, review
+  S8); item 6 approved 2026-10-30 (resolved question 7); item 7 approved 2026-10-30 (the builder's
+  decision on review S1 after the `013-adapter` build). None of it may hold a teaching rule (what to
   teach, when to demonstrate, how to grade, what to record); if a skill needs a rule, it goes in
   `SKILL.md` through its owner, not here. Adding or changing any of it is a builder approval plus a
   change to this list and to the allowlist check (FR-016, T023).
@@ -368,24 +379,39 @@ both match their results before this feature.
      model with no tool call, or an answer with tool calls together with the message that returns a
      result for every one of those calls. When a turn fails, the history keeps the learner's message
      and every complete exchange that followed it, and takes back only what comes after the last
-     one: an answer that was cut off, refused or never finished, or calls whose results weren't all
-     returned. If a call in an answer already ran when the turn failed, that answer is completed
-     instead of taken back: the calls that ran keep their results, and each call that didn't run
-     gets an error result "That call didn't run." (FR-012). If no exchange completed, the learner's
+     one: an answer refused or never finished, an answer cut off inside a tool call (`max_tokens`
+     reached while a call's input was being written), or calls whose results weren't all returned.
+     An answer with no tool call that's cut off at `max_tokens` isn't taken back: it's a complete
+     answer, kept, and the turn ends `ok` (amended 2026-10-30 to match the code). If a call in an
+     answer already ran, or was still running, when the turn failed, that answer is completed
+     instead of taken back: the calls that ran keep their results; the call still running when the
+     turn failed (the turn timed out, or `ae-mentor` exited mid-call) gets the error result "That
+     call didn't finish, so it may or may not have changed the project."; and each call that never
+     started gets the error result "That call didn't run." (both `is_error: true`, FR-012 items 6
+     and 7). This holds even when the call in flight is the answer's first, because it may have
+     changed the project (the builder's decision on review S1, 2026-10-30). A call `ae-mentor`
+     wasn't running to take counts as never started. If no exchange completed, the learner's
      message is taken back too, so a retry doesn't send it twice (resolved questions 6 and 7).
-     Whatever a kept exchange did (a demonstration, `record_lesson`, a hand-over) stays in force. A turn that hits the step limit ends on a complete exchange, so nothing is
-     taken back.
+     Whatever a kept exchange did (a demonstration, `record_lesson`, a hand-over) stays in force. A
+     turn that hits the step limit ends on a complete exchange, so nothing is taken back.
   2. **A handed-over skill's text, when the reply right after it is empty** (review fix M1): it's
      taken back and goes in again before the next request.
   3. **After a server-side fallback** mid-answer, the declined attempt's reasoning and tool-call
      blocks aren't sent back, as the service requires (its fallback echo rule; research R10); the
      answer that was served is sent back as received.
 
+  **Never two user messages in a row** (review fix M1 as built, amended 2026-10-30). When the
+  history ends with a user message (a kept failure's tool results, the step limit, or an empty reply
+  after a hand-over), the learner's or panel's next text goes into that message as a text block
+  after its `tool_result` blocks, not as a new message. A later turn that completes nothing takes
+  back only that added block (item 1), never the tool results it was added to.
+
 **Isolation (what replaces the runtime folder)**
 
 - **FR-016**: On A, everything the model receives MUST come from an allowlist: the allowlisted
-  runtime text (FR-012: the preamble, the hand-over tool's definition, its three fixed results and
-  "That call didn't run."),
+  runtime text (FR-012: the preamble, the hand-over tool's definition, its three fixed results,
+  "That call didn't run." and "That call didn't finish, so it may or may not have changed the
+  project."),
   the server's instructions (FR-011), the `SKILL.md` body of the starting skill and of any skill
   handed over to (FR-010, FR-014), the server's tool definitions (FR-005, including hidden ones), the
   mid-conversation messages that make tools available or unavailable by name (FR-014), the
@@ -433,7 +459,11 @@ both match their results before this feature.
   a complete `text` event per block, and `tool_call` emitted once the model's whole answer is in,
   only for calls that will run (never for a call from an attempt the service declined before a
   fallback, or from an answer cut off mid-call), so the panel never shows a call that didn't happen
-  (amended 2026-10-30, review S6; research R9). The hand-over tool's own call isn't emitted, as B1
+  (amended 2026-10-30, review S6; research R9). "Will run" means the helper will try it: a call to
+  a tool that isn't available still gets its `tool_call` (and its error `tool_result`), and a call
+  the turn's failure answers with "That call didn't run." or "That call didn't finish, …" keeps its
+  `tool_call` and gets no `tool_result` (clarified 2026-10-30 to match the merged code,
+  `panel/helper/lib/loop.mjs` and contracts/helper-protocol.md). The hand-over tool's own call isn't emitted, as B1
   emits only `ae-mentor` calls. Spec 003 SC-004's "first sign of the mentor working" clock still
   starts at the first `text_delta` or `tool_call`. Reasoning blocks are never shown.
 - **FR-023**: Each lesson's conversation MUST be saved after each complete exchange to one file in
@@ -683,6 +713,11 @@ after the `013-helper` review (they were OQ-1 to OQ-4). The spec above is writte
    taken back: calls that ran keep their results, and each call that didn't run gets the error
    result "That call didn't run.", approved as runtime text (FR-012, FR-015, FR-016, T023). Why: a
    demo that ran must stay in the history, which is the case D1 exists for. T059 tests it.
+   *Amended 2026-10-30 (the builder's decision on review S1):* a call that was still running when
+   the turn failed (timeout, or `ae-mentor` exiting mid-call) gets "That call didn't finish, so it
+   may or may not have changed the project." (`is_error: true`, FR-012 item 7), and completes the
+   answer even when it's the answer's first call, since AE may have changed. "That call didn't
+   run." stays for calls that never started.
 8. **The history check after D2** (was OQ-3). On Opus 5.5 and Sonnet 5.5, `error` for the whole
    lesson once T060 is built, so any edit still fails loudly; `drop_block` stays only for Haiku 5.5's
    swap fallback (FR-021a, T060).
@@ -707,3 +742,20 @@ smaller items, written in to match what was built.
 | S6 | `tool_call` once the whole answer is in, only for calls that will run | FR-022, research R9 |
 | S7 | Thinking display `updates` (B1's, T001) forced to `omitted` on Haiku 5.5; `max_tokens` 32000 | data-model › Runtime settings |
 | Other | Every `ANTHROPIC_*` variable stripped (R3); `skill-tool.json` in the settings hash; the protocol's test-only `base_url`, `bad_command`, `not_implemented`, `turn_end` extras, missing-key and server-start retries (contracts/helper-protocol.md); `install.sh` without Claude Code on A (T061); T037's scrubber note; T016's checkpoint and the three real-service unknowns | research, data-model, contracts, tasks |
+
+## Amendments 2026-10-30 (after the `013-evals` and `013-adapter` merge)
+
+The eval runners on A (T022 to T029), the A adapter and panel wiring (T017 to T020, T059, T061) and
+the review fixes merged to `main` (`5963fef`). The builder approved S1 and M1 as below; the rest
+writes the merged code's protocol into the contracts.
+
+| ID | What changed | Where |
+|---|---|---|
+| S1 (builder's decision) | A call still running when the turn fails gets "That call didn't finish, so it may or may not have changed the project." (`is_error: true`) and completes the answer, even as its first call; "That call didn't run." stays for calls that never started. Approved runtime text item 7 | FR-012, FR-015, FR-016, Edge Cases, Resolved Question 7, data-model › Lesson conversation, T023 |
+| M1 (as built) | Never two user messages in a row: the learner's next text joins a history-ending user message as a text block after its `tool_result` blocks; a later turn that completes nothing takes back only that block | FR-015, data-model › Lesson conversation |
+| FR-015 item 1 | Narrowed: an answer cut off at `max_tokens` is taken back only when it's cut off inside a tool call; a text-only one is kept and the turn ends `ok` | FR-015, Edge Cases |
+| S3 (helper, panel) | `start` takes a test-only `keychain: false`, accepted only with a local `base_url`; `drive.js --fault` and the panel's tests use it, so no fault run or test reads the real Keychain | contracts/helper-protocol.md, T040 |
+| S5 (helper, adapter) | The start command's own `error` carries `during: "start"`, so the adapter tells it from a turn's | contracts/helper-protocol.md |
+| S6 (adapter) | The adapter's backstop (30 s past the helper's 5-minute timeout) ends the turn as `process_exited` and stops the helper | contracts/helper-protocol.md |
+| Adapter events | The A adapter's `turn_end` carries the helper's extras plus `error_kind` and, on the first turn, `start_ms`; `tool_call` carries `input`. Noted against spec 003's adapter contract, which this spec doesn't edit | contracts/helper-protocol.md › The A adapter against spec 003's contract |
+| Evals | `skill-tool.json` in the `--changed` hash; the request-field allowlist; the README's `A-comparison baseline:` line; `non_baseline`, `settings_file` and `cost_unknown_turns` in results; the real tool-change block shape owed by T060 | contracts/eval-runtime.md, data-model › Eval results, T060 |

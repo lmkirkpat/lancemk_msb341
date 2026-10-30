@@ -222,6 +222,7 @@ fields, and the panel only needs the call's start.
 | `ae-mentor` won't start or exits | spawn error, `initialize` failure, exit | `start_failed` | `start_failed` |
 | 12 model steps | the step counter | none: `turn_end { ok: false }` | Claude Code's `error_max_turns` result → `turn_end { ok: false }` |
 | Helper exits | adapter sees the process close | `process_exited` | `process_exited` |
+| Helper stops answering (added 2026-10-30, as merged) | the adapter's backstop, 30 s past the 5-minute turn timeout; it stops the helper | `process_exited` | none |
 
 Messages are fixed plain strings chosen by kind (contracts/helper-protocol.md), never built from
 service text. Service text that reaches a log is scrubbed of anything shaped like a key

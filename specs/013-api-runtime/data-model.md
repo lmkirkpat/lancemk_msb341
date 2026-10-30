@@ -61,8 +61,20 @@ on each `turn_end`. Rebuilt only at lesson start and at a hand-over.
   hand-over system messages between them). When a turn fails, the incomplete tail after the last
   complete exchange is taken back; complete exchanges from the failed turn stay, so a demonstration
   or `record_lesson` that ran is still there next turn. If nothing in the failed turn completed, the
-  learner's message comes off too (spec resolved question 6). If a call in an answer already ran, that answer is completed instead: each call that didn't run gets the error result "That call didn't run." (resolved question 7). The only other removal: a hand-over's skill-body
-  system message taken back when the reply right after it is empty (review fix M1).
+  learner's message comes off too (spec resolved question 6). If a call in an answer already ran,
+  or was still running, when the turn failed, that answer is completed instead: the call in flight
+  gets the error result "That call didn't finish, so it may or may not have changed the project."
+  and each call that never started gets "That call didn't run." (both `is_error: true`; resolved
+  question 7, amended 2026-10-30 for review S1). A call in flight completes the answer even when
+  it's the first. An assistant message with no tool use cut off at `max_tokens` is a complete
+  exchange; one cut off inside a tool use is the incomplete tail. The only other removal: a
+  hand-over's skill-body system message taken back when the reply right after it is empty (review
+  fix M1).
+- **No two user messages in a row** (M1 as built, amended 2026-10-30). When the history ends with a
+  user message (a kept failure's tool results, the step limit, or an empty reply after a hand-over),
+  the next learner or panel text is added to that message as a text block after its `tool_result`
+  blocks. A later turn that completes nothing removes only that added block (the take-back works at
+  block level on the last kept message).
 - Image data in tool results is replaced on disk by `{ "frame_file": "panel-conversation-frames/<name>.png" }`
   and restored from the file when the conversation is loaded.
 - Written (temp file and rename) after each complete exchange: a turn that fails mid-answer saves
@@ -81,13 +93,20 @@ Added to spec 003's entry, still with no text: `runtime` (`b1` | `a`; missing on
 `model` (the model that answered), `effort`, `settings_hash`, `tokens` `{ input, cache_write,
 cache_read, output }`, `other_model` (true when the answer came from a model other than settings'),
 `error_kind` (or null), `start_ms` (A, a lesson's first turn only: helper spawn to ready, for
-`decisions/010`'s start-up signal). B1 lines get `runtime: "b1"` only.
+`decisions/010`'s start-up signal). B1 lines get `runtime: "b1"` only. On A, `error_kind` and
+`start_ms` come from the adapter's `turn_end` (it adds them; the helper's `turn_end` carries
+neither, contracts/helper-protocol.md, amended 2026-10-30).
 
 ## Eval results: new fields (FR-029, FR-030, FR-033)
 
 Top level: `runtime`, `model`, `effort`, `settings_hash`, `prompt_hash` per skill, `other_model_turns`
 (count), `baseline` `{ file, passed, total }` and `vs_baseline` `{ b1_pass_a_fail[], b1_fail_a_pass[] }`.
 Old files without `runtime` are B1.
+
+*Amended 2026-10-30 (as merged, `product/evals/lib/ab.mjs` `resultFields`):* also `cost_unknown_turns`
+(turns whose cost the service never reported), `non_baseline` (true for a `--settings` run, which is
+never picked as a baseline) and `settings_file` (its name, only on such a run). B1 runs now write
+`runtime: "b1"`. Each A case also records its `allowlist` result.
 
 ## Equivalence record (each set's `README.md` › Option A; FR-033, FR-035)
 

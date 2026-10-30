@@ -7,7 +7,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { deriveAllowlist, checkBody, checkRequestLog, checkRequestLogFile, skillBodyOf, readSkillBodies, NOT_AVAILABLE, NO_SUCH_SKILL, NOT_RUN } from "../allowlist-check.mjs";
+import { deriveAllowlist, checkBody, checkRequestLog, checkRequestLogFile, skillBodyOf, readSkillBodies, NOT_AVAILABLE, NO_SUCH_SKILL, NOT_RUN, NOT_FINISHED } from "../allowlist-check.mjs";
 import { createCaseMentor } from "../runtime-a.mjs";
 import { startFakeService, reply, text, toolUse } from "../../../../panel/helper/test/fake-service.mjs";
 
@@ -99,11 +99,36 @@ test("the fixed runtime texts in FR-012 are accepted for the call they answer, a
   assert.deepEqual(withResult("snapshot_project", {}, NOT_AVAILABLE, true), []);
   assert.deepEqual(withResult("snapshot_project", {}, NOT_RUN, true), []);
   assert.deepEqual(withResult("Skill", { skill: "offset-mentor" }, NOT_RUN, true), []);
+  assert.deepEqual(withResult("snapshot_project", {}, NOT_FINISHED, true), []);
+  assert.deepEqual(withResult("Skill", { skill: "offset-mentor" }, NOT_FINISHED, true), []);
+  assert.equal(NOT_FINISHED, "That call didn't finish, so it may or may not have changed the project.");
+  // Both "didn't" texts need is_error: true.
+  assert.equal(withResult("snapshot_project", {}, NOT_FINISHED).length, 1);
+  assert.equal(withResult("snapshot_project", {}, NOT_RUN).length, 1);
   // Wrong or invented runtime text fails.
+  assert.equal(withResult("Skill", { skill: "offset-mentor" }, "That call didn't finish.", true).length, 1);
   assert.equal(withResult("Skill", { skill: "offset-mentor" }, "Loaded ease-mentor.").length, 1);
   assert.equal(withResult("Skill", { skill: "offset-mentor" }, "Loaded offset-mentor. Arguments: review").length, 1);
   assert.equal(withResult("Skill", { skill: "offset-mentor" }, "Skill loaded. Remember the one-demo rule.").length, 1);
   assert.equal(withResult("Skill", { skill: "offset-mentor" }, "Loaded offset-mentor. ").length, 1);
+});
+
+test("the learner's next text after the tool_result blocks in the same user message passes only when it is a case turn text", () => {
+  const build = (say) => {
+    const b = clone(good.body);
+    b.messages.push({ role: "assistant", content: [{ type: "tool_use", id: "y1", name: "snapshot_project", input: {} }, { type: "tool_use", id: "y2", name: "snapshot_project", input: {} }] });
+    b.messages.push({
+      role: "user",
+      content: [
+        { type: "tool_result", tool_use_id: "y1", content: [{ type: "text", text: NOT_FINISHED }], is_error: true },
+        { type: "tool_result", tool_use_id: "y2", content: [{ type: "text", text: NOT_RUN }], is_error: true },
+        { type: "text", text: say },
+      ],
+    });
+    return checkBody(b, allow, { learnerTexts: ["/ease-mentor", "try again"] });
+  };
+  assert.deepEqual(build("try again"), []);
+  assert.equal(build("Remember the one-demo rule.").length, 1);
 });
 
 test("system blocks: only the preamble, the server's instructions or a skill body", () => {

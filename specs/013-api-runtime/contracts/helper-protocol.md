@@ -14,13 +14,14 @@ of only `PATH=/usr/bin:/bin:/usr/sbin:/sbin`, `HOME`, `TZ` (if set). Nothing els
 
 | Command | Fields | Effect |
 |---|---|---|
-| `start` | `session_id`, `resume` (bool), `home`, `mcp_config` (path to `.mcp.json`), `skills_dir`, `fixture_env` (object, evals only: passed to `ae-mentor`), `key` (evals only, R11), `request_log` (path, evals only), `settings_file` (evals only; default `panel/helper/settings.json`), `base_url` (tests only, see below) | Read settings, read the key, start `ae-mentor`, load the conversation if `resume`. Replies `ready` or `error`. `session_id`, `mcp_config` and `skills_dir` are required. A second `start` gets `error bad_command` |
+| `start` | `session_id`, `resume` (bool), `home`, `mcp_config` (path to `.mcp.json`), `skills_dir`, `fixture_env` (object, evals only: passed to `ae-mentor`), `key` (evals only, R11), `request_log` (path, evals only), `settings_file` (evals only; default `panel/helper/settings.json`), `base_url` (tests only, see below), `keychain` (tests only, `false` only, with a local `base_url`; added 2026-10-30) | Read settings, read the key, start `ae-mentor`, load the conversation if `resume`. Replies `ready` or `error`. `session_id`, `mcp_config` and `skills_dir` are required. A second `start` gets `error bad_command` |
 | `send` | `text`, `kind` | One turn. Refused with `error { kind: "busy" }` if a turn is in flight |
 | `stop` | | End the turn in flight (no save), stop `ae-mentor`, exit 0 |
 | `key_check` | `key`? | Needs no `start`. Replies `key_status`. Makes one free request (R11) |
 
 A `start` without `key` makes the helper read the Keychain item (service `Knack`, account
-`anthropic-api-key`). The key is never echoed in any reply.
+`anthropic-api-key`), unless it has `keychain: false` (tests only, below). The key is never echoed
+in any reply.
 
 *Amended 2026-10-30 (review; must be in before T017, the A adapter):*
 
@@ -39,6 +40,19 @@ A `start` without `key` makes the helper read the Keychain item (service `Knack`
   (spec 003's rule: say nothing alarming).
 - **`send` before a successful `start`**: `error start_failed` and `turn_end { ok: false }`.
 
+*Amended 2026-10-30 (after the `013-adapter` merge, `5963fef`; review S3, S5):*
+
+- **`keychain: false` is test-only.** A `start` with `keychain: false` never reads the Keychain: the
+  key is the start command's `key`, or none. It's accepted only together with a `base_url` (which
+  must be local, above); `keychain: false` without one, or any other `keychain` value, fails `start`
+  with `start_failed`. `panel/dev/drive.js --fault` and the panel's tests send it, so no fault run
+  or test reads the real Keychain or raises its access dialog. **The adapter never sends it**;
+  neither do the eval runners.
+- **The start command's own errors carry `during: "start"`**: a missing required field, a
+  `base_url` or `keychain` that isn't allowed, unreadable settings or runtime text, and `ae-mentor`
+  failing to start. The adapter uses it to tell the start's error from a turn's. A second `start`'s
+  `bad_command` and the error for a `send` before a successful `start` don't carry it.
+
 ## Events (helper → adapter)
 
 The adapter contract's events, unchanged in meaning, plus fields the panel may ignore:
@@ -49,15 +63,41 @@ The adapter contract's events, unchanged in meaning, plus fields the panel may i
 | `turn_start` | `{ kind, at }` |
 | `text_delta` | `{ text }` |
 | `text` | `{ text }` |
-| `tool_call` | `{ id, name, input }`, sent once the model's whole answer is in, only for calls that will run: never for a call from an attempt declined before a fallback or an answer cut off mid-call, and never for the hand-over tool (research R9, amended 2026-10-30) |
+| `tool_call` | `{ id, name, input }`, sent once the model's whole answer is in, only for calls that will run: never for a call from an attempt declined before a fallback or an answer cut off mid-call, and never for the hand-over tool (research R9, amended 2026-10-30). A call the turn's failure leaves answered with a fixed text ("That call didn't run." or "That call didn't finish, so it may or may not have changed the project.") still got its `tool_call` and gets no `tool_result` (amended 2026-10-30, review S1); a call to a tool that isn't available gets both |
 | `tool_result` | `{ id, name, ok, json?, text?, images[] }` |
 | `turn_end` | `{ ok, cost_usd, wait_ms, first_event_ms, total_ms, kind, runtime, model, effort, settings_hash, tokens, other_model, steps, skill, prompt_hash }`. `steps`: model requests in the turn (12 when it hit the limit); `skill`: the active skill after the turn (null if none loaded); `prompt_hash`: the lesson prompt's hash (data-model). `cost_usd` is `null` when a request was billed but its counts never came, and `0` when no request was made |
-| `error` | `{ kind, message }` |
+| `error` | `{ kind, message, during? }` (`during: "start"` only on the start command's own errors, above) |
 | `key_status` | `{ status: "works" \| "rejected" \| "out_of_credit" \| "offline" \| "no_key" }` |
 | `skill_loaded` | `{ skill }` on a hand-over, by the hand-over tool or by a message starting with another mentor skill's command (log only) |
 
 The adapter times `wait_ms` and `first_event_ms` itself from the events it sees, as B1's adapter
 does, so the SC-004 clock includes the helper's own start. `exit` comes from the process closing.
+
+## The A adapter against spec 003's contract (added 2026-10-30, as merged)
+
+Spec 003's `contracts/mentor-adapter.md` is unchanged; this spec doesn't edit it. What
+`panel/lib/adapter-api.js` emits beyond it, all ignorable by a panel written to 003's contract:
+
+- **`turn_end`**: 003's `{ ok, cost_usd, wait_ms, first_event_ms, total_ms }` (its own timings, as
+  above), plus `kind`, the helper's extras passed on as they come (`runtime`, `model`, `effort`,
+  `settings_hash`, `tokens`, `other_model`, `steps`, `skill`, `prompt_hash`), `error_kind` (the
+  kind of the turn's shown `error`, or null) and, on the lesson's first turn only, `start_ms`
+  (spawn to the helper's `ready`; absent when starting ended in an error). The helper's own
+  `turn_end` carries neither `error_kind` nor `start_ms`; the adapter adds them.
+- **`tool_call`** carries `input` (003 lists `{ id, name }`).
+- **`skill_loaded`** and **`key_status`** are passed on; `ready` and the helper's `turn_start` are
+  not (the adapter sends its own `turn_start` when it accepts a `send`).
+- **`error`** is re-emitted as `{ kind, message }` (no `during`). Kinds beyond 003's: the A kinds in
+  the table below. `busy`, `bad_command` and `not_implemented` are logged, never emitted. An
+  `error` with `during: "start"` ends starting; if a turn is already waiting, it isn't shown (the
+  turn reports its own error).
+- **The backstop** (review S6): if the helper hasn't ended a turn 30 seconds after its own
+  5-minute timeout (5 min 30 s from `send`), the adapter emits `error process_exited` and
+  `turn_end { ok: false, error_kind: "process_exited" }`, and stops the helper (SIGTERM, then
+  SIGKILL after 3 s). The lesson is over: the message says to start it again, and the panel offers
+  Start once `exit` arrives.
+- **The helper's process failing to spawn**: `error start_failed`, and `turn_end { ok: false }` if
+  a turn was waiting.
 
 ## Error kinds and the panel's wording
 
