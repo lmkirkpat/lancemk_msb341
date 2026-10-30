@@ -29,6 +29,9 @@ export const NO_SUCH_SKILL = "That skill isn't available.";
 // A call that didn't run because the turn failed after an earlier call in the same answer ran
 // (FR-012 item 6, FR-015, spec resolved question 7).
 export const DIDNT_RUN = "That call didn't run.";
+// A call that was still running when the turn failed: sent to ae-mentor, so AE may have changed
+// (builder's decision on review S1, 2026-10-30; approved runtime text, FR-012).
+export const NOT_FINISHED = "That call didn't finish, so it may or may not have changed the project.";
 export const loadedText = (name, args) => (args ? `Loaded ${name}. Arguments: ${args}` : `Loaded ${name}.`);
 
 // The SDK client: an explicit key (never the environment), 2 retries on 429, 5xx and connection
@@ -216,7 +219,8 @@ export function createLesson(opts) {
 
   // → { content (API tool result content), isError, ran } (ran: the call did something: ae-mentor
   // answered it, or a skill was loaded; a call answered with a fixed refusal didn't run).
-  async function runTool(use, race, emit, pendingHandOver) {
+  // flight: set to { id } when a call was sent to ae-mentor and the turn failed before it answered.
+  async function runTool(use, race, emit, pendingHandOver, flight) {
     if (use.name === SKILL_TOOL && prompt.allowed.has(SKILL_TOOL)) {
       const input = use.input || {};
       const name = String(input.skill || "").trim().replace(/^\//, "");
@@ -236,6 +240,9 @@ export function createLesson(opts) {
     try {
       r = await race(mcp.callTool(use.name, use.input || {}));
     } catch (e) {
+      // Sent unless the server wasn't running to take it (NOT_RUNNING): a timeout or the server
+      // dying mid-call leaves it in flight, and AE may have changed.
+      if (!(e && e.code === "NOT_RUNNING")) flight.id = use.id;
       if (e instanceof TurnAbort) throw e;
       log({ event: "server_failed", code: e.code || "error" });
       throw new TurnAbort("start_failed");
@@ -409,27 +416,29 @@ export function createLesson(opts) {
         const pendingHandOver = {};
         const results = [];
         let ran = false;
+        const flight = {};
         try {
           for (const use of uses) {
-            const r = await runTool(use, race, emit, pendingHandOver);
+            const r = await runTool(use, race, emit, pendingHandOver, flight);
             results.push(resultBlock(use.id, r.content, r.isError));
             if (r.ran) ran = true;
           }
         } catch (e) {
-          if (!ran) throw e;
-          // Any error once a call has run (a fault in the helper too, S4) completes the answer, so
-          // what ran stays in the history.
+          if (!ran && !flight.id) throw e;
+          // Any error once a call has run (a fault in the helper too, S4), or while one was in
+          // flight (S1), completes the answer, so whatever may have changed AE stays in the history:
+          // the call in flight gets NOT_FINISHED, calls never started get DIDNT_RUN.
           const kind = e instanceof TurnAbort ? e.kind : timedOut ? "timeout" : "start_failed";
           if (!(e instanceof TurnAbort)) log({ event: "internal_error", name: (e && e.constructor && e.constructor.name) || typeof e, detail: String((e && e.message) || e).slice(0, 300) });
           // A call in this answer already ran (a demonstration, say), so the answer is completed
           // rather than taken back: each call that didn't run gets the fixed result (resolved
           // question 7), and whatever ran, a hand-over included, stays in force.
           const notRun = uses.slice(results.length);
-          for (const use of notRun) results.push(resultBlock(use.id, [{ type: "text", text: DIDNT_RUN }], true));
+          for (const use of notRun) results.push(resultBlock(use.id, [{ type: "text", text: use.id === flight.id ? NOT_FINISHED : DIDNT_RUN }], true));
           messages.push({ role: "user", content: results });
           applyHandOver(pendingHandOver, emit);
           markComplete();
-          log({ event: "calls_not_run", count: notRun.length });
+          log({ event: "calls_not_run", count: notRun.length, in_flight: flight.id ? 1 : 0 });
           return fail(kind);
         }
         messages.push({ role: "user", content: results });

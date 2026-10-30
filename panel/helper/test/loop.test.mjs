@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createLesson, createClient, echoContent, BETAS, NOT_AVAILABLE, NO_SUCH_SKILL, DIDNT_RUN } from "../lib/loop.mjs";
+import { createLesson, createClient, echoContent, BETAS, NOT_AVAILABLE, NO_SUCH_SKILL, DIDNT_RUN, NOT_FINISHED } from "../lib/loop.mjs";
 import { createMcpClient } from "../lib/mcp-client.mjs";
 import { loadSettings, HELPER_DIR } from "../lib/settings.mjs";
 import { loadPreamble, loadSkillTool, withoutBreakpoints } from "../lib/prompt.mjs";
@@ -810,5 +810,76 @@ test("S4: a fault in the helper after a demo ran completes the answer instead of
   assert.ok(s.logs.some((l) => l.event === "internal_error" && l.name === "TypeError"));
   s.svc.script(reply([text("Your turn.")]));
   assert.equal((await s.turn("What now?")).r.ok, true);
+  assertAppendOnly(s.svc);
+});
+
+test("S1: a demo call still running when the turn times out gets the didn't-finish result; the answer is completed", async () => {
+  let hang = false;
+  const s = await setup({
+    patch: { turn_timeout_ms: 1500 },
+    wrapMcp: (m) => ({
+      start: () => m.start(),
+      pid: () => m.pid(),
+      stop: () => m.stop(),
+      callTool(name, args) {
+        if (hang && name === "set_ease") return new Promise(() => {}); // sent, never answers
+        return m.callTool(name, args);
+      },
+    }),
+  });
+  const target = await opening(s);
+  const before = s.lesson.messages.length;
+  hang = true;
+  s.svc.script(reply([text("Watch."), toolUse("set_ease", { segment_id: target }, "tu_demo"), toolUse("diff_since_last", {}, "tu_diff")], { stop_reason: "tool_use" }));
+  const { r, events } = await s.turn("Show me one.");
+  assert.equal(r.error_kind, "timeout");
+  assert.ok(!events.some((e) => e.type === "tool_result"), "no result shown for a call that didn't finish");
+
+  // Nothing ran to completion, but AE may have changed: the answer is completed, not taken back.
+  const kept = JSON.parse(JSON.stringify(s.lesson.messages.slice(before)));
+  assert.deepEqual(kept.map((m) => m.role), ["user", "assistant", "user"]);
+  const res = kept[2].content;
+  assert.deepEqual(res.map((b) => b.tool_use_id), ["tu_demo", "tu_diff"]);
+  assert.equal(NOT_FINISHED, "That call didn't finish, so it may or may not have changed the project.");
+  assert.deepEqual(res[0], { type: "tool_result", tool_use_id: "tu_demo", content: [{ type: "text", text: NOT_FINISHED }], is_error: true });
+  assert.deepEqual(res[1], { type: "tool_result", tool_use_id: "tu_diff", content: [{ type: "text", text: DIDNT_RUN }], is_error: true }, "never started");
+
+  // The next turn has the call with its result, the learner's text after it, and valid roles.
+  hang = false;
+  s.svc.script(reply([text("Let's check what's there.")]));
+  assert.equal((await s.turn("Did it land?")).r.ok, true);
+  const sent = withoutBreakpoints(bodies(s.svc).at(-1).messages);
+  assert.equal(sent.length, before + 3);
+  assert.deepEqual(sent[before + 1], kept[1]);
+  assert.deepEqual(sent[before + 2].content, [...res, { type: "text", text: "Did it land?" }]);
+  assertAppendOnly(s.svc);
+});
+
+test("S1: a call never sent (the server already gone) is still \"didn't run\"; one in flight when the server dies \"didn't finish\"", async () => {
+  let mode = null;
+  const s = await setup({
+    wrapMcp: (m) => ({
+      start: () => m.start(),
+      pid: () => m.pid(),
+      stop: () => m.stop(),
+      async callTool(name, args) {
+        if (mode === "exit-mid-call" && name === "set_ease") {
+          const p = m.callTool(name, args);
+          process.kill(m.pid(), "SIGKILL"); // dies with the call sent
+          return p;
+        }
+        return m.callTool(name, args);
+      },
+    }),
+  });
+  const target = await opening(s);
+  mode = "exit-mid-call";
+  s.svc.script(reply([toolUse("set_ease", { segment_id: target }, "tu_x")], { stop_reason: "tool_use" }));
+  const { r } = await s.turn("Show me one.");
+  assert.equal(r.error_kind, "start_failed");
+  assert.deepEqual(withoutBreakpoints(s.lesson.messages.at(-1).content), [{ type: "tool_result", tool_use_id: "tu_x", content: [{ type: "text", text: NOT_FINISHED }], is_error: true }]);
+  mode = null;
+  s.svc.script(reply([text("Back.")]));
+  assert.equal((await s.turn("Hello?")).r.ok, true);
   assertAppendOnly(s.svc);
 });
