@@ -9,7 +9,7 @@
 //
 // Scripted entries, consumed one per HTTP request (the SDK's own retries consume one each):
 //   reply(content, opts)            a streamed message; opts: stop_reason, stop_details, model, usage,
-//                                   delayMs (before headers), hang (never answer)
+//                                   input_transformations, delayMs (before headers), hang (never answer)
 //   failure(status, type, message)  a JSON error with that status (401, 403, 429, 529, billing …)
 //   drop(content, afterBlocks)      streams the first blocks, then cuts the connection
 //   errorEvent(type, content)       streams the blocks, then an SSE `error` event
@@ -92,6 +92,7 @@ function messageStart(entry, model) {
       content: [],
       stop_reason: null,
       stop_sequence: null,
+      ...(entry.input_transformations ? { input_transformations: entry.input_transformations } : {}),
       usage: {
         input_tokens: usage.input_tokens,
         cache_creation_input_tokens: usage.cache_creation_input_tokens,

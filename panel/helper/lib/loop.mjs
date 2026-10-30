@@ -127,15 +127,18 @@ export function createLesson(opts) {
   }
 
   function requestParams() {
-    const betas = [];
-    const thinking = { type: "adaptive", display: settings.thinking_display };
+    // Every request opts into the history check (preserved thinking), so an edited history fails
+    // here on any account, not only on accounts made after 2026-08-31 (every learner's): "error"
+    // while the history must be intact, "drop_block" once a hand-over has changed the tool list,
+    // which invalidates the thinking blocks from before it (the claude-api reference, Breaking
+    // change 3). The beta also makes each response list what it dropped (input_transformations).
+    const betas = [BETAS.binding];
+    const thinking = {
+      type: "adaptive",
+      display: settings.thinking_display,
+      block_binding: { prefix_mismatch_behavior: handedOver ? "drop_block" : "error" },
+    };
     if (settings.thinking_display === "updates") betas.push(BETAS.updates);
-    // A changed tool list invalidates the thinking blocks from before it; the service drops those
-    // instead of refusing the request (the claude-api reference, preserved thinking).
-    if (handedOver) {
-      thinking.block_binding = { prefix_mismatch_behavior: "drop_block" };
-      betas.push(BETAS.binding);
-    }
     const params = {
       model: settings.model,
       max_tokens: settings.max_tokens,
@@ -150,6 +153,15 @@ export function createLesson(opts) {
       betas.push(BETAS.fallback);
     }
     return { params, betas };
+  }
+
+  // What the service changed in what it was sent (dropped thinking blocks), for the helper log:
+  // type, reason and path only, never any text. An empty list isn't logged.
+  function logTransformations(message, stepNo) {
+    const list = message && Array.isArray(message.input_transformations) ? message.input_transformations : [];
+    if (!list.length) return;
+    const str = (v) => (typeof v === "string" ? v.slice(0, 80) : null);
+    log({ event: "input_transformations", turn: turnNo, step: stepNo, entries: list.map((t) => ({ type: str(t && t.type), reason: str(t && t.reason), path: str(t && t.path) })) });
   }
 
   // Puts a waiting skill body in, if the history ends with a user message. → whether it did.
@@ -313,6 +325,7 @@ export function createLesson(opts) {
         }
         if (timedOut) throw new TurnAbort("timeout");
 
+        logTransformations(message, steps);
         model = message.model;
         if (message.model !== settings.model) otherModel = true;
         costs.push(costOf({ model: message.model, usage: message.usage }, prices, settings.cache_ttl));

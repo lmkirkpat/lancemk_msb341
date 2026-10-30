@@ -126,12 +126,12 @@ test("an easing turn end to end: the request, the events, the tool through ae-me
   const [b0, b1] = bodies(s.svc);
   assert.equal(b0.model, "claude-opus-5-5");
   assert.equal(b0.max_tokens, 32000);
-  assert.deepEqual(b0.thinking, { type: "adaptive", display: "updates" });
+  assert.deepEqual(b0.thinking, { type: "adaptive", display: "updates", block_binding: { prefix_mismatch_behavior: "error" } });
   assert.deepEqual(b0.output_config, { effort: "medium" });
   assert.equal(b0.fallbacks, "default");
   assert.equal(b0.tool_choice, undefined);
   assert.equal(b0.betas, undefined, "betas travel as a header");
-  assert.deepEqual(betasOf(s.svc.messageRequests[0]).sort(), [BETAS.fallback, BETAS.updates].sort());
+  assert.deepEqual(betasOf(s.svc.messageRequests[0]).sort(), [BETAS.binding, BETAS.fallback, BETAS.updates].sort());
   assert.equal(b0.system.length, 3);
   assert.equal(b0.system[2].text, readSkill(SKILLS, "ease-mentor").body);
   assert.deepEqual(b0.tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
@@ -277,8 +277,8 @@ test("the hand-over: next-mentor loads ease-mentor without editing anything earl
   const [b0, b1, b2] = bodies(s.svc);
   assert.deepEqual(b0.tools.map((t) => t.name), ["read_learner_record", "recommend_next", "Skill"]);
   assert.equal(b0.system[2].text, readSkill(SKILLS, "next-mentor").body);
-  assert.equal(b0.thinking.block_binding, undefined);
-  assert.ok(!betasOf(s.svc.messageRequests[0]).includes(BETAS.binding));
+  assert.deepEqual(b0.thinking.block_binding, { prefix_mismatch_behavior: "error" }, "checked strictly before the hand-over");
+  assert.ok(betasOf(s.svc.messageRequests[0]).includes(BETAS.binding));
   // After: the result, then the new skill's body as a mid-conversation system message; its tools.
   assert.equal(b1.messages.length, 4);
   assert.deepEqual(withoutBreakpoints(b1.messages[2].content[0].content), [{ type: "text", text: "Loaded ease-mentor. Arguments: review" }]);
@@ -388,8 +388,8 @@ test("effort and the 1-hour cache come from the settings; no fallback field when
   assert.deepEqual(b.output_config, { effort: "high" });
   assert.deepEqual(b.system[2].cache_control, { type: "ephemeral", ttl: "1h" });
   assert.equal("fallbacks" in b, false);
-  assert.deepEqual(b.thinking, { type: "adaptive", display: "omitted" });
-  assert.equal(s.svc.messageRequests[0].headers["anthropic-beta"], null);
+  assert.deepEqual(b.thinking, { type: "adaptive", display: "omitted", block_binding: { prefix_mismatch_behavior: "error" } });
+  assert.deepEqual(betasOf(s.svc.messageRequests[0]), [BETAS.binding], "only the binding beta");
 });
 
 test("a hand-over on the last step: the skill's body waits for the next learner message (M1)", async () => {
@@ -494,4 +494,46 @@ test("the fake service refuses what the real one does (S3)", async () => {
   assert.equal(invalidRequest({ messages: [u], thinking: { type: "adaptive", block_binding: { prefix_mismatch_behavior: "error" } } }, all), null);
   assert.match(invalidRequest({ messages: [u], fallbacks: "default" }, BETA.binding), /fallbacks/);
   assert.match(invalidRequest({ messages: [u], thinking: { type: "adaptive", display: "updates" } }, BETA.fallback), /updates/);
+});
+
+test("every request opts into the history check: error before a hand-over, drop_block after (M2)", async () => {
+  const s = await setup();
+  s.svc.script(
+    reply([text("Hi.")]),
+    reply([text("Offset now.")]),
+    reply([text("Still offset.")]),
+  );
+  await s.turn("/ease-mentor");
+  await s.turn("/offset-mentor");
+  await s.turn("Next?");
+  const behaviors = bodies(s.svc).map((b) => b.thinking.block_binding.prefix_mismatch_behavior);
+  assert.deepEqual(behaviors, ["error", "drop_block", "drop_block"]);
+  for (const r of s.svc.messageRequests) assert.ok(betasOf(r).includes(BETAS.binding));
+  assertAppendOnly(s.svc, { toolChangesAt: [1] });
+});
+
+test("input_transformations are logged: type, reason and path only, never text (M2)", async () => {
+  const s = await setup();
+  s.svc.script(
+    reply([text("Hi.")]),
+    reply([text("Again.")], {
+      input_transformations: [
+        { type: "thinking_dropped", path: "messages.1.content.0", reason: "prefix_binding_mismatch", note: "secret learner words" },
+        { type: "thinking_mismatch_allowed", path: "messages.3.content.0", reason: "prefix_binding_mismatch" },
+      ],
+    }),
+  );
+  await s.turn("/ease-mentor");
+  assert.ok(!s.logs.some((l) => l.event === "input_transformations"), "an empty or missing list isn't logged");
+  await s.turn("Hint?");
+  assert.deepEqual(s.logs.find((l) => l.event === "input_transformations"), {
+    event: "input_transformations",
+    turn: 2,
+    step: 1,
+    entries: [
+      { type: "thinking_dropped", reason: "prefix_binding_mismatch", path: "messages.1.content.0" },
+      { type: "thinking_mismatch_allowed", reason: "prefix_binding_mismatch", path: "messages.3.content.0" },
+    ],
+  });
+  assert.doesNotMatch(JSON.stringify(s.logs), /secret learner words/);
 });
