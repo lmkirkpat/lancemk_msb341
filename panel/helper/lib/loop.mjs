@@ -172,7 +172,7 @@ export function createLesson(opts) {
     return true;
   }
 
-  // One streamed request. Emits text_delta, text and tool_call as blocks arrive. → { message } or
+  // One streamed request. Emits text_delta and text as blocks arrive. → { message } or
   // throws { err, started } (started: the service had begun answering, so the cost is unknown).
   async function step(client, signal, emit) {
     const { params, betas } = requestParams();
@@ -187,8 +187,8 @@ export function createLesson(opts) {
         const b = snapshot && snapshot.content[ev.index];
         if (!b) return;
         if (b.type === "text" && b.text) emit("text", { text: b.text });
-        // Sent when the call is complete, as B1's adapter does, so it carries the input.
-        if (b.type === "tool_use" && b.name !== SKILL_TOOL) emit("tool_call", { id: b.id, name: b.name, input: b.input });
+        // tool_call waits for the whole answer (runTurn): a later fallback marker can show the
+        // call came from a declined attempt that will never run.
       }
     });
     try {
@@ -350,6 +350,11 @@ export function createLesson(opts) {
         }
         const uses = content.filter((b) => b.type === "tool_use");
 
+        // The calls that will run, each with its input (as B1's adapter sends them). Calls from an
+        // attempt declined before a fallback, a refusal or a cut-off answer are never shown.
+        if (!(uses.length && message.stop_reason === "max_tokens")) {
+          for (const u of uses) if (u.name !== SKILL_TOOL) emit("tool_call", { id: u.id, name: u.name, input: u.input });
+        }
         if (uses.length && message.stop_reason === "max_tokens") {
           log({ event: "cut_off" }); // a call cut off mid-input is never run
           return fail(null);

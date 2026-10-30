@@ -257,6 +257,7 @@ test("an answer from another model is marked; a fallback's declined attempt isn'
   assert.equal(r.model, "claude-opus-5");
   assert.equal(r.cost_usd, null, "no price row for the fallback model: unknown, not 0");
   assert.ok(!events.some((e) => e.type === "tool_result"), "the declined attempt's call is never run");
+  assert.ok(!events.some((e) => e.type === "tool_call"), "nor shown as a call (S6)");
   assert.deepEqual(s.lesson.messages[1].content, [{ type: "fallback", from: { model: "claude-opus-5-5" }, to: { model: "claude-opus-5" } }, { type: "text", text: "Let's look together." }]);
   assert.deepEqual(echoContent([text("a"), thinking("", "s"), fallbackBlock("x", "y"), thinking("", "t"), text("b")]), [text("a"), fallbackBlock("x", "y"), thinking("", "t"), text("b")]);
 });
