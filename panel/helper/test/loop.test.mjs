@@ -72,14 +72,19 @@ const bodies = (svc) => svc.messageRequests.map((r) => r.body);
 const betasOf = (req) => (req.headers["anthropic-beta"] || "").split(",").map((s) => s.trim()).filter(Boolean);
 
 // Every request's messages start with the previous request's, byte for byte (cache markers aside),
-// and the system prompt never changes within a lesson.
-function assertAppendOnly(svc) {
+// the system prompt never changes within a lesson, and the tools change only where a test says a
+// hand-over happened (toolChangesAt: the 0-based request indexes whose tools differ from the one
+// before). Requests the fake rejected as invalid are left out of the comparison and fail the check.
+function assertAppendOnly(svc, { toolChangesAt = [] } = {}) {
+  assert.deepEqual(svc.rejected, [], "the fake service rejected a request as invalid");
   const b = bodies(svc);
   for (let i = 1; i < b.length; i++) {
     const prev = JSON.stringify(withoutBreakpoints(b[i - 1].messages));
     const next = JSON.stringify(withoutBreakpoints(b[i].messages.slice(0, b[i - 1].messages.length)));
     assert.equal(next, prev, `request ${i + 1} rewrote the history of request ${i}`);
     assert.equal(JSON.stringify(b[i].system), JSON.stringify(b[0].system), `request ${i + 1} changed the system prompt`);
+    const sameTools = JSON.stringify(b[i].tools) === JSON.stringify(b[i - 1].tools);
+    assert.equal(sameTools, !toolChangesAt.includes(i), `request ${i + 1}'s tools ${sameTools ? "didn't change" : "changed"} unexpectedly`);
   }
 }
 
@@ -282,7 +287,7 @@ test("the hand-over: next-mentor loads ease-mentor without editing anything earl
   assert.deepEqual(b1.thinking, { type: "adaptive", display: "updates", block_binding: { prefix_mismatch_behavior: "drop_block" } });
   assert.ok(betasOf(s.svc.messageRequests[1]).includes(BETAS.binding));
   assert.equal(JSON.stringify(b2.tools), JSON.stringify(b1.tools));
-  assertAppendOnly(s.svc);
+  assertAppendOnly(s.svc, { toolChangesAt: [1] });
   assert.match(s.calls(), /snapshot_project/);
 });
 
@@ -308,7 +313,7 @@ test("a later skill command switches skills the same way (append, never edit)", 
   assert.equal(b1.messages[3].content[0].text, readSkill(SKILLS, "offset-mentor").body);
   assert.ok(b1.tools.some((t) => t.name === "offset_snapshot"));
   assert.ok(!b1.tools.some((t) => t.name === "set_ease"));
-  assertAppendOnly(s.svc);
+  assertAppendOnly(s.svc, { toolChangesAt: [1] });
 });
 
 test("service faults: each kind, nothing kept from the failed turn", async () => {
@@ -385,4 +390,108 @@ test("effort and the 1-hour cache come from the settings; no fallback field when
   assert.equal("fallbacks" in b, false);
   assert.deepEqual(b.thinking, { type: "adaptive", display: "omitted" });
   assert.equal(s.svc.messageRequests[0].headers["anthropic-beta"], null);
+});
+
+test("a hand-over on the last step: the skill's body waits for the next learner message (M1)", async () => {
+  const s = await setup({ patch: { max_steps: 1 } });
+  s.svc.script(reply([text("Easing next."), toolUse("Skill", { skill: "ease-mentor" }, "tu_last")], { stop_reason: "tool_use" }));
+  const first = await s.turn("/next-mentor");
+  assert.equal(first.r.ok, false, "the step limit");
+  assert.equal(first.r.error_kind, null);
+  assert.equal(first.r.skill, "ease-mentor");
+  assert.ok(first.events.some((e) => e.type === "skill_loaded"));
+  assert.notEqual(s.lesson.messages.at(-1).role, "system", "no system message left waiting at the end");
+
+  s.svc.script(reply([text("Let's ease the Title.")]));
+  const second = await s.turn("Yes, easing please.");
+  assert.equal(second.r.ok, true);
+  const b1 = bodies(s.svc)[1];
+  assert.deepEqual(b1.messages.slice(-2).map((m) => m.role), ["user", "system"]);
+  assert.equal(b1.messages.at(-2).content[0].text, "Yes, easing please.");
+  assert.equal(b1.messages.at(-1).content[0].text, readSkill(SKILLS, "ease-mentor").body);
+  assert.deepEqual(b1.tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
+
+  s.svc.script(reply([text("Check when ready.")]));
+  assert.equal((await s.turn("Done.")).r.ok, true);
+  assertAppendOnly(s.svc, { toolChangesAt: [1] });
+});
+
+test("an empty reply right after a hand-over: the body waits for the next learner message (M1)", async () => {
+  const s = await setup();
+  s.svc.script(
+    reply([toolUse("Skill", { skill: "ease-mentor" }, "tu_h")], { stop_reason: "tool_use" }),
+    reply([], { stop_reason: "end_turn" }),
+  );
+  const first = await s.turn("/next-mentor");
+  assert.equal(first.r.ok, true);
+  assert.notEqual(s.lesson.messages.at(-1).role, "system");
+  s.svc.script(reply([text("Here we go.")]));
+  const second = await s.turn("Hello?");
+  assert.equal(second.r.ok, true);
+  const last = bodies(s.svc).at(-1);
+  assert.deepEqual(last.messages.slice(-2).map((m) => m.role), ["user", "system"]);
+  // Requests 2 and 3 both carried the body last; request 3 has it after the new message instead.
+  assert.deepEqual(s.svc.rejected, []);
+  assert.equal(last.messages.filter((m) => m.role === "system").length, 1);
+});
+
+test("a failure at step 2 takes the whole turn back; the lesson goes on (S3)", async () => {
+  const s = await setup();
+  s.svc.script(reply([text("Hi.")]));
+  await s.turn("/ease-mentor");
+  const before = JSON.stringify(s.lesson.messages);
+  const fast = { "retry-after-ms": "1" };
+  s.svc.script(
+    reply([toolUse("snapshot_project", {}, "tu2")], { stop_reason: "tool_use" }),
+    failure(529, "overloaded_error", "o", fast),
+    failure(529, "overloaded_error", "o", fast),
+    failure(529, "overloaded_error", "o", fast),
+  );
+  const { r, events } = await s.turn("Check my work.");
+  assert.equal(r.error_kind, "service_busy");
+  assert.equal(r.steps, 2);
+  assert.ok(events.some((e) => e.type === "tool_result"), "the step-1 call ran and was shown");
+  assert.equal(JSON.stringify(s.lesson.messages), before, "nothing from the failed turn is kept");
+  s.svc.script(reply([text("Back.")]));
+  assert.equal((await s.turn("Check my work.")).r.ok, true);
+  // The rolled-back requests aren't prefixes of what came after; compare the kept ones only.
+  const kept = bodies(s.svc);
+  assert.equal(JSON.stringify(withoutBreakpoints(kept.at(-1).messages.slice(0, 2))), JSON.stringify(withoutBreakpoints(kept[0].messages.concat([{ role: "assistant", content: [{ type: "text", text: "Hi." }] }]))));
+  assert.deepEqual(s.svc.rejected, []);
+});
+
+test("a failure at step 3, after a hand-over at step 1, takes the hand-over back too (S3)", async () => {
+  const s = await setup();
+  s.svc.script(
+    reply([toolUse("Skill", { skill: "ease-mentor" }, "h")], { stop_reason: "tool_use" }),
+    reply([toolUse("snapshot_project", {}, "s")], { stop_reason: "tool_use" }),
+    failure(401, "authentication_error", "revoked"),
+  );
+  const { r } = await s.turn("/next-mentor");
+  assert.equal(r.error_kind, "not_signed_in");
+  assert.equal(r.steps, 3);
+  assert.equal(s.lesson.messages.length, 0);
+  assert.equal(s.lesson.skill, null, "the hand-over is undone with the turn (here, the lesson's first)");
+  s.svc.script(reply([text("Hi again.")]));
+  assert.equal((await s.turn("/next-mentor")).r.ok, true);
+  const last = bodies(s.svc).at(-1);
+  assert.deepEqual(last.tools.map((t) => t.name), ["read_learner_record", "recommend_next", "Skill"]);
+  assert.deepEqual(s.svc.rejected, []);
+});
+
+test("the fake service refuses what the real one does (S3)", async () => {
+  const { invalidRequest, BETA } = await import("./fake-service.mjs");
+  const u = { role: "user", content: "x" };
+  const a = { role: "assistant", content: [{ type: "text", text: "y" }] };
+  const sys = { role: "system", content: "z" };
+  const all = [BETA.binding, BETA.fallback, BETA.updates].join(",");
+  assert.equal(invalidRequest({ messages: [u, sys] }, ""), null);
+  assert.equal(invalidRequest({ messages: [u, sys, a] }, ""), null);
+  assert.match(invalidRequest({ messages: [u, sys, u] }, ""), /followed by an assistant/);
+  assert.match(invalidRequest({ messages: [sys, u] }, ""), /can't be first/);
+  assert.match(invalidRequest({ messages: [u, a, sys] }, ""), /must follow a user/);
+  assert.match(invalidRequest({ messages: [u], thinking: { type: "adaptive", block_binding: { prefix_mismatch_behavior: "error" } } }, ""), /Extra inputs/);
+  assert.equal(invalidRequest({ messages: [u], thinking: { type: "adaptive", block_binding: { prefix_mismatch_behavior: "error" } } }, all), null);
+  assert.match(invalidRequest({ messages: [u], fallbacks: "default" }, BETA.binding), /fallbacks/);
+  assert.match(invalidRequest({ messages: [u], thinking: { type: "adaptive", display: "updates" } }, BETA.fallback), /updates/);
 });

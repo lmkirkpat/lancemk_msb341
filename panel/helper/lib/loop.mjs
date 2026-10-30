@@ -95,6 +95,11 @@ export function createLesson(opts) {
   let server = null; // the first { instructions, tools } this lesson saw; kept for the lesson
   let prompt = null; // { tools, allowed, system, skillName, prompt_hash }
   let handedOver = false; // the tool list changed after the first request
+  // A handed-over skill's body waiting to go in as a mid-conversation system message. The service
+  // takes one only right after a user message, as the last message or followed by an assistant
+  // turn, so it goes in just before a request whose history ends with a user message, and stays
+  // only once an assistant turn follows it.
+  let pendingBody = null;
   let turnNo = 0;
 
   function tryReadSkill(name) {
@@ -145,6 +150,14 @@ export function createLesson(opts) {
       betas.push(BETAS.fallback);
     }
     return { params, betas };
+  }
+
+  // Puts a waiting skill body in, if the history ends with a user message. → whether it did.
+  function placePendingBody() {
+    if (pendingBody === null || !messages.length || messages[messages.length - 1].role !== "user") return false;
+    messages.push(skillSystemMessage(pendingBody));
+    pendingBody = null;
+    return true;
   }
 
   // One streamed request. Emits text_delta, text and tool_call as blocks arrive. → { message } or
@@ -206,7 +219,7 @@ export function createLesson(opts) {
   // One turn. → { ok, error_kind, cost_usd, tokens, model, other_model, steps, skill, prompt_hash }
   async function runTurn(text, emit) {
     turnNo++;
-    const mark = { len: messages.length, prompt, handedOver };
+    const mark = { len: messages.length, prompt, handedOver, pendingBody };
     const ctl = new AbortController();
     let timedOut = false;
     const timer = setTimeout(() => {
@@ -245,6 +258,7 @@ export function createLesson(opts) {
         messages.length = mark.len;
         prompt = mark.prompt;
         handedOver = mark.handedOver;
+        pendingBody = mark.pendingBody;
       }
       return summary(false, kind);
     };
@@ -267,7 +281,6 @@ export function createLesson(opts) {
       // text itself goes to the model unchanged.
       const cmd = commandOf(text);
       let bodyAhead = null;
-      let handOverBody = null;
       if (!prompt) {
         const skill = cmd ? tryReadSkill(cmd.name) : null;
         prompt = buildLessonPrompt({ preamble, instructions: server.instructions, serverTools: server.tools, skill, skillTool, settings });
@@ -276,16 +289,14 @@ export function createLesson(opts) {
         const skill = tryReadSkill(cmd.name);
         if (skill) {
           switchTo(skill);
-          handOverBody = skill.body;
+          pendingBody = skill.body;
+          emit("skill_loaded", { skill: skill.name });
         }
       }
       messages.push({ role: "user", content: userContent(text, bodyAhead) });
-      if (handOverBody !== null) {
-        messages.push(skillSystemMessage(handOverBody));
-        emit("skill_loaded", { skill: prompt.skillName });
-      }
 
       for (steps = 1; steps <= settings.max_steps; steps++) {
+        const placed = placePendingBody();
         let message;
         try {
           ({ message } = await step(client, ctl.signal, emit));
@@ -315,6 +326,11 @@ export function createLesson(opts) {
 
         const content = echoContent(JSON.parse(JSON.stringify(message.content || [])));
         if (content.length) messages.push({ role: "assistant", content });
+        else if (placed) {
+          // Nothing followed the body, so it can't stay last before the next user message: take it
+          // back off the end (no thinking block was made after it) and let it wait again.
+          pendingBody = messages.pop().content[0].text;
+        }
         const uses = content.filter((b) => b.type === "tool_use");
 
         if (uses.length && message.stop_reason === "max_tokens") {
@@ -335,7 +351,7 @@ export function createLesson(opts) {
         }
         messages.push({ role: "user", content: results });
         if (pendingHandOver.skill) {
-          messages.push(skillSystemMessage(pendingHandOver.skill.body));
+          pendingBody = pendingHandOver.skill.body;
           switchTo(pendingHandOver.skill);
           emit("skill_loaded", { skill: pendingHandOver.skill.name });
         }

@@ -116,12 +116,43 @@ function messageEnd(entry) {
   ];
 }
 
+// ---------- request checks ----------
+
+export const BETA = Object.freeze({
+  binding: "thinking-binding-controls-2026-08-01",
+  fallback: "server-side-fallback-2026-07-01",
+  updates: "thinking-display-updates-2026-08-18",
+});
+
+// → a reason the real service would answer 400, or null. From the claude-api reference:
+// a mid-conversation system message must follow a user message and be the last message or be
+// followed by an assistant turn; block_binding needs its beta; fallbacks "default" needs
+// server-side-fallback-2026-07-01; display "updates" needs its beta.
+export function invalidRequest(body, betaHeader) {
+  if (!body || typeof body !== "object") return null;
+  const betas = new Set(String(betaHeader || "").split(",").map((b) => b.trim()).filter(Boolean));
+  const msgs = Array.isArray(body.messages) ? body.messages : [];
+  for (let i = 0; i < msgs.length; i++) {
+    if (msgs[i].role !== "system") continue;
+    if (i === 0) return `messages.${i}: a system message can't be first`;
+    if (msgs[i - 1].role !== "user") return `messages.${i}: a system message must follow a user message`;
+    if (i + 1 < msgs.length && msgs[i + 1].role !== "assistant") return `messages.${i + 1}: a system message must be last or followed by an assistant turn`;
+  }
+  const t = body.thinking || {};
+  if (t.block_binding && !betas.has(BETA.binding)) return "thinking.block_binding: Extra inputs are not permitted";
+  if (t.block_binding && !["error", "drop_block"].includes(t.block_binding.prefix_mismatch_behavior)) return "thinking.block_binding.prefix_mismatch_behavior: bad value";
+  if (t.display === "updates" && !betas.has(BETA.updates)) return "thinking.display: unknown value updates";
+  if (body.fallbacks !== undefined && !betas.has(BETA.fallback)) return "fallbacks: Extra inputs are not permitted";
+  return null;
+}
+
 // ---------- server ----------
 
 export async function startFakeService(opts = {}) {
   const defaultModel = opts.model || "claude-opus-5-5";
   const queue = [];
   const requests = [];
+  const rejected = [];
   const open = new Set();
   const timers = new Set();
 
@@ -179,6 +210,13 @@ export async function startFakeService(opts = {}) {
     if (req.method !== "POST" || !path.startsWith("/v1/messages")) {
       return sendJsonError(res, 404, "not_found_error", `fake service: no route ${req.method} ${path}`, { "x-should-retry": "false" });
     }
+    // What the claude-api reference says the real service refuses with a 400, checked before any
+    // scripted entry is used (the entry stays for the next request).
+    const problem = invalidRequest(body, req.headers["anthropic-beta"]);
+    if (problem) {
+      rejected.push(problem);
+      return sendJsonError(res, 400, "invalid_request_error", problem);
+    }
     const entry = queue.shift();
     if (!entry) return sendJsonError(res, 500, "api_error", "fake service: no scripted response", { "x-should-retry": "false" });
     if (entry.kind === "failure") return sendJsonError(res, entry.status, entry.type, entry.message, entry.headers);
@@ -223,6 +261,8 @@ export async function startFakeService(opts = {}) {
     get messageRequests() {
       return requests.filter((r) => r.method === "POST" && r.path.startsWith("/v1/messages"));
     },
+    // The 400s the fake gave for invalid requests, in order (each one's reason).
+    rejected,
     script(...entries) {
       queue.push(...entries);
       return this;
