@@ -155,7 +155,7 @@ test("a turn: events re-emitted, timings from send, the helper's fields kept, st
 test("start_failed in place of ready ends starting: shown when no turn is waiting, no start_ms", () => {
   const h = harness();
   h.adapter.start();
-  h.child().say({ type: "error", kind: "start_failed", message: "The mentor couldn't start. Close and reopen the panel; if it happens again, check setup." });
+  h.child().say({ type: "error", kind: "start_failed", message: "The mentor couldn't start. Close and reopen the panel; if it happens again, check setup.", during: "start" });
   assert.deepEqual(h.events.map(brief), [["error", "start_failed"]]);
   h.adapter.send("/ease-mentor", "start"); // the helper tries ae-mentor again on this send
   h.child().say({ type: "error", kind: "start_failed", message: "m" });
@@ -170,10 +170,33 @@ test("start_failed in place of ready while the first turn waits: shown once, by 
   const h = harness();
   h.adapter.start();
   h.adapter.send("/ease-mentor", "start");
-  h.child().say({ type: "error", kind: "start_failed", message: "m" }); // the start's
+  h.child().say({ type: "error", kind: "start_failed", message: "m", during: "start" }); // the start's
   h.child().say({ type: "error", kind: "start_failed", message: "m" }); // the turn's
   h.child().say(Object.assign({ type: "turn_end" }, HELPER_END, { ok: false }));
   assert.deepEqual(h.events.map(brief), [["turn_start", undefined], ["error", "start_failed"], ["turn_end", false]]);
+});
+
+test("which start_failed is hidden goes by its source, not its timing (review S5)", () => {
+  // A turn's own start_failed while the helper is still starting is shown; the start's arrives
+  // later, after that turn ended, and is shown too (nothing else will report it).
+  const h = harness();
+  h.adapter.start();
+  h.adapter.send("/ease-mentor", "start");
+  h.child().say({ type: "error", kind: "start_failed", message: "m" }); // the turn's, before the start's
+  h.child().say(Object.assign({ type: "turn_end" }, HELPER_END, { ok: false }));
+  h.child().say({ type: "error", kind: "start_failed", message: "m", during: "start" });
+  assert.deepEqual(h.events.map(brief), [["turn_start", undefined], ["error", "start_failed"], ["turn_end", false], ["error", "start_failed"]]);
+  assert.equal(h.events[2].error_kind, "start_failed");
+
+  // A start error while a turn waits is hidden whatever the turn reports.
+  const k = harness();
+  k.adapter.start();
+  k.adapter.send("/ease-mentor", "start");
+  k.child().say({ type: "error", kind: "not_signed_in", message: "m" });
+  k.child().say({ type: "error", kind: "start_failed", message: "m", during: "start" });
+  k.child().say(Object.assign({ type: "turn_end" }, HELPER_END, { ok: false }));
+  assert.deepEqual(k.events.map(brief), [["turn_start", undefined], ["error", "not_signed_in"], ["turn_end", false]]);
+  assert.ok(k.logs.some((l) => l.event === "start_failed_during_turn"));
 });
 
 test("not_signed_in can come on any send; the lesson goes on", () => {
@@ -264,17 +287,25 @@ test("a write to a helper that's gone doesn't throw into the page", () => {
   assert.ok(h.logs.some((l) => l.event === "stdin_error" && l.code === "EPIPE"));
 });
 
-test("the adapter's backstop: if the helper never ends a turn, timeout, and the helper is stopped", () => {
+test("the adapter's backstop: a helper that never ends a turn is stopped, with the start-again wording (review S6)", async () => {
   const h = harness();
   h.adapter.start();
   h.adapter.send("x", "check");
   const t = h.timers.find((x) => x.ms === api.BACKSTOP_MS);
   assert.ok(api.BACKSTOP_MS > 5 * 60 * 1000, "after the helper's own 5-minute timeout");
   t.fn();
-  assert.deepEqual(h.events.slice(1).map(brief), [["error", "timeout"], ["turn_end", false]]);
+  // process_exited: "The mentor stopped unexpectedly. Start the lesson again." The helper is
+  // stopped, so its exit closes the lesson and the panel offers Start again; never "Try again"
+  // followed by "the mentor isn't running".
+  assert.deepEqual(h.events.slice(1).map(brief), [["error", "process_exited"], ["turn_end", false]]);
+  assert.equal(h.events[2].error_kind, "process_exited");
+  assert.ok(h.logs.some((l) => l.event === "backstop_timeout"));
   assert.deepEqual(h.child().commands().at(-1), { type: "stop" });
   h.child().say(Object.assign({ type: "turn_end" }, HELPER_END));
   assert.equal(h.events.filter((e) => e.type === "turn_end").length, 1, "a late turn_end is ignored");
+  await new Promise((r) => setImmediate(r));
+  assert.deepEqual(h.events.at(-1), { type: "exit", code: 0 }, "the exit that closes the lesson");
+  assert.throws(() => h.adapter.send("again", "check"), (e) => e.code === "NOT_STARTED");
 });
 
 // ---------- the real helper, against T005's fake service ----------

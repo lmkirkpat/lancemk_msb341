@@ -17,7 +17,9 @@ const HELPER_DIR = path.resolve(__dirname, "..", "helper");
 const HELPER_PATH = path.join(HELPER_DIR, "main.mjs");
 const HELPER_PATH_ENV = "/usr/bin:/bin:/usr/sbin:/sbin";
 // The helper ends a turn itself after 5 minutes (settings turn_timeout_ms). This backstop is only
-// for a helper that has stopped answering: it ends the turn and stops the helper.
+// for a helper that has stopped answering: it stops the helper and ends the turn as
+// process_exited, whose message says to start the lesson again (the helper's exit closes the
+// lesson, so the panel offers Start). Review S6: start-again wording, not a restart.
 const BACKSTOP_MS = 5 * 60 * 1000 + 30 * 1000;
 const KILL_AFTER_MS = 3000;
 // Kinds the panel never shows (contracts/helper-protocol.md › Error kinds).
@@ -93,10 +95,10 @@ function createAdapter(config, deps) {
   function onError(ev) {
     const kind = typeof ev.kind === "string" ? ev.kind : "start_failed";
     if (NOT_SHOWN.has(kind)) return log({ event: "helper_error", kind });
-    if (starting && kind === "start_failed") {
-      // The start's own error, in place of ready (ae-mentor couldn't start). Starting is over;
-      // the next send tries again. A turn already waiting reports its own error, so this one
-      // isn't shown twice.
+    if (ev.during === "start") {
+      // The start command's own error, in place of ready (ae-mentor couldn't start), told apart
+      // from a turn's by its source (review S5). Starting is over; the next send tries again. A
+      // turn already waiting reports its own error, so this one isn't shown as well.
       starting = false;
       if (turn) return log({ event: "start_failed_during_turn" });
     }
@@ -220,8 +222,8 @@ function createAdapter(config, deps) {
     turn.timer = setT(() => {
       if (!turn) return;
       log({ event: "backstop_timeout" });
-      turn.errorKind = "timeout";
-      emit("error", { kind: "timeout", message: "" });
+      turn.errorKind = "process_exited";
+      emit("error", { kind: "process_exited", message: "" });
       endTurn(false, null);
       stop();
     }, BACKSTOP_MS);
