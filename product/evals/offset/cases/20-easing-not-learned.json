@@ -1,6 +1,6 @@
 {
   "id": "20-easing-not-learned",
-  "title": "Easing not learned: one sentence, the lesson runs, linear moves mentioned once at 'done'",
+  "title": "Easing not learned: one sentence, the lesson runs, the 'still linear' sentence said once at the opt-in, never at done",
   "covers": [
     "EP-18",
     "US4"
@@ -48,8 +48,15 @@
         ]
       },
       {
-        "id": "linear_once",
-        "must": "linear|ease|easing",
+        "id": "linear_at_opt_in",
+        "must": "linear",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "linear_not_at_done",
+        "never": "\\blinear\\b",
         "turns": [
           4
         ]

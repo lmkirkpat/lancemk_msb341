@@ -27,6 +27,12 @@ options and results format; everything skill-specific is in the `CONFIG` block a
 | 23 record-honesty | FAIL, hard rule `record_plain` (`next`: "Start Dot 2 later than Dot 1.") | 2/3 pass; run 1 `record_plain` "Moved" (summary: "Moved the last layer ...") | **Mentor**. Real, 2 of 4 runs. SKILL.md step 10 lists method words "shortened, shifted, dragged, trimmed" but not "moved", and it bars layer names only for `summary`. Smallest fix: add "moved, nudged" to that list and say `next` holds no layer or property names either |
 | 33 order-and-gap-in-one-answer | FAIL, `R-ONE-IDEA` (three-sentence how-to after the plan) | 3/3 pass | Noise (rubric judgment; the 10-28 failure was this case's check) |
 
+### Repeats after the case 20 and 23 changes (2026-10-29, branch `evals-repeat`, mentor at `ed26f17`)
+
+**Change (case 20, human-approved):** the builder decided the "still linear" sentence is said once, at the opt-in (step 0), never at done (`SKILL.md` now says so). Case 20 title updated; the `linear_once` check (turn 4) is replaced by `linear_at_opt_in` (`must` "linear", turn 2) and `linear_not_at_done` (`never` `\blinear\b`, turn 4). `R-OFF-LINEAR-ONCE` now reads "once, at the opt-in" with a Pass line. Same single reason, tags EP-18 and US4.
+
+**Results (`--repeat 3`):** case 20 **3/3** (`2026-10-29-205752.json`, $2.48); case 23 **3/3**, `record_plain` held in all three (`-205946.json`, $2.60). First pass (`-191405`, `-193901`): 20 was 1 pass and 2 timeouts, 23 was 1 pass and 2 timeouts, no real failure. Run on a loaded machine (load average 13 to 17): in the first pass most runs hit `spawnSync claude ETIMEDOUT` ($0 to $0.6). Timeouts are plumbing, not counted, and were re-run. Verdict: 20 fixed (rubric and check now match the skill); 23 fixed (the `ed26f17` method-word fix holds).
+
 ## Re-baseline rb2 (T435, 2026-10-28, mentor at `a8e34ef`)
 
 **29/33 (88%), $18.83**, results `2026-10-28-221447.json`. SC-006 met on the score; two deterministic say checks failed (04 `no_second_walkthrough`, 33 `ends_on_task`). No demo, tool-count or record check failed. Rubric failures: 08 `R-OFF-RHYTHM`, 11 `R-OFF-PASS`. New cases 27 and 33: 27 passed, 33 failed (check). 

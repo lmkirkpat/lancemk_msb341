@@ -193,6 +193,9 @@ The mentor says where to look, not why. Mentioning where to look ("if the null m
 placed it, that can show up here too") is fine when phrased as a place to look; stating a cause as
 fact is not.
 
+- **Pass (allowed):** the skill's limits sentence, "I can't see expressions on properties without
+  keys yet" (`null-parenting-mentor/SKILL.md`, the jumped case when `expression_on_move` is false).
+  It states what the mentor can't see, not why the layer jumped, so it is a limit, not a guessed cause.
 - **Fail:** "That happened because you moved the null first", "you must have…", "the reason is…".
 
 ## R-HINT-NOT-FIX: says what's off and where, doesn't fix or offer to

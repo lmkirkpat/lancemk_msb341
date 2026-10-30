@@ -557,3 +557,11 @@ the mentor passes the names to the snapshot even though the tool refuses them (r
 |---|---|---|---|
 | 02 explain what a parent passes | judge: R-ONE-IDEA (turn 1 adds "a null is an invisible layer ...") | pass, pass, pass | **Noise.** |
 | 06 jump | judge: R-NO-CAUSE (and R-JUMP-STATED once): "I can't see expressions on properties that have no keys yet, so I can't rule one out" | FAIL, pass, plumbing (usage limit, "turn 4 ended with success") | **Rubric / skill conflict, not new.** `SKILL.md:303-305` tells the mentor to say exactly this when `expression_on_move` is false; the judge reads it as a guessed cause. Proposed smallest fix (rubric, needs the human's OK): R-NO-CAUSE accepts that one sentence as an honesty note. Alternative on the skill side: drop the sentence. 1 of 3 judged runs passed, so it is unstable either way. |
+
+### Case 06 rubric allowance and repeat (2026-10-29, branch `evals-repeat`, mentor at `ed26f17`)
+
+**Change (human-approved by the builder):** `R-NO-CAUSE` now has an explicit Pass-line allowance for the skill's limits sentence, "I can't see expressions on properties without keys yet" (`null-parenting-mentor/SKILL.md:303-305`), as stating a limit and not guessing a cause. The `no_cause` regex check is unchanged.
+
+**Results (`--repeat 3`):** **3/3** (`results/2026-10-29-210429.json`, $2.81). First pass (`-205555`): 2 pass, 1 timeout. Run on a loaded machine (load average 13 to 17): in the first pass most runs hit `spawnSync claude ETIMEDOUT` ($0 to $0.6). Timeouts are plumbing, not counted, and were re-run. Verdict: the old case 06 failure was a rubric judgment on the allowed sentence; fixed.
+
+**Cost of this repeat round (all five cases, both passes):** offset $7.41, anchor $4.16, key types $0.98, null $4.69, **$17.24 in all**.

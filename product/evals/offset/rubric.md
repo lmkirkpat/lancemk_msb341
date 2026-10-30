@@ -283,12 +283,14 @@ not bring up Quick Offset until its live check has confirmed it at this version.
 
 - **Fail:** any shortcut, or Quick Offset.
 
-## R-OFF-LINEAR-ONCE: with easing not learned, linear moves are mentioned once at "done"
+## R-OFF-LINEAR-ONCE: with easing not learned, the "still linear" sentence is said once, at the opt-in
 
-When easing isn't learned and the staggered members are still linear, the mentor says once, at "done",
-that the moves are still linear and suggests easing next. It doesn't grade the ease.
+When easing isn't learned and the learner opts in anyway, the mentor says one sentence at that turn
+(step 0) that offsetting moves that are still linear still looks mechanical. It is the only time the
+lesson says the moves are linear: not at "done", not again later. It doesn't grade the ease.
 
-- **Fail:** says it more than once, grades the ease, or never says it.
+- **Pass:** the sentence is at the opt-in turn and nowhere else; the "done" turn doesn't mention linear moves or suggest easing as a fix.
+- **Fail:** says it more than once (including at "done"), grades the ease, or never says it at the opt-in.
 
 ## R-OFF-SPLIT: a split on purpose is accepted and said plainly
 

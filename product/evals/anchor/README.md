@@ -576,3 +576,7 @@ right layer; the unit tests (`anchor-audit`, `demo-renumber`) own it.
 |---|---|---|---|
 | 20 group pivot moved | judge: R-HINT-NOT-FIX (turn 3 restates the Pan Behind steps; once also offered to show Door first) | pass, FAIL, pass (2 of 4 runs pass) | **Noise**, watch list. Checks all passed; the earlier baseline passed. Not from the audit changes. |
 | 30 stop early record | `record_plain`: record says "Pan Behind" (hard rule) | FAIL, FAIL, pass (1 of 4) | **Mentor** (prompt gap). The `next` field names the method ("... with Pan Behind"); `SKILL.md` step 11 says "no tool or method" only for `summary`. Proposed smallest fix: add "no tool or method" to the `next` line too, with an example in the Pass-line style ("Set Door's pivot on its left edge without Door moving"). Passed in the 10-28 baseline, so it is variance on an unconstrained field, not a new regression. |
+
+### Repeat of case 30 (2026-10-29, branch `evals-repeat`, mentor at `ed26f17`)
+
+`--only 30 --repeat 3`: **3/3**, `record_plain` held in all three (`results/2026-10-29-210140.json`, $3.18). First pass (`-201331`) was 3 timeouts, no result. Run on a loaded machine (load average 13 to 17): in the first pass most runs hit `spawnSync claude ETIMEDOUT` ($0 to $0.6). Timeouts are plumbing, not counted, and were re-run. Verdict: the 10-29 `record_plain` failure was fixed by the `ed26f17` prompt fix.
