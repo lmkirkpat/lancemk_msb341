@@ -141,8 +141,14 @@ a brand new session act like a colleague who already knows what you are working 
     skills audited; 16 misses fixed (the worst: adding a null renumbered layers and broke the easing,
     speed graph and key types checks), guide and solo-hidden layers never the demo, land-hard edits
     reported, demos safe after a renumber, all five spec matrices updated. Mentor tests 1494 pass.
-    **Next:** re-run all six eval sets (every `SKILL.md` changed) with the new cases; a live check of
-    the demo guard in AE; the locked-child and locked-layer rules.
+    Evals re-run the same day with 25 new cases (all pass): easing 27/28, key types 29/30, speed
+    graph 29/29, offset 33/37, pivot 48/50, null 42/44, every set at SC-006. Two `record_plain`
+    leaks (offset 23, pivot 30: the record's `next` named layers or the method) and offset 20's
+    double "still linear" were fixed in `SKILL.md` and re-run 3/3 each; null's R-NO-CAUSE accepts
+    the limits sentence. About $180 in all. Runs time out (`ETIMEDOUT`) when the machine is loaded;
+    count those as plumbing. **Next:** a live check of the demo guard in AE (add a null, then a
+    demo); the locked-child (D-OA-2) and key types locked-layer rules; 8 unpinned right-but-
+    surprising rows.
   - **Easing after wave A:** the drop to 20/25 was the judge, not the mentor (`23b37e9`); baseline
     24/25.
   - **Spec 004 live sitting (2026-10-26,** `specs/004-ae-curriculum/live-sitting-2026-10-26.md`**):**

@@ -105,6 +105,7 @@ Built in two waves of agents, merged to `main` (`03f66ff`, `a5d5aee`); mentor te
   pinning test.
 - **Still open:** the pivot rows held for T261/T248; key types has no rule for a locked layer
   (spec 009 row 32); offset's later landing moved alone isn't listed (same class as OA-2).
-- **Evals:** every skill's `SKILL.md` changed, so all six sets need a re-run, plus new cases the
-  builders listed (renumber after a null, same-name copy, guide leave-out, land-hard note, masked
-  or off-screen pivot focus, a duplicated null group layer, an unkeyed change outside the focus).
+- **Evals (re-run 2026-10-29):** 25 new cases, all passing. Easing 27/28, key types 29/30, speed
+  graph 29/29, offset 33/37, pivot 48/50, null 42/44; every set meets SC-006 after the follow-up
+  fixes (offset 23 and pivot 30 record wording, offset 20 said once at the opt-in, null R-NO-CAUSE),
+  each re-run 3/3. Details in each set's README.
