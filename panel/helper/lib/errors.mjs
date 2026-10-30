@@ -56,8 +56,27 @@ export function classify(err) {
     // An SSE error event of a type the table doesn't list, mid-answer.
     return "service_busy";
   }
-  // The connection dropped mid-answer: the SDK surfaces it as a plain error ("terminated").
-  return "offline";
+  // A connection that dropped mid-answer reaches here as the SDK's plain error ("terminated")
+  // over undici's socket error; that's offline. Anything else is a fault in the helper, not the
+  // learner's network: the start_failed message (reopen, check setup), and the loop logs it as
+  // internal_error so it's never mistaken for a connection problem.
+  return isNetworkError(err) ? "offline" : "start_failed";
+}
+
+const NET_CODE = /^(?:ECONNRESET|ECONNREFUSED|ECONNABORTED|ETIMEDOUT|EPIPE|ENOTFOUND|EAI_AGAIN|ENETUNREACH|ENETDOWN|EHOSTUNREACH|UND_ERR_[A-Z_]+)$/;
+const NET_MESSAGE = /^(?:terminated|fetch failed|other side closed)$/;
+
+// The SDK's connection and timeout classes, or an error whose cause chain holds a network error
+// code or undici's own wording for a dropped connection.
+export function isNetworkError(err) {
+  let e = err;
+  for (let depth = 0; e && typeof e === "object" && depth < 6; depth++) {
+    if (e instanceof Anthropic.APIConnectionError) return true;
+    if (typeof e.code === "string" && NET_CODE.test(e.code)) return true;
+    if (e instanceof TypeError && NET_MESSAGE.test(String(e.message))) return true;
+    e = e.cause;
+  }
+  return false;
 }
 
 const KEY_SHAPE = /sk-ant-[A-Za-z0-9_-]{10,}/g;

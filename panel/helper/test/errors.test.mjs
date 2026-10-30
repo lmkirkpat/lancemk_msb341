@@ -1,7 +1,7 @@
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import Anthropic from "@anthropic-ai/sdk";
-import { classify, MESSAGES, KINDS, errorEvent, scrub, logLine } from "../lib/errors.mjs";
+import { classify, isNetworkError, MESSAGES, KINDS, errorEvent, scrub, logLine } from "../lib/errors.mjs";
 import { startFakeService, reply, failure, drop, errorEvent as sseError, text } from "./fake-service.mjs";
 
 const KEY = "sk-ant-api03-TESTKEY_abcdefghijklmnop";
@@ -87,4 +87,19 @@ test("scrub removes key-shaped text and the key itself", () => {
   const line = logLine({ event: "x", detail: `401 ${KEY}` }, KEY);
   assert.doesNotMatch(line, /TESTKEY/);
   assert.ok(JSON.parse(line).at);
+});
+
+test("only network errors are offline; any other non-API error is a helper fault, start_failed (S5)", async () => {
+  const dropped = await errorFrom(drop([text("half")], 1));
+  assert.ok(isNetworkError(dropped), "a dropped stream: undici's socket error under the SDK's");
+  assert.equal(classify(dropped), "offline");
+  const reset = Object.assign(new Error("read failed"), { cause: Object.assign(new Error("socket"), { code: "ECONNRESET" }) });
+  assert.equal(classify(reset), "offline");
+  assert.equal(classify(new Anthropic.APIConnectionTimeoutError()), "offline");
+  for (const bug of [new TypeError("Cannot read properties of undefined (reading 'content')"), new Error("boom"), new RangeError("x"), "a string"]) {
+    assert.equal(isNetworkError(bug), false, String(bug));
+    assert.equal(classify(bug), "start_failed", String(bug));
+  }
+  const parse = new Anthropic.AnthropicError("Unable to parse tool parameter JSON from model.");
+  assert.equal(classify(parse), "start_failed");
 });

@@ -537,3 +537,24 @@ test("input_transformations are logged: type, reason and path only, never text (
   });
   assert.doesNotMatch(JSON.stringify(s.logs), /secret learner words/);
 });
+
+test("a fault in the helper is start_failed and logged as internal_error, not offline (S5)", async () => {
+  const s = await setup();
+  const broken = { beta: { messages: { stream: () => { throw new TypeError("Cannot read properties of undefined (reading 'x')"); } } } };
+  const lesson = createLesson({
+    getClient: async () => broken,
+    mcp: s.mcp,
+    settings: SETTINGS,
+    prices,
+    preamble,
+    skillTool,
+    skillsDir: SKILLS,
+    log: (e) => s.logs.push(e),
+  });
+  const r = await lesson.runTurn("/ease-mentor", () => {});
+  assert.equal(r.error_kind, "start_failed");
+  assert.equal(lesson.messages.length, 0);
+  const entry = s.logs.find((l) => l.event === "internal_error");
+  assert.equal(entry.name, "TypeError");
+  assert.ok(!s.logs.some((l) => l.event === "service_error"));
+});

@@ -10,7 +10,7 @@
 // as the turn's error kind; main.mjs sends the error and turn_end events.
 
 import Anthropic from "@anthropic-ai/sdk";
-import { classify } from "./errors.mjs";
+import { classify, isNetworkError } from "./errors.mjs";
 import { costOf, sumCosts, tokensOf, addTokens, ZERO_TOKENS } from "./cost.mjs";
 import { buildLessonPrompt, buildTools, promptHash, userContent, skillSystemMessage, withBreakpoint, SKILL_TOOL } from "./prompt.mjs";
 import { readSkill, commandOf } from "./skills.mjs";
@@ -320,7 +320,11 @@ export function createLesson(opts) {
           // The service's own words help the builder find a rejected request; the log line is
           // scrubbed of the key (main.mjs), and nothing from it reaches the learner (FR-021, FR-027).
           const detail = err && err.error && err.error.error && typeof err.error.error.message === "string" ? err.error.error.message.slice(0, 300) : null;
-          log({ event: "service_error", kind, status: (err && err.status) || null, type: (err && err.type) || null, detail });
+          if (!(err instanceof Anthropic.APIError) && !isNetworkError(err)) {
+            log({ event: "internal_error", name: (err && err.constructor && err.constructor.name) || typeof err, detail: String((err && err.message) || err).slice(0, 300) });
+          } else {
+            log({ event: "service_error", kind, status: (err && err.status) || null, type: (err && err.type) || null, detail });
+          }
           return fail(kind);
         }
         if (timedOut) throw new TurnAbort("timeout");
