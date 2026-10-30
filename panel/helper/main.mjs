@@ -26,6 +26,11 @@ const LOCAL_URL = /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d{1,5})?\/?$/;
 
 let key = null; // in memory only
 let startKey = null; // the start command's key (evals), if any
+// Tests and dev/drive.js --fault only: `keychain: false` in a start command that also has a local
+// base_url means the Keychain is never read (no real key in a test, no access dialog).
+let useKeychain = true;
+
+const findKey = () => (useKeychain ? resolveKey(startKey) : Promise.resolve(startKey));
 let started = false;
 let stopping = false;
 let turnInFlight = false;
@@ -43,7 +48,7 @@ function log(entry) {
 if (removedEnv.length) log({ event: "env_removed", names: removedEnv });
 
 async function getClient() {
-  if (!key) key = await resolveKey(startKey);
+  if (!key) key = await findKey();
   if (!key) return null;
   if (!ctx.client) ctx.client = createClient({ apiKey: key, baseURL: ctx.baseURL, timeoutMs: ctx.loaded.settings.turn_timeout_ms });
   return ctx.client;
@@ -56,14 +61,19 @@ async function start(cmd) {
   }
   startKey = typeof cmd.key === "string" && cmd.key ? cmd.key : null;
   delete cmd.key;
+  // The start command's own errors say so (during: "start"), so the adapter can tell them from a
+  // turn's error by their source (review S5).
+  const startError = () => out("error", { ...errorEvent("start_failed"), during: "start" });
   const fail = (reason) => {
     log({ event: "start_failed", reason });
-    out("error", errorEvent("start_failed"));
+    startError();
   };
   for (const f of ["session_id", "mcp_config", "skills_dir"]) {
     if (typeof cmd[f] !== "string" || !cmd[f]) return fail(`missing ${f}`);
   }
   if (cmd.base_url !== undefined && (typeof cmd.base_url !== "string" || !LOCAL_URL.test(cmd.base_url))) return fail("base_url must be on this Mac");
+  if (cmd.keychain !== undefined && cmd.keychain !== false) return fail("keychain may only be false");
+  if (cmd.keychain === false && cmd.base_url === undefined) return fail("keychain false needs a local base_url");
 
   let loaded;
   try {
@@ -105,12 +115,16 @@ async function start(cmd) {
   // resumed lesson starts fresh, which spec 003's rule allows (say nothing alarming).
   if (cmd.resume) log({ event: "resume_not_available" });
 
-  key = await resolveKey(startKey);
+  if (cmd.keychain === false) {
+    useKeychain = false;
+    log({ event: "keychain_off" });
+  }
+  key = await findKey();
   try {
     await mcp.start();
   } catch (e) {
     log({ event: "server_failed", code: e.code || "error" });
-    out("error", errorEvent("start_failed")); // the next send tries again
+    startError(); // the next send tries again
     return;
   }
   out("ready", {
@@ -185,7 +199,7 @@ async function send(cmd) {
 
 async function keyCheck(cmd) {
   // T037 builds the real check (one free models.retrieve). Until then: whether a key is there.
-  const k = await resolveKey(typeof cmd.key === "string" ? cmd.key : startKey);
+  const k = typeof cmd.key === "string" && cmd.key.trim() ? cmd.key.trim() : await findKey();
   delete cmd.key;
   if (!k) return out("key_status", { status: "no_key" });
   out("error", { kind: "not_implemented", message: "" });

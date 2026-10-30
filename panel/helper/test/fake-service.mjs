@@ -127,7 +127,9 @@ export const BETA = Object.freeze({
 
 // → a reason the real service would answer 400, or null. From the claude-api reference:
 // a mid-conversation system message must follow a user message and be the last message or be
-// followed by an assistant turn; block_binding needs its beta; fallbacks "default" needs
+// followed by an assistant turn; user and assistant turns alternate (system messages aside: two
+// user messages in a row are refused, shared/error-codes.md); every tool_use is answered by a
+// tool_result in the next user message; block_binding needs its beta; fallbacks "default" needs
 // server-side-fallback-2026-07-01; display "updates" needs its beta.
 export function invalidRequest(body, betaHeader) {
   if (!body || typeof body !== "object") return null;
@@ -139,6 +141,19 @@ export function invalidRequest(body, betaHeader) {
     if (msgs[i - 1].role !== "user") return `messages.${i}: a system message must follow a user message`;
     if (i + 1 < msgs.length && msgs[i + 1].role !== "assistant") return `messages.${i + 1}: a system message must be last or followed by an assistant turn`;
   }
+  // The conversation without its system messages: roles alternate, and each tool_use is answered.
+  const turns = msgs.map((m, i) => ({ m, i })).filter(({ m }) => m.role !== "system");
+  const blocks = (m) => (Array.isArray(m.content) ? m.content : []);
+  for (let k = 0; k < turns.length; k++) {
+    const { m, i } = turns[k];
+    const next = turns[k + 1];
+    if (next && next.m.role === m.role) return `messages.${next.i}: roles must alternate (two ${m.role} messages in a row)`;
+    if (m.role !== "assistant") continue;
+    const ids = blocks(m).filter((b) => b && b.type === "tool_use").map((b) => b.id);
+    if (!ids.length) continue;
+    const answered = new Set(next && next.m.role === "user" ? blocks(next.m).filter((b) => b && b.type === "tool_result").map((b) => b.tool_use_id) : []);
+    for (const id of ids) if (!answered.has(id)) return `messages.${i}: tool_use ${id} has no tool_result in the next user message`;
+  }
   const t = body.thinking || {};
   if (t.block_binding && !betas.has(BETA.binding)) return "thinking.block_binding: Extra inputs are not permitted";
   if (t.block_binding && !["error", "drop_block"].includes(t.block_binding.prefix_mismatch_behavior)) return "thinking.block_binding.prefix_mismatch_behavior: bad value";
@@ -148,6 +163,11 @@ export function invalidRequest(body, betaHeader) {
 }
 
 // ---------- server ----------
+
+// A key that looks real (a full-length sk-ant- key) is recorded redacted, never its value; the
+// short stand-in keys tests use are kept so a test can check which key was sent.
+const REAL_LOOKING_KEY = /sk-ant-[A-Za-z0-9_-]{40,}/g;
+export const redactKey = (v) => (typeof v === "string" ? v.replace(REAL_LOOKING_KEY, "[redacted]") : v);
 
 export async function startFakeService(opts = {}) {
   const defaultModel = opts.model || "claude-opus-5-5";
@@ -174,8 +194,8 @@ export async function startFakeService(opts = {}) {
         headers: {
           "anthropic-beta": req.headers["anthropic-beta"] || null,
           "anthropic-version": req.headers["anthropic-version"] || null,
-          authorization: req.headers.authorization || null,
-          "x-api-key": req.headers["x-api-key"] || null,
+          authorization: redactKey(req.headers.authorization || null),
+          "x-api-key": redactKey(req.headers["x-api-key"] || null),
         },
         body,
         raw,

@@ -11,7 +11,12 @@
 
   const { loadConfig, defaultHome } = lib("config.js");
   const { ensureRuntime } = lib("runtime.js");
-  const { createAdapter } = lib("adapter-claude-code.js");
+  const { createAdapter: createB1Adapter } = lib("adapter-claude-code.js");
+  const { createAdapter: createApiAdapter } = lib("adapter-api.js");
+  const { messageForA } = lib("errors-a.js");
+  // The runtime panel.json names (spec 013 FR-037): "a" is the Claude API through the helper;
+  // anything else is B1, headless Claude Code, exactly as before.
+  const createAdapter = (cfg) => (cfg.runtime === "a" ? createApiAdapter : createB1Adapter)(cfg);
   const { REQUESTS, visibleKinds } = lib("requests.js");
   const { initialLesson, reduceLesson, stageOf } = lib("lesson.js");
   const { pathView } = lib("path.js");
@@ -301,6 +306,13 @@
       render();
     });
     a.on("error", (e) => {
+      if (state.cfg && state.cfg.runtime === "a") {
+        // Option A: fixed text by kind only, nothing appended (spec 013 FR-027).
+        const text = messageForA(e.kind);
+        if (text === null) return;
+        state.turnError = true;
+        return notice(text);
+      }
       const msg = ERRORS[e.kind];
       if (e.kind === "bad_stream") return console.warn("[Knack] bad stream line", e.message);
       state.turnError = true;
@@ -398,7 +410,9 @@
   });
 
   const cfg = loadConfig();
-  if (cfg.ok) {
+  if (cfg.ok && cfg.runtime !== "a") {
+    // B1 only: option A needs no runtime folder (spec 013 FR-017); the helper gets only the
+    // allowlisted inputs instead.
     try {
       cfg.runtime_path = ensureRuntime(cfg.repo_path, path.join(defaultHome(), "runtime"));
     } catch (e) {

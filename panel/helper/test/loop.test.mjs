@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createLesson, createClient, echoContent, BETAS, NOT_AVAILABLE, NO_SUCH_SKILL } from "../lib/loop.mjs";
+import { createLesson, createClient, echoContent, BETAS, NOT_AVAILABLE, NO_SUCH_SKILL, DIDNT_RUN, NOT_FINISHED } from "../lib/loop.mjs";
 import { createMcpClient } from "../lib/mcp-client.mjs";
 import { loadSettings, HELPER_DIR } from "../lib/settings.mjs";
 import { loadPreamble, loadSkillTool, withoutBreakpoints } from "../lib/prompt.mjs";
@@ -25,7 +25,7 @@ afterEach(async () => {
   while (cleanups.length) await cleanups.pop()();
 });
 
-async function setup({ patch, noKey } = {}) {
+async function setup({ patch, noKey, wrapMcp } = {}) {
   const svc = await startFakeService();
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-loop-"));
   const state = path.join(home, "fixture-state.json");
@@ -36,7 +36,7 @@ async function setup({ patch, noKey } = {}) {
   const reqLogFile = path.join(home, "requests.jsonl");
   const lesson = createLesson({
     getClient: async () => (noKey ? null : createClient({ apiKey: KEY, baseURL: svc.url, timeoutMs: settings.turn_timeout_ms })),
-    mcp,
+    mcp: wrapMcp ? wrapMcp(mcp) : mcp,
     settings,
     prices,
     preamble,
@@ -71,22 +71,53 @@ async function setup({ patch, noKey } = {}) {
 const bodies = (svc) => svc.messageRequests.map((r) => r.body);
 const betasOf = (req) => (req.headers["anthropic-beta"] || "").split(",").map((s) => s.trim()).filter(Boolean);
 
-// Every request's messages start with the previous request's, byte for byte (cache markers aside),
-// the system prompt never changes within a lesson, and the tools change only where a test says a
-// hand-over happened (toolChangesAt: the 0-based request indexes whose tools differ from the one
-// before). Requests the fake rejected as invalid are left out of the comparison and fail the check.
-function assertAppendOnly(svc, { toolChangesAt = [] } = {}) {
+// Every request's messages extend the previous request's, byte for byte (cache markers aside):
+// the same messages, except that the last one may have gained content blocks at its end (the
+// learner's text after a turn's tool results, the documented mid-turn user-input shape). The
+// system prompt never changes within a lesson, and the tools change only where a test says a
+// hand-over happened (toolChangesAt: the 0-based request indexes whose tools differ from the
+// previous kept request's). Requests the fake rejected as invalid fail the check.
+// skip: request indexes that were sent and failed, and whose taken-back tail was in them (a
+// learner's message from a turn that completed nothing, or a skill body placed just before the
+// failed step; FR-015). A skipped request must still extend the kept request before it, with the
+// same system prompt and the tools toolChangesAt says; only later requests don't have to extend it.
+function extendsHistory(prev, next) {
+  if (next.length < prev.length) return false;
+  const last = prev.length - 1;
+  for (let j = 0; j < last; j++) if (JSON.stringify(prev[j]) !== JSON.stringify(next[j])) return false;
+  if (last < 0) return true;
+  const a = prev[last];
+  const b = next[last];
+  if (JSON.stringify(a) === JSON.stringify(b)) return true;
+  if (a.role !== b.role || !Array.isArray(a.content) || !Array.isArray(b.content) || b.content.length <= a.content.length) return false;
+  return JSON.stringify(b.content.slice(0, a.content.length)) === JSON.stringify(a.content);
+}
+
+function assertAppendOnly(svc, { toolChangesAt = [], skip = [] } = {}) {
   assert.deepEqual(svc.rejected, [], "the fake service rejected a request as invalid");
   const b = bodies(svc);
+  let p = 0;
   for (let i = 1; i < b.length; i++) {
-    const prev = JSON.stringify(withoutBreakpoints(b[i - 1].messages));
-    const next = JSON.stringify(withoutBreakpoints(b[i].messages.slice(0, b[i - 1].messages.length)));
-    assert.equal(next, prev, `request ${i + 1} rewrote the history of request ${i}`);
+    const prev = withoutBreakpoints(b[p].messages);
+    const next = withoutBreakpoints(b[i].messages);
+    assert.ok(extendsHistory(JSON.parse(JSON.stringify(prev)), JSON.parse(JSON.stringify(next))), `request ${i + 1} rewrote the history of request ${p + 1}`);
     assert.equal(JSON.stringify(b[i].system), JSON.stringify(b[0].system), `request ${i + 1} changed the system prompt`);
-    const sameTools = JSON.stringify(b[i].tools) === JSON.stringify(b[i - 1].tools);
+    const sameTools = JSON.stringify(b[i].tools) === JSON.stringify(b[p].tools);
     assert.equal(sameTools, !toolChangesAt.includes(i), `request ${i + 1}'s tools ${sameTools ? "didn't change" : "changed"} unexpectedly`);
+    if (!skip.includes(i)) p = i;
   }
 }
+
+test("assertAppendOnly: a block added to the last message is an extension; anything else isn't", () => {
+  const u = { role: "user", content: [{ type: "tool_result", tool_use_id: "x", content: "r" }] };
+  const a = { role: "assistant", content: [{ type: "text", text: "a" }] };
+  const more = { role: "user", content: [...u.content, { type: "text", text: "next" }] };
+  assert.equal(extendsHistory([a, u], [a, more]), true);
+  assert.equal(extendsHistory([a, u], [a, u, a]), true);
+  assert.equal(extendsHistory([a, more], [a, u]), false, "a removed block");
+  assert.equal(extendsHistory([u, a], [more, a]), false, "only the last message may grow");
+  assert.equal(extendsHistory([a, u], [a, { role: "user", content: [{ type: "text", text: "next" }, ...u.content] }]), false, "blocks go after, not before");
+});
 
 test("an easing turn end to end: the request, the events, the tool through ae-mentor", async () => {
   const s = await setup();
@@ -408,7 +439,9 @@ test("a hand-over on the last step: the skill's body waits for the next learner 
   assert.equal(second.r.ok, true);
   const b1 = bodies(s.svc)[1];
   assert.deepEqual(b1.messages.slice(-2).map((m) => m.role), ["user", "system"]);
-  assert.equal(b1.messages.at(-2).content[0].text, "Yes, easing please.");
+  // The learner's text goes after the step's tool results, in the same user message (M1 review fix).
+  assert.deepEqual(b1.messages.at(-2).content.map((c) => c.type), ["tool_result", "text"]);
+  assert.equal(b1.messages.at(-2).content.at(-1).text, "Yes, easing please.");
   assert.equal(b1.messages.at(-1).content[0].text, readSkill(SKILLS, "ease-mentor").body);
   assert.deepEqual(b1.tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
 
@@ -436,32 +469,182 @@ test("an empty reply right after a hand-over: the body waits for the next learne
   assert.equal(last.messages.filter((m) => m.role === "system").length, 1);
 });
 
-test("a failure at step 2 takes the whole turn back; the lesson goes on (S3)", async () => {
+// ---------- D1 (spec FR-015 as amended 2026-10-30, T059): a failed turn keeps its complete
+// exchanges and takes back only the incomplete tail. ----------
+
+const FAST = { "retry-after-ms": "1" };
+const busy = () => [failure(529, "overloaded_error", "o", FAST), failure(529, "overloaded_error", "o", FAST), failure(529, "overloaded_error", "o", FAST)];
+
+// Turn 1 of a lesson: the snapshot, then a line. → the demo target ae-mentor named.
+async function opening(s) {
+  s.svc.script(reply([toolUse("snapshot_project", {}, "tu_open")], { stop_reason: "tool_use" }), reply([text("Your Title moves at one speed.")]));
+  const { r, events } = await s.turn("/ease-mentor");
+  assert.equal(r.ok, true);
+  const target = events.find((e) => e.type === "tool_result").json.demo_target;
+  assert.equal(typeof target, "string", "the fixture has a demo target");
+  return target;
+}
+
+const stripped = (m) => JSON.parse(JSON.stringify(withoutBreakpoints(m)));
+
+for (const [label, patch, step3, kind] of [
+  ["a dropped connection", {}, () => [drop([text("half of an answer"), toolUse("snapshot_project", {}, "tu_never")], 1)], "offline"],
+  ["a service error", {}, busy, "service_busy"],
+  ["the turn timeout", { turn_timeout_ms: 2500 }, () => [reply([text("never")], { hang: true })], "timeout"],
+  ["a refusal", {}, () => [reply([], { stop_reason: "refusal", stop_details: { type: "refusal", category: "other" } })], "refused"],
+  ["an answer cut off mid call", {}, () => [reply([text("Now"), toolUse("snapshot_project", {}, "tu_cut")], { stop_reason: "max_tokens" })], null],
+]) {
+  test(`D1: the demo at step 1 and a check at step 2 stay when step 3 fails (${label})`, async () => {
+    const s = await setup({ patch });
+    const target = await opening(s);
+    const before = s.lesson.messages.length;
+    s.svc.script(
+      reply([thinking("", "d1-a"), text("Watch the first pair."), toolUse("set_ease", { segment_id: target }, "tu_demo")], { stop_reason: "tool_use" }),
+      reply([thinking("", "d1-b"), toolUse("diff_since_last", {}, "tu_diff")], { stop_reason: "tool_use" }),
+      ...step3(),
+    );
+    const { r, events } = await s.turn("Show me one.");
+    assert.equal(r.ok, false);
+    assert.equal(r.error_kind, kind);
+    assert.equal(r.steps, 3);
+    const results = events.filter((e) => e.type === "tool_result");
+    assert.deepEqual(results.map((e) => e.name), ["set_ease", "diff_since_last"]);
+    assert.equal(results[0].ok, true, "the demo ran");
+
+    // Kept: the learner's message and both complete exchanges, exactly as step 3 sent them.
+    const step3Request = bodies(s.svc)[4]; // requests 0-1: the opening; 2-3: steps 1 and 2
+    assert.equal(s.lesson.messages.length, before + 5);
+    assert.deepEqual(s.lesson.messages.slice(before).map((m) => m.role), ["user", "assistant", "user", "assistant", "user"]);
+    assert.deepEqual(stripped(s.lesson.messages), stripped(step3Request.messages), "nothing of step 3's answer is kept");
+    assert.doesNotMatch(JSON.stringify(s.lesson.messages), /half of an answer|tu_never|tu_cut|"Now"/);
+
+    // The next turn sends both calls and their results byte for byte, then the new text as a block
+    // after the last tool results, in the same user message (the mid-turn shape; M1 review fix).
+    s.svc.script(reply([text("That one's eased. Now the rest.")]));
+    const next = await s.turn("Did it work?");
+    assert.equal(next.r.ok, true);
+    const sent = bodies(s.svc).at(-1).messages;
+    assert.equal(sent.length, before + 5, "no second user message");
+    assert.equal(JSON.stringify(withoutBreakpoints(sent.slice(0, before + 4))), JSON.stringify(withoutBreakpoints(step3Request.messages.slice(0, before + 4))));
+    const merged = withoutBreakpoints(sent[before + 4]);
+    assert.deepEqual(merged.content.slice(0, -1), withoutBreakpoints(step3Request.messages[before + 4]).content);
+    assert.deepEqual(merged.content.at(-1), { type: "text", text: "Did it work?" });
+    assertAppendOnly(s.svc);
+    assert.equal((s.calls().match(/"tool":"set_ease"/g) || []).length, 1, "the demo ran once");
+  });
+}
+
+test("D1: a demo runs, the next call in the same answer fails (ae-mentor exits): the answer is completed", async () => {
+  let killNext = false;
+  const s = await setup({
+    wrapMcp: (m) => ({
+      start: () => m.start(),
+      pid: () => m.pid(),
+      stop: () => m.stop(),
+      async callTool(name, args) {
+        if (killNext && name === "diff_since_last") {
+          killNext = false;
+          await m.stop(); // the server is gone when the call is made
+        }
+        return m.callTool(name, args);
+      },
+    }),
+  });
+  const target = await opening(s);
+  const before = s.lesson.messages.length;
+  killNext = true;
+  s.svc.script(
+    reply(
+      [thinking("", "q7"), text("Watch."), toolUse("set_ease", { segment_id: target }, "tu_demo"), toolUse("diff_since_last", {}, "tu_diff"), toolUse("snapshot_project", {}, "tu_snap2")],
+      { stop_reason: "tool_use" },
+    ),
+  );
+  const { r, events } = await s.turn("Show me one.");
+  assert.equal(r.ok, false);
+  assert.equal(r.error_kind, "start_failed");
+  assert.equal(r.steps, 1);
+  assert.deepEqual(events.filter((e) => e.type === "tool_call").map((e) => e.id), ["tu_demo", "tu_diff", "tu_snap2"]);
+  assert.deepEqual(events.filter((e) => e.type === "tool_result").map((e) => e.id), ["tu_demo"], "a call that didn't run shows no result");
+
+  const kept = JSON.parse(JSON.stringify(s.lesson.messages.slice(before)));
+  assert.deepEqual(kept.map((m) => m.role), ["user", "assistant", "user"]);
+  const res = kept[2].content;
+  assert.deepEqual(res.map((b) => b.tool_use_id), ["tu_demo", "tu_diff", "tu_snap2"]);
+  assert.equal(res[0].is_error, undefined, "the demo keeps its own result");
+  assert.notEqual(res[0].content[0].text, DIDNT_RUN);
+  for (const b of res.slice(1)) {
+    assert.equal(b.is_error, true);
+    assert.deepEqual(withoutBreakpoints(b.content), [{ type: "text", text: DIDNT_RUN }]);
+  }
+  assert.equal(DIDNT_RUN, "That call didn't run.");
+
+  // The next turn starts the server again and still has the demo's call and result.
+  s.svc.script(reply([text("Your turn on the rest.")]));
+  const next = await s.turn("What now?");
+  assert.equal(next.r.ok, true);
+  const sent = bodies(s.svc).at(-1).messages;
+  assert.equal(sent.length, before + 3);
+  assert.equal(JSON.stringify(withoutBreakpoints(sent.slice(before, before + 2))), JSON.stringify(kept.slice(0, 2)));
+  assert.deepEqual(withoutBreakpoints(sent[before + 2]).content, [...kept[2].content, { type: "text", text: "What now?" }]);
+  assertAppendOnly(s.svc);
+  assert.equal((s.calls().match(/"tool":"set_ease"/g) || []).length, 1);
+});
+
+test("D1: a failure at step 1 takes the learner's message back too (resolved question 6)", async () => {
   const s = await setup();
   s.svc.script(reply([text("Hi.")]));
   await s.turn("/ease-mentor");
   const before = JSON.stringify(s.lesson.messages);
-  const fast = { "retry-after-ms": "1" };
-  s.svc.script(
-    reply([toolUse("snapshot_project", {}, "tu2")], { stop_reason: "tool_use" }),
-    failure(529, "overloaded_error", "o", fast),
-    failure(529, "overloaded_error", "o", fast),
-    failure(529, "overloaded_error", "o", fast),
-  );
-  const { r, events } = await s.turn("Check my work.");
+  s.svc.script(...busy());
+  const { r } = await s.turn("Check my work.");
   assert.equal(r.error_kind, "service_busy");
-  assert.equal(r.steps, 2);
-  assert.ok(events.some((e) => e.type === "tool_result"), "the step-1 call ran and was shown");
-  assert.equal(JSON.stringify(s.lesson.messages), before, "nothing from the failed turn is kept");
+  assert.equal(JSON.stringify(s.lesson.messages), before, "the learner's message came off");
+
+  // A skill command whose turn completed nothing: the switch is undone with it.
+  s.svc.script(failure(401, "authentication_error", "revoked"));
+  assert.equal((await s.turn("/offset-mentor")).r.error_kind, "not_signed_in");
+  assert.equal(s.lesson.skill, "ease-mentor");
+  assert.equal(JSON.stringify(s.lesson.messages), before);
+
   s.svc.script(reply([text("Back.")]));
   assert.equal((await s.turn("Check my work.")).r.ok, true);
-  // The rolled-back requests aren't prefixes of what came after; compare the kept ones only.
-  const kept = bodies(s.svc);
-  assert.equal(JSON.stringify(withoutBreakpoints(kept.at(-1).messages.slice(0, 2))), JSON.stringify(withoutBreakpoints(kept[0].messages.concat([{ role: "assistant", content: [{ type: "text", text: "Hi." }] }]))));
-  assert.deepEqual(s.svc.rejected, []);
+  const last = bodies(s.svc).at(-1);
+  assert.equal(last.messages.length, 3, "the retry sends the message once");
+  assert.ok(last.tools.some((t) => t.name === "set_ease"));
+  // Requests 2 to 5 failed with nothing completed, so their learner messages were taken back;
+  // request 5 carried offset's tools (its skill command), taken back with it.
+  assertAppendOnly(s.svc, { skip: [1, 2, 3, 4], toolChangesAt: [4] });
 });
 
-test("a failure at step 3, after a hand-over at step 1, takes the hand-over back too (S3)", async () => {
+test("D1: a hand-over completed in the failed turn stays in force; its body goes in before the next request", async () => {
+  const s = await setup();
+  s.svc.script(
+    reply([thinking("", "h1"), toolUse("Skill", { skill: "ease-mentor", args: "review" }, "tu_h")], { stop_reason: "tool_use" }),
+    drop([text("Let's")], 1), // step 2, with the body just placed
+  );
+  const { r, events } = await s.turn("/next-mentor");
+  assert.equal(r.error_kind, "offline");
+  assert.equal(r.skill, "ease-mentor");
+  assert.ok(events.some((e) => e.type === "skill_loaded"));
+  assert.equal(s.lesson.skill, "ease-mentor");
+  assert.deepEqual(s.lesson.messages.map((m) => m.role), ["user", "assistant", "user"], "the body was in the failed step's tail");
+  assert.deepEqual(withoutBreakpoints(s.lesson.messages[2].content[0].content), [{ type: "text", text: "Loaded ease-mentor. Arguments: review" }]);
+
+  s.svc.script(reply([text("Let's review your easing.")]), reply([text("Ready when you are.")]));
+  assert.equal((await s.turn("Hello?")).r.ok, true);
+  assert.equal((await s.turn("Ok.")).r.ok, true);
+  const b = bodies(s.svc);
+  const body = readSkill(SKILLS, "ease-mentor").body;
+  assert.deepEqual(b[2].messages.slice(-2).map((m) => m.role), ["user", "system"]);
+  assert.equal(b[2].messages.at(-1).content[0].text, body);
+  assert.equal(b[2].messages.filter((m) => m.role === "system").length, 1);
+  assert.deepEqual(b[2].tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
+  assert.equal(b[2].thinking.block_binding.prefix_mismatch_behavior, "drop_block");
+  // Request 2 (failed, skipped) already had ease-mentor's tools; request 3 is compared with request 1.
+  assertAppendOnly(s.svc, { toolChangesAt: [1, 2], skip: [1] });
+});
+
+test("D1: a hand-over at step 1 and a call at step 2 stay when step 3 fails", async () => {
   const s = await setup();
   s.svc.script(
     reply([toolUse("Skill", { skill: "ease-mentor" }, "h")], { stop_reason: "tool_use" }),
@@ -471,13 +654,14 @@ test("a failure at step 3, after a hand-over at step 1, takes the hand-over back
   const { r } = await s.turn("/next-mentor");
   assert.equal(r.error_kind, "not_signed_in");
   assert.equal(r.steps, 3);
-  assert.equal(s.lesson.messages.length, 0);
-  assert.equal(s.lesson.skill, null, "the hand-over is undone with the turn (here, the lesson's first)");
+  assert.equal(s.lesson.skill, "ease-mentor", "the hand-over stays in force");
+  assert.deepEqual(s.lesson.messages.map((m) => m.role), ["user", "assistant", "user", "system", "assistant", "user"]);
   s.svc.script(reply([text("Hi again.")]));
-  assert.equal((await s.turn("/next-mentor")).r.ok, true);
+  assert.equal((await s.turn("Hello?")).r.ok, true);
   const last = bodies(s.svc).at(-1);
-  assert.deepEqual(last.tools.map((t) => t.name), ["read_learner_record", "recommend_next", "Skill"]);
-  assert.deepEqual(s.svc.rejected, []);
+  assert.deepEqual(last.tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
+  assert.equal(last.messages.filter((m) => m.role === "system").length, 1);
+  assertAppendOnly(s.svc, { toolChangesAt: [1] });
 });
 
 test("the fake service refuses what the real one does (S3)", async () => {
@@ -495,6 +679,25 @@ test("the fake service refuses what the real one does (S3)", async () => {
   assert.equal(invalidRequest({ messages: [u], thinking: { type: "adaptive", block_binding: { prefix_mismatch_behavior: "error" } } }, all), null);
   assert.match(invalidRequest({ messages: [u], fallbacks: "default" }, BETA.binding), /fallbacks/);
   assert.match(invalidRequest({ messages: [u], thinking: { type: "adaptive", display: "updates" } }, BETA.fallback), /updates/);
+  // Roles alternate, system messages aside; every tool_use is answered in the next user message.
+  assert.match(invalidRequest({ messages: [u, a, u, u] }, ""), /two user messages in a row/);
+  assert.match(invalidRequest({ messages: [u, a, a] }, ""), /two assistant messages/);
+  const call = { role: "assistant", content: [{ type: "tool_use", id: "c1", name: "x", input: {} }] };
+  const answer = { role: "user", content: [{ type: "tool_result", tool_use_id: "c1", content: "ok" }] };
+  assert.equal(invalidRequest({ messages: [u, call, answer] }, ""), null);
+  assert.equal(invalidRequest({ messages: [u, call, answer, sys, a] }, ""), null);
+  assert.equal(invalidRequest({ messages: [u, call, { role: "user", content: [...answer.content, { type: "text", text: "and?" }] }] }, ""), null, "text after the results is the mid-turn shape");
+  assert.match(invalidRequest({ messages: [u, call, u] }, ""), /tool_use c1 has no tool_result/);
+  assert.match(invalidRequest({ messages: [u, call] }, ""), /tool_use c1 has no tool_result/);
+});
+
+test("the fake service records a real-looking key redacted, and keeps short stand-ins", async () => {
+  const { redactKey } = await import("./fake-service.mjs");
+  const real = "sk-ant-api03-" + "Ab3_".repeat(23) + "xyzAA";
+  assert.equal(redactKey(`Bearer ${real}`), "Bearer [redacted]");
+  assert.equal(redactKey(real), "[redacted]");
+  assert.equal(redactKey(`Bearer ${KEY}`), `Bearer ${KEY}`);
+  assert.equal(redactKey(null), null);
 });
 
 test("every request opts into the history check: error before a hand-over, drop_block after (M2)", async () => {
@@ -558,4 +761,125 @@ test("a fault in the helper is start_failed and logged as internal_error, not of
   const entry = s.logs.find((l) => l.event === "internal_error");
   assert.equal(entry.name, "TypeError");
   assert.ok(!s.logs.some((l) => l.event === "service_error"));
+});
+
+test("M1: after the step limit, a turn that completes nothing takes back only its text block", async () => {
+  const s = await setup({ patch: { max_steps: 1 } });
+  s.svc.script(reply([toolUse("snapshot_project", {}, "tu_lim")], { stop_reason: "tool_use" }));
+  await s.turn("/ease-mentor");
+  const atLimit = JSON.stringify(s.lesson.messages);
+  assert.equal(s.lesson.messages.at(-1).role, "user");
+
+  s.svc.script(failure(401, "authentication_error", "revoked"));
+  assert.equal((await s.turn("Check my work.")).r.error_kind, "not_signed_in");
+  assert.equal(JSON.stringify(s.lesson.messages), atLimit, "the tool results stay; only the added text came off");
+  const failed = bodies(s.svc).at(-1).messages.at(-1);
+  assert.deepEqual(failed.content.map((c) => c.type), ["tool_result", "text"], "the failed request had the mid-turn shape");
+
+  s.svc.script(reply([text("Here's what I see.")]));
+  assert.equal((await s.turn("Check my work.")).r.ok, true);
+  const last = bodies(s.svc).at(-1).messages;
+  assert.deepEqual(last.at(-1).content.filter((c) => c.type === "text").map((c) => c.text), ["Check my work."], "the retry sends the text once");
+  assertAppendOnly(s.svc);
+});
+
+test("S4: a fault in the helper after a demo ran completes the answer instead of cutting past it", async () => {
+  let second = false;
+  const s = await setup({
+    wrapMcp: (m) => ({
+      start: () => m.start(),
+      pid: () => m.pid(),
+      stop: () => m.stop(),
+      async callTool(name, args) {
+        if (second && name === "diff_since_last") return { content: null, isError: false }; // malformed: a TypeError in the helper
+        return m.callTool(name, args);
+      },
+    }),
+  });
+  const target = await opening(s);
+  const before = s.lesson.messages.length;
+  second = true;
+  s.svc.script(reply([toolUse("set_ease", { segment_id: target }, "tu_demo"), toolUse("diff_since_last", {}, "tu_diff")], { stop_reason: "tool_use" }));
+  const { r } = await s.turn("Show me one.");
+  assert.equal(r.error_kind, "start_failed");
+  const res = s.lesson.messages.at(-1).content;
+  assert.deepEqual(res.map((b) => b.tool_use_id), ["tu_demo", "tu_diff"]);
+  assert.equal(res[0].is_error, undefined, "the demo's result is kept");
+  assert.deepEqual(withoutBreakpoints(res[1].content), [{ type: "text", text: DIDNT_RUN }]);
+  assert.equal(s.lesson.messages.length, before + 3);
+  assert.ok(s.logs.some((l) => l.event === "internal_error" && l.name === "TypeError"));
+  s.svc.script(reply([text("Your turn.")]));
+  assert.equal((await s.turn("What now?")).r.ok, true);
+  assertAppendOnly(s.svc);
+});
+
+test("S1: a demo call still running when the turn times out gets the didn't-finish result; the answer is completed", async () => {
+  let hang = false;
+  const s = await setup({
+    patch: { turn_timeout_ms: 1500 },
+    wrapMcp: (m) => ({
+      start: () => m.start(),
+      pid: () => m.pid(),
+      stop: () => m.stop(),
+      callTool(name, args) {
+        if (hang && name === "set_ease") return new Promise(() => {}); // sent, never answers
+        return m.callTool(name, args);
+      },
+    }),
+  });
+  const target = await opening(s);
+  const before = s.lesson.messages.length;
+  hang = true;
+  s.svc.script(reply([text("Watch."), toolUse("set_ease", { segment_id: target }, "tu_demo"), toolUse("diff_since_last", {}, "tu_diff")], { stop_reason: "tool_use" }));
+  const { r, events } = await s.turn("Show me one.");
+  assert.equal(r.error_kind, "timeout");
+  assert.ok(!events.some((e) => e.type === "tool_result"), "no result shown for a call that didn't finish");
+
+  // Nothing ran to completion, but AE may have changed: the answer is completed, not taken back.
+  const kept = JSON.parse(JSON.stringify(s.lesson.messages.slice(before)));
+  assert.deepEqual(kept.map((m) => m.role), ["user", "assistant", "user"]);
+  const res = kept[2].content;
+  assert.deepEqual(res.map((b) => b.tool_use_id), ["tu_demo", "tu_diff"]);
+  assert.equal(NOT_FINISHED, "That call didn't finish, so it may or may not have changed the project.");
+  assert.deepEqual(res[0], { type: "tool_result", tool_use_id: "tu_demo", content: [{ type: "text", text: NOT_FINISHED }], is_error: true });
+  assert.deepEqual(res[1], { type: "tool_result", tool_use_id: "tu_diff", content: [{ type: "text", text: DIDNT_RUN }], is_error: true }, "never started");
+
+  // The next turn has the call with its result, the learner's text after it, and valid roles.
+  hang = false;
+  s.svc.script(reply([text("Let's check what's there.")]));
+  assert.equal((await s.turn("Did it land?")).r.ok, true);
+  const sent = withoutBreakpoints(bodies(s.svc).at(-1).messages);
+  assert.equal(sent.length, before + 3);
+  assert.deepEqual(sent[before + 1], kept[1]);
+  assert.deepEqual(sent[before + 2].content, [...res, { type: "text", text: "Did it land?" }]);
+  assertAppendOnly(s.svc);
+});
+
+test("S1: a call never sent (the server already gone) is still \"didn't run\"; one in flight when the server dies \"didn't finish\"", async () => {
+  let mode = null;
+  const s = await setup({
+    wrapMcp: (m) => ({
+      start: () => m.start(),
+      pid: () => m.pid(),
+      stop: () => m.stop(),
+      async callTool(name, args) {
+        if (mode === "exit-mid-call" && name === "set_ease") {
+          const p = m.callTool(name, args);
+          process.kill(m.pid(), "SIGKILL"); // dies with the call sent
+          return p;
+        }
+        return m.callTool(name, args);
+      },
+    }),
+  });
+  const target = await opening(s);
+  mode = "exit-mid-call";
+  s.svc.script(reply([toolUse("set_ease", { segment_id: target }, "tu_x")], { stop_reason: "tool_use" }));
+  const { r } = await s.turn("Show me one.");
+  assert.equal(r.error_kind, "start_failed");
+  assert.deepEqual(withoutBreakpoints(s.lesson.messages.at(-1).content), [{ type: "tool_result", tool_use_id: "tu_x", content: [{ type: "text", text: NOT_FINISHED }], is_error: true }]);
+  mode = null;
+  s.svc.script(reply([text("Back.")]));
+  assert.equal((await s.turn("Hello?")).r.ok, true);
+  assertAppendOnly(s.svc);
 });

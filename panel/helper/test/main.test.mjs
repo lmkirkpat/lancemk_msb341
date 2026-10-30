@@ -205,7 +205,7 @@ test("another settings file is reported in ready; a bad one or a remote base_url
   const bad = await helper();
   fs.writeFileSync(path.join(bad.home, "bad.json"), JSON.stringify({ version: 2 }));
   bad.start({ settings_file: path.join(bad.home, "bad.json") });
-  assert.deepEqual(await bad.next("error"), { type: "error", kind: "start_failed", message: MESSAGES.start_failed });
+  assert.deepEqual(await bad.next("error"), { type: "error", kind: "start_failed", message: MESSAGES.start_failed, during: "start" });
   bad.cmd({ type: "send", text: "/ease-mentor" });
   const end = await bad.next("turn_end");
   assert.equal(end.ok, false);
@@ -225,12 +225,14 @@ test("ae-mentor can't start: start_failed at start and on the next send, no serv
   const cfg = path.join(h.home, ".mcp.json");
   fs.writeFileSync(cfg, JSON.stringify({ mcpServers: { "ae-mentor": { command: "node", args: [path.join(h.home, "missing-server.mjs")] } } }));
   h.start({ mcp_config: cfg });
-  assert.deepEqual(await h.next("error"), { type: "error", kind: "start_failed", message: MESSAGES.start_failed });
+  // The start command's own error says so (during: "start"), so the adapter can tell it from a
+  // turn's error by its source (review S5); the turn's error doesn't carry it.
+  assert.deepEqual(await h.next("error"), { type: "error", kind: "start_failed", message: MESSAGES.start_failed, during: "start" });
   const at = h.events.length;
   h.cmd({ type: "send", text: "/ease-mentor", kind: "start" });
   const end = await h.next("turn_end", at);
   assert.equal(end.ok, false);
-  assert.equal(h.events.slice(at).find((e) => e.type === "error").kind, "start_failed");
+  assert.deepEqual(h.events.slice(at).find((e) => e.type === "error"), { type: "error", kind: "start_failed", message: MESSAGES.start_failed });
   assert.equal(h.svc.requests.length, 0, "no service request without the mentor's server");
   h.cmd({ type: "stop" });
   assert.equal(await h.exited, 0);
@@ -244,4 +246,27 @@ test("unknown commands and lines that aren't JSON are refused without echoing th
   assert.ok(!h.stderr.includes("MAINKEY"));
   h.cmd({ type: "stop" });
   await h.exited;
+});
+
+test("keychain false (tests only, with a local base_url): no Keychain read; no key means not_signed_in, no request", async () => {
+  const h = await helper();
+  h.start({ key: undefined, keychain: false });
+  await h.next("ready");
+  assert.match(h.stderr, /"event":"keychain_off"/);
+  const at = h.events.length;
+  h.cmd({ type: "send", text: "/ease-mentor", kind: "start" });
+  const end = await h.next("turn_end", at);
+  assert.equal(end.ok, false);
+  assert.equal(h.events.slice(at).find((e) => e.type === "error").kind, "not_signed_in");
+  assert.equal(h.svc.requests.length, 0);
+  h.cmd({ type: "stop" });
+  await h.exited;
+
+  // Without a local base_url it's refused, so the panel's path can't turn the Keychain off.
+  const remote = await helper();
+  remote.start({ base_url: undefined, keychain: false });
+  assert.deepEqual(await remote.next("error"), { type: "error", kind: "start_failed", message: MESSAGES.start_failed, during: "start" });
+  assert.match(remote.stderr, /keychain false needs a local base_url/);
+  remote.cmd({ type: "stop" });
+  await remote.exited;
 });
