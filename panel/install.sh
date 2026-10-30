@@ -4,7 +4,10 @@
 # 1. symlinks panel/ into ~/Library/Application Support/Adobe/CEP/extensions/AEMentorPanel
 # 2. lets After Effects load unsigned CEP extensions (PlayerDebugMode, current user only)
 # 3. writes panel.json with the claude, node and repo paths (research R3): apps opened from the
-#    Dock don't get the shell's PATH, so the panel can't find either program on its own.
+#    Dock don't get the shell's PATH, so the panel can't find either program on its own. A
+#    runtime already chosen in panel.json ("b1" or "a", spec 013 FR-037) is kept.
+# 4. installs the option A helper's one dependency (panel/helper, decisions/010) with npm ci,
+#    using the npm that comes with that node.
 # Needs the bridge too (bash bridge/install.sh). Undo with panel/uninstall.sh.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -34,11 +37,21 @@ echo "OK   PlayerDebugMode=1 for CSXS.9 to CSXS.14"
 HOME_DIR="${AE_MENTOR_HOME:-$HOME/Library/Application Support/AEMentor}"
 mkdir -p "$HOME_DIR"
 CFG="$HOME_DIR/panel.json"
-"$NODE" -e 'const [f, c, n, r] = process.argv.slice(1);
-  require("fs").writeFileSync(f, JSON.stringify({ version: 1, claude_path: c, node_path: n, repo_path: r }, null, 2) + "\n", { mode: 0o600 });' \
+"$NODE" -e 'const fs = require("fs"); const [f, c, n, r] = process.argv.slice(1);
+  let runtime; try { const old = JSON.parse(fs.readFileSync(f, "utf8")); if (old.runtime === "a" || old.runtime === "b1") runtime = old.runtime; } catch (e) {}
+  const cfg = { version: 1, claude_path: c, node_path: n, repo_path: r };
+  if (runtime) cfg.runtime = runtime;
+  fs.writeFileSync(f, JSON.stringify(cfg, null, 2) + "\n", { mode: 0o600 });' \
   "$CFG" "$CLAUDE" "$NODE" "$REPO"
 chmod 600 "$CFG"
 echo "OK   wrote $(tilde "$CFG")"
+
+NODE_DIR="$(dirname "$NODE")"
+NPM="$NODE_DIR/npm"
+[ -x "$NPM" ] || { echo "No npm next to $(tilde "$NODE"). Reinstall Node.js 18+ from https://nodejs.org and re-run." >&2; exit 1; }
+(cd "$ROOT/helper" && PATH="$NODE_DIR:/usr/bin:/bin:/usr/sbin:/sbin" "$NPM" ci --no-audit --no-fund --loglevel=error >/dev/null) \
+  || { echo "Couldn't install the helper's packages in $(tilde "$ROOT/helper") (npm ci failed; see above)." >&2; exit 1; }
+echo "OK   helper packages installed: $(tilde "$ROOT/helper/node_modules")"
 
 echo
 echo "NEXT: restart After Effects, then open Window > Extensions > Knack."
