@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "thinking_display": "updates",
+  "cache_ttl": "5m",
+  "skill_placement": "system",
+  "max_steps": 12,
+  "turn_timeout_ms": 300000,
+  "max_tokens": 32000,
+  "fallbacks": "default"
+}
