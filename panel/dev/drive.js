@@ -36,7 +36,7 @@ const arg = (name) => {
 // scripted on the local fake service for every request, so every turn hits it.
 const FAST = { "retry-after-ms": "1" };
 const FAULTS = {
-  no_key: (f) => f.failure(401, "authentication_error", "invalid x-api-key"), // see the note below
+  no_key: null, // no key in the start command and the Keychain not read: no request is made
   rejected: (f) => f.failure(401, "authentication_error", "invalid x-api-key"),
   out_of_credit: (f) => f.failure(400, "billing_error", "Your credit balance is too low to access the Claude API."), // provisional until T038
   rate_limited: (f) => f.failure(429, "rate_limit_error", "Number of requests has exceeded your rate limit.", FAST),
@@ -75,20 +75,18 @@ const isA = cfg.runtime === "a";
 async function faultSetup(kind, tmp) {
   const f = await import(pathToFileURL(path.join(HELPER_DIR, "test", "fake-service.mjs")).href);
   const svc = await f.startFakeService();
-  const fields = { base_url: svc.url, key: STAND_IN_KEY };
-  let note = "";
+  // keychain: false (honoured only with a local base_url): the helper never reads the Keychain,
+  // so a fault run never touches a real key or raises an access dialog.
+  const fields = { base_url: svc.url, key: STAND_IN_KEY, keychain: false };
   if (kind === "offline") await svc.close(); // the address stays, nothing answers
   else if (FAULTS[kind]) for (let i = 0; i < 60; i++) svc.script(FAULTS[kind](f));
-  if (kind === "no_key") {
-    delete fields.key;
-    note = " (no key in the start command: real while the Keychain has no Knack item; if it has one, the local fake answers 401, the same kind and message)";
-  }
+  if (kind === "no_key") delete fields.key;
   if (kind === "start_failed") {
     const broken = path.join(tmp, ".mcp.json");
     fs.writeFileSync(broken, JSON.stringify({ mcpServers: { "ae-mentor": { type: "stdio", command: "node", args: ["no-such-server.mjs"] } } }));
     fields.mcp_config = broken;
   }
-  return { fields, note };
+  return { fields };
 }
 
 async function main() {
@@ -113,9 +111,9 @@ async function main() {
   }
   if (isA) console.log(fault ? "runtime a" : "runtime a: the Claude API with the Keychain key (real calls)");
   if (fault) {
-    const { fields, note } = await faultSetup(fault, tmp);
+    const { fields } = await faultSetup(fault, tmp);
     Object.assign(startFields, fields);
-    console.log(`fault: ${fault} (local fake service; no real API call)${note}`);
+    console.log(`fault: ${fault} (local fake service; Keychain not read; no real API call)`);
   }
 
   const a = isA

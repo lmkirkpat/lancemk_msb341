@@ -1,7 +1,9 @@
 // panel/dev/drive.js --runtime a --fault <kind> (spec 013 T020): each fault through the real
 // adapter and helper, against T005's local fake service, shows the panel's fixed message, no check
 // result, and a failed turn. Every fault points the helper at this Mac, so no real API call is
-// made. (T040 is the builder reading the same messages.)
+// made, and the helper is told never to read the Keychain (keychain: false), so no test touches a
+// real key or raises an access dialog; HOME is a temporary folder as a second guard. (T040 is the
+// builder reading the same messages.)
 "use strict";
 const { test, after } = require("node:test");
 const assert = require("node:assert/strict");
@@ -27,7 +29,8 @@ function panelHome() {
 // Runs drive.js until its first turn_end line, then quits. → { code, out, err }
 function drive(args, { waitFor = /turn_end/ } = {}) {
   return new Promise((resolve) => {
-    const p = spawn(process.execPath, [DRIVE, ...args], { env: { HOME: os.homedir(), PATH: "/usr/bin:/bin", AE_MENTOR_HOME: panelHome() }, stdio: ["pipe", "pipe", "pipe"] });
+    const home = panelHome();
+    const p = spawn(process.execPath, [DRIVE, ...args], { env: { HOME: home, PATH: "/usr/bin:/bin", AE_MENTOR_HOME: home }, stdio: ["pipe", "pipe", "pipe"] });
     let out = "";
     let err = "";
     let quit = false;
@@ -60,7 +63,7 @@ for (const [fault, kind] of FAULTS) {
   test(`drive.js --runtime a --fault ${fault}: the panel's ${kind} message, no check result, a failed turn`, { timeout: 40000 }, async () => {
     const r = await drive(["--runtime", "a", "--fault", fault]);
     assert.equal(r.code, 0, r.err + r.out);
-    assert.match(r.out, new RegExp(`fault: ${fault}`));
+    assert.match(r.out, new RegExp(`fault: ${fault} \\(local fake service; Keychain not read; no real API call\\)`));
     assert.ok(r.out.includes(`error ${kind}: ${MESSAGES_A[kind]}`), r.out);
     assert.equal((r.out.match(/ error /g) || []).length, 1, "one message, shown once");
     assert.match(r.out, /turn_end ok=false/);

@@ -335,6 +335,7 @@ test("the real helper: one easing turn on a fixture, then stop leaves no helper 
   const spawn = withStartFields((cmd, args, opts) => (helperProc = realSpawn(cmd, args, opts)), {
     base_url: svc.url,
     key: "sk-ant-api03-FAKEFORTESTS_abcdefghij",
+    keychain: false, // never the real Keychain in a test
     fixture_env: { AE_MENTOR_FIXTURE_STATE: state },
   });
   const adapter = createAdapter({ runtime: "a", node_path: process.execPath, repo_path: REPO, home }, { spawn });
