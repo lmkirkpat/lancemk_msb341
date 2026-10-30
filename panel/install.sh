@@ -20,8 +20,15 @@ NODE="$(command -v node || true)"
 [ -n "$NODE" ] || { echo "Node.js isn't installed. Install Node 18+ from https://nodejs.org and re-run." >&2; exit 1; }
 HOME_DIR="${AE_MENTOR_HOME:-$HOME/Library/Application Support/AEMentor}"
 CFG="$HOME_DIR/panel.json"
-# The runtime already chosen in panel.json, if any ("a" or "b1"; anything else counts as none).
-RUNTIME="$("$NODE" -e 'try { const r = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).runtime; if (r === "a" || r === "b1") process.stdout.write(r); } catch (e) {}' "$CFG")"
+# The runtime already chosen in panel.json, if any: "a", "b1", or empty (no file, unreadable, or no
+# runtime). Any other value stops the install, as config.js refuses it, rather than being rewritten
+# as B1.
+RUNTIME="$("$NODE" -e 'let c; try { c = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")); } catch (e) {}
+  if (c && typeof c === "object" && "runtime" in c) process.stdout.write(c.runtime === "a" || c.runtime === "b1" ? c.runtime : "?");' "$CFG")"
+if [ "$RUNTIME" = "?" ]; then
+  echo "The panel's settings aren't ones it knows. In $(tilde "$CFG"), set \"runtime\" to \"a\" or \"b1\", or remove it, then re-run." >&2
+  exit 1
+fi
 CLAUDE="$(command -v claude || true)"
 if [ "$RUNTIME" != "a" ]; then
   [ -n "$CLAUDE" ] || { echo "Claude Code isn't installed (no 'claude' on PATH). Install it, sign in with 'claude', and re-run." >&2; exit 1; }

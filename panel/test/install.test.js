@@ -93,3 +93,16 @@ test("install.sh, runtime a: an existing claude_path is kept, not replaced", () 
   assert.equal(cfg.claude_path, "/old/place/claude");
   assert.equal(cfg.runtime, "a");
 });
+
+test("install.sh, a runtime it doesn't know: fails with config.js's plain words, panel.json untouched", () => {
+  for (const runtime of ["A", "c", null, 1]) {
+    const s = sandbox({ claude: true, panelJson: { version: 1, claude_path: "/old/claude", runtime } });
+    const before = fs.readFileSync(s.cfgFile, "utf8");
+    const r = s.run();
+    assert.equal(r.status, 1, JSON.stringify(runtime));
+    assert.match(r.stderr, /The panel's settings aren't ones it knows\./);
+    assert.match(r.stderr, /"runtime" to "a" or "b1", or remove it/);
+    assert.equal(fs.readFileSync(s.cfgFile, "utf8"), before, "not rewritten as B1");
+    assert.equal(s.calls(), "", "stopped before changing anything");
+  }
+});
