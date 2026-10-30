@@ -7,6 +7,9 @@
 
 **Status**: Approved 2026-10-20. Plan and tasks come next. Q1 is answered: option A, recorded in
 `decisions/009-ship-runtime-option-a.md` (amends `decisions/005`). Still open: Q2 to Q5.
+Amended 2026-10-30 from spec 013 (the option A runtime) and `decisions/010`: FR-002, FR-021, FR-025,
+SC-006, the UXP table's model-runtime and mentor-tools rows, Q2's note, and Dependencies. Not
+re-approved; the changes follow from 013's approved answers.
 
 **Input**: Cockpit task, sprint 3 (`sprints/sprint-3-plan.md` › Done looks like › specs › an
 installer): "an installer that lets someone who isn't a developer set up Knack on a Mac", covering
@@ -260,7 +263,10 @@ info names the commit and results file.
   (the forked bridge in `bridge/`), the panel (`panel/`), the mentor tools (`mentor/`) and the
   skill text they serve, the private Node runtime they run on (FR-003), the model runtime
   (FR-004), and the learner record folder (FR-009). After it, the panel opens with no setup
-  message (spec 003 FR-015's messages never show on a good install).
+  message (spec 003 FR-015's messages never show on a good install). *(Amended 2026-10-30, spec
+  013:* the model runtime is the option A helper process (`panel/helper/`, `decisions/010`) with
+  its pinned Anthropic Node SDK; the installer ships both and runs the helper on the private Node
+  from FR-003.)
 - **FR-003**: Any Node runtime Knack needs MUST be private to Knack: installed with it, used only
   by it, and removed with it. The installer MUST NOT require Node to be installed, MUST NOT change
   the user's PATH or shell files, and MUST NOT replace or depend on a Node the user already has.
@@ -323,7 +329,8 @@ info names the commit and results file.
 - **FR-021**: A setup check MUST be reachable from the installer's last screen and from the
   panel, with no Terminal, and MUST report, for each part: the macOS and AE versions; that each
   extension is in place and loads; that the bridge answers (when AE is open); the AE scripting
-  setting (FR-008); that the model runtime is reachable and the access key works; that the learner
+  setting (FR-008); that the model runtime is reachable and the access key works (*amended
+  2026-10-30:* using spec 013 FR-020's key check, which costs nothing and changes nothing); that the learner
   record folder can be written and the record can be read; that every part is the same version;
   and whether After Effects can still load this kind of extension (the CEP shutdown edge case).
   It replaces `node bridge/scripts/doctor.mjs` for learners; the doctor stays for development.
@@ -344,7 +351,8 @@ info names the commit and results file.
 - **FR-025**: A release MUST be built by one command from a clean commit, and MUST be refused
   unless that commit has a full eval run, against the runtime the release ships, at or above the
   eval set's target (spec 002 SC-006: 80%). The release MUST record its version, commit and eval
-  results file, and the setup check MUST show the version.
+  results file, and the setup check MUST show the version. *(Amended 2026-10-30, spec 013:* "a
+  full eval run" means all six sets on option A, each meeting spec 013 FR-033's bar, as in SC-006.)
 
 **Built to survive a UXP rebuild**
 
@@ -367,8 +375,8 @@ table is a design target to re-check against the spec 001 re-run (`CLAUDE.md` �
 | Download, signing and notarization of the installer itself | Survives | A macOS concern, not an Adobe one |
 | Learner record folder, its format, migration and backup | Survives | Lives outside AE (`decisions/003`) |
 | Access key in Keychain, key check | Survives | Belongs to the model runtime, which is outside AE |
-| Model runtime (option A) | Survives, maybe moves | Plain HTTPS. If UXP can make network calls, it can run in the panel; if not, in a local helper (`decisions/005` › UXP signal) |
-| Mentor tools and private Node runtime | Survives if a local helper exists | Findings: UXP probably can't run a local server, so a UXP plugin would connect *out* to a local helper. Then the installer also installs and starts that helper |
+| Model runtime (option A) | Survives | *Amended 2026-10-30:* a local helper process from the start (spec 013, `decisions/010`), plain Node and HTTPS outside AE; a UXP panel starts the same helper |
+| Mentor tools and private Node runtime | Survives | *Amended 2026-10-30:* the helper starts `ae-mentor` over stdio on the private Node (spec 013), so the local helper exists from the first release. Findings: a UXP plugin would connect *out* to it |
 | Setup check framework, the report, update and uninstall flows | Survives; the AE lines change | Only the AE-side checks are CEP-specific |
 | CEP extension placement and signing | Replaced | UXP plugins install as `.ccx` files or through Adobe's marketplace, which may do this part for us |
 | PlayerDebugMode handling | Goes away | Already avoided by FR-006 |
@@ -418,7 +426,9 @@ table is a design target to re-check against the spec 001 re-run (`CLAUDE.md` �
   kept), and nothing changed that Knack didn't add. *Measured by:* inventory diff test, run for
   both keep and remove.
 - **SC-006**: The lesson a tester gets is the lesson that was measured: every release names a
-  passing full eval run against its runtime (at least 80%), and quickstart steps a–f
+  passing full eval run against its runtime (at least 80%; *amended 2026-10-30:* all six sets on
+  option A, each meeting spec 013 FR-033's bar: no hard-rule failure, at least 80%, within 5 points
+  of its B1 baseline, every regression fixed or accepted), and quickstart steps a–f
   (`specs/003-mentor-panel/quickstart.md` §4) pass on an installed copy with no repo on the Mac.
   *Measured by:* the release command's refusal test (US5) plus one live run by the builder.
 - **SC-007**: No installed file, log, cache or copied report contains the access key, a real name,
@@ -477,8 +487,8 @@ table is a design target to re-check against the spec 001 re-run (`CLAUDE.md` �
   claude.ai login for shipped products is part of why.
 - **`decisions/006`**: says to revisit the name "before anything ships to people outside this
   repo". The first tester release is that moment.
-- **The option A runtime build spec** (number to be assigned): User Story 1 and SC-001, SC-006 can't
-  pass until it exists. Stories 2 to 4, FR-024 and FR-025 can be planned without it.
+- **The option A runtime build spec** (spec 013, `specs/013-api-runtime/`, approved 2026-10-30):
+  User Story 1 and SC-001, SC-006 can't pass until it exists. Stories 2 to 4, FR-024 and FR-025 can be planned without it.
 - **Specs 002 and 003** as shipped: the learner record, the panel's setup messages (003 FR-015),
   and the quickstart lesson used by SC-006.
 
@@ -499,6 +509,10 @@ Each changes the spec. Recommended answer first.
    builder sees cost per tester, and a leaked key costs at most its limit. Alternatives: each
    tester brings their own key (a developer-shaped step, and a pricing signal for belief 12), or
    one shared key built in (rejected: `decisions/005` › A cons says anything in AE can read it).
+   *Note 2026-10-30 (spec 013):* whether the Anthropic console sets a spend limit per key or only per
+   workspace needs checking in the console before this is answered; if only per workspace, "one key
+   per tester, each with its own limit" means one workspace per tester. The Keychain item is service
+   `Knack`, account `anthropic-api-key` (spec 013 research R11).
 3. **Pay for Apple's Developer ID (yearly fee) so the installer is notarized?** *Recommended: yes,
    before the first tester.* Without it, recent macOS blocks the file and the tester has to
    approve it in System Settings › Privacy & Security, which fails SC-008 and is exactly the

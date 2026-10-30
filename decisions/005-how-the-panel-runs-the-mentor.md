@@ -4,6 +4,8 @@
 **Status:** Accepted, 2026-10-05 (option B1). Covers the Sprint 2 panel and the prototype.
 Raised in `sprints/sprint-2-plan.md` › Raised goals. Amends `decisions/003` (Teaching row).
 Amended by `decisions/009` (2026-10-20): shipped Knack uses option A; B1 stays for the prototype.
+Amended by `decisions/010` (2026-10-30): option A's loop runs in a local helper that starts the
+`ae-mentor` server, not with the tools imported directly as sketched below.
 
 ## Context
 

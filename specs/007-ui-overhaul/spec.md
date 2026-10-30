@@ -7,7 +7,8 @@
 
 **Status**: Approved 2026-10-20. Plan and tasks come next. Home A is approved for now. Open
 questions 1, 3 and 5 are answered and folded in (FR-007, FR-012, FR-054, RQ-01, SC-013,
-Assumptions). Still open: questions 2 and 4, and the D and C questions.
+Assumptions). Still open: questions 2 and 4, and the D and C questions. Amended 2026-10-30 from
+spec 013 (the option A runtime): FR-056 and the runtime assumption. Not re-approved.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the spec for the UI overhaul:
 three tabs (Home, Lesson, Skills), Home option A (path-first) as recommended, the docked
@@ -543,6 +544,13 @@ From the README's "States still missing" and the specs this one sits on.
   instructions**, which opens them in the browser.
 - **FR-056**: When the mentor can't start, exits, or isn't signed in, the panel MUST show
   `err-mentor`, and actions that need the mentor MUST say "Needs the mentor."
+  *(Amended 2026-10-30, spec 013 FR-027:* option A adds causes B1 never had: `out_of_credit`,
+  `rate_limited`, `service_busy`, `offline` and `refused`, alongside `not_signed_in`, `timeout` and
+  `start_failed`. Each needs either its own wording inside `err-mentor` or its own state; which, and
+  the copy, is the UI designer's call. Until then the CEP panel uses the interim wording in
+  `specs/013-api-runtime/contracts/helper-protocol.md` › Error kinds. `rate_limited`,
+  `service_busy`, `offline` and `refused` are passing: the lesson continues on the next try, so they
+  probably shouldn't replace Home's actions the way a missing key does.)
 - **FR-057**: When After Effects is unreachable or busy, Home MUST show `home-unreachable` (red,
   AE actions replaced by "Needs After Effects.") or `home-busy` (amber).
 - **FR-058**: Errors, banners and status lines MUST NOT contain a file path, a command, a tool name, a
@@ -826,8 +834,11 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
 
 - **Runtime:** for the builder's prototype, the panel keeps running the mentor through headless
   Claude Code (`decisions/005`, B1) behind its one seam. Shipped Knack uses option A
-  (`decisions/009`), built in its own runtime spec; when it lands, only the seam and the sign-in
-  step change.
+  (`decisions/009`), built in its own runtime spec. *(Amended 2026-10-30:* spec 013 builds it, and
+  more than the seam and the sign-in step change: the new error causes (FR-056), the key check that
+  `setup-signin` and Check setup call (spec 013 FR-020), and a runtime setting (B1 or A, spec 013
+  FR-037) in `panel.json`. The setting is builder-only: learners only ever get A, so no screen draws
+  it. Continuing a lesson works the same on both, from the helper's saved conversation on A.)
 - **Container:** CEP, as today; nothing in the mockup needs more than the panel already uses
   (README › Open questions 9). A UXP port is its own work after the Nov 2026 beta.
 - **User:** the builder on their own Mac with After Effects 26.5 on macOS 27.0.1, then the

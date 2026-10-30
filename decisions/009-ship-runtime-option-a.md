@@ -2,7 +2,8 @@
 
 **Date:** 2026-10-20
 **Status:** Accepted, 2026-10-20. Amends `decisions/005` (B1 stays for the builder's own prototype
-until A is built). Raised in `specs/006-installer/spec.md` › Open Questions 1.
+until A is built). Raised in `specs/006-installer/spec.md` › Open Questions 1. Refined by `decisions/010` (2026-10-30): A's loop
+runs in a local helper process.
 
 ## Context
 
@@ -50,5 +51,13 @@ Rejected: a B1 tester build first (above). A hosted backend stays rejected for t
   local helper outside the panel (005 › UXP signal); that changes the installer, not this choice.
 - **Evals on A fall below the B1 baseline** (25/25 on 2026-10-19) and the gap can't be closed with
   prompt or tool fixes: revisit before shipping.
+  - *2026-10-30 (spec 013 approval):* the bar is now spec 013 FR-033, measured against all six
+    2026-10-29 baselines (easing 27/28, key types 29/30, speed graph 29/29, offset 33/37, pivot
+    48/50, null 42/44), not easing's 25/25 from 10-19.
 - **Cost:** if measured cost per lesson on A is far above B1's ($0.38 per lesson, spec 003 T034),
   test Sonnet 5.5 against the evals before the first tester.
+  - *2026-10-30 (spec 013 approval):* "far above" is now spec 013 SC-004's target, $0.40 per lesson.
+    013 Q2 already plans Sonnet 5.5 and Haiku 5.5 runs on easing and pivot once Opus 5.5 meets
+    FR-033.
+- *2026-10-30:* the UXP signal above is answered early. `decisions/010` puts A's loop in a local
+  helper from the start.
