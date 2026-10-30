@@ -1,5 +1,7 @@
 // Panel config (data-model › Panel config, research R3). install.sh writes panel.json with the
 // claude, node and repo paths, because AE's child processes don't get the shell's PATH.
+// `runtime` (spec 013 FR-037): "b1" (headless Claude Code) or "a" (the Claude API through the
+// helper); missing means "b1". On "a", Claude Code isn't needed, so claude_path isn't checked.
 "use strict";
 
 const nodeFs = require("fs");
@@ -21,7 +23,9 @@ function isExecutable(fs, p) {
   }
 }
 
-// → { ok: true, claude_path, node_path, repo_path } or { ok: false, fix }
+const RUNTIMES = ["b1", "a"];
+
+// → { ok: true, runtime, claude_path (B1 only), node_path, repo_path } or { ok: false, fix }
 function loadConfig(opts) {
   const fs = (opts && opts.fs) || nodeFs;
   const home = (opts && opts.home) || defaultHome();
@@ -33,7 +37,9 @@ function loadConfig(opts) {
     return { ok: false, fix: `The panel isn't set up yet. ${FIX}` };
   }
   if (!cfg || cfg.version !== 1) return { ok: false, fix: `The panel's settings are from a different version. ${FIX}` };
-  if (typeof cfg.claude_path !== "string" || !isExecutable(fs, cfg.claude_path)) {
+  const runtime = cfg.runtime === undefined ? "b1" : cfg.runtime;
+  if (!RUNTIMES.includes(runtime)) return { ok: false, fix: `The panel's settings aren't ones it knows. ${FIX}` };
+  if (runtime === "b1" && (typeof cfg.claude_path !== "string" || !isExecutable(fs, cfg.claude_path))) {
     return { ok: false, fix: `The panel can't find Claude Code. Check that \`claude\` works in Terminal, then ${FIX.charAt(0).toLowerCase()}${FIX.slice(1)}` };
   }
   if (typeof cfg.node_path !== "string" || !isExecutable(fs, cfg.node_path)) {
@@ -42,7 +48,8 @@ function loadConfig(opts) {
   if (typeof cfg.repo_path !== "string" || !fs.existsSync(path.join(cfg.repo_path, ".mcp.json"))) {
     return { ok: false, fix: `The panel can't find the mentor's project folder. ${FIX}` };
   }
-  return { ok: true, claude_path: cfg.claude_path, node_path: cfg.node_path, repo_path: cfg.repo_path };
+  if (runtime === "a") return { ok: true, runtime, node_path: cfg.node_path, repo_path: cfg.repo_path };
+  return { ok: true, runtime, claude_path: cfg.claude_path, node_path: cfg.node_path, repo_path: cfg.repo_path };
 }
 
 // PATH for the Claude Code child process: the claude and node folders first, so .mcp.json's
