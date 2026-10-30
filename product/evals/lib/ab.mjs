@@ -40,8 +40,9 @@ export function prepareRun(opts) {
 }
 
 // One case's mentor on A. env: the AE_MENTOR_* variables B1 gets.
-export function openCase({ repo, home, env, opts }) {
-  return createCaseMentor({ repo, home, fixtureEnv: env, key: runKey, settingsFile: opts.settings });
+export function openCase({ repo, home, env, opts, baseUrl }) {
+  // baseUrl is for tests against a local stand-in only; no runner passes it.
+  return createCaseMentor({ repo, home, fixtureEnv: env, key: runKey, settingsFile: opts.settings, baseUrl });
 }
 
 // Stops the helper, checks the request log, and returns what the run records.

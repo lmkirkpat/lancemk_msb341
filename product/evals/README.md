@@ -26,3 +26,38 @@ Neither passes `--model` or `--effort`, so both take the account's defaults.
 
 Not found: a per-set split by directory (the runtime folders have random names); sets were told
 apart by skill name in the transcript, and every set shows only `claude-opus-5-5`.
+
+## Running on option A (spec 013, T022 to T029)
+
+All six runners take `--runtime a|b1`. `b1` (headless Claude Code) is the default until every set meets
+FR-033; `--only`, `--changed`, `--repeat`, `--judge-always` and `--dry-run` work on both.
+
+```text
+KNACK_EVAL_API_KEY=… node product/evals/<set>/run.mjs --runtime a [--only 07] [--repeat 3]
+node product/evals/<set>/run.mjs --runtime a --dry-run     # no key, no request to the service
+node product/evals/<set>/run.mjs --runtime a --settings <file>   # an experiment; never a baseline
+```
+
+- **What changes:** only the mentor's runtime. The judge is still `claude -p` exactly as before (FR-032).
+  The key is read from `KNACK_EVAL_API_KEY`, sent to the helper in its `start` command only, and removed
+  from the runner's environment, so neither the helper's children nor the judge ever have it.
+- **Per case:** one helper (`panel/helper/main.mjs`), the fixture state file written per turn as on B1.
+  A turn with `new_session` starts a fresh helper on the same home. Tool calls, results and mentor text
+  become the same transcript events, so every `expect` check and the judge work unchanged.
+- **Extra check `allowlist`** (SC-008, FR-016): the case's request log is checked against the allowlist
+  before the temp home goes. Code: `lib/allowlist-check.mjs`; it derives the allowlist on its own from
+  `preamble.md`, `skill-tool.json`, the server's own `initialize` and `tools/list`, and the `*-mentor`
+  `SKILL.md` bodies. A failure fails the case and skips the judge (use `--judge-always` to see both).
+- **A dry run** also starts the helper (placeholder key, no turn sent), starts `ae-mentor`, and checks that
+  every skill a case starts has a readable `SKILL.md` whose allowed tools the server lists.
+- **Results file:** `runtime`, `model`, `effort`, `settings_hash`, `prompt_hash` (per skill),
+  `other_model_turns`, `cost_unknown_turns`, `non_baseline`, `baseline` and `vs_baseline`. A turn whose cost
+  the service never reported is counted as unknown, not as $0. B1 results now carry `runtime: "b1"`.
+- **Baseline for the comparison:** the newest full (not `--only`) results file on B1 or from before the
+  field existed, never an `--settings` run. A set's README can name another with one line,
+  `A-comparison baseline: results/<file>.json`, which wins.
+- **`--changed`** on A adds the helper's files (`main.mjs`, `lib/*`, the settings file in use, `preamble.md`,
+  `skill-tool.json`, `prices.json`) to a case's hash, so a model change invalidates earlier A passes. B1
+  hashes are unchanged.
+- **Tests:** `node --test product/evals/lib/test/` (no key, no network; they run the real helper against
+  `panel/helper/test/fake-service.mjs`).

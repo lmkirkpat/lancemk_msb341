@@ -10,6 +10,8 @@
 //   node product/evals/easing/run.mjs --repeat 3       each case 3 times; passes on a majority
 //   node product/evals/easing/run.mjs --judge-always   judge even after a failed check
 //   node product/evals/easing/run.mjs --dry-run        validate cases and fixtures, call nothing
+//   node product/evals/easing/run.mjs --runtime a          run the mentor on option A (needs KNACK_EVAL_API_KEY); default is b1
+//   node product/evals/easing/run.mjs --runtime a --settings <file>   an experiment on other settings; never a baseline
 
 import { spawnSync } from "node:child_process";
 import crypto from "node:crypto";
@@ -18,6 +20,7 @@ import os from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
 // with no builder CLAUDE.md or auto-memory in context (agent audit 2026-10-12, lesson 4.5).
@@ -51,9 +54,11 @@ function parseArgs(argv) {
     else if (a === "--repeat") opts.repeat = Math.max(1, Number(argv[++i]) || 1);
     else if (a === "--judge-always") opts.judgeAlways = true;
     else if (a === "--dry-run") opts.dryRun = true;
+    else if (a === "--runtime") opts.runtime = argv[++i];
+    else if (a === "--settings") opts.settings = argv[++i];
     else throw new Error(`Unknown argument: ${a}`);
   }
-  return opts;
+  return ab.checkOpts(opts);
 }
 
 // ---------- cases, fixtures and hashes ----------
@@ -94,11 +99,12 @@ const SHARED_INPUTS = [
   "panel/lib/runtime.js",
 ];
 
-function caseHash(c) {
+function caseHash(c, opts = {}) {
   const h = crypto.createHash("sha256");
   const files = [...SHARED_INPUTS.map((f) => path.join(REPO, f)), c.file];
   if (c.learner_record) files.push(path.join(CASES_DIR, c.learner_record));
   for (const t of c.turns) if (t.project !== "unreachable") files.push(fixtureFile(t.project));
+  if (opts.runtime === "a") files.push(...ab.helperHashFiles(REPO, opts.settings)); // A runs only: B1 hashes are unchanged
   for (const f of [...new Set(files)]) h.update(f.slice(REPO.length)).update(fs.readFileSync(f));
   return h.digest("hex");
 }
@@ -318,14 +324,15 @@ function judge(c, turns) {
 
 // ---------- one run of one case ----------
 
-function runCase(c, opts) {
+async function runCase(c, opts) {
   // A neutral folder name: read_learner_record returns the record's path, and a name with "eval"
   // in it told the mentor it was being tested (case 21, 2026-10-06).
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-"));
   const stateFile = path.join(home, "fixture-state.json");
   if (c.learner_record) fs.copyFileSync(path.join(CASES_DIR, c.learner_record), path.join(home, "learner.json"));
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
-  const runtime = ensureRuntime(REPO, path.join(home, "runtime"));
+  const mentor = opts.runtime === "a" ? ab.openCase({ repo: REPO, home, env, opts }) : null;
+  const runtime = mentor ? null : ensureRuntime(REPO, path.join(home, "runtime"));
 
   const turns = [];
   let sessionId = null;
@@ -335,6 +342,13 @@ function runCase(c, opts) {
     for (const t of c.turns) {
       const project = t.project === "unreachable" ? "unreachable" : fixtureFile(t.project);
       fs.writeFileSync(stateFile, JSON.stringify(t.undo_demo ? { project, undo_demo: true } : { project }));
+      if (mentor) {
+        // Option A: the helper runs the turn; the transcript has the same events (lib/runtime-a.mjs).
+        const r = await mentor.turn(t.say, !!t.new_session);
+        turns.push({ project: t.project, say: t.say, events: r.events, denials: [] });
+        if (!r.ok) throw new Error(`turn ${turns.length} ended with ${r.error}`);
+        continue;
+      }
       const { messages, result } = mentorTurn(t.say, sessionId, env, runtime);
       sessionId = result.session_id;
       cost += result.total_cost_usd || 0;
@@ -345,7 +359,10 @@ function runCase(c, opts) {
     error = e.message;
   }
 
+  const fin = mentor ? await ab.closeCase({ repo: REPO, mentor, learnerTexts: c.turns.map((t) => t.say) }) : null;
+  if (fin) cost += fin.cost;
   const checks = error ? [{ check: "run", pass: false, detail: error }] : check(c.expect, turns);
+  if (fin && (!error || !fin.allowlist.pass)) checks.push({ check: "allowlist", pass: fin.allowlist.pass, detail: fin.allowlist.detail });
   const checksPass = checks.every((x) => x.pass);
   let rubric = [];
   if (!error && (checksPass || opts.judgeAlways)) {
@@ -360,7 +377,8 @@ function runCase(c, opts) {
   }
   const pass = checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
   fs.rmSync(home, { recursive: true, force: true });
-  return { pass, checks, rubric, cost, session_id: sessionId, transcript: renderTranscript(turns) };
+  return { pass, checks, rubric, cost, session_id: sessionId, transcript: renderTranscript(turns),
+    ...(fin ? { runtime: "a", cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist } : {}) };
 }
 
 // ---------- main ----------
@@ -382,8 +400,9 @@ function newResultsFile() {
   }
 }
 
-function main() {
+async function main() {
   const opts = parseArgs(process.argv.slice(2));
+  ab.prepareRun(opts);
   let cases = loadCases();
   if (opts.only) cases = cases.filter((c) => c.id.startsWith(opts.only) || c.covers.includes(opts.only));
   if (!cases.length) throw new Error(`No cases match ${opts.only}`);
@@ -392,6 +411,12 @@ function main() {
   for (const [id, p] of bad) console.error(`${id}: ${p.join("; ")}`);
   if (bad.length) process.exit(1);
   if (opts.dryRun) {
+    if (opts.runtime === "a") {
+      const a = await ab.dryRunA({ repo: REPO, cases, opts });
+      for (const l of a.lines) console.log(l);
+      for (const p of a.problems) console.error(p);
+      if (a.problems.length) process.exit(1);
+    }
     console.log(`${cases.length} cases valid; ${cases.reduce((n, c) => n + c.turns.length, 0)} mentor turns per run.`);
     return;
   }
@@ -400,7 +425,7 @@ function main() {
   const results = [];
   let cost = 0;
   for (const c of cases) {
-    const hash = caseHash(c);
+    const hash = caseHash(c, opts);
     const prior = opts.changed ? lastPassWithHash(history, c.id, hash) : null;
     if (prior) {
       console.log(`${c.id}  skipped (unchanged since ${prior.from})`);
@@ -409,7 +434,7 @@ function main() {
     }
     const runs = [];
     for (let i = 0; i < opts.repeat; i++) {
-      const r = runCase(c, opts);
+      const r = await runCase(c, opts);
       cost += r.cost;
       runs.push(r);
       const why = r.pass ? "" : "  " + [...r.checks.filter((x) => !x.pass).map((x) => `${x.check}: ${x.detail}`),
@@ -424,6 +449,7 @@ function main() {
   const pct = Math.round((passed / results.length) * 100);
   const out = { run_at: new Date().toISOString(), options: opts, partial: !!opts.only, cost_usd: Number(cost.toFixed(2)),
     summary: { passed, total: results.length, percent: pct, target_percent: TARGET * 100 }, cases: results };
+  Object.assign(out, ab.resultFields(opts, results, { resultsDir: RESULTS_DIR, readme: fs.readFileSync(path.join(EVAL_DIR, "README.md"), "utf8") }));
   fs.mkdirSync(RESULTS_DIR, { recursive: true });
   const file = newResultsFile();
   fs.writeFileSync(file, scrubHome(JSON.stringify(out, null, 2)) + "\n", { flag: "wx" });
@@ -437,8 +463,14 @@ function main() {
     const delta = passed - prev.cases.filter((c) => results.some((r) => r.id === c.id) && c.pass).length;
     change = ` | vs ${prev.file}: ${delta >= 0 ? "+" : ""}${delta} pass${flips.length ? "; " + flips.join(", ") : ""}`;
   }
-  console.log(`\n${passed}/${results.length} passed (${pct}%, target ${TARGET * 100}%) ${pct >= TARGET * 100 ? "✓" : "✗"}  $${cost.toFixed(2)}${change}`);
+  if (opts.runtime === "a") {
+    console.log();
+    ab.printSummary(out, TARGET * 100);
+  } else console.log(`\n${passed}/${results.length} passed (${pct}%, target ${TARGET * 100}%) ${pct >= TARGET * 100 ? "✓" : "✗"}  $${cost.toFixed(2)}${change}`);
   console.log(`Results: ${path.relative(REPO, file)}`);
 }
 
-main();
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
