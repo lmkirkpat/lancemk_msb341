@@ -316,6 +316,7 @@ test("service faults: each kind, nothing kept from the failed turn", async () =>
   s.svc.script(failure(401, "authentication_error", "bad key"));
   assert.equal((await s.turn("/ease-mentor")).r.error_kind, "not_signed_in");
   assert.equal(s.lesson.messages.length, 0);
+  assert.deepEqual(s.logs.find((l) => l.event === "service_error"), { event: "service_error", kind: "not_signed_in", status: 401, type: "authentication_error", detail: "bad key" });
   s.svc.script(drop([text("half of an answer"), text("never sent")], 1));
   const d = await s.turn("/ease-mentor");
   assert.equal(d.r.error_kind, "offline");

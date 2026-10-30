@@ -131,6 +131,7 @@ function turn(textToSend, kind) {
   return new Promise((resolve) => {
     let midLine = false;
     let shown = "";
+    let hadError = false;
     onEvent = (ev) => {
       if (ev.type === "text_delta") {
         process.stdout.write(ev.text);
@@ -154,7 +155,18 @@ function turn(textToSend, kind) {
         if (ev.kind === "busy") return;
         if (midLine) process.stdout.write("\n");
         process.stdout.write(`! ${ev.message || ev.kind}\n`);
+        hadError = true;
       } else if (ev.type === "turn_end") {
+        // For the builder: after an error, the helper's last log line says what the service
+        // answered (its stderr can arrive a moment after the event).
+        if (hadError) {
+          hadError = false;
+          return setTimeout(() => {
+            const last = helperLog.trim().split("\n").filter((l) => /service_error|server_failed|start_failed|refused|step_limit/.test(l)).pop();
+            if (last) process.stdout.write(dim(`  helper log: ${last}\n`));
+            onEvent(ev);
+          }, 150);
+        }
         if (midLine) process.stdout.write("\n");
         const secs = ev.total_ms != null ? `${(ev.total_ms / 1000).toFixed(1)} s` : "?";
         const first = ev.first_event_ms != null ? `first sign ${(ev.first_event_ms / 1000).toFixed(1)} s` : "no reply";

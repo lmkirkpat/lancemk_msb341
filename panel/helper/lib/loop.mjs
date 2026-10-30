@@ -294,7 +294,10 @@ export function createLesson(opts) {
           const err = thrown && thrown.err !== undefined ? thrown.err : thrown;
           if (thrown && thrown.started) costs.push(null); // billed, but the counts never came
           const kind = classify(err);
-          log({ event: "service_error", kind, status: (err && err.status) || null, type: (err && err.type) || null });
+          // The service's own words help the builder find a rejected request; the log line is
+          // scrubbed of the key (main.mjs), and nothing from it reaches the learner (FR-021, FR-027).
+          const detail = err && err.error && err.error.error && typeof err.error.error.message === "string" ? err.error.error.message.slice(0, 300) : null;
+          log({ event: "service_error", kind, status: (err && err.status) || null, type: (err && err.type) || null, detail });
           return fail(kind);
         }
         if (timedOut) throw new TurnAbort("timeout");
