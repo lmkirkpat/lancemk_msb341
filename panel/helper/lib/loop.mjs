@@ -2,8 +2,10 @@
 // FR-025, FR-029; research R5 to R10). A turn is up to max_steps streamed requests; between them
 // the helper runs the tools the active skill allows through ae-mentor and sends the results back
 // whole. The history is append-only: every block the service returns (thinking included) goes
-// back exactly as received. A failed turn is taken back off the end of the history, so a retry
-// never sends half an answer; nothing earlier is ever changed. Holds no teaching logic.
+// back exactly as received. A failed turn keeps every complete exchange it made and takes back only
+// the incomplete tail after the last one (FR-015, D1), so a retry never sends half an answer and a
+// demonstration that ran stays in the history; if nothing completed, the learner's message comes
+// off too. Nothing earlier is ever changed. Holds no teaching logic.
 //
 // Events go out through emit(type, payload): text_delta, text, tool_call, tool_result,
 // skill_loaded (contracts/helper-protocol.md). Thinking blocks produce none. Errors are returned
@@ -24,6 +26,9 @@ export const BETAS = Object.freeze({
 // Fixed texts the model sees in tool results the runtime itself answers.
 export const NOT_AVAILABLE = "That tool isn't available in this lesson.";
 export const NO_SUCH_SKILL = "That skill isn't available.";
+// A call that didn't run because the turn failed after an earlier call in the same answer ran
+// (FR-012 item 6, FR-015, spec resolved question 7).
+export const DIDNT_RUN = "That call didn't run.";
 export const loadedText = (name, args) => (args ? `Loaded ${name}. Arguments: ${args}` : `Loaded ${name}.`);
 
 // The SDK client: an explicit key (never the environment), 2 retries on 429, 5xx and connection
@@ -199,22 +204,23 @@ export function createLesson(opts) {
     }
   }
 
-  // → { content (API tool result content), isError }
+  // → { content (API tool result content), isError, ran } (ran: the call did something: ae-mentor
+  // answered it, or a skill was loaded; a call answered with a fixed refusal didn't run).
   async function runTool(use, race, emit, pendingHandOver) {
     if (use.name === SKILL_TOOL && prompt.allowed.has(SKILL_TOOL)) {
       const input = use.input || {};
       const name = String(input.skill || "").trim().replace(/^\//, "");
       const args = typeof input.args === "string" ? input.args.trim() : "";
       const skill = tryReadSkill(name);
-      if (!skill) return { content: [{ type: "text", text: NO_SUCH_SKILL }], isError: true };
+      if (!skill) return { content: [{ type: "text", text: NO_SUCH_SKILL }], isError: true, ran: false };
       pendingHandOver.skill = skill;
-      return { content: [{ type: "text", text: loadedText(skill.name, args) }], isError: false };
+      return { content: [{ type: "text", text: loadedText(skill.name, args) }], isError: false, ran: true };
     }
     if (!prompt.allowed.has(use.name)) {
       log({ event: "tool_not_allowed", name: String(use.name).slice(0, 80) });
       const r = { content: [{ type: "text", text: NOT_AVAILABLE }], isError: true };
       emit("tool_result", toolResultEvent(use.id, use.name, r));
-      return { content: toApiContent(r.content), isError: true };
+      return { content: toApiContent(r.content), isError: true, ran: false };
     }
     let r;
     try {
@@ -225,13 +231,34 @@ export function createLesson(opts) {
       throw new TurnAbort("start_failed");
     }
     emit("tool_result", toolResultEvent(use.id, use.name, r));
-    return { content: toApiContent(r.content), isError: r.isError };
+    return { content: toApiContent(r.content), isError: r.isError, ran: true };
+  }
+
+  const resultBlock = (id, content, isError) => ({ type: "tool_result", tool_use_id: id, content, ...(isError ? { is_error: true } : {}) });
+
+  // A completed hand-over: the new skill's tools from now on, its body waiting to go in.
+  function applyHandOver(pendingHandOver, emit) {
+    if (!pendingHandOver.skill) return;
+    pendingBody = pendingHandOver.skill.body;
+    switchTo(pendingHandOver.skill);
+    emit("skill_loaded", { skill: pendingHandOver.skill.name });
   }
 
   // One turn. → { ok, error_kind, cost_usd, tokens, model, other_model, steps, skill, prompt_hash }
   async function runTurn(text, emit) {
     turnNo++;
-    const mark = { len: messages.length, prompt, handedOver, pendingBody };
+    // Where a failed turn goes back to: the end of its last complete exchange (an answer with no
+    // tool call, or an answer with a result for every call), else the turn's start, which takes
+    // the learner's message back too (FR-015, D1; spec resolved question 6). The lesson's prompt
+    // goes back with it, so a hand-over in a kept exchange stays in force and one in the tail
+    // doesn't.
+    const mark = () => ({ len: messages.length, prompt, handedOver, pendingBody });
+    let back = mark();
+    let completed = false;
+    const markComplete = () => {
+      back = mark();
+      completed = true;
+    };
     const ctl = new AbortController();
     let timedOut = false;
     const timer = setTimeout(() => {
@@ -263,15 +290,14 @@ export function createLesson(opts) {
       skill: prompt ? prompt.skillName : null,
       prompt_hash: prompt ? prompt.prompt_hash : null,
     });
-    // A failed turn comes off the end of the history, and the lesson's prompt goes back to what it
-    // was, so the next request continues from the last complete exchange.
-    const fail = (kind, keepHistory) => {
-      if (!keepHistory) {
-        messages.length = mark.len;
-        prompt = mark.prompt;
-        handedOver = mark.handedOver;
-        pendingBody = mark.pendingBody;
-      }
+    // A failed turn's incomplete tail comes off the end of the history, and the lesson's prompt
+    // goes back with it, so the next request continues from the last complete exchange.
+    const fail = (kind) => {
+      messages.length = back.len;
+      prompt = back.prompt;
+      handedOver = back.handedOver;
+      pendingBody = back.pendingBody;
+      if (!completed) log({ event: "turn_taken_back" });
       return summary(false, kind);
     };
 
@@ -349,6 +375,7 @@ export function createLesson(opts) {
           pendingBody = messages.pop().content[0].text;
         }
         const uses = content.filter((b) => b.type === "tool_use");
+        if (content.length && !uses.length) markComplete(); // an answer with no tool call
 
         // The calls that will run, each with its input (as B1's adapter sends them). Calls from an
         // attempt declined before a fallback, a refusal or a cut-off answer are never shown.
@@ -367,23 +394,37 @@ export function createLesson(opts) {
 
         const pendingHandOver = {};
         const results = [];
-        for (const use of uses) {
-          const r = await runTool(use, race, emit, pendingHandOver);
-          results.push({ type: "tool_result", tool_use_id: use.id, content: r.content, ...(r.isError ? { is_error: true } : {}) });
+        let ran = false;
+        try {
+          for (const use of uses) {
+            const r = await runTool(use, race, emit, pendingHandOver);
+            results.push(resultBlock(use.id, r.content, r.isError));
+            if (r.ran) ran = true;
+          }
+        } catch (e) {
+          if (!(e instanceof TurnAbort) || !ran) throw e;
+          // A call in this answer already ran (a demonstration, say), so the answer is completed
+          // rather than taken back: each call that didn't run gets the fixed result (resolved
+          // question 7), and whatever ran, a hand-over included, stays in force.
+          const notRun = uses.slice(results.length);
+          for (const use of notRun) results.push(resultBlock(use.id, [{ type: "text", text: DIDNT_RUN }], true));
+          messages.push({ role: "user", content: results });
+          applyHandOver(pendingHandOver, emit);
+          markComplete();
+          log({ event: "calls_not_run", count: notRun.length });
+          return fail(e.kind);
         }
         messages.push({ role: "user", content: results });
-        if (pendingHandOver.skill) {
-          pendingBody = pendingHandOver.skill.body;
-          switchTo(pendingHandOver.skill);
-          emit("skill_loaded", { skill: pendingHandOver.skill.name });
-        }
+        applyHandOver(pendingHandOver, emit);
+        markComplete();
       }
-      // The step limit: as B1's --max-turns, the turn ends without an answer and no error. Every
-      // call made has its result in the history, so the lesson can go on from here.
+      // The step limit: as B1's --max-turns, the turn ends without an answer and no error. It ends
+      // on a complete exchange (every call made has its result), so nothing is taken back and the
+      // lesson can go on from here.
       steps = settings.max_steps;
       log({ event: "step_limit", steps });
       clearTimeout(timer);
-      return fail(null, true);
+      return fail(null);
     } catch (e) {
       if (e instanceof TurnAbort) return fail(e.kind);
       log({ event: "turn_failed", detail: String((e && e.message) || e).slice(0, 200) });
