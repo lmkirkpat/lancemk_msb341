@@ -169,6 +169,16 @@ export function createLesson(opts) {
     log({ event: "input_transformations", turn: turnNo, step: stepNo, entries: list.map((t) => ({ type: str(t && t.type), reason: str(t && t.reason), path: str(t && t.path) })) });
   }
 
+  // The learner's or panel's text. When the history already ends with a user message (a turn that
+  // ended on its tool results: the step limit, a kept failure, an empty reply), the text goes in
+  // that message as blocks after its tool_result blocks, the documented mid-turn user-input shape,
+  // since the service refuses two user messages in a row. Otherwise it's a new user message.
+  function addUserText(blocks) {
+    const last = messages[messages.length - 1];
+    if (last && last.role === "user") last.content = last.content.concat(blocks);
+    else messages.push({ role: "user", content: blocks });
+  }
+
   // Puts a waiting skill body in, if the history ends with a user message. → whether it did.
   function placePendingBody() {
     if (pendingBody === null || !messages.length || messages[messages.length - 1].role !== "user") return false;
@@ -252,7 +262,9 @@ export function createLesson(opts) {
     // the learner's message back too (FR-015, D1; spec resolved question 6). The lesson's prompt
     // goes back with it, so a hand-over in a kept exchange stays in force and one in the tail
     // doesn't.
-    const mark = () => ({ len: messages.length, prompt, handedOver, pendingBody });
+    // lastLen: how many blocks the last kept message had, so text added to it (addUserText) comes
+    // off at block level.
+    const mark = () => ({ len: messages.length, lastLen: messages.length ? messages[messages.length - 1].content.length : 0, prompt, handedOver, pendingBody });
     let back = mark();
     let completed = false;
     const markComplete = () => {
@@ -294,6 +306,8 @@ export function createLesson(opts) {
     // goes back with it, so the next request continues from the last complete exchange.
     const fail = (kind) => {
       messages.length = back.len;
+      const last = messages[back.len - 1];
+      if (last && last.content.length > back.lastLen) last.content = last.content.slice(0, back.lastLen);
       prompt = back.prompt;
       handedOver = back.handedOver;
       pendingBody = back.pendingBody;
@@ -331,7 +345,7 @@ export function createLesson(opts) {
           emit("skill_loaded", { skill: skill.name });
         }
       }
-      messages.push({ role: "user", content: userContent(text, bodyAhead) });
+      addUserText(userContent(text, bodyAhead));
 
       for (steps = 1; steps <= settings.max_steps; steps++) {
         const placed = placePendingBody();
@@ -402,7 +416,11 @@ export function createLesson(opts) {
             if (r.ran) ran = true;
           }
         } catch (e) {
-          if (!(e instanceof TurnAbort) || !ran) throw e;
+          if (!ran) throw e;
+          // Any error once a call has run (a fault in the helper too, S4) completes the answer, so
+          // what ran stays in the history.
+          const kind = e instanceof TurnAbort ? e.kind : timedOut ? "timeout" : "start_failed";
+          if (!(e instanceof TurnAbort)) log({ event: "internal_error", name: (e && e.constructor && e.constructor.name) || typeof e, detail: String((e && e.message) || e).slice(0, 300) });
           // A call in this answer already ran (a demonstration, say), so the answer is completed
           // rather than taken back: each call that didn't run gets the fixed result (resolved
           // question 7), and whatever ran, a hand-over included, stays in force.
@@ -412,7 +430,7 @@ export function createLesson(opts) {
           applyHandOver(pendingHandOver, emit);
           markComplete();
           log({ event: "calls_not_run", count: notRun.length });
-          return fail(e.kind);
+          return fail(kind);
         }
         messages.push({ role: "user", content: results });
         applyHandOver(pendingHandOver, emit);
