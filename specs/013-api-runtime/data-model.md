@@ -11,15 +11,24 @@ everything not listed here.
 |---|---|---|---|
 | `version` | 1 | 1 | Other versions refused |
 | `model` | string | `claude-opus-5-5` | Must have a row in the price table, else the helper refuses to start |
-| `effort` | `low`…`max` | from T001 (R2) | Always sent |
-| `cache_ttl` | `5m` \| `1h` | `5m` (R8) | |
+| `effort` | `low`…`max` | `medium` (T001, R2) | Always sent (`output_config.effort`) |
+| `thinking_display` | `omitted` \| `summarized` \| `updates` | `updates` (B1's, T001) | Forced to `omitted` on Haiku 5.5 (R7). Needs beta `thinking-display-updates-2026-08-18` when `updates` |
+| `cache_ttl` | `5m` \| `1h` | `5m` (R8) | Sent on every breakpoint as `ttl` |
 | `skill_placement` | `system` \| `message` | `system` (Q5, R5) | `message` is the fallback |
-| `max_steps` | integer | 12 | B1's `--max-turns 12` |
-| `turn_timeout_ms` | integer | 300000 | B1's timeout |
-| `fallbacks` | `"default"` \| null | `"default"` (R10) | |
+| `max_steps` | integer 1–100 | 12 | B1's `--max-turns 12` |
+| `turn_timeout_ms` | integer | 300000 | B1's timeout; also each request's SDK timeout |
+| `max_tokens` | integer 1–128000 | 32000 | Per request (added in the build) |
+| `fallbacks` | `"default"` \| null | `"default"` (R10) | Forced to null on Haiku 5.5. Needs beta `server-side-fallback-2026-07-01` when set |
 
-A **settings hash** (sha256 of this file, `preamble.md` and the helper's `lib/` and `main.mjs`) is
-reported in `ready` and recorded in eval results and turn log lines.
+Every field is required and an unknown field is refused. Always sent, whatever the settings: beta
+`thinking-binding-controls-2026-08-01` with `thinking.block_binding` (R10, FR-021a). After D2 (T060),
+Opus 5.5 and Sonnet 5.5 also send beta `mid-conversation-tool-changes-2026-07-01`.
+
+A **settings hash** (sha256 of this file, `preamble.md`, `skill-tool.json`, `main.mjs` and the
+helper's `lib/*.mjs`, each with its label and length) is reported in `ready` and recorded in eval
+results and turn log lines. It covers everything that decides what the model gets, including the
+runtime text FR-012 allowlists. `prices.json` isn't in it (it changes cost, not the request); the
+eval runners' `--changed` hash adds it (contracts/eval-runtime.md).
 
 ## Panel config (`panel.json`, learner home): one new field
 
@@ -29,9 +38,12 @@ reported in `ready` and recorded in eval results and turn log lines.
 ## Lesson prompt (in memory; FR-010 to FR-013)
 
 `{ tools[], system[3], prompt_hash }`. `system` = preamble, server instructions, skill body, in that
-order; `tools` = the server's tools filtered by `allowed-tools`, plus `Skill` if listed. The
-`prompt_hash` (sha256 over the serialized tools and system) goes in eval results. Rebuilt only at
-lesson start and at a hand-over.
+order (two blocks with `skill_placement: "message"`); `tools` = the server's tools filtered by
+`allowed-tools`, plus `Skill` (from `skill-tool.json`) if listed. After D2 (T060) on Opus 5.5 and
+Sonnet 5.5, `tools` declares every server tool plus `Skill`, those the active skill doesn't list with
+`defer_loading: true`, and stays the same for the whole lesson. The `prompt_hash` (sha256 over the
+serialized tools, system without cache markers, placement and skill name) goes in eval results and
+on each `turn_end`. Rebuilt only at lesson start and at a hand-over.
 
 ## Lesson conversation (`panel-conversation.json`, learner home; FR-015, FR-023, FR-024)
 
@@ -41,11 +53,20 @@ lesson start and at a hand-over.
 ```
 
 - `messages` are the API messages exactly as sent and received, in order, including thinking
-  blocks, tool uses and tool results, and any mid-conversation system message from a hand-over.
+  blocks, tool uses and tool results, and any mid-conversation system message from a hand-over
+  (the new skill's body and, after D2, its tool changes).
+- **Complete exchange** (FR-015, D1, amended 2026-10-30): an assistant message with no tool use, or
+  an assistant message with tool uses plus the user message holding a result for every one of them.
+  The history is only ever the learner's and panel's messages plus complete exchanges (and the
+  hand-over system messages between them). When a turn fails, the incomplete tail after the last
+  complete exchange is taken back; complete exchanges from the failed turn stay, so a demonstration
+  or `record_lesson` that ran is still there next turn. If nothing in the failed turn completed, the
+  learner's message comes off too (spec resolved question 6). If a call in an answer already ran, that answer is completed instead: each call that didn't run gets the error result "That call didn't run." (resolved question 7). The only other removal: a hand-over's skill-body
+  system message taken back when the reply right after it is empty (review fix M1).
 - Image data in tool results is replaced on disk by `{ "frame_file": "panel-conversation-frames/<name>.png" }`
   and restored from the file when the conversation is loaded.
-- Written (temp file and rename) only after a complete exchange: a turn that ends mid-answer saves
-  nothing from that turn.
+- Written (temp file and rename) after each complete exchange: a turn that fails mid-answer saves
+  its complete exchanges and nothing of its incomplete tail.
 - Unreadable, another version, another `session_id`, or another `model` → not continued (spec 003's
   rule: say nothing alarming). A new lesson deletes the file and the frames folder.
 

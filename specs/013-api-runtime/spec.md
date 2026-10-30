@@ -6,7 +6,10 @@
 
 **Status**: Approved 2026-10-30 by the builder, with all five open questions answered as
 recommended (see Resolved Questions). Q1 is recorded in `decisions/010`. Plan and tasks written
-2026-10-30 ([plan.md](plan.md), [tasks.md](tasks.md)); the plan's preamble awaits the builder's yes.
+2026-10-30 ([plan.md](plan.md), [tasks.md](tasks.md)); the preamble approved the same day. Amended
+2026-10-30 after the `013-helper` build and review (merged `d934115`): the builder's decisions D1 to
+D3 and the review's smaller items, listed under [Amendments](#amendments-2026-10-30-after-the-013-helper-review);
+four follow-up questions answered the same day (Resolved Questions 6 to 9).
 
 **Input**: Cockpit task, sprint 4 (`sprints/sprint-4-plan.md` › Done looks like: "The option A
 runtime built, with the evals moved onto it"). "The panel calls the Claude API directly instead of
@@ -226,22 +229,34 @@ both match their results before this feature.
 - **A lesson that needs many tool calls in one turn.** A turn ends after the same 12-step limit
   B1 uses (`--max-turns 12`), with the panel told the turn ended without an answer; never an
   unbounded loop.
-- **The model calls a tool the active skill doesn't allow** (another skill's tool, or one that
-  doesn't exist). The call isn't run; the mentor gets an error result, as Claude Code returns for a
-  tool outside `--allowedTools`, and the call is logged.
+- **The model calls a tool the active skill doesn't allow** (another skill's tool, one declared but
+  hidden, or one that doesn't exist). The call isn't run; the mentor gets an error result with the
+  fixed text "That tool isn't available in this lesson." (FR-012), as Claude Code returns an error
+  for a tool outside `--allowedTools`, and the tool's name is logged (never its input).
 - **The `ae-mentor` server fails to start or exits mid-lesson.** The turn ends with a "mentor can't
   start" error (spec 003 FR-015); the next send starts it again. No project claims are made.
 - **After Effects unreachable or busy.** Unchanged from today: the tool returns `AE_UNREACHABLE` or
   `AE_BUSY`, the server instructions' rule (2) governs what the mentor says, and the panel's
   bridge status shows it. The runtime doesn't add its own message for this.
-- **The connection drops mid-answer.** Text already streamed stays on screen, the turn ends as
-  failed with the offline message, and the conversation is saved only up to the last complete
-  exchange, so retrying never sends half an answer back.
+- **A turn fails partway** (the connection drops mid-answer, the service errors, the turn times out,
+  the answer is refused or cut off mid tool call). Text already streamed stays on screen, and the
+  turn ends with its error kind. The history keeps every complete exchange the turn made and takes
+  back only the incomplete tail (FR-015, D1, amended 2026-10-30), so a retry never sends half an
+  answer back, and a demonstration or a `record_lesson` that already ran stays in the history: the
+  mentor still knows it demonstrated, and the one-demo rule holds after a failed turn. A turn that
+  ends at the step limit keeps everything, as it already did.
+- **The model's answer is cut off inside a tool call** (`max_tokens` reached while a call's input
+  was being written). The call is never run, the incomplete answer is taken back, and the turn ends
+  failed with no error event, as the step limit does (added 2026-10-30, `panel/helper/lib/loop.mjs`).
 - **The service refuses a request** (a safety refusal). The turn ends with a plain "the mentor
   couldn't answer that; try rephrasing" message, and the refusal is logged with its category, never
   the learner's text.
-- **A skill hand-over** (`/next-mentor` hands the lesson to another skill). The handed-over
-  skill's `SKILL.md` and allowed tools apply from then on, without editing earlier turns (FR-014).
+- **A skill hand-over** (`/next-mentor` hands the lesson to another skill, or a message starts with
+  another mentor skill's command). The handed-over skill's `SKILL.md` and allowed tools apply from
+  then on, without editing earlier turns (FR-014). If the model's reply right after the new skill's
+  text is empty, that text is taken back off the end and goes in again before the next request:
+  the one removal from the history that's allowed besides a failed turn's tail (review fix M1,
+  2026-10-30).
 - **A frame is in the conversation when the lesson is continued later.** Frames are kept as files
   (as the panel already does) and sent again from those files, so continuing doesn't depend on
   memory.
@@ -281,10 +296,14 @@ both match their results before this feature.
   today, over its existing standard connection (`.mcp.json`'s stdio server), not by importing
   `mentor/tools/` into the panel (Q1, `decisions/010`). The server's code, tool list, schemas, results
   and call log (`calls.jsonl`) MUST be unchanged by this feature.
-- **FR-005**: The tools offered to the model in a lesson MUST be exactly those in the active
-  skill's `allowed-tools` frontmatter that the server lists, with the server's own names,
-  descriptions and schemas, so a new skill needs no change to the runtime. A call to any other tool
-  MUST NOT run and MUST get an error result.
+- **FR-005**: The tools **available to the model** at any point in a lesson MUST be exactly those in
+  the active skill's `allowed-tools` frontmatter that the server lists, with the server's own names,
+  descriptions and schemas, so a new skill needs no change to the runtime. A request MAY also
+  *declare* other tools from the same sources (the server's list and the hand-over tool) as hidden
+  (`defer_loading`), which the model can't see or call until they're made available; that is how a
+  hand-over changes the tools without editing the request's tool list (FR-014, D2, amended
+  2026-10-30). A call to any tool that isn't available, declared or not, MUST NOT run and MUST get an
+  error result.
 - **FR-006**: Tool results MUST go back to the model whole: text, JSON and images (rendered frames)
   as the server returned them, and errors marked as errors, as Claude Code passes them.
 - **FR-007**: One user message MUST run at most 12 model steps (B1's `--max-turns 12`), and one
@@ -307,27 +326,70 @@ both match their results before this feature.
 - **FR-011**: The `ae-mentor` server's instructions (`mentor/server.mjs` `INSTRUCTIONS`, the eight
   rules Claude Code injects today) MUST be taken from the server's own start-up reply at run time
   and given to the model on every lesson, so there is one source and they can't drift.
-- **FR-012**: Anything else the runtime adds to what the model sees (a short fixed preamble saying
-  the learner reads every word in a small panel, for example) MUST be in one versioned file, MUST
-  hold no teaching rules (what to teach, when to demonstrate, how to grade, what to record), and
-  MUST be shown in full in the plan for the builder's approval. If a skill needs a rule, it goes in
-  `SKILL.md` through its owner, not here.
+- **FR-012**: The runtime MUST add nothing to what the model sees except the **allowlisted runtime
+  text**, all of it fixed, versioned in the helper's files (covered by the settings hash) and
+  approved by the builder:
+  1. the preamble, one file (`panel/helper/preamble.md`, plan › The preamble);
+  2. the hand-over tool's definition, one file (`panel/helper/skill-tool.json`);
+  3. the hand-over tool's result, "Loaded <skill>." or, with arguments, "Loaded <skill>. Arguments:
+     <args>" (the skill's name and the arguments the model itself passed);
+  4. "That skill isn't available." (a hand-over to a skill that can't be loaded);
+  5. "That tool isn't available in this lesson." (a call to a tool that isn't available, FR-005);
+  6. "That call didn't run." (a call that didn't run because the turn failed after an earlier call
+     in the same answer ran, FR-015).
+
+  Items 2 to 5 approved 2026-10-30 (D3, review S8); item 6 approved 2026-10-30 (resolved question 7). None of it may hold a teaching rule (what to
+  teach, when to demonstrate, how to grade, what to record); if a skill needs a rule, it goes in
+  `SKILL.md` through its owner, not here. Adding or changing any of it is a builder approval plus a
+  change to this list and to the allowlist check (FR-016, T023).
 - **FR-013**: The parts above MUST be assembled in a fixed order with nothing that changes between
   turns (no date, time, paths or ids) before the conversation, so the stable part can be cached
   (FR-025).
 - **FR-014**: A skill that lists the hand-over tool (`next-mentor`'s `Skill`) MUST be able to hand
   the lesson to another mentor skill with an optional argument (`review`, focus layer names): the
   runtime loads that skill's `SKILL.md` and allowed tools from then on, without editing earlier
-  turns. Only `*-mentor` skills can be loaded.
+  turns. A learner's or the panel's message that starts with another mentor skill's command (FR-002)
+  hands over the same way. Only `*-mentor` skills can be loaded. How (D2, amended 2026-10-30):
+  - **On Claude Opus 5.5 and Claude Sonnet 5.5**: every tool a lesson can reach is declared in the
+    first request, those outside the starting skill hidden (FR-005); a hand-over appends a
+    mid-conversation system message that makes the new skill's tools available and the old skill's
+    unavailable (the service's mid-conversation tool changes, research R5), and the new skill's
+    `SKILL.md` body as a mid-conversation system message. The request's tool list never changes
+    during a lesson.
+  - **On Claude Haiku 5.5** (no mid-conversation tool changes): the fallback built in the
+    `013-helper` branch: the tool list is replaced with the new skill's, and from then on every
+    request asks the service to drop the reasoning blocks the change invalidates instead of refusing
+    the request (R10).
 - **FR-015**: The conversation history sent each turn MUST be append-only: every earlier message
   and content block (including any reasoning blocks the service returns) is sent back exactly as
-  received, in order. Nothing is summarised, trimmed or rewritten during a lesson.
+  received, in order. Nothing is summarised, trimmed or rewritten during a lesson. Three exceptions,
+  each at the very end of the history and nowhere else (amended 2026-10-30):
+  1. **A failed turn's incomplete tail** (D1). A **complete exchange** is either an answer from the
+     model with no tool call, or an answer with tool calls together with the message that returns a
+     result for every one of those calls. When a turn fails, the history keeps the learner's message
+     and every complete exchange that followed it, and takes back only what comes after the last
+     one: an answer that was cut off, refused or never finished, or calls whose results weren't all
+     returned. If a call in an answer already ran when the turn failed, that answer is completed
+     instead of taken back: the calls that ran keep their results, and each call that didn't run
+     gets an error result "That call didn't run." (FR-012). If no exchange completed, the learner's
+     message is taken back too, so a retry doesn't send it twice (resolved questions 6 and 7).
+     Whatever a kept exchange did (a demonstration, `record_lesson`, a hand-over) stays in force. A turn that hits the step limit ends on a complete exchange, so nothing is
+     taken back.
+  2. **A handed-over skill's text, when the reply right after it is empty** (review fix M1): it's
+     taken back and goes in again before the next request.
+  3. **After a server-side fallback** mid-answer, the declined attempt's reasoning and tool-call
+     blocks aren't sent back, as the service requires (its fallback echo rule; research R10); the
+     answer that was served is sent back as received.
 
 **Isolation (what replaces the runtime folder)**
 
-- **FR-016**: On A, everything the model receives MUST come from an allowlist: the preamble file
-  (FR-012), the server's instructions (FR-011), the active skill's `SKILL.md` body (FR-010), the
-  server's tool definitions (FR-005), the learner's and panel's messages, and tool results. No
+- **FR-016**: On A, everything the model receives MUST come from an allowlist: the allowlisted
+  runtime text (FR-012: the preamble, the hand-over tool's definition, its three fixed results and
+  "That call didn't run."),
+  the server's instructions (FR-011), the `SKILL.md` body of the starting skill and of any skill
+  handed over to (FR-010, FR-014), the server's tool definitions (FR-005, including hidden ones), the
+  mid-conversation messages that make tools available or unavailable by name (FR-014), the
+  learner's and panel's messages, tool results, and the model's own earlier answers. No
   `CLAUDE.md`, auto-memory, output style, settings, agents, hooks, builder skills, sprint notes or
   eval fixtures (beyond what the server serves as "the project") can reach it. A test MUST check
   every request built during an eval run against the allowlist.
@@ -353,14 +415,27 @@ both match their results before this feature.
   writes it to the Keychain (installer or sign-in screen) are not this spec's.
 - **FR-021**: Every error message, log line, turn log entry, saved conversation, eval results file
   and copied report MUST be free of the key. Text from the service that is shown or logged MUST be
-  scrubbed of anything shaped like a key before use.
+  scrubbed of anything shaped like a key before use. What the service reports it changed in a
+  request (its list of dropped reasoning blocks, R10) is logged as each entry's type, reason and
+  position only, never any text (added 2026-10-30).
+- **FR-021a**: Every request MUST opt into the service's check that the history is unchanged (the
+  reasoning-block binding, research R10): refuse the request on a changed history. On Opus 5.5 and
+  Sonnet 5.5, once FR-014's tool changes are built, it refuses for the whole lesson. Dropping the
+  affected reasoning blocks instead is only for a hand-over that replaces the tool list (Haiku 5.5's
+  fallback, and every model until T060 lands), from that hand-over on (resolved question 8). Why:
+  accounts created before 2026-08-31 aren't checked unless a request asks, so without this an edit
+  to the history would pass silently on the builder's account and fail only on learners' (added
+  2026-10-30, review M2).
 
 **Streaming and continuing**
 
 - **FR-022**: The mentor's words MUST stream into the panel as they're written (`text_delta`), with
-  a complete `text` event per block, and `tool_call` emitted when a call starts, so spec 003
-  SC-004's "first sign of the mentor working" clock means the same thing on A. Reasoning blocks are
-  never shown.
+  a complete `text` event per block, and `tool_call` emitted once the model's whole answer is in,
+  only for calls that will run (never for a call from an attempt the service declined before a
+  fallback, or from an answer cut off mid-call), so the panel never shows a call that didn't happen
+  (amended 2026-10-30, review S6; research R9). The hand-over tool's own call isn't emitted, as B1
+  emits only `ae-mentor` calls. Spec 003 SC-004's "first sign of the mentor working" clock still
+  starts at the first `text_delta` or `tool_call`. Reasoning blocks are never shown.
 - **FR-023**: Each lesson's conversation MUST be saved after each complete exchange to one file in
   the learner home next to `panel-session.json`, keyed by the same session id the panel already
   stores, with frames saved as files rather than inline (as `panel-frames/` does). It's replaced
@@ -383,8 +458,10 @@ both match their results before this feature.
   show (spec 003 FR-015, spec 007 FR-056, FR-058): `not_signed_in` (no key, or the key is rejected),
   `out_of_credit` (billing or spend limit), `rate_limited` and `service_busy` (after the runtime's
   own retries), `offline` (can't reach the service), `refused` (a safety refusal, see Edge Cases), `timeout`,
-  `start_failed` (the `ae-mentor` server can't start). Existing kinds keep their meaning. None of the
-  messages contain a status code, path, tool name or the key.
+  `start_failed` (the `ae-mentor` server can't start, or a fault in the request or the helper that
+  isn't the learner's, research R10). Existing kinds keep their meaning. None of the messages contain
+  a status code, path, tool name or the key. Two protocol kinds, `bad_command` and `not_implemented`,
+  are never shown to a learner (contracts/helper-protocol.md).
 - **FR-028**: The model and its settings (effort, cache lifetime) MUST be set in one place in
   configuration, not in code paths spread across the panel and the evals, so the panel and the
   evals always run the same settings (Q2). An eval run MAY name another settings file as an
@@ -461,7 +538,8 @@ both match their results before this feature.
   server instructions, active skill body, tool definitions (FR-010 to FR-013). Has a hash recorded
   in eval results.
 - **Lesson conversation**: the append-only list of messages for one lesson (FR-015, FR-023), saved
-  in the learner home, keyed by the panel session's id; frames as files.
+  in the learner home, keyed by the panel session's id; frames as files. Made of complete exchanges
+  (FR-015); a failed turn's incomplete tail is never in it.
 - **Price table**: per-model prices by token kind, with the date they were checked (FR-026).
 - **Turn log entry**: spec 003's entry plus runtime, model, effort and token counts by kind; no text
   (FR-029).
@@ -571,8 +649,8 @@ both match their results before this feature.
 
 ## Resolved Questions
 
-All five answered by the builder on 2026-10-30, each as recommended. The spec above is written to
-them.
+All answered by the builder on 2026-10-30, each as recommended: 1 to 5 before the plan, 6 to 9
+after the `013-helper` review (they were OQ-1 to OQ-4). The spec above is written to them.
 
 1. **Where the agent loop runs.** In its own small local Node helper process that the A adapter
    starts (on Knack's private Node, spec 006 FR-003); it speaks the adapter's events to the panel
@@ -599,3 +677,33 @@ them.
    earlier turns are never edited. If FR-033 shows drift the prompt can't explain, switch to Claude
    Code's placement (the skill as a message) before touching any `SKILL.md`. The plan keeps the
    placement a one-setting switch.
+6. **A failed turn that completed nothing** (was OQ-1). The learner's message comes off too, so a
+   retry doesn't send it twice. Once one exchange has completed, it stays (FR-015).
+7. **A failure between tool calls in one answer** (was OQ-2). The exchange is completed instead of
+   taken back: calls that ran keep their results, and each call that didn't run gets the error
+   result "That call didn't run.", approved as runtime text (FR-012, FR-015, FR-016, T023). Why: a
+   demo that ran must stay in the history, which is the case D1 exists for. T059 tests it.
+8. **The history check after D2** (was OQ-3). On Opus 5.5 and Sonnet 5.5, `error` for the whole
+   lesson once T060 is built, so any edit still fails loudly; `drop_block` stays only for Haiku 5.5's
+   swap fallback (FR-021a, T060).
+9. **D2 before the easing baseline** (was OQ-4). T060 lands before T031, because D2 changes every
+   Opus 5.5 request's tool list and T031 is the run the stop rule reads.
+
+No decision record for D1 to D3: the builder ruled spec 013 enough (2026-10-30).
+
+## Amendments 2026-10-30 (after the `013-helper` review)
+
+The helper (T002 to T016) was built on branch `013-helper`, reviewed, and merged to `main`
+(`d934115`). The builder approved three decisions the review raised; the rest are the review's
+smaller items, written in to match what was built.
+
+| ID | What changed | Where |
+|---|---|---|
+| D1 (review S1) | A failed turn keeps every complete exchange and takes back only the incomplete tail; "complete exchange" defined; the M1 removal named as the other sanctioned one. Not built yet: T059 | FR-015, Edge Cases, data-model › Lesson conversation |
+| D2 (review S2) | Hand-over by declaring all tools up front and changing them mid-conversation on Opus 5.5 and Sonnet 5.5; the built swap plus drop is Haiku 5.5's fallback; "tools offered" reworded to allow hidden tools. Not built yet: T060 | FR-005, FR-014, research R5, R8 |
+| D3 (review S8) | The runtime text allowlist names exactly the preamble, the hand-over tool's definition and its three fixed results; "That call didn't run." added by resolved question 7 | FR-012, FR-016, T023 |
+| M2 | Every request opts into the history check; `error` before a hand-over, `drop_block` after; dropped blocks logged as type, reason and position | FR-021, FR-021a, research R10 |
+| S3, S5 | Statuses the error table doesn't list become `start_failed`; non-API, non-network errors become `start_failed` (logged `internal_error`); only network errors are `offline` | FR-027, research R10 |
+| S6 | `tool_call` once the whole answer is in, only for calls that will run | FR-022, research R9 |
+| S7 | Thinking display `updates` (B1's, T001) forced to `omitted` on Haiku 5.5; `max_tokens` 32000 | data-model › Runtime settings |
+| Other | Every `ANTHROPIC_*` variable stripped (R3); `skill-tool.json` in the settings hash; the protocol's test-only `base_url`, `bad_command`, `not_implemented`, `turn_end` extras, missing-key and server-start retries (contracts/helper-protocol.md); `install.sh` without Claude Code on A (T061); T037's scrubber note; T016's checkpoint and the three real-service unknowns | research, data-model, contracts, tasks |

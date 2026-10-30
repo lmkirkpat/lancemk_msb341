@@ -14,7 +14,7 @@ of only `PATH=/usr/bin:/bin:/usr/sbin:/sbin`, `HOME`, `TZ` (if set). Nothing els
 
 | Command | Fields | Effect |
 |---|---|---|
-| `start` | `session_id`, `resume` (bool), `home`, `mcp_config` (path to `.mcp.json`), `skills_dir`, `fixture_env` (object, evals only: passed to `ae-mentor`), `key` (evals only, R11), `request_log` (path, evals only), `settings_file` (evals only; default `panel/helper/settings.json`) | Read settings, read the key, start `ae-mentor`, load the conversation if `resume`. Replies `ready` or `error` |
+| `start` | `session_id`, `resume` (bool), `home`, `mcp_config` (path to `.mcp.json`), `skills_dir`, `fixture_env` (object, evals only: passed to `ae-mentor`), `key` (evals only, R11), `request_log` (path, evals only), `settings_file` (evals only; default `panel/helper/settings.json`), `base_url` (tests only, see below) | Read settings, read the key, start `ae-mentor`, load the conversation if `resume`. Replies `ready` or `error`. `session_id`, `mcp_config` and `skills_dir` are required. A second `start` gets `error bad_command` |
 | `send` | `text`, `kind` | One turn. Refused with `error { kind: "busy" }` if a turn is in flight |
 | `stop` | | End the turn in flight (no save), stop `ae-mentor`, exit 0 |
 | `key_check` | `key`? | Needs no `start`. Replies `key_status`. Makes one free request (R11) |
@@ -22,22 +22,39 @@ of only `PATH=/usr/bin:/bin:/usr/sbin:/sbin`, `HOME`, `TZ` (if set). Nothing els
 A `start` without `key` makes the helper read the Keychain item (service `Knack`, account
 `anthropic-api-key`). The key is never echoed in any reply.
 
+*Amended 2026-10-30 (review; must be in before T017, the A adapter):*
+
+- **`base_url` is test-only.** It points the SDK at T005's fake service (`panel/helper/test/`,
+  `panel/dev/drive.js --fault`). It must be `http://127.0.0.1` or `http://localhost` with an optional
+  port, else `start` fails with `start_failed`, so the key can't be sent anywhere else by mistake.
+  **The adapter never sends it**; neither do the eval runners.
+- **A missing key doesn't fail `start`.** The helper still replies `ready`; each `send` re-reads the
+  Keychain (or the start command's key) and, while there's none, ends with `error not_signed_in` and
+  `turn_end { ok: false }` without calling the service. So a key added after the panel opened works
+  on the next send.
+- **`ae-mentor` can't start during `start`**: the helper replies `error start_failed` and **no
+  `ready`**; it stays started, and each later `send` tries to start the server again. The adapter
+  must treat that `error` as the end of starting (no `start_ms`), not wait for `ready`.
+- **`resume`** is accepted but, until T043 and T044, logged and ignored: the lesson starts fresh
+  (spec 003's rule: say nothing alarming).
+- **`send` before a successful `start`**: `error start_failed` and `turn_end { ok: false }`.
+
 ## Events (helper → adapter)
 
 The adapter contract's events, unchanged in meaning, plus fields the panel may ignore:
 
 | Event | Payload |
 |---|---|
-| `ready` | `{ session_id, runtime: "a", model, effort, settings_hash, skill? }` (helper only; the adapter doesn't re-emit it) |
+| `ready` | `{ session_id, runtime: "a", model, effort, settings_hash, skill, settings_file? }` (`skill` is null until the first message loads one; `settings_file` only when it isn't the default; helper only, the adapter doesn't re-emit it) |
 | `turn_start` | `{ kind, at }` |
 | `text_delta` | `{ text }` |
 | `text` | `{ text }` |
-| `tool_call` | `{ id, name, input? }` (`input` when the block is complete) |
+| `tool_call` | `{ id, name, input }`, sent once the model's whole answer is in, only for calls that will run: never for a call from an attempt declined before a fallback or an answer cut off mid-call, and never for the hand-over tool (research R9, amended 2026-10-30) |
 | `tool_result` | `{ id, name, ok, json?, text?, images[] }` |
-| `turn_end` | `{ ok, cost_usd, wait_ms, first_event_ms, total_ms, kind, runtime, model, effort, settings_hash, tokens, other_model }` |
+| `turn_end` | `{ ok, cost_usd, wait_ms, first_event_ms, total_ms, kind, runtime, model, effort, settings_hash, tokens, other_model, steps, skill, prompt_hash }`. `steps`: model requests in the turn (12 when it hit the limit); `skill`: the active skill after the turn (null if none loaded); `prompt_hash`: the lesson prompt's hash (data-model). `cost_usd` is `null` when a request was billed but its counts never came, and `0` when no request was made |
 | `error` | `{ kind, message }` |
 | `key_status` | `{ status: "works" \| "rejected" \| "out_of_credit" \| "offline" \| "no_key" }` |
-| `skill_loaded` | `{ skill }` on a hand-over (log only) |
+| `skill_loaded` | `{ skill }` on a hand-over, by the hand-over tool or by a message starting with another mentor skill's command (log only) |
 
 The adapter times `wait_ms` and `first_event_ms` itself from the events it sees, as B1's adapter
 does, so the SC-004 clock includes the helper's own start. `exit` comes from the process closing.
@@ -59,6 +76,12 @@ Every message is fixed text chosen by kind, with no status code, path, tool name
 | `start_failed` | "The mentor couldn't start. Close and reopen the panel; if it happens again, check setup." |
 | `process_exited` | "The mentor stopped unexpectedly. Start the lesson again." |
 | `busy` | not shown (the panel already blocks a second send) |
+| `bad_command` | never shown to a learner: an unknown command, a line that isn't JSON (logged, never echoed), or a second `start`. Empty message |
+| `not_implemented` | never shown to a learner: `key_check` with a key present, until T037 builds the real check (then this kind goes away). Empty message |
+
+`start_failed` also covers a request the service rejects with a status the table in research R10
+doesn't list (400, 404, 413 …) and any error in the helper that isn't from the service or the
+network (logged as `internal_error`). Only network errors are `offline` (amended 2026-10-30).
 
 A turn that hits 12 model steps ends with `turn_end { ok: false }` and no `error`, as on B1; the
 panel's existing "The mentor stopped before finishing. Try again." covers it.
@@ -67,9 +90,15 @@ panel's existing "The mentor stopped before finishing. Try again." covers it.
 
 - Neither the helper nor the adapter reads or writes the AE project, `session.json` or
   `learner.json`. Only `ae-mentor` does.
-- The model gets only the allowlisted inputs (FR-016) and only the skill's tools plus `Skill` where
-  listed (FR-005, FR-008).
+- The model gets only the allowlisted inputs (FR-016) and can call only the active skill's tools
+  plus `Skill` where listed (FR-005, FR-008); other tools may be declared hidden (FR-014, D2).
 - The key is held in the helper's memory only, never in `ae-mentor`'s environment, any event, the
   conversation file, logs or the request log (FR-019, FR-021).
 - With `request_log` in the start command (evals only), every request body is appended as one JSON line, without the key and with image data replaced by its length.
+- Log lines go to the helper's stderr as JSON, scrubbed of the key and anything key-shaped. They hold
+  names, codes, kinds and the service's own error text (scrubbed, cut to 300 characters) for the
+  builder. The helper never logs the learner's words, a tool's input or a response's text itself;
+  the service's error text is logged as it came, and could quote part of a request. The service's
+  `input_transformations` are logged as type, reason and path only.
+- The helper removes every `ANTHROPIC_*` variable from its own environment at start (research R3).
 - `stop()` leaves no helper and no `ae-mentor` process running.

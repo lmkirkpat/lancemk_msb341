@@ -24,8 +24,8 @@ eval sets. The approach (research R1 to R14):
   byte-for-byte in the system prompt (Q5), and the tools the skill's `allowed-tools` lists, as the
   server describes them. Nothing from `CLAUDE.md`, `~/.claude/`, settings or the repo's other files
   can get in (FR-016), and a request log lets the eval engineer check that independently (SC-008).
-- **Settings in one file** (`panel/helper/settings.json`): model, effort, cache lifetime, skill
-  placement, step limit, timeout. The panel and the evals both read it (FR-028). The first
+- **Settings in one file** (`panel/helper/settings.json`): model, effort, thinking display, cache
+  lifetime, skill placement, step limit, timeout, output limit, fallbacks. The panel and the evals both read it (FR-028). The first
   comparison uses Opus 5.5 at the effort B1's Claude Code actually used, found first (T001), so only
   the runtime changes.
 - **Comparison order** (Q4): easing on A; stop and triage if it misses B1 by more than 5 points;
@@ -148,7 +148,8 @@ panel/helper/                    # NEW (panel-builder): the option A helper (dec
 ├── package.json                 # "type": "module"; @anthropic-ai/sdk pinned exactly; "test": "node --test test/"
 ├── package-lock.json
 ├── main.mjs                     # Entry: JSON lines in (start, send, stop, key_check), events out (contracts/helper-protocol.md)
-├── settings.json                # FR-028: model, effort, cache_ttl, skill_placement, max_steps, turn_timeout_ms, fallbacks
+├── settings.json                # FR-028: model, effort, thinking_display, cache_ttl, skill_placement, max_steps, turn_timeout_ms, max_tokens, fallbacks
+├── skill-tool.json              # FR-012 item 2: the hand-over tool's definition (allowlisted runtime text, D3)
 ├── prices.json                  # FR-026: dated per-model prices by token kind
 ├── preamble.md                  # FR-012: the text above
 ├── lib/
@@ -156,7 +157,7 @@ panel/helper/                    # NEW (panel-builder): the option A helper (dec
 │   ├── skills.mjs               # Read a *-mentor SKILL.md: allowed-tools from frontmatter, body bytes (FR-010, FR-017)
 │   ├── mcp-client.mjs           # Start ae-mentor per .mcp.json with an allowlisted env; initialize → instructions; tools/list; tools/call (FR-004, FR-009, FR-011)
 │   ├── prompt.mjs               # Fixed-order system blocks, tool definitions, cache breakpoints, prompt hash (FR-005, FR-012, FR-013, FR-016)
-│   ├── loop.mjs                 # One turn: stream, run allowed tools, step limit, timeout, hand-over (FR-005–FR-008, FR-014, FR-015, FR-022)
+│   ├── loop.mjs                 # One turn: stream, run allowed tools, step limit, timeout, hand-over, history check, failed-turn tail (FR-005–FR-008, FR-014, FR-015, FR-021a, FR-022)
 │   ├── conversation.mjs         # Append-only save after each complete exchange; frames as files; load for continue (FR-023, FR-024)
 │   ├── key.mjs                  # Keychain read (security CLI), eval env fallback, key check (FR-018–FR-020)
 │   ├── errors.mjs               # SDK errors and stop reasons → error kinds; key scrubbing (FR-021, FR-027)
@@ -208,6 +209,20 @@ spawn the same helper, so what the evals measure is what the panel runs.
 6. **Live** (the builder, one AE sitting at a time): SC-001 (3 lessons), SC-002, SC-004, SC-007,
    then FR-039's terminal chat for a non-easing skill and a hand-over.
 7. **Cheaper models** (Q2, about $60), then **A becomes the default** (FR-035, FR-037).
+
+## Amendments after the helper's build (2026-10-30)
+
+The helper core (T002 to T015) is on `main` (`d934115`). The review and the builder's decisions D1 to
+D3 changed the spec (spec › Amendments); three tasks were added:
+
+- **T059** (D1): a failed turn keeps its complete exchanges. Test first: a failure at step 3 after a
+  demonstration, then the next turn still has the demo's call and result.
+- **T060** (D2): tool changes for the hand-over on Opus 5.5 and Sonnet 5.5, after a live check of the
+  two open points (research R5). Before T031 and T055 (spec resolved question 9).
+- **T061**: `panel/install.sh` doesn't require Claude Code when `runtime` is `"a"` (FR-038), before
+  T054.
+
+The amended contract (contracts/helper-protocol.md) is what T017 builds against.
 
 ## Complexity Tracking
 

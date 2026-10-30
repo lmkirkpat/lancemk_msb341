@@ -44,3 +44,9 @@
 - Iteration 2 (2026-10-30): approved with Q1 to Q5 as recommended; `decisions/010` covers Q1 and
   the builder approved the SDK (Q3). `/speckit-analyze` led to clarifying FR-007, FR-020, FR-028 and
   the Runtime setting entity.
+- Iteration 3 (2026-10-30): amended after the `013-helper` build and review with the builder's
+  decisions D1 to D3 and the review's smaller items (spec › Amendments). Four open questions
+  (OQ-1 to OQ-4) added, each with a recommended answer; FR-015 and FR-021a are written to the
+  recommendations. `/speckit-analyze` re-run.
+  Later the same day the builder answered OQ-1 to OQ-4 as recommended; they're now resolved
+  questions 6 to 9, and the Open Questions section is gone.

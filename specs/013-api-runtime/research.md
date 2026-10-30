@@ -42,14 +42,27 @@ Opus 5.5).
 
 **Why**: FR-033's comparison is only about the runtime if the model and effort match.
 
+**Result (T001, 2026-10-30, `product/evals/README.md` › Runtimes)**: the 2026-10-29 B1 runs were all
+`claude-opus-5-5` at effort `medium`, with `thinking: {type: "adaptive", display: "updates"}` and the
+`thinking-display-updates-2026-08-18` beta; the judge the same model and effort. Claude Code 2.1.312
+for most of the day, 2.1.314 for the rest. Where `medium` comes from is inferred (likely an inherited
+`CLAUDE_EFFORT` or the default), so a run from another shell could differ. `settings.json` took these
+values (T006).
+
 ## R3. The SDK and credentials (spec Q3)
 
 **Decision**: `@anthropic-ai/sdk`, exact version pinned (`"x.y.z"`, no range) with a committed
 `package-lock.json`, installed by `npm ci` in `panel/helper/` (`panel/install.sh`, T004). The client
 is built with an explicit `apiKey` from R11 and `maxRetries: 2`, `timeout` per request under the
-5-minute turn timeout. The helper's own environment is checked at start: `ANTHROPIC_API_KEY`,
-`ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_PROFILE` and `ANTHROPIC_BASE_URL` are removed before the client
-is built, so the SDK can't fall back to a shell variable or a CLI profile on disk.
+5-minute turn timeout. The helper's own environment is checked at start: **every `ANTHROPIC_*`
+variable** is removed before the client is built (their names, never values, logged), so the SDK
+can't fall back to a shell variable or a CLI profile on disk. Pinned at `@anthropic-ai/sdk` 1.3.0
+(T002).
+
+*Amended 2026-10-30 (review):* the plan named four variables; the build strips all of them, because
+the SDK also reads others, such as `ANTHROPIC_LOG` (its own logging) and `ANTHROPIC_CUSTOM_HEADERS`
+(extra headers on every request), and the helper is configured only by its start command and
+`settings.json` (`panel/helper/lib/key.mjs` `scrubEnv`).
 
 **Why**: the SDK covers streaming, retries on 429/5xx and connection errors, and typed errors
 (`AuthenticationError`, `PermissionDeniedError`, `RateLimitError`, `InternalServerError`,
@@ -66,7 +79,8 @@ spawns it with an **allowlisted** environment: `PATH=/usr/bin:/bin:/usr/sbin:/sb
 helper's start command. Never the key. It sends `initialize` (protocol `2025-06-18`), keeps the
 reply's `instructions` string, sends `notifications/initialized`, then `tools/list`. One server per
 lesson, kept for the helper's life; if it exits, the turn ends `start_failed` and the next `send`
-starts it again.
+starts it again. If it can't start during `start`, the helper replies `error start_failed` and no
+`ready`, and each later `send` tries again (as built, `main.mjs`).
 
 **Why**: the server is the same code, call log and fixtures mode the evals measure today; taking
 its instructions from its own reply keeps one source (FR-011).
@@ -89,11 +103,34 @@ server holds in memory between turns rather than in `session.json` would behave 
 - **messages**: the learner's and panel's texts verbatim, including a leading `/ease-mentor` or
   `/offset-mentor review` (so the model sees what Claude Code's mentor saw typed; the skill itself
   is already in the system prompt).
-- **Hand-over** (`Skill` called with `{ skill, args }`): the helper answers the tool call with a
-  short result (`Loaded <skill>.`), then appends a mid-conversation system message holding the new
-  skill's body before the next request, and swaps the tool list to the new skill's. Earlier
-  messages are never edited. Mid-conversation system messages are supported on Opus 5.5, Sonnet 5.5
-  and Haiku 5.5.
+- **Hand-over** (`Skill` called with `{ skill, args }`, or a message starting with another mentor
+  skill's command): the helper answers the tool call with a fixed result ("Loaded <skill>." or
+  "Loaded <skill>. Arguments: <args>"; "That skill isn't available." if it can't be loaded), then
+  appends a mid-conversation system message holding the new skill's body before the next request.
+  The service takes such a message only right after a user message, as the last message or followed
+  by an assistant turn, so the body waits until the history ends with a user message; if the reply
+  right after it is empty, the body is taken back off the end and waits again (review fix M1).
+  Earlier messages are never edited. Mid-conversation system messages are supported on Opus 5.5,
+  Sonnet 5.5 and Haiku 5.5.
+- **Tools at a hand-over (D2, amended 2026-10-30)**:
+  - *As built* (`lib/loop.mjs` `switchTo`): the request's tool list is replaced with the new skill's,
+    and from then on every request sends `prefix_mismatch_behavior: "drop_block"` (R10), because the
+    replaced list invalidates every reasoning block from before it.
+  - *Decided, on Opus 5.5 and Sonnet 5.5* (T060): the first request declares every tool the lesson
+    can reach (the server's list plus `Skill`), those outside the starting skill with
+    `defer_loading: true`; the tool list then never changes. A hand-over appends a `role: "system"`
+    message with a `tool_removal` block for each tool leaving and a `tool_addition` block for each
+    tool arriving, each naming the tool by `tool_reference` (beta
+    `mid-conversation-tool-changes-2026-07-01`). Documented rules: an added tool must already be
+    declared with `defer_loading: true`; a `tool_removal` must sit immediately before an assistant
+    message or last in `messages`. The beta's model list includes Opus 5.5 and Sonnet 5.5, not Haiku
+    5.5.
+  - *Haiku 5.5*: keeps the as-built swap plus `drop_block`.
+  - *Open, checked live first in T060*: whether the tool-change blocks can share one system message
+    with the skill body's text, and where the `tool_removal` must sit when the body follows it.
+  - *Which tools "the lesson can reach"*: every tool the server lists plus `Skill` (one fixed list per
+    lesson, so it's the same bytes on every request). A call to a hidden tool gets "That tool isn't
+    available in this lesson." as today (FR-005).
 - **Fallback placement** (`settings.skill_placement: "message"`): the skill body goes in the first
   user message ahead of the learner's text, the way Claude Code expands a `/skill`. One setting, no
   code change, so the eval engineer can switch if FR-033 shows drift the prompt can't explain.
@@ -120,8 +157,10 @@ the fix, if any, is the skill's or the runner's owner's call, not the runtime's.
 **Decision**: `thinking` is left at the model's default (adaptive; Opus 5.5 can't turn it off),
 `output_config.effort` is always sent from `settings.effort` (Opus 5.5's default is `medium`, so it
 is never left implicit). Thinking blocks are kept in the history exactly as returned and never
-shown; only `text` blocks reach the panel. The thinking `display` setting matches what T001 finds
-Claude Code sends, or the API default if unknown.
+shown; only `text` blocks reach the panel. The thinking `display` setting matches what T001 found
+Claude Code sends: `"updates"` (beta `thinking-display-updates-2026-08-18`), in `settings.json` as
+`thinking_display`. The reference documents `"updates"` for Opus 5.5 and Sonnet 5.5, not Haiku 5.5,
+so settings validation forces it to `"omitted"` on Haiku 5.5 (review S7, 2026-10-30).
 
 **Why**: on Opus 5.5, Sonnet 5.5 and Haiku 5.5 thinking blocks are bound to the conversation, and
 an edited history fails the service's history check, so append-only (FR-015) is required, not just
@@ -141,18 +180,28 @@ gaps between a turn's end and the next send within a lesson: median 20 s, 75th p
 90th 77 s, none over 5 minutes. A 1-hour lifetime would double the cache-write price for nothing.
 Re-check after SC-001: if more than 1 in 10 gaps go over 5 minutes, revisit.
 
-**Known cost**: a hand-over (R5) changes the tool list, which sits ahead of the system prompt, so
-that one request writes the cache again.
+**Known cost (corrected 2026-10-30, review S2)**: the plan said a hand-over rewrites the cache once.
+That's wrong for the as-built swap: replacing the tool list changes the very front of the prefix, so
+that request writes the cache again, and from then on the service drops the invalidated reasoning
+blocks (`drop_block`, R10). With `drop_block`, the service drops the first mismatched block and every
+reasoning block after it, so what's sent differs from the cached prefix from the first dropped block
+on, and the cache can miss from that point, not only once. D2's tool changes (R5, T060) keep the
+tool list and history unchanged, so a hand-over on Opus 5.5 and Sonnet 5.5 costs only the new
+messages; the swap's cost stays on Haiku 5.5. The turn log's cache reads after a hand-over show
+which happened.
 
 ## R9. Streaming into the adapter's events (FR-022)
 
 **Decision**: the loop streams each model step. `content_block_delta` with text →
-`text_delta`; a finished text block → `text`; a `tool_use` block's start → `tool_call` (id, name;
-`input` added when the block finishes); each tool result → `tool_result` with `ok`, `text`, `json`
+`text_delta`; a finished text block → `text`; `tool_call` (id, name, input) once the whole answer is
+in, only for calls that will run: never for a call from an attempt declined before a server-side
+fallback (it's dropped by the echo rule, R10), never for an answer cut off at `max_tokens` mid-call,
+and never for the hand-over tool's own call, which B1's `stream.js` doesn't emit either (amended
+2026-10-30, review S6; the plan had `tool_call` at the block's start). Each tool result → `tool_result` with `ok`, `text`, `json`
 (when the text parses) and `images` (`{ data, mimeType }`), as `stream.js` builds them for B1.
 Thinking blocks produce no events. `turn_end` carries `ok`, `cost_usd`, `wait_ms`,
-`first_event_ms`, `total_ms`, plus `runtime`, `model`, `effort`, token counts by kind and
-`other_model`. Fine-grained tool-input streaming is left off: the mentor's tool inputs are a few
+`first_event_ms`, `total_ms`, plus `runtime`, `model`, `effort`, `settings_hash`, token counts by
+kind, `other_model`, and (added in the build) `steps`, `skill` and `prompt_hash`. Fine-grained tool-input streaming is left off: the mentor's tool inputs are a few
 fields, and the panel only needs the call's start.
 
 ## R10. Errors, refusals and retries (FR-007, FR-027)
@@ -163,8 +212,11 @@ fields, and the panel only needs the call's start.
 | Key rejected | `AuthenticationError` (401); `PermissionDeniedError` (403) | `not_signed_in` | `not_signed_in` |
 | Out of credit, spend limit | billing-type error from the service (**verify** the exact type and status, T038) | `out_of_credit` | none |
 | Rate limited | `RateLimitError` (429) after the SDK's 2 retries | `rate_limited` | none |
-| Overloaded, server error | `InternalServerError` / 529 after retries | `service_busy` | none |
-| Can't reach the service | `APIConnectionError`, `APIConnectionTimeoutError` | `offline` | none |
+| Overloaded, server error | `InternalServerError` / 529 after retries; an error event mid-stream of a type the table doesn't list | `service_busy` | none |
+| Can't reach the service | `APIConnectionError`, `APIConnectionTimeoutError`; a dropped connection mid-answer (a network error code or undici's wording anywhere in the error's cause chain) | `offline` | none |
+| A status the table doesn't list (400, 404, 413 …) | any other `APIError` with a status | `start_failed` (a setup or helper fault, not the learner's) | none |
+| Any other error (not from the service, not a network error) | everything else | `start_failed`, logged as `internal_error` | none |
+| Answer cut off mid tool call | `stop_reason: "max_tokens"` with a `tool_use` block | none: `turn_end { ok: false }`; the call never runs | none |
 | Safety refusal | `stop_reason: "refusal"` (category logged, never text) | `refused` | none |
 | 5 minutes | the turn timer | `timeout` | `timeout` |
 | `ae-mentor` won't start or exits | spawn error, `initialize` failure, exit | `start_failed` | `start_failed` |
@@ -173,7 +225,26 @@ fields, and the panel only needs the call's start.
 
 Messages are fixed plain strings chosen by kind (contracts/helper-protocol.md), never built from
 service text. Service text that reaches a log is scrubbed of anything shaped like a key
-(`sk-ant-…`) first (FR-021).
+(`sk-ant-…`) and of the key itself first (FR-021).
+
+*Amended 2026-10-30 (review S5, `panel/helper/lib/errors.mjs` `classify`):* only network errors are
+`offline`. The plan sent every non-API error there, which would tell a learner to check their
+internet for a bug in the helper. The billing row stays provisional until T038.
+
+**The history check (amended 2026-10-30, review M2; FR-021a)**: every request sends the beta
+`thinking-binding-controls-2026-08-01` with `thinking.block_binding.prefix_mismatch_behavior`:
+`"error"` until the lesson's first hand-over, `"drop_block"` after it (`lib/loop.mjs`
+`requestParams`). Why on every request: the service enforces the check by default only for accounts
+created on or after 2026-08-31; on older accounts (the builder's) a request is checked only if it
+sets the field. Without it, an edited history would pass on the builder's account and fail on every
+learner's. With the beta, each response lists what the service changed in `input_transformations`;
+a non-empty list is logged as each entry's type, reason and path, never text. `block_binding` works
+only with adaptive thinking, which every model here uses. After D2 is built, Opus 5.5 and Sonnet 5.5 keep `error` for the whole lesson; `drop_block` stays only for Haiku 5.5's swap fallback (spec resolved question 8).
+
+**The fallback echo rule**: after a mid-answer server-side fallback, the reasoning and tool-call
+blocks before the last `fallback` block aren't sent back; text and everything after it are
+(`lib/loop.mjs` `echoContent`). This is FR-015's third exception. Cost counts every attempt from
+`usage.iterations` when present (`lib/cost.mjs`).
 
 **Refusal fallback**: `settings.fallbacks: "default"` (server-side fallback beta) is sent, so a
 refusal on Opus 5.5 can be answered by another model instead of ending the turn. It needs the beta
