@@ -1,0 +1,259 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(ellipse at 50% 30%, #2a1d14 0%, #120c08 60%, #070504 100%);
+  color: #d9ffe2;
+  font-family: 'Courier New', Courier, monospace;
+  overflow: hidden;
+  user-select: none;
+}
+
+.room {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2vh;
+}
+
+/* Faux woodgrain console, like a 70s living-room TV game. */
+.cabinet {
+  width: min(96vw, calc((100vh - 180px) * 4 / 3 + 80px));
+  padding: 18px 24px 16px;
+  border-radius: 18px;
+  background:
+    repeating-linear-gradient(92deg, rgba(0, 0, 0, 0.12) 0 3px, transparent 3px 11px),
+    repeating-linear-gradient(88deg, rgba(255, 220, 170, 0.05) 0 2px, transparent 2px 17px),
+    linear-gradient(180deg, #6b4425, #4a2d17 55%, #3a2312);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 210, 160, 0.25),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.5),
+    0 30px 60px rgba(0, 0, 0, 0.7);
+}
+
+.marquee {
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 0.5em;
+  color: #f4c46a;
+  text-shadow: 0 0 8px rgba(244, 170, 70, 0.6), 0 2px 0 #3a2312;
+  margin-bottom: 12px;
+  font-size: clamp(14px, 2.2vw, 22px);
+}
+
+.bezel {
+  padding: 18px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #1d1d1d, #0b0b0b);
+  box-shadow: inset 0 0 0 2px #2c2c2c, inset 0 8px 20px rgba(0, 0, 0, 0.9);
+}
+
+.screen {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 28px / 22px;
+  overflow: hidden;
+  background: #040a06;
+  box-shadow: 0 0 0 3px #000, 0 0 40px rgba(93, 255, 138, 0.12);
+  animation: flicker 0.12s infinite alternate;
+}
+
+.screen canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  cursor: none;
+}
+
+.scanlines,
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.28) 3px,
+    rgba(0, 0, 0, 0) 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+/* Curved glass: dark corners plus a faint reflection. */
+.vignette {
+  background:
+    radial-gradient(ellipse at 30% 15%, rgba(255, 255, 255, 0.07), transparent 40%),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.75) 100%);
+}
+
+@keyframes flicker {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(0.96);
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4vh;
+  text-shadow: 0 0 6px #5dff8a, 0 0 18px rgba(93, 255, 138, 0.5);
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  font-size: clamp(11px, 1.7vw, 18px);
+}
+
+.overlay.dim {
+  background: rgba(2, 8, 4, 0.55);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(48px, 10vw, 112px);
+  letter-spacing: 0.25em;
+  margin-right: -0.25em;
+  line-height: 1;
+  background: rgba(4, 10, 6, 0.9);
+  padding: 0 0.2em;
+}
+
+.subtitle {
+  margin-bottom: 2.5vh;
+  opacity: 0.8;
+  font-size: 0.8em;
+}
+
+.big {
+  margin: 0;
+  font-size: clamp(32px, 6vw, 64px);
+  letter-spacing: 0.2em;
+}
+
+.winner {
+  margin-bottom: 2vh;
+}
+
+.menu-item {
+  all: unset;
+  cursor: pointer;
+  padding: 0.3em 1em;
+  background: rgba(4, 10, 6, 0.9);
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: #d9ffe2;
+  color: #040a06;
+  text-shadow: none;
+}
+
+.hint {
+  font-size: 0.75em;
+  opacity: 0.7;
+  background: rgba(4, 10, 6, 0.9);
+  padding: 0 0.4em;
+}
+
+.blink {
+  margin-top: 2vh;
+  animation: blink 1s steps(1) infinite;
+  background: rgba(4, 10, 6, 0.9);
+  padding: 0 0.4em;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* The brushed-metal strip under the screen. */
+.panel {
+  margin-top: 14px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #c9c3b8, #8f897e);
+  box-shadow: inset 0 1px 0 #fff8, inset 0 -2px 4px #0006;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  justify-content: space-between;
+  align-items: center;
+  color: #2a2016;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.controls,
+.switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 1px 5px;
+  margin: 0 2px;
+  border-radius: 4px;
+  background: #2a2016;
+  color: #f4e6cc;
+  font-family: inherit;
+  font-size: 11px;
+  text-align: center;
+  box-shadow: 0 2px 0 #000;
+}
+
+.switch {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #3b3127, #241c14);
+  color: #f4e6cc;
+  box-shadow: 0 2px 0 #000, inset 0 1px 0 #fff2;
+}
+
+.switch:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 #000;
+}
+
+.led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4a1010;
+  box-shadow: inset 0 0 2px #000;
+}
+
+.switch.on .led {
+  background: #ff4b3a;
+  box-shadow: 0 0 6px #ff4b3a, 0 0 2px #fff inset;
+}
