@@ -161,6 +161,20 @@ a brand new session act like a colleague who already knows what you are working 
     text layers read Collapse on (key fixed), and offset lists Transform properties before
     effects (`offset-order`). Easing case 26 (matte, eye off) passes 3/3 even without T123's
     line, because the tool already keeps mattes out of `hidden_layers` (`evals-matte`).
+- **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
+  `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
+  (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
+  and `--runtime a|b1` in all six eval runners (B1 the default, dry runs byte-identical). 25 of 61
+  tasks done; two reviews fixed five history bugs. After a fresh checkout, run `npm ci` in
+  `panel/helper/` (the SDK isn't committed). **Next, in order:**
+  1. Builder: an API key from the Console. It's billed as API credits, not the subscription, so
+     start with about $25. Add it with `security add-generic-password -s Knack -a anthropic-api-key -w`.
+  2. Smoke check: `node panel/helper/dev/chat.mjs --skill ease-mentor --fixture
+     product/evals/easing/fixtures/before.json`, then `--skill next-mentor`. Check the cache
+     write/read and `input_transformations`.
+  3. T060 (panel-builder: hand-over via the tool-changes beta; live check first), then T030–T031
+     (easing A vs B1, about $15; stop if more than 5 points down). Then T021 in AE.
+  4. Open: whether to spend on all six sets on A (about $115) or easing and pivot only (about $40).
 - **Next steps:**
   1. Spec 004 is done (T047 passed 2026-10-26 after a two-sentence fix to `next-mentor/SKILL.md`; for a
      live test on a temp learner home, set `AE_MENTOR_HOME` in an MCP config's `env` and run
