@@ -7,10 +7,11 @@
   --line: #3a3a3a;
   --text: #c8c8c8;
   --text-strong: #e6e6e6;
-  --muted: #8a8a8a;
+  --muted: #9a9a9a;
   --accent: #2d8ceb;
+  --primary-fill: #1473e6; /* filled button, under white text; --accent stays for marks, never text */
   --ok: #3fb950;
-  --bad: #e5534b;
+  --bad: #ff7b72;
   --warn: #d29922;
 }
 
@@ -26,7 +27,7 @@ body {
   overflow-x: hidden;
 }
 [hidden] { display: none !important; }
-h2 { margin: 0 0 4px; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h2 { margin: 0 0 4px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 h3 { margin: 6px 0 2px; font-size: 11px; font-weight: 600; color: var(--muted); }
 ul { margin: 0; padding: 0; list-style: none; }
 
@@ -56,7 +57,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .msg p { margin: 0 0 6px; }
 .msg ul, .msg ol { margin: 0 0 6px; padding-left: 18px; }
 .msg ul { list-style: disc; }
-.msg code { background: var(--bg-sunk); padding: 0 3px; border-radius: 2px; }
+.msg code { background: var(--bg-sunk); padding: 0 3px; border-radius: 2px; font-size: 12px; } /* a monospace default would shrink it under the floor */
 .msg.learner { text-align: right; }
 .msg.learner span { display: inline-block; background: var(--bg-raised); border: 1px solid var(--line); border-radius: 10px; padding: 2px 9px; color: var(--text-strong); }
 .msg.mentor { background: var(--bg-raised); border-left: 2px solid var(--accent); padding: 6px 8px; border-radius: 0 3px 3px 0; }
@@ -72,7 +73,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .check-summary { margin: 0 0 4px; color: var(--text-strong); }
 .check-rows li, .check-outside li { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; border-bottom: 1px solid #2e2e2e; }
 .check-rows li span:first-child { overflow-wrap: anywhere; }
-.check-rows li small { display: block; color: var(--muted); }
+.check-rows li small { display: block; font-size: 11px; color: var(--muted); } /* the browser's <small> would be 10 px */
 .check-rows li span:last-child { flex: none; }
 .check-rows li.ok span:last-child { color: var(--ok); }
 .check-rows li.bad span:last-child { color: var(--bad); }
@@ -84,7 +85,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .buttons { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border-top: 1px solid var(--line); }
 button { background: #3a3a3a; color: var(--text-strong); border: 1px solid #4a4a4a; border-radius: 3px; padding: 5px 10px; font: inherit; cursor: pointer; }
 button:hover:not(:disabled) { background: #454545; }
-button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.primary { background: var(--primary-fill); border-color: var(--primary-fill); color: #fff; }
 button:disabled { opacity: .45; cursor: default; }
 .ask { display: flex; gap: 6px; padding: 0 10px 8px; }
 .ask input { flex: 1; min-width: 0; background: var(--bg-sunk); color: var(--text-strong); border: 1px solid var(--line); border-radius: 3px; padding: 5px 8px; font: inherit; }
