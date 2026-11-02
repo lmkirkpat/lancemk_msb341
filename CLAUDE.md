@@ -175,6 +175,10 @@ a brand new session act like a colleague who already knows what you are working 
   3. T060 (panel-builder: hand-over via the tool-changes beta; live check first), then T030–T031
      (easing A vs B1, about $15; stop if more than 5 points down). Then T021 in AE.
   4. Open: whether to spend on all six sets on A (about $115) or easing and pivot only (about $40).
+  5. **Pinned (2026-11-02): where testers' access keys come from** (spec 006 Q2). On A every user
+     needs a key; the question is who supplies and pays for it. The builder is thinking it over and
+     exploring funding options; don't push for an answer. It doesn't block spec 013, but it does
+     block the installer's plan.
 - **Next steps:**
   1. Spec 004 is done (T047 passed 2026-10-26 after a two-sentence fix to `next-mentor/SKILL.md`; for a
      live test on a temp learner home, set `AE_MENTOR_HOME` in an MCP config's `env` and run
@@ -352,8 +356,11 @@ a brand new session act like a colleague who already knows what you are working 
 
 ## Voice
 
-Writing other people read (product copy, marketing, memos) sounds like: warm, playful, and
+Writing other people read outside the product (marketing, memos) sounds like: warm, playful, and
 encouraging, like a friend a few steps ahead of you in the studio. Use creative-tool language,
 and poke fun at the struggle, never at the learner. Example line: "Undo the tutorial spiral."
-This is for product copy and marketing only. The mentor's in-lesson voice lives in `SKILL.md`
-and is covered by the eval set.
+
+Copy inside the panel is plain (decided 2026-11-02): say what happened and what to do, in the
+fewest words. A little voice is fine when it's short and natural, like "Take me in". No slogans
+or wordplay; those read as AI-written. The mentor's in-lesson voice lives in `SKILL.md` and is
+covered by the eval set.

@@ -513,6 +513,12 @@ Each changes the spec. Recommended answer first.
    workspace needs checking in the console before this is answered; if only per workspace, "one key
    per tester, each with its own limit" means one workspace per tester. The Keychain item is service
    `Knack`, account `anthropic-api-key` (spec 013 research R11).
+   *Note 2026-11-02 (paused by the builder):* still open on purpose while the builder thinks it
+   over and explores funding options (who pays for testers' lessons). Choices on the table: per-tester
+   keys issued by the builder (recommended above), bring-your-own key, or later a hosted backend
+   (still rejected for now by `decisions/005`; it's the likely path for a public release). Spec 013
+   doesn't need the answer, since it only builds the key check and error kinds. Come back to this
+   before the installer's plan, and write a decision record when it's answered.
 3. **Pay for Apple's Developer ID (yearly fee) so the installer is notarized?** *Recommended: yes,
    before the first tester.* Without it, recent macOS blocks the file and the tester has to
    approve it in System Settings › Privacy & Security, which fails SC-008 and is exactly the
