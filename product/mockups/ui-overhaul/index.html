@@ -5,6 +5,9 @@
   right is the design. Deep link to any state with #<state-id>, e.g. index.html#lesson-partial.
   Flows, states and the reasoning are in README.md next to this file.
   Revision 2 (2026-10-20): diagnosis screens redrawn against specs/005-diagnosis (US1 reads).
+  Revision 3 (2026-11-02): the six built skills' checklists, one row pattern, Pick / Try / Done,
+  Home without diagnosis, the real path, reviews, and option A's error kinds. diag-* and homeB-*
+  stay in the file, held for spec 005, not part of this build.
 -->
 <html lang="en">
 <head>
@@ -84,7 +87,7 @@ button, input { font: inherit; }
 
 .nav { display: flex; align-items: stretch; border-bottom: 1px solid var(--line); flex: none; height: 30px; }
 .nav [role="tablist"] { display: flex; align-items: stretch; }
-.nav [role="tab"] { background: none; border: 0; color: var(--muted); padding: 0 10px; cursor: pointer; border-bottom: 2px solid transparent; position: relative; }
+.nav [role="tab"] { background: none; border: 0; color: var(--muted); padding: 0 12px; cursor: pointer; border-bottom: 2px solid transparent; position: relative; }
 .nav [role="tab"][aria-selected="true"] { color: var(--text-strong); border-bottom-color: var(--accent); }
 .nav [role="tab"] .live { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-left: 5px; vertical-align: middle; }
 .conn { margin-left: auto; display: flex; align-items: center; gap: 5px; padding: 0 10px; color: var(--muted); font-size: 11px; white-space: nowrap; }
@@ -96,24 +99,24 @@ button, input { font: inherit; }
 .conn.busy { color: var(--warn); }
 
 .body, .view { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-.scroll { flex: 1; overflow-y: auto; padding: 10px; min-height: 0; }
+.scroll { flex: 1; overflow-y: auto; padding: 12px; min-height: 0; }
 
 h2.lbl { margin: 0 0 4px; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
 .kicker { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .kicker.accent { color: var(--accent); }
-.hello { margin: 0 0 10px; color: var(--text-strong); font-size: 13px; }
+.hello { margin: 0 0 12px; color: var(--text-strong); font-size: 13px; }
 .hello small { display: block; font-size: 12px; color: var(--muted); }
 
-.card { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; margin: 0 0 8px; }
+.card { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin: 0 0 10px; }
 .card.lead { border-color: #2f5f9e; box-shadow: inset 3px 0 0 var(--accent); }
-.card h3 { margin: 2px 0 4px; font-size: 14px; color: var(--text-strong); font-weight: 600; }
-.card p { margin: 0 0 8px; }
+.card h3 { margin: 2px 0 6px; font-size: 14px; color: var(--text-strong); font-weight: 600; }
+.card p { margin: 0 0 10px; }
 .card .why { color: var(--text); }
 .card .meta, .meta { color: var(--muted); font-size: 11px; }
 /* Pushed back, not faded: no opacity, so text and buttons keep their contrast. */
 .card.dim { background: transparent; border-style: dashed; box-shadow: none; }
 .card.dim .kicker.accent { color: var(--muted); }
-.row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .later { color: var(--muted); font-size: 11px; margin: 0; }
 
 button.btn { background: #3a3a3a; color: var(--text-strong); border: 1px solid #4a4a4a; border-radius: 3px; padding: 5px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 26px; }
@@ -129,10 +132,10 @@ button.btn.wide { width: 100%; justify-content: center; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .skel { animation: none !important; } }
 
-.banner { display: flex; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--line); flex: none; }
+.banner { display: flex; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); flex: none; }
 .banner .ic { flex: none; font-weight: 700; width: 16px; text-align: center; }
 .banner b { color: var(--text-strong); display: block; }
-.banner p { margin: 2px 0 6px; }
+.banner p { margin: 4px 0 8px; }
 .banner.bad { background: #2e1f1f; box-shadow: inset 3px 0 0 var(--bad); }
 .banner.bad .ic { color: var(--bad); }
 .banner.warn { background: #2d2716; box-shadow: inset 3px 0 0 var(--warn); }
@@ -140,20 +143,20 @@ button.btn.wide { width: 100%; justify-content: center; }
 .banner.info { background: #1c2533; box-shadow: inset 3px 0 0 var(--accent); }
 .banner.info .ic { color: var(--accent); }
 
-.memory { border-top: 1px solid var(--line); padding-top: 8px; margin-top: 4px; color: var(--muted); }
-.memory p { margin: 0 0 2px; }
+.memory { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 6px; color: var(--muted); }
+.memory p { margin: 0 0 4px; }
 .memory strong { color: var(--text); font-weight: 600; }
 
-input.text { width: 100%; background: var(--bg-sunk); color: var(--text-strong); border: 1px solid var(--line); border-radius: 3px; padding: 4px 8px; margin: 0 0 6px; }
+input.text { width: 100%; background: var(--bg-sunk); color: var(--text-strong); border: 1px solid var(--line); border-radius: 3px; padding: 6px 8px; margin: 0 0 8px; }
 input.text::placeholder { color: #8c8c8c; }
 label.small { display: block; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
 
 /* lesson */
-.lhead { display: flex; align-items: center; gap: 6px; padding: 6px 10px 4px; flex: none; }
+.lhead { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px; flex: none; }
 .back { background: none; border: 1px solid transparent; color: var(--muted); font-size: 16px; line-height: 1; padding: 2px 6px; border-radius: 3px; cursor: pointer; }
 .back:hover { border-color: var(--line); color: var(--text-strong); }
 .ltitle { flex: 1; min-width: 0; }
-.ltitle strong { display: block; color: var(--text-strong); font-size: 13px; overflow-wrap: anywhere; }
+.ltitle strong { display: block; margin-top: 2px; color: var(--text-strong); font-size: 13px; overflow-wrap: anywhere; }
 .tag { font-size: 11px; border: 1px solid var(--line); border-radius: 10px; padding: 0 7px; color: var(--muted); white-space: nowrap; }
 .tag.practice { border-color: #6b5a22; color: var(--warn); }
 .tag.pass { border-color: #2d5f3a; color: var(--ok); }
@@ -165,11 +168,11 @@ label.small { display: block; font-size: 11px; color: var(--muted); margin-botto
 .stage li.skipped { font-style: italic; }
 
 /* The chat is the only part that shrinks, so buttons and Ask are never clipped. */
-.chat { flex: 1 1 auto; overflow-y: auto; padding: 10px; min-height: 0; }
-.msg { margin: 0 0 10px; overflow-wrap: anywhere; }
+.chat { flex: 1 1 auto; overflow-y: auto; padding: 12px; min-height: 0; }
+.msg { margin: 0 0 12px; overflow-wrap: anywhere; }
 .msg p { margin: 0 0 6px; }
-.msg.mentor { background: var(--bg-raised); border-left: 2px solid var(--accent); padding: 6px 8px; border-radius: 0 3px 3px 0; }
-.msg .who { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
+.msg.mentor { background: var(--bg-raised); border-left: 2px solid var(--accent); padding: 10px 12px; border-radius: 0 3px 3px 0; }
+.msg .who { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
 .msg.learner { text-align: right; }
 .msg.learner span { display: inline-block; background: #333; border: 1px solid #444; border-radius: 10px; padding: 2px 9px; color: var(--text-strong); }
 .msg.notice { border-left: 2px solid var(--warn); padding: 4px 8px; color: var(--text); background: #2a2516; }
@@ -191,38 +194,92 @@ figure.frame figcaption { color: var(--muted); font-size: 11px; margin-top: 2px;
 .frames2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
 .check { border-top: 1px solid var(--line); background: #262626; flex: none; max-height: 38%; display: flex; flex-direction: column; }
-.check-head { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: none; border: 0; color: var(--text-strong); width: 100%; text-align: left; cursor: pointer; }
-.check-head .chev { color: var(--muted); width: 10px; }
+.check-head { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: none; border: 0; color: var(--text-strong); width: 100%; text-align: left; cursor: pointer; }
+.check-head .chev { color: var(--text-strong); flex: none; width: 16px; align-self: flex-start; font-size: 20px; line-height: 16px; text-align: center; }
 .check-head .sum { flex: 1; min-width: 0; }
 .check-head .sum small { color: var(--muted); display: block; font-size: 11px; }
-.check-body { overflow-y: auto; padding: 0 10px 6px; }
-.check.stale .check-body ul, .check.stale .check-head .sum b { opacity: .7; }
+.check-body { overflow-y: auto; padding: 0 12px 8px; }
+/* Stale (builder's decision, amends FR-017): only the row's label dims. The note, the summary, the
+   glyph, the result word, section heads and detail lines keep full contrast. On the checklist's
+   #262626, --text at .7 is 5.2:1; the floor is .63 (4.5:1). --muted is left alone: dimmed, it fails. */
+.check.stale .lab { opacity: .7; }
 .check ul { list-style: none; margin: 0; padding: 0; }
-.check li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line-soft); }
-.check li .what { min-width: 0; overflow-wrap: anywhere; }
-.check li .what small { display: block; color: var(--muted); }
-.check li .st { flex: none; white-space: nowrap; }
-.check li.ok .st { color: var(--ok); }
-.check li.bad .st { color: var(--bad); }
-.check li.pending .st, .check li.proposed .st { color: var(--muted); }
-.check h3 { margin: 6px 0 2px; font-size: 11px; color: var(--muted); font-weight: 600; }
-.check .outside li { color: var(--muted); }
-.stale-note { color: var(--text); font-style: italic; margin: 4px 0 0; }
+.check li { display: flex; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--line-soft); }
+.check li .g { flex: none; width: 13px; text-align: center; font-weight: 700; }
+.check li .what { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.check li .what small { display: block; color: var(--muted); font-size: 11px; }
+.check li .st { flex: none; max-width: 48%; text-align: right; font-size: 11.5px; }
+.check li.done .g, .check li.done .st { color: var(--ok); }
+.check li.off .g, .check li.off .st { color: var(--bad); }
+.check li.part .g, .check li.part .st, .check li.ask .g, .check li.ask .st { color: var(--warn); }
+.check li.none .g, .check li.none .st, .check li.prop .g, .check li.prop .st, .check li.cant .g, .check li.cant .st { color: var(--muted); }
+.check li.fresh { box-shadow: inset 2px 0 0 var(--accent); padding-left: 4px; margin-left: -4px; }
+.check li.timed { flex-wrap: wrap; }
+.check li.timed .what { flex-basis: 0; }
+.check h3 { margin: 10px 0 4px; font-size: 11px; color: var(--muted); font-weight: 600; }
+.check .plain li { color: var(--muted); }
+.stale-note { color: var(--text-strong); margin: 4px 0 0; }
+.check .more, .check .emptyl { color: var(--muted); margin: 4px 0 0; font-size: 11.5px; }
+.check .foot { margin: 6px 0 0; padding: 4px 6px; border: 1px dashed #5a4d1e; border-radius: 3px; color: var(--text); }
+.check .foot b { color: var(--warn); font-weight: 600; }
+.foldline { display: none; background: none; border: 0; color: var(--ok); padding: 3px 0; cursor: pointer; width: 100%; text-align: left; }
+/* A tiny timeline, not a meter: a ruler with ticks and the first key as a diamond, as in the AE timeline. Rows share one scale, so the stagger reads down the list. */
+.track { display: block; position: relative; flex: 0 0 calc(100% - 19px); margin-left: 19px; height: 11px; margin-top: 2px; border-bottom: 1px solid #4f4f4f; background: repeating-linear-gradient(to right, #4f4f4f 0 1px, transparent 1px 10%) left bottom / 100% 4px no-repeat; }
+.track i { position: absolute; top: 2px; width: 7px !important; height: 7px; background: var(--accent); transform: translateX(-50%) rotate(45deg); }
+/* Pick / Try / Done (replaces the three-part stage): one line, a glyph and a word per step. */
+.strip { display: flex; gap: 14px; margin: 0; padding: 2px 12px 10px; list-style: none; border-bottom: 1px solid var(--line); flex: none; font-size: 11.5px; color: var(--muted); }
+.strip li.done { color: var(--ok); }
+.strip li.current { color: var(--text-strong); font-weight: 600; box-shadow: inset 0 -2px 0 var(--accent); }
+.strip .mk { margin-right: 3px; }
+.lhead .kicker { text-transform: none; letter-spacing: 0; font-weight: 400; }
+/* Older turns fold away, so the newest turn (two sentences and a frame) is what you see. */
+details.earlier { margin: 0 0 8px; color: var(--muted); }
+details.earlier summary { cursor: pointer; font-size: 11px; list-style: none; display: flex; align-items: center; gap: 6px; }
+details.earlier summary::-webkit-details-marker { display: none; }
+details.earlier summary::before { content: "▸"; color: var(--text-strong); width: 16px; text-align: center; font-size: 20px; line-height: 16px; }
+details.earlier[open] summary::before { content: "▾"; }
+details.earlier[open] { color: var(--text); }
+.framebtn { display: block; width: 100%; padding: 0; background: none; border: 0; cursor: zoom-in; }
+.flip { position: relative; }
+.flip figure { margin: 4px 0 2px; }
+.flip [data-side][hidden] { display: none; }
+.slot { border: 1px dashed #4a4a4a; border-radius: var(--radius); padding: 6px 8px; margin: 0 0 8px; color: var(--muted); }
+.slot b { color: var(--text); font-weight: 600; }
 
-.statusline { display: flex; align-items: center; gap: 6px; padding: 4px 10px; color: var(--text); border-top: 1px solid var(--line); background: #1f2630; flex: none; }
-.actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border-top: 1px solid var(--line); flex: none; }
-.ask { display: flex; gap: 6px; padding: 0 10px 8px; flex: none; }
-.ask input { flex: 1; min-width: 0; background: var(--bg-sunk); color: var(--text-strong); border: 1px solid var(--line); border-radius: 3px; padding: 4px 8px; }
+.statusline { display: flex; align-items: center; gap: 6px; padding: 6px 12px; color: var(--text); border-top: 1px solid var(--line); background: #1f2630; flex: none; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }
+.ask { display: flex; gap: 8px; padding: 0 12px 12px; flex: none; }
+.ask input { flex: 1; min-width: 0; background: var(--bg-sunk); color: var(--text-strong); border: 1px solid var(--line); border-radius: 3px; padding: 6px 8px; }
 .ask input::placeholder { color: #8c8c8c; }
 .ask input:disabled { opacity: .5; }
 
 /* Short docks: the checklist gives up room first, then padding. */
 @container (max-height: 560px) {
-  .check { max-height: 30%; }
-  .lhead { padding-top: 3px; padding-bottom: 2px; }
+  /* One scrolling area at a time. The checklist is its one-line summary, always in view; pressing it
+     swaps the chat for the rows, and pressing again swaps back. */
+  .check { --short: 1; max-height: none; }
+  .check:not(.peek) .check-head + .check-body { display: none; }
+  .check.stale:not(.peek) .check-head + .check-body { display: block; }
+  .check.stale:not(.peek) .check-body > :not(.stale-note) { display: none; }
+  .check.peek { flex: 1 1 auto; min-height: 0; }
+  .check.peek .check-body { display: block; flex: 1 1 auto; min-height: 0; }
+  .chat:has(~ .check.peek) { display: none; }
+  .check-head .chev { font-size: 0; }
+  .check-head .chev::before { content: "▸"; font-size: 20px; }
+  .check.peek .check-head .chev::before { content: "▾"; }
+  .lhead { padding-top: 8px; padding-bottom: 5px; }
   .stage { padding-bottom: 5px; }
   .stage li { padding: 1px 0; }
-  .actions { padding: 6px 10px; }
+  .strip { padding-bottom: 7px; }
+  .actions { padding: 8px 12px; gap: 6px; }
+  .actions .btn { padding: 4px 8px; }
+  .chat { padding: 8px 12px; }
+  /* A frame takes the height of the two sentences, not the whole chat. Press it for full size. */
+  .framebtn svg { max-height: 74px; }
+  .framebtn[aria-expanded="true"] svg { max-height: none; }
+  /* The checklist folds what's done, so the open rows stay in view. */
+  .foldline { display: block; }
+  .check:not(.unfold) li.done, .check:not(.unfold) h3.alld { display: none; }
 }
 
 /* diagnosis */
@@ -240,7 +297,7 @@ figure.frame figcaption { color: var(--muted); font-size: 11px; margin-top: 2px;
 .chip:hover { background: #3d3d3d; }
 .chip.pressed { border-color: var(--accent); cursor: progress; }
 .steps { list-style: none; margin: 0 0 10px; padding: 0; }
-.steps li { display: flex; gap: 8px; align-items: center; padding: 3px 0; color: var(--muted); }
+.steps li { display: flex; gap: 8px; align-items: center; padding: 5px 0; color: var(--muted); }
 .steps li.done { color: var(--text); }
 .steps li.done .m { color: var(--ok); }
 .steps li.now { color: var(--text-strong); }
@@ -271,9 +328,9 @@ figure.frame figcaption { color: var(--muted); font-size: 11px; margin-top: 2px;
 .meter i { flex: 1; height: 6px; border-radius: 1px; background: #3a3a3a; }
 .meter i.l { background: var(--ok); }
 .meter i.p { background: #2b6b40; background-image: repeating-linear-gradient(45deg, transparent 0 3px, rgba(0,0,0,.35) 3px 5px); }
-.skills { list-style: none; margin: 0 0 10px; padding: 0; }
+.skills { list-style: none; margin: 0 0 12px; padding: 0; }
 .skills li { border-bottom: 1px solid var(--line-soft); }
-.skills .rowbtn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 5px 4px; background: none; border: 0; color: inherit; text-align: left; border-radius: 2px; }
+.skills .rowbtn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 4px; background: none; border: 0; color: inherit; text-align: left; border-radius: 2px; }
 .skills button.rowbtn { cursor: pointer; }
 .skills button.rowbtn:hover { background: #2a2a2a; }
 .skills .g { width: 14px; text-align: center; flex: none; }
@@ -301,13 +358,15 @@ figure.frame figcaption { color: var(--muted); font-size: 11px; margin-top: 2px;
 .tradeoff th { color: #eee; background: #1a1a1a; }
 .compare-wrap { display: flex; flex-direction: column; gap: 16px; align-items: center; }
 .compare-row { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+.rig h2.held { color: #b79a45; }
+.gallery-title { color: #e0e0e0; font-size: 12px; margin: 0; align-self: flex-start; }
 </style>
 </head>
 <body>
 
 <nav class="rig" aria-label="Mockup states">
   <h1>Knack panel · UI overhaul</h1>
-  <p class="sub">Mockup for spec 007, revision 2 (diagnosis per spec 005). Click inside the panel to walk the flows, or jump to any state here.</p>
+  <p class="sub">Mockup for spec 007, revision 3 (2026-11-02). Click inside the panel to walk the flows, or jump to any state here. Start with the first group below.</p>
 
   <h2>Panel width</h2>
   <div class="ctl" id="widths">
@@ -319,14 +378,14 @@ figure.frame figcaption { color: var(--muted); font-size: 11px; margin-top: 2px;
   </div>
   <h2>Home option</h2>
   <div class="ctl" id="opts">
-    <button data-opt="A" aria-pressed="true">A · path-first (recommended)</button><button data-opt="B">B · diagnose-first</button>
+    <button data-opt="A" aria-pressed="true">A · path-first (this build)</button><button data-opt="B">B · held</button>
   </div>
   <label><input type="checkbox" id="auto" checked /> Auto-advance loading states</label>
 
   <div id="list"></div>
 
   <div class="note" id="note" aria-live="polite"></div>
-  <p class="ph-key">Text marked "Placeholder" is the mentor's in-lesson voice, which belongs to SKILL.md. Skill names other than Easing and Keyframes are placeholders until the curriculum spec lands. Diagnosis shows spec 005's US1 reads only: parenting and motion blur (US4) appear under "Couldn't check". All lesson and diagnosis data is from the Mentor Practice comp.</p>
+  <p class="ph-key">Text marked "Placeholder" is the mentor's in-lesson voice, based on each skill's SKILL.md; it belongs there. Skill names are mentor/curriculum/path.json's. Layers and times are from Mentor Practice and Mentor Practice 2 (usage notes); a few row values are invented to show a state (README › Sources). No snapshot or frame was attached, so frames are sketches. Groups marked "Held" wait on spec 005 and aren't part of this build.</p>
 </nav>
 
 <main class="stage-area" id="stage"></main>
@@ -377,6 +436,19 @@ function stage(st) {
     `<li class="${st[i]}"><span class="mk" aria-hidden="true">${mk[st[i]]}</span>${l}<span class="sr"> (${word[st[i]]})</span></li>`).join("")}</ol>`;
 }
 
+// Pick / Try / Done. step: 0 pick, 1 try, 2 done (all three ticked). Comes from tool results only:
+// Pick ends when the rows lose their Proposed mark or the targets stop being empty; Done is the
+// check's own passed. A demo is an event in the chat and on its row, never a step.
+function strip(step) {
+  const labels = ["Pick", "Try", "Done"];
+  return `<ol class="strip" aria-label="Lesson progress">${labels.map((l, i) => {
+    const st = step === 2 ? "done" : i < step ? "done" : i === step ? "current" : "up";
+    const mk = { done: "✓", current: "●", up: "○" }[st];
+    const word = { done: "done", current: "now", up: "to come" }[st];
+    return `<li class="${st}"${st === "current" ? ' aria-current="step"' : ""}><span class="mk" aria-hidden="true">${mk}</span>${l}<span class="sr"> (${word})</span></li>`;
+  }).join("")}</ol>`;
+}
+
 // back: where ‹ goes, and what it says it does.
 function lhead(kicker, title, right = "", back = HOME(), backLabel = "Back to Home") {
   return `<div class="lhead"><button class="back" data-go="${back}" aria-label="${esc(backLabel)}" title="${esc(backLabel)}">‹</button>
@@ -385,30 +457,42 @@ function lhead(kicker, title, right = "", back = HOME(), backLabel = "Back to Ho
 // In a lesson, ‹ goes Home and the lesson stays open (Home shows "Lesson in progress").
 const LESSON_BACK = ["home-lessonopen", "Back to Home. Your lesson stays open."];
 
-const ROWSTATE = {
-  you: ["✓", "Eased by you", "ok"],
-  demo: ["✓", "Demo", "ok"],
-  linear: ["✗", "Still linear", "bad"],
-  half: ["◐", "Half eased", "bad"],
-  pending: ["○", "Not checked yet", "pending"],
-  proposed: ["?", "Proposed", "proposed"],
-};
+/* ---------- the one checklist pattern (README › The checklist) ----------
+   A row: glyph · subject · word · detail. Seven state families, always a glyph and a word:
+   done ✓, off ✗, part ◐, none ○, prop ◇, cant ⊘, ask ?. Rows sit in optional sections; a list can
+   add a footer (facts about the whole group), Outside, and Not graded. No skill adds a row type. */
+const GLYPH_OF = { done: "✓", off: "✗", part: "◐", none: "○", prop: "◇", cant: "⊘", ask: "?" };
+// r("off", "Position 1.5–3 s", "Still linear", "detail", { fresh: true, track: [left%, width%] })
+const r = (s, lab, word, detail = "", o = {}) => ({ s, lab, word, detail, ...o });
+const sec = (head, rows) => ({ head, rows });
 
-function checklist(rows, o = {}) {
+function rowHtml(x) {
+  const track = x.track ? `<span class="track" aria-hidden="true"><i style="left:${x.track[0]}%;width:${x.track[1]}%"></i></span>` : "";
+  return `<li class="${x.s}${x.fresh ? " fresh" : ""}${x.track ? " timed" : ""}"><span class="g" aria-hidden="true">${GLYPH_OF[x.s]}</span><span class="what"><span class="lab">${x.lab}</span>${x.detail ? `<small>${x.detail}</small>` : ""}</span><span class="st">${x.word}</span>${track}</li>`;
+}
+
+function checklist(sections, o = {}) {
   const open = o.collapsed ? "false" : "true";
-  const items = rows.map(([what, range, s, detail]) => {
-    const [g, w, cls] = ROWSTATE[s];
-    return `<li class="${cls}"><span class="what">${what}<small>${range}${detail ? " · " + detail : ""}</small></span><span class="st"><span aria-hidden="true">${g}</span> ${w}</span></li>`;
+  const all = sections.flatMap((s) => s.rows);
+  const nDone = all.filter((x) => x.s === "done").length;
+  const body = sections.map((s) => {
+    const alld = s.rows.length > 0 && s.rows.every((x) => x.s === "done");
+    return `${s.head ? `<h3 class="${alld ? "alld" : ""}">${s.head}</h3>` : ""}<ul>${s.rows.map(rowHtml).join("")}</ul>`;
   }).join("");
-  const outside = o.outside ? `<h3>Outside this lesson</h3><ul class="outside">${o.outside.map((x) => `<li><span class="what">${x}</span><span class="st">not counted</span></li>`).join("")}</ul>` : "";
+  const fold = nDone >= 2 ? `<button type="button" class="foldline" data-fold data-n="${nDone}" aria-expanded="false"><span aria-hidden="true">✓</span> ${nDone} done · show</button>` : "";
+  const plain = (head, items) => (items && items.length ? `<h3>${head}</h3><ul class="plain">${items.map((x) => `<li><span class="what">${x}</span></li>`).join("")}</ul>` : "");
   return `<section class="check ${o.stale ? "stale" : ""}" aria-label="Checklist">
     <button class="check-head" aria-expanded="${open}" data-toggle>
       <span class="chev" aria-hidden="true">${o.collapsed ? "▸" : "▾"}</span>
       <span class="sum"><b style="font-weight:400">${o.summary}</b>${o.sub ? `<small>${o.sub}</small>` : ""}</span>
     </button>
-    <div class="check-body" ${o.collapsed ? "hidden" : ""}>${o.stale ? `<p class="stale-note">${o.stale}</p>` : ""}<ul>${items}</ul>${outside}</div>
+    <div class="check-body" ${o.collapsed ? "hidden" : ""}>${o.stale ? `<p class="stale-note">${o.stale}</p>` : ""}${fold}${body}${o.more ? `<p class="more">${o.more}</p>` : ""}${o.foot ? o.foot.map((f) => `<p class="foot"><b aria-hidden="true">?</b> ${f}</p>`).join("") : ""}${plain("Outside this lesson · not counted", o.outside)}${plain("Worth a look · not graded", o.notes)}</div>
   </section>`;
 }
+
+// With no targets yet (key types, the pivot, null at the opening), the slot says what fills it. It
+// never lists candidates or the proposal: those skills ask first, on purpose.
+const emptyList = (t) => `<section class="check" aria-label="Checklist"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> ${t}</p></div></section>`;
 
 const mentor = (html) => `<div class="msg mentor"><div class="who">Mentor</div>${html}</div>`;
 const learner = (t) => `<div class="msg learner"><span>${t}</span></div>`;
@@ -431,8 +515,15 @@ function frameSvg(mode) {
     <text x="40" y="170" fill="#999" font-size="11" font-family="system-ui, sans-serif">${mode === "eased" ? "eased: bunched at the ends" : "linear: evenly spaced"}</text>
   </svg>`;
 }
-const frame = (caption, mode = "linear") => `<figure class="frame">${frameSvg(mode)}<figcaption>${caption}</figcaption></figure>`;
-const frames2 = (a, b) => `<div class="frames2">${frame(a, "linear")}${frame(b, "eased")}</div>`;
+// A frame the mentor rendered this turn. In a short dock it's small; press it for full size.
+const frame = (caption, mode = "linear") => `<figure class="frame"><button type="button" class="framebtn" data-frame aria-expanded="false" aria-label="Show this frame bigger">${frameSvg(mode)}</button><figcaption>${caption}</figcaption></figure>`;
+// Two frames from one turn: flip between them in place, so the change reads as motion. Only ever the
+// frames the mentor already rendered (D3); no new render, and nothing moves on its own.
+const frames2 = (a, b) => `<div class="flip" data-flipbox>
+  <div data-side="a" hidden>${frame(a, "linear")}</div>
+  <div data-side="b">${frame(b, "eased")}</div>
+  <button type="button" class="btn quiet" data-flip aria-label="Flip between the two frames">⇄ Flip: ${a} / ${b}</button>
+</div>`;
 // A list row that opens something: a real button inside the list item.
 const skillRow = (cls, glyph, name, state, to) => {
   const inner = `<span class="g" aria-hidden="true">${glyph}</span><span class="n">${name}</span><span class="s">${state}</span>`;
@@ -441,43 +532,54 @@ const skillRow = (cls, glyph, name, state, to) => {
 
 /* ===================== shared content (Mentor Practice) ===================== */
 
-const ROWS_PROPOSED = [
-  ["Title › Position", "0.5–1.5 s", "proposed"],
-  ["Title › Position", "1.5–3 s", "proposed"],
-  ["Title › Scale", "0.5–1.5 s", "proposed"],
-  ["Title › Opacity", "0.5–1.5 s", "proposed"],
-];
-const ROWS_DEMO = [
-  ["Title › Position", "0.5–1.5 s", "demo"],
-  ["Title › Position", "1.5–3 s", "pending"],
-  ["Title › Scale", "0.5–1.5 s", "pending"],
-  ["Title › Opacity", "0.5–1.5 s", "pending"],
-];
-const ROWS_PARTIAL = [
-  ["Title › Position", "0.5–1.5 s", "demo"],
-  ["Title › Position", "1.5–3 s", "linear"],
-  ["Title › Scale", "0.5–1.5 s", "half", "the 1.5 s key is still linear"],
-  ["Title › Opacity", "0.5–1.5 s", "you"],
-];
-const ROWS_PASSED = [
-  ["Title › Position", "0.5–1.5 s", "demo"],
-  ["Title › Position", "1.5–3 s", "you"],
-  ["Title › Scale", "0.5–1.5 s", "you"],
-  ["Title › Opacity", "0.5–1.5 s", "you"],
-];
+const N = {
+  easing: "Easing", kt: "Pick the key type on purpose", sg: "Shape the ease in the speed graph",
+  off: "Break the lockstep with offset", piv: "Set the pivot (anchor point)", nul: "Move a group with a null",
+};
 
-// The "next" line is shown as the mentor writes it for the learner (README: needs a learner-facing
-// next note in the record; today's note is written for the mentor).
+const ROWS_PROPOSED = [sec("Title", [
+  r("prop", "Position 0.5–1.5 s", "Proposed"),
+  r("prop", "Position 1.5–3 s", "Proposed"),
+  r("prop", "Scale 0.5–1.5 s", "Proposed"),
+  r("prop", "Opacity 0.5–1.5 s", "Proposed"),
+])];
+const ROWS_UNMARKED = [sec("Title", [
+  r("none", "Position 0.5–1.5 s", "Not checked yet"),
+  r("none", "Position 1.5–3 s", "Not checked yet"),
+  r("none", "Scale 0.5–1.5 s", "Not checked yet"),
+  r("none", "Opacity 0.5–1.5 s", "Not checked yet"),
+])];
+const ROWS_DEMO = [sec("Title", [
+  r("done", "Position 0.5–1.5 s", "Demo"),
+  r("none", "Position 1.5–3 s", "Not checked yet"),
+  r("none", "Scale 0.5–1.5 s", "Not checked yet"),
+  r("none", "Opacity 0.5–1.5 s", "Not checked yet"),
+])];
+const ROWS_PARTIAL = [sec("Title", [
+  r("done", "Position 0.5–1.5 s", "Demo"),
+  r("off", "Position 1.5–3 s", "Still linear"),
+  r("part", "Scale 0.5–1.5 s", "Half eased", "the 1.5 s key is still linear", { fresh: true }),
+  r("done", "Opacity 0.5–1.5 s", "Eased by you", "", { fresh: true }),
+])];
+const ROWS_PASSED = [sec("Title", [
+  r("done", "Position 0.5–1.5 s", "Demo"),
+  r("done", "Position 1.5–3 s", "Eased by you"),
+  r("done", "Scale 0.5–1.5 s", "Eased by you"),
+  r("done", "Opacity 0.5–1.5 s", "Eased by you"),
+])];
+
+// `next` is shown as the record has it, under "Next time". Since the pacing rules it's plain and
+// general; if a real one reads badly, that's the case for PN-10, not before.
 const memoryReturn = `<section class="memory" aria-label="What the mentor remembers">
   <h2 class="lbl">What the mentor remembers</h2>
-  <p><strong>Oct 7</strong> · Easing · passed</p>
-  <p>Next time: ease CTRL's move at the start. If F9 seems to do nothing, check the keys are selected first.</p>
+  <p><strong>Oct 26</strong> · ${N.piv} · passed</p>
+  <p>Next time: a keyed swing on Door, or Needle's bottom edge.</p>
   ${btn("All skills and history ›", 'data-go="skills-few"', "quiet")}
 </section>`;
 
 const memoryEmpty = `<section class="memory" aria-label="What the mentor remembers">
   <h2 class="lbl">What the mentor remembers</h2>
-  <p>No lessons yet. What you learn lands here, so next time the mentor picks up where you left off.</p>
+  <p>No lessons yet. The mentor keeps track of what you learn here.</p>
 </section>`;
 
 /* ---------- diagnosis catalogue, US1 only (spec 005 FR-005) ----------
@@ -559,6 +661,25 @@ function screen(id, group, name, note, render, extra = {}) {
   META.push(S[id]);
 }
 
+/* ---------- start here: every skill at 260 × 480, side by side ---------- */
+
+const G_START = "Start here: revision 3";
+screen("all-checklists", G_START, "All six checklists, mid-lesson",
+  "The main job. One row pattern holding every skill's check result, at 260 × 480. Press any row list's header to fold it. Each panel also has its own state further down.",
+  null, { gallery: ["skill-easing-check", "skill-keytypes-check", "skill-speedgraph-check", "skill-offset-layers-check", "skill-offset-props-check", "skill-pivot-check", "skill-null-parent"] });
+screen("all-openings", G_START, "All six openings",
+  "What each lesson's list does at the opening. Only easing, speed graph and offset have targets then. Key types, the pivot and null ask first, so their slot says what fills it, and never shows the candidates.",
+  null, { gallery: ["lesson-open", "skill-keytypes-open", "skill-speedgraph-open", "skill-offset-layers-open", "skill-pivot-open", "skill-null-open"] });
+screen("compare-stage", G_START, "Stage: I do / We do / You do vs Pick / Try / Done",
+  "The same offset lesson with no demo, under both. A says what today's stageOf says: 'I do' skipped and 'We do' done, though nobody did anything. Recommendation: B.",
+  null, { compare2: ["cmp-stage-a", "cmp-stage-b"], capA: "<b>A · Keep I do / We do / You do.</b> What the rule gives today on a lesson with no demo.", capB: "<b>B · Pick / Try / Done (recommended).</b> True in all six skills and in a review.", table: () => TRADEOFF_STAGE });
+screen("compare-upnext", G_START, "Up next: nothing stored vs stored",
+  "Same returning learner. Left works today with no mentor change. Right needs one field in the record, written by the record tool's code, with no prompt change. Recommendation: left now; right fits the same card later.",
+  null, { compare2: ["home-return", "home-return-stored"], capA: "<b>A · Nothing stored (this build).</b> The card names no skill; the mentor picks when you press.", capB: "<b>B · A stored recommendation (later decision).</b> Names the skill, with a reason that makes no claim about the comp.", table: () => TRADEOFF_UPNEXT });
+screen("home-held-slot", G_START, "Home with the held diagnosis slot",
+  "Where diagnosis lands later: one compact row under Up next, so both starts stay above the fold at 260 × 480 and no other card moves. Not in this build; shown only so the slot can be judged.",
+  () => `<div class="body">${nav("home")}<div class="scroll">${homeA({ slot: true })}</div></div>`, { size: true });
+
 /* ---------- setup (after the installer) ---------- */
 
 const setupSteps = (s1, s2, s3) => `<ol class="steps" aria-label="Setup steps">
@@ -569,16 +690,16 @@ const setupSteps = (s1, s2, s3) => `<ol class="steps" aria-label="Setup steps">
 screen("setup-welcome", "First run (after install)", "Welcome",
   "First time the panel opens after the installer. Three steps, each shows its own result. The panel can check the bridge itself (panel/lib/bridge-status.js); sign-in depends on decisions/005 option A.",
   () => `<div class="body"><div class="scroll">
-    <p class="brand">Knack</p><p>Learn After Effects in your own comp. Undo the tutorial spiral.</p>
+    <p class="brand">Knack</p><p>Learn After Effects on your own comps.</p>
     ${setupSteps(["now", "1", "Connect to After Effects"], ["", "2", "Sign in"], ["", "3", "Open a comp you're working on"])}
     ${btn("Get started", 'data-go="setup-checking"', "primary wide")}
-    <p class="ro" style="margin-top:10px">Knack teaches; it doesn't do the work for you. When it shows you something in your comp, Edit › Undo takes it back.</p>
+    <p class="ro" style="margin-top:10px">Knack shows you how, then you do the work.</p>
   </div></div>`);
 
 screen("setup-checking", "First run (after install)", "Connecting (loading)",
   "Loading state for step 1. Auto-advances.",
   () => `<div class="body"><div class="scroll">
-    <p class="brand">Knack</p><p>Learn After Effects in your own comp. Undo the tutorial spiral.</p>
+    <p class="brand">Knack</p><p>Learn After Effects on your own comps.</p>
     <ol class="steps"><li class="now"><span class="m"><span class="spin" aria-hidden="true"></span></span>Looking for After Effects…</li>
       <li><span class="m" aria-hidden="true">2</span>Sign in</li><li><span class="m" aria-hidden="true">3</span>Open a comp you're working on</li></ol>
   </div>${statusline("Looking for After Effects…", true)}</div>`, { auto: ["setup-signin", 1600] });
@@ -586,7 +707,7 @@ screen("setup-checking", "First run (after install)", "Connecting (loading)",
 screen("setup-signin", "First run (after install)", "Sign in",
   "Step 2. The sign-in method is undecided (decisions/005: the shipped version needs the direct API, option A). The pressed state says it's waiting on the browser. Missing: a Cancel while waiting.",
   () => `<div class="body"><div class="scroll">
-    <p class="brand">Knack</p><p>Learn After Effects in your own comp. Undo the tutorial spiral.</p>
+    <p class="brand">Knack</p><p>Learn After Effects on your own comps.</p>
     ${setupSteps(["done", "✓", "Connected to After Effects"], ["now", "2", "Sign in"], ["", "3", "Open a comp you're working on"])}
     ${busyBtn("Sign in (opens your browser)", "Waiting for your browser…", "Finish signing in in your browser, then come back here.", "setup-ready", "primary wide", 2200)}
   </div>${statusline()}</div>`);
@@ -594,7 +715,7 @@ screen("setup-signin", "First run (after install)", "Sign in",
 screen("setup-ready", "First run (after install)", "Ready",
   "Setup done. Step 3 is advice, not a check: the panel never reads the project (decisions/005), so it can't confirm a comp is open until the mentor looks.",
   () => `<div class="body"><div class="scroll">
-    <p class="brand">Knack</p><p>You're set. Grab a comp you're working on, any comp, messy is fine.</p>
+    <p class="brand">Knack</p><p>Setup's done. Open a comp you're working on.</p>
     ${setupSteps(["done", "✓", "Connected to After Effects"], ["done", "✓", "Signed in"], ["now", "3", "Open a comp you're working on"])}
     ${btn("Take me in", `data-go="${OPT === "A" ? "home-first" : "homeB-first"}"`, "primary wide")}
   </div></div>`);
@@ -603,67 +724,87 @@ screen("err-notsetup", "First run (after install)", "Error: install not finished
   "Replaces today's developer copy (\"Run bash panel/install.sh\"). The button opens the install instructions in the browser; the panel stays put.",
   () => `<div class="body">${banner("bad", "Knack isn't finished installing", "Run the Knack installer again, then close and reopen this panel.",
       busyBtn("Open the install instructions", "Opening in your browser…", "Opening the install instructions in your browser…", "err-notsetup", "", 1600))}
-    <div class="scroll"><p class="ro">Nothing in your project has been touched.</p></div>${statusline()}</div>`);
+    <div class="scroll"><p class="ro">Your project wasn't changed.</p></div>${statusline()}</div>`);
 
-screen("err-mentor", "First run (after install)", "Error: mentor can't start",
-  "Covers not signed in, signed out, and failed to start. Today these are three separate developer messages (panel/main.js ERRORS).",
-  () => `<div class="body">${nav("home")}${banner("bad", "The mentor couldn't start", "You may have been signed out. Sign in again, then try once more.", btn("Sign in again", 'data-go="setup-signin"', "primary") + busyBtn("Try again", "Trying…", "Starting the mentor…", HOME()))}
+/* ---------- errors: what stops everything vs what passes (FR-056, helper-protocol › Error kinds) ---------- */
+
+const G_ERR = "Errors: mentor";
+const checkSetup = () => btn("Check setup", 'data-go="setup-signin"', "primary");
+screen("err-mentor", G_ERR, "Blocking: the mentor couldn't start",
+  "start_failed. Blocking: nothing that needs the mentor can run, so Home's actions say so. Check setup goes to the setup screen until spec 006's Check setup exists.",
+  () => `<div class="body">${nav("home")}${banner("bad", "The mentor couldn't start", "Close and reopen this panel. If it happens again, check setup.", checkSetup() + busyBtn("Try again", "Trying…", "Starting the mentor…", HOME()))}
+    <div class="scroll">${homeA({ disabled: true, reason: "Needs the mentor." })}</div>${statusline()}</div>`);
+screen("err-key", G_ERR, "Blocking: no working access key",
+  "not_signed_in. Blocking, with its own wording. The helper re-reads the key on each send, so a key added now works on the next press without reopening. Says nothing about where keys come from: that question is open.",
+  () => `<div class="body">${nav("home")}${banner("bad", "Knack needs its access key", "It's missing or isn't working. Check setup, then try again.", checkSetup() + busyBtn("Try again", "Trying…", "Starting the mentor…", HOME()))}
+    <div class="scroll">${homeA({ disabled: true, reason: "Needs the mentor." })}</div>${statusline()}</div>`);
+screen("err-credit", G_ERR, "Blocking: out of credit",
+  "out_of_credit. Blocking until the key has credit: every mentor action is stopped, so red. A lesson on screen isn't lost. The wording stays neutral about who holds the key: that question is open.",
+  () => `<div class="body">${nav("home")}${banner("bad", "Your access key is out of credit", "It may also have reached its spending limit. Check setup or add credit, then try again.", checkSetup() + busyBtn("Try again", "Trying…", "Starting the mentor…", HOME()))}
     <div class="scroll">${homeA({ disabled: true, reason: "Needs the mentor." })}</div>${statusline()}</div>`);
 
 /* ---------- home, option A: path-first ---------- */
 
-// The diagnosis card, with an optional symptom (spec 005 FR-008). Empty → plain look.
+// The diagnosis card, with an optional symptom (spec 005 FR-008). Empty → plain look. Option B only
+// in this revision: option A's Home has no diagnosis card until spec 005 (see homeA's slot).
 const diagForm = (o = {}) => `<form data-diag autocomplete="off">
   <label class="small" for="sym">What looks off? (optional)</label>
   <input class="text" id="sym" type="text" placeholder="e.g. Title feels stiff when it lands" ${o.disabled ? "disabled" : ""} />
   <button type="submit" class="btn ${o.primary ? "primary" : ""}" ${o.disabled ? "disabled" : ""}>${o.label || "Look at my comp"}</button>
 </form>`;
 
+// Up next has three sources, all without a mentor turn:
+//   first:  no record. Path data's first skill.
+//   stored: a stored recommendation (later decision). The skill, and a reason from its code plus the
+//           path, saying nothing about the comp, since nothing has looked at it since.
+//   else:   nothing stored (today). The card names no skill. Pressing it asks the mentor, one turn,
+//           which reads the record and the comp live (/next-mentor), so it can't be stale.
+function upNext(o, off, reason) {
+  const pick = o.lessonOpen ? "" : btn("Pick a skill", `data-go="${o.first ? "skills-empty" : "skills-few"}"`);
+  const named = (name, why, meta) => `<h3>${name}</h3><p class="why">${why}</p>${meta ? `<p class="meta">${meta}</p>` : ""}
+    <div class="row">${off ? `<p class="later">${reason}</p>` : busyBtn("Start lesson", "Starting…", "Getting your lesson ready…", "lesson-starting", o.dimLead ? "" : "primary", 900)}${pick}</div>`;
+  const body = o.first ? named(N.easing, "If your motion feels stiff, easing is usually why. Start here.", "")
+    : o.stored ? named(N.sg, "Control how a move starts and lands.", "Suggested Oct 26, after your last lesson")
+    : `<h3>Your next lesson</h3><p class="why">The mentor looks at your history and this comp, then suggests a skill.</p>
+       <div class="row">${off ? `<p class="later">${reason}</p>` : busyBtn("Find my next lesson", "Looking…", "Looking at your comp…", "lesson-picking", o.dimLead ? "" : "primary", 900)}${pick}</div>`;
+  return `<section class="card lead ${o.dimLead ? "dim" : ""}" aria-label="Up next"><div class="kicker accent">Up next</div>${body}</section>`;
+}
+
+// Practice due: the record's review_due is today or earlier, on a skill whose path data says it has
+// a review (easing has none yet, so it's never here). One card; the mentor runs one review a session.
+function practiceCard(off, reason) {
+  return `<section class="card" aria-label="Practice">
+    <div class="kicker" style="color:var(--warn)"><span aria-hidden="true">↻</span> Practice due</div>
+    <h3>${N.off}</h3>
+    <p>Last practiced Oct 26. <span class="meta">One more is due in Skills.</span></p>
+    ${off ? `<p class="later">${reason}</p>` : busyBtn("Warm up", "Starting…", "Getting your warm-up ready…", "practice", "", 900)}
+  </section>`;
+}
+
 function homeA(o = {}) {
   const first = o.first;
   const off = o.disabled || o.lessonOpen;
   const reason = o.lessonOpen ? "Available after your lesson." : o.reason || "Needs After Effects.";
-  const startBtn = off ? `<p class="later">${reason}</p>`
-    : busyBtn("Start lesson", "Starting…", "Getting your lesson ready…", "lesson-starting", o.dimLead ? "" : "primary", 900);
   return `
-    ${o.hello === false ? "" : first ? `<p class="hello">Your comp, your classroom.<small>Pick up a skill, or have the mentor look at what you've got.</small></p>`
-            : `<p class="hello">Welcome back.<small>Last lesson Oct 7: Easing on Title, passed.</small></p>`}
-    <section class="card lead ${o.dimLead ? "dim" : ""}" aria-label="Up next">
-      <div class="kicker accent">Up next</div>
-      <h3>${first ? "Easing" : "Graph Editor"}</h3>
-      <p class="why">${first ? "The usual first stop. It's what takes motion from robot to real." : "From your look at Mentor Practice: the Bar's speed jumps at its 0.6 s key."}</p>
-      ${first ? "" : '<p class="meta">Oct 7 · Mentor Practice · not re-checked</p>'}
-      <div class="row">${startBtn}${o.lessonOpen ? "" : btn("Pick another skill", `data-go="${first ? "skills-empty" : "skills-few"}"`)}</div>
-    </section>
-    ${first ? "" : `<section class="card" aria-label="A question from your last look">
-      <div class="kicker" style="color:var(--warn)"><span aria-hidden="true">?</span> A question from your last look</div>
-      <h3>Cursor fades: meant to blink?</h3>
-      <p class="meta">Oct 7 · Mentor Practice · Cursor › Opacity</p>
-      <div class="row">${off ? `<p class="later">${reason}</p>` :
-        busyBtn("Meant to fade", "Telling the mentor…", "Saving that it's on purpose…", "diag-intended", "", 900, 'data-intended="Cursor fades · Cursor › Opacity"') +
-        btn("Meant to blink", 'data-go="diag-hints" data-hint="dx05"')}</div>
-    </section>
-    <section class="card" aria-label="Practice">
-      <div class="kicker" style="color:var(--warn)"><span aria-hidden="true">↻</span> Practice due</div>
-      <h3>Easing</h3>
-      <p>Last practiced 13 days ago. A quick warm-up on your own keys keeps it from fading.</p>
-      ${off ? `<p class="later">${reason}</p>` : busyBtn("Warm up · about 2 min", "Starting…", "Getting your warm-up ready…", "practice", "", 900)}
-    </section>`}
-    <section class="card" aria-label="What's wrong here">
-      <div class="kicker">What's wrong here?</div>
-      <p>${first ? "Not sure where to start? The mentor reads your whole comp and points at what's off." : "Something feel off? The mentor reads your whole comp and points at what's off."} It only looks.</p>
-      ${off ? `<p class="later">${reason}</p>` : diagForm()}
-    </section>
+    ${o.hello === false ? "" : first ? `<p class="hello">Welcome to Knack.</p>`
+            : `<p class="hello">Welcome back.<small>Last lesson Oct 26: ${N.piv}, passed.</small></p>`}
+    ${upNext(o, off, reason)}
+    ${o.slot ? `<div class="slot"><b>Held for spec 005:</b> What's wrong here? <span class="meta">One row, one button. Not in this build.</span></div>` : ""}
+    ${first ? "" : practiceCard(off, reason)}
     ${first ? memoryEmpty : memoryReturn}`;
 }
 
 screen("home-first", "Home · option A (path-first)", "First run, no history",
-  "Empty learner record. The mentor still leads: Up next defaults to the first skill on the path. Diagnosis is a card for people who'd rather start from their comp, with an optional symptom.",
+  "Empty learner record. Up next is the first skill in path data (FR-010). No diagnosis card, and nothing points at one.",
   () => `<div class="body">${nav("home")}<div class="scroll">${homeA({ first: true })}</div></div>`, { opt: "A" });
 
-screen("home-return", "Home · option A (path-first)", "Returning",
-  "Up next's reason quotes a style finding, dated and tied to its comp (FR-019): it isn't re-checked until the mentor reads the comp again. The Cursor question can't be a reason until it's answered, so it gets its own card. Memory is the read-only memory section.",
+screen("home-return", "Home · option A (path-first)", "Returning (no stored recommendation)",
+  "The record stores no recommendation today, and Home makes no mentor turn, so Up next names no skill. Pressing it is one mentor turn that reads the comp live. The facts under it (last lesson, Practice due, memory) all come from the record.",
   () => `<div class="body">${nav("home")}<div class="scroll">${homeA({})}</div></div>`, { opt: "A" });
+
+screen("home-return-stored", "Home · option A (path-first)", "Returning (a stored recommendation)",
+  "Later decision. The reason comes from the stored reason code plus the path's own data. It names no layer and says nothing about this comp: nothing has looked at it since. Start lesson can still turn into a review if one is due, because the snapshot tool chooses.",
+  () => `<div class="body">${nav("home")}<div class="scroll">${homeA({ stored: true })}</div></div>`, { opt: "A" });
 
 screen("home-lessonopen", "Home · option A (path-first)", "Lesson in progress",
   "Where ‹ in a lesson leads: Home, with the lesson still open. Nothing else can start until you go back to it or end it (Start fresh), so two lessons never run at once.",
@@ -671,9 +812,9 @@ screen("home-lessonopen", "Home · option A (path-first)", "Lesson in progress",
     <section class="card lead" aria-label="Lesson in progress">
       <div class="kicker accent">Lesson in progress</div>
       <h3>Easing on Title</h3>
-      <p class="meta">You do · 1 of 3 yours eased</p>
-      <div class="row">${btn("Back to lesson", 'data-go="lesson-partial"', "primary")}${btn("End lesson", 'data-go="home-return"', "quiet")}</div>
-      <p class="meta" style="margin:6px 0 0">Ending keeps everything you've learned before. This lesson isn't saved until it passes.</p>
+      <p class="meta">1 of 3 yours eased</p>
+      <div class="row">${btn("Back to lesson", 'data-go="lesson-partial"', "primary")}${btn("End lesson", 'data-go="home-return"')}</div>
+      <p class="meta" style="margin:6px 0 0">If you end now, this lesson won't be saved. Earlier lessons aren't affected.</p>
     </section>
     ${homeA({ lessonOpen: true, hello: false })}
   </div></div>`, { opt: "A" });
@@ -684,28 +825,32 @@ screen("home-cutoff", "Home · option A (path-first)", "Lesson cut off (continue
     <section class="card lead" aria-label="Lesson waiting">
       <div class="kicker accent">Your lesson is waiting</div>
       <h3>Easing on Title</h3>
-      <p class="meta">You do · 1 of 3 yours eased · last check Oct 19, 9:12 pm</p>
+      <p class="meta">1 of 3 yours eased · last check Oct 19, 9:12 pm</p>
       <div class="row">${busyBtn("Continue lesson", "Opening…", "Picking up where you left off…", "lesson-continued", "primary", 1000)}${btn("Start fresh", 'data-go="home-return"')}</div>
-      <p class="meta" style="margin:6px 0 0">Starting fresh keeps everything you've already learned.</p>
+      <p class="meta" style="margin:6px 0 0">This lesson won't be saved. Earlier lessons aren't affected.</p>
     </section>
     ${homeA({ dimLead: true, hello: false })}
   </div></div>`, { opt: "A" });
 
 screen("home-aeclosed", "Home · option A (path-first)", "Last lesson ended when AE quit",
   "Spec 003 edge case row 10: no continue after AE restarts. Today this is silent; the overhaul says it once, then the note can be dismissed.",
-  () => `<div class="body">${nav("home")}${banner("info", "Your last lesson ended when After Effects closed", "Nothing from that lesson was saved, and everything before it is safe. Start it again whenever you like.", btn("Got it", 'data-go="home-return"'))}<div class="scroll">${homeA({})}</div></div>`, { opt: "A" });
+  () => `<div class="body">${nav("home")}${banner("info", "Your last lesson ended when After Effects closed", "That lesson wasn't saved. Earlier lessons aren't affected.", btn("Got it", 'data-go="home-return"'))}<div class="scroll">${homeA({})}</div></div>`, { opt: "A" });
 
-screen("home-unreachable", "Home · option A (path-first)", "Can't see After Effects",
+screen("home-unreachable", "Home · option A (path-first)", "Can't connect to After Effects",
   "Bridge unreachable before any lesson. Every action that needs AE says why in words, in place of its button. Pick another skill and Skills still work: they're local.",
-  () => `<div class="body">${nav("home", { conn: "bad" })}${banner("bad", "Can't see After Effects", "Check that After Effects is open, with no dialog showing.", busyBtn("Try again", "Looking…", "Looking for After Effects…", "home-return", "", 1200))}<div class="scroll">${homeA({ disabled: true })}</div>${statusline()}</div>`, { opt: "A" });
+  () => `<div class="body">${nav("home", { conn: "bad" })}${banner("bad", "Can't connect to After Effects", "Make sure After Effects is open, with no dialog showing.", busyBtn("Try again", "Looking…", "Looking for After Effects…", "home-return", "", 1200))}<div class="scroll">${homeA({ disabled: true })}</div>${statusline()}</div>`, { opt: "A" });
 
 screen("home-busy", "Home · option A (path-first)", "AE busy (rendering or dialog)",
   "AE_BUSY. Amber, not red: nothing is broken, it's just occupied.",
-  () => `<div class="body">${nav("home", { conn: "busy" })}${banner("warn", "After Effects is busy", "It's rendering, or a dialog is open. Once it's free, try again.", busyBtn("Try again", "Looking…", "Looking for After Effects…", "home-return", "", 1200))}<div class="scroll">${homeA({ disabled: true, reason: "Waiting for After Effects." })}</div>${statusline()}</div>`, { opt: "A" });
+  () => `<div class="body">${nav("home", { conn: "busy" })}${banner("warn", "After Effects is busy", "It may be rendering, or a dialog may be open. Try again when it's free.", busyBtn("Try again", "Looking…", "Looking for After Effects…", "home-return", "", 1200))}<div class="scroll">${homeA({ disabled: true, reason: "Waiting for After Effects." })}</div>${statusline()}</div>`, { opt: "A" });
 
 screen("home-unreadable", "Home · option A (path-first)", "History couldn't be read",
-  "RECORD_UNREADABLE (agent audit 2026-10-12): the file was moved aside untouched. Lessons and diagnosis still work (spec 005 US3-5). How to recover is an open question.",
-  () => `<div class="body">${nav("home")}${banner("warn", "Couldn't read your history", "The file was set aside, untouched, so nothing's lost. Lessons still work; the mentor will treat the next one as your first.", btn("What happened?", 'data-go="home-unreadable"'))}<div class="scroll">${homeA({ first: true })}</div></div>`, { opt: "A" });
+  "RECORD_UNREADABLE (agent audit 2026-10-12): the file was moved aside untouched. Lessons still work. D4: What happened? opens one plain paragraph, not a recovery tool, because no recovery is built.",
+  () => `<div class="body">${nav("home")}${banner("warn", "Couldn't read your history", "Your history file is safe, but Knack can't read it. Lessons still work, and the mentor will treat your next one as your first.", btn("What happened?", 'data-go="home-unreadable-why"'))}<div class="scroll">${homeA({ first: true, hello: false })}</div></div>`, { opt: "A" });
+
+screen("home-unreadable-why", "Home · option A (path-first)", "History: what happened?",
+  "D4, settled: an explanation with no action, since there's nothing to press yet. No file path (FR-058). A way to bring the old history back would be its own spec.",
+  () => `<div class="body">${nav("home")}${banner("warn", "What happened to your history", "Knack couldn't read part of your history file, so it moved the file aside without changing it. Your comps weren't touched. New lessons start a new history.", btn("Got it", 'data-go="home-first"'))}<div class="scroll">${homeA({ first: true, hello: false })}</div></div>`, { opt: "A" });
 
 screen("home-loading", "Home · option A (path-first)", "Loading (reading history)",
   "Reading the record is local and fast; show this skeleton only if it takes over 300 ms.",
@@ -713,7 +858,7 @@ screen("home-loading", "Home · option A (path-first)", "Loading (reading histor
     <div class="skel" style="width:55%"></div><div class="skel" style="width:80%"></div>
     <div class="card"><div class="skel" style="width:30%"></div><div class="skel" style="width:60%;height:14px"></div><div class="skel"></div><div class="skel" style="width:40%;height:22px"></div></div>
     <div class="card"><div class="skel" style="width:30%"></div><div class="skel"></div><div class="skel" style="width:70%"></div></div>
-  </div>${statusline("Remembering what you've practiced…", true)}</div>`, { opt: "A", auto: ["home-return", 1400] });
+  </div>${statusline("Loading your history…", true)}</div>`, { opt: "A", auto: ["home-return", 1400] });
 
 /* ---------- home, option B: diagnose-first ---------- */
 
@@ -741,17 +886,17 @@ function homeB(first) {
     ${first ? memoryEmpty : memoryReturn}`;
 }
 
-screen("homeB-first", "Home · option B (diagnose-first)", "First run, no history",
+screen("homeB-first", "Held: Home option B, not this build", "First run, no history",
   "Option B: the comp is the starting point. One primary action with an optional symptom. The path is one click away.",
   () => `<div class="body">${nav("home")}<div class="scroll"><p class="hello">Your comp, your classroom.</p>${homeB(true)}</div></div>`, { opt: "B" });
 
-screen("homeB-return", "Home · option B (diagnose-first)", "Returning",
+screen("homeB-return", "Held: Home option B, not this build", "Returning",
   "The last look is dated and tied to its comp, never shown as current (FR-019). At most 3 plus a count (FR-007). Look again is a paid mentor turn.",
   () => `<div class="body">${nav("home")}<div class="scroll"><p class="hello">Welcome back.</p>${homeB(false)}</div></div>`, { opt: "B" });
 
 /* ---------- diagnosis (spec 005, US1 reads) ---------- */
 
-const G_DIAG = "Diagnosis: \"What's wrong here?\"";
+const G_DIAG = "Held for spec 005: diagnosis, not this build";
 
 const runningSteps = (third) => `<ul class="steps">
   <li class="done"><span class="m" aria-hidden="true">✓</span>Remembering what you've practiced</li>
@@ -941,7 +1086,7 @@ screen("diag-nocomp", G_DIAG, "No comp open",
 screen("diag-unreachable", G_DIAG, "Can't see AE during a look",
   "AE_UNREACHABLE mid-look: no findings and no claims about the comp (spec 005 Edge Cases, server rule 2). Same banner as Home.",
   () => `<div class="body">${nav("home", { conn: "bad" })}${DH("Looking at your comp")}
-    ${banner("bad", "Can't see After Effects", "So there's nothing to say about your comp this time. Check that After Effects is open, with no dialog showing.", busyBtn("Try again", "Looking…", "Reading your whole comp…", "diag-results", "primary", 1600))}
+    ${banner("bad", "Can't connect to After Effects", "So there's nothing to say about your comp this time. Make sure After Effects is open, with no dialog showing.", busyBtn("Try again", "Looking…", "Reading your whole comp…", "diag-results", "primary", 1600))}
     <div class="scroll"></div>${statusline()}</div>`);
 
 screen("diag-busy", G_DIAG, "AE busy during a look",
@@ -969,70 +1114,126 @@ screen("diag-stopped", G_DIAG, "Stopped by you",
 
 /* ---------- skills (picking a skill, progress across many) ---------- */
 
-const SKILLS = {
-  empty: [
-    ["Motion basics", [["Keyframes", "learned", "Assumed known"], ["Easing", "next", "Up next"], ["Graph Editor", "", "Not started"], ["Hold keys", "", "Not started"], ["Timing and offset", "", "Not started"]]],
-    ["Structure", [["Parenting", "", "Not started"], ["Precomps", "", "Not started"]]],
-    ["Expressions", [["Expressions basics", "", "Not started"], ["Loops", "", "Not started"]]],
-    ["Finishing", [["Motion blur", "", "Not started"], ["Trim paths", "", "Not started"], ["Text animators", "", "Not started"]]],
-  ],
-  few: [
-    ["Motion basics", [["Keyframes", "learned", "Assumed known"], ["Easing", "due", "Practice due · Oct 7"], ["Graph Editor", "next", "Up next"], ["Hold keys", "", "Not started"], ["Timing and offset", "", "Not started"]]],
-    ["Structure", [["Parenting", "", "Not started"], ["Precomps", "", "Not started"]]],
-    ["Expressions", [["Expressions basics", "", "Not started"], ["Loops", "", "Not started"]]],
-    ["Finishing", [["Motion blur", "", "Not started"], ["Trim paths", "", "Not started"], ["Text animators", "soon", "Coming later"]]],
-  ],
-  many: [
-    ["Motion basics", [["Keyframes", "learned", "Assumed known"], ["Easing", "learned", "Practiced 4× · Nov 2"], ["Hold keys", "learned", "Nov 1"], ["Graph Editor", "fading", "Getting rusty · Oct 21"], ["Timing and offset", "due", "Practice due · Oct 28"]]],
-    ["Structure", [["Parenting", "learned", "Oct 30"], ["Precomps", "next", "Up next"]]],
-    ["Expressions", [["Expressions basics", "progress", "In progress · 1 of 2"], ["Loops", "", "Not started"]]],
-    ["Finishing", [["Motion blur", "learned", "Oct 25"], ["Trim paths", "", "Not started"], ["Text animators", "soon", "Coming later"]]],
-  ],
+// The real path (mentor/curriculum/path.json), in order, no groups. Built: six. A warm-up has no
+// length and "getting rusty" has no definition, so neither is drawn. "Up next" (▸) only appears with
+// a source: the path's first skill with no record, or a stored recommendation.
+const PATH = [
+  ["keyframes", "Setting keyframes"], ["easing", N.easing], ["kt", N.kt], ["sg", N.sg], ["off", N.off],
+  ["motion", "Find what's moving it"], ["piv", N.piv], ["nul", N.nul], ["trim", "Draw it on with Trim Paths"],
+  ["matte", "Show one layer through another (track matte)"], ["text", "Animate letters with a text animator"],
+  ["precomp", "Precompose and open the right level"],
+];
+const LATER = new Set(["motion", "trim", "matte", "text", "precomp"]);
+const SKILLSTATE = {
+  empty: { keyframes: ["learned", "We assume you know this"], easing: ["next", "Up next"] },
+  few: { keyframes: ["learned", "We assume you know this"], easing: ["learned", "Learned · Oct 7"], kt: ["progress", "In progress · Oct 12"] },
+  many: {
+    keyframes: ["learned", "We assume you know this"], easing: ["learned", "Learned · Oct 7"], kt: ["due", "Practice due · Oct 27"],
+    sg: ["learned", "Learned · Oct 26"], off: ["due", "Practice due · Oct 27"], piv: ["learned", "Learned · Oct 26"], nul: ["learned", "Learned · Oct 26"],
+  },
 };
-const GLYPH = { learned: "✓", due: "↻", next: "▸", fading: "◔", progress: "◐", soon: "·", "": "○" };
+const GLYPH = { learned: "✓", due: "↻", next: "▸", progress: "◐", soon: "·", "": "○" };
+const DETAIL = { easing: "skill-detail-noreview", kt: "skill-detail", sg: "skill-detail", off: "skill-detail", piv: "skill-detail", nul: "skill-detail-new" };
 
 function skillsView(set, summary, meter) {
+  const st = SKILLSTATE[set];
   return `${nav("skills")}<div class="scroll">
     <h2 class="lbl">Your skills</h2>
     <p style="margin:0;color:var(--text-strong)">${summary}</p>
     <div class="meter" role="img" aria-label="${summary}">${meter}</div>
-    <p class="meta" style="margin:0 0 10px">Pick any skill to start it, or see what the mentor remembers about it.</p>
-    ${SKILLS[set].map(([group, items]) => `<h2 class="lbl" style="margin-top:8px">${group}</h2>
-      <ul class="skills">${items.map(([n, st, s]) => skillRow(st, GLYPH[st], n, s, st === "soon" ? null : "skill-detail")).join("")}</ul>`).join("")}
+    <p class="meta" style="margin:0 0 10px">Pick a skill to start it or see its history.</p>
+    <ul class="skills">${PATH.map(([id, name]) => {
+      if (LATER.has(id)) return skillRow("soon", GLYPH.soon, name, "Coming later", null);
+      const [cls, word] = st[id] || ["", "Not started"];
+      return skillRow(cls, GLYPH[cls], name, word, id === "keyframes" ? null : DETAIL[id]);
+    }).join("")}</ul>
   </div>`;
 }
 const bars = (l, p, n) => "<i class=\"l\"></i>".repeat(l) + "<i class=\"p\"></i>".repeat(p) + "<i></i>".repeat(n);
 
 screen("skills-empty", "Skills (pick a skill, progress)", "First run, nothing learned",
-  "Picking a skill yourself. Order and groups come from the curriculum; names are placeholders. Keyframes shows as assumed (spec 003 FR-010).",
-  () => `<div class="body">${skillsView("empty", "0 of 11 learned", bars(0, 0, 11))}</div>`);
+  "The real path, in order, no groups. Six built, five coming later and not pressable. The count is of built skills. Setting keyframes is the path's on-ramp, shown as assumed.",
+  () => `<div class="body">${skillsView("empty", "0 of 6 learned", bars(0, 0, 6))}</div>`);
 screen("skills-few", "Skills (pick a skill, progress)", "A week in",
-  "Matches the current learner record (Easing passed Oct 7). Every state has a glyph and a word.",
-  () => `<div class="body">${skillsView("few", "1 of 11 learned · 1 due for practice", bars(1, 0, 10))}</div>`);
-screen("skills-many", "Skills (pick a skill, progress)", "A few weeks in (many skills)",
-  "Practice due (↻) and getting rusty (◔) have different glyphs as well as words. When they happen is the mentor's call from the record (curriculum decides the rule).",
-  () => `<div class="body">${skillsView("many", "5 of 11 learned · 2 to practice", bars(5, 1, 5))}</div>`);
+  "With nothing stored there's no ▸ Up next row: the panel doesn't pick one. In progress is the record's practicing status.",
+  () => `<div class="body">${skillsView("few", "1 of 6 learned · 1 in progress", bars(1, 1, 4))}</div>`);
+screen("skills-many", "Skills (pick a skill, progress)", "All six learned, two due",
+  "Every word comes from the record's status and review_due. Easing never shows Practice due, because it has no review mode yet, even though its record has a due date. Getting rusty isn't drawn: it isn't defined.",
+  () => `<div class="body">${skillsView("many", "6 of 6 learned · 2 due for practice", bars(6, 0, 0))}</div>`);
 
-screen("skill-detail", "Skills (pick a skill, progress)", "Skill detail + memory",
-  "What the mentor remembers about one skill. Read-only (spec 003 US3-4). ‹ goes back to Skills and says so.",
-  () => `<div class="body">${nav("skills")}${lhead("Skill · Motion basics", "Easing", '<span class="tag practice">↻ practice due</span>', "skills-few", "Back to Skills")}
+const histNote = '<p class="ro">The mentor uses this history in your lessons. Only the mentor can change it.</p>';
+
+screen("skill-detail", "Skills (pick a skill, progress)", "Skill detail: review due",
+  "What the mentor remembers about one skill. Read-only. Warm up shows only for a learned skill with a review. No length, since none is defined. New lesson asks for a lesson, so it isn't turned into the due review.",
+  () => `<div class="body">${nav("skills")}${lhead("Skill", N.off, '<span class="tag practice">↻ practice due</span>', "skills-many", "Back to Skills")}
     <div class="scroll">
-      <p>Learned Oct 7. Last practiced 13 days ago.</p>
-      <div class="row" style="margin-bottom:12px">${busyBtn("Warm up · about 2 min", "Starting…", "Getting your warm-up ready…", "practice", "primary", 900)}${busyBtn("New lesson", "Starting…", "Getting your lesson ready…", "lesson-starting", "", 900)}</div>
+      <p>Learned Oct 26.</p>
+      <div class="row" style="margin-bottom:12px">${busyBtn("Warm up", "Starting…", "Getting your warm-up ready…", "practice", "primary", 900)}${busyBtn("New lesson", "Starting…", "Getting your lesson ready…", "lesson-starting", "", 900)}</div>
+      <h2 class="lbl">What the mentor remembers</h2>
+      <ul class="hist">
+        <li><b>Oct 26</b> · Mentor Practice 2 · passed<small>Staggered a row of layers. Next time: try it on a layer's properties.</small></li>
+        <li><b>Oct 26</b> · Mentor Practice · passed<small>Staggered a layer's properties, gaps of about 30 frames.</small></li>
+      </ul>
+      ${histNote}
+    </div></div>`);
+
+screen("skill-detail-noreview", "Skills (pick a skill, progress)", "Skill detail: no review yet (Easing)",
+  "Easing has no review mode (spec 004 plan P5), so no Warm up, and no Practice due anywhere. New lesson runs it as practice on new keys.",
+  () => `<div class="body">${nav("skills")}${lhead("Skill", N.easing, '<span class="tag pass">✓ learned</span>', "skills-many", "Back to Skills")}
+    <div class="scroll">
+      <p>Learned Oct 7.</p>
+      <div class="row" style="margin-bottom:12px">${busyBtn("New lesson", "Starting…", "Getting your lesson ready…", "lesson-starting", "primary", 900)}</div>
       <h2 class="lbl">What the mentor remembers</h2>
       <ul class="hist">
         <li><b>Oct 7</b> · Glow › Blurriness · passed<small>Next time: ease CTRL's move at the start.</small></li>
-        <li><b>Oct 7</b> · Subtitle and Bar · passed<small>4 of 4 yours</small></li>
-        <li><b>Oct 7</b> · Title · passed<small>3 of 3 yours, plus the demo</small></li>
-        <li><b>Oct 6</b> · Glow › Blurriness · passed</li>
+        <li><b>Oct 7</b> · Subtitle and Bar · passed</li>
+        <li><b>Oct 7</b> · Title · passed</li>
       </ul>
-      <p class="ro">This is what the mentor reads before each lesson. You can see it here, but only the mentor writes it.</p>
+      ${histNote}
+    </div></div>`);
+
+screen("skill-detail-new", "Skills (pick a skill, progress)", "Skill detail: not started, builds on another",
+  "Builds on comes from the path's hard prerequisites and the record. It never blocks: the mentor offers the other skill first and carries on if you insist, so the panel just says it.",
+  () => `<div class="body">${nav("skills")}${lhead("Skill", N.nul, "", "skills-few", "Back to Skills")}
+    <div class="scroll">
+      <p>This builds on ${N.piv}. The mentor will suggest that lesson first.</p>
+      <div class="row" style="margin-bottom:12px">${busyBtn("New lesson", "Starting…", "Getting your lesson ready…", "lesson-starting", "primary", 900)}</div>
+      <h2 class="lbl">What the mentor remembers</h2>
+      <p>No lessons yet.</p>
     </div></div>`);
 
 /* ---------- lesson ---------- */
 
-const LH = (right = '<span class="tag">check 2</span>') => lhead("Lesson · Easing", "Title", right, LESSON_BACK[0], LESSON_BACK[1]);
+const LH = (skill = N.easing, focus = "Title", right = "") => lhead(skill, focus, right, LESSON_BACK[0], LESSON_BACK[1]);
 const L = (id) => nav("lesson", { lesson: true, lessonAt: id });
+const earlier = (n, html) => `<details class="earlier"><summary>Earlier in this lesson (${n})</summary>${html}</details>`;
+// Answers the mentor's "say done". The request it sends stays "I'm done. Check my work.", so no eval changes.
+const DONE = "Done, check it";
+
+// show: "show" (the snapshot has a demo target, none used), "again" (demo used), or null (a review, or
+// no demo target: no button, and the mentor says why in its own words).
+function acts(o = {}) {
+  const st = o.status || "Checking your keyframes…";
+  const parts = [busyBtn(o.label || DONE, "Checking…", st, o.next || "lesson-partial", "primary")];
+  if (o.hint) parts.push(busyBtn("Hint", "Thinking…", st, o.self || "lesson-partial"));
+  if (o.show === "show") parts.push(busyBtn("Show me", "Showing…", o.showStatus || "Easing one pair to show you…", o.demoTo || "lesson-demo"));
+  if (o.show === "again") parts.push(busyBtn("Show me again", "Showing…", "Rendering a frame from your comp…", o.againTo || "lesson-demo"));
+  return `<div class="actions">${parts.join("")}</div>`;
+}
+const noActs = (why) => `<div class="actions"><p class="why-off">${why}</p></div>`;
+
+function page(id, o) {
+  return `<div class="body">${o.nav || L(id)}${LH(o.skill, o.focus, o.right)}${strip(o.step)}${o.banner || ""}
+    <div class="chat">${o.chat}</div>
+    ${o.list || ""}
+    ${statusline(o.statusText || "", !!o.statusText)}
+    ${o.actions}${o.noAsk ? "" : ask(o.ask !== false)}
+  </div>`;
+}
+
+const SUM_PARTIAL = { summary: "1 of 3 yours eased · 2 still to ease", sub: "1 more since your last check. Next: Position 1.5–3 s" };
+const MORE_11 = "+7 more on Subtitle, Bar, CTRL and Glow";
+const EARLY_EASING = earlier(2, mentor(ph("You've got 11 linear pairs across five layers. Let's start with Title.")) + learner("Title's good") + mentor(ph("From 0.5 s to 1.5 s Title moves at one speed the whole way, then stops dead at 3 s: that's linear, and it's why it looks mechanical. Easing slows it out of each key and into the next.")));
 
 screen("lesson-none", "Lesson", "No lesson open",
   "What the Lesson tab shows with no lesson: a visible reason and two ways to start, instead of a disabled tab.",
@@ -1042,151 +1243,448 @@ screen("lesson-none", "Lesson", "No lesson open",
   </div></div>`);
 
 screen("lesson-starting", "Lesson", "Starting (loading)",
-  "First activity within 10 s (spec 003 SC-004). The checklist slot is reserved so nothing jumps when it fills.",
-  () => `<div class="body">${L("lesson-starting")}${LH("")}${stage(["up", "up", "up"])}
+  "First activity within 10 s (spec 003 SC-004). The checklist slot is reserved so nothing jumps when it fills. The strip shows nothing done yet.",
+  () => `<div class="body">${L("lesson-starting")}${LH(N.easing, "Looking at your comp")}${strip(0)}
     <div class="chat" aria-busy="true"><div class="msg mentor"><div class="who">Mentor</div><div class="skel" style="width:85%"></div><div class="skel" style="width:70%"></div><div class="skel" style="width:40%"></div></div></div>
+    ${emptyList("Your checklist will appear here.")}
     ${statusline("Looking at your comp…", true)}
-    <div class="actions">${btn("Show me", "disabled")}${btn("Check my work", "disabled", "primary")}<p class="why-off">Buttons wake up when the mentor has looked.</p></div>${ask(false)}
+    ${noActs("Buttons turn on after the mentor looks at your comp.")}${ask(false)}
   </div>`, { auto: ["lesson-open", 1700] });
 
-screen("lesson-open", "Lesson", "Opening (I do)",
-  "Checklist shows from the opening. Rows are Proposed until the learner's next turn accepts the focus (a button press, or typing another layer). Needs the focus as data at the start.",
-  () => `<div class="body">${L("lesson-open")}${LH("")}${stage(["current", "up", "up"])}
-    <div class="chat">
-      ${mentor(ph("[Opening: names the 11 linear pairs it found, proposes Title as the focus, explains easing with a frame from the comp.]") + frame("Your comp at 1.0 s"))}
-    </div>
-    ${checklist(ROWS_PROPOSED, { summary: "Proposed focus · 4 pairs on Title", sub: "Go ahead, or ask for other layers" })}
+screen("lesson-picking", "Lesson", "Finding your next lesson",
+  "Where Up next leads with nothing stored: /next-mentor, one mentor turn reading the record and the comp. No strip and no checklist: it isn't a lesson yet, and nothing starts until you agree. Then it hands over to that skill. Today its hand-over table lists only four skills (README › What the panel needs).",
+  () => `<div class="body">${L("lesson-picking")}${lhead("What's next", "One suggestion", "", LESSON_BACK[0], LESSON_BACK[1])}
+    <div class="chat">${mentor(ph(`It's been a few days since you learned ${N.off}; want a quick review on the Chips, all hands-on, no demo?`))}</div>
     ${statusline()}
-    <div class="actions">${busyBtn("Show me", "Showing…", "Easing one pair to show you…", "lesson-demo")}${busyBtn("Check my work", "Checking…", "Checking your keyframes…", "lesson-partial", "primary")}</div>${ask()}
+    <div class="actions">${busyBtn("Yes, let's go", "Starting…", "Getting your lesson ready…", "practice", "primary", 900)}${btn("Pick a skill", 'data-go="skills-few"')}</div>${ask()}
   </div>`);
 
-screen("lesson-demo", "Lesson", "After the demo (We do)",
-  "The one change the mentor makes is stated in its own box, with the Undo route (spec 003 FR-006). Show me becomes Show me again. Before/after frames are the closest a frame gets to \"a mouse on a screen moving\" (interview 004).",
-  () => `<div class="body">${L("lesson-demo")}${LH("")}${stage(["done", "current", "up"])}
-    <div class="chat">
-      ${mentor(ph("[Opening and frame, as before.]"))}
-      ${learner("Show me")}
-      ${change("eased Title › Position 0.5–1.5 s. One step: Edit › Undo takes it back.")}
-      ${mentor(ph("[Demo: what it did, why it looks smoother, and the rest is yours.]") + frames2("Before, 1.0 s", "After, 1.0 s"))}
-    </div>
-    ${checklist(ROWS_DEMO, { summary: "Your checklist · 3 pairs are yours", sub: "Not checked yet" })}
-    ${statusline()}
-    <div class="actions">${busyBtn("Show me again", "Showing…", "Rendering a frame from your comp…", "lesson-demo")}${busyBtn("Check my work", "Checking…", "Checking your keyframes…", "lesson-partial", "primary")}</div>${ask()}
-  </div>`);
+screen("lesson-open", "Lesson", "Opening: rows Proposed",
+  "Decision 2, the cheap version. Rows are the opening snapshot's targets, marked Proposed. On easing that's every linear pair in the comp, 11 here, because the tool's focus is empty until a later call: the mentor's 'start with Title' is words, not data. So the header says what the rows are (found), not what's agreed.",
+  () => page("lesson-open", { focus: "Your comp", step: 0,
+    chat: mentor(ph("You've got 11 linear pairs across five layers. Let's start with Title: you've hidden Old Take, so I'll leave it unless you want it.")),
+    list: checklist(ROWS_PROPOSED, { summary: "11 linear pairs found · Proposed", sub: "Based on the mentor's last look at your comp.", more: MORE_11 }),
+    actions: acts({ show: "show" }),
+  }));
 
-const partialActions = (next = "lesson-passed") => `<div class="actions">${busyBtn("Check my work", "Checking…", "Checking your keyframes…", next, "primary")}${busyBtn("Hint", "Thinking…", "Checking your keyframes…", "lesson-partial")}${busyBtn("Show me again", "Showing…", "Rendering a frame from your comp…", "lesson-demo")}</div>`;
+screen("lesson-focus-replying", "Lesson", "First reply: the mark drops",
+  "The moment the panel drops Proposed: the learner's first reply. It can't know what the reply meant, so the rows just become Not checked yet, and the header stays about the source. The usual path: the mentor re-reads in this same turn, and the rows narrow when it does.",
+  () => page("lesson-focus-replying", { focus: "Your comp", step: 1, statusText: "Looking at your comp…",
+    chat: mentor(ph("You've got 11 linear pairs across five layers. Let's start with Title.")) + learner("Title's good"),
+    list: checklist(ROWS_UNMARKED, { summary: "11 linear pairs found", sub: "Based on the mentor's last look. Updating…", more: MORE_11 }),
+    actions: noActs("Buttons turn on after the mentor answers."), ask: false,
+  }), { auto: ["lesson-focused", 1800] });
 
-screen("lesson-partial", "Lesson", "Partly done (You do)",
-  "The core state. Checklist rows come from the check result, not the mentor's words (FR-007). Half eased names the key still linear. Hint appears from the first check on.",
-  () => `<div class="body">${L("lesson-partial")}${LH()}${stage(["done", "done", "current"])}
-    <div class="chat">
-      ${mentor(ph("[Earlier messages.]"))}
-      ${learner("Check my work")}
-      ${mentor(ph("[Says what's still off and where: Position's second pair, and Scale's 1.5 s key. A hint, not a fix.]"))}
-    </div>
-    ${checklist(ROWS_PARTIAL, { summary: "1 of 3 yours eased · 2 still to ease", sub: "Checked just now" })}
-    ${statusline()}${partialActions()}${ask()}
-  </div>`);
+screen("lesson-focus-stale", "Lesson", "First reply changed the focus: old rows stay",
+  "The honest worst case, drawn on purpose. The learner asks for Glow; the mentor answers without a new read, so the list still shows the old read for one turn. Softened by wording and row treatment only: the rows claim nothing but 'not checked', and the header says they're from the last read and when they'll change. It can't be softened further without pretending the panel knows the focus moved.",
+  () => page("lesson-focus-stale", { focus: "Your comp", step: 1,
+    chat: earlier(1, mentor(ph("You've got 11 linear pairs across five layers. Let's start with Title."))) + learner("Can we do Glow instead?") + mentor(ph("Glow has just one pair, so if I eased it there'd be nothing left for you to do. Want that one, with no demo?")),
+    list: checklist(ROWS_UNMARKED, { summary: "Based on the mentor's last look", sub: "Updates at your next check.", more: MORE_11 }),
+    actions: acts({ show: "show" }),
+  }));
+
+screen("lesson-focused", "Lesson", "Focus set: the list is yours",
+  "The mentor re-read with a focus, so the rows narrowed and the list says it's yours. The newest turn, its frame and its one task are what you see; older turns fold.",
+  () => page("lesson-focused", { focus: "Title", step: 1,
+    chat: earlier(1, mentor(ph("You've got 11 linear pairs across five layers. Let's start with Title."))) + learner("Title's good") + mentor(ph("From 0.5 s to 1.5 s Title moves at one speed the whole way, then stops dead at 3 s: that's linear, and it's why it looks mechanical. Easing slows it out of each key and into the next.") + frame("Your comp at 1.0 s") + ph("Ease Title's two Position moves, its Scale and its Opacity, and say done.")),
+    list: checklist(ROWS_UNMARKED, { summary: "4 pairs on Title · not checked yet" }),
+    actions: acts({ show: "show" }),
+  }));
+
+screen("lesson-demo", "Lesson", "After the demo",
+  "The one change is in its own box, with the Undo route. Show me becomes Show me again. Flip moves between the frames the mentor rendered, in place: as close to 'a mouse on a screen moving' (interview 004) as frames get, at no new cost. The strip doesn't move: a demo isn't a step.",
+  () => page("lesson-demo", { focus: "Title", step: 1,
+    chat: EARLY_EASING + learner("Show me")
+      + change("eased Title &gt; Position, 0.5–1.5 s. Edit &gt; Undo reverses it.")
+      + mentor(ph("I eased Title › Position between 0.5 s and 1.5 s, and Edit > Undo reverses it. The other three are yours; say done.") + frames2("Before, 1.0 s", "After, 1.0 s")),
+    list: checklist(ROWS_DEMO, { summary: "3 pairs are yours · not checked yet", sub: "Next: Position 1.5–3 s" }),
+    actions: acts({ show: "again" }),
+  }));
+
+screen("lesson-partial", "Lesson", "Partly done",
+  "The core state. Rows come from the check result, not the mentor's words. At 480 px what's done folds to one line so what's open stays in view. A row that changed since the last check has a bar; the summary says how many, in words.",
+  () => page("lesson-partial", { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+    chat: earlier(4, mentor(ph("[Earlier turns.]"))) + learner("Done, check it") + mentor(ph("Scale eases at one end and still stops hard at the other: its 1.5 s key is still linear. Position's 1.5 s to 3 s move hasn't changed yet; say done when it has.")),
+    list: checklist(ROWS_PARTIAL, SUM_PARTIAL),
+    actions: acts({ hint: true, show: "again", next: "lesson-passed" }),
+  }));
 
 screen("lesson-outside", "Lesson", "Changed something outside the lesson",
-  "Spec 003 FR-007: outside changes are listed separately and not counted as errors (SC-002 check 6).",
-  () => `<div class="body">${L("lesson-outside")}${LH()}${stage(["done", "done", "current"])}
-    <div class="chat">${mentor(ph("[Mentor notices the Glow edit, says it doesn't count against the lesson, steers back to Title.]"))}</div>
-    ${checklist(ROWS_PARTIAL, { summary: "1 of 3 yours eased · 2 still to ease", sub: "Checked just now", outside: ["Glow › Blurriness was changed"] })}
-    ${statusline()}${partialActions()}${ask()}
-  </div>`);
+  "Outside changes are listed apart and not counted (FR-016). Easing's come as sentences from the tool; the pivot's and null's come as kinds, which the panel words.",
+  () => page("lesson-outside", { focus: "Title", step: 1, right: '<span class="tag">check 3</span>',
+    chat: mentor(ph("I see Glow's Blurriness changed; that doesn't count against this lesson. Title's 1.5 s to 3 s move is what's left.")),
+    list: checklist(ROWS_PARTIAL, { ...SUM_PARTIAL, outside: ["Glow › Blurriness was changed"] }),
+    actions: acts({ hint: true, show: "again", next: "lesson-passed" }),
+  }));
 
 screen("lesson-stale", "Lesson", "Can't see AE mid-lesson",
-  "AE_UNREACHABLE during a check. No new result; the last list is marked and dated, with its note at full contrast (FR-015). Hint pauses too, with the reason in words: a hint needs a fresh check.",
-  () => `<div class="body">${L("lesson-stale").replace('class="conn ok"', 'class="conn bad"').replace("</span>AE</span>", "</span>Can't see AE</span>")}${LH()}${stage(["done", "done", "current"])}
-    <div class="chat">
-      ${learner("Check my work")}
-      ${notice("Can't see After Effects.", "Check that it's open, with no dialog showing and nothing rendering. Your lesson is still here.")}
-    </div>
-    ${checklist(ROWS_PARTIAL, { summary: "1 of 3 yours eased · 2 still to ease", sub: "From your last check, 9:12 pm", stale: "This is from your last check, not right now." })}
-    ${statusline()}
-    <div class="actions">${busyBtn("Check again", "Checking…", "Checking your keyframes…", "lesson-partial", "primary")}${btn("Hint", "disabled")}<p class="why-off">Hint needs After Effects.</p></div>${ask()}
-  </div>`);
+  "Builder's decision, amends FR-017. The note is at full contrast, row labels dim to 70% (5.2:1 on the checklist's background), and every result stays at full contrast: the glyph, the word and the summary. Hint pauses with the reason in words.",
+  () => page("lesson-stale", { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+    nav: L("lesson-stale").replace('class="conn ok"', 'class="conn bad"').replace("</span>AE</span>", "</span>Can't see AE</span>"),
+    chat: learner("Done, check it") + notice("Can't connect to After Effects.", "Make sure it's open and not rendering, with no dialog showing. Your lesson is still open."),
+    list: checklist(ROWS_PARTIAL, { summary: SUM_PARTIAL.summary, stale: "From your last check, 9:12 pm." }),
+    actions: `<div class="actions">${busyBtn("Check again", "Checking…", "Checking your keyframes…", "lesson-partial", "primary")}${btn("Hint", "disabled")}<p class="why-off">Hint needs After Effects.</p></div>`,
+  }));
 
 screen("lesson-othercomp", "Lesson", "A different comp is active",
-  "Spec 003 edge case row 5. No new list, old one marked as from the last check.",
-  () => `<div class="body">${L("lesson-othercomp")}${LH()}${stage(["done", "done", "current"])}
-    <div class="chat">
-      ${learner("Check my work")}
-      ${mentor(ph("[Mentor: a different comp is active; switch back to Mentor Practice and check again. Nothing's lost.]"))}
-    </div>
-    ${checklist(ROWS_PARTIAL, { summary: "1 of 3 yours eased · 2 still to ease", sub: "From your last check, 9:12 pm", stale: "This is from your last check, on Mentor Practice." })}
-    ${statusline()}
-    <div class="actions">${busyBtn("Check my work", "Checking…", "Checking your keyframes…", "lesson-partial", "primary")}${busyBtn("Hint", "Thinking…", "Checking your keyframes…", "lesson-othercomp")}</div>${ask()}
-  </div>`);
+  "Spec 003 edge case row 5. No new list; the old one is marked as from the last check, treated as in lesson-stale.",
+  () => page("lesson-othercomp", { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+    chat: learner("Done, check it") + mentor(ph("It looks like a different comp is active in After Effects right now, so I can't check Title's keys. Switch back to Mentor Practice and say done again.")),
+    list: checklist(ROWS_PARTIAL, { summary: SUM_PARTIAL.summary, stale: "From your last check, on Mentor Practice." }),
+    actions: acts({ hint: true, self: "lesson-othercomp" }),
+  }));
 
 screen("lesson-error", "Lesson", "Mentor stopped mid-answer",
-  "Timeout, process exit or a dropped turn. The partial reply stays, marked as cut off. Try again resends the same request, except after Show me (next state).",
-  () => `<div class="body">${L("lesson-error")}${LH()}${stage(["done", "done", "current"])}
-    <div class="chat">
-      ${learner("Hint")}
-      ${mentor(ph("[First part of the hint…]") + '<p class="cutoff">— cut off</p>')}
-      ${notice("The mentor stopped before finishing.", "Your lesson and checklist are still here.")}
-    </div>
-    ${checklist(ROWS_PARTIAL, { summary: "1 of 3 yours eased · 2 still to ease", sub: "Checked 2 min ago", collapsed: true })}
-    ${statusline()}
-    <div class="actions">${busyBtn("Try again", "Trying…", "Checking your keyframes…", "lesson-partial", "primary")}${busyBtn("Check my work", "Checking…", "Checking your keyframes…", "lesson-partial")}</div>${ask()}
-  </div>`);
+  "Timeout, or a dropped turn. The partial reply stays, marked as cut off. Try again resends the same request, except after Show me (next state). A 5-minute timeout reads the same, with its own first sentence.",
+  () => page("lesson-error", { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+    chat: learner("Hint") + mentor(ph("[First part of the hint…]") + '<p class="cutoff">— cut off</p>') + notice("The mentor took too long to respond.", "Your lesson and checklist are still open."),
+    list: checklist(ROWS_PARTIAL, { ...SUM_PARTIAL, sub: "Checked 2 min ago", collapsed: true }),
+    actions: `<div class="actions">${busyBtn("Try again", "Trying…", "Checking your keyframes…", "lesson-partial", "primary")}${busyBtn(DONE, "Checking…", "Checking your keyframes…", "lesson-partial")}</div>`,
+  }));
 
 screen("lesson-error-demo", "Lesson", "Cut off during Show me",
-  "If the demo's change came back before the cut-off, resending Show me would ask for a second demo. So the button becomes Show me again, which only explains (spec 003 FR-006). If the cut-off came before any result, the panel can't know; it says so and offers Check my work, which reads the comp.",
-  () => `<div class="body">${L("lesson-error-demo")}${LH("")}${stage(["done", "current", "up"])}
-    <div class="chat">
-      ${learner("Show me")}
-      ${change("eased Title › Position 0.5–1.5 s. One step: Edit › Undo takes it back.")}
-      ${mentor(ph("[Start of the demo explanation…]") + '<p class="cutoff">— cut off</p>')}
-      ${notice("The mentor stopped before finishing.", "The demo pair was already eased, so press Show me again to hear the rest.")}
-    </div>
-    ${checklist(ROWS_DEMO, { summary: "Your checklist · 3 pairs are yours", sub: "Not checked yet", collapsed: true })}
-    ${statusline()}
-    <div class="actions">${busyBtn("Show me again", "Showing…", "Rendering a frame from your comp…", "lesson-demo", "primary")}${busyBtn("Check my work", "Checking…", "Checking your keyframes…", "lesson-partial")}</div>${ask()}
-  </div>`);
+  "A retry can never ask for a second demo. Change came back: Show me again, which only explains. A demo call started with no result: the panel can't know, so it offers the check, which reads the comp. No demo call started at all (on option A, a call that won't run sends no event): Show me is safe to resend.",
+  () => page("lesson-error-demo", { focus: "Title", step: 1,
+    chat: learner("Show me") + change("eased Title &gt; Position, 0.5–1.5 s. Edit &gt; Undo reverses it.") + mentor(ph("[Start of the demo explanation…]") + '<p class="cutoff">— cut off</p>') + notice("The mentor stopped before finishing, but the demo pair is already eased.", "Press Show me again to hear the rest."),
+    list: checklist(ROWS_DEMO, { summary: "3 pairs are yours · not checked yet", collapsed: true }),
+    actions: `<div class="actions">${busyBtn("Show me again", "Showing…", "Rendering a frame from your comp…", "lesson-demo", "primary")}${busyBtn(DONE, "Checking…", "Checking your keyframes…", "lesson-partial")}</div>`,
+  }));
 
 screen("lesson-continued", "Lesson", "Continued after a cut-off",
-  "Opened from Home's \"Your lesson is waiting\". Earlier messages are redrawn; a frame whose file is gone says so.",
-  () => `<div class="body">${L("lesson-continued")}${LH()}${stage(["done", "done", "current"])}
-    <div class="chat">
-      ${mentor(ph("[Opening, from the saved conversation.]") + '<div class="frame-missing">Frame no longer available</div>')}
-      ${learner("Check my work")}
-      ${mentor(ph("[Earlier check reply.]"))}
-      <div class="divider">Picked up where you left off · Oct 20</div>
-      ${learner("Continue lesson")}
-      ${mentor(ph("[Mentor: welcome back, short reminder of what's left.]"))}
-    </div>
-    ${checklist(ROWS_PARTIAL, { summary: "1 of 3 yours eased · 2 still to ease", sub: "From Oct 19, 9:12 pm. Check again to update.", stale: "From before the break." })}
-    ${statusline()}${partialActions()}${ask()}
-  </div>`);
+  "Opened from Home's \"Your lesson is waiting\". Earlier messages are redrawn and folded; a frame whose file is gone says so.",
+  () => page("lesson-continued", { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+    chat: earlier(3, mentor(ph("[Opening, from the saved conversation.]") + '<div class="frame-missing">Frame no longer available</div>') + learner("Done, check it") + mentor(ph("[Earlier check reply.]")))
+      + '<div class="divider">Picked up where you left off · Oct 20</div>' + learner("Continue lesson") + mentor(ph("Welcome back. Title's 1.5 s to 3 s move and Scale's 1.5 s key are what's left; say done when they're eased.")),
+    list: checklist(ROWS_PARTIAL, { summary: SUM_PARTIAL.summary, stale: "From your last check, Oct 19, 9:12 pm." }),
+    actions: acts({ hint: true, show: "again", next: "lesson-passed" }),
+  }));
+
+// Every skill says the same plain pass line. What's under it is from the record.
+const passedPage = (id, o) => page(id, { skill: o.skill, focus: o.focus, step: 2, right: '<span class="tag pass">✓ passed</span>', noAsk: true,
+  banner: banner("info", o.line, `<span aria-hidden="true">✓</span> Saved to your history. ${o.after}`),
+  chat: learner("Done, check it") + mentor(ph(o.say) + (o.frame || "")),
+  list: checklist(o.rows, { summary: o.summary, sub: o.sub, collapsed: !o.open, notes: o.notes }),
+  actions: `<div class="actions">${btn("What's next ›", `data-go="${HOME()}"`, "primary")}${btn("See your skills", 'data-go="skills-many"')}</div>`,
+});
 
 screen("lesson-passed", "Lesson", "Passed and saved",
-  "Saved shows only after the record is written (needs a record-failed signal for the other case). The next skill is the mentor's, from the record.",
-  () => `<div class="body">${L("lesson-passed")}${LH('<span class="tag pass">✓ passed</span>')}${stage(["done", "done", "done"])}
-    ${banner("info", "Smooth landing. Lesson passed.", "<span aria-hidden=\"true\">✓</span> Saved to your history.")}
-    <div class="chat">
-      ${learner("Check my work")}
-      ${mentor(ph("[Wrap-up: what they did, one line on why it works, the next note.]") + frame("Your comp at 1.0 s, eased", "eased"))}
-    </div>
-    ${checklist(ROWS_PASSED, { summary: "3 of 3 yours eased · passed", sub: "Plus the demo pair", collapsed: true })}
-    <div class="actions">${btn("Up next: Graph Editor ›", 'data-go="home-return"', "primary")}${btn("See your skills", 'data-go="skills-few"')}</div>
-  </div>`);
+  "Saved shows only once record_lesson says saved. The second line is progress from the record and path. No skill is named as next: with nothing stored, What's next goes to Home. Easing shows no review date: it has none yet.",
+  () => passedPage("lesson-passed", { skill: N.easing, focus: "Title", line: "Lesson passed.", after: "1 of 6 learned.",
+    say: "That's all four. Play it back at full speed: Title should slow into its stops now.", frame: frame("Your comp at 1.0 s, eased", "eased"),
+    rows: ROWS_PASSED, summary: "3 of 3 yours eased · passed", sub: "Plus the demo pair" }));
 
-screen("practice", "Lesson", "Practice warm-up",
-  "A practice session on a learned skill. What a warm-up contains (demo or not, how many pairs, how long) is the curriculum's call; this shows only how it's labelled differently from a lesson.",
-  () => `<div class="body">${L("practice")}${lhead("Warm-up · Easing", "Bar and CTRL", '<span class="tag practice">↻ practice</span>', LESSON_BACK[0], LESSON_BACK[1])}
-    <div class="chat">${mentor(ph("[Warm-up opening: recalls Oct 7, picks two pairs on Bar and CTRL, asks them to go first.]"))}</div>
-    ${checklist([["Bar › X Position", "0–1.2 s", "proposed"], ["CTRL › Position", "0–1 s", "proposed"]], { summary: "Proposed · 2 pairs", sub: "Go ahead, or ask for others" })}
+screen("lesson-passed-asking", "Lesson", "Check passed, one more question",
+  "A pass isn't the end. The pivot asks what stays still, speed graph asks you to read the graph again, and key types asks what runs at constant speed, all before the record is written. So Done ticks on the check's pass, Ask stays, and Saved and the ways out wait for record_lesson.",
+  () => page("lesson-passed-asking", { skill: N.piv, focus: "Door", step: 2, right: '<span class="tag pass">✓ check passed</span>',
+    banner: banner("info", "Check passed.", "One more question before this lesson is saved."),
+    chat: learner("Done, check it") + mentor(ph("Which part of Door will stay still when it turns?")),
+    list: checklist(PIVOT_DONE, { summary: "Door · pivot in place · passed", collapsed: true }),
+    actions: `<div class="actions"><button type="button" class="btn quiet" data-go="lesson-passed-pivot">(mock: answer, then saved ›)</button></div>`,
+  }));
+
+screen("lesson-passed-pivot", "Lesson", "Passed, with a review date",
+  "A skill with a review shows when it comes back, from the record's review_due. That's practice made visible, at the moment it's earned, with no new data.",
+  () => passedPage("lesson-passed-pivot", { skill: N.piv, focus: "Door", line: "Lesson passed.", after: "Warm-up due tomorrow.",
+    say: "That's it. Play it back and watch it turn from the new place.",
+    rows: PIVOT_DONE, summary: "Door · pivot in place · passed" }));
+
+screen("lesson-passed-unsaved", "Lesson", "Passed, but not saved",
+  "record_lesson returned anything but saved, or nothing. The pass stands, because the check said so. 'Saved' never shows. Plain copy, no fault of the learner's.",
+  () => page("lesson-passed-unsaved", { focus: "Title", step: 2, right: '<span class="tag pass">✓ passed</span>', noAsk: true,
+    banner: banner("warn", "Lesson passed, but it couldn't be saved", "Your comp is fine. This lesson won't appear in your history, and the mentor won't remember it."),
+    chat: learner("Done, check it") + mentor(ph("That's all four. Play it back at full speed: Title should slow into its stops now.")),
+    list: checklist(ROWS_PASSED, { summary: "3 of 3 yours eased · passed", collapsed: true }),
+    actions: `<div class="actions">${btn("What's next ›", `data-go="${HOME()}"`, "primary")}</div>`,
+  }));
+
+/* ---------- reviews ---------- */
+
+const G_REV = "Reviews (Warm up)";
+const REVIEW_TAG = '<span class="tag practice">↻ review</span>';
+const CHIPS = (s, w) => [sec("", [
+  r(s, "Chip A", w, "starts 2 s", { track: [40, 4] }),
+  r(s, "Chip B", w, "starts 2 s", { track: [40, 4] }),
+  r(s, "Chip C", w, "starts 2 s", { track: [40, 4] }),
+])];
+
+screen("practice", G_REV, "Warm up: opening",
+  "Label from the tool's own mode, never guessed. No demo in a review, so no Show me. Hint still comes after the first check: a review's hints are the lesson's. Rows are Proposed where the tool has targets.",
+  () => page("practice", { skill: N.off, focus: "A new group", step: 0, right: REVIEW_TAG,
+    chat: mentor(ph("Chip A, Chip B and Chip C all start at 2 s. Which goes first?")),
+    list: checklist(CHIPS("prop", "Proposed"), { summary: "3 layers start together · Proposed", sub: "Based on the mentor's last look at your comp." }),
+    actions: acts({ next: "practice-check", status: "Checking your stagger…" }),
+  }));
+
+screen("practice-check", G_REV, "Warm up: partly done",
+  "Same rows as the lesson. Hint here, Show me never, in any state of a review.",
+  () => page("practice-check", { skill: N.off, focus: "Chip A, B and C", step: 1, right: REVIEW_TAG,
+    chat: earlier(2, mentor(ph("Chip A, Chip B and Chip C all start at 2 s. Which goes first?"))) + learner("Done, check it") + mentor(ph("Chip B and Chip C still start together at 2.13 s. Chip A goes first, as you said; say done when they're apart.")),
+    list: checklist([sec("", [
+      r("done", "Chip A", "On its own", "starts 2 s", { track: [40, 4] }),
+      r("off", "Chip B", "With Chip C", "starts 2.13 s · moved 4 f", { track: [43, 4], fresh: true }),
+      r("off", "Chip C", "With Chip B", "starts 2.13 s · moved 4 f", { track: [43, 4], fresh: true }),
+    ])], { summary: "Chip B and Chip C still start together", sub: "Checked just now" }),
+    actions: acts({ hint: true, next: "practice-passed", self: "practice-check", status: "Checking your stagger…" }),
+  }));
+
+screen("practice-passed", G_REV, "Warm up: passed",
+  "The record's next review_due comes back after the save, so the panel can say when it returns. Nothing about getting rusty: it isn't defined.",
+  () => passedPage("practice-passed", { skill: N.off, focus: "Chip A, B and C", line: "Review passed.", after: "Next warm-up in 3 days.",
+    say: "All apart, with your own gaps. Play it back.",
+    rows: [sec("", [
+      r("done", "Chip A", "On its own", "starts 2 s", { track: [40, 4] }),
+      r("done", "Chip B", "On its own", "starts 2.13 s", { track: [43, 4] }),
+      r("done", "Chip C", "On its own", "starts 2.4 s", { track: [48, 4] }),
+    ])], summary: "All apart · gaps 4 f, 8 f" }));
+
+screen("practice-nothing-new", G_REV, "Warm up: nothing new on this comp",
+  "Practice due is from the record, and a review also needs a target it hasn't used on this comp. Only the mentor can see that, so it can only show after the press. Not a failure. Nothing is recorded, so it stays due.",
+  () => page("practice-nothing-new", { skill: N.off, focus: "This comp", step: 0, right: REVIEW_TAG, noAsk: true,
+    chat: mentor(ph("There's nothing new to review on this comp.")) + '<p class="ro">This warm-up is still due. Open another comp and try again, or pick another skill.</p>',
+    actions: `<div class="actions">${btn("Back to Home", `data-go="${HOME()}"`, "primary")}${btn("Pick a skill", 'data-go="skills-many"')}</div>`,
+  }));
+
+/* ---------- the six skills' checklists, one pattern ---------- */
+
+const G_SK = "Six skills' checklists (260 × 480)";
+const SZ = { size: true };
+
+// Easing: a row is one keyframe pair.
+screen("skill-easing-check", G_SK, "Easing: mid-lesson",
+  "One row, one pair. From diff_since_last's targets: eased by you, demo, still linear, half eased (names the key). Also: keys changed, can't tell which. Summary is the tool's own count.",
+  () => page("skill-easing-check", { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+    chat: learner("Done, check it") + mentor(ph("Scale eases at one end and still stops hard at the other: its 1.5 s key is still linear.")),
+    list: checklist(ROWS_PARTIAL, SUM_PARTIAL), actions: acts({ hint: true, show: "again", self: "skill-easing-check", next: "lesson-passed", againTo: "lesson-demo" }),
+  }), SZ);
+
+// Key types: a row is one key pair; two extra sections.
+screen("skill-keytypes-open", G_SK, "Key types: opening",
+  "The tool's targets are empty until the learner says what should snap. Its candidates aren't shown: the skill asks first on purpose, and listing them answers the question for you.",
+  () => page("skill-keytypes-open", { skill: N.kt, focus: "No focus yet", step: 0,
+    chat: mentor(ph("What in this comp is meant to snap rather than fade?")),
+    list: emptyList("Your checklist starts once you say what should snap."),
+    actions: noActs("Buttons turn on once you have a checklist."),
+  }), SZ);
+screen("skill-keytypes-check", G_SK, "Key types: mid-lesson",
+  "One row, one pair, from key_types_check. Doesn't quite fit one list: should_move_held and constant_speed also hold the pass, so each gets its own section. extra_holds don't, so they go in Outside. Wrong side is ◐: it does snap, too early.",
+  () => page("skill-keytypes-check", { skill: N.kt, focus: "Blink", step: 1, right: '<span class="tag">check 2</span>',
+    chat: learner("Done, check it") + mentor(ph("Blink's 1.8 s pair snaps too early: the hold is on the key at its end. It goes on the key at the start of the pair.")),
+    list: checklist([
+      sec("Blink › Opacity", [
+        r("done", "1–1.4 s", "Demo"),
+        r("done", "1.4–1.8 s", "Held by you"),
+        r("part", "1.8–2.2 s", "Hold on the wrong key", "", { fresh: true }),
+      ]),
+      sec("Meant to keep moving", [r("off", "Cut › Opacity", "Now snaps", "waits until 3.4 s")]),
+      sec("Runs at constant speed", [r("done", "Spinner › Rotation", "Linear, stays")]),
+    ], { summary: "1 of 2 yours held · 1 to fix", sub: "Plus one that should still move" }),
+    actions: acts({ hint: true, show: "again", self: "skill-keytypes-check", next: "skill-keytypes-check", status: "Checking your holds…" }),
+  }), SZ);
+
+// Speed graph: a row is one eased pair.
+screen("skill-speedgraph-open", G_SK, "Speed graph: opening",
+  "Targets are there from the opening, capped at 5 by the tool, so rows are Proposed and match what the mentor says.",
+  () => page("skill-speedgraph-open", { skill: N.sg, focus: "Title", step: 0,
+    chat: mentor(ph("Title's already eased, so let's shape it. Is anything here meant to land hard?")),
+    list: checklist([sec("Title", [
+      r("prop", "Position 0.5–1.5 s", "Proposed"),
+      r("prop", "Position 1.5–3 s", "Proposed"),
+      r("prop", "Position 3–4.37 s", "Proposed"),
+      r("prop", "Scale 0.5–1.5 s", "Proposed"),
+    ])], { summary: "4 pairs on Title · Proposed", sub: "Based on the mentor's last look at your comp." }),
+    actions: acts({ show: "show", showStatus: "Shaping one pair to show you…", next: "skill-speedgraph-check", demoTo: "skill-speedgraph-check", status: "Checking your shapes…" }),
+  }), SZ);
+screen("skill-speedgraph-check", G_SK, "Speed graph: mid-lesson",
+  "One row, one pair, from speed_graph_check, worded from its mistake code. Deliberately left out: where the move is fastest. The tool returns it, but the lesson asks the learner to read it from the graph, so showing it gives the answer away.",
+  () => page("skill-speedgraph-check", { skill: N.sg, focus: "Title", step: 1, right: '<span class="tag">check 1</span>',
+    chat: learner("Done, check it") + mentor(ph("Scale isn't shaped yet, and it opens in the value graph, so choose Edit Speed Graph. Position's last move is still moving when it lands.")),
+    list: checklist([
+      sec("Title", [
+        r("done", "Position 0.5–1.5 s", "Demo"),
+        r("done", "Position 1.5–3 s", "Shaped by you", "", { fresh: true }),
+        r("part", "Position 3–4.37 s", "Still moving as it lands", "", { fresh: true }),
+        r("off", "Scale 0.5–1.5 s", "Not shaped yet"),
+      ]),
+      sec("You said it lands hard · left out", [r("none", "Bar › X Position 0.6–1.2 s", "Your call")]),
+    ], { summary: "1 of 3 yours shaped · 2 still to shape", sub: "Next: Position 3–4.37 s" }),
+    actions: acts({ hint: true, show: "again", self: "skill-speedgraph-check", next: "skill-speedgraph-check", status: "Checking your shapes…" }),
+  }), SZ);
+
+// Offset: a row is one member, and its state is relative to the others.
+const dot = (s, name, word, detail, left, o = {}) => r(s, name, word, detail, { track: [left, 4], ...o });
+screen("skill-offset-layers-open", G_SK, "Offset, layers: opening",
+  "Targets are there from the opening: the group the tool proposes. A row's small bar is where that member starts: they all sit together, which is the whole idea. It's the one place the list draws a picture.",
+  () => page("skill-offset-layers-open", { skill: N.off, focus: "Dot 1, 2 and 3", step: 0,
+    chat: mentor(ph("Dot 1, Dot 2 and Dot 3 all start at 0.5 s. Which goes first, and how far apart should they be?")),
+    list: checklist([sec("", [
+      dot("prop", "Dot 1", "Proposed", "starts 0.5 s", 10), dot("prop", "Dot 2", "Proposed", "starts 0.5 s", 10), dot("prop", "Dot 3", "Proposed", "starts 0.5 s", 10),
+    ])], { summary: "3 layers start together · Proposed", sub: "Based on the mentor's last look at your comp." }),
+    actions: acts({ next: "skill-offset-layers-check", status: "Checking your stagger…" }),
+  }), SZ);
+screen("skill-offset-layers-check", G_SK, "Offset, layers: mid-lesson",
+  "Doesn't fit as a pass per row: the tool has no per-member verdict, only which pairs are still together. So ✗ means 'still with another member', and the first layer staying put is ✓. Group facts (gaps, rhythm, order) go in a footer. The bar shows the stagger.",
+  () => page("skill-offset-layers-check", { skill: N.off, focus: "Dot 1, 2 and 3", step: 1, right: '<span class="tag">check 1</span>',
+    chat: learner("Done, check it") + mentor(ph("Dot 2 and Dot 3 still start together at 0.63 s. Say done when they're apart.")),
+    list: checklist([sec("", [
+      dot("done", "Dot 1", "On its own", "starts 0.5 s · stayed", 10),
+      dot("off", "Dot 2", "With Dot 3", "starts 0.63 s · moved 4 f · demo", 14),
+      dot("off", "Dot 3", "With Dot 2", "starts 0.63 s · moved 4 f", 14, { fresh: true }),
+    ])], { summary: "Dot 2 and Dot 3 still start together", sub: "Checked just now" }),
+    actions: acts({ hint: true, show: "again", self: "skill-offset-layers-check", next: "skill-offset-layers-check", status: "Checking your stagger…" }),
+  }), SZ);
+screen("skill-offset-props-check", G_SK, "Offset, properties: mid-lesson",
+  "Same row, one property per row, with start and landing. All apart here, but the order differs from what the learner said. The tool never fails that: the mentor asks. So it's a ? footer, not a ✗. Also fits: keys changed, lands past the comp's end, split on purpose.",
+  () => page("skill-offset-props-check", { skill: N.off, focus: "Title", step: 1, right: '<span class="tag">check 1</span>',
+    chat: learner("Done, check it") + mentor(ph("They're all apart now, but Position goes first and you'd said Opacity. Did you change your mind?")),
+    list: checklist([sec("Title", [
+      r("done", "Position", "Apart", "0.5–1.5 s", { track: [10, 18] }),
+      r("done", "Scale", "Apart", "1.5–2.5 s · moved 30 f", { track: [30, 18], fresh: true }),
+      r("done", "Opacity", "Apart", "2.5–3.5 s · moved 60 f", { track: [50, 18], fresh: true }),
+    ])], { summary: "All apart · gaps 30 f, 30 f", sub: "Checked just now", foot: ["The order's different from what you said."] }),
+    actions: acts({ hint: true, self: "skill-offset-props-check", next: "skill-offset-props-check", status: "Checking your stagger…" }),
+  }), SZ);
+
+// The pivot: a row is one thing that must hold on a layer.
+const PIVOT_DONE = [sec("Door", [
+  r("done", "Pivot on the middle of its left edge", "In place"),
+  r("done", "Door stays where it is", "Stayed"),
+  r("done", "Nothing else moves", "Nothing did"),
+])];
+screen("skill-pivot-open", G_SK, "Set the pivot: opening",
+  "Targets are empty until the learner names a layer and a place. The tool has a proposal, and the skill keeps it back until they've had a chance to answer, so the list does too.",
+  () => page("skill-pivot-open", { skill: N.piv, focus: "No focus yet", step: 0,
+    chat: mentor(ph("Which layer should turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle?")),
+    list: emptyList("Your checklist starts once you pick a layer and where it turns from."),
+    actions: noActs("Buttons turn on once you have a checklist."),
+  }), SZ);
+screen("skill-pivot-check", G_SK, "Set the pivot: mid-lesson",
+  "Doesn't fit as one row per target: a layer has up to five conditions and one verdict. So the layer is the section and each condition a row, worded from item1 to item5. One or two layers at most. No numbers: the skill never says a pixel count here.",
+  () => page("skill-pivot-check", { skill: N.piv, focus: "Door", step: 1, right: '<span class="tag">check 1</span>',
+    chat: learner("Done, check it") + mentor(ph("The pivot's outside Door, to its left, and Door didn't move. Select Door to see its crosshair, then bring it back to the edge; say done.")),
+    list: checklist([sec("Door", [
+      r("off", "Pivot on the middle of its left edge", "Outside, to its left", "", { fresh: true }),
+      r("done", "Door stays where it is", "Stayed"),
+      r("done", "Nothing else moves", "Nothing did"),
+    ])], { summary: "Door · 2 of 3 holding", sub: "Next: the pivot" }),
+    actions: acts({ hint: true, self: "skill-pivot-check", next: "lesson-passed-asking", status: "Checking your pivot…" }),
+  }), SZ);
+screen("skill-pivot-keyed", G_SK, "Set the pivot: a layer with keys",
+  "Same rows, with the extra conditions a keyed layer brings: checked at its rest key, and holding at its Position keys. ⊘ when the check can't read something: that holds the pass, and it never reads as 'didn't move'.",
+  () => page("skill-pivot-keyed", { skill: N.piv, focus: "Pop", step: 1, right: '<span class="tag">check 2</span>',
+    chat: learner("Done, check it") + mentor(ph("Pop's pivot is in the right place at its rest key, but it slid at its 1 s Position key. Edit > Undo, then set it with the playhead on that key.")),
+    list: checklist([sec("Pop, at its rest key", [
+      r("done", "Pivot at the center of its bottom edge", "In place"),
+      r("done", "Pop stays where it is", "Stayed"),
+      r("off", "Holds at its Position keys", "Slid at 1 s", "", { fresh: true }),
+      r("cant", "Nothing else moves", "Can't check Tab", "its layer can't be measured"),
+    ])], { summary: "Pop · 2 of 4 holding", sub: "Next: its Position keys" }),
+    actions: acts({ hint: true, self: "skill-pivot-keyed", next: "skill-pivot-keyed", status: "Checking your pivot…" }),
+  }), SZ);
+
+// Null: sections are the check's own stages; rows open as it reaches them.
+const MOVE_LATER = sec("The move", [r("none", "One move on the null", "After the group")]);
+const NULL_OK = sec("The null", [
+  r("done", "Null 12", "2D, no parent"),
+  r("done", "Pivot at the group's top-left", "In place"),
+]);
+screen("skill-null-open", G_SK, "Null: opening",
+  "Targets are empty. The tool already has a proposal; the skill asks first and only names it if the learner asks, so the list stays empty too.",
+  () => page("skill-null-open", { skill: N.nul, focus: "No group yet", step: 0,
+    chat: mentor(ph("You've done the pivot lesson, and this builds on it. Which layers should move as one, like the parts of a lower third or a logo lockup?")),
+    list: emptyList("Your checklist starts once you pick the group."),
+    actions: noActs("Buttons turn on once you have a checklist."),
+  }), SZ);
+screen("skill-null-place", G_SK, "Null: placing the null",
+  "Null's own stages: the check's stage field and which items it returns. Later sections show as one waiting row, so you can see what's coming. No Show me yet: the demo needs the null to have passed.",
+  () => page("skill-null-place", { skill: N.nul, focus: "Tile, Caption and Stamp", step: 1, right: '<span class="tag">check 1</span>',
+    chat: earlier(2, mentor(ph("The null's pivot is the top-left corner of its square, so put that corner on the spot."))) + learner("Done, check it") + mentor(ph("Null 12 sits at the group's middle, and you said it turns from the top-left. Move it there; say done.")),
+    list: checklist([
+      sec("The null", [
+        r("done", "Null 12", "2D, no parent"),
+        r("off", "Pivot at the group's top-left", "At its middle", "", { fresh: true }),
+      ]),
+      sec("The group", [r("none", "Tile, Caption and Stamp", "After the null")]),
+      MOVE_LATER,
+    ], { summary: "The null · 1 of 2 holding", sub: "Then the group, then one move" }),
+    actions: acts({ hint: true, self: "skill-null-place", next: "skill-null-parent", status: "Checking your null…" }),
+  }), SZ);
+screen("skill-null-parent", G_SK, "Null: parenting the group",
+  "Fits, with sections for its stages. Each row is one layer, worded from p1, p2 and p3 with the check's parent name, distance, direction and time. The null's rows fold at 480 once they're done, so the stage you're in fills the list.",
+  () => page("skill-null-parent", { skill: N.nul, focus: "Tile, Caption and Stamp", step: 1, right: '<span class="tag">check 2</span>',
+    chat: learner("Done, check it") + mentor(ph("Tile moved 1105 px to the right at 0 s, so use Edit > Undo and parent it again with no key held. Caption follows Blink, not Null 12.")),
+    list: checklist([
+      NULL_OK,
+      sec("The group", [
+        r("off", "Tile", "Jumped 1105 px right", "at 0 s", { fresh: true }),
+        r("off", "Caption", "Follows Blink", "", { fresh: true }),
+        r("done", "Stamp", "Follows Null 12", "own keys kept"),
+      ]),
+      MOVE_LATER,
+    ], { summary: "The group · 1 of 3 following Null 12", sub: "Then one move on the null" }),
+    actions: acts({ hint: true, show: "show", showStatus: "Parenting one layer to show you…", demoTo: "skill-null-parent", self: "skill-null-parent", next: "skill-null-move", status: "Checking your group…" }),
+  }), SZ);
+screen("skill-null-move", G_SK, "Null: passed, with notes",
+  "The move's row comes from p4 and p5. The check's comments are never graded, so they get their own list after a pass. If a check comes back ungraded (a parent on the null that moves), the list stays as it was and says so, like lesson-stale.",
+  () => passedPage("skill-null-move", { skill: N.nul, focus: "Tile, Caption and Stamp", line: "Lesson passed.", after: "Warm-up due tomorrow.", open: true,
+    say: "They all turned together, and each kept its own keys. Null 12 still has its default name; naming it after what it moves helps.",
+    rows: [NULL_OK, sec("The group", [
+      r("done", "Tile", "Follows Null 12", "own keys kept"),
+      r("done", "Caption", "Follows Null 12", "own keys kept"),
+      r("done", "Stamp", "Follows Null 12", "own keys kept"),
+    ]), sec("The move", [r("done", "One move on the null", "Rotation")])],
+    summary: "Null, group and move · passed",
+    notes: ["Null 12 still has its default name", "The group starts and stops hard"] }), SZ);
+
+/* ---------- errors that pass: the lesson carries on (FR-056) ---------- */
+
+const passing = (id, title, body, extra = "") => () => page(id, { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+  chat: learner("Done, check it") + notice(title, body),
+  list: checklist(ROWS_PARTIAL, { summary: SUM_PARTIAL.summary, sub: "From your last check" }),
+  actions: `<div class="actions">${extra || busyBtn("Try again", "Trying…", "Checking your keyframes…", "lesson-partial", "primary")}</div>`,
+});
+screen("lesson-pass-rate", G_ERR, "Passing: too many requests",
+  "rate_limited. A notice in the chat, in place of an answer. The list stays as it was, undimmed: nothing about the comp is in doubt. Nothing is replaced and Home is untouched. Try again resends, with FR-030's rule for Show me.",
+  passing("lesson-pass-rate", "Too many requests right now.", "Wait a minute, then try again. Your lesson is still open."));
+screen("lesson-pass-busy", G_ERR, "Passing: service busy",
+  "service_busy. Same treatment as rate_limited, with a shorter wait.",
+  passing("lesson-pass-busy", "The mentor's service is busy.", "Try again in a moment. Your lesson is still open."));
+screen("lesson-pass-offline", G_ERR, "Passing: no internet",
+  "offline. After Effects is fine, so the connection mark stays AE. The notice names the internet, so the two don't get confused.",
+  passing("lesson-pass-offline", "Can't reach the internet.", "Check your connection, then try again. Your lesson is still open."));
+screen("lesson-pass-refused", G_ERR, "Passing: couldn't answer that",
+  "refused. Resending the same words won't help, so there's no Try again: the check still works, and Ask is there to say it differently.",
+  passing("lesson-pass-refused", "The mentor couldn't answer that.", "Try rewording it, or continue with your check.", busyBtn(DONE, "Checking…", "Checking your keyframes…", "lesson-partial", "primary")));
+screen("lesson-start-failed", G_ERR, "Passing: at the start of a lesson",
+  "What Home sees of a passing error. Home makes no mentor turn, so these can only happen after a press. Home's actions were never replaced; the lesson just didn't open. Same four kinds, same wording. Shown: service_busy.",
+  () => `<div class="body">${nav("lesson")}${LH(N.easing, "Didn't start")}${strip(0)}
+    <div class="chat">${notice("The mentor's service is busy.", "Try again in a moment. No lesson started, and your comp wasn't changed.")}</div>
     ${statusline()}
-    <div class="actions">${busyBtn("Check my work", "Checking…", "Checking your keyframes…", "lesson-passed", "primary")}${busyBtn("Hint", "Thinking…", "Checking your keyframes…", "practice")}</div>${ask()}
+    <div class="actions">${busyBtn("Try again", "Trying…", "Getting your lesson ready…", "lesson-starting", "primary", 900)}${btn("Back to Home", `data-go="${HOME()}"`)}</div>
   </div>`);
+screen("lesson-exited", G_ERR, "Ended: the mentor stopped",
+  "process_exited. Not passing: the helper is gone, so the lesson is over and the panel offers Start. Nothing unfinished is ever recorded, so 'not saved' is true.",
+  () => page("lesson-exited", { focus: "Title", step: 1, noAsk: true,
+    chat: learner("Done, check it") + notice("The mentor stopped unexpectedly, so this lesson ended and wasn't saved.", "Your changes in the comp are still there."),
+    list: checklist(ROWS_PARTIAL, { summary: SUM_PARTIAL.summary, stale: "From your last check, before the mentor stopped." }),
+    actions: `<div class="actions">${busyBtn("Start lesson", "Starting…", "Getting your lesson ready…", "lesson-starting", "primary", 900)}${btn("Back to Home", `data-go="${HOME()}"`)}</div>`,
+  }));
 
 /* ---------- compare ---------- */
 
-screen("compare", "Compare", "Home: A vs B side by side",
-  "Two contrasting home screens on the same returning learner. Trade-offs below; recommendation is A.", null, { compare: true });
+screen("compare", "Held: Home option B, not this build", "Home: A vs B side by side",
+  "Kept from revision 2. Home A stays (decision 3). B and its trade-offs wait for testers, and for diagnosis.", null, { compare: true });
+
+// The two sides of compare-stage: the same offset lesson with no demo, one check in.
+const stageChat = () => learner("Done, check it") + mentor(ph("Dot 2 and Dot 3 still start together at 0.63 s. Say done when they're apart."));
+const stageList = () => checklist([sec("", [
+  dot("done", "Dot 1", "On its own", "starts 0.5 s · stayed", 10),
+  dot("off", "Dot 2", "With Dot 3", "starts 0.63 s · moved 4 f", 14),
+  dot("off", "Dot 3", "With Dot 2", "starts 0.63 s · moved 4 f", 14),
+])], { summary: "Dot 2 and Dot 3 still start together" });
+const stageActs = () => acts({ hint: true, self: "compare-stage", next: "compare-stage", status: "Checking your stagger…" });
+screen("cmp-stage-a", "", "", "", () => `<div class="body">${L("lesson-partial")}${LH(N.off, "Dot 1, 2 and 3")}${stage(["skipped", "done", "current"])}
+    <div class="chat">${stageChat()}</div>${stageList()}${statusline()}${stageActs()}${ask()}</div>`, { hidden: true });
+screen("cmp-stage-b", "", "", "", () => page("lesson-partial", { skill: N.off, focus: "Dot 1, 2 and 3", step: 1, chat: stageChat(), list: stageList(), actions: stageActs() }), { hidden: true });
 
 /* ===================== rendering ===================== */
 
@@ -1195,9 +1693,16 @@ let HEIGHT = "";
 let current = null;
 let timer = null;
 
-function panelHtml(id) {
+function panelHtml(id, sized) {
+  const cls = sized ? "w260 h480" : `${WIDTH} ${HEIGHT}`;
   return `<div class="dock"><div class="dock-tabs"><span class="dock-tab">Knack <span class="x" aria-hidden="true">×</span></span><span class="dock-menu" aria-hidden="true">≡</span></div>
-    <div class="panel ${WIDTH} ${HEIGHT}" data-screen="${id}">${S[id].render()}</div></div>`;
+    <div class="panel ${cls}" data-screen="${id}">${S[id].render()}</div></div>`;
+}
+
+function setSize(w, h) {
+  WIDTH = w; HEIGHT = h;
+  document.querySelectorAll("#widths button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.w === w));
+  document.querySelectorAll("#heights button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.h === h));
 }
 
 // Everything after the tab bar becomes the tabpanel the tabs control.
@@ -1216,7 +1721,7 @@ function wireTabs(panel) {
 
 // Focus after a re-render: tabs keep focus on the tab; actions move it to what changed.
 function placeFocus(panel, how) {
-  if (!how) return;
+  if (!how || how === "rig") return;
   if (how === "tab") { const t = panel.querySelector('[role="tab"][aria-selected="true"]'); if (t) t.focus(); return; }
   const msgs = panel.querySelectorAll(".chat .msg.mentor, .chat .msg.notice");
   const target = msgs[msgs.length - 1] || panel.querySelector(".banner") || panel.querySelector(".ltitle strong, .hello, .brand, h3");
@@ -1235,10 +1740,21 @@ function go(id, how) {
     OPT = "B"; const b = panelHtml("homeB-return");
     OPT = save;
     stageEl.innerHTML = `<div class="compare-wrap"><div class="compare-row">
-      <div class="col"><div class="cap"><b>A · Path-first (recommended).</b> The mentor leads: one clear next step, practice, then "What's wrong here?" as a door.</div>${a}</div>
+      <div class="col"><div class="cap"><b>A · Path-first (this build).</b> The mentor leads: one clear next step, then practice and memory. Diagnosis waits for spec 005.</div>${a}</div>
       <div class="col"><div class="cap"><b>B · Diagnose-first.</b> The comp leads: look first, and the findings become the to-do list.</div>${b}</div>
     </div>${TRADEOFF}</div>`;
+  } else if (S[id].gallery) {
+    stageEl.innerHTML = `<div class="compare-wrap"><p class="gallery-title">${esc(S[id].name)}, all at 260 × 480. Press a name in the rail for one on its own.</p><div class="compare-row">
+      ${S[id].gallery.map((g) => `<div class="col"><div class="cap"><b>${esc(S[g].name)}</b></div>${panelHtml(g, true)}</div>`).join("")}
+    </div></div>`;
+  } else if (S[id].compare2) {
+    const [a, b] = S[id].compare2;
+    stageEl.innerHTML = `<div class="compare-wrap"><div class="compare-row">
+      <div class="col"><div class="cap">${S[id].capA}</div>${panelHtml(a, true)}</div>
+      <div class="col"><div class="cap">${S[id].capB}</div>${panelHtml(b, true)}</div>
+    </div>${S[id].table()}</div>`;
   } else {
+    if (S[id].size && how !== "rig") setSize("w260", "h480");
     stageEl.innerHTML = `<div class="col"><div class="cap"><b>${esc(S[id].group)}</b> · ${esc(S[id].name)}</div>${panelHtml(id)}</div>`;
   }
   stageEl.querySelectorAll(".panel").forEach(wireTabs);
@@ -1249,6 +1765,24 @@ function go(id, how) {
   const auto = S[id].auto;
   if (auto && document.getElementById("auto").checked) timer = setTimeout(() => current === id && go(auto[0], "action"), auto[1]);
 }
+
+const TRADEOFF_STAGE = `<table class="tradeoff">
+<tr><th></th><th>A · I do / We do / You do</th><th>B · Pick / Try / Done</th></tr>
+<tr><td>True with no demo?</td><td>No. A review never has one, and the bar still says "We do ✓". Five of the eight live lessons on the new skills ran with no demo (T036, T037, T236, T237, T341).</td><td>Yes. A demo is an event in the chat and on its row, not a step.</td></tr>
+<tr><td>True for null?</td><td>No. The learner places the null (We do) before the demo (I do), so the order's backwards.</td><td>Yes. Null's three stages are the list's sections, all inside Try.</td></tr>
+<tr><td>Where it comes from</td><td>Today's stageOf: tool results.</td><td>Tool results: the Proposed mark or empty targets, and the check's passed. No mentor change.</td></tr>
+<tr><td>Height at 480</td><td>About 26 px.</td><td>About 20 px, on one line.</td></tr>
+<tr><td>What you lose</td><td></td><td>The teaching method's name on screen. It stays how the skills teach; it just stops being a progress bar.</td></tr>
+</table>`;
+
+const TRADEOFF_UPNEXT = `<table class="tradeoff">
+<tr><th></th><th>A · Nothing stored</th><th>B · Stored</th></tr>
+<tr><td>Names a skill on Home?</td><td>No, until you press.</td><td>Yes, straight away. It feels more led, and less like a menu.</td></tr>
+<tr><td>Up to date with the comp?</td><td>Yes: one live read when pressed. It can suggest a due review, or name layers.</td><td>No: written when the last lesson ended. It says so with its date, and names no layer.</td></tr>
+<tr><td>Cost</td><td>One mentor turn per press. Opening Home is free either way.</td><td>Home is free. Start lesson goes straight to the skill.</td></tr>
+<tr><td>Mentor change</td><td>None to the card. /next-mentor's hand-over table needs its two missing skills.</td><td>record_lesson's code also writes the recommend() result to the record, with no comp read. No prompt change, unit tests only, no eval re-run.</td></tr>
+<tr><td>Same card?</td><td colspan="2">Yes. The kicker, buttons and position stay. Adding B later changes the heading, the reason line and the button label, and nothing else on Home.</td></tr>
+</table>`;
 
 const TRADEOFF = `<table class="tradeoff">
 <tr><th></th><th>A · Path-first</th><th>B · Diagnose-first</th></tr>
@@ -1265,12 +1799,13 @@ const TRADEOFF = `<table class="tradeoff">
 function buildRig() {
   const groups = [];
   for (const m of META) {
+    if (m.hidden) continue;
     let g = groups.find((x) => x.name === m.group);
     if (!g) groups.push((g = { name: m.group, items: [] }));
     g.items.push(m);
   }
   document.getElementById("list").innerHTML = groups.map((g) =>
-    `<h2>${esc(g.name)}</h2><ul>${g.items.map((m) => `<li><a href="#${m.id}" data-id="${m.id}">${esc(m.name)}</a></li>`).join("")}</ul>`).join("");
+    `<h2 class="${g.name.startsWith("Held") ? "held" : ""}">${esc(g.name)}</h2><ul>${g.items.map((m) => `<li><a href="#${m.id}" data-id="${m.id}">${esc(m.name)}</a></li>`).join("")}</ul>`).join("");
 }
 
 /* ===================== interaction ===================== */
@@ -1300,23 +1835,48 @@ document.addEventListener("click", (e) => {
   if (w) {
     WIDTH = w.dataset.w;
     document.querySelectorAll("#widths button").forEach((x) => x.setAttribute("aria-pressed", x === w));
-    return go(current);
+    return go(current, "rig");
   }
   const hh = e.target.closest("[data-h]");
   if (hh) {
     HEIGHT = hh.dataset.h;
     document.querySelectorAll("#heights button").forEach((x) => x.setAttribute("aria-pressed", x === hh));
-    return go(current);
+    return go(current, "rig");
   }
   const o = e.target.closest("[data-opt]");
   if (o) {
     OPT = o.dataset.opt;
     document.querySelectorAll("#opts button").forEach((x) => x.setAttribute("aria-pressed", x === o));
     if (/^home/.test(current)) return go(OPT === "A" ? "home-return" : "homeB-return");
-    return go(current);
+    return go(current, "rig");
+  }
+  // Fold what's done in a short dock; flip between a turn's two frames; a frame at full size.
+  const fd = e.target.closest("[data-fold]");
+  if (fd) {
+    const list = fd.closest(".check");
+    const un = list.classList.toggle("unfold");
+    fd.setAttribute("aria-expanded", String(un));
+    fd.innerHTML = `<span aria-hidden="true">✓</span> ${fd.dataset.n} done · ${un ? "hide" : "show"}`;
+    return;
+  }
+  const fl = e.target.closest("[data-flip]");
+  if (fl) {
+    const box = fl.closest("[data-flipbox]");
+    box.querySelectorAll("[data-side]").forEach((s) => { s.hidden = !s.hidden; });
+    return;
+  }
+  const fr = e.target.closest("[data-frame]");
+  if (fr) {
+    fr.setAttribute("aria-expanded", String(fr.getAttribute("aria-expanded") !== "true"));
+    return;
   }
   const t = e.target.closest("[data-toggle]");
   if (t) {
+    const box = t.closest(".check");
+    if (getComputedStyle(box).getPropertyValue("--short").trim() === "1") {
+      t.setAttribute("aria-expanded", String(box.classList.toggle("peek")));
+      return;
+    }
     const open = t.getAttribute("aria-expanded") === "true";
     t.setAttribute("aria-expanded", String(!open));
     t.querySelector(".chev").textContent = open ? "▸" : "▾";
@@ -1384,7 +1944,7 @@ document.addEventListener("submit", (e) => {
 window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (id && id !== current) go(id); });
 
 buildRig();
-go(location.hash.slice(1) || "setup-welcome");
+go(location.hash.slice(1) || "all-checklists");
 })();
 </script>
 </body>
