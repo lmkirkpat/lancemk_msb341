@@ -232,6 +232,14 @@ service text. Service text that reaches a log is scrubbed of anything shaped lik
 `offline`. The plan sent every non-API error there, which would tell a learner to check their
 internet for a bug in the helper. The billing row stays provisional until T038.
 
+**T016's answers from the real service (2026-11-03, Opus 5.5, helper settings `2a0eb1d34662`):**
+
+1. **Betas together: accepted.** Binding, updates and fallback went on one request, on all 7 requests of a `next-mentor` lesson and on the easing fixture turn.
+2. **Taking back a system message: accepted.** A direct test sent a history ending in a `role: "system"` message, the same history without it, then with it again, with `prefix_mismatch_behavior: "error"`. All were accepted, with empty `input_transformations`. The test used effort low and the binding beta only, and each reply was a normal one, not an empty one.
+3. **`cache_control` with `ttl: "5m"` and an array `system`: accepted**, on every request. Cache reads and writes were both reported.
+
+**Hand-over, before T060:** `next-mentor` handed over to `ease-mentor` on a fixture. The tool list went from 3 to 6 tools, the binding from `error` to `drop_block`, and every later step logged `input_transformations` with `thinking_dropped`, reason `prefix_binding_mismatch`, path `messages.5.content.0`. That matches the as-built swap, and T060 is meant to remove it on Opus 5.5 and Sonnet 5.5.
+
 **The history check (amended 2026-10-30, review M2; FR-021a)**: every request sends the beta
 `thinking-binding-controls-2026-08-01` with `thinking.block_binding.prefix_mismatch_behavior`:
 `"error"` until the lesson's first hand-over, `"drop_block"` after it (`lib/loop.mjs`
