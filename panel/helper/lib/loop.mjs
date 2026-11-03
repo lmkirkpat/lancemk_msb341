@@ -14,13 +14,14 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { classify, isNetworkError } from "./errors.mjs";
 import { costOf, sumCosts, tokensOf, addTokens, ZERO_TOKENS } from "./cost.mjs";
-import { buildLessonPrompt, buildTools, promptHash, userContent, skillSystemMessage, withBreakpoint, SKILL_TOOL } from "./prompt.mjs";
+import { buildLessonPrompt, buildTools, promptHash, toolChangeBlocks, userContent, skillSystemMessage, withBreakpoint, SKILL_TOOL } from "./prompt.mjs";
 import { readSkill, commandOf } from "./skills.mjs";
 
 export const BETAS = Object.freeze({
   updates: "thinking-display-updates-2026-08-18",
   fallback: "server-side-fallback-2026-07-01",
   binding: "thinking-binding-controls-2026-08-01",
+  toolChanges: "mid-conversation-tool-changes-2026-07-01",
 });
 
 // Fixed texts the model sees in tool results the runtime itself answers.
@@ -101,8 +102,12 @@ export function createLesson(opts) {
 
   const messages = [];
   let server = null; // the first { instructions, tools } this lesson saw; kept for the lesson
-  let prompt = null; // { tools, allowed, system, skillName, prompt_hash }
-  let handedOver = false; // the tool list changed after the first request
+  let prompt = null; // { tools, allowed, toolChanges, system, skillName, prompt_hash }
+  let handedOver = false; // the tool list changed after the first request (never with toolChanges)
+  // What the history has told the model it can call, when prompt.toolChanges: the tools declared
+  // without defer_loading, then each tool change placed. prompt.allowed moves at the hand-over;
+  // this follows when the changes go in, so the blocks say only what the model hasn't been told.
+  let offered = null;
   // A handed-over skill's body waiting to go in as a mid-conversation system message. The service
   // takes one only right after a user message, as the last message or followed by an assistant
   // turn, so it goes in just before a request whose history ends with a user message, and stays
@@ -120,27 +125,33 @@ export function createLesson(opts) {
   }
 
   // The hand-over (R5): the new skill's tools from now on; the top-level system prompt stays as it
-  // was (the body arrives as a mid-conversation system message), so nothing earlier changes.
+  // was (the body arrives as a mid-conversation system message), so nothing earlier changes. With
+  // tool changes the list stays too; on other models it's replaced (D2).
   function switchTo(skill) {
-    const { tools, allowed } = buildTools(server.tools, skill.allowedTools, skillTool);
+    const built = buildTools(server.tools, skill.allowedTools, skillTool);
+    const { allowed } = built;
+    const tools = prompt.toolChanges ? prompt.tools : built.tools;
     const system = prompt.system;
     prompt = {
+      ...prompt,
       tools,
       allowed,
       system,
       skillName: skill.name,
       prompt_hash: promptHash({ tools, system, placement: settings.skill_placement, skillName: skill.name, skillBody: skill.body }),
     };
-    handedOver = true;
+    if (!prompt.toolChanges) handedOver = true;
   }
 
   function requestParams() {
     // Every request opts into the history check (preserved thinking), so an edited history fails
     // here on any account, not only on accounts made after 2026-08-31 (every learner's): "error"
-    // while the history must be intact, "drop_block" once a hand-over has changed the tool list,
-    // which invalidates the thinking blocks from before it (the claude-api reference, Breaking
-    // change 3). The beta also makes each response list what it dropped (input_transformations).
+    // while the history must be intact, which with tool changes is the whole lesson. "drop_block"
+    // only once a hand-over has replaced the tool list, which invalidates the thinking blocks from
+    // before it (the claude-api reference, Breaking change 3; D2: Haiku 5.5 only). The beta also
+    // makes each response list what it dropped (input_transformations).
     const betas = [BETAS.binding];
+    if (prompt.toolChanges) betas.push(BETAS.toolChanges);
     const thinking = {
       type: "adaptive",
       display: settings.thinking_display,
@@ -182,12 +193,17 @@ export function createLesson(opts) {
     else messages.push({ role: "user", content: blocks });
   }
 
-  // Puts a waiting skill body in, if the history ends with a user message. → whether it did.
-  function placePendingBody() {
-    if (pendingBody === null || !messages.length || messages[messages.length - 1].role !== "user") return false;
-    messages.push(skillSystemMessage(pendingBody));
+  // Puts a waiting skill body and any tool changes the history doesn't have yet in one system
+  // message, if the history ends with a user message. → how to take it back, or null if it didn't.
+  function placeHandOver() {
+    if (!messages.length || messages[messages.length - 1].role !== "user") return null;
+    const changes = prompt.toolChanges ? toolChangeBlocks(prompt.tools, offered, prompt.allowed) : [];
+    if (pendingBody === null && !changes.length) return null;
+    const undo = { body: pendingBody, offered };
+    messages.push(skillSystemMessage(pendingBody, changes));
     pendingBody = null;
-    return true;
+    if (prompt.toolChanges) offered = prompt.allowed;
+    return undo;
   }
 
   // One streamed request. Emits text_delta and text as blocks arrive. → { message } or
@@ -271,7 +287,7 @@ export function createLesson(opts) {
     // doesn't.
     // lastLen: how many blocks the last kept message had, so text added to it (addUserText) comes
     // off at block level.
-    const mark = () => ({ len: messages.length, lastLen: messages.length ? messages[messages.length - 1].content.length : 0, prompt, handedOver, pendingBody });
+    const mark = () => ({ len: messages.length, lastLen: messages.length ? messages[messages.length - 1].content.length : 0, prompt, handedOver, pendingBody, offered });
     let back = mark();
     let completed = false;
     const markComplete = () => {
@@ -318,6 +334,7 @@ export function createLesson(opts) {
       prompt = back.prompt;
       handedOver = back.handedOver;
       pendingBody = back.pendingBody;
+      offered = back.offered;
       if (!completed) log({ event: "turn_taken_back" });
       return summary(false, kind);
     };
@@ -344,6 +361,7 @@ export function createLesson(opts) {
         const skill = cmd ? tryReadSkill(cmd.name) : null;
         prompt = buildLessonPrompt({ preamble, instructions: server.instructions, serverTools: server.tools, skill, skillTool, settings });
         if (skill && settings.skill_placement === "message") bodyAhead = skill.body;
+        offered = prompt.toolChanges ? new Set(prompt.tools.filter((t) => !t.defer_loading).map((t) => t.name)) : null;
       } else if (cmd && cmd.name !== prompt.skillName) {
         const skill = tryReadSkill(cmd.name);
         if (skill) {
@@ -355,7 +373,7 @@ export function createLesson(opts) {
       addUserText(userContent(text, bodyAhead));
 
       for (steps = 1; steps <= settings.max_steps; steps++) {
-        const placed = placePendingBody();
+        const placed = placeHandOver();
         let message;
         try {
           ({ message } = await step(client, ctl.signal, emit));
@@ -391,9 +409,11 @@ export function createLesson(opts) {
         const content = echoContent(JSON.parse(JSON.stringify(message.content || [])));
         if (content.length) messages.push({ role: "assistant", content });
         else if (placed) {
-          // Nothing followed the body, so it can't stay last before the next user message: take it
-          // back off the end (no thinking block was made after it) and let it wait again.
-          pendingBody = messages.pop().content[0].text;
+          // Nothing followed the message, so it can't stay last before the next user message: take
+          // it back off the end (no thinking block was made after it) and let it wait again.
+          messages.pop();
+          pendingBody = placed.body;
+          offered = placed.offered;
         }
         const uses = content.filter((b) => b.type === "tool_use");
         if (content.length && !uses.length) markComplete(); // an answer with no tool call

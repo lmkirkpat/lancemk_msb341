@@ -10,7 +10,7 @@ import { loadSettings, HELPER_DIR } from "../lib/settings.mjs";
 import { loadPreamble, loadSkillTool, withoutBreakpoints } from "../lib/prompt.mjs";
 import { readSkill } from "../lib/skills.mjs";
 import { createRequestLog } from "../lib/request-log.mjs";
-import { startFakeService, reply, failure, drop, text, thinking, toolUse, fallbackBlock } from "./fake-service.mjs";
+import { startFakeService, invalidRequest, reply, failure, drop, text, thinking, toolUse, fallbackBlock } from "./fake-service.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const SKILLS = path.join(REPO, ".claude", "skills");
@@ -70,6 +70,39 @@ async function setup({ patch, noKey, wrapMcp } = {}) {
 
 const bodies = (svc) => svc.messageRequests.map((r) => r.body);
 const betasOf = (req) => (req.headers["anthropic-beta"] || "").split(",").map((s) => s.trim()).filter(Boolean);
+
+// What the model can call at this request: the tools declared without defer_loading, then every
+// tool_removal and tool_addition in the messages, in order (D2, research R5). Sorted by name.
+function offeredIn(body) {
+  const offered = new Set((body.tools || []).filter((t) => !t.defer_loading).map((t) => t.name));
+  for (const m of body.messages) {
+    if (m.role !== "system") continue;
+    for (const b of m.content) {
+      if (b.type === "tool_removal") {
+        assert.ok(offered.delete(b.tool.name), `removed ${b.tool.name}, which wasn't on offer`);
+      } else if (b.type === "tool_addition") {
+        assert.ok(!offered.has(b.tool.name), `added ${b.tool.name}, which was already on offer`);
+        offered.add(b.tool.name);
+      }
+    }
+  }
+  return [...offered].sort();
+}
+const allowedOf = (name) => readSkill(SKILLS, name).allowedTools.slice().sort();
+const ref = (type, name) => ({ type, tool: { type: "tool_reference", name } });
+// The tool-change blocks, then the body, of the hand-over from one skill to another.
+function handOverContent(from, to) {
+  const a = allowedOf(from);
+  const b = allowedOf(to);
+  const order = (names, tools) => tools.map((t) => t.name).filter((n) => names.includes(n));
+  return (tools) => [
+    ...order(a.filter((n) => !b.includes(n)), tools).map((n) => ref("tool_removal", n)),
+    ...order(b.filter((n) => !a.includes(n)), tools).map((n) => ref("tool_addition", n)),
+    { type: "text", text: readSkill(SKILLS, to).body },
+  ];
+}
+const bodyTextOf = (m) => m.content.filter((b) => b.type === "text").map((b) => b.text).join("");
+const HAIKU = { model: "claude-haiku-5-5", fallbacks: null, thinking_display: "omitted" };
 
 // Every request's messages extend the previous request's, byte for byte (cache markers aside):
 // the same messages, except that the last one may have gained content blocks at its end (the
@@ -162,10 +195,10 @@ test("an easing turn end to end: the request, the events, the tool through ae-me
   assert.equal(b0.fallbacks, "default");
   assert.equal(b0.tool_choice, undefined);
   assert.equal(b0.betas, undefined, "betas travel as a header");
-  assert.deepEqual(betasOf(s.svc.messageRequests[0]).sort(), [BETAS.binding, BETAS.fallback, BETAS.updates].sort());
+  assert.deepEqual(betasOf(s.svc.messageRequests[0]).sort(), [BETAS.binding, BETAS.toolChanges, BETAS.fallback, BETAS.updates].sort());
   assert.equal(b0.system.length, 3);
   assert.equal(b0.system[2].text, readSkill(SKILLS, "ease-mentor").body);
-  assert.deepEqual(b0.tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
+  assert.deepEqual(offeredIn(b0), allowedOf("ease-mentor"));
   assert.deepEqual(b0.messages, [{ role: "user", content: [{ type: "text", text: "/ease-mentor", cache_control: { type: "ephemeral", ttl: "5m" } }] }]);
 
   // The second: the assistant turn exactly as received (thinking and its signature), the result whole.
@@ -307,19 +340,20 @@ test("the hand-over: next-mentor loads ease-mentor without editing anything earl
   assert.deepEqual(events.find((e) => e.type === "skill_loaded"), { type: "skill_loaded", skill: "ease-mentor" });
 
   const [b0, b1, b2] = bodies(s.svc);
-  assert.deepEqual(b0.tools.map((t) => t.name), ["read_learner_record", "recommend_next", "Skill"]);
+  assert.deepEqual(offeredIn(b0), allowedOf("next-mentor"));
   assert.equal(b0.system[2].text, readSkill(SKILLS, "next-mentor").body);
-  assert.deepEqual(b0.thinking.block_binding, { prefix_mismatch_behavior: "error" }, "checked strictly before the hand-over");
-  assert.ok(betasOf(s.svc.messageRequests[0]).includes(BETAS.binding));
-  // After: the result, then the new skill's body as a mid-conversation system message; its tools.
+  // After: the result, then one system message with the tool changes and the new skill's body.
   assert.equal(b1.messages.length, 4);
   assert.deepEqual(withoutBreakpoints(b1.messages[2].content[0].content), [{ type: "text", text: "Loaded ease-mentor. Arguments: review" }]);
-  assert.deepEqual(b1.messages[3], { role: "system", content: [{ type: "text", text: readSkill(SKILLS, "ease-mentor").body }] });
-  assert.deepEqual(b1.tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
-  assert.deepEqual(b1.thinking, { type: "adaptive", display: "updates", block_binding: { prefix_mismatch_behavior: "drop_block" } });
-  assert.ok(betasOf(s.svc.messageRequests[1]).includes(BETAS.binding));
-  assert.equal(JSON.stringify(b2.tools), JSON.stringify(b1.tools));
-  assertAppendOnly(s.svc, { toolChangesAt: [1] });
+  assert.deepEqual(b1.messages[3], { role: "system", content: handOverContent("next-mentor", "ease-mentor")(b0.tools) });
+  assert.deepEqual(offeredIn(b1), allowedOf("ease-mentor"));
+  assert.deepEqual(offeredIn(b2), allowedOf("ease-mentor"));
+  assert.deepEqual(b1.thinking, { type: "adaptive", display: "updates", block_binding: { prefix_mismatch_behavior: "error" } });
+  for (const r of s.svc.messageRequests) {
+    assert.ok(betasOf(r).includes(BETAS.binding));
+    assert.ok(betasOf(r).includes(BETAS.toolChanges));
+  }
+  assertAppendOnly(s.svc);
   assert.match(s.calls(), /snapshot_project/);
 });
 
@@ -342,10 +376,9 @@ test("a later skill command switches skills the same way (append, never edit)", 
   await s.turn("/offset-mentor review");
   const b1 = bodies(s.svc)[1];
   assert.deepEqual(b1.messages.slice(-2).map((m) => m.role), ["user", "system"]);
-  assert.equal(b1.messages[3].content[0].text, readSkill(SKILLS, "offset-mentor").body);
-  assert.ok(b1.tools.some((t) => t.name === "offset_snapshot"));
-  assert.ok(!b1.tools.some((t) => t.name === "set_ease"));
-  assertAppendOnly(s.svc, { toolChangesAt: [1] });
+  assert.deepEqual(b1.messages[3].content, handOverContent("ease-mentor", "offset-mentor")(b1.tools));
+  assert.deepEqual(offeredIn(b1), allowedOf("offset-mentor"));
+  assertAppendOnly(s.svc);
 });
 
 test("service faults: each kind, nothing kept from the failed turn", async () => {
@@ -388,15 +421,42 @@ test("ae-mentor exits between turns: the next turn starts it again", async () =>
   assertAppendOnly(s.svc);
 });
 
-test("no skill command: no tools and no skill body", async () => {
+test("no skill command: no tool on offer and no skill body", async () => {
   const s = await setup();
   s.svc.script(reply([text("Hello!")]));
   const { r } = await s.turn("hello");
   assert.equal(r.ok, true);
   assert.equal(r.skill, null);
   const b = bodies(s.svc)[0];
-  assert.equal(b.tools, undefined);
   assert.equal(b.system.length, 2);
+  assert.deepEqual(offeredIn(b), []);
+  assertAppendOnly(s.svc);
+});
+
+test("no skill command, then one: the tools don't change and the history check stays on (D2)", async () => {
+  const s = await setup();
+  s.svc.script(reply([text("Hello!")]), reply([text("Easing.")]));
+  await s.turn("hello");
+  await s.turn("/ease-mentor");
+  const [b0, b1] = bodies(s.svc);
+  // The service refuses a list where every tool is deferred, so Skill is declared and withdrawn.
+  assert.deepEqual(b0.tools.filter((t) => !t.defer_loading).map((t) => t.name), ["Skill"]);
+  assert.deepEqual(b0.messages[1], { role: "system", content: [ref("tool_removal", "Skill")] });
+  assert.equal(JSON.stringify(b1.tools), JSON.stringify(b0.tools));
+  assert.deepEqual(offeredIn(b1), allowedOf("ease-mentor"));
+  assert.equal(bodyTextOf(b1.messages.at(-1)), readSkill(SKILLS, "ease-mentor").body);
+  assert.equal(b1.thinking.block_binding.prefix_mismatch_behavior, "error");
+  assertAppendOnly(s.svc);
+});
+
+test("no skill command: a call to the withdrawn hand-over tool doesn't load a skill", async () => {
+  const s = await setup();
+  s.svc.script(reply([toolUse("Skill", { skill: "ease-mentor" }, "tu_x")], { stop_reason: "tool_use" }), reply([text("No.")]));
+  const { r } = await s.turn("hello");
+  assert.equal(r.skill, null);
+  const tr = bodies(s.svc)[1].messages.at(-1).content[0];
+  assert.equal(tr.is_error, true);
+  assert.deepEqual(withoutBreakpoints(tr.content), [{ type: "text", text: NOT_AVAILABLE }]);
 });
 
 test("skill_placement message: the body ahead of the first text, two system blocks", async () => {
@@ -421,7 +481,7 @@ test("effort and the 1-hour cache come from the settings; no fallback field when
   assert.deepEqual(b.system[2].cache_control, { type: "ephemeral", ttl: "1h" });
   assert.equal("fallbacks" in b, false);
   assert.deepEqual(b.thinking, { type: "adaptive", display: "omitted", block_binding: { prefix_mismatch_behavior: "error" } });
-  assert.deepEqual(betasOf(s.svc.messageRequests[0]), [BETAS.binding], "only the binding beta");
+  assert.deepEqual(betasOf(s.svc.messageRequests[0]), [BETAS.binding, BETAS.toolChanges], "no display or fallback beta");
 });
 
 test("a hand-over on the last step: the skill's body waits for the next learner message (M1)", async () => {
@@ -442,12 +502,12 @@ test("a hand-over on the last step: the skill's body waits for the next learner 
   // The learner's text goes after the step's tool results, in the same user message (M1 review fix).
   assert.deepEqual(b1.messages.at(-2).content.map((c) => c.type), ["tool_result", "text"]);
   assert.equal(b1.messages.at(-2).content.at(-1).text, "Yes, easing please.");
-  assert.equal(b1.messages.at(-1).content[0].text, readSkill(SKILLS, "ease-mentor").body);
-  assert.deepEqual(b1.tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
+  assert.deepEqual(b1.messages.at(-1).content, handOverContent("next-mentor", "ease-mentor")(b1.tools));
+  assert.deepEqual(offeredIn(b1), allowedOf("ease-mentor"));
 
   s.svc.script(reply([text("Check when ready.")]));
   assert.equal((await s.turn("Done.")).r.ok, true);
-  assertAppendOnly(s.svc, { toolChangesAt: [1] });
+  assertAppendOnly(s.svc);
 });
 
 test("an empty reply right after a hand-over: the body waits for the next learner message (M1)", async () => {
@@ -467,6 +527,9 @@ test("an empty reply right after a hand-over: the body waits for the next learne
   // Requests 2 and 3 both carried the body last; request 3 has it after the new message instead.
   assert.deepEqual(s.svc.rejected, []);
   assert.equal(last.messages.filter((m) => m.role === "system").length, 1);
+  // The tool changes came off and went back with the body, so they're announced once.
+  assert.deepEqual(last.messages.at(-1).content, handOverContent("next-mentor", "ease-mentor")(last.tools));
+  assert.deepEqual(offeredIn(last), allowedOf("ease-mentor"));
 });
 
 // ---------- D1 (spec FR-015 as amended 2026-10-30, T059): a failed turn keeps its complete
@@ -610,10 +673,10 @@ test("D1: a failure at step 1 takes the learner's message back too (resolved que
   assert.equal((await s.turn("Check my work.")).r.ok, true);
   const last = bodies(s.svc).at(-1);
   assert.equal(last.messages.length, 3, "the retry sends the message once");
-  assert.ok(last.tools.some((t) => t.name === "set_ease"));
+  assert.deepEqual(offeredIn(last), allowedOf("ease-mentor"), "the switch's tool changes went with it");
   // Requests 2 to 5 failed with nothing completed, so their learner messages were taken back;
-  // request 5 carried offset's tools (its skill command), taken back with it.
-  assertAppendOnly(s.svc, { skip: [1, 2, 3, 4], toolChangesAt: [4] });
+  // request 5 carried offset's tool changes (its skill command), taken back with it.
+  assertAppendOnly(s.svc, { skip: [1, 2, 3, 4] });
 });
 
 test("D1: a hand-over completed in the failed turn stays in force; its body goes in before the next request", async () => {
@@ -636,12 +699,12 @@ test("D1: a hand-over completed in the failed turn stays in force; its body goes
   const b = bodies(s.svc);
   const body = readSkill(SKILLS, "ease-mentor").body;
   assert.deepEqual(b[2].messages.slice(-2).map((m) => m.role), ["user", "system"]);
-  assert.equal(b[2].messages.at(-1).content[0].text, body);
+  assert.equal(bodyTextOf(b[2].messages.at(-1)), body);
   assert.equal(b[2].messages.filter((m) => m.role === "system").length, 1);
-  assert.deepEqual(b[2].tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
-  assert.equal(b[2].thinking.block_binding.prefix_mismatch_behavior, "drop_block");
-  // Request 2 (failed, skipped) already had ease-mentor's tools; request 3 is compared with request 1.
-  assertAppendOnly(s.svc, { toolChangesAt: [1, 2], skip: [1] });
+  assert.deepEqual(offeredIn(b[2]), allowedOf("ease-mentor"), "the changes went back with the body and came again");
+  assert.equal(b[2].thinking.block_binding.prefix_mismatch_behavior, "error");
+  // Request 2 failed with the changes in its tail; request 3 is compared with request 1.
+  assertAppendOnly(s.svc, { skip: [1] });
 });
 
 test("D1: a hand-over at step 1 and a call at step 2 stay when step 3 fails", async () => {
@@ -659,9 +722,25 @@ test("D1: a hand-over at step 1 and a call at step 2 stay when step 3 fails", as
   s.svc.script(reply([text("Hi again.")]));
   assert.equal((await s.turn("Hello?")).r.ok, true);
   const last = bodies(s.svc).at(-1);
-  assert.deepEqual(last.tools.map((t) => t.name).sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
+  assert.deepEqual(offeredIn(last), allowedOf("ease-mentor"));
   assert.equal(last.messages.filter((m) => m.role === "system").length, 1);
-  assertAppendOnly(s.svc, { toolChangesAt: [1] });
+  assertAppendOnly(s.svc);
+});
+
+test("the fake service refuses tool changes the way the real one does (T060's live check)", () => {
+  const t = (name, defer) => ({ name, description: "d", input_schema: { type: "object" }, ...(defer ? { defer_loading: true } : {}) });
+  const betas = BETAS.toolChanges;
+  const u = { role: "user", content: [{ type: "text", text: "hi" }] };
+  const sys = (...content) => ({ role: "system", content });
+  const model = "claude-opus-5-5";
+  assert.match(invalidRequest({ model, tools: [t("a", true)], messages: [u] }, betas), /All tools cannot be deferred/);
+  assert.match(invalidRequest({ model, tools: [t("a"), t("b", true)], messages: [u, sys(ref("tool_addition", "b"))] }, ""), /beta/);
+  assert.match(invalidRequest({ model: "claude-haiku-5-5", tools: [t("a"), t("b", true)], messages: [u, sys(ref("tool_addition", "b"))] }, betas), /model/);
+  assert.match(invalidRequest({ model, tools: [t("a")], messages: [u, sys(ref("tool_addition", "z"))] }, betas), /isn't declared/);
+  assert.match(invalidRequest({ model, tools: [t("a")], messages: [u, sys(ref("tool_addition", "a"))] }, betas), /defer_loading/);
+  // Live: a tool declared on offer can come back once it has been removed.
+  assert.equal(invalidRequest({ model, tools: [t("a"), t("b")], messages: [u, sys(ref("tool_removal", "a"), ref("tool_addition", "a"))] }, betas), null);
+  assert.equal(invalidRequest({ model, tools: [t("a"), t("b", true)], messages: [u, sys(ref("tool_removal", "a"), ref("tool_addition", "b"), { type: "text", text: "x" })] }, betas), null);
 });
 
 test("the fake service refuses what the real one does (S3)", async () => {
@@ -700,20 +779,130 @@ test("the fake service records a real-looking key redacted, and keeps short stan
   assert.equal(redactKey(null), null);
 });
 
-test("every request opts into the history check: error before a hand-over, drop_block after (M2)", async () => {
+for (const model of ["claude-opus-5-5", "claude-sonnet-5-5"]) {
+  test(`D2 on ${model}: the history check stays on and the tools stay the same bytes through hand-overs`, async () => {
+    const s = await setup({ patch: { model } });
+    s.svc.script(
+      reply([text("Hi.")]),
+      reply([toolUse("Skill", { skill: "ease-mentor" }, "tu_h")], { stop_reason: "tool_use" }),
+      reply([toolUse("snapshot_project", {}, "tu_s")], { stop_reason: "tool_use" }),
+      reply([text("Easing.")]),
+      reply([text("Offset now.")]),
+      reply([text("Still offset.")]),
+    );
+    await s.turn("/next-mentor");
+    await s.turn("What's next?");
+    await s.turn("/offset-mentor");
+    await s.turn("Next?");
+    const b = bodies(s.svc);
+    assert.equal(b.length, 6);
+    assert.deepEqual(b.map((x) => x.thinking.block_binding.prefix_mismatch_behavior), Array(6).fill("error"));
+    for (const x of b) assert.equal(JSON.stringify(x.tools), JSON.stringify(b[0].tools));
+    for (const r of s.svc.messageRequests) assert.ok(betasOf(r).includes(BETAS.toolChanges));
+    assert.deepEqual(offeredIn(b[0]), allowedOf("next-mentor"));
+    assert.deepEqual(offeredIn(b[2]), allowedOf("ease-mentor"));
+    assert.deepEqual(offeredIn(b[5]), allowedOf("offset-mentor"));
+    assert.deepEqual(s.logs.filter((l) => l.event === "input_transformations"), []);
+    assertAppendOnly(s.svc);
+  });
+}
+
+test("D2: tools declares every server tool plus Skill, those outside the active skill deferred", async () => {
+  const s = await setup();
+  s.svc.script(reply([text("Hi.")]));
+  await s.turn("/ease-mentor");
+  const { tools } = bodies(s.svc)[0];
+  const server = await s.mcp.start();
+  assert.deepEqual(tools.map((t) => t.name), [...server.tools.map((t) => t.name), "Skill"]);
+  const active = allowedOf("ease-mentor");
+  for (const t of tools) assert.equal(t.defer_loading, active.includes(t.name) ? undefined : true, t.name);
+});
+
+test("D2: a call to a hidden tool still gets the fixed answer, before and after a hand-over", async () => {
   const s = await setup();
   s.svc.script(
-    reply([text("Hi.")]),
+    reply([toolUse("set_ease", {}, "tu_a"), toolUse("Skill", { skill: "ease-mentor" }, "tu_h")], { stop_reason: "tool_use" }),
+    reply([toolUse("recommend_next", {}, "tu_b")], { stop_reason: "tool_use" }),
+    reply([text("Ok.")]),
+  );
+  await s.turn("/next-mentor");
+  const b = bodies(s.svc);
+  const notAvailable = (block) => {
+    assert.equal(block.is_error, true);
+    assert.deepEqual(withoutBreakpoints(block.content), [{ type: "text", text: NOT_AVAILABLE }]);
+  };
+  notAvailable(b[1].messages[2].content[0]);
+  notAvailable(b[2].messages.at(-1).content[0]);
+  assert.doesNotMatch(s.calls(), /set_ease|recommend_next/);
+  assert.deepEqual(s.logs.filter((l) => l.event === "tool_not_allowed").map((l) => l.name), ["set_ease", "recommend_next"]);
+});
+
+test("D2: a tool withdrawn and offered again is announced again; a tool kept is never mentioned", async () => {
+  const s = await setup();
+  s.svc.script(reply([text("Next.")]), reply([text("Easing.")]), reply([text("Next again.")]));
+  await s.turn("/next-mentor");
+  await s.turn("/ease-mentor");
+  await s.turn("/next-mentor");
+  const b = bodies(s.svc);
+  assert.deepEqual(b[2].messages.at(-1).content, handOverContent("ease-mentor", "next-mentor")(b[2].tools));
+  assert.ok(b[2].messages.at(-1).content.some((x) => x.type === "tool_addition" && x.tool.name === "Skill"), "Skill was declared on offer, withdrawn, and comes back");
+  assert.ok(!b[1].messages.at(-1).content.some((x) => x.tool && x.tool.name === "read_learner_record"), "both skills list it");
+  assert.deepEqual(offeredIn(b[2]), allowedOf("next-mentor"));
+  assertAppendOnly(s.svc);
+});
+
+test("D2: two hand-overs before either is placed announce only where the lesson ended up", async () => {
+  const s = await setup({ patch: { max_steps: 1 } });
+  s.svc.script(reply([toolUse("Skill", { skill: "ease-mentor" }, "tu_h")], { stop_reason: "tool_use" }), reply([text("Offset.")]));
+  await s.turn("/next-mentor");
+  await s.turn("/offset-mentor");
+  const last = bodies(s.svc).at(-1);
+  assert.deepEqual(last.messages.at(-1).content, handOverContent("next-mentor", "offset-mentor")(last.tools));
+  assert.deepEqual(offeredIn(last), allowedOf("offset-mentor"));
+  assertAppendOnly(s.svc);
+});
+
+test("D2: a skill command in a turn that completes nothing takes its tool changes back too", async () => {
+  const s = await setup();
+  s.svc.script(reply([text("Easing.")]), failure(401, "authentication_error", "revoked"), reply([text("Offset.")]));
+  await s.turn("/ease-mentor");
+  assert.equal((await s.turn("/key-types-mentor")).r.error_kind, "not_signed_in");
+  assert.equal(s.lesson.skill, "ease-mentor");
+  await s.turn("/offset-mentor");
+  const last = bodies(s.svc).at(-1);
+  assert.deepEqual(last.messages.at(-1).content, handOverContent("ease-mentor", "offset-mentor")(last.tools));
+  assert.deepEqual(offeredIn(last), allowedOf("offset-mentor"));
+  assertAppendOnly(s.svc, { skip: [1] });
+});
+
+test("Haiku 5.5: the as-built swap, drop_block from the hand-over on, no tool-change blocks (D2)", async () => {
+  const s = await setup({ patch: HAIKU });
+  s.svc.script(
+    reply([thinking("", "n1"), toolUse("Skill", { skill: "ease-mentor", args: "review" }, "tu_skill")], { stop_reason: "tool_use" }),
+    reply([text("Let's review.")]),
     reply([text("Offset now.")]),
     reply([text("Still offset.")]),
   );
-  await s.turn("/ease-mentor");
+  await s.turn("/next-mentor");
   await s.turn("/offset-mentor");
   await s.turn("Next?");
-  const behaviors = bodies(s.svc).map((b) => b.thinking.block_binding.prefix_mismatch_behavior);
-  assert.deepEqual(behaviors, ["error", "drop_block", "drop_block"]);
-  for (const r of s.svc.messageRequests) assert.ok(betasOf(r).includes(BETAS.binding));
-  assertAppendOnly(s.svc, { toolChangesAt: [1] });
+  const b = bodies(s.svc);
+  assert.deepEqual(b[0].tools.map((t) => t.name), ["read_learner_record", "recommend_next", "Skill"]);
+  assert.deepEqual(b[1].tools.map((t) => t.name).sort(), allowedOf("ease-mentor"));
+  assert.deepEqual(b[2].tools.map((t) => t.name).sort(), allowedOf("offset-mentor"));
+  assert.equal(JSON.stringify(b[3].tools), JSON.stringify(b[2].tools));
+  for (const x of b) assert.ok(!x.tools.some((t) => "defer_loading" in t));
+  assert.deepEqual(b.map((x) => x.thinking.block_binding.prefix_mismatch_behavior), ["error", "drop_block", "drop_block", "drop_block"]);
+  assert.deepEqual(b[1].messages[3], { role: "system", content: [{ type: "text", text: readSkill(SKILLS, "ease-mentor").body }] });
+  for (const r of s.svc.messageRequests) assert.ok(!betasOf(r).includes(BETAS.toolChanges));
+  assertAppendOnly(s.svc, { toolChangesAt: [1, 2] });
+});
+
+test("Haiku 5.5: a lesson with no skill yet sends no tools", async () => {
+  const s = await setup({ patch: HAIKU });
+  s.svc.script(reply([text("Hello!")]));
+  await s.turn("hello");
+  assert.equal(bodies(s.svc)[0].tools, undefined);
 });
 
 test("input_transformations are logged: type, reason and path only, never text (M2)", async () => {

@@ -123,14 +123,43 @@ export const BETA = Object.freeze({
   binding: "thinking-binding-controls-2026-08-01",
   fallback: "server-side-fallback-2026-07-01",
   updates: "thinking-display-updates-2026-08-18",
+  toolChanges: "mid-conversation-tool-changes-2026-07-01",
 });
+
+// The models the reference lists for tool-change blocks, of those the helper can be set to.
+const TOOL_CHANGE_MODELS = new Set(["claude-opus-5-5", "claude-sonnet-5-5"]);
+
+// → a reason the real service refuses the request's tool list or tool-change blocks, or null.
+// Live (T060, 2026-11-03): a list with every tool deferred is refused; a tool declared without
+// defer_loading can come back once it's been removed. From the reference: the beta, the model
+// list, and that an added tool must be declared and, otherwise, deferred.
+function invalidToolChange(body, msgs, betas) {
+  const tools = Array.isArray(body.tools) ? body.tools : [];
+  if (tools.length && tools.every((t) => t.defer_loading)) return "tools: At least one tool must have defer_loading=false. All tools cannot be deferred.";
+  const byName = new Map(tools.map((t) => [t.name, t]));
+  const removed = new Set();
+  for (let i = 0; i < msgs.length; i++) {
+    if (msgs[i].role !== "system" || !Array.isArray(msgs[i].content)) continue;
+    for (const b of msgs[i].content) {
+      if (!b || (b.type !== "tool_addition" && b.type !== "tool_removal")) continue;
+      if (!betas.has(BETA.toolChanges)) return `messages.${i}: ${b.type} needs the beta ${BETA.toolChanges}`;
+      if (!TOOL_CHANGE_MODELS.has(body.model)) return `messages.${i}: ${b.type} isn't supported on this model`;
+      const name = b.tool && b.tool.type === "tool_reference" ? b.tool.name : null;
+      if (!byName.has(name)) return `messages.${i}: ${b.type} names a tool that isn't declared`;
+      if (b.type === "tool_removal") removed.add(name);
+      else if (!byName.get(name).defer_loading && !removed.has(name)) return `messages.${i}: an added tool must be declared with defer_loading`;
+    }
+  }
+  return null;
+}
 
 // → a reason the real service would answer 400, or null. From the claude-api reference:
 // a mid-conversation system message must follow a user message and be the last message or be
 // followed by an assistant turn; user and assistant turns alternate (system messages aside: two
 // user messages in a row are refused, shared/error-codes.md); every tool_use is answered by a
 // tool_result in the next user message; block_binding needs its beta; fallbacks "default" needs
-// server-side-fallback-2026-07-01; display "updates" needs its beta.
+// server-side-fallback-2026-07-01; display "updates" needs its beta. System right after system is
+// refused here though the live service took it (T060): the helper only ever sends one.
 export function invalidRequest(body, betaHeader) {
   if (!body || typeof body !== "object") return null;
   const betas = new Set(String(betaHeader || "").split(",").map((b) => b.trim()).filter(Boolean));
@@ -154,6 +183,8 @@ export function invalidRequest(body, betaHeader) {
     const answered = new Set(next && next.m.role === "user" ? blocks(next.m).filter((b) => b && b.type === "tool_result").map((b) => b.tool_use_id) : []);
     for (const id of ids) if (!answered.has(id)) return `messages.${i}: tool_use ${id} has no tool_result in the next user message`;
   }
+  const toolProblem = invalidToolChange(body, msgs, betas);
+  if (toolProblem) return toolProblem;
   const t = body.thinking || {};
   if (t.block_binding && !betas.has(BETA.binding)) return "thinking.block_binding: Extra inputs are not permitted";
   if (t.block_binding && !["error", "drop_block"].includes(t.block_binding.prefix_mismatch_behavior)) return "thinking.block_binding.prefix_mismatch_behavior: bad value";
