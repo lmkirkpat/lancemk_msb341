@@ -5,10 +5,11 @@
 
 **Created**: 2026-10-20
 
-**Status**: Approved 2026-10-20. Plan and tasks come next. Home A is approved for now. Open
-questions 1, 3 and 5 are answered and folded in (FR-007, FR-012, FR-054, RQ-01, SC-013,
-Assumptions). Still open: questions 2 and 4, and the D and C questions. Amended 2026-10-30 from
-spec 013 (the option A runtime): FR-056 and the runtime assumption. Not re-approved.
+**Status**: Amended 2026-11-02 to match mockup revision 3 and the builder's decisions of that date;
+**awaits re-approval**. [plan.md](plan.md) and [tasks.md](tasks.md) are written and await the same
+approval; nothing is built from them until then. Earlier history: approved 2026-10-20 (Home A; open
+questions 1, 3 and 5 answered); amended 2026-10-30 from spec 013 (FR-056 and the runtime assumption).
+Step 0 (contrast and the 11 px floor) shipped in `5bed931`.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the spec for the UI overhaul:
 three tabs (Home, Lesson, Skills), Home option A (path-first) as recommended, the docked
@@ -17,13 +18,20 @@ lesson-in-progress rules, and every interface state in the README's state table.
 panel-needs list into requirements with IDs, and say which ones need a mentor change versus the
 panel alone."
 
-**The design this spec builds.** The UI designer's mockup, revision 2 (design-reviewed, then
-revised, 2026-10-20): [`product/mockups/ui-overhaul/README.md`](../../product/mockups/ui-overhaul/README.md)
-and [`index.html`](../../product/mockups/ui-overhaul/index.html). This spec links to it and turns
-it into requirements; it doesn't redraw or reword it. Where this spec says "the README", it means
-that file, and state ids (`home-return`, `diag-rest`, ...) are the ones in its rail and its
-"Every state" table. Where the spec needs something the mockup doesn't settle, it's a question
-for the designer (Open questions › D), not an edit.
+**Amendment input (2026-11-02)**: Cockpit task: amend to mockup revision 3 and the builder's nine
+decisions, check the mockup's claims against the code, then write the plan and tasks. What the code
+check found is in [research.md](research.md).
+
+**The design this spec builds.** The UI designer's mockup, revision 3 (2026-11-02):
+[`product/mockups/ui-overhaul/README.md`](../../product/mockups/ui-overhaul/README.md),
+[`index.html`](../../product/mockups/ui-overhaul/index.html) and
+[`copy-pass.html`](../../product/mockups/ui-overhaul/copy-pass.html). This spec links to it and turns
+it into requirements; it doesn't redraw or reword it. **The mockup's wording is the source for panel
+copy** (decision 7): where this spec quotes copy, a difference means the mockup wins and this spec is
+out of date. Where this spec says "the README", it means that file, and state ids (`home-return`,
+`lesson-picking`, ...) are the ones in its rail and its "Every state" table. Where the spec needs
+something the mockup doesn't settle, it's a question for the designer (Open questions › D), not an
+edit.
 
 ## Why this overhaul
 
@@ -37,8 +45,8 @@ for the designer (Open questions › D), not an edit.
   can't easily copy is:
   1. **Depth.** The checklist shows every keyframe pair (and, from spec 004, every key and setting)
      the lesson checks, docked next to the comp from the opening, from the check's own result.
-     A diagnosis finding says where, by layer, property and time. Adobe's assistant said it
-     couldn't read easing at all on 2026-10-08.
+     (A diagnosis finding that says where, by layer, property and time, is
+     held with spec 005.) Adobe's assistant said it couldn't read easing at all on 2026-10-08.
   2. **Memory.** Home shows what the mentor remembers, a remembered look is always dated and tied
      to its comp, and each skill keeps its history. Today memory is one line.
   3. **Practice.** Practice due and Warm up sit on Home and in Skills, so the review spec 004
@@ -47,11 +55,11 @@ for the designer (Open questions › D), not an edit.
   is what helped most in every panel session (`discovery/usage-notes/mentor-panel.md`, spec 003
   SC-008).
 - **Home is path-first (option A).** The mentor leads (`decisions/002`), Home opens instantly and
-  free from the local record, and it works before diagnosis or the curriculum ship. The
-  diagnosis card and an Up next that quotes a dated finding keep B's strength, "your comp is the
-  hook" (README › Home screen: two options, Recommendation). The open risk is that A reads like a
-  course menu. Home A is approved for now (2026-10-20); it gets evaluated, and possibly A/B tested
-  against Home B, once there are enough target-market testers (Open question 3, SC-013).
+  free from the local record, and it works before diagnosis ships. Home keeps one held slot directly
+  under Up next (`home-held-slot`), so both starts fit above the fold when spec 005 lands and no other
+  card moves. The open risk is that A reads like a course menu. Home A is approved for now
+  (2026-10-20); it gets evaluated, and possibly A/B tested against Home B, once there are enough
+  target-market testers (Open question 3, SC-013).
 - **The overhaul also clears debts from spec 003:** developer error copy ("Run `bash
   panel/install.sh`") for an installer audience, a silent fresh start after AE restarts, and
   three colour tokens that fail contrast (FR-074).
@@ -91,16 +99,29 @@ for the designer (Open questions › D), not an edit.
 None needs changing. Open question 1 was answered (a) plus (c), which doesn't change how a session
 that names a skill opens, so it needs no decision record.
 
+### The builder's decisions of 2026-11-02 (folded in below)
+
+| # | Decision | Where |
+|---|---|---|
+| 1 | Scope: all six built skills run live in the new panel. Diagnosis is out: `diag-*` held, RQ-03 to RQ-10 held, Home keeps a place for it. Home A stays. Setup screens wait on the installer and spec 006 Q2 | FR-006, FR-007, FR-031 to FR-047, Build order |
+| 2 | Proposed mark, cheap version: rows from the opening snapshot's targets; the mark drops at the first reply or first check. No focus-accepted signal. PN-10, PN-13 and PN-14 dropped for now. `lesson-focus-stale` stays visible | FR-015, FR-098 |
+| 3 | No checklist at the opening for key types, the pivot and null. Easing's opening shows all linear pairs | FR-015 |
+| 4 | Pick / Try / Done. The check button reads "Done, check it"; its request stays exactly "I'm done. Check my work." Up next with nothing stored reads "Find my next lesson" and spends one `/next-mentor` turn | FR-009, FR-014, FR-016, RQ-14, RQ-15 |
+| 5 | Short docks (560 px tall and under): one scrolling area at a time, swapped by the checklist's arrow; after a check the panel stays on the chat. Replaces FR-022's 30% cap | FR-022, FR-090 |
+| 6 | Stale list: the note, summary and results stay full; only row labels dim, keeping 4.5:1 | FR-017, FR-075 |
+| 7 | Plain copy; the mockup's wording is the source. One pass line. One short line per skill for Up next's reason | FR-021, FR-061, FR-063, FR-094 |
+| 8 | Offset's small timeline stays, with a real scale | FR-088 |
+| 9 | Spacing, the large toggle arrow, End lesson as a gray secondary button, and option A's error split | FR-056, FR-096 |
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Open Knack and know what to do next (Priority: P1)
 
 I open the Knack panel next to my comp. It opens on **Home** straight away, without waiting for
-the mentor. The top card says what to learn next and why, with the date and comp if the reason
-came from a look at my comp. Below it: a question from my last look if there is one, practice
-that's due, **What's wrong here?** with a box for what looks off, and what the mentor remembers.
-Three tabs across the top (Home, Lesson, Skills) and a mark that says whether After Effects is
-connected.
+the mentor. The top card is Up next: on my first run it names Easing with **Start lesson**; after that
+it reads "Your next lesson" with **Find my next lesson**, which asks the mentor to look at my history
+and this comp. Below it: practice that's due, and what the mentor remembers. Three tabs across the top
+(Home, Lesson, Skills) and a mark that says whether After Effects is connected.
 
 **Why this priority**: it's the frame every other story sits in, and option A's claim (the mentor
 leads, free and instant) is tested here. It works on today's mentor and record.
@@ -113,7 +134,7 @@ in every case, appears without a mentor turn, and the tabs work by keyboard.
 **Acceptance Scenarios**:
 
 1. **Given** no learner record, **When** I open the panel, **Then** Home shows `home-first`: Up
-   next is the path's starting skill, the diagnosis card, and "No lessons yet", with no error.
+   next is the path's starting skill with Start lesson, and "No lessons yet", with no error.
 2. **Given** a learner record with lessons, **When** I open the panel, **Then** Home shows
    `home-return`, and every date, skill, result and note on it matches the record.
 3. **Given** the record can't be read, **When** I open the panel, **Then** Home shows
@@ -130,12 +151,13 @@ in every case, appears without a mentor turn, and the tabs work by keyboard.
 
 ### User Story 2 - Take a lesson with the checklist beside me from the start (Priority: P1)
 
-I press **Start lesson**. The Lesson tab opens with the mentor's opening and, docked above the
-buttons, the checklist of what this lesson will check, each row marked **Proposed** until I say
-yes to the focus. When I ask **Show me**, the one change the mentor made sits in its own "Changed
-in your comp" box with how to undo it. Each **Check my work** fills the rows with what's eased,
-still off, or outside the lesson. When it passes, I see **Lesson passed** and **Saved to your
-history**, and two ways on.
+I press **Start lesson**. The Lesson tab opens with the mentor's opening. Where the skill's tool has
+targets at the opening (easing, speed graph, offset), the checklist docks above the buttons, each row
+marked **Proposed** until my first reply or check. Where the skill asks first (key types, the pivot,
+null), the slot says what fills it ("Your checklist starts once you pick the group."). When I ask
+**Show me**, the one change the mentor made sits in its own "Changed in your comp" box with how to undo
+it. Each **Done, check it** fills the rows from the check. When it passes, I see **Lesson passed.** and
+**Saved to your history**, and two ways on.
 
 **Why this priority**: the lesson is the product, and the checklist next to the comp helped most
 in every session. Moving it to the opening is the overhaul's main teaching-facing change.
@@ -147,31 +169,36 @@ terminal.
 
 **Acceptance Scenarios**:
 
-1. **Given** I press Start lesson, **When** the opening arrives, **Then** the checklist is docked
-   above the buttons with one row per proposed focus target, each marked **Proposed**
-   (`lesson-open`).
-2. **Given** the checklist says Proposed, **When** my next turn accepts the focus, **Then** the
-   rows stop saying Proposed; **When** the mentor changes the focus instead, **Then** the rows
-   change to the new focus.
-3. **Given** no demonstration yet, **When** I press Show me, **Then** the change appears in a
-   "Changed in your comp" box that says Edit > Undo reverses it, and the button becomes **Show me
-   again** (`lesson-demo`).
+1. **Given** I press Start lesson on a skill with opening targets, **When** the opening arrives,
+   **Then** the checklist is docked above the buttons with one row per target, each marked
+   **Proposed** (`lesson-open`). On a skill that asks first, **Then** no rows show and the slot says
+   what fills it (`skill-keytypes-open`, `skill-pivot-open`, `skill-null-open`).
+2. **Given** rows say Proposed, **When** I reply or check, **Then** the mark drops to "Not checked yet"
+   (`lesson-focus-replying`); **When** the mentor reads again in that turn, **Then** the rows change to
+   the new targets (`lesson-focused`); **When** it doesn't, **Then** the old rows stay, unmarked, and
+   say they come from the mentor's last look (`lesson-focus-stale`).
+3. **Given** the tool names a demo target and no demonstration yet, **When** I press Show me, **Then**
+   the change appears in a "Changed in your comp" box that says Edit > Undo reverses it, and the button
+   becomes **Show me again** (`lesson-demo`). With no demo target, Show me isn't there.
 4. **Given** a check that isn't a pass, **When** it returns, **Then** each row shows its state as a
    glyph and a word, Hint appears, and changes outside the focus are listed apart as "Outside this
    lesson · not counted" (`lesson-partial`, `lesson-outside`).
 5. **Given** a passing check, **When** the record is written, **Then** `lesson-passed` shows
-   **Saved to your history**; **When** the record write fails, **Then** "Saved" never shows.
-6. **Given** a panel 480 px tall, **When** the lesson runs, **Then** only the chat shrinks, the
-   checklist takes at most 30% of the height, and the buttons and Ask are never clipped.
+   **Saved to your history**; **When** the skill asks one more question first, **Then**
+   `lesson-passed-asking` shows the check passed and Ask stays; **When** the record write fails, **Then**
+   "Saved" never shows (`lesson-passed-unsaved`).
+6. **Given** a panel 560 px tall or under, **When** the lesson runs, **Then** one area scrolls at a
+   time: the checklist is its summary line with a toggle arrow, pressing it swaps the chat for the
+   rows, and after a check the panel stays on the chat. The buttons and Ask are never clipped.
 
 ---
 
 ### User Story 3 - One lesson at a time, and never lost without a word (Priority: P1)
 
-I can leave a lesson for Home and come back to it. While it's open, Knack won't start a second one
-or a diagnosis; it says those are "Available after your lesson". If I close the panel and reopen
-it, my lesson is waiting. If After Effects quit, Home tells me once that the lesson ended. If the
-mentor gets cut off, **Try again** never asks for a second demonstration.
+I can leave a lesson for Home and come back to it. While it's open, Knack won't start a second one;
+it says those are "Available after your lesson". If I close the panel and reopen it, my lesson is
+waiting. If After Effects quit, Home tells me once that the lesson ended. If the mentor gets cut off,
+**Try again** never asks for a second demonstration.
 
 **Why this priority**: three tabs make it easy to start something twice. The one-demonstration
 rule (spec 002 FR-006) and "nothing recorded for an unfinished lesson" (spec 003) must survive the
@@ -185,8 +212,8 @@ second demonstration, and each case shows the README state named for it.
 **Acceptance Scenarios**:
 
 1. **Given** a lesson is open, **When** I press ‹, **Then** Home shows **Lesson in progress** with
-   **Back to lesson** and **End lesson**, and Start lesson, Warm up, the question card and **Look
-   at my comp** read "Available after your lesson" (`home-lessonopen`).
+   **Back to lesson** and **End lesson** (a gray secondary button), and Find my next lesson, Start
+   lesson and Warm up read "Available after your lesson." (`home-lessonopen`).
 2. **Given** no lesson is open, **When** I choose the Lesson tab, **Then** it says why it's empty
    and offers **Go to Home** and **Pick a skill** (`lesson-none`). The tab is never disabled.
 3. **Given** I closed the panel mid-lesson in the same AE session, **When** I reopen it, **Then**
@@ -195,12 +222,15 @@ second demonstration, and each case shows the README state named for it.
 4. **Given** AE quit mid-lesson, **When** I next open the panel, **Then** Home shows a one-time,
    dismissible note that the lesson ended and wasn't saved (`home-aeclosed`).
 5. **Given** Show me was cut off after its change came back, **When** the panel offers a retry,
-   **Then** the button reads **Show me again**; **Given** it was cut off before any result,
-   **Then** the panel offers **Check my work** instead (`lesson-error-demo`).
+   **Then** the button reads **Show me again**; **Given** it was cut off before any result, **Then** the
+   panel offers **Done, check it** instead (`lesson-error-demo`). On option A only, if no demo call
+   started at all, Show me may be resent (FR-030).
 
 ---
 
-### User Story 4 - Ask "what's wrong here?" from Home and be led, not handed the fix (Priority: P1 with spec 005 US1 and US2)
+### User Story 4 - Ask "what's wrong here?" from Home and be led, not handed the fix (HELD with spec 005, decision 1)
+
+**Held, not this build.** Kept so the screens and requirements are ready when spec 005 has a plan.
 
 On Home I press **Look at my comp**, optionally saying what looks off. Knack reads my whole comp
 and shows a dated, scoped line, the mentor's short read, and at most three findings, one marked
@@ -246,26 +276,28 @@ builder checking each finding's where against After Effects.
 ### User Story 5 - See my progress across skills and keep it fresh (Priority: P2)
 
 The **Skills** tab lists every skill in the path with its state in a glyph and a word: learned,
-practice due, in progress, up next, not started, coming later. I pick one to see its history and
-start a **New lesson** or a **Warm up**. Home's **Practice due** card offers the warm-up that's due.
+practice due, in progress, not started, coming later. I pick one to see its history and start a **New
+lesson** or, when it has a review, a **Warm up**. Home's **Practice due** card offers the warm-up that's
+due.
 
 **Why this priority**: memory and practice are the harder-to-copy parts, and they only matter
 once a second skill and reviews exist (spec 004 waves A and C).
 
-**Independent Test**: on saved records in spec 004's states (nothing learned; easing learned;
-skill 2 practicing; skills 1 to 3 learned with a review due), the Skills tab and `skill-detail`
-match the record and the path data on every row.
+**Independent Test**: on saved records (nothing learned; easing learned with a due date; skill 2
+practicing; all six learned, two due), the Skills tab and `skill-detail` match the record and the path
+data on every row, and Easing never offers a Warm up.
 
 **Acceptance Scenarios**:
 
 1. **Given** the path data and a record, **When** I open Skills, **Then** every skill in the path
-   shows once, in path order, with its state, and skills not built yet say "coming later" and
-   can't be started (`skills-few`, `skills-many`).
+   shows once, in path order, with its state, and skills not built yet say "Coming later" and can't be
+   started (`skills-empty`, `skills-few`, `skills-many`).
 2. **Given** a skill, **When** I open it, **Then** `skill-detail` lists each lesson from the record
    read-only, and its back control says "Back to Skills".
-3. **Given** a review is due, **When** I open Home, **Then** Practice due names the skill and the
-   warm-up's expected length; **When** I press Warm up, **Then** a review starts, tagged as
-   practice, with rows Proposed (`practice`).
+3. **Given** a review is due on a skill with a review, **When** I open Home, **Then** Practice due names
+   the first such skill in path order and how many more are due; **When** I press Warm up, **Then** a
+   review starts, tagged from the tool's `mode` (`practice`); **When** the comp has nothing new for it,
+   **Then** `practice-nothing-new` says so and it stays due.
 4. **Given** a lesson just passed, **When** I go to Skills, **Then** that skill's state and history
    already show it, without reopening the panel.
 
@@ -273,27 +305,28 @@ match the record and the path data on every row.
 
 ### User Story 6 - Set up and recover in plain words (Priority: P2)
 
-The first time I open Knack after installing, it walks me through three steps: finding After
-Effects, signing in, and opening a comp. When something breaks, a banner says what's wrong and
-what to do, in words a designer understands, with no commands to type.
+When something breaks, a banner says what's wrong and what to do, in words a designer understands,
+with no commands to type. The first-run walk (finding After Effects, signing in, opening a comp) is
+**held** until the installer and spec 006 Q2.
 
 **Why this priority**: the installer audience isn't developers (spec 006). The error copy can
 change now. The sign-in step draws option A's access-key flow (`decisions/009`); the exact key
 source waits on spec 006 Q2.
 
-**Independent Test**: on a fresh learner home, open the panel and walk `setup-welcome` to
-`home-first`; then fault one thing at a time (no AE, mentor can't start, record unreadable, AE
-busy, install incomplete) and compare each banner with the README state.
+**Independent Test**: fault one thing at a time (no AE, mentor can't start, record unreadable, AE
+busy) and compare each banner with the README state. The option A kinds run from recorded event
+streams, since B1 can't produce them. The `setup-*` walk is tested when it's built.
 
 **Acceptance Scenarios**:
 
-1. **Given** the panel's first open after install, **When** it opens, **Then** `setup-welcome`
-   shows three steps and Get started, and each step shows its progress (`setup-checking`,
-   `setup-signin`, `setup-ready`).
-2. **Given** the install is incomplete, **When** the panel opens, **Then** `err-notsetup` offers
-   **Open the install instructions**, which opens them in the browser.
-3. **Given** the mentor can't start or I was signed out, **When** I try any action that needs it,
-   **Then** `err-mentor` shows, and Home's actions say "Needs the mentor."
+1. *(Held with spec 006.)* **Given** the panel's first open after install, **When** it opens, **Then**
+   `setup-welcome` shows three steps and Get started, and each step shows its progress
+   (`setup-checking`, `setup-signin`, `setup-ready`).
+2. *(Held with spec 006.)* **Given** the install is incomplete, **When** the panel opens, **Then**
+   `err-notsetup` offers **Open the install instructions**, which opens them in the browser.
+3. **Given** the mentor can't start, **When** I try any action that needs it, **Then** `err-mentor`
+   shows (`err-key` or `err-credit` on option A's kinds), and Home's actions say "Needs the mentor."
+   A passing kind shows as a notice in the lesson and leaves Home's actions alone.
 4. **Given** any error state, **When** I read it, **Then** it contains no file path, command, tool
    name, field name or error code.
 
@@ -302,7 +335,8 @@ busy, install incomplete) and compare each banner with the README state.
 ### User Story 7 - Every new button is evaluated (Priority: P1)
 
 Every fixed request a new button sends to the mentor has an eval case that sends exactly that
-request, and a test fails if the two drift apart. The easing evals still pass at baseline.
+request, and a test fails if the two drift apart. The eval sets that the build's mentor changes touch
+stay at their baselines.
 
 **Why this priority**: constitution III, and spec 003 FR-019's rule. A button is a new way of
 asking the mentor to behave; untested, it can break the teaching without anyone typing anything.
@@ -316,8 +350,9 @@ skill) without AE; get a pass or fail per case.
    sends text has at least one named eval case whose turn is that exact text.
 2. **Given** a request's wording changes, **When** its eval case doesn't, **Then** the sync test
    fails.
-3. **Given** the full easing set, **When** it runs after the overhaul's mentor changes, **Then** it
-   passes at 25/25 or within one case, with no hard-rule failure.
+3. **Given** any `SKILL.md` or tool behaviour change, **When** the build merges it, **Then** that skill's
+   set is re-run and stays within one case of its baseline with no hard-rule failure. This build plans
+   only one such change: `next-mentor` (FR-072).
 
 ---
 
@@ -325,16 +360,21 @@ skill) without AE; get a pass or fail per case.
 
 From the README's "States still missing" and the specs this one sits on.
 
-- **Two lessons, or a lesson and a look, at once.** Never: every start is replaced while a lesson
-  or a look is open (FR-024, FR-032).
+- **Two lessons at once.** Never: every start is replaced while a lesson is open (FR-024).
 - **A lesson also open in a terminal.** Not supported, as in spec 003; nothing the panel does may
   write the record.
-- **Up next is older than today.** The stored recommendation was made at the end of the last
-  session; a review may have come due since. Home shows both cards as stored; Start lesson sends
-  Up next's skill and the mentor's opening can change it, saying why (spec 004 FR-004 runs in the
-  mentor, not the panel).
-- **The recommended skill has nothing to focus on in this comp.** The mentor says so in the
-  opening (spec 004 Edge Cases); the checklist shows no rows, never placeholder rows.
+- **Up next names no skill.** With nothing stored there's nothing to go stale: the press reads the
+  record and comp live. The stored version is a later option (FR-093).
+- **The skill has nothing to focus on in this comp.** The mentor says so in the opening (spec 004 Edge
+  Cases); the checklist shows no rows, never placeholder rows.
+- **Find my next lesson finds nothing.** `recommend_next` returns no recommendation: the mentor's words
+  show, and **Yes, let's go** doesn't (FR-082).
+- **A new lesson on a comp where one was left open.** End lesson and Start fresh don't touch the mentor's
+  session, which keeps one lesson per skill and comp until it passes. The next lesson there picks up the
+  old lesson's start, and its demo stays spent. The panel shows what the tool returns (FR-092).
+- **The mentor records a lesson that didn't pass** (the learner stopped; `result: partial`). `saved: true`
+  arrives with no pass. No state is drawn for this (Open question D6); until then the panel shows
+  "Saved to your history." with the ways out, and no pass line.
 - **`record_lesson` failed after a passing check.** `lesson-passed` shows the pass but not "Saved
   to your history", and says the lesson couldn't be saved (PN-15).
 - **Huge comp.** The look still leads with at most 3; the status line keeps saying what's running
@@ -347,8 +387,8 @@ From the README's "States still missing" and the specs this one sits on.
   "not re-checked" until a new read (FR-047).
 - **The active comp isn't the last look's comp.** `diag-othercomp`: the remembered findings aren't
   shown, and the panel asks which comp you mean.
-- **Out of credit or rate-limited.** Shown as `err-mentor` with plain copy; the panel doesn't guess
-  the cause beyond what the runtime reports.
+- **Out of credit or rate-limited.** Option A's kinds; each has its own treatment (FR-056). B1 can't
+  report them.
 - **A second AE project open, Windows, AE's lighter brightness settings.** Not supported in this
   release (Out of scope); nothing may break, and the dark theme is used regardless.
 - **Track mattes** shown as "hidden, set aside" in Couldn't check. The reason text is data
@@ -356,8 +396,10 @@ From the README's "States still missing" and the specs this one sits on.
   panel change.
 - **A record from before this spec** (spec 002 version 1, easing only). Reads as it is; fields
   that don't exist yet leave their cards out, never show an error (FR-050).
-- **Narrow and short docks.** At 260 px wide and 480 px tall, every state wraps without
-  horizontal scrolling; only the chat shrinks.
+- **Narrow and short docks.** At 260 px wide and 480 px tall, every state wraps without horizontal
+  scrolling. At 560 px tall and under, one area scrolls at a time (FR-022).
+- **A skill's record has a due date but no review** (easing). No Warm up, no Practice due, and no "Warm-up
+  due" line at a pass (FR-021, FR-051).
 
 ## Requirements *(mandatory)*
 
@@ -374,75 +416,90 @@ From the README's "States still missing" and the specs this one sits on.
   stays open.", "Back to Skills", "Back to the top 3".
 - **FR-005**: Switching tabs MUST NOT end, restart or change a lesson or a look, or send anything
   to the mentor.
-- **FR-006**: The panel MUST implement every state in the README's "Every state" table by its id,
-  with the trigger and source given there, except the option B states (`homeB-first`,
-  `homeB-return`; Out of scope) and the states held until a dependency ships (Build order ›
-  States by dependency).
+- **FR-006**: The panel MUST implement every state in the README's "Every state" table by its id, with
+  the trigger and source given there, except the option B states (Out of scope), the review views
+  (`all-*`, `compare-*`, `cmp-*`, `home-held-slot`), `home-return-stored` (FR-093) and the states held
+  until a dependency ships (Build order › States by dependency).
 
 ### Home (option A, path-first)
 
-- **FR-007**: Home MUST show, in this order: **Up next** with its reason; **A question from your
-  last look** when there is an unanswered ask finding; **Practice due** when a review is due;
-  **What's wrong here?** with an optional **What looks off?** input; **What the mentor
-  remembers**. A card with no data is left out, not shown empty (except `home-first`'s "No lessons
-  yet"). Up next's **Start lesson** and the diagnosis card's **Look at my comp** MUST both be
-  above the fold at 260 × 480 px (Open question 3). The card order that does it is the UI
-  designer's revision (D5); until it lands, the order above stands.
+- **FR-007**: Home MUST show, in this order: **Up next** with its source (FR-009); the held slot's place
+  (nothing drawn this build); **Practice due** when a review is due; **What the mentor remembers**. A card
+  with no data is left out, not shown empty (except `home-first`'s "No lessons yet"). Up next's button
+  MUST be above the fold at 260 × 480 px. *(Amended 2026-11-02, revision 3 and decision 1: no diagnosis
+  or question card. Open question 3's "both starts above the fold" holds when spec 005 lands, in the
+  held slot.)*
 - **FR-008**: Home MUST be drawn from the learner record and the path data alone, with no mentor
   turn, so opening it costs nothing (README › Home, cost row). If the read takes more than 300 ms
   it MUST show `home-loading`.
-- **FR-009**: Up next MUST show the skill and reason the mentor stored (PN-09). When the reason
-  comes from a diagnosis it MUST be a style finding, shown with its date and comp and "not
-  re-checked" until a newer read. An ask finding MUST NOT be a reason until it's answered; until
-  then it's the question card.
-- **FR-010**: With no record, Up next MUST be the path data's starting skill (PN-16), not a skill
-  the panel picks.
+- **FR-009**: Up next has two sources in this build, each with no mentor turn to draw: no record: the
+  path's starting skill with **Start lesson**; a record: "Your next lesson", no skill named, with **Find
+  my next lesson** (RQ-15), one `/next-mentor` turn when pressed, opening `lesson-picking`. A stored
+  recommendation is a later option (FR-093).
+- **FR-010**: With no record, Up next MUST be the path data's starting skill (PN-16), not a skill the
+  panel picks.
 - **FR-011**: The panel MUST tell a missing record from an unreadable one. Unreadable MUST show
   `home-unreadable` and MUST NOT be treated as a first run (the 2026-10-12 agent audit's rule:
   unreadable is not empty). Today's `panel/lib/memory.js` returns the same thing for both, which
   this changes.
-- **FR-012**: **Start lesson** on Up next MUST send that skill's start request (RQ-01), which opens
-  the named skill's lesson as today, with no diagnosis opening. Diagnosis stays a separate press,
-  **Look at my comp** (Open question 1, answered (a); spec 005 FR-026).
-- **FR-013**: **Pick another skill** MUST go to the Skills tab.
+- **FR-012**: **Start lesson** MUST send that skill's start request (RQ-01), which opens the named
+  skill's lesson as today. No lesson opens with a diagnosis (Open question 1, answered (a)).
+- **FR-013**: **Pick a skill** MUST go to the Skills tab.
 
 ### Lesson
 
-- **FR-014**: The lesson header MUST show the lesson's title, skill and focus, and a practice tag
-  for a warm-up, from data (PN-13), plus the I do / We do / You do stage derived from tool results
-  as spec 003 FR-009 does.
-- **FR-015**: The checklist MUST be docked above the buttons from the lesson's opening, one row per
-  proposed focus target, each marked **Proposed** until the mentor's data says the focus was
-  accepted, then without the mark (PN-14). If the focus changes, the rows MUST change to the new
-  focus.
-- **FR-016**: After each check, the rows MUST come from that check's comparison result, not from
-  the mentor's wording, and agree with it every time (spec 003 FR-007 carried over), with each
-  state shown as a glyph and a word. Changes outside the focus MUST be listed apart as "Outside
-  this lesson · not counted".
-- **FR-017**: When After Effects can't be reached mid-lesson, the list MUST be marked stale (rows
-  dimmed to 70%, the note at full contrast), and Hint MUST pause with "Hint needs After Effects."
-  (`lesson-stale`). No check result is shown for that turn (spec 003 FR-015).
+- **FR-014**: The lesson header MUST show the skill's name and the focus, and a practice tag for a warm-up,
+  from which tool ran and its `focus` and `mode` (no new mentor data), plus a one-line **Pick · Try · Done**
+  strip, replacing I do / We do / You do. **Pick** is the start; **Try** begins at the first reply or
+  non-empty targets; **Done** is the check's own `passed`. A demo is an event, in its box and on its row,
+  never a step. All of it derives from tool results and sends, never the mentor's wording. *(Spec 003
+  FR-009's three stages don't carry over.)*
+- **FR-015**: The checklist MUST dock above the buttons. Rows at the opening come from the opening
+  snapshot's targets, each marked **Proposed**, with the header naming the source ("Based on the mentor's
+  last look at your comp."). The mark MUST drop at the learner's first reply or first check, whichever is
+  first. Whenever a snapshot returns new targets, the rows MUST change to them. With no targets at the
+  opening (key types, the pivot, null, by design) the slot MUST say what fills it, naming no candidate.
+  Easing's opening rows are all its linear pairs. There is no accept signal, so the panel MUST NOT claim
+  the focus was agreed.
+- **FR-016**: After each check, the rows MUST come from that check's result, not the mentor's wording, and
+  agree with it every time (spec 003 FR-007 carried over), with each state shown as a glyph and a word per
+  the README's per-skill table and [contracts/checklist-rows.md](contracts/checklist-rows.md). An unknown
+  code MUST read "Not checked yet", never a pass. The summary's "passed" and the Done step MUST come from the
+  tool's `passed`, never from counting ticks. Changes outside the focus MUST be listed apart as "Outside
+  this lesson · not counted". The button is labelled **Done, check it**; its request is unchanged (RQ-14).
+- **FR-017**: When After Effects can't be reached mid-lesson, on another comp (`lesson-othercomp`), or on an
+  ungraded null check, the list MUST be marked stale: the note, the summary and all pass and fail results
+  (glyph and word) stay at full contrast; only row labels dim, to a level that keeps 4.5:1 on the list's
+  own background. Detail lines and section heads don't dim. Hint MUST pause with "Hint needs After Effects."
+  (`lesson-stale`). No check result is shown for that turn (spec 003 FR-015). The same treatment covers
+  `lesson-continued` and `lesson-exited`. `panel/test/contrast.test.js`'s `todo` MUST be cleared.
 - **FR-018**: After the lesson's demonstration, the change MUST appear in its own "Changed in your
   comp" box built from the demonstration tool's result, saying Edit > Undo reverses it and naming
   no undo label (server rule 1). Frames shown are the ones the mentor rendered in that turn; the
   panel renders none itself.
-- **FR-019**: The demo button MUST read **Show me** before the demonstration and **Show me again**
-  after, and no control may ask for a second demonstration or for the mentor to do the rest (spec
+- **FR-019**: **Show me** MUST show only while the latest snapshot names a demo target (on null, also once
+  the check says the null is ready), and never in a review. It reads **Show me again** after the
+  demonstration, and no control may ask for a second demonstration or for the mentor to do the rest (spec
   003 FR-006 carried over).
 - **FR-020**: Hint MUST appear from the first check on (spec 003 FR-005).
-- **FR-021**: `lesson-passed` MUST show **Lesson passed** on a passing check, and **Saved to your
-  history** only when the record write succeeded in that turn (PN-15). Its two ways out are **Up
-  next: skill ›** and **See your skills**.
-- **FR-022**: The chat MUST be the only part of the Lesson tab that shrinks. At 480 px tall the
-  checklist MUST cap at 30% of the panel height, and the buttons and Ask MUST never be clipped.
+- **FR-021**: A check's pass and the save are separate moments. A passing check with no save yet MUST show
+  `lesson-passed-asking` ("Check passed.", Ask stays). `lesson-passed` MUST show **Lesson passed.**, the one
+  plain line for every skill (`practice-passed`: "Review passed."), and **Saved to your history** only when
+  `record_lesson` returned `saved: true` in that turn (PN-15), else `lesson-passed-unsaved`. A "Warm-up due"
+  line comes from the record's `review_due`, only on a skill with a review. Its two ways out are **What's
+  next ›** (to Home) and **See your skills**.
+- **FR-022**: The chat MUST be the only part of the Lesson tab that shrinks. At **560 px tall and under**,
+  one area scrolls at a time: the checklist is its one-line summary with a large toggle arrow and no text
+  label; pressing it swaps the chat for the rows, and pressing again swaps back; after a check the panel
+  stays on the chat. Taller docks keep the chat and checklist together. The buttons and Ask MUST never be
+  clipped. *(Amended 2026-11-02, decision 5; replaces the 30% cap.)*
 
 ### Lesson in progress
 
 - **FR-023**: Only one lesson may be open at a time, in the whole panel.
-- **FR-024**: While a lesson is open, Home MUST show **Lesson in progress** with **Back to
-  lesson** and **End lesson**, and MUST replace Start lesson, Warm up, the question card's answers,
-  **Look at my comp** and Skills' New lesson and Warm up with "Available after your lesson"
-  (`home-lessonopen`).
+- **FR-024**: While a lesson is open, Home MUST show **Lesson in progress** with **Back to lesson** and **End
+  lesson** (gray secondary), and MUST replace Find my next lesson, Start lesson, Warm up and Skills' New
+  lesson and Warm up with "Available after your lesson." (`home-lessonopen`).
 - **FR-025**: **End lesson** MUST close the lesson and return to Home. Whether ending an unfinished
   lesson records anything is Open question 2; until it's answered, nothing is recorded (spec 003
   edge case), and the panel says so in one line before ending.
@@ -454,14 +511,18 @@ From the README's "States still missing" and the specs this one sits on.
   record untouched.
 - **FR-028**: If AE quit during a lesson, the next open MUST show `home-aeclosed` once, dismissible,
   and the lesson is gone (spec 003: continuing works only within one AE session).
-- **FR-029**: When a turn is cut off (timeout, exit, dropped stream), the panel MUST show
-  `lesson-error` with the partial reply marked "cut off" and **Try again**, which resends the last
-  request unchanged.
-- **FR-030**: If the cut-off turn was **Show me** and its change result had arrived, the retry
-  MUST be **Show me again**. If no result had arrived, the panel MUST offer **Check my work**
-  instead, so a retry can never ask for a second demonstration (`lesson-error-demo`).
+- **FR-029**: When a turn is cut off without the process ending (timeout, or a turn that ends not ok), the
+  panel MUST show `lesson-error` with the partial reply marked "cut off" and **Try again**, which resends the
+  last request unchanged. On B1 a timeout leaves the old process running, so Try again MUST stop it and resume
+  the session before resending (FR-097). `process_exited` isn't this state: it ends the lesson (FR-056).
+- **FR-030**: If the cut-off turn was **Show me** and its change result had arrived, the retry MUST be **Show me
+  again**. If no result had arrived, the panel MUST offer **Done, check it** instead, so a retry can never ask
+  for a second demonstration (`lesson-error-demo`). **Third case, option A only:** if no demo call started,
+  Show me may be resent, because A's `tool_call` is sent only for calls that will run. **B1 can't tell the same**
+  ([research.md](research.md) R5), so on B1 no result always means the check. The tools' `DEMO_USED` refusal
+  remains the backstop on both.
 
-### Diagnosis screens (spec 005)
+### Diagnosis screens (spec 005) (HELD: FR-031 to FR-045 and FR-047 aren't this build, decision 1)
 
 - **FR-031**: **Look at my comp** on Home MUST send the look request, without (RQ-03) or with
   (RQ-04) the symptom typed in **What looks off?**.
@@ -508,49 +569,57 @@ From the README's "States still missing" and the specs this one sits on.
   any other tool ran, or the panel can't tell, the line MUST be left out (fail closed).
 - **FR-045**: The diagnosis screens MUST offer no control that asks the mentor to fix a finding,
   fix everything, or do the rest (spec 005 FR-011, FR-015).
-- **FR-046**: **Ask the mentor** MUST be available on the Lesson tab and on diagnosis screens,
-  below the buttons (spec 003 FR-008). Whether it's also on Home is Open question D2.
+- **FR-046**: **Ask the mentor** MUST be available on the Lesson tab below the buttons (spec 003 FR-008),
+  including `lesson-picking` and `lesson-passed-asking`, and not on Home or Skills (D2, settled).
 
 ### Skills, memory and practice
 
 - **FR-047**: A remembered diagnosis shown anywhere (Up next's reason, the question card,
   `diag-again`) MUST carry its date, its comp and "not re-checked" until the mentor reads that comp
   again.
-- **FR-048**: The Skills tab MUST list every skill in the path data once, in path order, with its
-  state as a glyph and a word: learned ✓, practice due ↻, in progress ◐, up next ▸, not started ○,
-  coming later (not built). "Getting rusty ◔" is shown only once the curriculum defines it (Open
-  questions › C1).
-- **FR-049**: `skill-detail` MUST list the skill's lessons from the record, read-only, with **New
-  lesson** (RQ-02) and, when the skill is learned, **Warm up** (RQ-11).
-- **FR-050**: **What the mentor remembers** MUST show the record's recent lessons with their date,
-  skill, result and the learner-facing next note (PN-10). Missing fields from an older record MUST
-  leave that part out, never show an error or an internal note.
-- **FR-051**: **Practice due** MUST show when the record says a review is due on or before today,
-  with the skill and the warm-up's expected length (PN-11). The panel MUST compare the stored due
-  date with today and nothing more; it MUST NOT compute a schedule.
-- **FR-052**: A warm-up MUST open as `practice`: the practice tag, rows Proposed, the same
-  checklist rules as a lesson.
+- **FR-048**: The Skills tab MUST list every skill in the path data once, in path order, in one list with no
+  groups, counted over built skills, with its state as a glyph and a word: learned ✓, practice due ↻, in
+  progress ◐, not started ○, coming later · (not built, not pressable). The on-ramp reads "We assume you know
+  this". Up next ▸ shows only with a source, so not in this build. Getting rusty isn't drawn.
+- **FR-049**: `skill-detail` MUST list the skill's lessons from the record, read-only, with **New lesson**
+  (RQ-02) and, on a learned skill **with a review**, **Warm up** (RQ-11). `skill-detail-new` says what it builds
+  on from the path's hard prerequisites and never blocks.
+- **FR-050**: **What the mentor remembers** MUST show the record's recent lessons with their date, skill, result
+  and the `next` note as written (PN-10 dropped: since the pacing rules it's written plainly; a real one that
+  reads badly is the case for bringing PN-10 back). Missing fields from an older record MUST leave that part
+  out, never show an error or an internal note.
+- **FR-051**: **Practice due** MUST show when the record's `review_due` is today or earlier on a learned skill
+  with a review: one card, the first in path order, with a count of the rest in Skills, and no expected length.
+  The panel MUST compare the stored date with today and nothing more; it MUST NOT compute a schedule. Easing
+  never shows it, whatever its record's date says.
+- **FR-052**: A warm-up MUST open as `practice`: tagged from the tool's `mode`, no Show me in any state, Hint after
+  the first check, the same rows as a lesson, Proposed where the tool has targets. `no_new_target` MUST show
+  `practice-nothing-new`.
 - **FR-053**: Home, Skills and `skill-detail` MUST update when a lesson or look is recorded,
   without reopening the panel (spec 003 FR-011 carried over).
 
 ### Setup and errors
 
-- **FR-054**: On the first open after install, the panel MUST walk `setup-welcome`,
-  `setup-checking`, `setup-signin` and `setup-ready` to `home-first`. `setup-signin` draws option
-  A's access-key flow (`decisions/009`, Open question 5): the key is entered once and checked
-  before setup finishes. Where the key comes from waits on spec 006 Q2. Everything else uses the
-  panel's own checks.
-- **FR-055**: An incomplete install MUST show `err-notsetup` with **Open the install
-  instructions**, which opens them in the browser.
-- **FR-056**: When the mentor can't start, exits, or isn't signed in, the panel MUST show
-  `err-mentor`, and actions that need the mentor MUST say "Needs the mentor."
-  *(Amended 2026-10-30, spec 013 FR-027:* option A adds causes B1 never had: `out_of_credit`,
-  `rate_limited`, `service_busy`, `offline` and `refused`, alongside `not_signed_in`, `timeout` and
-  `start_failed`. Each needs either its own wording inside `err-mentor` or its own state; which, and
-  the copy, is the UI designer's call. Until then the CEP panel uses the interim wording in
-  `specs/013-api-runtime/contracts/helper-protocol.md` › Error kinds. `rate_limited`,
-  `service_busy`, `offline` and `refused` are passing: the lesson continues on the next try, so they
-  probably shouldn't replace Home's actions the way a missing key does.)
+- **FR-054**: *(Held until the installer and spec 006 Q2; this spec doesn't try to resolve Q2.)* On the first
+  open after install, the panel MUST walk `setup-welcome`, `setup-checking`, `setup-signin` and `setup-ready` to
+  `home-first`. `setup-signin` draws option A's access-key flow (`decisions/009`); the mockup still draws a
+  browser sign-in, and stays so until Q2.
+- **FR-055**: *(Held with FR-054.)* An incomplete install MUST show `err-notsetup` with **Open the install
+  instructions**. Until then the panel's existing not-set-up message stays, for the builder only, and is the one
+  named exception to FR-058's scan.
+- **FR-056**: Errors MUST follow the README's option A table, by kind, in the mockup's final wording:
+  - **Blocking** (Home's actions say "Needs the mentor."): `start_failed` → `err-mentor`; `not_signed_in` →
+    `err-key`; `out_of_credit` → `err-credit`.
+  - **Passing** (a notice in the lesson; the list isn't dimmed; Home's actions are left alone): `rate_limited`
+    → `lesson-pass-rate`; `service_busy` → `lesson-pass-busy`; `offline` → `lesson-pass-offline`; `refused` →
+    `lesson-pass-refused` with no Try again. On a lesson's first turn, any of them → `lesson-start-failed`.
+  - `timeout` → wording in `lesson-error`.
+  - `process_exited` → `lesson-exited`: the lesson is over and nothing was saved.
+  - **On B1** only `start_failed`, `not_signed_in`, `timeout` and `process_exited` occur. `not_signed_in` there
+    means Claude Code's sign-in, not an access key, so B1 shows `err-mentor` and logs the detail. The other kinds
+    are tested from recorded streams.
+  - **Check setup** has no screen until spec 006, so this build draws no Check setup button (Open question D9).
+  This replaces `panel/lib/errors-a.js`'s interim wording (spec 013's contract expects it).
 - **FR-057**: When After Effects is unreachable or busy, Home MUST show `home-unreachable` (red,
   AE actions replaced by "Needs After Effects.") or `home-busy` (amber).
 - **FR-058**: Errors, banners and status lines MUST NOT contain a file path, a command, a tool name, a
@@ -563,13 +632,14 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-060**: Every button that sends something MUST show it was pressed (spinner and a verb),
   pause every other action, and show a status line, until the turn ends (spec 003 FR-012 carried
   over: no duplicate requests).
-- **FR-061**: A paused or replaced action MUST say why in words ("Hint needs After Effects.",
-  "Available after your lesson.", "Buttons wake up when the mentor has looked.").
-- **FR-062**: Status lines MUST come from which mentor tool is running, as `panel/lib/activity.js`
-  does, extended to every new tool (diagnosis, each skill's demo and reads). A line MUST claim
-  only what its tool does.
-- **FR-063**: Product copy MUST follow CLAUDE.md "Voice" (README › Copy). Errors stay plain and
-  say what to do. The mentor's words are the skill's and aren't panel copy.
+- **FR-061**: A paused or replaced action MUST say why in words ("Hint needs After Effects.", "Available after
+  your lesson.", "Buttons turn on after the mentor looks at your comp.").
+- **FR-062**: Status lines MUST come from which mentor tool is running, as `panel/lib/activity.js` does, extended
+  to every tool in all six skills and next-mentor. A line MUST claim only what its tool does. A test MUST fail
+  if a tool in any `*-mentor` skill's `allowed-tools` has no line.
+- **FR-063**: Product copy MUST be the mockup's wording (`index.html`, with `copy-pass.html` keeping the before
+  and after), plain, with a little natural voice. Errors say what to do. The mentor's words are the skill's and
+  aren't panel copy.
 - **FR-064**: The panel MUST NOT show internal field names, record or catalogue ids, tool names or
   raw data (spec 003 FR-017 carried over).
 
@@ -592,38 +662,37 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-069**: Every fixed request the panel sends MUST be written once, in one place, as spec
   003's `panel/lib/requests.js` is. A request MAY have parameters (a skill, a finding, a layer, a
   symptom, an answer); its fixed wording around them is the request.
-- **FR-070**: Every request in the table below that sends text MUST have at least one eval case
-  that sends it, written by the eval engineer in the eval set named, scored on that set's teaching
-  rubric (spec 003 FR-019's rule).
+- **FR-070**: Every request in the table below that sends text and isn't held MUST have at least one eval case
+  that sends it, written by the eval engineer in the eval set named, scored on that set's teaching rubric (spec
+  003 FR-019's rule). Exact text per skill: [contracts/button-requests.md](contracts/button-requests.md).
 
   | ID | Request (button) | Sends text? | Eval set | Notes |
   |---|---|---|---|---|
-  | RQ-01 | Start lesson (Up next's skill) | Yes | each built skill's set | Replaces `/ease-mentor`; opens the named skill, no diagnosis opening (Open question 1) |
-  | RQ-02 | New lesson (a skill picked in Skills) | Yes, RQ-01's template | each built skill's set | One case where the picked skill isn't Up next |
-  | RQ-03 | Look at my comp | Yes | diagnosis | |
-  | RQ-04 | Look at my comp, with a symptom | Yes | diagnosis | Cases for a match and a miss |
-  | RQ-05 | Learn: skill › (from a finding) | Yes | diagnosis | Hands over with the finding's layer as focus (spec 005 FR-012) |
-  | RQ-06 | Get hints | Yes | diagnosis | |
-  | RQ-07 | Done, check it | Yes | diagnosis | Fixture: an after-fix snapshot (spec 005 FR-014) |
-  | RQ-08 | That's on purpose | Yes | diagnosis | |
-  | RQ-09 | An answer to an ask finding | Yes | diagnosis | One case per answer kind: intended, not intended, not sure |
-  | RQ-10 | Look at this comp instead | Yes | diagnosis | |
-  | RQ-11 | Warm up | Yes | each built skill's set | A spec 004 review: no demo, no walkthrough |
-  | RQ-12 | Continue lesson | Yes (exists) | easing | Add a case if it has none today |
-  | RQ-13 | Try again | Resends the last request | easing | Two cases: Show me again after a cut-off demo that landed; Check my work after a cut-off demo with no result |
-  | RQ-14 | Check my work, Hint, Show me, Show me again | Yes (exist) | easing | Cases 17 to 20, unchanged |
-  | — | Start fresh, End lesson, Stop looking, See the other N, tabs, back | No | — | Panel tests (FR-073), not evals |
+  | RQ-01 | Start lesson (`home-first`, `lesson-exited`) | Yes, `/ease-mentor` or the lesson's own command | each built skill's set | Cases already exist with the bare command |
+  | RQ-02 | New lesson (a skill picked in Skills) | Yes: `/<skill>-mentor lesson`; easing `/ease-mentor` | the five sets with reviews | Must ask for a lesson, or the tool may choose a due review. One case each on a due record |
+  | RQ-03 to RQ-10 | Diagnosis requests | **Held with spec 005** | diagnosis | Kept as written on 2026-10-20 in git history; come back with spec 005's plan |
+  | RQ-11 | Warm up | Yes: `/<skill>-mentor review` | five sets | Key types, speed graph and offset have this exact turn; the pivot and null need a case. Never easing |
+  | RQ-12 | Continue lesson | Yes (exists) | all six | No set has a case today; one each |
+  | RQ-13 | Try again | Resends the last request | easing | Two cases: Show me again after a cut-off demo that landed; the check after a cut-off demo with no result |
+  | RQ-14 | Done, check it; Hint; Show me; Show me again | Yes. Text unchanged, except Show me again on the five new skills, whose wording can't say "pair" or "eased" | all six | Easing's cases 17 to 20 are unchanged. None of the other five sets has these turns; one each |
+  | RQ-15 | Find my next lesson | Yes: `/next-mentor` | next-mentor (new set) | No such set exists today |
+  | RQ-16 | Yes, let's go | Yes | next-mentor (new set) | Hand-over to each of the six |
+  | — | Start fresh, End lesson, Pick a skill, tabs, back, fold, Flip, the checklist's arrow | No | — | Panel tests (FR-073), not evals |
 
-- **FR-071**: The panel's requests-eval-sync test (spec 003, `panel/test/requests-eval-sync.test.js`)
-  MUST be kept and widened: for each request that sends text, it checks that the named case's turn
-  is that exact request (with the case's parameters filled in), and that every turn of a button
-  case is a panel request. A change to a request without its case fails the test. Case numbers and
-  files are the eval engineer's; the test only names them.
-- **FR-072**: The easing eval set MUST pass at 25/25 or within one case, with no hard-rule failure,
-  after the overhaul's mentor changes (PN-10, PN-13, PN-14). Diagnosis and skill sets meet their
-  own specs' targets.
-- **FR-073**: Actions that send no text (the last row above) MUST each have a panel test. Stop
-  looking and End lesson MUST also have a test that the learner record is unchanged afterwards.
+
+- **FR-071**: The panel's requests-eval-sync test (`panel/test/requests-eval-sync.test.js`) MUST be kept and
+  widened: for each request that sends text and isn't held, on each skill, it names a case and checks that the
+  named turn is that exact request. A change to a request without its case fails the test. *(Amended 2026-11-02:*
+  easing's cases keep "every turn is a panel request"; on key types, the pivot and null a case has to answer
+  in typed words before any button can apply, because those skills ask first, so there the rule is the named
+  turn only.) Case numbers and files are the eval engineer's; the test only names them.
+- **FR-072**: This build's only `SKILL.md` or tool behaviour change is `next-mentor`'s hand-over table (PN-17), so
+  **no existing set needs a full re-run** because of the panel: new cases run with `--only`. If a new case fails
+  and is fixed with a `SKILL.md` change, that skill's whole set is re-run and MUST stay within one case of its
+  baseline (easing 27/28, key types 29/30, speed graph 29/29, offset 33/37, pivot 48/50, null 42/44, on
+  2026-10-29) with no hard-rule failure.
+- **FR-073**: Actions that send no text (the last row above) MUST each have a panel test. End lesson and Start
+  fresh MUST also have a test that the learner record is unchanged afterwards.
 
 ### Accessibility (README › Accessibility)
 
@@ -631,10 +700,9 @@ From the README's "States still missing" and the specs this one sits on.
   today's tokens fail and MUST change: muted `#8a8a8a` → `#9a9a9a` (4.10:1 → 5.03:1 on raised
   cards); red `#e5534b` → `#ff7b72` (4.24:1 → 6.23:1); and the filled primary button's background
   → `#1473e6` (white text 3.46:1 on today's `#2d8ceb` → 4.54:1).
-- **FR-075**: A state MUST NOT rely on colour alone: each has a glyph and a word; practice due and
-  getting rusty differ in glyph; ask findings have a dashed border and "? Question"; the connection
-  mark changes shape. Pushed-back cards are dashed, not faded, and keep full contrast; only stale
-  rows dim, their note doesn't.
+- **FR-075**: A state MUST NOT rely on colour alone: each has a glyph and a word; ask rows have "?"; the connection
+  mark changes shape. Pushed-back cards are dashed, not faded, and keep full contrast. Stale lists follow FR-017:
+  only row labels dim. Offset's timeline is hidden from screen readers, and its detail line says the same.
 - **FR-076**: Body text MUST be 12 px, and text MUST NOT be under 11 px anywhere. (Today's section headings,
   `h2` in `panel/panel.css`, are 10 px.)
 - **FR-077**: The tabs MUST be a real tablist (`role="tab"`, `aria-selected`, `aria-controls`, a
@@ -646,13 +714,58 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-081**: At 260 px wide (the minimum) and 480 px tall, a state MUST NOT scroll sideways, and
   long text MUST wrap.
 
+### Added 2026-11-02 (mockup revision 3)
+
+- **FR-082**: `lesson-picking`: Find my next lesson MUST open the Lesson tab with the mentor's one suggestion, no
+  strip and no checklist. **Yes, let's go** (RQ-16) MUST show only when that turn's `recommend_next` returned a
+  recommendation. **Pick a skill** MUST end the picking process, with nothing recorded. On hand-over, the lesson's
+  skill comes from the next tool that runs.
+- **FR-085**: Following the lesson, all panel-only, per README › Following the lesson: older turns fold ("Earlier in
+  this lesson (3)"); done rows fold at short docks; "Next: …" under the summary is the first open row in the tool's
+  order, never re-ranked; "1 more since your last check" and a bar on changed rows come from comparing two results;
+  frames are small at short docks and full size on press; **Flip** moves between a turn's frames, manually. Each is
+  a real button or `details`.
+- **FR-086**: Each skill's rows MUST follow the one pattern (glyph, subject, word, optional detail; optional sections,
+  footer, Outside, Worth a look), mapped from its check tool per [contracts/checklist-rows.md](contracts/checklist-rows.md).
+  Speed graph's `fastest` MUST NOT show. The pivot and null's `other_changes` kinds get panel words.
+- **FR-087**: The panel MUST run all six skills and next-mentor on B1: its allowlist MUST cover each skill's
+  `allowed-tools`, and next-mentor's run MUST also allow the hand-over. A test MUST compare the list with the
+  `SKILL.md` files. Option A's helper already reads each skill's list itself, so this is B1's gap alone; the status
+  lines (FR-062) are a gap on both.
+- **FR-088**: Offset's small timeline MUST place rows on one shared scale per lesson, taken from the tool's results as
+  [plan.md](plan.md) P5 defines. It's a ruler with the first key as a diamond, never a meter.
+- **FR-090**: Panel CSS and scripts MUST use only what AE 26.5's CEP browser runs (CEF 99, Chromium 99): no `:has`, no
+  container queries. The short-dock rule uses a height media query and a class set by script (plan.md P4). An
+  automated scan MUST fail on anything newer.
+- **FR-091**: The connection mark and `home-unreachable` / `home-busy` MUST come from the bridge's `/health` alone, polled
+  (plan.md P6): an answer is connected, nothing listening is not connected, no answer within 2 s is busy; a tool's
+  `AE_BUSY` or `AE_UNREACHABLE` also sets it. It carries no project data (FR-066).
+- **FR-092**: End lesson and Start fresh MUST NOT claim the next lesson starts over. They end the panel's lesson and
+  record nothing. If the next snapshot says the lesson is `continued` or `resumed`, the panel shows what it returns:
+  its targets, with Show me only if it names a demo target (Open question 6).
+- **FR-093**: **Later option, not this build:** a stored recommendation (`home-return-stored`). The mockup's simplest
+  design: `record_lesson`'s handler also calls `recommend()` with no snapshot and writes `{ skill, skill_name, reason, at }`
+  to the record. It's server code with unit tests and no prompt change. It adds a field to what `read_learner_record`
+  returns, so re-run easing and next-mentor if it's built.
+- **FR-094**: The per-skill reason lines from the README (for example, offset: "Stop everything moving at once.") MUST be
+  kept in the panel's copy, ready for FR-093. Easing's line in this build is `home-first`'s. They name no layer and make no
+  claim about the comp.
+- **FR-095**: `home-unreadable` MUST also show when `learner.json` is gone and a `learner.json.unreadable-*` file sits beside
+  it, because the mentor moves a broken file aside on its first read; that is not a first run. Validity MUST match the
+  mentor's: an object with a `skills` object and a `lessons` array.
+- **FR-096**: Spacing (12 px side margins and the looser gaps), the one large bright toggle arrow (checklist and "Earlier in
+  this lesson") and End lesson's gray secondary button MUST match the mockup.
+- **FR-097**: The panel MUST run on B1 throughout this build and MUST NOT depend on spec 013's unfinished work (T060,
+  T043, T044). Option A's kinds are mapped and tested from recorded streams only.
+- **FR-098**: `lesson-focus-stale` MUST be shown honestly, not hidden: when a reply gets no re-read, the old rows stay,
+  unmarked, saying "Based on the mentor's last look" and "Updates at your next check." The live lessons MUST log how
+  often it happens (SC-014).
+
 ## What the panel needs from the mentor
 
-The README's 15 items (› What the panel needs from the mentor), each as a requirement, plus one
-the mockup implies (PN-16). The panel only displays, so each must arrive as data. **Change**
-says what has to change for the panel to get it; **Built under** says which spec's plan builds the
-producing side. Items built under specs 004 and 005 are this spec's requirements on those specs'
-tool and record shapes; the cockpit should pass them on, since this spec can't edit theirs.
+Revision 3 needs far less than revision 2 did. **Two mentor changes in this build: PN-16's data file and PN-17's table
+rows.** PN-01 to PN-08, PN-09 and PN-12 are held; PN-10, PN-13 and PN-14 are dropped for now. Items built under other
+specs are this spec's requirements on those specs' shapes; the cockpit should pass them on.
 
 **Diagnosis result** (one structured result per look, as `diff_since_last` is today):
 
@@ -675,111 +788,81 @@ tool and record shapes; the cockpit should pass them on, since this spec can't e
 
 **Learner record** (read by the panel; written only by the mentor):
 
-- **PN-09**: Up next: the skill, its reason, and when the reason is a finding, the finding, its
-  date and its comp. Today the record has only a free-text `next` note.
-- **PN-10**: A learner-facing next note per skill. Today's `next` is written for the mentor ("check
-  key selection before F9").
-- **PN-11**: Per skill, when its next review is due, and per skill the warm-up's expected length
-  ("about 2 min").
+- **PN-09**: *(Later, FR-093.)* Up next: the skill, its reason, and when it was suggested. Today the record has only a
+  free-text `next` note.
+- **PN-10**: *(Dropped for now, decision 2 and README.)* `next` is shown as it is (FR-050).
+- **PN-11**: Per skill, when its next review is due: `review_due`, already there. *(Amended: no expected length.)*
 - **PN-12**: Unanswered ask findings from the last look on each comp, for the question card.
 
 **Lesson** (from tool results in the turn stream):
 
-- **PN-13**: The lesson's title, skill and focus, and whether it's a lesson or a warm-up.
-- **PN-14**: The proposed focus rows at the opening, and a signal when the focus is accepted or
-  changed.
+- **PN-13**: *(Dropped for now.)* Title and focus come from tool names and results; the mode from `mode`.
+- **PN-14**: *(Dropped for now, decision 2.)* No accept signal. Opening rows come from existing `targets`.
 - **PN-15**: Whether `record_lesson` saved. Its result already says `saved: true` on success; the
   panel MUST treat anything else, including no result, as not saved.
 
 **Path data**:
 
-- **PN-16**: The path's skills in order, each with its learner-facing name, whether it's built,
-  and which is the starting skill for a learner with no record, readable by the panel from the one
-  place spec 004 FR-001 keeps it. It replaces the fixed list in `panel/lib/path.js`.
+- **PN-16**: The path's skills in order with their names, from `mentor/curriculum/path.json` (exists), plus which skills
+  are built and which have a review, from a **new small generated data file** (`mentor/curriculum/skills-built.json`,
+  written from the tool files' `SKILLS` and `FINDERS`, with a test that fails if it's out of date). Skill-builder owns it;
+  the panel only reads it. The starting skill is position 0. It replaces the fixed list in `panel/lib/path.js`.
+
+**Skill hand-over**:
+
+- **PN-17**: `next-mentor/SKILL.md`'s hand-over table MUST list all six skills. It omits Set the pivot and Move a group with a
+  null, though `recommend_next` does suggest them (checked by running it: [research.md](research.md) R2).
 
 **Who changes what**:
 
-| Item | Panel alone? | Mentor change | Built under | Needs an eval case? |
+| Item | Status | Change | Built under | Eval cost |
 |---|---|---|---|---|
-| PN-01 | No | Tools (diagnosis result shape); catalogue data (titles, answers) | Spec 005 | Covered by RQ-03 to RQ-09 |
-| PN-02 | **Yes**, given PN-01 | — | This spec | No |
-| PN-03 | No | Tools | Spec 005 | No (data only) |
-| PN-04 | No | Tools | Spec 005 (FR-004) | Covered by spec 005's cases |
-| PN-05 | No | Tools; catalogue data | Spec 005 | Covered by RQ-06 |
-| PN-06 | No | Tools (symptom in, match flag out) | Spec 005 (FR-008) | Covered by RQ-04 |
-| PN-07 | No | Tools (re-check) | Spec 005 (FR-014) | Covered by RQ-07 |
-| PN-08 | No | Tools and learner record (diagnosis record) | Spec 005 (FR-017, FR-019) | Spec 005 case 11 |
-| PN-09 | No | Learner record and skill (store the recommendation at each session's end) | Spec 004 (FR-004) with spec 005 (FR-020) | **Yes**: a case that the stored Up next and reason match the record |
-| PN-10 | No | Learner record (new field), skill (writes it) | This spec | **Yes**: the note is learner-facing, plain, and holds no method or motive |
-| PN-11 | No | Learner record (spec 004 FR-018 has the due date); path data (warm-up length) | Spec 004 | No (data only) |
-| PN-12 | No | Learner record (ask findings' answered state) | Spec 005 (FR-017) | Covered by RQ-09 |
-| PN-13 | No | Tools (opening result) | This spec, then every skill spec | **Yes**: easing opening case checks the result |
-| PN-14 | No | Tools and skill (declare and accept the focus) | This spec, then every skill spec | **Yes**: opening, accepted, and changed focus |
-| PN-15 | **Yes** | — (existing result) | This spec | No; a panel test with a failure fixture |
-| PN-16 | No | Path data readable by the panel, with the built flag and starting skill | Spec 004 (FR-001, FR-003) | No |
-| Status lines | **Yes** | — (tool names from specs 004, 005) | This spec | No |
-| "Looked only" | **Yes** | — (FR-044's read-only list) | This spec | No |
-
-Three items (PN-10, PN-13, PN-14) need the easing skill, its tools or the record to change under
-this spec; they're the only mentor changes this spec builds itself. Each later skill spec carries
-PN-13 and PN-14 for its own lesson.
+| PN-01 to PN-08, PN-12 | Held | Diagnosis tools and record | Spec 005 | Spec 005's |
+| PN-09 | Later | `record_lesson`'s handler | Later decision | Easing and next-mentor re-run if built |
+| PN-10, PN-13, PN-14 | Dropped for now | None | — | None |
+| PN-11 | Panel alone | None: `review_due` exists | This spec | None |
+| PN-15 | Panel alone | None: `saved: true` exists | This spec | None; a panel test with a failure fixture |
+| PN-16 | **Mentor (new files only)** | Generated data file, generator, test | This spec, skill-builder | None |
+| PN-17 | **Mentor (one `SKILL.md`)** | Two table rows | This spec, skill-builder | next-mentor's new set, which doesn't exist yet (RQ-15, RQ-16) |
+| Status lines, rows, stage, allowlist | Panel alone | None | This spec | None |
 
 ## Build order and priorities
 
-Each step can stop on its own and leave a working panel.
+Each step can stop on its own and leave a working panel. Tasks are in [tasks.md](tasks.md).
 
 | Step | Priority | Builds | Needs | Ships |
 |---|---|---|---|---|
-| **0. Contrast fixes** | P1 | FR-074's three tokens and FR-076's 11 px floor, in today's `panel/panel.css` | Nothing | Can ship **ahead of the overhaul**, on spec 003's panel, as one small change with its own test (SC-008). |
-| **1. Shell and lesson** | P1 | Tabs, Home A from today's record, the Lesson tab with the docked checklist, lesson-in-progress rules, plain errors, accessibility, the widened sync test | PN-10, PN-13, PN-14 (easing skill and tools), their eval cases | Easing only, in the new layout. Up next comes from today's fixed path (`panel/lib/path.js`) until spec 004's path data exists. |
-| **2. Curriculum wave A** | P1 | Skills tab, path from data, Up next from the stored recommendation, Start lesson and New lesson for any built skill | Spec 004 wave A (PN-09, PN-16) | Easing plus skills 2, 1, 3; skills 5 and 6 (spec 004 wave B) arrive through the same screens |
-| **3. Diagnosis** | P1 | The `diag-*` screens, story by story with spec 005 | Spec 005 US1, then US2, then US3 | See the next table |
-| **4. Reviews** | P2 | Practice due, Warm up, the practice state | Spec 004 wave C (PN-11) | Practice across sessions (for skills 2, 1, 3 this sprint; spec 004 has them in its baseline) |
-| **5. First run** | P2 | `setup-*` screens and the Check setup entry, with option A's access-key sign-in | Spec 006 (its Q1 answered by `decisions/009`; the key source waits on its Q2) and the option A runtime spec | The installer path |
-
-### If only diagnosis US1 and curriculum wave A exist
-
-The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest answer) and spec
-004 wave A (path, recommendation, skills 2, 1, 3), this ships:
-
-- **Home A**, with Up next from the stored recommendation (no finding as its reason), the
-  diagnosis card, and memory. No question card and no Practice due card.
-- **Lesson** in full (steps 1 and 2), for easing and skills 2, 1 and 3.
-- **Skills** with learned, in progress, up next, not started and coming later (skills 4 to 10).
-  No practice due or getting rusty.
-- **Diagnosis, read-only**: `diag-running`, `diag-symptom-running`, `diag-results`, `diag-rest`,
-  `diag-symptom-results`, `diag-symptom-none`, `diag-clean`, the Couldn't check list, "Looked
-  only", and every failure state (`diag-nocomp`, `-unreachable`, `-busy`, `-error`, `-stopped`).
-  Findings show kind and where but **no action buttons**: no Learn, Get hints, That's on purpose,
-  or answer buttons, because leading into the fix is spec 005 US2. Ask findings still read as
-  questions. **Ask the mentor** is the way to follow up.
+| **0. Contrast fixes** | Done | FR-074, FR-076 | — | Shipped in `5bed931` |
+| **1. Shell and easing** | P1 | Tabs, Home A from the record and path, the Lesson tab with the checklist, short docks, Pick / Try / Done, lesson-in-progress rules, the error split, accessibility. Up next is always the path's first skill; the Skills tab is a one-line interim | Nothing from the mentor | Easing in the new layout. Other skills stay in Claude Code |
+| **2. Six skills and Skills** | P1 | The other five checklists, the demo and Changed box per skill, the allowlist and status lines, the Skills tab, skill detail, New lesson, Find my next lesson and `lesson-picking`, the widened sync test | PN-16, PN-17, the B1 hand-over check, eval cases | All six as live lessons |
+| **3. Practice** | P2 | Practice due, Warm up, the `practice*` states, the "Warm-up due" lines | Step 2, eval cases | Practice across sessions |
+| **Held** | — | Diagnosis screens; first run and Check setup | Spec 005's plan; the installer and spec 006 Q2 | — |
 
 ### States by dependency
 
 | Held until | States |
 |---|---|
-| Spec 005 US1 | `diag-running`, `diag-symptom-running`, `diag-results`, `diag-rest`, `diag-symptom-results`, `diag-symptom-none`, `diag-clean`, `diag-nocomp`, `diag-unreachable`, `diag-busy`, `diag-error`, `diag-stopped` |
-| Spec 005 US2 | `diag-hints`, `diag-recheck-gone`, `diag-recheck-still`, `diag-recheck-changed`, `diag-intended`; finding actions and answer buttons |
-| Spec 005 US3 | `diag-again`, `diag-othercomp`, Home's question card, Up next quoting a finding |
-| Spec 004 wave A | `skills-few`, `skills-many`, Start lesson for skills other than easing |
-| Spec 004 wave C | Practice due, `practice`, Warm up, the practice due state |
+| Spec 005 | Every `diag-*` state, finding actions and answer buttons, the question card, Up next quoting a finding |
+| Spec 006 and its Q2 | `setup-welcome`, `setup-checking`, `setup-signin`, `setup-ready`, `err-notsetup` |
+| A later decision (FR-093) | `home-return-stored` |
 | Curriculum designer (C1) | Getting rusty |
-| Spec 006 | `setup-welcome`, `setup-checking`, `setup-signin`, `setup-ready`, `err-notsetup` |
-| Nothing (step 1) | Every other state in the README's table |
+| Not this build (option B) | `homeB-first`, `homeB-return`, `compare` |
+| Step 2 | `home-return`, `lesson-picking`, `skills-empty`, `skills-few`, `skills-many`, `skill-detail`, `skill-detail-noreview`, `skill-detail-new`, every `skill-*-open` and `skill-*-check` except easing's |
+| Step 3 | `practice`, `practice-check`, `practice-passed`, `practice-nothing-new`, `lesson-passed-pivot` |
+| Step 1 | Every other state in the README's table |
 
 ## Key Entities
 
 - **Tab**: Home, Lesson or Skills; one selected at a time; never disabled.
-- **Home card**: one of Up next, question, Practice due, What's wrong here?, memory, Lesson in
-  progress, Your lesson is waiting; each drawn from the record, the path data or the panel session.
+- **Home card**: one of Up next, Practice due, memory, Lesson in progress, Your lesson is waiting; each drawn from the
+  record, the path data or the panel session.
 - **Panel state**: one README state id, with its trigger and source (R, P, T, M as the README
   defines them).
 - **Fixed request**: one RQ entry: a label, its fixed wording, its parameters, and its eval cases.
-- **Checklist row**: one focus target with its state (proposed, then each check's result), glyph
-  and word.
-- **Diagnosis view**: a look's scope line, findings in rank order, not-checked list, symptom echo,
-  and since-last-time, all from one result (PN-01 to PN-08).
-- **Skill row**: a path skill with its display state (FR-048), from the path data and the record.
+- **Checklist row**: one thing the skill's check grades: glyph, subject, word, optional detail, in optional sections
+  ([data-model.md](data-model.md)).
+- **Diagnosis view** *(held)*: a look's scope line, findings, not-checked list, symptom echo and since-last-time.
+- **Skill row**: a path skill with its display state (FR-048), from the path data, the generated data file and the record.
 
 ## Success Criteria *(mandatory)*
 
@@ -789,46 +872,57 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
   panel in **15 minutes or less**, with **zero** characters typed in a terminal, and the checklist
   visible from the opening. *Measured by:* the builder, in a usage session, timed from the call
   log.
-- **SC-002**: Across at least 10 checks from the panel (at least 3 partial, 2 outside the lesson,
-  1 undone), the checklist matches the check's result in **10 of 10** and a manual inspection in
-  After Effects in **at least 9 of 10**; and across at least 3 openings, rows say Proposed until
-  the accept signal, then not, in **3 of 3**. *Measured by:* panel tests on recorded streams, plus
-  the builder in usage notes.
+- **SC-002**: On **each of the six skills**, across at least 3 checks from the panel, and overall at least 10 (at least 3
+  partial, 2 outside the lesson, 1 undone), the checklist matches the check's result in **100%** and a manual inspection in
+  After Effects in **at least 9 of 10**; and across at least 3 openings on skills with targets, rows say Proposed until the
+  first reply or check, then not, in **3 of 3**. *Measured by:* panel tests on recorded streams, plus the builder in usage
+  notes.
 - **SC-003**: **100%** of the README's state ids in scope (FR-006) have a panel test that drives
   the panel into that state from a recorded stream or a saved record and checks what shows.
   *Measured by:* panel tests, with a list of ids checked against the README.
 - **SC-004**: Home shows its cards with **zero** mentor turns, within **1 second** of the panel
   opening on a record of at least 20 lessons. *Measured by:* a panel test (no spawn) and a timing
   in usage notes.
-- **SC-005**: Across every recorded diagnosis stream in spec 005's fixtures, the panel shows at most
-  3 findings first in **100%**, never repeats a top-3 finding in the rest, shows the Couldn't check
-  list whenever the result has one, shows "Looked only" **0 times** when a non-listed tool ran, and
-  shows nothing from a stopped or cut-off turn. *Measured by:* panel tests.
-- **SC-006**: Every request in FR-070 that sends text has at least one eval case, the sync test
-  passes, the easing set passes at **25/25 or within one case** with no hard-rule failure, and
-  each new case passes its set's rubric. *Measured by:* the sync test and eval runs.
-- **SC-007**: In every panel test and usage session, **0** paths open two lessons, start a look
-  during a lesson, or send Show me after a demonstration was made, including every cut-off retry.
-  *Measured by:* panel tests on recorded streams, and the call log in usage sessions.
+- **SC-005** *(Held with spec 005.)*: Across every recorded diagnosis stream in spec 005's fixtures, the panel shows at most
+  3 findings first in **100%**, never repeats a top-3 finding in the rest, shows the Couldn't check list whenever the result
+  has one, shows "Looked only" **0 times** when a non-listed tool ran, and shows nothing from a stopped or cut-off turn.
+  *Measured by:* panel tests.
+- **SC-006**: Every request in FR-070 that sends text and isn't held has at least one eval case, the sync test passes, each
+  new case passes its set's rubric with no hard-rule failure, and any set re-run under FR-072 stays within one case of its
+  baseline. *Measured by:* the sync test and eval runs.
+- **SC-007**: In every panel test and usage session, **0** paths open two lessons or send Show me after a demonstration was
+  made, including every cut-off retry. *Measured by:* panel tests on recorded streams, and the call log in usage sessions.
 - **SC-008**: Every text token reaches **4.5:1** on its background, and **no** text is under 11 px.
   *Measured by:* an automated check over the panel's colour tokens and font sizes.
-- **SC-009**: A keyboard-only walk of flows 2, 3 and 5 in the README (pick a skill, a lesson, a
-  diagnosis) completes without a mouse, and focus lands where FR-078 says after each action, in
-  **100%** of steps. *Measured by:* the builder, once, logged in usage notes.
-- **SC-010**: At 260 × 480 px, in at least 12 states (named in the plan, including `lesson-partial`,
-  `diag-results` and `home-cutoff`), nothing scrolls sideways and no button or the Ask input is
-  clipped. *Measured by:* the builder, against the mockup at the same size.
+- **SC-009**: A keyboard-only walk of flows 2, 3 and 5 in the README (pick a skill, a lesson, a review) completes without a
+  mouse, and focus lands where FR-078 says after each action, in **100%** of steps. *Measured by:* the builder, once, logged
+  in usage notes.
+- **SC-010**: At 260 × 480 px, in at least 12 states (named in [quickstart.md](quickstart.md), including `lesson-partial`, each
+  skill's mid-lesson state and `home-cutoff`), nothing scrolls sideways and no button or the Ask input is clipped. *Measured
+  by:* the builder, in the real panel in AE, since the mockup itself hasn't been seen at that size.
 - **SC-011**: **0** panel strings contain a file path, command, tool name, field name or error
   code. *Measured by:* an automated scan of the panel's copy and its error mappings.
 - **SC-012**: "Saved to your history" shows **0 times** without a successful save, including on a
   failure fixture. *Measured by:* a panel test.
-- **SC-013**: After at least 3 sessions with the overhaul, the builder's usage notes say which
-  start each session used (Up next, Look at my comp, Skills), whether Up next was what they wanted,
-  and whether they reached for Adobe's assistant. Either answer counts; it feeds Open question 3.
+- **SC-013**: After at least 3 sessions with the overhaul, the builder's usage notes say which start each session used (Up
+  next, Skills), whether the suggestion was what they wanted, and whether they reached for Adobe's assistant. Either answer
+  counts; it feeds Open question 3.
   *Measured by:* the builder, in usage notes. *Later:* these notes are the start of evaluating
   Home A. Once there are enough target-market testers for a comparison to mean something, Home A
   gets evaluated with them and possibly A/B tested against Home B (Open question 3); with the
   builder alone, the notes don't settle it.
+- **SC-014**: **All six skills complete one live lesson in the new panel** (sprint 4's first "done" item), each with no
+  terminal, the checklist agreeing with the check, and `lesson-focus-stale` counted. *Measured by:* the builder, with the
+  turn log, in `discovery/usage-notes/ui-overhaul.md`.
+- **SC-015**: **A usage session compares the new panel with the current one** on the same task (quickstart a to f on Mentor
+  Practice, at 260 × 480, from a reset comp), and the notes check it against this section. It records time to pass, times the
+  builder had to work out what to do next, whether the answer was in view without scrolling, and which panel they'd rather
+  use and why. Target: not slower, and fewer "what now?" moments; either result is logged. *Measured by:* the builder, in
+  usage notes; the current panel's half is run before step 1 merges.
+- **SC-016**: At 560 px tall and under exactly one of chat and rows shows, and above it both do, in **100%** of panel tests; a
+  check leaves the chat showing. *Measured by:* panel tests, plus the builder at 480 and 680 in AE.
+- **SC-017**: **0** CSS features newer than Chromium 99 in the panel, and every skill's every tool has a status line and is on
+  the B1 allowlist. *Measured by:* automated checks.
 
 ## Assumptions
 
@@ -844,17 +938,22 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
 - **User:** the builder on their own Mac with After Effects 26.5 on macOS 27.0.1, then the
   installer's
   testers.
-- **Design source:** the README and `index.html` at revision 2. Text marked Placeholder there is
-  the mentor's voice (the skill's) or catalogue wording (spec 005's), not panel copy.
+- **Design source:** the README, `index.html` and `copy-pass.html` at revision 3. Text marked Placeholder there is the mentor's
+  voice (the skill's), not panel copy. The mockup hasn't been seen in a browser, by its own note, so fit is checked in AE (SC-010).
 - **Warm up is spec 004's review.** The button says Warm up; the record calls it a review.
 - **Skill names** shown in the panel come from the path data (PN-16), not from the mockup.
-- **Diagnosis entry:** on Home only, by the learner's press (Look at my comp). A lesson's opening
-  never includes a diagnosis in the panel (Open question 1, answered; spec 005 FR-026).
+- **Diagnosis entry:** held. When it lands it's on Home only, by the learner's press; a lesson's opening never includes a
+  diagnosis in the panel (Open question 1, answered; spec 005 FR-026).
 
 ## Out of scope (build scope)
 
 - **Home option B** (diagnose-first) now. It may come back later as the other arm of an A/B test,
   once there are enough target-market testers (Open question 3).
+- **Diagnosis** (all `diag-*` states, RQ-03 to RQ-10): no spec 005 code exists (decision 1).
+- **First-run screens, `err-notsetup` and Check setup** until the installer and spec 006 Q2.
+- **A stored recommendation** (FR-093), an accept signal, a learner-facing next note, a warm-up's length, Getting rusty.
+- **A mentor change so End lesson or Start fresh really resets a lesson** (Open question 6).
+- **Running the build on option A.** Spec 013 stays paused; the panel doesn't wait for it (FR-097).
 - **What the mentor says and teaches:** `SKILL.md` wording, the diagnosis catalogue and its
   analysis, the path rule, the review schedule and what a warm-up contains. They belong to specs
   002, 004 and 005 and the curriculum design; this spec only shows them.
@@ -870,7 +969,7 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
 - **Editing the learner record** from the panel, cost display, usage analytics, accounts, update
   notices, uninstall, Windows, AE's lighter brightness themes, a second open project, and more
   than one comp at a time.
-- **Ask the mentor on Home or Skills** (Open question D2).
+- **Ask the mentor on Home or Skills** (D2, settled).
 
 ## Open questions
 
@@ -914,42 +1013,52 @@ The sprint may be cut back. With only spec 005 US1 (ask and get a short, honest 
    until then `err-mentor`'s copy names no runtime ("The mentor can't start. Check setup.").
    **Answered 2026-10-20 by `decisions/009`:** step 5's first-run sign-in draws option A's
    access-key flow (FR-054). The exact key source still waits on spec 006 Q2.
+6. **What should the next lesson do after End lesson or Start fresh, on the same skill and comp?** The mentor keeps one lesson
+   per skill and comp until it passes, and once there's a demo or check neither time nor `fresh` restarts it. So the next lesson
+   resumes the old start, with the demo spent. **Recommended: accept it for this build** (FR-092). The copy only promises "won't be
+   saved", and the one-demo rule holds. A real reset needs a tool change in all six skills and their re-runs, about $180.
+7. **Is a new next-mentor eval set acceptable?** The README expected "next-mentor's cases", but no such set exists, and no runner
+   allows the hand-over. **Recommended: yes, about 9 cases on a small new runner**, about $5 to $10 a run. Constitution III requires
+   one, and Find my next lesson is Home's main button.
+8. **What should Show me again say on the five new skills?** Today's text says "the pair you already eased". **Recommended: easing
+   keeps its text (case 20 holds); the five share "Show me again: explain the change you already made, with a frame. Don't change
+   anything."**, with one new case each.
+9. **Raise the panel's minimum height?** The manifest allows 400 px; this spec's floor is 480. **Recommended: raise `MinSize` to 480**,
+   so no state is built for a height nobody checks.
 
 ### For the UI designer (D, don't block approval)
 
-1. **Checklist from the opening** (README › Open questions 3): this spec requires it (FR-015,
-   PN-14) and pays for it with a tool and skill change. Confirm the rows and the Proposed tag are
-   still wanted at that cost.
-2. **Keep Ask the mentor?** This spec keeps it on Lesson and diagnosis screens (FR-046,
-   spec 003 FR-008). **Recommended:** keep it there; draw Ask outside a lesson only if usage notes
-   show the builder needs it.
-3. **Before and after frames vs. a moving demo** (interview 004): this spec shows only the frames
-   the mentor renders. A before frame needs the skill to render one before the change.
-4. **What does "What happened?" lead to** on `home-unreadable`?
-5. **Card order on Home** now that Open question 3 is answered "both above the fold" (FR-007).
+D1 to D5 are settled in revision 3 (README › D1 to D5). New, from the code check; each has a default so none blocks approval:
+
+6. **A lesson saved without a pass** (`result: partial`) has no state. Default: "Saved to your history." with the ways out.
+7. **Missing row words.** The pivot: a pivot at another named place (the tool's `neighbour_place`) isn't in the table; default "✗ At
+   [place]". Null: `three_d`, `region_needed`, `null_name_not_unique`, `focus_name_not_unique`, `which_null`, `not_found`; defaults in
+   [contracts/checklist-rows.md](contracts/checklist-rows.md).
+8. **Easing-only wording.** `lesson-error-demo` says "the demo pair is already eased". Default for the other five: "the mentor stopped
+   before finishing, but its change is already in your comp."
+9. **"Check setup" with no screen.** `err-*` copy says to check setup, and FR-059's screen is spec 006's. Default: the words stay, no
+   button.
+10. **`home-unreadable-why`** says the file was moved aside; that's only true after the mentor's first read. Default: as drawn.
+11. **README Open question 6, "Worth a look" on null.** Default: as drawn.
 
 ### For the curriculum designer (C, don't block approval)
 
-1. **"Getting rusty"**: is it a state the curriculum wants (for example, a review overdue by some
-   number of days), and what defines it? Until defined, the panel doesn't show it (FR-048).
-2. **The warm-up's expected length** per skill (PN-11), and **skill groups** in the Skills tab (the
-   mockup groups them; the path data has no groups). Until given, Skills is one list in path order
-   and the length is left out.
+1. **"Getting rusty"**: is it a state the curriculum wants, and what defines it? Until defined, the panel doesn't show it (FR-048).
+2. **The warm-up's expected length** and **skill groups**: not drawn in revision 3. Skills is one list in path order.
 3. **Finding titles, where wording and answer options** are catalogue wording (spec 005 open
    question 4's `teaching-design.md`), not panel copy.
 
 ## Dependencies
 
-- **Mockup:** `product/mockups/ui-overhaul/README.md` and `index.html`, revision 2 (2026-10-20),
-  UI designer's.
+- **Mockup:** `product/mockups/ui-overhaul/README.md`, `index.html` and `copy-pass.html`, revision 3 (2026-11-02), UI designer's.
 - **Spec 003** (shipped): the panel, its requests and sync test, its activity map, and its
   quickstart (used by SC-001).
-- **Spec 004** (approved): path data (PN-16), the stored recommendation (PN-09), the record's review
-  fields (PN-11), and waves A and C.
-- **Spec 005** (approved): the diagnosis result (PN-01 to PN-08), the diagnosis record (PN-08, PN-12),
-  its fixtures for SC-005, and its stories US1 to US3.
-- **Spec 006** (approved): first run and sign-in (step 5), Check setup (FR-059).
+- **Spec 004** (approved, built): path data, the record's review fields, reviews.
+- **Spec 005** (approved, no plan): held; the diagnosis screens wait on it.
+- **Spec 006** (approved, no plan): held; first run and Check setup wait on it and its Q2.
+- **Spec 013** (paused): the option A kinds this panel maps. No dependency the other way (FR-097).
 - **Decisions:** `002`, `003`, `005`, `006`, `007`, `008`, and `009` (option A for shipped Knack,
   amends 005); none changes. Open question 1 was answered (a) plus (c), so no new one is needed.
 - **Constitution 1.3.0**, Principles I to VI.
-- **Eval engineer:** writes every case in FR-070 and owns their numbers and fixtures.
+- **Eval engineer:** writes every case in FR-070, the next-mentor set, and owns their numbers and fixtures.
+- **Skill-builder:** PN-16 and PN-17. **Panel-builder:** `panel/`.
