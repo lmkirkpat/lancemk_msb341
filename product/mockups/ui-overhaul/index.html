@@ -182,6 +182,7 @@ label.small { display: block; font-size: 11px; color: var(--muted); margin-botto
 .ph { color: #a9a9a9; font-style: italic; }
 .ph::before { content: "Placeholder · "; font-style: normal; color: #8f8f8f; font-size: 11px; }
 .cutoff { color: var(--warn); font-size: 11px; }
+.resuming { margin: 0 0 12px; padding: 4px 8px; border-left: 2px solid #555; color: var(--text-strong); }
 .divider { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; margin: 4px 0 10px; }
 .divider::before, .divider::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
 .skel { height: 10px; background: #333; border-radius: 3px; margin: 6px 0; animation: pulse 1.4s ease-in-out infinite; }
@@ -201,7 +202,8 @@ figure.frame figcaption { color: var(--muted); font-size: 11px; margin-top: 2px;
 .check-body { overflow-y: auto; padding: 0 12px 8px; }
 /* Stale (builder's decision, amends FR-017): only the row's label dims. The note, the summary, the
    glyph, the result word, section heads and detail lines keep full contrast. On the checklist's
-   #262626, --text at .7 is 5.2:1; the floor is .63 (4.5:1). --muted is left alone: dimmed, it fails. */
+   #262626, --text at .7 is 5.18:1. The .63 floor holds only on #262626 or darker (4.32:1 on #2b2b2b);
+   .7 clears 4.5:1 on all three backgrounds. --muted is left alone: dimmed, it fails. */
 .check.stale .lab { opacity: .7; }
 .check ul { list-style: none; margin: 0; padding: 0; }
 .check li { display: flex; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--line-soft); }
@@ -366,7 +368,7 @@ details.earlier[open] { color: var(--text); }
 
 <nav class="rig" aria-label="Mockup states">
   <h1>Knack panel · UI overhaul</h1>
-  <p class="sub">Mockup for spec 007, revision 3 (2026-11-02). Click inside the panel to walk the flows, or jump to any state here. Start with the first group below.</p>
+  <p class="sub">Mockup for spec 007, revision 3 (2026-11-02, corrected 2026-11-04). Click inside the panel to walk the flows, or jump to any state here. Start with the first group below.</p>
 
   <h2>Panel width</h2>
   <div class="ctl" id="widths">
@@ -436,9 +438,10 @@ function stage(st) {
     `<li class="${st[i]}"><span class="mk" aria-hidden="true">${mk[st[i]]}</span>${l}<span class="sr"> (${word[st[i]]})</span></li>`).join("")}</ol>`;
 }
 
-// Pick / Try / Done. step: 0 pick, 1 try, 2 done (all three ticked). Comes from tool results only:
-// Pick ends when the rows lose their Proposed mark or the targets stop being empty; Done is the
-// check's own passed. A demo is an event in the chat and on its row, never a step.
+// Pick / Try / Done. step: 0 pick, 1 try, 2 done (all three ticked). Comes from tool results and sends
+// (FR-014): Try starts at the first reply, first check or demo, or at once when the lesson's first
+// snapshot says continued or resumed. Targets alone don't start it, and "Yes, let's go" isn't a reply.
+// Done is the check's own passed. A demo is an event in the chat and on its row, never a step.
 function strip(step) {
   const labels = ["Pick", "Try", "Done"];
   return `<ol class="strip" aria-label="Lesson progress">${labels.map((l, i) => {
@@ -807,7 +810,7 @@ screen("home-return-stored", "Home · option A (path-first)", "Returning (a stor
   () => `<div class="body">${nav("home")}<div class="scroll">${homeA({ stored: true })}</div></div>`, { opt: "A" });
 
 screen("home-lessonopen", "Home · option A (path-first)", "Lesson in progress",
-  "Where ‹ in a lesson leads: Home, with the lesson still open. Nothing else can start until you go back to it or end it (Start fresh), so two lessons never run at once.",
+  "Where ‹ in a lesson leads: Home, with the lesson still open. Nothing else can start until you go back to it or press End lesson, so two lessons never run at once.",
   () => `<div class="body">${nav("home", { lesson: true })}<div class="scroll">
     <section class="card lead" aria-label="Lesson in progress">
       <div class="kicker accent">Lesson in progress</div>
@@ -820,14 +823,14 @@ screen("home-lessonopen", "Home · option A (path-first)", "Lesson in progress",
   </div></div>`, { opt: "A" });
 
 screen("home-cutoff", "Home · option A (path-first)", "Lesson cut off (continue)",
-  "The panel was closed mid-lesson in the same AE session (spec 003 FR-016). The waiting lesson outranks Up next; Up next is pushed back (dashed, not faded) and its Start isn't primary. Start fresh keeps the record.",
+  "The panel was closed mid-lesson in the same AE session (spec 003 FR-016). The waiting lesson outranks Up next; Up next is pushed back (dashed, not faded) and its Start isn't primary. Set it aside leaves the record untouched and doesn't reset the mentor's lesson, so the next lesson on this skill and comp resumes it (lesson-resumed, FR-092). Nothing here claims it starts over.",
   () => `<div class="body">${nav("home")}<div class="scroll">
     <section class="card lead" aria-label="Lesson waiting">
       <div class="kicker accent">Your lesson is waiting</div>
       <h3>Easing on Title</h3>
       <p class="meta">1 of 3 yours eased · last check Oct 19, 9:12 pm</p>
-      <div class="row">${busyBtn("Continue lesson", "Opening…", "Picking up where you left off…", "lesson-continued", "primary", 1000)}${btn("Start fresh", 'data-go="home-return"')}</div>
-      <p class="meta" style="margin:6px 0 0">This lesson won't be saved. Earlier lessons aren't affected.</p>
+      <div class="row">${busyBtn("Continue lesson", "Opening…", "Picking up where you left off…", "lesson-continued", "primary", 1000)}${btn("Set it aside", 'data-go="home-return"')}</div>
+      <p class="meta" style="margin:6px 0 0">If you set it aside, this lesson won't be saved. Earlier lessons aren't affected.</p>
     </section>
     ${homeA({ dimLead: true, hello: false })}
   </div></div>`, { opt: "A" });
@@ -1128,8 +1131,12 @@ const SKILLSTATE = {
   empty: { keyframes: ["learned", "We assume you know this"], easing: ["next", "Up next"] },
   few: { keyframes: ["learned", "We assume you know this"], easing: ["learned", "Learned · Oct 7"], kt: ["progress", "In progress · Oct 12"] },
   many: {
-    keyframes: ["learned", "We assume you know this"], easing: ["learned", "Learned · Oct 7"], kt: ["due", "Practice due · Oct 27"],
-    sg: ["learned", "Learned · Oct 26"], off: ["due", "Practice due · Oct 27"], piv: ["learned", "Learned · Oct 26"], nul: ["learned", "Learned · Oct 26"],
+    keyframes: ["learned", "We assume you know this"], easing: ["learned", "Learned · Oct 7"], kt: ["learned", "Learned · Oct 26"],
+    sg: ["learned", "Learned · Oct 26"], off: ["due", "Practice due · Oct 27"], piv: ["due", "Practice due · Oct 27"], nul: ["learned", "Learned · Oct 26"],
+  },
+  after: {
+    keyframes: ["learned", "We assume you know this"], easing: ["learned", "Learned · Oct 7"], kt: ["learned", "Learned · Oct 26"],
+    sg: ["learned", "Learned · Oct 26"], off: ["learned", "Learned · Oct 26"], piv: ["due", "Practice due · Oct 27"], nul: ["learned", "Learned · Oct 26"],
   },
 };
 const GLYPH = { learned: "✓", due: "↻", next: "▸", progress: "◐", soon: "·", "": "○" };
@@ -1160,6 +1167,9 @@ screen("skills-few", "Skills (pick a skill, progress)", "A week in",
 screen("skills-many", "Skills (pick a skill, progress)", "All six learned, two due",
   "Every word comes from the record's status and review_due. Easing never shows Practice due, because it has no review mode yet, even though its record has a due date. Getting rusty isn't drawn: it isn't defined.",
   () => `<div class="body">${skillsView("many", "6 of 6 learned · 2 due for practice", bars(6, 0, 0))}</div>`);
+screen("skills-after-review", "Skills (pick a skill, progress)", "After one review, one still due",
+  "D14. Offset's warm-up passed and the pivot's is still due, so it stays ↻ with its Warm up. The panel adds no one-a-session limit. Warm up asks for a review, and the tool's mode says what opened. Start lesson on a due skill can come back as a lesson, because the mentor offers one review a session, and the header follows the mode. Home's card now names the pivot, the first due in path order, with no count line.",
+  () => `<div class="body">${skillsView("after", "6 of 6 learned · 1 due for practice", bars(6, 0, 0))}</div>`);
 
 const histNote = '<p class="ro">The mentor uses this history in your lessons. Only the mentor can change it.</p>';
 
@@ -1233,6 +1243,9 @@ function page(id, o) {
 
 const SUM_PARTIAL = { summary: "1 of 3 yours eased · 2 still to ease", sub: "1 more since your last check. Next: Position 1.5–3 s" };
 const MORE_11 = "+7 more on Subtitle, Bar, CTRL and Glow";
+const SUGGESTION = `It's been a few days since you learned ${N.off}; want a quick review on the Chips, all hands-on, no demo?`;
+// Says it's resuming, from the first snapshot's lesson value alone (FR-092, D16).
+const resuming = () => '<p class="resuming" role="status">Picking up your earlier lesson on this comp.</p>';
 const EARLY_EASING = earlier(2, mentor(ph("You've got 11 linear pairs across five layers. Let's start with Title.")) + learner("Title's good") + mentor(ph("From 0.5 s to 1.5 s Title moves at one speed the whole way, then stops dead at 3 s: that's linear, and it's why it looks mechanical. Easing slows it out of each key and into the next.")));
 
 screen("lesson-none", "Lesson", "No lesson open",
@@ -1252,12 +1265,28 @@ screen("lesson-starting", "Lesson", "Starting (loading)",
   </div>`, { auto: ["lesson-open", 1700] });
 
 screen("lesson-picking", "Lesson", "Finding your next lesson",
-  "Where Up next leads with nothing stored: /next-mentor, one mentor turn reading the record and the comp. No strip and no checklist: it isn't a lesson yet, and nothing starts until you agree. Then it hands over to that skill. Today its hand-over table lists only four skills (README › What the panel needs).",
+  "Where Up next leads with nothing stored: /next-mentor, one mentor turn reading the record and the comp. No strip and no checklist: it isn't a lesson yet, and nothing starts until you agree. Yes gets you to the recommended lesson, and the screens are the same on both runtimes. On B1, this build's runtime, Yes ends next-mentor's run and starts the recommended lesson as a new conversation (plan P3). On option A, the same button sends 'Yes, let's go.' and the mentor hands over in the same conversation.",
   () => `<div class="body">${L("lesson-picking")}${lhead("What's next", "One suggestion", "", LESSON_BACK[0], LESSON_BACK[1])}
-    <div class="chat">${mentor(ph(`It's been a few days since you learned ${N.off}; want a quick review on the Chips, all hands-on, no demo?`))}</div>
+    <div class="chat">${mentor(ph(SUGGESTION))}</div>
     ${statusline()}
-    <div class="actions">${busyBtn("Yes, let's go", "Starting…", "Getting your lesson ready…", "practice", "primary", 900)}${btn("Pick a skill", 'data-go="skills-few"')}</div>${ask()}
+    <div class="actions">${btn("Yes, let's go", 'data-go="lesson-picking-starting"', "primary")}${btn("Pick a skill", 'data-go="skills-few"')}</div>${ask()}
   </div>`);
+
+screen("lesson-picking-starting", "Lesson", "Yes pressed: starting",
+  "FR-082. The same on both runtimes: Yes, let's go in the chat, the button's Starting…, the status line, and everything else paused. Drawn for B1, where the header changes at the press because the panel starts the lesson itself. On A the header changes when the next tool runs. Yes isn't a reply, so the strip stays on Pick. A failed start shows lesson-start-failed, and nothing is recorded.",
+  () => page("lesson-picking-starting", { skill: N.off, focus: "Looking at your comp", step: 0, statusText: "Getting your lesson ready…", ask: false,
+    chat: mentor(ph(SUGGESTION)) + learner("Yes, let's go"),
+    list: emptyList("Your checklist will appear here."),
+    actions: `<div class="actions"><button type="button" class="btn primary pressed" disabled aria-busy="true"><span class="spin" aria-hidden="true"></span>Starting…</button>${btn("Pick a skill", "disabled")}</div>`,
+  }), { auto: ["lesson-picked", 1400] });
+
+screen("lesson-picked", "Lesson", "Yes pressed: the lesson's opening",
+  "FR-082, FR-014. The lesson's opening sits under the suggestion, with the skill's header, the strip on Pick and the checklist. It reads the same as any opening from here on. On B1 the mentor starts a new conversation, so its opening may repeat the suggestion. The review tag comes from the tool's mode.",
+  () => page("lesson-picked", { skill: N.off, focus: "A new group", step: 0, right: REVIEW_TAG,
+    chat: mentor(ph(SUGGESTION)) + learner("Yes, let's go") + mentor(ph("Chip A, Chip B and Chip C all start at 2 s. Which goes first?")),
+    list: checklist(CHIPS("prop", "Proposed"), { summary: "3 layers start together · Proposed", sub: "Based on the mentor's last look at your comp." }),
+    actions: acts({ next: "practice-check", status: "Checking your stagger…" }),
+  }));
 
 screen("lesson-open", "Lesson", "Opening: rows Proposed",
   "Decision 2, the cheap version. Rows are the opening snapshot's targets, marked Proposed. On easing that's every linear pair in the comp, 11 here, because the tool's focus is empty until a later call: the mentor's 'start with Title' is words, not data. So the header says what the rows are (found), not what's agreed.",
@@ -1343,11 +1372,55 @@ screen("lesson-error", "Lesson", "Mentor stopped mid-answer",
   }));
 
 screen("lesson-error-demo", "Lesson", "Cut off during Show me",
-  "A retry can never ask for a second demo. Change came back: Show me again, which only explains. A demo call started with no result: the panel can't know, so it offers the check, which reads the comp. No demo call started at all (on option A, a call that won't run sends no event): Show me is safe to resend.",
+  "Easing, change landed. A retry can never ask for a second demo (FR-030). The change came back, so it offers Show me again, which only explains. Easing keeps this wording; the other five say 'its change', next state. With no result, see the state after that. Not drawn: on option A, if no demo call started, Show me is safe to resend, because a call that won't run sends no event. B1 can't tell, so it always treats no result as the check.",
   () => page("lesson-error-demo", { focus: "Title", step: 1,
     chat: learner("Show me") + change("eased Title &gt; Position, 0.5–1.5 s. Edit &gt; Undo reverses it.") + mentor(ph("[Start of the demo explanation…]") + '<p class="cutoff">— cut off</p>') + notice("The mentor stopped before finishing, but the demo pair is already eased.", "Press Show me again to hear the rest."),
     list: checklist(ROWS_DEMO, { summary: "3 pairs are yours · not checked yet", collapsed: true }),
     actions: `<div class="actions">${busyBtn("Show me again", "Showing…", "Rendering a frame from your comp…", "lesson-demo", "primary")}${busyBtn(DONE, "Checking…", "Checking your keyframes…", "lesson-partial")}</div>`,
+  }));
+
+screen("lesson-error-demo-other", "Lesson", "Cut off during Show me: the other five skills",
+  "D8. The same state on key types, speed graph, offset, the pivot and null: the change landed, and only the words differ from easing's. Shown: key types. Show me again's request explains the change and alters nothing (Open question 8).",
+  () => page("lesson-error-demo-other", { skill: N.kt, focus: "Blink", step: 1,
+    chat: learner("Show me") + change("held Blink &gt; Opacity, 1–1.4 s. Edit &gt; Undo reverses it.") + mentor(ph("[Start of the demo explanation…]") + '<p class="cutoff">— cut off</p>') + notice("The mentor stopped before finishing, but its change is already in your comp.", "Press Show me again to hear the rest."),
+    list: checklist([sec("Blink › Opacity", [
+      r("done", "1–1.4 s", "Demo"),
+      r("none", "1.4–1.8 s", "Not checked yet"),
+      r("none", "1.8–2.2 s", "Not checked yet"),
+    ])], { summary: "2 pairs are yours · not checked yet", collapsed: true }),
+    actions: `<div class="actions">${busyBtn("Show me again", "Showing…", "Rendering a frame from your comp…", "skill-keytypes-check", "primary")}${busyBtn(DONE, "Checking…", "Checking your holds…", "skill-keytypes-check")}</div>`,
+  }));
+
+screen("lesson-error-demo-unknown", "Lesson", "Cut off during Show me: no result",
+  "D12, FR-030. No change result arrived, so the panel can't know whether the demo landed, and the line makes no claim about the comp. No Changed box, no Demo row, and neither Show me nor Show me again (demo_unknown). The only way on is the check, which reads the comp. All six skills use this line.",
+  () => page("lesson-error-demo-unknown", { focus: "Title", step: 1,
+    chat: learner("Show me") + mentor(ph("[Start of the reply…]") + '<p class="cutoff">— cut off</p>') + notice("The mentor stopped before finishing.", "To see where things stand, press Done, check it."),
+    list: checklist(ROWS_UNMARKED, { summary: "4 pairs on Title · not checked yet", collapsed: true }),
+    actions: `<div class="actions">${busyBtn(DONE, "Checking…", "Checking your keyframes…", "lesson-partial", "primary")}</div>`,
+  }));
+
+screen("lesson-resumed", "Lesson", "A new start that resumes an earlier lesson",
+  "FR-092, D16. End lesson and Set it aside don't reset the mentor's lesson, so the next start on that skill and comp can come back continued or resumed, whichever button started it. The line comes from that value alone, and only on the lesson's first snapshot, because a lesson's own second call also says continued. Rows aren't Proposed, and the strip is on Try. No Show me here: the demo's spent, so the tool names no demo target. If it names one, Show me shows. Continue lesson doesn't add this line: lesson-continued has its own divider. Easing also has D15's count line: its targets come from the saved start, so a pair with no label is counted, not listed (FR-100). 1 pair reads '1 more pair. It gets its name at your next check.'",
+  () => page("lesson-resumed", { focus: "Title", step: 1,
+    chat: resuming() + mentor(ph("We'd started on Title earlier, so let's pick that up. Position's 1.5 s to 3 s move and Scale are still open; say done when they're eased.")),
+    list: checklist([sec("Title", [
+      r("none", "Position 1.5–3 s", "Not checked yet"),
+      r("none", "Scale 0.5–1.5 s", "Not checked yet"),
+    ])], { summary: "4 pairs on Title · not checked yet", more: "2 more pairs. They get names at your next check." }),
+    actions: acts({ next: "lesson-resumed-check" }),
+  }));
+
+screen("lesson-resumed-check", "Lesson", "Resumed: the first check",
+  "D15. The check names the counted pairs, so the count line goes. A label that's only the tool's id reads A pair, and no id ever shows (FR-064). The word beside it comes from the check as usual, and the summary is the tool's own count.",
+  () => page("lesson-resumed-check", { focus: "Title", step: 1, right: '<span class="tag">check 1</span>',
+    chat: learner("Done, check it") + mentor(ph("Scale eases at one end and still stops hard at the other: its 1.5 s key is still linear. Position's 1.5 s to 3 s move hasn't changed yet; say done when it has.")),
+    list: checklist([sec("Title", [
+      r("done", "Position 0.5–1.5 s", "Demo"),
+      r("off", "Position 1.5–3 s", "Still linear"),
+      r("part", "Scale 0.5–1.5 s", "Half eased", "the 1.5 s key is still linear"),
+      r("done", "A pair", "Eased by you"),
+    ])], { summary: SUM_PARTIAL.summary, sub: "Next: Position 1.5–3 s" }),
+    actions: acts({ hint: true, show: "again", self: "lesson-resumed-check", next: "lesson-passed" }),
   }));
 
 screen("lesson-continued", "Lesson", "Continued after a cut-off",
@@ -1364,7 +1437,7 @@ const passedPage = (id, o) => page(id, { skill: o.skill, focus: o.focus, step: 2
   banner: banner("info", o.line, `<span aria-hidden="true">✓</span> Saved to your history. ${o.after}`),
   chat: learner("Done, check it") + mentor(ph(o.say) + (o.frame || "")),
   list: checklist(o.rows, { summary: o.summary, sub: o.sub, collapsed: !o.open, notes: o.notes }),
-  actions: `<div class="actions">${btn("What's next ›", `data-go="${HOME()}"`, "primary")}${btn("See your skills", 'data-go="skills-many"')}</div>`,
+  actions: `<div class="actions">${btn("What's next ›", `data-go="${HOME()}"`, "primary")}${btn("See your skills", `data-go="${o.skillsTo || "skills-many"}"`)}</div>`,
 });
 
 screen("lesson-passed", "Lesson", "Passed and saved",
@@ -1429,7 +1502,7 @@ screen("practice-check", G_REV, "Warm up: partly done",
 
 screen("practice-passed", G_REV, "Warm up: passed",
   "The record's next review_due comes back after the save, so the panel can say when it returns. Nothing about getting rusty: it isn't defined.",
-  () => passedPage("practice-passed", { skill: N.off, focus: "Chip A, B and C", line: "Review passed.", after: "Next warm-up in 3 days.",
+  () => passedPage("practice-passed", { skill: N.off, focus: "Chip A, B and C", line: "Review passed.", after: "Next warm-up in 3 days.", skillsTo: "skills-after-review",
     say: "All apart, with your own gaps. Play it back.",
     rows: [sec("", [
       r("done", "Chip A", "On its own", "starts 2 s", { track: [40, 4] }),
@@ -1455,6 +1528,19 @@ screen("skill-easing-check", G_SK, "Easing: mid-lesson",
   () => page("skill-easing-check", { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
     chat: learner("Done, check it") + mentor(ph("Scale eases at one end and still stops hard at the other: its 1.5 s key is still linear.")),
     list: checklist(ROWS_PARTIAL, SUM_PARTIAL), actions: acts({ hint: true, show: "again", self: "skill-easing-check", next: "lesson-passed", againTo: "lesson-demo" }),
+  }), SZ);
+
+screen("skill-easing-who", G_SK, "Easing: can't tell who eased the demo pair",
+  "D13. demo_credit is unknown, so the row asks and credits nobody, and the mentor asks once in its own words. The panel can't judge the answer (FR-065), so the row stays ? until a check says otherwise. It doesn't hold the pass: the summary and any pass are still the tool's. Mentor's line from ease-mentor/SKILL.md.",
+  () => page("skill-easing-who", { focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+    chat: learner("Done, check it") + mentor(ph("Did you undo my demo and ease that pair yourself?")),
+    list: checklist([sec("Title", [
+      r("ask", "Position 0.5–1.5 s", "Who eased it?", "", { fresh: true }),
+      r("off", "Position 1.5–3 s", "Still linear"),
+      r("done", "Scale 0.5–1.5 s", "Eased by you", "", { fresh: true }),
+      r("done", "Opacity 0.5–1.5 s", "Eased by you"),
+    ])], { summary: "2 of 3 yours eased · 1 still to ease", sub: "Next: Position 1.5–3 s" }),
+    actions: acts({ hint: true, show: "again", self: "skill-easing-who", next: "lesson-passed" }),
   }), SZ);
 
 // Key types: a row is one key pair; two extra sections.
@@ -1508,6 +1594,18 @@ screen("skill-speedgraph-check", G_SK, "Speed graph: mid-lesson",
       sec("You said it lands hard · left out", [r("none", "Bar › X Position 0.6–1.2 s", "Your call")]),
     ], { summary: "1 of 3 yours shaped · 2 still to shape", sub: "Next: Position 3–4.37 s" }),
     actions: acts({ hint: true, show: "again", self: "skill-speedgraph-check", next: "skill-speedgraph-check", status: "Checking your shapes…" }),
+  }), SZ);
+
+screen("skill-speedgraph-who", G_SK, "Speed graph: can't tell who shaped the demo pair",
+  "D13. credit is unknown, so the row asks and credits nobody, and the mentor asks once. The same treatment as easing, in speed graph's word. Mentor's line based on speed-graph-mentor/SKILL.md.",
+  () => page("skill-speedgraph-who", { skill: N.sg, focus: "Title", step: 1, right: '<span class="tag">check 2</span>',
+    chat: learner("Done, check it") + mentor(ph("Did you undo my demo and shape that pair yourself?")),
+    list: checklist([sec("Title", [
+      r("ask", "Position 0.5–1.5 s", "Who shaped it?", "", { fresh: true }),
+      r("done", "Position 1.5–3 s", "Shaped by you"),
+      r("off", "Scale 0.5–1.5 s", "Not shaped yet"),
+    ])], { summary: "1 of 2 yours shaped · 1 still to shape", sub: "Next: Scale 0.5–1.5 s" }),
+    actions: acts({ hint: true, show: "again", self: "skill-speedgraph-who", next: "skill-speedgraph-check", status: "Checking your shapes…" }),
   }), SZ);
 
 // Offset: a row is one member, and its state is relative to the others.
@@ -1770,7 +1868,7 @@ const TRADEOFF_STAGE = `<table class="tradeoff">
 <tr><th></th><th>A · I do / We do / You do</th><th>B · Pick / Try / Done</th></tr>
 <tr><td>True with no demo?</td><td>No. A review never has one, and the bar still says "We do ✓". Five of the eight live lessons on the new skills ran with no demo (T036, T037, T236, T237, T341).</td><td>Yes. A demo is an event in the chat and on its row, not a step.</td></tr>
 <tr><td>True for null?</td><td>No. The learner places the null (We do) before the demo (I do), so the order's backwards.</td><td>Yes. Null's three stages are the list's sections, all inside Try.</td></tr>
-<tr><td>Where it comes from</td><td>Today's stageOf: tool results.</td><td>Tool results: the Proposed mark or empty targets, and the check's passed. No mentor change.</td></tr>
+<tr><td>Where it comes from</td><td>Today's stageOf: tool results.</td><td>Tool results and sends: the first reply, check or demo, a continued or resumed first snapshot, and the check's passed. No mentor change.</td></tr>
 <tr><td>Height at 480</td><td>About 26 px.</td><td>About 20 px, on one line.</td></tr>
 <tr><td>What you lose</td><td></td><td>The teaching method's name on screen. It stays how the skills teach; it just stops being a progress bar.</td></tr>
 </table>`;
@@ -1780,7 +1878,7 @@ const TRADEOFF_UPNEXT = `<table class="tradeoff">
 <tr><td>Names a skill on Home?</td><td>No, until you press.</td><td>Yes, straight away. It feels more led, and less like a menu.</td></tr>
 <tr><td>Up to date with the comp?</td><td>Yes: one live read when pressed. It can suggest a due review, or name layers.</td><td>No: written when the last lesson ended. It says so with its date, and names no layer.</td></tr>
 <tr><td>Cost</td><td>One mentor turn per press. Opening Home is free either way.</td><td>Home is free. Start lesson goes straight to the skill.</td></tr>
-<tr><td>Mentor change</td><td>None to the card. /next-mentor's hand-over table needs its two missing skills.</td><td>record_lesson's code also writes the recommend() result to the record, with no comp read. No prompt change, unit tests only, no eval re-run.</td></tr>
+<tr><td>Mentor change</td><td>None to the card.</td><td>record_lesson's code also writes the recommend() result to the record, with no comp read. No prompt change, unit tests only, no eval re-run.</td></tr>
 <tr><td>Same card?</td><td colspan="2">Yes. The kicker, buttons and position stay. Adding B later changes the heading, the reason line and the button label, and nothing else on Home.</td></tr>
 </table>`;
 
