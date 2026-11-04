@@ -8,7 +8,8 @@
 //   - every `system` block is the preamble, the server's instructions or a skill body;
 //   - every tool is a server tool (unchanged, optionally `defer_loading: true`) or the hand-over tool;
 //   - every message is learner or panel text, a tool result, a tool use or the model's own block,
-//     or a `role: "system"` message holding a skill body or tool_addition / tool_removal blocks;
+//     or a `role: "system"` message holding a skill body and / or tool_removal / tool_addition blocks
+//     (each naming a tool by `tool_reference`; a message may hold only a tool_removal);
 //   - the runtime's own tool-result texts are exactly the six in FR-012 (items 3 to 6), and the two
 //     "didn't run" / "didn't finish" texts only ever carry is_error: true;
 //   - no text that isn't an allowlisted source mentions CLAUDE.md, a sprint or eval-fixture path,
@@ -80,16 +81,12 @@ const loadedText = (name, args) => (args ? `Loaded ${name}. Arguments: ${args}` 
 const REQUEST_KEYS = new Set(["model", "max_tokens", "system", "tools", "messages", "thinking", "output_config", "fallbacks", "stream", "input_transformations"]);
 const ASSISTANT_BLOCKS = new Set(["text", "thinking", "redacted_thinking", "tool_use", "fallback"]);
 
-// The tool names a tool_addition / tool_removal block names (shape settled by T060; reads `name`,
-// `tool_name`, `names` and `tools` so the check doesn't depend on which one the service wants).
+// The tool a tool_addition / tool_removal block names. The real shape (T060, settled 2026-11-03):
+// { type: "tool_removal" | "tool_addition", tool: { type: "tool_reference", name } }. Anything else
+// names no tool, so the caller fails it.
 function namedBy(block) {
-  const names = [];
-  for (const k of ["name", "tool_name"]) if (typeof block[k] === "string") names.push(block[k]);
-  for (const k of ["names", "tools"]) {
-    if (!Array.isArray(block[k])) continue;
-    for (const x of block[k]) names.push(typeof x === "string" ? x : x && typeof x.name === "string" ? x.name : undefined);
-  }
-  return names;
+  const t = block && block.tool;
+  return t && typeof t === "object" && t.type === "tool_reference" && typeof t.name === "string" ? [t.name] : [];
 }
 
 // One request body → a list of { where, detail } violations.

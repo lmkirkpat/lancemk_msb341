@@ -203,10 +203,20 @@ test("mid-conversation system messages: a skill body, or tool_addition / tool_re
     return checkBody(b, allow, { learnerTexts: ["/ease-mentor"] });
   };
   assert.deepEqual(add([{ type: "text", text: allow.skillBodies.get("offset-mentor") }]), []);
-  assert.deepEqual(add([{ type: "tool_removal", name: "set_ease" }, { type: "tool_addition", tools: [{ name: "Skill" }, "snapshot_project"] }]), []);
+  const ref = (type, name) => ({ type, tool: { type: "tool_reference", name } });
+  // The real shape: removals, then additions, then the body's text, in one message.
+  assert.deepEqual(add([ref("tool_removal", "set_ease"), ref("tool_addition", "Skill"), ref("tool_addition", "snapshot_project"), { type: "text", text: allow.skillBodies.get("offset-mentor") }]), []);
+  // A lesson with no active skill sends only a removal.
+  assert.deepEqual(add([ref("tool_removal", "Skill")]), []);
   assert.equal(add([{ type: "text", text: "Remember to be kind." }]).length, 1);
-  assert.equal(add([{ type: "tool_addition", name: "Bash" }]).length, 1);
+  assert.equal(add([ref("tool_addition", "Bash")]).length, 1);
+  assert.equal(add([ref("tool_removal", "Bash")]).length, 1);
   assert.equal(add([{ type: "tool_removal" }]).length, 1);
+  // The old guessed readings no longer name a tool.
+  assert.equal(add([{ type: "tool_removal", name: "set_ease" }]).length, 1);
+  assert.equal(add([{ type: "tool_addition", tools: [{ name: "Skill" }] }]).length, 1);
+  assert.equal(add([{ type: "tool_addition", tool: { type: "other", name: "Skill" } }]).length, 1);
+  assert.equal(add([{ type: "tool_addition", tool: "Skill" }]).length, 1);
   assert.equal(add([{ type: "image" }]).length, 1);
 });
 

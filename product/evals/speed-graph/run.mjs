@@ -95,11 +95,12 @@ const CHECK = `${T}check`;
 const TARGET = 0.8; // SC-006
 const MAX_TURNS = "12";
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
-const MENTOR_TOOLS = ["read_learner_record", SNAP, DEMO, CHECK, "preview_frame", "record_lesson", "recommend_next"];
+// FR-042: --allowedTools is the skill's own allowed-tools (lib/skill-tools.mjs). MENTOR_TOOLS also holds
+// read_learner_record, so a call to it is still seen and reported even where the skill no longer lists it.
+const { mentor: MENTOR_TOOLS, allowed: ALLOWED_TOOLS } = ab.toolSets(REPO, "speed-graph-mentor");
 // FR-052 / OR-2: the lesson opens with the snapshot, so read_learner_record is no longer allowed here.
 // It stays in MENTOR_TOOLS so a call to it is still seen (and fails no_read_learner_record) instead of
 // reading as a foreign tool.
-const ALLOWED_TOOLS = MENTOR_TOOLS.filter((t) => t !== "read_learner_record");
 const PREFIX = "mcp__ae-mentor__";
 // The repo's local settings may set a builder output style (Explanatory adds "★ Insight" notes).
 // CLI settings outrank local ones, so every headless run here uses the default voice (usage notes,
@@ -633,7 +634,7 @@ async function runCase(c, opts) {
   const pass = checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
   fs.rmSync(home, { recursive: true, force: true });
   return { pass, checks, rubric, cost, session_id: sessionId, transcript: renderTranscript(turns),
-    ...(fin ? { runtime: "a", cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist } : {}) };
+    ...(fin ? { runtime: "a", mentor_cost_usd: Number(fin.cost.toFixed(4)), judge_cost_usd: Number((cost - fin.cost).toFixed(4)), cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist } : {}) };
 }
 
 // ---------- main ----------

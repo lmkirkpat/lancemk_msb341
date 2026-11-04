@@ -9,8 +9,9 @@ import { createCaseMentor, helperHashFiles, startHelper, takeEvalKey, KEY_VAR } 
 import { deriveAllowlist, checkRequestLogFile, describe, SKILL_PATTERN } from "./allowlist-check.mjs";
 import { probeServer } from "./server-probe.mjs";
 import { findBaseline, compareToBaseline, summaryLines } from "./compare.mjs";
+import { allowedToolsOf, toolSets } from "./skill-tools.mjs";
 
-export { takeEvalKey, helperHashFiles, KEY_VAR };
+export { takeEvalKey, helperHashFiles, KEY_VAR, allowedToolsOf, toolSets };
 
 // Checks --runtime and --settings after parsing. Sets the default.
 export function checkOpts(opts) {
@@ -75,18 +76,6 @@ export function skillsOf(c) {
   return names;
 }
 
-// The `allowed-tools` of a SKILL.md, read here on its own (inline or as a list).
-function allowedToolsOf(markdown) {
-  const front = /^---\n([\s\S]*?)\n---\n/.exec(markdown);
-  if (!front) return null;
-  const lines = front[1].split("\n");
-  const i = lines.findIndex((l) => /^allowed-tools\s*:/.test(l));
-  if (i < 0) return [];
-  const items = lines[i].replace(/^allowed-tools\s*:/, "").trim().replace(/^\[|\]$/g, "").split(/[,\s]+/);
-  for (let j = i + 1; j < lines.length && /^\s+-\s+/.test(lines[j]); j++) items.push(lines[j].replace(/^\s+-\s+/, ""));
-  return items.map((s) => s.trim().replace(/^["']|["']$/g, "")).filter(Boolean).map((s) => s.replace(/^mcp__ae-mentor__/, ""));
-}
-
 // The A dry run (contracts/eval-runtime.md): the helper starts, settings.json loads, and every skill
 // a case uses has a readable SKILL.md and tools the server lists. No request to the service: the
 // helper gets a placeholder key and is never sent a turn. → { problems[], lines[] }
@@ -143,8 +132,12 @@ export function resultFields(opts, results, { resultsDir, readme }) {
   const promptHash = {};
   let otherModel = 0;
   let unknown = 0;
+  let mentorCost = 0;
+  let judgeCost = 0;
   for (const r of results) {
     for (const run of r.runs || []) {
+      mentorCost += run.mentor_cost_usd || 0;
+      judgeCost += run.judge_cost_usd || 0;
       for (const [k, v] of Object.entries(run.prompt_hashes || {})) promptHash[k] ||= v;
       otherModel += run.other_model_turns || 0;
       unknown += run.cost_unknown_turns || 0;
@@ -156,6 +149,10 @@ export function resultFields(opts, results, { resultsDir, readme }) {
     model: runInfo ? runInfo.model : null,
     effort: runInfo ? runInfo.effort : null,
     settings_hash: runInfo ? runInfo.settings_hash : null,
+    // T063: cost_usd stays the total; these split it into what the API credit paid (the mentor) and
+    // what the subscription paid (the judge, a headless claude -p).
+    mentor_cost_usd: Number(mentorCost.toFixed(2)),
+    judge_cost_usd: Number(judgeCost.toFixed(2)),
     ...(opts.settings ? { settings_file: path.basename(opts.settings) } : {}),
     non_baseline: isExperiment(opts),
     prompt_hash: promptHash,
@@ -173,6 +170,8 @@ export function printSummary(out, target) {
     total: out.summary.total,
     target,
     cost: out.cost_usd,
+    mentorCost: out.mentor_cost_usd,
+    judgeCost: out.judge_cost_usd,
     costUnknownTurns: out.cost_unknown_turns,
     info: { model: out.model, effort: out.effort },
     comparison,
