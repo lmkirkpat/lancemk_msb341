@@ -1,7 +1,7 @@
 // What the model is given (spec 013 FR-005, FR-010 to FR-013, FR-016, FR-025; research R5, R6,
 // R8). Everything comes from an allowlist: the preamble file, the server's own instructions, the
-// active skill's SKILL.md body byte for byte, the server's tool definitions filtered by the
-// skill's allowed-tools (plus the hand-over tool where a skill lists it), and the conversation.
+// active skill's SKILL.md body byte for byte, the server's tool definitions (plus the hand-over
+// tool), with the skill's allowed-tools on offer, and the conversation.
 // Render order is tools, system, messages, in a fixed order with nothing that varies (no date,
 // time, path or id), so the stable part caches.
 
@@ -22,6 +22,11 @@ export function loadSkillTool(helperDir) {
   return t;
 }
 
+// The models that take mid-conversation tool changes (D2, research R5). On them the tool list never
+// changes during a lesson; any other model (Haiku 5.5) gets a replaced list at a hand-over.
+const TOOL_CHANGE_MODELS = /^claude-(opus|sonnet)-5-5$/;
+export const usesToolChanges = (model) => TOOL_CHANGE_MODELS.test(model);
+
 export function cacheControl(ttl) {
   return { type: "ephemeral", ttl };
 }
@@ -37,6 +42,29 @@ export function buildTools(serverTools, allowedTools, skillTool) {
     allowed.add(SKILL_TOOL);
   }
   return { tools, allowed };
+}
+
+// D2's fixed list: every server tool in the server's order, then the hand-over tool. Tools outside
+// `allowed` are deferred, so the model doesn't see them until a tool_addition names them. The
+// service refuses a list with every tool deferred, so with nothing on offer (no skill yet) Skill
+// stays undeferred, and the loop withdraws it in the first request.
+export function buildDeclaredTools(serverTools, allowed, skillTool) {
+  const tools = serverTools.map(toApiTool);
+  if (skillTool) tools.push({ name: skillTool.name, description: skillTool.description, input_schema: skillTool.input_schema });
+  const keep = allowed.size ? allowed : new Set([SKILL_TOOL]);
+  return tools.map((t) => (keep.has(t.name) ? t : { ...t, defer_loading: true }));
+}
+
+// The blocks that take the model from the tools `offered` to the tools `allowed`: removals, then
+// additions, each in the declared order, each naming its tool by reference. The service's real
+// shape, checked live in T060.
+export function toolChangeBlocks(tools, offered, allowed) {
+  const names = tools.map((t) => t.name);
+  const block = (type) => (name) => ({ type, tool: { type: "tool_reference", name } });
+  return [
+    ...names.filter((n) => offered.has(n) && !allowed.has(n)).map(block("tool_removal")),
+    ...names.filter((n) => !offered.has(n) && allowed.has(n)).map(block("tool_addition")),
+  ];
 }
 
 // Three text blocks (preamble, server instructions, skill body), or two when the skill goes in the
@@ -58,9 +86,13 @@ export function userContent(text, skillBodyAhead) {
   return blocks;
 }
 
-// The hand-over's mid-conversation system message (R5): the new skill's body, unedited.
-export function skillSystemMessage(body) {
-  return { role: "system", content: [{ type: "text", text: body }] };
+// The hand-over's mid-conversation system message (R5): the tool changes, if any, then the new
+// skill's body, unedited, if there is one. One message: the live check found the service takes both
+// together, and it keeps a tool_removal right before the assistant turn or last, as documented.
+export function skillSystemMessage(body, toolChanges = []) {
+  const content = [...toolChanges];
+  if (typeof body === "string") content.push({ type: "text", text: body });
+  return { role: "system", content };
 }
 
 // A copy of the messages for one request with the second breakpoint on the last block of the
@@ -96,11 +128,15 @@ export function promptHash({ tools, system, placement, skillName, skillBody }) {
 // The lesson prompt for one skill (or none yet). skill: readSkill()'s result or null.
 export function buildLessonPrompt({ preamble, instructions, serverTools, skill, skillTool, settings }) {
   const placement = settings.skill_placement;
-  const { tools, allowed } = skill ? buildTools(serverTools, skill.allowedTools, skillTool) : { tools: [], allowed: new Set() };
+  const toolChanges = usesToolChanges(settings.model);
+  const built = skill ? buildTools(serverTools, skill.allowedTools, skillTool) : { tools: [], allowed: new Set() };
+  const { allowed } = built;
+  const tools = toolChanges ? buildDeclaredTools(serverTools, allowed, skillTool) : built.tools;
   const system = buildSystem({ preamble, instructions, skillBody: skill ? skill.body : null, placement, ttl: settings.cache_ttl });
   return {
     tools,
     allowed,
+    toolChanges,
     system,
     skillName: skill ? skill.name : null,
     prompt_hash: promptHash({ tools, system, placement, skillName: skill && skill.name, skillBody: skill && skill.body }),
