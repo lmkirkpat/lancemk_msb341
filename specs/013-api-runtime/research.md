@@ -139,6 +139,15 @@ server holds in memory between turns rather than in `session.json` would behave 
 the skill. **Rejected**: copying Claude Code's own system prompt (FR-012: not ours, and not an
 allowlisted source).
 
+**T060's answers from the real service (2026-11-03, cockpit's record of the hand-back; merged `2185304`):**
+
+- The beta `mid-conversation-tool-changes-2026-07-01` is accepted and behaves as the task describes, on Opus 5.5 and Sonnet 5.5.
+- **As built:** one `role: "system"` message holding removals, then additions, then the skill body. Each block is `{ "type": "tool_removal" | "tool_addition", "tool": { "type": "tool_reference", "name": "…" } }`.
+- **Looser than the docs:** the service accepted a removal followed by another system message, a system message followed by another, and re-adding a tool declared without `defer_loading` once it had been removed. The `next-mentor` → `ease-mentor` → `next-mentor` path relies on the last one.
+- **A hard rule:** a list with every tool deferred gets a 400. So a lesson with no active skill declares `Skill` undeferred and withdraws it in its first request. A model asked directly can say a tool was removed. The builder merged this on 2026-11-04.
+- **Not tested:** a server-side fallback firing during a hand-over.
+- **Measured:** `tools` byte-identical on all 6 requests (23 tools, 20 deferred), binding `error` throughout, no `input_transformations`. First turn $0.0239 against T016's $0.0227; hand-over turn $0.0900 (3 requests) against $0.1029 (4 requests).
+
 ## R6. Which tools a lesson gets (FR-005, FR-008)
 
 **Decision**: exactly the active skill's `allowed-tools` (the `mcp__ae-mentor__` prefix removed)

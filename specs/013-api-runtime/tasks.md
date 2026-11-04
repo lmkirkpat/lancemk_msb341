@@ -8,6 +8,7 @@ description: "Task list for spec 013: the option A runtime"
 builder 2026-10-30. The helper stays at `panel/helper/` (panel-builder) until the UXP rebuild.
 Amended 2026-10-30 after the `013-helper` review (merged `d934115`): T059 to T061 added (Phase 10),
 notes on T011, T014, T016, T018, T023, T031, T037, T039, T054 and T055 (spec › Amendments).
+Amended 2026-11-04 by `decisions/011`: T032, T051, T053 and T054 changed, T062 to T067 added (Phase 11).
 Amended again 2026-10-30 after `013-evals` and `013-adapter` merged (`5963fef`): notes on T023, T040
 and T060 (spec › Amendments after the merge). No task ticked or unticked by this amendment.
 
@@ -107,7 +108,7 @@ SC-005 to SC-009).
 - [x] T029 [P] [US2] EE · Same change as T024 in `product/evals/null-parenting/run.mjs` (including `AE_MENTOR_FIXTURE_TWINS` where it's set today). Depends on T024.
 - [ ] T030 [US2] EE · FR-031 shape test `product/evals/lib/test/transcript-shape.test.mjs`: run easing case 01 once on each runtime (recorded, then replayed in the test), and assert both transcripts have the same event kinds and fields and that `check()` and `renderTranscript()` accept both. While here, check research R4's watch item (one server per case on A vs. one per turn on B1) on one multi-turn case and note the result. ($ about $1) Depends on T024.
 - [ ] T031 [US2] EE · Depends on T060 (spec resolved question 9: T060 changes every request's tool list on Opus 5.5). Full easing run on A (`--runtime a`). Apply the stop rule (spec Q4): if more than 5 points below the B1 baseline (27/28, 2026-10-29), stop, triage with `/eval-triage`, and hand back before T032; the first suspect is the skill placement (R5), the second the thinking display (R7). ($ about $15)
-- [ ] T032 [P] [US2] EE · Full A runs of key types, speed graph, offset, pivot (`anchor`) and null against their 2026-10-29 B1 baselines (29/30, 29/29, 33/37, 48/50, 42/44); the five can run as parallel processes. ($ about $70) Depends on T025–T029, T031 passing the stop rule.
+- [ ] T032 [P] [US2] EE · *Amended 2026-11-04 (`decisions/011`):* a full A run of pivot (`anchor`) against its 2026-10-29 B1 baseline (48/50) now. ($ about $25) Key types, speed graph, offset and null (29/30, 29/29, 33/37, 42/44) run later, on the commit given to the first tester, against whatever their B1 baselines are then; they don't hold this spec open. (The earlier figure for all five was about $70, and the per-case rate suggests about $100.) Depends on T025–T029, T031 passing the stop rule.
 - [ ] T033 [US2] EE · For every case that passed on B1 and failed on A: `--only <id> --repeat 3 --runtime a`; majority pass = noise; majority fail = regression, triaged (`/eval-triage`), with research R6's `read_learner_record` note checked for the five non-easing sets. ($ about $30)
 - [ ] T034 [US2] EE · Write each set's `README.md` › Option A equivalence record per data-model › Equivalence record, and say whether the set meets FR-033.
 - [ ] T035 [US2] SB or PB (by the gap) · Only if T033 finds a regression the builder doesn't accept: a placement or display change is PB's in `panel/helper/settings.json` (one setting, research R5), applied to all six sets; a prompt or tool gap is SB's in that `SKILL.md` or `mentor/` file, as its own change. No change to eval cases or rubrics.
@@ -164,10 +165,10 @@ SC-005 to SC-009).
 
 - [ ] T049 [P] [US6] PB · `panel/test/b1-unchanged.test.js`: with `runtime` missing or `"b1"`, `main.js`'s adapter choice is `adapter-claude-code.js` and its `launchArgs` output, `runtime.js` and `stream.js` behave as before (existing fixtures), and `git diff main -- panel/lib/adapter-claude-code.js panel/lib/stream.js panel/lib/runtime.js` is empty on the branch (FR-037).
 - [ ] T050 [US6] EE · SC-009 after the panel and runner changes merge: `cd panel && npm test`, then a full B1 easing run (no `--runtime`); within noise of 27/28. ($ about $15)
-- [ ] T051 [US6] EE · Spec Q2: once easing meets FR-033 on Opus 5.5, run easing and pivot on A with `--settings` files for Sonnet 5.5 and Haiku 5.5 (same effort; files in `product/evals/runtimes/`); if one meets FR-033 on both, run the other four on it. Report each model's pass rates and cost per run. ($ about $60)
+- [ ] T051 [US6] EE · *Deferred 2026-11-04 (`decisions/011`): not on the $100 budget; run it when funding allows.* Spec Q2: once easing meets FR-033 on Opus 5.5, run easing and pivot on A with `--settings` files for Sonnet 5.5 and Haiku 5.5 (same effort; files in `product/evals/runtimes/`); if one meets FR-033 on both, run the other four on it. Report each model's pass rates and cost per run. ($ about $60)
 - [ ] T052 [US6] PB · Only if T051 finds a cheaper model meeting FR-033 on all six sets and the builder agrees: set `model` in `panel/helper/settings.json` to it; EE then re-runs all six on the new default for the A baseline.
-- [ ] T053 [US6] EE · After the cockpit records SC-001 to SC-008 as passed: make `a` the runners' default `--runtime` (FR-035), and record in each set's README the A baseline (results file, model, effort, cost).
-- [ ] T054 [US6] PB · Same gate as T053, and after T061: a missing `runtime` in `panel.json` now means A (FR-037), B1 still selectable; update `panel/test/config.test.js`.
+- [ ] T053 [US6] EE · *Amended 2026-11-04 (`decisions/011`):* when a set meets FR-033, record in its README the A baseline (results file, model, effort, cost, commit) next to its B1 baseline (FR-035). The runners' default stays `b1`.
+- [ ] ~~T054~~ *Dropped 2026-11-04 (`decisions/011`):* a missing `runtime` stays B1 (FR-037). What a tester's install writes moves to spec 006's plan.
 
 ---
 
@@ -191,6 +192,19 @@ lists what it must land before.
 
 ---
 
+## Phase 11: Build on B1, ship on A (added 2026-11-04, `decisions/011`)
+
+**Purpose**: moving work between the runtimes is one step, and B1 can't quietly allow what A refuses. T062 and T063 land before T031. None of these spends API credit; T065's check uses the subscription.
+
+- [ ] T062 EE · T060's hand-back: `product/evals/lib/allowlist-check.mjs` `namedBy()` reads `block.tool.name` (the real shape: `{ "type": "tool_removal", "tool": { "type": "tool_reference", "name": "…" } }`, `tool_addition` the same); take out the guessed readings; a system message may hold only a `tool_removal`. Fixes the failing test at `product/evals/lib/test/allowlist-check.test.mjs:82`. Hand back the wording for `contracts/eval-runtime.md`; the cockpit updates it (the file isn't the eval engineer's). Before T031.
+- [ ] T063 EE · On A, results and the printed summary report the mentor's cost (credit) and the judge's (subscription) separately, so the printed total stops overstating what the credit paid for. B1 output stays byte-identical unless the builder agrees otherwise. Before T031.
+- [ ] T064 EE · FR-042 for the runners: test first, then build each B1 runner's `--allowedTools` from its skill's `allowed-tools`, with one shared reader (`lib/ab.mjs` has `allowedToolsOf`). A test asserts each set is the same set the 2026-10-29 baselines used. Say in the hand-back whether this changes `--changed`'s hash, so nothing re-runs by surprise.
+- [ ] T065 PB · FR-042 for the panel: first check headlessly on a fixture (subscription, not credit) whether a non-easing skill's tools work under today's list, and whether `next-mentor` can hand over on B1. Record both in research R6. Then test first, build `adapter-claude-code.js`'s `--allowedTools` from the opening skill's `allowed-tools`, keeping easing's arguments the same set as today (`panel/test/b1-unchanged.test.js`). If B1 can't hand over, say so and hand back; don't build around it.
+- [ ] T066 PB · FR-041: test first, then `bash panel/install.sh --runtime a|b1`, with T061's rules for each runtime and a line saying which runtime is on. Document it in `install.sh`'s header; T056's README picks it up.
+- [ ] T067 EE · FR-043: test first, then `product/evals/lib/ready-for-a.mjs <skill>`, and run it on all seven `*-mentor` skills. Report any mismatch to the skill's owner rather than fixing it. Depends on T064.
+
+---
+
 ## Dependencies and order
 
 - **T001 → T006** (settings need B1's effort). T002, T003 alongside T001.
@@ -198,9 +212,10 @@ lists what it must land before.
 - **US1 (PB)** and **US2 (EE)** run in parallel after T015. US2's runs (T031–T033) need no AE.
 - **US3**: T037 and T041 after Phase 2; T039 after T038 and T059; T040 after T020; T042 after T021 and T032.
 - **US4** after T018 (adapter). **US5** T046–T047 any time after T019; T048 after T021, T045.
-- **US6**: T049 with US1; T050 after merges; T051 after T031; T053 and T054 last, gated on the cockpit.
+- **US6**: T049 with US1; T050 after merges; T051 deferred; T053 after each set meets FR-033.
 - **AE sittings (one at a time)**: T021, T045 (can share T021's sitting), T048 only if more turns are needed, T055.
-- **Phase 10**: T059 before T039, T043 and T021; T060 after T059, before T031 and T055; T061 any time, before T054.
+- **Phase 10**: T059 before T039, T043 and T021; T060 after T059, before T031 and T055; T061 any time.
+- **Phase 11**: T062 and T063 before T031. T064 before T067. T065 and T066 any time.
 
 ## Parallel examples
 
@@ -222,11 +237,11 @@ US3 alongside US2:     PB: T037, T038 → T039      EE: T041
 
 | Owner | Tasks | Count |
 |---|---|---|
-| panel-builder | T002–T020, T037, T038 (with Builder), T039, T043, T044, T046, T047, T049, T052, T054, T056, T059–T061 | 33 |
-| eval-engineer | T001, T022–T034, T036, T041, T042, T050, T051, T053 | 20 |
+| panel-builder | T002–T020, T037, T038 (with Builder), T039, T043, T044, T046, T047, T049, T052, T056, T059–T061, T065, T066 | 34 |
+| eval-engineer | T001, T022–T034, T036, T041, T042, T050, T051, T053, T062–T064, T067 | 24 |
 | skill-builder (conditional, shared with PB) | T035 | 1 |
 | Builder | T021, T040, T045, T048, T055 | 5 |
 | Cockpit | T058 | 1 |
 | Both PB and EE | T057 | (counted once, not above) |
 
-61 tasks. 🖐 AE: T021, T045, T055 (and T048 only if an extra lesson is needed).
+66 tasks (T054 dropped, T062 to T067 added). 🖐 AE: T021, T045, T055 (and T048 only if an extra lesson is needed).

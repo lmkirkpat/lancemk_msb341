@@ -12,7 +12,9 @@ D3 and the review's smaller items, listed under [Amendments](#amendments-2026-10
 four follow-up questions answered the same day (Resolved Questions 6 to 9). Amended again
 2026-10-30 after `013-evals` and `013-adapter` merged (`5963fef`): the builder's decisions on review
 S1 and M1 and the merged code's protocol, listed under
-[Amendments after the merge](#amendments-2026-10-30-after-the-013-evals-and-013-adapter-merge).
+[Amendments after the merge](#amendments-2026-10-30-after-the-013-evals-and-013-adapter-merge). Amended
+2026-11-04 by `decisions/011` (build on B1, ship on A): FR-035, FR-037, SC-003 and new FR-041 to FR-043,
+listed under [Amendments 2026-11-04](#amendments-2026-11-04-build-on-b1-ship-on-a).
 
 **Input**: Cockpit task, sprint 4 (`sprints/sprint-4-plan.md` › Done looks like: "The option A
 runtime built, with the evals moved onto it"). "The panel calls the Claude API directly instead of
@@ -524,9 +526,10 @@ both match their results before this feature.
 - **FR-034**: If a `SKILL.md` or tool change is made to close a gap, the B1 baseline for that set
   MUST be re-run on the same commit before the comparison counts, so neither runtime is compared
   against an older prompt.
-- **FR-035**: Once all six sets meet FR-033, A MUST become the runners' default and each set's
-  README MUST record the A baseline (results file, model, effort, cost) as the new baseline. B1
-  stays available by switch.
+- **FR-035** *(amended 2026-11-04, `decisions/011`)*: B1 MUST stay the runners' default, so an eval
+  run never spends API credit unless `--runtime a` is asked for. When a set meets FR-033, its README
+  MUST record the A baseline (results file, model, effort, cost) next to its B1 baseline, and the
+  commit it was measured on. The B1 baseline stays the one development compares against.
 - **FR-036**: The runners MUST keep their existing options (`--only`, `--changed`, `--repeat`,
   `--judge-always`, `--dry-run`) on A, and `--changed`'s hash MUST cover the runtime's files and
   settings (model, effort, preamble) so changing the model invalidates earlier passes.
@@ -535,7 +538,8 @@ both match their results before this feature.
 
 - **FR-037**: The panel's configuration MUST name the runtime (B1 or A). With B1 selected, the
   panel, `runtime.js`, `adapter-claude-code.js`, `stream.js` and the evals behave exactly as before
-  this feature. A missing setting means B1 until SC-001 to SC-008 pass, then A.
+  this feature, except FR-042's tool list. A missing setting means B1 (*amended 2026-11-04,
+  `decisions/011`*); anything installed for a tester MUST write `"runtime": "a"` itself (spec 006).
 - **FR-038**: Option A MUST work with no Claude Code installed or signed in on the Mac, and MUST
   NOT read `~/.claude/` or the repo's `.claude/settings*.json`.
 - **FR-039**: A builder-only way to run any of the six skills on A against the live comp without
@@ -589,9 +593,10 @@ both match their results before this feature.
 - **SC-002**: The panel shows the first sign of the mentor working within 10 seconds in at least 9
   of 10 turns on A (spec 003 SC-004's bar), over at least 10 turns, and the median is reported next
   to B1's (spec 003 T034, `discovery/usage-notes/mentor-panel.md`). *Measured by:* the turn log (FR-029).
-- **SC-003**: All six eval sets meet FR-033 on A (no hard-rule failure, ≥ 80%, within 5 points of
-  their B1 baseline, every regression fixed or accepted). *Measured by:* the results files and each
-  set's README.
+- **SC-003** *(amended 2026-11-04, `decisions/011`)*: Easing and pivot meet FR-033 on A (no hard-rule
+  failure, ≥ 80%, within 5 points of their B1 baseline, every regression fixed or accepted). The
+  other four sets MUST do the same on the commit given to the first tester, as a gate on that
+  hand-off rather than on this spec. *Measured by:* the results files and each set's README.
 - **SC-004**: The median cost of a full quickstart lesson on A, over at least 3 lessons, is at most
   $0.40 (B1 measured $0.38 per lesson in spec 003 T034, before the pacing rules). If it's higher,
   the cheaper-model comparison in Q2 runs before the first tester. *Measured by:* the
@@ -759,3 +764,41 @@ writes the merged code's protocol into the contracts.
 | S6 (adapter) | The adapter's backstop (30 s past the helper's 5-minute timeout) ends the turn as `process_exited` and stops the helper | contracts/helper-protocol.md |
 | Adapter events | The A adapter's `turn_end` carries the helper's extras plus `error_kind` and, on the first turn, `start_ms`; `tool_call` carries `input`. Noted against spec 003's adapter contract, which this spec doesn't edit | contracts/helper-protocol.md › The A adapter against spec 003's contract |
 | Evals | `skill-tool.json` in the `--changed` hash; the request-field allowlist; the README's `A-comparison baseline:` line; `non_baseline`, `settings_file` and `cost_unknown_turns` in results; the real tool-change block shape owed by T060 | contracts/eval-runtime.md, data-model › Eval results, T060 |
+
+## Amendments 2026-11-04 (build on B1, ship on A)
+
+Approved by the builder 2026-11-04. From `decisions/011`: new work is built on B1, then
+finalized, user tested and shipped on A. Evidence: the builder's $100 credit, and a read-only
+comparison of each runtime's tool lists on 2026-11-04.
+
+| ID | What changed | Why |
+|---|---|---|
+| FR-035 | B1 stays the runners' default; A baselines are recorded alongside B1's | Eval runs shouldn't spend credit by default |
+| FR-037 | A missing setting stays B1; tester installs write `"runtime": "a"` themselves | The builder's setup stays on B1 |
+| SC-003 | Easing and pivot now; the other four before the first tester | Skills will change during development, so proving them now would be paid for twice |
+| FR-041 (new) | One command switches runtime: `bash panel/install.sh --runtime a\|b1` | Moving between them should be one step |
+| FR-042 (new) | B1's tool lists MUST come from the skill's `allowed-tools`, in the runners and the panel's adapter | B1 is more permissive than A, so a mistake could pass in development and fail for a tester |
+| FR-043 (new) | A free check MUST say whether a skill is ready for A | Catch what can be caught before spending credit |
+
+- **FR-041**: `panel/install.sh --runtime a|b1` MUST set the runtime in `panel.json`, add what that
+  runtime needs (the Claude Code path for B1), and say which runtime is now on. With no flag, the
+  installer keeps today's behavior.
+- **FR-042**: The B1 runners and `adapter-claude-code.js` MUST build `--allowedTools` from the active
+  skill's `allowed-tools`, with no hand-kept lists. The runners' lists MUST stay the same set as the
+  2026-10-29 baselines used, so those baselines stay valid. A runner MAY still recognize
+  `read_learner_record` so that a call to it is reported.
+- **FR-043**: `product/evals/lib/ready-for-a.mjs <skill>` MUST, with no service call and no credit,
+  check that the skill's name is one A accepts, its `allowed-tools` are listed by the server, every
+  `ae-mentor` tool named in its `SKILL.md` body is allowed, and its runner's `--runtime a --dry-run`
+  passes.
+
+**Found on 2026-11-04, for these tasks:**
+
+- The panel's B1 adapter hard-codes easing's six tools (`panel/lib/adapter-claude-code.js`). The other
+  five skills' first lessons ran in plain Claude Code sessions, so they've never run on the B1 panel.
+  Whether a skill's own `allowed-tools` frontmatter grants its tools in a headless run isn't known.
+- `next-mentor`'s hand-over hasn't been checked on B1; `--tools ToolSearch` leaves out `Skill`.
+- The five non-easing runners already leave `read_learner_record` out of what they allow, and their
+  lists appear to match each skill's today, so research R6's "Found while planning" note looks out of
+  date. Nothing enforces the match.
+

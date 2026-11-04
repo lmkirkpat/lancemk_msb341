@@ -352,7 +352,10 @@ info names the commit and results file.
   unless that commit has a full eval run, against the runtime the release ships, at or above the
   eval set's target (spec 002 SC-006: 80%). The release MUST record its version, commit and eval
   results file, and the setup check MUST show the version. *(Amended 2026-10-30, spec 013:* "a
-  full eval run" means all six sets on option A, each meeting spec 013 FR-033's bar, as in SC-006.)
+  full eval run" means all six sets on option A, each meeting spec 013 FR-033's bar, as in SC-006.) *(Amended 2026-11-04, `decisions/011`:* that full
+  run is required for the first release to a tester. A later release MAY reuse a set's A result if the
+  set's skill, tools, helper and settings (including model and effort) are unchanged since it, and MUST
+  record which results it reused and from which commit; every changed set re-runs on A.)
 
 **Built to survive a UXP rebuild**
 
