@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Installs the Knack panel on macOS (specs/003-mentor-panel). Non-interactive, safe to re-run.
-#   bash panel/install.sh
+#   bash panel/install.sh                 keeps the runtime panel.json already names
+#   bash panel/install.sh --runtime a     switches to option A, the Claude API (spec 013 FR-041)
+#   bash panel/install.sh --runtime b1    switches to B1, headless Claude Code; needs Claude Code
+#                                         installed, and adds its path to panel.json
+# Anything else is refused and changes nothing. Restart After Effects after switching.
 # 1. symlinks panel/ into ~/Library/Application Support/Adobe/CEP/extensions/AEMentorPanel
 # 2. lets After Effects load unsigned CEP extensions (PlayerDebugMode, current user only)
 # 3. writes panel.json with the claude, node and repo paths (research R3): apps opened from the
@@ -16,15 +20,29 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$ROOT/.." && pwd)"
 tilde() { printf '%s' "${1/#$HOME/~}"; }
 
+usage() { echo "Use: bash panel/install.sh [--runtime a|b1]" >&2; exit 1; }
+CHOSEN=""
+if [ "$#" -gt 0 ]; then
+  [ "$#" -eq 2 ] && [ "$1" = "--runtime" ] || usage
+  case "$2" in
+    a|b1) CHOSEN="$2" ;;
+    *) usage ;;
+  esac
+fi
+
 NODE="$(command -v node || true)"
 [ -n "$NODE" ] || { echo "Node.js isn't installed. Install Node 18+ from https://nodejs.org and re-run." >&2; exit 1; }
 HOME_DIR="${AE_MENTOR_HOME:-$HOME/Library/Application Support/AEMentor}"
 CFG="$HOME_DIR/panel.json"
 # The runtime already chosen in panel.json, if any: "a", "b1", or empty (no file, unreadable, or no
 # runtime). Any other value stops the install, as config.js refuses it, rather than being rewritten
-# as B1.
-RUNTIME="$("$NODE" -e 'let c; try { c = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")); } catch (e) {}
+# as B1. --runtime replaces whatever is there, so it's also the fix for a value it doesn't know.
+if [ -n "$CHOSEN" ]; then
+  RUNTIME="$CHOSEN"
+else
+  RUNTIME="$("$NODE" -e 'let c; try { c = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")); } catch (e) {}
   if (c && typeof c === "object" && "runtime" in c) process.stdout.write(c.runtime === "a" || c.runtime === "b1" ? c.runtime : "?");' "$CFG")"
+fi
 if [ "$RUNTIME" = "?" ]; then
   echo "The panel's settings aren't ones it knows. In $(tilde "$CFG"), set \"runtime\" to \"a\" or \"b1\", or remove it, then re-run." >&2
   exit 1
@@ -66,6 +84,10 @@ mkdir -p "$HOME_DIR"
   "$CFG" "$CLAUDE" "$NODE" "$REPO" "$RUNTIME"
 chmod 600 "$CFG"
 echo "OK   wrote $(tilde "$CFG")"
+case "$CHOSEN" in
+  a) echo "OK   runtime: A (Claude API)" ;;
+  b1) echo "OK   runtime: B1 (Claude Code)" ;;
+esac
 
 NODE_DIR="$(dirname "$NODE")"
 NPM="$NODE_DIR/npm"

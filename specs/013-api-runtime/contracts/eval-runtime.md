@@ -4,7 +4,9 @@ Owner: eval-engineer. Applies to all six `product/evals/*/run.mjs`.
 
 ## Switch
 
-`--runtime a|b1`. Default `b1` until every set meets FR-033 (then `a`, FR-035). Every existing
+*Amended (T064):* on B1, each runner's `--allowedTools` is the skill's own `allowed-tools`, read by `lib/skill-tools.mjs`. `read_learner_record` is recognized but not allowed unless the skill lists it.
+
+`--runtime a|b1`. Default `b1` (FR-035, amended 2026-11-04 by `decisions/011`). Every existing
 option (`--only`, `--changed`, `--repeat`, `--judge-always`, `--dry-run`) works on both. `--dry-run`
 on A also checks that the helper starts, `settings.json` loads, and every skill a case uses has a
 readable `SKILL.md` and tools the server lists, with no request to the service.
@@ -48,13 +50,11 @@ command, and removed from every child's environment (helper, `claude` mentor on 
 - **Fixed runtime texts in tool results**: exactly FR-012 items 3 to 7. "That call didn't run." and
   "That call didn't finish, so it may or may not have changed the project." pass only with
   `is_error: true`.
-- **Mid-conversation tool changes** (`tool_addition` / `tool_removal` in a `role: "system"`
-  message) pass when every tool they name is a server tool or `Skill`. Until T060 settles the
-  service's block shape, the check reads a name from `name`, `tool_name`, `names` or `tools`. Once
-  T060 lands, the real shape goes into this contract and the allowlist test, and the other readings
-  come out.
+- **Mid-conversation tool changes** (settled by T060, 2026-11-03). A `role: "system"` message may hold, in order, `tool_removal` blocks, `tool_addition` blocks, then the skill body's text. A message may hold only a `tool_removal` (a lesson with no active skill sends one). Each block is `{ "type": "tool_removal" | "tool_addition", "tool": { "type": "tool_reference", "name": "<tool>" } }`. The check passes a block only when `tool.type` is `tool_reference` and `tool.name` is a server tool or `Skill`. A block of any other shape names no tool and fails. Tool entries may carry `defer_loading: true`; no new top-level request field is involved.
 
 ## Results file
+
+*Amended (T063):* on A, each run carries `mentor_cost_usd` (what the API credit paid) and `judge_cost_usd` (the headless judge, paid by the subscription), and the results file carries their sums. `cost_usd` stays the total. The summary line reads `total $X (mentor $M on credit + judge $J on subscription)`. B1 results are unchanged.
 
 Adds the fields in [data-model.md](../data-model.md) › Eval results. `--changed`'s hash adds
 `panel/helper/main.mjs`, `panel/helper/lib/*`, `settings.json`, `preamble.md` and `prices.json` on

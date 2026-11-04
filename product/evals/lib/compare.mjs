@@ -58,9 +58,11 @@ export function compareToBaseline(results, baseline) {
 }
 
 // The two or three summary lines for an A run.
-export function summaryLines({ passed, total, target, cost, costUnknownTurns = 0, info, comparison, otherModelTurns = 0, partial = false }) {
+export function summaryLines({ passed, total, target, cost, mentorCost, judgeCost, costUnknownTurns = 0, info, comparison, otherModelTurns = 0, partial = false }) {
   const pct = total ? Math.round((passed / total) * 100) : 0;
-  const money = `$${cost.toFixed(2)}${costUnknownTurns ? ` (+ ${costUnknownTurns} turn${costUnknownTurns === 1 ? "" : "s"} of unknown cost)` : ""}`;
+  // T063: with the split, say what each part paid for; the total includes the judge, which is not credit.
+  const split = typeof mentorCost === "number" && typeof judgeCost === "number";
+  const money = `${split ? "total " : ""}$${cost.toFixed(2)}${split ? ` (mentor $${mentorCost.toFixed(2)} on credit + judge $${judgeCost.toFixed(2)} on subscription)` : ""}${costUnknownTurns ? ` (+ ${costUnknownTurns} turn${costUnknownTurns === 1 ? "" : "s"} of unknown cost)` : ""}`;
   const lines = [`${passed}/${total} passed (${pct}%, target ${target}%) ${pct >= target ? "✓" : "✗"}  ${money}  runtime a, ${info ? info.model : "?"}, effort ${info ? info.effort : "?"}`];
   if (comparison) {
     const { baseline: b, vs_baseline: v } = comparison;

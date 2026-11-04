@@ -786,7 +786,9 @@ comparison of each runtime's tool lists on 2026-11-04.
 - **FR-042**: The B1 runners and `adapter-claude-code.js` MUST build `--allowedTools` from the active
   skill's `allowed-tools`, with no hand-kept lists. The runners' lists MUST stay the same set as the
   2026-10-29 baselines used, so those baselines stay valid. A runner MAY still recognize
-  `read_learner_record` so that a call to it is reported.
+  `read_learner_record` so that a call to it is reported. `Skill` MUST NOT be passed in B1's list: a 2026-11-04
+  check showed it has no effect, because `--tools ToolSearch` leaves that tool out. Hand-overs are tested on
+  A only (builder's decision, 2026-11-04).
 - **FR-043**: `product/evals/lib/ready-for-a.mjs <skill>` MUST, with no service call and no credit,
   check that the skill's name is one A accepts, its `allowed-tools` are listed by the server, every
   `ae-mentor` tool named in its `SKILL.md` body is allowed, and its runner's `--runtime a --dry-run`

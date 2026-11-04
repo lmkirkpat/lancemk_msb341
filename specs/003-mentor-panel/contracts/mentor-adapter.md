@@ -71,7 +71,7 @@ plus `PATH` = `dirname(claude_path):dirname(node_path):/usr/bin:/bin:/usr/sbin:/
 ## Guarantees
 
 - The adapter never reads or writes the AE project, `session.json`, or `learner.json`.
-- The adapter never adds tools beyond the six above, and never enables Bash, file or web tools.
+- The adapter never adds tools beyond the six above, and never enables Bash, file or web tools. *(Amended 2026-11-04, spec 013 FR-042, once T065 lands: the allowed tools are the opening skill's `allowed-tools`; still no Bash, file or web tools.)*
 - One turn at a time.
 - The child process can always find `node`, so the `ae-mentor` server starts inside AE (R3).
 - `stop()` leaves no child process running.

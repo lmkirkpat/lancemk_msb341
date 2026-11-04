@@ -161,6 +161,22 @@ matter little (the skills no longer mention it), but if a case diverges and the 
 `read_learner_record` attempt, this is why. The eval engineer notes it in the equivalence record;
 the fix, if any, is the skill's or the runner's owner's call, not the runtime's.
 
+**T065's check on B1 (2026-11-04, Claude Code 2.1.318, the panel's real launch arguments, on fixtures, subscription only; `apiKeySource: none` in all five runs):**
+
+| Run | Allowed list | Turns | Observed |
+|---|---|---|---|
+| r1 | Today's | `/key-types-mentor` | `key_types_snapshot` works, no denials |
+| r2 | Today's | Same, then a second turn | Turn 1 works; turn 2 **denies** `key_types_snapshot` |
+| r4 | Today's | `/next-mentor`, then "Yes" | `recommend_next` works; no `Skill` call, and the mentor tells the learner to type the command |
+| r5 | Key types' own (scratch) | Same as r2 | Both turns work, no denials |
+| r6 | `next-mentor`'s own plus `Skill` (scratch) | `/next-mentor`, "Yes", a typed `/key-types-mentor`, a next turn | `Skill` isn't in `init.tools`; the typed command works for its own turn, and the next turn **denies** `key_types_snapshot` |
+
+- **A skill's frontmatter grants its tools for one turn only.** After that, only the launch's `--allowedTools` carries them, so a one-turn check can't prove a lesson works on B1.
+- **B1 can't hand over.** `--tools ToolSearch` leaves out `Skill`, and listing it in `--allowedTools` doesn't bring it back. A typed hand-over also breaks on its second turn, because the list is fixed at launch.
+- **R6's "Found while planning" note is out of date:** the runners' lists match the skills' (T064 checks this), so B1 and A now allow the same tools in evals.
+- **Not checked:** whether `--resume` honours the launch list; a runtime switch followed by Continue without restarting After Effects.
+- The cockpit checked denials and `Skill`'s absence against the raw transcripts.
+
 ## R7. Thinking, effort and history (FR-015, FR-022, spec Q2)
 
 **Decision**: `thinking` is left at the model's default (adaptive; Opus 5.5 can't turn it off),

@@ -70,3 +70,12 @@ test("unknown cost, a partial run, below target and no baseline are said plainly
   assert.match(p[1], /partial run, compared on the cases run; B1 pass → A fail: none; A pass → B1 fail: 21b/);
   assert.equal(shortId("21b-something"), "21b");
 });
+
+test("T063: with a cost split the first line labels the total, the credit part and the subscription part", () => {
+  const l = summaryLines({ passed: 26, total: 28, target: 80, cost: 14.8, mentorCost: 12.1, judgeCost: 2.7, info: { model: "m", effort: "e" }, comparison: null });
+  assert.equal(l[0], "26/28 passed (93%, target 80%) ✓  total $14.80 (mentor $12.10 on credit + judge $2.70 on subscription)  runtime a, m, effort e");
+  // Unknown-cost turns still follow, and a missing split leaves the old line untouched.
+  const u = summaryLines({ passed: 1, total: 1, target: 80, cost: 1, mentorCost: 1, judgeCost: 0, costUnknownTurns: 1, info: null, comparison: null });
+  assert.match(u[0], /total \$1\.00 \(mentor \$1\.00 on credit \+ judge \$0\.00 on subscription\) \(\+ 1 turn of unknown cost\)/);
+  assert.match(summaryLines({ passed: 1, total: 1, target: 80, cost: 1, info: null, comparison: null })[0], /✓  \$1\.00  runtime a/);
+});
