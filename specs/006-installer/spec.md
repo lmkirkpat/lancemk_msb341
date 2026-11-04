@@ -352,7 +352,10 @@ info names the commit and results file.
   unless that commit has a full eval run, against the runtime the release ships, at or above the
   eval set's target (spec 002 SC-006: 80%). The release MUST record its version, commit and eval
   results file, and the setup check MUST show the version. *(Amended 2026-10-30, spec 013:* "a
-  full eval run" means all six sets on option A, each meeting spec 013 FR-033's bar, as in SC-006.)
+  full eval run" means all six sets on option A, each meeting spec 013 FR-033's bar, as in SC-006.) *(Amended 2026-11-04, `decisions/011`:* that full
+  run is required for the first release to a tester. A later release MAY reuse a set's A result if the
+  set's skill, tools, helper and settings (including model and effort) are unchanged since it, and MUST
+  record which results it reused and from which commit; every changed set re-runs on A.)
 
 **Built to survive a UXP rebuild**
 
@@ -428,7 +431,8 @@ table is a design target to re-check against the spec 001 re-run (`CLAUDE.md` �
 - **SC-006**: The lesson a tester gets is the lesson that was measured: every release names a
   passing full eval run against its runtime (at least 80%; *amended 2026-10-30:* all six sets on
   option A, each meeting spec 013 FR-033's bar: no hard-rule failure, at least 80%, within 5 points
-  of its B1 baseline, every regression fixed or accepted), and quickstart steps a–f
+  of its B1 baseline, every regression fixed or accepted; *amended 2026-11-04:* a later release may
+  reuse unchanged sets' results, as FR-025 says), and quickstart steps a–f
   (`specs/003-mentor-panel/quickstart.md` §4) pass on an installed copy with no repo on the Mac.
   *Measured by:* the release command's refusal test (US5) plus one live run by the builder.
 - **SC-007**: No installed file, log, cache or copied report contains the access key, a real name,
@@ -513,6 +517,12 @@ Each changes the spec. Recommended answer first.
    workspace needs checking in the console before this is answered; if only per workspace, "one key
    per tester, each with its own limit" means one workspace per tester. The Keychain item is service
    `Knack`, account `anthropic-api-key` (spec 013 research R11).
+   *Note 2026-11-02 (paused by the builder):* still open on purpose while the builder thinks it
+   over and explores funding options (who pays for testers' lessons). Choices on the table: per-tester
+   keys issued by the builder (recommended above), bring-your-own key, or later a hosted backend
+   (still rejected for now by `decisions/005`; it's the likely path for a public release). Spec 013
+   doesn't need the answer, since it only builds the key check and error kinds. Come back to this
+   before the installer's plan, and write a decision record when it's answered.
 3. **Pay for Apple's Developer ID (yearly fee) so the installer is notarized?** *Recommended: yes,
    before the first tester.* Without it, recent macOS blocks the file and the tester has to
    approve it in System Settings › Privacy & Security, which fails SC-008 and is exactly the

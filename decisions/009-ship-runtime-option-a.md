@@ -3,7 +3,8 @@
 **Date:** 2026-10-20
 **Status:** Accepted, 2026-10-20. Amends `decisions/005` (B1 stays for the builder's own prototype
 until A is built). Raised in `specs/006-installer/spec.md` › Open Questions 1. Refined by `decisions/010` (2026-10-30): A's loop
-runs in a local helper process.
+runs in a local helper process. Refined by `decisions/011` (2026-11-04): new work is built on B1, then
+finalized, user tested and shipped on A.
 
 ## Context
 

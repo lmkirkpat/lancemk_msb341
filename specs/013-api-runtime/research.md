@@ -139,6 +139,15 @@ server holds in memory between turns rather than in `session.json` would behave 
 the skill. **Rejected**: copying Claude Code's own system prompt (FR-012: not ours, and not an
 allowlisted source).
 
+**T060's answers from the real service (2026-11-03, cockpit's record of the hand-back; merged `2185304`):**
+
+- The beta `mid-conversation-tool-changes-2026-07-01` is accepted and behaves as the task describes, on Opus 5.5 and Sonnet 5.5.
+- **As built:** one `role: "system"` message holding removals, then additions, then the skill body. Each block is `{ "type": "tool_removal" | "tool_addition", "tool": { "type": "tool_reference", "name": "…" } }`.
+- **Looser than the docs:** the service accepted a removal followed by another system message, a system message followed by another, and re-adding a tool declared without `defer_loading` once it had been removed. The `next-mentor` → `ease-mentor` → `next-mentor` path relies on the last one.
+- **A hard rule:** a list with every tool deferred gets a 400. So a lesson with no active skill declares `Skill` undeferred and withdraws it in its first request. A model asked directly can say a tool was removed. The builder merged this on 2026-11-04.
+- **Not tested:** a server-side fallback firing during a hand-over.
+- **Measured:** `tools` byte-identical on all 6 requests (23 tools, 20 deferred), binding `error` throughout, no `input_transformations`. First turn $0.0239 against T016's $0.0227; hand-over turn $0.0900 (3 requests) against $0.1029 (4 requests).
+
 ## R6. Which tools a lesson gets (FR-005, FR-008)
 
 **Decision**: exactly the active skill's `allowed-tools` (the `mcp__ae-mentor__` prefix removed)
@@ -231,6 +240,14 @@ service text. Service text that reaches a log is scrubbed of anything shaped lik
 *Amended 2026-10-30 (review S5, `panel/helper/lib/errors.mjs` `classify`):* only network errors are
 `offline`. The plan sent every non-API error there, which would tell a learner to check their
 internet for a bug in the helper. The billing row stays provisional until T038.
+
+**T016's answers from the real service (2026-11-03, Opus 5.5, helper settings `2a0eb1d34662`):**
+
+1. **Betas together: accepted.** Binding, updates and fallback went on one request, on all 7 requests of a `next-mentor` lesson and on the easing fixture turn.
+2. **Taking back a system message: accepted.** A direct test sent a history ending in a `role: "system"` message, the same history without it, then with it again, with `prefix_mismatch_behavior: "error"`. All were accepted, with empty `input_transformations`. The test used effort low and the binding beta only, and each reply was a normal one, not an empty one.
+3. **`cache_control` with `ttl: "5m"` and an array `system`: accepted**, on every request. Cache reads and writes were both reported.
+
+**Hand-over, before T060:** `next-mentor` handed over to `ease-mentor` on a fixture. The tool list went from 3 to 6 tools, the binding from `error` to `drop_block`, and every later step logged `input_transformations` with `thinking_dropped`, reason `prefix_binding_mismatch`, path `messages.5.content.0`. That matches the as-built swap, and T060 is meant to remove it on Opus 5.5 and Sonnet 5.5.
 
 **The history check (amended 2026-10-30, review M2; FR-021a)**: every request sends the beta
 `thinking-binding-controls-2026-08-01` with `thinking.block_binding.prefix_mismatch_behavior`:

@@ -17,7 +17,7 @@ testing with real users.
 - [ ] All six skills run as live lessons inside the new panel
 - [ ] A usage session comparing the new panel with the current one, checked against spec 007's
       success criteria
-- [ ] The option A runtime built, with the evals moved onto it
+- [ ] The option A runtime built, with easing and pivot proven on it; the rest before the first tester (`decisions/011`, changed 2026-11-04)
 - [ ] Knack installed with the installer on a fresh macOS user account with only After Effects
       installed (spec 006 SC-002)
 - [x] Carry-over from Sprint 3: eval baselines for the five new skills (key types, speed graph,

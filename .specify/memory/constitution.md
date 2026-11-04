@@ -82,6 +82,9 @@ person it checks proves nothing. The eval baseline only counts if the builder co
   files, the same as code.
 - Sprint plans and reviews live in `sprints/`. The plan is committed on day one of the sprint.
 - `CLAUDE.md` holds current state and working context. It is kept current as work progresses.
+- New features and skills MUST be built and evaluated on B1, then finalized, user tested and shipped
+  on A (`decisions/011`). Only option A ships. Each plan's constitution check MUST say how the work
+  moves to A.
 
 ## Spec Workflow
 
@@ -102,4 +105,4 @@ editing this file, bumping the version (MAJOR: a principle removed or redefined;
 principle or section added or materially expanded; PATCH: wording), and updating the dates
 below. Every Spec Kit plan checks compliance before tasks are generated.
 
-**Version**: 1.3.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-10-19
+**Version**: 1.4.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-11-04

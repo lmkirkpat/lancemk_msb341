@@ -16,6 +16,7 @@ import {
   withBreakpoint,
   withoutBreakpoints,
   skillSystemMessage,
+  toolChangeBlocks,
 } from "../lib/prompt.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -64,8 +65,61 @@ test("system: preamble, server instructions, skill body byte for byte; breakpoin
   assert.equal(p.system[1].cache_control, undefined);
 });
 
-test("tools: exactly the skill's, in the server's order, as the server describes them", () => {
-  const p = lesson("ease-mentor");
+const HAIKU = { model: "claude-haiku-5-5", fallbacks: null, thinking_display: "omitted" };
+const offered = (p) => p.tools.filter((t) => !t.defer_loading).map((t) => t.name);
+
+test("tools on Opus 5.5 and Sonnet 5.5: every server tool plus Skill; those outside the skill deferred (D2)", () => {
+  for (const model of ["claude-opus-5-5", "claude-sonnet-5-5"]) {
+    const p = lesson("ease-mentor", { model });
+    assert.deepEqual(p.tools.map((t) => t.name), [...server.tools.map((t) => t.name), "Skill"], model);
+    const listed = readSkill(SKILLS, "ease-mentor").allowedTools;
+    assert.deepEqual(offered(p), server.tools.map((t) => t.name).filter((n) => listed.includes(n)));
+    for (const t of p.tools) {
+      const s = server.tools.find((x) => x.name === t.name);
+      const def = s ? { name: s.name, description: s.description, input_schema: s.inputSchema } : { name: "Skill", description: skillTool.description, input_schema: skillTool.input_schema };
+      assert.deepEqual(t, listed.includes(t.name) ? def : { ...def, defer_loading: true });
+    }
+    assert.deepEqual([...p.allowed].sort(), listed.slice().sort());
+    assert.equal(p.toolChanges, true);
+  }
+});
+
+test("tools on Opus 5.5: the same declaration whichever skill lists what, apart from which are deferred", () => {
+  const strip = (p) => p.tools.map(({ defer_loading, ...t }) => t);
+  assert.equal(JSON.stringify(strip(lesson("ease-mentor"))), JSON.stringify(strip(lesson("offset-mentor"))));
+  assert.deepEqual(offered(lesson("next-mentor")), ["read_learner_record", "recommend_next", "Skill"]);
+  assert.ok(!lesson("offset-mentor").allowed.has("Skill"));
+});
+
+test("tools with no skill: Skill alone isn't deferred, since the service refuses a list with none", () => {
+  const p = buildLessonPrompt({ preamble, instructions: server.instructions, serverTools: server.tools, skill: null, skillTool, settings });
+  assert.deepEqual(offered(p), ["Skill"]);
+  assert.equal(p.allowed.size, 0, "and it can't be run");
+});
+
+test("tool-change blocks: removals then additions, in the declared order, by reference", () => {
+  const { tools } = lesson("next-mentor");
+  const blocks = toolChangeBlocks(tools, new Set(["read_learner_record", "recommend_next", "Skill"]), new Set(["read_learner_record", "snapshot_project", "set_ease"]));
+  const order = tools.map((t) => t.name);
+  assert.ok(order.indexOf("snapshot_project") < order.indexOf("set_ease") || order.indexOf("set_ease") < order.indexOf("snapshot_project"));
+  assert.deepEqual(blocks.slice(0, 2), [
+    { type: "tool_removal", tool: { type: "tool_reference", name: "recommend_next" } },
+    { type: "tool_removal", tool: { type: "tool_reference", name: "Skill" } },
+  ]);
+  assert.deepEqual(blocks.slice(2).map((b) => b.type), ["tool_addition", "tool_addition"]);
+  assert.deepEqual(blocks.slice(2).map((b) => b.tool.name), order.filter((n) => n === "snapshot_project" || n === "set_ease"));
+  assert.deepEqual(toolChangeBlocks(tools, new Set(["a"]), new Set(["a"])), []);
+});
+
+test("the hand-over's system message: tool changes first, then the body; either can be alone", () => {
+  const change = { type: "tool_removal", tool: { type: "tool_reference", name: "Skill" } };
+  assert.deepEqual(skillSystemMessage("BODY", [change]), { role: "system", content: [change, { type: "text", text: "BODY" }] });
+  assert.deepEqual(skillSystemMessage("BODY"), { role: "system", content: [{ type: "text", text: "BODY" }] });
+  assert.deepEqual(skillSystemMessage(null, [change]), { role: "system", content: [change] });
+});
+
+test("tools on Haiku 5.5: exactly the skill's, in the server's order, as the server describes them", () => {
+  const p = lesson("ease-mentor", HAIKU);
   const serverOrder = server.tools.map((t) => t.name).filter((n) => readSkill(SKILLS, "ease-mentor").allowedTools.includes(n));
   assert.deepEqual(p.tools.map((t) => t.name), serverOrder);
   assert.equal(p.tools.length, 6);
@@ -75,18 +129,21 @@ test("tools: exactly the skill's, in the server's order, as the server describes
   }
   assert.ok(!p.tools.some((t) => t.name === "offset_snapshot" || t.name === "Skill"), "an unlisted tool is absent");
   assert.deepEqual([...p.allowed].sort(), serverOrder.slice().sort());
+  assert.equal(p.toolChanges, false);
 });
 
-test("each skill gets only its own tools; only next-mentor gets the hand-over tool", () => {
-  for (const name of ["anchor-mentor", "key-types-mentor", "null-parenting-mentor", "offset-mentor", "speed-graph-mentor"]) {
-    const p = lesson(name);
-    const want = readSkill(SKILLS, name).allowedTools.filter((t) => server.tools.some((s) => s.name === t));
-    assert.deepEqual(p.tools.map((t) => t.name).sort(), want.sort(), name);
-    assert.ok(!p.allowed.has("Skill"));
+test("each skill offers only its own tools; only next-mentor offers the hand-over tool", () => {
+  for (const patch of [undefined, HAIKU]) {
+    for (const name of ["anchor-mentor", "key-types-mentor", "null-parenting-mentor", "offset-mentor", "speed-graph-mentor"]) {
+      const p = lesson(name, patch);
+      const want = readSkill(SKILLS, name).allowedTools.filter((t) => server.tools.some((s) => s.name === t));
+      assert.deepEqual(offered(p).sort(), want.sort(), name);
+      assert.ok(!p.allowed.has("Skill"));
+    }
+    const next = lesson("next-mentor", patch);
+    assert.deepEqual(offered(next), ["read_learner_record", "recommend_next", "Skill"]);
+    assert.deepEqual(next.tools.find((t) => t.name === "Skill"), { name: "Skill", description: skillTool.description, input_schema: skillTool.input_schema });
   }
-  const next = lesson("next-mentor");
-  assert.deepEqual(next.tools.map((t) => t.name), ["read_learner_record", "recommend_next", "Skill"]);
-  assert.deepEqual(next.tools[2], { name: "Skill", description: skillTool.description, input_schema: skillTool.input_schema });
 });
 
 test("a tool the skill lists but the server doesn't have is left out", () => {
