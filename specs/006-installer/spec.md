@@ -431,7 +431,8 @@ table is a design target to re-check against the spec 001 re-run (`CLAUDE.md` �
 - **SC-006**: The lesson a tester gets is the lesson that was measured: every release names a
   passing full eval run against its runtime (at least 80%; *amended 2026-10-30:* all six sets on
   option A, each meeting spec 013 FR-033's bar: no hard-rule failure, at least 80%, within 5 points
-  of its B1 baseline, every regression fixed or accepted), and quickstart steps a–f
+  of its B1 baseline, every regression fixed or accepted; *amended 2026-11-04:* a later release may
+  reuse unchanged sets' results, as FR-025 says), and quickstart steps a–f
   (`specs/003-mentor-panel/quickstart.md` §4) pass on an installed copy with no repo on the Mac.
   *Measured by:* the release command's refusal test (US5) plus one live run by the builder.
 - **SC-007**: No installed file, log, cache or copied report contains the access key, a real name,
