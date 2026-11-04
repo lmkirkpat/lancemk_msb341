@@ -87,6 +87,8 @@ recommendation.)
    | Pick the key type on purpose | `/key-types-mentor` |
    | Shape the ease in the speed graph | `/speed-graph-mentor` |
    | Break the lockstep with offset | `/offset-mentor` |
+   | Set the pivot (anchor point) | `/anchor-mentor` |
+   | Move a group with a null | `/null-parenting-mentor` |
 
    For a review, hand over with "review" so the lesson starts in review mode, and only for a skill
    whose `review_available` is true or that `recommend_next` recommended as a review. For a recommendation
