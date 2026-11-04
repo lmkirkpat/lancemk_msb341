@@ -62,6 +62,16 @@ test("the same interface as the B1 adapter", () => {
   assert.ok(fs.existsSync(HELPER_PATH));
 });
 
+test("A ignores the skill named at start: the helper reads it from the request (spec 013 FR-042)", () => {
+  const plain = harness();
+  plain.adapter.start();
+  const named = harness();
+  named.adapter.start({ skill: "key-types-mentor" });
+  const fields = (h) => { const c = Object.assign({}, h.child().commands()[0]); delete c.session_id; return c; };
+  assert.deepEqual(fields(named), fields(plain));
+  assert.deepEqual(named.spawned[0].args, plain.spawned[0].args);
+});
+
 test("start spawns node on the helper with only PATH and HOME, and sends the start command", () => {
   const h = harness();
   const id = h.adapter.start();

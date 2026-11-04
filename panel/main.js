@@ -18,6 +18,7 @@
   // anything else is B1, headless Claude Code, exactly as before.
   const createAdapter = (cfg) => (cfg.runtime === "a" ? createApiAdapter : createB1Adapter)(cfg);
   const { REQUESTS, visibleKinds } = lib("requests.js");
+  const { skillOf } = lib("skill-tools.js");
   const { initialLesson, reduceLesson, stageOf } = lib("lesson.js");
   const { pathView } = lib("path.js");
   const { readLearnerRecord, memoryView } = lib("memory.js");
@@ -356,8 +357,9 @@
     state.lessonOpen = true;
     state.adapter = createAdapter(state.cfg);
     wireAdapter(state.adapter);
-    const id = state.adapter.start();
-    const session = ps.newPanelSession({ claude_session_id: id, lesson: state.view });
+    const skill = skillOf(REQUESTS.start.request);
+    const id = state.adapter.start({ skill });
+    const session = ps.newPanelSession({ claude_session_id: id, lesson: state.view, skill });
     state.session = session;
     persist();
     bridgeStarted().then((started) => {
@@ -381,7 +383,7 @@
     redraw(saved.messages);
     state.adapter = createAdapter(state.cfg);
     wireAdapter(state.adapter);
-    state.adapter.start({ resumeSessionId: saved.claude_session_id });
+    state.adapter.start({ resumeSessionId: saved.claude_session_id, skill: saved.skill });
     setConn("ok", "Knack · lesson open");
     send("continue", REQUESTS.continue.request, REQUESTS.continue.label);
   }

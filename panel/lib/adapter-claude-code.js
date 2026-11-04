@@ -2,15 +2,17 @@
 // decisions/005 option B1). This adapter keeps one headless Claude Code process per lesson and
 // talks stream-json over stdin/stdout (research R1, confirmed by the spike), in the runtime folder
 // from runtime.js, never the repo. It never reads or
-// writes the AE project, session.json or learner.json, and gives the mentor no tools beyond the
-// six ae-mentor tools plus ToolSearch (research R2).
+// writes the AE project, session.json or learner.json, and gives the mentor no tools beyond
+// ToolSearch and the opening skill's ae-mentor tools (research R2, spec 013 FR-042).
 "use strict";
 
 const nodeCrypto = require("crypto");
 const { createStreamParser } = require("./stream.js");
 const { childPath } = require("./config.js");
+const { toolsForSkill, PREFIX } = require("./skill-tools.js");
 
-const PREFIX = "mcp__ae-mentor__";
+// Easing's six: the list when there's no skill to read (a request or a save with no skill, or an
+// unreadable SKILL.md), because every older save is an easing lesson.
 const MENTOR_TOOLS = ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson"];
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
 const AUTH = /not (?:logged|signed) in|\/login|authenticat|api key/i;
@@ -19,11 +21,16 @@ const AUTH = /not (?:logged|signed) in|\/login|authenticat|api key/i;
 // learner's (usage notes, panel session 1; verified with the init line's output_style).
 const LEARNER_SETTINGS = JSON.stringify({ outputStyle: "default" });
 
-function launchArgs(sessionFlag, sessionId) {
+// opts: { skill, runtimePath, fs }. The list is fixed for the life of the process: `Skill` isn't in
+// it, and `--tools` leaves it out, so B1 can't hand over and a typed /other-skill doesn't change it
+// (research R6).
+function launchArgs(sessionFlag, sessionId, opts) {
+  const o = opts || {};
+  const tools = toolsForSkill(o.skill, o.runtimePath, o.fs) || MENTOR_TOOLS.map((t) => PREFIX + t);
   return ["--print", "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",
     "--include-partial-messages", sessionFlag, sessionId,
     "--mcp-config", ".mcp.json", "--strict-mcp-config", "--tools", "ToolSearch",
-    "--allowedTools", ...MENTOR_TOOLS.map((t) => PREFIX + t), "--max-turns", "12",
+    "--allowedTools", ...tools, "--max-turns", "12",
     "--settings", LEARNER_SETTINGS];
 }
 
@@ -90,7 +97,8 @@ function createAdapter(config, deps) {
     const env = Object.assign({}, baseEnv, { PATH: childPath(config) });
     try {
       if (!config.runtime_path) throw new Error("No runtime folder: the mentor must not run from the repo (runtime.js).");
-      child = spawn(config.claude_path, launchArgs(resumeSessionId ? "--resume" : "--session-id", sessionId), {
+      const args = launchArgs(resumeSessionId ? "--resume" : "--session-id", sessionId, { skill: opts && opts.skill, runtimePath: config.runtime_path });
+      child = spawn(config.claude_path, args, {
         cwd: config.runtime_path, // never the repo: see runtime.js
         env,
         stdio: ["pipe", "pipe", "pipe"],

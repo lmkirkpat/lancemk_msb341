@@ -11,7 +11,7 @@ const STARTED = "2026-10-12T15:00:00.000Z";
 
 test("new session has exactly the data-model fields", () => {
   const s = ps.newPanelSession({ claude_session_id: "abc", bridge_started: STARTED, now: "2026-10-12T16:00:00.000Z" });
-  assert.deepEqual(Object.keys(s).sort(), ["bridge_started", "claude_session_id", "ended", "lesson", "messages", "started_at", "updated_at", "version"]);
+  assert.deepEqual(Object.keys(s).sort(), ["bridge_started", "claude_session_id", "ended", "lesson", "messages", "skill", "started_at", "updated_at", "version"]);
   assert.equal(s.version, 1);
   assert.equal(s.ended, false);
   assert.deepEqual(s.messages, []);
@@ -35,6 +35,24 @@ test("a new lesson replaces the file", () => {
   ps.writePanelSession({ home }, ps.newPanelSession({ claude_session_id: "one", bridge_started: STARTED }));
   ps.writePanelSession({ home }, ps.newPanelSession({ claude_session_id: "two", bridge_started: STARTED }));
   assert.equal(ps.readPanelSession({ home }).claude_session_id, "two");
+});
+
+test("the opening skill is saved, so Continue launches with the same tools (spec 013 FR-042)", () => {
+  const home = tmpHome();
+  const s = ps.newPanelSession({ claude_session_id: "abc", bridge_started: STARTED, skill: "key-types-mentor" });
+  assert.equal(s.skill, "key-types-mentor");
+  ps.writePanelSession({ home }, Object.assign(s, { lesson: { checks: 1 } }));
+  assert.equal(ps.readPanelSession({ home }).skill, "key-types-mentor");
+  assert.equal(ps.newPanelSession({ claude_session_id: "abc" }).skill, null, "a request with no skill");
+});
+
+test("a save from before the skill was kept still reads, with no skill (so easing's list)", () => {
+  const home = tmpHome();
+  fs.writeFileSync(path.join(home, ps.FILE), JSON.stringify({ version: 1, claude_session_id: "old", bridge_started: STARTED, ended: false, messages: [] }));
+  const back = ps.readPanelSession({ home });
+  assert.equal(back.claude_session_id, "old");
+  assert.equal(back.skill, undefined);
+  assert.equal(ps.canContinue(back, STARTED), true);
 });
 
 test("missing, broken or other-version files read as null; bad messages are dropped", () => {
