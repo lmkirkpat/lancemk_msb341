@@ -6,7 +6,7 @@ Owner: eval-engineer. Applies to all six `product/evals/*/run.mjs`.
 
 *Amended (T064):* on B1, each runner's `--allowedTools` is the skill's own `allowed-tools`, read by `lib/skill-tools.mjs`. `read_learner_record` is recognized but not allowed unless the skill lists it.
 
-`--runtime a|b1`. Default `b1` until every set meets FR-033 (then `a`, FR-035). Every existing
+`--runtime a|b1`. Default `b1` (FR-035, amended 2026-11-04 by `decisions/011`). Every existing
 option (`--only`, `--changed`, `--repeat`, `--judge-always`, `--dry-run`) works on both. `--dry-run`
 on A also checks that the helper starts, `settings.json` loads, and every skill a case uses has a
 readable `SKILL.md` and tools the server lists, with no request to the service.
