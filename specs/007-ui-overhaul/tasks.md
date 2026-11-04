@@ -5,7 +5,7 @@ description: "Task list for spec 007: panel UI overhaul"
 # Tasks: Panel UI overhaul (Home, Lesson, Skills)
 
 **Status**: Approved 2026-11-04 with the spec, subject to its open label item (D16), and corrected the same day from the review and
-`decisions/011` (T075 to T079 added). 79 tasks. Written by hand to `/speckit-tasks`' structure.
+`decisions/011` (T075 to T079 added). 79 tasks: PB 52, EE 10, BL 14, SB 2 (T031 done on `main`, T029 open), SW 1. Written by hand to `/speckit-tasks`' structure.
 
 **Input**: [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md),
 [contracts/](contracts/), [quickstart.md](quickstart.md). Mockup: `product/mockups/ui-overhaul/` (state ids are its).
@@ -68,8 +68,8 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 
 - [ ] T029 [P] SB · `mentor/curriculum/skills-built.json`, `mentor/scripts/write-skills-built.mjs`, `mentor/test/skills-built.test.mjs`. New files only. PN-16, plan P2. No eval cost.
 - [ ] T030 [P] PB · Read 013's research R6 ("T065's check on B1") and confirm in the hand-back that T052 follows it: B1 can't hand over. No check to run; `--tools ToolSearch,Skill` stays untested and unplanned (research R11).
-- [ ] T031 SB · `next-mentor/SKILL.md`: add `Set the pivot (anchor point)` → `/anchor-mentor` and `Move a group with a null` → `/null-parenting-mentor`, names exactly as in `path.json`. Editing an existing file: the cockpit passes `--shared-owner`. PN-17.
-- [ ] T032 EE · `product/evals/next-mentor/`: runner with `--runtime a|b1` from the start, tool lists from `allowedToolsOf` (013 T064's reader, never hand-kept; no `Skill` on B1), rubric. **B1, 9 cases:** 5 openings; 4 Yes-path cases that check the `recommend_next` result, then run the panel's follow-on request in a fresh session with that skill's list, to the pivot, to null, to a review, and to a lesson with focus layers. **A only, 4 more cases, written now, run at T078:** `Yes, let's go.` handing over for real on the same four. RQ-15, RQ-16, FR-082. Depends on T031.
+- [x] T031 SB · `next-mentor/SKILL.md`: `Set the pivot (anchor point)` → `/anchor-mentor` and `Move a group with a null` → `/null-parenting-mentor`. Done on `main` by `6094ee9`. PN-17.
+- [ ] T032 EE · `product/evals/next-mentor/`: runner with `--runtime a|b1` from the start, tool lists from `allowedToolsOf` (013 T064's reader, never hand-kept; no `Skill` on B1), rubric. Covers `discovery/usage-notes/next-mentor-handover.md`'s items 1, 2 and 5. **B1, 9 cases:** 5 openings; 4 Yes-path cases that check the `recommend_next` result, then run the panel's plain follow-on request in a fresh session with that skill's list: the pivot with named layers (1), null with named layers, where the lesson asks (1), null's crowded comp with an empty list, where no layer may be invented (2), and a due review (5). **A only, 4 more cases, written now, run at T078:** real hand-overs from `Yes, let's go.` to the pivot with named layers (1), null's crowded comp (2), offset as a due review (5), and key types after "I already know it" on an unlearned skill (5). A failure on these known items is reported, with no `SKILL.md` change planned. RQ-15, RQ-16, FR-082.
 - [ ] T033 [P] [US7] EE · Key types: 6 cases, contracts/button-requests.md.
 - [ ] T034 [P] [US7] EE · Speed graph: 6 cases.
 - [ ] T035 [P] [US7] EE · Offset: 6 cases.
@@ -92,7 +92,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [ ] T049 [US2] PB · Per-skill demo: Show me from `demo_target` (null also `null_ready`), the Changed box from each demo tool's result, header from tool → skill. FR-014, FR-018, FR-019.
 - [ ] T050 [US5] PB · Skills tab: `skills-empty`, `skills-few`, `skills-many`; removes the interim. FR-048, FR-053.
 - [ ] T051 [US5] PB · `skill-detail`, `skill-detail-noreview`, `skill-detail-new`, New lesson. FR-049.
-- [ ] T052 [US1] PB · Home's `home-return` and Find my next lesson; `lesson-picking`, Yes per FR-082: `handsOver` on both adapters; on B1, stop next-mentor's process and start the recommended lesson from `recommendation`, ignoring late events from the stopped adapter; on A, send `Yes, let's go.`; hidden with `requested`, no recommendation or a skill not in the table. A review reached before step 3 has no practice tag yet. Removes `home-return-interim`. FR-009, FR-013, FR-082, FR-094, plan P3. Depends on T030, T039, T041.
+- [ ] T052 [US1] PB · Home's `home-return` and Find my next lesson; `lesson-picking`, Yes per FR-082: `handsOver` on both adapters; on B1, stop next-mentor's process and start the recommended lesson from `recommendation`, ignoring late events from the stopped adapter; on A, send `Yes, let's go.`; hidden with `requested`, no recommendation or a skill not in the table; a test that the request is the same with `focus_layers` empty, null or very long. A review reached before step 3 has no practice tag yet. Removes `home-return-interim`. FR-009, FR-013, FR-082, FR-094, plan P3. Depends on T030, T039, T041.
 - [ ] T053 [US7] PB · Widen the sync test from EE's case names, covering RQ-16's `Yes, let's go.` and the follow-on requests. FR-071, SC-006. Depends on T027, T032 to T037.
 - [ ] T054 PB · SC-003's tests for step 2's states; each skill's recorded stream through the panel. SC-002's test half, SC-007.
 - [ ] T055 PB · Hand-back: what ran, what the scans say, anything for the designer.

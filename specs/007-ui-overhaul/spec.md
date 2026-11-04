@@ -707,7 +707,7 @@ From the README's "States still missing" and the specs this one sits on.
   | RQ-13 | Try again | Resends the last request | easing | Two cases: Show me again after a cut-off demo that landed; the check after a cut-off demo with no result |
   | RQ-14 | Done, check it; Hint; Show me; Show me again | Yes. Text unchanged, except Show me again on the five new skills, whose wording can't say "pair" or "eased" | all six | Easing's cases 17 to 20 are unchanged. None of the other five sets has these turns; one each |
   | RQ-15 | Find my next lesson | Yes: `/next-mentor` | next-mentor (new set) | No such set exists today |
-  | RQ-16 | Yes, let's go | A: `Yes, let's go.` B1: starts the recommended lesson (FR-082) | next-mentor (new set) | Four cases each way: to the pivot, to null, to a review, and to a lesson with focus layers. B1's stop at the recommendation and the follow-on start; real hand-overs run on A only (contract) |
+  | RQ-16 | Yes, let's go | A: `Yes, let's go.` B1: starts the recommended lesson (FR-082) | next-mentor (new set) | Four cases each way, covering the usage note's items 1, 2 and 5. B1's stop at the recommendation and the follow-on start; real hand-overs run on A only (contract) |
   | — | Start fresh, End lesson, Pick a skill, tabs, back, fold, Flip, the checklist's arrow | No | — | Panel tests (FR-073), not evals |
 
 
@@ -717,7 +717,7 @@ From the README's "States still missing" and the specs this one sits on.
   easing's cases keep "every turn is a panel request"; on key types, the pivot and null a case has to answer
   in typed words before any button can apply, because those skills ask first, so there the rule is the named
   turn only.) Case numbers and files are the eval engineer's; the test only names them.
-- **FR-072**: This build's only `SKILL.md` or tool behaviour change is `next-mentor`'s hand-over table (PN-17), so
+- **FR-072**: This build's only `SKILL.md` or tool behaviour change is `next-mentor`'s hand-over table (PN-17, already on `main`, `6094ee9`), so
   **no existing set needs a full re-run** because of the panel: new cases run with `--only`. If a new case fails
   and is fixed with a `SKILL.md` change, that skill's whole set is re-run and MUST stay within one case of its
   baseline (easing 27/28, key types 29/30, speed graph 29/29, offset 33/37, pivot 48/50, null 42/44, on
@@ -751,7 +751,7 @@ From the README's "States still missing" and the specs this one sits on.
   MUST end the picking process, with nothing recorded. Yes MUST get the learner into the recommended lesson on both runtimes:
   - **On B1,** which can't hand over (013 research R6, FR-042: hand-overs are tested on A only), the panel MUST end next-mentor's process,
     send it nothing more, and start the recommended skill's own lesson with that skill's list, by the request
-    [contracts/button-requests.md](contracts/button-requests.md) maps from `recommendation.skill`, `kind` and `focus_layers`. The panel only reads
+    [contracts/button-requests.md](contracts/button-requests.md) maps from `recommendation.skill` and `kind`: the plain command, or `review`, never layers. It works the same when `focus_layers` is empty, null or very long. The panel only reads
     those fields and looks the skill up in its table; it doesn't choose the skill or the lesson's focus (FR-065, `decisions/005`).
   - **On A,** Yes MUST send `Yes, let's go.` in the same conversation, and the real hand-over runs (013 T060). The lesson's skill comes from the
     next tool that runs.
@@ -759,6 +759,8 @@ From the README's "States still missing" and the specs this one sits on.
     other actions paused; then the lesson's opening under the suggestion, with the skill's header, the strip on Pick and its checklist slot. On B1
     the mentor starts a new conversation, so its opening may repeat the suggestion, and the header changes at the press. A failed start shows
     `lesson-start-failed`, and nothing is recorded.
+  - **Known gap:** the suggestion may name layers, and then the lesson asks or proposes as it does today, on its own terms. The suggestion's wording is the mentor's, so an
+    empty or very long layer list is a known risk there, not a panel fix ([plan.md](plan.md) › Risks).
 - **FR-085**: Following the lesson, all panel-only, per README › Following the lesson: older turns fold ("Earlier in
   this lesson (3)"); done rows fold at short docks; "Next: …" under the summary is the first open row in the tool's
   order, never re-ranked; "1 more since your last check" and a bar on changed rows come from comparing two results;
@@ -824,8 +826,7 @@ From the README's "States still missing" and the specs this one sits on.
 
 ## What the panel needs from the mentor
 
-Revision 3 needs far less than revision 2 did. **Two mentor changes in this build: PN-16's data file and PN-17's table
-rows.** PN-01 to PN-08, PN-09 and PN-12 are held; PN-10, PN-13 and PN-14 are dropped for now. Items built under other
+Revision 3 needs far less than revision 2 did. **One mentor change left in this build: PN-16's data file. PN-17's table rows are done (`6094ee9`).** PN-01 to PN-08, PN-09 and PN-12 are held; PN-10, PN-13 and PN-14 are dropped for now. Items built under other
 specs are this spec's requirements on those specs' shapes; the cockpit should pass them on.
 
 **Diagnosis result** (one structured result per look, as `diff_since_last` is today):
@@ -871,8 +872,8 @@ specs are this spec's requirements on those specs' shapes; the cockpit should pa
 
 **Skill hand-over**:
 
-- **PN-17**: `next-mentor/SKILL.md`'s hand-over table MUST list all six skills. It omits Set the pivot and Move a group with a
-  null, though `recommend_next` does suggest them (checked by running it: [research.md](research.md) R2). Only A follows this table (FR-082).
+- **PN-17**: `next-mentor/SKILL.md`'s hand-over table MUST list all six skills. **Done on `main` (`6094ee9`).** It had omitted Set the pivot and Move a group with a
+  null, though `recommend_next` does suggest them (checked by running it: [research.md](research.md) R2). Only A follows this table (FR-082), and its rows are unproven until T078.
 
 **Who changes what**:
 
@@ -884,7 +885,7 @@ specs are this spec's requirements on those specs' shapes; the cockpit should pa
 | PN-11 | Panel alone | None: `review_due` exists | This spec | None |
 | PN-15 | Panel alone | None: `saved: true` exists | This spec | None; a panel test with a failure fixture |
 | PN-16 | **Mentor (new files only)** | Generated data file, generator, test | This spec, skill-builder | None |
-| PN-17 | **Mentor (one `SKILL.md`)** | Two table rows, used by the real hand-over on A | This spec, skill-builder | next-mentor's new set, which doesn't exist yet (RQ-15, RQ-16) |
+| PN-17 | **Done, `6094ee9`** | Two table rows, used by the real hand-over on A | Skill-builder, on `main` | next-mentor's new set, which doesn't exist yet (RQ-15, RQ-16) |
 | Status lines, rows, stage, allowlist | Panel alone | None | This spec | None |
 
 ## Build order and priorities
@@ -895,7 +896,7 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
 |---|---|---|---|---|
 | **0. Contrast fixes** | Done | FR-074, FR-076 | — | Shipped in `5bed931` |
 | **1. Shell and easing** | P1 | Tabs, Home A from the record and path, the Lesson tab with the checklist, short docks, Pick / Try / Done, lesson-in-progress rules, the error split, accessibility. Up next is always the path's first skill (`home-return-interim` with a record); the Skills tab is a one-line interim | Nothing from the mentor | Easing in the new layout. Other skills stay in Claude Code |
-| **2. Six skills and Skills** | P1 | The other five checklists, the demo and Changed box per skill, the allowlist and status lines, the Skills tab, skill detail, New lesson, Find my next lesson and `lesson-picking`, the widened sync test | PN-16, PN-17, 013 T065's per-skill list, eval cases | All six as live lessons |
+| **2. Six skills and Skills** | P1 | The other five checklists, the demo and Changed box per skill, the allowlist and status lines, the Skills tab, skill detail, New lesson, Find my next lesson and `lesson-picking`, the widened sync test | PN-16, 013 T065's per-skill list, eval cases | All six as live lessons |
 | **3. Practice** | P2 | Practice due, Warm up, the `practice*` states, the "Warm-up due" lines | Step 2, eval cases | Practice across sessions |
 | **To A** | Before the first tester | `decisions/011`'s path (FR-099): free check and dry run in this build; paid run and live lesson on the builder's go | Step 2 or 3, 013 T064 to T067 | Nothing new; the proof a tester's panel needs |
 | **Held** | — | Diagnosis screens; first run and Check setup | Spec 005's plan; the installer and spec 006 Q2 | — |
@@ -950,7 +951,8 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
   has one, shows "Looked only" **0 times** when a non-listed tool ran, and shows nothing from a stopped or cut-off turn.
   *Measured by:* panel tests.
 - **SC-006**: Every request in FR-070 that sends text and isn't held has at least one eval case, the sync test passes, each
-  new case passes its set's rubric with no hard-rule failure, and any set re-run under FR-072 stays within one case of its
+  new case passes its set's rubric with no hard-rule failure (a next-mentor case failing on a known item in the plan's Risks is reported to the builder, with no
+  `SKILL.md` change planned), and any set re-run under FR-072 stays within one case of its
   baseline. *Measured by:* the sync test and eval runs.
 - **SC-007**: In every panel test and usage session, **0** paths open two lessons or send Show me after a demonstration was
   made, including every cut-off retry and a retry after `demo_unknown`. *Measured by:* panel tests on recorded streams, and the call log in usage sessions.
@@ -1139,4 +1141,4 @@ D1 to D5 are settled in revision 3 (README › D1 to D5). New, from the code che
   `011` (build on B1, ship on A); none changes. Open question 1 was answered (a) plus (c), so no new one is needed.
 - **Constitution 1.3.0**, Principles I to VI.
 - **Eval engineer:** writes every case in FR-070, the next-mentor set, and owns their numbers and fixtures.
-- **Skill-builder:** PN-16 and PN-17. **Panel-builder:** `panel/`.
+- **Skill-builder:** PN-16 (PN-17 is done). **Panel-builder:** `panel/`.

@@ -22,20 +22,18 @@ request. Requests say what the learner wants, not how to teach.
 
 **Yes's follow-on request on B1** (FR-082), from `recommend_next`'s `recommendation`; `<command>` comes from the panel's skill table by `skill`:
 
-| `kind` | `focus_layers` | Request | Same as |
-|---|---|---|---|
-| `review` | Any | `<command> review` | RQ-11 |
-| `continue` | Any | `<command>` (the lesson resumes with its own targets) | RQ-01 |
-| `lesson` | None | `<command>` | RQ-01 |
-| `lesson` | Layers | `<command> focus: Door, Pop` | RQ-01 with a parameter (FR-069); untried, T032 tests it |
+| `kind` | Request | Same as |
+|---|---|---|
+| `review` | `<command> review` | RQ-11 |
+| `continue`, `lesson` | `<command>` | RQ-01 |
 
-The learner sees the label, as with every button; layer names reach only the mentor.
+`focus_layers` is never sent, whatever it holds. The lesson's own opening asks or proposes as it does today, so a suggestion that named layers may be followed by the lesson asking again (known gap, FR-082). The learner sees the label, as with every button.
 
 ## Eval handoffs (eval-engineer writes these; numbers and files are theirs)
 
 | Set | New cases | Count |
 |---|---|---|
-| **next-mentor (new set and runner)** | **B1:** `/next-mentor` opening with: a skill in progress; a due review; next in path with a focus; nothing left; AE unreachable. Then four Yes-path cases that stop at the recommendation and the follow-on request: to the pivot, to null, to a review, and to a lesson with focus layers. **A only, run at T078:** `Yes, let's go.` handing over for real on those four, plus the five openings | 9 on B1; 9 on A (4 written only for A) |
+| **next-mentor (new set and runner)** | **B1:** `/next-mentor` opening with: a skill in progress; a due review; next in path with a focus; nothing left; AE unreachable. Then four Yes-path cases that stop at the recommendation and the plain follow-on request: the pivot with named layers; null with named layers; null's crowded comp with an empty list; a due review. **A only, run at T078:** the five openings, plus `Yes, let's go.` handing over for real to the pivot with named layers, null's crowded comp, offset as a due review, and key types after "I already know it" (usage note items 1, 2 and 5, `discovery/usage-notes/next-mentor-handover.md`). Easing and speed graph aren't covered by a real hand-over | 9 on B1; 9 on A (4 written only for A) |
 | Easing | Continue; Try again after a demo that landed (expects Show me again's text); Try again after a demo with no result (expects the check) | 3 |
 | Key types, speed graph, offset | The check, Hint, Show me, Show me again (new text), New lesson on a due record (expects `mode` lesson), Continue. Warm up already has its exact turn | 6 each, 18 |
 | Pivot, null | As above, plus Warm up (`/<skill>-mentor review`) | 7 each, 14 |

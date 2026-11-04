@@ -27,7 +27,7 @@ was read. Nothing here touched After Effects. Updated 2026-11-04 after `main`'s 
 | Those plus the pivot learned | `parenting.null` |
 | Nothing learned, comp with only pivot candidates (stand-in finders) | `transform.anchor` |
 
-So the missing table rows can be reached, even by a new learner. PN-17 is a real bug.
+So the missing table rows can be reached, even by a new learner. PN-17 was a real bug, fixed on `main` by `6094ee9`.
 
 ## R3. Row words the README's table doesn't cover
 
@@ -136,6 +136,6 @@ turn only, and that B1 can't hand over. 013 FR-042 now says `Skill` MUST NOT be 
 - **What the panel can read** (read, not run): `recommend_next` returns `recommendation: { skill, skill_name, kind, reason, focus_layers, offer_practice_comp }` or null, and `requested` when one was
   asked for. `stream.js` emits it as `tool_result.json`, since the call has the `ae-mentor` prefix. That's enough to pick the request without judging anything.
 - **Why `requested` hides Yes:** then the mentor may be offering the asked-for skill or a prerequisite, and only its words say which.
-- **Focus layers:** no lesson `SKILL.md` says what to do with layers passed at the start; only next-mentor says to pass them on. So the follow-on's `focus:` is untried on either runtime, and T032 tests it.
+- **Focus layers aren't sent.** They wouldn't reach two skills: null's opening names no layer and its schema has only `skill_options.focus`; anchor has `focus_layers`, but its prompt doesn't use them (`discovery/usage-notes/next-mentor-handover.md`, item 1). Yes sends the plain command.
 - **`--resume`:** whether it honours the launch list isn't known (013 research R6). Continue lesson and Try again rely on it for non-easing lessons, so T039 checks first.
 - **Replacing an adapter:** `main.js`'s `exit` handler sets `state.adapter = null` and `lessonOpen = false`. `startLesson` already stops an old adapter this way, and Yes would make it a normal path (plan P3).

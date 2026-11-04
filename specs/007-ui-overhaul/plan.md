@@ -12,8 +12,8 @@
 
 Replace the one-screen panel with three tabs, on B1, in three steps that can each stop with a working
 panel: easing in the new shell; the other five skills and the Skills tab; practice. The panel gets its
-data from tool results it already receives, so **only two mentor changes** are needed: a generated data
-file (no eval cost) and two table rows in `next-mentor/SKILL.md` (a new small eval set). No existing set
+data from tool results it already receives, so **one mentor change is left**: a generated data
+file (no eval cost). Two table rows in `next-mentor/SKILL.md` are already on `main` (`6094ee9`) and need a new small eval set. No existing set
 needs a full re-run because of this build.
 
 ## Technical Context
@@ -99,7 +99,6 @@ panel/            main.js, index.html, panel.css, CSXS/manifest.xml (changed)
 panel/test/       one test file per module; contrast and sync tests changed
 mentor/           curriculum/skills-built.json, scripts/write-skills-built.mjs,
                   test/skills-built.test.mjs (all new)
-.claude/skills/next-mentor/SKILL.md   two rows
 product/evals/    next-mentor/ (new), new cases in all six sets
 ```
 
@@ -130,7 +129,7 @@ T032: about $0.50 to $0.55 a case).
 | Change | Owner | Eval cost |
 |---|---|---|
 | `skills-built.json`, generator, test | skill-builder | None |
-| Two rows in `next-mentor/SKILL.md` | skill-builder | The new next-mentor set on B1: 9 cases (5 openings, 4 Yes-path cases that stop at the recommendation and the follow-on start), $5 to $10 worth |
+| Two rows in `next-mentor/SKILL.md` (done, `6094ee9`) | skill-builder | The new next-mentor set on B1: 9 cases (5 openings, 4 Yes-path cases that stop at the recommendation and the follow-on start), $5 to $10 worth |
 | New button cases (no mentor change) | eval-engineer | 35 cases, about $18 to $35 worth |
 
 **Total about $22 to $45 worth, plus repeats on failures.** A new case that fails and needs a `SKILL.md` fix triggers that skill's
@@ -153,8 +152,12 @@ credit before it. On a fixed credit, that checkpoint and the $100 budget already
 ## Risks
 
 - **Yes differs by runtime** (P3): B1 tests the follow-on start, and only A tests the real hand-over, late (T078, 013 T055).
-- **Passing focus layers in a request is untried.** No `SKILL.md` says what to do with them; next-mentor just says to pass them on. T032's focus case tests it on B1. If it
-  fails and needs a `SKILL.md` change, FR-072's full re-run applies; dropping the parameter costs nothing.
+- **next-mentor's hand-over mismatches** (`discovery/usage-notes/next-mentor-handover.md`, read from the skills and tools, not run). No `SKILL.md` change or re-run is planned for them here:
+  - **Item 1:** the suggestion can name layers, and then the lesson asks or proposes on its own, since Yes sends no layers. T032 covers it.
+  - **Item 2:** on null's crowded comp, `focus_layers` is empty and step 3 has no wording for that. T032 covers it. Yes still works; the wording is the mentor's.
+  - **Item 3, known issue:** anchor's list can be long, so the suggestion could read out many names. Yes still works.
+  - **Item 4, known issue:** a prerequisite can be offered twice, by next-mentor and again by the lesson.
+  - **Item 5:** next-mentor passes `review` as an argument, while the skills send `mode: "review"` only on the learner's own words. A due review is fine; "I already know it" is the doubt. T032 covers it.
 - **B1 passing doesn't prove A passes** (`decisions/011`). The new buttons reach A last, at FR-099's paid steps, so a problem there shows
   up late.
 - **Row mapping is the bulk of the work** across six vocabularies. A real recorded stream per skill keeps it honest; the eval
