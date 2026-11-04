@@ -35,6 +35,7 @@ time. A new lesson replaces it.
 | `bridge_started` | ISO time or null | From the bridge status endpoint. "Same AE session" test |
 | `started_at`, `updated_at` | ISO time | |
 | `ended` | boolean | True once the lesson is recorded or the learner stops |
+| `skill` | string or missing | The opening `*-mentor` skill, so Continue launches with its tools (spec 013 FR-042, T065). Missing in older saves, which are easing lessons |
 | `lesson` | LessonView | Derived state, below |
 | `messages` | DisplayMessage[] | What the panel has shown, in order |
 

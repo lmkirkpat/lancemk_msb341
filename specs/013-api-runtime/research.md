@@ -174,7 +174,10 @@ the fix, if any, is the skill's or the runner's owner's call, not the runtime's.
 - **A skill's frontmatter grants its tools for one turn only.** After that, only the launch's `--allowedTools` carries them, so a one-turn check can't prove a lesson works on B1.
 - **B1 can't hand over.** `--tools ToolSearch` leaves out `Skill`, and listing it in `--allowedTools` doesn't bring it back. A typed hand-over also breaks on its second turn, because the list is fixed at launch.
 - **R6's "Found while planning" note is out of date:** the runners' lists match the skills' (T064 checks this), so B1 and A now allow the same tools in evals.
-- **Not checked:** whether `--resume` honours the launch list; a runtime switch followed by Continue without restarting After Effects.
+- **`--resume` honours the launch list** (T065's verification, 2026-11-04): a resumed lesson on the saved skill's list had no denial, and a resumed one with no skill, so on easing's list, was denied `key_types_check`. Permissions don't carry over from the earlier launch.
+- **A wrong list reaches the learner as builder language:** on that denial the mentor said the learner hadn't granted permission and pointed to `/permissions`. It can happen if a non-easing lesson falls back to easing's list, or after a typed `/other-skill`. Fine for builder-only B1, and a reason not to ship it.
+- **As built (T065):** `--allowedTools` comes from the opening skill's `allowed-tools` (`panel/lib/skill-tools.js`), and the panel session saves the skill so Continue uses the same list. Today's Start button only sends `/ease-mentor`, so other skills' panel lessons need a way to open them first.
+- **Not checked:** a runtime switch followed by Continue without restarting After Effects; `panel/lib/skill-tools.js` loading in CEP's Node (T065's live check covers it); `panel/dev/drive.js` on B1, which nothing in `panel/dev` gives a `runtime_path`, so it looks broken (read in the code, not run).
 - The cockpit checked denials and `Skill`'s absence against the raw transcripts.
 
 ## R7. Thinking, effort and history (FR-015, FR-022, spec Q2)
