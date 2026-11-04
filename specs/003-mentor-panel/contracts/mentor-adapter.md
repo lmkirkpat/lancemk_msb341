@@ -13,7 +13,7 @@ createAdapter(config, { spawn, now }) → adapter
   config: Panel config (data-model) plus { home }
   spawn, now: injected so tests can fake the process and the clock
 
-adapter.start({ resumeSessionId? }) → sessionId
+adapter.start({ resumeSessionId?, skill? }) → sessionId
   Starts the process. New lessons get a fresh uuid; resumed lessons pass the stored id.
 
 adapter.send(text, kind) → void
@@ -62,16 +62,14 @@ plus `PATH` = `dirname(claude_path):dirname(node_path):/usr/bin:/bin:/usr/sbin:/
 --print --input-format stream-json --output-format stream-json --verbose
 --include-partial-messages --session-id <uuid> | --resume <uuid>
 --mcp-config .mcp.json --strict-mcp-config --tools ToolSearch
---allowedTools mcp__ae-mentor__read_learner_record mcp__ae-mentor__snapshot_project
-  mcp__ae-mentor__preview_frame mcp__ae-mentor__set_ease mcp__ae-mentor__diff_since_last
-  mcp__ae-mentor__record_lesson
+--allowedTools <the opening skill's mcp__ae-mentor__ tools, from its SKILL.md (spec 013 FR-042)>
 --max-turns 12
 ```
 
 ## Guarantees
 
 - The adapter never reads or writes the AE project, `session.json`, or `learner.json`.
-- The adapter never adds tools beyond the six above, and never enables Bash, file or web tools. *(Amended 2026-11-04, spec 013 FR-042, once T065 lands: the allowed tools are the opening skill's `allowed-tools`; still no Bash, file or web tools.)*
+- The adapter allows only the opening skill's `ae-mentor` tools, and never enables `Skill`, Bash, file or web tools. With no skill or an unreadable `SKILL.md`, it falls back to easing's six (spec 013 FR-042, T065).
 - One turn at a time.
 - The child process can always find `node`, so the `ae-mentor` server starts inside AE (R3).
 - `stop()` leaves no child process running.

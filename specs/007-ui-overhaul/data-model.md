@@ -39,7 +39,7 @@ tool is in its `allowed-tools`, and each built id has a row.
 
 | Field | From |
 |---|---|
-| `skill` | The pressed request (on B1, Yes's recommended skill), then whichever tool ran (a real hand-over on A changes it). Saved with the display log, for B1's launch list on resume |
+| `skill` | The pressed request (on B1, Yes's recommended skill), then whichever tool ran (a real hand-over on A changes it). Saved with the display log as the opening skill (`panel-session.js`, 013 T065), for B1's launch list on resume |
 | `mode` | The snapshot's `mode`; absent is `lesson` |
 | `focus` | The snapshot's `focus` |
 | `demo_target` | The latest snapshot |

@@ -4,7 +4,7 @@
 **Date**: 2026-11-02 | **Spec**: [spec.md](spec.md) | **Mockup**:
 [`product/mockups/ui-overhaul/`](../../product/mockups/ui-overhaul/README.md) (revision 3, linked, not copied)
 
-**Status**: Approved 2026-11-04 with the spec, subject to its open label item (D16); corrected the same day from the review and
+**Status**: Approved 2026-11-04 with the spec; corrected the same day from the review and
 `decisions/011`. Written by hand to
 `/speckit-plan`'s structure, because its setup script needs `.specify/feature.json`, outside this folder.
 
@@ -51,8 +51,9 @@ needs a full re-run because of this build.
   files only, so the add-only rule holds and no eval is affected. `path.json` is left alone: it mirrors
   `curriculum.md` and says "built" isn't stored there on purpose. The panel reads it through `cfg.repo_path`. If it
   can't be read, only the path's first skill counts as built, and the panel logs it.
-- **P3. B1 allowlist and Yes.** Every B1 start and resume gets that skill's own `allowed-tools` at launch, `next-mentor` included (spec 013 FR-042, built by
-  013 T065, not here), with `--tools ToolSearch` as today and no `Skill`. It has to be the launch: frontmatter grants tools for one turn only (013 research R6).
+- **P3. B1 allowlist and Yes.** Every B1 start and resume gets that skill's own `allowed-tools` at launch, `next-mentor` included (spec 013 FR-042, landed with
+  013 T065, `panel/lib/skill-tools.js`), with `--tools ToolSearch` as today and no `Skill`. It has to be the launch: frontmatter grants tools for one turn only, and `--resume` takes the list given at that launch, not the earlier one (013 research R6). `main.js` hard-codes
+  `REQUESTS.start` today, so `startLesson` must take the request and pass `skillOf(request)` (T041).
   **B1 can't hand over, so Yes on B1 is a panel action:** read `recommendation` from `recommend_next`'s `tool_result.json`, which `stream.js` already gives, map it to a
   request ([contracts/button-requests.md](contracts/button-requests.md)), stop next-mentor's process, and start that skill's lesson as Start lesson would (T052). The
   panel looks up data and sends a fixed request with parameters (FR-069), so it stays display-only (FR-065, `decisions/005`). **On A, the same button sends `Yes, let's go.`
@@ -78,7 +79,8 @@ needs a full re-run because of this build.
   after a timeout stops the process and resumes the session first (research R5).
 - **P8. Saved session.** `panel-session.json` moves to version 2 because the view's shape changes. An older file reads as
   nothing to continue, as the reader already does for another version. It keeps `claude_session_id`, which spec 013's continue flow
-  (013 T044) reads, and adds the `labels` and `picked_up` of the lesson view, and the opening `skill`, because resuming on B1 needs that skill's launch list.
+  (013 T044) reads, keeps the opening `skill` that 013 T065 added at version 1, because resuming on B1 needs that skill's launch list, and adds the `labels` and `picked_up` of the lesson view. Try again's
+  resume passes the saved skill too (T023); without it a non-easing lesson falls back to easing's list and is denied. Next-mentor's picking process isn't a lesson, so it writes no display log (T052).
 - **P9. Step 1's interim.** Up next always shows the path's first skill with Start lesson, and the Skills tab shows one line
   plus that same start. Step 2 removes both, so stopping after step 1 still tells the truth. Home with a record at step 1 has the id
   `home-return-interim`: the `home-first` card plus the memory card, so no new drawing.
@@ -92,7 +94,7 @@ specs/007-ui-overhaul/
 ├── spec.md, plan.md, research.md, data-model.md, quickstart.md, tasks.md
 └── contracts/button-requests.md, contracts/checklist-rows.md
 
-panel/lib/        skills.js, home.js, skills-view.js, view-state.js, errors.js, copy.js,
+panel/lib/        skill-tools.js (spec 013's, already there); skills.js, home.js, skills-view.js, view-state.js, errors.js, copy.js,
                   connection.js, checklist/ (new); lesson.js, requests.js, activity.js,
                   memory.js, adapter-*.js, panel-session.js (changed); path.js, errors-a.js (removed)
 panel/            main.js, index.html, panel.css, CSXS/manifest.xml (changed)
@@ -109,9 +111,9 @@ engineer runs the owning 013 task as written, and the cockpit ticks it in 013.
 
 | Work | Owning task | 007's task | If 013 gets there first | If 007 gets there first |
 |---|---|---|---|---|
-| A lesson's `--allowedTools` from its skill's `allowed-tools`, in `adapter-claude-code.js` (013 FR-042) | 013 T065's build half (open) | T039 passes the skill at every start and resume, and tests all seven files | T039 builds on it | T039 waits while 013 T065 runs first; there's no second list |
-| Whether `next-mentor` hands over on B1 | 013 T065's check (done: it can't) | T030 records the result | Settled | Settled |
-| Yes on B1 | T052 (013 T065 builds nothing for it) | T052 | Same | Same |
+| A lesson's `--allowedTools` from its skill's `allowed-tools`, in `adapter-claude-code.js` (013 FR-042) | 013 T065 (landed, `9fc10bb`) | T039 done by it. T041 and T023 pass the skill on their new paths | Landed | n/a |
+| Whether `next-mentor` hands over on B1 | 013 T065's check (it can't) | T030, done | Settled | n/a |
+| Yes on B1 | T052 (013 T065 built nothing for it) | T052 | n/a | n/a |
 | Runners' lists from `allowed-tools` (FR-042) | 013 T064 (done) | T032's new runner uses its reader, without `Skill` on B1 | T032 uses it | n/a |
 | `bash panel/install.sh --runtime a\|b1` | 013 T066 (done) | None. 007 changes the manifest only (T025), and T066 doesn't touch it; T079 uses the flag | T079 uses it | n/a |
 | `ready-for-a.mjs` | 013 T067 (done) | T077 runs it again once the new cases and runner exist | T077 re-runs it | n/a |
@@ -143,6 +145,8 @@ skills. No tool behaviour changes.
 | Free check and dry runs | T077 | Free |
 | Paid eval run: next-mentor's set (the 5 openings, plus 4 real hand-over cases that run only on A, about $2 to $4 of it), plus any new cases 013's runs left out | T078 | Credit: $5 to $10 for next-mentor, and up to $18 to $35 for the rest. About $5 to $10 of that if only easing and pivot's 10 cases were left out |
 | Live on A: a lesson and a hand-over | T079 | Credit: about $1 |
+
+Easing and speed graph have no real hand-over case for now (builder's decision, 2026-11-04). They can be added at the first tester check, 2 more cases on A, about $1 to $2.
 
 The real hand-over cases have no B1 result to compare with, so they're judged on their rubric and hard rules, and a problem with them shows up only here.
 

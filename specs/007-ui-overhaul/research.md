@@ -1,7 +1,7 @@
 # Research: the mockup's claims against the code (spec 007, 2026-11-02)
 
 Read from the code on branch `007-plan` (cut from `ebdceb0`). "Ran" means executed; everything else
-was read. Nothing here touched After Effects. Updated 2026-11-04 after `main`'s merges (013 T060, `decisions/011`, 013 T065's check); R10 and R11 are new.
+was read. Nothing here touched After Effects. Updated 2026-11-04 after `main`'s merges (013 T060, `decisions/011`, 013 T065); R10 and R11 are new.
 
 ## R1. Can each skill's rows come from existing tool results? Yes, with no mentor change
 
@@ -49,7 +49,7 @@ designer as D7.
 | 2 | "A small eval cost, next-mentor's cases only" | `product/evals/` has no next-mentor set, and every runner passes `--tools ToolSearch`, so none allows the hand-over | New set (Open question 7) |
 | 3 | Panel hand-over works | `adapter-claude-code.js` passes `--tools ToolSearch`, which leaves out `Skill`. The panel has never run a hand-over | B1 can't hand over: R11, plan P3 |
 | 4 | Show me again is one request | Its text says "the pair you already eased". No `SKILL.md` mentions it. It's wrong for five skills | Open question 8 |
-| 5 | "Start fresh" and End lesson | `session.start` keeps one lesson per skill and comp until it passes. With a demo or check it's never stale, and `fresh` is refused (`LESSON_UNDERWAY`). The next lesson resumes it | FR-092, Open question 6 |
+| 5 | "Start fresh" (now "Set it aside", D16) and End lesson | `session.start` keeps one lesson per skill and comp until it passes. With a demo or check it's never stale, and `fresh` is refused (`LESSON_UNDERWAY`). The next lesson resumes it | FR-092, Open question 6 |
 | 6 | `home-unreadable` from the record alone | `readJson` renames a broken file to `learner.json.unreadable-<time>` on the mentor's first read. After that the file is missing, which looks like a first run | FR-095 |
 | 7 | "Warm-up due" is safe from `review_due` | Easing's record gets a `review_due` too, with no review mode | Gated on the review flag (FR-021) |
 | 8 | Status lines and allowlist | `MENTOR_TOOLS` and `activity.js` hold easing's tools only | R6 |
@@ -81,7 +81,7 @@ moment leaves a change with no record. That's milliseconds out of a 5-minute tim
 
 - **Allowlist: no.** `helper/lib/skills.mjs` reads each skill's `allowed-tools` from its `SKILL.md`. On Opus 5.5
   and Sonnet 5.5 the tool list never changes: a hand-over appends `tool_removal` and `tool_addition` blocks (013 T060,
-  `helper/lib/loop.mjs`); only Haiku 5.5 still swaps the list. The gap is B1's, and 013 T065 closes it (FR-042).
+  `helper/lib/loop.mjs`); only Haiku 5.5 still swaps the list. The gap was B1's, and 013 T065 closed it (FR-042).
 - **Status lines: yes.** `activity.js` is the panel's, used on both runtimes.
 - **A's hand-over** works since 013 T060 (merged `2185304`, real-service answers in 013's research R5). Its live check on A is
   013 T055.
@@ -137,5 +137,5 @@ turn only, and that B1 can't hand over. 013 FR-042 now says `Skill` MUST NOT be 
   asked for. `stream.js` emits it as `tool_result.json`, since the call has the `ae-mentor` prefix. That's enough to pick the request without judging anything.
 - **Why `requested` hides Yes:** then the mentor may be offering the asked-for skill or a prerequisite, and only its words say which.
 - **Focus layers aren't sent.** They wouldn't reach two skills: null's opening names no layer and its schema has only `skill_options.focus`; anchor has `focus_layers`, but its prompt doesn't use them (`discovery/usage-notes/next-mentor-handover.md`, item 1). Yes sends the plain command.
-- **`--resume`:** whether it honours the launch list isn't known (013 research R6). Continue lesson and Try again rely on it for non-easing lessons, so T039 checks first.
+- **`--resume` honours the list given at that launch** (013 research R6). So a resume needs the saved skill: without one, a non-easing lesson falls back to easing's list and is denied, and the mentor then talks about `/permissions`. Continue already passes it; Try again must too (T023).
 - **Replacing an adapter:** `main.js`'s `exit` handler sets `state.adapter = null` and `lessonOpen = false`. `startLesson` already stops an old adapter this way, and Yes would make it a normal path (plan P3).

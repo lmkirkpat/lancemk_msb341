@@ -4,8 +4,7 @@
 
 **Created**: 2026-10-20
 
-**Status**: **Approved 2026-11-04**, subject to one open label item (Open questions › D16, "Start fresh"
-and "New lesson"). [plan.md](plan.md) and [tasks.md](tasks.md) are approved with it. Corrected 2026-11-04 from
+**Status**: **Approved 2026-11-04.** [plan.md](plan.md) and [tasks.md](tasks.md) are approved with it. Corrected 2026-11-04 from
 the review of that approval and reconciled with `decisions/011`, which added FR-099, FR-100, SC-018 and tasks
 T075 to T079. Earlier history: approved 2026-10-20 (Home A; open questions 1, 3 and 5 answered); amended
 2026-10-30 from spec 013 (FR-056 and the runtime assumption); amended 2026-11-02 to mockup revision 3 and the
@@ -115,6 +114,17 @@ that names a skill opens, so it needs no decision record.
 | 8 | Offset's small timeline stays, with a real scale | FR-088 |
 | 9 | Spacing, the large toggle arrow, End lesson as a gray secondary button, and option A's error split | FR-056, FR-096 |
 
+### The builder's decisions of 2026-11-04 (folded in below)
+
+| # | Decision | Where |
+|---|---|---|
+| 1 | Yes on B1 ends next-mentor's process and starts the recommended lesson. It's the plan, not a fallback | FR-082, plan P3 |
+| 2 | SC-002: 3 checks per skill from recorded lessons, plus 10 live overall | SC-002 |
+| 3 | Typed text stays in the local display log for this build; revisit before the first tester | FR-068, T080 |
+| 4 | "Start fresh" becomes **"Set it aside"**. "New lesson" stays, and a resumed lesson must say it's resuming | FR-026, FR-027, FR-092, D16 |
+| 5 | A new case failing on a known gap is reported to the builder rather than blocking | SC-006 |
+| 6 | Four real hand-over cases on A. Easing and speed graph stay out for now, and can be added at the first tester check for about $1 to $2 | T032, T078 |
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Open Knack and know what to do next (Priority: P1)
@@ -219,7 +229,7 @@ second demonstration, and each case shows the README state named for it.
 2. **Given** no lesson is open, **When** I choose the Lesson tab, **Then** it says why it's empty
    and offers **Go to Home** and **Pick a skill** (`lesson-none`). The tab is never disabled.
 3. **Given** I closed the panel mid-lesson in the same AE session, **When** I reopen it, **Then**
-   **Your lesson is waiting** sits on top with **Continue lesson** and **Start fresh**, and Up next is
+   **Your lesson is waiting** sits on top with **Continue lesson** and **Set it aside**, and Up next is
    dashed and not the primary button (`home-cutoff`).
 4. **Given** AE quit mid-lesson, **When** I next open the panel and the bridge answers with a new start
    time, **Then** Home shows a one-time, dismissible note that the lesson ended and wasn't saved
@@ -376,9 +386,9 @@ From the README's "States still missing" and the specs this one sits on.
   accepted. On A, typed agreement hands over.
 - **Find my next lesson finds nothing.** `recommend_next` returns no recommendation: the mentor's words
   show, and **Yes, let's go** doesn't (FR-082).
-- **A new lesson on a comp where one was left open.** End lesson and Start fresh don't touch the mentor's
+- **A new lesson on a comp where one was left open.** End lesson and Set it aside don't touch the mentor's
   session, which keeps one lesson per skill and comp until it passes. The next lesson there picks up the
-  old lesson's start, and its demo stays spent. The panel shows what the tool returns (FR-092).
+  old lesson's start, and its demo stays spent. The panel shows what the tool returns and says it's resuming (FR-092).
 - **The mentor records a lesson that didn't pass** (the learner stopped; `result: partial`). `saved: true`
   arrives with no pass. No state is drawn for this (Open question D6); until then the panel shows
   "Saved to your history." with the ways out, and no pass line.
@@ -522,10 +532,10 @@ From the README's "States still missing" and the specs this one sits on.
   lesson records anything is Open question 2; until it's answered, nothing is recorded (spec 003
   edge case), and the panel says so in one line before ending.
 - **FR-026**: If the panel is closed and reopened during a lesson in the same AE session, Home MUST
-  show `home-cutoff`: **Your lesson is waiting** on top with **Continue lesson** and **Start fresh**, and
+  show `home-cutoff`: **Your lesson is waiting** on top with **Continue lesson** and **Set it aside**, and
   Up next pushed back (dashed border, full contrast, not the primary button).
 - **FR-027**: **Continue lesson** MUST reopen the lesson as `lesson-continued` (redrawn, a divider, and a
-  note where a frame from before can't be shown). **Start fresh** MUST return to Home with the
+  note where a frame from before can't be shown). **Set it aside** MUST return to Home with the
   record untouched.
 - **FR-028**: `home-aeclosed` MUST show only when the bridge answers with a start time different from the saved session's:
   once, dismissible, and the lesson is gone (spec 003: continuing works only within one AE session). If the bridge is busy or
@@ -685,7 +695,7 @@ From the README's "States still missing" and the specs this one sits on.
   and is replaced by the next lesson. The turn log (`panel-turns.jsonl`) holds timings and no message text. The panel writes
   nothing else in the learner's home.
 - **FR-068**: The panel MUST add no real names, emails or phone numbers to anything it stores or logs (constitution IV).
-  What a learner types in Ask is sent to the mentor and kept only in the display log, never in the turn log or console output.
+  What a learner types in Ask is sent to the mentor and kept only in the local display log, never in the turn log or console output. That stands for this build, and the builder revisits it before the first tester (T080).
   A typed symptom *(held with spec 005)* is sent to the mentor, not stored by the panel.
 
 ### Requests and evals
@@ -708,7 +718,7 @@ From the README's "States still missing" and the specs this one sits on.
   | RQ-14 | Done, check it; Hint; Show me; Show me again | Yes. Text unchanged, except Show me again on the five new skills, whose wording can't say "pair" or "eased" | all six | Easing's cases 17 to 20 are unchanged. None of the other five sets has these turns; one each |
   | RQ-15 | Find my next lesson | Yes: `/next-mentor` | next-mentor (new set) | No such set exists today |
   | RQ-16 | Yes, let's go | A: `Yes, let's go.` B1: starts the recommended lesson (FR-082) | next-mentor (new set) | Four cases each way, covering the usage note's items 1, 2 and 5. B1's stop at the recommendation and the follow-on start; real hand-overs run on A only (contract) |
-  | — | Start fresh, End lesson, Pick a skill, tabs, back, fold, Flip, the checklist's arrow | No | — | Panel tests (FR-073), not evals |
+  | — | Set it aside, End lesson, Pick a skill, tabs, back, fold, Flip, the checklist's arrow | No | — | Panel tests (FR-073), not evals |
 
 
 - **FR-071**: The panel's requests-eval-sync test (`panel/test/requests-eval-sync.test.js`) MUST be kept and
@@ -722,8 +732,8 @@ From the README's "States still missing" and the specs this one sits on.
   and is fixed with a `SKILL.md` change, that skill's whole set is re-run and MUST stay within one case of its
   baseline (easing 27/28, key types 29/30, speed graph 29/29, offset 33/37, pivot 48/50, null 42/44, on
   2026-10-29) with no hard-rule failure.
-- **FR-073**: Actions that send no text (the last row above) MUST each have a panel test. End lesson and Start
-  fresh MUST also have a test that the learner record is unchanged afterwards.
+- **FR-073**: Actions that send no text (the last row above) MUST each have a panel test. End lesson and Set it
+  aside MUST also have a test that the learner record is unchanged afterwards.
 
 ### Accessibility (README › Accessibility)
 
@@ -769,8 +779,8 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-086**: Each skill's rows MUST follow the one pattern (glyph, subject, word, optional detail; optional sections,
   footer, Outside, Worth a look), mapped from its check tool per [contracts/checklist-rows.md](contracts/checklist-rows.md).
   Speed graph's `fastest` MUST NOT show. The pivot and null's `other_changes` kinds get panel words.
-- **FR-087**: The panel MUST run all six skills and next-mentor on B1, each on its own `allowed-tools` from the launch (spec 013 FR-042, built once by
-  013 T065; [plan.md](plan.md) › Shared work with spec 013), without `Skill`, which FR-042 forbids. Every start and resume MUST pass the skill, because a
+- **FR-087**: The panel MUST run all six skills and next-mentor on B1, each on its own `allowed-tools` from the launch (spec 013 FR-042, landed with
+  013 T065; [plan.md](plan.md) › Shared work with spec 013), without `Skill`, which FR-042 forbids. Every start and resume MUST pass the skill, as `main.js` now does for easing, because a
   skill's frontmatter grants its tools for one turn only: without the launch list a lesson works once and is denied on its second turn (013 research
   R6). A test MUST compare the list with the `SKILL.md` files. Option A's helper already reads each skill's list itself, so this is B1's gap alone; the status
   lines (FR-062) are a gap on both.
@@ -784,10 +794,10 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-091**: The connection mark and `home-unreachable` / `home-busy` MUST come from the bridge's `/health` alone, polled
   (plan.md P6): an answer is connected, nothing listening is not connected, no answer within 2 s is busy; a tool's
   `AE_BUSY` or `AE_UNREACHABLE` also sets it. It carries no project data (FR-066).
-- **FR-092**: End lesson and Start fresh MUST NOT claim the next lesson starts over. They end the panel's lesson and
+- **FR-092**: End lesson and Set it aside MUST NOT claim the next lesson starts over. They end the panel's lesson and
   record nothing. If the next snapshot says the lesson is `continued` or `resumed`, the panel shows what it returns: its
-  targets, unmarked and with the strip on Try, with Show me only if it names a demo target (Open question 6, answered). Whether
-  the labels themselves promise more is D16.
+  targets, unmarked and with the strip on Try, with Show me only if it names a demo target (Open question 6, answered). The panel MUST
+  say it's resuming, whichever button started it, New lesson included, from the tool's `lesson` value alone (D16).
 - **FR-093**: **Later option, not this build:** a stored recommendation (`home-return-stored`). The mockup's simplest
   design: `record_lesson`'s handler also calls `recommend()` with no snapshot and writes `{ skill, skill_name, reason, at }`
   to the record. It's server code with unit tests and no prompt change. It adds a field to what `read_learner_record`
@@ -804,7 +814,7 @@ From the README's "States still missing" and the specs this one sits on.
   and MUST NOT wait on spec 013's unfinished runtime work (013 T043, T044). Option A's kinds are mapped and tested from recorded
   streams only. Work both specs touch has one owning task, whichever spec gets there first ([plan.md](plan.md) › Shared work with
   spec 013). If this build merges into `panel/` before 013's open tasks run: 013 T049 checks B1 against the panel as merged (with
-  `launchArgs` and `adapter-claude-code.js` changed by this spec's T023 and T039), 013 T044 wires into `panel-session.json`
+  `adapter-claude-code.js` changed by this spec's T023 and `main.js` by its T041 and T052), 013 T044 wires into `panel-session.json`
   version 2, which keeps `claude_session_id` (P8), and 013 T021 follows the same steps with the new labels. The requests don't
   change, so no eval is affected.
 - **FR-098**: `lesson-focus-stale` MUST be shown honestly, not hidden: when a reply gets no re-read, the old rows stay,
@@ -896,7 +906,7 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
 |---|---|---|---|---|
 | **0. Contrast fixes** | Done | FR-074, FR-076 | — | Shipped in `5bed931` |
 | **1. Shell and easing** | P1 | Tabs, Home A from the record and path, the Lesson tab with the checklist, short docks, Pick / Try / Done, lesson-in-progress rules, the error split, accessibility. Up next is always the path's first skill (`home-return-interim` with a record); the Skills tab is a one-line interim | Nothing from the mentor | Easing in the new layout. Other skills stay in Claude Code |
-| **2. Six skills and Skills** | P1 | The other five checklists, the demo and Changed box per skill, the allowlist and status lines, the Skills tab, skill detail, New lesson, Find my next lesson and `lesson-picking`, the widened sync test | PN-16, 013 T065's per-skill list, eval cases | All six as live lessons |
+| **2. Six skills and Skills** | P1 | The other five checklists, the demo and Changed box per skill, status lines, a start path per skill, the Skills tab, skill detail, New lesson, Find my next lesson and `lesson-picking`, the widened sync test | PN-16, eval cases | All six as live lessons |
 | **3. Practice** | P2 | Practice due, Warm up, the `practice*` states, the "Warm-up due" lines | Step 2, eval cases | Practice across sessions |
 | **To A** | Before the first tester | `decisions/011`'s path (FR-099): free check and dry run in this build; paid run and live lesson on the builder's go | Step 2 or 3, 013 T064 to T067 | Nothing new; the proof a tester's panel needs |
 | **Held** | — | Diagnosis screens; first run and Check setup | Spec 005's plan; the installer and spec 006 Q2 | — |
@@ -951,7 +961,7 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
   has one, shows "Looked only" **0 times** when a non-listed tool ran, and shows nothing from a stopped or cut-off turn.
   *Measured by:* panel tests.
 - **SC-006**: Every request in FR-070 that sends text and isn't held has at least one eval case, the sync test passes, each
-  new case passes its set's rubric with no hard-rule failure (a next-mentor case failing on a known item in the plan's Risks is reported to the builder, with no
+  new case passes its set's rubric with no hard-rule failure (a new case failing on a known gap in the plan's Risks is reported to the builder rather than blocking, with no
   `SKILL.md` change planned), and any set re-run under FR-072 stays within one case of its
   baseline. *Measured by:* the sync test and eval runs.
 - **SC-007**: In every panel test and usage session, **0** paths open two lessons or send Show me after a demonstration was
@@ -1020,7 +1030,7 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
 - **Diagnosis** (all `diag-*` states, RQ-03 to RQ-10): no spec 005 code exists (decision 1).
 - **First-run screens, `err-notsetup` and Check setup** until the installer and spec 006 Q2.
 - **A stored recommendation** (FR-093), an accept signal, a learner-facing next note, a warm-up's length, Getting rusty.
-- **A mentor change so End lesson or Start fresh really resets a lesson** (Open question 6).
+- **A mentor change so End lesson or Set it aside really resets a lesson** (Open question 6).
 - **Running the build on option A** (`decisions/011`), apart from FR-099's check before a tester. Spec 013 keeps its own track;
   the panel doesn't wait for it (FR-097).
 - **What the mentor says and teaches:** `SKILL.md` wording, the diagnosis catalogue and its
@@ -1081,11 +1091,10 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
    until then `err-mentor`'s copy names no runtime ("The mentor can't start. Check setup.").
    **Answered 2026-10-20 by `decisions/009`:** the first-run sign-in draws option A's
    access-key flow (FR-054). The exact key source still waits on spec 006 Q2.
-6. **What should the next lesson do after End lesson or Start fresh, on the same skill and comp?** The mentor keeps one lesson
+6. **What should the next lesson do after End lesson or Set it aside, on the same skill and comp?** The mentor keeps one lesson
    per skill and comp until it passes, and once there's a demo or check neither time nor `fresh` restarts it. So the next lesson
    resumes the old start, with the demo spent. **Answered 2026-11-04: accept it for this build** (FR-092). The one-demo rule holds. A
-   real reset needs a tool change in all six skills and their re-runs, about $180. The labels "Start fresh" and "New lesson" can
-   still read as a promise of a fresh start, so they're open as D16.
+   real reset needs a tool change in all six skills and their re-runs, about $180. D16 settles the labels.
 7. **Is a new next-mentor eval set acceptable?** The README expected "next-mentor's cases", but no such set exists, and B1 can't hand over (013 research R6). **Answered 2026-11-04: yes, about 9 cases on a small new runner**, about $5 to $10 a run; its Yes-path cases stop at the follow-on start on B1, and real hand-overs run on A only (FR-082). Constitution III requires
    one, and Find my next lesson is Home's main button.
 8. **What should Show me again say on the five new skills?** Today's text says "the pair you already eased". **Answered 2026-11-04: easing
@@ -1116,9 +1125,9 @@ D1 to D5 are settled in revision 3 (README › D1 to D5). New, from the code che
     in Skills, and the panel shows the `mode` the tool returns.
 15. **Easing rows with no label** (FR-100). Defaults: a count line, "3 more pairs. They get names at your next check."; at a check, a row with no
     name reads "A pair".
-16. **"Start fresh" and "New lesson" (open: the builder's call).** Both may promise a fresh start, though the next lesson on that skill and comp
-    resumes with the demo spent (Open question 6). Another option is "Set it aside" for Start fresh. Until the builder decides, the labels stay
-    as drawn. It changes copy only (T022, T051).
+16. **The label for setting a lesson aside. Closed 2026-11-04, the builder's decision:** "Start fresh" becomes **"Set it aside"**, because the next lesson on that skill
+    and comp resumes with the demo spent (Open question 6). "New lesson" stays, and a resumed lesson says it's resuming (FR-092). This overrides the mockup until it's updated. Default for
+    that line, for the designer to confirm: "Picking up your earlier lesson on this comp."
 
 ### For the curriculum designer (C, don't block approval)
 
