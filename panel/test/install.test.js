@@ -1,4 +1,5 @@
-// panel/install.sh with and without Claude Code, per runtime (spec 013 T061, FR-038). Runs the real
+// panel/install.sh with and without Claude Code, per runtime (spec 013 T061, FR-038), and its
+// --runtime switch (T066, FR-041). Runs the real
 // script against a temporary home, with stand-ins for `defaults` and `npm` first on PATH, so it
 // never touches the real CEP preferences, extensions folder or After Effects, and installs nothing.
 "use strict";
@@ -39,8 +40,8 @@ function sandbox({ claude, panelJson }) {
     fs.mkdirSync(mentorHome);
     fs.writeFileSync(path.join(mentorHome, "panel.json"), JSON.stringify(panelJson));
   }
-  const run = () =>
-    spawnSync("/bin/bash", [SCRIPT], {
+  const run = (...args) =>
+    spawnSync("/bin/bash", [SCRIPT, ...args], {
       env: { HOME: home, PATH: `${bin}:/usr/bin:/bin:/usr/sbin:/sbin`, AE_MENTOR_HOME: mentorHome },
       encoding: "utf8",
     });
@@ -105,4 +106,88 @@ test("install.sh, a runtime it doesn't know: fails with config.js's plain words,
     assert.equal(fs.readFileSync(s.cfgFile, "utf8"), before, "not rewritten as B1");
     assert.equal(s.calls(), "", "stopped before changing anything");
   }
+});
+
+// ---------- install.sh --runtime a|b1 (T066, FR-041) ----------
+
+const REPO_PATH = path.resolve(PANEL, "..");
+
+test("install.sh --runtime a: switches from B1, keeps claude_path, says A is on, helper installed", () => {
+  const s = sandbox({ claude: true, panelJson: { version: 1, claude_path: "/old/place/claude", node_path: "/old/node", repo_path: "/old/repo", runtime: "b1" } });
+  const r = s.run("--runtime", "a");
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(readCfg(s.cfgFile), { version: 1, claude_path: "/old/place/claude", node_path: path.join(s.bin, "node"), repo_path: REPO_PATH, runtime: "a" });
+  assert.match(r.stdout, /^OK {3}runtime: A \(Claude API\)$/m);
+  assert.match(r.stdout, /claude: not needed \(runtime A\)/);
+  assert.ok(helperInstalled(s.calls()));
+  assert.equal(fs.statSync(s.cfgFile).mode & 0o777, 0o600);
+});
+
+test("install.sh --runtime a: no panel.json and no Claude Code still works, and adds no claude_path", () => {
+  const s = sandbox({ claude: false });
+  const r = s.run("--runtime", "a");
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(readCfg(s.cfgFile), { version: 1, node_path: path.join(s.bin, "node"), repo_path: REPO_PATH, runtime: "a" });
+  assert.match(r.stdout, /runtime: A \(Claude API\)/);
+});
+
+test("install.sh --runtime b1: switching from A adds the missing claude_path and says B1 is on", () => {
+  const s = sandbox({ claude: true, panelJson: { version: 1, node_path: "/old/node", repo_path: "/old/repo", runtime: "a" } });
+  const r = s.run("--runtime", "b1");
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(readCfg(s.cfgFile), { version: 1, claude_path: path.join(s.bin, "claude"), node_path: path.join(s.bin, "node"), repo_path: REPO_PATH, runtime: "b1" });
+  assert.match(r.stdout, /^OK {3}runtime: B1 \(Claude Code\)$/m);
+  assert.match(r.stdout, /^OK {3}claude: /m);
+  assert.ok(helperInstalled(s.calls()), "the helper stays installed on B1, as with no flag");
+});
+
+test("install.sh --runtime b1 without Claude Code: a plain fix, still on A, nothing changed", () => {
+  const s = sandbox({ claude: false, panelJson: { version: 1, node_path: "/old/node", repo_path: "/old/repo", runtime: "a" } });
+  const before = fs.readFileSync(s.cfgFile, "utf8");
+  const r = s.run("--runtime", "b1");
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /Claude Code isn't installed/);
+  assert.match(r.stderr, /Install it, sign in with 'claude', and re-run/);
+  assert.doesNotMatch(r.stdout, /runtime:/, "doesn't say B1 is on");
+  assert.equal(fs.readFileSync(s.cfgFile, "utf8"), before);
+  assert.equal(s.calls(), "", "stopped before changing anything");
+});
+
+test("install.sh --runtime: replaces a runtime panel.json doesn't know, since that's the fix", () => {
+  const s = sandbox({ claude: false, panelJson: { version: 1, runtime: "c" } });
+  const r = s.run("--runtime", "a");
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(readCfg(s.cfgFile).runtime, "a");
+});
+
+test("install.sh: refuses anything but --runtime a|b1, with nothing changed", () => {
+  const refused = [["--runtime", "c"], ["--runtime", "A"], ["--runtime", "B1"], ["--runtime", ""], ["--runtime"], ["--runtime=a"], ["a"], ["--runtime", "a", "extra"]];
+  for (const args of refused) {
+    const s = sandbox({ claude: true, panelJson: { version: 1, claude_path: "/old/claude", runtime: "b1" } });
+    const before = fs.readFileSync(s.cfgFile, "utf8");
+    const r = s.run(...args);
+    assert.equal(r.status, 1, JSON.stringify(args));
+    assert.match(r.stderr, /^Use: bash panel\/install\.sh \[--runtime a\|b1\]$/m, JSON.stringify(args));
+    assert.equal(r.stdout, "", JSON.stringify(args));
+    assert.equal(fs.readFileSync(s.cfgFile, "utf8"), before, JSON.stringify(args));
+    assert.equal(s.calls(), "", JSON.stringify(args));
+  }
+});
+
+test("install.sh, no flag: says nothing new, and the runtime stays what it was", () => {
+  for (const runtime of ["a", "b1", undefined]) {
+    const panelJson = Object.assign({ version: 1 }, runtime ? { runtime } : {});
+    const s = sandbox({ claude: true, panelJson });
+    const r = s.run();
+    assert.equal(r.status, 0, r.stderr);
+    assert.doesNotMatch(r.stdout, /runtime: /);
+    assert.equal(readCfg(s.cfgFile).runtime, runtime);
+  }
+});
+
+test("install.sh: the sandbox never reaches the real home", () => {
+  const s = sandbox({ claude: true });
+  assert.equal(s.run("--runtime", "b1").status, 0);
+  assert.ok(s.cfgFile.startsWith(os.tmpdir()), "panel.json is under the temp folder");
+  assert.match(s.calls(), /^defaults write /m, "the stand-in defaults ran, not the real one");
 });
