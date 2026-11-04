@@ -1,13 +1,13 @@
 # Research: the mockup's claims against the code (spec 007, 2026-11-02)
 
 Read from the code on branch `007-plan` (cut from `ebdceb0`). "Ran" means executed; everything else
-was read. Nothing here touched After Effects.
+was read. Nothing here touched After Effects. Updated 2026-11-04 after `main`'s merge (013 T060, `decisions/011`); R10 is new.
 
 ## R1. Can each skill's rows come from existing tool results? Yes, with no mentor change
 
 | Skill | Opening rows | Check rows | Note |
 |---|---|---|---|
-| Easing | `snapshot_project.targets` are ids; labels join from `findings[].segments[]` | `diff_since_last.targets[]`: `label`, `result` | `findings` is read from the comp now, so a pair already eased drops out on a re-read. The panel keeps labels by id for the lesson |
+| Easing | `snapshot_project.targets` are ids; labels join from `findings[].segments[]` | `diff_since_last.targets[]`: `label`, `result` | `findings` is read from the comp now, so a pair already eased drops out on a re-read. The panel keeps labels by id for the lesson. A `continued` or `resumed` lesson's `targets` come from its baseline, so a target can have no label (R10, FR-100) |
 | Key types | Empty until the learner names a focus, then `target_pairs` | `key_types_check.pairs[]`: `id`, `label`, `verdict` | The check has no layer field; sections join by id to `target_pairs` |
 | Speed graph | `pairs` (capped) | `speed_graph_check.pairs[]`: `id`, `label`, `result`, `mistake` | Same join. All six `mistake` codes in the README exist. `landing_hard_labels` comes from the snapshot |
 | Offset | `group.members` | `offset_check.members[]`, `still_same`, `order_differs`, `out_of_comp`, `gaps_frames` | No per-member verdict, as the README says |
@@ -73,14 +73,18 @@ run after the panel stopped waiting, and a retry would be written to a process s
 B1 must stop the process and resume the session first.
 
 **Rule:** each adapter says whether it makes the promise (`announcesCalls`: A true, B1 false). On B1, no
-result always means the check. `assertCanDemo`'s `DEMO_USED` backstops both.
+result always means the check, and `demo_unknown` hides Show me until a later snapshot or check settles it (FR-030). `assertCanDemo`'s
+`DEMO_USED` backstops both, with one narrow gap: `set_ease` records the demo only after AE returns, so a process killed in that
+moment leaves a change with no record. That's milliseconds out of a 5-minute timeout, and accepted.
 
 ## R6. Does option A's helper have the same gap? Half
 
-- **Allowlist: no.** `helper/lib/skills.mjs` reads each skill's `allowed-tools` from its `SKILL.md`, and
-  the loop swaps the list at a hand-over. The gap is B1's.
+- **Allowlist: no.** `helper/lib/skills.mjs` reads each skill's `allowed-tools` from its `SKILL.md`. On Opus 5.5
+  and Sonnet 5.5 the tool list never changes: a hand-over appends `tool_removal` and `tool_addition` blocks (013 T060,
+  `helper/lib/loop.mjs`); only Haiku 5.5 still swaps the list. The gap is B1's, and 013 T065 closes it (FR-042).
 - **Status lines: yes.** `activity.js` is the panel's, used on both runtimes.
-- **A's hand-over** still waits on spec 013's T060, which doesn't block this build.
+- **A's hand-over** works since 013 T060 (merged `2185304`, real-service answers in 013's research R5). Its live check on A is
+  013 T055.
 
 ## R7. How often does `lesson-focus-stale` happen? (ran; README Open question 5)
 
@@ -109,3 +113,16 @@ about 3 px, narrower than the 7 px diamond, so the stagger the picture exists to
 
 `bridge/cep/host.js` already reads it three ways: an answer, nothing listening, and no answer within 2 s
 ("AE may be busy"). `bridge-status.js` flattens these to null today. No bridge change is needed.
+
+## R10. Review checks, 2026-11-04 (read, not run)
+
+- **Unlabelled easing rows.** `findings` lists only pairs that still need ease (`mentor/lib/analyze.mjs`). `session.start` builds a resumed
+  lesson's `targets` from its baseline. `diff.mjs` sets `label` to the id when the baseline lacks the pair. FR-100.
+- **Credit the tool doesn't know.** Only easing's `demo_credit` and speed graph's `credit` can be `unknown`; the other four can't.
+- **Which results show a demo.** After a demo every snapshot's `demo_target` is null (`session.mjs`), and all six checks mark it in their
+  rows. Easing's snapshot has no `demo_used`, so a null target alone doesn't say a demo happened. FR-030's settling rule follows from this.
+- **`recorded_result` can't be read on B1.** `tool_call` has no input (`stream.js`), and `record_lesson` returns only `saved` and `skill`.
+  Removed. `saved: true` with no pass already covers D6.
+- **Temp learner home.** `runtime.js` rewrites the runtime `.mcp.json` from the repo's on every launch, and Home reads `defaultHome()`,
+  so an MCP config's `env` can't reach both. The adapter passes its environment to Claude Code, which suggests AE's own launch environment would
+  reach the server, but that's untested (quickstart §4).

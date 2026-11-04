@@ -4,7 +4,8 @@
 **Date**: 2026-11-02 | **Spec**: [spec.md](spec.md) | **Mockup**:
 [`product/mockups/ui-overhaul/`](../../product/mockups/ui-overhaul/README.md) (revision 3, linked, not copied)
 
-**Status**: Awaits approval with the amended spec. Nothing is built until then. Written by hand to
+**Status**: Approved 2026-11-04 with the spec, subject to its open label item (D16); corrected the same day from the review and
+`decisions/011`. Written by hand to
 `/speckit-plan`'s structure, because its setup script needs `.specify/feature.json`, outside this folder.
 
 ## Summary
@@ -19,9 +20,10 @@ needs a full re-run because of this build.
 
 - **Language:** CommonJS JavaScript in the panel, as today, with no dependencies. `panel/helper/` is untouched.
 - **Browser:** AE 26.5, CEP 12.0.1.2, CEF 99 (Chromium 99). See P4.
-- **Runtime:** B1 throughout (FR-097). A's error kinds are tested from recorded streams.
-- **Storage:** reads `learner.json`, `path.json` and `skills-built.json`; writes only its existing
-  `panel-session.json` and frames.
+- **Runtime:** built and evaluated on B1 (FR-097, `decisions/011`: panel features build on B1; A's errors use the fake service, so
+  A's kinds are tested from recorded streams). The last check before a tester is on A (below).
+- **Storage:** reads `learner.json`, `path.json` and `skills-built.json`; writes only its existing display log
+  (`panel-session.json`, `panel-frames/`) and turn log (`panel-turns.jsonl`). FR-067, T075.
 - **Testing:** `node --test` in `panel/test/`, on recorded streams and saved records. Live checks by the builder.
 - **Constraints:** 260 × 480 minimum; Home draws with no mentor turn, within 1 s (SC-004).
 
@@ -30,7 +32,7 @@ needs a full re-run because of this build.
 | Principle | Result |
 |---|---|
 | I. Spec before build | Pass: amended spec, approval gate |
-| II. Decisions | Pass: `002`, `003`, `005`, `006`, `007`, `008`, `009`, `010` respected. The panel holds no teaching logic; row words map tool codes and never decide a state. No new decision record needed |
+| II. Decisions | Pass: `002`, `003`, `005`, `006`, `007`, `008`, `009`, `010`, `011` respected. The panel holds no teaching logic; row words map tool codes and never decide a state. No new decision record needed |
 | III. Teaching evaluated | Pass: every new request has cases; next-mentor gets the set it lacks |
 | IV. Privacy | Pass: no names; the panel stores nothing new about the learner |
 | V. Simplicity | Pass: no dependencies, smallest-first steps |
@@ -50,14 +52,18 @@ needs a full re-run because of this build.
   `curriculum.md` and says "built" isn't stored there on purpose. The panel reads it through `cfg.repo_path`. If it
   can't be read, only the path's first skill counts as built, and the panel logs it.
 - **P3. B1 allowlist and hand-over.** A lesson started directly gets that skill's own `allowed-tools`, as its eval
-  runner does. Next-mentor's run gets every skill's tools plus `Skill`, with `--tools ToolSearch,Skill`. The list comes
-  from `SKILL.md` frontmatter, matching option A. **This hand-over has never run under these flags, so T030 checks it
-  first.** If it fails, Yes, let's go sends the recommended skill's own command instead, read from `recommend_next`'s
-  result. That's panel-only and also works on A; typed agreement would then stop short, which the eval cases would show.
+  runner does (spec 013 FR-042; built by 013 T065, not here). Next-mentor's run gets every skill's tools plus `Skill`, with
+  `--tools ToolSearch,Skill`: one B1 process can't change its list at a hand-over, so the union is the one place B1 allows more than
+  A, and the next-mentor set fails a case that uses it early (T032). The list comes from `SKILL.md` frontmatter, matching option A.
+  **This hand-over has never run under these flags, so 013 T065's check comes first (T030).** If it fails, Yes, let's go sends the
+  recommended skill's own command instead, read from `recommend_next`'s result. That's panel-only, built in T052 (013 T065 only hands
+  back), and also works on A; typed agreement would then stop short, which the eval cases would show.
 - **P4. Short docks without `:has`.** `@media (max-height: 560px)` replaces the mockup's `@container`, since the panel
   fills its viewport. A class on the lesson's own container (`.list-open`), set by the arrow's handler and cleared after a
-  check, hides the chat. T011's scan fails on `:has(`, `@container`, `color-mix(`, `text-wrap`, `dvh`, CSS nesting and
-  anything else newer than Chromium 99.
+  check, hides the chat. T011's scan is a named list. CSS: `:has(`, `@container`, `color-mix(`, `text-wrap`, `dvh`, CSS nesting. Scripts in
+  `main.js` and `panel/lib/**`: `toSorted`, `toReversed`, `toSpliced`, `.with(`, `Object.groupBy`, `Map.groupBy`, `Promise.withResolvers`,
+  `Array.fromAsync`, `Set` methods such as `.union(`, the regex `v` flag, and `:has(` in a selector string. The list grows when a live
+  sitting finds something it missed.
 - **P5. Offset's scale.** One scale per lesson, in seconds:
   - **Start:** the earliest start seen (`group.members[].start`, each check's `start_before`, `start_now`).
   - **End:** the latest start seen on the layers kind, or the latest landing (`end_before`, `end_now`) on the properties
@@ -66,13 +72,16 @@ needs a full re-run because of this build.
   - **Widen only** during a lesson, so diamonds don't jump between checks.
   - Rows draw from the snapshot at the opening and from `start_now` afterward. Comp length is rejected (research R8).
 - **P6. Connection.** `lib/connection.js` extends the bridge read to return `connected`, `not_connected` or `busy`, polled
-  every 5 s while the panel is visible and on Try again. `bridgeStarted()` keeps its contract for continuing a lesson.
-- **P7. Retry.** Each adapter exposes `announcesCalls`. The panel applies FR-030 from it. B1's Try again after a timeout
-  stops the process and resumes the session first (research R5).
+  every 5 s while the panel is visible and on Try again. `bridgeStarted()` keeps its contract, and `canContinue` still reads null as "can't", but only a start time that answers
+  and differs ends a saved lesson (FR-028), so the read also returns the start time.
+- **P7. Retry.** Each adapter exposes `announcesCalls`. The panel applies FR-030 from it, including `demo_unknown`. B1's Try again
+  after a timeout stops the process and resumes the session first (research R5).
 - **P8. Saved session.** `panel-session.json` moves to version 2 because the view's shape changes. An older file reads as
-  nothing to continue, as the reader already does for another version.
+  nothing to continue, as the reader already does for another version. It keeps `claude_session_id`, which spec 013's continue flow
+  (013 T044) reads, and adds the `labels` and `picked_up` of the lesson view.
 - **P9. Step 1's interim.** Up next always shows the path's first skill with Start lesson, and the Skills tab shows one line
-  plus that same start. Step 2 removes both, so stopping after step 1 still tells the truth.
+  plus that same start. Step 2 removes both, so stopping after step 1 still tells the truth. Home with a record at step 1 has the id
+  `home-return-interim`: the `home-first` card plus the memory card, so no new drawing.
 - **P10. Copy.** `lib/copy.js` takes the wording from `index.html`, not the README's error table, which still holds the
   pre-pass text. `copy-pass.html` shows which is final.
 
@@ -94,23 +103,56 @@ mentor/           curriculum/skills-built.json, scripts/write-skills-built.mjs,
 product/evals/    next-mentor/ (new), new cases in all six sets
 ```
 
+## Shared work with spec 013 (`decisions/011`)
+
+Each piece has one owning task. The other task points to it and never rebuilds it. If 007 gets there first, its panel-builder or eval
+engineer runs the owning 013 task as written, and the cockpit ticks it in 013.
+
+| Work | Owning task | 007's task | If 013 gets there first | If 007 gets there first |
+|---|---|---|---|---|
+| A lesson's `--allowedTools` from its skill's `allowed-tools`, in `adapter-claude-code.js` (013 FR-042) | 013 T065 | T039 adds only next-mentor's union, `--tools` and the test over all files | T039 builds on it | T039 waits while 013 T065 runs first; there's no second list |
+| Whether `next-mentor` hands over on B1 | 013 T065's headless check | T030 reads the result and decides on P3's fallback | T030 runs nothing | The check runs once, under 013 T065, using `--tools ToolSearch,Skill` and the next skill's tools |
+| If B1 can't hand over | T052 (P3's fallback; 013 T065 only hands back) | T052 | Same | Same. Decision 011's table says hand-overs test on A until then, so T032's hand-over cases follow what T052 sends |
+| Runners' lists from `allowed-tools` (FR-042) | 013 T064 | T032's new runner reads `allowedToolsOf` (`lib/ab.mjs`) too | T032 uses T064's reader | T032 reads `allowedToolsOf` directly, with no hand-kept list; T064 then covers it |
+| `bash panel/install.sh --runtime a\|b1` | 013 T066 | None. 007 changes the manifest only (T025), and T066 doesn't touch it; T079 uses the flag | T079 uses it | T079 waits for it |
+| `ready-for-a.mjs` | 013 T067 | T077 runs it again once the new cases and runner exist | T077 re-runs it | T077 waits for it |
+| Paid A runs of whole sets | 013 T031, T032 | T078 pays only for what those runs leave out | T078 runs only 007's new cases, with `--only` | The new cases are in the sets, so 013's runs include them |
+| `adapter-claude-code.js`'s other lines (`announcesCalls`, stop and resume) | T023 | T023 | 013 T049 sees them as merged | Same (FR-097) |
+| `adapter-api.js` | 013 T044 owns resume; T023 owns `announcesCalls` | T023 | Different lines; the cockpit merges one at a time | Same |
+
 ## Mentor changes and eval cost
 
-Estimates use about $0.50 to $1 a case, from easing's $12 for 26 and the 2026-10-29 round's $180.
+Estimates use about $0.50 to $1 a case, from easing's $12 for 26 and the 2026-10-29 round's $180. A's rate is about the same (013 T031,
+T032: about $0.50 to $0.55 a case).
+
+**On B1, in this build (subscription limits, no API credit, `decisions/011`):**
 
 | Change | Owner | Eval cost |
 |---|---|---|
 | `skills-built.json`, generator, test | skill-builder | None |
-| Two rows in `next-mentor/SKILL.md` | skill-builder | The new next-mentor set: about 9 cases, $5 to $10 |
-| New button cases (no mentor change) | eval-engineer | 35 cases, about $18 to $35 |
+| Two rows in `next-mentor/SKILL.md` | skill-builder | The new next-mentor set: about 9 cases, $5 to $10 worth |
+| New button cases (no mentor change) | eval-engineer | 35 cases, about $18 to $35 worth |
 
-**Total about $22 to $45, plus repeats on failures.** A new case that fails and needs a `SKILL.md` fix triggers that skill's
-full set under FR-072, about $12 to $40 a set. That's the real risk: these buttons have never been run on the five newer
+**Total about $22 to $45 worth, plus repeats on failures.** A new case that fails and needs a `SKILL.md` fix triggers that skill's
+full set under FR-072, about $12 to $40 worth a set. That's the real risk: these buttons have never been run on the five newer
 skills. No tool behaviour changes.
+
+**Moving to A, before the first tester (FR-099; API credit where noted; nothing starts without the builder's go):**
+
+| Step | Task | Cost |
+|---|---|---|
+| Free check and dry runs | T077 | Free |
+| Paid eval run: next-mentor's set, plus any new cases 013's runs left out | T078 | Credit: $5 to $10 for next-mentor, and up to $18 to $35 for the rest. About $5 to $10 of that if only easing and pivot's 10 cases were left out |
+| Live on A: a lesson and a hand-over | T079 | Credit: about $1 |
+
+So this spec adds **about $24 to $46 of credit** to the first-tester checkpoint, on top of decision 011's six sets (about $115), and no
+credit before it. On a fixed credit, that checkpoint and the $100 budget already don't fit; this widens the gap.
 
 ## Risks
 
-- **Hand-over on B1** is untested (P3). Checked first, with a fallback.
+- **Hand-over on B1** is untested (P3). Checked first (013 T065), with a fallback.
+- **B1 passing doesn't prove A passes** (`decisions/011`). The new buttons reach A last, at FR-099's paid steps, so a problem there shows
+  up late.
 - **Row mapping is the bulk of the work** across six vocabularies. A real recorded stream per skill keeps it honest; the eval
   transcripts supply fixtures.
 - **The mockup hasn't been seen in a browser** by its own note, so fit at 260 × 480 may move. SC-010 is checked in AE.

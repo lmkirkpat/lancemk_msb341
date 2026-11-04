@@ -6,8 +6,8 @@ checked yet", never a pass. "Passed" comes only from the tool's `passed`.
 
 ## Easing: `diff_since_last.targets[].result`
 
-`eased_by_learner` ✓ Eased by you · `eased_by_demo` ✓ Demo · `still_linear` ✗ Still linear · `partly_eased` ◐ Half eased (detail from
-`linear_key_time`) · `removed` ⊘ Keys changed · `unmatched` ⊘ Can't tell which. Outside: `unexpected_changes`. Count: `summary`.
+`eased_by_learner` ✓ Eased by you · `eased_by_demo` ✓ Demo, or ? Who eased it? when `demo_credit` is `unknown` **(D13)** · `still_linear` ✗ Still linear · `partly_eased` ◐ Half eased (detail from
+`linear_key_time`) · `removed` ⊘ Keys changed · `unmatched` ⊘ Can't tell which. Outside: `unexpected_changes`. Count: `summary`. A `label` equal to `segment_id` is never shown: the row reads "A pair" **(D15)**. Opening rows with no label are a count line (FR-100).
 
 ## Key types: `key_types_check`
 
@@ -18,7 +18,7 @@ checked yet", never a pass. "Passed" comes only from the tool's `passed`.
 
 ## Speed graph: `speed_graph_check.pairs[]`
 
-`result` `passed`: `credit` `demo` ✓ Demo, else ✓ Shaped by you. `not_passed` by `mistake`: `not_shaped` ✗ Not shaped yet · `no_handle` ✗ No ease on a
+`result` `passed`: `credit` `demo` ✓ Demo, `unknown` ? Who shaped it? **(D13)**, else ✓ Shaped by you. `not_passed` by `mistake`: `not_shaped` ✗ Not shaped yet · `no_handle` ✗ No ease on a
 key · `arrives_moving` ◐ Still moving as it lands · `back_to_default` ◐ Back to the default · `long_both_ends` ◐ Long at both ends · `in_out_mixed` ◐
 Shaped the wrong side. `keys_changed`, `removed` ⊘ Keys changed · `unmatched` ⊘ Can't tell which. Detail: `dimension`. **You said it lands hard · left
 out:** the snapshot's `landing_hard_labels`, ○ Your call. `fastest` is never shown. Outside: `other_changes`.

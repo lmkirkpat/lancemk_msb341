@@ -12,8 +12,8 @@ request. Requests say what the learner wants, not how to teach.
 | RQ-13 | `retry` | Try again | `lesson-error`, passing kinds except `refused` | The last request, unchanged, under FR-030's rule |
 | RQ-14 | `check` | Done, check it | A lesson with targets | `I'm done. Check my work.` **(unchanged)** |
 | RQ-14 | `hint` | Hint | From the first check | `Can I have a hint?` |
-| RQ-14 | `show_me` | Show me | A demo target, no demo, not a review | `Show me how first.` |
-| RQ-14 | `show_me_again` | Show me again | `demo_made` | Easing: `Show me again: explain the pair you already eased, with a frame. Don't change anything.` Other five: `Show me again: explain the change you already made, with a frame. Don't change anything.` (Open question 8) |
+| RQ-14 | `show_me` | Show me | A demo target, no demo, not `demo_unknown`, not a review | `Show me how first.` |
+| RQ-14 | `show_me_again` | Show me again | `demo_made`, not `demo_unknown` | Easing: `Show me again: explain the pair you already eased, with a frame. Don't change anything.` Other five: `Show me again: explain the change you already made, with a frame. Don't change anything.` (Open question 8) |
 | RQ-15 | `find_next` | Find my next lesson | `home-return` | `/next-mentor` |
 | RQ-16 | `yes` | Yes, let's go | `lesson-picking`, with a recommendation | `Yes, let's go.` |
 | — | `ask` | (typed) | Lesson open | The learner's text, unchanged |
@@ -31,6 +31,7 @@ request. Requests say what the learner wants, not how to teach.
 
 **Total 44 cases.** Null already has one "Show me again" turn; the eval engineer should check whether it uses the new text or
 needs replacing. The next-mentor runner needs `--tools ToolSearch,Skill` and the union of the skills' tools, matching the panel
-(plan P3).
+(plan P3), read from `allowed-tools`, not hand-kept, and `--runtime a|b1` (`decisions/011`). All 44 run on B1 in this build; on A
+they're counted at FR-099's paid step (plan › Mentor changes and eval cost).
 
 The sync test's table names each case once the eval engineer hands them over (FR-071).

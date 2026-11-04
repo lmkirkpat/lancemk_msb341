@@ -43,17 +43,19 @@ tool is in its `allowed-tools`, and each built id has a row.
 | `mode` | The snapshot's `mode`; absent is `lesson` |
 | `focus` | The snapshot's `focus` |
 | `demo_target` | The latest snapshot |
-| `demo_made` | A demo tool's ok result, or the snapshot's `demo_used` where it has one |
+| `demo_made` | A demo tool's ok result, the snapshot's `demo_used` where it has one, or a check's rows marking a demo |
+| `demo_unknown` | Set by a cut-off Show me that may have landed a demo (FR-030). Hides Show me and Show me again. A later snapshot naming a demo target clears it; a snapshot that doesn't leaves it. A check marking a demo makes it `demo_made`; a check with no mark clears it |
+| `picked_up` | The first snapshot of this panel lesson returned `lesson` as `continued` or `resumed` (FR-014, FR-092) |
 | `null_ready` | Null's snapshot `null_ready`, or `null_ready` in a check's `codes` |
-| `replied` | The learner sent anything after the opening; drops Proposed |
+| `replied` | The learner sent anything after the opening; drops Proposed. Continue lesson counts. At a hand-over it resets, and "Yes, let's go" doesn't count |
 | `checks`, `passed` | Count of comparable check results; the latest check's own `passed` |
-| `labels` | id → label, kept for the lesson (research R1) |
+| `labels` | id → label, kept for the lesson and saved with the display log (research R1). A target with no label is a count line; a label equal to its id is never shown (FR-100) |
 | `check_list` | The checklist view below |
 | `saved` | `true` only on `record_lesson`'s `saved: true` in this lesson; `false` on any other result |
-| `recorded_result` | The `result` the mentor sent, for a save with no pass |
 | `timeline` | Offset's scale (plan P5) |
 
-**Stage** (`stageOf`): `done` if `passed`, else `try` if `replied` or targets are non-empty, else `pick`.
+**Stage** (`stageOf`): `done` if `passed`, else `try` if `replied`, `checks > 0`, `demo_made`, `demo_unknown` or `picked_up`, else `pick`.
+Targets alone never make it `try` (FR-014). `proposed` is opening rows with neither `replied` nor `picked_up`.
 
 ## Checklist view
 
@@ -69,7 +71,7 @@ key. `passed` is only ever the tool's.
 ## View state (`view-state.js`)
 
 A pure function from `{ config, record status, connection, lesson, turn, error }` to one README state id, with SC-003's list
-checked against the README's table.
+checked against the README's table. One id isn't in that table: `home-return-interim`, step 1's Home with a record (FR-006, plan P9).
 
 ## Record reading (`memory.js`)
 
