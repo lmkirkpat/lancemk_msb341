@@ -54,7 +54,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [ ] T019 [US2] PB · Following the lesson: Earlier fold, done fold, Next line, "1 more", changed bar, frame sizes, Flip. FR-085.
 - [ ] T020 [US2] PB · Easing's Changed in your comp box, Show me and Show me again from `demo_target`. FR-018, FR-019, `lesson-demo`.
 - [ ] T021 [US2] PB · `lesson-passed-asking`, `lesson-passed`, `lesson-passed-unsaved`, and a save with no pass (D6). FR-021, FR-053.
-- [ ] T022 [US3] PB · Lesson in progress: `home-lessonopen`, `home-cutoff`, `lesson-continued`, `home-aeclosed`, gray End lesson; `panel-session.json` version 2; nothing recorded; a resumed lesson shown as returned; `home-aeclosed` only on a different start time, with a busy or absent bridge keeping the session and re-checking on the poll. FR-023 to FR-028, FR-073, FR-092, plan P8.
+- [ ] T022 [US3] PB · Lesson in progress: `home-lessonopen`, `home-cutoff`, `lesson-continued`, `home-aeclosed`, gray End lesson; `panel-session.json` version 2, holding the opening skill (plan P8); nothing recorded; a resumed lesson shown as returned; `home-aeclosed` only on a different start time, with a busy or absent bridge keeping the session and re-checking on the poll. FR-023 to FR-028, FR-073, FR-092, plan P8.
 - [ ] T023 [US3] PB · Errors on screen: `err-mentor`, `err-key`, `err-credit`, `lesson-pass-*`, `lesson-start-failed`, `lesson-exited`, `lesson-error`, `lesson-error-demo`; `announcesCalls` on both adapters; B1's stop and resume before a retry after a timeout; `demo_unknown` hiding Show me and Show me again until a snapshot or check settles it; the no-result line (D12). FR-019, FR-029, FR-030, FR-056, plan P7, SC-007.
 - [ ] T024 [P] PB · The Skills tab's one-line interim (plan P9).
 - [ ] T025 [P] PB · `CSXS/manifest.xml`: `MinSize` height 480 (Open question 9).
@@ -67,19 +67,19 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 ## Phase 3: Step 2 prerequisites
 
 - [ ] T029 [P] SB · `mentor/curriculum/skills-built.json`, `mentor/scripts/write-skills-built.mjs`, `mentor/test/skills-built.test.mjs`. New files only. PN-16, plan P2. No eval cost.
-- [ ] T030 [P] PB · Whether `/next-mentor` hands over on B1. Owned by 013 T065's headless check (fixture mode, no AE, no credit), so read its result in 013's research R6; if 013 T065 hasn't run, run it now as written, under `--tools ToolSearch,Skill` with the next skill's tools allowed, not a second check. If it fails, take plan P3's fallback and tell the cockpit before T052.
+- [ ] T030 [P] PB · Read 013's research R6 ("T065's check on B1") and confirm in the hand-back that T052 follows it: B1 can't hand over. No check to run; `--tools ToolSearch,Skill` stays untested and unplanned (research R11).
 - [ ] T031 SB · `next-mentor/SKILL.md`: add `Set the pivot (anchor point)` → `/anchor-mentor` and `Move a group with a null` → `/null-parenting-mentor`, names exactly as in `path.json`. Editing an existing file: the cockpit passes `--shared-owner`. PN-17.
-- [ ] T032 EE · `product/evals/next-mentor/`: runner with the panel's flags and `--runtime a|b1` from the start (its tool lists from `allowedToolsOf`, 013 T064's reader, never hand-kept), rubric, 9 cases, a hard-rule check that fails a call to another skill's tool before the hand-over. RQ-15, RQ-16, FR-087. Depends on T030, T031.
+- [ ] T032 EE · `product/evals/next-mentor/`: runner with `--runtime a|b1` from the start, tool lists from `allowedToolsOf` (013 T064's reader, never hand-kept; no `Skill` on B1), rubric. **B1, 9 cases:** 5 openings; 4 Yes-path cases that check the `recommend_next` result, then run the panel's follow-on request in a fresh session with that skill's list, to the pivot, to null, to a review, and to a lesson with focus layers. **A only, 4 more cases, written now, run at T078:** `Yes, let's go.` handing over for real on the same four. RQ-15, RQ-16, FR-082. Depends on T031.
 - [ ] T033 [P] [US7] EE · Key types: 6 cases, contracts/button-requests.md.
 - [ ] T034 [P] [US7] EE · Speed graph: 6 cases.
 - [ ] T035 [P] [US7] EE · Offset: 6 cases.
 - [ ] T036 [P] [US7] EE · Pivot: 7 cases.
 - [ ] T037 [P] [US7] EE · Null: 7 cases; check its existing Show me again turn.
-- [ ] T038 EE · Run the new cases on B1 with `--only`, and report by set. A failure needing a `SKILL.md` change goes to the cockpit first: it triggers that set's full run (FR-072). Depends on T027, T032 to T037.
+- [ ] T038 EE · Run the new cases on B1 with `--only`, leaving out next-mentor's A-only cases, and report by set. A failure needing a `SKILL.md` change goes to the cockpit first: it triggers that set's full run (FR-072). Depends on T027, T032 to T037.
 
 ## Phase 4: Step 2 build (all six skills and the Skills tab)
 
-- [ ] T039 PB · On top of 013 T065's per-skill list (run 013 T065 first if it hasn't run; this task doesn't build that list): next-mentor's run gets the union plus `Skill` and `--tools ToolSearch,Skill`, with a test against all seven `SKILL.md` files. FR-087, plan P3, SC-017. Depends on 013 T065.
+- [ ] T039 PB · First in this phase, on top of 013 T065's per-skill list (run 013 T065's build first if it hasn't landed; this task doesn't build that list): every start and resume passes the skill, the saved session's included, with a test against all seven `SKILL.md` files and that `Skill` isn't passed. Check headlessly first (fixture, subscription) that `--resume` honours the launch list, which 013's research R6 leaves open; if it doesn't, tell the cockpit before T056. FR-087, plan P3, P8, SC-017. Depends on 013 T065.
 - [ ] T040 [P] PB · `activity.js`: a line for every tool, claiming only what it does, with a test. FR-062, SC-017.
 - [ ] T041 PB · `requests.js` per skill, including Show me again's text (Open question 8), New lesson and Find my next lesson; `turns.js` `KINDS` gains the new kinds, so the turn log doesn't count them as Ask. contracts/button-requests.md.
 - [ ] T042 PB · `lib/skills.js`: path, data file and skill table, with its drift test; tool → skill; remove `path.js`. PN-16, data-model.
@@ -92,8 +92,8 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [ ] T049 [US2] PB · Per-skill demo: Show me from `demo_target` (null also `null_ready`), the Changed box from each demo tool's result, header from tool → skill. FR-014, FR-018, FR-019.
 - [ ] T050 [US5] PB · Skills tab: `skills-empty`, `skills-few`, `skills-many`; removes the interim. FR-048, FR-053.
 - [ ] T051 [US5] PB · `skill-detail`, `skill-detail-noreview`, `skill-detail-new`, New lesson. FR-049.
-- [ ] T052 [US1] PB · Home's `home-return` and Find my next lesson; `lesson-picking`, Yes only with a recommendation, a hand-over changing the header; removes `home-return-interim`; plan P3's fallback if T030 says so. FR-009, FR-013, FR-082, FR-094. Depends on T030.
-- [ ] T053 [US7] PB · Widen the sync test from EE's case names. FR-071, SC-006. Depends on T027, T032 to T037.
+- [ ] T052 [US1] PB · Home's `home-return` and Find my next lesson; `lesson-picking`, Yes per FR-082: `handsOver` on both adapters; on B1, stop next-mentor's process and start the recommended lesson from `recommendation`, ignoring late events from the stopped adapter; on A, send `Yes, let's go.`; hidden with `requested`, no recommendation or a skill not in the table. A review reached before step 3 has no practice tag yet. Removes `home-return-interim`. FR-009, FR-013, FR-082, FR-094, plan P3. Depends on T030, T039, T041.
+- [ ] T053 [US7] PB · Widen the sync test from EE's case names, covering RQ-16's `Yes, let's go.` and the follow-on requests. FR-071, SC-006. Depends on T027, T032 to T037.
 - [ ] T054 PB · SC-003's tests for step 2's states; each skill's recorded stream through the panel. SC-002's test half, SC-007.
 - [ ] T055 PB · Hand-back: what ran, what the scans say, anything for the designer.
 - [ ] T056 BL · Key types, live in the panel (quickstart §2). SC-002, SC-014.
@@ -101,9 +101,9 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [ ] T058 BL · Offset, live; react to the timeline. SC-002, SC-014.
 - [ ] T059 BL · Set the pivot, live. SC-002, SC-014.
 - [ ] T060 BL · Move a group with a null, live. SC-002, SC-014; closes the live tally in quickstart §2.
-- [ ] T061 BL · Find my next lesson through to a hand-over (quickstart §4). First confirm the temp learner home reaches both Home and the mentor; that setup is untested.
+- [ ] T061 BL · Find my next lesson through Yes into the recommended lesson, on B1 (quickstart §4). First confirm the temp learner home reaches both Home and the mentor; that setup is untested.
 - [ ] T062 BL · SC-010 at 260 × 480, 11 of its 12 states (`practice-check` waits for T071), and SC-016 at 480 and 680 (quickstart §3).
-- [ ] T076 SW · When 013 T065 or this spec's T039 merges, update the launch arguments in `specs/003-mentor-panel/contracts/mentor-adapter.md`, which still shows `--tools ToolSearch` and easing's six tools. The cockpit asks when the merge lands.
+- [ ] T076 SW · When 013 T065 merges, update `specs/003-mentor-panel/contracts/mentor-adapter.md`: replace the launch block's `--allowedTools` with the skill's own list (`--tools ToolSearch` stays), and fold in the Guarantees note added 2026-11-04. When T023 and T052 merge, add `announcesCalls` and `handsOver`. The cockpit asks when each merge lands.
 
 **Stop point:** all six live lessons in the panel, sprint 4's first "done" item.
 
@@ -129,13 +129,15 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 **T077 is free and part of this build. T078 and T079 spend API credit: they're for the builder to start, before a tester sees the panel, and they don't hold the stop points above open. Nothing here has started.**
 
 - [ ] T077 EE · Free. After T038: `product/evals/lib/ready-for-a.mjs` (013 T067) on all seven skills, then `--runtime a --dry-run` on each set with new cases and on the next-mentor set. Report any mismatch to its owner. SC-018's free half. Depends on 013 T067, T038.
-- [ ] T078 EE · **Paid, on the builder's go.** On A, at spec 013 FR-033's bar, against each set's B1 result: the next-mentor set, plus any new cases 013 T031 and T032 didn't include, with `--only`. Whole-set runs stay 013's. Credit: $5 to $10 for next-mentor, up to $18 to $35 for the rest (plan › Mentor changes and eval cost). Depends on T077 and on 013 T060 and 013 T062.
+- [ ] T078 EE · **Paid, on the builder's go.** On A, at spec 013 FR-033's bar, against each set's B1 result: the next-mentor set, plus any new cases 013 T031 and T032 didn't include, with `--only`. The 4 real hand-over cases run only here, and have no B1 result, so they're judged on their rubric and hard rules. Whole-set runs stay 013's. Credit: $5 to $10 for next-mentor, up to $18 to $35 for the rest (plan › Mentor changes and eval cost). Depends on T077 and on 013 T060 and 013 T062.
 - [ ] T079 BL · **Paid, on the builder's go.** Live on A, in the new panel: `bash panel/install.sh --runtime a` (013 T066), one easing lesson, then Find my next lesson through a hand-over (quickstart §7). Can share 013 T021's sitting if that hasn't run. Credit: about $1. Depends on T078 and 013 T066.
 
 ## Dependencies
 
 Phase 0 → 1 → 2 (stop) → 3 → 4 (stop) → 5. T029 and T030 can start any time after approval. T076 follows the merge it names. Phase 6 follows T038 (T077) and the builder's go (T078, T079); shared tasks in 013 can land in either order (plan › Shared work with spec 013). Live tasks run one at a time (one AE lock), each in a fresh
 session after a `mentor/` merge. T056 to T060 need T038 reported, so a failing request is known before a sitting.
+
+**No non-easing lesson runs in the panel until T039 lands.** Today's launch list holds only easing's tools, and a skill's frontmatter grants tools for one turn, so a non-easing lesson would look fine on its opening and be denied on its second turn (013 research R6). Phases 1 and 2 are easing only, so they're safe. Phases 3 and 4's eval and recorded-stream tasks don't start the panel. Every live task from T056 on, T050 to T052's manual use, and Phase 5 depend on T039, and so on 013 T065's build.
 
 ## Not tasks
 

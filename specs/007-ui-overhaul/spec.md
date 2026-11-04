@@ -371,6 +371,9 @@ From the README's "States still missing" and the specs this one sits on.
   record and comp live. The stored version is a later option (FR-093).
 - **The skill has nothing to focus on in this comp.** The mentor says so in the opening (spec 004 Edge
   Cases); the checklist shows no rows, never placeholder rows.
+- **Agreeing by typing, on B1.** B1 can't hand over, so a typed "yes" stays in `lesson-picking` and the mentor may tell the learner to type a
+  command (013 research R6). The panel can't judge wording (FR-065), so **Yes, let's go** stays until pressed. B1 is builder-only, so this is
+  accepted. On A, typed agreement hands over.
 - **Find my next lesson finds nothing.** `recommend_next` returns no recommendation: the mentor's words
   show, and **Yes, let's go** doesn't (FR-082).
 - **A new lesson on a comp where one was left open.** End lesson and Start fresh don't touch the mentor's
@@ -463,8 +466,8 @@ From the README's "States still missing" and the specs this one sits on.
   from which tool ran and its `focus` and `mode` (no new mentor data), plus a one-line **Pick · Try · Done**
   strip, replacing I do / We do / You do. **Pick** is the start. **Try** begins at the first reply, first
   check or demo, or at once when the lesson's first snapshot returns `lesson` as `continued` or `resumed`; targets alone
-  don't start it, because easing, speed graph and offset have them at the opening. A hand-over starts at Pick from its first
-  snapshot ("Yes, let's go" isn't a reply). **Done** is the check's own `passed`. A demo is an event, in its box and on its row,
+  don't start it, because easing, speed graph and offset have them at the opening. A lesson reached from `lesson-picking` starts at Pick from its first
+  snapshot ("Yes, let's go" isn't a reply), on both runtimes (FR-082). **Done** is the check's own `passed`. A demo is an event, in its box and on its row,
   never a step. All of it derives from tool results and sends, never the mentor's wording. *(Spec 003
   FR-009's three stages don't carry over.)*
 - **FR-015**: The checklist MUST dock above the buttons. Rows at the opening come from the opening
@@ -704,7 +707,7 @@ From the README's "States still missing" and the specs this one sits on.
   | RQ-13 | Try again | Resends the last request | easing | Two cases: Show me again after a cut-off demo that landed; the check after a cut-off demo with no result |
   | RQ-14 | Done, check it; Hint; Show me; Show me again | Yes. Text unchanged, except Show me again on the five new skills, whose wording can't say "pair" or "eased" | all six | Easing's cases 17 to 20 are unchanged. None of the other five sets has these turns; one each |
   | RQ-15 | Find my next lesson | Yes: `/next-mentor` | next-mentor (new set) | No such set exists today |
-  | RQ-16 | Yes, let's go | Yes | next-mentor (new set) | Four hand-over cases: to the pivot, to null, to a review, and to a lesson with focus layers (contract) |
+  | RQ-16 | Yes, let's go | A: `Yes, let's go.` B1: starts the recommended lesson (FR-082) | next-mentor (new set) | Four cases each way: to the pivot, to null, to a review, and to a lesson with focus layers. B1's stop at the recommendation and the follow-on start; real hand-overs run on A only (contract) |
   | — | Start fresh, End lesson, Pick a skill, tabs, back, fold, Flip, the checklist's arrow | No | — | Panel tests (FR-073), not evals |
 
 
@@ -743,9 +746,19 @@ From the README's "States still missing" and the specs this one sits on.
 ### Added 2026-11-02 (mockup revision 3)
 
 - **FR-082**: `lesson-picking`: Find my next lesson MUST open the Lesson tab with the mentor's one suggestion, no
-  strip and no checklist. **Yes, let's go** (RQ-16) MUST show only when that turn's `recommend_next` returned a
-  recommendation. **Pick a skill** MUST end the picking process, with nothing recorded. On hand-over, the lesson's
-  skill comes from the next tool that runs.
+  strip and no checklist. **Yes, let's go** (RQ-16) MUST show only when the latest `recommend_next` result has a `recommendation`
+  and no `requested`, and the recommended skill is in the panel's skill table; otherwise Pick a skill is the way on. **Pick a skill**
+  MUST end the picking process, with nothing recorded. Yes MUST get the learner into the recommended lesson on both runtimes:
+  - **On B1,** which can't hand over (013 research R6, FR-042: hand-overs are tested on A only), the panel MUST end next-mentor's process,
+    send it nothing more, and start the recommended skill's own lesson with that skill's list, by the request
+    [contracts/button-requests.md](contracts/button-requests.md) maps from `recommendation.skill`, `kind` and `focus_layers`. The panel only reads
+    those fields and looks the skill up in its table; it doesn't choose the skill or the lesson's focus (FR-065, `decisions/005`).
+  - **On A,** Yes MUST send `Yes, let's go.` in the same conversation, and the real hand-over runs (013 T060). The lesson's skill comes from the
+    next tool that runs.
+  - **What the learner sees on either:** "Yes, let's go" in the chat, the button's "Starting…" and the status line "Getting your lesson ready…",
+    other actions paused; then the lesson's opening under the suggestion, with the skill's header, the strip on Pick and its checklist slot. On B1
+    the mentor starts a new conversation, so its opening may repeat the suggestion, and the header changes at the press. A failed start shows
+    `lesson-start-failed`, and nothing is recorded.
 - **FR-085**: Following the lesson, all panel-only, per README › Following the lesson: older turns fold ("Earlier in
   this lesson (3)"); done rows fold at short docks; "Next: …" under the summary is the first open row in the tool's
   order, never re-ranked; "1 more since your last check" and a bar on changed rows come from comparing two results;
@@ -754,10 +767,10 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-086**: Each skill's rows MUST follow the one pattern (glyph, subject, word, optional detail; optional sections,
   footer, Outside, Worth a look), mapped from its check tool per [contracts/checklist-rows.md](contracts/checklist-rows.md).
   Speed graph's `fastest` MUST NOT show. The pivot and null's `other_changes` kinds get panel words.
-- **FR-087**: The panel MUST run all six skills and next-mentor on B1: its allowlist MUST cover each skill's
-  `allowed-tools` (spec 013 FR-042, built once by 013 T065; [plan.md](plan.md) › Shared work with spec 013), and next-mentor's
-  run MUST also allow the hand-over. A test MUST compare the list with the `SKILL.md` files. Next-mentor's run allows other
-  skills' tools before the hand-over, which A refuses, so the next-mentor set MUST fail a case that calls one early. Option A's helper already reads each skill's list itself, so this is B1's gap alone; the status
+- **FR-087**: The panel MUST run all six skills and next-mentor on B1, each on its own `allowed-tools` from the launch (spec 013 FR-042, built once by
+  013 T065; [plan.md](plan.md) › Shared work with spec 013), without `Skill`, which FR-042 forbids. Every start and resume MUST pass the skill, because a
+  skill's frontmatter grants its tools for one turn only: without the launch list a lesson works once and is denied on its second turn (013 research
+  R6). A test MUST compare the list with the `SKILL.md` files. Option A's helper already reads each skill's list itself, so this is B1's gap alone; the status
   lines (FR-062) are a gap on both.
 - **FR-088**: Offset's small timeline MUST place rows on one shared scale per lesson, taken from the tool's results as
   [plan.md](plan.md) P5 defines. It's a ruler with the first key as a diamond, never a meter.
@@ -859,7 +872,7 @@ specs are this spec's requirements on those specs' shapes; the cockpit should pa
 **Skill hand-over**:
 
 - **PN-17**: `next-mentor/SKILL.md`'s hand-over table MUST list all six skills. It omits Set the pivot and Move a group with a
-  null, though `recommend_next` does suggest them (checked by running it: [research.md](research.md) R2).
+  null, though `recommend_next` does suggest them (checked by running it: [research.md](research.md) R2). Only A follows this table (FR-082).
 
 **Who changes what**:
 
@@ -871,7 +884,7 @@ specs are this spec's requirements on those specs' shapes; the cockpit should pa
 | PN-11 | Panel alone | None: `review_due` exists | This spec | None |
 | PN-15 | Panel alone | None: `saved: true` exists | This spec | None; a panel test with a failure fixture |
 | PN-16 | **Mentor (new files only)** | Generated data file, generator, test | This spec, skill-builder | None |
-| PN-17 | **Mentor (one `SKILL.md`)** | Two table rows | This spec, skill-builder | next-mentor's new set, which doesn't exist yet (RQ-15, RQ-16) |
+| PN-17 | **Mentor (one `SKILL.md`)** | Two table rows, used by the real hand-over on A | This spec, skill-builder | next-mentor's new set, which doesn't exist yet (RQ-15, RQ-16) |
 | Status lines, rows, stage, allowlist | Panel alone | None | This spec | None |
 
 ## Build order and priorities
@@ -882,7 +895,7 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
 |---|---|---|---|---|
 | **0. Contrast fixes** | Done | FR-074, FR-076 | — | Shipped in `5bed931` |
 | **1. Shell and easing** | P1 | Tabs, Home A from the record and path, the Lesson tab with the checklist, short docks, Pick / Try / Done, lesson-in-progress rules, the error split, accessibility. Up next is always the path's first skill (`home-return-interim` with a record); the Skills tab is a one-line interim | Nothing from the mentor | Easing in the new layout. Other skills stay in Claude Code |
-| **2. Six skills and Skills** | P1 | The other five checklists, the demo and Changed box per skill, the allowlist and status lines, the Skills tab, skill detail, New lesson, Find my next lesson and `lesson-picking`, the widened sync test | PN-16, PN-17, the B1 hand-over check, eval cases | All six as live lessons |
+| **2. Six skills and Skills** | P1 | The other five checklists, the demo and Changed box per skill, the allowlist and status lines, the Skills tab, skill detail, New lesson, Find my next lesson and `lesson-picking`, the widened sync test | PN-16, PN-17, 013 T065's per-skill list, eval cases | All six as live lessons |
 | **3. Practice** | P2 | Practice due, Warm up, the `practice*` states, the "Warm-up due" lines | Step 2, eval cases | Practice across sessions |
 | **To A** | Before the first tester | `decisions/011`'s path (FR-099): free check and dry run in this build; paid run and live lesson on the builder's go | Step 2 or 3, 013 T064 to T067 | Nothing new; the proof a tester's panel needs |
 | **Held** | — | Diagnosis screens; first run and Check setup | Spec 005's plan; the installer and spec 006 Q2 | — |
@@ -972,9 +985,9 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
 - **SC-016**: At 560 px tall and under exactly one of chat and rows shows, and above it both do, in **100%** of panel tests; a
   check leaves the chat showing. *Measured by:* panel tests, plus the builder at 480 and 680 in AE.
 - **SC-017**: **0** CSS or script features on the scan's list (FR-090) in the panel, and every skill's every tool has a status
-  line (except `Skill`, FR-062) and is on the B1 allowlist. *Measured by:* automated checks.
+  line (except `Skill`, FR-062), and every tool but `Skill` is on the B1 allowlist. *Measured by:* automated checks.
 - **SC-018**: Before any tester sees the panel: `ready-for-a` and the dry runs pass on all seven skills (this build, T077); the new
-  cases and the next-mentor set meet spec 013 FR-033's bar on A, and one lesson and one hand-over run live on A (on the builder's
+  cases and the next-mentor set meet spec 013 FR-033's bar on A, including the real hand-over cases, which run nowhere else, and one lesson and one hand-over run live on A (on the builder's
   go, T078, T079). *Measured by:* the free check and dry runs, eval runs on A, and the builder in usage notes.
 
 ## Assumptions
@@ -1071,8 +1084,7 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
    resumes the old start, with the demo spent. **Answered 2026-11-04: accept it for this build** (FR-092). The one-demo rule holds. A
    real reset needs a tool change in all six skills and their re-runs, about $180. The labels "Start fresh" and "New lesson" can
    still read as a promise of a fresh start, so they're open as D16.
-7. **Is a new next-mentor eval set acceptable?** The README expected "next-mentor's cases", but no such set exists, and no runner
-   allows the hand-over. **Answered 2026-11-04: yes, about 9 cases on a small new runner**, about $5 to $10 a run. Constitution III requires
+7. **Is a new next-mentor eval set acceptable?** The README expected "next-mentor's cases", but no such set exists, and B1 can't hand over (013 research R6). **Answered 2026-11-04: yes, about 9 cases on a small new runner**, about $5 to $10 a run; its Yes-path cases stop at the follow-on start on B1, and real hand-overs run on A only (FR-082). Constitution III requires
    one, and Find my next lesson is Home's main button.
 8. **What should Show me again say on the five new skills?** Today's text says "the pair you already eased". **Answered 2026-11-04: easing
    keeps its text (case 20 holds); the five share "Show me again: explain the change you already made, with a frame. Don't change

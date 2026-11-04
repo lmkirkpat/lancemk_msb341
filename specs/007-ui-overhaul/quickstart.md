@@ -66,7 +66,8 @@ rewrites the runtime `.mcp.json` on every launch, and Home reads the record thro
 If they disagree, stop and don't press on. Fallback, AE quit: copy the real `learner.json` aside, put the four-skill one in its place, run, and copy the
 real one back. Log which way worked.
 
-Then press Find my next lesson, say yes, and confirm it hands over to the pivot and the header follows. Afterward, quit AE and start it from the Dock.
+Then press Find my next lesson and Yes, let's go. On B1 this isn't a hand-over: confirm the pivot's own lesson starts below the suggestion, the header changes at the press, the strip reads Pick, and a second
+turn in that lesson isn't denied. Afterward, quit AE and start it from the Dock.
 
 ## 5. Practice (T071)
 
@@ -82,5 +83,5 @@ Flows 2, 3 and 5, no mouse, once.
 **Free (T077):** `node product/evals/lib/ready-for-a.mjs <skill>` on all seven skills, then each set's runner with `--runtime a --dry-run`.
 
 **Paid, only on the builder's go (T078, T079):** the eval run on A, then `bash panel/install.sh --runtime a`, restart AE, run one easing lesson and one
-Find my next lesson through a hand-over, about $1 of credit. Check the rows, Show me, and that no setup or error copy changed. Then
+Find my next lesson through the real hand-over, about $1 of credit. Check the rows, Show me, and that no setup or error copy changed. Then
 `bash panel/install.sh --runtime b1` and restart AE.

@@ -51,13 +51,13 @@ needs a full re-run because of this build.
   files only, so the add-only rule holds and no eval is affected. `path.json` is left alone: it mirrors
   `curriculum.md` and says "built" isn't stored there on purpose. The panel reads it through `cfg.repo_path`. If it
   can't be read, only the path's first skill counts as built, and the panel logs it.
-- **P3. B1 allowlist and hand-over.** A lesson started directly gets that skill's own `allowed-tools`, as its eval
-  runner does (spec 013 FR-042; built by 013 T065, not here). Next-mentor's run gets every skill's tools plus `Skill`, with
-  `--tools ToolSearch,Skill`: one B1 process can't change its list at a hand-over, so the union is the one place B1 allows more than
-  A, and the next-mentor set fails a case that uses it early (T032). The list comes from `SKILL.md` frontmatter, matching option A.
-  **This hand-over has never run under these flags, so 013 T065's check comes first (T030).** If it fails, Yes, let's go sends the
-  recommended skill's own command instead, read from `recommend_next`'s result. That's panel-only, built in T052 (013 T065 only hands
-  back), and also works on A; typed agreement would then stop short, which the eval cases would show.
+- **P3. B1 allowlist and Yes.** Every B1 start and resume gets that skill's own `allowed-tools` at launch, `next-mentor` included (spec 013 FR-042, built by
+  013 T065, not here), with `--tools ToolSearch` as today and no `Skill`. It has to be the launch: frontmatter grants tools for one turn only (013 research R6).
+  **B1 can't hand over, so Yes on B1 is a panel action:** read `recommendation` from `recommend_next`'s `tool_result.json`, which `stream.js` already gives, map it to a
+  request ([contracts/button-requests.md](contracts/button-requests.md)), stop next-mentor's process, and start that skill's lesson as Start lesson would (T052). The
+  panel looks up data and sends a fixed request with parameters (FR-069), so it stays display-only (FR-065, `decisions/005`). **On A, the same button sends `Yes, let's go.`
+  and the real hand-over runs.** Each adapter exposes `handsOver` (A true, B1 false), as with `announcesCalls`. The hazard: `main.js`'s `exit` handler clears
+  `state.adapter` and `lessonOpen`, so the stopped process's late `exit` would close the new lesson; handlers must ignore events from an adapter that's been replaced.
 - **P4. Short docks without `:has`.** `@media (max-height: 560px)` replaces the mockup's `@container`, since the panel
   fills its viewport. A class on the lesson's own container (`.list-open`), set by the arrow's handler and cleared after a
   check, hides the chat. T011's scan is a named list. CSS: `:has(`, `@container`, `color-mix(`, `text-wrap`, `dvh`, CSS nesting. Scripts in
@@ -78,7 +78,7 @@ needs a full re-run because of this build.
   after a timeout stops the process and resumes the session first (research R5).
 - **P8. Saved session.** `panel-session.json` moves to version 2 because the view's shape changes. An older file reads as
   nothing to continue, as the reader already does for another version. It keeps `claude_session_id`, which spec 013's continue flow
-  (013 T044) reads, and adds the `labels` and `picked_up` of the lesson view.
+  (013 T044) reads, and adds the `labels` and `picked_up` of the lesson view, and the opening `skill`, because resuming on B1 needs that skill's launch list.
 - **P9. Step 1's interim.** Up next always shows the path's first skill with Start lesson, and the Skills tab shows one line
   plus that same start. Step 2 removes both, so stopping after step 1 still tells the truth. Home with a record at step 1 has the id
   `home-return-interim`: the `home-first` card plus the memory card, so no new drawing.
@@ -110,12 +110,12 @@ engineer runs the owning 013 task as written, and the cockpit ticks it in 013.
 
 | Work | Owning task | 007's task | If 013 gets there first | If 007 gets there first |
 |---|---|---|---|---|
-| A lesson's `--allowedTools` from its skill's `allowed-tools`, in `adapter-claude-code.js` (013 FR-042) | 013 T065 | T039 adds only next-mentor's union, `--tools` and the test over all files | T039 builds on it | T039 waits while 013 T065 runs first; there's no second list |
-| Whether `next-mentor` hands over on B1 | 013 T065's headless check | T030 reads the result and decides on P3's fallback | T030 runs nothing | The check runs once, under 013 T065, using `--tools ToolSearch,Skill` and the next skill's tools |
-| If B1 can't hand over | T052 (P3's fallback; 013 T065 only hands back) | T052 | Same | Same. Decision 011's table says hand-overs test on A until then, so T032's hand-over cases follow what T052 sends |
-| Runners' lists from `allowed-tools` (FR-042) | 013 T064 | T032's new runner reads `allowedToolsOf` (`lib/ab.mjs`) too | T032 uses T064's reader | T032 reads `allowedToolsOf` directly, with no hand-kept list; T064 then covers it |
-| `bash panel/install.sh --runtime a\|b1` | 013 T066 | None. 007 changes the manifest only (T025), and T066 doesn't touch it; T079 uses the flag | T079 uses it | T079 waits for it |
-| `ready-for-a.mjs` | 013 T067 | T077 runs it again once the new cases and runner exist | T077 re-runs it | T077 waits for it |
+| A lesson's `--allowedTools` from its skill's `allowed-tools`, in `adapter-claude-code.js` (013 FR-042) | 013 T065's build half (open) | T039 passes the skill at every start and resume, and tests all seven files | T039 builds on it | T039 waits while 013 T065 runs first; there's no second list |
+| Whether `next-mentor` hands over on B1 | 013 T065's check (done: it can't) | T030 records the result | Settled | Settled |
+| Yes on B1 | T052 (013 T065 builds nothing for it) | T052 | Same | Same |
+| Runners' lists from `allowed-tools` (FR-042) | 013 T064 (done) | T032's new runner uses its reader, without `Skill` on B1 | T032 uses it | n/a |
+| `bash panel/install.sh --runtime a\|b1` | 013 T066 (done) | None. 007 changes the manifest only (T025), and T066 doesn't touch it; T079 uses the flag | T079 uses it | n/a |
+| `ready-for-a.mjs` | 013 T067 (done) | T077 runs it again once the new cases and runner exist | T077 re-runs it | n/a |
 | Paid A runs of whole sets | 013 T031, T032 | T078 pays only for what those runs leave out | T078 runs only 007's new cases, with `--only` | The new cases are in the sets, so 013's runs include them |
 | `adapter-claude-code.js`'s other lines (`announcesCalls`, stop and resume) | T023 | T023 | 013 T049 sees them as merged | Same (FR-097) |
 | `adapter-api.js` | 013 T044 owns resume; T023 owns `announcesCalls` | T023 | Different lines; the cockpit merges one at a time | Same |
@@ -130,7 +130,7 @@ T032: about $0.50 to $0.55 a case).
 | Change | Owner | Eval cost |
 |---|---|---|
 | `skills-built.json`, generator, test | skill-builder | None |
-| Two rows in `next-mentor/SKILL.md` | skill-builder | The new next-mentor set: about 9 cases, $5 to $10 worth |
+| Two rows in `next-mentor/SKILL.md` | skill-builder | The new next-mentor set on B1: 9 cases (5 openings, 4 Yes-path cases that stop at the recommendation and the follow-on start), $5 to $10 worth |
 | New button cases (no mentor change) | eval-engineer | 35 cases, about $18 to $35 worth |
 
 **Total about $22 to $45 worth, plus repeats on failures.** A new case that fails and needs a `SKILL.md` fix triggers that skill's
@@ -142,15 +142,19 @@ skills. No tool behaviour changes.
 | Step | Task | Cost |
 |---|---|---|
 | Free check and dry runs | T077 | Free |
-| Paid eval run: next-mentor's set, plus any new cases 013's runs left out | T078 | Credit: $5 to $10 for next-mentor, and up to $18 to $35 for the rest. About $5 to $10 of that if only easing and pivot's 10 cases were left out |
+| Paid eval run: next-mentor's set (the 5 openings, plus 4 real hand-over cases that run only on A, about $2 to $4 of it), plus any new cases 013's runs left out | T078 | Credit: $5 to $10 for next-mentor, and up to $18 to $35 for the rest. About $5 to $10 of that if only easing and pivot's 10 cases were left out |
 | Live on A: a lesson and a hand-over | T079 | Credit: about $1 |
+
+The real hand-over cases have no B1 result to compare with, so they're judged on their rubric and hard rules, and a problem with them shows up only here.
 
 So this spec adds **about $24 to $46 of credit** to the first-tester checkpoint, on top of decision 011's six sets (about $115), and no
 credit before it. On a fixed credit, that checkpoint and the $100 budget already don't fit; this widens the gap.
 
 ## Risks
 
-- **Hand-over on B1** is untested (P3). Checked first (013 T065), with a fallback.
+- **Yes differs by runtime** (P3): B1 tests the follow-on start, and only A tests the real hand-over, late (T078, 013 T055).
+- **Passing focus layers in a request is untried.** No `SKILL.md` says what to do with them; next-mentor just says to pass them on. T032's focus case tests it on B1. If it
+  fails and needs a `SKILL.md` change, FR-072's full re-run applies; dropping the parameter costs nothing.
 - **B1 passing doesn't prove A passes** (`decisions/011`). The new buttons reach A last, at FR-099's paid steps, so a problem there shows
   up late.
 - **Row mapping is the bulk of the work** across six vocabularies. A real recorded stream per skill keeps it honest; the eval

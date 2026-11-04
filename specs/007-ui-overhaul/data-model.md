@@ -39,7 +39,7 @@ tool is in its `allowed-tools`, and each built id has a row.
 
 | Field | From |
 |---|---|
-| `skill` | The pressed request, then whichever tool ran (a hand-over changes it) |
+| `skill` | The pressed request (on B1, Yes's recommended skill), then whichever tool ran (a real hand-over on A changes it). Saved with the display log, for B1's launch list on resume |
 | `mode` | The snapshot's `mode`; absent is `lesson` |
 | `focus` | The snapshot's `focus` |
 | `demo_target` | The latest snapshot |
@@ -47,7 +47,7 @@ tool is in its `allowed-tools`, and each built id has a row.
 | `demo_unknown` | Set by a cut-off Show me that may have landed a demo (FR-030). Hides Show me and Show me again. A later snapshot naming a demo target clears it; a snapshot that doesn't leaves it. A check marking a demo makes it `demo_made`; a check with no mark clears it |
 | `picked_up` | The first snapshot of this panel lesson returned `lesson` as `continued` or `resumed` (FR-014, FR-092) |
 | `null_ready` | Null's snapshot `null_ready`, or `null_ready` in a check's `codes` |
-| `replied` | The learner sent anything after the opening; drops Proposed. Continue lesson counts. At a hand-over it resets, and "Yes, let's go" doesn't count |
+| `replied` | The learner sent anything after the opening; drops Proposed. Continue lesson counts. On a hand-over from `lesson-picking` it starts false (a new view on B1, reset on A), and "Yes, let's go" doesn't count |
 | `checks`, `passed` | Count of comparable check results; the latest check's own `passed` |
 | `labels` | id → label, kept for the lesson and saved with the display log (research R1). A target with no label is a count line; a label equal to its id is never shown (FR-100) |
 | `check_list` | The checklist view below |

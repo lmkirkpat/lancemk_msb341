@@ -1,7 +1,7 @@
 # Research: the mockup's claims against the code (spec 007, 2026-11-02)
 
 Read from the code on branch `007-plan` (cut from `ebdceb0`). "Ran" means executed; everything else
-was read. Nothing here touched After Effects. Updated 2026-11-04 after `main`'s merge (013 T060, `decisions/011`); R10 is new.
+was read. Nothing here touched After Effects. Updated 2026-11-04 after `main`'s merges (013 T060, `decisions/011`, 013 T065's check); R10 and R11 are new.
 
 ## R1. Can each skill's rows come from existing tool results? Yes, with no mentor change
 
@@ -47,7 +47,7 @@ designer as D7.
 |---|---|---|---|
 | 1 | `:has` and `@container` for short docks | AE 26.5's CEP is 12.0.1.2 with CEF 99.2.15 (Chromium 99), read from the app bundle. Both arrived in Chromium 105 | Plan P4 |
 | 2 | "A small eval cost, next-mentor's cases only" | `product/evals/` has no next-mentor set, and every runner passes `--tools ToolSearch`, so none allows the hand-over | New set (Open question 7) |
-| 3 | Panel hand-over works | `adapter-claude-code.js` passes `--tools ToolSearch`, which leaves out `Skill`. The panel has never run a hand-over | Plan P3; a check comes first |
+| 3 | Panel hand-over works | `adapter-claude-code.js` passes `--tools ToolSearch`, which leaves out `Skill`. The panel has never run a hand-over | B1 can't hand over: R11, plan P3 |
 | 4 | Show me again is one request | Its text says "the pair you already eased". No `SKILL.md` mentions it. It's wrong for five skills | Open question 8 |
 | 5 | "Start fresh" and End lesson | `session.start` keeps one lesson per skill and comp until it passes. With a demo or check it's never stale, and `fresh` is refused (`LESSON_UNDERWAY`). The next lesson resumes it | FR-092, Open question 6 |
 | 6 | `home-unreadable` from the record alone | `readJson` renames a broken file to `learner.json.unreadable-<time>` on the mentor's first read. After that the file is missing, which looks like a first run | FR-095 |
@@ -126,3 +126,16 @@ about 3 px, narrower than the 7 px diamond, so the stagger the picture exists to
 - **Temp learner home.** `runtime.js` rewrites the runtime `.mcp.json` from the repo's on every launch, and Home reads `defaultHome()`,
   so an MCP config's `env` can't reach both. The adapter passes its environment to Claude Code, which suggests AE's own launch environment would
   reach the server, but that's untested (quickstart §4).
+
+## R11. Yes on B1, after 013 T065's check (2026-11-04)
+
+The check is spec 013's (its research R6, "T065's check on B1"), run by another session and checked against raw transcripts. It found that a skill's frontmatter grants tools for one
+turn only, and that B1 can't hand over. 013 FR-042 now says `Skill` MUST NOT be passed, and that hand-overs are tested on A only (builder's decision, 2026-11-04).
+
+- **Untested alternative, not planned:** `--tools ToolSearch,Skill` with every skill's tools at launch. The check didn't try that combination, but the builder's decision closes the route.
+- **What the panel can read** (read, not run): `recommend_next` returns `recommendation: { skill, skill_name, kind, reason, focus_layers, offer_practice_comp }` or null, and `requested` when one was
+  asked for. `stream.js` emits it as `tool_result.json`, since the call has the `ae-mentor` prefix. That's enough to pick the request without judging anything.
+- **Why `requested` hides Yes:** then the mentor may be offering the asked-for skill or a prerequisite, and only its words say which.
+- **Focus layers:** no lesson `SKILL.md` says what to do with layers passed at the start; only next-mentor says to pass them on. So the follow-on's `focus:` is untried on either runtime, and T032 tests it.
+- **`--resume`:** whether it honours the launch list isn't known (013 research R6). Continue lesson and Try again rely on it for non-easing lessons, so T039 checks first.
+- **Replacing an adapter:** `main.js`'s `exit` handler sets `state.adapter = null` and `lessonOpen = false`. `startLesson` already stops an old adapter this way, and Yes would make it a normal path (plan P3).
