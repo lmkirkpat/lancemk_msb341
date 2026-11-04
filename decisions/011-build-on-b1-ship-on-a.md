@@ -81,6 +81,10 @@ Option 1. **Deciding reason: development and testing shouldn't spend API credit.
   against paying for A or a cheaper model on the affected sets.
 - If funding makes credit no longer the limit, or T051 finds a cheaper model that meets FR-033 and
   brings a full round under about $30, then reconsider option 2 and retire B1.
+  *2026-11-04 (T031, `product/evals/easing/results/2026-11-04-150619.json`):* easing on A cost $2.03 of
+  credit on Opus 5.5, with no cheaper model, against the $15 estimate. At that per-turn rate all six sets
+  project to about $18 to $25 (not measured). If pivot confirms the rate, this signal has fired in
+  substance: reconsider where eval runs happen. The judge's share ($2.51) stays on the subscription.
 - If a tester reports teaching that a reused A result says should pass, or the service changes a model
   in a way that moves results, then re-run all six on A before the next release.
 - If Claude Code changes how headless runs or subscription use work so that B1 stops matching the
