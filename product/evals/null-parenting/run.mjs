@@ -51,8 +51,9 @@ const MAX_TURNS = "12";
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
 // read_learner_record stays in MENTOR_TOOLS only so a call to it is recognised and reported by the
 // universal read_learner_record_never_called check; it is not in ALLOWED_TOOLS (spec 004 OR-2, FR-052).
-const MENTOR_TOOLS = ["read_learner_record", "null_parent_snapshot", "null_parent_demo", "null_parent_check", "preview_frame", "record_lesson", "recommend_next"];
-const ALLOWED_TOOLS = MENTOR_TOOLS.filter((t) => t !== "read_learner_record");
+// FR-042: --allowedTools is the skill's own allowed-tools (lib/skill-tools.mjs). MENTOR_TOOLS also holds
+// read_learner_record, so a call to it is still seen and reported even where the skill no longer lists it.
+const { mentor: MENTOR_TOOLS, allowed: ALLOWED_TOOLS } = ab.toolSets(REPO, "null-parenting-mentor");
 const PREFIX = "mcp__ae-mentor__";
 const SKILL_CMD = "/null-parenting-mentor";
 // The repo's local settings may set a builder output style (Explanatory adds "★ Insight" notes).
@@ -656,7 +657,7 @@ async function runCase(c, opts) {
   const pass = checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
   fs.rmSync(home, { recursive: true, force: true });
   return { pass, checks, rubric, cost, session_id: sessionId, transcript: renderTranscript(turns),
-    ...(fin ? { runtime: "a", cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist } : {}) };
+    ...(fin ? { runtime: "a", mentor_cost_usd: Number(fin.cost.toFixed(4)), judge_cost_usd: Number((cost - fin.cost).toFixed(4)), cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist } : {}) };
 }
 
 // ---------- main ----------

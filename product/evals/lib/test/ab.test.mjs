@@ -61,8 +61,8 @@ test("results fields: B1 records its runtime only; A records model, effort, hash
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "results-"));
   fs.writeFileSync(path.join(dir, "2026-10-29-100000.json"), JSON.stringify({ summary: { passed: 1, total: 2 }, cases: [{ id: "01-x", pass: true }, { id: "02-x", pass: false }] }));
   const results = [
-    { id: "01-x", pass: false, runs: [{ prompt_hashes: { "ease-mentor": "h" }, other_model_turns: 1, cost_unknown_turns: 0 }] },
-    { id: "02-x", pass: true, runs: [{ prompt_hashes: { "ease-mentor": "h2" }, other_model_turns: 0, cost_unknown_turns: 2 }] },
+    { id: "01-x", pass: false, runs: [{ prompt_hashes: { "ease-mentor": "h" }, other_model_turns: 1, cost_unknown_turns: 0, mentor_cost_usd: 0.5, judge_cost_usd: 0.25 }] },
+    { id: "02-x", pass: true, runs: [{ prompt_hashes: { "ease-mentor": "h2" }, other_model_turns: 0, cost_unknown_turns: 2, mentor_cost_usd: 0.5, judge_cost_usd: 0.25 }] },
   ];
   const f = resultFields({ runtime: "a", settings: null }, results, { resultsDir: dir, readme: "" });
   assert.equal(f.runtime, "a");
@@ -70,16 +70,19 @@ test("results fields: B1 records its runtime only; A records model, effort, hash
   assert.deepEqual(f.prompt_hash, { "ease-mentor": "h" });
   assert.equal(f.other_model_turns, 1);
   assert.equal(f.cost_unknown_turns, 2);
+  assert.equal(f.mentor_cost_usd, 1);
+  assert.equal(f.judge_cost_usd, 0.5);
   assert.deepEqual(f.baseline, { file: "2026-10-29-100000.json", passed: 1, total: 2 });
   assert.deepEqual(f.vs_baseline, { b1_pass_a_fail: ["01-x"], b1_fail_a_pass: ["02-x"] });
   const out = [];
   const log = console.log;
   console.log = (s) => out.push(s);
   try {
-    printSummary({ ...f, summary: { passed: 1, total: 2 }, cost_usd: 1.2, partial: false, model: "m", effort: "e" }, 80);
+    printSummary({ ...f, summary: { passed: 1, total: 2 }, cost_usd: 1.5, partial: false, model: "m", effort: "e" }, 80);
   } finally {
     console.log = log;
   }
   assert.equal(out.length, 3);
+  assert.match(out[0], /total \$1\.50 \(mentor \$1\.00 on credit \+ judge \$0\.50 on subscription\)/);
   assert.match(out[1], /vs B1 baseline 2026-10-29-100000\.json \(1\/2\): \+0; B1 pass → A fail: 01; A pass → B1 fail: 02/);
 });
