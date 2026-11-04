@@ -23,6 +23,7 @@ const { createAdapter: createB1Adapter } = require("../lib/adapter-claude-code.j
 const { createAdapter: createApiAdapter, HELPER_DIR } = require("../lib/adapter-api.js");
 const { messageForA } = require("../lib/errors-a.js");
 const { REQUESTS } = require("../lib/requests.js");
+const { skillOf } = require("../lib/skill-tools.js");
 const { withStartFields } = require("./start-fields.js");
 
 const REPO = path.resolve(__dirname, "..", "..");
@@ -156,7 +157,7 @@ async function main() {
     process.exit(0);
   });
 
-  a.start();
+  a.start({ skill: skillOf(REQUESTS.start.request) });
   a.send(REQUESTS.start.request, "start");
 
   readline.createInterface({ input: process.stdin }).on("line", (line) => {

@@ -13,9 +13,11 @@ const ROLES = ["learner", "mentor", "notice"];
 
 const where = (opts) => ({ fs: (opts && opts.fs) || nodeFs, home: (opts && opts.home) || defaultHome() });
 
-function newPanelSession({ claude_session_id, bridge_started, lesson, now }) {
+// skill: the lesson's opening skill, so Continue launches with the same tools (spec 013 FR-042).
+// Older saves have none, and those are all easing lessons.
+function newPanelSession({ claude_session_id, bridge_started, lesson, now, skill }) {
   const at = now || new Date().toISOString();
-  return { version: 1, claude_session_id, bridge_started: bridge_started || null, started_at: at, updated_at: at, ended: false, lesson: lesson || null, messages: [] };
+  return { version: 1, claude_session_id, bridge_started: bridge_started || null, started_at: at, updated_at: at, ended: false, lesson: lesson || null, skill: skill || null, messages: [] };
 }
 
 // The saved session, or null when it's missing, unreadable or another version.
