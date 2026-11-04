@@ -1,0 +1,111 @@
+{
+  "run_at": "2026-11-04T22:08:27.135Z",
+  "options": {
+    "only": "23",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.22,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "23-undo-then-redo",
+      "title": "An undone demo, redone by the learner, is credited to the learner",
+      "covers": [
+        "FR-006",
+        "FR-007",
+        "panel session 1"
+      ],
+      "hash": "f84c800b6dae2742fc3a3fd8140bfecd692d77c8d3e8d88795fcba1b30132d7c",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "set_ease_max",
+              "pass": true,
+              "detail": "1 successful set_ease"
+            },
+            {
+              "check": "verdict",
+              "pass": true,
+              "detail": "last turn's check: pass"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "12 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-CREDITS-REDO",
+              "pass": true,
+              "reason": "In Turn 4, where the check shows demo_credit \"learner_after_undo\" and eased_by_learner, the mentor credits the learner: \"the Position move from 0.5 s to 1.5 s, which you redid yourself after undoing my demo, so the whole layer is your work\"; in Turn 3 the pair was still linear, so it correctly gave no credit yet."
+            }
+          ],
+          "cost": 0.2175464,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is fixture \"before\"\nLEARNER: /ease-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {},\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-djJUaE/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL snapshot_project {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1.5,\n          \"to_time\": 3,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"2/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.3,\n          \"to_time\": 1.3,\n          \"state\": \"partly_eased\",\n          \"linear_end\": \"end\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n          \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n          \"from_time\": 0.2,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 0.6,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/2\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Glow\",\n      \"property\": \"Blurriness\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n          \"display_path\": \"Effects › Gaussian Blur › Blurriness\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"8/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Scale\",\n      \"reason\": \"single_key\"\n    },\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Old Take\"\n  ],\n  \"precomp_layers\": [\n    \"Icon\"\n  ],\n  \"focus\": null,\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Scale/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"2/ADBE Transform Group/ADBE Opacity/1\",\n    \"3/ADBE Transform Group/ADBE Position/1\",\n    \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n    \"4/ADBE Transform Group/ADBE Position_0/1\",\n    \"4/ADBE Transform Group/ADBE Position_0/2\",\n    \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n    \"8/ADBE Transform Group/ADBE Position/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"counts\": {\n    \"linear\": 10,\n    \"partly_eased\": 1,\n    \"eased\": 1,\n    \"held\": 5\n  }\n}\nMENTOR: I found 11 keyframe pairs in Mentor Practice that still move at a constant speed, spread across 6 layers. One of them, Subtitle's Opacity, is half done: it's eased at the start but still stops hard at the end.\n\nI'd suggest we start with **Title**. It has 4 pairs: two Position moves (0.5 s to 1.5 s and 1.5 s to 3 s), plus Scale and Opacity, both from 0.5 s to 1.5 s.\n\nWhat I'm leaving out for now:\n- **Old Take:** you've hidden this layer, so I'll leave it alone unless you want it.\n- **Icon:** it's a precomp. I can't see inside those yet, so I can't tell you whether it needs easing.\n\nShall we start with Title, or would you rather pick another layer?\n\n### Turn 2: the project is fixture \"before\"\nLEARNER: Title sounds good. Show me how first.\nTOOL CALL snapshot_project {\"focus_layers\":[\"Title\"]}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1.5,\n          \"to_time\": 3,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"2/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.3,\n          \"to_time\": 1.3,\n          \"state\": \"partly_eased\",\n          \"linear_end\": \"end\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n          \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n          \"from_time\": 0.2,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 0.6,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/2\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Glow\",\n      \"property\": \"Blurriness\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n          \"display_path\": \"Effects › Gaussian Blur › Blurriness\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"8/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Scale\",\n      \"reason\": \"single_key\"\n    },\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Old Take\"\n  ],\n  \"precomp_layers\": [\n    \"Icon\"\n  ],\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Scale/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"counts\": {\n    \"linear\": 10,\n    \"partly_eased\": 1,\n    \"eased\": 1,\n    \"held\": 5\n  }\n}\nTOOL CALL preview_frame {\"time\":1,\"layer\":\"Title\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice\",\"time\":1,\"layer_bounds_reason\":\"no_layer_info\",\"image_size\":{\"width\":1920,\"height\":1080}}\nTOOL CALL set_ease {\"segment_id\":\"1/ADBE Transform Group/ADBE Position/1\"}\nTOOL RESULT (ok): {\n  \"eased\": \"Title › Position, 0.500 s → 1.500 s\",\n  \"undo\": \"Edit > Undo\"\n}\nMENTOR: Between 0.5 s and 1.5 s, Title moves at one speed the whole way and then stops dead: that's linear, and it's why the move looks mechanical.\n\nI eased Title's Position between 0.5 s and 1.5 s, and **Edit > Undo** reverses it if you want it back. Look at the two keys in the timeline: they've changed from diamonds to hourglasses, and if you scrub through, Title now speeds up gently out of 0.5 s and slows down into 1.5 s.\n\nThe other three pairs are yours: Title's second Position move from 1.5 s to 3 s, plus its Scale and its Opacity from 0.5 s to 1.5 s. Ease them and say done.\n\n### Turn 3: the project is fixture \"before\"\nLEARNER: I undid your demo so I can do it myself. Check my work.\nTOOL CALL diff_since_last {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice\",\n  \"targets\": [\n    {\n      \"segment_id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"result\": \"still_linear\",\n      \"demo_undone\": true,\n      \"demo_credit\": \"learner_after_undo\"\n    },\n    {\n      \"segment_id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"result\": \"still_linear\"\n    },\n    {\n      \"segment_id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"result\": \"still_linear\"\n    },\n    {\n      \"segment_id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Title › Opacity 0.5–1.5 s\",\n      \"result\": \"still_linear\"\n    }\n  ],\n  \"unexpected_changes\": [],\n  \"summary\": {\n    \"learner_eased\": 0,\n    \"still_linear\": 4,\n    \"partly_eased\": 0,\n    \"total_for_learner\": 4\n  },\n  \"passed\": false,\n  \"demo_undone\": true\n}\nMENTOR: The undo worked: my demo is gone. But all four of Title's pairs are still linear, so nothing's eased yet. The keys on Position at 0.5 s, 1.5 s and 3 s, and on Scale and Opacity at 0.5 s and 1.5 s, are all still diamonds.\n\nWith Title's keys showing (U), select both keys of a pair and choose **Animation > Keyframe Assistant > Easy Ease** (F9); the diamonds turn into hourglasses.\n\nEase Title's two Position moves, its Scale and its Opacity, and say done.\n\n### Turn 4: the project is fixture \"title-done\"\nLEARNER: I'm done. Check my work.\nTOOL CALL diff_since_last {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice\",\n  \"targets\": [\n    {\n      \"segment_id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"result\": \"eased_by_learner\",\n      \"demo_undone\": true,\n      \"demo_credit\": \"learner_after_undo\"\n    },\n    {\n      \"segment_id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"result\": \"eased_by_learner\"\n    },\n    {\n      \"segment_id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"result\": \"eased_by_learner\"\n    },\n    {\n      \"segment_id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Title › Opacity 0.5–1.5 s\",\n      \"result\": \"eased_by_learner\"\n    }\n  ],\n  \"unexpected_changes\": [],\n  \"summary\": {\n    \"learner_eased\": 4,\n    \"still_linear\": 0,\n    \"partly_eased\": 0,\n    \"total_for_learner\": 4\n  },\n  \"passed\": true,\n  \"demo_undone\": true\n}\nTOOL CALL record_lesson {\"skill\":\"easing.basic\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice\",\"attempted\":\"Eased 4 Title pairs: Position ×2, Scale, Opacity\",\"result\":\"passed\",\"demo_used\":true,\"summary\":\"Watched one demonstration, undid it, and then eased every pair on the layer themselves, including the demo pair. The first check found nothing eased yet; the second found every pair eased, so the lesson passed.\",\"next\":\"Finish Subtitle's half-eased Opacity (still linear at its end key), then try Bar: separated X Position and Trim Paths End.\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Finish Subtitle's half-eased Opacity (still linear at its end key), then try Bar: separated X Position and Trim Paths End.\"\n  }\n}\nMENTOR: You passed. All four of Title's pairs are eased: both Position moves, plus Scale and Opacity. That includes the Position move from 0.5 s to 1.5 s, which you redid yourself after undoing my demo, so the whole layer is your work. Scrub through and you'll see Title now speeds up and slows down at each key instead of moving at one speed and stopping dead.\n\nI've noted that for next time.\n\nSubtitle would make a good next step. Its Opacity is half done: it's eased at 0.3 s, but it still stops hard at 1.3 s. Do you want to go there next?\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.1176,
+          "judge_cost_usd": 0.0999,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ease-mentor": "ee454062e6f5ebbb585d0a32254d5e00825139caafbc9b20d1948ddfc76a7807"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 12,
+            "detail": "12 requests, all inside the allowlist",
+            "violations": []
+          }
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "20bff077e6afdc861a785d687491341e79a9b32c5e270f84daeb3991074d64d1",
+  "mentor_cost_usd": 0.12,
+  "judge_cost_usd": 0.1,
+  "non_baseline": false,
+  "prompt_hash": {
+    "ease-mentor": "ee454062e6f5ebbb585d0a32254d5e00825139caafbc9b20d1948ddfc76a7807"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-10-29-142512.json",
+    "passed": 27,
+    "total": 28
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}

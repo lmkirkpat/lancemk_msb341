@@ -220,3 +220,35 @@ Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, spee
 | Case | Result | Triage |
 |---|---|---|
 | 07 | 3/3 | Clean. The rb2 failure (`R-NAMES-LAYER`) did not recur, which is the layer-count fix working. |
+
+## Option A equivalence record (spec 013 T030, T031, T033, T034; 2026-11-04)
+
+Measured at `e2f54c2` plus this branch's results files only (no skill, tool, helper or setting changed). A: `--runtime a`, `claude-opus-5-5`, effort `medium`, settings hash `20bff077e6af`, prompt hash `ee454062e6f5` (`ease-mentor`). The judge ran on Claude Code as on B1 (FR-032). B1 baseline: `2026-10-29-142512.json`, 27/28.
+
+**Verdict: easing does NOT meet FR-033 as written, and is not recorded as the A baseline (T053).** The raw full run is 25/28 (89%), 7.1 points below B1's 96.4% (the bar in (c) is 5). All three misses were plumbing, not teaching, and all three passed on re-run; whether that counts is the builder's call (see "Open" below).
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. No deterministic teaching check failed in any run. Every `allowlist` check passed. Two `run` failures were timeouts (plumbing). |
+| (b) at least 80% | Met. 25/28 = 89%. |
+| (c) no more than 5 points below B1 | **Not met on the raw run:** 25/28 vs 27/28 = 7.1 points. With the three plumbing misses replaced by their re-runs it would be 28/28. |
+| (d) B1-pass, A-fail cases re-run with `--repeat 3` | Done (below). All majority pass. |
+
+**Full run on A:** `results/2026-11-04-150619.json`. Mentor $2.03 on credit (1 turn of unknown cost), judge $2.51 on subscription. 72 mentor turns. 0 other-model turns.
+
+| Case | B1 | A (full run) | A re-run once | A `--repeat 3` | Triage |
+|---|---|---|---|---|---|
+| 17 button-check-partial | pass | FAIL: turn 1 timeout ($0.002) | pass (`-150717`) | 3/3 (`-151300`) | Plumbing: a stalled request, not teaching. |
+| 18 button-hint | pass | FAIL: turn 2 timeout (1 turn of unknown cost) | pass (`-150749`) | 2/3 + 1 turn-1 timeout (`-152229`) | Plumbing; majority pass. |
+| 23 undo-then-redo | pass | FAIL: judge reply cut off mid-sentence, unreadable (R-CREDITS-REDO was `pass: true` in the part that came through) | pass (`-150827`) | 2/3 + 1 turn-2 timeout (`-152852`) | Plumbing (judge on Claude Code); majority pass. |
+| 27 null-added-mid-lesson | FAIL | pass | | | A passed what B1 missed; not scored for A. |
+
+**Outcome per case:** 17, 18 and 23 are `noise` (majority pass, failures were plumbing). No regression to triage.
+
+**Other runs (all on A, all in `results/`):** case 01 `-143941` (pass), case 06 `-144145` (FAIL on R-RECORD-HONEST: the `record_lesson` summary named the method, "Basic Easy Ease on transform properties"; it passed in the full run and on B1 `-144217`, so a rubric item to watch, not a finding on its own). B1 runs of 01 and 06 (`-144011`, `-144217`) were for T030.
+
+**T030 (FR-031) shape check:** case 01 (one turn) and case 06 (three turns, a demo, a check, a record) on each runtime give the same turn headers, learner lines, tool calls (name and input), tool results (ok or error) and mentor lines, and `check()` and `renderTranscript()` took both without change. Test: `product/evals/lib/test/transcript-shape.test.mjs` with the two recorded transcripts. **R4's watch item:** the multi-turn case 06 behaved the same on both runtimes, including `diff_since_last` after the fixture changed between turns, so nothing the server holds in memory between turns showed up. One case is thin evidence for it.
+
+**Plumbing seen on A:** 4 turn timeouts (5 minutes each) in about 130 mentor turns over the brief: cases 17 and 18 in the full run, 18 and 23 in repeats. A fifth call ended `offline` on the last turn of a one-case probe. Judge reply truncated once (case 23). The timeouts are the helper's own `turn_timeout_ms` of 300000 (a request that got no answer), not slow teaching; the machine's load was about 3 to 4 at the time.
+
+**Open (builder):** whether (c) is judged on the raw run or after plumbing re-runs. If raw, a second full run on A is needed (about $2.2 of credit); the three misses were not teaching, so that would most likely land at 27/28 or 28/28.
