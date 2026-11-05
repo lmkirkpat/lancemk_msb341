@@ -1,6 +1,10 @@
 # Knack panel: UI overhaul mockup
 
 **Status:** Design for `specs/007-ui-overhaul` (approved; amended after this revision). Not built.
+**Corrected 2026-11-04:** brought in line with approved spec 007 (D8, D12 to D16, FR-014, FR-082, FR-092,
+research R4 #9). "Start fresh" is now "Set it aside", and nine new states are drawn: `lesson-picking-starting`,
+`lesson-picked`, `lesson-error-demo-other`, `lesson-error-demo-unknown`, `lesson-resumed`,
+`lesson-resumed-check`, `skill-easing-who`, `skill-speedgraph-who` and `skills-after-review`. No redesign.
 **Revision 3 (2026-11-02):** drawn around the six built skills: one checklist pattern, a progress
 strip that's true without a demo, Home without diagnosis, the real path, reviews, and option A's
 error kinds. Where this differs from the spec, see "Differences from spec 007".
@@ -20,7 +24,7 @@ you:
 - turn off auto-advance to study loading states
 
 **Open first:** `#all-checklists`, `#all-openings`, `#compare-stage`, `#compare-upnext`,
-`#lesson-focus-stale`, `#home-return`, `#lesson-passed-asking`, `#skills-many`.
+`#lesson-focus-stale`, `#home-return`, `#lesson-passed-asking`, `#skills-many`, `#lesson-resumed`.
 
 **Not run in a browser.** It was written with no way to open it (this agent has no shell, and the
 built-in browser can't open local files). The code was read back, but nothing was seen on screen, so
@@ -76,9 +80,9 @@ codes read "Not checked yet" and never a pass (as `lesson.js` does today). The s
 
 | Skill (tool) | One row is | States: glyph and word | Sections and extras |
 |---|---|---|---|
-| **Easing** (`diff_since_last`) | One keyframe pair | ✓ Eased by you · ✓ Demo · ✗ Still linear · ◐ Half eased (names the key) · ⊘ Keys changed (`removed`) · ⊘ Can't tell which (`unmatched`) | Section: layer. Outside: the tool's sentences. Tool's own count |
+| **Easing** (`diff_since_last`) | One keyframe pair | ✓ Eased by you · ✓ Demo · ? Who eased it? (`demo_credit` unknown) · ✗ Still linear · ◐ Half eased (names the key) · ⊘ Keys changed (`removed`) · ⊘ Can't tell which (`unmatched`) | Section: layer. Outside: the tool's sentences. Tool's own count. A label that's only the id reads "A pair". Targets with no label yet: one count line, "3 more pairs. They get names at your next check." (D15) |
 | **Key types** (`key_types_check`) | One key pair | ✓ Held by you · ✓ Demo · ✗ Not held · ◐ Hold on the wrong key · ⊘ Keys changed · ⊘ Expression on it · ⊘ Can't tell which | Section: layer › property. **Meant to keep moving**: ✗ Now snaps. **Runs at constant speed**: ✓ Linear, stays · ✗ Not linear · ⊘ Expression. Outside: `extra_holds`, `other_changes` |
-| **Speed graph** (`speed_graph_check`) | One eased pair | ✓ Shaped by you · ✓ Demo · ✗ Not shaped yet · ✗ No ease on a key · ◐ Still moving as it lands · ◐ Back to the default · ◐ Long at both ends · ◐ Shaped the wrong side · ⊘ Keys changed · ⊘ Can't tell which | Section: layer. **You said it lands hard · left out**: ○ Your call. Detail: which dimension |
+| **Speed graph** (`speed_graph_check`) | One eased pair | ✓ Shaped by you · ✓ Demo · ? Who shaped it? (`credit` unknown) · ✗ Not shaped yet · ✗ No ease on a key · ◐ Still moving as it lands · ◐ Back to the default · ◐ Long at both ends · ◐ Shaped the wrong side · ⊘ Keys changed · ⊘ Can't tell which | Section: layer. **You said it lands hard · left out**: ○ Your call. Detail: which dimension |
 | **Offset, layers** (`offset_check`) | One layer in the group | ✓ On its own · ✗ With [other layer] · ? Split · ✓ Split on purpose · ⊘ Keys changed | Detail: starts, moved by, demo. A small bar for where it starts. Footer: order differs. Group line: gaps. Outside: `out_of_comp`, `other_changes` |
 | **Offset, properties** | One property on one layer | ✓ Apart · ✗ With [other property] · ◐ Lands past the end · ⊘ Keys changed | As above, with start and landing |
 | **Set the pivot** (`anchor_check`) | One condition on a layer | Pivot: ✓ In place · ◐ Near it · ✗ Outside, to its [side]. Layer stays: ✓ Stayed · ✗ Moved [direction]. At rest: ✗ Set away from rest. Position keys: ✓ Held · ✗ Slid at [time]. Others: ✓ Nothing did · ✗ [layer] moved. ⊘ Can't check, on any | Section: the layer (one or two). No pixel numbers (the skill's rule). Outside: panel words each `other_changes` kind |
@@ -131,9 +135,10 @@ rare (a side question, or a mentor reply that asks something first). How rare is
 
 The note is at full contrast, row labels dim, and results don't: glyph, word and summary stay full.
 **Opacity .7 on the label only.** The checklist's background is `#262626`, so `--text` at .7 is
-**5.2:1** (the 5.4 figure is on `--bg`). The floor is .63. Detail lines and section heads use
-`--muted`, which is 5.4:1 undimmed and would fail dimmed, so they don't dim. The same treatment
-covers `lesson-othercomp`, `lesson-continued` and `lesson-exited`.
+**5.18:1**. It's 5.38 on `#232323` and 4.97 on `#2b2b2b`, so .7 clears 4.5:1 on all three. The .63
+floor holds only on `#262626` or darker: on `#2b2b2b` it's 4.32:1 (research R4 #9). Detail lines and
+section heads use `--muted`, which is 5.4:1 undimmed and would fail dimmed, so they don't dim. The same
+treatment covers `lesson-othercomp`, `lesson-continued` and `lesson-exited`.
 
 ## The stage: Pick / Try / Done
 
@@ -145,7 +150,9 @@ while the mentor has done nothing.
 **Proposal, side by side at `#compare-stage`:** a one-line **Pick · Try · Done**.
 
 - **Pick:** agreeing what to work on. All six skills have this, reviews too.
-- **Try:** from the first reply or non-empty targets.
+- **Try:** from the first reply, first check or demo, or at once when the lesson's first snapshot says
+  `continued` or `resumed`. Targets alone don't start it, because easing, speed graph and offset have them
+  at the opening. "Yes, let's go" isn't a reply, so a lesson reached from `lesson-picking` starts at Pick.
 - **Done:** the check's own `passed`.
 
 A demo is an event, in Changed in your comp and on its row, never a step. Null's stages are the
@@ -215,6 +222,22 @@ reviews. Side by side at `#compare-upnext`.
   a review also needs a target it hasn't used here. It says so, nothing is recorded, and it stays due.
 - **Easing never shows Warm up**, even though its record has a due date (the builder's has been due
   since Oct 13). It has no review mode, so pressing it would dead-end. It offers New lesson.
+- **Several due (D14).** Home's card names the first in path order and counts the rest. After one review,
+  the others stay ↻ in Skills with their Warm up (`skills-after-review`), and Home's card moves on to the next.
+  The panel adds no limit of its own: the one review a session is the mentor's, and the header follows the
+  `mode` the tool returns.
+
+## Resuming (FR-092, D16)
+
+End lesson and Set it aside end the panel's lesson and record nothing, but the mentor keeps one lesson per
+skill and comp until it passes. So the next start there can come back `continued` or `resumed`, whichever
+button started it. `lesson-resumed` is that case: the line "Picking up your earlier lesson on this comp."
+above the mentor's reply, rows unmarked, the strip on Try, and Show me only if the tool names a demo target.
+
+- The line comes from the `lesson` value of the lesson's **first** snapshot alone. A lesson's own second
+  call also says `continued` (`speed-graph-mentor/SKILL.md`), and that mustn't trigger it.
+- `lesson-continued` (Continue lesson) keeps its own divider, "Picked up where you left off", so it doesn't
+  show both.
 
 ## Option A's error kinds (FR-056)
 
@@ -264,10 +287,8 @@ and never blocks, as the skills don't.
 1. **Which skills are built and which have a review, readable by the panel.** `path.json` says neither
    on purpose: built comes from the tool files, review from `FINDERS`. The panel can't read those.
    Simplest: a small generated data file, with a test against the tool files. **No eval cost.**
-2. **Two rows in `next-mentor/SKILL.md`'s hand-over table.** It lists four skills; Set the pivot and
-   Move a group with a null are missing, though `recommend_next` can recommend them. Up next can dead-end
-   there. **A small eval cost**, next-mentor's cases only. This looks like a bug whatever happens to
-   this design.
+
+**Done since revision 3:** `next-mentor/SKILL.md`'s hand-over table now lists all six skills.
 
 **Later, if decided:** the stored recommendation, above. **No eval cost.**
 
@@ -322,16 +343,21 @@ State ids match the rail.
 
 1. **First run:** `setup-welcome` → `setup-checking` → `setup-signin` → `setup-ready` → `home-first`.
    Unchanged, waiting on the installer and the access-key question.
-2. **Recommended:** `home-return` → Find my next lesson → `lesson-picking` → Yes → the lesson. Or
+2. **Recommended:** `home-return` → Find my next lesson → `lesson-picking` → Yes →
+   `lesson-picking-starting` → `lesson-picked`. The same screens on both runtimes: on B1 Yes ends
+   next-mentor's run and starts the recommended lesson (plan P3); on A the mentor hands over. Or
    `home-return-stored` → Start lesson, later. **Yourself:** Pick a skill → `skills-*` →
    `skill-detail` → New lesson or Warm up.
 3. **A lesson:** `lesson-starting` → `lesson-open` → `lesson-focus-replying` → `lesson-focused` →
    `lesson-demo` (if asked) → `lesson-partial` → `lesson-passed-asking` (if the skill asks) →
    `lesson-passed`. Side states: `lesson-outside`, `lesson-stale`, `lesson-othercomp`, `lesson-error`,
-   `lesson-error-demo`, `lesson-pass-*`, `lesson-exited`, `lesson-passed-unsaved`.
-4. **Continuing:** as revision 2: `home-lessonopen`, `home-cutoff` → `lesson-continued`, `home-aeclosed`.
+   `lesson-error-demo`, `lesson-error-demo-other`, `lesson-error-demo-unknown`, `skill-easing-who`,
+   `skill-speedgraph-who`, `lesson-pass-*`, `lesson-exited`, `lesson-passed-unsaved`.
+4. **Continuing:** as revision 2: `home-lessonopen`, `home-cutoff` → Continue lesson → `lesson-continued`,
+   or Set it aside → Home; `home-aeclosed`. **Resuming:** after End lesson or Set it aside, any start on the
+   same skill and comp: `lesson-starting` → `lesson-resumed` → `lesson-resumed-check`.
 5. **A review:** `home-return` or `skill-detail` → Warm up → `practice` → `practice-check` →
-   `practice-passed`, or `practice-nothing-new`.
+   `practice-passed` → `skills-after-review`, or `practice-nothing-new`.
 
 ## Every state
 
@@ -350,22 +376,26 @@ Source: **R** learner record, **Pa** path data, **P** the panel's own files or t
 | `home-lessonopen`, `home-cutoff`, `home-aeclosed` | Lesson open, waiting, ended | As revision 2 | P |
 | `home-unreachable`, `home-busy` | AE | Banner; AE actions say why | P, T |
 | `home-unreadable`, `home-unreadable-why` | History | Banner; one paragraph | P |
-| `skills-empty`, `-few`, `-many` | Progress | The real path | R, Pa |
+| `skills-empty`, `-few`, `-many`, `skills-after-review` | Progress | The real path; the rest stay ↻ after one review | R, Pa |
 | `skill-detail`, `-noreview`, `-new` | One skill | History; Warm up only with a review | R, Pa |
 | `lesson-none` | Empty | Why, and two ways on | P |
 | `lesson-starting` | Loading | Skeleton, list slot, status | P |
 | `lesson-picking` | Suggestion | Mentor's one suggestion, no strip or list | M |
+| `lesson-picking-starting`, `lesson-picked` | Yes pressed | "Starting…", then the opening under the suggestion, strip on Pick | P, T, M |
 | `lesson-open` | Pick | ◇ rows | T, M |
 | `lesson-focus-replying`, `lesson-focus-stale`, `lesson-focused` | The Proposed moment | Above | P, T |
 | `lesson-demo` | Try, after a demo | Changed box, Flip | T, M |
 | `lesson-partial`, `lesson-outside` | Try | Rows from the check | T, M |
 | `lesson-stale`, `lesson-othercomp` | Can't compare | Note full, labels dim | T |
 | `lesson-error`, `lesson-error-demo`, `lesson-continued` | Cut off, picked up | As revision 2, relabelled | P, T |
+| `lesson-error-demo-other`, `lesson-error-demo-unknown` | Cut off during Show me | The other five's wording; no result, no claim about the comp, only the check | P, T |
+| `lesson-resumed`, `lesson-resumed-check` | A start that resumes | The resuming line, rows unmarked, strip on Try; count line, then "A pair" | T, M |
 | `lesson-pass-rate`, `-busy`, `-offline`, `-refused`, `lesson-start-failed`, `lesson-exited` | Option A errors | Notice | P |
 | `lesson-passed-asking` | Check passed, not saved yet | Ask stays | T, M |
 | `lesson-passed`, `lesson-passed-pivot`, `lesson-passed-unsaved` | Done | Pass line, Saved only on `saved: true` | T, R |
 | `practice`, `practice-check`, `practice-passed`, `practice-nothing-new` | Review | Above | T, R, M |
 | `skill-easing-check`, `skill-keytypes-open`, `-check`, `skill-speedgraph-open`, `-check`, `skill-offset-layers-open`, `-check`, `skill-offset-props-check`, `skill-pivot-open`, `-check`, `-keyed`, `skill-null-open`, `-place`, `-parent`, `-move` | Six skills | At 260 × 480 | T, M |
+| `skill-easing-who`, `skill-speedgraph-who` | Can't tell who did the demo pair | A "?" row that credits nobody; the mentor asks | T, M |
 | `homeB-first`, `homeB-return`, `compare` | **Held: option B, not this build** | As revision 2 | |
 | every `diag-*` state | **Held for spec 005, not this build** | Unchanged from revision 2 | |
 
@@ -373,10 +403,10 @@ Source: **R** learner record, **Pa** path data, **P** the panel's own files or t
 
 - A check that comes back ungraded on null (`graded: false`) has no state of its own; described in its
   note.
-- A review with more than one due skill, past Home's card: what Skills does after the session's one
-  review.
-- Who shaped or eased a demo pair when the tool can't tell (`demo_credit` or `credit` unknown, easing and
-  speed graph): the mentor asks. It would be a "?" row; it isn't drawn.
+- A lesson saved without a pass (D6): spec default "Saved to your history." with the ways out. Not drawn.
+- Cut off during Show me when no demo call started (option A only, FR-030's third case): Show me may be
+  resent. Described in `lesson-error-demo`'s note; not drawn.
+- `home-return-interim` (plan P9): step 1's `home-first` card plus the memory card, so no drawing.
 - Long skill names at 260 in the lesson header wrap to two lines; not checked on screen.
 - Out of scope, as before: AE's lighter themes, Windows, a second project open, updates, uninstall.
 
