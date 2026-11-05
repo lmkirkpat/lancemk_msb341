@@ -565,3 +565,24 @@ the mentor passes the names to the snapshot even though the tool refuses them (r
 **Results (`--repeat 3`):** **3/3** (`results/2026-10-29-210429.json`, $2.81). First pass (`-205555`): 2 pass, 1 timeout. Run on a loaded machine (load average 13 to 17): in the first pass most runs hit `spawnSync claude ETIMEDOUT` ($0 to $0.6). Timeouts are plumbing, not counted, and were re-run. Verdict: the old case 06 failure was a rubric judgment on the allowed sentence; fixed.
 
 **Cost of this repeat round (all five cases, both passes):** offset $7.41, anchor $4.16, key types $0.98, null $4.69, **$17.24 in all**.
+
+## Option A equivalence record (spec 013 T032, T033, T034; 2026-11-04)
+
+Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed during the runs). A: `--runtime a`, `claude-opus-5-5`, effort `medium`, settings hash `20bff077e6af`, prompt hash `53d545e1` (`null-parenting-mentor`). The judge ran on Claude Code as on B1 (FR-032). B1 baseline: `2026-10-29-150257.json`, 42/44.
+
+**Verdict: null meets FR-033 on A. A baseline (T053): `results/2026-11-04-212619.json`, 43/44, $2.72 mentor credit, at `4edba27`.**
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. Every `allowlist` check passed. |
+| (b) at least 80% | Met. 43/44 = 98%. |
+| (c) no more than 5 points below B1 | Met. 2.3 points above. |
+| (d) B1-pass, A-fail cases re-run | Done. Majority pass. |
+
+**Full run on A:** `results/2026-11-04-212619.json`. Mentor $2.72 on credit, judge $5.43 on subscription. 137 mentor turns. 0 other-model turns, 0 turns of unknown cost, 0 timeouts.
+
+| Case | B1 | A (full run) | A `--repeat 3` | Triage |
+|---|---|---|---|---|
+| 02 explain-what-a-parent-passes | FAIL | pass | | A passed what B1 missed. |
+| 06 jump | FAIL | pass | | A passed what B1 missed. |
+| 11 comments-never-graded | pass | FAIL: R-NULL-NOT-FADED | 2/3 (`-212845`) | Noise. Watch: both misses call the null "invisible" in a lesson where it only slid. |

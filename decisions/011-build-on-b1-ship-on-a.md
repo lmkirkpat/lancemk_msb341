@@ -85,6 +85,10 @@ Option 1. **Deciding reason: development and testing shouldn't spend API credit.
   credit on Opus 5.5, with no cheaper model, against the $15 estimate. At that per-turn rate all six sets
   project to about $18 to $25 (not measured). If pivot confirms the rate, this signal has fired in
   substance: reconsider where eval runs happen. The judge's share ($2.51) stays on the subscription.
+  *2026-11-04 (T032, all six sets on `4edba27`):* **measured, and the cost half of this signal has fired.**
+  A full round on Opus 5.5 took $11.78 of credit (repeats $1.73) and $25.74 of judge on the subscription.
+  The Console matched the price table at the first check ($3.75 against about $3.76). Rule unchanged for
+  now; the builder hasn't decided. A real lesson's cost is still unmeasured (T048).
 - If a tester reports teaching that a reused A result says should pass, or the service changes a model
   in a way that moves results, then re-run all six on A before the next release.
 - If Claude Code changes how headless runs or subscription use work so that B1 stops matching the

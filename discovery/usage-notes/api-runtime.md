@@ -1,5 +1,18 @@
 # Option A runtime: usage notes
 
+## All six sets on A (2026-11-04, at `4edba27`)
+
+Easing 26/28, key types 28/30, speed graph 28/29, offset 33/37, pivot 48/50, null 43/44. Mentor $11.78 for the
+full runs, $1.73 for repeats, so about $17.26 of credit used so far. Judge $29.19 on the subscription.
+
+- **Timeouts are only in easing:** 2 in this round, and the other five sets had 0 in about 515 turns, with load
+  peaking around 24 during pivot. So load doesn't look like the cause. T068 looks into it.
+- **Controls earned their cost:** pivot 14 and key types 22 looked like A regressions until B1 failed them too on
+  the same commit (1/3 each). A single baseline pass isn't reliable evidence.
+- **Pivot 14:** the hint runs on into the walk-through's wording (`SKILL.md:269`, suspected). T035.
+- **Key types 22:** a fixed fixture date ages out of the check's pattern. T069.
+- **Judge share:** on heavy sets the judge now costs more than the mentor (pivot: $7.05 against $2.30).
+
 ## Easing eval on A (2026-11-04, T030 to T034)
 
 25/28 raw against B1's 27/28; every miss passed on re-run and by majority on `--repeat 3`. Credit: $2.03 for

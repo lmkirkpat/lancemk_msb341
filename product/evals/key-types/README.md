@@ -316,3 +316,24 @@ Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, spee
 ## Changed after seeing results (2026-10-29, human-approved)
 
 - **R-KT-WRONG-SIDE (`rubric.md`):** no longer requires "says the pair still fades". It now requires that the mentor does not call the pair done and points at the key at the start of the pair as the one that should hold; any description of the motion is not required (the skill now forbids describing it, and forbids times beyond the pair's own key times). "Never called done" is kept. Reason: case 18 failed 0/3 on 2026-10-28 because the rubric asked for what fix round 4 made the skill withhold. Needs a paid re-run (case 18).
+
+## Option A equivalence record (spec 013 T032, T033, T034; 2026-11-04)
+
+Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed during the runs). A: `--runtime a`, `claude-opus-5-5`, effort `medium`, settings hash `20bff077e6af`, prompt hash `932b735c` (`key-types-mentor`). The judge ran on Claude Code as on B1 (FR-032). B1 baseline: `2026-10-29-143934.json`, 29/30.
+
+**Verdict: key types does not meet FR-033 yet: case 22 is a majority failure, caused by a stale check.** The builder approved fixing the check (2026-11-04, T069). Not recorded as the A baseline until then (T053).
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. Every `allowlist` check passed. |
+| (b) at least 80% | Met. 28/30 = 93%. |
+| (c) no more than 5 points below B1 | Met. 3.3 points below. |
+| (d) B1-pass, A-fail cases re-run | Case 12 majority pass. **Case 22 majority fail: being fixed.** |
+
+**Full run on A:** `results/2026-11-04-203649.json`. Mentor $1.28 on credit, judge $3.12 on subscription. 80 mentor turns. 0 other-model turns, 0 turns of unknown cost, 0 timeouts.
+
+| Case | B1 | A (full run) | A `--repeat 3` | Triage |
+|---|---|---|---|---|
+| 12 eased-not-linear | pass | FAIL: R-NAMES-REAL | 3/3 (`-203902`) | Noise. |
+| 22 practicing-memory-clause | pass | FAIL: `say:says_when` | 0/3 (`-203920`) | **Stale test:** the fixture's lesson date is fixed, so "five days ago" became "a week and a half ago", which the pattern doesn't accept. The mentor's reply is right. B1 control 1/3 (`-204007`). |
+| 24 review-still-open-offered-again | FAIL | pass | | A passed what B1 missed. |

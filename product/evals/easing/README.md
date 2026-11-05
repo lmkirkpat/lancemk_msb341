@@ -225,7 +225,7 @@ Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, spee
 
 Measured at `e2f54c2` plus this branch's results files only (no skill, tool, helper or setting changed). A: `--runtime a`, `claude-opus-5-5`, effort `medium`, settings hash `20bff077e6af`, prompt hash `ee454062e6f5` (`ease-mentor`). The judge ran on Claude Code as on B1 (FR-032). B1 baseline: `2026-10-29-142512.json`, 27/28.
 
-**Verdict: easing does NOT meet FR-033 as written, and is not recorded as the A baseline (T053).** The raw full run is 25/28 (89%), 7.1 points below B1's 96.4% (the bar in (c) is 5). All three misses were plumbing, not teaching, and all three passed on re-run; whether that counts is the builder's call (see "Open" below).
+**Superseded by the second full run below: easing meets FR-033 on A.** First run's verdict: easing does not meet FR-033 as written. The raw full run is 25/28 (89%), 7.1 points below B1's 96.4% (the bar in (c) is 5). All three misses were plumbing, not teaching, and all three passed on re-run; whether that counts is the builder's call (see "Open" below).
 
 | FR-033 | Result |
 |---|---|
@@ -251,4 +251,15 @@ Measured at `e2f54c2` plus this branch's results files only (no skill, tool, hel
 
 **Plumbing seen on A:** 4 turn timeouts (5 minutes each) in about 130 mentor turns over the brief: cases 17 and 18 in the full run, 18 and 23 in repeats. A fifth call ended `offline` on the last turn of a one-case probe. Judge reply truncated once (case 23). The timeouts are the helper's own `turn_timeout_ms` of 300000 (a request that got no answer), not slow teaching; the machine's load was about 3 to 4 at the time.
 
-**Open (builder):** whether (c) is judged on the raw run or after plumbing re-runs. If raw, a second full run on A is needed (about $2.2 of credit); the three misses were not teaching, so that would most likely land at 27/28 or 28/28.
+### Second full run (2026-11-04, at `4edba27`)
+
+The builder chose a second full run over rewriting the bar. **Verdict: easing meets FR-033 on A. A baseline (T053): `results/2026-11-04-195955.json`, 26/28, $2.13 mentor credit, 0 turns of unknown cost.** Prompt hash `ee454062`.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. Both failures are `run` timeouts. Every `allowlist` check passed. |
+| (b) at least 80% | Met. 26/28 = 93%. |
+| (c) no more than 5 points below B1 | Met. 3.6 points below. |
+| (d) B1-pass, A-fail cases re-run | Done. 22 3/3 (`-200134`), 24 3/3 (`-200259`). |
+
+Case 24's turn 1 timed out with 1 request and $0 cost: the first request got no answer for 5 minutes. All 6 of A's turn timeouts so far are in this set; the other five sets had none in about 515 turns (`discovery/usage-notes/api-runtime.md`, T068).

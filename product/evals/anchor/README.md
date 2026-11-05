@@ -580,3 +580,27 @@ right layer; the unit tests (`anchor-audit`, `demo-renumber`) own it.
 ### Repeat of case 30 (2026-10-29, branch `evals-repeat`, mentor at `ed26f17`)
 
 `--only 30 --repeat 3`: **3/3**, `record_plain` held in all three (`results/2026-10-29-210140.json`, $3.18). First pass (`-201331`) was 3 timeouts, no result. Run on a loaded machine (load average 13 to 17): in the first pass most runs hit `spawnSync claude ETIMEDOUT` ($0 to $0.6). Timeouts are plumbing, not counted, and were re-run. Verdict: the 10-29 `record_plain` failure was fixed by the `ed26f17` prompt fix.
+
+## Option A equivalence record (spec 013 T032, T033, T034; 2026-11-04)
+
+Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed during the runs). A: `--runtime a`, `claude-opus-5-5`, effort `medium`, settings hash `20bff077e6af`, prompt hash `e0f37bc9` (`anchor-mentor`). The judge ran on Claude Code as on B1 (FR-032). B1 baseline: `2026-10-29-143900.json`, 48/50.
+
+**Verdict: pivot does not meet FR-033 yet: case 14 is a majority failure, on both runtimes.** The builder chose to fix it (2026-11-04, T035), then re-run the set on B1 and A on one commit (FR-034, T036). Not recorded as the A baseline until then (T053).
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. Every `allowlist` check passed. |
+| (b) at least 80% | Met. 48/50 = 96%. |
+| (c) no more than 5 points below B1 | Met. Level. |
+| (d) B1-pass, A-fail cases re-run | Case 29 majority pass. **Case 14 majority fail: being fixed.** |
+
+**Full run on A:** `results/2026-11-04-202011.json`. Mentor $2.30 on credit, judge $7.05 on subscription. 130 mentor turns. 0 other-model turns, 0 turns of unknown cost, 0 timeouts.
+
+| Case | B1 | A (full run) | A `--repeat 3` | Triage |
+|---|---|---|---|---|
+| 14 layer-dragged | pass | FAIL: R-AN-DRAGGED, R-HINT-NOT-FIX | 0/3 (`-202151`) | **Regression in the prompt, not the runtime:** B1 control on the same commit 1/3 (`-202510`). The B1 baseline's pass was luck. The reply spells out the fix and offers to show it. |
+| 20 | FAIL | pass | | A passed what B1 missed. |
+| 29 no-number-to-type | pass | FAIL: R-ONE-IDEA | 2/3 (`-202258`) | Noise. |
+| 30 | FAIL | pass | | A passed what B1 missed. |
+
+**Gap in the check:** case 14's `no_offer` pattern has no "show", so "I could show you on Needle" passes it; only the judge caught that.

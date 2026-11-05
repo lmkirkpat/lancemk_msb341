@@ -322,3 +322,22 @@ Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, spee
 | 05 | 3/3 (`-224515`, $2.61) | Clean |
 | 16 | 3/3 (`-224730`, $2.73) | Clean |
 | 23 | 3/3 (`-224821`, $0.66) | Clean |
+
+## Option A equivalence record (spec 013 T032, T033, T034; 2026-11-04)
+
+Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed during the runs). A: `--runtime a`, `claude-opus-5-5`, effort `medium`, settings hash `20bff077e6af`, prompt hash `b2e9841c` (`speed-graph-mentor`). The judge ran on Claude Code as on B1 (FR-032). B1 baseline: `2026-10-29-142640.json`, 29/29.
+
+**Verdict: speed graph meets FR-033 on A. A baseline (T053): `results/2026-11-04-204942.json`, 28/29, $1.28 mentor credit, at `4edba27`.**
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. Every `allowlist` check passed. |
+| (b) at least 80% | Met. 28/29 = 97%. |
+| (c) no more than 5 points below B1 | Met. 3.4 points below. |
+| (d) B1-pass, A-fail cases re-run | Done. Majority pass. |
+
+**Full run on A:** `results/2026-11-04-204942.json`. Mentor $1.28 on credit, judge $3.30 on subscription. 68 mentor turns. 0 other-model turns, 0 turns of unknown cost, 0 timeouts.
+
+| Case | B1 | A (full run) | A `--repeat 3` | Triage |
+|---|---|---|---|---|
+| 04 incomplete-attempt | pass | FAIL: R-ONE-IDEA | 2/3 (`-205115`) | Noise. Watch: both misses add a mini-lesson on shared-key handles. |

@@ -167,18 +167,17 @@ a brand new session act like a colleague who already knows what you are working 
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
-  and `--runtime a|b1` in all six eval runners (B1 the default, dry runs byte-identical). 39 of 66 tasks done; two reviews fixed five history bugs. After a fresh checkout, run `npm ci` in
+  and `--runtime a|b1` in all six eval runners (B1 the default, dry runs byte-identical). 42 of 68 tasks done; two reviews fixed five history bugs. After a fresh checkout, run `npm ci` in
   `panel/helper/` (the SDK isn't committed). **Next, in order:**
   1. Done 2026-11-03/04: the API key is in the Keychain (a $100 credit, the lean budget for now; about
      $0.40 spent), the smoke check (T016), and the hand-over change (T060, merged `2185304`).
   2. Phase 11 (`decisions/011`, no credit): T062 and T063 before T031, then T064 to T067.
-  3. Easing on A done 2026-11-04: 25/28 raw vs 27/28; the 3 misses were timeouts or a cut-off judge reply and
-     passed on repeat; no hard-rule failure. Credit $2.03 for the run (estimate was $15), about $3.8 spent
-     in all. Next: a second full run on an idle machine (about $2.2), then T032 (pivot, about $4 to $6),
-     then T021 in AE. Turn timeouts hit about 3% of A's turns, with no cause found yet.
-  4. Decided 2026-11-04: easing and pivot now, the other four sets on the first tester's commit. Later
-     releases may reuse a set's A result if nothing it depends on changed (spec 006 FR-025). The measured
-     rate may reopen this (`decisions/011` › signals).
+  3. All six sets on A done 2026-11-04 (`4edba27`): easing 26/28, key types 28/30, speed graph 28/29, offset
+     33/37, pivot 48/50, null 43/44. $11.78 of credit for the round (estimate was far higher), about $17.26
+     spent in all. Easing, speed graph, offset and null meet FR-033. **Next:** T035 (pivot case 14), T069 (key
+     types case 22's stale check), T068 (A's timeouts, all in easing), then T036 and T021 in AE.
+  4. `decisions/011`'s cost signal has fired; the rule stands until the builder decides. Later releases may
+     reuse a set's A result if nothing it depends on changed (spec 006 FR-025).
   5. **Pinned (2026-11-02): where testers' access keys come from** (spec 006 Q2). On A every user
      needs a key; the question is who supplies and pays for it. The builder is thinking it over and
      exploring funding options; don't push for an answer. It doesn't block spec 013, but it does

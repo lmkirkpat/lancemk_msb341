@@ -596,7 +596,10 @@ both match their results before this feature.
 - **SC-003** *(amended 2026-11-04, `decisions/011`)*: Easing and pivot meet FR-033 on A (no hard-rule
   failure, ≥ 80%, within 5 points of their B1 baseline, every regression fixed or accepted). The
   other four sets MUST do the same on the commit given to the first tester, as a gate on that
-  hand-off rather than on this spec. *Measured by:* the results files and each set's README.
+  hand-off rather than on this spec. *Amended again 2026-11-04 (builder):* all six ran now, because a
+  round proved far cheaper than estimated ($11.78 of credit). The tester gate stays: any set whose
+  inputs change before the first tester re-runs on A (spec 006 FR-025). *Measured by:* the results
+  files and each set's README.
 - **SC-004**: The median cost of a full quickstart lesson on A, over at least 3 lessons, is at most
   $0.40 (B1 measured $0.38 per lesson in spec 003 T034, before the pacing rules). If it's higher,
   the cheaper-model comparison in Q2 runs before the first tester. *Measured by:* the
