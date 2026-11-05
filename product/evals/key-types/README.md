@@ -321,19 +321,24 @@ Mentor at `7de3cc2` (fix round 3: record-summary rule, offset's one how-to, spee
 
 Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed during the runs). A: `--runtime a`, `claude-opus-5-5`, effort `medium`, settings hash `20bff077e6af`, prompt hash `932b735c` (`key-types-mentor`). The judge ran on Claude Code as on B1 (FR-032). B1 baseline: `2026-10-29-143934.json`, 29/30.
 
-**Verdict: key types does not meet FR-033 yet: case 22 is a majority failure, caused by a stale check.** The builder approved fixing the check (2026-11-04, T069). Not recorded as the A baseline until then (T053).
+**Verdict: key types meets FR-033 (updated 2026-11-04, T069).** The A baseline is `results/2026-11-04-203649.json` (28/30, $1.28 on credit, measured at `4edba27`). Its one majority failure, case 22, was a stale check (see "Changed after seeing results (2026-11-04)" below); with the check fixed, case 22 passes on A by majority (2/3, `-234113`). The baseline file itself was not re-run, and its case 22 still shows the old FAIL: the check changed after it was measured.
 
 | FR-033 | Result |
 |---|---|
 | (a) no hard-rule check fails | Met. Every `allowlist` check passed. |
 | (b) at least 80% | Met. 28/30 = 93%. |
 | (c) no more than 5 points below B1 | Met. 3.3 points below. |
-| (d) B1-pass, A-fail cases re-run | Case 12 majority pass. **Case 22 majority fail: being fixed.** |
+| (d) B1-pass, A-fail cases re-run | Case 12 majority pass. Case 22 majority pass after the check fix (2/3 on A, `-234113`). |
 
 **Full run on A:** `results/2026-11-04-203649.json`. Mentor $1.28 on credit, judge $3.12 on subscription. 80 mentor turns. 0 other-model turns, 0 turns of unknown cost, 0 timeouts.
 
 | Case | B1 | A (full run) | A `--repeat 3` | Triage |
 |---|---|---|---|---|
 | 12 eased-not-linear | pass | FAIL: R-NAMES-REAL | 3/3 (`-203902`) | Noise. |
-| 22 practicing-memory-clause | pass | FAIL: `say:says_when` | 0/3 (`-203920`) | **Stale test:** the fixture's lesson date is fixed, so "five days ago" became "a week and a half ago", which the pattern doesn't accept. The mentor's reply is right. B1 control 1/3 (`-204007`). |
+| 22 practicing-memory-clause | pass | FAIL: `say:says_when` | 0/3 (`-203920`) | **Stale test:** the fixture's lesson date is fixed, so "five days ago" became "a week and a half ago", which the pattern doesn't accept. The mentor's reply is right. B1 control 1/3 (`-204007`). **After the check fix (T069): A 2/3 (`-234113`; the miss was R-ONE-IDEA, a rubric judgment, not `says_when`); B1 2/3 twice (`-233314`, `-233815`; the miss in each was a `claude` ETIMEDOUT, plumbing).** |
 | 24 review-still-open-offered-again | FAIL | pass | | A passed what B1 missed. |
+
+## Changed after seeing results (2026-11-04, human-approved, T069)
+
+- **Case 22 `says_when` (`cases/22-practicing-memory-clause.json`):** the pattern no longer lists only "days ago", "last week" and "a few/couple of days". It now accepts any plain statement of elapsed time: `ago`, last/this week or month, "a week", "two weeks", "eleven days", "three months", plus the earlier words (last time, yesterday, earlier, the other day, before). Reason: the record fixture's lesson date is fixed (2026-10-24), so the true elapsed time keeps growing ("five days ago" on 2026-10-29, "a week and a half ago" by 2026-11-04) and the old pattern failed a correct reply (A 0/3 in `-203920`, B1 1/3 in `-204007`). A reply with no time reference still fails (tested against the pattern: "Your Blink pair still needs a hold." and "Blink: let us hold the second pair" do not match). The fixture date was left fixed: making it relative would need all six runners to rewrite the record, and the wider pattern removes the dependency. The same pattern in offset case 30 and speed graph case 22 was widened the same way (dry runs pass; not re-run).
+- **Re-runs after the change (every run):** B1 `--only 22 --repeat 3` twice by mistake (two copies overlapped): `-233314` pass, ETIMEDOUT, pass; `-233815` ETIMEDOUT, pass, pass. A `--only 22 --repeat 3`: `-234113` FAIL (R-ONE-IDEA), pass, pass. Case 22 passes by majority on both.

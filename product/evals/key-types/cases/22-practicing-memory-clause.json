@@ -41,7 +41,7 @@
       },
       {
         "id": "says_when",
-        "must": "\\b(?:last time|yesterday|earlier|days? ago|last week|a (?:few|couple of) days|this week|the other day|before)\\b",
+        "must": "\\b(?:last time|yesterday|earlier|ago|last (?:week|month)|this (?:week|month)|the other day|before|(?:an?|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\\d+)(?: (?:few|couple of))? (?:days?|weeks?|months?))\\b",
         "turns": [
           1
         ]
