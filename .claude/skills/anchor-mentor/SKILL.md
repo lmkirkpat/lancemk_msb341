@@ -286,6 +286,7 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      - `watch_offer` is null (two focus layers, or no other layer would take the demo);
      - this is a review;
      - step 0's record shows this skill passed before;
+     - a check has already come back (they said "done" before this turn ran);
      - they already asked to watch one, or named a second layer (step 5 covers both).
    - The offer runs nothing: never call `anchor_demo` before a yes.
    - **Yes:** call `anchor_snapshot` with two `focus` entries, theirs first, then `watch_offer`'s
@@ -345,7 +346,10 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      place, or it passed. It holds the pass.
    - **Otherwise, one hint per code in `hints`**, naming the layer, what moved and where to look,
      never the numbers. A hint says what's off and where; add no drag or move that fixes it
-     ("drag the crosshair up until…"):
+     ("drag the crosshair up until…"). This holds when they said "done" before step 3 ran, too: a
+     failed check's turn never carries step 3's walk-through or step 4's offer. In a lesson, the
+     walk-through waits until they ask how (step 5). The one step you may add to a hint is Edit >
+     Undo, when the layer has to go back, and the turn can end on step 4's invite:
      - moved with its pivot: "Door's pivot moved, but Door moved with it, to the right. Edit > Undo,
        then try Pan Behind (Y) and drag the crosshair instead." Use `item2.direction` for the way.
      - dragged the layer: "Door moved, and its pivot is still at its center. Pan Behind (Y) drags
