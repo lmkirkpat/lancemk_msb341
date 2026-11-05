@@ -13,6 +13,8 @@
 //   failure(status, type, message)  a JSON error with that status (401, 403, 429, 529, billing …)
 //   drop(content, afterBlocks)      streams the first blocks, then cuts the connection
 //   errorEvent(type, content)       streams the blocks, then an SSE `error` event
+//   stall(content, afterBlocks)     streams the first blocks, then says nothing and keeps the connection
+// reply's opts also take pings: { count, everyMs }, a quiet wait with only pings before the blocks.
 // An unscripted request gets a 500 the SDK won't retry, so a missing script fails loudly.
 
 import http from "node:http";
@@ -39,6 +41,9 @@ export function failure(status, type, message, headers) {
 }
 export function drop(content, afterBlocks) {
   return { kind: "drop", content, afterBlocks: afterBlocks || 0 };
+}
+export function stall(content, afterBlocks) {
+  return { kind: "stall", content: content || [], afterBlocks: afterBlocks || 0 };
 }
 export function errorEvent(type, content) {
   return { kind: "error_event", type, content: content || [] };
@@ -207,6 +212,8 @@ export async function startFakeService(opts = {}) {
   const rejected = [];
   const open = new Set();
   const timers = new Set();
+  const socketIds = new WeakMap();
+  let sockets = 0;
 
   const server = http.createServer((req, res) => {
     let raw = "";
@@ -222,6 +229,7 @@ export async function startFakeService(opts = {}) {
       requests.push({
         method: req.method,
         path,
+        socket: socketIds.get(req.socket),
         headers: {
           "anthropic-beta": req.headers["anthropic-beta"] || null,
           "anthropic-version": req.headers["anthropic-version"] || null,
@@ -285,6 +293,28 @@ export async function startFakeService(opts = {}) {
         // Let the client read what was sent, then cut the connection mid-answer.
         return later(20, () => res.socket && res.socket.destroy());
       }
+      if (entry.kind === "stall") {
+        content.slice(0, entry.afterBlocks).forEach((b, i) => parts.push(...blockEvents(b, i)));
+        res.write(parts.join(""));
+        return; // never says more; closed by close()
+      }
+      if (entry.pings && entry.pings.left !== 0) {
+        res.write(parts.join(""));
+        let left = entry.pings.count;
+        const finish = () => {
+          const rest = [];
+          content.forEach((b, i) => rest.push(...blockEvents(b, i)));
+          rest.push(...messageEnd(entry));
+          res.write(rest.join(""));
+          res.end();
+        };
+        const tick = () => {
+          res.write(sse("ping", { type: "ping" }));
+          if (--left > 0) later(entry.pings.everyMs, tick);
+          else later(entry.pings.everyMs, finish);
+        };
+        return later(entry.pings.everyMs, tick);
+      }
       content.forEach((b, i) => parts.push(...blockEvents(b, i)));
       if (entry.kind === "error_event") {
         parts.push(sse("error", { type: "error", error: { type: entry.type, message: entry.type } }));
@@ -300,6 +330,7 @@ export async function startFakeService(opts = {}) {
   }
 
   server.on("connection", (s) => {
+    socketIds.set(s, ++sockets);
     open.add(s);
     s.on("close", () => open.delete(s));
   });

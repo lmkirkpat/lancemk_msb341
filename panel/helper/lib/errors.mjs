@@ -5,6 +5,7 @@
 // reaches a log line (FR-021).
 
 import Anthropic from "@anthropic-ai/sdk";
+import { isStall } from "./stall.mjs";
 
 export const MESSAGES = Object.freeze({
   not_signed_in: "The mentor can't start: its access key is missing or isn't working. Check setup, then start the lesson again.",
@@ -42,6 +43,7 @@ function isBilling(err) {
 export function classify(err) {
   if (!err) return "service_busy";
   if (err.code === "NO_KEY") return "not_signed_in";
+  if (isStall(err)) return "service_busy"; // headers came, so the connection worked; then silence
   if (err instanceof Anthropic.APIConnectionError) return "offline"; // includes the timeout subclass
   if (err instanceof Anthropic.APIError) {
     if (isBilling(err)) return "out_of_credit";
