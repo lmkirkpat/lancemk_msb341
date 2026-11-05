@@ -1,5 +1,23 @@
 # Option A runtime: usage notes
 
+## Request timing, live (T068, 2026-11-04, about 23:42 to 23:54 local)
+
+258 live requests, none stalled, about $1.13: 222 first requests alternating easing and pivot (2 of them to check
+cost), 34 from full easing turns, and 2 hard questions to draw out thinking.
+
+| | p50 | p95 | Longest |
+|---|---|---|---|
+| Time to headers | 1.1 s | 2.2 s | 4.7 s |
+| Longest gap between bytes, per request | 0.4 s | 1.6 s | 4.2 s |
+
+- **What this backs:** the 20 s and 30 s limits sit well above all of it. Pings arrived in both silent thinking
+  waits that were checked.
+- **What it doesn't cover:** bodies were 99 kB at most, so no real frame and no slow uplink, and the longest answer
+  took about 10 s, so no long silent think. One quiet hour on one network. `response_timing` in the helper's log
+  now records `headers_ms` and `max_gap_ms` for every request, so real lessons can check the limits.
+- **Stall fix (merged, cause not found):** a stalled request now fails fast and retries, proven only against the
+  fake service. The header wait grows with body size (50 kB/s), so a stalled 5 MB request takes 120 s to notice.
+
 ## All six sets on A (2026-11-04, at `4edba27`)
 
 Easing 26/28, key types 28/30, speed graph 28/29, offset 33/37, pivot 48/50, null 43/44. Mentor $11.78 for the

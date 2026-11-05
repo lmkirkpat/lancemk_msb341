@@ -262,4 +262,4 @@ The builder chose a second full run over rewriting the bar. **Verdict: easing me
 | (c) no more than 5 points below B1 | Met. 3.6 points below. |
 | (d) B1-pass, A-fail cases re-run | Done. 22 3/3 (`-200134`), 24 3/3 (`-200259`). |
 
-Case 24's turn 1 timed out with 1 request and $0 cost: the first request got no answer for 5 minutes. All 6 of A's turn timeouts so far are in this set; the other five sets had none in about 515 turns (`discovery/usage-notes/api-runtime.md`, T068).
+Case 24's turn 1 timed out with 1 request and $0 reported. The helper discarded whether the answer had started, so $0 here doesn't prove no reply arrived (T068). All 6 of A's turn timeouts so far are in this set; the other five sets had none in about 515 turns (`discovery/usage-notes/api-runtime.md`, T068).
