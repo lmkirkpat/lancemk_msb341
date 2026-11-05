@@ -111,7 +111,10 @@ a brand new session act like a colleague who already knows what you are working 
     released it on stop, a second was blocked while the cockpit held it). The cockpit never
     stops, so it stays off AE while a builder needs it.
   - **Specs (2026-10-20 to 10-24):** curriculum (`specs/004`, with `curriculum.md`), diagnosis
-    (005), installer (006) and UI overhaul (007) approved; 005 to 007 have no plan or tasks yet.
+    (005), installer (006) and UI overhaul (007) approved; 005 and 006 have no plan or tasks yet.
+    Spec 007's plan and 80 tasks were approved 2026-11-04 (three already done by other commits), and
+    its mockup matches. Nothing is built yet. **Next:** T001, the builder's session on the current
+    panel, before the first `panel/` merge from this build.
     The five baseline skills each have a teaching design, spec, plan and tasks: speed graph (008),
     key types (009), offset (010), set the pivot (011), move a group with a null (012).
   - **Parallel runs** (`discovery/usage-notes/parallel-runs.md`, with its template): run 1 specs
