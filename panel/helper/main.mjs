@@ -50,7 +50,7 @@ if (removedEnv.length) log({ event: "env_removed", names: removedEnv });
 async function getClient() {
   if (!key) key = await findKey();
   if (!key) return null;
-  if (!ctx.client) ctx.client = createClient({ apiKey: key, baseURL: ctx.baseURL, timeoutMs: ctx.loaded.settings.turn_timeout_ms });
+  if (!ctx.client) ctx.client = createClient({ apiKey: key, baseURL: ctx.baseURL, log });
   return ctx.client;
 }
 

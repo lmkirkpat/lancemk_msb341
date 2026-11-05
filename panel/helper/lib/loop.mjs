@@ -13,6 +13,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { classify, isNetworkError } from "./errors.mjs";
+import { stallFetch, isStall } from "./stall.mjs";
 import { costOf, sumCosts, tokensOf, addTokens, ZERO_TOKENS } from "./cost.mjs";
 import { buildLessonPrompt, buildTools, promptHash, toolChangeBlocks, userContent, skillSystemMessage, withBreakpoint, SKILL_TOOL } from "./prompt.mjs";
 import { readSkill, commandOf } from "./skills.mjs";
@@ -35,10 +36,29 @@ export const DIDNT_RUN = "That call didn't run.";
 export const NOT_FINISHED = "That call didn't finish, so it may or may not have changed the project.";
 export const loadedText = (name, args) => (args ? `Loaded ${name}. Arguments: ${args}` : `Loaded ${name}.`);
 
-// The SDK client: an explicit key (never the environment), 2 retries on 429, 5xx and connection
-// errors (research R3), each request bounded by the turn timeout.
-export function createClient({ apiKey, baseURL, timeoutMs }) {
-  return new Anthropic({ apiKey, ...(baseURL ? { baseURL } : {}), maxRetries: 2, timeout: timeoutMs });
+// How long a request may go without headers, and an answer without a byte (T068). Neither limits
+// how long an answer takes: only silence counts, and pings count as bytes. The longest seen in 258
+// live requests (2026-11-04, bodies up to 99 kB): 4.7 s to headers, 4.2 s between bytes. Too short
+// costs a re-send. The helper logs both per request (response_timing).
+export const HEADERS_MS = 20 * 1000;
+export const QUIET_MS = 30 * 1000;
+// The wait for headers includes uploading the body, and frames travel in the history as base64, so
+// the limit grows with the body: 50 kB/s is a 400 kbps uplink. Chosen low on purpose. Too low only
+// makes a stalled big request slower to notice (5 MB: 120 s); too high would cut off a healthy slow
+// upload and strand the lesson, since every later request carries that frame again.
+export const UPLOAD_BYTES_PER_S = 50 * 1000;
+export const headersLimitMs = (bytes, headersMs = HEADERS_MS) => headersMs + Math.ceil((bytes * 1000) / UPLOAD_BYTES_PER_S);
+// A request that went quiet with nothing on screen is sent once more. Anything more would risk
+// spending the learner's wait, and credit, on a service that isn't answering.
+export const QUIET_RETRIES = 1;
+
+// The SDK client: an explicit key (never the environment), 2 retries on 429, 5xx, connection errors
+// and missing headers (research R3), and a body that fails if it goes quiet (lib/stall.mjs). Each
+// message request sets its own wait for headers (headersLimitMs). The turn limit stays the loop's:
+// it can't be the request's too, or the retries never get a chance. At worst a small request that
+// gets nothing back takes about a minute to fail; a big one can reach the turn limit.
+export function createClient({ apiKey, baseURL, headersMs = HEADERS_MS, quietMs = QUIET_MS, log }) {
+  return new Anthropic({ apiKey, ...(baseURL ? { baseURL } : {}), maxRetries: 2, timeout: headersMs, fetch: stallFetch({ stallMs: quietMs, log }) });
 }
 
 // After a mid-output server-side fallback, only the text before the last fallback marker goes back
@@ -99,6 +119,7 @@ export function createLesson(opts) {
   const log = opts.log || (() => {});
   const requestLog = opts.requestLog || { append() {} };
   const now = opts.now || Date.now;
+  const headersMs = opts.headersMs ?? HEADERS_MS;
 
   const messages = [];
   let server = null; // the first { instructions, tools } this lesson saw; kept for the lesson
@@ -206,30 +227,53 @@ export function createLesson(opts) {
     return undo;
   }
 
-  // One streamed request. Emits text_delta and text as blocks arrive. → { message } or
-  // throws { err, started } (started: the service had begun answering, so the cost is unknown).
-  async function step(client, signal, emit) {
+  // One streamed request. Emits text_delta and text as blocks arrive. → { message } or throws
+  // { err }. live.started: the service accepted the request (headers came), so it may be billed and
+  // the cost is unknown until the counts come. live.shown: the learner has seen words from this
+  // request.
+  //
+  // A request that goes quiet before any words are shown goes again, the same bytes (T068). No tool
+  // has run for it (tools run only after a whole answer) and nothing is on screen, so the only cost
+  // of going again is credit: a quiet attempt that had started may still be billed, and its cost
+  // then shows as unknown. Once words are on screen a second answer would repeat them, so the turn
+  // fails instead, as it does when a connection drops mid-answer.
+  async function step(client, signal, emit, live, billedUnknown) {
     const { params, betas } = requestParams();
-    requestLog.append(params, { turn: turnNo, betas });
-    let started = false;
-    const stream = client.beta.messages.stream({ ...params, betas }, { signal });
-    stream.on("streamEvent", (ev, snapshot) => {
-      if (ev.type === "message_start") started = true;
-      else if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "text_delta" && ev.delta.text) {
-        emit("text_delta", { text: ev.delta.text });
-      } else if (ev.type === "content_block_stop") {
-        const b = snapshot && snapshot.content[ev.index];
-        if (!b) return;
-        if (b.type === "text" && b.text) emit("text", { text: b.text });
-        // tool_call waits for the whole answer (runTurn): a later fallback marker can show the
-        // call came from a declined attempt that will never run.
+    const timeout = headersLimitMs(Buffer.byteLength(JSON.stringify(params)), headersMs);
+    for (let attempt = 0; ; attempt++) {
+      requestLog.append(params, { turn: turnNo, betas });
+      live.started = false;
+      let over = false;
+      const stream = client.beta.messages.stream({ ...params, betas }, { signal, timeout });
+      // The SDK fires connect only on a successful response's headers; a refused request throws first.
+      stream.on("connect", () => {
+        if (!over) live.started = true;
+      });
+      stream.on("streamEvent", (ev, snapshot) => {
+        if (over) return;
+        if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "text_delta" && ev.delta.text) {
+          live.shown = true;
+          emit("text_delta", { text: ev.delta.text });
+        } else if (ev.type === "content_block_stop") {
+          const b = snapshot && snapshot.content[ev.index];
+          if (!b) return;
+          if (b.type === "text" && b.text) {
+            live.shown = true;
+            emit("text", { text: b.text });
+          }
+          // tool_call waits for the whole answer (runTurn): a later fallback marker can show the
+          // call came from a declined attempt that will never run.
+        }
+      });
+      try {
+        const message = await stream.finalMessage();
+        return { message };
+      } catch (err) {
+        over = true;
+        if (!isStall(err) || signal.aborted || live.shown || attempt >= QUIET_RETRIES) throw { err };
+        log({ event: "request_sent_again", turn: turnNo, attempt: attempt + 1, started: live.started });
+        if (live.started) billedUnknown();
       }
-    });
-    try {
-      const message = await stream.finalMessage();
-      return { message };
-    } catch (err) {
-      throw { err, started };
     }
   }
 
@@ -296,8 +340,13 @@ export function createLesson(opts) {
     };
     const ctl = new AbortController();
     let timedOut = false;
+    // What the turn is waiting on, so a timeout's log line says which kind of wait it was: a request
+    // (and how far its answer got), or the server (an ae-mentor call or its start).
+    let waitingOn = "start";
+    const live = { started: false, shown: false };
     const timer = setTimeout(() => {
       timedOut = true;
+      log({ event: "turn_timeout", turn: turnNo, step: steps, waiting_on: waitingOn, started: live.started, shown: live.shown });
       ctl.abort();
     }, settings.turn_timeout_ms);
     // One shared "timed out" promise, already handled, so a timer that fires after a race has
@@ -375,17 +424,21 @@ export function createLesson(opts) {
       for (steps = 1; steps <= settings.max_steps; steps++) {
         const placed = placeHandOver();
         let message;
+        waitingOn = "request";
+        live.started = false;
+        live.shown = false;
         try {
-          ({ message } = await step(client, ctl.signal, emit));
+          // Raced, so the turn limit holds even if a request never settles after the abort.
+          ({ message } = await race(step(client, ctl.signal, emit, live, () => costs.push(null))));
         } catch (thrown) {
+          if (live.started) costs.push(null); // billed, but the counts never came
           if (timedOut) throw new TurnAbort("timeout");
           const err = thrown && thrown.err !== undefined ? thrown.err : thrown;
-          if (thrown && thrown.started) costs.push(null); // billed, but the counts never came
           const kind = classify(err);
           // The service's own words help the builder find a rejected request; the log line is
           // scrubbed of the key (main.mjs), and nothing from it reaches the learner (FR-021, FR-027).
           const detail = err && err.error && err.error.error && typeof err.error.error.message === "string" ? err.error.error.message.slice(0, 300) : null;
-          if (!(err instanceof Anthropic.APIError) && !isNetworkError(err)) {
+          if (!(err instanceof Anthropic.APIError) && !isNetworkError(err) && !isStall(err)) {
             log({ event: "internal_error", name: (err && err.constructor && err.constructor.name) || typeof err, detail: String((err && err.message) || err).slice(0, 300) });
           } else {
             log({ event: "service_error", kind, status: (err && err.status) || null, type: (err && err.type) || null, detail });
@@ -433,6 +486,7 @@ export function createLesson(opts) {
           return summary(true, null);
         }
 
+        waitingOn = "server";
         const pendingHandOver = {};
         const results = [];
         let ran = false;

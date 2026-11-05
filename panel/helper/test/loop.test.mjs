@@ -4,13 +4,13 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createLesson, createClient, echoContent, BETAS, NOT_AVAILABLE, NO_SUCH_SKILL, DIDNT_RUN, NOT_FINISHED } from "../lib/loop.mjs";
+import { createLesson, createClient, echoContent, headersLimitMs, HEADERS_MS, QUIET_MS, QUIET_RETRIES, UPLOAD_BYTES_PER_S, BETAS, NOT_AVAILABLE, NO_SUCH_SKILL, DIDNT_RUN, NOT_FINISHED } from "../lib/loop.mjs";
 import { createMcpClient } from "../lib/mcp-client.mjs";
 import { loadSettings, HELPER_DIR } from "../lib/settings.mjs";
 import { loadPreamble, loadSkillTool, withoutBreakpoints } from "../lib/prompt.mjs";
 import { readSkill } from "../lib/skills.mjs";
 import { createRequestLog } from "../lib/request-log.mjs";
-import { startFakeService, invalidRequest, reply, failure, drop, text, thinking, toolUse, fallbackBlock } from "./fake-service.mjs";
+import { startFakeService, invalidRequest, reply, failure, drop, stall, headersOnly, wholeText, text, thinking, toolUse, fallbackBlock } from "./fake-service.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const SKILLS = path.join(REPO, ".claude", "skills");
@@ -25,8 +25,8 @@ afterEach(async () => {
   while (cleanups.length) await cleanups.pop()();
 });
 
-async function setup({ patch, noKey, wrapMcp } = {}) {
-  const svc = await startFakeService();
+async function setup({ patch, noKey, wrapMcp, limits, service } = {}) {
+  const svc = await startFakeService(service);
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-loop-"));
   const state = path.join(home, "fixture-state.json");
   fs.writeFileSync(state, JSON.stringify({ project: FIXTURE }));
@@ -35,7 +35,7 @@ async function setup({ patch, noKey, wrapMcp } = {}) {
   const logs = [];
   const reqLogFile = path.join(home, "requests.jsonl");
   const lesson = createLesson({
-    getClient: async () => (noKey ? null : createClient({ apiKey: KEY, baseURL: svc.url, timeoutMs: settings.turn_timeout_ms })),
+    getClient: async () => (noKey ? null : createClient({ apiKey: KEY, baseURL: svc.url, log: (e) => logs.push(e), ...limits })),
     mcp: wrapMcp ? wrapMcp(mcp) : mcp,
     settings,
     prices,
@@ -44,6 +44,7 @@ async function setup({ patch, noKey, wrapMcp } = {}) {
     skillsDir: SKILLS,
     requestLog: createRequestLog(reqLogFile, KEY),
     log: (e) => logs.push(e),
+    ...(limits && limits.headersMs ? { headersMs: limits.headersMs } : {}),
   });
   let events = [];
   const emit = (type, payload) => events.push({ type, ...payload });
@@ -1071,4 +1072,247 @@ test("S1: a call never sent (the server already gone) is still \"didn't run\"; o
   s.svc.script(reply([text("Back.")]));
   assert.equal((await s.turn("Hello?")).r.ok, true);
   assertAppendOnly(s.svc);
+});
+
+// ---------- T068: a request that goes quiet fails fast and goes again, within the turn. ----------
+
+const QUICK = { headersMs: 150, quietMs: 150 };
+const rawOf = (s) => s.svc.messageRequests.map((r) => r.raw);
+
+test("T068: no headers at all: the SDK sends the same bytes again, and the learner waits a moment, not the turn limit", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(reply([text("never")], { hang: true }), reply([text("Here.")]));
+  const started = Date.now();
+  const { r, events } = await s.turn("/ease-mentor");
+  assert.equal(r.ok, true);
+  assert.ok(Date.now() - started < 3000);
+  assert.equal(r.steps, 1, "a retry isn't another step");
+  const raw = rawOf(s);
+  assert.equal(raw.length, 2);
+  assert.equal(raw[1], raw[0], "the bytes sent again are the same");
+  assert.notEqual(s.svc.messageRequests[1].socket, s.svc.messageRequests[0].socket, "the retry doesn't reuse the silent connection");
+  assert.equal(events.filter((e) => e.type === "text").length, 1);
+  assert.ok(s.logs.some((l) => l.event === "request_no_headers" && l.retry === 0), "the log says what happened");
+});
+
+test("T068: no headers on any attempt: the turn fails well inside the limit, with the existing kind, and is taken back", async () => {
+  const s = await setup({ limits: { headersMs: 100, quietMs: 100 } });
+  s.svc.script(reply([text("never")], { hang: true }), reply([text("never")], { hang: true }), reply([text("never")], { hang: true }));
+  const started = Date.now();
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.ok, false);
+  assert.equal(r.error_kind, "offline");
+  assert.ok(Date.now() - started < 8000);
+  assert.equal(r.cost_usd, 0, "no answer began, so nothing is known to be billed");
+  assert.equal(s.svc.messageRequests.length, 3);
+  assert.equal(s.lesson.messages.length, 0);
+});
+
+test("T068: quiet after the answer began, nothing on screen: sent again once, with the first attempt's cost unknown", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(stall([thinking("", "q-1")], 1), reply([thinking("", "q-2"), text("Here.")]));
+  const started = Date.now();
+  const { r, events } = await s.turn("/ease-mentor");
+  assert.equal(r.ok, true);
+  assert.ok(Date.now() - started < 3000);
+  assert.equal(r.cost_usd, null, "the quiet attempt may be billed, and its counts never came");
+  const raw = rawOf(s);
+  assert.equal(raw.length, 2);
+  assert.equal(raw[1], raw[0], "the bytes sent again are the same");
+  assert.notEqual(s.svc.messageRequests[1].socket, s.svc.messageRequests[0].socket, "the silent connection isn't reused");
+  assert.deepEqual(events.filter((e) => e.type === "text").map((e) => e.text), ["Here."]);
+  const quiet = s.logs.find((l) => l.event === "response_went_quiet");
+  assert.ok(quiet && quiet.silent_ms === 150, "the log says it went quiet");
+  assert.deepEqual(s.logs.find((l) => l.event === "request_sent_again"), { event: "request_sent_again", turn: 1, attempt: 1, started: true });
+  assert.deepEqual(s.lesson.messages.at(-1).content.map((b) => b.type), ["thinking", "text"], "only the answer that finished is in the history");
+  assert.equal(s.lesson.messages.at(-1).content[0].signature, "q-2");
+});
+
+test("T068: quiet twice: the turn stops as busy, not as a 5-minute timeout, and is taken back", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(stall([thinking("", "q-1")], 1), stall([thinking("", "q-2")], 1));
+  const started = Date.now();
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "service_busy");
+  assert.ok(Date.now() - started < 3000);
+  assert.equal(r.cost_usd, null);
+  assert.equal(s.svc.messageRequests.length, 2, "sent again once only");
+  assert.equal(s.lesson.messages.length, 0);
+  assert.ok(!s.logs.some((l) => l.event === "internal_error"), "not mistaken for a fault in the helper");
+  s.svc.script(reply([text("Back.")]));
+  assert.equal((await s.turn("/ease-mentor")).r.ok, true);
+});
+
+test("T068: quiet with words on screen isn't sent again, so nothing shows twice", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(stall([text("Half of an answer")], 1));
+  const { r, events } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "service_busy");
+  assert.equal(r.cost_usd, null);
+  assert.equal(s.svc.messageRequests.length, 1);
+  assert.ok(events.some((e) => e.type === "text_delta"), "the words stay on screen, as after a dropped connection");
+  assert.equal(s.lesson.messages.length, 0, "the half answer is never sent back");
+});
+
+test("T068: a tool that ran isn't run again when the next request goes quiet", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(reply([text("One.")]));
+  await s.turn("/ease-mentor");
+  const seen = [];
+  s.svc.script(
+    // Words in step 1 don't stop step 2 going again: those words are finished, and step 2 has shown none.
+    reply([thinking("", "t-1"), text("Looking."), toolUse("diff_since_last", {}, "tu_once")], { stop_reason: "tool_use" }),
+    stall([thinking("", "t-2")], 1),
+    reply([thinking("", "t-3"), text("Done.")]),
+  );
+  const { r, events } = await s.turn("Check my work.");
+  for (const e of events) if (e.type === "tool_call") seen.push(e.id);
+  assert.equal(r.ok, true);
+  assert.deepEqual(seen, ["tu_once"], "the call ran once");
+  assert.deepEqual(events.filter((e) => e.type === "text").map((e) => e.text), ["Looking.", "Done."], "nothing shows twice");
+  assert.equal(r.steps, 2);
+  const b = s.svc.messageRequests;
+  assert.equal(b[3].raw, b[2].raw, "the request after the tool went again unchanged");
+  assert.equal(JSON.stringify(s.lesson.messages).split("tu_once").length - 1, 2, "one call, one result");
+  assertAppendOnly(s.svc, { skip: [2] });
+});
+
+test("T068: a long answer that keeps sending pings is left alone, however long it takes", async () => {
+  const s = await setup({ limits: { headersMs: 150, quietMs: 150 } });
+  s.svc.script(reply([thinking("", "p-1"), text("Worth the wait.")], { pings: { count: 6, everyMs: 90 } }));
+  const started = Date.now();
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.ok, true);
+  assert.ok(Date.now() - started >= 500, "longer than the quiet limit");
+  assert.equal(r.cost_usd !== null, true);
+  assert.equal(s.svc.messageRequests.length, 1);
+  assert.ok(!s.logs.some((l) => l.event === "response_went_quiet"));
+});
+
+test("T068: a turn limit shorter than the quiet limit still ends the turn; the log says what it was waiting on", async () => {
+  const s = await setup({ patch: { turn_timeout_ms: 300 }, limits: { headersMs: 60000, quietMs: 60000 } });
+  s.svc.script(stall([thinking("", "l-1")], 1));
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "timeout");
+  assert.equal(r.cost_usd, null, "the answer had begun, so the cost is unknown, not 0");
+  assert.deepEqual(s.logs.find((l) => l.event === "turn_timeout"), { event: "turn_timeout", turn: 1, step: 1, waiting_on: "request", started: true, shown: false });
+  assert.equal(s.lesson.messages.length, 0);
+});
+
+test("T068: the turn limit holds even if a request never settles after the abort", async () => {
+  const svcless = {
+    beta: {
+      messages: {
+        stream: () => ({ on() {}, finalMessage: () => new Promise(() => {}) }),
+      },
+    },
+  };
+  const s = await setup({ patch: { turn_timeout_ms: 300 } });
+  const lesson = createLesson({ getClient: async () => svcless, mcp: s.mcp, settings: Object.freeze({ ...SETTINGS, turn_timeout_ms: 300 }), prices, preamble, skillTool, skillsDir: SKILLS, log: () => {} });
+  const started = Date.now();
+  const r = await lesson.runTurn("/ease-mentor", () => {});
+  assert.equal(r.error_kind, "timeout");
+  assert.ok(Date.now() - started < 3000);
+});
+
+test("T068: a wait on the server is logged as that, not as a request", async () => {
+  const s = await setup({
+    patch: { turn_timeout_ms: 800 },
+    wrapMcp: (mcp) => ({ ...mcp, start: mcp.start, stop: mcp.stop, callTool: () => new Promise(() => {}) }),
+  });
+  s.svc.script(reply([thinking("", "w-1"), toolUse("diff_since_last", {}, "tu_wait")], { stop_reason: "tool_use" }));
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "timeout");
+  assert.equal(s.logs.find((l) => l.event === "turn_timeout").waiting_on, "server");
+});
+
+test("T068: the limits leave room inside the turn: even the worst mix of stalls in one request ends before it", () => {
+  // Per try: up to 2 tries with no headers, then a third that gets them and goes quiet. Then once more.
+  const worstMs = (QUIET_RETRIES + 1) * (2 * HEADERS_MS + QUIET_MS);
+  assert.ok(worstMs + 10000 < SETTINGS.turn_timeout_ms, "backoff included");
+  assert.ok(HEADERS_MS < SETTINGS.turn_timeout_ms / 5);
+});
+
+test("T068: a healthy slow upload finishes: the wait for headers grows with the body", async () => {
+  const s = await setup({ limits: { headersMs: 300, quietMs: 300 }, service: { readBytesPerSec: 200 * 1000 } });
+  s.svc.script(reply([text("Got it.")]));
+  // About 240 kB at 200 kB/s: about 1.2 s to upload, well over the 300 ms floor.
+  const started = Date.now();
+  const { r } = await s.turn("/ease-mentor " + "x".repeat(200 * 1000));
+  assert.ok(Date.now() - started > 600, "the upload really was slow");
+  assert.equal(r.ok, true);
+  assert.equal(s.svc.messageRequests.length, 1, "no attempt was given up on");
+  assert.ok(!s.logs.some((l) => l.event === "request_no_headers"));
+});
+
+test("T068: the limit for headers: the floor, plus the body at 400 kbps", () => {
+  assert.equal(UPLOAD_BYTES_PER_S * 8, 400 * 1000);
+  assert.equal(headersLimitMs(0), HEADERS_MS);
+  assert.equal(headersLimitMs(50 * 1000, 100), 1100);
+  assert.equal(headersLimitMs(1), HEADERS_MS + 1, "a whole number, as the SDK requires");
+  // A 2 Mbps uplink with a 6 MB body (a 4.5 MB frame as base64) takes 24 s to send, 5 times over.
+  assert.ok(headersLimitMs(6 * 1000 * 1000) > 5 * 24 * 1000);
+});
+
+test("T068: headers, then silence: accepted, so its cost is unknown, even with counts from an earlier step", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(
+    reply([thinking("", "h-1"), toolUse("diff_since_last", {}, "tu_h")], { stop_reason: "tool_use" }),
+    headersOnly(),
+    headersOnly(),
+  );
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "service_busy");
+  assert.equal(r.cost_usd, null, "not the first step's cost as if it were exact");
+});
+
+test("T068: headers, then silence on the first request of a turn: unknown, not 0", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(headersOnly(), headersOnly());
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "service_busy");
+  assert.equal(r.cost_usd, null);
+});
+
+test("T068: a request the service refused was never accepted, so its cost stays known", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(failure(401, "authentication_error", "bad key"));
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "not_signed_in");
+  assert.equal(r.cost_usd, 0);
+});
+
+test("T068: a re-send marks the turn's cost unknown even when the second try answers, and shows in the request log", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(headersOnly(), reply([text("Here.")]));
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.ok, true);
+  assert.equal(r.cost_usd, null);
+  assert.deepEqual(s.logs.find((l) => l.event === "request_sent_again"), { event: "request_sent_again", turn: 1, attempt: 1, started: true });
+  const logged = fs.readFileSync(s.reqLogFile, "utf8").trim().split("\n");
+  assert.equal(logged.length, 2, "both tries are in the request log");
+  assert.equal(logged[1], logged[0]);
+});
+
+test("T068: words that arrive whole, with no delta, count as on screen", async () => {
+  const s = await setup({ limits: QUICK });
+  s.svc.script(stall([wholeText("A whole sentence.")], 1));
+  const { r, events } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "service_busy");
+  assert.equal(s.svc.messageRequests.length, 1, "not sent again, so it can't show twice");
+  assert.deepEqual(events.filter((e) => e.type === "text").map((e) => e.text), ["A whole sentence."]);
+});
+
+test("T068: each request logs its timing, numbers only", async () => {
+  const s = await setup({ limits: { headersMs: 500, quietMs: 500 } });
+  s.svc.script(reply([thinking("", "p-2"), text("Done.")], { pings: { count: 2, everyMs: 120 } }));
+  await s.turn("/ease-mentor");
+  const t = s.logs.find((l) => l.event === "response_timing");
+  assert.ok(t, "logged");
+  assert.deepEqual(Object.keys(t).sort(), ["end", "event", "headers_ms", "max_gap_ms", "request_id", "status", "total_ms"]);
+  assert.equal(t.end, "done");
+  assert.equal(t.status, 200);
+  assert.ok(t.max_gap_ms >= 80 && t.max_gap_ms < 400, `the gap was ${t.max_gap_ms}`);
+  assert.ok(t.headers_ms <= t.total_ms);
+  assert.doesNotMatch(JSON.stringify(t), /Done/);
 });
