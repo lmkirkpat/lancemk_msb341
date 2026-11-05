@@ -14,6 +14,7 @@
 //   drop(content, afterBlocks)      streams the first blocks, then cuts the connection
 //   errorEvent(type, content)       streams the blocks, then an SSE `error` event
 //   stall(content, afterBlocks)     streams the first blocks, then says nothing and keeps the connection
+//   headersOnly()                   sends a 200's headers, then not one byte more
 // reply's opts also take pings: { count, everyMs }, a quiet wait with only pings before the blocks.
 // An unscripted request gets a 500 the SDK won't retry, so a missing script fails loudly.
 
@@ -25,6 +26,8 @@ const nextId = (prefix) => `${prefix}_fake_${++ids}`;
 // ---------- content blocks ----------
 
 export const text = (t) => ({ type: "text", text: t });
+// A text block that arrives whole in its start event, with no delta.
+export const wholeText = (t) => ({ type: "text", text: t, whole: true });
 export const thinking = (t, signature) => ({ type: "thinking", thinking: t || "", signature: signature || `sig_${++ids}` });
 export const toolUse = (name, input, id) => ({ type: "tool_use", id: id || nextId("toolu"), name, input: input || {} });
 export const fallbackBlock = (from, to) => ({ type: "fallback", from: { model: from }, to: { model: to } });
@@ -45,6 +48,9 @@ export function drop(content, afterBlocks) {
 export function stall(content, afterBlocks) {
   return { kind: "stall", content: content || [], afterBlocks: afterBlocks || 0 };
 }
+export function headersOnly() {
+  return { kind: "headers_only" };
+}
 export function errorEvent(type, content) {
   return { kind: "error_event", type, content: content || [] };
 }
@@ -64,7 +70,9 @@ function chunks(s, size) {
 // → the SSE strings for one block at `index`.
 function blockEvents(block, index) {
   const out = [];
-  if (block.type === "text") {
+  if (block.type === "text" && block.whole) {
+    out.push(sse("content_block_start", { type: "content_block_start", index, content_block: { type: "text", text: block.text } }));
+  } else if (block.type === "text") {
     out.push(sse("content_block_start", { type: "content_block_start", index, content_block: { type: "text", text: "" } }));
     for (const c of chunks(block.text, 8)) out.push(sse("content_block_delta", { type: "content_block_delta", index, delta: { type: "text_delta", text: c } }));
   } else if (block.type === "thinking") {
@@ -217,7 +225,15 @@ export async function startFakeService(opts = {}) {
 
   const server = http.createServer((req, res) => {
     let raw = "";
-    req.on("data", (c) => (raw += c));
+    req.on("data", (c) => {
+      raw += c;
+      // opts.readBytesPerSec: a healthy service behind a slow uplink. It answers only with the whole
+      // body in hand, so the time to headers includes the upload.
+      if (opts.readBytesPerSec) {
+        req.pause();
+        later((c.length / opts.readBytesPerSec) * 1000, () => req.resume());
+      }
+    });
     req.on("end", () => {
       let body = null;
       try {
@@ -281,6 +297,11 @@ export async function startFakeService(opts = {}) {
     if (!entry) return sendJsonError(res, 500, "api_error", "fake service: no scripted response", { "x-should-retry": "false" });
     if (entry.kind === "failure") return sendJsonError(res, entry.status, entry.type, entry.message, entry.headers);
     if (entry.hang) return; // never answers; closed by close()
+
+    if (entry.kind === "headers_only") {
+      res.writeHead(200, { "content-type": "text/event-stream", "cache-control": "no-cache", "request-id": nextId("req") });
+      return res.flushHeaders(); // closed by close()
+    }
 
     const model = entry.model || (body && body.model) || defaultModel;
     const go = () => {

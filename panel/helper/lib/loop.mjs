@@ -38,18 +38,25 @@ export const loadedText = (name, args) => (args ? `Loaded ${name}. Arguments: ${
 
 // How long a request may go without headers, and an answer without a byte (T068). Neither limits
 // how long an answer takes: only silence counts, and pings count as bytes. The longest seen in 258
-// live requests (2026-11-04): 4.7 s to headers, 4.2 s between bytes. Too short costs a re-send.
-// At worst a request that gets nothing back takes about 62 s to fail (3 tries, see createClient),
-// or 60 s if it goes quiet twice; the turn limit still bounds everything.
+// live requests (2026-11-04, bodies up to 99 kB): 4.7 s to headers, 4.2 s between bytes. Too short
+// costs a re-send. The helper logs both per request (response_timing).
 export const HEADERS_MS = 20 * 1000;
 export const QUIET_MS = 30 * 1000;
+// The wait for headers includes uploading the body, and frames travel in the history as base64, so
+// the limit grows with the body: 50 kB/s is a 400 kbps uplink. Chosen low on purpose. Too low only
+// makes a stalled big request slower to notice (5 MB: 120 s); too high would cut off a healthy slow
+// upload and strand the lesson, since every later request carries that frame again.
+export const UPLOAD_BYTES_PER_S = 50 * 1000;
+export const headersLimitMs = (bytes, headersMs = HEADERS_MS) => headersMs + Math.ceil((bytes * 1000) / UPLOAD_BYTES_PER_S);
 // A request that went quiet with nothing on screen is sent once more. Anything more would risk
 // spending the learner's wait, and credit, on a service that isn't answering.
 export const QUIET_RETRIES = 1;
 
 // The SDK client: an explicit key (never the environment), 2 retries on 429, 5xx, connection errors
-// and missing headers (research R3), and a body that fails if it goes quiet (lib/stall.mjs). The
-// turn limit stays the loop's: it can't be the request's too, or the retries never get a chance.
+// and missing headers (research R3), and a body that fails if it goes quiet (lib/stall.mjs). Each
+// message request sets its own wait for headers (headersLimitMs). The turn limit stays the loop's:
+// it can't be the request's too, or the retries never get a chance. At worst a small request that
+// gets nothing back takes about a minute to fail; a big one can reach the turn limit.
 export function createClient({ apiKey, baseURL, headersMs = HEADERS_MS, quietMs = QUIET_MS, log }) {
   return new Anthropic({ apiKey, ...(baseURL ? { baseURL } : {}), maxRetries: 2, timeout: headersMs, fetch: stallFetch({ stallMs: quietMs, log }) });
 }
@@ -112,6 +119,7 @@ export function createLesson(opts) {
   const log = opts.log || (() => {});
   const requestLog = opts.requestLog || { append() {} };
   const now = opts.now || Date.now;
+  const headersMs = opts.headersMs ?? HEADERS_MS;
 
   const messages = [];
   let server = null; // the first { instructions, tools } this lesson saw; kept for the lesson
@@ -220,8 +228,9 @@ export function createLesson(opts) {
   }
 
   // One streamed request. Emits text_delta and text as blocks arrive. → { message } or throws
-  // { err }. live.started: the service had begun answering, so the cost is unknown. live.shown:
-  // the learner has seen words from this request.
+  // { err }. live.started: the service accepted the request (headers came), so it may be billed and
+  // the cost is unknown until the counts come. live.shown: the learner has seen words from this
+  // request.
   //
   // A request that goes quiet before any words are shown goes again, the same bytes (T068). No tool
   // has run for it (tools run only after a whole answer) and nothing is on screen, so the only cost
@@ -230,21 +239,28 @@ export function createLesson(opts) {
   // fails instead, as it does when a connection drops mid-answer.
   async function step(client, signal, emit, live, billedUnknown) {
     const { params, betas } = requestParams();
+    const timeout = headersLimitMs(Buffer.byteLength(JSON.stringify(params)), headersMs);
     for (let attempt = 0; ; attempt++) {
       requestLog.append(params, { turn: turnNo, betas });
       live.started = false;
       let over = false;
-      const stream = client.beta.messages.stream({ ...params, betas }, { signal });
+      const stream = client.beta.messages.stream({ ...params, betas }, { signal, timeout });
+      // The SDK fires connect only on a successful response's headers; a refused request throws first.
+      stream.on("connect", () => {
+        if (!over) live.started = true;
+      });
       stream.on("streamEvent", (ev, snapshot) => {
         if (over) return;
-        if (ev.type === "message_start") live.started = true;
-        else if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "text_delta" && ev.delta.text) {
+        if (ev.type === "content_block_delta" && ev.delta && ev.delta.type === "text_delta" && ev.delta.text) {
           live.shown = true;
           emit("text_delta", { text: ev.delta.text });
         } else if (ev.type === "content_block_stop") {
           const b = snapshot && snapshot.content[ev.index];
           if (!b) return;
-          if (b.type === "text" && b.text) emit("text", { text: b.text });
+          if (b.type === "text" && b.text) {
+            live.shown = true;
+            emit("text", { text: b.text });
+          }
           // tool_call waits for the whole answer (runTurn): a later fallback marker can show the
           // call came from a declined attempt that will never run.
         }

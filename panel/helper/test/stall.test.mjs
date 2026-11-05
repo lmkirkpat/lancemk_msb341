@@ -102,9 +102,29 @@ test("stallFetch sends the request untouched and logs a failed attempt with no t
   assert.equal(res.status, 201);
   assert.equal(res.headers.get("request-id"), "req_1");
   assert.equal(await res.text(), "ok");
-  assert.equal(logs.length, 1);
   assert.equal(logs[0].event, "request_no_headers");
   assert.equal(logs[0].retry, 2);
   assert.equal(logs[0].name, "AbortError");
+  assert.deepEqual(logs.slice(1).map((l) => l.event), ["response_timing"]);
   assert.doesNotMatch(JSON.stringify(logs), /the body/);
+});
+
+test("onEnd reports the longest wait and how the body ended, once", async () => {
+  const ends = [];
+  await readAll(watchBody(bodyOf(["a", "b"], 60).stream, 500, null, (e) => ends.push(e)));
+  assert.equal(ends.length, 1);
+  assert.equal(ends[0].how, "done");
+  assert.ok(ends[0].maxGapMs >= 40 && ends[0].maxGapMs < 400);
+
+  const quiet = [];
+  await assert.rejects(readAll(watchBody(bodyOf([], 1, true).stream, 60, null, (e) => quiet.push(e))));
+  assert.equal(quiet.length, 1);
+  assert.equal(quiet[0].how, "quiet");
+  assert.ok(quiet[0].maxGapMs >= 50);
+
+  const cancelled = [];
+  const r = watchBody(bodyOf(["a"], 1, true).stream, 500, null, (e) => cancelled.push(e)).getReader();
+  await r.read();
+  await r.cancel("done");
+  assert.deepEqual(cancelled.map((e) => e.how), ["cancelled"]);
 });

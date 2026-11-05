@@ -26,30 +26,45 @@ export function isStall(err) {
 }
 
 // A copy of `body` that errors with a StalledError if a read waits longer than stallMs. The timer
-// runs only while a read is waiting, so a slow reader never looks like a quiet service.
-export function watchBody(body, stallMs, onStall) {
+// runs only while a read is waiting, so a slow reader never looks like a quiet service. onEnd gets
+// the longest wait and how the body ended (done, quiet, error, cancelled), once.
+export function watchBody(body, stallMs, onStall, onEnd) {
   const reader = body.getReader();
   let timer = null;
+  let maxGap = 0;
+  let ended = false;
+  const end = (how) => {
+    if (ended) return;
+    ended = true;
+    if (onEnd) onEnd({ maxGapMs: maxGap, how });
+  };
   const disarm = () => {
     clearTimeout(timer);
     timer = null;
   };
   return new ReadableStream({
     async pull(ctl) {
+      const waitFrom = Date.now();
       timer = setTimeout(() => {
         timer = null;
+        maxGap = Math.max(maxGap, Date.now() - waitFrom);
         const err = new StalledError(stallMs);
         if (onStall) onStall(err);
+        end("quiet");
         ctl.error(err);
         reader.cancel(err).catch(() => {});
       }, stallMs);
       try {
         const { done, value } = await reader.read();
         disarm();
-        if (done) ctl.close();
-        else ctl.enqueue(value);
+        if (!ended) maxGap = Math.max(maxGap, Date.now() - waitFrom);
+        if (done) {
+          end("done");
+          ctl.close();
+        } else ctl.enqueue(value);
       } catch (e) {
         disarm();
+        end("error");
         try {
           ctl.error(e);
         } catch {}
@@ -57,6 +72,7 @@ export function watchBody(body, stallMs, onStall) {
     },
     cancel(reason) {
       disarm();
+      end("cancelled");
       return reader.cancel(reason);
     },
   });
@@ -77,7 +93,14 @@ export function stallFetch({ stallMs, log = () => {}, baseFetch = globalThis.fet
     }
     if (!res.body) return res;
     const requestId = res.headers.get("request-id");
-    const body = watchBody(res.body, stallMs, () => log({ event: "response_went_quiet", request_id: requestId, silent_ms: stallMs, ms: Date.now() - t0 }));
+    const headersMs = Date.now() - t0;
+    // Per request, numbers only, so the limits can be checked against real data.
+    const body = watchBody(
+      res.body,
+      stallMs,
+      () => log({ event: "response_went_quiet", request_id: requestId, silent_ms: stallMs, ms: Date.now() - t0 }),
+      ({ maxGapMs, how }) => log({ event: "response_timing", request_id: requestId, status: res.status, headers_ms: headersMs, max_gap_ms: maxGapMs, total_ms: Date.now() - t0, end: how }),
+    );
     return new Response(body, { status: res.status, statusText: res.statusText, headers: res.headers });
   };
 }
