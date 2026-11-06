@@ -65,7 +65,7 @@ The adapter contract's events, unchanged in meaning, plus fields the panel may i
 | `text` | `{ text }` |
 | `tool_call` | `{ id, name, input }`, sent once the model's whole answer is in, only for calls that will run: never for a call from an attempt declined before a fallback or an answer cut off mid-call, and never for the hand-over tool (research R9, amended 2026-10-30). A call the turn's failure leaves answered with a fixed text ("That call didn't run." or "That call didn't finish, so it may or may not have changed the project.") still got its `tool_call` and gets no `tool_result` (amended 2026-10-30, review S1); a call to a tool that isn't available gets both |
 | `tool_result` | `{ id, name, ok, json?, text?, images[] }` |
-| `turn_end` | `{ ok, cost_usd, wait_ms, first_event_ms, total_ms, kind, runtime, model, effort, settings_hash, tokens, other_model, steps, skill, prompt_hash }`. `steps`: model requests in the turn (12 when it hit the limit); `skill`: the active skill after the turn (null if none loaded); `prompt_hash`: the lesson prompt's hash (data-model). `cost_usd` is `null` when a request was billed but its counts never came, and `0` when no request was made |
+| `turn_end` | `{ ok, cost_usd, wait_ms, first_event_ms, total_ms, kind, runtime, model, effort, settings_hash, tokens, other_model, steps, skill, prompt_hash }`. `steps`: model requests in the turn (12 when it hit the limit); `skill`: the active skill after the turn (null if none loaded); `prompt_hash`: the lesson prompt's hash (data-model). `cost_usd` is `null` when a request attempt received headers but its counts never came, and `0` when no attempt received headers (none made, or none answered); see › Cost of a failed request (amended 2026-11-05) |
 | `error` | `{ kind, message, during? }` (`during: "start"` only on the start command's own errors, above) |
 | `key_status` | `{ status: "works" \| "rejected" \| "out_of_credit" \| "offline" \| "no_key" }` |
 | `skill_loaded` | `{ skill }` on a hand-over, by the hand-over tool or by a message starting with another mentor skill's command (log only) |
@@ -123,8 +123,64 @@ Every message is fixed text chosen by kind, with no status code, path, tool name
 doesn't list (400, 404, 413 …) and any error in the helper that isn't from the service or the
 network (logged as `internal_error`). Only network errors are `offline` (amended 2026-10-30).
 
+*Amended 2026-11-05 (after T068, `431e556`; **pending** the panel-builder's error-kind change, not
+yet merged):* `offline` is only for a request that never made a connection (refused, no route, no
+DNS, a dropped network). A connection that was made but got no answer ends as `service_busy`: no
+headers after the SDK's retries, or an answer that went quiet (see › Stalls). As merged at
+`431e556`, an answer that went quiet is already `service_busy`, but no headers after the retries is
+still `offline` (the SDK's `APIConnectionTimeoutError`); that changes with the pending work. The
+messages don't change.
+
 A turn that hits 12 model steps ends with `turn_end { ok: false }` and no `error`, as on B1; the
 panel's existing "The mentor stopped before finishing. Try again." covers it.
+
+## Stalls and request timing (added 2026-11-05, after T068, `431e556`)
+
+Code: `panel/helper/lib/stall.mjs` (`stallFetch`, `watchBody`) and `lib/loop.mjs` (`createClient`,
+`step`). Only silence is limited, never how long an answer takes.
+
+- **Waiting for headers**: 20 s plus the request body's size at 50 kB/s (`headersLimitMs`), set per
+  request, since the wait includes uploading the body and frames travel in the history as base64.
+  A 5 MB body gets 120 s. A request with no headers in that time is retried by the SDK, twice (its
+  `maxRetries: 2`, which also covers 429, 5xx and connection errors), each attempt with the same
+  limit. A small request that gets nothing back fails in about a minute.
+- **Waiting between bytes**: 30 s once headers have come. Pings count as bytes (the SDK drops them
+  before any event reaches the loop, so the helper watches the raw body). After 30 s of silence
+  the body fails and that connection is closed.
+- **Going again**: an answer that went quiet before any of its words are on screen is sent once
+  more, the same bytes, on a new connection (`QUIET_RETRIES = 1`). No tool has run for it (tools
+  run only after a whole answer). Once words from that request are on screen, a quiet answer is
+  never sent again (a second answer would repeat them): the turn fails with `service_busy`, as a
+  connection dropped mid-answer fails the turn.
+- **The turn limit still holds**: the 5-minute turn timer (`turn_timeout_ms`) is the loop's, not
+  any request's, so the SDK's retries and the one re-send all run inside it. A big body's retries
+  can reach it; then the turn ends `timeout`.
+
+**Log lines** (stderr, JSON, each with `at`; ids, codes and timings only, never text):
+
+| Event | Fields | When |
+|---|---|---|
+| `response_timing` | `request_id`, `status`, `headers_ms`, `max_gap_ms` (longest wait for a byte), `total_ms`, `end` (`done`, `quiet`, `error` or `cancelled`) | Once per response that had a body, when the body ends |
+| `request_no_headers` | `retry` (the SDK's retry count for that attempt, or null), `ms`, `name`, `code` (the error's and its cause's, e.g. `APIConnectionTimeoutError`, `ECONNREFUSED`) | Each attempt that ended before headers: the SDK's header wait, a failed connection, or the turn's abort |
+| `response_went_quiet` | `request_id`, `silent_ms` (the limit), `ms` (since the request went out) | An answer hit the 30 s silence limit |
+| `request_sent_again` | `turn`, `attempt`, `started` (headers had come) | The one re-send after a quiet answer |
+| `turn_timeout` | `turn`, `step`, `waiting_on` (`start`: before the first request; `request`; `server`: an `ae-mentor` call), `started`, `shown` (words from the current request on screen) | The 5-minute turn limit fired |
+
+A quiet answer that ends the turn also logs `service_error` with its kind, as other service errors
+do.
+
+**Cost of a failed request.** "Unknown is null, never 0" still holds, and these two rules say what
+counts as unknown:
+
+- An attempt that **never received headers** isn't counted in `cost_usd` (it adds nothing). This is
+  an assumption, not checked: no source says whether a request abandoned before headers is billed.
+  So a turn whose only attempts got no headers reports `0`, which may be low.
+- An attempt that **received headers and then went quiet** (or dropped) may be billed and its
+  counts never came, so the turn's `cost_usd` is `null`, even when its re-send then succeeds.
+  Eval results count such turns in `cost_unknown_turns` (data-model).
+
+"Received headers" means a successful response's headers (the SDK's `connect` event); an error
+status such as 429 or 529 isn't counted, as before.
 
 ## Guarantees
 
@@ -139,6 +195,7 @@ panel's existing "The mentor stopped before finishing. Try again." covers it.
   names, codes, kinds and the service's own error text (scrubbed, cut to 300 characters) for the
   builder. The helper never logs the learner's words, a tool's input or a response's text itself;
   the service's error text is logged as it came, and could quote part of a request. The service's
-  `input_transformations` are logged as type, reason and path only.
+  `input_transformations` are logged as type, reason and path only. The request timing and stall lines
+  (above, added 2026-11-05) hold request ids, statuses, error names and codes, and timings only.
 - The helper removes every `ANTHROPIC_*` variable from its own environment at start (research R3).
 - `stop()` leaves no helper and no `ae-mentor` process running.
