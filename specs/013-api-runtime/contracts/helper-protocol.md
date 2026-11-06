@@ -123,13 +123,13 @@ Every message is fixed text chosen by kind, with no status code, path, tool name
 doesn't list (400, 404, 413 …) and any error in the helper that isn't from the service or the
 network (logged as `internal_error`). Only network errors are `offline` (amended 2026-10-30).
 
-*Amended 2026-11-05 (after T068, `431e556`; **pending** the panel-builder's error-kind change, not
-yet merged):* `offline` is only for a request that never made a connection (refused, no route, no
-DNS, a dropped network). A connection that was made but got no answer ends as `service_busy`: no
-headers after the SDK's retries, or an answer that went quiet (see › Stalls). As merged at
-`431e556`, an answer that went quiet is already `service_busy`, but no headers after the retries is
-still `offline` (the SDK's `APIConnectionTimeoutError`); that changes with the pending work. The
-messages don't change.
+*Amended 2026-11-05 (after T068; merged 2026-11-06, `lib/reach.mjs`):* only a request that never reached
+the service is `offline`: no DNS answer, refused, no route, a connect timeout, or a TLS handshake that never
+finished. Once the request has gone out on an open connection, a missing response (no headers within the
+helper's limit, the SDK's `APIConnectionTimeoutError` included), a connection closed before headers, or a
+connection dropped mid-answer is `service_busy`. With retries, the last attempt decides. A dropped network
+after the request went out can't be told from the service closing it, so it's `service_busy`; the next try
+fails before connecting and says `offline`. The messages don't change.
 
 A turn that hits 12 model steps ends with `turn_end { ok: false }` and no `error`, as on B1; the
 panel's existing "The mentor stopped before finishing. Try again." covers it.

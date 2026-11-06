@@ -291,10 +291,13 @@ service text. Service text that reaches a log is scrubbed of anything shaped lik
 `offline`. The plan sent every non-API error there, which would tell a learner to check their
 internet for a bug in the helper. The billing row stays provisional until T038.
 
-*Amended 2026-11-05 (after T068; **pending** the panel-builder's error-kind change):* a connection
-that was made but got no answer is `service_busy`, not `offline`: no headers after the SDK's
-retries (`APIConnectionTimeoutError`, today still `offline`), or an answer that went quiet for 30 s
-(already `service_busy` at `431e556`). `offline` stays for a request that never made a connection.
+*Amended 2026-11-05 (T068 follow-up, builder's decision; merged 2026-11-06):* the SDK reports its own
+timeout and undici's connect timeout as the same cause-less `APIConnectionTimeoutError`, so the helper
+records per attempt whether the request reached the service (undici's diagnostics channels,
+`lib/reach.mjs`). Reached the service, then no headers in time, closed before headers, or dropped
+mid-answer: `service_busy`. Never reached it (DNS, refused, no route, connect timeout, TLS never
+finished): `offline`. A dropped connection mid-answer can't be told from the service closing it; if the
+network really is down, the next try fails before connecting and says `offline`.
 See R3's amendment and contracts/helper-protocol.md › Stalls and request timing.
 
 **T016's answers from the real service (2026-11-03, Opus 5.5, helper settings `2a0eb1d34662`):**
