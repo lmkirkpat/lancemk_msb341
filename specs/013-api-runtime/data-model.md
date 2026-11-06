@@ -20,6 +20,10 @@ everything not listed here.
 | `max_tokens` | integer 1–128000 | 32000 | Per request (added in the build) |
 | `fallbacks` | `"default"` \| null | `"default"` (R10) | Forced to null on Haiku 5.5. Needs beta `server-side-fallback-2026-07-01` when set |
 
+*Amended 2026-11-05 (T068, `431e556`):* `turn_timeout_ms` is the turn's limit only, no longer each
+request's SDK timeout. Requests get their own limits in code, not settings: 20 s plus the body at
+50 kB/s for headers, 30 s between bytes (research R3).
+
 Every field is required and an unknown field is refused. Always sent, whatever the settings: beta
 `thinking-binding-controls-2026-08-01` with `thinking.block_binding` (R10, FR-021a). After D2 (T060),
 Opus 5.5 and Sonnet 5.5 also send beta `mid-conversation-tool-changes-2026-07-01`.
@@ -97,6 +101,12 @@ cache_read, output }`, `other_model` (true when the answer came from a model oth
 `start_ms` come from the adapter's `turn_end` (it adds them; the helper's `turn_end` carries
 neither, contracts/helper-protocol.md, amended 2026-10-30).
 
+*Amended 2026-11-05 (after T068):* on A, the entry's `cost_usd` follows the helper's rule: `null`
+when an attempt received headers and its counts never came (including a quiet attempt whose re-send
+succeeded), and nothing counted for an attempt that never received headers, so a turn with only
+such attempts logs `0` (unverified whether they're billed). Contracts/helper-protocol.md › Stalls
+and request timing.
+
 ## Eval results: new fields (FR-029, FR-030, FR-033)
 
 Top level: `runtime`, `model`, `effort`, `settings_hash`, `prompt_hash` per skill, `other_model_turns`
@@ -104,7 +114,8 @@ Top level: `runtime`, `model`, `effort`, `settings_hash`, `prompt_hash` per skil
 Old files without `runtime` are B1.
 
 *Amended 2026-10-30 (as merged, `product/evals/lib/ab.mjs` `resultFields`):* also `cost_unknown_turns`
-(turns whose cost the service never reported), `non_baseline` (true for a `--settings` run, which is
+(turns whose cost the service never reported; from 2026-11-05 this includes a turn with a quiet
+attempt that had received headers, even if its re-send succeeded), `non_baseline` (true for a `--settings` run, which is
 never picked as a baseline) and `settings_file` (its name, only on such a run). B1 runs now write
 `runtime: "b1"`. Each A case also records its `allowlist` result.
 

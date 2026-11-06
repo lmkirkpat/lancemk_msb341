@@ -64,6 +64,37 @@ the SDK also reads others, such as `ANTHROPIC_LOG` (its own logging) and `ANTHRO
 (extra headers on every request), and the helper is configured only by its start command and
 `settings.json` (`panel/helper/lib/key.mjs` `scrubEnv`).
 
+*Amended 2026-11-05 (T068, merged `431e556`):* the SDK's `timeout` is no longer the turn timeout. It
+covers only the wait for response headers, and undici's own limits are 5 minutes, so an answer that
+went silent after its headers held the learner until the turn limit (the easing run's turn
+timeouts, cause still not found). The limits now:
+
+- **Headers**: 20 s plus the body at 50 kB/s (a 400 kbps uplink, chosen low on purpose: too low
+  only makes a stalled big request slower to notice, 120 s at 5 MB; too high would cut off a
+  healthy slow upload and strand the lesson, since every later request carries the frame again).
+  The SDK retries a missing-headers attempt twice (`maxRetries: 2`, unchanged).
+- **Between bytes**: 30 s, pings counted, watched on the raw body by a custom `fetch`
+  (`lib/stall.mjs`), which closes the connection when it fires.
+- **One re-send** on a new connection when the answer went quiet before any of its words were on
+  screen; none once words are on screen.
+- **The 5-minute turn limit** stays the loop's, so the retries and the re-send run inside it.
+
+Details, log lines and the cost rule: contracts/helper-protocol.md › Stalls and request timing.
+
+**Live timing behind the limits** (`discovery/usage-notes/api-runtime.md` › Request timing, live;
+2026-11-04, 258 requests, none stalled):
+
+| | p50 | p95 | Longest |
+|---|---|---|---|
+| Time to headers | 1.1 s | 2.2 s | 4.7 s |
+| Longest gap between bytes, per request | 0.4 s | 1.6 s | 4.2 s |
+
+Both limits sit well above it. What it doesn't cover: bodies were 99 kB at most and answers took up
+to about 10 s, so no real frame, no slow uplink and no long silent think; one quiet hour on one
+network. Pings arrived in both silent thinking waits checked. The stall handling is proven only
+against the fake service. Every request now logs `response_timing` (`headers_ms`, `max_gap_ms`), so
+real lessons can re-check the limits.
+
 **Why**: the SDK covers streaming, retries on 429/5xx and connection errors, and typed errors
 (`AuthenticationError`, `PermissionDeniedError`, `RateLimitError`, `InternalServerError`,
 `APIConnectionError`, `APIConnectionTimeoutError`), which are where FR-022 and FR-027 go wrong
@@ -260,6 +291,12 @@ service text. Service text that reaches a log is scrubbed of anything shaped lik
 `offline`. The plan sent every non-API error there, which would tell a learner to check their
 internet for a bug in the helper. The billing row stays provisional until T038.
 
+*Amended 2026-11-05 (after T068; **pending** the panel-builder's error-kind change):* a connection
+that was made but got no answer is `service_busy`, not `offline`: no headers after the SDK's
+retries (`APIConnectionTimeoutError`, today still `offline`), or an answer that went quiet for 30 s
+(already `service_busy` at `431e556`). `offline` stays for a request that never made a connection.
+See R3's amendment and contracts/helper-protocol.md › Stalls and request timing.
+
 **T016's answers from the real service (2026-11-03, Opus 5.5, helper settings `2a0eb1d34662`):**
 
 1. **Betas together: accepted.** Binding, updates and fallback went on one request, on all 7 requests of a `next-mentor` lesson and on the easing fixture turn.
@@ -339,6 +376,10 @@ set's named B1 baseline. `--changed`'s hash adds `panel/helper/**` (except tests
 
 A model or token kind missing from the table makes `cost_usd: null` ("unknown"), never 0. A
 lesson's cost is the sum of its turns. Thinking tokens bill as output.
+
+*Amended 2026-11-05 (after T068):* a request attempt that never received headers isn't counted
+(unverified whether it's billed); one that received headers then went quiet makes the turn's cost
+`null`. Contracts/helper-protocol.md › Stalls and request timing › Cost of a failed request.
 
 ## R14. B1 stays as it is (FR-037, SC-009)
 
