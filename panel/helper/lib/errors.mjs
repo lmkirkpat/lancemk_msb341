@@ -40,11 +40,18 @@ function isBilling(err) {
 
 // An error thrown while calling the service → its kind (research R10's table). The SDK has
 // already retried 429, 5xx and connection errors twice by the time one reaches here.
-export function classify(err) {
+//
+// offline is only for a request that never reached the service: no DNS answer, refused, no route,
+// a connect timeout, a TLS handshake that never finished. Once the request went out on an open
+// connection, anything that goes wrong is the service's side as far as the learner can tell, so it's
+// service_busy (builder's decision, 2026-11-05). reached comes from the client's last attempt
+// (loop.mjs lastReach); the SDK's connection errors, its timeout included, can't say on their own.
+export function classify(err, { reached = false } = {}) {
   if (!err) return "service_busy";
   if (err.code === "NO_KEY") return "not_signed_in";
   if (isStall(err)) return "service_busy"; // headers came, so the connection worked; then silence
-  if (err instanceof Anthropic.APIConnectionError) return "offline"; // includes the timeout subclass
+  // Includes the timeout subclass: no headers in time, or (from undici) no connection in time.
+  if (err instanceof Anthropic.APIConnectionError) return reached ? "service_busy" : "offline";
   if (err instanceof Anthropic.APIError) {
     if (isBilling(err)) return "out_of_credit";
     const s = err.status;
@@ -59,10 +66,12 @@ export function classify(err) {
     return "service_busy";
   }
   // A connection that dropped mid-answer reaches here as the SDK's plain error ("terminated")
-  // over undici's socket error; that's offline. Anything else is a fault in the helper, not the
-  // learner's network: the start_failed message (reopen, check setup), and the loop logs it as
-  // internal_error so it's never mistaken for a connection problem.
-  return isNetworkError(err) ? "offline" : "start_failed";
+  // over undici's socket error. Every failure before headers comes wrapped as an APIConnectionError
+  // (above), so this one came after the headers: the connection was made, so service_busy. If the
+  // learner's network did go down, trying again fails before connecting and says offline. Anything
+  // else is a fault in the helper, not the network: the start_failed message (reopen, check setup),
+  // and the loop logs it as internal_error so it's never mistaken for a connection problem.
+  return isNetworkError(err) ? "service_busy" : "start_failed";
 }
 
 const NET_CODE = /^(?:ECONNRESET|ECONNREFUSED|ECONNABORTED|ETIMEDOUT|EPIPE|ENOTFOUND|EAI_AGAIN|ENETUNREACH|ENETDOWN|EHOSTUNREACH|UND_ERR_[A-Z_]+)$/;

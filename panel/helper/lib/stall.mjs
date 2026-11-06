@@ -4,6 +4,8 @@
 // bytes, pings included (the SDK drops pings before any event reaches the loop), and fails the body
 // when none arrive for stallMs, which also closes that connection. Holds no text; logs ids only.
 
+import { trackReach } from "./reach.mjs";
+
 const CODE = "KNACK_STALLED";
 
 export class StalledError extends Error {
@@ -79,16 +81,21 @@ export function watchBody(body, stallMs, onStall, onEnd) {
 }
 
 // A fetch for the SDK client. Requests go out untouched; only the response body is watched.
-export function stallFetch({ stallMs, log = () => {}, baseFetch = globalThis.fetch }) {
+// reach, if given, is the caller's object: reach.last is set to each attempt as it starts, and its
+// `reached` says whether the request reached the service (lib/reach.mjs). The SDK sends one
+// attempt at a time per request, so after a failure reach.last is the attempt that failed.
+export function stallFetch({ stallMs, log = () => {}, baseFetch = globalThis.fetch, reach = null }) {
   return async (url, init) => {
     const t0 = Date.now();
     const retry = new Headers(init && init.headers).get("x-stainless-retry-count");
+    const attempt = { reached: false };
+    if (reach) reach.last = attempt;
     let res;
     try {
-      res = await baseFetch(url, init);
+      res = await trackReach(attempt, () => baseFetch(url, init));
     } catch (e) {
       // What the SDK's own timeout or a connection failure looks like, before its retry.
-      log({ event: "request_no_headers", retry: retry === null ? null : Number(retry), ms: Date.now() - t0, name: (e && e.name) || null, code: (e && e.cause && e.cause.code) || null });
+      log({ event: "request_no_headers", retry: retry === null ? null : Number(retry), ms: Date.now() - t0, name: (e && e.name) || null, code: (e && e.cause && e.cause.code) || null, reached: attempt.reached });
       throw e;
     }
     if (!res.body) return res;
