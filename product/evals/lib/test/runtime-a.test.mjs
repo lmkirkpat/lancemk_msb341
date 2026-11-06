@@ -8,7 +8,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { mapTurn, takeEvalKey, helperEnv, createCaseMentor, helperHashFiles, KEY_VAR, startHelper } from "../runtime-a.mjs";
+import { mapTurn, takeEvalKey, helperEnv, createCaseMentor, helperHashFiles, KEY_VAR, startHelper, scrubKey, RUNNER_TIMEOUT, STDERR_CAP } from "../runtime-a.mjs";
 import { startFakeService, reply, text, thinking, toolUse } from "../../../../panel/helper/test/fake-service.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -111,7 +111,11 @@ test("createCaseMentor: new_session starts a fresh helper; costs add up; a null 
 
 test("createCaseMentor: a helper that won't start ends the turn with its kind", async () => {
   const m = createCaseMentor({ repo: REPO, home: "/tmp/x", startHelper: async () => Promise.reject(Object.assign(new Error("no"), { kind: "start_failed" })) });
-  assert.deepEqual(await m.turn("hi"), { events: [], ok: false, error: "start_failed" });
+  const r = await m.turn("hi");
+  assert.equal(r.ok, false);
+  assert.equal(r.error, "start_failed");
+  assert.deepEqual(r.events, []);
+  assert.equal(r.stderr, "no");
 });
 
 test("the real helper on the fake service: two turns map to events and the cost is a number", async () => {
@@ -175,4 +179,108 @@ test("helperHashFiles: the helper's code, texts, the settings file in use and th
 
 test("startHelper: a start the helper refuses rejects with its kind", async () => {
   await assert.rejects(startHelper({ repo: REPO, home: os.tmpdir(), fixtureEnv: {}, settingsFile: "/nonexistent/settings.json", key: "sk-ant-api03-x_abcdefghijklmnop" }), (e) => e.kind === "start_failed");
+});
+
+// ---------- T068 follow-ups: the runner's own limit, and the helper's log on a failed turn ----------
+
+const FAKE_KEY = "sk-ant-api03-FAKEKEY_abcdefghij";
+
+// A stand-in helper: ready on start; on `send`, "hang" never answers, "fail" ends the turn not ok.
+// Its stderr carries log lines, a key-shaped string (as if an upstream message had leaked one) and
+// 6000 characters of filler first, so the cap and the scrub both have work to do.
+function fakeHelperDir() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "fake-helper-"));
+  fs.writeFileSync(
+    path.join(dir, "main.mjs"),
+    `import readline from "node:readline";
+const out = (o) => process.stdout.write(JSON.stringify(o) + "\\n");
+readline.createInterface({ input: process.stdin }).on("line", (l) => {
+  const c = JSON.parse(l);
+  if (c.type === "start") { out({ type: "ready", model: "m", effort: "e", settings_hash: "s" }); }
+  else if (c.type === "send") {
+    process.stderr.write("x".repeat(6000) + "\\n");
+    process.stderr.write(JSON.stringify({ event: "response_timing", ms: 1234 }) + "\\n");
+    process.stderr.write(JSON.stringify({ event: "stall", note: "${FAKE_KEY}" }) + "\\n");
+    if (c.text === "fail") { out({ type: "error", kind: "stall" }); out({ type: "turn_end", ok: false, cost_usd: 0.01 }); }
+  } else if (c.type === "stop") process.exit(0);
+});
+`,
+  );
+  return dir;
+}
+
+test("scrubKey: the exact key and anything key-shaped are replaced", () => {
+  assert.equal(scrubKey(`a ${FAKE_KEY} b sk-ant-other_ONE-12345 c`, FAKE_KEY), "a [key] b [key] c");
+  assert.equal(scrubKey(undefined, FAKE_KEY), "");
+});
+
+test("startHelper: the runner's own wait gets the runner_timeout kind, not the helper's `timeout`", async () => {
+  assert.equal(RUNNER_TIMEOUT, "runner_timeout");
+  const dir = fakeHelperDir();
+  try {
+    const h = await startHelper({ repo: REPO, home: os.tmpdir(), key: FAKE_KEY, helperDir: dir, turnWaitMs: 400 });
+    const r = await h.send("hang");
+    assert.equal(r.ok, false);
+    assert.equal(r.error, "runner_timeout");
+    await h.stop();
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a failed A turn keeps the helper's log in the results, scrubbed and capped; a good turn adds nothing", async () => {
+  const dir = fakeHelperDir();
+  try {
+    const m = createCaseMentor({
+      repo: REPO,
+      home: os.tmpdir(),
+      key: FAKE_KEY,
+      startHelper: (o) => startHelper({ ...o, helperDir: dir, turnWaitMs: 400 }),
+    });
+    const bad = await m.turn("fail");
+    assert.equal(bad.ok, false);
+    assert.equal(bad.error, "stall");
+    assert.ok(bad.stderr.length <= STDERR_CAP);
+    const f = m.failedTurns;
+    assert.equal(f.length, 1);
+    assert.deepEqual(Object.keys(f[0]).sort(), ["error", "helper_stderr", "turn"]);
+    assert.equal(f[0].turn, 1);
+    assert.equal(f[0].error, "stall");
+    // The helper's own log lines reach the results (the end of the log is kept).
+    assert.match(f[0].helper_stderr, /response_timing/);
+    assert.match(f[0].helper_stderr, /"event":"stall"/);
+    assert.ok(f[0].helper_stderr.length <= STDERR_CAP);
+    // The key never reaches the results, by the exact string or its shape.
+    const all = JSON.stringify([bad, f]);
+    assert.equal(all.includes("sk-ant-"), false);
+    assert.equal(all.includes("FAKEKEY"), false);
+    // A runner timeout is a failed turn with its own label.
+    const hung = await m.turn("hang");
+    assert.equal(hung.error, "runner_timeout");
+    assert.equal(m.failedTurns.length, 2);
+    assert.equal(m.failedTurns[1].turn, 2);
+    await m.stop();
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a case with no failed turn has no failed_turns", async () => {
+  const fake = async () => ({ ready: { model: "m" }, send: async () => ({ events: [], ok: true, error: null, cost_usd: 0.1, end: null }), stop: async () => {} });
+  const m = createCaseMentor({ repo: REPO, home: "/tmp/x", key: "k", startHelper: fake });
+  await m.turn("hi");
+  assert.deepEqual(m.failedTurns, []);
+});
+
+test("closeCase returns failed_turns only when a turn failed, and each runner writes them to its results", async () => {
+  const ab = await import("../ab.mjs");
+  const mk = (failedTurns) => ({ stop: async () => {}, info: null, requestLog: path.join(os.tmpdir(), "no-such-request-log.jsonl"), cost: 0, costUnknownTurns: 0, otherModelTurns: 0, promptHashes: {}, failedTurns });
+  const none = await ab.closeCase({ repo: REPO, mentor: mk([]), learnerTexts: [] });
+  assert.equal("failed_turns" in none, false);
+  const one = await ab.closeCase({ repo: REPO, mentor: mk([{ turn: 2, error: "stall", helper_stderr: "x" }]), learnerTexts: [] });
+  assert.deepEqual(one.failed_turns, [{ turn: 2, error: "stall", helper_stderr: "x" }]);
+  for (const set of ["easing", "key-types", "speed-graph", "offset", "anchor", "null-parenting"]) {
+    const src = fs.readFileSync(path.join(REPO, "product", "evals", set, "run.mjs"), "utf8");
+    assert.match(src, /failed_turns: fin\.failed_turns/, set);
+  }
 });

@@ -16,6 +16,19 @@ import readline from "node:readline";
 export const KEY_VAR = "KNACK_EVAL_API_KEY";
 const TURN_WAIT_MS = 6 * 60 * 1000; // the helper's own turn limit is 5 minutes
 const START_WAIT_MS = 30 * 1000;
+// The error kind when this runner's own wait ran out. The helper's own limits report `timeout` (and
+// its stall kinds); a different label says which side gave up (T068).
+export const RUNNER_TIMEOUT = "runner_timeout";
+// The most helper log a failed turn puts in the results file.
+export const STDERR_CAP = 4000;
+
+// Text safe to write to a results file: the key (exact, and anything key-shaped) is replaced. The
+// helper's log is scrubbed already (panel/helper/lib/errors.mjs); this is the second guard.
+export function scrubKey(text, key) {
+  let t = String(text ?? "");
+  if (key && key.length >= 8) t = t.split(key).join("[key]");
+  return t.replace(/sk-ant-[A-Za-z0-9_-]+/g, "[key]");
+}
 
 export const helperDirOf = (repo) => path.join(repo, "panel", "helper");
 
@@ -82,7 +95,7 @@ export function mapTurn(helperEvents) {
 
 // → { ready, send(text, kind), stop(), stderr() }. Rejects with an Error whose `kind` is the
 // helper's error kind when it answers `start` with an error instead of `ready`.
-export async function startHelper({ repo, home, fixtureEnv, requestLog, key, settingsFile, baseUrl, sessionId, mcpConfig, skillsDir, helperDir }) {
+export async function startHelper({ repo, home, fixtureEnv, requestLog, key, settingsFile, baseUrl, sessionId, mcpConfig, skillsDir, helperDir, turnWaitMs }) {
   const dir = helperDir || helperDirOf(repo);
   const proc = spawn(process.execPath, [path.join(dir, "main.mjs")], { cwd: dir, env: helperEnv(), stdio: ["pipe", "pipe", "pipe"] });
   const events = [];
@@ -119,7 +132,7 @@ export async function startHelper({ repo, home, fixtureEnv, requestLog, key, set
           if (exited) return done(() => reject(Object.assign(new Error("the helper exited"), { kind: "process_exited", partial: events.slice(from) })));
         },
       };
-      const timer = setTimeout(() => done(() => reject(Object.assign(new Error("the helper didn't answer in time"), { kind: "timeout", partial: events.slice(from) }))), ms);
+      const timer = setTimeout(() => done(() => reject(Object.assign(new Error("the helper didn't answer in time"), { kind: RUNNER_TIMEOUT, partial: events.slice(from) }))), ms);
       const done = (fn) => {
         clearTimeout(timer);
         const j = waiters.indexOf(w);
@@ -169,27 +182,30 @@ export async function startHelper({ repo, home, fixtureEnv, requestLog, key, set
     got = await until((e) => e.type === "ready" || e.type === "error", 0, START_WAIT_MS);
   } catch (e) {
     await stop();
-    throw Object.assign(new Error(`the helper didn't start: ${e.message}. ${stderr.slice(-300)}`), { kind: e.kind || "start_failed" });
+    throw Object.assign(new Error(scrubKey(`the helper didn't start: ${e.message}. ${stderr.slice(-300)}`, key)), { kind: e.kind || "start_failed" });
   }
   const last = got.at(-1);
   if (last.type === "error") {
     await stop();
-    throw Object.assign(new Error(`the helper's start failed (${last.kind}). ${stderr.slice(-300)}`), { kind: last.kind });
+    throw Object.assign(new Error(scrubKey(`the helper's start failed (${last.kind}). ${stderr.slice(-300)}`, key)), { kind: last.kind });
   }
 
   return {
     ready: last,
     stderr: () => stderr,
     // → mapTurn()'s result. A helper that dies or hangs mid-turn gives ok false with that kind.
+    // A turn that fails also carries `stderr`: the end of the helper's log, key-scrubbed and capped.
     async send(text, kind = "typed") {
       const from = events.length;
       cmd({ type: "send", text, kind });
+      const failed = (r) => ({ ...r, stderr: scrubKey(stderr, key).slice(-STDERR_CAP) });
       try {
-        const got = await until((e) => e.type === "turn_end", from, TURN_WAIT_MS);
-        return { ...mapTurn(got), raw: got };
+        const got = await until((e) => e.type === "turn_end", from, turnWaitMs || TURN_WAIT_MS);
+        const r = { ...mapTurn(got), raw: got };
+        return r.ok ? r : failed(r);
       } catch (e) {
         const r = mapTurn(e.partial || []);
-        return { ...r, ok: false, error: e.kind || "process_exited" };
+        return failed({ ...r, ok: false, error: e.kind || "process_exited" });
       }
     },
     stop,
@@ -210,6 +226,8 @@ export function createCaseMentor(opts) {
   let otherModelTurns = 0;
   const promptHashes = {};
   let info = null;
+  let turnNo = 0;
+  const failedTurns = [];
 
   return {
     requestLog,
@@ -228,8 +246,13 @@ export function createCaseMentor(opts) {
     get info() {
       return info;
     },
-    // → { events, ok, error }
+    // [{ turn, error, helper_stderr }] for each turn that failed, for the results file.
+    get failedTurns() {
+      return failedTurns.map((f) => ({ ...f }));
+    },
+    // → { events, ok, error } and, on a failed turn, `stderr` (the helper's log, scrubbed, capped).
     async turn(say, newSession = false) {
+      turnNo++;
       if (newSession && helper) {
         await helper.stop();
         helper = null;
@@ -238,7 +261,10 @@ export function createCaseMentor(opts) {
         try {
           helper = await begin({ repo: opts.repo, home: opts.home, fixtureEnv: opts.fixtureEnv, requestLog, key: opts.key, settingsFile: opts.settingsFile, baseUrl: opts.baseUrl });
         } catch (e) {
-          return { events: [], ok: false, error: e.kind || "start_failed" };
+          const error = e.kind || "start_failed";
+          const stderr = scrubKey(e.message, opts.key).slice(-STDERR_CAP);
+          failedTurns.push({ turn: turnNo, error, helper_stderr: stderr });
+          return { events: [], ok: false, error, stderr };
         }
         const r = helper.ready;
         info = { model: r.model, effort: r.effort, settings_hash: r.settings_hash, ...(r.settings_file ? { settings_file: r.settings_file } : {}) };
@@ -249,6 +275,11 @@ export function createCaseMentor(opts) {
       if (r.end) {
         if (r.end.other_model) otherModelTurns++;
         if (r.end.skill && r.end.prompt_hash) promptHashes[r.end.skill] = r.end.prompt_hash;
+      }
+      if (!r.ok) {
+        const stderr = scrubKey(r.stderr, opts.key).slice(-STDERR_CAP);
+        failedTurns.push({ turn: turnNo, error: r.error, helper_stderr: stderr });
+        return { events: r.events, ok: false, error: r.error, stderr };
       }
       return { events: r.events, ok: r.ok, error: r.error };
     },
