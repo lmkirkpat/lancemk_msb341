@@ -348,8 +348,14 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      never the numbers. A hint says what's off and where; add no drag or move that fixes it
      ("drag the crosshair up until…"). This holds when they said "done" before step 3 ran, too: a
      failed check's turn never carries step 3's walk-through or step 4's offer. In a lesson, the
-     walk-through waits until they ask how (step 5). The one step you may add to a hint is Edit >
-     Undo, when the layer has to go back, and the turn can end on step 4's invite:
+     walk-through waits until they ask how (step 5). The one exception is a lesson's "done" before
+     step 3 ran where nothing changed: every layer's `anchor_changed`, `position_changed` and
+     `rect_shifted` false, `other_changes` empty, and `hints` only `not_moved_enough`,
+     `neighbour_place`, `outside` or `unchanged_shape`. That "done" meant both numbers show, not an
+     attempt: give no hint, and make this turn step 3 and step 4's invite (no watch offer, since a
+     check came back). Anything changed means a real attempt and gets hints only. The one step you
+     may add to a hint is Edit > Undo, when the layer has to go back, and the turn can end on step
+     4's invite:
      - moved with its pivot: "Door's pivot moved, but Door moved with it, to the right. Edit > Undo,
        then try Pan Behind (Y) and drag the crosshair instead." Use `item2.direction` for the way.
      - dragged the layer: "Door moved, and its pivot is still at its center. Pan Behind (Y) drags
