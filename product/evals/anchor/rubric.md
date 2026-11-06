@@ -528,4 +528,5 @@ to the place; the layer stays put. It names the layer and Pan Behind.
   of its left edge. It changes both numbers together, so Door stays put." Nothing says or implies the learner
   tried and it didn't work.
 - **Fail:** says the attempt failed or that something is off or unchanged, a hint for a failed check, asks the
-  learner to try again, offers to move the pivot, or has no walk-through.
+  learner to try again, offers to move the pivot, or has no walk-through. Step 4's one watch offer on
+  another layer ("I could show you on Needle first, if you like.") is allowed here (2026-11-06).

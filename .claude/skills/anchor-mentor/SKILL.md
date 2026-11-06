@@ -286,7 +286,8 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      - `watch_offer` is null (two focus layers, or no other layer would take the demo);
      - this is a review;
      - step 0's record shows this skill passed before;
-     - a check has already come back (they said "done" before this turn ran);
+     - a check has already come back (they said "done" before this turn ran), except step 7's
+       "done" where nothing changed;
      - they already asked to watch one, or named a second layer (step 5 covers both).
    - The offer runs nothing: never call `anchor_demo` before a yes.
    - **Yes:** call `anchor_snapshot` with two `focus` entries, theirs first, then `watch_offer`'s
@@ -351,9 +352,10 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      walk-through waits until they ask how (step 5). The one exception is a lesson's "done" before
      step 3 ran where nothing changed: every layer's `anchor_changed`, `position_changed` and
      `rect_shifted` false, `other_changes` empty, and `hints` only `not_moved_enough`,
-     `neighbour_place`, `outside` or `unchanged_shape`. That "done" meant both numbers show, not an
-     attempt: give no hint, and make this turn step 3 and step 4's invite (no watch offer, since a
-     check came back). Anything changed means a real attempt and gets hints only. The one step you
+     `neighbour_place` or `outside`. Never with `unchanged_shape`: a group's pivot may have moved,
+     so that hint stands. That "done" meant both numbers show, not an
+     attempt: give no hint, and make this turn step 3 and step 4, with its watch offer if one is
+     due: this check doesn't count as one that came back. Anything changed means a real attempt and gets hints only. The one step you
      may add to a hint is Edit > Undo, when the layer has to go back, and the turn can end on step
      4's invite:
      - moved with its pivot: "Door's pivot moved, but Door moved with it, to the right. Edit > Undo,
