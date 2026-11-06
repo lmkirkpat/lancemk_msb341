@@ -105,6 +105,7 @@ test("stallFetch sends the request untouched and logs a failed attempt with no t
   assert.equal(logs[0].event, "request_no_headers");
   assert.equal(logs[0].retry, 2);
   assert.equal(logs[0].name, "AbortError");
+  assert.equal(logs[0].reached, false, "a stand-in fetch never reports reaching the service");
   assert.deepEqual(logs.slice(1).map((l) => l.event), ["response_timing"]);
   assert.doesNotMatch(JSON.stringify(logs), /the body/);
 });

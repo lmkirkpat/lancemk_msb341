@@ -56,7 +56,7 @@ const FAULTS = [
   ["offline", "offline"],
   ["start_failed", "start_failed"],
   ["refused", "refused"],
-  ["dropped", "offline"],
+  ["dropped", "service_busy"], // connected, then cut off: the service side, not the learner's network (2026-11-05)
 ];
 
 for (const [fault, kind] of FAULTS) {

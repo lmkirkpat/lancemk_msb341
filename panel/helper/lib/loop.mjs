@@ -58,7 +58,19 @@ export const QUIET_RETRIES = 1;
 // it can't be the request's too, or the retries never get a chance. At worst a small request that
 // gets nothing back takes about a minute to fail; a big one can reach the turn limit.
 export function createClient({ apiKey, baseURL, headersMs = HEADERS_MS, quietMs = QUIET_MS, log }) {
-  return new Anthropic({ apiKey, ...(baseURL ? { baseURL } : {}), maxRetries: 2, timeout: headersMs, fetch: stallFetch({ stallMs: quietMs, log }) });
+  const reach = { last: null };
+  const client = new Anthropic({ apiKey, ...(baseURL ? { baseURL } : {}), maxRetries: 2, timeout: headersMs, fetch: stallFetch({ stallMs: quietMs, log, reach }) });
+  reaches.set(client, reach);
+  return client;
+}
+
+// Whether the last request attempt made by a createClient client reached the service (lib/reach.mjs),
+// for classify: a timeout or connection error after the request went out is the service, not the
+// learner's network. → { reached } ({ reached: false } for a client made elsewhere, or none yet).
+const reaches = new WeakMap();
+export function lastReach(client) {
+  const r = reaches.get(client);
+  return { reached: Boolean(r && r.last && r.last.reached) };
 }
 
 // After a mid-output server-side fallback, only the text before the last fallback marker goes back
@@ -434,14 +446,14 @@ export function createLesson(opts) {
           if (live.started) costs.push(null); // billed, but the counts never came
           if (timedOut) throw new TurnAbort("timeout");
           const err = thrown && thrown.err !== undefined ? thrown.err : thrown;
-          const kind = classify(err);
+          const kind = classify(err, lastReach(client));
           // The service's own words help the builder find a rejected request; the log line is
           // scrubbed of the key (main.mjs), and nothing from it reaches the learner (FR-021, FR-027).
           const detail = err && err.error && err.error.error && typeof err.error.error.message === "string" ? err.error.error.message.slice(0, 300) : null;
           if (!(err instanceof Anthropic.APIError) && !isNetworkError(err) && !isStall(err)) {
             log({ event: "internal_error", name: (err && err.constructor && err.constructor.name) || typeof err, detail: String((err && err.message) || err).slice(0, 300) });
           } else {
-            log({ event: "service_error", kind, status: (err && err.status) || null, type: (err && err.type) || null, detail });
+            log({ event: "service_error", kind, status: (err && err.status) || null, type: (err && err.type) || null, reached: lastReach(client).reached, detail });
           }
           return fail(kind);
         }

@@ -1,6 +1,7 @@
 import { test, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import http from "node:http";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,7 +26,7 @@ afterEach(async () => {
   while (cleanups.length) await cleanups.pop()();
 });
 
-async function setup({ patch, noKey, wrapMcp, limits, service } = {}) {
+async function setup({ patch, noKey, wrapMcp, limits, service, baseURL } = {}) {
   const svc = await startFakeService(service);
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-loop-"));
   const state = path.join(home, "fixture-state.json");
@@ -35,7 +36,7 @@ async function setup({ patch, noKey, wrapMcp, limits, service } = {}) {
   const logs = [];
   const reqLogFile = path.join(home, "requests.jsonl");
   const lesson = createLesson({
-    getClient: async () => (noKey ? null : createClient({ apiKey: KEY, baseURL: svc.url, log: (e) => logs.push(e), ...limits })),
+    getClient: async () => (noKey ? null : createClient({ apiKey: KEY, baseURL: baseURL || svc.url, log: (e) => logs.push(e), ...limits })),
     mcp: wrapMcp ? wrapMcp(mcp) : mcp,
     settings,
     prices,
@@ -387,14 +388,14 @@ test("service faults: each kind, nothing kept from the failed turn", async () =>
   s.svc.script(failure(401, "authentication_error", "bad key"));
   assert.equal((await s.turn("/ease-mentor")).r.error_kind, "not_signed_in");
   assert.equal(s.lesson.messages.length, 0);
-  assert.deepEqual(s.logs.find((l) => l.event === "service_error"), { event: "service_error", kind: "not_signed_in", status: 401, type: "authentication_error", detail: "bad key" });
+  assert.deepEqual(s.logs.find((l) => l.event === "service_error"), { event: "service_error", kind: "not_signed_in", status: 401, type: "authentication_error", reached: true, detail: "bad key" });
   s.svc.script(drop([text("half of an answer"), text("never sent")], 1));
   const d = await s.turn("/ease-mentor");
-  assert.equal(d.r.error_kind, "offline");
+  assert.equal(d.r.error_kind, "service_busy", "the connection was made, so it isn't the learner's network");
   assert.equal(d.r.cost_usd, null, "the service had started answering: cost unknown");
   assert.ok(d.events.some((e) => e.type === "text_delta"), "words already streamed stay on screen");
   assert.equal(s.lesson.messages.length, 0, "the half answer is never sent back");
-  assert.ok(s.logs.some((l) => l.event === "service_error" && l.kind === "offline"));
+  assert.ok(s.logs.some((l) => l.event === "service_error" && l.kind === "service_busy" && l.reached === true));
   assert.doesNotMatch(JSON.stringify(s.logs), /LOOPKEY/);
   s.svc.script(reply([text("Hello.")]));
   assert.equal((await s.turn("/ease-mentor")).r.ok, true);
@@ -552,7 +553,7 @@ async function opening(s) {
 const stripped = (m) => JSON.parse(JSON.stringify(withoutBreakpoints(m)));
 
 for (const [label, patch, step3, kind] of [
-  ["a dropped connection", {}, () => [drop([text("half of an answer"), toolUse("snapshot_project", {}, "tu_never")], 1)], "offline"],
+  ["a dropped connection", {}, () => [drop([text("half of an answer"), toolUse("snapshot_project", {}, "tu_never")], 1)], "service_busy"],
   ["a service error", {}, busy, "service_busy"],
   ["the turn timeout", { turn_timeout_ms: 2500 }, () => [reply([text("never")], { hang: true })], "timeout"],
   ["a refusal", {}, () => [reply([], { stop_reason: "refusal", stop_details: { type: "refusal", category: "other" } })], "refused"],
@@ -687,7 +688,7 @@ test("D1: a hand-over completed in the failed turn stays in force; its body goes
     drop([text("Let's")], 1), // step 2, with the body just placed
   );
   const { r, events } = await s.turn("/next-mentor");
-  assert.equal(r.error_kind, "offline");
+  assert.equal(r.error_kind, "service_busy");
   assert.equal(r.skill, "ease-mentor");
   assert.ok(events.some((e) => e.type === "skill_loaded"));
   assert.equal(s.lesson.skill, "ease-mentor");
@@ -1074,6 +1075,20 @@ test("S1: a call never sent (the server already gone) is still \"didn't run\"; o
   assertAppendOnly(s.svc);
 });
 
+test("a service that can't be reached at all is offline; the log says the request never reached it", async () => {
+  const closed = http.createServer();
+  await new Promise((ok) => closed.listen(0, "127.0.0.1", ok));
+  const port = closed.address().port;
+  await new Promise((ok) => closed.close(ok));
+  const s = await setup({ baseURL: `http://127.0.0.1:${port}` });
+  const { r } = await s.turn("/ease-mentor");
+  assert.equal(r.error_kind, "offline");
+  assert.equal(r.cost_usd, 0);
+  assert.equal(s.lesson.messages.length, 0);
+  assert.ok(s.logs.some((l) => l.event === "service_error" && l.kind === "offline" && l.reached === false));
+  assert.ok(s.logs.some((l) => l.event === "request_no_headers" && l.code === "ECONNREFUSED" && l.reached === false));
+});
+
 // ---------- T068: a request that goes quiet fails fast and goes again, within the turn. ----------
 
 const QUICK = { headersMs: 150, quietMs: 150 };
@@ -1095,13 +1110,14 @@ test("T068: no headers at all: the SDK sends the same bytes again, and the learn
   assert.ok(s.logs.some((l) => l.event === "request_no_headers" && l.retry === 0), "the log says what happened");
 });
 
-test("T068: no headers on any attempt: the turn fails well inside the limit, with the existing kind, and is taken back", async () => {
+test("T068: no headers on any attempt: the turn fails well inside the limit, as service_busy (connected, so not offline), and is taken back", async () => {
   const s = await setup({ limits: { headersMs: 100, quietMs: 100 } });
   s.svc.script(reply([text("never")], { hang: true }), reply([text("never")], { hang: true }), reply([text("never")], { hang: true }));
   const started = Date.now();
   const { r } = await s.turn("/ease-mentor");
   assert.equal(r.ok, false);
-  assert.equal(r.error_kind, "offline");
+  assert.equal(r.error_kind, "service_busy");
+  assert.ok(s.logs.some((l) => l.event === "request_no_headers" && l.reached === true), "each attempt reached the service");
   assert.ok(Date.now() - started < 8000);
   assert.equal(r.cost_usd, 0, "no answer began, so nothing is known to be billed");
   assert.equal(s.svc.messageRequests.length, 3);

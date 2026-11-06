@@ -33,7 +33,8 @@ const arg = (name) => {
   return i > 0 ? process.argv[i + 1] : null;
 };
 
-// --fault kinds: SC-006's seven, plus a refusal and a connection dropped mid-answer. Each is
+// --fault kinds: SC-006's seven, plus a refusal and a connection dropped mid-answer (shown as
+// service_busy: the connection was made, so it isn't called offline; 2026-11-05). Each is
 // scripted on the local fake service for every request, so every turn hits it.
 const FAST = { "retry-after-ms": "1" };
 const FAULTS = {
