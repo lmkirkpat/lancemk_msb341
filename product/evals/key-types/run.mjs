@@ -608,7 +608,7 @@ async function runCase(c, opts) {
   const pass = checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
   fs.rmSync(home, { recursive: true, force: true });
   return { pass, checks, rubric, cost, session_id: sessionId, transcript: renderTranscript(turns),
-    ...(fin ? { runtime: "a", mentor_cost_usd: Number(fin.cost.toFixed(4)), judge_cost_usd: Number((cost - fin.cost).toFixed(4)), cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist } : {}) };
+    ...(fin ? { runtime: "a", mentor_cost_usd: Number(fin.cost.toFixed(4)), judge_cost_usd: Number((cost - fin.cost).toFixed(4)), cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist, ...(fin.failed_turns ? { failed_turns: fin.failed_turns } : {}) } : {}) };
 }
 
 // ---------- main ----------

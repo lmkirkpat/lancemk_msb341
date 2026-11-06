@@ -63,6 +63,8 @@ export async function closeCase({ repo, mentor, learnerTexts }) {
     other_model_turns: mentor.otherModelTurns,
     prompt_hashes: mentor.promptHashes,
     allowlist,
+    // Only when a turn failed: its error kind and the end of the helper's log (T068).
+    ...(mentor.failedTurns?.length ? { failed_turns: mentor.failedTurns } : {}),
   };
 }
 

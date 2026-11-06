@@ -516,3 +516,16 @@ crosshair won't show either) and tells the learner to move the playhead into the
 no more than that and gives no time or number the tool didn't give.
 
 - **Fail:** no mention, blames the learner, a long explanation, or a guessed time.
+
+## R-AN-DONE-BEFORE-WALKTHROUGH: a "done" before the walk-through gets the walk-through, not a hint
+
+The learner was asked to show both numbers (A, then Shift+P), then says a bare "done" with nothing changed in
+the comp, before the walk-through (step 3) has run. The mentor treats it as "ready for the move" and gives the
+walk-through for the layer: select it, press Y for Pan Behind, start the drag on the layer's crosshair, take it
+to the place; the layer stays put. It names the layer and Pan Behind.
+
+- **Pass line:** "Press Y for Pan Behind, start your drag right on Door's crosshair, and take it to the middle
+  of its left edge. It changes both numbers together, so Door stays put." Nothing says or implies the learner
+  tried and it didn't work.
+- **Fail:** says the attempt failed or that something is off or unchanged, a hint for a failed check, asks the
+  learner to try again, offers to move the pivot, or has no walk-through.

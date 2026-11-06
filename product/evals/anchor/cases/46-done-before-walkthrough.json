@@ -1,0 +1,70 @@
+{
+  "id": "46-done-before-walkthrough",
+  "title": "A bare 'done' after 'press A, then Shift+P', nothing changed: the walk-through comes next, not a hint; no sign of a failed attempt, no offer to do it",
+  "covers": [
+    "TD20",
+    "FR-019"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "names_door",
+        "must": "\\bDoor\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "names_pan_behind",
+        "must": "Pan Behind",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "walks_to_crosshair",
+        "must": "crosshair",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_a_failed_attempt",
+        "never": "\\b(?:didn['\u2019]t|did not|hasn['\u2019]t|has not|haven['\u2019]t)\\s+(?:work|change|take|register|happen|stick|go through|move yet)|\\bnothing\\s+(?:has\\s+)?(?:changed|happened)|\\bno change\\b|something(?:['\u2019]s| is) (?:off|wrong)|\\bnot quite\\b|\\btry again\\b|\\bstill\\s+(?:at|in)\\s+(?:its|the)\\s+(?:middle|center|centre)\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['\u2019]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:move|set|fix|drag|do (?:it|that|them|the rest|the other)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-DONE-BEFORE-WALKTHROUGH",
+    "R-NAMES-REAL"
+  ]
+}

@@ -117,6 +117,7 @@ the number of mentor turns. Fixtures: `live` (a capture) or `synthetic` (derived
 | 37 | A one-key layer whose Position key and rest key are one frame apart (synthetic): both labels, "3.67 s" and "3.7 s" | 2 | synthetic | R-AN-TWO-FRAMES |
 | 38 | A comp with only a background (a full-frame layer): no layer proposed, the new-solid line instead; the background never offered, no place on it, no demo | 1 | synthetic | R-AN-NO-CANDIDATE, R-NAMES-REAL |
 | 39 | A layer named with no place given (Needle, whose own hinge is the bottom middle): the mentor asks where it should turn from, picks none, no snapshot call carries a place, no demo or check | 2 | live | R-AN-ASKS-PLACE, R-NAMES-REAL |
+| 46 | A bare 'done' after 'press A, then Shift+P', nothing changed (added 2026-11-06, spec 013 follow-up; needs the skill rule that sends this to the walk-through): the walk-through for Door (Pan Behind, the crosshair), nothing said about a failed attempt, no offer to do it; no demo | 3 | live | R-AN-DONE-BEFORE-WALKTHROUGH, R-NAMES-REAL |
 
 Dropped from the first set: the Sled-slid case (old 15). Since D-4 no lesson can reach Sled with three keys
 (`sled-slid` is a unit-test fixture), so cases 13 and 22 replace it.
@@ -604,3 +605,8 @@ Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed duri
 | 30 | FAIL | pass | | A passed what B1 missed. |
 
 **Gap in the check:** case 14's `no_offer` pattern has no "show", so "I could show you on Needle" passes it; only the judge caught that.
+
+## Changed after seeing results (2026-11-06, human-approved, spec 013 follow-up)
+
+- **`no_offer` in cases 03, 14 and 28 (turn 3):** the verb list gains `show(?: you)? (?:on|with|first|one|it|this|that|how)` and `demonstrate`, so "I could show you on Needle first, if you like" is an offer to do it, as the case-14 triage found (the old pattern let it pass; only the judge caught it). Final tail of the pattern: `...|do (?:it|that|them|the rest|the other)|the rest|show(?: you)? (?:on|with|first|one|it|this|that|how)|demonstrate)\b`. Checked against every turn-3 reply of 03, 14 and 28 in all 98 result files: it matches only that offer sentence (22 turns scanned). It does not match "I can show you the frame" or "Let me show you the frame" (no such line appears in any anchor result). **Expect a change on the next run:** cases 03 and 28 passed the judge with that same offer sentence in the 10-29 and 11-04 runs, so they will now fail `no_offer` until `SKILL.md` stops offering a demo on a failed-check turn (the same fault as case 14, a prompt gap, not an eval one).
+- **Case 46 added** (see the table). It tests the approved skill rule "nothing changed and step 3 hasn't run: go to the walk-through, not a hint" and will fail until that rule is in `SKILL.md`. Its `no_offer` uses the old pattern on purpose: step 4 ends a walk-through turn with the one watch offer ("I could show you on Needle first"), so the stricter pattern would fail a correct reply.
