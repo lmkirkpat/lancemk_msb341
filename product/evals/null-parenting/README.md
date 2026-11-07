@@ -586,3 +586,7 @@ Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed duri
 | 02 explain-what-a-parent-passes | FAIL | pass | | A passed what B1 missed. |
 | 06 jump | FAIL | pass | | A passed what B1 missed. |
 | 11 comments-never-graded | pass | FAIL: R-NULL-NOT-FADED | 2/3 (`-212845`) | Noise. Watch: both misses call the null "invisible" in a lesson where it only slid. |
+
+**Note (2026-11-06):** this set's A record was measured with helper settings `20bff077e6af`. The helper has
+changed since (T068's stall guard and error kinds, now `0d5cda88ea83`), with request bodies unchanged. Re-run on A
+on the first tester's commit (SC-003).

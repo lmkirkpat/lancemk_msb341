@@ -390,3 +390,7 @@ Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed duri
 | 23 record-honesty | FAIL | pass | | A passed what B1 missed. |
 | 26 how-does-quick-offset-work | pass | FAIL: R-ONE-IDEA | 3/3 (`-210755`) | Noise. |
 | 33 order-and-gap | FAIL | FAIL: R-ONE-IDEA | not required | Fails on both. |
+
+**Note (2026-11-06):** this set's A record was measured with helper settings `20bff077e6af`. The helper has
+changed since (T068's stall guard and error kinds, now `0d5cda88ea83`), with request bodies unchanged. Re-run on A
+on the first tester's commit (SC-003).

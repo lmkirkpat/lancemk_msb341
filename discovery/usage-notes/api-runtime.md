@@ -1,5 +1,16 @@
 # Option A runtime: usage notes
 
+## Pivot fix and re-runs (2026-11-06)
+
+Pivot B1 51/51 and A 50/51 at `c2d5f8d`; easing A 27/28 on the new helper. No A timeouts in about 260 turns
+(load up to 14). Credit about $26.85 in all.
+
+- **A new rule broke two cases, on both runtimes:** the "done before the walk-through" rule treated a moved group
+  pivot as nothing changed (case 20), and the model kept the watch offer 6 of 6 though the rule said not to
+  (case 46). The second was resolved by allowing the offer, since step 4's wording was pulling the other way.
+- **An overloaded machine wrecks B1, not A:** B1 had 11 `ETIMEDOUT`s at load 48 with memory nearly full; A's run
+  just after had none. B1 spawns a whole Claude Code per turn.
+
 ## Request timing, live (T068, 2026-11-04, about 23:42 to 23:54 local)
 
 258 live requests, none stalled, about $1.13: 222 first requests alternating easing and pivot (2 of them to check

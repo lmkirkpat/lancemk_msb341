@@ -167,16 +167,15 @@ a brand new session act like a colleague who already knows what you are working 
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
-  and `--runtime a|b1` in all six eval runners (B1 the default, dry runs byte-identical). 43 of 68 tasks done; two reviews fixed five history bugs. After a fresh checkout, run `npm ci` in
+  and `--runtime a|b1` in all six eval runners (B1 the default, dry runs byte-identical). 45 of 68 tasks done; two reviews fixed five history bugs. After a fresh checkout, run `npm ci` in
   `panel/helper/` (the SDK isn't committed). **Next, in order:**
   1. Done 2026-11-03/04: the API key is in the Keychain (a $100 credit, the lean budget for now; about
      $0.40 spent), the smoke check (T016), and the hand-over change (T060, merged `2185304`).
   2. Phase 11 (`decisions/011`, no credit): T062 and T063 before T031, then T064 to T067.
-  3. All six sets on A done 2026-11-04 (`4edba27`): easing 26/28, key types 28/30, speed graph 28/29, offset
-     33/37, pivot 48/50, null 43/44. $11.78 of credit for the round (estimate was far higher), about $17.26
-  **Next:** T036, re-running pivot after its case 14
-     fix (merged), then T021 in AE. Key types' stale check is fixed (T069). The helper's stall guard is merged, which
-     changes `settings_hash`; the timeouts' cause isn't found (T068 open). About $18.48 of credit spent.
+  3. All six sets on A done 2026-11-04; pivot and easing re-run 2026-11-06 after the fixes (T035, T068, T069):
+     pivot B1 51/51 and A 50/51 at `c2d5f8d`, easing A 27/28, no timeouts. All six meet FR-033. About $26.85 of
+     credit spent. The other four were measured on the older helper, so they re-run on the first tester's
+     commit. **Next:** T021 (a live lesson on A in AE), then T048 (lesson cost). T068's cause is still open.
   4. `decisions/011`'s cost signal has fired; the rule stands until the builder decides. Later releases may
      reuse a set's A result if nothing it depends on changed (spec 006 FR-025).
   5. **Pinned (2026-11-02): where testers' access keys come from** (spec 006 Q2). On A every user

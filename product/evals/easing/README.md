@@ -263,3 +263,9 @@ The builder chose a second full run over rewriting the bar. **Verdict: easing me
 | (d) B1-pass, A-fail cases re-run | Done. 22 3/3 (`-200134`), 24 3/3 (`-200259`). |
 
 Case 24's turn 1 timed out with 1 request and $0 reported. The helper discarded whether the answer had started, so $0 here doesn't prove no reply arrived (T068). All 6 of A's turn timeouts so far are in this set; the other five sets had none in about 515 turns (`discovery/usage-notes/api-runtime.md`, T068).
+
+### Third full run (2026-11-06, at `fcde27a`, helper settings `0d5cda88ea83`)
+
+After the helper's stall guard and error kinds (T068). **A baseline (T053) is now `results/2026-11-06-165707.json`:
+27/28, level with B1, $2.13 mentor credit, 0 timeouts** (load up to 14). The one miss, case 03 (R-ONE-IDEA), passed 2/3
+on repeat. No stall happened, so the guard wasn't exercised.

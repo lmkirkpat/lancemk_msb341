@@ -1,0 +1,141 @@
+{
+  "run_at": "2026-11-06T23:24:13.956Z",
+  "options": {
+    "only": "18",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.68,
+  "fixtures_note": "Live captures of Mentor Practice 2 (comp 179) plus synthetic fixtures; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "18-cant-check",
+      "title": "A layer that can't be checked (no rectangle): says so and never claims it didn't move",
+      "covers": [
+        "EP-18"
+      ],
+      "fixture_sources": {
+        "synthetic/edge-before.json": "synthetic",
+        "synthetic/row27-no-rect.json": "synthetic"
+      },
+      "hash": "aea08a1cc39bd17491e908f517dcf887383d049bd3394ce9ab44ec4a8573a649",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "never called"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say:says_cant",
+              "pass": true,
+              "detail": "turn 3: \"can't check\""
+            },
+            {
+              "check": "say:no_false_claim",
+              "pass": true,
+              "detail": "turn 3: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-CANT-CHECK",
+              "pass": true,
+              "reason": "Turn 3 says plainly \"I can't check Door right now: its edges didn't come through in this read, so I can't tell where its pivot sits or whether Door stayed put\" and never says it passed, is in place, or didn't move; the only other statement (both Anchor Point and Position changed) comes straight from the tool's anchor_changed/position_changed and claims no place or result."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses (Door, Anchor Point, Position, center, middle of its left edge) matches the anchor_snapshot and anchor_check results, and no time or layer is invented."
+            }
+          ],
+          "cost": 0.6828574000000002,
+          "session_id": "ac4c606b-5b29-4714-9ba5-894f3f85d8d7",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Studio Reel.aep\",\n  \"comp\": {\n    \"name\": \"Studio Edges\",\n    \"time\": 0,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Door\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Other\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Door\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Door\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Door could swing from the middle of its left edge. Want to try that one?\n\n### Turn 2: the project is an open comp\nLEARNER: Door should turn from the middle of its left edge.\nTOOL CALL anchor_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"Door\",\"place\":\"middle-left\"}]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Studio Reel.aep\",\n  \"comp\": {\n    \"name\": \"Studio Edges\",\n    \"time\": 0,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Door\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Other\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Door\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": [\n    \"Door\"\n  ],\n  \"places\": {\n    \"Door\": \"middle-left\"\n  },\n  \"place_now\": {\n    \"Door\": \"center\"\n  },\n  \"check_times\": {\n    \"Door\": {\n      \"time\": 0,\n      \"basis\": \"current\"\n    }\n  },\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [\n    \"anchor/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"single_target\",\n  \"notes\": [],\n  \"watch_offer\": {\n    \"layer\": \"Other\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"reads\": 1\n}\nTOOL CALL preview_frame {\"time\":0,\"layer\":\"Door\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-R302mB-runtime/ac4c606b-5b29-4714-9ba5-894f3f85d8d7/tool-results/mcp-ae-mentor-blob-1794007440068-essffy.png]\n{\"comp\":\"Studio Edges\",\"time\":0,\"layer_bounds\":{\"left\":50,\"top\":50,\"right\":350,\"bottom\":550},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: So Door turns from the middle of its left edge. Right now Door's pivot is at its center.\n\nAnchor Point is where the pivot sits inside Door; Position is where that pivot sits in the comp.\n\nSelect Door in the timeline and press A, then Shift+P, so both show.\n\n### Turn 3: the project is an open comp\nLEARNER: I set it. Done.\nTOOL CALL anchor_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"time\": 0,\n  \"passed\": false,\n  \"layers\": [\n    {\n      \"layer\": \"Door\",\n      \"credit\": \"learner\",\n      \"check_time\": 0,\n      \"basis\": \"current\",\n      \"item1\": {\n        \"passed\": false,\n        \"place_now\": null,\n        \"wanted\": \"middle-left\",\n        \"outside_side\": null\n      },\n      \"item2\": {\n        \"passed\": false,\n        \"edges_px\": null,\n        \"direction\": null,\n        \"distance_px\": null\n      },\n      \"item3\": {\n        \"now\": 0,\n        \"at_rest\": true,\n        \"set_away_from_rest\": null\n      },\n      \"item4\": null,\n      \"item5\": {\n        \"passed\": true,\n        \"moved_layers\": [],\n        \"anchor_keys_added\": false,\n        \"not_compared\": []\n      },\n      \"kind\": \"solid\",\n      \"anchor_changed\": true,\n      \"position_changed\": true,\n      \"rect_shifted\": false,\n      \"locked\": false,\n      \"cant_check\": [\n        {\n          \"what\": \"pivot\",\n          \"reason\": \"no_rect\"\n        },\n        {\n          \"what\": \"footprint\",\n          \"reason\": \"no_rect\"\n        }\n      ],\n      \"passed\": false,\n      \"hints\": [\n        \"cant_check\"\n      ]\n    }\n  ],\n  \"other_changes\": [],\n  \"demo_undone\": false\n}\nMENTOR: I can't check Door right now: its edges didn't come through in this read, so I can't tell where its pivot sits or whether Door stayed put. I can see that both its Anchor Point and Position changed, but that's all I can say for now.\n\nLeave Door as it is and say done again, and I'll read it once more.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

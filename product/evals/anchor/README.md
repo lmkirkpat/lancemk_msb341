@@ -612,3 +612,29 @@ Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed duri
 - **Case 46 added** (see the table). It tests the approved skill rule "nothing changed and step 3 hasn't run: go to the walk-through, not a hint" and will fail until that rule is in `SKILL.md`. Its `no_offer` uses the old pattern on purpose: step 4 ends a walk-through turn with the one watch offer ("I could show you on Needle first"), so the stricter pattern would fail a correct reply.
 - **Case 46's `no_offer` uses the stricter pattern (cockpit, 2026-11-06):** the approved rule for a "done" before the walk-through gives step 3 and step 4's invite with no watch offer, since a check came back. So the offer is a failure here, unlike case 11.
 - **Case 46 allows the watch offer again (builder, 2026-11-06):** the mentor made the offer in 6 of 6 runs on both runtimes, and this "done" isn't an attempt, so the learner is at their first walk-through, as in case 11. `SKILL.md` now says so; `no_offer` is back to the pattern without `show`. The `R-AN-DONE-BEFORE-WALKTHROUGH` rubric item should be checked for the same point.
+
+### Re-run after T035 (2026-11-06, at `c2d5f8d`)
+
+Changes since the first A run: the case 14 fix (`3765964`), the rule for a "done" before the walk-through, then its
+fix for case 20 and 46 (`5c245e9`, `c2d5f8d`), case 46, "show" in `no_offer` for 03, 14 and 28, and the helper's
+stall guard and error kinds (settings hash `0d5cda88ea83`). Prompt hash `59df112a`.
+
+**Verdict: pivot meets FR-033 on A.** B1 baseline (FR-034, same commit): `results/2026-11-06-171530.json`, **51/51**
+(about $35 by the meter). **A baseline (T053): `results/2026-11-06-173224.json`, 50/51, $2.39 mentor credit,
+$6.58 judge, 0 timeouts, 0 turns of unknown cost.**
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. Every `allowlist` check passed. |
+| (b) at least 80% | Met. 50/51 = 98%. |
+| (c) no more than 5 points below B1 | Met. 2 points below. |
+| (d) B1-pass, A-fail cases re-run | Case 07 3/3 (`-173602`). |
+
+**Case 07 to watch:** in 2 of about 8 A runs the mentor treated turn 3's "done" as coming before the A, Shift+P ask
+and gave the explanation without calling the check. Both times a repeat passed.
+
+**On the way (at `fcde27a`, before the case 20 and 46 fix):** B1 38/51 raw, with 11 `ETIMEDOUT`s while the machine
+was overloaded (load 48, memory nearly full), all 11 passing on re-run, so 49/51; A 44/51 with no timeouts.
+Cases 20 and 46 failed 3/3 on both runtimes: the new rule read a moved group pivot (`unchanged_shape`) as
+"nothing changed" (20), and the mentor made the watch offer 6 of 6 against a rule saying not to (46). Fixed in
+`c2d5f8d` by leaving `unchanged_shape` out of the rule and allowing the offer.
