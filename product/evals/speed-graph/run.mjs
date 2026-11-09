@@ -54,7 +54,7 @@ const CONFIG = {
     "mentor/test/fixtures/speed-graph/stand-in"
   ],
   "judgeLabel": "an After Effects mentor that teaches shaping an ease in the speed graph (influence)",
-  "recordMethod": "\\binfluence\\b[^|]{0,15}\\d|\\d+ ?%|\\bbecause\\b|\\bdialog\\b|\\bdrag(?:ged|ging)?\\b|\\bso that\\b|\\bthreshold",
+  "recordMethod": "\\binfluence\\b[^|]{0,15}\\d|\\d+ ?%|\\bbecause\\b|\\bdialog\\b|\\bdrag(?:ged|ging)?\\b|\\bso that\\b|\\bthreshold|\\bshared (?:middle )?keys?\\b|\\bside facing\\b|\\b(?:only )?(?:one|the other) side\\b|\\bexplained\\b",
   "internalExtra": [
     "\\b\\d+\\/ADBE\\b",
     "[\"'`](?:not_shaped|arrives_moving|no_handle|back_to_default|long_both_ends|in_out_mixed|keys_changed|nothing_to_shape|single_target|none_in_focus)[\"'`]"

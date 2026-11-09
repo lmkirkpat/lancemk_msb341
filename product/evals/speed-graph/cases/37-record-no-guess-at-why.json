@@ -1,0 +1,67 @@
+{
+  "id": "37-record-no-guess-at-why",
+  "title": "Pair 1 passes at the first check; pair 2 stays default for two checks (the shared key shaped on one side only), then passes: the record says what was off, not why",
+  "covers": [
+    "T057-finding-2",
+    "SC-014"
+  ],
+  "learner_record": "product/evals/speed-graph/records/learned-title-not-due.json",
+  "fixture_sources": {
+    "subtitle-opening.json": "synthetic",
+    "subtitle-pair1-shaped.json": "synthetic",
+    "subtitle-far-side-shaped.json": "synthetic",
+    "subtitle-both-shaped.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "subtitle-opening.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "subtitle-opening.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "subtitle-opening.json",
+      "say": "I think it's fastest in the middle."
+    },
+    {
+      "project": "subtitle-pair1-shaped.json",
+      "say": "I shaped the first move. Done."
+    },
+    {
+      "project": "subtitle-far-side-shaped.json",
+      "say": "I did the second one now. Done."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "Fixed it. Done."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "Toward the start."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "Thanks, that's it for today."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "tools_called": [
+      "record_lesson"
+    ],
+    "record_lesson": {
+      "skill": "easing.speed_graph",
+      "result": "passed",
+      "demo_used": false
+    },
+    "demo_calls_max": 0
+  },
+  "rubric": [
+    "R-RECORD-HONEST",
+    "R-NAMES-REAL"
+  ]
+}
