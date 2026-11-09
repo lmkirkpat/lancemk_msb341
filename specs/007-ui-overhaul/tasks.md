@@ -30,7 +30,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 ## Phase 1: Step 1 foundations (pure modules, no screen yet)
 
 - [x] T002 PB · Recorded fixtures for the panel tests: extend `panel/dev/record-fixtures.js` to take tool results from stored eval transcripts, easing first; saved records for none, one lesson, 20 lessons, unreadable, set aside.
-- [ ] T003 [P] PB · `lib/copy.js` from `index.html` (plan P10), with "Set it aside" for the mockup's "Start fresh" (D16), and SC-011's scan with the one named exception (FR-055). FR-058, FR-063, FR-064.
+- [x] T003 [P] PB · `lib/copy.js` from `index.html` (plan P10), with "Set it aside" for the mockup's "Start fresh" (D16), and SC-011's scan with the one named exception (FR-055). FR-058, FR-063, FR-064.
 - [ ] T004 [P] [US1] PB · `lib/memory.js` returns missing, unreadable or ok, with the mentor's shape test and the set-aside file; skill names from `path.json`. FR-011, FR-050, FR-095.
 - [ ] T005 [P] [US1] PB · `lib/connection.js`: connected, not connected, busy, polled, plus the start time when the bridge answers; `bridgeStarted()` unchanged. FR-002, FR-028, FR-057, FR-091.
 - [ ] T006 [P] [US6] PB · `lib/errors.js` replaces `errors-a.js`: kind → treatment and copy, including B1's `not_signed_in` → `err-mentor`, and the logged-only kinds (`bad_stream`, `busy`, `bad_command`, `not_implemented`) listed ahead of the fallback to `start_failed`; tests for every kind from recorded streams, including one bad stream line leaving the lesson running. FR-056, FR-097.

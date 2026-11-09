@@ -75,8 +75,8 @@ function toStreamLines(turns) {
 
 function scrubPaths(text) {
   return text
-    .replace(/\/(?:private\/)?var\/folders\/[^"\s]*/g, "~/AEMentor-test")
-    .replace(/\/Users\/[^"\s]*/g, "~/file");
+    .replace(/\/(?:private\/)?var\/folders\/[^"\\\s]*/g, "~/AEMentor-test")
+    .replace(/\/Users\/[^"\\\s]*/g, "~/file");
 }
 
 // The newest stored run of a case, from results/*.json. → its transcript, or null.
