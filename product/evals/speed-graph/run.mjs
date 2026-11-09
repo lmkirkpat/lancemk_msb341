@@ -28,6 +28,7 @@ import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
+import { turnChecks, turnProblems, TURN_KEYS } from "../lib/turn-checks.mjs"; // last_turn_* and say_max_sentences (spec 007)
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
 // with no builder CLAUDE.md or auto-memory in context (agent audit 2026-10-12, lesson 4.5).
@@ -169,9 +170,10 @@ function validate(c) {
   if (c.learner_record && !fs.existsSync(recordFile(c.learner_record))) problems.push(`no learner record ${c.learner_record}`);
   const items = new Set([...RUBRIC.matchAll(/^## (R-[A-Z0-9-]+)/gm)].map((m) => m[1]));
   for (const r of c.rubric || []) if (!items.has(r)) problems.push(`unknown rubric item ${r}`);
-  const known = ["first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
+  const known = [...TURN_KEYS, "first_tool", "tools_called", "tools_not_called", "snapshot_with", "demo_calls_min", "demo_calls_max", "demo_only_on",
     "last_check", "say", "record_lesson", "review_mode", "snapshot_calls_max", "snapshot_input_matches", "snapshot_input_lacks", "snapshot_reply", "focus_stable", "focus_named", "first_snapshot_without_options", "snapshot_in_turn_lacks"];
   for (const k of Object.keys(c.expect || {})) if (!known.includes(k)) problems.push(`unknown expect key ${k}`);
+  problems.push(...turnProblems(c.expect, (c.turns || []).length));
   for (const s of (c.expect || {}).say || []) {
     if (!s.id || !(s.must || s.never)) problems.push(`say check needs an id and must or never: ${JSON.stringify(s).slice(0, 60)}`);
     try { new RegExp(s.must || s.never); } catch (e) { problems.push(`say ${s.id}: bad regex`); }
@@ -371,6 +373,7 @@ function check(expect, turns, c) {
     wordsCheck("no_test_tell", SYNTH_TELL, turns),
   ];
   const add = (name, pass, detail) => out.push({ check: name, pass, detail });
+  out.push(...turnChecks(expect, turns, MENTOR_TOOLS));
   const calls = mentorCalls(turns);
   const demos = calls.filter((e) => e.name === DEMO);
   const checks = calls.filter((e) => e.name === CHECK);

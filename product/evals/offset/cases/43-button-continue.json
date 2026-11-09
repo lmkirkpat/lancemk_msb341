@@ -1,0 +1,50 @@
+{
+  "id": "43-button-continue",
+  "title": "Panel: Continue picks the lesson up where it was: the Dots plan said back as theirs, no new opening, no demo",
+  "covers": [
+    "RQ-12",
+    "FR-027",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I'm back. Pick up where we left off."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "offset_check"
+    ],
+    "last_turn_tools_not_called": [
+      "offset_demo",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "names_dots",
+        "must": "Dot",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-CONTINUES",
+    "R-NAMES-REAL"
+  ]
+}

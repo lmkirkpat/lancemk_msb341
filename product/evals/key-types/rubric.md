@@ -397,3 +397,43 @@ a demo happened, doesn't pick one of the layers, and uses no error code or field
 - **Pass:** "There are two layers named Blink now, so I can't tell which to show it on. Rename the copy
   or Edit > Undo, then ask again."
 - **Fail:** says it held a pair, shows a frame as if held, names an error code, or offers to hold the copy.
+
+---
+
+## R-CONTINUES: a resumed lesson picks up where it was (RQ-12)
+
+*Added for spec 007 (the Continue case).* The panel's Continue button sends "I'm back. Pick up where we
+left off." into a lesson that was open. The learner has answered the lesson's opening question and
+nothing else has happened. The mentor says in a clause that it's picking up, says back what was meant to snap (Blink's Opacity) as
+the learner's own, and hands over the one pending step in a sentence or two. It doesn't open again with
+a fresh proposal, doesn't re-ask what was answered, doesn't recap the whole lesson, makes no change to
+the project, and doesn't demonstrate.
+
+- **Pass:** "Picking up with Blink's Opacity. Hold the pairs you meant to snap and say done."
+- **Fail:** a fresh opening, asks "is anything here meant to snap" again, a recap of everything said so far, a demonstration, or a
+  turn that ends with nothing for the learner to do.
+
+## R-SHOW-ME-AGAIN: Show me again explains the change already made and changes nothing (RQ-14)
+
+*Added for spec 007.* The learner pressed Show me again after the one demonstration: "Show me again:
+explain the change you already made, with a frame. Don't change anything." The mentor explains the one
+change it already made, in plain words with real names: which pair is held and that it now snaps. It shows a frame from the
+comp with it (the runner checks that `preview_frame` ran in this turn), and hands the rest back in one
+sentence. It makes no second demonstration, doesn't make any change, doesn't walk through the how-to
+again, and doesn't claim a result the tools didn't return.
+
+- **Pass:** "Blink's Opacity is held on its first pair now, so it snaps there instead of fading. Edit > Undo takes it back. The other pair is yours."
+- **Fail:** a second demonstration or an offer of one, an explanation of something other than the change
+  it made, a repeat of the whole walk-through, numbers or field names, or a turn that ends with nothing
+  for the learner to do.
+
+## R-NEW-LESSON-ASKED: "New lesson" on a skill with a review due opens a lesson (RQ-02)
+
+*Added for spec 007.* The record says a review of this skill is due, and the learner asked for a new
+lesson: `/key-types-mentor lesson`. The runner checks that the snapshot opened a lesson. The mentor opens the lesson the way it opens
+any other: "Is anything here meant to snap, like a blink, an on/off, or a cut?". It says nothing about a review: no "review", no "warm up", no "it's been a few days
+since you learned…" as a reason for what it does, and no offer of a review instead.
+
+- **Pass:** "Is anything here meant to snap, like a blink, an on/off, or a cut?"
+- **Fail:** mentions a review, offers one, says one is due, or opens as a review (the task with no
+  walkthrough) when the learner asked for a lesson.

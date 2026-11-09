@@ -1,0 +1,48 @@
+{
+  "id": "34-button-show-me",
+  "title": "Panel: Show me holds one pair on the demo target, in plain words, with Edit > Undo",
+  "covers": [
+    "RQ-14",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Blink's Opacity should snap."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Show me how first."
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "1/ADBE Transform Group/ADBE Opacity/1",
+    "tools_called": [
+      "preview_frame"
+    ],
+    "say": [
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-KT-DEMO",
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "52-button-continue",
+  "title": "Panel: Continue picks the lesson up where it was: Door and its place said back, no new opening, no demo",
+  "covers": [
+    "RQ-12",
+    "FR-027",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I'm back. Pick up where we left off."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_check"
+    ],
+    "last_turn_tools_not_called": [
+      "anchor_demo",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "names_door",
+        "must": "Door",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-CONTINUES",
+    "R-NAMES-REAL"
+  ]
+}

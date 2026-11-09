@@ -1,0 +1,73 @@
+{
+  "id": "02-review-due",
+  "title": "Opening, a review due: offered as a quick review (an offer, hands-on), not started",
+  "covers": [
+    "RQ-15",
+    "FR-070",
+    "FR-020"
+  ],
+  "runtimes": [
+    "b1",
+    "a"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/learned-blink.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/next-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "recommend_next"
+    ],
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "keyframes.types",
+          "recommendation.kind": "review",
+          "recommendation.reason": "review_due"
+        }
+      }
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "offers_review",
+        "must": "review",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_skill",
+        "must": "key type",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "asks",
+        "must": "\\?",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-REVIEW-OFFER",
+    "R-NM-SUGGESTS",
+    "R-NAMES-REAL"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "47-button-show-me",
+  "title": "Panel: Show me parents one layer after the null is in place, in plain words, with Edit > Undo",
+  "covers": [
+    "RQ-14",
+    "FR-070"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-center.json",
+      "say": "Show me how first."
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "parent/Tile",
+    "demo_after_null_ready": true,
+    "say": [
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "49-button-new-lesson-due-record",
+  "title": "Panel: New lesson on a skill with a review due opens a lesson, not the review, and never mentions one",
+  "covers": [
+    "RQ-02",
+    "FR-070"
+  ],
+  "learner_record": "learned-group.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor lesson"
+    }
+  ],
+  "expect": {
+    "first_tool": "null_parent_snapshot",
+    "first_snapshot_reply": {
+      "mode": "lesson"
+    },
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "say": [
+      {
+        "id": "no_review_talk",
+        "never": "\\b(?:review|warm[- ]?up|refresher)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NEW-LESSON-ASKED",
+    "R-ASKS-FIRST",
+    "R-NAMES-REAL"
+  ]
+}

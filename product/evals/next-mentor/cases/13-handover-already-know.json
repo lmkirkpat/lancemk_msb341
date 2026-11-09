@@ -1,0 +1,62 @@
+{
+  "id": "13-handover-already-know",
+  "title": "A only: \"I already know it\" on a skill not learned yet hands over to key types as a review (no demonstration), after asking recommend_next for it",
+  "covers": [
+    "RQ-16",
+    "FR-020",
+    "FR-070"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "known_gap": "next-mentor-handover item 5: 'review' as an argument",
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/next-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "I already know how to pick the key type on purpose."
+    },
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "Yes, let's go."
+    }
+  ],
+  "expect": {
+    "reply_equals": [
+      {
+        "turn": 2,
+        "tool": "recommend_next",
+        "equals": {
+          "requested.skill": "keyframes.types",
+          "requested.review_available": true
+        }
+      },
+      {
+        "turn": 3,
+        "tool": "key_types_snapshot",
+        "equals": {
+          "mode": "review"
+        }
+      }
+    ],
+    "handover": [
+      {
+        "turn": 3,
+        "skill": "key-types-mentor",
+        "args_match": "review"
+      }
+    ],
+    "tools_not_called": [
+      "key_types_demo"
+    ]
+  },
+  "rubric": [
+    "R-NM-ALREADY-KNEW",
+    "R-NM-HANDS-OVER",
+    "R-NM-REVIEW-HANDS-ON"
+  ]
+}

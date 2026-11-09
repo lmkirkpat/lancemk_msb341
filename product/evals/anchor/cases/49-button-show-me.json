@@ -1,0 +1,59 @@
+{
+  "id": "49-button-show-me",
+  "title": "Panel: Show me moves one pivot (asks for the numbers first, then moves it), in plain words, with Edit > Undo",
+  "covers": [
+    "RQ-14",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door and Tab should both turn from the middle of their left edges."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Show me how first."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tab is selected and Anchor Point and Position are showing."
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "anchor/19",
+    "tools_called": [
+      "preview_frame"
+    ],
+    "say": [
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "names_tab",
+        "must": "Tab",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-DEMO",
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL"
+  ]
+}

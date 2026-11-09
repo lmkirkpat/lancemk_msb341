@@ -1,0 +1,47 @@
+{
+  "id": "42-button-new-lesson-due-record",
+  "title": "Panel: New lesson on a skill with a review due opens a lesson, not the review, and never mentions one",
+  "covers": [
+    "RQ-02",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/offset/records/learned-dots.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/offset-mentor lesson"
+    }
+  ],
+  "expect": {
+    "first_tool": "offset_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "tools_not_called": [
+      "offset_check"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "no_review_talk",
+        "never": "\\b(?:review|warm[- ]?up|refresher)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NEW-LESSON-ASKED",
+    "R-OFF-PROPOSAL",
+    "R-NAMES-REAL"
+  ]
+}

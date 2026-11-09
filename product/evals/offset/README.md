@@ -8,6 +8,21 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
+## Spec 007 button cases (T035, written 2026-11-09, dry-run only)
+
+6 cases added, ids 38 to 43. Each sends one panel request, word for word (`contracts/button-requests.md`), into a lesson that is open. The first run is spec 007 T038: `node product/evals/offset/run.mjs --only FR-070` runs exactly these cases (every one lists `FR-070` in `covers`).
+Not yet run: the set's full-run baseline is unchanged. New rubric items: `R-CONTINUES`, `R-SHOW-ME-AGAIN`, `R-NEW-LESSON-ASKED`. New expect keys (shared, `../lib/turn-checks.mjs`): `last_turn_tools_called`, `last_turn_tools_not_called`, `say_max_sentences`.
+The turn named is the one that carries the request under test; earlier turns set the lesson up (typed answers on the way in, since these skills ask first).
+
+| Case | Turn | Exact request | Request |
+|---|---|---|---|
+| 38-button-check-partial | 3 | `I'm done. Check my work.` | RQ-14 Done, check it |
+| 39-button-hint | 4 | `Can I have a hint?` | RQ-14 Hint |
+| 40-button-show-me | 3 | `Show me how first.` | RQ-14 Show me |
+| 41-button-show-me-again | 4 | `Show me again: explain the change you already made, with a frame. Don't change anything.` | RQ-14 Show me again |
+| 42-button-new-lesson-due-record | 1 | `/offset-mentor lesson` | RQ-02 New lesson |
+| 43-button-continue | 3 | `I'm back. Pick up where we left off.` | RQ-12 Continue lesson |
+
 ## Re-baseline rb3 (2026-10-29, after the overlap-audit fixes; mentor at `df65d41`)
 
 **33/37 (89%), $21.38**, results `2026-10-29-144419.json` (rb2 was 29/33, 88%). SC-006 met on the score, but **one hard-rule check failed** (23 `record_plain`), so the bar is not clean. Failures were repeated once with `--repeat 3` ($8.74: `-144627` case 13, `-144824` case 20, `-145024` case 23, `-145202` case 33).

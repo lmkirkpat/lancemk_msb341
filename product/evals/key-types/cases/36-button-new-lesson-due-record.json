@@ -1,0 +1,47 @@
+{
+  "id": "36-button-new-lesson-due-record",
+  "title": "Panel: New lesson on a skill with a review due opens a lesson, not the review, and never mentions one",
+  "covers": [
+    "RQ-02",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/learned-blink.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/key-types-mentor lesson"
+    }
+  ],
+  "expect": {
+    "first_tool": "key_types_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "key_types_check"
+    ],
+    "say": [
+      {
+        "id": "no_review_talk",
+        "never": "\\b(?:review|warm[- ]?up|refresher)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NEW-LESSON-ASKED",
+    "R-KT-INTENT-FIRST",
+    "R-NAMES-REAL"
+  ]
+}

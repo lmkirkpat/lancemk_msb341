@@ -7,6 +7,20 @@ need to be open**. Whether the detection and grading are *correct* is covered by
 (`cd mentor && npm test`), which are free and instant. Evals cost real usage, so they don't
 repeat what the unit tests already prove.
 
+## Spec 007 cases (T027, written 2026-11-09, not yet run)
+
+Five cases added, numbers 29 to 33 (the set is now 33 cases). Written and dry-run only; the first run is spec 007 T038, with `--only`, and does not need a full run.
+
+| Case | Request (exact) | Covers | Notes |
+|---|---|---|---|
+| 29-button-continue | `I'm back. Pick up where we left off.` (turn 3) | RQ-12 | new item `R-CONTINUES` |
+| 30-retry-show-me-again | `Show me again: explain the pair you already eased, with a frame. Don't change anything.` (turn 3) | RQ-13 | Try again after a Show me whose demo landed. Same text as case 20, with the last-turn checks (no `set_ease`, no `record_lesson`). B1 can't cut a turn off, so the cut-off itself is the panel's test |
+| 31-retry-check-no-result | `I'm done. Check my work.` (turn 3, project `after-demo`) | RQ-13 | Try again after a Show me with no result: the check reads the project and eases nothing more |
+| 32-why-mechanical-before-focus | `Why does it look mechanical?` (turn 2) | T028 finding 1 | new item `R-WHY-EXPLAINED`; fails on a bare status report. Expected to fail on `main` until the `007-skill` fix lands |
+| 33-question-after-pass | `Why does easing make it feel less robotic?` (turn 4) | FR-046 | new item `R-ANSWERS-AFTER-PASS`; the runner checks that the last turn calls neither `record_lesson` nor `set_ease` |
+
+Run them: `node product/evals/easing/run.mjs --only T027` runs exactly these five (they list `T027` in `covers`), or one at a time with `--only 29` to `--only 33`.
+
 ## Overlap-audit re-run (2026-10-29, mentor at `df65d41`)
 
 **27/28 (96%), $14.89**, results `2026-10-29-142512.json` (last baseline 25/26 on 2026-10-28). SC-006 met; no hard-rule check failed. New cases (numbers from the cockpit): **27** a null added above the focus layer mid-lesson, then the learner's correct ease (passes, graded on the right layer; new item `R-RENUMBER-OK`; fixture `null-added-title-done.json`) and **28** a same-name copy of the focus layer (verdict `fail`, plain words, no pass, the word "unmatched" never said; new item `R-UNMATCHED-PLAIN`; fixture `title-copied.json`). 28 passed; both fixtures derive from `title-done.json`.
