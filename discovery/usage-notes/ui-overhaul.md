@@ -55,6 +55,8 @@ scrolled to.
 
 - The project open in AE during the lesson was the copy,
   `~/Documents/Tutor Test before T001.aep.aep`, so the repo's `.aep` on disk wasn't changed.
-- The capture taken before the lesson read Title's keys as linear. After the lesson Title is shaped,
-  with an out influence of 15.13. That capture can't be the check for Title; check Title against
-  the T032 shape after reopening the repo's file.
+- The capture taken before the lesson read Title's keys as linear, and after the lesson Title was
+  shaped (out influence 15.13) in the copy. Reopening the repo's file on 2026-11-09 gave a comp
+  identical to that capture, layers and `layer_info` included, so T028 starts where T001 did. It also
+  means the saved file's Title is linear, without the shaped ease spec 008's review (T035) expects;
+  the shaped version exists only in the copy.
