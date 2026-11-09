@@ -59,7 +59,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T025 [P] PB · `CSXS/manifest.xml`: `MinSize` height 480 (Open question 9).
 - [x] T026 PB · SC-003's tests for step 1's states, `home-return-interim` included; reduced motion; a keyboard pass by test. FR-073, FR-079, FR-080.
 - [ ] T027 [P] [US7] EE · Easing: Continue, and the two Try again cases. RQ-12, RQ-13. Hand the case names to PB.
-- [ ] T028 BL · Easing live in the new panel, and SC-015's second half (quickstart §1): SC-001, SC-002's easing part. Depends on T015 to T026.
+- [x] T028 BL · Easing live in the new panel, and SC-015's second half (quickstart §1): SC-001, SC-002's easing part. Depends on T015 to T026.
 
 **Stop point:** a working panel, easing only. Other skills stay in Claude Code.
 

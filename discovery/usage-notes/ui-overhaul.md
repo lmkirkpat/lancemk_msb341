@@ -104,4 +104,7 @@ The two runs are one session each and the mentor picked its own focus, so the ti
    ran once, on Subtitle's Opacity), so step c ran as scripted.
 
 **Not run in this sitting:** End lesson greyed during a turn, a check's rows staying after asking about another
-layer, and the connection mark when After Effects quits. Which panel the builder would rather use isn't recorded yet.
+layer, and the connection mark when After Effects quits. 
+**Which panel:** the builder said "new panel is better". SC-015 met for step 1, with the three checks above still to run.
+
+**Decided after this sitting:** keep Ask after a pass in the same session (FR-046), and fix the mentor's answer to "why does it look mechanical" (finding 1).

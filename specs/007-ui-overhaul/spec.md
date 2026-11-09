@@ -606,7 +606,9 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-045**: The diagnosis screens MUST offer no control that asks the mentor to fix a finding,
   fix everything, or do the rest (spec 005 FR-011, FR-015).
 - **FR-046**: **Ask the mentor** MUST be available on the Lesson tab below the buttons (spec 003 FR-008),
-  including `lesson-picking` and `lesson-passed-asking`, and not on Home or Skills (D2, settled).
+  including `lesson-picking`, `lesson-passed-asking` and, from 2026-11-09, after a pass (`lesson-passed`,
+  `lesson-passed-unsaved`), in the same mentor session; not on Home or Skills (D2, settled). A question after a
+  pass MUST NOT write a second lesson record. Builder's decision after T028; a separate Ask tab is later work.
 
 ### Skills, memory and practice
 
