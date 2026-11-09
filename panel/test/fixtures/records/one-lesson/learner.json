@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "skills": {
+    "easing.basic": {
+      "status": "learned",
+      "last_practiced": "2026-10-01T18:00:00.000Z",
+      "times_passed": 1,
+      "next": "Practice note 1."
+    }
+  },
+  "lessons": [
+    {
+      "date": "2026-10-01T18:00:00.000Z",
+      "skill": "easing.basic",
+      "project": "Practice.aep",
+      "comp": "Mentor Practice",
+      "result": "passed",
+      "next": "Practice note 1."
+    }
+  ]
+}

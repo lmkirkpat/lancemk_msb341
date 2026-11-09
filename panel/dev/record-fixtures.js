@@ -4,7 +4,18 @@
 // each turn's raw stdout with the home folder and session ids scrubbed. Re-run it after a Claude
 // Code update changes the stream format, then run the panel tests. Costs about $0.25.
 //   node panel/dev/record-fixtures.js
+// Two free modes spend nothing and start no process (spec 007 T002):
+//   node panel/dev/record-fixtures.js --from-evals easing   (fixtures from stored eval transcripts)
+//   node panel/dev/record-fixtures.js --records             (the saved learner records)
 "use strict";
+
+const evalArg = process.argv.indexOf("--from-evals");
+if (evalArg >= 0 || process.argv.includes("--records")) {
+  const { fromEvals, writeRecords } = require("./eval-transcripts.js");
+  if (evalArg >= 0) console.log(fromEvals(process.argv[evalArg + 1] || "easing").join("\n"));
+  if (process.argv.includes("--records")) console.log(Object.keys(writeRecords()).join(", "));
+  process.exit(0);
+}
 
 const fs = require("fs");
 const os = require("os");
