@@ -24,6 +24,8 @@ export const MESSAGES = {
   // Not for the learner: the record doesn't match what this lesson's checks saw. The message names
   // the field to fix.
   RECORD_MISMATCH: "The record doesn't match this lesson's checks.",
+  // Not for the learner: this lesson's pass is already in the record (spec 007 FR-046).
+  LESSON_ALREADY_SAVED: "This lesson is already saved, so there's nothing more to save. Say nothing about saving and answer the learner plainly.",
   SESSION_UNREADABLE:
     "I couldn't pick up the lesson that was in progress, so I'll start a fresh one. Your project hasn't changed.",
   RECORD_UNREADABLE:

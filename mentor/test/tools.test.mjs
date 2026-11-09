@@ -27,12 +27,12 @@ test("record_lesson saves without AE, and read_learner_record returns it with it
     result: "passed", demo_used: true, summary: "Eased every Title pair.", next: "Try Bar next.",
   };
   session.markChecked(true); // the lesson from the test above, with its demo, now passed
+  await assert.rejects(tool("record_lesson")({ ...entry, summary: "Email me at a@b.co" }), { code: "UNSAFE_RECORD" });
   const saved = JSON.parse((await tool("record_lesson")(entry)).content[0].text);
   assert.deepEqual(saved, { saved: true, skill: { status: "learned", next: "Try Bar next." } });
   const after = JSON.parse((await tool("read_learner_record")({})).content[0].text);
   assert.equal(after.lessons.length, 1);
   assert.ok(after.path.endsWith("learner.json"));
-  await assert.rejects(tool("record_lesson")({ ...entry, summary: "Email me at a@b.co" }), { code: "UNSAFE_RECORD" });
 });
 
 test("record_lesson refuses a result or demo_used the session didn't see (RECORD_MISMATCH)", async () => {

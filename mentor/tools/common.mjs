@@ -154,6 +154,8 @@ async function readLearnerRecord() {
 // the current lesson's skill only, passed only after a passing check, partial only after some check,
 // not_checked only before one, demo_used only if the demonstration ran, and never in a review
 // (FR-021). With no lesson at all, only not_checked with no demo fits. Returns the lesson.
+// A lesson whose pass is saved takes nothing more (spec 007 FR-046). That comes first, because
+// RECORD_MISMATCH asks the mentor to fix a field and save again.
 function assertMatchesLesson({ skill, result, demo_used }) {
   let lesson = null;
   try {
@@ -161,6 +163,7 @@ function assertMatchesLesson({ skill, result, demo_used }) {
   } catch (e) {
     if (e.code !== "NO_SESSION") throw e;
   }
+  if (lesson && lesson.pass_saved && skill === lesson.skill) throw new MentorError("LESSON_ALREADY_SAVED");
   const checked = !!lesson && (lesson.checked || lesson.status === "checked");
   const demo = !!(lesson && lesson.demo);
   const off = [];
@@ -212,6 +215,7 @@ export function commonTools(options) {
   async function recordLesson(entry) {
     const lesson = assertMatchesLesson(entry);
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
+    if (lesson && entry.result === "passed") session.markPassSaved();
     return json({ saved: true, skill: { status: skill.status, next: skill.next } });
   }
 
