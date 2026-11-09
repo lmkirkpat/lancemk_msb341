@@ -149,6 +149,25 @@ for (const [set, { skill: id, cases }] of Object.entries(PER_SKILL)) {
   });
 }
 
+// T069, RQ-11: the button itself, not just the request table, sends what each skill's Warm up case says.
+const { ready, SIX_PATH } = require("./app-harness.js");
+const WARM_UP_SETS = Object.entries(PER_SKILL).filter(([, s]) => s.cases.warm_up);
+
+test("Warm up is covered on exactly the five skills with a review", () => {
+  assert.deepEqual(WARM_UP_SETS.map(([set]) => set).sort(), ["anchor", "key-types", "null-parenting", "offset", "speed-graph"]);
+});
+
+for (const [set, { skill: id, cases }] of WARM_UP_SETS) {
+  test(`${set}: pressing Warm up sends the eval case's words`, async () => {
+    const record = { skills: { [id]: { status: "learned", review_due: "2026-11-01" } }, lessons: [{ skill: id, date: "2026-10-26T12:00:00Z", result: "passed" }] };
+    const h = await ready({ memory: { status: "ok", record }, pathData: SIX_PATH });
+    h.app.act("warm_up", { skill: id });
+    const [[caseId, turn]] = cases.warm_up;
+    assertTurn(set, caseId, turn, h.adapter().sent[0].text);
+    assert.equal(h.adapter().sent[0].kind, "warm_up");
+  });
+}
+
 const NEXT = "next-mentor";
 const FIND_NEXT = [
   "01-in-progress", "02-review-due", "03-next-in-path-with-focus", "04-nothing-left", "05-ae-unreachable",
