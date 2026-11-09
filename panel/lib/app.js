@@ -248,6 +248,7 @@ function createApp(deps) {
     reduce(Object.assign({}, e, { at: now().toISOString() }));
     if (showsResuming(state.lesson) && !state.messages.some((m) => m.role === "resuming")) pushBefore({ role: "resuming", text: COPY.lesson.picking_up });
     if (list.isCheck(e.name)) state.list_open = false;
+    if (list.isSnapshot(e.name) && state.lesson.no_new_target && state.lesson_open) closeNothingNew();
     if (e.name === "recommend_next" && e.ok && e.json) state.recommend = e.json;
     if (state.picking === "starting" && list.isSnapshot(e.name)) state.picking = null;
     if (e.name === "record_lesson") {
@@ -261,6 +262,14 @@ function createApp(deps) {
     }
     persist();
     changed();
+  }
+
+  // Nothing new on this comp (FR-052): nothing to do and nothing recorded, so the lesson closes like a
+  // saved one, the display log can't come back as a waiting lesson, and the review stays due.
+  function closeNothingNew() {
+    state.lesson_over = true;
+    state.lesson_open = false;
+    if (state.session) state.session.ended = true;
   }
 
   function onError(e) {
@@ -322,7 +331,7 @@ function createApp(deps) {
     if (state.mentorEntry) state.mentorEntry.cut_off = true;
     const stopped = !!t && t.treatment === "ended"; // no error event at all: the turn failed, the process lives
     const copy = stopped ? E.after_pass_stopped : E.after_pass_failed;
-    notice(copy.title, copy.body);
+    if (!(state.lesson && state.lesson.no_new_target)) notice(copy.title, copy.body); // no result to reassure about
     if (stopped) stopAdapter();
     state.resume_first = !stopped && !!t && t.kind === "timeout";
   }

@@ -368,3 +368,103 @@ test("a saved review with nothing else due is the plain Skills list", async () =
   h.app.act("see_skills");
   assert.equal(h.app.model().state, "skills-few");
 });
+
+// ---------- T067: practice-nothing-new ----------
+
+const NOTHING = () => OF_SNAP({ targets: [], focus: null, group: null, no_demo_reason: "no_new_target" });
+const nothingNew = async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  h.adapter().emit("tool_result", NOTHING());
+  h.adapter().emit("text", { text: "There's nothing new to review on this comp." });
+  h.adapter().emit("turn_end", { ok: true, kind: "warm_up" });
+  return h;
+};
+
+test("no_new_target shows practice-nothing-new: tagged, the mentor's words, the still-due line, two ways out, no Ask (FR-052)", async () => {
+  const h = await nothingNew();
+  assert.equal(h.app.model().state, "practice-nothing-new");
+  const p = lessonParts(h);
+  assert.ok(p.head.includes(COPY.lesson.review_tag));
+  assert.ok(p.head.includes(COPY.lesson.this_comp));
+  assert.ok(p.chat.includes("nothing new to review"));
+  assert.ok(p.chat.includes(COPY.lesson.nothing_new));
+  assert.equal(p.list, "", "no checklist, not even the empty slot");
+  assert.ok(p.actions.includes(COPY.buttons.back_home));
+  assert.ok(p.actions.includes(COPY.buttons.pick_skill));
+  assert.ok(!p.actions.includes(COPY.buttons.check));
+  assert.equal(p.ask, "");
+});
+
+test("the same reason on other tools' words: only mode review plus the tool's code counts", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  h.adapter().emit("tool_result", OF_SNAP({ mode: "lesson", no_demo_reason: "no_new_target" }));
+  h.adapter().emit("turn_end", { ok: true, kind: "warm_up" });
+  assert.notEqual(h.app.model().state, "practice-nothing-new");
+  const r = await onHome(TWO_DUE);
+  r.app.act("warm_up", { skill: "timing.offset" });
+  r.adapter().emit("tool_result", OF_SNAP({ no_demo_reason: "awaiting_focus", targets: [] }));
+  r.adapter().emit("turn_end", { ok: true, kind: "warm_up" });
+  assert.notEqual(r.app.model().state, "practice-nothing-new", "a review still waiting on a focus isn't nothing new");
+});
+
+test("while the mentor is still saying so, the buttons wait", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  h.adapter().emit("tool_result", NOTHING());
+  assert.equal(h.app.model().state, "practice-nothing-new");
+  assert.ok(lessonParts(h).actions.includes(COPY.paused.after_answer));
+});
+
+test("nothing is recorded, nothing can be continued, and it stays due (FR-052)", async () => {
+  const h = await nothingNew();
+  assert.equal(h.saved.current.ended, true, "the display log can't come back as a waiting lesson");
+  assert.equal(h.app.model().lesson_open, false);
+  h.app.act("back_home");
+  assert.equal(h.app.model().state, "home-return");
+  assert.equal(h.adapters[0].stopped, 1, "the mentor's process ends with it");
+  const text = homeText(h);
+  assert.ok(text.includes(COPY.home.practice_due));
+  assert.ok(text.includes("Break the lockstep with offset"));
+  assert.ok(hasWarmUp(view(h)), "another try is open");
+});
+
+test("Pick a skill leaves for Skills, with the due skill still ↻", async () => {
+  const h = await nothingNew();
+  h.app.act("see_skills");
+  assert.equal(h.app.model().tab, "skills");
+  assert.equal(h.app.model().skills_view.rows.find((r) => r.id === "timing.offset").glyph, "↻");
+  assert.equal(h.app.model().lesson, null);
+});
+
+test("nothing-new ends the session for a new start: Warm up works again straight from Home", async () => {
+  const h = await nothingNew();
+  h.app.act("tab", { tab: "home" });
+  h.app.act("warm_up", { skill: "timing.offset" });
+  assert.equal(h.adapters.length, 2);
+  assert.deepEqual(h.adapter().sent, [{ text: "/offset-mentor review", kind: "warm_up" }]);
+});
+
+test("a turn cut off after no_new_target keeps the screen and adds no lesson-result notice", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  h.adapter().emit("tool_result", NOTHING());
+  h.adapter().emit("turn_end", { ok: false, kind: "warm_up" });
+  assert.equal(h.app.model().state, "practice-nothing-new");
+  assert.ok(!h.app.model().messages.some((x) => x.role === "notice"));
+  assert.ok(lessonParts(h).actions.includes(COPY.buttons.back_home));
+});
+
+test("no_new_target on every skill's snapshot field name opens the same state", async () => {
+  const cases = [["keyframes.types", "key_types_snapshot"], ["easing.speed_graph", "speed_graph_snapshot"], ["transform.anchor", "anchor_snapshot"], ["parenting.null", "null_parent_snapshot"]];
+  for (const [skill, tool] of cases) {
+    const record = { skills: { [skill]: learned("2026-11-01") }, lessons };
+    const h = await onHome(record);
+    h.app.act("warm_up", { skill });
+    h.adapter().emit("tool_result", T(tool, { lesson: "new", mode: "review", targets: [], focus: null, demo_target: null, no_demo_reason: "no_new_target" }));
+    h.adapter().emit("turn_end", { ok: true, kind: "warm_up" });
+    assert.equal(h.app.model().state, "practice-nothing-new", skill);
+    assert.equal(lessonParts(h).list, "", skill);
+  }
+});

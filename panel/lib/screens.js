@@ -166,6 +166,7 @@ function stripHtml(view) {
 function headTitle(m) {
   if (m.state === "lesson-starting" || m.state === "lesson-picking-starting") return COPY.lesson.looking;
   if (m.state === "lesson-start-failed") return COPY.lesson.didnt_start;
+  if (m.state === "practice-nothing-new") return COPY.lesson.this_comp;
   const row = skillById(m.lesson && m.lesson.skill);
   return focusText(m.lesson) || (row && row.no_focus && m.lesson.checks === 0 ? row.no_focus : COPY.lesson.your_comp);
 }
@@ -283,6 +284,7 @@ function visibleSections(l) {
 }
 
 function listHtml(m) {
+  if (m.state === "practice-nothing-new") return "";
   const v = m.lesson;
   const l = v.check_list;
   if (!l) {
@@ -322,6 +324,10 @@ function actionsHtml(m) {
     return `<div class="actions">${m.yes_ready ? btn(LABELS.yes, "yes", "primary") : ""}${btn(LABELS.pick_skill, "leave_picking", m.yes_ready ? "" : "primary")}</div>`;
   }
   if (s === "lesson-picking-starting") return `<div class="actions">${pressed(COPY.buttons.pressed.start)}<button type="button" disabled>${esc(LABELS.pick_skill)}</button></div>`;
+  if (s === "practice-nothing-new") {
+    if (busy) return whyOff(COPY.paused.after_answer);
+    return `<div class="actions">${btn(LABELS.back_home, "back_home", "primary")}${btn(LABELS.pick_skill, "see_skills")}</div>`;
+  }
   if (s === "lesson-exited") return `<div class="actions">${btn(LABELS.start, "start", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if (s === "lesson-start-failed") return `<div class="actions">${btn(LABELS.try_again, "try_again", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if ((FINISHED.includes(s) || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
@@ -362,17 +368,19 @@ const VERB_KEY = { check: "check", check_again: "check", hint: "hint", show_me: 
 
 function askHtml(m) {
   const s = m.state;
-  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting"].includes(s) || savedNoPass(m.lesson)) return "";
+  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting", "practice-nothing-new"].includes(s) || savedNoPass(m.lesson)) return "";
   if ([...FINISHED, "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
   const open = m.can_ask && !(m.turn && m.turn.busy) && !m.error;
   return `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${esc(COPY.ask_label)}</label><input id="ask-in" type="text" placeholder="${esc(COPY.ask_placeholder)}"${open ? "" : " disabled"} /><button type="submit" aria-label="${esc(COPY.buttons.send)}"${open ? "" : " disabled"}>⏎</button></form>`;
 }
 
 function lessonRegions(m) {
+  const chat = chatRegion(m);
+  if (m.state === "practice-nothing-new") chat.items = chat.items.concat(`<p class="ro">${esc(COPY.lesson.nothing_new)}</p>`);
   return {
     head: headHtml(m),
     banner: lessonBanner(m),
-    chat: chatRegion(m),
+    chat,
     list: listHtml(m),
     status: statusline(m.turn && m.turn.busy ? m.turn.status : null),
     actions: actionsHtml(m),

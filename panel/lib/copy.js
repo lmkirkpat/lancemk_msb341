@@ -111,6 +111,7 @@ const COPY = {
     cut_off: "— cut off",
     frame_gone: "Frame no longer available",
     your_comp: "Your comp",
+    this_comp: "This comp",
     no_focus: "No focus yet",
     no_group: "No group yet",
     earlier: (n) => `Earlier in this lesson (${n})`,
