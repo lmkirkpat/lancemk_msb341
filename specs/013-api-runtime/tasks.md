@@ -141,7 +141,7 @@ SC-005 to SC-009).
 
 **Independent test**: quickstart.md §6, SC-007.
 
-- [ ] T043 [US4] PB · Test first (`panel/helper/test/conversation.test.mjs`), then `panel/helper/lib/conversation.mjs` per data-model › Lesson conversation: saved (temp file and rename) only after a complete exchange; images as files in `panel-conversation-frames/` and restored on load; not continued when unreadable, another version, another `session_id` or another `model`; deleted with its frames when a new lesson starts. The test asserts the resumed request's history equals what was sent before, byte for byte (FR-015, FR-023, FR-024, SC-007 automated half).
+- [x] T043 [US4] PB · Test first (`panel/helper/test/conversation.test.mjs`), then `panel/helper/lib/conversation.mjs` per data-model › Lesson conversation: saved (temp file and rename) only after a complete exchange; images as files in `panel-conversation-frames/` and restored on load; not continued when unreadable, another version, another `session_id` or another `model`; deleted with its frames when a new lesson starts. The test asserts the resumed request's history equals what was sent before, byte for byte (FR-015, FR-023, FR-024, SC-007 automated half).
 - [ ] T044 [US4] PB · Wire continuing: `adapter-api.js` `start({ resumeSessionId })` sends `resume: true` with that id; `main.mjs` loads the conversation or, if it can't, starts fresh and says nothing alarming (spec 003's rule); the panel's existing continue flow (`panel-session.js`, `canContinue`) unchanged. Depends on T018, T043.
 - [ ] T045 [US4] 🖐 AE · Builder · Quickstart.md §6 three times: no second demonstration, the earlier part referred to correctly (SC-007). Log in `discovery/usage-notes/api-runtime.md`. Can share T021's sitting. ($ about $1)
 
@@ -177,7 +177,7 @@ SC-005 to SC-009).
 ## Phase 9: Polish and cross-cutting
 
 - [ ] T055 🖐 AE · Builder · Depends on T060. Quickstart.md §7 with `panel/helper/dev/chat.mjs`: a short lesson on a non-easing skill on the live comp (its tools only), and a `/next-mentor` hand-over that runs the suggested skill (FR-014, FR-039). `next-mentor` has no eval set, so this is its only check on A. Log in `discovery/usage-notes/api-runtime.md`. ($ about $1)
-- [ ] T056 [P] PB · `panel/helper/README.md`: what the helper is, the protocol link, settings, how to run tests and `dev/chat.mjs`, the Keychain item, and that it holds no teaching logic.
+- [x] T056 [P] PB · `panel/helper/README.md`: what the helper is, the protocol link, settings, how to run tests and `dev/chat.mjs`, the Keychain item, and that it holds no teaching logic.
 - [ ] T057 PB and EE (each on their branch) · Before hand-back: `cd panel/helper && npm test`, `cd panel && npm test`, `cd mentor && npm test` (unchanged), `node --test .claude/hooks/test/*.test.mjs`, and `node .claude/hooks/check-branch.mjs <branch> <persona> main`; nothing outside the persona's paths; PB also confirms the helper uses no CEP API and `lib/loop.mjs` imports nothing from `panel/lib/` or the page (FR-040); nothing under `mentor/`, `bridge/` or `.claude/skills/` unless a T035 change.
 - [ ] T058 Cockpit · After merge: update `CLAUDE.md` (A built, settings, baselines), add dated evidence under `decisions/009`'s signals (evals vs B1, cost), and send spec 006 and 007's owners the amended items (installer ships the helper and SDK; error wording).
 

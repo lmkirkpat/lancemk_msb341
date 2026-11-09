@@ -108,14 +108,14 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 
 ## Phase 5: Step 3 (practice)
 
-- [ ] T063 [P] [US5] PB · Practice due on Home: one card, first in path order, a count of the rest, never easing, date compare only. FR-051, PN-11.
-- [ ] T064 [P] [US5] PB · Warm up on Home and `skill-detail`, and ↻ on Skills. FR-048, FR-049, RQ-11.
-- [ ] T065 [US5] PB · `practice`, `practice-check`, tagged from `mode`, no Show me. FR-052.
-- [ ] T066 [US5] PB · `practice-passed`, `lesson-passed-pivot`, the due lines, gated on the review flag. FR-021.
-- [ ] T067 [US5] PB · `practice-nothing-new` from `no_new_target`; nothing recorded. FR-052.
-- [ ] T068 PB · SC-003's tests for these states and the final id list against the README.
-- [ ] T069 [US7] PB · Sync test covers Warm up on all five.
-- [ ] T070 PB · Full panel test run, scans and hand-back.
+- [x] T063 [P] [US5] PB · Practice due on Home: one card, first in path order, a count of the rest, never easing, date compare only. FR-051, PN-11.
+- [x] T064 [P] [US5] PB · Warm up on Home and `skill-detail`, and ↻ on Skills. FR-048, FR-049, RQ-11.
+- [x] T065 [US5] PB · `practice`, `practice-check`, tagged from `mode`, no Show me. FR-052.
+- [x] T066 [US5] PB · `practice-passed`, `lesson-passed-pivot`, the due lines, gated on the review flag. FR-021.
+- [x] T067 [US5] PB · `practice-nothing-new` from `no_new_target`; nothing recorded. FR-052.
+- [x] T068 PB · SC-003's tests for these states and the final id list against the README.
+- [x] T069 [US7] PB · Sync test covers Warm up on all five.
+- [x] T070 PB · Full panel test run, scans and hand-back.
 - [ ] T071 BL · A warm-up live, and nothing new on a comp (quickstart §5); `practice-check` at 260 × 480, the last of SC-010's states.
 - [ ] T072 BL · SC-009, the keyboard walk (quickstart §6).
 - [ ] T073 BL · SC-013: three sessions' notes.
