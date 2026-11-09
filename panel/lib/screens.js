@@ -173,7 +173,7 @@ function headTitle(m) {
 function headTag(m) {
   const v = m.lesson;
   if (m.state === "lesson-passed-asking") return `<span class="tag pass">${esc(COPY.lesson.check_passed_tag)}</span>`;
-  if (m.state === "lesson-passed-unsaved" || (m.state === "lesson-passed" && v.passed)) return `<span class="tag pass">${esc(COPY.lesson.passed_tag)}</span>`;
+  if (m.state === "lesson-passed-unsaved" || (FINISHED.includes(m.state) && v.passed)) return `<span class="tag pass">${esc(COPY.lesson.passed_tag)}</span>`;
   if (v.mode === "review") return `<span class="tag practice">${esc(COPY.lesson.review_tag)}</span>`; // FR-014: from the tool's mode alone
   return v.checks > 0 ? `<span class="tag">${esc(COPY.lesson.check_tag(v.checks))}</span>` : "";
 }
@@ -185,13 +185,23 @@ function headHtml(m) {
   return `<div class="lhead"><button type="button" class="back" data-action="go_home" aria-label="${esc(COPY.back.lesson)}" title="${esc(COPY.back.lesson)}">‹</button><div class="ltitle"><span class="kicker">${esc(name)}</span><strong>${esc(headTitle(m))}</strong></div>${headTag(m)}</div>${stripHtml(v)}`;
 }
 
+// The saved passes: same page, different first line and due line (FR-021).
+const FINISHED = ["lesson-passed", "lesson-passed-pivot", "practice-passed"];
+
+function savedLine(m) {
+  const n = m.review_date;
+  const due = !n || m.state === "lesson-passed" ? "" : m.state === "practice-passed" ? COPY.lesson.next_warm_up(n) : COPY.lesson.warm_up_due(n);
+  return `✓ ${COPY.lesson.saved}${due ? ` ${due}` : ""}`;
+}
+
 // D6: saved with no pass has no state of its own; it keeps its screen, adds Saved and the ways out, and says nothing about a pass.
 const savedNoPass = (v) => !!v && v.saved === true && !v.passed;
 
 function lessonBanner(m) {
   const s = m.state;
   if (savedNoPass(m.lesson)) return banner("info", COPY.lesson.saved, "");
-  if (s === "lesson-passed") return banner("info", COPY.lesson.passed, `✓ ${COPY.lesson.saved}`);
+  if (s === "lesson-passed" || s === "lesson-passed-pivot") return banner("info", COPY.lesson.passed, savedLine(m));
+  if (s === "practice-passed") return banner("info", COPY.lesson.review_passed, savedLine(m));
   if (s === "lesson-passed-unsaved") return banner("warn", COPY.lesson.unsaved.title, COPY.lesson.unsaved.body);
   if (s === "lesson-passed-asking") return banner("info", COPY.lesson.check_passed, COPY.lesson.one_more_question);
   if (m.error && m.error.blocks_home) return banner("bad", m.error.title, m.error.body, btn(COPY.buttons.try_again, "try_again"));
@@ -314,8 +324,8 @@ function actionsHtml(m) {
   if (s === "lesson-picking-starting") return `<div class="actions">${pressed(COPY.buttons.pressed.start)}<button type="button" disabled>${esc(LABELS.pick_skill)}</button></div>`;
   if (s === "lesson-exited") return `<div class="actions">${btn(LABELS.start, "start", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if (s === "lesson-start-failed") return `<div class="actions">${btn(LABELS.try_again, "try_again", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
-  if ((s === "lesson-passed" || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
-  if (s === "lesson-passed" || savedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
+  if ((FINISHED.includes(s) || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
+  if (FINISHED.includes(s) || savedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
   if (s === "lesson-passed-unsaved") return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}</div>`;
   if (s === "lesson-passed-asking") return "";
   if (s === "lesson-starting") return whyOff(COPY.paused.after_look);
@@ -353,7 +363,7 @@ const VERB_KEY = { check: "check", check_again: "check", hint: "hint", show_me: 
 function askHtml(m) {
   const s = m.state;
   if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting"].includes(s) || savedNoPass(m.lesson)) return "";
-  if (["lesson-passed", "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
+  if ([...FINISHED, "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
   const open = m.can_ask && !(m.turn && m.turn.busy) && !m.error;
   return `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${esc(COPY.ask_label)}</label><input id="ask-in" type="text" placeholder="${esc(COPY.ask_placeholder)}"${open ? "" : " disabled"} /><button type="submit" aria-label="${esc(COPY.buttons.send)}"${open ? "" : " disabled"}>⏎</button></form>`;
 }

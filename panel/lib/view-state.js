@@ -130,7 +130,7 @@ function stateOf(m) {
   return homeState(m);
 }
 
-const COLLAPSED_BY_DEFAULT = new Set(["lesson-error", "lesson-error-demo", "lesson-error-demo-other", "lesson-error-demo-unknown", "lesson-passed", "lesson-passed-asking", "lesson-passed-unsaved"]);
+const COLLAPSED_BY_DEFAULT = new Set(["lesson-error", "lesson-error-demo", "lesson-error-demo-other", "lesson-error-demo-unknown", "lesson-passed", "lesson-passed-pivot", "practice-passed", "lesson-passed-asking", "lesson-passed-unsaved"]);
 
 // Whether the checklist is folded: the learner's own choice once they've made one, else the state's default.
 function listCollapsed(m) {

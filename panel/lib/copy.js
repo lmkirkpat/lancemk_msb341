@@ -98,6 +98,8 @@ const COPY = {
     check_passed_tag: "✓ check passed",
     passed: "Lesson passed.",
     review_passed: "Review passed.",
+    warm_up_due: (n) => (n === 1 ? "Warm-up due tomorrow." : `Warm-up due in ${n} days.`),
+    next_warm_up: (n) => (n === 1 ? "Next warm-up tomorrow." : `Next warm-up in ${n} days.`),
     check_passed: "Check passed.",
     one_more_question: "One more question before this lesson is saved.",
     saved: "Saved to your history.",

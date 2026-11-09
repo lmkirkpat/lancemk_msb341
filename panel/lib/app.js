@@ -11,7 +11,7 @@ const list = require("./checklist/index.js");
 const { treatError, logEntry } = require("./errors.js");
 const { REQUESTS, showMeAgain, startRequest, newLessonRequest, warmUpRequest, followOnRequest } = require("./requests.js");
 const { skillById, skillOfCommand, builtSkills, EASING } = require("./skills.js");
-const { skillsView, skillDetail } = require("./skills-view.js");
+const { skillsView, skillDetail, daysUntilReview, recordSkills } = require("./skills-view.js");
 const { skillOf } = require("./skill-tools.js");
 const { statusFor } = require("./activity.js");
 const { connectionFromTool } = require("./connection.js");
@@ -74,6 +74,7 @@ function createApp(deps) {
     pick_session: null,
     recommend: null,
     skill_detail: null,
+    review_saved: false, // a passed review saved since the panel opened (skills-after-review, D14)
     turnsDone: 0,
     error: null,
     turnError: null,
@@ -254,6 +255,7 @@ function createApp(deps) {
         state.lesson_over = true;
         state.lesson_open = false;
         if (state.session) state.session.ended = true;
+        if (state.lesson.mode === "review" && state.lesson.passed && state.lesson.saved === true) state.review_saved = true;
       }
       loadRecord();
     }
@@ -726,7 +728,9 @@ function createApp(deps) {
     const viewArgs = { memory, pathData: deps.pathData, built, now: now() };
     const skills_view = skillsView(viewArgs);
     const detail = state.skill_detail ? skillDetail(state.skill_detail, viewArgs) : null;
-    m.skills_state = skills_view.state;
+    m.skills_state = state.review_saved && skills_view.due_count > 0 ? "after_review" : skills_view.state;
+    const lessonSkill = state.lesson && state.lesson.skill;
+    m.review_date = lessonSkill ? daysUntilReview(recordSkills(memory)[lessonSkill], built.find((s) => s.id === lessonSkill), now()) : null;
     m.skill_detail = detail ? detail.state : null;
     return Object.assign(m, {
       state: stateOf(m),

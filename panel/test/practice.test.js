@@ -250,3 +250,121 @@ test("a review reached through Yes on B1 is tagged too", async () => {
   assert.ok(lessonParts(h).head.includes(COPY.lesson.review_tag));
   assert.ok(!lessonParts(h).actions.includes(COPY.buttons.show_me));
 });
+
+// ---------- T066: the passes and the due lines ----------
+
+const { daysUntilReview } = require("../lib/skills-view.js");
+const offsetRow = built.find((s) => s.id === "timing.offset");
+const easingRow = built.find((s) => s.id === "easing.basic");
+
+test("daysUntilReview: from the stored date, only ahead of today, only with a review", () => {
+  assert.equal(daysUntilReview({ review_due: "2026-11-10" }, offsetRow, NOW), 1);
+  assert.equal(daysUntilReview({ review_due: "2026-11-12" }, offsetRow, NOW), 3);
+  assert.equal(daysUntilReview({ review_due: "2026-11-09" }, offsetRow, NOW), null, "today isn't ahead");
+  assert.equal(daysUntilReview({ review_due: "2026-11-01" }, offsetRow, NOW), null);
+  assert.equal(daysUntilReview({ review_due: "2026-11-12" }, easingRow, NOW), null, "easing has no review");
+  assert.equal(daysUntilReview({ review_due: "soon" }, offsetRow, NOW), null);
+  assert.equal(daysUntilReview({}, offsetRow, NOW), null);
+  assert.equal(daysUntilReview(undefined, offsetRow, NOW), null);
+});
+
+// A record that changes when the mentor saves, so the line reads what the save wrote.
+function passThrough(mode, skill, after) {
+  return async () => {
+    let record = { skills: { [skill]: { status: mode === "review" ? "learned" : "practicing", last_practiced: LAST, review_due: "2026-11-01" }, "transform.anchor": learned("2026-11-01") }, lessons };
+    const h = await ready({ pathData: SIX_PATH, readRecord: () => Promise.resolve({ status: "ok", record }) });
+    h.app.act("start", { skill });
+    return { h, save: async () => { record = after(record); h.adapter().emit("tool_result", SAVED); await tick(); h.adapter().emit("turn_end", { ok: true, kind: "check" }); await tick(); } };
+  };
+}
+const withDue = (skill, due) => (r) => ({ skills: Object.assign({}, r.skills, { [skill]: learned(due) }), lessons: r.lessons.concat([{ skill, date: LAST, result: "passed" }]) });
+
+async function passedLesson(skill, snap, check, due) {
+  const { h, save } = await passThrough("lesson", skill, withDue(skill, due))();
+  h.adapter().emit("tool_result", snap);
+  h.adapter().emit("tool_result", check);
+  await save();
+  return h;
+}
+
+test("lesson-passed-pivot: a pass on a skill with a review says when it's due, after the save (FR-021)", async () => {
+  const h = await passedLesson("timing.offset", OF_SNAP({ mode: "lesson", no_demo_reason: null }), OF_CHECK(true), "2026-11-10");
+  assert.equal(h.app.model().state, "lesson-passed-pivot");
+  const p = lessonParts(h);
+  assert.ok(p.banner.includes(COPY.lesson.passed));
+  assert.ok(p.banner.includes(COPY.lesson.saved));
+  assert.ok(p.banner.includes("Warm-up due tomorrow."));
+  assert.ok(p.head.includes(COPY.lesson.passed_tag));
+  assert.ok(p.actions.includes(COPY.buttons.whats_next));
+  assert.ok(p.actions.includes(COPY.buttons.see_skills));
+  assert.ok(renderApp(h.app.model()).lesson.list.includes('aria-expanded="false"'), "the list folds, as at lesson-passed");
+});
+
+test("easing's pass has no due line, whatever its record says (FR-021)", async () => {
+  const snap = T("snapshot_project", { lesson: "new", targets: [], focus: ["Title"], demo_target: null });
+  const check = T("diff_since_last", { comp_matches: true, passed: true, targets: [], unexpected_changes: [], summary: {} });
+  const h = await passedLesson("easing.basic", snap, check, "2026-11-10");
+  assert.equal(h.app.model().state, "lesson-passed");
+  assert.ok(!lessonParts(h).banner.includes("Warm-up"));
+});
+
+test("practice-passed: Review passed, saved, and the next warm-up from the record (FR-021)", async () => {
+  const { h, save } = await passThrough("review", "timing.offset", withDue("timing.offset", "2026-11-12"))();
+  h.adapter().emit("tool_result", OF_SNAP());
+  h.adapter().emit("tool_result", OF_CHECK(true));
+  await save();
+  assert.equal(h.app.model().state, "practice-passed");
+  const p = lessonParts(h);
+  assert.ok(p.banner.includes(COPY.lesson.review_passed));
+  assert.ok(!p.banner.includes(COPY.lesson.passed));
+  assert.ok(p.banner.includes(COPY.lesson.saved));
+  assert.ok(p.banner.includes("Next warm-up in 3 days."));
+  assert.ok(p.head.includes(COPY.lesson.passed_tag));
+  assert.ok(p.actions.includes(COPY.buttons.whats_next));
+});
+
+test("a stale due date is never shown as the next one: no line until the record has a future date", async () => {
+  const { h, save } = await passThrough("review", "timing.offset", (r) => r)();
+  h.adapter().emit("tool_result", OF_SNAP());
+  h.adapter().emit("tool_result", OF_CHECK(true));
+  await save();
+  const p = lessonParts(h);
+  assert.equal(h.app.model().state, "practice-passed");
+  assert.ok(!p.banner.includes("warm-up"));
+});
+
+test("Ask stays after a saved review while the mentor's session lives (FR-046)", async () => {
+  const { h, save } = await passThrough("review", "timing.offset", withDue("timing.offset", "2026-11-12"))();
+  h.adapter().emit("tool_result", OF_SNAP());
+  h.adapter().emit("tool_result", OF_CHECK(true));
+  await save();
+  assert.ok(lessonParts(h).ask.includes("<form"));
+});
+
+test("skills-after-review: after a saved pass with another still due; Home's card moves on (D14)", async () => {
+  const { h, save } = await passThrough("review", "timing.offset", withDue("timing.offset", "2026-11-12"))();
+  h.adapter().emit("tool_result", OF_SNAP());
+  h.adapter().emit("tool_result", OF_CHECK(true));
+  await save();
+  h.app.act("see_skills");
+  assert.equal(h.app.model().state, "skills-after-review");
+  assert.ok(plain(view(h)).includes("1 due for practice"));
+  h.app.act("tab", { tab: "home" });
+  const text = homeText(h);
+  assert.ok(text.includes("Set the pivot (anchor point)"), "the next due skill");
+  assert.ok(!text.includes("is due in Skills"), "no count line");
+});
+
+test("a saved review with nothing else due is the plain Skills list", async () => {
+  let record = { skills: { "timing.offset": learned("2026-11-01") }, lessons };
+  const h = await ready({ pathData: SIX_PATH, readRecord: () => Promise.resolve({ status: "ok", record }) });
+  h.app.act("warm_up", { skill: "timing.offset" });
+  h.adapter().emit("tool_result", OF_SNAP());
+  h.adapter().emit("tool_result", OF_CHECK(true));
+  record = withDue("timing.offset", "2026-11-12")(record);
+  h.adapter().emit("tool_result", SAVED);
+  await tick();
+  h.adapter().emit("turn_end", { ok: true, kind: "check" });
+  h.app.act("see_skills");
+  assert.equal(h.app.model().state, "skills-few");
+});
