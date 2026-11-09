@@ -78,7 +78,7 @@ most; they hold the rest with their own hands.
      you couldn't read your notes, and teach a first lesson. That one sentence is all you say about
      your notes in this lesson.
    - If easing isn't learned (the Easing entry in `learner.other_skills` has `learned` false), name
-     it as the place to start and offer it (`/ease-mentor`). If they want this lesson anyway, say
+     it as the place to start and offer it, as the easing lesson. If they want this lesson anyway, say
      one sentence ("this builds on easing: hold is the third choice next to linear and eased") and
      carry on. Don't reteach easing.
      `learned` null means your notes couldn't be read, so you don't know: say nothing about whether
@@ -269,6 +269,7 @@ most; they hold the rest with their own hands.
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short
     "I've noted that for next time" is enough.
+    Name what comes next in words, never a slash command.
 
 ## The review
 
