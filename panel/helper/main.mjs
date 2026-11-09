@@ -8,13 +8,13 @@
 // Log lines go to stderr, scrubbed.
 
 import readline from "node:readline";
-import { scrubEnv, resolveKey } from "./lib/key.mjs";
+import { scrubEnv, resolveKey, checkKey } from "./lib/key.mjs";
 import { loadSettings, HELPER_DIR } from "./lib/settings.mjs";
 import { createMcpClient } from "./lib/mcp-client.mjs";
-import { createLesson, createClient } from "./lib/loop.mjs";
+import { createLesson, createClient, lastReach } from "./lib/loop.mjs";
 import { loadPreamble, loadSkillTool } from "./lib/prompt.mjs";
 import { createRequestLog } from "./lib/request-log.mjs";
-import { errorEvent, logLine } from "./lib/errors.mjs";
+import { errorEvent, logLine, scrub } from "./lib/errors.mjs";
 import { ZERO_TOKENS } from "./lib/cost.mjs";
 
 // Before anything can build a client: no key, token, profile or host from the environment.
@@ -26,6 +26,7 @@ const LOCAL_URL = /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d{1,5})?\/?$/;
 
 let key = null; // in memory only
 let startKey = null; // the start command's key (evals), if any
+const checkedKeys = []; // keys from key_check commands, scrubbed from every log line (T037)
 // Tests and dev/drive.js --fault only: `keychain: false` in a start command that also has a local
 // base_url means the Keychain is never read (no real key in a test, no access dialog).
 let useKeychain = true;
@@ -42,7 +43,9 @@ function out(type, payload) {
 }
 
 function log(entry) {
-  process.stderr.write(logLine(entry, key || startKey) + "\n");
+  let line = logLine(entry, key || startKey);
+  for (const k of checkedKeys) line = scrub(line, k);
+  process.stderr.write(line + "\n");
 }
 
 if (removedEnv.length) log({ event: "env_removed", names: removedEnv });
@@ -197,12 +200,36 @@ async function send(cmd) {
   });
 }
 
+// key_check (spec 013 T037, FR-020; spec 006's installer and setup check): needs no start. The
+// command's key (the installer checks one before storing it) wins; else the start's key or the
+// Keychain. base_url and keychain: false are test-only, with the start command's rules.
 async function keyCheck(cmd) {
-  // T037 builds the real check (one free models.retrieve). Until then: whether a key is there.
-  const k = typeof cmd.key === "string" && cmd.key.trim() ? cmd.key.trim() : await findKey();
+  const given = typeof cmd.key === "string" && cmd.key.trim() ? cmd.key.trim() : null;
+  if (typeof cmd.key === "string" && cmd.key) checkedKeys.push(cmd.key);
+  if (given) checkedKeys.push(given); // before any log line this check writes
   delete cmd.key;
+  const refuse = (reason) => {
+    log({ event: "bad_command", type: "key_check", reason });
+    out("error", { kind: "bad_command", message: "" });
+  };
+  if (cmd.base_url !== undefined && (typeof cmd.base_url !== "string" || !LOCAL_URL.test(cmd.base_url))) return refuse("base_url must be on this Mac");
+  if (cmd.keychain !== undefined && cmd.keychain !== false) return refuse("keychain may only be false");
+  if (cmd.keychain === false && cmd.base_url === undefined) return refuse("keychain false needs a local base_url");
+
+  let k = given;
+  if (!k && cmd.keychain !== false) k = started ? await findKey() : await resolveKey(null);
   if (!k) return out("key_status", { status: "no_key" });
-  out("error", { kind: "not_implemented", message: "" });
+  let model;
+  try {
+    model = started ? ctx.loaded.settings.model : loadSettings().settings.model;
+  } catch (e) {
+    log({ event: "key_check_failed", reason: "settings unreadable" });
+    return out("error", errorEvent("start_failed"));
+  }
+  const baseURL = cmd.base_url || (ctx && ctx.baseURL) || undefined;
+  const client = createClient({ apiKey: k, baseURL, log });
+  const status = await checkKey({ key: k, model, client, reached: () => lastReach(client).reached, log });
+  out("key_status", { status });
 }
 
 async function stop() {

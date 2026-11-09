@@ -18,7 +18,8 @@
 //   --fixture <file>               run ae-mentor in fixture mode on that saved snapshot instead of
 //                                  the live comp (no After Effects needed)
 //   --settings <file>              another settings file (experiments only)
-//   --key-check                    ask the helper whether the Keychain key works, then exit
+//   --key-check                    ask the helper whether the Keychain key works (one free
+//                                  request), then exit
 //   --fake-service <url>           dev only: a local fake service (test/fake-service.mjs) with a
 //                                  placeholder key; the Keychain is never read
 // Type /quit (or press Ctrl-D) to end; the helper and ae-mentor stop with it.
@@ -61,7 +62,7 @@ function parseArgs(argv) {
 }
 
 function usage(problem) {
-  const head = fs.readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n").slice(1, 26).map((l) => l.replace(/^\/\/ ?/, "")).join("\n");
+  const head = fs.readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n").slice(1, 25).map((l) => l.replace(/^\/\/ ?/, "")).join("\n");
   if (problem) console.error(`chat.mjs: ${problem}\n`);
   console.error(head);
   process.exit(problem ? 2 : 0);
@@ -183,9 +184,11 @@ function turn(textToSend, kind) {
 
 async function main() {
   if (o.keyCheck) {
-    send({ type: "key_check", ...(o.fakeService ? { key: FAKE_KEY } : {}) });
+    // One free request (models.retrieve): works, rejected, out_of_credit, offline or no_key.
+    send({ type: "key_check", ...(o.fakeService ? { key: FAKE_KEY, base_url: o.fakeService } : {}) });
     const ev = await Promise.race([nextEvent("key_status"), nextEvent("error")]);
-    console.log(ev.type === "key_status" ? `key: ${ev.status}` : "key check: not built yet (T037); a key is stored.");
+    console.log(ev.type === "key_status" ? `key: ${ev.status}` : `key check failed: ${ev.message || ev.kind}`);
+    if (ev.type === "error" && helperLog) console.error(dim(helperLog.trim().split("\n").slice(-2).join("\n")));
     return quit();
   }
 
