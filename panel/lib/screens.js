@@ -10,6 +10,7 @@ const { shortDate } = require("./memory.js");
 const { visibleKinds } = require("./requests.js");
 const { rowsOf } = require("./checklist/index.js");
 const { listCollapsed } = require("./view-state.js");
+const { skillById } = require("./skills.js");
 
 const TABS = ["home", "lesson", "skills"];
 
@@ -155,7 +156,8 @@ function stripHtml(view) {
 function headTitle(m) {
   if (m.state === "lesson-starting") return COPY.lesson.looking;
   if (m.state === "lesson-start-failed") return COPY.lesson.didnt_start;
-  return focusText(m.lesson) || COPY.lesson.your_comp;
+  const row = skillById(m.lesson && m.lesson.skill);
+  return focusText(m.lesson) || (row && row.no_focus && m.lesson.checks === 0 ? row.no_focus : COPY.lesson.your_comp);
 }
 
 function headTag(m) {
@@ -232,8 +234,17 @@ function chatRegion(m) {
   return { earlier: `<details class="earlier"><summary>${esc(COPY.lesson.earlier(turns))}</summary>${folded.map(messageHtml).join("")}</details>`, items: msgs.slice(foldAt).map(messageHtml) };
 }
 
-function rowHtml(r) {
-  return `<li class="${r.family}${r.changed ? " fresh" : ""}"><span class="g" aria-hidden="true">${esc(r.glyph)}</span><span class="what"><span class="lab">${esc(r.subject)}</span>${r.detail ? `<small>${esc(r.detail)}</small>` : ""}</span><span class="st">${esc(r.word)}</span></li>`;
+// Offset's timeline (FR-088): one scale for the whole lesson, hidden from screen readers since the
+// detail line says the same.
+function trackHtml(r, timeline) {
+  if (r.time === null || r.time === undefined || !timeline || !(timeline.end > timeline.start)) return "";
+  const at = Math.min(100, Math.max(0, ((r.time - timeline.start) / (timeline.end - timeline.start)) * 100));
+  return `<span class="track" aria-hidden="true"><i style="left:${at.toFixed(1)}%"></i></span>`;
+}
+
+function rowHtml(r, timeline) {
+  const track = trackHtml(r, timeline);
+  return `<li class="${r.family}${r.changed ? " fresh" : ""}${track ? " trk" : ""}"><span class="g" aria-hidden="true">${esc(r.glyph)}</span><span class="what"><span class="lab">${esc(r.subject)}</span>${r.detail ? `<small>${esc(r.detail)}</small>` : ""}</span><span class="st">${esc(r.word)}</span>${track}</li>`;
 }
 
 // At the opening the list is the mentor's whole read: the first section's rows, then a count for the
@@ -250,7 +261,11 @@ function visibleSections(l) {
 function listHtml(m) {
   const v = m.lesson;
   const l = v.check_list;
-  if (!l) return m.state === "lesson-starting" ? `<section class="check" aria-label="${esc(COPY.check.aria)}"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> ${esc(COPY.check.slot_starting)}</p></div></section>` : "";
+  if (!l) {
+    const row = skillById(v.skill);
+    const slot = m.state === "lesson-starting" ? COPY.check.slot_starting : row && row.slot;
+    return slot ? `<section class="check" aria-label="${esc(COPY.check.aria)}"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> ${esc(slot)}</p></div></section>` : "";
+  }
   const { sections, foldLine } = visibleSections(l);
   const nDone = rowsOf(l).filter((r) => r.family === "done").length;
   const collapsed = listCollapsed(m);
@@ -258,11 +273,13 @@ function listHtml(m) {
   const noteOnly = collapsed && !!l.stale && m.list_collapsed === true;
   const body = sections.map((s) => {
     const allDone = s.rows.length > 0 && s.rows.every((r) => r.family === "done");
-    return `${s.title ? `<h3${allDone ? ' class="alld"' : ""}>${esc(s.title)}</h3>` : ""}<ul>${s.rows.map(rowHtml).join("")}</ul>`;
+    return `${s.title ? `<h3${allDone ? ' class="alld"' : ""}>${esc(s.title)}</h3>` : ""}<ul>${s.rows.map((row) => rowHtml(row, v.timeline)).join("")}</ul>`;
   }).join("");
   const fold = nDone >= 2 ? `<button type="button" class="foldline" data-action="fold_done" data-keep-focus aria-expanded="${!!m.done_unfolded}"><span aria-hidden="true">✓</span> ${esc(COPY.check.done_fold(nDone, m.done_unfolded))}</button>` : "";
   const lines = [foldLine, l.more].filter(Boolean).map((t) => `<p class="more">${esc(t)}</p>`).join("");
-  const outside = l.outside && l.outside.length ? `<h3>${esc(COPY.check.outside)}</h3><ul class="plain">${l.outside.map((o) => `<li><span class="what">${esc(o)}</span></li>`).join("")}</ul>` : "";
+  const plainList = (title, items) => (items && items.length ? `<h3>${esc(title)}</h3><ul class="plain">${items.map((o) => `<li><span class="what">${esc(o)}</span></li>`).join("")}</ul>` : "");
+  const footer = (l.footer || []).map((t) => `<p class="foot">${esc(t)}</p>`).join("");
+  const outside = `${footer}${plainList(COPY.check.worth_a_look, l.worth_a_look)}${plainList(COPY.check.outside, l.outside)}`;
   const cls = ["check", m.done_unfolded ? "unfold" : "", l.stale ? "stale" : ""].filter(Boolean).join(" ");
   return `<section class="${cls}" aria-label="${esc(COPY.check.aria)}"><button type="button" class="check-head" aria-expanded="${!collapsed}" data-action="toggle_list" data-keep-focus><span class="chev" aria-hidden="true"><span class="ch-tall">${collapsed ? "▸" : "▾"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span><span class="sum">${esc(l.summary)}${l.sub ? `<small>${esc(l.sub)}</small>` : ""}</span></button><div class="check-body"${collapsed && !noteOnly ? " hidden" : ""}>${l.stale ? `<p class="stale-note">${esc(l.stale)}</p>` : ""}${noteOnly ? "" : `${fold}${body}${lines}${outside}`}</div></section>`;
 }

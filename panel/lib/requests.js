@@ -43,7 +43,7 @@ function visibleKinds(view, { lessonOpen, canContinue } = {}) {
   if (v.checks > 0) kinds.push("hint");
   if (!v.demo_unknown) {
     if (v.demo_made) kinds.push("show_me_again");
-    else if (v.demo_target && v.mode !== "review") kinds.push("show_me");
+    else if (v.demo_target && v.mode !== "review" && (v.skill !== "parenting.null" || v.null_ready)) kinds.push("show_me");
   }
   return kinds;
 }

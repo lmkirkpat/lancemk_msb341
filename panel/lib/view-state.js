@@ -102,7 +102,7 @@ function lessonState(m) {
   if (v.passed && typeof v.saved === "boolean") return passedState(m, v);
   if (l && l.stale_kind === "continued") return "lesson-continued";
   if (l && l.stale_kind === "other_comp") return "lesson-othercomp";
-  if (l && l.stale_kind) return "lesson-stale";
+  if (l && l.stale_kind && l.stale_kind !== "ungraded") return "lesson-stale";
   if (v.passed) return passedState(m, v);
   if (v.snapshots === 0 && v.checks === 0 && m.turn && m.turn.busy) return "lesson-starting";
   if (m.from_picking && !v.replied) return "lesson-picked";

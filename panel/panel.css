@@ -180,6 +180,11 @@ button.check-head:hover:not(:disabled) { background: none; }
 .check li.fresh { box-shadow: inset 2px 0 0 var(--accent); padding-left: 4px; margin-left: -4px; }
 .check h3 { margin: 10px 0 4px; font-size: 11px; color: var(--muted); font-weight: 600; }
 .check .plain li { color: var(--muted); }
+.check .foot { margin: 6px 0 0; padding: 4px 6px; border: 1px dashed #5a4d1e; border-radius: 3px; color: var(--text); }
+/* Offset's timeline, not a meter: a ruler with the first key as a diamond (FR-088). */
+.check li.trk { flex-wrap: wrap; }
+.track { display: block; position: relative; flex: 0 0 calc(100% - 21px); margin-left: 21px; height: 11px; border-bottom: 1px solid #4f4f4f; background: repeating-linear-gradient(to right, #4f4f4f 0 1px, transparent 1px 10%) left bottom / 100% 4px no-repeat; }
+.track i { position: absolute; top: 2px; width: 7px; height: 7px; background: var(--accent); transform: translateX(-50%) rotate(45deg); }
 .stale-note { color: var(--text-strong); margin: 4px 0 0; }
 .check .more, .check .emptyl { color: var(--muted); margin: 4px 0 0; font-size: 12px; }
 button.foldline { display: none; background: none; border: 0; color: var(--ok); padding: 3px 0; cursor: pointer; width: 100%; text-align: left; min-height: 0; }

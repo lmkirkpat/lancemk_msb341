@@ -82,13 +82,13 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T040 [P] PB · `activity.js`: a line for every tool, claiming only what it does, with a test. FR-062, SC-017.
 - [x] T041 PB · `requests.js` per skill, including Show me again's text (Open question 8), New lesson and Find my next lesson; `startLesson` takes the request and passes `skillOf(request)`, since `main.js` hard-codes `REQUESTS.start` today, and no non-easing lesson can start without this; `turns.js` `KINDS` gains the new kinds, so the turn log doesn't count them as Ask. contracts/button-requests.md.
 - [x] T042 PB · `lib/skills.js`: path, data file and skill table, with its drift test; tool → skill; remove `path.js`. PN-16, data-model.
-- [ ] T043 [P] [US2] PB · `checklist/key-types.js`, `skill-keytypes-open`, `-check`.
-- [ ] T044 [P] [US2] PB · `checklist/speed-graph.js`, `skill-speedgraph-open`, `-check`; `fastest` never shown; land-hard section; `credit` `unknown` as a "?" row (D13).
-- [ ] T045 [P] [US2] PB · `checklist/offset.js`, `skill-offset-layers-open`, `-check`, `skill-offset-props-check`.
-- [ ] T046 [P] [US2] PB · `checklist/pivot.js`, `skill-pivot-open`, `-check`, `-keyed`.
-- [ ] T047 [P] [US2] PB · `checklist/null.js`, `skill-null-open`, `-place`, `-parent`, `-move`; `graded: false` as stale.
-- [ ] T048 [US2] PB · Offset's timeline, scale per plan P5, hidden from screen readers. FR-088. Depends on T045.
-- [ ] T049 [US2] PB · Per-skill demo: Show me from `demo_target` (null also `null_ready`), the Changed box from each demo tool's result, header from tool → skill. FR-014, FR-018, FR-019.
+- [x] T043 [P] [US2] PB · `checklist/key-types.js`, `skill-keytypes-open`, `-check`.
+- [x] T044 [P] [US2] PB · `checklist/speed-graph.js`, `skill-speedgraph-open`, `-check`; `fastest` never shown; land-hard section; `credit` `unknown` as a "?" row (D13).
+- [x] T045 [P] [US2] PB · `checklist/offset.js`, `skill-offset-layers-open`, `-check`, `skill-offset-props-check`.
+- [x] T046 [P] [US2] PB · `checklist/pivot.js`, `skill-pivot-open`, `-check`, `-keyed`.
+- [x] T047 [P] [US2] PB · `checklist/null.js`, `skill-null-open`, `-place`, `-parent`, `-move`; `graded: false` as stale.
+- [x] T048 [US2] PB · Offset's timeline, scale per plan P5, hidden from screen readers. FR-088. Depends on T045.
+- [x] T049 [US2] PB · Per-skill demo: Show me from `demo_target` (null also `null_ready`), the Changed box from each demo tool's result, header from tool → skill. FR-014, FR-018, FR-019.
 - [ ] T050 [US5] PB · Skills tab: `skills-empty`, `skills-few`, `skills-many`; removes the interim. FR-048, FR-053.
 - [ ] T051 [US5] PB · `skill-detail`, `skill-detail-noreview`, `skill-detail-new`, New lesson. FR-049.
 - [ ] T052 [US1] PB · Home's `home-return` and Find my next lesson; `lesson-picking`, Yes per FR-082: `handsOver` on both adapters; on B1, stop next-mentor's process and start the recommended lesson from `recommendation`, ignoring late events from the stopped adapter, with the skill from the follow-on request; next-mentor's picking process writes no display log, so it can't show as `home-cutoff`; on A, send `Yes, let's go.`; hidden with `requested`, no recommendation or a skill not in the table; a test that the request is the same with `focus_layers` empty, null or very long. A review reached before step 3 has no practice tag yet. Removes `home-return-interim`. FR-009, FR-013, FR-082, FR-094, plan P3. Depends on T041.

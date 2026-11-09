@@ -157,6 +157,7 @@ const SITS_ON = {
   ".check li .what small": [LIST],
   ".check h3": [LIST],
   ".check .plain li": [LIST],
+  ".check .foot": [LIST],
   ".stale-note": [LIST],
   ".check .more": [LIST],
   ".check .emptyl": [LIST],

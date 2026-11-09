@@ -30,6 +30,10 @@ function initialLesson(opts) {
     labels: {},
     check_list: null,
     timeline: null,
+    offset_kind: null,
+    pivot_keyed: false,
+    null_stage: null,
+    landing_hard: [],
   };
 }
 
@@ -81,9 +85,9 @@ function onSnapshot(v, ev) {
   const fromCheck = v.check_list && v.check_list.source === "check";
   if (Array.isArray(r.targets) && r.targets.length && !fromCheck) {
     const proposed = !next.replied && !next.picked_up && next.checks === 0;
-    next.check_list = list.fromSnapshot(ev.name, r.targets, { labels, proposed, focus: next.focus });
+    next.check_list = list.fromSnapshot(ev.name, r.targets, { labels, proposed, focus: next.focus, snapshot: r });
   }
-  return next;
+  return Object.assign(next, list.snapshotFields(ev.name, r, v));
 }
 
 function onCheck(v, ev) {
@@ -93,11 +97,14 @@ function onCheck(v, ev) {
     if (ev.ok && r && r.comp_matches === false) return markStale(v, "other_comp", r.lesson_comp);
     return markStale(v, "ae");
   }
-  const built = list.fromCheck(ev.name, r, { labels: v.labels, previous: v.check_list, at: ev.at });
+  if (list.isUngraded(ev.name, r)) return markStale(v, "ungraded");
+  const built = list.fromCheck(ev.name, r, { labels: v.labels, previous: v.check_list, at: ev.at, landing_hard: v.landing_hard, timeline: v.timeline });
   // A pass whose save has answered is over: a later check, asked for after it (FR-046), updates the
   // rows but can't unsay the result.
   const over = v.passed && typeof v.saved === "boolean";
   const next = Object.assign({}, v, { checks: v.checks + 1, passed: over || built.passed, check_list: built });
+  if (built.view_fields) Object.assign(next, built.view_fields);
+  if (Array.isArray(r.codes) && r.codes.includes("null_ready")) next.null_ready = true;
   next.demo_unknown = false; // a check settles it either way (FR-030)
   if (built.marks_demo) next.demo_made = true;
   return next;
