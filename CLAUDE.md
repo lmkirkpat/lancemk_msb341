@@ -111,15 +111,21 @@ a brand new session act like a colleague who already knows what you are working 
     released it on stop, a second was blocked while the cockpit held it). The cockpit never
     stops, so it stays off AE while a builder needs it.
   - **Specs (2026-10-20 to 10-24):** curriculum (`specs/004`, with `curriculum.md`), diagnosis
-    (005), installer (006) and UI overhaul (007) approved; 005 and 006 have no plan or tasks yet.
+    (005), installer (006) and UI overhaul (007) approved; 005 has no plan or tasks yet.
+    **Spec 006 status (2026-11-09):** plan and 61 tasks; Phase 1 done (T001 to T016): T004's gate passed
+    (signed extensions load with debug mode off), the installer is built (`installer/`) and a test zip is
+    staged. **Next:** T017 to T019, three runs on fresh accounts, then T020 ticks SC-002. T045 is held on
+    Q2 (testers' keys), and T046 (revisit the name) comes before the first tester.
     Spec 007's plan and 80 tasks were approved 2026-11-04; its mockup matches.
     **Spec 007 status (2026-11-09):** phases 0 to 5 are built and merged, practice included (T063 to T070, merge
     `dc6eab2`; panel tests 605 pass). T001 and T028 (the comparison) passed: the builder prefers the new panel. All
     six skills ran a live lesson in it on B1 (T028, T056 to T060), so sprint 4's first "done" item is ticked; logs in
-    `discovery/usage-notes/ui-overhaul.md`. SC-002's live tally is met (16 checks, all matching AE) except its
-    Proposed openings, 2 of 3: easing's opening rows said "Not checked yet" (cause open, for panel-builder).
-    **Next:** fix that and re-run an easing opening; T061 (Find my next lesson), T062 (states at 260 × 480), T071
-    (a warm-up), T072 (keyboard), T073 (three sessions' notes), then T074 (close). Four mentor findings from the
+    `discovery/usage-notes/ui-overhaul.md`. SC-002's live half is met (16 checks, all matching AE, and Proposed
+    openings 3 of 3: easing's miss was a resume of an unfinished lesson, which FR-092 keeps unproposed).
+    T062 passed: ten states clean at the default right-side dock (about 343 pt), and SC-010 was amended to that
+    size. Finding: row times show three decimals. **Next:** T061 (Find my next lesson, plus `home-first`), T071
+    (a warm-up, `practice-check` at 260 × 480), T072 (keyboard), T073 (three sessions' notes), then T074 (close);
+    EE's T038 and T077; paid T078 and T079 on the builder's go. Four mentor findings from the
     live lessons (a close naming `/speed-graph-mentor`, the speed graph record guessing why, pivot guessing an
     expression, null's confusing "where") have eval cases on branch `evals-live-findings`, speed graph 36 and 37,
     pivot 54, null 52; `SKILL.md` fixes wait for those to fail on B1.
