@@ -1,0 +1,12 @@
+{"type":"error","kind":"not_signed_in","message":"401 from the service, key sk-ant-xxxx"}
+{"type":"error","kind":"out_of_credit","message":"credit balance too low"}
+{"type":"error","kind":"rate_limited","message":"429"}
+{"type":"error","kind":"service_busy","message":"529 overloaded"}
+{"type":"error","kind":"offline","message":"ENOTFOUND"}
+{"type":"error","kind":"refused","message":"model refused"}
+{"type":"error","kind":"timeout","message":""}
+{"type":"error","kind":"start_failed","message":"spawn failed at /Users/someone/x"}
+{"type":"error","kind":"process_exited","message":"exit 1"}
+{"type":"error","kind":"busy","message":"a turn is running"}
+{"type":"error","kind":"bad_command","message":"unrecognised request"}
+{"type":"error","kind":"not_implemented","message":"nope"}

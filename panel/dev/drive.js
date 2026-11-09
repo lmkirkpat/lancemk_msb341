@@ -21,7 +21,7 @@ const { pathToFileURL } = require("url");
 const { loadConfig } = require("../lib/config.js");
 const { createAdapter: createB1Adapter } = require("../lib/adapter-claude-code.js");
 const { createAdapter: createApiAdapter, HELPER_DIR } = require("../lib/adapter-api.js");
-const { messageForA } = require("../lib/errors-a.js");
+const { noticeText } = require("../lib/errors.js");
 const { REQUESTS } = require("../lib/requests.js");
 const { skillOf } = require("../lib/skill-tools.js");
 const { withStartFields } = require("./start-fields.js");
@@ -140,7 +140,7 @@ async function main() {
   a.on("error", (e) => {
     endText();
     if (!isA) return console.log(`${t0()}  error ${e.kind}: ${tilde(e.message)}`);
-    const shown = messageForA(e.kind); // exactly what the panel shows
+    const shown = noticeText(e.kind); // exactly what the panel shows
     console.log(`${t0()}  error ${e.kind}: ${shown === null ? "(not shown)" : shown}`);
   });
   a.on("turn_end", (e) => {

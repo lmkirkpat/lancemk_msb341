@@ -13,7 +13,7 @@
   const { ensureRuntime } = lib("runtime.js");
   const { createAdapter: createB1Adapter } = lib("adapter-claude-code.js");
   const { createAdapter: createApiAdapter } = lib("adapter-api.js");
-  const { messageForA } = lib("errors-a.js");
+  const { noticeText, logEntry } = lib("errors.js");
   // The runtime panel.json names (spec 013 FR-037): "a" is the Claude API through the helper;
   // anything else is B1, headless Claude Code, exactly as before.
   const createAdapter = (cfg) => (cfg.runtime === "a" ? createApiAdapter : createB1Adapter)(cfg);
@@ -309,13 +309,13 @@
     a.on("error", (e) => {
       if (state.cfg && state.cfg.runtime === "a") {
         // Option A: fixed text by kind only, nothing appended (spec 013 FR-027).
-        const text = messageForA(e.kind);
-        if (text === null) return;
+        const text = noticeText(e.kind);
+        if (text === null) return console.warn("[Knack] error", JSON.stringify(logEntry(e)));
         state.turnError = true;
         return notice(text);
       }
       const msg = ERRORS[e.kind];
-      if (e.kind === "bad_stream") return console.warn("[Knack] bad stream line", e.message);
+      if (e.kind === "bad_stream") return console.warn("[Knack] error", JSON.stringify(logEntry(e)));
       state.turnError = true;
       notice(msg === undefined ? `Something went wrong: ${e.message}` : e.kind === "start_failed" ? `${msg} ${e.message || ""}`.trim() : msg);
     });
