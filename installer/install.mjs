@@ -3,7 +3,8 @@
 // applet on the private Node, never by a person in Terminal:
 //   install.mjs preflight --payload <dir>                 → "ok" | "stop\n<message>"
 //   install.mjs ae-open                                   → "open" | "closed"
-//   install.mjs key-check --payload <dir>   (key on stdin) → works | rejected | out_of_credit | offline | no_key | bad_format
+//   install.mjs key-check --payload <dir> --node-dir <dir>   (key on stdin)
+//                                                         → works | rejected | out_of_credit | offline | no_key | bad_format | unknown
 //   install.mjs install --payload <dir> --node-dir <dir> [--key-status <status>]   (key on stdin, optional)
 //                                                         → "ok\n<note>" | "failed\n<message>"
 // The key only ever arrives on stdin, and goes on only over stdin (lib/keychain.mjs). Output is one
@@ -16,11 +17,27 @@ import { layout } from "./lib/layout.mjs";
 import { guard } from "./lib/fsx.mjs";
 import { preflight, STOP } from "./lib/preflight.mjs";
 import { aeRunning } from "./lib/ae.mjs";
-import { installPayload } from "./lib/payload.mjs";
+import { installPayload, recordKeychain } from "./lib/payload.mjs";
+import { normalizeKey, checkKey, storeKey, shouldStore, KEY_ITEM } from "./lib/keychain.mjs";
 
 export const FAILED = "Knack couldn't finish installing. Open the installer again to finish; your lesson history is safe.";
+export const NOTES = Object.freeze({
+  not_checked: "Your access key is not yet checked, so it wasn't saved. When you're online, open the installer again to add it.",
+  needs_credit: "Your access key works, but its account needs credit before lessons can start.",
+  not_saved: "Knack couldn't save your access key. Open the installer again to add it.",
+});
 
-// opts: { home, payloadDir, nodeDir, run, tools, dirs, afterStep, key, keyStatus, keychain }
+// After the files are in place: store the key if its check allows it (lib/keychain.mjs).
+// → the note for the last screen, or "".
+async function keyStep({ L, g, key, keyStatus, run, tools }) {
+  if (!key) return "";
+  if (!shouldStore(keyStatus)) return NOTES.not_checked;
+  if (!(await storeKey({ key, run, tools }))) return NOTES.not_saved;
+  recordKeychain(L, g, KEY_ITEM);
+  return keyStatus === "out_of_credit" ? NOTES.needs_credit : "";
+}
+
+// opts: { home, payloadDir, nodeDir, run, tools, dirs, afterStep, key, keyStatus }
 // → { ok: true, note } or { ok: false, reason, text }
 export async function install(opts) {
   const L = layout(opts.home);
@@ -35,8 +52,8 @@ export async function install(opts) {
     if (opts.onError) opts.onError(e);
     return { ok: false, reason: "failed", text: FAILED };
   }
-  const note = opts.afterInstall ? await opts.afterInstall({ L, g }) : "";
-  return { ok: true, note: note || "" };
+  const note = await keyStep({ L, g, key: normalizeKey(opts.key), keyStatus: opts.keyStatus, run: opts.run, tools: opts.tools });
+  return { ok: true, note };
 }
 
 export function parseArgs(argv) {
@@ -66,7 +83,7 @@ export function readStdin(stream = process.stdin) {
 }
 
 // One CLI call → the text to print and the exit code. `deps` lets tests swap the parts that touch
-// the Mac (tools, AE folders, the key steps).
+// the Mac: { home, run, tools, dirs, afterStep, stdin (text, instead of reading stdin) }.
 export async function main(argv, deps = {}) {
   let o;
   try {
@@ -82,10 +99,23 @@ export async function main(argv, deps = {}) {
   if (o.command === "ae-open") {
     return { out: (await aeRunning({ run: deps.run, tools: deps.tools })) ? "open" : "closed", code: 0 };
   }
-  if (o.command === "key-check" && deps.keyCheck) return deps.keyCheck(o);
+  const stdin = () => (deps.stdin !== undefined ? Promise.resolve(deps.stdin) : readStdin());
+  if (o.command === "key-check") {
+    const key = normalizeKey(await stdin());
+    if (!key) return { out: "bad_format", code: 0 };
+    if (!o.payloadDir || !o.nodeDir) return { out: "unknown", code: 0 };
+    const status = await checkKey({
+      key,
+      nodePath: path.join(o.nodeDir, "bin", "node"),
+      helperPath: path.join(o.payloadDir, "version", "panel", "helper", "main.mjs"),
+      home: layout(deps.home).home,
+      timeoutMs: deps.keyTimeoutMs,
+    });
+    return { out: status, code: 0 };
+  }
   if (o.command === "install") {
-    const extra = deps.installExtras ? await deps.installExtras(o) : {};
-    const r = await install({ ...base, payloadDir: o.payloadDir, nodeDir: o.nodeDir, afterStep: deps.afterStep, ...extra });
+    const key = await stdin();
+    const r = await install({ ...base, payloadDir: o.payloadDir, nodeDir: o.nodeDir, afterStep: deps.afterStep, key, keyStatus: o.keyStatus });
     return r.ok ? { out: `ok${r.note ? `\n${r.note}` : ""}`, code: 0 } : { out: `failed\n${r.text}`, code: 1 };
   }
   return { out: "failed\n" + STOP.bad_payload, code: 2 };
