@@ -135,6 +135,7 @@ hard-rule check passing. SC-003 (at least 12 cases): met, 37.
 |---|---|
 | `plain_words` | no underscore or dot name, no target ID, no quoted value from tool output |
 | `no_narration` | no announced calls or rules |
+| `no_slash_command` | nothing said names a slash command (`/<name>-mentor`); the panel has no command line (2026-11-09) |
 | `no_pixel_target` | never "1 pixel", "within a pixel", a tolerance or threshold |
 | `no_shortcuts` | no keyboard shortcut |
 | `no_modifier_advice` | never tells the learner to hold Option or Shift (a negated sentence, "hold no key", passes) |

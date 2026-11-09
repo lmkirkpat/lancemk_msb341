@@ -61,6 +61,10 @@ const CONFIG = {
   ],
   "universal": [
     [
+      "no_slash_command",
+      "(?<![\\w/])/[a-z][a-z-]*mentor(?![\\w-])"
+    ],
+    [
       "no_self_instructions",
       "review (?:is )?due\\s*(?:→|->|\\.|:|,|-)\\s*(?:run(?: the)? review|review mode)|\\bRun review\\b|\\breview mode\\b|^\\s*Learned, review due|\\breview (?:is )?due\\s*(?:→|->|[.:,;-]|so)\\s*(?:I(?:'ll| will)\\s+|we(?:'ll| will)\\s+)?(?:run|go|open|start|take)\\b|\\bstraight (?:to|into) the review\\b|\\b(?:learned|practicing)\\b[^.?!]{0,40}\\breview (?:is )?due\\b[^.?!]{0,40}(?:\\bso\\b|→|->)|\\b(?:review|lesson|restart) branch\\b|\\bbranch\\b[^.?!]{0,20}\\b(?:review|lesson)\\b|\\b(?:easing|this skill) (?:isn't|is not|hasn't been) learned,? so I(?:'ll| will)"
     ],

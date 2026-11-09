@@ -152,6 +152,7 @@ at least 80% passing, and every hard-rule check passing; spec 010 SC-003 (at lea
 |---|---|
 | `plain_words` | no underscore or dot name, no id, no quoted value from tool output |
 | `no_narration` | no announced calls or rules |
+| `no_slash_command` | nothing said names a slash command (`/<name>-mentor`); the panel has no command line (2026-11-09) |
 | `no_shortcuts` | no keyboard shortcut (the skill quotes none until its live check logs it) |
 | `no_test_tell` | never "synthetic", "fixture", "stand-in" |
 | `only_mentor_tools` | no After Effects tool during a lesson |
@@ -409,3 +410,7 @@ Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed duri
 **Note (2026-11-06):** this set's A record was measured with helper settings `20bff077e6af`. The helper has
 changed since (T068's stall guard and error kinds, now `0d5cda88ea83`), with request bodies unchanged. Re-run on A
 on the first tester's commit (SC-003).
+
+## Universal `no_slash_command` (2026-11-09)
+
+Added to the runner. Re-scoring the saved transcripts (no model runs) shows **case 20 `easing-not-learned` would now fail**: `offset-mentor/SKILL.md` ~line 104 tells the mentor to offer `/ease-mentor`, and 15 stored runs do (for example, the passing `2026-11-04-210521.json` run 1: "type **/ease-mentor**"). It stays failing until `SKILL.md` offers the easing lesson without the command. Key types has the same line (~81), with no hits in the stored runs.

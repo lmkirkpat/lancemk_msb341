@@ -151,6 +151,7 @@ at least 80% passing, and every hard-rule check passing; spec 008's SC-003 is ab
 |---|---|
 | `plain_words` | no underscore or dot name, no id, no quoted value from tool output |
 | `no_narration` | no announced calls or rules |
+| `no_slash_command` | nothing said names a slash command (`/<name>-mentor`); the panel has no command line (2026-11-09) |
 | `no_shortcuts` | no keyboard shortcut (the skill quotes none until its live check logs it) |
 | `no_test_tell` | never "synthetic", "fixture", "stand-in" |
 | `only_mentor_tools` | no After Effects tool during a lesson |

@@ -63,6 +63,10 @@ const CONFIG = {
   ],
   "universal": [
     [
+      "no_slash_command",
+      "(?<![\\w/])/[a-z][a-z-]*mentor(?![\\w-])"
+    ],
+    [
       "no_gap_named",
       "\\b(?:try|use|aim for|go with|start with|something like|maybe|should be|make it|I'd say|I would say)\\s+(?:a\\s+|about\\s+|around\\s+)?(?:gap\\s+of\\s+)?(?:a\\s+few|\\d+|one|two|three|four|five|six|eight|ten|twelve)\\s*(?:more\\s+)?(?:frames?|seconds?)\\b"
     ],

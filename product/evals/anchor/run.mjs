@@ -63,6 +63,10 @@ const CONFIG = {
   ],
   "universal": [
     [
+      "no_slash_command",
+      "(?<![\\w/])/[a-z][a-z-]*mentor(?![\\w-])"
+    ],
+    [
       "no_number_or_tolerance",
       "\\b(?:within|about|around|roughly|under|less than)\\s+\\d+\\s*(?:px|pixels?|%)|\\b1 pixel\\b|\\ba few pixels\\b|\\btolerance\\b|\\b\\d+(?:\\.\\d+)?\\s*(?:px|pixels)\\b"
     ],

@@ -239,8 +239,10 @@ function wordsCheck(name, re, turns) {
   return { check: name, pass: !hit, detail: hit ? `said "${hit[0]}"` : "clean" };
 }
 
+// Universal (T057 finding 1, 2026-11-09): the panel has no command line, so nothing said names a slash command.
+const NO_SLASH_COMMAND = /(?<![\w/])\/[a-z][a-z-]*mentor(?![\w-])/i;
 function check(expect, turns, c) {
-  const out = [wordsCheck("plain_words", INTERNAL_NAME, turns), wordsCheck("no_narration", NARRATION, turns), wordsCheck("no_test_tell", SYNTH_TELL, turns)];
+  const out = [wordsCheck("plain_words", INTERNAL_NAME, turns), wordsCheck("no_narration", NARRATION, turns), wordsCheck("no_test_tell", SYNTH_TELL, turns), wordsCheck("no_slash_command", NO_SLASH_COMMAND, turns)];
   const add = (name, pass, detail) => out.push({ check: name, pass, detail });
   out.push(...turnChecks(expect, turns, MENTOR_TOOLS));
   const calls = mentorCalls(turns);
