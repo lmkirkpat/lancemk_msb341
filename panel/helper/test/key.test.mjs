@@ -140,7 +140,7 @@ test("key check: a service that can't be reached is offline, after one try", asy
 });
 
 test("key check: a busy or unexpected answer can't say the key works or doesn't: offline (not checked)", async () => {
-  for (const [status, type] of [[529, "overloaded_error"], [500, "api_error"], [429, "rate_limit_error"], [404, "not_found_error"]]) {
+  for (const [status, type] of [[529, "overloaded_error"], [500, "api_error"], [404, "not_found_error"]]) {
     const svc = await startFakeService();
     try {
       svc.script(forModels(failure(status, type, "x", { "x-should-retry": "false" })));
@@ -149,6 +149,17 @@ test("key check: a busy or unexpected answer can't say the key works or doesn't:
     } finally {
       await svc.close();
     }
+  }
+});
+
+test("key check: a rate limit means the key was accepted: works, after one try", async () => {
+  const svc = await startFakeService();
+  try {
+    svc.script(forModels(failure(429, "rate_limit_error", "x", { "x-should-retry": "false" })));
+    assert.equal(await check(svc, KEY), "works");
+    assert.equal(svc.requests.length, 1, "one request");
+  } finally {
+    await svc.close();
   }
 });
 

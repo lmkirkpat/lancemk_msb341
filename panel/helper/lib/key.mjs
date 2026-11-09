@@ -58,10 +58,12 @@ export async function resolveKey(startKey, run) {
 
 // ---------- the key check (spec 013 FR-020, research R11, T037; spec 006 FR-021) ----------
 
-// Error kinds (errors.mjs classify) → the key check's status. Anything else (busy, rate limited, an
-// unexpected status, a fault in the helper) can't say whether the key works, so it reads as
-// "offline": not checked, try again later (spec 006 contracts/setup-check.md › key).
-const CHECK_STATUS = Object.freeze({ not_signed_in: "rejected", out_of_credit: "out_of_credit", offline: "offline" });
+// Error kinds (errors.mjs classify) → the key check's status. A rate limit means the service
+// accepted the key before limiting it, so it reads as "works" (decided 2026-11-09, so a good key
+// isn't left unstored because the service was busy). Anything else (busy, an unexpected status, a
+// fault in the helper) can't say whether the key works, so it reads as "offline": not checked, try
+// again later (spec 006 contracts/setup-check.md › key).
+const CHECK_STATUS = Object.freeze({ not_signed_in: "rejected", out_of_credit: "out_of_credit", rate_limited: "works", offline: "offline" });
 
 // One models.retrieve(model), which costs nothing and changes nothing, with no retries so it's one
 // request. → "works" | "rejected" | "out_of_credit" | "offline" | "no_key" (no key: no request).

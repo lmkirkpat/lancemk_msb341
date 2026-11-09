@@ -175,7 +175,8 @@ a brand new session act like a colleague who already knows what you are working 
   3. All six sets on A done 2026-11-04; pivot and easing re-run 2026-11-06 after the fixes (T035, T068, T069):
      pivot B1 51/51 and A 50/51 at `c2d5f8d`, easing A 27/28, no timeouts. All six meet FR-033. About $26.85 of
      credit spent. The other four were measured on the older helper, so they re-run on the first tester's
-     commit. **Next:** T021 (a live lesson on A in AE), then T048 (lesson cost). T068's cause is still open.
+     commit. Spec 006 T008 (2026-11-09, the key check) moved the settings hash off `0d5cda88`, so pivot and
+     easing re-run on that commit too (no lesson code changed). **Next:** T021 (a live lesson on A in AE), then T048 (lesson cost). T068's cause is still open.
   4. `decisions/011`'s cost signal has fired; the rule stands until the builder decides. Later releases may
      reuse a set's A result if nothing it depends on changed (spec 006 FR-025).
   5. **Pinned (2026-11-02): where testers' access keys come from** (spec 006 Q2). On A every user

@@ -137,7 +137,7 @@ the eval engineer, not its builder (constitution VI).
 - [ ] T058 BL AE · An Intel run, if one wasn't in Phase 2 and an Intel Mac turns up.
 - [ ] T059 PB · Audit `installer/parts.json` and folder names against FR-026 and FR-027.
 - [ ] T060 PB · `installer/README.md`: how to build and what stays outside the repo.
-- [ ] T061 SW · After Phase 2, reconcile this spec and plan with what T004 and T017 found, in `specs/006-installer/`.
+- [ ] T061 SW · After Phase 2, reconcile this spec and plan with what T004 and T017 found, in `specs/006-installer/` Also bring `specs/013-api-runtime/contracts/helper-protocol.md` in line with T008 (2026-11-09): drop the `not_implemented` row; the `key_check` row gains the test-only `base_url` (local only) and `keychain: false` fields, the reply `key_status` with five statuses including `out_of_credit`, and a 429 reads as `works` (the key was accepted) while 5xx and 404 read as `offline`. Carry the 429 rule into `contracts/setup-check.md` › key.
 
 ---
 
