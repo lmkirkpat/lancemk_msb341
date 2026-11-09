@@ -112,9 +112,20 @@ a brand new session act like a colleague who already knows what you are working 
     stops, so it stays off AE while a builder needs it.
   - **Specs (2026-10-20 to 10-24):** curriculum (`specs/004`, with `curriculum.md`), diagnosis
     (005), installer (006) and UI overhaul (007) approved; 005 and 006 have no plan or tasks yet.
-    Spec 007's plan and 80 tasks were approved 2026-11-04 (three already done by other commits), and
-    its mockup matches. Nothing is built yet. **Next:** T001, the builder's session on the current
-    panel, before the first `panel/` merge from this build.
+    Spec 007's plan and 80 tasks were approved 2026-11-04; its mockup matches.
+    **Spec 007 status (2026-11-09):** phases 0 to 5 are built and merged, practice included (T063 to T070, merge
+    `dc6eab2`; panel tests 605 pass). T001 and T028 (the comparison) passed: the builder prefers the new panel. All
+    six skills ran a live lesson in it on B1 (T028, T056 to T060), so sprint 4's first "done" item is ticked; logs in
+    `discovery/usage-notes/ui-overhaul.md`. SC-002's live tally is met (16 checks, all matching AE) except its
+    Proposed openings, 2 of 3: easing's opening rows said "Not checked yet" (cause open, for panel-builder).
+    **Next:** fix that and re-run an easing opening; T061 (Find my next lesson), T062 (states at 260 × 480), T071
+    (a warm-up), T072 (keyboard), T073 (three sessions' notes), then T074 (close). Four mentor findings from the
+    live lessons (a close naming `/speed-graph-mentor`, the speed graph record guessing why, pivot guessing an
+    expression, null's confusing "where") have eval cases on branch `evals-live-findings`, speed graph 36 and 37,
+    pivot 54, null 52; `SKILL.md` fixes wait for those to fail on B1.
+    **Live sittings:** the panel is linked to the main checkout, so a `panel/` merge is live at AE's next restart;
+    merge only between sittings. `mentor/dev/capture.mjs` captures the *active* comp (check the name it prints),
+    and the Save a Copy for a restore goes outside the repo.
     The five baseline skills each have a teaching design, spec, plan and tasks: speed graph (008),
     key types (009), offset (010), set the pivot (011), move a group with a null (012).
   - **Parallel runs** (`discovery/usage-notes/parallel-runs.md`, with its template): run 1 specs
@@ -177,9 +188,14 @@ a brand new session act like a colleague who already knows what you are working 
      credit spent. The other four were measured on the older helper, so they re-run on the first tester's
      commit. Spec 006 T008 (2026-11-09, the key check) moved the settings hash off `0d5cda88`, so pivot and
      easing re-run on that commit too (no lesson code changed). **Next:** T021 (a live lesson on A in AE), then T048 (lesson cost). T068's cause is still open.
-  4. `decisions/011`'s cost signal has fired; the rule stands until the builder decides. Later releases may
+  4. **Saved conversation (2026-11-09):** T043 (`panel/helper/lib/conversation.mjs`, 51 tests) and T056 (the
+     helper's README) merged (`085cf1a`). It moved the settings hash from `4bc1686c` to `06339ff3` (no lesson code
+     changed). T044 (the wiring) needs `loop.mjs` too, and the saved file doesn't yet hold the prompt state or a
+     hand-over still in progress: the spec-writer settles the data model first. Spec 006's uninstall must cover
+     `panel-conversation.json` and `panel-conversation-frames/`.
+  5. `decisions/011`'s cost signal has fired; the rule stands until the builder decides. Later releases may
      reuse a set's A result if nothing it depends on changed (spec 006 FR-025).
-  5. **Pinned (2026-11-02): where testers' access keys come from** (spec 006 Q2). On A every user
+  6. **Pinned (2026-11-02): where testers' access keys come from** (spec 006 Q2). On A every user
      needs a key; the question is who supplies and pays for it. The builder is thinking it over and
      exploring funding options; don't push for an answer. It doesn't block spec 013, but it does
      block the installer's plan.
