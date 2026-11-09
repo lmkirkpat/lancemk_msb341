@@ -361,3 +361,10 @@ test("pivot, others: keys added on the pivot isn't 'Something moved'", () => {
   assert.deepEqual(word({ passed: false, moved_layers: ["Wall"], anchor_keys_added: true }), ["off", "Wall moved"]);
   assert.deepEqual(word({ passed: true, moved_layers: [], anchor_keys_added: false }), ["done", "Nothing did"]);
 });
+
+test("null: an accepted parent isn't '2D, no parent'", () => {
+  const word = (over, hints) => rows(check("null_parent_check", { stage: "parenting", graded: true, null: NULL(over), layers: [], comments: [], other_changes: [], hints: hints || [], codes: [] }))[0].slice(1);
+  assert.deepEqual(word({}), ["done", "2D, no parent"]);
+  assert.deepEqual(word({}, [{ code: "one_level_only", null: "Null 1", parent: "Rig" }]), ["done", "2D, parent on purpose"]);
+  assert.deepEqual(word({ parent: "Rig" }), ["done", "2D, parent on purpose"]);
+});

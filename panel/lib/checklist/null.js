@@ -20,7 +20,7 @@ function nullEntries(nul, codes, makeRow) {
   else if (has_("three_d")) { family = "off"; word = W.three_d; }
   else if (has_("which_null")) { family = "ask"; word = W.which_null; }
   else if (has_("null_name_not_unique")) { family = "ask"; word = W.name_not_unique; }
-  else if (n.n1 && n.n2 === true) { family = "done"; word = W.two_d; }
+  else if (n.n1 && n.n2 === true) { family = "done"; word = has_("one_level_only") || n.parent ? W.two_d_parent : W.two_d; }
   else { family = "none"; word = COPY.check.not_checked; }
   const entries = [{ section, row: makeRow({ key: "null/self", family, subject, word }) }];
   const n3 = n.n3;

@@ -190,7 +190,7 @@ const COPY = {
     },
     null_: {
       the_null: "The null", the_group: "The group", the_move: "The move", no_null: "No null yet", not_a_null: "Not a null", has_parent: "Has a parent", three_d: "It's 3D", which_null: "Which null?",
-      name_not_unique: "Two layers share its name", two_d: "2D, no parent", in_place: "In place", at_region: (r) => `At its ${r}`, pivot_at: (r) => `Pivot at the group's ${r}`, couldnt_check: "Couldn't check",
+      name_not_unique: "Two layers share its name", two_d: "2D, no parent", two_d_parent: "2D, parent on purpose", in_place: "In place", at_region: (r) => `At its ${r}`, pivot_at: (r) => `Pivot at the group's ${r}`, couldnt_check: "Couldn't check",
       follows: (x) => `Follows ${x}`, jumped: (px, dir) => `Jumped ${px} px ${dir}`, at_time: (t) => `at ${t} s`, keys_changed: "Its keys changed", pickwhip: "Position linked, not parented", not_parented: "Not parented yet", not_in_comp: "Not in the comp", own_keys_kept: "own keys kept",
       after_null: "After the null", after_group: "After the group", one_move: "One move on the null", no_move: "No move yet", opacity_move: "Opacity doesn't carry", where_turn: "Where does it turn from?", moves: "Moves",
       null_summary: (done, total) => `The null · ${done} of ${total} holding`,
