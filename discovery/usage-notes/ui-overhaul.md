@@ -191,3 +191,85 @@ same comp).
 
 **SC-014:** key types met (live in the panel, no terminal, checklist agreed with the check, stale counted: 0). Builder
 only, so it says the panel works, not that a learner finds it easy.
+
+### Speed graph (T057, 2026-11-09)
+
+Builder, on B1, Mentor Practice, focus Subtitle's Position (2 Easy Ease pairs). Comp restored after T056 and checked
+(strict compare, `layer_info` included) before this lesson; captured before as `practice1-before.json`. In this file
+Title is linear: its shaped ease lives only in `~/Documents/Tutor Test before T001.aep.aep` (see T001's comp handling).
+
+| Measure | Result |
+|---|---|
+| Time to pass | 2 min 19 s (Start lesson 21:41:56Z, passing check ended 21:44:15Z), 6 turns |
+| Time to saved | About 2 min 41 s (`record_lesson` 21:44:37Z), 7 turns; 8 with the closing request |
+| Slowest turn | 13.7 s to finish (the opening); first activity 5.5 s at worst |
+| Cost | $0.31 (B1) |
+| Demo | None (offered, not asked for) |
+| `lesson-focus-stale` | 0 |
+| Terminal needed | No |
+
+| Step (quickstart §2) | What happened | Matches? |
+|---|---|---|
+| Opening | Proposed Subtitle; listed what it leaves out (hidden, null, precomp, expression, still linear); asked about hard landings | No: finding 3 |
+| Rows from the opening; Proposed until first reply | Checklist was collapsed, so not seen | Not judged |
+| `fastest` not shown | Never shown | Yes |
+| Read the graph | "middle" | Yes |
+| Check 1 | 1 of 2 shaped, partial | Yes |
+| Check 2 | Still 1 of 2; Title's Position, Scale and Opacity listed outside the lesson | Yes |
+| Check 3 | 2 of 2, passed; Title still listed outside | Yes |
+| Read again | "toward the start" | Yes |
+| Saved | `passed`, `demo_used: false` | Yes, but finding 2 |
+| Close | Told the learner to start with `/speed-graph-mentor` | No: finding 1 |
+
+**SC-002 agreement.** The builder checked each against AE: the rows matched.
+
+| Check | Check's result | Panel rows | Builder in AE | Kind |
+|---|---|---|---|---|
+| 4 | 1 of 2 shaped | Same | Same | Partial |
+| 5 | 1 of 2; Title changed outside | Same | Same | Partial, outside the lesson |
+| 6 | 2 of 2, passed; Title outside | Same | Same | Outside the lesson |
+
+Title's changes were the builder easing it on purpose for the tally. No undo.
+
+**SC-002 live tally so far:**
+
+| Needed | Count |
+|---|---|
+| Checks, panel vs check 100%, vs AE ≥ 9 of 10 | 6 of 10 (6/6 and 6/6) |
+| Partial | 4 of 3 ✓ |
+| Outside the lesson | 4 of 2 ✓ |
+| Something undone | 0 of 1 |
+| Openings on easing, speed graph or offset: Proposed, then not | 0 of 3 (this one not judged: list collapsed) |
+
+### What the builder said
+
+> everything felt good
+
+### Findings
+
+1. **The close named a Claude Code command.** Asked to finish, the mentor said "Just start with
+   **/speed-graph-mentor** when you're ready." A panel learner can't type that. `speed-graph-mentor/SKILL.md` never says
+   it, so the model added it. *Eval case (speed graph, likely every skill):* a close after "let's finish up"; `expect`:
+   no `/` followed by a skill name in anything said; rubric "points to the next step in the panel's terms, or not at
+   all". *To fix:* one line in each `SKILL.md`'s close (never name a slash command; the panel has buttons), after the
+   eval case fails on B1.
+2. **The record guesses why.** Summary: "the second still had the default shape for two checks, because only one side
+   of the shared middle key had been shaped". `SKILL.md:311–315` says no method and "no guess at why something was
+   missed". Same kind as offset 23 and pivot 30's `record_plain` leaks. *Eval case:* a check where a shared key is
+   shaped on one side only, then passes; `record_plain` should catch "because" plus a handle or side. *To fix:* check
+   whether speed graph's `recordMethod` pattern would match this; if not, widen it before changing the prompt.
+3. **The opening contradicted itself.** "Two weeks ago you shaped Title's moves", then Title's Position, Scale and
+   Opacity in the still-needs-easing list. The record remembers Title shaped (T032), but this file's Title is linear
+   after the T001 restore. A real learner gets here by undoing or reverting. *Fix:* when the record says a layer was
+   shaped and the snapshot says it's linear, don't claim it from memory. *Overlap:* the record and the comp disagree;
+   add to "Edge cases to plan for". Low priority.
+4. **The checklist was collapsed at the opening,** so the Proposed check couldn't be judged. Collapse now sticks (T028
+   finding 2), which also hides the rows SC-002 needs. For the next two openings (offset, and easing or another speed
+   graph), expand the list before replying.
+
+**Comp handling:** Subtitle's two Position moves are shaped, and Title is eased (Position, Scale, Opacity). Restore
+from the copy saved before the lesson and strict-compare with `practice1-before.json` before the next sitting on
+Mentor Practice.
+
+**SC-014:** speed graph met (live in the panel, no terminal, checklist agreed with the check, stale counted: 0). Builder
+only.

@@ -96,7 +96,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T054 PB · SC-003's tests for step 2's states; each skill's recorded stream through the panel. SC-002's test half, SC-007.
 - [x] T055 PB · Hand-back: what ran, what the scans say, anything for the designer.
 - [x] T056 BL · Key types, live in the panel (quickstart §2). SC-002, SC-014.
-- [ ] T057 BL · Speed graph, live. SC-002, SC-014.
+- [x] T057 BL · Speed graph, live. SC-002, SC-014.
 - [ ] T058 BL · Offset, live; react to the timeline. SC-002, SC-014.
 - [ ] T059 BL · Set the pivot, live. SC-002, SC-014.
 - [ ] T060 BL · Move a group with a null, live. SC-002, SC-014; closes the live tally in quickstart §2.
