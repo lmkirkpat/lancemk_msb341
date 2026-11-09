@@ -9,7 +9,8 @@ const { defaultHome } = require("./config.js");
 
 const FILE = "panel-session.json";
 const FRAMES = "panel-frames";
-const ROLES = ["learner", "mentor", "notice"];
+const ROLES = ["learner", "mentor", "notice", "change", "divider", "resuming"];
+const VERSION = 2; // version 2: the lesson view's shape (plan P8). An older file reads as nothing to continue.
 
 const where = (opts) => ({ fs: (opts && opts.fs) || nodeFs, home: (opts && opts.home) || defaultHome() });
 
@@ -17,7 +18,7 @@ const where = (opts) => ({ fs: (opts && opts.fs) || nodeFs, home: (opts && opts.
 // Older saves have none, and those are all easing lessons.
 function newPanelSession({ claude_session_id, bridge_started, lesson, now, skill }) {
   const at = now || new Date().toISOString();
-  return { version: 1, claude_session_id, bridge_started: bridge_started || null, started_at: at, updated_at: at, ended: false, lesson: lesson || null, skill: skill || null, messages: [] };
+  return { version: VERSION, claude_session_id, bridge_started: bridge_started || null, started_at: at, updated_at: at, ended: false, lesson: lesson || null, skill: skill || null, messages: [] };
 }
 
 // The saved session, or null when it's missing, unreadable or another version.
@@ -25,10 +26,10 @@ function readPanelSession(opts) {
   const { fs, home } = where(opts);
   try {
     const s = JSON.parse(fs.readFileSync(path.join(home, FILE), "utf8"));
-    if (!s || s.version !== 1 || typeof s.claude_session_id !== "string" || !Array.isArray(s.messages)) return null;
+    if (!s || s.version !== VERSION || typeof s.claude_session_id !== "string" || !Array.isArray(s.messages)) return null;
     s.messages = s.messages
       .filter((m) => m && ROLES.includes(m.role))
-      .map((m) => ({ role: m.role, text: String(m.text || ""), frames: Array.isArray(m.frames) ? m.frames.map(String) : [] }));
+      .map((m) => Object.assign({ role: m.role, text: String(m.text || ""), frames: Array.isArray(m.frames) ? m.frames.map(String) : [] }, m.title ? { title: String(m.title) } : {}, m.cut_off ? { cut_off: true } : {}));
     return s;
   } catch (e) {
     return null;
@@ -78,10 +79,28 @@ function saveFrame(opts, image) {
   }
 }
 
+// A saved frame's base64, or null when the file is gone (FR-027).
+function readFrame(opts, file) {
+  const { fs } = where(opts);
+  try {
+    return fs.readFileSync(file).toString("base64");
+  } catch (e) {
+    return null;
+  }
+}
+
+// FR-028: only a connected bridge answering with a different start time ends a saved lesson; a busy
+// or absent bridge shows neither, and the connection poll asks again.
+function savedStatus(saved, connection) {
+  if (!saved || saved.ended !== false || !saved.bridge_started) return null;
+  if (!connection || connection.state !== "connected" || !connection.started) return null;
+  return connection.started === saved.bridge_started ? "waiting" : "aeclosed";
+}
+
 // Continue only an unfinished lesson from the same AE session: the bridge restarts with AE, so a
 // changed (or unknown) start time means the mentor's view of the project may be out of date.
 function canContinue(saved, bridgeStartedNow) {
   return !!saved && saved.ended === false && saved.bridge_started != null && saved.bridge_started === bridgeStartedNow;
 }
 
-module.exports = { newPanelSession, readPanelSession, writePanelSession, clearPanelSession, saveFrame, canContinue, FILE, FRAMES };
+module.exports = { newPanelSession, readPanelSession, writePanelSession, clearPanelSession, saveFrame, readFrame, savedStatus, canContinue, FILE, FRAMES };

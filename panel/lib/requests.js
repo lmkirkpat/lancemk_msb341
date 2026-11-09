@@ -8,15 +8,22 @@ const REQUESTS = {
   continue: { label: "Continue lesson", request: "I'm back. Pick up where we left off." },
   show_me: { label: "Show me", request: "Show me how first." },
   show_me_again: { label: "Show me again", request: "Show me again: explain the pair you already eased, with a frame. Don't change anything." },
-  check: { label: "Check my work", request: "I'm done. Check my work." },
+  check: { label: "Done, check it", request: "I'm done. Check my work." },
   hint: { label: "Hint", request: "Can I have a hint?" },
 };
 
-// The contract's "Shown when" column. view: a LessonView (or null before a lesson).
+// The contract's "Shown when" column (spec 007 FR-019, FR-020). view: a LessonView (or null before a
+// lesson). The check first, then Hint from the first check, then Show me or Show me again, which a
+// cut-off that may have landed a demo (demo_unknown) or a review hides.
 function visibleKinds(view, { lessonOpen, canContinue } = {}) {
   if (!lessonOpen) return canContinue ? ["continue", "start"] : ["start"];
-  const kinds = [view && view.demo_made ? "show_me_again" : "show_me", "check"];
-  if (view && view.checks > 0) kinds.push("hint");
+  const v = view || {};
+  const kinds = ["check"];
+  if (v.checks > 0) kinds.push("hint");
+  if (!v.demo_unknown) {
+    if (v.demo_made) kinds.push("show_me_again");
+    else if (v.demo_target && v.mode !== "review") kinds.push("show_me");
+  }
   return kinds;
 }
 

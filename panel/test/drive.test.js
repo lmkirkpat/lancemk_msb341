@@ -11,7 +11,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { spawn } = require("child_process");
-const { MESSAGES_A } = require("../lib/errors-a.js");
+const { noticeText } = require("../lib/errors.js");
 
 const DRIVE = path.resolve(__dirname, "..", "dev", "drive.js");
 const REPO = path.resolve(__dirname, "..", "..");
@@ -64,7 +64,7 @@ for (const [fault, kind] of FAULTS) {
     const r = await drive(["--runtime", "a", "--fault", fault]);
     assert.equal(r.code, 0, r.err + r.out);
     assert.match(r.out, new RegExp(`fault: ${fault} \\(local fake service; Keychain not read; no real API call\\)`));
-    assert.ok(r.out.includes(`error ${kind}: ${MESSAGES_A[kind]}`), r.out);
+    assert.ok(r.out.includes(`error ${kind}: ${noticeText(kind)}`), r.out);
     assert.equal((r.out.match(/ error /g) || []).length, 1, "one message, shown once");
     assert.match(r.out, /turn_end ok=false/);
     assert.doesNotMatch(r.out, /tool_result/, "no check result for that turn");

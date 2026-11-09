@@ -78,7 +78,8 @@ function createStreamParser(emit) {
     try {
       m = JSON.parse(line);
     } catch (e) {
-      emit({ type: "error", kind: "bad_stream", message: line.slice(0, 300) });
+      // Its length only: a line can hold anything, and it could reach the log (FR-068).
+      emit({ type: "error", kind: "bad_stream", message: "", length: line.length });
       return;
     }
     if (m && typeof m === "object") onMessage(m);

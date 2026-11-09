@@ -151,6 +151,7 @@ function createAdapter(config, deps) {
   }
 
   return {
+    announcesCalls: false, // FR-030: whether a tool_call seen proves the call will run (plan P7)
     start,
     send,
     stop,
