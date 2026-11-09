@@ -15,9 +15,9 @@ const ZERO_ID = "00000000-0000-0000-0000-000000000000";
 const CASES = {
   easing: ["01-new-learner-opening", "03-show-me", "06-correct-attempt", "07-partial-attempt", "12-other-comp", "23-undo-then-redo"],
   "key-types": ["06-do-the-rest-for-me"],
-  "speed-graph": ["05-do-the-rest-for-me"],
-  offset: ["16-do-the-rest-for-me"],
-  anchor: ["12-demonstration-two-layers", "22-one-key-dragged-off-it"],
+  "speed-graph": ["05-do-the-rest-for-me", "17-review-nothing-new"],
+  offset: ["16-do-the-rest-for-me", "17-review"],
+  anchor: ["12-demonstration-two-layers", "22-one-key-dragged-off-it", "17-review-nothing-new", "53-button-warm-up"],
   "null-parenting": ["04-demonstration"],
 };
 
