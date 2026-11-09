@@ -19,9 +19,11 @@ export function normalizeKey(raw) {
   return KEY_SHAPE.test(k) ? k : null;
 }
 
-// A key that works, or works but needs credit, is stored. An offline check stores nothing
-// (contracts/install-layout.md step 8); the setup check reports the key as not yet checked.
-export const shouldStore = (status) => status === "works" || status === "out_of_credit";
+// A key is stored unless the service refused it. One that couldn't be checked (offline, or no
+// answer from the helper) is stored too, so the setup check can retry it and report it as not yet
+// checked rather than missing (spec edge case "No internet during install").
+export const shouldStore = (status) => ["works", "out_of_credit", "offline", "unknown"].includes(status);
+export const uncheckedStatus = (status) => status === "offline" || status === "unknown";
 
 // Runs the helper's key_check with the key on stdin (contracts/helper-protocol.md).
 // opts: { key, nodePath, helperPath, home, timeoutMs } → one of STATUSES, or "unknown" when the

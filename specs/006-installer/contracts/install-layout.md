@@ -36,7 +36,7 @@ Keychain: login keychain, service `Knack`, account `anthropic-api-key` (spec 013
 5. Write `versions/<v>/` beside anything already there; verify it.
 6. Replace the two extension folders, each by unpacking to a temporary sibling and renaming.
 7. Swap `current`. Create the learner home if missing. Write `panel.json` and `install-state.json`.
-8. Store the key, unless the check was offline (then retry from the setup check; edge case).
+8. Store the key unless the service rejected it. A key that couldn't be checked (offline, or no answer) is stored, and the setup check retries it (edge case; decided 2026-11-09).
 9. Last screen: restart AE, tick the setting, open the panel, press Check setup.
 
 A failure in 5 to 7 leaves the previous state or something a re-run completes (FR-012).

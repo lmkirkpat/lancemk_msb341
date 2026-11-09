@@ -97,8 +97,8 @@ test("normalizeKey trims a pasted key and refuses anything that can't be one", (
   assert.equal(normalizeKey(`"${KEY("works")}"`), null);
 });
 
-test("only a key that works, or works but needs credit, is stored", () => {
-  assert.deepEqual(["works", "rejected", "out_of_credit", "offline", "no_key", "unknown"].filter(shouldStore), ["works", "out_of_credit"]);
+test("a key is stored unless the service refused it", () => {
+  assert.deepEqual(["works", "rejected", "out_of_credit", "offline", "no_key", "unknown"].filter(shouldStore), ["works", "out_of_credit", "offline", "unknown"]);
 });
 
 test("checkKey: each status from the helper, with the key on stdin only", async (t) => {
@@ -181,14 +181,14 @@ test("install stores a working key, records the item, and says nothing more", as
   assert.ok(!r.out.includes(KEY("works")) && !check.out.includes(KEY("works")));
 });
 
-test("offline: the install finishes, the key isn't stored, and it says not yet checked", async (t) => {
+test("offline: the install finishes, the key is stored, and it says not yet checked", async (t) => {
   for (const status of ["offline", "unknown"]) {
     const s = setup(t);
     const r = await fullInstall(s, KEY("offline"), status);
     assert.deepEqual(r, { out: `ok\n${NOTES.not_checked}`, code: 0 });
     assert.ok(fs.existsSync(s.L.current), "installed");
-    assert.equal(s.readLog(s.secLog).length, 0, "security never ran");
-    assert.equal(JSON.parse(fs.readFileSync(s.L.state, "utf8")).keychain, null);
+    assert.ok(fs.existsSync(s.secState), "the key was stored");
+    assert.ok(JSON.parse(fs.readFileSync(s.L.state, "utf8")).keychain, "the item is recorded");
   }
 });
 
@@ -201,7 +201,7 @@ test("out of credit: the key is stored and the note says it needs credit", async
 
 test("a rejected key, or none, is never stored", async (t) => {
   const s = setup(t);
-  assert.equal((await fullInstall(s, KEY("rejected"), "rejected")).out, `ok\n${NOTES.not_checked}`);
+  assert.equal((await fullInstall(s, KEY("rejected"), "rejected")).out, `ok\n${NOTES.not_accepted}`);
   assert.equal((await fullInstall(s, "", undefined)).out, "ok");
   assert.equal(s.readLog(s.secLog).length, 0);
 });

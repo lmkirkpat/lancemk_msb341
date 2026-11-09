@@ -18,11 +18,12 @@ import { guard } from "./lib/fsx.mjs";
 import { preflight, STOP } from "./lib/preflight.mjs";
 import { aeRunning } from "./lib/ae.mjs";
 import { installPayload, recordKeychain } from "./lib/payload.mjs";
-import { normalizeKey, checkKey, storeKey, shouldStore, KEY_ITEM } from "./lib/keychain.mjs";
+import { normalizeKey, checkKey, storeKey, shouldStore, uncheckedStatus, KEY_ITEM } from "./lib/keychain.mjs";
 
 export const FAILED = "Knack couldn't finish installing. Open the installer again to finish; your lesson history is safe.";
 export const NOTES = Object.freeze({
-  not_checked: "Your access key is not yet checked, so it wasn't saved. When you're online, open the installer again to add it.",
+  not_checked: "Your access key is saved but not yet checked. When you're online, press Check setup.",
+  not_accepted: "Your access key wasn't accepted, so it wasn't saved. Open the installer again to add a new one.",
   needs_credit: "Your access key works, but its account needs credit before lessons can start.",
   not_saved: "Knack couldn't save your access key. Open the installer again to add it.",
 });
@@ -31,9 +32,10 @@ export const NOTES = Object.freeze({
 // → the note for the last screen, or "".
 async function keyStep({ L, g, key, keyStatus, run, tools }) {
   if (!key) return "";
-  if (!shouldStore(keyStatus)) return NOTES.not_checked;
+  if (!shouldStore(keyStatus)) return NOTES.not_accepted;
   if (!(await storeKey({ key, run, tools }))) return NOTES.not_saved;
   recordKeychain(L, g, KEY_ITEM);
+  if (uncheckedStatus(keyStatus)) return NOTES.not_checked;
   return keyStatus === "out_of_credit" ? NOTES.needs_credit : "";
 }
 
