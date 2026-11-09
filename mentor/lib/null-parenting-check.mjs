@@ -386,7 +386,7 @@ export function check(baseline, current, lesson, input = {}) {
 
   // The null.
   const nul = findNull(baseline, current, sd, { null: input.null, focus });
-  const nullOut = { name: nul.name, found: nul.found, name_unique: nul.name_unique, n1: null, n2: null, n3: null, p4: null, p5: null, moves: [], renamed_from: nul.renamed_from || null, which_null: nul.which_null || null, stored_now: false };
+  const nullOut = { name: nul.name, found: nul.found, name_unique: nul.name_unique, parent: null, n1: null, n2: null, n3: null, p4: null, p5: null, moves: [], renamed_from: nul.renamed_from || null, which_null: nul.which_null || null, stored_now: false };
   if (nul.found && !nul.name_unique) {
     // D-3: ask for the rename; nothing stored, nothing else graded on the null, no P1 to P3.
     add("null_name_not_unique", { null: nul.name });
@@ -398,6 +398,7 @@ export function check(baseline, current, lesson, input = {}) {
     nullOut.n1 = classOf(current, nul.index) === "null";
     if (!nullOut.n1) add("not_a_null", { null: nul.name });
     const chain = (sourcesOf(current, nul.index) || {}).parents || [];
+    nullOut.parent = chain.length ? chain[0].layer : null; // every check: the once-only hints don't repeat it
     const before = uniqueLayer(baseline, nul.name);
     const chainBefore = before ? (sourcesOf(baseline, before.index) || {}).parents || [] : [];
     if (info.three_d) {
