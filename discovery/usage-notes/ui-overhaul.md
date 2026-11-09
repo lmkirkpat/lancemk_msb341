@@ -41,8 +41,11 @@ scrolled to.
 - **The turn log marks the second check `lesson_passed: false`** although the mentor recorded a pass
   and the panel showed "All eased. Lesson passed". The first lesson had already passed in that session.
   Not investigated; the old panel is being replaced.
-- **Show me again changed nothing visible in AE, as expected,** but both Show me turns were slow to
-  finish: 20.2 s and 14.0 s. The opening took 17.7 s to finish, with first activity at 6.3 s.
+- **The first Show me didn't demonstrate.** That turn took a snapshot and a frame, with no edit. The
+  second Show me press made the one demo (`set_ease` on Glow), after the focus narrowed. So step c's
+  "second press changes nothing" didn't happen as scripted, and it's worth watching in T028.
+- **Slow turns:** the two Show me turns took 20.2 s and 14.0 s to finish. The opening took 17.7 s, with
+  first activity at 6.3 s.
 - **"Outside this lesson" listed four properties:** Subtitle Opacity, Glow Blurriness, Logo Rotation,
   Old Take Position. All four really differ from the capture taken before the lesson. Glow is the
   lesson's own demo, so it's listed as outside the lesson on the second lesson only because the
