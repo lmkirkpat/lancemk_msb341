@@ -174,6 +174,7 @@
     appendTurn: (entry) => appendTurn({}, entry),
     bridgeStarted: () => bridgeStarted(),
     pollNow: () => poller.now(),
+    forgetPoll: () => poller.forget(),
     log: (entry) => console.warn("[Knack] error", JSON.stringify(entry)),
     onChange: () => draw(),
   });

@@ -36,7 +36,7 @@ function retryKind(kind, v) {
 }
 
 // deps: { cfg, createAdapter, readRecord, pathData, session, appendTurn, bridgeStarted, pollNow,
-// log, onChange, now, setTimeout }. test/app-harness.js builds a fake set.
+// forgetPoll, log, onChange, now, setTimeout }. test/app-harness.js builds a fake set.
 function createApp(deps) {
   const later = deps.setTimeout || setTimeout;
   const session = deps.session;
@@ -223,7 +223,10 @@ function createApp(deps) {
   function onToolResult(e) {
     if (e.images && e.images.length) addFrames(e.images);
     const conn = connectionFromTool(e);
-    if (conn) state.connection = { state: conn, started: state.connection ? state.connection.started : null };
+    if (conn) {
+      state.connection = { state: conn, started: state.connection ? state.connection.started : null };
+      deps.forgetPoll();
+    }
     if (!e.ok && AE_LOST.test(e.text || "") && !state.aeNoticed) {
       state.aeNoticed = true;
       notice(COPY.lesson.ae_lost.title, COPY.lesson.ae_lost.body);

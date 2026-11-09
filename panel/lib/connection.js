@@ -98,7 +98,10 @@ function createPoller({ read, onChange, timers, intervalMs }) {
     }
   }
 
-  return { now, setVisible, current: () => last };
+  // A tool changed the mark without the poller knowing, so the next reading must be reported.
+  const forget = () => { last = null; };
+
+  return { now, setVisible, forget, current: () => last };
 }
 
 module.exports = { readConnection, connectionFromTool, createPoller, POLL_MS, CONNECTED, NOT_CONNECTED, BUSY };

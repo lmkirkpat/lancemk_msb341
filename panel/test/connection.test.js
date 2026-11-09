@@ -3,6 +3,9 @@
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const { EventEmitter } = require("events");
+const fs = require("fs");
+const path = require("path");
+const { ready, CONNECTED: HARNESS_CONNECTED } = require("./app-harness.js");
 const { readConnection, connectionFromTool, createPoller, POLL_MS, CONNECTED, NOT_CONNECTED, BUSY } = require("../lib/connection.js");
 const { bridgeStarted } = require("../lib/bridge-status.js");
 
@@ -121,6 +124,39 @@ test("the default timers work where the host's timer needs the right this (Chrom
   } finally {
     Object.assign(globalThis, real);
   }
+});
+
+test("after forget, the next reading is reported even if it matches the last", async () => {
+  const c = clock();
+  const changes = [];
+  const reading = { state: CONNECTED, started: "a" };
+  const p = createPoller({ read: async () => reading, onChange: (v) => changes.push(v), timers: c });
+  await p.now();
+  await p.now();
+  assert.equal(changes.length, 1);
+  p.forget();
+  await p.now();
+  assert.equal(changes.length, 2);
+});
+
+test("a tool's busy mark is corrected by the next poll, so Home doesn't stick on busy", async () => {
+  let poller;
+  const h = await ready({ forgetPoll: () => poller.forget() });
+  poller = createPoller({ read: async () => HARNESS_CONNECTED, onChange: (v) => h.app.setConnection(v), timers: clock() });
+  await poller.now();
+  h.app.act("start");
+  h.adapter().emit("tool_result", { name: "snapshot_project", ok: false, text: "AE_BUSY: rendering", images: [] });
+  assert.equal(h.app.model().connection.state, BUSY);
+  await poller.now();
+  assert.equal(h.app.model().connection.state, CONNECTED);
+  h.adapter().emit("turn_end", { ok: true, kind: "start" });
+  h.app.act("end_lesson");
+  assert.notEqual(h.app.model().state, "home-busy");
+});
+
+test("main.js wires the tool's mark to the poller", () => {
+  const main = fs.readFileSync(path.join(__dirname, "..", "main.js"), "utf8");
+  assert.match(main, /forgetPoll:\s*\(\)\s*=>\s*poller\.forget\(\)/);
 });
 
 test("Try again reads now, and a slow read isn't overlapped", async () => {
