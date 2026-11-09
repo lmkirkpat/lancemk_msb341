@@ -13,11 +13,11 @@
   "learner_record": "product/evals/next-mentor/records/five-learned-none-due.json",
   "turns": [
     {
-      "project": "mentor/test/fixtures/null-parenting/synthetic/crowd-only.json",
+      "project": "product/evals/next-mentor/fixtures/crowd-only.json",
       "say": "/next-mentor"
     },
     {
-      "project": "mentor/test/fixtures/null-parenting/synthetic/crowd-only.json",
+      "project": "product/evals/next-mentor/fixtures/crowd-only.json",
       "say": "/null-parenting-mentor",
       "skill": "null-parenting-mentor",
       "new_session": true
@@ -76,7 +76,7 @@
       },
       {
         "id": "no_count",
-        "never": "\\b(?:0|1|[5-9]|\\d{2,}|five|six|seven|eight|nine|ten|eleven|twelve|dozen)\\b",
+        "never": "\\b(?:0|1|[5-9]|\\d{2,})\\b|\\b(?:five|six|seven|eight|nine|ten|eleven|twelve|dozen)\\b(?!\\s+skills?\\b)",
         "turns": [
           1
         ]

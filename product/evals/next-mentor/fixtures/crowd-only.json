@@ -1,0 +1,994 @@
+{
+  "taken_at": "2026-10-24T12:00:00.000Z",
+  "project": "Bricks.aep",
+  "comp": {
+    "id": 600,
+    "name": "Wall",
+    "duration": 8,
+    "frame_rate": 30,
+    "time": 1,
+    "hide_shy": false,
+    "width": 1920,
+    "height": 1080
+  },
+  "host": {
+    "ae_version": "26.5x89",
+    "os": "Macintosh OS 27.0.1/64"
+  },
+  "precomp_layers": [],
+  "layers": [],
+  "layer_info": [
+    {
+      "index": 1,
+      "name": "Brick 1",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          300,
+          500,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            300,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 2,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            300,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 3,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            300,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 2,
+      "name": "Brick 2",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          410,
+          500,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            410,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 2,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            410,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 3,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            410,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 3,
+      "name": "Brick 3",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          520,
+          500,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            520,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 2,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            520,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 3,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            520,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 4,
+      "name": "Brick 4",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          630,
+          500,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            630,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 2,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            630,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 3,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            630,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 5,
+      "name": "Brick 5",
+      "kind": "shape",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          740,
+          500,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            740,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 2,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            740,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 3,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            740,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -30,
+            "width": 100,
+            "height": 60
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 6,
+      "name": "Brick 6",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          850,
+          500,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            850,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 2,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            850,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        },
+        {
+          "time": 3,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            850,
+            500,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          },
+          "rect_extents": {
+            "left": -50,
+            "top": -48,
+            "width": 100,
+            "height": 60
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 7,
+      "name": "Backdrop",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 8,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "transform": {
+        "anchor": [
+          960,
+          540,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 1,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    }
+  ]
+}

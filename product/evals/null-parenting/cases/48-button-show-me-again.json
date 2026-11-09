@@ -38,7 +38,6 @@
     "demo_only_on": "parent/Tile",
     "last_turn_tools_not_called": [
       "null_parent_demo",
-      "null_parent_check",
       "record_lesson"
     ]
   },

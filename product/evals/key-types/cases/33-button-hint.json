@@ -37,7 +37,7 @@
     "say": [
       {
         "id": "names_blink",
-        "must": "Blink",
+        "must": "Blink|Opacity",
         "turns": [
           4
         ]

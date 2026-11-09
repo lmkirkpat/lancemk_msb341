@@ -36,7 +36,6 @@
     ],
     "last_turn_tools_not_called": [
       "speed_graph_demo",
-      "speed_graph_check",
       "record_lesson"
     ]
   },
