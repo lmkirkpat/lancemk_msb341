@@ -35,15 +35,15 @@ function followOnRequest(recommendation, command) {
 
 // The contract's "Shown when" column (spec 007 FR-019, FR-020). view: a LessonView (or null before a
 // lesson). The check first, then Hint from the first check, then Show me or Show me again, which a
-// cut-off that may have landed a demo (demo_unknown) or a review hides.
+// cut-off that may have landed a demo (demo_unknown) or a review hides: a review never shows either (FR-052).
 function visibleKinds(view, { lessonOpen, canContinue } = {}) {
   if (!lessonOpen) return canContinue ? ["continue", "start"] : ["start"];
   const v = view || {};
   const kinds = ["check"];
   if (v.checks > 0) kinds.push("hint");
-  if (!v.demo_unknown) {
+  if (!v.demo_unknown && v.mode !== "review") {
     if (v.demo_made) kinds.push("show_me_again");
-    else if (v.demo_target && v.mode !== "review" && (v.skill !== "parenting.null" || v.null_ready)) kinds.push("show_me");
+    else if (v.demo_target && (v.skill !== "parenting.null" || v.null_ready)) kinds.push("show_me");
   }
   return kinds;
 }

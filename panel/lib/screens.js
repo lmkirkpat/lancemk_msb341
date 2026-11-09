@@ -174,6 +174,7 @@ function headTag(m) {
   const v = m.lesson;
   if (m.state === "lesson-passed-asking") return `<span class="tag pass">${esc(COPY.lesson.check_passed_tag)}</span>`;
   if (m.state === "lesson-passed-unsaved" || (m.state === "lesson-passed" && v.passed)) return `<span class="tag pass">${esc(COPY.lesson.passed_tag)}</span>`;
+  if (v.mode === "review") return `<span class="tag practice">${esc(COPY.lesson.review_tag)}</span>`; // FR-014: from the tool's mode alone
   return v.checks > 0 ? `<span class="tag">${esc(COPY.lesson.check_tag(v.checks))}</span>` : "";
 }
 

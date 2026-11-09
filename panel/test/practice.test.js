@@ -178,3 +178,75 @@ test("a failed warm-up start retries with the warm-up's request and status", asy
   assert.deepEqual(h.adapter().sent, [{ text: "/offset-mentor review", kind: "warm_up" }]);
   assert.equal(h.app.model().turn.status, COPY.status.warm_up_ready);
 });
+
+// ---------- T065: practice and practice-check ----------
+
+const { tick } = require("./app-harness.js");
+const T = (name, json) => ({ name, json, ok: true, text: "", images: [] });
+const OF_SNAP = (o) => T("offset_snapshot", Object.assign({ lesson: "new", mode: "review", comp: { duration: 8 }, group: { kind: "layers", members: [{ target: "x", label: "Chip A", start: 2 }, { target: "y", label: "Chip B", start: 2 }] }, targets: ["x", "y"], focus: ["Chip A", "Chip B"], demo_target: null, no_demo_reason: "review" }, o));
+const OF_CHECK = (passed) => T("offset_check", { comp_matches: true, passed, kind: "layers", members: [["Chip A", 2], ["Chip B", 2.2]].map(([label, start_now]) => ({ target: `t/${label}`, label, layer: label, start_before: 2, start_now, end_now: start_now + 1, moved_by: {}, split: null, credit: null, status: "graded" })), still_same: [], order_differs: false, out_of_comp: [], other_changes: [], gaps_frames: [] });
+const SAVED = T("record_lesson", { saved: true });
+const lessonParts = (h) => { const l = renderApp(h.app.model()).lesson; return { head: plain(l.head), banner: plain(l.banner), chat: plain([l.chat.earlier || "", ...l.chat.items].join("\n")), list: plain(l.list), actions: plain(l.actions), ask: l.ask }; };
+const warmUpOn = async (record, ...events) => {
+  const h = await onHome(record);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  for (const e of events) h.adapter().emit("tool_result", e);
+  h.adapter().emit("turn_end", { ok: true, kind: "warm_up" });
+  return h;
+};
+
+test("no tag until the tool says it's a review (FR-014: never guessed)", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  assert.ok(!lessonParts(h).head.includes(COPY.lesson.review_tag));
+});
+
+test("practice: tagged from mode, same rows as a lesson marked Proposed, no Show me (FR-052)", async () => {
+  const h = await warmUpOn(TWO_DUE, OF_SNAP());
+  assert.equal(h.app.model().state, "practice");
+  const p = lessonParts(h);
+  assert.ok(p.head.includes(COPY.lesson.review_tag));
+  assert.ok(renderApp(h.app.model()).lesson.head.includes('class="tag practice"'));
+  assert.ok(p.list.includes(COPY.check.proposed));
+  assert.ok(p.actions.includes(COPY.buttons.check));
+  assert.ok(!p.actions.includes(COPY.buttons.hint), "Hint waits for the first check");
+  assert.ok(!p.actions.includes(COPY.buttons.show_me));
+});
+
+test("Warm up that the tool opens as a lesson isn't tagged: the header follows mode", async () => {
+  const h = await warmUpOn(TWO_DUE, OF_SNAP({ mode: "lesson", no_demo_reason: null }));
+  assert.equal(h.app.model().state, "skill-offset-layers-open");
+  assert.ok(!lessonParts(h).head.includes(COPY.lesson.review_tag));
+});
+
+test("practice-check: the tag stays, Hint appears, Show me never does", async () => {
+  const h = await warmUpOn(TWO_DUE, OF_SNAP());
+  h.app.act("check");
+  h.adapter().emit("tool_result", OF_CHECK(false));
+  h.adapter().emit("turn_end", { ok: true, kind: "check" });
+  assert.equal(h.app.model().state, "practice-check");
+  const p = lessonParts(h);
+  assert.ok(p.head.includes(COPY.lesson.review_tag));
+  assert.ok(!p.head.includes(COPY.lesson.check_tag(1)), "the review tag takes the check count's place");
+  assert.ok(p.actions.includes(COPY.buttons.hint));
+  assert.ok(!p.actions.includes(COPY.buttons.show_me));
+  assert.ok(!p.list.includes(COPY.check.proposed));
+});
+
+test("no Show me or Show me again in a review, whatever the tool says about a demo (FR-052)", async () => {
+  const h = await warmUpOn(TWO_DUE, OF_SNAP({ demo_target: "x", demo_used: true }));
+  assert.ok(!lessonParts(h).actions.includes("Show me"));
+});
+
+test("a review reached through Yes on B1 is tagged too", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("find_next");
+  h.adapter().emit("tool_result", T("recommend_next", { recommendation: { skill: "timing.offset", kind: "review", focus_layers: [] } }));
+  h.adapter().emit("turn_end", { ok: true, kind: "find_next" });
+  h.app.act("yes");
+  assert.equal(h.adapter().sent[0].text, "/offset-mentor review");
+  h.adapter().emit("tool_result", OF_SNAP());
+  h.adapter().emit("turn_end", { ok: true, kind: "yes" });
+  assert.ok(lessonParts(h).head.includes(COPY.lesson.review_tag));
+  assert.ok(!lessonParts(h).actions.includes(COPY.buttons.show_me));
+});
