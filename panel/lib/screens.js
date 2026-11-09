@@ -65,10 +65,19 @@ function upNextCard(h, o) {
   return `<section class="card lead${o.dim ? " dim" : ""}" aria-label="${esc(COPY.home.up_next)}"><div class="kicker accent">${esc(COPY.home.up_next)}</div><h3 data-title tabindex="-1">${esc(u.name)}</h3><p class="why">${esc(u.why)}</p><div class="row">${go}${pick}</div></section>`;
 }
 
+function practiceCard(h) {
+  const p = h.practice;
+  if (!p) return "";
+  const last = p.last_practiced ? `${COPY.home.last_practiced} ${p.last_practiced}.` : "";
+  const more = p.rest ? `<span class="meta">${esc(COPY.home.more_due(p.rest))}</span>` : "";
+  const line = last || more ? `<p>${esc(last)}${last && more ? " " : ""}${more}</p>` : "";
+  return `<section class="card" aria-label="${esc(COPY.home.practice_due)}"><div class="kicker due"><span aria-hidden="true">↻</span> ${esc(COPY.home.practice_due)}</div><h3>${esc(p.name)}</h3>${line}</section>`;
+}
+
 function homeCards(m, o) {
   const h = m.home;
   const hello = o.hideHello || !h.hello ? "" : `<p class="hello">${esc(h.hello.text)}${h.hello.sub ? `<small>${esc(h.hello.sub)}</small>` : ""}</p>`;
-  return `${hello}${upNextCard(h, o)}${memoryCard(h, h.has_history)}`;
+  return `${hello}${upNextCard(h, o)}${practiceCard(h)}${memoryCard(h, h.has_history)}`;
 }
 
 const focusText = (v) => (v && Array.isArray(v.focus) && v.focus.length ? v.focus.join(", ") : null);

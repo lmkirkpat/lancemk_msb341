@@ -692,7 +692,8 @@ function createApp(deps) {
   function model() {
     const recordStatus = state.record.status;
     const memory = recordStatus === "pending" || recordStatus === "loading" ? { status: "missing", record: null } : state.record;
-    const home = homeView({ memory, pathData: deps.pathData });
+    const built = builtSkills(deps.pathData, deps.skillsBuilt);
+    const home = homeView({ memory, pathData: deps.pathData, built, now: now() });
     const saved = state.aeclosed ? "aeclosed" : state.saved;
     const m = {
       config_ok: true,
@@ -715,7 +716,6 @@ function createApp(deps) {
       saved,
       reconnecting: state.reconnecting,
     };
-    const built = builtSkills(deps.pathData, deps.skillsBuilt);
     const viewArgs = { memory, pathData: deps.pathData, built, now: now() };
     const skills_view = skillsView(viewArgs);
     const detail = state.skill_detail ? skillDetail(state.skill_detail, viewArgs) : null;

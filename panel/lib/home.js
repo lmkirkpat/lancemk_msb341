@@ -6,6 +6,7 @@
 const nodeFs = require("fs");
 const path = require("path");
 const { memoryView } = require("./memory.js");
+const { practiceDue } = require("./skills-view.js");
 const { REQUESTS } = require("./requests.js");
 const { COPY } = require("./copy.js");
 
@@ -32,8 +33,8 @@ function helloLine(m) {
   return m.date ? `${COPY.home.last_lesson} ${m.date}: ${what}.` : `${COPY.home.last_lesson}: ${what}.`;
 }
 
-// memory: readLearnerRecord's result. pathData: readPathData's result.
-function homeView({ memory, pathData }) {
+// memory: readLearnerRecord's result. pathData: readPathData's result. built and now: for Practice due.
+function homeView({ memory, pathData, built, now }) {
   const unreadable = memory.status === "unreadable";
   const lessons = memory.status === "ok" && memory.record && Array.isArray(memory.record.lessons) ? memory.record.lessons : [];
   const has_history = lessons.length > 0;
@@ -60,7 +61,8 @@ function homeView({ memory, pathData }) {
     };
   }
 
-  return { has_history, unreadable, hello, up_next, memory: view, memory_title: COPY.home.memory_title };
+  const practice = built && now ? practiceDue({ memory, built, now }) : null;
+  return { has_history, unreadable, hello, up_next, practice, memory: view, memory_title: COPY.home.memory_title };
 }
 
 module.exports = { homeView, readPathData, startRequest };

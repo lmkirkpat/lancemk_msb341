@@ -214,6 +214,7 @@ button.foldline:hover:not(:disabled) { background: none; }
 .hist li small { display: block; color: var(--muted); font-size: 11px; }
 .ro { color: var(--muted); font-size: 11px; }
 .tag.practice { border-color: #5a4d1e; color: var(--warn); }
+.kicker.due { color: var(--warn); }
 
 .statusline { display: flex; align-items: center; gap: 6px; padding: 6px 12px; color: var(--text); border-top: 1px solid var(--line); background: #1f2630; flex: none; }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }

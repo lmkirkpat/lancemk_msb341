@@ -53,6 +53,15 @@ function skillsView({ memory, pathData, built, now }) {
   return { rows: ramp.concat(rows), summary, learned, in_progress, total, due_count, state };
 }
 
+// Home's Practice due (FR-051): the first due skill in path order and how many more are due. `built`
+// is in path order, and a skill with no review is never due.
+function practiceDue({ memory, built, now }) {
+  const info = recordSkills(memory);
+  const due = (built || []).filter((s) => isDue(info[s.id], s, now));
+  if (!due.length) return null;
+  return { skill: due[0].id, name: due[0].name, last_practiced: info[due[0].id].last_practiced ? shortDate(info[due[0].id].last_practiced) : null, rest: due.length - 1 };
+}
+
 // One skill's detail, or null when `id` isn't a built skill.
 function skillDetail(id, { memory, pathData, built, now }) {
   const row = built.find((s) => s.id === id);
@@ -75,4 +84,4 @@ function skillDetail(id, { memory, pathData, built, now }) {
   };
 }
 
-module.exports = { skillsView, skillDetail, isDue };
+module.exports = { skillsView, skillDetail, isDue, practiceDue };
