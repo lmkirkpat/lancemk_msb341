@@ -35,7 +35,7 @@ function check(result, opts, makeRow) {
   const shaped = mine.filter((p) => p.result === "passed" && p.credit !== "unknown").length;
   return {
     sections: intoSections(entries),
-    summary: result.passed === true ? W.summary_passed(shaped, mine.length) : W.summary(shaped, mine.length, mine.length - shaped),
+    summary: result.passed === true ? W.summary_passed(shaped, mine.length) : W.summary(shaped, mine.length, mine.filter((p) => p.result !== "passed").length),
     outside: sentences(result.other_changes),
     marks_demo: pairs.some((p) => p.credit === "demo" || p.credit === "unknown") || result.demo_undone === true,
   };

@@ -387,3 +387,9 @@ test("null: the pivot row's region_now is in words, never raw", () => {
   assert.equal(word("center"), "At its center");
   assert.equal(word("bottom-right"), "At its bottom-right corner");
 });
+
+test("speed graph: a passed pair of unknown credit isn't still to shape", () => {
+  const P = (id, over) => Object.assign({ id, label: `Title › ${id}`, result: "passed", credit: "learner" }, over);
+  const s = check("speed_graph_check", { pairs: [P("a"), P("b", { credit: "unknown" }), P("c", { result: "not_passed", credit: null, mistake: "not_shaped" })] }).summary;
+  assert.equal(s, "1 of 3 yours shaped · 1 still to shape");
+});
