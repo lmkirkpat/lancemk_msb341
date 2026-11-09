@@ -1,0 +1,81 @@
+{
+  "id": "11-handover-null-crowded",
+  "title": "A only: Yes, let's go. hands over for real to null in a crowded comp: no layer invented in the suggestion or the lesson",
+  "covers": [
+    "RQ-16",
+    "FR-082",
+    "FR-070"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "known_gap": "next-mentor-handover item 2: a crowded comp gives an empty layer list",
+  "learner_record": "product/evals/next-mentor/records/five-learned-none-due.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/null-parenting/synthetic/crowd-only.json",
+      "say": "/next-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/null-parenting/synthetic/crowd-only.json",
+      "say": "Yes, let's go."
+    }
+  ],
+  "expect": {
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "parenting.null",
+          "recommendation.focus_layers": []
+        }
+      },
+      {
+        "turn": 2,
+        "tool": "null_parent_snapshot",
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "handover": [
+      {
+        "turn": 2,
+        "skill": "null-parenting-mentor"
+      }
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "no_layer_names",
+        "never": "\\b(?:Brick|Backdrop)\\b",
+        "cs": true
+      },
+      {
+        "id": "no_count",
+        "never": "\\b(?:0|1|[5-9]|\\d{2,}|five|six|seven|eight|nine|ten|eleven|twelve|dozen)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-HANDS-OVER",
+    "R-NM-EMPTY-LIST",
+    "R-NM-LESSON-OPENS"
+  ]
+}

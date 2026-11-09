@@ -1,0 +1,66 @@
+{
+  "id": "01-in-progress",
+  "title": "Opening, a skill in progress: picks it back up, names its skill and a layer, in two sentences",
+  "covers": [
+    "RQ-15",
+    "FR-070",
+    "handover item 3"
+  ],
+  "runtimes": [
+    "b1",
+    "a"
+  ],
+  "learner_record": "product/evals/key-types/records/practicing-blink.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/next-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "recommend_next"
+    ],
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "keyframes.types",
+          "recommendation.kind": "continue",
+          "recommendation.reason": "in_progress"
+        }
+      }
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "names_skill",
+        "must": "key type",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_layer",
+        "must": "Blink|Cut",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-IN-PROGRESS",
+    "R-NM-SUGGESTS",
+    "R-NAMES-REAL"
+  ]
+}

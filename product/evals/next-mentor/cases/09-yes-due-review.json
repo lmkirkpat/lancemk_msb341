@@ -1,0 +1,84 @@
+{
+  "id": "09-yes-due-review",
+  "title": "Yes path (B1), a due review: offered as a review; then /key-types-mentor review opens it hands-on, with no demonstration or method",
+  "covers": [
+    "RQ-16",
+    "RQ-11",
+    "FR-082",
+    "FR-070"
+  ],
+  "runtimes": [
+    "b1"
+  ],
+  "learner_record": "mentor/test/fixtures/key-types/records/learned-blink.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/next-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/key-types-mentor review",
+      "skill": "key-types-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "keyframes.types",
+          "recommendation.kind": "review"
+        }
+      },
+      {
+        "turn": 2,
+        "tool": "key_types_snapshot",
+        "equals": {
+          "mode": "review"
+        }
+      }
+    ],
+    "turn_first_tool": [
+      {
+        "turn": 2,
+        "tool": "key_types_snapshot"
+      }
+    ],
+    "tools_not_called": [
+      "key_types_demo"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "offers_review",
+        "must": "review",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_method",
+        "never": "Toggle Hold|Animation\\s*>|right-click|\\bmenu\\b|Keyframe Interpolation|constant speed",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-REVIEW-OFFER",
+    "R-NM-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}

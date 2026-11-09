@@ -1,0 +1,69 @@
+{
+  "id": "03-next-in-path-with-focus",
+  "title": "Opening, next in the path with something in the comp: names the skill and the layers it would use",
+  "covers": [
+    "RQ-15",
+    "FR-070"
+  ],
+  "runtimes": [
+    "b1",
+    "a"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/next-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "recommend_next"
+    ],
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "keyframes.types",
+          "recommendation.kind": "lesson",
+          "recommendation.reason": "next_in_path",
+          "recommendation.focus_layers": [
+            "Blink",
+            "Cut"
+          ]
+        }
+      }
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "names_skill",
+        "must": "key type",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_layer",
+        "must": "Blink|Cut",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-NEXT-WITH-FOCUS",
+    "R-NM-SUGGESTS",
+    "R-NAMES-REAL"
+  ]
+}

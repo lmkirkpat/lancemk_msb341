@@ -1,0 +1,89 @@
+{
+  "id": "10-handover-pivot-named-layers",
+  "title": "A only: Yes, let's go. hands over for real to the pivot, which then opens its lesson (the named layers should reach it)",
+  "covers": [
+    "RQ-16",
+    "FR-082",
+    "FR-070"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "known_gap": "next-mentor-handover item 1 / FR-082: the layers a suggestion names don't reach the lesson",
+  "learner_record": "product/evals/next-mentor/records/four-learned-none-due.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/key-types/practice-now.json",
+      "say": "/next-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/key-types/practice-now.json",
+      "say": "Yes, let's go."
+    }
+  ],
+  "expect": {
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "transform.anchor",
+          "recommendation.focus_layers": [
+            "Cursor",
+            "Icon"
+          ]
+        }
+      },
+      {
+        "turn": 2,
+        "tool": "anchor_snapshot",
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "handover": [
+      {
+        "turn": 2,
+        "skill": "anchor-mentor"
+      }
+    ],
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "tools_not_called": [
+      "anchor_demo",
+      "anchor_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "names_cursor",
+        "must": "Cursor",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_icon",
+        "must": "Icon",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-HANDS-OVER",
+    "R-NM-LESSON-OPENS",
+    "R-NM-LAYERS-KEPT"
+  ]
+}

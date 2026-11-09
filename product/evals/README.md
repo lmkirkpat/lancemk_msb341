@@ -1,6 +1,7 @@
 # Evals
 
-One folder per skill (`easing/`, `key-types/`, `speed-graph/`, `offset/`, `anchor/`, `null-parenting/`),
+One folder per skill (`easing/`, `key-types/`, `speed-graph/`, `offset/`, `anchor/`, `null-parenting/`) and one for the
+hand-over between them (`next-mentor/`, spec 007 T032; `lib/` holds the code the runners share),
 each with its own `README.md`, `rubric.md`, `cases/`, `fixtures/`, `run.mjs` and `results/`.
 
 ## Runtimes
