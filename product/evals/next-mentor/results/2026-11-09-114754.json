@@ -1,0 +1,879 @@
+{
+  "run_at": "2026-11-09T18:47:54.343Z",
+  "options": {
+    "only": "0",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 1.59,
+  "summary": {
+    "passed": 4,
+    "total": 9,
+    "percent": 44,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "01-in-progress",
+      "title": "Opening, a skill in progress: picks it back up, names its skill and a layer, in two sentences",
+      "covers": [
+        "RQ-15",
+        "FR-070",
+        "handover item 3"
+      ],
+      "hash": "f5491b29d475b7b81f13e9071658e38fdd8d1b85635be3135e10b0f9ca01954c",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-IN-PROGRESS",
+              "pass": true,
+              "reason": "The mentor says \"You were partway through *Pick the key type on purpose* last time\" and offers to \"pick that back up on Blink and Cut\", both of which are in focus_layers."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The two-sentence reply suggests one skill by name, gives the reason in plain words (\"one pair on Blink snapping and the rest still fading\" is a brief why, not a recital of the record), and ends on the offer \"Want to jump back in?\" without teaching or mentioning tools."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\", Blink and Cut all appear in the recommend_next result, and the one-clause memory of the last lesson matches the record's \"One pair snapped; the rest still faded\" in plain words."
+            }
+          ],
+          "cost": 0.12088159999999999,
+          "session_id": "604aa157-b06d-4231-be9b-fb56be63d64d",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"practicing\",\n      \"last_practiced\": \"2026-10-24T17:00:00.000Z\",\n      \"times_passed\": 0,\n      \"next\": \"Hold the second Blink pair so it snaps.\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-24T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held one Blink pair; the other pairs still fade\",\n      \"result\": \"partial\",\n      \"demo_used\": false,\n      \"summary\": \"One pair snapped; the rest still faded.\",\n      \"next\": \"Hold the second Blink pair so it snaps.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-suKeTJ/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"continue\",\n    \"reason\": \"in_progress\",\n    \"focus_layers\": [\n      \"Blink\",\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: You were partway through *Pick the key type on purpose* last time, with one pair on Blink snapping and the rest still fading, so let's pick that back up on Blink and Cut. Want to jump back in?\n"
+        }
+      ]
+    },
+    {
+      "id": "02-review-due",
+      "title": "Opening, a review due: offered as a quick review (an offer, hands-on), not started",
+      "covers": [
+        "RQ-15",
+        "FR-070",
+        "FR-020"
+      ],
+      "hash": "9958db87a1bc5dc4c6fb647d3e02433f36fb4fae2e9cca0b0b70e66cf6c8ebf5",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:offers_review",
+              "pass": true,
+              "detail": "turn 1: \"review\""
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-REVIEW-OFFER",
+              "pass": false,
+              "reason": "The mentor offers a hands-on review on Cut without starting it, but \"so it's due for a refresher\" tells the learner a review is owed, which the item lists as a fail."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "In two sentences, the mentor suggests only \"Pick the key type on purpose\", gives the plain reason \"It's been about three weeks\", and ends on the offer \"Want to do a quick review there, all hands-on with no demo?\""
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\" and \"Cut\" both match the recommend_next result, and \"about three weeks\" is a plain-words reference to the record's last_practiced date with no detailed recital."
+            }
+          ],
+          "cost": 0.12479539999999999,
+          "session_id": "927b12ca-ca49-43c3-bb57-e930cafb22b8",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-19T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Make another on/off change snap.\",\n      \"review_due\": \"2026-10-20\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"The 1.4 s pair was still fading at first.\",\n      \"next\": \"Make another on/off change snap.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-9LaPVe/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"review\",\n    \"reason\": \"review_due\",\n    \"focus_layers\": [\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: It's been about three weeks since you learned *Pick the key type on purpose*, so it's due for a refresher, and Cut in this comp is a good layer to try it on. Want to do a quick review there, all hands-on with no demo?\n"
+        }
+      ]
+    },
+    {
+      "id": "03-next-in-path-with-focus",
+      "title": "Opening, next in the path with something in the comp: names the skill and the layers it would use",
+      "covers": [
+        "RQ-15",
+        "FR-070"
+      ],
+      "hash": "bbeeaa0ba9525146794bb728e32986274d9fdf4e41c45f92238da1d3ca30f394",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"key type\""
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 1: \"Blink\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-NEXT-WITH-FOCUS",
+              "pass": true,
+              "reason": "The mentor names the recommended skill and both listed layers, then offers to start: \"the next step is *Pick the key type on purpose*, and Blink and Cut in your comp are good layers to learn it on. Want to start?\""
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The two-sentence reply suggests one skill, gives a plain reason (\"Since you've got Easing down\"), ends on the offer \"Want to start?\", and contains no menu, teaching, or tool talk."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\", \"Blink\", and \"Cut\" all match the recommend_next result, and \"Easing\" is a plain-words mention of the learned easing.basic skill from the record."
+            }
+          ],
+          "cost": 0.11137140000000001,
+          "session_id": "9481d89f-f155-4191-bb19-0e76d5d88a16",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-gqeLiU/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Blink\",\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Since you've got Easing down, the next step is *Pick the key type on purpose*, and Blink and Cut in your comp are good layers to learn it on. Want to start?\n"
+        }
+      ]
+    },
+    {
+      "id": "04-nothing-left",
+      "title": "Opening, everything built is learned and none is due: says they're up to date and that more is coming; suggests nothing",
+      "covers": [
+        "RQ-15",
+        "FR-070"
+      ],
+      "hash": "977e3b1774ad0beba1072683edd7ffb5f0490afb75371673073de644286f98a3",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "1 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:up_to_date",
+              "pass": true,
+              "detail": "turn 1: \"up to date\""
+            },
+            {
+              "check": "say:more_coming",
+              "pass": true,
+              "detail": "turn 1: \"new skills\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-NOTHING-LEFT",
+              "pass": true,
+              "reason": "With recommendation null and reason nothing_left, the mentor said \"You're up to date with everything that's ready right now, and new skills are on the way,\" suggesting no skill or review."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "Not triggered: recommend_next returned no recommendation, so there was nothing to suggest, and the single-sentence reply recites no record and mentions no tools or fields."
+            }
+          ],
+          "cost": 0.1341534,
+          "session_id": "bbdec7ee-93ef-4975-ada3-e7853dcc08c3",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"transform.anchor\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"parenting.null\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T16:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-17T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-04T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-07T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"End\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-GTtp2E/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": null,\n  \"reason\": \"nothing_left\"\n}\nMENTOR: You're up to date with everything that's ready right now, and new skills are on the way.\n"
+        }
+      ]
+    },
+    {
+      "id": "05-ae-unreachable",
+      "title": "Opening with After Effects unreachable: says it hasn't looked at the comp, suggests from past lessons only, claims nothing about the comp",
+      "covers": [
+        "RQ-15",
+        "FR-070"
+      ],
+      "hash": "13268f277852b2beb0dfd30c27acf111fa0e66f7b062db5d1ef3c485e06e3405",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:three_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 3)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:says_not_seen",
+              "pass": true,
+              "detail": "turn 1: \"couldn't see\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-BLIND",
+              "pass": true,
+              "reason": "The mentor says once \"I couldn't see your project just now, so this comes only from your past lessons\" and makes no claim about any layer, count, or comp state."
+            },
+            {
+              "item": "R-NM-SUGGESTS",
+              "pass": true,
+              "reason": "The reply is two sentences suggesting one skill by name, \"Pick the key type on purpose\", with a plain reason (\"since you've learned Easing\"), and ends on the offer \"Want to start on that?\" without a menu, teaching, or tool talk."
+            }
+          ],
+          "cost": 0.11239940000000001,
+          "session_id": "5412ce8c-630b-4add-82b6-a14a4eaec22a",
+          "transcript": "### Turn 1: next-mentor; the project is UNREACHABLE (After Effects not answering)\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-Z9Q1cn/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": false,\n  \"comp\": null,\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path_no_focus\",\n    \"focus_layers\": null,\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: I couldn't see your project just now, so this comes only from your past lessons: since you've learned Easing, the next step is *Pick the key type on purpose*. Want to start on that?\n"
+        }
+      ]
+    },
+    {
+      "id": "06-yes-pivot-named-layers",
+      "title": "Yes path (B1), the pivot with named layers: the suggestion names them; then the plain /anchor-mentor opens the lesson from its own snapshot",
+      "covers": [
+        "RQ-16",
+        "FR-082",
+        "FR-070"
+      ],
+      "known_gap": "next-mentor-handover item 1 / FR-082: the layers a suggestion names don't reach the lesson",
+      "hash": "70cd3562bc3d2af55e054ef2fb16a9afc18df39e982663d5f1da96bbc7537a17",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": false,
+              "detail": "3 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": false,
+              "detail": "said \"I'll check where you left off and pick one good thing to lea\" before the first call"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "turn_first_tool@2",
+              "pass": true,
+              "detail": "turn 2's first tool was anchor_snapshot"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "reply_equals:anchor_snapshot@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_cursor",
+              "pass": true,
+              "detail": "turn 1: \"Cursor\""
+            },
+            {
+              "check": "say:names_icon",
+              "pass": true,
+              "detail": "turn 1: \"Icon\""
+            }
+          ],
+          "rubric": [],
+          "cost": 0.23529959999999997,
+          "session_id": "981624fa-930a-445d-b23c-6c264bd84cfd",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nMENTOR: I'll check where you left off and pick one good thing to learn next.\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T16:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-17T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-04T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-07T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"End\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-elcoBE/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"transform.anchor\",\n    \"skill_name\": \"Set the pivot (anchor point)\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Cursor\",\n      \"Icon\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up is *Set the pivot (anchor point)*, since you've finished the timing skills before it and Cursor and Icon in your Mentor Practice comp are good layers to try it on. Want to start?\n\n### Turn 2: anchor-mentor; the project is an open comp; a new conversation\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"time\": 3.6,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Bar\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Glow\",\n      \"bucket\": \"never\",\n      \"reason\": \"adjustment\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Cursor\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Logo\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Icon\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    },\n    {\n      \"layer\": \"Background\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Cursor\",\n    \"suggested_place\": \"bottom-middle\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Cursor\": \"between\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [\n    {\n      \"layer\": \"Cursor\",\n      \"note\": \"text_baseline\"\n    }\n  ],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Cursor could swing from the middle of its bottom edge. Want to try that one?\n"
+        }
+      ]
+    },
+    {
+      "id": "07-yes-null-named-layers",
+      "title": "Yes path (B1), null with named layers: the suggestion names the group; then the plain /null-parenting-mentor opens, where the lesson asks which layers",
+      "covers": [
+        "RQ-16",
+        "FR-082",
+        "FR-070"
+      ],
+      "known_gap": "next-mentor-handover item 1 / FR-082: the layers a suggestion names don't reach the lesson",
+      "hash": "3e4dc7ec6b9756240a9917edc6bc8f364f4356f14c031dca4bd45927df2bac19",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "turn_first_tool@2",
+              "pass": true,
+              "detail": "turn 2's first tool was null_parent_snapshot"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "reply_equals:null_parent_snapshot@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_group",
+              "pass": true,
+              "detail": "turn 1: \"\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-LAYERS-NAMED",
+              "pass": true,
+              "reason": "Turn 1 names exactly the short focus_layers list and no others: \"Tile, Caption and Stamp in this comp are a good set to practice it on.\""
+            },
+            {
+              "item": "R-NM-LESSON-OPENS",
+              "pass": false,
+              "reason": "In Turn 2 the mentor speaks before calling null_parent_snapshot (\"We'll practice moving a group of layers with a null in your own comp...\"), so the turn does not start with the skill's snapshot tool, even though the rest of the opening is sound."
+            },
+            {
+              "item": "R-NM-LAYERS-KEPT",
+              "pass": false,
+              "reason": "Known gap FR-082 (see discovery/usage-notes/next-mentor-handover.md, item 1): the snapshot's proposal holds Tile, Caption and Stamp, but the lesson opens with the general question \"Which layers should move as one, like the parts of a lower third or a logo lockup?\" and names none of them."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Move a group with a null\", Tile, Caption, Stamp and Mentor Practice 2 all appear in tool results, the pivot mention matches the snapshot's other_skills, and \"lower third\" and \"logo lockup\" are generic examples rather than claimed layers."
+            }
+          ],
+          "cost": 0.29838719999999996,
+          "session_id": "52739d4f-c86f-42a8-9329-3abc8fd05719",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"transform.anchor\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T16:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-17T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-04T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-07T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"End\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-wivWwM/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"parenting.null\",\n    \"skill_name\": \"Move a group with a null\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Tile\",\n      \"Caption\",\n      \"Stamp\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up for you is *Move a group with a null*, and Tile, Caption and Stamp in this comp are a good set to practice it on. Want to start?\n\n### Turn 2: null-parenting-mentor; the project is an open comp; a new conversation\nLEARNER: /null-parenting-mentor\nMENTOR: We'll practice moving a group of layers with a null in your own comp: I'll guide and check, and you'll do the hands-on work.\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this builds on it. We'll be working in Mentor Practice 2.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n"
+        }
+      ]
+    },
+    {
+      "id": "08-yes-null-crowded-empty-list",
+      "title": "Yes path (B1), null in a crowded comp with an empty layer list: no layer invented or counted, in the suggestion or the lesson",
+      "covers": [
+        "RQ-16",
+        "FR-082",
+        "FR-070"
+      ],
+      "known_gap": "next-mentor-handover item 2: a crowded comp gives an empty layer list",
+      "hash": "9922b7dca081e2515fe3553e12ee8ab6cb8c5709015cf28f8de596365c595f93",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": false,
+              "detail": "said \"Synthetic\""
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "turn_first_tool@2",
+              "pass": true,
+              "detail": "turn 2's first tool was null_parent_snapshot"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "reply_equals:null_parent_snapshot@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"group\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turns 1, 2: clean"
+            },
+            {
+              "check": "say:no_count",
+              "pass": false,
+              "detail": "turn 1 said \"five\""
+            }
+          ],
+          "rubric": [],
+          "cost": 0.21304499999999998,
+          "session_id": "f1cd0e9a-59ef-4ed2-a1e6-7adfb93154d1",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"transform.anchor\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T16:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-17T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-04T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-07T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"End\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-Dugp0v/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Synthetic Group\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"parenting.null\",\n    \"skill_name\": \"Move a group with a null\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: You've got the five skills before it, so next up is *Move a group with a null*, but Synthetic Group has nothing for that skill yet. Would you like to make a quick example in your comp and start there?\n\n### Turn 2: null-parenting-mentor; the project is an open comp; a new conversation\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Synthetic.aep\",\n  \"comp\": {\n    \"name\": \"Synthetic Group\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this builds on it. Today you'll set up a group in Synthetic Group so a single handle moves it all, and I'll check your work as you go.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n"
+        }
+      ]
+    },
+    {
+      "id": "09-yes-due-review",
+      "title": "Yes path (B1), a due review: offered as a review; then /key-types-mentor review opens it hands-on, with no demonstration or method",
+      "covers": [
+        "RQ-16",
+        "RQ-11",
+        "FR-082",
+        "FR-070"
+      ],
+      "hash": "34d1cab24ebf5d3b690b188f35af2296b458c0c62c24f79269a1f3dc5e5ea2bb",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "turn_first_tool@2",
+              "pass": true,
+              "detail": "turn 2's first tool was key_types_snapshot"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "reply_equals:key_types_snapshot@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:offers_review",
+              "pass": true,
+              "detail": "turn 1: \"review\""
+            },
+            {
+              "check": "say:no_method",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-REVIEW-OFFER",
+              "pass": false,
+              "reason": "The turn 1 reply is a hands-on offer on Cut with no demo and doesn't start the review, but \"so it's due for a refresher\" tells the learner a review is owed, which the item names as a fail."
+            },
+            {
+              "item": "R-NM-REVIEW-HANDS-ON",
+              "pass": true,
+              "reason": "Turn 2 opens in two short sentences on the move (\"Cut's Opacity changes at 3 s. Is it meant to snap... or... fade?\") with no demonstration, method, menu path or reteach; the added Seal precomp note teaches nothing."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Pick the key type on purpose\", Cut, Opacity at 3 s and Seal all appear in the recommend_next or key_types_snapshot results, and \"about three weeks\" matches days_since_practiced: 21."
+            }
+          ],
+          "cost": 0.2435806,
+          "session_id": "65918126-f801-4871-972f-05d823abe5fc",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-12T18:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Try Bar: separated X Position and Trim Paths End.\",\n      \"review_due\": \"2026-10-13\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-10-19T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Make another on/off change snap.\",\n      \"review_due\": \"2026-10-20\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": true\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T17:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice 2\",\n      \"attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"The 1.4 s pair was still fading at first.\",\n      \"next\": \"Make another on/off change snap.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Blink\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-A05nUh/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice 2\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"keyframes.types\",\n    \"skill_name\": \"Pick the key type on purpose\",\n    \"kind\": \"review\",\n    \"reason\": \"review_due\",\n    \"focus_layers\": [\n      \"Cut\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: It's been about three weeks since you learned *Pick the key type on purpose*, so it's due for a refresher. Want a quick review on Cut, all hands-on with no demo?\n\n### Turn 2: key-types-mentor; the project is an open comp; a new conversation\nLEARNER: /key-types-mentor review\nTOOL CALL key_types_snapshot {\"mode\":\"review\"}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"review\",\n  \"mode_source\": \"asked\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Make another on/off change snap.\",\n    \"last_attempted\": \"Held 2 Blink Opacity pairs; the demo held the first\",\n    \"days_since_practiced\": 21,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Cut's Opacity changes at 3 s. Is it meant to snap, like an on/off or a cut, or is that one meant to fade?\n\nSeal is a precomp, so I can't see inside it yet, and I'm not saying it's fine.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}
