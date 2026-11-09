@@ -99,7 +99,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T057 BL · Speed graph, live. SC-002, SC-014.
 - [x] T058 BL · Offset, live; react to the timeline. SC-002, SC-014.
 - [x] T059 BL · Set the pivot, live. SC-002, SC-014.
-- [ ] T060 BL · Move a group with a null, live. SC-002, SC-014; closes the live tally in quickstart §2.
+- [x] T060 BL · Move a group with a null, live. SC-002, SC-014; closes the live tally in quickstart §2.
 - [ ] T061 BL · Find my next lesson through Yes into the recommended lesson, on B1 (quickstart §4). First confirm the temp learner home reaches both Home and the mentor; that setup is untested.
 - [ ] T062 BL · SC-010 at 260 × 480, 11 of its 12 states (`practice-check` waits for T071), and SC-016 at 480 and 680 (quickstart §3).
 - [ ] T076 SW · `specs/003-mentor-panel/contracts/mentor-adapter.md`. The launch arguments and `start`'s `skill` were updated 2026-11-04, after 013 T065. Left: when T023 and T052 merge, add `announcesCalls` and `handsOver`. The cockpit asks when each lands.

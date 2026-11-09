@@ -406,3 +406,84 @@ Nothing felt off; no terminal.
 `practice2-before.json` before T060 (null, same comp).
 
 **SC-014:** pivot met (live in the panel, no terminal, checklist agreed with the check, stale counted: 0). Builder only.
+
+### Move a group with a null (T060, 2026-11-09)
+
+Builder, on B1, Mentor Practice 2, focus Tile, Caption and Stamp (suggested by the mentor). Comp restored after T059 and
+checked (strict compare, `layer_info` included); that state is the capture before this lesson. The builder said "slide",
+then keyed Rotation on purpose, to see the mentor adapt.
+
+| Measure | Result |
+|---|---|
+| Time to pass | 6 min 14 s (23:08:02Z to 23:14:16Z), 11 turns; about 1.3 min of that was finding 1 |
+| Cost | $0.36 (B1) |
+| Slowest turn | 10.0 s to finish (the passing check, which also saved); first activity 5.8 s at worst (the opening) |
+| Demo | None (offered in words at the parenting stage, not taken) |
+| `lesson-focus-stale` | 0 (none in the session state) |
+| Terminal | All turns ran in the panel |
+
+| Step (quickstart §2) | What happened | Matches? |
+|---|---|---|
+| Opening | Asked which layers move as one; on "any suggestions?" proposed Tile, Caption and Stamp | Yes |
+| Frame and idea | One frame at 0 s; what a parent passes on and what it doesn't | Yes |
+| Stages open in order | The null, then the group, then the move (builder) | Yes |
+| Show me after the null is ready | Yes (builder); the mentor also offered to parent Tile, in words | Yes |
+| Check 1 (the null) | Null 12 in place | Yes |
+| Check 2 (the group) | All three follow Null 12, none jumped | Yes |
+| Check 3 (the move) | Keys on Rotation, not a slide; asked where the group turns from | Yes |
+| Where to turn from | Three turns to agree on the group's top-left corner | No: finding 1 |
+| Check 4 (the move) | Null's pivot outside the group, not passed | Yes |
+| Check 5 (the move) | Passed: turns from the group's top-left; two ungraded notes (linear move, default name) | Yes |
+| Saved | `passed`, `demo_used: false` | Yes |
+
+**SC-002 agreement.** The builder checked each against AE: the rows matched.
+
+| Check | Check's result | Panel rows | Builder in AE | Kind |
+|---|---|---|---|---|
+| 12 | Null in place | Same | Same | Stage passed |
+| 13 | Group follows, none jumped | Same | Same | Stage passed |
+| 14 | Rotation, not a slide; place not set | Same | Same | Partial |
+| 15 | Pivot outside the group | Same | Same | Partial |
+| 16 | Passed | Same | Same | Pass |
+
+**SC-002 live tally, closed for quickstart §2's six lessons:**
+
+| Needed | Count |
+|---|---|
+| Checks, panel vs check 100%, vs AE ≥ 9 of 10 | 16 of 10 ✓ (16/16 and 16/16) |
+| Partial | 7 of 3 ✓ |
+| Outside the lesson | 4 of 2 ✓ |
+| Something undone | 2 of 1 ✓ |
+| Openings on easing, speed graph or offset: Proposed, then not | 1 of 3: two more needed |
+
+### What the builder said
+
+> confusing but i got there eventually
+
+(About agreeing where the group turns from.)
+
+### Findings
+
+1. **The mentor's "where" question mixed up the null's corner and the group's.** After "it should turn from where it
+   is right now", the mentor asked "Where on the group is Null 12 sitting right now", and the builder answered "the top
+   left corner of the null", which is where a null's pivot always is. It took a rephrase and a failed check to land on
+   the group's top-left. Builder: confusing. *Cause:* the question asked about the null's place on the group, when the
+   learner thinks of the null as the thing with the corner. *Eval case (null):* the learner keys Rotation after saying
+   slide, then answers "where it is right now"; `expect`: at most one follow-up question about the place; rubric "asks
+   about a place on the group (a corner, an edge, the middle) and never about the null's own corner". *To fix:* in
+   `null-parenting-mentor/SKILL.md`, ask "which part of Tile, Caption and Stamp should stay still while they turn?",
+   the pivot lesson's wording, which the builder answered at once in T059.
+
+**Comp handling:** Mentor Practice 2 now has Null 12, with Tile, Caption and Stamp parented to it, and Rotation keys.
+Adding the null renumbered the layers below it. Restore from the copy and strict-compare with `practice2-before.json`
+before any other sitting on this comp.
+
+**SC-014:** null met (live in the panel, checklist agreed with the check, stale counted: 0). Builder only.
+
+### SC-014 summary
+
+All six skills completed one live lesson in the new panel on 2026-11-09: easing (T028), key types (T056), speed graph
+(T057), offset (T058), set the pivot (T059), null (T060). For the five today, none needed the terminal, every checklist
+agreed with the check, and `lesson-focus-stale` showed 0 times. T028's notes above don't record its stale count or a
+row-by-row agreement, so easing rests on its "things were pretty smooth" and the panel's pass. With that caveat, sprint
+4's first "done" item is met. Builder only, on B1.

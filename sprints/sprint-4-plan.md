@@ -14,7 +14,8 @@ testing with real users.
 
 **Done looks like:**
 
-- [ ] All six skills run as live lessons inside the new panel
+- [x] All six skills run as live lessons inside the new panel. Done 2026-11-09 on B1 (T028, T056 to T060,
+      `discovery/usage-notes/ui-overhaul.md`); easing's T028 notes lack a stale count and row-by-row agreement
 - [ ] A usage session comparing the new panel with the current one, checked against spec 007's
       success criteria
 - [ ] The option A runtime built, with easing and pivot proven on it; the rest before the first tester (`decisions/011`, changed 2026-11-04)
