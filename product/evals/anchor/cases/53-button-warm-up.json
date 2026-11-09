@@ -1,0 +1,38 @@
+{
+  "id": "53-button-warm-up",
+  "title": "Panel: Warm up runs a review: the task, no demonstration, no walkthrough, no watch offer",
+  "covers": [
+    "RQ-11",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/learned-door.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor review"
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "first_snapshot_mode": "review",
+    "first_tool": "anchor_snapshot",
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "asks_where",
+        "must": "turn from|where",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HANDS-ON",
+    "R-AN-NO-WATCH-OFFER",
+    "R-NAMES-REAL"
+  ]
+}

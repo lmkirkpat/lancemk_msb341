@@ -1,0 +1,52 @@
+{
+  "id": "50-button-show-me-again",
+  "title": "Panel: Show me again explains the change already made with a frame, and makes no second demonstration",
+  "covers": [
+    "RQ-14",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door and Tab should both turn from the middle of their left edges."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Show me how first."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tab is selected and Anchor Point and Position are showing."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Show me again: explain the change you already made, with a frame. Don't change anything."
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "anchor/19",
+    "last_turn_tools_called": [
+      "preview_frame"
+    ],
+    "last_turn_tools_not_called": [
+      "anchor_demo",
+      "anchor_check",
+      "record_lesson"
+    ]
+  },
+  "rubric": [
+    "R-SHOW-ME-AGAIN",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}
