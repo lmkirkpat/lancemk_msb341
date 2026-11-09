@@ -3,7 +3,8 @@
   "title": "Panel: Try again after a Show me with no result sends the check; the mentor reads the project and eases nothing more",
   "covers": [
     "RQ-13",
-    "FR-030"
+    "FR-030",
+    "T027"
   ],
   "learner_record": null,
   "turns": [

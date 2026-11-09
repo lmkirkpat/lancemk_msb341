@@ -3,7 +3,8 @@
   "title": "Panel: Try again after a Show me whose demo landed sends Show me again; the pair is explained with a frame and not eased twice",
   "covers": [
     "RQ-13",
-    "FR-030"
+    "FR-030",
+    "T027"
   ],
   "learner_record": null,
   "turns": [

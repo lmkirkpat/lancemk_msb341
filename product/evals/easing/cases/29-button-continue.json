@@ -3,7 +3,8 @@
   "title": "Panel: Continue picks the lesson up where it was, with no new opening and no change",
   "covers": [
     "RQ-12",
-    "FR-027"
+    "FR-027",
+    "T027"
   ],
   "learner_record": null,
   "turns": [

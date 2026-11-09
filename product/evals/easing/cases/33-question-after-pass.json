@@ -3,7 +3,8 @@
   "title": "A follow-up question after the pass is recorded is answered, and nothing is recorded a second time",
   "covers": [
     "FR-046",
-    "ui-overhaul"
+    "ui-overhaul",
+    "T027"
   ],
   "learner_record": null,
   "turns": [
