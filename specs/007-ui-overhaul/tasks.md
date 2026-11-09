@@ -92,7 +92,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T050 [US5] PB · Skills tab: `skills-empty`, `skills-few`, `skills-many`; removes the interim. FR-048, FR-053.
 - [x] T051 [US5] PB · `skill-detail`, `skill-detail-noreview`, `skill-detail-new`, New lesson. FR-049.
 - [x] T052 [US1] PB · Home's `home-return` and Find my next lesson; `lesson-picking`, Yes per FR-082: `handsOver` on both adapters; on B1, stop next-mentor's process and start the recommended lesson from `recommendation`, ignoring late events from the stopped adapter, with the skill from the follow-on request; next-mentor's picking process writes no display log, so it can't show as `home-cutoff`; on A, send `Yes, let's go.`; hidden with `requested`, no recommendation or a skill not in the table; a test that the request is the same with `focus_layers` empty, null or very long. A review reached before step 3 has no practice tag yet. Removes `home-return-interim`. FR-009, FR-013, FR-082, FR-094, plan P3. Depends on T041.
-- [ ] T053 [US7] PB · Widen the sync test from EE's case names, covering RQ-16's `Yes, let's go.` and the follow-on requests. FR-071, SC-006. Depends on T027, T032 to T037.
+- [x] T053 [US7] PB · Widen the sync test from EE's case names, covering RQ-16's `Yes, let's go.` and the follow-on requests. FR-071, SC-006. Depends on T027, T032 to T037.
 - [x] T054 PB · SC-003's tests for step 2's states; each skill's recorded stream through the panel. SC-002's test half, SC-007.
 - [x] T055 PB · Hand-back: what ran, what the scans say, anything for the designer.
 - [ ] T056 BL · Key types, live in the panel (quickstart §2). SC-002, SC-014.
