@@ -20,6 +20,7 @@
   const { appendTurn } = lib("turns.js");
   const ps = lib("panel-session.js");
   const { createApp } = lib("app.js");
+  const { writeLoadedStamp } = lib("loaded-stamp.js");
   const { renderApp, nextTab } = lib("screens.js");
 
   const $ = (id) => document.getElementById(id);
@@ -141,6 +142,10 @@
   window.addEventListener("beforeunload", () => app && app.shutdown());
 
   // ---------- start-up ----------
+
+  // Tells the setup check this panel version has loaded in AE (spec 006 T007). Before the config,
+  // so a setup problem still shows the panel loaded. Never throws.
+  writeLoadedStamp({ panelDir: DIR });
 
   const cfg = loadConfig();
   if (cfg.ok && cfg.runtime !== "a") {
