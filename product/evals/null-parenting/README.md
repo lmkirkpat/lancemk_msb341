@@ -17,6 +17,11 @@ resumed-before-the-region-question branch (SKILL.md ~:162). Known overlap: **cas
 `goes_to_null_step` or `R-NULL-CONTINUED` until it is re-pointed (it should pass the region question first, or answer it in
 turn 1). Not changed here: 37 was not in this task's runs. `R-NULL-CONTINUED` now says asking the region question first passes.
 
+## Live finding from the new panel (2026-11-09, T060): case 52, B1, written before any `SKILL.md` change
+
+**52 where-question-about-the-group**: the learner keyed Rotation on the null and answers "It should turn from where it is right now." Turn 5 must ask once, about a part of the group, never about the null's own corner (`say:no_question_about_the_nulls_corner`, `say:one_question_after_answer`, rubric `R-NULL-PLACE-ON-GROUP`). **Fails 4/4 on the rubric** (one judge reply was unreadable and a re-run failed the same way); the first version of the deterministic regex missed the real wording and was tightened afterwards, so it has not itself been run against the mentor.
+
+
 ## Spec 007 button cases (T037, written 2026-11-09, dry-run only)
 
 7 cases added, ids 45 to 51. Each sends one panel request, word for word (`contracts/button-requests.md`), into a lesson that is open. The first run is spec 007 T038: `node product/evals/null-parenting/run.mjs --only FR-070` runs exactly these cases (every one lists `FR-070` in `covers`).
