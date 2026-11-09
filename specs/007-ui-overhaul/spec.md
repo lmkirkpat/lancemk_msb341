@@ -483,7 +483,8 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-015**: The checklist MUST dock above the buttons. Rows at the opening come from the opening
   snapshot's targets, each marked **Proposed**, with the header naming the source ("Based on the mentor's
   last look at your comp."). The mark MUST drop at the learner's first reply or first check, whichever is
-  first. Whenever a snapshot returns new targets, the rows MUST change to them. With no targets at the
+  first. Whenever a snapshot returns new targets, the rows MUST change to them, unless the rows came from
+  a check: those stay until the next check (builder's decision, 2026-11-09). With no targets at the
   opening (key types, the pivot, null, by design) the slot MUST say what fills it, naming no candidate.
   Easing's opening rows are all its linear pairs (with no label yet, FR-100). There is no accept signal, so the panel MUST
   NOT claim the focus was agreed. A `continued` or `resumed` lesson isn't marked Proposed (FR-092).
