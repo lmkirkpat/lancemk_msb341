@@ -345,7 +345,45 @@ test("FR-056: blocking start_failed, first turn: Home with err-mentor and Needs 
   assert.equal(v.includes("ENOENT"), false);
   assert.equal(h.app.model().lesson_open, false);
   h.app.act("try_again");
-  assert.notEqual(st(h), "err-mentor");
+  assert.equal(h.adapters.length, 2, "Try again starts the lesson again");
+  assert.equal(st(h), "err-mentor", "this mentor still can't start");
+});
+
+test("err-mentor: Try again really starts, and a start that works opens the lesson (T023)", async () => {
+  let starts = 0;
+  const h = await ready({ onStart: (a) => { if (starts++ === 0) a.emit("error", { kind: "start_failed", message: "" }); } });
+  h.app.act("start");
+  assert.equal(st(h), "err-mentor");
+  h.app.act("try_again");
+  assert.equal(h.adapters.length, 2);
+  assert.equal(h.adapter().sent[0].kind, "start");
+  assert.equal(h.app.model().lesson_open, true);
+  assert.equal(h.app.model().tab, "lesson");
+  assert.equal(h.app.model().error, null);
+});
+
+test("Try again on an error after the lesson was saved clears it and starts nothing", async () => {
+  const h = await open();
+  h.adapter().emit("tool_result", CHECK({ passed: true }));
+  h.adapter().emit("tool_result", SAVED);
+  end(h);
+  h.adapter().emit("error", { kind: "rate_limited", message: "" });
+  assert.equal(st(h), "lesson-pass-rate");
+  h.app.act("try_again");
+  assert.equal(h.adapters.length, 1);
+  assert.equal(st(h), "lesson-passed");
+});
+
+test("a saved start time isn't overwritten by a bridge read that found nothing; a real one replaces it", async () => {
+  const none = await ready({ bridgeStarted: () => Promise.resolve(null) });
+  none.app.act("start");
+  await tick();
+  none.adapter().emit("turn_end", { ok: true, kind: "start" });
+  assert.equal(none.saved.current.bridge_started, CONNECTED.started);
+  const found = await ready({ bridgeStarted: () => Promise.resolve("2026-11-09T11:00:00.000Z") });
+  found.app.act("start");
+  await tick();
+  assert.equal(found.saved.current.bridge_started, "2026-11-09T11:00:00.000Z");
 });
 
 test("B1 not_signed_in shows err-mentor, never err-key (FR-056); A shows err-key and out_of_credit err-credit", async () => {

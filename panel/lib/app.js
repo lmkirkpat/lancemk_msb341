@@ -415,6 +415,7 @@ function createApp(deps) {
     state.session = session.newSession({ claude_session_id: id, lesson: state.lesson, skill, bridge_started: state.connection ? state.connection.started : null });
     const sess = state.session;
     deps.bridgeStarted().then((started) => {
+      if (started === null) return; // busy or gone: keep the start time the mark already had
       sess.bridge_started = started;
       if (state.session === sess) persist();
     });
@@ -453,12 +454,12 @@ function createApp(deps) {
   function tryAgain() {
     if (state.busy || !state.error) return;
     const e = state.error;
-    if (e.state === "lesson-start-failed") {
+    if (e.state === "lesson-start-failed" || (!state.lesson_open && !state.lesson_over)) {
       state.error = null;
       startLesson();
       return;
     }
-    if (!state.lesson_open) { state.error = null; return; } // no lesson to retry into (FR-056)
+    if (!state.lesson_open) { state.error = null; return; } // the lesson is saved: nothing to retry into
     retry();
   }
 
