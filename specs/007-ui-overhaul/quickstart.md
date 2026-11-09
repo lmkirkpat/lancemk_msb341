@@ -8,7 +8,7 @@ Notes go in `discovery/usage-notes/ui-overhaul.md`.
 carry-over, so no reset here may lose it, whatever order the two run in. Around every sitting that changes Mentor Practice or Mentor
 Practice 2:
 
-1. **Capture:** with the comp active, `node mentor/dev/capture.mjs <scratch>/<comp>-before.json`, and File > Save a Copy of the project.
+1. **Capture:** with the comp active, `node mentor/dev/capture.mjs <scratch>/<comp>-before.json`, and File > Save As > Save a Copy of the project.
    The repo has no restore script, so the capture is the check and the copy is the restore.
 2. **Reset** as the session needs, by script or by hand.
 3. **Restore:** reopen the copy and save it back over the project. Check with a strict compare against the capture, including `layer_info`,
