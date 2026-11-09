@@ -78,6 +78,11 @@ test("the helper path comes from repo_path; a dev install resolves to this repo'
   over.adapter.start();
   assert.deepEqual(over.spawned[0].args, ["/elsewhere/main.mjs"]);
   assert.equal(over.spawned[0].opts.cwd, "/elsewhere");
+  // No repo_path: creating the adapter doesn't throw; starting it is start_failed.
+  const none = harness({}, { runtime: "a", node_path: "/n/node" });
+  none.adapter.start();
+  assert.equal(none.spawned.length, 0);
+  assert.deepEqual(none.events.map(brief), [["error", "start_failed"]]);
 });
 
 test("A ignores the skill named at start: the helper reads it from the request (spec 013 FR-042)", () => {

@@ -48,7 +48,8 @@ function createAdapter(config, deps) {
   const log = d.log || ((entry) => console.warn("[Knack] helper", JSON.stringify(entry)));
   // Under repo_path (spec 006 T006): an install's panel sits in AE's extensions folder, apart from
   // the helper. A dev install's repo_path is this repo, so it's the same file as HELPER_PATH.
-  const helperPath = d.helperPath || path.join(config.repo_path, "panel", "helper", "main.mjs");
+  // Resolved at start, inside its try, so a config without repo_path is start_failed, not a throw.
+  const helperPathFor = () => d.helperPath || path.join(config.repo_path, "panel", "helper", "main.mjs");
 
   const handlers = {};
   const emit = (type, payload) => (handlers[type] || []).forEach((h) => h(Object.assign({ type }, payload)));
@@ -172,6 +173,7 @@ function createAdapter(config, deps) {
     firstTurnDone = false;
     spawnedAt = now();
     try {
+      const helperPath = helperPathFor();
       child = spawn(config.node_path, [helperPath], { cwd: path.dirname(helperPath), env: helperEnv(baseEnv), stdio: ["pipe", "pipe", "pipe"] });
     } catch (e) {
       child = null;
