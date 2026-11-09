@@ -8,7 +8,7 @@ const REQUESTS = {
   continue: { label: "Continue lesson", request: "I'm back. Pick up where we left off." },
   show_me: { label: "Show me", request: "Show me how first." },
   show_me_again: { label: "Show me again", request: "Show me again: explain the pair you already eased, with a frame. Don't change anything." },
-  check: { label: "Check my work", request: "I'm done. Check my work." },
+  check: { label: "Done, check it", request: "I'm done. Check my work." },
   hint: { label: "Hint", request: "Can I have a hint?" },
 };
 

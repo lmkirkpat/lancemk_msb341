@@ -9,9 +9,14 @@ const path = require("node:path");
 
 const root = path.join(__dirname, "..");
 const css = fs.readFileSync(path.join(root, "panel.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
-const scripts = [path.join(root, "main.js")].concat(
-  fs.readdirSync(path.join(root, "lib")).filter((f) => f.endsWith(".js")).map((f) => path.join(root, "lib", f))
-);
+// Every script in lib, subfolders included (lib/checklist/ would otherwise escape the check).
+function scriptsIn(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = path.join(dir, e.name);
+    return e.isDirectory() ? scriptsIn(p) : e.name.endsWith(".js") ? [p] : [];
+  });
+}
+const scripts = [path.join(root, "main.js")].concat(scriptsIn(path.join(root, "lib")));
 const markup = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const sources = [markup].concat(scripts.map((f) => fs.readFileSync(f, "utf8")));
 
@@ -196,9 +201,19 @@ test("body text is 12 px", () => {
   assert.match(decl("body", "font"), /^12px\//);
 });
 
-test("the markup and scripts set no font size of their own", () => {
-  const inline = /style\s*=|\.style\b|cssText|fontSize|font-size/;
-  assert.deepStrictEqual(sources.filter((s) => inline.test(s)).map((s) => s.slice(0, 40)), []);
+// Narrowed to font sizes (research R4 #13): offset's timeline needs an inline position.
+const FONT_SIZE = /fontSize|font-size|\.style\.font\b|["'`;\s]font:\s*\d/;
+
+test("the markup and scripts set no font size of their own, in lib's subfolders too", () => {
+  assert.ok(scripts.some((f) => f.endsWith(path.join("checklist", "index.js"))), "lib/checklist is scanned");
+  assert.deepStrictEqual(sources.filter((s) => FONT_SIZE.test(s)).map((s) => s.slice(0, 40)), []);
+});
+
+test("the font-size check catches a size and allows a position", () => {
+  assert.ok(FONT_SIZE.test('el.style.fontSize = "10px"'));
+  assert.ok(FONT_SIZE.test('<i style="font-size:10px">'));
+  assert.ok(FONT_SIZE.test('<i style="font: 10px sans-serif">'));
+  assert.equal(FONT_SIZE.test('<i style="left:40%;width:4%">'), false);
 });
 
 test("elements the browser shrinks have a size of their own wherever the panel makes them", () => {

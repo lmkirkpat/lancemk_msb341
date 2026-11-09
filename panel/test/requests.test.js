@@ -7,6 +7,7 @@ test("matches the contract's table", () => {
   assert.deepEqual(Object.keys(REQUESTS).sort(), ["check", "continue", "hint", "show_me", "show_me_again", "start"]);
   assert.equal(REQUESTS.start.request, "/ease-mentor");
   assert.equal(REQUESTS.show_me.request, "Show me how first.");
+  assert.equal(REQUESTS.check.label, "Done, check it"); // RQ-14: the label moved, the request didn't
   assert.equal(REQUESTS.check.request, "I'm done. Check my work.");
   assert.equal(REQUESTS.hint.request, "Can I have a hint?");
   assert.equal(REQUESTS.continue.request, "I'm back. Pick up where we left off.");
