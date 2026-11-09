@@ -58,7 +58,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T024 [P] PB · The Skills tab's one-line interim (plan P9).
 - [x] T025 [P] PB · `CSXS/manifest.xml`: `MinSize` height 480 (Open question 9).
 - [x] T026 PB · SC-003's tests for step 1's states, `home-return-interim` included; reduced motion; a keyboard pass by test. FR-073, FR-079, FR-080.
-- [ ] T027 [P] [US7] EE · Easing: Continue, and the two Try again cases. RQ-12, RQ-13. Hand the case names to PB.
+- [x] T027 [P] [US7] EE · Easing: Continue, and the two Try again cases. RQ-12, RQ-13. Hand the case names to PB.
 - [x] T028 BL · Easing live in the new panel, and SC-015's second half (quickstart §1): SC-001, SC-002's easing part. Depends on T015 to T026.
 
 **Stop point:** a working panel, easing only. Other skills stay in Claude Code.
@@ -68,12 +68,12 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T029 [P] SB · `mentor/curriculum/skills-built.json`, `mentor/scripts/write-skills-built.mjs`, `mentor/test/skills-built.test.mjs`. New files only. PN-16, plan P2. No eval cost.
 - [x] T030 [P] PB · Settled by 013 T065's check (013's research R6): B1 can't hand over. T052 follows it. `--tools ToolSearch,Skill` stays untested and unplanned (research R11).
 - [x] T031 SB · `next-mentor/SKILL.md`: `Set the pivot (anchor point)` → `/anchor-mentor` and `Move a group with a null` → `/null-parenting-mentor`. Done on `main` by `6094ee9`. PN-17.
-- [ ] T032 EE · `product/evals/next-mentor/`: runner with `--runtime a|b1` from the start, tool lists from `allowedToolsOf` (013 T064's reader, never hand-kept; no `Skill` on B1), rubric. Covers `discovery/usage-notes/next-mentor-handover.md`'s items 1, 2 and 5. **B1, 9 cases:** 5 openings; 4 Yes-path cases that check the `recommend_next` result, then run the panel's plain follow-on request in a fresh session with that skill's list: the pivot with named layers (1), null with named layers, where the lesson asks (1), null's crowded comp with an empty list, where no layer may be invented (2), and a due review (5). **A only, 4 more cases, written now, run at T078:** real hand-overs from `Yes, let's go.` to the pivot with named layers (1), null's crowded comp (2), offset as a due review (5), and key types after "I already know it" on an unlearned skill (5). A failure on these known items is reported, with no `SKILL.md` change planned. RQ-15, RQ-16, FR-082.
-- [ ] T033 [P] [US7] EE · Key types: 6 cases, contracts/button-requests.md.
-- [ ] T034 [P] [US7] EE · Speed graph: 6 cases.
-- [ ] T035 [P] [US7] EE · Offset: 6 cases.
-- [ ] T036 [P] [US7] EE · Pivot: 7 cases.
-- [ ] T037 [P] [US7] EE · Null: 7 cases; check its existing Show me again turn.
+- [x] T032 EE · `product/evals/next-mentor/`: runner with `--runtime a|b1` from the start, tool lists from `allowedToolsOf` (013 T064's reader, never hand-kept; no `Skill` on B1), rubric. Covers `discovery/usage-notes/next-mentor-handover.md`'s items 1, 2 and 5. **B1, 9 cases:** 5 openings; 4 Yes-path cases that check the `recommend_next` result, then run the panel's plain follow-on request in a fresh session with that skill's list: the pivot with named layers (1), null with named layers, where the lesson asks (1), null's crowded comp with an empty list, where no layer may be invented (2), and a due review (5). **A only, 4 more cases, written now, run at T078:** real hand-overs from `Yes, let's go.` to the pivot with named layers (1), null's crowded comp (2), offset as a due review (5), and key types after "I already know it" on an unlearned skill (5). A failure on these known items is reported, with no `SKILL.md` change planned. RQ-15, RQ-16, FR-082.
+- [x] T033 [P] [US7] EE · Key types: 6 cases, contracts/button-requests.md.
+- [x] T034 [P] [US7] EE · Speed graph: 6 cases.
+- [x] T035 [P] [US7] EE · Offset: 6 cases.
+- [x] T036 [P] [US7] EE · Pivot: 7 cases.
+- [x] T037 [P] [US7] EE · Null: 7 cases; check its existing Show me again turn.
 - [ ] T038 EE · Run the new cases on B1 with `--only`, leaving out next-mentor's A-only cases, and report by set. A failure needing a `SKILL.md` change goes to the cockpit first: it triggers that set's full run (FR-072). Depends on T027, T032 to T037.
 
 ## Phase 4: Step 2 build (all six skills and the Skills tab)
