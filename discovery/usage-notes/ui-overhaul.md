@@ -273,3 +273,67 @@ Mentor Practice.
 
 **SC-014:** speed graph met (live in the panel, no terminal, checklist agreed with the check, stale counted: 0). Builder
 only.
+
+### Offset (T058, 2026-11-09)
+
+Builder, on B1, Mentor Practice 2, layers kind, focus Dot 1, Dot 2 and Dot 3. Captured before as `practice2-before.json`,
+identical to the state restored and checked after T056. Checklist expanded before the first reply, for the Proposed check.
+
+| Measure | Result |
+|---|---|
+| Time to pass | 7 min 22 s wall clock (22:42:37Z to 22:49:59Z), including about 4.6 min with the panel closed; about 2.8 min of lesson |
+| Turns, cost | 7 turns, $0.53 (B1); the Continue turn alone was $0.24 |
+| Slowest turn | 8.7 s to finish (the opening); first activity 4.7 s at worst |
+| Demo | None |
+| Checks | 1, passed |
+| `lesson-focus-stale` | 0 |
+| Terminal needed | No |
+
+| Step (quickstart §2) | What happened | Matches? |
+|---|---|---|
+| Opening | Offered properties inside Dot 2 (Position, Opacity, Blurriness) or the three Dots; left out Seal (a precomp) | Yes |
+| Proposed until first reply | Rows said Proposed, gone after the first reply | Yes |
+| Kind | "let's do the layers"; one frame at 1 s with all three mid-move | Yes |
+| Close and reopen the panel | "Picked up where you left off" divider; Continue lesson restated where it was and took a new snapshot | Yes: finding 2 |
+| Order and gap | Asked which goes second twice | No: finding 1 |
+| Quick Offset | Offered with the steps | Yes (FR-017) |
+| Timeline | Read well, straightforward (builder) | Yes |
+| Check 1 | Passed: Dot 1 stayed at 0.5 s, Dot 2 moved 6 f to 0.7 s, Dot 3 moved 12 f to 0.9 s; rows matched AE | Yes |
+| Saved | `passed`, `demo_used: false`; gaps kept as numbers, which offset allows | Yes |
+
+**SC-002 agreement.** One check; the builder checked it against AE and the rows matched.
+
+| Check | Check's result | Panel rows | Builder in AE | Kind |
+|---|---|---|---|---|
+| 7 | All apart, passed | Same | Same | Pass on the first check |
+
+**SC-002 live tally so far:**
+
+| Needed | Count |
+|---|---|
+| Checks, panel vs check 100%, vs AE ≥ 9 of 10 | 7 of 10 (7/7 and 7/7) |
+| Partial | 4 of 3 ✓ |
+| Outside the lesson | 4 of 2 ✓ |
+| Something undone | 0 of 1 |
+| Openings on easing, speed graph or offset: Proposed, then not | 1 of 3 (offset) |
+
+### What the builder said
+
+> the timeline read well it was pretty straightforward
+
+> no need for the terminal everything was smooth
+
+### Findings
+
+1. **The mentor asked which Dot goes second twice.** Its first question asked the order and the gap together; the
+   builder answered the gap ("6 frames"), so the mentor asked the order again, one turn later. Minor: one extra turn. Not
+   checked against `offset-mentor/SKILL.md`'s turn rules yet. *Eval case (offset):* the learner names the first layer and a vague gap;
+   `expect`: the next turn asks one question; rubric "asks one thing at a time". Low priority.
+2. **Continuing after closing the panel works, and costs.** Close, reopen, Continue lesson: the divider showed, the
+   mentor restated the lesson and re-read the comp before going on. That turn cost $0.24 against $0.01 to $0.06 for a
+   normal one, since B1 resumes the whole session. Watch on A (spec 013 T043 to T045's saved conversation).
+
+**Comp handling:** the Dots are staggered (Dot 2 later by 6 frames, Dot 3 by 12). Restore from the copy saved before the
+lesson and strict-compare with `practice2-before.json` before T059 (pivot, same comp).
+
+**SC-014:** offset met (live in the panel, no terminal, checklist agreed with the check, stale counted: 0). Builder only.

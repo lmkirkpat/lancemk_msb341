@@ -97,7 +97,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T055 PB · Hand-back: what ran, what the scans say, anything for the designer.
 - [x] T056 BL · Key types, live in the panel (quickstart §2). SC-002, SC-014.
 - [x] T057 BL · Speed graph, live. SC-002, SC-014.
-- [ ] T058 BL · Offset, live; react to the timeline. SC-002, SC-014.
+- [x] T058 BL · Offset, live; react to the timeline. SC-002, SC-014.
 - [ ] T059 BL · Set the pivot, live. SC-002, SC-014.
 - [ ] T060 BL · Move a group with a null, live. SC-002, SC-014; closes the live tally in quickstart §2.
 - [ ] T061 BL · Find my next lesson through Yes into the recommended lesson, on B1 (quickstart §4). First confirm the temp learner home reaches both Home and the mentor; that setup is untested.
