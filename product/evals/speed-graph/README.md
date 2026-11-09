@@ -8,6 +8,21 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
+## Spec 007 button cases (T034, written 2026-11-09, dry-run only)
+
+6 cases added, ids 30 to 35. Each sends one panel request, word for word (`contracts/button-requests.md`), into a lesson that is open. The first run is spec 007 T038, with `--only`.
+Not yet run: the set's full-run baseline is unchanged. New rubric items: `R-CONTINUES`, `R-SHOW-ME-AGAIN`, `R-NEW-LESSON-ASKED`. New expect keys (shared, `../lib/turn-checks.mjs`): `last_turn_tools_called`, `last_turn_tools_not_called`, `say_max_sentences`.
+The turn named is the one that carries the request under test; earlier turns set the lesson up (typed answers on the way in, since these skills ask first).
+
+| Case | Turn | Exact request | Request |
+|---|---|---|---|
+| 30-button-check-partial | 3 | `I'm done. Check my work.` | RQ-14 Done, check it |
+| 31-button-hint | 4 | `Can I have a hint?` | RQ-14 Hint |
+| 32-button-show-me | 3 | `Show me how first.` | RQ-14 Show me |
+| 33-button-show-me-again | 4 | `Show me again: explain the change you already made, with a frame. Don't change anything.` | RQ-14 Show me again |
+| 34-button-new-lesson-due-record | 1 | `/speed-graph-mentor lesson` | RQ-02 New lesson |
+| 35-button-continue | 3 | `I'm back. Pick up where we left off.` | RQ-12 Continue lesson |
+
 ## Re-baseline rb3 (2026-10-29, after the overlap-audit fixes; mentor at `df65d41`)
 
 **29/29 (100%), $14.91**, results `2026-10-29-142640.json` (rb2 was 21/25, 84%). SC-006 met, every hard-rule check passing, no failures, so no repeats. The watch-list case 03 passed.

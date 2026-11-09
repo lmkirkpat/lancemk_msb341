@@ -1,0 +1,50 @@
+{
+  "id": "35-button-continue",
+  "title": "Panel: Continue picks the lesson up where it was: Title said back, no new opening, no demo",
+  "covers": [
+    "RQ-12",
+    "FR-027",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "I'm back. Pick up where we left off."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "speed_graph_check"
+    ],
+    "last_turn_tools_not_called": [
+      "speed_graph_demo",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "names_title",
+        "must": "Title",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-CONTINUES",
+    "R-NAMES-REAL"
+  ]
+}

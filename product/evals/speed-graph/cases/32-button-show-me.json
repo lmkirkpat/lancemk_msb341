@@ -1,0 +1,49 @@
+{
+  "id": "32-button-show-me",
+  "title": "Panel: Show me shapes one pair on the demo target, in plain words, with Edit > Undo",
+  "covers": [
+    "RQ-14",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Show me how first."
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "1/ADBE Transform Group/ADBE Position/1",
+    "tools_called": [
+      "preview_frame"
+    ],
+    "say": [
+      {
+        "id": "undo",
+        "must": "Edit\\s*>\\s*Undo",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-SG-DEMO",
+    "R-DEMO-PLAIN",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}
