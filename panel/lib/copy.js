@@ -28,6 +28,7 @@ const COPY = {
     after_lesson: AFTER_LESSON, needs_ae: NEEDS_AE, needs_mentor: NEEDS_MENTOR, waiting_ae: "Waiting for After Effects.",
     hint_needs_ae: "Hint needs After Effects.", after_look: "Buttons turn on after the mentor looks at your comp.",
     after_answer: "Buttons turn on after the mentor answers.", once_checklist: "Buttons turn on once you have a checklist.",
+    end_after_answer: "The mentor is answering. You can end the lesson when it's done.",
   },
   status: {
     lesson_ready: "Getting your lesson ready…", warm_up_ready: "Getting your warm-up ready…", looking_comp: "Looking at your comp…",

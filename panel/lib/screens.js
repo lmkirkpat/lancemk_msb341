@@ -84,10 +84,12 @@ function lessonCard(m, kind) {
   const copy = kind === "waiting" ? COPY.home.cutoff : COPY.home.lesson_open;
   const l = v && v.check_list;
   const bits = [l && l.summary, saved && l && l.checked_at ? `${COPY.lesson.last_check} ${checkClock(l.checked_at)}` : null].filter(Boolean).join(" · ");
+  const answering = kind !== "waiting" && !!m.turn && !!m.turn.busy; // FR-060, FR-061
   const actions = kind === "waiting"
     ? btn(COPY.buttons.continue, "continue", "primary") + btn(copy.set_aside, "set_aside")
-    : btn(COPY.buttons.back_lesson, "back_lesson", "primary") + btn(COPY.buttons.end_lesson, "end_lesson");
-  return `<section class="card lead note" aria-label="${esc(copy.kicker)}"><div class="kicker accent">${esc(copy.kicker)}</div><h3 data-title tabindex="-1">${esc(v ? lessonTitle(m, v) : "")}</h3>${bits ? `<p class="meta">${esc(bits)}</p>` : ""}<div class="row">${actions}</div><p class="meta">${esc(copy.note)}</p></section>`;
+    : btn(COPY.buttons.back_lesson, "back_lesson", "primary") + btn(COPY.buttons.end_lesson, "end_lesson", "", answering ? "disabled" : "");
+  const why = answering ? `<p class="meta">${esc(COPY.paused.end_after_answer)}</p>` : "";
+  return `<section class="card lead note" aria-label="${esc(copy.kicker)}"><div class="kicker accent">${esc(copy.kicker)}</div><h3 data-title tabindex="-1">${esc(v ? lessonTitle(m, v) : "")}</h3>${bits ? `<p class="meta">${esc(bits)}</p>` : ""}<div class="row">${actions}</div>${why}<p class="meta">${esc(copy.note)}</p></section>`;
 }
 
 function checkClock(iso) {

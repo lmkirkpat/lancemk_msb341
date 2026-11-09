@@ -173,6 +173,21 @@ test("home-lessonopen: Back to lesson and End lesson; Start replaced by why (FR-
   assert.equal(h.adapter().stopped, 1);
 });
 
+test("FR-060, FR-061: End lesson is off during a turn and says why; back on when the turn ends", async () => {
+  const h = await open();
+  h.app.act("hint");
+  h.app.act("go_home");
+  assert.equal(st(h), "home-lessonopen");
+  assert.match(renderApp(h.app.model()).view, /data-action="end_lesson" disabled/);
+  assert.ok(homeHtml(h).includes(COPY.paused.end_after_answer));
+  h.app.act("end_lesson");
+  assert.equal(h.app.model().lesson_open, true);
+  assert.equal(h.adapter().stopped, 0);
+  end(h, "hint");
+  assert.doesNotMatch(renderApp(h.app.model()).view, /data-action="end_lesson" disabled/);
+  assert.equal(homeHtml(h).includes(COPY.paused.end_after_answer), false);
+});
+
 test("FR-023: only one lesson at a time; Start while one is open does nothing", async () => {
   const h = await open();
   h.app.act("start");
