@@ -223,6 +223,95 @@ test("SC-016: the arrow toggles one area at short docks, a check leaves the chat
   assert.match(r(h).list, /ch-short-open/);
 });
 
+// ---------- the learner's fold holds (live finding, T028) ----------
+
+const isFolded = (h) => /aria-expanded="false"/.test(r(h).list);
+const STALE_CHECK = { name: "diff_since_last", ok: false, text: "AE_BUSY", images: [] };
+const CHECKED = { name: "diff_since_last", ok: true, text: "", images: [], json: { comp_matches: true, passed: false, summary: { learner_eased: 0, total_for_learner: 1, still_linear: 1 }, targets: [{ segment_id: "a", label: "Title › Position 0.5–1.5 s", result: "still_linear" }] } };
+
+function cutOff(h) {
+  h.app.ask("and now?");
+  h.adapter().emit("turn_end", { ok: false, kind: "ask" });
+  assert.equal(h.app.model().state, "lesson-error");
+}
+
+test("a checklist the learner folded stays folded across asks, turn ends and checks", async () => {
+  const h = await started();
+  openLesson(h, TITLE);
+  h.app.act("toggle_list", { short: false });
+  assert.equal(isFolded(h), true);
+  h.app.ask("Title's good");
+  assert.equal(isFolded(h), true, "while the turn runs");
+  h.adapter().emit("turn_end", { ok: true, kind: "ask" });
+  assert.equal(isFolded(h), true, "after the turn");
+  h.app.act("check");
+  h.adapter().emit("tool_result", CHECKED);
+  assert.equal(isFolded(h), true, "when the check's rows arrive");
+  h.adapter().emit("turn_end", { ok: true, kind: "check" });
+  assert.equal(isFolded(h), true, "after the check");
+  h.app.act("toggle_list", { short: false });
+  assert.equal(isFolded(h), false, "until they open it again");
+  h.app.ask("ok");
+  h.adapter().emit("turn_end", { ok: true, kind: "ask" });
+  assert.equal(isFolded(h), false, "and open holds too");
+});
+
+test("untouched, the list keeps each state's default: open while working, folded at an error", async () => {
+  const h = await started();
+  openLesson(h, TITLE);
+  assert.equal(isFolded(h), false);
+  cutOff(h);
+  assert.equal(isFolded(h), true);
+});
+
+test("the first press on a list folded by default opens it, and that choice holds", async () => {
+  const h = await started();
+  openLesson(h, TITLE);
+  cutOff(h);
+  h.app.act("toggle_list", { short: false });
+  assert.equal(isFolded(h), false, "the press changes what's showing");
+  h.app.act("try_again");
+  h.adapter().emit("turn_end", { ok: false, kind: "ask" });
+  assert.equal(h.app.model().state, "lesson-error");
+  assert.equal(isFolded(h), false, "open holds into a state that folds by default");
+});
+
+test("a new lesson goes back to the defaults", async () => {
+  const h = await started();
+  openLesson(h, TITLE);
+  h.app.act("toggle_list", { short: false });
+  assert.equal(isFolded(h), true);
+  h.app.act("end_lesson");
+  h.app.act("start");
+  openLesson(h, TITLE);
+  assert.equal(isFolded(h), false);
+});
+
+test("FR-017: a list the learner folded still shows the stale note, and only the note", async () => {
+  const h = await started();
+  openLesson(h, TITLE);
+  h.adapter().emit("tool_result", CHECKED);
+  h.adapter().emit("turn_end", { ok: true, kind: "check" });
+  h.app.act("toggle_list", { short: false });
+  h.app.act("check");
+  h.adapter().emit("tool_result", STALE_CHECK);
+  h.adapter().emit("turn_end", { ok: true, kind: "check" });
+  assert.equal(h.app.model().state, "lesson-stale");
+  assert.equal(isFolded(h), true);
+  assert.match(r(h).list, /stale-note/);
+  assert.equal(/check-body" hidden/.test(r(h).list), false, "the note can be seen");
+  assert.equal(r(h).list.includes("<ul>"), false, "the rows stay folded");
+});
+
+test("a press on a tall dock folds a list that was opened at a short dock", async () => {
+  const h = await started();
+  openLesson(h, TITLE);
+  h.app.act("toggle_list", { short: true });
+  assert.equal(isFolded(h), false);
+  h.app.act("toggle_list", { short: false });
+  assert.equal(isFolded(h), true);
+});
+
 test("frames: small at short docks and full on press are real buttons; two frames get Flip", async () => {
   const h = await started();
   openLesson(h, TITLE);

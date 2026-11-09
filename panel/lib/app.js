@@ -5,7 +5,7 @@
 "use strict";
 
 const { homeView, startRequest } = require("./home.js");
-const { stateOf } = require("./view-state.js");
+const { stateOf, listCollapsed } = require("./view-state.js");
 const { initialLesson, reduceLesson, showsResuming, DEMO_TOOLS } = require("./lesson.js");
 const list = require("./checklist/index.js");
 const { treatError, logEntry } = require("./errors.js");
@@ -332,7 +332,6 @@ function createApp(deps) {
     state.mentorEntry = null;
     state.committed = "";
     state.block = "";
-    state.list_collapsed = null;
     persist();
     if (deps.appendTurn) {
       deps.appendTurn({ at: state.sentAt || undefined, kind: e.kind, wait_ms: e.wait_ms, first_event_ms: e.first_event_ms, total_ms: e.total_ms, cost_usd: e.cost_usd, ok: e.ok, lesson_passed: !state.passedBefore && !!(state.lesson && state.lesson.passed) });
@@ -369,7 +368,6 @@ function createApp(deps) {
     state.demoResult = false;
     state.passedBefore = !!(state.lesson && state.lesson.passed);
     state.last = { kind, text, label };
-    state.list_collapsed = null;
     if (kind === "check") state.list_open = false;
     reduce({ type: "sent", kind });
     persist();
@@ -509,8 +507,9 @@ function createApp(deps) {
   }
 
   function toggleList(short) {
-    if (short) state.list_open = !state.list_open;
-    else state.list_collapsed = !(state.list_collapsed === true);
+    if (short) { state.list_open = !state.list_open; return; }
+    state.list_collapsed = !listCollapsed(model());
+    state.list_open = false; // opened at a short dock and since resized: it would override the press
   }
 
   const ACTIONS = {

@@ -9,6 +9,7 @@ const { stageOf } = require("./lesson.js");
 const { shortDate } = require("./memory.js");
 const { visibleKinds } = require("./requests.js");
 const { rowsOf } = require("./checklist/index.js");
+const { listCollapsed } = require("./view-state.js");
 
 const TABS = ["home", "lesson", "skills"];
 
@@ -246,15 +247,15 @@ function visibleSections(l) {
   return { sections: [first], foldLine: COPY.check.more_on(n, joined) };
 }
 
-const COLLAPSED_BY_DEFAULT = new Set(["lesson-error", "lesson-error-demo", "lesson-error-demo-other", "lesson-error-demo-unknown", "lesson-passed", "lesson-passed-asking", "lesson-passed-unsaved"]);
-
 function listHtml(m) {
   const v = m.lesson;
   const l = v.check_list;
   if (!l) return m.state === "lesson-starting" ? `<section class="check" aria-label="${esc(COPY.check.aria)}"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> ${esc(COPY.check.slot_starting)}</p></div></section>` : "";
   const { sections, foldLine } = visibleSections(l);
   const nDone = rowsOf(l).filter((r) => r.family === "done").length;
-  const collapsed = !m.list_open && (m.list_collapsed === null ? COLLAPSED_BY_DEFAULT.has(m.state) : m.list_collapsed);
+  const collapsed = listCollapsed(m);
+  // A fold the learner chose can outlast the moment the list goes stale; the note still has to show (FR-017).
+  const noteOnly = collapsed && !!l.stale && m.list_collapsed === true;
   const body = sections.map((s) => {
     const allDone = s.rows.length > 0 && s.rows.every((r) => r.family === "done");
     return `${s.title ? `<h3${allDone ? ' class="alld"' : ""}>${esc(s.title)}</h3>` : ""}<ul>${s.rows.map(rowHtml).join("")}</ul>`;
@@ -263,7 +264,7 @@ function listHtml(m) {
   const lines = [foldLine, l.more].filter(Boolean).map((t) => `<p class="more">${esc(t)}</p>`).join("");
   const outside = l.outside && l.outside.length ? `<h3>${esc(COPY.check.outside)}</h3><ul class="plain">${l.outside.map((o) => `<li><span class="what">${esc(o)}</span></li>`).join("")}</ul>` : "";
   const cls = ["check", m.done_unfolded ? "unfold" : "", l.stale ? "stale" : ""].filter(Boolean).join(" ");
-  return `<section class="${cls}" aria-label="${esc(COPY.check.aria)}"><button type="button" class="check-head" aria-expanded="${!collapsed}" data-action="toggle_list" data-keep-focus><span class="chev" aria-hidden="true"><span class="ch-tall">${collapsed ? "▸" : "▾"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span><span class="sum">${esc(l.summary)}${l.sub ? `<small>${esc(l.sub)}</small>` : ""}</span></button><div class="check-body"${collapsed ? " hidden" : ""}>${l.stale ? `<p class="stale-note">${esc(l.stale)}</p>` : ""}${fold}${body}${lines}${outside}</div></section>`;
+  return `<section class="${cls}" aria-label="${esc(COPY.check.aria)}"><button type="button" class="check-head" aria-expanded="${!collapsed}" data-action="toggle_list" data-keep-focus><span class="chev" aria-hidden="true"><span class="ch-tall">${collapsed ? "▸" : "▾"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span><span class="sum">${esc(l.summary)}${l.sub ? `<small>${esc(l.sub)}</small>` : ""}</span></button><div class="check-body"${collapsed && !noteOnly ? " hidden" : ""}>${l.stale ? `<p class="stale-note">${esc(l.stale)}</p>` : ""}${noteOnly ? "" : `${fold}${body}${lines}${outside}`}</div></section>`;
 }
 
 const whyOff = (text) => `<div class="actions"><p class="why-off">${esc(text)}</p></div>`;

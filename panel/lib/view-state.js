@@ -131,4 +131,12 @@ function stateOf(m) {
   return homeState(m);
 }
 
-module.exports = { stateOf, STATE_IDS, ALIASES, INTERIM_IDS };
+const COLLAPSED_BY_DEFAULT = new Set(["lesson-error", "lesson-error-demo", "lesson-error-demo-other", "lesson-error-demo-unknown", "lesson-passed", "lesson-passed-asking", "lesson-passed-unsaved"]);
+
+// Whether the checklist is folded: the learner's own choice once they've made one, else the state's default.
+function listCollapsed(m) {
+  if (m.list_open) return false;
+  return m.list_collapsed === null ? COLLAPSED_BY_DEFAULT.has(m.state) : m.list_collapsed;
+}
+
+module.exports = { stateOf, listCollapsed, STATE_IDS, ALIASES, INTERIM_IDS };
