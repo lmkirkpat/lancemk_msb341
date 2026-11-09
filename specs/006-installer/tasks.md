@@ -159,7 +159,7 @@ SC-002 first: T001 to T020. Then US2, since it's how every later fault is found,
 
 | Owner | Tasks | Count |
 |---|---|---|
-| PB | T002, T006–T014, T016, T022–T026, T028, T031–T038, T040, T043, T049–T051, T054–T056, T059, T060 | 34 |
+| PB | T002, T006–T014, T016, T022–T026, T028, T031–T038, T040, T043, T049–T051, T054–T056, T059, T060 | 35 |
 | EE | T015, T027, T029, T042, T044, T052, T057 | 7 |
 | BL | T003, T004, T017–T019, T021, T030, T039, T041, T047, T048, T053, T058 (and T001) | 13 + T001 |
 | Cockpit | T005, T020, T045, T046 (and T001) | 4 + T001 |

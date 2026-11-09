@@ -30,7 +30,7 @@ Scope: tasks T001 to T021 in [tasks.md](tasks.md).
 6. Scan the build; build it.
 7. Three runs on fresh accounts, saving each check's result.
 
-**Rough size:** about 16 build tasks, perhaps 800 lines with tests, and 3 to 4 hours of agent time if no
+**Rough size:** about 12 build tasks, perhaps 800 lines with tests, and 3 to 4 hours of agent time if no
 usage limit stalls it (a guess from run 2; agents' own timing is unreliable). Builder's hands: about 1.5
 hours. Approvals, one spike sitting, and three account runs, each with a Creative Cloud sign-in.
 

@@ -14,8 +14,8 @@ Quit After Effects on the builder's account first: two copies would compete for 
 1. System Settings > Users & Groups: add a new user. Standard for runs 1 and 3, Administrator for run 2. Use
    a made-up name.
 2. Log in as that user. Open AE, sign in to Creative Cloud, quit AE.
-3. Confirm nothing is there: no `node` in Terminal for this user is not required, but no CEP extensions,
-   no `Knack` folder.
+3. Confirm nothing from Knack is there: no CEP extensions folder entries for it and no `Knack` folder in
+   this user's Library.
 4. From `/Users/Shared`, unzip and open the installer. Follow the dialogs. Paste the access key.
 5. Open AE. Tick After Effects > Settings > Scripting & Expressions > Allow Scripts to Write Files and
    Access Network. Restart AE if it asks.
