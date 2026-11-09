@@ -279,6 +279,44 @@ test("a resumed snapshot (not via Continue) shows the resuming line once, and ne
   assert.equal(chat(h).split(COPY.lesson.picking_up).length, 2, "one line");
 });
 
+const passedSaved = () => saved({ lesson: Object.assign({}, saved().lesson, { passed: true }) });
+
+test("a pass reopened with Continue, then saved: the lesson closes on the passed screen with its ways out", async () => {
+  const h = await ready({ saved: passedSaved() });
+  h.app.act("continue");
+  assert.equal(st(h), "lesson-continued", "not saved yet, so it's still the reopened lesson");
+  h.adapter().emit("tool_result", SAVED);
+  end(h, "continue");
+  assert.equal(h.app.model().lesson_open, false);
+  assert.equal(st(h), "lesson-passed");
+  assert.ok(actions(h).includes(COPY.buttons.whats_next));
+  assert.equal(actions(h).includes(COPY.buttons.check), false);
+});
+
+test("a pass whose list went stale because AE was unreachable, then saved or not: the passed screens win", async () => {
+  for (const [record, state] of [[SAVED, "lesson-passed"], [{ name: "record_lesson", ok: false, text: "error", images: [] }, "lesson-passed-unsaved"]]) {
+    const h = await open();
+    h.app.act("check");
+    h.adapter().emit("tool_result", CHECK({ passed: true }));
+    h.adapter().emit("tool_result", { name: "snapshot_project", ok: false, text: "AE_UNREACHABLE: gone", images: [] });
+    assert.equal(st(h), "lesson-stale", "not saved yet");
+    h.adapter().emit("tool_result", record);
+    end(h, "check");
+    assert.equal(st(h), state);
+    assert.ok(actions(h).includes(COPY.buttons.whats_next), state);
+  }
+});
+
+test("D6 on a reopened lesson: saved with no pass keeps its screen and shows the ways out", async () => {
+  const h = await ready({ saved: saved() });
+  h.app.act("continue");
+  h.adapter().emit("tool_result", SAVED);
+  end(h, "continue");
+  assert.equal(st(h), "lesson-continued");
+  assert.ok(banner(h).includes(COPY.lesson.saved));
+  assert.ok(actions(h).includes(COPY.buttons.whats_next));
+});
+
 // ---------- T023: errors on screen ----------
 
 test("FR-056: blocking start_failed, first turn: Home with err-mentor and Needs the mentor, no raw message (T023)", async () => {

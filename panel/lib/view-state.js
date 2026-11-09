@@ -82,6 +82,13 @@ function openSkillState(slug) {
   return slug === "offset" ? "skill-offset-layers-open" : `skill-${slug}-open`;
 }
 
+function passedState(m, v) {
+  if (v.saved === false) return "lesson-passed-unsaved";
+  if (v.saved !== true) return "lesson-passed-asking";
+  if (v.mode === "review") return "practice-passed";
+  return m.review_date ? "lesson-passed-pivot" : "lesson-passed";
+}
+
 function lessonState(m) {
   const v = m.lesson;
   if (m.error && v) return errorState(m, v);
@@ -91,15 +98,12 @@ function lessonState(m) {
   if (m.picking === "starting") return "lesson-picking-starting";
   if (v.no_new_target) return "practice-nothing-new";
   const l = v.check_list;
+  // A pass whose save has answered is over, even on a stale list (D6's saved-with-no-pass keeps its screen).
+  if (v.passed && typeof v.saved === "boolean") return passedState(m, v);
   if (l && l.stale_kind === "continued") return "lesson-continued";
   if (l && l.stale_kind === "other_comp") return "lesson-othercomp";
   if (l && l.stale_kind) return "lesson-stale";
-  if (v.passed) {
-    if (v.saved === false) return "lesson-passed-unsaved";
-    if (v.saved !== true) return "lesson-passed-asking";
-    if (v.mode === "review") return "practice-passed";
-    return m.review_date ? "lesson-passed-pivot" : "lesson-passed";
-  }
+  if (v.passed) return passedState(m, v);
   if (v.snapshots === 0 && v.checks === 0 && m.turn && m.turn.busy) return "lesson-starting";
   if (m.from_picking && !v.replied) return "lesson-picked";
   if (v.mode === "review") return v.checks > 0 ? "practice-check" : "practice";
