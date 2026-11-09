@@ -10,6 +10,8 @@
 Amended 2026-10-30 from spec 013 (the option A runtime) and `decisions/010`: FR-002, FR-021, FR-025,
 SC-006, the UXP table's model-runtime and mentor-tools rows, Q2's note, and Dependencies. Not
 re-approved; the changes follow from 013's approved answers.
+Planned and tasked 2026-11-09 (`plan.md`, `tasks.md`), awaiting the builder's approval. Q3 to Q5 are planned
+on their recommendations as marked assumptions, not answered. Q2 stays pinned and the plan doesn't depend on it.
 
 **Input**: Cockpit task, sprint 3 (`sprints/sprint-3-plan.md` › Done looks like › specs › an
 installer): "an installer that lets someone who isn't a developer set up Knack on a Mac", covering
@@ -545,3 +547,6 @@ Each changes the spec. Recommended answer first.
    comparing the running mentor's version with the installed one after an update, User Story 3)?
    *Recommended: yes, from the release's recorded version (FR-025), with no git at all;* decide it
    in this spec's plan. Never install or prompt for the command-line tools.
+   *Plan 2026-11-09 (research R11), narrower than recommended:* no separate check. On A the helper starts a new
+   mentor per lesson and updates need AE closed, so a stale running server can't exist; setup check's
+   same-version line covers the rest.
