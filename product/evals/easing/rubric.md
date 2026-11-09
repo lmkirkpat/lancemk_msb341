@@ -235,3 +235,47 @@ field name.
   (or Edit > Undo) and say done again."
 - **Fail:** "Title passed", "the copy still has linear pairs" (grading one of them), a record with
   `result: passed`, or "the result is unmatched".
+
+---
+
+## R-CONTINUES: a resumed lesson picks up where it was (RQ-12)
+
+*Added for spec 007 (case 29).* The panel's Continue button sends "I'm back. Pick up where we left
+off." into a lesson that was open: the learner agreed on a layer and nothing else has happened. The
+mentor says in a clause that it's picking up, and hands over the one pending step in a sentence or two
+(the agreed layer, and the explanation or the try that comes next). It doesn't open again with a count
+and a proposal, doesn't ask the learner to choose a layer again, doesn't recap the whole lesson, and
+changes nothing in the project.
+
+- **Pass:** "Picking up with Title. Ease its four pairs and say done."
+- **Fail:** a fresh opening ("I found 11 linear pairs across 6 layers. Let's start with Title…"), a
+  question about which layer to use, a recap of everything said so far, a demonstration, or a turn that
+  ends with nothing for the learner to do.
+
+## R-WHY-EXPLAINED: "why does it look mechanical?" before a focus gets the explanation, tied to their animation (T028 finding 1)
+
+*Added for spec 007 (case 32), from the panel sitting of 2026-11-09, where the answer was a status
+report.* The learner asks why it looks mechanical after the opening and before agreeing a focus. The
+mentor answers the question: it explains, on a real layer and property of theirs, that linear keys move
+at one speed and start and stop dead, and that easing slows the move in and out. It shows a frame from
+the comp with it (`preview_frame`, which the runner also checks), and ends by handing the learner the
+next step. A list of what is still linear, with no reason given, is the fail.
+
+- **Pass:** "Title's Position runs at one speed from 0.5 to 1.5 s, then stops dead at the key. That's
+  why it reads as mechanical. Easing slows it in and out. Want to start with Title?"
+- **Fail:** only a status ("11 of the 12 pairs are still fully linear"), a count with no reason, an
+  explanation that names no layer or property of theirs, or an explanation of easing in general with
+  nothing from their comp.
+
+## R-ANSWERS-AFTER-PASS: a question after the pass is answered, and the lesson is not recorded again (FR-046)
+
+*Added for spec 007 (case 33).* The lesson passed and was recorded. The learner then asks a follow-up
+question in the same session. The mentor answers it in a few plain sentences, using their comp where it
+helps. It doesn't say it is saving, recording or noting anything again, doesn't re-run the lesson or
+offer another one unasked, and doesn't treat the question as a new attempt. (That `record_lesson` isn't
+called a second time is checked by the runner, not here.)
+
+- **Pass:** "Easing slows a move in and out, so it starts and stops the way something with weight does.
+  That's why Title's Position now reads as natural."
+- **Fail:** "I've noted that for next time" or any other mention of recording after the pass, a fresh
+  lesson proposal in place of an answer, an answer that ignores the question, or a re-check of the pairs.

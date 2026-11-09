@@ -1,0 +1,39 @@
+{
+  "id": "30-retry-show-me-again",
+  "title": "Panel: Try again after a Show me whose demo landed sends Show me again; the pair is explained with a frame and not eased twice",
+  "covers": [
+    "RQ-13",
+    "FR-030"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "after-demo",
+      "say": "Show me again: explain the pair you already eased, with a frame. Don't change anything."
+    }
+  ],
+  "expect": {
+    "set_ease_min": 1,
+    "set_ease_max": 1,
+    "set_ease_only_on": "1/ADBE Transform Group/ADBE Position/1",
+    "last_turn_tools_called": [
+      "preview_frame"
+    ],
+    "last_turn_tools_not_called": [
+      "set_ease",
+      "record_lesson"
+    ]
+  },
+  "rubric": [
+    "R-SHOWS",
+    "R-LEARNER-DOES"
+  ]
+}
