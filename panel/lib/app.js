@@ -310,7 +310,7 @@ function createApp(deps) {
     state.lesson_over = false;
     state.busy = false;
     state.turn = Object.assign({}, state.turn, { busy: false });
-    state.adapter = null;
+    stopAdapter();
     if (state.session) { state.session.ended = true; persist(); }
   }
 
@@ -318,11 +318,11 @@ function createApp(deps) {
   // is a notice and never an error state. A stopped process means there's no session left to ask.
   function afterPassFailure(t) {
     if (state.mentorEntry) state.mentorEntry.cut_off = true;
-    const stopped = !t || t.treatment === "ended";
+    const stopped = !!t && t.treatment === "ended"; // no error event at all: the turn failed, the process lives
     const copy = stopped ? E.after_pass_stopped : E.after_pass_failed;
     notice(copy.title, copy.body);
-    if (stopped) state.adapter = null;
-    state.resume_first = !stopped && t.kind === "timeout";
+    if (stopped) stopAdapter();
+    state.resume_first = !stopped && !!t && t.kind === "timeout";
   }
 
   function cutOffNotice(error) {

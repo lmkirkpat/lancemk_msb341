@@ -882,3 +882,34 @@ test("T041: Show me again sends the other five's text; the tool that ran sets th
   a.adapter().emit("tool_result", { name: "key_types_snapshot", ok: true, text: "", images: [], json: { targets: [] } });
   assert.equal(a.app.model().lesson.skill, "keyframes.types");
 });
+
+// ---------- review fixes: a failed turn with no error event, and the process when it's dropped ----------
+
+test("a failed turn after a pass with no error event keeps the process: Ask still works in the same session", async () => {
+  const h = await passedLesson();
+  const a = h.adapter();
+  h.app.ask("Why?");
+  a.emit("turn_end", { ok: false, kind: "ask" });
+  assert.equal(st(h), "lesson-passed");
+  assert.ok(chat(h).includes(COPY.errors.after_pass_failed.title));
+  assert.equal(chat(h).includes(COPY.errors.after_pass_stopped.title), false);
+  assert.equal(a.stopped, 0, "the process isn't dropped");
+  assert.ok(askEnabled(h));
+  assert.equal(h.app.ask("Again?"), true);
+  assert.equal(h.adapter(), a, "the same process answers");
+  assert.equal(a.sent.at(-1).text, "Again?");
+});
+
+test("a process the panel drops is stopped, not orphaned: after a pass, and mid-lesson", async () => {
+  const h = await passedLesson();
+  const a = h.adapter();
+  h.app.ask("Why?");
+  a.emit("error", { kind: "process_exited", message: "x" });
+  a.emit("turn_end", { ok: false, kind: "ask" });
+  assert.equal(a.stopped, 1, "after a pass");
+  const m = await open();
+  const b = m.adapter();
+  b.emit("error", { kind: "process_exited", message: "x" });
+  assert.equal(st(m), "lesson-exited");
+  assert.equal(b.stopped, 1, "mid-lesson");
+});
