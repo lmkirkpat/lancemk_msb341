@@ -11,7 +11,10 @@ const OVERLAP = 512;
 const EXT_SEGMENTS = new Set(['AEMentorBridge', 'AEMentorPanel', 'bridge', 'panel']);
 
 const TEXT_RULES = [
-  { kind: 'access key (sk-ant-)', re: /sk-ant-/ },
+  // The shape of a real key: sk-ant-, a type segment (api03, admin01, oat01), a hyphen, then a long
+  // token. The 20-character minimum keeps code and docs that only mention the prefix (guard regexes,
+  // scrubbers, "sk-ant-req-..." placeholders) from tripping the scan; real tokens run to 80+.
+  { kind: 'access key (sk-ant-...)', re: /sk-ant-[A-Za-z]+\d*-[A-Za-z0-9_-]{20,}/ },
   { kind: 'home path (/Users/<name>)', re: /\/Users\/(?!Shared(?![A-Za-z0-9._-]))[A-Za-z0-9._-]+/ },
 ];
 

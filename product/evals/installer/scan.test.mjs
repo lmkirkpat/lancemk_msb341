@@ -9,6 +9,9 @@ import { scan } from './scan.mjs';
 
 const SCAN = path.join(path.dirname(fileURLToPath(import.meta.url)), 'scan.mjs');
 
+// Built from parts so this file holds no key-shaped string.
+const fakeKey = (type = 'api03', n = 40) => ['sk', 'ant', type].join('-') + '-' + 'Ab9_'.repeat(Math.ceil(n / 4)).slice(0, n);
+
 function tree(extra = {}) {
   const root = mkdtempSync(path.join(tmpdir(), 'scan-'));
   const files = {
@@ -48,7 +51,7 @@ const bad = {
   'test folder': [{ 'mentor/test/a.test.mjs': 'x' }, 'mentor/test|test/ folder'],
   '.git': [{ '.git/HEAD': 'ref' }, '.git|.git'],
   'mentor/fixture': [{ 'mentor/fixture/snap.json': '{}' }, 'mentor/fixture|mentor/fixture/'],
-  'sk-ant string': [{ 'panel/helper/cfg.json': 'key=sk-ant-api03-abcdef' }, 'panel/helper/cfg.json|access key (sk-ant-)'],
+  'sk-ant string': [{ 'panel/helper/cfg.json': 'key=' + fakeKey() }, 'panel/helper/cfg.json|access key (sk-ant-...)'],
   'home path': [{ 'mentor/log.txt': 'at /Users/jane/Documents/x' }, 'mentor/log.txt|home path (/Users/<name>)'],
   'node_modules in panel': [{ 'panel/node_modules/x/i.js': 'a' }, 'panel/node_modules|node_modules in extension folder'],
   'node_modules in bridge': [{ 'bridge/cep/node_modules/x/i.js': 'a' }, 'bridge/cep/node_modules|node_modules in extension folder'],
@@ -67,7 +70,7 @@ for (const [name, [extra, expected]] of Object.entries(bad)) {
 }
 
 test('sk-ant string is never echoed in the report', () => {
-  const root = tree({ 'a.txt': 'sk-ant-api03-SECRETSECRET' });
+  const root = tree({ 'a.txt': fakeKey('api03', 40).replace('Ab9_Ab9_', 'SECRETSECRET') });
   const r = spawnSync('node', [SCAN, root], { encoding: 'utf8' });
   assert.equal(r.status, 1);
   assert.ok(!r.stderr.includes('SECRETSECRET'));
@@ -91,6 +94,41 @@ test('binary file with a match is caught, across a chunk boundary', async () => 
   rmSync(root, { recursive: true });
 });
 
+test('a key in a binary file is caught, across a chunk boundary', async () => {
+  const pre = Buffer.alloc((1 << 20) - 30, 0);
+  const root = tree({ 'runtime/node/bin/big': Buffer.concat([pre, Buffer.from('\u0000' + fakeKey('oat01', 60) + '\u0000')]) });
+  const got = await kinds(root);
+  assert.ok(got.includes('runtime/node/bin/big|access key (sk-ant-...)'));
+  rmSync(root, { recursive: true });
+});
+
+test('a key in a text file fails with each type segment', async () => {
+  for (const type of ['api03', 'admin01', 'oat01']) {
+    const root = tree({ 'notes.txt': `token: ${fakeKey(type)}\n` });
+    assert.ok((await kinds(root)).includes('notes.txt|access key (sk-ant-...)'), type);
+    rmSync(root, { recursive: true });
+  }
+});
+
+test('too-short token after the type is not a key', async () => {
+  const root = tree({ 'a.txt': fakeKey('api03', 19) });
+  assert.deepEqual(await kinds(root), []);
+  rmSync(root, { recursive: true });
+});
+
+const falseAlarms = {
+  'errors.mjs scrubber regex': "const KEY = /sk-ant-[A-Za-z0-9_-]{8,}/g;",
+  'mcp-client.mjs guard regex': "if (/sk-ant-/.test(text)) throw new Error('no');",
+  'SDK doc placeholder': " * Authorization: Bearer sk-ant-req-... (set by the server)",
+};
+for (const [name, line] of Object.entries(falseAlarms)) {
+  test(`passes: ${name}`, async () => {
+    const root = tree({ 'panel/helper/lib/x.mjs': line + '\n' });
+    assert.deepEqual(await kinds(root), []);
+    rmSync(root, { recursive: true });
+  });
+}
+
 test('symlinks are not followed', async () => {
   const root = tree();
   const outside = tree({ 'CLAUDE.md': 'x' });
@@ -101,7 +139,7 @@ test('symlinks are not followed', async () => {
 });
 
 test('lists every offender, not just the first', async () => {
-  const root = tree({ 'CLAUDE.md': 'x', 'mentor/test/a.mjs': 'x', 'b.txt': 'sk-ant-zz' });
+  const root = tree({ 'CLAUDE.md': 'x', 'mentor/test/a.mjs': 'x', 'b.txt': fakeKey('admin01') });
   assert.equal((await scan(root)).length, 3);
   rmSync(root, { recursive: true });
 });
