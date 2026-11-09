@@ -5,6 +5,7 @@
 // it reports not_signed_in.
 
 import { execFile } from "node:child_process";
+import { classify } from "./errors.mjs";
 
 export const KEYCHAIN = Object.freeze({ service: "Knack", account: "anthropic-api-key" });
 export const SECURITY = "/usr/bin/security";
@@ -53,4 +54,43 @@ export async function readKeychainKey(run = runSecurity) {
 export async function resolveKey(startKey, run) {
   if (typeof startKey === "string" && startKey.trim()) return startKey.trim();
   return readKeychainKey(run);
+}
+
+// ---------- the key check (spec 013 FR-020, research R11, T037; spec 006 FR-021) ----------
+
+// Error kinds (errors.mjs classify) → the key check's status. Anything else (busy, rate limited, an
+// unexpected status, a fault in the helper) can't say whether the key works, so it reads as
+// "offline": not checked, try again later (spec 006 contracts/setup-check.md › key).
+const CHECK_STATUS = Object.freeze({ not_signed_in: "rejected", out_of_credit: "out_of_credit", offline: "offline" });
+
+// One models.retrieve(model), which costs nothing and changes nothing, with no retries so it's one
+// request. → "works" | "rejected" | "out_of_credit" | "offline" | "no_key" (no key: no request).
+// Never throws. reached(): whether the request reached the service (loop.mjs lastReach), for
+// classify. log gets the outcome, the status code and the service's own text (cut short); the
+// caller's log line scrubs the key.
+export async function checkKey({ key, model, client, reached = () => false, log = () => {} }) {
+  if (typeof key !== "string" || !key.trim()) return "no_key";
+  try {
+    await client.models.retrieve(model, null, { maxRetries: 0 });
+    log({ event: "key_check", status: "works" });
+    return "works";
+  } catch (err) {
+    let kind;
+    try {
+      kind = classify(err, { reached: reached() });
+    } catch {
+      kind = "start_failed";
+    }
+    const status = CHECK_STATUS[kind] || "offline";
+    const msg = err && err.error && err.error.error && typeof err.error.error.message === "string" ? err.error.error.message : null;
+    log({
+      event: "key_check",
+      status,
+      kind,
+      http_status: err && typeof err.status === "number" ? err.status : null,
+      name: (err && err.name) || null,
+      ...(msg ? { detail: msg.slice(0, 300) } : {}),
+    });
+    return status;
+  }
 }

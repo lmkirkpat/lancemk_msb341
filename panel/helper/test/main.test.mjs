@@ -270,3 +270,79 @@ test("keychain false (tests only, with a local base_url): no Keychain read; no k
   remote.cmd({ type: "stop" });
   await remote.exited;
 });
+
+// ---------- key_check (spec 013 T037, spec 006 T008) ----------
+// Always against the fake service (a local base_url, test-only as on start): no real API call.
+
+const forModels = (entry) => ({ ...entry, forModels: true });
+// Not key-shaped, so only the scrubber's copy of the command's key can remove it from a log line.
+const CHECK_KEY = "plain-check-key-0123456789abcdef";
+
+test("key_check needs no start; a key in the command is checked with one free request", async () => {
+  const h = await helper();
+  h.cmd({ type: "key_check", key: CHECK_KEY, base_url: h.svc.url });
+  assert.deepEqual(await h.next("key_status"), { type: "key_status", status: "works" });
+  assert.equal(h.svc.requests.length, 1);
+  assert.equal(h.svc.requests[0].method, "GET");
+  assert.equal(h.svc.requests[0].path, `/v1/models/${loadSettings().settings.model}`);
+  assert.equal(h.svc.messageRequests.length, 0);
+  assert.ok(!h.events.some((e) => e.type === "error"), "no not_implemented");
+  h.cmd({ type: "stop" });
+  await h.exited;
+  assert.ok(!h.stdout.includes(CHECK_KEY) && !h.stderr.includes(CHECK_KEY));
+});
+
+test("key_check: a rejected key, and the command's key is scrubbed from the log even when the service quotes it", async () => {
+  const h = await helper();
+  h.svc.script(forModels(failure(401, "authentication_error", `invalid x-api-key ${CHECK_KEY}`)));
+  h.cmd({ type: "key_check", key: CHECK_KEY, base_url: h.svc.url });
+  assert.deepEqual(await h.next("key_status"), { type: "key_status", status: "rejected" });
+  h.cmd({ type: "stop" });
+  await h.exited;
+  assert.match(h.stderr, /"event":"key_check"/);
+  assert.match(h.stderr, /\[key removed\]/, "the service's text was logged, with the key taken out");
+  assert.ok(!h.stderr.includes(CHECK_KEY) && !h.stdout.includes(CHECK_KEY));
+});
+
+test("key_check: no key makes no request (keychain false, tests only)", async () => {
+  const h = await helper();
+  h.cmd({ type: "key_check", keychain: false, base_url: h.svc.url });
+  assert.deepEqual(await h.next("key_status"), { type: "key_status", status: "no_key" });
+  assert.equal(h.svc.requests.length, 0);
+  h.cmd({ type: "stop" });
+  await h.exited;
+});
+
+test("key_check: offline when the service can't be reached", async () => {
+  const h = await helper();
+  const url = h.svc.url;
+  await h.svc.close();
+  h.cmd({ type: "key_check", key: CHECK_KEY, base_url: url });
+  assert.deepEqual(await h.next("key_status"), { type: "key_status", status: "offline" });
+  h.cmd({ type: "stop" });
+  await h.exited;
+});
+
+test("key_check after start uses the start's key", async () => {
+  const h = await helper();
+  h.start({ keychain: false });
+  await h.next("ready");
+  h.cmd({ type: "key_check" });
+  assert.deepEqual(await h.next("key_status"), { type: "key_status", status: "works" });
+  assert.equal(h.svc.requests.length, 1);
+  h.cmd({ type: "stop" });
+  await h.exited;
+});
+
+test("key_check: a remote base_url or a keychain other than false (without a local base_url) is refused, no request", async () => {
+  const h = await helper();
+  for (const extra of [{ base_url: "https://elsewhere.invalid" }, { keychain: false }, { keychain: true, base_url: h.svc.url }]) {
+    const at = h.events.length;
+    h.cmd({ type: "key_check", key: CHECK_KEY, ...extra });
+    assert.deepEqual(await h.next("error", at), { type: "error", kind: "bad_command", message: "" }, JSON.stringify(extra));
+  }
+  assert.equal(h.svc.requests.length, 0);
+  h.cmd({ type: "stop" });
+  await h.exited;
+  assert.ok(!h.stderr.includes(CHECK_KEY) && !h.stdout.includes(CHECK_KEY));
+});

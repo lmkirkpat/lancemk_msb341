@@ -31,6 +31,7 @@ const WRITES = /\bfs\.(writeFileSync|appendFileSync|renameSync|unlinkSync|rmSync
 
 // Every write call in the panel. A new one fails here until it's added on purpose. Not panel/helper/.
 const ALLOWED_WRITES = {
+  [path.join("lib", "loaded-stamp.js")]: ["renameSync", "unlinkSync", "writeFileSync"],
   [path.join("lib", "panel-session.js")]: ["mkdirSync", "mkdirSync", "renameSync", "unlinkSync", "writeFileSync", "writeFileSync"],
   [path.join("lib", "runtime.js")]: ["mkdirSync", "rmSync", "rmSync", "symlinkSync", "writeFileSync"],
   [path.join("lib", "turns.js")]: ["appendFileSync", "mkdirSync"],
