@@ -384,7 +384,7 @@ comp.** This is step 2's sentence, the explanation turn's only one.
        changed. If you dragged a pivot while something under Contents was selected, that one
        belongs to a group inside Lid, not Lid itself. Click Lid's name in the timeline, then drag
        its crosshair." Offer it as a possibility; never say they moved the group's pivot. Say this
-       **instead of** the "didn't change … like an expression" line below, never both.
+       **instead of** the "didn't change … What did you do?" line below, never both.
      - set away from rest, on a layer shrunk to nothing there: "Pop is shrunk to nothing at 3.3 s,
        so the drag looked like it did nothing, but it did move Pop's pivot. Edit >
        Undo first, then put the playhead on 4.3 s, where Pop is full size, and set the pivot
@@ -416,7 +416,8 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      - locked: "Door is still locked, so Pan Behind can't move it. Unlock it first (the lock switch
        in the timeline)."
    - **A pivot that didn't change after "done"** on a layer they say they moved, when it isn't a
-     shape with the "own pivot unchanged" hint above: "Door's pivot didn't change. If something
+     shape with the "own pivot unchanged" hint above: "Door's pivot didn't change. What did you
+     do?" Guess no cause. Only if they then say it moved and went back on its own: "If something
      drives it, like an expression, I can't see that yet." On that shape, the hint's line alone.
    - **Other changes** (`other_changes`): mention briefly, without treating them as mistakes,
      unless a hint above already covers one. Don't list layers in `not_compared` unless asked;
@@ -458,6 +459,7 @@ comp.** This is step 2's sentence, the explanation turn's only one.
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short
     "I've noted that for next time" is enough.
+    Name what comes next in words, never a slash command.
 
 ## The review
 
