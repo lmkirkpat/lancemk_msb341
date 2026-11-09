@@ -70,7 +70,8 @@ function connectionFromTool(ev) {
 // Polls while the panel is visible, and on Try again (now). onChange gets a reading only when it
 // differs from the last one. A read still running is never doubled up.
 function createPoller({ read, onChange, timers, intervalMs }) {
-  const t = timers || { setInterval, clearInterval };
+  // Wrapped: Chromium's timers throw "Illegal invocation" when called as a method of a plain object.
+  const t = timers || { setInterval: (f, ms) => setInterval(f, ms), clearInterval: (h) => clearInterval(h) };
   let handle = null;
   let last = null;
   let running = null;

@@ -106,6 +106,23 @@ test("polls every 5 s while visible, reports only changes, and stops when hidden
   assert.equal(c.fn, null);
 });
 
+test("the default timers work where the host's timer needs the right this (Chromium's Illegal invocation)", () => {
+  const real = { setInterval: globalThis.setInterval, clearInterval: globalThis.clearInterval };
+  const picky = (result) => function () {
+    if (this !== undefined && this !== globalThis) throw new TypeError("Illegal invocation");
+    return result;
+  };
+  globalThis.setInterval = picky(7);
+  globalThis.clearInterval = picky();
+  try {
+    const p = createPoller({ read: async () => ({ state: CONNECTED, started: null }), onChange: () => {} });
+    p.setVisible(true);
+    p.setVisible(false);
+  } finally {
+    Object.assign(globalThis, real);
+  }
+});
+
 test("Try again reads now, and a slow read isn't overlapped", async () => {
   const c = clock();
   let reads = 0;
