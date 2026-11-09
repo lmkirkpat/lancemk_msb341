@@ -487,3 +487,23 @@ All six skills completed one live lesson in the new panel on 2026-11-09: easing 
 agreed with the check, and `lesson-focus-stale` showed 0 times. T028's notes above don't record its stale count or a
 row-by-row agreement, so easing rests on its "things were pretty smooth" and the panel's pass. With that caveat, sprint
 4's first "done" item is met. Builder only, on B1.
+
+### Proposed openings (SC-002, 2026-11-09)
+
+Two short openings after T060, checklist expanded before the first reply (Start lesson at 23:17:13Z for easing and
+23:18:49Z for speed graph in `panel-turns.jsonl`).
+
+| Opening | Rows said | Matches? |
+|---|---|---|
+| Offset (T058) | Proposed, gone after the first reply | Yes |
+| Easing | "Not checked yet", never Proposed | **No: finding 1** |
+| Speed graph | Proposed, gone after the first reply (builder) | Yes |
+
+**SC-002's opening part: 2 of 3, so not met.** It needs 3 of 3. Re-run an easing opening once finding 1 is fixed.
+
+1. **Easing's opening rows aren't marked Proposed.** `panel/lib/lesson.js:92` marks rows Proposed only while there's
+   no reply, no pick-up and no check, the same for every skill. What differs for easing: its opening called
+   `read_learner_record` (23:17:16Z) before `snapshot_project` (23:17:18Z), while the other five skills open with their
+   snapshot. Whether that, or the snapshot reporting a continued lesson (`picked_up`), turned Proposed off isn't
+   confirmed. *For panel-builder:* reproduce with easing's recorded opening stream, find the cause, and add a test
+   that easing's opening rows say Proposed.
