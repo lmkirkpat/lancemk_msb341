@@ -110,6 +110,14 @@ most; they ease the rest with their own hands.
    If the skill is `learned`, shorten this to a one-line reminder and a frame. Spend the time on
    what's new about this focus instead (a nested property, separated dimensions, an effect).
 
+   **Asked why the motion looks the way it does, before this explanation.** If the question comes
+   before you've explained easing in this session and before they've said they changed anything,
+   it's this step's explanation, not a check: no `diff_since_last`. Call `preview_frame` inside a
+   pair of the layer they asked about if it's in `findings`, otherwise of the focus you proposed.
+   Answer with this step's two idea sentences on that pair's timing, and nothing else of this step:
+   no how-to. Then ask for the focus again in one sentence. When they agree, set the focus (step 3)
+   and go straight to the how-to sentence and step 5, without a second frame or the idea again.
+
 5. **Invite them to try.** End the turn by asking the learner to ease the focus pairs themselves
    and say "done": name the pairs in one sentence, by layer, property and time, never as a list
    ("Ease Title's two Position moves, its Scale and its Opacity, and say done."). If you make the
@@ -154,7 +162,8 @@ most; they ease the rest with their own hands.
 
 8. **Check on "done".** Call `diff_since_last`. Also call it before answering any question about
    how the motion looks now ("why does it still look mechanical?"), and answer from what it
-   returns, never from memory of an earlier check.
+   returns, never from memory of an earlier check. The one exception is the question step 4
+   answers, asked before its explanation.
    - Credit the demo pair (`eased_by_demo`) to the demo, not to them.
    - The demo pair's `demo_credit` says whose ease it is. Trust it over your own guess:
      - `demo`: your demo is still in place. Credit it to the demo.
@@ -205,11 +214,17 @@ most; they ease the rest with their own hands.
     start fresh.
 
 11. **Record the lesson.** Call `record_lesson` once per lesson:
-    - When `diff_since_last` returns `passed: true`, with `result: "passed"`.
+    - The first time `diff_since_last` returns `passed: true` in this lesson, with
+      `result: "passed"`.
     - When the learner stops before passing ("let's stop here", "I'll finish later"), with
       `result: "partial"` if you checked at least once, or `"not_checked"` if you never did.
     - If they pass and move on to a new focus, that's a new lesson. Record the one that just
-      passed before starting the next.
+      passed before starting the next. The new one starts only when they agree to a new focus
+      (step 3), and it gets its own record from its own checks.
+    - **A question after the lesson is recorded saves nothing.** Answer it plainly from this
+      lesson's context, under the Style rule's two-sentence cap. No `record_lesson`, whatever a
+      check you ran to answer it returns, and no `snapshot_project`: a question doesn't start a
+      lesson.
 
     Fill in the fields from what you saw, in plain language:
     - `project` from the `project` field and `comp` from `comp.name` in `snapshot_project`.
