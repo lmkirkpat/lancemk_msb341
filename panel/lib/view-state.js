@@ -6,8 +6,7 @@
 
 // The README's ids that draw the same screen as another: the gallery view of a lesson state.
 const ALIASES = Object.freeze({ "skill-easing-check": "lesson-partial" });
-// The one id the README doesn't have: step 1's Home with a record (plan P9). T052 removes it.
-const INTERIM_IDS = Object.freeze(["home-return-interim"]);
+const INTERIM_IDS = Object.freeze([]);
 
 const SKILL_SLUGS = {
   "keyframes.types": "keytypes",
@@ -50,7 +49,7 @@ function homeState(m) {
   if (conn === "busy") return "home-busy";
   if (m.record && m.record.status === "unreadable" && !m.unreadable_dismissed) return m.unreadable_why ? "home-unreadable-why" : "home-unreadable";
   if (!m.has_history) return "home-first";
-  return m.step === 1 ? "home-return-interim" : "home-return";
+  return "home-return";
 }
 
 function skillsState(m) {
@@ -102,7 +101,7 @@ function lessonState(m) {
   if (v.passed && typeof v.saved === "boolean") return passedState(m, v);
   if (l && l.stale_kind === "continued") return "lesson-continued";
   if (l && l.stale_kind === "other_comp") return "lesson-othercomp";
-  if (l && l.stale_kind) return "lesson-stale";
+  if (l && l.stale_kind && l.stale_kind !== "ungraded") return "lesson-stale";
   if (v.passed) return passedState(m, v);
   if (v.snapshots === 0 && v.checks === 0 && m.turn && m.turn.busy) return "lesson-starting";
   if (m.from_picking && !v.replied) return "lesson-picked";

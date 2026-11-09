@@ -36,7 +36,7 @@ const on = async (fn, opts) => { const h = await ready(opts); fn(h); return h; }
 // state id → how to get there, and a marker the screen must show.
 const CASES = {
   "home-first": [() => ready(), COPY.home.welcome_first],
-  "home-return-interim": [() => ready({ memory: { status: "ok", record: LESSON } }), COPY.home.welcome_back],
+  "home-return": [() => ready({ memory: { status: "ok", record: LESSON } }), COPY.buttons.find_next],
   "home-loading": [async () => { const timers = []; const h = makeApp({ readRecord: () => new Promise(() => {}), setTimeout: (f) => timers.push(f) }); h.app.init(); timers[0](); return h; }, "aria-busy"],
   "home-unreachable": [() => on((h) => h.app.setConnection({ state: "not_connected", started: null })), COPY.home.unreachable.title],
   "home-busy": [() => on((h) => h.app.setConnection({ state: "busy", started: null })), COPY.home.busy.title],
@@ -89,7 +89,7 @@ function screenText(h) {
   return [r.nav, r.lesson.head, r.lesson.banner, c.earlier || "", ...c.items, r.lesson.list, r.lesson.status, r.lesson.actions, r.lesson.ask].join("\n");
 }
 
-test("the step 1 list names only ids the README has, and home-return-interim", () => {
+test("the step 1 list names only ids the README has", () => {
   for (const id of Object.keys(CASES)) if (id !== "skill-easing-check") assert.ok(STATE_IDS.includes(id), id);
 });
 
@@ -112,19 +112,17 @@ test("recorded easing stream: an opening and a check drive the panel to a real s
   assert.ok(STATE_IDS.includes(h.app.model().state));
 });
 
-test("T024: the Skills tab's one line and the same start; while a lesson is open, why it's off", async () => {
+test("T050: opening Skills costs nothing; a detail's New lesson waits while a lesson is open", async () => {
   const h = await on((x) => x.app.act("pick_skill"));
   assert.equal(h.app.model().tab, "skills");
-  let v = plain(renderApp(h.app.model()).view);
-  assert.ok(v.includes(COPY.skills.interim_line));
-  assert.ok(v.includes(COPY.buttons.start));
   assert.equal(h.adapters.length, 0, "opening Skills costs nothing");
+  assert.ok(plain(renderApp(h.app.model()).view).includes(COPY.skills.title));
   h.app.act("start");
-  assert.equal(h.app.model().tab, "lesson");
   h.app.act("pick_skill");
-  v = plain(renderApp(h.app.model()).view);
+  h.app.act("open_skill", { skill: "keyframes.types" });
+  const v = plain(renderApp(h.app.model()).view);
   assert.ok(v.includes(COPY.paused.after_lesson));
-  assert.equal(v.includes(`data-action="start"`), false);
+  assert.equal(v.includes(`data-action="new_lesson"`), false);
 });
 
 test("T025: the manifest's minimum height is 480 (Open question 9)", () => {

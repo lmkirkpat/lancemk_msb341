@@ -14,6 +14,11 @@ const ZERO_ID = "00000000-0000-0000-0000-000000000000";
 // Which cases become fixtures, per skill.
 const CASES = {
   easing: ["01-new-learner-opening", "03-show-me", "06-correct-attempt", "07-partial-attempt", "12-other-comp", "23-undo-then-redo"],
+  "key-types": ["06-do-the-rest-for-me"],
+  "speed-graph": ["05-do-the-rest-for-me"],
+  offset: ["16-do-the-rest-for-me"],
+  anchor: ["12-demonstration-two-layers", "22-one-key-dragged-off-it"],
+  "null-parenting": ["04-demonstration"],
 };
 
 // The rendered form is run.mjs's renderTranscript. A block runs until the next line with a marker.

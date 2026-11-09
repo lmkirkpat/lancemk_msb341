@@ -107,7 +107,6 @@ test("lesson-passed: the plain pass line, Saved only on saved:true, Plus the dem
   assert.ok(list(h).includes(COPY.check.plus_demo));
   assert.ok(actions(h).includes(COPY.buttons.whats_next));
   assert.ok(actions(h).includes(COPY.buttons.see_skills));
-  assert.equal(r(h).ask, "");
   h.app.act("whats_next");
   assert.equal(h.app.model().tab, "home");
   assert.equal(h.app.model().lesson_open, false);
@@ -139,6 +138,119 @@ test("D6: saved with no pass shows Saved and the ways out, with no pass line", a
   end(h);
   assert.ok(banner(h).includes(COPY.lesson.saved));
   assert.equal(banner(h).includes(COPY.lesson.passed), false);
+  assert.ok(actions(h).includes(COPY.buttons.whats_next));
+});
+
+// ---------- FR-046 (2026-11-09): Ask stays after a pass ----------
+
+const askEnabled = (h) => r(h).ask.includes("<input") && !/<input[^>]*disabled/.test(r(h).ask);
+const FAILING = CHECK({ passed: false });
+
+async function passedLesson(opts, record) {
+  const h = await open(opts);
+  h.adapter().emit("tool_result", CHECK({ passed: true }));
+  h.adapter().emit("tool_result", record || SAVED);
+  end(h);
+  return h;
+}
+const UNSAVED = { name: "record_lesson", ok: false, text: "error", images: [] };
+
+test("FR-046: Ask is open on lesson-passed and lesson-passed-unsaved, in the same session", async () => {
+  for (const [record, state] of [[SAVED, "lesson-passed"], [UNSAVED, "lesson-passed-unsaved"]]) {
+    const h = await passedLesson({}, record);
+    assert.equal(st(h), state);
+    assert.ok(askEnabled(h), state);
+    const before = h.adapters.length;
+    assert.equal(h.app.ask("Why does that work?"), true);
+    assert.equal(h.adapters.length, before, "no new process");
+    assert.deepEqual(h.adapter().sent.at(-1), { text: "Why does that work?", kind: "ask" });
+  }
+});
+
+test("FR-046: Ask stays hidden with no session (exited, start failed), and on a save with no pass (D6)", async () => {
+  const x = await open();
+  x.adapter().emit("error", { kind: "process_exited", message: "x" });
+  assert.equal(st(x), "lesson-exited");
+  assert.equal(r(x).ask, "");
+  const n = await open();
+  n.adapter().emit("tool_result", SAVED);
+  end(n);
+  assert.equal(r(n).ask, "");
+});
+
+test("asking from a passed lesson: the passed screen stays, its ways out wait for the answer, then return", async () => {
+  const h = await passedLesson();
+  h.app.ask("Why?");
+  assert.equal(st(h), "lesson-passed");
+  assert.equal(actions(h).includes(COPY.buttons.whats_next), false, "can't leave mid-answer");
+  assert.ok(actions(h).includes(COPY.paused.after_answer));
+  assert.ok(/<input[^>]*disabled/.test(r(h).ask));
+  assert.equal(h.app.ask("Again?"), false, "can't send twice");
+  h.adapter().emit("text", { text: "Because." });
+  end(h);
+  assert.equal(st(h), "lesson-passed");
+  assert.ok(actions(h).includes(COPY.buttons.whats_next));
+  assert.ok(askEnabled(h));
+  assert.ok(banner(h).includes(COPY.lesson.saved));
+  assert.ok(chat(h).includes("Because."));
+  assert.equal(h.app.model().lesson_open, false, "still over, so Home isn't Lesson in progress");
+  assert.equal(h.turns.filter((t) => t.lesson_passed).length, 1, "the pass is logged once");
+});
+
+test("Home's start waits, and says why, while a question after a pass is being answered (FR-060, FR-061)", async () => {
+  const h = await passedLesson();
+  h.app.ask("Why?");
+  h.app.act("tab", { tab: "home" });
+  assert.ok(homeHtml(h).includes(COPY.paused.after_answer));
+  assert.equal(homeHtml(h).includes('data-action="start"'), false);
+  end(h);
+  assert.ok(homeHtml(h).includes('data-action="start"'));
+});
+
+test("a second record refused after a pass can't unsay Saved; a later failing check can't unsay the pass", async () => {
+  const h = await passedLesson();
+  h.app.ask("Check it again?");
+  h.adapter().emit("tool_result", UNSAVED);
+  h.adapter().emit("tool_result", FAILING);
+  end(h);
+  assert.equal(st(h), "lesson-passed");
+  assert.ok(banner(h).includes(COPY.lesson.saved));
+  assert.equal(h.app.model().lesson.passed, true);
+  assert.ok(list(h).includes("still to ease"), "the list still tells the truth about the comp");
+  const u = await passedLesson({}, UNSAVED);
+  u.app.ask("Again?");
+  u.adapter().emit("tool_result", FAILING);
+  end(u);
+  assert.equal(st(u), "lesson-passed-unsaved");
+});
+
+test("a question that fails after a pass leaves the pass on screen; Ask works again, resuming first after a B1 timeout", async () => {
+  const h = await passedLesson();
+  const first = h.adapter();
+  h.app.ask("Why?");
+  first.emit("error", { kind: "timeout", message: "x" });
+  first.emit("turn_end", { ok: false, kind: "ask" });
+  assert.equal(st(h), "lesson-passed");
+  assert.ok(chat(h).includes(COPY.errors.after_pass_failed.title));
+  assert.ok(askEnabled(h));
+  assert.equal(h.app.ask("Still there?"), true);
+  assert.equal(first.stopped, 1, "the hung process is stopped");
+  assert.notEqual(h.adapter(), first);
+  assert.equal(h.adapter().started[0].resumeSessionId, "session-1");
+  assert.equal(h.adapter().sent.at(-1).text, "Still there?");
+});
+
+test("the mentor's process dying on a question after a pass: the pass stands, nothing says it wasn't saved, Ask goes", async () => {
+  const h = await passedLesson();
+  h.app.ask("Why?");
+  h.adapter().emit("error", { kind: "process_exited", message: "x" });
+  h.adapter().emit("turn_end", { ok: false, kind: "ask" });
+  h.adapter().emit("exit", { code: 1 });
+  assert.equal(st(h), "lesson-passed");
+  assert.ok(banner(h).includes(COPY.lesson.saved));
+  assert.ok(chat(h).includes(COPY.errors.after_pass_stopped.title));
+  assert.equal(chat(h).includes(COPY.errors.process_exited.title), false);
+  assert.equal(r(h).ask, "", "no session to ask");
   assert.ok(actions(h).includes(COPY.buttons.whats_next));
 });
 
@@ -362,16 +474,14 @@ test("err-mentor: Try again really starts, and a start that works opens the less
   assert.equal(h.app.model().error, null);
 });
 
-test("Try again on an error after the lesson was saved clears it and starts nothing", async () => {
+test("an error after the lesson was saved leaves the passed screen and starts nothing (FR-046)", async () => {
   const h = await open();
   h.adapter().emit("tool_result", CHECK({ passed: true }));
   h.adapter().emit("tool_result", SAVED);
   end(h);
   h.adapter().emit("error", { kind: "rate_limited", message: "" });
-  assert.equal(st(h), "lesson-pass-rate");
-  h.app.act("try_again");
-  assert.equal(h.adapters.length, 1);
   assert.equal(st(h), "lesson-passed");
+  assert.equal(h.adapters.length, 1);
 });
 
 test("a saved start time isn't overwritten by a bridge read that found nothing; a real one replaces it", async () => {
@@ -735,3 +845,110 @@ test("announcesCalls: A true, B1 false, on the real adapters (plan P7)", () => {
   assert.equal(b1Adapter({ claude_path: "x", runtime_path: "/tmp" }).announcesCalls, false);
   assert.equal(apiAdapter({ runtime: "a" }).announcesCalls, true);
 });
+
+// ---------- T041: a lesson starts from any skill's request ----------
+
+test("T041: Start lesson with a skill sends that skill's command and launches with its tool list", async () => {
+  const h = await ready();
+  h.app.act("start", { skill: "keyframes.types" });
+  assert.deepEqual(h.adapter().started[0], { skill: "key-types-mentor" });
+  assert.deepEqual(h.adapter().sent[0], { text: "/key-types-mentor", kind: "start" });
+  assert.equal(h.app.model().lesson.skill, "keyframes.types");
+  assert.equal(h.saved.current.skill, "key-types-mentor");
+});
+
+test("T041: no skill named means the path's first; Try again after a failed start restarts the same skill", async () => {
+  const h = await ready();
+  h.app.act("start");
+  assert.equal(h.adapter().sent[0].text, "/ease-mentor");
+  const k = await ready();
+  k.app.act("start", { skill: "timing.offset" });
+  k.adapter().emit("error", { kind: "rate_limited", message: "" });
+  assert.equal(st(k), "lesson-start-failed");
+  k.app.act("try_again");
+  assert.deepEqual(k.adapter().started[0], { skill: "offset-mentor" });
+  assert.equal(k.adapter().sent[0].text, "/offset-mentor");
+});
+
+test("T041: Show me again sends the other five's text; the tool that ran sets the skill", async () => {
+  const h = await ready();
+  h.app.act("start", { skill: "timing.offset" });
+  h.adapter().emit("tool_result", { name: "offset_demo", ok: true, text: "", images: [], json: { layer: "Dot 2", properties: ["Position"], shift_frames: 4, undo: "Edit > Undo" } });
+  end(h, "start");
+  h.app.act("show_me_again");
+  assert.equal(h.adapter().sent.at(-1).text, "Show me again: explain the change you already made, with a frame. Don't change anything.");
+  const a = await ready();
+  a.app.act("start");
+  a.adapter().emit("tool_result", { name: "key_types_snapshot", ok: true, text: "", images: [], json: { targets: [] } });
+  assert.equal(a.app.model().lesson.skill, "keyframes.types");
+});
+
+// ---------- review fixes: a failed turn with no error event, and the process when it's dropped ----------
+
+test("a failed turn after a pass with no error event keeps the process: Ask still works in the same session", async () => {
+  const h = await passedLesson();
+  const a = h.adapter();
+  h.app.ask("Why?");
+  a.emit("turn_end", { ok: false, kind: "ask" });
+  assert.equal(st(h), "lesson-passed");
+  assert.ok(chat(h).includes(COPY.errors.after_pass_failed.title));
+  assert.equal(chat(h).includes(COPY.errors.after_pass_stopped.title), false);
+  assert.equal(a.stopped, 0, "the process isn't dropped");
+  assert.ok(askEnabled(h));
+  assert.equal(h.app.ask("Again?"), true);
+  assert.equal(h.adapter(), a, "the same process answers");
+  assert.equal(a.sent.at(-1).text, "Again?");
+});
+
+test("a process the panel drops is stopped, not orphaned: after a pass, and mid-lesson", async () => {
+  const h = await passedLesson();
+  const a = h.adapter();
+  h.app.ask("Why?");
+  a.emit("error", { kind: "process_exited", message: "x" });
+  a.emit("turn_end", { ok: false, kind: "ask" });
+  assert.equal(a.stopped, 1, "after a pass");
+  const m = await open();
+  const b = m.adapter();
+  b.emit("error", { kind: "process_exited", message: "x" });
+  assert.equal(st(m), "lesson-exited");
+  assert.equal(b.stopped, 1, "mid-lesson");
+});
+
+// ---------- review fixes: Start lesson starts the skill on screen ----------
+
+test("after a continued offset lesson exits, Start lesson starts offset", async () => {
+  const offset = saved({ skill: "offset-mentor", lesson: Object.assign({}, saved().lesson, { skill: "timing.offset" }) });
+  const h = await ready({ saved: offset });
+  h.app.act("continue");
+  h.adapter().emit("exit", { code: 1 });
+  assert.equal(st(h), "lesson-exited");
+  h.app.act("start");
+  assert.equal(h.adapter().sent[0].text, "/offset-mentor");
+  assert.equal(h.adapter().started[0].skill, "offset-mentor");
+});
+
+test("a saved lesson with no skill in its view still restarts from the session's own skill", async () => {
+  const h = await ready({ saved: saved({ skill: "offset-mentor", lesson: Object.assign({}, saved().lesson, { skill: null }) }) });
+  h.app.act("continue");
+  h.adapter().emit("exit", { code: 1 });
+  h.app.act("start");
+  assert.equal(h.adapter().sent[0].text, "/offset-mentor");
+});
+
+const homeStart = (h) => {
+  const tag = /<button[^>]*data-action="start"[^>]*>/.exec(renderApp(h.app.model()).view);
+  return tag && (/data-skill="([^"]+)"/.exec(tag[0]) || [])[1];
+};
+
+for (const [how, leave] of [["End lesson", (h) => h.app.act("end_lesson")], ["Back to Home", (h) => h.app.act("back_home")], ["the Home tab after it stops", (h) => { h.adapter().emit("exit", { code: 1 }); h.app.act("tab", { tab: "home" }); }]]) {
+  test(`Home's Start names its own skill after an offset lesson left by ${how}`, async () => {
+    const h = await ready();
+    h.app.act("new_lesson", { skill: "timing.offset" });
+    h.adapter().emit("turn_end", { ok: true, kind: "new_lesson" });
+    leave(h);
+    assert.equal(h.app.model().tab, "home");
+    assert.equal(homeStart(h), "easing.basic");
+    h.app.act("start", { skill: homeStart(h) });
+    assert.equal(h.adapter().sent[0].text, "/ease-mentor");
+  });
+}

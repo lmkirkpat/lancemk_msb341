@@ -10,6 +10,7 @@ const { shortDate } = require("./memory.js");
 const { visibleKinds } = require("./requests.js");
 const { rowsOf } = require("./checklist/index.js");
 const { listCollapsed } = require("./view-state.js");
+const { skillById } = require("./skills.js");
 
 const TABS = ["home", "lesson", "skills"];
 
@@ -59,7 +60,7 @@ function memoryCard(h, hasHistory) {
 function upNextCard(h, o) {
   const u = h.up_next;
   if (!u) return "";
-  const go = o.off ? `<p class="later">${esc(o.reason)}</p>` : u.start ? btn(u.start.label, "start", o.dim ? "" : "primary") : "";
+  const go = o.off ? `<p class="later">${esc(o.reason)}</p>` : u.find ? btn(u.find.label, "find_next", o.dim ? "" : "primary") : u.start ? btn(u.start.label, "start", o.dim ? "" : "primary", `data-skill="${esc(u.skill)}"`) : "";
   const pick = o.lessonOpen ? "" : btn(u.pick_skill, "pick_skill");
   return `<section class="card lead${o.dim ? " dim" : ""}" aria-label="${esc(COPY.home.up_next)}"><div class="kicker accent">${esc(COPY.home.up_next)}</div><h3 data-title tabindex="-1">${esc(u.name)}</h3><p class="why">${esc(u.why)}</p><div class="row">${go}${pick}</div></section>`;
 }
@@ -73,6 +74,7 @@ function homeCards(m, o) {
 const focusText = (v) => (v && Array.isArray(v.focus) && v.focus.length ? v.focus.join(", ") : null);
 
 function lessonTitle(m, v) {
+  if (m.picking) return COPY.lesson.picking_title;
   const name = m.names[v.skill] || COPY.home.a_skill;
   const focus = focusText(v);
   return focus ? COPY.lesson.on(name, focus) : name;
@@ -122,7 +124,7 @@ function homeBody(m) {
     case "home-unreadable-why":
       return { banner: banner("warn", COPY.home.unreadable_why.title, COPY.home.unreadable_why.body, btn(COPY.buttons.got_it, "got_it_unreadable")), cards: homeCards(m, { hideHello: true }) };
     default:
-      return { banner: "", cards: homeCards(m, {}) };
+      return { banner: "", cards: homeCards(m, m.answering_after_pass ? { off: true, reason: COPY.paused.after_answer } : {}) };
   }
 }
 
@@ -153,9 +155,10 @@ function stripHtml(view) {
 }
 
 function headTitle(m) {
-  if (m.state === "lesson-starting") return COPY.lesson.looking;
+  if (m.state === "lesson-starting" || m.state === "lesson-picking-starting") return COPY.lesson.looking;
   if (m.state === "lesson-start-failed") return COPY.lesson.didnt_start;
-  return focusText(m.lesson) || COPY.lesson.your_comp;
+  const row = skillById(m.lesson && m.lesson.skill);
+  return focusText(m.lesson) || (row && row.no_focus && m.lesson.checks === 0 ? row.no_focus : COPY.lesson.your_comp);
 }
 
 function headTag(m) {
@@ -167,6 +170,7 @@ function headTag(m) {
 
 function headHtml(m) {
   const v = m.lesson;
+  if (m.state === "lesson-picking") return `<div class="lhead"><button type="button" class="back" data-action="go_home" aria-label="${esc(COPY.back.lesson)}" title="${esc(COPY.back.lesson)}">‹</button><div class="ltitle"><span class="kicker">${esc(COPY.lesson.picking_kicker)}</span><strong>${esc(COPY.lesson.picking_title)}</strong></div></div>`;
   const name = m.names[v.skill] || "";
   return `<div class="lhead"><button type="button" class="back" data-action="go_home" aria-label="${esc(COPY.back.lesson)}" title="${esc(COPY.back.lesson)}">‹</button><div class="ltitle"><span class="kicker">${esc(name)}</span><strong>${esc(headTitle(m))}</strong></div>${headTag(m)}</div>${stripHtml(v)}`;
 }
@@ -217,6 +221,8 @@ function chatRegion(m) {
     return { items };
   }
   const msgs = m.messages;
+  // FR-082: a lesson reached from a suggestion keeps the suggestion above its opening, unfolded.
+  if (m.from_picking && m.lesson && !m.lesson.replied) return { items: msgs.map(messageHtml) };
   let last = -1;
   for (let i = msgs.length - 1; i >= 0; i--) if (msgs[i].role === "learner") { last = i; break; }
   let foldAt = last;
@@ -232,8 +238,17 @@ function chatRegion(m) {
   return { earlier: `<details class="earlier"><summary>${esc(COPY.lesson.earlier(turns))}</summary>${folded.map(messageHtml).join("")}</details>`, items: msgs.slice(foldAt).map(messageHtml) };
 }
 
-function rowHtml(r) {
-  return `<li class="${r.family}${r.changed ? " fresh" : ""}"><span class="g" aria-hidden="true">${esc(r.glyph)}</span><span class="what"><span class="lab">${esc(r.subject)}</span>${r.detail ? `<small>${esc(r.detail)}</small>` : ""}</span><span class="st">${esc(r.word)}</span></li>`;
+// Offset's timeline (FR-088): one scale for the whole lesson, hidden from screen readers since the
+// detail line says the same.
+function trackHtml(r, timeline) {
+  if (r.time === null || r.time === undefined || !timeline || !(timeline.end > timeline.start)) return "";
+  const at = Math.min(100, Math.max(0, ((r.time - timeline.start) / (timeline.end - timeline.start)) * 100));
+  return `<span class="track" aria-hidden="true"><i style="left:${at.toFixed(1)}%"></i></span>`;
+}
+
+function rowHtml(r, timeline) {
+  const track = trackHtml(r, timeline);
+  return `<li class="${r.family}${r.changed ? " fresh" : ""}${track ? " trk" : ""}"><span class="g" aria-hidden="true">${esc(r.glyph)}</span><span class="what"><span class="lab">${esc(r.subject)}</span>${r.detail ? `<small>${esc(r.detail)}</small>` : ""}</span><span class="st">${esc(r.word)}</span>${track}</li>`;
 }
 
 // At the opening the list is the mentor's whole read: the first section's rows, then a count for the
@@ -250,7 +265,12 @@ function visibleSections(l) {
 function listHtml(m) {
   const v = m.lesson;
   const l = v.check_list;
-  if (!l) return m.state === "lesson-starting" ? `<section class="check" aria-label="${esc(COPY.check.aria)}"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> ${esc(COPY.check.slot_starting)}</p></div></section>` : "";
+  if (!l) {
+    const row = skillById(v.skill);
+    if (m.state === "lesson-picking") return "";
+    const slot = m.state === "lesson-starting" || m.state === "lesson-picking-starting" ? COPY.check.slot_starting : row && row.slot;
+    return slot ? `<section class="check" aria-label="${esc(COPY.check.aria)}"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> ${esc(slot)}</p></div></section>` : "";
+  }
   const { sections, foldLine } = visibleSections(l);
   const nDone = rowsOf(l).filter((r) => r.family === "done").length;
   const collapsed = listCollapsed(m);
@@ -258,11 +278,13 @@ function listHtml(m) {
   const noteOnly = collapsed && !!l.stale && m.list_collapsed === true;
   const body = sections.map((s) => {
     const allDone = s.rows.length > 0 && s.rows.every((r) => r.family === "done");
-    return `${s.title ? `<h3${allDone ? ' class="alld"' : ""}>${esc(s.title)}</h3>` : ""}<ul>${s.rows.map(rowHtml).join("")}</ul>`;
+    return `${s.title ? `<h3${allDone ? ' class="alld"' : ""}>${esc(s.title)}</h3>` : ""}<ul>${s.rows.map((row) => rowHtml(row, v.timeline)).join("")}</ul>`;
   }).join("");
   const fold = nDone >= 2 ? `<button type="button" class="foldline" data-action="fold_done" data-keep-focus aria-expanded="${!!m.done_unfolded}"><span aria-hidden="true">✓</span> ${esc(COPY.check.done_fold(nDone, m.done_unfolded))}</button>` : "";
   const lines = [foldLine, l.more].filter(Boolean).map((t) => `<p class="more">${esc(t)}</p>`).join("");
-  const outside = l.outside && l.outside.length ? `<h3>${esc(COPY.check.outside)}</h3><ul class="plain">${l.outside.map((o) => `<li><span class="what">${esc(o)}</span></li>`).join("")}</ul>` : "";
+  const plainList = (title, items) => (items && items.length ? `<h3>${esc(title)}</h3><ul class="plain">${items.map((o) => `<li><span class="what">${esc(o)}</span></li>`).join("")}</ul>` : "");
+  const footer = (l.footer || []).map((t) => `<p class="foot">${esc(t)}</p>`).join("");
+  const outside = `${footer}${plainList(COPY.check.worth_a_look, l.worth_a_look)}${plainList(COPY.check.outside, l.outside)}`;
   const cls = ["check", m.done_unfolded ? "unfold" : "", l.stale ? "stale" : ""].filter(Boolean).join(" ");
   return `<section class="${cls}" aria-label="${esc(COPY.check.aria)}"><button type="button" class="check-head" aria-expanded="${!collapsed}" data-action="toggle_list" data-keep-focus><span class="chev" aria-hidden="true"><span class="ch-tall">${collapsed ? "▸" : "▾"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span><span class="sum">${esc(l.summary)}${l.sub ? `<small>${esc(l.sub)}</small>` : ""}</span></button><div class="check-body"${collapsed && !noteOnly ? " hidden" : ""}>${l.stale ? `<p class="stale-note">${esc(l.stale)}</p>` : ""}${noteOnly ? "" : `${fold}${body}${lines}${outside}`}</div></section>`;
 }
@@ -275,8 +297,14 @@ function actionsHtml(m) {
   const s = m.state;
   const t = m.turn || {};
   const busy = !!t.busy;
+  if (s === "lesson-picking") {
+    if (busy) return whyOff(COPY.paused.after_answer);
+    return `<div class="actions">${m.yes_ready ? btn(LABELS.yes, "yes", "primary") : ""}${btn(LABELS.pick_skill, "leave_picking", m.yes_ready ? "" : "primary")}</div>`;
+  }
+  if (s === "lesson-picking-starting") return `<div class="actions">${pressed(COPY.buttons.pressed.start)}<button type="button" disabled>${esc(LABELS.pick_skill)}</button></div>`;
   if (s === "lesson-exited") return `<div class="actions">${btn(LABELS.start, "start", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if (s === "lesson-start-failed") return `<div class="actions">${btn(LABELS.try_again, "try_again", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
+  if ((s === "lesson-passed" || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
   if (s === "lesson-passed" || savedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
   if (s === "lesson-passed-unsaved") return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}</div>`;
   if (s === "lesson-passed-asking") return "";
@@ -314,8 +342,9 @@ const VERB_KEY = { check: "check", check_again: "check", hint: "hint", show_me: 
 
 function askHtml(m) {
   const s = m.state;
-  if (["lesson-exited", "lesson-start-failed", "lesson-passed", "lesson-passed-unsaved"].includes(s) || savedNoPass(m.lesson)) return "";
-  const open = m.lesson_open && !(m.turn && m.turn.busy) && !m.error;
+  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting"].includes(s) || savedNoPass(m.lesson)) return "";
+  if (["lesson-passed", "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
+  const open = m.can_ask && !(m.turn && m.turn.busy) && !m.error;
   return `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${esc(COPY.ask_label)}</label><input id="ask-in" type="text" placeholder="${esc(COPY.ask_placeholder)}"${open ? "" : " disabled"} /><button type="submit" aria-label="${esc(COPY.buttons.send)}"${open ? "" : " disabled"}>⏎</button></form>`;
 }
 
@@ -332,16 +361,35 @@ function lessonRegions(m) {
   };
 }
 
-// Step 1's interim (plan P9): one line and the same start as Home. T050 replaces it.
+// ---------- Skills (T050, T051) ----------
+
+function skillRowHtml(r) {
+  const inner = `<span class="g" aria-hidden="true">${esc(r.glyph)}</span><span class="n">${esc(r.name)}</span><span class="s">${esc(r.word)}</span>`;
+  const body = r.pressable ? `<button type="button" class="rowbtn" data-action="open_skill" data-skill="${esc(r.id)}">${inner}</button>` : `<span class="rowbtn">${inner}</span>`;
+  return `<li class="${esc(r.cls)}">${body}</li>`;
+}
+
 function skillsHtml(m) {
-  const u = m.home.up_next;
+  const v = m.skills_view;
+  if (m.detail) return detailHtml(m, m.detail);
+  const bars = `<i class="l"></i>`.repeat(v.learned) + `<i class="p"></i>`.repeat(v.in_progress) + `<i></i>`.repeat(Math.max(0, v.total - v.learned - v.in_progress));
+  return `<div class="scroll"><h2 class="lbl" data-title tabindex="-1">${esc(COPY.skills.title)}</h2><p class="lead-count">${esc(v.summary)}</p><div class="meter" role="img" aria-label="${esc(v.summary)}">${bars}</div><p class="meta">${esc(COPY.skills.pick)}</p><ul class="skills">${v.rows.map(skillRowHtml).join("")}</ul></div>`;
+}
+
+function detailHtml(m, d) {
   const off = homeOff(m);
-  const go = !u ? "" : off ? `<p class="later">${esc(off)}</p>` : u.start ? btn(u.start.label, "start", "primary") : "";
-  return `<div class="scroll"><p class="hello" data-title tabindex="-1">${esc(COPY.skills.title)}<small>${esc(COPY.skills.interim_line)}</small></p><div class="row">${go}</div></div>`;
+  const tag = d.tag === "due" ? `<span class="tag practice">↻ ${esc(COPY.skills.words.due.toLowerCase())}</span>` : d.tag === "learned" ? `<span class="tag pass">✓ ${esc(COPY.skills.words.learned.toLowerCase())}</span>` : "";
+  const line = d.builds_on.length ? `<p>${esc(COPY.skills.builds_on(d.builds_on))}</p>` : d.status_line ? `<p>${esc(d.status_line)}</p>` : "";
+  const go = off ? `<p class="later">${esc(off)}</p>` : btn(COPY.buttons.new_lesson, "new_lesson", "primary", `data-skill="${esc(d.id)}"`);
+  const history = d.history.length
+    ? `<ul class="hist">${d.history.map((h) => `<li><b>${esc(h.date)}</b>${[h.comp, h.result].filter(Boolean).map((p) => ` · ${esc(p)}`).join("")}${h.summary || h.next ? `<small>${esc([h.summary, h.next ? `${COPY.home.next_time} ${h.next}` : ""].filter(Boolean).join(" "))}</small>` : ""}</li>`).join("")}</ul>`
+    : `<p class="meta">${esc(COPY.skills.no_lessons)}</p>`;
+  return `<div class="lhead"><button type="button" class="back" data-action="back_skills" aria-label="${esc(COPY.back.skills)}" title="${esc(COPY.back.skills)}">‹</button><div class="ltitle"><span class="kicker">${esc(COPY.skills.skill_kicker)}</span><strong data-title tabindex="-1">${esc(d.name)}</strong></div>${tag}</div><div class="scroll">${line}<div class="row detail-go">${go}</div><h2 class="lbl">${esc(COPY.home.memory_title)}</h2>${history}<p class="ro">${esc(COPY.skills.history_note)}</p></div>`;
 }
 
 function homeOff(m) {
   if (m.lesson_open) return COPY.paused.after_lesson;
+  if (m.answering_after_pass) return COPY.paused.after_answer;
   if (m.error && m.error.blocks_home) return COPY.paused.needs_mentor;
   const conn = m.connection && m.connection.state;
   if (conn === "not_connected") return COPY.paused.needs_ae;

@@ -3,12 +3,13 @@
 "use strict";
 
 const list = require("./checklist/index.js");
+const { TABLE, skillIdForTool } = require("./skills.js");
 const { COPY } = require("./copy.js");
 const { shortDate } = require("./memory.js");
 
-const DEMO_TOOLS = new Set(["set_ease"]);
-// Sends that aren't a reply: the opening, and agreeing to a suggestion (FR-082).
-const NOT_A_REPLY = new Set(["start", "yes"]);
+const DEMO_TOOLS = new Set(TABLE.map((s) => s.demo));
+// Sends that aren't a reply: the openings, and agreeing to a suggestion (FR-082).
+const NOT_A_REPLY = new Set(["start", "new_lesson", "warm_up", "find_next", "yes"]);
 
 function initialLesson(opts) {
   return {
@@ -29,6 +30,10 @@ function initialLesson(opts) {
     labels: {},
     check_list: null,
     timeline: null,
+    offset_kind: null,
+    pivot_keyed: false,
+    null_stage: null,
+    landing_hard: [],
   };
 }
 
@@ -57,6 +62,8 @@ function markStale(v, kind, comp) {
 }
 
 const aeLost = (ev) => !ev.ok && /AE_UNREACHABLE|AE_BUSY/.test(ev.text || "");
+// The mentor's refusal of a second save: the lesson is saved, even if the panel never saw the first.
+const alreadySaved = (ev) => !ev.ok && /^LESSON_ALREADY_SAVED/.test(ev.text || "");
 
 function onSnapshot(v, ev) {
   const r = ev.json;
@@ -80,9 +87,9 @@ function onSnapshot(v, ev) {
   const fromCheck = v.check_list && v.check_list.source === "check";
   if (Array.isArray(r.targets) && r.targets.length && !fromCheck) {
     const proposed = !next.replied && !next.picked_up && next.checks === 0;
-    next.check_list = list.fromSnapshot(ev.name, r.targets, { labels, proposed, focus: next.focus });
+    next.check_list = list.fromSnapshot(ev.name, r.targets, { labels, proposed, focus: next.focus, snapshot: r });
   }
-  return next;
+  return Object.assign(next, list.snapshotFields(ev.name, r, v));
 }
 
 function onCheck(v, ev) {
@@ -92,8 +99,14 @@ function onCheck(v, ev) {
     if (ev.ok && r && r.comp_matches === false) return markStale(v, "other_comp", r.lesson_comp);
     return markStale(v, "ae");
   }
-  const built = list.fromCheck(ev.name, r, { labels: v.labels, previous: v.check_list, at: ev.at });
-  const next = Object.assign({}, v, { checks: v.checks + 1, passed: built.passed, check_list: built });
+  if (list.isUngraded(ev.name, r)) return markStale(v, "ungraded");
+  const built = list.fromCheck(ev.name, r, { labels: v.labels, previous: v.check_list, at: ev.at, landing_hard: v.landing_hard, timeline: v.timeline });
+  // A pass whose save has answered is over: a later check, asked for after it (FR-046), updates the
+  // rows but can't unsay the result.
+  const over = v.passed && typeof v.saved === "boolean";
+  const next = Object.assign({}, v, { checks: v.checks + 1, passed: over || built.passed, check_list: built });
+  if (built.view_fields) Object.assign(next, built.view_fields);
+  if (Array.isArray(r.codes) && r.codes.includes("null_ready")) next.null_ready = true;
   next.demo_unknown = false; // a check settles it either way (FR-030)
   if (built.marks_demo) next.demo_made = true;
   return next;
@@ -125,8 +138,11 @@ function onDemo(v) {
 }
 
 function reduceLesson(view, ev) {
-  const v = view || initialLesson();
+  let v = view || initialLesson();
   if (!ev) return v;
+  // Whichever tool ran says whose lesson this is (a real hand-over on A changes it).
+  const tool = ev.type === "tool_result" ? skillIdForTool(ev.name) : null;
+  if (tool && v.skill !== tool) v = Object.assign({}, v, { skill: tool });
   if (ev.type === "sent") return onSent(v, ev);
   if (ev.type === "turn_end") return onTurnEnd(v);
   if (ev.type === "cut_off") return onCutOff(v, ev);
@@ -134,7 +150,7 @@ function reduceLesson(view, ev) {
   if (ev.type === "exited") return markStale(v, "exited");
   if (ev.type !== "tool_result") return v;
   if (DEMO_TOOLS.has(ev.name)) return ev.ok ? onDemo(v) : v;
-  if (ev.name === "record_lesson") return Object.assign({}, v, { saved: ev.ok === true && !!ev.json && ev.json.saved === true });
+  if (ev.name === "record_lesson") return Object.assign({}, v, { saved: v.saved === true || alreadySaved(ev) || (ev.ok === true && !!ev.json && ev.json.saved === true) }); // a refused second record can't unsay the first
   if (list.isSnapshot(ev.name)) return onSnapshot(v, ev);
   if (list.isCheck(ev.name)) return onCheck(v, ev);
   return v;

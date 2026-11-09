@@ -14,6 +14,7 @@
   const { createAdapter: createApiAdapter } = lib("adapter-api.js");
   const { readLearnerRecordAsync } = lib("memory.js");
   const { readPathData } = lib("home.js");
+  const { readSkillsBuilt } = lib("skills.js");
   const { readConnection, createPoller } = lib("connection.js");
   const { bridgeStarted } = lib("bridge-status.js");
   const { appendTurn } = lib("turns.js");
@@ -103,7 +104,7 @@
     const el = ev.target.closest("[data-action]");
     if (!el || el.disabled) return;
     const keepFocus = el.getAttribute("role") === "tab" || el.hasAttribute("data-keep-focus");
-    app.act(el.dataset.action, { tab: el.dataset.tab, short: SHORT.matches });
+    app.act(el.dataset.action, { tab: el.dataset.tab, skill: el.dataset.skill, short: SHORT.matches });
     if (!keepFocus) focusNewest();
   });
 
@@ -162,6 +163,7 @@
     createAdapter: (c) => (c.runtime === "a" ? createApiAdapter : createB1Adapter)(c),
     readRecord: () => readLearnerRecordAsync(),
     pathData: readPathData({ repoPath: cfg.repo_path }),
+    skillsBuilt: readSkillsBuilt({ repoPath: cfg.repo_path }),
     session: {
       read: () => ps.readPanelSession({}),
       write: (s) => ps.writePanelSession({}, s),

@@ -91,7 +91,6 @@ const MODELS = {
   "skill-null-move": lessonTab(checked({ skill: "parenting.null", null_stage: "move" })),
   "skill-easing-who": lessonTab(checked({ check_list: list(row("ask")) })),
   "skill-speedgraph-who": lessonTab(checked({ skill: "easing.speed_graph", check_list: list(row("ask")) })),
-  "home-return-interim": home({ step: 1 }),
 };
 
 test("every model drives its state id", () => {
@@ -124,7 +123,7 @@ test("the id list is the README's table, minus what's held, plus the one named a
   assert.ok(readme.includes("skill-detail-noreview") && readme.includes("lesson-pass-busy") && readme.includes("skill-null-move"), "the expansion works");
   const inScope = readme.filter((id) => !HELD.test(id) && !(id in ALIASES));
   assert.deepEqual([...STATE_IDS].filter((id) => !INTERIM_IDS.includes(id)).sort(), inScope.slice().sort());
-  assert.deepEqual([...INTERIM_IDS], ["home-return-interim"]);
+  assert.deepEqual([...INTERIM_IDS], []);
 });
 
 test("every id has a model here (SC-003's list), and no alias is its own state", () => {
@@ -136,9 +135,9 @@ test("home-first is never shown for an unreadable record (FR-011)", () => {
   assert.notEqual(stateOf(home({ has_history: false, record: { status: "unreadable" } })), "home-first");
 });
 
-test("a record at step 1 is the interim Home; with no record it's home-first", () => {
-  assert.equal(stateOf(home({ step: 1 })), "home-return-interim");
-  assert.equal(stateOf(home({ step: 1, has_history: false })), "home-first");
+test("a record is home-return; with no record it's home-first", () => {
+  assert.equal(stateOf(home({})), "home-return");
+  assert.equal(stateOf(home({ has_history: false })), "home-first");
 });
 
 test("blocking errors win Home; a passing error leaves Home alone", () => {

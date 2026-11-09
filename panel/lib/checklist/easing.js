@@ -4,9 +4,9 @@
 
 const { COPY } = require("../copy.js");
 
-const SEP = " › ";
+const { SEP, secs, has, splitLabel, nameOf, intoSections } = require("./shared.js");
+
 const W = COPY.check.easing;
-const secs = (t) => Number(Number(t).toFixed(2));
 
 const CODES = {
   eased_by_learner: ["done", W.eased_by_learner],
@@ -16,37 +16,6 @@ const CODES = {
   removed: ["cant", W.removed],
   unmatched: ["cant", W.unmatched],
 };
-
-const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
-
-// "Title › Position 0.5–1.5 s" → { section: "Title", subject: "Position 0.5–1.5 s" }.
-function splitLabel(label) {
-  const at = label.indexOf(SEP);
-  return at < 0 ? { section: "", subject: label } : { section: label.slice(0, at), subject: label.slice(at + SEP.length) };
-}
-
-// A label is a name only if it isn't the id itself (FR-100). `labels` are those kept from the lesson.
-function nameOf(id, label, labels) {
-  if (typeof label === "string" && label && label !== id) return label;
-  const kept = labels && labels[id];
-  return typeof kept === "string" && kept && kept !== id ? kept : null;
-}
-
-// Rows in the tool's order, grouped by layer where the layer appears first.
-function intoSections(entries) {
-  const sections = [];
-  const byTitle = new Map();
-  for (const { section, row } of entries) {
-    let s = byTitle.get(section);
-    if (!s) {
-      s = { title: section, rows: [] };
-      byTitle.set(section, s);
-      sections.push(s);
-    }
-    s.rows.push(row);
-  }
-  return sections;
-}
 
 function checkRows(result, opts, makeRow) {
   const labels = opts && opts.labels;

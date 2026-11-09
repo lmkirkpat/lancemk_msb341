@@ -4,12 +4,14 @@
 // keeps track of the screen, and never reads or changes the project.
 "use strict";
 
-const { homeView, startRequest } = require("./home.js");
+const { homeView } = require("./home.js");
 const { stateOf, listCollapsed } = require("./view-state.js");
 const { initialLesson, reduceLesson, showsResuming, DEMO_TOOLS } = require("./lesson.js");
 const list = require("./checklist/index.js");
 const { treatError, logEntry } = require("./errors.js");
-const { REQUESTS } = require("./requests.js");
+const { REQUESTS, showMeAgain, startRequest, newLessonRequest, followOnRequest } = require("./requests.js");
+const { skillById, skillOfCommand, builtSkills, EASING } = require("./skills.js");
+const { skillsView, skillDetail } = require("./skills-view.js");
 const { skillOf } = require("./skill-tools.js");
 const { statusFor } = require("./activity.js");
 const { connectionFromTool } = require("./connection.js");
@@ -17,13 +19,11 @@ const { shortDate } = require("./memory.js");
 const { COPY } = require("./copy.js");
 
 const LOADING_AFTER_MS = 300; // FR-008
-const SKILL = "easing.basic"; // step 1 teaches easing only (plan P9); T041 passes the request's skill
 const AE_LOST = /AE_UNREACHABLE|AE_BUSY/;
 
 const E = COPY.errors;
 const VERB = COPY.buttons.pressed;
 const PRESS = { check: VERB.check, check_again: VERB.check, hint: VERB.hint, show_me: VERB.show, show_me_again: VERB.show, try_again: VERB.try, continue: VERB.open };
-const PRESS_STATUS = { check: "diff_since_last", check_again: "diff_since_last", show_me: "set_ease" };
 const BUTTONS = { check: "check", check_again: "check", hint: "hint", show_me: "show_me", show_me_again: "show_me_again" };
 
 const lessonOver = (v) => !!v && (v.saved === true || (v.passed && v.saved === false));
@@ -58,6 +58,7 @@ function createApp(deps) {
     adapter: null,
     lesson_open: false,
     lesson_over: false,
+    resume_first: false,
     lesson: null,
     session: null,
     messages: [],
@@ -67,6 +68,12 @@ function createApp(deps) {
     busy: false,
     turn: null,
     last: null,
+    start: null,
+    picking: null, // "suggesting", then "starting" after Yes (FR-082)
+    from_picking: false,
+    pick_session: null,
+    recommend: null,
+    skill_detail: null,
     turnsDone: 0,
     error: null,
     turnError: null,
@@ -116,6 +123,7 @@ function createApp(deps) {
     }, LOADING_AFTER_MS);
     loadRecord();
     loadSaved();
+    if (deps.skillsBuilt === null && deps.log) deps.log({ kind: "skills_built_unreadable", length: 0 });
     changed();
   }
 
@@ -239,6 +247,8 @@ function createApp(deps) {
     reduce(Object.assign({}, e, { at: now().toISOString() }));
     if (showsResuming(state.lesson) && !state.messages.some((m) => m.role === "resuming")) pushBefore({ role: "resuming", text: COPY.lesson.picking_up });
     if (list.isCheck(e.name)) state.list_open = false;
+    if (e.name === "recommend_next" && e.ok && e.json) state.recommend = e.json;
+    if (state.picking === "starting" && list.isSnapshot(e.name)) state.picking = null;
     if (e.name === "record_lesson") {
       if (lessonOver(state.lesson)) {
         state.lesson_over = true;
@@ -256,6 +266,7 @@ function createApp(deps) {
     const t = treatError(e.kind, { runtime, firstTurn });
     if (t.treatment === "logged") { deps.log(logEntry(e)); return; }
     state.turnError = t;
+    if (state.lesson_over) return; // a question after the pass: onTurnEnd says so, and the pass stands
     if (t.treatment === "blocking") {
       state.error = t;
       if (firstTurn) closeUnstarted(); else changed();
@@ -291,6 +302,7 @@ function createApp(deps) {
 
   // process_exited, or the mentor's process going away (FR-056): the lesson is over and nothing saved.
   function endLesson(t) {
+    if (state.lesson_over) { afterPassFailure(t); state.busy = false; state.turn = Object.assign({}, state.turn, { busy: false }); return; }
     reduce({ type: "exited" });
     notice(t.title, t.body);
     state.error = t;
@@ -298,8 +310,19 @@ function createApp(deps) {
     state.lesson_over = false;
     state.busy = false;
     state.turn = Object.assign({}, state.turn, { busy: false });
-    state.adapter = null;
+    stopAdapter();
     if (state.session) { state.session.ended = true; persist(); }
+  }
+
+  // A question asked after the pass went wrong (FR-046). The lesson's result doesn't change, so this
+  // is a notice and never an error state. A stopped process means there's no session left to ask.
+  function afterPassFailure(t) {
+    if (state.mentorEntry) state.mentorEntry.cut_off = true;
+    const stopped = !!t && t.treatment === "ended"; // no error event at all: the turn failed, the process lives
+    const copy = stopped ? E.after_pass_stopped : E.after_pass_failed;
+    notice(copy.title, copy.body);
+    if (stopped) stopAdapter();
+    state.resume_first = !stopped && !!t && t.kind === "timeout";
   }
 
   function cutOffNotice(error) {
@@ -307,7 +330,7 @@ function createApp(deps) {
     const kind = state.turn && state.turn.kind;
     let copy = error.copy;
     if (kind === "show_me" && v && v.demo_unknown) copy = E.demo_unknown;
-    else if (kind === "show_me" && v && v.demo_made) copy = v.skill === SKILL ? E.demo_easing : E.demo_other;
+    else if (kind === "show_me" && v && v.demo_made) copy = v.skill === EASING.id ? E.demo_easing : E.demo_other;
     notice(copy.title, copy.body);
   }
 
@@ -315,8 +338,10 @@ function createApp(deps) {
     const ok = !!e.ok;
     if (ok) state.turnsDone++;
     reduce({ type: "turn_end" });
+    if (state.picking === "starting") state.picking = null;
     if (!ok && !state.busy && state.error) { changed(); return; } // already handled on the first turn
-    if (!ok) {
+    if (!ok && state.lesson_over) afterPassFailure(state.turnError);
+    else if (!ok) {
       reduce({ type: "cut_off", kind: state.turn && state.turn.kind, announcesCalls: !!(state.adapter && state.adapter.announcesCalls), demoCallSeen: state.demoCallSeen, demoResult: state.demoResult });
       if (state.turnError && state.turnError.treatment !== "cut_off") { /* already shown at the error */ }
       else {
@@ -347,14 +372,16 @@ function createApp(deps) {
   function resumeAfterTimeout() {
     stopAdapter();
     const a = newAdapter();
-    a.start({ resumeSessionId: state.session.claude_session_id, skill: state.session.skill });
+    const saved = state.session || state.pick_session;
+    a.start({ resumeSessionId: saved.claude_session_id, skill: saved.skill });
     return !!state.adapter;
   }
 
   function send(kind, text, label, o) {
     const opts = o || {};
     if (state.busy || !state.adapter) return false;
-    if (state.error && state.error.kind === "timeout" && runtime !== "a" && !resumeAfterTimeout()) return false;
+    if (((state.error && state.error.kind === "timeout") || state.resume_first) && runtime !== "a" && !resumeAfterTimeout()) return false;
+    state.resume_first = false;
     if (!opts.silent) push({ role: "learner", text: label });
     state.busy = true;
     state.turn = { busy: true, kind, pressed: opts.pressed || null, status: opts.status || statusFor("") };
@@ -392,24 +419,47 @@ function createApp(deps) {
     state.list_collapsed = null;
     state.done_unfolded = false;
     state.lesson_over = false;
+    state.resume_first = false;
+    state.picking = null;
+    state.from_picking = false;
+    state.pick_session = null;
+    state.recommend = null;
   }
 
-  function startLesson() {
+  // The path's first skill: what Start lesson means with no skill named (FR-010).
+  function firstSkill() {
+    const first = deps.pathData && Array.isArray(deps.pathData.skills) && deps.pathData.skills[0];
+    return (first && skillById(first.id)) || EASING;
+  }
+
+  function startLesson(args) {
+    if (!(args && args.skill) && state.start && state.start.picking) { findNext(); return; }
+    const row = (args && args.skill && skillById(args.skill)) || (state.start && skillById(state.start.skill)) || firstSkill();
+    beginLesson(row.id, startRequest(row.command), COPY.status.lesson_ready);
+  }
+
+  // Every lesson start: which request, whose lesson, and the status line (T041, FR-087).
+  function beginLesson(skillId, req, status) {
     if (state.busy || state.lesson_open) return;
     stopAdapter();
-    const req = startRequest(SKILL) || REQUESTS.start;
     resetLessonFields();
+    state.start = { skill: skillId, req };
     state.pending = null;
     state.saved = null;
     state.aeclosed = false;
     state.messages = [];
-    state.lesson = initialLesson({ skill: SKILL });
+    state.lesson = initialLesson({ skill: skillId });
     state.lesson_open = true;
     state.tab = "lesson";
     const skill = skillOf(req.request);
     const a = newAdapter();
     const id = a.start({ skill });
     if (!state.adapter) return; // the start failed and onError already closed the lesson
+    startSession(id, skill);
+    send(req.kind, req.request, req.label, { silent: true, status });
+  }
+
+  function startSession(id, skill) {
     state.session = session.newSession({ claude_session_id: id, lesson: state.lesson, skill, bridge_started: state.connection ? state.connection.started : null });
     const sess = state.session;
     deps.bridgeStarted().then((started) => {
@@ -417,7 +467,73 @@ function createApp(deps) {
       sess.bridge_started = started;
       if (state.session === sess) persist();
     });
-    send("start", req.request, req.label, { silent: true, status: COPY.status.lesson_ready });
+  }
+
+  function newLesson({ skill }) {
+    const row = skillById(skill);
+    if (row) beginLesson(row.id, newLessonRequest(row.command), COPY.status.lesson_ready);
+  }
+
+  // Find my next lesson (FR-013, FR-082): one next-mentor turn. It isn't a lesson, so it writes no
+  // display log and can't come back as home-cutoff.
+  function findNext() {
+    if (state.busy || state.lesson_open) return;
+    stopAdapter();
+    resetLessonFields();
+    state.start = { picking: true };
+    state.pending = null;
+    state.saved = null;
+    state.aeclosed = false;
+    state.messages = [];
+    state.session = null;
+    state.lesson = initialLesson({});
+    state.lesson_open = true;
+    state.tab = "lesson";
+    state.picking = "suggesting";
+    const a = newAdapter();
+    const id = a.start({ skill: "next-mentor" });
+    if (!state.adapter) return;
+    state.pick_session = { claude_session_id: id, skill: "next-mentor" };
+    send("find_next", REQUESTS.find_next.request, REQUESTS.find_next.label, { silent: true, status: COPY.status.looking_comp });
+  }
+
+  // Yes's recommended skill: only with a recommendation, no `requested`, and a skill in the table (FR-082).
+  function yesRow() {
+    const r = state.recommend;
+    if (state.picking !== "suggesting" || !r || r.requested || !r.recommendation) return null;
+    return skillById(r.recommendation.skill);
+  }
+
+  function yes() {
+    const row = yesRow();
+    if (state.busy || !row) return;
+    const follow = followOnRequest(state.recommend.recommendation, row.command);
+    const pick = state.pick_session;
+    if (state.adapter && state.adapter.handsOver) {
+      // A: the mentor hands over in the same conversation; the lesson's skill comes from the next tool.
+      state.picking = "starting";
+      state.from_picking = true;
+      state.start = { skill: row.id, req: follow };
+      state.lesson = initialLesson({});
+      state.turnsDone = 0;
+      if (pick) startSession(pick.claude_session_id, row.skill);
+      send("yes", REQUESTS.yes.request, REQUESTS.yes.label, { pressed: "yes", status: COPY.status.lesson_ready });
+      return;
+    }
+    // B1 can't hand over: end next-mentor and start the recommended lesson as Start lesson would. A
+    // new adapter replaces the old one, so its late exit can't touch this lesson (plan P3).
+    stopAdapter();
+    resetLessonFields();
+    state.picking = "starting";
+    state.from_picking = true;
+    state.start = { skill: row.id, req: follow };
+    state.lesson = initialLesson({ skill: row.id });
+    state.lesson_open = true;
+    const a = newAdapter();
+    const id = a.start({ skill: row.skill });
+    if (!state.adapter) return;
+    startSession(id, row.skill);
+    send("yes", follow.request, REQUESTS.yes.label, { pressed: "yes", status: COPY.status.lesson_ready });
   }
 
   function continueLesson() {
@@ -430,6 +546,9 @@ function createApp(deps) {
     state.pending = null;
     state.session = saved;
     state.lesson = Object.assign(initialLesson(), saved.lesson || {});
+    // So Start lesson, once this one has ended, starts the skill the header names.
+    const row = skillById(state.lesson.skill) || skillOfCommand(`/${saved.skill}`);
+    state.start = row ? { skill: row.id, req: startRequest(row.command) } : null;
     reduce({ type: "continued" });
     state.messages = saved.messages.map((m) => Object.assign({}, m, { srcs: (m.frames || []).map((f) => { const d = session.readFrame(f); return d ? `data:image/png;base64,${d}` : null; }) }));
     state.lesson_open = true;
@@ -454,7 +573,9 @@ function createApp(deps) {
     const e = state.error;
     if (e.state === "lesson-start-failed" || (!state.lesson_open && !state.lesson_over)) {
       state.error = null;
-      startLesson();
+      if (state.start && state.start.picking) findNext();
+      else if (state.start) beginLesson(state.start.skill, state.start.req, COPY.status.lesson_ready);
+      else startLesson();
       return;
     }
     if (!state.lesson_open) { state.error = null; return; } // the lesson is saved: nothing to retry into
@@ -463,14 +584,19 @@ function createApp(deps) {
 
   function sendButton(name) {
     const kind = BUTTONS[name] || name;
-    const req = REQUESTS[kind];
+    const v = state.lesson;
+    const req = kind === "show_me_again" ? showMeAgain(v && v.skill) : REQUESTS[kind];
     if (!req || !state.lesson_open) return;
-    const toolStatus = PRESS_STATUS[name];
+    const row = (v && skillById(v.skill)) || EASING;
+    const toolStatus = name === "check" || name === "check_again" ? row.check : name === "show_me" ? row.demo : null;
     send(kind, req.request, name === "check_again" ? COPY.buttons.check_again : req.label, { pressed: name, status: toolStatus ? statusFor(toolStatus) : statusFor("") });
   }
 
+  // FR-046: Ask stays after a pass, in the same mentor session, for as long as that session lives.
+  const canAsk = () => state.lesson_open || (state.lesson_over && !!state.adapter && !!state.lesson && state.lesson.passed);
+
   function ask(text) {
-    if (!state.lesson_open || state.busy) return false;
+    if (!canAsk() || state.busy) return false;
     return send("ask", text, text);
   }
 
@@ -485,6 +611,14 @@ function createApp(deps) {
     state.error = null;
     state.messages = [];
     state.tab = "home";
+    resetPicking();
+  }
+
+  function resetPicking() {
+    state.picking = null;
+    state.from_picking = false;
+    state.pick_session = null;
+    state.recommend = null;
   }
 
   function setAside() {
@@ -504,6 +638,7 @@ function createApp(deps) {
     state.session = null;
     state.messages = [];
     state.tab = tab;
+    resetPicking();
   }
 
   function toggleList(short) {
@@ -513,15 +648,21 @@ function createApp(deps) {
   }
 
   const ACTIONS = {
-    tab: ({ tab }) => { if (tab) state.tab = tab; },
+    tab: ({ tab }) => { if (tab) { state.tab = tab; if (tab === "skills") state.skill_detail = null; } },
     go_home: () => { state.tab = "home"; },
-    pick_skill: () => { state.tab = "skills"; },
+    pick_skill: () => { state.tab = "skills"; state.skill_detail = null; },
     back_lesson: () => { state.tab = "lesson"; },
     what_happened: () => { state.unreadable_why = true; },
     got_it_unreadable: () => { state.unreadable_why = false; state.unreadable_dismissed = true; },
     got_it_aeclosed: () => { state.aeclosed = false; },
     reconnect,
-    start: startLesson,
+    start: ({ skill }) => startLesson({ skill }),
+    new_lesson: newLesson,
+    find_next: findNext,
+    yes,
+    leave_picking: () => leaveLesson("skills"),
+    open_skill: ({ skill }) => { if (skill) state.skill_detail = skill; },
+    back_skills: () => { state.skill_detail = null; },
     continue: continueLesson,
     set_aside: setAside,
     end_lesson: endLessonNow,
@@ -556,7 +697,9 @@ function createApp(deps) {
     const m = {
       config_ok: true,
       tab: state.tab,
-      step: 1,
+      step: 2,
+      picking: state.picking,
+      from_picking: state.from_picking,
       record: { status: recordStatus },
       has_history: home.has_history,
       connection: state.connection,
@@ -564,15 +707,27 @@ function createApp(deps) {
       unreadable_dismissed: state.unreadable_dismissed,
       lesson_open: state.lesson_open,
       lesson_over: state.lesson_over,
+      can_ask: canAsk(),
+      answering_after_pass: state.lesson_over && state.busy,
       lesson: state.lesson,
       turn: state.turn,
       error: state.error,
       saved,
       reconnecting: state.reconnecting,
     };
+    const built = builtSkills(deps.pathData, deps.skillsBuilt);
+    const viewArgs = { memory, pathData: deps.pathData, built, now: now() };
+    const skills_view = skillsView(viewArgs);
+    const detail = state.skill_detail ? skillDetail(state.skill_detail, viewArgs) : null;
+    m.skills_state = skills_view.state;
+    m.skill_detail = detail ? detail.state : null;
     return Object.assign(m, {
       state: stateOf(m),
       home,
+      skills_view,
+      detail,
+      skill_detail: state.skill_detail,
+      yes_ready: !!yesRow(),
       names: Object.fromEntries(((deps.pathData && deps.pathData.skills) || []).map((s) => [s.id, s.name])),
       saved_lesson: state.pending,
       messages: state.messages,
