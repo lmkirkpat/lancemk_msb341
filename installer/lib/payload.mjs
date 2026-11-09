@@ -1,0 +1,150 @@
+// Puts the payload in place (contracts/install-layout.md steps 5 to 7; FR-009, FR-012, FR-013).
+// Each step leaves either the previous state or one a re-run completes: everything is copied into
+// Knack/tmp first and verified, then moved in by rename. The learner home is only created when
+// missing; nothing in it is touched except panel.json.
+
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { EXTENSIONS, tilde } from "./layout.mjs";
+import { writePanelConfig } from "./panel-config.mjs";
+import { readJson } from "./preflight.mjs";
+
+export const STEPS = Object.freeze(["clean", "stage", "place_version", "extensions", "current", "learner_home", "panel_config", "state"]);
+
+function listFiles(dir) {
+  const out = [];
+  const walk = (d, rel) => {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      if (e.name === ".DS_Store") continue;
+      const r = rel ? `${rel}/${e.name}` : e.name;
+      if (e.isDirectory()) walk(path.join(d, e.name), r);
+      else out.push(r);
+    }
+  };
+  walk(dir, "");
+  return out.sort();
+}
+
+const hash = (f) => crypto.createHash("sha256").update(fs.readFileSync(f)).digest("hex");
+
+// Every file in src is in dest with the same bytes.
+export function sameTree(src, dest) {
+  const a = listFiles(src);
+  let b;
+  try {
+    b = new Set(listFiles(dest));
+  } catch {
+    return false;
+  }
+  return a.every((r) => b.has(r) && hash(path.join(src, r)) === hash(path.join(dest, r)));
+}
+
+export class InstallError extends Error {}
+
+// opts: { L, g (fsx guard), payloadDir, nodeDir, release, afterStep(name) }
+// → { learnerCreated, files }
+export function installPayload({ L, g, payloadDir, nodeDir, release, afterStep = () => {} }) {
+  const v = release.version;
+  const staged = path.join(L.tmp, `version-${v}`);
+  const target = path.join(L.versions, v);
+  let learnerCreated = false;
+  const step = (name, fn) => {
+    fn();
+    afterStep(name);
+  };
+
+  step("clean", () => {
+    g.rm(L.tmp);
+    g.mkdir(L.tmp);
+    g.mkdir(L.versions);
+  });
+
+  step("stage", () => {
+    g.copyTree(path.join(payloadDir, "version"), staged);
+    const nodeTo = path.join(staged, "runtime", "node");
+    g.mkdir(path.join(nodeTo, "bin"));
+    g.copyFile(path.join(nodeDir, "bin", "node"), path.join(nodeTo, "bin", "node"));
+    g.chmod(path.join(nodeTo, "bin", "node"), 0o755);
+    if (fs.existsSync(path.join(nodeDir, "LICENSE"))) g.copyFile(path.join(nodeDir, "LICENSE"), path.join(nodeTo, "LICENSE"));
+    if (!sameTree(path.join(payloadDir, "version"), staged) || !sameTree(nodeDir, nodeTo)) {
+      throw new InstallError("The copied files don't match the installer's.");
+    }
+  });
+
+  step("place_version", () => {
+    if (fs.existsSync(target)) {
+      const old = path.join(L.tmp, `old-version-${v}`);
+      g.rename(target, old);
+    }
+    g.rename(staged, target);
+  });
+
+  step("extensions", () => {
+    g.mkdir(L.cep);
+    for (const name of EXTENSIONS) {
+      const src = path.join(payloadDir, "cep", name);
+      const fresh = path.join(L.tmp, `ext-${name}`);
+      g.copyTree(src, fresh);
+      if (!sameTree(src, fresh) || !fs.existsSync(path.join(fresh, "META-INF", "signatures.xml"))) {
+        throw new InstallError("The copied extension doesn't match the installer's.");
+      }
+      const dest = path.join(L.cep, name);
+      let st = null;
+      try {
+        st = fs.lstatSync(dest);
+      } catch {}
+      if (st && st.isSymbolicLink()) throw new InstallError("A development copy is in the way.");
+      if (st) g.rename(dest, path.join(L.tmp, `old-ext-${name}`));
+      g.rename(fresh, dest);
+    }
+  });
+
+  step("current", () => {
+    const link = path.join(L.tmp, "current-new");
+    g.rm(link);
+    g.symlink(path.join("versions", v), link);
+    let st = null;
+    try {
+      st = fs.lstatSync(L.current);
+    } catch {}
+    if (st && !st.isSymbolicLink()) throw new InstallError("Something unexpected is where Knack's current version goes.");
+    g.rename(link, L.current);
+  });
+
+  step("learner_home", () => {
+    if (!fs.existsSync(L.learner)) {
+      g.mkdir(L.learner);
+      learnerCreated = true;
+    }
+  });
+
+  step("panel_config", () => writePanelConfig(L, g));
+
+  const files = [];
+  step("state", () => {
+    const prev = readJson(L.state) || {};
+    const prevFiles = Array.isArray(prev.files) ? prev.files : [];
+    const add = [L.knack, ...EXTENSIONS.map((n) => path.join(L.cep, n)), L.panelJson];
+    if (learnerCreated) add.push(L.learner);
+    for (const f of [...prevFiles, ...add.map((p) => tilde(L, p))]) if (f && !files.includes(f)) files.push(f);
+    const state = {
+      version: v,
+      files,
+      keychain: prev.keychain && typeof prev.keychain === "object" ? prev.keychain : null,
+      settings_changed: [],
+    };
+    g.writeAtomic(L.state, JSON.stringify(state, null, 2) + "\n");
+  });
+
+  g.rm(L.tmp);
+  return { learnerCreated, files };
+}
+
+// Records that the Keychain item is Knack's, for uninstall.
+export function recordKeychain(L, g, item) {
+  const state = readJson(L.state);
+  if (!state) return;
+  state.keychain = { service: item.service, account: item.account };
+  g.writeAtomic(L.state, JSON.stringify(state, null, 2) + "\n");
+}

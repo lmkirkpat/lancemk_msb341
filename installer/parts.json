@@ -1,0 +1,62 @@
+{
+  "_about": "What ships (specs/006-installer research R4, data-model › Parts list). Copied from the commit's tracked files only. leave_out: a pattern without a slash matches a file or folder name at any depth (* is a wildcard); one with a slash matches a path from the part's root. only: the top-level names to take, all others left out. to: cep/<name> is a signed extension in the CEP extensions folder; version/<path> goes into Knack/versions/<v>/.",
+  "version": "0.1.0",
+  "parts": [
+    {
+      "id": "ae-pipe",
+      "side": "ae",
+      "from": "bridge/cep",
+      "to": "cep/AEMentorBridge",
+      "manifest": "CSXS/manifest.xml",
+      "leave_out": ["test", "dev", ".DS_Store", "node_modules"]
+    },
+    {
+      "id": "panel",
+      "side": "ae",
+      "from": "panel",
+      "to": "cep/AEMentorPanel",
+      "manifest": "CSXS/manifest.xml",
+      "leave_out": ["helper", "dev", "test", "*.sh", "package.json", ".DS_Store", "node_modules"]
+    },
+    {
+      "id": "mentor",
+      "side": "outside",
+      "from": "mentor",
+      "to": "version/mentor",
+      "leave_out": ["test", "dev", "fixture", "package.json", ".DS_Store", "node_modules"],
+      "also": [
+        { "from": "bridge/paths.mjs", "to": "version/bridge/paths.mjs" },
+        { "from": ".mcp.json", "to": "version/.mcp.json" }
+      ]
+    },
+    {
+      "id": "helper",
+      "side": "outside",
+      "from": "panel/helper",
+      "to": "version/panel/helper",
+      "leave_out": ["dev", "test", ".DS_Store", "node_modules"],
+      "npm_ci": true
+    },
+    {
+      "id": "skills",
+      "side": "outside",
+      "from": ".claude/skills",
+      "to": "version/.claude/skills",
+      "only": ["*-mentor"],
+      "leave_out": ["test", "dev", ".DS_Store"]
+    },
+    {
+      "id": "node",
+      "side": "outside",
+      "from": null,
+      "to": "version/runtime/node",
+      "source": "node.json"
+    }
+  ],
+  "installer": {
+    "from": "installer",
+    "to": "version/setup",
+    "only": ["install.mjs", "setup-check.mjs", "lib"],
+    "leave_out": ["test", "dev", ".DS_Store"]
+  }
+}

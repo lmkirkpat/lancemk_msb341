@@ -1,0 +1,11 @@
+{
+  "name": "knack-installer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Knack's Mac installer, build and setup check (specs/006-installer). Node built-ins only.",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test test/"
+  }
+}
