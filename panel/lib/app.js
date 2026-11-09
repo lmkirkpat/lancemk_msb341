@@ -9,8 +9,9 @@ const { stateOf, listCollapsed } = require("./view-state.js");
 const { initialLesson, reduceLesson, showsResuming, DEMO_TOOLS } = require("./lesson.js");
 const list = require("./checklist/index.js");
 const { treatError, logEntry } = require("./errors.js");
-const { REQUESTS, showMeAgain, startRequest } = require("./requests.js");
-const { skillById, EASING } = require("./skills.js");
+const { REQUESTS, showMeAgain, startRequest, newLessonRequest, followOnRequest } = require("./requests.js");
+const { skillById, builtSkills, EASING } = require("./skills.js");
+const { skillsView, skillDetail } = require("./skills-view.js");
 const { skillOf } = require("./skill-tools.js");
 const { statusFor } = require("./activity.js");
 const { connectionFromTool } = require("./connection.js");
@@ -68,6 +69,11 @@ function createApp(deps) {
     turn: null,
     last: null,
     start: null,
+    picking: null, // "suggesting", then "starting" after Yes (FR-082)
+    from_picking: false,
+    pick_session: null,
+    recommend: null,
+    skill_detail: null,
     turnsDone: 0,
     error: null,
     turnError: null,
@@ -117,6 +123,7 @@ function createApp(deps) {
     }, LOADING_AFTER_MS);
     loadRecord();
     loadSaved();
+    if (deps.skillsBuilt === null && deps.log) deps.log({ kind: "skills_built_unreadable", length: 0 });
     changed();
   }
 
@@ -240,6 +247,8 @@ function createApp(deps) {
     reduce(Object.assign({}, e, { at: now().toISOString() }));
     if (showsResuming(state.lesson) && !state.messages.some((m) => m.role === "resuming")) pushBefore({ role: "resuming", text: COPY.lesson.picking_up });
     if (list.isCheck(e.name)) state.list_open = false;
+    if (e.name === "recommend_next" && e.ok && e.json) state.recommend = e.json;
+    if (state.picking === "starting" && list.isSnapshot(e.name)) state.picking = null;
     if (e.name === "record_lesson") {
       if (lessonOver(state.lesson)) {
         state.lesson_over = true;
@@ -329,6 +338,7 @@ function createApp(deps) {
     const ok = !!e.ok;
     if (ok) state.turnsDone++;
     reduce({ type: "turn_end" });
+    if (state.picking === "starting") state.picking = null;
     if (!ok && !state.busy && state.error) { changed(); return; } // already handled on the first turn
     if (!ok && state.lesson_over) afterPassFailure(state.turnError);
     else if (!ok) {
@@ -362,7 +372,8 @@ function createApp(deps) {
   function resumeAfterTimeout() {
     stopAdapter();
     const a = newAdapter();
-    a.start({ resumeSessionId: state.session.claude_session_id, skill: state.session.skill });
+    const saved = state.session || state.pick_session;
+    a.start({ resumeSessionId: saved.claude_session_id, skill: saved.skill });
     return !!state.adapter;
   }
 
@@ -409,6 +420,10 @@ function createApp(deps) {
     state.done_unfolded = false;
     state.lesson_over = false;
     state.resume_first = false;
+    state.picking = null;
+    state.from_picking = false;
+    state.pick_session = null;
+    state.recommend = null;
   }
 
   // The path's first skill: what Start lesson means with no skill named (FR-010).
@@ -418,6 +433,7 @@ function createApp(deps) {
   }
 
   function startLesson(args) {
+    if (!(args && args.skill) && state.start && state.start.picking) { findNext(); return; }
     const row = (args && args.skill && skillById(args.skill)) || (state.start && skillById(state.start.skill)) || firstSkill();
     beginLesson(row.id, startRequest(row.command), COPY.status.lesson_ready);
   }
@@ -439,6 +455,11 @@ function createApp(deps) {
     const a = newAdapter();
     const id = a.start({ skill });
     if (!state.adapter) return; // the start failed and onError already closed the lesson
+    startSession(id, skill);
+    send(req.kind, req.request, req.label, { silent: true, status });
+  }
+
+  function startSession(id, skill) {
     state.session = session.newSession({ claude_session_id: id, lesson: state.lesson, skill, bridge_started: state.connection ? state.connection.started : null });
     const sess = state.session;
     deps.bridgeStarted().then((started) => {
@@ -446,7 +467,73 @@ function createApp(deps) {
       sess.bridge_started = started;
       if (state.session === sess) persist();
     });
-    send(req.kind, req.request, req.label, { silent: true, status });
+  }
+
+  function newLesson({ skill }) {
+    const row = skillById(skill);
+    if (row) beginLesson(row.id, newLessonRequest(row.command), COPY.status.lesson_ready);
+  }
+
+  // Find my next lesson (FR-013, FR-082): one next-mentor turn. It isn't a lesson, so it writes no
+  // display log and can't come back as home-cutoff.
+  function findNext() {
+    if (state.busy || state.lesson_open) return;
+    stopAdapter();
+    resetLessonFields();
+    state.start = { picking: true };
+    state.pending = null;
+    state.saved = null;
+    state.aeclosed = false;
+    state.messages = [];
+    state.session = null;
+    state.lesson = initialLesson({});
+    state.lesson_open = true;
+    state.tab = "lesson";
+    state.picking = "suggesting";
+    const a = newAdapter();
+    const id = a.start({ skill: "next-mentor" });
+    if (!state.adapter) return;
+    state.pick_session = { claude_session_id: id, skill: "next-mentor" };
+    send("find_next", REQUESTS.find_next.request, REQUESTS.find_next.label, { silent: true, status: COPY.status.looking_comp });
+  }
+
+  // Yes's recommended skill: only with a recommendation, no `requested`, and a skill in the table (FR-082).
+  function yesRow() {
+    const r = state.recommend;
+    if (state.picking !== "suggesting" || !r || r.requested || !r.recommendation) return null;
+    return skillById(r.recommendation.skill);
+  }
+
+  function yes() {
+    const row = yesRow();
+    if (state.busy || !row) return;
+    const follow = followOnRequest(state.recommend.recommendation, row.command);
+    const pick = state.pick_session;
+    if (state.adapter && state.adapter.handsOver) {
+      // A: the mentor hands over in the same conversation; the lesson's skill comes from the next tool.
+      state.picking = "starting";
+      state.from_picking = true;
+      state.start = { skill: row.id, req: follow };
+      state.lesson = initialLesson({});
+      state.turnsDone = 0;
+      if (pick) startSession(pick.claude_session_id, row.skill);
+      send("yes", REQUESTS.yes.request, REQUESTS.yes.label, { pressed: "yes", status: COPY.status.lesson_ready });
+      return;
+    }
+    // B1 can't hand over: end next-mentor and start the recommended lesson as Start lesson would. A
+    // new adapter replaces the old one, so its late exit can't touch this lesson (plan P3).
+    stopAdapter();
+    resetLessonFields();
+    state.picking = "starting";
+    state.from_picking = true;
+    state.start = { skill: row.id, req: follow };
+    state.lesson = initialLesson({ skill: row.id });
+    state.lesson_open = true;
+    const a = newAdapter();
+    const id = a.start({ skill: row.skill });
+    if (!state.adapter) return;
+    startSession(id, row.skill);
+    send("yes", follow.request, REQUESTS.yes.label, { pressed: "yes", status: COPY.status.lesson_ready });
   }
 
   function continueLesson() {
@@ -483,7 +570,9 @@ function createApp(deps) {
     const e = state.error;
     if (e.state === "lesson-start-failed" || (!state.lesson_open && !state.lesson_over)) {
       state.error = null;
-      if (state.start) beginLesson(state.start.skill, state.start.req, COPY.status.lesson_ready); else startLesson();
+      if (state.start && state.start.picking) findNext();
+      else if (state.start) beginLesson(state.start.skill, state.start.req, COPY.status.lesson_ready);
+      else startLesson();
       return;
     }
     if (!state.lesson_open) { state.error = null; return; } // the lesson is saved: nothing to retry into
@@ -519,6 +608,14 @@ function createApp(deps) {
     state.error = null;
     state.messages = [];
     state.tab = "home";
+    resetPicking();
+  }
+
+  function resetPicking() {
+    state.picking = null;
+    state.from_picking = false;
+    state.pick_session = null;
+    state.recommend = null;
   }
 
   function setAside() {
@@ -538,6 +635,7 @@ function createApp(deps) {
     state.session = null;
     state.messages = [];
     state.tab = tab;
+    resetPicking();
   }
 
   function toggleList(short) {
@@ -547,15 +645,21 @@ function createApp(deps) {
   }
 
   const ACTIONS = {
-    tab: ({ tab }) => { if (tab) state.tab = tab; },
+    tab: ({ tab }) => { if (tab) { state.tab = tab; if (tab === "skills") state.skill_detail = null; } },
     go_home: () => { state.tab = "home"; },
-    pick_skill: () => { state.tab = "skills"; },
+    pick_skill: () => { state.tab = "skills"; state.skill_detail = null; },
     back_lesson: () => { state.tab = "lesson"; },
     what_happened: () => { state.unreadable_why = true; },
     got_it_unreadable: () => { state.unreadable_why = false; state.unreadable_dismissed = true; },
     got_it_aeclosed: () => { state.aeclosed = false; },
     reconnect,
     start: ({ skill }) => startLesson({ skill }),
+    new_lesson: newLesson,
+    find_next: findNext,
+    yes,
+    leave_picking: () => leaveLesson("skills"),
+    open_skill: ({ skill }) => { if (skill) state.skill_detail = skill; },
+    back_skills: () => { state.skill_detail = null; },
     continue: continueLesson,
     set_aside: setAside,
     end_lesson: endLessonNow,
@@ -590,7 +694,9 @@ function createApp(deps) {
     const m = {
       config_ok: true,
       tab: state.tab,
-      step: 1,
+      step: 2,
+      picking: state.picking,
+      from_picking: state.from_picking,
       record: { status: recordStatus },
       has_history: home.has_history,
       connection: state.connection,
@@ -606,9 +712,19 @@ function createApp(deps) {
       saved,
       reconnecting: state.reconnecting,
     };
+    const built = builtSkills(deps.pathData, deps.skillsBuilt);
+    const viewArgs = { memory, pathData: deps.pathData, built, now: now() };
+    const skills_view = skillsView(viewArgs);
+    const detail = state.skill_detail ? skillDetail(state.skill_detail, viewArgs) : null;
+    m.skills_state = skills_view.state;
+    m.skill_detail = detail ? detail.state : null;
     return Object.assign(m, {
       state: stateOf(m),
       home,
+      skills_view,
+      detail,
+      skill_detail: state.skill_detail,
+      yes_ready: !!yesRow(),
       names: Object.fromEntries(((deps.pathData && deps.pathData.skills) || []).map((s) => [s.id, s.name])),
       saved_lesson: state.pending,
       messages: state.messages,

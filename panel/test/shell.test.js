@@ -69,13 +69,13 @@ test("home-first: the path's first skill, Start lesson, Pick a skill, No lessons
   assert.ok(v.includes(COPY.home.first_why));
 });
 
-test("home-return-interim: the first-run card plus the memory card, with the record's line", async () => {
+test("home-return: Find my next lesson plus the memory card, with the record's line", async () => {
   const h = await ready({ memory: { status: "ok", record: LESSON } });
-  assert.equal(h.app.model().state, "home-return-interim");
+  assert.equal(h.app.model().state, "home-return");
   const v = home(h);
   assert.ok(v.includes(COPY.home.welcome_back));
   assert.ok(v.includes("Oct 26"));
-  assert.ok(v.includes(COPY.buttons.start));
+  assert.ok(v.includes(COPY.buttons.find_next));
   assert.ok(v.includes(COPY.home.next_time));
 });
 

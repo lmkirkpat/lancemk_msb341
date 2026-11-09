@@ -14,6 +14,7 @@
   const { createAdapter: createApiAdapter } = lib("adapter-api.js");
   const { readLearnerRecordAsync } = lib("memory.js");
   const { readPathData } = lib("home.js");
+  const { readSkillsBuilt } = lib("skills.js");
   const { readConnection, createPoller } = lib("connection.js");
   const { bridgeStarted } = lib("bridge-status.js");
   const { appendTurn } = lib("turns.js");
@@ -162,6 +163,7 @@
     createAdapter: (c) => (c.runtime === "a" ? createApiAdapter : createB1Adapter)(c),
     readRecord: () => readLearnerRecordAsync(),
     pathData: readPathData({ repoPath: cfg.repo_path }),
+    skillsBuilt: readSkillsBuilt({ repoPath: cfg.repo_path }),
     session: {
       read: () => ps.readPanelSession({}),
       write: (s) => ps.writePanelSession({}, s),

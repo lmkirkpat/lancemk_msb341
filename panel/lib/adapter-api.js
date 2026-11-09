@@ -245,6 +245,7 @@ function createAdapter(config, deps) {
 
   return {
     announcesCalls: true, // FR-030: whether a tool_call seen proves the call will run (plan P7)
+    handsOver: true, // the mentor's own Skill call hands over (plan P3)
     start,
     send,
     stop,

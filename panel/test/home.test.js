@@ -38,11 +38,12 @@ test("FR-010: Up next is position 0 in the path data, not a skill the panel pick
   assert.equal(v.up_next.start, null, "step 1 can only start easing, so nothing else offers Start lesson");
 });
 
-test("home-return-interim (plan P9): a record keeps step 1's Up next and adds the memory card", () => {
+test("home-return (T052): a record leads with Find my next lesson, naming no skill, and adds the memory card", () => {
   const v = homeView({ memory: read("one-lesson"), pathData });
   assert.equal(v.has_history, true);
-  assert.equal(v.up_next.name, "Easing");
-  assert.deepEqual(v.up_next.start.request, "/ease-mentor");
+  assert.equal(v.up_next.name, COPY.home.your_next);
+  assert.equal(v.up_next.start, null);
+  assert.equal(v.up_next.find.label, COPY.buttons.find_next);
   assert.equal(v.memory.empty, false);
   assert.equal(v.memory.skill, "Easing");
   assert.equal(v.memory.result, "passed");

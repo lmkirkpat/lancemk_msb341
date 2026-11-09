@@ -152,6 +152,7 @@ function createAdapter(config, deps) {
 
   return {
     announcesCalls: false, // FR-030: whether a tool_call seen proves the call will run (plan P7)
+    handsOver: false, // B1 can't hand over (013 research R6): Yes starts the recommended lesson itself (plan P3)
     start,
     send,
     stop,

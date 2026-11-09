@@ -1,6 +1,6 @@
-// Home at step 1 (plan P9, FR-007, FR-008, FR-010): from the learner record and the path data alone,
-// with no mentor turn. Up next is always the path's first skill; step 2 (T052) replaces this with
-// Find my next lesson once a skill can start from anywhere but easing.
+// Home (FR-007, FR-008, FR-010): from the learner record and the path data alone, with no mentor
+// turn. First run: the path's first skill. With a record: Find my next lesson, naming no skill,
+// because nothing stores a recommendation (FR-009, FR-013).
 "use strict";
 
 const nodeFs = require("fs");
@@ -9,7 +9,7 @@ const { memoryView } = require("./memory.js");
 const { REQUESTS } = require("./requests.js");
 const { COPY } = require("./copy.js");
 
-// Which skill Up next can start at step 1: T052 replaces this.
+// Which skill Up next starts on a first run.
 const START_REQUESTS = { "easing.basic": REQUESTS.start };
 
 function startRequest(skillId) {
@@ -46,7 +46,9 @@ function homeView({ memory, pathData }) {
   if (!unreadable) hello = has_history ? { text: COPY.home.welcome_back, sub: helloLine(view) } : { text: COPY.home.welcome_first, sub: null };
 
   let up_next = null;
-  if (first) {
+  if (has_history) {
+    up_next = { kicker: COPY.home.up_next, name: COPY.home.your_next, why: COPY.home.your_next_why, start: null, find: { label: COPY.buttons.find_next }, pick_skill: COPY.buttons.pick_skill };
+  } else if (first) {
     const req = startRequest(first.id);
     up_next = {
       kicker: COPY.home.up_next,

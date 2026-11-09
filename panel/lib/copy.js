@@ -79,7 +79,12 @@ const COPY = {
     words: { learned: "Learned", due: "Practice due", progress: "In progress", none: "Not started", later: "Coming later" },
     history_note: "The mentor uses this history in your lessons. Only the mentor can change it.",
     no_lessons: "No lessons yet.",
-    interim_line: "Easing is the one skill you can start here for now.",
+    summary: (learned, total) => `${learned} of ${total} learned`,
+    due_count: (n) => `${n} due for practice`,
+    progress_count: (n) => `${n} in progress`,
+    learned_on: (d) => `Learned ${d}.`,
+    in_progress: "In progress.",
+    builds_on: (names) => `This builds on ${names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}` : names[0]}. The mentor will suggest that lesson first.`,
     skill_kicker: "Skill",
   },
   lesson: {

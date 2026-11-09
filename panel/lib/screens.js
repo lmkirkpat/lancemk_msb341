@@ -60,7 +60,7 @@ function memoryCard(h, hasHistory) {
 function upNextCard(h, o) {
   const u = h.up_next;
   if (!u) return "";
-  const go = o.off ? `<p class="later">${esc(o.reason)}</p>` : u.start ? btn(u.start.label, "start", o.dim ? "" : "primary") : "";
+  const go = o.off ? `<p class="later">${esc(o.reason)}</p>` : u.find ? btn(u.find.label, "find_next", o.dim ? "" : "primary") : u.start ? btn(u.start.label, "start", o.dim ? "" : "primary") : "";
   const pick = o.lessonOpen ? "" : btn(u.pick_skill, "pick_skill");
   return `<section class="card lead${o.dim ? " dim" : ""}" aria-label="${esc(COPY.home.up_next)}"><div class="kicker accent">${esc(COPY.home.up_next)}</div><h3 data-title tabindex="-1">${esc(u.name)}</h3><p class="why">${esc(u.why)}</p><div class="row">${go}${pick}</div></section>`;
 }
@@ -74,6 +74,7 @@ function homeCards(m, o) {
 const focusText = (v) => (v && Array.isArray(v.focus) && v.focus.length ? v.focus.join(", ") : null);
 
 function lessonTitle(m, v) {
+  if (m.picking) return COPY.lesson.picking_title;
   const name = m.names[v.skill] || COPY.home.a_skill;
   const focus = focusText(v);
   return focus ? COPY.lesson.on(name, focus) : name;
@@ -154,7 +155,7 @@ function stripHtml(view) {
 }
 
 function headTitle(m) {
-  if (m.state === "lesson-starting") return COPY.lesson.looking;
+  if (m.state === "lesson-starting" || m.state === "lesson-picking-starting") return COPY.lesson.looking;
   if (m.state === "lesson-start-failed") return COPY.lesson.didnt_start;
   const row = skillById(m.lesson && m.lesson.skill);
   return focusText(m.lesson) || (row && row.no_focus && m.lesson.checks === 0 ? row.no_focus : COPY.lesson.your_comp);
@@ -169,6 +170,7 @@ function headTag(m) {
 
 function headHtml(m) {
   const v = m.lesson;
+  if (m.state === "lesson-picking") return `<div class="lhead"><button type="button" class="back" data-action="go_home" aria-label="${esc(COPY.back.lesson)}" title="${esc(COPY.back.lesson)}">‹</button><div class="ltitle"><span class="kicker">${esc(COPY.lesson.picking_kicker)}</span><strong>${esc(COPY.lesson.picking_title)}</strong></div></div>`;
   const name = m.names[v.skill] || "";
   return `<div class="lhead"><button type="button" class="back" data-action="go_home" aria-label="${esc(COPY.back.lesson)}" title="${esc(COPY.back.lesson)}">‹</button><div class="ltitle"><span class="kicker">${esc(name)}</span><strong>${esc(headTitle(m))}</strong></div>${headTag(m)}</div>${stripHtml(v)}`;
 }
@@ -219,6 +221,8 @@ function chatRegion(m) {
     return { items };
   }
   const msgs = m.messages;
+  // FR-082: a lesson reached from a suggestion keeps the suggestion above its opening, unfolded.
+  if (m.from_picking && m.lesson && !m.lesson.replied) return { items: msgs.map(messageHtml) };
   let last = -1;
   for (let i = msgs.length - 1; i >= 0; i--) if (msgs[i].role === "learner") { last = i; break; }
   let foldAt = last;
@@ -263,7 +267,8 @@ function listHtml(m) {
   const l = v.check_list;
   if (!l) {
     const row = skillById(v.skill);
-    const slot = m.state === "lesson-starting" ? COPY.check.slot_starting : row && row.slot;
+    if (m.state === "lesson-picking") return "";
+    const slot = m.state === "lesson-starting" || m.state === "lesson-picking-starting" ? COPY.check.slot_starting : row && row.slot;
     return slot ? `<section class="check" aria-label="${esc(COPY.check.aria)}"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> ${esc(slot)}</p></div></section>` : "";
   }
   const { sections, foldLine } = visibleSections(l);
@@ -292,6 +297,11 @@ function actionsHtml(m) {
   const s = m.state;
   const t = m.turn || {};
   const busy = !!t.busy;
+  if (s === "lesson-picking") {
+    if (busy) return whyOff(COPY.paused.after_answer);
+    return `<div class="actions">${m.yes_ready ? btn(LABELS.yes, "yes", "primary") : ""}${btn(LABELS.pick_skill, "leave_picking", m.yes_ready ? "" : "primary")}</div>`;
+  }
+  if (s === "lesson-picking-starting") return `<div class="actions">${pressed(COPY.buttons.pressed.start)}<button type="button" disabled>${esc(LABELS.pick_skill)}</button></div>`;
   if (s === "lesson-exited") return `<div class="actions">${btn(LABELS.start, "start", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if (s === "lesson-start-failed") return `<div class="actions">${btn(LABELS.try_again, "try_again", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if ((s === "lesson-passed" || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
@@ -332,7 +342,7 @@ const VERB_KEY = { check: "check", check_again: "check", hint: "hint", show_me: 
 
 function askHtml(m) {
   const s = m.state;
-  if (["lesson-exited", "lesson-start-failed"].includes(s) || savedNoPass(m.lesson)) return "";
+  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting"].includes(s) || savedNoPass(m.lesson)) return "";
   if (["lesson-passed", "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
   const open = m.can_ask && !(m.turn && m.turn.busy) && !m.error;
   return `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${esc(COPY.ask_label)}</label><input id="ask-in" type="text" placeholder="${esc(COPY.ask_placeholder)}"${open ? "" : " disabled"} /><button type="submit" aria-label="${esc(COPY.buttons.send)}"${open ? "" : " disabled"}>⏎</button></form>`;
@@ -351,12 +361,30 @@ function lessonRegions(m) {
   };
 }
 
-// Step 1's interim (plan P9): one line and the same start as Home. T050 replaces it.
+// ---------- Skills (T050, T051) ----------
+
+function skillRowHtml(r) {
+  const inner = `<span class="g" aria-hidden="true">${esc(r.glyph)}</span><span class="n">${esc(r.name)}</span><span class="s">${esc(r.word)}</span>`;
+  const body = r.pressable ? `<button type="button" class="rowbtn" data-action="open_skill" data-skill="${esc(r.id)}">${inner}</button>` : `<span class="rowbtn">${inner}</span>`;
+  return `<li class="${esc(r.cls)}">${body}</li>`;
+}
+
 function skillsHtml(m) {
-  const u = m.home.up_next;
+  const v = m.skills_view;
+  if (m.detail) return detailHtml(m, m.detail);
+  const bars = `<i class="l"></i>`.repeat(v.learned) + `<i class="p"></i>`.repeat(v.in_progress) + `<i></i>`.repeat(Math.max(0, v.total - v.learned - v.in_progress));
+  return `<div class="scroll"><h2 class="lbl" data-title tabindex="-1">${esc(COPY.skills.title)}</h2><p class="lead-count">${esc(v.summary)}</p><div class="meter" role="img" aria-label="${esc(v.summary)}">${bars}</div><p class="meta">${esc(COPY.skills.pick)}</p><ul class="skills">${v.rows.map(skillRowHtml).join("")}</ul></div>`;
+}
+
+function detailHtml(m, d) {
   const off = homeOff(m);
-  const go = !u ? "" : off ? `<p class="later">${esc(off)}</p>` : u.start ? btn(u.start.label, "start", "primary") : "";
-  return `<div class="scroll"><p class="hello" data-title tabindex="-1">${esc(COPY.skills.title)}<small>${esc(COPY.skills.interim_line)}</small></p><div class="row">${go}</div></div>`;
+  const tag = d.tag === "due" ? `<span class="tag practice">↻ ${esc(COPY.skills.words.due.toLowerCase())}</span>` : d.tag === "learned" ? `<span class="tag pass">✓ ${esc(COPY.skills.words.learned.toLowerCase())}</span>` : "";
+  const line = d.builds_on.length ? `<p>${esc(COPY.skills.builds_on(d.builds_on))}</p>` : d.status_line ? `<p>${esc(d.status_line)}</p>` : "";
+  const go = off ? `<p class="later">${esc(off)}</p>` : btn(COPY.buttons.new_lesson, "new_lesson", "primary", `data-skill="${esc(d.id)}"`);
+  const history = d.history.length
+    ? `<ul class="hist">${d.history.map((h) => `<li><b>${esc(h.date)}</b>${[h.comp, h.result].filter(Boolean).map((p) => ` · ${esc(p)}`).join("")}${h.summary || h.next ? `<small>${esc([h.summary, h.next ? `${COPY.home.next_time} ${h.next}` : ""].filter(Boolean).join(" "))}</small>` : ""}</li>`).join("")}</ul>`
+    : `<p class="meta">${esc(COPY.skills.no_lessons)}</p>`;
+  return `<div class="lhead"><button type="button" class="back" data-action="back_skills" aria-label="${esc(COPY.back.skills)}" title="${esc(COPY.back.skills)}">‹</button><div class="ltitle"><span class="kicker">${esc(COPY.skills.skill_kicker)}</span><strong data-title tabindex="-1">${esc(d.name)}</strong></div>${tag}</div><div class="scroll">${line}<div class="row detail-go">${go}</div><h2 class="lbl">${esc(COPY.home.memory_title)}</h2>${history}<p class="ro">${esc(COPY.skills.history_note)}</p></div>`;
 }
 
 function homeOff(m) {

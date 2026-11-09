@@ -190,6 +190,31 @@ button.check-head:hover:not(:disabled) { background: none; }
 button.foldline { display: none; background: none; border: 0; color: var(--ok); padding: 3px 0; cursor: pointer; width: 100%; text-align: left; min-height: 0; }
 button.foldline:hover:not(:disabled) { background: none; }
 
+/* The Skills tab (FR-048, FR-049) */
+.lead-count { margin: 0; color: var(--text-strong); }
+.meter { display: flex; gap: 2px; margin: 4px 0 2px; }
+.meter i { flex: 1; height: 6px; border-radius: 1px; background: #3a3a3a; }
+.meter i.l { background: var(--ok); }
+.meter i.p { background: #2b6b40; background-image: repeating-linear-gradient(45deg, transparent 0 3px, rgba(0,0,0,.35) 3px 5px); }
+.skills { list-style: none; margin: 10px 0 12px; padding: 0; }
+.skills li { border-bottom: 1px solid var(--line-soft); }
+.skills .rowbtn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 4px; background: none; border: 0; color: var(--text); text-align: left; border-radius: 2px; }
+.skills button.rowbtn { cursor: pointer; }
+.skills button.rowbtn:hover:not(:disabled) { background: #2a2a2a; }
+.skills .g { width: 14px; text-align: center; flex: none; }
+.skills .n { flex: 1; min-width: 0; color: var(--text-strong); }
+.skills .s { flex: none; font-size: 11px; color: var(--muted); text-align: right; }
+.skills li.learned .g, .skills li.learned .s { color: var(--ok); }
+.skills li.due .g, .skills li.due .s { color: var(--warn); }
+.skills li.soon .n { color: var(--muted); }
+.detail-go { margin-bottom: 12px; }
+.hist { list-style: none; margin: 0 0 10px; padding: 0; }
+.hist li { padding: 4px 0; border-bottom: 1px solid var(--line-soft); }
+.hist li b { color: var(--text-strong); font-weight: 600; }
+.hist li small { display: block; color: var(--muted); font-size: 11px; }
+.ro { color: var(--muted); font-size: 11px; }
+.tag.practice { border-color: #5a4d1e; color: var(--warn); }
+
 .statusline { display: flex; align-items: center; gap: 6px; padding: 6px 12px; color: var(--text); border-top: 1px solid var(--line); background: #1f2630; flex: none; }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }
 .ask { display: flex; gap: 8px; padding: 0 12px 12px; flex: none; }
