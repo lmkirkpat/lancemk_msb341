@@ -296,8 +296,18 @@ export function markChecked(passed, { demoUndone = false } = {}) {
   return updateCurrent((lesson) => {
     lesson.status = "checked";
     lesson.checked = true; // stays true after a later demo, unlike status
-    lesson.passed = passed;
+    // A saved pass stays a pass: a later check answers a question, it doesn't reopen the lesson.
+    lesson.passed = passed || !!lesson.pass_saved;
     if (demoUndone && lesson.demo && !lesson.demo.undone) lesson.demo.undone = new Date().toISOString();
+  });
+}
+
+// Spec 007 FR-046: this lesson's pass is in the learner record, so the record for it is finished.
+// Kept in session.json, so it holds when a Continue relaunches the mentor. Only a pass sets it: a
+// learner who stopped can come back, pass, and have that saved too.
+export function markPassSaved() {
+  return updateCurrent((lesson) => {
+    lesson.pass_saved = true;
   });
 }
 
