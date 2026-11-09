@@ -1,0 +1,53 @@
+{
+  "id": "45-button-check-partial",
+  "title": "Panel: Done, check it with the null placed and nothing parented: the layers named, no fix, no offer",
+  "covers": [
+    "RQ-14",
+    "FR-070"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I'm done. Check my work."
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": false,
+      "parenting_passed": false
+    },
+    "say": [
+      {
+        "id": "names_layers",
+        "must": "Tile|Caption|Stamp",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:parent|fix|do (?:it|that|them|the rest|the other)|set (?:it|that|them)|the rest)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

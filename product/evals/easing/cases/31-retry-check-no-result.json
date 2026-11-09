@@ -1,0 +1,39 @@
+{
+  "id": "31-retry-check-no-result",
+  "title": "Panel: Try again after a Show me with no result sends the check; the mentor reads the project and eases nothing more",
+  "covers": [
+    "RQ-13",
+    "FR-030",
+    "T027"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Title sounds good. Show me how first."
+    },
+    {
+      "project": "after-demo",
+      "say": "I'm done. Check my work."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "diff_since_last"
+    ],
+    "verdict": "fail",
+    "set_ease_max": 1,
+    "last_turn_tools_not_called": [
+      "set_ease",
+      "record_lesson"
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-LAYERS"
+  ]
+}

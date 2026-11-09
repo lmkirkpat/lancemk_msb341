@@ -8,6 +8,22 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
+## Spec 007 button cases (T036, written 2026-11-09, dry-run only)
+
+7 cases added, ids 47 to 53. Each sends one panel request, word for word (`contracts/button-requests.md`), into a lesson that is open. The first run is spec 007 T038: `node product/evals/anchor/run.mjs --only FR-070` runs exactly these cases (every one lists `FR-070` in `covers`).
+Not yet run: the set's full-run baseline is unchanged. New rubric items: `R-CONTINUES`, `R-SHOW-ME-AGAIN`, `R-NEW-LESSON-ASKED`. New expect keys (shared, `../lib/turn-checks.mjs`): `last_turn_tools_called`, `last_turn_tools_not_called`, `say_max_sentences`.
+The turn named is the one that carries the request under test; earlier turns set the lesson up (typed answers on the way in, since these skills ask first).
+
+| Case | Turn | Exact request | Request |
+|---|---|---|---|
+| 47-button-check-dragged | 3 | `I'm done. Check my work.` | RQ-14 Done, check it |
+| 48-button-hint | 4 | `Can I have a hint?` | RQ-14 Hint |
+| 49-button-show-me | 3 | `Show me how first.` | RQ-14 Show me |
+| 50-button-show-me-again | 5 | `Show me again: explain the change you already made, with a frame. Don't change anything.` | RQ-14 Show me again |
+| 51-button-new-lesson-due-record | 1 | `/anchor-mentor lesson` | RQ-02 New lesson |
+| 52-button-continue | 3 | `I'm back. Pick up where we left off.` | RQ-12 Continue lesson |
+| 53-button-warm-up | 1 | `/anchor-mentor review` | RQ-11 Warm up |
+
 ## Status (2026-10-27, evening): updated for the opening read (T413, T414); ready for SC-015's repeats and the re-baseline
 
 The set now has 46 case files (44 + 40 and 41; case 17 renamed). Changes and smoke results are in "Opening read changes"

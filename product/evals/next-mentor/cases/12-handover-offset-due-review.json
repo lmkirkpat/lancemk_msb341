@@ -1,0 +1,66 @@
+{
+  "id": "12-handover-offset-due-review",
+  "title": "A only: Yes, let's go. on a due review hands over to offset as a review: the task, no demonstration, no walkthrough",
+  "covers": [
+    "RQ-16",
+    "FR-082",
+    "FR-070"
+  ],
+  "runtimes": [
+    "a"
+  ],
+  "known_gap": "next-mentor-handover item 5: 'review' as an argument",
+  "learner_record": "mentor/test/fixtures/offset/records/learned-dots.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/next-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "Yes, let's go."
+    }
+  ],
+  "expect": {
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "timing.offset",
+          "recommendation.kind": "review"
+        }
+      },
+      {
+        "turn": 2,
+        "tool": "offset_snapshot",
+        "equals": {
+          "mode": "review"
+        }
+      }
+    ],
+    "handover": [
+      {
+        "turn": 2,
+        "skill": "offset-mentor",
+        "args_match": "review"
+      }
+    ],
+    "tools_not_called": [
+      "offset_demo"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-HANDS-OVER",
+    "R-NM-REVIEW-HANDS-ON"
+  ]
+}

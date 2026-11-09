@@ -1,0 +1,33 @@
+{
+  "id": "32-why-mechanical-before-focus",
+  "title": "\"Why does it look mechanical?\" before a focus is agreed gets the explanation with a frame, not a status report",
+  "covers": [
+    "FR-007",
+    "T028 finding 1",
+    "ui-overhaul",
+    "T027"
+  ],
+  "learner_record": null,
+  "turns": [
+    {
+      "project": "before",
+      "say": "/ease-mentor"
+    },
+    {
+      "project": "before",
+      "say": "Why does it look mechanical?"
+    }
+  ],
+  "expect": {
+    "last_turn_tools_called": [
+      "preview_frame"
+    ],
+    "set_ease_max": 0,
+    "record_lesson": null
+  },
+  "rubric": [
+    "R-WHY-EXPLAINED",
+    "R-SHOWS",
+    "R-NAMES-LAYERS"
+  ]
+}

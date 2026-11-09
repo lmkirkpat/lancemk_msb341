@@ -1,0 +1,60 @@
+{
+  "id": "05-ae-unreachable",
+  "title": "Opening with After Effects unreachable: says it hasn't looked at the comp, suggests from past lessons only, claims nothing about the comp",
+  "covers": [
+    "RQ-15",
+    "FR-070"
+  ],
+  "runtimes": [
+    "b1",
+    "a"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "turns": [
+    {
+      "project": "unreachable",
+      "say": "/next-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "recommend_next"
+    ],
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "looked_at_comp": false
+        }
+      }
+    ],
+    "say_max_sentences": [
+      {
+        "id": "three_sentences",
+        "turns": [
+          1
+        ],
+        "max": 3
+      }
+    ],
+    "say": [
+      {
+        "id": "says_not_seen",
+        "must": "(?:couldn't|can't|cannot|haven't|didn't|unable|not able)[^.?!]{0,50}(?:see|look|read|reach|open)|(?:isn't|not) (?:open|responding|answering)",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "no_layer_names",
+        "never": "\\b(?:Blink|Cut|Title|Subtitle|Dot|Door|Tile|Chip|Caption)\\b",
+        "cs": true
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-BLIND",
+    "R-NM-SUGGESTS"
+  ]
+}

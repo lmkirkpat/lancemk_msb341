@@ -1,0 +1,90 @@
+{
+  "id": "06-yes-pivot-named-layers",
+  "title": "Yes path (B1), the pivot with named layers: the suggestion names them; then the plain /anchor-mentor opens the lesson from its own snapshot",
+  "covers": [
+    "RQ-16",
+    "FR-082",
+    "FR-070"
+  ],
+  "runtimes": [
+    "b1"
+  ],
+  "known_gap": "next-mentor-handover item 1 / FR-082: the layers a suggestion names don't reach the lesson",
+  "learner_record": "product/evals/next-mentor/records/four-learned-none-due.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/key-types/practice-now.json",
+      "say": "/next-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/key-types/practice-now.json",
+      "say": "/anchor-mentor",
+      "skill": "anchor-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "transform.anchor",
+          "recommendation.kind": "lesson",
+          "recommendation.focus_layers": [
+            "Cursor",
+            "Icon"
+          ]
+        }
+      },
+      {
+        "turn": 2,
+        "tool": "anchor_snapshot",
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "turn_first_tool": [
+      {
+        "turn": 2,
+        "tool": "anchor_snapshot"
+      }
+    ],
+    "tools_not_called": [
+      "anchor_demo",
+      "anchor_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "names_cursor",
+        "must": "Cursor",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "names_icon",
+        "must": "Icon",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-LAYERS-NAMED",
+    "R-NM-LESSON-OPENS",
+    "R-NM-LAYERS-KEPT",
+    "R-NAMES-REAL"
+  ]
+}

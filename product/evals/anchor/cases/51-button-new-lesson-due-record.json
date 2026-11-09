@@ -1,0 +1,40 @@
+{
+  "id": "51-button-new-lesson-due-record",
+  "title": "Panel: New lesson on a skill with a review due opens a lesson, not the review, and never mentions one",
+  "covers": [
+    "RQ-02",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/learned-door.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor lesson"
+    }
+  ],
+  "expect": {
+    "first_tool": "anchor_snapshot",
+    "first_snapshot_mode": "lesson",
+    "demo_calls_max": 0,
+    "tools_not_called": [
+      "anchor_check"
+    ],
+    "say": [
+      {
+        "id": "no_review_talk",
+        "never": "\\b(?:review|warm[- ]?up|refresher)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NEW-LESSON-ASKED",
+    "R-AN-INTENT-FIRST",
+    "R-NAMES-REAL"
+  ]
+}

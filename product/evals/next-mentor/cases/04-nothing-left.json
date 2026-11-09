@@ -1,0 +1,63 @@
+{
+  "id": "04-nothing-left",
+  "title": "Opening, everything built is learned and none is due: says they're up to date and that more is coming; suggests nothing",
+  "covers": [
+    "RQ-15",
+    "FR-070"
+  ],
+  "runtimes": [
+    "b1",
+    "a"
+  ],
+  "learner_record": "product/evals/next-mentor/records/six-learned-none-due.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/next-mentor"
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "recommend_next"
+    ],
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation": null,
+          "reason": "nothing_left"
+        }
+      }
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "up_to_date",
+        "must": "up to date|caught up|all caught|everything",
+        "turns": [
+          1
+        ]
+      },
+      {
+        "id": "more_coming",
+        "must": "on the way|coming|soon|more skills|new skills",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-NOTHING-LEFT",
+    "R-NM-SUGGESTS"
+  ]
+}

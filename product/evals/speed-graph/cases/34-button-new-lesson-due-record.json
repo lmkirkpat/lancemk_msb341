@@ -1,0 +1,47 @@
+{
+  "id": "34-button-new-lesson-due-record",
+  "title": "Panel: New lesson on a skill with a review due opens a lesson, not the review, and never mentions one",
+  "covers": [
+    "RQ-02",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/speed-graph/record-learned-title.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/speed-graph-mentor lesson"
+    }
+  ],
+  "expect": {
+    "first_tool": "speed_graph_snapshot",
+    "snapshot_reply": [
+      {
+        "turn": 1,
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "tools_not_called": [
+      "speed_graph_check"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "no_review_talk",
+        "never": "\\b(?:review|warm[- ]?up|refresher)\\b",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NEW-LESSON-ASKED",
+    "R-SG-PROPOSAL",
+    "R-NAMES-REAL"
+  ]
+}

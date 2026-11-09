@@ -1,0 +1,50 @@
+{
+  "id": "48-button-show-me-again",
+  "title": "Panel: Show me again explains the change already made with a frame, and makes no second demonstration",
+  "covers": [
+    "RQ-14",
+    "FR-070"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "null-center.json",
+      "say": "Show me how first."
+    },
+    {
+      "project": "null-center.json",
+      "say": "Show me again: explain the change you already made, with a frame. Don't change anything."
+    }
+  ],
+  "expect": {
+    "demo_calls_min": 1,
+    "demo_calls_max": 1,
+    "demo_only_on": "parent/Tile",
+    "last_turn_tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check",
+      "record_lesson"
+    ]
+  },
+  "rubric": [
+    "R-SHOW-ME-AGAIN",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}

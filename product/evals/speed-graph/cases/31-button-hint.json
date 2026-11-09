@@ -1,0 +1,51 @@
+{
+  "id": "31-button-hint",
+  "title": "Panel: Hint after a check that didn't pass gives a hint and changes nothing",
+  "covers": [
+    "RQ-14",
+    "FR-070"
+  ],
+  "learner_record": "mentor/test/fixtures/records/easing-learned.json",
+  "fixture_sources": {
+    "practice-now.json": "live",
+    "planted-15-80.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice-now.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "practice-now.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "planted-15-80.json",
+      "say": "I'm done. Check my work."
+    },
+    {
+      "project": "planted-15-80.json",
+      "say": "Can I have a hint?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "last_turn_tools_not_called": [
+      "speed_graph_demo",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "no_offer",
+        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:shape|fix|do (?:it|that|them|the rest|the other)|ease|the rest)\\b",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-HINT-NOT-FIX",
+    "R-NAMES-REAL"
+  ]
+}

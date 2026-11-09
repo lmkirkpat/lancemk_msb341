@@ -1,0 +1,84 @@
+{
+  "id": "07-yes-null-named-layers",
+  "title": "Yes path (B1), null with named layers: the suggestion names the group; then the plain /null-parenting-mentor opens, where the lesson asks which layers",
+  "covers": [
+    "RQ-16",
+    "FR-082",
+    "FR-070"
+  ],
+  "runtimes": [
+    "b1"
+  ],
+  "known_gap": "next-mentor-handover item 1 / FR-082: the layers a suggestion names don't reach the lesson",
+  "learner_record": "product/evals/next-mentor/records/five-learned-none-due.json",
+  "turns": [
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/next-mentor"
+    },
+    {
+      "project": "mentor/test/fixtures/layer-info/practice2b.json",
+      "say": "/null-parenting-mentor",
+      "skill": "null-parenting-mentor",
+      "new_session": true
+    }
+  ],
+  "expect": {
+    "reply_equals": [
+      {
+        "turn": 1,
+        "tool": "recommend_next",
+        "equals": {
+          "recommendation.skill": "parenting.null",
+          "recommendation.kind": "lesson",
+          "recommendation.focus_layers": [
+            "Tile",
+            "Caption",
+            "Stamp"
+          ]
+        }
+      },
+      {
+        "turn": 2,
+        "tool": "null_parent_snapshot",
+        "equals": {
+          "mode": "lesson"
+        }
+      }
+    ],
+    "turn_first_tool": [
+      {
+        "turn": 2,
+        "tool": "null_parent_snapshot"
+      }
+    ],
+    "tools_not_called": [
+      "null_parent_demo",
+      "null_parent_check"
+    ],
+    "say_max_sentences": [
+      {
+        "id": "two_sentences",
+        "turns": [
+          1
+        ],
+        "max": 2
+      }
+    ],
+    "say": [
+      {
+        "id": "names_group",
+        "must": "(?=[\\s\\S]*Tile)(?=[\\s\\S]*Caption)(?=[\\s\\S]*Stamp)",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NM-LAYERS-NAMED",
+    "R-NM-LESSON-OPENS",
+    "R-NM-LAYERS-KEPT",
+    "R-NAMES-REAL"
+  ]
+}
