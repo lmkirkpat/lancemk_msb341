@@ -498,12 +498,21 @@ Two short openings after T060, checklist expanded before the first reply (Start 
 | Offset (T058) | Proposed, gone after the first reply | Yes |
 | Easing | "Not checked yet", never Proposed | **No: finding 1** |
 | Speed graph | Proposed, gone after the first reply (builder) | Yes |
+| Easing, on Mentor Practice (23:25:21Z) | Proposed, gone after the first reply (builder); a new lesson, no pick-up | Yes |
 
-**SC-002's opening part: 2 of 3, so not met.** It needs 3 of 3. Re-run an easing opening once finding 1 is fixed.
+**SC-002's opening part: 3 of 3, met** (offset, speed graph, and easing re-run on Mentor Practice). The easing opening
+on Mentor Practice 2 doesn't count: it was a resumed lesson (finding 1). With the checks above, **SC-002's live half is
+met.**
 
-1. **Easing's opening rows aren't marked Proposed.** `panel/lib/lesson.js:92` marks rows Proposed only while there's
-   no reply, no pick-up and no check, the same for every skill. What differs for easing: its opening called
-   `read_learner_record` (23:17:16Z) before `snapshot_project` (23:17:18Z), while the other five skills open with their
-   snapshot. Whether that, or the snapshot reporting a continued lesson (`picked_up`), turned Proposed off isn't
-   confirmed. *For panel-builder:* reproduce with easing's recorded opening stream, find the cause, and add a test
-   that easing's opening rows say Proposed.
+1. **Easing's first opening was a resume, not a new lesson, so the panel was right.** An easing lesson from
+   2026-11-05 was still open on Mentor Practice 2: never checked, never passed. The last snapshot before it was key
+   types', so `start()` in `mentor/lib/session.mjs` (lines 199–201, 220) resumed the old lesson; it counts an old
+   unchecked lesson as stale only if the comp no longer matches, and the restore after T060 made it match again. A
+   resumed lesson is never Proposed (spec 007 FR-092, `panel/lib/lesson.js:74` and `:92`). The call order
+   (`read_learner_record` first) wasn't the cause: the recorded easing opening makes the same calls and shows
+   Proposed. Panel-builder added `panel/test/easing-opening.test.js` (from New lesson and Home, Proposed then dropped;
+   the same stream as "resumed" gives Not checked yet), merged with this note. *To decide later (spec-writer):*
+   New lesson silently resumes any unfinished lesson on a matching comp, and restores make that likely; an unchecked
+   lesson with no demo a day or more old could count as stale on resume too. Mentor Practice 2 still has unfinished
+   easing, key types, pivot and speed graph lessons, so new lessons there may resume ("Picking up your earlier lesson
+   on this comp.").
