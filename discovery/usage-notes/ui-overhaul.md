@@ -516,3 +516,39 @@ met.**
    lesson with no demo a day or more old could count as stale on resume too. Mentor Practice 2 still has unfinished
    easing, key types, pivot and speed graph lessons, so new lessons there may resume ("Picking up your earlier lesson
    on this comp.").
+
+## States at the default dock (T062, 2026-11-09)
+
+Builder, on B1. The panel was docked on the right of AE at its default width, with the height dragged to a size that
+looked right; the builder expects users to do the same, so SC-010 was amended to this size (`spec.md`, SC-010). Ten
+screenshots in `~/Desktop/t062/` (4:28 to 4:37 pm; not in the repo). Sizes from the pixels, assuming a 2× screen:
+about 343 pt wide; about 583 pt tall for the first five and 688 pt for the last five, including AE's own "Knack ☰"
+tab (about 36 pt), so the panel's content area is about 547 and 652 pt.
+
+| State | Screenshot | Sideways scroll | Clipped button or Ask |
+|---|---|---|---|
+| `home-return` | 4.28.39 | None | None |
+| `skills-many` | 4.28.45 | None | None |
+| `lesson-open` (speed graph, rows Proposed) | 4.29.27 | None | None |
+| `skill-speedgraph-check` (rows collapsed, chat showing) | 4.30.22 | None | None |
+| `lesson-partial` (rows expanded) | 4.30.27 | None | None |
+| `home-cutoff` | 4.31.11 | None | None |
+| `skill-keytypes-check` | 4.32.52 | None | None |
+| `skill-offset-layers-check` | 4.34.32 | None | None |
+| `skill-pivot-check` | 4.36.08 | None | None |
+| `skill-null-parent` | 4.37.35 | None | None |
+
+**SC-010 (as amended): met** for these 10 states. `home-first` needs an empty learner record, so it moves to T061,
+which sets up a temp learner home anyway; `practice-check` stays with T071.
+
+**SC-016:** at a content height of about 547 pt (under 560), exactly one of chat and rows shows: chat with the rows
+collapsed (4.30.22), rows alone when expanded (4.30.27). At about 652 pt (over 560), both show, and each check left the
+chat in view (4.32.52 to 4.37.35). **Met** at these two heights, not at exactly 480 and 680.
+
+### Findings
+
+1. **Row times have three decimals where the mentor says two.** Speed graph's rows read "Position 1.3–4.367 s" and
+   "Next: Position 1.3–4.367 s" while the mentor says "4.37 s" (4.30.22, 4.30.27). The label comes straight from the
+   tool. *For panel-builder:* round row times the way the mentor does, with a test.
+2. **The narrowest dock is untested.** AE lets a docked panel be dragged narrower than its default; 260 was the guard
+   for that. Re-check if a tester docks narrower.

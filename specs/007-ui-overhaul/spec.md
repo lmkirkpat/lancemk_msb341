@@ -977,6 +977,9 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
 - **SC-010**: At 260 × 480 px, in at least 12 states (named in [quickstart.md](quickstart.md), including `lesson-partial`, each
   skill's mid-lesson state and `home-cutoff`), nothing scrolls sideways and no button or the Ask input is clipped. *Measured
   by:* the builder, in the real panel in AE, since the mockup itself hasn't been seen at that size.
+  *Amended 2026-11-09 (builder's decision, T062):* measured at the panel's default width docked on the right of AE,
+  about 343 pt wide, at the heights a user would pick (about 583 and 688 pt), since that's how the builder expects
+  people to use it. 260 × 480 is not required. The narrowest dock is untested: re-check if a tester docks narrower.
 - **SC-011**: **0** panel strings contain a file path, command, tool name, field name or error
   code. *Measured by:* an automated scan of the panel's copy and its error mappings.
 - **SC-012**: "Saved to your history" shows **0 times** without a successful save, including on a
