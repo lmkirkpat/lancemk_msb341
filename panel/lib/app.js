@@ -340,9 +340,19 @@ function createApp(deps) {
 
   // ---------- sending ----------
 
+  // B1's timeout ends the turn but leaves the process running, so whatever is sent next must not go
+  // to it (research R5). False if the new process couldn't start and the lesson has closed.
+  function resumeAfterTimeout() {
+    stopAdapter();
+    const a = newAdapter();
+    a.start({ resumeSessionId: state.session.claude_session_id, skill: state.session.skill });
+    return !!state.adapter;
+  }
+
   function send(kind, text, label, o) {
     const opts = o || {};
     if (state.busy || !state.adapter) return false;
+    if (state.error && state.error.kind === "timeout" && runtime !== "a" && !resumeAfterTimeout()) return false;
     if (!opts.silent) push({ role: "learner", text: label });
     state.busy = true;
     state.turn = { busy: true, kind, pressed: opts.pressed || null, status: opts.status || statusFor("") };
@@ -434,15 +444,6 @@ function createApp(deps) {
     if (!last) return;
     const rk = retryKind(last.kind, state.lesson);
     if (rk !== last.kind) { sendButton(rk); return; }
-    if (state.error && state.error.kind === "timeout" && runtime !== "a") {
-      // B1's timeout leaves the old process running; stop it and resume the session (research R5).
-      const old = state.adapter;
-      state.adapter = null;
-      if (old) old.stop();
-      const a = newAdapter();
-      a.start({ resumeSessionId: state.session.claude_session_id, skill: state.session.skill });
-      if (!state.adapter) return;
-    }
     send(last.kind, last.text, COPY.buttons.try_again, { pressed: "try_again", status: statusFor("") });
   }
 

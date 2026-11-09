@@ -373,6 +373,160 @@ test("A retries in place after a timeout: no restart", async () => {
   assert.equal(h.adapters.length, 1);
 });
 
+// ---- every way of sending after a B1 timeout stops the old process and resumes (research R5) ----
+
+const timeOut = (a, kind) => {
+  a.emit("error", { kind: "timeout", message: "" });
+  a.emit("turn_end", { ok: false, kind });
+};
+
+// old: the timed-out adapter. `text` and `kind` are what must reach the new process, once.
+function assertResumedOnce(h, old, sentBefore, text, kind) {
+  assert.equal(old.stopped, 1, "the old process is stopped once");
+  assert.equal(old.sent.length, sentBefore, "nothing more is written to the old process");
+  assert.equal(h.adapters.length, 2, "one new process");
+  const a = h.adapter();
+  assert.deepEqual(a.started, [{ resumeSessionId: "session-1", skill: "ease-mentor" }]);
+  assert.deepEqual(a.sent, [{ text, kind }]);
+  assert.equal(a.stopped, 0);
+}
+
+const AFTER_TIMEOUT = [
+  ["Done, check it", (h) => h.app.act("check"), "I'm done. Check my work.", "check"],
+  ["Ask", (h) => h.app.ask("why?"), "why?", "ask"],
+  ["Hint", (h) => h.app.act("hint"), "Can I have a hint?", "hint"],
+];
+for (const [name, press, text, kind] of AFTER_TIMEOUT) {
+  test(`B1: ${name} after a timeout stops the old process and resumes the session first (research R5)`, async () => {
+    const h = await open();
+    h.app.act("hint");
+    const old = h.adapter();
+    const sentBefore = old.sent.length;
+    timeOut(old, "hint");
+    let adaptersAtStop = null;
+    const stop = old.stop;
+    old.stop = () => { adaptersAtStop = h.adapters.length; stop(); };
+    press(h);
+    assert.equal(adaptersAtStop, 1, "stopped before the new process starts");
+    assertResumedOnce(h, old, sentBefore, text, kind);
+  });
+}
+
+test("B1: Show me again after a timeout stops the old process and resumes the session first (research R5)", async () => {
+  const h = await open();
+  h.app.act("show_me");
+  const old = h.adapter();
+  const sentBefore = old.sent.length;
+  old.emit("tool_result", SET_EASE);
+  timeOut(old, "show_me");
+  h.app.act("show_me_again");
+  assert.equal(old.stopped, 1);
+  assert.equal(old.sent.length, sentBefore);
+  assert.equal(h.adapters.length, 2);
+  assert.match(h.adapter().sent[0].text, /^Show me again/);
+  assert.equal(h.adapter().sent.length, 1);
+});
+
+test("B1: a cut-off Show me whose Try again becomes another button resumes once (FR-030, research R5)", async () => {
+  for (const [madeDemo, sentKind] of [[true, "show_me_again"], [false, "check"]]) {
+    const h = await open();
+    h.app.act("show_me");
+    const old = h.adapter();
+    const sentBefore = old.sent.length;
+    if (madeDemo) old.emit("tool_result", SET_EASE);
+    timeOut(old, "show_me");
+    h.app.act("try_again");
+    assert.equal(old.stopped, 1, sentKind);
+    assert.equal(old.sent.length, sentBefore, sentKind);
+    assert.equal(h.adapters.length, 2, sentKind);
+    assert.equal(h.adapter().started.length, 1, sentKind);
+    assert.equal(h.adapter().sent.length, 1, sentKind);
+    assert.equal(h.adapter().sent[0].kind, sentKind);
+  }
+});
+
+test("B1: Try again after a timeout resumes exactly once, and sends once", async () => {
+  const h = await open();
+  h.app.act("hint");
+  const old = h.adapter();
+  const sentBefore = old.sent.length;
+  timeOut(old, "hint");
+  h.app.act("try_again");
+  assertResumedOnce(h, old, sentBefore, "Can I have a hint?", "hint");
+});
+
+test("B1: pressing twice after a timeout resumes once and sends once", async () => {
+  const h = await open();
+  h.app.act("hint");
+  const old = h.adapter();
+  const sentBefore = old.sent.length;
+  timeOut(old, "hint");
+  h.app.act("check");
+  h.app.act("check");
+  assertResumedOnce(h, old, sentBefore, "I'm done. Check my work.", "check");
+});
+
+test("B1: a send after the timeout has been recovered from stops nothing", async () => {
+  const h = await open();
+  h.app.act("hint");
+  timeOut(h.adapter(), "hint");
+  h.app.act("check");
+  const a = h.adapter();
+  a.emit("turn_end", { ok: true, kind: "check" });
+  h.app.ask("why?");
+  assert.equal(h.adapters.length, 2);
+  assert.equal(a.stopped, 0);
+  assert.equal(a.started.length, 1);
+  assert.deepEqual(a.sent.map((s) => s.kind), ["check", "ask"]);
+});
+
+test("B1: a send with no timeout stops nothing, nor after another kind of cut-off", async () => {
+  const quiet = await open();
+  quiet.app.act("check");
+  assert.equal(quiet.adapters.length, 1);
+  assert.equal(quiet.adapter().stopped, 0);
+
+  const stopped = await open();
+  stopped.app.act("hint");
+  stopped.adapter().emit("turn_end", { ok: false, kind: "hint" });
+  stopped.app.act("check");
+  assert.equal(stopped.adapters.length, 1);
+  assert.equal(stopped.adapter().stopped, 0);
+
+  const busy = await open();
+  busy.app.act("hint");
+  busy.adapter().emit("error", { kind: "service_busy", message: "" });
+  busy.adapter().emit("turn_end", { ok: false, kind: "hint" });
+  busy.app.ask("why?");
+  assert.equal(busy.adapters.length, 1);
+  assert.equal(busy.adapter().stopped, 0);
+});
+
+test("B1: if the resume can't start on the very first turn, nothing is sent", async () => {
+  let starts = 0;
+  const h = await ready({ onStart: (a) => { starts++; if (starts === 2) a.emit("error", { kind: "start_failed", message: "" }); } });
+  h.app.act("start");
+  const old = h.adapter();
+  timeOut(old, "start");
+  h.app.act("try_again");
+  assert.equal(old.stopped, 1);
+  assert.equal(h.adapter().sent.length, 0);
+  assert.equal(h.app.model().tab, "home");
+});
+
+test("A: every send after a timeout stays on the same process", async () => {
+  for (const [name, press, text, kind] of AFTER_TIMEOUT) {
+    const h = await open({ runtime: "a" });
+    h.app.act("hint");
+    const a = h.adapter();
+    timeOut(a, "hint");
+    press(h);
+    assert.equal(h.adapters.length, 1, name);
+    assert.equal(a.stopped, 0, name);
+    assert.deepEqual(a.sent[a.sent.length - 1], { text, kind }, name);
+  }
+});
+
 test("FR-030: Show me cut off after the change came back: lesson-error-demo, Show me again and the check", async () => {
   const h = await open();
   h.app.act("show_me");
