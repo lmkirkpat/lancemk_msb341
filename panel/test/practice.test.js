@@ -78,3 +78,103 @@ test("no card when nothing is due", async () => {
   const h = await onHome({ skills: { "timing.offset": learned("2026-12-01") }, lessons });
   assert.ok(!homeText(h).includes(COPY.home.practice_due));
 });
+
+// ---------- T064: Warm up on Home and skill-detail, ↻ on Skills ----------
+
+const hasWarmUp = (html) => /data-action="warm_up"/.test(html);
+const view = (h) => renderApp(h.app.model()).view;
+
+test("Home's Warm up sends the first due skill's review, and shows the warm-up status (RQ-11)", async () => {
+  const h = await onHome(TWO_DUE);
+  assert.ok(hasWarmUp(view(h)));
+  assert.match(view(h), /data-action="warm_up"[^>]*data-skill="timing\.offset"/);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  assert.deepEqual(h.adapter().started[0], { skill: "offset-mentor" });
+  assert.deepEqual(h.adapter().sent, [{ text: "/offset-mentor review", kind: "warm_up" }]);
+  const m = h.app.model();
+  assert.equal(m.state, "lesson-starting");
+  assert.equal(m.turn.status, COPY.status.warm_up_ready);
+});
+
+test("Warm up can't be pressed twice", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  h.app.act("warm_up", { skill: "timing.offset" });
+  assert.equal(h.adapters.length, 1);
+  assert.equal(h.adapter().sent.length, 1);
+});
+
+test("Warm up never starts easing, or a skill with no review", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("warm_up", { skill: "easing.basic" });
+  assert.equal(h.adapters.length, 0);
+  assert.equal(h.app.model().tab, "home");
+});
+
+test("with a lesson open, Home's Warm up reads Available after your lesson (FR-024)", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("find_next");
+  h.app.act("go_home");
+  const html = view(h);
+  assert.equal(h.app.model().state, "home-lessonopen");
+  assert.ok(!hasWarmUp(html));
+  assert.ok(plain(html).includes(COPY.paused.after_lesson));
+});
+
+test("with After Effects out of reach, Home's Warm up is replaced by the reason", async () => {
+  const h = await onHome(TWO_DUE, { connection: { state: "not_connected", started: null } });
+  const html = view(h);
+  assert.ok(plain(html).includes(COPY.home.practice_due));
+  assert.ok(!hasWarmUp(html));
+  assert.ok(plain(html).includes(COPY.paused.needs_ae));
+});
+
+const detail = async (record, skill) => { const h = await onHome(record); h.app.act("tab", { tab: "skills" }); h.app.act("open_skill", { skill }); return h; };
+
+test("skill-detail has Warm up on a learned skill with a review, even when it isn't due (FR-049)", async () => {
+  const due = await detail(TWO_DUE, "timing.offset");
+  assert.equal(due.app.model().state, "skill-detail");
+  assert.match(view(due), /class="primary" data-action="warm_up" data-skill="timing\.offset"/);
+  assert.ok(plain(view(due)).includes(COPY.buttons.new_lesson));
+  const notDue = await detail({ skills: { "timing.offset": learned("2026-12-01") }, lessons }, "timing.offset");
+  assert.ok(hasWarmUp(view(notDue)));
+});
+
+test("skill-detail's Warm up sends that skill's review", async () => {
+  const h = await detail(TWO_DUE, "transform.anchor");
+  h.app.act("warm_up", { skill: "transform.anchor" });
+  assert.deepEqual(h.adapter().sent, [{ text: "/anchor-mentor review", kind: "warm_up" }]);
+});
+
+test("easing's detail and a skill not yet learned have no Warm up (FR-049)", async () => {
+  assert.ok(!hasWarmUp(view(await detail(TWO_DUE, "easing.basic"))));
+  assert.ok(!hasWarmUp(view(await detail(TWO_DUE, "parenting.null"))));
+});
+
+test("with a lesson open, skill-detail's buttons read Available after your lesson", async () => {
+  const h = await detail(TWO_DUE, "timing.offset");
+  h.app.act("find_next");
+  h.app.act("tab", { tab: "skills" });
+  h.app.act("open_skill", { skill: "timing.offset" });
+  assert.ok(!hasWarmUp(view(h)));
+  assert.ok(plain(view(h)).includes(COPY.paused.after_lesson));
+});
+
+test("Skills shows ↻ Practice due on a due skill, never on easing (FR-048)", async () => {
+  const h = await onHome(TWO_DUE);
+  const rows = h.app.model().skills_view.rows;
+  const row = (id) => rows.find((r) => r.id === id);
+  assert.deepEqual([row("timing.offset").glyph, row("timing.offset").word], ["↻", COPY.skills.words.due]);
+  assert.deepEqual([row("transform.anchor").glyph, row("transform.anchor").word], ["↻", COPY.skills.words.due]);
+  assert.deepEqual([row("easing.basic").glyph, row("easing.basic").word], ["✓", COPY.skills.words.learned]);
+});
+
+test("a failed warm-up start retries with the warm-up's request and status", async () => {
+  const h = await onHome(TWO_DUE);
+  h.app.act("warm_up", { skill: "timing.offset" });
+  h.adapter().emit("error", { kind: "service_busy" });
+  assert.equal(h.app.model().state, "lesson-start-failed");
+  h.app.act("try_again");
+  assert.deepEqual(h.adapter().sent, [{ text: "/offset-mentor review", kind: "warm_up" }]);
+  assert.equal(h.app.model().turn.status, COPY.status.warm_up_ready);
+});

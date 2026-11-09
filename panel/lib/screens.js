@@ -65,19 +65,19 @@ function upNextCard(h, o) {
   return `<section class="card lead${o.dim ? " dim" : ""}" aria-label="${esc(COPY.home.up_next)}"><div class="kicker accent">${esc(COPY.home.up_next)}</div><h3 data-title tabindex="-1">${esc(u.name)}</h3><p class="why">${esc(u.why)}</p><div class="row">${go}${pick}</div></section>`;
 }
 
-function practiceCard(h) {
+function practiceCard(h, o) {
   const p = h.practice;
   if (!p) return "";
   const last = p.last_practiced ? `${COPY.home.last_practiced} ${p.last_practiced}.` : "";
   const more = p.rest ? `<span class="meta">${esc(COPY.home.more_due(p.rest))}</span>` : "";
   const line = last || more ? `<p>${esc(last)}${last && more ? " " : ""}${more}</p>` : "";
-  return `<section class="card" aria-label="${esc(COPY.home.practice_due)}"><div class="kicker due"><span aria-hidden="true">↻</span> ${esc(COPY.home.practice_due)}</div><h3>${esc(p.name)}</h3>${line}</section>`;
+  return `<section class="card" aria-label="${esc(COPY.home.practice_due)}"><div class="kicker due"><span aria-hidden="true">↻</span> ${esc(COPY.home.practice_due)}</div><h3>${esc(p.name)}</h3>${line}${o.off ? `<p class="later">${esc(o.reason)}</p>` : btn(COPY.buttons.warm_up, "warm_up", "", `data-skill="${esc(p.skill)}"`)}</section>`;
 }
 
 function homeCards(m, o) {
   const h = m.home;
   const hello = o.hideHello || !h.hello ? "" : `<p class="hello">${esc(h.hello.text)}${h.hello.sub ? `<small>${esc(h.hello.sub)}</small>` : ""}</p>`;
-  return `${hello}${upNextCard(h, o)}${practiceCard(h)}${memoryCard(h, h.has_history)}`;
+  return `${hello}${upNextCard(h, o)}${practiceCard(h, o)}${memoryCard(h, h.has_history)}`;
 }
 
 const focusText = (v) => (v && Array.isArray(v.focus) && v.focus.length ? v.focus.join(", ") : null);
@@ -389,7 +389,10 @@ function detailHtml(m, d) {
   const off = homeOff(m);
   const tag = d.tag === "due" ? `<span class="tag practice">↻ ${esc(COPY.skills.words.due.toLowerCase())}</span>` : d.tag === "learned" ? `<span class="tag pass">✓ ${esc(COPY.skills.words.learned.toLowerCase())}</span>` : "";
   const line = d.builds_on.length ? `<p>${esc(COPY.skills.builds_on(d.builds_on))}</p>` : d.status_line ? `<p>${esc(d.status_line)}</p>` : "";
-  const go = off ? `<p class="later">${esc(off)}</p>` : btn(COPY.buttons.new_lesson, "new_lesson", "primary", `data-skill="${esc(d.id)}"`);
+  const skill = `data-skill="${esc(d.id)}"`;
+  const go = off ? `<p class="later">${esc(off)}</p>`
+    : d.state === "review" ? btn(COPY.buttons.warm_up, "warm_up", "primary", skill) + btn(COPY.buttons.new_lesson, "new_lesson", "", skill)
+      : btn(COPY.buttons.new_lesson, "new_lesson", "primary", skill);
   const history = d.history.length
     ? `<ul class="hist">${d.history.map((h) => `<li><b>${esc(h.date)}</b>${[h.comp, h.result].filter(Boolean).map((p) => ` · ${esc(p)}`).join("")}${h.summary || h.next ? `<small>${esc([h.summary, h.next ? `${COPY.home.next_time} ${h.next}` : ""].filter(Boolean).join(" "))}</small>` : ""}</li>`).join("")}</ul>`
     : `<p class="meta">${esc(COPY.skills.no_lessons)}</p>`;

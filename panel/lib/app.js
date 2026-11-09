@@ -9,7 +9,7 @@ const { stateOf, listCollapsed } = require("./view-state.js");
 const { initialLesson, reduceLesson, showsResuming, DEMO_TOOLS } = require("./lesson.js");
 const list = require("./checklist/index.js");
 const { treatError, logEntry } = require("./errors.js");
-const { REQUESTS, showMeAgain, startRequest, newLessonRequest, followOnRequest } = require("./requests.js");
+const { REQUESTS, showMeAgain, startRequest, newLessonRequest, warmUpRequest, followOnRequest } = require("./requests.js");
 const { skillById, skillOfCommand, builtSkills, EASING } = require("./skills.js");
 const { skillsView, skillDetail } = require("./skills-view.js");
 const { skillOf } = require("./skill-tools.js");
@@ -443,7 +443,7 @@ function createApp(deps) {
     if (state.busy || state.lesson_open) return;
     stopAdapter();
     resetLessonFields();
-    state.start = { skill: skillId, req };
+    state.start = { skill: skillId, req, status };
     state.pending = null;
     state.saved = null;
     state.aeclosed = false;
@@ -472,6 +472,12 @@ function createApp(deps) {
   function newLesson({ skill }) {
     const row = skillById(skill);
     if (row) beginLesson(row.id, newLessonRequest(row.command), COPY.status.lesson_ready);
+  }
+
+  // Warm up (RQ-11): only a skill the data file says has a review, so never easing.
+  function warmUp({ skill }) {
+    const row = builtSkills(deps.pathData, deps.skillsBuilt).find((s) => s.id === skill);
+    if (row && row.review) beginLesson(row.id, warmUpRequest(row.command), COPY.status.warm_up_ready);
   }
 
   // Find my next lesson (FR-013, FR-082): one next-mentor turn. It isn't a lesson, so it writes no
@@ -574,7 +580,7 @@ function createApp(deps) {
     if (e.state === "lesson-start-failed" || (!state.lesson_open && !state.lesson_over)) {
       state.error = null;
       if (state.start && state.start.picking) findNext();
-      else if (state.start) beginLesson(state.start.skill, state.start.req, COPY.status.lesson_ready);
+      else if (state.start) beginLesson(state.start.skill, state.start.req, state.start.status || COPY.status.lesson_ready);
       else startLesson();
       return;
     }
@@ -658,6 +664,7 @@ function createApp(deps) {
     reconnect,
     start: ({ skill }) => startLesson({ skill }),
     new_lesson: newLesson,
+    warm_up: warmUp,
     find_next: findNext,
     yes,
     leave_picking: () => leaveLesson("skills"),
