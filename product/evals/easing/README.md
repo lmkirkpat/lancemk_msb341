@@ -19,7 +19,7 @@ Five cases added, numbers 29 to 33 (the set is now 33 cases). Written and dry-ru
 | 32-why-mechanical-before-focus | `Why does it look mechanical?` (turn 2) | T028 finding 1 | new item `R-WHY-EXPLAINED`; fails on a bare status report. Expected to fail on `main` until the `007-skill` fix lands |
 | 33-question-after-pass | `Why does easing make it feel less robotic?` (turn 4) | FR-046 | new item `R-ANSWERS-AFTER-PASS`; the runner checks that the last turn calls neither `record_lesson` nor `set_ease` |
 
-Run them: `node product/evals/easing/run.mjs --only 29` (and 30, 31, 32, 33). Each id prefix matches one case.
+Run them: `node product/evals/easing/run.mjs --only T027` runs exactly these five (they list `T027` in `covers`), or one at a time with `--only 29` to `--only 33`.
 
 ## Overlap-audit re-run (2026-10-29, mentor at `df65d41`)
 

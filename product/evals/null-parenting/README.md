@@ -19,7 +19,7 @@ turn 1). Not changed here: 37 was not in this task's runs. `R-NULL-CONTINUED` no
 
 ## Spec 007 button cases (T037, written 2026-11-09, dry-run only)
 
-7 cases added, ids 45 to 51. Each sends one panel request, word for word (`contracts/button-requests.md`), into a lesson that is open. The first run is spec 007 T038, with `--only`.
+7 cases added, ids 45 to 51. Each sends one panel request, word for word (`contracts/button-requests.md`), into a lesson that is open. The first run is spec 007 T038: `node product/evals/null-parenting/run.mjs --only FR-070` runs exactly these cases (every one lists `FR-070` in `covers`).
 Not yet run: the set's full-run baseline is unchanged. New rubric items: `R-CONTINUES`, `R-SHOW-ME-AGAIN`, `R-NEW-LESSON-ASKED`. New expect keys (shared, `../lib/turn-checks.mjs`): `last_turn_tools_called`, `last_turn_tools_not_called`, `say_max_sentences`.
 The turn named is the one that carries the request under test; earlier turns set the lesson up (typed answers on the way in, since these skills ask first).
 
