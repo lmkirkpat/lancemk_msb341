@@ -3,7 +3,7 @@
 "use strict";
 
 const { COPY } = require("../copy.js");
-const { has, arr, nameOf, intoSections, LAYERS, header, kindSentence } = require("./shared.js");
+const { has, arr, nameOf, intoSections, LAYERS, header, placeWord, kindSentence } = require("./shared.js");
 
 const W = COPY.check.null_;
 const hintFor = (hints, layer) => arr(hints).filter((h) => h && h.layer === layer).map((h) => h.code);
@@ -26,7 +26,7 @@ function nullEntries(nul, codes, makeRow) {
   const n3 = n.n3;
   if (n3 && n3.applies) {
     const f = n3.cant_check ? "cant" : n3.passed ? "done" : "off";
-    const w = n3.cant_check ? W.couldnt_check : n3.passed ? W.in_place : W.at_region(n3.region_now);
+    const w = n3.cant_check ? W.couldnt_check : n3.passed ? W.in_place : has(W.regions, n3.region_now) ? W.regions[n3.region_now] : W.at_region(placeWord(n3.region_now));
     entries.push({ section, row: makeRow({ key: "null/pivot", family: f, subject: W.pivot_at(n3.wanted), word: w }) });
   }
   return entries;

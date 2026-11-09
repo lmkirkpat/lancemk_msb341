@@ -379,3 +379,11 @@ test("null: the group waits only on the null itself, and a pivot it can't check 
   assert.equal(cant.view_fields.null_stage, "parent");
   assert.equal(cant.summary, "The group · 2 of 2 following Null 1");
 });
+
+test("null: the pivot row's region_now is in words, never raw", () => {
+  const word = (region_now) => rows(check("null_parent_check", { stage: "parenting", graded: true, null: NULL({ n3: { applies: true, passed: false, region_now, wanted: "top-left" } }), layers: [], comments: [], other_changes: [], hints: [], codes: [] }))[1][2];
+  assert.equal(word("between"), "Between spots");
+  assert.equal(word("outside"), "Outside the group");
+  assert.equal(word("center"), "At its center");
+  assert.equal(word("bottom-right"), "At its bottom-right corner");
+});
