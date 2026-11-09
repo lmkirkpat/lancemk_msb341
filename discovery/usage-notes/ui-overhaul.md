@@ -337,3 +337,72 @@ identical to the state restored and checked after T056. Checklist expanded befor
 lesson and strict-compare with `practice2-before.json` before T059 (pivot, same comp).
 
 **SC-014:** offset met (live in the panel, no terminal, checklist agreed with the check, stale counted: 0). Builder only.
+
+### Set the pivot (T059, 2026-11-09)
+
+Builder, on B1, Mentor Practice 2, focus Door (pivot to the middle of its left edge). Comp restored after T058 and checked
+(strict compare, `layer_info` included); that state is the capture before this lesson.
+
+| Measure | Result |
+|---|---|
+| Time to pass | 1 min 35 s (23:02:49Z to 23:04:25Z), 7 turns |
+| Time to saved | 1 min 47 s (`record_lesson` 23:04:36Z), 8 turns |
+| Slowest turn | 7.5 s to finish (the opening); first activity 4.2 s at worst (the closing question) |
+| Cost | $0.36 (B1) |
+| Demo | None |
+| `lesson-focus-stale` | 0 |
+| Terminal needed | No |
+
+| Step (quickstart §2) | What happened | Matches? |
+|---|---|---|
+| Opening | Asked one thing, with Door's left edge as a suggestion; no leave-out list | Yes |
+| Setup | Anchor Point and Position shown (A, then Shift+P); one frame of Door | Yes |
+| Check 1 | Partway; Door stayed | Yes |
+| Check 2 | Back at the center (builder's undo); Door stayed | Yes |
+| Check 3 | No change since check 2 (builder's second undo); mentor guessed an expression might be driving it | No: finding 1 |
+| Check 4 | At the middle of the left edge, Door didn't move; passed | Yes |
+| `lesson-passed-asking`, then saved | Asked which part stays still; "the left side"; saved | Yes |
+| Close | Suggested dragging Rotation to see the swing, then Edit > Undo | Yes |
+
+**SC-002 agreement.** The builder checked each against AE: the rows matched.
+
+| Check | Check's result | Panel rows | Builder in AE | Kind |
+|---|---|---|---|---|
+| 8 | Partway, Door stayed | Same | Same | Partial |
+| 9 | Pivot back at center | Same | Same | Undone |
+| 10 | No change since the last check | Same | Same | Undone (a second undo with nothing new to undo in the check's terms) |
+| 11 | Passed | Same | Same | Pass |
+
+**SC-002 live tally so far:**
+
+| Needed | Count |
+|---|---|
+| Checks, panel vs check 100%, vs AE ≥ 9 of 10 | 11 of 10 ✓ (11/11 and 11/11) |
+| Partial | 5 of 3 ✓ |
+| Outside the lesson | 4 of 2 ✓ |
+| Something undone | 2 of 1 ✓ |
+| Openings on easing, speed graph or offset: Proposed, then not | 1 of 3 |
+
+Only the Proposed openings are left: two more on easing, speed graph or offset, with the list expanded before the
+first reply.
+
+### What the builder said
+
+Nothing felt off; no terminal.
+
+### Findings
+
+1. **The mentor guessed a cause that wasn't there.** At check 3 nothing had changed, and the mentor said "If you dragged
+   it and it went back, something may be driving it, like an expression, and I can't see that yet." Door has no
+   expression; the builder had used Undo. A real learner could go looking for an expression. The spec's L-8 (an
+   unkeyed expression on Anchor Point or Position, T261) is probably the case this line is for: the mentor said
+   it can't see one, so it may be hedging by design. Not checked against `anchor-mentor/SKILL.md` or the tool yet.
+   *Eval case (pivot):* a check with no change after a partial, no expression on the layer, learner hasn't said a drag
+   snapped back; `expect`: no "expression" in what's said; rubric "when nothing changed, says so and asks what they
+   did, without guessing a cause". *To fix:* raise an expression only after the learner says the pivot went back on
+   its own, after the eval case fails on B1.
+
+**Comp handling:** Door's pivot is at the middle of its left edge. Restore from the copy and strict-compare with
+`practice2-before.json` before T060 (null, same comp).
+
+**SC-014:** pivot met (live in the panel, no terminal, checklist agreed with the check, stale counted: 0). Builder only.
