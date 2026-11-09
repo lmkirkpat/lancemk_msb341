@@ -1,0 +1,40 @@
+{
+  "id": "51-button-warm-up",
+  "title": "Panel: Warm up runs a review: the task for the chips, no demonstration, no walkthrough",
+  "covers": [
+    "RQ-11",
+    "FR-070"
+  ],
+  "learner_record": "learned-group.json",
+  "fixture_sources": {
+    "practice2b-with-wave-a-parented.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b-with-wave-a-parented.json",
+      "say": "/null-parenting-mentor review"
+    }
+  ],
+  "expect": {
+    "review_mode": true,
+    "first_snapshot_reply": {
+      "mode": "review"
+    },
+    "tools_not_called": [
+      "null_parent_demo"
+    ],
+    "say": [
+      {
+        "id": "names_chips",
+        "must": "(?=[\\s\\S]*Chip A)(?=[\\s\\S]*Chip B)(?=[\\s\\S]*Chip C)",
+        "turns": [
+          1
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-REVIEW-HANDS-ON",
+    "R-NAMES-REAL"
+  ]
+}

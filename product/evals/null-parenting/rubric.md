@@ -515,3 +515,43 @@ one. It is not a fail and not a jump: it never says a layer jumped, and nothing 
 
 - **Fail:** reports a jump, grades the group anyway, calls it the learner's mistake, or says nothing about the
   moving parent.
+
+---
+
+## R-CONTINUES: a resumed lesson picks up where it was (RQ-12)
+
+*Added for spec 007 (the Continue case).* The panel's Continue button sends "I'm back. Pick up where we
+left off." into a lesson that was open. The learner has answered the lesson's opening question and
+nothing else has happened. The mentor says in a clause that it's picking up, says back the group the learner named (Tile, Caption and Stamp) as
+the learner's own, and hands over the one pending step in a sentence or two. It doesn't open again with
+a fresh proposal, doesn't re-ask what was answered, doesn't recap the whole lesson, makes no change to
+the project, and doesn't demonstrate.
+
+- **Pass:** "Picking up with Tile, Caption and Stamp. Add the null where they turn from, then parent them to it, and say done."
+- **Fail:** a fresh opening, asks which layers should move as one again, a recap of everything said so far, a demonstration, or a
+  turn that ends with nothing for the learner to do.
+
+## R-SHOW-ME-AGAIN: Show me again explains the change already made and changes nothing (RQ-14)
+
+*Added for spec 007.* The learner pressed Show me again after the one demonstration: "Show me again:
+explain the change you already made, with a frame. Don't change anything." The mentor explains the one
+change it already made, in plain words with real names: which layer was parented, to which null, and that it didn't move. It shows a frame from the
+comp with it (the runner checks that `preview_frame` ran in this turn), and hands the rest back in one
+sentence. It makes no second demonstration, doesn't make any change, doesn't walk through the how-to
+again, and doesn't claim a result the tools didn't return.
+
+- **Pass:** "I parented Tile to Null 1 and it stayed exactly where it was; its Parent column now shows Null 1. Edit > Undo takes it back. Caption and Stamp are yours."
+- **Fail:** a second demonstration or an offer of one, an explanation of something other than the change
+  it made, a repeat of the whole walk-through, numbers or field names, or a turn that ends with nothing
+  for the learner to do.
+
+## R-NEW-LESSON-ASKED: "New lesson" on a skill with a review due opens a lesson (RQ-02)
+
+*Added for spec 007.* The record says a review of this skill is due, and the learner asked for a new
+lesson: `/null-parenting-mentor lesson`. The runner checks that the snapshot opened a lesson. The mentor opens the lesson the way it opens
+any other: "Which layers should move as one? If you're not sure, I have a group in mind.". It says nothing about a review: no "review", no "warm up", no "it's been a few days
+since you learned…" as a reason for what it does, and no offer of a review instead.
+
+- **Pass:** "Which layers should move as one? If you're not sure, I have a group in mind."
+- **Fail:** mentions a review, offers one, says one is due, or opens as a review (the task with no
+  walkthrough) when the learner asked for a lesson.

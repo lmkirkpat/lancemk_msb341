@@ -1,0 +1,49 @@
+{
+  "id": "50-button-continue",
+  "title": "Panel: Continue picks the lesson up where it was: the group said back, no new opening, no demo",
+  "covers": [
+    "RQ-12",
+    "FR-027",
+    "FR-070"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I'm back. Pick up where we left off."
+    }
+  ],
+  "expect": {
+    "tools_not_called": [
+      "null_parent_check"
+    ],
+    "last_turn_tools_not_called": [
+      "null_parent_demo",
+      "record_lesson"
+    ],
+    "say": [
+      {
+        "id": "names_group",
+        "must": "Tile|Caption|Stamp",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-CONTINUES",
+    "R-NAMES-REAL"
+  ]
+}
