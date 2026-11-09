@@ -108,3 +108,86 @@ layer, and the connection mark when After Effects quits.
 **Which panel:** the builder said "new panel is better". SC-015 met for step 1, with the three checks above still to run.
 
 **Decided after this sitting:** keep Ask after a pass in the same session (FR-046), and fix the mentor's answer to "why does it look mechanical" (finding 1).
+
+## Six live lessons (quickstart §2, SC-014, SC-002)
+
+### Key types (T056, 2026-11-09)
+
+Builder, on B1, Mentor Practice 2, focus Blink's Opacity (3 pairs). New panel at 260 × 480, panel installed with
+`--runtime b1`. Captured before: `practice2-before.json` (24 layers) in the session scratchpad. Times and costs from the raw
+`panel-turns.jsonl` and `calls.jsonl` lines, not `panel/dev/turns.js` (finding 3).
+
+| Measure | Result |
+|---|---|
+| Time to pass | 2 min 36 s (Start lesson 21:21:36Z, passing check 21:24:12Z), 7 turns |
+| Time to saved | 5 min 17 s, 8 turns, including the closing question and the builder's reply |
+| Slowest turn | 11.4 s to finish (check 2); first activity 4.8 s at worst (the opening) |
+| Cost | $0.51 (B1, so not API credit) |
+| Demo | None (`demo_made: false`) |
+| `lesson-focus-stale` | 0 |
+| Terminal needed | No |
+
+| Step (quickstart §2) | What happened | Matches? |
+|---|---|---|
+| Opening | Asked what's meant to snap; named Blink and Cut; said it can't see inside Seal (a precomp). Check slot empty | Yes |
+| Focus | "blink is supposed to snap"; one frame at 1.2 s showing Blink half see-through | Yes |
+| Check 1 | 1 of 3 held, partial; rows matched AE | Yes |
+| Check 2 | Still 1 of 3; Card's Position and Scale newly held at 1.2 s, listed outside the lesson; rows matched AE | Yes |
+| Hint | Said the selection may have been on Card's row; check the highlighted keys first | Yes |
+| Show me | No demo: the one demo pair was already held, so it gave the steps in words | No: finding 1 |
+| Check 3 | 3 of 3 held, passed; Card's holds still listed outside | Yes |
+| "Meant to keep moving" | The constant-speed question came after the pass; the builder said "no not right now", so the row never showed | Not reached |
+| Saved | `record_lesson` at 21:26:51Z after the reply: `passed`, `demo_used: false` | Yes |
+
+**SC-002 agreement.** The builder checked each against AE: the rows matched.
+
+| Check | Check's result | Panel rows | Builder in AE | Kind |
+|---|---|---|---|---|
+| 1 | 1 of 3 held | Same | Same | Partial |
+| 2 | 1 of 3; Card held outside | Same | Same | Partial, outside the lesson |
+| 3 | 3 of 3, passed; Card held outside | Same | Same | Outside the lesson |
+
+Card's holds were planted on purpose for the tally, not a slip.
+
+**SC-002 live tally so far** (T028 wasn't tallied):
+
+| Needed | Count |
+|---|---|
+| Checks, panel vs check 100%, vs AE ≥ 9 of 10 | 3 of 10 (3/3 and 3/3) |
+| Partial | 2 of 3 |
+| Outside the lesson | 2 of 2 ✓ |
+| Something undone | 0 of 1 |
+| Openings on easing, speed graph or offset: Proposed, then not | 0 of 3 (key types doesn't count) |
+
+### What the builder said
+
+> everything felt smooth it was easy to follow
+
+> it all worked in panel
+
+### Findings
+
+1. **Show me was offered when there was nothing it could show.** The demo target (Blink 1–1.4 s) was already held by the
+   learner, so the mentor gave the steps in words. That's right for the mentor (one demo, on its target only), but the
+   button promised a demo. *Fix, for the designer:* when the demo target is already done, either hide Show me or let it
+   read as steps. *Eval:* none; the mentor did the right thing.
+2. **The frames couldn't show the fade, and the mentor kept sending them.** Blink sits on a red square, so red on red hides
+   half see-through. The mentor said so at check 1 ("I should have said so earlier") but took the same two frames (1.6 s,
+   2 s) again at check 2. *Eval case (key types):* a focus layer the same color as what's behind it; after the mentor says
+   frames won't show it, no `preview_frame` on later checks; rubric "says once that the frame can't show the change, and
+   doesn't lean on frames after that". *Overlap:* a check's verdict and the picture disagree when layers blend. Worth a
+   line in the curriculum's edge cases.
+3. **`panel/dev/turns.js` merges lessons.** It reported lesson 15 as starting 17:26Z with 20 turns, "2.5 min", which
+   includes this lesson (a `new_lesson` turn at 21:21:36Z) and probably the pivot lesson saved at 19:49Z. Cause not
+   checked. *To fix later:* split on every `new_lesson` turn, with a test using three lessons in one log. Until then,
+   take times from the raw lines.
+4. **The planted holds are in the real record.** `next` says to decide whether Card's holds are meant. Harmless, but
+   planting for a tally on the real learner home leaves test notes in the builder's memory. For the remaining lessons,
+   use a temp `AE_MENTOR_HOME` or accept it.
+
+**Comp handling:** Card's Position and Scale still hold at 1.2 s, and Blink's three pairs are held. Restore from the copy
+saved before the lesson, then strict-compare with `practice2-before.json` (including `layer_info`) before T058 (offset,
+same comp).
+
+**SC-014:** key types met (live in the panel, no terminal, checklist agreed with the check, stale counted: 0). Builder
+only, so it says the panel works, not that a learner finds it easy.

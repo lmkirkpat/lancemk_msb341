@@ -95,7 +95,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T053 [US7] PB · Widen the sync test from EE's case names, covering RQ-16's `Yes, let's go.` and the follow-on requests. FR-071, SC-006. Depends on T027, T032 to T037.
 - [x] T054 PB · SC-003's tests for step 2's states; each skill's recorded stream through the panel. SC-002's test half, SC-007.
 - [x] T055 PB · Hand-back: what ran, what the scans say, anything for the designer.
-- [ ] T056 BL · Key types, live in the panel (quickstart §2). SC-002, SC-014.
+- [x] T056 BL · Key types, live in the panel (quickstart §2). SC-002, SC-014.
 - [ ] T057 BL · Speed graph, live. SC-002, SC-014.
 - [ ] T058 BL · Offset, live; react to the timeline. SC-002, SC-014.
 - [ ] T059 BL · Set the pivot, live. SC-002, SC-014.
