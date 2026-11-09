@@ -62,7 +62,7 @@ the eval engineer, not its builder (constitution VI).
 
 ### Check and run
 
-- [ ] T015 [P] [US1] EE · `product/evals/installer/scan.mjs <staged folder>`, written apart from the build: no `CLAUDE.md`, auto-memory, sprint notes, eval fixtures, `test/` or `.git`; `mentor/fixture/` absent; no `sk-ant-` strings; no `/Users/<name>` paths; the two extension folders contain no `node_modules` (FR-005, SC-007's install half).
+- [x] T015 [P] [US1] EE · `product/evals/installer/scan.mjs <staged folder>`, written apart from the build: no `CLAUDE.md`, auto-memory, sprint notes, eval fixtures, `test/` or `.git`; `mentor/fixture/` absent; no `sk-ant-` strings; no `/Users/<name>` paths; the two extension folders contain no `node_modules` (FR-005, SC-007's install half).
 - [ ] T016 [US1] PB · From a clean commit, run `node installer/build.mjs --channel test`, `cd installer && npm test`, and T015's scan on the staged folder. Smoke test the staged tree with no inherited environment and a temp home: the private Node starts the helper, the helper starts `ae-mentor`, and the tool list matches the repo's. Copy the zip to `/Users/Shared`. Depends on T006 to T015.
 - [ ] T017 [US1] BL AE · Run 1, on test account 1 (standard user, Apple silicon), per quickstart §2. Note any Keychain dialog. Copy `last-check.json` to `/Users/Shared`. Pass: `all_working: true`.
 - [ ] T018 [US1] BL AE · Run 2, on a new admin account, the same way. Use Intel for this or T019 if an Intel Mac is available.
