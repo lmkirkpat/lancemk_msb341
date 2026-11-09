@@ -1,0 +1,134 @@
+{
+  "run_at": "2026-11-09T19:05:30.869Z",
+  "options": {
+    "only": "08",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.29,
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "08-yes-null-crowded-empty-list",
+      "title": "Yes path (B1), null in a crowded comp with an empty layer list: no layer invented or counted, in the suggestion or the lesson",
+      "covers": [
+        "RQ-16",
+        "FR-082",
+        "FR-070"
+      ],
+      "known_gap": "next-mentor-handover item 2: a crowded comp gives an empty layer list",
+      "hash": "90de8b18d4a48e358026e0ba4996f06177bc16f642914dba8d6300d548c0a20c",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "turn_first_tool@2",
+              "pass": true,
+              "detail": "turn 2's first tool was null_parent_snapshot"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "reply_equals:null_parent_snapshot@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_skill",
+              "pass": true,
+              "detail": "turn 1: \"group\""
+            },
+            {
+              "check": "say:no_layer_names",
+              "pass": true,
+              "detail": "turns 1, 2: clean"
+            },
+            {
+              "check": "say:no_count",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-EMPTY-LIST",
+              "pass": false,
+              "reason": "In Turn 1, with an empty focus_layers list, the mentor says \"your Wall comp doesn't have anything to use it on yet\", which claims the comp has nothing for the skill, even though it names no layer or count."
+            },
+            {
+              "item": "R-NM-LESSON-OPENS",
+              "pass": true,
+              "reason": "Turn 2 calls null_parent_snapshot before speaking, then opens with its own question, \"Which layers should move as one...?\", naming no layers and not mentioning the earlier suggestion or asking the learner to type a command."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Move a group with a null\", \"Wall\" and the pivot lesson all appear in tool results, and \"lower third\" and \"logo lockup\" are generic examples, not claimed layers."
+            }
+          ],
+          "cost": 0.2851116,
+          "session_id": "cfc3345b-527a-4b1f-925e-8a9477b9461a",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"transform.anchor\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T16:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-17T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-04T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-07T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"End\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-pV0YJT/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Wall\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"parenting.null\",\n    \"skill_name\": \"Move a group with a null\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up for you is *Move a group with a null*, since you've learned everything before it, but your Wall comp doesn't have anything to use it on yet. Would you like to make a quick example in Wall and start the lesson there?\n\n### Turn 2: null-parenting-mentor; the project is an open comp; a new conversation\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Bricks.aep\",\n  \"comp\": {\n    \"name\": \"Wall\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this builds on it. Today you'll set up a few layers in Wall so one invisible handle moves them together, and I'll check your work as you go.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

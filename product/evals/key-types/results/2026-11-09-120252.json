@@ -1,0 +1,146 @@
+{
+  "run_at": "2026-11-09T19:02:52.042Z",
+  "options": {
+    "only": "35",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.84,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "35-button-show-me-again",
+      "title": "Panel: Show me again explains the change already made with a frame, and makes no second demonstration",
+      "covers": [
+        "RQ-14",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "80f3a18663ff0d35174c70b9f1679cd8adda1997ebdca40ae96fdbc0e8732f87",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_freeze_for_hold",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "last_turn_tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_turn_tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_min",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_ok_max",
+              "pass": true,
+              "detail": "1 successful demo calls"
+            },
+            {
+              "check": "demo_only_on",
+              "pass": true,
+              "detail": "only the demo target"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOW-ME-AGAIN",
+              "pass": true,
+              "reason": "Turn 4 calls preview_frame, makes no change, explains only the existing hold in plain words (\"the key at 1 s now keeps Blink fully visible until the key at 1.4 s, where it jumps to see-through instead of fading\"), and hands back with \"The 1.4 s and 1.8 s pairs are yours; say done.\""
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time the mentor uses (Blink, Cut, Seal, Dot 1 at 0.5 s, Opacity, 1 s, 1.4 s, 1.8 s, and the 1.2 s, 1.367 s and 1.433 s frame times) appears in the snapshot, demo or preview_frame results."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Each turn stays short and on one step: the turn 2 explanation ends on \"Hold Blink's three pairs and say done\", the turn 3 demo hands back the other pairs in one sentence, and turn 4 is the explanation plus \"say done\", with the blank-frame remarks ignored as a fixture artifact."
+            }
+          ],
+          "cost": 0.8403917999999999,
+          "session_id": "cef7db08-3d89-4fc7-9234-26b51c02e48a",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /key-types-mentor\nTOOL CALL key_types_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": null,\n  \"targets\": [],\n  \"target_pairs\": [],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: In Mentor Practice 2, is anything meant to snap, like a blink, an on/off, or a cut?\n\nBlink's Opacity changes across three pairs of keys starting at 1 s, and Cut's Opacity changes in one pair at 3 s. Is either meant to snap on and off instead of fading?\n\nSeal is a precomp, so I can't see inside it yet, and I'm not saying it's fine.\n\n### Turn 2: the project is an open comp\nLEARNER: Blink's Opacity should snap.\nTOOL CALL key_types_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"Blink\",\"property\":\"Opacity\"}]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Blink\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/2\",\n    \"1/ADBE Transform Group/ADBE Opacity/3\"\n  ],\n  \"target_pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1,\n      \"to_time\": 1.4,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.4,\n      \"to_time\": 1.8,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        0,\n        100\n      ]\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"from_time\": 1.8,\n      \"to_time\": 2.2,\n      \"state\": \"eased\",\n      \"layer_visible\": true,\n      \"values\": [\n        100,\n        0\n      ]\n    }\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n  \"no_demo_reason\": null,\n  \"candidates\": [\n    {\n      \"layer\": \"Blink\",\n      \"property\": \"Opacity\",\n      \"first_time\": 1,\n      \"pairs\": 3\n    },\n    {\n      \"layer\": \"Cut\",\n      \"property\": \"Opacity\",\n      \"first_time\": 3,\n      \"pairs\": 1\n    }\n  ],\n  \"more_candidates\": 0,\n  \"refused\": [],\n  \"held_examples\": [\n    {\n      \"layer\": \"Dot 1\",\n      \"property\": \"Position\",\n      \"jump_time\": 0.5\n    },\n    {\n      \"layer\": \"Flag\",\n      \"property\": \"Position\",\n      \"jump_time\": 4.5\n    }\n  ],\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ],\n      \"properties\": [\n        {\n          \"layer\": \"Seal\"\n        }\n      ]\n    }\n  ],\n  \"should_move\": [],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1.2,\"layer\":\"Blink\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-U1aC6w-runtime/cef7db08-3d89-4fc7-9234-26b51c02e48a/tool-results/mcp-ae-mentor-blob-1794250943717-t7fceo.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1.2,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: Blink's Opacity it is. The preview came back too small to show anything, but its keys put Blink partway see-through at 1.2 s, so it fades. A hold keeps the value until the next key, then jumps, the way Dot 1 already jumps at 0.5 s.\n\nSelect the key at the start of each pair (1 s, 1.4 s and 1.8 s) and choose Animation > Toggle Hold Keyframe (⌃⌥⌘H), or right-click it. Hold Blink's three pairs and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Show me how first.\nTOOL CALL key_types_demo {\"segment_id\":\"1/ADBE Transform Group/ADBE Opacity/1\"}\nTOOL RESULT (ok): {\n  \"layer\": \"Blink\",\n  \"property\": \"Opacity\",\n  \"from_time\": 1,\n  \"to_time\": 1.4,\n  \"in_type\": \"bezier\",\n  \"out_type\": \"hold\",\n  \"frames\": {\n    \"before\": 1.367,\n    \"after\": 1.433\n  },\n  \"undo\": \"Edit > Undo\"\n}\nTOOL CALL preview_frame {\"time\":1.367,\"layer\":\"Blink\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-U1aC6w-runtime/cef7db08-3d89-4fc7-9234-26b51c02e48a/tool-results/mcp-ae-mentor-blob-1794250952125-7mh1r0.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1.367,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: I held Blink's Opacity at 1 s, so it stays fully visible right up to 1.4 s, then jumps and vanishes there. Edit > Undo reverses it. The preview came back too small to show this again, so scrub across 1.4 s in your timeline to see the snap.\n\nThe 1.4 s and 1.8 s pairs are yours; say done.\n\n### Turn 4: the project is an open comp\nLEARNER: Show me again: explain the change you already made, with a frame. Don't change anything.\nTOOL CALL key_types_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n      \"label\": \"Blink › Opacity 1–1.4 s\",\n      \"verdict\": \"held_by_demo\"\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/2\",\n      \"label\": \"Blink › Opacity 1.4–1.8 s\",\n      \"verdict\": \"not_held\",\n      \"state\": \"eased\",\n      \"frame_time\": 1.6\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Opacity/3\",\n      \"label\": \"Blink › Opacity 1.8–2.2 s\",\n      \"verdict\": \"not_held\",\n      \"state\": \"eased\",\n      \"frame_time\": 2\n    }\n  ],\n  \"should_move_held\": [],\n  \"extra_holds\": [],\n  \"other_changes\": [],\n  \"constant_speed\": null,\n  \"demo_undone\": false,\n  \"items\": {\n    \"held\": false,\n    \"none_should_move_held\": true,\n    \"constant_speed\": null\n  },\n  \"passed\": false\n}\nTOOL CALL preview_frame {\"time\":1.367,\"layer\":\"Blink\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-U1aC6w-runtime/cef7db08-3d89-4fc7-9234-26b51c02e48a/tool-results/mcp-ae-mentor-blob-1794250956998-lh418o.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1.367,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: I changed nothing this time, and the hold I made is still in place: the key at 1 s now keeps Blink fully visible until the key at 1.4 s, where it jumps to see-through instead of fading. I tried the frame just before that jump, at 1.367 s, but it came back as a single purple pixel again, so I can't show you the change in a picture; moving your playhead between 1.367 s and 1.433 s shows the same thing in your Composition panel.\n\nThe 1.4 s and 1.8 s pairs are yours; say done.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

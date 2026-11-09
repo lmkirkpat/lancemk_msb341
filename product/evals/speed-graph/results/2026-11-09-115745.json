@@ -1,0 +1,371 @@
+{
+  "run_at": "2026-11-09T18:57:45.745Z",
+  "options": {
+    "only": "33",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 2.75,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "33-button-show-me-again",
+      "title": "Panel: Show me again explains the change already made with a frame, and makes no second demonstration",
+      "covers": [
+        "RQ-14",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice-now.json": "live"
+      },
+      "hash": "4c915a12be231ab06053db065a873b51d922819fa3be4d0bd004771def9959d8",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "last_turn_tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_turn_tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_min",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_only_on",
+              "pass": true,
+              "detail": "only the demo target"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOW-ME-AGAIN",
+              "pass": true,
+              "reason": "Turn 4 ran preview_frame, changed nothing, explained the one change in plain words (\"Title's Position from 0.5 to 1.5 s now gets up to speed early and spends most of the move slowing down\"), and handed back the rest in one sentence (\"The other three moves are yours\")."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time, such as Title's Position 0.5 to 1.5 s and 3 to 4.37 s, Old Take, CTRL, Icon, Logo's Rotation, Subtitle's Opacity, Bar's X Position and Glow's Blurriness, matches the tool output, and Turn 4's \"fastest part is near the start\" follows from the check's fastest \"first\"."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Each turn stays short and ends with something for the learner to do; Turn 3's demo hands back \"the other three moves\" in one sentence, and Turn 4, setting aside the blank-frame remark, gives the explanation, a brief way to see it, and the pending step (\"say done\")."
+            }
+          ],
+          "cost": 0.9314634,
+          "session_id": "bc51f4dd-7fa6-4a47-836c-c3fc94ec2203",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL speed_graph_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Position/3\",\n    \"1/ADBE Transform Group/ADBE Scale/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.5,\n      \"to_time\": 3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.367 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [\n        \"width\",\n        \"height\"\n      ],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 2\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL speed_graph_snapshot {\"skill_options\":{\"eased_layers\":[\"Title\"],\"land_hard\":[]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Position/3\",\n    \"1/ADBE Transform Group/ADBE Scale/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.5,\n      \"to_time\": 3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.367 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [\n        \"width\",\n        \"height\"\n      ],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 2\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Let's work on Title, the layer you eased before: its Position from 0.5 to 1.5 s, 1.5 to 3 s and 3 to 4.37 s, and its Scale from 0.5 to 1.5 s. Easy Ease is only a starting shape, and in this lesson you'll reshape it so each move starts quickly and lands softly.\n\nYou've hidden Old Take, so I'll leave it unless you want it. CTRL is a null, so its move can't be seen in a frame. Icon is a precomp, and I can't see inside it yet. An expression drives Logo's Rotation, so graph edits won't show. Subtitle's Opacity, Bar's X Position and Glow's Blurriness still need easing; that's the easing lesson.\n\nShould any of Title's moves land hard, like an impact or a slam?\n\n### Turn 2: the project is an open comp\nLEARNER: Sounds good, let's start.\nMENTOR: Good, we'll keep all four moves as soft landings.\n\nSelect Title and press P to show its Position, then click the Position property so its keys are selected. Open the Graph Editor with its button at the top of the timeline panel, and choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor.\n\nLooking at the move from 0.5 to 1.5 s, where is it fastest: near the start, in the middle, or near the end?\n\n### Turn 3: the project is an open comp\nLEARNER: Show me how first.\nTOOL CALL speed_graph_demo {\"segment_id\":\"1/ADBE Transform Group/ADBE Position/1\"}\nTOOL RESULT (ok): {\n  \"shaped\": \"Title › Position, 0.500 s → 1.500 s\",\n  \"layer\": \"Title\",\n  \"property\": \"Position\",\n  \"from_time\": 0.5,\n  \"to_time\": 1.5,\n  \"dimensions\": 1,\n  \"out_influence\": [\n    15.13\n  ],\n  \"in_influence\": [\n    79.87\n  ],\n  \"undo\": \"Edit > Undo\"\n}\nTOOL CALL preview_frame {\"time\":0.7,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-WiF1VL-runtime/bc51f4dd-7fa6-4a47-836c-c3fc94ec2203/tool-results/mcp-ae-mentor-blob-1794250532338-a0ssdp.png]\n{\"comp\":\"Mentor Practice\",\"time\":0.7,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nTOOL CALL preview_frame {\"time\":1.3,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-WiF1VL-runtime/bc51f4dd-7fa6-4a47-836c-c3fc94ec2203/tool-results/mcp-ae-mentor-blob-1794250532587-8gtxm5.png]\n{\"comp\":\"Mentor Practice\",\"time\":1.3,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: The handle's sideways reach is influence, how long the ease lasts. I shaped Title's Position from 0.5 s to 1.5 s: a short ease out of the start, a long ease into the landing. Edit > Undo reverses it. In the speed graph, the peak of that move has shifted toward the start. The other three moves are yours: give each one a short ease out and a long ease in, and say done.\n\n### Turn 4: the project is an open comp\nLEARNER: Show me again: explain the change you already made, with a frame. Don't change anything.\nTOOL CALL speed_graph_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice\",\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"result\": \"passed\",\n      \"failed\": [],\n      \"mistake\": null,\n      \"fastest\": {\n        \"parts\": [\n          \"first\"\n        ]\n      },\n      \"credit\": \"demo\"\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"result\": \"not_passed\",\n      \"failed\": [\n        \"a\",\n        \"b\"\n      ],\n      \"mistake\": \"not_shaped\",\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.367 s\",\n      \"result\": \"not_passed\",\n      \"failed\": [\n        \"a\",\n        \"b\"\n      ],\n      \"mistake\": \"not_shaped\",\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"result\": \"not_passed\",\n      \"failed\": [\n        \"a\",\n        \"b\"\n      ],\n      \"mistake\": \"not_shaped\",\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"other_changes\": [],\n  \"passed\": false,\n  \"demo_undone\": false,\n  \"seen_shaped\": [\n    \"1/ADBE Transform Group/ADBE Position/1\"\n  ]\n}\nTOOL CALL preview_frame {\"time\":0.7,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-WiF1VL-runtime/bc51f4dd-7fa6-4a47-836c-c3fc94ec2203/tool-results/mcp-ae-mentor-blob-1794250540463-b8ndbf.png]\n{\"comp\":\"Mentor Practice\",\"time\":0.7,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: I can't show you a frame: the render came back as a single pixel, as did the two I tried during the demo, so I can't say where Title is at any moment. My change is still in place and I altered nothing just now: Title's Position from 0.5 to 1.5 s now gets up to speed early and spends most of the move slowing down, so its fastest part is near the start instead of the middle.\n\nTo see it yourself, drag the playhead through 0.5 to 1.5 s in the timeline and watch Title in the Composition panel. The other three moves are yours: give each one a short ease out and a long ease in, and say done.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "last_turn_tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_turn_tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_min",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_only_on",
+              "pass": true,
+              "detail": "only the demo target"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOW-ME-AGAIN",
+              "pass": true,
+              "reason": "Turn 4 ran preview_frame, made no change or second demo, explained the existing shape in words (\"the ease out of the first key is short and the ease into the 1.5 s key is long\"), and handed back the remaining pairs in one sentence ending \"say done\"."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Turn 4's names and times (Title's Position 0.5 to 1.5 s, 1.5 to 3 s, 3 to 4.37 s, Scale, and 0.8 s) all match the snapshot, check and preview_frame results, and \"near the start\" follows from the check's fastest \"first\"."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Setting aside the blank-frame remark, Turn 4 moves one idea, the shape already made on Title's Position, in a sentence and ends by handing over the task: \"a short ease out and a long ease in, and say done.\""
+            }
+          ],
+          "cost": 0.9226302000000001,
+          "session_id": "85f423cf-44ff-4168-acf7-bfdf55b54644",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL speed_graph_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Position/3\",\n    \"1/ADBE Transform Group/ADBE Scale/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.5,\n      \"to_time\": 3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.367 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [\n        \"width\",\n        \"height\"\n      ],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 2\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL speed_graph_snapshot {\"skill_options\":{\"eased_layers\":[\"Title\"],\"land_hard\":[]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Position/3\",\n    \"1/ADBE Transform Group/ADBE Scale/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.5,\n      \"to_time\": 3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.367 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [\n        \"width\",\n        \"height\"\n      ],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 2\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Let's shape the eases on Title, the layer you eased before: its Position from 0.5 to 1.5 s, 1.5 to 3 s and 3 to 4.37 s, and its Scale from 0.5 to 1.5 s. You'll turn Easy Ease's one-size shape into moves that start quickly and land softly.\n\nYou've hidden Old Take, so I'll leave it unless you want it. CTRL is a null, so its move can't be seen in a frame. I can't see inside Icon yet. An expression drives Logo's Rotation, so graph edits won't show. Subtitle's Opacity, Bar's X Position and Glow's Blurriness still need easing; that's the easing lesson.\n\nShould any of Title's moves land hard, like an impact or a slam?\n\n### Turn 2: the project is an open comp\nLEARNER: Sounds good, let's start.\nMENTOR: Select Title and reveal its Position keys, then open the Graph Editor with its button at the top of the timeline panel. Choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor.\n\nLooking at Position between 0.5 and 1.5 s, where is the move fastest: near the start, in the middle, or near the end?\n\n### Turn 3: the project is an open comp\nLEARNER: Show me how first.\nTOOL CALL speed_graph_demo {\"segment_id\":\"1/ADBE Transform Group/ADBE Position/1\"}\nTOOL RESULT (ok): {\n  \"shaped\": \"Title › Position, 0.500 s → 1.500 s\",\n  \"layer\": \"Title\",\n  \"property\": \"Position\",\n  \"from_time\": 0.5,\n  \"to_time\": 1.5,\n  \"dimensions\": 1,\n  \"out_influence\": [\n    15.13\n  ],\n  \"in_influence\": [\n    79.87\n  ],\n  \"undo\": \"Edit > Undo\"\n}\nTOOL CALL preview_frame {\"time\":0.7,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-8nOnjU-runtime/85f423cf-44ff-4168-acf7-bfdf55b54644/tool-results/mcp-ae-mentor-blob-1794250573604-yobs31.png]\n{\"comp\":\"Mentor Practice\",\"time\":0.7,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nTOOL CALL preview_frame {\"time\":1.3,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-8nOnjU-runtime/85f423cf-44ff-4168-acf7-bfdf55b54644/tool-results/mcp-ae-mentor-blob-1794250573940-g6am87.png]\n{\"comp\":\"Mentor Practice\",\"time\":1.3,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: The handle's sideways reach is influence, how long the ease lasts. I shaped Title's Position from 0.5 s to 1.5 s: a short ease out of the start, a long ease into the landing. Edit > Undo reverses it. In the speed graph, the peak moved toward the start. The other three are yours: Title's Position from 1.5 to 3 s and 3 to 4.37 s, and its Scale, so give each a short ease out and a long ease in, and say done.\n\n### Turn 4: the project is an open comp\nLEARNER: Show me again: explain the change you already made, with a frame. Don't change anything.\nTOOL CALL speed_graph_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice\",\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"result\": \"passed\",\n      \"failed\": [],\n      \"mistake\": null,\n      \"fastest\": {\n        \"parts\": [\n          \"first\"\n        ]\n      },\n      \"credit\": \"demo\"\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"result\": \"not_passed\",\n      \"failed\": [\n        \"a\",\n        \"b\"\n      ],\n      \"mistake\": \"not_shaped\",\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.367 s\",\n      \"result\": \"not_passed\",\n      \"failed\": [\n        \"a\",\n        \"b\"\n      ],\n      \"mistake\": \"not_shaped\",\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"result\": \"not_passed\",\n      \"failed\": [\n        \"a\",\n        \"b\"\n      ],\n      \"mistake\": \"not_shaped\",\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"other_changes\": [],\n  \"passed\": false,\n  \"demo_undone\": false,\n  \"seen_shaped\": [\n    \"1/ADBE Transform Group/ADBE Position/1\"\n  ]\n}\nTOOL CALL preview_frame {\"time\":0.8,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-8nOnjU-runtime/85f423cf-44ff-4168-acf7-bfdf55b54644/tool-results/mcp-ae-mentor-blob-1794250582258-uguhkf.png]\n{\"comp\":\"Mentor Practice\",\"time\":0.8,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: I changed nothing, and my shape on Title's Position from 0.5 to 1.5 s is still there: the ease out of the first key is short and the ease into the 1.5 s key is long, so the move gets up to speed early and spends the rest of its time settling, with its fastest point now near the start. I can't show that with a frame, because the frame came back as a single purple pixel (as did the two I took after the demo), so scrub to about 0.8 s in your comp to see it instead.\n\nGive Title's Position from 1.5 to 3 s and 3 to 4.37 s, and its Scale, a short ease out and a long ease in, and say done.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "last_turn_tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_turn_tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_min",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_only_on",
+              "pass": true,
+              "detail": "only the demo target"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOW-ME-AGAIN",
+              "pass": true,
+              "reason": "Turn 4 calls only preview_frame, explains the existing change in words without influence numbers (\"leaves its 0.5 s key after only a short ease and spends most of the move slowing into its 1.5 s key\"), says \"I didn't change anything this time\", and hands back the other three in one sentence ending \"say done\"."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time the mentor uses, such as Title's Position 0.5 to 1.5 s, 1.5 to 3 s, 3 to 4.37 s (rounded from 4.367), Scale, Old Take, CTRL, Icon, Logo's Rotation, Subtitle's Opacity, Bar's X Position and Glow's Blurriness, matches the speed_graph_snapshot, speed_graph_demo or preview_frame output."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Each turn moves one step and ends with something to do or answer: the land-hard question in turn 1, the fastest-point question in turn 2, and \"say done\" after the demo in turn 3 and the single explanation in turn 4, with the blank-frame remark ignored as a fixture artifact."
+            }
+          ],
+          "cost": 0.8927718000000001,
+          "session_id": "4dce4dda-e540-494c-9b4d-4693f2c593cf",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL speed_graph_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Position/3\",\n    \"1/ADBE Transform Group/ADBE Scale/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.5,\n      \"to_time\": 3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.367 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [\n        \"width\",\n        \"height\"\n      ],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 2\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL speed_graph_snapshot {\"skill_options\":{\"eased_layers\":[\"Title\"],\"land_hard\":[]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Title\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Position/3\",\n    \"1/ADBE Transform Group/ADBE Scale/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Title › Position 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Title › Position 1.5–3 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.5,\n      \"to_time\": 3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Position/3\",\n      \"label\": \"Title › Position 3–4.367 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n      \"label\": \"Title › Scale 0.5–1.5 s\",\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"display_path\": \"Transform › Scale\",\n      \"from_time\": 0.5,\n      \"to_time\": 1.5,\n      \"moving_dims\": [\n        \"width\",\n        \"height\"\n      ],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 6,\n  \"candidates_count\": 8,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"display_path\": \"Transform › Opacity\",\n      \"pairs\": 1\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"pairs\": 2\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: In this lesson you'll reshape Easy Ease by hand, so moves start quickly and land softly. I'd like to work on Title, which you've eased before: its Position from 0.5 to 1.5 s, 1.5 to 3 s and 3 to 4.37 s, and its Scale from 0.5 to 1.5 s.\n\nYou've hidden Old Take, so I'll leave it unless you want it. CTRL is a null, so its move can't be seen in a frame. I can't see inside Icon yet. An expression drives Logo's Rotation, so graph edits won't show there. Subtitle's Opacity, Bar's X Position and Glow's Blurriness still need easing; that's the easing lesson.\n\nShould any of those Title moves land hard, like an impact or a slam?\n\n### Turn 2: the project is an open comp\nLEARNER: Sounds good, let's start.\nMENTOR: Select Title and open the Graph Editor with its button at the top of the timeline panel, then choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor. Looking at Position from 0.5 to 1.5 s, where is the move fastest: near the start, in the middle, or near the end?\n\n### Turn 3: the project is an open comp\nLEARNER: Show me how first.\nTOOL CALL speed_graph_demo {\"segment_id\":\"1/ADBE Transform Group/ADBE Position/1\"}\nTOOL RESULT (ok): {\n  \"shaped\": \"Title › Position, 0.500 s → 1.500 s\",\n  \"layer\": \"Title\",\n  \"property\": \"Position\",\n  \"from_time\": 0.5,\n  \"to_time\": 1.5,\n  \"dimensions\": 1,\n  \"out_influence\": [\n    15.13\n  ],\n  \"in_influence\": [\n    79.87\n  ],\n  \"undo\": \"Edit > Undo\"\n}\nTOOL CALL preview_frame {\"time\":0.7,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-N8Ziqa-runtime/4dce4dda-e540-494c-9b4d-4693f2c593cf/tool-results/mcp-ae-mentor-blob-1794250615375-9inhjb.png]\n{\"comp\":\"Mentor Practice\",\"time\":0.7,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nTOOL CALL preview_frame {\"time\":1.3,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-N8Ziqa-runtime/4dce4dda-e540-494c-9b4d-4693f2c593cf/tool-results/mcp-ae-mentor-blob-1794250615732-3ntj6v.png]\n{\"comp\":\"Mentor Practice\",\"time\":1.3,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: The handle's sideways reach is influence, how long the ease lasts. I shaped Title's Position from 0.5 s to 1.5 s: a short ease out of the start, a long ease into the landing. **Edit > Undo** reverses it. In the speed graph, the peak moved toward the start.\n\nThe other three are yours, Title's Position from 1.5 to 3 s and from 3 to 4.37 s, and its Scale; say done.\n\n### Turn 4: the project is an open comp\nLEARNER: Show me again: explain the change you already made, with a frame. Don't change anything.\nTOOL CALL preview_frame {\"time\":0.7,\"layer\":\"Title\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-N8Ziqa-runtime/4dce4dda-e540-494c-9b4d-4693f2c593cf/tool-results/mcp-ae-mentor-blob-1794250626193-2ar517.png]\n{\"comp\":\"Mentor Practice\",\"time\":0.7,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: I tried a frame at 0.7 s, but it came back as a single colored pixel, so I can't show you where Title is; you can see it yourself by parking the playhead there. The change is that Title now leaves its 0.5 s key after only a short ease and spends most of the move slowing into its 1.5 s key, and I didn't change anything this time.\n\nThe other three are yours, Title's Position from 1.5 to 3 s and from 3 to 4.37 s, and its Scale; say done.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

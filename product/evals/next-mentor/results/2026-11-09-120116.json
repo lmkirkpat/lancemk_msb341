@@ -1,0 +1,324 @@
+{
+  "run_at": "2026-11-09T19:01:16.857Z",
+  "options": {
+    "only": "06",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.94,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "06-yes-pivot-named-layers",
+      "title": "Yes path (B1), the pivot with named layers: the suggestion names them; then the plain /anchor-mentor opens the lesson from its own snapshot",
+      "covers": [
+        "RQ-16",
+        "FR-082",
+        "FR-070"
+      ],
+      "known_gap": "next-mentor-handover item 1 / FR-082: the layers a suggestion names don't reach the lesson",
+      "hash": "4608bc7f503c035f07180038d8638662da480d88e4f875a39266b786b8b98ff4",
+      "pass": true,
+      "passes": 2,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "turn_first_tool@2",
+              "pass": true,
+              "detail": "turn 2's first tool was anchor_snapshot"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "reply_equals:anchor_snapshot@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_cursor",
+              "pass": true,
+              "detail": "turn 1: \"Cursor\""
+            },
+            {
+              "check": "say:names_icon",
+              "pass": true,
+              "detail": "turn 1: \"Icon\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-LAYERS-NAMED",
+              "pass": true,
+              "reason": "Turn 1 names exactly the short focus_layers list and no other layer: \"Cursor and Icon in Mentor Practice are good layers to learn it on.\""
+            },
+            {
+              "item": "R-NM-LESSON-OPENS",
+              "pass": false,
+              "reason": "In Turn 2 the mentor speaks before anchor_snapshot runs (\"I'll look at your comp, then we'll pick a layer and you'll set where it turns from.\"), so the lesson does not start with its snapshot tool, although the later opening uses only snapshot layers and doesn't mention the suggestion."
+            },
+            {
+              "item": "R-NM-LAYERS-KEPT",
+              "pass": true,
+              "reason": "The Turn 2 opening proposes Cursor, one of the two layers the suggestion named and one the snapshot offers (\"Cursor could swing from the middle of its bottom edge\"), though this follows the snapshot's own proposal after a general question rather than showing that the named layers carried over."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Set the pivot (anchor point)\", \"Mentor Practice\", \"Cursor\" and \"Icon\" all appear in tool results, and the bottom-edge placement matches the snapshot's \"bottom-middle\" proposal."
+            }
+          ],
+          "cost": 0.3194256,
+          "session_id": "4a2c175f-0297-4404-8fc3-ca47c745c966",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T16:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-17T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-04T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-07T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"End\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-zrg4g4/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"transform.anchor\",\n    \"skill_name\": \"Set the pivot (anchor point)\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Cursor\",\n      \"Icon\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up in your path is *Set the pivot (anchor point)*, and Cursor and Icon in Mentor Practice are good layers to learn it on. Want to start?\n\n### Turn 2: anchor-mentor; the project is an open comp; a new conversation\nLEARNER: /anchor-mentor\nMENTOR: I'll look at your comp, then we'll pick a layer and you'll set where it turns from.\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"time\": 3.6,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Bar\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Glow\",\n      \"bucket\": \"never\",\n      \"reason\": \"adjustment\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Cursor\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Logo\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Icon\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    },\n    {\n      \"layer\": \"Background\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Cursor\",\n    \"suggested_place\": \"bottom-middle\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Cursor\": \"between\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [\n    {\n      \"layer\": \"Cursor\",\n      \"note\": \"text_baseline\"\n    }\n  ],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Cursor could swing from the middle of its bottom edge. Want to try that one?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "turn_first_tool@2",
+              "pass": true,
+              "detail": "turn 2's first tool was anchor_snapshot"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "reply_equals:anchor_snapshot@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_cursor",
+              "pass": true,
+              "detail": "turn 1: \"Cursor\""
+            },
+            {
+              "check": "say:names_icon",
+              "pass": true,
+              "detail": "turn 1: \"Icon\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-LAYERS-NAMED",
+              "pass": true,
+              "reason": "The turn 1 suggestion names exactly the short focus_layers list and no others: \"Cursor and Icon in your comp are good layers to practice it on.\""
+            },
+            {
+              "item": "R-NM-LESSON-OPENS",
+              "pass": true,
+              "reason": "Turn 2 calls anchor_snapshot before speaking, then opens with the skill's own question and offers only the snapshot's proposal (\"Cursor could swing from the middle of its bottom edge\"), without mentioning the suggestion or a hand-over."
+            },
+            {
+              "item": "R-NM-LAYERS-KEPT",
+              "pass": true,
+              "reason": "The lesson starts with a general question but does propose a layer the suggestion named (\"Cursor could swing from the middle of its bottom edge. Want to try that one?\"), though this comes from the snapshot's own proposal, not from the layers being carried over."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Set the pivot (anchor point)\", Cursor and Icon all match recommend_next, Cursor matches anchor_snapshot, and \"the timing work you've finished\" is a plain-words mention of the record with no detailed recital."
+            }
+          ],
+          "cost": 0.306345,
+          "session_id": "98de45de-e19f-4b3d-b116-c19f09623dbb",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T16:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-17T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-04T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-07T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"End\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-f0zU94/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"transform.anchor\",\n    \"skill_name\": \"Set the pivot (anchor point)\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Cursor\",\n      \"Icon\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up is *Set the pivot (anchor point)*, the next step after the timing work you've finished, and Cursor and Icon in your comp are good layers to practice it on.\n\nWant to start on those two?\n\n### Turn 2: anchor-mentor; the project is an open comp; a new conversation\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"time\": 3.6,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Bar\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Glow\",\n      \"bucket\": \"never\",\n      \"reason\": \"adjustment\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Cursor\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Logo\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Icon\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    },\n    {\n      \"layer\": \"Background\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Cursor\",\n    \"suggested_place\": \"bottom-middle\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Cursor\": \"between\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [\n    {\n      \"layer\": \"Cursor\",\n      \"note\": \"text_baseline\"\n    }\n  ],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Cursor could swing from the middle of its bottom edge. Want to try that one?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "say_max_sentences:two_sentences",
+              "pass": true,
+              "detail": "2 sentences in turn 1 (at most 2)"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "opening_changes_nothing@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_text_before_first_call",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "turn_first_tool@2",
+              "pass": true,
+              "detail": "turn 2's first tool was anchor_snapshot"
+            },
+            {
+              "check": "reply_equals:recommend_next@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "reply_equals:anchor_snapshot@2",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "say:names_cursor",
+              "pass": true,
+              "detail": "turn 1: \"Cursor\""
+            },
+            {
+              "check": "say:names_icon",
+              "pass": true,
+              "detail": "turn 1: \"Icon\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NM-LAYERS-NAMED",
+              "pass": true,
+              "reason": "Turn 1 names exactly the short focus_layers list and nothing else: \"Cursor and Icon in Mentor Practice are good layers to learn it on.\""
+            },
+            {
+              "item": "R-NM-LESSON-OPENS",
+              "pass": true,
+              "reason": "Turn 2 calls anchor_snapshot before speaking, then opens with the skill's own question (\"Which layer do you want to turn or grow from somewhere other than its middle...\"), names only Cursor from the snapshot, and doesn't mention the suggestion or a hand-over."
+            },
+            {
+              "item": "R-NM-LAYERS-KEPT",
+              "pass": true,
+              "reason": "The lesson's opening proposes a layer the suggestion named (\"Cursor could swing from the middle of its bottom edge\"), although it starts with a general question and the choice matches the snapshot's own proposal rather than showing that the suggestion's layers carried over."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "\"Set the pivot (anchor point)\", \"Mentor Practice\", \"Cursor\" and \"Icon\" all appear in the recommend_next result, Cursor's bottom-middle place matches anchor_snapshot's suggested_place, and the record is not recited."
+            }
+          ],
+          "cost": 0.31201239999999997,
+          "session_id": "6db60a0d-dd14-4f23-aa3c-adfb283b2596",
+          "transcript": "### Turn 1: next-mentor; the project is an open comp\nLEARNER: /next-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {\n    \"easing.basic\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"keyframes.types\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"easing.speed_graph\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    },\n    \"timing.offset\": {\n      \"status\": \"learned\",\n      \"last_practiced\": \"2026-11-05T17:00:00.000Z\",\n      \"times_passed\": 1,\n      \"next\": \"Keep going.\",\n      \"review_due\": \"2099-01-01\",\n      \"reviews_passed_in_row\": 0,\n      \"review_is_due\": false\n    }\n  },\n  \"lessons\": [\n    {\n      \"date\": \"2026-10-12T18:00:00.000Z\",\n      \"skill\": \"easing.basic\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Eased 4 Title pairs: Position x2, Scale, Opacity\",\n      \"result\": \"passed\",\n      \"demo_used\": true,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-19T16:00:00.000Z\",\n      \"skill\": \"keyframes.types\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Cursor\",\n          \"property\": \"Opacity\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-17T16:00:00.000Z\",\n      \"skill\": \"easing.speed_graph\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-04T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"first\",\n      \"targets\": [\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Position\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-07T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"End\"\n        }\n      ]\n    },\n    {\n      \"date\": \"2026-10-14T16:00:00.000Z\",\n      \"skill\": \"timing.offset\",\n      \"project\": \"Claude AE Tutor Test.aep\",\n      \"comp\": \"Mentor Practice\",\n      \"attempted\": \"Worked on the focus pairs\",\n      \"result\": \"passed\",\n      \"demo_used\": false,\n      \"summary\": \"What the check showed.\",\n      \"next\": \"Try another layer.\",\n      \"kind\": \"review\",\n      \"targets\": [\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-xGnqBo/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL recommend_next {}\nTOOL RESULT (ok): {\n  \"looked_at_comp\": true,\n  \"comp\": \"Mentor Practice\",\n  \"record_readable\": true,\n  \"recommendation\": {\n    \"skill\": \"transform.anchor\",\n    \"skill_name\": \"Set the pivot (anchor point)\",\n    \"kind\": \"lesson\",\n    \"reason\": \"next_in_path\",\n    \"focus_layers\": [\n      \"Cursor\",\n      \"Icon\"\n    ],\n    \"offer_practice_comp\": false\n  }\n}\nMENTOR: Next up in your path is *Set the pivot (anchor point)*, and Cursor and Icon in Mentor Practice are good layers to learn it on. Want to start there?\n\n### Turn 2: anchor-mentor; the project is an open comp; a new conversation\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"time\": 3.6,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Title\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Bar\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Glow\",\n      \"bucket\": \"never\",\n      \"reason\": \"adjustment\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Cursor\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1\n    },\n    {\n      \"layer\": \"Logo\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"bucket\": \"never\",\n      \"reason\": \"position_moves\",\n      \"rank\": null,\n      \"moves_case\": \"two_or_more\"\n    },\n    {\n      \"layer\": \"Icon\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2\n    },\n    {\n      \"layer\": \"Background\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Cursor\",\n    \"suggested_place\": \"bottom-middle\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Cursor\": \"between\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [\n    {\n      \"layer\": \"Cursor\",\n      \"note\": \"text_baseline\"\n    }\n  ],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Cursor could swing from the middle of its bottom edge. Want to try that one?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}
