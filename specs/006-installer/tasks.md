@@ -47,9 +47,9 @@ the eval engineer, not its builder (constitution VI).
 
 ### Small changes first
 
-- [ ] T006 [P] [US1] PB · Test first in `panel/test/`: in `panel/lib/adapter-api.js`, default the helper path to `path.join(config.repo_path, "panel", "helper", "main.mjs")`, keeping `deps.helperPath`. A dev install resolves to the same file. Merge note: 007 T023 and 013 T044 change other lines.
-- [ ] T007 [P] [US2] PB · Test first: new `panel/lib/loaded-stamp.js` writes `panel-loaded.json` to the learner home with `version` from the manifest and `at`, atomically, and never throws; one call from `panel/main.js` at start-up. No record, project or key access. Merge note: 007 rebuilds `main.js`, so re-apply this one call if it lands first.
-- [ ] T008 [P] [US2] PB · Do spec 013 T037 as written there and tick it in `specs/013-api-runtime/tasks.md`: `key_check` in `panel/helper/main.mjs` and `panel/helper/lib/key.mjs` returns `works`, `rejected`, `offline` or `no_key`. Check that a `key` field is accepted, since the installer checks before storing.
+- [x] T006 [P] [US1] PB · Test first in `panel/test/`: in `panel/lib/adapter-api.js`, default the helper path to `path.join(config.repo_path, "panel", "helper", "main.mjs")`, keeping `deps.helperPath`. A dev install resolves to the same file. Merge note: 007 T023 and 013 T044 change other lines.
+- [x] T007 [P] [US2] PB · Test first: new `panel/lib/loaded-stamp.js` writes `panel-loaded.json` to the learner home with `version` from the manifest and `at`, atomically, and never throws; one call from `panel/main.js` at start-up. No record, project or key access. Merge note: 007 rebuilds `main.js`, so re-apply this one call if it lands first.
+- [x] T008 [P] [US2] PB · Do spec 013 T037 as written there and tick it in `specs/013-api-runtime/tasks.md`: `key_check` in `panel/helper/main.mjs` and `panel/helper/lib/key.mjs` returns `works`, `rejected`, `offline` or `no_key`. Check that a `key` field is accepted, since the installer checks before storing.
 
 ### The installer
 
