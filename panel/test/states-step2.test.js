@@ -58,7 +58,7 @@ const CASES = {
   "skill-pivot-check": [open("transform.anchor", AN_CHECK(null)), "In place"],
   "skill-pivot-keyed": [open("transform.anchor", AN_CHECK({ passed: true })), "Held"],
   "skill-null-open": [open("parenting.null", T("null_parent_snapshot", { lesson: "new", targets: [], focus: null })), COPY.check.slot_null],
-  "skill-null-place": [open("parenting.null", NU_CHECK("parenting", { applies: true, passed: false, region_now: "center", wanted: "top-left" })), "After the null"],
+  "skill-null-place": [open("parenting.null", NU_CHECK("parenting", { applies: true, passed: false, region_now: "center", wanted: "top-left" })), "At its center"],
   "skill-null-parent": [open("parenting.null", NU_CHECK("parenting", null)), "Follows Null 1"],
   "skill-null-move": [open("parenting.null", NU_CHECK("move", null)), "The move"],
 };

@@ -71,8 +71,11 @@ function check(result, opts, makeRow) {
   const codes = hints.map((h) => h && h.code).concat(arr(result.codes));
   const layers = arr(result.layers).filter((l) => l && typeof l === "object");
   const entries = nullEntries(nul, codes, makeRow);
-  const nullOk = entries.every((e) => e.row.family === "done");
-  if (!nullOk && layers.length) {
+  // The group opens on the null itself. A pivot that's off keeps the summary on the null (the mockup's
+  // skill-null-place); one that can't be checked never resolves, so it can't hold anything.
+  const selfOk = entries[0].row.family === "done";
+  const pivotOff = !!(nul.n3 && nul.n3.applies && !nul.n3.cant_check && !nul.n3.passed);
+  if (!selfOk && layers.length) {
     entries.push({ section: W.the_group, row: makeRow({ key: "group/wait", family: "none", subject: layers.map((l) => l.layer).join(", "), word: W.after_null, quiet: true }) });
   } else {
     for (const l of layers) entries.push(layerRow(l, hints, nul.name, makeRow));
@@ -80,7 +83,7 @@ function check(result, opts, makeRow) {
   const move = result.stage === "move";
   if (move) entries.push(...moveEntries(nul, codes, makeRow));
   else entries.push({ section: W.the_move, row: makeRow({ key: "move/wait", family: "none", subject: W.one_move, word: W.after_group, quiet: true }) });
-  const stage = move ? "move" : nullOk ? "parent" : "place";
+  const stage = move ? "move" : selfOk && !pivotOff ? "parent" : "place";
   let summary;
   if (stage === "place") {
     const rows = entries.filter((e) => e.section === W.the_null);

@@ -178,10 +178,10 @@ const NU = "null_parent_check";
 const NULL = (over) => Object.assign({ name: "Null 1", found: true, n1: true, n2: true, n3: { applies: true, passed: true, region_now: "top-left", wanted: "top-left" }, p4: null, moves: [] }, over);
 const L = (layer, over) => Object.assign({ layer, found: true, credit: "learner", parent: "Null 1", p1: true, p2: { passed: true }, not_checked: [], p3: { passed: true, changed: [] } }, over);
 
-test("null, placing: the null's rows, the group and move wait, and they're never Next", () => {
+test("null, pivot off: the null's rows lead, the group's results still show, the move waits", () => {
   const l = check(NU, { stage: "parenting", graded: true, null: NULL({ n3: { applies: true, passed: false, region_now: "center", wanted: "top-left" } }), layers: [L("Tile"), L("Caption")], comments: [], other_changes: [], hints: [], codes: ["pivot_region"] });
   assert.deepEqual(titles(l), ["The null", "The group", "The move"]);
-  assert.deepEqual(rows(l), [["Null 1", "done", "2D, no parent"], ["Pivot at the group's top-left", "off", "At its center"], ["Tile, Caption", "none", "After the null"], ["One move on the null", "none", "After the group"]]);
+  assert.deepEqual(rows(l), [["Null 1", "done", "2D, no parent"], ["Pivot at the group's top-left", "off", "At its center"], ["Tile", "done", "Follows Null 1"], ["Caption", "done", "Follows Null 1"], ["One move on the null", "none", "After the group"]]);
   assert.equal(l.summary, "The null · 1 of 2 holding");
   assert.equal(l.next, "Pivot at the group's top-left");
   assert.equal(l.view_fields.null_stage, "place");
@@ -367,4 +367,15 @@ test("null: an accepted parent isn't '2D, no parent'", () => {
   assert.deepEqual(word({}), ["done", "2D, no parent"]);
   assert.deepEqual(word({}, [{ code: "one_level_only", null: "Null 1", parent: "Rig" }]), ["done", "2D, parent on purpose"]);
   assert.deepEqual(word({ parent: "Rig" }), ["done", "2D, parent on purpose"]);
+});
+
+test("null: the group waits only on the null itself, and a pivot it can't check doesn't hold it", () => {
+  const run = (nul, codes) => check("null_parent_check", { stage: "parenting", graded: true, null: nul, layers: [L("Tile"), L("Caption")], comments: [], other_changes: [], hints: (codes || []).map((code) => ({ code })), codes: codes || [] });
+  const none = run(NULL({ found: false, name: null, n1: null, n2: null, n3: null }), ["no_null"]);
+  assert.deepEqual(rows(none).slice(0, 2), [["The null", "off", "No null yet"], ["Tile, Caption", "none", "After the null"]]);
+  assert.equal(none.view_fields.null_stage, "place");
+  const cant = run(NULL({ n3: { applies: true, passed: false, cant_check: true, region_now: null, wanted: "top-left" } }));
+  assert.deepEqual(rows(cant).slice(0, 4), [["Null 1", "done", "2D, no parent"], ["Pivot at the group's top-left", "cant", "Couldn't check"], ["Tile", "done", "Follows Null 1"], ["Caption", "done", "Follows Null 1"]]);
+  assert.equal(cant.view_fields.null_stage, "parent");
+  assert.equal(cant.summary, "The group · 2 of 2 following Null 1");
 });
