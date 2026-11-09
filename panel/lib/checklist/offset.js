@@ -50,6 +50,13 @@ function propertyRow(m, r, makeRow) {
 const asOutside = (o) => (typeof o === "string" ? o : (o && (o.label || o.layer)) || "");
 const pastEnd = (o) => W.past_end(asOutside(o));
 
+// still_same compares graded members only, so "All apart" needs every member graded and in the comp.
+function apartWord(members) {
+  if (!members.length) return COPY.check.not_checked;
+  if (members.some((m) => m.status !== "graded")) return W.keys_changed;
+  return members.some((m) => m.lands_in_comp === false) ? W.lands_past : W.all_apart;
+}
+
 function check(result, opts, makeRow) {
   const members = arr(result.members).filter((m) => m && typeof m === "object");
   const kind = result.kind === "properties" ? "properties" : "layers";
@@ -58,10 +65,10 @@ function check(result, opts, makeRow) {
   let summary;
   if (pairs.length === 1 && Array.isArray(pairs[0])) summary = W.together(pairs[0][0], pairs[0][1]);
   else if (pairs.length) summary = W.pairs_together(pairs.length);
-  else if (result.passed === true) summary = `${W.all_apart} · ${COPY.check.passed_word}`;
+  else if (result.passed === true) summary = `${apartWord(members)} · ${COPY.check.passed_word}`;
   else {
     const gaps = arr(result.gaps_frames);
-    summary = gaps.length ? `${W.all_apart} · ${W.gaps(gaps.join(" f, "))}` : W.all_apart;
+    summary = gaps.length ? `${apartWord(members)} · ${W.gaps(gaps.join(" f, "))}` : apartWord(members);
   }
   return {
     sections: intoSections(entries),

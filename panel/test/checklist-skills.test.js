@@ -119,7 +119,7 @@ test("offset, properties: section is the layer, Lands past the end, Apart; all �
   assert.deepEqual(titles(l), ["Title"]);
   assert.deepEqual(rows(l), [["Position", "done", "Apart"], ["Scale", "done", "Apart"], ["Opacity", "part", "Lands past the end"]]);
   assert.equal(rowsOf(l)[1].detail, "1.5–2.5 s · moved 30 f");
-  assert.equal(l.summary, "All apart · gaps 30 f");
+  assert.equal(l.summary, "Lands past the end · gaps 30 f", "not All apart: one lands past the end");
   assert.equal(l.passed, false);
   assert.equal(check(OF, { kind: "properties", members: [P("A")], still_same: [], passed: true, gaps_frames: [] }).summary, "All apart · passed");
 });
@@ -341,4 +341,16 @@ test("a non-easing demo shows Changed in your comp with its own line", async () 
   assert.ok(chat.includes(COPY.lesson.changed_in_comp));
   assert.ok(chat.includes("held Blink › Opacity, 1–1.4 s."));
   assert.ok(plain(lesson(h).actions).includes("Show me again"));
+});
+
+test("offset: All apart only when every member is graded and none lands past the end", () => {
+  const P = (label, over) => Object.assign({ target: `t/${label}`, label: `Title › ${label}`, layer: "Title", start_now: 0.5, end_now: 1.5, lands_in_comp: true, moved_by: { start: 0, end: 0 }, credit: null, status: "graded" }, over);
+  const sum = (kind, members, over) => check("offset_check", Object.assign({ kind, members, still_same: [], gaps_frames: [] }, over)).summary;
+  const L = (label, over) => Object.assign({ target: `layer/${label}`, label, layer: label, start_before: 0.5, start_now: 0.5, moved_by: {}, split: null, credit: null, status: "graded" }, over);
+  assert.equal(sum("layers", [L("A"), L("B", { start_now: 1 })]), "All apart");
+  assert.equal(sum("layers", [L("A"), L("B", { status: "keys_changed", start_now: null })]), "Keys changed");
+  assert.equal(sum("layers", [L("A"), L("B", { status: "keys_changed", start_now: null })], { gaps_frames: [8] }), "Keys changed · gaps 8 f");
+  assert.equal(sum("properties", [P("A"), P("B", { lands_in_comp: false })], { passed: true }), "Lands past the end · passed");
+  assert.equal(sum("properties", [P("A"), P("B", { status: "keys_changed", lands_in_comp: null })]), "Keys changed", "null isn't false: a member that wasn't graded");
+  assert.equal(sum("layers", []), COPY.check.not_checked, "nothing compared, so nothing to claim");
 });
