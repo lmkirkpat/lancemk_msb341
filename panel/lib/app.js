@@ -58,6 +58,7 @@ function createApp(deps) {
     adapter: null,
     lesson_open: false,
     lesson_over: false,
+    resume_first: false,
     lesson: null,
     session: null,
     messages: [],
@@ -256,6 +257,7 @@ function createApp(deps) {
     const t = treatError(e.kind, { runtime, firstTurn });
     if (t.treatment === "logged") { deps.log(logEntry(e)); return; }
     state.turnError = t;
+    if (state.lesson_over) return; // a question after the pass: onTurnEnd says so, and the pass stands
     if (t.treatment === "blocking") {
       state.error = t;
       if (firstTurn) closeUnstarted(); else changed();
@@ -291,6 +293,7 @@ function createApp(deps) {
 
   // process_exited, or the mentor's process going away (FR-056): the lesson is over and nothing saved.
   function endLesson(t) {
+    if (state.lesson_over) { afterPassFailure(t); state.busy = false; state.turn = Object.assign({}, state.turn, { busy: false }); return; }
     reduce({ type: "exited" });
     notice(t.title, t.body);
     state.error = t;
@@ -300,6 +303,17 @@ function createApp(deps) {
     state.turn = Object.assign({}, state.turn, { busy: false });
     state.adapter = null;
     if (state.session) { state.session.ended = true; persist(); }
+  }
+
+  // A question asked after the pass went wrong (FR-046). The lesson's result doesn't change, so this
+  // is a notice and never an error state. A stopped process means there's no session left to ask.
+  function afterPassFailure(t) {
+    if (state.mentorEntry) state.mentorEntry.cut_off = true;
+    const stopped = !t || t.treatment === "ended";
+    const copy = stopped ? E.after_pass_stopped : E.after_pass_failed;
+    notice(copy.title, copy.body);
+    if (stopped) state.adapter = null;
+    state.resume_first = !stopped && t.kind === "timeout";
   }
 
   function cutOffNotice(error) {
@@ -316,7 +330,8 @@ function createApp(deps) {
     if (ok) state.turnsDone++;
     reduce({ type: "turn_end" });
     if (!ok && !state.busy && state.error) { changed(); return; } // already handled on the first turn
-    if (!ok) {
+    if (!ok && state.lesson_over) afterPassFailure(state.turnError);
+    else if (!ok) {
       reduce({ type: "cut_off", kind: state.turn && state.turn.kind, announcesCalls: !!(state.adapter && state.adapter.announcesCalls), demoCallSeen: state.demoCallSeen, demoResult: state.demoResult });
       if (state.turnError && state.turnError.treatment !== "cut_off") { /* already shown at the error */ }
       else {
@@ -354,7 +369,8 @@ function createApp(deps) {
   function send(kind, text, label, o) {
     const opts = o || {};
     if (state.busy || !state.adapter) return false;
-    if (state.error && state.error.kind === "timeout" && runtime !== "a" && !resumeAfterTimeout()) return false;
+    if (((state.error && state.error.kind === "timeout") || state.resume_first) && runtime !== "a" && !resumeAfterTimeout()) return false;
+    state.resume_first = false;
     if (!opts.silent) push({ role: "learner", text: label });
     state.busy = true;
     state.turn = { busy: true, kind, pressed: opts.pressed || null, status: opts.status || statusFor("") };
@@ -392,6 +408,7 @@ function createApp(deps) {
     state.list_collapsed = null;
     state.done_unfolded = false;
     state.lesson_over = false;
+    state.resume_first = false;
   }
 
   function startLesson() {
@@ -469,8 +486,11 @@ function createApp(deps) {
     send(kind, req.request, name === "check_again" ? COPY.buttons.check_again : req.label, { pressed: name, status: toolStatus ? statusFor(toolStatus) : statusFor("") });
   }
 
+  // FR-046: Ask stays after a pass, in the same mentor session, for as long as that session lives.
+  const canAsk = () => state.lesson_open || (state.lesson_over && !!state.adapter && !!state.lesson && state.lesson.passed);
+
   function ask(text) {
-    if (!state.lesson_open || state.busy) return false;
+    if (!canAsk() || state.busy) return false;
     return send("ask", text, text);
   }
 
@@ -564,6 +584,8 @@ function createApp(deps) {
       unreadable_dismissed: state.unreadable_dismissed,
       lesson_open: state.lesson_open,
       lesson_over: state.lesson_over,
+      can_ask: canAsk(),
+      answering_after_pass: state.lesson_over && state.busy,
       lesson: state.lesson,
       turn: state.turn,
       error: state.error,

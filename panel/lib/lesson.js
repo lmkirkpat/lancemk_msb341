@@ -93,7 +93,10 @@ function onCheck(v, ev) {
     return markStale(v, "ae");
   }
   const built = list.fromCheck(ev.name, r, { labels: v.labels, previous: v.check_list, at: ev.at });
-  const next = Object.assign({}, v, { checks: v.checks + 1, passed: built.passed, check_list: built });
+  // A pass whose save has answered is over: a later check, asked for after it (FR-046), updates the
+  // rows but can't unsay the result.
+  const over = v.passed && typeof v.saved === "boolean";
+  const next = Object.assign({}, v, { checks: v.checks + 1, passed: over || built.passed, check_list: built });
   next.demo_unknown = false; // a check settles it either way (FR-030)
   if (built.marks_demo) next.demo_made = true;
   return next;
@@ -134,7 +137,7 @@ function reduceLesson(view, ev) {
   if (ev.type === "exited") return markStale(v, "exited");
   if (ev.type !== "tool_result") return v;
   if (DEMO_TOOLS.has(ev.name)) return ev.ok ? onDemo(v) : v;
-  if (ev.name === "record_lesson") return Object.assign({}, v, { saved: ev.ok === true && !!ev.json && ev.json.saved === true });
+  if (ev.name === "record_lesson") return Object.assign({}, v, { saved: v.saved === true || (ev.ok === true && !!ev.json && ev.json.saved === true) }); // a refused second record can't unsay the first
   if (list.isSnapshot(ev.name)) return onSnapshot(v, ev);
   if (list.isCheck(ev.name)) return onCheck(v, ev);
   return v;

@@ -166,6 +166,8 @@ const COPY = {
     demo_easing: { title: "The mentor stopped before finishing, but the demo pair is already eased.", body: "Press Show me again to hear the rest." },
     demo_other: { title: "The mentor stopped before finishing, but its change is already in your comp.", body: "Press Show me again to hear the rest." },
     demo_unknown: { title: "The mentor stopped before finishing.", body: "To see where things stand, press Done, check it." },
+    after_pass_failed: { title: "The mentor couldn't answer that.", body: "Your lesson's result hasn't changed. Try asking again." },
+    after_pass_stopped: { title: "The mentor stopped.", body: "Your lesson's result hasn't changed." },
   },
 };
 

@@ -122,7 +122,7 @@ function homeBody(m) {
     case "home-unreadable-why":
       return { banner: banner("warn", COPY.home.unreadable_why.title, COPY.home.unreadable_why.body, btn(COPY.buttons.got_it, "got_it_unreadable")), cards: homeCards(m, { hideHello: true }) };
     default:
-      return { banner: "", cards: homeCards(m, {}) };
+      return { banner: "", cards: homeCards(m, m.answering_after_pass ? { off: true, reason: COPY.paused.after_answer } : {}) };
   }
 }
 
@@ -277,6 +277,7 @@ function actionsHtml(m) {
   const busy = !!t.busy;
   if (s === "lesson-exited") return `<div class="actions">${btn(LABELS.start, "start", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if (s === "lesson-start-failed") return `<div class="actions">${btn(LABELS.try_again, "try_again", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
+  if ((s === "lesson-passed" || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
   if (s === "lesson-passed" || savedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
   if (s === "lesson-passed-unsaved") return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}</div>`;
   if (s === "lesson-passed-asking") return "";
@@ -314,8 +315,9 @@ const VERB_KEY = { check: "check", check_again: "check", hint: "hint", show_me: 
 
 function askHtml(m) {
   const s = m.state;
-  if (["lesson-exited", "lesson-start-failed", "lesson-passed", "lesson-passed-unsaved"].includes(s) || savedNoPass(m.lesson)) return "";
-  const open = m.lesson_open && !(m.turn && m.turn.busy) && !m.error;
+  if (["lesson-exited", "lesson-start-failed"].includes(s) || savedNoPass(m.lesson)) return "";
+  if (["lesson-passed", "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
+  const open = m.can_ask && !(m.turn && m.turn.busy) && !m.error;
   return `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${esc(COPY.ask_label)}</label><input id="ask-in" type="text" placeholder="${esc(COPY.ask_placeholder)}"${open ? "" : " disabled"} /><button type="submit" aria-label="${esc(COPY.buttons.send)}"${open ? "" : " disabled"}>⏎</button></form>`;
 }
 
@@ -342,6 +344,7 @@ function skillsHtml(m) {
 
 function homeOff(m) {
   if (m.lesson_open) return COPY.paused.after_lesson;
+  if (m.answering_after_pass) return COPY.paused.after_answer;
   if (m.error && m.error.blocks_home) return COPY.paused.needs_mentor;
   const conn = m.connection && m.connection.state;
   if (conn === "not_connected") return COPY.paused.needs_ae;
