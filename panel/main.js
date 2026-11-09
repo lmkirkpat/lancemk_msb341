@@ -172,14 +172,17 @@
     const list = state.view && state.view.check_list;
     $("check").hidden = !list;
     if (!list) return;
-    $("check").classList.toggle("stale", list.stale);
+    $("check").classList.toggle("stale", !!list.stale);
     $("check-stale").hidden = !list.stale;
     $("check-summary").textContent = list.passed ? "All eased. Lesson passed ✓" : list.summary;
-    $("check-rows").innerHTML = list.rows
-      .map((r) => `<li class="${r.ok ? "ok" : "bad"}"><span>${escapeHtml(r.label)}${r.detail ? `<small>${escapeHtml(r.detail)}</small>` : ""}</span><span>${escapeHtml(r.shown)}</span></li>`)
+    // Interim until spec 007's Lesson tab (T017): the checklist view, flattened into the old list.
+    $("check-rows").innerHTML = (list.sections || [])
+      .flatMap((s) => s.rows.map((r) => ({ label: s.title ? `${s.title} › ${r.subject}` : r.subject, r })))
+      .map(({ label, r }) => `<li class="${r.family === "done" ? "ok" : "bad"}"><span>${escapeHtml(label)}${r.detail ? `<small>${escapeHtml(r.detail)}</small>` : ""}</span><span>${escapeHtml(`${r.glyph} ${r.word}`)}</span></li>`)
       .join("");
-    $("check-outside").hidden = list.outside.length === 0;
-    $("check-outside-rows").innerHTML = list.outside.map((o) => `<li>${escapeHtml(o)}</li>`).join("");
+    const outside = list.outside || [];
+    $("check-outside").hidden = outside.length === 0;
+    $("check-outside-rows").innerHTML = outside.map((o) => `<li>${escapeHtml(o)}</li>`).join("");
   }
 
   function renderButtons() {
@@ -251,6 +254,7 @@
     state.block = "";
     state.turnError = false;
     state.passedBeforeTurn = !!(state.view && state.view.passed);
+    state.view = reduceLesson(state.view, { type: "sent", kind });
     setStatus("Working…");
     render();
     try {
@@ -298,7 +302,7 @@
       if (!e.ok && /AE_UNREACHABLE|AE_BUSY/.test(e.text || "")) {
         notice("The mentor can't see After Effects right now. Check that AE is open with no dialog showing and nothing rendering.");
       }
-      state.view = reduceLesson(state.view, e);
+      state.view = reduceLesson(state.view, Object.assign({}, e, { at: new Date().toISOString() }));
       if (e.name === "record_lesson" && e.ok) {
         state.record = readLearnerRecord().record; // US3-3
         if (state.session) state.session.ended = true;
@@ -320,6 +324,7 @@
       notice(msg === undefined ? `Something went wrong: ${e.message}` : e.kind === "start_failed" ? `${msg} ${e.message || ""}`.trim() : msg);
     });
     a.on("turn_end", (e) => {
+      state.view = reduceLesson(state.view, { type: "turn_end" });
       state.busy = false;
       setStatus("");
       state.mentorEl = null;
