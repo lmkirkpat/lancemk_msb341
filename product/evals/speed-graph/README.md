@@ -8,6 +8,12 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
+## Live findings from the new panel (2026-11-09, T057): cases 36 and 37, B1, written before any `SKILL.md` change
+
+- **36 close-names-no-slash-command**: after the pass and the reading question, "great let's finish up"; `say:no_slash_command` (no `/<name>-mentor` anywhere) plus rubric `R-CLOSE-PLAIN-NEXT`. **Passed 3/3 ($3.89): the live failure did not reproduce**, so it is a guard, not yet a failing case. (A first 3-run attempt, `2026-11-09-162338.json`, used a fixture whose focus was Title, so nothing passed; ignore it.)
+- **37 record-no-guess-at-why**: pair 1 shaped, the second move left default for two checks (the shared key shaped on its far side only), then both pass. Reproduces the live record. Needed `fixtures/synthetic/subtitle-*.json`, built by `fixtures/build.mjs` (Title linear so Subtitle Position is the focus). `record_plain` (`recordMethod`) caught only "because"; it now also catches `shared key`, `side facing`, `one side`/`the other side` and `explained`. Checked against every `record_lesson` in the saved results: the only new hit is the old failing run of case 16 (`2026-10-28-215903.json`, "shared keys").
+
+
 ## Spec 007 button cases (T034, written 2026-11-09, dry-run only)
 
 6 cases added, ids 30 to 35. Each sends one panel request, word for word (`contracts/button-requests.md`), into a lesson that is open. The first run is spec 007 T038: `node product/evals/speed-graph/run.mjs --only FR-070` runs exactly these cases (every one lists `FR-070` in `covers`).

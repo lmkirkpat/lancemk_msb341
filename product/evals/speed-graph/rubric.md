@@ -407,3 +407,12 @@ since you learned…" as a reason for what it does, and no offer of a review ins
 - **Pass:** a proposal of the focus layer with its pairs, like "Let's start with Title…"
 - **Fail:** mentions a review, offers one, says one is due, or opens as a review (the task with no
   walkthrough) when the learner asked for a lesson.
+
+## R-CLOSE-PLAIN-NEXT: the close points to the next step in plain terms, or not at all (T057, 2026-11-09)
+
+After the pass, the reading question and "let's finish up", the close names what comes next only in the
+panel's terms: "start another lesson", "try a review", "pick another move", or nothing. The learner is in a
+panel and can't type commands. The record sentence and the play-it-back line are fine.
+
+- **Fail:** names a command to type, a slash command, or a terminal or chat step ("start with /...",
+  "run ..."), or tells the learner to do something the panel has no control for.
