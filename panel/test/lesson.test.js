@@ -335,3 +335,13 @@ test("the recorded other-comp case: the list goes stale and no check is counted"
   assert.equal(v.checks, events.length - other.length);
   assert.equal(v.check_list.stale_kind, "other_comp");
 });
+
+test("a refused second record_lesson counts as saved, even when the panel never saw the first save", () => {
+  const refused = { type: "tool_result", name: "record_lesson", ok: false, text: "LESSON_ALREADY_SAVED: This lesson is already saved." };
+  const v = reduce(null, snap(), diff({ passed: true }), refused);
+  assert.equal(v.saved, true);
+  const other = reduce(null, snap(), diff({ passed: true }), { type: "tool_result", name: "record_lesson", ok: false, text: "something else" });
+  assert.equal(other.saved, false, "any other failure is still unsaved");
+  const quoted = reduce(null, snap(), diff({ passed: true }), { type: "tool_result", name: "record_lesson", ok: false, text: "Could not save. LESSON_ALREADY_SAVED" });
+  assert.equal(quoted.saved, false, "the code has to lead the text");
+});

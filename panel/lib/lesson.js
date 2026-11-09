@@ -62,6 +62,8 @@ function markStale(v, kind, comp) {
 }
 
 const aeLost = (ev) => !ev.ok && /AE_UNREACHABLE|AE_BUSY/.test(ev.text || "");
+// The mentor's refusal of a second save: the lesson is saved, even if the panel never saw the first.
+const alreadySaved = (ev) => !ev.ok && /^LESSON_ALREADY_SAVED/.test(ev.text || "");
 
 function onSnapshot(v, ev) {
   const r = ev.json;
@@ -148,7 +150,7 @@ function reduceLesson(view, ev) {
   if (ev.type === "exited") return markStale(v, "exited");
   if (ev.type !== "tool_result") return v;
   if (DEMO_TOOLS.has(ev.name)) return ev.ok ? onDemo(v) : v;
-  if (ev.name === "record_lesson") return Object.assign({}, v, { saved: v.saved === true || (ev.ok === true && !!ev.json && ev.json.saved === true) }); // a refused second record can't unsay the first
+  if (ev.name === "record_lesson") return Object.assign({}, v, { saved: v.saved === true || alreadySaved(ev) || (ev.ok === true && !!ev.json && ev.json.saved === true) }); // a refused second record can't unsay the first
   if (list.isSnapshot(ev.name)) return onSnapshot(v, ev);
   if (list.isCheck(ev.name)) return onCheck(v, ev);
   return v;
