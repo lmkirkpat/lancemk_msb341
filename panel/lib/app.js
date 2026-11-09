@@ -10,7 +10,7 @@ const { initialLesson, reduceLesson, showsResuming, DEMO_TOOLS } = require("./le
 const list = require("./checklist/index.js");
 const { treatError, logEntry } = require("./errors.js");
 const { REQUESTS, showMeAgain, startRequest, newLessonRequest, followOnRequest } = require("./requests.js");
-const { skillById, builtSkills, EASING } = require("./skills.js");
+const { skillById, skillOfCommand, builtSkills, EASING } = require("./skills.js");
 const { skillsView, skillDetail } = require("./skills-view.js");
 const { skillOf } = require("./skill-tools.js");
 const { statusFor } = require("./activity.js");
@@ -546,6 +546,9 @@ function createApp(deps) {
     state.pending = null;
     state.session = saved;
     state.lesson = Object.assign(initialLesson(), saved.lesson || {});
+    // So Start lesson, once this one has ended, starts the skill the header names.
+    const row = skillById(state.lesson.skill) || skillOfCommand(`/${saved.skill}`);
+    state.start = row ? { skill: row.id, req: startRequest(row.command) } : null;
     reduce({ type: "continued" });
     state.messages = saved.messages.map((m) => Object.assign({}, m, { srcs: (m.frames || []).map((f) => { const d = session.readFrame(f); return d ? `data:image/png;base64,${d}` : null; }) }));
     state.lesson_open = true;

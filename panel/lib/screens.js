@@ -60,7 +60,7 @@ function memoryCard(h, hasHistory) {
 function upNextCard(h, o) {
   const u = h.up_next;
   if (!u) return "";
-  const go = o.off ? `<p class="later">${esc(o.reason)}</p>` : u.find ? btn(u.find.label, "find_next", o.dim ? "" : "primary") : u.start ? btn(u.start.label, "start", o.dim ? "" : "primary") : "";
+  const go = o.off ? `<p class="later">${esc(o.reason)}</p>` : u.find ? btn(u.find.label, "find_next", o.dim ? "" : "primary") : u.start ? btn(u.start.label, "start", o.dim ? "" : "primary", `data-skill="${esc(u.skill)}"`) : "";
   const pick = o.lessonOpen ? "" : btn(u.pick_skill, "pick_skill");
   return `<section class="card lead${o.dim ? " dim" : ""}" aria-label="${esc(COPY.home.up_next)}"><div class="kicker accent">${esc(COPY.home.up_next)}</div><h3 data-title tabindex="-1">${esc(u.name)}</h3><p class="why">${esc(u.why)}</p><div class="row">${go}${pick}</div></section>`;
 }

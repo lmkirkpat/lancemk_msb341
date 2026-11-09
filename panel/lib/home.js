@@ -53,6 +53,7 @@ function homeView({ memory, pathData }) {
     up_next = {
       kicker: COPY.home.up_next,
       name: first.name,
+      skill: first.id,
       why: COPY.reasons[first.id] || "",
       start: req ? { kind: "start", label: req.label, request: req.request } : null,
       pick_skill: COPY.buttons.pick_skill,

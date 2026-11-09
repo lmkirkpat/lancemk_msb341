@@ -913,3 +913,42 @@ test("a process the panel drops is stopped, not orphaned: after a pass, and mid-
   assert.equal(st(m), "lesson-exited");
   assert.equal(b.stopped, 1, "mid-lesson");
 });
+
+// ---------- review fixes: Start lesson starts the skill on screen ----------
+
+test("after a continued offset lesson exits, Start lesson starts offset", async () => {
+  const offset = saved({ skill: "offset-mentor", lesson: Object.assign({}, saved().lesson, { skill: "timing.offset" }) });
+  const h = await ready({ saved: offset });
+  h.app.act("continue");
+  h.adapter().emit("exit", { code: 1 });
+  assert.equal(st(h), "lesson-exited");
+  h.app.act("start");
+  assert.equal(h.adapter().sent[0].text, "/offset-mentor");
+  assert.equal(h.adapter().started[0].skill, "offset-mentor");
+});
+
+test("a saved lesson with no skill in its view still restarts from the session's own skill", async () => {
+  const h = await ready({ saved: saved({ skill: "offset-mentor", lesson: Object.assign({}, saved().lesson, { skill: null }) }) });
+  h.app.act("continue");
+  h.adapter().emit("exit", { code: 1 });
+  h.app.act("start");
+  assert.equal(h.adapter().sent[0].text, "/offset-mentor");
+});
+
+const homeStart = (h) => {
+  const tag = /<button[^>]*data-action="start"[^>]*>/.exec(renderApp(h.app.model()).view);
+  return tag && (/data-skill="([^"]+)"/.exec(tag[0]) || [])[1];
+};
+
+for (const [how, leave] of [["End lesson", (h) => h.app.act("end_lesson")], ["Back to Home", (h) => h.app.act("back_home")], ["the Home tab after it stops", (h) => { h.adapter().emit("exit", { code: 1 }); h.app.act("tab", { tab: "home" }); }]]) {
+  test(`Home's Start names its own skill after an offset lesson left by ${how}`, async () => {
+    const h = await ready();
+    h.app.act("new_lesson", { skill: "timing.offset" });
+    h.adapter().emit("turn_end", { ok: true, kind: "new_lesson" });
+    leave(h);
+    assert.equal(h.app.model().tab, "home");
+    assert.equal(homeStart(h), "easing.basic");
+    h.app.act("start", { skill: homeStart(h) });
+    assert.equal(h.adapter().sent[0].text, "/ease-mentor");
+  });
+}
