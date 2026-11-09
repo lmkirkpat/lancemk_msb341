@@ -198,13 +198,25 @@ test("the opening's own second call stays Proposed: nobody has replied", () => {
   assert.deepEqual(names(v), ["Position 1–2 s"]);
 });
 
-test("after a check, a re-read with the same targets keeps the results; new targets replace them", () => {
-  const checked = reduce(null, snap({ targets: [ID(1)] }), diff());
-  const same = reduce(checked, snap({ targets: [ID(1)] }));
-  assert.deepEqual(words(same), ["Still linear"]);
-  const moved = reduce(checked, snap({ targets: [ID(2)], focus: ["Title"] }));
-  assert.deepEqual(names(moved), ["Position 2–3 s"]);
-  assert.deepEqual(words(moved), ["Not checked yet"]);
+test("FR-015: rows from a check stay until the next check, whatever a snapshot returns", () => {
+  const checked = reduce(null, snap({ targets: [ID(1), ID(2)] }), diff({ unexpected_changes: ["Glow › Opacity"] }));
+  assert.deepEqual(checked.check_list.outside, ["Glow › Opacity"]);
+  for (const targets of [[ID(1)], [ID(2)], [ID(1), ID(2), ID(3)]]) {
+    const after = reduce(checked, snap({ targets, focus: ["Title"] }));
+    assert.deepEqual(after.check_list, checked.check_list, JSON.stringify(targets));
+  }
+  const next = reduce(checked, snap({ targets: [ID(2)] }), diff({ targets: [{ segment_id: ID(2), label: "Title › Position 2–3 s", result: "eased_by_learner" }] }));
+  assert.deepEqual(names(next), ["Position 2–3 s"]);
+  assert.deepEqual(words(next), [COPY.check.easing.eased_by_learner]);
+});
+
+test("a snapshot still replaces rows that came from a snapshot, and can still mark a check's rows stale", () => {
+  const focused = reduce(null, snap(), sent("ask"), snap({ targets: [ID(1), ID(2)], focus: ["Title"] }));
+  assert.deepEqual(names(reduce(focused, snap({ targets: [ID(2)], focus: ["Title"] }))), ["Position 2–3 s"]);
+  const checked = reduce(null, snap(), diff());
+  const lost = reduce(checked, { type: "tool_result", name: "snapshot_project", ok: false, text: "AE_UNREACHABLE: gone" });
+  assert.equal(lost.check_list.stale_kind, "ae");
+  assert.deepEqual(words(lost), words(checked));
 });
 
 test("no targets at the opening: no rows, never placeholders", () => {

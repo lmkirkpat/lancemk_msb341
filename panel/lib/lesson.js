@@ -58,12 +58,6 @@ function markStale(v, kind, comp) {
 
 const aeLost = (ev) => !ev.ok && /AE_UNREACHABLE|AE_BUSY/.test(ev.text || "");
 
-function sameTargets(a, b) {
-  if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
-  const set = new Set(b);
-  return a.every((x) => set.has(x));
-}
-
 function onSnapshot(v, ev) {
   const r = ev.json;
   if (aeLost(ev)) return markStale(v, "ae");
@@ -82,8 +76,9 @@ function onSnapshot(v, ev) {
   });
   if (r.demo_used === true) { next.demo_made = true; next.demo_unknown = false; }
   if (r.demo_target) next.demo_unknown = false;
-  const current = v.check_list;
-  if (Array.isArray(r.targets) && r.targets.length && !(current && current.source === "check" && sameTargets(r.targets, current.target_ids))) {
+  // FR-015: rows from a check are only ever replaced by the next check.
+  const fromCheck = v.check_list && v.check_list.source === "check";
+  if (Array.isArray(r.targets) && r.targets.length && !fromCheck) {
     const proposed = !next.replied && !next.picked_up && next.checks === 0;
     next.check_list = list.fromSnapshot(ev.name, r.targets, { labels, proposed, focus: next.focus });
   }
