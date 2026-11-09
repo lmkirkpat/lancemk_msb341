@@ -182,7 +182,7 @@ const COPY = {
       in_place: "In place", near_it: "Near it", outside: (side) => (side ? `Outside, to its ${side}` : "Outside"), at: (p) => `At ${p}`, pivot_on: (p) => `Pivot on ${p}`,
       stays: (layer) => `${layer} stays where it is`, stayed: "Stayed", moved: (dir) => (dir ? `Moved ${dir}` : "Moved"),
       at_rest: "At rest", set_away: "Set away from rest", position_keys: "Holds at its Position keys", held: "Held", slid: "Slid", slid_at: (t) => `Slid at ${t} s`,
-      others: "Nothing else moves", nothing_did: "Nothing did", other_moved: (layer) => `${layer} moved`, something_moved: "Something moved",
+      others: "Nothing else moves", nothing_did: "Nothing did", other_moved: (layer) => `${layer} moved`, something_moved: "Something moved", keys_on_pivot: "Keys added on the pivot",
       cant_check: "Can't check",
       summary: (name, done, total) => `${name} · ${done} of ${total} holding`,
       places: { "top-left": "its top-left corner", "top-right": "its top-right corner", "bottom-left": "its bottom-left corner", "bottom-right": "its bottom-right corner", "top-middle": "the center of its top edge", "bottom-middle": "the center of its bottom edge", "middle-left": "the middle of its left edge", "middle-right": "the middle of its right edge", center: "its center" },

@@ -40,7 +40,7 @@ function layerEntries(l, makeRow) {
   const i5 = l.item5;
   if (i5) {
     const moved = arr(i5.moved_layers).map((x) => (typeof x === "string" ? x : x && x.layer)).filter(Boolean);
-    add("others", W.others, i5.passed ? "done" : "off", i5.passed ? W.nothing_did : moved.length ? W.other_moved(moved[0]) : W.something_moved);
+    add("others", W.others, i5.passed ? "done" : "off", i5.passed ? W.nothing_did : moved.length ? W.other_moved(moved[0]) : i5.anchor_keys_added ? W.keys_on_pivot : W.something_moved);
   }
   return entries;
 }

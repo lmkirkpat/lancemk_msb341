@@ -354,3 +354,10 @@ test("offset: All apart only when every member is graded and none lands past the
   assert.equal(sum("properties", [P("A"), P("B", { status: "keys_changed", lands_in_comp: null })]), "Keys changed", "null isn't false: a member that wasn't graded");
   assert.equal(sum("layers", []), COPY.check.not_checked, "nothing compared, so nothing to claim");
 });
+
+test("pivot, others: keys added on the pivot isn't 'Something moved'", () => {
+  const word = (item5) => rows(check("anchor_check", { layers: [{ layer: "Door", item5 }] })).at(-1).slice(1);
+  assert.deepEqual(word({ passed: false, moved_layers: [], anchor_keys_added: true }), ["off", "Keys added on the pivot"]);
+  assert.deepEqual(word({ passed: false, moved_layers: ["Wall"], anchor_keys_added: true }), ["off", "Wall moved"]);
+  assert.deepEqual(word({ passed: true, moved_layers: [], anchor_keys_added: false }), ["done", "Nothing did"]);
+});
