@@ -300,7 +300,7 @@
       }
       state.view = reduceLesson(state.view, e);
       if (e.name === "record_lesson" && e.ok) {
-        state.record = readLearnerRecord(); // US3-3
+        state.record = readLearnerRecord().record; // US3-3
         if (state.session) state.session.ended = true;
       }
       persist();
@@ -426,7 +426,7 @@
     notice(cfg.fix);
   } else {
     state.cfg = cfg;
-    state.record = readLearnerRecord();
+    state.record = readLearnerRecord().record;
     setConn("", "Knack");
     const saved = ps.readPanelSession({});
     if (saved && !saved.ended) {
