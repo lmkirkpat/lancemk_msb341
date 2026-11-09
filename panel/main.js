@@ -103,7 +103,7 @@
     const el = ev.target.closest("[data-action]");
     if (!el || el.disabled) return;
     const keepFocus = el.getAttribute("role") === "tab" || el.hasAttribute("data-keep-focus");
-    app.act(el.dataset.action, { tab: el.dataset.tab, short: SHORT.matches });
+    app.act(el.dataset.action, { tab: el.dataset.tab, skill: el.dataset.skill, short: SHORT.matches });
     if (!keepFocus) focusNewest();
   });
 

@@ -6,7 +6,7 @@ const nodeFs = require("fs");
 const path = require("path");
 const { defaultHome } = require("./config.js");
 
-const KINDS = ["start", "check", "hint", "show_me", "show_me_again", "ask", "continue"];
+const KINDS = ["start", "new_lesson", "warm_up", "find_next", "yes", "check", "hint", "show_me", "show_me_again", "ask", "continue"];
 const num = (v) => (typeof v === "number" && isFinite(v) ? v : null);
 
 function appendTurn(opts, entry) {

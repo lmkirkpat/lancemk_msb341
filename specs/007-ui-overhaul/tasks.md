@@ -79,9 +79,9 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 ## Phase 4: Step 2 build (all six skills and the Skills tab)
 
 - [x] T039 PB · Done by 013 T065 (`9fc10bb`, merged `4d6d627`): each skill launches with its own tools, `Skill` is left out, the session saves the skill, `--resume` honours the list (013's research R6), and `panel/test/adapter.test.js` holds every skill's list to its `SKILL.md`. FR-087, SC-017's allowlist half.
-- [ ] T040 [P] PB · `activity.js`: a line for every tool, claiming only what it does, with a test. FR-062, SC-017.
-- [ ] T041 PB · `requests.js` per skill, including Show me again's text (Open question 8), New lesson and Find my next lesson; `startLesson` takes the request and passes `skillOf(request)`, since `main.js` hard-codes `REQUESTS.start` today, and no non-easing lesson can start without this; `turns.js` `KINDS` gains the new kinds, so the turn log doesn't count them as Ask. contracts/button-requests.md.
-- [ ] T042 PB · `lib/skills.js`: path, data file and skill table, with its drift test; tool → skill; remove `path.js`. PN-16, data-model.
+- [x] T040 [P] PB · `activity.js`: a line for every tool, claiming only what it does, with a test. FR-062, SC-017.
+- [x] T041 PB · `requests.js` per skill, including Show me again's text (Open question 8), New lesson and Find my next lesson; `startLesson` takes the request and passes `skillOf(request)`, since `main.js` hard-codes `REQUESTS.start` today, and no non-easing lesson can start without this; `turns.js` `KINDS` gains the new kinds, so the turn log doesn't count them as Ask. contracts/button-requests.md.
+- [x] T042 PB · `lib/skills.js`: path, data file and skill table, with its drift test; tool → skill; remove `path.js`. PN-16, data-model.
 - [ ] T043 [P] [US2] PB · `checklist/key-types.js`, `skill-keytypes-open`, `-check`.
 - [ ] T044 [P] [US2] PB · `checklist/speed-graph.js`, `skill-speedgraph-open`, `-check`; `fastest` never shown; land-hard section; `credit` `unknown` as a "?" row (D13).
 - [ ] T045 [P] [US2] PB · `checklist/offset.js`, `skill-offset-layers-open`, `-check`, `skill-offset-props-check`.

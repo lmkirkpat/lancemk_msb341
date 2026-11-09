@@ -4,12 +4,13 @@
 // keeps track of the screen, and never reads or changes the project.
 "use strict";
 
-const { homeView, startRequest } = require("./home.js");
+const { homeView } = require("./home.js");
 const { stateOf, listCollapsed } = require("./view-state.js");
 const { initialLesson, reduceLesson, showsResuming, DEMO_TOOLS } = require("./lesson.js");
 const list = require("./checklist/index.js");
 const { treatError, logEntry } = require("./errors.js");
-const { REQUESTS } = require("./requests.js");
+const { REQUESTS, showMeAgain, startRequest } = require("./requests.js");
+const { skillById, EASING } = require("./skills.js");
 const { skillOf } = require("./skill-tools.js");
 const { statusFor } = require("./activity.js");
 const { connectionFromTool } = require("./connection.js");
@@ -17,13 +18,11 @@ const { shortDate } = require("./memory.js");
 const { COPY } = require("./copy.js");
 
 const LOADING_AFTER_MS = 300; // FR-008
-const SKILL = "easing.basic"; // step 1 teaches easing only (plan P9); T041 passes the request's skill
 const AE_LOST = /AE_UNREACHABLE|AE_BUSY/;
 
 const E = COPY.errors;
 const VERB = COPY.buttons.pressed;
 const PRESS = { check: VERB.check, check_again: VERB.check, hint: VERB.hint, show_me: VERB.show, show_me_again: VERB.show, try_again: VERB.try, continue: VERB.open };
-const PRESS_STATUS = { check: "diff_since_last", check_again: "diff_since_last", show_me: "set_ease" };
 const BUTTONS = { check: "check", check_again: "check", hint: "hint", show_me: "show_me", show_me_again: "show_me_again" };
 
 const lessonOver = (v) => !!v && (v.saved === true || (v.passed && v.saved === false));
@@ -68,6 +67,7 @@ function createApp(deps) {
     busy: false,
     turn: null,
     last: null,
+    start: null,
     turnsDone: 0,
     error: null,
     turnError: null,
@@ -321,7 +321,7 @@ function createApp(deps) {
     const kind = state.turn && state.turn.kind;
     let copy = error.copy;
     if (kind === "show_me" && v && v.demo_unknown) copy = E.demo_unknown;
-    else if (kind === "show_me" && v && v.demo_made) copy = v.skill === SKILL ? E.demo_easing : E.demo_other;
+    else if (kind === "show_me" && v && v.demo_made) copy = v.skill === EASING.id ? E.demo_easing : E.demo_other;
     notice(copy.title, copy.body);
   }
 
@@ -411,16 +411,28 @@ function createApp(deps) {
     state.resume_first = false;
   }
 
-  function startLesson() {
+  // The path's first skill: what Start lesson means with no skill named (FR-010).
+  function firstSkill() {
+    const first = deps.pathData && Array.isArray(deps.pathData.skills) && deps.pathData.skills[0];
+    return (first && skillById(first.id)) || EASING;
+  }
+
+  function startLesson(args) {
+    const row = (args && args.skill && skillById(args.skill)) || (state.start && skillById(state.start.skill)) || firstSkill();
+    beginLesson(row.id, startRequest(row.command), COPY.status.lesson_ready);
+  }
+
+  // Every lesson start: which request, whose lesson, and the status line (T041, FR-087).
+  function beginLesson(skillId, req, status) {
     if (state.busy || state.lesson_open) return;
     stopAdapter();
-    const req = startRequest(SKILL) || REQUESTS.start;
     resetLessonFields();
+    state.start = { skill: skillId, req };
     state.pending = null;
     state.saved = null;
     state.aeclosed = false;
     state.messages = [];
-    state.lesson = initialLesson({ skill: SKILL });
+    state.lesson = initialLesson({ skill: skillId });
     state.lesson_open = true;
     state.tab = "lesson";
     const skill = skillOf(req.request);
@@ -434,7 +446,7 @@ function createApp(deps) {
       sess.bridge_started = started;
       if (state.session === sess) persist();
     });
-    send("start", req.request, req.label, { silent: true, status: COPY.status.lesson_ready });
+    send(req.kind, req.request, req.label, { silent: true, status });
   }
 
   function continueLesson() {
@@ -471,7 +483,7 @@ function createApp(deps) {
     const e = state.error;
     if (e.state === "lesson-start-failed" || (!state.lesson_open && !state.lesson_over)) {
       state.error = null;
-      startLesson();
+      if (state.start) beginLesson(state.start.skill, state.start.req, COPY.status.lesson_ready); else startLesson();
       return;
     }
     if (!state.lesson_open) { state.error = null; return; } // the lesson is saved: nothing to retry into
@@ -480,9 +492,11 @@ function createApp(deps) {
 
   function sendButton(name) {
     const kind = BUTTONS[name] || name;
-    const req = REQUESTS[kind];
+    const v = state.lesson;
+    const req = kind === "show_me_again" ? showMeAgain(v && v.skill) : REQUESTS[kind];
     if (!req || !state.lesson_open) return;
-    const toolStatus = PRESS_STATUS[name];
+    const row = (v && skillById(v.skill)) || EASING;
+    const toolStatus = name === "check" || name === "check_again" ? row.check : name === "show_me" ? row.demo : null;
     send(kind, req.request, name === "check_again" ? COPY.buttons.check_again : req.label, { pressed: name, status: toolStatus ? statusFor(toolStatus) : statusFor("") });
   }
 
@@ -541,7 +555,7 @@ function createApp(deps) {
     got_it_unreadable: () => { state.unreadable_why = false; state.unreadable_dismissed = true; },
     got_it_aeclosed: () => { state.aeclosed = false; },
     reconnect,
-    start: startLesson,
+    start: ({ skill }) => startLesson({ skill }),
     continue: continueLesson,
     set_aside: setAside,
     end_lesson: endLessonNow,

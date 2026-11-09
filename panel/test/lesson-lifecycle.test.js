@@ -845,3 +845,40 @@ test("announcesCalls: A true, B1 false, on the real adapters (plan P7)", () => {
   assert.equal(b1Adapter({ claude_path: "x", runtime_path: "/tmp" }).announcesCalls, false);
   assert.equal(apiAdapter({ runtime: "a" }).announcesCalls, true);
 });
+
+// ---------- T041: a lesson starts from any skill's request ----------
+
+test("T041: Start lesson with a skill sends that skill's command and launches with its tool list", async () => {
+  const h = await ready();
+  h.app.act("start", { skill: "keyframes.types" });
+  assert.deepEqual(h.adapter().started[0], { skill: "key-types-mentor" });
+  assert.deepEqual(h.adapter().sent[0], { text: "/key-types-mentor", kind: "start" });
+  assert.equal(h.app.model().lesson.skill, "keyframes.types");
+  assert.equal(h.saved.current.skill, "key-types-mentor");
+});
+
+test("T041: no skill named means the path's first; Try again after a failed start restarts the same skill", async () => {
+  const h = await ready();
+  h.app.act("start");
+  assert.equal(h.adapter().sent[0].text, "/ease-mentor");
+  const k = await ready();
+  k.app.act("start", { skill: "timing.offset" });
+  k.adapter().emit("error", { kind: "rate_limited", message: "" });
+  assert.equal(st(k), "lesson-start-failed");
+  k.app.act("try_again");
+  assert.deepEqual(k.adapter().started[0], { skill: "offset-mentor" });
+  assert.equal(k.adapter().sent[0].text, "/offset-mentor");
+});
+
+test("T041: Show me again sends the other five's text; the tool that ran sets the skill", async () => {
+  const h = await ready();
+  h.app.act("start", { skill: "timing.offset" });
+  h.adapter().emit("tool_result", { name: "offset_demo", ok: true, text: "", images: [], json: { layer: "Dot 2", properties: ["Position"], shift_frames: 4, undo: "Edit > Undo" } });
+  end(h, "start");
+  h.app.act("show_me_again");
+  assert.equal(h.adapter().sent.at(-1).text, "Show me again: explain the change you already made, with a frame. Don't change anything.");
+  const a = await ready();
+  a.app.act("start");
+  a.adapter().emit("tool_result", { name: "key_types_snapshot", ok: true, text: "", images: [], json: { targets: [] } });
+  assert.equal(a.app.model().lesson.skill, "keyframes.types");
+});

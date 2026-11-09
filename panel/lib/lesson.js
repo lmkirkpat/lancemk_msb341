@@ -3,12 +3,13 @@
 "use strict";
 
 const list = require("./checklist/index.js");
+const { TABLE, skillIdForTool } = require("./skills.js");
 const { COPY } = require("./copy.js");
 const { shortDate } = require("./memory.js");
 
-const DEMO_TOOLS = new Set(["set_ease"]);
-// Sends that aren't a reply: the opening, and agreeing to a suggestion (FR-082).
-const NOT_A_REPLY = new Set(["start", "yes"]);
+const DEMO_TOOLS = new Set(TABLE.map((s) => s.demo));
+// Sends that aren't a reply: the openings, and agreeing to a suggestion (FR-082).
+const NOT_A_REPLY = new Set(["start", "new_lesson", "warm_up", "find_next", "yes"]);
 
 function initialLesson(opts) {
   return {
@@ -128,8 +129,11 @@ function onDemo(v) {
 }
 
 function reduceLesson(view, ev) {
-  const v = view || initialLesson();
+  let v = view || initialLesson();
   if (!ev) return v;
+  // Whichever tool ran says whose lesson this is (a real hand-over on A changes it).
+  const tool = ev.type === "tool_result" ? skillIdForTool(ev.name) : null;
+  if (tool && v.skill !== tool) v = Object.assign({}, v, { skill: tool });
   if (ev.type === "sent") return onSent(v, ev);
   if (ev.type === "turn_end") return onTurnEnd(v);
   if (ev.type === "cut_off") return onCutOff(v, ev);

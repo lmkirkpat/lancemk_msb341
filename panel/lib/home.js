@@ -9,7 +9,7 @@ const { memoryView } = require("./memory.js");
 const { REQUESTS } = require("./requests.js");
 const { COPY } = require("./copy.js");
 
-// Step 1 can start only easing (main.js hard-codes it until T041).
+// Which skill Up next can start at step 1: T052 replaces this.
 const START_REQUESTS = { "easing.basic": REQUESTS.start };
 
 function startRequest(skillId) {
