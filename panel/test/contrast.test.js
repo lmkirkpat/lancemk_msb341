@@ -104,6 +104,7 @@ const SITS_ON = {
   "h2.lbl": [BG],
   ".kicker": [BG, RAISED, LIST],
   ".kicker.accent": [RAISED],
+  ".kicker.due": [RAISED],
   ".hello": [BG],
   ".hello small": [BG],
   ".card h3": [RAISED],

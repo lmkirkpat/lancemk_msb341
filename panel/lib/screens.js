@@ -65,10 +65,19 @@ function upNextCard(h, o) {
   return `<section class="card lead${o.dim ? " dim" : ""}" aria-label="${esc(COPY.home.up_next)}"><div class="kicker accent">${esc(COPY.home.up_next)}</div><h3 data-title tabindex="-1">${esc(u.name)}</h3><p class="why">${esc(u.why)}</p><div class="row">${go}${pick}</div></section>`;
 }
 
+function practiceCard(h, o) {
+  const p = h.practice;
+  if (!p) return "";
+  const last = p.last_practiced ? `${COPY.home.last_practiced} ${p.last_practiced}.` : "";
+  const more = p.rest ? `<span class="meta">${esc(COPY.home.more_due(p.rest))}</span>` : "";
+  const line = last || more ? `<p>${esc(last)}${last && more ? " " : ""}${more}</p>` : "";
+  return `<section class="card" aria-label="${esc(COPY.home.practice_due)}"><div class="kicker due"><span aria-hidden="true">↻</span> ${esc(COPY.home.practice_due)}</div><h3>${esc(p.name)}</h3>${line}${o.off ? `<p class="later">${esc(o.reason)}</p>` : btn(COPY.buttons.warm_up, "warm_up", "", `data-skill="${esc(p.skill)}"`)}</section>`;
+}
+
 function homeCards(m, o) {
   const h = m.home;
   const hello = o.hideHello || !h.hello ? "" : `<p class="hello">${esc(h.hello.text)}${h.hello.sub ? `<small>${esc(h.hello.sub)}</small>` : ""}</p>`;
-  return `${hello}${upNextCard(h, o)}${memoryCard(h, h.has_history)}`;
+  return `${hello}${upNextCard(h, o)}${practiceCard(h, o)}${memoryCard(h, h.has_history)}`;
 }
 
 const focusText = (v) => (v && Array.isArray(v.focus) && v.focus.length ? v.focus.join(", ") : null);
@@ -157,6 +166,7 @@ function stripHtml(view) {
 function headTitle(m) {
   if (m.state === "lesson-starting" || m.state === "lesson-picking-starting") return COPY.lesson.looking;
   if (m.state === "lesson-start-failed") return COPY.lesson.didnt_start;
+  if (m.state === "practice-nothing-new") return COPY.lesson.this_comp;
   const row = skillById(m.lesson && m.lesson.skill);
   return focusText(m.lesson) || (row && row.no_focus && m.lesson.checks === 0 ? row.no_focus : COPY.lesson.your_comp);
 }
@@ -164,7 +174,8 @@ function headTitle(m) {
 function headTag(m) {
   const v = m.lesson;
   if (m.state === "lesson-passed-asking") return `<span class="tag pass">${esc(COPY.lesson.check_passed_tag)}</span>`;
-  if (m.state === "lesson-passed-unsaved" || (m.state === "lesson-passed" && v.passed)) return `<span class="tag pass">${esc(COPY.lesson.passed_tag)}</span>`;
+  if (m.state === "lesson-passed-unsaved" || (FINISHED.includes(m.state) && v.passed)) return `<span class="tag pass">${esc(COPY.lesson.passed_tag)}</span>`;
+  if (v.mode === "review") return `<span class="tag practice">${esc(COPY.lesson.review_tag)}</span>`; // FR-014: from the tool's mode alone
   return v.checks > 0 ? `<span class="tag">${esc(COPY.lesson.check_tag(v.checks))}</span>` : "";
 }
 
@@ -175,13 +186,23 @@ function headHtml(m) {
   return `<div class="lhead"><button type="button" class="back" data-action="go_home" aria-label="${esc(COPY.back.lesson)}" title="${esc(COPY.back.lesson)}">‹</button><div class="ltitle"><span class="kicker">${esc(name)}</span><strong>${esc(headTitle(m))}</strong></div>${headTag(m)}</div>${stripHtml(v)}`;
 }
 
+// The saved passes: same page, different first line and due line (FR-021).
+const FINISHED = ["lesson-passed", "lesson-passed-pivot", "practice-passed"];
+
+function savedLine(m) {
+  const n = m.review_date;
+  const due = !n || m.state === "lesson-passed" ? "" : m.state === "practice-passed" ? COPY.lesson.next_warm_up(n) : COPY.lesson.warm_up_due(n);
+  return `✓ ${COPY.lesson.saved}${due ? ` ${due}` : ""}`;
+}
+
 // D6: saved with no pass has no state of its own; it keeps its screen, adds Saved and the ways out, and says nothing about a pass.
 const savedNoPass = (v) => !!v && v.saved === true && !v.passed;
 
 function lessonBanner(m) {
   const s = m.state;
   if (savedNoPass(m.lesson)) return banner("info", COPY.lesson.saved, "");
-  if (s === "lesson-passed") return banner("info", COPY.lesson.passed, `✓ ${COPY.lesson.saved}`);
+  if (s === "lesson-passed" || s === "lesson-passed-pivot") return banner("info", COPY.lesson.passed, savedLine(m));
+  if (s === "practice-passed") return banner("info", COPY.lesson.review_passed, savedLine(m));
   if (s === "lesson-passed-unsaved") return banner("warn", COPY.lesson.unsaved.title, COPY.lesson.unsaved.body);
   if (s === "lesson-passed-asking") return banner("info", COPY.lesson.check_passed, COPY.lesson.one_more_question);
   if (m.error && m.error.blocks_home) return banner("bad", m.error.title, m.error.body, btn(COPY.buttons.try_again, "try_again"));
@@ -263,6 +284,7 @@ function visibleSections(l) {
 }
 
 function listHtml(m) {
+  if (m.state === "practice-nothing-new") return "";
   const v = m.lesson;
   const l = v.check_list;
   if (!l) {
@@ -302,10 +324,14 @@ function actionsHtml(m) {
     return `<div class="actions">${m.yes_ready ? btn(LABELS.yes, "yes", "primary") : ""}${btn(LABELS.pick_skill, "leave_picking", m.yes_ready ? "" : "primary")}</div>`;
   }
   if (s === "lesson-picking-starting") return `<div class="actions">${pressed(COPY.buttons.pressed.start)}<button type="button" disabled>${esc(LABELS.pick_skill)}</button></div>`;
+  if (s === "practice-nothing-new") {
+    if (busy) return whyOff(COPY.paused.after_answer);
+    return `<div class="actions">${btn(LABELS.back_home, "back_home", "primary")}${btn(LABELS.pick_skill, "see_skills")}</div>`;
+  }
   if (s === "lesson-exited") return `<div class="actions">${btn(LABELS.start, "start", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if (s === "lesson-start-failed") return `<div class="actions">${btn(LABELS.try_again, "try_again", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
-  if ((s === "lesson-passed" || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
-  if (s === "lesson-passed" || savedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
+  if ((FINISHED.includes(s) || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
+  if (FINISHED.includes(s) || savedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
   if (s === "lesson-passed-unsaved") return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}</div>`;
   if (s === "lesson-passed-asking") return "";
   if (s === "lesson-starting") return whyOff(COPY.paused.after_look);
@@ -342,17 +368,19 @@ const VERB_KEY = { check: "check", check_again: "check", hint: "hint", show_me: 
 
 function askHtml(m) {
   const s = m.state;
-  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting"].includes(s) || savedNoPass(m.lesson)) return "";
-  if (["lesson-passed", "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
+  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting", "practice-nothing-new"].includes(s) || savedNoPass(m.lesson)) return "";
+  if ([...FINISHED, "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
   const open = m.can_ask && !(m.turn && m.turn.busy) && !m.error;
   return `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${esc(COPY.ask_label)}</label><input id="ask-in" type="text" placeholder="${esc(COPY.ask_placeholder)}"${open ? "" : " disabled"} /><button type="submit" aria-label="${esc(COPY.buttons.send)}"${open ? "" : " disabled"}>⏎</button></form>`;
 }
 
 function lessonRegions(m) {
+  const chat = chatRegion(m);
+  if (m.state === "practice-nothing-new") chat.items = chat.items.concat(`<p class="ro">${esc(COPY.lesson.nothing_new)}</p>`);
   return {
     head: headHtml(m),
     banner: lessonBanner(m),
-    chat: chatRegion(m),
+    chat,
     list: listHtml(m),
     status: statusline(m.turn && m.turn.busy ? m.turn.status : null),
     actions: actionsHtml(m),
@@ -380,7 +408,10 @@ function detailHtml(m, d) {
   const off = homeOff(m);
   const tag = d.tag === "due" ? `<span class="tag practice">↻ ${esc(COPY.skills.words.due.toLowerCase())}</span>` : d.tag === "learned" ? `<span class="tag pass">✓ ${esc(COPY.skills.words.learned.toLowerCase())}</span>` : "";
   const line = d.builds_on.length ? `<p>${esc(COPY.skills.builds_on(d.builds_on))}</p>` : d.status_line ? `<p>${esc(d.status_line)}</p>` : "";
-  const go = off ? `<p class="later">${esc(off)}</p>` : btn(COPY.buttons.new_lesson, "new_lesson", "primary", `data-skill="${esc(d.id)}"`);
+  const skill = `data-skill="${esc(d.id)}"`;
+  const go = off ? `<p class="later">${esc(off)}</p>`
+    : d.state === "review" ? btn(COPY.buttons.warm_up, "warm_up", "primary", skill) + btn(COPY.buttons.new_lesson, "new_lesson", "", skill)
+      : btn(COPY.buttons.new_lesson, "new_lesson", "primary", skill);
   const history = d.history.length
     ? `<ul class="hist">${d.history.map((h) => `<li><b>${esc(h.date)}</b>${[h.comp, h.result].filter(Boolean).map((p) => ` · ${esc(p)}`).join("")}${h.summary || h.next ? `<small>${esc([h.summary, h.next ? `${COPY.home.next_time} ${h.next}` : ""].filter(Boolean).join(" "))}</small>` : ""}</li>`).join("")}</ul>`
     : `<p class="meta">${esc(COPY.skills.no_lessons)}</p>`;

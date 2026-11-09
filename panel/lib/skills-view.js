@@ -17,6 +17,17 @@ function isDue(info, built, now) {
   return String(info.review_due).slice(0, 10) <= ymd(now);
 }
 
+// Days until a stored review date, for the words "tomorrow" and "in 3 days" only: the date is the
+// mentor's. null with no review, no readable date, or a date that isn't ahead of today, so the date
+// from before a save is never read out as the next one.
+function daysUntilReview(info, built, now) {
+  if (!info || !built || !built.review) return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(info.review_due || ""));
+  if (!m) return null;
+  const days = Math.round((Date.UTC(+m[1], +m[2] - 1, +m[3]) - Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+  return days > 0 ? days : null;
+}
+
 function stateOfSkill(info, built, now) {
   if (!built) return "soon";
   if (isDue(info, built, now)) return "due";
@@ -53,6 +64,15 @@ function skillsView({ memory, pathData, built, now }) {
   return { rows: ramp.concat(rows), summary, learned, in_progress, total, due_count, state };
 }
 
+// Home's Practice due (FR-051): the first due skill in path order and how many more are due. `built`
+// is in path order, and a skill with no review is never due.
+function practiceDue({ memory, built, now }) {
+  const info = recordSkills(memory);
+  const due = (built || []).filter((s) => isDue(info[s.id], s, now));
+  if (!due.length) return null;
+  return { skill: due[0].id, name: due[0].name, last_practiced: info[due[0].id].last_practiced ? shortDate(info[due[0].id].last_practiced) : null, rest: due.length - 1 };
+}
+
 // One skill's detail, or null when `id` isn't a built skill.
 function skillDetail(id, { memory, pathData, built, now }) {
   const row = built.find((s) => s.id === id);
@@ -75,4 +95,4 @@ function skillDetail(id, { memory, pathData, built, now }) {
   };
 }
 
-module.exports = { skillsView, skillDetail, isDue };
+module.exports = { skillsView, skillDetail, isDue, practiceDue, daysUntilReview, recordSkills };

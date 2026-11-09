@@ -34,6 +34,7 @@ function initialLesson(opts) {
     pivot_keyed: false,
     null_stage: null,
     landing_hard: [],
+    no_new_target: false,
   };
 }
 
@@ -80,6 +81,8 @@ function onSnapshot(v, ev) {
     focus: r.focus === undefined ? v.focus : r.focus,
     demo_target: r.demo_target || null,
     null_ready: v.null_ready || r.null_ready === true,
+    // FR-052: the tool's own code, on a review. Sticky: the screen it opens ends the lesson.
+    no_new_target: v.no_new_target || (r.mode === "review" && r.no_demo_reason === "no_new_target"),
   });
   if (r.demo_used === true) { next.demo_made = true; next.demo_unknown = false; }
   if (r.demo_target) next.demo_unknown = false;

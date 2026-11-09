@@ -9,9 +9,9 @@ const { stateOf, listCollapsed } = require("./view-state.js");
 const { initialLesson, reduceLesson, showsResuming, DEMO_TOOLS } = require("./lesson.js");
 const list = require("./checklist/index.js");
 const { treatError, logEntry } = require("./errors.js");
-const { REQUESTS, showMeAgain, startRequest, newLessonRequest, followOnRequest } = require("./requests.js");
+const { REQUESTS, showMeAgain, startRequest, newLessonRequest, warmUpRequest, followOnRequest } = require("./requests.js");
 const { skillById, skillOfCommand, builtSkills, EASING } = require("./skills.js");
-const { skillsView, skillDetail } = require("./skills-view.js");
+const { skillsView, skillDetail, daysUntilReview, recordSkills } = require("./skills-view.js");
 const { skillOf } = require("./skill-tools.js");
 const { statusFor } = require("./activity.js");
 const { connectionFromTool } = require("./connection.js");
@@ -74,6 +74,7 @@ function createApp(deps) {
     pick_session: null,
     recommend: null,
     skill_detail: null,
+    review_saved: false, // a passed review saved since the panel opened (skills-after-review, D14)
     turnsDone: 0,
     error: null,
     turnError: null,
@@ -247,6 +248,7 @@ function createApp(deps) {
     reduce(Object.assign({}, e, { at: now().toISOString() }));
     if (showsResuming(state.lesson) && !state.messages.some((m) => m.role === "resuming")) pushBefore({ role: "resuming", text: COPY.lesson.picking_up });
     if (list.isCheck(e.name)) state.list_open = false;
+    if (list.isSnapshot(e.name) && state.lesson.no_new_target && state.lesson_open) closeNothingNew();
     if (e.name === "recommend_next" && e.ok && e.json) state.recommend = e.json;
     if (state.picking === "starting" && list.isSnapshot(e.name)) state.picking = null;
     if (e.name === "record_lesson") {
@@ -254,11 +256,20 @@ function createApp(deps) {
         state.lesson_over = true;
         state.lesson_open = false;
         if (state.session) state.session.ended = true;
+        if (state.lesson.mode === "review" && state.lesson.passed && state.lesson.saved === true) state.review_saved = true;
       }
       loadRecord();
     }
     persist();
     changed();
+  }
+
+  // Nothing new on this comp (FR-052): nothing to do and nothing recorded, so the lesson closes like a
+  // saved one, the display log can't come back as a waiting lesson, and the review stays due.
+  function closeNothingNew() {
+    state.lesson_over = true;
+    state.lesson_open = false;
+    if (state.session) state.session.ended = true;
   }
 
   function onError(e) {
@@ -320,7 +331,7 @@ function createApp(deps) {
     if (state.mentorEntry) state.mentorEntry.cut_off = true;
     const stopped = !!t && t.treatment === "ended"; // no error event at all: the turn failed, the process lives
     const copy = stopped ? E.after_pass_stopped : E.after_pass_failed;
-    notice(copy.title, copy.body);
+    if (!(state.lesson && state.lesson.no_new_target)) notice(copy.title, copy.body); // no result to reassure about
     if (stopped) stopAdapter();
     state.resume_first = !stopped && !!t && t.kind === "timeout";
   }
@@ -443,7 +454,7 @@ function createApp(deps) {
     if (state.busy || state.lesson_open) return;
     stopAdapter();
     resetLessonFields();
-    state.start = { skill: skillId, req };
+    state.start = { skill: skillId, req, status };
     state.pending = null;
     state.saved = null;
     state.aeclosed = false;
@@ -472,6 +483,12 @@ function createApp(deps) {
   function newLesson({ skill }) {
     const row = skillById(skill);
     if (row) beginLesson(row.id, newLessonRequest(row.command), COPY.status.lesson_ready);
+  }
+
+  // Warm up (RQ-11): only a skill the data file says has a review, so never easing.
+  function warmUp({ skill }) {
+    const row = builtSkills(deps.pathData, deps.skillsBuilt).find((s) => s.id === skill);
+    if (row && row.review) beginLesson(row.id, warmUpRequest(row.command), COPY.status.warm_up_ready);
   }
 
   // Find my next lesson (FR-013, FR-082): one next-mentor turn. It isn't a lesson, so it writes no
@@ -574,7 +591,7 @@ function createApp(deps) {
     if (e.state === "lesson-start-failed" || (!state.lesson_open && !state.lesson_over)) {
       state.error = null;
       if (state.start && state.start.picking) findNext();
-      else if (state.start) beginLesson(state.start.skill, state.start.req, COPY.status.lesson_ready);
+      else if (state.start) beginLesson(state.start.skill, state.start.req, state.start.status || COPY.status.lesson_ready);
       else startLesson();
       return;
     }
@@ -658,6 +675,7 @@ function createApp(deps) {
     reconnect,
     start: ({ skill }) => startLesson({ skill }),
     new_lesson: newLesson,
+    warm_up: warmUp,
     find_next: findNext,
     yes,
     leave_picking: () => leaveLesson("skills"),
@@ -692,7 +710,8 @@ function createApp(deps) {
   function model() {
     const recordStatus = state.record.status;
     const memory = recordStatus === "pending" || recordStatus === "loading" ? { status: "missing", record: null } : state.record;
-    const home = homeView({ memory, pathData: deps.pathData });
+    const built = builtSkills(deps.pathData, deps.skillsBuilt);
+    const home = homeView({ memory, pathData: deps.pathData, built, now: now() });
     const saved = state.aeclosed ? "aeclosed" : state.saved;
     const m = {
       config_ok: true,
@@ -715,11 +734,12 @@ function createApp(deps) {
       saved,
       reconnecting: state.reconnecting,
     };
-    const built = builtSkills(deps.pathData, deps.skillsBuilt);
     const viewArgs = { memory, pathData: deps.pathData, built, now: now() };
     const skills_view = skillsView(viewArgs);
     const detail = state.skill_detail ? skillDetail(state.skill_detail, viewArgs) : null;
-    m.skills_state = skills_view.state;
+    m.skills_state = state.review_saved && skills_view.due_count > 0 ? "after_review" : skills_view.state;
+    const lessonSkill = state.lesson && state.lesson.skill;
+    m.review_date = lessonSkill ? daysUntilReview(recordSkills(memory)[lessonSkill], built.find((s) => s.id === lessonSkill), now()) : null;
     m.skill_detail = detail ? detail.state : null;
     return Object.assign(m, {
       state: stateOf(m),
