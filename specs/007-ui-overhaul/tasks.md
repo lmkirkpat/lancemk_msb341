@@ -25,7 +25,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 
 ## Phase 0: Before anything changes
 
-- [ ] T001 BL · SC-015, first half: the current panel, quickstart §1. Must happen before the first `panel/` merge from this build, since the panel is linked to the main checkout.
+- [x] T001 BL · SC-015, first half: the current panel, quickstart §1. Must happen before the first `panel/` merge from this build, since the panel is linked to the main checkout.
 
 ## Phase 1: Step 1 foundations (pure modules, no screen yet)
 
