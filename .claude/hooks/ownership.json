@@ -12,7 +12,7 @@
     "ui-designer": ["product/mockups/**"],
     "design-reviewer": [],
     "skill-builder": ["mentor/**", "bridge/**", ".claude/skills/*-mentor/**", "specs/*/tasks.md", "specs/*/tasks-*.md"],
-    "panel-builder": ["panel/**", "specs/*/tasks.md"],
+    "panel-builder": ["panel/**", "installer/**", "specs/*/tasks.md"],
     "eval-engineer": ["product/evals/**"],
     "reviewer": [],
     "user-researcher": [

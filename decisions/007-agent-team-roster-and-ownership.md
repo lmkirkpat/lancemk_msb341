@@ -62,7 +62,7 @@ conflicts, and nobody checks their own work.
 | ui-designer | Mockups, `product/mockups/` |
 | design-reviewer | Findings only (read only) |
 | skill-builder | Skill prompts, `mentor/`, their unit tests |
-| panel-builder | `panel/` and its tests |
+| panel-builder | `panel/` and its tests; `installer/` (added 2026-11-09, spec 006 D4) |
 | eval-engineer | `product/evals/` |
 | reviewer | Findings only (read only, plus running tests) |
 | user-researcher | Interviews, `discovery/insights.md`, personas, competitors |
