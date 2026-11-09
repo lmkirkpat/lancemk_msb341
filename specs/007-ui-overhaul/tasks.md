@@ -5,7 +5,7 @@ description: "Task list for spec 007: panel UI overhaul"
 # Tasks: Panel UI overhaul (Home, Lesson, Skills)
 
 **Status**: Approved 2026-11-04 with the spec, and corrected the same day from the review and
-`decisions/011` (T075 to T080 added). 80 tasks: PB 52 (T030 and T039 done), EE 10, BL 15, SB 2 (T031 done, T029 open), SW 1. Written by hand to `/speckit-tasks`' structure.
+`decisions/011` (T075 to T080 added). 80 tasks: PB 52 (T030 and T039 done), EE 10, BL 15, SB 2 (T031 and T029 done), SW 1. Written by hand to `/speckit-tasks`' structure.
 
 **Input**: [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md),
 [contracts/](contracts/), [quickstart.md](quickstart.md). Mockup: `product/mockups/ui-overhaul/` (state ids are its).
@@ -65,7 +65,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 
 ## Phase 3: Step 2 prerequisites
 
-- [ ] T029 [P] SB · `mentor/curriculum/skills-built.json`, `mentor/scripts/write-skills-built.mjs`, `mentor/test/skills-built.test.mjs`. New files only. PN-16, plan P2. No eval cost.
+- [x] T029 [P] SB · `mentor/curriculum/skills-built.json`, `mentor/scripts/write-skills-built.mjs`, `mentor/test/skills-built.test.mjs`. New files only. PN-16, plan P2. No eval cost.
 - [x] T030 [P] PB · Settled by 013 T065's check (013's research R6): B1 can't hand over. T052 follows it. `--tools ToolSearch,Skill` stays untested and unplanned (research R11).
 - [x] T031 SB · `next-mentor/SKILL.md`: `Set the pivot (anchor point)` → `/anchor-mentor` and `Move a group with a null` → `/null-parenting-mentor`. Done on `main` by `6094ee9`. PN-17.
 - [ ] T032 EE · `product/evals/next-mentor/`: runner with `--runtime a|b1` from the start, tool lists from `allowedToolsOf` (013 T064's reader, never hand-kept; no `Skill` on B1), rubric. Covers `discovery/usage-notes/next-mentor-handover.md`'s items 1, 2 and 5. **B1, 9 cases:** 5 openings; 4 Yes-path cases that check the `recommend_next` result, then run the panel's plain follow-on request in a fresh session with that skill's list: the pivot with named layers (1), null with named layers, where the lesson asks (1), null's crowded comp with an empty list, where no layer may be invented (2), and a due review (5). **A only, 4 more cases, written now, run at T078:** real hand-overs from `Yes, let's go.` to the pivot with named layers (1), null's crowded comp (2), offset as a due review (5), and key types after "I already know it" on an unlearned skill (5). A failure on these known items is reported, with no `SKILL.md` change planned. RQ-15, RQ-16, FR-082.
