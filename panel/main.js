@@ -102,9 +102,9 @@
     if (dom) return domAction(dom);
     const el = ev.target.closest("[data-action]");
     if (!el || el.disabled) return;
-    const tabbed = el.getAttribute("role") === "tab";
+    const keepFocus = el.getAttribute("role") === "tab" || el.hasAttribute("data-keep-focus");
     app.act(el.dataset.action, { tab: el.dataset.tab, short: SHORT.matches });
-    if (!tabbed) focusNewest();
+    if (!keepFocus) focusNewest();
   });
 
   // Flip and frame size are the frames' own state, so they stay in the DOM (FR-085).

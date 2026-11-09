@@ -51,13 +51,13 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T017 [US2] PB · Lesson tab: header, strip, chat, checklist, buttons, Ask, status; `lesson-none`, `lesson-starting`, `lesson-partial`, `lesson-outside`, `lesson-stale`, `lesson-othercomp`, `skill-easing-check`. Writes the stale CSS (only row labels dim) and clears `contrast.test.js`'s `todo`, computed on the list's real background. FR-003, FR-014 to FR-017, FR-020, FR-046, FR-060, FR-061, FR-075, SC-008.
 - [x] T018 [US2] PB · Short docks by media query and class; the large arrow; after a check, back on the chat. FR-022, plan P4, SC-016.
 - [x] T019 [US2] PB · Following the lesson: Earlier fold, done fold, Next line, "1 more", changed bar, frame sizes, Flip. FR-085.
-- [ ] T020 [US2] PB · Easing's Changed in your comp box, Show me and Show me again from `demo_target`. FR-018, FR-019, `lesson-demo`.
-- [ ] T021 [US2] PB · `lesson-passed-asking`, `lesson-passed`, `lesson-passed-unsaved`, and a save with no pass (D6). FR-021, FR-053.
-- [ ] T022 [US3] PB · Lesson in progress: `home-lessonopen`, `home-cutoff`, `lesson-continued`, `home-aeclosed`, gray End lesson; `panel-session.json` version 2, keeping `skill` (plan P8); nothing recorded; a resumed lesson shown as returned; `home-aeclosed` only on a different start time, with a busy or absent bridge keeping the session and re-checking on the poll. FR-023 to FR-028, FR-073, FR-092, plan P8.
-- [ ] T023 [US3] PB · Errors on screen: `err-mentor`, `err-key`, `err-credit`, `lesson-pass-*`, `lesson-start-failed`, `lesson-exited`, `lesson-error`, `lesson-error-demo`; `announcesCalls` on both adapters; B1's stop and resume before a retry after a timeout, passing the saved skill and ignoring late events from the stopped adapter; `demo_unknown` hiding Show me and Show me again until a snapshot or check settles it; the no-result line (D12). FR-019, FR-029, FR-030, FR-056, plan P7, SC-007.
-- [ ] T024 [P] PB · The Skills tab's one-line interim (plan P9).
-- [ ] T025 [P] PB · `CSXS/manifest.xml`: `MinSize` height 480 (Open question 9).
-- [ ] T026 PB · SC-003's tests for step 1's states, `home-return-interim` included; reduced motion; a keyboard pass by test. FR-073, FR-079, FR-080.
+- [x] T020 [US2] PB · Easing's Changed in your comp box, Show me and Show me again from `demo_target`. FR-018, FR-019, `lesson-demo`.
+- [x] T021 [US2] PB · `lesson-passed-asking`, `lesson-passed`, `lesson-passed-unsaved`, and a save with no pass (D6). FR-021, FR-053.
+- [x] T022 [US3] PB · Lesson in progress: `home-lessonopen`, `home-cutoff`, `lesson-continued`, `home-aeclosed`, gray End lesson; `panel-session.json` version 2, keeping `skill` (plan P8); nothing recorded; a resumed lesson shown as returned; `home-aeclosed` only on a different start time, with a busy or absent bridge keeping the session and re-checking on the poll. FR-023 to FR-028, FR-073, FR-092, plan P8.
+- [x] T023 [US3] PB · Errors on screen: `err-mentor`, `err-key`, `err-credit`, `lesson-pass-*`, `lesson-start-failed`, `lesson-exited`, `lesson-error`, `lesson-error-demo`; `announcesCalls` on both adapters; B1's stop and resume before a retry after a timeout, passing the saved skill and ignoring late events from the stopped adapter; `demo_unknown` hiding Show me and Show me again until a snapshot or check settles it; the no-result line (D12). FR-019, FR-029, FR-030, FR-056, plan P7, SC-007.
+- [x] T024 [P] PB · The Skills tab's one-line interim (plan P9).
+- [x] T025 [P] PB · `CSXS/manifest.xml`: `MinSize` height 480 (Open question 9).
+- [x] T026 PB · SC-003's tests for step 1's states, `home-return-interim` included; reduced motion; a keyboard pass by test. FR-073, FR-079, FR-080.
 - [ ] T027 [P] [US7] EE · Easing: Continue, and the two Try again cases. RQ-12, RQ-13. Hand the case names to PB.
 - [ ] T028 BL · Easing live in the new panel, and SC-015's second half (quickstart §1): SC-001, SC-002's easing part. Depends on T015 to T026.
 

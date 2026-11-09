@@ -251,29 +251,21 @@ function listHtml(m) {
   const l = v.check_list;
   if (!l) return m.state === "lesson-starting" ? `<section class="check" aria-label="${esc(COPY.check.aria)}"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> ${esc(COPY.check.slot_starting)}</p></div></section>` : "";
   const { sections, foldLine } = visibleSections(l);
-  const all = sections.flatMap((s) => s.rows);
   const nDone = rowsOf(l).filter((r) => r.family === "done").length;
   const collapsed = !m.list_open && (m.list_collapsed === null ? COLLAPSED_BY_DEFAULT.has(m.state) : m.list_collapsed);
   const body = sections.map((s) => {
     const allDone = s.rows.length > 0 && s.rows.every((r) => r.family === "done");
     return `${s.title ? `<h3${allDone ? ' class="alld"' : ""}>${esc(s.title)}</h3>` : ""}<ul>${s.rows.map(rowHtml).join("")}</ul>`;
   }).join("");
-  const fold = nDone >= 2 ? `<button type="button" class="foldline" data-action="fold_done" aria-expanded="${!!m.done_unfolded}"><span aria-hidden="true">✓</span> ${esc(COPY.check.done_fold(nDone, m.done_unfolded))}</button>` : "";
-  void all;
+  const fold = nDone >= 2 ? `<button type="button" class="foldline" data-action="fold_done" data-keep-focus aria-expanded="${!!m.done_unfolded}"><span aria-hidden="true">✓</span> ${esc(COPY.check.done_fold(nDone, m.done_unfolded))}</button>` : "";
   const lines = [foldLine, l.more].filter(Boolean).map((t) => `<p class="more">${esc(t)}</p>`).join("");
   const outside = l.outside && l.outside.length ? `<h3>${esc(COPY.check.outside)}</h3><ul class="plain">${l.outside.map((o) => `<li><span class="what">${esc(o)}</span></li>`).join("")}</ul>` : "";
   const cls = ["check", m.done_unfolded ? "unfold" : "", l.stale ? "stale" : ""].filter(Boolean).join(" ");
-  return `<section class="${cls}" aria-label="${esc(COPY.check.aria)}"><button type="button" class="check-head" aria-expanded="${!collapsed}" data-action="toggle_list"><span class="chev" aria-hidden="true"><span class="ch-tall">${collapsed ? "▸" : "▾"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span><span class="sum">${esc(l.summary)}${l.sub ? `<small>${esc(l.sub)}</small>` : ""}</span></button><div class="check-body"${collapsed ? " hidden" : ""}>${l.stale ? `<p class="stale-note">${esc(l.stale)}</p>` : ""}${fold}${body}${lines}${outside}</div></section>`;
+  return `<section class="${cls}" aria-label="${esc(COPY.check.aria)}"><button type="button" class="check-head" aria-expanded="${!collapsed}" data-action="toggle_list" data-keep-focus><span class="chev" aria-hidden="true"><span class="ch-tall">${collapsed ? "▸" : "▾"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span><span class="sum">${esc(l.summary)}${l.sub ? `<small>${esc(l.sub)}</small>` : ""}</span></button><div class="check-body"${collapsed ? " hidden" : ""}>${l.stale ? `<p class="stale-note">${esc(l.stale)}</p>` : ""}${fold}${body}${lines}${outside}</div></section>`;
 }
 
 const whyOff = (text) => `<div class="actions"><p class="why-off">${esc(text)}</p></div>`;
 const buttonOf = (kind) => ({ check: [LABELS.check, "check"], hint: [LABELS.hint, "hint"], show_me: [LABELS.show_me, "show_me"], show_me_again: [LABELS.show_me_again, "show_me_again"] }[kind]);
-
-function turnButtons(m, busy, pressedKind) {
-  const kinds = visibleKinds(m.lesson, { lessonOpen: true });
-  if (m.lesson.passed || m.error) return kinds;
-  return busy && !pressedKind ? [] : kinds;
-}
 
 function actionsHtml(m) {
   const v = m.lesson;
@@ -308,7 +300,6 @@ function actionsHtml(m) {
   if (s === "lesson-stale") {
     return `<div class="actions">${verb("check_again", LABELS.check_again, "primary")}<button type="button" disabled>${esc(LABELS.hint)}</button><p class="why-off">${esc(COPY.paused.hint_needs_ae)}</p></div>`;
   }
-  void turnButtons;
   const parts = visibleKinds(v, { lessonOpen: true }).map((kind, i) => {
     const [label, action] = buttonOf(kind);
     return verb(action, label, i === 0 ? "primary" : "");
@@ -338,8 +329,21 @@ function lessonRegions(m) {
   };
 }
 
-function skillsHtml() {
-  return "";
+// Step 1's interim (plan P9): one line and the same start as Home. T050 replaces it.
+function skillsHtml(m) {
+  const u = m.home.up_next;
+  const off = homeOff(m);
+  const go = !u ? "" : off ? `<p class="later">${esc(off)}</p>` : u.start ? btn(u.start.label, "start", "primary") : "";
+  return `<div class="scroll"><p class="hello" data-title tabindex="-1">${esc(COPY.skills.title)}<small>${esc(COPY.skills.interim_line)}</small></p><div class="row">${go}</div></div>`;
+}
+
+function homeOff(m) {
+  if (m.lesson_open) return COPY.paused.after_lesson;
+  if (m.error && m.error.blocks_home) return COPY.paused.needs_mentor;
+  const conn = m.connection && m.connection.state;
+  if (conn === "not_connected") return COPY.paused.needs_ae;
+  if (conn === "busy") return COPY.paused.waiting_ae;
+  return null;
 }
 
 function renderApp(m) {

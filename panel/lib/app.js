@@ -288,7 +288,6 @@ function createApp(deps) {
 
   // process_exited, or the mentor's process going away (FR-056): the lesson is over and nothing saved.
   function endLesson(t) {
-    if (state.turnError && state.turnError !== t && !state.lesson_open) return;
     reduce({ type: "exited" });
     notice(t.title, t.body);
     state.error = t;
