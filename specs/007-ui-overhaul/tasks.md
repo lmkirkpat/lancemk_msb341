@@ -41,7 +41,7 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 - [x] T011 [P] PB · CSS and script feature scan over `panel.css`, `index.html`, `main.js` and `panel/lib/**` (not `panel/helper/`): fails on plan P4's named list. FR-090, SC-017.
 - [x] T012 [P] [US7] PB · `requests.js`: label Done, check it, request text unchanged; the existing sync test stays green. FR-016, RQ-14.
 - [ ] T013 PB · `lib/view-state.js`: model → state id, with the id list checked against the README's table, plus step 1's `home-return-interim` as the one named addition. FR-006, SC-003.
-- [ ] T014 [P] [US1] PB · `lib/home.js`: step 1's Up next (plan P9), memory, and Start lesson sending the skill's start request. FR-007, FR-008, FR-010, FR-012.
+- [x] T014 [P] [US1] PB · `lib/home.js`: step 1's Up next (plan P9), memory, and Start lesson sending the skill's start request. FR-007, FR-008, FR-010, FR-012.
 - [ ] T075 PB · Tests first. `panel/test/boundaries.test.js`: a static list of what the panel writes (`panel-session.json`, `panel-frames/`, `panel-turns.jsonl`, never `learner.json`, `path.json` or `session.json`) and calls on the bridge (`bridge.json`, `GET /health`), failing on anything new, with `panel/helper/` out of its scope. A scan of log output: a recorded stream with a planted fake name and email leaves none in the turn log or console output, so `bad_stream` logs its kind and length, not the line. FR-065's part: the same stream with the mentor's words swapped for nonsense gives the same stage, rows and state id. FR-065 to FR-068.
 
 ## Phase 2: Step 1 screens (easing in the new panel)
