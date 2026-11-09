@@ -4,6 +4,7 @@
 
 const list = require("./checklist/index.js");
 const { COPY } = require("./copy.js");
+const { shortDate } = require("./memory.js");
 
 const DEMO_TOOLS = new Set(["set_ease"]);
 // Sends that aren't a reply: the opening, and agreeing to a suggestion (FR-082).
@@ -40,6 +41,11 @@ const CLOCK = (iso) => {
 
 function staleNote(current, kind, comp) {
   if (current.source !== "check") return COPY.check.source_stale;
+  if (kind === "exited") return COPY.check.before_stopped;
+  if (kind === "continued") {
+    const when = current.checked_at && [shortDate(current.checked_at), CLOCK(current.checked_at)].filter(Boolean).join(", ");
+    return when ? `${COPY.check.from_last_check}, ${when}.` : `${COPY.check.from_last_check}.`;
+  }
   if (kind === "other_comp" && comp) return `${COPY.check.from_last_check}, ${COPY.check.on_comp} ${comp}.`;
   const at = current.checked_at && CLOCK(current.checked_at);
   return at ? `${COPY.check.from_last_check}, ${at}.` : `${COPY.check.from_last_check}.`;
@@ -110,13 +116,29 @@ function onTurnEnd(v) {
   return v;
 }
 
+// A turn ended early. demo_unknown if a demonstration may have landed unseen (FR-030): no result came
+// back and either the runtime can't promise it never started, or a demo call was seen on A.
+function onCutOff(v, ev) {
+  const maybeDemo = !ev.demoResult && !v.demo_made && ((ev.kind === "show_me" && !ev.announcesCalls) || ev.demoCallSeen);
+  return maybeDemo ? Object.assign({}, v, { demo_unknown: true }) : v;
+}
+
+function onDemo(v) {
+  const next = Object.assign({}, v, { demo_made: true, demo_unknown: false });
+  if (v.check_list && v.demo_target) next.check_list = list.markDemo(v.check_list, v.demo_target);
+  return next;
+}
+
 function reduceLesson(view, ev) {
   const v = view || initialLesson();
   if (!ev) return v;
   if (ev.type === "sent") return onSent(v, ev);
   if (ev.type === "turn_end") return onTurnEnd(v);
+  if (ev.type === "cut_off") return onCutOff(v, ev);
+  if (ev.type === "continued") return markStale(v, "continued");
+  if (ev.type === "exited") return markStale(v, "exited");
   if (ev.type !== "tool_result") return v;
-  if (DEMO_TOOLS.has(ev.name)) return ev.ok ? Object.assign({}, v, { demo_made: true, demo_unknown: false }) : v;
+  if (DEMO_TOOLS.has(ev.name)) return ev.ok ? onDemo(v) : v;
   if (ev.name === "record_lesson") return Object.assign({}, v, { saved: ev.ok === true && !!ev.json && ev.json.saved === true });
   if (list.isSnapshot(ev.name)) return onSnapshot(v, ev);
   if (list.isCheck(ev.name)) return onCheck(v, ev);
@@ -136,4 +158,4 @@ function stageOf(view) {
 // The resuming line (D16): from the first snapshot's value alone, and not after Continue lesson.
 const showsResuming = (view) => !!view && view.picked_up && !view.continued;
 
-module.exports = { initialLesson, reduceLesson, stageOf, showsResuming };
+module.exports = { initialLesson, reduceLesson, stageOf, showsResuming, DEMO_TOOLS };

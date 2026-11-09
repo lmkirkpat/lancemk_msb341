@@ -26,11 +26,14 @@ test("before a lesson: Start, plus Continue when allowed", () => {
 });
 
 test("Show me before the demo, Show me again after it, never both", () => {
-  assert.deepEqual(visibleKinds({ demo_made: false, checks: 0 }, { lessonOpen: true }), ["show_me", "check"]);
-  assert.deepEqual(visibleKinds({ demo_made: true, checks: 0 }, { lessonOpen: true }), ["show_me_again", "check"]);
+  assert.deepEqual(visibleKinds({ demo_made: false, demo_target: "a", checks: 0 }, { lessonOpen: true }), ["check", "show_me"]);
+  assert.deepEqual(visibleKinds({ demo_made: true, checks: 0 }, { lessonOpen: true }), ["check", "show_me_again"]);
 });
 
 test("Hint only from the first check on", () => {
-  assert.deepEqual(visibleKinds({ demo_made: true, checks: 1 }, { lessonOpen: true }), ["show_me_again", "check", "hint"]);
-  assert.deepEqual(visibleKinds({ demo_made: false, checks: 2 }, { lessonOpen: true }), ["show_me", "check", "hint"]);
+  assert.deepEqual(visibleKinds({ demo_made: true, checks: 1 }, { lessonOpen: true }), ["check", "hint", "show_me_again"]);
+  assert.deepEqual(visibleKinds({ demo_made: false, demo_target: "a", checks: 2 }, { lessonOpen: true }), ["check", "hint", "show_me"]);
+  assert.deepEqual(visibleKinds({ demo_made: false, demo_target: null, checks: 1 }, { lessonOpen: true }), ["check", "hint"], "no demo target, no Show me");
+  assert.deepEqual(visibleKinds({ demo_made: false, demo_unknown: true, demo_target: "a", checks: 0 }, { lessonOpen: true }), ["check"], "demo_unknown hides both");
+  assert.deepEqual(visibleKinds({ demo_made: false, demo_target: "a", mode: "review", checks: 0 }, { lessonOpen: true }), ["check"], "never in a review");
 });

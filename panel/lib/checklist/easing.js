@@ -62,6 +62,8 @@ function checkRows(result, opts, makeRow) {
   return intoSections(entries);
 }
 
+const targets_of = (result) => (Array.isArray(result.targets) ? result.targets : []);
+
 function check(result, opts, makeRow) {
   const s = result.summary || {};
   const learner = Number(s.learner_eased) || 0;
@@ -71,11 +73,19 @@ function check(result, opts, makeRow) {
     sections: checkRows(result, opts, makeRow),
     summary: result.passed === true ? W.summary_passed(learner, total) : W.summary(learner, total, still),
     outside: Array.isArray(result.unexpected_changes) ? result.unexpected_changes.map(String) : [],
+    passed_note: targets_of(result).some((t) => t && t.result === "eased_by_demo" && t.demo_credit !== "unknown") ? COPY.check.plus_demo : null,
     marks_demo: (Array.isArray(result.targets) ? result.targets : []).some((t) => t && (t.result === "eased_by_demo" || t.demo_credit !== undefined || t.demo_undone === true)),
   };
 }
 
 // id → label for every pair the snapshot names. Findings are the pairs that still need ease.
+// set_ease's "Title › Position, 0.500 s → 1.500 s" → "eased Title › Position, 0.5–1.5 s."
+function changeLine(result) {
+  if (!result || typeof result.eased !== "string") return null;
+  const m = /^(.*), ([\d.]+) s → ([\d.]+) s$/.exec(result.eased);
+  return m ? `eased ${m[1]}, ${secs(m[2])}–${secs(m[3])} s.` : `eased ${result.eased}.`;
+}
+
 function labelsFrom(snapshot) {
   const out = {};
   for (const f of Array.isArray(snapshot.findings) ? snapshot.findings : []) {
@@ -108,4 +118,4 @@ function openingHeader(state, count, focus) {
   return { summary: on ? W.pairs_on(count, on) : W.pairs(count), sub: null };
 }
 
-module.exports = { check, labelsFrom, openingRows, openingHeader };
+module.exports = { check, labelsFrom, openingRows, openingHeader, changeLine };

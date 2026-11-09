@@ -46,11 +46,11 @@ and what happens whichever gets there first: [plan.md](plan.md) › Shared work 
 
 ## Phase 2: Step 1 screens (easing in the new panel)
 
-- [ ] T015 [US1] PB · `index.html`, `panel.css`: real tablist with roving tabindex, connection mark, focus rules, spacing. FR-001 to FR-005, FR-077 to FR-081, FR-096.
-- [ ] T016 [US1] PB · Home: `home-first`, `home-return-interim`, `home-loading`, `home-unreadable`, `home-unreadable-why`, `home-unreachable`, `home-busy`; held slot's place. FR-007, FR-008, FR-057, SC-004.
-- [ ] T017 [US2] PB · Lesson tab: header, strip, chat, checklist, buttons, Ask, status; `lesson-none`, `lesson-starting`, `lesson-partial`, `lesson-outside`, `lesson-stale`, `lesson-othercomp`, `skill-easing-check`. Writes the stale CSS (only row labels dim) and clears `contrast.test.js`'s `todo`, computed on the list's real background. FR-003, FR-014 to FR-017, FR-020, FR-046, FR-060, FR-061, FR-075, SC-008.
-- [ ] T018 [US2] PB · Short docks by media query and class; the large arrow; after a check, back on the chat. FR-022, plan P4, SC-016.
-- [ ] T019 [US2] PB · Following the lesson: Earlier fold, done fold, Next line, "1 more", changed bar, frame sizes, Flip. FR-085.
+- [x] T015 [US1] PB · `index.html`, `panel.css`: real tablist with roving tabindex, connection mark, focus rules, spacing. FR-001 to FR-005, FR-077 to FR-081, FR-096.
+- [x] T016 [US1] PB · Home: `home-first`, `home-return-interim`, `home-loading`, `home-unreadable`, `home-unreadable-why`, `home-unreachable`, `home-busy`; held slot's place. FR-007, FR-008, FR-057, SC-004.
+- [x] T017 [US2] PB · Lesson tab: header, strip, chat, checklist, buttons, Ask, status; `lesson-none`, `lesson-starting`, `lesson-partial`, `lesson-outside`, `lesson-stale`, `lesson-othercomp`, `skill-easing-check`. Writes the stale CSS (only row labels dim) and clears `contrast.test.js`'s `todo`, computed on the list's real background. FR-003, FR-014 to FR-017, FR-020, FR-046, FR-060, FR-061, FR-075, SC-008.
+- [x] T018 [US2] PB · Short docks by media query and class; the large arrow; after a check, back on the chat. FR-022, plan P4, SC-016.
+- [x] T019 [US2] PB · Following the lesson: Earlier fold, done fold, Next line, "1 more", changed bar, frame sizes, Flip. FR-085.
 - [ ] T020 [US2] PB · Easing's Changed in your comp box, Show me and Show me again from `demo_target`. FR-018, FR-019, `lesson-demo`.
 - [ ] T021 [US2] PB · `lesson-passed-asking`, `lesson-passed`, `lesson-passed-unsaved`, and a save with no pass (D6). FR-021, FR-053.
 - [ ] T022 [US3] PB · Lesson in progress: `home-lessonopen`, `home-cutoff`, `lesson-continued`, `home-aeclosed`, gray End lesson; `panel-session.json` version 2, keeping `skill` (plan P8); nothing recorded; a resumed lesson shown as returned; `home-aeclosed` only on a different start time, with a busy or absent bridge keeping the session and re-checking on the poll. FR-023 to FR-028, FR-073, FR-092, plan P8.

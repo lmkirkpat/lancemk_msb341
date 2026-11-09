@@ -48,7 +48,7 @@ function homeState(m) {
   const conn = m.connection && m.connection.state;
   if (conn === "not_connected") return "home-unreachable";
   if (conn === "busy") return "home-busy";
-  if (m.record && m.record.status === "unreadable") return m.unreadable_why ? "home-unreadable-why" : "home-unreadable";
+  if (m.record && m.record.status === "unreadable" && !m.unreadable_dismissed) return m.unreadable_why ? "home-unreadable-why" : "home-unreadable";
   if (!m.has_history) return "home-first";
   return m.step === 1 ? "home-return-interim" : "home-return";
 }
@@ -86,7 +86,7 @@ function lessonState(m) {
   const v = m.lesson;
   if (m.error && v) return errorState(m, v);
   if (m.error) return m.error.state;
-  if (!m.lesson_open || !v) return "lesson-none";
+  if ((!m.lesson_open && !m.lesson_over) || !v) return "lesson-none";
   if (m.picking === "suggesting") return "lesson-picking";
   if (m.picking === "starting") return "lesson-picking-starting";
   if (v.no_new_target) return "practice-nothing-new";

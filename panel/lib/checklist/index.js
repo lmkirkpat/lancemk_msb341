@@ -13,10 +13,13 @@ const OPEN = new Set(["off", "part", "none"]);
 // Tools by what they do. Steps 2 and 3 add the other five skills here.
 const CHECKS = { diff_since_last: easing };
 const SNAPSHOTS = { snapshot_project: easing };
+const DEMOS = { set_ease: easing };
 
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 const isCheck = (tool) => has(CHECKS, tool);
 const isSnapshot = (tool) => has(SNAPSHOTS, tool);
+// The Changed in your comp line from a demonstration's own result (FR-018), or null.
+const changeLine = (tool, result) => (has(DEMOS, tool) && result ? DEMOS[tool].changeLine(result) : null);
 
 function makeRow({ key, family, subject, word, detail }) {
   return { key, family, glyph: GLYPHS[family], subject, word, detail: detail || null, track: null, changed: false };
@@ -43,11 +46,12 @@ function fromCheck(tool, result, opts) {
   const next = first && !list.passed ? first.subject : null;
   const gained = previous ? doneCount(list) - doneCount(previous) : 0;
   const parts = [gained > 0 ? COPY.check.more_since(gained) : null, next ? COPY.check.next(next) : null].filter(Boolean);
+  const passed_note = list.passed && built.passed_note ? built.passed_note : null;
   return Object.assign(list, {
     source: "check",
     tool,
     summary: built.summary,
-    sub: parts.length ? parts.join(" ") : null,
+    sub: parts.length ? parts.join(" ") : passed_note,
     next,
     proposed: false,
     stale: null,
@@ -97,6 +101,28 @@ function fromSnapshot(tool, targets, opts) {
   };
 }
 
+// The demo pair ticks at once, before any check (T020). The header follows only on a focused list; an
+// opening list is still the mentor's whole read, so it isn't "yours" yet.
+function markDemo(list, id) {
+  let found = false;
+  const sections = list.sections.map((s) => ({
+    title: s.title,
+    rows: s.rows.map((r) => {
+      if (r.key !== id) return r;
+      found = true;
+      return Object.assign({}, r, { family: "done", glyph: GLYPHS.done, word: COPY.check.easing.eased_by_demo });
+    }),
+  }));
+  if (!found) return list;
+  const out = Object.assign({}, list, { sections });
+  if (list.source === "focus") {
+    const open = rowsOf(out).find((r) => r.family === "none");
+    out.summary = COPY.check.easing.pairs_yours(rowsOf(out).filter((r) => r.family !== "done").length);
+    out.sub = open ? COPY.check.next(open.subject) : null;
+  }
+  return out;
+}
+
 // The learner replied to rows still marked Proposed: the marks drop, and the header says it's updating.
 function dropProposed(list) {
   const sections = list.sections.map((s) => ({
@@ -113,4 +139,4 @@ function markFocusStale(list) {
   return Object.assign({}, list, header, { updating: false, focus_stale: true });
 }
 
-module.exports = { fromCheck, fromSnapshot, labelsFromSnapshot, dropProposed, markFocusStale, isCheck, isSnapshot, rowsOf, GLYPHS, FAMILIES };
+module.exports = { fromCheck, fromSnapshot, labelsFromSnapshot, dropProposed, markFocusStale, markDemo, changeLine, isCheck, isSnapshot, rowsOf, GLYPHS, FAMILIES };

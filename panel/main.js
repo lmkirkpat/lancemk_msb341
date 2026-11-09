@@ -1,6 +1,5 @@
-// Knack panel: DOM wiring only (FR-013). What to teach, when to demonstrate and how to grade
-// all come from the mentor. What the panel shows besides the mentor's words comes from tool
-// results and the learner record (research R5), through the pure modules in lib/.
+// Knack panel: DOM wiring only (spec 007 plan P1). lib/app.js holds every decision and lib/screens.js
+// the markup; this file draws app.model() and passes clicks in. CEP-only code stays here.
 (function () {
   "use strict";
 
@@ -13,413 +12,138 @@
   const { ensureRuntime } = lib("runtime.js");
   const { createAdapter: createB1Adapter } = lib("adapter-claude-code.js");
   const { createAdapter: createApiAdapter } = lib("adapter-api.js");
-  const { noticeText, logEntry } = lib("errors.js");
-  // The runtime panel.json names (spec 013 FR-037): "a" is the Claude API through the helper;
-  // anything else is B1, headless Claude Code, exactly as before.
-  const createAdapter = (cfg) => (cfg.runtime === "a" ? createApiAdapter : createB1Adapter)(cfg);
-  const { REQUESTS, visibleKinds } = lib("requests.js");
-  const { skillOf } = lib("skill-tools.js");
-  const { initialLesson, reduceLesson, stageOf } = lib("lesson.js");
-  const { pathView } = lib("path.js");
-  const { readLearnerRecord, memoryView } = lib("memory.js");
-  const { renderMentorText, escapeHtml } = lib("text.js");
-  const { statusFor } = lib("activity.js");
-  const { appendTurn } = lib("turns.js");
+  const { readLearnerRecordAsync } = lib("memory.js");
+  const { readPathData } = lib("home.js");
+  const { readConnection, createPoller } = lib("connection.js");
   const { bridgeStarted } = lib("bridge-status.js");
+  const { appendTurn } = lib("turns.js");
   const ps = lib("panel-session.js");
-  const fs = req("fs");
+  const { createApp } = lib("app.js");
+  const { renderApp, nextTab } = lib("screens.js");
 
   const $ = (id) => document.getElementById(id);
-  const conversation = $("conversation");
+  const SHORT = window.matchMedia("(max-height: 560px)");
 
-  const state = {
-    cfg: null,
-    adapter: null,
-    lessonOpen: false,
-    view: null,
-    busy: false,
-    mentorEl: null, // the mentor message being written this turn
-    committed: "", // finished text blocks this turn
-    block: "", // the text block being streamed
-    passedBeforeTurn: false,
-    turnError: false,
-    sentAt: null, // ISO time the turn was sent, for the turn log
-    record: null, // learner.json, read-only (FR-011)
-    session: null, // the display log being written (panel-session.json, FR-016)
-    mentorEntry: null, // this turn's mentor message in session.messages
-    saved: null, // a session that can be continued, found on open
-    canContinue: false,
-  };
+  // ---------- drawing: only what changed, so scroll, focus and Flip survive a redraw ----------
 
-  // ---------- conversation ----------
-
-  function scrollToEnd() {
-    conversation.scrollTop = conversation.scrollHeight;
-  }
-
-  function addMessage(role, html) {
-    const empty = $("empty");
-    if (empty) empty.remove();
-    const el = document.createElement("div");
-    el.className = `msg ${role}`;
+  function setHtml(el, html) {
+    if (el.__html === html) return;
+    const list = el.querySelector && el.querySelector(".check-body");
+    const top = list ? list.scrollTop : 0;
     el.innerHTML = html;
-    conversation.appendChild(el);
-    scrollToEnd();
-    return el;
+    el.__html = html;
+    const after = el.querySelector && el.querySelector(".check-body");
+    if (after) after.scrollTop = top;
   }
 
-  // ---------- the display log (research R6) ----------
-
-  function persist() {
-    if (state.session) ps.writePanelSession({}, Object.assign(state.session, { lesson: state.view }));
+  function patchChat(el, chat) {
+    const want = (chat.earlier ? [chat.earlier] : []).concat(chat.items);
+    while (el.children.length > want.length) el.removeChild(el.lastElementChild);
+    let changed = false;
+    want.forEach((html, i) => {
+      const old = el.children[i];
+      if (old && old.__html === html) return;
+      const t = document.createElement("template");
+      t.innerHTML = html;
+      const node = t.content.firstElementChild;
+      node.__html = html;
+      if (old && old.tagName === "DETAILS" && node.tagName === "DETAILS") node.open = old.open;
+      if (old) el.replaceChild(node, old); else el.appendChild(node);
+      changed = true;
+    });
+    if (changed) el.scrollTop = el.scrollHeight;
   }
 
-  function logMessage(role, text, frames) {
-    if (!state.session) return null;
-    const entry = { role, text, frames: frames || [] };
-    state.session.messages.push(entry);
-    return entry;
+  function focusNewest() {
+    const view = $("lesson").hidden ? $("view") : $("lesson");
+    const msgs = view.querySelectorAll(".msg.mentor, .msg.notice");
+    const target = msgs.length ? msgs[msgs.length - 1] : view.querySelector(".banner") || view.querySelector("[data-title]");
+    if (!target) return;
+    target.setAttribute("tabindex", "-1");
+    target.focus();
   }
 
-  const showLearner = (label) => addMessage("learner", `<span>${escapeHtml(label)}</span>`);
-  const showNotice = (text) => addMessage("notice", escapeHtml(text));
+  let app;
+  let focusTick = 0;
 
-  function learnerSays(label) {
-    showLearner(label);
-    logMessage("learner", label); // the button label, not the fixed request (data-model)
-    persist();
-  }
-
-  function notice(text) {
-    showNotice(text);
-    logMessage("notice", text);
-    persist();
-  }
-
-  function mentorMessage() {
-    if (!state.mentorEl) {
-      state.mentorEl = addMessage("mentor", '<div class="text"></div><div class="frames"></div>');
-      state.mentorEntry = logMessage("mentor", "");
+  function draw() {
+    const m = app.model();
+    const r = renderApp(m);
+    const onTab = document.activeElement && document.activeElement.getAttribute("role") === "tab" ? document.activeElement.id : null;
+    setHtml($("nav"), r.nav);
+    if (onTab && $(onTab)) $(onTab).focus();
+    $("view").setAttribute("aria-labelledby", `tab-${m.tab}`);
+    $("lesson").setAttribute("aria-labelledby", `tab-${m.tab}`);
+    $("lesson").setAttribute("role", r.lesson ? "tabpanel" : "presentation");
+    $("view").hidden = !!r.lesson;
+    $("lesson").hidden = !r.lesson;
+    if (r.lesson) {
+      $("lesson").classList.toggle("list-open", !!r.lesson.list_open);
+      setHtml($("r-head"), r.lesson.head);
+      setHtml($("r-banner"), r.lesson.banner);
+      patchChat($("r-chat"), r.lesson.chat);
+      setHtml($("r-list"), r.lesson.list);
+      setHtml($("r-status"), r.lesson.status);
+      setHtml($("r-actions"), r.lesson.actions);
+      setHtml($("r-ask"), r.lesson.ask);
+    } else {
+      setHtml($("view"), r.view);
     }
-    return state.mentorEl;
-  }
-
-  function renderMentor() {
-    const el = mentorMessage();
-    const text = state.committed + state.block;
-    el.querySelector(".text").innerHTML = renderMentorText(text);
-    if (state.mentorEntry) state.mentorEntry.text = text;
-    scrollToEnd();
-  }
-
-  function appendFrame(container, src) {
-    const img = document.createElement("img");
-    img.className = "frame";
-    img.alt = "A frame from your comp";
-    img.src = src;
-    container.appendChild(img);
-  }
-
-  function addFrames(images) {
-    const frames = mentorMessage().querySelector(".frames");
-    for (const im of images) {
-      appendFrame(frames, `data:${im.mimeType || "image/png"};base64,${im.data}`);
-      const file = ps.saveFrame({}, im);
-      if (file && state.mentorEntry) state.mentorEntry.frames.push(file);
-    }
-    scrollToEnd();
-  }
-
-  // Redraw a saved conversation. Frames come back from their files; a missing one says so.
-  function redraw(messages) {
-    conversation.innerHTML = "";
-    for (const m of messages) {
-      if (m.role === "learner") showLearner(m.text);
-      else if (m.role === "notice") showNotice(m.text);
-      else {
-        const el = addMessage("mentor", '<div class="text"></div><div class="frames"></div>');
-        el.querySelector(".text").innerHTML = renderMentorText(m.text);
-        const frames = el.querySelector(".frames");
-        for (const file of m.frames) {
-          let data = null;
-          try { data = fs.readFileSync(file).toString("base64"); } catch (e) {}
-          if (data) appendFrame(frames, `data:image/png;base64,${data}`);
-          else {
-            const gone = document.createElement("p");
-            gone.className = "frame-missing";
-            gone.textContent = "frame no longer available";
-            frames.appendChild(gone);
-          }
-        }
-      }
-    }
-    scrollToEnd();
-  }
-
-  // ---------- status, check list, buttons ----------
-
-  function setStatus(text) {
-    $("status").hidden = !text;
-    $("status-text").textContent = text || "";
-  }
-
-  function setConn(kind, text) {
-    $("conn").className = `conn ${kind || ""}`;
-    $("conn-text").textContent = text;
-  }
-
-  function renderCheck() {
-    const list = state.view && state.view.check_list;
-    $("check").hidden = !list;
-    if (!list) return;
-    $("check").classList.toggle("stale", !!list.stale);
-    $("check-stale").hidden = !list.stale;
-    $("check-summary").textContent = list.passed ? "All eased. Lesson passed ✓" : list.summary;
-    // Interim until spec 007's Lesson tab (T017): the checklist view, flattened into the old list.
-    $("check-rows").innerHTML = (list.sections || [])
-      .flatMap((s) => s.rows.map((r) => ({ label: s.title ? `${s.title} › ${r.subject}` : r.subject, r })))
-      .map(({ label, r }) => `<li class="${r.family === "done" ? "ok" : "bad"}"><span>${escapeHtml(label)}${r.detail ? `<small>${escapeHtml(r.detail)}</small>` : ""}</span><span>${escapeHtml(`${r.glyph} ${r.word}`)}</span></li>`)
-      .join("");
-    const outside = list.outside || [];
-    $("check-outside").hidden = outside.length === 0;
-    $("check-outside-rows").innerHTML = outside.map((o) => `<li>${escapeHtml(o)}</li>`).join("");
-  }
-
-  function renderButtons() {
-    const nav = $("buttons");
-    nav.innerHTML = "";
-    if (!state.cfg) return;
-    for (const kind of visibleKinds(state.view, { lessonOpen: state.lessonOpen, canContinue: state.canContinue })) {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = kind === "start" && state.canContinue ? "New lesson" : REQUESTS[kind].label;
-      if (kind === "start" || kind === "continue" || kind === "check") b.className = "primary";
-      b.disabled = state.busy;
-      b.addEventListener("click", () => onButton(kind));
-      nav.appendChild(b);
-    }
-    $("ask-input").disabled = !state.lessonOpen || state.busy;
-    $("ask-send").disabled = !state.lessonOpen || state.busy;
-  }
-
-  const MARKS = { done: "✓", current: "●", upcoming: "○", skipped: "–", next: "○" };
-
-  // Stage (FR-009): only while a lesson is open. Path (FR-010): always, from the record.
-  function renderStage() {
-    $("stage").hidden = !state.lessonOpen;
-    if (!state.lessonOpen) return;
-    $("stage").innerHTML = "<ol>" + stageOf(state.view).steps
-      .map((s) => `<li class="${s.state}"><span class="mark">${MARKS[s.state]}</span>${escapeHtml(s.label)}</li>`)
-      .join("") + "</ol>";
-  }
-
-  function renderPath() {
-    $("path").hidden = !state.cfg;
-    $("path").innerHTML = "<h2>Path · Motion basics</h2><ol>" + pathView(state.record, state.view)
-      .map((s) => `<li class="${s.state}">${MARKS[s.state]} ${escapeHtml(s.name)}${s.state === "next" ? " (next)" : ""}</li>`)
-      .join("") + "</ol>";
-  }
-
-  // Memory (FR-011): read-only, no controls (US3-4).
-  function renderMemory() {
-    $("memory").hidden = !state.cfg;
-    const m = memoryView(state.record);
-    $("memory").innerHTML = "<h2>Memory</h2>" + (m.empty
-      ? `<p>${escapeHtml(m.text)}</p>`
-      : `<p><strong>${escapeHtml(m.date)}</strong> · ${escapeHtml(m.skill)} · ${escapeHtml(m.result)}</p>` +
-        (m.next ? `<p>Next: ${escapeHtml(m.next)}</p>` : ""));
-  }
-
-  function renderExtras() {
-    renderStage();
-    renderPath();
-    renderMemory();
-  }
-
-  function render() {
-    renderCheck();
-    renderButtons();
-    renderExtras();
-  }
-
-  // ---------- talking to the mentor ----------
-
-  function send(kind, text, label) {
-    if (state.busy || !state.adapter) return;
-    learnerSays(label);
-    state.busy = true;
-    state.mentorEl = null;
-    state.mentorEntry = null;
-    state.committed = "";
-    state.block = "";
-    state.turnError = false;
-    state.passedBeforeTurn = !!(state.view && state.view.passed);
-    state.view = reduceLesson(state.view, { type: "sent", kind });
-    setStatus("Working…");
-    render();
-    try {
-      state.adapter.send(text, kind);
-    } catch (e) {
-      state.busy = false;
-      setStatus("");
-      notice(e.code === "BUSY" ? "The mentor is still answering. Wait for it to finish." : "The mentor isn't running. Start the lesson again.");
-      render();
+    if (m.focus_tick !== focusTick) {
+      focusTick = m.focus_tick;
+      focusNewest();
     }
   }
 
-  function onButton(kind) {
-    if (kind === "start" && state.canContinue) return newLessonInstead();
-    if (kind === "start") return startLesson();
-    if (kind === "continue") return continueLesson();
-    send(kind, REQUESTS[kind].request, REQUESTS[kind].label);
+  // ---------- input ----------
+
+  document.addEventListener("click", (ev) => {
+    const dom = ev.target.closest("[data-dom]");
+    if (dom) return domAction(dom);
+    const el = ev.target.closest("[data-action]");
+    if (!el || el.disabled) return;
+    const tabbed = el.getAttribute("role") === "tab";
+    app.act(el.dataset.action, { tab: el.dataset.tab, short: SHORT.matches });
+    if (!tabbed) focusNewest();
+  });
+
+  // Flip and frame size are the frames' own state, so they stay in the DOM (FR-085).
+  function domAction(el) {
+    if (el.dataset.dom === "frame") return el.setAttribute("aria-expanded", String(el.getAttribute("aria-expanded") !== "true"));
+    const sides = [...el.closest("[data-flipbox]").querySelectorAll("[data-side]")];
+    const now = sides.findIndex((s) => !s.hidden);
+    const next = (now + 1) % sides.length;
+    sides.forEach((s, i) => { s.hidden = i !== next; });
   }
 
-  const ERRORS = {
-    not_signed_in: "Claude Code isn't signed in. Open Terminal and run `claude` once to sign in, then start the lesson again.",
-    start_failed: "Claude Code couldn't start.",
-    timeout: "The mentor took more than 5 minutes to answer, so the panel stopped waiting. Try again.",
-    process_exited: "Claude Code stopped unexpectedly. Start the lesson again.",
-    bad_stream: null, // logged, not shown: one bad line isn't worth interrupting the lesson
-  };
+  document.addEventListener("keydown", (ev) => {
+    if (ev.target.getAttribute && ev.target.getAttribute("role") === "tab") {
+      const tab = nextTab(ev.target.dataset.tab, ev.key);
+      if (!tab) return;
+      ev.preventDefault();
+      app.act("tab", { tab });
+      $(`tab-${tab}`).focus();
+    }
+  });
 
-  function wireAdapter(a) {
-    a.on("turn_start", (e) => { state.sentAt = e.at; });
-    a.on("tool_call", (e) => {
-      if (!state.block && !state.committed) setStatus(statusFor(e.name));
-    });
-    a.on("text_delta", (e) => {
-      setStatus("");
-      state.block += e.text;
-      renderMentor();
-    });
-    a.on("text", (e) => {
-      state.committed += (state.committed ? "\n\n" : "") + e.text;
-      state.block = "";
-      renderMentor();
-    });
-    a.on("tool_result", (e) => {
-      if (e.images && e.images.length) addFrames(e.images);
-      if (!e.ok && /AE_UNREACHABLE|AE_BUSY/.test(e.text || "")) {
-        notice("The mentor can't see After Effects right now. Check that AE is open with no dialog showing and nothing rendering.");
-      }
-      state.view = reduceLesson(state.view, Object.assign({}, e, { at: new Date().toISOString() }));
-      if (e.name === "record_lesson" && e.ok) {
-        state.record = readLearnerRecord().record; // US3-3
-        if (state.session) state.session.ended = true;
-      }
-      persist();
-      render();
-    });
-    a.on("error", (e) => {
-      if (state.cfg && state.cfg.runtime === "a") {
-        // Option A: fixed text by kind only, nothing appended (spec 013 FR-027).
-        const text = noticeText(e.kind);
-        if (text === null) return console.warn("[Knack] error", JSON.stringify(logEntry(e)));
-        state.turnError = true;
-        return notice(text);
-      }
-      const msg = ERRORS[e.kind];
-      if (e.kind === "bad_stream") return console.warn("[Knack] error", JSON.stringify(logEntry(e)));
-      state.turnError = true;
-      notice(msg === undefined ? `Something went wrong: ${e.message}` : e.kind === "start_failed" ? `${msg} ${e.message || ""}`.trim() : msg);
-    });
-    a.on("turn_end", (e) => {
-      state.view = reduceLesson(state.view, { type: "turn_end" });
-      state.busy = false;
-      setStatus("");
-      state.mentorEl = null;
-      state.mentorEntry = null;
-      if (!e.ok && !state.turnError) notice("The mentor stopped before finishing. Try again.");
-      persist();
-      appendTurn({}, {
-        at: state.sentAt || undefined, // when the request was sent (data-model › Turn log)
-        kind: e.kind,
-        wait_ms: e.wait_ms,
-        first_event_ms: e.first_event_ms,
-        total_ms: e.total_ms,
-        cost_usd: e.cost_usd,
-        ok: e.ok,
-        lesson_passed: !state.passedBeforeTurn && !!(state.view && state.view.passed),
-      });
-      render();
-    });
-    a.on("exit", () => {
-      state.adapter = null;
-      state.lessonOpen = false;
-      state.busy = false;
-      setStatus("");
-      setConn("", "Knack");
-      render();
-    });
-  }
+  document.addEventListener("submit", (ev) => {
+    const form = ev.target.closest("[data-ask]");
+    if (!form) return;
+    ev.preventDefault();
+    const input = form.querySelector("input");
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = "";
+    app.ask(text);
+  });
 
-  // A new lesson replaces the display log (data-model › Panel session).
-  function startLesson() {
-    if (state.adapter) state.adapter.stop();
-    state.canContinue = false;
-    state.saved = null;
-    state.view = initialLesson();
-    state.lessonOpen = true;
-    state.adapter = createAdapter(state.cfg);
-    wireAdapter(state.adapter);
-    const skill = skillOf(REQUESTS.start.request);
-    const id = state.adapter.start({ skill });
-    const session = ps.newPanelSession({ claude_session_id: id, lesson: state.view, skill });
-    state.session = session;
-    persist();
-    bridgeStarted().then((started) => {
-      session.bridge_started = started;
-      if (state.session === session) persist();
-    });
-    setConn("ok", "Knack · lesson open");
-    send("start", REQUESTS.start.request, REQUESTS.start.label);
-  }
-
-  // Continue (FR-016): redraw from the log, resume the same Claude Code session, and say so.
-  function continueLesson() {
-    const saved = state.saved;
-    if (!saved) return startLesson();
-    if (state.adapter) state.adapter.stop();
-    state.canContinue = false;
-    state.saved = null;
-    state.session = saved;
-    state.view = Object.assign(initialLesson(), saved.lesson || {});
-    state.lessonOpen = true;
-    redraw(saved.messages);
-    state.adapter = createAdapter(state.cfg);
-    wireAdapter(state.adapter);
-    state.adapter.start({ resumeSessionId: saved.claude_session_id, skill: saved.skill });
-    setConn("ok", "Knack · lesson open");
-    send("continue", REQUESTS.continue.request, REQUESTS.continue.label);
-  }
-
-  function newLessonInstead() {
-    ps.clearPanelSession({});
-    state.canContinue = false;
-    state.saved = null;
-    render();
-  }
+  window.addEventListener("beforeunload", () => app && app.shutdown());
 
   // ---------- start-up ----------
 
-  $("ask").addEventListener("submit", (ev) => {
-    ev.preventDefault();
-    const input = $("ask-input");
-    const text = input.value.trim();
-    if (!text || !state.lessonOpen || state.busy) return;
-    input.value = "";
-    send("ask", text, text);
-  });
-
-  window.addEventListener("beforeunload", () => {
-    persist();
-    if (state.adapter) state.adapter.stop();
-  });
-
   const cfg = loadConfig();
   if (cfg.ok && cfg.runtime !== "a") {
-    // B1 only: option A needs no runtime folder (spec 013 FR-017); the helper gets only the
-    // allowlisted inputs instead.
+    // B1 only: option A needs no runtime folder (spec 013 FR-017).
     try {
       cfg.runtime_path = ensureRuntime(cfg.repo_path, path.join(defaultHome(), "runtime"));
     } catch (e) {
@@ -427,21 +151,33 @@
     }
   }
   if (!cfg.ok) {
-    setConn("bad", "Knack · not set up");
-    notice(cfg.fix);
-  } else {
-    state.cfg = cfg;
-    state.record = readLearnerRecord().record;
-    setConn("", "Knack");
-    const saved = ps.readPanelSession({});
-    if (saved && !saved.ended) {
-      bridgeStarted().then((started) => {
-        if (state.lessonOpen || !ps.canContinue(saved, started)) return;
-        state.saved = saved;
-        state.canContinue = true;
-        render();
-      });
-    }
+    // The one named exception (FR-055): builder-only, and stays as it is.
+    $("view").textContent = cfg.fix;
+    return;
   }
-  render();
+
+  const poller = createPoller({ read: () => readConnection(), onChange: (v) => app.setConnection(v) });
+  app = createApp({
+    cfg,
+    createAdapter: (c) => (c.runtime === "a" ? createApiAdapter : createB1Adapter)(c),
+    readRecord: () => readLearnerRecordAsync(),
+    pathData: readPathData({ repoPath: cfg.repo_path }),
+    session: {
+      read: () => ps.readPanelSession({}),
+      write: (s) => ps.writePanelSession({}, s),
+      clear: () => ps.clearPanelSession({}),
+      saveFrame: (im) => ps.saveFrame({}, im),
+      readFrame: (file) => ps.readFrame({}, file),
+      newSession: ps.newPanelSession,
+      savedStatus: ps.savedStatus,
+    },
+    appendTurn: (entry) => appendTurn({}, entry),
+    bridgeStarted: () => bridgeStarted(),
+    pollNow: () => poller.now(),
+    log: (entry) => console.warn("[Knack] error", JSON.stringify(entry)),
+    onChange: () => draw(),
+  });
+  app.init();
+  poller.setVisible(!document.hidden);
+  document.addEventListener("visibilitychange", () => poller.setVisible(!document.hidden));
 })();

@@ -12,7 +12,7 @@ const STARTED = "2026-10-12T15:00:00.000Z";
 test("new session has exactly the data-model fields", () => {
   const s = ps.newPanelSession({ claude_session_id: "abc", bridge_started: STARTED, now: "2026-10-12T16:00:00.000Z" });
   assert.deepEqual(Object.keys(s).sort(), ["bridge_started", "claude_session_id", "ended", "lesson", "messages", "skill", "started_at", "updated_at", "version"]);
-  assert.equal(s.version, 1);
+  assert.equal(s.version, 2);
   assert.equal(s.ended, false);
   assert.deepEqual(s.messages, []);
 });
@@ -48,7 +48,7 @@ test("the opening skill is saved, so Continue launches with the same tools (spec
 
 test("a save from before the skill was kept still reads, with no skill (so easing's list)", () => {
   const home = tmpHome();
-  fs.writeFileSync(path.join(home, ps.FILE), JSON.stringify({ version: 1, claude_session_id: "old", bridge_started: STARTED, ended: false, messages: [] }));
+  fs.writeFileSync(path.join(home, ps.FILE), JSON.stringify({ version: 2, claude_session_id: "old", bridge_started: STARTED, ended: false, messages: [] }));
   const back = ps.readPanelSession({ home });
   assert.equal(back.claude_session_id, "old");
   assert.equal(back.skill, undefined);
@@ -60,9 +60,9 @@ test("missing, broken or other-version files read as null; bad messages are drop
   assert.equal(ps.readPanelSession({ home }), null);
   fs.writeFileSync(path.join(home, ps.FILE), "{ broken");
   assert.equal(ps.readPanelSession({ home }), null);
-  fs.writeFileSync(path.join(home, ps.FILE), JSON.stringify({ version: 2, claude_session_id: "a", messages: [] }));
+  fs.writeFileSync(path.join(home, ps.FILE), JSON.stringify({ version: 1, claude_session_id: "a", messages: [] }));
   assert.equal(ps.readPanelSession({ home }), null);
-  fs.writeFileSync(path.join(home, ps.FILE), JSON.stringify({ version: 1, claude_session_id: "a", ended: false, messages: [{ role: "system", text: "x" }, { role: "mentor", text: "hi" }, null] }));
+  fs.writeFileSync(path.join(home, ps.FILE), JSON.stringify({ version: 2, claude_session_id: "a", ended: false, messages: [{ role: "system", text: "x" }, { role: "mentor", text: "hi" }, null] }));
   assert.deepEqual(ps.readPanelSession({ home }).messages, [{ role: "mentor", text: "hi", frames: [] }]);
 });
 

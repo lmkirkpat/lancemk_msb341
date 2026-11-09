@@ -36,6 +36,20 @@ function readLearnerRecord(opts) {
   }
 }
 
+// The same read for the panel's start-up, so a slow disk can't hold up the first paint (FR-008, SC-004).
+function readLearnerRecordAsync(opts) {
+  const fs = (opts && opts.fs) || nodeFs;
+  const home = (opts && opts.home) || defaultHome();
+  return new Promise((resolve) => {
+    fs.readFile(path.join(home, FILE), "utf8", (err, text) => {
+      const buffered = err
+        ? { readFileSync: () => { throw err; }, readdirSync: fs.readdirSync.bind(fs) }
+        : { readFileSync: () => text };
+      resolve(readLearnerRecord({ fs: buffered, home }));
+    });
+  });
+}
+
 function hasSetAside(fs, home) {
   try {
     return fs.readdirSync(home).some((f) => f.startsWith(SET_ASIDE));
@@ -83,4 +97,4 @@ function memoryView(record, opts) {
   };
 }
 
-module.exports = { readLearnerRecord, isValidRecord, memoryView, readSkillNames, shortDate };
+module.exports = { readLearnerRecord, readLearnerRecordAsync, isValidRecord, memoryView, readSkillNames, shortDate };

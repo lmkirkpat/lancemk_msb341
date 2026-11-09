@@ -79,6 +79,14 @@ function dimmed(fg, bg, opacity) {
 const BG = "--bg";
 const RAISED = "--bg-raised";
 const SUNK = "--bg-sunk";
+const LIST = "--list-bg";
+const PRESSED = "#2f2f2f";
+const BUBBLE = "#333333";
+const NOTICE = "#2a2516";
+const STATUS = "#1f2630";
+const BAN_BAD = "#2e1f1f";
+const BAN_WARN = "#2d2716";
+const BAN_INFO = "#1c2533";
 const buttonFill = () => decl("button", "background");
 const buttonHover = () => decl("button:hover:not(:disabled)", "background");
 const primaryFill = () => decl("button.primary", "background");
@@ -87,37 +95,82 @@ const primaryFill = () => decl("button.primary", "background");
 // comes from the CSS. A new colour rule fails below until its backgrounds are written here.
 const SITS_ON = {
   body: [BG],
-  h2: [BG],
-  h3: [BG],
+  ".nav [role=\"tab\"]": [BG],
+  ".nav [role=\"tab\"][aria-selected=\"true\"]": [BG],
+  ".nav [role=\"tab\"]:hover:not(:disabled)": [BG],
   ".conn": [BG],
-  ".path li": [BG],
-  ".path li.done": [BG],
-  ".path li.current": [BG],
-  ".stage li": [BG],
-  ".stage li.done": [BG],
-  ".stage li.current": [BG],
-  ".stage li.skipped": [BG],
-  ".empty": [BG],
-  ".msg.learner span": [RAISED],
-  ".msg.notice": [BG],
-  ".frame-missing": [RAISED], // inside a mentor message
-  ".status": [BG],
-  ".check-summary": [BG],
-  ".check-rows li small": [BG],
-  ".check-rows li.ok span:last-child": [BG],
-  ".check-rows li.bad span:last-child": [BG],
-  ".check-outside li": [BG],
-  ".check-stale": [BG],
+  ".conn.bad": [BG],
+  ".conn.busy": [BG],
+  "h2.lbl": [BG],
+  ".kicker": [BG, RAISED, LIST],
+  ".kicker.accent": [RAISED],
+  ".hello": [BG],
+  ".hello small": [BG],
+  ".card h3": [RAISED],
+  ".card .why": [RAISED],
+  ".card .meta": [RAISED],
+  ".meta": [BG, RAISED],
+  ".card.dim .kicker.accent": [BG],
+  ".later": [RAISED, BG],
   button: [buttonFill, buttonHover],
-  "button.primary": [primaryFill, buttonHover], // the hover rule outranks button.primary
-  ".ask input": [SUNK],
+  "button.primary": [primaryFill, buttonHover],
+  "button.quiet": [BG, RAISED],
+  "button.pressed": [PRESSED],
+  ".why-off": [BG],
+  ".banner b": [BAN_BAD, BAN_WARN, BAN_INFO],
+  ".banner.bad .ic": [BAN_BAD],
+  ".banner.warn .ic": [BAN_WARN],
+  ".banner.info .ic": [BAN_INFO],
   ".memory": [BG],
   ".memory strong": [BG],
+  "button.back": [BG],
+  "button.back:hover:not(:disabled)": [BG],
+  ".ltitle strong": [BG],
+  ".tag": [BG],
+  ".tag.pass": [BG],
+  ".strip": [BG],
+  ".strip li.done": [BG],
+  ".strip li.current": [BG],
+  ".msg .who": [RAISED],
+  ".msg.learner span": [BUBBLE],
+  ".msg.notice": [NOTICE],
+  ".msg.notice b": [NOTICE],
+  ".msg.change": [BG],
+  ".msg.change b": [BG],
+  ".cutoff": [RAISED],
+  ".resuming": [BG],
+  ".divider": [BG],
+  ".frame-missing": [RAISED],
+  "details.earlier": [BG],
+  "details.earlier summary::before": [BG],
+  "details.earlier[open]": [BG],
+  "button.check-head": [LIST],
+  ".check-head .chev": [LIST],
+  ".check-head .sum small": [LIST],
+  ".check li.done .g": [LIST], ".check li.done .st": [LIST],
+  ".check li.off .g": [LIST], ".check li.off .st": [LIST],
+  ".check li.part .g": [LIST], ".check li.part .st": [LIST],
+  ".check li.ask .g": [LIST], ".check li.ask .st": [LIST],
+  ".check li.none .g": [LIST], ".check li.none .st": [LIST],
+  ".check li.prop .g": [LIST], ".check li.prop .st": [LIST],
+  ".check li.cant .g": [LIST], ".check li.cant .st": [LIST],
+  ".check li .what small": [LIST],
+  ".check h3": [LIST],
+  ".check .plain li": [LIST],
+  ".stale-note": [LIST],
+  ".check .more": [LIST],
+  ".check .emptyl": [LIST],
+  "button.foldline": [LIST],
+  ".statusline": [STATUS],
+  ".ask input": [SUNK],
+  ".ask input::placeholder": [SUNK],
 };
+
 
 // Text that inherits its colour onto a different background, so no colour rule names the pair.
 const INHERITED = [
   ["mentor message text", "--text", RAISED],
+  ["a checklist row's words", "--text", LIST],
   ["code in a mentor message", "--text", SUNK],
 ];
 
@@ -168,20 +221,14 @@ test("--accent is not used as a text colour", () => {
   assert.deepStrictEqual(colourRules.filter((r) => r.decls.color === "var(--accent)").map((r) => r.selector), []);
 });
 
-// Known failure, reported to the cockpit, not fixed: the spec names only three tokens to change.
-// `.check.stale { opacity: .5 }` dims the whole check, its note too; FR-075 says the note keeps
-// its contrast. Remove `todo` when the dim changes. Disabled controls are left out on purpose:
-// WCAG 1.4.3 exempts them.
-test("the stale check keeps 4.5:1 once dimmed", { todo: "SC-008 finding: the stale dim, needs a decision" }, () => {
-  const opacity = Number(decl(".check.stale", "opacity"));
-  const bg = resolve(BG);
-  const stale = [".check-summary", ".check-rows li small", ".check-rows li.ok span:last-child",
-    ".check-rows li.bad span:last-child", ".check-outside li", ".check-stale", "h2", "h3", "body"];
-  const failing = stale
-    .map((s) => [s, ratio(dimmed(resolve(colourOf(s)), bg, opacity), bg)])
-    .filter((p) => p[1] < MIN_RATIO)
-    .map((p) => `${p[0]}: ${p[1].toFixed(2)}:1`);
-  assert.deepStrictEqual(failing, []);
+// FR-017, FR-075: only row labels dim, computed on the list's real background, and nothing else in
+// a stale list carries an opacity. T017 replaced the old `.check.stale { opacity: .5 }`.
+test("the stale checklist dims only row labels, and they keep 4.5:1 on the list's background", () => {
+  const opacity = Number(decl(".check.stale .lab", "opacity"));
+  const bg = resolve(LIST);
+  assert.ok(ratio(dimmed(resolve("--text"), bg, opacity), bg) >= MIN_RATIO);
+  assert.equal(rules.some((r) => r.selector === ".check.stale" && "opacity" in r.decls), false);
+  assert.equal(rules.filter((r) => /\.stale\b/.test(r.selector) && "opacity" in r.decls).length, 1);
 });
 
 // ---------- size ----------

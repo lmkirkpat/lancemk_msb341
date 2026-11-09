@@ -99,12 +99,10 @@ test("every real mentor skill: the same list the helper and the runners read, mi
   }
 });
 
-test("the panel's wiring: start names the request's skill and saves it; Continue passes the save's", () => {
-  // main.js needs the host page, so this one reads its source. The behaviour behind each line is
-  // tested in adapter.test.js and panel-session.test.js.
-  const main = fs.readFileSync(path.join(__dirname, "..", "main.js"), "utf8");
-  assert.match(main, /const skill = skillOf\(REQUESTS\.start\.request\)/);
-  assert.match(main, /state\.adapter\.start\(\{ skill \}\)/);
-  assert.match(main, /ps\.newPanelSession\(\{ claude_session_id: id, lesson: state\.view, skill \}\)/);
-  assert.match(main, /state\.adapter\.start\(\{ resumeSessionId: saved\.claude_session_id, skill: saved\.skill \}\)/);
+test("the panel's wiring: start names the request's skill and saves it; Continue passes the save's", async () => {
+  const { ready } = require("./app-harness.js");
+  const h = await ready();
+  h.app.act("start");
+  assert.deepEqual(h.adapter().started[0], { skill: "ease-mentor" });
+  assert.equal(h.saved.current.skill, "ease-mentor");
 });
