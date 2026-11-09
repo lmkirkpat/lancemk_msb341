@@ -46,7 +46,9 @@ function createAdapter(config, deps) {
   const randomUUID = d.randomUUID || (() => nodeCrypto.randomUUID());
   const baseEnv = d.env || process.env;
   const log = d.log || ((entry) => console.warn("[Knack] helper", JSON.stringify(entry)));
-  const helperPath = d.helperPath || HELPER_PATH;
+  // Under repo_path (spec 006 T006): an install's panel sits in AE's extensions folder, apart from
+  // the helper. A dev install's repo_path is this repo, so it's the same file as HELPER_PATH.
+  const helperPath = d.helperPath || path.join(config.repo_path, "panel", "helper", "main.mjs");
 
   const handlers = {};
   const emit = (type, payload) => (handlers[type] || []).forEach((h) => h(Object.assign({ type }, payload)));

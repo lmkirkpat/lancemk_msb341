@@ -62,6 +62,24 @@ test("the same interface as the B1 adapter", () => {
   assert.ok(fs.existsSync(HELPER_PATH));
 });
 
+test("the helper path comes from repo_path; a dev install resolves to this repo's helper (spec 006 T006)", () => {
+  // Dev install: install.sh writes repo_path as this repo, so the helper is the same file as before.
+  const dev = harness({}, { runtime: "a", node_path: "/n/node", repo_path: path.resolve(__dirname, "..", "..") });
+  dev.adapter.start();
+  assert.deepEqual(dev.spawned[0].args, [HELPER_PATH]);
+  assert.equal(dev.spawned[0].opts.cwd, HELPER_DIR);
+  // Installed: repo_path is the install's current folder, not where the panel's own files are.
+  const installed = harness({}, { runtime: "a", node_path: "/n/node", repo_path: "/k/current" });
+  installed.adapter.start();
+  assert.deepEqual(installed.spawned[0].args, ["/k/current/panel/helper/main.mjs"]);
+  assert.equal(installed.spawned[0].opts.cwd, "/k/current/panel/helper");
+  // deps.helperPath still overrides.
+  const over = harness({ helperPath: "/elsewhere/main.mjs" });
+  over.adapter.start();
+  assert.deepEqual(over.spawned[0].args, ["/elsewhere/main.mjs"]);
+  assert.equal(over.spawned[0].opts.cwd, "/elsewhere");
+});
+
 test("A ignores the skill named at start: the helper reads it from the request (spec 013 FR-042)", () => {
   const plain = harness();
   plain.adapter.start();
@@ -78,8 +96,8 @@ test("start spawns node on the helper with only PATH and HOME, and sends the sta
   assert.equal(id, UUID);
   const { cmd, args, opts } = h.spawned[0];
   assert.equal(cmd, CONFIG.node_path);
-  assert.deepEqual(args, [HELPER_PATH]);
-  assert.equal(opts.cwd, HELPER_DIR);
+  assert.deepEqual(args, ["/repo/panel/helper/main.mjs"], "the helper under the config's repo_path (spec 006 T006)");
+  assert.equal(opts.cwd, "/repo/panel/helper");
   assert.deepEqual(opts.env, { PATH: "/usr/bin:/bin:/usr/sbin:/sbin", HOME: "/home/u" }, "nothing else inherited: no key, no AE_MENTOR_*");
   assert.deepEqual(h.child().commands(), [{
     type: "start",
