@@ -11,11 +11,12 @@
 // skill_loaded (contracts/helper-protocol.md). Thinking blocks produce none. Errors are returned
 // as the turn's error kind; main.mjs sends the error and turn_end events.
 
+import crypto from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { classify, isNetworkError } from "./errors.mjs";
 import { stallFetch, isStall } from "./stall.mjs";
 import { costOf, sumCosts, tokensOf, addTokens, ZERO_TOKENS } from "./cost.mjs";
-import { buildLessonPrompt, buildTools, promptHash, toolChangeBlocks, userContent, skillSystemMessage, withBreakpoint, SKILL_TOOL } from "./prompt.mjs";
+import { buildLessonPrompt, buildTools, promptHash, toolChangeBlocks, userContent, skillSystemMessage, withBreakpoint, withoutBreakpoints, SKILL_TOOL } from "./prompt.mjs";
 import { readSkill, commandOf } from "./skills.mjs";
 
 export const BETAS = Object.freeze({
@@ -125,7 +126,13 @@ class TurnAbort extends Error {
 }
 
 // opts: { getClient: async () => client | null, mcp, settings, prices, preamble, skillTool,
-//         skillsDir, requestLog, log, now }
+//         skillsDir, requestLog, log, now,
+//         onComplete({ messages, prompt }): called after each complete exchange, inside the turn,
+//           with the history and the prompt state at that mark (data-model › Saving and clearing),
+//         resume: a loaded conversation ({ messages, prompt }) to continue, checked once ae-mentor
+//           has started (settleResume, or the first turn that starts it),
+//         onResume({ resumed, reason? }): how that check came out,
+//         freshSkill: the opening skill for a lesson whose continuing was refused (*-mentor) }
 export function createLesson(opts) {
   const { mcp, settings, prices, preamble, skillTool, skillsDir } = opts;
   const log = opts.log || (() => {});
@@ -135,18 +142,24 @@ export function createLesson(opts) {
 
   const messages = [];
   let server = null; // the first { instructions, tools } this lesson saw; kept for the lesson
-  let prompt = null; // { tools, allowed, toolChanges, system, skillName, prompt_hash }
+  let prompt = null; // { tools, allowed, toolChanges, system, skillName, startSkill, prompt_hash }
   let handedOver = false; // the tool list changed after the first request (never with toolChanges)
   // What the history has told the model it can call, when prompt.toolChanges: the tools declared
   // without defer_loading, then each tool change placed. prompt.allowed moves at the hand-over;
   // this follows when the changes go in, so the blocks say only what the model hasn't been told.
   let offered = null;
-  // A handed-over skill's body waiting to go in as a mid-conversation system message. The service
-  // takes one only right after a user message, as the last message or followed by an assistant
-  // turn, so it goes in just before a request whose history ends with a user message, and stays
-  // only once an assistant turn follows it.
-  let pendingBody = null;
+  // A handed-over skill's body waiting to go in as a mid-conversation system message, with the
+  // skill's name ({ name, body }). The service takes one only right after a user message, as the
+  // last message or followed by an assistant turn, so it goes in just before a request whose
+  // history ends with a user message, and stays only once an assistant turn follows it.
+  let pending = null;
   let turnNo = 0;
+  // A saved conversation still to check against today's prompt (data-model › Continuing), and the
+  // opening skill a refused one starts fresh on. Neither is used once the lesson has a prompt.
+  let resumeWith = opts.resume || null;
+  let freshSkill = opts.freshSkill || null;
+  // The turn in flight's stop (stop(), below), or null.
+  let stopTurn = null;
 
   function tryReadSkill(name) {
     try {
@@ -176,7 +189,7 @@ export function createLesson(opts) {
     if (!prompt.toolChanges) handedOver = true;
   }
 
-  function requestParams() {
+  function requestParams(withMessages = true) {
     // Every request opts into the history check (preserved thinking), so an edited history fails
     // here on any account, not only on accounts made after 2026-08-31 (every learner's): "error"
     // while the history must be intact, which with tool changes is the whole lesson. "drop_block"
@@ -196,7 +209,7 @@ export function createLesson(opts) {
       max_tokens: settings.max_tokens,
       system: prompt.system,
       ...(prompt.tools.length ? { tools: prompt.tools } : {}),
-      messages: withBreakpoint(messages, settings.cache_ttl),
+      ...(withMessages ? { messages: withBreakpoint(messages, settings.cache_ttl) } : {}),
       thinking,
       output_config: { effort: settings.effort },
     };
@@ -205,6 +218,85 @@ export function createLesson(opts) {
       betas.push(BETAS.fallback);
     }
     return { params, betas };
+  }
+
+  // offered as names in the declared order (the file's form), or null.
+  const offeredList = () => (offered ? prompt.tools.map((t) => t.name).filter((n) => offered.has(n)) : null);
+
+  // The check that a rebuilt state is exact (data-model › Prompt state): everything except the
+  // history that decides the next request, or what a hand-over already completed will put in it.
+  // Cache markers are left out: moving a breakpoint isn't an edit (R8), and its lifetime only
+  // changes cost.
+  function requestHash() {
+    const { params, betas } = requestParams(false);
+    const shape = { params: withoutBreakpoints(params), betas, allowed: [...prompt.allowed], offered: offeredList(), pending_body: pending ? pending.body : null };
+    return crypto.createHash("sha256").update(JSON.stringify(shape)).digest("hex");
+  }
+
+  // The lesson's prompt state as the conversation file holds it (data-model › Prompt state).
+  function promptState() {
+    return {
+      start_skill: prompt.startSkill,
+      skill: prompt.skillName,
+      offered: offeredList(),
+      handed_over: handedOver,
+      pending_skill: pending ? pending.name : null,
+      request_hash: requestHash(),
+    };
+  }
+
+  // Continuing (data-model › Continuing, steps 2 to 4): rebuilds the saved state from today's
+  // sources and the server that just started, and keeps the saved history only if the rebuild gives
+  // the same request_hash. A named skill that can't be read is the same refusal. The body of a
+  // waiting skill is read again, never stored. → { resumed: true } or { resumed: false, reason }.
+  function rebuild(srv, saved) {
+    const p = saved.prompt;
+    const refuse = () => {
+      prompt = null;
+      handedOver = false;
+      offered = null;
+      pending = null;
+      messages.length = 0;
+      return { resumed: false, reason: "prompt" };
+    };
+    const read = (name) => (name === null ? null : tryReadSkill(name));
+    const start = read(p.start_skill);
+    if (p.start_skill !== null && !start) return refuse();
+    server = srv;
+    prompt = { ...buildLessonPrompt({ preamble, instructions: server.instructions, serverTools: server.tools, skill: start, skillTool, settings }), startSkill: p.start_skill };
+    handedOver = false;
+    if (p.skill !== p.start_skill) {
+      const active = read(p.skill);
+      if (!active) return refuse();
+      switchTo(active);
+    }
+    handedOver = p.handed_over;
+    offered = Array.isArray(p.offered) ? new Set(p.offered) : null;
+    if (p.pending_skill !== null) {
+      const waiting = read(p.pending_skill);
+      if (!waiting) return refuse();
+      pending = { name: waiting.name, body: waiting.body };
+    }
+    if (requestHash() !== p.request_hash) return refuse();
+    messages.push(...saved.messages);
+    return { resumed: true };
+  }
+
+  // Settles a waiting continue against the server's { instructions, tools }: once, reported to
+  // onResume. A refusal leaves a lesson with no prompt, which the first send opens on freshSkill.
+  function settle(srv) {
+    const saved = resumeWith;
+    resumeWith = null;
+    const r = rebuild(srv, saved);
+    if (r.resumed) freshSkill = null;
+    if (opts.onResume) {
+      try {
+        opts.onResume(r);
+      } catch (e) {
+        log({ event: "internal_error", name: "onResume", detail: String((e && e.message) || e).slice(0, 300) });
+      }
+    }
+    return r;
   }
 
   // What the service changed in what it was sent (dropped thinking blocks), for the helper log:
@@ -231,10 +323,10 @@ export function createLesson(opts) {
   function placeHandOver() {
     if (!messages.length || messages[messages.length - 1].role !== "user") return null;
     const changes = prompt.toolChanges ? toolChangeBlocks(prompt.tools, offered, prompt.allowed) : [];
-    if (pendingBody === null && !changes.length) return null;
-    const undo = { body: pendingBody, offered };
-    messages.push(skillSystemMessage(pendingBody, changes));
-    pendingBody = null;
+    if (pending === null && !changes.length) return null;
+    const undo = { pending, offered };
+    messages.push(skillSystemMessage(pending ? pending.body : null, changes));
+    pending = null;
     if (prompt.toolChanges) offered = prompt.allowed;
     return undo;
   }
@@ -328,7 +420,7 @@ export function createLesson(opts) {
   // A completed hand-over: the new skill's tools from now on, its body waiting to go in.
   function applyHandOver(pendingHandOver, emit) {
     if (!pendingHandOver.skill) return;
-    pendingBody = pendingHandOver.skill.body;
+    pending = { name: pendingHandOver.skill.name, body: pendingHandOver.skill.body };
     switchTo(pendingHandOver.skill);
     emit("skill_loaded", { skill: pendingHandOver.skill.name });
   }
@@ -343,28 +435,40 @@ export function createLesson(opts) {
     // doesn't.
     // lastLen: how many blocks the last kept message had, so text added to it (addUserText) comes
     // off at block level.
-    const mark = () => ({ len: messages.length, lastLen: messages.length ? messages[messages.length - 1].content.length : 0, prompt, handedOver, pendingBody, offered });
+    const mark = () => ({ len: messages.length, lastLen: messages.length ? messages[messages.length - 1].content.length : 0, prompt, handedOver, pending, offered });
     let back = mark();
     let completed = false;
+    // Each complete exchange is a mark, and the conversation file is saved at it with the state
+    // of that moment, so the file is always what the lesson would hold if this turn failed now.
     const markComplete = () => {
       back = mark();
       completed = true;
+      if (!opts.onComplete) return;
+      try {
+        opts.onComplete({ messages, prompt: promptState() });
+      } catch (e) {
+        log({ event: "internal_error", name: "onComplete", detail: String((e && e.message) || e).slice(0, 300) });
+      }
     };
     const ctl = new AbortController();
-    let timedOut = false;
+    // Why the turn was cut short: "timeout" (the turn limit) or "stopped" (stop(): the helper is
+    // closing). Either ends it as a failed turn: complete exchanges kept, an answer whose call ran
+    // or is running completed, the rest taken back.
+    let abortKind = null;
     // What the turn is waiting on, so a timeout's log line says which kind of wait it was: a request
     // (and how far its answer got), or the server (an ae-mentor call or its start).
     let waitingOn = "start";
     const live = { started: false, shown: false };
     const timer = setTimeout(() => {
-      timedOut = true;
+      if (abortKind) return;
+      abortKind = "timeout";
       log({ event: "turn_timeout", turn: turnNo, step: steps, waiting_on: waitingOn, started: live.started, shown: live.shown });
       ctl.abort();
     }, settings.turn_timeout_ms);
     // One shared "timed out" promise, already handled, so a timer that fires after a race has
     // settled never leaves an unhandled rejection behind.
     const timedOutP = new Promise((resolve) => ctl.signal.addEventListener("abort", resolve, { once: true })).then(() => {
-      throw new TurnAbort("timeout");
+      throw new TurnAbort(abortKind);
     });
     timedOutP.catch(() => {});
     const race = (p) => Promise.race([p, timedOutP]);
@@ -394,15 +498,23 @@ export function createLesson(opts) {
       if (last && last.content.length > back.lastLen) last.content = last.content.slice(0, back.lastLen);
       prompt = back.prompt;
       handedOver = back.handedOver;
-      pendingBody = back.pendingBody;
+      pending = back.pending;
       offered = back.offered;
       if (!completed) log({ event: "turn_taken_back" });
       return summary(false, kind);
     };
 
+    stopTurn = () => {
+      if (abortKind) return;
+      abortKind = "stopped";
+      log({ event: "turn_stopped", turn: turnNo, waiting_on: waitingOn });
+      ctl.abort();
+    };
+
     try {
       const client = await opts.getClient();
       if (!client) return fail("not_signed_in");
+      if (abortKind) throw new TurnAbort(abortKind);
 
       let srv;
       try {
@@ -413,21 +525,30 @@ export function createLesson(opts) {
         return fail("start_failed");
       }
       if (!server) server = srv;
+      // A continue that couldn't be checked at start (ae-mentor wasn't up) is checked now, before
+      // anything of this turn; the turn's mark moves with it, so a failure goes back to the
+      // continued history, not to an empty one.
+      if (resumeWith && !prompt) {
+        settle(srv);
+        back = mark();
+      }
 
       // The skill: a message that starts with a mentor skill's command loads it (FR-002). The
-      // text itself goes to the model unchanged.
+      // text itself goes to the model unchanged. A lesson whose continuing was refused opens on
+      // its opening skill, as if the text had started with that skill's command.
       const cmd = commandOf(text);
       let bodyAhead = null;
       if (!prompt) {
-        const skill = cmd ? tryReadSkill(cmd.name) : null;
-        prompt = buildLessonPrompt({ preamble, instructions: server.instructions, serverTools: server.tools, skill, skillTool, settings });
+        const name = cmd ? cmd.name : freshSkill;
+        const skill = name ? tryReadSkill(name) : null;
+        prompt = { ...buildLessonPrompt({ preamble, instructions: server.instructions, serverTools: server.tools, skill, skillTool, settings }), startSkill: skill ? skill.name : null };
         if (skill && settings.skill_placement === "message") bodyAhead = skill.body;
         offered = prompt.toolChanges ? new Set(prompt.tools.filter((t) => !t.defer_loading).map((t) => t.name)) : null;
       } else if (cmd && cmd.name !== prompt.skillName) {
         const skill = tryReadSkill(cmd.name);
         if (skill) {
           switchTo(skill);
-          pendingBody = skill.body;
+          pending = { name: skill.name, body: skill.body };
           emit("skill_loaded", { skill: skill.name });
         }
       }
@@ -444,7 +565,7 @@ export function createLesson(opts) {
           ({ message } = await race(step(client, ctl.signal, emit, live, () => costs.push(null))));
         } catch (thrown) {
           if (live.started) costs.push(null); // billed, but the counts never came
-          if (timedOut) throw new TurnAbort("timeout");
+          if (abortKind) throw new TurnAbort(abortKind);
           const err = thrown && thrown.err !== undefined ? thrown.err : thrown;
           const kind = classify(err, lastReach(client));
           // The service's own words help the builder find a rejected request; the log line is
@@ -457,7 +578,7 @@ export function createLesson(opts) {
           }
           return fail(kind);
         }
-        if (timedOut) throw new TurnAbort("timeout");
+        if (abortKind) throw new TurnAbort(abortKind);
 
         logTransformations(message, steps);
         model = message.model;
@@ -477,7 +598,7 @@ export function createLesson(opts) {
           // Nothing followed the message, so it can't stay last before the next user message: take
           // it back off the end (no thinking block was made after it) and let it wait again.
           messages.pop();
-          pendingBody = placed.body;
+          pending = placed.pending;
           offered = placed.offered;
         }
         const uses = content.filter((b) => b.type === "tool_use");
@@ -505,6 +626,8 @@ export function createLesson(opts) {
         const flight = {};
         try {
           for (const use of uses) {
+            // Nothing more is sent once the turn is cut short: a call not started is "didn't run".
+            if (abortKind) throw new TurnAbort(abortKind);
             const r = await runTool(use, race, emit, pendingHandOver, flight);
             results.push(resultBlock(use.id, r.content, r.isError));
             if (r.ran) ran = true;
@@ -514,7 +637,7 @@ export function createLesson(opts) {
           // Any error once a call has run (a fault in the helper too, S4), or while one was in
           // flight (S1), completes the answer, so whatever may have changed AE stays in the history:
           // the call in flight gets NOT_FINISHED, calls never started get DIDNT_RUN.
-          const kind = e instanceof TurnAbort ? e.kind : timedOut ? "timeout" : "start_failed";
+          const kind = e instanceof TurnAbort ? e.kind : abortKind || "start_failed";
           if (!(e instanceof TurnAbort)) log({ event: "internal_error", name: (e && e.constructor && e.constructor.name) || typeof e, detail: String((e && e.message) || e).slice(0, 300) });
           // A call in this answer already ran (a demonstration, say), so the answer is completed
           // rather than taken back: each call that didn't run gets the fixed result (resolved
@@ -541,14 +664,30 @@ export function createLesson(opts) {
     } catch (e) {
       if (e instanceof TurnAbort) return fail(e.kind);
       log({ event: "turn_failed", detail: String((e && e.message) || e).slice(0, 200) });
-      return fail(timedOut ? "timeout" : "start_failed");
+      return fail(abortKind || "start_failed");
     } finally {
       clearTimeout(timer);
+      stopTurn = null;
     }
   }
 
   return {
     runTurn,
+    // Checks a waiting continue now: starts ae-mentor (main.mjs calls this in start, so ready can
+    // say whether the lesson continued). → { resumed, reason? }, or null if there's nothing to
+    // check. Throws the server's error if it can't start; the check then waits for the first turn.
+    async settleResume() {
+      if (!resumeWith || prompt) return null;
+      const srv = await mcp.start();
+      if (!resumeWith || prompt) return null;
+      return settle(srv);
+    },
+    // Ends the turn in flight as a failed turn (the helper is closing; data-model › Saving and
+    // clearing): an answer whose call ran or is running is completed and saved; the rest isn't.
+    // Nothing is sent after it. The caller awaits the turn's runTurn promise.
+    stop() {
+      if (stopTurn) stopTurn();
+    },
     // For tests and the conversation file (T043): the history exactly as it will next be sent.
     get messages() {
       return messages;

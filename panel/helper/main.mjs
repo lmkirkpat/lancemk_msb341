@@ -7,6 +7,8 @@
 // ae-mentor does), and never puts the key in an event, a log line or a child's environment.
 // Log lines go to stderr, scrubbed.
 
+import os from "node:os";
+import path from "node:path";
 import readline from "node:readline";
 import { scrubEnv, resolveKey, checkKey } from "./lib/key.mjs";
 import { loadSettings, HELPER_DIR } from "./lib/settings.mjs";
@@ -16,6 +18,8 @@ import { loadPreamble, loadSkillTool } from "./lib/prompt.mjs";
 import { createRequestLog } from "./lib/request-log.mjs";
 import { errorEvent, logLine, scrub } from "./lib/errors.mjs";
 import { ZERO_TOKENS } from "./lib/cost.mjs";
+import { saveConversation, loadConversation, clearConversation } from "./lib/conversation.mjs";
+import { SKILL_PATTERN } from "./lib/skills.mjs";
 
 // Before anything can build a client: no key, token, profile or host from the environment.
 const removedEnv = scrubEnv(process.env);
@@ -34,8 +38,15 @@ let useKeychain = true;
 const findKey = () => (useKeychain ? resolveKey(startKey) : Promise.resolve(startKey));
 let started = false;
 let stopping = false;
-let turnInFlight = false;
-let ctx = null; // { sessionId, loaded, mcp, lesson, client, baseURL }
+let turnInFlight = null; // the turn's runTurn promise while one runs
+let ctx = null; // { sessionId, home, loaded, mcp, lesson, client, baseURL }
+// How long a closing helper waits for the turn in flight to complete and save (stop, below). The
+// adapter sends SIGKILL 3 s after SIGTERM, and stopping ae-mentor can take up to 2 s more.
+const STOP_TURN_MS = 800;
+
+// The learner home when the start command names none: the same default as the panel's
+// (panel/lib/config.js) and ae-mentor's.
+const defaultHome = () => path.join(os.homedir(), "Library", "Application Support", "AEMentor");
 
 function out(type, payload) {
   if (stopping) return;
@@ -101,7 +112,37 @@ async function start(cmd) {
       if (!stopping) log({ event: "server_exited", code: code ?? null, signal: signal ?? null });
     },
   });
-  ctx = { sessionId: cmd.session_id, loaded, mcp, client: null, baseURL: cmd.base_url || undefined };
+  const home = typeof cmd.home === "string" && cmd.home ? cmd.home : defaultHome();
+  ctx = { sessionId: cmd.session_id, home, loaded, mcp, client: null, baseURL: cmd.base_url || undefined };
+
+  // The saved conversation (data-model › Lesson conversation, Continuing). resume false or missing:
+  // a new lesson, so any saved one goes before ready. resume true: loaded now, checked against
+  // today's prompt once ae-mentor has started. Any refusal deletes it and the lesson starts fresh
+  // on the opening skill (`skill`), with nothing said to the learner (spec 003's rule).
+  let opening = null;
+  if (cmd.skill !== undefined && cmd.skill !== null) {
+    if (typeof cmd.skill === "string" && SKILL_PATTERN.test(cmd.skill)) opening = cmd.skill;
+    else log({ event: "skill_ignored" });
+  }
+  const notContinued = (reason) => {
+    log({ event: "conversation_not_continued", reason });
+    if (!clearConversation(home)) log({ event: "conversation_clear_failed" });
+  };
+  let resume = null;
+  if (cmd.resume === true) {
+    const got = loadConversation({ home, sessionId: cmd.session_id, model: loaded.settings.model });
+    if (got.ok) resume = got.conversation;
+    else notContinued(got.reason);
+  } else if (!clearConversation(home)) {
+    log({ event: "conversation_clear_failed" });
+  }
+  const save = ({ messages, prompt }) => {
+    const r = saveConversation({ home, sessionId: ctx.sessionId, settingsHash: loaded.hash, model: loaded.settings.model, prompt, messages });
+    if (r.saved) return;
+    log({ event: "conversation_not_saved", reason: r.reason });
+    if (r.reason === "write_failed" && !r.cleared) log({ event: "conversation_clear_failed" });
+  };
+
   ctx.lesson = createLesson({
     getClient,
     mcp,
@@ -112,31 +153,40 @@ async function start(cmd) {
     skillsDir: cmd.skills_dir,
     requestLog: createRequestLog(typeof cmd.request_log === "string" ? cmd.request_log : null, startKey),
     log,
+    onComplete: save,
+    resume,
+    // Only for a continue that's refused; a new lesson loads a skill only from a command, as before.
+    freshSkill: cmd.resume === true ? opening : null,
+    onResume: (r) => (r.resumed ? log({ event: "conversation_continued" }) : notContinued(r.reason)),
   });
   started = true;
-  // `resume` is accepted; continuing a saved conversation comes with T043/T044. Until then a
-  // resumed lesson starts fresh, which spec 003's rule allows (say nothing alarming).
-  if (cmd.resume) log({ event: "resume_not_available" });
 
   if (cmd.keychain === false) {
     useKeychain = false;
     log({ event: "keychain_off" });
   }
   key = await findKey();
+  let resumed = false;
   try {
     await mcp.start();
+    // The continue's check needs the server's tools and instructions. If the server can't start,
+    // the check waits for the first send that starts it.
+    const r = await ctx.lesson.settleResume();
+    resumed = Boolean(r && r.resumed);
   } catch (e) {
     log({ event: "server_failed", code: e.code || "error" });
     startError(); // the next send tries again
     return;
   }
+  if (stopping) return;
   out("ready", {
     session_id: ctx.sessionId,
     runtime: "a",
     model: loaded.settings.model,
     effort: loaded.settings.effort,
     settings_hash: loaded.hash,
-    skill: null,
+    skill: ctx.lesson.skill,
+    resumed,
     ...(loaded.isDefault ? {} : { settings_file: loaded.file }),
   });
 }
@@ -157,13 +207,13 @@ function turnEnd(fields) {
 
 async function send(cmd) {
   const kind = typeof cmd.kind === "string" ? cmd.kind : "typed";
+  if (stopping) return;
   if (turnInFlight) return out("error", errorEvent("busy"));
   const sentAt = Date.now();
   if (!started) {
     out("error", errorEvent("start_failed"));
     return turnEnd({ ok: false, wait_ms: null, first_event_ms: null, total_ms: 0, kind });
   }
-  turnInFlight = true;
   let firstDelta = null;
   let firstEvent = null;
   out("turn_start", { kind, at: new Date(sentAt).toISOString() });
@@ -176,13 +226,14 @@ async function send(cmd) {
     out(type, payload);
   };
   let r;
+  turnInFlight = ctx.lesson.runTurn(typeof cmd.text === "string" ? cmd.text : String(cmd.text ?? ""), emit);
   try {
-    r = await ctx.lesson.runTurn(typeof cmd.text === "string" ? cmd.text : String(cmd.text ?? ""), emit);
+    r = await turnInFlight;
   } catch (e) {
     log({ event: "turn_crashed", detail: String((e && e.message) || e).slice(0, 200) });
     r = { ok: false, error_kind: "start_failed", cost_usd: null, tokens: { ...ZERO_TOKENS }, model: ctx.loaded.settings.model, other_model: false };
   }
-  turnInFlight = false;
+  turnInFlight = null;
   if (r.error_kind) out("error", errorEvent(r.error_kind));
   turnEnd({
     ok: r.ok,
@@ -232,9 +283,19 @@ async function keyCheck(cmd) {
   out("key_status", { status });
 }
 
+// stop, SIGTERM or stdin closing (the panel closes the helper with all three). A turn in flight
+// ends as a failed turn (data-model › Saving and clearing, OQ-C3): an answer whose call ran or is
+// running is completed and saved; anything else in flight isn't saved. Then ae-mentor stops and
+// the helper exits. No event goes out once stopping.
 async function stop() {
   if (stopping) return;
   stopping = true;
+  if (ctx && turnInFlight) {
+    ctx.lesson.stop();
+    let timer;
+    await Promise.race([turnInFlight.catch(() => {}), new Promise((resolve) => (timer = setTimeout(resolve, STOP_TURN_MS)))]);
+    clearTimeout(timer);
+  }
   try {
     if (ctx) await ctx.mcp.stop();
   } catch {}

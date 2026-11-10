@@ -6,11 +6,12 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { saveConversation, loadConversation, clearConversation, isCompleteHistory, CONVERSATION_FILE, FRAMES_DIR } from "../lib/conversation.mjs";
-import { createLesson, createClient } from "../lib/loop.mjs";
+import { createLesson, createClient, NOT_FINISHED } from "../lib/loop.mjs";
 import { createMcpClient } from "../lib/mcp-client.mjs";
 import { loadSettings, HELPER_DIR } from "../lib/settings.mjs";
 import { loadPreamble, loadSkillTool, withoutBreakpoints } from "../lib/prompt.mjs";
-import { startFakeService, reply, drop, text, thinking, toolUse } from "./fake-service.mjs";
+import { readSkill } from "../lib/skills.mjs";
+import { startFakeService, reply, drop, failure, text, thinking, toolUse } from "./fake-service.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const SKILLS = path.join(REPO, ".claude", "skills");
@@ -67,7 +68,11 @@ function fullHistory() {
   ];
 }
 
-const baseSave = (home, messages, extra = {}) => saveConversation({ home, sessionId: SESSION, skill: "ease-mentor", settingsHash: "hash-1", model: MODEL, messages, ...extra });
+// A prompt state as the loop saves it (data-model › Prompt state).
+const PROMPT = Object.freeze({ start_skill: "next-mentor", skill: "ease-mentor", offered: ["snapshot_project", "set_ease", "Skill"], handed_over: false, pending_skill: "ease-mentor", request_hash: "a".repeat(64) });
+const NO_SKILL = Object.freeze({ start_skill: null, skill: null, offered: ["Skill"], handed_over: false, pending_skill: null, request_hash: "b".repeat(64) });
+
+const baseSave = (home, messages, extra = {}) => saveConversation({ home, sessionId: SESSION, settingsHash: "hash-1", model: MODEL, prompt: { ...PROMPT }, messages, ...extra });
 const baseLoad = (home, extra = {}) => loadConversation({ home, sessionId: SESSION, model: MODEL, ...extra });
 const convFile = (home) => path.join(home, CONVERSATION_FILE);
 const framesDir = (home) => path.join(home, FRAMES_DIR);
@@ -88,7 +93,7 @@ test("a saved conversation loads back byte for byte, with its metadata", () => {
   const r = baseLoad(home);
   assert.equal(r.ok, true);
   assert.equal(JSON.stringify(r.conversation.messages), JSON.stringify(fullHistory()));
-  assert.equal(r.conversation.skill, "ease-mentor");
+  assert.deepEqual(r.conversation.prompt, PROMPT);
   assert.equal(r.conversation.settings_hash, "hash-1");
   assert.equal(r.conversation.session_id, SESSION);
   assert.equal(r.conversation.model, MODEL);
@@ -99,16 +104,17 @@ test("the file has the data model's fields, in its place in the learner home", (
   baseSave(home, fullHistory());
   assert.equal(CONVERSATION_FILE, "panel-conversation.json");
   assert.equal(FRAMES_DIR, "panel-conversation-frames");
-  assert.deepEqual(Object.keys(readSaved(home)), ["version", "session_id", "skill", "settings_hash", "model", "messages"]);
-  assert.equal(readSaved(home).version, 1);
+  assert.deepEqual(Object.keys(readSaved(home)), ["version", "session_id", "settings_hash", "model", "prompt", "messages"]);
+  assert.equal(readSaved(home).version, 2);
+  assert.deepEqual(Object.keys(readSaved(home).prompt), ["start_skill", "skill", "offered", "handed_over", "pending_skill", "request_hash"]);
 });
 
 test("a lesson with no skill loaded yet saves and loads", () => {
   const home = tempHome();
-  baseSave(home, [userText("hi"), answer("hello")], { skill: null });
+  baseSave(home, [userText("hi"), answer("hello")], { prompt: { ...NO_SKILL } });
   const r = baseLoad(home);
   assert.equal(r.ok, true);
-  assert.equal(r.conversation.skill, null);
+  assert.deepEqual(r.conversation.prompt, NO_SKILL);
 });
 
 test("saving doesn't change the history it's given", () => {
@@ -182,22 +188,35 @@ test("a save leaves no temp file behind and replaces the last one whole", () => 
   assert.equal(baseLoad(home).conversation.messages.length, 4);
 });
 
-test("a frame that can't be written leaves the last save as it was", () => {
+// A failed save deletes the last one (data-model › Saving and clearing): an older save may be
+// missing a demonstration or record_lesson that ran after it, so it must never be continued.
+test("a frame that can't be written deletes the last save and its frames", () => {
   const home = tempHome();
-  baseSave(home, [userText("hi"), answer("one")]);
-  const before = fs.readFileSync(convFile(home), "utf8");
+  baseSave(home, fullHistory());
+  assert.equal(fs.existsSync(path.join(framesDir(home), PNG_NAME)), true);
+  fs.rmSync(framesDir(home), { recursive: true });
   fs.writeFileSync(framesDir(home), "a file where the folder should be");
   const r = baseSave(home, fullHistory());
-  assert.deepEqual(r, { saved: false, reason: "write_failed" });
-  assert.equal(fs.readFileSync(convFile(home), "utf8"), before);
+  assert.deepEqual(r, { saved: false, reason: "write_failed", cleared: true });
+  assert.deepEqual(fs.readdirSync(home), []);
+  assert.deepEqual(baseLoad(home), { ok: false, reason: "none" });
 });
 
-test("a rename that fails reports it, throws nothing and leaves no temp file", () => {
+test("a rename that fails reports it, throws nothing and leaves nothing behind", () => {
   const home = tempHome();
   fs.mkdirSync(path.join(convFile(home), "occupied"), { recursive: true });
   const r = baseSave(home, [userText("hi"), answer("one")]);
-  assert.deepEqual(r, { saved: false, reason: "write_failed" });
-  assert.deepEqual(fs.readdirSync(home), [CONVERSATION_FILE]);
+  assert.deepEqual(r, { saved: false, reason: "write_failed", cleared: true });
+  assert.deepEqual(fs.readdirSync(home), []);
+});
+
+test("a failed save whose clearing fails too says so and still throws nothing", () => {
+  const home = tempHome();
+  baseSave(home, [userText("hi"), answer("one")]);
+  fs.chmodSync(home, 0o500); // nothing in the home can be written or removed
+  cleanups.push(() => fs.chmodSync(home, 0o700));
+  const r = baseSave(home, [userText("hi"), answer("one"), userText("more"), answer("two")]);
+  assert.deepEqual(r, { saved: false, reason: "write_failed", cleared: false });
 });
 
 // ---------- only after a complete exchange ----------
@@ -256,10 +275,21 @@ const NOT_CONTINUED = [
   ["a message with no content list", "unreadable", (home) => rewriteSaved(home, (s) => (s.messages[0].content = "text"))],
   ["a message with an unknown role", "unreadable", (home) => rewriteSaved(home, (s) => (s.messages[0].role = "tool"))],
   ["a block that isn't an object", "unreadable", (home) => rewriteSaved(home, (s) => (s.messages[0].content = [null]))],
-  ["a skill that isn't text", "unreadable", (home) => rewriteSaved(home, (s) => (s.skill = 7))],
+  ["no prompt state", "unreadable", (home) => rewriteSaved(home, (s) => delete s.prompt)],
+  ["a prompt state that isn't an object", "unreadable", (home) => rewriteSaved(home, (s) => (s.prompt = "ease-mentor"))],
+  ["a prompt field missing", "unreadable", (home) => rewriteSaved(home, (s) => delete s.prompt.pending_skill)],
+  ["a prompt field unknown", "unreadable", (home) => rewriteSaved(home, (s) => (s.prompt.extra = 1))],
+  ["a skill that isn't a mentor skill", "unreadable", (home) => rewriteSaved(home, (s) => (s.prompt.skill = "../builder"))],
+  ["a start skill that isn't text", "unreadable", (home) => rewriteSaved(home, (s) => (s.prompt.start_skill = 7))],
+  ["a waiting skill that isn't a mentor skill", "unreadable", (home) => rewriteSaved(home, (s) => (s.prompt.pending_skill = "x"))],
+  ["offered tools that aren't a list of names", "unreadable", (home) => rewriteSaved(home, (s) => (s.prompt.offered = ["a", 2]))],
+  ["handed_over that isn't true or false", "unreadable", (home) => rewriteSaved(home, (s) => (s.prompt.handed_over = "no"))],
+  ["a request hash that isn't one", "unreadable", (home) => rewriteSaved(home, (s) => (s.prompt.request_hash = "short"))],
   ["a settings hash that isn't text", "unreadable", (home) => rewriteSaved(home, (s) => (s.settings_hash = null))],
   ["its tail incomplete", "unreadable", (home) => rewriteSaved(home, (s) => s.messages.splice(-2))],
-  ["another version", "version", (home) => rewriteSaved(home, (s) => (s.version = 2))],
+  ["another version", "version", (home) => rewriteSaved(home, (s) => (s.version = 3))],
+  // T043's file as merged: version 1, a top-level skill and no prompt state.
+  ["a version 1 file", "version", (home) => rewriteSaved(home, (s) => { s.version = 1; s.skill = "ease-mentor"; delete s.prompt; })],
   ["another session", "session", (home) => rewriteSaved(home, (s) => (s.session_id = "someone-else"))],
   ["another model", "model", (home) => rewriteSaved(home, (s) => (s.model = "claude-sonnet-5-5"))],
   ["a frame missing", "frames", (home) => fs.rmSync(path.join(framesDir(home), PNG_NAME))],
@@ -316,32 +346,22 @@ test("clearing with nothing there is fine, even with no home folder", () => {
   assert.equal(clearConversation(path.join(home, "does-not-exist")), true);
 });
 
-// ---------- through the real loop (FR-015, FR-023, SC-007's automated half) ----------
+// ---------- through the real loop (FR-015, FR-023, FR-023a, SC-007's automated half) ----------
+//
+// The rule (data-model › Continuing): a continued lesson's next request is exactly the request the
+// same helper would have sent had it stayed open and the turn in progress at the close had failed
+// at that moment. So each case runs one lesson (the "live" one, which saves after each complete
+// exchange as main.mjs does) up to a turn that fails at the point of the close, takes the file as
+// it stands, lets the live lesson send the next text, then opens a second lesson from the file
+// (a new ae-mentor, as a new helper process would start) and sends the same text. The two
+// requests must be equal byte for byte: params, betas and messages, cache markers aside.
 
-async function lessonOn(svc, home) {
-  const state = path.join(home, "fixture-state.json");
-  fs.writeFileSync(state, JSON.stringify({ project: FIXTURE }));
-  const mcp = createMcpClient({ mcpConfig: path.join(REPO, ".mcp.json"), home, fixtureEnv: { AE_MENTOR_FIXTURE_STATE: state } });
-  cleanups.push(() => mcp.stop());
-  // The real server, with a frame added to each result so the history carries an image.
-  const withFrame = {
-    start: () => mcp.start(),
-    stop: () => mcp.stop(),
-    callTool: async (name, input) => {
-      const r = await mcp.callTool(name, input);
-      return { ...r, content: [...r.content, { type: "image", data: PNG, mimeType: "image/png" }] };
-    },
-  };
-  return createLesson({
-    getClient: async () => createClient({ apiKey: "sk-ant-api03-CONVKEY_abcdefghijklm", baseURL: svc.url }),
-    mcp: withFrame,
-    settings: Object.freeze({ ...SETTINGS }),
-    prices,
-    preamble: loadPreamble(HELPER_DIR),
-    skillTool: loadSkillTool(HELPER_DIR),
-    skillsDir: SKILLS,
-  });
-}
+const OPUS = {};
+const HAIKU = { model: "claude-haiku-5-5", fallbacks: null, thinking_display: "omitted" };
+const MODELS = [["Opus 5.5", OPUS], ["Haiku 5.5", HAIKU]];
+const FAST = { "retry-after-ms": "1" };
+const busy = () => [failure(529, "overloaded_error", "o", FAST), failure(529, "overloaded_error", "o", FAST), failure(529, "overloaded_error", "o", FAST)];
+const BACK = "I'm back. Pick up where we left off.";
 
 async function service() {
   const svc = await startFakeService();
@@ -349,52 +369,380 @@ async function service() {
   return svc;
 }
 
-const noBreakpoints = (messages) => JSON.parse(JSON.stringify(withoutBreakpoints(messages)));
+// The real ae-mentor in fixture mode, with a frame added to each result so the history carries an
+// image (and the file a frame). hang(name) → true makes that call hang, sent and never answered.
+function mentorOn(home, { hang, change } = {}) {
+  const state = path.join(home, "fixture-state.json");
+  if (!fs.existsSync(state)) fs.writeFileSync(state, JSON.stringify({ project: FIXTURE }));
+  const mcp = createMcpClient({ mcpConfig: path.join(REPO, ".mcp.json"), home, fixtureEnv: { AE_MENTOR_FIXTURE_STATE: state } });
+  cleanups.push(() => mcp.stop());
+  const calls = [];
+  return {
+    calls,
+    start: async () => (change ? change(await mcp.start()) : mcp.start()),
+    stop: () => mcp.stop(),
+    pid: () => mcp.pid(),
+    callTool: async (name, input) => {
+      calls.push(name);
+      if (hang && hang(name)) return new Promise(() => {});
+      const r = await mcp.callTool(name, input);
+      return { ...r, content: [...r.content, { type: "image", data: PNG, mimeType: "image/png" }] };
+    },
+  };
+}
 
-test("the resumed request's history equals what was sent before, byte for byte", async () => {
+// opts: { patch (settings), skillsDir, preamble, resume (a loaded conversation), freshSkill,
+// mentor (mentorOn's options), save (false: no saving), onResume }
+function lessonIn(svc, home, opts = {}) {
+  const settings = Object.freeze({ ...SETTINGS, ...(opts.patch || {}) });
+  const mcp = mentorOn(home, opts.mentor);
+  const lesson = createLesson({
+    getClient: async () => createClient({ apiKey: "sk-ant-api03-CONVKEY_abcdefghijklm", baseURL: svc.url }),
+    mcp,
+    settings,
+    prices,
+    preamble: opts.preamble ?? loadPreamble(HELPER_DIR),
+    skillTool: loadSkillTool(HELPER_DIR),
+    skillsDir: opts.skillsDir || SKILLS,
+    resume: opts.resume || null,
+    freshSkill: opts.freshSkill || null,
+    onResume: opts.onResume,
+    onComplete:
+      opts.save === false
+        ? undefined
+        : ({ messages, prompt }) => {
+            const r = saveConversation({ home, sessionId: SESSION, settingsHash: "hash-1", model: settings.model, prompt, messages });
+            assert.deepEqual(r, { saved: true }, "every complete exchange saves");
+          },
+  });
+  let events = [];
+  return {
+    lesson,
+    mcp,
+    settings,
+    events: () => events,
+    turn: async (t) => {
+      events = [];
+      return lesson.runTurn(t, (type, payload) => events.push({ type, ...payload }));
+    },
+  };
+}
+
+const strip = (v) => JSON.stringify(withoutBreakpoints(v));
+const lastRequest = (svc) => svc.messageRequests.at(-1);
+
+// Takes the file as it stands at the close, has the live lesson send `next` (the reference), then
+// a lesson opened from the file sends `next` too. → { ref, cont, live, opened, saved }.
+async function closeAndContinue(svc, home, live, { next = BACK, answer = [text("Welcome back.")], patch, skillsDir } = {}) {
+  const loaded = baseLoad(home, { model: live.settings.model });
+  assert.equal(loaded.ok, true, `the file loads (${loaded.reason})`);
+  const saved = loaded.conversation;
+
+  svc.script(reply(answer));
+  const liveEnd = await live.turn(next);
+  assert.equal(liveEnd.ok, true);
+  const ref = lastRequest(svc);
+
+  const resumes = [];
+  const opened = lessonIn(svc, home, { patch, skillsDir, resume: saved, freshSkill: "ease-mentor", onResume: (r) => resumes.push(r) });
+  assert.deepEqual(await opened.lesson.settleResume(), { resumed: true });
+  assert.deepEqual(resumes, [{ resumed: true }]);
+  assert.equal(opened.lesson.skill, saved.prompt.skill);
+  svc.script(reply(answer));
+  const openedEnd = await opened.turn(next);
+  assert.equal(openedEnd.ok, true);
+  const cont = lastRequest(svc);
+
+  assert.deepEqual(svc.rejected, [], "the fake service rejected a request as invalid");
+  assert.equal(svc.pending(), 0, "every scripted reply was used");
+  assert.equal(strip(cont.body), strip(ref.body), "the continued request is the uninterrupted one, byte for byte");
+  assert.equal(cont.headers["anthropic-beta"], ref.headers["anthropic-beta"], "the same betas");
+  assert.equal(openedEnd.prompt_hash, liveEnd.prompt_hash, "turn_end reports the same prompt_hash");
+  assert.equal(openedEnd.skill, liveEnd.skill);
+  return { ref: ref.body, cont: cont.body, live, opened, saved };
+}
+
+// Turn 1 of an easing lesson: the snapshot, then a line. → the demo target ae-mentor named.
+async function easeOpening(svc, live) {
+  svc.script(reply([thinking("", "sig-open"), text("Let me look."), toolUse("snapshot_project", { detail: "café" }, "tu_open")], { stop_reason: "tool_use" }), reply([thinking("", "sig-open2"), text("Your Title moves at one speed.")]));
+  assert.equal((await live.turn("/ease-mentor")).ok, true);
+  const target = live.events().find((e) => e.type === "tool_result").json.demo_target;
+  assert.equal(typeof target, "string", "the fixture has a demo target");
+  return target;
+}
+
+async function nextOpening(svc, live) {
+  svc.script(reply([thinking("", "sig-next"), text("Easing is next. Want to start?")]));
+  assert.equal((await live.turn("/next-mentor")).ok, true);
+}
+
+const handOver = (id = "tu_hand") => reply([thinking("", `sig-${id}`), text("Easing it is."), toolUse("Skill", { skill: "ease-mentor" }, id)], { stop_reason: "tool_use" });
+const systemMessages = (body) => body.messages.filter((m) => m.role === "system");
+const EASE_BODY = readSkill(SKILLS, "ease-mentor").body;
+const bodyText = (m) => m.content.filter((b) => b.type === "text").map((b) => b.text).join("");
+
+test("the file holds the history and the prompt state of the last complete exchange, frames as files", async () => {
   const svc = await service();
   const home = tempHome();
-  const first = await lessonOn(svc, home);
-  svc.script(reply([thinking("look first"), text("Let me look."), toolUse("snapshot_project", { detail: "café" })], { stop_reason: "tool_use" }));
-  svc.script(reply([thinking("then answer"), text("Your turn — ease “Title”.")]));
-  const done = await first.runTurn("/ease-mentor", () => {});
-  assert.equal(done.ok, true);
-  assert.deepEqual(baseSave(home, first.messages), { saved: true });
-
-  // What went over the wire last, plus the answer it got.
-  const sentLast = noBreakpoints(svc.messageRequests[1].body.messages);
-  const before = [...sentLast, first.messages[first.messages.length - 1]];
-  assert.equal(JSON.stringify(before), JSON.stringify(first.messages));
-  assert.equal(JSON.stringify(sentLast).includes(PNG), true, "the frame went to the model");
-  assert.equal(fs.readFileSync(convFile(home), "utf8").includes(PNG), false, "the frame isn't in the file");
-
-  // The panel closes; a new helper process loads the file.
-  const loaded = baseLoad(home);
-  assert.equal(loaded.ok, true);
-  const second = await lessonOn(svc, home);
-  second.messages.push(...loaded.conversation.messages);
-  svc.script(reply([text("Picking up where we left off.")]));
-  // Opened with the skill's command so this lesson has the first one's tools (T044 restores them).
-  assert.equal((await second.runTurn("/ease-mentor I eased it", () => {})).ok, true);
-
-  const resumed = noBreakpoints(svc.messageRequests[2].body.messages);
-  assert.equal(JSON.stringify(resumed.slice(0, before.length)), JSON.stringify(before));
-  assert.deepEqual(resumed.slice(before.length), [{ role: "user", content: [{ type: "text", text: "/ease-mentor I eased it" }] }]);
+  const live = lessonIn(svc, home);
+  await easeOpening(svc, live);
+  const raw = fs.readFileSync(convFile(home), "utf8");
+  assert.equal(raw.includes(PNG), false, "the frame isn't in the file");
+  assert.equal(fs.existsSync(path.join(framesDir(home), PNG_NAME)), true);
+  const saved = baseLoad(home).conversation;
+  assert.equal(strip(saved.messages), strip(live.lesson.messages));
+  // offered: what the first request declared without defer_loading, in the declared order.
+  const offered = svc.messageRequests[0].body.tools.filter((t) => !t.defer_loading).map((t) => t.name);
+  assert.deepEqual(offered.slice().sort(), readSkill(SKILLS, "ease-mentor").allowedTools.slice().sort());
+  assert.deepEqual({ ...saved.prompt, request_hash: "-" }, { start_skill: "ease-mentor", skill: "ease-mentor", offered, handed_over: false, pending_skill: null, request_hash: "-" });
+  assert.match(saved.prompt.request_hash, /^[0-9a-f]{64}$/);
 });
 
-test("a turn that fails mid-answer saves its complete exchanges and none of its tail", async () => {
+test("continuing: a plain lesson after the demo, closed during the next turn's first request", async () => {
   const svc = await service();
   const home = tempHome();
-  const lesson = await lessonOn(svc, home);
-  svc.script(reply([text("Let me look."), toolUse("snapshot_project", {})], { stop_reason: "tool_use" }));
-  // Enough drops to use up the SDK's retries, if it makes any for a dropped stream.
-  for (let i = 0; i < 3; i++) svc.script(drop([text("Half an ans"), toolUse("snapshot_project", {})], 1));
-  const r = await lesson.runTurn("/ease-mentor", () => {});
-  assert.equal(r.ok, false);
+  const live = lessonIn(svc, home);
+  const target = await easeOpening(svc, live);
+  svc.script(reply([thinking("", "sig-demo"), text("Watch the first pair."), toolUse("set_ease", { segment_id: target }, "tu_demo")], { stop_reason: "tool_use" }), reply([text("Your turn on the rest.")]));
+  assert.equal((await live.turn("Show me one.")).ok, true);
+  svc.script(...busy());
+  assert.equal((await live.turn("I eased the rest.")).error_kind, "service_busy");
 
-  assert.deepEqual(baseSave(home, lesson.messages), { saved: true });
-  const saved = baseLoad(home).conversation.messages;
-  assert.deepEqual(saved.map((m) => m.role), ["user", "assistant", "user"]);
-  assert.equal(saved[2].content[0].type, "tool_result");
-  assert.equal(JSON.stringify(saved).includes("Half an ans"), false);
+  const { cont, saved } = await closeAndContinue(svc, home, live);
+  assert.equal(saved.prompt.pending_skill, null);
+  assert.equal(JSON.stringify(cont).includes("I eased the rest."), false, "a message whose turn completed nothing isn't there");
+  assert.equal(live.mcp.calls.filter((n) => n === "set_ease").length, 1, "the demo ran once");
+  assert.ok(JSON.stringify(cont).includes("tu_demo"), "the demo is in the continued history");
+});
+
+for (const [model, patch] of MODELS) {
+  test(`hand-over across a close, ${model}: the Skill call written, its result not in (the answer cut off)`, async () => {
+    const svc = await service();
+    const home = tempHome();
+    const live = lessonIn(svc, home, { patch });
+    await nextOpening(svc, live);
+    svc.script(drop([text("Easing it is."), toolUse("Skill", { skill: "ease-mentor" }, "tu_hand")], 1));
+    const r = await live.turn("Yes.");
+    assert.equal(r.ok, false);
+    assert.equal(live.lesson.skill, "next-mentor");
+    const { cont, saved } = await closeAndContinue(svc, home, live, { patch });
+    assert.equal(saved.prompt.skill, "next-mentor");
+    assert.equal(saved.prompt.pending_skill, null);
+    assert.equal(systemMessages(cont).length, 0, "no hand-over");
+  });
+
+  test(`hand-over across a close, ${model}: the Skill exchange completed, its body placed for a request that never finished`, async () => {
+    const svc = await service();
+    const home = tempHome();
+    const live = lessonIn(svc, home, { patch });
+    await nextOpening(svc, live);
+    svc.script(handOver(), ...busy());
+    const r = await live.turn("Yes.");
+    assert.equal(r.error_kind, "service_busy");
+    assert.equal(live.lesson.skill, "ease-mentor");
+    const { cont, saved } = await closeAndContinue(svc, home, live, { patch });
+    assert.deepEqual([saved.prompt.start_skill, saved.prompt.skill, saved.prompt.pending_skill], ["next-mentor", "ease-mentor", "ease-mentor"]);
+    assert.equal(saved.prompt.handed_over, patch === HAIKU);
+    // The next text joins the last user message (M1), then one system message with the body.
+    assert.deepEqual(cont.messages.slice(-2).map((m) => m.role), ["user", "system"]);
+    assert.deepEqual(cont.messages.at(-2).content.map((b) => b.type), ["tool_result", "text"]);
+    assert.equal(systemMessages(cont).length, 1, "the body goes in once");
+    assert.equal(bodyText(cont.messages.at(-1)), EASE_BODY);
+  });
+
+  test(`hand-over across a close, ${model}: the body went in and an exchange after it completed`, async () => {
+    const svc = await service();
+    const home = tempHome();
+    const live = lessonIn(svc, home, { patch });
+    await nextOpening(svc, live);
+    svc.script(handOver(), reply([thinking("", "sig-snap"), toolUse("snapshot_project", {}, "tu_snap")], { stop_reason: "tool_use" }), ...busy());
+    assert.equal((await live.turn("Yes.")).error_kind, "service_busy");
+    const { cont, saved } = await closeAndContinue(svc, home, live, { patch });
+    assert.equal(saved.prompt.pending_skill, null);
+    assert.equal(saved.prompt.skill, "ease-mentor");
+    assert.equal(systemMessages(cont).length, 1, "the body isn't sent twice");
+  });
+
+  test(`hand-over across a close, ${model}: a typed command with no exchange completed after it`, async () => {
+    const svc = await service();
+    const home = tempHome();
+    const live = lessonIn(svc, home, { patch });
+    await nextOpening(svc, live);
+    svc.script(...busy());
+    assert.equal((await live.turn("/ease-mentor")).error_kind, "service_busy");
+    assert.equal(live.lesson.skill, "next-mentor", "the switch went back with the turn");
+    const { cont, saved } = await closeAndContinue(svc, home, live, { patch });
+    assert.equal(saved.prompt.skill, "next-mentor");
+    assert.equal(systemMessages(cont).length, 0);
+    assert.equal(JSON.stringify(cont.messages).includes("/ease-mentor"), false, "the learner's message isn't there");
+  });
+
+  test(`hand-over across a close, ${model}: the reply right after the placed body was empty`, async () => {
+    const svc = await service();
+    const home = tempHome();
+    const live = lessonIn(svc, home, { patch });
+    await nextOpening(svc, live);
+    svc.script(handOver(), reply([], { stop_reason: "end_turn" }));
+    assert.equal((await live.turn("Yes.")).ok, true);
+    const { cont, saved } = await closeAndContinue(svc, home, live, { patch });
+    assert.equal(saved.prompt.pending_skill, "ease-mentor", "as the second row");
+    assert.equal(systemMessages(cont).length, 1);
+    assert.equal(bodyText(cont.messages.at(-1)), EASE_BODY);
+  });
+
+  test(`a chain of two hand-overs, ${model}: next-mentor to easing by the hand-over tool, then to the speed graph by command`, async () => {
+    const svc = await service();
+    const home = tempHome();
+    const live = lessonIn(svc, home, { patch });
+    await nextOpening(svc, live);
+    svc.script(handOver(), reply([thinking("", "sig-ease"), text("Let's ease.")]));
+    assert.equal((await live.turn("Yes.")).ok, true);
+    svc.script(reply([thinking("", "sig-sg"), text("Speed graph time.")]));
+    assert.equal((await live.turn("/speed-graph-mentor")).ok, true);
+    svc.script(...busy());
+    assert.equal((await live.turn("Ok.")).error_kind, "service_busy");
+    const { cont, saved } = await closeAndContinue(svc, home, live, { patch });
+    assert.deepEqual([saved.prompt.start_skill, saved.prompt.skill, saved.prompt.pending_skill], ["next-mentor", "speed-graph-mentor", null]);
+    assert.equal(systemMessages(cont).length, 2, "both hand-overs are in the history, once each");
+  });
+}
+
+test("continuing a history that ends on tool results (M1): the next text joins that message", async () => {
+  const svc = await service();
+  const home = tempHome();
+  const live = lessonIn(svc, home);
+  const target = await easeOpening(svc, live);
+  svc.script(
+    reply([thinking("", "sig-d"), text("Watch."), toolUse("set_ease", { segment_id: target }, "tu_demo")], { stop_reason: "tool_use" }),
+    reply([thinking("", "sig-c"), toolUse("diff_since_last", {}, "tu_diff")], { stop_reason: "tool_use" }),
+    ...busy(),
+  );
+  assert.equal((await live.turn("Show me one.")).error_kind, "service_busy");
+  assert.equal(live.lesson.messages.at(-1).role, "user");
+  const { cont } = await closeAndContinue(svc, home, live);
+  assert.deepEqual(cont.messages.at(-1).content.map((b) => b.type), ["tool_result", "text"]);
+  assert.equal(cont.messages.at(-1).content.at(-1).text, BACK);
+});
+
+test("stop during a demo call: the call is saved with the didn't-finish result, and continuing doesn't demonstrate again", async () => {
+  const svc = await service();
+  const home = tempHome();
+  let hang = false;
+  const live = lessonIn(svc, home, { mentor: { hang: (name) => hang && name === "set_ease" } });
+  const target = await easeOpening(svc, live);
+  hang = true;
+  svc.script(reply([thinking("", "sig-w"), text("Watch."), toolUse("set_ease", { segment_id: target }, "tu_demo"), toolUse("diff_since_last", {}, "tu_diff")], { stop_reason: "tool_use" }));
+  const turn = live.turn("Show me one.");
+  while (!live.mcp.calls.includes("set_ease")) await new Promise((r) => setTimeout(r, 10));
+  live.lesson.stop();
+  const r = await turn;
+  assert.equal(r.ok, false);
+  assert.deepEqual(live.mcp.calls.filter((n) => n === "diff_since_last"), [], "nothing is sent after the stop");
+  const res = baseLoad(home).conversation.messages.at(-1).content;
+  assert.deepEqual(res, [
+    { type: "tool_result", tool_use_id: "tu_demo", content: [{ type: "text", text: NOT_FINISHED }], is_error: true },
+    { type: "tool_result", tool_use_id: "tu_diff", content: [{ type: "text", text: "That call didn't run." }], is_error: true },
+  ]);
+  hang = false;
+  const { cont } = await closeAndContinue(svc, home, live);
+  assert.ok(strip(cont).includes(NOT_FINISHED));
+});
+
+test("stop while a request streams: nothing of the turn is saved", async () => {
+  const svc = await service();
+  const home = tempHome();
+  const live = lessonIn(svc, home);
+  await easeOpening(svc, live);
+  const before = fs.readFileSync(convFile(home), "utf8");
+  svc.script(reply([text("never")], { hang: true }));
+  const turn = live.turn("Show me one.");
+  while (svc.messageRequests.length < 3) await new Promise((r) => setTimeout(r, 10));
+  live.lesson.stop();
+  assert.equal((await turn).ok, false);
+  assert.equal(fs.readFileSync(convFile(home), "utf8"), before);
+});
+
+// ---------- not continued: something that goes in a request changed (FR-023a, OQ-C1) ----------
+
+function copySkills() {
+  const dir = tempHome();
+  fs.cpSync(SKILLS, dir, { recursive: true });
+  return dir;
+}
+
+// A lesson handed over to easing, closed with the body waiting (the second row), so the file names
+// a start skill, an active skill and a waiting one. → { svc, home, saved, skillsDir }.
+async function savedHandOver(skillsDir) {
+  const svc = await service();
+  const home = tempHome();
+  const live = lessonIn(svc, home, { skillsDir });
+  await nextOpening(svc, live);
+  svc.script(handOver(), ...busy());
+  assert.equal((await live.turn("Yes.")).error_kind, "service_busy");
+  const loaded = baseLoad(home);
+  assert.equal(loaded.ok, true);
+  return { svc, home, saved: loaded.conversation, live };
+}
+
+const CHANGES = [
+  ["the opening skill's SKILL.md", (o) => fs.appendFileSync(path.join(o.skillsDir, "next-mentor", "SKILL.md"), "\nOne more line.\n")],
+  ["the active and waiting skill's SKILL.md", (o) => fs.appendFileSync(path.join(o.skillsDir, "ease-mentor", "SKILL.md"), "\nOne more line.\n")],
+  ["the opening skill gone", (o) => fs.rmSync(path.join(o.skillsDir, "next-mentor"), { recursive: true })],
+  ["the preamble", (o) => (o.preamble = loadPreamble(HELPER_DIR) + "\nChanged.")],
+  ["a server tool's definition", (o) => (o.mentor = { change: (srv) => ({ ...srv, tools: srv.tools.map((t, i) => (i === 0 ? { ...t, description: `${t.description} Changed.` } : t)) }) })],
+  ["the server's instructions", (o) => (o.mentor = { change: (srv) => ({ ...srv, instructions: `${srv.instructions} Changed.` }) })],
+  ["a request setting (effort)", (o) => (o.patch = { effort: "high" })],
+  ["a request setting (max_tokens)", (o) => (o.patch = { max_tokens: 16000 })],
+];
+
+for (const [what, change] of CHANGES) {
+  test(`not continued when ${what} changed: reason prompt, then a fresh start on the opening skill`, async () => {
+    const skillsDir = copySkills();
+    const { svc, home, saved } = await savedHandOver(skillsDir);
+    const o = { skillsDir };
+    change(o);
+    const resumes = [];
+    const opened = lessonIn(svc, home, { ...o, resume: saved, freshSkill: "ease-mentor", onResume: (r) => resumes.push(r) });
+    assert.deepEqual(await opened.lesson.settleResume(), { resumed: false, reason: "prompt" });
+    assert.deepEqual(resumes, [{ resumed: false, reason: "prompt" }]);
+    assert.equal(opened.lesson.skill, null);
+    assert.deepEqual(opened.lesson.messages, []);
+
+    // The first send builds the prompt as if it started with the opening skill's command; the
+    // text goes in unchanged, and nothing alarming is said (no error).
+    svc.script(reply([text("Let's look at your easing.")]));
+    const end = await opened.turn(BACK);
+    assert.equal(end.ok, true);
+    assert.equal(end.error_kind, null);
+    assert.equal(end.skill, "ease-mentor");
+    assert.ok(!opened.events().some((e) => e.type === "error"));
+    const body = lastRequest(svc).body;
+    assert.deepEqual(withoutBreakpoints(body.messages), [{ role: "user", content: [{ type: "text", text: BACK }] }]);
+    assert.equal(body.system.at(-1).text, readSkill(skillsDir, "ease-mentor").body);
+  });
+}
+
+test("still continued when only the cache lifetime changed: moving or retiming a breakpoint isn't an edit", async () => {
+  const { svc, home, saved } = await savedHandOver();
+  const opened = lessonIn(svc, home, { patch: { cache_ttl: "1h" }, resume: saved });
+  assert.deepEqual(await opened.lesson.settleResume(), { resumed: true });
+  assert.equal(svc.rejected.length, 0);
+});
+
+test("a fresh start with no command and no opening skill loads nothing, as before", async () => {
+  const svc = await service();
+  const home = tempHome();
+  const opened = lessonIn(svc, home);
+  svc.script(reply([text("Hi.")]));
+  assert.equal((await opened.turn(BACK)).skill, null);
+  assert.equal(lastRequest(svc).body.system.length, 2);
+});
+
+test("the opening skill is used only when continuing was refused; a command in the first text still wins", async () => {
+  const svc = await service();
+  const home = tempHome();
+  const opened = lessonIn(svc, home, { freshSkill: "ease-mentor", resume: { messages: [], prompt: { start_skill: "nope-mentor", skill: "nope-mentor", offered: null, handed_over: false, pending_skill: null, request_hash: "0".repeat(64) } } });
+  assert.deepEqual(await opened.lesson.settleResume(), { resumed: false, reason: "prompt" });
+  svc.script(reply([text("Offsets.")]));
+  assert.equal((await opened.turn("/offset-mentor")).skill, "offset-mentor");
 });

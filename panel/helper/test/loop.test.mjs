@@ -26,7 +26,7 @@ afterEach(async () => {
   while (cleanups.length) await cleanups.pop()();
 });
 
-async function setup({ patch, noKey, wrapMcp, limits, service, baseURL } = {}) {
+async function setup({ patch, noKey, wrapMcp, limits, service, baseURL, onComplete } = {}) {
   const svc = await startFakeService(service);
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-loop-"));
   const state = path.join(home, "fixture-state.json");
@@ -45,6 +45,7 @@ async function setup({ patch, noKey, wrapMcp, limits, service, baseURL } = {}) {
     skillsDir: SKILLS,
     requestLog: createRequestLog(reqLogFile, KEY),
     log: (e) => logs.push(e),
+    onComplete,
     ...(limits && limits.headersMs ? { headersMs: limits.headersMs } : {}),
   });
   let events = [];
@@ -1331,4 +1332,83 @@ test("T068: each request logs its timing, numbers only", async () => {
   assert.ok(t.max_gap_ms >= 80 && t.max_gap_ms < 400, `the gap was ${t.max_gap_ms}`);
   assert.ok(t.headers_ms <= t.total_ms);
   assert.doesNotMatch(JSON.stringify(t), /Done/);
+});
+
+// ---------- T044: the save hook (data-model › Saving and clearing) ----------
+
+test("T044: the save hook runs once per complete exchange, inside the turn, with that moment's state", async () => {
+  const saves = [];
+  let inTurn = false;
+  const s = await setup({
+    onComplete: ({ messages, prompt }) => {
+      assert.equal(inTurn, true, "inside the turn, not only at its end");
+      saves.push({ roles: messages.map((m) => m.role), prompt: { ...prompt } });
+    },
+  });
+  const turn = async (t) => {
+    inTurn = true;
+    const r = await s.turn(t);
+    inTurn = false;
+    return r;
+  };
+  s.svc.script(reply([text("Easing next?")]));
+  await turn("/next-mentor");
+  assert.equal(saves.length, 1);
+  assert.deepEqual(saves[0].roles, ["user", "assistant"]);
+  assert.deepEqual({ ...saves[0].prompt, offered: null, request_hash: null }, { start_skill: "next-mentor", skill: "next-mentor", offered: null, handed_over: false, pending_skill: null, request_hash: null });
+
+  // A hand-over completes (saved with its body waiting), then the step with the body placed fails:
+  // nothing more is saved, so the file keeps the waiting body.
+  s.svc.script(reply([toolUse("Skill", { skill: "ease-mentor" }, "tu_h")], { stop_reason: "tool_use" }), ...busy());
+  assert.equal((await turn("Yes.")).r.error_kind, "service_busy");
+  assert.equal(saves.length, 2);
+  assert.deepEqual(saves[1].roles, ["user", "assistant", "user", "assistant", "user"]);
+  assert.equal(saves[1].prompt.skill, "ease-mentor");
+  assert.equal(saves[1].prompt.pending_skill, "ease-mentor");
+  assert.deepEqual(saves[1].prompt.offered.slice().sort(), allowedOf("next-mentor"), "the old skill's tools until the body goes in");
+  assert.notEqual(saves[1].prompt.request_hash, saves[0].prompt.request_hash);
+
+  // A typed command in a turn that completes nothing is never saved.
+  s.svc.script(...busy());
+  assert.equal((await turn("/offset-mentor")).r.error_kind, "service_busy");
+  assert.equal(saves.length, 2);
+
+  // The body goes in and an answer completes: saved with nothing waiting and the new tools offered.
+  s.svc.script(reply([text("Let's ease.")]));
+  await turn("Hello?");
+  assert.equal(saves.length, 3);
+  assert.equal(saves[2].prompt.pending_skill, null);
+  assert.deepEqual(saves[2].prompt.offered.slice().sort(), allowedOf("ease-mentor"));
+});
+
+test("T044: a save hook that throws is logged and the lesson goes on", async () => {
+  const s = await setup({ onComplete: () => { throw new Error("disk full"); } });
+  s.svc.script(reply([text("Hi.")]));
+  assert.equal((await s.turn("/ease-mentor")).r.ok, true);
+  assert.ok(s.logs.some((e) => e.event === "internal_error" && e.name === "onComplete"));
+});
+
+test("T044: stop with no turn in flight does nothing; stop before the first request takes the turn back", async () => {
+  let release;
+  const s = await setup({
+    wrapMcp: (m) => ({
+      start: async () => {
+        await new Promise((r) => (release = r));
+        return m.start();
+      },
+      pid: () => m.pid(),
+      stop: () => m.stop(),
+      callTool: (n, a) => m.callTool(n, a),
+    }),
+  });
+  s.lesson.stop();
+  const turn = s.turn("/ease-mentor");
+  while (!release) await new Promise((r) => setTimeout(r, 5));
+  s.lesson.stop();
+  const { r } = await turn;
+  release();
+  assert.equal(r.ok, false);
+  assert.deepEqual(s.lesson.messages, []);
+  assert.equal(s.svc.messageRequests.length, 0);
+  assert.ok(s.logs.some((e) => e.event === "turn_stopped"));
 });
