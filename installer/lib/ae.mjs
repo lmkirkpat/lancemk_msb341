@@ -14,6 +14,7 @@ export const TOOLS = Object.freeze({
   ps: "/bin/ps",
   profiles: "/usr/bin/profiles",
   pbcopy: "/usr/bin/pbcopy",
+  id: "/usr/bin/id",
 });
 const ENV = { PATH: SYSTEM_PATH };
 const AE_PROCESS = "/Adobe After Effects [^/]*\\.app/Contents/MacOS/";
