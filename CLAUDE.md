@@ -206,7 +206,9 @@ a brand new session act like a colleague who already knows what you are working 
      pivot B1 51/51 and A 50/51 at `c2d5f8d`, easing A 27/28, no timeouts. All six meet FR-033. About $26.85 of
      credit spent. The other four were measured on the older helper, so they re-run on the first tester's
      commit. Spec 006 T008 (2026-11-09, the key check) moved the settings hash off `0d5cda88`, so pivot and
-     easing re-run on that commit too (no lesson code changed). **Next:** T021 (a live lesson on A in AE), then T048 (lesson cost). T068's cause is still open.
+     easing re-run on that commit too (no lesson code changed). T021 passed 2026-11-09 (three easing lessons on A, 18/18 turns ≤ 10 s, median $0.22 a lesson;
+     `discovery/usage-notes/api-runtime.md`; the third was a review, so two ran with a demo). **Next:** T048 (lesson
+     cost; `panel/dev/turns.js` needs a per-runtime split first). T068's cause is still open.
   4. **Saved conversation (2026-11-09):** T043 (`panel/helper/lib/conversation.mjs`, 51 tests) and T056 (the
      helper's README) merged (`085cf1a`). It moved the settings hash from `4bc1686c` to `06339ff3` (no lesson code
      changed). The data model for T044 (the wiring, with `loop.mjs`) was approved 2026-11-09 (`5ea2b26`, OQ-C1 to

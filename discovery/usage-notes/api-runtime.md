@@ -1,5 +1,28 @@
 # Option A runtime: usage notes
 
+## Live lessons on A (T021, 2026-11-09, 19:43 to 19:50 local, at `229dc0e`)
+
+Three easing lessons in the panel on Mentor Practice, `"runtime": "a"` (set 17:20), the helper
+(`panel/helper/main.mjs`) as the only mentor process and no `claude -p`. A find-next hand-over just before
+(19:42) is left out. Times and costs are from `panel-turns.jsonl`, tool calls from `calls.jsonl`.
+
+| Lesson | Turns | Demo | Checks | Passed | Cost | First activity, longest |
+|---|---|---|---|---|---|---|
+| 1, Title and CTRL (6 pairs) | start, ask, show me, show me again, check, check | 1 (`set_ease`, Title Position) | 2 | 2nd check | $0.21 | 5.0 s |
+| 2, Bar (3 pairs, separated X) | the same | 1 (`set_ease`, Subtitle Opacity) | 2 | 2nd check | $0.25 | 4.9 s |
+| 3, Title review (5 pairs) | start, ask, show me ×2, check, check | none (a review) | 2 | 2nd check | $0.22 | 5.9 s |
+
+- **SC-001:** each check's list matched AE every time (builder's confirmation; the check results aren't in
+  the logs). Every tool call returned ok, with no `AE_UNREACHABLE` or `AE_BUSY`.
+- **Speed:** 18 of 18 turns had first activity ≤ 10 s, median 2.4 s. **Cost:** median lesson $0.22, below
+  SC-004's $0.40. These feed T048, which still needs B1's median next to it.
+- **Lesson 3 was a review, not a first lesson:** the record already had easing, so the mentor opened a review.
+  It turned down both show-me requests and gave the steps in words, which is right for a review (one demo per
+  lesson, none in a review). So the a–f path with a demo ran twice, not three times.
+- **`node panel/dev/turns.js` doesn't split by runtime** and doesn't treat `new_lesson` as a lesson start: it
+  folds every turn since 2026-11-09 16:47 into one 100-turn, $5.10 "lesson". The numbers above were worked out
+  by hand. Fix before T048 (panel-builder).
+
 ## Pivot fix and re-runs (2026-11-06)
 
 Pivot B1 51/51 and A 50/51 at `c2d5f8d`; easing A 27/28 on the new helper. No A timeouts in about 260 turns
