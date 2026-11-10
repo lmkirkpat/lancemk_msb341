@@ -209,6 +209,17 @@ skill's, the tools the active one's, and the hand-overs between are in the histo
 - `start { resume: false }` deletes the file and frames before `ready` (a new lesson). Uninstall
   removes both (FR-023; spec 006's inventory, see spec › Amendments 2026-11-09).
 
+**As built (T044, merged 2026-11-09 `27dd7c6`; the builder accepted these the same day):**
+- **The exact match (FR-023a) holds only at complete exchanges.** If a turn ends `ok` having completed
+  nothing (an empty reply that isn't the one right after a placed skill body) and the panel closes right
+  then, the file doesn't have that learner message, so the continued lesson's next request lacks it.
+  Accepted, not fixed: it's rare and does what a failed turn does (the text is gone, nothing else).
+- **A turn cut short makes no more `ae-mentor` calls.** After `stop` or the 5-minute timeout, a call not yet
+  started gets "That call didn't run." Before T044, a timeout between two calls still sent the next one.
+- **Closing waits at most 0.8 s** for the turn to save before stopping `ae-mentor`, inside the adapter's
+  3-second wait before SIGKILL.
+- **With no `home` in `start`,** the file goes to the panel's default learner home.
+
 ## Price table (`panel/helper/prices.json`, repo; FR-026)
 
 `{ "checked": "2026-10-30", "models": { "<id>": { "input", "output", "cache_read", "cache_write_5m", "cache_write_1h", "long_prompt"? } } }`,

@@ -46,7 +46,7 @@ in any reply.
   the adapter takes from `panel-session.json` (as B1's Continue does). Used only when `resume` is
   true and the conversation can't be continued: the first `send` then builds the prompt as if its
   text started with that skill's command, and the text goes in unchanged. Any other value is
-  ignored and logged. Without it, a fresh start loads a skill only from a command, as today.
+  ignored and logged. Without it, a fresh start loads a skill only from a command, as today. As built (T044): the A adapter sends `skill` only with `resume: true`, so a new lesson's `start` is unchanged (FR-042).
 - **`ready`** gains `resumed` (bool, added 2026-11-09): true when the saved conversation was
   continued. The adapter logs it and doesn't re-emit it; the panel's flow is unchanged (OQ-C2).
 - **`stop`** *(amended 2026-11-09, OQ-C3)*: if the turn in flight has an answer with a call that ran
@@ -73,7 +73,7 @@ The adapter contract's events, unchanged in meaning, plus fields the panel may i
 
 | Event | Payload |
 |---|---|
-| `ready` | `{ session_id, runtime: "a", model, effort, settings_hash, skill, resumed, settings_file? }` (`resumed` added 2026-11-09, › Commands) (`skill` is null until the first message loads one; `settings_file` only when it isn't the default; helper only, the adapter doesn't re-emit it) |
+| `ready` | `{ session_id, runtime: "a", model, effort, settings_hash, skill, resumed, settings_file? }` (`resumed` added 2026-11-09, › Commands) (`skill` is null until the first message loads one, except after a successful continue, where it's the continued lesson's skill (as built, T044, 2026-11-09); `settings_file` only when it isn't the default; helper only, the adapter doesn't re-emit it) |
 | `turn_start` | `{ kind, at }` |
 | `text_delta` | `{ text }` |
 | `text` | `{ text }` |
