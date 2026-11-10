@@ -19,8 +19,10 @@ testing with real users.
 - [ ] A usage session comparing the new panel with the current one, checked against spec 007's
       success criteria
 - [ ] The option A runtime built, with easing and pivot proven on it; the rest before the first tester (`decisions/011`, changed 2026-11-04)
-- [ ] Knack installed with the installer on a fresh macOS user account with only After Effects
-      installed (spec 006 SC-002)
+- [x] Knack installed with the installer on a fresh macOS user account with only After Effects
+      installed (spec 006 SC-002). Done 2026-11-09: 3 of 3 runs `all_working` (two standard, one admin; Apple
+      silicon only, with a Rosetta stand-in for Intel), `discovery/usage-notes/installer-sc002.md`. Not yet proven:
+      notarization, outside testers, a lesson on an installed copy, faults, update, uninstall
 - [x] Carry-over from Sprint 3: eval baselines for the five new skills (key types, speed graph,
       offset, set the pivot, move a group with a null). Done 2026-10-28 to 10-29, every set meets
       SC-006 (`discovery/usage-notes/pacing-rebaselines.md`)
