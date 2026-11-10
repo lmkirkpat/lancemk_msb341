@@ -221,8 +221,7 @@ puts it lower), then the reason, then the start's own question, in one sentence 
 - <a id="start-depth"></a>**`depth`** (the start is first by the order above): I'd start with the [first] one, because [the kind's First line]:
 - <a id="start-symptom"></a>**`symptom`** (the start matches what the learner said): I'd start with the [first] one, since it's on [layer] around [time], where you said it looks off:
 - <a id="start-only-one"></a>**`only_one`** (one finding in all): That's the only thing I found, so let's start there:
-- <a id="start-first-non-ask"></a>**`first_non_ask`** (a question ranks above it): I'd start with the [second] one, since the one above it is a question about what you meant:
-- <a id="start-all-questions"></a>**every finding is a question** (no code yet; § 13, SW-2): Everything I found depends on what you meant, so let's start with the first one:
+- <a id="start-all-questions"></a>**`all_questions`** (every finding is a question): Everything I found depends on what you meant, so let's start with the first one:
 
 Each is followed by the start-here finding's **Question** (or, for DX-09, "want to look at where
 that is?"). Drop "[time]" in `symptom` when the learner named no time.
@@ -509,6 +508,8 @@ in the hand-back, not edited): § 10's DX-08 row says "4 (trace), then hints; 6 
    written, and drop it if live sessions show it slows the turn without helping.** *Approved 2026-11-09.*
 
 ### For the spec writer (SW)
+
+*All resolved 2026-11-09, as proposed, with SB-1 too (spec `b0fa184`). `first_non_ask` was dropped.*
 
 1. **Symptom on an ask finding.** Research R5 and T014 pick the highest-ranked non-ask as the start,
    even when a symptom puts an ask first. If the learner says "Cursor looks wrong" and Cursor's fade
