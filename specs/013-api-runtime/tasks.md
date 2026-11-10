@@ -11,7 +11,7 @@ notes on T011, T014, T016, T018, T023, T031, T037, T039, T054 and T055 (spec ›
 Amended 2026-11-04 by `decisions/011`: T032, T051, T053 and T054 changed, T062 to T067 added (Phase 11).
 Amended again 2026-10-30 after `013-evals` and `013-adapter` merged (`5963fef`): notes on T023, T040
 and T060 (spec › Amendments after the merge). No task ticked or unticked by this amendment.
-Amended 2026-11-09 (spec › Amendments 2026-11-09, awaiting approval): T044 widened, a note on T043. No task
+Amended 2026-11-09 (spec › Amendments 2026-11-09, approved 2026-11-09): T044 widened, a note on T043. No task
 ticked or unticked.
 
 **Input**: Design documents from `specs/013-api-runtime/`

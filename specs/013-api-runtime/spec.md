@@ -15,7 +15,7 @@ S1 and M1 and the merged code's protocol, listed under
 [Amendments after the merge](#amendments-2026-10-30-after-the-013-evals-and-013-adapter-merge). Amended
 2026-11-04 by `decisions/011` (build on B1, ship on A): FR-035, FR-037, SC-003 and new FR-041 to FR-043,
 listed under [Amendments 2026-11-04](#amendments-2026-11-04-build-on-b1-ship-on-a). Amended
-2026-11-09, **awaiting approval**: the saved conversation's prompt state and continuing rules
+2026-11-09, approved the same day by the builder (OQ-C1 to OQ-C3 as recommended): the saved conversation's prompt state and continuing rules
 (FR-023, new FR-023a, US4), listed under
 [Amendments 2026-11-09](#amendments-2026-11-09-the-saved-conversations-data-model-for-t044).
 
@@ -841,7 +841,7 @@ comparison of each runtime's tool lists on 2026-11-04.
 
 ## Amendments 2026-11-09 (the saved conversation's data model, for T044)
 
-**Status: awaiting the builder's approval.** T043 (`panel/helper/lib/conversation.mjs`) saved the
+**Status: approved 2026-11-09 by the builder, OQ-C1 to OQ-C3 as recommended.** T043 (`panel/helper/lib/conversation.mjs`) saved the
 history but not what else decides a request: the opening and active skill, the tools the history
 has offered, and a hand-over whose text is still to go in. Without them a continued lesson after a
 hand-over would send a different request from an uninterrupted one. Nothing is ticked or unticked.
@@ -855,7 +855,7 @@ hand-over would send a different request from an uninterrupted one. Nothing is t
 | Protocol | `start` gains `skill` (the opening skill, for a fresh start when continuing fails); `ready` gains `resumed`; `stop` saves an answer whose call ran or is running | contracts/helper-protocol.md, T044 |
 | US4 scenario 3 | Read as "Continue starts fresh" rather than "no Continue offered", since the panel can't read the conversation before the helper starts | US4 |
 
-**Open questions (the builder's; the data model is written as recommended):**
+**Resolved questions (approved 2026-11-09 as recommended):**
 
 - **OQ-C1: an update between close and reopen.** Recommended: the lesson isn't continued and
   starts fresh (`request_hash` differs). Alternative: send the saved prompt as it was. Rejected in

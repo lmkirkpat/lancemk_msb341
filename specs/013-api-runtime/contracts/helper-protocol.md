@@ -37,7 +37,7 @@ in any reply.
   `ready`**; it stays started, and each later `send` tries to start the server again. The adapter
   must treat that `error` as the end of starting (no `start_ms`), not wait for `ready`.
 - **`resume`** is accepted but, until T043 and T044, logged and ignored: the lesson starts fresh
-  (spec 003's rule: say nothing alarming). *Amended 2026-11-09 (T044; awaiting approval):* with
+  (spec 003's rule: say nothing alarming). *Amended 2026-11-09 (T044; approved 2026-11-09):* with
   `resume: true` the helper loads and checks the saved conversation (data-model › Lesson
   conversation › Continuing) once `ae-mentor` has started. If it can't be continued, the helper
   deletes it, logs the reason (a fixed word) and starts the lesson fresh on `skill`. With `resume`

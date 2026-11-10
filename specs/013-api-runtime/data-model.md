@@ -151,15 +151,15 @@ made to fail the same way, › Saving and clearing.)
 4. Not equal, or a named skill can't be read → not continued, reason `prompt` (a fixed word, logged
    as the other reasons are). This catches any change between the close and the reopen to the
    preamble, the server's tools or instructions, a `SKILL.md` that's in the prompt or waiting to go
-   in, or a setting that goes in a request. **Open (builder), OQ-C1:** written as recommended
+   in, or a setting that goes in a request. **Resolved 2026-11-09, OQ-C1:** approved as recommended
    (refuse and start fresh); the alternative is below the list.
 5. Any refusal (`none`, `unreadable`, `version`, `session`, `model`, `frames`, `prompt`) → the
    helper deletes the file and frames (a fresh lesson starts) and the lesson starts as a new one with
    the start command's `skill` (the opening skill the panel saved in `panel-session.json`, as B1's
    Continue uses it; contracts/helper-protocol.md): its prompt is built at the first `send` as if that
    send had started with the skill's command, and the send's text goes in unchanged. The learner sees
-   no error and no notice (spec 003's rule); `ready` carries `resumed: false`. **Open (builder),
-   OQ-C2:** written as recommended; see below.
+   no error and no notice (spec 003's rule); `ready` carries `resumed: false`. **Resolved 2026-11-09,
+   OQ-C2:** approved as recommended; see below.
 
 A different `settings_hash` alone is still not a refusal (T043): it covers helper code that doesn't
 change a request, and `request_hash` catches what does.
@@ -205,7 +205,7 @@ skill's, the tools the active one's, and the hand-overs between are in the histo
   saves, and then exits. Anything else in flight is dropped unsaved, as today. Why: without this, a
   demonstration that ran in the closing answer is missing from the file and a continued lesson can
   demonstrate a second time (SC-007). A helper killed outright (SIGKILL, a crash) saves nothing more.
-  **Open (builder), OQ-C3:** written as recommended; it changes the protocol's "`stop`: no save".
+  **Resolved 2026-11-09, OQ-C3:** approved as recommended; it changes the protocol's "`stop`: no save".
 - `start { resume: false }` deletes the file and frames before `ready` (a new lesson). Uninstall
   removes both (FR-023; spec 006's inventory, see spec › Amendments 2026-11-09).
 
