@@ -89,6 +89,8 @@ export async function scan(root, opts = {}) {
       const rel = s.join('/');
       const full = path.join(dir, ent.name);
       if (ent.isSymbolicLink()) {
+        // Any link, inside the tree or out: the installer's copy refuses links (spec 006 T017 run 1).
+        if (names) findings.push({ path: rel, kind: 'link' });
         if (names) for (const k of nameFindings(s, false)) findings.push({ path: rel, kind: k });
         continue;
       }

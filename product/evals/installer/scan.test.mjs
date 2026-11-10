@@ -129,13 +129,21 @@ for (const [name, line] of Object.entries(falseAlarms)) {
   });
 }
 
-test('symlinks are not followed', async () => {
+test('symlinks are not followed, and any link is reported', async () => {
   const root = tree();
   const outside = tree({ 'CLAUDE.md': 'x' });
   symlinkSync(outside, path.join(root, 'link'));
-  assert.deepEqual(await kinds(root), []);
+  assert.deepEqual(await kinds(root), ['link|link']);
   rmSync(root, { recursive: true });
   rmSync(outside, { recursive: true });
+});
+
+test('a link inside the tree is reported too (node_modules/.bin from npm ci, T017 run 1)', async () => {
+  const root = tree({ 'panel/helper/node_modules/@anthropic-ai/sdk/bin/cli': 'x' });
+  mkdirSync(path.join(root, 'panel/helper/node_modules/.bin'), { recursive: true });
+  symlinkSync('../@anthropic-ai/sdk/bin/cli', path.join(root, 'panel/helper/node_modules/.bin/anthropic-ai-sdk'));
+  assert.deepEqual(await scan(root), [{ path: 'panel/helper/node_modules/.bin/anthropic-ai-sdk', kind: 'link' }]);
+  rmSync(root, { recursive: true });
 });
 
 test('lists every offender, not just the first', async () => {

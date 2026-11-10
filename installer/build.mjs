@@ -54,6 +54,20 @@ export function stampManifest(xml, version) {
   return out;
 }
 
+// Every link under dir, as paths relative to it. Links are reported, never followed.
+export function findLinks(dir) {
+  const out = [];
+  const walk = (d, rel) => {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const r = rel ? `${rel}/${e.name}` : e.name;
+      if (e.isSymbolicLink()) out.push(r);
+      else if (e.isDirectory()) walk(path.join(d, e.name), r);
+    }
+  };
+  walk(dir, "");
+  return out.sort();
+}
+
 // After npm ci: drop type declarations, source maps and docs; keep licences.
 export function pruneModules(dir) {
   let removed = 0;
@@ -142,7 +156,8 @@ export async function build(opts = {}) {
   // 3. The helper's packages from its lockfile, production only, then pruned.
   const helperPart = parts.parts.find((p) => p.id === "helper");
   const stagedHelper = path.join(payload, helperPart.to);
-  await must(run, "npm", ["ci", "--omit=dev", "--no-audit", "--no-fund", "--loglevel=error"], { cwd: stagedHelper, env }, "npm ci in the staged helper");
+  // --no-bin-links: no node_modules/.bin links, which the installer refuses and the helper never uses.
+  await must(run, "npm", ["ci", "--omit=dev", "--no-bin-links", "--no-audit", "--no-fund", "--loglevel=error"], { cwd: stagedHelper, env }, "npm ci in the staged helper");
   const pruned = pruneModules(path.join(stagedHelper, "node_modules"));
   log(`helper packages installed, ${pruned} type, map and doc files removed`);
 
@@ -224,6 +239,11 @@ export async function build(opts = {}) {
     await must(run, zxp, ["-verify", dir], { env }, `Verifying ${e.name}`);
   }
   log("both extensions signed and verified");
+
+  // The finished payload holds no links: install.mjs's copyTree refuses one, so a link here fails
+  // every install (spec 006 T017 run 1, 2026-11-09: npm ci made node_modules/.bin after step 2's check).
+  const links = findLinks(payload);
+  if (links.length) throw new BuildError(`The payload holds a link, which the installer refuses: ${links.join(", ")}`);
 
   // 9. The applet, with the payload in its Resources, re-signed ad hoc.
   const appPath = path.join(workDir, APP_NAME);

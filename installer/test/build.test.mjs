@@ -8,7 +8,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { build, stampManifest, pruneModules, BuildError, SIGNING } from "../build.mjs";
+import { build, stampManifest, pruneModules, findLinks, BuildError, SIGNING } from "../build.mjs";
 import { run as realRun } from "../lib/run.mjs";
 import { INSTALLER_DIR } from "../buildlib/parts.mjs";
 
@@ -279,7 +279,7 @@ test("a full test build: staged parts, Node, stamped manifests, release.json, si
 
   // npm ran in the staged helper, production only, never in the repo.
   const npm = run.calls.find((c) => c.cmd === "npm");
-  assert.deepEqual(npm.args.slice(0, 2), ["ci", "--omit=dev"]);
+  assert.deepEqual(npm.args.slice(0, 3), ["ci", "--omit=dev", "--no-bin-links"]);
   // The password reaches ZXPSignCmd only, and never a log line.
   const withPw = run.calls.filter((c) => c.args.includes(PASSWORD));
   assert.ok(withPw.length === 2 && withPw.every((c) => c.cmd === opts.zxpSignCmd && c.args[0] === "-sign"));
@@ -315,6 +315,25 @@ test("a cached Node with the right hash isn't downloaded again", async (t) => {
   assert.equal(fetched.length, 2);
   await build(opts);
   assert.equal(fetched.length, 2);
+});
+
+test("refuses a payload with a link, such as one npm ci made (T017 run 1)", async (t) => {
+  const { opts } = setup(t, {
+    npmTouch: (helper) => {
+      fs.mkdirSync(path.join(helper, "node_modules", ".bin"), { recursive: true });
+      fs.symlinkSync("../@anthropic-ai/sdk/index.js", path.join(helper, "node_modules", ".bin", "anthropic-ai-sdk"));
+    },
+  });
+  await assert.rejects(build(opts), (e) => e instanceof BuildError && /holds a link.*node_modules\/\.bin\/anthropic-ai-sdk/.test(e.message));
+});
+
+test("findLinks lists links without following them", (t) => {
+  const d = fs.mkdtempSync(path.join(os.tmpdir(), "knack-links-"));
+  t.after(() => fs.rmSync(d, { recursive: true, force: true }));
+  write(d, "a/b.txt", "x");
+  fs.symlinkSync("a", path.join(d, "dirlink"));
+  fs.symlinkSync("a/b.txt", path.join(d, "a", "filelink"));
+  assert.deepEqual(findLinks(d), ["a/filelink", "dirlink"]);
 });
 
 test("refuses when the staged helper's settings hash differs from the repo's", async (t) => {
