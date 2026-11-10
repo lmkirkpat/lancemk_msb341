@@ -12,8 +12,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { layout } from "./lib/layout.mjs";
+import { isMain } from "./lib/main.mjs";
 import { guard } from "./lib/fsx.mjs";
 import { preflight, STOP } from "./lib/preflight.mjs";
 import { aeRunning } from "./lib/ae.mjs";
@@ -123,7 +123,7 @@ export async function main(argv, deps = {}) {
   return { out: "failed\n" + STOP.bad_payload, code: 2 };
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isMain(import.meta.url)) {
   const r = await main(process.argv.slice(2));
   process.stdout.write(r.out + "\n");
   process.exitCode = r.code;

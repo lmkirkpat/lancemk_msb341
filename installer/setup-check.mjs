@@ -6,9 +6,8 @@
 // only if every line is working. Changes nothing else; finishes within 15 seconds.
 
 import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { layout } from "./lib/layout.mjs";
+import { isMain } from "./lib/main.mjs";
 import { guard } from "./lib/fsx.mjs";
 import { runChecks, formatText } from "./lib/checks.mjs";
 
@@ -25,7 +24,7 @@ export async function setupCheck(opts = {}) {
   return { out: opts.json ? JSON.stringify(result, null, 2) : formatText(result), code: result.all_working ? 0 : 1, result };
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isMain(import.meta.url)) {
   const args = process.argv.slice(2);
   const r = await setupCheck({ json: args.includes("--json") });
   process.stdout.write(r.out + "\n");
