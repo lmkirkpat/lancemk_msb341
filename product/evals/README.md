@@ -75,3 +75,17 @@ node product/evals/<set>/run.mjs --runtime a --settings <file>   # an experiment
   hashes are unchanged.
 - **Tests:** `node --test product/evals/lib/test/` (no key, no network; they run the real helper against
   `panel/helper/test/fake-service.mjs`).
+
+## Shared checks and helpers (`lib/`)
+
+- **`key-scan.mjs`** (spec 013 T041, SC-005): looks for the access key (from `KNACK_EVAL_API_KEY`, never an
+  argument) in a learner home (every file, `panel-conversation.json` and the frames folder as bytes), eval
+  results folders, a copied report, and the environments of running `node` processes whose command line is
+  the panel helper or `mentor/server.mjs`. Prints counts per place only, never the key or the text around
+  it. Exit 0 clean, 1 found or a place missing, 2 usage.
+
+      KNACK_EVAL_API_KEY=... node product/evals/lib/key-scan.mjs --home <learner home> \
+        --results product/evals/<set>/results ... --report <file> --processes
+
+  Run `--processes` while an A eval case is in progress (the helper and server are running only then).
+  Tests use a fake key and temp folders: `node --test product/evals/lib/test/key-scan.test.mjs`.

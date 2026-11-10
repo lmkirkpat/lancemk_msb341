@@ -148,3 +148,115 @@ test('missing folder and no argument exit 2', () => {
   assert.equal(spawnSync('node', [SCAN, '/nonexistent-scan-dir'], { encoding: 'utf8' }).status, 2);
   assert.equal(spawnSync('node', [SCAN], { encoding: 'utf8' }).status, 2);
 });
+
+// ---- after a full lesson (spec 006 T027, SC-007): installed tree, logs and caches, sample report ----
+import { scanAfterLesson } from './scan.mjs';
+
+const FAKE_USER = 'zelda_test';
+const LKEY = ['sk', 'ant', 'api03'].join('-') + '-LITERALFAKE_0123456789abc'; // 20+ after the type: also key-shaped
+const OPAQUE = 'opaque_token_without_the_prefix_12345'; // only the literal check can see this
+const email = (n = 'person') => `${n}@${['mail', 'org'].join('.')}`;
+const phone = '(' + '801' + ') ' + '555' + '-' + '0142';
+
+function lesson(parts = {}) {
+  const mk = (files) => {
+    const root = mkdtempSync(path.join(tmpdir(), 'scanl-'));
+    for (const [rel, body] of Object.entries(files)) {
+      mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
+      writeFileSync(path.join(root, rel), body);
+    }
+    return root;
+  };
+  return {
+    installed: mk({ 'release.json': '{}', 'mentor/server.mjs': 'export {}', ...(parts.installed || {}) }),
+    logs: mk({ 'helper.log': 'started', ...(parts.logs || {}) }),
+    cache: mk({ 'x.cache': '{}', ...(parts.cache || {}) }),
+    report: path.join(mk({ 'report.txt': parts.report ?? 'macOS 27\nAE 26.5\nall working' }), 'report.txt'),
+  };
+}
+const run = (l, extra = {}) => scanAfterLesson({ installed: l.installed, logs: [l.logs, l.cache], report: l.report, userName: FAKE_USER, ...extra });
+const lk = (f) => f.map((x) => `${x.path}|${x.kind}`);
+
+test('after-lesson: clean installed tree, logs, caches and report pass', async () => {
+  assert.deepEqual(await run(lesson()), []);
+});
+
+test('after-lesson: the installed tree keeps the staged rules (CLAUDE.md, home path, key shape)', async () => {
+  const f = lk(await run(lesson({ installed: { 'CLAUDE.md': 'x', 'mentor/a.txt': '/Users/jane/x', 'b.txt': LKEY } })));
+  assert.ok(f.includes('installed/CLAUDE.md|CLAUDE.md'));
+  assert.ok(f.includes('installed/mentor/a.txt|home path (/Users/<name>)'));
+  assert.ok(f.includes('installed/b.txt|access key (sk-ant-...)'));
+});
+
+test('after-lesson: logs, caches and the report are labelled and checked for key, path, email, phone, user name', async () => {
+  const l = lesson({
+    logs: { 'run.log': `warn ${LKEY}`, 'p.log': 'cwd /Users/jane/Documents', 'e.log': `from ${email()}`, 't.log': `call ${phone}` },
+    cache: { 'sub/c.json': `{"owner":"${FAKE_USER}"}` },
+    report: `AE 26.5\n${email('x')}\n`,
+  });
+  const f = lk(await run(l));
+  assert.ok(f.includes('logs1/run.log|access key (sk-ant-...)'));
+  assert.ok(f.includes('logs1/p.log|home path (/Users/<name>)'));
+  assert.ok(f.includes('logs1/e.log|email address'));
+  assert.ok(f.includes('logs1/t.log|phone number'));
+  assert.ok(f.includes('logs2/sub/c.json|Mac user name'));
+  assert.ok(f.includes('report|email address'));
+});
+
+test('after-lesson: the literal key is found even without the sk-ant shape, and never echoed', async () => {
+  const l = lesson({ logs: { 'a.log': `x ${OPAQUE} y` } });
+  const f = await run(l, { key: OPAQUE });
+  assert.deepEqual(lk(f), ['logs1/a.log|access key (literal)']);
+  assert.ok(!JSON.stringify(f).includes(OPAQUE));
+});
+
+test('after-lesson: placeholder emails, ordinary numbers and timestamps are not personal data', async () => {
+  const l = lesson({ logs: { 'a.log': 'to you@example.com at 2026-11-09 12:30:45 id 1234567890 v1.2.3 801 ms' }, report: 'Tests: 801-555\n' });
+  assert.deepEqual(await run(l), []);
+});
+
+test('after-lesson: third-party code under node_modules and runtime/ is exempt from email, phone and name checks only', async () => {
+  const l = lesson({
+    installed: {
+      'panel/helper/node_modules/sdk/package.json': `{"author":"${email('dev')}","tel":"${phone}","u":"${FAKE_USER}"}`,
+      'runtime/node/LICENSE': `contact ${email('lic')}`,
+      'panel/helper/node_modules/sdk/leak.js': '/Users/jane/x',
+    },
+  });
+  assert.deepEqual(lk(await run(l)), ['installed/panel/helper/node_modules/sdk/leak.js|home path (/Users/<name>)']);
+});
+
+test('after-lesson: our own installed files are not exempt from email and phone checks', async () => {
+  const f = lk(await run(lesson({ installed: { 'panel.json': `{"contact":"${email()}"}`, 'mentor/n.txt': phone } })));
+  assert.ok(f.includes('installed/panel.json|email address'));
+  assert.ok(f.includes('installed/mentor/n.txt|phone number'));
+});
+
+test('after-lesson: the user name must stand alone, not sit inside another word', async () => {
+  const l = lesson({ logs: { 'a.log': `${FAKE_USER}x and x${FAKE_USER} ok` } });
+  assert.deepEqual(await run(l), []);
+});
+
+test('after-lesson: a missing folder or report throws', async () => {
+  await assert.rejects(scanAfterLesson({ installed: '/nonexistent-scan-dir', userName: FAKE_USER }), /not found/);
+  const l = lesson();
+  await assert.rejects(scanAfterLesson({ installed: l.installed, report: '/nonexistent-report.txt', userName: FAKE_USER }), /not found/);
+});
+
+test('after-lesson CLI: exit 1 lists labelled paths and kinds, not the matched text', () => {
+  const l = lesson({ logs: { 'e.log': `from ${email('sneaky')}` } });
+  const r = spawnSync('node', [SCAN, '--after-lesson', '--installed', l.installed, '--logs', l.logs, '--logs', l.cache, '--report', l.report, '--user', FAKE_USER], { encoding: 'utf8' });
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /logs1\/e\.log {2}\[email address\]/);
+  assert.ok(!r.stderr.includes('sneaky'));
+});
+
+test('after-lesson CLI: clean exits 0; no --installed exits 2; the key comes from the environment only', () => {
+  const l = lesson({ logs: { 'a.log': OPAQUE } });
+  const args = ['--after-lesson', '--installed', l.installed, '--logs', l.logs, '--user', FAKE_USER];
+  assert.equal(spawnSync('node', [SCAN, ...args], { encoding: 'utf8', env: { ...process.env, KNACK_EVAL_API_KEY: '' } }).status, 0);
+  const hit = spawnSync('node', [SCAN, ...args], { encoding: 'utf8', env: { ...process.env, KNACK_EVAL_API_KEY: OPAQUE } });
+  assert.equal(hit.status, 1);
+  assert.ok(!hit.stderr.includes(OPAQUE) && !hit.stdout.includes(OPAQUE));
+  assert.equal(spawnSync('node', [SCAN, '--after-lesson'], { encoding: 'utf8' }).status, 2);
+});

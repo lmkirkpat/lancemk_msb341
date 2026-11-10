@@ -17,6 +17,30 @@ After `node installer/build.mjs --channel test`:
 
 Exit 0 and `scan: clean` pass the step. Exit 1 lists `path  [kind]` lines; exit 2 is a usage error.
 
+## T027: after a full lesson (SC-007)
+
+Checks what an install and a lesson leave behind: the installed tree, its logs and caches, and a
+sample report. The installed tree gets every rule above plus email addresses, phone numbers and the
+Mac user name (third-party code under `node_modules/` and `runtime/` is exempt from those three only).
+Logs, caches and the report get every content rule: key shape, `/Users/<name>`, email, phone, user name.
+If `KNACK_EVAL_API_KEY` is set, that exact text is looked for everywhere too, even if it has no `sk-ant-`
+shape. Findings are labelled `installed/...`, `logs1/...`, `logs2/...`, `report` and name only the kind,
+never the matched text.
+
+After a full lesson on an installed copy, with the sample report pasted into a file outside the repo,
+scan the installed tree, the log and cache folders and the report in one go:
+
+    node product/evals/installer/scan.mjs --after-lesson \
+      --installed "$HOME/Library/Application Support/Knack" \
+      --logs "$HOME/Library/Application Support/AEMentor" \
+      --logs "$HOME/Library/Application Support/AEMentorBridge" \
+      --logs "$HOME/Library/Caches/Knack" \
+      --report <the pasted report file>
+
+Set `KNACK_EVAL_API_KEY` to the key in the environment for that one command only (read it from the
+Keychain in the shell; never write it to a file). Add `--user <name>` to check a different Mac user name
+than the one running the scan. Exit 0 is clean, 1 lists findings, 2 is a usage error.
+
 ## Tests
 
     node --test product/evals/installer/
