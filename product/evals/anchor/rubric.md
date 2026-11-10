@@ -570,3 +570,13 @@ since you learned…" as a reason for what it does, and no offer of a review ins
 - **Pass:** "Which layer do you want to turn from somewhere other than its middle? And where from?"
 - **Fail:** mentions a review, offers one, says one is due, or opens as a review (the task with no
   walkthrough) when the learner asked for a lesson.
+
+## R-AN-NOTHING-CHANGED-NO-GUESS: when nothing changed, it says so and asks, without guessing a cause (T059, 2026-11-09)
+
+The check shows Door's pivot exactly as it was at the last check, and the learner hasn't said the pivot snapped
+back or that something fought them. The mentor says plainly that Door's pivot is where it was (or "didn't
+change"), and asks what they did or to try Pan Behind again. It doesn't offer a cause it cannot see (an expression,
+a lock, a setting). Door has no expression here.
+
+- **Fail:** names or hints at a cause ("something may be driving it", "like an expression", "a setting could be
+  fighting you") the tool never reported, or says nothing about the lack of change.

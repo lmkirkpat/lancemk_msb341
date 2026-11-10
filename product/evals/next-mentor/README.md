@@ -63,6 +63,7 @@ KNACK_EVAL_API_KEY=… node product/evals/next-mentor/run.mjs --runtime a    # A
 - **plain_words**: no field or value name from tool output (anything with an underscore, a skill ID with a dot,
   or a quoted `continue`/`lesson`/`review`/`next_in_path`). The learner sees every word.
 - **no_narration**: no "let me call…" or "I'll run the…".
+- **no_slash_command**: nothing said names a slash command (`/<name>-mentor`); the panel has no command line (2026-11-09). The skill's own table (`SKILL.md` ~line 86) lists commands, so this fails until it says skill names instead.
 - **no_test_tell**: never says "fixture", "synthetic", "the eval".
 - **only_mentor_tools**: only `ae-mentor` tools (and `Skill` on A).
 - **opening_changes_nothing**: in `next-mentor`'s own turns (up to a hand-over), no demonstration, no ease,

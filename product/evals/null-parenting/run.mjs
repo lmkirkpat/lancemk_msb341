@@ -346,6 +346,8 @@ function firstPass(turns) {
   return null;
 }
 
+// Universal (T057 finding 1, 2026-11-09): the panel has no command line, so nothing said names a slash command.
+const NO_SLASH_COMMAND = /(?<![\w/])\/[a-z][a-z-]*mentor(?![\w-])/i;
 function check(expect, turns, c) {
   const out = [
     wordsCheck("plain_words", INTERNAL_NAME, turns),
@@ -355,6 +357,7 @@ function check(expect, turns, c) {
     adviceCheck("no_modifier_advice", MODIFIER_ADVICE, turns),
     wordsCheck("matte_not_hidden", MATTE_HIDDEN, turns),
     wordsCheck("no_test_tell", SYNTH_TELL, turns),
+    wordsCheck("no_slash_command", NO_SLASH_COMMAND, turns),
   ];
   const add = (name, pass, detail) => out.push({ check: name, pass, detail });
   out.push(...turnChecks(expect, turns, MENTOR_TOOLS));

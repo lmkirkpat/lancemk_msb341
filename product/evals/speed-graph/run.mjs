@@ -54,12 +54,16 @@ const CONFIG = {
     "mentor/test/fixtures/speed-graph/stand-in"
   ],
   "judgeLabel": "an After Effects mentor that teaches shaping an ease in the speed graph (influence)",
-  "recordMethod": "\\binfluence\\b[^|]{0,15}\\d|\\d+ ?%|\\bbecause\\b|\\bdialog\\b|\\bdrag(?:ged|ging)?\\b|\\bso that\\b|\\bthreshold",
+  "recordMethod": "\\binfluence\\b[^|]{0,15}\\d|\\d+ ?%|\\bbecause\\b|\\bdialog\\b|\\bdrag(?:ged|ging)?\\b|\\bso that\\b|\\bthreshold|\\bshared (?:middle )?keys?\\b|\\bside facing\\b|\\b(?:only )?(?:one|the other) side\\b|\\bexplained\\b",
   "internalExtra": [
     "\\b\\d+\\/ADBE\\b",
     "[\"'`](?:not_shaped|arrives_moving|no_handle|back_to_default|long_both_ends|in_out_mixed|keys_changed|nothing_to_shape|single_target|none_in_focus)[\"'`]"
   ],
   "universal": [
+    [
+      "no_slash_command",
+      "(?<![\\w/])/[a-z][a-z-]*mentor(?![\\w-])"
+    ],
     [
       "no_self_instructions",
       "review (?:is )?due\\s*(?:→|->|\\.|:|,|-)\\s*(?:run(?: the)? review|review mode)|\\bRun review\\b|\\breview mode\\b|^\\s*Learned, review due|\\breview (?:is )?due\\s*(?:→|->|[.:,;-]|so)\\s*(?:I(?:'ll| will)\\s+|we(?:'ll| will)\\s+)?(?:run|go|open|start|take)\\b|\\bstraight (?:to|into) the review\\b|\\b(?:learned|practicing)\\b[^.?!]{0,40}\\breview (?:is )?due\\b[^.?!]{0,40}(?:\\bso\\b|→|->)|\\b(?:review|lesson|restart) branch\\b|\\bbranch\\b[^.?!]{0,20}\\b(?:review|lesson)\\b|\\b(?:easing|this skill) (?:isn't|is not|hasn't been) learned,? so I(?:'ll| will)"

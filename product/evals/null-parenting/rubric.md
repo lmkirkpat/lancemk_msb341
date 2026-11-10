@@ -555,3 +555,14 @@ since you learned…" as a reason for what it does, and no offer of a review ins
 - **Pass:** "Which layers should move as one? If you're not sure, I have a group in mind."
 - **Fail:** mentions a review, offers one, says one is due, or opens as a review (the task with no
   walkthrough) when the learner asked for a lesson.
+
+## R-NULL-PLACE-ON-GROUP: the "where" question is about a place on the group (T060, 2026-11-09)
+
+When the learner answers "where it is right now" to where the group should turn from, the mentor asks once more,
+about a part of the group: a corner, an edge, or the middle ("which part of Tile, Caption and Stamp should stay still
+while they turn?"). It never asks where the null sits on the group, or which corner of the null counts: a null's pivot
+is always its own top-left corner, so a learner answers with that and the question hasn't moved.
+
+- **Pass:** "Which part of Tile, Caption and Stamp should stay still while they turn: a corner, an edge, or the middle?"
+- **Fail:** asks about the null's own place or corner ("where on the group is Null 1 sitting?"), asks more than one
+  question about the place in the turn, or picks the place for them.

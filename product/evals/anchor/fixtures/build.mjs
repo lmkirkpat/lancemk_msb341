@@ -140,4 +140,16 @@ fs.writeFileSync(path.join(HERE, "../records/anchor-passed-not-due.json"), JSON.
   write("gauge-away-between-keys.json", b);
 }
 
+// Case 54 (T059 finding 1, 2026-11-09): Door's pivot dragged partway along the middle row (anchor 75,250 with
+// Position 125,300, so Door stays put) -- the "partway" check the learner then undoes.
+{
+  const b = read("practice2b.json");
+  const door = b.layer_info.find((l) => l.name === "Door");
+  const set = (t) => { t.anchor = [75, 250, 0]; t.position = [125, 300, 0]; };
+  set(door.transform);
+  for (const s of door.samples) set(s);
+  b.synthetic = "Case 54: live practice2b.json with Door's pivot partway toward the left edge (anchor 75,250; Position 125,300).";
+  write("door-pivot-partway.json", b);
+}
+
 console.log("wrote fixtures/synthetic/*, records/*.json");

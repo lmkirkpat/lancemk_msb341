@@ -8,6 +8,11 @@ measures are *correct* is covered by the unit tests (`cd mentor && npm test`); e
 Built from the skill 6 set (`product/evals/null-parenting/`), itself copied from easing's runner. Same
 options and results format; everything skill-specific is in the `CONFIG` block at the top of `run.mjs`.
 
+## Live finding from the new panel (2026-11-09, T059): case 54, B1, written before any `SKILL.md` change
+
+**54 undo-then-nothing-changed-no-guessed-cause**: a partial (Door's pivot partway, `synthetic/door-pivot-partway.json`, built by `fixtures/build.mjs`), "I undid that", then a check with nothing new. `say:no_guessed_expression` on turn 5 plus rubric `R-AN-NOTHING-CHANGED-NO-GUESS`. **Fails 3/3.** `SKILL.md` step 7's "A pivot that didn't change after 'done'" line prescribes "If something drives it, like an expression, I can't see that yet", and the spec (`spec.md` row 2) and TD § 9 and § 14 call that sentence right until live check L-8 (T261). The conflict is resolved: the builder chose to drop the guess, and the anchor teaching design § 9 row was amended on 2026-11-09 (`69a8e08`: ask what they did before guessing an expression), so this case matches the design. `SKILL.md` still has to follow. L-8 (T261) stays open for a layer that does have an expression. Door has no expression in the fixture.
+
+
 ## Spec 007 button cases (T036, written 2026-11-09, dry-run only)
 
 7 cases added, ids 47 to 53. Each sends one panel request, word for word (`contracts/button-requests.md`), into a lesson that is open. The first run is spec 007 T038: `node product/evals/anchor/run.mjs --only FR-070` runs exactly these cases (every one lists `FR-070` in `covers`).
@@ -61,6 +66,7 @@ at least 80% passing, and every hard-rule check passing; spec 011's SC-004 (no n
 |---|---|
 | `plain_words` | no underscore or dot name, no id, no quoted value from tool output |
 | `no_narration` | no announced calls or rules |
+| `no_slash_command` | nothing said names a slash command (`/<name>-mentor`); the panel has no command line (2026-11-09) |
 | `no_shortcuts` | no keyboard shortcut (the skill quotes none until its live check logs it) |
 | `no_test_tell` | never "synthetic", "fixture", "stand-in" |
 | `only_mentor_tools` | no After Effects tool during a lesson |

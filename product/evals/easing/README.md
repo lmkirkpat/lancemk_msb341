@@ -7,6 +7,8 @@ need to be open**. Whether the detection and grading are *correct* is covered by
 (`cd mentor && npm test`), which are free and instant. Evals cost real usage, so they don't
 repeat what the unit tests already prove.
 
+**Universal checks:** `plain_words`, `no_narration`, and (2026-11-09) `no_slash_command`: nothing said names a slash command (`/<name>-mentor`), because the panel has no command line.
+
 ## Spec 007 cases (T027, written 2026-11-09, not yet run)
 
 Five cases added, numbers 29 to 33 (the set is now 33 cases). Written and dry-run only; the first run is spec 007 T038, with `--only`, and does not need a full run.

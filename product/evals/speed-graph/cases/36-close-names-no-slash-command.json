@@ -1,0 +1,58 @@
+{
+  "id": "36-close-names-no-slash-command",
+  "title": "After the pass and the closing question, 'let's finish up': the close never names a slash command (the panel has no command line)",
+  "covers": [
+    "T057-finding-1",
+    "SC-014"
+  ],
+  "learner_record": "product/evals/speed-graph/records/learned-title-not-due.json",
+  "fixture_sources": {
+    "subtitle-opening.json": "synthetic",
+    "subtitle-both-shaped.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "subtitle-opening.json",
+      "say": "/speed-graph-mentor"
+    },
+    {
+      "project": "subtitle-opening.json",
+      "say": "Sounds good, let's start."
+    },
+    {
+      "project": "subtitle-opening.json",
+      "say": "I think it's fastest in the middle."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "I shaped both moves. Done."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "Toward the start now."
+    },
+    {
+      "project": "subtitle-both-shaped.json",
+      "say": "great let's finish up"
+    }
+  ],
+  "expect": {
+    "last_check": {
+      "passed": true
+    },
+    "tools_called": [
+      "record_lesson"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "no_slash_command",
+        "never": "(?<![\\w/])/[a-z][a-z-]*mentor\\b"
+      }
+    ]
+  },
+  "rubric": [
+    "R-CLOSE-PLAIN-NEXT",
+    "R-ONE-IDEA"
+  ]
+}

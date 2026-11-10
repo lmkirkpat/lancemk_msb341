@@ -1,0 +1,72 @@
+{
+  "id": "52-where-question-about-the-group",
+  "title": "The learner slid-then-keyed Rotation and answers 'where it is right now': one follow-up, about a place on the group (corner, edge, middle), never about the null's own corner",
+  "covers": [
+    "T060-finding-1",
+    "SC-014",
+    "R-REGION-ASKED"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "null-center.json": "live",
+    "rotate-null.json": "live"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Tile, Caption and Stamp should move together. I think they'll just slide."
+    },
+    {
+      "project": "null-center.json",
+      "say": "I added a null. Done."
+    },
+    {
+      "project": "rotate-null.json",
+      "say": "I parented all three to the null and keyed its Rotation instead. Done."
+    },
+    {
+      "project": "rotate-null.json",
+      "say": "It should turn from where it is right now."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "null_parent_check"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "asks_region_first",
+        "must": "\\?",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_question_about_the_nulls_corner",
+        "never": "\\b(?:Null \\d+|the null)(?:['\u2019]s)\\s+(?:own\\s+)?(?:top[- ]left\\s+)?(?:corner|pivot)\\b|where on the group (?:is|does)\\b[^.?!]{0,30}\\b(?:Null\\b|null\\b)",
+        "turns": [
+          5
+        ]
+      },
+      {
+        "id": "one_question_after_answer",
+        "never": "\\?[\\s\\S]*\\?",
+        "turns": [
+          5
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-PLACE-ON-GROUP",
+    "R-ONE-IDEA",
+    "R-NAMES-REAL"
+  ],
+  "notes": "T060 finding 1 (usage notes ui-overhaul.md): after 'it should turn from where it is right now' the mentor asked 'Where on the group is Null 12 sitting right now', got 'the top left corner of the null' (a null's pivot is always its own corner), and needed another turn. Turn 4 may already ask the region question (region_needed); the case is about turn 5. The fixture's null is called Null 1, so the quoted wording differs by name only."
+}

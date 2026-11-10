@@ -1,0 +1,55 @@
+{
+  "id": "54-undo-then-nothing-changed-no-guessed-cause",
+  "title": "A partial, the learner undoes, then the next check shows nothing changed since: says so and asks what they did, without guessing a cause (no expression on Door)",
+  "covers": [
+    "T059-finding-1",
+    "SC-014"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "practice2b.json": "live",
+    "synthetic/door-pivot-partway.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "practice2b.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Door should turn from the middle of its left edge."
+    },
+    {
+      "project": "synthetic/door-pivot-partway.json",
+      "say": "I dragged the pivot over a bit. Done."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "I undid that. Done."
+    },
+    {
+      "project": "practice2b.json",
+      "say": "Let me try again. Done."
+    }
+  ],
+  "expect": {
+    "tools_called": [
+      "anchor_check"
+    ],
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "no_guessed_expression",
+        "never": "\\bexpressions?\\b",
+        "turns": [
+          5
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NOTHING-CHANGED-NO-GUESS",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ]
+}
