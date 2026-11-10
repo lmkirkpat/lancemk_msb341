@@ -1,0 +1,147 @@
+{
+  "run_at": "2026-11-09T23:49:35.070Z",
+  "options": {
+    "only": "36",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 1.29,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "36-close-names-no-slash-command",
+      "title": "After the pass and the closing question, 'let's finish up': the close never names a slash command (the panel has no command line)",
+      "covers": [
+        "T057-finding-1",
+        "SC-014"
+      ],
+      "fixture_sources": {
+        "subtitle-opening.json": "synthetic",
+        "subtitle-both-shaped.json": "synthetic"
+      },
+      "hash": "ee4401306f5f68dd49eeda97711681e885f661442a7cd702881bee2cb500e65a",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_target_number",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_graph_vision",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_unconfirmed_velocity_path",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "record_plain",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:no_slash_command",
+              "pass": true,
+              "detail": "turns 1 to 6: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-CLOSE-PLAIN-NEXT",
+              "pass": true,
+              "reason": "Turn 6 names the next step only in panel terms ('Next time, try a review on a move you haven't shaped yet, like the End of Bar's Trim Paths'), with no slash command or typed or terminal step, then gives the play-it-back line."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Each turn is short and moves one idea: turn 3 confirms the reading, gives the two influence sentences and the task, and ends on 'say done' with one demo offer; turn 4 is 'That passes' plus the read-again question; turns 5 and 6 each end with something to do ('Play it back at full speed', 'play Subtitle back at full speed')."
+            }
+          ],
+          "cost": 1.2876668000000002,
+          "session_id": "89e47804-4dbb-44ee-a93a-73d1d5ecd008",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /speed-graph-mentor\nTOOL CALL speed_graph_snapshot {}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Shape Subtitle Position, or try a review on a new move.\",\n    \"last_attempted\": \"Shaped Title Position 1.5–3 s, 3–4.37 s and Scale: short start, long landing\",\n    \"days_since_practiced\": 25,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Subtitle\"\n  ],\n  \"targets\": [\n    \"2/ADBE Transform Group/ADBE Position/1\",\n    \"2/ADBE Transform Group/ADBE Position/2\"\n  ],\n  \"demo_target\": \"2/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Subtitle › Position 0.3–1.3 s\",\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.3,\n      \"to_time\": 1.3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Subtitle › Position 1.3–4.367 s\",\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Title\",\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 11,\n  \"candidates_count\": 3,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL speed_graph_snapshot {\"skill_options\":{\"eased_layers\":[\"Title\"],\"land_hard\":[]}}\nTOOL RESULT (ok): {\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Shape Subtitle Position, or try a review on a new move.\",\n    \"last_attempted\": \"Shaped Title Position 1.5–3 s, 3–4.37 s and Scale: short start, long landing\",\n    \"days_since_practiced\": 25,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ],\n    \"eased_layers\": [\n      \"Title\"\n    ]\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"focus\": [\n    \"Subtitle\"\n  ],\n  \"targets\": [\n    \"2/ADBE Transform Group/ADBE Position/1\",\n    \"2/ADBE Transform Group/ADBE Position/2\"\n  ],\n  \"demo_target\": \"2/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"pairs\": [\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Subtitle › Position 0.3–1.3 s\",\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 0.3,\n      \"to_time\": 1.3,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    },\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Subtitle › Position 1.3–4.367 s\",\n      \"layer\": \"Subtitle\",\n      \"property\": \"Position\",\n      \"display_path\": \"Transform › Position\",\n      \"from_time\": 1.3,\n      \"to_time\": 4.367,\n      \"moving_dims\": [],\n      \"fastest\": {\n        \"parts\": [\n          \"middle\"\n        ]\n      }\n    }\n  ],\n  \"landing_hard\": [],\n  \"landing_hard_labels\": [],\n  \"left_out\": [\n    {\n      \"kind\": \"hidden\",\n      \"layers\": [\n        \"Old Take\"\n      ]\n    },\n    {\n      \"kind\": \"null\",\n      \"layers\": [\n        \"CTRL\"\n      ]\n    },\n    {\n      \"kind\": \"precomp\",\n      \"layers\": [\n        \"Icon\"\n      ]\n    },\n    {\n      \"kind\": \"expression\",\n      \"layers\": [\n        \"Logo\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Logo\",\n          \"property\": \"Rotation\"\n        }\n      ]\n    },\n    {\n      \"kind\": \"ease_first\",\n      \"layers\": [\n        \"Title\",\n        \"Subtitle\",\n        \"Bar\",\n        \"Glow\"\n      ],\n      \"refs\": [\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Position\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Scale\"\n        },\n        {\n          \"layer\": \"Title\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Subtitle\",\n          \"property\": \"Opacity\"\n        },\n        {\n          \"layer\": \"Bar\",\n          \"property\": \"X Position\"\n        },\n        {\n          \"layer\": \"Glow\",\n          \"property\": \"Blurriness\"\n        }\n      ]\n    }\n  ],\n  \"ease_first_count\": 11,\n  \"candidates_count\": 3,\n  \"other_candidates\": [\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n      \"pairs\": 1\n    }\n  ],\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: I'd like us to work on **Subtitle's Position** this time. It has two moves: 0.3 to 1.3 s, and 1.3 to 4.37 s.\n\nHere's what I'm leaving out:\n- You've hidden Old Take, so I'll skip it unless you want it.\n- CTRL is a null, so its move doesn't show up in a frame.\n- I can't see inside Icon yet.\n- An expression drives Logo's Rotation, so changes in the graph won't show.\n- These still need easing before they can be shaped: Title's Position, Scale and Opacity, Subtitle's Opacity, Bar's X Position and Glow's Blurriness. That's the easing lesson.\n\nBefore we start: should either of Subtitle's moves land hard, like an impact or a slam?\n\n### Turn 2: the project is an open comp\nLEARNER: Sounds good, let's start.\nMENTOR: Good, both moves will land softly then. Select Subtitle and open its Position property. Open the Graph Editor with its button at the top of the timeline panel, then choose **Edit Speed Graph** from the graph type menu at the bottom of the Graph Editor. On the first move, 0.3 to 1.3 s, where is the motion fastest: near the start, in the middle, or near the end?\n\n### Turn 3: the project is an open comp\nLEARNER: I think it's fastest in the middle.\nTOOL CALL preview_frame {\"time\":0.8,\"layer\":\"Subtitle\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-UyeXnd-runtime/89e47804-4dbb-44ee-a93a-73d1d5ecd008/tool-results/mcp-ae-mentor-blob-1794268065639-tzzped.png]\n{\"comp\":\"Mentor Practice\",\"time\":0.8,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1,\"height\":1}}\nMENTOR: That's right, it's fastest in the middle, which is where Easy Ease always puts it.\n\nOn the speed graph, how far each key's handle reaches sideways is called influence, and it sets how long the ease lasts. Easy Ease gives every key the same reach, so every move has the same feel.\n\nYour task is to make each move start quickly and land softly. Drag the landing key's handle sideways along the bottom to make its ease longer, and shorten the start key's. Do that on both of Subtitle's Position moves, 0.3 to 1.3 s and 1.3 to 4.37 s, and say done. If you'd like to see me shape one first, just ask.\n\n### Turn 4: the project is an open comp\nLEARNER: I shaped both moves. Done.\nTOOL CALL speed_graph_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice\",\n  \"pairs\": [\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/1\",\n      \"label\": \"Subtitle › Position 0.3–1.3 s\",\n      \"result\": \"passed\",\n      \"failed\": [],\n      \"mistake\": null,\n      \"fastest\": {\n        \"parts\": [\n          \"first\"\n        ]\n      }\n    },\n    {\n      \"id\": \"2/ADBE Transform Group/ADBE Position/2\",\n      \"label\": \"Subtitle › Position 1.3–4.367 s\",\n      \"result\": \"passed\",\n      \"failed\": [],\n      \"mistake\": null,\n      \"fastest\": {\n        \"parts\": [\n          \"first\"\n        ]\n      }\n    }\n  ],\n  \"other_changes\": [],\n  \"passed\": true,\n  \"demo_undone\": false,\n  \"seen_shaped\": [\n    \"2/ADBE Transform Group/ADBE Position/1\",\n    \"2/ADBE Transform Group/ADBE Position/2\"\n  ]\n}\nMENTOR: That passes: both of Subtitle's Position moves now start quickly and land softly. Look at the speed graph for the first move, 0.3 to 1.3 s, again. Where is it fastest now: near the start, in the middle, or near the end?\n\n### Turn 5: the project is an open comp\nLEARNER: Toward the start now.\nTOOL CALL record_lesson {\"skill\":\"easing.speed_graph\",\"project\":\"Claude AE Tutor Test.aep\",\"comp\":\"Mentor Practice\",\"attempted\":\"Shaped Subtitle Position 0.3–1.3 s and 1.3–4.37 s: short start, long landing\",\"result\":\"passed\",\"demo_used\":false,\"summary\":\"Shaped both moves on the first check without a demonstration. Read the graph correctly both times: said 'the middle' before shaping, and 'toward the start' after.\",\"next\":\"Try a review on a new eased move, such as Bar's Trim Paths End.\"}\nTOOL RESULT (ok): {\n  \"saved\": true,\n  \"skill\": {\n    \"status\": \"learned\",\n    \"next\": \"Try a review on a new eased move, such as Bar's Trim Paths End.\"\n  }\n}\nMENTOR: That's right. The peak moved toward the start, so the move gets going quickly and leaves a long soft landing. I've noted that for next time. Play it back at full speed to judge it, because scrubbing doesn't show the feel.\n\n### Turn 6: the project is an open comp\nLEARNER: great let's finish up\nMENTOR: You shaped both of Subtitle's moves yourself and read the graph correctly before and after. Next time, try a review on a move you haven't shaped yet, like the End of Bar's Trim Paths. For now, play Subtitle back at full speed and see if the landings feel right to you.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}
