@@ -20,7 +20,7 @@ running tests (eval batches were running from the main checkout).
   except the comp switch. Every row in the spec's "Reaches the model today?" column is still "No",
   so the spec's main claim (none of Adobe's 8 reaches the learner as a diagnosis) holds.
 - **Decision:** US1 uses no new read. US4 adds one: `motion_blur` on the snapshot's `comp` object.
-  The spec is amended to match (R16, T053).
+  The spec is amended to match (R16; spec › Amendment 2026-11-09).
 
 ## R2. Where the analysis lives, and what it reuses
 
@@ -155,7 +155,8 @@ more keys), and inside the layer's in and out points.
 - **Conflict flagged:** spec 007's held edge case says "nothing is recorded (spec 005 FR-017 writes
   only at the end of a diagnosis)" for a stopped turn. With the tools' way, a tool call that
   completed before the learner pressed Stop is recorded. Recommended: accept it (a complete read is
-  true, and the record never claims a skill), and amend spec 007's edge case. Open question 2.
+  true, and the record never claims a skill), and amend spec 007's edge case. **Approved 2026-11-09**;
+  spec 007's amendment is T054.
 - **Alternatives:** the model calls a record tool at the end (record_lesson's pattern). Rejected:
   "end of a diagnosis" has no clear event, and the 2026-10-12 audit's lesson was to enforce
   record rules in tools.
@@ -219,7 +220,8 @@ more keys), and inside the layer's in and out points.
   speed graph lesson, kept on purpose for its review), Title's Position has a fourth key, and Cursor
   holds. And the build script (`mentor/dev/build-practice-comp.jsx` line 124) builds Cursor with
   **holds**, while Adobe described it as a fade. So Adobe's finding 5 may have been a misread, or
-  the comp had been changed that day. Open question 3.
+  the comp had been changed that day. **Approved 2026-11-09:** SC-002 runs on the rebuilt Diagnosis
+  Practice below, with Cursor fading, and finding 5 counts there.
 - **Decision:** a new dev script, `mentor/dev/build-diagnosis-comps.jsx`, builds comps in the
   practice project without touching existing comps:
   1. **Diagnosis Practice**: `build-practice-comp.jsx`'s layers as of 10-08 (linear Title, CTRL
@@ -243,11 +245,11 @@ more keys), and inside the layer's in and out points.
 - **US3 waits for spec Q1** (SC-009: one hidden-fault session with a target-market learner).
   Its tasks are written so the builder can release them without re-planning.
 - **US4 is cheap now** (R1): DX-08 and DX-09 are analysis plus one comp field. The spec held US4 with
-  US3 because it needed new reads. The plan puts it after US5 and doesn't gate it, but asks
-  (open question 1).
+  US3 because it needed new reads. **Approved 2026-11-09:** US4 is built right after the first
+  version (after US5) and isn't gated; only US3 waits for T005.
 - **FR-026's entry** is last and small (the builder's note).
 
-## R16. Spec facts to amend (T053, spec-writer, needs approval)
+## R16. Spec facts to amend (T053, done 2026-11-09: spec › Amendment 2026-11-09, approved)
 
 1. "What the mentor can read today": now reads parenting, layer switches, mattes, in and out points
    (R1); US4's "needs new reads" becomes "needs one new read".
@@ -255,5 +257,5 @@ more keys), and inside the layer's in and out points.
 3. Assumptions › Curriculum not ready: the skill map exists (`path.json › findings`); DX-06 and DX-08
    map to `motion.sources`, which isn't built, so both are "no skill yet" today.
 4. Edge Cases: add the trimmed-layer row and the guide and solo row (plan › Overlaps).
-5. SC-002: name the comp it runs on (Diagnosis Practice, R14), pending open question 3.
-6. Open question 4 answered (teaching design: yes), if the builder approves this plan.
+5. SC-002: name the comp it runs on (Diagnosis Practice, R14).
+6. Spec question 4 answered (teaching design: yes), and the other questions recorded as resolved.

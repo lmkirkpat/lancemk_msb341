@@ -1,12 +1,12 @@
 # Implementation Plan: Diagnosis ("what's wrong here?")
 
 **Branch**: `005-diagnosis` (spec folder only; no git branch) | **Date**: 2026-11-09 |
-**Spec**: [spec.md](spec.md) (approved 2026-10-20; open questions 1, 3, 4 and 5 still open)
+**Spec**: [spec.md](spec.md) (approved 2026-10-20; amended and all questions resolved 2026-11-09)
 
 **Input**: Feature specification from `specs/005-diagnosis/spec.md`.
 
-**Status**: Plan written 2026-11-09, awaiting the builder's approval with [tasks.md](tasks.md). Nothing
-here is built.
+**Status**: Approved by the builder 2026-11-09 with [tasks.md](tasks.md), all five plan questions answered as
+recommended (research R9, R14, R15, R16; spec › Amendment 2026-11-09). Nothing here is built.
 
 ## Summary
 
@@ -104,8 +104,8 @@ edits, 1 eval set of at least 15 cases.
 
 | Principle | Check | Pre-research | Post-design |
 |---|---|---|---|
-| I. Spec Before Build | Spec 005 approved 2026-10-20. Open question 4 (a `teaching-design.md`) is treated as **yes** (the spec's recommendation): T001 writes it before any wording reaches `SKILL.md` or the catalogue. Q1 gates US3 (research R15). The spec's stale facts are listed for an amendment (research R16, T053), not silently overridden | ✅ | ✅ |
-| II. Decisions Are Recorded | Relies on **`decisions/002`** (the bet; Adobe trigger), **`003`** (thin bridge, narrow tools, local learner record: one comp field added to the existing snapshot, three narrow read-only tools, no script tool), **`005`** (the panel only displays: no diagnosis logic in `panel/`, FR-023), **`007`/`008`** (owners, hooks, one agent on AE), **`010`** (on A the helper starts `ae-mentor` over stdio, so the new tools reach A unchanged), **`011`** (build on B1, ship on A: moving to A below). No new decision needed. **Flagged:** writing the record from the tools on every complete read (research R9) differs from spec 007's edge case "FR-017 writes only at the end of a diagnosis"; the plan recommends the tools' way and asks (open question) | ✅ | ✅ |
+| I. Spec Before Build | Spec 005 approved 2026-10-20. Spec question 4 resolved 2026-11-09 (a `teaching-design.md`: yes): T001 writes it before any wording reaches `SKILL.md` or the catalogue. Q1 gates US3 only (research R15). The spec's stale facts are amended in the spec itself (Amendment 2026-11-09, T053), not silently overridden | ✅ | ✅ |
+| II. Decisions Are Recorded | Relies on **`decisions/002`** (the bet; Adobe trigger), **`003`** (thin bridge, narrow tools, local learner record: one comp field added to the existing snapshot, three narrow read-only tools, no script tool), **`005`** (the panel only displays: no diagnosis logic in `panel/`, FR-023), **`007`/`008`** (owners, hooks, one agent on AE), **`010`** (on A the helper starts `ae-mentor` over stdio, so the new tools reach A unchanged), **`011`** (build on B1, ship on A: moving to A below). No new decision needed. Writing the record from the tools on every complete read (research R9) was approved 2026-11-09; spec 007's held edge case "FR-017 writes only at the end of a diagnosis" is amended to match by T054 | ✅ | ✅ |
 | III. Teaching Quality Is Evaluated | New set `product/evals/diagnosis/` (≥ 10 cases, SC-006) scoring leads, restraint and honesty as well as correctness; easing set re-run to stay within one case of its baseline (27/28, 2026-10-29) | ✅ | ✅ |
 | IV. Privacy by Default | The diagnosis record has no free-text field: every value comes from tool state, and layer and property names are checked with the record's existing email and phone test (`UNSAFE_RECORD`). Fixtures are captures of the builder's practice comps | ✅ | ✅ |
 | V. Simplicity and Checkpoints | No dependency. US1 needs no new read from AE. Three shared edits, each one function or line. Plan shown before building; commit only when asked | ✅ | ✅ |

@@ -4,9 +4,43 @@
 
 **Created**: 2026-10-20
 
-**Status**: Approved 2026-10-20. Plan and tasks come next. Open question 2 (entry point) is
-answered, together with spec 007's open question 1, and folded into Assumptions and FR-026. Still
-open: questions 1, 3, 4 and 5.
+**Status**: Approved 2026-10-20. Plan and tasks approved 2026-11-09 ([plan.md](plan.md),
+[tasks.md](tasks.md)), with the amendment below. No open questions remain (Resolved questions,
+below). Not built.
+
+## Amendment 2026-11-09 (approved)
+
+Approved by the builder with the plan, 2026-11-09. It corrects facts that changed after 2026-10-20 and
+records the answers to the open questions. Where a section below still says otherwise, this amendment
+wins. Details: [research.md](research.md) R1, R14, R15 and R16.
+
+1. **Reads.** Spec 004 wave B (reads R1 and R3) added, for every layer: parent, layer switches
+   (motion blur, shy, solo, guide, 3D), track matte and matte status, in and out points, stretch and
+   time remap. "What the mentor can read today" › "What it doesn't read" now lists only: the comp's
+   motion blur switch, expression text and expressions on unkeyed properties, anything inside a
+   precomp, the work area, and shape or text key values. In the table, findings 3 and 8 are now
+   "Yes" for "Read today?", except the comp motion blur switch. "Reaches the model today?" is
+   unchanged ("No" for all 8). US4 needs **one** new read (the comp's motion blur switch), not new
+   reads in general.
+2. **Easing baseline.** US5 › 2 and SC-006 compare with **27/28 (2026-10-29)**, not 25/25
+   (2026-10-19).
+3. **Skill map.** The map exists as `mentor/curriculum/path.json › findings` (FR-010). Assumptions ›
+   Curriculum not ready no longer applies. DX-06 and DX-08 map to *Find what's moving it*
+   (`motion.sources`), which isn't built, so both count as "no skill yet" until it is. Whether DX-08
+   should map to *Move a group with a null* is a question for the curriculum designer (tasks T001).
+4. **Edge Cases** gain two rows:
+   - **Layer trimmed (in and out points):** moves entirely outside a layer's in and out points are
+     left out of every comparison. A layer that comes in or goes out partway counts as a change in
+     the frame for dead time. It must not count invisible moves.
+   - **Guide and solo:** guide layers, and layers not rendered because another layer is soloed, are
+     set aside like hidden layers and named. Shy changes nothing.
+   The **Track mattes** row's "until matte status is read" is now met: a matte's motion counts in
+   comparisons and dead time with its eye off.
+5. **SC-002's comp.** SC-002 runs on **Diagnosis Practice**, a comp rebuilt as Mentor Practice was on
+   2026-10-08, with Cursor's opacity fading, so Adobe's finding 5 is there to find (tasks T002, T004).
+   Mentor Practice itself has changed since (Title eased, Cursor holding) and isn't used for SC-002.
+6. **Priorities.** US4 is built right after the first version (US1, US2, US5) and isn't gated. Only
+   US3 waits for the hidden-fault session (SC-009).
 
 **Input**: Cockpit task, Sprint 3 parallel run 1: "Write the spec for Knack's diagnostic
 capability: reading the learner's whole After Effects comp to find what's wrong (across layers,
@@ -51,6 +85,8 @@ to learn next." Evidence: `discovery/diagnosis-evidence.md` (2026-10-20). Carrie
   own entry, and is not folded into each skill's opening.
 
 ## What the mentor can read today (verified 2026-10-20)
+
+*Out of date: see Amendment 2026-11-09 › 1. Kept as written for the record.*
 
 Checked against `mentor/jsx/snapshot.jsx`, `mentor/lib/analyze.mjs` and `mentor/tools/` on
 `main` at `7fde798`. The evidence brief reasoned this from the transcript (its claim I); this
@@ -217,8 +253,10 @@ switched off on animated layers, the two of Adobe's 8 that need reads the mentor
 
 **Why this priority**: closes the rest of the 2026-10-08 gap. P2 because it needs new reads
 from After Effects and new test fixtures, and US1 tests the idea first on reads that exist.
+*(Amended 2026-11-09: only the comp's motion blur switch is a new read; built right after US1, US2
+and US5, not gated. Amendment › 1, 6.)*
 
-**Independent Test**: on Mentor Practice, the diagnosis names CTRL's drift under Title and
+**Independent Test**: on Diagnosis Practice (Amendment › 5), the diagnosis names CTRL's drift under Title and
 Subtitle, and motion blur off, and both match an inspection in After Effects.
 
 **Acceptance Scenarios**:
@@ -248,7 +286,7 @@ or fail per case.
 1. **Given** the diagnosis eval set, **When** I run it, **Then** it passes at least 80% and every
    hard-rule check passes in every case.
 2. **Given** the easing eval set, **When** I run it after diagnosis is added, **Then** it passes
-   at its current baseline (25/25 on 2026-10-19) or within one case of it, with no hard-rule
+   at its current baseline (27/28 on 2026-10-29; Amendment › 2) or within one case of it, with no hard-rule
    failure.
 
 ---
@@ -274,6 +312,8 @@ on a saved snapshot (FR-031).
 | **Precomp time remapping or stretch** | Not read today; named under what wasn't checked if the comp has precomps. | Compare a precomp's own key times with the parent's as if time ran the same inside. |
 | **Null and other invisible layers** | Use a null's motion for the parent check (US4). | Present a null as something the viewer sees. |
 | **Layers with no keys** | Treat static layers as static. | Report them as missing or broken. |
+| **Layer trimmed (in and out points)** *(added 2026-11-09)* | Leave out moves entirely outside the layer's in and out points; a layer coming in or going out partway is a change in the frame for dead time. | Count moves nobody can see. |
+| **Guide and solo** *(added 2026-11-09)* | Set guide layers, and layers not rendered because another is soloed, aside like hidden layers, and say so. Shy changes nothing. | Include them in comparisons or dead time. |
 
 Other edge cases:
 
@@ -428,7 +468,7 @@ Other edge cases:
 - **SC-001**: On at least 6 saved snapshots with planted findings (Mentor Practice plus one per
   overlap group), the analysis finds 100% of the answer key's findings for the stories built and
   reports 0 findings the key marks false. *Measured by:* unit tests.
-- **SC-002**: On Mentor Practice, live, the diagnosis names at least 6 of Adobe's 8 findings
+- **SC-002**: On Diagnosis Practice (Amendment › 5), live, the diagnosis names at least 6 of Adobe's 8 findings
   after US1 (1, 2, 4, 5, 6, 7), and 8 of 8 after US4, each with layer names and times that
   match an inspection in After Effects, plus the linear pairs Adobe couldn't see. *Measured
   by:* the builder, in a usage session.
@@ -441,7 +481,7 @@ Other edge cases:
   names one to start with, and names what it couldn't check when the comp has any. *Measured
   by:* deterministic eval checks.
 - **SC-006**: The diagnosis eval set has at least 10 cases and passes at least 80%, with every
-  hard-rule check passing; the easing set stays at its baseline within one case. *Measured by:*
+  hard-rule check passing; the easing set stays at its baseline (27/28, 2026-10-29) within one case. *Measured by:*
   eval runs.
 - **SC-007**: In at least 3 builder sessions, the builder resolves at least one finding with
   their own hands after the mentor's lead, and the re-check agrees with After Effects each time.
@@ -501,8 +541,9 @@ and motion blur once US4's reads exist; take them from live reads, not by hand.
 - **Learner:** the builder on their own Mac with After Effects 26.5 on macOS 27.0.1 (CLAUDE.md ›
   My setup), then target-market learners. No accounts, no other apps.
 - **One comp at a time:** the active comp. Other comps in the project aren't read.
-- **Curriculum not ready:** until spec 004 lands, the skill map has one entry (DX-01 → the easing
-  lesson) and every other finding maps to "no skill yet" (FR-013 hints apply).
+- **Curriculum not ready:** *(superseded 2026-11-09, Amendment › 3)* until spec 004 lands, the skill
+  map has one entry (DX-01 → the easing lesson) and every other finding maps to "no skill yet"
+  (FR-013 hints apply).
 - **Adobe's bar:** the 8 findings are from one beta session on 2026-10-08; Adobe may have changed
   since. Open question 5.
 - **Parked name:** `decisions/006` parks **Gauge** as a possible name for this feature. Not used
@@ -531,37 +572,38 @@ and motion blur once US4's reads exist; take them from live reads, not by hand.
   findings to them.
 - **Other apps,** pricing, and analytics.
 
-## Open questions (need a decision)
+## Resolved questions
 
-1. **The riskiest assumption: would learners use Knack's diagnosis over what they have now**
-   (a chatbot with a screenshot, or Adobe's assistant)? Claim K in the brief, no evidence. The
-   brief's test: give a current After Effects user (ideally a stranger) a comp with a known
-   hidden fault, and watch which of the three they reach for and what they do with the answer;
-   or, at minimum, the brief's interview questions 1 to 6 with the pitch last.
-   **Recommended:** approve US1, US2 and US5 for planning now, and hold US3 and US4 until at
-   least one hidden-fault session is logged (SC-009). If the learner reaches for a chatbot and
-   is satisfied, rethink before building memory and new reads.
-2. **Entry point:** diagnosis only on request, or also as the default opening when a session
-   starts without a named skill? **Answered 2026-10-20** (with spec 007 open question 1): on
-   request everywhere, plus the short opening only in sessions started without a named skill
-   outside the panel (typing in Claude Code). In the panel, Start lesson opens the named skill and
-   diagnosis is its own press, Look at my comp. Folded into Assumptions › Entry and FR-026.
-3. **How many findings up front:** a ranked short list, or one finding only? Nothing in the
-   interviews speaks to it; the builder found Adobe's 8 "a lot at once". **Recommended:** at most
-   3 ranked, one named to start, the rest on request (FR-007). Revisit after SC-009.
-4. **Does diagnosis need a `teaching-design.md` from the curriculum designer?** US2 (how a
-   finding becomes a lesson, how to ask about intent, the wording of each kind) is teaching
-   design, which this spec shouldn't write (`decisions/007`). **Recommended:** yes, a short one
-   for US2 and the DX kinds, next to this spec, before `/speckit-plan`. This spec then links to
-   it instead of the wording in US2 › 5 and FR-006.
-5. **Re-run the Adobe side-by-side before planning?** The bar (8 findings, no easing read) is one
-   beta session from 2026-10-08. **Recommended:** a 15-minute re-run of the same prompt on Mentor
-   Practice before `/speckit-plan`, so SC-002 targets the current bar.
+Questions 1 and 4 were answered by the builder on 2026-11-09, with the plan. Question 2 was answered
+on 2026-10-20. Questions 3 and 5 weren't put to the builder separately: the approved plan follows
+their recommended answers, recorded here as resolved on that basis. The earlier wording is in git
+history.
+
+1. **The riskiest assumption: would learners use Knack's diagnosis over what they have now?** Claim K
+   in the evidence brief; no evidence yet. **Resolved 2026-11-09:** build US1, US2 and US5 first, then
+   US4 straight after. Only US3 (memory) waits until at least one hidden-fault session with a
+   target-market learner is logged (SC-009, tasks T005). If that learner reaches for a chatbot and is
+   satisfied, rethink before building memory.
+2. **Entry point.** **Answered 2026-10-20** (with spec 007's open question 1): on request everywhere,
+   plus the short opening only in sessions started without a named skill outside the panel. In the
+   panel, Start lesson opens the named skill and diagnosis is its own press, Look at my comp. Folded
+   into Assumptions › Entry and FR-026.
+3. **How many findings up front?** **Resolved 2026-11-09, by the approved plan:** at most 3 ranked, one named to start,
+   the rest on request (FR-007). Revisit after SC-009.
+4. **Does diagnosis need a `teaching-design.md`?** **Resolved 2026-11-09:** yes. The curriculum
+   designer writes it next to this spec (tasks T001) before any wording reaches the skill or the
+   catalogue. It covers US2's wording, the intent questions and each DX kind. This spec links to it
+   rather than to the wording in US2 › 5 and FR-006. Whether DX-08 maps to *Move a group with a null*
+   is left to the curriculum designer there.
+5. **Re-run the Adobe side-by-side before planning?** **Resolved 2026-11-09, by the approved plan:**
+   not before planning.
+   SC-002 is measured on a rebuilt Diagnosis Practice comp with Cursor fading (Amendment › 5), and
+   Adobe's 2026-10-08 findings stay the bar.
 
 ## Dependencies
 
 - **Spec 004 (curriculum), approved 2026-10-20:** the skill map (FR-010, FR-012, FR-020) needs its
-  skill IDs. Until then, see Assumptions › Curriculum not ready.
+  skill IDs. Done: `path.json › findings` (Amendment › 3).
 - **Spec 002 mentor:** the snapshot, the ae-mentor server and its rules, the learner record, and
   the easing lesson (DX-01's skill). The `mentor/tools/` per-skill layout (`b1875f1`) lets
   diagnosis be its own tool file without editing the easing tools.
