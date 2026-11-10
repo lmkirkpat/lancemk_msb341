@@ -18,7 +18,7 @@ two disagree.
       "rank_weight": 5,
       "may_be_intended": true,
       "thresholds": { "min_layers": 3, "min_moves": 3, "tolerance_frames": 1, "min_share": 0.5 },
-      "wording": { "title_key": "dx-02-title", "effect_key": "dx-02-effect", "where_key": "dx-02-where" }
+      "wording": { "title_key": "dx-02-title", "effect_key": "dx-02-effect", "question_key": "dx-02-question", "where_key": "dx-02-where", "first_key": "dx-02-first" }
     }
   ]
 }
@@ -31,6 +31,11 @@ two disagree.
 3. **`wording` keys** each name an anchor that exists in `teaching-design.md`. The catalogue holds no
    prose, so the words have one source.
 4. **Ask kinds** (DX-05, DX-06) have a `question_key`. Style kinds have `may_be_intended: true`.
+   *(Amended 2026-11-09, approved:)* every kind has a `where_key`: it's the hint said when no skill
+   covers the finding **or** when the learner turns the lesson down (spec FR-013, teaching design
+   § 7.1). It isn't only the no-skill hint. `first_key` is **optional** and names the kind's
+   start-here reason (`dx-NN-first`); when present, the catalogue test checks it's an anchor in
+   `teaching-design.md`, like every other key (SB-1).
 5. **`enabled: false`** for DX-08 and DX-09 until US4's tasks land (T034 flips them).
 6. **The skill map** is `path.json › findings` and isn't repeated here. The test checks every DX ID
    has an entry there (a skill ID or `null`).

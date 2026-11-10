@@ -51,13 +51,13 @@ more keys), and inside the layer's in and out points.
 
 | ID | Fires when | Reported as |
 |---|---|---|
-| DX-01 | At least one counted pair is `linear` or `partly_eased` | **One finding per comp**: the layers and properties, pair count, and each half-eased pair's linear end |
+| DX-01 | At least one counted pair is `linear` or `partly_eased`, leaving out properties raised as DX-05's fade shape (SW-5, approved 2026-11-09) | **One finding per comp**: the layers and properties, pair count, and each half-eased pair's linear end |
 | DX-02 | At least 3 counted ramp moves on **3 or more different layers** share one duration within ±1 frame, and they are at least half of all counted ramp moves in the comp | One finding per comp: the shared duration and the layers |
 | DX-03 | On one layer, two or more units have a ramp move that starts on the same frame **and** lands on the same frame (separated Position is one unit) | One finding per layer: the units and the span |
 | DX-04 | A property with 3 or more numeric keys where two neighbouring ramp moves meet at a key and their speeds differ by a ratio of **1.5 or more** (multi-value: straight-line distance per second; a bezier middle key uses its in and out ease speeds, a linear one the two average speeds) | One per property: the key's time and both speeds |
-| DX-05 | (a) a property whose keys alternate between exactly two values for 3 or more keys with ramps between them (a blink that fades), or (b) a lone held pair (not part of a run of two or more) on Position, Scale or Rotation between two different values | One per property, kind **ask** |
+| DX-05 | (a) a property whose keys alternate between exactly two values for 3 or more keys with ramps between them (a blink that fades), or (b) a lone held pair (not part of a run of two or more) on Position, Scale or Rotation between two different values | One per property, kind **ask**, with `measures.shape` `fade` (a) or `jump` (b) |
 | DX-06 | A keyed property has an expression turned on | One per property, kind **ask** |
-| DX-07 | The last change in the frame (latest counted landing, instant change, or a counted layer's in or out point inside the comp) is at least **2 s and at least 25%** of the comp's length before the comp ends | One per comp: the last change's time, the comp's length, and anything that keeps moving that can't be timed (expressions) |
+| DX-07 | The last change in the frame (latest counted landing, instant change, or a counted layer's in or out point inside the comp) is at least **2 s and at least 25%** of the comp's length before the comp ends | One per comp: the last change's time, the comp's length, the gap, and the layers and properties an expression keeps moving (data only; the words are `dx-07-effect`'s) |
 | DX-08 | A counted layer has its own ramp on a transform property its parent chain also moves (`motion-sources` › MOVES), and the two spans overlap by at least 1 frame | One finding per parent: its children and each overlap span (US4) |
 | DX-09 | The comp's motion blur switch is off, **or** every counted layer with a transform ramp has its layer switch off; at least one such layer exists | One per comp, kind **setting** (US4) |
 
@@ -90,9 +90,14 @@ more keys), and inside the layer's in and out points.
      Depth first (what Adobe guessed was the biggest cause and couldn't read), then motion that fights
      itself, then style across the comp, then settings, then the questions.
   3. Ties: more layers involved first, then the earliest time.
-  **Start here** is the highest-ranked finding that isn't kind ask; if every finding is an ask, rank 1.
-  The reply carries `start_here_reason` as a code (`depth`, `symptom`, `only_one`, `first_non_ask`)
-  that the skill turns into words.
+  **Start here** *(amended 2026-11-09, teaching design SW-1 and SW-2, approved)*:
+  - **With a matched symptom:** the highest-ranked non-ask among the matched findings; if every
+    matched finding is an ask, the first matched one. Reason `symptom`.
+  - **Without one** (or none matched): the highest-ranked non-ask finding. Reason `depth`; `only_one`
+    when there's one finding in all; `all_questions` when every finding is an ask (then rank 1).
+  The reply carries `start_here_reason` as one of `depth`, `symptom`, `only_one`, `all_questions`,
+  which the skill turns into the design's § 5 words. `first_non_ask` is dropped: with asks weighted
+  last and the symptom rule above, the start is never below an ask for that reason.
 - **Teaching design owns the reasons:** which cause to start with is partly a teaching choice. The
   curriculum designer may change the weights in `teaching-design.md` (T001); the catalogue mirrors
   them and the answer keys follow.

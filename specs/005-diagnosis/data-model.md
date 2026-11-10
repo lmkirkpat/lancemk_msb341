@@ -17,7 +17,7 @@ One per DX ID. Contract: [contracts/catalogue.md](contracts/catalogue.md).
 | `scope` | `comp` \| `layer` \| `property` \| `parent` | Research R4 |
 | `rank_weight` | integer, 1 = first | Research R5; mirrors `teaching-design.md` |
 | `thresholds` | object | Research R3, e.g. `{ "min_layers": 3, "tolerance_frames": 1, "min_share": 0.5 }` for DX-02 |
-| `wording` | object of keys | `title_key`, `effect_key`, `question_key` (ask), `where_key` (no-skill hint). Values are anchors in `teaching-design.md`, never prose here |
+| `wording` | object of keys | `title_key`, `effect_key`, `question_key` (ask kinds and style kinds' "on purpose?"), `where_key` (the hint, for a kind with no skill **or** a lesson the learner turned down; every kind has one), `first_key` (optional: the start-here reason for that kind). Values are anchors in `teaching-design.md`, never prose here. Amended 2026-11-09 (SW-3, SB-1) |
 | `may_be_intended` | boolean | True for every style and ask kind (FR-006): the skill asks before treating it as something to fix |
 
 The skill map is **not** here: it's `mentor/curriculum/path.json › findings` (FR-010), mirrored from
@@ -33,7 +33,7 @@ The skill map is **not** here: it's `mentor/curriculum/path.json › findings` (
 | `layers` | `[{ name, index }]` | Index for this read only; names are the identity |
 | `property` | display path or null | Null for per-comp and per-parent kinds |
 | `times` | `[{ start, end }]` or `[{ at }]` | Seconds, from the comp |
-| `measures` | object | Kind-specific, e.g. DX-02 `{ duration, layer_count, share }`, DX-04 `{ speed_before, speed_after, ratio }`, DX-07 `{ last_change, comp_duration, gap }`, DX-01 `{ pairs, partly_eased: [{ layer, property, linear_end }] }` |
+| `measures` | object | Kind-specific data, never sentences: DX-01 `{ pairs, partly_eased: [{ layer, property, linear_end }] }`; DX-02 `{ duration, layer_count, share }`; DX-04 `{ speed_before, speed_after, ratio }`; DX-05 `{ shape: "fade" \| "jump", values }` (`fade` = shape (a), `jump` = shape (b); amended 2026-11-09, SB-2); DX-07 `{ last_change, comp_duration, gap, expression_moving: [{ layer, property }] }` (amended 2026-11-09, SB-3) |
 | `rank` | integer | 1-based, after symptom and weights |
 | `start_here` | boolean | Exactly one true when there are findings |
 | `skill` | `{ id, skill_name, built, learned, review_available }` or null | From `path.json › findings` and the built skills; null means no skill yet |
@@ -71,6 +71,7 @@ The skill map is **not** here: it's `mentor/curriculum/path.json › findings` (
 | `symptom_matched` | boolean or null | Null when no symptom was passed |
 | `findings` | Finding[] | Ranked; intended findings left out |
 | `top` | keys (≤ 3) | The first three by rank |
+| `start_here`, `start_here_reason` | key; `depth` \| `symptom` \| `only_one` \| `all_questions` | Research R5 (amended 2026-11-09) |
 | `more_count` | integer | `findings.length − top.length`, plus how many of those are ask |
 | `scope` | Not-checked list | |
 | `since` | `{ date, fixed, changed, intended, still }` or null | When an earlier diagnosis of this comp exists (FR-019, US3; `diagnosis.json` before US3) |

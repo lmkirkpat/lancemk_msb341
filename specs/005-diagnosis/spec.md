@@ -41,6 +41,23 @@ wins. Details: [research.md](research.md) R1, R14, R15 and R16.
    Mentor Practice itself has changed since (Title eased, Cursor holding) and isn't used for SC-002.
 6. **Priorities.** US4 is built right after the first version (US1, US2, US5) and isn't gated. Only
    US3 waits for the hidden-fault session (SC-009).
+7. **From the teaching design** ([teaching-design.md](teaching-design.md) § 13, approved by the builder
+   2026-11-09):
+   - **Start with a symptom (SW-1, SW-2).** With a matched symptom, the start is the highest-ranked
+     finding that isn't a question among the matched findings; if they're all questions, the first
+     matched one. Without a symptom, the start is the highest-ranked finding that isn't a question;
+     if every finding is a question, the first one. US1 › 3 is unchanged and now holds for questions
+     too: a symptom on Cursor's fade starts at that fade, not at an unrelated finding.
+   - **Hints when a lesson is turned down (SW-3).** FR-013's hints also apply when a skill covers the
+     finding and the learner turns the lesson down. So every kind has a "where to look" line.
+   - **The panel's Get hints (SW-4)** for findings with a built skill (DX-01, DX-03, DX-05) follows
+     from SW-3. It's spec 007's to change (its FR-035 shows hints only when no skill is built), through
+     tasks T054.
+   - **A fade isn't also a linear-pairs finding (SW-5).** A property raised as DX-05's fade shape is
+     left out of DX-01. Edge Cases gains the row.
+8. **DX-08 and skill 6.** The curriculum dropped "6 if they want a null" from DX-08's row
+   (`curriculum.md` § 10, amended 2026-11-09). DX-08 maps only to *Find what's moving it* (not built),
+   with hints until then (teaching design § 12).
 
 **Input**: Cockpit task, Sprint 3 parallel run 1: "Write the spec for Knack's diagnostic
 capability: reading the learner's whole After Effects comp to find what's wrong (across layers,
@@ -164,7 +181,9 @@ afterwards.
    finding briefly, without repeating the first three.
 3. **Given** I name a symptom ("Title feels stiff when it lands"), **When** the mentor answers,
    **Then** findings on that layer and moment come first, and if nothing it can read explains
-   the symptom, it says so instead of offering an unrelated finding as the cause.
+   the symptom, it says so instead of offering an unrelated finding as the cause. The place it
+   suggests starting is one of the matched findings, even when that finding is a question about
+   intent *(amended 2026-11-09, Amendment › 7)*.
 4. **Given** my comp has precomp layers or layers it can't read, **When** it answers, **Then**
    it names them as not checked, and never says they're fine.
 5. **Given** a comp where none of the checks find anything, **When** I ask what's wrong,
@@ -304,6 +323,7 @@ on a saved snapshot (FR-031).
 | **Single keys** | Treat a single key as a set value, not a move. | Count it as a move of zero length in equal-durations or dead time. |
 | **Hold keys** | Treat a held pair as a jump, not a move. A run of holds (a blink) is a pattern, not a fault. | Count a held pair's span as a move's duration. Call a fade "wrong" without asking whether a blink was meant (US2 › 5). |
 | **Half-eased pairs** | Count as not eased, with the linear end named (spec 002 FR-007 amendment). | Count as eased in the linear-pairs finding. |
+| **A fade raised as a question** *(added 2026-11-09)* | A property raised as DX-05's fade shape (ramps back and forth between two values) is left out of the linear-pairs finding, whether or not the learner later says it's on purpose. | Raise the same keys as both "fade or blink?" and "could ease", which contradict each other. |
 | **Separated dimensions** | Treat X and Y Position of one layer as one move when comparing durations and landing-together. | Flag X and Y landing together as a finding. |
 | **Effects** | Include keyed effect properties (Trim Paths, sliders) as motion. | Skip effect motion in equal-durations or dead time. |
 | **Precomps** | Read the precomp layer's own transform. Name the precomp as not checked inside. | Claim dead time, or "nothing wrong", across a comp whose precomps it can't see into, without saying so. |
@@ -389,7 +409,9 @@ Other edge cases:
 - **FR-012**: When the learner picks a finding a skill covers, the mentor MUST offer that skill's
   lesson with the finding's layer as the proposed focus, and hand over to the lesson's rules.
 - **FR-013**: When no skill covers the finding, the mentor MUST give hints (what to look for,
-  where) and ask the learner to make the change, as spec 002 FR-008.
+  where) and ask the learner to make the change, as spec 002 FR-008. The same hints apply when a
+  skill covers the finding and the learner turns the lesson down *(amended 2026-11-09, Amendment ›
+  7)*.
 - **FR-014**: When the learner says "done" on a finding, the mentor MUST re-read the comp and
   report that finding as gone, still there, or changed, and list what's still open. It MUST NOT
   answer from an earlier read.

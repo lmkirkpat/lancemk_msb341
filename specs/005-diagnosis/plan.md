@@ -6,7 +6,8 @@
 **Input**: Feature specification from `specs/005-diagnosis/spec.md`.
 
 **Status**: Approved by the builder 2026-11-09 with [tasks.md](tasks.md), all five plan questions answered as
-recommended (research R9, R14, R15, R16; spec › Amendment 2026-11-09). Nothing here is built.
+recommended (research R9, R14, R15, R16; spec › Amendment 2026-11-09). The teaching design's fixes SW-1 to
+SW-5 and SB-1 to SB-3 approved 2026-11-09 and applied (spec › Amendment › 7). Nothing here is built.
 
 ## Summary
 
@@ -160,6 +161,7 @@ once the detectors exist (T018).
 | Single keys | key count | A set value: not a move, never a duration (timing's `single_key`) |
 | Hold keys | `out_type: "hold"` | A held pair is an instant change at its second key: it counts as "something changed then" for DX-07 and never as a duration in DX-02 or DX-03. A run of two or more holds is a pattern (no DX-05) |
 | Half-eased pairs | `segmentState` → `partly_eased` | Counted as not eased in DX-01, with the linear end named |
+| A fade raised as a question *(added 2026-11-09, SW-5)* | key values and types | A property raised as DX-05's fade shape is left out of DX-01, so the same keys never get "fade or blink?" and "could ease" at once |
 | Separated dimensions | property paths `Position_0/1/2` | One Position unit (timing's `mergeDimensions`): X and Y landing together is never DX-03 |
 | Effects | effect property paths | Keyed effect properties are motion in DX-02, DX-03, DX-04 and DX-07 |
 | Precomps | `precomp_layers`, `kind: "precomp"` | The precomp layer's own transform is analyzed; its inside is named as not checked. DX-07 and a clean result both say so |

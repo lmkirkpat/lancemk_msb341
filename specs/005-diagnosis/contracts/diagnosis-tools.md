@@ -42,7 +42,7 @@ Read the whole active comp and diagnose it. Starts a diagnosis of this comp, or 
   "symptom_matched": null,
   "top": [ Finding, Finding, Finding ],
   "start_here": "key",
-  "start_here_reason": "depth | symptom | only_one | first_non_ask",
+  "start_here_reason": "depth | symptom | only_one | all_questions",
   "more": { "count": 6, "ask_count": 2 },
   "rest": [ Finding ],
   "scope": { "set_aside": [], "not_checked": [] },
@@ -52,6 +52,9 @@ Read the whole active comp and diagnose it. Starts a diagnosis of this comp, or 
 }
 ```
 
+- `start_here` follows research R5 (amended 2026-11-09): with a matched symptom, the highest-ranked
+  non-ask among the matched findings, else the first matched one; without, the highest-ranked non-ask,
+  else rank 1 with `all_questions`.
 - `rest` is always present, so "see the rest" (US1 › 2, spec 007 FR-036) needs no new call.
 - Intended findings (FR-016) are left out of `top` and `rest` and counted in `since.intended`.
 - An empty `top` means nothing was found (FR-009); `scope` is still filled.
