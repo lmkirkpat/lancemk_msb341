@@ -116,6 +116,9 @@ function createAdapter(config, deps) {
           starting = false;
           startMs = now() - spawnedAt;
         }
+        // Whether a resumed lesson was continued or started fresh: logged only, the panel's
+        // continue flow is unchanged (OQ-C2).
+        log({ event: "helper_ready", resumed: ev.resumed === true });
         return; // helper only: not re-emitted
       case "turn_start":
         return; // the adapter sent its own when the send was accepted
