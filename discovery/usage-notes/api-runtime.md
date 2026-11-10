@@ -29,7 +29,15 @@ Three continues in the panel on runtime A, on Mentor Practice 2 (not Mentor Prac
   the panel took the helper's exit as the mentor stopping, so it marked the lesson ended (`app.js` `endLesson`).
   Now `shutdown()` sets a closing flag and the exit handler leaves the lesson open. It wasn't offset's fault, and
   it wasn't the moved learner record: any skill on A or B1 could hit it when the panel closes mid-turn. Spec 013
-  US4 scenario 5 says Continue must be offered. **T045 waits on one re-run:** close during a demo, then continue.
+  US4 scenario 5 says Continue must be offered.
+- **Re-run after the fix (22:25 to 22:28 local): pass.** Offset on Title's properties, panel closed while
+  `offset_demo` ran (05:26:56 UTC), reopened: Continue lesson was offered. The mentor named its change
+  ("I moved all of Title's Scale keys 30 frames later") and noticed AE had switched to Mentor Practice 2. Show me
+  again made no second `offset_demo`, and the check passed. **SC-007 met (T045 ticked):** four of four runs that
+  reached a Continue continued correctly, with the one failure fixed and re-run. The learner record was restored
+  after the sitting, so the test lessons aren't in it.
+- **Small finding:** the panel's change line read "moved Title 30 frames later" when only Title's Scale keys
+  moved. It sounds like the whole layer moved (panel-builder, spec 007's change rows).
 - **The skill isn't in the turn log.** T046's field list doesn't include it, though the helper's `turn_end` has
   it. Not needed for T045; worth adding to `panel/lib/turns.js` (panel-builder) so a report can split by skill.
 
