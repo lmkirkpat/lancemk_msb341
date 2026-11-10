@@ -7,7 +7,9 @@ a brand new session act like a colleague who already knows what you are working 
 
 - **My role:** Solo builder: discovery, specs, building, design, testing, and GTM. Want to use
   agent workflows and automations in how I work. Low priority: pricing and analytics.
-- **What it is:** **Knack** (`decisions/006`), an AI creative mentor (`decisions/002`,
+- **What it is:** **Knack** (`decisions/006`; the 2026-11-09 name check found live KNACK marks in
+  education software, so keep it for the prototype and get a clearance search before a public launch),
+  an AI creative mentor (`decisions/002`,
   `product/product-description.md`).
   A teaching layer that leads the teaching, remembers what the user has learned across
   sessions, and builds practice so skills stick, inside the user's own project. After
@@ -111,11 +113,17 @@ a brand new session act like a colleague who already knows what you are working 
     released it on stop, a second was blocked while the cockpit held it). The cockpit never
     stops, so it stays off AE while a builder needs it.
   - **Specs (2026-10-20 to 10-24):** curriculum (`specs/004`, with `curriculum.md`), diagnosis
-    (005), installer (006) and UI overhaul (007) approved; 005 has no plan or tasks yet.
+    (005), installer (006) and UI overhaul (007) approved. **Spec 005 (2026-11-09):** plan and 56 tasks
+    approved (`9285e03`): three read-only tools on the existing reads, a `/diagnose-mentor` skill with no demo
+    tool, and memory saved by the tools. US4 (parents and switches) comes right after the first version (US1,
+    US2, US5); only US3 (memory) waits for the hidden-fault session. **Next:** T001 (the curriculum designer's
+    teaching design, which gates the wording) and T002 (rebuild Diagnosis Practice with the cursor fading).
     **Spec 006 status (2026-11-09):** plan and 61 tasks; Phase 1 done (T001 to T016): T004's gate passed
     (signed extensions load with debug mode off), the installer is built (`installer/`) and a test zip is
     staged. **Next:** T017 to T019, three runs on fresh accounts, then T020 ticks SC-002. T045 is held on
-    Q2 (testers' keys), and T046 (revisit the name) comes before the first tester.
+    Q2 (testers' keys). T046 is done (the name kept for now; see `decisions/006`). Use the staged zip
+    (`ba141e2`) for T017 to T019: `installer/` is unchanged since. Delete `/Users/Shared/knack-key.txt` (readable
+    by every account) after run 3.
     Spec 007's plan and 80 tasks were approved 2026-11-04; its mockup matches.
     **Spec 007 status (2026-11-09):** phases 0 to 5 are built and merged, practice included (T063 to T070, merge
     `dc6eab2`; panel tests 605 pass). T001 and T028 (the comparison) passed: the builder prefers the new panel. All
@@ -123,7 +131,8 @@ a brand new session act like a colleague who already knows what you are working 
     `discovery/usage-notes/ui-overhaul.md`. SC-002's live half is met (16 checks, all matching AE, and Proposed
     openings 3 of 3: easing's miss was a resume of an unfinished lesson, which FR-092 keeps unproposed).
     T062 passed: ten states clean at the default right-side dock (about 343 pt), and SC-010 was amended to that
-    size. Finding: row times show three decimals. **Next:** T061 (Find my next lesson, plus `home-first`), T071
+    size. Finding: row times show three decimals; fixed on branch `panel-row-times` (`eb2b0e1`, panel tests
+    610/610), not merged: merge between sittings. **Next:** T061 (Find my next lesson, plus `home-first`), T071
     (a warm-up, `practice-check` at 260 × 480), T072 (keyboard), T073 (three sessions' notes), then T074 (close);
     EE's T038 and T077; paid T078 and T079 on the builder's go. Four mentor findings from the
     live lessons (a close naming `/speed-graph-mentor`, the speed graph record guessing why, pivot guessing an
@@ -196,9 +205,10 @@ a brand new session act like a colleague who already knows what you are working 
      easing re-run on that commit too (no lesson code changed). **Next:** T021 (a live lesson on A in AE), then T048 (lesson cost). T068's cause is still open.
   4. **Saved conversation (2026-11-09):** T043 (`panel/helper/lib/conversation.mjs`, 51 tests) and T056 (the
      helper's README) merged (`085cf1a`). It moved the settings hash from `4bc1686c` to `06339ff3` (no lesson code
-     changed). T044 (the wiring) needs `loop.mjs` too, and the saved file doesn't yet hold the prompt state or a
-     hand-over still in progress: the spec-writer settles the data model first. Spec 006's uninstall must cover
-     `panel-conversation.json` and `panel-conversation-frames/`.
+     changed). The data model for T044 (the wiring, with `loop.mjs`) was approved 2026-11-09 (`5ea2b26`, OQ-C1 to
+     OQ-C3 as recommended): file version 2 saves the prompt state with a `request_hash`, a continue that doesn't
+     match starts fresh, and `stop` finishes a running call and saves. **Next:** build T044. Spec 006's FR-019,
+     T054 and T057 now always remove the conversation files, even when the learner keeps their history.
   5. `decisions/011`'s cost signal has fired; the rule stands until the builder decides. Later releases may
      reuse a set's A result if nothing it depends on changed (spec 006 FR-025).
   6. **Pinned (2026-11-02): where testers' access keys come from** (spec 006 Q2). On A every user

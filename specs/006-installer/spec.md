@@ -323,6 +323,10 @@ info names the commit and results file.
 - **FR-019**: Uninstall MUST remove everything Knack installed or stored (extensions, mentor,
   private runtime, config, Keychain item, runtime and cache folders), and MUST ask whether to keep
   the learner record, keeping it by default.
+  *Amended 2026-11-09 (approved by the builder; spec 013's saved conversation):* the saved lesson
+  conversation (`panel-conversation.json`, `panel-conversation-frames/` and any leftover
+  `panel-conversation.json.*.tmp` in the learner home) is always removed, even when the learner keeps
+  their history: it holds one unfinished lesson's words, not the learner record.
 - **FR-020**: Uninstall MUST NOT change anything Knack didn't add: other extensions, other
   extensions' settings, PlayerDebugMode if something else set it, and the upstream Claude Bridge.
 

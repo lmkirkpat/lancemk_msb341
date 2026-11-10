@@ -107,7 +107,7 @@ the eval engineer, not its builder (constitution VI).
 - [ ] T043 [US5] PB · `installer/build.mjs --channel release`: FR-025's gate, with reuse per its 2026-11-04 amendment, recording each set's results file in `release.json`.
 - [ ] T044 EE $ · All six sets on A on the first tester's commit (four were measured on an older helper). Results in `product/evals/*/results/`.
 - [ ] T045 Cockpit · **HELD on Q2, on purpose.** How a tester gets a key and who pays. The installer doesn't change; this is the handout and any spend limit, in `decisions/`. Blocks T048 only.
-- [ ] T046 Cockpit · `decisions/006` says to revisit the name before anything reaches people outside this repo. Do that before the first tester.
+- [x] T046 Cockpit · `decisions/006` says to revisit the name before anything reaches people outside this repo. Do that before the first tester. *Done 2026-11-09:* the name check (`discovery/name-check-2026-11-09.md`) found the trademark signal appears met; the builder keeps Knack for the prototype and testers they know, and gets a TSDR check and a professional clearance search before a public launch (note under 006's first signal).
 - [ ] T047 [US1] BL AE $ · SC-006: spec 003 quickstart §4 a to f on an installed copy, no repo on the account.
 - [ ] T048 [US1] BL · ASSUMES Q4: SC-001 with up to 3 testers via `/usage-session`. Depends on T041, T045, T047.
 
@@ -125,10 +125,10 @@ the eval engineer, not its builder (constitution VI).
 
 ## Phase 6: Uninstall (US4, P3)
 
-- [ ] T054 [US4] PB · `installer/lib/uninstall.mjs` from `install-state.json`, keep history by default; never touches debug mode or the upstream bridge (FR-019, FR-020).
+- [ ] T054 [US4] PB · `installer/lib/uninstall.mjs` from `install-state.json`, keep history by default; never touches debug mode or the upstream bridge (FR-019, FR-020). *Amended 2026-11-09 (spec 013 T044):* always remove the saved lesson conversation from the learner home, `panel-conversation.json`, `panel-conversation-frames/` and any leftover `panel-conversation.json.*.tmp`, even when the learner keeps their history; test both choices.
 - [ ] T055 [US4] PB · Uninstall from the downloaded app, in `installer/applet/installer.applescript`.
 - [ ] T056 [US4] PB · Uninstall from the panel's Check setup screen, in `panel/`. Depends on T033.
-- [ ] T057 [US4] EE · `product/evals/installer/inventory-diff.mjs`: SC-005, keep and remove.
+- [ ] T057 [US4] EE · `product/evals/installer/inventory-diff.mjs`: SC-005, keep and remove. *Amended 2026-11-09:* with keep, the diff expects the saved conversation files gone and the learner record still there.
 
 ---
 
