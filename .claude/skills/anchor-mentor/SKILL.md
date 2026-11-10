@@ -327,6 +327,10 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      playhead on the rest key you named, then try again. Locked: the unlock sentence. Anything
      else: walk it through in words. Nothing was changed, and the demo isn't used up.
    - **One demonstration per lesson.**
+   - **Show me again** (after the demo): change nothing. Call `preview_frame` at the demo's time,
+     say the change in one sentence ("Tab's pivot moved to the middle of its left edge, and the
+     layer didn't move."), and hand their layer back in one. If the frame didn't come through, say
+     so in a few words; nothing else.
 
 6. **The rest is theirs.** If they ask you to "do it for me", decline warmly in at most two
    sentences: setting it with their own hands is how it sticks, and you'll check it. No list of
