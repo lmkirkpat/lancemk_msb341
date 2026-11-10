@@ -48,8 +48,7 @@
         "id": "demo_offer_made",
         "must": "\\b(?:want|like)\\b[^.?!]{0,40}\\b(?:see|watch)\\b|\\b(?:I could|I can(?!['’]t)|I'll|let me)\\b[^.?!]{0,30}\\b(?:show|parent|demonstrate)\\b|\\bshow you\\b|\\bwatch (?:me|one)\\b|\\bsee one\\b",
         "turns": [
-          3,
-          4
+          3
         ]
       },
       {

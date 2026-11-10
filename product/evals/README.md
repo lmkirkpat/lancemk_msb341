@@ -28,6 +28,19 @@ Neither passes `--model` or `--effort`, so both take the account's defaults.
 Not found: a per-set split by directory (the runtime folders have random names); sets were told
 apart by skill name in the transcript, and every set shows only `claude-opus-5-5`.
 
+## Plumbing: an unreadable judge reply
+
+Every runner reads the judge's reply with `lib/judge-reply.mjs`: it strips code fences and stray text
+around the JSON array before parsing. A reply that still won't parse is plumbing, not a failure of the
+mentor: the run is marked `plumbing: "judge reply unreadable"`, printed as `PLUMBING`, and left out of
+the case's pass count (a case with no readable run shows `plumbing: true` and does not pass). Re-run
+that case once. Timeouts (`ETIMEDOUT`) and usage limits are still read by hand. Tests:
+`node --test product/evals/lib/test/judge-reply.test.mjs`.
+
+The fixture server's preview frame is a 1 x 1 placeholder unless `frame.png` sits beside the snapshot
+copies. The anchor and null runners write a flat 1920 x 1080 one (`lib/blank-frame.mjs`) so a mentor
+isn't asked to teach from "a single pixel".
+
 ## Running on option A (spec 013, T022 to T029)
 
 All six runners take `--runtime a|b1`. `b1` (headless Claude Code) is the default until every set meets

@@ -27,8 +27,10 @@ import os from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { parseJudgeReply } from "../lib/judge-reply.mjs"; // lenient judge reply (fences, stray text); unreadable = plumbing
 import * as ab from "../lib/ab.mjs"; // --runtime a|b1 (spec 013)
 import { turnChecks, turnProblems, TURN_KEYS } from "../lib/turn-checks.mjs"; // last_turn_* and say_max_sentences (spec 007)
+import { blankFrame } from "../lib/blank-frame.mjs"; // flat 1920 x 1080 preview frame
 
 // The panel's runtime folder, so evals run the mentor the way the panel does: outside the repo,
 // with no builder CLAUDE.md or auto-memory in context (agent audit 2026-10-12, lesson 4.5).
@@ -541,9 +543,10 @@ function judge(c, turns) {
     "<transcript>", renderTranscript(turns), "</transcript>",
   ].join("\n");
   const { result } = claude(["-p", prompt, "--output-format", "json", "--tools", "", "--strict-mcp-config", "--max-turns", "1", ...SETTINGS], {}, os.tmpdir());
-  const text = String(result.result || "").replace(/^```(?:json)?\s*|\s*```$/g, "").trim();
-  const items = parse(text);
-  if (!Array.isArray(items)) return { items: [{ item: "judge", pass: false, reason: `unreadable judge reply: ${text.slice(0, 300)}` }], cost: result.total_cost_usd || 0 };
+  const text = String(result.result || "").trim();
+  const items = parseJudgeReply(text);
+  // Still unreadable after the lenient read: plumbing, not a fail (the run is left out of the pass count).
+  if (!items) return { items: [{ item: "judge", pass: false, reason: `unreadable judge reply: ${text.slice(0, 300)}` }], plumbing: true, cost: result.total_cost_usd || 0 };
   const missing = c.rubric.filter((r) => !items.some((x) => x.item === r));
   for (const m of missing) items.push({ item: m, pass: false, reason: "the judge didn't grade this item" });
   return { items, cost: result.total_cost_usd || 0 };
@@ -558,6 +561,7 @@ async function runCase(c, opts) {
   const stateFile = path.join(home, "fixture-state.json");
   const snaps = path.join(home, "snaps");
   fs.mkdirSync(snaps);
+  fs.writeFileSync(path.join(snaps, "frame.png"), blankFrame());
   if (c.learner_record) fs.copyFileSync(recordFile(c.learner_record), path.join(home, "learner.json"));
   const env = { AE_MENTOR_HOME: home, AE_MENTOR_FIXTURE_STATE: stateFile };
   const mentor = opts.runtime === "a" ? ab.openCase({ repo: REPO, home, env, opts }) : null;
@@ -602,19 +606,21 @@ async function runCase(c, opts) {
   if (fin && (!error || !fin.allowlist.pass)) checks.push({ check: "allowlist", pass: fin.allowlist.pass, detail: fin.allowlist.detail });
   const checksPass = checks.every((x) => x.pass);
   let rubric = [];
+  let plumbing = false;
   if (!error && (checksPass || opts.judgeAlways)) {
     // A judge that times out or errors fails this case's rubric; it never stops the whole run.
     try {
       const j = judge(c, turns);
       rubric = j.items;
+      plumbing = !!j.plumbing;
       cost += j.cost;
     } catch (e) {
       rubric = [{ item: "judge", pass: false, reason: `judge failed to run: ${e.message}` }];
     }
   }
-  const pass = checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
+  const pass = !plumbing && checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
   fs.rmSync(home, { recursive: true, force: true });
-  return { pass, checks, rubric, cost, session_id: sessionId, transcript: renderTranscript(turns),
+  return { pass, ...(plumbing ? { plumbing: "judge reply unreadable" } : {}), checks, rubric, cost, session_id: sessionId, transcript: renderTranscript(turns),
     ...(fin ? { runtime: "a", mentor_cost_usd: Number(fin.cost.toFixed(4)), judge_cost_usd: Number((cost - fin.cost).toFixed(4)), cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist, ...(fin.failed_turns ? { failed_turns: fin.failed_turns } : {}) } : {}) };
 }
 
@@ -704,10 +710,11 @@ async function main() {
       runs.push(r);
       const why = r.pass ? "" : "  " + [...r.checks.filter((x) => !x.pass).map((x) => `${x.check}: ${x.detail}`),
         ...r.rubric.filter((x) => !x.pass).map((x) => `${x.item}: ${x.reason}`)].join(" | ");
-      console.log(`${c.id}${opts.repeat > 1 ? ` [${i + 1}/${opts.repeat}]` : ""}  ${r.pass ? "pass" : "FAIL"}  $${r.cost.toFixed(2)}${why}`);
+      console.log(`${c.id}${opts.repeat > 1 ? ` [${i + 1}/${opts.repeat}]` : ""}  ${r.pass ? "pass" : r.plumbing ? "PLUMBING" : "FAIL"}  $${r.cost.toFixed(2)}${why}`);
     }
     const passes = runs.filter((r) => r.pass).length;
-    results.push({ id: c.id, title: c.title, covers: c.covers, fixture_sources: c.fixture_sources, hash, pass: passes * 2 > runs.length, passes, runs });
+    const valid = runs.filter((r) => !r.plumbing).length; // a run whose judge reply was unreadable is plumbing, not counted
+    results.push({ id: c.id, title: c.title, covers: c.covers, fixture_sources: c.fixture_sources, hash, pass: passes * 2 > valid, passes, ...(valid === 0 ? { plumbing: true } : {}), runs });
   }
 
   const passed = results.filter((r) => r.pass).length;
@@ -733,6 +740,8 @@ async function main() {
     console.log();
     ab.printSummary(out, TARGET * 100);
   } else console.log(`\n${passed}/${results.length} passed (${pct}%, target ${TARGET * 100}%) ${pct >= TARGET * 100 ? "✓" : "✗"}  $${cost.toFixed(2)}${change}`);
+  const plumbed = results.reduce((n, r) => n + (r.runs || []).filter((x) => x.plumbing).length, 0);
+  if (plumbed) console.log(`${plumbed} run(s) had an unreadable judge reply: plumbing, left out of the pass counts (cases with no readable run: ${results.filter((r) => r.plumbing).map((r) => r.id.slice(0, 2)).join(", ") || "none"}).`);
   console.log(`Results: ${path.relative(REPO, file)}`);
 }
 
