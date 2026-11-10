@@ -4,7 +4,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { EXTENSIONS, MIN_AE, MIN_MACOS } from "./layout.mjs";
-import { findAE, appDirs, macosVersion, aeRunning } from "./ae.mjs";
+import crypto from "node:crypto";
+import { findAE, appDirs, macosVersion, aeRunning, managedMac } from "./ae.mjs";
 import { atLeast, compareVersions, parseVersion } from "./versions.mjs";
 
 export const STOP = Object.freeze({
@@ -16,7 +17,42 @@ export const STOP = Object.freeze({
   newer: (v) => `A newer version of Knack (${v}) is already installed, so nothing was changed.`,
   bad_payload: "This copy of the installer is incomplete. Download it again.",
   ae_open: "After Effects is open. Quit it, then continue.",
+  // T031: a write refused, worded by whether the Mac is enrolled in device management.
+  managed: "This Mac's management settings are blocking the install. Ask your IT team to allow Knack, then open the installer again.",
+  blocked: "This Mac won't let Knack save its files. Send a note to whoever gave you Knack.",
 });
+
+// Errors that mean the Mac refused a write, rather than a fault in the installer.
+export const BLOCKED_CODES = Object.freeze(["EACCES", "EPERM", "EROFS"]);
+
+// A refused write → the stop for it: "managed" on an enrolled Mac, else "blocked".
+export async function blockedStop({ run, tools } = {}) {
+  const reason = (await managedMac({ run, tools })) ? "managed" : "blocked";
+  return { ok: false, reason, text: STOP[reason] };
+}
+
+// Can the install write where it needs to? Probes the nearest existing folder above each place with
+// a test file that's removed at once, so nothing is left. → null, or the refusal's error code.
+export function writeProbe(L) {
+  const seen = new Set();
+  for (const target of [L.knack, L.cep, L.learner]) {
+    let d = target;
+    while (!fs.existsSync(d) && path.dirname(d) !== d) d = path.dirname(d);
+    if (seen.has(d)) continue;
+    seen.add(d);
+    const probe = path.join(d, `.knack-probe-${crypto.randomBytes(6).toString("hex")}`);
+    try {
+      fs.writeFileSync(probe, "", { flag: "wx" });
+      fs.unlinkSync(probe);
+    } catch (e) {
+      try {
+        fs.unlinkSync(probe);
+      } catch {}
+      if (BLOCKED_CODES.includes(e && e.code)) return e.code;
+    }
+  }
+  return null;
+}
 
 export function readJson(file) {
   try {
@@ -65,6 +101,7 @@ export async function preflight({ L, payloadDir, run, tools, dirs }) {
   const ae = await findAE({ dirs: dirs || appDirs(L.home), run, tools });
   if (!ae.length) return stop("no_ae");
   if (!ae.some((a) => atLeast(a.version, MIN_AE))) return stop("old_ae");
+  if (writeProbe(L)) return blockedStop({ run, tools });
   if (devInstall(L)) return stop("dev_install");
   const installed = installedVersion(L);
   if (installed && compareVersions(installed, release.version) > 0) return stop("newer", STOP.newer(installed));

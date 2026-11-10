@@ -263,8 +263,46 @@ test("the CLI runs as a program", () => {
 });
 
 test("every stop message is plain: no paths, field names, codes or commands", () => {
-  for (const text of [...Object.values(STOP).map((v) => (typeof v === "function" ? v("0.2.0") : v)), FAILED]) {
+  for (const raw of [...Object.values(STOP).map((v) => (typeof v === "function" ? v("0.2.0") : v)), FAILED]) {
+    const text = raw.replace(/\byour IT team\b/g, "your helpers"); // "IT" is a plain word, not a code
     assert.doesNotMatch(text, /\/|`|\b[a-z]+_[a-z_]+\b|\b[A-Z]{2,}_?[A-Z0-9]*\b|\bnpm\b|\bnode\b|\bbash\b|Terminal/, text);
     assert.ok(text.split(/(?<=\.)\s/).length <= 2, `one or two sentences: ${text}`);
   }
+});
+
+// T031: a managed Mac blocking the install is named, before anything is written or when a write fails.
+const asRoot = typeof process.getuid === "function" && process.getuid() === 0;
+
+test("a home the installer can't write to stops it before anything is written, naming management when enrolled", { skip: asRoot }, async (t) => {
+  for (const managed of [false, true]) {
+    const { home, opts } = setup(t, { state: { managed } });
+    fs.chmodSync(home, 0o555);
+    let r, before, after;
+    try {
+      before = snapshot(home);
+      r = await install(opts);
+      after = snapshot(home);
+    } finally {
+      fs.chmodSync(home, 0o755);
+    }
+    assert.equal(r.ok, false);
+    assert.equal(r.reason, managed ? "managed" : "blocked");
+    assert.equal(r.text, STOP[r.reason]);
+    assert.deepEqual(after, before);
+  }
+});
+
+test("a write refused partway through is named the same way, and a re-run completes once it's allowed", { skip: asRoot }, async (t) => {
+  const { L, opts, state } = setup(t, { state: { managed: true } });
+  fs.mkdirSync(L.cep, { recursive: true });
+  let r;
+  try {
+    r = await install({ ...opts, afterStep: (name) => name === "place_version" && fs.chmodSync(L.cep, 0o555) });
+  } finally {
+    fs.chmodSync(L.cep, 0o755);
+  }
+  assert.equal(r.reason, "managed");
+  assert.equal(r.text, STOP.managed);
+  state.managed = false;
+  assert.equal((await install(opts)).ok, true);
 });

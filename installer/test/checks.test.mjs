@@ -451,3 +451,43 @@ test("which AE is open can't be told: the lines still read, without a version", 
   assert.equal(l.bridge_answers.text, "After Effects answers Knack.");
   assert.equal(l.ae_scripting.text, "After Effects lets Knack's scripts run.");
 });
+
+// T031: an unreadable learner record and a managed Mac, each named plainly.
+const asRoot = typeof process.getuid === "function" && process.getuid() === 0;
+
+test("a learner record that can't be opened, or isn't a file, is unreadable and kept as it is", { skip: asRoot }, async (t) => {
+  const s = await setup(t);
+  write(s.L.learner, "learner.json", '{"lessons":[1]}');
+  fs.chmodSync(s.L.learnerFile, 0o000);
+  let l;
+  try {
+    l = byId((await s.check()).result);
+  } finally {
+    fs.chmodSync(s.L.learnerFile, 0o644);
+  }
+  assert.equal(l.record_read.state, "not_working");
+  assert.equal(l.record_read.text, TEXT.record_read.not_working.text);
+  assert.equal(fs.readFileSync(s.L.learnerFile, "utf8"), '{"lessons":[1]}');
+  fs.rmSync(s.L.learnerFile);
+  fs.mkdirSync(s.L.learnerFile);
+  l = byId((await s.check()).result);
+  assert.equal(l.record_read.state, "not_working");
+  assert.ok(fs.statSync(s.L.learnerFile).isDirectory(), "left as it is");
+});
+
+test("a learner home that can't be written: on a managed Mac it says to ask IT", { skip: asRoot }, async (t) => {
+  const s = await setup(t);
+  fs.chmodSync(s.L.learner, 0o555);
+  let plain, managed;
+  try {
+    plain = byId((await s.check()).result);
+    s.state.managed = true;
+    managed = byId((await s.check()).result);
+  } finally {
+    fs.chmodSync(s.L.learner, 0o755);
+  }
+  assert.equal(plain.record_folder.text, TEXT.record_folder.not_writable.text);
+  assert.equal(managed.record_folder.state, "not_working");
+  assert.equal(managed.record_folder.text, TEXT.record_folder.managed.text);
+  assert.match(managed.record_folder.fix, /IT/);
+});

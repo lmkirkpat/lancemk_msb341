@@ -8,10 +8,10 @@ import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
 import { EXTENSIONS, MIN_AE, MIN_MACOS } from "./layout.mjs";
-import { findAE, aeRunning, aeProcesses, macosVersion, appDirs } from "./ae.mjs";
+import { findAE, aeRunning, aeProcesses, macosVersion, appDirs, managedMac } from "./ae.mjs";
 import { atLeast, parseVersion } from "./versions.mjs";
 import { checkKey } from "./keychain.mjs";
-import { readJson } from "./preflight.mjs";
+import { readJson, BLOCKED_CODES } from "./preflight.mjs";
 
 export const STATES = Object.freeze(["working", "not_working", "needs_ae", "not_checked"]);
 export const IDS = Object.freeze([
@@ -129,6 +129,8 @@ export const TEXT = Object.freeze({
     working: "Knack can save your lesson history.",
     missing: { text: "Knack's folder for your lesson history is missing.", fix: AGAIN },
     not_writable: { text: "Knack can't save your lesson history on this Mac.", fix: "Send a note to whoever gave you Knack." },
+    // T031: the same refusal on a Mac enrolled in device management.
+    managed: { text: "This Mac's management settings stop Knack saving your lesson history.", fix: "Ask your IT team to allow Knack, then check again." },
   },
   record_read: {
     none: "No lessons recorded yet.",
@@ -407,11 +409,13 @@ export async function runChecks(opts) {
       fs.writeFileSync(probe, "check", { flag: "wx" });
       fs.unlinkSync(probe);
       lines.record_folder = line("record_folder", "working", TEXT.record_folder.working);
-    } catch {
+    } catch (e) {
       try {
         fs.unlinkSync(probe);
       } catch {}
-      lines.record_folder = line("record_folder", "not_working", TEXT.record_folder.not_writable.text, TEXT.record_folder.not_writable.fix);
+      const refused = BLOCKED_CODES.includes(e && e.code) && (await by(deadline, managedMac(toolArgs), false));
+      const t = refused ? TEXT.record_folder.managed : TEXT.record_folder.not_writable;
+      lines.record_folder = line("record_folder", "not_working", t.text, t.fix);
     }
   }
   if (!fs.existsSync(L.learnerFile)) lines.record_read = line("record_read", "working", TEXT.record_read.none);

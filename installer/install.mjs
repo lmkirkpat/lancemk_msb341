@@ -15,7 +15,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { layout } from "./lib/layout.mjs";
 import { guard } from "./lib/fsx.mjs";
-import { preflight, STOP } from "./lib/preflight.mjs";
+import { preflight, STOP, BLOCKED_CODES, blockedStop } from "./lib/preflight.mjs";
 import { aeRunning } from "./lib/ae.mjs";
 import { installPayload, recordKeychain } from "./lib/payload.mjs";
 import { normalizeKey, checkKey, storeKey, shouldStore, uncheckedStatus, KEY_ITEM } from "./lib/keychain.mjs";
@@ -52,6 +52,7 @@ export async function install(opts) {
     installPayload({ L, g, payloadDir: opts.payloadDir, nodeDir: opts.nodeDir, release: pre.release, afterStep: opts.afterStep });
   } catch (e) {
     if (opts.onError) opts.onError(e);
+    if (BLOCKED_CODES.includes(e && e.code)) return blockedStop({ run: opts.run, tools: opts.tools });
     return { ok: false, reason: "failed", text: FAILED };
   }
   const note = await keyStep({ L, g, key: normalizeKey(opts.key), keyStatus: opts.keyStatus, run: opts.run, tools: opts.tools });
