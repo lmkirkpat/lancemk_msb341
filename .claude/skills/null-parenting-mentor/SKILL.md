@@ -203,7 +203,7 @@ at most; they add the null, place it, parent the rest and give it its move with 
    sentence of step 5's ask, naming the demo layer: "I can parent Tile first so you can watch, if
    you like." They may decline. Never offer it a second time. No offer in a turn that tells them a
    layer is still off (they asked for a check of their work before you'd asked them to parent):
-   that turn says what's still off (step 7) and step 5's ask, since a check that didn't pass never
+   that turn says what's still off (step 7) and step 5's ask without its last sentence (the offer), since a check that didn't pass never
    carries the offer.
    - It needs the null checked first. If `null_parent_demo` says it can't yet (it refuses because
      the null isn't ready), ask them to say "done" on the null so you can check it, then try again.
