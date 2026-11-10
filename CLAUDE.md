@@ -121,8 +121,11 @@ a brand new session act like a colleague who already knows what you are working 
     **Spec 006 status (2026-11-09):** plan and 61 tasks; Phase 1 done (T001 to T016): T004's gate passed
     (signed extensions load with debug mode off), the installer is built (`installer/`) and a test zip is
     staged. **Next:** T017 to T019, three runs on fresh accounts, then T020 ticks SC-002. T045 is held on
-    Q2 (testers' keys). T046 is done (the name kept for now; see `decisions/006`). Use the staged zip
-    (`ba141e2`) for T017 to T019: `installer/` is unchanged since. Delete `/Users/Shared/knack-key.txt` (readable
+    Q2 (testers' keys). T046 is done (the name kept for now; see `decisions/006`). T017's first try (2026-11-09) failed on two
+    bugs that tests on fake payloads missed (fixed `b45eea8`, `50c581a`): npm ci's `node_modules/.bin` link,
+    which the install refuses, and entry points that exited silently when run through `Knack/current`. Use
+    the zip from `50c581a` for T017 to T019 (a fresh account; `betatester` is spent). For T020: the install
+    swallows its error (log it to a file), and the setup check lists each AE version twice. Delete `/Users/Shared/knack-key.txt` (readable
     by every account) after run 3.
     Spec 007's plan and 80 tasks were approved 2026-11-04; its mockup matches.
     **Spec 007 status (2026-11-09):** phases 0 to 5 are built and merged, practice included (T063 to T070, merge
