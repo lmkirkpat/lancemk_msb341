@@ -21,6 +21,15 @@ Three continues in the panel on runtime A, on Mentor Practice 2 (not Mentor Prac
 - **T046 live, first check:** the turn log now has `runtime: "a"`, tokens and `start_ms`. `node panel/dev/turns.js`
   reports A on its own: 31/31 turns ≤ 10 s (median 2.1 s), $0.22 per lesson, cache read share 87%, no gap over
   5 minutes, helper start-up median 0.3 s live (0.15 s measured in T048, both far below `decisions/010`'s 2 s).
+- **Second sitting (22:09 to 22:16 local, on a fresh learner record):** key types after a hand-over, closed after
+  the demo: **pass**. Easing, closed during Show me before `set_ease` ran: **pass**. The demo ran once, on the
+  turn after Continue lesson. Offset, closed while its demo ran (a Show me at 05:12:29 UTC that ended failed
+  with no error kind): **fail, no Continue lesson**.
+- **Offset's cause (fixed, merged `151c64f`, panel tests 628/628):** closing the panel stopped the helper, and
+  the panel took the helper's exit as the mentor stopping, so it marked the lesson ended (`app.js` `endLesson`).
+  Now `shutdown()` sets a closing flag and the exit handler leaves the lesson open. It wasn't offset's fault, and
+  it wasn't the moved learner record: any skill on A or B1 could hit it when the panel closes mid-turn. Spec 013
+  US4 scenario 5 says Continue must be offered. **T045 waits on one re-run:** close during a demo, then continue.
 - **The skill isn't in the turn log.** T046's field list doesn't include it, though the helper's `turn_end` has
   it. Not needed for T045; worth adding to `panel/lib/turns.js` (panel-builder) so a report can split by skill.
 
