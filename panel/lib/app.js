@@ -370,7 +370,9 @@ function createApp(deps) {
     state.block = "";
     persist();
     if (deps.appendTurn) {
-      deps.appendTurn({ at: state.sentAt || undefined, kind: e.kind, wait_ms: e.wait_ms, first_event_ms: e.first_event_ms, total_ms: e.total_ms, cost_usd: e.cost_usd, ok: e.ok, lesson_passed: !state.passedBefore && !!(state.lesson && state.lesson.passed) });
+      // FR-029: the runtime's fields as the adapter gives them; turns.js keeps only what's allowed.
+      deps.appendTurn({ at: state.sentAt || undefined, kind: e.kind, wait_ms: e.wait_ms, first_event_ms: e.first_event_ms, total_ms: e.total_ms, cost_usd: e.cost_usd, ok: e.ok, lesson_passed: !state.passedBefore && !!(state.lesson && state.lesson.passed),
+        runtime: e.runtime || runtime, model: e.model, effort: e.effort, settings_hash: e.settings_hash, tokens: e.tokens, other_model: e.other_model, error_kind: e.error_kind, start_ms: e.start_ms });
     }
     state.focus_tick++;
     changed();
