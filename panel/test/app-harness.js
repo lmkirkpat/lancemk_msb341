@@ -32,7 +32,8 @@ function fakeAdapter(opts) {
   return a;
 }
 
-// opts: { memory, pathData, runtime, saved, adapter, sendThrows, onStart }.
+// opts: { memory, pathData, runtime, saved, adapter, sendThrows, onStart, createAdapter }.
+// createAdapter: a real adapter in place of the fake (its events come from its own process).
 function makeApp(opts) {
   const o = opts || {};
   const adapters = [];
@@ -50,7 +51,7 @@ function makeApp(opts) {
   let polled = 0;
   const app = createApp({
     cfg: { ok: true, runtime: o.runtime || "b1" },
-    createAdapter: () => { const a = fakeAdapter({ announcesCalls: o.runtime === "a", handsOver: o.runtime === "a", sendThrows: o.sendThrows, onStart: o.onStart }); adapters.push(a); return a; },
+    createAdapter: o.createAdapter ? (cfg) => { const a = o.createAdapter(cfg); adapters.push(a); return a; } : () => { const a = fakeAdapter({ announcesCalls: o.runtime === "a", handsOver: o.runtime === "a", sendThrows: o.sendThrows, onStart: o.onStart }); adapters.push(a); return a; },
     readRecord: o.readRecord || (() => Promise.resolve(o.memory || { status: "missing", record: null })),
     pathData: o.pathData === undefined ? PATH_DATA : o.pathData,
     skillsBuilt: o.skillsBuilt === undefined ? SKILLS_BUILT : o.skillsBuilt,
