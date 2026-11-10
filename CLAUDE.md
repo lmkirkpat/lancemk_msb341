@@ -209,7 +209,9 @@ a brand new session act like a colleague who already knows what you are working 
      easing re-run on that commit too (no lesson code changed). T021 passed 2026-11-09 (three easing lessons on A, 18/18 turns ≤ 10 s, median $0.22 a lesson;
      `discovery/usage-notes/api-runtime.md`; the third was a review, so two ran with a demo). T048 passed the same day
      (SC-002 18/18, median 2.4 s against B1's 1.7 s; SC-004 median $0.22; R8 no gap over 5 min; helper start 0.15 s).
-     **Next:** T044 (continue), then T045; T046 and T047 (`turns.js` per runtime, `start_ms` and cache in the log). T068's cause is still open.
+     **Next:** T044 (continue), then T045. T046 and T047 merged 2026-11-09 (`94cb8f0`, panel tests 621/621): the turn log records the
+     runtime, tokens and `start_ms`, and `node panel/dev/turns.js` reports per runtime (`--last N`); its `at` is
+     the send time. Lines before the merge have no runtime and show as B1. T068's cause is still open.
   4. **Saved conversation (2026-11-09):** T043 (`panel/helper/lib/conversation.mjs`, 51 tests) and T056 (the
      helper's README) merged (`085cf1a`). It moved the settings hash from `4bc1686c` to `06339ff3` (no lesson code
      changed). The data model for T044 (the wiring, with `loop.mjs`) was approved 2026-11-09 (`5ea2b26`, OQ-C1 to
