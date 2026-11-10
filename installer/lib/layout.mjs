@@ -21,10 +21,13 @@ export function layout(home = os.homedir()) {
     stamp: path.join(learner, "panel-loaded.json"),
     learnerFile: path.join(learner, "learner.json"),
     bridgeConfig: path.join(support, "AEMentorBridge", "bridge.json"),
+    bridgeLog: path.join(support, "AEMentorBridge", "host.log"),
     knack,
     versions: path.join(knack, "versions"),
     current: path.join(knack, "current"),
     tmp: path.join(knack, "tmp"),
+    // A developer install's links, kept aside when the person chooses to replace it (FR-024, T037).
+    devLinks: path.join(knack, "developer-links"),
     state: path.join(knack, "install-state.json"),
     lastCheck: path.join(knack, "last-check.json"),
   });

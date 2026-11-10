@@ -263,8 +263,115 @@ test("the CLI runs as a program", () => {
 });
 
 test("every stop message is plain: no paths, field names, codes or commands", () => {
-  for (const text of [...Object.values(STOP).map((v) => (typeof v === "function" ? v("0.2.0") : v)), FAILED]) {
+  for (const raw of [...Object.values(STOP).map((v) => (typeof v === "function" ? v("0.2.0") : v)), FAILED]) {
+    const text = raw.replace(/\byour IT team\b/g, "your helpers"); // "IT" is a plain word, not a code
     assert.doesNotMatch(text, /\/|`|\b[a-z]+_[a-z_]+\b|\b[A-Z]{2,}_?[A-Z0-9]*\b|\bnpm\b|\bnode\b|\bbash\b|Terminal/, text);
     assert.ok(text.split(/(?<=\.)\s/).length <= 2, `one or two sentences: ${text}`);
   }
+});
+
+// T031: a managed Mac blocking the install is named, before anything is written or when a write fails.
+const asRoot = typeof process.getuid === "function" && process.getuid() === 0;
+
+test("a home the installer can't write to stops it before anything is written, naming management when enrolled", { skip: asRoot }, async (t) => {
+  for (const managed of [false, true]) {
+    const { home, opts } = setup(t, { state: { managed } });
+    fs.chmodSync(home, 0o555);
+    let r, before, after;
+    try {
+      before = snapshot(home);
+      r = await install(opts);
+      after = snapshot(home);
+    } finally {
+      fs.chmodSync(home, 0o755);
+    }
+    assert.equal(r.ok, false);
+    assert.equal(r.reason, managed ? "managed" : "blocked");
+    assert.equal(r.text, STOP[r.reason]);
+    assert.deepEqual(after, before);
+  }
+});
+
+test("a write refused partway through is named the same way, and a re-run completes once it's allowed", { skip: asRoot }, async (t) => {
+  const { L, opts, state } = setup(t, { state: { managed: true } });
+  fs.mkdirSync(L.cep, { recursive: true });
+  let r;
+  try {
+    r = await install({ ...opts, afterStep: (name) => name === "place_version" && fs.chmodSync(L.cep, 0o555) });
+  } finally {
+    fs.chmodSync(L.cep, 0o755);
+  }
+  assert.equal(r.reason, "managed");
+  assert.equal(r.text, STOP.managed);
+  state.managed = false;
+  assert.equal((await install(opts)).ok, true);
+});
+
+// T037 (FR-024): a developer install is named, and replaced only when the person chooses to. The
+// repo is never touched; the development links are kept aside, not deleted.
+function devSetup(t, o = {}) {
+  const s = setup(t, o);
+  const repo = tmpdir(t, "knack-repo-");
+  write(repo, "bridge/cep/CSXS/manifest.xml", "<dev/>");
+  write(repo, "panel/main.js", "// dev panel\n");
+  fs.mkdirSync(s.L.cep, { recursive: true });
+  fs.symlinkSync(path.join(repo, "bridge", "cep"), path.join(s.L.cep, "AEMentorBridge"));
+  fs.symlinkSync(path.join(repo, "panel"), path.join(s.L.cep, "AEMentorPanel"));
+  write(s.L.learner, "panel.json", JSON.stringify({ version: 1, runtime: "b1", claude_path: "/x/claude", node_path: "/x/node", repo_path: repo }));
+  write(s.L.learner, "learner.json", '{"lessons":[1]}');
+  return { ...s, repo };
+}
+
+test("a developer install: replace moves the links aside, keeps the repo, the record and the old settings", async (t) => {
+  const s = devSetup(t);
+  const repoBefore = snapshot(s.repo);
+  const oldConfig = fs.readFileSync(s.L.panelJson, "utf8");
+  const r = await install({ ...s.opts, replaceDev: true });
+  assert.equal(r.ok, true, r.text);
+  for (const name of ["AEMentorBridge", "AEMentorPanel"]) {
+    assert.ok(!fs.lstatSync(path.join(s.L.cep, name)).isSymbolicLink(), `${name} is now a real folder`);
+    const kept = path.join(s.L.devLinks, name);
+    assert.ok(fs.lstatSync(kept).isSymbolicLink(), `${name}'s link is kept aside`);
+    assert.ok(fs.realpathSync(kept).startsWith(s.repo));
+  }
+  assert.equal(fs.readFileSync(path.join(s.L.devLinks, "panel.json"), "utf8"), oldConfig);
+  assert.equal(fs.statSync(path.join(s.L.devLinks, "panel.json")).mode & 0o777, 0o600);
+  assert.equal(JSON.parse(fs.readFileSync(s.L.panelJson, "utf8")).runtime, "a");
+  assert.equal(fs.readFileSync(s.L.learnerFile, "utf8"), '{"lessons":[1]}');
+  assert.deepEqual(snapshot(s.repo), repoBefore, "the repo is untouched");
+  assert.equal(JSON.parse(fs.readFileSync(s.L.state, "utf8")).developer_links, "~/Library/Application Support/Knack/developer-links");
+  assert.ok(!s.run.calls.some((c) => /defaults/.test(c.cmd)));
+});
+
+test("a developer install without the choice stops, names it, and changes nothing", async (t) => {
+  const s = devSetup(t);
+  const before = snapshot(s.home);
+  const r = await install(s.opts);
+  assert.deepEqual(r, { ok: false, reason: "dev_install", text: STOP.dev_install });
+  assert.match(STOP.dev_install, /development/);
+  assert.deepEqual(snapshot(s.home), before);
+});
+
+test("a kill partway through a replace leaves a state a re-run completes, the links still kept", async (t) => {
+  for (const killAt of STEPS) {
+    const s = devSetup(t);
+    const killed = await install({ ...s.opts, replaceDev: true, afterStep: (n) => { if (n === killAt) throw new Error("killed"); } });
+    assert.equal(killed.ok, false, killAt);
+    const again = await install({ ...s.opts, replaceDev: true });
+    assert.equal(again.ok, true, `re-run after a kill at ${killAt}`);
+    for (const name of ["AEMentorBridge", "AEMentorPanel"]) {
+      assert.ok(!fs.lstatSync(path.join(s.L.cep, name)).isSymbolicLink(), `${killAt}: ${name}`);
+      const kept = fs.readdirSync(s.L.devLinks).filter((f) => f.startsWith(name));
+      assert.equal(kept.length, 1, `${killAt}: one link kept for ${name}`);
+    }
+    assert.equal(fs.readFileSync(s.L.learnerFile, "utf8"), '{"lessons":[1]}');
+  }
+});
+
+test("the CLI: preflight says dev with the question, and install takes --replace-dev", async (t) => {
+  const s = devSetup(t);
+  const deps = { home: s.home, run: s.run, dirs: [s.apps] };
+  assert.deepEqual(await main(["preflight", "--payload", s.payloadDir], deps), { out: `dev\n${STOP.dev_install}`, code: 1 });
+  const r = await main(["install", "--payload", s.payloadDir, "--node-dir", s.nodeDir, "--replace-dev"], { ...deps, stdin: "" });
+  assert.equal(r.code, 0, r.out);
 });

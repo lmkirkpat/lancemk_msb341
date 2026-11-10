@@ -78,17 +78,17 @@ the eval engineer, not its builder (constitution VI).
 
 **Goal**: FR-022 and FR-023 and SC-003. **Independent test**: break each of 11 faults; each is named with a plain fix, with no false failures.
 
-- [ ] T022 [P] [US2] PB · No internet and AE closed behave per US2 scenario 2 and the edge case, in `installer/lib/checks.mjs`.
-- [ ] T023 [P] [US2] PB · Bridge port taken (`/health` fails with something listening on the port) names the cause, in `installer/lib/checks.mjs`.
-- [ ] T024 [P] [US2] PB · CEP loading disabled is named, not a generic missing panel, in `installer/lib/checks.mjs`.
-- [ ] T025 [US2] PB · `installer/lib/fixes.mjs`: **Fix** re-runs one part or creates a missing folder, then re-checks (FR-022). Never touches the learner record.
-- [ ] T026 [US2] PB · `installer/lib/report.mjs`: **Copy report** with versions, commit and results, and no key, name or user path (FR-023).
+- [x] T022 [P] [US2] PB · No internet and AE closed behave per US2 scenario 2 and the edge case, in `installer/lib/checks.mjs`.
+- [x] T023 [P] [US2] PB · Bridge port taken (`/health` fails with something listening on the port) names the cause, in `installer/lib/checks.mjs`.
+- [x] T024 [P] [US2] PB · CEP loading disabled is named, not a generic missing panel, in `installer/lib/checks.mjs`.
+- [x] T025 [US2] PB · `installer/lib/fixes.mjs`: **Fix** re-runs one part or creates a missing folder, then re-checks (FR-022). Never touches the learner record.
+- [x] T026 [US2] PB · `installer/lib/report.mjs`: **Copy report** with versions, commit and results, and no key, name or user path (FR-023).
 - [x] T027 [US2] EE · Extend `product/evals/installer/scan.mjs` to the installed tree, logs and caches after a full lesson, and to a sample report (SC-007). *2026-11-09: built and tested on fixture trees (`7e2d6c1`); the real run, on an installed account after a full lesson, follows T017 to T019 (command in `product/evals/installer/README.md`).*
 - [ ] T028 [US2] PB · Add Fix and Copy report to `installer/applet/installer.applescript`.
 - [ ] T029 [US2] EE · `product/evals/installer/faults.test.mjs`: every SC-003 fault that can be faked without AE, plus a working install with no false failures.
 - [ ] T030 [US2] BL AE · The faults that need AE. Read every message against FR-022. 11 of 11.
-- [ ] T031 [P] [US2] PB · Unreadable learner record, and a managed Mac blocking the install, each named plainly, in `installer/lib/checks.mjs` and `installer/lib/preflight.mjs`.
-- [ ] T032 [P] [US2] PB · Several AE versions: the check names which it looked at, in `installer/lib/checks.mjs`.
+- [x] T031 [P] [US2] PB · Unreadable learner record, and a managed Mac blocking the install, each named plainly, in `installer/lib/checks.mjs` and `installer/lib/preflight.mjs`.
+- [x] T032 [P] [US2] PB · Several AE versions: the check names which it looked at, in `installer/lib/checks.mjs`.
 - [ ] T033 [US2] PB · **Waits for spec 007** (its FR-059, D9): panel's Check setup entry runs the check and shows its lines, in `panel/main.js` and `panel/lib/`.
 
 ---
@@ -98,8 +98,8 @@ the eval engineer, not its builder (constitution VI).
 - [ ] T034 [US1] PB · **Waits for spec 007**: the panel shows the scripting setting's location with a picture when it's off (US1 scenario 6), in `panel/`. ASSUMES Q5. Mockup from the UI designer.
 - [ ] T035 [US1] PB · **Coordinate with 007's FR-056**: `panel/lib/config.js`'s messages say `bash panel/install.sh`, which a learner must not see on a broken install (FR-022).
 - [ ] T036 [US1] PB · The picture for the installer's last screen, in `installer/applet/`, with the asset from the UI designer. ASSUMES Q5.
-- [ ] T037 [US1] PB · FR-024: name a developer install and offer replace or cancel, never touching the repo, in `installer/lib/preflight.mjs` and `payload.mjs`.
-- [ ] T038 [US1] PB · Upstream Claude Bridge keeps working before and after install, with a test in `installer/test/`.
+- [x] T037 [US1] PB · FR-024: name a developer install and offer replace or cancel, never touching the repo, in `installer/lib/preflight.mjs` and `payload.mjs`.
+- [x] T038 [US1] PB · Upstream Claude Bridge keeps working before and after install, with a test in `installer/test/`.
 - [ ] T039 BL · ASSUMES Q3: enrol in Apple's Developer ID program. Can take days. Identity on the builder's Mac only.
 - [ ] T040 [US1] PB · ASSUMES Q3: sign and notarize the applet and its Node binaries in `installer/build.mjs`; check Node still runs with no quarantine trouble after a real download.
 - [ ] T041 [US1] BL · ASSUMES Q3: SC-008, on a Mac that has never opened it, from a real download.

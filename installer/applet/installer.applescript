@@ -35,7 +35,12 @@ on run
 			return
 		end if
 		set nodeDir to paragraph 1 of prep
-		if paragraph 2 of prep is not "ok" then
+		-- A developer install: name it and offer Replace or Cancel (FR-024). Cancel changes nothing.
+		set replaceDev to "no"
+		if paragraph 2 of prep is "dev" then
+			display dialog my restOf(prep, 3) buttons {"Cancel", "Replace"} default button 1 cancel button 1 with title appTitle
+			set replaceDev to "yes"
+		else if paragraph 2 of prep is not "ok" then
 			my stopWith(my restOf(prep, 3), nodeDir)
 			return
 		end if
@@ -69,7 +74,7 @@ on run
 
 		-- 5. Install.
 		set progress description to "Installing Knack…"
-		set installOut to my runNode(nodeDir, {payloadDir & "/version/setup/install.mjs", "install", "--payload", payloadDir, "--node-dir", nodeDir, "--key-status", keyStatus}, accessKey)
+		set installOut to my runNode(nodeDir, {payloadDir & "/version/setup/install.mjs", "install", "--payload", payloadDir, "--node-dir", nodeDir, "--replace-dev", replaceDev, "--key-status", keyStatus}, accessKey)
 		set accessKey to ""
 		my removeNode(nodeDir)
 		set nodeDir to ""
