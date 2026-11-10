@@ -602,3 +602,35 @@ fail. *For eval-engineer:* parse the judge leniently or retry once.
 
 About $133 on B1 in all (full runs $106, repeats $21, offset 20 $2.56, before that the skill-builder's targeted
 runs $22.55).
+
+## Warm-up sitting attempt (T071, 2026-11-09, late): stopped
+
+Panel on B1 (it was still on A from spec 013 T045's sitting; switched with `install.sh --runtime b1`). Mentor Practice captured
+before, and the learner record backed up; neither changed.
+
+Pressed Warm up twice (06:42 UTC, 6.5 s and 5.9 s, ok). Both opened speed graph's review (`/speed-graph-mentor review`)
+and ended at the opening with `no_new_target`: "I couldn't find anything new to review in Mentor Practice 2." No snapshot
+errors, no record written, so the review stays due, which is FR-defined behavior (`practice-nothing-new`).
+
+**Why:** after the restart AE opened with **Mentor Practice 2** active. Speed graph's review needs eased pairs to reshape,
+and Title on Mentor Practice is the one meant for it. But Title is linear in the open project too (all keys linear, influence
+16.667, captured tonight); its shaped ease lives only in `~/Documents/Tutor Test before T001.aep.aep` (see T001's comp handling).
+So the speed graph warm-up would have had nothing to review on either comp.
+
+### Findings
+
+- **Not a panel bug.** The warm-up did what the spec says on a comp with nothing new. It does count as a first
+  look at `practice-nothing-new` (T071's second half): the message showed and the review stayed due. The 260 × 480 check of that
+  state was not done.
+- **The message's second sentence reads oddly:** "The moves here that are eased are either ones you've already shaped or have
+  already been shaped." Mentor wording (speed graph `SKILL.md`), not panel copy. *For eval-engineer:* a case for the
+  nothing-new opening's wording.
+- **The warm-up doesn't say which comp it looked at before you press it.** Home picks the skill; the comp is whatever is active.
+  Worth a line in Practice due ("on the active comp") if testers hit this too. Not a fix yet: one data point, the builder's.
+
+### Next sitting (start here)
+
+1. Open Mentor Practice and restore Title's shaped ease from `~/Documents/Tutor Test before T001.aep.aep`, then capture it
+   (`node mentor/dev/capture.mjs`, check the comp name it prints).
+2. With **Mentor Practice** active, Warm up for speed graph (T035): partial, pass, the "Next warm-up" line, keyboard only (T072 flow 5).
+3. Then pivot on Needle (T240), null on Row A to C (T343), offset on the Chips (T040). Make each one's comp active first.
