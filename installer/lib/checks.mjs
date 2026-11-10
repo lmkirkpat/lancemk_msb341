@@ -255,7 +255,7 @@ export function classifyHealth(h) {
   return "no_reply";
 }
 
-function manifestVersion(file) {
+export function manifestVersion(file) {
   try {
     const m = /ExtensionBundleVersion="([^"]+)"/.exec(fs.readFileSync(file, "utf8"));
     return m ? m[1] : null;

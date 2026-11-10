@@ -123,23 +123,7 @@ export function installPayload({ L, g, payloadDir, nodeDir, release, replaceDev 
   });
 
   step("extensions", () => {
-    g.mkdir(L.cep);
-    for (const name of EXTENSIONS) {
-      const src = path.join(payloadDir, "cep", name);
-      const fresh = path.join(L.tmp, `ext-${name}`);
-      g.copyTree(src, fresh);
-      if (!sameTree(src, fresh) || !fs.existsSync(path.join(fresh, "META-INF", "signatures.xml"))) {
-        throw new InstallError("The copied extension doesn't match the installer's.");
-      }
-      const dest = path.join(L.cep, name);
-      let st = null;
-      try {
-        st = fs.lstatSync(dest);
-      } catch {}
-      if (st && st.isSymbolicLink()) throw new InstallError("A development copy is in the way.");
-      if (st) g.rename(dest, path.join(L.tmp, `old-ext-${name}`));
-      g.rename(fresh, dest);
-    }
+    for (const name of EXTENSIONS) placeExtension({ L, g, payloadDir, name, work: L.tmp });
   });
 
   step("current", () => {
@@ -183,6 +167,33 @@ export function installPayload({ L, g, payloadDir, nodeDir, release, replaceDev 
 
   g.rm(L.tmp);
   return { learnerCreated, files };
+}
+
+// One extension from the payload into CEP's folder: copied to `work` (inside Knack's own folder),
+// verified, then swapped in by rename, the old one moved into `work`. A link in the way (a developer
+// install) is refused, never followed. Used by the install and by Fix (T025).
+export function placeExtension({ L, g, payloadDir, name, work }) {
+  g.mkdir(L.cep);
+  g.mkdir(work);
+  const src = path.join(payloadDir, "cep", name);
+  const fresh = path.join(work, `ext-${name}`);
+  g.rm(fresh);
+  g.copyTree(src, fresh);
+  if (!sameTree(src, fresh) || !fs.existsSync(path.join(fresh, "META-INF", "signatures.xml"))) {
+    throw new InstallError("The copied extension doesn't match the installer's.");
+  }
+  const dest = path.join(L.cep, name);
+  let st = null;
+  try {
+    st = fs.lstatSync(dest);
+  } catch {}
+  if (st && st.isSymbolicLink()) throw new InstallError("A development copy is in the way.");
+  if (st) {
+    const old = path.join(work, `old-ext-${name}`);
+    g.rm(old);
+    g.rename(dest, old);
+  }
+  g.rename(fresh, dest);
 }
 
 // Records that the Keychain item is Knack's, for uninstall.
