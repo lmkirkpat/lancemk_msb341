@@ -8,7 +8,7 @@ import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
 import { EXTENSIONS, MIN_AE, MIN_MACOS } from "./layout.mjs";
-import { findAE, aeRunning, macosVersion, appDirs } from "./ae.mjs";
+import { findAE, aeRunning, aeProcesses, macosVersion, appDirs } from "./ae.mjs";
 import { atLeast, parseVersion } from "./versions.mjs";
 import { checkKey } from "./keychain.mjs";
 import { readJson } from "./preflight.mjs";
@@ -83,6 +83,7 @@ export const TEXT = Object.freeze({
   bridge_answers: {
     working: "After Effects answers Knack.",
     not_working: { text: "After Effects is open, but it isn't answering Knack.", fix: "Quit After Effects and open it again, then check again." },
+    port_taken: { text: "Something else is using Knack's connection to After Effects.", fix: "Restart the Mac, then open After Effects and check again." },
   },
   panel_loads: {
     working: "The Knack panel has opened in After Effects.",
@@ -187,6 +188,53 @@ function bridgeConfig(L) {
   return { port: cfg.port, token: cfg.token };
 }
 
+// What the bridge's own log says since `sinceMs` (T023, T024): did its page start, and was its port
+// taken? Read only; nothing from the log is ever printed. A taken port that the bridge got later
+// doesn't count. sinceMs null → { started: null, portTaken: false } (no way to tell this session's
+// lines from an earlier one's).
+export function bridgeLog(L, sinceMs) {
+  const none = { started: sinceMs === null ? null : false, portTaken: false };
+  if (sinceMs === null) return none;
+  let text;
+  try {
+    const fd = fs.openSync(L.bridgeLog, "r");
+    try {
+      const size = fs.fstatSync(fd).size;
+      const len = Math.min(size, 64 * 1024);
+      const buf = Buffer.alloc(len);
+      fs.readSync(fd, buf, 0, len, size - len);
+      text = buf.toString("utf8");
+    } finally {
+      fs.closeSync(fd);
+    }
+  } catch {
+    return none;
+  }
+  let started = false;
+  let portTaken = false;
+  for (const l of text.split("\n")) {
+    const m = /^(\d{4}-\d\d-\d\dT[\d:.]+Z) (.*)$/.exec(l);
+    if (!m || Date.parse(m[1]) < sinceMs) continue;
+    if (m[2].startsWith("start: ")) {
+      started = true;
+      portTaken = false;
+    } else if (m[2].startsWith("listening on ")) portTaken = false;
+    else if (m[2].startsWith("server error: ") && /is taken/.test(m[2])) portTaken = true;
+  }
+  return { started, portTaken };
+}
+
+// The /health reply → "ours" (answered), "ours_refused" (our bridge, but it refused this token),
+// "foreign" (something else answered on the port), "nobody" (nothing listening, or no config) or
+// "no_reply" (connected, no answer in time).
+export function classifyHealth(h) {
+  if (h.status === 200 && h.json && h.json.ok === true) return "ours";
+  if ((h.status === 401 || h.status === 403) && h.json && h.json.ok === false) return "ours_refused";
+  if (h.status !== undefined) return "foreign";
+  if (h.error === "ECONNREFUSED" || h.error === "no_config") return "nobody";
+  return "no_reply";
+}
+
 function manifestVersion(file) {
   try {
     const m = /ExtensionBundleVersion="([^"]+)"/.exec(fs.readFileSync(file, "utf8"));
@@ -222,11 +270,15 @@ export async function runChecks(opts) {
   const release = readJson(path.join(L.current, "release.json"));
   const version = release && parseVersion(release.version) ? release.version : null;
 
-  const [macos, ae, open] = await Promise.all([
+  const [macos, ae, open, procs] = await Promise.all([
     by(deadline, macosVersion(toolArgs), null),
     by(deadline, findAE({ dirs: opts.dirs || appDirs(L.home), ...toolArgs }), []),
     by(deadline, aeRunning(toolArgs), false),
+    by(deadline, aeProcesses(toolArgs), []),
   ]);
+  // When the AE that's open started: the oldest, if several are (null if unknown).
+  const uptimes = procs.map((p) => p.uptimeS).filter((u) => Number.isFinite(u));
+  const aeSince = uptimes.length ? Date.now() - Math.max(...uptimes) * 1000 : null;
   const aeVersions = ae.map((a) => a.version);
   const lines = {};
 
@@ -258,10 +310,14 @@ export async function runChecks(opts) {
     const cfg = bridgeConfig(L);
     const t = opts.bridgeTimeoutMs || 3000;
     const health = cfg ? await by(deadline, bridgeCall({ ...cfg, timeoutMs: t }), { error: "timeout" }) : { error: "no_config" };
-    answered = health.status === 200 && health.json && health.json.ok === true;
-    lines.bridge_answers = answered
-      ? line("bridge_answers", "working", TEXT.bridge_answers.working)
-      : line("bridge_answers", "not_working", TEXT.bridge_answers.not_working.text, TEXT.bridge_answers.not_working.fix);
+    const kind = classifyHealth(health);
+    answered = kind === "ours";
+    const log = bridgeLog(L, aeSince);
+    const portTaken = kind === "foreign" || ((kind === "nobody" || kind === "no_reply") && log.portTaken);
+    const ba = TEXT.bridge_answers;
+    if (answered) lines.bridge_answers = line("bridge_answers", "working", ba.working);
+    else if (portTaken) lines.bridge_answers = line("bridge_answers", "not_working", ba.port_taken.text, ba.port_taken.fix);
+    else lines.bridge_answers = line("bridge_answers", "not_working", ba.not_working.text, ba.not_working.fix);
 
     if (!answered) {
       lines.ae_scripting = line("ae_scripting", "not_checked", TEXT.ae_scripting.no_bridge.text, TEXT.ae_scripting.no_bridge.fix);

@@ -30,9 +30,12 @@ async function fakeBridge(t, L, o = {}) {
         res.end(JSON.stringify(obj));
       };
       if (o.hang) return;
+      // Another program holding the bridge's port: it answers, but not as the bridge would.
+      if (o.foreign === "html") return res.writeHead(200, { "Content-Type": "text/html" }), res.end("<html>hello</html>");
+      if (o.foreign === "json") return send(404, { error: "no such route" });
       if (req.headers.authorization !== `Bearer ${TOKEN}`) return send(401, { ok: false, error: "bad token" });
       if (!/^127\.0\.0\.1:\d+$/.test(req.headers.host)) return send(403, { ok: false });
-      if (req.method === "GET" && req.url === "/health") return send(200, { ok: true, bridge: "1.1.0" });
+      if (req.method === "GET" && req.url === "/health") return send(200, { ok: true, bridge: "1.1.0", app: "aftereffects", appVersion: o.appVersion || "26.5.0" });
       if (req.method === "POST" && req.url === "/run") {
         const b = JSON.parse(body);
         if (b.code !== SCRIPTING_SCRIPT) return send(200, { ok: false, error: "unexpected script" });
@@ -42,8 +45,11 @@ async function fakeBridge(t, L, o = {}) {
     });
   });
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
-  t.after(() => server.close());
-  write(path.dirname(L.bridgeConfig), "bridge.json", JSON.stringify({ token: o.wrongToken ? "0".repeat(64) : TOKEN, port: server.address().port }));
+  const port = server.address().port;
+  // Nothing listening: the bridge's port, with the server gone.
+  if (o.refused) await new Promise((r) => server.close(r));
+  else t.after(() => server.close());
+  write(path.dirname(L.bridgeConfig), "bridge.json", JSON.stringify({ token: o.wrongToken ? "0".repeat(64) : TOKEN, port }));
   return seen;
 }
 
@@ -64,11 +70,30 @@ async function setup(t, o = {}) {
   state.aeOpen = o.aeOpen !== false;
   state.macos = o.macos || "27.0.1";
   if (o.stamp !== false) write(L.learner, "panel-loaded.json", JSON.stringify({ version: o.stamp || "0.1.0", at: "2026-11-09T12:00:00.000Z" }));
+  // The AE that's open: the newest installed unless the test says (null: process not identified).
+  const openAe = o.openAe === undefined ? (o.ae || ["26.5"]).slice().sort().pop() : o.openAe;
+  if (openAe) state.aeApps = [appPath(apps, openAe)];
+  if (o.aeUptime !== undefined) state.aeUptime = o.aeUptime;
+  if (o.log) writeLog(L, o.log);
   const seen = o.noBridge ? [] : await fakeBridge(t, L, o);
   const keyCheck = o.keyCheck || (async () => o.key || "works");
   const check = (extra = {}) => setupCheck({ home, run, dirs: [apps], keyCheck, json: true, ...extra });
   return { sandbox, home, L, run, apps, seen, check, state };
 }
+
+// The .app path makeApps made for an AE version.
+const appPath = (apps, v) => {
+  const year = 2000 + Number(v.split(".")[0]);
+  return path.join(apps, `Adobe After Effects ${year}`, `Adobe After Effects ${year}.app`);
+};
+
+// The bridge's own log, as host.js writes it: [seconds ago, message].
+function writeLog(L, entries) {
+  const text = entries.map(([ago, msg]) => `${new Date(Date.now() - ago * 1000).toISOString()} ${msg}\n`).join("");
+  write(path.dirname(L.bridgeConfig), "host.log", text);
+}
+const LOG_START = "start: bridge 1.1.0, aftereffects 26.5.0, node v16, extension /Users/someone/x";
+const LOG_TAKEN = "server error: Port 47671 is taken, probably by another open copy of After Effects.";
 
 const byId = (result) => Object.fromEntries(result.checks.map((c) => [c.id, c]));
 
@@ -304,4 +329,34 @@ test("the closing line matches the worst state: broken, then needs AE, then not 
   assert.equal(last(mk("working", "not_checked", "needs_ae", "not_working")), TEXT.tail.fix);
   assert.equal(last(mk("working", "not_checked", "needs_ae")), TEXT.tail.open_ae);
   assert.equal(last(mk("working", "not_checked")), TEXT.tail.later);
+});
+
+// T023: the bridge's port taken by another program (edge case; SC-003 "bridge port taken").
+test("another program answering on the bridge's port is named, with a fix", async (t) => {
+  for (const foreign of ["html", "json"]) {
+    const l = byId((await (await setup(t, { foreign })).check()).result);
+    assert.equal(l.bridge_answers.state, "not_working", foreign);
+    assert.equal(l.bridge_answers.text, TEXT.bridge_answers.port_taken.text, foreign);
+    assert.equal(l.bridge_answers.fix, TEXT.bridge_answers.port_taken.fix);
+    assert.equal(l.ae_scripting.state, "not_checked", "scripting waits for the bridge");
+    assert.equal(l.cep_can_load.state, "working", "the port isn't a loading problem");
+  }
+  assert.match(TEXT.bridge_answers.port_taken.text, /something else is using Knack's connection to After Effects/i);
+});
+
+test("the bridge's log saying the port was taken since AE started names it, even when nothing answers now", async (t) => {
+  for (const o of [{ refused: true }, { hang: true }]) {
+    const s = await setup(t, { ...o, aeUptime: 300, log: [[250, LOG_START], [249, LOG_TAKEN]] });
+    const l = byId((await s.check({ bridgeTimeoutMs: 500 })).result);
+    assert.equal(l.bridge_answers.text, TEXT.bridge_answers.port_taken.text, JSON.stringify(o));
+  }
+});
+
+test("a port taken in an earlier AE session, or our own bridge refusing an old token, isn't called taken", async (t) => {
+  const old = byId((await (await setup(t, { refused: true, aeUptime: 300, log: [[900, LOG_START], [899, LOG_TAKEN]] })).check()).result);
+  assert.equal(old.bridge_answers.text, TEXT.bridge_answers.not_working.text);
+  const token = byId((await (await setup(t, { wrongToken: true })).check()).result);
+  assert.equal(token.bridge_answers.text, TEXT.bridge_answers.not_working.text);
+  const later = byId((await (await setup(t, { aeUptime: 300, log: [[250, LOG_START], [249, LOG_TAKEN], [100, "listening on 127.0.0.1:47671"]] })).check()).result);
+  assert.equal(later.bridge_answers.state, "working", "it got the port later");
 });
