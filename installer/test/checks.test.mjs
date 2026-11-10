@@ -271,3 +271,37 @@ test("as a program on a Mac without Knack: exit 1, valid JSON, nothing created",
   assert.ok(!p.stdout.includes(home));
   assert.ok(execFileSync);
 });
+
+// T022: no internet and AE closed (US2 scenario 2, edge case "No internet during install").
+test("no internet with AE closed: AE lines wait for AE, the key is not yet checked, nothing reads as broken", async (t) => {
+  const s = await setup(t, { aeOpen: false, stamp: false, key: "offline" });
+  const r = await s.check();
+  const l = byId(r.result);
+  for (const id of ["bridge_answers", "ae_scripting", "cep_can_load", "panel_loads"]) assert.equal(l[id].state, "needs_ae", id);
+  assert.equal(l.key.state, "not_checked");
+  assert.equal(l.key.text, TEXT.key.offline.text);
+  assert.equal(l.key.fix, TEXT.key.offline.fix);
+  for (const id of ["macos", "ae_version", "ext_bridge", "ext_panel", "record_folder", "record_read", "versions_match"]) assert.equal(l[id].state, "working", id);
+  assert.ok(!r.result.checks.some((c) => c.state === "not_working"), "offline and closed are not faults");
+  assert.equal(r.result.all_working, false);
+  assert.equal(r.code, 1);
+  const text = formatText(r.result).split("\n");
+  assert.equal(text[text.length - 1], TEXT.tail.open_ae);
+});
+
+test("a key check with no answer in time reads as not yet checked, with the connection as the fix", async (t) => {
+  const s = await setup(t, { keyCheck: () => new Promise(() => {}) });
+  const k = byId((await s.check({ budgetMs: 1200 })).result).key;
+  assert.equal(k.state, "not_checked");
+  assert.equal(k.text, TEXT.key.timeout.text);
+  assert.match(k.fix, /internet connection/);
+});
+
+test("the closing line matches the worst state: broken, then needs AE, then not yet checked", () => {
+  const mk = (...states) => ({ version: "0.1.0", channel: "release", all_working: states.every((x) => x === "working"), checks: states.map((state, i) => ({ id: IDS[i], state, text: "T.", fix: state === "working" ? null : "F." })) });
+  const last = (r) => formatText(r).split("\n").pop();
+  assert.equal(last(mk("working", "working")), TEXT.tail.done);
+  assert.equal(last(mk("working", "not_checked", "needs_ae", "not_working")), TEXT.tail.fix);
+  assert.equal(last(mk("working", "not_checked", "needs_ae")), TEXT.tail.open_ae);
+  assert.equal(last(mk("working", "not_checked")), TEXT.tail.later);
+});

@@ -62,7 +62,6 @@ const AGAIN = "Open the Knack installer again.";
 
 export const TEXT = Object.freeze({
   needs_ae: "Open After Effects to check this.",
-  timeout: { text: "This took too long to check.", fix: "Check again in a minute." },
   macos: {
     working: (v) => `macOS ${v} is supported.`,
     not_working: { text: "This version of macOS is older than Knack supports.", fix: "Update macOS, then check again." },
@@ -106,6 +105,8 @@ export const TEXT = Object.freeze({
     offline: { state: "not_checked", text: "Your access key is not yet checked, because Knack couldn't reach the service.", fix: "Check your internet connection, then check again." },
     no_key: { state: "not_working", text: "No access key is saved yet.", fix: "When you're online, open the Knack installer again and add your key." },
     unknown: { state: "not_checked", text: "Knack couldn't check your access key just now.", fix: "Check again in a minute." },
+    // No answer within the check's time: most often no internet, so it's not yet checked, not broken (T022).
+    timeout: { state: "not_checked", text: "Knack couldn't reach the service in time to check your access key.", fix: "Check your internet connection, then check again." },
   },
   record_folder: {
     working: "Knack can save your lesson history.",
@@ -122,6 +123,13 @@ export const TEXT = Object.freeze({
     not_installed: { text: "Knack isn't installed completely.", fix: AGAIN },
     mixed: { text: "Some parts of Knack are from different versions.", fix: AGAIN },
     stale_panel: { text: "After Effects still has the earlier Knack open.", fix: "Quit After Effects and open it again, then check again." },
+  },
+  // The closing line, by the worst state in the result (T022: AE closed or no internet isn't broken).
+  tail: {
+    done: "Everything is working.",
+    fix: "Fix the lines above, then check again.",
+    open_ae: "Nothing looks broken. Open After Effects, then check again.",
+    later: "Nothing looks broken. Follow the lines above, then check again.",
   },
 });
 
@@ -323,11 +331,8 @@ export async function runChecks(opts) {
   else lines.versions_match = line("versions_match", "working", vm.working(version));
 
   const status = await keyPromise;
-  if (status === "timeout") lines.key = line("key", "not_checked", TEXT.timeout.text, TEXT.timeout.fix);
-  else {
-    const k = TEXT.key[status] || TEXT.key.unknown;
-    lines.key = line("key", k.state, k.text, k.fix);
-  }
+  const k = TEXT.key[status] || TEXT.key.unknown;
+  lines.key = line("key", k.state, k.text, k.fix);
 
   const checks = IDS.map((id) => lines[id]);
   return {
@@ -352,10 +357,17 @@ function defaultKeyCheck(L, timeoutMs) {
 
 const LABEL = { working: "Working", not_working: "Not working", needs_ae: "Needs After Effects", not_checked: "Not checked yet" };
 
+export function closingLine(result) {
+  const has = (state) => result.checks.some((c) => c.state === state);
+  if (result.all_working) return TEXT.tail.done;
+  if (has("not_working")) return TEXT.tail.fix;
+  return has("needs_ae") ? TEXT.tail.open_ae : TEXT.tail.later;
+}
+
 // The result as plain lines for the installer's last screen.
 export function formatText(result) {
   const head = result.version ? `Knack ${result.version}${result.channel === "test" ? " (test build)" : ""}` : "Knack";
   const body = result.checks.map((c) => `${LABEL[c.state]}: ${c.text}${c.fix ? ` ${c.fix}` : ""}`);
-  const tail = result.all_working ? "Everything is working." : "Fix the lines above, then check again.";
+  const tail = closingLine(result);
   return [head, "", ...body, "", tail].join("\n");
 }

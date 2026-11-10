@@ -70,15 +70,37 @@ export function makeApps(t, versions = ["26.5"]) {
   return d;
 }
 
-// A recording runner: sw_vers and pgrep are faked; everything else runs for real.
-// state: { macos, aeOpen } (changeable during a test).
+// A recording runner: sw_vers, pgrep, ps and profiles are faked; everything else runs for real.
+// state: { macos, aeOpen, aeApps (paths of the running .app, for pgrep -lf), aeUptime (seconds),
+// managed } (changeable during a test).
 export function makeRun(state = {}) {
   const calls = [];
   const fn = async (cmd, args = [], opts = {}) => {
     calls.push({ cmd, args: [...args], env: opts.env ? { ...opts.env } : undefined, input: opts.input, cwd: opts.cwd });
-    if (cmd === TOOLS.sw_vers) return { code: 0, stdout: (state.macos || "27.0.1") + "\n", stderr: "" };
-    if (cmd === TOOLS.pgrep) return { code: state.aeOpen ? 0 : 1, stdout: state.aeOpen ? "123\n" : "", stderr: "" };
     if (state.fake && state.fake[cmd]) return state.fake[cmd](args, opts);
+    if (cmd === TOOLS.sw_vers) return { code: 0, stdout: (state.macos || "27.0.1") + "\n", stderr: "" };
+    if (cmd === TOOLS.pgrep) {
+      if (!state.aeOpen) return { code: 1, stdout: "", stderr: "" };
+      if (args[0] !== "-lf") return { code: 0, stdout: "123\n", stderr: "" };
+      const apps = state.aeApps || [];
+      const lines = apps.map((a, i) => `${200 + i} ${a}/Contents/MacOS/After Effects`);
+      for (const a of apps) lines.push(`${300} ${a}/Contents/MacOS/crashpad_handler --database=/Users/someone/x`);
+      return { code: 0, stdout: (lines.length ? lines.join("\n") : "123") + "\n", stderr: "" };
+    }
+    if (cmd === TOOLS.ps) {
+      const s = state.aeUptime === undefined ? 600 : state.aeUptime;
+      const mm = String(Math.floor(s / 60) % 60).padStart(2, "0");
+      const ss = String(s % 60).padStart(2, "0");
+      const hh = Math.floor(s / 3600);
+      return { code: 0, stdout: `${hh ? `${String(hh).padStart(2, "0")}:` : ""}${mm}:${ss}\n`, stderr: "" };
+    }
+    if (cmd === TOOLS.profiles) {
+      return { code: 0, stdout: `Enrolled via DEP: No\nMDM enrollment: ${state.managed ? "Yes (User Approved)" : "No"}\n`, stderr: "" };
+    }
+    if (cmd === TOOLS.pbcopy) {
+      state.clipboard = opts.input;
+      return { code: 0, stdout: "", stderr: "" };
+    }
     return realRun(cmd, args, opts);
   };
   fn.calls = calls;
