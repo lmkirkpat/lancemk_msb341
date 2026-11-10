@@ -67,7 +67,7 @@ the eval engineer, not its builder (constitution VI).
 - [ ] T017 [US1] BL AE · Run 1, on test account 1 (standard user, Apple silicon), per quickstart §2. Note any Keychain dialog. Copy `last-check.json` to `/Users/Shared`. Pass: `all_working: true`.
 - [ ] T018 [US1] BL AE · Run 2, on a new admin account, the same way. Use Intel for this or T019 if an Intel Mac is available.
 - [ ] T019 [US1] BL AE · Run 3, on a new standard account, the same way.
-- [ ] T020 Cockpit · Check the three results, log them and any finding in `discovery/usage-notes/installer-sc002.md`, tick SC-002 in `sprints/sprint-4-plan.md`, noting what's still unproven (quickstart §3) and whether Intel was run.
+- [ ] T020 Cockpit · Check the three results, log them and any finding in `discovery/usage-notes/installer-sc002.md`, tick SC-002 in `sprints/sprint-4-plan.md`, noting what's still unproven (quickstart §3) and whether Intel was run. With no Intel Mac (the builder has none, 2026-11-09), also run a Rosetta stand-in on the builder's account: the install keeps only the Mac's own Node, so unzip the staged zip's `node/node-x64.zip` to a temp folder, confirm `file` says x86_64, and under `arch -x86_64` with no inherited environment and a temp home repeat T016's smoke test (that Node starts the helper, the helper starts `ae-mentor`, and the tool list matches the repo's). Log it as a partial check: it proves the x64 binary and the helper run, not which Node an Intel install picks or how Intel AE talks to the bridge.
 - [ ] T021 [US1] BL AE $ · Optional, about $0.40: on the last account, press Start lesson and read the mentor's opening. SC-002 doesn't require it, but it's the first sign SC-006 can pass.
 
 **Stop here for sprint 4.**
