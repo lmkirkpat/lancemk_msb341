@@ -3,7 +3,7 @@
 "use strict";
 
 const { COPY } = require("../copy.js");
-const { has, arr, secs, nameOf, splitLabel, intoSections, PAIRS, header, sentences } = require("./shared.js");
+const { has, arr, secs, tidyTimes, nameOf, splitLabel, intoSections, PAIRS, header, sentences } = require("./shared.js");
 
 const W = COPY.check.speed_graph;
 const MISTAKES = {
@@ -29,7 +29,7 @@ function check(result, opts, makeRow) {
     return { section, row: makeRow({ key: p.id || name || subject, family, subject, word, detail: typeof p.dimension === "string" ? p.dimension : null }) };
   });
   for (const label of arr(opts && opts.landing_hard)) {
-    entries.push({ section: W.land_hard, row: makeRow({ key: `hard/${label}`, family: "none", subject: String(label), word: W.your_call, quiet: true }) });
+    entries.push({ section: W.land_hard, row: makeRow({ key: `hard/${label}`, family: "none", subject: tidyTimes(String(label)), word: W.your_call, quiet: true }) });
   }
   const mine = pairs.filter((p) => p.credit !== "demo");
   const shaped = mine.filter((p) => p.result === "passed" && p.credit !== "unknown").length;
