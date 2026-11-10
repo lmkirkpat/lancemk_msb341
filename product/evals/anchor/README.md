@@ -660,3 +660,23 @@ was overloaded (load 48, memory nearly full), all 11 passing on re-run, so 49/51
 Cases 20 and 46 failed 3/3 on both runtimes: the new rule read a moved group pivot (`unchanged_shape`) as
 "nothing changed" (20), and the mentor made the watch offer 6 of 6 against a rule saying not to (46). Fixed in
 `c2d5f8d` by leaving `unchanged_shape` out of the rule and allowing the offer.
+
+### A re-run on settings `3acbda26` (2026-11-09, at `f5d6ab9`)
+
+After spec 013 T044 (saved conversation) moved the helper's settings hash; no lesson code changed. `claude-opus-5-5`, effort `medium`, prompt hash `b0cb025c`.
+**Full run: `results/2026-11-09-225329.json`, 57/59 (97%), $3.63 mentor credit, $9.04 judge, 0 turns of unknown cost.**
+B1 baseline compared: `2026-11-09-175705.json`, 56/59 (95%); A is 1.7 points above.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. |
+| (b) at least 80% | Met. 97%. |
+| (c) no more than 5 points below B1 | Met. |
+| (d) failures re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 04-neighbouring-place | judge (plumbing) | 2/3 (`-234907`) |
+| 50-button-show-me-again | R-ONE-IDEA | 3/3 (`-235142`) |
+
+**Verdict: meets FR-033 on A.** Case 04 was a cut-off judge reply (plumbing).

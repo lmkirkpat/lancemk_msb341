@@ -285,3 +285,27 @@ Case 24's turn 1 timed out with 1 request and $0 reported. The helper discarded 
 After the helper's stall guard and error kinds (T068). **A baseline (T053) is now `results/2026-11-06-165707.json`:
 27/28, level with B1, $2.13 mentor credit, 0 timeouts** (load up to 14). The one miss, case 03 (R-ONE-IDEA), passed 2/3
 on repeat. No stall happened, so the guard wasn't exercised.
+
+### A re-run on settings `3acbda26` (2026-11-09, at `f5d6ab9`)
+
+After spec 013 T044 (saved conversation) moved the helper's settings hash; no lesson code changed. `claude-opus-5-5`, effort `medium`, prompt hash `554fe3f9`.
+**Full run: `results/2026-11-09-225305.json`, 27/33 (82%), $2.63 mentor credit, $3.43 judge, 0 turns of unknown cost.**
+B1 baseline compared: `2026-10-29-142512.json`, 27/28 (96%); A is 14.6 points below.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. |
+| (b) at least 80% | Met. 82%. |
+| (c) no more than 5 points below B1 | Not met on the full run. |
+| (d) failures re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 02-explanation | R-NAMES-LAYERS | 3/3 (`-233748`) |
+| 03-show-me | R-ONE-IDEA | 3/3 (`-233917`) |
+| 16-stop-early | R-RECORD-HONEST | 3/3 (`-234055`) |
+| 22-half-eased-why-mechanical | R-HALF-EASED | 3/3 (`-234237`) |
+| 26-matte-eye-off | R-MATTE-NOT-HIDDEN | 3/3 (`-234347`) |
+| 32-why-mechanical-before-focus | R-NAMES-LAYERS | 2/3 (`-234458`) |
+
+**Verdict: open.** Every failure passes on repeat (no majority failure), but (c) misses on the full run. Builder to decide: a second full run (as on 11-04) or accept in writing.

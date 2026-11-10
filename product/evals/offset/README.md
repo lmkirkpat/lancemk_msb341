@@ -414,3 +414,27 @@ on the first tester's commit (SC-003).
 ## Universal `no_slash_command` (2026-11-09)
 
 Added to the runner. Re-scoring the saved transcripts (no model runs) shows **case 20 `easing-not-learned` would now fail**: `offset-mentor/SKILL.md` ~line 104 tells the mentor to offer `/ease-mentor`, and 15 stored runs do (for example, the passing `2026-11-04-210521.json` run 1: "type **/ease-mentor**"). It stays failing until `SKILL.md` offers the easing lesson without the command. Key types has the same line (~81), with no hits in the stored runs.
+
+### A re-run on settings `3acbda26` (2026-11-09, at `f5d6ab9`)
+
+After spec 013 T044 (saved conversation) moved the helper's settings hash; no lesson code changed. `claude-opus-5-5`, effort `medium`, prompt hash `c616843f`.
+**Full run: `results/2026-11-09-234532.json`, 37/43 (86%), $3.1 mentor credit, $5.18 judge, 0 turns of unknown cost.**
+B1 baseline compared: `2026-10-29-144419.json`, 33/37 (89%); A is 3.1 points below.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Not on the full run: 07-floor-60fps, 34-member-single-and-expression-keys-moved (see repeats). |
+| (b) at least 80% | Met. 86%. |
+| (c) no more than 5 points below B1 | Met. |
+| (d) failures re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 07-floor-60fps | say:no_number | 1/3 (`-234624`) |
+| 13-order-differs | R-OFF-ORDER | not re-run |
+| 18-due-review-nothing-new-opens-lesson | R-OR1-LESSON | 1/3 (`-234610`) |
+| 28-passed-stated-gap-differs | R-OF-GAP-MEASURED | 3/3 (`-234707`) |
+| 34-member-single-and-expression-keys-moved | say:names_other_change | 3/3 (`-234714`) |
+| 41-button-show-me-again | R-SHOW-ME-AGAIN | not re-run |
+
+**Verdict: open.** Two majority failures to fix or accept: **07** 1/3 (`say:no_number`, "60 frames" said aloud) and **18** 1/3 (R-OR1-LESSON: points to "Mentor Practice 2", a comp in no tool result, an invented target). Cases 13 and 41 failed on B1 too, so not re-run.

@@ -367,3 +367,22 @@ Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed duri
 **Note (2026-11-06):** this set's A record was measured with helper settings `20bff077e6af`. The helper has
 changed since (T068's stall guard and error kinds, now `0d5cda88ea83`), with request bodies unchanged. Re-run on A
 on the first tester's commit (SC-003).
+
+### A re-run on settings `3acbda26` (2026-11-09, at `f5d6ab9`)
+
+After spec 013 T044 (saved conversation) moved the helper's settings hash; no lesson code changed. `claude-opus-5-5`, effort `medium`, prompt hash `b6cab4bd`.
+**Full run: `results/2026-11-09-232716.json`, 36/37 (97%), $1.94 mentor credit, $4.47 judge, 0 turns of unknown cost.**
+B1 baseline compared: `2026-11-09-173733.json`, 34/37 (92%); A is 5.4 points above.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Not on the full run: 30-button-check-partial (see repeats). |
+| (b) at least 80% | Met. 97%. |
+| (c) no more than 5 points below B1 | Met. |
+| (d) failures re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 30-button-check-partial | tools_called, last_check, say:names_scale | 0/3 (`-235318`) |
+
+**Verdict: open.** Case 30 fails 0/3 on A (R-ONE-IDEA: a turn adds a lesson on the shared key's two handles, the same pattern as case 04 earlier). It passed on B1, so it is a majority failure to fix in `SKILL.md` or accept in writing.

@@ -207,7 +207,7 @@ a brand new session act like a colleague who already knows what you are working 
      `discovery/usage-notes/api-runtime.md`; the third was a review, so two ran with a demo). T048 passed the same day
      (SC-002 18/18, median 2.4 s against B1's 1.7 s; SC-004 median $0.22; R8 no gap over 5 min; helper start 0.15 s).
      T045 passed 2026-11-09 (SC-007; a close during a demo ended the lesson, fixed `151c64f`, panel tests 628/628,
-     then re-run clean). **Next:** the A eval re-runs on the new settings hash (`3acbda26`), on the builder's go. T046 and T047 merged 2026-11-09 (`94cb8f0`, panel tests 621/621): the turn log records the
+     then re-run clean). **A re-runs on `3acbda26` (2026-11-09, at `f5d6ab9`, about $16 credit):** pivot 57/59 and key types 34/36 meet FR-033; easing 27/33 (every failure passed on repeat, but 15 points under B1 on the full run), speed graph 36/37 (case 30 0/3, R-ONE-IDEA) and offset 37/43 (07 and 18 1/3) are open for a fix or the builder's written acceptance (each set's README). **Null is held for the morning.** T046 and T047 merged 2026-11-09 (`94cb8f0`, panel tests 621/621): the turn log records the
      runtime, tokens and `start_ms`, and `node panel/dev/turns.js` reports per runtime (`--last N`); its `at` is
      the send time. Lines before the merge have no runtime and show as B1. T068's cause is still open.
   4. **Saved conversation (2026-11-09):** T043 (`panel/helper/lib/conversation.mjs`, 51 tests) and T056 (the

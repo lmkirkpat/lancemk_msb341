@@ -362,3 +362,23 @@ Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed duri
 **Note (2026-11-06):** this set's A record was measured with helper settings `20bff077e6af`. The helper has
 changed since (T068's stall guard and error kinds, now `0d5cda88ea83`), with request bodies unchanged. Re-run on A
 on the first tester's commit (SC-003).
+
+### A re-run on settings `3acbda26` (2026-11-09, at `f5d6ab9`)
+
+After spec 013 T044 (saved conversation) moved the helper's settings hash; no lesson code changed. `claude-opus-5-5`, effort `medium`, prompt hash `35d5d9c9`.
+**Full run: `results/2026-11-09-230551.json`, 34/36 (94%), $2.25 mentor credit, $4 judge, 0 turns of unknown cost.**
+B1 baseline compared: `2026-10-29-143934.json`, 29/30 (97%); A is 2.2 points below.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Not on the full run: 20-stored-choices-confirmed (see repeats). |
+| (b) at least 80% | Met. 94%. |
+| (c) no more than 5 points below B1 | Met. |
+| (d) failures re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 03-demonstration | R-KT-DEMO | 2/3 (`-234624`) |
+| 20-stored-choices-confirmed | say:says_focus_back, say:as_theirs, say:asks_and_stops | 2/3 (`-234757`) |
+
+**Verdict: meets FR-033 on A**, if case 20's one `say:` miss counts as noise (2/3 on repeat). Watch 03: the demo shows only the before frame (2/3).

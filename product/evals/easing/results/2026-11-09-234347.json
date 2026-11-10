@@ -1,0 +1,249 @@
+{
+  "run_at": "2026-11-10T06:43:47.381Z",
+  "options": {
+    "only": "26",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.51,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "26-matte-eye-off",
+      "title": "A moving track matte with its eye off is taught like any layer, not called hidden",
+      "covers": [
+        "spec 004 cross-skill 3",
+        "KD-001",
+        "SC-011"
+      ],
+      "hash": "e6809158887c23bafde8c6485163b8adbfb5fa899988b6255095c61084389395",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "set_ease_max",
+              "pass": true,
+              "detail": "0 successful set_ease"
+            },
+            {
+              "check": "targets_include",
+              "pass": true,
+              "detail": "all in targets"
+            },
+            {
+              "check": "never_said_near",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-MATTE-NOT-HIDDEN",
+              "pass": true,
+              "reason": "Wipe is never called hidden, off or left out: the opening lists only Rig and Draft as hidden, and Turn 2 teaches Wipe like any other layer (\"From 0.6 s to 1.6 s Wipe's Position moves at one speed the whole way… Ease Wipe's Position move from 0.6 s to 1.6 s and say done\")."
+            }
+          ],
+          "cost": 0.1683754,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is fixture \"matte\"\nLEARNER: /ease-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {},\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-NEeiT4/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL snapshot_project {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Overlaps\",\n    \"duration\": 6\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Wipe\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.6,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"Y Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_1/1\",\n          \"display_path\": \"Transform › Y Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 1\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Rig\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Shy Parent\",\n      \"property\": \"Rotation\",\n      \"segments\": [\n        {\n          \"id\": \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n          \"display_path\": \"Transform › Rotation\",\n          \"from_time\": 0,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Arm\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Draft\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"14/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 2.5,\n          \"to_time\": 3.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Icon Remap\",\n      \"property\": \"Time Remap\",\n      \"segments\": [\n        {\n          \"id\": \"16/ADBE Time Remapping/1\",\n          \"display_path\": \"Time Remap\",\n          \"from_time\": 0,\n          \"to_time\": 8,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Orbit\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Gauge Dial\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Rig\",\n    \"Draft\"\n  ],\n  \"precomp_layers\": [\n    \"Icon Stretch\",\n    \"Icon Remap\"\n  ],\n  \"focus\": null,\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"3/ADBE Transform Group/ADBE Position_0/1\",\n    \"3/ADBE Transform Group/ADBE Position_1/1\",\n    \"4/ADBE Transform Group/ADBE Scale/1\",\n    \"5/ADBE Transform Group/ADBE Position/1\",\n    \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n    \"9/ADBE Transform Group/ADBE Position/1\",\n    \"9/ADBE Transform Group/ADBE Position/2\",\n    \"14/ADBE Transform Group/ADBE Position/1\",\n    \"16/ADBE Time Remapping/1\",\n    \"19/ADBE Transform Group/ADBE Position/1\",\n    \"19/ADBE Transform Group/ADBE Position/2\"\n  ],\n  \"demo_target\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n  \"no_demo_reason\": null,\n  \"counts\": {\n    \"linear\": 12,\n    \"partly_eased\": 0,\n    \"eased\": 3,\n    \"held\": 0\n  }\n}\nMENTOR: Welcome to your first easing lesson. In Mentor Overlaps I found 12 keyframe pairs across 9 layers that are still linear, meaning they move at one constant speed and stop suddenly.\n\nTo start, I suggest Leaf 2 and Leaf 1. That's three pairs, all between 0 s and 1 s: Leaf 2's X Position and Y Position, and Leaf 1's Scale.\n\nWhat I'm leaving out for now:\n- **Rig and Draft:** you've hidden these, so I'll skip them unless you want them.\n- **Icon Stretch and Icon Remap:** these are precomps, and I can't see inside them yet, so I can't tell you whether they're fine.\n- **Gauge Dial's Rotation:** an expression drives it, so easing its keys wouldn't change its motion.\n\nShall we start with Leaf 2 and Leaf 1, or would you rather pick a different layer?\n\n### Turn 2: the project is fixture \"matte\"\nLEARNER: Let's do Wipe.\nTOOL CALL snapshot_project {\"focus_layers\":[\"Wipe\"]}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Overlaps\",\n    \"duration\": 6\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Wipe\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.6,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"Y Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_1/1\",\n          \"display_path\": \"Transform › Y Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 1\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Rig\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Shy Parent\",\n      \"property\": \"Rotation\",\n      \"segments\": [\n        {\n          \"id\": \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n          \"display_path\": \"Transform › Rotation\",\n          \"from_time\": 0,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Arm\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Draft\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"14/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 2.5,\n          \"to_time\": 3.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Icon Remap\",\n      \"property\": \"Time Remap\",\n      \"segments\": [\n        {\n          \"id\": \"16/ADBE Time Remapping/1\",\n          \"display_path\": \"Time Remap\",\n          \"from_time\": 0,\n          \"to_time\": 8,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Orbit\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Gauge Dial\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Rig\",\n    \"Draft\"\n  ],\n  \"precomp_layers\": [\n    \"Icon Stretch\",\n    \"Icon Remap\"\n  ],\n  \"focus\": [\n    \"Wipe\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\"\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_pair\",\n  \"counts\": {\n    \"linear\": 12,\n    \"partly_eased\": 0,\n    \"eased\": 3,\n    \"held\": 0\n  }\n}\nTOOL CALL preview_frame {\"time\":1.1,\"layer\":\"Wipe\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Overlaps\",\"time\":1.1,\"layer_bounds_reason\":\"not_rendered\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Wipe it is. This frame is at 1.1 s, in the middle of its move.\n\nFrom 0.6 s to 1.6 s Wipe's Position moves at one speed the whole way, then stops dead at 1.6 s: that's linear, and it's why it looks mechanical. Easing slows it out of each key and into the next.\n\nWipe has just one pair, so if I eased it there'd be nothing left for you to do. With Wipe's keys showing (U), select both keys of a pair and choose **Animation > Keyframe Assistant > Easy Ease** (F9); the diamonds turn into hourglasses.\n\nEase Wipe's Position move from 0.6 s to 1.6 s and say done. If you'd like to watch me ease a pair first, Leaf 2 has a pair I can show you.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0739,
+          "judge_cost_usd": 0.0945,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ease-mentor": "554fe3f9ebb27a5bc6a89ed079acdff8fb13810883f678c9d61cdcfcb9ff7e11"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          }
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "set_ease_max",
+              "pass": true,
+              "detail": "0 successful set_ease"
+            },
+            {
+              "check": "targets_include",
+              "pass": true,
+              "detail": "all in targets"
+            },
+            {
+              "check": "never_said_near",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-MATTE-NOT-HIDDEN",
+              "pass": true,
+              "reason": "Wipe is never called hidden, off or left out, and is never grouped with Rig and Draft (Turn 1's leave-out list names only Rig, Draft, the precomps and Gauge Dial); in Turn 2 it is taught like any layer: \"From 0.6 s to 1.6 s, Wipe's Position moves at one speed the whole way… Ease Wipe's Position move from 0.6 s to 1.6 s and say done.\""
+            }
+          ],
+          "cost": 0.1675278,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is fixture \"matte\"\nLEARNER: /ease-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {},\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-a5TAbq/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL snapshot_project {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Overlaps\",\n    \"duration\": 6\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Wipe\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.6,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"Y Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_1/1\",\n          \"display_path\": \"Transform › Y Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 1\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Rig\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Shy Parent\",\n      \"property\": \"Rotation\",\n      \"segments\": [\n        {\n          \"id\": \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n          \"display_path\": \"Transform › Rotation\",\n          \"from_time\": 0,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Arm\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Draft\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"14/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 2.5,\n          \"to_time\": 3.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Icon Remap\",\n      \"property\": \"Time Remap\",\n      \"segments\": [\n        {\n          \"id\": \"16/ADBE Time Remapping/1\",\n          \"display_path\": \"Time Remap\",\n          \"from_time\": 0,\n          \"to_time\": 8,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Orbit\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Gauge Dial\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Rig\",\n    \"Draft\"\n  ],\n  \"precomp_layers\": [\n    \"Icon Stretch\",\n    \"Icon Remap\"\n  ],\n  \"focus\": null,\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"3/ADBE Transform Group/ADBE Position_0/1\",\n    \"3/ADBE Transform Group/ADBE Position_1/1\",\n    \"4/ADBE Transform Group/ADBE Scale/1\",\n    \"5/ADBE Transform Group/ADBE Position/1\",\n    \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n    \"9/ADBE Transform Group/ADBE Position/1\",\n    \"9/ADBE Transform Group/ADBE Position/2\",\n    \"14/ADBE Transform Group/ADBE Position/1\",\n    \"16/ADBE Time Remapping/1\",\n    \"19/ADBE Transform Group/ADBE Position/1\",\n    \"19/ADBE Transform Group/ADBE Position/2\"\n  ],\n  \"demo_target\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n  \"no_demo_reason\": null,\n  \"counts\": {\n    \"linear\": 12,\n    \"partly_eased\": 0,\n    \"eased\": 3,\n    \"held\": 0\n  }\n}\nMENTOR: This is your first easing lesson. I found 12 linear keyframe pairs across 9 layers in Mentor Overlaps.\n\nI suggest starting with **Leaf 2**. Its X Position and Y Position each move from 0 s to 1 s, and the two are set separately. We could add **Leaf 1**'s Scale from 0 s to 1 s as well.\n\nI'm leaving a few layers out for now:\n- **Rig** and **Draft:** you've hidden these, so I'll skip them unless you want them.\n- **Icon Stretch** and **Icon Remap:** these are precomps. I can't see inside them yet, so I can't tell you whether they're fine.\n- **Gauge Dial:** an expression drives its Rotation, so there are no keyframes there to ease.\n\nShall we start with Leaf 2, plus Leaf 1 if you'd like?\n\n### Turn 2: the project is fixture \"matte\"\nLEARNER: Let's do Wipe.\nTOOL CALL snapshot_project {\"focus_layers\":[\"Wipe\"]}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Overlaps\",\n    \"duration\": 6\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Wipe\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.6,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"Y Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_1/1\",\n          \"display_path\": \"Transform › Y Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 1\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Rig\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Shy Parent\",\n      \"property\": \"Rotation\",\n      \"segments\": [\n        {\n          \"id\": \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n          \"display_path\": \"Transform › Rotation\",\n          \"from_time\": 0,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Arm\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Draft\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"14/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 2.5,\n          \"to_time\": 3.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Icon Remap\",\n      \"property\": \"Time Remap\",\n      \"segments\": [\n        {\n          \"id\": \"16/ADBE Time Remapping/1\",\n          \"display_path\": \"Time Remap\",\n          \"from_time\": 0,\n          \"to_time\": 8,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Orbit\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Gauge Dial\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Rig\",\n    \"Draft\"\n  ],\n  \"precomp_layers\": [\n    \"Icon Stretch\",\n    \"Icon Remap\"\n  ],\n  \"focus\": [\n    \"Wipe\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\"\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_pair\",\n  \"counts\": {\n    \"linear\": 12,\n    \"partly_eased\": 0,\n    \"eased\": 3,\n    \"held\": 0\n  }\n}\nTOOL CALL preview_frame {\"time\":1.1,\"layer\":\"Wipe\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Overlaps\",\"time\":1.1,\"layer_bounds_reason\":\"not_rendered\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: We'll work on Wipe. This frame is at 1.1 s, partway through its move.\n\nFrom 0.6 s to 1.6 s, Wipe's Position moves at one speed the whole way, then stops dead at 1.6 s: that's linear, and it's why it looks mechanical. Easing slows it out of the first key and into the next.\n\nI won't demonstrate on this layer, because it has just one pair: if I eased it, there'd be nothing left for you to do. With Wipe's keys showing (U), select both keys of a pair and choose **Animation > Keyframe Assistant > Easy Ease** (F9); the diamonds turn into hourglasses.\n\nEase Wipe's Position move from 0.6 s to 1.6 s and say done.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0724,
+          "judge_cost_usd": 0.0951,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ease-mentor": "554fe3f9ebb27a5bc6a89ed079acdff8fb13810883f678c9d61cdcfcb9ff7e11"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          }
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "set_ease_max",
+              "pass": true,
+              "detail": "0 successful set_ease"
+            },
+            {
+              "check": "targets_include",
+              "pass": true,
+              "detail": "all in targets"
+            },
+            {
+              "check": "never_said_near",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-MATTE-NOT-HIDDEN",
+              "pass": true,
+              "reason": "Turn 1 lists only Rig and Draft as hidden, and Turn 2 teaches Wipe like any other layer (\"From 0.6 s to 1.6 s Wipe's Position moves at one speed the whole way… Ease Wipe's Position from 0.6 s to 1.6 s and say done\"); it never calls Wipe hidden, off or invisible, even though preview_frame returned layer_bounds_reason \"not_rendered\"."
+            }
+          ],
+          "cost": 0.1731592,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is fixture \"matte\"\nLEARNER: /ease-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {},\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-pTudNK/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL snapshot_project {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Overlaps\",\n    \"duration\": 6\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Wipe\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.6,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"Y Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_1/1\",\n          \"display_path\": \"Transform › Y Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 1\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Rig\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Shy Parent\",\n      \"property\": \"Rotation\",\n      \"segments\": [\n        {\n          \"id\": \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n          \"display_path\": \"Transform › Rotation\",\n          \"from_time\": 0,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Arm\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Draft\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"14/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 2.5,\n          \"to_time\": 3.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Icon Remap\",\n      \"property\": \"Time Remap\",\n      \"segments\": [\n        {\n          \"id\": \"16/ADBE Time Remapping/1\",\n          \"display_path\": \"Time Remap\",\n          \"from_time\": 0,\n          \"to_time\": 8,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Orbit\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Gauge Dial\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Rig\",\n    \"Draft\"\n  ],\n  \"precomp_layers\": [\n    \"Icon Stretch\",\n    \"Icon Remap\"\n  ],\n  \"focus\": null,\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"3/ADBE Transform Group/ADBE Position_0/1\",\n    \"3/ADBE Transform Group/ADBE Position_1/1\",\n    \"4/ADBE Transform Group/ADBE Scale/1\",\n    \"5/ADBE Transform Group/ADBE Position/1\",\n    \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n    \"9/ADBE Transform Group/ADBE Position/1\",\n    \"9/ADBE Transform Group/ADBE Position/2\",\n    \"14/ADBE Transform Group/ADBE Position/1\",\n    \"16/ADBE Time Remapping/1\",\n    \"19/ADBE Transform Group/ADBE Position/1\",\n    \"19/ADBE Transform Group/ADBE Position/2\"\n  ],\n  \"demo_target\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n  \"no_demo_reason\": null,\n  \"counts\": {\n    \"linear\": 12,\n    \"partly_eased\": 0,\n    \"eased\": 3,\n    \"held\": 0\n  }\n}\nMENTOR: This is your first easing lesson. In Mentor Overlaps I found 12 keyframe pairs that move at one constant speed, spread over 9 layers.\n\n**Where I suggest we start:** Leaf 2 and Leaf 1. Leaf 2's X Position and Y Position both run from 0 s to 1 s, and Leaf 1's Scale runs over the same second. That's three pairs, which is a small enough chunk to get the feel of easing.\n\n**What I'm leaving out for now:**\n- **Rig and Draft:** you've hidden these, so I'll leave them alone unless you want them.\n- **Icon Stretch and Icon Remap:** these are precomps, and I can't see inside them yet. That doesn't mean they're fine.\n- **Gauge Dial's Rotation:** it's driven by an expression, so its keys aren't part of this lesson.\n\nShall we start with Leaf 2 and Leaf 1, or would you rather pick another layer?\n\n### Turn 2: the project is fixture \"matte\"\nLEARNER: Let's do Wipe.\nTOOL CALL snapshot_project {\"focus_layers\":[\"Wipe\"]}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Overlaps\",\n    \"duration\": 6\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Wipe\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.6,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 2\",\n      \"property\": \"Y Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position_1/1\",\n          \"display_path\": \"Transform › Y Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Leaf 1\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Rig\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Shy Parent\",\n      \"property\": \"Rotation\",\n      \"segments\": [\n        {\n          \"id\": \"7/ADBE Transform Group/ADBE Rotate Z/1\",\n          \"display_path\": \"Transform › Rotation\",\n          \"from_time\": 0,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Arm\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"9/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Draft\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"14/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 2.5,\n          \"to_time\": 3.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Icon Remap\",\n      \"property\": \"Time Remap\",\n      \"segments\": [\n        {\n          \"id\": \"16/ADBE Time Remapping/1\",\n          \"display_path\": \"Time Remap\",\n          \"from_time\": 0,\n          \"to_time\": 8,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Orbit\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"19/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1,\n          \"to_time\": 2,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Gauge Dial\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Rig\",\n    \"Draft\"\n  ],\n  \"precomp_layers\": [\n    \"Icon Stretch\",\n    \"Icon Remap\"\n  ],\n  \"focus\": [\n    \"Wipe\"\n  ],\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\"\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_pair\",\n  \"counts\": {\n    \"linear\": 12,\n    \"partly_eased\": 0,\n    \"eased\": 3,\n    \"held\": 0\n  }\n}\nTOOL CALL preview_frame {\"time\":1.1,\"layer\":\"Wipe\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Overlaps\",\"time\":1.1,\"layer_bounds_reason\":\"not_rendered\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: We're working on Wipe. Here's your comp at 1.1 s, halfway through Wipe's move.\n\nFrom 0.6 s to 1.6 s Wipe's Position moves at one speed the whole way, then stops dead at 1.6 s: that's linear, and it's why it looks mechanical. Easing makes it slow down as it leaves each key and as it arrives at the next.\n\nWipe has only one pair, so if I eased it there'd be nothing left for you to do. With Wipe's keys showing (U), select both keys of a pair and choose **Animation > Keyframe Assistant > Easy Ease** (F9); the diamonds turn into hourglasses.\n\nEase Wipe's Position from 0.6 s to 1.6 s and say done.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0757,
+          "judge_cost_usd": 0.0974,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ease-mentor": "554fe3f9ebb27a5bc6a89ed079acdff8fb13810883f678c9d61cdcfcb9ff7e11"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          }
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "3acbda26fba303399a29bbf15502c01318a76c32f74767df6204793d3a6eca24",
+  "mentor_cost_usd": 0.22,
+  "judge_cost_usd": 0.29,
+  "non_baseline": false,
+  "prompt_hash": {
+    "ease-mentor": "554fe3f9ebb27a5bc6a89ed079acdff8fb13810883f678c9d61cdcfcb9ff7e11"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-10-29-142512.json",
+    "passed": 27,
+    "total": 28
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}
