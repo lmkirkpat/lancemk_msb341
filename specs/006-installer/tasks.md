@@ -83,7 +83,7 @@ the eval engineer, not its builder (constitution VI).
 - [ ] T024 [P] [US2] PB · CEP loading disabled is named, not a generic missing panel, in `installer/lib/checks.mjs`.
 - [ ] T025 [US2] PB · `installer/lib/fixes.mjs`: **Fix** re-runs one part or creates a missing folder, then re-checks (FR-022). Never touches the learner record.
 - [ ] T026 [US2] PB · `installer/lib/report.mjs`: **Copy report** with versions, commit and results, and no key, name or user path (FR-023).
-- [ ] T027 [US2] EE · Extend `product/evals/installer/scan.mjs` to the installed tree, logs and caches after a full lesson, and to a sample report (SC-007).
+- [x] T027 [US2] EE · Extend `product/evals/installer/scan.mjs` to the installed tree, logs and caches after a full lesson, and to a sample report (SC-007). *2026-11-09: built and tested on fixture trees (`7e2d6c1`); the real run, on an installed account after a full lesson, follows T017 to T019 (command in `product/evals/installer/README.md`).*
 - [ ] T028 [US2] PB · Add Fix and Copy report to `installer/applet/installer.applescript`.
 - [ ] T029 [US2] EE · `product/evals/installer/faults.test.mjs`: every SC-003 fault that can be faked without AE, plus a working install with no false failures.
 - [ ] T030 [US2] BL AE · The faults that need AE. Read every message against FR-022. 11 of 11.
