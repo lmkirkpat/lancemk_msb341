@@ -99,6 +99,19 @@ left unchanged so existing installs and learner records keep working.
 - **If a domain or trademark search** finds a "Knack" mark covering software, education, or
   creative tools, **then** add a qualifier (Knack Studio) or rename before any public launch. Do
   the search before the installer ships to anyone else.
+  - *2026-11-09 (`discovery/name-check-2026-11-09.md`, T046):* **This signal appears to have
+    fired.** The evidence is web and trademark-aggregator snippets, not TSDR. The closest
+    conflict is Knack Technologies' KNACK, a peer-tutoring app for students (classes 9 and 42,
+    including a filing registered 2025-05-27): the same word, the same field (learning help in
+    an app) and the same audience. Others: knack.com (class 42, a no-code app builder, already
+    known); getknack.ai (an agent-skills tool for Claude users, no mark found); a class 41 KNACK
+    mark with unknown goods. A qualifier probably won't clear it: "Knack" is the main word in
+    both names, and "Studio" is generic for creative tools. Knack Studio was considered and not
+    taken. **Builder's call:** keep Knack for now, for the portfolio, the prototype and a few
+    testers the builder knows. Before a public launch or anything paid: check rows 1, 2 and 4
+    in TSDR and get a professional clearance search. If the conflict is confirmed, pick a
+    clearly different name in a new decision that supersedes this one. The other signals still
+    stand.
 - **If target-market interviewees** (the next round, `CLAUDE.md` › Next steps 3) mention knack.com
   or another product when they hear the name, **then** add a qualifier.
 - **If people shown the name and tagline** for five seconds (portfolio readers or interviewees)
