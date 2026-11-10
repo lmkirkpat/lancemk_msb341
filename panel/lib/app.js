@@ -87,6 +87,7 @@ function createApp(deps) {
     list_collapsed: null,
     done_unfolded: false,
     focus_tick: 0,
+    closing: false, // the panel is closing (shutdown): its own stop of the mentor ends nothing
   };
 
   const changed = () => deps.onChange();
@@ -219,7 +220,9 @@ function createApp(deps) {
     a.on("turn_end", live(onTurnEnd));
     a.on("exit", live(() => {
       state.adapter = null;
-      if (state.lesson_open) endLesson(treatError("process_exited", { runtime }));
+      // After shutdown the exit is our own stop, not the mentor going away: the lesson stays
+      // waiting to continue (spec 013 US4 scenario 5; T045's live bug).
+      if (state.lesson_open && !state.closing) endLesson(treatError("process_exited", { runtime }));
       changed();
     }));
   }
@@ -705,6 +708,7 @@ function createApp(deps) {
   }
 
   function shutdown() {
+    state.closing = true;
     persist();
     if (state.adapter) state.adapter.stop();
   }
