@@ -131,8 +131,8 @@ a brand new session act like a colleague who already knows what you are working 
     `discovery/usage-notes/ui-overhaul.md`. SC-002's live half is met (16 checks, all matching AE, and Proposed
     openings 3 of 3: easing's miss was a resume of an unfinished lesson, which FR-092 keeps unproposed).
     T062 passed: ten states clean at the default right-side dock (about 343 pt), and SC-010 was amended to that
-    size. Finding: row times show three decimals; fixed on branch `panel-row-times` (`eb2b0e1`, panel tests
-    610/610), not merged: merge between sittings. **Next:** T061 (Find my next lesson, plus `home-first`), T071
+    size. Finding: row times show three decimals; fixed and merged 2026-11-09 (`ef17f39`, panel tests
+    610/610), live at AE's next start. **Next:** T061 (Find my next lesson, plus `home-first`), T071
     (a warm-up, `practice-check` at 260 × 480), T072 (keyboard), T073 (three sessions' notes), then T074 (close);
     EE's T038 and T077; paid T078 and T079 on the builder's go. The four mentor findings from the
     live lessons are fixed (eval cases `d50330a`: speed graph 36 and 37, pivot 54, null 52; `SKILL.md` `ad4a257`),
