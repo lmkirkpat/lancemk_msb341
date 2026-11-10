@@ -246,6 +246,7 @@ most; they ease the rest with their own hands.
     If it returns `RECORD_MISMATCH`, your `result` or `demo_used` didn't match the checks. Fix
     the field it names and record again, without mentioning it to the learner.
     You don't need to announce the save. A short "I've noted that for next time" is enough.
+    Name what comes next in words, never a slash command.
 
 ## Style
 

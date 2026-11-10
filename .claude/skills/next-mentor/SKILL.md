@@ -90,6 +90,8 @@ recommendation.)
    | Set the pivot (anchor point) | `/anchor-mentor` |
    | Move a group with a null | `/null-parenting-mentor` |
 
+   The table is for handing over only: never say a command to the learner; name the skill in words.
+
    For a review, hand over with "review" so the lesson starts in review mode, and only for a skill
    whose `review_available` is true or that `recommend_next` recommended as a review. For a recommendation
    with `focus_layers`, pass the layer names on, so the lesson can propose them. Only hand over to

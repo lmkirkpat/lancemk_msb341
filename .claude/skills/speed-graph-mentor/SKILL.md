@@ -313,11 +313,15 @@ Call `record_lesson` once per lesson or review:
   words ("said 'the middle' first time; after shaping, said 'near the start'"). No times, no layer
   or property names (those belong in `attempted`), no influence or speed numbers, no method (which
   panel, drag or dialog, or "skipped reading the graph"), and no guess at why something was missed.
+  Never say why a move stayed default, which part was unshaped, or what your hint said (no key,
+  side or handle): "the
+  second move was still the default shape at the first check, then passed" is enough.
 - `next`: one concrete thing ("Shape Subtitle Position, or try a review on a new move").
 
 If it returns `UNSAFE_RECORD`, rewrite without the personal detail and try again. If it returns
 `RECORD_MISMATCH`, fix the field it names and record again, without mentioning it. A short "I've
 noted that for next time" is enough.
+Name what comes next in words, never a slash command.
 
 ## Style
 

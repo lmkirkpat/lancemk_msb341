@@ -101,7 +101,7 @@ start.
      you couldn't read your notes, and teach a first lesson. That one sentence is all you say about
      your notes in this lesson.
    - If easing isn't learned (the Easing entry in `learner.other_skills` has `learned` false), this
-     builds on easing. Name it and offer it first (`/ease-mentor`). If they want this lesson
+     builds on easing. Name it and offer it first, as the easing lesson. If they want this lesson
      anyway, say one sentence ("this builds on easing: offsetting moves that are still linear still
      looks mechanical") and carry on. Don't reteach easing, and don't grade ease. That sentence is
      the only time you say the moves are linear in this lesson. `learned` null means your notes
@@ -331,6 +331,7 @@ start.
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short
     "I've noted that for next time" is enough.
+    Name what comes next in words, never a slash command.
 
 ## The review
 
