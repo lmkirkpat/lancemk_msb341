@@ -4,7 +4,7 @@
 doesn't copy it; gaps or contradictions come back as questions. The skill-builder's
 `mentor/curriculum/diagnosis.json` mirrors § 4's anchors ([contracts/catalogue.md](contracts/catalogue.md)),
 and `.claude/skills/diagnose-mentor/SKILL.md` takes its wording from the Pass lines here.
-**Date:** 2026-11-09. **Status:** draft for the cockpit (tasks T001). Spec question 4 answered yes;
+**Date:** 2026-11-09. **Status:** approved 2026-11-09 by the builder (§ 13 H-1 to H-3 as recommended; SW and SB items sent to the spec writer) (tasks T001). Spec question 4 answered yes;
 this file is the answer.
 **Builds on:** spec 005 as amended 2026-11-09 (Amendment, Resolved questions), [plan.md](plan.md),
 [research.md](research.md) R3 to R11, [data-model.md](data-model.md),
@@ -501,12 +501,12 @@ in the hand-back, not edited): § 10's DX-08 row says "4 (trace), then hints; 6 
 
 1. **The first answer's list.** The cockpit's rule is two sentences per turn. The first answer has a
    list of up to three lines plus two sentences (§ 6.1), because three findings with layers and
-   times in two sentences run together. Approve, or ask for prose? **Recommended: approve the list.**
+   times in two sentences run together. Approve, or ask for prose? **Recommended: approve the list.** *Approved 2026-11-09.*
 2. **Asking intent at the end of the first answer.** The first answer ends on the start's own
    "on purpose?" question, not "want to start there?", so US2 › 5 is met without an extra round
-   trip. A learner who wanted to see the rest first can say so. **Guess.**
+   trip. A learner who wanted to see the rest first can say so. **Guess.** *Approved 2026-11-09; watch the first live session for it feeling like a quiz.*
 3. **Frames in a hint** (§ 7.3): one frame at the finding's time, or none? **Recommended: one, as
-   written, and drop it if live sessions show it slows the turn without helping.**
+   written, and drop it if live sessions show it slows the turn without helping.** *Approved 2026-11-09.*
 
 ### For the spec writer (SW)
 

@@ -854,8 +854,12 @@ conflict: name the menu path instead.
 | DX-05 ramp vs hold | 1 | hints |
 | DX-06 expression on keyed property | 4 (trace it); the fix itself waits for deferred 13 | hints; ask what it's for |
 | DX-07 dead time | none (a comp-length decision, not a skill) | hints |
-| DX-08 own motion over parent's | 4 (trace), then hints; 6 if they want a null | hints |
+| DX-08 own motion over parent's | 4 (trace), then hints | hints |
 | DX-09 motion blur off | none (a switch) | hints |
+
+*Amended 2026-11-09 (builder approved; spec 005 teaching design § 12):* DX-08 no longer offers skill 6.
+Every DX-08 child already has a parent, and skill 6's focus leaves parented layers out, so the
+hand-over would land on a lesson that refuses its layers. `path.json` is unchanged.
 
 ## 11. Teaching scope for the whole curriculum
 
