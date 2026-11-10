@@ -265,7 +265,10 @@ at most; they add the null, place it, parent the rest and give it its move with 
      null), suggest it as `next` after this one.
    - `region_needed`: the move turns or scales, so ask where the group should turn or scale from,
      and check again with `region`. If step 3's pivot sentence hasn't been said this lesson, say it
-     with this question.
+     with this question. Ask about a part of the group, never about the null's corner or where the
+     null sits: "Which part of Tile, Caption and Stamp should stay still while they turn: a corner,
+     an edge, or the middle?" (their layers, and "scale" for a scale). If the answer isn't a place
+     ("where it is right now"), the whole reply is that question again, with nothing before it.
    - `opacity_move`: "Opacity doesn't pass from a parent to its children, so the null's fade does
      nothing you can see. Fade each layer, or ask about precomps in a later lesson."
    - `effect_move`: "Effects don't pass down either; the null has nothing to show them on."
@@ -364,6 +367,7 @@ at most; they add the null, place it, parent the rest and give it its move with 
     If it returns `UNSAFE_RECORD`, rewrite without the personal detail. If it returns
     `RECORD_MISMATCH`, fix the field it names and record again without mentioning it. A short "I've
     noted that for next time" is enough.
+    Name what comes next in words, never a slash command.
 
 ## The review
 
