@@ -360,3 +360,51 @@ test("a port taken in an earlier AE session, or our own bridge refusing an old t
   const later = byId((await (await setup(t, { aeUptime: 300, log: [[250, LOG_START], [249, LOG_TAKEN], [100, "listening on 127.0.0.1:47671"]] })).check()).result);
   assert.equal(later.bridge_answers.state, "working", "it got the port later");
 });
+
+// T024: AE no longer loading CEP extensions (edge case "Adobe turns CEP off"; SC-003 "CEP loading disabled").
+test("CEP off in the AE that's open is named, and the panel and bridge lines point to it, not to a missing panel", async (t) => {
+  const s = await setup(t, { ae: ["29.0"], refused: true, stamp: false, aeUptime: 300 });
+  const l = byId((await s.check()).result);
+  assert.equal(l.cep_can_load.state, "not_working");
+  assert.equal(l.cep_can_load.text, TEXT.cep_can_load.blocked("29.0").text);
+  for (const id of ["bridge_answers", "ae_scripting", "panel_loads"]) {
+    assert.equal(l[id].state, "not_checked", id);
+    assert.equal(l[id].text, TEXT.cep_can_load.depends.text, id);
+  }
+  assert.notEqual(l.panel_loads.text, TEXT.panel_loads.not_working.text);
+  // An older stamp from before AE stopped loading CEP doesn't make the panel line pass.
+  write(s.L.learner, "panel-loaded.json", JSON.stringify({ version: "0.1.0", at: "2026-11-09T12:00:00.000Z" }));
+  assert.equal(byId((await s.check()).result).panel_loads.state, "not_checked");
+});
+
+test("CEP off: the fix names an installed After Effects that still loads Knack", async (t) => {
+  const l = byId((await (await setup(t, { ae: ["26.5", "27.0", "29.0"], openAe: "29.0", refused: true })).check()).result);
+  assert.equal(l.cep_can_load.state, "not_working");
+  assert.equal(l.cep_can_load.fix, "Open After Effects 27.0 instead, then check again.");
+  const only = byId((await (await setup(t, { ae: ["29.0"], refused: true })).check()).result);
+  assert.equal(only.cep_can_load.fix, TEXT.cep_can_load.blocked("29.0", null).fix);
+});
+
+test("no false CEP failure: the bridge started in this AE, an older AE is open, or the bridge is missing", async (t) => {
+  const started = byId((await (await setup(t, { ae: ["29.0"], refused: true, aeUptime: 300, log: [[200, LOG_START]] })).check()).result);
+  assert.equal(started.cep_can_load.state, "working", "the bridge's page ran, so CEP loads");
+  assert.equal(started.bridge_answers.text, TEXT.bridge_answers.not_working.text);
+
+  const older = byId((await (await setup(t, { ae: ["26.5", "29.0"], openAe: "26.5", refused: true })).check()).result);
+  assert.equal(older.cep_can_load.state, "working");
+
+  const s = await setup(t, { ae: ["29.0"], refused: true });
+  fs.rmSync(path.join(s.L.cep, "AEMentorBridge"), { recursive: true });
+  const missing = byId((await s.check()).result);
+  assert.equal(missing.ext_bridge.state, "not_working");
+  assert.notEqual(missing.cep_can_load.state, "not_working", "the missing folder is the cause, not CEP");
+});
+
+test("AE still starting: the bridge line says to wait, not that it's broken", async (t) => {
+  const l = byId((await (await setup(t, { refused: true, aeUptime: 10 })).check()).result);
+  assert.equal(l.bridge_answers.state, "not_checked");
+  assert.equal(l.bridge_answers.text, TEXT.bridge_answers.starting.text);
+  assert.equal(l.ae_scripting.state, "not_checked");
+  const cep = byId((await (await setup(t, { ae: ["29.0"], refused: true, aeUptime: 10 })).check()).result);
+  assert.equal(cep.cep_can_load.state, "not_checked", "too early to blame CEP");
+});

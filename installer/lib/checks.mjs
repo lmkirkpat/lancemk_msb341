@@ -54,8 +54,13 @@ export const SCRIPTING_SCRIPT =
   `return { have: have, value: have ? app.preferences.getPrefAsLong(s, k) : null };`;
 
 // The first After Effects release expected to have CEP off by default (Dec 2028, AE 2029). A
-// guess until Adobe says; T024 finishes this line.
+// guess until Adobe says. The check never blames CEP on the version alone: the bridge must also
+// not have started in this AE session (its log), and its folder must be in place (T024).
 export const CEP_OFF_FROM_MAJOR = 29;
+const cepOff = (parts) => parts[0] >= CEP_OFF_FROM_MAJOR;
+// Seconds after AE starts before a silent bridge counts as a fault (its page loads after AE's
+// window; T024's "still starting").
+export const STARTING_S = 60;
 
 const SETTING = "After Effects > Settings > Scripting & Expressions, and tick Allow Scripts to Write Files and Access Network";
 const AGAIN = "Open the Knack installer again.";
@@ -84,6 +89,7 @@ export const TEXT = Object.freeze({
     working: "After Effects answers Knack.",
     not_working: { text: "After Effects is open, but it isn't answering Knack.", fix: "Quit After Effects and open it again, then check again." },
     port_taken: { text: "Something else is using Knack's connection to After Effects.", fix: "Restart the Mac, then open After Effects and check again." },
+    starting: { text: "After Effects is still starting.", fix: "Wait a moment, then check again." },
   },
   panel_loads: {
     working: "The Knack panel has opened in After Effects.",
@@ -97,7 +103,11 @@ export const TEXT = Object.freeze({
   },
   cep_can_load: {
     working: "After Effects can load Knack.",
-    not_working: { text: "This version of After Effects no longer loads Knack's kind of panel.", fix: "Use an earlier version of After Effects for now." },
+    blocked: (v, fallback) => ({
+      text: v ? `After Effects ${v} no longer loads Knack's kind of panel.` : "This version of After Effects no longer loads Knack's kind of panel.",
+      fix: fallback ? `Open After Effects ${fallback} instead, then check again.` : "Use an earlier version of After Effects for now.",
+    }),
+    depends: { text: "Knack can check this once After Effects loads it.", fix: "Fix the line about After Effects loading Knack first." },
   },
   key: {
     works: { state: "working", text: "Your access key works.", fix: null },
@@ -302,8 +312,12 @@ export async function runChecks(opts) {
   // The key check runs alongside the AE checks; it's the slow one.
   const keyPromise = by(deadline, (opts.keyCheck || defaultKeyCheck)(L, Math.max(1000, deadline - Date.now() - 500)), "timeout");
 
-  // Bridge, scripting setting, CEP.
+  // Bridge, scripting setting, CEP. Which AE is open comes from its process, matched to an
+  // installed app (null if it can't be told).
+  const openApp = procs.map((p) => ae.find((a) => a.app === p.app)).find(Boolean) || null;
+  const openUptime = uptimes.length ? Math.min(...uptimes) : null;
   let answered = false;
+  let cepBlocked = false;
   if (!open) {
     for (const id of ["bridge_answers", "ae_scripting", "cep_can_load"]) lines[id] = needsAe(id);
   } else {
@@ -314,12 +328,22 @@ export async function runChecks(opts) {
     answered = kind === "ours";
     const log = bridgeLog(L, aeSince);
     const portTaken = kind === "foreign" || ((kind === "nobody" || kind === "no_reply") && log.portTaken);
+    // CEP off (T024): only when nothing else explains the silence. The bridge's page running in this
+    // AE proves CEP loads; a missing bridge folder is its own line; a new AE gets time to start.
+    const cepOffHere = openApp ? cepOff(openApp.parts) : ae.length > 0 && ae.every((a) => cepOff(a.parts));
+    const starting = !answered && !portTaken && log.started !== true && openUptime !== null && openUptime < STARTING_S;
+    cepBlocked = !answered && !portTaken && !starting && log.started !== true && cepOffHere && lines.ext_bridge.state === "working";
+
     const ba = TEXT.bridge_answers;
+    const cd = TEXT.cep_can_load.depends;
     if (answered) lines.bridge_answers = line("bridge_answers", "working", ba.working);
     else if (portTaken) lines.bridge_answers = line("bridge_answers", "not_working", ba.port_taken.text, ba.port_taken.fix);
+    else if (cepBlocked) lines.bridge_answers = line("bridge_answers", "not_checked", cd.text, cd.fix);
+    else if (starting) lines.bridge_answers = line("bridge_answers", "not_checked", ba.starting.text, ba.starting.fix);
     else lines.bridge_answers = line("bridge_answers", "not_working", ba.not_working.text, ba.not_working.fix);
 
-    if (!answered) {
+    if (cepBlocked) lines.ae_scripting = line("ae_scripting", "not_checked", cd.text, cd.fix);
+    else if (!answered) {
       lines.ae_scripting = line("ae_scripting", "not_checked", TEXT.ae_scripting.no_bridge.text, TEXT.ae_scripting.no_bridge.fix);
     } else {
       const r = await by(
@@ -333,17 +357,22 @@ export async function runChecks(opts) {
       else lines.ae_scripting = line("ae_scripting", "not_checked", TEXT.ae_scripting.unread.text, TEXT.ae_scripting.unread.fix);
     }
 
-    const cepOld = ae.some((a) => a.parts[0] < CEP_OFF_FROM_MAJOR);
-    lines.cep_can_load =
-      answered || cepOld
-        ? line("cep_can_load", "working", TEXT.cep_can_load.working)
-        : line("cep_can_load", "not_working", TEXT.cep_can_load.not_working.text, TEXT.cep_can_load.not_working.fix);
+    if (cepBlocked) {
+      // The newest installed AE that Knack supports and that still loads CEP, if any.
+      const fallback = ae.filter((a) => atLeast(a.version, MIN_AE) && !cepOff(a.parts)).map((a) => a.version).pop() || null;
+      const b = TEXT.cep_can_load.blocked(openApp ? openApp.version : null, fallback);
+      lines.cep_can_load = line("cep_can_load", "not_working", b.text, b.fix);
+    } else if (starting && cepOffHere) {
+      lines.cep_can_load = line("cep_can_load", "not_checked", ba.starting.text, ba.starting.fix);
+    } else lines.cep_can_load = line("cep_can_load", "working", TEXT.cep_can_load.working);
   }
 
-  // The panel's stamp (written by the panel on load, with its manifest's version).
+  // The panel's stamp (written by the panel on load, with its manifest's version). With CEP off, an
+  // earlier session's stamp proves nothing, so the line points to the CEP line instead.
   const stamp = readJson(L.stamp);
   const stampVersion = stamp && typeof stamp.version === "string" ? stamp.version : null;
-  if (version && stampVersion === version) lines.panel_loads = line("panel_loads", "working", TEXT.panel_loads.working);
+  if (cepBlocked) lines.panel_loads = line("panel_loads", "not_checked", TEXT.cep_can_load.depends.text, TEXT.cep_can_load.depends.fix);
+  else if (version && stampVersion === version) lines.panel_loads = line("panel_loads", "working", TEXT.panel_loads.working);
   else if (!open) lines.panel_loads = needsAe("panel_loads");
   else lines.panel_loads = line("panel_loads", "not_working", TEXT.panel_loads.not_working.text, TEXT.panel_loads.not_working.fix);
 
