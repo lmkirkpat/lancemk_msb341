@@ -14,7 +14,10 @@ four follow-up questions answered the same day (Resolved Questions 6 to 9). Amen
 S1 and M1 and the merged code's protocol, listed under
 [Amendments after the merge](#amendments-2026-10-30-after-the-013-evals-and-013-adapter-merge). Amended
 2026-11-04 by `decisions/011` (build on B1, ship on A): FR-035, FR-037, SC-003 and new FR-041 to FR-043,
-listed under [Amendments 2026-11-04](#amendments-2026-11-04-build-on-b1-ship-on-a).
+listed under [Amendments 2026-11-04](#amendments-2026-11-04-build-on-b1-ship-on-a). Amended
+2026-11-09, **awaiting approval**: the saved conversation's prompt state and continuing rules
+(FR-023, new FR-023a, US4), listed under
+[Amendments 2026-11-09](#amendments-2026-11-09-the-saved-conversations-data-model-for-t044).
 
 **Input**: Cockpit task, sprint 4 (`sprints/sprint-4-plan.md` › Done looks like: "The option A
 runtime built, with the evals moved onto it"). "The panel calls the Claude API directly instead of
@@ -182,7 +185,16 @@ part of the lesson correctly.
    conversation is deleted, the same way the panel's display log is replaced today.
 3. **Given** the saved conversation is unreadable or from another version, **When** the panel
    opens, **Then** it doesn't offer to continue and says nothing alarming (spec 003's rule for an
-   unreadable display log).
+   unreadable display log). *Amended 2026-11-09 (OQ-C2, as recommended):* the panel offers
+   Continue from `panel-session.json` as today and can't read the conversation before the helper
+   starts, so this reads: **When** I press Continue lesson, **Then** the lesson starts fresh on the
+   skill it opened with, and nothing alarming is said. The same holds when the saved conversation
+   no longer matches what the lesson would send (an update between closing and reopening; FR-023a).
+4. *(Added 2026-11-09.)* **Given** `/next-mentor` handed the lesson to another skill and the panel
+   closed before or after that skill's text went in, **When** I continue, **Then** the lesson goes
+   on in the handed-to skill, with its text sent once (data-model › A hand-over across a close).
+5. *(Added 2026-11-09.)* **Given** the panel closed while a demonstration was running, **When** I
+   continue and ask for Show me, **Then** the mentor doesn't demonstrate again (OQ-C3).
 
 ---
 
@@ -269,6 +281,12 @@ both match their results before this feature.
 - **A frame is in the conversation when the lesson is continued later.** Frames are kept as files
   (as the panel already does) and sent again from those files, so continuing doesn't depend on
   memory.
+- **The panel closes mid-turn or mid-hand-over, or something is updated before it reopens** (added
+  2026-11-09). Continuing treats the close as a failed turn at that moment (FR-015 item 1): complete
+  exchanges are kept, a hand-over whose exchange completed stays in force with its text still to go
+  in, and one whose exchange didn't is gone. If the preamble, the server's tools or instructions, a
+  `SKILL.md` in the prompt or waiting to go in, or a setting that goes in a request changed in
+  between, the lesson isn't continued and starts fresh (FR-023a).
 - **The price of a model changes.** Costs are computed from a dated price table kept in one file;
   a missing price makes cost "unknown" rather than zero.
 - **Long pauses while the learner works in AE.** The cached prompt may expire between turns; the
@@ -472,7 +490,19 @@ both match their results before this feature.
   the learner home next to `panel-session.json`, keyed by the same session id the panel already
   stores, with frames saved as files rather than inline (as `panel-frames/` does). It's replaced
   when a new lesson starts, removed by uninstall (spec 006), and never written to the repo or the
-  learner record.
+  learner record. *Amended 2026-11-09:* each save also holds the lesson's prompt state at that same
+  complete exchange (the opening skill, the active skill, the tools the history has offered, a
+  hand-over still to go in, and a hash of everything but the history that decides the next request;
+  data-model › Prompt state). A save that fails removes the file, so an older save is never
+  continued.
+- **FR-023a** *(added 2026-11-09)*: Continuing a saved lesson MUST send, as its next request,
+  exactly the request the lesson would have sent had the panel stayed open and the turn in progress
+  at the close failed then (FR-015 item 1), given the same next text. If the rebuilt state's hash
+  differs from the saved one, or the file can't be continued for any other reason, the lesson MUST
+  start fresh on the skill it opened with, with nothing alarming said (spec 003's rule), and the
+  file MUST be deleted. A close that stops the helper while a call in the closing answer has run or
+  is running MUST complete and save that answer as a failed turn does, before the helper exits
+  (data-model › Saving and clearing; OQ-C3).
 - **FR-024**: The saved conversation holds what the learner typed and the tool results, the same
   content Claude Code keeps today under `~/.claude/projects/`. It MUST NOT be sent anywhere except
   back to the model for that lesson, and MUST be covered by spec 006's install inventory.
@@ -573,7 +603,8 @@ both match their results before this feature.
   in eval results.
 - **Lesson conversation**: the append-only list of messages for one lesson (FR-015, FR-023), saved
   in the learner home, keyed by the panel session's id; frames as files. Made of complete exchanges
-  (FR-015); a failed turn's incomplete tail is never in it.
+  (FR-015); a failed turn's incomplete tail is never in it. Saved with its prompt state (FR-023,
+  amended 2026-11-09).
 - **Price table**: per-model prices by token kind, with the date they were checked (FR-026).
 - **Turn log entry**: spec 003's entry plus runtime, model, effort and token counts by kind; no text
   (FR-029).
@@ -807,3 +838,42 @@ comparison of each runtime's tool lists on 2026-11-04.
   lists appear to match each skill's today, so research R6's "Found while planning" note looks out of
   date. Nothing enforces the match.
 
+
+## Amendments 2026-11-09 (the saved conversation's data model, for T044)
+
+**Status: awaiting the builder's approval.** T043 (`panel/helper/lib/conversation.mjs`) saved the
+history but not what else decides a request: the opening and active skill, the tools the history
+has offered, and a hand-over whose text is still to go in. Without them a continued lesson after a
+hand-over would send a different request from an uninterrupted one. Nothing is ticked or unticked.
+
+| ID | What changed | Where |
+|---|---|---|
+| Model | The file goes to version 2 with a `prompt` object (`start_skill`, `skill`, `offered`, `handed_over`, `pending_skill`, `request_hash`), saved at the same complete exchange as the history. Version 1 isn't continued | FR-023, data-model › Prompt state |
+| Exactness | New FR-023a: the continued request is the one the lesson would have sent after a failed turn at the close; checked by rebuilding the state and comparing `request_hash` | FR-023a, data-model › Continuing |
+| Hand-over | A hand-over whose exchange completed survives a close and its text goes in once; one whose exchange didn't is gone | US4 scenario 4, Edge Cases, data-model › A hand-over across a close |
+| Failed save | Deletes the file, so an older save is never continued | FR-023, data-model › Saving and clearing |
+| Protocol | `start` gains `skill` (the opening skill, for a fresh start when continuing fails); `ready` gains `resumed`; `stop` saves an answer whose call ran or is running | contracts/helper-protocol.md, T044 |
+| US4 scenario 3 | Read as "Continue starts fresh" rather than "no Continue offered", since the panel can't read the conversation before the helper starts | US4 |
+
+**Open questions (the builder's; the data model is written as recommended):**
+
+- **OQ-C1: an update between close and reopen.** Recommended: the lesson isn't continued and
+  starts fresh (`request_hash` differs). Alternative: send the saved prompt as it was. Rejected in
+  the recommendation because it would send skill text or tool definitions no longer in the repo,
+  which FR-016's allowlist rejects. Changes: FR-023a, data-model › Continuing step 4.
+- **OQ-C2: what a failed continue starts.** Recommended: the opening skill (from
+  `panel-session.json`, sent in `start`), with the panel's "I'm back. Pick up where we left off."
+  as its first message, panel unchanged. Alternative: the panel, told `resumed: false`, sends the
+  opening skill's start request instead (a spec 007 continue-flow change). Changes: US4 scenario 3,
+  data-model › Continuing step 5.
+- **OQ-C3: closing mid-call.** Recommended: on `stop` the helper completes an answer whose call ran
+  or is running (FR-015 item 1's fixed results), saves, then exits. Alternative: keep "`stop`: no
+  save" and accept that a demonstration running at the close can be repeated. Changes: FR-023a, US4
+  scenario 5, contracts › `stop`.
+
+**For spec 006 (not edited here):** its uninstall (FR-019, T054 to T056) and install inventory
+must cover `panel-conversation.json`, `panel-conversation-frames/` and any
+`panel-conversation.json.*.tmp` left by an interrupted save, all in the learner home. Its tasks don't
+name them today. Whether "keep my history" keeps them is spec 006's question; this spec's
+recommendation is that they're always removed, since they hold one unfinished lesson's words, not
+the learner record.

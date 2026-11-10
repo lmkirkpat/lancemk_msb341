@@ -14,9 +14,9 @@ of only `PATH=/usr/bin:/bin:/usr/sbin:/sbin`, `HOME`, `TZ` (if set). Nothing els
 
 | Command | Fields | Effect |
 |---|---|---|
-| `start` | `session_id`, `resume` (bool), `home`, `mcp_config` (path to `.mcp.json`), `skills_dir`, `fixture_env` (object, evals only: passed to `ae-mentor`), `key` (evals only, R11), `request_log` (path, evals only), `settings_file` (evals only; default `panel/helper/settings.json`), `base_url` (tests only, see below), `keychain` (tests only, `false` only, with a local `base_url`; added 2026-10-30) | Read settings, read the key, start `ae-mentor`, load the conversation if `resume`. Replies `ready` or `error`. `session_id`, `mcp_config` and `skills_dir` are required. A second `start` gets `error bad_command` |
+| `start` | `session_id`, `resume` (bool), `skill` (opening skill, optional; added 2026-11-09), `home`, `mcp_config` (path to `.mcp.json`), `skills_dir`, `fixture_env` (object, evals only: passed to `ae-mentor`), `key` (evals only, R11), `request_log` (path, evals only), `settings_file` (evals only; default `panel/helper/settings.json`), `base_url` (tests only, see below), `keychain` (tests only, `false` only, with a local `base_url`; added 2026-10-30) | Read settings, read the key, start `ae-mentor`, load the conversation if `resume`. Replies `ready` or `error`. `session_id`, `mcp_config` and `skills_dir` are required. A second `start` gets `error bad_command` |
 | `send` | `text`, `kind` | One turn. Refused with `error { kind: "busy" }` if a turn is in flight |
-| `stop` | | End the turn in flight (no save), stop `ae-mentor`, exit 0 |
+| `stop` | | End the turn in flight (no save, except an answer whose call ran or is running: completed and saved, amended 2026-11-09), stop `ae-mentor`, exit 0 |
 | `key_check` | `key`? | Needs no `start`. Replies `key_status`. Makes one free request (R11) |
 
 A `start` without `key` makes the helper read the Keychain item (service `Knack`, account
@@ -37,7 +37,21 @@ in any reply.
   `ready`**; it stays started, and each later `send` tries to start the server again. The adapter
   must treat that `error` as the end of starting (no `start_ms`), not wait for `ready`.
 - **`resume`** is accepted but, until T043 and T044, logged and ignored: the lesson starts fresh
-  (spec 003's rule: say nothing alarming).
+  (spec 003's rule: say nothing alarming). *Amended 2026-11-09 (T044; awaiting approval):* with
+  `resume: true` the helper loads and checks the saved conversation (data-model › Lesson
+  conversation › Continuing) once `ae-mentor` has started. If it can't be continued, the helper
+  deletes it, logs the reason (a fixed word) and starts the lesson fresh on `skill`. With `resume`
+  false or missing, the helper deletes any saved conversation and its frames before `ready`.
+- **`skill`** *(added 2026-11-09)*: optional, a `*-mentor` name: the lesson's opening skill, which
+  the adapter takes from `panel-session.json` (as B1's Continue does). Used only when `resume` is
+  true and the conversation can't be continued: the first `send` then builds the prompt as if its
+  text started with that skill's command, and the text goes in unchanged. Any other value is
+  ignored and logged. Without it, a fresh start loads a skill only from a command, as today.
+- **`ready`** gains `resumed` (bool, added 2026-11-09): true when the saved conversation was
+  continued. The adapter logs it and doesn't re-emit it; the panel's flow is unchanged (OQ-C2).
+- **`stop`** *(amended 2026-11-09, OQ-C3)*: if the turn in flight has an answer with a call that ran
+  or is still running, the helper completes that answer as a failed turn does (FR-015 item 1),
+  saves, then exits; anything else in flight isn't saved. SIGTERM and stdin closing do the same.
 - **`send` before a successful `start`**: `error start_failed` and `turn_end { ok: false }`.
 
 *Amended 2026-10-30 (after the `013-adapter` merge, `5963fef`; review S3, S5):*
@@ -59,7 +73,7 @@ The adapter contract's events, unchanged in meaning, plus fields the panel may i
 
 | Event | Payload |
 |---|---|
-| `ready` | `{ session_id, runtime: "a", model, effort, settings_hash, skill, settings_file? }` (`skill` is null until the first message loads one; `settings_file` only when it isn't the default; helper only, the adapter doesn't re-emit it) |
+| `ready` | `{ session_id, runtime: "a", model, effort, settings_hash, skill, resumed, settings_file? }` (`resumed` added 2026-11-09, › Commands) (`skill` is null until the first message loads one; `settings_file` only when it isn't the default; helper only, the adapter doesn't re-emit it) |
 | `turn_start` | `{ kind, at }` |
 | `text_delta` | `{ text }` |
 | `text` | `{ text }` |
