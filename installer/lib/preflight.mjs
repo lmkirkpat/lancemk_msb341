@@ -13,7 +13,7 @@ export const STOP = Object.freeze({
   macos_unknown: "The installer couldn't tell which version of macOS this is. Restart the Mac, then open the installer again.",
   no_ae: "After Effects isn't installed. Install After Effects 2026 or later from Creative Cloud, then open the installer again.",
   old_ae: "Knack needs After Effects 2026 (version 26.4) or later. Update After Effects from Creative Cloud, then open the installer again.",
-  dev_install: "Knack is already set up for development on this Mac. This installer can't replace that yet, so nothing was changed.",
+  dev_install: "Knack is already set up for development on this Mac. Replacing it keeps your lesson history and doesn't change the development copy's files.",
   newer: (v) => `A newer version of Knack (${v}) is already installed, so nothing was changed.`,
   bad_payload: "This copy of the installer is incomplete. Download it again.",
   ae_open: "After Effects is open. Quit it, then continue.",
@@ -91,7 +91,8 @@ export function payloadRelease(payloadDir) {
 }
 
 // → { ok: true, release, macos, ae: [versions], installed, aeOpen } or { ok: false, reason, text }
-export async function preflight({ L, payloadDir, run, tools, dirs }) {
+// replaceDev: the person chose to replace a developer install (FR-024); without it, one stops here.
+export async function preflight({ L, payloadDir, run, tools, dirs, replaceDev = false }) {
   const stop = (reason, text) => ({ ok: false, reason, text: text || STOP[reason] });
   const release = payloadRelease(payloadDir);
   if (!release) return stop("bad_payload");
@@ -102,9 +103,10 @@ export async function preflight({ L, payloadDir, run, tools, dirs }) {
   if (!ae.length) return stop("no_ae");
   if (!ae.some((a) => atLeast(a.version, MIN_AE))) return stop("old_ae");
   if (writeProbe(L)) return blockedStop({ run, tools });
-  if (devInstall(L)) return stop("dev_install");
+  const dev = devInstall(L);
+  if (dev && !replaceDev) return stop("dev_install");
   const installed = installedVersion(L);
   if (installed && compareVersions(installed, release.version) > 0) return stop("newer", STOP.newer(installed));
   const aeOpen = await aeRunning({ run, tools });
-  return { ok: true, release, macos, ae: ae.map((a) => a.version), installed, aeOpen };
+  return { ok: true, release, macos, ae: ae.map((a) => a.version), installed, aeOpen, dev };
 }

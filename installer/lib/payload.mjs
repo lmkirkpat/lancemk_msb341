@@ -10,7 +10,7 @@ import { EXTENSIONS, tilde } from "./layout.mjs";
 import { writePanelConfig } from "./panel-config.mjs";
 import { readJson } from "./preflight.mjs";
 
-export const STEPS = Object.freeze(["clean", "stage", "place_version", "extensions", "current", "learner_home", "panel_config", "state"]);
+export const STEPS = Object.freeze(["clean", "stage", "place_version", "developer_links", "extensions", "current", "learner_home", "panel_config", "state"]);
 
 function listFiles(dir) {
   const out = [];
@@ -42,9 +42,47 @@ export function sameTree(src, dest) {
 
 export class InstallError extends Error {}
 
-// opts: { L, g (fsx guard), payloadDir, nodeDir, release, afterStep(name) }
+// A free name in `dir` for `name`: name, then name-2, name-3 and so on (nothing is ever overwritten).
+function freeName(dir, name) {
+  const taken = (n) => {
+    try {
+      fs.lstatSync(path.join(dir, n));
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  let n = name;
+  for (let i = 2; taken(n); i++) n = `${name}-${i}`;
+  return path.join(dir, n);
+}
+
+// FR-024 (T037): a developer install's links move to Knack/developer-links, still pointing at the
+// repo; they're never deleted or followed, and the repo is never touched. The old panel.json is
+// copied there first (0600), once, so the developer can put both back. PlayerDebugMode is left as
+// it is. → true if any link moved.
+export function moveDeveloperLinks(L, g) {
+  const links = EXTENSIONS.map((n) => path.join(L.cep, n)).filter((p) => {
+    try {
+      return fs.lstatSync(p).isSymbolicLink();
+    } catch {
+      return false;
+    }
+  });
+  if (!links.length) return false;
+  g.mkdir(L.devLinks);
+  const savedConfig = path.join(L.devLinks, "panel.json");
+  if (fs.existsSync(L.panelJson) && !fs.existsSync(savedConfig)) {
+    g.copyFile(L.panelJson, savedConfig);
+    g.chmod(savedConfig, 0o600);
+  }
+  for (const p of links) g.rename(p, freeName(L.devLinks, path.basename(p)));
+  return true;
+}
+
+// opts: { L, g (fsx guard), payloadDir, nodeDir, release, replaceDev, afterStep(name) }
 // → { learnerCreated, files }
-export function installPayload({ L, g, payloadDir, nodeDir, release, afterStep = () => {} }) {
+export function installPayload({ L, g, payloadDir, nodeDir, release, replaceDev = false, afterStep = () => {} }) {
   const v = release.version;
   const staged = path.join(L.tmp, `version-${v}`);
   const target = path.join(L.versions, v);
@@ -78,6 +116,10 @@ export function installPayload({ L, g, payloadDir, nodeDir, release, afterStep =
       g.rename(target, old);
     }
     g.rename(staged, target);
+  });
+
+  step("developer_links", () => {
+    if (replaceDev) moveDeveloperLinks(L, g);
   });
 
   step("extensions", () => {
@@ -134,6 +176,8 @@ export function installPayload({ L, g, payloadDir, nodeDir, release, afterStep =
       keychain: prev.keychain && typeof prev.keychain === "object" ? prev.keychain : null,
       settings_changed: [],
     };
+    // Kept developer links, so uninstall (T054) can put them back rather than remove them.
+    if (fs.existsSync(L.devLinks)) state.developer_links = tilde(L, L.devLinks);
     g.writeAtomic(L.state, JSON.stringify(state, null, 2) + "\n");
   });
 

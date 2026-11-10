@@ -118,3 +118,9 @@ test("runTask sends stdin and passes only PATH, HOME and TMPDIR", (t) => {
   assert.match(env, /^PATH=\/usr\/bin:\/bin:\/usr\/sbin:\/sbin$/m);
   assert.equal(missing, "", "a program that can't start gives nothing, not an error dialog");
 });
+
+test("a developer install is offered as Replace or Cancel, and the choice reaches the install (FR-024)", () => {
+  assert.match(RUN, /if paragraph 2 of prep is "dev" then\n\s*display dialog my restOf\(prep, 3\) buttons \{"Cancel", "Replace"\} default button 1 cancel button 1/);
+  assert.match(RUN, /"--replace-dev", replaceDev, "--key-status", keyStatus\}, accessKey\)/);
+  assert.ok(RUN.indexOf('"dev"') < RUN.indexOf('"key-check"'), "asked before the key");
+});

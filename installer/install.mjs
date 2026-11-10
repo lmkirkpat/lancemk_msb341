@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // Knack's installer logic (specs/006-installer T011, contracts/install-layout.md). Run by the
 // applet on the private Node, never by a person in Terminal:
-//   install.mjs preflight --payload <dir>                 → "ok" | "stop\n<message>"
+//   install.mjs preflight --payload <dir>                 → "ok" | "dev\n<question>" | "stop\n<message>"
 //   install.mjs ae-open                                   → "open" | "closed"
 //   install.mjs key-check --payload <dir> --node-dir <dir>   (key on stdin)
 //                                                         → works | rejected | out_of_credit | offline | no_key | bad_format | unknown
-//   install.mjs install --payload <dir> --node-dir <dir> [--key-status <status>]   (key on stdin, optional)
+//   install.mjs install --payload <dir> --node-dir <dir> [--replace-dev [yes|no]] [--key-status <status>]   (key on stdin, optional)
 //                                                         → "ok\n<note>" | "failed\n<message>"
 // The key only ever arrives on stdin, and goes on only over stdin (lib/keychain.mjs). Output is one
 // word or plain sentences for the applet to show; nothing here prints a path, a key or a code.
@@ -43,13 +43,13 @@ async function keyStep({ L, g, key, keyStatus, run, tools }) {
 // → { ok: true, note } or { ok: false, reason, text }
 export async function install(opts) {
   const L = layout(opts.home);
-  const pre = await preflight({ L, payloadDir: opts.payloadDir, run: opts.run, tools: opts.tools, dirs: opts.dirs });
+  const pre = await preflight({ L, payloadDir: opts.payloadDir, run: opts.run, tools: opts.tools, dirs: opts.dirs, replaceDev: !!opts.replaceDev });
   if (!pre.ok) return pre;
   if (pre.aeOpen) return { ok: false, reason: "ae_open", text: STOP.ae_open };
   if (!opts.nodeDir || !fs.existsSync(path.join(opts.nodeDir, "bin", "node"))) return { ok: false, reason: "bad_payload", text: STOP.bad_payload };
   const g = guard(L.support);
   try {
-    installPayload({ L, g, payloadDir: opts.payloadDir, nodeDir: opts.nodeDir, release: pre.release, afterStep: opts.afterStep });
+    installPayload({ L, g, payloadDir: opts.payloadDir, nodeDir: opts.nodeDir, release: pre.release, replaceDev: !!opts.replaceDev, afterStep: opts.afterStep });
   } catch (e) {
     if (opts.onError) opts.onError(e);
     if (BLOCKED_CODES.includes(e && e.code)) return blockedStop({ run: opts.run, tools: opts.tools });
@@ -67,6 +67,10 @@ export function parseArgs(argv) {
     if (a === "--payload") o.payloadDir = rest[++i];
     else if (a === "--node-dir") o.nodeDir = rest[++i];
     else if (a === "--key-status") o.keyStatus = rest[++i];
+    else if (a === "--replace-dev") {
+      o.replaceDev = true;
+      if (rest[i + 1] === "yes" || rest[i + 1] === "no") o.replaceDev = rest[++i] === "yes";
+    }
     else throw new Error("unknown option");
   }
   return o;
@@ -97,7 +101,8 @@ export async function main(argv, deps = {}) {
   const base = { home: deps.home, run: deps.run, tools: deps.tools, dirs: deps.dirs };
   if (o.command === "preflight") {
     const r = await preflight({ L: layout(deps.home), payloadDir: o.payloadDir, run: deps.run, tools: deps.tools, dirs: deps.dirs });
-    return r.ok ? { out: "ok", code: 0 } : { out: `stop\n${r.text}`, code: 1 };
+    if (r.ok) return { out: "ok", code: 0 };
+    return { out: `${r.reason === "dev_install" ? "dev" : "stop"}\n${r.text}`, code: 1 };
   }
   if (o.command === "ae-open") {
     return { out: (await aeRunning({ run: deps.run, tools: deps.tools })) ? "open" : "closed", code: 0 };
@@ -118,7 +123,7 @@ export async function main(argv, deps = {}) {
   }
   if (o.command === "install") {
     const key = await stdin();
-    const r = await install({ ...base, payloadDir: o.payloadDir, nodeDir: o.nodeDir, afterStep: deps.afterStep, key, keyStatus: o.keyStatus });
+    const r = await install({ ...base, payloadDir: o.payloadDir, nodeDir: o.nodeDir, afterStep: deps.afterStep, key, keyStatus: o.keyStatus, replaceDev: o.replaceDev });
     return r.ok ? { out: `ok${r.note ? `\n${r.note}` : ""}`, code: 0 } : { out: `failed\n${r.text}`, code: 1 };
   }
   return { out: "failed\n" + STOP.bad_payload, code: 2 };
