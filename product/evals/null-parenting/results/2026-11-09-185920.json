@@ -1,0 +1,434 @@
+{
+  "run_at": "2026-11-10T01:59:20.479Z",
+  "options": {
+    "only": "18",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.81,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "18-due-review-no-new-group",
+      "title": "A due review with no new group (OR-1): a lesson starts, and no review is mentioned; nothing recorded",
+      "covers": [
+        "EP-18",
+        "US3-3",
+        "OR-1",
+        "FR-048",
+        "FR-052"
+      ],
+      "fixture_sources": {
+        "synthetic/crowd-only.json": "synthetic"
+      },
+      "hash": "a6cf9e19080062102930b6cc473925a13c839a67c30ec33e572771022fa9300d",
+      "pass": true,
+      "passes": 2,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was null_parent_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:no_review_mentioned",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:asks_group",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            },
+            {
+              "check": "say:no_crowd_names",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:no_crowd_count",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "0 lessons recorded"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-DUE-NO-NEW-LESSON",
+              "pass": false,
+              "reason": "The snapshot returned no_proposal_reason \"crowded\", so the lesson should open with the crowd question, but the mentor only asked \"Which layers in Lower Thirds should move as one, like the parts of a lower third or a logo lockup?\" without saying that a lot of layers sit close together or asking for 2 to 4 (it did avoid mentioning a review, a demo or a record)."
+            },
+            {
+              "item": "R-CROWD-HIDDEN",
+              "pass": true,
+              "reason": "The mentor's only reply names no crowded layers and gives no count or list of them; the only layer-related names it uses are the comp name \"Lower Thirds\" and generic examples."
+            }
+          ],
+          "cost": 0.267845,
+          "session_id": "ba901a2f-ecc1-4ad9-a896-8721524608c5",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Lower Thirds.aep\",\n  \"comp\": {\n    \"name\": \"Lower Thirds\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 17,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: I liked your work last time, a couple of weeks ago: you slid a group with a null. You've also done the pivot lesson, and this builds on it.\n\nWhich layers in Lower Thirds should move as one, like the parts of a lower third or a logo lockup?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was null_parent_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:no_review_mentioned",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:asks_group",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            },
+            {
+              "check": "say:no_crowd_names",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:no_crowd_count",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "0 lessons recorded"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-DUE-NO-NEW-LESSON",
+              "pass": true,
+              "reason": "Although the snapshot had review_due true, the mentor opened a lesson by asking \"Which layers in Lower Thirds should move as one...?\" It never mentioned a review, invented no group, offered no demo and recorded nothing; it did skip the plain crowd sentence, which R-CROWD-QUESTION covers."
+            },
+            {
+              "item": "R-CROWD-HIDDEN",
+              "pass": true,
+              "reason": "The snapshot returned no_proposal_reason \"crowded\", and the mentor's only reply never named, counted or listed any of the crowded layers."
+            }
+          ],
+          "cost": 0.270265,
+          "session_id": "8cdb119e-8177-4ee0-859a-8ac913967d39",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Lower Thirds.aep\",\n  \"comp\": {\n    \"name\": \"Lower Thirds\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 17,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You moved a group with a null a couple of weeks ago, and you've done the pivot lesson, which this builds on.\n\nWhich layers in Lower Thirds should move as one, like the parts of a lower third or a logo lockup?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "first_tool",
+              "pass": true,
+              "detail": "first tool was null_parent_snapshot"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_focus_set",
+              "pass": true,
+              "detail": "no focus set"
+            },
+            {
+              "check": "say:no_review_mentioned",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:asks_group",
+              "pass": true,
+              "detail": "turn 1: \"?\""
+            },
+            {
+              "check": "say:no_crowd_names",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "say:no_crowd_count",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "0 lessons recorded"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-DUE-NO-NEW-LESSON",
+              "pass": true,
+              "reason": "Although the snapshot had \"review_due\": true, the mentor's only turn opens a lesson by asking \"Which layers in Lower Thirds should move as one...?\" and never mentions a review, invents a group, offers a demo, or records anything."
+            },
+            {
+              "item": "R-CROWD-HIDDEN",
+              "pass": true,
+              "reason": "In the crowded comp (\"no_proposal_reason\": \"crowded\"), the mentor's turn names no layers from the crowd and gives no count or list of them; the only layers it names are those from the earlier lesson."
+            }
+          ],
+          "cost": 0.2691398,
+          "session_id": "e7785292-6c5d-43b2-a3e6-ed243430f86b",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Lower Thirds.aep\",\n  \"comp\": {\n    \"name\": \"Lower Thirds\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": null,\n  \"next_proposal\": null,\n  \"no_proposal_reason\": \"crowded\",\n  \"left_out\": [\n    {\n      \"layer\": \"Backdrop\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Try a group that turns.\",\n    \"last_attempted\": \"Parented Tile, Caption and Stamp to Group Null and moved it up from 6 to 7 s\",\n    \"days_since_practiced\": 17,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You moved a group with a null a couple of weeks ago, and you've done the pivot lesson, which this builds on. Your note from last time says to try a group that turns.\n\nWhich layers in Lower Thirds should move as one, like the parts of a lower third or a logo lockup?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

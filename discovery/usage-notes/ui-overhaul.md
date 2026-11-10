@@ -552,3 +552,53 @@ chat in view (4.32.52 to 4.37.35). **Met** at these two heights, not at exactly 
    tool. *For panel-builder:* round row times the way the mentor does, with a test.
 2. **The narrowest dock is untested.** AE lets a docked panel be dragged narrower than its default; 260 was the guard
    for that. Re-check if a tester docks narrower.
+
+## The live findings fixed, and the evals after (2026-11-09)
+
+The four mentor findings from T057, T059 and T060 got eval cases first (branch `evals-live-findings`, merged
+`d50330a`): speed graph 36 (the close names no slash command) and 37 (the record guesses why), pivot 54 (an
+expression guessed before the learner says what they did, after the 2026-11-09 teaching design amendment `69a8e08`)
+and null 52 (the "where" question asks about the group, not the null). 37, 54 and 52 failed on B1 before the fix.
+The same branch added a check that no skill's mentor ever says a slash command (`no_slash_command`, all seven
+runners). Re-scoring every saved run found it in offset case 20 only ("type **/ease-mentor**"), from
+`offset-mentor/SKILL.md`; key types had the same line.
+
+The `SKILL.md` fixes merged as `ad4a257`: pivot asks "What did you do?" and guesses no cause; null's `region_needed`
+question names a part of the group; speed graph's record says what the checks showed, never why; offset and key
+types offer "the easing lesson" by name; all six closes name what comes next in words. Mentor tests 1530 pass.
+
+### Full runs on B1 after both merges
+
+| Set | Score | Last full B1 run | The live-lesson case |
+|---|---|---|---|
+| Speed graph | 34/37 (92%), $22.34, `-173733` | 29/29, 10-29 | 36 pass (3/3 on repeat), 37 pass |
+| Pivot | 56/59 (95%), $42.54, `-175705` | 51/51, 11-06 | 54 pass |
+| Null | 45/52 (87%), $39.05, `-181838` | 42/44, 10-29 | 52 pass |
+| Offset case 20 only, ×3 | 3/3, $2.56, `-182007` | | no slash command |
+
+Every set meets SC-006, and the sets grew since their baselines (spec 007's request cases, then today's four).
+
+### The failures, repeated ×3
+
+| Case | Full run | Repeat | Verdict |
+|---|---|---|---|
+| Speed graph 04 | R-ONE-IDEA (the shared key's two handles explained in the same turn) | 2/3 (`-184802`), same item | Noise, watch; it failed once on A on 11-04 |
+| Speed graph 36 | judge reply unreadable, item passed | 3/3 (`-184952`) | Plumbing |
+| Pivot 07 | no check call came back | 3/3 (`-185108`) | Plumbing |
+| Pivot 45 | judge reply unreadable, item passed | 1 pass, 1 unreadable judge, 1 R-AN-REST-KEY (`-185230`) | Watch: one real miss in four samples today (turn 3 didn't say the pivot did move); 5/5 before. Not the changed lines, but near them |
+| Null 05 | said "jumped" | 3/3 (`-185350`) | Noise |
+| Null 17 | the review record named the method | 3/3 (`-185538`) | Noise |
+| Null 18 | crowded comp, no crowd question | 2/3 (`-185920`), same item | Noise, watch; failed once on 10-28 too |
+| Null 30 | named Rotation or Scale no tool held | 3/3 (`-185717`) | Noise; failed twice on 10-29 |
+| Null 37 | restated the opening on continue | 2/3 (`-185834`), same item | Noise, watch |
+
+**Failing before today's merges (not caused by them):** spec 007's request cases speed graph 34 (a "New lesson"
+request with a review due opens a review: a hard-rule fail), pivot 50 (Show me again runs to eight sentences),
+null 45 (Done, check it offers to parent one) and null 46 (the hint gives the exact fix). Each failed in this
+morning's runs too (11-09 11:35 to 12:04). They want `SKILL.md` fixes under spec 007.
+
+**Plumbing:** the judge twice returned a malformed key (`"R-ONE-IDEA":"pass"`), and the runner counts that as a
+fail. *For eval-engineer:* parse the judge leniently or retry once.
+
+About $133 on B1 in all (full runs $106, repeats $21, offset 20 $2.56, before that the skill-builder's targeted
+runs $22.55).

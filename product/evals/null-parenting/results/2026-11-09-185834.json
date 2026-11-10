@@ -1,0 +1,419 @@
+{
+  "run_at": "2026-11-10T01:58:34.304Z",
+  "options": {
+    "only": "37",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 1.41,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "37-left-open-with-choices",
+      "title": "A lesson left open on Tile, Caption and Stamp with no null placed, reopened in a new session: one sentence on where it left off, then the next step: the turn-or-scale question if it was never answered, else the null step (round 2 C); no recap, no 'which layers', no new proposal",
+      "covers": [
+        "FR-043",
+        "FR-046",
+        "FR-052",
+        "SC-015",
+        "EP-37"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "22dc4b1174f05bcdcb07266ae602fc3913931395471f88c2250eaf731b664e70",
+      "pass": true,
+      "passes": 2,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:names_group",
+              "pass": true,
+              "detail": "turn 2: \"\""
+            },
+            {
+              "check": "say:no_which_layers",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_new_proposal",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_review",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_recap",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:next_step_null_or_region",
+              "pass": true,
+              "detail": "turn 2: \"null\""
+            },
+            {
+              "check": "say:does_not_say_null_placed",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-CONTINUED",
+              "pass": false,
+              "reason": "Turn 2 names the group and asks the turn-or-scale question with no null task, but it first repeats turn 1's opener verbatim (\"You've done the pivot lesson, and this one builds on it.\"), a recap beyond the one sentence on where it left off."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name used is in a tool result: Tile, Caption, Stamp and Mentor Practice 2 appear in the snapshots, the pivot lesson matches other_skills \"Set the pivot (anchor point)\" learned, and \"the null isn't placed yet\" follows from null_ready false."
+            }
+          ],
+          "cost": 0.4733876,
+          "session_id": "7658e5eb-6782-4305-ba6c-4bfeda6c113f",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Tile, Caption and Stamp should move as one.\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-1iDwdP-runtime/681f9b83-25de-45f1-8a6a-9a67210cd368/tool-results/mcp-ae-mentor-blob-1794275843569-btk4kp.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0}\nMENTOR: You've done the pivot lesson, and this one builds on it. We'll move Tile, Caption and Stamp as one group in Mentor Practice 2.\n\nThe idea is this: a layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and it keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, where from: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 2: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it. We're picking up where we left off: we were moving Tile, Caption and Stamp together, and the null isn't placed yet.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, where should they do it from: a corner, the middle of an edge, or the middle of the group?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:names_group",
+              "pass": true,
+              "detail": "turn 2: \"\""
+            },
+            {
+              "check": "say:no_which_layers",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_new_proposal",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_review",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_recap",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:next_step_null_or_region",
+              "pass": true,
+              "detail": "turn 2: \"null\""
+            },
+            {
+              "check": "say:does_not_say_null_placed",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-CONTINUED",
+              "pass": true,
+              "reason": "In turn 2 the mentor says where it left off in one sentence (\"We were partway through moving Tile, Caption and Stamp together, and the null isn't in place yet\"), then asks the still-unanswered turn-or-scale question on its own, with no null task, no idea recap, no 'which layers' and no new proposal."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name used (Tile, Caption, Stamp, Mentor Practice 2, 0 s, the pivot lesson) appears in the snapshot's focus, comp, before_time/preview_frame time or other_skills results."
+            }
+          ],
+          "cost": 0.4714358,
+          "session_id": "b8221596-4643-4202-a945-b0bf0ac4894e",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Tile, Caption and Stamp should move as one.\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-5tIsw1-runtime/98d42eb6-d89a-4f05-a1cd-a5b5515ccb61/tool-results/mcp-ae-mentor-blob-1794275870403-2jqjoo.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0}\nMENTOR: You've done the pivot lesson, and this builds on it. Tile, Caption and Stamp will be the group. Above is Mentor Practice 2 at 0 s, the point we'll check everything against.\n\nA layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they'll turn or scale, where should that happen from: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 2: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this builds on it. We were partway through moving Tile, Caption and Stamp together, and the null isn't in place yet, so we'll pick up from there.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:names_group",
+              "pass": true,
+              "detail": "turn 2: \"\""
+            },
+            {
+              "check": "say:no_which_layers",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_new_proposal",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_review",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_recap",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:next_step_null_or_region",
+              "pass": true,
+              "detail": "turn 2: \"null\""
+            },
+            {
+              "check": "say:does_not_say_null_placed",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-CONTINUED",
+              "pass": true,
+              "reason": "Turn 2 states where it left off in one sentence naming the group ('We're picking up where we stopped: Tile, Caption and Stamp are going to move together, and you haven't placed the null yet'), then asks the never-answered turn-or-scale question on its own, with no null task, no idea recap, no 'which layers' and no new proposal; the repeated pivot-lesson opener is not a restart of this lesson."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name used (Tile, Caption, Stamp, Mentor Practice 2, 0 s, the pivot lesson) appears in the snapshot or preview_frame results, and no layer, property or time is invented."
+            }
+          ],
+          "cost": 0.4698742,
+          "session_id": "00cf37b9-ac08-4a51-962c-871a8fb16ea1",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Tile, Caption and Stamp should move as one.\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-bA4uWe-runtime/582f008d-6d36-431d-8c04-bb8f9c062598/tool-results/mcp-ae-mentor-blob-1794275895085-pbsb5m.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nWe'll move Tile, Caption and Stamp as one group. The frame above is Mentor Practice 2 at 0 s, where we're starting from. Here's the idea: a layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and it keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, where from: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 2: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it. We're picking up where we stopped: Tile, Caption and Stamp are going to move together, and you haven't placed the null yet.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, where from: a corner, the middle of an edge, or the middle of the group?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}
