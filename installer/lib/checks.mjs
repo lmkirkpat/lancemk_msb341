@@ -73,7 +73,11 @@ export const TEXT = Object.freeze({
     not_checked: { text: "Knack couldn't tell which version of macOS this is.", fix: "Restart the Mac, then check again." },
   },
   ae_version: {
-    working: (vs) => `Found After Effects ${listVersions(vs)}.`,
+    // T032: with several installed, the ones Knack doesn't support are named apart.
+    working: (vs, supported = vs) => {
+      const other = vs.filter((v) => !supported.includes(v));
+      return `Found After Effects ${listVersions(vs)}.${other.length ? ` Knack works in ${listVersions(supported)}, not ${listVersions(other)}.` : ""}`;
+    },
     none: { text: "After Effects isn't installed.", fix: "Install After Effects 2026 or later from Creative Cloud." },
     old: (vs) => ({ text: `After Effects ${listVersions(vs)} is older than Knack supports.`, fix: "Update After Effects from Creative Cloud." }),
   },
@@ -86,7 +90,9 @@ export const TEXT = Object.freeze({
     not_working: { text: "The Knack panel is missing.", fix: AGAIN },
   },
   bridge_answers: {
-    working: "After Effects answers Knack.",
+    // v: the After Effects version checked, when it can be told (T032).
+    working: (v) => `${ae(v)} answers Knack.`,
+    unsupported: (v, newest) => ({ text: `After Effects ${v} is open, which Knack doesn't support.`, fix: `Quit it and open After Effects ${newest} instead.` }),
     not_working: { text: "After Effects is open, but it isn't answering Knack.", fix: "Quit After Effects and open it again, then check again." },
     port_taken: { text: "Something else is using Knack's connection to After Effects.", fix: "Restart the Mac, then open After Effects and check again." },
     starting: { text: "After Effects is still starting.", fix: "Wait a moment, then check again." },
@@ -96,13 +102,13 @@ export const TEXT = Object.freeze({
     not_working: { text: "The Knack panel hasn't opened yet.", fix: "In After Effects, choose Window > Extensions > Knack, then check again." },
   },
   ae_scripting: {
-    working: "After Effects lets Knack's scripts run.",
-    not_working: { text: "After Effects doesn't let Knack's scripts run yet.", fix: `Open ${SETTING}.` },
+    working: (v) => `${ae(v)} lets Knack's scripts run.`,
+    not_working: (v) => ({ text: `${ae(v)} doesn't let Knack's scripts run yet.`, fix: `Open ${SETTING}.` }),
     unread: { text: "Knack couldn't read this setting in this version of After Effects.", fix: `Make sure it's on: open ${SETTING}.` },
     no_bridge: { text: "Knack can check this once After Effects answers it.", fix: "Fix the line about After Effects answering first." },
   },
   cep_can_load: {
-    working: "After Effects can load Knack.",
+    working: (v) => `${ae(v)} can load Knack.`,
     blocked: (v, fallback) => ({
       text: v ? `After Effects ${v} no longer loads Knack's kind of panel.` : "This version of After Effects no longer loads Knack's kind of panel.",
       fix: fallback ? `Open After Effects ${fallback} instead, then check again.` : "Use an earlier version of After Effects for now.",
@@ -143,6 +149,8 @@ export const TEXT = Object.freeze({
     later: "Nothing looks broken. Follow the lines above, then check again.",
   },
 });
+
+const ae = (v) => (v ? `After Effects ${v}` : "After Effects");
 
 function listVersions(vs) {
   if (vs.length <= 1) return vs.join("");
@@ -303,7 +311,7 @@ export async function runChecks(opts) {
   else if (!supported.length) {
     const t = TEXT.ae_version.old(aeVersions);
     lines.ae_version = line("ae_version", "not_working", t.text, t.fix);
-  } else lines.ae_version = line("ae_version", "working", TEXT.ae_version.working(aeVersions));
+  } else lines.ae_version = line("ae_version", "working", TEXT.ae_version.working(aeVersions, supported));
 
   for (const [id, name] of [["ext_bridge", "AEMentorBridge"], ["ext_panel", "AEMentorPanel"]]) {
     lines[id] = extensionInPlace(L, name) ? line(id, "working", TEXT[id].working) : line(id, "not_working", TEXT[id].not_working.text, TEXT[id].not_working.fix);
@@ -318,6 +326,7 @@ export async function runChecks(opts) {
   const openUptime = uptimes.length ? Math.min(...uptimes) : null;
   let answered = false;
   let cepBlocked = false;
+  let unsupportedOpen = false;
   if (!open) {
     for (const id of ["bridge_answers", "ae_scripting", "cep_can_load"]) lines[id] = needsAe(id);
   } else {
@@ -326,6 +335,10 @@ export async function runChecks(opts) {
     const health = cfg ? await by(deadline, bridgeCall({ ...cfg, timeoutMs: t }), { error: "timeout" }) : { error: "no_config" };
     const kind = classifyHealth(health);
     answered = kind === "ours";
+    // The version checked (T032): what the bridge reports, else the open app's.
+    const reported = answered ? parseVersion(health.json.appVersion) : null;
+    const checkedV = reported && reported[0] > 0 ? `${reported[0]}.${reported[1]}` : openApp ? openApp.version : null;
+    const unsupported = !answered && openApp && !atLeast(openApp.version, MIN_AE) && supported.length ? openApp.version : null;
     const log = bridgeLog(L, aeSince);
     const portTaken = kind === "foreign" || ((kind === "nobody" || kind === "no_reply") && log.portTaken);
     // CEP off (T024): only when nothing else explains the silence. The bridge's page running in this
@@ -336,10 +349,13 @@ export async function runChecks(opts) {
 
     const ba = TEXT.bridge_answers;
     const cd = TEXT.cep_can_load.depends;
-    if (answered) lines.bridge_answers = line("bridge_answers", "working", ba.working);
+    if (answered) lines.bridge_answers = line("bridge_answers", "working", ba.working(checkedV));
     else if (portTaken) lines.bridge_answers = line("bridge_answers", "not_working", ba.port_taken.text, ba.port_taken.fix);
     else if (cepBlocked) lines.bridge_answers = line("bridge_answers", "not_checked", cd.text, cd.fix);
-    else if (starting) lines.bridge_answers = line("bridge_answers", "not_checked", ba.starting.text, ba.starting.fix);
+    else if (unsupported) {
+      const u = ba.unsupported(unsupported, supported[supported.length - 1]);
+      lines.bridge_answers = line("bridge_answers", "not_working", u.text, u.fix);
+    } else if (starting) lines.bridge_answers = line("bridge_answers", "not_checked", ba.starting.text, ba.starting.fix);
     else lines.bridge_answers = line("bridge_answers", "not_working", ba.not_working.text, ba.not_working.fix);
 
     if (cepBlocked) lines.ae_scripting = line("ae_scripting", "not_checked", cd.text, cd.fix);
@@ -352,8 +368,9 @@ export async function runChecks(opts) {
         { error: "timeout" },
       );
       const res = r.json && r.json.ok === true ? r.json.result : null;
-      if (res && res.have === true && res.value === 1) lines.ae_scripting = line("ae_scripting", "working", TEXT.ae_scripting.working);
-      else if (res && res.have === true) lines.ae_scripting = line("ae_scripting", "not_working", TEXT.ae_scripting.not_working.text, TEXT.ae_scripting.not_working.fix);
+      const off = TEXT.ae_scripting.not_working(checkedV);
+      if (res && res.have === true && res.value === 1) lines.ae_scripting = line("ae_scripting", "working", TEXT.ae_scripting.working(checkedV));
+      else if (res && res.have === true) lines.ae_scripting = line("ae_scripting", "not_working", off.text, off.fix);
       else lines.ae_scripting = line("ae_scripting", "not_checked", TEXT.ae_scripting.unread.text, TEXT.ae_scripting.unread.fix);
     }
 
@@ -364,7 +381,8 @@ export async function runChecks(opts) {
       lines.cep_can_load = line("cep_can_load", "not_working", b.text, b.fix);
     } else if (starting && cepOffHere) {
       lines.cep_can_load = line("cep_can_load", "not_checked", ba.starting.text, ba.starting.fix);
-    } else lines.cep_can_load = line("cep_can_load", "working", TEXT.cep_can_load.working);
+    } else lines.cep_can_load = line("cep_can_load", "working", TEXT.cep_can_load.working(checkedV));
+    unsupportedOpen = !!unsupported;
   }
 
   // The panel's stamp (written by the panel on load, with its manifest's version). With CEP off, an
@@ -372,6 +390,7 @@ export async function runChecks(opts) {
   const stamp = readJson(L.stamp);
   const stampVersion = stamp && typeof stamp.version === "string" ? stamp.version : null;
   if (cepBlocked) lines.panel_loads = line("panel_loads", "not_checked", TEXT.cep_can_load.depends.text, TEXT.cep_can_load.depends.fix);
+  else if (unsupportedOpen && stampVersion !== version) lines.panel_loads = line("panel_loads", "not_checked", TEXT.ae_scripting.no_bridge.text, TEXT.ae_scripting.no_bridge.fix);
   else if (version && stampVersion === version) lines.panel_loads = line("panel_loads", "working", TEXT.panel_loads.working);
   else if (!open) lines.panel_loads = needsAe("panel_loads");
   else lines.panel_loads = line("panel_loads", "not_working", TEXT.panel_loads.not_working.text, TEXT.panel_loads.not_working.fix);

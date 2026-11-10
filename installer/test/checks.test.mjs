@@ -251,8 +251,16 @@ function allTexts() {
   const walk = (v) => {
     if (typeof v === "string") out.push(v);
     else if (typeof v === "function") {
-      const r = v.length ? v(["26.5", "27.0"]) : v();
-      walk(typeof r === "object" ? r : r);
+      // Every text function, with each kind of argument it takes (a version, a list, none).
+      for (const args of [[], ["26.5"], [["26.5", "27.0"]], [["25.6", "26.5"], ["26.5"]], ["29.0", "27.0"], [null, null]]) {
+        let r;
+        try {
+          r = v(...args);
+        } catch {
+          continue;
+        }
+        walk(r);
+      }
     } else if (v && typeof v === "object") Object.values(v).forEach(walk);
   };
   walk(TEXT);
@@ -407,4 +415,39 @@ test("AE still starting: the bridge line says to wait, not that it's broken", as
   assert.equal(l.ae_scripting.state, "not_checked");
   const cep = byId((await (await setup(t, { ae: ["29.0"], refused: true, aeUptime: 10 })).check()).result);
   assert.equal(cep.cep_can_load.state, "not_checked", "too early to blame CEP");
+});
+
+// T032: several After Effects versions (edge case): the check names which it looked at.
+test("several AE versions: the AE lines name the one that's open, which the bridge reports", async (t) => {
+  const r = (await (await setup(t, { ae: ["26.5", "27.0"], openAe: "27.0", appVersion: "27.0.1" })).check()).result;
+  const l = byId(r);
+  assert.equal(r.all_working, true, formatText(r));
+  assert.equal(l.ae_version.text, "Found After Effects 26.5 and 27.0.");
+  assert.equal(l.bridge_answers.text, "After Effects 27.0 answers Knack.");
+  assert.equal(l.ae_scripting.text, "After Effects 27.0 lets Knack's scripts run.");
+  assert.equal(l.cep_can_load.text, "After Effects 27.0 can load Knack.");
+  // The setting is kept per version, so the off line names the version to change it in.
+  const off = byId((await (await setup(t, { ae: ["26.5", "27.0"], openAe: "27.0", appVersion: "27.0", pref: { have: true, value: 0 } })).check()).result);
+  assert.equal(off.ae_scripting.text, "After Effects 27.0 doesn't let Knack's scripts run yet.");
+});
+
+test("several AE versions: unsupported ones are named apart from the ones Knack works in", async (t) => {
+  const l = byId((await (await setup(t, { ae: ["25.6", "26.5"], openAe: "26.5" })).check()).result);
+  assert.equal(l.ae_version.state, "working");
+  assert.equal(l.ae_version.text, "Found After Effects 25.6 and 26.5. Knack works in 26.5, not 25.6.");
+});
+
+test("an unsupported AE open beside a supported one: the bridge line names both", async (t) => {
+  const l = byId((await (await setup(t, { ae: ["25.6", "26.5"], openAe: "25.6", refused: true, stamp: false })).check()).result);
+  assert.equal(l.bridge_answers.state, "not_working");
+  assert.equal(l.bridge_answers.text, "After Effects 25.6 is open, which Knack doesn't support.");
+  assert.equal(l.bridge_answers.fix, "Quit it and open After Effects 26.5 instead.");
+  assert.equal(l.ae_scripting.state, "not_checked");
+  assert.equal(l.panel_loads.state, "not_checked", "not a missing panel");
+});
+
+test("which AE is open can't be told: the lines still read, without a version", async (t) => {
+  const l = byId((await (await setup(t, { ae: ["26.5", "27.0"], openAe: null, appVersion: "garbled" })).check()).result);
+  assert.equal(l.bridge_answers.text, "After Effects answers Knack.");
+  assert.equal(l.ae_scripting.text, "After Effects lets Knack's scripts run.");
 });
