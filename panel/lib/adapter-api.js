@@ -207,10 +207,16 @@ function createAdapter(config, deps) {
       }
       emit("exit", { code });
     });
+    // skill: the lesson's opening skill (from panel-session.json, as B1's Continue uses it), sent
+    // only with a resume. The helper uses it only if the saved lesson can't be continued: it then
+    // starts fresh on that skill (contracts/helper-protocol.md, amended 2026-11-09). A new lesson's
+    // start command stays as it was: its skill comes from the first request (FR-042).
+    const skill = resumeSessionId && opts && typeof opts.skill === "string" && opts.skill ? opts.skill : null;
     write({
       type: "start",
       session_id: sessionId,
       resume: !!resumeSessionId,
+      ...(skill ? { skill } : {}),
       home: config.home || defaultHome(baseEnv),
       mcp_config: path.join(config.repo_path, ".mcp.json"),
       skills_dir: path.join(config.repo_path, ".claude", "skills"),

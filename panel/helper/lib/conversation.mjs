@@ -4,14 +4,23 @@
 // was saved, byte for byte, because the service checks the history it gets back. Nothing here reads
 // the AE project, session.json or learner.json, and nothing here throws: a conversation that can't
 // be saved or continued must never break a lesson. Reasons are fixed words, safe to log.
+//
+// Version 2 (T044, data-model › Prompt state): the file also holds the lesson's prompt state at the
+// same complete exchange as the history, so a continued lesson can rebuild the same next request.
+// The loop checks that rebuild (request_hash); a mismatch is the reason `prompt`. Version 1 (T043's,
+// never wired) had no prompt state and isn't continued (reason `version`).
 
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { SKILL_PATTERN } from "./skills.mjs";
 
 export const CONVERSATION_FILE = "panel-conversation.json";
 export const FRAMES_DIR = "panel-conversation-frames";
-const VERSION = 1;
+const VERSION = 2;
+// Why a saved conversation wasn't continued. `prompt` comes from the loop's rebuild (lib/loop.mjs).
+export const NOT_CONTINUED = Object.freeze(["none", "unreadable", "version", "session", "model", "frames", "prompt"]);
+const PROMPT_FIELDS = ["start_skill", "skill", "offered", "handed_over", "pending_skill", "request_hash"];
 const ROLES = new Set(["user", "assistant", "system"]);
 // A frame's name is the sha256 of its bytes: the same frame is one file, and a load can tell it's
 // intact. Only this exact shape is ever opened, so a damaged file can't point outside the folder.
@@ -101,23 +110,40 @@ function frameIn(home, block) {
   return { ...block, source: swapKey(block.source, "frame_file", "data", bytes.toString("base64")) };
 }
 
-// Saves the history if it ends on a complete exchange, frames first so the file never names one
-// that isn't there. Any failure leaves the last save as it was.
-// → { saved: true } or { saved: false, reason: "incomplete" | "write_failed" }.
-export function saveConversation({ home, sessionId, skill, settingsHash, model, messages }) {
+// Saves the history and the prompt state (the loop's, at the same complete exchange) if the history
+// ends on a complete exchange, frames first so the file never names one that isn't there. A save
+// that fails deletes the last one and its frames (best effort): an older save may be missing a
+// demonstration or record_lesson that ran after it, so it must never be continued.
+// → { saved: true }, { saved: false, reason: "incomplete" } (the last save stays), or
+// { saved: false, reason: "write_failed", cleared } (cleared: whether the deletion worked).
+export function saveConversation({ home, sessionId, settingsHash, model, prompt, messages }) {
   if (!isCompleteHistory(messages)) return { saved: false, reason: "incomplete" };
   try {
     fs.mkdirSync(home, { recursive: true });
     const onDisk = mapToolResultImages(messages, (block) => frameOut(home, block));
-    writeWhole(path.join(home, CONVERSATION_FILE), JSON.stringify({ version: VERSION, session_id: sessionId, skill: skill ?? null, settings_hash: settingsHash, model, messages: onDisk }));
+    writeWhole(path.join(home, CONVERSATION_FILE), JSON.stringify({ version: VERSION, session_id: sessionId, settings_hash: settingsHash, model, prompt, messages: onDisk }));
     return { saved: true };
   } catch {
-    return { saved: false, reason: "write_failed" };
+    return { saved: false, reason: "write_failed", cleared: clearConversation(home) };
   }
 }
 
+const skillName = (v) => v === null || (typeof v === "string" && SKILL_PATTERN.test(v));
+
+// The prompt state's shape (data-model › Prompt state): every field, nothing else. Whether it
+// rebuilds the same request is the loop's check, not this one.
+function wellFormedPrompt(p) {
+  if (!p || typeof p !== "object" || Array.isArray(p)) return false;
+  const keys = Object.keys(p);
+  if (keys.length !== PROMPT_FIELDS.length || !PROMPT_FIELDS.every((f) => keys.includes(f))) return false;
+  if (!skillName(p.start_skill) || !skillName(p.skill) || !skillName(p.pending_skill)) return false;
+  if (p.offered !== null && !(Array.isArray(p.offered) && p.offered.every((n) => typeof n === "string"))) return false;
+  if (typeof p.handed_over !== "boolean") return false;
+  return typeof p.request_hash === "string" && /^[0-9a-f]{64}$/.test(p.request_hash);
+}
+
 function wellFormed(saved) {
-  if (typeof saved.skill !== "string" && saved.skill !== null) return false;
+  if (!wellFormedPrompt(saved.prompt)) return false;
   if (typeof saved.settings_hash !== "string") return false;
   if (!Array.isArray(saved.messages)) return false;
   if (!saved.messages.every((m) => m && ROLES.has(m.role) && isBlockList(m.content))) return false;
@@ -125,9 +151,10 @@ function wellFormed(saved) {
 }
 
 // The saved conversation for this session and model, with its frames restored.
-// → { ok: true, conversation } or { ok: false, reason: "none" | "unreadable" | "version" |
-// "session" | "model" | "frames" }. Every refusal means the same to the learner: a fresh start
-// with nothing alarming said (spec 003's rule). A different settings hash isn't a refusal.
+// → { ok: true, conversation: { version, session_id, settings_hash, model, prompt, messages } } or
+// { ok: false, reason: "none" | "unreadable" | "version" | "session" | "model" | "frames" }. Every
+// refusal means the same to the learner: a fresh start with nothing alarming said (spec 003's
+// rule). A different settings hash isn't a refusal: request_hash catches what changes a request.
 export function loadConversation({ home, sessionId, model }) {
   let raw;
   try {

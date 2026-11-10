@@ -11,6 +11,10 @@ import { fileURLToPath } from "node:url";
 import { loadSettings, HELPER_DIR } from "../lib/settings.mjs";
 import { MESSAGES } from "../lib/errors.mjs";
 import { startFakeService, reply, failure, text, thinking, toolUse } from "./fake-service.mjs";
+import { CONVERSATION_FILE, FRAMES_DIR } from "../lib/conversation.mjs";
+import { NOT_FINISHED, DIDNT_RUN } from "../lib/loop.mjs";
+import { readSkill } from "../lib/skills.mjs";
+import { withoutBreakpoints } from "../lib/prompt.mjs";
 
 const REPO = path.resolve(HELPER_DIR, "../..");
 const FIXTURE = path.join(REPO, "product", "evals", "easing", "fixtures", "before.json");
@@ -36,11 +40,13 @@ const childrenOf = (pid) => {
   }
 };
 
-async function helper() {
+// opts.home: share a learner home (and its fixture state) with an earlier helper, as a reopened
+// panel does.
+async function helper(opts = {}) {
   const svc = await startFakeService();
-  const home = fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-main-"));
+  const home = opts.home || fs.mkdtempSync(path.join(os.tmpdir(), "AEMentor-main-"));
   const state = path.join(home, "fixture-state.json");
-  fs.writeFileSync(state, JSON.stringify({ project: FIXTURE }));
+  if (!opts.home) fs.writeFileSync(state, JSON.stringify({ project: FIXTURE }));
   // As the adapter starts it: PATH, HOME, TZ. The ANTHROPIC_* variables show they're ignored.
   const env = { PATH: "/usr/bin:/bin:/usr/sbin:/sbin", HOME: process.env.HOME, ANTHROPIC_API_KEY: "sk-ant-api03-WRONGKEY_from_env_xx", ANTHROPIC_BASE_URL: "https://elsewhere.invalid" };
   const proc = spawn(process.execPath, [path.join(HELPER_DIR, "main.mjs")], { cwd: HELPER_DIR, env, stdio: ["pipe", "pipe", "pipe"] });
@@ -112,6 +118,7 @@ test("a fixture easing lesson end to end; stop leaves no helper and no ae-mentor
     effort: "medium",
     settings_hash: loaded.hash,
     skill: null,
+    resumed: false,
   });
 
   h.svc.script(
@@ -345,4 +352,175 @@ test("key_check: a remote base_url or a keychain other than false (without a loc
   h.cmd({ type: "stop" });
   await h.exited;
   assert.ok(!h.stderr.includes(CHECK_KEY) && !h.stdout.includes(CHECK_KEY));
+});
+
+// ---------- T044: continuing a lesson (contracts/helper-protocol.md, amended 2026-11-09) ----------
+
+const SESSION = "6f1c2b9e-0000-4000-8000-000000000001";
+const BACK = "I'm back. Pick up where we left off.";
+const convFile = (home) => path.join(home, CONVERSATION_FILE);
+const EASE_BODY = readSkill(path.join(REPO, ".claude", "skills"), "ease-mentor").body;
+const strip = (v) => JSON.stringify(withoutBreakpoints(v));
+
+// One easing turn (the snapshot, then a line), then stop. → { h, end, demoTarget }.
+async function easedOnce() {
+  const h = await helper();
+  h.start();
+  await h.next("ready");
+  h.svc.script(
+    reply([thinking("", "s1"), text("Let me look."), toolUse("snapshot_project", {}, "tu1")], { stop_reason: "tool_use" }),
+    reply([thinking("", "s2"), text("Your Title moves at one speed.")]),
+  );
+  const at = h.events.length;
+  h.cmd({ type: "send", text: "/ease-mentor", kind: "start" });
+  const end = await h.next("turn_end", at);
+  assert.equal(end.ok, true);
+  const demoTarget = h.events.slice(at).find((e) => e.type === "tool_result").json.demo_target;
+  return { h, end, demoTarget };
+}
+
+async function stopped(h) {
+  h.cmd({ type: "stop" });
+  assert.equal(await h.exited, 0);
+}
+
+test("resume false: a saved conversation and its frames are deleted before ready", async () => {
+  const { h } = await easedOnce();
+  assert.equal(fs.existsSync(convFile(h.home)), true, "saved after the complete exchange");
+  await stopped(h);
+  fs.mkdirSync(path.join(h.home, FRAMES_DIR), { recursive: true });
+  fs.writeFileSync(path.join(h.home, FRAMES_DIR, "x.png"), "x");
+  const again = await helper({ home: h.home });
+  again.start({ resume: false });
+  const ready = await again.next("ready");
+  assert.equal(ready.resumed, false);
+  assert.equal(fs.existsSync(convFile(h.home)), false);
+  assert.equal(fs.existsSync(path.join(h.home, FRAMES_DIR)), false);
+});
+
+test("resume true: a new helper continues the saved lesson; ready says so, and the next request carries the history", async () => {
+  const { h, end } = await easedOnce();
+  const history = withoutBreakpoints(h.svc.messageRequests[1].body.messages);
+  await stopped(h);
+
+  const again = await helper({ home: h.home });
+  again.start({ resume: true, skill: "ease-mentor" });
+  const ready = await again.next("ready");
+  assert.equal(ready.resumed, true);
+  assert.equal(ready.skill, "ease-mentor");
+  assert.match(again.stderr, /conversation_continued/);
+  again.svc.script(reply([text("Welcome back.")]));
+  const at = again.events.length;
+  again.cmd({ type: "send", text: BACK, kind: "continue" });
+  const next = await again.next("turn_end", at);
+  assert.equal(next.ok, true);
+  assert.equal(next.prompt_hash, end.prompt_hash);
+  const sent = withoutBreakpoints(again.svc.messageRequests[0].body.messages);
+  assert.equal(JSON.stringify(sent.slice(0, history.length)), JSON.stringify(history));
+  assert.equal(sent.length, history.length + 2);
+  assert.deepEqual(sent.at(-1), { role: "user", content: [{ type: "text", text: BACK }] });
+  assert.ok(!again.events.some((e) => e.type === "error"));
+});
+
+for (const [what, damage, reason] of [
+  ["a changed prompt (request_hash)", (saved) => (saved.prompt.request_hash = "0".repeat(64)), "prompt"],
+  ["a version 1 file", (saved) => { saved.version = 1; saved.skill = "ease-mentor"; delete saved.prompt; }, "version"],
+  ["another session's file", (saved) => (saved.session_id = "someone-else"), "session"],
+]) {
+  test(`resume true, ${what}: deleted, a fresh start on the opening skill, no error`, async () => {
+    const { h } = await easedOnce();
+    await stopped(h);
+    const saved = JSON.parse(fs.readFileSync(convFile(h.home), "utf8"));
+    damage(saved);
+    fs.writeFileSync(convFile(h.home), JSON.stringify(saved));
+
+    const again = await helper({ home: h.home });
+    again.start({ resume: true, skill: "ease-mentor" });
+    const ready = await again.next("ready");
+    assert.equal(ready.resumed, false);
+    assert.equal(ready.skill, null);
+    assert.equal(fs.existsSync(convFile(h.home)), false, "deleted");
+    assert.equal(fs.existsSync(path.join(h.home, FRAMES_DIR)), false);
+    assert.match(again.stderr, new RegExp(`"conversation_not_continued","reason":"${reason}"`));
+
+    again.svc.script(reply([text("Let's look at your easing.")]));
+    const at = again.events.length;
+    again.cmd({ type: "send", text: BACK, kind: "continue" });
+    const end = await again.next("turn_end", at);
+    assert.equal(end.ok, true);
+    assert.equal(end.skill, "ease-mentor");
+    assert.ok(!again.events.some((e) => e.type === "error"), "nothing alarming");
+    const body = again.svc.messageRequests[0].body;
+    assert.deepEqual(withoutBreakpoints(body.messages), [{ role: "user", content: [{ type: "text", text: BACK }] }], "the text unchanged");
+    assert.equal(body.system.at(-1).text, EASE_BODY, "as if it had started with /ease-mentor");
+  });
+}
+
+test("a start skill that isn't a mentor skill is ignored and logged; resume false never uses one", async () => {
+  const h = await helper();
+  h.start({ resume: true, skill: "../builder" });
+  const ready = await h.next("ready");
+  assert.equal(ready.resumed, false);
+  assert.match(h.stderr, /skill_ignored/);
+  assert.ok(!h.stderr.includes("builder"));
+  h.svc.script(reply([text("Hi.")]));
+  h.cmd({ type: "send", text: BACK, kind: "continue" });
+  assert.equal((await h.next("turn_end")).skill, null);
+
+  const fresh = await helper();
+  fresh.start({ resume: false, skill: "ease-mentor" });
+  await fresh.next("ready");
+  fresh.svc.script(reply([text("Hi.")]));
+  fresh.cmd({ type: "send", text: "Hello", kind: "typed" });
+  assert.equal((await fresh.next("turn_end")).skill, null, "a new lesson loads a skill only from a command");
+});
+
+// A demonstration that hangs in ae-mentor: the fixture's project becomes a pipe nobody writes to,
+// so the server blocks reading it once the call arrives.
+for (const how of ["stop", "SIGTERM"]) {
+  test(`${how} during a demo call: the answer is completed and saved, then the helper exits`, async () => {
+    const { h, demoTarget } = await easedOnce();
+    const fifo = path.join(h.home, "hang.json");
+    execFileSync("/usr/bin/mkfifo", [fifo]);
+    fs.writeFileSync(h.state, JSON.stringify({ project: fifo }));
+    h.svc.script(reply([thinking("", "s3"), text("Watch."), toolUse("set_ease", { segment_id: demoTarget }, "tu_demo"), toolUse("diff_since_last", {}, "tu_diff")], { stop_reason: "tool_use" }));
+    const at = h.events.length;
+    h.cmd({ type: "send", text: "Show me one.", kind: "typed" });
+    await h.next("tool_call", at);
+    await new Promise((r) => setTimeout(r, 300)); // the call reaches ae-mentor
+    const t0 = Date.now();
+    if (how === "stop") h.cmd({ type: "stop" });
+    else h.proc.kill("SIGTERM");
+    assert.equal(await h.exited, 0);
+    assert.ok(Date.now() - t0 < 3000, "inside the adapter's 3 s before SIGKILL");
+    assert.ok(!h.events.slice(at).some((e) => e.type === "turn_end"), "no event once stopping");
+
+    const saved = JSON.parse(fs.readFileSync(convFile(h.home), "utf8"));
+    assert.deepEqual(saved.messages.at(-1).content, [
+      { type: "tool_result", tool_use_id: "tu_demo", content: [{ type: "text", text: NOT_FINISHED }], is_error: true },
+      { type: "tool_result", tool_use_id: "tu_diff", content: [{ type: "text", text: DIDNT_RUN }], is_error: true },
+    ]);
+    assert.equal(saved.messages.at(-2).content.find((b) => b.type === "tool_use").id, "tu_demo");
+    fs.rmSync(fifo, { force: true });
+
+    // The reopened lesson has the call and its result, so it knows a demonstration was attempted.
+    fs.writeFileSync(h.state, JSON.stringify({ project: FIXTURE }));
+    const again = await helper({ home: h.home });
+    again.start({ resume: true, skill: "ease-mentor" });
+    assert.equal((await again.next("ready")).resumed, true);
+    again.svc.script(reply([text("Let's check what's there.")]));
+    again.cmd({ type: "send", text: BACK, kind: "continue" });
+    assert.equal((await again.next("turn_end")).ok, true);
+    assert.ok(strip(again.svc.messageRequests[0].body.messages).includes(NOT_FINISHED));
+  });
+}
+
+test("stop while a request streams: nothing of that turn is saved", async () => {
+  const { h } = await easedOnce();
+  const before = fs.readFileSync(convFile(h.home), "utf8");
+  h.svc.script(reply([text("never")], { hang: true }));
+  h.cmd({ type: "send", text: "Show me one.", kind: "typed" });
+  while (h.svc.messageRequests.length < 3) await new Promise((r) => setTimeout(r, 10));
+  await stopped(h);
+  assert.equal(fs.readFileSync(convFile(h.home), "utf8"), before);
 });

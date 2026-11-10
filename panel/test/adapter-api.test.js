@@ -135,6 +135,20 @@ test("a resumed lesson sends its stored id with resume true", () => {
   assert.equal(h.child().commands()[0].resume, true);
 });
 
+test("a resume sends the opening skill from start's options (T044); a new lesson or no skill sends none", () => {
+  const h = harness();
+  h.adapter.start({ resumeSessionId: "44444444-4444-4444-8444-444444444444", skill: "ease-mentor" });
+  const start = h.child().commands()[0];
+  assert.equal(start.skill, "ease-mentor");
+  assert.equal(start.resume, true);
+  const fresh = harness();
+  fresh.adapter.start({ skill: "next-mentor" });
+  assert.equal("skill" in fresh.child().commands()[0], false, "a new lesson's skill comes from its first request (FR-042)");
+  const none = harness();
+  none.adapter.start({ resumeSessionId: "44444444-4444-4444-8444-444444444444" });
+  assert.equal("skill" in none.child().commands()[0], false);
+});
+
 test("send goes straight to the helper, even before ready; a second send while busy throws BUSY", () => {
   const h = harness();
   h.adapter.start();

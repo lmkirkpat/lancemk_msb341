@@ -34,6 +34,24 @@ The helper reports a **settings hash** in `ready` and on each `turn_end`. It cov
 `preamble.md`, `skill-tool.json`, `main.mjs` and every `lib/*.mjs`, so changing any of those files,
 or adding one to `lib/`, changes the hash that eval results are recorded against.
 
+## The saved conversation
+
+After each complete exchange the helper saves the lesson to `panel-conversation.json` in the
+learner home, with frames as files in `panel-conversation-frames/` (`lib/conversation.mjs`). Besides
+the history, the file holds the prompt state: the opening and active skill, the tools offered so
+far, and a hand-over whose skill text hasn't gone in yet.
+
+- `start` with `resume: true` continues it, if a rebuild from today's skills, preamble, server and
+  settings gives the same request. Anything else (no file, damaged, another lesson or model, or a
+  change to something that goes in a request) deletes it and starts the lesson fresh on the start
+  command's `skill`, saying nothing to the learner. `ready.resumed` says which happened.
+- `start` with `resume: false` deletes it first.
+- `stop`, SIGTERM or stdin closing mid-turn: an answer whose call ran or is still running is
+  completed ("That call didn't finish, …") and saved before the helper exits. Anything else in
+  flight isn't saved.
+
+[`data-model.md`](../../specs/013-api-runtime/data-model.md) › Lesson conversation has the details.
+
 ## The access key
 
 The key is in the macOS Keychain, in the item with service `Knack` and account `anthropic-api-key`.
