@@ -157,7 +157,7 @@ SC-005 to SC-009).
 
 - [ ] T046 [P] [US5] PB · Test first, then `panel/lib/turns.js`: add `runtime` (B1 lines get `"b1"`), `model`, `effort`, `settings_hash`, `tokens` `{ input, cache_write, cache_read, output }`, `other_model`, `error_kind` from `turn_end`/`error`, and `start_ms` on a lesson's first turn; still no message text; never throws (FR-029); `panel/main.js` passes the new fields through.
 - [ ] T047 [US5] PB · `panel/dev/turns.js`: report SC-004's share and median and the cost per lesson separately per runtime (missing `runtime` = B1), plus the cache read share and the gaps over 5 minutes (research R8's re-check).
-- [ ] T048 [US5] Builder · From T021's and T045's lessons: SC-002 (≥ 9 of 10 turns first activity ≤ 10 s over ≥ 10 turns, median next to B1's from spec 003 T034) and SC-004 (median lesson cost ≤ $0.40 over ≥ 3 lessons), R8's gap check, and the median helper start time (`start_ms`) against `decisions/010`'s 2-second signal; log in `discovery/usage-notes/api-runtime.md`. If fewer than 10 A turns were logged, one more lesson (🖐 AE). If SC-004 misses, T051 runs before the first tester.
+- [x] T048 [US5] Builder · From T021's and T045's lessons: SC-002 (≥ 9 of 10 turns first activity ≤ 10 s over ≥ 10 turns, median next to B1's from spec 003 T034) and SC-004 (median lesson cost ≤ $0.40 over ≥ 3 lessons), R8's gap check, and the median helper start time (`start_ms`) against `decisions/010`'s 2-second signal; log in `discovery/usage-notes/api-runtime.md`. If fewer than 10 A turns were logged, one more lesson (🖐 AE). If SC-004 misses, T051 runs before the first tester.
 
 ---
 

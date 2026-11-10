@@ -23,6 +23,30 @@ Three easing lessons in the panel on Mentor Practice, `"runtime": "a"` (set 17:2
   folds every turn since 2026-11-09 16:47 into one 100-turn, $5.10 "lesson". The numbers above were worked out
   by hand. Fix before T048 (panel-builder).
 
+## Speed, cost and start-up on A (T048, 2026-11-09)
+
+From T021's three lessons only (T045 hasn't run). That's enough for each minimum: at least 10 turns and 3 lessons.
+
+| Check | Bar | A | B1 for comparison | Result |
+|---|---|---|---|---|
+| SC-002, first activity ≤ 10 s | ≥ 9 of 10, over ≥ 10 turns | 18/18, median 2.4 s, worst 5.9 s | 36/36, median 1.7 s (spec 003 T034; 1.76 s recomputed) | Pass |
+| SC-004, median lesson cost | ≤ $0.40, over ≥ 3 lessons | $0.22 ($0.21, $0.25, $0.22) | $0.38 average (spec 003 T034) | Pass |
+| R8, gaps between turns within a lesson | revisit if > 1 in 10 go over 5 min | 0 of 15; median 8.9 s, longest 53 s | 32 gaps, median 20 s, none over 5 min (R8) | Keep the 5-minute cache |
+| `decisions/010`, helper start-up | signal if > 2 s | median 0.15 s, worst 0.18 s (10 runs) | none (B1 has no helper) | No signal |
+
+- **A is about 0.7 s slower to first activity than B1** (2.4 s against 1.7 s), but every turn was still well
+  under the 10 s bar.
+- **How start-up was measured:** `start_ms` isn't saved anywhere yet. T046 adds it to the turn log, and the
+  panel throws away the helper's own log (stderr). So I timed it directly: the helper spawned as the adapter
+  does (only `PATH`, `HOME`, `TZ`), from spawn to `ready`, 10 times at load about 5. `ready` comes after
+  `ae-mentor` has started. To avoid a Keychain dialog, the runs used a local `base_url` with `keychain: false`.
+  A Keychain lookup on its own took at most 0.01 s, so it adds nothing that matters.
+- **One gap was −0.3 s** (lesson 2, the two checks back to back): the log's `at` is written a moment after the
+  turn ends, so pressing the next button immediately gives a tiny negative gap. Counted as 0.
+- **Not checked:** cache reads and writes per turn. They're also waiting on T046, so R8's choice is backed by
+  the gaps, not by measured cache hits.
+- **Lesson 3 was a review.** Leaving it out, the median of the two first lessons is $0.23, which still passes.
+
 ## Pivot fix and re-runs (2026-11-06)
 
 Pivot B1 51/51 and A 50/51 at `c2d5f8d`; easing A 27/28 on the new helper. No A timeouts in about 260 turns
