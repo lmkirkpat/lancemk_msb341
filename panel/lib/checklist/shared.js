@@ -5,6 +5,10 @@ const { COPY } = require("../copy.js");
 
 const SEP = " › ";
 const secs = (t) => Number(Number(t).toFixed(2));
+// A label's trailing time ("Position 1.3–4.367 s", "Dot 2 0.5 s") rounds the way the mentor says it:
+// two decimals at most, trailing zeros dropped. Layer names with numbers in them are left alone.
+const tidyTimes = (label) =>
+  typeof label !== "string" ? label : label.replace(/(\d+(?:\.\d+)?)(?:–(\d+(?:\.\d+)?))? s$/, (_, a, b) => `${secs(a)}${b === undefined ? "" : `–${secs(b)}`} s`);
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 const arr = (x) => (Array.isArray(x) ? x : []);
 
@@ -16,9 +20,9 @@ function splitLabel(label) {
 
 // A label is a name only if it isn't the id itself (FR-100). `labels` are those kept from the lesson.
 function nameOf(id, label, labels) {
-  if (typeof label === "string" && label && label !== id) return label;
+  if (typeof label === "string" && label && label !== id) return tidyTimes(label);
   const kept = labels && labels[id];
-  return typeof kept === "string" && kept && kept !== id ? kept : null;
+  return typeof kept === "string" && kept && kept !== id ? tidyTimes(kept) : null;
 }
 
 // Rows in the tool's order, grouped by section where the section appears first.
@@ -75,4 +79,4 @@ function kindSentence(c) {
 
 const sentences = (list) => arr(list).map(String);
 
-module.exports = { SEP, secs, has, arr, splitLabel, nameOf, intoSections, count, PAIRS, LAYERS, PROPERTIES, header, placeWord, kindSentence, sentences };
+module.exports = { SEP, secs, tidyTimes, has, arr, splitLabel, nameOf, intoSections, count, PAIRS, LAYERS, PROPERTIES, header, placeWord, kindSentence, sentences };

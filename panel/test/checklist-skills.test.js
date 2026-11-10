@@ -393,3 +393,17 @@ test("speed graph: a passed pair of unknown credit isn't still to shape", () => 
   const s = check("speed_graph_check", { pairs: [P("a"), P("b", { credit: "unknown" }), P("c", { result: "not_passed", credit: null, mistake: "not_shaped" })] }).summary;
   assert.equal(s, "1 of 3 yours shaped · 1 still to shape");
 });
+
+// ---------- row times (spec 007 finding 1) ----------
+
+test("row times round like the mentor: two decimals at most, trailing zeros dropped", () => {
+  const raw = "Title › Position 1.3–4.367 s";
+  const l = check(SG, { pairs: [{ id: "1", label: raw, result: "not_passed", mistake: "not_shaped" }] }, { landing_hard: ["Bar › X Position 0.600–1.2049 s"] });
+  assert.equal(rows(l)[0][0], "Position 1.3–4.37 s");
+  assert.equal(l.next, "Position 1.3–4.37 s");
+  assert.equal(rows(l)[1][0], "Bar › X Position 0.6–1.2 s");
+  // Kept labels from the opening list round the same way, and names with numbers in them are left alone.
+  const snap = fromSnapshot("speed_graph_snapshot", ["a", "b"], { labels: { a: raw, b: "Dot 2.50 › Scale 0.5–1 s" } });
+  assert.deepEqual(rowsOf(snap).map((r) => r.subject), ["Position 1.3–4.37 s", "Scale 0.5–1 s"]);
+  assert.deepEqual(snap.sections.map((s) => s.title), ["Title", "Dot 2.50"]);
+});
