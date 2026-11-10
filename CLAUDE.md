@@ -138,8 +138,10 @@ a brand new session act like a colleague who already knows what you are working 
     live lessons are fixed (eval cases `d50330a`: speed graph 36 and 37, pivot 54, null 52; `SKILL.md` `ad4a257`),
     plus a `no_slash_command` check in every runner (it caught offset and key types offering `/ease-mentor`). Full B1
     runs after: speed graph 34/37, pivot 56/59, null 45/52, all at SC-006; repeats showed the rest as noise or
-    plumbing. **Open:** spec 007's request cases fail from before (speed graph 34, a hard rule; pivot 50; null 45
-    and 46) and want `SKILL.md` fixes; watch pivot 45; the runners should parse a malformed judge reply leniently.
+    plumbing. Spec 007's request cases that failed from before (speed graph 34, a hard rule; pivot 50; null 45 and
+    46) are fixed in `SKILL.md` (`b630cc8`, each 3/3 on B1). **Open:** for eval-engineer, null 45's `no_offer`
+    regex lets a "so you can watch" offer through, pin case 15's offer to turn 3, and pivot 50's one-pixel preview;
+    watch pivot 45; the runners should parse a malformed judge reply leniently.
     **Live sittings:** the panel is linked to the main checkout, so a `panel/` merge is live at AE's next restart;
     merge only between sittings. `mentor/dev/capture.mjs` captures the *active* comp (check the name it prints),
     and the Save a Copy for a restore goes outside the repo.
