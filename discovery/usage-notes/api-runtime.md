@@ -1,5 +1,29 @@
 # Option A runtime: usage notes
 
+## Continue a lesson on A (T045, 2026-11-09, 21:58 to 22:05 local, at `392efa5`)
+
+Three continues in the panel on runtime A, on Mentor Practice 2 (not Mentor Practice). From `panel-turns.jsonl`,
+`calls.jsonl` and `panel-session.json`.
+
+| Run | Lesson | Closed | Demo before the close | After Continue | Second demo | Result |
+|---|---|---|---|---|---|---|
+| 1 | easing, opened as a **review** (Dot 3) | right after the start | none (a review) | Show me → steps in words, passed 1st check | no | Doesn't test SC-007 |
+| 2 | easing, opened as a **review** (Pause) | after Show me (words) | none (a review) | Show me → words, passed 1st check | no | Doesn't test SC-007 |
+| 3 | speed graph, by Find my next lesson (Card) | after the demo | `speed_graph_demo` on Card Position, one call | "We're still on Card's Scale…"; Show me again restated the demo's change and its look at 1.5 s | **no** (one demo call in all) | **Pass** |
+
+- **SC-007: 1 of 3 so far.** Every continue picked the lesson back up with no error, but runs 1 and 2 had no
+  demonstration to repeat: the record already has easing, so on this comp easing always opens as a review,
+  where a demo isn't allowed. Two more runs are needed, each on a skill that demonstrates (Find my next lesson
+  to key types, offset, the pivot or null, or easing on a comp with linear pairs).
+- **Run 3 referred to the earlier part correctly:** it named the demo's change (Position, 1.2 to 2.4 s, short
+  ease out and long ease in), said it was still in place, and kept Scale as the learner's part. The check
+  passed it on the shape the mentor made (`seen_shaped`).
+- **T046 live, first check:** the turn log now has `runtime: "a"`, tokens and `start_ms`. `node panel/dev/turns.js`
+  reports A on its own: 31/31 turns ≤ 10 s (median 2.1 s), $0.22 per lesson, cache read share 87%, no gap over
+  5 minutes, helper start-up median 0.3 s live (0.15 s measured in T048, both far below `decisions/010`'s 2 s).
+- **The skill isn't in the turn log.** T046's field list doesn't include it, though the helper's `turn_end` has
+  it. Not needed for T045; worth adding to `panel/lib/turns.js` (panel-builder) so a report can split by skill.
+
 ## Live lessons on A (T021, 2026-11-09, 19:43 to 19:50 local, at `229dc0e`)
 
 Three easing lessons in the panel on Mentor Practice, `"runtime": "a"` (set 17:20), the helper
