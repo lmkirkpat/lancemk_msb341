@@ -347,7 +347,7 @@ export async function runChecks(opts) {
     // AE proves CEP loads; a missing bridge folder is its own line; a new AE gets time to start.
     const cepOffHere = openApp ? cepOff(openApp.parts) : ae.length > 0 && ae.every((a) => cepOff(a.parts));
     const starting = !answered && !portTaken && log.started !== true && openUptime !== null && openUptime < STARTING_S;
-    cepBlocked = !answered && !portTaken && !starting && log.started !== true && cepOffHere && lines.ext_bridge.state === "working";
+    cepBlocked = !answered && kind !== "ours_refused" && !portTaken && !starting && log.started !== true && cepOffHere && lines.ext_bridge.state === "working";
 
     const ba = TEXT.bridge_answers;
     const cd = TEXT.cep_can_load.depends;

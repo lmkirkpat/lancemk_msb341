@@ -38,7 +38,7 @@ export async function findAE({ dirs, run = defaultRun, tools = TOOLS } = {}) {
       if (!e.isDirectory() || !/^Adobe After Effects/.test(e.name)) continue;
       let apps = [];
       try {
-        apps = fs.readdirSync(path.join(dir, e.name)).filter((n) => /^Adobe After Effects.*\.app$/.test(n));
+        apps = fs.readdirSync(path.join(dir, e.name)).filter((n) => /^Adobe After Effects.*\.app$/.test(n) && !/Render Engine/i.test(n));
       } catch {
         continue;
       }
@@ -51,7 +51,11 @@ export async function findAE({ dirs, run = defaultRun, tools = TOOLS } = {}) {
       }
     }
   }
-  return found.sort((a, b) => compareVersions(a.parts, b.parts));
+  // One entry per version: a second app with the same version (another copy) isn't another install.
+  const seen = new Set();
+  return found
+    .sort((a, b) => compareVersions(a.parts, b.parts))
+    .filter((f) => (seen.has(f.version) ? false : seen.add(f.version)));
 }
 
 export async function aeRunning({ run = defaultRun, tools = TOOLS } = {}) {

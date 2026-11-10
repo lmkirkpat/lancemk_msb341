@@ -188,12 +188,19 @@ export function placeExtension({ L, g, payloadDir, name, work }) {
     st = fs.lstatSync(dest);
   } catch {}
   if (st && st.isSymbolicLink()) throw new InstallError("A development copy is in the way.");
-  if (st) {
-    const old = path.join(work, `old-ext-${name}`);
-    g.rm(old);
-    g.rename(dest, old);
+  if (!st) return g.rename(fresh, dest);
+  const old = path.join(work, `old-ext-${name}`);
+  g.rm(old);
+  g.rename(dest, old);
+  try {
+    g.rename(fresh, dest);
+  } catch (e) {
+    // Put the old extension back, so a failed swap never leaves CEP's folder without it.
+    try {
+      if (!fs.existsSync(dest)) g.rename(old, dest);
+    } catch {}
+    throw e;
   }
-  g.rename(fresh, dest);
 }
 
 // Records that the Keychain item is Knack's, for uninstall.

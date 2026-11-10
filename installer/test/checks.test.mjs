@@ -491,3 +491,24 @@ test("a learner home that can't be written: on a managed Mac it says to ask IT",
   assert.equal(managed.record_folder.text, TEXT.record_folder.managed.text);
   assert.match(managed.record_folder.fix, /IT/);
 });
+
+// Installer SC-002 finding: each AE folder's Render Engine app was counted as a second install.
+test("Render Engine apps and repeat copies aren't extra AE versions", async (t) => {
+  const apps = makeApps(t, ["26.5", "27.0", "25.6"]);
+  // A second copy of 27.0 elsewhere in the same folder.
+  write(apps, "Adobe After Effects 2027 copy/Adobe After Effects 2027.app/Contents/Info.plist",
+    fs.readFileSync(path.join(apps, "Adobe After Effects 2027/Adobe After Effects 2027.app/Contents/Info.plist"), "utf8"));
+  const { findAE } = await import("../lib/ae.mjs");
+  const found = await findAE({ dirs: [apps], run: makeRun({}) });
+  assert.deepEqual(found.map((f) => f.version), ["25.6", "26.5", "27.0"]);
+  assert.ok(found.every((f) => !/Render Engine/.test(f.app)));
+  const l = byId((await (await setup(t, { ae: ["25.6", "26.5", "27.0"], openAe: "27.0", appVersion: "27.0" })).check()).result);
+  assert.equal(l.ae_version.text, "Found After Effects 25.6, 26.5 and 27.0. Knack works in 26.5 and 27.0, not 25.6.");
+});
+
+// A 401/403 from our own bridge proves CEP loaded it, so CEP is never blamed.
+test("our bridge refusing the token is not read as CEP off", async (t) => {
+  const l = byId((await (await setup(t, { ae: ["29.0"], wrongToken: true, stamp: false, aeUptime: 300 })).check()).result);
+  assert.notEqual(l.cep_can_load.state, "not_working");
+  assert.notEqual(l.bridge_answers.text, TEXT.cep_can_load.depends.text);
+});

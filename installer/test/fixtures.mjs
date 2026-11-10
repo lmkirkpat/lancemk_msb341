@@ -66,6 +66,8 @@ export function makeApps(t, versions = ["26.5"]) {
   for (const v of versions) {
     const year = 2000 + Number(v.split(".")[0]);
     write(d, `Adobe After Effects ${year}/Adobe After Effects ${year}.app/Contents/Info.plist`, PLIST(v));
+    // Every real AE folder also holds a Render Engine app with the same version; it isn't an install.
+    write(d, `Adobe After Effects ${year}/Adobe After Effects Render Engine ${year}.app/Contents/Info.plist`, PLIST(v));
   }
   return d;
 }

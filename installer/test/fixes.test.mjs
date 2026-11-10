@@ -125,3 +125,19 @@ test("Fix's messages are plain (FR-022)", () => {
     assert.ok(text.split(/(?<=[.!?])\s+/).length <= 2, text);
   }
 });
+
+// A failed swap puts the old extension back, so Fix's cleanup of its work folder can't delete it.
+test("a failed swap keeps the old extension in place", async (t) => {
+  const { placeExtension } = await import("../lib/payload.mjs");
+  const { guard } = await import("../lib/fsx.mjs");
+  const s = await setup(t);
+  const L = s.L;
+  const dest = path.join(L.cep, "AEMentorPanel");
+  const before = snapshot(dest);
+  const g0 = guard(L.support);
+  const work = path.join(L.tmp, "fix");
+  const g = { ...g0, rename: (a, b) => { if (b === dest && path.basename(a).startsWith("ext-")) throw Object.assign(new Error("busy"), { code: "EBUSY" }); return g0.rename(a, b); } };
+  assert.throws(() => placeExtension({ L, g, payloadDir: s.payloadDir, name: "AEMentorPanel", work }));
+  g0.rm(work);
+  assert.deepEqual(snapshot(dest), before);
+});
