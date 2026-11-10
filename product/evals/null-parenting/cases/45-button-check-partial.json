@@ -1,6 +1,6 @@
 {
   "id": "45-button-check-partial",
-  "title": "Panel: Done, check it with the null placed and nothing parented: the layers named, no fix, no offer",
+  "title": "Panel: Done, check it with the null placed and nothing parented: the layers named, no fix, and no offer in a turn that says a layer is still off (an offer is allowed when the turn moves on to the parenting ask; accepted 2026-11-09)",
   "covers": [
     "RQ-14",
     "FR-070"
@@ -39,7 +39,7 @@
       },
       {
         "id": "no_offer",
-        "never": "\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:parent|fix|do (?:it|that|them|the rest|the other)|set (?:it|that|them)|the rest)\\b",
+        "never": "^(?=[\\s\\S]*\\b(?:still|yet|aren['’]t|isn['’]t|don['’]t follow|doesn['’]t follow|not (?:parented|following))\\b)[\\s\\S]*?\\b(?:want me to|shall I|should I|let me|I can(?!['’]t)|I'll|I will|I could|happy to)\\b[^.?!]{0,40}\\b(?:parent|fix|do (?:it|that|them|the rest|the other)|set (?:it|that|them)|the rest)\\b",
         "turns": [
           3
         ]
