@@ -9,6 +9,19 @@ repeat what the unit tests already prove.
 
 **Universal checks:** `plain_words`, `no_narration`, and (2026-11-09) `no_slash_command`: nothing said names a slash command (`/<name>-mentor`), because the panel has no command line.
 
+## B1 baseline on `e46b739` (2026-11-11)
+
+Full run on B1 (the default runtime, no API credit), all 33 cases, mentor and judge unchanged since the 11-09 A run (no lesson code changed).
+**`results/2026-11-11-225131.json`: 32/33 (97%), $18.71.** SC-006 met; no hard-rule check failed; no `ETIMEDOUT` or other plumbing failures.
+
+| Failure | Triage |
+|---|---|
+| 03-show-me `R-NAMES-LAYERS`: the opening said Title's four pairs "all start at 0.5 s", but the second Position pair runs 1.5 s to 3 s | Rubric, the known opening-wording flake (same family as 07, 17 and 27 earlier). |
+
+`--only 03 --repeat 3` (`results/2026-11-11-225311.json`, $1.33): runs 1 and 2 pass, run 3 fails `R-ONE-IDEA` (the demo turn opens with two sentences explaining linear motion). Majority pass (2/3), so the original failure is noise by the set's rule. Run 3's failure is a different item from the first one; both are wording flakes on case 03, no hard rule involved. Not fixed (no prompt change in this task).
+
+**FR-033 (c) recomputed for the 11-09 A run (`2026-11-09-225305.json`, 27/33 = 81.8%) against this B1 baseline (32/33 = 97.0%): A is 15.2 points below.** The limit is 5 points, so (c) is still not met on that run. The old comparison (27/28 = 96.4%, 14.6 points) was against a baseline that lacked cases 29 to 33; this one is like for like, and the gap barely moved. Easing's A verdict is not declared here; the second A run decides it.
+
 ## Spec 007 cases (T027, written 2026-11-09, not yet run)
 
 Five cases added, numbers 29 to 33 (the set is now 33 cases). Written and dry-run only; the first run is spec 007 T038, with `--only`, and does not need a full run.
