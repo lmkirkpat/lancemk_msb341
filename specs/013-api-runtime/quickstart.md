@@ -10,7 +10,11 @@ How to check spec 013 end to end. Each section names the success criterion it pr
 2. Store your access key in the Keychain:
    `security add-generic-password -s Knack -a anthropic-api-key -w` (it prompts for the key; nothing
    is echoed or saved in shell history).
-3. For eval runs only, in that shell: `read -s KNACK_EVAL_API_KEY && export KNACK_EVAL_API_KEY`.
+3. For eval runs only, in that shell, load it from the Keychain (no paste):
+   `export KNACK_EVAL_API_KEY="$(security find-generic-password -s Knack -a anthropic-api-key -w)"`,
+   then `echo ${KNACK_EVAL_API_KEY:0:7} ${#KNACK_EVAL_API_KEY}` → `sk-ant-` and about 100. *(Changed
+   2026-11-12: the silent `read -s` form took a pasted command line as the key twice, with no prompt
+   to show it was waiting.)*
    Don't use `ANTHROPIC_API_KEY`: Claude Code (the judge and B1) would pick it up.
 4. Check the key: `node panel/helper/dev/chat.mjs --key-check` → `works`.
 
