@@ -8,7 +8,8 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { mapTurn, takeEvalKey, helperEnv, createCaseMentor, helperHashFiles, KEY_VAR, startHelper, scrubKey, RUNNER_TIMEOUT, STDERR_CAP } from "../runtime-a.mjs";
+import { mapTurn, takeEvalKey, helperEnv, createCaseMentor, helperHashFiles, KEY_VAR, startHelper, scrubKey, RUNNER_TIMEOUT, STDERR_CAP, parseLogLine, requestSizes } from "../runtime-a.mjs";
+import { summarize, format } from "../timing-report.mjs";
 import { startFakeService, reply, text, thinking, toolUse } from "../../../../panel/helper/test/fake-service.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -201,6 +202,13 @@ readline.createInterface({ input: process.stdin }).on("line", (l) => {
     process.stderr.write("x".repeat(6000) + "\\n");
     process.stderr.write(JSON.stringify({ event: "response_timing", ms: 1234 }) + "\\n");
     process.stderr.write(JSON.stringify({ event: "stall", note: "${FAKE_KEY}" }) + "\\n");
+    if (c.text === "timing") {
+      process.stderr.write(JSON.stringify({ event: "request_no_headers", retry: 0, ms: 90, name: "TimeoutError", code: null, reached: false }) + "\\n");
+      process.stderr.write(JSON.stringify({ event: "response_went_quiet", request_id: "req_a", silent_ms: 30000, ms: 31000 }) + "\\n");
+      process.stderr.write(JSON.stringify({ event: "request_sent_again", turn: 1, attempt: 1, started: false }) + "\\n");
+      process.stderr.write(JSON.stringify({ event: "response_timing", request_id: "req_b", status: 200, headers_ms: 400, max_gap_ms: 900, total_ms: 5000, end: "done", note: "${FAKE_KEY}" }) + "\\n");
+      out({ type: "turn_end", ok: true, cost_usd: 0.01 });
+    }
     if (c.text === "fail") { out({ type: "error", kind: "stall" }); out({ type: "turn_end", ok: false, cost_usd: 0.01 }); }
   } else if (c.type === "stop") process.exit(0);
 });
@@ -283,4 +291,79 @@ test("closeCase returns failed_turns only when a turn failed, and each runner wr
     const src = fs.readFileSync(path.join(REPO, "product", "evals", set, "run.mjs"), "utf8");
     assert.match(src, /failed_turns: fin\.failed_turns/, set);
   }
+});
+
+test("parseLogLine keeps timing and stall events as numbers and short labels, drops the rest, scrubs", () => {
+  const t = parseLogLine(JSON.stringify({ at: "x", event: "response_timing", request_id: "req_1", status: 200, headers_ms: 10, max_gap_ms: 20, total_ms: 30, end: "done", extra: "no" }), "k");
+  assert.deepEqual(t, { kind: "timing", entry: { request_id: "req_1", status: 200, headers_ms: 10, max_gap_ms: 20, total_ms: 30, end: "done" } });
+  const e = parseLogLine(JSON.stringify({ event: "request_sent_again", turn: 3, attempt: 1, started: true }), "k");
+  assert.equal(e.kind, "event");
+  assert.equal(e.entry.event, "request_sent_again");
+  assert.equal(e.entry.attempt, 1);
+  assert.equal(parseLogLine(JSON.stringify({ event: "input_transformations", entries: [] }), "k"), null);
+  assert.equal(parseLogLine("not json", "k"), null);
+  const leak = parseLogLine(JSON.stringify({ event: "service_error", detail: `bad ${FAKE_KEY} here` }), FAKE_KEY);
+  assert.equal(JSON.stringify(leak).includes("FAKEKEY"), false);
+});
+
+test("a good turn's request timing and re-send events reach the case (T068), with body sizes only when the counts agree", async () => {
+  const dir = fakeHelperDir();
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), "timing-home-"));
+  try {
+    const m = createCaseMentor({ repo: REPO, home, key: FAKE_KEY, startHelper: (o) => startHelper({ ...o, helperDir: dir, turnWaitMs: 2000 }) });
+    const r = await m.turn("timing");
+    assert.equal(r.ok, true);
+    await m.stop();
+    assert.deepEqual(m.failedTurns, []);
+    // Two attempts ended (no headers, then timing) but the request log is empty: no sizes.
+    assert.deepEqual(m.requestTiming, [{ turn: 1, request_id: "req_b", status: 200, headers_ms: 400, max_gap_ms: 900, total_ms: 5000, end: "done" }]);
+    assert.deepEqual(m.requestEvents.map((e) => e.event), ["request_no_headers", "response_went_quiet", "request_sent_again"]);
+    assert.equal(JSON.stringify([m.requestTiming, m.requestEvents]).includes("FAKEKEY"), false);
+    // Two logged requests of known size, in order: the sizes line up.
+    fs.writeFileSync(m.requestLog, "a".repeat(99) + "\n" + "b".repeat(199) + "\n");
+    assert.deepEqual(requestSizes(m.requestLog), [99, 199]);
+    assert.equal(m.requestTiming[0].body_bytes, 199);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+    fs.rmSync(home, { recursive: true, force: true });
+  }
+});
+
+test("closeCase carries request_timing and request_events only when there are some, and every runner writes them", async () => {
+  const ab = await import("../ab.mjs");
+  const mk = (extra) => ({ stop: async () => {}, info: null, requestLog: path.join(os.tmpdir(), "no-such-request-log.jsonl"), cost: 0, costUnknownTurns: 0, otherModelTurns: 0, promptHashes: {}, failedTurns: [], ...extra });
+  const none = await ab.closeCase({ repo: REPO, mentor: mk({ requestTiming: [], requestEvents: [] }), learnerTexts: [] });
+  assert.equal("request_timing" in none, false);
+  assert.equal("request_events" in none, false);
+  const b1like = await ab.closeCase({ repo: REPO, mentor: mk({}), learnerTexts: [] });
+  assert.equal("request_timing" in b1like, false);
+  const one = await ab.closeCase({ repo: REPO, mentor: mk({ requestTiming: [{ turn: 1, total_ms: 5 }], requestEvents: [{ turn: 1, event: "request_sent_again" }] }), learnerTexts: [] });
+  assert.deepEqual(one.request_timing, [{ turn: 1, total_ms: 5 }]);
+  assert.deepEqual(one.request_events, [{ turn: 1, event: "request_sent_again" }]);
+  for (const set of ["easing", "key-types", "speed-graph", "offset", "anchor", "null-parenting", "next-mentor"]) {
+    const src = fs.readFileSync(path.join(REPO, "product", "evals", set, "run.mjs"), "utf8");
+    assert.match(src, /request_timing: fin\.request_timing/, set);
+    assert.match(src, /request_events: fin\.request_events/, set);
+  }
+});
+
+test("timing-report: counts, re-sends, maxima and the slowest five", () => {
+  const timing = (n, total, gap = 10) => ({ turn: n, request_id: "r" + n, status: 200, headers_ms: total / 10, max_gap_ms: gap, total_ms: total, end: "done" });
+  const results = {
+    cases: [
+      { id: "01", runs: [{ request_timing: [timing(1, 1000), timing(2, 9000, 700), timing(3, 300)], request_events: [{ turn: 2, event: "request_sent_again" }, { turn: 2, event: "response_went_quiet" }] }] },
+      { id: "02", runs: [{ request_timing: [timing(1, 2000), timing(2, 3000), timing(3, 4000), timing(4, 500)] }, { cost: 1 }] },
+    ],
+  };
+  const s = summarize(results);
+  assert.equal(s.requests, 7);
+  assert.equal(s.resends, 1);
+  assert.equal(s.quiet, 1);
+  assert.equal(s.runs, 3);
+  assert.equal(s.runs_with_timing, 2);
+  assert.equal(s.max_headers_ms, 900);
+  assert.equal(s.max_gap_ms, 700);
+  assert.deepEqual(s.slowest.map((t) => `${t.case}/${t.turn}`), ["01/2", "02/3", "02/2", "02/1", "01/1"]);
+  assert.match(format("f", s), /01\/run 1\/turn 2: 9000 ms/);
+  assert.match(format("f", summarize({ cases: [] })), /no timing/);
 });

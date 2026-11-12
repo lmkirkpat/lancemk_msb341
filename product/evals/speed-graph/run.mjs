@@ -647,7 +647,7 @@ async function runCase(c, opts) {
   const pass = !plumbing && checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
   fs.rmSync(home, { recursive: true, force: true });
   return { pass, ...(plumbing ? { plumbing: "judge reply unreadable" } : {}), checks, rubric, cost, session_id: sessionId, transcript: renderTranscript(turns),
-    ...(fin ? { runtime: "a", mentor_cost_usd: Number(fin.cost.toFixed(4)), judge_cost_usd: Number((cost - fin.cost).toFixed(4)), cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist, ...(fin.failed_turns ? { failed_turns: fin.failed_turns } : {}) } : {}) };
+    ...(fin ? { runtime: "a", mentor_cost_usd: Number(fin.cost.toFixed(4)), judge_cost_usd: Number((cost - fin.cost).toFixed(4)), cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist, ...(fin.failed_turns ? { failed_turns: fin.failed_turns } : {}), ...(fin.request_timing ? { request_timing: fin.request_timing } : {}), ...(fin.request_events ? { request_events: fin.request_events } : {}) } : {}) };
 }
 
 // ---------- main ----------

@@ -22,6 +22,43 @@ export const RUNNER_TIMEOUT = "runner_timeout";
 // The most helper log a failed turn puts in the results file.
 export const STDERR_CAP = 4000;
 
+// The helper's log events that say how a request went (T068): the per-request timing, and every sign
+// of a stall or a re-send. Everything else in the log stays out of the results.
+export const TIMING_EVENT = "response_timing";
+export const REQUEST_EVENTS = new Set(["request_no_headers", "response_went_quiet", "request_sent_again", "turn_timeout", "service_error", "turn_failed"]);
+const TIMING_KEEP = ["request_id", "status", "headers_ms", "max_gap_ms", "total_ms", "end"];
+const EVENT_KEEP = ["request_id", "retry", "ms", "name", "code", "reached", "silent_ms", "attempt", "started", "step", "waiting_on", "shown", "kind", "status", "type"];
+
+// One stderr line → { kind: "timing" | "event", entry } or null. Entries carry numbers and short
+// labels only, never free text longer than a short detail, and are key-scrubbed.
+export function parseLogLine(line, key) {
+  let o;
+  try {
+    o = JSON.parse(line);
+  } catch {
+    return null;
+  }
+  if (!o || typeof o !== "object") return null;
+  const pick = (keys) => Object.fromEntries(keys.filter((k) => o[k] !== undefined && o[k] !== null).map((k) => [k, typeof o[k] === "string" ? scrubKey(o[k], key).slice(0, 80) : o[k]]));
+  if (o.event === TIMING_EVENT) return typeof o.total_ms !== "number" ? null : { kind: "timing", entry: pick(TIMING_KEEP) };
+  if (REQUEST_EVENTS.has(o.event)) return { kind: "event", entry: { event: o.event, ...pick(EVENT_KEEP), ...(typeof o.detail === "string" ? { detail: scrubKey(o.detail, key).slice(0, 120) } : {}) } };
+  return null;
+}
+
+// Body sizes (bytes of each logged request line) from a request log file, in the order sent; [] if
+// the file can't be read. The helper's own log doesn't carry the size (a proposed one-line change).
+export function requestSizes(file) {
+  try {
+    return fs
+      .readFileSync(file, "utf8")
+      .split("\n")
+      .filter(Boolean)
+      .map((l) => Buffer.byteLength(l));
+  } catch {
+    return [];
+  }
+}
+
 // Text safe to write to a results file: the key (exact, and anything key-shaped) is replaced. The
 // helper's log is scrubbed already (panel/helper/lib/errors.mjs); this is the second guard.
 export function scrubKey(text, key) {
@@ -102,7 +139,19 @@ export async function startHelper({ repo, home, fixtureEnv, requestLog, key, set
   const waiters = [];
   let stderr = "";
   let exited = false;
-  proc.stderr.on("data", (d) => (stderr = (stderr + d).slice(-4000)));
+  let partial = "";
+  let label = null;
+  const logged = []; // in the order logged: { kind, entry }
+  proc.stderr.on("data", (d) => {
+    stderr = (stderr + d).slice(-4000);
+    // Whole lines only; the tail kept above is for a failed turn, this is for every turn.
+    const lines = (partial + d).split("\n");
+    partial = lines.pop().slice(-20000);
+    for (const l of lines) {
+      const p = parseLogLine(l, key);
+      if (p) logged.push({ kind: p.kind, entry: { turn: label, ...p.entry } });
+    }
+  });
   readline.createInterface({ input: proc.stdout }).on("line", (line) => {
     let ev;
     try {
@@ -193,9 +242,12 @@ export async function startHelper({ repo, home, fixtureEnv, requestLog, key, set
   return {
     ready: last,
     stderr: () => stderr,
+    // Every request line logged so far, in order (kept after stop; call it after `stop`).
+    logged: () => logged.slice(),
     // → mapTurn()'s result. A helper that dies or hangs mid-turn gives ok false with that kind.
     // A turn that fails also carries `stderr`: the end of the helper's log, key-scrubbed and capped.
-    async send(text, kind = "typed") {
+    async send(text, kind = "typed", turnLabel = null) {
+      label = turnLabel;
       const from = events.length;
       cmd({ type: "send", text, kind });
       const failed = (r) => ({ ...r, stderr: scrubKey(stderr, key).slice(-STDERR_CAP) });
@@ -228,6 +280,11 @@ export function createCaseMentor(opts) {
   let info = null;
   let turnNo = 0;
   const failedTurns = [];
+  const logged = []; // all helpers of the case, in order
+  // Takes what a stopped helper logged about its requests.
+  const collect = (h) => {
+    if (h && typeof h.logged === "function") logged.push(...h.logged());
+  };
 
   return {
     requestLog,
@@ -250,11 +307,31 @@ export function createCaseMentor(opts) {
     get failedTurns() {
       return failedTurns.map((f) => ({ ...f }));
     },
+    // One entry per request the helper timed (every turn, good or failed): { turn, request_id, status,
+    // headers_ms, max_gap_ms, total_ms, end, body_bytes? }. body_bytes comes from the request log, matched
+    // by order, and only when the counts agree. Complete after stop().
+    get requestTiming() {
+      // The request log has one line per request the loop sent; each ends in a timing line or a
+      // no-headers line. Same count, same order: the sizes line up. Otherwise no sizes.
+      const sent = logged.filter((l) => l.kind === "timing" || l.entry.event === "request_no_headers");
+      const sizes = requestSizes(requestLog);
+      const aligned = sizes.length === sent.length;
+      const out = [];
+      sent.forEach((l, i) => {
+        if (l.kind === "timing") out.push({ ...l.entry, ...(aligned ? { body_bytes: sizes[i] } : {}) });
+      });
+      return out;
+    },
+    // The stall and re-send events: { turn, event, ... }. Complete after stop().
+    get requestEvents() {
+      return logged.filter((l) => l.kind === "event").map((l) => ({ ...l.entry }));
+    },
     // → { events, ok, error } and, on a failed turn, `stderr` (the helper's log, scrubbed, capped).
     async turn(say, newSession = false) {
       turnNo++;
       if (newSession && helper) {
         await helper.stop();
+        collect(helper);
         helper = null;
       }
       if (!helper) {
@@ -269,7 +346,7 @@ export function createCaseMentor(opts) {
         const r = helper.ready;
         info = { model: r.model, effort: r.effort, settings_hash: r.settings_hash, ...(r.settings_file ? { settings_file: r.settings_file } : {}) };
       }
-      const r = await helper.send(say);
+      const r = await helper.send(say, "typed", turnNo);
       if (r.cost_usd === null) costUnknown++;
       else cost += r.cost_usd;
       if (r.end) {
@@ -285,7 +362,10 @@ export function createCaseMentor(opts) {
     },
     // Stops the helper (and with it ae-mentor). Always call, also after a failed case.
     async stop() {
-      if (helper) await helper.stop();
+      if (helper) {
+        await helper.stop();
+        collect(helper);
+      }
       helper = null;
     },
   };
