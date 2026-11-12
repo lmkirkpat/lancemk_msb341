@@ -145,8 +145,7 @@ start.
      `skill_options` (step 3); a yes carries on. If they say it's changed but not how, ask step 3's
      question now. Never say where it was kept or name a field.
    - **No group** (`group` is empty): say in one sentence that nothing here starts together, and
-     offer the practice comp by what it is ("The practice comp, Mentor Practice 2, has a group to
-     work on, if you'd like to open it."). Never invent one.
+     offer Mentor Practice 2, which has a group to work on. Never invent one.
 
 2. **Explain on their comp, in the same turn as step 3's question.** Confirm the group in one
    clause. Call `preview_frame` at `frame_together`, with at most one clause on it, using their
