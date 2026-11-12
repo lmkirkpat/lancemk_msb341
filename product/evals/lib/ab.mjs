@@ -65,6 +65,9 @@ export async function closeCase({ repo, mentor, learnerTexts }) {
     allowlist,
     // Only when a turn failed: its error kind and the end of the helper's log (T068).
     ...(mentor.failedTurns?.length ? { failed_turns: mentor.failedTurns } : {}),
+    // Every request's timing and every stall or re-send event (T068), so a stall the guard recovered shows.
+    ...(mentor.requestTiming?.length ? { request_timing: mentor.requestTiming } : {}),
+    ...(mentor.requestEvents?.length ? { request_events: mentor.requestEvents } : {}),
   };
 }
 
