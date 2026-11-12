@@ -1,0 +1,666 @@
+{
+  "run_at": "2026-11-12T18:25:41.829Z",
+  "options": {
+    "only": "39",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.55,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "39-rig-example-only-when-asked",
+      "title": "The existing rig (Hatch follows Hatch Rig) stays out of the explanation turn and is named in words, from the read, only when the learner asks what it looks like; then the turn-or-scale question again, no null task, no claim about how the rig moves",
+      "covers": [
+        "FR-023",
+        "FR-023a",
+        "TD 012 § 16",
+        "US1-2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "be8899a904ba3a5c2438ead9f31100faef1e0e17c27d2eaf8891d42ad14b1310",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:no_rig_in_explain",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:names_rig_when_asked",
+              "pass": true,
+              "detail": "turn 3: \"Hatch already follows Hatch Rig\""
+            },
+            {
+              "check": "say:no_rig_move_claim",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:no_null_task",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:asks_region_again",
+              "pass": true,
+              "detail": "turn 3: \"turn or scale, where should that happen from\""
+            },
+            {
+              "check": "say:ends_on_question",
+              "pass": true,
+              "detail": "turn 3: \"?\""
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NO-NULL-MOVE",
+              "pass": true,
+              "reason": "In turn 3 the mentor names Hatch Rig only as the layer Hatch follows ('Hatch already follows Hatch Rig, an invisible layer that carries it around'). That generic description of what a parent does makes no claim that Hatch Rig slides, spins or scales, or when."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every layer and time the mentor mentions (Tile, Caption, Stamp, Hatch, Hatch Rig, 0 s) appears in the snapshot or preview_frame results, and 'invisible layer' follows from Hatch Rig's 'null' reason."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 2 gives context plus the single inheritance sentence and ends on the turn-or-scale question. Turn 3 answers the side question in one sentence and repeats the pending question, adding no null task or next stage."
+            }
+          ],
+          "cost": 0.1813226,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it. Here, one invisible layer will carry a whole group of layers at once.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0,\"layer\":\"Tile\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0,\"layer_bounds\":{\"left\":1100,\"top\":100,\"right\":1300,\"bottom\":200},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: We'll move Tile, Caption and Stamp as one group. That frame is your comp at the start, at 0 s.\n\nA layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, where should that happen from: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: What does that look like? Is there one already in my comp?\nMENTOR: Yes: Hatch already follows Hatch Rig, an invisible layer that carries it around.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, where should that happen from: a corner, the middle of an edge, or the middle of the group?\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0509,
+          "judge_cost_usd": 0.1304,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "null-parenting-mentor": "0ffa0cce1f48dea31f68f7f42b6352b2e25550c017169e9de32a0479f529a009"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyW6vm7h2Vsyg5mKS5aL",
+              "status": 200,
+              "headers_ms": 912,
+              "max_gap_ms": 258,
+              "total_ms": 1175,
+              "end": "done",
+              "body_bytes": 54061
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyW71fJ6DdxkoiLCMLmS",
+              "status": 200,
+              "headers_ms": 561,
+              "max_gap_ms": 799,
+              "total_ms": 1607,
+              "end": "done",
+              "body_bytes": 56226
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW78Kdsfqrz9BPfqvnV",
+              "status": 200,
+              "headers_ms": 639,
+              "max_gap_ms": 502,
+              "total_ms": 1144,
+              "end": "done",
+              "body_bytes": 57589
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW7DvEefgQQPQSK2dY3",
+              "status": 200,
+              "headers_ms": 733,
+              "max_gap_ms": 283,
+              "total_ms": 1076,
+              "end": "done",
+              "body_bytes": 59951
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW7K7mTDTHub7rV5MjK",
+              "status": 200,
+              "headers_ms": 618,
+              "max_gap_ms": 1427,
+              "total_ms": 2411,
+              "end": "done",
+              "body_bytes": 60564
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyW7VRdeNC2G9TXrL29X",
+              "status": 200,
+              "headers_ms": 551,
+              "max_gap_ms": 728,
+              "total_ms": 1283,
+              "end": "done",
+              "body_bytes": 62425
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:no_rig_in_explain",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:names_rig_when_asked",
+              "pass": true,
+              "detail": "turn 3: \"Hatch already follows Hatch Rig, so moving Hatch Rig\""
+            },
+            {
+              "check": "say:no_rig_move_claim",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:no_null_task",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:asks_region_again",
+              "pass": true,
+              "detail": "turn 3: \"turn or scale, from\""
+            },
+            {
+              "check": "say:ends_on_question",
+              "pass": true,
+              "detail": "turn 3: \"?\""
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NO-NULL-MOVE",
+              "pass": true,
+              "reason": "In Turn 3 the mentor says only \"Hatch already follows Hatch Rig, so moving Hatch Rig carries Hatch along\". That is a conditional statement of what parenting does, and it makes no claim that Hatch Rig slides, spins, scales, or moves at any time."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses appears in the snapshot results: Tile, Caption, Stamp, Hatch, Hatch Rig and the pivot lesson. The time \"0 s\" matches before_time and the preview_frame time."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 2 gives the one idea sentence and ends on the turn-or-scale question with no null or menu task. Turn 3 answers the side question in one sentence and repeats only the pending question, without adding the next stage."
+            }
+          ],
+          "cost": 0.180375,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0,\"layer\":\"Tile\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0,\"layer_bounds\":{\"left\":1100,\"top\":100,\"right\":1300,\"bottom\":200},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Tile, Caption and Stamp it is. That's the comp at 0 s, where we're starting from.\n\nA layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and it keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: What does that look like? Is there one already in my comp?\nMENTOR: Yes, Hatch already follows Hatch Rig, so moving Hatch Rig carries Hatch along while Hatch keeps its own animation.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0508,
+          "judge_cost_usd": 0.1296,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "null-parenting-mentor": "0ffa0cce1f48dea31f68f7f42b6352b2e25550c017169e9de32a0479f529a009"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyW8BpzgQSYBZ4A4Ls4e",
+              "status": 200,
+              "headers_ms": 684,
+              "max_gap_ms": 353,
+              "total_ms": 1043,
+              "end": "done",
+              "body_bytes": 54061
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyW8GBwNemE8AhcjofHU",
+              "status": 200,
+              "headers_ms": 523,
+              "max_gap_ms": 431,
+              "total_ms": 1245,
+              "end": "done",
+              "body_bytes": 56226
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW8MY9QQ4LbjPrAE39S",
+              "status": 200,
+              "headers_ms": 713,
+              "max_gap_ms": 528,
+              "total_ms": 1243,
+              "end": "done",
+              "body_bytes": 57523
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW8T24cLw5Yoo7RBoER",
+              "status": 200,
+              "headers_ms": 654,
+              "max_gap_ms": 311,
+              "total_ms": 1004,
+              "end": "done",
+              "body_bytes": 59885
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW8YTj8sfM7t2AMQkE5",
+              "status": 200,
+              "headers_ms": 585,
+              "max_gap_ms": 1564,
+              "total_ms": 2595,
+              "end": "done",
+              "body_bytes": 60498
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyW8jaiX37gP4WuYyBwT",
+              "status": 200,
+              "headers_ms": 589,
+              "max_gap_ms": 364,
+              "total_ms": 1340,
+              "end": "done",
+              "body_bytes": 62386
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:no_rig_in_explain",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:names_rig_when_asked",
+              "pass": true,
+              "detail": "turn 3: \"Hatch already follows Hatch Rig, a null, so moving Hatch Rig\""
+            },
+            {
+              "check": "say:no_rig_move_claim",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:no_null_task",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "say:asks_region_again",
+              "pass": true,
+              "detail": "turn 3: \"turn or scale, from\""
+            },
+            {
+              "check": "say:ends_on_question",
+              "pass": true,
+              "detail": "turn 3: \"?\""
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NO-NULL-MOVE",
+              "pass": true,
+              "reason": "Turn 3 says only \"Hatch already follows Hatch Rig, a null, so moving Hatch Rig carries Hatch along\"; it describes what following means and never claims how or when Hatch Rig itself moves."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name used (Tile, Caption, Stamp, Hatch, Hatch Rig as a null, 0 s) appears in the snapshot or preview_frame results; \"keeps its own animation\" in turn 3 restates the general principle rather than naming a property absent from the tools."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 2 gives the frame context, the single inheritance sentence and ends on the turn-or-scale question; turn 3 answers the side question in one sentence and repeats the pending question with no null task; turn 1 is short and ends on the opening question."
+            }
+          ],
+          "cost": 0.1885598,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it. Here you'll use a null, an invisible handle, to move several layers as one.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0,\"layer\":\"Tile\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0,\"layer_bounds\":{\"left\":1100,\"top\":100,\"right\":1300,\"bottom\":200},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Tile, Caption and Stamp it is. That frame is your comp at the start, 0 s, where the lesson begins.\n\nA layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: What does that look like? Is there one already in my comp?\nMENTOR: Yes: Hatch already follows Hatch Rig, a null, so moving Hatch Rig carries Hatch along while Hatch keeps its own animation.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0521,
+          "judge_cost_usd": 0.1365,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "null-parenting-mentor": "0ffa0cce1f48dea31f68f7f42b6352b2e25550c017169e9de32a0479f529a009"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyW9RssjsjTX9d5QLowr",
+              "status": 200,
+              "headers_ms": 721,
+              "max_gap_ms": 268,
+              "total_ms": 995,
+              "end": "done",
+              "body_bytes": 54061
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyW9W7NUp1FbrpdLBA6P",
+              "status": 200,
+              "headers_ms": 515,
+              "max_gap_ms": 804,
+              "total_ms": 1527,
+              "end": "done",
+              "body_bytes": 56226
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW9cg1kfEeNKoRjUPyi",
+              "status": 200,
+              "headers_ms": 682,
+              "max_gap_ms": 539,
+              "total_ms": 1223,
+              "end": "done",
+              "body_bytes": 57591
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW9i6wEy8FRtL2AQepq",
+              "status": 200,
+              "headers_ms": 623,
+              "max_gap_ms": 294,
+              "total_ms": 969,
+              "end": "done",
+              "body_bytes": 59953
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW9oMx1yPnWkzHQu8V4",
+              "status": 200,
+              "headers_ms": 581,
+              "max_gap_ms": 1463,
+              "total_ms": 2417,
+              "end": "done",
+              "body_bytes": 60566
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyW9yi3fTtTZNVDnDn1A",
+              "status": 200,
+              "headers_ms": 569,
+              "max_gap_ms": 273,
+              "total_ms": 1608,
+              "end": "done",
+              "body_bytes": 62432
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "3acbda26fba303399a29bbf15502c01318a76c32f74767df6204793d3a6eca24",
+  "mentor_cost_usd": 0.15,
+  "judge_cost_usd": 0.4,
+  "non_baseline": false,
+  "prompt_hash": {
+    "null-parenting-mentor": "0ffa0cce1f48dea31f68f7f42b6352b2e25550c017169e9de32a0479f529a009"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-11-09-181838.json",
+    "passed": 45,
+    "total": 52
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}

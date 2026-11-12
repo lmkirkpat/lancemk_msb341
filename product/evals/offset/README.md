@@ -457,3 +457,32 @@ Runtime B1, no timeouts (`ETIMEDOUT` count 0). **Full run: `results/2026-11-11-2
 Proposals for the builder, smallest first: (1) 41, in `SKILL.md`'s show-me-again answer say the shift only in the learner's own gap and name no time; (2) 13, end turn 3 on the change-of-mind question; (3) 04, the second walk-through rule needs the same "one sentence and the pending step" wording as the null set.
 
 **The A comparison for FR-033 will be against this baseline** (39/43, 91%), not the older `2026-10-29-144419.json`. Cases 04, 13 and 41 fail on B1 and so are not B1-pass, A-fail cases for (d).
+
+### A run on `ffc0c1b` (2026-11-12)
+
+`claude-opus-5-5`, effort `medium`, settings hash `3acbda26fba3…`, 0 turns of unknown cost, 0 other-model turns. Run by the builder; no lesson code, prompt or setting changed from `ffc0c1b`.
+Prompt hash `a1642614`.
+**Full run: `results/2026-11-12-104428.json`, 37/43 (86%), $3.12 mentor credit, $5.04 judge.**
+B1 baseline compared: `2026-11-11-230338.json`, 39/43 (91%); A is 4.7 points below (within 5).
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Not on the full run: 04, 13 (both fail on B1 too) and 34 (3/3 on repeat). |
+| (b) at least 80% | Met. 86%. |
+| (c) no more than 5 points below B1 | Met. 4.7 points. |
+| (d) B1-pass, A-fail cases re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 01-first-lesson-properties | R-OFF-PROPOSAL (a second sentence about the group) | 3/3 (`-112645`, $0.18 mentor, $0.36 judge) |
+| 09-pops-in | unreadable judge reply (plumbing) | 3/3 (`-112823`, $0.29 mentor, $0.40 judge) |
+| 34-member-single-and-expression-keys-moved | `say:names_other_change` | 3/3 (`-113006`, $0.26 mentor, $0.41 judge) |
+| 04-two-members-no-demo | `say:no_second_walkthrough` | not re-run: fails on B1 too |
+| 13-order-differs | `say:asks_change_of_mind` | not re-run: fails on B1 too |
+| 41-button-show-me-again | R-SHOW-ME-AGAIN | not re-run: fails on B1 too |
+
+**Verdict: meets FR-033.** Every B1-pass, A-fail case passes 3/3 on repeat. Cases 04, 13 and 41 fail on B1 as well; prompt fixes were proposed on 2026-11-11 and are not made. Cases 07 and 18 pass on A. This closes the open 2026-11-09 verdict. Margin on (c) is thin (4.7 of 5), so a later A run that loses one more case would miss it.
+
+**A baseline (FR-035, T053):** `results/2026-11-12-104428.json`, `claude-opus-5-5`, effort `medium`, $3.12 mentor credit ($5.04 judge, on subscription), at `ffc0c1b`.
+
+**Timing (T068, `node product/evals/lib/timing-report.mjs results/2026-11-12-104428.json`):** 269 requests over 43 cases, 0 re-sends, 0 went quiet, 0 with no headers, max headers 5675 ms, max gap 6194 ms.

@@ -1,0 +1,705 @@
+{
+  "run_at": "2026-11-12T18:28:23.093Z",
+  "options": {
+    "only": "09",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.69,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "09-pops-in",
+      "title": "Opacity moved and Position didn't: the hint shows a frame, asks if it was on purpose, no fix",
+      "covers": [
+        "EP-7",
+        "FR-012"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "pops-in.json": "live"
+      },
+      "hash": "1f4f74131b9795b9973c5c7cc807644246e2f292e6b8d61af3a4315d5738fa60",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 3: \"Dot 1\""
+            },
+            {
+              "check": "say:names_props",
+              "pass": true,
+              "detail": "turn 3: \"\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 3: \"on purpose\""
+            },
+            {
+              "check": "say:no_offer",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "7 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-POPS-IN",
+              "pass": true,
+              "reason": "Turn 3 calls preview_frame at 0.6 s on Dot 1, then says 'At 0.6 s its Position has already started, but its Opacity hasn't come up yet' and asks 'Was that on purpose?' with no fix."
+            },
+            {
+              "item": "R-HINT-NOT-FIX",
+              "pass": true,
+              "reason": "Turn 3 says what's off and where ('Dot 1's Opacity has moved later, though, and its Position hasn't', at 0.6 s), then ends on a question with no fix, steps or offer to do it."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "All names and times come from the tool results: Dot 1/2/3, Position, Opacity, Blurriness, Seal, 0.5 s, 1.5 s, the 1 s and 0.6 s frames, 0.633 s, 0.767 s and the 4-frame gaps."
+            }
+          ],
+          "cost": 0.2327678,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 2\"\n  ],\n  \"targets\": [\n    \"6/Transform › Position/1\",\n    \"6/Transform › Opacity/1\",\n    \"6/Effects › Gaussian Blur › Blurriness/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Dot 2's Position, Opacity and Blurriness all run from 0.5 s to 1.5 s, so they start and land on the same frames. Dot 1, Dot 2 and Dot 3 also all start at 0.5 s, if you'd rather stagger the layers. Seal is a precomp, and I can't check its timing yet, so I'll leave it out.\n\nDo you want to stagger Dot 2's properties, or the three Dots?\n\n### Turn 2: the project is an open comp\nLEARNER: Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"layers\",\"order\":[\"Dot 1\",\"Dot 2\",\"Dot 3\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"targets\": [\n    \"layer/5\",\n    \"layer/6\",\n    \"layer/7\"\n  ],\n  \"demo_target\": \"layer/6\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":1}\nMENTOR: This is the comp at 1 s, half a second after all three Dots start together. When everything moves at once, nothing leads the eye.\n\nSo Dot 1 goes first, then Dot 2, then Dot 3, each 4 frames after the one before. Leave Dot 1 where it is and move Dot 2 and Dot 3 later. You can select a Dot's keys and drag them later, or drag the middle of its bar. Quick Offset does all of them in one drag: select them, hold Command and Option, and drag.\n\nPlay it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: I staggered them. Done.\nTOOL CALL offset_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"kind\": \"layers\",\n  \"members\": [\n    {\n      \"target\": \"layer/5\",\n      \"label\": \"Dot 1\",\n      \"layer\": \"Dot 1\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.5,\n      \"moved_by\": {\n        \"Position\": 0,\n        \"Opacity\": 6\n      },\n      \"dimensions\": null,\n      \"split\": {\n        \"moved\": [\n          \"Opacity\"\n        ],\n        \"stayed\": [\n          \"Position\"\n        ],\n        \"within_position\": null,\n        \"on_purpose\": false\n      },\n      \"credit\": null,\n      \"status\": \"graded\"\n    },\n    {\n      \"target\": \"layer/6\",\n      \"label\": \"Dot 2\",\n      \"layer\": \"Dot 2\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.633,\n      \"moved_by\": {\n        \"Position\": 4,\n        \"Opacity\": 4,\n        \"Blurriness\": 4\n      },\n      \"dimensions\": null,\n      \"split\": null,\n      \"credit\": null,\n      \"status\": \"graded\"\n    },\n    {\n      \"target\": \"layer/7\",\n      \"label\": \"Dot 3\",\n      \"layer\": \"Dot 3\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.767,\n      \"moved_by\": {\n        \"Position\": 8,\n        \"Opacity\": 8\n      },\n      \"dimensions\": {\n        \"X Position\": 8,\n        \"Y Position\": 8\n      },\n      \"split\": null,\n      \"credit\": null,\n      \"status\": \"graded\"\n    }\n  ],\n  \"still_same\": [],\n  \"order_differs\": false,\n  \"out_of_comp\": [],\n  \"other_changes\": [],\n  \"rhythm\": null,\n  \"gaps_frames\": [\n    4,\n    4\n  ],\n  \"passed\": false,\n  \"demo_undone\": false\n}\nTOOL CALL preview_frame {\"time\":0.6,\"layer\":\"Dot 1\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0.6,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Dot 2 now starts at 0.633 s and Dot 3 at 0.767 s, so they're 4 frames apart in your order.\n\nDot 1's Opacity has moved later, though, and its Position hasn't. At 0.6 s its Position has already started, but its Opacity hasn't come up yet, so it moves before you can see it. Was that on purpose?\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.1024,
+          "judge_cost_usd": 0.1304,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "offset-mentor": "a1642614d0844f7089f281231ae2aba3bfdac9f642120357ffeaeb255cc53b3e"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 7,
+            "detail": "7 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyWFeECKRRB1PX53Mwbo",
+              "status": 200,
+              "headers_ms": 1308,
+              "max_gap_ms": 289,
+              "total_ms": 1603,
+              "end": "done",
+              "body_bytes": 48752
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyWFm1UrP31yCtrZt8qB",
+              "status": 200,
+              "headers_ms": 2169,
+              "max_gap_ms": 1434,
+              "total_ms": 3991,
+              "end": "done",
+              "body_bytes": 52768
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyWG478YGc37nC3pQrMj",
+              "status": 200,
+              "headers_ms": 2357,
+              "max_gap_ms": 561,
+              "total_ms": 3296,
+              "end": "done",
+              "body_bytes": 54579
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyWGKUbZ3qJ7pP4aGESy",
+              "status": 200,
+              "headers_ms": 1833,
+              "max_gap_ms": 5004,
+              "total_ms": 7258,
+              "end": "done",
+              "body_bytes": 59167
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWGrWQeSYovTVSZroPG",
+              "status": 200,
+              "headers_ms": 1610,
+              "max_gap_ms": 640,
+              "total_ms": 2252,
+              "end": "done",
+              "body_bytes": 62102
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWH2C5Bfoi1pKou6zTT",
+              "status": 200,
+              "headers_ms": 1437,
+              "max_gap_ms": 1286,
+              "total_ms": 3280,
+              "end": "done",
+              "body_bytes": 64066
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWHHLeSPtDypUUYMHpm",
+              "status": 200,
+              "headers_ms": 1590,
+              "max_gap_ms": 1315,
+              "total_ms": 3595,
+              "end": "done",
+              "body_bytes": 66130
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 3: \"Dot 1\""
+            },
+            {
+              "check": "say:names_props",
+              "pass": true,
+              "detail": "turn 3: \"\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 3: \"on purpose\""
+            },
+            {
+              "check": "say:no_offer",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "7 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-POPS-IN",
+              "pass": true,
+              "reason": "In turn 3 the mentor called preview_frame at 0.6 s on Dot 1 and said 'at 0.6 s, the frame above, Dot 1 is already moving, but its fade-in hasn't started yet. Was that on purpose?', which matches the check's split (Opacity moved, Position stayed) and offers no fix."
+            },
+            {
+              "item": "R-HINT-NOT-FIX",
+              "pass": true,
+              "reason": "In turn 3 the mentor names what is off and where (Dot 1's Opacity 6 frames later than its Position, at 0.6 s), asks if it was on purpose, and neither fixes it, offers to, nor spells out steps."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time comes from tool results or follows directly from them: Dot 1–3, Position, Opacity, Blurriness, Seal, 0.5 s, 1.5 s, 1 s, 0.6 s, the 4-frame gaps, and 0.7 s (0.5 s plus Opacity's 6-frame shift at 30 fps)."
+            }
+          ],
+          "cost": 0.22593899999999997,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 2\"\n  ],\n  \"targets\": [\n    \"6/Transform › Position/1\",\n    \"6/Transform › Opacity/1\",\n    \"6/Effects › Gaussian Blur › Blurriness/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: On Dot 2, the Position, Opacity and Blurriness all run from 0.5 s to 1.5 s, so they start and land on the same frames. Dot 1, Dot 2 and Dot 3 also all start at 0.5 s, if you'd rather stagger the layers. Seal is a precomp, and I can't check its timing yet, so I'll leave it out.\n\nDo you want to stagger Dot 2's properties, or the three Dots?\n\n### Turn 2: the project is an open comp\nLEARNER: Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"layers\",\"order\":[\"Dot 1\",\"Dot 2\",\"Dot 3\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"targets\": [\n    \"layer/5\",\n    \"layer/6\",\n    \"layer/7\"\n  ],\n  \"demo_target\": \"layer/6\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":1}\nMENTOR: That's the three Dots, and here at 1 s they're all still in the middle of moves that began together at 0.5 s. When everything moves at once, nothing leads the eye.\n\nSo Dot 1 goes first, then Dot 2, then Dot 3, each 4 frames after the one before. Leave Dot 1 where it is and move Dot 2 and Dot 3 later. You can select a Dot's keys and drag them later, or drag the middle of its bar. Quick Offset can do them all in one drag: select them, hold Command and Option, and drag.\n\nPlay it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: I staggered them. Done.\nTOOL CALL offset_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"kind\": \"layers\",\n  \"members\": [\n    {\n      \"target\": \"layer/5\",\n      \"label\": \"Dot 1\",\n      \"layer\": \"Dot 1\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.5,\n      \"moved_by\": {\n        \"Position\": 0,\n        \"Opacity\": 6\n      },\n      \"dimensions\": null,\n      \"split\": {\n        \"moved\": [\n          \"Opacity\"\n        ],\n        \"stayed\": [\n          \"Position\"\n        ],\n        \"within_position\": null,\n        \"on_purpose\": false\n      },\n      \"credit\": null,\n      \"status\": \"graded\"\n    },\n    {\n      \"target\": \"layer/6\",\n      \"label\": \"Dot 2\",\n      \"layer\": \"Dot 2\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.633,\n      \"moved_by\": {\n        \"Position\": 4,\n        \"Opacity\": 4,\n        \"Blurriness\": 4\n      },\n      \"dimensions\": null,\n      \"split\": null,\n      \"credit\": null,\n      \"status\": \"graded\"\n    },\n    {\n      \"target\": \"layer/7\",\n      \"label\": \"Dot 3\",\n      \"layer\": \"Dot 3\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.767,\n      \"moved_by\": {\n        \"Position\": 8,\n        \"Opacity\": 8\n      },\n      \"dimensions\": {\n        \"X Position\": 8,\n        \"Y Position\": 8\n      },\n      \"split\": null,\n      \"credit\": null,\n      \"status\": \"graded\"\n    }\n  ],\n  \"still_same\": [],\n  \"order_differs\": false,\n  \"out_of_comp\": [],\n  \"other_changes\": [],\n  \"rhythm\": null,\n  \"gaps_frames\": [\n    4,\n    4\n  ],\n  \"passed\": false,\n  \"demo_undone\": false\n}\nTOOL CALL preview_frame {\"time\":0.6,\"layer\":\"Dot 1\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0.6,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Dot 2 now starts 4 frames after Dot 1, and Dot 3 starts 4 frames after Dot 2, so the three Dots are staggered in the order you said.\n\nThere's one thing I want to ask about, on Dot 1. Its Position still starts at 0.5 s, but you moved its Opacity 6 frames later, so it doesn't start until 0.7 s. That means at 0.6 s, the frame above, Dot 1 is already moving, but its fade-in hasn't started yet. Was that on purpose?\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0937,
+          "judge_cost_usd": 0.1322,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "offset-mentor": "a1642614d0844f7089f281231ae2aba3bfdac9f642120357ffeaeb255cc53b3e"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 7,
+            "detail": "7 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyWJ32hKwNyxJ5ERAAck",
+              "status": 200,
+              "headers_ms": 1277,
+              "max_gap_ms": 297,
+              "total_ms": 1579,
+              "end": "done",
+              "body_bytes": 48752
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyWJ9iGqa8dL2MK2kfTe",
+              "status": 200,
+              "headers_ms": 1344,
+              "max_gap_ms": 1577,
+              "total_ms": 3195,
+              "end": "done",
+              "body_bytes": 52768
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyWJPRnituVUGHaooF6g",
+              "status": 200,
+              "headers_ms": 1267,
+              "max_gap_ms": 817,
+              "total_ms": 2090,
+              "end": "done",
+              "body_bytes": 54485
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyWJZfSUMjxiE31fFJhY",
+              "status": 200,
+              "headers_ms": 1899,
+              "max_gap_ms": 3996,
+              "total_ms": 6254,
+              "end": "done",
+              "body_bytes": 59073
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWK2QGms2ARZSkKYNeW",
+              "status": 200,
+              "headers_ms": 1592,
+              "max_gap_ms": 540,
+              "total_ms": 2135,
+              "end": "done",
+              "body_bytes": 61709
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWKBaBcMehgJPHttbor",
+              "status": 200,
+              "headers_ms": 2501,
+              "max_gap_ms": 463,
+              "total_ms": 3639,
+              "end": "done",
+              "body_bytes": 63673
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWKUG2eKec8W3jkRLjs",
+              "status": 200,
+              "headers_ms": 1558,
+              "max_gap_ms": 2507,
+              "total_ms": 4442,
+              "end": "done",
+              "body_bytes": 65489
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_layer",
+              "pass": true,
+              "detail": "turn 3: \"Dot 1\""
+            },
+            {
+              "check": "say:names_props",
+              "pass": true,
+              "detail": "turn 3: \"\""
+            },
+            {
+              "check": "say:asks",
+              "pass": true,
+              "detail": "turn 3: \"?\""
+            },
+            {
+              "check": "say:no_offer",
+              "pass": true,
+              "detail": "turn 3: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "8 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OFF-POPS-IN",
+              "pass": true,
+              "reason": "Turn 3 calls preview_frame at 0.6 s on Dot 1. It says Dot 1's 'Opacity moved 6 frames later but its Position didn't', so at 0.6 s Position is moving and Opacity hasn't started, which matches moved_by. It ends on 'Did you mean to split Dot 1 like that?' with no fix."
+            },
+            {
+              "item": "R-HINT-NOT-FIX",
+              "pass": true,
+              "reason": "Turn 3 names what is off and where (Dot 1's Opacity vs Position at 0.6 s) and only asks if it was on purpose. It gives no steps to fix it and makes no offer to do it."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time is backed by tool output. Dot 1/2/3, Position, Opacity, Blurriness, Seal as a precomp, 0.5 s to 1.5 s, 1 s, 0.6 s, the 4-frame gaps (gaps_frames [4,4]) and Opacity's 6-frame shift all appear in the snapshot, check and preview results."
+            }
+          ],
+          "cost": 0.22928320000000002,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 2\"\n  ],\n  \"targets\": [\n    \"6/Transform › Position/1\",\n    \"6/Transform › Opacity/1\",\n    \"6/Effects › Gaussian Blur › Blurriness/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Dot 2's Position, Opacity and Blurriness all run from 0.5 s to 1.5 s, starting and landing on the same frames. Dot 1, Dot 2 and Dot 3 also all start at 0.5 s, if you'd rather stagger layers. Seal is a precomp, and I can't check its timing yet, so I'll leave it out.\n\nWould you like to stagger Dot 2's properties, or the three Dots?\n\n### Turn 2: the project is an open comp\nLEARNER: Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"layers\",\"order\":[\"Dot 1\",\"Dot 2\",\"Dot 3\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"targets\": [\n    \"layer/5\",\n    \"layer/6\",\n    \"layer/7\"\n  ],\n  \"demo_target\": \"layer/6\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":1}\nMENTOR: You're staggering the three Dots. At 1 s, all three have been moving together since 0.5 s. When everything moves at once, nothing leads the eye.\n\nSo Dot 1 goes first, then Dot 2, then Dot 3, each 4 frames after the one before. Leave Dot 1 where it is and move Dot 2 and Dot 3 later. You can select a Dot's keys and drag them later, or drag the middle of its bar. Quick Offset does all of them in one drag: select them, hold Command and Option, and drag.\n\nPlay it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: I staggered them. Done.\nTOOL CALL offset_check {}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"kind\": \"layers\",\n  \"members\": [\n    {\n      \"target\": \"layer/5\",\n      \"label\": \"Dot 1\",\n      \"layer\": \"Dot 1\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.5,\n      \"moved_by\": {\n        \"Position\": 0,\n        \"Opacity\": 6\n      },\n      \"dimensions\": null,\n      \"split\": {\n        \"moved\": [\n          \"Opacity\"\n        ],\n        \"stayed\": [\n          \"Position\"\n        ],\n        \"within_position\": null,\n        \"on_purpose\": false\n      },\n      \"credit\": null,\n      \"status\": \"graded\"\n    },\n    {\n      \"target\": \"layer/6\",\n      \"label\": \"Dot 2\",\n      \"layer\": \"Dot 2\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.633,\n      \"moved_by\": {\n        \"Position\": 4,\n        \"Opacity\": 4,\n        \"Blurriness\": 4\n      },\n      \"dimensions\": null,\n      \"split\": null,\n      \"credit\": null,\n      \"status\": \"graded\"\n    },\n    {\n      \"target\": \"layer/7\",\n      \"label\": \"Dot 3\",\n      \"layer\": \"Dot 3\",\n      \"start_before\": 0.5,\n      \"start_now\": 0.767,\n      \"moved_by\": {\n        \"Position\": 8,\n        \"Opacity\": 8\n      },\n      \"dimensions\": {\n        \"X Position\": 8,\n        \"Y Position\": 8\n      },\n      \"split\": null,\n      \"credit\": null,\n      \"status\": \"graded\"\n    }\n  ],\n  \"still_same\": [],\n  \"order_differs\": false,\n  \"out_of_comp\": [],\n  \"other_changes\": [],\n  \"rhythm\": null,\n  \"gaps_frames\": [\n    4,\n    4\n  ],\n  \"passed\": false,\n  \"demo_undone\": false\n}\nTOOL CALL preview_frame {\"time\":0.6,\"layer\":\"Dot 1\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0.6,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Dot 2 and Dot 3 now start 4 frames apart, in the order you set. Dot 1's Opacity moved 6 frames later but its Position didn't. So at 0.6 s Dot 1's Position is already moving, while its Opacity hasn't started yet, which is why you can't see it in this frame.\n\nDid you mean to split Dot 1 like that?\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0934,
+          "judge_cost_usd": 0.1359,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "offset-mentor": "a1642614d0844f7089f281231ae2aba3bfdac9f642120357ffeaeb255cc53b3e"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 8,
+            "detail": "8 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyWLKsXL3nVKBizWbwPs",
+              "status": 200,
+              "headers_ms": 1278,
+              "max_gap_ms": 237,
+              "total_ms": 1523,
+              "end": "done",
+              "body_bytes": 48752
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyWLSJUudTHtm1P41ss5",
+              "status": 200,
+              "headers_ms": 2182,
+              "max_gap_ms": 1739,
+              "total_ms": 4335,
+              "end": "done",
+              "body_bytes": 52768
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyWLkvQxwxAnryFPNr8J",
+              "status": 200,
+              "headers_ms": 1325,
+              "max_gap_ms": 757,
+              "total_ms": 2086,
+              "end": "done",
+              "body_bytes": 54564
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyWLuwPxpNXBQzNQGmTU",
+              "status": 200,
+              "headers_ms": 1345,
+              "max_gap_ms": 392,
+              "total_ms": 2133,
+              "end": "done",
+              "body_bytes": 58785
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyWM6BnLejDPQSD7TFju",
+              "status": 200,
+              "headers_ms": 1925,
+              "max_gap_ms": 2671,
+              "total_ms": 4858,
+              "end": "done",
+              "body_bytes": 60382
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWMT78Ld7NSFgfAF8Mi",
+              "status": 200,
+              "headers_ms": 1754,
+              "max_gap_ms": 523,
+              "total_ms": 2278,
+              "end": "done",
+              "body_bytes": 62572
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWMcpn8WJpTfBkG6cnU",
+              "status": 200,
+              "headers_ms": 1665,
+              "max_gap_ms": 1049,
+              "total_ms": 3459,
+              "end": "done",
+              "body_bytes": 64536
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyWMti1CZvF6aYHuBowL",
+              "status": 200,
+              "headers_ms": 1886,
+              "max_gap_ms": 1244,
+              "total_ms": 3407,
+              "end": "done",
+              "body_bytes": 66528
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "3acbda26fba303399a29bbf15502c01318a76c32f74767df6204793d3a6eca24",
+  "mentor_cost_usd": 0.29,
+  "judge_cost_usd": 0.4,
+  "non_baseline": false,
+  "prompt_hash": {
+    "offset-mentor": "a1642614d0844f7089f281231ae2aba3bfdac9f642120357ffeaeb255cc53b3e"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-11-11-230338.json",
+    "passed": 39,
+    "total": 43
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}

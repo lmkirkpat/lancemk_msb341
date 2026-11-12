@@ -46,6 +46,8 @@ isn't asked to teach from "a single pixel".
 All six runners take `--runtime a|b1`. `b1` (headless Claude Code) is the default until every set meets
 FR-033; `--only`, `--changed`, `--repeat`, `--judge-always` and `--dry-run` work on both.
 
+`--only` takes one case id prefix or covers code, not a comma list; loop for several.
+
 ```text
 KNACK_EVAL_API_KEY=… node product/evals/<set>/run.mjs --runtime a [--only 07] [--repeat 3]
 node product/evals/<set>/run.mjs --runtime a --dry-run     # no key, no request to the service

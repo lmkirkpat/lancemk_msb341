@@ -392,3 +392,27 @@ B1 baseline compared: `2026-11-09-173733.json`, 34/37 (92%); A is 5.4 points abo
 Runtime B1, no timeouts. **Full run: `results/2026-11-11-232337.json`, 36/37 (97%), $23.30.** SC-006 met, no hard-rule check failed. The one miss was plumbing, not a score: case 10 `dragged-up` returned an unreadable judge reply (the reply was a JSON array with every item passing). Re-run `--only 10 --repeat 3`: **3/3** (`-232447`, $1.41), so the set stands at 37/37 on the cases that scored. Case 30 (the `SKILL.md` fix of `f276cd6`) passed on the full run.
 
 **The A comparison for FR-033 will be against this baseline** (36/37 on the full run, 37/37 with case 10 re-run), not the older `2026-10-29` run.
+
+### A run on `ffc0c1b` (2026-11-12)
+
+`claude-opus-5-5`, effort `medium`, settings hash `3acbda26fba3…`, 0 turns of unknown cost, 0 other-model turns. Run by the builder; no lesson code, prompt or setting changed from `ffc0c1b`.
+Prompt hash `df2d2f75`.
+**Full run: `results/2026-11-12-102435.json`, 36/37 (97%), $2.04 mentor credit, $4.60 judge.**
+B1 baseline compared: `2026-11-11-232337.json`, 36/37 (97%); gap 0 points.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. |
+| (b) at least 80% | Met. 97%. |
+| (c) no more than 5 points below B1 | Met. Level with B1. |
+| (d) failures re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 36-close-names-no-slash-command | unreadable judge reply (plumbing; the visible items all passed, no check failed) | 3/3 (`-112146`, $0.37 mentor, $0.37 judge) |
+
+**Verdict: meets FR-033.** The one miss was an unreadable judge reply, not a score. Case 30 (fixed in `f276cd6`) passes on A, and case 10 passed on A where B1 needed a re-run. This closes the open 2026-11-09 verdict.
+
+**A baseline (FR-035, T053):** `results/2026-11-12-102435.json`, `claude-opus-5-5`, effort `medium`, $2.04 mentor credit ($4.60 judge, on subscription), at `ffc0c1b`.
+
+**Timing (T068, `node product/evals/lib/timing-report.mjs results/2026-11-12-102435.json`):** 208 requests over 37 cases, 0 re-sends, 0 went quiet, 0 with no headers, max headers 1625 ms, max gap 4498 ms.

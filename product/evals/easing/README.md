@@ -322,3 +322,27 @@ B1 baseline compared: `2026-10-29-142512.json`, 27/28 (96%); A is 14.6 points be
 | 32-why-mechanical-before-focus | R-NAMES-LAYERS | 2/3 (`-234458`) |
 
 **Verdict: open.** Every failure passes on repeat (no majority failure), but (c) misses on the full run. Builder to decide: a second full run (as on 11-04) or accept in writing.
+
+### A run on `ffc0c1b` (2026-11-12)
+
+`claude-opus-5-5`, effort `medium`, settings hash `3acbda26fba3…`, 0 turns of unknown cost, 0 other-model turns. Run by the builder; no lesson code, prompt or setting changed from `ffc0c1b`.
+Prompt hash `554fe3f9`.
+**Full run: `results/2026-11-12-101243.json`, 32/33 (97%), $2.62 mentor credit, $3.42 judge.**
+B1 baseline compared: `2026-11-11-225131.json`, 32/33 (97%); gap 0 points.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Met. |
+| (b) at least 80% | Met. 97%. |
+| (c) no more than 5 points below B1 | Met. Level with B1. |
+| (d) failures re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 21-single-pair-no-demo | R-ONE-IDEA (Turn 2's how-to adds a second sentence about Blurriness sitting inside the Gaussian Blur effect) | 2/3 (`-112019`, $0.26 mentor, $0.33 judge) |
+
+**Verdict: meets FR-033.** Case 21 passed on B1 and failed on A once; on repeat it passes 2/3, so noise. Case 03 (B1 fail) passed on A. This supersedes the open 2026-11-09 verdict (27/33), which was a noisy draw: no prompt or settings change lies between the two A runs.
+
+**A baseline (FR-035, T053):** `results/2026-11-12-101243.json`, `claude-opus-5-5`, effort `medium`, $2.62 mentor credit ($3.42 judge, on subscription), at `ffc0c1b`.
+
+**Timing (T068, `node product/evals/lib/timing-report.mjs results/2026-11-12-101243.json`):** 240 requests over 33 cases, 0 re-sends, 0 went quiet, 0 with no headers, max headers 4520 ms, max gap 5221 ms.

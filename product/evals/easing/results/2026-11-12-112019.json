@@ -1,0 +1,449 @@
+{
+  "run_at": "2026-11-12T18:20:19.223Z",
+  "options": {
+    "only": "21",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.59,
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "21-single-pair-no-demo",
+      "title": "A one-pair focus gets a walkthrough, not a demo that does the whole lesson",
+      "covers": [
+        "FR-006",
+        "panel session 1"
+      ],
+      "hash": "c7a3284d252ece6e779dcb24b8ef974f78ba51f3d9761a5ce3110c758d2c7813",
+      "pass": true,
+      "passes": 2,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "set_ease_max",
+              "pass": true,
+              "detail": "0 successful set_ease"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOWS",
+              "pass": true,
+              "reason": "Turn 2 explains easing and calls preview_frame at time 0.5 on Glow, inside Glow's Blurriness pair (0–1 s); the reply says nothing about the frame, which is allowed."
+            },
+            {
+              "item": "R-LEARNER-DOES",
+              "pass": true,
+              "reason": "No set_ease ran (demo_target was null, no_demo_reason single_pair), and Turn 2 names the pair for the learner to do: \"Ease Glow's Blurriness and say done.\" The Title demo offer is a demonstration on another layer, not an offer to do the learner's work."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 2 is one task: Glow confirmed with the reason there's no demo, the idea on their timing (\"changes at one steady speed and then stops dead at 1 s… Easing makes it slow down\"), one how-to sentence, then \"Ease Glow's Blurriness and say done.\" It has a single demo alternative as the last sentence and no lists or Graph Editor tour."
+            }
+          ],
+          "cost": 0.2178226,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is fixture \"before\"\nLEARNER: /ease-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {},\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-HzO9Ye/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL snapshot_project {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1.5,\n          \"to_time\": 3,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"2/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.3,\n          \"to_time\": 1.3,\n          \"state\": \"partly_eased\",\n          \"linear_end\": \"end\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n          \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n          \"from_time\": 0.2,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 0.6,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/2\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Glow\",\n      \"property\": \"Blurriness\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n          \"display_path\": \"Effects › Gaussian Blur › Blurriness\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"8/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Scale\",\n      \"reason\": \"single_key\"\n    },\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Old Take\"\n  ],\n  \"precomp_layers\": [\n    \"Icon\"\n  ],\n  \"focus\": null,\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Scale/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"2/ADBE Transform Group/ADBE Opacity/1\",\n    \"3/ADBE Transform Group/ADBE Position/1\",\n    \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n    \"4/ADBE Transform Group/ADBE Position_0/1\",\n    \"4/ADBE Transform Group/ADBE Position_0/2\",\n    \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n    \"8/ADBE Transform Group/ADBE Position/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"counts\": {\n    \"linear\": 10,\n    \"partly_eased\": 1,\n    \"eased\": 1,\n    \"held\": 5\n  }\n}\nMENTOR: Welcome to Mentor Practice. I found 11 keyframe pairs that run at one flat speed (that's called linear) across 6 layers, and one of them, on Subtitle's Opacity, is half done: it's eased at the start but still linear at the end.\n\nI suggest we start with **Title**. It has four pairs: two Position moves (0.5 s to 1.5 s, then 1.5 s to 3 s), plus Scale and Opacity from 0.5 s to 1.5 s.\n\nI'm leaving out two layers for now. You've hidden **Old Take**, so I'll skip it unless you want it in. **Icon** is a precomp, and I can't see inside those yet, so I can't tell you whether it's fine.\n\nShall we start with Title, or would you rather pick another layer?\n\n### Turn 2: the project is fixture \"before\"\nLEARNER: Let's do Glow. Show me how first.\nTOOL CALL snapshot_project {\"focus_layers\":[\"Glow\"]}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1.5,\n          \"to_time\": 3,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"2/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.3,\n          \"to_time\": 1.3,\n          \"state\": \"partly_eased\",\n          \"linear_end\": \"end\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n          \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n          \"from_time\": 0.2,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 0.6,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/2\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Glow\",\n      \"property\": \"Blurriness\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n          \"display_path\": \"Effects › Gaussian Blur › Blurriness\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"8/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Scale\",\n      \"reason\": \"single_key\"\n    },\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Old Take\"\n  ],\n  \"precomp_layers\": [\n    \"Icon\"\n  ],\n  \"focus\": [\n    \"Glow\"\n  ],\n  \"targets\": [\n    \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\"\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_pair\",\n  \"counts\": {\n    \"linear\": 10,\n    \"partly_eased\": 1,\n    \"eased\": 1,\n    \"held\": 5\n  }\n}\nTOOL CALL preview_frame {\"time\":0.5,\"layer\":\"Glow\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice\",\"time\":0.5,\"layer_bounds_reason\":\"no_layer_info\",\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Glow it is. Glow has only one pair, so if I eased it for you there'd be nothing left for you to do.\n\nThat pair is the Gaussian Blur effect's Blurriness, from 0 s to 1 s. Right now the blur changes at one steady speed and then stops dead at 1 s: that's linear, and it's why it feels mechanical. Easing makes it slow down as it leaves each key and as it arrives at the next.\n\nWith Glow's keys showing (U), select both keys of a pair and choose **Animation > Keyframe Assistant > Easy Ease** (F9); the diamonds turn into hourglasses.\n\nEase Glow's Blurriness and say done. If you'd like to watch me do one first, we can switch to Title, which has enough pairs for me to show you one.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.1115,
+          "judge_cost_usd": 0.1063,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ease-mentor": "554fe3f9ebb27a5bc6a89ed079acdff8fb13810883f678c9d61cdcfcb9ff7e11"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVeFWUFnfxQocNSJX5b",
+              "status": 200,
+              "headers_ms": 1335,
+              "max_gap_ms": 426,
+              "total_ms": 1764,
+              "end": "done",
+              "body_bytes": 39426
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVeP5dfYnAKhEJB85QB",
+              "status": 200,
+              "headers_ms": 1146,
+              "max_gap_ms": 45,
+              "total_ms": 1193,
+              "end": "done",
+              "body_bytes": 39906
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVeTu6vv7JdyAc39xt2",
+              "status": 200,
+              "headers_ms": 2102,
+              "max_gap_ms": 3287,
+              "total_ms": 5843,
+              "end": "done",
+              "body_bytes": 45369
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVetvzdqSaesg4SBCYK",
+              "status": 200,
+              "headers_ms": 2273,
+              "max_gap_ms": 1019,
+              "total_ms": 3300,
+              "end": "done",
+              "body_bytes": 47496
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVf992de6864kfdKTfc",
+              "status": 200,
+              "headers_ms": 1055,
+              "max_gap_ms": 1697,
+              "total_ms": 3504,
+              "end": "done",
+              "body_bytes": 53548
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVfRayd4CuUY86sxViY",
+              "status": 200,
+              "headers_ms": 1653,
+              "max_gap_ms": 2361,
+              "total_ms": 4267,
+              "end": "done",
+              "body_bytes": 55832
+            }
+          ]
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "set_ease_max",
+              "pass": true,
+              "detail": "0 successful set_ease"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOWS",
+              "pass": true,
+              "reason": "Turn 2 calls preview_frame at 0.5 s, inside Glow's 0–1 s Blurriness pair, and adds one accurate clause about it (\"halfway through its blur, at 0.5 s\")."
+            },
+            {
+              "item": "R-LEARNER-DOES",
+              "pass": true,
+              "reason": "Turn 2 makes no set_ease call (demo_target is null, no_demo_reason single_pair), explains why it won't ease Glow's only pair, and ends with \"Ease it and say done\" for the Glow Blurriness 0–1 s pair it just named; the Title demo offer is one optional demonstration, not doing the rest."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": false,
+              "reason": "Turn 2's explanation goes past the one-task shape: it adds a demo-refusal sentence (\"Glow has just one pair…\"), splits the how-to across two sentences (\"The Blurriness keys sit under the Gaussian Blur effect, not under Transform.\" plus the Easy Ease steps), and ends on \"Ease it and say done\" without naming the pair in that sentence."
+            }
+          ],
+          "cost": 0.1857858,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is fixture \"before\"\nLEARNER: /ease-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {},\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-Fi7Pnp/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL snapshot_project {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1.5,\n          \"to_time\": 3,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"2/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.3,\n          \"to_time\": 1.3,\n          \"state\": \"partly_eased\",\n          \"linear_end\": \"end\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n          \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n          \"from_time\": 0.2,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 0.6,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/2\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Glow\",\n      \"property\": \"Blurriness\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n          \"display_path\": \"Effects › Gaussian Blur › Blurriness\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"8/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Scale\",\n      \"reason\": \"single_key\"\n    },\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Old Take\"\n  ],\n  \"precomp_layers\": [\n    \"Icon\"\n  ],\n  \"focus\": null,\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Scale/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"2/ADBE Transform Group/ADBE Opacity/1\",\n    \"3/ADBE Transform Group/ADBE Position/1\",\n    \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n    \"4/ADBE Transform Group/ADBE Position_0/1\",\n    \"4/ADBE Transform Group/ADBE Position_0/2\",\n    \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n    \"8/ADBE Transform Group/ADBE Position/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"counts\": {\n    \"linear\": 10,\n    \"partly_eased\": 1,\n    \"eased\": 1,\n    \"held\": 5\n  }\n}\nMENTOR: In Mentor Practice I found 11 keyframe pairs that still need easing, across 6 layers. One of them, Subtitle's Opacity, is half done: it's eased at the start but still linear at the end.\n\nI'd start with **Title**, which has four pairs: two Position moves (0.5 s to 1.5 s, then 1.5 s to 3 s), plus Scale and Opacity, both from 0.5 s to 1.5 s.\n\nSome layers aren't part of this lesson:\n- **Old Take** is hidden, so I'll leave it alone unless you want it.\n- **Icon** is a precomp. I can't see inside it yet, so I can't tell you whether its animation is fine.\n\nShall we start with Title?\n\n### Turn 2: the project is fixture \"before\"\nLEARNER: Let's do Glow. Show me how first.\nTOOL CALL snapshot_project {\"focus_layers\":[\"Glow\"]}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1.5,\n          \"to_time\": 3,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"2/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.3,\n          \"to_time\": 1.3,\n          \"state\": \"partly_eased\",\n          \"linear_end\": \"end\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n          \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n          \"from_time\": 0.2,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 0.6,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/2\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Glow\",\n      \"property\": \"Blurriness\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n          \"display_path\": \"Effects › Gaussian Blur › Blurriness\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"8/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Scale\",\n      \"reason\": \"single_key\"\n    },\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Old Take\"\n  ],\n  \"precomp_layers\": [\n    \"Icon\"\n  ],\n  \"focus\": [\n    \"Glow\"\n  ],\n  \"targets\": [\n    \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\"\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_pair\",\n  \"counts\": {\n    \"linear\": 10,\n    \"partly_eased\": 1,\n    \"eased\": 1,\n    \"held\": 5\n  }\n}\nTOOL CALL preview_frame {\"time\":0.5,\"layer\":\"Glow\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice\",\"time\":0.5,\"layer_bounds_reason\":\"no_layer_info\",\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Glow it is. This frame is halfway through its blur, at 0.5 s.\n\nGlow has just one pair, so if I eased it there'd be nothing left for you to do. From 0 s to 1 s, Glow's Gaussian Blur Blurriness changes at one speed the whole way, then stops dead at 1 s: that's linear, and it's why it looks mechanical. Easing slows it out of each key and into the next.\n\nThe Blurriness keys sit under the Gaussian Blur effect, not under Transform. With Glow's keys showing (U), select both keys of a pair and choose **Animation > Keyframe Assistant > Easy Ease** (F9); the diamonds turn into hourglasses.\n\nEase it and say done. If you'd like to watch me ease a pair first, Title has four pairs and I can show you one there.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0719,
+          "judge_cost_usd": 0.1139,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ease-mentor": "554fe3f9ebb27a5bc6a89ed079acdff8fb13810883f678c9d61cdcfcb9ff7e11"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVgSnCa2foJqzfTmtNp",
+              "status": 200,
+              "headers_ms": 1141,
+              "max_gap_ms": 482,
+              "total_ms": 1631,
+              "end": "done",
+              "body_bytes": 39426
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVgZcTA6x7dZsb7hdCu",
+              "status": 200,
+              "headers_ms": 1198,
+              "max_gap_ms": 1,
+              "total_ms": 1199,
+              "end": "done",
+              "body_bytes": 39906
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVgejY5iFgqrv7HQsoM",
+              "status": 200,
+              "headers_ms": 986,
+              "max_gap_ms": 3311,
+              "total_ms": 4623,
+              "end": "done",
+              "body_bytes": 45369
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVgzXeyAtekNYp4KeRY",
+              "status": 200,
+              "headers_ms": 1120,
+              "max_gap_ms": 965,
+              "total_ms": 2090,
+              "end": "done",
+              "body_bytes": 47561
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVh9WQ3SQss6JE1RabU",
+              "status": 200,
+              "headers_ms": 1158,
+              "max_gap_ms": 1337,
+              "total_ms": 3113,
+              "end": "done",
+              "body_bytes": 53597
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVhPxJudAXPUqdAvujj",
+              "status": 200,
+              "headers_ms": 1800,
+              "max_gap_ms": 2167,
+              "total_ms": 4262,
+              "end": "done",
+              "body_bytes": 55693
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "set_ease_max",
+              "pass": true,
+              "detail": "0 successful set_ease"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "6 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOWS",
+              "pass": true,
+              "reason": "Turn 2 calls preview_frame at 0.5 s on Glow, which is inside the Blurriness pair (0–1 s), and the only clause about the frame (\"Here's that pair at 0.5 s, halfway through the change\") is accurate."
+            },
+            {
+              "item": "R-LEARNER-DOES",
+              "pass": true,
+              "reason": "Turn 2 makes no set_ease call, which is right since no_demo_reason is single_pair, and it ends by asking the learner to \"Ease Glow's Blurriness and say 'done',\" naming the one pair."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 2 gives one task: a brief reason for not demonstrating, the frame with one clause, the idea in two sentences, and the how-to in one sentence. It ends on \"Ease Glow's Blurriness and say 'done',\" with a single demo alternative (via Title) as the last sentence, and has no lists or Graph Editor tour."
+            }
+          ],
+          "cost": 0.1879496,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is fixture \"before\"\nLEARNER: /ease-mentor\nTOOL CALL read_learner_record {}\nTOOL RESULT (ok): {\n  \"version\": 1,\n  \"skills\": {},\n  \"lessons\": [],\n  \"path\": \"/var/folders/46/djntkg2n30b6jxyl_7nx71cr0000gn/T/AEMentor-0kB8jx/learner.json\",\n  \"server_current\": true\n}\nTOOL CALL snapshot_project {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1.5,\n          \"to_time\": 3,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"2/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.3,\n          \"to_time\": 1.3,\n          \"state\": \"partly_eased\",\n          \"linear_end\": \"end\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n          \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n          \"from_time\": 0.2,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 0.6,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/2\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Glow\",\n      \"property\": \"Blurriness\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n          \"display_path\": \"Effects › Gaussian Blur › Blurriness\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"8/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Scale\",\n      \"reason\": \"single_key\"\n    },\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Old Take\"\n  ],\n  \"precomp_layers\": [\n    \"Icon\"\n  ],\n  \"focus\": null,\n  \"targets\": [\n    \"1/ADBE Transform Group/ADBE Position/1\",\n    \"1/ADBE Transform Group/ADBE Position/2\",\n    \"1/ADBE Transform Group/ADBE Scale/1\",\n    \"1/ADBE Transform Group/ADBE Opacity/1\",\n    \"2/ADBE Transform Group/ADBE Opacity/1\",\n    \"3/ADBE Transform Group/ADBE Position/1\",\n    \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n    \"4/ADBE Transform Group/ADBE Position_0/1\",\n    \"4/ADBE Transform Group/ADBE Position_0/2\",\n    \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n    \"8/ADBE Transform Group/ADBE Position/1\"\n  ],\n  \"demo_target\": \"1/ADBE Transform Group/ADBE Position/1\",\n  \"no_demo_reason\": null,\n  \"counts\": {\n    \"linear\": 10,\n    \"partly_eased\": 1,\n    \"eased\": 1,\n    \"held\": 5\n  }\n}\nMENTOR: Welcome to easing. In Mentor Practice I found 11 keyframe pairs that run at constant speed across 6 layers, and one of them, Subtitle's Opacity, is half done: it eases in at the start but still stops hard at the end.\n\nI suggest we start with **Title**, which has four pairs: two Position moves (0.5 s to 1.5 s, then 1.5 s to 3 s), plus Scale and Opacity, both from 0.5 s to 1.5 s.\n\nI'm leaving out two layers for now:\n- **Old Take:** you've hidden it, so I'll skip it unless you want it.\n- **Icon:** it's a precomp, and I can't see inside it yet, so I can't say whether it's fine.\n\nShall we start with Title?\n\n### Turn 2: the project is fixture \"before\"\nLEARNER: Let's do Glow. Show me how first.\nTOOL CALL snapshot_project {\"focus_layers\":[\"Glow\"]}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice\",\n    \"duration\": 8\n  },\n  \"findings\": [\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Position/2\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 1.5,\n          \"to_time\": 3,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Scale\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Scale/1\",\n          \"display_path\": \"Transform › Scale\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Title\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"1/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.5,\n          \"to_time\": 1.5,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Subtitle\",\n      \"property\": \"Opacity\",\n      \"segments\": [\n        {\n          \"id\": \"2/ADBE Transform Group/ADBE Opacity/1\",\n          \"display_path\": \"Transform › Opacity\",\n          \"from_time\": 0.3,\n          \"to_time\": 1.3,\n          \"state\": \"partly_eased\",\n          \"linear_end\": \"end\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"CTRL\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"3/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"End\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Root Vectors Group/ADBE Vector Group#1/ADBE Vectors Group/ADBE Vector Filter - Trim#3/ADBE Vector Trim End/1\",\n          \"display_path\": \"Contents › Rectangle › Contents › Trim Paths 1 › End\",\n          \"from_time\": 0.2,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Bar\",\n      \"property\": \"X Position\",\n      \"segments\": [\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/1\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0,\n          \"to_time\": 0.6,\n          \"state\": \"linear\"\n        },\n        {\n          \"id\": \"4/ADBE Transform Group/ADBE Position_0/2\",\n          \"display_path\": \"Transform › X Position\",\n          \"from_time\": 0.6,\n          \"to_time\": 1.2,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Glow\",\n      \"property\": \"Blurriness\",\n      \"segments\": [\n        {\n          \"id\": \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\",\n          \"display_path\": \"Effects › Gaussian Blur › Blurriness\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    },\n    {\n      \"layer\": \"Old Take\",\n      \"property\": \"Position\",\n      \"segments\": [\n        {\n          \"id\": \"8/ADBE Transform Group/ADBE Position/1\",\n          \"display_path\": \"Transform › Position\",\n          \"from_time\": 0,\n          \"to_time\": 1,\n          \"state\": \"linear\"\n        }\n      ]\n    }\n  ],\n  \"skipped\": [\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Scale\",\n      \"reason\": \"single_key\"\n    },\n    {\n      \"layer\": \"Logo\",\n      \"property\": \"Rotation\",\n      \"reason\": \"expression\"\n    }\n  ],\n  \"hidden_layers\": [\n    \"Old Take\"\n  ],\n  \"precomp_layers\": [\n    \"Icon\"\n  ],\n  \"focus\": [\n    \"Glow\"\n  ],\n  \"targets\": [\n    \"5/ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001/1\"\n  ],\n  \"demo_target\": null,\n  \"no_demo_reason\": \"single_pair\",\n  \"counts\": {\n    \"linear\": 10,\n    \"partly_eased\": 1,\n    \"eased\": 1,\n    \"held\": 5\n  }\n}\nTOOL CALL preview_frame {\"time\":0.5,\"layer\":\"Glow\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice\",\"time\":0.5,\"layer_bounds_reason\":\"no_layer_info\",\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: We'll do Glow. It has just one pair, its Gaussian Blur Blurriness from 0 s to 1 s, so if I eased it there'd be nothing left for you to do.\n\nHere's that pair at 0.5 s, halfway through the change. The blur changes at one speed the whole way and then stops dead at 1 s: that's linear, and it's why it looks mechanical. Easing makes it start slowly from the first key and slow down into the second.\n\nWith Glow's keys showing (U), select both keys of a pair and choose **Animation > Keyframe Assistant > Easy Ease** (F9); the diamonds turn into hourglasses.\n\nEase Glow's Blurriness and say \"done.\" If you'd rather watch me ease one first, pick Title instead, since it has four pairs.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0769,
+          "judge_cost_usd": 0.111,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "ease-mentor": "554fe3f9ebb27a5bc6a89ed079acdff8fb13810883f678c9d61cdcfcb9ff7e11"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 6,
+            "detail": "6 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVigxnNPB3wJ1k3B5fH",
+              "status": 200,
+              "headers_ms": 1940,
+              "max_gap_ms": 513,
+              "total_ms": 2460,
+              "end": "done",
+              "body_bytes": 39426
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVisJPKnUvnZH5qaYVY",
+              "status": 200,
+              "headers_ms": 2267,
+              "max_gap_ms": 49,
+              "total_ms": 2318,
+              "end": "done",
+              "body_bytes": 39906
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVj3FfsVHUBKWiBKhxH",
+              "status": 200,
+              "headers_ms": 2346,
+              "max_gap_ms": 3852,
+              "total_ms": 6576,
+              "end": "done",
+              "body_bytes": 45369
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVjXQLro1AP8bd3VtsL",
+              "status": 200,
+              "headers_ms": 1221,
+              "max_gap_ms": 836,
+              "total_ms": 2060,
+              "end": "done",
+              "body_bytes": 47672
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVjgEfDypKS3Er7LcUg",
+              "status": 200,
+              "headers_ms": 1199,
+              "max_gap_ms": 1890,
+              "total_ms": 3800,
+              "end": "done",
+              "body_bytes": 53696
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVjycAqXtsxZuvv9dXv",
+              "status": 200,
+              "headers_ms": 1492,
+              "max_gap_ms": 3614,
+              "total_ms": 5516,
+              "end": "done",
+              "body_bytes": 56096
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "3acbda26fba303399a29bbf15502c01318a76c32f74767df6204793d3a6eca24",
+  "mentor_cost_usd": 0.26,
+  "judge_cost_usd": 0.33,
+  "non_baseline": false,
+  "prompt_hash": {
+    "ease-mentor": "554fe3f9ebb27a5bc6a89ed079acdff8fb13810883f678c9d61cdcfcb9ff7e11"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-11-11-225131.json",
+    "passed": 32,
+    "total": 33
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}

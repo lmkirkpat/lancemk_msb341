@@ -612,3 +612,33 @@ Measured 2026-11-04 at `4edba27` (no skill, tool, helper or setting changed duri
 **Note (2026-11-06):** this set's A record was measured with helper settings `20bff077e6af`. The helper has
 changed since (T068's stall guard and error kinds, now `0d5cda88ea83`), with request bodies unchanged. Re-run on A
 on the first tester's commit (SC-003).
+
+### A run on `ffc0c1b` (2026-11-12)
+
+`claude-opus-5-5`, effort `medium`, settings hash `3acbda26fba3…`, 0 turns of unknown cost, 0 other-model turns. Run by the builder; no lesson code, prompt or setting changed from `ffc0c1b`.
+Prompt hash `0ffa0cce`.
+**Full run: `results/2026-11-12-095659.json`, 47/52 (90%), $3.26 mentor credit, $6.62 judge.**
+B1 baseline compared: `2026-11-09-181838.json`, 45/52 (87%); A is 3.8 points above.
+
+| FR-033 | Result |
+|---|---|
+| (a) no hard-rule check fails | Not on the full run: 05 (`say:no_jump_claim`, fails on B1 too) and 39 (`say:no_rig_move_claim`, 3/3 on repeat). |
+| (b) at least 80% | Met. 90%. |
+| (c) no more than 5 points below B1 | Met. |
+| (d) B1-pass, A-fail cases re-run with `--repeat 3` | Below. |
+
+| Case | Failed on the full run | A `--repeat 3` |
+|---|---|---|
+| 03-pivot-question | unreadable judge reply (plumbing) | 3/3 (`-112349`, $0.28 mentor, $0.42 judge) |
+| 09-fade-instead-of-move | unreadable judge reply (plumbing) | 2/3 (`-112447`, $0.23 mentor, $0.41 judge); the miss was also an unreadable judge reply |
+| 39-rig-example-only-when-asked | `say:no_rig_move_claim` (turn 3 said "Hatch Rig moves") | 3/3 (`-112541`, $0.15 mentor, $0.40 judge) |
+| 05-correct-parenting-passes | `say:no_jump_claim` (turn 4 said "jumped") | not re-run: fails on B1 too |
+| 18-due-review-no-new-group | R-DUE-NO-NEW-LESSON | not re-run: fails on B1 too |
+
+**Verdict: meets FR-033.** All three B1-pass, A-fail cases pass on repeat (two judge-reader plumbing misses and one wording check). Cases 05 and 18 fail on both runtimes, so they are not an A difference but are still open for a prompt or rubric look. Five cases that failed on B1 passed on A (17, 30, 37, 45, 46).
+
+The one-case probe `results/2026-11-12-093928.json` (case 01, pass, $0.08 mentor, $0.14 judge) ran first to check the setup. It is not a baseline.**
+
+**A baseline (FR-035, T053):** `results/2026-11-12-095659.json`, `claude-opus-5-5`, effort `medium`, $3.26 mentor credit ($6.62 judge, on subscription), at `ffc0c1b`.
+
+**Timing (T068, `node product/evals/lib/timing-report.mjs results/2026-11-12-095659.json`):** 365 requests over 52 cases, 0 re-sends, 0 went quiet, 0 with no headers, max headers 4002 ms, max gap 5520 ms.

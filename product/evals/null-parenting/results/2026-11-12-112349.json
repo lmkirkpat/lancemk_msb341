@@ -1,0 +1,696 @@
+{
+  "run_at": "2026-11-12T18:23:49.400Z",
+  "options": {
+    "only": "03",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "a",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.69,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "03-pivot-question",
+      "title": "The pivot is asked, never picked; it'll only slide is accepted",
+      "covers": [
+        "EP-3",
+        "US1-3",
+        "FR-016"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "cb603fe17d38d12e7ab0e4caa6edb8a6dfed7f0386583a2fc9700625db7c2d06",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:asks_region",
+              "pass": true,
+              "detail": "turn 3: \"turn or scale, from\""
+            },
+            {
+              "check": "say:never_picks",
+              "pass": true,
+              "detail": "turns 1 to 3: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "8 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REGION-ASKED",
+              "pass": true,
+              "reason": "After the learner says \"I added a null. What now?\" in turn 3, the mentor asks \"Will Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\" before running any check."
+            },
+            {
+              "item": "R-REGION-NEVER-PICKED",
+              "pass": true,
+              "reason": "The mentor never names a place for the null; in turn 3 it hands the choice back (\"I need your answer first\"), and in turn 4 it says only that \"anywhere near it is fine\" because the learner chose a group that only slides."
+            },
+            {
+              "item": "R-ACCEPTS-SLIDES",
+              "pass": true,
+              "reason": "In turn 4 the mentor accepts the answer without pushback (\"That's right: since the group only slides, anywhere near it is fine\") and moves straight to parenting."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Every turn is short and ends on one ask: turn 2 gives the idea sentence and then the turn-or-scale question, turn 3 answers the side question and repeats the pending question, and turn 4 gives the single parenting task with the demo offer as its last sentence."
+            }
+          ],
+          "cost": 0.2750338,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this builds on it. Today's idea is moving a group of layers together with one invisible handle.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0,\"layer\":\"Tile\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0,\"layer_bounds\":{\"left\":1100,\"top\":100,\"right\":1300,\"bottom\":200},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Tile, Caption and Stamp it is. The frame above is your comp at 0 s, where we'll start.\n\nA layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: I added a null. What now?\nMENTOR: Good, that null is the handle we'll use. Where it goes depends on how the group moves, so I need your answer first.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 4: the project is an open comp\nLEARNER: It'll only slide, so it doesn't matter where it sits. Done.\nTOOL CALL null_parent_check {\"region\":\"slides_only\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"null_ready\",\n      \"null\": \"Null 1\"\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": null,\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": true\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"null_ready\"\n  ]\n}\nMENTOR: That's right: since the group only slides, anywhere near it is fine, and Null 1 is ready.\n\nNow parent Tile, Caption and Stamp to it with the pick whip in the Parent column, and say done. I can parent Tile first so you can watch, if you like.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.1378,
+          "judge_cost_usd": 0.1373,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "null-parenting-mentor": "0ffa0cce1f48dea31f68f7f42b6352b2e25550c017169e9de32a0479f529a009"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 8,
+            "detail": "8 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVwp1YzckeR3cZH3XEY",
+              "status": 200,
+              "headers_ms": 724,
+              "max_gap_ms": 340,
+              "total_ms": 1071,
+              "end": "done",
+              "body_bytes": 54061
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVwtXQr1FYue3Y192BW",
+              "status": 200,
+              "headers_ms": 527,
+              "max_gap_ms": 715,
+              "total_ms": 1539,
+              "end": "done",
+              "body_bytes": 56226
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVx19mj6URNzjTfGQpb",
+              "status": 200,
+              "headers_ms": 630,
+              "max_gap_ms": 515,
+              "total_ms": 1147,
+              "end": "done",
+              "body_bytes": 57572
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVx6Dt7849ip7C2j4gP",
+              "status": 200,
+              "headers_ms": 647,
+              "max_gap_ms": 308,
+              "total_ms": 995,
+              "end": "done",
+              "body_bytes": 59934
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVxBgYWyYZ4YEmvgakg",
+              "status": 200,
+              "headers_ms": 662,
+              "max_gap_ms": 1141,
+              "total_ms": 2236,
+              "end": "done",
+              "body_bytes": 60547
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyVxMF1czB9eBK2TZSCW",
+              "status": 200,
+              "headers_ms": 539,
+              "max_gap_ms": 1025,
+              "total_ms": 2359,
+              "end": "done",
+              "body_bytes": 62288
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011CgyVxXMDi1rxaoj3RpRMe",
+              "status": 200,
+              "headers_ms": 772,
+              "max_gap_ms": 398,
+              "total_ms": 1173,
+              "end": "done",
+              "body_bytes": 64150
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011CgyVxcUJeern7gSTKiiiT",
+              "status": 200,
+              "headers_ms": 620,
+              "max_gap_ms": 805,
+              "total_ms": 1754,
+              "end": "done",
+              "body_bytes": 66493
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:asks_region",
+              "pass": true,
+              "detail": "turn 3: \"Where you put it depends on how the group moves, so first:\n\nWill Tile, Caption and Stamp turn or scale\""
+            },
+            {
+              "check": "say:never_picks",
+              "pass": true,
+              "detail": "turns 1 to 3: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "8 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REGION-ASKED",
+              "pass": true,
+              "reason": "In turn 3, after the learner says \"I added a null. What now?\", the mentor asks \"If they turn or scale, where should that happen from: a corner, the middle of an edge, or the middle of the group?\" before any check runs."
+            },
+            {
+              "item": "R-REGION-NEVER-PICKED",
+              "pass": true,
+              "reason": "The mentor never names or recommends a place; turn 4's \"anywhere near it is fine\" only accepts the learner's slides-only answer, and the learner never asked the mentor to choose."
+            },
+            {
+              "item": "R-ACCEPTS-SLIDES",
+              "pass": true,
+              "reason": "In turn 4 the mentor replies \"You're right, since the group only slides, anywhere near it is fine\" and moves straight to parenting without asking for a place."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Each turn is short and ends with something for the learner: turn 2 gives the inherit idea and ends on the turn/scale/slide question, turn 3 re-asks the pending question, and turn 4 gives the one parenting task with the demo offer as its last sentence."
+            }
+          ],
+          "cost": 0.212428,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: Earlier you did the pivot lesson, and this one builds on it.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0,\"layer\":\"Tile\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0,\"layer_bounds\":{\"left\":1100,\"top\":100,\"right\":1300,\"bottom\":200},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: We'll move Tile, Caption and Stamp together. Above is your comp at the start, 0 s.\n\nA layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects. It also keeps its own animation on top of that.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, where should that happen from: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: I added a null. What now?\nMENTOR: Good, that's the handle. Where you put it depends on how the group moves, so first:\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, where should that happen from: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 4: the project is an open comp\nLEARNER: It'll only slide, so it doesn't matter where it sits. Done.\nTOOL CALL null_parent_check {\"region\":\"slides_only\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"null_ready\",\n      \"null\": \"Null 1\"\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": null,\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": true\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"null_ready\"\n  ]\n}\nMENTOR: You're right, since the group only slides, anywhere near it is fine. Null 1 is ready to use, and it won't show up in the render, so it works as a handle with no look of its own.\n\nNow parent Tile, Caption and Stamp to Null 1 with the pick whip in the Parent column, then say done. If you'd like to watch one first, I can parent Tile for you.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.0708,
+          "judge_cost_usd": 0.1416,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "null-parenting-mentor": "0ffa0cce1f48dea31f68f7f42b6352b2e25550c017169e9de32a0479f529a009"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 8,
+            "detail": "8 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVyMadsEmNuhHXbY1Hf",
+              "status": 200,
+              "headers_ms": 657,
+              "max_gap_ms": 327,
+              "total_ms": 989,
+              "end": "done",
+              "body_bytes": 54061
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyVyRyYZHw38NRe3YcEX",
+              "status": 200,
+              "headers_ms": 565,
+              "max_gap_ms": 408,
+              "total_ms": 1160,
+              "end": "done",
+              "body_bytes": 56226
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVyWp17mLox6PkFX4cG",
+              "status": 200,
+              "headers_ms": 616,
+              "max_gap_ms": 619,
+              "total_ms": 1239,
+              "end": "done",
+              "body_bytes": 57507
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVycW4wXs8Nb1mq5PrZ",
+              "status": 200,
+              "headers_ms": 683,
+              "max_gap_ms": 232,
+              "total_ms": 960,
+              "end": "done",
+              "body_bytes": 59869
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyVyhjpnMuJXjxStH1gq",
+              "status": 200,
+              "headers_ms": 659,
+              "max_gap_ms": 1958,
+              "total_ms": 2998,
+              "end": "done",
+              "body_bytes": 60482
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyVyvbEj5dLdzhaeYnHp",
+              "status": 200,
+              "headers_ms": 644,
+              "max_gap_ms": 1208,
+              "total_ms": 2514,
+              "end": "done",
+              "body_bytes": 62562
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011CgyVz7PtGdwmMr6AQ4kmc",
+              "status": 200,
+              "headers_ms": 746,
+              "max_gap_ms": 421,
+              "total_ms": 1167,
+              "end": "done",
+              "body_bytes": 64451
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011CgyVzCkqRxBv8nS1Kkv8i",
+              "status": 200,
+              "headers_ms": 682,
+              "max_gap_ms": 1292,
+              "total_ms": 2325,
+              "end": "done",
+              "body_bytes": 66794
+            }
+          ]
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:asks_region",
+              "pass": true,
+              "detail": "turn 3: \"turn or scale, where from\""
+            },
+            {
+              "check": "say:never_picks",
+              "pass": true,
+              "detail": "turns 1 to 3: clean"
+            },
+            {
+              "check": "allowlist",
+              "pass": true,
+              "detail": "8 requests, all inside the allowlist"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-REGION-ASKED",
+              "pass": true,
+              "reason": "In turn 3, after \"I added a null. What now?\", the mentor asks \"Will Tile, Caption and Stamp turn or scale, or will they only slide? If they turn or scale, where from: a corner, the middle of an edge, or the middle of the group?\" before any placement check."
+            },
+            {
+              "item": "R-REGION-NEVER-PICKED",
+              "pass": true,
+              "reason": "The mentor never recommends a spot; in turn 4 it only says \"since the group only slides, the null can sit anywhere near it,\" which follows the learner's own answer rather than picking a pivot."
+            },
+            {
+              "item": "R-ACCEPTS-SLIDES",
+              "pass": true,
+              "reason": "In turn 4 the mentor replies \"That works: since the group only slides...\" and goes straight to parenting without asking for a place or pushing back."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Each turn is short and ends with one ask: turn 2 gives the inheritance idea and ends on the turn-or-scale question, turn 3 asks only that question again, and turn 4 gives one parenting task with the demo offer as its last sentence."
+            }
+          ],
+          "cost": 0.2061104,
+          "session_id": null,
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nWhich layers in Mentor Practice 2 should move together, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0,\"layer\":\"Tile\"}\nTOOL RESULT (ok): {\"comp\":\"Mentor Practice 2\",\"time\":0,\"layer_bounds\":{\"left\":1100,\"top\":100,\"right\":1300,\"bottom\":200},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: Good: Tile, Caption and Stamp will move together. That's the group's starting frame, at 0 s.\n\nWhen a layer has a parent, it takes on the parent's position, scale and rotation, but not its fade or effects. It also keeps its own animation on top of that.\n\nWill Tile, Caption and Stamp turn or scale, or will they only slide? If they turn or scale, where from: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: I added a null. What now?\nMENTOR: Good. Next you'll place the null, and where it goes depends on how the group moves.\n\nWill Tile, Caption and Stamp turn or scale, or will they only slide? If they turn or scale, where from: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 4: the project is an open comp\nLEARNER: It'll only slide, so it doesn't matter where it sits. Done.\nTOOL CALL null_parent_check {\"region\":\"slides_only\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"null_ready\",\n      \"null\": \"Null 1\"\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": null,\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": true\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"null_ready\"\n  ]\n}\nMENTOR: That works: since the group only slides, the null can sit anywhere near it. Null 1 is ready to use.\n\nNow parent Tile, Caption and Stamp to Null 1 with the pick whip in the Parent column, then say done. If you'd like to watch one first, I can parent Tile for you.\n",
+          "runtime": "a",
+          "mentor_cost_usd": 0.068,
+          "judge_cost_usd": 0.1381,
+          "cost_unknown_turns": 0,
+          "other_model_turns": 0,
+          "prompt_hashes": {
+            "null-parenting-mentor": "0ffa0cce1f48dea31f68f7f42b6352b2e25550c017169e9de32a0479f529a009"
+          },
+          "allowlist": {
+            "pass": true,
+            "requests": 8,
+            "detail": "8 requests, all inside the allowlist",
+            "violations": []
+          },
+          "request_timing": [
+            {
+              "turn": 1,
+              "request_id": "req_011CgyW17CF8TJ9xAVvPmAwe",
+              "status": 200,
+              "headers_ms": 743,
+              "max_gap_ms": 315,
+              "total_ms": 1067,
+              "end": "done",
+              "body_bytes": 54061
+            },
+            {
+              "turn": 1,
+              "request_id": "req_011CgyW1BafaUYA1NyiRnfWH",
+              "status": 200,
+              "headers_ms": 503,
+              "max_gap_ms": 639,
+              "total_ms": 1402,
+              "end": "done",
+              "body_bytes": 56226
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW1HdZ1fuLs9WTSDrvS",
+              "status": 200,
+              "headers_ms": 681,
+              "max_gap_ms": 494,
+              "total_ms": 1178,
+              "end": "done",
+              "body_bytes": 57558
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW1NqazBRUhBkh4HCWL",
+              "status": 200,
+              "headers_ms": 621,
+              "max_gap_ms": 290,
+              "total_ms": 970,
+              "end": "done",
+              "body_bytes": 59920
+            },
+            {
+              "turn": 2,
+              "request_id": "req_011CgyW1U8LWBxwQpw6GczWS",
+              "status": 200,
+              "headers_ms": 672,
+              "max_gap_ms": 1591,
+              "total_ms": 2556,
+              "end": "done",
+              "body_bytes": 60533
+            },
+            {
+              "turn": 3,
+              "request_id": "req_011CgyW1f4A8L6XCG1QfbJaR",
+              "status": 200,
+              "headers_ms": 551,
+              "max_gap_ms": 868,
+              "total_ms": 2025,
+              "end": "done",
+              "body_bytes": 62378
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011CgyW1om2dvzdd4URKPUxg",
+              "status": 200,
+              "headers_ms": 664,
+              "max_gap_ms": 416,
+              "total_ms": 1084,
+              "end": "done",
+              "body_bytes": 64242
+            },
+            {
+              "turn": 4,
+              "request_id": "req_011CgyW1tVYPsarvC9ZVT6JC",
+              "status": 200,
+              "headers_ms": 586,
+              "max_gap_ms": 857,
+              "total_ms": 1662,
+              "end": "done",
+              "body_bytes": 66585
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": "a",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "settings_hash": "3acbda26fba303399a29bbf15502c01318a76c32f74767df6204793d3a6eca24",
+  "mentor_cost_usd": 0.28,
+  "judge_cost_usd": 0.42,
+  "non_baseline": false,
+  "prompt_hash": {
+    "null-parenting-mentor": "0ffa0cce1f48dea31f68f7f42b6352b2e25550c017169e9de32a0479f529a009"
+  },
+  "other_model_turns": 0,
+  "cost_unknown_turns": 0,
+  "baseline": {
+    "file": "2026-11-09-181838.json",
+    "passed": 45,
+    "total": 52
+  },
+  "vs_baseline": {
+    "b1_pass_a_fail": [],
+    "b1_fail_a_pass": []
+  }
+}
