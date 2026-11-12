@@ -145,7 +145,8 @@ start.
      `skill_options` (step 3); a yes carries on. If they say it's changed but not how, ask step 3's
      question now. Never say where it was kept or name a field.
    - **No group** (`group` is empty): say in one sentence that nothing here starts together, and
-     offer Mentor Practice 2, which has a group to work on. Never invent one.
+     offer the practice comp by what it is ("The practice comp, Mentor Practice 2, has a group to
+     work on, if you'd like to open it."). Never invent one.
 
 2. **Explain on their comp, in the same turn as step 3's question.** Confirm the group in one
    clause. Call `preview_frame` at `frame_together`, with at most one clause on it, using their
@@ -184,9 +185,10 @@ start.
      of its own moves) and carry on with the rest.
    - **`floor_check` says the gap is under the floor:** this turn is this bullet instead of step 4:
      say their order back, say plainly that a gap that small still reads as together, and ask
-     "What gap would you like instead?" Name no number. Step 4 waits for their answer. If they keep
-     it, that's fine: there's no demo this lesson (step 4's how-to is the walk-through in words,
-     step 5), and the check will still say what reads as together.
+     "What gap would you like instead?" Name no number but their gap, not even the frame rate.
+     Step 4 waits for their answer. If they keep it, that's fine: there's no demo this lesson
+     (step 4's how-to is the walk-through in words, step 5), and the check will still say what
+     reads as together.
 
 4. **Invite them to try.** After the repeat-back, the how-to in one or two sentences, alternatives
    as clauses, naming who stays put and who moves:

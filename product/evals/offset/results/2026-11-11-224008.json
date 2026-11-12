@@ -1,0 +1,356 @@
+{
+  "run_at": "2026-11-12T05:40:08.745Z",
+  "options": {
+    "only": "18",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.69,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "18-due-review-nothing-new-opens-lesson",
+      "title": "A review is due but this comp has nothing new to review: a lesson opens (or says what the comp lacks), and no review is mentioned",
+      "covers": [
+        "FR-052",
+        "OR-1"
+      ],
+      "fixture_sources": {
+        "synthetic/linear-basic.json": "synthetic"
+      },
+      "hash": "9e931beff9509f9d269fed5ae188848151093e198296f4754263ccc9c8867f7b",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:no_review_mentioned",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "0 lessons recorded"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OR1-LESSON",
+              "pass": true,
+              "reason": "With group null, the mentor says plainly what the Studio comp lacks for the lesson (\"there's nothing to stagger here\") and offers the practice comp, never mentioning a review, \"due\" or \"nothing to review\" and inventing no target."
+            }
+          ],
+          "cost": 0.230798,
+          "session_id": "3c31e7ab-051b-4a35-b731-2413f404475f",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Stagger the Chips.\",\n    \"last_attempted\": \"Staggered Dot 1, Dot 2 and Dot 3, in that order\",\n    \"days_since_practiced\": 28,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Studio Reel.aep\",\n  \"comp\": {\n    \"name\": \"Studio\",\n    \"duration\": 4,\n    \"frame_rate\": 30\n  },\n  \"group\": null,\n  \"proposed_kind\": null,\n  \"other_kind\": null,\n  \"other_group\": null,\n  \"left_out\": [],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"no_group\",\n  \"frame_together\": null,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: About four weeks ago you staggered Dot 1, Dot 2 and Dot 3.\n\nIn the Studio comp, no layers start at the same time and no layer's properties start and land together, so there's nothing to stagger here. The practice comp has a group of layers that start together. Would you like to open it?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:no_review_mentioned",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "0 lessons recorded"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OR1-LESSON",
+              "pass": true,
+              "reason": "The mentor says plainly what this comp lacks (\"In the Studio comp, though, nothing starts together right now, so there's no group to stagger here\"), which matches the tool's group: null and no_demo_reason \"no_group\"; it never mentions a review, \"due\" or \"nothing to review\", and the practice-comp offer is not a target invented on this comp."
+            }
+          ],
+          "cost": 0.233078,
+          "session_id": "aaff4f66-5f4e-4571-a5b2-69615c8972b7",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Stagger the Chips.\",\n    \"last_attempted\": \"Staggered Dot 1, Dot 2 and Dot 3, in that order\",\n    \"days_since_practiced\": 28,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Studio Reel.aep\",\n  \"comp\": {\n    \"name\": \"Studio\",\n    \"duration\": 4,\n    \"frame_rate\": 30\n  },\n  \"group\": null,\n  \"proposed_kind\": null,\n  \"other_kind\": null,\n  \"other_group\": null,\n  \"left_out\": [],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"no_group\",\n  \"frame_together\": null,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Last month you staggered Dot 1, Dot 2 and Dot 3. In the Studio comp, though, nothing starts together right now, so there's no group to stagger here.\n\nThe practice comp has a group ready to work on. Would you like to open it?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "snapshot_reply@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:no_review_mentioned",
+              "pass": true,
+              "detail": "turn 1: clean"
+            },
+            {
+              "check": "record_lesson",
+              "pass": true,
+              "detail": "0 lessons recorded"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-OR1-LESSON",
+              "pass": true,
+              "reason": "The mentor never mentions a review, 'due' or 'nothing to review'; it says plainly what this comp lacks ('In the Studio comp, though, nothing starts together, so there's no group to stagger here') and offers the practice comp for the lesson without inventing a target."
+            }
+          ],
+          "cost": 0.22853400000000001,
+          "session_id": "de052f05-465c-48ad-85d3-925aada4429f",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"learned\",\n    \"times_passed\": 1,\n    \"next\": \"Stagger the Chips.\",\n    \"last_attempted\": \"Staggered Dot 1, Dot 2 and Dot 3, in that order\",\n    \"days_since_practiced\": 28,\n    \"review_due\": true,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": false\n  },\n  \"quick_offset\": false,\n  \"project\": \"Studio Reel.aep\",\n  \"comp\": {\n    \"name\": \"Studio\",\n    \"duration\": 4,\n    \"frame_rate\": 30\n  },\n  \"group\": null,\n  \"proposed_kind\": null,\n  \"other_kind\": null,\n  \"other_group\": null,\n  \"left_out\": [],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"no_group\",\n  \"frame_together\": null,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: About a month ago you staggered Dot 1, Dot 2 and Dot 3. In the Studio comp, though, nothing starts together, so there's no group to stagger here.\n\nThe practice comp has a group to work on. Want to open it and say when it's active?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}
