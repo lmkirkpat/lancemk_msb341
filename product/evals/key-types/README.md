@@ -382,3 +382,7 @@ B1 baseline compared: `2026-10-29-143934.json`, 29/30 (97%); A is 2.2 points bel
 | 20-stored-choices-confirmed | say:says_focus_back, say:as_theirs, say:asks_and_stops | 2/3 (`-234757`) |
 
 **Verdict: meets FR-033 on A**, if case 20's one `say:` miss counts as noise (2/3 on repeat). Watch 03: the demo shows only the before frame (2/3).
+
+## Changed after seeing results (2026-11-11, human-approved): R-OR1-LESSON accepts the named practice comp
+
+Same change as offset (see `offset/README.md`). `rubric.md` R-OR1-LESSON now says that offering "Mentor Practice 2", the comp `key-types-mentor/SKILL.md` (~line 142) names, is not an invented target; any other comp or layer no tool result names still fails. No case was re-run for key types (no failure of this item has been seen here).

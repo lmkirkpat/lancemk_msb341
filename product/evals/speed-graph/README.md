@@ -386,3 +386,9 @@ B1 baseline compared: `2026-11-09-173733.json`, 34/37 (92%); A is 5.4 points abo
 | 30-button-check-partial | tools_called, last_check, say:names_scale | 0/3 (`-235318`) |
 
 **Verdict: open.** Case 30 fails 0/3 on A (R-ONE-IDEA: a turn adds a lesson on the shared key's two handles, the same pattern as case 04 earlier). It passed on B1, so it is a majority failure to fix in `SKILL.md` or accept in writing.
+
+## B1 baseline on `0e2bf84` (2026-11-11)
+
+Runtime B1, no timeouts. **Full run: `results/2026-11-11-232337.json`, 36/37 (97%), $23.30.** SC-006 met, no hard-rule check failed. The one miss was plumbing, not a score: case 10 `dragged-up` returned an unreadable judge reply (the reply was a JSON array with every item passing). Re-run `--only 10 --repeat 3`: **3/3** (`-232447`, $1.41), so the set stands at 37/37 on the cases that scored. Case 30 (the `SKILL.md` fix of `f276cd6`) passed on the full run.
+
+**The A comparison for FR-033 will be against this baseline** (36/37 on the full run, 37/37 with case 10 re-run), not the older `2026-10-29` run.

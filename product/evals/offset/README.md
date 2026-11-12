@@ -438,3 +438,22 @@ B1 baseline compared: `2026-10-29-144419.json`, 33/37 (89%); A is 3.1 points bel
 | 41-button-show-me-again | R-SHOW-ME-AGAIN | not re-run |
 
 **Verdict: open.** Two majority failures to fix or accept: **07** 1/3 (`say:no_number`, "60 frames" said aloud) and **18** 1/3 (R-OR1-LESSON: points to "Mentor Practice 2", a comp in no tool result, an invented target). Cases 13 and 41 failed on B1 too, so not re-run.
+
+## Changed after seeing results (2026-11-11, human-approved): R-OR1-LESSON accepts the named practice comp
+
+`rubric.md` R-OR1-LESSON (case 18) failed any reply that offered "Mentor Practice 2" as "a comp in no tool result, an invented target" (A: 2/3 and 1/3). But `offset-mentor/SKILL.md` (~line 148) and spec 010 (~line 190) tell the mentor to offer that comp by name. The rubric was wrong, not the prompt. The Fail line now says: offering the practice comp `SKILL.md` names, "Mentor Practice 2", is not an invented target; any other comp or layer no tool result names still fails. The same rubric item in `key-types/rubric.md` had the same wording and the same `SKILL.md` offer (~line 142), so it got the same change. Speed graph's `SKILL.md` offers no named comp, so its rubric is unchanged. `--only 18 --repeat 3` on B1: **3/3** (`results/2026-11-11-224540.json`, $0.68).
+
+## B1 baseline on `0e2bf84` (2026-11-11)
+
+Runtime B1, no timeouts (`ETIMEDOUT` count 0). **Full run: `results/2026-11-11-230338.json`, 39/43 (91%), $28.26.** SC-006 met. Hard-rule checks failed in 04 (`no_second_walkthrough`), 13 (`asks_change_of_mind`, `no_fail`) and 42 (`no_review_talk`, `snapshot_reply` mode); the last was not reproducible. Case 07 (`no_number`) and 18 (R-OR1-LESSON) passed.
+
+| Case | Full run | `--repeat 3` | Triage |
+|---|---|---|---|
+| 04 two-members-no-demo | FAIL `say:no_second_walkthrough` | 1/3 (`-230501`, $1.96) | Real, minor prompt flake: "Can you show me how?" repeats the drag walk-through (run 2 failed `R-OFF-WALKTHROUGH` instead). Known since the 2026-10-28 pacing repeats. |
+| 13 order-differs | FAIL `say:asks_change_of_mind` | 1/3 (`-230619`, $1.92) | Real. Turn 3 does not ask the change-of-mind question (run 2 also says "wrong"). Fails on the earlier B1 and A runs too. |
+| 41 button-show-me-again | FAIL R-SHOW-ME-AGAIN, R-ONE-IDEA | 0/3 (`-230823`, $3.32) | Real. Turn 4 explains with the tool's numbers ("starts at 0.633 s", "scrub to 0.6 s") instead of the learner's gap in words, and runs long. Fails on the earlier B1 and A runs too. |
+| 42 button-new-lesson-due-record | FAIL (`mode` was review, "review" said) | 3/3 (`-230913`, $0.79) | Noise. |
+
+Proposals for the builder, smallest first: (1) 41, in `SKILL.md`'s show-me-again answer say the shift only in the learner's own gap and name no time; (2) 13, end turn 3 on the change-of-mind question; (3) 04, the second walk-through rule needs the same "one sentence and the pending step" wording as the null set.
+
+**The A comparison for FR-033 will be against this baseline** (39/43, 91%), not the older `2026-10-29-144419.json`. Cases 04, 13 and 41 fail on B1 and so are not B1-pass, A-fail cases for (d).

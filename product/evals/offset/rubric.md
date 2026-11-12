@@ -365,7 +365,9 @@ The learner's record says a review is due, but this comp has nothing new for it.
 lesson; the mentor teaches it (or says plainly what this comp lacks for the lesson) and never says
 a review was due, offers one or says there is nothing to review.
 
-- **Fail:** mentions a review, "due", or "nothing to review"; or invents a target.
+- **Fail:** mentions a review, "due", or "nothing to review"; or invents a target. Offering the practice comp
+  `SKILL.md` names, "Mentor Practice 2", is not an invented target (spec 010 tells the mentor to offer it
+  by name); any other comp or layer that no tool result names still fails.
 
 ## R-REVIEW-ASKED-NOT-DUE: a review the learner asked for runs, and nothing says it wasn't due
 
