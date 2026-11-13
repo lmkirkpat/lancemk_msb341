@@ -218,6 +218,42 @@ not through the MCP server, with each read timed through `io.takeSnapshot`. So t
   for their OK. A panel inside AE (spec 003) keeps AE in front while the learner types, so it may
   not see this at all.
 
+## Session 3: 2026-11-12 (Door on runtime A, sprint 5's carry-over)
+
+Panel on runtime A (`claude-opus-5-5`, effort medium, settings hash `3acbda26`, the same as the A
+eval runs), at `494b2d2`. **After Effects 27.0** with the project converted from 26.5
+(`Claude AE Tutor Test (converted).aep`): this is the first lesson on AE 27. Learner record cleared
+first (moved to `AEMentor/backup-2026-11-12-pivot-A/`), so the opening chose a first lesson, not
+the review that had been overdue since 10-27. Mentor Practice 2 captured before; Door and Pop had
+their pivots in the middle again, and Lid and Sign were already moved as planted.
+
+**What happened:** the new opening (spec 004 Phase 10) chose a lesson with Door as the only focus.
+There was no demo, as expected with one focus layer (filter 4). The first try moved the pivot
+without moving Door but stopped short of the target place, a hint followed, and the second check
+passed. The understanding answer was that the hinged edge stays still. The builder: "behaved as
+expected and in line with all of the B tests."
+
+| Measure | Result |
+|---|---|
+| Turns | 8 (new lesson, 4 asks, 2 checks, 1 hint) |
+| Time to pass (SC-005 ≤ 15 min) | 1.9 min ✓ |
+| First activity per turn (SC-004 ≤ 10 s) | 8/8; 2.0 to 4.3 s, worst whole turn 7.8 s |
+| Cost (credit) | $0.25 |
+| Demo | none (single target) |
+| Check vs. a look in AE | after: Door's pivot at [3.08, 252.7] (left edge, about 3 px in), Position moved by the same amount, so Door didn't move; the check's pass matches |
+
+**Record:** `transform.anchor` learned, first pass, `demo_used: false`; the summary is in general
+terms (no numbers, method or motive), `next` names Door only as a layer to key, review due
+2026-11-13.
+
+**After:** Door reset by script (Anchor Point [150, 250], Position [200, 300]; it has no keys).
+
+**Counts toward:** sprint 5's option A carry-over (pivot proven live on A), and the first-lesson half
+of spec 004 T416 (the new opening, live). T416's review half is still open; the record now makes the
+review due 2026-11-13.
+
+**Findings:** none. Watch item from CLAUDE.md, "what do you mean by turn from?": not raised.
+
 ## To fix later
 
 - **A review writes a note to itself before its first snapshot (not started; noted 2026-10-26).**

@@ -19,7 +19,7 @@ else.
 - [ ] 3 sessions on 3 of my own comps that aren't set up for demos, each logged in a usage note:
       the question I asked, the steps it gave, whether I could follow them, and at least one
       go-deeper into a skill lesson
-- [ ] Option A runtime carry-over done: pivot proven in a live lesson on A, the null set run on A,
+- [x] Option A runtime carry-over done: pivot proven in a live lesson on A, the null set run on A,
       easing, speed graph and offset meeting FR-033 on A, T068's cause found (changed Nov 12:
       not reproduced in 1,082 timed requests, log left on), and T066 (the install switch) landed
 - [ ] Sessions and/or eval runs logged on most days of the sprint, so the work doesn't pile up at
