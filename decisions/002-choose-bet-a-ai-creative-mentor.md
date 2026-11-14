@@ -3,6 +3,8 @@
 **Date:** 2026-09-28
 **Status:** Accepted, 2026-09-28, after interviews 001–005. Open questions below carry into
 Sprint 2.
+**Amended by `decisions/012` (2026-11-14):** Home opens ask-first. The mentor still leads, but
+through the follow-through after an answer, not at the moment the learner opens the panel.
 
 ## Context
 
@@ -109,6 +111,11 @@ Open questions this decision doesn't settle yet:
   doesn't lead, does the work when asked, and can't read easing, but it diagnosed the comp
   better. This points toward keeping the bet; the Adobe risk stays open
   (`discovery/usage-notes/easing-slice.md` › SC-007).
+  *2026-11-13 (`discovery/usage-notes/ask-baseline.md`):* on my own logo comp, not built for
+  demos, I'd have left for YouTube or a chatbot after three or four turns. It answered no
+  questions with steps and pushed a lesson every turn, and it couldn't see motion driven by a
+  parent's expressions. Same signal, but from a chatbot rather than Adobe. It points against the
+  product's current form, not the bet; it led to spec 014 and `decisions/012`.
 - **Interviews:** by the end of Sprint 2, if most people who recently learned a creative app
   say Adobe's assistant or a chatbot on request is enough, and don't value a record of their
   progress or structured practice, fall back to Option 4 or treat this openly as a learning

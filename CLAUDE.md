@@ -200,9 +200,15 @@ a brand new session act like a colleague who already knows what you are working 
     Undo"). That rock review was rolled back in `learner.json` (backup `learner.json.bak-ask-baseline`).
   - **Decided:** the fix is an overhaul of how teaching works, not patches, so eval cases are held until
     the teaching design exists (the note's table lists the situations).
-  - **Next:** curriculum-designer's `specs/014-ask-mentor/teaching-design.md` (in progress), then the
-    ui-designer's Ask entry with spec 007 T061, a decision on an ask-first Home, and spec 014 through
-    Spec Kit.
+  - **Teaching design done (2026-11-14,** `specs/014-ask-mentor/teaching-design.md`**):** read first,
+    answer second, teach only when asked. All six H questions are as recommended. Added rule: asking
+    again about a learned skill is normal, and the mentor stays helpful and reaffirming, never making
+    the learner feel forgetful. **Home opens ask-first** (`decisions/012`, amends 002). Watch signal:
+    go-deepers in the three sessions. The expression read and the "what links here" search are the
+    first build task (H-6).
+  - **Next:** the ui-designer's ask-first Home and Ask entry with spec 007 T061, then spec 014 through
+    Spec Kit. Before the spec, verify live: Pan Behind on an expression-driven null, whether
+    `sourceRectAtTime` ignores alpha, and capture Comp 1 as a fixture.
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
