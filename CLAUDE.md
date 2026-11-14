@@ -191,6 +191,18 @@ a brand new session act like a colleague who already knows what you are working 
     text layers read Collapse on (key fixed), and offset lists Transform properties before
     effects (`offset-order`). Easing case 26 (matte, eye off) passes 3/3 even without T123's
     line, because the tool already keeps mattes out of `hidden_layers` (`evals-matte`).
+- **Sprint 5 (`sprints/sprint-5-plan.md`): a mentor companion that answers questions about my own
+  comps, spec 014 (`specs/014-ask-mentor/`).** The option A carry-over is done (below).
+  - **Baseline (2026-11-13,** `discovery/usage-notes/ask-baseline.md`**, `262b81a`):** today's mentor on
+    my own logo comp, on A. It answered 0 of 2 questions with steps and pushed a lesson every turn. The
+    shake ran on a parent null's expressions, which no skill reads. The pivot check failed the right spot
+    on a padded PNG and passed an empty one, and it called expression motion a learner edit ("Edit >
+    Undo"). That rock review was rolled back in `learner.json` (backup `learner.json.bak-ask-baseline`).
+  - **Decided:** the fix is an overhaul of how teaching works, not patches, so eval cases are held until
+    the teaching design exists (the note's table lists the situations).
+  - **Next:** curriculum-designer's `specs/014-ask-mentor/teaching-design.md` (in progress), then the
+    ui-designer's Ask entry with spec 007 T061, a decision on an ask-first Home, and spec 014 through
+    Spec Kit.
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
