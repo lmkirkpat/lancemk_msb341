@@ -150,6 +150,26 @@ first one not built for the mentor, and every problem came from things real comp
 practice comps don't: a control null, expressions instead of keys, a padded PNG. A second comp in
 the three sessions will show whether that pattern holds.
 
+### Follow-up, 2026-11-14: the live checks for spec 014
+
+- **Which pivot the shake turns from.** I moved a pivot by hand and couldn't tell whether the shake
+  turned from it. A read-only script showed why. Shake Control's pivot never moved (anchor 0,0,
+  position 960,540, the same as on 11-13), and rock.png sits at 0,0 inside it with its own pivot back
+  at its center. So the shake has always turned around the rock's center, which is the complaint I
+  started with.
+- **Even a correct pivot would barely show.** Rotation peaks at 0.75° and fades within about 1/3 s
+  (decay 3). From a pivot on the hit corner, the far end of the rock (about 910 px away) moves about
+  12 px, the same as the Position shake in every direction, so the eye can't separate them. The
+  settings that would make it feel organic are the Position hits' sizes (the `amps[1]` bug) and how
+  much it rotates. **Teaching consequence:** before an answer names a fix, the read must say how
+  much each source moves the layer, and steps go in order of visible effect.
+- **`sourceRectAtTime` on rock.png** returns the full image box (0, 0, 1588 × 535), not the visible
+  art. Finding the art's edges needs the frame's alpha (teaching design SB-3 confirmed).
+- **Pan Behind on an expression-driven null** (SB-2): Shake Control's Position expression ends in
+  `value + offset`, so it builds on the base value. Pan Behind changes that base and the anchor
+  together, which moves the turning point and leaves the children still. Confirmed by reading the
+  expression, not yet by hand.
+
 ## To fix later
 
 - **The pivot check warns about expression motion as a learner edit** (finding 4). In the check's

@@ -101,7 +101,17 @@ three sessions).
    precomp. This is the sentence the baseline never said (AB 2). When the asked-about layer and the
    moving layer differ, it says both: "[asked layer] has no motion of its own; it rides on [parent],
    whose [properties] are driven by expressions."
-2. **The steps** (a numbered list, two to four lines). Each line: what to do, on which layer, in AE's
+   **What's going on can run longer than a sentence or two, as its own short list** when the cause has
+   parts (each source of motion and how much it moves the layer, in order of visible effect, § 19
+   "Checked 2026-11-14"). This is explanation, not steps: it's never numbered as steps or called
+   "steps", and the panel never docks it as steps.
+2. **The steps** (a numbered list, two to four lines). **A step is only something the learner does in
+   AE**: it starts with an action (select, move, drag, change, play back) on a named layer or property,
+   and the learner could follow it without asking what to do. "The rotation is too small to see" is
+   explanation, not a step; "Raise Shake Control's rotation amounts, then play it back" is a step
+   (builder, 2026-11-14: "when the user sees 'steps' they assume they're followable"). If nothing in
+   the answer is actionable yet (only explanation, or one clarifying question), there are no steps and
+   nothing is docked. Each line: what to do, on which layer, in AE's
    words for the learner's version, and, when one of the six teaches it, the skill's name in a short
    tag at the end ("*Set the pivot*"). The list is the one exception to the two-sentence turn rule, for
    the reason diagnosis's first answer has one: several steps with layers and places in prose run
@@ -535,6 +545,16 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
 - **H-5:** plus the builder's rule in § 11: asking again is normal, and the mentor is helpful and
   reaffirming, never making the learner feel forgetful.
 
+**Decided 2026-11-14, from the mockup review** (`product/mockups/ask-mentor/`):
+- **Steps are only actionable things the learner does** (§ 5.1, part 2). An explanation broken into
+  parts stays, as good information design, but it's never labeled or docked as steps.
+- **Steps dock under the chat**, folded behind a disclosure, and never get ticks (ask mode has no
+  check).
+- **The comp's name:** the ask card says "Ask about the open comp" for now. Adding the comp name to
+  the bridge's health check (constitution II) waits until the sessions show the panel feels anonymous.
+- **Panel data:** the "asked" result carries the offered skills (two at most) and the step lines as
+  data, so the panel never parses the mentor's prose. A requirement for the spec writer.
+
 1. **Ask-first, with the lead moved to the follow-through (§ 12).** **Recommended: yes**, and watch
    the three sessions for go-deepers. If none of the three goes deeper without the builder forcing it,
    revisit: the product may be drifting toward Adobe's "answer when asked".
@@ -574,6 +594,17 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
    doesn't. § 16's step 1 depends on it.
 3. **Claim to verify:** `sourceRectAtTime` on footage returns the full frame, not the alpha bounds (my
    understanding), so Q6 needs the frame's alpha, not that call.
+
+**Checked 2026-11-14** (cockpit, read-only script on Comp 1; `discovery/usage-notes/ask-baseline.md` ›
+Follow-up):
+- **SB-3 confirmed:** `sourceRectAtTime` returns the full image box on padded footage.
+- **SB-2 confirmed by reading the expression, not by hand:** Shake Control's Position expression ends
+  in `value + offset`.
+- **New rule for § 5 and § 16:** read how much each source moves the layer before naming a fix, and
+  put steps in order of visible effect. On Comp 1 the rotation (≤ 0.75°, gone in about 1/3 s) moves the
+  rock's far end about 12 px from a corner pivot, no more than the Position shake. The builder couldn't
+  see the pivot change by hand, so § 16's step 1 (move the null's pivot) is right in principle but
+  nearly invisible, and the Position hits' sizes (the `amps[1]` bug) should lead.
 
 ### For the eval engineer (EE)
 
