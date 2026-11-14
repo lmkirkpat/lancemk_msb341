@@ -170,6 +170,40 @@ the three sessions will show whether that pattern holds.
   together, which moves the turning point and leaves the children still. Confirmed by reading the
   expression, not yet by hand.
 
+### Follow-up, 2026-11-14: live checks for the expression and precomp reads
+
+Read-only scripts on Comp 1 (saved, AE 27.0), before the reads spec (expressions plus "what links
+here" first, precomps as a later phase; skills 4 and 10 as lessons later). Not covered above:
+
+- **An expression read on every property is cheap.** Walking all 4,720 properties of Comp 1's 29
+  layers took 60 ms. Walking every comp in the project (22 comps, 33,447 properties) took 292 ms.
+  So the read doesn't need scoping for speed, only for what the answer talks about (TD § 8).
+- **Expressions on unkeyed properties read fine:** text, whether it's on, and the error. All three
+  in the project have 0 keys: Shake Control's Position and Rotation, and Black Solid 1's
+  CC Light Sweep Center. None is off and none has an error. No expression anywhere uses `comp(`, so
+  for this comp the "what links here" search only needs to look in the same comp. An error case
+  wasn't tested, since making one means editing the comp.
+- **Values with and without expressions** (Q7): `valueAtTime(t, true)` gives the base value
+  (960, 540 at every time) and `valueAtTime(t, false)` the result (952.4, 542.5 at 0.6 s). That
+  gives K2 its rule: an expression-driven property moves between times even though nothing changed.
+- **What links here, plus a surprise:** Sweep Control drives the sweep's Center on Black Solid 1,
+  but that layer's **eye is off** and nothing uses it as a matte. So the light sweep doesn't render
+  at all. A "what does this layer do?" answer has to say that the target is hidden, not just name the link.
+- **Inside the precomps is where the letters' animation lives.** There are 20 precomp layers (10
+  Shakers parented to Shake Control, 10 Fragments not parented). Inside them are 347 keyed
+  properties on 123 layers, all keys with no expressions (for example, O Shakers' O1 to O7 each
+  have 3 Position and 3 Rotation keys). Today's "I can't see inside these yet" hides most of the
+  comp's motion.
+- **Comps can share a name, nested.** "U Fragments" (id 353) holds a layer whose source is
+  another "U Fragments" (id 321), and the same for B (242 holding 131). "G Shakers", "G Fragments"
+  and "Y Fragments" also each have two comps with the same name. The precomp read must key comps by
+  id and say which one it means, never by name.
+- **Not testable on this comp:** no precomp layer is time-remapped or stretched, and all start at 0.
+  Ten of the precomps are 30 s long inside a 5 s comp, so anything they hold after 5 s never shows. I
+  didn't check whether any keys sit there; the precomp read should flag keys outside the time the
+  parent comp shows. The time mapping
+  (spec 004's precomp row) needs Mentor Practice's Icon or a planted case.
+
 ## To fix later
 
 - **The pivot check warns about expression motion as a learner edit** (finding 4). In the check's
