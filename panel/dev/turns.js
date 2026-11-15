@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // SC-004, SC-005, cost and caching from panel-turns.jsonl, per runtime (spec 003 research R9,
 // spec 013 FR-029, T047, research R8's gap re-check). Reads the log; never writes it.
-//   node panel/dev/turns.js [--home <AEMentor folder>]
+//   node panel/dev/turns.js [--home <AEMentor folder>] [--last N] [--ask]
+// Ask thread turns (spec 014 FR-058, research R11: `thread: "ask"`) are left out of the lesson
+// report; --ask reports them: answer turns (question, followup) apart from go-deeper lessons.
 "use strict";
 
 const fs = require("fs");
@@ -125,6 +127,54 @@ function report(turns, opts) {
   return out.join("\n");
 }
 
+// ---------- spec 014: ask threads (--ask) ----------
+
+const isAsk = (t) => t.thread === "ask";
+const ANSWER_KINDS = new Set(["question", "followup"]);
+
+// A go-deeper lesson starts at each go_deeper turn and runs until the next answer turn. Its turns
+// keep the lesson kinds; the first one is the go_deeper press itself.
+function splitAsk(turns) {
+  const answers = [];
+  const lessons = [];
+  let open = null;
+  for (const t of turns.filter(isAsk)) {
+    if (ANSWER_KINDS.has(t.kind)) { open = null; answers.push(t); continue; }
+    if (t.kind === "go_deeper" || !open || open.runtime !== runtimeOf(t)) {
+      open = { start: t.at, runtime: runtimeOf(t), turns: [] };
+      lessons.push(open);
+    }
+    open.turns.push(t);
+  }
+  return { answers, lessons };
+}
+
+function askReport(turns) {
+  const { answers, lessons } = splitAsk(turns);
+  if (!answers.length && !lessons.length) return "No ask turns logged yet.";
+  const out = [];
+  for (const [rt, title] of RUNTIMES) {
+    const a = answers.filter((t) => runtimeOf(t) === rt);
+    const l = lessons.filter((x) => x.runtime === rt);
+    if (!a.length && !l.length) continue;
+    out.push(`${title}, ask threads`);
+    const first = a.map((t) => t.first_event_ms);
+    const under = first.filter((ms) => isNum(ms) && ms <= 10000).length;
+    const costs = a.map((t) => t.cost_usd).filter(isNum);
+    out.push(`  Answer turns: ${a.length} (${a.filter((t) => t.kind === "question").length} questions, ${a.filter((t) => t.kind === "followup").length} follow-ups)`);
+    if (a.length) {
+      out.push(`    first activity ≤ 10 s: ${under}/${a.length} (FR-058), median ${secs(median(first))}`);
+      out.push(`    cost: median $${(median(costs) || 0).toFixed(3)} per answer turn, $${costs.reduce((x, y) => x + y, 0).toFixed(2)} in all (SC-005 aims under $0.10)`);
+      const tok = a.map((t) => t.tokens).filter(Boolean);
+      if (tok.length) out.push(`    tokens: median input ${median(tok.map((k) => k.input))}, cache read ${median(tok.map((k) => k.cache_read))}, output ${median(tok.map((k) => k.output))}`);
+    }
+    out.push(`  Go-deeper lessons: ${l.length}`);
+    l.forEach((x, n) => out.push("    " + lessonRow(x, n + 1)));
+    out.push("");
+  }
+  return out.join("\n");
+}
+
 function main(argv) {
   const arg = (name) => {
     const i = argv.indexOf(name);
@@ -141,9 +191,13 @@ function main(argv) {
   }
   if (!turns.length) return console.log(`No turns logged yet (${tilde(file)}).`);
   console.log(`${tilde(file)}\n`);
-  console.log(report(turns, { last: Number(arg("--last")) || 0 }));
+  if (argv.includes("--ask")) return console.log(askReport(turns));
+  const lessonTurns = turns.filter((t) => !isAsk(t));
+  const asked = turns.length - lessonTurns.length;
+  if (lessonTurns.length) console.log(report(lessonTurns, { last: Number(arg("--last")) || 0 }));
+  if (asked) console.log(`${asked} ask thread turn(s) left out; see --ask.`);
 }
 
 if (require.main === module) main(process.argv.slice(2));
 
-module.exports = { splitLessons, gaps, summarize, report, runtimeOf };
+module.exports = { splitLessons, gaps, summarize, report, runtimeOf, splitAsk, askReport };

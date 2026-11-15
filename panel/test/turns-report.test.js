@@ -6,7 +6,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { execFileSync } = require("child_process");
-const { splitLessons, gaps, summarize, report } = require("../dev/turns.js");
+const { splitLessons, gaps, summarize, report, splitAsk, askReport } = require("../dev/turns.js");
 
 const T0 = Date.parse("2026-11-10T02:00:00.000Z");
 // at is the send time (app.js logs turn_start's at), total_ms the turn's length.
@@ -67,4 +67,36 @@ test("an empty or missing log says so", () => {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "panel-report-"));
   const out = execFileSync(process.execPath, [path.join(__dirname, "..", "dev", "turns.js"), "--home", home], { encoding: "utf8" });
   assert.match(out, /No turns logged yet/);
+});
+
+// ---------- spec 014 T027: --ask (FR-058, research R11) ----------
+
+const ask = (sec, kind, o) => turn(sec, kind, Object.assign({ thread: "ask" }, o));
+
+test("ask threads: answer turns apart from go-deeper lessons, which run until the next answer turn", () => {
+  const { answers, lessons } = splitAsk([
+    turn(0, "start"), turn(10, "check"),
+    ask(100, "question"), ask(110, "followup"), ask(120, "go_deeper", { runtime: "a" }), ask(130, "check", { runtime: "a", lesson_passed: true }),
+    ask(140, "followup"), ask(150, "question", { cost_usd: 0.08 }),
+  ]);
+  assert.deepEqual(answers.map((t) => t.kind), ["question", "followup", "followup", "question"]);
+  assert.equal(lessons.length, 1);
+  assert.deepEqual(lessons[0].turns.map((t) => t.kind), ["go_deeper", "check"]);
+  assert.equal(lessons[0].runtime, "a");
+});
+
+test("--ask prints answer turns and go-deeper lessons; the default report leaves ask turns out", () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), "panel-report-"));
+  const file = path.join(home, "panel-turns.jsonl");
+  const lines = [turn(0, "start"), turn(10, "check", { lesson_passed: true }), ask(100, "question", { first_event_ms: 12000 }), ask(110, "followup"), ask(120, "go_deeper"), ask(130, "check")];
+  fs.writeFileSync(file, lines.map((l) => JSON.stringify(l)).join("\n") + "\n");
+  const run = (...args) => execFileSync(process.execPath, [path.join(__dirname, "..", "dev", "turns.js"), "--home", home, ...args], { encoding: "utf8" });
+  const plain = run();
+  assert.match(plain, /Turns: 2 in 1 lesson/);
+  assert.match(plain, /4 ask thread turn\(s\) left out; see --ask\./);
+  const out = run("--ask");
+  assert.match(out, /Answer turns: 2 \(1 questions, 1 follow-ups\)/);
+  assert.match(out, /first activity ≤ 10 s: 1\/2/);
+  assert.match(out, /Go-deeper lessons: 1/);
+  assert.match(askReport([turn(0, "start")]), /No ask turns logged yet/);
 });
