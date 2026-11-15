@@ -367,17 +367,17 @@ test("lesson-continued: redrawn, the divider, the stale note, resumed with the s
 test("Start lesson with a saved lesson waiting replaces it (FR-028)", async () => {
   const h = await ready({ saved: saved() });
   h.app.act("start");
-  assert.equal(h.saved.current.version, 2);
+  assert.equal(h.saved.current.version, 3, "spec 014 T026: version 3 adds the thread beside the lesson");
   assert.equal(h.saved.current.claude_session_id, "session-1");
 });
 
-test("panel-session.json is version 2 and keeps the skill, picked_up and labels (plan P8)", () => {
+test("panel-session.json (version 3 since spec 014) keeps the skill, picked_up and labels (plan P8)", () => {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "panel-v2-"));
   const s = ps.newPanelSession({ claude_session_id: "x", bridge_started: "t", skill: "ease-mentor", lesson: { picked_up: true, labels: { a: "L" } } });
-  assert.equal(s.version, 2);
+  assert.equal(s.version, 3);
   ps.writePanelSession({ home }, s);
   const back = ps.readPanelSession({ home });
-  assert.equal(back.version, 2);
+  assert.equal(back.version, 3);
   assert.equal(back.skill, "ease-mentor");
   assert.equal(back.lesson.picked_up, true);
   assert.deepEqual(back.lesson.labels, { a: "L" });
