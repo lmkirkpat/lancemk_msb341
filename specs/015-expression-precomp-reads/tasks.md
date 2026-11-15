@@ -96,21 +96,21 @@ step). Read-only scripts except where a plant is named.
 
 ## Foundational (blocks US1 to US3)
 
-- [ ] T010 (skill-builder) In `mentor/jsx/snapshot.jsx`, add the expressions pass (research R1, R2):
+- [x] T010 (skill-builder) In `mentor/jsx/snapshot.jsx`, add the expressions pass (research R1, R2):
   top-level `expressions` (one entry per property with a non-empty expression, fields per data-model
   § 1: `layer`, `path`, `display_path`, `group`, `keys`, `enabled`, `active`, `error` "trimmed to
   300 characters", `text` "up to 20,000 characters", `text_length`, `text_cut`) and `expressions_read`.
   Walk every group; skip markers; each read in its own try. `active` follows T003's answer.
-- [ ] T011 [P] (skill-builder) In `mentor/jsx/snapshot.jsx`, add `layer_info[].effects`:
+- [x] T011 [P] (skill-builder) In `mentor/jsx/snapshot.jsx`, add `layer_info[].effects`:
   `[{ name, match_name }]` for every effect, keyed or not (FR-007).
-- [ ] T012 (skill-builder) In `mentor/jsx/snapshot.jsx`, add `samples[].base` with only the
+- [x] T012 (skill-builder) In `mentor/jsx/snapshot.jsx`, add `samples[].base` with only the
   properties that have an active, error-free transform expression, read with `valueAtTime(t, true)`
   at the sample's exact time (research R5; data-model § 1).
-- [ ] T013 (skill-builder) In `mentor/jsx/snapshot.jsx`, add `expression_sweeps`: a coarse sweep
+- [x] T013 (skill-builder) In `mentor/jsx/snapshot.jsx`, add `expression_sweeps`: a coarse sweep
   (24 times, every active, error-free transform expression) and a fine sweep for
   `ARGS.measure_layers` at `max(1 frame, duration / 240)`, giving `varies`, `max_offset`, `max_at`,
   `sampled_every` (research R9; contracts/snippets.md).
-- [ ] T014 (skill-builder) In `mentor/dev/capture.mjs` add `--measure <indexes>` and `--time` (prints
+- [x] T014 (skill-builder) In `mentor/dev/capture.mjs` add `--measure <indexes>` and `--time` (prints
   elapsed ms); in `mentor/fixture.mjs` return saved sweeps and mark missing fine sweeps
   `not_read: fixture` (research R13). Tests in `mentor/test/fixture-sweeps.test.mjs`.
 - [ ] T015 (skill-builder, AE) Capture fixtures into `mentor/test/fixtures/expressions/`: Comp 1
@@ -122,7 +122,13 @@ step). Read-only scripts except where a plant is named.
   matte, a link by index and by `index - 1`, a `comp("…")` reference, a run-time name, a Source Text
   expression, a constant `value` expression on a parent (E19), and a comp with 30 expressions (for
   SC-007). Reset and strict-compare every original.
-- [ ] T016 (skill-builder) **Easing unchanged (FR-021, SC-004).** Extend
+  **Partly done 2026-11-14:** every capture but Comp 1 (the builder's project was closed). Mentor Practice, Mentor
+  Practice 2 and Mentor Overlaps (each also captured with `main`'s snippet: identical apart from read R2), and three
+  planted comps from `mentor/dev/live-015/plant-t015.jsx`: 015 Rig (Comp 1's rig with Comp 1's own expression
+  texts; playhead moved, Pan Behind's values and a base Position edit, each reset and strict-compared), 015 Planted
+  (before and after a null renumbers its wiggle) and 015 Thirty. Comp 1 tests run on a shape derived from the
+  committed live reads (`fixtures/expressions/comp1.mjs`) until `comp1.json` is captured.
+- [x] T016 (skill-builder) **Easing unchanged (FR-021, SC-004).** Extend
   `mentor/test/analyze-unchanged.test.mjs` (or add `analyze-r2-unchanged.test.mjs`) so the easing
   findings on the new Mentor Practice and Mentor Practice 2 captures equal the committed baselines
   (`practice-findings-baseline.json`), and Comp 1 gives 0 keyframe-skill findings from Shake Control
@@ -135,19 +141,19 @@ step). Read-only scripts except where a plant is named.
 **Goal:** expression reads with state, text, builds-on, base and after values, and how much they move.
 **Independent test:** SC-001 and SC-003 on the Comp 1 capture, E1 to E9 and E27 on the others.
 
-- [ ] T017 [US1] (skill-builder) Create `mentor/lib/expressions.mjs`: expression reads from the
+- [x] T017 [US1] (skill-builder) Create `mentor/lib/expressions.mjs`: expression reads from the
   snapshot (data-model § 2), `is_source` = on, active and no error (FR-006), base and after values at
   a given time (FR-003), and `moves` from the sweeps or `not_read` (FR-004). Tests in
   `mentor/test/expressions-read.test.mjs`: SC-001's 3 expressions with text identical to
   `comp1-ground-truth.json`; SC-003's (960, 540) and (952.4, 542.5) within 0.1 px at 0.6 s; E1 to E4,
   E7, E9, E27; E29 (FR-006a: on T015's joined and separated layers, no expression, base value or sweep
   comes from the hidden half).
-- [ ] T018 [US1] (skill-builder) Add the builds-on classifier to `mentor/lib/expressions.mjs`
+- [x] T018 [US1] (skill-builder) Add the builds-on classifier to `mentor/lib/expressions.mjs`
   (research R3: `builds_on`, `sets_own`, `cant_tell`, always `inferred: true`). Tests in
   `mentor/test/expressions-builds-on.test.mjs`: Comp 1 gives 2 `builds_on` and 1 `sets_own`; E5
   (`wiggle`, `loopOut`, `smooth`, `temporalWiggle` without `value`), E6 (`value` in a comment and in a
   string), `.value` on another property, cut text gives `cant_tell`.
-- [ ] T019 [US1] (skill-builder) Update `mentor/lib/motion-sources.mjs` (FR-005, data-model § 3):
+- [x] T019 [US1] (skill-builder) Update `mentor/lib/motion-sources.mjs` (FR-005, data-model § 3):
   `read.expressions` "all" when the snapshot has `expressions`; per-layer `expressions` read;
   `moves_children` true for keys **or** a source transform expression whose sweep `varies`;
   `moves_by`; `static_as_read` only when expressions were read. Tests in
@@ -159,12 +165,12 @@ step). Read-only scripts except where a plant is named.
 **Goal:** incoming links per layer, marked inferred, with whether the target renders.
 **Independent test:** SC-002 on Comp 1; E10 to E16 on the planted captures and strings.
 
-- [ ] T020 [US2] (skill-builder) Add the reference finder to `mentor/lib/expressions.mjs` (research
+- [x] T020 [US2] (skill-builder) Add the reference finder to `mentor/lib/expressions.mjs` (research
   R4's table: name, index, `index ± N`, `thisLayer`, `parent`, unresolved, other comp; the referenced
   property when the chain is plain). Tests in `mentor/test/expressions-refs.test.mjs`: E10 (Comp 1's
   two "G Shakers" and "Y Fragments": topmost, `shared_name`), E11, E12, E13, E26 (string cases), and
   Sweep Center → Sweep Control's Position.
-- [ ] T021 [US2] (skill-builder) Add `links_in` and `target_renders` (FR-008 to FR-011; data-model
+- [x] T021 [US2] (skill-builder) Add `links_in` and `target_renders` (FR-008 to FR-011; data-model
   § 2) using `mentor/lib/visibility.mjs` and in and out at the comp's time. Tests in
   `mentor/test/expressions-links.test.mjs`: SC-002 (exactly 1 link into Sweep Control, target
   `eye_off`; every other Comp 1 layer `status: "read"` with 0 links and `unresolved_in_comp: 0`); E14
@@ -180,7 +186,7 @@ pivot and null.
 
 **Starts after the builder approves Amendment 1 and answers OQ-8.** Both done 2026-11-14 (OQ-8 as recommended).
 
-- [ ] T022 [US3] (skill-builder) Rewrite `mentor/test/k2-turn-f.test.mjs`'s third test (the todo for
+- [x] T022 [US3] (skill-builder) Rewrite `mentor/test/k2-turn-f.test.mjs`'s third test (the todo for
   the old SC-005) to SC-005 (a): on `BASE` against `panBehindOnShakeControl(NOW, …)` with the fitted
   `pan_behind_fit`, `check` returns **exactly one** other change for Shake Control, its Anchor Point,
   carrying an `effect` whose `distance_px` and `direction` equal the saved reply's old moved entry
@@ -188,7 +194,7 @@ pivot and null.
   (playhead only: no change, SC-005 b). Change test 2 to assert the same numbers through the new
   `effect` instead of the old moved entry, so it still proves T004's fit. The test stays failing
   until T023.
-- [ ] T023 [US3] (skill-builder) In `mentor/lib/anchor-check.mjs` (FR-012 to FR-014a; research R7;
+- [x] T023 [US3] (skill-builder) In `mentor/lib/anchor-check.mjs` (FR-012 to FR-014a; research R7;
   data-model § 5): (a) a changed property on a layer outside the focus becomes one entry per property
   with the footprint shift attached as `effect`, and no separate moved entry for that layer; (b)
   item 5's moved list, `rawChanged` and `otherChanges` compare `base` for properties with an active
@@ -196,18 +202,18 @@ pivot and null.
   add `expression_changed`. Tests in `mentor/test/anchor-check-k2.test.mjs`: SC-005 (b), (c) with the
   T015 renumber capture, (d) a planted base Position change reported as Position; no shared time gives
   `not_compared`. Makes T022 pass.
-- [ ] T024 [US3] (skill-builder) In `mentor/lib/null-parenting-check.mjs`, the same two halves:
+- [x] T024 [US3] (skill-builder) In `mentor/lib/null-parenting-check.mjs`, the same two halves:
   `value_changed` (OA-4) and the jump check compare `base` for expression-driven properties at the same
   frame; a real property change is one entry with its effect attached; `expression_toggled` becomes
   `expression_changed` (keep every existing test's meaning). Tests in
   `mentor/test/null-parenting-k2.test.mjs`: SC-005 (a) to (d), including **the learner's new null
   renumbering a `wiggle` layer below it gives no change on that layer** (FR-013a, E28).
-- [ ] T025 [P] [US3] (skill-builder) Replay SC-005 (a) to (d) through offset, key types and speed
+- [x] T025 [P] [US3] (skill-builder) Replay SC-005 (a) to (d) through offset, key types and speed
   graph (`mentor/test/k2-replay-keyed.test.mjs`): (a) is reported as the anchor change (these checks
   compare keys, so expect a property entry, not a moved one), (b) and (c) give nothing, (d) is
   reported. Change `mentor/lib/offset-keys.mjs`, `mentor/lib/key-types.mjs` or
   `mentor/lib/speed-graph.mjs` only if a replay fails.
-- [ ] T026 [US3] (skill-builder) Add `motion_from` (data-model § 4) to the focus and candidate
+- [x] T026 [US3] (skill-builder) Add `motion_from` (data-model § 4) to the focus and candidate
   layers that `mentor/tools/transform-anchor.mjs` and `mentor/tools/null-parenting.mjs` return
   (FR-015, OQ-3: these two only). Tests in the existing `anchor-tools` and `null-parenting-tools`
   tests: rock.png gives `parents: [{ layer: "Shake Control", by: "expression" }]`. Don't edit any
@@ -215,21 +221,21 @@ pivot and null.
 
 ## Shared: the ask's read tool, honesty and privacy (US1 to US3)
 
-- [ ] T027 (skill-builder) Create `mentor/tools/comp-reads.mjs` with `describe_layers` per
+- [x] T027 (skill-builder) Create `mentor/tools/comp-reads.mjs` with `describe_layers` per
   [contracts/describe-layers.md](contracts/describe-layers.md): `TOOLS` only, no `SKILLS`; summary and
   detail shapes; `NAME_SHARED`, `NOT_FOUND`, `DETAIL_NEEDS_LAYERS`; `read.precomps` always
   `not_read` in phase 1; caps "≤ 4 KB per layer", "≤ 12 KB" whole comp, text "cut at 1,500
   characters", detail "≤ 16 KB". Tests in `mentor/test/comp-reads.test.mjs`: SC-007 on Comp 1 and the
   30-expression capture; no expression text in any summary; read-only (no write snippet called).
-- [ ] T028 [P] (skill-builder) Honesty sweep, `mentor/test/not-read.test.mjs` (FR-018, SC-009): the
+- [x] T028 [P] (skill-builder) Honesty sweep, `mentor/test/not-read.test.mjs` (FR-018, SC-009): the
   committed `comp1-snapshot.json` (no `expressions`), a capture with an unresolved reference, an
   other-comp reference, and a fixture without fine sweeps: every reply and map says `not_read` or
   `cant_resolve`, never `none`, `[]` or `false` for a read that didn't run.
-- [ ] T029 [P] (skill-builder) FR-020 guard in `record_lesson` (`mentor/tools/common.mjs`): refuse a
+- [x] T029 [P] (skill-builder) FR-020 guard in `record_lesson` (`mentor/tools/common.mjs`): refuse a
   summary or `next` that contains 24 or more characters copied from any expression text or error in
   the session's last snapshot, with a new code (plain message, no field names). Tests in
   `mentor/test/record-expression-guard.test.mjs`. See OQ-7.
-- [ ] T030 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`;
+- [x] T030 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`;
   all pass. Note the counts in the hand-back.
 
 ## Phase 1 gate
