@@ -1,0 +1,2749 @@
+{
+  "taken_at": "2026-11-15T03:41:06.970Z",
+  "project": "Claude AE Tutor Test (converted).aep",
+  "comp": {
+    "id": 2737,
+    "name": "015 Planted",
+    "duration": 6,
+    "frame_rate": 30,
+    "time": 0.6,
+    "hide_shy": false,
+    "width": 1920,
+    "height": 1080
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 1,
+      "name": "Ctrl",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                100,
+                100,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 425,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 4,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1800,
+                100,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 425,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Off Expr",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Scale",
+          "display_path": "Transform › Scale",
+          "match_name": "ADBE Scale",
+          "display_name": "Scale",
+          "dimensions": 3,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                100,
+                100,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 25,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 25,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                150,
+                150,
+                100
+              ],
+              "in_ease": [
+                {
+                  "speed": 25,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 25,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                },
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Over Keys",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": true,
+          "keys": [
+            {
+              "index": 1,
+              "time": 0,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                200,
+                800,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 200,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 2,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                600,
+                800,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 200,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layer_info": [
+    {
+      "index": 1,
+      "name": "Ctrl",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          355,
+          100,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 15,
+        "opacity": 0
+      },
+      "samples": [
+        {
+          "time": 0,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            100,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 15,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 0.6,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            355,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 15,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            737.501,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 15,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 4,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            1800,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 15,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 2,
+      "name": "Err Transform",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          1500,
+          200,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            1500,
+            200,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            1500,
+            200,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 3,
+      "name": "Err Effect",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 1,
+      "effects": [
+        {
+          "name": "Slider Control",
+          "match_name": "ADBE Slider Control"
+        }
+      ],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 4,
+      "name": "Off Expr",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          115,
+          115,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            115,
+            115,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            137.5,
+            137.5,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            150,
+            150,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 5,
+      "name": "Over Keys",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          320.002,
+          820,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            200,
+            820,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              200,
+              800,
+              0
+            ]
+          }
+        },
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            320.002,
+            820,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              320.002,
+              800,
+              0
+            ]
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            499.998,
+            820,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              499.998,
+              800,
+              0
+            ]
+          }
+        },
+        {
+          "time": 2,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            600,
+            820,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              600,
+              800,
+              0
+            ]
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 6,
+      "name": "Joined",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          520,
+          526,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            520,
+            526,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              520,
+              520,
+              0
+            ]
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            520,
+            535,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              520,
+              520,
+              0
+            ]
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 7,
+      "name": "Separated",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          806,
+          300,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            806,
+            300,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              800,
+              300,
+              0
+            ]
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            815,
+            300,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              800,
+              300,
+              0
+            ]
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 8,
+      "name": "Guide Link",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": true,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 35.5
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 35.5,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "opacity": 100
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 73.75,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "opacity": 100
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 9,
+      "name": "Matte Link",
+      "kind": "solid",
+      "enabled": false,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": true,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 15,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 15,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "rotation": 0
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 15,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "rotation": 0
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 10,
+      "name": "Matte Fill",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": {
+        "layer": 9,
+        "type": "alpha"
+      },
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 11,
+      "name": "Index Link",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          355,
+          100,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            355,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ]
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            737.501,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ]
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 12,
+      "name": "Offset Link",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "rotation": 0
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "rotation": 0
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 13,
+      "name": "Comp Ref",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "opacity": 100
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "opacity": 100
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 14,
+      "name": "Runtime Name",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          355,
+          100,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            355,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ]
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            737.501,
+            100,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ]
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 15,
+      "name": "Words",
+      "kind": "text",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": true,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 2.755,
+            "top": -25.741,
+            "width": 175.499,
+            "height": 26.14
+          },
+          "rect_extents": {
+            "left": 2.755,
+            "top": -25.741,
+            "width": 175.499,
+            "height": 26.14
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 2.755,
+            "top": -25.741,
+            "width": 175.499,
+            "height": 26.14
+          },
+          "rect_extents": {
+            "left": 2.755,
+            "top": -25.741,
+            "width": 175.499,
+            "height": 26.14
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 16,
+      "name": "Const Parent",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          300,
+          300,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 0
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            300,
+            300,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              300,
+              300,
+              0
+            ]
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            300,
+            300,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              300,
+              300,
+              0
+            ]
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 17,
+      "name": "Const Kid",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": 16,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          660,
+          240,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            660,
+            240,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            660,
+            240,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 18,
+      "name": "Wiggle",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 6,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          943.238,
+          538.64,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            943.238,
+            538.64,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ]
+          }
+        },
+        {
+          "time": 1.5,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            959.407,
+            567.328,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ]
+          }
+        }
+      ],
+      "samples_truncated": false
+    }
+  ],
+  "expressions": [
+    {
+      "layer": 2,
+      "path": "ADBE Transform Group/ADBE Position",
+      "display_path": "Transform › Position",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": false,
+      "error": "Expression disabled. Error at line 1 in property ‘Position’ of layer 2 (‘Err Transform’) in comp ‘015 Planted’. \rError: layer named ‘Gone’ is missing or does not exist. It may have been renamed, moved, or deleted, or the name may have been mistyped",
+      "text": "thisComp.layer(\"Gone\").transform.position",
+      "text_length": 41,
+      "text_cut": false
+    },
+    {
+      "layer": 3,
+      "path": "ADBE Effect Parade/ADBE Slider Control#1/ADBE Slider Control-0001",
+      "display_path": "Effects › Slider Control › Slider",
+      "group": "effect",
+      "keys": 0,
+      "enabled": true,
+      "active": false,
+      "error": "Expression disabled. Error at line 1 in property ‘Slider’ of layer 3 (‘Err Effect’) in comp ‘015 Planted’. \rError: layer named ‘Gone’ is missing or does not exist. It may have been renamed, moved, or deleted, or the name may have been mistyped",
+      "text": "thisComp.layer(\"Gone\").transform.position[0]",
+      "text_length": 44,
+      "text_cut": false
+    },
+    {
+      "layer": 4,
+      "path": "ADBE Transform Group/ADBE Scale",
+      "display_path": "Transform › Scale",
+      "group": "transform",
+      "keys": 2,
+      "enabled": false,
+      "active": false,
+      "error": null,
+      "text": "[50, 50]",
+      "text_length": 8,
+      "text_cut": false
+    },
+    {
+      "layer": 5,
+      "path": "ADBE Transform Group/ADBE Position",
+      "display_path": "Transform › Position",
+      "group": "transform",
+      "keys": 2,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "value + [0, 20]",
+      "text_length": 15,
+      "text_cut": false
+    },
+    {
+      "layer": 6,
+      "path": "ADBE Transform Group/ADBE Position",
+      "display_path": "Transform › Position",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "value + [0, time * 10]",
+      "text_length": 22,
+      "text_cut": false
+    },
+    {
+      "layer": 7,
+      "path": "ADBE Transform Group/ADBE Position_0",
+      "display_path": "Transform › X Position",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "value + time * 10",
+      "text_length": 17,
+      "text_cut": false
+    },
+    {
+      "layer": 8,
+      "path": "ADBE Transform Group/ADBE Opacity",
+      "display_path": "Transform › Opacity",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "thisComp.layer(\"Ctrl\").transform.position[0] / 10",
+      "text_length": 49,
+      "text_cut": false
+    },
+    {
+      "layer": 9,
+      "path": "ADBE Transform Group/ADBE Rotate Z",
+      "display_path": "Transform › Rotation",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "thisComp.layer(\"Ctrl\").transform.rotation",
+      "text_length": 41,
+      "text_cut": false
+    },
+    {
+      "layer": 11,
+      "path": "ADBE Transform Group/ADBE Position",
+      "display_path": "Transform › Position",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "thisComp.layer(1).transform.position",
+      "text_length": 36,
+      "text_cut": false
+    },
+    {
+      "layer": 12,
+      "path": "ADBE Transform Group/ADBE Rotate Z",
+      "display_path": "Transform › Rotation",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "thisComp.layer(index - 1).transform.rotation",
+      "text_length": 44,
+      "text_cut": false
+    },
+    {
+      "layer": 13,
+      "path": "ADBE Transform Group/ADBE Opacity",
+      "display_path": "Transform › Opacity",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "comp(\"Mentor Practice\").layer(\"Logo\").transform.opacity",
+      "text_length": 55,
+      "text_cut": false
+    },
+    {
+      "layer": 14,
+      "path": "ADBE Transform Group/ADBE Position",
+      "display_path": "Transform › Position",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "n = \"Ct\" + \"rl\";\nthisComp.layer(n).transform.position",
+      "text_length": 53,
+      "text_cut": false
+    },
+    {
+      "layer": 15,
+      "path": "ADBE Text Properties/ADBE Text Document",
+      "display_path": "Text › Source Text",
+      "group": "text",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "\"Hello \" + thisLayer.name",
+      "text_length": 25,
+      "text_cut": false
+    },
+    {
+      "layer": 16,
+      "path": "ADBE Transform Group/ADBE Position",
+      "display_path": "Transform › Position",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "value",
+      "text_length": 5,
+      "text_cut": false
+    },
+    {
+      "layer": 18,
+      "path": "ADBE Transform Group/ADBE Position",
+      "display_path": "Transform › Position",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "wiggle(5, 20)",
+      "text_length": 13,
+      "text_cut": false
+    }
+  ],
+  "expressions_read": "all",
+  "expression_sweeps": [
+    {
+      "layer": 5,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": false,
+      "max_offset": 20,
+      "max_at": 0
+    },
+    {
+      "layer": 6,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": true,
+      "max_offset": 57.5,
+      "max_at": 5.75
+    },
+    {
+      "layer": 7,
+      "path": "ADBE Transform Group/ADBE Position_0",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": true,
+      "max_offset": 57.5,
+      "max_at": 5.75
+    },
+    {
+      "layer": 8,
+      "path": "ADBE Transform Group/ADBE Opacity",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": true,
+      "max_offset": 90,
+      "max_at": 0
+    },
+    {
+      "layer": 9,
+      "path": "ADBE Transform Group/ADBE Rotate Z",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": false,
+      "max_offset": 15,
+      "max_at": 0
+    },
+    {
+      "layer": 11,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": true,
+      "max_offset": 966.023,
+      "max_at": 0
+    },
+    {
+      "layer": 12,
+      "path": "ADBE Transform Group/ADBE Rotate Z",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": false,
+      "max_offset": 0,
+      "max_at": 0
+    },
+    {
+      "layer": 13,
+      "path": "ADBE Transform Group/ADBE Opacity",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": false,
+      "max_offset": 0,
+      "max_at": 0
+    },
+    {
+      "layer": 14,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": true,
+      "max_offset": 966.023,
+      "max_at": 0
+    },
+    {
+      "layer": 16,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": false,
+      "max_offset": 0,
+      "max_at": 0
+    },
+    {
+      "layer": 18,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "coarse",
+      "sampled_every": 0.25,
+      "varies": true,
+      "max_offset": 27.334,
+      "max_at": 1.5
+    },
+    {
+      "layer": 18,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "fine",
+      "sampled_every": 0.033,
+      "varies": true,
+      "max_offset": 28.878,
+      "max_at": 2.433
+    }
+  ],
+  "measured_layers": [
+    18
+  ],
+  "host": {
+    "ae_version": "27.0x78",
+    "os": "Macintosh OS 27.2.1/64"
+  }
+}
