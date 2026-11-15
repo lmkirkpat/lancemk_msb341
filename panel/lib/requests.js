@@ -48,4 +48,13 @@ function visibleKinds(view, { lessonOpen, canContinue } = {}) {
   return kinds;
 }
 
-module.exports = { REQUESTS, visibleKinds, startRequest, newLessonRequest, warmUpRequest, showMeAgain, followOnRequest };
+// Spec 014 (contracts/panel-ask.md › Requests, research R12). A question, from Home or the thread,
+// opens the ask skill, so B1 launches with its tools and A switches to it; the learner's bubble
+// shows `label`, the text as typed, never the command. A follow-up goes as typed. Go deeper sends
+// MU's sentence with the offer's short name, drawn from the answer's own data.
+const ASK_COMMAND = "/ask-mentor";
+const askRequest = (text) => ({ kind: "question", label: text, request: `${ASK_COMMAND} ${text}` });
+const followUpRequest = (text) => ({ kind: "followup", label: text, request: text });
+const goDeeperRequest = (tag) => ({ kind: "go_deeper", label: `Yes, go deeper on ${tag}.`, request: `Yes, go deeper on ${tag}.` });
+
+module.exports = { REQUESTS, visibleKinds, startRequest, newLessonRequest, warmUpRequest, showMeAgain, followOnRequest, ASK_COMMAND, askRequest, followUpRequest, goDeeperRequest };

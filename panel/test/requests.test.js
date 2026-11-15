@@ -57,3 +57,21 @@ test("Hint only from the first check on", () => {
   assert.deepEqual(visibleKinds({ demo_made: false, demo_unknown: true, demo_target: "a", checks: 0 }, { lessonOpen: true }), ["check"], "demo_unknown hides both");
   assert.deepEqual(visibleKinds({ demo_made: false, demo_target: "a", mode: "review", checks: 0 }, { lessonOpen: true }), ["check"], "never in a review");
 });
+
+// ---------- spec 014 T024: the ask requests (contracts/panel-ask.md › Requests) ----------
+const { askRequest, followUpRequest, goDeeperRequest, ASK_COMMAND } = require("../lib/requests.js");
+const { skillOf } = require("../lib/skill-tools.js");
+
+test("Ask sends the ask command and the text as typed; the bubble is the text alone", () => {
+  const q = "How can I make the rock shake from the hit?";
+  const r = askRequest(q);
+  assert.deepEqual(r, { kind: "question", label: q, request: `/ask-mentor ${q}` });
+  assert.equal(ASK_COMMAND, "/ask-mentor");
+  assert.equal(skillOf(r.request), "ask-mentor", "so B1 launches with the ask skill's tools");
+  assert.doesNotMatch(r.label, /ask-mentor/);
+});
+
+test("a follow-up goes as typed; Go deeper is MU's sentence with the short name", () => {
+  assert.deepEqual(followUpRequest("Why the null?"), { kind: "followup", label: "Why the null?", request: "Why the null?" });
+  assert.deepEqual(goDeeperRequest("Set the pivot"), { kind: "go_deeper", label: "Yes, go deeper on Set the pivot.", request: "Yes, go deeper on Set the pivot." });
+});

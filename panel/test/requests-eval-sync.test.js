@@ -207,3 +207,30 @@ test("next-mentor: Yes on A is the panel's text, run on A only", () => {
     assert.deepEqual(loadFrom(NEXT, id).runtimes, ["a"], id);
   }
 });
+
+// ---------- spec 014 T024: the ask set (contracts/panel-ask.md › Requests) ----------
+// The ask set (product/evals/ask/, the eval engineer's T031) isn't built yet. Until it is, these
+// pin the strings; once it exists, every ask case's turns must be the panel's requests word for word:
+// a question is "/ask-mentor " plus the text, and a press of Go deeper is goDeeperRequest's sentence
+// with one of MU's short names (FR-021).
+const { askRequest, goDeeperRequest, ASK_COMMAND } = require("../lib/requests.js");
+const ASK_SET = path.join(EVALS, "ask", "cases");
+const SHORT_NAMES = ["Easing", "Key types", "Speed graph", "Offset", "Set the pivot", "Group with a null"];
+
+test("ask: the request strings the eval set must use", () => {
+  assert.equal(askRequest("Why does it swing?").request, "/ask-mentor Why does it swing?");
+  assert.equal(goDeeperRequest("Set the pivot").request, "Yes, go deeper on Set the pivot.");
+});
+
+test("ask: every case opens with the panel's question request, and any Go deeper turn is the panel's", { skip: fs.existsSync(ASK_SET) ? false : "product/evals/ask/ isn't built yet (T031)" }, () => {
+  const deeper = new Set(SHORT_NAMES.map((n) => goDeeperRequest(n).request));
+  const files = fs.readdirSync(ASK_SET).filter((f) => f.endsWith(".json"));
+  assert.ok(files.length > 0);
+  for (const f of files) {
+    const c = JSON.parse(fs.readFileSync(path.join(ASK_SET, f), "utf8"));
+    const first = c.turns[0].say;
+    assert.ok(first.startsWith(`${ASK_COMMAND} `), `${f}: turn 1 isn't a question request`);
+    assert.equal(first, askRequest(first.slice(ASK_COMMAND.length + 1)).request, f);
+    for (const t of c.turns) if (/^Yes, go deeper on /.test(t.say)) assert.ok(deeper.has(t.say), `${f}: "${t.say}" isn't the panel's Go deeper`);
+  }
+});
