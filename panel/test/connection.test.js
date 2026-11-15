@@ -6,7 +6,7 @@ const { EventEmitter } = require("events");
 const fs = require("fs");
 const path = require("path");
 const { ready, CONNECTED: HARNESS_CONNECTED } = require("./app-harness.js");
-const { readConnection, connectionFromTool, createPoller, POLL_MS, CONNECTED, NOT_CONNECTED, BUSY } = require("../lib/connection.js");
+const { readConnection, connectionFromTool, createPoller, noComp, POLL_MS, CONNECTED, NOT_CONNECTED, BUSY } = require("../lib/connection.js");
 const { bridgeStarted } = require("../lib/bridge-status.js");
 
 const fsWith = (cfg) => ({ readFileSync: () => JSON.stringify(cfg) });
@@ -170,4 +170,32 @@ test("Try again reads now, and a slow read isn't overlapped", async () => {
   release({ state: CONNECTED, started: null });
   await first;
   assert.deepEqual(p.current(), { state: CONNECTED, started: null });
+});
+
+// ---------- spec 014 T025: comp_active (FR-047, research R10) ----------
+
+test("comp_active: true or false is carried; null and an older bridge mean unknown", async () => {
+  const read = (body) => readConnection({ fs: OK, http: fakeHttp(answer(body)) });
+  assert.deepEqual(await read({ ok: true, started: "s", comp_active: false }), { state: CONNECTED, started: "s", comp_active: false });
+  assert.deepEqual(await read({ ok: true, started: "s", comp_active: true }), { state: CONNECTED, started: "s", comp_active: true });
+  assert.deepEqual(await read({ ok: true, started: "s", comp_active: null }), { state: CONNECTED, started: "s" }, "null while a job runs");
+  assert.deepEqual(await read({ ok: true, started: "s" }), { state: CONNECTED, started: "s" }, "a bridge from before spec 014");
+  assert.deepEqual(await read({ ok: true, started: "s", comp_active: "no" }), { state: CONNECTED, started: "s" }, "anything else is unknown");
+  assert.deepEqual(await read({ ok: false, comp_active: false }), { state: NOT_CONNECTED, started: null }, "no answer, no flag");
+});
+
+test("only a connected false pauses Ask", () => {
+  assert.equal(noComp({ state: CONNECTED, started: "s", comp_active: false }), true);
+  for (const c of [null, { state: CONNECTED, started: "s" }, { state: CONNECTED, comp_active: true }, { state: BUSY, comp_active: false }, { state: NOT_CONNECTED, comp_active: false }]) {
+    assert.equal(noComp(c), false, JSON.stringify(c));
+  }
+});
+
+test("the poller reports a change of comp_active alone", async () => {
+  const seen = [];
+  const readings = [{ state: CONNECTED, started: "s", comp_active: true }, { state: CONNECTED, started: "s", comp_active: true }, { state: CONNECTED, started: "s", comp_active: false }, { state: CONNECTED, started: "s" }];
+  let i = 0;
+  const p = createPoller({ read: () => Promise.resolve(readings[i++]), onChange: (v) => seen.push(v.comp_active), timers: { setInterval: () => 1, clearInterval: () => {} } });
+  for (let n = 0; n < readings.length; n++) await p.now();
+  assert.deepEqual(seen, [true, false, undefined]);
 });
