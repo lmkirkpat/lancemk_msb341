@@ -5,6 +5,7 @@ here and doesn't copy it; gaps or contradictions come back as questions. The ui-
 and screens (with spec 007 T061) follow from § 12; this file says what the learner should meet, not
 how it's drawn.
 **Date:** 2026-11-13. **Status:** draft for the builder's review. Number 014 assigned by the cockpit.
+**Updated 2026-11-14:** § 5.1, § 7.1 and § 16 brought in line with § 19 (spec 014 CD-2 to CD-4).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2 (the method, the opening rule, the turn
 rule, "do it for me"), § 3 (where "what's moving it" lives), § 4 (the path), § 5 (reads R1 to R4 and
 the motion-sources map), § 8 (overlaps); `.claude/skills/next-mentor/SKILL.md` (the hand-over);
@@ -96,30 +97,35 @@ and the record says only what a check saw or the learner said.
 One turn, three parts, in this order. **About 120 words at most, list included** (Guess; tune on the
 three sessions).
 
-1. **What's making it happen now** (one or two sentences). From the read, on the layer that actually
+1. **What's making it happen now** (one or two sentences; the first line names the comp it read, "In
+   Comp 1, …", as the wrong-comp safeguard, § 19). From the read, on the layer that actually
    makes the motion, by name, with the source: own keys, a parent, an expression, an effect, inside a
    precomp. This is the sentence the baseline never said (AB 2). When the asked-about layer and the
    moving layer differ, it says both: "[asked layer] has no motion of its own; it rides on [parent],
    whose [properties] are driven by expressions."
-   **What's going on can run longer than a sentence or two, as its own short list** when the cause has
+   **What's going on can run longer than a sentence or two, as short unnumbered bullets** when the cause has
    parts (each source of motion and how much it moves the layer, in order of visible effect, § 19
    "Checked 2026-11-14"). This is explanation, not steps: it's never numbered as steps or called
    "steps", and the panel never docks it as steps.
-2. **The steps** (a numbered list, two to four lines). **A step is only something the learner does in
-   AE**: it starts with an action (select, move, drag, change, play back) on a named layer or property,
-   and the learner could follow it without asking what to do. "The rotation is too small to see" is
-   explanation, not a step; "Raise Shake Control's rotation amounts, then play it back" is a step
-   (builder, 2026-11-14: "when the user sees 'steps' they assume they're followable"). If nothing in
-   the answer is actionable yet (only explanation, or one clarifying question), there are no steps and
-   nothing is docked. Each line: what to do, on which layer, in AE's
-   words for the learner's version, and, when one of the six teaches it, the skill's name in a short
-   tag at the end ("*Set the pivot*"). The list is the one exception to the two-sentence turn rule, for
-   the reason diagnosis's first answer has one: several steps with layers and places in prose run
-   together (spec 005 TD § 13 H-1, approved 2026-11-09). If the goal needs more than four steps, give
-   the first three and say there's more ("that gets the hit point right; the size of each hit is the
+2. **The steps** (step data, two to four lines; never in the mentor's prose). **A step is only
+   something the learner does in AE**: it starts with an action (select, open, move, drag, change, play
+   back) on a named layer or property, and the learner could follow it without asking what to do. "The
+   rotation is too small to see" is explanation, not a step; "Select Shake Control (the null, not a
+   letter) and Pan Behind its pivot to where the hammer hits" is a step (builder, 2026-11-14: "when the
+   user sees 'steps' they assume they're followable"). A step outside the six pairs an action with the
+   read fact, never the edit (§ 19, H-2; § 16 step 1). If nothing in the answer is actionable yet (only
+   explanation, or one clarifying question), there are no steps and nothing is docked. Each line: what
+   to do, on which layer, in AE's words for the learner's version, with its skill as a short tag (Easing,
+   Key types, Speed graph, Offset, Set the pivot, Group with a null) or "not taught yet". The panel
+   draws the STEPS label, the numbers and the tags from the data (§ 19), so the mentor's prose never
+   lists or repeats them. The list is the one exception to the two-sentence turn rule, for the reason
+   diagnosis's first answer has one: several steps with layers and places in prose run together (spec
+   005 TD § 13 H-1, approved 2026-11-09). If the goal needs more than four steps, give the first three
+   and say there's more in the closing offer ("that sets the hit sizes; where the turn centers is the
    next part").
-3. **Handing it back** (one sentence). The learner chooses: try the steps, ask about one, or go deeper
-   on a named skill. One sentence, ending on a question, naming at most two skills (§ 7.1).
+3. **Handing it back** (one sentence, its own field). The learner chooses: try the steps, ask about
+   one, or go deeper on a named skill. One sentence, ending on a question, naming at most two skills
+   (§ 7.1): "Try them, or want to go deeper on step 3 with *Set the pivot*?"
 
 No greeting, no "great question", no recap of their question, no list of what's fine. No frame by
 default: a frame costs time and rarely helps an answer (diagnosis § 6.1). One `preview_frame` is
@@ -212,12 +218,19 @@ undo something they may not have done (AB 4).
 - **Offer only a lesson whose check can see the learner's real target** (§ 7.3). Never route to a
   lesson whose snapshot will find nothing there (AB 3: Easing proposed for keyless, expression-driven
   motion).
-- **A learned skill is offered as practice or review** in `/next-mentor`'s words (its step 4), never
-  as a first lesson. Asking about a learned skill is not a failed review and isn't recorded as one.
+- **A learned skill is offered as practice, never a review** (§ 19), and never as a first lesson. The
+  lesson runs without review mode: no "review" label and no "Review passed"; a check that doesn't pass
+  says what's still off and where, with no fail language. It's recorded as practice, not as a review
+  passed or failed, so the skill's status and review date stay as they were (§ 11). Asking about a
+  learned skill is never a failed review either.
 - **A missing hard prerequisite** follows `/next-mentor` step 4: named in one sentence, the asked
   lesson still runs if they want it (curriculum § 13 C1).
-- **On B1**, a skill can't hand over (sprint 5 plan, step 4): stop at the offer, as diagnosis does
-  (spec 005 TD § 7.1 c).
+- **On B1, stop at the offer** (§ 19; spec 005 TD § 7.1 c). The answer carries no offered skills, so
+  there's no Go deeper button (spec 014 FR-017); the closing offer's wording stays the same, so the
+  evals still judge it. If the learner types "yes" anyway, one plain sentence says the lesson can't
+  start from here and where to start it, naming the skill and never a command: "I can't start that
+  lesson from here; open *Set the pivot* from the Skills tab when you want it." Nothing hands over and
+  no lesson starts; the steps stay as they were. (Spec 014 CD-4.)
 
 ### 7.2 Starting the lesson from the learner's setup
 
@@ -293,7 +306,7 @@ Three bands, decided per **step**, not per question:
 |---|---|---|
 | **Inside** | A step one of the six skills teaches (easing, key types, speed graph, offset, pivot, null) | The step, tagged with the skill; the go-deeper offer (§ 7) |
 | **Describing the comp** | What a layer is, what moves it, what links to it, what's hidden or not read | **Always in scope**, whatever the skill: it's a read, and every step depends on it. This is skill 4's idea, told rather than taught (§ 4) |
-| **Next to the six** | A step outside the six that the read can see (an expression's text, an effect's setting, a comp setting) | Say what the read shows and where it is, in one step line, in diagnosis's hint shape (spec 005 TD § 7.3): where to look and what's there, plus "not something I teach yet". The learner decides. **No code written or rewritten**, no new expression, no effect recipe. Pointing at a token the read saw ("uses the first hit's size for every hit") is a read fact, not code; whether to say which token to change is H-2 |
+| **Next to the six** | A step outside the six that the read can see (an expression's text, an effect's setting, a comp setting) | Say what the read shows and where it is, in one step line, in diagnosis's hint shape (spec 005 TD § 7.3): where to look and what's there, plus "not something I teach yet". The learner decides. **No code written or rewritten**, no new expression, no effect recipe, and no edit to say: the step pairs an action with the read fact (§ 16 step 1, "it uses the first hit's size for all three"), never what to change it to (H-2, decided 2026-11-14) |
 | **Outside** | Nothing in the comp to read, and no skill: color, render and export, audio, 3D and cameras, typography choice, other apps, general AE trivia | One sentence: it's outside what the mentor covers, and what it does cover in one clause. No answer from general knowledge, no link list |
 
 Rules that keep it from becoming a general chatbot:
@@ -463,34 +476,63 @@ overlap tables; this is for answers and turn 4's fresh read.
 - **Effects, color, render, 3D, audio, other apps** (curriculum § 11).
 - **Doing the steps** for the learner, in any form.
 
-## 16. A worked answer (for the rubric and evals only; not for `SKILL.md`)
+## 16. A worked answer (the Comp 1 answer, as data)
 
-Written from AB's ground truth, assuming Q2 to Q4 exist. The model copies example sentences word for
-word (pacing re-baselines, main lesson), so `SKILL.md` takes § 5's shape and § 5.3's kinds, never this
-text.
+Written from AB's ground truth and § 19's decisions (2026-11-14), assuming Q2 to Q4 exist. It matches
+the approved mockup (`product/mockups/ask-mentor/`, its WHY, STEPS and OFFER) except step 2 (below).
+The model copies example sentences word for word (pacing re-baselines, main lesson), so this is the
+one version the rubric, the evals and `SKILL.md`'s examples all take: copy whole lines from here, never
+paraphrase them into a second version.
 
-> rock.png has no motion of its own: it rides on Shake Control, a null whose Position and Rotation are
-> expressions, so the shake turns around Shake Control's pivot at the comp's center, not the rock.
->
-> 1. Move Shake Control's pivot to where the hammer hits, without the rock or letters moving. *Set the
->    pivot*
-> 2. Its Position expression uses the first hit's size and decay for all three hits (`amps[1]`,
->    `decays[1]`), which is part of why it feels mechanical; Rotation uses each hit's own. That's an
->    expression, which I don't teach yet.
-> 3. Play it back and check the rock now rocks from the hit.
->
-> Want to go deeper on step 1 with *Set the pivot*, on Shake Control?
+The answer is spec 014 FR-016's four fields. Only the explanation and the closing offer are the
+mentor's prose. The panel draws the STEPS label, the numbers and the skill tags from the step data;
+the mentor's prose never lists, numbers or repeats a step, and never writes "Steps:" (§ 19).
 
-What a judge should see: the source layer named first; read facts plain, the inference marked ("so");
-three steps, one tagged, one marked outside; no Easing; one offer at the end, naming one skill, on the
-null; no review; no "great question". Whether step 2 may quote the tokens is H-2.
+**explanation** (the mentor's words; bullets, never numbered; in order of visible effect, § 19
+"Checked 2026-11-14"; about 40 words, within § 5.1's 120):
+
+> In Comp 1, rock.png rides on Shake Control, a null moved by expressions:
+> - All three hits are the same size.
+> - Rotation is too small to see: 0.75° at most, gone in about 1/3 s.
+> - The turn centers on the rock, where Shake Control sits.
+
+**steps** (data: each line is something the learner does in AE; two to four):
+
+| # | Line | Skill tag |
+|---|---|---|
+| 1 | Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet. | not taught yet |
+| 2 | Open Shake Control's Rotation expression and look at its amounts: 0.75° at most, too small to see. Not something I teach yet. | not taught yet |
+| 3 | Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. | Set the pivot |
+| 4 | Play it back and watch the turn. | (none) |
+
+**offered skills:** Set the pivot (on A; empty on B1, FR-017).
+
+**closing offer** (its own field, § 6 turn 2): "Try them, or want to go deeper on step 3 with *Set the
+pivot*?"
+
+Skill tags use the short names (mockup README): Easing, Key types, Speed graph, Offset, Set the pivot,
+Group with a null. Lesson headers and the Skills tab keep the full names.
+
+**Where this differs from the mockup:** the mockup's step 2 is "Raise the amounts in Shake Control's
+Rotation expression." That's the edit inside an expression, which § 19 rules out for a step outside
+the six ("pairs an action with the read fact, never the edit"; H-2) and § 9 keeps out ("no code
+written or rewritten"). It's rewritten in the same shape as step 1. The ui-designer may want to update
+the mockup's STEPS constant to match.
+
+What a judge should see: the first line names Comp 1; the source layer (Shake Control) named, with
+rock.png riding on it; the explanation as bullets in order of visible effect (hit sizes first), never
+numbered or called steps; steps that are all actions, the hit sizes before the pivot; both expression
+steps say what the read shows plus "Not something I teach yet", and neither says what to change it to;
+one step tagged *Set the pivot*; no Easing; one closing offer naming one skill; no review; no "great
+question".
 
 ## 17. Situations an eval set should cover (for the eval engineer, after the spec)
 
 Grouped; each needs a fixture shaped like the real case. The first five are AB's held cases.
 
 1. A child with no keys, parent null moved by Position and Rotation expressions; "shake from the hit
-   point" (AB's case). Names the parent and its expressions first; step on the parent; no Easing.
+   point" (AB's case). First line names the comp; names the parent and its expressions; steps on the
+   parent, the hit sizes before the pivot; no Easing (§ 16).
 2. Same, playhead moved since the last read; "done". No "Undo" about the parent; no "you moved".
 3. Padded PNG; learner names a spot on the art. The pivot lesson never asks for a spot off the art;
    passes on "didn't move" with the place taken as given.
@@ -516,7 +558,8 @@ Grouped; each needs a fixture shaped like the real case. The first five are AB's
     hands back to the next step at the end.
 17. Record after an answer: no status change; goal in general terms; nothing tool-inferred as the
     learner's action.
-18. A learned skill asked about. Offered as practice or review, never a first lesson.
+18. A learned skill asked about. Offered as practice, never a review or a first lesson; no "review"
+    label, a miss says what's still off with no fail words, and the record keeps it as practice.
 19. Turn 4 "it didn't work" where the change landed on the wrong layer. Says where it landed, as a
     hint; no pass or fail words.
 
@@ -583,8 +626,8 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
 1. **Ask-first, with the lead moved to the follow-through (§ 12).** **Recommended: yes**, and watch
    the three sessions for go-deepers. If none of the three goes deeper without the builder forcing it,
    revisit: the product may be drifting toward Adobe's "answer when asked".
-2. **May an "outside the six" step say what to change, at the token level?** (§ 16 step 2: "uses the
-   first hit's size for all three hits" vs. adding "use each hit's own instead"). **Recommended: name
+2. **May an "outside the six" step say what to change, at the token level?** (§ 16 step 1: "it uses the
+   first hit's size for all three" vs. also saying what to change it to). **Recommended: name
    what the read sees and what it does to the motion, not the edit.** It's still useful (the learner
    can find it), it stays a read fact, and it keeps the mentor out of writing expressions, where
    Adobe's edge is biggest (curriculum § 7).
@@ -616,7 +659,7 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
 1. The tools Q2 to Q7 and K1 to K7 don't exist yet; they're listed as needs, not designs.
 2. **Claim to verify live:** Pan Behind on a null whose Position is an expression that builds on
    `value` keeps the children still and moves the rotation center; on one that sets its own value it
-   doesn't. § 16's step 1 depends on it.
+   doesn't. § 16's step 3 depends on it.
 3. **Claim to verify:** `sourceRectAtTime` on footage returns the full frame, not the alpha bounds (my
    understanding), so Q6 needs the frame's alpha, not that call.
 
@@ -628,8 +671,8 @@ Follow-up):
 - **New rule for § 5 and § 16:** read how much each source moves the layer before naming a fix, and
   put steps in order of visible effect. On Comp 1 the rotation (≤ 0.75°, gone in about 1/3 s) moves the
   rock's far end about 12 px from a corner pivot, no more than the Position shake. The builder couldn't
-  see the pivot change by hand, so § 16's step 1 (move the null's pivot) is right in principle but
-  nearly invisible, and the Position hits' sizes (the `amps[1]` bug) should lead.
+  see the pivot change by hand, so the pivot step is right in principle but nearly invisible, and the
+  Position hits' sizes (the `amps[1]` bug) lead. § 16 now has this order (pivot is step 3).
 
 ### For the eval engineer (EE)
 

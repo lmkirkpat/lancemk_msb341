@@ -55,7 +55,7 @@ words; the middle is drawn by the panel from the step data:
 > *Panel (from step data):* **STEPS**
 > 1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first
 >    hit's size for all three. Not something I teach yet.
-> 2. Raise the amounts in Shake Control's Rotation expression.
+> 2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most, too small to see. Not something I teach yet.
 > 3. Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits.
 >    *Set the pivot*
 > 4. Play it back and watch the turn.
