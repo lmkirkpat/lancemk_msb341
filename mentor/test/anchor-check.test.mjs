@@ -84,12 +84,15 @@ test("L-2, playhead on the first key: only that key is rewritten, Sled slides at
   assert.deepEqual(r.other_changes, []);
 });
 
-test("item 5 fails when another layer moved 2 px", () => {
+// Spec 015 FR-014a: a layer whose own value changed is reported as that change, with the shift it
+// caused as its effect, and no moved entry; it holds item 5 as a moved layer did.
+test("item 5 fails when another layer moved 2 px, reported as its Position with the shift attached", () => {
   const r = run(synthetic("edge-before"), synthetic("edge-other-moved"), DOOR);
   const door = layerOf(r, "Door");
   assert.equal(door.item1.passed && door.item2.passed, true);
   assert.equal(door.item5.passed, false);
-  assert.deepEqual(door.item5.moved_layers.map((m) => m.layer), ["Other"]);
+  assert.deepEqual(door.item5.moved_layers, []);
+  assert.deepEqual(r.other_changes, [{ kind: "value_changed", layer: "Other", property: "Position", effect: { distance_px: 2, direction: "right", time: 0 } }]);
   assert.equal(r.passed, false);
 });
 
@@ -418,7 +421,7 @@ test("hint other_layer_moved: the focus holds items 1 to 4 and another layer's b
   const r = run(synthetic("edge-before"), synthetic("edge-other-moved"), DOOR);
   const door = layerOf(r, "Door");
   assert.deepEqual(door.hints, ["other_layer_moved"]);
-  assert.deepEqual(door.item5.moved_layers.map((m) => [m.layer, m.direction]), [["Other", "right"]]);
+  assert.deepEqual(r.other_changes.map((o) => [o.layer, o.effect.direction]), [["Other", "right"]], "the layer and the way, now on the change (FR-014a)");
   assert.deepEqual(layerOf(run(P2, fixture("wrong-layer"), [{ layer: "Needle", place: "bottom-middle" }]), "Needle").hints, ["wrong_layer"], "not when the focus's pivot never moved");
 });
 
@@ -457,8 +460,9 @@ test("the reviewer's hand-check: Needle moved 50 px with its rect nulled doesn't
     const r = check(base, cur, lessonFor(base, DOOR));
     const door = layerOf(r, "Door");
     assert.equal(r.passed, false, `rect nulled in ${both ? "both reads" : "the check read"}`);
-    assert.ok(door.item5.not_compared.some((n) => n.layer === "Needle"));
-    assert.deepEqual(door.item5.moved_layers.map((m) => [m.layer, m.direction, m.from_transform]), [["Needle", null, true]]);
+    // Spec 015 FR-014a: its own Position changed, so it's that change, with a shift of unknown size.
+    assert.deepEqual(r.other_changes, [{ kind: "value_changed", layer: "Needle", property: "Position", effect: { distance_px: null, direction: null, time: 0 } }]);
+    assert.deepEqual(door.item5.moved_layers, []);
     assert.ok(door.hints.length > 0);
   }
 });
