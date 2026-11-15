@@ -527,3 +527,22 @@ test("fix B: reviewFor finds no target on the crowd; recommend's lesson path sti
   const out = recommend({ path: readPath(), record: fresh, built: ["transform.anchor", "parenting.null"], finders: FINDERS, snapshot, now });
   assert.deepEqual([out.recommendation.skill, out.recommendation.kind, out.recommendation.reason], ["parenting.null", "lesson", "next_in_path"]);
 });
+
+// ---- Spec 015 T026 (FR-015, K3): motion_from on the proposal and focus, on reads with R2
+
+test("T026: on the live 015 Planted, the proposed layers' motion_from says their Position runs on an expression", async () => {
+  project(path.join(DIR, "..", "expressions", "planted.json"));
+  try {
+    const r = await call("null_parent_snapshot", {});
+    assert.ok(Array.isArray(r.proposal) && r.proposal.length >= 2);
+    for (const name of r.proposal) assert.ok(r.motion_from[name], name);
+    assert.deepEqual(r.motion_from["Index Link"], { own_keys: false, own_expressions: ["Position"], parents: [] });
+  } finally {
+    project("practice2b.json");
+  }
+});
+
+test("T026: a read from before spec 015 has no motion_from", async () => {
+  const r = await call("null_parent_snapshot", {});
+  assert.equal("motion_from" in r, false);
+});

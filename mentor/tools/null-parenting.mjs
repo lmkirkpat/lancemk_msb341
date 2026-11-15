@@ -16,7 +16,7 @@ import { layerInfo } from "../lib/layer-info.mjs";
 import { pastTargets } from "../lib/learner-store.mjs";
 import { allP2Times, analyze, finder, focusProblems, p2Times, SKILL } from "../lib/null-parenting.mjs";
 import { check, demoRefusal, JUMP_PX, p2For, REFUSAL_REASONS, REFUSED_MESSAGE, refused, REGIONS, storeNull } from "../lib/null-parenting-check.mjs";
-import { sourcesOf } from "../lib/motion-sources.mjs";
+import { motionFrom, sourcesOf } from "../lib/motion-sources.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
@@ -86,8 +86,20 @@ function snapshotReply(snapshot, { lesson, session: s, analysis }, extra = {}) {
     before_time: s.focus && s.focus.length ? base.comp.time : null,
     null_ready: !!(s.skill_data && s.skill_data.stored),
     notes: analysis.notes,
+    // Spec 015 FR-015: where each focus and proposed layer's motion comes from, by name. Only on a
+    // read with R2, so replies on older captures (the eval sets') stay as they were.
+    ...(Array.isArray(base.expressions) ? { motion_from: motionFromFor(base, [...(s.focus || []), ...(analysis.proposal || []), ...(analysis.next_proposal || [])]) } : {}),
     ...extra,
   });
+}
+
+function motionFromFor(snapshot, names) {
+  const out = {};
+  for (const name of new Set(names.filter((n) => typeof n === "string"))) {
+    const l = layerInfo(snapshot).layers.find((x) => x.name === name);
+    if (l) out[name] = motionFrom(snapshot, l.index);
+  }
+  return out;
 }
 
 async function nullParentSnapshot({ mode: asked, skill_options } = {}) {

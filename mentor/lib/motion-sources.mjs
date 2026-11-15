@@ -102,3 +102,20 @@ export function sourcesOf(snapshot, nameOrIndex) {
   const match = typeof nameOrIndex === "number" ? (l) => l.layer_index === nameOrIndex : (l) => l.layer === nameOrIndex;
   return layers.find(match) || null;
 }
+
+// Spec 015 FR-015 (K3; data-model § 4): where a layer's motion comes from, for the pivot and null
+// snapshot tools only (OQ-3). { own_keys, own_expressions, parents: [{ layer, by }] } with only the
+// parents that move their children, or not_read when read R2 or layer_info isn't in the snapshot,
+// so a parent's expression is never said to be absent.
+export function motionFrom(snapshot, index) {
+  const map = motionSources(snapshot);
+  if (map.read.expressions !== "all") return { status: "not_read", reason: "older_snapshot" };
+  if (!map.known) return { status: "not_read", reason: "no_layer_info" };
+  const e = map.layers.find((l) => l.layer_index === index);
+  if (!e) return { status: "not_read", reason: "not_found" };
+  return {
+    own_keys: e.own_keys.length > 0,
+    own_expressions: e.expressions.list.filter((x) => x.active).map((x) => x.property),
+    parents: e.parents.filter((p) => p.moves_children).map((p) => ({ layer: p.layer, by: p.moves_by })),
+  };
+}
