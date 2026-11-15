@@ -119,3 +119,45 @@ test("live practice-r1.json: Title's map lists its own keys and CTRL (US4 scenar
   assert.equal(title.parents[0].moves_children, true, "CTRL's Position is keyed");
   assert.ok(sourcesOf(snap, "CTRL").children.some((c) => c.layer === "Title"));
 });
+
+// ---- Spec 015 T019 (FR-005, K3; data-model § 3): expressions in the map
+
+import { comp1, LIVE as COMP1_LIVE } from "./fixtures/expressions/comp1.mjs";
+import { comp as mockComp, layer as mockLayer, run as runMock } from "./fixtures/expressions/mock-ae.mjs";
+
+test(`SC-003: rock.png's parent Shake Control moves its children by expression (Comp 1, ${COMP1_LIVE ? "live" : "derived"})`, () => {
+  const snap = comp1();
+  const map = motionSources(snap);
+  assert.equal(map.read.expressions, "all");
+  const rock = sourcesOf(snap, "rock.png");
+  assert.deepEqual(rock.parents.map(({ layer, moves_children, moves_by }) => ({ layer, moves_children, moves_by })), [
+    { layer: "Shake Control", moves_children: true, moves_by: "expression" },
+  ]);
+  assert.deepEqual(rock.expressions, { status: "read", list: [] });
+  const shake = sourcesOf(snap, "Shake Control");
+  assert.deepEqual(shake.expressions.list.map((x) => [x.property, x.active]), [["Position", true], ["Rotation", true]]);
+  assert.equal(shake.static_as_read, false, "no keys and no parent, but its own expressions move it");
+  assert.equal(sourcesOf(snap, "Sweep Control").static_as_read, false, "keyed");
+  assert.equal(sourcesOf(snap, "White Solid 1").static_as_read, true, "no keys, no parent, no expression, all read");
+});
+
+test("E19: a parent whose expression never varies doesn't move its children; one that varies does", () => {
+  const layers = mockComp();
+  layers.push(mockLayer(10, "Still Kid", { parent: layers[6] }), mockLayer(11, "Shaker Kid", { parent: layers[0] }));
+  const snap = runMock(layers);
+  const still = sourcesOf(snap, "Still Kid").parents[0];
+  assert.deepEqual([still.layer, still.moves_children, still.moves_by], ["Still", false, null]);
+  const shaker = sourcesOf(snap, "Shaker Kid").parents[0];
+  assert.deepEqual([shaker.layer, shaker.moves_children, shaker.moves_by], ["Shaker", true, "expression"]);
+});
+
+test("an older snapshot keeps keyed_only, on_keyed and the parent shape it had", () => {
+  const snap = comp1();
+  delete snap.expressions;
+  const map = motionSources(snap);
+  assert.equal(map.read.expressions, "keyed_only");
+  const rock = sourcesOf(snap, "rock.png");
+  assert.deepEqual(rock.expressions, { status: "not_read", on_keyed: [] });
+  assert.deepEqual(Object.keys(rock.parents[0]), ["layer_index", "layer", "class", "shy", "moves_children"]);
+  assert.equal(rock.parents[0].moves_children, false, "as before: keys only, so the read can't see the shake");
+});

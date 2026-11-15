@@ -1,13 +1,19 @@
 // FR-014's motion-sources map, step 1 (spec 004 wave B, research R19; data-model › Motion-sources
 // map): per layer, its own keys and its Parent chain, with "not_read" wherever the reads don't reach.
-// It never says a layer has no expressions or that a precomp is empty: expressions on unkeyed or
-// turned-off properties wait for read R2, and what's inside a precomp for read R4 (wave D).
+// It never says a layer has no expressions or that a precomp is empty: what's inside a precomp
+// waits for read R4.
+//
+// Spec 015 (FR-005, data-model § 3): with read R2 in the snapshot, `read.expressions` is "all", each
+// layer's `expressions` is { status: "read", list }, and a parent moves its children when it has
+// keys on a moving transform property or a source transform expression (on, no error) whose sweep
+// varies (K3; a constant one doesn't, E19). An older snapshot keeps "keyed_only" and `on_keyed`.
 //
 // Without layer_info: `known: false`, one entry per keyed layer, `parents` and `children` null and
 // `read.parents` "not_read".
 
 import { layerInfo } from "./layer-info.mjs";
 import { visibility } from "./visibility.mjs";
+import { expressionReads } from "./expressions.mjs";
 
 // Keys on these are inherited by a child; Opacity and effects aren't.
 const MOVES = new Set([
@@ -25,26 +31,48 @@ function ownKeys(keyedLayer) {
   }));
 }
 
-const movesChildren = (keyedLayer) =>
+const keysMove = (keyedLayer) =>
   !!keyedLayer && keyedLayer.properties.some((p) => p.keys.length > 0 && p.path.startsWith(TRANSFORM) && MOVES.has(p.path.slice(TRANSFORM.length)));
+
+// A source transform expression on a property a child inherits moves the children when its sweep
+// varies. With no sweep read for it, it counts as moving: "may move" is safer than "still".
+const exprMoves = (list) => list.some((x) => x.active && x.group === "transform" && MOVES.has(x.path.slice(TRANSFORM.length)) &&
+  (x.moves.status === "not_read" ? x.moves.reason !== "not_running" : x.moves.varies === true));
+
+function movedBy(keyedLayer, exprList) {
+  const k = keysMove(keyedLayer);
+  const e = !!exprList && exprMoves(exprList);
+  return { moves_children: k || e, moves_by: k && e ? "both" : k ? "keys" : e ? "expression" : null };
+}
 
 export function motionSources(snapshot) {
   const { known, layers: info } = layerInfo(snapshot);
   const keyed = new Map((snapshot.layers || []).map((l) => [l.index, l]));
   const classes = new Map(visibility(snapshot).map((v) => [v.layer_index, v.class]));
   const precomps = new Set((snapshot.precomp_layers || []).map((l) => l.index));
-  const read = { own_keys: true, parents: known ? true : "not_read", expressions: "keyed_only", precomp_contents: "not_read" };
+  const er = expressionReads(snapshot);
+  const exprRead = er.read === "all";
+  const exprOf = new Map();
+  for (const x of er.list) exprOf.set(x.layer_index, [...(exprOf.get(x.layer_index) || []), x]);
+  const read = { own_keys: true, parents: known ? true : "not_read", expressions: exprRead ? "all" : "keyed_only", precomp_contents: "not_read" };
 
   const entry = (index, name, isPrecomp, parents, children) => {
     const own = ownKeys(keyed.get(index));
+    const mine = exprOf.get(index) || [];
+    const expressions = exprRead
+      ? { status: "read", list: mine }
+      : { status: "not_read", on_keyed: own.filter((k) => k.expression_on).map(({ property, path }) => ({ property, path })) };
     return {
       layer_index: index, layer: name, class: classes.get(index) ?? null,
       own_keys: own,
       parents,
       children,
-      expressions: { status: "not_read", on_keyed: own.filter((k) => k.expression_on).map(({ property, path }) => ({ property, path })) },
+      expressions,
       precomp_contents: isPrecomp ? "not_read" : "not_a_precomp",
-      static_as_read: own.length === 0 && Array.isArray(parents) && parents.length === 0,
+      // Static only as far as the reads reach: with read R2, no own keys, no own source expression
+      // and no parents. Without it, the same as before (keys and parents only), since read.expressions
+      // already says "keyed_only".
+      static_as_read: own.length === 0 && Array.isArray(parents) && parents.length === 0 && !(exprRead && mine.some((x) => x.active)),
     };
   };
 
@@ -58,7 +86,8 @@ export function motionSources(snapshot) {
     const seen = new Set([l.index]);
     for (let p = byIdx.get(l.parent); p && !seen.has(p.index); p = byIdx.get(p.parent)) {
       seen.add(p.index);
-      parents.push({ layer_index: p.index, layer: p.name, class: classes.get(p.index) ?? null, shy: p.shy, moves_children: movesChildren(keyed.get(p.index)) });
+      const by = movedBy(keyed.get(p.index), exprRead ? exprOf.get(p.index) || [] : null);
+      parents.push({ layer_index: p.index, layer: p.name, class: classes.get(p.index) ?? null, shy: p.shy, ...(exprRead ? by : { moves_children: by.moves_children }) });
     }
     const children = info.filter((c) => c.parent === l.index).map((c) => ({ layer_index: c.index, layer: c.name }));
     return entry(l.index, l.name, l.kind === "precomp" || precomps.has(l.index), parents, children);
