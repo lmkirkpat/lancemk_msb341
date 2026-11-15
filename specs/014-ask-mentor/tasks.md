@@ -36,7 +36,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   states: comp viewer focused; the Knack panel focused right after clicking into a comp; a footage item
   selected in the Project panel; every comp viewer closed; no project open; a render running (does the call
   queue?). Answer: is it a reliable yes or no, and does panel focus change it?
-- [ ] T002 [P] (panel-builder) **Hand-over on the fake service (research R4, R5).** `panel/helper/test/ask-handover.test.mjs`:
+- [x] T002 [P] (panel-builder) **Hand-over on the fake service (research R4, R5).** `panel/helper/test/ask-handover.test.mjs`:
   a test skill named `*-mentor` with `Skill` in its tools hands over to another; the conversation is kept,
   the tool list switches to the second skill's, a `session.json` value written by a tool before the switch
   is read by a tool after it, and a mid-conversation `/ask-mentor` command switches back.
