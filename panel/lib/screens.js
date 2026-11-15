@@ -47,37 +47,72 @@ function banner(kind, title, body, actions) {
 
 const statusline = (text) => (text ? `<div class="statusline" role="status" aria-live="polite"><span class="spin" aria-hidden="true"></span><span class="st">${esc(text)}</span></div>` : "");
 
-// ---------- Home ----------
+// ---------- Home, ask-first (spec 014 FR-055, MU › Home) ----------
 
-function memoryCard(h, hasHistory) {
+const A = COPY.ask;
+
+// What the mentor remembers: drawn on Skills since spec 014 (FR-050 moved), under the path.
+function memoryCard(h) {
   const v = h.memory;
   const bits = v.empty
     ? `<p>${esc(v.text)}</p>`
-    : `<p><strong>${esc(v.date)}</strong> · ${esc(v.skill)} · ${esc(v.result)}</p>${v.next ? `<p>${esc(COPY.home.next_time)} ${esc(v.next)}</p>` : ""}${hasHistory ? btn(COPY.buttons.all_skills, "pick_skill", "quiet") : ""}`;
+    : `<p><strong>${esc(v.date)}</strong> · ${esc(v.skill)} · ${esc(v.result)}</p>${v.next ? `<p>${esc(COPY.home.next_time)} ${esc(v.next)}</p>` : ""}`;
   return `<section class="memory" aria-label="${esc(h.memory_title)}"><h2 class="lbl">${esc(h.memory_title)}</h2>${bits}</section>`;
 }
 
-function upNextCard(h, o) {
-  const u = h.up_next;
-  if (!u) return "";
-  const go = o.off ? `<p class="later">${esc(o.reason)}</p>` : u.find ? btn(u.find.label, "find_next", o.dim ? "" : "primary") : u.start ? btn(u.start.label, "start", o.dim ? "" : "primary", `data-skill="${esc(u.skill)}"`) : "";
-  const pick = o.lessonOpen ? "" : btn(u.pick_skill, "pick_skill");
-  return `<section class="card lead${o.dim ? " dim" : ""}" aria-label="${esc(COPY.home.up_next)}"><div class="kicker accent">${esc(COPY.home.up_next)}</div><h3 data-title tabindex="-1">${esc(u.name)}</h3><p class="why">${esc(u.why)}</p><div class="row">${go}${pick}</div></section>`;
+// The ask card (MU askCard). Paused, Ask stays focusable (aria-disabled) with its reason linked
+// (FR-054); an empty box links "Type a question first." for screen readers. The box keeps what was
+// typed: main.js restores its value and focus across redraws.
+function askCard(m) {
+  const off = m.ask_off;
+  const sending = m.ask.sending;
+  const lock = m.lesson_open;
+  const empty = !m.draft;
+  const go = sending
+    ? `<button type="button" id="ask-go" class="primary pressed" aria-disabled="true" aria-busy="true" aria-describedby="ask-why"><span class="spin" aria-hidden="true"></span>${esc(A.pressed)}</button>`
+    : `<button type="submit" id="ask-go" class="primary" data-action="ask_home" data-keep-focus aria-disabled="${!!off || empty}" aria-describedby="ask-why${!off && empty ? " ask-empty" : ""}">${esc(A.button)}</button><span class="sr" id="ask-empty">${esc(A.empty)}</span>`;
+  return `<section class="card lead askcard" aria-label="${esc(A.card_title)}"><h3 data-title tabindex="-1">${esc(A.card_title)}</h3>`
+    + `<form data-askhome autocomplete="off"><label class="small" for="ask-q">${esc(A.label)}</label>`
+    + `<textarea id="ask-q" rows="3" data-keep-value${lock || sending ? " disabled" : ""}>${esc(m.draft_text || "")}</textarea>`
+    + `<div class="row between"><p class="meta" id="ask-why">${esc(off && !sending ? off : A.hint)}</p>${go}</div></form></section>`;
 }
 
-function practiceCard(h, o) {
-  const p = h.practice;
-  if (!p) return "";
-  const last = p.last_practiced ? `${COPY.home.last_practiced} ${p.last_practiced}.` : "";
-  const more = p.rest ? `<span class="meta">${esc(COPY.home.more_due(p.rest))}</span>` : "";
-  const line = last || more ? `<p>${esc(last)}${last && more ? " " : ""}${more}</p>` : "";
-  return `<section class="card" aria-label="${esc(COPY.home.practice_due)}"><div class="kicker due"><span aria-hidden="true">↻</span> ${esc(COPY.home.practice_due)}</div><h3>${esc(p.name)}</h3>${line}${o.off ? `<p class="later">${esc(o.reason)}</p>` : btn(COPY.buttons.warm_up, "warm_up", "", `data-skill="${esc(p.skill)}"`)}</section>`;
+const chev = `<span class="chev" aria-hidden="true">›</span>`;
+
+// The one quiet line (decisions/012): a lesson open, else a lesson in progress, else Find my next
+// lesson. Long names are drawn short; the full text is the title and the accessible name.
+function quietLine(m) {
+  if (m.lesson_open && m.lesson) {
+    const title = lessonTitle(m, m.lesson);
+    const sum = m.lesson.check_list && m.lesson.check_list.summary;
+    const full = [COPY.quiet.back_lesson, title, sum].filter(Boolean).join(". ");
+    const answering = !!m.turn && !!m.turn.busy; // FR-060, FR-061
+    const end = btn(COPY.buttons.end_lesson, "end_lesson", "quiet", answering ? 'aria-disabled="true" aria-describedby="end-why"' : "");
+    const why = answering ? `<span id="end-why">${esc(COPY.paused.end_after_answer)}</span>` : esc(COPY.quiet.end_note);
+    return `<div class="quietwrap"><button type="button" class="qline" data-action="back_lesson" title="${esc(full)}" aria-label="${esc(full)}"><span class="ql">${esc(COPY.quiet.back_lesson)}<small>${esc([title, sum].filter(Boolean).join(" · "))}</small></span>${chev}</button><p class="aside meta">${end} ${why}</p></div>`;
+  }
+  const off = m.quiet_off;
+  if (m.saved === "waiting" && m.saved_lesson) {
+    const v = m.saved_lesson.lesson || {};
+    const skill = m.names[v.skill] || COPY.home.a_skill;
+    const title = COPY.quiet.pick_up(skill, focusText(v));
+    const l = v.check_list;
+    const sub = [l && l.summary, l && l.checked_at ? `${COPY.lesson.last_check} ${checkClock(l.checked_at)}` : null].filter(Boolean).join(" · ");
+    const full = [title, sub, off].filter(Boolean).join(". ");
+    const attrs = off ? `aria-disabled="true" aria-describedby="quiet-why"` : `data-action="continue"`;
+    return `<div class="quietwrap"><button type="button" class="qline" ${attrs} title="${esc(full)}" aria-label="${esc(full)}"><span class="ql">${esc(title)}${sub ? `<small>${esc(sub)}</small>` : ""}</span>${chev}</button>`
+      + `${off ? `<p class="aside meta" id="quiet-why">${esc(off)}</p>` : ""}<p class="aside meta">${esc(COPY.quiet.not_finished)} ${btn(COPY.home.cutoff.set_aside, "set_aside", "quiet")}</p></div>`;
+  }
+  const label = COPY.buttons.find_next;
+  const attrs = off ? `aria-disabled="true" aria-describedby="quiet-why"` : `data-action="find_next"`;
+  return `<div class="quietwrap"><button type="button" class="qline" ${attrs} title="${esc(off ? `${label}. ${off}` : label)}"><span class="ql">${esc(label)}${off ? `<small id="quiet-why">${esc(off)}</small>` : ""}</span>${chev}</button></div>`;
 }
 
 function homeCards(m, o) {
   const h = m.home;
-  const hello = o.hideHello || !h.hello ? "" : `<p class="hello">${esc(h.hello.text)}${h.hello.sub ? `<small>${esc(h.hello.sub)}</small>` : ""}</p>`;
-  return `${hello}${upNextCard(h, o)}${practiceCard(h, o)}${memoryCard(h, h.has_history)}`;
+  const hello = (o && o.hideHello) || !h.hello ? "" : `<p class="hello">${esc(h.hello.text)}</p>`;
+  const link = m.ask.thread ? `<div class="thread-link">${btn(A.back_to_question, "back_question", "quiet")}</div>` : "";
+  return `${hello}${askCard(m)}${quietLine(m)}${link}`;
 }
 
 const focusText = (v) => (v && Array.isArray(v.focus) && v.focus.length ? v.focus.join(", ") : null);
@@ -89,21 +124,6 @@ function lessonTitle(m, v) {
   return focus ? COPY.lesson.on(name, focus) : name;
 }
 
-// Lesson in progress, or Your lesson is waiting (FR-024, FR-026).
-function lessonCard(m, kind) {
-  const saved = kind === "waiting" ? m.saved_lesson : null;
-  const v = saved ? saved.lesson : m.lesson;
-  const copy = kind === "waiting" ? COPY.home.cutoff : COPY.home.lesson_open;
-  const l = v && v.check_list;
-  const bits = [l && l.summary, saved && l && l.checked_at ? `${COPY.lesson.last_check} ${checkClock(l.checked_at)}` : null].filter(Boolean).join(" · ");
-  const answering = kind !== "waiting" && !!m.turn && !!m.turn.busy; // FR-060, FR-061
-  const actions = kind === "waiting"
-    ? btn(COPY.buttons.continue, "continue", "primary") + btn(copy.set_aside, "set_aside")
-    : btn(COPY.buttons.back_lesson, "back_lesson", "primary") + btn(COPY.buttons.end_lesson, "end_lesson", "", answering ? "disabled" : "");
-  const why = answering ? `<p class="meta">${esc(COPY.paused.end_after_answer)}</p>` : "";
-  return `<section class="card lead note" aria-label="${esc(copy.kicker)}"><div class="kicker accent">${esc(copy.kicker)}</div><h3 data-title tabindex="-1">${esc(v ? lessonTitle(m, v) : "")}</h3>${bits ? `<p class="meta">${esc(bits)}</p>` : ""}<div class="row">${actions}</div>${why}<p class="meta">${esc(copy.note)}</p></section>`;
-}
-
 function checkClock(iso) {
   const d = new Date(iso);
   if (isNaN(d.getTime())) return "";
@@ -112,39 +132,152 @@ function checkClock(iso) {
 }
 
 function homeBody(m) {
+  const tryBtn = m.reconnecting ? pressed(COPY.buttons.pressed.find) : btn(COPY.buttons.try_again, "reconnect");
   switch (m.state) {
     case "err-mentor": case "err-key": case "err-credit":
-      return { banner: banner("bad", m.error.title, m.error.body, btn(COPY.buttons.try_again, "try_again")),
-        cards: `${m.lesson_open ? lessonCard(m, "open") : ""}${homeCards(m, { off: true, reason: COPY.paused.needs_mentor, lessonOpen: m.lesson_open, hideHello: m.lesson_open })}` };
-    case "home-lessonopen":
-      return { banner: "", cards: `${lessonCard(m, "open")}${homeCards(m, { off: true, reason: COPY.paused.after_lesson, lessonOpen: true, hideHello: true })}` };
-    case "home-cutoff":
-      return { banner: "", cards: `${lessonCard(m, "waiting")}${homeCards(m, { dim: true, hideHello: true })}` };
+      return { banner: banner("bad", m.error.title, m.error.body, btn(COPY.buttons.try_again, "try_again")), cards: homeCards(m, { hideHello: m.lesson_open }) };
     case "home-aeclosed":
-      return { banner: banner("info", COPY.home.aeclosed.title, COPY.home.aeclosed.body, btn(COPY.buttons.got_it, "got_it_aeclosed")), cards: homeCards(m, {}) };
+      return { banner: banner("info", COPY.home.aeclosed.title, COPY.home.aeclosed.body, btn(COPY.buttons.got_it, "got_it_aeclosed")), cards: homeCards(m) };
     case "home-unreachable":
-      return { banner: banner("bad", COPY.home.unreachable.title, COPY.home.unreachable.body, m.reconnecting ? pressed(COPY.buttons.pressed.find) : btn(COPY.buttons.try_again, "reconnect")),
-        cards: homeCards(m, { off: true, reason: COPY.paused.needs_ae }) };
+      return { banner: banner("bad", COPY.home.unreachable.title, COPY.home.unreachable.body, tryBtn), cards: homeCards(m) };
     case "home-busy":
-      return { banner: banner("warn", COPY.home.busy.title, COPY.home.busy.body, m.reconnecting ? pressed(COPY.buttons.pressed.find) : btn(COPY.buttons.try_again, "reconnect")),
-        cards: homeCards(m, { off: true, reason: COPY.paused.waiting_ae }) };
+      return { banner: banner("warn", COPY.home.busy.title, COPY.home.busy.body, tryBtn), cards: homeCards(m) };
     case "home-unreadable":
       return { banner: banner("warn", COPY.home.unreadable.title, COPY.home.unreadable.body, btn(COPY.buttons.what_happened, "what_happened")), cards: homeCards(m, { hideHello: true }) };
     case "home-unreadable-why":
       return { banner: banner("warn", COPY.home.unreadable_why.title, COPY.home.unreadable_why.body, btn(COPY.buttons.got_it, "got_it_unreadable")), cards: homeCards(m, { hideHello: true }) };
     default:
-      return { banner: "", cards: homeCards(m, m.answering_after_pass ? { off: true, reason: COPY.paused.after_answer } : {}) };
+      return { banner: "", cards: homeCards(m, { hideHello: m.lesson_open }) };
   }
 }
 
-const SKELETON = `<div class="scroll" aria-busy="true"><div class="skel skel-55"></div><div class="skel skel-80"></div><div class="card"><div class="skel skel-30"></div><div class="skel skel-60"></div><div class="skel"></div></div><div class="card"><div class="skel skel-30"></div><div class="skel"></div><div class="skel skel-70"></div></div></div>`;
+// One card and one line (MU home-loading).
+const SKELETON = `<div class="scroll" aria-busy="true"><div class="card"><div class="skel skel-30"></div><div class="skel skel-55"></div><div class="skel skel-box"></div><div class="skel skel-30 skel-end"></div></div><div class="skel skel-60"></div></div>`;
 
 function homeHtml(m) {
   if (m.state === "home-loading") return SKELETON + statusline(COPY.status.history);
   if (m.record && m.record.status === "pending") return "";
   const b = homeBody(m);
-  const status = m.reconnecting ? statusline(COPY.status.looking_ae) : "";
+  let status = m.reconnecting ? statusline(COPY.status.looking_ae) : "";
+  if (m.ask.sending) status = statusline(A.reading);
   return `${b.banner}<div class="scroll">${b.cards}</div>${status}`;
+}
+
+// ---------- the ask thread (spec 014 T023, MU › Asking) ----------
+
+const learnerMsg = (text) => `<div class="msg learner"><span>${esc(text)}</span></div>`;
+const skeletonMsg = () => `<div class="msg mentor" aria-busy="true"><div class="who">${esc(COPY.mentor_label)}</div><div class="skel skel-85"></div><div class="skel skel-70"></div><div class="skel skel-40"></div></div>`;
+
+function stepItems(steps) {
+  return steps.map((st) => `<li>${esc(st.text)}${st.tag ? ` <em class="skill">${esc(st.tag)}</em>` : ""}</li>`).join("");
+}
+
+// One Go deeper per offer, inside its answer (FR-048, FR-050). Gray, not primary: the usual choice
+// is to try the steps. Paused, it stays focusable with its reason linked.
+function deeperHtml(m, offers, i) {
+  if (!offers.length) return "";
+  const off = m.follow_off;
+  const pressedSkill = m.ask.busy ? m.ask.pressed : null;
+  const why = `deeper-why-${i}`;
+  const btns = offers.map((o) => {
+    if (pressedSkill === o.skill) return pressed(COPY.buttons.pressed.start);
+    return off && !pressedSkill
+      ? `<button type="button" class="deeper-btn" aria-disabled="true" aria-describedby="${why}">${esc(A.go_deeper(o.tag))}</button>`
+      : `<button type="button" class="deeper-btn" data-action="go_deeper" data-skill="${esc(o.skill)}"${pressedSkill ? ` aria-disabled="true" aria-describedby="${why}"` : ""}>${esc(A.go_deeper(o.tag))}</button>`;
+  }).join("");
+  const reason = off && !pressedSkill ? off : pressedSkill ? A.answering : null;
+  return `<div class="deeper">${btns}${reason ? `<p class="why-off" id="${why}">${esc(reason)}</p>` : ""}</div>`;
+}
+
+// FR-048: explanation, then (only with steps) the Steps heading and the numbered list from the step
+// data, then the closing offer, then Go deeper. The turn's prose isn't drawn beside a valid view
+// (research R2). With no view, the mentor's words as they came.
+function answerHtml(m, entry, i, srcs, frames) {
+  const v = entry.view;
+  const pics = framesHtml(srcs || []);
+  if (!v) {
+    if (!entry.prose) return "";
+    return `<div class="msg mentor" tabindex="-1"><div class="who">${esc(COPY.mentor_label)}</div>${renderMentorText(entry.prose)}${pics}</div>`;
+  }
+  const steps = v.steps.length
+    ? `<section class="stepsblock" aria-labelledby="ask-steps-h-${i}"><h3 class="steps-lbl" id="ask-steps-h-${i}">${esc(A.steps)}</h3><ol class="ans">${stepItems(v.steps)}</ol></section>`
+    : "";
+  const offers = entry.folded ? [] : v.offers;
+  return `<div class="msg mentor" tabindex="-1"><div class="who">${esc(COPY.mentor_label)}</div>${renderMentorText(v.explanation)}${pics}${steps}${v.closing_offer ? renderMentorText(v.closing_offer) : ""}${deeperHtml(m, offers, i)}</div>`;
+}
+
+function entryHtml(m, entry, i) {
+  const parts = [learnerMsg(entry.text)];
+  const last = i === m.thread.questions.length - 1;
+  if (last && m.ask_turn) {
+    // In flight: the answer's view as soon as it's in, else any prose as it streams, else a skeleton.
+    const live = Object.assign({}, entry, { view: m.ask_turn.view, prose: m.ask_turn.committed || null });
+    parts.push(answerHtml(m, live, i, m.ask_turn.srcs) || skeletonMsg());
+  } else {
+    parts.push(answerHtml(m, entry, i, (m.ask_frames || {})[i]));
+  }
+  if (entry.notice) parts.push(`<div class="msg notice" role="status" tabindex="-1">${entry.notice.title ? `<b>${esc(entry.notice.title)}</b> ` : ""}${esc(entry.notice.text)}</div>`);
+  return parts.filter(Boolean).join("");
+}
+
+function threadChat(m) {
+  const th = m.thread;
+  const items = [];
+  let earlier = null;
+  const folded = [];
+  th.questions.forEach((q, i) => {
+    const html = entryHtml(m, q, i);
+    if (q.folded) folded.push(html);
+    else items.push(`<div class="turn">${html}</div>`);
+  });
+  if (folded.length) {
+    const n = th.questions.filter((q) => q.folded && q.kind === "question").length;
+    earlier = `<details class="earlier"><summary>${esc(A.earlier(n))}</summary>${folded.join("")}</details>`;
+  }
+  return { earlier, items };
+}
+
+// Your steps (FR-049): the checklist frame, folded, holding only the latest answer's steps. No
+// glyphs or ticks, ever; nothing is pressable. At short docks it swaps with the chat.
+function stepsDock(m) {
+  const steps = m.thread.latest_steps;
+  if (!steps || !steps.length) return "";
+  const open = m.ask.steps_open || m.steps_list_open;
+  return `<section class="check steps" aria-label="${esc(A.steps_aria)}"><button type="button" class="check-head" aria-expanded="${!!open}" aria-controls="ask-steps-body" data-action="toggle_steps" data-keep-focus>`
+    + `<span class="chev" aria-hidden="true"><span class="ch-tall">${m.ask.steps_open ? "▾" : "▸"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span>`
+    + `<span class="sum">${esc(A.your_steps(steps.length))}<small>${esc(A.steps_note)}</small></span></button>`
+    + `<div class="check-body" id="ask-steps-body"${open ? "" : " hidden"}><ol class="ans">${stepItems(steps)}</ol></div></section>`;
+}
+
+function threadStatus(m) {
+  if (m.state === "ask-busy" && m.ask.busy) return statusline(A.busy_status);
+  if (!m.ask.busy) return "";
+  if (m.ask.pressed && m.ask.pressed !== "try_again") return statusline(COPY.status.lesson_ready); // Go deeper pressed
+  return statusline(m.ask.long ? A.reading_long : A.reading);
+}
+
+function threadActions(m) {
+  const s = m.state;
+  if (s === "ask-outside") return `<div class="actions">${btn(A.see_covered, "see_covered", "quiet")}</div>`;
+  const q = m.thread.questions[m.thread.questions.length - 1];
+  const retryable = q && q.answered && (q.notice || s === "ask-nocomp" || (s === "ask-unreachable" && !q.view));
+  if (m.ask.busy && m.ask.pressed === "try_again") return `<div class="actions">${pressed(COPY.buttons.pressed.try)}</div>`;
+  if (!retryable || m.ask.busy) return "";
+  const off = s === "ask-unreachable" ? null : m.follow_off;
+  return `<div class="actions">${off ? `<button type="button" class="primary" aria-disabled="true" aria-describedby="retry-why">${esc(COPY.buttons.try_again)}</button><p class="why-off" id="retry-why">${esc(off)}</p>` : btn(COPY.buttons.try_again, "ask_try_again", "primary")}</div>`;
+}
+
+// The follow-up bar: spec 007's single-line Ask bar. Paused, the box still takes text and Send says
+// why (FR-054); a paused send keeps what was typed.
+function followBar(m) {
+  const off = m.follow_off;
+  const send = `<button type="submit" aria-label="${esc(COPY.buttons.send)}"${off ? ' aria-disabled="true" aria-describedby="ask-in-why"' : ""}>⏎</button>`;
+  return `<form class="ask" data-followup autocomplete="off"><label class="sr" for="ask-in">${esc(A.followup_label)}</label><input id="ask-in" type="text" data-keep-value placeholder="${esc(A.followup_placeholder)}" />${send}</form>${off ? `<p class="ask-why" id="ask-in-why">${esc(off)}</p>` : ""}`;
+}
+
+function threadRegions(m) {
+  const head = `<div class="lhead thread-head"><button type="button" class="back" data-action="thread_back" aria-label="${esc(A.back_thread)}" title="${esc(A.back_thread)}">‹</button><div class="ltitle"><span class="kicker">${esc(A.thread_kicker)}</span><strong data-title tabindex="-1">${esc(A.thread_title)}</strong></div></div>`;
+  return { head, banner: "", chat: threadChat(m), list: stepsDock(m), status: threadStatus(m), actions: threadActions(m), ask: followBar(m), list_open: !!m.steps_list_open };
 }
 
 // ---------- the Lesson tab ----------
@@ -397,11 +530,22 @@ function skillRowHtml(r) {
   return `<li class="${esc(r.cls)}">${body}</li>`;
 }
 
+// Practice due, moved off Home (spec 014 FR-055, MU skills-due): one line at the top, the first due
+// skill in path order with a count of the rest, and Warm up.
+function dueLine(m) {
+  const p = m.home.practice;
+  if (!p) return "";
+  const sub = [COPY.skills.due_line(p.last_practiced), p.rest ? COPY.skills.more_due(p.rest) : null].filter(Boolean).join(" · ");
+  const off = homeOff(m);
+  const go = off ? `<button type="button" aria-disabled="true" aria-describedby="due-why">${esc(COPY.buttons.warm_up)}</button>` : btn(COPY.buttons.warm_up, "warm_up", "", `data-skill="${esc(p.skill)}"`);
+  return `<section class="dueline" aria-label="${esc(COPY.home.practice_due)}"><span class="g" aria-hidden="true">↻</span><span class="n">${esc(p.name)}<small>${esc(sub)}</small>${off ? `<small id="due-why">${esc(off)}</small>` : ""}</span>${go}</section>`;
+}
+
 function skillsHtml(m) {
   const v = m.skills_view;
   if (m.detail) return detailHtml(m, m.detail);
   const bars = `<i class="l"></i>`.repeat(v.learned) + `<i class="p"></i>`.repeat(v.in_progress) + `<i></i>`.repeat(Math.max(0, v.total - v.learned - v.in_progress));
-  return `<div class="scroll"><h2 class="lbl" data-title tabindex="-1">${esc(COPY.skills.title)}</h2><p class="lead-count">${esc(v.summary)}</p><div class="meter" role="img" aria-label="${esc(v.summary)}">${bars}</div><p class="meta">${esc(COPY.skills.pick)}</p><ul class="skills">${v.rows.map(skillRowHtml).join("")}</ul></div>`;
+  return `<div class="scroll"><h2 class="lbl" data-title tabindex="-1">${esc(COPY.skills.title)}</h2><p class="lead-count">${esc(v.summary)}</p><div class="meter" role="img" aria-label="${esc(v.summary)}">${bars}</div>${dueLine(m)}<p class="meta">${esc(COPY.skills.pick)}</p><ul class="skills">${v.rows.map(skillRowHtml).join("")}</ul>${memoryCard(m.home)}</div>`;
 }
 
 function detailHtml(m, d) {
@@ -420,6 +564,7 @@ function detailHtml(m, d) {
 
 function homeOff(m) {
   if (m.lesson_open) return COPY.paused.after_lesson;
+  if (m.ask && (m.ask.busy || m.ask.sending)) return COPY.ask.after_answer;
   if (m.answering_after_pass) return COPY.paused.after_answer;
   if (m.error && m.error.blocks_home) return COPY.paused.needs_mentor;
   const conn = m.connection && m.connection.state;
@@ -430,6 +575,7 @@ function homeOff(m) {
 
 function renderApp(m) {
   const nav = navHtml(m);
+  if (m.tab === "home" && /^ask-/.test(m.state || "") && m.state !== "ask-typing" && m.state !== "ask-sending") return { nav, view: "", lesson: threadRegions(m) };
   if (m.tab === "home") return { nav, view: homeHtml(m), lesson: null };
   if (m.tab === "skills") return { nav, view: skillsHtml(m), lesson: null };
   if (!m.lesson || m.state === "lesson-none" || /^err-/.test(m.state) && !m.lesson_open) return { nav, view: `${/^err-/.test(m.state) ? banner("bad", m.error.title, m.error.body, btn(COPY.buttons.try_again, "try_again")) : ""}${lessonNoneHtml()}`, lesson: null };

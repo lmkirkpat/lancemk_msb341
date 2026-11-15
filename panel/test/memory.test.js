@@ -87,3 +87,24 @@ test("reading never writes", () => {
   readLearnerRecord({ home: path.join(RECORDS, "unreadable"), fs: spy });
   assert.deepEqual(calls, []);
 });
+
+// ---------- spec 014 T021: What the mentor remembers moved from Home to Skills, under the path ----------
+const { ready, plain, LESSON } = require("./app-harness.js");
+const { renderApp } = require("../lib/screens.js");
+
+test("the memory section draws on Skills, after the path, and never on Home", async () => {
+  const h = await ready({ memory: { status: "ok", record: LESSON } });
+  assert.equal(plain(renderApp(h.app.model()).view).includes(COPY.home.memory_title), false, "not on Home (decisions/012)");
+  h.app.act("tab", { tab: "skills" });
+  const v = plain(renderApp(h.app.model()).view);
+  assert.ok(v.includes(COPY.home.memory_title));
+  assert.ok(v.indexOf(COPY.home.memory_title) > v.indexOf('class="skills"'), "under the path");
+  assert.ok(v.includes("Glow next."), "the record's next line");
+  assert.equal(v.includes(COPY.buttons.all_skills), false, "no link to where it already is");
+});
+
+test("an empty record's memory line still reads on Skills", async () => {
+  const h = await ready();
+  h.app.act("tab", { tab: "skills" });
+  assert.ok(plain(renderApp(h.app.model()).view).includes(COPY.home.memory_empty));
+});

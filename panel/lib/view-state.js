@@ -1,11 +1,16 @@
 // Model → one README state id (spec 007 FR-006, data-model › View state). Pure: the panel's model
 // comes from tool results, the record and the panel's own files. Step 2 and 3 fields (offset_kind,
 // pivot_keyed, null_stage, no_new_target) are filled in by those tasks. test/view-state.test.js
-// checks STATE_IDS against the README's table.
+// checks STATE_IDS against the README's table, and against spec 014's mockup
+// (product/mockups/ask-mentor, MU): ask-first Home, the ask thread, Skills with a review due.
 "use strict";
 
-// The README's ids that draw the same screen as another: the gallery view of a lesson state.
-const ALIASES = Object.freeze({ "skill-easing-check": "lesson-partial" });
+// The README's ids that draw the same screen as another: the gallery view of a lesson state, and
+// MU's home-review-due, identical to home-return on purpose (the review is in Skills).
+const ALIASES = Object.freeze({ "skill-easing-check": "lesson-partial", "home-review-due": "home-return" });
+// MU's go-deeper ids: spec 014 phase 2 (T054) draws them. Named here so the MU test can tell them
+// from a state this phase forgot.
+const DEEPER_IDS = Object.freeze(["home-lessonopen-deeper", "ask-deeper-starting", "ask-deeper-lesson", "ask-deeper-notyet", "ask-deeper-passed", "ask-lessonopen", "ask-back", "ask-ended"]);
 const INTERIM_IDS = Object.freeze([]);
 
 const SKILL_SLUGS = {
@@ -18,9 +23,11 @@ const SKILL_SLUGS = {
 
 const STATE_IDS = Object.freeze([
   "err-mentor", "err-key", "err-credit",
-  "home-loading", "home-first", "home-return", "home-lessonopen", "home-cutoff", "home-aeclosed",
-  "home-unreachable", "home-busy", "home-unreadable", "home-unreadable-why",
-  "skills-empty", "skills-few", "skills-many", "skills-after-review",
+  "home-loading", "home-first", "home-return", "home-lessonopen", "home-inprogress", "home-aeclosed",
+  "home-unreachable", "home-busy", "home-unreadable", "home-unreadable-why", "home-nocomp", "home-thread",
+  "ask-typing", "ask-sending", "ask-reading", "ask-reading-long", "ask-answer", "ask-followup", "ask-steps-open",
+  "ask-clarify", "ask-outside", "ask-unreachable", "ask-nocomp", "ask-busy", "ask-new-question",
+  "skills-empty", "skills-few", "skills-many", "skills-after-review", "skills-due",
   "skill-detail", "skill-detail-noreview", "skill-detail-new",
   "lesson-none", "lesson-starting", "lesson-picking", "lesson-picking-starting", "lesson-picked",
   "lesson-open", "lesson-focus-replying", "lesson-focus-stale", "lesson-focused", "lesson-demo",
@@ -38,25 +45,49 @@ const STATE_IDS = Object.freeze([
   ...INTERIM_IDS,
 ]);
 
+const askOf = (m) => m.ask || {};
+
 function homeState(m) {
   if (m.error && m.error.blocks_home) return m.error.state;
   if (m.record && m.record.status === "loading") return "home-loading";
   if (m.lesson_open) return "home-lessonopen";
-  if (m.saved === "waiting") return "home-cutoff";
+  if (askOf(m).sending) return "ask-sending";
+  if (m.saved === "waiting") return "home-inprogress";
   if (m.saved === "aeclosed") return "home-aeclosed";
   const conn = m.connection && m.connection.state;
   if (conn === "not_connected") return "home-unreachable";
   if (conn === "busy") return "home-busy";
+  if (conn === "connected" && m.connection.comp_active === false) return "home-nocomp"; // FR-047: only a false
   if (m.record && m.record.status === "unreadable" && !m.unreadable_dismissed) return m.unreadable_why ? "home-unreadable-why" : "home-unreadable";
+  if (askOf(m).thread) return "home-thread";
+  if (m.draft) return "ask-typing";
   if (!m.has_history) return "home-first";
   return "home-return";
+}
+
+// The thread on the Home tab (MU › Asking). m.ask: { thread, busy, long, answered, latest_kind,
+// view_kind, earlier_count, has_steps, steps_open }.
+function threadState(m) {
+  const a = askOf(m);
+  const conn = m.connection && m.connection.state;
+  if (conn === "not_connected") return "ask-unreachable";
+  if (conn === "busy") return "ask-busy";
+  if (a.busy && !a.answered) return a.long ? "ask-reading-long" : "ask-reading";
+  if (a.view_kind === "no_comp") return "ask-nocomp";
+  if (a.view_kind === "clarify") return "ask-clarify";
+  if (a.view_kind === "outside") return "ask-outside";
+  if (a.steps_open && a.has_steps) return "ask-steps-open";
+  if (a.latest_kind === "followup") return "ask-followup";
+  if (a.earlier_count > 0) return "ask-new-question";
+  return "ask-answer";
 }
 
 function skillsState(m) {
   if (m.skill_detail === "review") return "skill-detail";
   if (m.skill_detail) return `skill-detail-${m.skill_detail}`;
   if (m.step === 1 || !m.skills_state) return null; // step 1's one-line interim (plan P9) has no id
-  return m.skills_state === "after_review" ? "skills-after-review" : `skills-${m.skills_state}`;
+  if (m.skills_state === "after_review") return "skills-after-review";
+  return `skills-${m.skills_state}`; // "due" since spec 014: Practice due moved here (MU skills-due)
 }
 
 function errorState(m, v) {
@@ -127,6 +158,7 @@ function stateOf(m) {
   if (!m || !m.config_ok) return null; // the not-set-up message stays as it is (FR-055)
   if (m.tab === "lesson") return lessonState(m);
   if (m.tab === "skills") return skillsState(m);
+  if (m.home_view === "thread" && askOf(m).thread && !(m.error && m.error.blocks_home)) return threadState(m);
   return homeState(m);
 }
 
@@ -138,4 +170,4 @@ function listCollapsed(m) {
   return m.list_collapsed === null ? COLLAPSED_BY_DEFAULT.has(m.state) : m.list_collapsed;
 }
 
-module.exports = { stateOf, listCollapsed, STATE_IDS, ALIASES, INTERIM_IDS };
+module.exports = { stateOf, listCollapsed, STATE_IDS, ALIASES, INTERIM_IDS, DEEPER_IDS };

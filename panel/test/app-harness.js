@@ -32,13 +32,13 @@ function fakeAdapter(opts) {
   return a;
 }
 
-// opts: { memory, pathData, runtime, saved, adapter, sendThrows, onStart, createAdapter }.
+// opts: { memory, pathData, runtime, saved, thread, adapter, sendThrows, onStart, createAdapter }.
 // createAdapter: a real adapter in place of the fake (its events come from its own process).
 function makeApp(opts) {
   const o = opts || {};
   const adapters = [];
   const log = [];
-  const saved = { current: o.saved === undefined ? null : o.saved };
+  const saved = { current: o.saved === undefined ? null : o.saved, thread: o.thread === undefined ? null : o.thread };
   const session = {
     read: () => saved.current,
     write: (s) => { saved.current = JSON.parse(JSON.stringify(s)); },
@@ -47,6 +47,10 @@ function makeApp(opts) {
     readFrame: (f) => (f === "/gone.png" ? null : "AAAA"),
     newSession: ps.newPanelSession,
     savedStatus: ps.savedStatus,
+    // spec 014 T026: the thread's own slot in panel-session.json
+    readThread: () => saved.thread,
+    writeThread: (t) => { saved.thread = JSON.parse(JSON.stringify(t)); },
+    clearThread: () => { saved.thread = null; },
   };
   let polled = 0;
   const app = createApp({

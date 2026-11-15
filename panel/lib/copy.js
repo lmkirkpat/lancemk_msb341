@@ -86,6 +86,8 @@ const COPY = {
     in_progress: "In progress.",
     builds_on: (names) => `This builds on ${names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}` : names[0]}. The mentor will suggest that lesson first.`,
     skill_kicker: "Skill",
+    due_line: (date) => (date ? `Practice due · last practiced ${date}` : "Practice due"),
+    more_due: (n) => `${n} more due`,
   },
   // Spec 014's ask-first Home and the ask thread (product/mockups/ask-mentor › Copy). The mentor's
   // answer reaches the panel as data (give_answer); only the words around it are here.
@@ -106,6 +108,7 @@ const COPY = {
     followup_placeholder: "Ask a follow-up…",
     followup_label: "Ask a follow-up",
     steps: "Steps",
+    steps_aria: "Your steps",
     your_steps: (n) => `Your steps · ${n}`,
     steps_note: "From the answer. Knack doesn't track these.",
     go_deeper: (tag) => `Go deeper: ${tag} ›`,
@@ -122,7 +125,7 @@ const COPY = {
     last_step: "That was the last step.",
   },
   quiet: {
-    pick_up: (skill, focus) => `Pick up ${skill} on ${focus}`,
+    pick_up: (skill, focus) => (focus ? `Pick up ${skill} on ${focus}` : `Pick up ${skill}`),
     not_finished: "Not finished yet.",
     back_lesson: "Back to your lesson",
     end_note: "If you end now, this lesson won't be saved.",

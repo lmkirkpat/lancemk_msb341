@@ -1,6 +1,8 @@
-// Home (FR-007, FR-008, FR-010): from the learner record and the path data alone, with no mentor
-// turn. First run: the path's first skill. With a record: Find my next lesson, naming no skill,
-// because nothing stores a recommendation (FR-009, FR-013).
+// Home, ask-first (spec 014 FR-055 amending spec 007 FR-007 to FR-010, decisions/012, MU › Home):
+// from the learner record and the path data alone, with no mentor turn (FR-008 still holds). Home is
+// the ask card and one quiet line; the line itself depends on the lesson state, so screens.js picks
+// it. What the mentor remembers and Practice due are worked out here but drawn on Skills (FR-050,
+// FR-051 moved), so nothing from the record leads at the door.
 "use strict";
 
 const nodeFs = require("fs");
@@ -10,7 +12,7 @@ const { practiceDue } = require("./skills-view.js");
 const { REQUESTS } = require("./requests.js");
 const { COPY } = require("./copy.js");
 
-// Which skill Up next starts on a first run.
+// Which skill Start lesson means with no skill named (the app's act("start"); Home no longer draws it).
 const START_REQUESTS = { "easing.basic": REQUESTS.start };
 
 function startRequest(skillId) {
@@ -28,11 +30,6 @@ function readPathData(opts) {
   }
 }
 
-function helloLine(m) {
-  const what = [m.skill, m.result].filter(Boolean).join(", ");
-  return m.date ? `${COPY.home.last_lesson} ${m.date}: ${what}.` : `${COPY.home.last_lesson}: ${what}.`;
-}
-
 // memory: readLearnerRecord's result. pathData: readPathData's result. built and now: for Practice due.
 function homeView({ memory, pathData, built, now }) {
   const unreadable = memory.status === "unreadable";
@@ -40,29 +37,11 @@ function homeView({ memory, pathData, built, now }) {
   const has_history = lessons.length > 0;
   const skills = pathData && Array.isArray(pathData.skills) ? pathData.skills : [];
   const names = Object.fromEntries(skills.map((s) => [s.id, s.name]));
-  const first = skills[0] || null;
-
-  const view = memoryView(memory.status === "ok" ? memory.record : null, { names });
-  let hello = null;
-  if (!unreadable) hello = has_history ? { text: COPY.home.welcome_back, sub: helloLine(view) } : { text: COPY.home.welcome_first, sub: null };
-
-  let up_next = null;
-  if (has_history) {
-    up_next = { kicker: COPY.home.up_next, name: COPY.home.your_next, why: COPY.home.your_next_why, start: null, find: { label: COPY.buttons.find_next }, pick_skill: COPY.buttons.pick_skill };
-  } else if (first) {
-    const req = startRequest(first.id);
-    up_next = {
-      kicker: COPY.home.up_next,
-      name: first.name,
-      skill: first.id,
-      why: COPY.reasons[first.id] || "",
-      start: req ? { kind: "start", label: req.label, request: req.request } : null,
-      pick_skill: COPY.buttons.pick_skill,
-    };
-  }
-
+  // FR-010 as amended: an empty record is the same Home plus a welcome. A returning learner gets no
+  // line from the record here: one quiet line is all Home shows (decisions/012).
+  const hello = !unreadable && !has_history ? { text: COPY.home.welcome_first, sub: null } : null;
   const practice = built && now ? practiceDue({ memory, built, now }) : null;
-  return { has_history, unreadable, hello, up_next, practice, memory: view, memory_title: COPY.home.memory_title };
+  return { has_history, unreadable, hello, practice, memory: memoryView(memory.status === "ok" ? memory.record : null, { names }), memory_title: COPY.home.memory_title };
 }
 
 module.exports = { homeView, readPathData, startRequest };

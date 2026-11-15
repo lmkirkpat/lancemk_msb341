@@ -5,7 +5,7 @@ const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("fs");
 const path = require("path");
-const { stateOf, STATE_IDS, ALIASES, INTERIM_IDS } = require("../lib/view-state.js");
+const { stateOf, STATE_IDS, ALIASES, INTERIM_IDS, DEEPER_IDS } = require("../lib/view-state.js");
 const { initialLesson } = require("../lib/lesson.js");
 const { treatError } = require("../lib/errors.js");
 
@@ -13,6 +13,7 @@ const CONNECTED = { state: "connected", started: null };
 const home = (o) => Object.assign({ config_ok: true, tab: "home", step: 2, record: { status: "ok" }, has_history: true, connection: CONNECTED }, o);
 const lessonTab = (lesson, o) => Object.assign({ config_ok: true, tab: "lesson", step: 2, record: { status: "ok" }, connection: CONNECTED, lesson_open: true, lesson: Object.assign(initialLesson(), lesson) }, o);
 const skills = (o) => Object.assign({ config_ok: true, tab: "skills", step: 2 }, o);
+const thread = (ask, o) => home(Object.assign({ home_view: "thread", ask: Object.assign({ thread: true, latest_kind: "question" }, ask) }, o));
 const err = (kind, opts) => treatError(kind, Object.assign({ runtime: "a" }, opts));
 const list = (o) => Object.assign({ source: "check", stale: null, stale_kind: null, sections: [], outside: [], proposed: false, updating: false, focus_stale: false }, o);
 const easing = { skill: "easing.basic" };
@@ -27,7 +28,23 @@ const MODELS = {
   "home-first": home({ has_history: false, record: { status: "missing" } }),
   "home-return": home(),
   "home-lessonopen": home({ lesson_open: true, lesson: initialLesson() }),
-  "home-cutoff": home({ saved: "waiting" }),
+  "home-inprogress": home({ saved: "waiting" }),
+  "home-nocomp": home({ connection: { state: "connected", started: null, comp_active: false } }),
+  "home-thread": home({ ask: { thread: true } }),
+  "ask-typing": home({ draft: true }),
+  "ask-sending": home({ ask: { sending: true } }),
+  "ask-reading": thread({ busy: true }),
+  "ask-reading-long": thread({ busy: true, long: true }),
+  "ask-answer": thread({ answered: true, view_kind: "answer", has_steps: true }),
+  "ask-followup": thread({ answered: true, latest_kind: "followup", has_steps: true }),
+  "ask-steps-open": thread({ answered: true, has_steps: true, steps_open: true }),
+  "ask-clarify": thread({ answered: true, view_kind: "clarify" }),
+  "ask-outside": thread({ answered: true, view_kind: "outside" }),
+  "ask-unreachable": thread({ answered: true }, { connection: { state: "not_connected", started: null } }),
+  "ask-nocomp": thread({ answered: true, view_kind: "no_comp" }),
+  "ask-busy": thread({ busy: true }, { connection: { state: "busy", started: null } }),
+  "ask-new-question": thread({ answered: true, view_kind: "describe", earlier_count: 1 }),
+  "skills-due": skills({ skills_state: "due" }),
   "home-aeclosed": home({ saved: "aeclosed" }),
   "home-unreachable": home({ connection: { state: "not_connected", started: null } }),
   "home-busy": home({ connection: { state: "busy", started: null } }),
@@ -118,16 +135,41 @@ function readmeIds() {
 
 const HELD = /^(setup-|err-notsetup$|homeB-|compare$|diag-|home-return-stored$|all-|compare-|home-held-slot$)/;
 
-test("the id list is the README's table, minus what's held, plus the one named addition", () => {
+// Spec 014's MU States table (product/mockups/ask-mentor/README.md › States): id → kind.
+function muStates() {
+  const text = fs.readFileSync(path.join(__dirname, "..", "..", "product", "mockups", "ask-mentor", "README.md"), "utf8");
+  const table = text.slice(text.indexOf("## States"), text.indexOf("### States still missing"));
+  const out = {};
+  for (const line of table.split("\n").filter((l) => l.startsWith("| `"))) {
+    const [, ids, kind] = line.split("|");
+    for (const m of ids.matchAll(/`([^`]+)`/g)) out[m[1]] = kind.trim();
+  }
+  return out;
+}
+
+test("the id list is spec 007's README table, minus what's held, with spec 014's changes", () => {
   const readme = readmeIds();
   assert.ok(readme.includes("skill-detail-noreview") && readme.includes("lesson-pass-busy") && readme.includes("skill-null-move"), "the expansion works");
-  const inScope = readme.filter((id) => !HELD.test(id) && !(id in ALIASES));
-  assert.deepEqual([...STATE_IDS].filter((id) => !INTERIM_IDS.includes(id)).sort(), inScope.slice().sort());
+  const mu = Object.keys(muStates()).filter((id) => !DEEPER_IDS.includes(id) && !(id in ALIASES));
+  const inScope = readme.filter((id) => !HELD.test(id) && !(id in ALIASES) && id !== "home-cutoff").concat(mu);
+  assert.deepEqual([...STATE_IDS].filter((id) => !INTERIM_IDS.includes(id)).sort(), [...new Set(inScope)].sort());
   assert.deepEqual([...INTERIM_IDS], []);
+});
+
+test("spec 014 T018: every new and changed MU id is a state, an alias, or a named phase 2 id", () => {
+  const mu = muStates();
+  const changed = Object.entries(mu).filter(([, kind]) => /new|changed/.test(kind)).map(([id]) => id);
+  assert.ok(changed.length >= 30, `only ${changed.length} read from MU's table`);
+  assert.ok(mu["home-inprogress"].includes("changed") && mu["ask-busy"] === "new", "the table reads right");
+  for (const id of changed) assert.ok(STATE_IDS.includes(id) || id in ALIASES || DEEPER_IDS.includes(id), id);
+  assert.equal(STATE_IDS.includes("home-cutoff"), false, "home-cutoff is home-inprogress now");
+  assert.equal(ALIASES["home-review-due"], "home-return");
+  for (const id of DEEPER_IDS) assert.ok(id in mu, `${id} is MU's`);
 });
 
 test("every id has a model here (SC-003's list), and no alias is its own state", () => {
   assert.deepEqual(Object.keys(MODELS).sort(), [...STATE_IDS].sort());
+  for (const id of Object.keys(ALIASES)) assert.equal(STATE_IDS.includes(id), false, id);
   assert.equal(ALIASES["skill-easing-check"], "lesson-partial");
 });
 
@@ -163,4 +205,26 @@ test("a config that isn't set up has no id (FR-055's message stays)", () => {
 
 test("step 1's one-line Skills tab has no README id", () => {
   assert.equal(stateOf(skills({ step: 1 })), null);
+});
+
+// ---------- spec 014: Home and thread precedence ----------
+
+test("comp_active: only a connected false is home-nocomp; unknown leaves Home as it was (FR-047)", () => {
+  assert.equal(stateOf(home({ connection: { state: "connected", started: null } })), "home-return");
+  assert.equal(stateOf(home({ connection: { state: "connected", started: null, comp_active: true } })), "home-return");
+  assert.equal(stateOf(home({ connection: { state: "busy", started: null, comp_active: false } })), "home-busy");
+});
+
+test("a lesson open or in progress outranks the thread link; a thread outranks the welcome", () => {
+  assert.equal(stateOf(home({ lesson_open: true, ask: { thread: true } })), "home-lessonopen");
+  assert.equal(stateOf(home({ saved: "waiting", ask: { thread: true } })), "home-inprogress");
+  assert.equal(stateOf(home({ has_history: false, ask: { thread: true } })), "home-thread");
+});
+
+test("a blocking error shows on Home even from the thread", () => {
+  assert.equal(stateOf(thread({ busy: true }, { error: err("start_failed") })), "err-mentor");
+});
+
+test("the thread view needs a thread; Home's tab without one is Home", () => {
+  assert.equal(stateOf(home({ home_view: "thread", ask: {} })), "home-return");
 });

@@ -24,15 +24,17 @@ function suggest(h, rec) {
   h.adapter().emit("turn_end", { ok: true, kind: "find_next" });
 }
 
-test("home-return: names no skill, Find my next lesson, no mentor turn; first run keeps Start lesson", async () => {
+test("home-return: names no skill, Find my next lesson, no mentor turn; first run has it too (spec 014 FR-010)", async () => {
   const h = await ready({ memory: MEMORY, pathData: SIX_PATH });
   assert.equal(st(h), "home-return");
-  assert.ok(view(h).includes(COPY.home.your_next));
   assert.ok(view(h).includes(COPY.buttons.find_next));
   assert.equal(h.adapters.length, 0);
   const first = await ready({ memory: { status: "missing", record: null }, pathData: SIX_PATH });
   assert.equal(st(first), "home-first");
-  assert.ok(view(first).includes(COPY.buttons.start));
+  assert.ok(view(first).includes(COPY.buttons.find_next));
+  assert.equal(view(first).includes(COPY.buttons.start), false);
+  first.app.act("find_next");
+  assert.deepEqual(first.adapter().sent[0], { text: "/next-mentor", kind: "find_next" }, "one mentor turn, as decisions/012 says");
 });
 
 test("Find my next lesson: no strip or list, status while it looks, and it writes no display log", async () => {
