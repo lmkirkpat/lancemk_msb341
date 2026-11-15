@@ -135,7 +135,9 @@ function expressionChanges(baseline, b, current, c) {
     let what = null;
     if (onW !== onN) what = onN ? "turned_on" : "turned_off";
     else if (w && n && w.text !== n.text) what = "text";
-    else if (w && n && (w.error || null) !== (n.error || null)) what = "error";
+    // A new error, or one gone. Not the error's wording: AE's text names the layer's index, so a
+    // renumber alone changes it (live, T015).
+    else if (w && n && !!w.error !== !!n.error) what = "error";
     if (what) out.push({ property: name(n || w), what });
   }
   return out;
@@ -337,6 +339,8 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
     const c = matchLayer(baseline, current, b);
     if (!c) continue; // a removed layer is an other change
     const times = childrenAt.has(b.index) ? [childrenAt.get(b.index)] : common(timesOf(b), timesOf(c));
+    // K2 (FR-012): no time read in both, so not compared, never "didn't move" or "moved".
+    if (!times.length) notCompared.push({ layer: b.name, time: null, reason: "no_shared_time" });
     let worst = null;
     let rawMoved = null;
     for (const t of times) {
