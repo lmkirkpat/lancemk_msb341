@@ -209,6 +209,9 @@ function resolve(snapshot, layerIndex, ref) {
   return out;
 }
 
+// Every reference in `text`, resolved as if the expression were on the layer at `layerIndex`.
+export const resolveRefs = (snapshot, layerIndex, text) => referencesIn(text).map((r) => resolve(snapshot, layerIndex, r));
+
 // ---- Values and motion (FR-003, FR-004)
 
 // The base value and the value after the expression at `time`, from the samples (research R5).
@@ -270,7 +273,7 @@ export function expressionReads(snapshot) {
     builds_on: buildsOn(x),
     builds_on_inferred: true,
     moves: movesOf(snapshot, x),
-    refs: referencesIn(x.text).map((r) => resolve(snapshot, x.layer, r)),
+    refs: resolveRefs(snapshot, x.layer, x.text),
   }));
   return { read, list };
 }
