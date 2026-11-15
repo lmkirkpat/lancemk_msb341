@@ -24,6 +24,10 @@ expressions in every skill's snapshot, and two reads at two moments could disagr
 expression on each `layers[].properties[]` entry (rejected: unkeyed properties aren't in `layers`,
 and adding them there would change what easing iterates).
 
+**Hidden dimension half (FR-006a, E29; session 2):** the hidden half of a separable Position keeps
+stale values (joined: X/Y read 960, 540; separated: Position reads the last joined value). Every new
+pass uses the snippet's existing `inUse()` test, which already keeps the keyed walk off the hidden half.
+
 ## R2. Expression text in the raw read, and its size
 
 **Decision:** the raw read keeps each expression's full text up to **20,000 characters**, with
@@ -94,9 +98,11 @@ and after are the same (T001), so it needs no special case.
 candidates. Replaying the reads with only the playhead moved gives no change (the check already
 compares at shared times), and rounding, a missing footprint and the mentor's own guess don't arise.
 The saved reply is reproduced, to 0.001 px on rock.png's edges, only by an **Anchor Point change on
-Shake Control** of about (572, −114) px: Pan Behind on the null that sits over the rock. Turn g shows it
-back, which fits an Undo. This is an inference from the saved reply, not a read of AE; T005 confirms
-it by hand.
+Shake Control** of about (572, −114) px: Pan Behind on the selected null. Turn g shows it back, which
+fits an Undo. This was an inference from the saved reply; **T005 confirmed it by hand** (session 2):
+Pan Behind on the selected Shake Control moved its base Position and Anchor Point together by
+(+561, −120), the children stayed still (0.07 px) and the shake carried on. Pan Behind acts on the
+**selected** layer, not the one under the cursor.
 
 **Consequence:** the check was right to see a change. It failed by reporting the side effect (Shake
 Control's footprint "moved up at 2.6 s") as its own entry, next to an `anchor_changed` entry the mentor
@@ -173,7 +179,7 @@ hand-written shake or wiggle whole.
 when the request touches a precomp (or asks for a comp id). It reads the active comp's precomp layers
 recursively, **once per comp id** (a memo), depth limit **5** (OQ-5), and a stack of ids for loops.
 Per comp: id, name, duration, frame rate, size, places used (layers in the project whose source is it,
-counted through `usedIn`), and its layers with the R1 fields, keyed properties (path, key count, key
+counted in each comp `usedIn` lists, since one comp can hold it twice), and its layers with the R1 fields, keyed properties (path, key count, key
 times only), and the R1 expression inventory. Per precomp layer: start time, stretch, in and out,
 `time_remap`, and when remap is on, the remap value at every outer frame from in to out (cap 600, then
 `remap_cut`). Time mapping is done in Node (`mentor/lib/precomp-time.mjs`).
@@ -181,8 +187,17 @@ times only), and the R1 expression inventory. Per precomp layer: start time, str
 **Why separate:** the skills' snapshots must not grow by the size of every inner comp (Comp 1's
 inner reads are 347 keyed properties), and FR-028 says no skill uses the contents yet.
 
-**Mapping:** without remap, `outer = start + inner × stretch / 100` (negative stretch reverses; **Live**,
-T006, still open). With remap, an inner time shows at each outer frame whose remap value is within half an inner
+**Mapping (confirmed live, T006, all 8 keys against AE's `sourceTime()` and the builder's eye):**
+- Without remap, `outer = start + inner × stretch / 100`. A negative stretch reverses, and AE reports
+  the in point **after** the out point (copy C: 3.5 and −4.5), so the shown span is
+  `[min(in, out), max(in, out))`. A key landing exactly on the upper end never shows (copy C's inner 0).
+- With remap, an inner time shows at every outer frame whose remap value equals it (within half an
+  inner frame). A flat stretch of remap is a **range**: copy D's inner 1 holds for 16 frames (0 to
+  0.5 s), inner 0 for 165 (2.5 s on). Report `{ first, last, frames }`.
+- `sourceTime()` exists only in expressions, not in ExtendScript, so the snippet can't ask AE for the
+  mapping; it reads start, stretch, in and out and the remap values, and Node maps.
+- **Places used counts layers:** `usedIn` lists comps (3 for Icon Precomp), but 4 layers use it
+  (Mentor Overlaps holds two). The snippet counts layers in each `usedIn` comp whose source is it. With remap, an inner time shows at each outer frame whose remap value is within half an inner
 frame of it. Nested mappings compound from the inside out. A key "never shows" when no outer time in
 the precomp layer's in-out range (and the outer comp's 0 to duration) maps to it.
 

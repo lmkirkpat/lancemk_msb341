@@ -57,8 +57,9 @@ step). Read-only scripts except where a plant is named.
   (SB-2).** On a duplicate of Comp 1, the agent reads Shake Control's base Position, Anchor Point and
   rock.png's footprint at 0.6 s; the builder uses Pan Behind on Shake Control by hand; the agent reads
   again at 0.6 s. Answer: did the base value and anchor change together, and did the children stay
-  still? **Also confirms turn f's likely action:** with the null over the rock, does Pan Behind take
-  Shake Control (the layer under the cursor), and does its anchor change match T004's fitted
+  still? **Also confirms turn f's likely action:** does Pan Behind take Shake Control when it's
+  selected (correction, session 2: it acts on the selected layer, not the one under the cursor), and
+  does its anchor change match T004's fitted
   (572, −114) px in kind? Script in `mentor/dev/live-015/pan-behind-read.jsx`. At the same sitting,
   run once as written the three scripts folded together after the live runs and not yet run:
   `separate-dims.jsx`, the renumber step in `random-expression.jsx`, and the edited
@@ -78,7 +79,9 @@ step). Read-only scripts except where a plant is named.
   and hand it back to the builder before T010. **Done 2026-11-14 for T001 to T004** (spec Amendment
   1; research R3, R5, R6, R7; data-model § 1 and § 5). T004 changed US3, SC-005 and added FR-013a,
   FR-014a and OQ-8, so it goes back to the builder before T022. T005 and T006's answers get a short
-  second fold when they run.
+  second fold when they run. **Second fold done 2026-11-14 for T005 and T006** (spec Amendment 2: new
+  FR-006a and E29; FR-023 to FR-025, SC-005 (a), SC-011, SC-012, E21 to E23 tightened; research R1,
+  R6, R12; data-model § 1 and § 7). Nothing in it changes an approved decision.
 
 **Checkpoint:** live facts logged; research matches them.
 
@@ -114,7 +117,8 @@ step). Read-only scripts except where a plant is named.
   (`--measure 25,26 --times 0.6`), Mentor Practice, Mentor Practice 2, Mentor Overlaps, and one
   duplicate comp with the planted cases from T001 and T002 (an erroring expression on a transform
   and on an effect property; a `wiggle` layer with a layer added above it, read before and after, E28)
-  plus: a link to a guide layer, a link to a
+  plus: a joined layer and a separated layer whose hidden half holds a different stale value (E29),
+  a link to a guide layer, a link to a
   matte, a link by index and by `index - 1`, a `comp("…")` reference, a run-time name, a Source Text
   expression, a constant `value` expression on a parent (E19), and a comp with 30 expressions (for
   SC-007). Reset and strict-compare every original.
@@ -136,7 +140,8 @@ step). Read-only scripts except where a plant is named.
   a given time (FR-003), and `moves` from the sweeps or `not_read` (FR-004). Tests in
   `mentor/test/expressions-read.test.mjs`: SC-001's 3 expressions with text identical to
   `comp1-ground-truth.json`; SC-003's (960, 540) and (952.4, 542.5) within 0.1 px at 0.6 s; E1 to E4,
-  E7, E9, E27.
+  E7, E9, E27; E29 (FR-006a: on T015's joined and separated layers, no expression, base value or sweep
+  comes from the hidden half).
 - [ ] T018 [US1] (skill-builder) Add the builds-on classifier to `mentor/lib/expressions.mjs`
   (research R3: `builds_on`, `sets_own`, `cant_tell`, always `inferred: true`). Tests in
   `mentor/test/expressions-builds-on.test.mjs`: Comp 1 gives 2 `builds_on` and 1 `sets_own`; E5
@@ -282,21 +287,28 @@ pivot and null.
 
 - [ ] T043 [US4] (skill-builder) Create `mentor/jsx/precomp-contents.jsx` (research R12;
   contracts/snippets.md): recursion by comp id with a memo, `max_depth` default 5, an id stack for
-  loops, places used through `usedIn`, per-layer R1 fields, keyed properties as path, count and
-  times, the expression inventory, and remap values per outer frame (cap 600, `remap_cut`).
+  loops, places used counted as **layers** in each comp `usedIn` lists (FR-023), per-layer R1 fields
+  with in and out points as AE reports them (in after out on a negative stretch), keyed properties as
+  path, count and times, skipping the hidden half of a separable Position (FR-006a), the expression
+  inventory, and remap values per outer frame (cap 600, `remap_cut`). No `sourceTime()`: it's
+  expression-only (research R12).
 - [ ] T044 [US4] (skill-builder) Add `--contents <file>` to `mentor/dev/capture.mjs` and the fixture
   twin `mentor/fixture/precomp-contents.mjs` (state file key `contents`; `not_read: fixture` without
   it). Tests in `mentor/test/fixture-precomp.test.mjs`.
 - [ ] T045 [US4] (skill-builder, AE) Capture into `mentor/test/fixtures/precomps/`: Comp 1's project,
-  Mentor Practice (Icon), and T006's four planted copies plus a 7-deep nest (for the depth limit).
+  Mentor Practice (Icon), and T006's four copies, re-planted with `mentor/dev/live-015/time-mapping.jsx`
+  (the T006 comp was deleted) and deleted again after, plus a 7-deep nest (for the depth limit).
 - [ ] T046 [US4] (skill-builder) Create `mentor/lib/precomp-time.mjs`: start, stretch (including
-  negative, per T006) and remap mapping, compounding through nests (FR-024). Tests in
-  `mentor/test/precomp-time.test.mjs`: SC-012, every mapped time within half an outer frame of
-  `time-mapping-key.json`.
-- [ ] T047 [US4] (skill-builder) Keys never shown (FR-025, E23) in `mentor/lib/precomp-time.mjs`.
-  Tests: Comp 1's 30 s precomps against T042's ground truth.
+  negative, per T006) and remap mapping, compounding through nests (FR-024), each key as ranges
+  `{ first, last, frames }`. Tests in `mentor/test/precomp-time.test.mjs`: SC-012, all 8 keys of
+  `time-mapping-key.json` within half an outer frame, copy D's two keys as ranges matching
+  `outer_first`, `outer_last` and `frames` (16 and 165).
+- [ ] T047 [US4] (skill-builder) Keys never shown (FR-025, E23) in `mentor/lib/precomp-time.mjs`,
+  using the span `[min(in, out), max(in, out))`. Tests: copy C's inner 0 (lands on the upper end) is
+  never shown and its inner 1 is; Comp 1's 30 s precomps against T042's ground truth.
 - [ ] T048 [P] [US4] (skill-builder) Tests in `mentor/test/precomp-read.test.mjs`: SC-011 (20 precomp
-  layers; 347 and 123; 353/321 and 242/131 told apart by id; places used), E21, E24 (Collapse
+  layers; 347 and 123; 353/321 and 242/131 told apart by id; places used), E21 (Icon Precomp's places
+  used is 4 layers, not 3 comps), E24 (Collapse
   reported), E25 (7-deep nest gives `too_deep` past 5; a loop fixture built by editing a capture's ids
   in the test, since AE prevents one).
 - [ ] T049 [US4] (skill-builder) Phase 2 in `describe_layers` (`mentor/tools/comp-reads.mjs`):

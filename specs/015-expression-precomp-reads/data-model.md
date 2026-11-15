@@ -18,7 +18,7 @@ Additive only. `layers`, `precomp_layers` and every existing `layer_info` field 
 | `group` | `transform` \| `effect` \| `text` \| `mask` \| `shape` \| `other` | from the path's root |
 | `keys` | int | `numKeys` |
 | `enabled` | bool | `expressionEnabled` |
-| `active` | bool | `enabled` and no `error` (T001: AE 27.0 keeps an erroring expression on, at the base value). Only the in-use side of a separable Position is walked (`inUse`, as today); separating or joining clears the expression (T003) |
+| `active` | bool | `enabled` and no `error` (T001: AE 27.0 keeps an erroring expression on, at the base value). Only the in-use side of a separable Position is walked (`inUse`, as today), since the hidden half holds stale values (FR-006a); separating or joining clears the expression (T003) |
 | `error` | string \| null | `expressionError`, trimmed to 300 characters |
 | `text` | string | up to 20,000 characters (research R2) |
 | `text_length` | int | full length |
@@ -113,7 +113,7 @@ expression's `text` (cut at 1,500), `error`, every link, and every reference.
 
 ### Comp contents (keyed by `comp_id`)
 
-`{ comp_id, name, duration, frame_rate, width, height, places_used, depth, layers: [{ index, name,
+`{ comp_id, name, duration, frame_rate, width, height, places_used (layers, not comps; FR-023), depth, layers: [{ index, name,
 kind, parent, enabled, in_point, out_point, start_time, stretch, time_remap, source_comp_id | null,
 keyed: [{ path, display_name, keys, times }], expressions: [as § 1] }], status: "read" | { status:
 "not_read", reason: "too_deep" | "loop" | "error" } }`
@@ -121,8 +121,10 @@ keyed: [{ path, display_name, keys, times }], expressions: [as § 1] }], status:
 ### Time mapping (per precomp layer, outer to inner)
 
 `{ outer_layer, source_comp_id, start_time, stretch, remap: null | { every_frame: [inner times],
-cut: bool }, shown: [outer_in, outer_out] }`. Derived per inner key: `{ inner_time, outer_times:
-[t], shows: bool }`. Nested layers compound mappings from the inside out.
+cut: bool }, shown: [lower, upper) }`, where lower and upper are the in and out points in either order
+(a negative stretch reports in after out; FR-025). Derived per inner key: `{ inner_time, outer:
+[{ first, last, frames }], shows: bool }`: a single time is a range with `frames: 1`, and a held remap
+gives a longer one (FR-024). A key on `upper` doesn't show. Nested layers compound mappings from the inside out.
 
 ### Precomp summary (FR-027)
 

@@ -9,13 +9,25 @@
 **Amendment 1 (2026-11-14, Phase 0 live checks, T008; approved by the builder 2026-11-14 with OQ-8 as recommended):** evidence in
 `discovery/usage-notes/expression-reads.md` (session 1) and the corrected finding 4 in
 `discovery/usage-notes/ask-baseline.md`. **AB turn f was most likely a real edit** (Pan Behind took
-Shake Control, the null over the rock, and changed its anchor), not playhead or expression motion. The
+Shake Control, the selected null, and changed its anchor), not playhead or expression motion. The
 check was right to see a change; the failure was that it named a side effect ("moved up at 2.6 s")
 instead of the cause (Shake Control's pivot moved, not rock.png's). Also: an erroring expression stays
 on in AE 27.0 and gives its base value; values don't change between reads at one time, but `wiggle`
 changes when the layer's index changes; separating or joining dimensions clears the expression. Changed
 here: US1 #6, US3 (story, why, test, scenarios), FR-006, FR-012 to FR-014, new FR-013a and FR-014a,
 SC-005, Edge Cases E4, E7, E17, E18 and new E28, Eval plan, Assumptions, and OQ-8 (new).
+
+**Amendment 2 (2026-11-14, Phase 0 session 2, T008's second fold):** evidence in
+`discovery/usage-notes/expression-reads.md` session 2 (`9d05420`, `cf37e7e`) and
+`mentor/test/fixtures/precomps/time-mapping-key.json`. T005 confirmed by hand that Pan Behind on
+Shake Control moves its base Position and Anchor Point together (+561, −120), keeps the children
+still (0.07 px) and leaves the shake running, the same edit as T004's fit (572, −114); it took Shake
+Control because it was **selected**, not because it was under the cursor. The hidden half of a
+separable Position holds stale values that don't draw. T006 confirmed the time-mapping formula on all
+eight keys, with three rules: a negative stretch reports the in point after the out point, a remapped
+key holds over a range, and "places used" counts layers, not comps. Changed here: US3's why, new
+FR-006a, FR-023 to FR-025 tightened, SC-005 (a), SC-011, SC-012, Edge Cases E21, E22, E23 and new
+E29, Assumptions. No approved decision changes.
 
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
@@ -168,7 +180,7 @@ rock.png's", not a side effect such as "Shake Control moved up at 2.6 s". Motion
 an expression (the playhead moved, or a layer's index changed under a `wiggle`) is never reported as
 mine.
 
-**Why this priority**: in AB turn f the check saw a real edit (Pan Behind took the null over the rock,
+**Why this priority**: in AB turn f the check saw a real edit (Pan Behind took Shake Control, the selected null,
 `expression-reads.md` T004) but named its side effect, so neither the builder nor the mentor could tell
 what had happened, and the advice was "Edit > Undo until it's back" for a move the builder didn't
 recognize. The other half of K2 (TD 014 § 10.1 rule 3) still stands: expression motion must never be
@@ -262,13 +274,14 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 | E18 | `random()` without a seed, `wiggle()` | Same value between reads at one time on the same index (T002) | A learner change | Live (T002 done) |
 | E19 | Parent expression that's constant (`value`) | Doesn't move children (sampled result never varies) | Moves children | Planted |
 | E20 | Same-name comps, nested | By id | By name | Comp 1 (353/321, 242/131) |
-| E21 | Comp used in several places | Count of places | Read once and assumed to show the same everywhere | Comp 1 |
-| E22 | Start offset, stretch (including negative), time remap | Inner times mapped to outer time | Inner key times as outer times | Mentor Practice Icon plus planted (none in Comp 1) |
-| E23 | Precomp longer than it's shown | Keys outside the shown time flagged | Counted as visible motion | Comp 1 (30 s precomps in a 5 s comp) |
+| E21 | Comp used in several places | Count of **layers** using it (T006: Icon Precomp is in 3 comps but 4 layers) | Count the comps `usedIn` lists; read once and assume it shows the same everywhere | Comp 1, Mentor Practice (Icon) |
+| E22 | Start offset, stretch (including negative), time remap | Inner times mapped to outer time; with a negative stretch, the in point is after the out point and the shown span is [lower, upper); with time remap, a key whose remap value is flat maps to a **range** of outer frames | Inner key times as outer times; assume in < out; one time for a held remap | T006 answer key (`time-mapping-key.json`) |
+| E23 | Precomp longer than it's shown, or a key landing exactly on the span's end | Keys outside the shown time flagged; a key on the end of [lower, upper) never shows (T006's reversed copy) | Counted as visible motion | Comp 1 (30 s precomps in a 5 s comp), T006 copy C |
 | E24 | Collapse Transformations on a precomp layer | Reported with the precomp | Ignored | Live |
 | E25 | Depth limit, or a cycle | "Not read: too deep" or "not read: loop" | Empty | Planted (cycle: unit only; AE prevents one) |
 | E26 | Expressions inside a precomp that reference the outer comp | Not followed (as E13) | Resolved | Planted text |
 | E27 | Older snapshot or fixture without the new fields | "Not read" | "None" | Comp 1's committed snapshot |
+| E29 | Hidden half of a separable Position (X/Y when joined, Position when separated) | Skipped: its values are stale and never draw (FR-006a) | Report its value, keys or expression | Planted (T015) |
 | E28 | A layer's index changes under a `wiggle` (a layer added or removed above it, such as the null skill's null) | Its after-expression values change with no edit (T002: about 6 px); compared on base, so nothing is reported | A learner change on that layer | Planted (T015) |
 
 ## Requirements *(mandatory)*
@@ -302,6 +315,11 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   is off or has an error MUST NOT count as a source of motion, and an erroring one MUST be reported as
   on with an error, never as working (AE 27.0 keeps it on and gives the base value, T001). Only the
   side of a separable Position in use is read (E3, E4, E7).
+- **FR-006a**: Every read that walks properties (the expression read, base values, sweeps, and phase 2's
+  inner keyed and expression reads) MUST skip the hidden half of a separable Position: Position when
+  its dimensions are separated, X, Y and Z Position when they're joined. The hidden half holds stale
+  values that never draw (T005 session: joined X/Y read 960, 540; separated Position reads the last
+  joined value) and MUST NOT be reported as a value, a key or a source (E29).
 - **FR-007**: Effects on every layer MUST be named, keyed or not, with which of their properties are
   keyed or expression-driven (TD 014 Q5).
 
@@ -372,11 +390,17 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   links and effects as phase 1, for each inner comp. Every comp MUST be identified by its **id**, with
   its name as a label only (E20).
 - **FR-023**: For each comp read, the read MUST give its duration, size, frame rate and how many
-  layers across the project use it as a source (E21).
+  layers across the project use it as a source, counted by **layers**, not by the comps that hold
+  them (one comp can hold it twice; E21).
 - **FR-024**: For each precomp layer, inner key times MUST be mapped to the outer comp's time through
   start time, stretch (including negative) and time remap, and nested mappings MUST compound (E22).
-- **FR-025**: Inner keys and expression peaks that map outside the precomp layer's in and out points,
-  or outside the outer comp, MUST be counted and flagged as never showing (E23).
+  Without remap, outer = start time + inner time × stretch / 100. With remap, an inner key maps to every
+  outer frame whose remap value equals it, and a run of such frames MUST be reported as a **range**
+  (first, last, frame count), not one time.
+- **FR-025**: Inner keys and expression peaks that map outside the precomp layer's shown span, or
+  outside the outer comp, MUST be counted and flagged as never showing (E23). The shown span is
+  [lower, upper) of the in and out points, whichever order AE reports them in (a negative stretch
+  reports in after out), so a key landing exactly on the upper end never shows.
 - **FR-026**: Recursion MUST stop at a depth limit (set in the plan; OQ-5) and on a repeated comp id,
   reporting the reason (E25). Each comp's contents are read once and shared across the places it's
   used.
@@ -430,7 +454,8 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   the Sweep Center. *Measured by:* unit test.
 - **SC-005**: Through each skill check with an other-changes list (pivot, null, offset, key types,
   speed graph), on fixtures derived from the Comp 1 capture:
-  - (a) AB turn f's edit (T004's fitted Anchor Point change on Shake Control) gives **exactly one**
+  - (a) AB turn f's edit (T004's fitted Anchor Point change on Shake Control, confirmed by T005's
+    hand edit of the same kind, +561, −120) gives **exactly one**
     change, Shake Control's Anchor Point, with its footprint shift attached, and **no** separate moved
     entry for Shake Control (pivot and null; the keyed-value checks report the anchor change);
   - (b) the same reads with only the playhead moved give **0** changes (E17a);
@@ -461,10 +486,12 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 
 - **SC-011**: On Comp 1, **all 20** precomp layers are read; inner keyed-property and layer counts
   match a ground-truth capture (expected 347 and 123); the two same-name nested pairs are told apart by
-  id; and places-used counts match. *Measured by:* unit test on a fresh capture.
-- **SC-012**: On Icon and the planted start, stretch, negative-stretch and remap cases, **every** mapped
-  inner key time is within half an outer frame of the answer key, and keys outside the shown time are
-  flagged on Comp 1's 30 s precomps if any exist. *Measured by:* unit tests on live captures.
+  id; and places-used counts (layers, not comps) match; on the practice project, Icon Precomp's is 4.
+  *Measured by:* unit test on a fresh capture.
+- **SC-012**: On T006's four copies (`time-mapping-key.json`), **all 8** inner keys map within half an
+  outer frame of the answer key: the remapped copy's two keys as ranges matching `outer_first`,
+  `outer_last` and `frames`, and the reversed copy's inner 0 flagged as never shown. Keys outside the
+  shown time are flagged on Comp 1's 30 s precomps if any exist. *Measured by:* unit tests on live captures.
 - **SC-013**: A whole-project read of Comp 1 (22 comps, 33,447 properties) takes **at most 1.5 s**
   (measured live: 292 ms for the walk alone), and the precomp summary for all 20 layers is **at most
   12 KB**. *Measured by:* the builder live, and a unit test for size.
@@ -517,9 +544,11 @@ motion) belong to spec 014's set and to pivot K1, not here.
   (T002); separating or joining dimensions clears the expression, and the hidden-side state can't be
   made by script (T003, so E7 is "UI not tested"); turn f was a real anchor edit, by inference from the
   saved reply (T004).
-- **Still to check by hand (T005):** that Pan Behind on an expression-driven null changes its base
-  Position and anchor together and keeps the children still (SB-2), and that it reproduces turn f's
-  edit. SC-005 (a) uses T004's fitted edit until then.
+- **Checked by hand 2026-11-14 (T005, session 2):** Pan Behind on the selected, expression-driven
+  null changes its base Position and Anchor Point together (+561, −120), keeps the children still
+  (0.07 px) and leaves the shake running (SB-2); it acts on the **selected** layer. The edit matches
+  T004's fit for turn f within a few pixels. T006 confirmed the time mapping on all eight keys against
+  AE's `sourceTime()` (an expression-only function, so the read can't call it) and the builder's eye.
 - Expression text stays in tool replies to the model only, never in the repo except in fixtures made
   from the builder's own comps with no real names.
 - Moving to A (`decisions/011`): the reads don't depend on the runtime. Each set's A result goes stale
