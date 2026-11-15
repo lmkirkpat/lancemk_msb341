@@ -17,7 +17,8 @@ const { statusFor } = require("./activity.js");
 const { connectionFromTool, noComp } = require("./connection.js");
 const { shortDate } = require("./memory.js");
 const { COPY } = require("./copy.js");
-const { askView, ANSWER_TOOL } = require("./ask-result.js");
+const { askView, fallbackText, ANSWER_TOOL } = require("./ask-result.js");
+const PHASE = require("./phase.js");
 const thr = require("./ask-thread.js");
 const { askRequest, followUpRequest, goDeeperRequest } = require("./requests.js");
 
@@ -755,6 +756,7 @@ function createApp(deps) {
   function toThread() {
     if (!state.askSending) return;
     state.askSending = false;
+    state.draft = ""; // MU ask-sending keeps the question in the box until the thread takes over
     state.home_view = "thread";
     state.focus_tick++;
   }
@@ -798,6 +800,7 @@ function createApp(deps) {
     if (t && e.name === ANSWER_TOOL && e.ok) {
       t.had_result = true;
       t.view = askView(e, { runtime });
+      t.fallback = t.view ? null : fallbackText(e);
       toThread();
     }
     changed();
@@ -825,10 +828,13 @@ function createApp(deps) {
     if (!t) return;
     state.askTurn = null;
     toThread();
-    const prose = (t.committed + t.block).trim() || null;
+    // FR-048: no view → the mentor's words; with no prose on an answer turn (PQ-1), the rejected
+    // result's own explanation and closing offer.
+    const prose = (t.committed + t.block).trim() || (t.view ? null : t.fallback) || null;
     state.thread = thr.answer(state.thread, { view: t.view, prose, had_result: t.had_result });
     if (t.srcs.length) state.askFrames[state.thread.questions.length - 1] = t.srcs;
-    const err = t.error || (e && e.ok === false ? { title: E.stopped.title } : null);
+    let err = t.error || (e && e.ok === false ? { title: E.stopped.title } : null);
+    if (!err && !t.view && !prose) err = { title: E.refused.title }; // never a question with nothing under it
     // B1's timeout leaves the process running (research R5): the next send resumes in a fresh one.
     if (t.error && t.error.kind === "timeout" && runtime !== "a") stopThreadAdapter();
     // MU › States still missing: spec 007's notices, with "Your question's still here." in place of the lesson's line.
@@ -854,7 +860,7 @@ function createApp(deps) {
       if (state.threadAdapter !== a) return false; // the start failed; onAskError has shown why
       if (!resume) state.thread = Object.assign({}, state.thread, { claude_session_id: id });
     }
-    const t = { kind: req.kind, sent_ms: now().getTime(), sent_at: null, long: false, pressed: (o && o.pressed) || null, committed: "", block: "", had_result: false, view: null, error: null, srcs: [] };
+    const t = { kind: req.kind, sent_ms: now().getTime(), sent_at: null, long: false, pressed: (o && o.pressed) || null, committed: "", block: "", had_result: false, view: null, fallback: null, error: null, srcs: [] };
     state.askTurn = t;
     if (state.error && state.error.from === "thread") state.error = null; // a lesson's own error stays with it
     unref(later(() => { if (state.askTurn === t) { t.long = true; changed(); } }, thr.READING_LONG_MS));
@@ -878,7 +884,6 @@ function createApp(deps) {
     const at = now().toISOString();
     if (!state.thread) state.thread = thr.newThread({ id: `ask-${now().getTime()}`, at });
     state.thread = thr.addQuestion(state.thread, { text: q, kind: "question", at });
-    state.draft = "";
     state.steps_open = false;
     state.steps_list_open = false;
     state.askSending = true;
@@ -901,7 +906,7 @@ function createApp(deps) {
   // Go deeper (FR-048, FR-050): only an offer drawn in an answer still in view. The lesson it opens
   // is phase 2's (T054); this sends the press, once.
   function goDeeper({ skill }) {
-    if (!state.thread || followOff()) return;
+    if (!PHASE.FLAGS.go_deeper || !state.thread || followOff()) return;
     const entry = state.thread.questions.slice().reverse().find((q) => q.view && !q.folded);
     const offer = thr.offersOf(state.thread, entry).find((x) => x.skill === skill);
     if (!offer) return;

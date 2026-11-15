@@ -63,4 +63,13 @@ function askView(ev, opts) {
   };
 }
 
-module.exports = { askView, check, ANSWER_TOOL, KINDS };
+// FR-048 with no prose: the mentor writes nothing outside give_answer on an answer turn (PQ-1), so a
+// result the panel can't draw falls back to its own words, the explanation and the closing offer, as
+// they came. → that text, or null when neither is usable.
+function fallbackText(ev) {
+  if (!ev || ev.name !== ANSWER_TOOL || !ev.ok || !isObj(ev.json)) return null;
+  const parts = [ev.json.explanation, ev.json.closing_offer].filter((x) => isStr(x) && x.trim() !== "");
+  return parts.length ? parts.join("\n\n") : null;
+}
+
+module.exports = { askView, fallbackText, check, ANSWER_TOOL, KINDS };

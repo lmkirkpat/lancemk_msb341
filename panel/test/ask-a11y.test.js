@@ -126,3 +126,14 @@ test("the quiet line's full text is its accessible name and its title (MU › Ac
   const s = html(await ready({ connection: { state: "connected", started: CONNECTED.started, comp_active: false } }));
   assert.match(s, /class="qline" aria-disabled="true" aria-describedby="quiet-why" title="Find my next lesson\. Needs an open comp\."/);
 });
+
+test("T035 item 3: pressing Ask keeps the box focusable: readonly while it's out, never disabled (FR-054)", async () => {
+  const h = await ready({ setTimeout: () => 0 });
+  h.app.setDraft("Why does it swing?");
+  h.app.act("ask_home");
+  assert.equal(h.app.model().state, "ask-sending");
+  const s = html(h);
+  assert.match(s, /<textarea id="ask-q"[^>]*\sreadonly/);
+  assert.doesNotMatch(s, /<textarea id="ask-q"[^>]*\sdisabled/);
+  assert.match(s, />Why does it swing\?<\/textarea>/, "the question stays in the box while it goes");
+});

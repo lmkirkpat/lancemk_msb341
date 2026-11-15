@@ -11,6 +11,7 @@ const { visibleKinds } = require("./requests.js");
 const { rowsOf } = require("./checklist/index.js");
 const { listCollapsed } = require("./view-state.js");
 const { skillById } = require("./skills.js");
+const PHASE = require("./phase.js");
 
 const TABS = ["home", "lesson", "skills"];
 
@@ -73,7 +74,7 @@ function askCard(m) {
     : `<button type="submit" id="ask-go" class="primary" data-action="ask_home" data-keep-focus aria-disabled="${!!off || empty}" aria-describedby="ask-why${!off && empty ? " ask-empty" : ""}">${esc(A.button)}</button><span class="sr" id="ask-empty">${esc(A.empty)}</span>`;
   return `<section class="card lead askcard" aria-label="${esc(A.card_title)}"><h3 data-title tabindex="-1">${esc(A.card_title)}</h3>`
     + `<form data-askhome autocomplete="off"><label class="small" for="ask-q">${esc(A.label)}</label>`
-    + `<textarea id="ask-q" rows="3" data-keep-value${lock || sending ? " disabled" : ""}>${esc(m.draft_text || "")}</textarea>`
+    + `<textarea id="ask-q" rows="3" data-keep-value${lock ? " disabled" : sending ? " readonly" : ""}>${esc(m.draft_text || "")}</textarea>`
     + `<div class="row between"><p class="meta" id="ask-why">${esc(off && !sending ? off : A.hint)}</p>${go}</div></form></section>`;
 }
 
@@ -175,7 +176,7 @@ function stepItems(steps) {
 // One Go deeper per offer, inside its answer (FR-048, FR-050). Gray, not primary: the usual choice
 // is to try the steps. Paused, it stays focusable with its reason linked.
 function deeperHtml(m, offers, i) {
-  if (!offers.length) return "";
+  if (!PHASE.FLAGS.go_deeper || !offers.length) return ""; // phase 2 (lib/phase.js)
   const off = m.follow_off;
   const pressedSkill = m.ask.busy ? m.ask.pressed : null;
   const why = `deeper-why-${i}`;

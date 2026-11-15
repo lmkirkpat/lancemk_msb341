@@ -295,3 +295,4 @@ em.skill { font-style: italic; color: var(--text-strong); font-weight: 600; }
 @media (max-height: 560px) {
   .askcard textarea { min-height: 44px; }
 }
+.askcard textarea[readonly] { opacity: .75; } /* sending: still focusable (FR-054), just not editable */

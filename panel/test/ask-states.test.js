@@ -10,6 +10,14 @@ const { renderApp } = require("../lib/screens.js");
 const { STATE_IDS } = require("../lib/view-state.js");
 const { COPY } = require("../lib/copy.js");
 const COMP1 = require("./fixtures/ask/comp1-answer.json");
+const PHASE = require("../lib/phase.js");
+
+// Go deeper is phase 2's (T053 to T057); these tests turn it on to check what that phase inherits.
+async function withGoDeeper(fn) {
+  const was = PHASE.FLAGS.go_deeper;
+  PHASE.FLAGS.go_deeper = true;
+  try { return await fn(); } finally { PHASE.FLAGS.go_deeper = was; }
+}
 
 const A = COPY.ask;
 const Q = "How can I make the rock shake from the hammer hit?";
@@ -61,7 +69,7 @@ const CASES = {
   "ask-sending": [async () => { const h = await panel(); askFromHome(h); return h; }, [A.pressed, A.reading, A.after_answer], []],
   "ask-reading": [async () => { const h = await panel(); askFromHome(h); h.fire(600); return h; }, [Q, A.reading, A.thread_title, A.answering], ["/ask-mentor"]],
   "ask-reading-long": [async () => { const h = await panel(); askFromHome(h); h.fire(600); h.fire(6000); return h; }, [A.reading_long], [A.reading + "<"]],
-  "ask-answer": [() => answered(), ["In Comp 1, rock.png rides on Shake Control", A.steps, "Set the pivot", A.go_deeper("Set the pivot"), A.your_steps(4), A.steps_note, "Try them, or want to go deeper"], ["/ask-mentor", "✓"]],
+  "ask-answer": [() => answered(), ["In Comp 1, rock.png rides on Shake Control", A.steps, "Set the pivot", A.your_steps(4), A.steps_note, "Try them, or want to go deeper"], ["/ask-mentor", "✓", "Go deeper:"]],
   "ask-followup": [async () => {
     const h = await answered();
     assert.equal(h.app.followUp("Why the null?"), true);
@@ -122,7 +130,7 @@ for (const [id, [drive, show, hide]] of Object.entries(CASES)) {
 
 // ---------- the answer, drawn from data (FR-048, PQ-1) ----------
 
-test("FR-048: explanation, then Steps and the numbered list, then the closing offer, then Go deeper; tags in bold italics", async () => {
+test("FR-048: explanation, then Steps and the numbered list, then the closing offer, then Go deeper; tags in bold italics", () => withGoDeeper(async () => {
   const h = await answered();
   const { r } = screen(h);
   const msg = r.lesson.chat.items.join("");
@@ -136,6 +144,18 @@ test("FR-048: explanation, then Steps and the numbered list, then the closing of
   assert.match(msg, /Pan Behind its pivot to where the hammer hits\. <em class="skill">Set the pivot<\/em>/);
   assert.doesNotMatch(msg, /Play it back and watch the turn\.\s*<em/, "PQ-5: the look step has no tag");
   assert.doesNotMatch(msg, /Not something I teach yet\.\s*<em/, "the not-taught words are the mentor's own, never said twice");
+}));
+
+test("T035 item 2: in phase 1 an answer that offers a skill draws no Go deeper, and a press does nothing; the closing offer still shows", async () => {
+  assert.equal(PHASE.FLAGS.go_deeper, false, "off until phase 2");
+  const h = await answered();
+  assert.ok(COMP1.offered_skills.length > 0);
+  const { html } = screen(h);
+  assert.doesNotMatch(html, /Go deeper|deeper-btn|data-action="go_deeper"/);
+  assert.ok(plain(html).includes("Try them, or want to go deeper on step 3 with"));
+  h.app.act("go_deeper", { skill: "transform.anchor" });
+  assert.equal(h.adapter().sent.length, 1, "nothing sent");
+  assert.equal(h.app.followUp("Why the null?"), true, "the bar isn't held by a press that didn't happen");
 });
 
 test("PQ-1, R2: prose beside a valid result isn't drawn; nothing is said twice", async () => {
@@ -149,24 +169,49 @@ test("PQ-1, R2: prose beside a valid result isn't drawn; nothing is said twice",
   assert.ok(text(h).includes("In Comp 1, rock.png rides"));
 });
 
+// The real mentor writes no prose on an answer turn (FR-009, PQ-1), so a rejected result must never
+// leave the question with nothing under it (T035 item 1).
 const MALFORMED = {
-  "missing (no give_answer)": null,
   "five steps": Object.assign({}, COMP1, { steps: COMP1.steps.concat([{ text: "More.", skill: null, layer: null }]) }),
   "an unknown kind": Object.assign({}, COMP1, { kind: "essay" }),
   "an offer no step uses": Object.assign({}, COMP1, { offered_skills: ["parenting.null"], tags: { "transform.anchor": "Set the pivot", "parenting.null": "Group with a null" } }),
+  "steps not an array": Object.assign({}, COMP1, { steps: "1. Open the expression." }),
 };
 for (const [what, json] of Object.entries(MALFORMED)) {
-  test(`FR-048 fail closed in the thread: ${what} → the mentor's words, no Steps, no dock, no Go deeper`, async () => {
+  test(`FR-048 fail closed with no prose: ${what} → the explanation and closing offer as text; no Steps, dock or Go deeper`, () => withGoDeeper(async () => {
     const h = await panel();
     askFromHome(h);
-    const a = h.adapter();
-    a.emit("text", { text: "In Comp 1, rock.png rides on Shake Control.\n1. Open the expression." });
-    if (json) a.emit("tool_result", GIVE(json));
-    a.emit("turn_end", { ok: true, kind: "question" });
+    answer(h, json);
     const { html, r } = screen(h);
-    assert.ok(plain(html).includes("In Comp 1, rock.png rides on Shake Control."), "the words as they came");
+    const t = plain(html);
+    assert.ok(t.includes("In Comp 1, rock.png rides on Shake Control"), "the explanation");
+    assert.ok(t.includes("Try them, or want to go deeper on step 3"), "the closing offer");
     assert.equal(r.lesson.list, "", "no dock");
-    assert.doesNotMatch(html, /steps-lbl|deeper-btn|Go deeper/);
+    assert.doesNotMatch(html, /steps-lbl|deeper-btn|Go deeper|Open Shake Control's Position/);
+    assert.equal(t.includes(A.question_still_here), false);
+  }));
+}
+
+test("FR-048 fail closed: only a closing offer usable → it alone shows", async () => {
+  const h = await panel();
+  askFromHome(h);
+  answer(h, Object.assign({}, COMP1, { explanation: 42, kind: "essay" }));
+  const t = text(h);
+  assert.ok(t.includes("Try them, or want to go deeper"));
+  assert.equal(t.includes(A.question_still_here), false);
+});
+
+for (const [what, json] of Object.entries({ "no give_answer at all": null, "nothing usable in it": { kind: "answer", explanation: null, steps: [], closing_offer: 7 } })) {
+  test(`FR-048 fail closed with nothing to show (${what}) → "Your question's still here." and Try again`, async () => {
+    const h = await panel();
+    askFromHome(h);
+    answer(h, json);
+    const t = text(h);
+    assert.ok(t.includes(A.question_still_here));
+    assert.ok(t.includes(COPY.buttons.try_again));
+    assert.equal(screen(h).r.lesson.list, "");
+    h.app.act("ask_try_again");
+    assert.equal(h.adapter().sent.at(-1).text, `/ask-mentor ${Q}`);
   });
 }
 
@@ -209,7 +254,7 @@ test("the learner's bubble shows the question as typed, never the command; the r
   assert.equal(h.adapters.length, 1);
 });
 
-test("a new question from Home joins the same conversation; earlier answers fold and lose their Go deeper", async () => {
+test("a new question from Home joins the same conversation; earlier answers fold and lose their Go deeper", () => withGoDeeper(async () => {
   const h = await answered();
   h.app.act("thread_back");
   askFromHome(h, "What does the sweep control layer do?");
@@ -219,7 +264,7 @@ test("a new question from Home joins the same conversation; earlier answers fold
   const items = screen(h).r.lesson.chat.items.join("");
   assert.doesNotMatch(items, /Go deeper/, "Go deeper stays inside its own answer, folded away (FR-050)");
   assert.equal(screen(h).r.lesson.list, "", "the dock goes away with a describe answer");
-});
+}));
 
 test("Ask can't be pressed twice, and nothing else starts while it's out", async () => {
   const h = await panel();
@@ -233,7 +278,7 @@ test("Ask can't be pressed twice, and nothing else starts while it's out", async
   assert.match(screen(h).html, /aria-busy="true"[^>]*>[^]*Asking…/);
 });
 
-test("Go deeper sends MU's sentence once, shows Starting…, and pauses the bar", async () => {
+test("Go deeper (phase 2, flag on) sends MU's sentence once, shows Starting…, and pauses the bar", () => withGoDeeper(async () => {
   const h = await answered();
   h.app.act("go_deeper", { skill: "transform.anchor" });
   h.app.act("go_deeper", { skill: "transform.anchor" });
@@ -243,13 +288,13 @@ test("Go deeper sends MU's sentence once, shows Starting…, and pauses the bar"
   assert.ok(t.includes(COPY.buttons.pressed.start));
   assert.ok(t.includes(COPY.status.lesson_ready));
   assert.equal(h.app.followUp("hello?"), false);
-});
+}));
 
-test("Go deeper only for an offer the answer made", async () => {
+test("Go deeper only for an offer the answer made", () => withGoDeeper(async () => {
   const h = await answered();
   h.app.act("go_deeper", { skill: "parenting.null" });
   assert.equal(h.adapter().sent.length, 1);
-});
+}));
 
 test("ask-unreachable and ask-nocomp: Try again resends the same question, no second bubble", async () => {
   const h = await answered(NOCOMP);
