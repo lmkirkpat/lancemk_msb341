@@ -109,6 +109,6 @@ afterwards, and the project was back to 77 items. Answer key:
 
 ### Still open
 
-- Nothing in Phase 0. The spec-writer's second fold (T008) takes sessions 2's new facts: Pan Behind
+- Nothing in Phase 0. The spec-writer's second fold (T008) takes session 2's new facts: Pan Behind
   takes the selected layer, stale hidden dimension values, the reversed in and out points, held remap
   ranges, and counting layers for "how many places".
