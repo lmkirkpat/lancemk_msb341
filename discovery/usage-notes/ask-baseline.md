@@ -108,6 +108,14 @@ Opened with Find my next lesson, then asked my own questions.
    check's "something else moved" warning compares across times or treats expression motion as a
    learner edit. **Fix:** compare at the same time and skip properties driven by an expression, then
    add the eval case below. Worst finding: it's a step toward damaging the learner's project.
+   **Corrected 2026-11-14 (spec 015 T004, `discovery/usage-notes/expression-reads.md`):** most likely
+   a real edit. Replaying the saved reply through the check matches an anchor change on **Shake
+   Control** (Pan Behind on the null, which sits over the rock and is the layer under the cursor), and
+   not playhead or expression motion. The builder agrees that's plausible. The check was right to see a
+   change; what failed was the **wording**: "moved up at 2.6 s" named a side effect, not "you moved
+   Shake Control's pivot, not rock.png's". The record line rolled back in finding 6 ("moved a parent
+   layer's pivot by mistake; undid that") was probably true. Row 4 of the verdicts table is therefore ✓
+   on the change and ✗ on how it was said.
 5. **The check made me put the pivot somewhere useless to pass.** Turns g to i. The check places the
    pivot among nine spots on the layer's whole image box. On a PNG with empty space around the art, the
    box's corner isn't the art's corner, so the right spot fails and an empty spot passes. Its own reply

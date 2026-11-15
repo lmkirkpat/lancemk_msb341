@@ -1,0 +1,62 @@
+{
+  "about": "AB turn f (discovery/usage-notes/ask-baseline.md, 2026-11-13, AE 27.0, Comp 1): the fields spec 015 T004 needs from the saved anchor_check reply (panel-conversation.json, read-only), copied with no learner text. The lesson baseline was read at playhead 0; the check at 4.338. Values are the tool reply as saved.",
+  "tool": "anchor_check",
+  "args": {},
+  "baseline_comp_time": 0,
+  "reply": {
+    "comp_matches": true,
+    "time": 4.338,
+    "passed": false,
+    "layer": {
+      "layer": "rock.png",
+      "check_time": 0,
+      "basis": "current",
+      "anchor_changed": true,
+      "position_changed": true,
+      "item2": {
+        "passed": true,
+        "edges_px": {
+          "left": 0.006,
+          "top": 0.035,
+          "right": 0.007,
+          "bottom": 0.035
+        },
+        "direction": null,
+        "distance_px": 0.036
+      },
+      "item5": {
+        "passed": false,
+        "moved_layers": [
+          {
+            "layer": "DISCOVER the past to INSPIRE the future",
+            "time": 2.636,
+            "distance_px": 4.087,
+            "direction": "up"
+          },
+          {
+            "layer": "Shake Control",
+            "time": 2.636,
+            "distance_px": 4.087,
+            "direction": "up"
+          }
+        ],
+        "anchor_keys_added": false,
+        "not_compared": []
+      }
+    },
+    "other_changes": [
+      {
+        "kind": "anchor_changed",
+        "layer": "Shake Control"
+      }
+    ]
+  },
+  "pan_behind_fit": {
+    "about": "Pan Behind on Shake Control (anchor += anchor_delta; base Position += R(rotation_at_edit) * anchor_delta, so it holds still at that frame only) applied to comp1-snapshot.json reproduces this reply (spec 015 T004). Fitted by a grid search over anchor_delta and the rotation at the edit, against item5 (distance and direction) and item2 (edges); not read from AE.",
+    "anchor_delta": [
+      572,
+      -114
+    ],
+    "rotation_at_edit_deg": -0.0035
+  }
+}
