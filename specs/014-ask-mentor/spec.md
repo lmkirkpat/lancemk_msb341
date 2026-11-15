@@ -5,7 +5,8 @@
 **Created**: 2026-11-14
 
 **Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended; OQ-1's
-constitution amendment is in, 1.5.0). Plan and tasks next.
+constitution amendment is in, 1.5.0). Plan and tasks approved 2026-11-14 (PQ-1 to PQ-5 as
+recommended; FR-006 and FR-016 amended for PQ-5 and PQ-4).
 
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
@@ -296,7 +297,9 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   property, in AE's words for the builder's version (AE 27.0), followable without asking what to do. Two to
   four lines; past four, the first three and a sentence saying there's more. Explanation is never a step
   (TD § 5.1 part 2, builder 2026-11-14).
-- **FR-006**: Each step line MUST carry either one skill tag (FR-021's short names) or "not taught yet". A
+- **FR-006**: Each step line that changes something MUST carry either one skill tag (FR-021's short names) or
+  "not taught yet"; a step that only plays back or looks may carry no tag (`skill: null`, drawn untagged;
+  amended 2026-11-14, plan PQ-5). A
   step outside the six MUST pair an action with what the read sees there ("Open …'s Position expression and
   look at how it sets each hit's size: it uses the first hit's size for all three."), never the edit, never new
   or rewritten code (H-2, TD § 19).
@@ -325,7 +328,9 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   parses prose (cockpit item 1; MU › Open question 2 and design review 4):
   1. **explanation**: the mentor's words for part 1;
   2. **steps**: the step lines in order, each with its skill (a skill ID, or "not taught yet");
-  3. **offered skills**: zero to two skill IDs, each among the steps' skills;
+  3. **offered skills**: zero to two skill IDs, each among the steps' skills, except that a how-to answer with
+     no comp target (FR-019) may carry one offered skill and no steps; its go-deeper hands over with no layer
+     and the lesson opens as it would from Skills (amended 2026-11-14, plan PQ-4);
   4. **closing offer**: the hand-back sentence, as its own field.
   A turn with nothing actionable has empty steps and offered skills. A clarifying question, the outside line,
   a describe-the-comp answer and "no comp open" all have empty steps.

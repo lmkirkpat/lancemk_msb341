@@ -418,7 +418,7 @@ place it shouldn't happen, and if it does the entry is `partial` with "place set
 **Recommendation: ask-first when the learner opens the panel; lesson-first stays one tap away.**
 The cockpit writes the decision record; the ui-designer draws it.
 
-- **What the learner meets:** a place to ask about their comp, with the open comp's name. Under it,
+- **What the learner meets:** a place to ask about their comp ("Ask about the open comp"; no comp name in the panel, § 19). Under it,
   **one quiet line** of lead from the record: the lesson in progress if there is one ("Pick up *Easing*
   on Title"), otherwise "Find my next lesson". A due review is **not** the opening; it's a line in
   Skills, or one clause after an answer (§ 10.1 rule 5).

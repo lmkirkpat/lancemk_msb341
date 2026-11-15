@@ -1,0 +1,78 @@
+# Contract: what the panel reads and draws for Ask (spec 014)
+
+The panel draws from the record, the path data, tool results and `comp_active`. It never parses the
+mentor's prose (FR-016) and holds no teaching logic (constitution II). States are MU's ids
+([`product/mockups/ask-mentor/README.md`](../../../product/mockups/ask-mentor/README.md) › States); copy is
+MU › Copy, plus the lines below.
+
+## Inputs
+
+| Input | From | Used for |
+|---|---|---|
+| `give_answer` tool result | `tool_result` event, `json` | AskView (data-model § 7); `ask-answer`, `ask-clarify`, `ask-outside`, `ask-new-question`, `ask-nocomp` by `kind` |
+| `go_deeper` tool result | `tool_result` | `ask-deeper-starting` → the lesson |
+| A snapshot tool result with `mode_source: "hand_in"` | `tool_result` | `ask-deeper-lesson`: "From your question. Back returns you to it.", Pick ticked, Practice tag when `hand_in.practice` |
+| The check tool's `passed` | `tool_result` (today's checklist) | `ask-deeper-passed`'s result line (below) |
+| `record_lesson`'s `hand_back` | `tool_result` | `ask-back`: the thread's hand-back line, drawn from data |
+| `comp_active` | `GET /health` (`connection.js`) | `home-nocomp` on `false` only |
+| `panel.json` runtime | config | Display guard: no Go deeper on `b1` |
+
+## Drawing an answer (FR-048, FR-049)
+
+1. A valid AskView: explanation (bullets as bullets), then, only with steps, the **Steps** heading and the
+   numbered list with each step's tag (short name, bold italic) or "not taught yet", then the closing
+   offer, then one gray **Go deeper: [tag] ›** per offer inside the same message. The turn's prose, if
+   any, isn't drawn (research R2).
+2. AskView `null`: the mentor's words as they came; no Steps, no dock, no Go deeper.
+3. **Your steps** docks under the chat, folded, only with steps; header "From the answer. Knack doesn't
+   track these."; no glyphs or ticks, ever; it holds only the latest answer's steps, and goes away when the
+   latest answer has none; opens itself once on returning from a lesson.
+4. Go deeper appears only inside its answer; while its lesson is open it's **Back to your lesson ›**; after
+   the lesson it's gone (FR-050).
+
+## Requests (added to `REQUESTS`, eval-synced)
+
+| Press | Request | Turn kind |
+|---|---|---|
+| Ask (Home or thread box) | `/ask-mentor ` + the text as typed | `question` |
+| Follow-up bar | the text as typed; the first one after a go-deeper lesson gets `/ask-mentor ` in front | `followup` |
+| Go deeper | "Yes, go deeper on [short name]." | `go_deeper` |
+| End lesson (go-deeper lesson) | "/ask-mentor I've ended that lesson." | `followup` |
+
+All carry `thread: "ask"` in the turn log. The learner's bubble shows the text as typed (or MU's "Yes, go
+deeper on Set the pivot."), never the `/ask-mentor ` prefix; End lesson shows only the divider.
+
+## Result lines and dividers (FR-051, PQ-3)
+
+Drawn on a passing check in a go-deeper lesson, by skill. Plain, no pass or fail words; the ui-designer
+may revise before T056.
+
+| Skill | Result line (`ask-deeper-passed`) |
+|---|---|
+| Easing | "Pairs eased, nothing else changed." |
+| Key types | "Keys set the way you wanted." |
+| Speed graph | "Ease shaped, still comes to rest." |
+| Offset | "Staggered, and each one still lands." |
+| Set the pivot | "Pivot moved, nothing else did." (MU) |
+| Group with a null | "The group moves as one. Nothing jumped." |
+
+Divider on return (`ask-back`): "[short name] · practiced on [layer]" for any lesson whose record was saved
+(first lesson or practice); "[short name] · ended, not saved" otherwise (`ask-ended`). Hand-back line in the
+thread: "That was step [n]; next is step [n+1]: [next_step]." or "That was the last step."
+
+## Home (FR-055's amendments)
+
+Ask card first ("Ask about the open comp", "What do you want to know or change?", "Reads your comp. Changes
+nothing."), then one quiet line in MU's order: a lesson open → "Back to your lesson"; a lesson in progress →
+"Pick up [skill] on [layer]" with Set it aside; else "Find my next lesson". No due review, Practice due or
+memory on Home; they're in Skills (`skills-due`). Empty record: "Welcome to Knack." with the same Home
+(`home-first`). `comp_active: false` → `home-nocomp`; `true`, `null` or absent → Ask on.
+
+## Tests (panel-builder)
+
+- One test per new and changed MU state id, driven from fixture events (SC-011).
+- Fail closed: every malformed `give_answer` result (missing, not JSON, unknown `kind`, 5 steps, 3 offers,
+  an offer no step uses, wrong types) draws no Steps, dock or Go deeper.
+- A `b1` panel draws no Go deeper for any result.
+- No panel string contains an underscore field name, a tool name or a slash command (FR-053); no bubble
+  shows the `/ask-mentor ` prefix.
