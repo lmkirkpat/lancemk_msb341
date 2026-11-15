@@ -206,9 +206,13 @@ a brand new session act like a colleague who already knows what you are working 
     the learner feel forgetful. **Home opens ask-first** (`decisions/012`, amends 002). Watch signal:
     go-deepers in the three sessions. The expression read and the "what links here" search are the
     first build task (H-6).
-  - **Next:** the ui-designer's ask-first Home and Ask entry with spec 007 T061, then spec 014 through
-    Spec Kit. Before the spec, verify live: Pan Behind on an expression-driven null, whether
-    `sourceRectAtTime` ignores alpha, and capture Comp 1 as a fixture.
+  - **Mockup and spec (2026-11-14):** the ask-first mockup passed design review after fixes
+    (`product/mockups/ask-mentor/`, `64bd9c4`). Spec 014 approved, OQ-1 to OQ-5 as recommended: the answer
+    comes as data (explanation, steps, up to two offered skills, closing offer), B1 offers no skills, and the
+    bridge's health check says whether a comp is active (constitution 1.5.0). The reads are spec 015's;
+    the three sessions wait for spec 015 phase 1 (FR-060). FR-055 carries spec 007's amendments.
+  - **Next:** the curriculum designer brings TD § 7.1 and § 16 in line with § 19 (before `SKILL.md`), then
+    spec 014's plan and tasks once spec 015's plan is committed (`.specify/feature.json` points at 015).
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),

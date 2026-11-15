@@ -25,7 +25,9 @@ decisions. In particular, `decisions/003` and `decisions/005` require:
 - The mentor's reasoning and the learner record live outside After Effects. A panel inside AE MAY
   start the mentor and show what it says (`decisions/005`), but it MUST hold no teaching logic,
   MUST NOT read or change the project except through the mentor's tools, and MUST NOT keep its
-  own copy of the learner record (it only reads the record).
+  own copy of the learner record (it only reads the record). One exception (amended 2026-11-14,
+  spec 014 OQ-1): the panel MAY read from the bridge's health check whether a comp is active, as a
+  yes or no with no name or other detail, so it can pause Ask before the mentor runs.
 
 A plan that conflicts with an active decision MUST either change or propose a new decision
 that supersedes it.
@@ -105,4 +107,4 @@ editing this file, bumping the version (MAJOR: a principle removed or redefined;
 principle or section added or materially expanded; PATCH: wording), and updating the dates
 below. Every Spec Kit plan checks compliance before tasks are generated.
 
-**Version**: 1.4.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-11-04
+**Version**: 1.5.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-11-14
