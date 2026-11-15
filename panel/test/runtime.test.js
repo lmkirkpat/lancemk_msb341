@@ -113,3 +113,14 @@ test("a repo .mcp.json with no ae-mentor server throws a plain message", () => {
   const t = repo({ mcpServers: {} });
   assert.throws(() => ensureRuntime(t.repo, t.dir), /no ae-mentor server/);
 });
+
+test("spec 014 R4: B1's folder sets no runtime flag, even if the repo's server entry has one", () => {
+  const plain = repo();
+  ensureRuntime(plain.repo, plain.dir);
+  const a = JSON.parse(fs.readFileSync(path.join(plain.dir, ".mcp.json"), "utf8")).mcpServers["ae-mentor"];
+  assert.equal(JSON.stringify(a).includes("AE_MENTOR_RUNTIME"), false);
+  const t = repo({ mcpServers: { "ae-mentor": { command: "node", args: ["mentor/server.mjs"], env: { AE_MENTOR_RUNTIME: "a", AE_MENTOR_HOME: "/tmp/h" } } } });
+  ensureRuntime(t.repo, t.dir);
+  const b = JSON.parse(fs.readFileSync(path.join(t.dir, ".mcp.json"), "utf8")).mcpServers["ae-mentor"];
+  assert.deepEqual(b.env, { AE_MENTOR_HOME: "/tmp/h" });
+});

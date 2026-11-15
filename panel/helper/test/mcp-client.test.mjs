@@ -45,7 +45,13 @@ test("the server's environment is the allowlist only", () => {
     AE_MENTOR_FIXTURE_TWINS: "/tmp/t",
     AE_MENTOR_TOOLS_DIR: "/tmp/tools",
     AE_MENTOR_HOME: "/tmp/h",
+    AE_MENTOR_RUNTIME: "a",
   });
+});
+
+test("spec 014 R4: the server always hears it's on A, and a start command can't say otherwise", () => {
+  assert.equal(serverEnv({}).AE_MENTOR_RUNTIME, "a");
+  assert.equal(serverEnv({ fixtureEnv: { AE_MENTOR_RUNTIME: "b1" }, baseEnv: { AE_MENTOR_RUNTIME: "b1" } }).AE_MENTOR_RUNTIME, "a");
 });
 
 test("the spawned server really gets no key and no ANTHROPIC_* variable (FR-009, FR-019)", async () => {
@@ -68,6 +74,7 @@ test("the spawned server really gets no key and no ANTHROPIC_* variable (FR-009,
   assert.equal(env.PATH, CHILD_PATH);
   assert.equal(env.AE_MENTOR_HOME, dir);
   assert.equal(env.AE_MENTOR_FIXTURE_STATE, "/tmp/s");
+  assert.equal(env.AE_MENTOR_RUNTIME, "a");
 });
 
 test("the real ae-mentor in fixture mode: instructions, tools, a call, a frame, exit and restart", async () => {
