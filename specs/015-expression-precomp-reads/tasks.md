@@ -53,7 +53,7 @@ step). Read-only scripts except where a plant is named.
   `mentor/test/k2-turn-f.test.mjs` (marked todo until T022 to T025). **Done 2026-11-14:** a real
   Anchor Point edit on Shake Control (Pan Behind), by inference; the failure was the wording (spec
   Amendment 1, research R6).
-- [ ] T005 (skill-builder, AE; **builder's hands**) **Pan Behind on an expression-driven null
+- [x] T005 (skill-builder, AE; **builder's hands**) **Pan Behind on an expression-driven null
   (SB-2).** On a duplicate of Comp 1, the agent reads Shake Control's base Position, Anchor Point and
   rock.png's footprint at 0.6 s; the builder uses Pan Behind on Shake Control by hand; the agent reads
   again at 0.6 s. Answer: did the base value and anchor change together, and did the children stay
@@ -62,7 +62,7 @@ step). Read-only scripts except where a plant is named.
   (572, −114) px in kind? Script in `mentor/dev/live-015/pan-behind-read.jsx`. At the same sitting,
   run once as written the three scripts folded together after the live runs and not yet run:
   `separate-dims.jsx`, the renumber step in `random-expression.jsx`, and the edited
-  `error-expression.jsx` (`expression-reads.md` › Still open).
+  `error-expression.jsx` (`expression-reads.md` › Still open). **Done 2026-11-14 (cockpit with the builder, `expression-reads.md` session 2): SB-2 and turn f confirmed by hand; Pan Behind took the *selected* layer; the scripts reproduce T001 to T003; new: hidden dimension properties hold stale values.**
 - [ ] T006 (skill-builder, AE; **builder's hands** for the scrub check) **Time mapping (E22).** Read
   Mentor Practice's Icon. On a duplicate, plant by script four copies of a keyed precomp: start
   offset 0.5 s, stretch 50%, stretch −100%, and time remap with two remap keys. For two inner keys per

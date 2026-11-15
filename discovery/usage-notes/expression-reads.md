@@ -28,21 +28,57 @@ session's scratchpad.
    instead of the cause ("Shake Control's pivot moved, not rock.png's"). Fix: report the changed
    property on the layer that changed, in the learner's terms. This fits K2's other half: an
    expression's motion must never be reported, and a real edit to a layer with an expression must be.
-2. **Pan Behind on a null over the art is an easy slip.** The null sits at the comp center on top of
-   the rock, so the tool takes the null. That's the anchor live finding from 10-26 ("it acts on the
-   layer under the cursor") in a real comp. Worth a teaching line where the pivot skill meets a parent
-   null.
+2. **Pan Behind on the parent instead of the art is an easy slip.** *Corrected by session 2:* the
+   tool took Shake Control because it was **selected**, not because it was under the cursor. Either
+   way, a learner working on a parented layer moves the parent's pivot without meaning to. Worth a
+   teaching line where the pivot skill meets a parent null.
 3. **An erroring expression looks "on".** Any rule that reads only the switch would call a broken
    expression a working one, which is wrong in the very case the ask mode cares about most ("what
    broke").
 4. **Renumbering moves wiggles.** The 10-29 overlap audit found that renumbering breaks checks;
    this is the same cause showing up in values.
 
+## Session 2: 2026-11-14, T005 and the scripts as written (cockpit with the builder)
+
+The cockpit ran it from the main session, not a skill-builder, because each step waits on the
+builder's hands. Same project. Duplicates "Comp 1 T005" (T005) and "Comp 1 015 live" (scripts) were
+deleted afterwards with their probe nulls. Comp 1 matched `comp1-snapshot.json` on a strict
+full-JSON compare, and the project was back to 34 items.
+
+### T005: Pan Behind on the expression-driven null (SB-2, turn f)
+
+The builder selected Shake Control, as in turn f, and used Pan Behind toward the rock's top-right,
+where the hammer hits. Read with `mentor/dev/live-015/pan-behind-read.jsx` at 0.6 s, before and
+after:
+
+| | Before | After | Change |
+|---|---|---|---|
+| Shake Control Anchor Point | 0, 0 | 561.0, −120.1 | +561.0, −120.1 |
+| Shake Control base Position (before the expression) | 960, 540 | 1521.0, 420.0 | +561.0, −120.0 |
+| Shake Control Position (after the expression) | 952.35, 542.49 | 1513.35, 422.49 | the same shift; the shake is unchanged |
+| rock.png's top-right corner in the comp | 1815.01, 251.32 | 1815.03, 251.39 | 0.07 px: the child stayed still |
+| Selected layer | none | Shake Control | |
+
+- **SB-2 confirmed by hand.** Pan Behind changes the base Position and the Anchor Point together.
+  The expression builds on `value`, so the shake carries on from the new base. The children stay
+  still, and the turning point is now the hit point.
+- **Turn f's action confirmed.** The hand move gives (561, −120), against T004's fitted (572, −114),
+  which is the same edit within a few pixels. Turn f's "Shake Control moved" was this edit.
+- **Correction:** Pan Behind took Shake Control because it was **selected**, not because it was the
+  layer under the cursor (finding 2 above is corrected).
+
+### The three scripts, run once as written
+
+- `error-expression.jsx` reproduces T001 exactly (on, an error starting "Expression disabled.", the
+  base value at two times, on Position and on a Slider).
+- `random-expression.jsx` (two plain runs, then one with `ARGS = { renumber: true }`, prepended)
+  reproduces T002 to the last digit. Moving the random probe to the top shifted the wiggle from
+  (601.17, 288.81) to (606.85, 295.47), and moving it back restored it. The random value never changed.
+- `separate-dims.jsx` reproduces T003. **New:** the hidden half keeps stale values that don't render.
+  When Position is joined, X and Y Position read 960, 540; when it's separated, Position reads the last
+  joined value. A read that walks every property must skip the hidden half (Position when separated,
+  X/Y/Z when joined), or it reports values that never show.
+
 ### Still open
 
-- T005 (Pan Behind on the expression-driven null, by hand) now confirms turn f's likely action, as
-  well as SB-2.
 - T006 (time mapping on Icon plus planted copies, a scrub check by hand).
-- `separate-dims.jsx`, the renumber step in `random-expression.jsx` and the edited
-  `error-expression.jsx` were folded together after the live runs and haven't been run as written.
-  Run each once at the T005 and T006 sitting.
