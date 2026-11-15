@@ -8,6 +8,7 @@
 import { segments, segmentState, segmentId, parseSegmentId } from "./analyze.mjs";
 import { isKeptLinear } from "./marks.mjs";
 import { unexpectedChanges } from "./diff.mjs";
+import { unkeyedChangeNotes } from "./k2-changes.mjs";
 import { alignLayers } from "./renumber.mjs";
 import { layerInfo } from "./layer-info.mjs";
 import { classOf, visibility } from "./visibility.mjs";
@@ -463,7 +464,7 @@ export function check(baseline, now0, lesson, { should_move = [], constant_speed
   const other = [...aligned.notes, ...unexpectedChanges(aligned.baseline, current, notedTargets).filter((note) => {
     const m = /^(.*) was changed \(not part of this lesson\)$/.exec(note);
     return !(m && extraProps.has(m[1]));
-  })];
+  }), ...unkeyedChangeNotes(baseline, now0)]; // spec 015 K2: unkeyed values, on base (T025)
 
   return grade({
     comp_matches: true,

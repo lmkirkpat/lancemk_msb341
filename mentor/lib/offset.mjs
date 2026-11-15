@@ -9,6 +9,7 @@ import { needsEase, segmentState } from "./analyze.mjs";
 import { clusters, timing } from "./timing.mjs";
 import { MentorError, registerErrors } from "../errors.mjs";
 import { dimensionShifts, isMoved, matchLayer, movedApart, otherChanges, outOfComp } from "./offset-keys.mjs";
+import { unkeyedChangeNotes } from "./k2-changes.mjs";
 import { layerInfo } from "./layer-info.mjs";
 import { classOf } from "./visibility.mjs";
 
@@ -574,7 +575,8 @@ export function check(baseline, current, lesson, { split = [] } = {}) {
     still_same,
     order_differs,
     out_of_comp: outOfComp(current, refsNow),
-    other_changes: otherChanges(baseline, current, groupRefs),
+    // Spec 015 K2 (T025): unkeyed values too, compared on base so an expression's motion isn't one.
+    other_changes: [...otherChanges(baseline, current, groupRefs), ...unkeyedChangeNotes(baseline, current)],
     rhythm,
     gaps_frames,
     passed,
