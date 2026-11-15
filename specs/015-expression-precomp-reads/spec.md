@@ -6,6 +6,17 @@
 
 **Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3).
 
+**Amendment 1 (2026-11-14, Phase 0 live checks, T008; approved by the builder 2026-11-14 with OQ-8 as recommended):** evidence in
+`discovery/usage-notes/expression-reads.md` (session 1) and the corrected finding 4 in
+`discovery/usage-notes/ask-baseline.md`. **AB turn f was most likely a real edit** (Pan Behind took
+Shake Control, the null over the rock, and changed its anchor), not playhead or expression motion. The
+check was right to see a change; the failure was that it named a side effect ("moved up at 2.6 s")
+instead of the cause (Shake Control's pivot moved, not rock.png's). Also: an erroring expression stays
+on in AE 27.0 and gives its base value; values don't change between reads at one time, but `wiggle`
+changes when the layer's index changes; separating or joining dimensions clears the expression. Changed
+here: US1 #6, US3 (story, why, test, scenarios), FR-006, FR-012 to FR-014, new FR-013a and FR-014a,
+SC-005, Edge Cases E4, E7, E17, E18 and new E28, Eval plan, Assumptions, and OQ-8 (new).
+
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
 (*Precompose*) as lessons for later. Expressions first, precomps as a later phase." Builder decision,
@@ -107,8 +118,9 @@ matches `comp1-ground-truth.json` and each planted case's answer key, with no ot
    Rotation expressions named as the reason.
 5. **Given** an expression turned off on a keyed property, **Then** it's listed as off and not as a
    source; the keys are.
-6. **Given** an expression with an error (planted), **Then** it's listed with its error and not counted
-   as a source of motion (its effect on the value is reported as not known).
+6. **Given** an expression with an error (planted), **Then** it's listed as on, with its error, and not
+   counted as a source of motion; its value after the expression is the base value (T001: AE 27.0 keeps
+   it on and falls back to the base).
 7. **Given** Shake Control's Position expression, **When** how much it moves the layer is read, **Then**
    the read gives the largest distance from the base value over the comp's duration and when it
    peaks, so an answer can order steps by visible effect (TD 014 § 19 "Checked 2026-11-14").
@@ -148,27 +160,38 @@ key, with US1's read as its input and nothing else built.
 
 ---
 
-### User Story 3 - A check never calls expression motion my edit (Priority: P1)
+### User Story 3 - A check reports what I changed, in my terms, and never an expression's motion (Priority: P1)
 
-When I do a lesson step and the mentor checks, it only says "you changed X" or "Edit > Undo until
-it's back" when X really changed: two reads at the same time disagree on something an expression
-doesn't drive, or on an expression-driven property's base value. If Shake Control just moved because
-of its expression, the check says nothing, or at most that it may be the expression.
+When I do a lesson step and the mentor checks, a change I really made outside the focus is reported
+as **the property I changed, on the layer I changed it on**: "Shake Control's pivot moved, not
+rock.png's", not a side effect such as "Shake Control moved up at 2.6 s". Motion that only comes from
+an expression (the playhead moved, or a layer's index changed under a `wiggle`) is never reported as
+mine.
 
-**Why this priority**: AB 4 was the worst finding: following the advice would have undone real work
-(TD 014 § 10.1 rule 3, K2). It's a fix to six shipped skills, not new capability.
+**Why this priority**: in AB turn f the check saw a real edit (Pan Behind took the null over the rock,
+`expression-reads.md` T004) but named its side effect, so neither the builder nor the mentor could tell
+what had happened, and the advice was "Edit > Undo until it's back" for a move the builder didn't
+recognize. The other half of K2 (TD 014 § 10.1 rule 3) still stands: expression motion must never be
+called an edit. Both are fixes to shipped skills, not new capability.
 
-**Independent Test**: unit tests that replay AB turn f (a parent null driven by expressions, the
-playhead moved between reads) through every skill check that reports other changes, plus a real edit
-to the same null's base value, with US1 built and no ask mode.
+**Independent Test**: unit tests on fixtures derived from the Comp 1 capture: AB turn f's fitted anchor
+edit, the same reads with only the playhead moved, and a renumber under a `wiggle`, through every skill
+check that reports other changes, with US1 built and no ask mode.
 
 **Acceptance Scenarios**:
 
-1. **Given** a pivot lesson on rock.png, Shake Control moving by expression, and the playhead moved
-   since the first read, **When** the learner checks, **Then** no other change is attributed to Shake
+1. **Given** a pivot lesson on rock.png and turn f's edit (Shake Control's Anchor Point changed by Pan
+   Behind), **When** the learner checks, **Then** the check reports one change: Shake Control's
+   Anchor Point (its pivot), with how far its footprint moved folded in as that change's visible
+   effect, and no separate "Shake Control moved" entry.
+2. **Given** a pivot lesson on rock.png, Shake Control moving by expression, and only the playhead
+   moved since the first read, **When** the learner checks, **Then** nothing is reported about Shake
    Control and the reply has no Undo advice about it.
-2. **Given** the same, but the learner moved Shake Control's base Position by hand, **When** checked,
-   **Then** the change is reported as before.
+2a. **Given** a layer with a `wiggle` on a transform property, and a layer added above it (so its index
+   changes, as the null skill's null does), **When** checked, **Then** its new wiggle values are not
+   reported as a change.
+2b. **Given** the learner changed Shake Control's base Position by hand, **When** checked, **Then** it's
+   reported as Shake Control's Position.
 3. **Given** two reads with no shared time for a layer, **When** compared, **Then** that layer is
    "not compared", never "moved".
 4. **Given** each skill with an "other changes" list (pivot, null, offset, key types, speed graph),
@@ -221,10 +244,10 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 | E1 | Expression over keys | Both; whether the text builds on value or keys (inferred) | "The keys do nothing" or "the expression overrides" as fact | Mentor Practice Logo |
 | E2 | Expression, no keys | The expression as the source | No source; an easing finding (FR-015) | Comp 1 Shake Control |
 | E3 | Expression turned off | Off; keys drive | Count it as a source | Live |
-| E4 | Expression with an error | The error; effect on value unknown | Count it as a source; a value claim | Live (never tested yet) |
+| E4 | Expression with an error | On, with the error; value after = base value (T001) | Count it as a source; call it off; call it working because it's on | Live (T001 done; planted copy) |
 | E5 | Functions that build on value without the word (`wiggle`, `loopOut`, `smooth`, `temporalWiggle`) | Builds on value or keys | "Sets its own value" | Planted text (unit) |
 | E6 | `value` only inside a comment or a string | Not counted | Builds on value | Planted text (unit) |
-| E7 | Separated dimensions | The expression on the active property; one left on Position while separated is reported as not active | An expression on Position as driving separated X and Y | Live (claim to verify) |
+| E7 | Separated dimensions | The expression on the side in use (Position, or X and Y). Separating or joining clears the expression (T003), and a script can't make the hidden-side state, so it has no fixture | An expression on Position as driving separated X and Y | UI separate or join not tested |
 | E8 | Effect property expression | Effect and property by name | Skipped because it isn't transform | Comp 1 Sweep |
 | E9 | Source Text and other non-transform properties | Listed with their group | Counted as moving children | Planted |
 | E10 | Link by name, name shared by two layers | Link to the topmost, flagged shared | Link to both, or pick silently | Comp 1 (G Shakers, Y Fragments) plus planted |
@@ -234,8 +257,9 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 | E14 | Link target eye off, not a matte | Doesn't render | Call it hidden by the learner without the matte check | Comp 1 Black Solid 1 |
 | E15 | Link target is a matte (eye off by design) | Renders through its fill layer | "Hidden" (spec 004 FR-013) | Mentor Practice 2 matte |
 | E16 | Link target is a guide layer, or outside its in and out at the times read | Doesn't render (guide); not on screen then (in and out) | "Renders" | Planted |
-| E17 | Expression-driven parent, playhead moved | Not a learner change | "You moved it"; Undo | Comp 1 (AB turn f) |
-| E18 | Expression with a random element, no seed | Values may differ between reads at one time; treat as expression-driven | A learner change | Planted text |
+| E17 | Real edit to a layer that has an expression (AB turn f: Pan Behind on Shake Control) | The property that changed on that layer (Anchor Point), with the footprint shift as its effect | A side effect as the change ("moved up at 2.6 s"); the focus layer named instead | Comp 1 capture plus T004's fitted edit (`turn-f-check-reply.json`) |
+| E17a | Expression-driven parent, only the playhead moved | Nothing | "You moved it"; Undo | Comp 1 capture (T004 test 1) |
+| E18 | `random()` without a seed, `wiggle()` | Same value between reads at one time on the same index (T002) | A learner change | Live (T002 done) |
 | E19 | Parent expression that's constant (`value`) | Doesn't move children (sampled result never varies) | Moves children | Planted |
 | E20 | Same-name comps, nested | By id | By name | Comp 1 (353/321, 242/131) |
 | E21 | Comp used in several places | Count of places | Read once and assumed to show the same everywhere | Comp 1 |
@@ -245,6 +269,7 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 | E25 | Depth limit, or a cycle | "Not read: too deep" or "not read: loop" | Empty | Planted (cycle: unit only; AE prevents one) |
 | E26 | Expressions inside a precomp that reference the outer comp | Not followed (as E13) | Resolved | Planted text |
 | E27 | Older snapshot or fixture without the new fields | "Not read" | "None" | Comp 1's committed snapshot |
+| E28 | A layer's index changes under a `wiggle` (a layer added or removed above it, such as the null skill's null) | Its after-expression values change with no edit (T002: about 6 px); compared on base, so nothing is reported | A learner change on that layer | Planted (T015) |
 
 ## Requirements *(mandatory)*
 
@@ -273,9 +298,10 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   be true when the parent has keys on a moving transform property **or** an on, error-free transform
   expression whose sampled result varies (K3; E19). The reason (keys, expression, or both) MUST be
   given.
-- **FR-006**: An expression that is off or has an error MUST NOT count as a source of motion; an
-  expression left on Position while dimensions are separated MUST be reported as not active (E3, E4,
-  E7).
+- **FR-006**: An expression is **active** only when it's on **and** has no error. An expression that
+  is off or has an error MUST NOT count as a source of motion, and an erroring one MUST be reported as
+  on with an error, never as working (AE 27.0 keeps it on and gives the base value, T001). Only the
+  side of a separable Position in use is read (E3, E4, E7).
 - **FR-007**: Effects on every layer MUST be named, keyed or not, with which of their properties are
   keyed or expression-driven (TD 014 Q5).
 
@@ -299,13 +325,22 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 
 - **FR-012**: Every check in the six skills that reports changes the learner made outside the focus
   ("other changes", "other layers moved", a jump) MUST compare two reads **at the same comp time**. A
-  layer with no shared time is "not compared", never "moved" (K2).
-- **FR-013**: For a property driven by an on, error-free expression, those checks MUST compare the
-  **base value**, not the value after the expression. A layer whose comp-space footprint differs at the
-  same time while no base value on it or its parents differs MUST NOT be attributed to the learner; the
+  layer with no shared time is "not compared", never "moved" (K2). (T004 found the pivot check already
+  does this; the requirement stays for every check.)
+- **FR-013**: For a property driven by an active expression, those checks MUST compare the **base
+  value**, not the value after the expression. A layer whose comp-space footprint differs at the same
+  time while no base value on it or its parents differs MUST NOT be attributed to the learner; the
   check MAY report it as "may be its expression" (TD 014 § 10.1 rule 3). See OQ-1.
+- **FR-013a**: A change in a layer's index between two reads (a layer added or removed above it) MUST
+  NOT be reported as a change to that layer's values. Expression results that depend on the index
+  (`wiggle`) are covered by FR-013's base comparison (E28).
 - **FR-014**: A change to an expression itself (turned on or off, text changed, new error) MUST be
   reported as an expression change, never as the layer moving.
+- **FR-014a**: A real change outside the focus MUST be reported as **the property that changed, on the
+  layer that changed** (Anchor Point, Position, parent, an expression), with any footprint shift it
+  caused attached to that entry as its visible effect, not reported as a separate "moved" entry. A
+  footprint shift with no property change behind it on the layer or a parent is reported as moved only
+  when FR-013 doesn't rule it out (E17). How the skill words it is OQ-8.
 - **FR-015**: The pivot and null skills' snapshots MUST report, for their focus layers, when their
   motion comes from a parent's motion or an own expression rather than their own keys, from the
   motion-sources map (K3). The other four skills get it with spec 014's rule 1 change (OQ-3, answered).
@@ -393,10 +428,16 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 - **SC-004**: The easing findings on Mentor Practice are **identical** before and after phase 1 and
   after phase 2 (spec 004 SC-004), and Comp 1 yields 0 keyframe-skill findings from Shake Control or
   the Sweep Center. *Measured by:* unit test.
-- **SC-005**: Replaying AB turn f (expression-driven parent, playhead moved) through each skill check
-  with an other-changes list gives **0** changes attributed to the learner, and a planted hand edit to
-  the same parent's base value is reported in **100%** of those checks. *Measured by:* unit tests, one
-  pair per skill.
+- **SC-005**: Through each skill check with an other-changes list (pivot, null, offset, key types,
+  speed graph), on fixtures derived from the Comp 1 capture:
+  - (a) AB turn f's edit (T004's fitted Anchor Point change on Shake Control) gives **exactly one**
+    change, Shake Control's Anchor Point, with its footprint shift attached, and **no** separate moved
+    entry for Shake Control (pivot and null; the keyed-value checks report the anchor change);
+  - (b) the same reads with only the playhead moved give **0** changes (E17a);
+  - (c) a renumber under a `wiggle` gives **0** changes on that layer (E28);
+  - (d) a planted hand edit to Shake Control's base Position is reported as its Position in **100%** of
+    those checks.
+  *Measured by:* unit tests, one set per skill.
 - **SC-006**: All six eval sets (easing, key types, speed graph, offset, pivot, null) meet their own
   SC-006 bar on B1 (at least 80% passing, every hard-rule check passing) on the merge commit of each
   phase, and the eval engineer's new K2 cases (Eval plan) pass 3 of 3. *Measured by:* eval runs, logged
@@ -435,8 +476,10 @@ every set re-runs (SC-006). Cases requested, from AB's held table, once US3 merg
 
 | Set | Situation | Hard check | Rubric item |
 |---|---|---|---|
-| Pivot | rock.png in a pivot lesson; parent null moved by expression; playhead moved since the first read; "done" | No "Undo" about the parent | "Doesn't call expression motion a learner change" |
+| Pivot | rock.png in a pivot lesson; Pan Behind took the parent null (turn f's edit); "done" | The reply names Shake Control's pivot; no "moved up" | "Says which layer's pivot moved, in the learner's terms, not a side effect" |
+| Pivot | rock.png in a pivot lesson; parent null moved by expression; only the playhead moved since the first read; "done" | No "Undo" about the parent | "Doesn't call expression motion a learner change" |
 | Null | A child of an expression-driven parent; jump check with the playhead moved | No jump reported for that child | Same |
+| Null | The learner's new null renumbers a layer with a `wiggle` below it; "done" | Nothing reported on that layer | Same |
 | Offset or key types | An expression-driven layer outside the focus | Not in other changes | Same |
 
 AB's other held cases (parent named first, padded PNG, answer before a review, no Easing for keyless
@@ -448,7 +491,7 @@ motion) belong to spec 014's set and to pivot K1, not here.
   errors; nothing writes one.
 - **The two lessons:** skill 4 (*Find what's moving it*) and skill 10 (*Precompose*). Queued for later
   specs.
-- **Any skill's teaching or `SKILL.md` wording.** Rule 1 ("trace before teaching") and the other § 10.1
+- **Any skill's teaching or `SKILL.md` wording** (except the one pivot line OQ-8 may add). Rule 1 ("trace before teaching") and the other § 10.1
   rules are spec 014's and the skill-builder's. This spec only changes what the tools return (K2, K3).
 - **Lifting easing's "I can't see inside these yet"** or making inner keys findings in any skill. Phase
   2 gives the data; a later spec decides how lessons use it.
@@ -464,15 +507,19 @@ motion) belong to spec 014's set and to pivot K1, not here.
 - Live captures are taken by the cockpit or builder (one AE driver at a time, constitution VI), on AE
   27.0, with `mentor/dev/capture.mjs` on the named comp. Planted cases go on duplicates and are reset
   with a strict compare (the sitting method in CLAUDE.md).
-- **Planted cases needed** (none exist in Comp 1): an off expression, an erroring expression (never
-  tested: making one means editing a comp, so it's planted on a copy), separated dimensions with an
-  expression left on Position, a run-time name, a `comp(...)` reference, a link to a guide and to a
+- **Planted cases needed** (none exist in Comp 1): an off expression, an erroring expression (planted
+  on a copy; T001), a `wiggle` under a renumber (E28), a run-time name, a `comp(...)` reference, a link to a guide and to a
   matte, and precomps with start offset, stretch, negative stretch and time remap (Mentor Practice's
   Icon covers some).
-- **Claims to verify live:** that After Effects keeps an erroring expression on (older versions turned
-  it off; E4); that a Position expression is inactive once dimensions are separated (E7); that Pan
-  Behind on an expression-driven null changes its base value (SB-2, read from the text, not tried by
-  hand), which SC-005's planted edit stands in for until then.
+- **Checked live 2026-11-14 (Phase 0, `expression-reads.md`):** in AE 27.0 an erroring expression
+  stays on and its value is the base value (T001; earlier versions weren't tested, and the product
+  targets 27.0); values don't change between reads at one time, but `wiggle` follows the layer's index
+  (T002); separating or joining dimensions clears the expression, and the hidden-side state can't be
+  made by script (T003, so E7 is "UI not tested"); turn f was a real anchor edit, by inference from the
+  saved reply (T004).
+- **Still to check by hand (T005):** that Pan Behind on an expression-driven null changes its base
+  Position and anchor together and keeps the children still (SB-2), and that it reproduces turn f's
+  edit. SC-005 (a) uses T004's fitted edit until then.
 - Expression text stays in tool replies to the model only, never in the repo except in fixtures made
   from the builder's own comps with no real names.
 - Moving to A (`decisions/011`): the reads don't depend on the runtime. Each set's A result goes stale
@@ -518,6 +565,15 @@ motion) belong to spec 014's set and to pivot K1, not here.
   copied from an expression's text or error in the session's last snapshot (T029).** The cost: a
   refusal is one more turn in a lesson, and evals could see it; no current case writes expression
   text, so none should.
+
+### New from Phase 0 (2026-11-14)
+
+- **OQ-8: Who changes how the pivot skill says turn f's change?** *Answered 2026-11-14: as recommended.* FR-014a makes the tool report the
+  cause (Shake Control's Anchor Point) with the side effect attached. Whether the mentor then says "you
+  moved Shake Control's pivot, not rock.png's" depends on the pivot `SKILL.md`, which this spec keeps
+  out of scope. **Recommended: tool change first (T023); if the new pivot eval case (Eval plan, row 1)
+  still fails on wording, one narrow pivot `SKILL.md` line in this spec (a new task after T036), not
+  spec 014's rule changes.** Expands Out of scope by that one line if needed.
 
 ### For the curriculum designer (hand-off, not edits)
 

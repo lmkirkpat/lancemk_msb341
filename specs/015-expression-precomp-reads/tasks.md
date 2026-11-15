@@ -28,30 +28,41 @@ order freedom inside that one branch.
 comp, then resets the original and checks it with a strict compare (quickstart › Before any live
 step). Read-only scripts except where a plant is named.
 
-- [ ] T001 (skill-builder, AE) **Erroring expression (E4).** On a duplicate of Comp 1, plant by
+- [x] T001 (skill-builder, AE) **Erroring expression (E4).** On a duplicate of Comp 1, plant by
   script an expression that errors (a reference to a layer name that doesn't exist) on a transform
   and on an effect property. Read `expressionEnabled`, `expressionError`, `valueAtTime(t, false)` and
   `valueAtTime(t, true)` at two times. Answer: does AE 27.0 keep it on, and what value does it give?
-  Script in `mentor/dev/live-015/error-expression.jsx`.
-- [ ] T002 [P] (skill-builder, AE) **Random without a seed (E18).** On the same duplicate, plant
+  Script in `mentor/dev/live-015/error-expression.jsx`. **Done 2026-11-14:** stays on; value is the
+  base value (`expression-reads.md`).
+- [x] T002 [P] (skill-builder, AE) **Random without a seed (E18).** On the same duplicate, plant
   `value + [random(10), 0]` and `wiggle(5, 20)`. Read each twice at one time across two snippet runs.
   Answer: does either change between reads at the same time? Script in
-  `mentor/dev/live-015/random-expression.jsx`.
-- [ ] T003 [P] (skill-builder, AE) **Separated dimensions (E7).** Plant by script an expression on
+  `mentor/dev/live-015/random-expression.jsx`. **Done 2026-11-14:** no change at one time; `wiggle`
+  moves when the layer's index changes (new E28, FR-013a).
+- [x] T003 [P] (skill-builder, AE) **Separated dimensions (E7).** Plant by script an expression on
   Position, then separate dimensions; then the reverse (expressions on X and Y, then join). Read
   `expression`, `expressionEnabled`, and whether the value follows the expression in each state.
   Answer: which property's expression is active. Script in `mentor/dev/live-015/separate-dims.jsx`.
-- [ ] T004 (skill-builder, no AE) **Find AB turn f's cause (research R6).** Build a fixture shaped
+  **Done 2026-11-14:** separating or joining clears the expression; the hidden-side state can't be made
+  by script (E7 narrowed to "UI not tested").
+- [x] T004 (skill-builder, no AE) **Find AB turn f's cause (research R6).** Build a fixture shaped
   like turn f from `mentor/test/fixtures/ask/comp1-snapshot.json` (Shake Control's samples at two
   playhead times; derive, don't hand-write values; take the session's saved tool replies too if the
   cockpit can provide them read-only) and run `anchor-check.mjs`'s `check` on it. Report which of
   R6's three candidates (or another) gives "Shake Control moved". Add the failing test as
-  `mentor/test/k2-turn-f.test.mjs` (marked todo until T022 to T025).
+  `mentor/test/k2-turn-f.test.mjs` (marked todo until T022 to T025). **Done 2026-11-14:** a real
+  Anchor Point edit on Shake Control (Pan Behind), by inference; the failure was the wording (spec
+  Amendment 1, research R6).
 - [ ] T005 (skill-builder, AE; **builder's hands**) **Pan Behind on an expression-driven null
   (SB-2).** On a duplicate of Comp 1, the agent reads Shake Control's base Position, Anchor Point and
   rock.png's footprint at 0.6 s; the builder uses Pan Behind on Shake Control by hand; the agent reads
   again at 0.6 s. Answer: did the base value and anchor change together, and did the children stay
-  still? Script in `mentor/dev/live-015/pan-behind-read.jsx`.
+  still? **Also confirms turn f's likely action:** with the null over the rock, does Pan Behind take
+  Shake Control (the layer under the cursor), and does its anchor change match T004's fitted
+  (572, −114) px in kind? Script in `mentor/dev/live-015/pan-behind-read.jsx`. At the same sitting,
+  run once as written the three scripts folded together after the live runs and not yet run:
+  `separate-dims.jsx`, the renumber step in `random-expression.jsx`, and the edited
+  `error-expression.jsx` (`expression-reads.md` › Still open).
 - [ ] T006 (skill-builder, AE; **builder's hands** for the scrub check) **Time mapping (E22).** Read
   Mentor Practice's Icon. On a duplicate, plant by script four copies of a keyed precomp: start
   offset 0.5 s, stretch 50%, stretch −100%, and time remap with two remap keys. For two inner keys per
@@ -59,11 +70,15 @@ step). Read-only scripts except where a plant is named.
   builder scrubs to each and confirms the key's pose shows there (by eye). Answer key saved as
   `mentor/test/fixtures/precomps/time-mapping-key.json`. Script in
   `mentor/dev/live-015/time-mapping.jsx`.
-- [ ] T007 (cockpit) Log T001 to T006 in `discovery/usage-notes/expression-reads.md` (new): each
-  question, the answer, and what it changes.
-- [ ] T008 (spec-writer) Fold the answers into spec › Assumptions and Edge Cases (E4, E7, E18, E22),
+- [x] T007 (cockpit) Log T001 to T006 in `discovery/usage-notes/expression-reads.md` (new): each
+  question, the answer, and what it changes. **Done for T001 to T004 (session 1);** the cockpit adds
+  T005 and T006 to the same note when they run.
+- [x] T008 (spec-writer) Fold the answers into spec › Assumptions and Edge Cases (E4, E7, E18, E22),
   research R3, R5, R7 and R12, and data-model § 1 `active`. If an answer changes a requirement, stop
-  and hand it back to the builder before T010.
+  and hand it back to the builder before T010. **Done 2026-11-14 for T001 to T004** (spec Amendment
+  1; research R3, R5, R6, R7; data-model § 1 and § 5). T004 changed US3, SC-005 and added FR-013a,
+  FR-014a and OQ-8, so it goes back to the builder before T022. T005 and T006's answers get a short
+  second fold when they run.
 
 **Checkpoint:** live facts logged; research matches them.
 
@@ -97,7 +112,9 @@ step). Read-only scripts except where a plant is named.
   `not_read: fixture` (research R13). Tests in `mentor/test/fixture-sweeps.test.mjs`.
 - [ ] T015 (skill-builder, AE) Capture fixtures into `mentor/test/fixtures/expressions/`: Comp 1
   (`--measure 25,26 --times 0.6`), Mentor Practice, Mentor Practice 2, Mentor Overlaps, and one
-  duplicate comp with the planted cases from T001 to T003 plus: a link to a guide layer, a link to a
+  duplicate comp with the planted cases from T001 and T002 (an erroring expression on a transform
+  and on an effect property; a `wiggle` layer with a layer added above it, read before and after, E28)
+  plus: a link to a guide layer, a link to a
   matte, a link by index and by `index - 1`, a `comp("…")` reference, a run-time name, a Source Text
   expression, a constant `value` expression on a parent (E19), and a comp with 30 expressions (for
   SC-007). Reset and strict-compare every original.
@@ -150,26 +167,41 @@ step). Read-only scripts except where a plant is named.
 
 ## User Story 3: a check never calls expression motion the learner's edit (P1)
 
-**Goal:** K2 in every check with an other-changes list; K3's `motion_from` in pivot and null.
-**Independent test:** SC-005: AB turn f replayed through each check gives 0 learner changes; a
-planted base edit is reported in each.
+**Goal:** K2's two halves in every check with an other-changes list: (a) a real edit to a layer,
+expression or not, is reported as the property that changed on that layer, with its side effect
+attached; (b) expression motion (playhead, renumber) is never reported. Plus K3's `motion_from` in
+pivot and null.
+**Independent test:** SC-005 (a) to (d) through each check (spec, Amendment 1).
 
-- [ ] T022 [US3] (skill-builder) Fix the cause T004 found. If it's time matching, add
-  `mentor/lib/same-time.mjs` (shared times are the same frame in both reads, research R7) and use it
-  where the checks pick shared times. Turn `mentor/test/k2-turn-f.test.mjs` from todo to passing.
-- [ ] T023 [US3] (skill-builder) In `mentor/lib/anchor-check.mjs`: item 5's moved list,
-  `rawChanged` and `otherChanges`' anchor comparison compare `base` for expression-driven properties;
-  a footprint difference with no base difference on the layer or a parent is left out; add
-  `expression_changed` (FR-012 to FR-014; data-model § 5). Tests in `mentor/test/anchor-check-k2.test.mjs`:
-  turn f gives no change on Shake Control; a planted base Position change on it is reported; no shared
-  time gives `not_compared`.
-- [ ] T024 [US3] (skill-builder) In `mentor/lib/null-parenting-check.mjs`: `value_changed` (OA-4) and
-  the jump check's footprints follow the same rule; `expression_toggled` becomes `expression_changed`
-  (keep every existing test's meaning). Tests in `mentor/test/null-parenting-k2.test.mjs`: a child of
-  an expression-driven parent with the playhead moved shows no jump; a base edit shows.
-- [ ] T025 [P] [US3] (skill-builder) Replay turn f through offset, key types and speed graph checks
-  (`mentor/test/k2-replay-keyed.test.mjs`); change `mentor/lib/offset-keys.mjs`,
-  `mentor/lib/key-types.mjs` or `mentor/lib/speed-graph.mjs` only if a replay attributes a change.
+**Starts after the builder approves Amendment 1 and answers OQ-8.** Both done 2026-11-14 (OQ-8 as recommended).
+
+- [ ] T022 [US3] (skill-builder) Rewrite `mentor/test/k2-turn-f.test.mjs`'s third test (the todo for
+  the old SC-005) to SC-005 (a): on `BASE` against `panBehindOnShakeControl(NOW, …)` with the fitted
+  `pan_behind_fit`, `check` returns **exactly one** other change for Shake Control, its Anchor Point,
+  carrying an `effect` whose `distance_px` and `direction` equal the saved reply's old moved entry
+  (`turn-f-check-reply.json`), and `item5.moved_layers` has **no** Shake Control entry. Keep test 1
+  (playhead only: no change, SC-005 b). Change test 2 to assert the same numbers through the new
+  `effect` instead of the old moved entry, so it still proves T004's fit. The test stays failing
+  until T023.
+- [ ] T023 [US3] (skill-builder) In `mentor/lib/anchor-check.mjs` (FR-012 to FR-014a; research R7;
+  data-model § 5): (a) a changed property on a layer outside the focus becomes one entry per property
+  with the footprint shift attached as `effect`, and no separate moved entry for that layer; (b)
+  item 5's moved list, `rawChanged` and `otherChanges` compare `base` for properties with an active
+  expression, so a footprint difference with no base difference on the layer or a parent is left out;
+  add `expression_changed`. Tests in `mentor/test/anchor-check-k2.test.mjs`: SC-005 (b), (c) with the
+  T015 renumber capture, (d) a planted base Position change reported as Position; no shared time gives
+  `not_compared`. Makes T022 pass.
+- [ ] T024 [US3] (skill-builder) In `mentor/lib/null-parenting-check.mjs`, the same two halves:
+  `value_changed` (OA-4) and the jump check compare `base` for expression-driven properties at the same
+  frame; a real property change is one entry with its effect attached; `expression_toggled` becomes
+  `expression_changed` (keep every existing test's meaning). Tests in
+  `mentor/test/null-parenting-k2.test.mjs`: SC-005 (a) to (d), including **the learner's new null
+  renumbering a `wiggle` layer below it gives no change on that layer** (FR-013a, E28).
+- [ ] T025 [P] [US3] (skill-builder) Replay SC-005 (a) to (d) through offset, key types and speed
+  graph (`mentor/test/k2-replay-keyed.test.mjs`): (a) is reported as the anchor change (these checks
+  compare keys, so expect a property entry, not a moved one), (b) and (c) give nothing, (d) is
+  reported. Change `mentor/lib/offset-keys.mjs`, `mentor/lib/key-types.mjs` or
+  `mentor/lib/speed-graph.mjs` only if a replay fails.
 - [ ] T026 [US3] (skill-builder) Add `motion_from` (data-model § 4) to the focus and candidate
   layers that `mentor/tools/transform-anchor.mjs` and `mentor/tools/null-parenting.mjs` return
   (FR-015, OQ-3: these two only). Tests in the existing `anchor-tools` and `null-parenting-tools`
@@ -205,9 +237,10 @@ planted base edit is reported in each.
   SC-008's timing (`capture.mjs --time` on Comp 1 and Mentor Practice, with and without the new
   passes; ≤ 0.5 s added). If over, drop the fine sweep to 120 samples (research R9) and re-measure.
 - [ ] T034 (skill-builder reads, **builder's hands**) SC-010: 10 spot checks of the read's facts in AE
-  across Comp 1 and the T001/T003 planted copies, including one off and one erroring expression; at
+  across Comp 1 and the T001 and T015 planted copies, including one off and one erroring expression; at
   least 9 of 10 agree. Logged by the cockpit in `discovery/usage-notes/expression-reads.md`.
-- [ ] T035 [P] (eval-engineer) Add the K2 cases from spec › Eval plan to `product/evals/anchor/`,
+- [ ] T035 [P] (eval-engineer) Add the K2 cases from spec › Eval plan (five rows, Amendment 1: turn
+  f's real edit named by cause; expression motion; a renumbered `wiggle`) to `product/evals/anchor/`,
   `product/evals/null-parenting/` and `product/evals/offset/` (or key types), with fixtures derived
   from the T015 Comp 1 capture. Case numbers from the cockpit.
 - [ ] T036 (eval-engineer) Re-run all six sets on B1 at the merge commit, one set at a time: easing,
@@ -293,9 +326,10 @@ planted base edit is reported in each.
 
 ## Dependencies and order
 
-- **Phase 0 before phase 1 code:** T001, T003 feed T010 (`active`, error handling); T004 feeds
-  T022 to T025; T005 feeds T023's planted base edit; T006 feeds T046. T002 feeds T023 (whether
-  random expressions need special handling).
+- **Phase 0 before phase 1 code:** T001 and T003 fed T010 (`active` = on and no error); T002 added
+  E28 to T015, T023 and T024; T004 reshaped T022 to T025, which wait on the builder's approval of
+  Amendment 1 and OQ-8. T005 confirms turn f's action and SB-2 (feeds T023's planted edit); T006 feeds
+  T046.
 - **Inside phase 1:** T010 → T012 → T013 → T014 → T015 → everything after. T016 right after T015.
   US1 (T017 to T019) → US2 (T020, T021, which use T017's reads) and US3 (T022 to T026, which use
   T017 and T019). T027 needs T017 to T021. T028 and T029 any time after T017.

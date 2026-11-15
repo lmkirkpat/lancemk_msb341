@@ -46,7 +46,8 @@ classifies:
 
 `.value` after another property (`thisComp.layer("A").transform.position.value`) is **not** this
 property's value. Always reported with `inferred: true`. An expression with an error still gets a
-classification (the text didn't change), but FR-006 keeps it out of the sources.
+classification (the text didn't change), but FR-006 keeps it out of the sources: in AE 27.0 it stays on
+and gives the base value (T001).
 
 **Why:** the spec asks for a plain text test, marked inferred (TD 014 Q3), and E5/E6 name the traps.
 **Considered:** evaluating in AE with `value` swapped (rejected: it edits the project, FR-019).
@@ -84,40 +85,50 @@ fields stay the value after expressions (`valueAtTime(t, false)`, as today). For
 caller's time, the time goes in `sample_times` as now.
 
 **Why:** the checks already compare samples at shared times; giving them the base value at the
-same times is the smallest change that lets K2 compare bases (OQ-1).
+same times is the smallest change that lets K2 compare bases (OQ-1). For an erroring expression, base
+and after are the same (T001), so it needs no special case.
 
-## R6. Why AB turn f blamed the learner (K2's cause)
+## R6. Why AB turn f blamed the learner (K2's cause): answered by T004
 
-**Decision: find it before fixing it** (task T004). `anchor-check.mjs` already compares at shared
-sample times, so "compared across times" isn't the whole story. Candidates to test against a fixture
-shaped like turn f:
-1. Times that match after rounding to 0.001 s but were read at slightly different exact times. A
-   12 px, 8 Hz sine moves about 0.6 px in 1 ms, far over `VALUE_TOL` (0.01).
-2. The `rawChanged` fallback for a layer with no footprint (a null) taking a time that is in one
-   read's samples only.
-3. The mentor comparing two tool replies' values itself, not the check (then the fix is the reply,
-   not the comparison).
+**Answer (2026-11-14, `discovery/usage-notes/expression-reads.md` T004):** none of the three
+candidates. Replaying the reads with only the playhead moved gives no change (the check already
+compares at shared times), and rounding, a missing footprint and the mentor's own guess don't arise.
+The saved reply is reproduced, to 0.001 px on rock.png's edges, only by an **Anchor Point change on
+Shake Control** of about (572, −114) px: Pan Behind on the null that sits over the rock. Turn g shows it
+back, which fits an Undo. This is an inference from the saved reply, not a read of AE; T005 confirms
+it by hand.
 
-The fix (T022 to T025) follows whichever holds; FR-012 and FR-013 are the rule either way.
+**Consequence:** the check was right to see a change. It failed by reporting the side effect (Shake
+Control's footprint "moved up at 2.6 s") as its own entry, next to an `anchor_changed` entry the mentor
+didn't lead with. K2 now has two halves (R7).
 
-## R7. K2: what a check does with expression motion
+## R7. K2: what a check does with real edits and with expression motion
 
 **Decision:**
-- Compare at the **same exact time** only. Snapshot sample times are stored rounded, so a shared time
-  is one both reads sampled from the same frame (both rounded to a frame when `fps` is known, as the
-  caller-time code already does). No shared time → `not_compared`.
-- For a property with an active, error-free expression, compare `base`. A footprint or value
-  difference with no `base` difference on the layer or any parent is **left out** of the check's
-  other-changes list (FR-013's "MAY report" is not used yet: a new kind that no `SKILL.md` knows
-  could reach the learner as a field name, rule 5; spec 014 can add it).
-- An expression turned on or off, its text changed, or a new error is reported as
-  `expression_changed` with what changed (FR-014). Null's existing `expression_toggled` becomes this
-  kind; offset's on/off listing keeps its sentence form.
+- **Real edits are reported by cause (FR-014a).** When a layer outside the focus has a property change
+  (Anchor Point, base Position, Scale, Rotation, parent, an expression), its footprint shift at the
+  shared times is attached to that entry as `effect: { distance_px, direction, time }`, and no separate
+  moved entry is made for that layer. Turn f becomes one entry: Shake Control's Anchor Point, with the
+  shift as its effect. A moved entry stays only for a footprint shift with no property change on the
+  layer or a parent behind it, and only when the base rule below doesn't rule it out.
+- **Same time only.** Shared times are the same frame in both reads (both rounded to a frame when
+  `fps` is known). No shared time gives `not_compared`. T004 showed the pivot check already does this;
+  the null check's before-read time and the other checks get the same helper.
+- **Expression motion is never reported.** For a property with an active expression (on, no error),
+  compare `base`. A footprint or value difference with no `base` difference on the layer or a parent is
+  left out of the other-changes list (FR-013's "MAY report" isn't used yet: a new kind no `SKILL.md`
+  knows could reach the learner as a field name, rule 5; spec 014 can add it).
+- **Renumbering (FR-013a, E28).** `wiggle` follows the layer's index (T002: about 6 px), so a layer
+  added above it moves its after-values with no edit. The base rule covers it; layers are already
+  matched across a renumber by `renumber.mjs` and the checks' `matchLayer`. A test pins it.
+- **Expression changes.** On or off, text changed, or a new error is reported as `expression_changed`
+  with what changed (FR-014). Null's `expression_toggled` becomes this kind; offset's on/off listing
+  keeps its sentence form.
 
-**Sites:** pivot (`anchor-check.mjs`: item 5's moved list and `rawChanged`; `otherChanges`'
-anchor comparison), null (`null-parenting-check.mjs`: `value_changed` (OA-4), the jump check's
-footprints, `expression_toggled`). Offset, key types and speed graph compare keys, not sampled
-values: they get the AB-f replay test (SC-005) and change only if it fails.
+**Sites:** pivot (`anchor-check.mjs`: item 5's moved list, `rawChanged`, `otherChanges`), null
+(`null-parenting-check.mjs`: `value_changed` (OA-4), the jump check's footprints,
+`expression_toggled`). Offset, key types and speed graph compare keys, not sampled values: they get
+SC-005's replays and change only if one fails.
 
 ## R8. K3: `moves_children` and the snapshot field (FR-005, FR-015)
 
@@ -171,7 +182,7 @@ times only), and the R1 expression inventory. Per precomp layer: start time, str
 inner reads are 347 keyed properties), and FR-028 says no skill uses the contents yet.
 
 **Mapping:** without remap, `outer = start + inner × stretch / 100` (negative stretch reverses; **Live**,
-T006). With remap, an inner time shows at each outer frame whose remap value is within half an inner
+T006, still open). With remap, an inner time shows at each outer frame whose remap value is within half an inner
 frame of it. Nested mappings compound from the inside out. A key "never shows" when no outer time in
 the precomp layer's in-out range (and the outer comp's 0 to duration) maps to it.
 

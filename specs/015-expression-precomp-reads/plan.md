@@ -129,7 +129,7 @@ goes in new files where possible, so the shared-file edits stay small.
 
 ## Risks
 
-- **AB 4's cause isn't what research R6 guesses.** T004 runs first; the K2 tasks follow its finding.
+- **AB 4 was a real edit, said badly** (T004, research R6). K2 now reports real edits by cause as well as leaving out expression motion; T022 to T025 wait on the builder's approval of spec Amendment 1 and OQ-8. T005 confirms the action by hand.
 - **A new snapshot field leaks into a lesson's wording** (`motion_from`, base samples). The six-set
   gate catches it; OQ-3 already narrowed `motion_from` to two skills.
 - **Expression-heavy comps cost more than Comp 1.** The fine sweep runs only on request; T033

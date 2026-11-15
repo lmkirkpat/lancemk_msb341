@@ -18,7 +18,7 @@ Additive only. `layers`, `precomp_layers` and every existing `layer_info` field 
 | `group` | `transform` \| `effect` \| `text` \| `mask` \| `shape` \| `other` | from the path's root |
 | `keys` | int | `numKeys` |
 | `enabled` | bool | `expressionEnabled` |
-| `active` | bool | false when on Position with dimensions separated, or on X/Y Position when they aren't (E7; **Live** T003) |
+| `active` | bool | `enabled` and no `error` (T001: AE 27.0 keeps an erroring expression on, at the base value). Only the in-use side of a separable Position is walked (`inUse`, as today); separating or joining clears the expression (T003) |
 | `error` | string \| null | `expressionError`, trimmed to 300 characters |
 | `text` | string | up to 20,000 characters (research R2) |
 | `text_length` | int | full length |
@@ -56,7 +56,7 @@ sample's exact time.
 "builds_on" | "sets_own" | "cant_tell", builds_on_inferred: true, moves: { varies, max_offset, max_at,
 units, sampled_every } | { status: "not_read", reason }, refs: [Reference] }`
 
-`is_source` = `on && active && !error`. Only sources count in the motion-sources map (FR-006).
+`is_source` = `active` (on and no error). Only sources count in the motion-sources map (FR-006).
 
 ### Reference (out of one expression)
 
@@ -93,6 +93,11 @@ or `{ status: "not_read", reason }`.
 
 - Other-change entries attributed to the learner need a difference at a **same-frame** time (see
   research R7) on a non-expression value or on `base`.
+- A real change outside the focus is one entry per changed property on that layer (Anchor Point,
+  Position, Scale, Rotation, parent, expression), with `effect: { distance_px, direction, time } | null`
+  for the footprint shift it caused. No separate moved entry for that layer (FR-014a).
+- A layer whose index changed is matched by the existing renumber matching and compared on `base`
+  (FR-013a).
 - New kind `expression_changed`: `{ layer, property, what: "turned_on" | "turned_off" | "text" | "error" }`.
 - Layers with no shared time: in the check's existing `not_compared` list, never in moved lists.
 
