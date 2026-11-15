@@ -91,8 +91,8 @@ step). Read-only scripts except where a plant is named.
 
 ## Setup
 
-- [ ] T009 (cockpit) Cut the phase 1 skill-builder worktree from local `main` (not `origin/main`;
-  CLAUDE.md next step 3) and name it `--shared-owner` for `mentor/**`.
+- [x] T009 (cockpit) Cut the phase 1 skill-builder worktree from local `main` (not `origin/main`;
+  CLAUDE.md next step 3) and name it `--shared-owner` for `mentor/**`. **Done 2026-11-14: `../wt-015-reads`, branch `015-reads-p1` from `71dc7c9`.**
 
 ## Foundational (blocks US1 to US3)
 
