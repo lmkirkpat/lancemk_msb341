@@ -558,6 +558,28 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
 - **Panel data:** the "asked" result carries the offered skills (two at most) and the step lines as
   data, so the panel never parses the mentor's prose. A requirement for the spec writer.
 
+**Decided 2026-11-14, from the design review of the mockup** (`product/mockups/ask-mentor/README.md`
+› Design review 2026-11-14):
+- **Go deeper on B1 stops at the offer** (§ 7.1 stands). The panel never starts the lesson itself on
+  B1: without the answer's context the lesson asks its own opening and the pivot skill turns down
+  nulls. B1 is for building and evals; the three sessions run on A, where the lesson takes over in the
+  same conversation (§ 7.2).
+- **An "outside the six" step pairs an action with the read fact, never the edit** (H-2 applied to
+  § 5.1's "actionable"): "Open Shake Control's Position expression and look at how it sets each hit's
+  size: it uses the first hit's size for all three. Not something I teach yet." Opening and looking
+  is the action; what to change stays the learner's. Take `SKILL.md` examples from this line, since
+  the model copies example sentences word for word.
+- **The numbered steps come from step data only.** The mentor's prose carries the explanation and the
+  offer; the panel draws the STEPS label and the numbered list from the step lines. Nothing is said
+  twice.
+- **The mentor's first line names the comp it read** ("In Comp 1, …"). It's the wrong-comp safeguard
+  now that the panel shows no comp name.
+- **Go deeper on a learned skill is practice, never a review** (§ 7.1, § 11): no "review" label or
+  "Review passed", and a check that doesn't pass says what's still off and where, with no fail
+  language. It's not recorded as a failed review.
+- **After a new question, the dock shows only the latest answer's steps.**
+- **Skill tags need short names** for all six; the mockup's README proposes them for the spec.
+
 1. **Ask-first, with the lead moved to the follow-through (§ 12).** **Recommended: yes**, and watch
    the three sessions for go-deepers. If none of the three goes deeper without the builder forcing it,
    revisit: the product may be drifting toward Adobe's "answer when asked".

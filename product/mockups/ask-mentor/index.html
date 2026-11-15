@@ -131,7 +131,9 @@ button.btn:hover:not(:disabled) { background: var(--btn-hover); }
 button.btn.primary { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
 button.btn.primary:hover:not(:disabled) { background: #0d66d0; }
 button.btn.quiet { background: transparent; border-color: transparent; color: var(--accent); padding-left: 2px; padding-right: 2px; }
-button.btn:disabled { opacity: .45; cursor: default; }
+button.btn:disabled, button.btn[aria-disabled="true"] { opacity: .45; cursor: default; }
+button.btn[aria-disabled="true"]:hover { background: var(--btn); }
+button.btn.primary[aria-disabled="true"]:hover { background: var(--accent-fill); }
 button.btn.pressed, button.btn.pressed:disabled { background: var(--btn-pressed); border-color: var(--accent); color: var(--text-strong); cursor: progress; opacity: 1; }
 .why-off { color: var(--muted); font-size: 11px; width: 100%; margin: 0; }
 .spin { width: 10px; height: 10px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; flex: none; display: inline-block; }
@@ -200,11 +202,14 @@ button.btn.pressed, button.btn.pressed:disabled { background: var(--btn-pressed)
 .msg .who { flex-wrap: nowrap; white-space: nowrap; }
 .msg .who .phk { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .qline .ql, .qline .ql small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-/* "Steps" label inside the answer, between the explanation and the numbered list (builder, 2026-11-14). */
-.steps-lbl { margin: 10px 0 2px; padding-top: 8px; border-top: 1px solid var(--line-soft); font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
-.steps-lbl + ol.ans { border-top: 0; padding-top: 0; }
-.askcard .row.between { flex-wrap: nowrap; }
-.askcard .row.between .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* "Steps" heading inside the answer, between the explanation and the numbered list (builder, 2026-11-14).
+   The heading and the list are drawn by the panel from the step data, never from the mentor's prose. */
+.stepsblock { margin: 10px 0 8px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+.steps-lbl { margin: 0 0 2px; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); display: flex; gap: 6px; justify-content: space-between; }
+.steps-lbl .drawn { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.stepsblock ol.ans { border-top: 0; padding-top: 0; margin-bottom: 0; }
+.askcard .row.between { flex-wrap: nowrap; align-items: flex-end; }
+.askcard .row.between .meta { overflow-wrap: anywhere; }
 .msg.learner { text-align: right; }
 .msg.learner .on { display: block; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
 .msg.learner span.b { display: inline-block; text-align: left; background: var(--bubble); border: 1px solid var(--bubble-line); border-radius: 10px; padding: 3px 9px; color: var(--text-strong); max-width: 92%; }
@@ -213,7 +218,8 @@ button.btn.pressed, button.btn.pressed:disabled { background: var(--btn-pressed)
 .ph { color: var(--text); }
 .phline { font-style: italic; }
 code { font: 11px/1.4 ui-monospace, Menlo, monospace; background: var(--code-bg); border: 1px solid var(--line); border-radius: 2px; padding: 0 3px; }
-em.skill { font-style: italic; color: var(--text-strong); font-weight: 600; white-space: nowrap; }
+/* Skill tags wrap like any words (design review 2026-11-14); answers use the short tag names (README). */
+em.skill { font-style: italic; color: var(--text-strong); font-weight: 600; }
 /* "What's going on": explanation in parts, a plain bulleted list, never numbered or docked. */
 ul.why { margin: 2px 0 10px; padding-left: 16px; }
 ul.why li { margin: 0 0 3px; }
@@ -222,6 +228,8 @@ ol.ans { margin: 4px 0 8px; padding: 8px 0 0 18px; border-top: 1px solid var(--l
 ol.ans li { margin: 0 0 5px; padding-left: 2px; }
 ol.ans li::marker { color: var(--muted); font-weight: 600; }
 .deeper { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+.deeper .btn { max-width: 100%; text-align: left; white-space: normal; }
+.deeper .why-off { margin-top: 2px; }
 .divider { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; margin: 4px 0 10px; text-align: center; }
 .divider::before, .divider::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
 .passline { margin: 0 0 12px; color: var(--ok); font-weight: 600; }
@@ -322,7 +330,7 @@ details.earlier[open] { color: var(--text); }
   <div id="list"></div>
 
   <div class="note" id="note" aria-live="polite"></div>
-  <p class="ph-key">The mentor's words are marked "Placeholder": they belong to SKILL.md, not the panel. The main answer is for Comp 1 from the ask baseline (discovery/usage-notes/ask-baseline.md), written to teaching design § 5.1 as decided in the 2026-11-14 mockup review: what's going on as unnumbered parts in order of visible effect, then only actionable steps. Layer names and times are from that comp's ground truth. The panel's own words never name the comp (decided 2026-11-14); only the mentor's do. The record (what's learned, what's due) and Mentor Practice's lesson line are invented to show a state. No snapshot or frame was attached.</p>
+  <p class="ph-key">The mentor's words are marked "Placeholder": they belong to SKILL.md, not the panel. The main answer is for Comp 1 from the ask baseline (discovery/usage-notes/ask-baseline.md), written to teaching design § 5.1 as decided in the 2026-11-14 mockup review: what's going on as unnumbered parts in order of visible effect, then only actionable steps. The STEPS heading and numbered list are marked "Panel · from step data": the panel draws them, and the mentor's prose leaves them out. Layer names and times are from that comp's ground truth. The panel's own words never name the comp (decided 2026-11-14); only the mentor's do, and its first line always names the comp it read. Revised after the design review, 2026-11-14 (README). The record (what's learned, what's due) and Mentor Practice's lesson line are invented to show a state. No snapshot or frame was attached.</p>
 </nav>
 
 <main class="stage-area" id="stage"></main>
@@ -344,7 +352,8 @@ function nav(tab, o = {}) {
   const conn = o.conn || "ok";
   const connText = { ok: "AE", bad: "Can't see AE", busy: "AE busy" }[conn];
   const lessonOn = !!o.lesson;
-  const target = { home: o.homeAt || "home-return", lesson: o.lessonAt || (lessonOn ? "ask-deeper-lesson" : "lesson-none"), skills: "skills-due" };
+  // With a lesson open, the Home tab shows Home with Ask paused (never a live thread or Go deeper).
+  const target = { home: o.homeAt || (lessonOn ? "home-lessonopen" : "home-return"), lesson: o.lessonAt || (lessonOn ? "ask-deeper-lesson" : "lesson-none"), skills: "skills-due" };
   const t = (id, label) => `<button role="tab" id="tab-${id}" aria-controls="view" aria-selected="${tab === id}" tabindex="${tab === id ? 0 : -1}" data-go="${target[id]}" data-tab>${label}</button>`;
   return `<div class="nav"><div role="tablist" aria-label="Knack">
     ${t("home", "Home")}${t("lesson", `Lesson${lessonOn ? '<span class="live" aria-hidden="true"></span><span class="sr"> (open)</span>' : ""}`)}${t("skills", "Skills")}
@@ -387,39 +396,61 @@ const PIV = "Set the pivot";
 const PIV_FULL = "Set the pivot (anchor point)";
 let QTEXT = "How can I make the rock shaking more organic, like it's vibrating from the hammer hit and not the center of the rock?";
 
-// Comp 1's answer, after the builder's mockup review (teaching design § 5.1 and § 19, 2026-11-14).
-// "What's going on" is explanation, in parts, in order of visible effect: never numbered, never
-// called steps, never docked. The steps are only things the learner does in AE, each starting with
-// an action on a named layer or property. About 125 words. A mockup placeholder; SKILL.md takes
-// § 5's shape, never this text.
+// Comp 1's answer, after the builder's mockup review and the design review (teaching design § 5.1
+// and § 19, 2026-11-14). The mentor's first line names the comp it read: with no comp name in the
+// panel, that line is the wrong-comp safeguard. "What's going on" is explanation, in parts, in order
+// of visible effect: never numbered, never called steps, never docked. The steps are only things the
+// learner does in AE, each starting with an action on a named layer or property. About 121 words with
+// the steps and the offer (§ 5.1's cap is about 120). A mockup placeholder; SKILL.md takes § 5's shape, never this text.
+const LEAD = `In ${COMP}, rock.png rides on Shake Control, a null moved by expressions:`;
 const WHY = [
-  `All three hits are the same size: the Position expression reuses the first hit's size.`,
-  `The rotation is too small to read: 0.75° at most, gone in about a third of a second.`,
-  `The turn centers on the rock, because Shake Control sits at its middle.`,
+  `All three hits are the same size.`,
+  `Rotation is too small to see: 0.75° at most, gone in about 1/3 s.`,
+  `The turn centers on the rock, where Shake Control sits.`,
 ];
-// Step lines come to the panel as data with the answer (open question 2, decided), never parsed from prose.
+const OFFER = `Try them, or want to go deeper on step 3 with <em class="skill">${PIV}</em>?`;
+// Step lines come to the panel as data with the answer (open question 2, decided), never parsed from
+// prose. Step 1 states a read fact with an action, never the edit (H-2). Tags use the short names.
 const STEPS = [
-  `Open Shake Control's Position expression, find where it uses the first hit's size, and make each hit use its own. Not something I teach yet.`,
+  `Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet.`,
   `Raise the amounts in Shake Control's Rotation expression.`,
-  `Select Shake Control (the null, not a letter layer) and Pan Behind its pivot to where the hammer hits. <em class="skill">${PIV}</em>`,
-  `Play it back and watch where the rock turns from.`,
+  `Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. <em class="skill">${PIV}</em>`,
+  `Play it back and watch the turn.`,
 ];
+let UID = 0;
+const uid = (p) => `${p}-${++UID}`;
 const whyList = () => `<ul class="why">${WHY.map((s) => `<li>${s}</li>`).join("")}</ul>`;
-const stepsList = () => `<ol class="ans">${STEPS.map((s) => `<li>${s}</li>`).join("")}</ol>`;
+const stepsList = (id) => `<ol class="ans"${id ? ` id="${id}"` : ""}>${STEPS.map((s) => `<li>${s}</li>`).join("")}</ol>`;
+// The STEPS heading and list, drawn by the panel from the step data. Only when there are steps.
+// "Panel · from step data" is a mockup marker, like "Placeholder"; the built panel shows only "Steps".
+function stepsBlock() {
+  const h = uid("steps-h");
+  return `<section class="stepsblock" aria-labelledby="${h}"><h4 class="steps-lbl" id="${h}"><span>Steps</span><span class="drawn phk">Panel · from step data</span></h4>${stepsList()}</section>`;
+}
 // The go-deeper control sits inside the answer it belongs to, so it scrolls away with it and never
 // repeats after a no (§ 5.4). One button per skill the answer offered, two at most (§ 7.1).
-const deeper = (on = true) => `<div class="deeper">${on
-  ? busyBtn(`Go deeper: ${PIV} ›`, "Starting…", "Getting your lesson ready…", "ask-deeper-lesson", "", 1300, 'data-say="Yes, go deeper on Set the pivot."')
-  : btn(`Go deeper: ${PIV} ›`, "disabled")}</div>`;
-const ANSWER = (o = {}) => mentor(`<p>rock.png rides on Shake Control, a null moved by expressions:</p>
+// mode "on": pressable. "lesson": a lesson from it is open, so it can't be pressed again; it becomes
+// the way back to that lesson. "none": not drawn (folded answers, and after the lesson ended).
+// "paused": AE is busy, so it can't start; it says why and stays focusable.
+function deeper(mode = "on") {
+  if (mode === "none") return "";
+  if (mode === "lesson") return `<div class="deeper">${btn("Back to your lesson ›", 'data-go="ask-deeper-lesson"', "quiet")}<p class="why-off">Your ${PIV} lesson is open.</p></div>`;
+  if (mode === "paused") { const w = uid("deeper-why"); return `<div class="deeper">${btn(`Go deeper: ${PIV} ›`, `aria-disabled="true" aria-describedby="${w}"`)}<p class="why-off" id="${w}">Waiting for After Effects.</p></div>`; }
+  return `<div class="deeper">${busyBtn(`Go deeper: ${PIV} ›`, "Starting…", "Getting your lesson ready…", "ask-deeper-lesson", "", 1300, 'data-say="Yes, go deeper on Set the pivot."')}</div>`;
+}
+// One answer, three parts from the "asked" result: the mentor's explanation (prose), the step data
+// (drawn by the panel), and the mentor's hand-back sentence (prose), so the panel places the steps
+// without parsing the mentor's words (README › Design review, finding 4).
+const ANSWER = (o = {}) => mentor(`<p>${LEAD}</p>
   ${whyList()}
-  <p class="steps-lbl">Steps</p>
-  ${stepsList()}
-  <p>Want to go deeper on step 3 with <em class="skill">${PIV}</em>?</p>${o.noDeeper ? "" : deeper(o.deeperOn !== false)}`, "Placeholder");
+  ${stepsBlock()}
+  <p>${OFFER}</p>${deeper(o.deeper || "on")}`, "Placeholder");
 
 const FOLLOW_Q = "Why the null and not the rock's own pivot?";
 const FOLLOW_A = mentor(`<p>Shake Control is the layer that moves, and rock.png just rides along, so the rock's own pivot never comes into the shake. That's why step 3 is on Shake Control.</p>`);
-const BACK_A = mentor(`<p>That was step 3; next is step 4: play it back and watch where the rock turns from.</p>`);
+const BACK_A = mentor(`<p>That was step 3; next is step 4: play it back and watch the turn.</p>`);
+const ENDED_A = mentor(`<p>Step 3 is still there when you want it; next is step 4: play it back and watch the turn.</p>`);
+const NOCOMP_A = mentor(`<p>No comp is open in After Effects, so there's nothing for me to read. Open a comp, or click into its timeline, then ask again.</p>`);
 const OUT_Q = "How do I export this as a GIF for the site?";
 const OUT_A = mentor(`<p>Exporting is outside what I cover. I can help with how things move in ${COMP}: easing, timing, pivots, and moving layers together.</p>`);
 const CLAR_Q = "Make it feel more natural.";
@@ -430,13 +461,17 @@ const UNREACH_A = mentor(`<p>I can't see After Effects right now, so I haven't r
 
 // Docked steps (decided 2026-11-14): the checklist frame, folded by default at every height, holding
 // only the actionable steps. No glyphs, no ticks: ask mode has no check (§ 7.4). An answer with no
-// steps (explanation only, a clarifying question, the outside line) has no dock at all.
-const stepsDock = (o = {}) => `<section class="check steps" aria-label="Your steps">
-  <button class="check-head" aria-expanded="${o.open ? "true" : "false"}" data-toggle>
+// steps (explanation only, a clarifying question, the outside line) has no dock at all. After a new
+// question, the dock holds only the latest answer's steps.
+function stepsDock(o = {}) {
+  const body = uid("steps-body");
+  return `<section class="check steps" aria-label="Your steps">
+  <button class="check-head" aria-expanded="${o.open ? "true" : "false"}" aria-controls="${body}" data-toggle>
     <span class="chev" aria-hidden="true">${o.open ? "▾" : "▸"}</span>
-    <span class="sum">Your steps · ${STEPS.length}<small>From the mentor's answer. Nothing here is checked.</small></span>
+    <span class="sum">Your steps · ${STEPS.length}<small>From the answer. Knack doesn't track these.</small></span>
   </button>
-  <div class="check-body" ${o.open ? "" : "hidden"}>${stepsList()}</div></section>`;
+  <div class="check-body" id="${body}" ${o.open ? "" : "hidden"}>${stepsList()}</div></section>`;
+}
 
 /* ===================== screens ===================== */
 
@@ -451,28 +486,36 @@ function screen(id, group, name, kind, note, render, extra = {}) {
 
 // The ask card. No comp name (open question 1, decided 2026-11-14: the panel doesn't read the
 // project, and the bridge change waits until sessions show the panel feels anonymous). off: why it's paused.
+// Ask stays focusable when it's off (aria-disabled, not disabled), and its reason is linked to it.
 function askCard(o = {}) {
   const off = !!o.off;
+  const why = uid("ask-why"), empty = uid("ask-empty");
+  const isOff = off || !o.text;
   return `<section class="card lead askcard" aria-label="Ask about the open comp"><h3>Ask about the open comp</h3>
     <form data-askhome ${off ? "data-off" : ""} autocomplete="off">
-      <label class="small" for="q">What do you want it to do?</label>
+      <label class="small" for="q">What do you want to know or change?</label>
       <textarea id="q" rows="3" placeholder="e.g. make the logo land softer" ${o.lockText ? "disabled" : ""}>${o.text ? esc(o.text) : ""}</textarea>
       <div class="row between">
-        <p class="meta">${off ? o.off : "Reads your comp. Changes nothing."}</p>
-        ${o.pressed ? `<button type="button" class="btn primary pressed" disabled aria-busy="true"><span class="spin" aria-hidden="true"></span>Asking…</button>`
-          : `<button type="submit" class="btn primary" ${off || !o.text ? "disabled" : ""}>Ask</button>`}
+        <p class="meta" id="${why}">${off ? o.off : "Reads your comp. Changes nothing."}</p>
+        ${o.pressed ? `<button type="button" class="btn primary pressed" aria-disabled="true" aria-busy="true"><span class="spin" aria-hidden="true"></span>Asking…</button>`
+          : `<button type="submit" class="btn primary" data-empty="${empty}" aria-disabled="${isOff}" aria-describedby="${why}${!off && !o.text ? ` ${empty}` : ""}">Ask</button><span class="sr" id="${empty}">Type a question first.</span>`}
       </div>
     </form></section>`;
 }
+// Long lesson and comp names truncate in the quiet line; the title shows the full text on hover, and
+// the button's accessible name is the full text (the DOM text isn't cut, only drawn short).
 // The one quiet line from the record (decisions/012): the lesson in progress, else Find my next lesson.
 function quietLine(o = {}) {
   if (o.inprogress) return `<div class="quietwrap">
-      <button type="button" class="qline" data-busy="Picking up where you left off…" data-pressed="Opening…" data-then="lesson-continued" data-ms="1000" ${o.off ? "disabled" : ""}>
+      <button type="button" class="qline" title="Pick up Easing on Title. Mentor Practice, 1 of 3 yours eased." data-busy="Picking up where you left off…" data-pressed="Opening…" data-then="lesson-continued" data-ms="1000" ${o.off ? "disabled" : ""}>
         <span class="ql">Pick up Easing on Title<small>Mentor Practice · 1 of 3 yours eased</small></span><span class="chev" aria-hidden="true">›</span></button>
       <p class="aside meta">Not finished yet. ${btn("Set it aside", 'data-go="home-return"', "quiet")}</p></div>`;
-  if (o.lessonopen) return `<div class="quietwrap">
-      <button type="button" class="qline" data-go="lesson-open-easing"><span class="ql">Back to your lesson<small>Easing on Title · 1 of 3 yours eased</small></span><span class="chev" aria-hidden="true">›</span></button>
-      <p class="aside meta">${btn("End lesson", 'data-go="home-return"', "quiet")} If you end now, this lesson won't be saved.</p></div>`;
+  if (o.lessonopen) {
+    const l = o.lessonopen === true ? { title: "Easing on Title", sub: "1 of 3 yours eased", go: "lesson-open-easing" } : o.lessonopen;
+    return `<div class="quietwrap">
+      <button type="button" class="qline" title="Back to your lesson: ${esc(l.title)}. ${esc(l.sub)}." data-go="${l.go}"><span class="ql">Back to your lesson<small>${l.title} · ${l.sub}</small></span><span class="chev" aria-hidden="true">›</span></button>
+      <p class="aside meta">${btn("End lesson", `data-go="${l.end || "home-return"}"`, "quiet")} If you end now, this lesson won't be saved.</p></div>`;
+  }
   return `<div class="quietwrap"><button type="button" class="qline" ${o.off ? "disabled" : 'data-busy="Looking at your comp…" data-pressed="Looking…" data-then="lesson-picking" data-ms="900"'}>
       <span class="ql">Find my next lesson${o.off ? `<small>${o.off}</small>` : ""}</span><span class="chev" aria-hidden="true">›</span></button></div>`;
 }
@@ -494,7 +537,7 @@ screen("home-return", G_HOME, "Returning, nothing in progress", "changed",
   () => homeBody({}));
 
 screen("home-first", G_HOME, "First run, empty record", "changed",
-  "Spec 007 showed Easing with Start lesson here (FR-010). Ask-first shows the same Home as a returning learner, plus a welcome. The line is Find my next lesson, per decisions/012, so T061's home-first check now looks for this. With an empty record, next-mentor will usually suggest Easing, so the outcome is the same; it costs one mentor turn instead of none (open question 4).",
+  "Spec 007 showed Easing with Start lesson here (FR-010). Ask-first shows the same Home as a returning learner, plus a welcome. The line is Find my next lesson, per decisions/012, so T061's home-first check now looks for this. With an empty record, next-mentor will usually suggest Easing, so the outcome is the same; it costs one mentor turn instead of none (README open question 5).",
   () => homeBody({ hello: "Welcome to Knack." }));
 
 screen("home-inprogress", G_HOME, "A lesson in progress", "changed",
@@ -506,8 +549,18 @@ screen("home-review-due", G_HOME, "A review is due", "changed",
   () => homeBody({}));
 
 screen("home-lessonopen", G_HOME, "Lesson open in the panel", "changed",
-  "Where ‹ in a lesson leads. Asking here would start a second conversation while one is open, so the ask card says why it's paused and the quiet line becomes the way back. Questions about the lesson go in the lesson's own Ask. End lesson keeps spec 007's wording and stays gray, under the line.",
+  "Where the lesson's Back button leads. Asking here would start a second conversation while one is open, so the ask card says why it's paused and the quiet line becomes the way back. Questions about the lesson go in the lesson's own Ask. End lesson keeps spec 007's wording and stays gray, under the line.",
   () => homeBody({ card: { off: "Your lesson is open. Ask there, or end it first.", lockText: true }, line: { lessonopen: true } }, { lesson: true, lessonAt: "lesson-open-easing" }));
+
+screen("home-lessonopen-deeper", G_HOME, "Lesson from a question open", "new",
+  "The Home tab while a lesson started from Go deeper is open (design review finding 2). Same rules as home-lessonopen: Ask is paused with the reason, and the quiet line goes back to that lesson. There's no Back to your question link here, because the thread is paused too; the lesson's own Back button goes to the thread, where Go deeper has become Back to your lesson. Ending the lesson returns to the thread (ask-ended).",
+  () => homeBody({ card: { off: "Your lesson is open. Ask there, or end it first.", lockText: true },
+    line: { lessonopen: { title: `${PIV} on Shake Control`, sub: "from your question", go: "ask-deeper-lesson", end: "ask-ended" } } },
+    { lesson: true, lessonAt: "ask-deeper-lesson", homeAt: "home-lessonopen-deeper" }));
+
+screen("home-nocomp", G_HOME, "No comp open", "new",
+  "Restored (design review finding 1). AE is connected but no comp is active. The panel names no comp, so it says none is open and what to do. You can still type; Ask stays paused (focusable, with this reason read out), and so does Find my next lesson. Needs a yes/no from the bridge's health check (is a comp active?), with no name: see README › Still open. Until that lands, the same case shows after Ask as ask-nocomp.",
+  () => homeBody({ card: { off: "No comp open. Open one, or click into its timeline." }, line: { off: "Needs an open comp." } }));
 
 screen("home-unreadable", G_HOME, "History couldn't be read", "changed",
   "Same banner and copy as spec 007, and it still never reads as a first run. Asking works: an answer doesn't need the record. Find my next lesson works too, and the mentor treats it as a first lesson.",
@@ -534,15 +587,15 @@ screen("home-loading", G_HOME, "Loading (reading history)", "same",
     <div class="skel" style="width:60%;height:14px"></div></div>${statusline("Loading your history…", true)}</div>`, { auto: ["home-return", 1400] });
 
 screen("home-thread", G_HOME, "Home with a question open", "new",
-  "Where ‹ in a thread leads. Home stays ask-first; one plain link goes back to the open question. That link is navigation in this session, not a lead from the record, so the one-quiet-line rule holds. A new question asked here joins the same conversation (teaching design § 6, turn 7) and the earlier one folds.",
+  "Where the thread's Back button leads. Home stays ask-first; one plain link goes back to the open question. That link is navigation in this session, not a lead from the record, so the one-quiet-line rule holds. A new question asked here joins the same conversation (teaching design § 6, turn 7) and the earlier one folds.",
   () => homeBody({ thread: true }));
 
 /* ---------- Asking ---------- */
 
 const G_ASK = "Asking";
-const threadHead = (right = "") => lhead("Ask", "About the open comp", right, "home-thread", "Back to Home. Your question stays here.");
+const threadHead = (right = "", back = "home-thread") => lhead("Ask", "About the open comp", right, back, "Back to Home. Your question stays here.");
 function thread(o) {
-  return `<div class="body">${nav("home", o.nav || {})}${o.banner || ""}${threadHead(o.right || "")}
+  return `<div class="body">${nav("home", o.nav || {})}${o.banner || ""}${threadHead(o.right || "", o.back)}
     <div class="chat">${o.chat}</div>
     ${o.dock === false ? "" : o.dock || ""}
     ${statusline(o.status || "", !!o.status)}
@@ -562,11 +615,11 @@ screen("ask-reading", G_ASK, "Reading the comp", "new",
   () => thread({ chat: learner(esc(QTEXT)) + skel(), status: "Reading the open comp…", ask: { off: true, why: "The mentor is answering." } }), { auto: ["ask-reading-long", 1800] });
 
 screen("ask-reading-long", G_ASK, "Reading takes a while", "new",
-  "After about 6 s the line changes so it doesn't look stuck. It says nothing about why: the panel doesn't know. Stop isn't offered (open question 6).",
+  "After about 6 s the line changes so it doesn't look stuck. It says nothing about why: the panel doesn't know. Stop isn't offered (README open question 7).",
   () => thread({ chat: learner(esc(QTEXT)) + skel(), status: "Still reading the open comp…", ask: { off: true, why: "The mentor is answering." } }), { auto: ["ask-answer", 1800] });
 
 screen("ask-answer", G_ASK, "The answer, with the go-deeper offer", "new",
-  "Teaching design § 5.1 as decided 2026-11-14. Two parts. What's going on: the source in one line, then its parts as plain bullets in order of visible effect (same-size hits, too little rotation, a turn centered on the rock). Never numbered, never called steps, never docked. Then the steps: only things to do in AE, each starting with an action on a named layer (open, raise, select and Pan Behind, play back). Step 3 names the null plainly, since the builder's own Pan Behind landed on O Shakers. One offer at the end. Go deeper sits inside the answer, one button per skill offered (two at most), gray because the usual choice is to try the steps. No 'learned' or 'again' mark, though this learner passed the pivot on Door (§ 11). Your steps holds only the four steps, folded under the chat.",
+  "Teaching design § 5.1 as decided 2026-11-14, revised after the design review. Three parts from the asked result. The mentor's explanation: its first line names the comp it read (In Comp 1, …), the wrong-comp safeguard now that the panel shows no comp name; then the parts as plain bullets in order of visible effect. Never numbered, never called steps, never docked. Then STEPS, drawn by the panel from the step data (heading and numbered list; the mentor's prose leaves them out): only things to do in AE, each starting with an action on a named layer. Step 1 states what the read sees, with an action, not the edit (H-2). Then the mentor's hand-back, ending like § 6 turn 2. Go deeper sits inside the answer, one button per skill offered (two at most), gray because the usual choice is to try the steps. No 'learned' or 'again' mark, though this learner passed the pivot on Door (§ 11). Your steps holds only the four steps, folded under the chat. About 121 words in all.",
   () => thread({ chat: learner(esc(QTEXT)) + ANSWER(), dock: stepsDock() }));
 
 screen("ask-followup", G_ASK, "A follow-up in the same thread", "new",
@@ -592,44 +645,89 @@ screen("ask-unreachable", G_ASK, "AE unreachable after Ask", "new",
 
 screen("ask-new-question", G_ASK, "A new question in the same thread", "new",
   "Asked from Home (home-thread) or the follow-up bar. Turn 7: same conversation, new answer. Earlier questions fold, as earlier lesson turns do. This one is the baseline's other question (turn b), a describe-the-comp answer: explanation only, no steps, so the dock goes away and there's no Go deeper. 'Looks like' marks the inferred link (§ 5.3).",
-  () => thread({ chat: earlier("Earlier questions (1)", learner(esc(QTEXT)) + ANSWER({ deeperOn: false })) + learner(DESC_Q) + DESC_A, dock: false }));
+  () => thread({ chat: earlier("Earlier questions (1)", learner(esc(QTEXT)) + ANSWER({ deeper: "none" })) + learner(DESC_Q) + DESC_A, dock: false }));
+
+screen("ask-nocomp", G_ASK, "No comp open, found by the read", "new",
+  "The no-comp case as it works today, with no bridge change: the panel can't know before Ask, so the mentor's read finds it and says so plainly, naming no comp. No steps, no dock. Try again resends the same question. Once the health check says whether a comp is active, home-nocomp catches this before Ask.",
+  () => thread({ chat: learner(esc(QTEXT)) + NOCOMP_A, dock: false,
+    actions: `<div class="actions">${busyBtn("Try again", "Trying…", "Reading the open comp…", "ask-reading", "primary", 900)}</div>` }));
+
+screen("ask-busy", G_ASK, "AE busy during an ask", "new",
+  "AE went busy (a render or a dialog) while a follow-up was being answered. The connection mark turns amber and says AE busy; the status line says the answer is waiting, in words. The thread stays readable: it scrolls, earlier answers and Your steps still open. The follow-up bar pauses with the reason. When AE is free, the answer comes in as usual; nothing is lost.",
+  () => thread({ nav: { conn: "busy" }, chat: learner(esc(QTEXT)) + ANSWER({ deeper: "paused" }) + learner(FOLLOW_Q) + skel(), dock: stepsDock(),
+    status: "After Effects is busy. Your answer will come when it's free.", ask: { off: true, why: "Waiting for After Effects." } }));
 
 /* ---------- Going deeper ---------- */
 
 const G_DEEP = "Going deeper";
-const FROMQ = `<p class="fromq">From your question. ‹ takes you back to it.</p>`;
-const backToQ = ["ask-answer", "Back to your question. Your lesson stays open."];
-const K7_ROWS = (state) => `<section class="check" aria-label="Checklist">
+const FROMQ = `<p class="fromq">From your question. Back returns you to it.</p>`;
+// While a lesson from Go deeper is open, its Back button and the Home tab lead to paused screens,
+// never to a live thread with a pressable Go deeper (design review finding 2).
+const backToQ = ["ask-lessonopen", "Back to your question. Your lesson stays open."];
+const DEEP_NAV = (at) => ({ lesson: true, lessonAt: at, homeAt: "home-lessonopen-deeper" });
+// Go deeper on a learned skill is practice (§ 7.1, § 11): the tag says Practice, results say what the
+// check saw, and a check that isn't there yet says what's still off and where. No review or pass/fail words.
+const PRACTICE_TAG = '<span class="tag practice">Practice</span>';
+function K7_ROWS(state) {
+  const head = { none: ["Shake Control · not checked yet", "Where the pivot goes is your call; the rest is checked."],
+    done: ["Shake Control · 2 of 2 holding", "Where the pivot goes is your call."],
+    miss: ["Shake Control · 2 still off", "Where the pivot goes is your call."] }[state];
+  const row = (lab, sub) => {
+    const r = { none: ["none", "○", "Not checked yet"], done: ["done fresh", "✓", "Stayed"], miss: ["ask fresh", "!", "Moved, about 40 px left"] }[state];
+    return `<li class="${r[0]}"><span class="g" aria-hidden="true">${r[1]}</span><span class="what"><span class="lab">${lab}</span>${sub ? `<small>${sub}</small>` : ""}</span><span class="st">${r[2]}</span></li>`;
+  };
+  return `<section class="check" aria-label="Checklist">
   <button class="check-head" aria-expanded="true" data-toggle><span class="chev" aria-hidden="true">▾</span>
-    <span class="sum">${state === "done" ? "Shake Control · 2 of 2 holding" : "Shake Control · not checked yet"}<small>${state === "done" ? "Where the pivot goes is your call." : "Where the pivot goes is your call; the rest is checked."}</small></span></button>
+    <span class="sum">${head[0]}<small>${head[1]}</small></span></button>
   <div class="check-body"><h3>Shake Control</h3><ul>
     <li class="ask"><span class="g" aria-hidden="true">?</span><span class="what"><span class="lab">Pivot where the hammer hits</span><small>You name the spot. I read the layers, not the rock's edge.</small></span><span class="st">Your call</span></li>
-    <li class="${state}${state === "done" ? " fresh" : ""}"><span class="g" aria-hidden="true">${state === "done" ? "✓" : "○"}</span><span class="what"><span class="lab">rock.png stays where it is</span></span><span class="st">${state === "done" ? "Stayed" : "Not checked yet"}</span></li>
-    <li class="${state}${state === "done" ? " fresh" : ""}"><span class="g" aria-hidden="true">${state === "done" ? "✓" : "○"}</span><span class="what"><span class="lab">The letters stay where they are</span><small>10 layers</small></span><span class="st">${state === "done" ? "Stayed" : "Not checked yet"}</span></li>
+    ${row("rock.png stays where it is")}
+    ${row("The letters stay where they are", "10 layers")}
   </ul></div></section>`;
+}
+const STARTING = `<div class="deeper"><button type="button" class="btn pressed" aria-disabled="true" aria-busy="true"><span class="spin" aria-hidden="true"></span>Starting…</button></div>`;
+const ANSWER_STARTING = () => mentor(`<p>${LEAD}</p>${whyList()}${stepsBlock()}<p>${OFFER}</p>${STARTING}`, "Placeholder");
+const LESSON_OPENING = mentor(`<p class="phline">We're on Shake Control, turning the shake from where the hammer hits. Select Shake Control and press A, then Shift+P, so its pivot and position show together.</p>`);
 
 screen("ask-deeper-starting", G_DEEP, "Go deeper pressed", "new",
-  "Like spec 007's Yes, let's go: the press shows in the thread as 'Yes, go deeper on Set the pivot.', the button reads Starting…, and the status line says what's happening. On A the mentor hands over in the same conversation. On B1 a skill can't hand over (sprint 5 step 4), so the panel starts the lesson itself, as T061 does on B1 (open question 3).",
-  () => thread({ chat: learner(esc(QTEXT)) + ANSWER({ noDeeper: true }).replace("</div></div>", `<div class="deeper"><button type="button" class="btn pressed" disabled aria-busy="true"><span class="spin" aria-hidden="true"></span>Starting…</button></div></div></div>`) + learner("Yes, go deeper on Set the pivot."),
+  "Like spec 007's Yes, let's go: the press shows in the thread as 'Yes, go deeper on Set the pivot.', the button reads Starting…, and the status line says what's happening. On A the lesson takes over in the same conversation with the answer's context (§ 7.2). On B1 the mentor stops at the offer; B1 is for building and evals, the sessions run on A.",
+  () => thread({ chat: learner(esc(QTEXT)) + ANSWER_STARTING() + learner("Yes, go deeper on Set the pivot."),
     dock: false, status: "Getting your lesson ready…", ask: { off: true, why: "The mentor is answering." } }), { auto: ["ask-deeper-lesson", 1300] });
 
 screen("ask-deeper-lesson", G_DEEP, "The lesson opens in context", "new",
-  "Spec 007's lesson screen, with one line saying where it came from, and ‹ going back to the question instead of Home. The lesson opens on the layer that makes the motion (Shake Control, not rock.png), in the learner's words, and skips its own 'which layer' question (§ 7.2). Pick is already ticked: the answer made the choice. The tag comes from the tool's mode; this learner's pivot review is due, so it shows ↻ review, which is all spec 007 shows. The rows need K7 (a null with children as the pivot focus) and rule 2 (the learner's spot). No Show me: on a real comp there's no second layer for a demo.",
-  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "ask-deeper-lesson", homeAt: "ask-answer" })}${lhead(PIV_FULL, "Shake Control", '<span class="tag practice">↻ review</span>', backToQ[0], backToQ[1], true)}${FROMQ}${strip(1)}
-    <div class="chat">${mentor(`<p class="phline">We're on Shake Control, turning the shake from where the hammer hits. Select Shake Control and press A, then Shift+P, so its pivot and position show together.</p>`)}</div>
+  "Spec 007's lesson screen, with one line saying where it came from, and the Back button going to the question instead of Home. The lesson opens on the layer that makes the motion (Shake Control, not rock.png), in the learner's words, and skips its own 'which layer' question (§ 7.2). Pick is already ticked: the answer made the choice. This learner passed the pivot on Door, so the tag reads Practice (§ 7.1), never review: asking about a learned skill isn't a failed review and isn't recorded as one. The rows need K7 (a null with children as the pivot focus) and rule 2 (the learner's spot). No Show me: on a real comp there's no second layer for a demo. The Home tab and Back both lead to paused screens while this is open.",
+  () => `<div class="body">${nav("lesson", DEEP_NAV("ask-deeper-lesson"))}${lhead(PIV_FULL, "Shake Control", PRACTICE_TAG, backToQ[0], backToQ[1], true)}${FROMQ}${strip(1)}
+    <div class="chat">${LESSON_OPENING}</div>
     ${K7_ROWS("none")}${statusline()}
     <div class="actions">${busyBtn("Done, check it", "Checking…", "Checking your pivot…", "ask-deeper-passed", "primary")}</div>${askBar()}</div>`);
 
-screen("ask-deeper-passed", G_DEEP, "The lesson passes", "changed",
-  "Spec 007's passed screen with one change: the way out is Back to your steps (primary), not What's next ›, because the lesson came from a question and hands back to it (§ 6, turn 6). Saved only on the tool's saved: true, as before.",
-  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "ask-deeper-passed", homeAt: "ask-answer" })}${lhead(PIV_FULL, "Shake Control", '<span class="tag pass">✓ passed</span>', backToQ[0], backToQ[1], true)}${FROMQ}${strip(2)}
-    <div class="chat">${learner("Done, check it")}${mentor(`<p class="phline">Shake Control's pivot is where you said, and rock.png and the letters stayed put. Play it back to see the turn come from the hit.</p>`)}<p class="passline">Review passed.<small>Saved to your history.</small></p></div>
+screen("ask-deeper-notyet", G_DEEP, "The check sees something still off", "new",
+  "The same lesson after Done, check it, when the check doesn't hold: the null moved instead of only its pivot, so rock.png and the letters moved with it. The mentor says what's still off and where (server rule 7), and the rows say Moved with how far, with a mark and words, not color alone. No fail, no review, nothing saved as a miss. Done, check it is there again.",
+  () => `<div class="body">${nav("lesson", DEEP_NAV("ask-deeper-notyet"))}${lhead(PIV_FULL, "Shake Control", PRACTICE_TAG, backToQ[0], backToQ[1], true)}${FROMQ}${strip(1)}
+    <div class="chat">${LESSON_OPENING}${learner("Done, check it")}${mentor(`<p class="phline">The pivot moved, but so did the null: rock.png and the letters sit about 40 px left of where they were. Pan Behind moves only the pivot.</p>`)}</div>
+    ${K7_ROWS("miss")}${statusline()}
+    <div class="actions">${busyBtn("Done, check it", "Checking…", "Checking your pivot…", "ask-deeper-passed", "primary")}</div>${askBar()}</div>`);
+
+screen("ask-deeper-passed", G_DEEP, "The check holds", "changed",
+  "Spec 007's passed screen with two changes: the way out is Back to your steps (primary), not What's next ›, because the lesson came from a question and hands back to it (§ 6, turn 6); and the result is practice, said plainly as what the check saw, with no review or pass wording. Saved only on the tool's saved: true, as before.",
+  () => `<div class="body">${nav("lesson", DEEP_NAV("ask-deeper-passed"))}${lhead(PIV_FULL, "Shake Control", '<span class="tag pass">✓ Done</span>', backToQ[0], backToQ[1], true)}${FROMQ}${strip(2)}
+    <div class="chat">${learner("Done, check it")}${mentor(`<p class="phline">Shake Control's pivot is where you said, and rock.png and the letters stayed put. Play it back to see the turn come from the hit.</p>`)}<p class="passline">Pivot moved, nothing else did.<small>Saved to your history.</small></p></div>
     ${K7_ROWS("done")}
     <div class="actions">${btn("Back to your steps ›", 'data-go="ask-back"', "primary")}</div></div>`);
 
+screen("ask-lessonopen", G_DEEP, "The question while its lesson is open", "new",
+  "Where the lesson's Back button leads (design review finding 2). The thread is readable, and Your steps still opens, but the follow-up bar pauses with the reason, and Go deeper has become Back to your lesson, so it can't be pressed a second time. Back from here goes to Home with Ask paused (home-lessonopen-deeper).",
+  () => thread({ nav: { lesson: true, lessonAt: "ask-deeper-lesson", homeAt: "ask-lessonopen" }, back: "home-lessonopen-deeper",
+    chat: learner(esc(QTEXT)) + ANSWER({ deeper: "lesson" }) + learner("Yes, go deeper on Set the pivot."), dock: stepsDock(),
+    ask: { off: true, why: "Your lesson is open. Ask there, or end it first." } }));
+
 screen("ask-back", G_DEEP, "Back at the question, next step", "new",
-  "The thread again, with a divider for the lesson (its result in panel words) and the mentor's one sentence handing back (§ 6, turn 6). The lesson covered step 3, so it names step 4. Your steps opens itself here, once, since you're picking the steps back up; nothing in it is ticked, because the lesson checked the pivot, not the step. If the lesson ended unfinished, the divider reads 'Set the pivot · ended, not saved' and the mentor still names the next step.",
-  () => thread({ chat: earlier("Your question and its answer", learner(esc(QTEXT)) + ANSWER({ deeperOn: false })) + divider(`${PIV} · review passed`) + BACK_A, dock: stepsDock({ open: true }) }));
+  "The thread again, with a divider for the lesson (what it did, in panel words) and the mentor's one sentence handing back (§ 6, turn 6). The lesson covered step 3, so it names step 4. Go deeper is gone from the answer: its lesson is over, and it's never offered again in this thread. Your steps opens itself here, once, since you're picking the steps back up; nothing in it is ticked, because the lesson checked the pivot, not the step.",
+  () => thread({ chat: earlier("Your question and its answer", learner(esc(QTEXT)) + ANSWER({ deeper: "none" })) + divider(`${PIV} · practiced on Shake Control`) + BACK_A, dock: stepsDock({ open: true }) }));
+
+screen("ask-ended", G_DEEP, "Back after ending the lesson early", "new",
+  "End lesson, from home-lessonopen-deeper. The divider says it ended and wasn't saved, with no fail wording, and the mentor still names the next step. Step 3 stays in Your steps, unticked, as it always is.",
+  () => thread({ chat: earlier("Your question and its answer", learner(esc(QTEXT)) + ANSWER({ deeper: "none" })) + divider(`${PIV} · ended, not saved`) + ENDED_A, dock: stepsDock({ open: true }) }));
 
 /* ---------- T061 and the rest of the panel ---------- */
 
@@ -638,12 +736,12 @@ const SUGGESTION = `It's been a few days since you learned ${PIV_FULL}; want a q
 
 screen("lesson-picking", G_T061, "Find my next lesson: one suggestion", "same",
   "T061's screen, unchanged from spec 007 (FR-082). Reached from Home's quiet line instead of the Up next card. A due review can be suggested here, because the learner asked for a lesson. Yes, let's go then runs lesson-picking-starting and lesson-picked, as built.",
-  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "lesson-picking" })}${lhead("What's next", "One suggestion", "", "home-return", "Back to Home")}
+  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "lesson-picking", homeAt: "home-return" })}${lhead("What's next", "One suggestion", "", "home-return", "Back to Home")}
     <div class="chat">${mentor(`<p class="phline">${SUGGESTION}</p>`)}</div>${statusline()}
     <div class="actions">${busyBtn("Yes, let's go", "Starting…", "Getting your lesson ready…", "lesson-picked", "primary", 1200)}${btn("Pick a skill", 'data-go="skills-due"')}</div>${askBar()}</div>`);
 
 screen("lesson-picked", G_T061, "Yes pressed: the lesson's opening", "same",
-  "Unchanged from spec 007. ‹ goes to Home (home-lessonopen), as before.",
+  "Unchanged from spec 007. Back goes to Home (home-lessonopen), as before. This is a due review the learner asked for through Find my next lesson, so spec 007's review tag stays; Go deeper's lessons say Practice instead.",
   () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "lesson-picked" })}${lhead(PIV_FULL, "No focus yet", '<span class="tag practice">↻ review</span>', "home-lessonopen", "Back to Home. Your lesson stays open.")}${strip(0)}
     <div class="chat">${mentor(`<p class="phline">${SUGGESTION}</p>`)}${learner("Yes, let's go")}${mentor(`<p class="phline">Which layer should turn from somewhere other than its middle, and where should it turn from?</p>`)}</div>
     <section class="check" aria-label="Checklist"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> Your checklist starts once you pick a layer and where it turns from.</p></div></section>
@@ -699,7 +797,10 @@ screen("flow", G_CMP, "The ask flow, start to finish", "",
   null, { gallery: ["home-return", "ask-reading", "ask-answer", "ask-deeper-lesson", "ask-deeper-passed", "ask-back"] });
 screen("all-homes", G_CMP, "Every Home state", "",
   "Each existing spec 007 Home state under ask-first, at 260 × 480. home-review-due is identical to home-return on purpose.",
-  null, { gallery: ["home-first", "home-return", "home-inprogress", "home-review-due", "home-lessonopen", "home-unreadable", "home-unreachable", "home-thread"] });
+  null, { gallery: ["home-first", "home-return", "home-inprogress", "home-review-due", "home-lessonopen", "home-nocomp", "home-unreadable", "home-unreachable", "home-thread"] });
+screen("deeper-paths", G_CMP, "Every way through Go deeper", "",
+  "The lesson from a question at 260 × 480: open, a check that sees something still off, the thread and Home while it's open (both paused, Go deeper never pressable twice), back after it's done, and back after ending it early.",
+  null, { gallery: ["ask-deeper-lesson", "ask-deeper-notyet", "ask-lessonopen", "home-lessonopen-deeper", "ask-back", "ask-ended"] });
 screen("cmp-before-after", G_CMP, "Before and after: spec 007 Home vs ask-first", "",
   "Same learner, same record (pivot passed, review due). Left: today's built Home. Right: ask-first. What's removed is listed in the table and the README.",
   null, { compare2: ["old-home-return", "home-return"], capA: "<b>Before · spec 007 (built).</b> Up next, Practice due and memory: three things from the record, and a review at the door.", capB: "<b>After · ask-first.</b> One place to ask about the open comp, and one quiet line.", table: () => TRADEOFF_BEFORE });
@@ -802,6 +903,16 @@ function buildRig() {
 
 /* ===================== interaction ===================== */
 
+// Keep focus somewhere useful while the panel is paused: on the pressed control if it can hold it,
+// else on the status line, never dropped to the page.
+function holdFocus(panel, prefer) {
+  const a = document.activeElement;
+  if (a && a !== document.body && !a.disabled && panel.contains(a)) return;
+  if (prefer && !prefer.disabled) { prefer.focus({ preventScroll: true }); return; }
+  const sl = panel.querySelector(".statusline:not([hidden])");
+  if (sl) { sl.setAttribute("tabindex", "-1"); sl.focus({ preventScroll: true }); }
+}
+
 function simulateBusy(b) {
   const panel = b.closest(".panel");
   if (!panel || b.dataset.running) return;
@@ -813,6 +924,7 @@ function simulateBusy(b) {
   else b.innerHTML = `<span class="spin" aria-hidden="true"></span>${esc(b.dataset.pressed || "Working…")}`;
   const sl = panel.querySelector(".statusline");
   if (sl) { sl.hidden = false; sl.querySelector(".st").textContent = b.dataset.busy; }
+  holdFocus(panel, b);
   const chat = panel.querySelector(".chat");
   if (chat && b.dataset.say) { chat.insertAdjacentHTML("beforeend", learner(esc(b.dataset.say))); chat.scrollTop = chat.scrollHeight; }
   timer = setTimeout(() => go(b.dataset.then, "action"), +(b.dataset.ms || 1200));
@@ -828,17 +940,24 @@ document.addEventListener("click", (e) => {
   const t = e.target.closest("[data-toggle]");
   if (t) {
     const box = t.closest(".check");
-    if (getComputedStyle(box).getPropertyValue("--short").trim() === "1") { t.setAttribute("aria-expanded", String(box.classList.toggle("peek"))); return; }
+    const body = t.nextElementSibling;
+    if (getComputedStyle(box).getPropertyValue("--short").trim() === "1") {
+      const on = box.classList.toggle("peek");
+      t.setAttribute("aria-expanded", String(on));
+      t.querySelector(".chev").textContent = on ? "▾" : "▸";
+      if (body) body.hidden = !on;
+      return;
+    }
     const open = t.getAttribute("aria-expanded") === "true";
     t.setAttribute("aria-expanded", String(!open));
     t.querySelector(".chev").textContent = open ? "▸" : "▾";
-    t.nextElementSibling.hidden = open;
+    if (body) body.hidden = open;
     return;
   }
   const a = e.target.closest(".rig a[data-id]");
   if (a) { e.preventDefault(); return go(a.dataset.id); }
   const b = e.target.closest("[data-busy],[data-go]");
-  if (!b || b.disabled) return;
+  if (!b || b.disabled || b.getAttribute("aria-disabled") === "true") return;
   if (b.dataset.busy) return simulateBusy(b);
   go(b.dataset.go, b.hasAttribute("data-tab") ? "tab" : "action");
 });
@@ -868,7 +987,11 @@ document.addEventListener("input", (e) => {
   const f = e.target.closest && e.target.closest("[data-askhome]");
   if (!f) return;
   const sb = f.querySelector('button[type="submit"]');
-  if (sb && !f.hasAttribute("data-off")) sb.disabled = !e.target.value.trim();
+  if (!sb || f.hasAttribute("data-off")) return;
+  const empty = !e.target.value.trim();
+  const why = f.querySelector(".meta").id;
+  sb.setAttribute("aria-disabled", String(empty));
+  sb.setAttribute("aria-describedby", empty ? `${why} ${sb.dataset.empty}` : why);
 });
 
 document.addEventListener("submit", (e) => {
@@ -894,6 +1017,7 @@ document.addEventListener("submit", (e) => {
   paused.forEach((x) => (x.disabled = true));
   const sl = panel.querySelector(".statusline");
   if (sl) { sl.hidden = false; sl.querySelector(".st").textContent = "Working…"; }
+  holdFocus(panel);
   chat.scrollTop = chat.scrollHeight;
   setTimeout(() => {
     chat.insertAdjacentHTML("beforeend", mentor('<p class="phline">[One or two sentences, then the step you\'re on.]</p>'));
