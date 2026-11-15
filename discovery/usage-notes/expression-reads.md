@@ -79,6 +79,36 @@ after:
   joined value. A read that walks every property must skip the hidden half (Position when separated,
   X/Y/Z when joined), or it reports values that never show.
 
+### T006: time mapping (E22)
+
+On the practice project (`Claude AE Tutor Test (converted).aep`, AE 27.0). Icon Precomp's Icon Shape
+sits left at its 0 s key and right at its 1 s key. `mentor/dev/live-015/time-mapping.jsx` built a new
+comp, "T006 time mapping", with four layers of it: A start offset 0.5 s, B stretch 50%, C stretch
+−100% starting at 3.5 s, and D time remapped (0.5 s → 1 s, 2.5 s → 0 s, linear). The comp was deleted
+afterwards, and the project was back to 77 items. Answer key:
+`mentor/test/fixtures/precomps/time-mapping-key.json`.
+
+| Copy | Inner key → outer time (formula) | AE's `sourceTime` there | Builder by eye |
+|---|---|---|---|
+| A offset | 0 → 0.5 s, 1 → 1.5 s | 0, 1 | left, right ✓ |
+| B stretch | 0 → 0 s, 1 → 0.5 s | 0, 1 | left, right ✓ |
+| C reverse | 1 → 2.5 s, 0 → 3.5 s | 1, 0 | right ✓; nearly left on the frame before 3.5 s, **gone at 3.5 s** ✓ |
+| D remap | 1 → 0 to 0.5 s (held), 0 → 2.5 s onward (held) | 1, 0 | right holding, halfway at 1.5 s, left holding ✓ |
+
+- **The formula holds for all eight keys:** start time + inner time × stretch, or, with time remap,
+  the frames whose remap value equals the inner time. It matches AE and the builder's eye.
+- **With a negative stretch, AE reports the in point after the out point** (C: 3.5 and −4.5). A read
+  that assumes in < out says a reversed layer never shows. Inner time 0 lands exactly on the end, so
+  that key never shows at all.
+- **Time remap holds a key's pose over a range,** not at one time (D: inner 1 holds for 16 frames,
+  inner 0 for 165). The read should report a range when the remap value is flat.
+- **`sourceTime()` exists only in expressions,** not in ExtendScript. The answer key came from a
+  Slider with `sourceTime(time)` on each copy.
+- **"How many places" must count layers:** `usedIn` lists 3 comps for Icon Precomp, but 4 layers
+  use it (Mentor Overlaps has two).
+
 ### Still open
 
-- T006 (time mapping on Icon plus planted copies, a scrub check by hand).
+- Nothing in Phase 0. The spec-writer's second fold (T008) takes sessions 2's new facts: Pan Behind
+  takes the selected layer, stale hidden dimension values, the reversed in and out points, held remap
+  ranges, and counting layers for "how many places".

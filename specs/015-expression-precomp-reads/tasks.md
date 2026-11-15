@@ -63,13 +63,13 @@ step). Read-only scripts except where a plant is named.
   run once as written the three scripts folded together after the live runs and not yet run:
   `separate-dims.jsx`, the renumber step in `random-expression.jsx`, and the edited
   `error-expression.jsx` (`expression-reads.md` › Still open). **Done 2026-11-14 (cockpit with the builder, `expression-reads.md` session 2): SB-2 and turn f confirmed by hand; Pan Behind took the *selected* layer; the scripts reproduce T001 to T003; new: hidden dimension properties hold stale values.**
-- [ ] T006 (skill-builder, AE; **builder's hands** for the scrub check) **Time mapping (E22).** Read
+- [x] T006 (skill-builder, AE; **builder's hands** for the scrub check) **Time mapping (E22).** Read
   Mentor Practice's Icon. On a duplicate, plant by script four copies of a keyed precomp: start
   offset 0.5 s, stretch 50%, stretch −100%, and time remap with two remap keys. For two inner keys per
   copy, the agent computes the outer time from `startTime`, `stretch` and the remap values; the
   builder scrubs to each and confirms the key's pose shows there (by eye). Answer key saved as
   `mentor/test/fixtures/precomps/time-mapping-key.json`. Script in
-  `mentor/dev/live-015/time-mapping.jsx`.
+  `mentor/dev/live-015/time-mapping.jsx`. **Done 2026-11-14 (cockpit with the builder, `expression-reads.md` session 2): all eight keys match AE and the builder's eye; negative stretch reports in > out; remap holds a range; count layers, not `usedIn`.**
 - [x] T007 (cockpit) Log T001 to T006 in `discovery/usage-notes/expression-reads.md` (new): each
   question, the answer, and what it changes. **Done for T001 to T004 (session 1);** the cockpit adds
   T005 and T006 to the same note when they run.
