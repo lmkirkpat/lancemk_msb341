@@ -21,6 +21,9 @@ Shapes are in [data-model.md](../data-model.md) § 1, § 2, § 8.
    `outside`, `no_comp`), `comp` is `null`.
 2. Checks the rules in research R3 and refuses the first that fails, with its code; nothing is saved.
 3. On B1, keeps the checked offer for the record of the call but returns `offered_skills: []`.
+3a. Normalizes each not-taught step (amended 2026-11-14, T035 design review): a step whose `skill` is "not
+   taught yet" gets "Not something I teach yet." appended to its `text` if the text doesn't already end with it.
+   The panel draws no separate tag for it, so this sentence is the only marker and must never be missing.
 4. Saves `session.ask` (data-model § 2) for `answer`, `describe` and `howto`.
 5. Phase 3: for `answer`, writes one asked entry (data-model § 3) and links it.
 

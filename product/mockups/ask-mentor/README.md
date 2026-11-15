@@ -416,7 +416,8 @@ did.", "Set the pivot · practiced on Shake Control", "Set the pivot · ended, n
 steps ›", "Back to your question ›", "Earlier questions (1)", "Pick up Easing on Title", "Back to your
 lesson", "Your lesson is open. Ask there, or end it first.", "No comp open. Open one, or click into its
 timeline.", "Needs an open comp.", "After Effects is busy. Your answer will come when it's free.",
-"Waiting for After Effects.", "See what's covered ›", "Not finished yet.", "Ask about your comp on Home,
+"Waiting for After Effects.", "Available after the answer.", "Back to Home. Your question stays here.",
+"See what's covered ›", "Not finished yet.", "Ask about your comp on Home,
 or pick a skill.". The rest are spec 007's `panel/lib/copy.js` strings as they are. No internal field
 names appear anywhere.
 
