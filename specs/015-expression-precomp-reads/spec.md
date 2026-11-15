@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-14
 
-**Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks next.
+**Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3).
 
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
@@ -306,9 +306,9 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   check MAY report it as "may be its expression" (TD 014 § 10.1 rule 3). See OQ-1.
 - **FR-014**: A change to an expression itself (turned on or off, text changed, new error) MUST be
   reported as an expression change, never as the layer moving.
-- **FR-015**: Each skill's snapshot MUST report, for its focus layers, when their motion comes from a
-  parent's motion or an own expression rather than their own keys, from the motion-sources map (K3).
-  Scope across skills: OQ-3.
+- **FR-015**: The pivot and null skills' snapshots MUST report, for their focus layers, when their
+  motion comes from a parent's motion or an own expression rather than their own keys, from the
+  motion-sources map (K3). The other four skills get it with spec 014's rule 1 change (OQ-3, answered).
 
 **Phase 1: reply shape and honesty (all stories)**
 
@@ -484,6 +484,8 @@ motion) belong to spec 014's set and to pivot K1, not here.
 
 ### For the builder (each with a recommendation)
 
+**Answered 2026-11-14: all five as recommended** (spec approved, `944cd8c`).
+
 - **OQ-1: K2's rule. Skip expression-driven properties, or compare their base values?** TD 014 K2 and
   the brief say "leave out". Comparing the base value at the same time catches a real hand edit to an
   expression-driven null (Pan Behind changes the base) and still ignores the expression's motion.
@@ -503,6 +505,19 @@ motion) belong to spec 014's set and to pivot K1, not here.
   layers and their parents.** It's a sampled read of values phase 1 already reads.
 - **OQ-5: Phase 2's depth limit.** Comp 1 nests 2 deep. **Recommended: 5 levels**, reported as "not
   read: too deep" past that; tune if a real comp hits it.
+
+### New from the plan (2026-11-14), each with a recommendation
+
+- **OQ-6: Phase 2's eval gate.** *Answered 2026-11-14: as recommended.* SC-006 asks for all six sets on B1 at each phase's merge (about
+  $180 a round). Phase 2 changes no skill tool's output by design (FR-028). **Recommended: for phase
+  2 only, a unit test that every skill tool's reply on every eval fixture is byte-identical before and
+  after (tasks T050), plus a free dry run per set, stands in for the paid re-run.** If any reply
+  differs, the full re-run is required. Amends SC-006 for phase 2.
+- **OQ-7: How FR-020 is enforced.** *Answered 2026-11-14: as recommended.* The model writes the record, so a rule in `SKILL.md` alone can
+  slip. **Recommended: `record_lesson` refuses a summary or `next` holding 24 or more characters
+  copied from an expression's text or error in the session's last snapshot (T029).** The cost: a
+  refusal is one more turn in a lesson, and evals could see it; no current case writes expression
+  text, so none should.
 
 ### For the curriculum designer (hand-off, not edits)
 

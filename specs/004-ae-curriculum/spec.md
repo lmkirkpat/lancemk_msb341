@@ -54,6 +54,13 @@ FR-048 step 3 counts no target for null's review when there's no proposal (a cro
 `recommend_next`'s lesson path), with a new FR-051 row; FR-050 lists round 2's four step 0 changes;
 contracts/skill-module.md § 2 and § 3 follow. Spec 012's FR-003 and H-6 mark their gap closed.
 
+**Changes 2026-11-14 (builder, approved with spec 015):** R2 (expressions on any property) and R4
+(inside precomps), with the motion-sources map's second step (FR-014), now come from
+[spec 015](../015-expression-precomp-reads/spec.md): R2 in its phase 1, R4 in its phase 2. They're
+built **before and apart from** skills 4 and 10, which stay queued as later lessons, because spec 014's
+ask mode needs them first. FR-010's rule (each read before the first skill that needs it) still holds;
+FR-015 is carried into spec 015 (its FR-021 and SC-004). Changed here: FR-010's note and wave D's row.
+
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the curriculum spec, which decides
 the 10 skills and what has to exist so they can be built." The teaching design is the curriculum
 designer's [`curriculum.md`](curriculum.md) (same folder, `decisions/007`). This spec links to it
@@ -438,6 +445,8 @@ Other edge cases:
   R7 (spatial tangents) is not built (Out of scope). With this sprint's baseline of skills 2, 1,
   3, 5 and 6 (H2), **R0, R1 and R3 are baseline reads**; R2, R4, R5, R6 and R8 come with the
   stretch skills that need them.
+  *Amended 2026-11-14:* R2 and R4 come from spec 015 (phases 1 and 2), ahead of skills 4 and 10, not
+  with them.
 - **FR-011**: R0 MUST return the AE version and OS only, nothing personal (no user name, path or
   machine name).
 - **FR-012**: Every read and both shared rules (FR-013, FR-014) MUST have unit tests on saved
@@ -1055,7 +1064,7 @@ own and leave a working path.
 | **A. First skills** (baseline) | P1 | Path data and recommendation (FR-001 to FR-008), record and reviews' data (FR-018, FR-023), R0, the timing analysis (FR-016), then skills **2, 1, 3** (each with its own spec and demo tool); second practice comp's skill 1 and review targets | Shared-code owner named (FR-032); skills 2, 1, 3's own specs approved | Ships easing plus 2, 1, 3, a path and a recommendation. Below the baseline. |
 | **B. Reads for 5 and 6, then skills 5 and 6** (baseline) | P2 | R1, R3, the visibility class (FR-013), the motion-sources map's first step (own keys and parent chain, FR-014), KD-001's fix (it comes with R1); then skills **5, 6** | Wave A merged, easing at baseline; skills 5 and 6's own specs approved | Ships the baseline: easing plus 2, 1, 3, 5, 6. |
 | **C. Reviews** (baseline for 2, 1, 3; stretch for 5, 6) | P1 | Reviews (FR-019 to FR-021), live first for skills 2, 1, 3; then for 5 and 6 once they're built | Wave A merged | Ships practice across sessions for the first skills, then every built skill |
-| **D. The rest, in parallel** (stretch or next sprint) | P3 | R2, R4 and the map's second step, then skills **4, 10**; then R5, R8, R6 and skills **7, 8, 9**; the rest of the second practice comp | Wave B's reads merged; each skill's spec approved; KD-001 fixed before 8 | Any subset ships, as long as its hard prerequisites are built |
+| **D. The rest, in parallel** (stretch or next sprint) | P3 | R2, R4 and the map's second step (moved to spec 015, 2026-11-14), then skills **4, 10**; then R5, R8, R6 and skills **7, 8, 9**; the rest of the second practice comp | Wave B's reads merged; each skill's spec approved; KD-001 fixed before 8 | Any subset ships, as long as its hard prerequisites are built |
 
 Within wave A, 2 first: it needs no new read and only a demo tool. 1 needs its practice target. 3
 needs the timing analysis. Within wave B, 5 before 6 (5 is 6's hard prerequisite); R3 is 5's only
