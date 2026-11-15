@@ -1,0 +1,77 @@
+// Spec 015 T021 (FR-008 to FR-011; data-model § 2): what links into each layer, and whether the
+// layer holding the expression renders. SC-002 on Comp 1; E14 to E16 on the live captures' layers.
+
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { linksIn, rendersAt } from "../lib/expressions.mjs";
+import { comp1 } from "./fixtures/expressions/comp1.mjs";
+import { FIXTURES } from "./helpers.mjs";
+
+const C1 = comp1();
+const live = (name) => JSON.parse(fs.readFileSync(path.join(FIXTURES, "layer-info", `${name}.json`), "utf8"));
+const idxOf = (snap, name) => snap.layer_info.find((l) => l.name === name).index;
+
+test("SC-002: exactly 1 link into Sweep Control, from Black Solid 1's CC Light Sweep Center, which doesn't render (eye off)", () => {
+  const links = linksIn(C1);
+  const sweep = links.get(idxOf(C1, "Sweep Control"));
+  assert.equal(sweep.status, "read");
+  assert.equal(sweep.unresolved_in_comp, 0);
+  assert.equal(sweep.links.length, 1);
+  const [l] = sweep.links;
+  assert.deepEqual(
+    { from: l.from_layer, prop: l.from_property, reads: l.property, how: l.how, inferred: l.inferred, shared: l.shared_name },
+    { from: "Black Solid 1", prop: "Effects › CC Light Sweep › Center", reads: "Position", how: "name", inferred: true, shared: false },
+  );
+  assert.deepEqual([l.target_renders.renders, l.target_renders.why], [false, "eye_off"], "E14");
+});
+
+test("SC-002: every other Comp 1 layer has the read run, 0 links and 0 unresolved, never left blank", () => {
+  const links = linksIn(C1);
+  assert.equal(links.size, 29);
+  for (const [index, entry] of links) {
+    if (index === idxOf(C1, "Sweep Control")) continue;
+    assert.deepEqual(entry, { status: "read", links: [], unresolved_in_comp: 0 }, String(index));
+  }
+});
+
+test("FR-010: with an unresolved reference anywhere in the comp, every layer says how many, so 'no links' isn't said", () => {
+  const snap = structuredClone(C1);
+  snap.expressions.push({ ...snap.expressions[0], layer: idxOf(C1, "logo.png"), text: 'thisComp.layer("Sweep " + name).position', text_length: 40 });
+  for (const [, entry] of linksIn(snap)) assert.equal(entry.unresolved_in_comp, 1);
+});
+
+test("E27: an older snapshot gives not read for every layer, never an empty list", () => {
+  const snap = structuredClone(C1);
+  delete snap.expressions;
+  const links = linksIn(snap);
+  assert.equal(links.size, 29);
+  for (const [, entry] of links) assert.deepEqual(entry, { status: "not_read", reason: "older_snapshot" });
+});
+
+test("E15: a matte renders through its fill layer, eye off by design (live practice2b and overlaps)", () => {
+  for (const [file, name] of [["practice2b", "Reveal Matte"], ["overlaps", "Wipe"]]) {
+    const snap = live(file);
+    assert.deepEqual(rendersAt(snap, idxOf(snap, name), 1), { renders: true, why: "matte_renders", at_time: 1 }, name);
+  }
+});
+
+test("E16: a guide layer doesn't render; a layer outside its in and out at the time read isn't on screen then", () => {
+  const snap = live("overlaps");
+  assert.deepEqual(rendersAt(snap, idxOf(snap, "Guide Grid"), 1), { renders: false, why: "guide", at_time: 1 });
+  const icon = idxOf(snap, "Icon Stretch"); // in 0, out 4
+  assert.deepEqual(rendersAt(snap, icon, 1).why, "renders");
+  assert.deepEqual(rendersAt(snap, icon, 4).why, "outside_in_out", "the out point is the first time it's gone");
+  assert.deepEqual(rendersAt(snap, idxOf(snap, "Draft"), 1).why, "eye_off");
+  assert.deepEqual(rendersAt(snap, idxOf(snap, "Rig"), 1).why, "null");
+});
+
+test("a reversed layer (in after out, as AE reports a negative stretch) is on screen between the two", () => {
+  const snap = live("overlaps");
+  const s = structuredClone(snap);
+  const e = s.layer_info.find((l) => l.name === "Still");
+  Object.assign(e, { in_point: 3.5, out_point: -4.5 });
+  assert.equal(rendersAt(s, e.index, 1).why, "renders");
+  assert.equal(rendersAt(s, e.index, 3.5).why, "outside_in_out");
+});
