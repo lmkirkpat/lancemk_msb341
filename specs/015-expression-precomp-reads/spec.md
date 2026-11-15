@@ -1,0 +1,521 @@
+# Feature Specification: Expression and precomp reads
+
+**Feature Branch**: `015-expression-precomp-reads` (spec folder only; no git branch)
+
+**Created**: 2026-11-14
+
+**Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks next.
+
+**Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
+teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
+(*Precompose*) as lessons for later. Expressions first, precomps as a later phase." Builder decision,
+2026-11-14.
+
+**What this is.** Spec 004's reads **R2** (expressions on any property) and **R4** (inside precomps)
+from `specs/004-ae-curriculum/curriculum.md` § 5, plus the "what links here" read that spec 014's
+teaching design asks for (TD Q4), and the tool change K2 that stops a check calling expression motion a
+learner edit. Spec 004 planned R2 and R4 to arrive *with* skills 4 and 10 (wave D, FR-010). This spec
+builds them without those skills, because spec 014's ask mode needs them first.
+
+**What the reads must give** is set by two teaching documents this spec links to and doesn't copy:
+- `specs/014-ask-mentor/teaching-design.md` (written "TD 014 § n"): § 8 (reads Q2 to Q8), § 10.2 (K2,
+  K3), § 13 (overlaps), § 19 (SB items and "Checked 2026-11-14").
+- `specs/004-ae-curriculum/curriculum.md` § 5 (R2, R4, the motion-sources map, the contract risk) and
+  `specs/004-ae-curriculum/spec.md` FR-010, FR-012 to FR-015 and its Edge Cases table.
+
+Where this spec needs something those don't say, it's a question below, not an edit to them.
+
+**Evidence:** `discovery/usage-notes/ask-baseline.md` (written "AB"): findings 1, 2 and 4, and both
+2026-11-14 follow-ups. The second, "live checks for the expression and precomp reads", is this
+spec's live evidence. Fixtures: `mentor/test/fixtures/ask/comp1-snapshot.json` (the mentor's
+snapshot today: 3 of 29 layers) and `comp1-ground-truth.json` (every layer, effects, and every keyed
+or expression-driven property with its full text).
+
+### Why this, and what Adobe can't easily copy
+
+The baseline answered "what does Sweep Control do?" with "I can't see inside that layer", taught a
+pivot on a layer that couldn't change the shake, and told the builder to undo motion they never made
+(AB 1, 2, 4). All three came from reads the mentor doesn't have: expressions on unkeyed properties,
+what points at a layer, and motion inside precomps (where 347 of Comp 1's keyed properties live).
+Real comps are built this way; the practice comps weren't.
+
+Adobe's assistant already reads a whole comp and diagnosed one well (2026-10-08 side-by-side), so
+reading alone isn't the edge. **Depth** is: these reads feed per-property, per-layer facts into checks
+that are honest about what they saw (a base value vs. the value after an expression, at one time; a
+link marked as inferred; "not read" never said as "none"). And they're what lets **memory and
+practice** reach the learner's own comps: a lesson can only come back on a real project if the mentor
+can see how that project's motion is made. These are the parts CLAUDE.md next step 4 says to keep in
+every spec's "why".
+
+### Decisions and rules this spec relies on
+
+| Record | What it requires here |
+|---|---|
+| `decisions/003`, `005` (constitution II) | Reads run as fixed, read-only snippets through the bridge. No open-ended script execution, no change to the project, no teaching logic in the bridge or panel |
+| `decisions/004` | Spec Kit for build specs |
+| `decisions/007`, `008` (constitution VI) | `mentor/` is the builder's; eval cases are the eval engineer's; one agent on live AE at a time |
+| `decisions/011` | Built and evaluated on B1. Moves to A with spec 014 (Constitution check in the plan says how) |
+| `decisions/012` | Ask-first Home. These reads are what make an ask answer possible (TD 014 § 8: "the ask mode isn't worth shipping without R2 and Q4") |
+| Spec 004 FR-012 to FR-015 | Fixtures from live reads; one visibility class; one motion-sources map; easing findings on Mentor Practice unchanged |
+| Constitution IV | No real names in fixtures; the learner record never stores expression text |
+
+**Supersedes:** TD 014 Q8 ("inside precomps: not needed for v1"). This spec adds it as phase 2. The
+TD's owner is asked to update Q8 and the § 13 precomps row (CD-1 below). Spec 004 FR-010 says R2 and R4
+come before skills 4 and 10; that still holds, they just come sooner (OQ note, spec 004 amendment
+proposed in Open questions).
+
+## Phases
+
+| Phase | Stories | Unblocks |
+|---|---|---|
+| **1. Expressions** | US1, US2, US3 (all P1) | Spec 014's ask mode; K2 and K3 in the six skills |
+| **2. Inside precomps** | US4 (P2) | Answers that touch a precomp; later skill 10; easing's "can't see inside" blind spot (as data only, see Out of scope) |
+
+Phase 1 ships on its own. Phase 2 starts after phase 1 is merged and its SCs pass.
+
+## User Scenarios & Testing *(mandatory)*
+
+The "user" of a read is the mentor (a skill or the ask mode); the person who benefits is the learner
+whose comp is read. Scenarios are written from the learner's side where it matters.
+
+### User Story 1 - The mentor sees every expression, keyed or not (Priority: P1)
+
+When I ask about a layer, the mentor knows which of its properties (and its parents' properties) run
+on expressions, even with no keys: transform, effect, text and any other property. It knows whether
+each is on, whether it has an error, what it says, whether it builds on the property's own value or
+keys, and what the property's value is before and after the expression at a given time. So it can tell
+me "rock.png rides on Shake Control, whose Position and Rotation are expressions", not "rock.png
+doesn't move".
+
+**Why this priority**: AB 2 and AB 3 both come from this gap (TD 014 Q2, Q3). Without it, the ask mode
+answers Comp 1 "as wrongly as the baseline did, only more politely" (TD 014 § 8).
+
+**Independent Test**: on a fresh live capture of Comp 1 plus planted cases, the expression read
+matches `comp1-ground-truth.json` and each planted case's answer key, with no other story built.
+
+**Acceptance Scenarios**:
+
+1. **Given** Comp 1, **When** the expressions are read, **Then** exactly three are found: Shake
+   Control's Position and Rotation and Black Solid 1's CC Light Sweep Center, each on, no error, 0
+   keys, with text identical to the ground truth.
+2. **Given** the same, **Then** Shake Control's two are marked "builds on its own value" and the Sweep
+   Center "sets its own value", each marked as inferred from the text.
+3. **Given** Shake Control at 0.6 s, **When** Position is read at that time, **Then** the base value is
+   (960, 540) and the value after the expression is about (952.4, 542.5) (AB follow-up).
+4. **Given** rock.png (no keys, parented to Shake Control), **When** its motion sources are read,
+   **Then** Shake Control is in its parent chain as moving its children, with the Position and
+   Rotation expressions named as the reason.
+5. **Given** an expression turned off on a keyed property, **Then** it's listed as off and not as a
+   source; the keys are.
+6. **Given** an expression with an error (planted), **Then** it's listed with its error and not counted
+   as a source of motion (its effect on the value is reported as not known).
+7. **Given** Shake Control's Position expression, **When** how much it moves the layer is read, **Then**
+   the read gives the largest distance from the base value over the comp's duration and when it
+   peaks, so an answer can order steps by visible effect (TD 014 § 19 "Checked 2026-11-14").
+
+---
+
+### User Story 2 - The mentor knows what links to a layer, and whether that shows (Priority: P1)
+
+When I ask "what does Sweep Control do?", the mentor can say that its Position drives the Center of a
+CC Light Sweep on Black Solid 1, and that Black Solid 1's eye is off, so the sweep never renders.
+
+**Why this priority**: AB 1 was the simplest question in the baseline and got "I can't see that" (TD
+014 Q4, Q5). The hidden target is the surprise from the 2026-11-14 live check.
+
+**Independent Test**: on Comp 1 and planted cases, "what links here" for each layer matches the answer
+key, with US1's read as its input and nothing else built.
+
+**Acceptance Scenarios**:
+
+1. **Given** Comp 1, **When** what links to Sweep Control is read, **Then** it lists one link: Black
+   Solid 1 › CC Light Sweep › Center reads Sweep Control's Position, matched by the layer's name and
+   marked as inferred.
+2. **Given** the same link, **Then** the target layer is reported as not rendering: eye off, not a
+   matte, not used as a matte by any layer.
+3. **Given** any other Comp 1 layer, **When** what links to it is read, **Then** the result is "no
+   expression links" with the read marked as run (never left blank); Shake Control's children come
+   from the parent chain, not from this read.
+4. **Given** Black Solid 1, **When** its effects are read, **Then** CC Light Sweep is named even
+   though none of its properties are keyed (TD 014 Q5).
+5. **Given** an expression that names a layer whose name two layers share (planted; Comp 1 already has
+   two "G Shakers" and two "Y Fragments"), **Then** the link goes to the one After Effects uses (the
+   topmost) and is flagged as a shared name.
+6. **Given** an expression that refers to a layer by index, or builds the name at run time, or reaches
+   into another comp with `comp(...)`, **Then** the index link is marked inferred, the built name is
+   listed as "a reference I can't resolve", and the other-comp reference is listed as not followed
+   (known limit).
+
+---
+
+### User Story 3 - A check never calls expression motion my edit (Priority: P1)
+
+When I do a lesson step and the mentor checks, it only says "you changed X" or "Edit > Undo until
+it's back" when X really changed: two reads at the same time disagree on something an expression
+doesn't drive, or on an expression-driven property's base value. If Shake Control just moved because
+of its expression, the check says nothing, or at most that it may be the expression.
+
+**Why this priority**: AB 4 was the worst finding: following the advice would have undone real work
+(TD 014 § 10.1 rule 3, K2). It's a fix to six shipped skills, not new capability.
+
+**Independent Test**: unit tests that replay AB turn f (a parent null driven by expressions, the
+playhead moved between reads) through every skill check that reports other changes, plus a real edit
+to the same null's base value, with US1 built and no ask mode.
+
+**Acceptance Scenarios**:
+
+1. **Given** a pivot lesson on rock.png, Shake Control moving by expression, and the playhead moved
+   since the first read, **When** the learner checks, **Then** no other change is attributed to Shake
+   Control and the reply has no Undo advice about it.
+2. **Given** the same, but the learner moved Shake Control's base Position by hand, **When** checked,
+   **Then** the change is reported as before.
+3. **Given** two reads with no shared time for a layer, **When** compared, **Then** that layer is
+   "not compared", never "moved".
+4. **Given** each skill with an "other changes" list (pivot, null, offset, key types, speed graph),
+   **Then** the same rules hold in each.
+5. **Given** a parent whose transform runs on an expression whose result varies over time, **When** a
+   skill's snapshot reads its children, **Then** the parent is reported as moving its children (K3).
+
+---
+
+### User Story 4 - The mentor sees inside precomps (Priority: P2, phase 2)
+
+When I ask why a letter shakes, or what's inside "O Shakers", the mentor can see the keys and
+expressions inside the precomp, which comp it means when two share a name, how many places that comp
+is used, and how the precomp's time lines up with the comp I'm in. If something inside never shows
+because the precomp is shorter, offset, stretched or time-remapped, it says so.
+
+**Why this priority**: most of Comp 1's motion is inside precomps (347 keyed properties on 123 inner
+layers), and "I can't see inside these yet" hides it (AB follow-up). P2 because the ask mode can ship
+saying "I couldn't see inside [precomp]" (TD 014 § 13), and expressions are the bigger gap.
+
+**Independent Test**: on a fresh capture of Comp 1's whole project, Mentor Practice's Icon, and
+planted time-mapping cases, the inside read matches each answer key, with phase 1 built.
+
+**Acceptance Scenarios**:
+
+1. **Given** Comp 1, **When** precomps are read, **Then** all 20 precomp layers are read, every comp is
+   named by its id, and "U Fragments" 353 and the "U Fragments" 321 it holds are told apart (likewise
+   "B Fragments" 242 and 131).
+2. **Given** O Shakers, **When** read, **Then** its inner layers O1 to O7 each show 3 Position and 3
+   Rotation keys and no expressions, matching a ground-truth capture.
+3. **Given** a comp used in more than one place, **Then** the number of places is reported.
+4. **Given** a precomp layer with a start offset, a stretch, or time remap (Icon or planted), **When**
+   inner key times are reported in the outer comp's time, **Then** each is within half a frame of the
+   answer key, and a time-remapped precomp's mapping comes from its remap values.
+5. **Given** a precomp longer than the time the outer layer shows (10 of Comp 1's are 30 s in a 5 s
+   comp), **Then** inner keys outside the shown time are counted and flagged as never showing.
+6. **Given** nesting deeper than the depth limit, **Then** the deeper level is "not read: too deep",
+   never empty.
+
+---
+
+### Edge Cases
+
+Overlaps the reads must get right (CLAUDE.md "Edge cases where concepts overlap"; spec 004's Edge
+Cases table rows for expressions and precomps; TD 014 § 13). Each row gets a unit test on a fixture
+from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (listed in Assumptions).
+
+| # | Overlap | What the read must report | Must never | Fixture |
+|---|---|---|---|---|
+| E1 | Expression over keys | Both; whether the text builds on value or keys (inferred) | "The keys do nothing" or "the expression overrides" as fact | Mentor Practice Logo |
+| E2 | Expression, no keys | The expression as the source | No source; an easing finding (FR-015) | Comp 1 Shake Control |
+| E3 | Expression turned off | Off; keys drive | Count it as a source | Live |
+| E4 | Expression with an error | The error; effect on value unknown | Count it as a source; a value claim | Live (never tested yet) |
+| E5 | Functions that build on value without the word (`wiggle`, `loopOut`, `smooth`, `temporalWiggle`) | Builds on value or keys | "Sets its own value" | Planted text (unit) |
+| E6 | `value` only inside a comment or a string | Not counted | Builds on value | Planted text (unit) |
+| E7 | Separated dimensions | The expression on the active property; one left on Position while separated is reported as not active | An expression on Position as driving separated X and Y | Live (claim to verify) |
+| E8 | Effect property expression | Effect and property by name | Skipped because it isn't transform | Comp 1 Sweep |
+| E9 | Source Text and other non-transform properties | Listed with their group | Counted as moving children | Planted |
+| E10 | Link by name, name shared by two layers | Link to the topmost, flagged shared | Link to both, or pick silently | Comp 1 (G Shakers, Y Fragments) plus planted |
+| E11 | Link by index, `thisLayer`, `parent` | Resolved where the text is plain; inferred | Treated as certain | Planted |
+| E12 | Name built at run time, or a variable | "A reference I can't resolve" | "Nothing links here" | Planted text |
+| E13 | `comp("…")` reference | Listed as not followed (known limit) | Followed by name across same-name comps | Planted text |
+| E14 | Link target eye off, not a matte | Doesn't render | Call it hidden by the learner without the matte check | Comp 1 Black Solid 1 |
+| E15 | Link target is a matte (eye off by design) | Renders through its fill layer | "Hidden" (spec 004 FR-013) | Mentor Practice 2 matte |
+| E16 | Link target is a guide layer, or outside its in and out at the times read | Doesn't render (guide); not on screen then (in and out) | "Renders" | Planted |
+| E17 | Expression-driven parent, playhead moved | Not a learner change | "You moved it"; Undo | Comp 1 (AB turn f) |
+| E18 | Expression with a random element, no seed | Values may differ between reads at one time; treat as expression-driven | A learner change | Planted text |
+| E19 | Parent expression that's constant (`value`) | Doesn't move children (sampled result never varies) | Moves children | Planted |
+| E20 | Same-name comps, nested | By id | By name | Comp 1 (353/321, 242/131) |
+| E21 | Comp used in several places | Count of places | Read once and assumed to show the same everywhere | Comp 1 |
+| E22 | Start offset, stretch (including negative), time remap | Inner times mapped to outer time | Inner key times as outer times | Mentor Practice Icon plus planted (none in Comp 1) |
+| E23 | Precomp longer than it's shown | Keys outside the shown time flagged | Counted as visible motion | Comp 1 (30 s precomps in a 5 s comp) |
+| E24 | Collapse Transformations on a precomp layer | Reported with the precomp | Ignored | Live |
+| E25 | Depth limit, or a cycle | "Not read: too deep" or "not read: loop" | Empty | Planted (cycle: unit only; AE prevents one) |
+| E26 | Expressions inside a precomp that reference the outer comp | Not followed (as E13) | Resolved | Planted text |
+| E27 | Older snapshot or fixture without the new fields | "Not read" | "None" | Comp 1's committed snapshot |
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+**Phase 1: expressions (US1)**
+
+- **FR-001**: The shared read MUST find every property with an expression on every layer of the active
+  comp, keyed or not, in any group (transform, effects, text, masks, shapes, other), and report for
+  each: layer index and name, the property's display path, its group, keys count, whether it's on,
+  its error text if any, and its full text. (R2; TD 014 Q2, Q3.)
+- **FR-002**: For each expression, the read MUST say whether it **builds on the property's own value
+  or keys**, **sets its own value**, or **can't tell**, always marked as inferred from the text. The
+  test MUST ignore comments and strings, and MUST count the functions that build on value or keys
+  without naming it (E5). The plan lists the functions.
+- **FR-003**: For any property with an expression, at any time the caller gives (default: the comp's
+  current time), the read MUST give both the **base value** (before the expression) and the **value
+  after it** (TD 014 Q7).
+- **FR-004**: For expression-driven **transform** properties of the layers a caller asks about and
+  each of their parents, the read MUST give **how much** the expression moves the property: the
+  largest difference from the base value over the comp's duration (in the property's units: pixels,
+  degrees, percent), the time of that peak, and whether the result varies at all. The sampling step
+  is set in the plan; the result is marked as sampled (TD 014 § 19 "Checked 2026-11-14"; see OQ-4).
+- **FR-005**: The motion-sources map (spec 004 FR-014) MUST include expressions on any property: its
+  read status for expressions changes from keyed-only to all, and each parent's `moves_children` MUST
+  be true when the parent has keys on a moving transform property **or** an on, error-free transform
+  expression whose sampled result varies (K3; E19). The reason (keys, expression, or both) MUST be
+  given.
+- **FR-006**: An expression that is off or has an error MUST NOT count as a source of motion; an
+  expression left on Position while dimensions are separated MUST be reported as not active (E3, E4,
+  E7).
+- **FR-007**: Effects on every layer MUST be named, keyed or not, with which of their properties are
+  keyed or expression-driven (TD 014 Q5).
+
+**Phase 1: what links here (US2)**
+
+- **FR-008**: For any layer in the active comp, the read MUST list every expression in the same comp
+  that references it: by name, by index, or through `thisLayer` or `parent`, including expressions on
+  effect properties. Each link gives the source layer, property and the referenced property when the
+  text names one (for example, Position, or an effect's slider).
+- **FR-009**: Every link MUST be marked as **inferred** (found in the text, not confirmed by After
+  Effects). A name shared by two or more layers MUST be flagged and resolved to the topmost, as After
+  Effects does (E10).
+- **FR-010**: References the read can't resolve (a name built at run time, a variable) MUST be listed
+  per expression as "can't resolve", and references to another comp as "not followed" (E12, E13).
+  "No links" MUST only be said when the search ran and every reference in the comp resolved.
+- **FR-011**: Every link MUST say whether its target **renders**, using spec 004's visibility class
+  (FR-013) plus whether the target is inside its in and out points at the time read. A matte is never
+  "doesn't render" (E14 to E16).
+
+**Phase 1: checks (US3)**
+
+- **FR-012**: Every check in the six skills that reports changes the learner made outside the focus
+  ("other changes", "other layers moved", a jump) MUST compare two reads **at the same comp time**. A
+  layer with no shared time is "not compared", never "moved" (K2).
+- **FR-013**: For a property driven by an on, error-free expression, those checks MUST compare the
+  **base value**, not the value after the expression. A layer whose comp-space footprint differs at the
+  same time while no base value on it or its parents differs MUST NOT be attributed to the learner; the
+  check MAY report it as "may be its expression" (TD 014 § 10.1 rule 3). See OQ-1.
+- **FR-014**: A change to an expression itself (turned on or off, text changed, new error) MUST be
+  reported as an expression change, never as the layer moving.
+- **FR-015**: Each skill's snapshot MUST report, for its focus layers, when their motion comes from a
+  parent's motion or an own expression rather than their own keys, from the motion-sources map (K3).
+  Scope across skills: OQ-3.
+
+**Phase 1: reply shape and honesty (all stories)**
+
+- **FR-016**: The reads MUST come in two shapes. A **summary** (per layer: expression count and
+  properties, on and error flags, builds-on-value flags, how much each transform expression moves,
+  incoming and outgoing link counts, effect names, and read status), with **no expression text**. A
+  **detail** for named layers (index, or name when unique), with each expression's text, capped at a
+  length set in the plan with a "cut short" flag and the full length (SC-007).
+- **FR-017**: A layer asked for by a name two layers share MUST return the candidates (index and
+  parent) instead of guessing.
+- **FR-018**: A read that didn't run, ran only in part, or met an older snapshot MUST say "not read"
+  with the reason, never "none", empty or false (E27). The motion-sources map's existing pattern
+  (`not_read`) is kept.
+- **FR-019**: The reads MUST be read-only: no change to the project, its selection, the playhead or
+  the active comp. They run as fixed snippets through the bridge, with no script text from the model
+  (constitution II).
+- **FR-020**: The learner record MUST NOT store expression text, error text, or effect names taken from
+  a read (constitution IV; TD 014 § 11's "never states what only a tool guessed").
+- **FR-021**: Adding the reads MUST NOT change the easing findings on Mentor Practice, and an unkeyed
+  property moved only by an expression MUST NOT become a finding in any keyframe skill (spec 004
+  FR-015, carried to all six).
+
+**Phase 2: inside precomps (US4)**
+
+- **FR-022**: The read MUST read inside every precomp layer, recursively: the same keys, expressions,
+  links and effects as phase 1, for each inner comp. Every comp MUST be identified by its **id**, with
+  its name as a label only (E20).
+- **FR-023**: For each comp read, the read MUST give its duration, size, frame rate and how many
+  layers across the project use it as a source (E21).
+- **FR-024**: For each precomp layer, inner key times MUST be mapped to the outer comp's time through
+  start time, stretch (including negative) and time remap, and nested mappings MUST compound (E22).
+- **FR-025**: Inner keys and expression peaks that map outside the precomp layer's in and out points,
+  or outside the outer comp, MUST be counted and flagged as never showing (E23).
+- **FR-026**: Recursion MUST stop at a depth limit (set in the plan; OQ-5) and on a repeated comp id,
+  reporting the reason (E25). Each comp's contents are read once and shared across the places it's
+  used.
+- **FR-027**: The phase 2 summary MUST give per precomp layer: inner layer count, keyed and
+  expression-driven property counts, the mapped key time span in outer time, and keys never shown,
+  with detail per inner comp on request (FR-016's two shapes).
+- **FR-028**: Phase 2 MUST NOT change any skill's findings or wording; the contents are data in the
+  motion-sources map (`precomp_contents` moves from `not_read` to read) for the ask mode and later
+  skills (Out of scope).
+
+**Tests**
+
+- **FR-029**: Every FR above MUST have unit tests on fixtures from live reads with an answer key
+  (spec 004 FR-012), covering every Edge Cases row. Comp 1's answer key is `comp1-ground-truth.json`,
+  extended by a fresh capture with the new reads; phase 2 needs a ground-truth capture of the inner
+  comps.
+
+### Key Entities
+
+- **Expression read**: one property's expression on one layer (or inner comp layer): where it is, its
+  group, keys count, on, error, text (detail only), builds-on-value (inferred), how much it moves the
+  property (transform only, sampled), and the references found in its text.
+- **Link**: from an expression to the layer it references: the source layer and property, the target
+  layer and property if named, how it was matched (name, index, `thisLayer`, `parent`), inferred,
+  shared-name flag, and whether the target renders.
+- **Layer summary / layer detail**: the two reply shapes (FR-016).
+- **Read status**: per read and per layer, "read" or "not read" with a reason (older snapshot, too deep,
+  loop, other comp, can't resolve).
+- **Comp contents** (phase 2): an inner comp by id, its size, duration, frame rate, places used, and its
+  layers' reads.
+- **Time mapping** (phase 2): per precomp layer, how its inner time maps to the outer comp's (start,
+  stretch, remap), and which inner keys never show.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+**Phase 1**
+
+- **SC-001**: On Comp 1, the read finds **exactly 3** expressions, with text identical to the ground
+  truth, on, no error, 0 keys, and builds-on-value right on all 3 (2 build on value, 1 sets its own).
+  *Measured by:* unit test on a fresh live capture.
+- **SC-002**: On Comp 1, what links to Sweep Control is **exactly 1** link (Black Solid 1's CC Light
+  Sweep Center), marked inferred, with its target reported as not rendering; every other layer reports
+  0 expression links with the read marked as run. *Measured by:* unit test.
+- **SC-003**: On Comp 1, rock.png's motion sources name Shake Control as moving its children by
+  expression, and Shake Control's Position shows a base of (960, 540) and an after-expression value
+  within 0.1 px of (952.4, 542.5) at 0.6 s. *Measured by:* unit test plus one live read.
+- **SC-004**: The easing findings on Mentor Practice are **identical** before and after phase 1 and
+  after phase 2 (spec 004 SC-004), and Comp 1 yields 0 keyframe-skill findings from Shake Control or
+  the Sweep Center. *Measured by:* unit test.
+- **SC-005**: Replaying AB turn f (expression-driven parent, playhead moved) through each skill check
+  with an other-changes list gives **0** changes attributed to the learner, and a planted hand edit to
+  the same parent's base value is reported in **100%** of those checks. *Measured by:* unit tests, one
+  pair per skill.
+- **SC-006**: All six eval sets (easing, key types, speed graph, offset, pivot, null) meet their own
+  SC-006 bar on B1 (at least 80% passing, every hard-rule check passing) on the merge commit of each
+  phase, and the eval engineer's new K2 cases (Eval plan) pass 3 of 3. *Measured by:* eval runs, logged
+  in each set's README.
+- **SC-007**: Reply size: the summary for one layer and its sources on Comp 1 is **at most 4 KB**, the
+  whole-comp summary **at most 12 KB**, the summary holds **no** expression text, and one expression's
+  detail is capped (FR-016). *Measured by:* unit test on Comp 1 and a planted comp with 30 expressions.
+  The caps are a first guess (Comp 1's full ground truth, with all text, is 7.5 KB); the plan may
+  tune them with a reason.
+- **SC-008**: Read time: phase 1 adds **at most 0.5 s** to a snapshot of Comp 1 and of Mentor Practice,
+  and a whole-turn first activity on a skill stays **≤ 10 s** (spec 003 SC-004). Measured live today:
+  60 ms for all 4,720 of Comp 1's properties. *Measured by:* the builder, timings in usage notes.
+- **SC-009**: In **100%** of fixture states where a read didn't run (an older snapshot, an unresolvable
+  reference, another comp, too deep), the output says "not read" or "can't resolve", never "none" or
+  empty. *Measured by:* unit tests.
+- **SC-010**: The read's facts agree with a look in After Effects in **at least 9 of 10** spot checks
+  (spec 004 SC-002's bar) across Comp 1 and the planted cases, including at least one off and one error
+  expression. *Measured by:* the builder, in usage notes.
+
+**Phase 2**
+
+- **SC-011**: On Comp 1, **all 20** precomp layers are read; inner keyed-property and layer counts
+  match a ground-truth capture (expected 347 and 123); the two same-name nested pairs are told apart by
+  id; and places-used counts match. *Measured by:* unit test on a fresh capture.
+- **SC-012**: On Icon and the planted start, stretch, negative-stretch and remap cases, **every** mapped
+  inner key time is within half an outer frame of the answer key, and keys outside the shown time are
+  flagged on Comp 1's 30 s precomps if any exist. *Measured by:* unit tests on live captures.
+- **SC-013**: A whole-project read of Comp 1 (22 comps, 33,447 properties) takes **at most 1.5 s**
+  (measured live: 292 ms for the walk alone), and the precomp summary for all 20 layers is **at most
+  12 KB**. *Measured by:* the builder live, and a unit test for size.
+
+## Eval plan (for the eval engineer; cases are theirs)
+
+This spec adds no new AI feature, so it needs no new set. It changes what six skills' tools return, so
+every set re-runs (SC-006). Cases requested, from AB's held table, once US3 merges:
+
+| Set | Situation | Hard check | Rubric item |
+|---|---|---|---|
+| Pivot | rock.png in a pivot lesson; parent null moved by expression; playhead moved since the first read; "done" | No "Undo" about the parent | "Doesn't call expression motion a learner change" |
+| Null | A child of an expression-driven parent; jump check with the playhead moved | No jump reported for that child | Same |
+| Offset or key types | An expression-driven layer outside the focus | Not in other changes | Same |
+
+AB's other held cases (parent named first, padded PNG, answer before a review, no Easing for keyless
+motion) belong to spec 014's set and to pivot K1, not here.
+
+## Out of scope
+
+- **Writing, fixing or suggesting expression edits** (TD 014 § 15, H-2). The reads report text and
+  errors; nothing writes one.
+- **The two lessons:** skill 4 (*Find what's moving it*) and skill 10 (*Precompose*). Queued for later
+  specs.
+- **Any skill's teaching or `SKILL.md` wording.** Rule 1 ("trace before teaching") and the other § 10.1
+  rules are spec 014's and the skill-builder's. This spec only changes what the tools return (K2, K3).
+- **Lifting easing's "I can't see inside these yet"** or making inner keys findings in any skill. Phase
+  2 gives the data; a later spec decides how lessons use it.
+- **Visible bounds of footage (TD 014 Q6, pivot K1)**, owned elsewhere.
+- **Cross-comp `comp("…")` references.** Listed as not followed. None in Comp 1 (known limit).
+- **K4 to K7** (no keyframe skill for keyless motion, the record guard, hand-in, a null as a pivot
+  focus): spec 014.
+- **Selected layers (TD 014 Q9).**
+- **The ask mode itself**, its tool's allowed list and when it calls the reads: spec 014.
+
+## Assumptions
+
+- Live captures are taken by the cockpit or builder (one AE driver at a time, constitution VI), on AE
+  27.0, with `mentor/dev/capture.mjs` on the named comp. Planted cases go on duplicates and are reset
+  with a strict compare (the sitting method in CLAUDE.md).
+- **Planted cases needed** (none exist in Comp 1): an off expression, an erroring expression (never
+  tested: making one means editing a comp, so it's planted on a copy), separated dimensions with an
+  expression left on Position, a run-time name, a `comp(...)` reference, a link to a guide and to a
+  matte, and precomps with start offset, stretch, negative stretch and time remap (Mentor Practice's
+  Icon covers some).
+- **Claims to verify live:** that After Effects keeps an erroring expression on (older versions turned
+  it off; E4); that a Position expression is inactive once dimensions are separated (E7); that Pan
+  Behind on an expression-driven null changes its base value (SB-2, read from the text, not tried by
+  hand), which SC-005's planted edit stands in for until then.
+- Expression text stays in tool replies to the model only, never in the repo except in fixtures made
+  from the builder's own comps with no real names.
+- Moving to A (`decisions/011`): the reads don't depend on the runtime. Each set's A result goes stale
+  when the tools change; the A re-runs happen in spec 014's ship step, not here.
+- Read time was measured on one machine with one comp; the 0.5 s and 1.5 s budgets leave room for
+  larger projects, which haven't been measured.
+
+## Open questions
+
+### For the builder (each with a recommendation)
+
+- **OQ-1: K2's rule. Skip expression-driven properties, or compare their base values?** TD 014 K2 and
+  the brief say "leave out". Comparing the base value at the same time catches a real hand edit to an
+  expression-driven null (Pan Behind changes the base) and still ignores the expression's motion.
+  **Recommended: compare base values (FR-013 as written).** Skipping would hide a real edit to exactly
+  the null the ask mode will send learners to (K7).
+- **OQ-2: Who owns the ask's read tool?** The ask mode needs a read-only "describe these layers" call
+  with FR-016's two shapes. **Recommended: this spec defines its contract (inputs, two shapes, read
+  status) in the plan; spec 014 decides when it's called and which skills may use it.** Otherwise 014's
+  plan re-specifies every field here.
+- **OQ-3: K3's snapshot field in all six skills now, or pivot and null first?** A new field in a skill's
+  snapshot that its `SKILL.md` doesn't use yet can still leak into replies and move evals. **Recommended:
+  pivot and null in phase 1 (TD 014 K3 says "first"), the other four with spec 014's rule 1 change.**
+  FR-015 would then name those two.
+- **OQ-4: Is "how much it moves" (FR-004) in phase 1?** It wasn't in the brief, but TD 014 § 19's new
+  rule says the answer must read it before naming a fix, and Comp 1's answer turns on it (0.75° of
+  rotation vs. 12 px of position). **Recommended: yes, for transform expressions only, on the asked
+  layers and their parents.** It's a sampled read of values phase 1 already reads.
+- **OQ-5: Phase 2's depth limit.** Comp 1 nests 2 deep. **Recommended: 5 levels**, reported as "not
+  read: too deep" past that; tune if a real comp hits it.
+
+### For the curriculum designer (hand-off, not edits)
+
+- **CD-1:** TD 014 Q8 says inside precomps is "not needed for v1", and § 13's precomps row says "I
+  couldn't see inside [precomp]". With phase 2, what should an answer say once the contents are read,
+  and does the § 13 row change? Also: with FR-004, does § 5.1's "in order of visible effect" want a
+  threshold for "too small to see"?
+- **CD-2:** Easing's "I can't see inside these yet" stays accurate only until phase 2 lands. Should the
+  lesson wording become "this lesson doesn't check inside precomps"? (A skill wording change, out of
+  scope here.)
+
+### Spec housekeeping (mine, after approval)
+
+- Add an amendment note to spec 004 FR-010 and its wave D row: R2 and R4 come from spec 015, before
+  and independent of skills 4 and 10 (builder, 2026-11-14). No decision record needed: the order of
+  reads is within spec 004's own rule (reads before the skills that need them).
