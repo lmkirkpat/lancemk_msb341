@@ -116,3 +116,47 @@ test("a fixture that wasn't captured with a layer's fine sweep says so beside th
   assert.deepEqual(still.moves.fine, { status: "not_read", reason: "fixture" });
   assert.equal(still.moves.sweep, "coarse");
 });
+
+// ---- The same rows on T015's live planted capture (015 Planted, AE 27.0)
+
+const P = JSON.parse(fs.readFileSync(path.join(FIXTURES, "expressions", "planted.json"), "utf8"));
+const liveOf = (layer) => expressionReads(P).list.filter((x) => x.layer === layer);
+
+test("live E1: an expression over keys is listed with its keys and builds on them (Over Keys)", () => {
+  const [x] = liveOf("Over Keys");
+  assert.deepEqual([x.property, x.keys, x.active, x.builds_on], ["Position", 2, true, "builds_on"]);
+});
+
+test("live E3 and E4: off is off; an erroring transform and effect expression are on, with the error, and not sources", () => {
+  const [off] = liveOf("Off Expr");
+  assert.deepEqual([off.on, off.active, off.keys], [false, false, 2]);
+  for (const name of ["Err Transform", "Err Effect"]) {
+    const [x] = liveOf(name);
+    assert.deepEqual([x.on, x.active], [true, false], name);
+    assert.match(x.error, /^Expression disabled\. Error at line 1/, name);
+  }
+  const err = liveOf("Err Transform")[0];
+  const v = valuesAt(P, rawExpression(P, err.layer_index, err.path), 0.6);
+  assert.deepEqual([v.base, v.after, v.note], [[1500, 200, 0], [1500, 200, 0], "not_running"], "T001: the value is the base");
+});
+
+test("live E7 and E29: the joined and separated layers read only their side in use, never the stale hidden half", () => {
+  assert.deepEqual(liveOf("Joined").map((x) => x.property), ["Position"]);
+  assert.deepEqual(liveOf("Separated").map((x) => x.property), ["X Position"]);
+  const at = (name) => P.layer_info.find((l) => l.name === name).samples.find((s) => s.time === 0.6);
+  assert.deepEqual([at("Joined").base.position, at("Joined").position], [[520, 520, 0], [520, 526, 0]], "not X/Y's stale 700, 650");
+  assert.deepEqual([at("Separated").base.position, at("Separated").position], [[800, 300, 0], [806, 300, 0]], "not Position's stale 500, 500");
+});
+
+test("live E9: Source Text is in the text group and isn't motion", () => {
+  const [x] = liveOf("Words");
+  assert.deepEqual([x.group, x.moves.reason], ["text", "not_transform"]);
+});
+
+test("live FR-004: the wiggle's fine sweep (measured) and the constant parent's coarse one", () => {
+  const [w] = liveOf("Wiggle");
+  assert.deepEqual([w.moves.sweep, w.moves.varies, w.moves.units, w.moves.sampled_every], ["fine", true, "px", 0.033]);
+  assert.ok(w.moves.max_offset > 20 && w.moves.max_offset < 40, String(w.moves.max_offset));
+  const [c] = liveOf("Const Parent");
+  assert.deepEqual([c.moves.sweep, c.moves.varies, c.moves.max_offset], ["coarse", false, 0]);
+});

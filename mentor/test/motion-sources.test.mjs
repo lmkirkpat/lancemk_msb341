@@ -161,3 +161,16 @@ test("an older snapshot keeps keyed_only, on_keyed and the parent shape it had",
   assert.deepEqual(Object.keys(rock.parents[0]), ["layer_index", "layer", "class", "shy", "moves_children"]);
   assert.equal(rock.parents[0].moves_children, false, "as before: keys only, so the read can't see the shake");
 });
+
+test("live E19 (015 Planted): Const Parent's value expression doesn't move Const Kid", () => {
+  const snap = JSON.parse(fs.readFileSync(path.join(FIXTURES, "expressions", "planted.json"), "utf8"));
+  const p = sourcesOf(snap, "Const Kid").parents[0];
+  assert.deepEqual([p.layer, p.moves_children, p.moves_by], ["Const Parent", false, null]);
+});
+
+test("live 015 Rig: rock.png's parent moves it by expression, from the sweep (varies), not only as unread", () => {
+  const snap = JSON.parse(fs.readFileSync(path.join(FIXTURES, "expressions", "rig.json"), "utf8"));
+  const p = sourcesOf(snap, "rock.png").parents[0];
+  assert.deepEqual([p.layer, p.moves_children, p.moves_by], ["Shake Control", true, "expression"]);
+  assert.ok(sourcesOf(snap, "Shake Control").expressions.list.every((x) => x.moves.varies === true));
+});
