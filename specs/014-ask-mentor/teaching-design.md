@@ -550,6 +550,9 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
   parts stays, as good information design, but it's never labeled or docked as steps.
 - **Steps dock under the chat**, folded behind a disclosure, and never get ticks (ask mode has no
   check).
+- **A "STEPS" label sits between the explanation and the numbered list** in the answer itself (mockup
+  comments, 2026-11-14). The panel draws it from the step data, not from the mentor's words, so it
+  appears only when there are steps, and `SKILL.md` never writes "Steps:" itself.
 - **The comp's name:** the ask card says "Ask about the open comp" for now. Adding the comp name to
   the bridge's health check (constitution II) waits until the sessions show the panel feels anonymous.
 - **Panel data:** the "asked" result carries the offered skills (two at most) and the step lines as

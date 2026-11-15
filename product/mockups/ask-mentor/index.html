@@ -1,0 +1,915 @@
+<!doctype html>
+<!--
+  Knack panel, ask-first Home and the Ask flow (for specs/014-ask-mentor and spec 007 T061).
+  Self-contained: no external files, fonts, images or scripts. Open in any browser. The left rail is
+  for reviewers; the panel on the right is the design. Deep link to any state with #<state-id>.
+  Built on product/mockups/ui-overhaul/index.html (spec 007): same tokens, components and state
+  names. Flows, states, what's new or changed, and open questions are in README.md next to this file.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Knack Ask Mockup</title>
+<style>
+/* ---------- tokens: spec 007's dark set, unchanged; a light set for AE's lightest brightness ---------- */
+.theme-dark {
+  color-scheme: dark;
+  --bg: #232323; --bg-raised: #2b2b2b; --bg-sunk: #1b1b1b; --chrome: #1e1e1e;
+  --line: #3a3a3a; --line-soft: #2f2f2f;
+  --text: #c8c8c8; --text-strong: #e6e6e6; --muted: #9a9a9a; --placeholder: #8c8c8c;
+  --accent: #4b9cf5; --accent-fill: #1473e6; --lead-line: #2f5f9e;
+  --ok: #4ac26b; --bad: #ff7b72; --warn: #e3b341;
+  --btn: #3a3a3a; --btn-line: #4a4a4a; --btn-hover: #454545; --btn-pressed: #2f2f2f;
+  --check-bg: #262626; --status-bg: #1f2630; --notice-bg: #2a2516;
+  --banner-bad: #2e1f1f; --banner-warn: #2d2716; --banner-info: #1c2533;
+  --bubble: #333; --bubble-line: #444; --skel: #333; --dock-edge: #0c0c0c; --dock-ring: #2a2a2a;
+  --tab-text: #e0e0e0; --code-bg: #1b1b1b;
+}
+/* Light: contrast worked by hand from sRGB luminance (README › Accessibility), not tool-checked. */
+.theme-light {
+  color-scheme: light;
+  --bg: #e3e3e3; --bg-raised: #ececec; --bg-sunk: #f7f7f7; --chrome: #d0d0d0;
+  --line: #b8b8b8; --line-soft: #cfcfcf;
+  --text: #2a2a2a; --text-strong: #111111; --muted: #5c5c5c; --placeholder: #6e6e6e;
+  --accent: #0a58b5; --accent-fill: #1473e6; --lead-line: #7aa7dd;
+  --ok: #0b6e4f; --bad: #b3261e; --warn: #7a5200;
+  --btn: #d6d6d6; --btn-line: #b0b0b0; --btn-hover: #cacaca; --btn-pressed: #e8e8e8;
+  --check-bg: #e8e8e8; --status-bg: #d5dde8; --notice-bg: #efe4c6;
+  --banner-bad: #f2dad8; --banner-warn: #efe4c6; --banner-info: #d8e4f3;
+  --bubble: #f7f7f7; --bubble-line: #b8b8b8; --skel: #cfcfcf; --dock-edge: #a8a8a8; --dock-ring: #bdbdbd;
+  --tab-text: #1a1a1a; --code-bg: #f7f7f7;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: #161616; color: #c8c8c8;
+  font: 12px/1.5 "Adobe Clean", system-ui, -apple-system, "Segoe UI", sans-serif;
+  display: flex; min-height: 100vh;
+}
+body.page-light { background: #9e9e9e; }
+[hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+button, input, textarea { font: inherit; }
+:focus-visible { outline: 2px solid var(--accent, #4b9cf5); outline-offset: 1px; }
+[tabindex="-1"]:focus { outline: none; }
+[tabindex="-1"]:focus-visible { outline: 2px solid var(--accent); }
+
+/* ---------- reviewer rail (not part of the design) ---------- */
+.rig { width: 290px; flex: none; background: #101010; border-right: 1px solid #2a2a2a; padding: 14px 14px 40px; overflow-y: auto; height: 100vh; position: sticky; top: 0; color: #c8c8c8; }
+.rig h1 { font-size: 13px; margin: 0 0 2px; color: #eee; }
+.rig .sub { color: #8f8f8f; margin: 0 0 12px; font-size: 11px; }
+.rig h2 { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #8f8f8f; margin: 14px 0 4px; }
+.rig ul { list-style: none; margin: 0; padding: 0; }
+.rig li a { display: flex; justify-content: space-between; gap: 6px; color: #bdbdbd; text-decoration: none; padding: 2px 6px; border-radius: 3px; font-size: 11.5px; }
+.rig li a:hover { background: #1f1f1f; color: #fff; }
+.rig li a[aria-current="true"] { background: #1d3557; color: #fff; }
+.rig li a .k { font-size: 10px; color: #8f8f8f; border: 1px solid #333; border-radius: 8px; padding: 0 5px; flex: none; align-self: center; }
+.rig li a .k.new { color: #7fb8ff; border-color: #2f5f9e; }
+.rig li a .k.chg { color: #e3b341; border-color: #6b5a22; }
+.rig .ctl { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+.rig .ctl button { background: #1f1f1f; color: #ccc; border: 1px solid #333; border-radius: 3px; padding: 2px 8px; cursor: pointer; font-size: 11px; }
+.rig .ctl button[aria-pressed="true"] { background: #1d3557; border-color: #2f5f9e; color: #fff; }
+.rig label { font-size: 11px; color: #bbb; display: flex; gap: 6px; align-items: center; margin-top: 6px; }
+.rig .note { margin-top: 14px; padding: 8px; border: 1px solid #2a2a2a; border-radius: 4px; background: #141414; color: #b5b5b5; font-size: 11px; }
+.rig .note b { color: #e0e0e0; }
+.rig .ph-key { color: #8f8f8f; font-size: 11px; margin-top: 10px; }
+
+.stage-area { flex: 1; display: flex; align-items: flex-start; justify-content: center; gap: 28px; padding: 28px 20px 60px; overflow: auto; }
+.col { display: flex; flex-direction: column; gap: 8px; }
+.col > .cap { color: #9a9a9a; font-size: 11px; max-width: 360px; }
+.page-light .col > .cap { color: #1c1c1c; }
+.col > .cap b { color: #e0e0e0; }
+.page-light .col > .cap b { color: #000; }
+
+/* ---------- fake AE dock frame ---------- */
+.dock { border: 1px solid var(--dock-edge); background: var(--chrome); box-shadow: 0 0 0 1px var(--dock-ring); color: var(--text); }
+.dock-tabs { display: flex; align-items: center; height: 24px; padding: 0 6px; border-bottom: 1px solid var(--dock-edge); }
+.dock-tab { color: var(--tab-text); font-size: 11.5px; padding: 0 8px; height: 24px; display: flex; align-items: center; gap: 6px; border-bottom: 2px solid var(--accent); }
+.dock-tab .x, .dock-menu { color: var(--muted); }
+.dock-menu { margin-left: auto; letter-spacing: 1px; }
+
+/* ---------- the panel (default dock: 343 wide, spec 007 SC-010 amended) ---------- */
+.panel { width: 343px; height: 680px; background: var(--bg); display: flex; flex-direction: column; overflow: hidden; position: relative; container-type: size; }
+.panel.w260 { width: 260px; }
+.panel.w420 { width: 420px; }
+.panel.h480 { height: 480px; }
+.panel.h900 { height: 900px; }
+
+.nav { display: flex; align-items: stretch; border-bottom: 1px solid var(--line); flex: none; height: 30px; }
+.nav [role="tablist"] { display: flex; align-items: stretch; }
+.nav [role="tab"] { background: none; border: 0; color: var(--muted); padding: 0 12px; cursor: pointer; border-bottom: 2px solid transparent; }
+.nav [role="tab"][aria-selected="true"] { color: var(--text-strong); border-bottom-color: var(--accent); }
+.nav [role="tab"] .live { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-left: 5px; vertical-align: middle; }
+.conn { margin-left: auto; display: flex; align-items: center; gap: 5px; padding: 0 10px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+.conn .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.conn.ok .dot { background: var(--ok); }
+.conn.bad .dot { border: 2px solid var(--bad); }
+.conn.busy .dot { border: 2px solid var(--warn); }
+.conn.bad { color: var(--bad); }
+.conn.busy { color: var(--warn); }
+
+.body, .view { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.scroll { flex: 1; overflow-y: auto; padding: 12px; min-height: 0; }
+
+h2.lbl { margin: 0 0 4px; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.kicker { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.kicker.accent { color: var(--accent); }
+.hello { margin: 0 0 12px; color: var(--text-strong); font-size: 13px; }
+
+.card { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 4px; padding: 12px; margin: 0 0 10px; }
+.card.lead { border-color: var(--lead-line); box-shadow: inset 3px 0 0 var(--accent); }
+.card h3 { margin: 2px 0 8px; font-size: 14px; color: var(--text-strong); font-weight: 600; overflow-wrap: anywhere; }
+.card p { margin: 0 0 10px; }
+.meta { color: var(--muted); font-size: 11px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.row.between { justify-content: space-between; flex-wrap: nowrap; }
+.row.between .meta { margin: 0; flex: 1; min-width: 0; }
+
+button.btn { background: var(--btn); color: var(--text-strong); border: 1px solid var(--btn-line); border-radius: 3px; padding: 5px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 26px; }
+button.btn:hover:not(:disabled) { background: var(--btn-hover); }
+button.btn.primary { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
+button.btn.primary:hover:not(:disabled) { background: #0d66d0; }
+button.btn.quiet { background: transparent; border-color: transparent; color: var(--accent); padding-left: 2px; padding-right: 2px; }
+button.btn:disabled { opacity: .45; cursor: default; }
+button.btn.pressed, button.btn.pressed:disabled { background: var(--btn-pressed); border-color: var(--accent); color: var(--text-strong); cursor: progress; opacity: 1; }
+.why-off { color: var(--muted); font-size: 11px; width: 100%; margin: 0; }
+.spin { width: 10px; height: 10px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; flex: none; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } .skel { animation: none !important; } }
+
+.banner { display: flex; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); flex: none; }
+.banner .ic { flex: none; font-weight: 700; width: 16px; text-align: center; }
+.banner b { color: var(--text-strong); display: block; }
+.banner p { margin: 4px 0 8px; }
+.banner.bad { background: var(--banner-bad); box-shadow: inset 3px 0 0 var(--bad); }
+.banner.bad .ic { color: var(--bad); }
+.banner.warn { background: var(--banner-warn); box-shadow: inset 3px 0 0 var(--warn); }
+.banner.warn .ic { color: var(--warn); }
+.banner.info { background: var(--banner-info); box-shadow: inset 3px 0 0 var(--accent); }
+.banner.info .ic { color: var(--accent); }
+
+/* ---------- ask-first Home ---------- */
+.askcard label.small { display: block; font-size: 11px; color: var(--muted); margin: 0 0 3px; }
+.askcard textarea { width: 100%; resize: none; background: var(--bg-sunk); color: var(--text-strong); border: 1px solid var(--line); border-radius: 3px; padding: 6px 8px; margin: 0 0 8px; min-height: 56px; display: block; }
+.askcard textarea::placeholder, .ask input::placeholder { color: var(--placeholder); }
+.askcard textarea:disabled { opacity: .55; }
+.compname { display: flex; align-items: baseline; gap: 6px; }
+.compname .meta { font-weight: 400; }
+/* The one quiet line from the record: a full-width row, not a card and not a primary button. */
+.qline { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--text-strong); text-align: left; padding: 9px 2px; cursor: pointer; }
+.qline:hover:not(:disabled) { background: var(--bg-raised); }
+.qline:disabled { cursor: default; color: var(--muted); }
+.qline.pressed { cursor: progress; }
+.qline .ql { flex: 1; min-width: 0; }
+.qline .ql small { display: block; color: var(--muted); font-size: 11px; }
+.qline .chev { color: var(--text-strong); font-size: 18px; line-height: 1; flex: none; }
+.quietwrap { margin: 4px 0 10px; }
+.quietwrap .aside { margin: 2px 0 0; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.thread-link { margin-top: 10px; }
+
+.memory { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 12px; color: var(--muted); }
+.memory p { margin: 0 0 4px; }
+.memory strong { color: var(--text); font-weight: 600; }
+
+/* ---------- the thread and the lesson ---------- */
+.lhead { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px; flex: none; border-bottom: 1px solid var(--line); }
+.lhead.nb { border-bottom: 0; }
+.back { background: none; border: 1px solid transparent; color: var(--muted); font-size: 16px; line-height: 1; padding: 2px 6px; border-radius: 3px; cursor: pointer; }
+.back:hover { border-color: var(--line); color: var(--text-strong); }
+.ltitle { flex: 1; min-width: 0; }
+.ltitle .kicker { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.ltitle strong { display: block; margin-top: 2px; color: var(--text-strong); font-size: 13px; overflow-wrap: anywhere; }
+.tag { font-size: 11px; border: 1px solid var(--line); border-radius: 10px; padding: 0 7px; color: var(--muted); white-space: nowrap; }
+.tag.practice { border-color: var(--warn); color: var(--warn); }
+.tag.pass { border-color: var(--ok); color: var(--ok); }
+.strip { display: flex; gap: 14px; margin: 0; padding: 2px 12px 10px; list-style: none; border-bottom: 1px solid var(--line); flex: none; font-size: 11.5px; color: var(--muted); }
+.strip li.done { color: var(--ok); }
+.strip li.current { color: var(--text-strong); font-weight: 600; box-shadow: inset 0 -2px 0 var(--accent); }
+.strip .mk { margin-right: 3px; }
+.fromq { margin: 0; padding: 0 12px 8px; color: var(--muted); font-size: 11px; flex: none; }
+.fromq b { color: var(--text); font-weight: 600; }
+
+.chat { flex: 1 1 auto; overflow-y: auto; padding: 12px; min-height: 0; }
+.msg { margin: 0 0 12px; overflow-wrap: anywhere; }
+.msg p { margin: 0 0 6px; }
+.msg.mentor { background: var(--bg-raised); border-left: 2px solid var(--accent); padding: 10px 12px; border-radius: 0 3px 3px 0; }
+.msg .who { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; display: flex; gap: 6px; justify-content: space-between; }
+.msg .who .phk { text-transform: none; letter-spacing: 0; color: var(--muted); }
+/* One line, always: the label truncates instead of wrapping (builder's comment, 2026-11-14). */
+.msg .who { flex-wrap: nowrap; white-space: nowrap; }
+.msg .who .phk { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.qline .ql, .qline .ql small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* "Steps" label inside the answer, between the explanation and the numbered list (builder, 2026-11-14). */
+.steps-lbl { margin: 10px 0 2px; padding-top: 8px; border-top: 1px solid var(--line-soft); font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.steps-lbl + ol.ans { border-top: 0; padding-top: 0; }
+.askcard .row.between { flex-wrap: nowrap; }
+.askcard .row.between .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg.learner { text-align: right; }
+.msg.learner .on { display: block; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.msg.learner span.b { display: inline-block; text-align: left; background: var(--bubble); border: 1px solid var(--bubble-line); border-radius: 10px; padding: 3px 9px; color: var(--text-strong); max-width: 92%; }
+.msg.notice { border-left: 2px solid var(--warn); padding: 6px 8px; color: var(--text); background: var(--notice-bg); }
+.msg.notice b { color: var(--warn); }
+.ph { color: var(--text); }
+.phline { font-style: italic; }
+code { font: 11px/1.4 ui-monospace, Menlo, monospace; background: var(--code-bg); border: 1px solid var(--line); border-radius: 2px; padding: 0 3px; }
+em.skill { font-style: italic; color: var(--text-strong); font-weight: 600; white-space: nowrap; }
+/* "What's going on": explanation in parts, a plain bulleted list, never numbered or docked. */
+ul.why { margin: 2px 0 10px; padding-left: 16px; }
+ul.why li { margin: 0 0 3px; }
+ul.why li::marker { color: var(--muted); }
+ol.ans { margin: 4px 0 8px; padding: 8px 0 0 18px; border-top: 1px solid var(--line-soft); }
+ol.ans li { margin: 0 0 5px; padding-left: 2px; }
+ol.ans li::marker { color: var(--muted); font-weight: 600; }
+.deeper { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+.divider { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; margin: 4px 0 10px; text-align: center; }
+.divider::before, .divider::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+.passline { margin: 0 0 12px; color: var(--ok); font-weight: 600; }
+.passline small { display: block; color: var(--muted); font-weight: 400; }
+.skel { height: 10px; background: var(--skel); border-radius: 3px; margin: 6px 0; animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .45; } }
+details.earlier { margin: 0 0 10px; color: var(--muted); }
+details.earlier summary { cursor: pointer; font-size: 11px; list-style: none; display: flex; align-items: center; gap: 6px; }
+details.earlier summary::-webkit-details-marker { display: none; }
+details.earlier summary::before { content: "▸"; color: var(--text-strong); width: 16px; text-align: center; font-size: 20px; line-height: 16px; }
+details.earlier[open] summary::before { content: "▾"; }
+details.earlier[open] { color: var(--text); }
+
+/* The docked list: spec 007's checklist frame. Ask's steps use it with no glyphs and no verdicts. */
+.check { border-top: 1px solid var(--line); background: var(--check-bg); flex: none; max-height: 38%; display: flex; flex-direction: column; }
+.check-head { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: none; border: 0; color: var(--text-strong); width: 100%; text-align: left; cursor: pointer; }
+.check-head .chev { color: var(--text-strong); flex: none; width: 16px; align-self: flex-start; font-size: 20px; line-height: 16px; text-align: center; }
+.check-head .sum { flex: 1; min-width: 0; }
+.check-head .sum small { color: var(--muted); display: block; font-size: 11px; }
+.check-body { overflow-y: auto; padding: 0 12px 8px; }
+.check ul { list-style: none; margin: 0; padding: 0; }
+.check li { display: flex; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--line-soft); }
+.check li .g { flex: none; width: 13px; text-align: center; font-weight: 700; }
+.check li .what { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.check li .what small { display: block; color: var(--muted); font-size: 11px; }
+.check li .st { flex: none; max-width: 48%; text-align: right; font-size: 11.5px; }
+.check li.done .g, .check li.done .st { color: var(--ok); }
+.check li.ask .g, .check li.ask .st { color: var(--warn); }
+.check li.none .g, .check li.none .st { color: var(--muted); }
+.check li.fresh { box-shadow: inset 2px 0 0 var(--accent); padding-left: 4px; margin-left: -4px; }
+.check h3 { margin: 10px 0 4px; font-size: 11px; color: var(--muted); font-weight: 600; }
+.check .emptyl { color: var(--muted); margin: 8px 0 0; font-size: 11.5px; }
+.check ol.ans { margin-top: 2px; padding-left: 18px; }
+.check ol.ans li { display: list-item; border: 0; padding: 0 0 0 2px; margin: 0 0 5px; }
+
+.statusline { display: flex; align-items: center; gap: 6px; padding: 6px 12px; color: var(--text); border-top: 1px solid var(--line); background: var(--status-bg); flex: none; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }
+.ask { display: flex; gap: 8px; padding: 10px 12px 12px; flex: none; border-top: 1px solid var(--line); }
+.actions + .ask { border-top: 0; padding-top: 0; }
+.ask input { flex: 1; min-width: 0; background: var(--bg-sunk); color: var(--text-strong); border: 1px solid var(--line); border-radius: 3px; padding: 6px 8px; }
+.ask input:disabled { opacity: .55; }
+.ask-why { margin: 0; padding: 0 12px 10px; color: var(--muted); font-size: 11px; flex: none; }
+
+/* skills */
+.skills { list-style: none; margin: 0 0 12px; padding: 0; }
+.skills li { border-bottom: 1px solid var(--line-soft); display: flex; align-items: center; gap: 8px; padding: 7px 4px; }
+.skills .g { width: 14px; text-align: center; flex: none; }
+.skills .n { flex: 1; min-width: 0; color: var(--text-strong); }
+.skills .n small { display: block; color: var(--muted); font-size: 11px; }
+.skills .s { flex: none; font-size: 11px; color: var(--muted); text-align: right; }
+.skills li.learned .g, .skills li.learned .s { color: var(--ok); }
+.skills li.due .g, .skills li.due .s { color: var(--warn); }
+.skills li.soon .n { color: var(--muted); }
+.dueline { display: flex; align-items: center; gap: 8px; padding: 8px 10px; margin: 0 0 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-raised); }
+.dueline .g { color: var(--warn); font-weight: 700; }
+.dueline .n { flex: 1; min-width: 0; color: var(--text-strong); }
+.dueline .n small { display: block; color: var(--muted); font-size: 11px; }
+
+/* Short docks: one scrolling area at a time (spec 007 builder's note, 2026-11-02). */
+@container (max-height: 560px) {
+  .check { --short: 1; max-height: none; }
+  .check:not(.peek) .check-head + .check-body { display: none; }
+  .check.peek { flex: 1 1 auto; min-height: 0; }
+  .check.peek .check-body { display: block; flex: 1 1 auto; min-height: 0; }
+  .chat:has(~ .check.peek) { display: none; }
+  .lhead { padding-top: 8px; padding-bottom: 6px; }
+  .strip { padding-bottom: 7px; }
+  .actions { padding: 8px 12px; gap: 6px; }
+  .chat { padding: 8px 12px; }
+  .askcard textarea { min-height: 44px; }
+}
+
+/* compare */
+.tradeoff { max-width: 780px; border-collapse: collapse; font-size: 11.5px; color: #c8c8c8; margin-top: 4px; }
+.page-light .tradeoff { color: #111; }
+.tradeoff th, .tradeoff td { border: 1px solid #2c2c2c; padding: 5px 8px; vertical-align: top; text-align: left; }
+.tradeoff th { color: #eee; background: #1a1a1a; }
+.compare-wrap { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.compare-row { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+.gallery-title { color: #e0e0e0; font-size: 12px; margin: 0; align-self: flex-start; }
+.page-light .gallery-title { color: #000; }
+</style>
+</head>
+<body>
+
+<nav class="rig" aria-label="Mockup states">
+  <h1>Knack · ask-first Home and Ask</h1>
+  <p class="sub">Mockup for spec 014 with spec 007's T061, 2026-11-14. Click inside the panel to walk the flows, or jump to any state. Tags: <b>new</b>, <b>changed</b> from spec 007, or <b>same</b>.</p>
+
+  <h2>Panel width</h2>
+  <div class="ctl" id="widths"><button data-w="w260">260 (min)</button><button data-w="" aria-pressed="true">343 (default)</button><button data-w="w420">420</button></div>
+  <h2>Panel height</h2>
+  <div class="ctl" id="heights"><button data-h="h480">480 (short)</button><button data-h="" aria-pressed="true">680</button><button data-h="h900">900</button></div>
+  <h2>Theme</h2>
+  <div class="ctl" id="themes"><button data-t="dark" aria-pressed="true">Dark (AE default)</button><button data-t="light">Light</button></div>
+  <label><input type="checkbox" id="auto" checked /> Auto-advance loading states</label>
+
+  <div id="list"></div>
+
+  <div class="note" id="note" aria-live="polite"></div>
+  <p class="ph-key">The mentor's words are marked "Placeholder": they belong to SKILL.md, not the panel. The main answer is for Comp 1 from the ask baseline (discovery/usage-notes/ask-baseline.md), written to teaching design § 5.1 as decided in the 2026-11-14 mockup review: what's going on as unnumbered parts in order of visible effect, then only actionable steps. Layer names and times are from that comp's ground truth. The panel's own words never name the comp (decided 2026-11-14); only the mentor's do. The record (what's learned, what's due) and Mentor Practice's lesson line are invented to show a state. No snapshot or frame was attached.</p>
+</nav>
+
+<main class="stage-area" id="stage"></main>
+
+<script>
+(function () {
+"use strict";
+
+/* ===================== small builders ===================== */
+
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const btn = (label, attrs = "", cls = "") => `<button type="button" class="btn ${cls}" ${attrs}>${label}</button>`;
+// A button that shows it was pressed and what it's doing, then moves on.
+const busyBtn = (label, pressed, status, then, cls = "", ms = 1200, extra = "") =>
+  btn(label, `data-busy="${esc(status)}" data-pressed="${esc(pressed)}" data-then="${then}" data-ms="${ms}" ${extra}`, cls);
+
+let LESSON_OPEN = false;
+function nav(tab, o = {}) {
+  const conn = o.conn || "ok";
+  const connText = { ok: "AE", bad: "Can't see AE", busy: "AE busy" }[conn];
+  const lessonOn = !!o.lesson;
+  const target = { home: o.homeAt || "home-return", lesson: o.lessonAt || (lessonOn ? "ask-deeper-lesson" : "lesson-none"), skills: "skills-due" };
+  const t = (id, label) => `<button role="tab" id="tab-${id}" aria-controls="view" aria-selected="${tab === id}" tabindex="${tab === id ? 0 : -1}" data-go="${target[id]}" data-tab>${label}</button>`;
+  return `<div class="nav"><div role="tablist" aria-label="Knack">
+    ${t("home", "Home")}${t("lesson", `Lesson${lessonOn ? '<span class="live" aria-hidden="true"></span><span class="sr"> (open)</span>' : ""}`)}${t("skills", "Skills")}
+  </div><span class="conn ${conn}" title="After Effects connection"><span class="dot" aria-hidden="true"></span>${connText}</span></div>`;
+}
+function banner(kind, title, body, actions = "") {
+  const ic = { bad: "!", warn: "!", info: "i" }[kind];
+  return `<div class="banner ${kind}" role="${kind === "info" ? "status" : "alert"}"><span class="ic" aria-hidden="true">${ic}</span><div><b>${title}</b><p>${body}</p>${actions ? `<div class="row">${actions}</div>` : ""}</div></div>`;
+}
+const statusline = (t, show = false) => `<div class="statusline" role="status" aria-live="polite" ${show ? "" : "hidden"}><span class="spin" aria-hidden="true"></span><span class="st">${t || ""}</span></div>`;
+const mentor = (html, src = "Placeholder") => `<div class="msg mentor"><div class="who"><span>Mentor</span>${src ? `<span class="phk">${src}</span>` : ""}</div><div class="ph">${html}</div></div>`;
+// The panel doesn't know the comp's name (decided 2026-11-14), so a question carries no comp label.
+const learner = (t) => `<div class="msg learner"><span class="b">${t}</span></div>`;
+const notice = (b, t) => `<div class="msg notice" role="status"><b>${b}</b> ${t}</div>`;
+const skel = () => `<div class="msg mentor" aria-busy="true"><div class="who"><span>Mentor</span></div><div class="skel" style="width:85%"></div><div class="skel" style="width:70%"></div><div class="skel" style="width:40%"></div></div>`;
+const divider = (t) => `<p class="divider">${t}</p>`;
+const earlier = (label, html) => `<details class="earlier"><summary>${label}</summary>${html}</details>`;
+
+function strip(step) {
+  const labels = ["Pick", "Try", "Done"];
+  return `<ol class="strip" aria-label="Lesson progress">${labels.map((l, i) => {
+    const st = step === 2 ? "done" : i < step ? "done" : i === step ? "current" : "up";
+    const mk = { done: "✓", current: "●", up: "○" }[st];
+    const word = { done: "done", current: "now", up: "to come" }[st];
+    return `<li class="${st}"${st === "current" ? ' aria-current="step"' : ""}><span class="mk" aria-hidden="true">${mk}</span>${l}<span class="sr"> (${word})</span></li>`;
+  }).join("")}</ol>`;
+}
+function lhead(kicker, title, right = "", back = "home-return", backLabel = "Back to Home", nb = false) {
+  return `<div class="lhead ${nb ? "nb" : ""}"><button class="back" data-go="${back}" aria-label="${esc(backLabel)}" title="${esc(backLabel)}">‹</button>
+    <div class="ltitle"><span class="kicker">${kicker}</span><strong>${title}</strong></div>${right}</div>`;
+}
+// The ask bar under a thread or a lesson. Same component as spec 007's Ask.
+const askBar = (o = {}) => `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${o.label || "Ask the mentor"}</label>
+  <input id="ask-in" type="text" placeholder="${o.ph || "Ask the mentor…"}" ${o.off ? "disabled" : ""} /><button type="submit" class="btn" aria-label="Send" ${o.off ? "disabled" : ""}>⏎</button></form>${o.why ? `<p class="ask-why">${o.why}</p>` : ""}`;
+
+/* ===================== content: Comp 1, from the ask baseline ===================== */
+
+const COMP = "Comp 1";
+const PIV = "Set the pivot";
+const PIV_FULL = "Set the pivot (anchor point)";
+let QTEXT = "How can I make the rock shaking more organic, like it's vibrating from the hammer hit and not the center of the rock?";
+
+// Comp 1's answer, after the builder's mockup review (teaching design § 5.1 and § 19, 2026-11-14).
+// "What's going on" is explanation, in parts, in order of visible effect: never numbered, never
+// called steps, never docked. The steps are only things the learner does in AE, each starting with
+// an action on a named layer or property. About 125 words. A mockup placeholder; SKILL.md takes
+// § 5's shape, never this text.
+const WHY = [
+  `All three hits are the same size: the Position expression reuses the first hit's size.`,
+  `The rotation is too small to read: 0.75° at most, gone in about a third of a second.`,
+  `The turn centers on the rock, because Shake Control sits at its middle.`,
+];
+// Step lines come to the panel as data with the answer (open question 2, decided), never parsed from prose.
+const STEPS = [
+  `Open Shake Control's Position expression, find where it uses the first hit's size, and make each hit use its own. Not something I teach yet.`,
+  `Raise the amounts in Shake Control's Rotation expression.`,
+  `Select Shake Control (the null, not a letter layer) and Pan Behind its pivot to where the hammer hits. <em class="skill">${PIV}</em>`,
+  `Play it back and watch where the rock turns from.`,
+];
+const whyList = () => `<ul class="why">${WHY.map((s) => `<li>${s}</li>`).join("")}</ul>`;
+const stepsList = () => `<ol class="ans">${STEPS.map((s) => `<li>${s}</li>`).join("")}</ol>`;
+// The go-deeper control sits inside the answer it belongs to, so it scrolls away with it and never
+// repeats after a no (§ 5.4). One button per skill the answer offered, two at most (§ 7.1).
+const deeper = (on = true) => `<div class="deeper">${on
+  ? busyBtn(`Go deeper: ${PIV} ›`, "Starting…", "Getting your lesson ready…", "ask-deeper-lesson", "", 1300, 'data-say="Yes, go deeper on Set the pivot."')
+  : btn(`Go deeper: ${PIV} ›`, "disabled")}</div>`;
+const ANSWER = (o = {}) => mentor(`<p>rock.png rides on Shake Control, a null moved by expressions:</p>
+  ${whyList()}
+  <p class="steps-lbl">Steps</p>
+  ${stepsList()}
+  <p>Want to go deeper on step 3 with <em class="skill">${PIV}</em>?</p>${o.noDeeper ? "" : deeper(o.deeperOn !== false)}`, "Placeholder");
+
+const FOLLOW_Q = "Why the null and not the rock's own pivot?";
+const FOLLOW_A = mentor(`<p>Shake Control is the layer that moves, and rock.png just rides along, so the rock's own pivot never comes into the shake. That's why step 3 is on Shake Control.</p>`);
+const BACK_A = mentor(`<p>That was step 3; next is step 4: play it back and watch where the rock turns from.</p>`);
+const OUT_Q = "How do I export this as a GIF for the site?";
+const OUT_A = mentor(`<p>Exporting is outside what I cover. I can help with how things move in ${COMP}: easing, timing, pivots, and moving layers together.</p>`);
+const CLAR_Q = "Make it feel more natural.";
+const CLAR_A = mentor(`<p>Do you mean the rock's shake, on Shake Control, or the shine's sweep, on Sweep Control?</p>`);
+const DESC_Q = "What does the sweep control layer do in this comp?";
+const DESC_A = mentor(`<p>Sweep Control is a null with two Position keys, at 3.37 s and 3.54 s. An expression on the CC Light Sweep's Center, on Black Solid 1, names it, so it looks like Sweep Control's move is what sends the shine across the logo.</p>`);
+const UNREACH_A = mentor(`<p>I can't see After Effects right now, so I haven't read your comp. Make sure it's open with no dialog showing, then try again.</p>`);
+
+// Docked steps (decided 2026-11-14): the checklist frame, folded by default at every height, holding
+// only the actionable steps. No glyphs, no ticks: ask mode has no check (§ 7.4). An answer with no
+// steps (explanation only, a clarifying question, the outside line) has no dock at all.
+const stepsDock = (o = {}) => `<section class="check steps" aria-label="Your steps">
+  <button class="check-head" aria-expanded="${o.open ? "true" : "false"}" data-toggle>
+    <span class="chev" aria-hidden="true">${o.open ? "▾" : "▸"}</span>
+    <span class="sum">Your steps · ${STEPS.length}<small>From the mentor's answer. Nothing here is checked.</small></span>
+  </button>
+  <div class="check-body" ${o.open ? "" : "hidden"}>${stepsList()}</div></section>`;
+
+/* ===================== screens ===================== */
+
+const S = {};
+const META = [];
+function screen(id, group, name, kind, note, render, extra = {}) {
+  S[id] = Object.assign({ id, group, name, kind, note, render }, extra);
+  META.push(S[id]);
+}
+
+/* ---------- Home, ask-first ---------- */
+
+// The ask card. No comp name (open question 1, decided 2026-11-14: the panel doesn't read the
+// project, and the bridge change waits until sessions show the panel feels anonymous). off: why it's paused.
+function askCard(o = {}) {
+  const off = !!o.off;
+  return `<section class="card lead askcard" aria-label="Ask about the open comp"><h3>Ask about the open comp</h3>
+    <form data-askhome ${off ? "data-off" : ""} autocomplete="off">
+      <label class="small" for="q">What do you want it to do?</label>
+      <textarea id="q" rows="3" placeholder="e.g. make the logo land softer" ${o.lockText ? "disabled" : ""}>${o.text ? esc(o.text) : ""}</textarea>
+      <div class="row between">
+        <p class="meta">${off ? o.off : "Reads your comp. Changes nothing."}</p>
+        ${o.pressed ? `<button type="button" class="btn primary pressed" disabled aria-busy="true"><span class="spin" aria-hidden="true"></span>Asking…</button>`
+          : `<button type="submit" class="btn primary" ${off || !o.text ? "disabled" : ""}>Ask</button>`}
+      </div>
+    </form></section>`;
+}
+// The one quiet line from the record (decisions/012): the lesson in progress, else Find my next lesson.
+function quietLine(o = {}) {
+  if (o.inprogress) return `<div class="quietwrap">
+      <button type="button" class="qline" data-busy="Picking up where you left off…" data-pressed="Opening…" data-then="lesson-continued" data-ms="1000" ${o.off ? "disabled" : ""}>
+        <span class="ql">Pick up Easing on Title<small>Mentor Practice · 1 of 3 yours eased</small></span><span class="chev" aria-hidden="true">›</span></button>
+      <p class="aside meta">Not finished yet. ${btn("Set it aside", 'data-go="home-return"', "quiet")}</p></div>`;
+  if (o.lessonopen) return `<div class="quietwrap">
+      <button type="button" class="qline" data-go="lesson-open-easing"><span class="ql">Back to your lesson<small>Easing on Title · 1 of 3 yours eased</small></span><span class="chev" aria-hidden="true">›</span></button>
+      <p class="aside meta">${btn("End lesson", 'data-go="home-return"', "quiet")} If you end now, this lesson won't be saved.</p></div>`;
+  return `<div class="quietwrap"><button type="button" class="qline" ${o.off ? "disabled" : 'data-busy="Looking at your comp…" data-pressed="Looking…" data-then="lesson-picking" data-ms="900"'}>
+      <span class="ql">Find my next lesson${o.off ? `<small>${o.off}</small>` : ""}</span><span class="chev" aria-hidden="true">›</span></button></div>`;
+}
+const threadLink = () => `<div class="thread-link">${btn("Back to your question ›", 'data-go="ask-answer"', "quiet")}</div>`;
+const memoryReturn = `<section class="memory" aria-label="What the mentor remembers">
+  <h2 class="lbl">What the mentor remembers</h2>
+  <p><strong>Nov 12</strong> · ${PIV_FULL} · passed</p>
+  <p>Next time: a keyed swing on Door, or Needle's bottom edge.</p>
+  ${btn("All skills and history ›", 'data-go="skills-due"', "quiet")}</section>`;
+
+function home(o = {}) {
+  return `${o.hello ? `<p class="hello">${o.hello}</p>` : ""}${askCard(o.card || {})}${quietLine(o.line || {})}${o.thread ? threadLink() : ""}${o.memory ? memoryReturn : ""}`;
+}
+const homeBody = (o, navO = {}, top = "", foot = "") => `<div class="body">${nav("home", navO)}${top}<div class="scroll">${home(o)}</div>${foot}</div>`;
+const G_HOME = "Home, ask-first";
+
+screen("home-return", G_HOME, "Returning, nothing in progress", "changed",
+  "Replaces spec 007's Up next card, Practice due card, welcome line and memory with two things: the ask card (Ask about the open comp; no name, decided 2026-11-14), and one quiet line. With nothing in progress the line is Find my next lesson, the entry to T061's flow (same screens from lesson-picking on). Pick a skill moves to the Skills tab, which already has it. Press the line to walk T061; type and press Ask (or Enter) to ask.",
+  () => homeBody({}));
+
+screen("home-first", G_HOME, "First run, empty record", "changed",
+  "Spec 007 showed Easing with Start lesson here (FR-010). Ask-first shows the same Home as a returning learner, plus a welcome. The line is Find my next lesson, per decisions/012, so T061's home-first check now looks for this. With an empty record, next-mentor will usually suggest Easing, so the outcome is the same; it costs one mentor turn instead of none (open question 4).",
+  () => homeBody({ hello: "Welcome to Knack." }));
+
+screen("home-inprogress", G_HOME, "A lesson in progress", "changed",
+  "Spec 007's home-cutoff card (Your lesson is waiting, Continue lesson, Set it aside) becomes the quiet line. It names the comp, since the lesson may be on another one. Pressing it is Continue lesson (same AE session) or the skill's start, which resumes (FR-092). Set it aside keeps its old meaning and wording, moved under the line.",
+  () => homeBody({ line: { inprogress: true } }));
+
+screen("home-review-due", G_HOME, "A review is due", "changed",
+  "Looks exactly like home-return, on purpose: a due review never opens the session (decisions/012, teaching design § 10.1 rule 5). Spec 007's Practice due card is gone from Home. The review is one line at the top of Skills (skills-due), with Warm up. The mentor may add one clause after an answer, at most once a session. No dot or badge on the Skills tab: that would be the lead at the door again.",
+  () => homeBody({}));
+
+screen("home-lessonopen", G_HOME, "Lesson open in the panel", "changed",
+  "Where ‹ in a lesson leads. Asking here would start a second conversation while one is open, so the ask card says why it's paused and the quiet line becomes the way back. Questions about the lesson go in the lesson's own Ask. End lesson keeps spec 007's wording and stays gray, under the line.",
+  () => homeBody({ card: { off: "Your lesson is open. Ask there, or end it first.", lockText: true }, line: { lessonopen: true } }, { lesson: true, lessonAt: "lesson-open-easing" }));
+
+screen("home-unreadable", G_HOME, "History couldn't be read", "changed",
+  "Same banner and copy as spec 007, and it still never reads as a first run. Asking works: an answer doesn't need the record. Find my next lesson works too, and the mentor treats it as a first lesson.",
+  () => homeBody({}, {}, banner("warn", "Couldn't read your history", "Your history file is safe, but Knack can't read it. Lessons still work, and the mentor will treat your next one as your first.", btn("What happened?", 'data-go="home-unreadable-why"'))));
+
+screen("home-unreadable-why", G_HOME, "History: what happened?", "same",
+  "Unchanged paragraph (spec 007 D4). Only the Home under it is new.",
+  () => homeBody({}, {}, banner("warn", "What happened to your history", "Knack couldn't read part of your history file, so it moved the file aside without changing it. Your comps weren't touched. New lessons start a new history.", btn("Got it", 'data-go="home-return"'))));
+
+screen("home-unreachable", G_HOME, "Can't connect to After Effects", "changed",
+  "Same banner as spec 007. You can still type, so a question isn't lost; Ask is paused with the reason in words, next to it. Find my next lesson says why it's paused too.",
+  () => homeBody({ card: { off: "Needs After Effects.", text: "" }, line: { off: "Needs After Effects." } }, { conn: "bad" },
+    banner("bad", "Can't connect to After Effects", "Make sure After Effects is open, with no dialog showing.", busyBtn("Try again", "Looking…", "Looking for After Effects…", "home-return", "", 1200)), statusline()));
+
+screen("home-busy", G_HOME, "AE busy (rendering or dialog)", "changed",
+  "As spec 007, amber not red. Ask waits.",
+  () => homeBody({ card: { off: "Waiting for After Effects." }, line: { off: "Waiting for After Effects." } }, { conn: "busy" },
+    banner("warn", "After Effects is busy", "It may be rendering, or a dialog may be open. Try again when it's free.", busyBtn("Try again", "Looking…", "Looking for After Effects…", "home-return", "", 1200)), statusline()));
+
+screen("home-loading", G_HOME, "Loading (reading history)", "same",
+  "Same skeleton as spec 007, reshaped to the new Home: one card and one line.",
+  () => `<div class="body">${nav("home")}<div class="scroll" aria-busy="true">
+    <div class="card"><div class="skel" style="width:35%"></div><div class="skel" style="width:50%;height:14px"></div><div class="skel" style="height:44px"></div><div class="skel" style="width:30%;height:22px;margin-left:auto"></div></div>
+    <div class="skel" style="width:60%;height:14px"></div></div>${statusline("Loading your history…", true)}</div>`, { auto: ["home-return", 1400] });
+
+screen("home-thread", G_HOME, "Home with a question open", "new",
+  "Where ‹ in a thread leads. Home stays ask-first; one plain link goes back to the open question. That link is navigation in this session, not a lead from the record, so the one-quiet-line rule holds. A new question asked here joins the same conversation (teaching design § 6, turn 7) and the earlier one folds.",
+  () => homeBody({ thread: true }));
+
+/* ---------- Asking ---------- */
+
+const G_ASK = "Asking";
+const threadHead = (right = "") => lhead("Ask", "About the open comp", right, "home-thread", "Back to Home. Your question stays here.");
+function thread(o) {
+  return `<div class="body">${nav("home", o.nav || {})}${o.banner || ""}${threadHead(o.right || "")}
+    <div class="chat">${o.chat}</div>
+    ${o.dock === false ? "" : o.dock || ""}
+    ${statusline(o.status || "", !!o.status)}
+    ${o.actions || ""}${askBar(Object.assign({ ph: "Ask a follow-up…", label: "Ask a follow-up" }, o.ask || {}))}</div>`;
+}
+
+screen("ask-typing", G_ASK, "Typing a question", "new",
+  "Ask turns on once there's text. Enter sends; Shift+Enter adds a line. The question is the baseline's own (session 1, turn c). Nothing is read yet.",
+  () => homeBody({ card: { text: QTEXT } }));
+
+screen("ask-sending", G_ASK, "Ask pressed", "new",
+  "The button shows it was pressed and what it's doing. Everything else pauses. Then the Home tab switches to the thread.",
+  () => homeBody({ card: { text: QTEXT, pressed: true, lockText: true }, line: { off: "Available after the answer." } }, {}, "", statusline("Reading the open comp…", true)), { auto: ["ask-reading", 900] });
+
+screen("ask-reading", G_ASK, "Reading the comp", "new",
+  "The question is in the thread at once. The status line says what's happening in panel words; the panel can't name the comp or layers. Target: first activity within 10 s (B-5).",
+  () => thread({ chat: learner(esc(QTEXT)) + skel(), status: "Reading the open comp…", ask: { off: true, why: "The mentor is answering." } }), { auto: ["ask-reading-long", 1800] });
+
+screen("ask-reading-long", G_ASK, "Reading takes a while", "new",
+  "After about 6 s the line changes so it doesn't look stuck. It says nothing about why: the panel doesn't know. Stop isn't offered (open question 6).",
+  () => thread({ chat: learner(esc(QTEXT)) + skel(), status: "Still reading the open comp…", ask: { off: true, why: "The mentor is answering." } }), { auto: ["ask-answer", 1800] });
+
+screen("ask-answer", G_ASK, "The answer, with the go-deeper offer", "new",
+  "Teaching design § 5.1 as decided 2026-11-14. Two parts. What's going on: the source in one line, then its parts as plain bullets in order of visible effect (same-size hits, too little rotation, a turn centered on the rock). Never numbered, never called steps, never docked. Then the steps: only things to do in AE, each starting with an action on a named layer (open, raise, select and Pan Behind, play back). Step 3 names the null plainly, since the builder's own Pan Behind landed on O Shakers. One offer at the end. Go deeper sits inside the answer, one button per skill offered (two at most), gray because the usual choice is to try the steps. No 'learned' or 'again' mark, though this learner passed the pivot on Door (§ 11). Your steps holds only the four steps, folded under the chat.",
+  () => thread({ chat: learner(esc(QTEXT)) + ANSWER(), dock: stepsDock() }));
+
+screen("ask-followup", G_ASK, "A follow-up in the same thread", "new",
+  "Turn 3: one or two sentences, then back to the steps. No second offer. The first answer's Go deeper stays inside that answer, so it isn't repeated. At 480 the answer has scrolled away; Your steps is the way back to the steps without scrolling.",
+  () => thread({ chat: learner(esc(QTEXT)) + ANSWER() + learner(FOLLOW_Q) + FOLLOW_A, dock: stepsDock() }));
+
+screen("ask-steps-open", G_ASK, "Your steps, opened", "new",
+  "The docked steps opened with the twirl-down. At tall docks they sit under the chat (38% cap, as the checklist). At short docks they replace the chat until pressed again, as the checklist does. Only the four steps, tags included; none of the explanation. Nothing is pressable and nothing is ticked.",
+  () => thread({ chat: learner(esc(QTEXT)) + ANSWER() + learner(FOLLOW_Q) + FOLLOW_A, dock: stepsDock({ open: true }) }));
+
+screen("ask-clarify", G_ASK, "A clarifying question: no steps, no dock", "new",
+  "§ 5.2: a vague goal where the two readings lead to different first steps, so one question naming both layers. Nothing is actionable yet, so there are no steps, no Your steps dock and no Go deeper. The answer that follows the reply gets its dock then.",
+  () => thread({ chat: learner(CLAR_Q) + CLAR_A, dock: false }));
+
+screen("ask-outside", G_ASK, "A question outside the six", "new",
+  "§ 9's outside line: one sentence that it's outside, one clause on what it covers. No steps, so no dock and no Go deeper. The panel adds one quiet link to Skills, which lists what's covered; it adds no words to the answer.",
+  () => thread({ chat: learner(OUT_Q) + OUT_A, dock: false, actions: `<div class="actions">${btn("See what's covered ›", 'data-go="skills-due"', "quiet")}</div>` }));
+
+screen("ask-unreachable", G_ASK, "AE unreachable after Ask", "new",
+  "AE closed between the press and the read. The connection mark turns red, and the mentor says it can't see the comp and makes no claims (server rule 2). Try again resends the same question, so you don't retype it. A passing runtime error (offline, busy) uses spec 007's notice with 'Your question's still here.'",
+  () => thread({ nav: { conn: "bad" }, chat: learner(esc(QTEXT)) + UNREACH_A, dock: false,
+    actions: `<div class="actions">${busyBtn("Try again", "Trying…", "Reading the open comp…", "ask-reading", "primary", 900)}</div>`, ask: { off: true, why: "Needs After Effects." } }));
+
+screen("ask-new-question", G_ASK, "A new question in the same thread", "new",
+  "Asked from Home (home-thread) or the follow-up bar. Turn 7: same conversation, new answer. Earlier questions fold, as earlier lesson turns do. This one is the baseline's other question (turn b), a describe-the-comp answer: explanation only, no steps, so the dock goes away and there's no Go deeper. 'Looks like' marks the inferred link (§ 5.3).",
+  () => thread({ chat: earlier("Earlier questions (1)", learner(esc(QTEXT)) + ANSWER({ deeperOn: false })) + learner(DESC_Q) + DESC_A, dock: false }));
+
+/* ---------- Going deeper ---------- */
+
+const G_DEEP = "Going deeper";
+const FROMQ = `<p class="fromq">From your question. ‹ takes you back to it.</p>`;
+const backToQ = ["ask-answer", "Back to your question. Your lesson stays open."];
+const K7_ROWS = (state) => `<section class="check" aria-label="Checklist">
+  <button class="check-head" aria-expanded="true" data-toggle><span class="chev" aria-hidden="true">▾</span>
+    <span class="sum">${state === "done" ? "Shake Control · 2 of 2 holding" : "Shake Control · not checked yet"}<small>${state === "done" ? "Where the pivot goes is your call." : "Where the pivot goes is your call; the rest is checked."}</small></span></button>
+  <div class="check-body"><h3>Shake Control</h3><ul>
+    <li class="ask"><span class="g" aria-hidden="true">?</span><span class="what"><span class="lab">Pivot where the hammer hits</span><small>You name the spot. I read the layers, not the rock's edge.</small></span><span class="st">Your call</span></li>
+    <li class="${state}${state === "done" ? " fresh" : ""}"><span class="g" aria-hidden="true">${state === "done" ? "✓" : "○"}</span><span class="what"><span class="lab">rock.png stays where it is</span></span><span class="st">${state === "done" ? "Stayed" : "Not checked yet"}</span></li>
+    <li class="${state}${state === "done" ? " fresh" : ""}"><span class="g" aria-hidden="true">${state === "done" ? "✓" : "○"}</span><span class="what"><span class="lab">The letters stay where they are</span><small>10 layers</small></span><span class="st">${state === "done" ? "Stayed" : "Not checked yet"}</span></li>
+  </ul></div></section>`;
+
+screen("ask-deeper-starting", G_DEEP, "Go deeper pressed", "new",
+  "Like spec 007's Yes, let's go: the press shows in the thread as 'Yes, go deeper on Set the pivot.', the button reads Starting…, and the status line says what's happening. On A the mentor hands over in the same conversation. On B1 a skill can't hand over (sprint 5 step 4), so the panel starts the lesson itself, as T061 does on B1 (open question 3).",
+  () => thread({ chat: learner(esc(QTEXT)) + ANSWER({ noDeeper: true }).replace("</div></div>", `<div class="deeper"><button type="button" class="btn pressed" disabled aria-busy="true"><span class="spin" aria-hidden="true"></span>Starting…</button></div></div></div>`) + learner("Yes, go deeper on Set the pivot."),
+    dock: false, status: "Getting your lesson ready…", ask: { off: true, why: "The mentor is answering." } }), { auto: ["ask-deeper-lesson", 1300] });
+
+screen("ask-deeper-lesson", G_DEEP, "The lesson opens in context", "new",
+  "Spec 007's lesson screen, with one line saying where it came from, and ‹ going back to the question instead of Home. The lesson opens on the layer that makes the motion (Shake Control, not rock.png), in the learner's words, and skips its own 'which layer' question (§ 7.2). Pick is already ticked: the answer made the choice. The tag comes from the tool's mode; this learner's pivot review is due, so it shows ↻ review, which is all spec 007 shows. The rows need K7 (a null with children as the pivot focus) and rule 2 (the learner's spot). No Show me: on a real comp there's no second layer for a demo.",
+  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "ask-deeper-lesson", homeAt: "ask-answer" })}${lhead(PIV_FULL, "Shake Control", '<span class="tag practice">↻ review</span>', backToQ[0], backToQ[1], true)}${FROMQ}${strip(1)}
+    <div class="chat">${mentor(`<p class="phline">We're on Shake Control, turning the shake from where the hammer hits. Select Shake Control and press A, then Shift+P, so its pivot and position show together.</p>`)}</div>
+    ${K7_ROWS("none")}${statusline()}
+    <div class="actions">${busyBtn("Done, check it", "Checking…", "Checking your pivot…", "ask-deeper-passed", "primary")}</div>${askBar()}</div>`);
+
+screen("ask-deeper-passed", G_DEEP, "The lesson passes", "changed",
+  "Spec 007's passed screen with one change: the way out is Back to your steps (primary), not What's next ›, because the lesson came from a question and hands back to it (§ 6, turn 6). Saved only on the tool's saved: true, as before.",
+  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "ask-deeper-passed", homeAt: "ask-answer" })}${lhead(PIV_FULL, "Shake Control", '<span class="tag pass">✓ passed</span>', backToQ[0], backToQ[1], true)}${FROMQ}${strip(2)}
+    <div class="chat">${learner("Done, check it")}${mentor(`<p class="phline">Shake Control's pivot is where you said, and rock.png and the letters stayed put. Play it back to see the turn come from the hit.</p>`)}<p class="passline">Review passed.<small>Saved to your history.</small></p></div>
+    ${K7_ROWS("done")}
+    <div class="actions">${btn("Back to your steps ›", 'data-go="ask-back"', "primary")}</div></div>`);
+
+screen("ask-back", G_DEEP, "Back at the question, next step", "new",
+  "The thread again, with a divider for the lesson (its result in panel words) and the mentor's one sentence handing back (§ 6, turn 6). The lesson covered step 3, so it names step 4. Your steps opens itself here, once, since you're picking the steps back up; nothing in it is ticked, because the lesson checked the pivot, not the step. If the lesson ended unfinished, the divider reads 'Set the pivot · ended, not saved' and the mentor still names the next step.",
+  () => thread({ chat: earlier("Your question and its answer", learner(esc(QTEXT)) + ANSWER({ deeperOn: false })) + divider(`${PIV} · review passed`) + BACK_A, dock: stepsDock({ open: true }) }));
+
+/* ---------- T061 and the rest of the panel ---------- */
+
+const G_T061 = "T061 and other tabs";
+const SUGGESTION = `It's been a few days since you learned ${PIV_FULL}; want a quick warm-up on ${COMP}, all hands-on, no demo?`;
+
+screen("lesson-picking", G_T061, "Find my next lesson: one suggestion", "same",
+  "T061's screen, unchanged from spec 007 (FR-082). Reached from Home's quiet line instead of the Up next card. A due review can be suggested here, because the learner asked for a lesson. Yes, let's go then runs lesson-picking-starting and lesson-picked, as built.",
+  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "lesson-picking" })}${lhead("What's next", "One suggestion", "", "home-return", "Back to Home")}
+    <div class="chat">${mentor(`<p class="phline">${SUGGESTION}</p>`)}</div>${statusline()}
+    <div class="actions">${busyBtn("Yes, let's go", "Starting…", "Getting your lesson ready…", "lesson-picked", "primary", 1200)}${btn("Pick a skill", 'data-go="skills-due"')}</div>${askBar()}</div>`);
+
+screen("lesson-picked", G_T061, "Yes pressed: the lesson's opening", "same",
+  "Unchanged from spec 007. ‹ goes to Home (home-lessonopen), as before.",
+  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "lesson-picked" })}${lhead(PIV_FULL, "No focus yet", '<span class="tag practice">↻ review</span>', "home-lessonopen", "Back to Home. Your lesson stays open.")}${strip(0)}
+    <div class="chat">${mentor(`<p class="phline">${SUGGESTION}</p>`)}${learner("Yes, let's go")}${mentor(`<p class="phline">Which layer should turn from somewhere other than its middle, and where should it turn from?</p>`)}</div>
+    <section class="check" aria-label="Checklist"><div class="check-body"><p class="emptyl"><span aria-hidden="true">○</span> Your checklist starts once you pick a layer and where it turns from.</p></div></section>
+    <div class="actions"><p class="why-off">Buttons turn on once you have a checklist.</p></div>${askBar()}</div>`);
+
+screen("lesson-open-easing", G_T061, "A lesson open (where 'Back to your lesson' goes)", "same",
+  "Stand-in for spec 007's lesson-partial; drawn only so home-lessonopen's line leads somewhere.",
+  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "lesson-open-easing" })}${lhead("Easing", "Title", "", "home-lessonopen", "Back to Home. Your lesson stays open.")}${strip(1)}
+    <div class="chat">${mentor(`<p class="phline">Opacity's eased. Scale still has one linear key at 1.5 s; ease that one and say done.</p>`)}</div>
+    <div class="actions">${busyBtn("Done, check it", "Checking…", "Checking your keyframes…", "lesson-open-easing", "primary")}</div>${askBar()}</div>`);
+
+screen("lesson-continued", G_T061, "Picked up (from the quiet line)", "same",
+  "Spec 007's lesson-continued, reached from 'Pick up Easing on Title'. Drawn short.",
+  () => `<div class="body">${nav("lesson", { lesson: true, lessonAt: "lesson-continued" })}${lhead("Easing", "Title", "", "home-lessonopen", "Back to Home. Your lesson stays open.")}${strip(1)}
+    <div class="chat">${divider("Picked up where you left off")}${mentor(`<p class="phline">Opacity's eased. Scale still has one linear key at 1.5 s; ease that one and say done.</p>`)}</div>
+    <div class="actions">${busyBtn("Done, check it", "Checking…", "Checking your keyframes…", "lesson-continued", "primary")}</div>${askBar()}</div>`);
+
+screen("lesson-none", G_T061, "Lesson tab, no lesson open", "changed",
+  "Spec 007's wording, with 'Start one from Home' now pointing at the quiet line.",
+  () => `<div class="body">${nav("lesson")}<div class="scroll"><p class="hello">No lesson open.<br><span class="meta">Ask about your comp on Home, or pick a skill.</span></p>
+    <div class="row">${btn("Go to Home", 'data-go="home-return"', "primary")}${btn("Pick a skill", 'data-go="skills-due"')}</div></div></div>`);
+
+screen("skills-due", G_T061, "Skills, with a review due", "changed",
+  "Where a due review lives now: one line at the top of Skills, with Warm up (spec 007's Practice due card, moved off Home). One line, first in path order, with a count of the rest, as before. Easing never shows Warm up (no review mode). 'What the mentor remembers' moves here from Home, under the path. Record invented to show the state.",
+  () => `<div class="body">${nav("skills")}<div class="scroll">
+    <h2 class="lbl">Your skills</h2><p class="meta" style="margin:0 0 10px">3 of 6 learned · 1 due for practice</p>
+    <div class="dueline"><span class="g" aria-hidden="true">↻</span><span class="n">${PIV_FULL}<small>Practice due · last practiced Nov 12</small></span>${busyBtn("Warm up", "Starting…", "Getting your warm-up ready…", "lesson-picked", "", 900)}</div>
+    <ul class="skills">
+      <li class="learned"><span class="g" aria-hidden="true">✓</span><span class="n">Easing</span><span class="s">Learned</span></li>
+      <li class="learned"><span class="g" aria-hidden="true">✓</span><span class="n">Pick the key type on purpose</span><span class="s">Learned</span></li>
+      <li><span class="g" aria-hidden="true">○</span><span class="n">Shape the ease in the speed graph</span><span class="s">Not started</span></li>
+      <li><span class="g" aria-hidden="true">○</span><span class="n">Break the lockstep with offset</span><span class="s">Not started</span></li>
+      <li class="due"><span class="g" aria-hidden="true">↻</span><span class="n">${PIV_FULL}</span><span class="s">Practice due</span></li>
+      <li><span class="g" aria-hidden="true">○</span><span class="n">Move a group with a null</span><span class="s">Not started</span></li>
+      <li class="soon"><span class="g" aria-hidden="true">·</span><span class="n">Find what's moving it<small>Coming later</small></span><span class="s"></span></li>
+    </ul>${memoryReturn.replace(btn("All skills and history ›", 'data-go="skills-due"', "quiet"), "")}</div></div>`);
+
+/* ---------- compare views ---------- */
+
+const G_CMP = "Start here";
+// Spec 007's built Home, drawn from its mockup for the before/after.
+screen("old-home-return", "", "", "", "",
+  () => `<div class="body">${nav("home")}<div class="scroll">
+    <p class="hello">Welcome back.<br><span class="meta">Last lesson Nov 12: ${PIV_FULL}, passed.</span></p>
+    <section class="card lead"><div class="kicker accent">Up next</div><h3>Your next lesson</h3><p>The mentor looks at your history and this comp, then suggests a skill.</p>
+      <div class="row">${btn("Find my next lesson", "", "primary")}${btn("Pick a skill")}</div></section>
+    <section class="card"><div class="kicker" style="color:var(--warn)"><span aria-hidden="true">↻</span> Practice due</div><h3>${PIV_FULL}</h3><p>Last practiced Nov 12.</p>${btn("Warm up")}</section>
+    ${memoryReturn}</div></div>`, { hidden: true });
+screen("home-return-memory", "", "", "", "", () => homeBody({ memory: true }), { hidden: true });
+
+screen("flow", G_CMP, "The ask flow, start to finish", "",
+  "The main path at 260 × 480: ask on Home, the read, the answer, go deeper, the lesson in context, and back to the next step. Press a name in the rail for any of them at full size.",
+  null, { gallery: ["home-return", "ask-reading", "ask-answer", "ask-deeper-lesson", "ask-deeper-passed", "ask-back"] });
+screen("all-homes", G_CMP, "Every Home state", "",
+  "Each existing spec 007 Home state under ask-first, at 260 × 480. home-review-due is identical to home-return on purpose.",
+  null, { gallery: ["home-first", "home-return", "home-inprogress", "home-review-due", "home-lessonopen", "home-unreadable", "home-unreachable", "home-thread"] });
+screen("cmp-before-after", G_CMP, "Before and after: spec 007 Home vs ask-first", "",
+  "Same learner, same record (pivot passed, review due). Left: today's built Home. Right: ask-first. What's removed is listed in the table and the README.",
+  null, { compare2: ["old-home-return", "home-return"], capA: "<b>Before · spec 007 (built).</b> Up next, Practice due and memory: three things from the record, and a review at the door.", capB: "<b>After · ask-first.</b> One place to ask about the open comp, and one quiet line.", table: () => TRADEOFF_BEFORE });
+screen("cmp-memory", G_CMP, "Choice: keep memory on Home?", "",
+  "A real choice decisions/012 doesn't settle. Recommendation: A.",
+  null, { compare2: ["home-return", "home-return-memory"], capA: "<b>A · Ask and one line (recommended).</b> Memory moves to Skills.", capB: "<b>B · Keep What the mentor remembers below the line.</b>", table: () => TRADEOFF_MEMORY });
+
+const TRADEOFF_BEFORE = `<table class="tradeoff">
+<tr><th>Spec 007 Home</th><th>Ask-first</th></tr>
+<tr><td>Welcome back, last lesson</td><td>Gone. First run keeps "Welcome to Knack."</td></tr>
+<tr><td>Up next card: Find my next lesson (primary), Pick a skill</td><td>Find my next lesson is the quiet line. Pick a skill is the Skills tab</td></tr>
+<tr><td>Practice due card, Warm up</td><td>A line at the top of Skills. Never on Home</td></tr>
+<tr><td>Your lesson is waiting card (home-cutoff)</td><td>The quiet line: Pick up Easing on Title</td></tr>
+<tr><td>What the mentor remembers</td><td>Moves to Skills (see the memory choice)</td></tr>
+<tr><td>Held diagnosis slot</td><td>Gone. Diagnosis is parked, and ask covers "what moves this"</td></tr>
+<tr><td>(nothing)</td><td>Ask card, "Ask about the open comp", first and largest</td></tr>
+</table>`;
+const TRADEOFF_MEMORY = `<table class="tradeoff">
+<tr><th></th><th>A · Ask and one line</th><th>B · Plus memory</th></tr>
+<tr><td>Matches decisions/012</td><td>Yes: one quiet line from the record</td><td>Bends it: a second thing from the record</td></tr>
+<tr><td>Memory shows as a difference from Adobe</td><td>Less, at the door. It shows in answers instead (§ 11) and in Skills</td><td>Yes, every open</td></tr>
+<tr><td>Fit at 260 × 480</td><td>Ask card and line end around 260 px; nothing scrolls</td><td>Memory sits around 300 to 420 px; fits, but reads as a dashboard</td></tr>
+<tr><td>Risk</td><td>Memory feels invisible until it's used</td><td>"Next time: a keyed swing on Door" is a lesson nudge at the door, the thing 012 removed</td></tr>
+</table>`;
+
+/* ===================== rendering ===================== */
+
+let WIDTH = "", HEIGHT = "", THEME = "dark", current = null, timer = null;
+
+function panelHtml(id, sized) {
+  const cls = sized ? "w260 h480" : `${WIDTH} ${HEIGHT}`;
+  return `<div class="dock theme-${THEME}"><div class="dock-tabs"><span class="dock-tab">Knack <span class="x" aria-hidden="true">×</span></span><span class="dock-menu" aria-hidden="true">≡</span></div>
+    <div class="panel ${cls}" data-screen="${id}">${S[id].render()}</div></div>`;
+}
+function wireTabs(panel) {
+  const navEl = panel.querySelector(".nav");
+  if (!navEl) return;
+  const view = document.createElement("div");
+  view.className = "view"; view.id = "view"; view.setAttribute("role", "tabpanel");
+  const sel = navEl.querySelector('[role="tab"][aria-selected="true"]');
+  if (sel) view.setAttribute("aria-labelledby", sel.id);
+  while (navEl.nextSibling) view.appendChild(navEl.nextSibling);
+  navEl.parentNode.appendChild(view);
+}
+// Like a real chat: show the top of the newest mentor turn, not the bottom of the thread.
+function settleChat(panel) {
+  const chat = panel.querySelector(".chat");
+  if (!chat) return;
+  const msgs = chat.querySelectorAll(":scope > .msg.mentor, :scope > .msg.notice, :scope > .divider");
+  const last = msgs[msgs.length - 1];
+  if (last) chat.scrollTop = Math.max(0, last.offsetTop - chat.offsetTop - 40);
+}
+function placeFocus(panel, how) {
+  if (!how || how === "rig") return;
+  if (how === "tab") { const t = panel.querySelector('[role="tab"][aria-selected="true"]'); if (t) t.focus(); return; }
+  const msgs = panel.querySelectorAll(".chat .msg.mentor, .chat .msg.notice");
+  const target = msgs[msgs.length - 1] || panel.querySelector(".banner") || panel.querySelector("textarea:not(:disabled), .ltitle strong, h3");
+  if (target) { if (target.tagName !== "TEXTAREA") target.setAttribute("tabindex", "-1"); target.focus({ preventScroll: true }); }
+}
+
+function go(id, how) {
+  if (!S[id]) id = "home-return";
+  clearTimeout(timer);
+  current = id;
+  if (location.hash.slice(1) !== id) history.replaceState(null, "", "#" + id);
+  document.body.classList.toggle("page-light", THEME === "light");
+  const st = document.getElementById("stage");
+  const s = S[id];
+  if (s.gallery) {
+    st.innerHTML = `<div class="compare-wrap"><p class="gallery-title">${esc(s.name)}, at 260 × 480.</p><div class="compare-row">
+      ${s.gallery.map((g) => `<div class="col"><div class="cap"><b>${esc(S[g].name)}</b>${S[g].kind ? ` · ${S[g].kind}` : ""}</div>${panelHtml(g, true)}</div>`).join("")}</div></div>`;
+  } else if (s.compare2) {
+    const [a, b] = s.compare2;
+    st.innerHTML = `<div class="compare-wrap"><div class="compare-row">
+      <div class="col"><div class="cap">${s.capA}</div>${panelHtml(a, true)}</div>
+      <div class="col"><div class="cap">${s.capB}</div>${panelHtml(b, true)}</div></div>${s.table()}</div>`;
+  } else {
+    st.innerHTML = `<div class="col"><div class="cap"><b>${esc(s.group)}</b> · ${esc(s.name)}${s.kind ? ` · ${s.kind}` : ""}</div>${panelHtml(id)}</div>`;
+  }
+  st.querySelectorAll(".panel").forEach((p) => { wireTabs(p); settleChat(p); });
+  const p = st.querySelector(".panel");
+  if (p && !s.gallery && !s.compare2) placeFocus(p, how);
+  document.getElementById("note").innerHTML = `<b>${esc(s.name)}</b><br>${esc(s.note)}`;
+  document.querySelectorAll(".rig li a").forEach((a) => a.setAttribute("aria-current", a.dataset.id === id ? "true" : "false"));
+  if (s.auto && document.getElementById("auto").checked) timer = setTimeout(() => current === id && go(s.auto[0], "action"), s.auto[1]);
+}
+
+function buildRig() {
+  const groups = [];
+  for (const m of META) {
+    if (m.hidden) continue;
+    let g = groups.find((x) => x.name === m.group);
+    if (!g) groups.push((g = { name: m.group, items: [] }));
+    g.items.push(m);
+  }
+  const k = { new: '<span class="k new">new</span>', changed: '<span class="k chg">changed</span>', same: '<span class="k">same</span>' };
+  document.getElementById("list").innerHTML = groups.map((g) => `<h2>${esc(g.name)}</h2><ul>${g.items.map((m) =>
+    `<li><a href="#${m.id}" data-id="${m.id}"><span>${esc(m.name)}</span>${k[m.kind] || ""}</a></li>`).join("")}</ul>`).join("");
+}
+
+/* ===================== interaction ===================== */
+
+function simulateBusy(b) {
+  const panel = b.closest(".panel");
+  if (!panel || b.dataset.running) return;
+  b.dataset.running = "1";
+  panel.querySelectorAll("button, input, textarea").forEach((x) => { if (x !== b) x.disabled = true; });
+  b.classList.add("pressed");
+  b.setAttribute("aria-busy", "true");
+  if (b.classList.contains("qline")) b.querySelector(".ql").insertAdjacentHTML("beforeend", `<small><span class="spin" aria-hidden="true"></span> ${esc(b.dataset.pressed)}</small>`);
+  else b.innerHTML = `<span class="spin" aria-hidden="true"></span>${esc(b.dataset.pressed || "Working…")}`;
+  const sl = panel.querySelector(".statusline");
+  if (sl) { sl.hidden = false; sl.querySelector(".st").textContent = b.dataset.busy; }
+  const chat = panel.querySelector(".chat");
+  if (chat && b.dataset.say) { chat.insertAdjacentHTML("beforeend", learner(esc(b.dataset.say))); chat.scrollTop = chat.scrollHeight; }
+  timer = setTimeout(() => go(b.dataset.then, "action"), +(b.dataset.ms || 1200));
+}
+
+document.addEventListener("click", (e) => {
+  const w = e.target.closest("[data-w]");
+  if (w) { WIDTH = w.dataset.w; document.querySelectorAll("#widths button").forEach((x) => x.setAttribute("aria-pressed", x === w)); return go(current, "rig"); }
+  const h = e.target.closest("[data-h]");
+  if (h) { HEIGHT = h.dataset.h; document.querySelectorAll("#heights button").forEach((x) => x.setAttribute("aria-pressed", x === h)); return go(current, "rig"); }
+  const th = e.target.closest("[data-t]");
+  if (th) { THEME = th.dataset.t; document.querySelectorAll("#themes button").forEach((x) => x.setAttribute("aria-pressed", x === th)); return go(current, "rig"); }
+  const t = e.target.closest("[data-toggle]");
+  if (t) {
+    const box = t.closest(".check");
+    if (getComputedStyle(box).getPropertyValue("--short").trim() === "1") { t.setAttribute("aria-expanded", String(box.classList.toggle("peek"))); return; }
+    const open = t.getAttribute("aria-expanded") === "true";
+    t.setAttribute("aria-expanded", String(!open));
+    t.querySelector(".chev").textContent = open ? "▸" : "▾";
+    t.nextElementSibling.hidden = open;
+    return;
+  }
+  const a = e.target.closest(".rig a[data-id]");
+  if (a) { e.preventDefault(); return go(a.dataset.id); }
+  const b = e.target.closest("[data-busy],[data-go]");
+  if (!b || b.disabled) return;
+  if (b.dataset.busy) return simulateBusy(b);
+  go(b.dataset.go, b.hasAttribute("data-tab") ? "tab" : "action");
+});
+
+// Tabs: Left/Right (and Home/End) move between tabs. In the ask box, Enter sends, Shift+Enter is a new line.
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches && e.target.matches("[data-askhome] textarea") && e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    e.target.form.requestSubmit();
+    return;
+  }
+  const tab = e.target.closest && e.target.closest('[role="tab"]');
+  if (!tab) return;
+  const tabs = [...tab.parentNode.querySelectorAll('[role="tab"]')];
+  let i = tabs.indexOf(tab);
+  if (e.key === "ArrowRight") i = (i + 1) % tabs.length;
+  else if (e.key === "ArrowLeft") i = (i - 1 + tabs.length) % tabs.length;
+  else if (e.key === "Home") i = 0;
+  else if (e.key === "End") i = tabs.length - 1;
+  else return;
+  e.preventDefault();
+  go(tabs[i].dataset.go, "tab");
+});
+
+// Ask turns on once there's text.
+document.addEventListener("input", (e) => {
+  const f = e.target.closest && e.target.closest("[data-askhome]");
+  if (!f) return;
+  const sb = f.querySelector('button[type="submit"]');
+  if (sb && !f.hasAttribute("data-off")) sb.disabled = !e.target.value.trim();
+});
+
+document.addEventListener("submit", (e) => {
+  const home = e.target.closest("[data-askhome]");
+  if (home) {
+    e.preventDefault();
+    const text = home.querySelector("textarea").value.trim();
+    if (!text || home.hasAttribute("data-off")) return;
+    if (text !== QTEXT) QTEXT = text; // the mockup answers any question with Comp 1's answer (README › How to open it)
+    return go(current === "home-thread" ? "ask-new-question" : "ask-sending", "action");
+  }
+  const f = e.target.closest("[data-ask]");
+  if (!f) return;
+  e.preventDefault();
+  const input = f.querySelector("input");
+  const text = input.value.trim();
+  const panel = f.closest(".panel");
+  const chat = panel.querySelector(".chat");
+  if (!text || !chat) return;
+  input.value = "";
+  chat.insertAdjacentHTML("beforeend", learner(esc(text)));
+  const paused = [...panel.querySelectorAll("button, input, textarea")].filter((x) => !x.disabled);
+  paused.forEach((x) => (x.disabled = true));
+  const sl = panel.querySelector(".statusline");
+  if (sl) { sl.hidden = false; sl.querySelector(".st").textContent = "Working…"; }
+  chat.scrollTop = chat.scrollHeight;
+  setTimeout(() => {
+    chat.insertAdjacentHTML("beforeend", mentor('<p class="phline">[One or two sentences, then the step you\'re on.]</p>'));
+    chat.scrollTop = chat.scrollHeight;
+    if (sl) sl.hidden = true;
+    paused.forEach((x) => (x.disabled = false));
+    const last = chat.querySelectorAll(".msg.mentor"); const m = last[last.length - 1];
+    if (m) { m.setAttribute("tabindex", "-1"); m.focus(); }
+  }, 1300);
+});
+
+window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (id && id !== current) go(id); });
+
+buildRig();
+go(location.hash.slice(1) || "flow");
+})();
+</script>
+</body>
+</html>
