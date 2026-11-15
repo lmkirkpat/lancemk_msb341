@@ -211,8 +211,12 @@ a brand new session act like a colleague who already knows what you are working 
     comes as data (explanation, steps, up to two offered skills, closing offer), B1 offers no skills, and the
     bridge's health check says whether a comp is active (constitution 1.5.0). The reads are spec 015's;
     the three sessions wait for spec 015 phase 1 (FR-060). FR-055 carries spec 007's amendments.
-  - **Next:** the curriculum designer brings TD § 7.1 and § 16 in line with § 19 (before `SKILL.md`), then
-    spec 014's plan and tasks once spec 015's plan is committed (`.specify/feature.json` points at 015).
+  - **Plan and 100 tasks approved (2026-11-14, `99124e6`), PQ-1 to PQ-5 as recommended:** the mentor answers
+    through a `give_answer` tool whose fields are the whole answer and which enforces the hard rules (B1 strips
+    offers). MVP is phases 1 and 2 on A. The panel half of phase 1 can start now; the mentor half waits on 015
+    T040, Go deeper on 015 T023 and T026. `.specify/feature.json` still points at 015 while it's being built, so
+    run 014's Spec Kit steps with explicit paths, not the setup scripts.
+  - **Next:** phase 0 (T001 to T007), then the panel half of phase 1.
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
