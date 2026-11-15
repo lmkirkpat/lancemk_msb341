@@ -6,7 +6,8 @@
 
 **Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended; OQ-1's
 constitution amendment is in, 1.5.0). Plan and tasks approved 2026-11-14 (PQ-1 to PQ-5 as
-recommended; FR-006 and FR-016 amended for PQ-5 and PQ-4).
+recommended; FR-006 and FR-016 amended for PQ-5 and PQ-4, FR-019 to match PQ-4, FR-009 points at
+PQ-1). Housekeeping done 2026-11-14 (T006): mockup v5, CD-2 to CD-4 answered.
 
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
@@ -20,7 +21,9 @@ four shared rules in all six skills, the learner record, and Home, which now ope
 
 **What is taught** is set by the curriculum designer's teaching design, which this spec links to and doesn't
 copy: [`teaching-design.md`](teaching-design.md) (written "TD § n"). The panel's screens are the
-ui-designer's approved mockup, v4: [`product/mockups/ask-mentor/`](../../product/mockups/ask-mentor/README.md)
+ui-designer's approved mockup, v5 (2026-11-14: step 2 of the Comp 1 answer now pairs an action with the read
+fact, "Open Shake Control's Rotation expression and look at its amounts: 0.75° at most, too small to see. Not
+something I teach yet."): [`product/mockups/ask-mentor/`](../../product/mockups/ask-mentor/README.md)
 (written "MU", with its state ids). Where this spec needs something those don't say, it's a question below,
 not an edit to them.
 
@@ -52,7 +55,7 @@ and restraint is a mode switch away for Adobe. What stays hard to copy (CLAUDE.m
 | Record | What it requires here |
 |---|---|
 | `decisions/002`, amended by `012` | The mentor still leads, through the follow-through (named skills, one go-deeper, memory), not at the door. 012's "what would change our mind" is SC-001's watch signal |
-| `decisions/003`, `005` (constitution II) | Read-only, narrow tools; no open-ended scripts; the panel holds no teaching logic and reads the project only through the mentor's tools. **FR-047 needs an amendment** (OQ-1) |
+| `decisions/003`, `005` (constitution II) | Read-only, narrow tools; no open-ended scripts; the panel holds no teaching logic and reads the project only through the mentor's tools, except the comp-active yes or no (constitution 1.5.0, amended 2026-11-14 for OQ-1; FR-047) |
 | `decisions/004` | Spec Kit for build specs |
 | `decisions/007`, `008` (constitution VI) | `SKILL.md` files and `mentor/` are the skill-builder's; `panel/` the panel-builder's; eval cases the eval engineer's; one agent on live AE at a time |
 | `decisions/011` | Built and evaluated on B1; the three sessions and the ship step on A. Go deeper is checked on A (B1 stops at the offer) |
@@ -309,7 +312,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   among the step tags (TD § 5.1 part 3, § 7.1). No greeting, no "great question", no recap, no list of what's
   fine. The whole answer, step lines included, SHOULD be about 120 words (a guess to tune on the sessions).
 - **FR-009**: The mentor's prose MUST NOT contain the step list or a "Steps:" label. The steps reach the learner
-  only from the step data (FR-016) (TD § 19).
+  only from the step data (FR-016) (TD § 19). The answer turn has no prose at all; its words are only the
+  answer tool's fields (plan › PQ-1).
 - **FR-010**: Every claim MUST be one of TD § 5.3's three kinds: read (plain), inferred (marked "so", "which
   means", "looks like"), or not read (named, with what's missing). A step that depends on something unread MUST
   say so in the step. An assumption about intent is stated once, in the first part.
@@ -327,7 +331,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 - **FR-016**: **Each answer turn MUST produce a structured "asked" result** with four fields, so the panel never
   parses prose (cockpit item 1; MU › Open question 2 and design review 4):
   1. **explanation**: the mentor's words for part 1;
-  2. **steps**: the step lines in order, each with its skill (a skill ID, or "not taught yet");
+  2. **steps**: the step lines in order, each with its skill (a skill ID, "not taught yet", or none for a
+     step that only plays back or looks, FR-006);
   3. **offered skills**: zero to two skill IDs, each among the steps' skills, except that a how-to answer with
      no comp target (FR-019) may carry one offered skill and no steps; its go-deeper hands over with no layer
      and the lesson opens as it would from Skills (amended 2026-11-14, plan PQ-4);
@@ -336,14 +341,17 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   a describe-the-comp answer and "no comp open" all have empty steps.
 - **FR-017**: **On B1, the result MUST carry no offered skills**, so no Go deeper control appears (cockpit item
   2). The closing offer's wording is unchanged on B1, so the eval set still judges it there; a yes on B1 MUST
-  NOT hand over (TD § 7.1). The plan says where B1 is detected.
+  NOT hand over and gets TD § 7.1's one sentence pointing to the Skills tab (CD-4, answered 2026-11-14). The
+  plan says where B1 is detected.
 - **FR-018**: Scope by step (TD § 9): **inside** the six, tag and offer; **describing the comp**, always in
   scope; **next to the six**, FR-006's line; **outside** (color, render, export, audio, 3D, typography, other
   apps, general trivia, or nothing in the comp to read), one sentence that it's outside what the mentor covers
   and what it does cover, and nothing from general knowledge. A goal partly outside gets both bands in one list;
   the outside part is never dropped.
 - **FR-019**: A how-to inside the six with no comp target ("how does the speed graph work?") MUST get two
-  sentences and an offer of the lesson (H-3, decided as recommended).
+  sentences and an offer of the lesson (H-3, decided as recommended). Its result carries no steps and one
+  offered skill, the lesson it offers (on B1, none, FR-017); Go deeper hands over with no layer, and the lesson
+  opens as it would from Skills (amended 2026-11-14, plan PQ-4; FR-016 item 3).
 - **FR-020**: "Do it for me" MUST get the curriculum § 2 decline in one sentence, then step 1 again in one
   sentence. "Show me" is a yes to the go-deeper; the ask mode has no demonstration (TD § 5.4).
 
@@ -459,9 +467,9 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   drawn, with spec 007's tokens and components. "Same" states keep spec 007's behavior.
 - **FR-047**: The bridge's health check MUST add **whether a comp is active (yes or no, no name, no other
   project detail)** so Home can pause Ask before anyone asks (`home-nocomp`; cockpit item 3, MU open question
-  10). **This needs a constitution II amendment before the plan** (OQ-1): today the panel "MUST NOT read … the
-  project except through the mentor's tools". Until it lands, `ask-nocomp` (the mentor's read finds no comp)
-  covers the case, and Ask stays enabled on Home.
+  10). Constitution II allows it as of 1.5.0 (amended 2026-11-14, OQ-1): the panel may read from the health
+  check whether a comp is active, as a yes or no with no name or other detail. Until the flag is built,
+  `ask-nocomp` (the mentor's read finds no comp) covers the case, and Ask stays enabled on Home.
 - **FR-048**: The panel MUST draw an answer as: the explanation, then (only with step lines) the STEPS heading
   and numbered list from the step data, then the closing offer, then one gray **Go deeper: [tag] ›** per offered
   skill inside that answer. Nothing is said twice. If the result is missing or malformed, the panel MUST show
@@ -658,7 +666,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 
 ### For the builder (each with a recommendation)
 
-- **OQ-1: How is the comp-active flag allowed (FR-047)?** Constitution II says the panel reads the project only
+- **OQ-1 (answered 2026-11-14, as recommended; constitution 1.5.0 is in, principle II): How is the
+  comp-active flag allowed (FR-047)?** Constitution II says the panel reads the project only
   through the mentor's tools. A yes or no carries no name, but it is still the panel learning something about
   the project. **Recommended: a constitution amendment (1.5.0, MINOR), proposed by the cockpit, that lets the
   panel read one thing from the bridge's health check, whether a comp is active, with no name or other
@@ -682,13 +691,17 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 
 - **CD-1** (also spec 015's CD-1): once spec 015 phase 2 reads precomps, what does an answer say about what's
   inside, and does TD § 13's precomps row change?
-- **CD-2: TD § 16 is out of date with § 19.** The worked answer puts the pivot step first and closes "on step 1";
+- **CD-2 (answered 2026-11-14: TD § 16 rewritten as FR-016's four fields, hit sizes first, pivot step 3; it
+  is now the one version the rubric, evals and `SKILL.md` take): TD § 16 is out of date with § 19.** The worked answer puts the pivot step first and closes "on step 1";
   § 19 "Checked 2026-11-14" says the Position hit sizes lead, and the design review's step shape ("Open … and
   look at …") replaced § 16's step 2. MU's revised Comp 1 answer has the new order. The eval rubric needs one
   version.
-- **CD-3: TD § 7.1 says a learned skill "is offered as practice or review"**, while § 19 decides "practice, never
+- **CD-3 (answered 2026-11-14: TD § 7.1 now says practice, never a review): TD § 7.1 says a learned skill
+  "is offered as practice or review"**, while § 19 decides "practice, never
   a review". This spec follows § 19 (FR-023); please align § 7.1.
-- **CD-4:** on B1 the closing offer still names a skill but nothing hands over (FR-017). What should the mentor
+- **CD-4 (answered 2026-11-14, TD § 7.1: one plain sentence saying the lesson can't start from here and to open
+  it from the Skills tab, naming the skill, never a command; nothing hands over, the steps stay):** on B1 the
+  closing offer still names a skill but nothing hands over (FR-017). What should the mentor
   say to a yes on B1? Builder-only, so one plain sentence and the pending step is enough unless you want more.
 
 ### For the eval engineer (EE)
@@ -698,4 +711,5 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 
 ### Spec housekeeping (mine, after approval)
 
-- Write FR-055's amendments into `specs/007-ui-overhaul/spec.md` and T061's note into its `tasks.md`.
+- Done 2026-11-14 (T007): FR-055's amendments are in `specs/007-ui-overhaul/spec.md` and T061's note in its
+  `tasks.md`.

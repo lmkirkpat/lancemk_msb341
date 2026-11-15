@@ -40,7 +40,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   a test skill named `*-mentor` with `Skill` in its tools hands over to another; the conversation is kept,
   the tool list switches to the second skill's, a `session.json` value written by a tool before the switch
   is read by a tool after it, and a mid-conversation `/ask-mentor` command switches back.
-- [ ] T003 [P] (skill-builder) **Practice keeps the schedule (research R18).** `mentor/test/practice-keeps-schedule.test.mjs`:
+- [x] T003 [P] (skill-builder) **Practice keeps the schedule (research R18).** `mentor/test/practice-keeps-schedule.test.mjs`:
   a non-review lesson on a learned skill, passed or partial, leaves status, `review_due` and
   `reviews_passed_in_row` as they were, and its entry's kind is `practice`.
 - [ ] T004 (cockpit) Log T001 to T003 in `discovery/usage-notes/ask-build.md` (new): each question, the
@@ -48,10 +48,10 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 - [ ] T005 (spec-writer) Fold T001 to T003 into research R4, R10, R18 and data-model § 6. If T001 shows
   focus changes the flag, apply R10's fallback; if an answer changes a requirement, stop and hand it to the
   builder before T015.
-- [ ] T006 [P] (spec-writer) Spec 014 housekeeping in `specs/014-ask-mentor/spec.md`: the mockup is v5; FR-047
+- [x] T006 [P] (spec-writer) Spec 014 housekeeping in `specs/014-ask-mentor/spec.md`: the mockup is v5; FR-047
   and OQ-1 say the 1.5.0 amendment is in; CD-2 to CD-4 marked answered (TD updated 2026-11-14); the builder's
   PQ-4 and PQ-5 answers written into FR-016, FR-019 and FR-006; a pointer to plan › PQ-1 in FR-009.
-- [ ] T007 [P] (spec-writer) **FR-055: amend spec 007.** In `specs/007-ui-overhaul/spec.md`: FR-006
+- [x] T007 [P] (spec-writer) **FR-055: amend spec 007.** In `specs/007-ui-overhaul/spec.md`: FR-006
   (`home-cutoff` → `home-inprogress`; add `home-lessonopen-deeper`, `home-nocomp`, `home-thread` and MU's ask
   states), FR-007 and FR-009 (no Up next card; the quiet line; Pick a skill on Skills), FR-010 (empty record:
   "Welcome to Knack." and Find my next lesson), FR-026 (the quiet line, Set it aside), FR-046 (Ask on Home,

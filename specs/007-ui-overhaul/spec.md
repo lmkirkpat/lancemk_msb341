@@ -8,7 +8,9 @@
 the review of that approval and reconciled with `decisions/011`, which added FR-099, FR-100, SC-018 and tasks
 T075 to T079. Earlier history: approved 2026-10-20 (Home A; open questions 1, 3 and 5 answered); amended
 2026-10-30 from spec 013 (FR-056 and the runtime assumption); amended 2026-11-02 to mockup revision 3 and the
-builder's decisions of that date. Step 0 (contrast and the 11 px floor) shipped in `5bed931`.
+builder's decisions of that date. Step 0 (contrast and the 11 px floor) shipped in `5bed931`. **Amended
+2026-11-14 from spec 014 (FR-055) for `decisions/012`, Home opens ask-first:** FR-006, FR-007, FR-009, FR-010,
+FR-026, FR-046, FR-050, FR-051 and SC-010; FR-008 still holds.
 
 **Input**: Cockpit task, Sprint 3 parallel run 1 (wave 3): "Write the spec for the UI overhaul:
 three tabs (Home, Lesson, Skills), Home option A (path-first) as recommended, the docked
@@ -20,6 +22,13 @@ panel alone."
 **Amendment input (2026-11-02)**: Cockpit task: amend to mockup revision 3 and the builder's nine
 decisions, check the mockup's claims against the code, then write the plan and tasks. What the code
 check found is in [research.md](research.md).
+
+**Amendment input (2026-11-14)**: Spec 014 FR-055 (`decisions/012`, amending `decisions/002`): Home opens
+ask-first. The design for Home and the Ask states is the ui-designer's approved ask-first mockup,
+[`product/mockups/ask-mentor/README.md`](../../product/mockups/ask-mentor/README.md) (its States table and
+"What this removes from spec 007's Home"), which builds on revision 3 below; anything it doesn't list works
+as revision 3 draws it. Each amended requirement says so in place, with the original text kept. Elsewhere in
+this spec, **Up next** on Home and `home-cutoff` read as amended by FR-007, FR-009 and FR-026.
 
 **The design this spec builds.** The UI designer's mockup, revision 3 (2026-11-02):
 [`product/mockups/ui-overhaul/README.md`](../../product/mockups/ui-overhaul/README.md),
@@ -444,6 +453,10 @@ From the README's "States still missing" and the specs this one sits on.
   (`all-checklists`, `all-openings`, `compare-stage`, `compare-upnext`, `home-held-slot`, and the `cmp-*` screens inside them), `home-return-stored`
   (FR-093) and the states held until a dependency ships (Build order › States by dependency). It adds one id the
   table doesn't have, for step 1 only: `home-return-interim`, Home with a record before step 2 (plan P9). T052 removes it.
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* `home-cutoff` becomes `home-inprogress` (the quiet line, FR-026);
+  the panel also implements the ask-first mockup's new and changed states by id, as spec 014 FR-046 lists them:
+  `home-lessonopen-deeper`, `home-nocomp`, `home-thread`, and the ask states (`ask-typing` through `ask-ended`,
+  plus `skills-due` and `lesson-none` as changed). Its "Same" states keep this spec's behavior.
 
 ### Home (option A, path-first)
 
@@ -453,21 +466,37 @@ From the README's "States still missing" and the specs this one sits on.
   MUST be above the fold at 260 × 480 px. *(Amended 2026-11-02, revision 3 and decision 1: no diagnosis
   or question card. Open question 3's "both starts above the fold" holds when spec 005 lands, in the
   held slot.)*
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* the Up next card, the held slot, Practice due and What the mentor
+  remembers are gone from Home. Home MUST show the ask card ("Ask about the open comp"), first, and under it
+  **one quiet line**, in this order: a lesson open in the panel (`home-lessonopen`, `home-lessonopen-deeper`),
+  else a lesson in progress (`home-inprogress`), else **Find my next lesson** (`home-return`, `home-first`).
+  Nothing else from the record is on Home. The ask card's Ask button MUST be above the fold at the default dock.
 - **FR-008**: Home MUST be drawn from the learner record and the path data alone, with no mentor
   turn, so opening it costs nothing (README › Home). If the read takes more than 300 ms
   it MUST show `home-loading`.
+  *Checked 2026-11-14 (spec 014 FR-055, `decisions/012`): still holds for the ask-first Home; no mentor turn
+  until a press (Ask or Find my next lesson). `home-nocomp` uses only the bridge's comp-active yes or no
+  (constitution 1.5.0), not a mentor turn.*
 - **FR-009**: Up next has two sources in this build, each with no mentor turn to draw: no record: the
   path's starting skill with **Start lesson**; a record: "Your next lesson", no skill named, with **Find
   my next lesson** (RQ-15), one `/next-mentor` turn when pressed, opening `lesson-picking`. A stored
   recommendation is a later option (FR-093).
-- **FR-010**: With no record, Up next MUST be the path data's starting skill (PN-16), not a skill the
-  panel picks.
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* there is no Up next card. **Find my next lesson** is Home's quiet
+  line, with or without a record (FR-010), and still opens `lesson-picking` with one `/next-mentor` turn when
+  pressed. **Pick a skill** is the Skills tab, and stays on `lesson-picking`.
+- **FR-010**: ~~With no record, Up next MUST be the path data's starting skill (PN-16), not a skill the
+  panel picks.~~ *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* with no record, Home MUST show the same Home as a
+  returning learner plus "Welcome to Knack.", with **Find my next lesson** as the quiet line (`home-first`), not
+  the path's starting skill with Start lesson. The press costs one mentor turn; drawing Home still costs none
+  (FR-008).
 - **FR-011**: The panel MUST tell a missing record from an unreadable one. Unreadable MUST show
   `home-unreadable` and MUST NOT be treated as a first run (the 2026-10-12 agent audit's rule:
   unreadable is not empty). Today's `panel/lib/memory.js` returns the same thing for both, which
   this changes.
 - **FR-012**: **Start lesson** MUST send that skill's start request (RQ-01), which opens the named
   skill's lesson as today. No lesson opens with a diagnosis (Open question 1, answered (a)).
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* Start lesson is no longer on Home (the Up next card is
+  gone); the behavior holds wherever Start lesson still appears (Skills, and the flow from `lesson-picking` on).
 - **FR-013**: **Pick a skill** MUST go to the Skills tab.
 
 ### Lesson
@@ -535,6 +564,9 @@ From the README's "States still missing" and the specs this one sits on.
 - **FR-026**: If the panel is closed and reopened during a lesson in the same AE session, Home MUST
   show `home-cutoff`: **Your lesson is waiting** on top with **Continue lesson** and **Set it aside**, and
   Up next pushed back (dashed border, full contrast, not the primary button).
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* the state is `home-inprogress`. The card is gone: Home's quiet line
+  reads "Pick up [skill] on [layer]" with its comp and progress (from the record, not a read), and **Set it
+  aside** under it. Pressing the line continues the lesson as **Continue lesson** did (FR-027 unchanged).
 - **FR-027**: **Continue lesson** MUST reopen the lesson as `lesson-continued` (redrawn, a divider, and a
   note where a frame from before can't be shown). **Set it aside** MUST return to Home with the
   record untouched.
@@ -607,8 +639,10 @@ From the README's "States still missing" and the specs this one sits on.
   fix everything, or do the rest (spec 005 FR-011, FR-015).
 - **FR-046**: **Ask the mentor** MUST be available on the Lesson tab below the buttons (spec 003 FR-008),
   including `lesson-picking`, `lesson-passed-asking` and, from 2026-11-09, after a pass (`lesson-passed`,
-  `lesson-passed-unsaved`), in the same mentor session; not on Home or Skills (D2, settled). A question after a
+  `lesson-passed-unsaved`), in the same mentor session; ~~not on Home or Skills (D2, settled)~~. A question after a
   pass MUST NOT write a second lesson record. Builder's decision after T028; a separate Ask tab is later work.
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* `decisions/012` overrides D2's "not on Home": Ask is on Home (the
+  ask card, spec 014). The Lesson tab's Ask stays as above. Still not on Skills.
 
 ### Skills, memory and practice
 
@@ -626,10 +660,15 @@ From the README's "States still missing" and the specs this one sits on.
   and the `next` note as written (PN-10 dropped: since the pacing rules it's written plainly; a real one that
   reads badly is the case for bringing PN-10 back). Missing fields from an older record MUST leave that part
   out, never show an error or an internal note.
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`; spec 014 OQ-2):* it moves from Home to the Skills tab, under the path.
+  What it shows is unchanged.
 - **FR-051**: **Practice due** MUST show when the record's `review_due` is today or earlier on a learned skill
   with a review: one card, the first in path order, with a count of the rest in Skills, and no expected length.
   The panel MUST compare the stored date with today and nothing more; it MUST NOT compute a schedule. Easing
   never shows it, whatever its record's date says.
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`; spec 014 OQ-2):* ~~one card~~ it is a line at the top of the Skills
+  tab with **Warm up** (`skills-due`), never on Home, and the Skills tab carries no badge for it. The rest of
+  this requirement holds.
 - **FR-052**: A warm-up MUST open as `practice`: tagged from the tool's `mode`, no Show me in any state, Hint after
   the first check, the same rows as a lesson, Proposed where the tool has targets. `no_new_target` MUST show
   `practice-nothing-new`.
@@ -980,6 +1019,11 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
   *Amended 2026-11-09 (builder's decision, T062):* measured at the panel's default width docked on the right of AE,
   about 343 pt wide, at the heights a user would pick (about 583 and 688 pt), since that's how the builder expects
   people to use it. 260 × 480 is not required. The narrowest dock is untested: re-check if a tester docks narrower.
+  *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* the Home states follow FR-007 as amended (`home-inprogress` in place
+  of `home-cutoff`; `home-first` with the ask card and Find my next lesson; `home-nocomp`,
+  `home-lessonopen-deeper`, `home-thread`), and the ask states are added at the default dock, gated by spec 014
+  SC-012. `ask-answer`, `ask-steps-open` and `ask-deeper-lesson` are checked once at 260 × 480 and logged, not
+  a gate (spec 014 OQ-4).
 - **SC-011**: **0** panel strings contain a file path, command, tool name, field name or error
   code. *Measured by:* an automated scan of the panel's copy and its error mappings.
 - **SC-012**: "Saved to your history" shows **0 times** without a successful save, including on a

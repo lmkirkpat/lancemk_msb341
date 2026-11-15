@@ -5,7 +5,7 @@ here and doesn't copy it; gaps or contradictions come back as questions. The ui-
 and screens (with spec 007 T061) follow from § 12; this file says what the learner should meet, not
 how it's drawn.
 **Date:** 2026-11-13. **Status:** draft for the builder's review. Number 014 assigned by the cockpit.
-**Updated 2026-11-14:** § 5.1, § 7.1 and § 16 brought in line with § 19 (spec 014 CD-2 to CD-4).
+**Updated 2026-11-14:** § 5.1, § 7.1, § 12 and § 16 brought in line with § 19 (spec 014 CD-2 to CD-4).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2 (the method, the opening rule, the turn
 rule, "do it for me"), § 3 (where "what's moving it" lives), § 4 (the path), § 5 (reads R1 to R4 and
 the motion-sources map), § 8 (overlaps); `.claude/skills/next-mentor/SKILL.md` (the hand-over);
