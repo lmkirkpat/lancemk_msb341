@@ -241,8 +241,11 @@ export function commonTools(options) {
     const lesson = assertMatchesLesson(entry);
     const copied = lesson ? ["attempted", "summary", "next"].filter((f) => copiesExpression(entry[f], lesson.baseline)) : [];
     if (copied.length) {
-      // OQ-9: the server logs this call without these fields' values (calls.jsonl).
-      throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: copied });
+      // OQ-9: the server logs this call without these fields' values (calls.jsonl). T061: and without
+      // any field holding an email or phone number, which this refusal comes before. The reply is
+      // the same RECORD_HAS_EXPRESSION either way.
+      const omit = new Set([...copied, ...learner.unsafeFields(entry)]);
+      throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: Object.keys(entry).filter((k) => omit.has(k)) });
     }
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();

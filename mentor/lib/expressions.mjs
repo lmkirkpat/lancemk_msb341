@@ -51,6 +51,16 @@ const propertyName = (x) => {
 // expression on and gives its base value).
 export const isSource = (x) => !!x && x.enabled === true && !x.error;
 
+// T061 (011 TD § 21, 012 TD § 17): whether read R2 shows a source expression (on, no error) on any
+// of `paths` (full match names, "ADBE Transform Group/ADBE Position") on the layer at `index`, keyed
+// or not. False whenever R2 isn't fully read, so callers keep their keyed-only rule on an older
+// snapshot. A false here is never "no expression" (FR-018): only "none the read can vouch for".
+export function sourceExpressionOn(snapshot, index, paths) {
+  if (expressionsRead(snapshot) !== "all") return false;
+  const want = paths instanceof Set ? paths : new Set(paths);
+  return snapshot.expressions.some((x) => x.layer === index && want.has(x.path) && isSource(x));
+}
+
 // ---- Builds on its own value (FR-002, research R3)
 
 // AE 27.0 gives expression text with classic Mac line ends (`\r`, live Comp 1, T015); text typed or

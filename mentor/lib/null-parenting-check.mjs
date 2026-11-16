@@ -22,6 +22,7 @@ import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { compPosition, footprint, sampleAt, toLayerSpace } from "./comp-space.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
 import { expressionTextDiffers } from "./expression-trim.mjs";
+import { sourceExpressionOn } from "./expressions.mjs";
 import { classOf } from "./visibility.mjs";
 import { FOOTPRINT_PATHS, keyedLayer, p2Times, uniqueLayer } from "./null-parenting.mjs";
 import { baseViews, pairValues } from "./k2-changes.mjs";
@@ -574,7 +575,9 @@ export function check(baseline, current, lesson, input = {}) {
     if (p2.worst_px > JUMP_PX && !pickwhip && !draggedByParent) add("jumped", { layer: name, px: p2.worst_px, direction: p2.direction, time: p2.time });
     if (p2.not_checked.length) add("cant_check", { layer: name, times: [...new Set(p2.not_checked.map((n) => n.time))] });
     if (!p3.passed) add("own_keys_changed", { layer: name, properties: p3.changed });
-    const expression_on_move = props(current, c.index).some((p) => MOVE_PATHS.has(p.path) && p.keys.length && p.expression_enabled);
+    // The jump line's "an expression drives it too" (TD § 17): keyed, or with read R2 keyed or not.
+    const expression_on_move = props(current, c.index).some((p) => MOVE_PATHS.has(p.path) && p.keys.length && p.expression_enabled) ||
+      sourceExpressionOn(current, c.index, MOVE_PATHS);
     return { layer: name, found: true, credit, parent: parent ? parent.layer : null, expression_on_move, p1, p2: { passed: p2.passed, worst_px: p2.worst_px, direction: p2.direction, time: p2.time }, not_checked: p2.not_checked.map((n) => n.time), p3 };
   });
 

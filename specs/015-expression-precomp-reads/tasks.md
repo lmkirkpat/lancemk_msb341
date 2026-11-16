@@ -349,13 +349,17 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
 
 ## Setup
 
-- [ ] T061 (skill-builder) The code half of 011 TD § 21 and 012 TD § 17, which T058 left out (wording
+- [x] T061 (skill-builder) The code half of 011 TD § 21 and 012 TD § 17, which T058 left out (wording
   only): the pivot leave-out groups, the demo refusal and the null jump flag still look only at keyed
   expressions, so a layer whose unkeyed Position, Rotation, Scale or Anchor Point an expression drives
   can be proposed or used as the demo target. Match T058's `SKILL.md` lines, with tests. Also: when one
   `record_lesson` field copies an expression and another holds an email or phone number, only the copy
   is left out of `calls.jsonl` (`mentor/tools/common.mjs` checks expressions first); leave out both.
-  Cockpit-numbered 2026-11-16. Before T036.
+  Cockpit-numbered 2026-11-16. Before T036. **Done 2026-11-16:** `sourceExpressionOn` in `expressions.mjs` (R2 fully
+  read, on and no error); the pivot's buckets, `neededTimes` and demo refusal (new reason
+  `expression_rotation_scale`, R2 only), the null demo target and `expression_on_move`; the copy refusal's
+  log line also leaves out unsafe fields. Replay of 480 calls across all 115 pivot and null cases: only null
+  53 and 54 change (`demo_target` null with `no_qualifying_layer`; `expression_on_move` true).
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script
