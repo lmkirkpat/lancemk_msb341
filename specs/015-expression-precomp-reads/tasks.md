@@ -329,11 +329,15 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   unsafe fields (T057's open item). Pivot case 06 and R-AN-WRONG-LAYER pin the old rule and need updating
   with T059. Not done (tool items in both sections): the unkeyed-expression buckets, the demo refusal and
   the null jump flag still read keyed expressions only.
-- [ ] T059 (eval-engineer) After T058: pivot 57 and null 55 from those sections' Pass lines (held
+- [x] T059 (eval-engineer) After T058: pivot 57 and null 55 from those sections' Pass lines (held
   since T035), plus one case where the learner asks about Shake Control's shake and the mentor says
   it builds on the null's own Position (never "sets its own value"; E30), on the live T015 Comp 1
   capture with its `\r` text. Case numbers from the cockpit. Each 3/3 on B1; the pivot and null sets
   still meet SC-006 (T036's bar).
+  **Done 2026-11-16 (`33145ed`, about $16 on B1):** pivot 06 updated to the selected-layer rule and 3/3;
+  pivot 57 3/3, 59 3/3, null 55 3/3 (one regex miss, loosened). Pivot 58 (an unkeyed Position expression
+  named as the focus) 0/3 until T061: re-run it after T061 merges. The Shake Control "builds on" case
+  moved to spec 014's set.
 - [ ] T060 (spec-writer) Record in the spec and hand to spec 014: the 1 px "too small to see" floor
   (014 TD § 5.1a, H-7) is approved; the "hard to tell apart" band is deferred until after spec 014's
   three sessions. Fold with T040.
