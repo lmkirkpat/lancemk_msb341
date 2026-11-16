@@ -267,7 +267,7 @@ export function hintCodes(r, others = []) {
   // layer's pivot never moved.
   // Spec 015 FR-014a: a change on another layer that shifted it is reported in other_changes, with
   // the shift as its effect, and holds the pass the same way.
-  const shifted = r.item5 && (r.item5.moved_layers.length || others.some((o) => o.effect));
+  const shifted = r.item5 && (r.item5.moved_layers.length || (r.item5.changed_layers || []).length);
   if (!wrongLayer && i1.passed && i2.passed && (!r.item4 || r.item4.passed) && shifted) codes.push("other_layer_moved");
   if (others.some((o) => o.kind === "eye_changed" && o.was_class === "matte" && o.eye_on)) codes.push("matte_eye");
   return codes;
@@ -417,8 +417,17 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
 
     const anchorKeysAdded = anchorKeyCount(keyedLayer(current, c.index)) > anchorKeyCount(keyedLayer(baseline, b.index));
     // A change elsewhere that visibly shifted its layer holds the pass, as a moved layer did (FR-014a).
-    const seen = others.some((o) => o.effect);
-    const item5 = { passed: moved.length === 0 && !anchorKeysAdded && !seen, moved_layers: moved, anchor_keys_added: anchorKeysAdded, not_compared: notCompared };
+    // Review M1: a change elsewhere that visibly shifted its layer carries that layer and the way, so
+    // the "another layer moved" hint names them. Only when there is one, so other replies don't change.
+    const changed = [];
+    for (const o of others) {
+      if (!o.effect || changed.some((c) => c.layer === o.layer)) continue;
+      changed.push({ layer: o.layer, direction: o.effect.direction, distance_px: o.effect.distance_px, time: o.effect.time });
+    }
+    const item5 = {
+      passed: moved.length === 0 && !anchorKeysAdded && !changed.length, moved_layers: moved, anchor_keys_added: anchorKeysAdded, not_compared: notCompared,
+      ...(changed.length ? { changed_layers: changed } : {}),
+    };
 
     const anchorChanged = !!(bs && cs) && differ(bs.anchor, cs.anchor);
     const positionChanged = !!(bs && cs) && differ(bs.position, cs.position);

@@ -59,6 +59,8 @@ test("SC-005 (d), live: a hand edit to Shake Control's base Position is reported
   assert.ok(Math.abs(c.effect.distance_px - 40) <= 0.5, String(c.effect.distance_px));
   assert.deepEqual(r.layers[0].item5.moved_layers, []);
   assert.equal(r.layers[0].item5.passed, false);
+  // Review M1: the "another layer moved" hint has its layer and way.
+  assert.deepEqual(r.layers[0].item5.changed_layers.map((c) => [c.layer, c.direction]), [["Shake Control", "right"]]);
 });
 
 test("no shared time for a layer: not compared, never moved", () => {

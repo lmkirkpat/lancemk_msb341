@@ -412,8 +412,9 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      - another layer moved: "Needle looks good, but Background moved too, down and to the right.
        Edit > Undo until Background is back, then check Needle's pivot is still where you put it."
        Name no drag start: a layer that moved on screen wasn't moved by Pan Behind. The layer and
-       the way are in `item5.moved_layers`; if it has no direction (I couldn't read its edges, only
-       that its own values changed), say it moved and leave out which way.
+       the way are in `item5.moved_layers` when it has them, else in `item5.changed_layers` (that
+       layer's own change, listed in `other_changes`); if it has no direction (I couldn't read its
+       edges, only that its own values changed), say it moved and leave out which way.
      - Anchor Point's stopwatch: "Anchor Point has a stopwatch on now, so the pivot would move over
        time. Turn it off, and keep the pivot you set."
      - a matte's eye: "Reveal Matte is a matte, so turn its eye back off."
@@ -424,7 +425,9 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      do?" Guess no cause. Only if they then say it moved and went back on its own: "If something
      drives it, like an expression, I can't see that yet." On that shape, the hint's line alone.
    - **Other changes** (`other_changes`): mention briefly, without treating them as mistakes,
-     unless a hint above already covers one. Don't list layers in `not_compared` unless asked;
+     unless a hint above already covers one. One short clause each, in plain words: a value or a
+     parent changed ("Background's Position changed too", "Plate follows Rig now"), or an
+     expression was turned on, turned off, edited or now has an error. Never say how many pixels. Don't list layers in `not_compared` unless asked;
      never call them unchanged.
    - If `comp_matches` is false, don't grade: ask them to switch back to `lesson_comp` by name and
      say "done" again.

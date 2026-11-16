@@ -422,6 +422,8 @@ test("hint other_layer_moved: the focus holds items 1 to 4 and another layer's b
   const door = layerOf(r, "Door");
   assert.deepEqual(door.hints, ["other_layer_moved"]);
   assert.deepEqual(r.other_changes.map((o) => [o.layer, o.effect.direction]), [["Other", "right"]], "the layer and the way, now on the change (FR-014a)");
+  // Review M1: the hint carries them too, from the change that caused it.
+  assert.deepEqual(door.item5.changed_layers, [{ layer: "Other", direction: "right", distance_px: 2, time: 0 }]);
   assert.deepEqual(layerOf(run(P2, fixture("wrong-layer"), [{ layer: "Needle", place: "bottom-middle" }]), "Needle").hints, ["wrong_layer"], "not when the focus's pivot never moved");
 });
 
@@ -473,4 +475,10 @@ test("an unreadable other layer whose own transform didn't change stays not comp
   const r = check(P2, cur, lessonFor(P2, DOOR));
   assert.equal(r.passed, true);
   assert.ok(layerOf(r, "Door").item5.not_compared.some((n) => n.layer === "Needle" && n.reason === "no_rect"));
+});
+
+test("review M1: item5.changed_layers is there only when another layer's change visibly moved it", () => {
+  const still = layerOf(run(P2, fixture("wrong-layer"), [{ layer: "Needle", place: "bottom-middle" }]), "Needle");
+  assert.equal("changed_layers" in still.item5, false, "Pan Behind on Background held still: no field, as before");
+  assert.equal("changed_layers" in layerOf(run(P2, fixture("door-pass"), DOOR), "Door").item5, false);
 });
