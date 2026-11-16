@@ -9,7 +9,7 @@
 
 import { MentorError, registerErrors } from "../errors.mjs";
 import { compPosition, footprint, layerMatrix, sampleAt } from "./comp-space.mjs";
-import { expressionsRead, sourceExpressionOn } from "./expressions.mjs";
+import { expressionDrives, expressionsRead } from "./expressions.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
@@ -145,13 +145,15 @@ export const keyedLayer = (snapshot, index) => (snapshot.layers || []).find((l) 
 const propsOf = (kl, paths) => (kl ? kl.properties.filter((p) => paths.includes(p.path)) : []);
 const keyedProps = (kl, paths) => propsOf(kl, paths).filter((p) => p.keys.length > 0);
 
-// With `read` ({ snapshot, index }), the two expression flags also take read R2's source
-// expressions on unkeyed properties (T061, TD § 21: keyed or not, one bucket and reason). Without
-// it, or on a snapshot without R2, keys only, as before spec 015.
+// With `read` ({ snapshot, index }) and read R2 in it, the two expression flags come from R2's
+// source expressions, keyed or not (T061, TD § 21: one bucket and reason), so an erroring or
+// switched-off one counts for neither (T062). Without `read`, or on a snapshot without R2, an
+// expression switched on over keys, as before spec 015.
 export function keyFlags(kl, read = null) {
   const has = (paths) => keyedProps(kl, paths).length > 0;
-  const fromRead = (paths) => !!read && sourceExpressionOn(read.snapshot, read.index, paths);
-  const expr = (paths) => keyedProps(kl, paths).some((p) => p.expression_enabled) || fromRead(paths);
+  const expr = (paths) => (read
+    ? expressionDrives(read.snapshot, read.index, paths, kl ? kl.properties : [])
+    : keyedProps(kl, paths).some((p) => p.expression_enabled));
   return {
     anchor: has([ANCHOR]),
     position: has(POSITION_PATHS),

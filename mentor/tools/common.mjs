@@ -237,19 +237,29 @@ async function recommendNext({ requested_skill } = {}, { skills, finders }) {
 // (mentor/tools/index.mjs). A plain array is read as `skills` (the call before spec 004).
 export function commonTools(options) {
   const { skills, finders = {} } = Array.isArray(options) ? { skills: options } : options;
-  async function recordLesson(entry) {
+  function saveLesson(entry) {
     const lesson = assertMatchesLesson(entry);
     const copied = lesson ? ["attempted", "summary", "next"].filter((f) => copiesExpression(entry[f], lesson.baseline)) : [];
-    if (copied.length) {
-      // OQ-9: the server logs this call without these fields' values (calls.jsonl). T061: and without
-      // any field holding an email or phone number, which this refusal comes before. The reply is
-      // the same RECORD_HAS_EXPRESSION either way.
-      const omit = new Set([...copied, ...learner.unsafeFields(entry)]);
-      throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: Object.keys(entry).filter((k) => omit.has(k)) });
-    }
+    // OQ-9: the server logs this call without these fields' values (calls.jsonl).
+    if (copied.length) throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: copied });
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();
     return json({ saved: true, skill: { status: skill.status, next: skill.next } });
+  }
+
+  // T061, T062: whatever refuses the call (a copy, a mismatch with the lesson's checks, a field
+  // missing or out of range, an unreadable session), its calls.jsonl line also leaves out every
+  // field holding an email or phone number, by name only. The error, and so the reply, is unchanged.
+  async function recordLesson(entry) {
+    try {
+      return saveLesson(entry);
+    } catch (e) {
+      if (entry && typeof entry === "object" && e && typeof e === "object") {
+        const omit = new Set([...(Array.isArray(e.omitFromLog) ? e.omitFromLog : []), ...learner.unsafeFields(entry)]);
+        if (omit.size) e.omitFromLog = Object.keys(entry).filter((k) => omit.has(k));
+      }
+      throw e;
+    }
   }
 
   return [

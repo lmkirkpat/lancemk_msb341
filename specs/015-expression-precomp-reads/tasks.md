@@ -364,12 +364,18 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   `expression_rotation_scale`, R2 only), the null demo target and `expression_on_move`; the copy refusal's
   log line also leaves out unsafe fields. Replay of 480 calls across all 115 pivot and null cases: only null
   53 and 54 change (`demo_target` null with `no_qualifying_layer`; `expression_on_move` true).
-- [ ] T062 (skill-builder) Two follow-ups from T061 (cockpit-numbered 2026-11-16, builder's go): (a) a keyed
+- [x] T062 (skill-builder) Two follow-ups from T061 (cockpit-numbered 2026-11-16, builder's go): (a) a keyed
   expression that errors still leaves its layer out of the pivot lesson and the demos, while an unkeyed
   one doesn't; make both follow "on and no error" (T001: AE plays the keys under an erroring
   expression). (b) A `record_lesson` refused for not matching the lesson's checks still logs every field
   to `calls.jsonl`; leave out any field holding an email or phone number, the reply unchanged. Replay
-  the pivot and null cases on old and new code and list the changed replies.
+  the pivot and null cases on old and new code and list the changed replies. **Done 2026-11-16:** (a) `expressionDrives`
+  in `expressions.mjs`: with R2 fully read, the pivot's flags, its demo, the null demo target and
+  `expression_on_move` take only source expressions, keyed or not; without R2, the keyed rule as before.
+  (b) `record_lesson` adds every email or phone field to `omitted_fields` on any refusal (mismatch,
+  already saved, validation's plain errors), and the server reads `omitFromLog` from any error; replies
+  unchanged. Replay of 524 calls across all 119 pivot and null cases: no reply changes (no capture has an
+  erroring keyed expression).
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script

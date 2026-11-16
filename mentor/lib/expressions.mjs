@@ -61,6 +61,17 @@ export function sourceExpressionOn(snapshot, index, paths) {
   return snapshot.expressions.some((x) => x.layer === index && want.has(x.path) && isSource(x));
 }
 
+// T062: whether an expression drives any of `paths` on the layer at `index`, keyed or not, for the
+// pivot's and the null's leave-outs, demos and jump flag. With read R2 fully read, only a source
+// expression (on, no error: T001, AE plays the keys under an erroring one), keyed or not. Without
+// it, the rule from before spec 015: an expression switched on over keys (`keyedProps`, the
+// snapshot's keyed properties for that layer).
+export function expressionDrives(snapshot, index, paths, keyedProps = []) {
+  if (expressionsRead(snapshot) === "all") return sourceExpressionOn(snapshot, index, paths);
+  const want = paths instanceof Set ? paths : new Set(paths);
+  return keyedProps.some((p) => want.has(p.path) && p.keys.length > 0 && p.expression_enabled);
+}
+
 // ---- Builds on its own value (FR-002, research R3)
 
 // AE 27.0 gives expression text with classic Mac line ends (`\r`, live Comp 1, T015); text typed or
