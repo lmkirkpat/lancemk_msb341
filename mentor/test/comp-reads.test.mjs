@@ -123,3 +123,16 @@ test("FR-019, FR-020: read-only, and the learner record and session are never wr
   await call({ layers: ["rock.png", "Shake Control"], detail: true });
   assert.deepEqual(fs.readdirSync(home).sort(), before, "no session.json, learner.json or fixture-edits.json appeared");
 });
+
+test("review: a child's parent entry lists an erroring parent expression, marked as erroring", async () => {
+  const snap = JSON.parse(fs.readFileSync(EX("rig"), "utf8"));
+  const rot = snap.expressions.find((x) => x.path.endsWith("ADBE Rotate Z"));
+  Object.assign(rot, { active: false, error: "Expression disabled. Error at line 1" });
+  snap.expression_sweeps = snap.expression_sweeps.filter((w) => !w.path.endsWith("ADBE Rotate Z"));
+  const file = path.join(home, "rig-error.json");
+  fs.writeFileSync(file, JSON.stringify(snap));
+  use(file);
+  const parent = (await call({ layers: ["rock.png"] })).layers[0].parents[0];
+  assert.deepEqual(parent.expressions.map((x) => [x.property, x.error]), [["Position", false], ["Rotation", true]]);
+  use(EX("rig"));
+});

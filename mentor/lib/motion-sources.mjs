@@ -13,7 +13,7 @@
 
 import { layerInfo } from "./layer-info.mjs";
 import { visibility } from "./visibility.mjs";
-import { expressionReads } from "./expressions.mjs";
+import { expressionReads, expressionsRead } from "./expressions.mjs";
 
 // Keys on these are inherited by a child; Opacity and effects aren't.
 const MOVES = new Set([
@@ -109,7 +109,8 @@ export function sourcesOf(snapshot, nameOrIndex) {
 // so a parent's expression is never said to be absent.
 export function motionFrom(snapshot, index) {
   const map = motionSources(snapshot);
-  if (map.read.expressions !== "all") return { status: "not_read", reason: "older_snapshot" };
+  // The read's own reason: older_snapshot, error or partial (review).
+  if (map.read.expressions !== "all") return expressionsRead(snapshot);
   if (!map.known) return { status: "not_read", reason: "no_layer_info" };
   const e = map.layers.find((l) => l.layer_index === index);
   if (!e) return { status: "not_read", reason: "not_found" };

@@ -73,7 +73,7 @@ function summaryOf(entry, ctx) {
     kind: entry.kind,
     class: m ? m.class : null,
     parents: m && Array.isArray(m.parents)
-      ? m.parents.map((p) => ({ layer_index: p.layer_index, layer: p.layer, class: p.class, moves_children: p.moves_children, moves_by: p.moves_by ?? null, expressions: (exprOf.get(p.layer_index) || []).filter((x) => x.active).map((x) => ({ property: x.property, moves: x.moves })) }))
+      ? m.parents.map((p) => ({ layer_index: p.layer_index, layer: p.layer, class: p.class, moves_children: p.moves_children, moves_by: p.moves_by ?? null, expressions: (exprOf.get(p.layer_index) || []).filter((x) => x.active || (x.on && x.error)).map((x) => ({ property: x.property, error: !!x.error, moves: x.moves })) }))
       : notRead("no_layer_info"),
     children: m && Array.isArray(m.children) ? m.children.length : notRead("no_layer_info"),
     effects: Array.isArray(entry.effects) ? entry.effects.map((f) => f.name) : notRead(entry.effects === undefined ? "older_snapshot" : "error"),

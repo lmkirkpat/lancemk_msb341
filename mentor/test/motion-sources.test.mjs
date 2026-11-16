@@ -174,3 +174,15 @@ test("live 015 Rig: rock.png's parent moves it by expression, from the sweep (va
   assert.deepEqual([p.layer, p.moves_children, p.moves_by], ["Shake Control", true, "expression"]);
   assert.ok(sourcesOf(snap, "Shake Control").expressions.list.every((x) => x.moves.varies === true));
 });
+
+test("review: motionFrom passes on why expressions weren't read (an error or a partial walk, not only an older snapshot)", async () => {
+  const { motionFrom } = await import("../lib/motion-sources.mjs");
+  const snap = JSON.parse(fs.readFileSync(path.join(FIXTURES, "expressions", "rig.json"), "utf8"));
+  const rock = snap.layer_info.find((l) => l.name === "rock.png").index;
+  for (const why of [{ status: "not_read", reason: "error" }, { status: "not_read", reason: "partial", skipped: 2 }]) {
+    assert.deepEqual(motionFrom({ ...snap, expressions_read: why }, rock), why);
+  }
+  const old = structuredClone(snap);
+  delete old.expressions;
+  assert.deepEqual(motionFrom(old, rock), { status: "not_read", reason: "older_snapshot" });
+});
