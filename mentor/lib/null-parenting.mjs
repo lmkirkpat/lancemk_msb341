@@ -10,6 +10,7 @@
 // null renumbers every layer below it.
 
 import { MentorError } from "../errors.mjs";
+import { sourceExpressionOn } from "./expressions.mjs";
 import { byName, layerInfo } from "./layer-info.mjs";
 import { footprint } from "./comp-space.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
@@ -26,7 +27,8 @@ export const MAX_P2_TIMES = 63; // the snapshot keeps comp.time and 63 caller ti
 const TF = "ADBE Transform Group/";
 // The properties whose keys move a layer's footprint (FR-011's times).
 export const FOOTPRINT_PATHS = new Set(["ADBE Anchor Point", "ADBE Position", "ADBE Position_0", "ADBE Position_1", "ADBE Scale", "ADBE Rotate Z"].map((p) => TF + p));
-// Position, Scale and Rotation: what a demo target's keyed expression rules out (FR-008).
+// Position, Scale and Rotation: what a demo target's expression rules out (FR-008): keyed, or with
+// read R2 keyed or not (T061, TD § 17).
 const MOVE_PATHS = new Set(["ADBE Position", "ADBE Position_0", "ADBE Position_1", "ADBE Scale", "ADBE Rotate Z"].map((p) => TF + p));
 
 const r3 = (t) => Math.round(t * 1000) / 1000 + 0;
@@ -239,6 +241,7 @@ export function demoTarget(snapshot, focus) {
     const keyed = keyedLayer(snapshot, info.index);
     const props = keyed ? keyed.properties : [];
     if (props.some((p) => MOVE_PATHS.has(p.path) && p.keys.length && p.expression_enabled)) continue;
+    if (sourceExpressionOn(snapshot, info.index, MOVE_PATHS)) continue;
     qualifies.push({ name, index: info.index, ownKeys: props.some((p) => FOOTPRINT_PATHS.has(p.path) && p.keys.length) });
   }
   qualifies.sort((a, b) => Number(b.ownKeys) - Number(a.ownKeys) || a.index - b.index);

@@ -39,8 +39,9 @@ function isUnsafe(text) {
   return EMAIL.test(text) || PHONE.some((re) => re.test(text));
 }
 
-// Every text argument holding an email or phone number, the refused one and any other.
-const unsafeFields = (input) => Object.keys(input).filter((k) => typeof input[k] === "string" && isUnsafe(input[k]));
+// Every text argument holding an email or phone number, the refused one and any other. Exported for
+// record_lesson's earlier refusal (T061), whose log line leaves these out too.
+export const unsafeFields = (input) => Object.keys(input).filter((k) => typeof input[k] === "string" && isUnsafe(input[k]));
 
 // Returns a clean LessonEntry (without date), or throws before anything is written. `skills` is
 // every skill ID the tool files declare (mentor/tools/index.mjs), so the store keeps no list.
