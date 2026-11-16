@@ -10,6 +10,9 @@ how it's drawn.
 H-7); § 8 Q8 and § 13's precomps row cover spec 015 phase 2 (§ 5.5, inside precomps); § 10.3 points
 at where the pivot and null lessons word what drives a layer (spec 015 FR-015); § 17 situation 14 is
 split in two.
+**Updated 2026-11-16 (H-7 answered):** § 5.1a's 1 px floor approved; its "hard to tell apart" band
+deferred until after the three sessions and kept as a labeled proposal. § 16's rotation bullet and
+step 2 drop "too small to see", since the rotation moves the rock well over 1 px.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2 (the method, the opening rule, the turn
 rule, "do it for me"), § 3 (where "what's moving it" lives), § 4 (the path), § 5 (reads R1 to R4 and
 the motion-sources map), § 8 (overlaps); `.claude/skills/next-mentor/SKILL.md` (the hand-over);
@@ -114,7 +117,8 @@ three sessions).
 2. **The steps** (step data, two to four lines; never in the mentor's prose). **A step is only
    something the learner does in AE**: it starts with an action (select, open, move, drag, change, play
    back) on a named layer or property, and the learner could follow it without asking what to do. "The
-   rotation is too small to see" is explanation, not a step; "Select Shake Control (the null, not a
+   rotation moves the rock about 9 px" is explanation, not a step (changed 2026-11-16 from "too small to
+   see", H-7); "Select Shake Control (the null, not a
    letter) and Pan Behind its pivot to where the hammer hits" is a step (builder, 2026-11-14: "when the
    user sees 'steps' they assume they're followable"). A step outside the six pairs an action with the
    read fact, never the edit (§ 19, H-2; § 16 step 1). If nothing in the answer is actionable yet (only
@@ -136,11 +140,14 @@ default: a frame costs time and rarely helps an answer (diagnosis § 6.1). One `
 allowed when the answer's first sentence points at something that shows at one time (where the null
 sits, a layer that's off-screen then). Guess.
 
-### 5.1a "In order of visible effect": what counts as visible (proposed 2026-11-16, H-7)
+### 5.1a "In order of visible effect": what counts as visible (floor approved 2026-11-16, H-7; band deferred)
 
 "In order of visible effect" needs one rule, because the mentor will otherwise decide "too small to
 see" by feel, and the model copies whatever number the prompt shows. **Yes, it needs a threshold.**
-The rule has two parts, and both are measured the same way:
+**Approved 2026-11-16 (builder, H-7):** the first three bullets below (measure in pixels, the 1 px
+floor, say the size from 1 px up). **Deferred:** the fourth bullet ("hard to tell apart") stays a
+proposal until spec 014's three sessions show real cases; until then the mentor doesn't use the
+phrase, and two sources of similar size are simply both named with their sizes, biggest first.
 
 - **Measure in screen pixels on the asked layer, not in the property's units.** A source's size is
   how far it moves the asked layer's farthest edge at its peak, in comp pixels (spec 015 FR-004's
@@ -156,7 +163,8 @@ The rule has two parts, and both are measured the same way:
 - **1 px and up: say its size, not an adjective.** Order the sources by that size, biggest first, and
   say each one's size in plain words with how long it lasts ("about 12 px at most, gone in about
   1/3 s"). Don't call it "small" or "too small to see"; the learner judges.
-- **Two sources about the same size at the same times: say they're hard to tell apart.** When a
+- **Proposed, deferred (not approved; revisit after the three sessions): two sources about the same
+  size at the same times: say they're hard to tell apart.** When a
   second source moves the same layer within about the same size (the smaller at least half the
   larger, Guess) and its peaks fall at the same times, it's named second with "about the same as
   [the other], so the two are hard to tell apart". This is the Comp 1 case: the rotation moves the
@@ -164,10 +172,11 @@ The rule has two parts, and both are measured the same way:
   separate them" (AB follow-up, R, builder only). It's the honest version of what § 16 now calls
   "too small to see".
 
-**What it changes:** § 16's rotation bullet and step 2 say "too small to see" about a source that
-moves the rock about 12 px. Under this rule they'd say its size and that it's hard to tell from the
-Position shake. **§ 16 stays as decided until the builder answers H-7**, because the evals and the
-mockup copy it word for word.
+**What it changed (2026-11-16):** § 16's rotation bullet and step 2 said "too small to see" about a
+source that moves the rock several pixels, which the floor's third bullet rules out. They now say the
+size and drop the adjective; they don't say "hard to tell apart" (deferred). The size in § 16 is an
+estimate from the design docs (see § 16's note) until the tool's pixel conversion (SB-4) reads it on
+Comp 1.
 
 **Needs from the tools (for the builder):** the peak in screen pixels on the asked layer, for each
 source, and whether two sources peak at the same times. Spec 015 FR-004 gives the peak in property
@@ -572,15 +581,25 @@ the mentor's prose never lists, numbers or repeats a step, and never writes "Ste
 
 > In Comp 1, rock.png rides on Shake Control, a null moved by expressions:
 > - All three hits are the same size.
-> - Rotation is too small to see: 0.75° at most, gone in about 1/3 s.
+> - Rotation moves the rock about 9 px at most, gone in about 1/3 s.
 > - The turn centers on the rock, where Shake Control sits.
+
+**Changed 2026-11-16 (H-7, the 1 px floor):** the rotation bullet was "Rotation is too small to see:
+0.75° at most, gone in about 1/3 s." Under the floor, a source of 1 px or more gets its size, not an
+adjective. **The 9 px is an estimate, not a read:** spec 015's sweep puts the rotation's peak at
+0.589° (Comp 1 fixture, at 2.569 s; the expression's largest amount is 0.75°, but the decay means the
+sampled peak is lower). The turn centers on the rock (AB follow-up), and rock.png's box is 1588 × 535,
+so its far corner is about 840 px from the center at 100% scale, or about 910 px from the hit corner
+(AB follow-up): 0.589° moves that about 8.6 to 9.4 px. rock.png's scale in Comp 1 isn't in the design
+docs; it would have to be under about 12% for the move to fall under 1 px, which the 910 px figure
+rules out. Replace "about 9 px" with the tool's number once SB-4's conversion reads Comp 1.
 
 **steps** (data: each line is something the learner does in AE; two to four):
 
 | # | Line | Skill tag |
 |---|---|---|
 | 1 | Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet. | not taught yet |
-| 2 | Open Shake Control's Rotation expression and look at its amounts: 0.75° at most, too small to see. Not something I teach yet. | not taught yet |
+| 2 | Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet. | not taught yet |
 | 3 | Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. | Set the pivot |
 | 4 | Play it back and watch the turn. | (none) |
 
@@ -661,9 +680,9 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
 - **C:** expressions over keys confuse beginners (expressions brief).
 - **Guess:** 120 words and two to four steps; one offer per answer; ask-first giving up the lead at
   the door but keeping it in the follow-through; "asked about" pulling a review forward; a stand-in
-  layer for a lesson that can't check the real target; one optional frame; § 5.1a's "about the same
-  size" as at least half the larger (the 1 px floor is R: T005's 0.07 px, and the pivot check's
-  `MOVE_PX`); § 5.5's wording (no learner has met a read-inside answer yet).
+  layer for a lesson that can't check the real target; one optional frame; § 5.1a's deferred "about
+  the same size" as at least half the larger (the approved 1 px floor is R: T005's 0.07 px, and the
+  pivot check's `MOVE_PX`); § 16's "about 9 px" (an estimate until SB-4 reads it); § 5.5's wording (no learner has met a read-inside answer yet).
 
 ## 19. Open questions
 
@@ -731,7 +750,13 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
    build task.** Without them the ask mode repeats findings 1 and 2. If it doesn't fit, the ask mode
    ships with "I can't read expressions yet" said plainly wherever one is in reach, and the three
    sessions should avoid expression-driven comps, which defeats the point of using real comps.
-7. **New 2026-11-16 (spec 015 CD-1): the "too small to see" rule (§ 5.1a).** Under 1 px at its peak,
+7. **Decided 2026-11-16 (builder): approve the 1 px floor now; defer the "hard to tell apart" band
+   until after spec 014's three sessions show real cases.** § 5.1a's first three bullets are in force;
+   the fourth stays a labeled proposal. § 16 changed under the floor alone: the rotation moves the rock
+   about 9 px (estimate), so "too small to see" came out of the bullet and step 2, and "hard to tell
+   apart" didn't go in. Revisit the band with the sessions' cases. The original question, kept for the
+   record:
+   **New 2026-11-16 (spec 015 CD-1): the "too small to see" rule (§ 5.1a).** Under 1 px at its peak,
    on screen, is "too small to see"; from 1 px up, the answer says the size and doesn't judge it; two
    sources about the same size at the same times are "hard to tell apart". **Recommended: yes**, and
    rewrite § 16's rotation bullet to "Rotation turns it about 12 px at most, the same as the Position
@@ -773,8 +798,9 @@ Follow-up):
   Position hits' sizes (the `amps[1]` bug) lead. § 16 now has this order (pivot is step 3).
 
 **New 2026-11-16 (spec 015 CD-1), needs, not designs:**
-4. § 5.1a needs each source's peak as **screen pixels on the asked layer** and whether two sources
-   peak at the same times. Spec 015 FR-004 gives the peak in the property's units only.
+4. § 5.1a needs each source's peak as **screen pixels on the asked layer**. Spec 015 FR-004 gives the
+   peak in the property's units only. (Whether two sources peak at the same times is only needed for
+   the deferred band; not needed now.) Once it exists, read Comp 1 and replace § 16's "about 9 px".
 5. § 5.5 needs the phase 2 read in the ask's reply (spec 015 FR-027's summary, and detail per inner
    comp), with each level's read status, so "partly read" can be told from "nothing inside".
 
