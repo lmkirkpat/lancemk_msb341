@@ -115,3 +115,25 @@ test("review S3 (FR-018): a property the walk can't read makes the read partial,
   for (const [, e] of linksIn(s)) assert.equal(e.status, "not_read", "so 'no links' is never said");
   assert.equal(run(comp()).expressions_read, "all");
 });
+
+test("review S4: the sweeps stop at their budget; the rest say not read (budget), measured layers go first, and the snapshot stays whole", async () => {
+  const { layer } = await import("./fixtures/expressions/mock-ae.mjs");
+  const many = [];
+  for (let i = 1; i <= 70; i++) {
+    many.push(layer(i, `Drift ${i}`, { transform: { position: { value: [100, 100, 0], expr: { text: "value + [time * 10, 0]", fn: (t, v) => [v[0] + t * 10, v[1], v[2]] } } } }));
+  }
+  const s = run(many, { measure_layers: [70] });
+  assert.equal(s.expressions_read, "all");
+  assert.equal(s.expressions.length, 70);
+  const done = s.expression_sweeps.filter((w) => w.status !== "not_read");
+  const budget = s.expression_sweeps.filter((w) => w.status === "not_read");
+  assert.equal(done.length, 60, "SWEEP_MAX_COUNT sweeps run");
+  assert.ok(budget.length > 0 && budget.every((w) => w.reason === "budget"));
+  assert.deepEqual(done.filter((w) => w.layer === 70).map((w) => w.kind), ["coarse", "fine"], "the measured layer's sweeps run first");
+  assert.equal(s.layer_info.length, 70);
+  const { expressionReads } = await import("../lib/expressions.mjs");
+  const last = expressionReads(s).list.find((x) => x.layer === "Drift 69");
+  assert.deepEqual(last.moves, { status: "not_read", reason: "budget" });
+  const { analyze } = await import("../lib/analyze.mjs");
+  assert.doesNotThrow(() => analyze(s), "an easing snapshot is still a valid snapshot");
+});

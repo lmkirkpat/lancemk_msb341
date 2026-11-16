@@ -239,8 +239,9 @@ export function movesOf(snapshot, x) {
   const coarse = mine.find((w) => w.kind === "coarse");
   const w = fine || coarse;
   if (!w) {
-    const failed = sweeps.some((v) => v.layer === x.layer && v.path === x.path);
-    return notRead(failed ? "error" : "not_swept");
+    // Review S4: a sweep past the snapshot's budget says "budget"; one that threw, "error".
+    const failed = sweeps.find((v) => v.layer === x.layer && v.path === x.path && v.status === "not_read");
+    return notRead(failed ? failed.reason || "error" : "not_swept");
   }
   const key = sampleKeyOf(x.path);
   const out = { varies: w.varies, max_offset: w.max_offset, max_at: w.max_at, units: key ? UNITS[key] : null, sampled_every: w.sampled_every, sweep: w.kind };

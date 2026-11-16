@@ -519,19 +519,44 @@ function sweep(x, kind, step) {
     return { layer: x.layer, path: x.path, kind: kind, sampled_every: r3(step), varies: resultMoves && partMoves, max_offset: r3(maxOff), max_at: r3(maxAt) };
 }
 
+// Review S4: a budget, so an expression-heavy comp never slows every skill's snapshot. Sweeps run for
+// the measured layers first, then the rest in order, until SWEEP_MAX_COUNT sweeps or SWEEP_BUDGET_MS
+// have gone; every sweep left is marked not_read "budget". Nothing here can fail the snapshot.
+var SWEEP_MAX_COUNT = 60;
+var SWEEP_BUDGET_MS = 300;
 var expressionSweeps = [];
 var measuredLayers = [];
-for (var wi = 0; wi < expressions.length; wi++) {
-    var wx = expressions[wi];
-    if (wx.group !== "transform" || !wx.active) continue;
-    try { expressionSweeps.push(sweep(wx, "coarse", comp.duration / COARSE_SAMPLES)); } catch (e) {
-        expressionSweeps.push({ layer: wx.layer, path: wx.path, kind: "coarse", status: "not_read", reason: "error" });
-    }
-    if (!isMeasured(wx.layer)) continue;
+try {
+    var sweepStart = new Date().getTime();
+    var sweepsRun = 0;
+    var overBudget = function () { return sweepsRun >= SWEEP_MAX_COUNT || new Date().getTime() - sweepStart > SWEEP_BUDGET_MS; };
+    var runSweep = function (wx, kind, step) {
+        if (overBudget()) return { layer: wx.layer, path: wx.path, kind: kind, status: "not_read", reason: "budget" };
+        sweepsRun++;
+        try { return sweep(wx, kind, step); } catch (e) { return { layer: wx.layer, path: wx.path, kind: kind, status: "not_read", reason: "error" }; }
+    };
     var frame = typeof fps === "number" && fps > 0 ? 1 / fps : comp.duration / FINE_SAMPLES;
-    try { expressionSweeps.push(sweep(wx, "fine", Math.max(frame, comp.duration / FINE_SAMPLES))); } catch (e) {
-        expressionSweeps.push({ layer: wx.layer, path: wx.path, kind: "fine", status: "not_read", reason: "error" });
+    var swept = [];
+    for (var wi = 0; wi < expressions.length; wi++) {
+        if (expressions[wi].group === "transform" && expressions[wi].active) swept.push(expressions[wi]);
     }
+    var ordered = [];
+    for (var oa = 0; oa < swept.length; oa++) if (isMeasured(swept[oa].layer)) ordered.push(swept[oa]);
+    for (var ob = 0; ob < swept.length; ob++) if (!isMeasured(swept[ob].layer)) ordered.push(swept[ob]);
+    var byKey = {};
+    for (var wj = 0; wj < ordered.length; wj++) {
+        var wx = ordered[wj];
+        var got = [runSweep(wx, "coarse", comp.duration / COARSE_SAMPLES)];
+        if (isMeasured(wx.layer)) got.push(runSweep(wx, "fine", Math.max(frame, comp.duration / FINE_SAMPLES)));
+        byKey[wx.layer + "|" + wx.path] = got;
+    }
+    // Back in expression order, as before the budget.
+    for (var wk = 0; wk < swept.length; wk++) {
+        var list = byKey[swept[wk].layer + "|" + swept[wk].path];
+        for (var wl = 0; wl < list.length; wl++) expressionSweeps.push(list[wl]);
+    }
+} catch (e) {
+    expressionSweeps = [];
 }
 for (var mj = 0; mj < measureLayers.length; mj++) measuredLayers.push(measureLayers[mj]);
 // The live property handles stay in the snippet.
