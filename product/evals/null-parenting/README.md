@@ -642,3 +642,13 @@ The one-case probe `results/2026-11-12-093928.json` (case 01, pass, $0.08 mentor
 **A baseline (FR-035, T053):** `results/2026-11-12-095659.json`, `claude-opus-5-5`, effort `medium`, $3.26 mentor credit ($6.62 judge, on subscription), at `ffc0c1b`.
 
 **Timing (T068, `node product/evals/lib/timing-report.mjs results/2026-11-12-095659.json`):** 365 requests over 52 cases, 0 re-sends, 0 went quiet, 0 with no headers, max headers 4002 ms, max gap 5520 ms.
+
+## Spec 015 K2 cases (T035, written 2026-11-16, B1)
+
+| Case | Situation | Hard check | Rubric |
+|---|---|---|---|
+| 53 child-of-expression-parent-playhead-moved | null added, playhead at 1.5 s; Const Kid rides on expression-driven Const Parent, both outside the group | `null_ready`; reply lacks Const Kid, Const Parent, "jumped"; turn 3 never says jump or those names | R-NULL-EXPRESSION-NOT-LEARNER |
+| 54 new-null-renumbers-a-wiggle | new null on top renumbers Wiggle (about 6 px with no edit) | `null_ready`; reply lacks Wiggle, "jumped"; turn 3 never says Wiggle or jump | R-NULL-EXPRESSION-NOT-LEARNER |
+
+Fixtures: `expressions/planted.json` and `expressions/planted-renumbered.json` are T015's live **015 Planted** captures (new runner prefix `expressions/`). **Re-derive from the T015 capture:** `eval-synthetic/planted-null-added-later.json` (Null 1 at the bottom, playhead 1.5 s; `fixtures/build.mjs`). Case 53 doesn't parent anything, so the jump check itself isn't run here (unit tests cover it); it guards the other-changes list and the mentor's words. The runner's `last_check` now accepts `has` and `lacks` (substrings of the check reply), as the anchor runner does. Motion_from is carried in both cases' snapshot reply (the group's layers run on Position expressions); no case asserts how the mentor words it, since `SKILL.md` has no motion_from line yet.
+Results, B1, `--repeat 3`: the first drafts failed 1 of 3 each (`2026-11-16-124440`, `-124541`, `-124825`, `-124924`: 53 2/3, 54 2/3, 53 3/3, 54 2/3): **case bug**, the skill asks turn-or-slide before checking, so "I added a null. Done." got that question and never reached a check. Turn 3 now says "The group will only slide, so the spot doesn't matter" (as case 44). Final: 53 3/3 ($2.11, `-125026`), 54 3/3 ($2.12, `-125125`).

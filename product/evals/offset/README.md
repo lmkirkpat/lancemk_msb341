@@ -486,3 +486,7 @@ B1 baseline compared: `2026-11-11-230338.json`, 39/43 (91%); A is 4.7 points bel
 **A baseline (FR-035, T053):** `results/2026-11-12-104428.json`, `claude-opus-5-5`, effort `medium`, $3.12 mentor credit ($5.04 judge, on subscription), at `ffc0c1b`.
 
 **Timing (T068, `node product/evals/lib/timing-report.mjs results/2026-11-12-104428.json`):** 269 requests over 43 cases, 0 re-sends, 0 went quiet, 0 with no headers, max headers 5675 ms, max gap 6194 ms.
+
+## Spec 015 K2 case (T035, written 2026-11-16, B1)
+
+**44 expression-layer-outside-focus**: Dots staggered by whole-bar drags; Tab (no keys, outside the lesson) has a Position expression following Dot 3, so its value after the expression changes with no edit while its base Position doesn't. Checks: pass; reply lacks Tab; turn 3 never says Tab. Rubric R-OF-EXPRESSION-NOT-LEARNER. Fixtures `dots-extras-expression-follows*.json`, built by `fixtures/build.mjs` from the dots-extras pair; **stand-in, re-derive from the T015 capture** (the expression layer is hand-added). Result B1 `--repeat 3`: 3/3, $2.20 (`2026-11-16-124704`).

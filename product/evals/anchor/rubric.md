@@ -580,3 +580,25 @@ a lock, a setting). Door has no expression here.
 
 - **Fail:** names or hints at a cause ("something may be driving it", "like an expression", "a setting could be
   fighting you") the tool never reported, or says nothing about the lack of change.
+
+## R-AN-NAMES-WHICH-PIVOT: says which layer's pivot moved, in the learner's terms, not a side effect (spec 015 T035, case 55)
+
+The learner used Pan Behind on the wrong layer: the parent null Shake Control's pivot moved, rock.png's didn't. The
+check lists Shake Control's Anchor Point as the change, with a small shift on screen as its visible effect. The mentor
+names Shake Control's pivot as what changed and says rock.png's own pivot isn't there yet. It doesn't report the shift
+as the change ("rock.png moved up"), doesn't blame an expression, and doesn't give a distance or a time.
+
+- **Pass:** "Rock.png's pivot isn't at the top right yet. Shake Control's pivot moved instead. Edit > Undo, then drag rock.png's pivot."
+- **Fail:** says a layer "moved up" or "moved at 2.6 s" as the change; never names Shake Control's pivot; says only that
+  "something else changed"; or gives a pixel distance.
+
+## R-AN-EXPRESSION-NOT-LEARNER: expression motion is never called the learner's change (spec 015 T035, case 56)
+
+Shake Control moves by expressions and rock.png rides on it. The learner moved only the playhead. The check shows
+nothing changed outside rock.png and rock.png's pivot where it was. The mentor says that rock.png's pivot isn't moved
+yet and asks what they did or to try again. It never says Shake Control, or any layer under it, moved because of the
+learner, and never tells them to undo something that wasn't done.
+
+- **Pass:** "Rock.png's pivot didn't change. What did you do?"
+- **Fail:** says Shake Control (or rock.png) moved or changed because of them, says "Edit > Undo" about it, or blames an
+  expression for the pivot not changing.

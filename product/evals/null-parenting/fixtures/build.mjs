@@ -43,4 +43,22 @@ const write = (name, obj) => fs.writeFileSync(path.join(HERE, "synthetic", name)
   r.synthetic = "Case 44 (OA-14): synthetic row23-still-parent.json with Holder's Position sample at 3 s moved to (340, 300).";
   write("row23-expression-grandparent.json", r);
 }
+
+// Case 53 (spec 015 T035): T015's live 015 Planted with the learner's new null at the bottom (Null 1 at
+// index 19, copied from the live planted-renumbered.json, so nothing is renumbered) and the playhead
+// moved from 0.6 s to 1.5 s, where every layer already has a sample. Const Kid rides on Const Parent,
+// whose Position runs on an expression; neither is in the group.
+// STAND-IN: re-derive from the T015 capture (a live read taken after adding the null at the bottom).
+{
+  const EXPR = path.resolve(HERE, "../../../../mentor/test/fixtures/expressions");
+  const load = (f) => JSON.parse(fs.readFileSync(path.join(EXPR, f), "utf8"));
+  const r = load("planted.json");
+  const nul = load("planted-renumbered.json").layer_info.find((l) => l.name === "Null 1");
+  nul.index = Math.max(...r.layer_info.map((l) => l.index)) + 1;
+  r.layer_info.push(nul);
+  if (!r.layer_info.every((l) => l.samples.some((x) => x.time === 1.5))) throw new Error("every layer needs a sample at 1.5 s");
+  r.comp.time = 1.5;
+  r.synthetic = "Case 53 (spec 015 T035): live 015 Planted with Null 1 added at the bottom (from planted-renumbered.json) and the playhead at 1.5 s.";
+  write("planted-null-added-later.json", r);
+}
 console.log("wrote fixtures/synthetic/*");

@@ -1,0 +1,69 @@
+{
+  "id": "53-child-of-expression-parent-playhead-moved",
+  "title": "A null is added and the playhead moved to 1.5 s; Const Kid rides on Const Parent, which an expression moves, and sits outside the group: no jump, nothing about either layer is reported",
+  "covers": [
+    "spec015-K2",
+    "FR-012",
+    "FR-013",
+    "E17a",
+    "SC-005",
+    "T035"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "expressions/planted.json": "live",
+    "eval-synthetic/planted-null-added-later.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "expressions/planted.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "expressions/planted.json",
+      "say": "Index Link and Runtime Name should move together."
+    },
+    {
+      "project": "eval-synthetic/planted-null-added-later.json",
+      "say": "I added a null. The group will only slide, so the spot doesn't matter. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_called": [
+      "null_parent_check"
+    ],
+    "last_check": {
+      "parenting_passed": false,
+      "codes_include": [
+        "null_ready"
+      ],
+      "lacks": [
+        "Const Kid",
+        "Const Parent",
+        "jumped"
+      ]
+    },
+    "say": [
+      {
+        "id": "no_jump_talk",
+        "never": "\\bjump(?:s|ed)?\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_expression_layers",
+        "never": "\\bConst (?:Parent|Kid)\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-EXPRESSION-NOT-LEARNER",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 015 T035 (Eval plan row 3). The group is not parented yet, so the jump check itself isn't exercised here (mentor/test/k2-replay and null-parenting-k2 tests cover p2 on a child of a moving parent); this guards the other-changes list and the mentor's words at a moved playhead. Stand-in to re-derive from the T015 capture: the null at the bottom (Null 1 at index 19) and the playhead at 1.5 s are built by fixtures/build.mjs from live 015 Planted."
+}
