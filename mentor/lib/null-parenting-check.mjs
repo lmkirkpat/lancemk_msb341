@@ -21,6 +21,7 @@ import { MentorError, registerErrors } from "../errors.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { compPosition, footprint, sampleAt, toLayerSpace } from "./comp-space.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
+import { expressionTextDiffers } from "./expression-trim.mjs";
 import { classOf } from "./visibility.mjs";
 import { FOOTPRINT_PATHS, keyedLayer, p2Times, uniqueLayer } from "./null-parenting.mjs";
 import { baseViews, pairValues } from "./k2-changes.mjs";
@@ -359,7 +360,7 @@ function expressionChanges(baseline, b, current, c, skipPath) {
       const n = now.get(path);
       let what = null;
       if (!!(w && w.enabled) !== !!(n && n.enabled)) what = n && n.enabled ? "turned_on" : "turned_off";
-      else if (w && n && w.text !== n.text) what = "text";
+      else if (w && n && expressionTextDiffers(w, n)) what = "text";
       // A new error or one gone, not its wording: AE's text names the layer's index (T015).
       else if (w && n && !!w.error !== !!n.error) what = "error";
       if (what) out.push({ property: String((n || w).display_path || path).split(" › ").pop(), what });
