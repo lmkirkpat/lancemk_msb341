@@ -9,7 +9,7 @@
 
 import { MentorError, registerErrors } from "../errors.mjs";
 import { byIndex, layerInfo } from "../lib/layer-info.mjs";
-import { expressionReads, expressionsRead, linksIn, rawExpression, valuesAt } from "../lib/expressions.mjs";
+import { expressionReads, expressionsRead, linksIn, normalizeLineEnds, rawExpression, valuesAt } from "../lib/expressions.mjs";
 import { motionSources } from "../lib/motion-sources.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 
@@ -61,6 +61,13 @@ function exprSummary(x) {
   return { property: x.property, group: x.group, on: x.on, error: !!x.error, builds_on: x.builds_on, moves: x.moves };
 }
 
+// A parent's expression in a child's entry. How much it moves is said once, on the parent's own entry,
+// when the parent is in the same reply (live Comp 1: 13 children of one shaking null repeated it,
+// 2.6 KB of a 12 KB cap); otherwise it's here.
+function parentExpr(x, parentListed) {
+  return parentListed ? { property: x.property, error: !!x.error } : { property: x.property, error: !!x.error, moves: x.moves };
+}
+
 function summaryOf(entry, ctx) {
   const { map, links, exprOf } = ctx;
   const m = map.layers.find((l) => l.layer_index === entry.index);
@@ -73,7 +80,7 @@ function summaryOf(entry, ctx) {
     kind: entry.kind,
     class: m ? m.class : null,
     parents: m && Array.isArray(m.parents)
-      ? m.parents.map((p) => ({ layer_index: p.layer_index, layer: p.layer, class: p.class, moves_children: p.moves_children, moves_by: p.moves_by ?? null, expressions: (exprOf.get(p.layer_index) || []).filter((x) => x.active || (x.on && x.error)).map((x) => ({ property: x.property, error: !!x.error, moves: x.moves })) }))
+      ? m.parents.map((p) => ({ layer_index: p.layer_index, layer: p.layer, class: p.class, moves_children: p.moves_children, moves_by: p.moves_by ?? null, expressions: (exprOf.get(p.layer_index) || []).filter((x) => x.active || (x.on && x.error)).map((x) => parentExpr(x, ctx.listed.has(p.layer_index))) }))
       : notRead("no_layer_info"),
     children: m && Array.isArray(m.children) ? m.children.length : notRead("no_layer_info"),
     effects: Array.isArray(entry.effects) ? entry.effects.map((f) => f.name) : notRead(entry.effects === undefined ? "older_snapshot" : "error"),
@@ -95,14 +102,17 @@ function detailOf(entry, ctx, snapshot, atTime) {
     expressions: ctx.exprRead === "all"
       ? mine.map((x) => {
         const raw = rawExpression(snapshot, x.layer_index, x.path);
-        const full = raw ? raw.text_length : 0;
-        const text = raw ? raw.text : "";
+        // AE's `\r` line ends as `\n` (T015), so the model reads, quotes and counts lines the
+        // usual way. A `\r\n` becomes one character, and the full length drops by as many.
+        const rawText = raw ? raw.text : "";
+        const text = normalizeLineEnds(rawText);
+        const full = raw ? raw.text_length - (rawText.length - text.length) : 0;
         const cut = text.length > LIMITS.text_chars || (raw && raw.text_cut);
         return {
           ...exprSummary(x),
           display_path: x.display_path,
           keys: x.keys,
-          error: x.error,
+          error: x.error == null ? x.error : normalizeLineEnds(x.error),
           text: text.slice(0, LIMITS.text_chars),
           cut_short: !!cut,
           full_length: full,
@@ -122,14 +132,24 @@ function sweepsRead(snapshot, measured) {
   return measured.length ? "fine" : "coarse";
 }
 
-// Drops layers from the end until the reply fits, naming each one left out.
-function fit(reply, cap) {
+// Drops layers from the end until the reply fits, naming each one left out. The reply is built again
+// after each drop, so a parent that's dropped has its moves back on its children's entries, and the
+// size note itself is counted against the cap (T015: it once tipped a fitted reply over).
+function fit(entries, build, cap) {
+  const list = [...entries];
   const cut = [];
-  while (bytes(reply) > cap && reply.layers.length > 1) {
-    const l = reply.layers.pop();
-    cut.unshift(l.layer ?? l.asked);
+  let reply = build(list);
+  const measured = () => (cut.length ? bytes({ ...reply, size: { bytes: cap, cut } }) : bytes(reply));
+  while (measured() > cap && list.length > 1) {
+    const e = list.pop();
+    cut.unshift(e.name ?? e.asked);
+    reply = build(list);
   }
-  if (cut.length) reply.size = { bytes: bytes(reply), cut };
+  if (cut.length) {
+    reply.size = { bytes: 0, cut };
+    reply.size.bytes = bytes(reply);
+    reply.size.bytes = bytes(reply);
+  }
   return reply;
 }
 
@@ -161,9 +181,12 @@ export async function describeLayers({ layers: asked, detail = false, at_time } 
   const entries = named
     ? named.map((e) => (e.index == null ? e : byIndex(snapshot, e.index)))
     : layerInfo(snapshot).layers;
-  const out = entries.map((e) => (e.error ? e : detail ? detailOf(e, ctx, snapshot, atTime) : summaryOf(e, ctx)));
-  const reply = { comp: { name: snapshot.comp.name, time: snapshot.comp.time }, read, layers: out };
-  return textReply(fit(reply, detail ? LIMITS.detail_bytes : LIMITS.summary_bytes));
+  const build = (list) => {
+    ctx.listed = new Set(list.filter((e) => !e.error).map((e) => e.index));
+    const out = list.map((e) => (e.error ? e : detail ? detailOf(e, ctx, snapshot, atTime) : summaryOf(e, ctx)));
+    return { comp: { name: snapshot.comp.name, time: snapshot.comp.time }, read, layers: out };
+  };
+  return textReply(fit(entries, build, detail ? LIMITS.detail_bytes : LIMITS.summary_bytes));
 }
 
 export const TOOLS = [
