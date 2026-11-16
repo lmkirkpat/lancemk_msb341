@@ -24,7 +24,10 @@ Additive only. `layers`, `precomp_layers` and every existing `layer_info` field 
 | `text_length` | int | full length |
 | `text_cut` | bool | |
 
-`expressions_read`: `"all"` when the walk finished, or `{ status: "not_read", reason }` when it threw.
+`expressions_read`: `"all"` when the walk finished with every property read; `{ status: "partial",
+reason, skipped: int }` when one or more properties threw while being read (the rest are kept, and
+the read is never called complete, FR-018); `{ status: "not_read", reason }` when the walk itself
+threw.
 
 ### `layer_info[].effects`
 
@@ -45,6 +48,7 @@ sample's exact time.
 | `kind` | `coarse` (24 times, always, every active transform expression) or `fine` (`measure_layers` only) |
 | `sampled_every` | seconds |
 | `varies` | bool: the result changed by more than the tolerance across the sweep |
+| `status` | present only when the sweep didn't run: `{ status: "not_read", reason: "budget" }` for coarse sweeps past the snippet's time or count budget (the plan's number), so `varies` is unknown, never false |
 | `max_offset` | largest distance from base, in the property's units |
 | `max_at` | time of that peak |
 
@@ -80,22 +84,34 @@ only when `links` is empty and `unresolved_in_comp` is 0.
 - Per layer `expressions`: `{ status: "read", list: [Expression read] }` (was `not_read` with
   `on_keyed`). `on_keyed` stays for old snapshots.
 - Per parent: `moves_children: bool` plus `moves_by: "keys" | "expression" | "both" | null`.
-- `static_as_read` is true only when own keys, own source expressions and parents are all empty
-  and expressions were read.
+- `static_as_read`: on snapshots with the new expression fields, true only when own keys, own source
+  expressions and parents are all empty. On **older snapshots it keeps its old meaning** (no own keys
+  and no parents), because expressions weren't read there. Nothing in production reads it today
+  (review, T031); a consumer that needs "static" must check `read.expressions` too.
 
 ## 4. `motion_from` (pivot and null snapshot tools, FR-015)
 
-On each focus or candidate layer those tools already return:
-`{ own_keys: bool, own_expressions: [property], parents: [{ layer, by: "keys" | "expression" | "both" }] }`
-or `{ status: "not_read", reason }`.
+On each focus or candidate layer those tools already return, **only when the snapshot has the new
+expression fields**:
+`{ own_keys: bool, own_expressions: [property], parents: [{ layer, by: "keys" | "expression" | "both" }] }`.
+On an older snapshot (every eval fixture captured before phase 1) the field is **absent**, not
+`not_read`, so those tool replies are byte-identical to before. The eval gate covers the field
+through cases on new captures (eval-engineer, T035).
 
 ## 5. Check changes (K2, FR-012 to FR-014)
 
 - Other-change entries attributed to the learner need a difference at a **same-frame** time (see
   research R7) on a non-expression value or on `base`.
 - A real change outside the focus is one entry per changed property on that layer (Anchor Point,
-  Position, Scale, Rotation, parent, expression), with `effect: { distance_px, direction, time } | null`
-  for the footprint shift it caused. No separate moved entry for that layer (FR-014a).
+  Position, Scale, Rotation, parent, expression), with `effect` for the footprint shift it caused. No
+  separate moved entry for that layer (FR-014a). `effect` is:
+  - **omitted** when nothing visibly moved;
+  - `{ distance_px, direction, time }` when the footprint shift was measured;
+  - `{ distance_px: null, direction: null, reason }` when the footprint can't be read (a null, a layer
+    with no bounds). Pivot and null use the same shape.
+- **Offset, key types and speed graph** list changes to unkeyed properties outside their focus too,
+  compared on `base` at a same-frame time, through one shared helper, `mentor/lib/k2-changes.mjs`
+  (review, T031). Keyed changes stay with each skill's own comparison.
 - A layer whose index changed is matched by the existing renumber matching and compared on `base`
   (FR-013a).
 - New kind `expression_changed`: `{ layer, property, what: "turned_on" | "turned_off" | "text" | "error" }`.

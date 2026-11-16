@@ -29,6 +29,13 @@ key holds over a range, and "places used" counts layers, not comps. Changed here
 FR-006a, FR-023 to FR-025 tightened, SC-005 (a), SC-011, SC-012, Edge Cases E21, E22, E23 and new
 E29, Assumptions. No approved decision changes.
 
+**Amendment 3 (2026-11-16, the T031 review of phase 1; fixes on `015-reads-p1`):** documentation
+to match the build, add or tighten only. Changed here: FR-018 (partial walks and the sweep budget),
+OQ-7 (the guard as built, plus a note for spec 014), new OQ-9 (`session.json` holds expression text)
+and an open item for T034 (which layer Pan Behind takes). Data model § 1, § 3, § 4 and § 5 match the
+build (`effect` omitted when nothing moved; `motion_from` absent on older snapshots;
+`static_as_read`'s old meaning on older snapshots; `k2-changes.mjs`).
+
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
 (*Precompose*) as lessons for later. Expressions first, precomps as a later phase." Builder decision,
@@ -374,7 +381,9 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   parent) instead of guessing.
 - **FR-018**: A read that didn't run, ran only in part, or met an older snapshot MUST say "not read"
   with the reason, never "none", empty or false (E27). The motion-sources map's existing pattern
-  (`not_read`) is kept.
+  (`not_read`) is kept. A read that ran only in part (a property threw during the expression walk)
+  MUST say **partial**, never "all". A sweep skipped for its time budget MUST say not read with the
+  reason "budget", so "doesn't vary" is never inferred from a sweep that didn't run (data-model § 1).
 - **FR-019**: The reads MUST be read-only: no change to the project, its selection, the playhead or
   the active comp. They run as fixed snippets through the bridge, with no script text from the model
   (constitution II).
@@ -594,6 +603,12 @@ motion) belong to spec 014's set and to pivot K1, not here.
   copied from an expression's text or error in the session's last snapshot (T029).** The cost: a
   refusal is one more turn in a lesson, and evals could see it; no current case writes expression
   text, so none should.
+  **As built (T029, T031 review, 2026-11-16):** the guard compares against **the current lesson's
+  starting snapshot**, not the session's latest read, and does nothing when no lesson is running.
+  Copies under 24 characters pass by design. It guards `attempted` as well as the summary and `next`.
+  **Note for spec 014:** the ask mode runs with no lesson, so this guard doesn't cover an "asked"
+  record entry. Spec 014 needs its own guard (or a snapshot to compare against) for FR-020 to hold
+  there; this spec doesn't change spec 014.
 
 ### New from Phase 0 (2026-11-14)
 
@@ -603,6 +618,25 @@ motion) belong to spec 014's set and to pivot K1, not here.
   out of scope. **Recommended: tool change first (T023); if the new pivot eval case (Eval plan, row 1)
   still fails on wording, one narrow pivot `SKILL.md` line in this spec (a new task after T036), not
   spec 014's rule changes.** Expands Out of scope by that one line if needed.
+
+### New from the T031 review (2026-11-16)
+
+- **OQ-9: `session.json` now holds expression text and effect names on disk.** The lesson baseline
+  stored in the session file includes the snapshot's new fields. It isn't the learner record, so FR-020
+  holds, but it is a file on the learner's machine with text from their project (constitution IV),
+  and spec 006's uninstall removes the conversation files (FR-019, T054, T057), not necessarily this
+  one. **Recommended: keep it (the checks need the baseline), have the session file drop expression
+  text and keep only its length and a hash (enough for FR-014's "text changed"), and ask spec 006 to
+  confirm its uninstall removes `session.json` with the conversation files.** Changes what the
+  baseline stores, so it's the builder's call; it doesn't block the phase 1 merge if the builder
+  prefers to keep the text and only fix the uninstall.
+- **Open item for T034 (the next live sitting): which layer does Pan Behind act on?**
+  `.claude/skills/anchor-mentor/SKILL.md` lines 378 to 381 say it acts on the layer under the cursor
+  even when another layer is selected (spec 011's live finding, 2026-10-26). T005 moved the selected
+  layer (Shake Control, which was also over the rock). Test at T034: select layer A, start a Pan
+  Behind drag over layer B (not over A), and see which layer's Anchor Point moves. Until then this
+  spec doesn't change that `SKILL.md` line, and the "selected" wording in Amendment 2 means "the layer
+  it took in T005", not a general rule.
 
 ### For the curriculum designer (hand-off, not edits)
 
