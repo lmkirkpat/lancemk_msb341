@@ -43,6 +43,12 @@ Layer summary and Layer detail: data-model § 6. `not_read` is `{ status: "not_r
   dropped from the end and named in `size.cut`.
 - Detail: expression text cut at 1,500 characters (`cut_short`, `full_length`); reply ≤ 16 KB.
 - No expression text in the summary, ever.
+- *Amended 2026-11-16 (merge `1499819`):* in a summary, a parent's `moves` is said once, on the
+  parent's own entry. A child's parent entry omits `moves` when that parent is also in the reply, and
+  keeps it when the parent isn't (for example, after a cut). `fit()` rebuilds the reply after each cut,
+  so a child whose parent was cut gets `moves` back, and its size note counts against the cap. (Live
+  Comp 1: 13,412 to 10,526 bytes.)
+- Detail shows expression text and errors with `\n` line ends (AE 27.0 gives `\r`; spec E30).
 
 ## Errors
 

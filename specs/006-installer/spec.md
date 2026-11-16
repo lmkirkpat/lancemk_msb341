@@ -12,6 +12,8 @@ SC-006, the UXP table's model-runtime and mentor-tools rows, Q2's note, and Depe
 re-approved; the changes follow from 013's approved answers.
 Planned and tasked 2026-11-09 (`plan.md`, `tasks.md`), awaiting the builder's approval. Q3 to Q5 are planned
 on their recommendations as marked assumptions, not answered. Q2 stays pinned and the plan doesn't depend on it.
+Amended 2026-11-16 from spec 015 OQ-9 (builder decision): FR-019, T054 and T057 always remove the mentor's
+session file and its leftovers; new Q7 (`calls.jsonl` on uninstall).
 
 **Input**: Cockpit task, sprint 3 (`sprints/sprint-3-plan.md` › Done looks like › specs › an
 installer): "an installer that lets someone who isn't a developer set up Knack on a Mac", covering
@@ -327,6 +329,11 @@ info names the commit and results file.
   conversation (`panel-conversation.json`, `panel-conversation-frames/` and any leftover
   `panel-conversation.json.*.tmp` in the learner home) is always removed, even when the learner keeps
   their history: it holds one unfinished lesson's words, not the learner record.
+  *Amended 2026-11-16 (spec 015 OQ-9, builder decision):* the mentor's session file is always removed
+  too, even when the learner keeps their history: `session.json`, any leftover `session.json.*.tmp`,
+  and any `session.json.unreadable-*` in the learner home. During a lesson it holds expression text
+  and errors from the learner's project (constitution IV), not the learner record. Whether the tool
+  call log `calls.jsonl` goes too is open question 7.
 - **FR-020**: Uninstall MUST NOT change anything Knack didn't add: other extensions, other
   extensions' settings, PlayerDebugMode if something else set it, and the upstream Claude Bridge.
 
@@ -554,3 +561,10 @@ Each changes the spec. Recommended answer first.
    *Plan 2026-11-09 (research R11), narrower than recommended:* no separate check. On A the helper starts a new
    mentor per lesson and updates need AE closed, so a stale running server can't exist; setup check's
    same-version line covers the rest.
+7. **Does uninstall remove `calls.jsonl` with "keep my history"?** (added 2026-11-16 from spec 015
+   OQ-9). The mentor logs every tool call's input there, so it can hold layer names and lesson words
+   from the learner's project, and after spec 015 a refused record call is logged without its text.
+   *Recommended: always remove it, like the conversation and session files.* It's a debugging log, not
+   the learner's progress; nothing in a lesson reads it back, and keeping it leaves project text on the
+   machine after the learner chose to remove Knack. If the builder wants it for testers' bug reports,
+   the setup check's copied report (User Story 2) is the place to collect it before uninstalling.

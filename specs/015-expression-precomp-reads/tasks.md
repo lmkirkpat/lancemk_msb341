@@ -297,6 +297,30 @@ pivot and null.
 - [ ] T040 (spec-writer) Fold T033 to T039's results into the spec (status, any SC amendments) and
   hand the cockpit a CLAUDE.md note. **Phase 1 is shippable here** (to spec 014).
 
+### Phase 1 follow-ups (Amendment 4, builder decisions 2026-11-16)
+
+Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block phase 2 except as noted.
+
+- [ ] T057 (skill-builder) OQ-9 as answered: the session baseline keeps expression text and errors
+  during a lesson for `copiesExpression` (`mentor/tools/common.mjs`), and blanks them once the
+  lesson's record is saved or a new lesson replaces the baseline; `calls.jsonl` logs a refused
+  `record_lesson` call without the refused text. Tests for both blanking paths, a guard refusal across
+  two fresh servers (B1), and a log line with no refused text. **In progress on branch `015-oq9`.**
+  Before T040.
+- [ ] T058 (skill-builder) The `motion_from` wording in `.claude/skills/anchor-mentor/SKILL.md` and
+  `.claude/skills/null-parenting-mentor/SKILL.md`, from `specs/011-anchor/teaching-design.md` § 21 and
+  `specs/012-null-parenting/teaching-design.md` § 17 (OQ-8, widened). Wording only; leave the Pan
+  Behind "wrong layer" lines alone until T034. Take example sentences from the Pass lines, not
+  invented ones.
+- [ ] T059 (eval-engineer) After T058: pivot 57 and null 55 from those sections' Pass lines (held
+  since T035), plus one case where the learner asks about Shake Control's shake and the mentor says
+  it builds on the null's own Position (never "sets its own value"; E30), on the live T015 Comp 1
+  capture with its `\r` text. Case numbers from the cockpit. Each 3/3 on B1; the pivot and null sets
+  still meet SC-006 (T036's bar).
+- [ ] T060 (spec-writer) Record in the spec and hand to spec 014: the 1 px "too small to see" floor
+  (014 TD § 5.1a, H-7) is approved; the "hard to tell apart" band is deferred until after spec 014's
+  three sessions. Fold with T040.
+
 **Checkpoint:** spec 014 can build on phase 1.
 
 ---
@@ -379,7 +403,8 @@ pivot and null.
   US1 (T017 to T019) → US2 (T020, T021, which use T017's reads) and US3 (T022 to T026, which use
   T017 and T019). T027 needs T017 to T021. T028 and T029 any time after T017.
 - **Gate:** T030 → T031 → T032 → T033, T034, T035 to T039 (T035, T037, T038, T039 in parallel; T036
-  after T035) → T040.
+  after T035) → T040. T057 before T040; T058 → T059 (T059 after T036's run or folded into it); T060
+  with T040.
 - **Phase 2:** after T040. T042 and T043 can start together; T044 → T045 → T046 to T050 → T051 →
   gate.
 
@@ -403,5 +428,5 @@ T033, T034) are serial because of the one-driver rule, and T005, T006, T034 wait
 2. Phase 2 follows when phase 1's gate passes, and doesn't block spec 014's first version (the
    answer says "I couldn't see inside [precomp]" until then).
 
-**Task count:** 56 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
-which US4 8).
+**Task count:** 60 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
+which US4 8; phase 1 follow-ups T057 to T060: 4, added 2026-11-16).
