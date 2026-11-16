@@ -256,12 +256,16 @@ pivot and null.
   Pan Behind A/B test** (T005 couldn't separate the rules): select layer A, use Pan Behind with the
   cursor over layer B, and read which anchor moved. It decides the pivot `SKILL.md` "wrong layer" lines,
   frozen until then.
-- [ ] T035 [P] (eval-engineer) Add the K2 cases from spec › Eval plan (five rows, Amendment 1: turn
+- [x] T035 [P] (eval-engineer) Add the K2 cases from spec › Eval plan (five rows, Amendment 1: turn
   f's real edit named by cause; expression motion; a renumbered `wiggle`) to `product/evals/anchor/`,
   `product/evals/null-parenting/` and `product/evals/offset/` (or key types), with fixtures derived
   from the T015 Comp 1 capture. Case numbers from the cockpit. **Also:** pivot and null cases on new
   captures where the check's reply carries `motion_from` (an edit reported by its cause, FR-014a), since
   the replay's existing fixtures predate it.
+  **Done 2026-11-16 (`da09e60`, merged `73a6dee`):** pivot 55, 56, null 53, 54, offset 44, each 3/3 on B1
+  (about $19 with two superseded drafts, both case bugs). Built on the live 015 Rig and Planted captures;
+  three stand-ins to re-derive after T015 (marked in the READMEs). Pivot 57 and null 55 held: `motion_from`
+  has no `SKILL.md` wording yet, so no case can pin how it's said (OQ-8 or spec 014).
 - [ ] T036 (eval-engineer) Re-run all six sets on B1 at the merge commit, one set at a time: easing,
   key types, speed graph, offset, pivot, null. Each meets its SC-006 bar with every hard-rule check
   passing; T035's cases pass 3 of 3. Triage with `/eval-triage`; log in each README (SC-006).
