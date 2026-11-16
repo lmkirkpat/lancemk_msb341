@@ -95,11 +95,13 @@ mentor/
 │   └── precomp-contents.jsx    # new (phase 2)
 ├── lib/
 │   ├── expressions.mjs         # new: expression reads, builds-on, references, links
-│   ├── same-time.mjs           # new: same-frame shared times (K2), if T004 shows it's needed
+│   ├── k2-changes.mjs          # new: K2 shared helper (pairValues, baseViews, unkeyed changes)
 │   ├── precomp-time.mjs        # new (phase 2): time mapping
 │   ├── motion-sources.mjs      # changed: expressions read, moves_by
 │   ├── anchor-check.mjs        # changed: K2
-│   └── null-parenting-check.mjs # changed: K2
+│   ├── null-parenting-check.mjs # changed: K2
+│   ├── offset.mjs, key-types.mjs, speed-graph.mjs # changed: unkeyed changes (T025)
+│   └── snapshot.mjs            # changed: phase 1 fields
 ├── tools/
 │   ├── comp-reads.mjs          # new: describe_layers
 │   ├── transform-anchor.mjs    # changed: motion_from (FR-015)
@@ -108,8 +110,9 @@ mentor/
 ├── fixture/precomp-contents.mjs # new (phase 2): fixture twin
 ├── fixture.mjs                 # changed: sweeps in fixture mode
 ├── dev/capture.mjs             # changed: --measure, --time, --contents
+├── dev/live-015/               # new: T015 plant scripts
 └── test/
-    ├── fixtures/expressions/   # new live captures (Comp 1, Mentor Practice, planted)
+    ├── fixtures/expressions/   # new live captures (Comp 1, Mentor Practice, planted) plus mock-ae.mjs
     ├── fixtures/precomps/      # new (phase 2)
     └── *.test.mjs              # new tests per FR
 

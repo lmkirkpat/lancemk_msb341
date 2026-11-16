@@ -9,7 +9,7 @@
 **Amendment 1 (2026-11-14, Phase 0 live checks, T008; approved by the builder 2026-11-14 with OQ-8 as recommended):** evidence in
 `discovery/usage-notes/expression-reads.md` (session 1) and the corrected finding 4 in
 `discovery/usage-notes/ask-baseline.md`. **AB turn f was most likely a real edit** (Pan Behind took
-Shake Control, the selected null, and changed its anchor), not playhead or expression motion. The
+Shake Control and changed its anchor), not playhead or expression motion. The
 check was right to see a change; the failure was that it named a side effect ("moved up at 2.6 s")
 instead of the cause (Shake Control's pivot moved, not rock.png's). Also: an erroring expression stays
 on in AE 27.0 and gives its base value; values don't change between reads at one time, but `wiggle`
@@ -22,7 +22,7 @@ SC-005, Edge Cases E4, E7, E17, E18 and new E28, Eval plan, Assumptions, and OQ-
 `mentor/test/fixtures/precomps/time-mapping-key.json`. T005 confirmed by hand that Pan Behind on
 Shake Control moves its base Position and Anchor Point together (+561, −120), keeps the children
 still (0.07 px) and leaves the shake running, the same edit as T004's fit (572, −114); it took Shake
-Control because it was **selected**, not because it was under the cursor. The hidden half of a
+Control, which was both selected and under the cursor; which rule decides is open (T034). The hidden half of a
 separable Position holds stale values that don't draw. T006 confirmed the time-mapping formula on all
 eight keys, with three rules: a negative stretch reports the in point after the out point, a remapped
 key holds over a range, and "places used" counts layers, not comps. Changed here: US3's why, new
@@ -187,7 +187,7 @@ rock.png's", not a side effect such as "Shake Control moved up at 2.6 s". Motion
 an expression (the playhead moved, or a layer's index changed under a `wiggle`) is never reported as
 mine.
 
-**Why this priority**: in AB turn f the check saw a real edit (Pan Behind took Shake Control, the selected null,
+**Why this priority**: in AB turn f the check saw a real edit (Pan Behind took Shake Control,
 `expression-reads.md` T004) but named its side effect, so neither the builder nor the mentor could tell
 what had happened, and the advice was "Edit > Undo until it's back" for a move the builder didn't
 recognize. The other half of K2 (TD 014 § 10.1 rule 3) still stands: expression motion must never be
@@ -553,9 +553,10 @@ motion) belong to spec 014's set and to pivot K1, not here.
   (T002); separating or joining dimensions clears the expression, and the hidden-side state can't be
   made by script (T003, so E7 is "UI not tested"); turn f was a real anchor edit, by inference from the
   saved reply (T004).
-- **Checked by hand 2026-11-14 (T005, session 2):** Pan Behind on the selected, expression-driven
+- **Checked by hand 2026-11-14 (T005, session 2):** Pan Behind on the expression-driven
   null changes its base Position and Anchor Point together (+561, −120), keeps the children still
-  (0.07 px) and leaves the shake running (SB-2); it acts on the **selected** layer. The edit matches
+  (0.07 px) and leaves the shake running (SB-2); it took Shake Control, which was both selected and under the cursor; which rule decides is
+  open (T034). The edit matches
   T004's fit for turn f within a few pixels. T006 confirmed the time mapping on all eight keys against
   AE's `sourceTime()` (an expression-only function, so the read can't call it) and the builder's eye.
 - Expression text stays in tool replies to the model only, never in the repo except in fixtures made
@@ -635,8 +636,8 @@ motion) belong to spec 014's set and to pivot K1, not here.
   even when another layer is selected (spec 011's live finding, 2026-10-26). T005 moved the selected
   layer (Shake Control, which was also over the rock). Test at T034: select layer A, start a Pan
   Behind drag over layer B (not over A), and see which layer's Anchor Point moves. Until then this
-  spec doesn't change that `SKILL.md` line, and the "selected" wording in Amendment 2 means "the layer
-  it took in T005", not a general rule.
+  spec doesn't change that `SKILL.md` line, and Amendment 2 names only the layer it took in T005, not a
+  general rule.
 
 ### For the curriculum designer (hand-off, not edits)
 

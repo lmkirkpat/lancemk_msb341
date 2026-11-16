@@ -98,11 +98,11 @@ and after are the same (T001), so it needs no special case.
 candidates. Replaying the reads with only the playhead moved gives no change (the check already
 compares at shared times), and rounding, a missing footprint and the mentor's own guess don't arise.
 The saved reply is reproduced, to 0.001 px on rock.png's edges, only by an **Anchor Point change on
-Shake Control** of about (572, −114) px: Pan Behind on the selected null. Turn g shows it back, which
+Shake Control** of about (572, −114) px: Pan Behind on Shake Control. Turn g shows it back, which
 fits an Undo. This was an inference from the saved reply; **T005 confirmed it by hand** (session 2):
-Pan Behind on the selected Shake Control moved its base Position and Anchor Point together by
-(+561, −120), the children stayed still (0.07 px) and the shake carried on. Pan Behind acts on the
-**selected** layer, not the one under the cursor.
+Pan Behind on Shake Control moved its base Position and Anchor Point together by (+561, −120), the
+children stayed still (0.07 px) and the shake carried on. Pan Behind took Shake Control, which was
+both selected and under the cursor; which rule decides is open (T034).
 
 **Consequence:** the check was right to see a change. It failed by reporting the side effect (Shake
 Control's footprint "moved up at 2.6 s") as its own entry, next to an `anchor_changed` entry the mentor
@@ -115,13 +115,20 @@ didn't lead with. K2 now has two halves (R7).
   (Anchor Point, base Position, Scale, Rotation, parent, an expression), its footprint shift at the
   shared times is attached to that entry as `effect: { distance_px, direction, time }`, and no separate
   moved entry is made for that layer. Turn f becomes one entry: Shake Control's Anchor Point, with the
-  shift as its effect. A moved entry stays only for a footprint shift with no property change on the
+  shift as its effect. As built (data-model § 5), `effect` is omitted when nothing visibly moved, and
+  is `{ distance_px: null, direction: null, reason }` when the footprint can't be read. A moved entry stays only for a footprint shift with no property change on the
   layer or a parent behind it, and only when the base rule below doesn't rule it out.
 - **Same time only.** Shared times are the same frame in both reads (both rounded to a frame when
   `fps` is known). No shared time gives `not_compared`. T004 showed the pivot check already does this;
   the null check's before-read time and the other checks get the same helper.
+  *As built:* there is no separate `same-time.mjs`. Pivot and null each keep their own half-frame
+  window (`anchor-check.mjs`, `null-parenting-check.mjs`), and the shared helper
+  `mentor/lib/k2-changes.mjs` matches sample times within 0.0005 s rather than rounding to a frame.
 - **Expression motion is never reported.** For a property with an active expression (on, no error),
-  compare `base`. A footprint or value difference with no `base` difference on the layer or a parent is
+  compare `base` (as built: `pairValues` in `k2-changes.mjs` uses `base` only when both reads have it
+  for that property, so a read from before spec 015 compares as read; `baseViews` gives the pivot and
+  null checks two reads with `base` swapped in, so their footprints differ only by real edits). A
+  footprint or value difference with no `base` difference on the layer or a parent is
   left out of the other-changes list (FR-013's "MAY report" isn't used yet: a new kind no `SKILL.md`
   knows could reach the learner as a field name, rule 5; spec 014 can add it).
 - **Renumbering (FR-013a, E28).** `wiggle` follows the layer's index (T002: about 6 px), so a layer
@@ -131,10 +138,17 @@ didn't lead with. K2 now has two halves (R7).
   with what changed (FR-014). Null's `expression_toggled` becomes this kind; offset's on/off listing
   keeps its sentence form.
 
-**Sites:** pivot (`anchor-check.mjs`: item 5's moved list, `rawChanged`, `otherChanges`), null
-(`null-parenting-check.mjs`: `value_changed` (OA-4), the jump check's footprints,
-`expression_toggled`). Offset, key types and speed graph compare keys, not sampled values: they get
-SC-005's replays and change only if one fails.
+**Sites (as built, phase 1 merge `a3300e3`):** the shared helper is `mentor/lib/k2-changes.mjs`
+(`pairValues`, `baseViews`, `unkeyedChanges`, `unkeyedChangeNotes`). Pivot
+(`mentor/lib/anchor-check.mjs`: item 5's moved list, `rawChanged`, `otherChanges`, the
+`changed_layers` entries with `effect`), null (`mentor/lib/null-parenting-check.mjs`:
+`value_changed` (OA-4), `parent_changed`, the jump check's footprints; `expression_toggled` is now
+`expression_changed`), both through `pairValues` and `baseViews`. The pivot and null snapshot tools
+(`mentor/tools/transform-anchor.mjs`, `mentor/tools/null-parenting.mjs`) add `motion_from` (R8).
+**Differs from this decision:** offset, key types and speed graph were planned to change only if an
+SC-005 replay failed; the build (T025) gives all three `unkeyedChangeNotes` from the shared helper,
+so they now list unkeyed transform changes outside the focus (data-model § 5). Keyed changes stay
+with each check's own key diff. Offset's on/off sentence form is unchanged.
 
 ## R8. K3: `moves_children` and the snapshot field (FR-005, FR-015)
 
