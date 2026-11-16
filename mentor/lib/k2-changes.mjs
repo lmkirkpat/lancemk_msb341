@@ -21,7 +21,14 @@ const PATHS = {
 };
 const NAMES = { anchor: "Anchor Point", position: "Position", scale: "Scale", rotation: "Rotation" };
 
-const compareValue = (s, k) => (s && s.base && s.base[k] != null ? s.base[k] : s ? s[k] : null);
+// Review S1: the two values to compare for key k. `base` only when both samples have it for k, so a
+// read from before spec 015 (no base) against one after it compares what both read, never base
+// against the value after the expression.
+export function pairValues(bs, cs, k) {
+  const both = !!(bs && cs && bs.base && cs.base && bs.base[k] != null && cs.base[k] != null);
+  return both ? [bs.base[k], cs.base[k]] : [bs ? bs[k] : null, cs ? cs[k] : null];
+}
+const at = (e, t) => (e.samples || []).find((s) => Math.abs(s.time - t) <= TIME_TOL);
 const differs = (a, b) => (Array.isArray(a) && Array.isArray(b)
   ? a.some((v, i) => isNum(v) && isNum(b[i]) && Math.abs(v - b[i]) > TOL)
   : isNum(a) && isNum(b) && Math.abs(a - b) > TOL);
@@ -53,8 +60,7 @@ export function unkeyedChanges(baseline, current) {
   for (const [b, c] of matches(baseline, current)) {
     const keyed = new Set([...keyedPaths(baseline, b.index), ...keyedPaths(current, c.index)]);
     const times = (b.samples || []).map((s) => s.time).filter((t) => (c.samples || []).some((u) => Math.abs(u.time - t) <= TIME_TOL));
-    const at = (e, t) => (e.samples || []).find((s) => Math.abs(s.time - t) <= TIME_TOL);
-    const changed = (k) => !PATHS[k].some((p) => keyed.has(p)) && times.some((t) => differs(compareValue(at(b, t), k), compareValue(at(c, t), k)));
+    const changed = (k) => !PATHS[k].some((p) => keyed.has(p)) && times.some((t) => differs(...pairValues(at(b, t), at(c, t), k)));
     const props = ["anchor", "position", "scale", "rotation"].filter(changed);
     for (const k of props) {
       if (k === "position" && props.includes("anchor")) continue;
@@ -68,3 +74,28 @@ export function unkeyedChanges(baseline, current) {
 // lesson)", as diff.mjs says it for keyed properties).
 export const unkeyedChangeNotes = (baseline, current) =>
   unkeyedChanges(baseline, current).map((c) => `${c.layer} › ${c.property} was changed (not part of this lesson)`);
+
+// Two reads with each sample's values taken before their expressions, only where both reads have
+// `base` for that layer, time and key (review S1); everything else as read. Footprints on the pair
+// differ only by real edits. Without any base on either side, the same two objects come back.
+export function baseViews(a, b) {
+  const hasBase = (snap) => layerInfo(snap).layers.some((l) => (l.samples || []).some((x) => x.base));
+  if (!hasBase(a) || !hasBase(b)) return [a, b];
+  const swapA = new Map();
+  const swapB = new Map();
+  for (const [la, lb] of matches(a, b)) {
+    for (const sa of la.samples || []) {
+      const sb = at(lb, sa.time);
+      if (!sa.base || !sb || !sb.base) continue;
+      const keys = Object.keys(sa.base).filter((k) => sa.base[k] != null && sb.base[k] != null);
+      if (!keys.length) continue;
+      swapA.set(sa, Object.fromEntries(keys.map((k) => [k, sa.base[k]])));
+      swapB.set(sb, Object.fromEntries(keys.map((k) => [k, sb.base[k]])));
+    }
+  }
+  const view = (snap, swap) => ({
+    ...snap,
+    layer_info: snap.layer_info.map((l) => ({ ...l, samples: (l.samples || []).map((x) => (swap.has(x) ? { ...x, ...swap.get(x) } : x)) })),
+  });
+  return [view(a, swapA), view(b, swapB)];
+}

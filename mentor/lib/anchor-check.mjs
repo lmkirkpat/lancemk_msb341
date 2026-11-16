@@ -21,6 +21,7 @@
 import * as compSpace from "./comp-space.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { motionSources } from "./motion-sources.mjs";
+import { baseViews, pairValues } from "./k2-changes.mjs";
 import { classOf } from "./visibility.mjs";
 import {
   analyze, anchorKeyCount, checkTime, DEMO_MATCH_PX, footprintOpts, inPlace, isPlace, keyedLayer, keyFlags, MOVE_PX, outsideSide, placeNow,
@@ -91,25 +92,11 @@ const common = (a, b) => a.filter((t) => b.some((u) => Math.abs(u - t) <= TIME_T
 // ---- K2: values before expressions
 
 const VALUE_KEYS = ["anchor", "position", "scale", "rotation"];
-// A sample's value for comparing: `base` when the property has an active expression (spec 015 R5).
-const compareValue = (s, k) => (s && s.base && s.base[k] != null ? s.base[k] : s ? s[k] : null);
+// Values compare on `base` only when both samples have it (k2-changes.mjs pairValues, review S1).
 const valueDiffers = (a, b) => {
   if (Array.isArray(a) && Array.isArray(b)) return a.some((v, i) => isNum(v) && isNum(b[i]) && Math.abs(v - b[i]) > VALUE_TOL);
   return isNum(a) && isNum(b) && Math.abs(a - b) > VALUE_TOL;
 };
-
-// The snapshot as it would read with every expression's part taken out: each sample's values
-// replaced by its base where it has one. Footprints on two of these differ only by real edits.
-function baseView(snapshot) {
-  if (!layerInfo(snapshot).layers.some((l) => (l.samples || []).some((s) => s.base))) return snapshot;
-  return {
-    ...snapshot,
-    layer_info: snapshot.layer_info.map((l) => ({
-      ...l,
-      samples: (l.samples || []).map((s) => (s.base ? { ...s, ...Object.fromEntries(Object.entries(s.base).filter(([, v]) => v != null)) } : s)),
-    })),
-  };
-}
 
 const PROPERTY_NAMES = { position: "Position", scale: "Scale", rotation: "Rotation" };
 const CHANGE_KINDS = new Set(["anchor_changed", "value_changed", "parent_changed", "expression_changed"]);
@@ -152,7 +139,7 @@ function propertyChanges(baseline, b, current, c) {
   else {
     const ts = common(timesOf(b), timesOf(c));
     const at = (e, t) => compSpace.sampleAt(e, t);
-    const changed = (k) => ts.some((t) => valueDiffers(compareValue(at(b, t), k), compareValue(at(c, t), k)));
+    const changed = (k) => ts.some((t) => valueDiffers(...pairValues(at(b, t), at(c, t), k)));
     // Pan Behind changes Anchor Point and Position together: one change, the pivot (turn f, T005).
     if (changed("anchor")) out.push({ kind: "anchor_changed", layer: b.name });
     else if (changed("position")) out.push({ kind: "value_changed", layer: b.name, property: PROPERTY_NAMES.position });
@@ -173,7 +160,7 @@ function descendantsOf(baseline, index) {
 // On `base` for a property with an active expression (K2).
 function rawChanged(bs, cs) {
   if (!bs || !cs) return false;
-  return VALUE_KEYS.some((k) => valueDiffers(compareValue(bs, k), compareValue(cs, k)));
+  return VALUE_KEYS.some((k) => valueDiffers(...pairValues(bs, cs, k)));
 }
 
 // ---- Other changes (FR-019), from layer_info for every layer
@@ -319,8 +306,7 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
       for (const d of descendantsOf(baseline, e.index)) explained.add(d);
     }
   }
-  const bView = baseView(baseline);
-  const cView = baseView(current);
+  const [bView, cView] = baseViews(baseline, current);
   const fps = baseline.comp.frame_rate;
   const half = isNum(fps) && fps > 0 ? 0.5 / fps + 1e-6 : 0;
   const demoIndex = lesson.demo && lesson.demo.segment_id ? Number(String(lesson.demo.segment_id).split("/")[1]) : null;

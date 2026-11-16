@@ -23,6 +23,7 @@ import { compPosition, footprint, sampleAt, toLayerSpace } from "./comp-space.mj
 import { sourcesOf } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
 import { FOOTPRINT_PATHS, keyedLayer, p2Times, uniqueLayer } from "./null-parenting.mjs";
+import { baseViews, pairValues } from "./k2-changes.mjs";
 
 export const JUMP_PX = 1; // FR-011: never said to the learner as a target
 const REGION_SHARE = 0.1; // FR-028's per-axis rule, on the group's combined bounds
@@ -63,21 +64,6 @@ function samplesMove(snap, index) {
 }
 const parentMoves = (snap) => (p) => p.moves_children || samplesMove(snap, p.layer_index);
 
-// A sample's value for comparing: `base` when the property has an active expression (spec 015 R5).
-const compareValue = (smp, k) => (smp && smp.base && smp.base[k] != null ? smp.base[k] : smp ? smp[k] : null);
-
-// The snapshot with every sample's values taken before their expressions (spec 015 K2): footprints
-// on two of these differ only by real edits.
-function baseView(snapshot) {
-  if (!layerInfo(snapshot).layers.some((l) => (l.samples || []).some((x) => x.base))) return snapshot;
-  return {
-    ...snapshot,
-    layer_info: snapshot.layer_info.map((l) => ({
-      ...l,
-      samples: (l.samples || []).map((x) => (x.base ? { ...x, ...Object.fromEntries(Object.entries(x.base).filter(([, v]) => v != null)) } : x)),
-    })),
-  };
-}
 const distinctValues = (p) => new Set(p.keys.map((k) => JSON.stringify(k.value))).size >= 2;
 
 // ---- Finding the lesson's null (FR-007, FR-019, research R5)
@@ -149,8 +135,7 @@ export function p2For(baseline, current, name, { throughNull = false, stored = n
   const b = uniqueLayer(baseline, name);
   const c = uniqueLayer(current, name);
   // K2: corners before expressions, so an expression's own motion is never a jump.
-  const bv = baseView(baseline);
-  const cv = baseView(current);
+  const [bv, cv] = baseViews(baseline, current);
   const times = only || p2Times(baseline, name);
   const not_checked = [];
   let worst = { px: 0, dx: 0, dy: 0, time: null };
@@ -334,7 +319,7 @@ function valuesChanged(baseline, b, current, c) {
   if (!bs || !cs) return [];
   // On base for a property with an active expression (K2). Pan Behind changes Anchor Point and
   // Position together: that's one change, the pivot.
-  let out = SAMPLED.filter((k) => valuesDiffer(compareValue(bs, k), compareValue(cs, k))).map((k) => SAMPLED_NAMES[k]);
+  let out = SAMPLED.filter((k) => valuesDiffer(...pairValues(bs, cs, k))).map((k) => SAMPLED_NAMES[k]);
   if (out.includes("Anchor Point")) out = out.filter((n) => n !== "Position");
   const sameTime = current.comp && typeof current.comp.time === "number" && Math.abs(current.comp.time - t0) < 0.0005;
   if (sameTime && b.transform && c.transform && valuesDiffer(b.transform.opacity, c.transform.opacity)) out.push("Opacity");
