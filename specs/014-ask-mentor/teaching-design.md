@@ -6,6 +6,10 @@ and screens (with spec 007 T061) follow from § 12; this file says what the lear
 how it's drawn.
 **Date:** 2026-11-13. **Status:** draft for the builder's review. Number 014 assigned by the cockpit.
 **Updated 2026-11-14:** § 5.1, § 7.1, § 12 and § 16 brought in line with § 19 (spec 014 CD-2 to CD-4).
+**Updated 2026-11-16 (spec 015 T038, CD-1):** § 5.1 gets a "too small to see" rule (§ 5.1a, proposed,
+H-7); § 8 Q8 and § 13's precomps row cover spec 015 phase 2 (§ 5.5, inside precomps); § 10.3 points
+at where the pivot and null lessons word what drives a layer (spec 015 FR-015); § 17 situation 14 is
+split in two.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2 (the method, the opening rule, the turn
 rule, "do it for me"), § 3 (where "what's moving it" lives), § 4 (the path), § 5 (reads R1 to R4 and
 the motion-sources map), § 8 (overlaps); `.claude/skills/next-mentor/SKILL.md` (the hand-over);
@@ -132,6 +136,43 @@ default: a frame costs time and rarely helps an answer (diagnosis § 6.1). One `
 allowed when the answer's first sentence points at something that shows at one time (where the null
 sits, a layer that's off-screen then). Guess.
 
+### 5.1a "In order of visible effect": what counts as visible (proposed 2026-11-16, H-7)
+
+"In order of visible effect" needs one rule, because the mentor will otherwise decide "too small to
+see" by feel, and the model copies whatever number the prompt shows. **Yes, it needs a threshold.**
+The rule has two parts, and both are measured the same way:
+
+- **Measure in screen pixels on the asked layer, not in the property's units.** A source's size is
+  how far it moves the asked layer's farthest edge at its peak, in comp pixels (spec 015 FR-004's
+  peak, turned into pixels by the tool: a rotation by the distance from the pivot to the far edge, a
+  scale by the layer's size). Degrees and percent mislead: 0.75° turning a 40 px icon from its corner
+  moves its far edge about half a pixel, and the rock's far end (about 910 px from the hit corner)
+  about 12 px (AB follow-up).
+- **Under 1 px at its peak: not visible.** It's never named as a cause and never gets a step. If the
+  learner asks about it, it's "too small to see: it moves [layer] less than a pixel". Reason: an edge
+  that moves less than a pixel doesn't land on a new pixel. T005's child moved 0.07 px when its
+  parent's pivot moved, and nobody could see it. The pivot check already uses 1 px as "moved"
+  (`MOVE_PX`, spec 011 FR-012), so the answer and the lesson draw the line in the same place.
+- **1 px and up: say its size, not an adjective.** Order the sources by that size, biggest first, and
+  say each one's size in plain words with how long it lasts ("about 12 px at most, gone in about
+  1/3 s"). Don't call it "small" or "too small to see"; the learner judges.
+- **Two sources about the same size at the same times: say they're hard to tell apart.** When a
+  second source moves the same layer within about the same size (the smaller at least half the
+  larger, Guess) and its peaks fall at the same times, it's named second with "about the same as
+  [the other], so the two are hard to tell apart". This is the Comp 1 case: the rotation moves the
+  rock's far end about 12 px, "the same as the Position shake in every direction, so the eye can't
+  separate them" (AB follow-up, R, builder only). It's the honest version of what § 16 now calls
+  "too small to see".
+
+**What it changes:** § 16's rotation bullet and step 2 say "too small to see" about a source that
+moves the rock about 12 px. Under this rule they'd say its size and that it's hard to tell from the
+Position shake. **§ 16 stays as decided until the builder answers H-7**, because the evals and the
+mockup copy it word for word.
+
+**Needs from the tools (for the builder):** the peak in screen pixels on the asked layer, for each
+source, and whether two sources peak at the same times. Spec 015 FR-004 gives the peak in property
+units; the conversion is new.
+
 ### 5.2 Steps, or one clarifying question?
 
 **Default: answer.** An answer with a stated assumption beats a question, because a question before
@@ -184,6 +225,35 @@ Three kinds of claim, worded differently (Guess on wording; the rule is not a gu
   mode has **no demonstration of its own**; the one demo lives in the lesson, and "show me" is a yes
   to the go-deeper (§ 7.1).
 - The steps are the learner's. The mentor never changes the project in ask mode.
+
+### 5.5 Inside precomps (once spec 015 phase 2 lands; CD-1, 2026-11-16)
+
+Most of a real comp's motion can sit inside precomps (Comp 1: 347 keyed properties on 123 inner
+layers, AB follow-up), so once the read reaches inside, "I couldn't see inside [precomp]" is the
+fallback, not the answer. The answer uses the inside read whenever a precomp is in its reach (the
+asked layer is one, or one is a source of it). Same three parts as § 5.1, same honesty kinds as
+§ 5.3. The examples are the lines to copy.
+
+| What the read gives | What the answer does | Example |
+|---|---|---|
+| **Read; the motion is inside** | Part 1 names the precomp and the inner layers that make the motion, with their source | "In Comp 1, O Shakers is a precomp, and the shake is inside it: O1 to O7 each have Position and Rotation keys." |
+| **A step on an inner layer** | Starts by opening the precomp. Never a step that selects an inner layer from the outer comp, and never "press U on [precomp]" (it shows nothing: the top precomp mistake, curriculum § 6 skill 10) | "Double-click O Shakers to open it, then select O3 and press U to see its keys." |
+| **Times** | Said in the timeline where the learner acts on them: the outer comp's time in the explanation, the precomp's own time in a step inside it, marked "inside [precomp]". When they differ, one clause in the first step that uses an inner time. Reversed or time-remapped: one clause naming it. A remapped key that holds is a range, never one time (spec 015 E22). Never an inner time said as the outer comp's | "O Shakers starts at 2 s here, so its 1 s is 3 s in Comp 1." / "O Shakers plays backwards here." / "O Shakers is time-remapped here, so its first key holds from 0 s to 0.5 s in Comp 1." |
+| **Keys that never show** | Said only when they answer the question (§ 9: no findings the learner didn't ask about), with the reason | "Two of O3's keys come after O Shakers ends in Comp 1, so they never show." |
+| **Used in more than one place** | In the step that changes something inside, never as a separate warning. Places count layers, not comps (spec 015 E21) | "O Shakers is used in 3 places, so this changes all of them." |
+| **Two comps share a name** | Says which one by where it sits, never by name alone (spec 015 E20) | "Two comps are called U Fragments; I mean the one inside the other." |
+| **Partly read** (too deep, a loop, out of time, an error on one level) | What was read, as read; the rest named as not read. Never "that's everything" | "I read inside O Shakers, but not the comps nested inside it." |
+| **Read; nothing inside moves** | Said as read, only when the whole inside was read | "Nothing inside Icon Precomp has keys or expressions." |
+| **Not read** (an older read, or the read failed) | Today's line, unchanged | "I couldn't see inside O Shakers." Never "nothing inside". |
+
+**Going deeper on a step inside a precomp.** The step keeps its skill tag (easing O3's keys is still
+Easing), but no lesson can check inside a precomp yet (spec 015 FR-028), so § 7.3 decides the
+offer: "*Easing* teaches this, but I can't check it inside O Shakers," and no offer unless the rest
+is checkable. *Precompose and open the right level* (curriculum skill 10) isn't built, so it's never
+offered.
+
+**Not here:** Collapse Transformations on a precomp (spec 015 E24 reads it; what an answer says about
+it waits for pivot B-3). How to precompose (skill 10).
 
 ## 6. Turn by turn
 
@@ -288,7 +358,7 @@ the question names plus their sources and links**, not the whole comp. That keep
 | Q5 | **Effects on a layer:** names, and which properties are keyed or expression-driven | Q4's links land on effect properties; "the shine is a CC Light Sweep" | `effect_count`; keyed effect properties only | Keyed effect properties as motion (plan › Overlaps) | **Effect names, unkeyed.** Recommended |
 | Q6 | **Visible bounds of footage with alpha** (the art, not the image box) | AB 5: the pivot's nine spots on a padded PNG put the art's corner "between" and an empty corner "right" | Layer rectangle = source size | Not planned | **New read.** Recommended for answers ("the rock's top-right edge sits inside the image's box"); **needed** for the pivot check (§ 10.2 K1) |
 | Q7 | **Values at one time, after expressions** (rendered), and the comp's current time | Any "what changed" (turn 4) must compare at one time and leave out expression-driven values (AB 4) | Comp `time` read; samples at key times and the playhead | Not needed by diagnosis | **Needed for turn 4 and every check** (anchor TD § 10 already recommended "rendered values" and "at a given time") |
-| Q8 | **Inside precomps** (R4) | "Why doesn't U show anything on Icon?" | Not read | Not read (named as not checked) | Not needed for v1; say "I couldn't see inside [precomp]" |
+| Q8 | **Inside precomps** (R4): each inner comp's keys, expressions and links; inner key times in the outer comp's time (start, stretch, reverse, time remap); keys that never show; how many layers use the comp; read status per level | "Why doesn't U show anything on Icon?"; "why does the O shake?" (most of Comp 1's motion is inside precomps) | Not read | Not read (named as not checked) | **Spec 015 phase 2** (US4; supersedes "not needed for v1", 2026-11-14). **Recommended** for v1 once it lands; § 5.5 says what the answer does with it. Until then, and whenever it isn't read, "I couldn't see inside [precomp]" |
 | Q9 | **Which layers are selected** (optional) | "This layer" and "the selected one" without a clarifying question | Not read in lessons | Not planned | Nice to have; a clarifying question covers it |
 
 **What spec 005's reads give the ask mode:** Q1 fully; Q2's parent chain (keys only); its honesty
@@ -375,6 +445,14 @@ Rules that keep it from becoming a general chatbot:
 | **Set the pivot** | The most changed. Trace first (rule 1) and teach on the parent when it turns the layer (K7); nine spots on visible art and the learner's named spot (rule 2, K1); same-time, expression-aware "other layers" (rule 3, K2); the parent note in step 2 rewritten | Rules 1 to 3; K1, K2, K3, K7 |
 | Move a group with a null | Today refuses already-parented layers. An ask about an *existing* control null ("move Shake Control to the hit point without the letters jumping") is the pivot skill with K7, not this one; this skill keeps teaching how to make the link. Its "no jump" check gets K2's same-time rule | K2; routing note for spec-writer |
 
+**K3's first wording is in the two skills' own designs (2026-11-16).** Spec 015 FR-015 gives the pivot
+and null snapshots what drives each focus layer (its own keys, its own expressions, and the parents
+that move it, by keys or by expression). How each lesson says it is lesson wording, so it lives with
+the lesson: `specs/011-anchor/teaching-design.md` § 21 and `specs/012-null-parenting/teaching-design.md`
+§ 17. Those are the narrow part of rule 1 (say where the motion comes from, and that this lesson can't
+change it); the rest of rule 1 (teach on the parent, K7) and the other four skills stay here, for
+spec 014.
+
 ## 11. Memory (Q6)
 
 **What the record keeps when the learner got an answer, not a lesson** (an "asked" entry; the
@@ -450,7 +528,8 @@ overlap tables; this is for answers and turn 4's fresh read.
 | **Separated dimensions** | X and Y Position as two properties, each with its own keys or expression | "Position" as one move; "X Position" when only X moves | Steps that name "Position" keys when only X Position has them; an expression on Position when the dimensions are separate |
 | **Effects** | Effect names (Q5); keyed or expression-driven effect properties; links into them (Q4) | "[layer]'s [effect]'s [property] follows [other layer]'s Position" | Effects as "not something I can see" when the read has them (AB 1); recipes for effects outside the six |
 | **What links to a layer** | Expressions elsewhere that reference it (Q4), marked inferred on a name match | "[control layer]'s Position drives [effect] on [layer]" | "I can't see inside that layer" for a null or control layer (AB 1); "nothing uses it" when the search didn't run |
-| **Precomps** | Precomp layer, not read inside (R4) | "I couldn't see inside [precomp]" in any answer that touches it | "nothing inside", "it isn't animated" |
+| **Precomps** (before spec 015 phase 2, or not read) | Precomp layer, not read inside (R4) | "I couldn't see inside [precomp]" in any answer that touches it | "nothing inside", "it isn't animated" |
+| **Precomps** (read inside, spec 015 phase 2) | The inner comp by id; its keys and expressions; inner times mapped to the outer comp (offset, stretch, reverse, remap ranges); keys outside the shown span; places used (layers); what wasn't read, and why | § 5.5: the inner layer that makes the motion; steps that open the precomp first; times in the timeline where they're used; "used in 3 places" in the step that changes it; "I read inside [precomp], but not the comps nested inside it" for a partial read | "Press U on [precomp]"; a step on an inner layer from the outer comp; an inner time said as the outer comp's; one time for a held remap; "nothing inside" after a partial read; a comp named by name alone when two share it |
 | **Hidden layers** | Visibility class: hidden by the learner, matte (eye off by design), guide, shy, solo elsewhere, null | Hidden: named with why, if the question touches it. A matte is never "hidden". A null "never renders but moves its children" | Skip a hidden null that carries children; call a matte hidden; call a shy layer missing |
 | **Padded footage** | Visible bounds vs. the image box (Q6) | Places on the art in the learner's words; "the image's box is bigger than the [art]" when it matters to a step | Name places by the image box ("the image's corner") when the learner means the art (AB 5) |
 | **Single and hold keys** | One key (a set value, not a move); hold pairs (jumps) | A hold as a jump; a single key as "set, not animated" | A single key as a move; easing steps for a hold the learner meant |
@@ -552,7 +631,13 @@ Grouped; each needs a fixture shaped like the real case. The first five are AB's
     answer.
 13. A vague goal with two first steps (keys on one layer, an expression on another). One question;
     then an answer with the assumption stated.
-14. A precomp in the answer's reach. "I couldn't see inside [precomp]"; never "nothing inside".
+14. A precomp in the answer's reach, inside **not read** (an older read). "I couldn't see inside
+    [precomp]"; never "nothing inside".
+14a. (After spec 015 phase 2.) A precomp in the answer's reach, **read inside** (O Shakers on Comp 1,
+    or T006's offset, reversed and remapped copies). Names the inner layers that make the motion; a
+    step on an inner layer opens the precomp first; never "press U on [precomp]"; times in the
+    timeline where they're used, a held remap as a range; "used in [n] places" in the step that
+    changes it; a partial read says what wasn't read (§ 5.5).
 15. A matte with its eye off in the answer's reach. Never "hidden".
 16. Go-deeper hand-over (on A). The lesson opens on the given layer, skips its intent question, and
     hands back to the next step at the end.
@@ -576,7 +661,9 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
 - **C:** expressions over keys confuse beginners (expressions brief).
 - **Guess:** 120 words and two to four steps; one offer per answer; ask-first giving up the lead at
   the door but keeping it in the follow-through; "asked about" pulling a review forward; a stand-in
-  layer for a lesson that can't check the real target; one optional frame.
+  layer for a lesson that can't check the real target; one optional frame; § 5.1a's "about the same
+  size" as at least half the larger (the 1 px floor is R: T005's 0.07 px, and the pivot check's
+  `MOVE_PX`); § 5.5's wording (no learner has met a read-inside answer yet).
 
 ## 19. Open questions
 
@@ -644,6 +731,17 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
    build task.** Without them the ask mode repeats findings 1 and 2. If it doesn't fit, the ask mode
    ships with "I can't read expressions yet" said plainly wherever one is in reach, and the three
    sessions should avoid expression-driven comps, which defeats the point of using real comps.
+7. **New 2026-11-16 (spec 015 CD-1): the "too small to see" rule (§ 5.1a).** Under 1 px at its peak,
+   on screen, is "too small to see"; from 1 px up, the answer says the size and doesn't judge it; two
+   sources about the same size at the same times are "hard to tell apart". **Recommended: yes**, and
+   rewrite § 16's rotation bullet to "Rotation turns it about 12 px at most, the same as the Position
+   shake, so the two are hard to tell apart." and step 2's end to "0.75° at most, which moves the
+   rock's far end about 12 px." It's what the AB follow-up actually found (the eye couldn't separate
+   the two), and "too small to see" for a 12 px move teaches the learner to distrust what they see.
+   **Cost:** § 16's lines are copied into the mockup, `SKILL.md`'s examples and the rubric, so all
+   three change together, and any spec 014 eval case that pins "too small to see" changes too.
+   **If no:** keep § 16 and the 1 px floor only; "too small to see" then also covers a source that's
+   masked by a bigger one, which the mentor has to judge by feel.
 
 ### For the spec writer (SW)
 
@@ -673,6 +771,12 @@ Follow-up):
   rock's far end about 12 px from a corner pivot, no more than the Position shake. The builder couldn't
   see the pivot change by hand, so the pivot step is right in principle but nearly invisible, and the
   Position hits' sizes (the `amps[1]` bug) lead. § 16 now has this order (pivot is step 3).
+
+**New 2026-11-16 (spec 015 CD-1), needs, not designs:**
+4. § 5.1a needs each source's peak as **screen pixels on the asked layer** and whether two sources
+   peak at the same times. Spec 015 FR-004 gives the peak in the property's units only.
+5. § 5.5 needs the phase 2 read in the ask's reply (spec 015 FR-027's summary, and detail per inner
+   comp), with each level's read status, so "partly read" can be told from "nothing inside".
 
 ### For the eval engineer (EE)
 

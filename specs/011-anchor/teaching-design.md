@@ -11,6 +11,8 @@ wording list), the one-layer watch offer decided (§ 17), round 3 answered (§ 1
 § 20 (pacing, one idea per turn) **approved 2026-10-28** by the human, as written, with its three
 questions answered (§ 20, "Answered 2026-10-28"). Where § 5 cuts the lesson into turns differently,
 § 20 wins; § 19 (the opening) is unchanged. The rule is now shared by every skill (curriculum § 2).
+§ 21 (what drives the focus, from spec 015's expression read, 2026-11-16) is **proposed**: where it
+words a parent or an expression differently from § 4 and § 9, § 21 wins once approved.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 4, § 6 skill 5, § 8, § 9, § 12 (B5),
 § 13, § 14; spec 004 (approved), above all FR-004, FR-005, FR-013, FR-014, FR-018 to FR-024,
 FR-028, FR-030, FR-031, FR-037, its Edge Cases table, and plan.md › Waves › Wave B (skill 5 teaches
@@ -101,11 +103,11 @@ From a fresh read, using the visibility class (FR-013), never the eye switch alo
 | Shape layer | **Yes** (L-1 passed 2026-10-26: Pan Behind on the layer moves its own Transform anchor and Position together, and the read matches the shape as drawn) | Nothing extra. If its pivot sits outside the shape, say which side and where to look (§ 7). The group hint is in § 7 |
 | Text layer | Yes | Its pivot starts on the text's baseline (§ 9) |
 | Precomp layer | Yes, ranked below the others | "Icon's edges are its precomp's frame, 400 × 400, not the square inside it." Collapse Transformations on: not a candidate once R1 reads it (open item B-3); until then, say once that it's not checked |
-| Parented layer | Yes, ranked below unparented ones | Names the parent in one sentence ("Title rides on CTRL; that doesn't change where its own pivot goes"). FR-037's hand-off doesn't fire: the parent's motion can't change this check (§ 9) |
+| Parented layer | Yes, ranked below unparented ones | Names the parent in one sentence ("Title rides on CTRL; that doesn't change where its own pivot goes"). FR-037's hand-off doesn't fire: the parent's motion can't change this check (§ 9). **A parent that moves it** (keys or an expression, spec 015): § 21's sentence instead |
 | Position keyed at **two or more times** (X and Y counted together; hold keys too) | **No** (D-4, § 16). Pan Behind at 26.5 changes or adds one Position key, at the playhead, so the layer always slides at its other keys and no taught move can pass | "Sled already moves, so moving its pivot now would shift where it sits at its other keys. Set the pivot before you key. Pick a layer that doesn't move yet?" |
 | Position keyed at **one** time | **Not a default candidate.** Allowed if named, only when that key's time is also the check time (no Rotation or Scale keys, or the rest key is on the same frame). Otherwise treated as the row above, but with its own sentence (D-8, § 18) | On the check time: "Sled has one Position key, at 3.7 s. Put the playhead right on it before you drag, so the pivot change goes into that key". Rest key on another frame: "Sled's Position key is at 1 s, but it's at rest at 3 s, so moving its pivot now would shift where it sits on one of those two frames. Set the pivot before you key. Pick another layer?" |
 | Rotation or Scale has keys | Ranked below layers with none; allowed | The rest-pose rule below |
-| Rotation or Scale under an expression (Logo in Mentor Practice) | No | "An expression turns Logo, so I can't tell where it sits at rest" |
+| Rotation or Scale under an expression (Logo in Mentor Practice) | No | "An expression turns Logo, so I can't tell where it sits at rest". **Keyed or not** once spec 015's read shows an unkeyed one (§ 21) |
 | Anchor Point has keys | No (an animated pivot is out of scope) | "Anchor Point is animated on Badge, which this lesson doesn't cover" |
 | 3D layer | No (out of scope) | "3D layers have a depth to their pivot; that's for later" |
 | *hidden by the learner* (eye off) | No, unless the learner wants it. Never the demo | "You've hidden this, so turn its eye on first if you want it": Pan Behind needs to see it |
@@ -312,7 +314,7 @@ Hints name the layer, what moved and where to look, never the numbers to type.
 | Overlap | What the check must see | What the mentor says | What it must never do |
 |---|---|---|---|
 | Expression on a **keyed** Anchor Point or Position | The snapshot's expression flag: not a candidate | "An expression drives Door's Position, so moving its pivot may not show" | Grade it, or demo on it |
-| Expression on an **unkeyed** Anchor Point or Position (an auto-center expression is a common pro trick) | Not read until R2. R3 should return what renders (after expressions, B-2), so the check grades the result | If the pivot didn't move after "done": "Door's pivot didn't change. What did you do?" Only if the learner then says it moved and went back on its own: "If something drives it, like an expression, I can't see that yet" *(amended 2026-11-09 by the builder: a plain "done" after an undo drew the expression guess live, T059, and eval case 54 reproduced it; a false lead costs a real learner more than the unkeyed case gains before L-8, T261)* | Say there's no expression; guess an expression before the learner says it went back |
+| Expression on an **unkeyed** Anchor Point or Position (an auto-center expression is a common pro trick) | **Read by spec 015 (R2): § 21 makes it the keyed row's case** (not a candidate, the same sentence). What follows applies only when the read doesn't have it (an older mentor). Not read until R2. R3 should return what renders (after expressions, B-2), so the check grades the result | If the pivot didn't move after "done": "Door's pivot didn't change. What did you do?" Only if the learner then says it moved and went back on its own: "If something drives it, like an expression, I can't see that yet" *(amended 2026-11-09 by the builder: a plain "done" after an undo drew the expression guess live, T059, and eval case 54 reproduced it; a false lead costs a real learner more than the unkeyed case gains before L-8, T261)* | Say there's no expression; guess an expression before the learner says it went back |
 | Expression on Rotation or Scale | Flag on a keyed property: not a candidate (no rest pose can be found) | "An expression turns Logo, so I can't tell where it sits at rest" | Say the expression ignores the pivot (it doesn't; a Rotation expression still turns around the anchor) |
 | Keys on Anchor Point | Not a candidate | One sentence (§ 4) | Teach an animated pivot |
 | Keys on Position at two or more times (L-2: Pan Behind changes or adds one key, at the playhead, and leaves the others) | Not a candidate (D-4) | § 4's sentence ("set the pivot before you key") | Accept it as a target the learner can't pass |
@@ -325,7 +327,7 @@ Hints name the layer, what moved and where to look, never the numbers to type.
 | Hidden layer (eye off) | Visibility class *hidden by the learner*: not a candidate unless wanted; never the demo | § 4 | Make it the demo target |
 | Matte (eye off by design) | Class *matte*: allowed if named, never the demo; its eye state is compared in the diff | § 4 | Call it hidden, or leave its eye on without a word |
 | Guide, shy, null | Per the class (§ 4) | § 4 | Treat shy as not rendering; teach a null's pivot here |
-| Parented layer | Comp-space bounds already include the parent. The compensation is in the parent's space, which the check never needs | One sentence naming the parent | Fire FR-037's hand-off (the parent can't change this check); grade raw Position values |
+| Parented layer | Comp-space bounds already include the parent. The compensation is in the parent's space, which the check never needs | One sentence naming the parent; § 21 when the parent moves it | Fire FR-037's hand-off (the parent can't change this check); grade raw Position values |
 | Layer with children | Children's bounds unchanged (§ 6 item 5) | n/a | Miss a child that moved |
 | Scale not 100% (including non-uniform, or a parent's scale) | Place measured in the layer's own space (§ 6 item 1) | n/a | Measure the place in comp pixels |
 | Negative scale (flipped) | The layer's own left is the screen's right | Ranked last. If chosen: "Banner is flipped, so I'll go by its own sides: its own left edge is on the right of the screen" | Grade the learner's screen words against the layer's own sides without saying so |
@@ -1384,3 +1386,94 @@ still fails.
 rule, next to C-5's opening rule. The human chose not to wait for skills 2 to 4's baselines; those
 skills were audited against the rule the same day (their teaching designs, and easing in curriculum
 § 6).
+
+## 21. What drives the focus: wording for spec 015's read (proposed 2026-11-16)
+
+**Why now.** Spec 015 FR-015 (T026, merged) gives the pivot snapshot, for each focus and candidate
+layer, what drives it: its own keys, its own expressions (by property), and the parents that move it
+(by keys, by an expression, or both). Before this, a parent moved only by expressions read as not
+moving, and expressions on unkeyed properties weren't seen at all. That's how the baseline taught a
+pivot on rock.png while Shake Control made the motion, and the builder found "it didn't change how it
+looks at all" (AB 2, turn f; R, builder only). No line in `SKILL.md` says how to put the new facts in
+the learner's words, so eval case pivot 57 is held for this section.
+
+**Where the wording lives.** Here, not in spec 014's design: it's this lesson's wording, and its evals
+pin it. It's the narrow part of TD 014 § 10.1 rule 1 (say where the motion comes from, and that this
+lesson can't change it). The rest of rule 1, teaching on the parent itself (K7), stays with spec 014.
+
+### What the mentor says
+
+The lines are the ones to copy; only the layer names change. Each is one sentence, said once.
+
+| What the read shows for the focus layer | Where | What the mentor says |
+|---|---|---|
+| A parent that moves it **by an expression** | The explanation turn's parent note (§ 20 turn 3), in place of today's | "rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion." |
+| A parent that moves it **by keys** | Same | "Hatch rides on Hatch Rig, which is keyed to move, so moving Hatch's pivot won't change that motion." |
+| A parent that moves it **by keys and an expression** | Same | "rock.png rides on Shake Control, which keys and an expression move, so moving rock.png's pivot won't change that motion." |
+| More than one moving parent up the chain | Same | The nearest one only, in the lines above. Never a list of the chain |
+| A parent that doesn't move it | Same | Today's line, unchanged: "Hatch rides on Hatch Rig; that doesn't change where its own pivot goes." |
+| Its own expression on **Anchor Point or Position**, keyed or not | Not a candidate (§ 4, § 9's keyed row now covers unkeyed too). Said when the learner names it | "An expression drives Slide's Position, so moving its pivot may not show." On Anchor Point: "An expression drives Door's Anchor Point, so moving its pivot may not show." |
+| Its own expression on **Rotation or Scale**, keyed or not | Not a candidate, as today's keyed row. Said when named | "An expression turns Gauge Dial, so I can't tell where it sits at rest." On Scale: "An expression scales Pop, so I can't tell where it sits at rest." |
+| Its own expression on anything else (Opacity, an effect, text) | n/a | Nothing. It doesn't touch the pivot |
+| The read has none of this (an older mentor or snapshot) | n/a | Today's lines, unchanged (§ 4, § 9, `SKILL.md` step 1 and step 2) |
+
+**When the learner then names the parent** (it's a null, as Shake Control is): today's null line
+("CTRL is a null, so there's nothing of its own to see turn in the frame") reads as "its pivot
+doesn't matter", which is the opposite of what they just learned. When the null they name is a
+moving parent of the layer they first named, instead: "Shake Control is a null, so I can't check its
+pivot in this lesson yet." Then the proposal or the next candidate, as step 1 says. Other nulls keep
+today's line. **Guess**; K7 (spec 014) replaces it by letting that null be the focus.
+
+**Where it goes in the turns.** The parent note stays in the explanation turn (§ 20 turn 3), before
+the idea, as context: the turn still ends on "press A, then Shift+P". Nothing in the opening (C-5:
+one choice). In a review, the same note, once. The leave-out sentences go where § 19 puts every
+leave-out: when the learner names that layer.
+
+**Never:**
+- a word from the read's own fields ("motion from", "own keys", "by expression"): say "an expression
+  moves", "keyed to move";
+- "rock.png doesn't move" or "has no motion of its own" when a parent moves it (the read shows the
+  parent; the layer moves on screen);
+- which properties the parent moves ("which turns it", "which shakes it"): the read doesn't say;
+- "you moved Shake Control" or Edit > Undo for a parent's expression motion (TD 014 § 10.1 rule 3,
+  spec 015 K2);
+- that an expression "overrides" or "ignores" the pivot;
+- a pointer to open the parent's expression or trace it (TD 014's ask mode does that; this lesson
+  doesn't, as today's "Don't suggest tracing the parent first");
+- a second sentence about the parent.
+
+**Demo target.** Never a layer with its own expression on Anchor Point, Position, Rotation or Scale,
+keyed or not (today the rule names keyed ones only, § 10's demo write tool). A layer that rides on a
+moving parent can still be the demo: Pan Behind's compensation is in the parent's space, and the
+check reads comp space (§ 9).
+
+**What it needs from the tools (for the builder):**
+- The unkeyed Anchor Point, Position, Rotation and Scale expressions go in the same bucket and reason
+  as the keyed ones, from the read; the demo write tool refuses them too.
+- **To confirm:** the wording assumes the read lists only parents that **move** the layer (data-model
+  § 4, from the motion-sources map's moves-children test). If it lists every parent, the "doesn't move
+  it" line can't be picked, and every parented layer would get a "moves" sentence.
+- **Nice to have, not needed now:** which properties a parent moves. A parent that only slides
+  doesn't change where the layer turns, so it could keep today's line, and a turning parent could
+  say "which an expression turns". Without it, "won't change that motion" is true for any motion.
+
+**For the eval engineer (pivot 57).** The Pass line is the first row's sentence with the fixture's
+names. Hard checks: no "undo", no word with an underscore or a dot, never "doesn't move" or "no
+motion" about the focus. Rubric item, intent only: "Says the parent's expression moves the layer and
+that its own pivot won't change that motion, once, in one sentence; the turn still ends on the
+A-then-Shift+P step."
+
+**Items (`NNN`, the cockpit's).** These change `SKILL.md` beyond spec 015 OQ-8's one pivot line, so
+the cockpit decides which spec carries them (a new spec 015 task, or spec 014's rule 1 change):
+- **Builder, `anchor-mentor/SKILL.md`:** step 2's parent note becomes the three "moves it" lines plus
+  today's line for a parent that doesn't; step 1's leave-out list drops "keyed" from both expression
+  lines and adds the Anchor Point and Scale variants; step 1's null line gets the moving-parent case.
+- **Builder, tool:** the buckets and the demo rule above.
+- **Eval engineer:** pivot 57 on the 015 Rig capture; one case for an unkeyed Position expression
+  named as the focus (the leave-out line).
+
+**Evidence and guesses.** R: AB 2 and turn f; T026's reply for rock.png (`parents: Shake Control, by
+expression`); T005 (the child stayed still within 0.07 px when the parent's pivot moved).
+Guess: that "won't change that motion" is enough for a learner to pick another layer or ask, without
+a question from the mentor; that unkeyed Rotation and Scale expressions should be left out like keyed
+ones (no evidence either way; it keeps one rule); the moving-parent null line.
