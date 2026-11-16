@@ -132,6 +132,10 @@ was back to 34 items.
   whole-comp summary at 12.4 KB over its 12 KB cap (each of 13 children repeated its parent's sweep;
   now 10.5 KB).
 
+- **Mentor Practice (practice project):** about 129 ms before the merge and about 137 ms after (+8 ms,
+  4 runs each; 10 layers, 1 expression). SC-004's phase 1 half: the easing findings are identical
+  before and after.
+
 ### T034: ten spot checks (SC-010)
 
 The read was `describe_layers` run live on the copy at 0.6 s. Planted: logo.png's Opacity `value * 0.5`,

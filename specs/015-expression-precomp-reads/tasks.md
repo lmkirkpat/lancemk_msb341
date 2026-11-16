@@ -247,7 +247,7 @@ pivot and null.
 - [x] T032 (cockpit) Merge with `/merge-worktree` (shared owner named), between live sittings
   (CLAUDE.md: a `mentor/` merge needs a fresh session for live lessons). **Done 2026-11-16 (`a3300e3`):**
   mentor tests 1677 pass, 4 todo, 0 fail; hooks 39/39.
-- [ ] T033 (skill-builder, AE) Live on `main`: SC-003's one live read of Shake Control at 0.6 s, and
+- [x] T033 (skill-builder, AE) Live on `main`: SC-003's one live read of Shake Control at 0.6 s, and
   SC-008's timing (`capture.mjs --time` on Comp 1 and Mentor Practice, with and without the new
   passes; ≤ 0.5 s added). If over, drop the fine sweep to 120 samples (research R9) and re-measure.
   **Comp 1 half done 2026-11-16 (cockpit):** SC-003 live ✓ (base 960, 540; after 952.352, 542.492 at 0.6 s;
@@ -259,6 +259,9 @@ pivot and null.
   Practice's timing; `contracts/describe-layers.md` should say a child's parent entry omits `moves` when the
   parent is in the same reply (spec-writer, with T040); an eval case where the learner asks about Shake
   Control's shake and hears it builds on the null's own Position (eval-engineer).
+  **Mentor Practice done 2026-11-16:** about 129 ms before the merge, about 137 ms after (+8 ms, 4 runs each);
+  SC-004's phase 1 half ✓: `analyze()` gives identical easing findings before and after (old code on a
+  pre-merge capture against new code on a new one, and new code on both). T033 done.
 - [x] T034 (skill-builder reads, **builder's hands**) SC-010: 10 spot checks of the read's facts in AE
   across Comp 1 and the T001 and T015 planted copies, including one off and one erroring expression; at
   least 9 of 10 agree. Logged by the cockpit in `discovery/usage-notes/expression-reads.md`. **Plus the
