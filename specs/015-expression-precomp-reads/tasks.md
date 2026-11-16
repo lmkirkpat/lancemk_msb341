@@ -269,9 +269,13 @@ pivot and null.
 - [ ] T036 (eval-engineer) Re-run all six sets on B1 at the merge commit, one set at a time: easing,
   key types, speed graph, offset, pivot, null. Each meets its SC-006 bar with every hard-rule check
   passing; T035's cases pass 3 of 3. Triage with `/eval-triage`; log in each README (SC-006).
-- [ ] T037 [P] (eval-engineer) Free A checks (`decisions/011` steps 1 and 2):
+- [x] T037 [P] (eval-engineer) Free A checks (`decisions/011` steps 1 and 2):
   `product/evals/lib/ready-for-a.mjs` and `--runtime a --dry-run` on all six sets. Paid A runs wait
   for spec 014's ship step.
+  **Done 2026-11-16 (no commit):** all six ready; A dry runs valid (easing 33, key types 36, speed graph 37,
+  offset 44, pivot 61, null 54 cases); settings hash unchanged at `3acbda26`. The hash covers the helper's
+  settings, not `mentor/`, so it doesn't make the old A results reusable: phase 1 changed what every
+  skill's tools return, and the new cases have never run on A. All six need a fresh A run at 014's ship step.
 - [ ] T038 [P] (curriculum-designer) CD-1 in `specs/014-ask-mentor/teaching-design.md`: update Q8 and
   the § 13 precomps row for phase 2, and say whether § 5.1's "in order of visible effect" needs a
   "too small to see" threshold. **Start only after the other session's uncommitted edits to that
