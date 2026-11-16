@@ -184,16 +184,13 @@ test("home-unreachable and home-busy: the box still takes text; Ask and the line
   }
 });
 
-test("home-nocomp only on a connected false; unknown (null or an older bridge) leaves Ask on (FR-047)", async () => {
-  const off = await ready({ connection: { state: "connected", started: CONNECTED.started, comp_active: false } });
-  off.app.setDraft("Why?");
-  assert.equal(st(off), "home-nocomp");
-  assert.match(html(off), /id="ask-why">No comp open\. Open one, or click into its timeline\.</);
-  assert.ok(words(off).includes(A.needs_comp));
-  assert.doesNotMatch(html(off), /data-action="find_next"/);
-  for (const c of [CONNECTED, Object.assign({}, CONNECTED, { comp_active: true })]) {
-    const on = await ready({ connection: c, memory: { status: "ok", record: LESSON } });
-    on.app.setDraft("Why?");
-    assert.match(html(on), /id="ask-go"[^>]*aria-disabled="false"/);
+test("T101: Ask is always on with AE connected; a comp_active from the bridge changes nothing", async () => {
+  for (const c of [CONNECTED, Object.assign({}, CONNECTED, { comp_active: false })]) {
+    const h = await ready({ connection: c, memory: { status: "ok", record: LESSON } });
+    h.app.setDraft("Why?");
+    assert.equal(st(h), "ask-typing");
+    assert.match(html(h), /id="ask-go"[^>]*aria-disabled="false"/);
+    assert.match(html(h), /class="qline" data-action="find_next"/);
+    assert.equal(words(h).includes("Needs an open comp."), false);
   }
 });

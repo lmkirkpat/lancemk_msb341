@@ -29,7 +29,6 @@ const MODELS = {
   "home-return": home(),
   "home-lessonopen": home({ lesson_open: true, lesson: initialLesson() }),
   "home-inprogress": home({ saved: "waiting" }),
-  "home-nocomp": home({ connection: { state: "connected", started: null, comp_active: false } }),
   "home-thread": home({ ask: { thread: true } }),
   "ask-typing": home({ draft: true }),
   "ask-sending": home({ ask: { sending: true } }),
@@ -136,6 +135,10 @@ function readmeIds() {
 const HELD = /^(setup-|err-notsetup$|homeB-|compare$|diag-|home-return-stored$|all-|compare-|home-held-slot$)/;
 
 // Spec 014's MU States table (product/mockups/ask-mentor/README.md › States): id → kind.
+// Withdrawn after MU was drawn (builder 2026-11-16, spec 014 T101, FR-047; struck in spec 007):
+// MU's table still lists it.
+const WITHDRAWN = ["home-nocomp"];
+
 function muStates() {
   const text = fs.readFileSync(path.join(__dirname, "..", "..", "product", "mockups", "ask-mentor", "README.md"), "utf8");
   const table = text.slice(text.indexOf("## States"), text.indexOf("### States still missing"));
@@ -150,7 +153,7 @@ function muStates() {
 test("the id list is spec 007's README table, minus what's held, with spec 014's changes", () => {
   const readme = readmeIds();
   assert.ok(readme.includes("skill-detail-noreview") && readme.includes("lesson-pass-busy") && readme.includes("skill-null-move"), "the expansion works");
-  const mu = Object.keys(muStates()).filter((id) => !DEEPER_IDS.includes(id) && !(id in ALIASES));
+  const mu = Object.keys(muStates()).filter((id) => !DEEPER_IDS.includes(id) && !(id in ALIASES) && !WITHDRAWN.includes(id));
   const inScope = readme.filter((id) => !HELD.test(id) && !(id in ALIASES) && id !== "home-cutoff").concat(mu);
   assert.deepEqual([...STATE_IDS].filter((id) => !INTERIM_IDS.includes(id)).sort(), [...new Set(inScope)].sort());
   assert.deepEqual([...INTERIM_IDS], []);
@@ -161,7 +164,8 @@ test("spec 014 T018: every new and changed MU id is a state, an alias, or a name
   const changed = Object.entries(mu).filter(([, kind]) => /new|changed/.test(kind)).map(([id]) => id);
   assert.ok(changed.length >= 30, `only ${changed.length} read from MU's table`);
   assert.ok(mu["home-inprogress"].includes("changed") && mu["ask-busy"] === "new", "the table reads right");
-  for (const id of changed) assert.ok(STATE_IDS.includes(id) || id in ALIASES || DEEPER_IDS.includes(id), id);
+  for (const id of changed) assert.ok(STATE_IDS.includes(id) || id in ALIASES || DEEPER_IDS.includes(id) || WITHDRAWN.includes(id), id);
+  for (const id of WITHDRAWN) assert.equal(STATE_IDS.includes(id), false, `${id} is withdrawn`);
   assert.equal(STATE_IDS.includes("home-cutoff"), false, "home-cutoff is home-inprogress now");
   assert.equal(ALIASES["home-review-due"], "home-return");
   for (const id of DEEPER_IDS) assert.ok(id in mu, `${id} is MU's`);
@@ -209,12 +213,6 @@ test("step 1's one-line Skills tab has no README id", () => {
 
 // ---------- spec 014: Home and thread precedence ----------
 
-test("comp_active: only a connected false is home-nocomp; unknown leaves Home as it was (FR-047)", () => {
-  assert.equal(stateOf(home({ connection: { state: "connected", started: null } })), "home-return");
-  assert.equal(stateOf(home({ connection: { state: "connected", started: null, comp_active: true } })), "home-return");
-  assert.equal(stateOf(home({ connection: { state: "busy", started: null, comp_active: false } })), "home-busy");
-});
-
 test("a lesson open or in progress outranks the thread link; a thread outranks the welcome", () => {
   assert.equal(stateOf(home({ lesson_open: true, ask: { thread: true } })), "home-lessonopen");
   assert.equal(stateOf(home({ saved: "waiting", ask: { thread: true } })), "home-inprogress");
@@ -227,4 +225,8 @@ test("a blocking error shows on Home even from the thread", () => {
 
 test("the thread view needs a thread; Home's tab without one is Home", () => {
   assert.equal(stateOf(home({ home_view: "thread", ask: {} })), "home-return");
+});
+
+test("T101: no connection reading makes home-nocomp; Ask's Home stays as it was", () => {
+  assert.equal(stateOf(home({ connection: { state: "connected", started: null, comp_active: false } })), "home-return");
 });

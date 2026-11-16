@@ -14,7 +14,7 @@ const { skillById, skillOfCommand, builtSkills, EASING } = require("./skills.js"
 const { skillsView, skillDetail, daysUntilReview, recordSkills } = require("./skills-view.js");
 const { skillOf } = require("./skill-tools.js");
 const { statusFor } = require("./activity.js");
-const { connectionFromTool, noComp } = require("./connection.js");
+const { connectionFromTool } = require("./connection.js");
 const { shortDate } = require("./memory.js");
 const { COPY } = require("./copy.js");
 const { askView, fallbackText, ANSWER_TOOL } = require("./ask-result.js");
@@ -703,8 +703,7 @@ function createApp(deps) {
     if (state.lesson_over && state.busy) return COPY.paused.after_answer;
     if (conn() === "not_connected") return COPY.paused.needs_ae;
     if (conn() === "busy") return COPY.paused.waiting_ae;
-    if (noComp(state.connection)) return COPY.ask.no_comp;
-    return null;
+    return null; // no comp open is the mentor's read to say (ask-nocomp): T101
   }
 
   // Why the quiet line is paused, or null.
@@ -714,7 +713,6 @@ function createApp(deps) {
     if (state.lesson_over && state.busy) return COPY.paused.after_answer;
     if (conn() === "not_connected") return COPY.paused.needs_ae;
     if (conn() === "busy") return COPY.paused.waiting_ae;
-    if (noComp(state.connection)) return COPY.ask.needs_comp;
     return null;
   }
 

@@ -33,7 +33,6 @@ async function answered(opts) {
 const STATES = {
   "home-return": () => ready({ memory: { status: "ok", record: LESSON } }),
   "home-unreachable": () => ready({ connection: { state: "not_connected", started: null } }),
-  "home-nocomp": () => ready({ connection: { state: "connected", started: CONNECTED.started, comp_active: false } }),
   "ask-typing": async () => { const h = await ready({ setTimeout: () => 0 }); h.app.setDraft("Why?"); return h; },
   "ask-sending": async () => { const h = await ready({ setTimeout: () => 0 }); h.app.setDraft("Why?"); h.app.act("ask_home"); return h; },
   "ask-answer": () => answered(),
@@ -123,8 +122,8 @@ test("nothing new is under 11 px: every new rule's size is 11 px or more", () =>
 });
 
 test("the quiet line's full text is its accessible name and its title (MU › Accessibility)", async () => {
-  const s = html(await ready({ connection: { state: "connected", started: CONNECTED.started, comp_active: false } }));
-  assert.match(s, /class="qline" aria-disabled="true" aria-describedby="quiet-why" title="Find my next lesson\. Needs an open comp\."/);
+  const s = html(await ready({ connection: { state: "not_connected", started: null } }));
+  assert.match(s, /class="qline" aria-disabled="true" aria-describedby="quiet-why" title="Find my next lesson\. Needs After Effects\."/);
 });
 
 test("T035 item 3: pressing Ask keeps the box focusable: readonly while it's out, never disabled (FR-054)", async () => {

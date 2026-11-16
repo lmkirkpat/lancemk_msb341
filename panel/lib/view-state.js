@@ -24,7 +24,7 @@ const SKILL_SLUGS = {
 const STATE_IDS = Object.freeze([
   "err-mentor", "err-key", "err-credit",
   "home-loading", "home-first", "home-return", "home-lessonopen", "home-inprogress", "home-aeclosed",
-  "home-unreachable", "home-busy", "home-unreadable", "home-unreadable-why", "home-nocomp", "home-thread",
+  "home-unreachable", "home-busy", "home-unreadable", "home-unreadable-why", "home-thread",
   "ask-typing", "ask-sending", "ask-reading", "ask-reading-long", "ask-answer", "ask-followup", "ask-steps-open",
   "ask-clarify", "ask-outside", "ask-unreachable", "ask-nocomp", "ask-busy", "ask-new-question",
   "skills-empty", "skills-few", "skills-many", "skills-after-review", "skills-due",
@@ -57,7 +57,6 @@ function homeState(m) {
   const conn = m.connection && m.connection.state;
   if (conn === "not_connected") return "home-unreachable";
   if (conn === "busy") return "home-busy";
-  if (conn === "connected" && m.connection.comp_active === false) return "home-nocomp"; // FR-047: only a false
   if (m.record && m.record.status === "unreadable" && !m.unreadable_dismissed) return m.unreadable_why ? "home-unreadable-why" : "home-unreadable";
   if (askOf(m).thread) return "home-thread";
   if (m.draft) return "ask-typing";

@@ -100,6 +100,9 @@ const PHASE_2 = new Set([
   "Yes, go deeper on Set the pivot.", "From your question. Back returns you to it.", "Back to your lesson ›", "Your Set the pivot lesson is open.",
   "Practice", "✓ Done", "Pivot moved, nothing else did.", "Set the pivot · practiced on Shake Control", "Set the pivot · ended, not saved", "Back to your steps ›",
   "practiced on Shake Control",
+  // home-nocomp's two lines: withdrawn 2026-11-16 (spec 014 T101, FR-047). The mentor's own read says
+  // "No comp open…" in ask-nocomp; MU › Copy still lists them.
+  "No comp open. Open one, or click into its timeline.", "Needs an open comp.",
 ]);
 
 test("every MU › Copy string this phase draws is in the copy, word for word", () => {

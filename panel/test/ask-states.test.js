@@ -105,7 +105,6 @@ const CASES = {
     return h;
   }, [A.earlier(1), "Sweep Control is a null with two Position keys"], [A.steps_note]],
   "home-thread": [async () => { const h = await answered(); h.app.act("thread_back"); return h; }, [A.card_title, A.back_to_question, COPY.buttons.find_next], []],
-  "home-nocomp": [() => panel({ connection: { state: "connected", started: CONNECTED.started, comp_active: false } }), [A.no_comp, A.needs_comp], []],
   "skills-due": [async () => {
     const record = { skills: { "timing.offset": { status: "learned", last_practiced: "2026-10-26T12:00:00.000Z", review_due: "2026-11-01" } }, lessons: [{ skill: "timing.offset", date: "2026-10-26T12:00:00.000Z", result: "passed" }] };
     const h = await panel({ memory: { status: "ok", record }, pathData: SIX_PATH, skillsBuilt: SKILLS_BUILT });

@@ -116,8 +116,6 @@ const COPY = {
     earlier: (n) => `Earlier questions (${n})`,
     see_covered: "See what's covered ›",
     lesson_open: "Your lesson is open. Ask there, or end it first.",
-    no_comp: "No comp open. Open one, or click into its timeline.",
-    needs_comp: "Needs an open comp.",
     busy_status: "After Effects is busy. Your answer will come when it's free.",
     question_still_here: "Your question's still here.",
     // The thread's hand-back after a go-deeper lesson (contracts/panel-ask.md, from record_lesson's data).

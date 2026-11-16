@@ -2,10 +2,7 @@
 // bridge's port and token from bridge.json and calls GET /health, which returns no project data.
 // bridge-status.js flattens every failure to null, which can't tell busy from gone; this keeps them
 // apart and returns the start time, so only a start time that answers and differs ends a saved
-// lesson (FR-028). A read never rejects. Since spec 014 (FR-047, research R10) the health check may
-// also say whether a comp is active, yes or no and nothing else about the project; the reading
-// carries `comp_active` only when the bridge says true or false. null (busy) and an older bridge
-// (no field) leave it out, which means unknown: Ask stays on, and only `false` pauses it.
+// lesson (FR-028). A read never rejects.
 "use strict";
 
 const nodeFs = require("fs");
@@ -26,12 +23,8 @@ function readConnection(opts) {
   const file = (opts && opts.file) || BRIDGE_FILE;
   return new Promise((resolve) => {
     let done = false;
-    const finish = (state, started, compActive) => {
-      if (done) return;
-      done = true;
-      const r = { state, started: started || null };
-      if (state === CONNECTED && typeof compActive === "boolean") r.comp_active = compActive;
-      resolve(r);
+    const finish = (state, started) => {
+      if (!done) { done = true; resolve({ state, started: started || null }); }
     };
     let cfg;
     try {
@@ -49,7 +42,7 @@ function readConnection(opts) {
           res.on("end", () => {
             try {
               const h = JSON.parse(text);
-              if (h && h.ok === true) finish(CONNECTED, typeof h.started === "string" ? h.started : null, h.comp_active);
+              if (h && h.ok === true) finish(CONNECTED, typeof h.started === "string" ? h.started : null);
               else finish(NOT_CONNECTED);
             } catch (e) {
               finish(NOT_CONNECTED);
@@ -87,7 +80,7 @@ function createPoller({ read, onChange, timers, intervalMs }) {
     if (running) return running;
     running = Promise.resolve(read()).then((v) => {
       running = null;
-      const changed = !last || last.state !== v.state || last.started !== v.started || last.comp_active !== v.comp_active;
+      const changed = !last || last.state !== v.state || last.started !== v.started;
       last = v;
       if (changed) onChange(v);
       return v;
@@ -111,7 +104,4 @@ function createPoller({ read, onChange, timers, intervalMs }) {
   return { now, setVisible, forget, current: () => last };
 }
 
-// FR-047: Home pauses Ask only on a comp the bridge says isn't active.
-const noComp = (c) => !!c && c.state === CONNECTED && c.comp_active === false;
-
-module.exports = { noComp, readConnection, connectionFromTool, createPoller, POLL_MS, CONNECTED, NOT_CONNECTED, BUSY };
+module.exports = { readConnection, connectionFromTool, createPoller, POLL_MS, CONNECTED, NOT_CONNECTED, BUSY };
