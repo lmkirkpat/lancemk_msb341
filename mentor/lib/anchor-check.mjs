@@ -7,10 +7,21 @@
 // layer it drops that comparison and lists it in not_compared, never "didn't move" (FR-018, filter
 // 6). Other changes come from layer_info for every layer, never unexpectedChanges(), which walks
 // keyed properties only and would miss every unkeyed anchor change (filter 1).
+//
+// K2 (spec 015 FR-012 to FR-014a, research R7; data-model § 5):
+// - A real change on a layer outside the focus is one entry per property that changed (its Anchor
+//   Point, Position, Scale, Rotation, parent, or an expression), with the footprint shift it caused
+//   attached as `effect`, and no separate moved entry for that layer or the layers under it. Pan
+//   Behind changes Anchor Point and Position together, so an anchor change is reported alone.
+// - Values are compared at the same time in both reads, and on `base` (before the expression) for a
+//   property with an active expression, so an expression's motion (the playhead, or a renumber under
+//   a wiggle) is never the learner's change. A footprint shift that's gone when both reads are taken
+//   before their expressions is left out.
 
 import * as compSpace from "./comp-space.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { motionSources } from "./motion-sources.mjs";
+import { baseViews, pairValues } from "./k2-changes.mjs";
 import { classOf } from "./visibility.mjs";
 import {
   analyze, anchorKeyCount, checkTime, DEMO_MATCH_PX, footprintOpts, inPlace, isPlace, keyedLayer, keyFlags, MOVE_PX, outsideSide, placeNow,
@@ -78,6 +89,66 @@ function compare(space, baseline, bi, current, ci, t, kind) {
 const timesOf = (entry) => (entry && Array.isArray(entry.samples) ? entry.samples.map((s) => s.time).filter(isNum) : []);
 const common = (a, b) => a.filter((t) => b.some((u) => Math.abs(u - t) <= TIME_TOL));
 
+// ---- K2: values before expressions
+
+const VALUE_KEYS = ["anchor", "position", "scale", "rotation"];
+// Values compare on `base` only when both samples have it (k2-changes.mjs pairValues, review S1).
+const valueDiffers = (a, b) => {
+  if (Array.isArray(a) && Array.isArray(b)) return a.some((v, i) => isNum(v) && isNum(b[i]) && Math.abs(v - b[i]) > VALUE_TOL);
+  return isNum(a) && isNum(b) && Math.abs(a - b) > VALUE_TOL;
+};
+
+const PROPERTY_NAMES = { position: "Position", scale: "Scale", rotation: "Rotation" };
+const CHANGE_KINDS = new Set(["anchor_changed", "value_changed", "parent_changed", "expression_changed"]);
+const parentName = (snap, entry) => {
+  if (!entry || entry.parent == null) return null;
+  const p = byIndex(snap, entry.parent);
+  return p ? p.name : null;
+};
+
+// Expression changes on one layer between the reads (FR-014): { property, what } per property.
+function expressionChanges(baseline, b, current, c) {
+  if (!Array.isArray(baseline.expressions) || !Array.isArray(current.expressions)) return [];
+  const mine = (snap, index) => new Map(snap.expressions.filter((x) => x.layer === index).map((x) => [x.path, x]));
+  const was = mine(baseline, b.index);
+  const now = mine(current, c.index);
+  const name = (x) => String(x.display_path || x.path).split(" › ").pop();
+  const out = [];
+  for (const path of new Set([...was.keys(), ...now.keys()])) {
+    const w = was.get(path);
+    const n = now.get(path);
+    const onW = !!(w && w.enabled);
+    const onN = !!(n && n.enabled);
+    let what = null;
+    if (onW !== onN) what = onN ? "turned_on" : "turned_off";
+    else if (w && n && w.text !== n.text) what = "text";
+    // A new error, or one gone. Not the error's wording: AE's text names the layer's index, so a
+    // renumber alone changes it (live, T015).
+    else if (w && n && !!w.error !== !!n.error) what = "error";
+    if (what) out.push({ property: name(n || w), what });
+  }
+  return out;
+}
+
+// The changes the learner made to one layer outside the focus, in kind order, each without its effect.
+function propertyChanges(baseline, b, current, c) {
+  const out = [];
+  const pb = parentName(baseline, b);
+  const pc = parentName(current, c);
+  if (pb !== pc) out.push({ kind: "parent_changed", layer: b.name, from: pb, to: pc });
+  else {
+    const ts = common(timesOf(b), timesOf(c));
+    const at = (e, t) => compSpace.sampleAt(e, t);
+    const changed = (k) => ts.some((t) => valueDiffers(...pairValues(at(b, t), at(c, t), k)));
+    // Pan Behind changes Anchor Point and Position together: one change, the pivot (turn f, T005).
+    if (changed("anchor")) out.push({ kind: "anchor_changed", layer: b.name });
+    else if (changed("position")) out.push({ kind: "value_changed", layer: b.name, property: PROPERTY_NAMES.position });
+    for (const k of ["scale", "rotation"]) if (changed(k)) out.push({ kind: "value_changed", layer: b.name, property: PROPERTY_NAMES[k] });
+  }
+  for (const x of expressionChanges(baseline, b, current, c)) out.push({ kind: "expression_changed", layer: b.name, ...x });
+  return out;
+}
+
 // Every layer below a focus layer in the Parent chain (children turn with its new pivot at other
 // times, which is the point, FR-012 item 5).
 function descendantsOf(baseline, index) {
@@ -86,19 +157,33 @@ function descendantsOf(baseline, index) {
 }
 
 // The layer's own sampled anchor, position, scale or rotation differ between two reads at one time.
+// On `base` for a property with an active expression (K2).
 function rawChanged(bs, cs) {
   if (!bs || !cs) return false;
-  for (const k of ["anchor", "position", "scale"]) {
-    const a = bs[k];
-    const b = cs[k];
-    if (Array.isArray(a) && Array.isArray(b) && a.some((v, i) => isNum(v) && isNum(b[i]) && Math.abs(v - b[i]) > VALUE_TOL)) return true;
-  }
-  return isNum(bs.rotation) && isNum(cs.rotation) && Math.abs(bs.rotation - cs.rotation) > VALUE_TOL;
+  return VALUE_KEYS.some((k) => valueDiffers(...pairValues(bs, cs, k)));
 }
 
 // ---- Other changes (FR-019), from layer_info for every layer
 
-export function otherChanges(baseline, current, focusIndexes = []) {
+// The footprint shift a change on `b` caused, the largest at the shared times, as the learner sees
+// it (values after expressions): { distance_px, direction, time }; distance and direction null when
+// the footprint can't be read; null when nothing visible moved (the entry then has no effect field).
+function effectOf(space, baseline, b, current, c) {
+  let worst = null;
+  let unreadable = null;
+  for (const t of common(timesOf(b), timesOf(c))) {
+    const cmp = compare(space, baseline, b.index, current, c.index, t, b.kind);
+    if (cmp.reason) {
+      if (!unreadable) unreadable = { distance_px: null, direction: null, time: r3(t), reason: cmp.reason };
+      continue;
+    }
+    if (cmp.moved && (!worst || cmp.max > worst.max)) worst = { time: r3(t), max: cmp.max, dx: cmp.dx, dy: cmp.dy };
+  }
+  if (worst) return { distance_px: r3(Math.hypot(worst.dx, worst.dy)), direction: direction(worst.dx, worst.dy), time: worst.time };
+  return unreadable;
+}
+
+export function otherChanges(baseline, current, focusIndexes = [], { space = compSpace } = {}) {
   const out = [];
   const base = layerInfo(baseline).layers;
   const cur = layerInfo(current).layers;
@@ -112,10 +197,11 @@ export function otherChanges(baseline, current, focusIndexes = []) {
       out.push({ kind: "eye_changed", layer: b.name, eye_on: c.enabled, was_class: classOf(baseline, b.index) });
     }
     if (!focusIndexes.includes(b.index)) {
-      const ts = common(timesOf(b), timesOf(c));
-      const at = (e, t) => compSpace.sampleAt(e, t);
-      if (ts.some((t) => at(b, t) && at(c, t) && Array.isArray(at(b, t).anchor) && Array.isArray(at(c, t).anchor) && differ(at(b, t).anchor, at(c, t).anchor))) {
-        out.push({ kind: "anchor_changed", layer: b.name });
+      const changes = propertyChanges(baseline, b, current, c);
+      if (changes.length) {
+        // No visible shift: no effect field, so a Pan Behind that held still reads as it always did.
+        const effect = effectOf(space, baseline, b, current, c);
+        for (const ch of changes) out.push(effect ? { ...ch, effect } : ch);
       }
     }
     const bk = keyedLayer(baseline, b.index);
@@ -166,7 +252,10 @@ export function hintCodes(r, others = []) {
   // TD § 7 "another layer moved": the focus layer holds items 1 to 4, and another layer's bounds
   // moved (item5.moved_layers names it and which way). Separate from wrong_layer, where the focus
   // layer's pivot never moved.
-  if (!wrongLayer && i1.passed && i2.passed && (!r.item4 || r.item4.passed) && r.item5 && r.item5.moved_layers.length) codes.push("other_layer_moved");
+  // Spec 015 FR-014a: a change on another layer that shifted it is reported in other_changes, with
+  // the shift as its effect, and holds the pass the same way.
+  const shifted = r.item5 && (r.item5.moved_layers.length || (r.item5.changed_layers || []).length);
+  if (!wrongLayer && i1.passed && i2.passed && (!r.item4 || r.item4.passed) && shifted) codes.push("other_layer_moved");
   if (others.some((o) => o.kind === "eye_changed" && o.was_class === "matte" && o.eye_on)) codes.push("matte_eye");
   return codes;
 }
@@ -206,7 +295,18 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
   const targets = (lesson.targets || []).map((id) => Number(String(id).split("/")[1]));
   const focusEntries = targets.map((i) => byIndex(baseline, i)).filter(Boolean);
   const focusIndexes = focusEntries.map((e) => e.index);
-  const others = otherChanges(baseline, current, focusIndexes);
+  const others = otherChanges(baseline, current, focusIndexes, { space });
+  // Layers whose own change is reported in others, and every layer under one in the Parent chain:
+  // their footprint shift is that change's effect, never a moved entry of its own (FR-014a).
+  const changedNames = new Set(others.filter((o) => CHANGE_KINDS.has(o.kind)).map((o) => o.layer));
+  const explained = new Set();
+  for (const e of layerInfo(baseline).layers) {
+    if (changedNames.has(e.name) && !focusIndexes.includes(e.index)) {
+      explained.add(e.index);
+      for (const d of descendantsOf(baseline, e.index)) explained.add(d);
+    }
+  }
+  const [bView, cView] = baseViews(baseline, current);
   const fps = baseline.comp.frame_rate;
   const half = isNum(fps) && fps > 0 ? 0.5 / fps + 1e-6 : 0;
   const demoIndex = lesson.demo && lesson.demo.segment_id ? Number(String(lesson.demo.segment_id).split("/")[1]) : null;
@@ -221,10 +321,12 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
   const moved = [];
   const notCompared = [];
   for (const b of layerInfo(baseline).layers) {
-    if (focusIndexes.includes(b.index)) continue;
+    if (focusIndexes.includes(b.index) || explained.has(b.index)) continue;
     const c = matchLayer(baseline, current, b);
     if (!c) continue; // a removed layer is an other change
     const times = childrenAt.has(b.index) ? [childrenAt.get(b.index)] : common(timesOf(b), timesOf(c));
+    // K2 (FR-012): no time read in both, so not compared, never "didn't move" or "moved".
+    if (!times.length) notCompared.push({ layer: b.name, time: null, reason: "no_shared_time" });
     let worst = null;
     let rawMoved = null;
     for (const t of times) {
@@ -236,6 +338,8 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
         if (!rawMoved && isNum(t) && rawChanged(space.sampleAt(b, t), space.sampleAt(c, t))) rawMoved = { layer: b.name, time: r3(t) };
         continue;
       }
+      // K2: a shift that's gone before expressions in both reads is the expression's own motion.
+      if (cmp.moved && bView !== baseline && !compare(space, bView, b.index, cView, c.index, t, b.kind).moved) continue;
       if (cmp.moved && (!worst || cmp.max > worst.max)) worst = { layer: b.name, time: r3(t), max: cmp.max, dx: cmp.dx, dy: cmp.dy };
     }
     if (worst) moved.push({ layer: worst.layer, time: worst.time, distance_px: r3(Math.hypot(worst.dx, worst.dy)), direction: direction(worst.dx, worst.dy) });
@@ -298,7 +402,18 @@ export function check(baseline, current, lesson, { space = compSpace } = {}) {
     }
 
     const anchorKeysAdded = anchorKeyCount(keyedLayer(current, c.index)) > anchorKeyCount(keyedLayer(baseline, b.index));
-    const item5 = { passed: moved.length === 0 && !anchorKeysAdded, moved_layers: moved, anchor_keys_added: anchorKeysAdded, not_compared: notCompared };
+    // A change elsewhere that visibly shifted its layer holds the pass, as a moved layer did (FR-014a).
+    // Review M1: a change elsewhere that visibly shifted its layer carries that layer and the way, so
+    // the "another layer moved" hint names them. Only when there is one, so other replies don't change.
+    const changed = [];
+    for (const o of others) {
+      if (!o.effect || changed.some((c) => c.layer === o.layer)) continue;
+      changed.push({ layer: o.layer, direction: o.effect.direction, distance_px: o.effect.distance_px, time: o.effect.time });
+    }
+    const item5 = {
+      passed: moved.length === 0 && !anchorKeysAdded && !changed.length, moved_layers: moved, anchor_keys_added: anchorKeysAdded, not_compared: notCompared,
+      ...(changed.length ? { changed_layers: changed } : {}),
+    };
 
     const anchorChanged = !!(bs && cs) && differ(bs.anchor, cs.anchor);
     const positionChanged = !!(bs && cs) && differ(bs.position, cs.position);

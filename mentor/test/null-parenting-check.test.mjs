@@ -437,7 +437,7 @@ test("other changes come from every layer: parented to the null, a parent change
   const kinds = (k) => result.other_changes.filter((o) => o.kind === k).map((o) => o.layer);
   assert.deepEqual(kinds("parent_changed"), ["Shadow"]);
   assert.deepEqual(kinds("keys_changed"), ["Gauge"]);
-  assert.deepEqual(kinds("expression_toggled"), ["Plate"]);
+  assert.deepEqual(kinds("expression_changed"), ["Plate"], "spec 015: was expression_toggled");
   assert.deepEqual(kinds("layer_removed"), ["Peg"]);
   assert.deepEqual(kinds("layer_added"), ["Tab 2"]);
   assert.ok(!result.other_changes.some((o) => o.layer === "Null 1"), "the lesson's null is never an other change");

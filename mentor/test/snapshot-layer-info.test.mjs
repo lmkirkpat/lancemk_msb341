@@ -180,6 +180,7 @@ const INFO_FIELDS = [
   "is_matte", "is_null", "kind", "locked", "mask_count", "matte", "motion_blur", "name", "out_point", "parent",
   "samples", "samples_truncated", "shy", "solo", "start_time", "stretch", "three_d", "time_remap",
   "transform", "guide",
+  "effects", // spec 015 FR-007 (T011)
 ].sort();
 
 test("layer_info has one entry per layer in index order, unkeyed layers included", () => {

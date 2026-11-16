@@ -427,3 +427,26 @@ test("T249: watch_offer is null in a review and once anchor_demo has run", async
   assert.equal(after.demo_used, true);
   assert.equal(after.watch_offer, null);
 });
+
+// ---- Spec 015 T026 (FR-015, K3): motion_from, from the motion-sources map, on reads with R2
+
+const EXPR = (name) => path.join(DIR, "..", "expressions", `${name}.json`);
+
+test("T026: on the live 015 Rig, rock.png's motion comes from its parent Shake Control's expression", async () => {
+  project(EXPR("rig"));
+  try {
+    const r = await call("anchor_snapshot", { fresh: true });
+    const of = (name) => r.candidates.find((c) => c.layer === name).motion_from;
+    assert.deepEqual(of("rock.png"), { own_keys: false, own_expressions: [], parents: [{ layer: "Shake Control", by: "expression" }] });
+    assert.deepEqual(of("Shake Control"), { own_keys: false, own_expressions: ["Position", "Rotation"], parents: [] });
+    assert.deepEqual(of("Sweep Control"), { own_keys: true, own_expressions: [], parents: [] });
+  } finally {
+    project("practice2b");
+  }
+});
+
+test("T026: a read from before spec 015 has no motion_from, so its replies (the eval sets') are unchanged", async () => {
+  const r = await call("anchor_snapshot", { fresh: true });
+  assert.ok(r.candidates.length > 0);
+  assert.ok(r.candidates.every((c) => !("motion_from" in c)));
+});

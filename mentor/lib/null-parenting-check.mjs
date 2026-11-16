@@ -11,6 +11,11 @@
 //   pass. It never counts as "didn't move".
 // - Tolerances are this skill's: 1 px per corner, half a frame for key times, 10% of the group's
 //   width and height for the region.
+// - K2 (spec 015 FR-012 to FR-014a; data-model § 5): values and P2's corners are compared at the
+//   same frame on `base` (before the expression) wherever a property has an active expression, so
+//   an expression's motion (the playhead, or the learner's new null renumbering a wiggle below it,
+//   E28) is never a change or a jump. A real change on another layer is one entry with the shift it
+//   caused attached as `effect`.
 
 import { MentorError, registerErrors } from "../errors.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
@@ -18,6 +23,7 @@ import { compPosition, footprint, sampleAt, toLayerSpace } from "./comp-space.mj
 import { sourcesOf } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
 import { FOOTPRINT_PATHS, keyedLayer, p2Times, uniqueLayer } from "./null-parenting.mjs";
+import { baseViews, pairValues } from "./k2-changes.mjs";
 
 export const JUMP_PX = 1; // FR-011: never said to the learner as a target
 const REGION_SHARE = 0.1; // FR-028's per-axis rule, on the group's combined bounds
@@ -57,6 +63,7 @@ function samplesMove(snap, index) {
   return ss.some((x) => SAMPLED.some((k) => valuesDiffer(ss[0][k], x[k])));
 }
 const parentMoves = (snap) => (p) => p.moves_children || samplesMove(snap, p.layer_index);
+
 const distinctValues = (p) => new Set(p.keys.map((k) => JSON.stringify(k.value))).size >= 2;
 
 // ---- Finding the lesson's null (FR-007, FR-019, research R5)
@@ -127,6 +134,8 @@ function direction(dx, dy) {
 export function p2For(baseline, current, name, { throughNull = false, stored = null, times: only = null } = {}) {
   const b = uniqueLayer(baseline, name);
   const c = uniqueLayer(current, name);
+  // K2: corners before expressions, so an expression's own motion is never a jump.
+  const [bv, cv] = baseViews(baseline, current);
   const times = only || p2Times(baseline, name);
   const not_checked = [];
   let worst = { px: 0, dx: 0, dy: 0, time: null };
@@ -139,8 +148,8 @@ export function p2For(baseline, current, name, { throughNull = false, stored = n
       not_checked.push({ time: t, reason: "not_stored" });
       continue;
     }
-    const before = footprint(baseline, b.index, t);
-    const after = footprint(current, c.index, t, throughNull ? { parent_transform: stored } : {});
+    const before = footprint(bv, b.index, t);
+    const after = footprint(cv, c.index, t, throughNull ? { parent_transform: stored } : {});
     if (before.reason || after.reason) {
       not_checked.push({ time: t, reason: before.reason || after.reason });
       continue;
@@ -308,9 +317,61 @@ function valuesChanged(baseline, b, current, c) {
   const bs = sampleAt(b, t0);
   const cs = sampleAt(c, t0);
   if (!bs || !cs) return [];
-  const out = SAMPLED.filter((k) => valuesDiffer(bs[k], cs[k])).map((k) => SAMPLED_NAMES[k]);
+  // On base for a property with an active expression (K2). Pan Behind changes Anchor Point and
+  // Position together: that's one change, the pivot.
+  let out = SAMPLED.filter((k) => valuesDiffer(...pairValues(bs, cs, k))).map((k) => SAMPLED_NAMES[k]);
+  if (out.includes("Anchor Point")) out = out.filter((n) => n !== "Position");
   const sameTime = current.comp && typeof current.comp.time === "number" && Math.abs(current.comp.time - t0) < 0.0005;
   if (sameTime && b.transform && c.transform && valuesDiffer(b.transform.opacity, c.transform.opacity)) out.push("Opacity");
+  return out;
+}
+
+// The shift a change on another layer caused at the before-read time, as the learner sees it
+// (after expressions): { distance_px, direction, time }; distance and direction null, with the
+// reason, when the footprint can't be read (review S7: never "nothing moved"); null when nothing
+// visible moved.
+function effectOf(baseline, b, current, c) {
+  const t0 = baseline.comp.time;
+  const before = footprint(baseline, b.index, t0);
+  const after = footprint(current, c.index, t0);
+  if (before.reason || after.reason) return { distance_px: null, direction: null, time: r3(t0), reason: before.reason || after.reason };
+  let worst = { px: 0, dx: 0, dy: 0 };
+  for (let k = 0; k < 4; k++) {
+    const dx = after.corners[k][0] - before.corners[k][0];
+    const dy = after.corners[k][1] - before.corners[k][1];
+    const px = Math.hypot(dx, dy);
+    if (px > worst.px) worst = { px, dx, dy };
+  }
+  return worst.px > JUMP_PX ? { distance_px: Math.round(worst.px), direction: direction(worst.dx, worst.dy), time: r3(t0) } : null;
+}
+const withEffect = (entry, effect) => (effect ? { ...entry, effect } : entry);
+
+// FR-014: expression changes on one layer, from read R2 when both reads have it, else from the keyed
+// properties' switches (as before spec 015). { property, what }: turned_on, turned_off, text, error.
+function expressionChanges(baseline, b, current, c, skipPath) {
+  const out = [];
+  if (Array.isArray(baseline.expressions) && Array.isArray(current.expressions)) {
+    const mine = (snap, index) => new Map(snap.expressions.filter((x) => x.layer === index && !skipPath(x.path)).map((x) => [x.path, x]));
+    const was = mine(baseline, b.index);
+    const now = mine(current, c.index);
+    for (const path of new Set([...was.keys(), ...now.keys()])) {
+      const w = was.get(path);
+      const n = now.get(path);
+      let what = null;
+      if (!!(w && w.enabled) !== !!(n && n.enabled)) what = n && n.enabled ? "turned_on" : "turned_off";
+      else if (w && n && w.text !== n.text) what = "text";
+      // A new error or one gone, not its wording: AE's text names the layer's index (T015).
+      else if (w && n && !!w.error !== !!n.error) what = "error";
+      if (what) out.push({ property: String((n || w).display_path || path).split(" › ").pop(), what });
+    }
+    return out;
+  }
+  const bp = props(baseline, b.index);
+  for (const p of props(current, c.index)) {
+    if (skipPath(p.path)) continue;
+    const was = bp.find((x) => x.path === p.path);
+    if (was && !!was.expression_enabled !== !!p.expression_enabled) out.push({ property: p.display_name, what: p.expression_enabled ? "turned_on" : "turned_off" });
+  }
   return out;
 }
 
@@ -325,27 +386,26 @@ function otherChanges(baseline, current, focus, nullName, alreadyNamed = []) {
     const b = uniqueLayer(baseline, n);
     const c = uniqueLayer(current, n);
     const inFocus = focus.includes(n);
+    const effect = inFocus ? null : effectOf(baseline, b, current, c);
     if (!inFocus) {
       const bp = parentOf(baseline, b.index);
       const cp = parentOf(current, c.index);
       const from = bp ? bp.layer : null;
       const to = cp ? cp.layer : null;
-      if (from !== to) out.push(to && to === nullName ? { kind: "parented_to_null", layer: n } : { kind: "parent_changed", layer: n, from, to });
+      if (from !== to) out.push(to && to === nullName ? { kind: "parented_to_null", layer: n } : withEffect({ kind: "parent_changed", layer: n, from, to }, effect));
       const p3 = p3For(baseline, current, n);
       if (!p3.passed) out.push({ kind: "keys_changed", layer: n, properties: p3.changed.map((x) => x.property) });
-      // OA-4: what it renders at the before-read time changed with no key or parent change (an
-      // expression on a property with no keys, say). Reported only, never graded (FR-021).
+      // OA-4: what it renders at the before-read time changed with no key or parent change. With
+      // read R2 compared on base, so an expression's own motion isn't one (K2). Reported only, never
+      // graded (FR-021); the shift it caused rides along as its effect (FR-014a).
       if (from === to && p3.passed) {
         const changed = valuesChanged(baseline, b, current, c);
-        if (changed.length) out.push({ kind: "value_changed", layer: n, properties: changed });
+        if (changed.length) out.push(withEffect({ kind: "value_changed", layer: n, properties: changed }, effect));
       }
     }
-    // Expressions on keyed properties: a focus layer's Position belongs to the pick-whip hint.
-    const bp = props(baseline, b.index);
-    for (const p of props(current, c.index)) {
-      if (inFocus && POSITION_PATHS.has(p.path)) continue;
-      const was = bp.find((x) => x.path === p.path);
-      if (was && !!was.expression_enabled !== !!p.expression_enabled) out.push({ kind: "expression_toggled", layer: n, property: p.display_name, on: !!p.expression_enabled });
+    // Expression changes (FR-014): a focus layer's Position belongs to the pick-whip hint.
+    for (const x of expressionChanges(baseline, b, current, c, (path) => inFocus && POSITION_PATHS.has(path))) {
+      out.push(withEffect({ kind: "expression_changed", layer: n, ...x }, effect));
     }
   }
   for (const n of focus) {

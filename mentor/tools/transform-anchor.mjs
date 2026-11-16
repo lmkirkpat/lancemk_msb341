@@ -13,6 +13,7 @@ import { sampleAt } from "../lib/comp-space.mjs";
 import { parseHost } from "../lib/host.mjs";
 import { byIndex, layerInfo } from "../lib/layer-info.mjs";
 import { layerNow } from "../lib/renumber.mjs";
+import { motionFrom } from "../lib/motion-sources.mjs";
 import { json } from "../lib/reply.mjs";
 import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
@@ -63,6 +64,8 @@ async function lessonRead() {
   return { read: await io.takeSnapshot({ sample_times: needed }), reads: 2 };
 }
 
+const motionFromField = (snapshot, index) => (Array.isArray(snapshot.expressions) ? { motion_from: motionFrom(snapshot, index) } : {});
+
 async function anchorSnapshot({ mode: asked, focus_layers, skill_options, fresh } = {}) {
   const { read, reads } = await lessonRead();
   // FR-048, FR-049: without a mode, the tool picks lesson or review (spec 004 › The opening read).
@@ -102,7 +105,10 @@ async function anchorSnapshot({ mode: asked, focus_layers, skill_options, fresh 
     host: parseHost(read),
     project: s.baseline.project,
     comp: { name: s.baseline.comp.name, time: s.baseline.comp.time, frame_rate: fps, width: s.baseline.comp.width ?? null, height: s.baseline.comp.height ?? null },
-    candidates: base.candidates.map((c) => ({ layer: c.layer, bucket: c.bucket, reason: c.reason, rank: c.rank, ...movesFields(c) })),
+    // Spec 015 FR-015: where each layer's motion comes from (a parent's keys or expression, its own
+    // expressions), from the motion-sources map. Only on a read with R2 (every AE 27.0 read from spec
+    // 015 on), so replies on older captures, the eval sets' included, stay as they were.
+    candidates: base.candidates.map((c) => ({ layer: c.layer, bucket: c.bucket, reason: c.reason, rank: c.rank, ...movesFields(c), ...motionFromField(s.baseline, c.index) })),
     proposal,
     focus: s.focus,
     places: Object.fromEntries(Object.entries(base.places).map(([k, v]) => [k, v.place])),
