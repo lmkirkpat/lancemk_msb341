@@ -301,12 +301,17 @@ pivot and null.
 
 Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block phase 2 except as noted.
 
-- [ ] T057 (skill-builder) OQ-9 as answered: the session baseline keeps expression text and errors
+- [x] T057 (skill-builder) OQ-9 as answered: the session baseline keeps expression text and errors
   during a lesson for `copiesExpression` (`mentor/tools/common.mjs`), and blanks them once the
   lesson's record is saved or a new lesson replaces the baseline; `calls.jsonl` logs a refused
   `record_lesson` call without the refused text. Tests for both blanking paths, a guard refusal across
   two fresh servers (B1), and a log line with no refused text. **In progress on branch `015-oq9`.**
   Before T040.
+  **Done 2026-11-16 (`f7fe578`, merged `4ce9bec`; mentor 1705 pass, 0 fail):** text cleared at the pass save
+  and for other passed lessons when one starts (SHA-256 kept, so "text changed" still works); refused calls
+  logged without the copied fields. Open: an abandoned unpassed lesson keeps its text until the next start
+  on that skill and comp (uninstall removes it); `UNSAFE_RECORD` refusals still log their arguments (one-line
+  fix with the same `omitFromLog`, not yet asked for).
 - [ ] T058 (skill-builder) The `motion_from` wording in `.claude/skills/anchor-mentor/SKILL.md` and
   `.claude/skills/null-parenting-mentor/SKILL.md`, from `specs/011-anchor/teaching-design.md` § 21 and
   `specs/012-null-parenting/teaching-design.md` § 17 (OQ-8, widened). Wording only; leave the Pan
