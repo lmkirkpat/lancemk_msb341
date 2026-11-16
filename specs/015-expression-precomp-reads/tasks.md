@@ -259,12 +259,15 @@ pivot and null.
   Practice's timing; `contracts/describe-layers.md` should say a child's parent entry omits `moves` when the
   parent is in the same reply (spec-writer, with T040); an eval case where the learner asks about Shake
   Control's shake and hears it builds on the null's own Position (eval-engineer).
-- [ ] T034 (skill-builder reads, **builder's hands**) SC-010: 10 spot checks of the read's facts in AE
+- [x] T034 (skill-builder reads, **builder's hands**) SC-010: 10 spot checks of the read's facts in AE
   across Comp 1 and the T001 and T015 planted copies, including one off and one erroring expression; at
   least 9 of 10 agree. Logged by the cockpit in `discovery/usage-notes/expression-reads.md`. **Plus the
   Pan Behind A/B test** (T005 couldn't separate the rules): select layer A, use Pan Behind with the
   cursor over layer B, and read which anchor moved. It decides the pivot `SKILL.md` "wrong layer" lines,
   frozen until then.
+  **Done 2026-11-16 (`expression-reads.md` session 3): 10 of 10 agree. Pan Behind on AE 27.0 takes the
+  selected layer, or with nothing selected the top layer under the cursor; T058 rewrites the pivot
+  `SKILL.md` lines to match.**
 - [x] T035 [P] (eval-engineer) Add the K2 cases from spec › Eval plan (five rows, Amendment 1: turn
   f's real edit named by cause; expression motion; a renumbered `wiggle`) to `product/evals/anchor/`,
   `product/evals/null-parenting/` and `product/evals/offset/` (or key types), with fixtures derived

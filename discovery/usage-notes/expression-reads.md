@@ -112,3 +112,62 @@ afterwards, and the project was back to 77 items. Answer key:
 - Nothing in Phase 0. The spec-writer's second fold (T008) takes session 2's new facts: which layer Pan
   Behind takes (open, T034), stale hidden dimension values, the reversed in and out points, held remap
   ranges, and counting layers for "how many places".
+
+## Session 3: 2026-11-16, T033 (Comp 1), T015 and T034 (cockpit with the builder)
+
+AE 27.0, the builder's own `Comp 1.aep`, after the phase 1 merge. Spot checks ran on a duplicate,
+"Comp 1 T034", with two planted expressions; it was deleted afterwards. Comp 1 then matched the T015
+capture (`mentor/test/fixtures/expressions/comp1.json`) on a strict full-JSON compare, and the project
+was back to 34 items.
+
+### T015 capture and T033 on Comp 1
+
+- **SC-003 ✓:** Shake Control's Position at 0.6 s is 960, 540 before the expression and 952.352,
+  542.492 after; rock.png's motion source is Shake Control, by expression.
+- **SC-008 ✓:** a Comp 1 snapshot took about 165 ms before the merge and about 210 ms after (wall clock,
+  3 runs each, +45 ms against a 0.5 s budget); the fine sweep on two layers adds nothing measurable.
+- **The capture found three faults the derived fixture hid** (fixed, merge `1499819`): AE 27.0 returns
+  expression text with `\r` line ends, so the parser read Shake Control's two expressions as setting
+  their own value (a `//` comment ran to the end of the text); SC-001's exact compare; and the
+  whole-comp summary at 12.4 KB over its 12 KB cap (each of 13 children repeated its parent's sweep;
+  now 10.5 KB).
+
+### T034: ten spot checks (SC-010)
+
+The read was `describe_layers` run live on the copy at 0.6 s. Planted: logo.png's Opacity `value * 0.5`,
+switched off; outline.png's Scale `thisComp.layer("Nope").transform.scale`, which errors.
+
+| # | The read said | Builder in AE |
+|---|---|---|
+| 1 | Shake Control: Position and Rotation expressions, both on | ✓ |
+| 2 | Black Solid 1: one expression, on CC Light Sweep's Center | ✓ |
+| 3 | Sweep Control: one link in, from Black Solid 1's Center | ✓ |
+| 4 | Black Solid 1 doesn't render (eye off) | ✓ |
+| 5 | Shake Control has 13 children, rock.png among them | ✓ |
+| 6 | Shake Control's Position moves most, about 12.1 px, at about 1.5 s | ✓ |
+| 7 | Shake Control's Rotation peaks at about 0.59° near 2.57 s | ✓ |
+| 8 | logo.png's Opacity expression is off (planted) | ✓ |
+| 9 | outline.png's Scale expression is on, with an error (planted) | ✓ |
+| 10 | outline.png doesn't render (eye off) | ✓ |
+
+**10 of 10 agree** (SC-010 needs 9). A reference to a missing layer ("Nope") reads as not found, not
+as unresolved, so other layers' "no links" stays true; that's as designed (FR-010 counts only names it
+can't read). Black Solid 1 moved from layer 23 to 20 in the copy during the checks, probably an
+accidental drag; Comp 1 itself was untouched.
+
+### Pan Behind: which layer it takes (T005's open question)
+
+Read every layer's Anchor Point before and after, on the copy.
+
+| Test | Selected | Under the cursor | Pivot that moved |
+|---|---|---|---|
+| A | the text layer only | rock.png (logo.png on top, O2 Fragments higher) | **the text** (0, 0 → 176.8, −77.0) |
+| B | nothing | the same area of the rock | **O2 Fragments** (layer 2, the top layer there), which AE then selected |
+
+- **Rule on AE 27.0: the selected layer; with nothing selected, the top layer under the cursor.** The
+  rock and logo never moved.
+- This overturns `anchor-mentor/SKILL.md`'s lines from spec 011's live session (2026-10-26, AE 26.5, a
+  shape layer's group): "the layer under the cursor even when another layer is selected". Test B
+  agrees with that session if nothing was selected then. T058 rewrites those lines.
+- Turn f fits rule A: Shake Control was selected.
+
