@@ -1,6 +1,6 @@
 {
   "id": "06-wrong-layer",
-  "title": "Pan Behind started on Background instead of Needle: start the drag on Needle's own crosshair; selecting it first is not the fix",
+  "title": "Pan Behind took Background instead of Needle: Pan Behind acts on the selected layer (AE 27.0), so selecting Needle first is the fix (T058, T059)",
   "covers": [
     "EP-6"
   ],
@@ -39,8 +39,8 @@
         ]
       },
       {
-        "id": "starts_on_crosshair",
-        "must": "under the cursor|right on Needle|on Needle['’]s (?:own )?crosshair|Needle['’]s (?:own )?crosshair",
+        "id": "select_needle_first",
+        "must": "(?:click|select)[^.?!]{0,30}\\bNeedle\\b",
         "turns": [
           3
         ]
@@ -53,8 +53,8 @@
         ]
       },
       {
-        "id": "select_first_not_fix",
-        "never": "\\bselect(?:ing)?\\s+(?:Needle|it|the layer)\\s+first\\b|\\bfirst\\b[^.?!]{0,20}\\bselect(?:ing)?\\b",
+        "id": "not_where_you_dragged",
+        "never": "\\b(?:you|they)\\s+(?:had|have|didn['’]t have)\\s+(?:\\w+\\s+)?selected\\b|\\bwhere you (?:dragged|started)\\b",
         "turns": [
           3
         ]
@@ -65,5 +65,6 @@
     "R-AN-WRONG-LAYER",
     "R-HINT-NOT-FIX",
     "R-NAMES-REAL"
-  ]
+  ],
+  "note": "2026-11-16 (T059): rewritten for T058's rule. Before, the case demanded the drag start on Needle's crosshair and banned selecting first; AE 27.0 Pan Behind takes the selected layer (the top layer under the cursor only when nothing is selected), so selecting first is the fix (discovery/usage-notes/expression-reads.md session 3)."
 }

@@ -1,0 +1,478 @@
+{
+  "run_at": "2026-11-16T20:58:05.505Z",
+  "options": {
+    "only": "57",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 1.7,
+  "fixtures_note": "Live captures of Mentor Practice 2 (comp 179) plus synthetic fixtures; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "57-parent-moved-by-expression-explanation-note",
+      "title": "rock.png rides on Shake Control, which an expression moves: the explanation turn says it in one sentence, never calls it a change of theirs, and still ends on the A-then-Shift+P ask",
+      "covers": [
+        "spec015-OQ-8",
+        "011-TD-21",
+        "SC-005",
+        "T059"
+      ],
+      "fixture_sources": {
+        "rig.json": "live"
+      },
+      "hash": "93ddaaab41690577a7b0da6c0b9664bb92c5d43ef24cf6dad58cc21a087809ef",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "never called"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:parent_note",
+              "pass": true,
+              "detail": "turn 2: \"rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion\""
+            },
+            {
+              "check": "say:one_parent_sentence",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:ends_on_ask",
+              "pass": true,
+              "detail": "turn 2: \"press A, then Shift+P, so both show.\""
+            },
+            {
+              "check": "say:no_undo",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_stillness_claim",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_trace_the_parent",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-PARENT-MOVES-IT",
+              "pass": true,
+              "reason": "In Turn 2 the mentor says in one sentence \"rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion\", naming only the nearest parent, with no claim that rock.png doesn't move and no tracing or undo, and the turn still ends on \"press A, then Shift+P\"."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses is backed by the anchor_snapshot results: G Shakers with its middle-left place, rock.png at center with target top-right, Shake Control as a parent moved by expression, and Anchor Point and Position."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 is the intent question plus a one-sentence G Shakers fallback that ends on the choice. Turn 2 gives the repeat-back, where the pivot is now, the one parent note, the frame and the first Anchor Point/Position sentence, adds no slide sentence, and ends on the ask to select rock.png and press A, then Shift+P."
+            }
+          ],
+          "cost": 0.5701706,
+          "session_id": "282f7ac2-ea22-454d-ad06-cf67e09ff760",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Rig\",\n    \"time\": 0.601,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"G Shakers\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"G Shakers\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, G Shakers could swing from its left edge. Want to try that one?\n\n### Turn 2: the project is an open comp\nLEARNER: rock.png should turn from its top-right corner.\nTOOL CALL anchor_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"rock.png\",\"place\":\"top-right\"}]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Rig\",\n    \"time\": 0.601,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"G Shakers\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": [\n    \"rock.png\"\n  ],\n  \"places\": {\n    \"rock.png\": \"top-right\"\n  },\n  \"place_now\": {\n    \"G Shakers\": \"center\",\n    \"rock.png\": \"center\"\n  },\n  \"check_times\": {\n    \"rock.png\": {\n      \"time\": 0.601,\n      \"basis\": \"current\"\n    }\n  },\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [\n    \"anchor/6\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"single_target\",\n  \"notes\": [\n    {\n      \"layer\": \"rock.png\",\n      \"note\": \"parent\",\n      \"parent\": \"Shake Control\"\n    }\n  ],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nTOOL CALL preview_frame {\"time\":0.601,\"layer\":\"rock.png\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-1GJIJj-runtime/282f7ac2-ea22-454d-ad06-cf67e09ff760/tool-results/mcp-ae-mentor-blob-1794862636536-kzn5m0.png]\n{\"comp\":\"015 Rig\",\"time\":0.601,\"layer_bounds\":{\"left\":158.414,\"top\":275.112,\"right\":1746.48,\"bottom\":810.306},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: So rock.png turns from its top-right corner.\n\nrock.png's pivot is at its center right now. rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion.\n\nAnchor Point is where the pivot sits inside rock.png; Position is where that pivot sits in the comp.\n\nSelect rock.png in the timeline and press A, then Shift+P, so both show.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "never called"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:parent_note",
+              "pass": true,
+              "detail": "turn 2: \"rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion\""
+            },
+            {
+              "check": "say:one_parent_sentence",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:ends_on_ask",
+              "pass": true,
+              "detail": "turn 2: \"press A, then Shift+P, so both show.\""
+            },
+            {
+              "check": "say:no_undo",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_stillness_claim",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_trace_the_parent",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-PARENT-MOVES-IT",
+              "pass": true,
+              "reason": "Turn 2 says in one sentence \"rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion\". It names only the nearest parent, says nothing about which properties it moves, never calls it the learner's change, and the turn still ends on \"Select rock.png in the timeline and press A, then Shift+P\"."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses appears in the anchor_snapshot results: G Shakers with its left edge (proposal middle-left), rock.png at center with place top-right, Shake Control as parent by expression, and Anchor Point/Position; no times are mentioned."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 is the intent question plus a one-sentence G Shakers fallback and ends on the choice. Turn 2 gives the repeat-back, where the pivot is now, one note and the first Anchor Point/Position sentence, with no slide sentence, and ends on the ask to select rock.png and press A, then Shift+P."
+            }
+          ],
+          "cost": 0.5669929999999999,
+          "session_id": "8fa9945b-f6f0-4538-b696-ff8a5216aa92",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Rig\",\n    \"time\": 0.601,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"G Shakers\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"G Shakers\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, G Shakers could swing from its left edge. Want to try that one?\n\n### Turn 2: the project is an open comp\nLEARNER: rock.png should turn from its top-right corner.\nTOOL CALL anchor_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"rock.png\",\"place\":\"top-right\"}]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Rig\",\n    \"time\": 0.601,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"G Shakers\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": [\n    \"rock.png\"\n  ],\n  \"places\": {\n    \"rock.png\": \"top-right\"\n  },\n  \"place_now\": {\n    \"G Shakers\": \"center\",\n    \"rock.png\": \"center\"\n  },\n  \"check_times\": {\n    \"rock.png\": {\n      \"time\": 0.601,\n      \"basis\": \"current\"\n    }\n  },\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [\n    \"anchor/6\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"single_target\",\n  \"notes\": [\n    {\n      \"layer\": \"rock.png\",\n      \"note\": \"parent\",\n      \"parent\": \"Shake Control\"\n    }\n  ],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nTOOL CALL preview_frame {\"time\":0.601,\"layer\":\"rock.png\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-IKzPBY-runtime/8fa9945b-f6f0-4538-b696-ff8a5216aa92/tool-results/mcp-ae-mentor-blob-1794862656118-a55ud4.png]\n{\"comp\":\"015 Rig\",\"time\":0.601,\"layer_bounds\":{\"left\":158.414,\"top\":275.112,\"right\":1746.48,\"bottom\":810.306},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: So rock.png turns from its top-right corner. Right now rock.png's pivot is at its center. rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion.\n\nAnchor Point is where the pivot sits inside rock.png; Position is where that pivot sits in the comp.\n\nSelect rock.png in the timeline and press A, then Shift+P, so both show.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "never called"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:parent_note",
+              "pass": true,
+              "detail": "turn 2: \"rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion\""
+            },
+            {
+              "check": "say:one_parent_sentence",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:ends_on_ask",
+              "pass": true,
+              "detail": "turn 2: \"press A, then Shift+P, so both show.\""
+            },
+            {
+              "check": "say:no_undo",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_stillness_claim",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_trace_the_parent",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-PARENT-MOVES-IT",
+              "pass": true,
+              "reason": "In the explanation turn the mentor says it in one sentence, \"rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion.\" It names only the nearest parent, says nothing about which properties move, adds no second sentence, and the turn ends on \"press A, then Shift+P\"."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses comes from the snapshot: rock.png, Shake Control (its parent, moved by expression), G Shakers with its left edge (proposal middle-left), and rock.png's pivot at its center (place_now center). Anchor Point and Position are the skill's own properties."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 is the intent question plus a one-sentence G Shakers proposal and ends on the choice. Turn 2 has the repeat-back, where the pivot is now, the one parent note, the frame and the Anchor Point/Position sentence. It adds no slide sentence and ends on the ask to select rock.png and press A, then Shift+P."
+            }
+          ],
+          "cost": 0.5655825999999999,
+          "session_id": "b6a0f2ab-096b-49d4-9adb-124a7c5b3b0a",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Rig\",\n    \"time\": 0.601,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"G Shakers\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"G Shakers\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle? And where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, G Shakers could swing from its left edge. Want to try that one?\n\n### Turn 2: the project is an open comp\nLEARNER: rock.png should turn from its top-right corner.\nTOOL CALL anchor_snapshot {\"skill_options\":{\"focus\":[{\"layer\":\"rock.png\",\"place\":\"top-right\"}]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Rig\",\n    \"time\": 0.601,\n    \"frame_rate\": 29.97,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"G Shakers\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Black Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"hidden\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Center\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Shake Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\",\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Sweep Control\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"rock.png\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": [\n          {\n            \"layer\": \"Shake Control\",\n            \"by\": \"expression\"\n          }\n        ]\n      }\n    },\n    {\n      \"layer\": \"White Solid 1\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"full_frame\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"G Shakers\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": [\n    \"rock.png\"\n  ],\n  \"places\": {\n    \"rock.png\": \"top-right\"\n  },\n  \"place_now\": {\n    \"G Shakers\": \"center\",\n    \"rock.png\": \"center\"\n  },\n  \"check_times\": {\n    \"rock.png\": {\n      \"time\": 0.601,\n      \"basis\": \"current\"\n    }\n  },\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [\n    \"anchor/6\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"single_target\",\n  \"notes\": [\n    {\n      \"layer\": \"rock.png\",\n      \"note\": \"parent\",\n      \"parent\": \"Shake Control\"\n    }\n  ],\n  \"watch_offer\": null,\n  \"reads\": 1\n}\nTOOL CALL preview_frame {\"time\":0.601,\"layer\":\"rock.png\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-GrSwJI-runtime/b6a0f2ab-096b-49d4-9adb-124a7c5b3b0a/tool-results/mcp-ae-mentor-blob-1794862675491-4t50yx.png]\n{\"comp\":\"015 Rig\",\"time\":0.601,\"layer_bounds\":{\"left\":158.414,\"top\":275.112,\"right\":1746.48,\"bottom\":810.306},\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: So rock.png turns from its top-right corner. Its pivot is at its center right now. rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion.\n\nAnchor Point is where the pivot sits inside rock.png; Position is where that pivot sits in the comp.\n\nSelect rock.png in the timeline and press A, then Shift+P, so both show.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

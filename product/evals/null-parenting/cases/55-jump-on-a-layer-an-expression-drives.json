@@ -1,0 +1,95 @@
+{
+  "id": "55-jump-on-a-layer-an-expression-drives",
+  "title": "A group layer that jumped when parented has its own Position expression: the jump sentence says it as a clause beside the jump (not the cause), never 'can't see expressions', never 'no animation' or 'holds still'",
+  "covers": [
+    "spec015-OQ-8",
+    "012-TD-17",
+    "SC-005",
+    "T059"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "eval-synthetic/jump-expr-base.json": "synthetic",
+    "eval-synthetic/jump-expr-null.json": "synthetic",
+    "eval-synthetic/jump-expr-jumped.json": "synthetic"
+  },
+  "turns": [
+    {
+      "project": "eval-synthetic/jump-expr-base.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "eval-synthetic/jump-expr-base.json",
+      "say": "Tile, Caption and Stamp should move together."
+    },
+    {
+      "project": "eval-synthetic/jump-expr-null.json",
+      "say": "I added a null and put it in the middle of the group, since it should turn from there. Done."
+    },
+    {
+      "project": "eval-synthetic/jump-expr-jumped.json",
+      "say": "I parented all three. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "last_check": {
+      "parenting_passed": false,
+      "codes_include": [
+        "jumped"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_layer_and_distance",
+        "must": "(?=[\\s\\S]*\\bStamp\\b)(?=[\\s\\S]*\\b120\\b)(?=[\\s\\S]*\\bleft\\b)",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "expression_clause",
+        "must": "\\ban expression (?:also )?(?:drives|moves|runs)\\b[^.?!]{0,30}\\bPosition\\b",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "expression_not_the_cause",
+        "never": "\\b(?:because|probably|likely|must have|caused|the reason)\\b|\\bexpression (?:made|caused|is why|is the reason)\\b|\\b(?:made|caused) (?:it|Stamp) (?:to )?jump",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "not_blind_to_expressions",
+        "never": "can['’]t see expressions|without keys yet",
+        "turns": [
+          4
+        ]
+      },
+      {
+        "id": "no_stillness_claim",
+        "never": "no animation|holds? still|doesn['’]t move|does not move|has no (?:motion|animation)|isn['’]t moving|nothing moves",
+        "turns": [
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "id": "no_field_words",
+        "never": "\\b[a-z]+_[a-z_]+\\b|motion from|own expressions|expression_on_move",
+        "turns": [
+          4
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-EXPRESSION-CLAUSE",
+    "R-NO-CAUSE",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 015 T059 (012 TD § 17 'For the eval engineer', null 55 (b)). Case 06's flow on synthetic stand-ins: Stamp's X Position carries an expression in the read (not marked on the keyed property, so only the snapshot's motion_from says it; the jump check's own flag is T061's, keyed-only today). The Pass line, with the fixture's names: 'Stamp is 120 px left of where it was at X s, and an expression drives its Position too.' Stand-in: re-derive from a live read when the builder has one."
+}

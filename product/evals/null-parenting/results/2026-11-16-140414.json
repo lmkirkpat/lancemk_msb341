@@ -1,0 +1,420 @@
+{
+  "run_at": "2026-11-16T21:04:14.231Z",
+  "options": {
+    "only": "55",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 3.03,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "55-jump-on-a-layer-an-expression-drives",
+      "title": "A group layer that jumped when parented has its own Position expression: the jump sentence says it as a clause beside the jump (not the cause), never 'can't see expressions', never 'no animation' or 'holds still'",
+      "covers": [
+        "spec015-OQ-8",
+        "012-TD-17",
+        "SC-005",
+        "T059"
+      ],
+      "fixture_sources": {
+        "eval-synthetic/jump-expr-base.json": "synthetic",
+        "eval-synthetic/jump-expr-null.json": "synthetic",
+        "eval-synthetic/jump-expr-jumped.json": "synthetic"
+      },
+      "hash": "f59dcf3e48bb6c910d24a420371857ef27f7e5615fafd62d2a86b254b0da1498",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_layer_and_distance",
+              "pass": true,
+              "detail": "turn 4: \"\""
+            },
+            {
+              "check": "say:expression_clause",
+              "pass": true,
+              "detail": "turn 4: \"an expression drives its X Position\""
+            },
+            {
+              "check": "say:expression_not_the_cause",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "say:not_blind_to_expressions",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "say:no_stillness_claim",
+              "pass": true,
+              "detail": "turns 1 to 4: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 4: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-EXPRESSION-CLAUSE",
+              "pass": true,
+              "reason": "Turn 4 gives the jump with its layer, distance, direction and time, and puts the expression in a clause beside it in the same sentence: \"Stamp ... it's now 120 px to the left of where it was at 0 s, and an expression drives its X Position too.\" It does not call the expression the cause, does not say it can't see expressions, and does not say Stamp has no animation."
+            },
+            {
+              "item": "R-NO-CAUSE",
+              "pass": true,
+              "reason": "Turn 4 never says why Stamp jumped. \"If the null moved after you placed it, that can show up here too\" is phrased as a place to look, and the held-key line is asked as a question (\"Were you holding a key while you parented it?\"), not stated as the cause."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every layer, property and time the mentor mentions comes from the tool results: Tile, Caption, Stamp, Null 1, X Position, 120 px left, 0 s, Mentor Practice 2, and the null's place in the middle (region_now center). The Parent column and Edit > Undo are plausible interface names."
+            }
+          ],
+          "cost": 1.0107514,
+          "session_id": "64d82a39-fbf5-44b0-a683-eea3a4a5b258",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"motion_from\": {\n    \"Tile\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Caption\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Stamp\": {\n      \"own_keys\": true,\n      \"own_expressions\": [\n        \"X Position\"\n      ],\n      \"parents\": []\n    },\n    \"Chip A\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip B\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip C\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    }\n  },\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"motion_from\": {\n    \"Tile\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Caption\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Stamp\": {\n      \"own_keys\": true,\n      \"own_expressions\": [\n        \"X Position\"\n      ],\n      \"parents\": []\n    },\n    \"Chip A\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip B\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip C\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    }\n  },\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-gaYLU4-runtime/64d82a39-fbf5-44b0-a683-eea3a4a5b258/tool-results/mcp-ae-mentor-blob-1794862981859-r0iq3i.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0}\nMENTOR: Tile, Caption and Stamp it is. Here's Mentor Practice 2 at 0 s, the moment we'll measure from.\n\nA layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: I added a null and put it in the middle of the group, since it should turn from there. Done.\nTOOL CALL null_parent_check {\"region\":\"center\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"null_ready\",\n      \"null\": \"Null 1\"\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": {\n      \"applies\": true,\n      \"passed\": true,\n      \"cant_check\": false,\n      \"region_now\": \"center\",\n      \"wanted\": \"center\"\n    },\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": true\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"null_ready\"\n  ]\n}\nMENTOR: Null 1's in place, with its pivot right in the middle of the group. Now parent Tile, Caption and Stamp to it with the pick whip in the Parent column, and say done. I can parent Tile first so you can watch, if you like.\n\n### Turn 4: the project is an open comp\nLEARNER: I parented all three. Done.\nTOOL CALL null_parent_check {\"region\":\"center\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"jumped\",\n      \"layer\": \"Stamp\",\n      \"px\": 120,\n      \"direction\": \"left\",\n      \"time\": 0\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": {\n      \"applies\": true,\n      \"passed\": true,\n      \"cant_check\": false,\n      \"region_now\": \"center\",\n      \"wanted\": \"center\"\n    },\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": false\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": false,\n        \"worst_px\": 120,\n        \"direction\": \"left\",\n        \"time\": 0\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"jumped\"\n  ]\n}\nMENTOR: Tile and Caption follow Null 1 and stayed exactly where they were.\n\nStamp follows Null 1 too, but it's now 120 px to the left of where it was at 0 s, and an expression drives its X Position too. Do Edit > Undo and parent it again. If the null moved after you placed it, that can show up here too. Were you holding a key while you parented it? Parent with no key held.\n\nSay done when Stamp's parented again.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_layer_and_distance",
+              "pass": true,
+              "detail": "turn 4: \"\""
+            },
+            {
+              "check": "say:expression_clause",
+              "pass": true,
+              "detail": "turn 4: \"an expression drives its X Position\""
+            },
+            {
+              "check": "say:expression_not_the_cause",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "say:not_blind_to_expressions",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "say:no_stillness_claim",
+              "pass": true,
+              "detail": "turns 1 to 4: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 4: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-EXPRESSION-CLAUSE",
+              "pass": true,
+              "reason": "Turn 4 says the jump and the expression in one sentence, with the expression as a clause beside the jump rather than its cause: \"it's 120 px to the left of where it was at 0 s, and an expression drives its X Position too\". It then gives Edit > Undo, never says it can't see expressions or that Stamp holds still, and \"X Position\" is a property name, not a read field."
+            },
+            {
+              "item": "R-NO-CAUSE",
+              "pass": true,
+              "reason": "Turn 4 gives no cause: \"If the null moved after you placed it, that can show up here too\" is phrased as a place to look, and \"Were you holding a key while you parented it?\" is a question, not a stated cause."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and value matches the tool results: Tile, Caption, Stamp, Null 1, X Position, 120 px, left and 0 s, and the turn 3 \"middle of the group\" matches region_now center. The pick whip in the Parent column and Edit > Undo are interface names used as the skill describes."
+            }
+          ],
+          "cost": 1.0085788000000002,
+          "session_id": "88a459b2-7c45-47f0-b09a-99d0aa730a7c",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"motion_from\": {\n    \"Tile\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Caption\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Stamp\": {\n      \"own_keys\": true,\n      \"own_expressions\": [\n        \"X Position\"\n      ],\n      \"parents\": []\n    },\n    \"Chip A\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip B\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip C\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    }\n  },\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this builds on it. Today's lesson is about moving several layers together as one group.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"motion_from\": {\n    \"Tile\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Caption\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Stamp\": {\n      \"own_keys\": true,\n      \"own_expressions\": [\n        \"X Position\"\n      ],\n      \"parents\": []\n    },\n    \"Chip A\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip B\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip C\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    }\n  },\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-VwbxLk-runtime/88a459b2-7c45-47f0-b09a-99d0aa730a7c/tool-results/mcp-ae-mentor-blob-1794863009504-4eejoe.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0}\nMENTOR: Good, Tile, Caption and Stamp are the group. Above is your comp at 0 s, where we'll start from.\n\nHere's the idea: a layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: I added a null and put it in the middle of the group, since it should turn from there. Done.\nTOOL CALL null_parent_check {\"region\":\"center\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"null_ready\",\n      \"null\": \"Null 1\"\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": {\n      \"applies\": true,\n      \"passed\": true,\n      \"cant_check\": false,\n      \"region_now\": \"center\",\n      \"wanted\": \"center\"\n    },\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": true\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"null_ready\"\n  ]\n}\nMENTOR: Null 1 is in place, with its pivot right in the middle of the group, where you want it to turn from.\n\nNow parent Tile, Caption and Stamp to it with the pick whip in the Parent column, and say done. I can parent Tile first so you can watch, if you like.\n\n### Turn 4: the project is an open comp\nLEARNER: I parented all three. Done.\nTOOL CALL null_parent_check {\"region\":\"center\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"jumped\",\n      \"layer\": \"Stamp\",\n      \"px\": 120,\n      \"direction\": \"left\",\n      \"time\": 0\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": {\n      \"applies\": true,\n      \"passed\": true,\n      \"cant_check\": false,\n      \"region_now\": \"center\",\n      \"wanted\": \"center\"\n    },\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": false\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": false,\n        \"worst_px\": 120,\n        \"direction\": \"left\",\n        \"time\": 0\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"jumped\"\n  ]\n}\nMENTOR: Tile and Caption both follow Null 1 and stayed exactly where they were.\n\nStamp also follows Null 1, but it's 120 px to the left of where it was at 0 s, and an expression drives its X Position too. Use Edit > Undo and parent it again. If the null moved after you placed it, that can show up here too. Were you holding a key while you parented it?\n\nSay done when Stamp is parented again.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "last_check",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "say:names_layer_and_distance",
+              "pass": true,
+              "detail": "turn 4: \"\""
+            },
+            {
+              "check": "say:expression_clause",
+              "pass": true,
+              "detail": "turn 4: \"an expression drives its X Position\""
+            },
+            {
+              "check": "say:expression_not_the_cause",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "say:not_blind_to_expressions",
+              "pass": true,
+              "detail": "turn 4: clean"
+            },
+            {
+              "check": "say:no_stillness_claim",
+              "pass": true,
+              "detail": "turns 1 to 4: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 4: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-EXPRESSION-CLAUSE",
+              "pass": true,
+              "reason": "Turn 4 says \"Stamp is 120 px to the left of where it was at 0 s, and an expression drives its X Position too\". The expression is a clause beside the jump, not its cause, followed by a where-to-look line and Edit > Undo, with no 'can't see expressions', no 'holds still' and no read field name ('X Position' is the property name from own_expressions)."
+            },
+            {
+              "item": "R-NO-CAUSE",
+              "pass": true,
+              "reason": "Turn 4 gives no reason for Stamp's jump, and \"If the null moved after you placed it, that can show up here too\" is phrased as a place to look, not as the cause."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every layer, property and time named matches tool output: Tile, Caption, Stamp and Null 1; X Position from own_expressions; 120 px left at 0 s from the jumped hint; the middle placement from region_now center; and the pivot lesson from other_skills. Interface names (Parent column, pick whip, Edit > Undo) are plausible and used as the steps say."
+            }
+          ],
+          "cost": 1.0088226,
+          "session_id": "74856b5a-7595-43db-8207-c69df0bc886f",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": null,\n  \"matte_added\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"before_time\": null,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"motion_from\": {\n    \"Tile\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Caption\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Stamp\": {\n      \"own_keys\": true,\n      \"own_expressions\": [\n        \"X Position\"\n      ],\n      \"parents\": []\n    },\n    \"Chip A\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip B\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip C\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    }\n  },\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nMENTOR: You've done the pivot lesson, and this one builds on it.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n\n### Turn 2: the project is an open comp\nLEARNER: Tile, Caption and Stamp should move together.\nTOOL CALL null_parent_snapshot {\"skill_options\":{\"focus\":[\"Tile\",\"Caption\",\"Stamp\"]}}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"proposal\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"next_proposal\": [\n    \"Chip A\",\n    \"Chip B\",\n    \"Chip C\"\n  ],\n  \"no_proposal_reason\": null,\n  \"left_out\": [\n    {\n      \"layer\": \"Hatch Rig\",\n      \"reason\": \"null\"\n    },\n    {\n      \"layer\": \"Hatch\",\n      \"reason\": \"parented\",\n      \"parent\": \"Hatch Rig\",\n      \"parent_is_null\": true\n    },\n    {\n      \"layer\": \"Shadow\",\n      \"reason\": \"parented\",\n      \"parent\": \"Plate\",\n      \"parent_is_null\": false\n    },\n    {\n      \"layer\": \"Background\",\n      \"reason\": \"full_frame\"\n    }\n  ],\n  \"duplicate_names\": [],\n  \"rename_needed\": [],\n  \"focus\": [\n    \"Tile\",\n    \"Caption\",\n    \"Stamp\"\n  ],\n  \"matte_added\": [],\n  \"targets\": [\n    \"parent/Tile\",\n    \"parent/Caption\",\n    \"parent/Stamp\"\n  ],\n  \"demo_target\": \"parent/Tile\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"before_time\": 0,\n  \"null_ready\": false,\n  \"notes\": [],\n  \"motion_from\": {\n    \"Tile\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Caption\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Stamp\": {\n      \"own_keys\": true,\n      \"own_expressions\": [\n        \"X Position\"\n      ],\n      \"parents\": []\n    },\n    \"Chip A\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip B\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    },\n    \"Chip C\": {\n      \"own_keys\": true,\n      \"own_expressions\": [],\n      \"parents\": []\n    }\n  },\n  \"focus_set\": true,\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true\n}\nTOOL CALL preview_frame {\"time\":0}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-9fpxvy-runtime/74856b5a-7595-43db-8207-c69df0bc886f/tool-results/mcp-ae-mentor-blob-1794863035635-kqzmic.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0}\nMENTOR: So Tile, Caption and Stamp are the group. That's how the comp looks at 0 s.\n\nA layer with a parent takes on the parent's position, scale and rotation, but not its fade or effects, and keeps its own animation on top.\n\nWill Tile, Caption and Stamp turn or scale, or only slide? If they turn or scale, from where: a corner, the middle of an edge, or the middle of the group?\n\n### Turn 3: the project is an open comp\nLEARNER: I added a null and put it in the middle of the group, since it should turn from there. Done.\nTOOL CALL null_parent_check {\"region\":\"center\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"null_ready\",\n      \"null\": \"Null 1\"\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": {\n      \"applies\": true,\n      \"passed\": true,\n      \"cant_check\": false,\n      \"region_now\": \"center\",\n      \"wanted\": \"center\"\n    },\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": true\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": null,\n      \"expression_on_move\": false,\n      \"p1\": false,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"null_ready\"\n  ]\n}\nMENTOR: Null 1's in place, with its pivot right in the middle of the group. Now parent Tile, Caption and Stamp to it with the pick whip in the Parent column, and say done. I can parent Tile first so you can watch, if you like.\n\n### Turn 4: the project is an open comp\nLEARNER: I parented all three. Done.\nTOOL CALL null_parent_check {\"region\":\"center\"}\nTOOL RESULT (ok): {\n  \"comp_matches\": true,\n  \"lesson_comp\": \"Mentor Practice 2\",\n  \"before_time\": 0,\n  \"stage\": \"parenting\",\n  \"parenting_passed\": false,\n  \"passed\": false,\n  \"graded\": true,\n  \"demo_undone\": false,\n  \"hints\": [\n    {\n      \"code\": \"jumped\",\n      \"layer\": \"Stamp\",\n      \"px\": 120,\n      \"direction\": \"left\",\n      \"time\": 0\n    }\n  ],\n  \"null\": {\n    \"name\": \"Null 1\",\n    \"found\": true,\n    \"name_unique\": true,\n    \"parent\": null,\n    \"n1\": true,\n    \"n2\": true,\n    \"n3\": {\n      \"applies\": true,\n      \"passed\": true,\n      \"cant_check\": false,\n      \"region_now\": \"center\",\n      \"wanted\": \"center\"\n    },\n    \"p4\": null,\n    \"p5\": null,\n    \"moves\": [],\n    \"renamed_from\": null,\n    \"which_null\": null,\n    \"stored_now\": false\n  },\n  \"layers\": [\n    {\n      \"layer\": \"Tile\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Caption\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": true,\n        \"worst_px\": 0,\n        \"direction\": null,\n        \"time\": null\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    },\n    {\n      \"layer\": \"Stamp\",\n      \"found\": true,\n      \"credit\": \"learner\",\n      \"parent\": \"Null 1\",\n      \"expression_on_move\": false,\n      \"p1\": true,\n      \"p2\": {\n        \"passed\": false,\n        \"worst_px\": 120,\n        \"direction\": \"left\",\n        \"time\": 0\n      },\n      \"not_checked\": [],\n      \"p3\": {\n        \"passed\": true,\n        \"changed\": []\n      }\n    }\n  ],\n  \"comments\": [],\n  \"other_changes\": [],\n  \"codes\": [\n    \"jumped\"\n  ]\n}\nMENTOR: Tile and Caption both follow Null 1 and stayed exactly where they were. Stamp is 120 px to the left of where it was at 0 s, and an expression drives its X Position too. Use Edit > Undo and parent it again. If the null moved after you placed it, that can show up here too.\n\nParent Stamp to Null 1 again, and say done.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

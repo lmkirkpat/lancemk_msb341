@@ -61,4 +61,25 @@ const write = (name, obj) => fs.writeFileSync(path.join(HERE, "synthetic", name)
   r.synthetic = "Case 53 (spec 015 T035): live 015 Planted with Null 1 added at the bottom (from planted-renumbered.json) and the playhead at 1.5 s.";
   write("planted-null-added-later.json", r);
 }
+// Case 55 (spec 015 T059): the case 06 flow (Tile, Caption, Stamp; Stamp ends 120 px left after the
+// parenting) with an expression read added to all three reads, as if Stamp's X Position ran an
+// expression (on, no error, not marked on the keyed property, so only the snapshot's motion_from
+// carries it). STAND-IN: re-derive from a live read of a group layer whose own Position expression
+// jumps when parented, once the builder has one (T059 note).
+{
+  const LAYER_INFO = path.resolve(HERE, "../../../../mentor/test/fixtures/layer-info");
+  const readAny = (f) => JSON.parse(fs.readFileSync(fs.existsSync(path.join(LIVE, f)) ? path.join(LIVE, f) : path.join(LAYER_INFO, f), "utf8"));
+  for (const [src, out] of [["practice2b.json", "jump-expr-base.json"], ["null-center.json", "jump-expr-null.json"], ["jumped.json", "jump-expr-jumped.json"]]) {
+    const r = readAny(src);
+    const stamp = r.layer_info.find((l) => l.name === "Stamp");
+    r.expressions = [{
+      layer: stamp.index, path: "ADBE Transform Group/ADBE Position_0", display_path: "Transform \u203a X Position", group: "transform",
+      keys: 2, enabled: true, active: true, error: null, text: "value + Math.sin(time * 4) * 10", text_length: 31, text_cut: false,
+    }];
+    r.expressions_read = "all";
+    r.expression_sweeps = [{ layer: stamp.index, path: "ADBE Transform Group/ADBE Position_0", kind: "coarse", sampled_every: 0.25, varies: true, max_offset: 10, max_at: 0.4 }];
+    r.synthetic = `Case 55 (spec 015 T059): live ${src} with an expression read added: Stamp's X Position runs an expression.`;
+    write(out, r);
+  }
+}
 console.log("wrote fixtures/synthetic/*");

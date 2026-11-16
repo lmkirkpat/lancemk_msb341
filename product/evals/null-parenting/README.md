@@ -652,3 +652,13 @@ The one-case probe `results/2026-11-12-093928.json` (case 01, pass, $0.08 mentor
 
 Fixtures: `expressions/planted.json` and `expressions/planted-renumbered.json` are T015's live **015 Planted** captures (new runner prefix `expressions/`). **Re-derive from the T015 capture:** `eval-synthetic/planted-null-added-later.json` (Null 1 at the bottom, playhead 1.5 s; `fixtures/build.mjs`). Case 53 doesn't parent anything, so the jump check itself isn't run here (unit tests cover it); it guards the other-changes list and the mentor's words. The runner's `last_check` now accepts `has` and `lacks` (substrings of the check reply), as the anchor runner does. Motion_from is carried in both cases' snapshot reply (the group's layers run on Position expressions); no case asserts how the mentor words it, since `SKILL.md` has no motion_from line yet.
 Results, B1, `--repeat 3`: the first drafts failed 1 of 3 each (`2026-11-16-124440`, `-124541`, `-124825`, `-124924`: 53 2/3, 54 2/3, 53 3/3, 54 2/3): **case bug**, the skill asks turn-or-slide before checking, so "I added a null. Done." got that question and never reached a check. Turn 3 now says "The group will only slide, so the spot doesn't matter" (as case 44). Final: 53 3/3 ($2.11, `-125026`), 54 3/3 ($2.12, `-125125`).
+
+## Spec 015 T059 (2026-11-16, B1): case 55
+
+| Case | Situation | Hard check | Rubric |
+|---|---|---|---|
+| 55 jump-on-a-layer-an-expression-drives | case 06's flow (Tile, Caption, Stamp; Stamp 120 px left) with Stamp's X Position carrying an expression in the read | turn 4 names Stamp, 120, left and "an expression drives ... Position"; never a cause, "can't see expressions", "no animation", "holds still", or a field name | R-NULL-EXPRESSION-CLAUSE |
+
+Fixtures `eval-synthetic/jump-expr-base.json`, `jump-expr-null.json`, `jump-expr-jumped.json` are **stand-ins** built by `fixtures/build.mjs` from the live practice 2b, null-center and jumped captures with an expression read added (not marked on the keyed property, so only the snapshot's `motion_from` carries it; the jump check's own flag is keyed-only until T061). Re-derive from a live read when there is one. The wording is 012 TD § 17's first row, so the case does not need T061's code; T061 would add the flag as a second source.
+
+**T059 results, B1, `--repeat 3`:** 55 2/3 (`2026-11-16-140126`, $2.89; the miss was my regex, which didn't allow "an expression also drives", now loosened) then 3/3 (`-140414`, $3.03, regex unchanged at that run).

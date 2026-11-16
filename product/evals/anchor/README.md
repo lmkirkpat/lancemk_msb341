@@ -689,3 +689,19 @@ B1 baseline compared: `2026-11-09-175705.json`, 56/59 (95%); A is 1.7 points abo
 | 56 parent-moved-by-expression-only-the-playhead-moved | rock.png rides on Shake Control (expressions); only the playhead moved; "done" | no "undo", no Shake Control in turn 3; check hint `not_moved_enough` | R-AN-EXPRESSION-NOT-LEARNER |
 
 Fixtures: `rig.json`, `rig-panned.json`, `rig-later.json` are T015's live **015 Rig** captures (Comp 1's rig, its expression texts), not Comp 1 itself; the runner finds them in `mentor/test/fixtures/expressions/`. **Re-derive from the T015 capture:** `synthetic/rig-playhead-0.6.json` (015 Rig with the playhead at 0.6 s, built by `fixtures/build.mjs`; rig.json's 0.601 s has no sample in rig-later.json, so the check can't read the layer). Results, B1, `--repeat 3`: 55 3/3 ($2.45, `2026-11-16-124231`); 56 3/3 on the final fixture ($2.42, `2026-11-16-125256`). The first 56 run (`2026-11-16-124345`, 3/3) was vacuous: the mentor said it couldn't read rock.png, so it passed without testing the case; fixed by the new baseline fixture and `has: not_moved_enough`.
+
+## Spec 015 T059 (2026-11-16, B1): T058's wording
+
+Case 06 and R-AN-WRONG-LAYER pinned the old Pan Behind rule (start the drag on the crosshair; selecting first is never the fix). T058 rewrote the skill to AE 27.0's rule (the selected layer; with nothing selected, the top layer under the cursor), so both are rewritten: the reply must tell them to click the focus layer in the timeline, and must not say which layer they had selected or where they dragged.
+
+| Case | Situation | Hard check | Rubric |
+|---|---|---|---|
+| 57 parent-moved-by-expression-explanation-note | rock.png on 015 Rig, named with a place; explanation turn | the Pass line's sentence; one Shake Control mention; ends on "press A, then Shift+P"; no undo, no "doesn't move"/"no motion", no field words | R-AN-PARENT-MOVES-IT |
+| 58 unkeyed-position-expression-named | Joined (015 Planted, Position on an expression, no keys) named | leave-out sentence; never "ignores/overrides" the pivot; no undo | R-AN-EXPRESSION-LEAVE-OUT |
+| 59 null-that-moves-the-named-layer-named | Shake Control named after rock.png | "Shake Control is a null, so I can't check its pivot in this lesson yet"; never the generic null line | R-AN-NULL-MOVES-NAMED |
+
+**58 waits on T061.** The pivot tool still groups only keyed expressions under `expression_anchor_position`, so before T061 the tool may accept Joined as the focus. The skill's line also keys on the snapshot's `motion_from`, so the mentor may say the sentence anyway; a failure before T061 is expected, not a prompt bug. Re-run it after T061 merges.
+
+**Open items for spec 014's set:** the case where the learner asks about Shake Control's shake and the mentor says it builds on the null's own Position (never "sets its own value"; E30) is moved there. It is an ask-mode answer with no lesson Pass line, so it isn't written here.
+
+**T059 results, B1, `--repeat 3`:** 06 3/3 (`2026-11-16-140246`, $2.72; the first run `-135701` was 1/3 with two `ETIMEDOUT`, plumbing); 57 3/3 (`-135805`, $1.70); 58 0/3 (`-135902`, $1.82, waits on T061: the mentor says the sentence, then teaches Joined as an ordinary lesson); 59 3/3 (`-140010`, $2.44).

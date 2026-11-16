@@ -1,0 +1,66 @@
+{
+  "id": "59-null-that-moves-the-named-layer-named",
+  "title": "After rock.png, the learner asks about Shake Control (a null that moves rock.png): 'Shake Control is a null, so I can't check its pivot in this lesson yet', not the generic null line",
+  "covers": [
+    "spec015-OQ-8",
+    "011-TD-21",
+    "T059"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "rig.json": "live"
+  },
+  "turns": [
+    {
+      "project": "rig.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "rig.json",
+      "say": "rock.png should turn from its top-right corner."
+    },
+    {
+      "project": "rig.json",
+      "say": "Could Shake Control turn from its middle too?"
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "cant_check_its_pivot",
+        "must": "Shake Control is a null, so I can['’]t check its pivot in this lesson yet",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_the_generic_null_line",
+        "never": "nothing of its own to see turn|doesn['’]t (?:matter|have a pivot)|has no pivot",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_undo",
+        "never": "\\bundo\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_field_words",
+        "never": "\\b[a-z]+_[a-z_]+\\b|\\bmotion from\\b|\\bown keys\\b|\\bown expressions\\b|\\bby expression\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NULL-MOVES-NAMED",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ],
+  "note": "Spec 015 T059, optional (011 TD § 21, 'When the learner then names the parent'). Turn 3 names the null after rock.png, in the middle of the lesson. SKILL.md's line sits in step 1's leave-outs and says 'then the proposal or the next candidate', so what follows it in turn 3 is not pinned; the case pins only the sentence and what it must not say."
+}

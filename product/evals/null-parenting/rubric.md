@@ -577,3 +577,15 @@ the layers aren't parented yet. It says nothing about the expression layers and 
 - **Pass:** "Null 1 is in. Index Link and Runtime Name don't follow it yet."
 - **Fail:** names Wiggle, Const Parent, Const Kid or any other layer outside the group as changed, moved or jumped, or
   reports any jump at all.
+
+## R-NULL-EXPRESSION-CLAUSE: a jump on a layer its own expression moves says the expression as a clause beside the jump (spec 015 T059, case 55)
+
+A group layer jumped when the learner parented it, and the layer has its own expression on Position. The mentor
+says the jump (layer, distance, direction, time) and, in the same sentence, that an expression drives its Position
+too, as a clause beside the jump and never as its cause. Then the usual where-to-look and Edit > Undo for the jump.
+It never says it can't see expressions, never says the layer has no animation of its own or holds still, and never
+shows a field name.
+
+- **Pass:** "Stamp is 120 px left of where it was at 4.2 s, and an expression drives its Position too."
+- **Fail:** leaves the expression out, says it made the layer jump, says it can't see expressions without keys,
+  says the layer holds still or has no animation, or shows a word from the read's own fields.

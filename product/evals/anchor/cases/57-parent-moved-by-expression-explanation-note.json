@@ -1,0 +1,87 @@
+{
+  "id": "57-parent-moved-by-expression-explanation-note",
+  "title": "rock.png rides on Shake Control, which an expression moves: the explanation turn says it in one sentence, never calls it a change of theirs, and still ends on the A-then-Shift+P ask",
+  "covers": [
+    "spec015-OQ-8",
+    "011-TD-21",
+    "SC-005",
+    "T059"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "rig.json": "live"
+  },
+  "turns": [
+    {
+      "project": "rig.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "rig.json",
+      "say": "rock.png should turn from its top-right corner."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_called": [
+      "anchor_snapshot"
+    ],
+    "say": [
+      {
+        "id": "parent_note",
+        "must": "rock\\.png rides on Shake Control, which an expression moves, so moving rock\\.png['’]s pivot won['’]t change that motion",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "one_parent_sentence",
+        "never": "(?:Shake Control[\\s\\S]*){2}",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "ends_on_ask",
+        "must": "press A,? then Shift\\+P[^.?!\\n]{0,30}[.?!]?\\s*$",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_undo",
+        "never": "\\bundo\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_stillness_claim",
+        "never": "doesn['’]t move|does not move|no motion|no animation|holds? still|isn['’]t moving|nothing moves|no (?:movement|motion) of its own",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_trace_the_parent",
+        "never": "open (?:its|the) expression|trace|look at (?:its|the) expression|which (?:turns|shakes|moves) it",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_field_words",
+        "never": "\\b[a-z]+_[a-z_]+\\b|\\bmotion from\\b|\\bown keys\\b|\\bown expressions\\b|\\bby expression\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-PARENT-MOVES-IT",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ],
+  "note": "Spec 015 T059 (011 TD § 21 'For the eval engineer', pivot 57). Same rig and flow as case 55; turn 2 is the explanation turn (rock.png has no keys, so there is no where-to-stand turn). Pass line with the fixture's names: 'rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion.' The never-undo is about the parent's motion; the explanation turn has no other reason to say it."
+}
