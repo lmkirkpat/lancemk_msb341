@@ -318,11 +318,17 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   logged without the copied fields. Open: an abandoned unpassed lesson keeps its text until the next start
   on that skill and comp (uninstall removes it); `UNSAFE_RECORD` refusals still log their arguments (one-line
   fix with the same `omitFromLog`, not yet asked for).
-- [ ] T058 (skill-builder) The `motion_from` wording in `.claude/skills/anchor-mentor/SKILL.md` and
+- [x] T058 (skill-builder) The `motion_from` wording in `.claude/skills/anchor-mentor/SKILL.md` and
   `.claude/skills/null-parenting-mentor/SKILL.md`, from `specs/011-anchor/teaching-design.md` § 21 and
   `specs/012-null-parenting/teaching-design.md` § 17 (OQ-8, widened). Wording only; leave the Pan
   Behind "wrong layer" lines alone until T034. Take example sentences from the Pass lines, not
   invented ones.
+  **Done 2026-11-16 (branch `015-t058`):** 011 TD § 21 and 012 TD § 17 wording in both `SKILL.md` files,
+  plus the Pan Behind lines rewritten to T034's rule (select the layer first); `anchor-check.mjs`'s
+  wrong-layer test unchanged (it never assumed a cause). Also `UNSAFE_RECORD` refusals logged without the
+  unsafe fields (T057's open item). Pivot case 06 and R-AN-WRONG-LAYER pin the old rule and need updating
+  with T059. Not done (tool items in both sections): the unkeyed-expression buckets, the demo refusal and
+  the null jump flag still read keyed expressions only.
 - [ ] T059 (eval-engineer) After T058: pivot 57 and null 55 from those sections' Pass lines (held
   since T035), plus one case where the learner asks about Shake Control's shake and the mentor says
   it builds on the null's own Position (never "sets its own value"; E30), on the live T015 Comp 1

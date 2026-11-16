@@ -39,6 +39,9 @@ function isUnsafe(text) {
   return EMAIL.test(text) || PHONE.some((re) => re.test(text));
 }
 
+// Every text argument holding an email or phone number, the refused one and any other.
+const unsafeFields = (input) => Object.keys(input).filter((k) => typeof input[k] === "string" && isUnsafe(input[k]));
+
 // Returns a clean LessonEntry (without date), or throws before anything is written. `skills` is
 // every skill ID the tool files declare (mentor/tools/index.mjs), so the store keeps no list.
 function validate(input, skills) {
@@ -47,7 +50,8 @@ function validate(input, skills) {
   if (typeof input.demo_used !== "boolean") throw new Error("demo_used must be true or false");
   for (const field of TEXT_FIELDS) {
     if (typeof input[field] !== "string") throw new Error(`${field} is required and must be text`);
-    if (isUnsafe(input[field])) throw new MentorError("UNSAFE_RECORD");
+    // The server logs the refused call without the unsafe fields' values (calls.jsonl), as OQ-9's.
+    if (isUnsafe(input[field])) throw Object.assign(new MentorError("UNSAFE_RECORD"), { omitFromLog: unsafeFields(input) });
   }
   const { skill, project, comp, attempted, result, demo_used, summary, next } = input;
   return { skill, project, comp, attempted, result, demo_used, summary, next };

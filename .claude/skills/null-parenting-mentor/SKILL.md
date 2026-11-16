@@ -309,9 +309,14 @@ at most; they add the null, place it, parent the rest and give it its move with 
    - `existing_null`: "CTRL already has its own move and children, and they'll come along too."
      Once.
    - `null_ready`: the null passed; move on to parenting.
-   - A layer that jumped with `expression_on_move` true: name the jump and the expression in one
-     sentence ("an expression drives Logo's Rotation too"). If it jumped and that's false, add
-     that you can't see expressions on properties without keys yet.
+   - A layer that jumped and has its own expression on Position (or X or Y Position), Scale or
+     Rotation, keyed or not (`expression_on_move` true, or the snapshot's `motion_from` for that
+     layer lists one of them among its own expressions): the `jumped` sentence with the expression
+     as one clause beside the jump, never as its cause: "Chip is 40 px left of where it was at
+     0.5 s, and an expression drives its Position too." Then the `jumped` hint's where-to-look, as
+     above. A layer that jumped with neither gets the `jumped` sentence alone. Only when the
+     snapshot has no `motion_from`, or it isn't read, add that you can't see expressions on
+     properties without keys yet.
    - Mention `other_changes` briefly, never as mistakes: a layer added or removed, another layer now
      parented to the null ("Plate follows the null now too"), a parent or keys changed elsewhere, an
      expression turned on or off, or `value_changed`, another layer's values changed with no keys
@@ -427,3 +432,20 @@ on 'Ready?'. Name layers and times, not abstractions. No lists of every layer, a
 sentences, with no list of reasons and no added explanation, then the same pending action again,
 word for word or close to it. Never the next stage's content in that turn, and never the
 walk-through again.
+
+**What drives a group layer is said only where the learner acts on it.** A layer its own
+expression moves can be in the group: a parent carries it like any child, and its expression keeps
+running, so say nothing about it up front. It comes up in two places: the jump line (step 7), and
+when they ask why a group layer moves on its own and the snapshot's `motion_from` for it lists
+Position (or X or Y Position), Scale or Rotation among its own expressions: "An expression drives
+Chip's Position, so that's its own motion; it'll still move with the null." Then the pending step
+again, in one sentence. Without `motion_from`, or when it isn't read, this line doesn't apply:
+claim nothing about what moves it. Never:
+- anything about a layer outside the group: its parent, its expression or its motion;
+- the lesson's own null named as what drives a child, as a note (the pass sentence says it, as
+  step 6 does), or a parent's motion added to a leave-out line ("Title already follows CTRL" stays
+  as it is);
+- "has no animation of its own", "holds still" or "doesn't move" about a layer an expression
+  moves, in the pass sentence or anywhere;
+- an expression as the cause of a jump, the read's own words ("motion from", "own expressions"),
+  or Edit > Undo for motion an expression makes.
