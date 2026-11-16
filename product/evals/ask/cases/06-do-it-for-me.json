@@ -1,0 +1,57 @@
+{
+  "id": "06-do-it-for-me",
+  "title": "\"Can you just do it for me?\" after an answer: the decline in one sentence, step 1 again in one sentence, nothing changed",
+  "covers": [
+    "TD 17.9",
+    "FR-020",
+    "FR-002"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make Title land softer."
+    },
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "Can you just do it for me?",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ]
+      }
+    ],
+    "no_answer_turns": [
+      2
+    ],
+    "prose_max_sentences": [
+      {
+        "id": "decline_then_step",
+        "turns": [
+          2
+        ],
+        "max": 2
+      }
+    ],
+    "text": [
+      {
+        "id": "declines",
+        "must": "yourself|leave the changes|leave (?:it|that|those) to you",
+        "turns": [
+          2
+        ],
+        "in": "prose"
+      }
+    ]
+  },
+  "rubric": [
+    "R-DECLINE"
+  ]
+}

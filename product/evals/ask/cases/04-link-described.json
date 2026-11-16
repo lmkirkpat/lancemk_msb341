@@ -1,0 +1,42 @@
+{
+  "id": "04-link-described",
+  "title": "\"What does Sweep Control do?\": a null whose Position drives an effect on another layer; the link is described, never \"can't see\"",
+  "covers": [
+    "TD 17.6",
+    "FR-004",
+    "FR-011",
+    "A5",
+    "A6"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor What does Sweep Control do?"
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "describe"
+      }
+    ],
+    "text": [
+      {
+        "id": "names_effect",
+        "must": "Light Sweep",
+        "in": "explanation"
+      },
+      {
+        "id": "names_target_layer",
+        "must": "Black Solid 1",
+        "in": "explanation"
+      }
+    ]
+  },
+  "rubric": [
+    "R-LINK-DESCRIBED",
+    "R-HONEST-KINDS",
+    "R-ONE-IDEA"
+  ]
+}

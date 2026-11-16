@@ -1,0 +1,42 @@
+{
+  "id": "11-precomp-unread",
+  "title": "A precomp in reach (Icon): \"I couldn't see inside\" it, never \"nothing inside\"",
+  "covers": [
+    "TD 17.14",
+    "FR-012",
+    "A7"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make the Icon move more smoothly."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": [
+          "answer",
+          "describe"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "says_not_read",
+        "must": "(?:couldn.t|can.t|cannot|didn.t|wasn.t able to) (?:see|read|look) inside",
+        "in": "all"
+      },
+      {
+        "id": "never_nothing_inside",
+        "never": "nothing (?:is )?(?:inside|in (?:it|there))|isn.t animated|not animated|no (?:keys|keyframes|animation) inside|Icon (?:is|looks|seems) empty",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-UNREAD-NAMED",
+    "R-ONE-IDEA"
+  ]
+}

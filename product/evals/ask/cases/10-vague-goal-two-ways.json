@@ -1,0 +1,63 @@
+{
+  "id": "10-vague-goal-two-ways",
+  "title": "A vague goal with two different first steps (keys on Card, an expression on Glow): one question naming both, then an answer that states its assumption",
+  "covers": [
+    "TD 17.13",
+    "FR-014"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/card-and-glow.json",
+      "say": "/ask-mentor Make the animation feel more natural."
+    },
+    {
+      "project": "product/evals/ask/fixtures/card-and-glow.json",
+      "say": "The Card.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "clarify",
+        "max_sentences": [
+          {
+            "field": "explanation",
+            "max": 1
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "names_card",
+        "must": "Card",
+        "turns": [
+          1
+        ],
+        "in": "explanation"
+      },
+      {
+        "id": "names_glow",
+        "must": "Glow",
+        "turns": [
+          1
+        ],
+        "in": "explanation"
+      }
+    ]
+  },
+  "rubric": [
+    "R-CLARIFY",
+    "R-ASSUMPTION"
+  ]
+}

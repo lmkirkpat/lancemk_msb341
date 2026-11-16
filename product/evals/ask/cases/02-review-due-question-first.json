@@ -1,0 +1,50 @@
+{
+  "id": "02-review-due-question-first",
+  "title": "A review is due and the first message is a question: the answer comes first, with no review or lesson ahead of it",
+  "covers": [
+    "TD 17.4",
+    "FR-001",
+    "FR-061"
+  ],
+  "learner_record": "product/evals/ask/records/review-due-four-skills.json",
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor What is CTRL doing to Title?"
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": [
+          "answer",
+          "describe"
+        ]
+      }
+    ],
+    "turn_first_tool": [
+      {
+        "turn": 1,
+        "tool": "describe_layers"
+      }
+    ],
+    "text": [
+      {
+        "id": "no_review",
+        "never": "\\breview|\\bdue\\b|\\bquiz|refresher",
+        "in": "all"
+      },
+      {
+        "id": "names_ctrl",
+        "must": "CTRL",
+        "in": "explanation"
+      }
+    ]
+  },
+  "rubric": [
+    "R-ANSWER-FIRST",
+    "R-ONE-IDEA",
+    "R-HONEST-KINDS"
+  ]
+}
