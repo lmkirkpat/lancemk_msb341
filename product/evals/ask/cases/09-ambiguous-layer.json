@@ -1,0 +1,64 @@
+{
+  "id": "09-ambiguous-layer",
+  "title": "\"The rock\" names two layers whose first steps differ: one clarifying question naming both, then an answer that states its assumption",
+  "covers": [
+    "TD 17.12",
+    "FR-014",
+    "A13"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1-two-rocks.json",
+      "say": "/ask-mentor Make the rock feel heavier."
+    },
+    {
+      "project": "product/evals/ask/fixtures/comp1-two-rocks.json",
+      "say": "The rock.png one.",
+      "followup": true
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "clarify",
+        "max_sentences": [
+          {
+            "field": "explanation",
+            "max": 1
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "names_first_rock",
+        "must": "rock\\.png",
+        "turns": [
+          1
+        ],
+        "in": "explanation"
+      },
+      {
+        "id": "names_second_rock",
+        "must": "Rock Shadow",
+        "turns": [
+          1
+        ],
+        "in": "explanation"
+      }
+    ]
+  },
+  "rubric": [
+    "R-CLARIFY",
+    "R-ASSUMPTION"
+  ]
+}

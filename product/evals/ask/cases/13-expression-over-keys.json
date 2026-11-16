@@ -1,0 +1,44 @@
+{
+  "id": "13-expression-over-keys",
+  "title": "Keys and an enabled expression on one property (Logo's Rotation): both said; the keys are not edited as if they drove it",
+  "covers": [
+    "EE-4",
+    "FR-010",
+    "A1"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make the Logo's spin ease out."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ],
+        "no_keyframe_skills": true
+      }
+    ],
+    "text": [
+      {
+        "id": "says_expression",
+        "must": "expression",
+        "in": "all"
+      },
+      {
+        "id": "says_keys",
+        "must": "\\bkeys?\\b|keyframes?",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-KEYS-AND-EXPRESSION",
+    "R-HONEST-KINDS"
+  ]
+}

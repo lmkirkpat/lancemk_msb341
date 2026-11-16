@@ -1,0 +1,51 @@
+{
+  "id": "05-keyed-softer-one-offer",
+  "title": "A question inside one skill on a keyed layer (\"make Subtitle land softer\"): steps plus one offer of the speed graph, and no lesson starts",
+  "covers": [
+    "TD 17.7",
+    "FR-008",
+    "FR-016",
+    "FR-022"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make Subtitle land softer."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ],
+        "step_skills_include": [
+          "easing.speed_graph"
+        ],
+        "offered_equals": [
+          "easing.speed_graph"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "offer_names_speed_graph",
+        "must": "speed graph",
+        "in": "offer"
+      },
+      {
+        "id": "no_review",
+        "never": "\\breview",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-ONE-IDEA",
+    "R-STEPS-ACTIONABLE",
+    "R-OFFER-FITS"
+  ]
+}

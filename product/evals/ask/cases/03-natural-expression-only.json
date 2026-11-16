@@ -1,0 +1,46 @@
+{
+  "id": "03-natural-expression-only",
+  "title": "\"Make the shake natural\" on motion that is all expressions: the source is named and no keyframe skill is proposed",
+  "covers": [
+    "TD 17.5",
+    "FR-022",
+    "A2"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the shake feel more natural."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ],
+        "no_keyframe_skills": true,
+        "step_on_layer": "Shake Control"
+      }
+    ],
+    "text": [
+      {
+        "id": "names_source",
+        "must": "Shake Control",
+        "in": "explanation"
+      },
+      {
+        "id": "names_expressions",
+        "must": "expression",
+        "in": "explanation"
+      }
+    ]
+  },
+  "rubric": [
+    "R-ONE-IDEA",
+    "R-NAMES-SOURCE",
+    "R-EXPRESSION-ONLY"
+  ]
+}

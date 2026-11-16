@@ -1,0 +1,43 @@
+{
+  "id": "14-separated-dimensions",
+  "title": "Separated dimensions (Bar's X Position has the keys): the step names X Position, never a Position that isn't there",
+  "covers": [
+    "EE-4",
+    "FR-010",
+    "A4"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make the Bar's slide ease in."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "names_x_position",
+        "must": "X Position",
+        "in": "all"
+      },
+      {
+        "id": "never_bare_position_keys",
+        "never": "(?<![XY] )Position (?:key|keyframe|expression)",
+        "cs": true,
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-DIMENSION"
+  ]
+}

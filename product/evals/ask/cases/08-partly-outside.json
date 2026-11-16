@@ -1,0 +1,42 @@
+{
+  "id": "08-partly-outside",
+  "title": "A goal partly outside (soften Title, plus how to export): the inside part gets steps, the outside part is named and not dropped, nothing from general knowledge",
+  "covers": [
+    "TD 17.11",
+    "FR-018"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Make Title land softer, and tell me the best way to export it for Instagram."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "outside_part_kept",
+        "must": "export",
+        "in": "all"
+      },
+      {
+        "id": "no_general_answer",
+        "never": "H\\.?264|bitrate|\\bMP4\\b|Media Encoder|\\bcodec|Render Queue|\\b1080\\b|frame rate",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-PARTLY-OUTSIDE",
+    "R-ONE-IDEA"
+  ]
+}

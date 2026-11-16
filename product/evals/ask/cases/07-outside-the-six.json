@@ -1,0 +1,32 @@
+{
+  "id": "07-outside-the-six",
+  "title": "A question fully outside (render settings): the outside line, no steps, no offer, nothing from general knowledge",
+  "covers": [
+    "TD 17.10",
+    "FR-018"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor What render settings should I use to export this for Instagram?"
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "outside"
+      }
+    ],
+    "text": [
+      {
+        "id": "no_general_answer",
+        "never": "H\\.?264|bitrate|\\bMP4\\b|Media Encoder|\\bcodec|Render Queue|\\b1080\\b|frame rate",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-OUTSIDE"
+  ]
+}

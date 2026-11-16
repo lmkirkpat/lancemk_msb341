@@ -1,0 +1,65 @@
+{
+  "id": "01-parent-source",
+  "title": "Comp 1: a child with no keys rides a null moved by expressions; the answer names the parent, its expressions, and puts steps on the parent",
+  "covers": [
+    "TD 17.1",
+    "FR-003",
+    "FR-005",
+    "FR-006",
+    "FR-007",
+    "FR-022",
+    "A3"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Make the rock shake from where the hammer hits."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          2,
+          4
+        ],
+        "no_keyframe_skills": true,
+        "step_on_layer": "Shake Control",
+        "step_order": [
+          {
+            "id": "hit_sizes_before_pivot",
+            "first": "not_taught",
+            "then": "transform.anchor",
+            "needs_sweeps": true
+          }
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "names_parent",
+        "must": "Shake Control",
+        "in": "explanation"
+      },
+      {
+        "id": "names_rock",
+        "must": "rock\\.png",
+        "in": "explanation"
+      },
+      {
+        "id": "names_expressions",
+        "must": "expression",
+        "in": "explanation"
+      }
+    ]
+  },
+  "rubric": [
+    "R-ONE-IDEA",
+    "R-NAMES-SOURCE",
+    "R-HONEST-KINDS",
+    "R-STEPS-ACTIONABLE",
+    "R-OUTSIDE-STEP-SHAPE"
+  ]
+}

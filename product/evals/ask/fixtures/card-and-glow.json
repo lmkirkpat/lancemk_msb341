@@ -1,0 +1,435 @@
+{
+ "taken_at": "2026-11-15T03:41:06.970Z",
+ "project": "Claude AE Tutor Test (converted).aep",
+ "comp": {
+  "id": 2737,
+  "name": "Intro",
+  "duration": 6,
+  "frame_rate": 30,
+  "time": 0.6,
+  "hide_shy": false,
+  "width": 1920,
+  "height": 1080
+ },
+ "precomp_layers": [],
+ "layers": [
+  {
+   "index": 1,
+   "name": "Card",
+   "kind": "solid",
+   "enabled": true,
+   "is_null": false,
+   "properties": [
+    {
+     "path": "ADBE Transform Group/ADBE Scale",
+     "display_path": "Transform › Scale",
+     "match_name": "ADBE Scale",
+     "display_name": "Scale",
+     "dimensions": 3,
+     "expression_enabled": false,
+     "keys": [
+      {
+       "index": 1,
+       "time": 0,
+       "in_type": "linear",
+       "out_type": "linear",
+       "value": [
+        100,
+        100,
+        100
+       ],
+       "in_ease": [
+        {
+         "speed": 0,
+         "influence": 16.667
+        },
+        {
+         "speed": 0,
+         "influence": 16.667
+        },
+        {
+         "speed": 0,
+         "influence": 16.667
+        }
+       ],
+       "out_ease": [
+        {
+         "speed": 25,
+         "influence": 16.667
+        },
+        {
+         "speed": 25,
+         "influence": 16.667
+        },
+        {
+         "speed": 0,
+         "influence": 16.667
+        }
+       ]
+      },
+      {
+       "index": 2,
+       "time": 2,
+       "in_type": "linear",
+       "out_type": "linear",
+       "value": [
+        150,
+        150,
+        100
+       ],
+       "in_ease": [
+        {
+         "speed": 25,
+         "influence": 16.667
+        },
+        {
+         "speed": 25,
+         "influence": 16.667
+        },
+        {
+         "speed": 0,
+         "influence": 16.667
+        }
+       ],
+       "out_ease": [
+        {
+         "speed": 0,
+         "influence": 16.667
+        },
+        {
+         "speed": 0,
+         "influence": 16.667
+        },
+        {
+         "speed": 0,
+         "influence": 16.667
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "layer_info": [
+  {
+   "index": 1,
+   "name": "Card",
+   "kind": "solid",
+   "enabled": true,
+   "is_null": false,
+   "adjustment": false,
+   "has_video": true,
+   "three_d": false,
+   "collapse": false,
+   "auto_orient": false,
+   "parent": null,
+   "shy": false,
+   "solo": false,
+   "guide": false,
+   "locked": false,
+   "in_point": 0,
+   "out_point": 6,
+   "start_time": 0,
+   "stretch": 100,
+   "time_remap": false,
+   "matte": null,
+   "is_matte": false,
+   "motion_blur": false,
+   "effect_count": 0,
+   "effects": [],
+   "mask_count": 0,
+   "transform": {
+    "anchor": [
+     100,
+     100,
+     0
+    ],
+    "position": [
+     960,
+     540,
+     0
+    ],
+    "scale": [
+     115,
+     115,
+     100
+    ],
+    "rotation": 0,
+    "opacity": 100
+   },
+   "samples": [
+    {
+     "time": 0,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      960,
+      540,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 0,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null
+    },
+    {
+     "time": 0.6,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      960,
+      540,
+      0
+     ],
+     "scale": [
+      115,
+      115,
+      100
+     ],
+     "rotation": 0,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null
+    },
+    {
+     "time": 1.5,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      960,
+      540,
+      0
+     ],
+     "scale": [
+      137.5,
+      137.5,
+      100
+     ],
+     "rotation": 0,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null
+    },
+    {
+     "time": 2,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      960,
+      540,
+      0
+     ],
+     "scale": [
+      150,
+      150,
+      100
+     ],
+     "rotation": 0,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null
+    }
+   ],
+   "samples_truncated": false
+  },
+  {
+   "index": 2,
+   "name": "Glow",
+   "kind": "solid",
+   "enabled": true,
+   "is_null": false,
+   "adjustment": false,
+   "has_video": true,
+   "three_d": false,
+   "collapse": false,
+   "auto_orient": false,
+   "parent": null,
+   "shy": false,
+   "solo": false,
+   "guide": false,
+   "locked": false,
+   "in_point": 0,
+   "out_point": 6,
+   "start_time": 0,
+   "stretch": 100,
+   "time_remap": false,
+   "matte": null,
+   "is_matte": false,
+   "motion_blur": false,
+   "effect_count": 0,
+   "effects": [],
+   "mask_count": 0,
+   "transform": {
+    "anchor": [
+     100,
+     100,
+     0
+    ],
+    "position": [
+     943.238,
+     538.64,
+     0
+    ],
+    "scale": [
+     100,
+     100,
+     100
+    ],
+    "rotation": 0,
+    "opacity": 100
+   },
+   "samples": [
+    {
+     "time": 0.6,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      943.238,
+      538.64,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 0,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null,
+     "base": {
+      "position": [
+       960,
+       540,
+       0
+      ]
+     }
+    },
+    {
+     "time": 1.5,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      959.407,
+      567.328,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 0,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null,
+     "base": {
+      "position": [
+       960,
+       540,
+       0
+      ]
+     }
+    }
+   ],
+   "samples_truncated": false
+  }
+ ],
+ "expressions": [
+  {
+   "layer": 2,
+   "path": "ADBE Transform Group/ADBE Position",
+   "display_path": "Transform › Position",
+   "group": "transform",
+   "keys": 0,
+   "enabled": true,
+   "active": true,
+   "error": null,
+   "text": "wiggle(5, 20)",
+   "text_length": 13,
+   "text_cut": false
+  }
+ ],
+ "expressions_read": "all",
+ "expression_sweeps": [
+  {
+   "layer": 2,
+   "path": "ADBE Transform Group/ADBE Position",
+   "kind": "coarse",
+   "sampled_every": 0.25,
+   "varies": true,
+   "max_offset": 27.334,
+   "max_at": 1.5
+  },
+  {
+   "layer": 2,
+   "path": "ADBE Transform Group/ADBE Position",
+   "kind": "fine",
+   "sampled_every": 0.033,
+   "varies": true,
+   "max_offset": 28.878,
+   "max_at": 2.433
+  }
+ ],
+ "measured_layers": [
+  2
+ ],
+ "host": {
+  "ae_version": "27.0x78",
+  "os": "Macintosh OS 27.2.1/64"
+ }
+}
