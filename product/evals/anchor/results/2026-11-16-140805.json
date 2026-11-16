@@ -1,0 +1,403 @@
+{
+  "run_at": "2026-11-16T21:08:05.217Z",
+  "options": {
+    "only": "58",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 1.43,
+  "fixtures_note": "Live captures of Mentor Practice 2 (comp 179) plus synthetic fixtures; see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "58-unkeyed-position-expression-named",
+      "title": "The learner names Joined, whose Position an expression drives with no keys: the leave-out sentence ('An expression drives Joined's Position, so moving its pivot may not show'), no demo, no promise the check will work",
+      "covers": [
+        "spec015-OQ-8",
+        "011-TD-21",
+        "T059",
+        "T061-dependent"
+      ],
+      "fixture_sources": {
+        "planted.json": "live"
+      },
+      "hash": "d13585db9ec5d76df62b4961c1c7b9d7b8af62a5be2840885c8e4acd984984ff",
+      "pass": true,
+      "passes": 3,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "never called"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:leave_out_sentence",
+              "pass": true,
+              "detail": "turn 2: \"An expression drives Joined's Position, so moving its pivot may not show\""
+            },
+            {
+              "check": "say:not_ignores_pivot",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_undo",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-EXPRESSION-LEAVE-OUT",
+              "pass": true,
+              "reason": "In Turn 2 the mentor says in one sentence \"An expression drives Joined's Position, so moving its pivot may not show,\" makes no claim that the expression ignores or overrides the pivot, runs no demo, and goes straight to the proposal (Err Transform from its left edge)."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses comes from the anchor_snapshot result: Joined and Err Transform are listed candidates, Joined's Position expression appears in own_expressions, and \"left edge\" follows from the proposal's suggested_place \"middle-left\"."
+            }
+          ],
+          "cost": 0.5192926,
+          "session_id": "482450cd-ba89-40da-b6d0-2289bfb7eebd",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Planted\",\n    \"time\": 0.6,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Ctrl\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Err Transform\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Err Effect\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Off Expr\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 6,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Over Keys\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Joined\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Separated\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"X Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Guide Link\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"guide\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Opacity\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Matte Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Matte Fill\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Index Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Offset Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Comp Ref\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 4,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Opacity\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Runtime Name\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Words\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 5,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Source Text\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Const Parent\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Const Kid\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 7,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Wiggle\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Err Transform\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Err Transform\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 2\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Err Transform could swing from its left edge. Want to try that one?\n\n### Turn 2: the project is an open comp\nLEARNER: Joined should turn from its top-left corner.\nMENTOR: An expression drives Joined's Position, so moving its pivot may not show. Err Transform could swing from its left edge instead. Want to try that one?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "never called"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:leave_out_sentence",
+              "pass": true,
+              "detail": "turn 2: \"An expression drives Joined's Position, so moving its pivot may not show\""
+            },
+            {
+              "check": "say:not_ignores_pivot",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_undo",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-EXPRESSION-LEAVE-OUT",
+              "pass": true,
+              "reason": "Turn 2 says exactly once \"An expression drives Joined's Position, so moving its pivot may not show,\" makes no claim that the expression ignores or overrides the pivot, runs no demo, and goes on to the proposal (Err Transform from its left edge)."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses (Joined, Err Transform, Position) appears in the anchor_snapshot result, and \"left edge\" follows from the proposal's suggested_place \"middle-left\"; no times or invented names appear."
+            }
+          ],
+          "cost": 0.38864999999999994,
+          "session_id": "42960f19-3fa5-4c60-9976-026239e49704",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Planted\",\n    \"time\": 0.6,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Ctrl\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Err Transform\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Err Effect\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Off Expr\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 6,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Over Keys\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Joined\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Separated\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"X Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Guide Link\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"guide\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Opacity\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Matte Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Matte Fill\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Index Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Offset Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Comp Ref\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 4,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Opacity\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Runtime Name\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Words\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 5,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Source Text\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Const Parent\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Const Kid\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 7,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Wiggle\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Err Transform\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Err Transform\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 2\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Err Transform could swing from its left edge. Want to try that one?\n\n### Turn 2: the project is an open comp\nLEARNER: Joined should turn from its top-left corner.\nMENTOR: An expression drives Joined's Position, so moving its pivot may not show. Err Transform could swing from its left edge instead. Want to try that one?\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_number_or_tolerance",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_place_codes",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pivot_in_frame",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_opposite_directions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "never called"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "say:leave_out_sentence",
+              "pass": true,
+              "detail": "turn 2: \"An expression drives Joined's Position, so moving its pivot may not show\""
+            },
+            {
+              "check": "say:not_ignores_pivot",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_undo",
+              "pass": true,
+              "detail": "turn 2: clean"
+            },
+            {
+              "check": "say:no_field_words",
+              "pass": true,
+              "detail": "turn 2: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-AN-EXPRESSION-LEAVE-OUT",
+              "pass": true,
+              "reason": "Turn 2 says exactly 'An expression drives Joined's Position, so moving its pivot may not show.' then offers the proposal (Err Transform), with no demo, no teaching on Joined, and no claim that the expression ignores or overrides the pivot."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name used (Joined, Position, Err Transform, middle of its left edge) is backed by the anchor_snapshot result: Joined's own_expressions lists Position, and the proposal is Err Transform at middle-left."
+            }
+          ],
+          "cost": 0.5178596,
+          "session_id": "260b081d-e651-4c94-90ad-ee3628ca5aee",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /anchor-mentor\nTOOL CALL anchor_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": []\n  },\n  \"server_current\": true,\n  \"host\": {\n    \"known\": true,\n    \"version\": \"27.0\",\n    \"build\": \"78\",\n    \"os\": \"macOS 27.2.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"project\": \"Claude AE Tutor Test (converted).aep\",\n  \"comp\": {\n    \"name\": \"015 Planted\",\n    \"time\": 0.6,\n    \"frame_rate\": 30,\n    \"width\": 1920,\n    \"height\": 1080\n  },\n  \"candidates\": [\n    {\n      \"layer\": \"Ctrl\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Err Transform\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 1,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Err Effect\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 2,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Off Expr\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 6,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Over Keys\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": true,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Joined\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Separated\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"X Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Guide Link\",\n      \"bucket\": \"if_named\",\n      \"reason\": \"guide\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Opacity\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Matte Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Matte Fill\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 3,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Index Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Offset Link\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_rotation_scale\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Rotation\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Comp Ref\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 4,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Opacity\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Runtime Name\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Words\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 5,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Source Text\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Const Parent\",\n      \"bucket\": \"never\",\n      \"reason\": \"null\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Const Kid\",\n      \"bucket\": \"default\",\n      \"reason\": null,\n      \"rank\": 7,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [],\n        \"parents\": []\n      }\n    },\n    {\n      \"layer\": \"Wiggle\",\n      \"bucket\": \"never\",\n      \"reason\": \"expression_anchor_position\",\n      \"rank\": null,\n      \"motion_from\": {\n        \"own_keys\": false,\n        \"own_expressions\": [\n          \"Position\"\n        ],\n        \"parents\": []\n      }\n    }\n  ],\n  \"proposal\": {\n    \"layer\": \"Err Transform\",\n    \"suggested_place\": \"middle-left\"\n  },\n  \"focus\": null,\n  \"places\": {},\n  \"place_now\": {\n    \"Err Transform\": \"center\"\n  },\n  \"check_times\": {},\n  \"already_there\": [],\n  \"focus_problems\": [],\n  \"targets\": [],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_focus\",\n  \"notes\": [],\n  \"watch_offer\": null,\n  \"reads\": 2\n}\nMENTOR: Which layer do you want to turn or grow from somewhere other than its middle, and where should it turn from: a corner, an edge, or the middle? If nothing comes to mind, Err Transform could swing from the middle of its left edge. Want to try that one?\n\n### Turn 2: the project is an open comp\nLEARNER: Joined should turn from its top-left corner.\nMENTOR: An expression drives Joined's Position, so moving its pivot may not show. Err Transform could swing from the middle of its left edge instead. Want to try that one?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

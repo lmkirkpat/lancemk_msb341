@@ -662,3 +662,5 @@ Results, B1, `--repeat 3`: the first drafts failed 1 of 3 each (`2026-11-16-1244
 Fixtures `eval-synthetic/jump-expr-base.json`, `jump-expr-null.json`, `jump-expr-jumped.json` are **stand-ins** built by `fixtures/build.mjs` from the live practice 2b, null-center and jumped captures with an expression read added (not marked on the keyed property, so only the snapshot's `motion_from` carries it; the jump check's own flag is keyed-only until T061). Re-derive from a live read when there is one. The wording is 012 TD § 17's first row, so the case does not need T061's code; T061 would add the flag as a second source.
 
 **T059 results, B1, `--repeat 3`:** 55 2/3 (`2026-11-16-140126`, $2.89; the miss was my regex, which didn't allow "an expression also drives", now loosened) then 3/3 (`-140414`, $3.03, regex unchanged at that run).
+
+**T059 re-run after T061 (`f480d3c`), B1, `--repeat 3`:** 53 3/3 (`2026-11-16-140903`, $2.16); 54 3/3 (`2026-11-16-141002`, $2.17).

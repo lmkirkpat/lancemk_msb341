@@ -705,3 +705,5 @@ Case 06 and R-AN-WRONG-LAYER pinned the old Pan Behind rule (start the drag on t
 **Open items for spec 014's set:** the case where the learner asks about Shake Control's shake and the mentor says it builds on the null's own Position (never "sets its own value"; E30) is moved there. It is an ask-mode answer with no lesson Pass line, so it isn't written here.
 
 **T059 results, B1, `--repeat 3`:** 06 3/3 (`2026-11-16-140246`, $2.72; the first run `-135701` was 1/3 with two `ETIMEDOUT`, plumbing); 57 3/3 (`-135805`, $1.70); 58 0/3 (`-135902`, $1.82, waits on T061: the mentor says the sentence, then teaches Joined as an ordinary lesson); 59 3/3 (`-140010`, $2.44).
+
+**T059 re-run after T061 (`f480d3c`), B1, `--repeat 3`:** 58 3/3 (`2026-11-16-140805`, $1.43). The mentor now leaves Joined out and goes on.
