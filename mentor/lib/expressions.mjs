@@ -53,6 +53,14 @@ export const isSource = (x) => !!x && x.enabled === true && !x.error;
 
 // ---- Builds on its own value (FR-002, research R3)
 
+// AE 27.0 gives expression text with classic Mac line ends (`\r`, live Comp 1, T015); text typed or
+// pasted elsewhere may have `\n` or `\r\n`. Every parse here treats all of them, and U+2028/2029 as
+// JavaScript does, as line ends.
+const LINE_END = /[\n\r\u2028\u2029]/;
+// `\r\n` and `\r` as `\n`, for text shown to the model or compared with text from elsewhere. The
+// snapshot keeps AE's text as AE gave it.
+export const normalizeLineEnds = (text) => String(text).replace(/\r\n?/g, "\n");
+
 // Comments and string literals out of the text; strings kept aside (for names) and replaced by a
 // placeholder `__S<n>__`. `ok` is false on an unclosed string or block comment.
 export function strip(text) {
@@ -64,8 +72,9 @@ export function strip(text) {
     const c = s[i];
     const n = s[i + 1];
     if (c === "/" && n === "/") {
-      const end = s.indexOf("\n", i);
-      i = end < 0 ? s.length : end;
+      let end = i + 2;
+      while (end < s.length && !LINE_END.test(s[end])) end++;
+      i = end;
       continue;
     }
     if (c === "/" && n === "*") {
@@ -79,8 +88,14 @@ export function strip(text) {
       let j = i + 1;
       let val = "";
       while (j < s.length && s[j] !== c) {
-        if (s[j] === "\\") { val += s[j + 1] ?? ""; j += 2; continue; }
-        if (s[j] === "\n" && c !== "`") return { ok: false, code, strings };
+        if (s[j] === "\\") {
+          // A backslash before \r\n continues the line: one line end, two characters.
+          const crlf = s[j + 1] === "\r" && s[j + 2] === "\n";
+          val += crlf ? "\n" : s[j + 1] ?? "";
+          j += crlf ? 3 : 2;
+          continue;
+        }
+        if ((s[j] === "\n" || s[j] === "\r") && c !== "`") return { ok: false, code, strings };
         val += s[j];
         j++;
       }

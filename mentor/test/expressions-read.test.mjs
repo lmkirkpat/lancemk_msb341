@@ -5,7 +5,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { expressionReads, expressionsRead, isSource, movesOf, rawExpression, valuesAt } from "../lib/expressions.mjs";
+import { expressionReads, expressionsRead, isSource, movesOf, normalizeLineEnds, rawExpression, valuesAt } from "../lib/expressions.mjs";
 import { comp1, groundTruth, LIVE } from "./fixtures/expressions/comp1.mjs";
 import { comp as mockComp, run } from "./fixtures/expressions/mock-ae.mjs";
 import fs from "node:fs";
@@ -25,7 +25,11 @@ test(`SC-001: Comp 1 has exactly 3 expressions, text identical to the ground tru
   assert.deepEqual(list.map((x) => [x.layer, x.property]), truth.map((t) => [t.layer, t.name]));
   for (const x of list) {
     const t = truth.find((g) => g.layer === x.layer && g.name === x.property);
-    assert.equal(rawExpression(C1, x.layer_index, x.path).text, t.text, `${x.layer} ${x.property}`);
+    // Identical but for line ends: AE 27.0 gives `\r` (T015), the ground truth's read wrote `\n`. The
+    // snapshot keeps AE's form, so the live capture's text has no `\n` at all.
+    const text = rawExpression(C1, x.layer_index, x.path).text;
+    assert.equal(normalizeLineEnds(text), normalizeLineEnds(t.text), `${x.layer} ${x.property}`);
+    if (LIVE && text.includes("\r")) assert.ok(!text.includes("\n"), `${x.layer} ${x.property}: AE's line ends kept`);
     assert.deepEqual([x.on, x.active, x.error, x.keys], [true, true, null, 0], `${x.layer} ${x.property}`);
   }
   assert.deepEqual(list.map((x) => x.group), ["effect", "transform", "transform"]);
@@ -47,11 +51,19 @@ test("E2: an expression with no keys is a source of motion; an effect expression
   assert.deepEqual(valuesAt(C1, rawExpression(C1, pos.layer_index, pos.path), 4.9), { status: "not_read", reason: "not_sampled" });
 });
 
-test("FR-004: with no sweep read, how much it moves is not read, never 0 or false", () => {
-  if (LIVE) return; // the live capture has sweeps; its numbers are pinned in comp-reads.test.mjs
-  const pos = expressionReads(C1).list.find((x) => x.property === "Position");
-  assert.deepEqual(pos.moves, { status: "not_read", reason: "not_swept" });
-  const sweep = expressionReads(C1).list.find((x) => x.group === "effect");
+test(`FR-004: how much Shake Control's two move, from the fine sweep when read, else not read, never 0 or false (${on})`, () => {
+  const list = expressionReads(C1).list;
+  const pos = list.find((x) => x.property === "Position");
+  const rot = list.find((x) => x.property === "Rotation");
+  if (LIVE) {
+    // T015, AE 27.0, --measure 25,26: the fine sweep (every frame) wins over the coarse one, which
+    // missed the Rotation's peak (0.283 degrees).
+    assert.deepEqual(pos.moves, { varies: true, max_offset: 12.147, max_at: 1.502, units: "px", sampled_every: 0.033, sweep: "fine" });
+    assert.deepEqual(rot.moves, { varies: true, max_offset: 0.589, max_at: 2.569, units: "degrees", sampled_every: 0.033, sweep: "fine" });
+  } else {
+    assert.deepEqual(pos.moves, { status: "not_read", reason: "not_swept" });
+  }
+  const sweep = list.find((x) => x.group === "effect");
   assert.deepEqual(sweep.moves, { status: "not_read", reason: "not_transform" });
 });
 
