@@ -218,7 +218,28 @@ a brand new session act like a colleague who already knows what you are working 
     offers). MVP is phases 1 and 2 on A. The panel half of phase 1 can start now; the mentor half waits on 015
     T040, Go deeper on 015 T023 and T026. `.specify/feature.json` still points at 015 while it's being built, so
     run 014's Spec Kit steps with explicit paths, not the setup scripts.
-  - **Next:** phase 0 (T001 to T007), then the panel half of phase 1.
+  - **Built so far (2026-11-16):**
+    - **Phase 0 (T001 to T007): done.** Results are in `discovery/usage-notes/ask-build.md`.
+    - **The panel half of phase 1 (T017 to T030, plus T101): done but not merged.** It's on branch `014-panel` in
+      the worktree `../wt-014-panel` (`a6a5c90`). Panel tests: 762 pass and 1 skipped, which waits for the ask eval
+      set. Helper tests: 282 of 282.
+      - T101 removed the dead comp-active code and the `home-nocomp` state.
+      - Go deeper stays hidden behind the flag in `panel/lib/phase.js` until phase 2.
+      - Merge this branch only between live sittings.
+    - **The ask eval set (T031 to T033): merged** (`b59e7c8`, `product/evals/ask/`).
+      - 17 cases, numbered 01 to 17: § 17 situations 1, 4, 5, 6, 7 and 9 to 15, then EE-4's four rows, then a how-to.
+      - The dry run validates. No model has run it yet.
+      - Before T037, re-run `fixtures/build.mjs` against 015's live `comp1.json`. That turns on situation 1's
+        ordering check.
+      - The B1 run is estimated at $6 to $9.
+  - **Next:**
+    1. The mentor half of phase 1 (T008 to T016, minus the withdrawn T015) waits on spec 015 T040.
+    2. Then the phase 1 gate:
+       - T034 (reviewer) and T035 (design-reviewer, which also re-checks T101).
+       - T036: merge both halves between live sittings.
+       - T037: the B1 eval run.
+       - T038: the live smoke test, which needs the builder.
+       - T039 and T040: log the results and fold them into the spec.
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
