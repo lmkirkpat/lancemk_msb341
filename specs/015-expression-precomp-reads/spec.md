@@ -36,6 +36,18 @@ and an open item for T034 (which layer Pan Behind takes). Data model § 1, § 3,
 build (`effect` omitted when nothing moved; `motion_from` absent on older snapshots;
 `static_as_read`'s old meaning on older snapshots; `k2-changes.mjs`).
 
+**Amendment 4 (2026-11-16, builder decisions on OQ-8 and OQ-9; T033's Comp 1 capture, merge `1499819`):**
+add or tighten only. OQ-9 answered: the session baseline keeps expression text and errors during a
+lesson and blanks them when the record is saved or a new lesson replaces the baseline; refused
+`record_lesson` calls are logged without the refused text; spec 006's uninstall always removes the
+session file. OQ-8 widened: the pivot and null `motion_from` wording is carried here (from 011 TD § 21
+and 012 TD § 17), and the 1 px "too small to see" floor (014 TD § 5.1a, H-7) is approved, the "hard to
+tell apart" band deferred. New edge case E30 and an Assumptions line: AE 27.0 gives expression text
+with `\r` line ends. Changed here: Edge Cases (E30), Out of scope (the one pivot line becomes the pivot
+and null `motion_from` lines), Assumptions, OQ-8, OQ-9; `contracts/describe-layers.md` (a parent's
+`moves` said once in a summary); tasks T057 to T060 (new, phase 1 follow-ups). No approved decision
+changes.
+
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
 (*Precompose*) as lessons for later. Expressions first, precomps as a later phase." Builder decision,
@@ -290,6 +302,7 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 | E27 | Older snapshot or fixture without the new fields | "Not read" | "None" | Comp 1's committed snapshot |
 | E29 | Hidden half of a separable Position (X/Y when joined, Position when separated) | Skipped: its values are stale and never draw (FR-006a) | Report its value, keys or expression | Planted (T015) |
 | E28 | A layer's index changes under a `wiggle` (a layer added or removed above it, such as the null skill's null) | Its after-expression values change with no edit (T002: about 6 px); compared on base, so nothing is reported | A learner change on that layer | Planted (T015) |
+| E30 | Expression text with `\r` line ends (AE 27.0 returns them; Amendment 4) | A `//` comment ends at `\r`, `\r\n`, `\n`, U+2028 or U+2029, so `value` after it counts (Shake Control builds on value); the snapshot keeps AE's text raw, and only `describe_layers` detail and text comparisons normalize line ends (`normalizeLineEnds()`) | Read the rest of the text as one comment and report "sets its own value"; a line-end-only difference reported as "text changed" | Comp 1 live capture (T015, `1499819`) plus unit text |
 
 ## Requirements *(mandatory)*
 
@@ -527,7 +540,8 @@ motion) belong to spec 014's set and to pivot K1, not here.
   errors; nothing writes one.
 - **The two lessons:** skill 4 (*Find what's moving it*) and skill 10 (*Precompose*). Queued for later
   specs.
-- **Any skill's teaching or `SKILL.md` wording** (except the one pivot line OQ-8 may add). Rule 1 ("trace before teaching") and the other § 10.1
+- **Any skill's teaching or `SKILL.md` wording** (except the pivot and null `motion_from` lines OQ-8
+  carries, T058, *amended 2026-11-16*). Rule 1 ("trace before teaching") and the other § 10.1
   rules are spec 014's and the skill-builder's. This spec only changes what the tools return (K2, K3).
 - **Lifting easing's "I can't see inside these yet"** or making inner keys findings in any skill. Phase
   2 gives the data; a later spec decides how lessons use it.
@@ -559,8 +573,13 @@ motion) belong to spec 014's set and to pivot K1, not here.
   open (T034). The edit matches
   T004's fit for turn f within a few pixels. T006 confirmed the time mapping on all eight keys against
   AE's `sourceTime()` (an expression-only function, so the read can't call it) and the builder's eye.
+- **Checked live 2026-11-16 (T015 Comp 1 capture, merge `1499819`):** AE 27.0 returns expression text
+  with `\r` line ends. The snapshot keeps the text as AE gives it; only `describe_layers` detail (shown
+  with `\n`) and text comparisons (SC-001, FR-014's "text changed") normalize, through
+  `normalizeLineEnds()` (E30). Fixtures derived by hand had `\n` and hid this.
 - Expression text stays in tool replies to the model only, never in the repo except in fixtures made
-  from the builder's own comps with no real names.
+  from the builder's own comps with no real names. On the learner's machine it sits in `session.json`
+  only while a lesson runs (OQ-9, answered 2026-11-16).
 - Moving to A (`decisions/011`): the reads don't depend on the runtime. Each set's A result goes stale
   when the tools change; the A re-runs happen in spec 014's ship step, not here.
 - Read time was measured on one machine with one comp; the 0.5 s and 1.5 s budgets leave room for
@@ -619,6 +638,14 @@ motion) belong to spec 014's set and to pivot K1, not here.
   out of scope. **Recommended: tool change first (T023); if the new pivot eval case (Eval plan, row 1)
   still fails on wording, one narrow pivot `SKILL.md` line in this spec (a new task after T036), not
   spec 014's rule changes.** Expands Out of scope by that one line if needed.
+  **Widened by the builder 2026-11-16 (Amendment 4):** this spec carries the `motion_from` wording
+  for both pivot and null, from `specs/011-anchor/teaching-design.md` § 21 and
+  `specs/012-null-parenting/teaching-design.md` § 17 (T058), with eval cases pivot 57 and null 55
+  written from those sections' Pass lines, plus a case where the learner asks about Shake Control's
+  shake and hears that it builds on the null's own Position (the answer the `\r` bug got wrong, E30)
+  (T059). The 1 px "too small to see" floor in `specs/014-ask-mentor/teaching-design.md` § 5.1a (H-7)
+  is approved; the "hard to tell apart" band is deferred until after spec 014's three sessions (T060
+  records both).
 
 ### New from the T031 review (2026-11-16)
 
@@ -631,6 +658,19 @@ motion) belong to spec 014's set and to pivot K1, not here.
   confirm its uninstall removes `session.json` with the conversation files.** Changes what the
   baseline stores, so it's the builder's call; it doesn't block the phase 1 merge if the builder
   prefers to keep the text and only fix the uninstall.
+  **Answered 2026-11-16 (builder, Amendment 4): keep the text during a lesson, then blank it.**
+  - The session baseline keeps expression text and errors while a lesson runs, because the record
+    guard (OQ-7, `copiesExpression` in `mentor/tools/common.mjs`) needs them across turns, and on B1
+    each turn is a fresh server that only has the file.
+  - They're blanked as soon as the lesson's record is saved, or when a new lesson replaces the
+    baseline.
+  - `calls.jsonl` logs a refused `record_lesson` call without the refused text.
+  - Spec 006's uninstall always removes `session.json` and its leftovers, even with "keep my
+    history" (spec 006 FR-019, amended 2026-11-16).
+  - **Rejected: length plus hash** (the recommendation above, withdrawn by the cockpit). It serves
+    FR-014's "text changed" but not the guard: a substring check needs the text, and a hash that
+    could answer it would have to be reversible.
+  Built by T057.
 - **Open item for T034 (the next live sitting): which layer does Pan Behind act on?**
   `.claude/skills/anchor-mentor/SKILL.md` lines 378 to 381 say it acts on the layer under the cursor
   even when another layer is selected (spec 011's live finding, 2026-10-26). T005 moved the selected
