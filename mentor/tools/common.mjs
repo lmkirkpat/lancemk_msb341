@@ -184,7 +184,7 @@ function assertMatchesLesson({ skill, result, demo_used }) {
   return lesson;
 }
 
-// FR-020 (OQ-7): a summary or next holding 24 or more characters in a row copied from an expression's
+// FR-020 (OQ-7): an attempted, summary or next holding 24 or more characters in a row copied from an expression's
 // text or error in the lesson's snapshot is refused. Compared as written and with runs of white space
 // made one space, so a reflowed copy is caught too.
 export const COPY_RUN = 24;
@@ -239,7 +239,7 @@ export function commonTools(options) {
   const { skills, finders = {} } = Array.isArray(options) ? { skills: options } : options;
   async function recordLesson(entry) {
     const lesson = assertMatchesLesson(entry);
-    if (lesson && (copiesExpression(entry.summary, lesson.baseline) || copiesExpression(entry.next, lesson.baseline))) {
+    if (lesson && ["attempted", "summary", "next"].some((f) => copiesExpression(entry[f], lesson.baseline))) {
       throw new MentorError("RECORD_HAS_EXPRESSION");
     }
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});

@@ -40,6 +40,7 @@ test(`a summary with ${COPY_RUN} characters copied from an expression is refused
   assert.equal(run.length, COPY_RUN);
   await assert.rejects(record({ summary: `The null runs ${run} on its Position.` }), (e) => e.code === "RECORD_HAS_EXPRESSION");
   await assert.rejects(record({ next: `Look at ${run}` }), (e) => e.code === "RECORD_HAS_EXPRESSION");
+  await assert.rejects(record({ attempted: `Eased ${run}` }), (e) => e.code === "RECORD_HAS_EXPRESSION", "review S5: attempted too");
   assert.equal(fs.existsSync(FILE), false);
 });
 
