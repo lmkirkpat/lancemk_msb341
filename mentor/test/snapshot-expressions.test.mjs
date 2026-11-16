@@ -101,3 +101,17 @@ test("without the new args the snippet still returns every older field as before
   for (const k of ["project", "comp", "precomp_layers", "layers", "layer_info", "host"]) assert.ok(k in s, k);
   assert.ok(s.layer_info.every((l) => typeof l.effect_count === "number"));
 });
+
+test("review S3 (FR-018): a property the walk can't read makes the read partial, with the count, never all", async () => {
+  const layers = comp();
+  const fx = layers[2].property("ADBE Effect Parade");
+  const real = fx.property;
+  fx.property = (n) => { if (n === 2) throw new Error("unreadable"); return real(n); };
+  const s = run(layers);
+  assert.deepEqual(s.expressions_read, { status: "not_read", reason: "partial", skipped: 1 });
+  assert.ok(s.expressions.length > 0, "what was read is kept in the snapshot");
+  const { expressionReads, linksIn } = await import("../lib/expressions.mjs");
+  assert.deepEqual(expressionReads(s).read, { status: "not_read", reason: "partial", skipped: 1 });
+  for (const [, e] of linksIn(s)) assert.equal(e.status, "not_read", "so 'no links' is never said");
+  assert.equal(run(comp()).expressions_read, "all");
+});

@@ -313,14 +313,18 @@ function exprGroup(path) {
     return "other";
 }
 
+// Review S3 (FR-018): every property or field the walk couldn't read is counted, and a read with any
+// skipped says so in expressions_read instead of "all".
+var exprSkipped = 0;
+
 function readExpression(layerIndex, p) {
     var text = String(p.expression);
     var err = "";
-    try { err = p.expressionError ? String(p.expressionError) : ""; } catch (e) {}
+    try { err = p.expressionError ? String(p.expressionError) : ""; } catch (e) { exprSkipped++; }
     var enabled = false;
-    try { enabled = !!p.expressionEnabled; } catch (e) {}
+    try { enabled = !!p.expressionEnabled; } catch (e) { exprSkipped++; }
     var keys = 0;
-    try { keys = p.numKeys; } catch (e) {}
+    try { keys = p.numKeys; } catch (e) { exprSkipped++; }
     var path = propPath(p);
     return {
         layer: layerIndex,
@@ -341,7 +345,7 @@ function readExpression(layerIndex, p) {
 function walkExpressions(layerIndex, group, out) {
     for (var i = 1; i <= group.numProperties; i++) {
         var p;
-        try { p = group.property(i); } catch (e) { continue; }
+        try { p = group.property(i); } catch (e) { exprSkipped++; continue; }
         if (p === null || p === undefined || p.matchName === "ADBE Marker") continue;
         try {
             if (p.propertyType === PropertyType.PROPERTY) {
@@ -349,7 +353,7 @@ function walkExpressions(layerIndex, group, out) {
             } else {
                 walkExpressions(layerIndex, p, out);
             }
-        } catch (e) {}
+        } catch (e) { exprSkipped++; }
     }
 }
 
@@ -362,6 +366,7 @@ try {
     expressions = [];
     expressionsRead = { status: "not_read", reason: "error" };
 }
+if (expressionsRead === "all" && exprSkipped > 0) expressionsRead = { status: "not_read", reason: "partial", skipped: exprSkipped };
 for (var ai = 0; ai < expressions.length; ai++) {
     var ax = expressions[ai];
     var bk = BASE_KEYS[ax.path];
