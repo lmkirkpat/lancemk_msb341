@@ -251,7 +251,7 @@ the flow clicks through.
 | `home-review-due` | changed | Identical to `home-return`, on purpose; the review is in Skills |
 | `home-lessonopen` | changed | Ask paused ("Your lesson is open. Ask there, or end it first."); line goes back to the lesson; End lesson |
 | `home-lessonopen-deeper` | new | The same, for a lesson from Go deeper; End lesson goes to `ask-ended` |
-| `home-nocomp` | new (restored) | No comp named; "No comp open. Open one, or click into its timeline."; Ask and the line paused |
+| ~~`home-nocomp`~~ (withdrawn 2026-11-16, spec 014 FR-047) | ~~new (restored)~~ | No comp named; "No comp open. Open one, or click into its timeline."; Ask and the line paused |
 | `home-unreadable`, `home-unreadable-why` | changed / same | Spec 007's banners over the new Home; asking works |
 | `home-unreachable`, `home-busy` | changed | Spec 007's banners; the box still takes text, Ask paused with the reason |
 | `home-loading` | same | Skeleton reshaped to one card and one line |
@@ -417,8 +417,8 @@ the pivot ›", "Yes, go deeper on Set the pivot.", "From your question. Back re
 your lesson ›", "Your Set the pivot lesson is open.", "Practice", "✓ Done", "Pivot moved, nothing else
 did.", "Set the pivot · practiced on Shake Control", "Set the pivot · ended, not saved", "Back to your
 steps ›", "Back to your question ›", "Earlier questions (1)", "Pick up Easing on Title", "Back to your
-lesson", "Your lesson is open. Ask there, or end it first.", "No comp open. Open one, or click into its
-timeline.", "Needs an open comp.", "After Effects is busy. Your answer will come when it's free.",
+lesson", "Your lesson is open. Ask there, or end it first.", ~~"No comp open. Open one, or click into its
+timeline."~~ (now the mentor's words, `ask-nocomp`), ~~"Needs an open comp."~~ (withdrawn 2026-11-16), "After Effects is busy. Your answer will come when it's free.",
 "Waiting for After Effects.", "Available after the answer.", "Back to Home. Your question stays here.",
 "See what's covered ›", "Not finished yet.", "Ask about your comp on Home,
 or pick a skill.". The rest are spec 007's `panel/lib/copy.js` strings as they are. No internal field
