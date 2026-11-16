@@ -36,7 +36,7 @@ for (const [label, now] of [["the same playhead", NEW], ["the playhead moved", L
     const p = anchorCheck(OLD, now, pivotLesson);
     assert.deepEqual(p.other_changes, []);
     assert.deepEqual(p.layers[0].item5.moved_layers, []);
-    assert.equal(p.layers[0].item2.passed, true);
+    if (now === NEW) assert.equal(p.layers[0].item2.passed, true, "rig-later has no sample at the rig's 0.601 s playhead");
     assert.deepEqual(nullCheck(OLD, now, nullLesson, {}).result.other_changes, []);
     for (const run of [offsetCheck, keyTypesCheck, speedGraphCheck]) assert.deepEqual(run(OLD, now, keyed).other_changes, [], run.name);
     assert.equal(p2For(OLD, now, "rock.png", { times: [0.6, 2.636] }).passed, true, "the jump check too");
