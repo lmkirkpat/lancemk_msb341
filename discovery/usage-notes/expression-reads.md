@@ -28,8 +28,8 @@ session's scratchpad.
    instead of the cause ("Shake Control's pivot moved, not rock.png's"). Fix: report the changed
    property on the layer that changed, in the learner's terms. This fits K2's other half: an
    expression's motion must never be reported, and a real edit to a layer with an expression must be.
-2. **Pan Behind on the parent instead of the art is an easy slip.** *Corrected by session 2:* the
-   tool took Shake Control because it was **selected**, not because it was under the cursor. Either
+2. **Pan Behind on the parent instead of the art is an easy slip.** *Session 2:* Shake Control was
+   selected as well as under the cursor, so which rule decides is still open (T034's A/B test). Either
    way, a learner working on a parented layer moves the parent's pivot without meaning to. Worth a
    teaching line where the pivot skill meets a parent null.
 3. **An erroring expression looks "on".** Any rule that reads only the switch would call a broken
@@ -64,8 +64,8 @@ after:
   still, and the turning point is now the hit point.
 - **Turn f's action confirmed.** The hand move gives (561, −120), against T004's fitted (572, −114),
   which is the same edit within a few pixels. Turn f's "Shake Control moved" was this edit.
-- **Correction:** Pan Behind took Shake Control because it was **selected**, not because it was the
-  layer under the cursor (finding 2 above is corrected).
+- **Which layer Pan Behind takes is still open:** Shake Control was both selected and under the
+  cursor, so this run can't tell the two rules apart. T034 tests it (select A, drag over B).
 
 ### The three scripts, run once as written
 
@@ -109,6 +109,6 @@ afterwards, and the project was back to 77 items. Answer key:
 
 ### Still open
 
-- Nothing in Phase 0. The spec-writer's second fold (T008) takes session 2's new facts: Pan Behind
-  takes the selected layer, stale hidden dimension values, the reversed in and out points, held remap
+- Nothing in Phase 0. The spec-writer's second fold (T008) takes session 2's new facts: which layer Pan
+  Behind takes (open, T034), stale hidden dimension values, the reversed in and out points, held remap
   ranges, and counting layers for "how many places".

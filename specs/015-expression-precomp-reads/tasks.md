@@ -58,12 +58,13 @@ step). Read-only scripts except where a plant is named.
   rock.png's footprint at 0.6 s; the builder uses Pan Behind on Shake Control by hand; the agent reads
   again at 0.6 s. Answer: did the base value and anchor change together, and did the children stay
   still? **Also confirms turn f's likely action:** does Pan Behind take Shake Control when it's
-  selected (correction, session 2: it acts on the selected layer, not the one under the cursor), and
+  selected (session 2: it took Shake Control, which was both selected and under the cursor, so this
+  can't tell the two rules apart; T034 tests it), and
   does its anchor change match T004's fitted
   (572, −114) px in kind? Script in `mentor/dev/live-015/pan-behind-read.jsx`. At the same sitting,
   run once as written the three scripts folded together after the live runs and not yet run:
   `separate-dims.jsx`, the renumber step in `random-expression.jsx`, and the edited
-  `error-expression.jsx` (`expression-reads.md` › Still open). **Done 2026-11-14 (cockpit with the builder, `expression-reads.md` session 2): SB-2 and turn f confirmed by hand; Pan Behind took the *selected* layer; the scripts reproduce T001 to T003; new: hidden dimension properties hold stale values.**
+  `error-expression.jsx` (`expression-reads.md` › Still open). **Done 2026-11-14 (cockpit with the builder, `expression-reads.md` session 2): SB-2 and turn f confirmed by hand; Pan Behind took Shake Control (selected; whether selection or the cursor decides is T034's A/B test); the scripts reproduce T001 to T003; new: hidden dimension properties hold stale values.**
 - [x] T006 (skill-builder, AE; **builder's hands** for the scrub check) **Time mapping (E22).** Read
   Mentor Practice's Icon. On a duplicate, plant by script four copies of a keyed precomp: start
   offset 0.5 s, stretch 50%, stretch −100%, and time remap with two remap keys. For two inner keys per
@@ -240,20 +241,27 @@ pivot and null.
 
 ## Phase 1 gate
 
-- [ ] T031 (reviewer) Review the phase 1 branch against FR-001 to FR-021 and the Edge Cases rows
-  E1 to E19, E27.
-- [ ] T032 (cockpit) Merge with `/merge-worktree` (shared owner named), between live sittings
-  (CLAUDE.md: a `mentor/` merge needs a fresh session for live lessons).
+- [x] T031 (reviewer) Review the phase 1 branch against FR-001 to FR-021 and the Edge Cases rows
+  E1 to E19, E27. **Done:** fix round M1, S1, S3 to S5, S7 and the small items in; the replay of 938
+  tool calls across 253 cases changed only null case 42 (gains `effect`), before and after the fixes.
+- [x] T032 (cockpit) Merge with `/merge-worktree` (shared owner named), between live sittings
+  (CLAUDE.md: a `mentor/` merge needs a fresh session for live lessons). **Done 2026-11-16 (`a3300e3`):**
+  mentor tests 1677 pass, 4 todo, 0 fail; hooks 39/39.
 - [ ] T033 (skill-builder, AE) Live on `main`: SC-003's one live read of Shake Control at 0.6 s, and
   SC-008's timing (`capture.mjs --time` on Comp 1 and Mentor Practice, with and without the new
   passes; ≤ 0.5 s added). If over, drop the fine sweep to 120 samples (research R9) and re-measure.
 - [ ] T034 (skill-builder reads, **builder's hands**) SC-010: 10 spot checks of the read's facts in AE
   across Comp 1 and the T001 and T015 planted copies, including one off and one erroring expression; at
-  least 9 of 10 agree. Logged by the cockpit in `discovery/usage-notes/expression-reads.md`.
+  least 9 of 10 agree. Logged by the cockpit in `discovery/usage-notes/expression-reads.md`. **Plus the
+  Pan Behind A/B test** (T005 couldn't separate the rules): select layer A, use Pan Behind with the
+  cursor over layer B, and read which anchor moved. It decides the pivot `SKILL.md` "wrong layer" lines,
+  frozen until then.
 - [ ] T035 [P] (eval-engineer) Add the K2 cases from spec › Eval plan (five rows, Amendment 1: turn
   f's real edit named by cause; expression motion; a renumbered `wiggle`) to `product/evals/anchor/`,
   `product/evals/null-parenting/` and `product/evals/offset/` (or key types), with fixtures derived
-  from the T015 Comp 1 capture. Case numbers from the cockpit.
+  from the T015 Comp 1 capture. Case numbers from the cockpit. **Also:** pivot and null cases on new
+  captures where the check's reply carries `motion_from` (an edit reported by its cause, FR-014a), since
+  the replay's existing fixtures predate it.
 - [ ] T036 (eval-engineer) Re-run all six sets on B1 at the merge commit, one set at a time: easing,
   key types, speed graph, offset, pivot, null. Each meets its SC-006 bar with every hard-rule check
   passing; T035's cases pass 3 of 3. Triage with `/eval-triage`; log in each README (SC-006).
