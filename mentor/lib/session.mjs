@@ -10,6 +10,7 @@ import fs from "node:fs";
 import { SESSION_FILE } from "../paths.mjs";
 import { MentorError, registerErrors } from "../errors.mjs";
 import { analyze as easingAnalyze, segmentState } from "./analyze.mjs";
+import { clearExpressionText } from "./expression-trim.mjs";
 import { readJson } from "./json-file.mjs";
 import { peekRecord, pastTargets } from "./learner-store.mjs";
 import { applies, marksFor, markFrom } from "./marks.mjs";
@@ -265,6 +266,8 @@ export function start(snapshot, opts = {}) {
 
   state.lessons[key] = lesson;
   state.current = currentFor(skill, compId);
+  // OQ-9: a passed lesson can't be continued or saved once another starts, so its expression text goes.
+  for (const [k, l] of Object.entries(state.lessons)) if (k !== key && l && l.passed) clearExpressionText(l.baseline);
   write(state);
   const analysis = { ...now, focus: lesson.focus, targets: lesson.targets, demo_target: lesson.demo_target };
   if (noDemoReason !== now.no_demo_reason) analysis.no_demo_reason = noDemoReason;
@@ -304,10 +307,12 @@ export function markChecked(passed, { demoUndone = false } = {}) {
 
 // Spec 007 FR-046: this lesson's pass is in the learner record, so the record for it is finished.
 // Kept in session.json, so it holds when a Continue relaunches the mentor. Only a pass sets it: a
-// learner who stopped can come back, pass, and have that saved too.
+// learner who stopped can come back, pass, and have that saved too. The record's guard has run, so
+// the baseline's expression text goes (spec 015 OQ-9; lib/expression-trim.mjs).
 export function markPassSaved() {
   return updateCurrent((lesson) => {
     lesson.pass_saved = true;
+    clearExpressionText(lesson.baseline);
   });
 }
 

@@ -239,8 +239,10 @@ export function commonTools(options) {
   const { skills, finders = {} } = Array.isArray(options) ? { skills: options } : options;
   async function recordLesson(entry) {
     const lesson = assertMatchesLesson(entry);
-    if (lesson && ["attempted", "summary", "next"].some((f) => copiesExpression(entry[f], lesson.baseline))) {
-      throw new MentorError("RECORD_HAS_EXPRESSION");
+    const copied = lesson ? ["attempted", "summary", "next"].filter((f) => copiesExpression(entry[f], lesson.baseline)) : [];
+    if (copied.length) {
+      // OQ-9: the server logs this call without these fields' values (calls.jsonl).
+      throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: copied });
     }
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();

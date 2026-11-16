@@ -46,7 +46,11 @@ async function callTool(name, args) {
     return result;
   } catch (e) {
     const code = e instanceof MentorError ? e.code : null;
-    logCall({ tool: name, args, ok: false, error_code: code, ms: Date.now() - started, at: new Date().toISOString() });
+    // Spec 015 OQ-9: a refusal can name fields whose values mustn't be kept (record_lesson's copied
+    // expression text). They're logged by name only, in `omitted_fields`.
+    const omit = e instanceof MentorError && Array.isArray(e.omitFromLog) ? e.omitFromLog.filter((f) => args && Object.hasOwn(args, f)) : [];
+    const logged = omit.length ? Object.fromEntries(Object.entries(args).filter(([k]) => !omit.includes(k))) : args;
+    logCall({ tool: name, args: logged, ok: false, error_code: code, ...(omit.length ? { omitted_fields: omit } : {}), ms: Date.now() - started, at: new Date().toISOString() });
     const text = code ? `${code}: ${e.message}` : String(e.message || e);
     return { content: [{ type: "text", text }], isError: true };
   }

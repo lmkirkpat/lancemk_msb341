@@ -21,6 +21,7 @@
 import * as compSpace from "./comp-space.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { motionSources } from "./motion-sources.mjs";
+import { expressionTextDiffers } from "./expression-trim.mjs";
 import { baseViews, pairValues } from "./k2-changes.mjs";
 import { classOf } from "./visibility.mjs";
 import {
@@ -121,7 +122,7 @@ function expressionChanges(baseline, b, current, c) {
     const onN = !!(n && n.enabled);
     let what = null;
     if (onW !== onN) what = onN ? "turned_on" : "turned_off";
-    else if (w && n && w.text !== n.text) what = "text";
+    else if (w && n && expressionTextDiffers(w, n)) what = "text";
     // A new error, or one gone. Not the error's wording: AE's text names the layer's index, so a
     // renumber alone changes it (live, T015).
     else if (w && n && !!w.error !== !!n.error) what = "error";
