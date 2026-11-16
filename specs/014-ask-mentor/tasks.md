@@ -182,7 +182,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   A1 to A13, and the contracts.
 - [ ] T035 (design-reviewer) Review the panel-builder branch against MU's phase 1 states, Copy and
   Accessibility, FR-046, FR-048 to FR-050, FR-053, FR-054.
-- [ ] T101 (panel-builder; before T036) **Remove the dead comp-active code** (FR-047 withdrawn 2026-11-16,
+- [x] T101 (panel-builder; before T036) **Remove the dead comp-active code** (FR-047 withdrawn 2026-11-16,
   research R10): the `comp_active` reading in `panel/lib/connection.js` and `noComp`, the `home-nocomp` state
   in `panel/lib/view-state.js` (`STATE_IDS` and the state pick) and any copy or screen for it, with their
   tests. Or, if removing them breaks spec 007's state-table test while MU still lists `home-nocomp`, keep the
