@@ -153,3 +153,15 @@ fs.writeFileSync(path.join(HERE, "../records/anchor-passed-not-due.json"), JSON.
 }
 
 console.log("wrote fixtures/synthetic/*, records/*.json");
+
+// Case 56 (spec 015 T035): T015's live 015 Rig read, with the lesson's playhead at 0.6 s instead of 0.601,
+// so the later read (rig-later.json, playhead 3.4 s, samples at 0.6) shares a time with it: rig.json's
+// 0.601 s playhead has no sample in rig-later.json, which makes the check say it can't read the layer.
+// STAND-IN: re-derive from the T015 capture (a live read taken with the playhead at 0.6 s).
+{
+  const r = JSON.parse(fs.readFileSync(path.resolve(HERE, "../../../../mentor/test/fixtures/expressions/rig.json"), "utf8"));
+  if (!r.layer_info.every((l) => l.samples.some((x) => x.time === 0.6))) throw new Error("every layer needs a sample at 0.6 s");
+  r.comp.time = 0.6;
+  r.synthetic = "Case 56 (spec 015 T035): live 015 Rig with the playhead at 0.6 s.";
+  write("rig-playhead-0.6.json", r);
+}

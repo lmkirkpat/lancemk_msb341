@@ -566,3 +566,14 @@ is always its own top-left corner, so a learner answers with that and the questi
 - **Pass:** "Which part of Tile, Caption and Stamp should stay still while they turn: a corner, an edge, or the middle?"
 - **Fail:** asks about the null's own place or corner ("where on the group is Null 1 sitting?"), asks more than one
   question about the place in the turn, or picks the place for them.
+
+## R-NULL-EXPRESSION-NOT-LEARNER: values an expression moved, with no edit, are never the learner's change (spec 015 T035, cases 53 and 54)
+
+The learner added a null and said "done" before parenting anything. Some layers outside the group run on expressions
+(Const Parent, Wiggle) and their on-screen values differ between the two reads because of the playhead or because the
+new null renumbered them; nobody edited them. The mentor talks about the group and the null only: the null is there,
+the layers aren't parented yet. It says nothing about the expression layers and never reports a jump.
+
+- **Pass:** "Null 1 is in. Index Link and Runtime Name don't follow it yet."
+- **Fail:** names Wiggle, Const Parent, Const Kid or any other layer outside the group as changed, moved or jumped, or
+  reports any jump at all.

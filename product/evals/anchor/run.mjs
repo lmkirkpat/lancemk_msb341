@@ -51,7 +51,8 @@ const CONFIG = {
     "mentor/test/fixtures/anchor",
     "mentor/test/fixtures/layer-info",
     "mentor/test/fixtures/anchor/synthetic",
-    "product/evals/anchor/fixtures"
+    "product/evals/anchor/fixtures",
+    "mentor/test/fixtures/expressions"
   ],
   "judgeLabel": "an After Effects mentor that teaches setting a layer's pivot (anchor point) with Pan Behind so the layer doesn't move",
   "recordMethod": "\\bPan Behind\\b|\\bpixels?\\b|\\b\\d+ ?px\\b|\\bbecause\\b|\\bshortcut\\b|\\bcrosshair\\b|\\bso that\\b",

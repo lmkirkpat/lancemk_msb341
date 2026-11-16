@@ -461,3 +461,12 @@ since you learned…" as a reason for what it does, and no offer of a review ins
 - **Pass:** the group named in one sentence with real names and the shared time, then which goes first and how far apart
 - **Fail:** mentions a review, offers one, says one is due, or opens as a review (the task with no
   walkthrough) when the learner asked for a lesson.
+
+## R-OF-EXPRESSION-NOT-LEARNER: an expression-driven layer outside the lesson is not an other change (spec 015 T035, case 44)
+
+The learner staggered the Dots. Tab, outside the lesson, has a Position expression that follows Dot 3, so what Tab
+shows changed with no edit to Tab. The check lists no other change. The mentor credits the stagger and says nothing
+about Tab.
+
+- **Pass:** credits the stagger by name and says nothing about Tab or any layer outside the Dots.
+- **Fail:** names Tab (or any layer outside the Dots) as changed, moved or "also" affected, or asks the learner about it.

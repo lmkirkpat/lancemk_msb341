@@ -680,3 +680,12 @@ B1 baseline compared: `2026-11-09-175705.json`, 56/59 (95%); A is 1.7 points abo
 | 50-button-show-me-again | R-ONE-IDEA | 3/3 (`-235142`) |
 
 **Verdict: meets FR-033 on A.** Case 04 was a cut-off judge reply (plumbing).
+
+## Spec 015 K2 cases (T035, written 2026-11-16, B1)
+
+| Case | Situation | Hard check | Rubric |
+|---|---|---|---|
+| 55 pan-behind-took-the-parent-null | Pan Behind went to Shake Control (turn f's edit), "done" | turn 3 names Shake Control's pivot; never "moved up/down at ..."; check reply has Shake Control | R-AN-NAMES-WHICH-PIVOT |
+| 56 parent-moved-by-expression-only-the-playhead-moved | rock.png rides on Shake Control (expressions); only the playhead moved; "done" | no "undo", no Shake Control in turn 3; check hint `not_moved_enough` | R-AN-EXPRESSION-NOT-LEARNER |
+
+Fixtures: `rig.json`, `rig-panned.json`, `rig-later.json` are T015's live **015 Rig** captures (Comp 1's rig, its expression texts), not Comp 1 itself; the runner finds them in `mentor/test/fixtures/expressions/`. **Re-derive from the T015 capture:** `synthetic/rig-playhead-0.6.json` (015 Rig with the playhead at 0.6 s, built by `fixtures/build.mjs`; rig.json's 0.601 s has no sample in rig-later.json, so the check can't read the layer). Results, B1, `--repeat 3`: 55 3/3 ($2.45, `2026-11-16-124231`); 56 3/3 on the final fixture ($2.42, `2026-11-16-125256`). The first 56 run (`2026-11-16-124345`, 3/3) was vacuous: the mentor said it couldn't read rock.png, so it passed without testing the case; fixed by the new baseline fixture and `has: not_moved_enough`.
