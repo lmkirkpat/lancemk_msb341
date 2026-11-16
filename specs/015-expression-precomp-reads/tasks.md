@@ -250,6 +250,15 @@ pivot and null.
 - [ ] T033 (skill-builder, AE) Live on `main`: SC-003's one live read of Shake Control at 0.6 s, and
   SC-008's timing (`capture.mjs --time` on Comp 1 and Mentor Practice, with and without the new
   passes; ≤ 0.5 s added). If over, drop the fine sweep to 120 samples (research R9) and re-measure.
+  **Comp 1 half done 2026-11-16 (cockpit):** SC-003 live ✓ (base 960, 540; after 952.352, 542.492 at 0.6 s;
+  rock.png's source is Shake Control by expression). SC-008 on Comp 1 ✓: about 165 ms before the merge,
+  about 210 ms after (+45 ms, wall clock, 3 runs each), fine sweep adds nothing measurable. The T015 Comp 1
+  capture (merged `1499819`) found three faults the derived fixture hid, fixed there: AE 27.0 gives
+  expression text with `\r` line ends, which made `strip()` read Shake Control's two as setting their own
+  value; SC-001's compare; the whole-comp summary at 12.4 KB (now 10.5 KB, no cap change). **Open:** Mentor
+  Practice's timing; `contracts/describe-layers.md` should say a child's parent entry omits `moves` when the
+  parent is in the same reply (spec-writer, with T040); an eval case where the learner asks about Shake
+  Control's shake and hears it builds on the null's own Position (eval-engineer).
 - [ ] T034 (skill-builder reads, **builder's hands**) SC-010: 10 spot checks of the read's facts in AE
   across Comp 1 and the T001 and T015 planted copies, including one off and one erroring expression; at
   least 9 of 10 agree. Logged by the cockpit in `discovery/usage-notes/expression-reads.md`. **Plus the
