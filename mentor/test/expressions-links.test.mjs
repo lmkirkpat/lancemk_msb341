@@ -87,7 +87,7 @@ test("live E15 and E16: Ctrl's links from a matte (renders) and a guide (doesn't
   const from = Object.fromEntries(ctrl.links.map((l) => [l.from_layer, [l.property, l.target_renders.why]]));
   assert.deepEqual(from["Matte Link"], ["Rotation", "matte_renders"]);
   assert.deepEqual(from["Guide Link"], ["Position", "guide"]);
-  assert.equal(ctrl.unresolved_in_comp, 1, "Runtime Name's thisComp.layer(n)");
+  assert.equal(ctrl.unresolved_in_comp, 2, "Runtime Name's thisComp.layer(n), and Comp Ref's comp() (review S7)");
   assert.ok(!ctrl.links.some((l) => l.from_layer === "Runtime Name"));
 });
 

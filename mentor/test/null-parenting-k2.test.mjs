@@ -61,3 +61,11 @@ test("FR-014: an expression turned off is expression_changed (was expression_tog
     { kind: "expression_changed", layer: "Shake Control", property: "Rotation", what: "turned_off" },
   ]);
 });
+
+test("review S7: a change on a layer whose footprint can't be read carries an unknown effect with the reason, never none", () => {
+  const now = structuredClone(load("rig-moved"));
+  const before = structuredClone(RIG);
+  for (const snap of [before, now]) for (const s of snap.layer_info.find((l) => l.name === "Shake Control").samples) s.rect = null;
+  const list = about(othersFor(before, now, ["White Solid 1"]), "Shake Control");
+  assert.deepEqual(list.map((o) => [o.kind, o.properties, o.effect]), [["value_changed", ["Position"], { distance_px: null, direction: null, time: 0.601, reason: "no_rect" }]]);
+});

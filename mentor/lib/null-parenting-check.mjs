@@ -327,13 +327,14 @@ function valuesChanged(baseline, b, current, c) {
 }
 
 // The shift a change on another layer caused at the before-read time, as the learner sees it
-// (after expressions): { distance_px, direction, time }, or null when nothing visible moved or it
-// can't be read.
+// (after expressions): { distance_px, direction, time }; distance and direction null, with the
+// reason, when the footprint can't be read (review S7: never "nothing moved"); null when nothing
+// visible moved.
 function effectOf(baseline, b, current, c) {
   const t0 = baseline.comp.time;
   const before = footprint(baseline, b.index, t0);
   const after = footprint(current, c.index, t0);
-  if (before.reason || after.reason) return null;
+  if (before.reason || after.reason) return { distance_px: null, direction: null, time: r3(t0), reason: before.reason || after.reason };
   let worst = { px: 0, dx: 0, dy: 0 };
   for (let k = 0; k < 4; k++) {
     const dx = after.corners[k][0] - before.corners[k][0];

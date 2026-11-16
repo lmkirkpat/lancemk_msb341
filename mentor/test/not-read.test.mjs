@@ -53,10 +53,10 @@ test("an unresolved reference: the link it might make isn't claimed, and every l
   const snap = load(PLANTED);
   const run = expressionReads(snap).list.find((x) => x.layer === "Runtime Name");
   assert.deepEqual(run.refs.map((r) => r.how), ["unresolved"]);
-  for (const [, e] of linksIn(snap)) assert.equal(e.unresolved_in_comp, 1);
+  for (const [, e] of linksIn(snap)) assert.equal(e.unresolved_in_comp, 2, "Runtime Name, and Comp Ref's comp() (review S7)");
   use(PLANTED);
   const r = await describe({ layers: ["Ctrl", "Words"] });
-  for (const l of r.layers) assert.equal(l.links_in.unresolved_in_comp, 1, `${l.layer}: never a bare "no links"`);
+  for (const l of r.layers) assert.equal(l.links_in.unresolved_in_comp, 2, `${l.layer}: never a bare "no links"`);
   noNone(r);
 });
 
@@ -79,5 +79,14 @@ test("an expression that isn't running (off or erroring) moves: not read, never 
   const list = expressionReads(load(PLANTED)).list;
   for (const name of ["Off Expr", "Err Transform"]) {
     assert.deepEqual(list.find((x) => x.layer === name).moves, { status: "not_read", reason: "not_running" }, name);
+  }
+});
+
+test("review S7: comp(\"Comp 1\").layer(…) inside Comp 1 isn't followed, so no layer says it has no links", () => {
+  const snap = load(path.join(FIXTURES, "expressions", "rig.json"));
+  const black = snap.expressions.find((x) => x.group === "effect");
+  black.text = 'comp("015 Rig").layer("Sweep Control").transform.position';
+  for (const [, e] of linksIn(snap)) {
+    assert.deepEqual([e.links.length, e.unresolved_in_comp], [0, 1]);
   }
 });

@@ -463,7 +463,7 @@ test("the reviewer's hand-check: Needle moved 50 px with its rect nulled doesn't
     const door = layerOf(r, "Door");
     assert.equal(r.passed, false, `rect nulled in ${both ? "both reads" : "the check read"}`);
     // Spec 015 FR-014a: its own Position changed, so it's that change, with a shift of unknown size.
-    assert.deepEqual(r.other_changes, [{ kind: "value_changed", layer: "Needle", property: "Position", effect: { distance_px: null, direction: null, time: 0 } }]);
+    assert.deepEqual(r.other_changes, [{ kind: "value_changed", layer: "Needle", property: "Position", effect: { distance_px: null, direction: null, time: 0, reason: "no_rect" } }]);
     assert.deepEqual(door.item5.moved_layers, []);
     assert.ok(door.hints.length > 0);
   }

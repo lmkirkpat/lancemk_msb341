@@ -315,7 +315,9 @@ export function linksIn(snapshot, { time } = {}) {
     for (const l of layerInfo(snapshot).layers) out.set(l.index, read);
     return out;
   }
-  const unresolved = list.reduce((n, x) => n + x.refs.filter((r) => r.how === "unresolved").length, 0);
+  // Another comp's reference counts too (review S7): a comp("…").layer(…) can name this comp, which
+  // isn't followed, so "no links" can't be said while one is there.
+  const unresolved = list.reduce((n, x) => n + x.refs.filter((r) => r.how === "unresolved" || r.how === "other_comp").length, 0);
   for (const l of layerInfo(snapshot).layers) out.set(l.index, { status: "read", links: [], unresolved_in_comp: unresolved });
   for (const x of list) {
     for (const r of x.refs) {

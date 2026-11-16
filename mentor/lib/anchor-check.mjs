@@ -174,7 +174,7 @@ function effectOf(space, baseline, b, current, c) {
   for (const t of common(timesOf(b), timesOf(c))) {
     const cmp = compare(space, baseline, b.index, current, c.index, t, b.kind);
     if (cmp.reason) {
-      if (!unreadable) unreadable = { distance_px: null, direction: null, time: r3(t) };
+      if (!unreadable) unreadable = { distance_px: null, direction: null, time: r3(t), reason: cmp.reason };
       continue;
     }
     if (cmp.moved && (!worst || cmp.max > worst.max)) worst = { time: r3(t), max: cmp.max, dx: cmp.dx, dy: cmp.dy };
