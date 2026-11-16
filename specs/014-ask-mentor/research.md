@@ -1,6 +1,8 @@
 # Research: Ask the mentor (spec 014)
 
 **Date:** 2026-11-14. **Spec:** [spec.md](spec.md) (approved 2026-11-14, OQ-1 to OQ-5 as recommended).
+**Updated 2026-11-16 (T005):** T001 to T003 folded into R4, R5, R10 and R18; R10's flag dropped (FR-047
+withdrawn, constitution 1.6.0).
 
 Each item: the decision, why, and what else was considered. Items marked **Live** are settled only by a
 live check (tasks Phase 0); until then the plan builds to the stated assumption and the check can change
@@ -83,6 +85,12 @@ drops offered skills when its own `panel.json` runtime is `b1` (a display guard;
 eval runners see the same empty field, so FR-061's "none on B1" check can run; the rule lives in the
 server, not the panel (constitution II). **Live:** T002 confirms the hand-over itself on the fake service.
 
+**Confirmed 2026-11-16 (T002, `panel/helper/test/ask-handover.test.mjs`, merged `392ef53`; on Opus 5.5 and
+Haiku 5.5):** today's helper already hands over through `Skill` (`panel/helper/lib/loop.mjs`, `switchTo`),
+keeps the conversation, switches the tool list to the second skill's, and switches back on a
+mid-conversation `/ask-mentor`. The one gap, the helper telling the server it's on A
+(`AE_MENTOR_RUNTIME=a` in `serverEnv`), was built in T028. Nothing in this decision changes.
+
 **Rejected:** the panel alone (the B1 evals wouldn't see it); telling the model (unreliable).
 
 ## R5. The hand-in (K6, FR-025, FR-026)
@@ -103,6 +111,9 @@ would be repeated); the panel passing it (teaching logic in the panel).
 
 **Expiry:** a hand-in is used once, only on the same comp, and lapses after the session window (3 h,
 `SESSION_WINDOW_HOURS`).
+
+**Confirmed 2026-11-16 (T002):** a `session.json` value a tool writes before the `Skill` switch is read by a
+tool after it, so the hand-in can travel in `session.json` as decided. Phase 2 builds on what's there.
 
 ## R6. The opening read's order (FR-023, FR-026, FR-032)
 
@@ -159,24 +170,39 @@ said it was wrong) is closed by R7 (the place doesn't decide the pass when named
 **Why:** a word-and-name test is crude but cheap and catches AB 6's shape; it errs toward refusing, and a
 refusal only asks the mentor to rewrite. **Rejected:** a model judge in the tool (cost, and non-deterministic).
 
-## R10. `comp_active` in the bridge's health check (FR-047, constitution II 1.5.0)
+## R10. ~~`comp_active` in the bridge's health check~~ (FR-047, **withdrawn 2026-11-16**)
 
-**Decision:** `GET /health` gains `comp_active: true | false | null`. The bridge keeps a cached value,
-refreshed by a one-line `evalScript` (`app.project && app.project.activeItem instanceof CompItem`) started
-at most once per second and **only when its script queue is idle**; while a job runs, or until the first
-read returns, it's `null`. `/health` never waits on it, so the connection mark keeps working while AE is
-busy. The panel pauses Ask (`home-nocomp`) only on `false`; `null` and an older bridge (no field) leave Ask
-on, and `ask-nocomp` covers the case after a press. Noted in `bridge/UPSTREAM.md`.
+**Was decided (2026-11-14):** `GET /health` gains `comp_active: true | false | null` from a cached,
+non-blocking read of `app.project.activeItem instanceof CompItem`; Home pauses Ask (`home-nocomp`) only on
+`false`. Constitution 1.5.0 allowed the panel that one read.
 
-**Live (T001):** whether `activeItem` stays the comp while the Knack panel has focus, after the timeline
-is closed, with a footage item selected in the Project panel, and with no project open; and the read's
-time. If `activeItem` drops to null when the panel takes focus, the flag would pause Ask every time the
-learner clicks into the ask box, so T015 then sets the bridge to report `null` unless the value is
-`true`, and Home pauses only on a confirmed `false` read taken while AE had focus, or drops `home-nocomp`
-(spec amendment).
+**Live (T001, 2026-11-16, AE 27.0, read-only `mentor/dev/live-014/comp-active.jsx`; full table in
+[`ask-build.md`](../../discovery/usage-notes/ask-build.md) › T001):**
 
-**Rejected:** reading it in `/health` synchronously (blocks the mark during renders); the mentor
-answering it (a model turn, which `home-nocomp` exists to avoid).
+| State | Comp open? | Read | Right? |
+|---|---|---|---|
+| Comp viewer focused; timeline clicked then the Knack panel focused | yes | yes | yes |
+| A footage item clicked in the Project panel | yes | no | **no** |
+| An empty spot clicked in the Project panel | yes | no | **no** |
+| Every comp closed; File › Close Project | no | no | yes |
+| A 4 s render running | yes | yes (after the render, most likely queued) | yes |
+
+Panel focus doesn't change the read (the risk this section named), but a **no** can't tell "no comp open"
+from "a comp is open and the learner last clicked in the Project panel". `activeItem` follows the viewer,
+not the Project selection, and `app.activeViewer` is stale with every comp closed, so it can't back the read
+up. Only **yes** is reliable.
+
+**Fallback taken (builder, option A, 2026-11-16):** drop the flag. FR-047 is withdrawn, T015 is withdrawn
+(the bridge is unchanged), and constitution 1.6.0 removes the 1.5.0 exception. Ask is always available on
+Home. With no comp active at ask time, the mentor's read returns `NO_ACTIVE_COMP` and `give_answer` gives a
+`no_comp` answer, "No comp open. Open one, or click into its timeline." (`ask-nocomp`). The mentor's read has
+the same blind spot (it reads the active comp), but that sentence's one click fixes both false-"no" cases.
+The panel already treats a missing flag as unknown and keeps Ask on, so no behavior changes; its now-dead
+`comp_active` reading and `home-nocomp` state are a cleanup task (tasks T101).
+
+**Rejected (2026-11-16):** a flag that reports only `true` and `null` (it would never pause anything, so it
+would carry a constitution exception for no behavior); pausing only on a `false` taken while AE had focus
+(states 3 and 4b had AE focused, so it would still be wrong).
 
 ## R11. Turn log tags (FR-058)
 
@@ -244,3 +270,10 @@ fail words).
 **Decision:** confirmed by reading `mentor/lib/reviews.mjs` `nextState`: a `practice` result on a learned
 skill returns `keep()` (status, `review_due`, `reviews_passed_in_row` unchanged). T003 adds the test so a
 later change can't break FR-023 silently.
+
+**Confirmed 2026-11-16 (T003, `mentor/test/practice-keeps-schedule.test.mjs`, merged `0a69de2`):** a
+non-review lesson on a learned skill, passed or partial, keeps status, `review_due` and
+`reviews_passed_in_row` (`mentor/lib/reviews.mjs`, written back in `mentor/lib/learner-store.mjs`), and its
+entry's kind is `practice`. **One `todo`:** a skill marked learned with no lesson entries of its own (only a
+hand-edited record) logs `first`, not `practice`; the schedule is still kept. Only a hand-edited record hits it,
+so nothing changes here; TD § 11's rule (asking again is normal, not a review) holds in today's code.

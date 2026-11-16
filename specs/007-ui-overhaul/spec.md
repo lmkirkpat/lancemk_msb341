@@ -455,7 +455,7 @@ From the README's "States still missing" and the specs this one sits on.
   table doesn't have, for step 1 only: `home-return-interim`, Home with a record before step 2 (plan P9). T052 removes it.
   *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* `home-cutoff` becomes `home-inprogress` (the quiet line, FR-026);
   the panel also implements the ask-first mockup's new and changed states by id, as spec 014 FR-046 lists them:
-  `home-lessonopen-deeper`, `home-nocomp`, `home-thread`, and the ask states (`ask-typing` through `ask-ended`,
+  `home-lessonopen-deeper`, ~~`home-nocomp`~~ (withdrawn 2026-11-16, spec 014 FR-047), `home-thread`, and the ask states (`ask-typing` through `ask-ended`,
   plus `skills-due` and `lesson-none` as changed). Its "Same" states keep this spec's behavior.
 
 ### Home (option A, path-first)
@@ -475,8 +475,8 @@ From the README's "States still missing" and the specs this one sits on.
   turn, so opening it costs nothing (README › Home). If the read takes more than 300 ms
   it MUST show `home-loading`.
   *Checked 2026-11-14 (spec 014 FR-055, `decisions/012`): still holds for the ask-first Home; no mentor turn
-  until a press (Ask or Find my next lesson). `home-nocomp` uses only the bridge's comp-active yes or no
-  (constitution 1.5.0), not a mentor turn.*
+  until a press (Ask or Find my next lesson). (`home-nocomp` was withdrawn 2026-11-16 with spec 014 FR-047: Ask
+  is always available, and the mentor's read answers "No comp open" as `ask-nocomp`.)*
 - **FR-009**: Up next has two sources in this build, each with no mentor turn to draw: no record: the
   path's starting skill with **Start lesson**; a record: "Your next lesson", no skill named, with **Find
   my next lesson** (RQ-15), one `/next-mentor` turn when pressed, opening `lesson-picking`. A stored
@@ -1020,7 +1020,7 @@ Each step can stop on its own and leave a working panel. Tasks are in [tasks.md]
   about 343 pt wide, at the heights a user would pick (about 583 and 688 pt), since that's how the builder expects
   people to use it. 260 × 480 is not required. The narrowest dock is untested: re-check if a tester docks narrower.
   *Amended 2026-11-14 (spec 014 FR-055, `decisions/012`):* the Home states follow FR-007 as amended (`home-inprogress` in place
-  of `home-cutoff`; `home-first` with the ask card and Find my next lesson; `home-nocomp`,
+  of `home-cutoff`; `home-first` with the ask card and Find my next lesson; ~~`home-nocomp`~~ (withdrawn 2026-11-16),
   `home-lessonopen-deeper`, `home-thread`), and the ask states are added at the default dock, gated by spec 014
   SC-012. `ask-answer`, `ask-steps-open` and `ask-deeper-lesson` are checked once at 260 × 480 and logged, not
   a gate (spec 014 OQ-4).

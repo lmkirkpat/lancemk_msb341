@@ -209,7 +209,9 @@ a brand new session act like a colleague who already knows what you are working 
   - **Mockup and spec (2026-11-14):** the ask-first mockup passed design review after fixes
     (`product/mockups/ask-mentor/`, `64bd9c4`). Spec 014 approved, OQ-1 to OQ-5 as recommended: the answer
     comes as data (explanation, steps, up to two offered skills, closing offer), B1 offers no skills, and the
-    bridge's health check says whether a comp is active (constitution 1.5.0). The reads are spec 015's;
+    Ask is always available on Home (the comp-active flag was dropped 2026-11-16: T001 found AE's active item
+    reads "no comp" after a click on footage or an empty Project spot, so constitution 1.5.0's exception was
+    removed in 1.6.0; `discovery/usage-notes/ask-build.md`). The reads are spec 015's;
     the three sessions wait for spec 015 phase 1 (FR-060). FR-055 carries spec 007's amendments.
   - **Plan and 100 tasks approved (2026-11-14, `99124e6`), PQ-1 to PQ-5 as recommended:** the mentor answers
     through a `give_answer` tool whose fields are the whole answer and which enforces the hard rules (B1 strips

@@ -14,7 +14,7 @@ The call's input and the tool's reply have the same fields; the reply holds what
 | `kind` | `answer` \| `describe` \| `howto` \| `clarify` \| `outside` \| `no_comp` | **Added by the plan** (spec allowed renames with a reason): lets the panel pick `ask-answer`, `ask-new-question`, `ask-clarify`, `ask-outside`, `ask-nocomp` without reading words. `describe` = a describe-the-comp answer with no steps (US1 scenario 2) |
 | `comp` | string \| null | Set by the tool from the session's last read, never by the model. `null` for `no_comp` and when no read ran (`outside`, `howto`) |
 | `explanation` | string | The mentor's words for part 1: one or two sentences, or a lead line and up to four `- ` bullets. No numbers, no "Steps:" (FR-004, FR-009) |
-| `steps` | array, 0 to 4 | Each `{ text, skill, layer }`. `skill`: a skill ID, `"not_taught"`, or `null` (an untagged look or playback step, PQ-5). `layer`: a layer name from the last read, or `null` |
+| `steps` | array, 0 to 4 | Each `{ text, skill, layer }`. `skill`: a skill ID, `"not_taught"`, or `null` (an untagged look or playback step, PQ-5). `layer`: a layer name from the last read, or `null`. **Normalized in the reply:** a `"not_taught"` step's `text` ends with "Not something I teach yet.", appended by the tool when missing (contracts/ask-tools.md step 3a, FR-006); the panel draws no tag for it, so this sentence is its only marker |
 | `offered_skills` | array, 0 to 2 | Skill IDs, each among the steps' skills (PQ-4: a `howto` may carry one with no steps). **Always `[]` in the reply on B1** (FR-017, research R4) |
 | `closing_offer` | string \| null | One sentence; a question when there are steps or an offer. `null` only for `clarify` (the question is the explanation) and `no_comp` |
 | `runtime` | `a` \| `b1` | Reply only. For the panel's display guard and the eval runner |
@@ -45,6 +45,8 @@ null, started_at }`
 
 - Written by `go_deeper`. Taken once by that skill's snapshot tool on the same comp (`used: true`); lapses
   after the session window. No learner words (FR-045).
+- Confirmed 2026-11-16 (T002, research R5): a `session.json` value written before the helper's `Skill` switch
+  is read after it, so the hand-in survives the hand-over as designed.
 
 ### `attributed` (K5; research R9, phase 3)
 
@@ -73,6 +75,11 @@ Never: `summary`, a verdict, expression or error text, effect names, the learner
 with steps (`kind: "answer"`) write an entry (FR-038). No skill's `status`, `times_passed`, `review_due` or
 `reviews_passed_in_row` changes (FR-039).
 
+A go-deeper lesson on a learned skill is a lesson entry of kind `practice` (not `review`), and keeps the
+skill's `status`, `review_due` and `reviews_passed_in_row` (FR-023). Confirmed in today's code 2026-11-16
+(T003, research R18); a skill marked learned only by hand, with no lesson entries, logs `first` instead (a
+`todo` in that test; the schedule is still kept).
+
 ## 4. Hand-in slice and hand-back (contract: [contracts/hand-in.md](contracts/hand-in.md))
 
 - Snapshot reply (each hand-in-ready skill): `mode_source: "hand_in"`, and
@@ -86,10 +93,12 @@ with steps (`kind: "answer"`) write an entry (FR-038). No skill's `status`, `tim
 Spec 015 data-model § 4's shape, unchanged, added to the focus and candidate layers of `snapshot_project`
 (easing), `key_types_snapshot`, `speed_graph_snapshot` and `offset_snapshot` (spec 015 OQ-3).
 
-## 6. Health check (`bridge/cep/host.js`, research R10)
+## 6. ~~Health check~~ (withdrawn 2026-11-16; research R10)
 
-`GET /health` adds `comp_active: true | false | null`. Nothing else about the project: no name, id or
-count (constitution II, 1.5.0).
+No change to `GET /health`. The planned `comp_active: true | false | null` was dropped with FR-047: T001 found
+a "no" wrong whenever the learner last clicked footage or an empty spot in the Project panel
+([`ask-build.md`](../../discovery/usage-notes/ask-build.md) › T001). The bridge carries nothing about the
+project to the panel (constitution II, 1.6.0). No comp at ask time is the mentor's `no_comp` answer (§ 1).
 
 ## 7. Panel
 
@@ -103,9 +112,19 @@ as they came, no STEPS, no dock, no Go deeper. On a `b1` panel, `offers` is alwa
 
 ### Thread (`panel/lib/ask-thread.js`, saved in `panel-session.json` version 3)
 
-`{ id, questions: [{ text, at, view: AskView | null, prose | null, folded }], latest_steps: [step] | null,
-deeper: null | { skill, tag, step_number, state: "starting" | "open" | "passed" | "ended", layer },
-steps_open_once: bool }`. `latest_steps` is the last answer's steps, or `null` when it had none (MU
+`{ id, questions: [{ text, kind, at, view: AskView | null, prose | null, folded, answered, notice }],
+latest_steps: [step] | null, deeper: null | { skill, tag, step_number, state: "starting" | "open" | "passed" |
+"ended", layer }, steps_open_once: bool }`.
+
+Each thread entry (added 2026-11-16 from the panel build, T035 review):
+- `kind`: `question` | `followup` | `go_deeper` (the turn log's kinds, research R11). A new `question` folds
+  the entries before it; a follow-up or Go deeper press stays in view with the answer it follows.
+- `answered`: whether the turn has ended; Try again resets it to `false`.
+- `notice`: `null` | `{ title | null, text }`, a passing error shown on the latest entry ("Your question's
+  still here."); cleared by Try again.
+
+The build also keeps `version`, `claude_session_id` and `started_at` on the thread (bookkeeping for the saved
+session). `latest_steps` is the last answer's steps, or `null` when it had none (MU
 `ask-new-question`: the dock goes away).
 
 ### Turn log line (research R11)

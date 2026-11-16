@@ -5,9 +5,12 @@
 **Created**: 2026-11-14
 
 **Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended; OQ-1's
-constitution amendment is in, 1.5.0). Plan and tasks approved 2026-11-14 (PQ-1 to PQ-5 as
+constitution amendment was 1.5.0, removed in 1.6.0 below). Plan and tasks approved 2026-11-14 (PQ-1 to PQ-5 as
 recommended; FR-006 and FR-016 amended for PQ-5 and PQ-4, FR-019 to match PQ-4, FR-009 points at
-PQ-1). Housekeeping done 2026-11-14 (T006): mockup v5, CD-2 to CD-4 answered.
+PQ-1). Housekeeping done 2026-11-14 (T006): mockup v5, CD-2 to CD-4 answered. **Amended 2026-11-16
+(T005, builder option A):** FR-047 withdrawn (T001: a "no comp" read is unreliable,
+[`ask-build.md`](../../discovery/usage-notes/ask-build.md) › T001); OQ-1's answer superseded, constitution
+1.6.0 removes the exception; Ask is always available on Home and `ask-nocomp` covers no comp.
 
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
@@ -55,7 +58,7 @@ and restraint is a mode switch away for Adobe. What stays hard to copy (CLAUDE.m
 | Record | What it requires here |
 |---|---|
 | `decisions/002`, amended by `012` | The mentor still leads, through the follow-through (named skills, one go-deeper, memory), not at the door. 012's "what would change our mind" is SC-001's watch signal |
-| `decisions/003`, `005` (constitution II) | Read-only, narrow tools; no open-ended scripts; the panel holds no teaching logic and reads the project only through the mentor's tools, except the comp-active yes or no (constitution 1.5.0, amended 2026-11-14 for OQ-1; FR-047) |
+| `decisions/003`, `005` (constitution II) | Read-only, narrow tools; no open-ended scripts; the panel holds no teaching logic and reads the project only through the mentor's tools, with no exception (constitution 1.6.0, 2026-11-16: 1.5.0's comp-active exception was removed when FR-047 was withdrawn) |
 | `decisions/004` | Spec Kit for build specs |
 | `decisions/007`, `008` (constitution VI) | `SKILL.md` files and `mentor/` are the skill-builder's; `panel/` the panel-builder's; eval cases the eval engineer's; one agent on live AE at a time |
 | `decisions/011` | Built and evaluated on B1; the three sessions and the ship step on A. Go deeper is checked on A (B1 stops at the offer) |
@@ -171,8 +174,9 @@ fixture events, with no mentor.
    (`home-inprogress`, formerly `home-cutoff`).
 3. **Given** an empty record, **Then** Home shows "Welcome to Knack.", the ask card and Find my next lesson
    (`home-first`), not Easing with Start lesson.
-4. **Given** the bridge reports no active comp (once FR-047 lands), **Then** Ask is paused with "No comp open.
-   Open one, or click into its timeline." and stays focusable (`home-nocomp`).
+4. **Given** no comp is active, **Then** Ask on Home stays available, and asking gets "No comp open. Open one,
+   or click into its timeline." from the mentor's read, with no steps (`ask-nocomp`). (Amended 2026-11-16: was
+   Ask paused on Home from the bridge's flag, `home-nocomp`; FR-047 withdrawn.)
 5. **Given** an answer with step data, **Then** the panel draws explanation, then STEPS and the numbered list
    from the step data, then the closing offer, then one Go deeper per offered skill; Your steps docks folded,
    with no ticks (`ask-answer`).
@@ -302,7 +306,9 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   (TD § 5.1 part 2, builder 2026-11-14).
 - **FR-006**: Each step line that changes something MUST carry either one skill tag (FR-021's short names) or
   "not taught yet"; a step that only plays back or looks may carry no tag (`skill: null`, drawn untagged;
-  amended 2026-11-14, plan PQ-5). A
+  amended 2026-11-14, plan PQ-5). A "not taught yet" step's text always ends with "Not something I teach
+  yet.": the answer tool appends it when missing, since the panel draws no separate tag for it
+  (contracts/ask-tools.md step 3a, amended 2026-11-14 after the T035 review). A
   step outside the six MUST pair an action with what the read sees there ("Open …'s Position expression and
   look at how it sets each hit's size: it uses the first hit's size for all three."), never the edit, never new
   or rewritten code (H-2, TD § 19).
@@ -332,7 +338,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   parses prose (cockpit item 1; MU › Open question 2 and design review 4):
   1. **explanation**: the mentor's words for part 1;
   2. **steps**: the step lines in order, each with its skill (a skill ID, "not taught yet", or none for a
-     step that only plays back or looks, FR-006);
+     step that only plays back or looks, FR-006); a not-taught step's text ends with "Not something I teach
+     yet.", added by the tool if missing (FR-006);
   3. **offered skills**: zero to two skill IDs, each among the steps' skills, except that a how-to answer with
      no comp target (FR-019) may carry one offered skill and no steps; its go-deeper hands over with no layer
      and the lesson opens as it would from Skills (amended 2026-11-14, plan PQ-4);
@@ -465,11 +472,15 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 
 - **FR-046**: The panel MUST implement every **new** and **changed** state in MU's States table by its id, as
   drawn, with spec 007's tokens and components. "Same" states keep spec 007's behavior.
-- **FR-047**: The bridge's health check MUST add **whether a comp is active (yes or no, no name, no other
-  project detail)** so Home can pause Ask before anyone asks (`home-nocomp`; cockpit item 3, MU open question
-  10). Constitution II allows it as of 1.5.0 (amended 2026-11-14, OQ-1): the panel may read from the health
-  check whether a comp is active, as a yes or no with no name or other detail. Until the flag is built,
-  `ask-nocomp` (the mentor's read finds no comp) covers the case, and Ask stays enabled on Home.
+- **FR-047** (**Withdrawn 2026-11-16**, builder option A): ~~The bridge's health check MUST add whether a comp
+  is active (yes or no, no name, no other project detail) so Home can pause Ask before anyone asks
+  (`home-nocomp`).~~ **Why withdrawn:** T001 found only a "yes" reliable. With a comp open, clicking a footage
+  item or an empty spot in the Project panel reads as no comp (states 3 and 4b in
+  [`ask-build.md`](../../discovery/usage-notes/ask-build.md) › T001), so Home would pause Ask with a comp on
+  screen. **Instead:** Ask is always available on Home; when no comp is active at ask time, the mentor's read
+  gives "No comp open. Open one, or click into its timeline." (`ask-nocomp`), and that one click fixes both
+  false-"no" cases too. The bridge's health check is unchanged, and constitution 1.6.0 removed the 1.5.0
+  exception. The ID stays so references resolve.
 - **FR-048**: The panel MUST draw an answer as: the explanation, then (only with step lines) the STEPS heading
   and numbered list from the step data, then the closing offer, then one gray **Go deeper: [tag] ›** per offered
   skill inside that answer. Nothing is said twice. If the result is missing or malformed, the panel MUST show
@@ -496,7 +507,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 
 - **FR-055**: Spec 007 is amended as follows (MU › Spec 007 amendments, plus three the mockup didn't list):
   - **FR-006:** `home-cutoff` becomes `home-inprogress`; add `home-lessonopen-deeper`, `home-nocomp`,
-    `home-thread` and MU's ask states.
+    `home-thread` and MU's ask states. (`home-nocomp` is moot since FR-047 was withdrawn, 2026-11-16; spec 007
+    FR-006 still lists it until it's tidied.)
   - **FR-007 and FR-009:** the Up next card is gone. Home is the ask card and one quiet line (a lesson open,
     else a lesson in progress, else Find my next lesson). Pick a skill is the Skills tab (still on
     `lesson-picking`).
@@ -557,8 +569,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 ### Key Entities
 
 - **Ask read**: spec 015's read for the asked layers and their sources (two shapes, read status). Defined there.
-- **Asked result** (one per answer turn): `explanation`, `steps` (each: `text`, `skill` as a skill ID or
-  `null` for not taught yet, `layer`), `offered_skills` (0 to 2 skill IDs; empty on B1), `closing_offer`, and
+- **Asked result** (one per answer turn): `explanation`, `steps` (each: `text`, `skill` as a skill ID, not taught
+  yet, or none for a look or playback step (FR-006; the data model's `"not_taught"` and `null`), `layer`), `offered_skills` (0 to 2 skill IDs; empty on B1), `closing_offer`, and
   `comp` (the name the first line uses). The panel draws from it; no prose is parsed.
 - **Asked entry** (learner record, a new kind beside lessons): `kind: "asked"`, `date`, `project`, `comp`,
   `layers` (the steps' layers), `goal` (general terms), `skills` (IDs referenced), `after_learning` (IDs of
@@ -641,7 +653,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   meanwhile.
 - **Selected layers (Q9).**
 - **Changing the review schedule from asked entries** (H-5: record now, schedule later).
-- **The comp's name on the panel** or in the health check (TD § 19, MU open question 1).
+- **The comp's name on the panel** or in the health check (TD § 19, MU open question 1). Since FR-047's
+  withdrawal the health check carries nothing about the project.
 - **A Stop control during a long read** (MU open question 7) and a growing follow-up bar.
 - **The light theme's build** (MU › Accessibility notes it; spec 007's tokens only).
 - **Go deeper on B1.**
@@ -666,7 +679,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 
 ### For the builder (each with a recommendation)
 
-- **OQ-1 (answered 2026-11-14, as recommended; constitution 1.5.0 is in, principle II): How is the
+- **OQ-1 (answered 2026-11-14, as recommended; superseded 2026-11-16: FR-047 withdrawn after T001, and
+  constitution 1.6.0 removed the 1.5.0 exception, so this no longer applies): How is the
   comp-active flag allowed (FR-047)?** Constitution II says the panel reads the project only
   through the mentor's tools. A yes or no carries no name, but it is still the panel learning something about
   the project. **Recommended: a constitution amendment (1.5.0, MINOR), proposed by the cockpit, that lets the
@@ -713,3 +727,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 
 - Done 2026-11-14 (T007): FR-055's amendments are in `specs/007-ui-overhaul/spec.md` and T061's note in its
   `tasks.md`.
+- Done 2026-11-16 (T005): T001 to T003 folded into research R4, R5, R10, R18 and data-model § 6; FR-047
+  withdrawn and OQ-1 superseded (builder option A); data-model § 7 has the panel's thread-entry fields;
+  `give_answer`'s not-taught normalization (contracts/ask-tools.md step 3a) is in FR-006 and data-model § 1.
+- Open, not mine to edit here: spec 007 FR-006 still lists `home-nocomp`; MU's `home-nocomp` row and open
+  question 10 are moot (a request for the ui-designer).

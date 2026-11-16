@@ -1,6 +1,7 @@
 # Contract: what the panel reads and draws for Ask (spec 014)
 
-The panel draws from the record, the path data, tool results and `comp_active`. It never parses the
+The panel draws from the record, the path data and tool results (not `comp_active`: FR-047 was withdrawn
+2026-11-16, research R10; constitution 1.6.0). It never parses the
 mentor's prose (FR-016) and holds no teaching logic (constitution II). States are MU's ids
 ([`product/mockups/ask-mentor/README.md`](../../../product/mockups/ask-mentor/README.md) › States); copy is
 MU › Copy, plus the lines below.
@@ -14,13 +15,14 @@ MU › Copy, plus the lines below.
 | A snapshot tool result with `mode_source: "hand_in"` | `tool_result` | `ask-deeper-lesson`: "From your question. Back returns you to it.", Pick ticked, Practice tag when `hand_in.practice` |
 | The check tool's `passed` | `tool_result` (today's checklist) | `ask-deeper-passed`'s result line (below) |
 | `record_lesson`'s `hand_back` | `tool_result` | `ask-back`: the thread's hand-back line, drawn from data |
-| `comp_active` | `GET /health` (`connection.js`) | `home-nocomp` on `false` only |
+| ~~`comp_active`~~ | ~~`GET /health`~~ | Withdrawn 2026-11-16 (FR-047): nothing read; Ask is always on, and no comp is `ask-nocomp` from the answer's `kind` |
 | `panel.json` runtime | config | Display guard: no Go deeper on `b1` |
 
 ## Drawing an answer (FR-048, FR-049)
 
 1. A valid AskView: explanation (bullets as bullets), then, only with steps, the **Steps** heading and the
-   numbered list with each step's tag (short name, bold italic) or "not taught yet", then the closing
+   numbered list with each step's tag (short name, bold italic), or no tag for a not-taught step (its text
+   already ends "Not something I teach yet.", contracts/ask-tools.md step 3a) or a look step, then the closing
    offer, then one gray **Go deeper: [tag] ›** per offer inside the same message. The turn's prose, if
    any, isn't drawn (research R2).
 2. AskView `null`: the mentor's words as they came; no Steps, no dock, no Go deeper.
@@ -66,7 +68,8 @@ Ask card first ("Ask about the open comp", "What do you want to know or change?"
 nothing."), then one quiet line in MU's order: a lesson open → "Back to your lesson"; a lesson in progress →
 "Pick up [skill] on [layer]" with Set it aside; else "Find my next lesson". No due review, Practice due or
 memory on Home; they're in Skills (`skills-due`). Empty record: "Welcome to Knack." with the same Home
-(`home-first`). `comp_active: false` → `home-nocomp`; `true`, `null` or absent → Ask on.
+(`home-first`). Ask is always on; no comp shows after a press as `ask-nocomp` ("No comp open. Open one, or
+click into its timeline."). `home-nocomp` is withdrawn with FR-047 (2026-11-16; tasks T101 removes it).
 
 ## Tests (panel-builder)
 

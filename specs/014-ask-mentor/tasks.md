@@ -4,7 +4,8 @@
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md),
 [teaching-design.md](teaching-design.md) (TD), [`product/mockups/ask-mentor/`](../../product/mockups/ask-mentor/README.md) (MU).
 
-**Status**: Approved by the builder 2026-11-14 (PQ-1 to PQ-5 as recommended).
+**Status**: Approved by the builder 2026-11-14 (PQ-1 to PQ-5 as recommended). Amended 2026-11-16 (T005, builder
+option A): FR-047 withdrawn, so T015 is withdrawn and T101 (panel cleanup) added.
 
 **Format**: `- [ ] T### [P?] [Story?] (owner) Description`. `[P]` = can run alongside the other `[P]` tasks
 in the same block (different files, no unfinished dependency). Owners (`decisions/007`,
@@ -45,9 +46,11 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   `reviews_passed_in_row` as they were, and its entry's kind is `practice`.
 - [x] T004 (cockpit) Log T001 to T003 in `discovery/usage-notes/ask-build.md` (new): each question, the
   answer, what it changes.
-- [ ] T005 (spec-writer) Fold T001 to T003 into research R4, R10, R18 and data-model § 6. If T001 shows
+- [x] T005 (spec-writer) Fold T001 to T003 into research R4, R10, R18 and data-model § 6. If T001 shows
   focus changes the flag, apply R10's fallback; if an answer changes a requirement, stop and hand it to the
-  builder before T015.
+  builder before T015. **Done 2026-11-16:** focus didn't change the flag, but a "no" was wrong after a Project
+  panel click; the builder chose option A (drop the flag): FR-047 and T015 withdrawn, OQ-1 superseded,
+  constitution 1.6.0. T002 and T003 confirmed today's code (R4, R5, R18, data-model § 2 and § 3).
 - [x] T006 [P] (spec-writer) Spec 014 housekeeping in `specs/014-ask-mentor/spec.md`: the mockup is v5; FR-047
   and OQ-1 say the 1.5.0 amendment is in; CD-2 to CD-4 marked answered (TD updated 2026-11-14); the builder's
   PQ-4 and PQ-5 answers written into FR-016, FR-019 and FR-006; a pointer to plan › PQ-1 in FR-009.
@@ -102,10 +105,11 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   § 13, § 14; FR-001 to FR-020 except the offer's hand-over. The answer turn is one `give_answer` call and no
   other words (PQ-1). Example lines only from TD § 16 and § 19, copied whole. No slash command named. Under
   about 2,500 words (research R16).
-- [ ] T015 [US3] (skill-builder) FR-047: `bridge/cep/host.js` `/health` adds `comp_active` from a cached,
+- [ ] ~~T015 [US3] (skill-builder) FR-047: `bridge/cep/host.js` `/health` adds `comp_active` from a cached,
   non-blocking read (research R10, as T005 left it); `null` while a job runs or before the first read. Note
   the change in `bridge/UPSTREAM.md` › Changes. Test the cache logic in `bridge/test/comp-active.test.mjs` (new
-  folder; Node built-ins, no CEP).
+  folder; Node built-ins, no CEP).~~ **Withdrawn 2026-11-16** with FR-047 (T001: a "no" is unreliable;
+  `discovery/usage-notes/ask-build.md` › T001). Don't build; the bridge is unchanged.
 - [ ] T016 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; all
   pass. Note the counts in the hand-back.
 
@@ -141,6 +145,8 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   new strings.
 - [ ] T025 [US3] (panel-builder) `panel/lib/connection.js` reads `comp_active`; Home pauses Ask only on `false`
   (`home-nocomp`, focusable, reason linked); `null` or absent leaves Ask on. Tests in `panel/test/connection.test.js`.
+  **Note 2026-11-16:** FR-047 is withdrawn, so the bridge never sends the flag and Ask is always on; no
+  behavior changes. The dead reading is removed in T101.
 - [ ] T026 [US3] (panel-builder) `panel/lib/panel-session.js` version 3 with the thread (research R12); a
   version 2 file reads as today; a Skills lesson ends the thread. Tests in `panel/test/panel-session.test.js`
   and `panel/test/close-continue.test.js`.
@@ -172,17 +178,23 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 ## Phase 1 gate
 
-- [ ] T034 (reviewer) Review the skill-builder branch against FR-001 to FR-021, FR-047, FR-057 and Edge Cases
+- [ ] T034 (reviewer) Review the skill-builder branch against FR-001 to FR-021, FR-057 (FR-047 withdrawn) and Edge Cases
   A1 to A13, and the contracts.
 - [ ] T035 (design-reviewer) Review the panel-builder branch against MU's phase 1 states, Copy and
   Accessibility, FR-046, FR-048 to FR-050, FR-053, FR-054.
+- [ ] T101 (panel-builder; before T036) **Remove the dead comp-active code** (FR-047 withdrawn 2026-11-16,
+  research R10): the `comp_active` reading in `panel/lib/connection.js` and `noComp`, the `home-nocomp` state
+  in `panel/lib/view-state.js` (`STATE_IDS` and the state pick) and any copy or screen for it, with their
+  tests. Or, if removing them breaks spec 007's state-table test while MU still lists `home-nocomp`, keep the
+  id and say why in the hand-back. Re-run the panel and helper suites; all pass. Then the design-reviewer
+  checks it with T035's branch.
 - [ ] T036 (cockpit) Merge both with `/merge-worktree` (skill-builder's shared owner named), between live
   sittings.
 - [ ] T037 (eval-engineer) The ask set on B1 at the merge commit: at least 80% and every hard check passing;
   situations 1, 4 and 5 at 3 of 3 (SC-006's B1 half). Triage with `/eval-triage`; log in the set's README with
   the refusal counts (plan › Risks).
 - [ ] T038 (skill-builder reads, AE, **builder's hands**) Live B1 smoke in the panel (quickstart › Phase 1
-  steps 2 to 4): the rock and sweep questions on Comp 1, `home-nocomp`, `turns.js --ask` timing and one
+  steps 2 to 4): the rock and sweep questions on Comp 1, `ask-nocomp` (quickstart step 3), `turns.js --ask` timing and one
   answer's tokens (research R16).
 - [ ] T039 (cockpit) Log T037 and T038 in `discovery/usage-notes/ask-build.md`.
 - [ ] T040 (spec-writer) Fold T034 to T039 into the spec (status, any amendments). **Asking works on B1.**
@@ -380,12 +392,12 @@ must land before session 3 (T094).
 
 ## Dependencies and order
 
-- **Phase 0:** T001 → T004 → T005 (T005 before T015). T002, T003, T006, T007 any time.
-- **Phase 1, mentor:** 015 T040 → T008's skill-builder cut → T009, T010, T011 → T012 → T013 → T014; T015 after
-  T005; T016 last. **Phase 1, panel:** T008's panel cut (no 015 wait) → T017, T018, T024, T027, T028 in any order
-  → T019 → T020, T021, T022 → T023, T025, T026 → T029 → T030. **Evals:** T031 after T008 (fixtures from 015 T015)
+- **Phase 0:** T001 → T004 → T005. T002, T003, T006, T007 any time.
+- **Phase 1, mentor:** 015 T040 → T008's skill-builder cut → T009, T010, T011 → T012 → T013 → T014; T016 last
+  (T015 withdrawn). **Phase 1, panel:** T008's panel cut (no 015 wait) → T017, T018, T024, T027, T028 in any order
+  → T019 → T020, T021, T022 → T023, T025, T026 → T029 → T030 → T101. **Evals:** T031 after T008 (fixtures from 015 T015)
   → T032 → T033.
-- **Gate 1:** T016, T030, T033 → T034, T035 → T036 → T037, T038 → T039 → T040.
+- **Gate 1:** T016, T030, T033 → T034, T035; T101 → T036 → T037, T038 → T039 → T040.
 - **Phase 2:** T040 and 015 T023, T026 → T041 → T042 → T043, T044 → T045, T046 → T047 → T049, T050, T051 → T052.
   Panel T053 to T057 in parallel with the mentor work. T058 after T041; T059 after T052 and T057.
 - **Gate 2:** T060, T061 → T062 → T063.
@@ -417,11 +429,12 @@ phase 1 (T017 to T030) and T001 to T007 run before 015 lands, so they're off the
    skills' hand-ins.
 3. T085 to T087 follow spec 015 phase 2, whenever it lands.
 
-**Task count:** 100. Phase 0: 7. Spec phase 1: 33 (setup and foundational 5, US1 3, US3 12, suites and the
-runtime flag 3, evals 3, gate 7). Spec phase 2: 23 (setup 1, US2 14, suites and evals 4, gate 4). Spec phase 3:
+**Task count:** 101 (100 active; T015 withdrawn 2026-11-16, T101 added). Phase 0: 7. Spec phase 1: 34 (setup
+and foundational 5, US1 3, US3 12 with T015 withdrawn, suites and the runtime flag 3, evals 3, gate 8 with
+T101). Spec phase 2: 23 (setup 1, US2 14, suites and evals 4, gate 4). Spec phase 3:
 24 (setup 1, US5 6, US6 5, US4 1, suites 1, evals 3, gate 4, later 3). Ship: 13.
 
-**By owner:** skill-builder 35 (T001 and T038 on AE), panel-builder 21, cockpit 15 (three of them logging the
+**By owner:** skill-builder 35, 34 active (T001 and T038 on AE), panel-builder 22 (with T101), cockpit 15 (three of them logging the
 builder's sessions), eval-engineer 14, spec-writer 8, reviewer 3, design-reviewer 3, the builder 1 (T097).
 Builder's hands in 6 (T038, T092 to T094, T097, and T001's panel-focus state). Paid: T089, T090 (recommended),
 T099.

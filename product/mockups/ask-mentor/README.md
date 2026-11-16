@@ -125,7 +125,9 @@ Home  Lesson  Skills                    ● AE
   Long lesson or comp names truncate to one line; the full text is in a tooltip and in the button's
   accessible name (the text is only drawn short, not cut).
 - **Nothing else from the record is on Home.** No due review, and no badge on the Skills tab.
-- **No comp open** (`home-nocomp`): AE is connected but no comp is active. The card says "No comp open.
+- **Withdrawn 2026-11-16 (spec 014 FR-047, T001: AE's active item reads "no comp" after a click on footage or
+  an empty Project spot, so a "no" can't be trusted; Ask stays available and `ask-nocomp` covers it).**
+  **No comp open** (`home-nocomp`): AE is connected but no comp is active. The card says "No comp open.
   Open one, or click into its timeline." in place of the hint, Ask is paused with that reason, and the
   line reads "Find my next lesson · Needs an open comp." You can still type. This needs the health check
   to say whether a comp is active (yes or no, no name); until it does, the same case shows after Ask as
@@ -327,7 +329,8 @@ the flow clicks through.
    show reads past about 15 s.
 9. **Memory on Home** (`#cmp-memory`). **Recommend A: move it to Skills.** 012 allows one quiet line, and
    "Next time: a keyed swing on Door" is a lesson nudge at the door.
-10. **No comp open before Ask** (`home-nocomp`). The panel can only pause Ask if the bridge's health check
+10. **Settled 2026-11-16: no.** The flag was dropped (spec 014 FR-047 withdrawn; `discovery/usage-notes/ask-build.md` T001).
+    **No comp open before Ask** (`home-nocomp`). The panel can only pause Ask if the bridge's health check
     says whether a comp is active. A yes or no carries no name, but it's still the panel learning
     something about the project, so it may need the same constitution II amendment as the comp name.
     **Recommend** adding the yes or no with spec 014 (it's one flag, and it saves a wasted mentor turn);
