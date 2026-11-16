@@ -276,13 +276,15 @@ pivot and null.
   offset 44, pivot 61, null 54 cases); settings hash unchanged at `3acbda26`. The hash covers the helper's
   settings, not `mentor/`, so it doesn't make the old A results reusable: phase 1 changed what every
   skill's tools return, and the new cases have never run on A. All six need a fresh A run at 014's ship step.
-- [ ] T038 [P] (curriculum-designer) CD-1 in `specs/014-ask-mentor/teaching-design.md`: update Q8 and
+- [x] T038 [P] (curriculum-designer) CD-1 in `specs/014-ask-mentor/teaching-design.md`: update Q8 and
   the § 13 precomps row for phase 2, and say whether § 5.1's "in order of visible effect" needs a
   "too small to see" threshold. **Start only after the other session's uncommitted edits to that
   file are committed.**
-- [ ] T039 [P] (curriculum-designer) CD-2: the wording that replaces easing's "I can't see inside these
+  **CD-1 done 2026-11-16: 014 TD § 5.1a (proposed 1 px "too small to see" threshold, builder's H-7), § 5.5 (answers once inside a precomp is read), Q8 and § 13 updated; also `motion_from` wording in 011 TD § 21 and 012 TD § 17 (unblocks pivot 57, null 55).**
+- [x] T039 [P] (curriculum-designer) CD-2: the wording that replaces easing's "I can't see inside these
   yet" once phase 2 lands, in the easing teaching design (`specs/002-easing-slice/` or curriculum
   § 6, skill 0). Design only; the `SKILL.md` change is a later skill-builder task.
+  **CD-2 done 2026-11-16: curriculum § 6 skill 0, wording per precomp read state; the not-read line kept word for word.**
 - [ ] T040 (spec-writer) Fold T033 to T039's results into the spec (status, any SC amendments) and
   hand the cockpit a CLAUDE.md note. **Phase 1 is shippable here** (to spec 014).
 
