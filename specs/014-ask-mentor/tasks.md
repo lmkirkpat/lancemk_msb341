@@ -31,7 +31,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 **Purpose:** settle the facts the design rests on, and do the spec housekeeping.
 
-- [ ] T001 (skill-builder, AE; **builder's hands** for the focus and render states) **Is a comp active? (research R10).** Read-only script
+- [x] T001 (skill-builder, AE; **builder's hands** for the focus and render states) **Is a comp active? (research R10).** Read-only script
   `mentor/dev/live-014/comp-active.jsx`: `app.project.activeItem instanceof CompItem` and its time, in six
   states: comp viewer focused; the Knack panel focused right after clicking into a comp; a footage item
   selected in the Project panel; every comp viewer closed; no project open; a render running (does the call
@@ -43,7 +43,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 - [x] T003 [P] (skill-builder) **Practice keeps the schedule (research R18).** `mentor/test/practice-keeps-schedule.test.mjs`:
   a non-review lesson on a learned skill, passed or partial, leaves status, `review_due` and
   `reviews_passed_in_row` as they were, and its entry's kind is `practice`.
-- [ ] T004 (cockpit) Log T001 to T003 in `discovery/usage-notes/ask-build.md` (new): each question, the
+- [x] T004 (cockpit) Log T001 to T003 in `discovery/usage-notes/ask-build.md` (new): each question, the
   answer, what it changes.
 - [ ] T005 (spec-writer) Fold T001 to T003 into research R4, R10, R18 and data-model § 6. If T001 shows
   focus changes the flag, apply R10's fallback; if an answer changes a requirement, stop and hand it to the
