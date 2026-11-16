@@ -164,17 +164,17 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 ## User Story 1 eval set (eval-engineer)
 
-- [ ] T031 [P] (eval-engineer) Build `product/evals/ask/` on the next-mentor runner's shape: `run.mjs`
+- [x] T031 [P] (eval-engineer) Build `product/evals/ask/` on the next-mentor runner's shape: `run.mjs`
   (`--runtime a|b1`, `--only`, `--repeat`, `--changed`, `--dry-run`, per-case `runtimes`), `README.md`,
   `rubric.md`, fixtures derived from 015 T015's Comp 1 capture and planted copies (no real names). The judge
   reads the answer rebuilt from `give_answer`'s call. Make `product/evals/lib/ready-for-a.mjs` accept
   `describe_layers` and `Skill` in `ask-mentor`.
-- [ ] T032 (eval-engineer) Phase 1 cases (numbers from the cockpit): TD § 17 situations 1, 4, 5, 6, 7, 9, 10,
+- [x] T032 (eval-engineer) Phase 1 cases (numbers from the cockpit): TD § 17 situations 1, 4, 5, 6, 7, 9, 10,
   11, 12, 13, 14, 15, plus EE-4's four rows (expressions over keys, separated dimensions, single and hold keys,
   locked or Collapse) and one how-to (FR-019). Deterministic checks per FR-061 that apply on B1, plus
   `answer_prose_empty` (research R2) and a refusal count per run. Rubric: TD § 5.3's kinds, R-ONE-IDEA as "one
   answer, ending on one choice", about 120 words.
-- [ ] T033 (eval-engineer) `node product/evals/ask/run.mjs --dry-run`; fix the set until it validates.
+- [x] T033 (eval-engineer) `node product/evals/ask/run.mjs --dry-run`; fix the set until it validates.
 
 ## Phase 1 gate
 
