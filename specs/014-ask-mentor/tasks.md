@@ -71,7 +71,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 ## Setup
 
-- [ ] T008 (cockpit) Cut the panel-builder worktree from local `main` now. Cut the skill-builder worktree from
+- [x] T008 (cockpit) Cut the panel-builder worktree from local `main` now. Cut the skill-builder worktree from
   local `main` **after 015 T040** (spec 015 phase 1 shippable; FR-059), and name it `--shared-owner` for
   `mentor/**`, `bridge/**` and `.claude/skills/*-mentor/**`. Hand out the ask set's case numbers to the
   eval-engineer.
@@ -210,7 +210,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 - [ ] T104 [P] (eval-engineer) Ask case 18: a follow-up sent in the wrapper after a lesson changed the comp.
   Checks: a fresh read before `give_answer`; the answer follows from the earlier question and from the comp as
   read now, not as the context described it. The request uses the wrapper from `REQUESTS`. Dry run validates.
-- [ ] T036 (cockpit) Merge both with `/merge-worktree` (skill-builder's shared owner named), between live
+- [x] T036 (cockpit) Merge both with `/merge-worktree` (skill-builder's shared owner named), between live
   sittings.
 - [ ] T037 (eval-engineer) The ask set on B1 at the merge commit: at least 80% and every hard check passing;
   situations 1, 4 and 5 at 3 of 3 (SC-006's B1 half). Triage with `/eval-triage`; log in the set's README with
