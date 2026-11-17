@@ -57,7 +57,8 @@ is open and how to open one or click into its timeline. No steps, no closing off
 
 - **Where the motion comes from:** each parent up the chain, whether it moves its children and by
   what (keys or expressions); the layer's own expressions, whether each is on or erroring, whether
-  it builds on the property's own value, and how far it moves at its peak.
+  it builds on the property's own value, and how far it moves at its peak. For a layer you named,
+  how far each parent's expression moves it on screen, in pixels (Sizes, below).
 - **What links in:** another layer's expression that names this layer. That's found by name in the
   text, so it's inferred: "looks like" or "so", never stated as fact. Say whether the layer it drives
   renders.
@@ -142,11 +143,16 @@ question, no list of what's fine, no findings about the comp they didn't ask abo
 - **A goal partly outside the six** gets both: the inside steps tagged, the outside part as a step
   that says where to look, ending "Not something I teach yet." Never drop the outside part.
 
-**Sizes.** Say each source's size as the read gives it, in its own units (pixels for Position,
-degrees for Rotation, percent for Scale), with when it peaks or how long it lasts, biggest first
-when they're in the same units. Never an adjective for a size ("small", "too small to see"), and
-never leave a source out for being small. The read gives sizes in the property's units, not on
-screen, so when two are in different units, don't say which one shows more.
+**Sizes.** For a layer you named, the read gives how far each parent's expression moves that
+layer's box at its peak, in comp pixels, with when it peaks. That's the size to use:
+- **Under 1 px at its peak: not visible.** Never name it as a cause and never give it a step. If
+  they ask about it, it's "too small to see: it moves [layer] less than a pixel".
+- **1 px and up: say its size in pixels, not an adjective,** with how long it lasts, biggest first.
+  Never "small" or "too small to see"; they judge. Two sources of about the same size are both
+  named with their sizes, biggest first.
+- **No pixel number** (the read couldn't work it out, or the motion is the layer's own expression):
+  say the size as the read gives it, in its own units (degrees for Rotation, percent for Scale), and
+  never call it small, leave it out, or say which shows more than a size in pixels.
 
 ### Skills
 

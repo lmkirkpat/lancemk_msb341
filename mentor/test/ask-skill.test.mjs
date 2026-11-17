@@ -58,3 +58,13 @@ test("the stale 'too small to see' wording (before H-7) is never an example", ()
   assert.doesNotMatch(SKILL, /0\.75° at most, too small to see/);
   assert.doesNotMatch(SKILL, /about 9 px/, "§ 16's 9 px is an estimate, not a read");
 });
+
+test("Sizes (015 FR-004a, TD § 5.1a): the 1 px floor on the read's pixel shifts, its one quoted line copied from § 5.1a", () => {
+  const sizes = SKILL.slice(SKILL.indexOf("**Sizes.**"), SKILL.indexOf("### Skills"));
+  assert.match(sizes, /Under 1 px at its peak/);
+  assert.match(sizes, /in its own units/, "falls back to the read's own units with no pixel number");
+  const quoted = [...sizes.matchAll(/"([^"]{12,})"/g)].map((m) => m[1]);
+  assert.ok(quoted.length >= 1);
+  for (const line of quoted) assert.ok(squash(section("5.")).includes(squash(line)), line);
+  assert.doesNotMatch(sizes, /hard to tell apart/, "the deferred band isn't used");
+});
