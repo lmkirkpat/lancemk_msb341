@@ -109,6 +109,8 @@ not_taught: bool }], offers: [{ skill, tag }], closing_offer }`, or **`null`** w
 not JSON, has an unknown `kind`, more than 4 steps, more than 2 offers, an offer not among the steps'
 skills (outside `howto`), or a field of the wrong type. `null` means FR-048's fallback: the mentor's words
 as they came, no STEPS, no dock, no Go deeper. On a `b1` panel, `offers` is always `[]`.
+*Added 2026-11-16 (amendment (e)):* each step also keeps the result's `layer` (string or `null`), for the
+context sent after a lesson (contracts/panel-ask.md › Context after a lesson). It is never drawn.
 
 ### Thread (`panel/lib/ask-thread.js`, saved in `panel-session.json` version 3)
 
