@@ -1,0 +1,37 @@
+{
+  "id": "16-locked-layer-in-the-step",
+  "title": "A locked layer (Title) that stops a step from working: the unlock is said in the step it blocks",
+  "covers": [
+    "EE-4",
+    "FR-015",
+    "A12"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice-title-locked.json",
+      "say": "/ask-mentor Make Title land softer."
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "answer",
+        "steps": [
+          1,
+          4
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "unlock_in_a_step",
+        "must": "unlock",
+        "in": "steps"
+      }
+    ]
+  },
+  "rubric": [
+    "R-BLOCKER-IN-STEP"
+  ]
+}

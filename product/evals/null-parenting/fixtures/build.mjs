@@ -43,4 +43,43 @@ const write = (name, obj) => fs.writeFileSync(path.join(HERE, "synthetic", name)
   r.synthetic = "Case 44 (OA-14): synthetic row23-still-parent.json with Holder's Position sample at 3 s moved to (340, 300).";
   write("row23-expression-grandparent.json", r);
 }
+
+// Case 53 (spec 015 T035): T015's live 015 Planted with the learner's new null at the bottom (Null 1 at
+// index 19, copied from the live planted-renumbered.json, so nothing is renumbered) and the playhead
+// moved from 0.6 s to 1.5 s, where every layer already has a sample. Const Kid rides on Const Parent,
+// whose Position runs on an expression; neither is in the group.
+// STAND-IN: re-derive from the T015 capture (a live read taken after adding the null at the bottom).
+{
+  const EXPR = path.resolve(HERE, "../../../../mentor/test/fixtures/expressions");
+  const load = (f) => JSON.parse(fs.readFileSync(path.join(EXPR, f), "utf8"));
+  const r = load("planted.json");
+  const nul = load("planted-renumbered.json").layer_info.find((l) => l.name === "Null 1");
+  nul.index = Math.max(...r.layer_info.map((l) => l.index)) + 1;
+  r.layer_info.push(nul);
+  if (!r.layer_info.every((l) => l.samples.some((x) => x.time === 1.5))) throw new Error("every layer needs a sample at 1.5 s");
+  r.comp.time = 1.5;
+  r.synthetic = "Case 53 (spec 015 T035): live 015 Planted with Null 1 added at the bottom (from planted-renumbered.json) and the playhead at 1.5 s.";
+  write("planted-null-added-later.json", r);
+}
+// Case 55 (spec 015 T059): the case 06 flow (Tile, Caption, Stamp; Stamp ends 120 px left after the
+// parenting) with an expression read added to all three reads, as if Stamp's X Position ran an
+// expression (on, no error, not marked on the keyed property, so only the snapshot's motion_from
+// carries it). STAND-IN: re-derive from a live read of a group layer whose own Position expression
+// jumps when parented, once the builder has one (T059 note).
+{
+  const LAYER_INFO = path.resolve(HERE, "../../../../mentor/test/fixtures/layer-info");
+  const readAny = (f) => JSON.parse(fs.readFileSync(fs.existsSync(path.join(LIVE, f)) ? path.join(LIVE, f) : path.join(LAYER_INFO, f), "utf8"));
+  for (const [src, out] of [["practice2b.json", "jump-expr-base.json"], ["null-center.json", "jump-expr-null.json"], ["jumped.json", "jump-expr-jumped.json"]]) {
+    const r = readAny(src);
+    const stamp = r.layer_info.find((l) => l.name === "Stamp");
+    r.expressions = [{
+      layer: stamp.index, path: "ADBE Transform Group/ADBE Position_0", display_path: "Transform \u203a X Position", group: "transform",
+      keys: 2, enabled: true, active: true, error: null, text: "value + Math.sin(time * 4) * 10", text_length: 31, text_cut: false,
+    }];
+    r.expressions_read = "all";
+    r.expression_sweeps = [{ layer: stamp.index, path: "ADBE Transform Group/ADBE Position_0", kind: "coarse", sampled_every: 0.25, varies: true, max_offset: 10, max_at: 0.4 }];
+    r.synthetic = `Case 55 (spec 015 T059): live ${src} with an expression read added: Stamp's X Position runs an expression.`;
+    write(out, r);
+  }
+}
 console.log("wrote fixtures/synthetic/*");

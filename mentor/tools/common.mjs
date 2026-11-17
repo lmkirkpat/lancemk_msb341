@@ -17,7 +17,12 @@ import { footprint, sampleAt } from "../lib/comp-space.mjs";
 import { byName, layerInfo } from "../lib/layer-info.mjs";
 import { visibility } from "../lib/visibility.mjs";
 import { json } from "../lib/reply.mjs";
-import { MentorError } from "../errors.mjs";
+import { MentorError, registerErrors } from "../errors.mjs";
+
+// Spec 015 FR-020 (OQ-7): the record never holds text copied from the learner's expressions.
+registerErrors({
+  RECORD_HAS_EXPRESSION: "The learner record can't hold text copied from the project's expressions. Say what happened in your own words, then save again.",
+});
 
 // From upstream ae_preview_frame: saveFrameToPng finishes writing after it returns.
 const FRAME_DIR = path.join(os.tmpdir(), "ae-mentor-frames");
@@ -179,6 +184,26 @@ function assertMatchesLesson({ skill, result, demo_used }) {
   return lesson;
 }
 
+// FR-020 (OQ-7): an attempted, summary or next holding 24 or more characters in a row copied from an expression's
+// text or error in the lesson's snapshot is refused. Compared as written and with runs of white space
+// made one space, so a reflowed copy is caught too.
+export const COPY_RUN = 24;
+const squash = (t) => String(t).replace(/\s+/g, " ");
+export function copiesExpression(text, snapshot) {
+  if (typeof text !== "string" || text.length < COPY_RUN || !snapshot || !Array.isArray(snapshot.expressions)) return false;
+  const sources = [];
+  for (const x of snapshot.expressions) for (const t of [x.text, x.error]) if (typeof t === "string" && t.length >= COPY_RUN) sources.push(t, squash(t));
+  if (!sources.length) return false;
+  for (const field of new Set([text, squash(text)])) {
+    for (let i = 0; i + COPY_RUN <= field.length; i++) {
+      const run = field.slice(i, i + COPY_RUN);
+      if (run.trim().length < COPY_RUN / 2) continue;
+      if (sources.some((src) => src.includes(run))) return true;
+    }
+  }
+  return false;
+}
+
 // recommend_next (contracts/shared-tools.md): the record (unreadable → treated as empty, and left as
 // it is), one look at the comp if AE answers, then the deterministic rule in lib/recommend.mjs.
 async function recommendNext({ requested_skill } = {}, { skills, finders }) {
@@ -212,11 +237,29 @@ async function recommendNext({ requested_skill } = {}, { skills, finders }) {
 // (mentor/tools/index.mjs). A plain array is read as `skills` (the call before spec 004).
 export function commonTools(options) {
   const { skills, finders = {} } = Array.isArray(options) ? { skills: options } : options;
-  async function recordLesson(entry) {
+  function saveLesson(entry) {
     const lesson = assertMatchesLesson(entry);
+    const copied = lesson ? ["attempted", "summary", "next"].filter((f) => copiesExpression(entry[f], lesson.baseline)) : [];
+    // OQ-9: the server logs this call without these fields' values (calls.jsonl).
+    if (copied.length) throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: copied });
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();
     return json({ saved: true, skill: { status: skill.status, next: skill.next } });
+  }
+
+  // T061, T062: whatever refuses the call (a copy, a mismatch with the lesson's checks, a field
+  // missing or out of range, an unreadable session), its calls.jsonl line also leaves out every
+  // field holding an email or phone number, by name only. The error, and so the reply, is unchanged.
+  async function recordLesson(entry) {
+    try {
+      return saveLesson(entry);
+    } catch (e) {
+      if (entry && typeof entry === "object" && e && typeof e === "object") {
+        const omit = new Set([...(Array.isArray(e.omitFromLog) ? e.omitFromLog : []), ...learner.unsafeFields(entry)]);
+        if (omit.size) e.omitFromLog = Object.keys(entry).filter((k) => omit.has(k));
+      }
+      throw e;
+    }
   }
 
   return [

@@ -1,0 +1,41 @@
+{
+  "id": "15-single-and-hold-keys",
+  "title": "One key (set, not animated) and hold keys (a jump): Logo's single Scale key and Cursor's holds are each said as what they are",
+  "covers": [
+    "EE-4",
+    "FR-010",
+    "A10"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor Why doesn't the Logo scale up, and why does the Cursor snap on and off?"
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": [
+          "answer",
+          "describe"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "single_key_said",
+        "must": "\\b(?:one|single|only) (?:key|keyframe)",
+        "in": "all"
+      },
+      {
+        "id": "hold_or_snap_said",
+        "must": "\\bhold|\\bsnap|\\bjump",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-KEY-SHAPES"
+  ]
+}

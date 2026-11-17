@@ -1,0 +1,24 @@
+{
+  "about": "Spec 015 T006 answer key (E22). Icon Precomp (practice project id 111, 400 x 400, 30 fps, 8 s): Icon Shape Position keys at 0 s (x 100, 'left') and 1 s (x 300, 'right'). Four layers of it in a test comp 'T006 time mapping' (30 fps, 8 s), planted by mentor/dev/live-015/time-mapping.jsx on AE 27.0x78, 2026-11-14. 'outer' is the formula the precomp read uses; 'ae_source_time' is AE's sourceTime() expression at that outer time; 'builder' is the builder's scrub check by eye.",
+  "fps": 30,
+  "inner_keys": [{ "time": 0, "pose": "left" }, { "time": 1, "pose": "right" }],
+  "layers": [
+    { "name": "A offset", "start_time": 0.5, "stretch": 100, "time_remap": false, "in_point": 0.5, "out_point": 8.5,
+      "keys": [{ "inner": 0, "outer": 0.5, "ae_source_time": 0, "builder": "left" },
+               { "inner": 1, "outer": 1.5, "ae_source_time": 1, "builder": "right" }] },
+    { "name": "B stretch", "start_time": 0, "stretch": 50, "time_remap": false, "in_point": 0, "out_point": 4,
+      "keys": [{ "inner": 0, "outer": 0, "ae_source_time": 0, "builder": "left" },
+               { "inner": 1, "outer": 0.5, "ae_source_time": 1, "builder": "right" }] },
+    { "name": "C reverse", "start_time": 3.5, "stretch": -100, "time_remap": false, "in_point": 3.5, "out_point": -4.5,
+      "note": "AE reports in_point > out_point when stretch is negative; the shown span is [-4.5, 3.5). Inner 0 lands exactly on the end, so it never shows: the builder saw the layer gone at 3.5 s and nearly left at 3.467 s.",
+      "keys": [{ "inner": 0, "outer": 3.5, "ae_source_time": 0, "shown": false, "builder": "gone at 3.5 s; nearly left on the frame before" },
+               { "inner": 1, "outer": 2.5, "ae_source_time": 1, "shown": true, "builder": "right" }] },
+    { "name": "D remap", "start_time": 0, "stretch": 100, "time_remap": true, "in_point": 0, "out_point": 8,
+      "remap_keys": [[0.5, 1], [2.5, 0]], "remap_interpolation": "linear",
+      "keys": [{ "inner": 0, "outer_first": 2.5, "outer_last": 7.967, "frames": 165, "ae_source_time": 0, "builder": "left, holding from 2.5 s" },
+               { "inner": 1, "outer_first": 0, "outer_last": 0.5, "frames": 16, "ae_source_time": 1, "builder": "right, holding until 0.5 s" }],
+      "midpoint_check": { "outer": 1.5, "builder": "about halfway" } }
+  ],
+  "used_in": { "comps": ["Mentor Overlaps", "Mentor Practice", "Mentor Practice 2"], "layers": 4,
+    "note": "CompItem.usedIn lists 3 comps but 4 layers use it (Mentor Overlaps twice: Icon Stretch, Icon Remap). Count layers for 'how many places'." }
+}

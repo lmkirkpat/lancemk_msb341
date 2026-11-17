@@ -123,7 +123,8 @@ for (var li = 1; li <= comp.numLayers; li++) {
 // ---- Reads R1 and R3 (spec 004 wave B, research R16, R17; data-model › Wave B shapes): one
 // layer_info entry per layer, keyed or not, in a second loop so the one above stays as it was.
 // Every read is its own try, so one that fails is null and the snapshot still returns. Never read:
-// a layer source's name or file (FR-011), expression text (read R2), what's inside a precomp (R4).
+// a layer source's name or file (FR-011), what's inside a precomp (R4). Expression text is read R2,
+// below (spec 015), and goes to the model only.
 
 function rd(f) { try { var v = f(); return v === undefined ? null : v; } catch (e) { return null; } }
 function r3n(v) { return typeof v === "number" ? r3(v) : null; }
@@ -279,6 +280,129 @@ function sampleAt(L, t, hasRect, textOrShape) {
     };
 }
 
+// ---- Read R2 (spec 015 research R1, R2; data-model § 1): every property with an expression, keyed
+// or not, in any group. Only the side of a separable Position in use is walked (inUse), since the
+// hidden half holds stale values that never draw (FR-006a). Each read is its own try. active is on
+// and no error: AE 27.0 keeps an erroring expression on and gives its base value (T001).
+
+var EXPR_TEXT_MAX = 20000;
+var EXPR_ERROR_MAX = 300;
+var expressions = [];
+var expressionsRead = "all";
+// Per layer index: { anchor|position|scale|rotation|opacity: [properties] } for the active transform
+// expressions that samples[].base and the sweeps read.
+var activeTransform = {};
+var BASE_KEYS = {
+    "ADBE Transform Group/ADBE Anchor Point": "anchor",
+    "ADBE Transform Group/ADBE Position": "position",
+    "ADBE Transform Group/ADBE Position_0": "position",
+    "ADBE Transform Group/ADBE Position_1": "position",
+    "ADBE Transform Group/ADBE Position_2": "position",
+    "ADBE Transform Group/ADBE Scale": "scale",
+    "ADBE Transform Group/ADBE Rotate Z": "rotation",
+    "ADBE Transform Group/ADBE Opacity": "opacity"
+};
+
+function exprGroup(path) {
+    var root = path.split("/")[0];
+    if (root === "ADBE Transform Group") return "transform";
+    if (root === "ADBE Effect Parade") return "effect";
+    if (root === "ADBE Text Properties") return "text";
+    if (root === "ADBE Mask Parade") return "mask";
+    if (root === "ADBE Root Vectors Group") return "shape";
+    return "other";
+}
+
+// Review S3 (FR-018): every property or field the walk couldn't read is counted, and a read with any
+// skipped says so in expressions_read instead of "all".
+var exprSkipped = 0;
+
+function readExpression(layerIndex, p) {
+    var text = String(p.expression);
+    var err = "";
+    try { err = p.expressionError ? String(p.expressionError) : ""; } catch (e) { exprSkipped++; }
+    var enabled = false;
+    try { enabled = !!p.expressionEnabled; } catch (e) { exprSkipped++; }
+    var keys = 0;
+    try { keys = p.numKeys; } catch (e) { exprSkipped++; }
+    var path = propPath(p);
+    return {
+        layer: layerIndex,
+        path: path,
+        display_path: rd(function () { return displayPath(p); }),
+        group: exprGroup(path),
+        keys: keys,
+        enabled: enabled,
+        active: enabled && err === "",
+        error: err === "" ? null : err.substring(0, EXPR_ERROR_MAX),
+        text: text.length > EXPR_TEXT_MAX ? text.substring(0, EXPR_TEXT_MAX) : text,
+        text_length: text.length,
+        text_cut: text.length > EXPR_TEXT_MAX,
+        _prop: p
+    };
+}
+
+function walkExpressions(layerIndex, group, out) {
+    for (var i = 1; i <= group.numProperties; i++) {
+        var p;
+        try { p = group.property(i); } catch (e) { exprSkipped++; continue; }
+        if (p === null || p === undefined || p.matchName === "ADBE Marker") continue;
+        try {
+            if (p.propertyType === PropertyType.PROPERTY) {
+                if (p.canSetExpression && typeof p.expression === "string" && p.expression !== "" && inUse(p)) out.push(readExpression(layerIndex, p));
+            } else {
+                walkExpressions(layerIndex, p, out);
+            }
+        } catch (e) { exprSkipped++; }
+    }
+}
+
+try {
+    for (var ei = 1; ei <= comp.numLayers; ei++) {
+        var EL = comp.layer(ei);
+        walkExpressions(ei, EL, expressions);
+    }
+} catch (e) {
+    expressions = [];
+    expressionsRead = { status: "not_read", reason: "error" };
+}
+if (expressionsRead === "all" && exprSkipped > 0) expressionsRead = { status: "not_read", reason: "partial", skipped: exprSkipped };
+for (var ai = 0; ai < expressions.length; ai++) {
+    var ax = expressions[ai];
+    var bk = BASE_KEYS[ax.path];
+    if (!bk || !ax.active) continue;
+    if (!activeTransform[ax.layer]) activeTransform[ax.layer] = {};
+    activeTransform[ax.layer][bk] = true;
+}
+
+// samples[].base: each active transform expression's property before the expression, at the
+// sample's exact time (research R5). A separated Position's base is read from X, Y (and Z).
+function baseAt(layer, t) {
+    var want = activeTransform[layer.index];
+    var out = {};
+    if (want.position) {
+        out.position = rd(function () {
+            var p = tprop(layer, "ADBE Position");
+            if (!p.dimensionsSeparated) return r3list(p.valueAtTime(t, true));
+            var v = [];
+            for (var d = 0; d < 3; d++) {
+                var dim = tprop(layer, "ADBE Position_" + d);
+                if (!dim) { if (d < 2) return null; break; }
+                var x = dim.valueAtTime(t, true);
+                if (typeof x !== "number") return null;
+                v.push(r3(x));
+            }
+            return v;
+        });
+    }
+    var others = [["anchor", "ADBE Anchor Point"], ["scale", "ADBE Scale"], ["rotation", "ADBE Rotate Z"], ["opacity", "ADBE Opacity"]];
+    for (var oi = 0; oi < others.length; oi++) {
+        if (!want[others[oi][0]]) continue;
+        out[others[oi][0]] = (function (mn) { return rd(function () { return r3list(tprop(layer, mn).valueAtTime(t, true)); }); })(others[oi][1]);
+    }
+    return out;
+}
+
 var layerInfo = [];
 for (var ii = 1; ii <= comp.numLayers; ii++) {
     var L = comp.layer(ii);
@@ -290,6 +414,7 @@ for (var ii = 1; ii <= comp.numLayers; ii++) {
     var nowSample = null;
     for (var si = 0; si < st.times.length; si++) {
         var sm = sampleAt(L, st.times[si], hasRect, textOrShape);
+        if (activeTransform[ii]) sm.base = baseAt(L, st.times[si]);
         samples.push(sm);
         if (compTime !== null && sm.time === compTime) nowSample = sm;
     }
@@ -321,6 +446,14 @@ for (var ii = 1; ii <= comp.numLayers; ii++) {
         is_matte: rd(function () { return !!L.isTrackMatte; }),
         motion_blur: rd(function () { return !!L.motionBlur; }),
         effect_count: rd(function () { return L.property("ADBE Effect Parade").numProperties; }),
+        // Every effect, keyed or not (spec 015 FR-007). Names can be the learner's own, so they go to
+        // the model only, never to the record (FR-020).
+        effects: rd(function () {
+            var fx = L.property("ADBE Effect Parade");
+            var list = [];
+            for (var fi = 1; fi <= fx.numProperties; fi++) list.push({ name: fx.property(fi).name, match_name: fx.property(fi).matchName });
+            return list;
+        }),
         mask_count: rd(function () { return L.property("ADBE Mask Parade").numProperties; }),
         transform: {
             anchor: nowSample.anchor,
@@ -333,6 +466,101 @@ for (var ii = 1; ii <= comp.numLayers; ii++) {
         samples_truncated: st.truncated
     });
 }
+
+// ---- How much each active transform expression moves its property (spec 015 FR-004, research R9):
+// a coarse sweep of 24 times over [0, duration) for every one, and a fine sweep for the layers in
+// ARGS.measure_layers at max(1 frame, duration / 240). Distance from base: vector length for arrays,
+// absolute for numbers. varies: the result changed across the sweep **and** the expression's own
+// part of it did, so keys passing through a value expression aren't counted as the expression's
+// motion, and a constant expression never varies (E19).
+
+var SWEEP_TOL = 0.01;
+var COARSE_SAMPLES = 24;
+var FINE_SAMPLES = 240;
+var measureLayers = [];
+if (typeof ARGS !== "undefined" && ARGS && Object.prototype.toString.call(ARGS.measure_layers) === "[object Array]") {
+    for (var mi = 0; mi < ARGS.measure_layers.length; mi++) {
+        if (typeof ARGS.measure_layers[mi] === "number") measureLayers.push(ARGS.measure_layers[mi]);
+    }
+}
+function isMeasured(index) {
+    for (var i = 0; i < measureLayers.length; i++) if (measureLayers[i] === index) return true;
+    return false;
+}
+function vec(v) {
+    if (typeof v === "number") return [v];
+    if (Object.prototype.toString.call(v) !== "[object Array]") return null;
+    for (var i = 0; i < v.length; i++) if (typeof v[i] !== "number") return null;
+    return v;
+}
+function dist(a, b) {
+    var s = 0;
+    for (var i = 0; i < Math.min(a.length, b.length); i++) s += (a[i] - b[i]) * (a[i] - b[i]);
+    return Math.sqrt(s);
+}
+function sweep(x, kind, step) {
+    var p = x._prop;
+    var dur = comp.duration;
+    var n = Math.max(1, Math.floor(dur / step - 1e-9) + 1);
+    var maxOff = 0, maxAt = 0, after0 = null, part0 = null, resultMoves = false, partMoves = false;
+    for (var i = 0; i < n; i++) {
+        var t = i * step;
+        var after = vec(p.valueAtTime(t, false));
+        var base = vec(p.valueAtTime(t, true));
+        if (!after || !base) return { layer: x.layer, path: x.path, kind: kind, status: "not_read", reason: "not_a_number" };
+        var part = [];
+        for (var d = 0; d < after.length; d++) part.push(after[d] - (d < base.length ? base[d] : 0));
+        var off = dist(after, base);
+        if (off > maxOff + 1e-9) { maxOff = off; maxAt = t; }
+        if (after0 === null) { after0 = after; part0 = part; continue; }
+        if (dist(after, after0) > SWEEP_TOL) resultMoves = true;
+        if (dist(part, part0) > SWEEP_TOL) partMoves = true;
+    }
+    return { layer: x.layer, path: x.path, kind: kind, sampled_every: r3(step), varies: resultMoves && partMoves, max_offset: r3(maxOff), max_at: r3(maxAt) };
+}
+
+// Review S4: a budget, so an expression-heavy comp never slows every skill's snapshot. Sweeps run for
+// the measured layers first, then the rest in order, until SWEEP_MAX_COUNT sweeps or SWEEP_BUDGET_MS
+// have gone; every sweep left is marked not_read "budget". Nothing here can fail the snapshot.
+var SWEEP_MAX_COUNT = 60;
+var SWEEP_BUDGET_MS = 300;
+var expressionSweeps = [];
+var measuredLayers = [];
+try {
+    var sweepStart = new Date().getTime();
+    var sweepsRun = 0;
+    var overBudget = function () { return sweepsRun >= SWEEP_MAX_COUNT || new Date().getTime() - sweepStart > SWEEP_BUDGET_MS; };
+    var runSweep = function (wx, kind, step) {
+        if (overBudget()) return { layer: wx.layer, path: wx.path, kind: kind, status: "not_read", reason: "budget" };
+        sweepsRun++;
+        try { return sweep(wx, kind, step); } catch (e) { return { layer: wx.layer, path: wx.path, kind: kind, status: "not_read", reason: "error" }; }
+    };
+    var frame = typeof fps === "number" && fps > 0 ? 1 / fps : comp.duration / FINE_SAMPLES;
+    var swept = [];
+    for (var wi = 0; wi < expressions.length; wi++) {
+        if (expressions[wi].group === "transform" && expressions[wi].active) swept.push(expressions[wi]);
+    }
+    var ordered = [];
+    for (var oa = 0; oa < swept.length; oa++) if (isMeasured(swept[oa].layer)) ordered.push(swept[oa]);
+    for (var ob = 0; ob < swept.length; ob++) if (!isMeasured(swept[ob].layer)) ordered.push(swept[ob]);
+    var byKey = {};
+    for (var wj = 0; wj < ordered.length; wj++) {
+        var wx = ordered[wj];
+        var got = [runSweep(wx, "coarse", comp.duration / COARSE_SAMPLES)];
+        if (isMeasured(wx.layer)) got.push(runSweep(wx, "fine", Math.max(frame, comp.duration / FINE_SAMPLES)));
+        byKey[wx.layer + "|" + wx.path] = got;
+    }
+    // Back in expression order, as before the budget.
+    for (var wk = 0; wk < swept.length; wk++) {
+        var list = byKey[swept[wk].layer + "|" + swept[wk].path];
+        for (var wl = 0; wl < list.length; wl++) expressionSweeps.push(list[wl]);
+    }
+} catch (e) {
+    expressionSweeps = [];
+}
+for (var mj = 0; mj < measureLayers.length; mj++) measuredLayers.push(measureLayers[mj]);
+// The live property handles stay in the snippet.
+for (var xi = 0; xi < expressions.length; xi++) delete expressions[xi]._prop;
 
 // R0 (spec 004 research R10): the AE version and OS. mentor/lib/host.mjs keeps only the version
 // and OS name from these, never anything else in the strings (FR-011).
@@ -348,5 +576,9 @@ return {
     precomp_layers: precomps,
     layers: layers,
     layer_info: layerInfo,
+    expressions: expressions,
+    expressions_read: expressionsRead,
+    expression_sweeps: expressionSweeps,
+    measured_layers: measuredLayers,
     host: { ae_version: aeVersion, os: osName }
 };

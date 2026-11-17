@@ -16,6 +16,9 @@ spec 004's Q1 to Q3 answered; sections 3, 5, 6, 9, 12 and 13).
   ends on something to do. Later the same day the human approved all four proposals as written
   (easing in § 6, key types, speed graph and offset in their designs' § 15), with their open
   questions answered there; § 2's audit table says so.
+- **2026-11-16: easing's precomp leave-out after spec 015 phase 2** (CD-2, T039; proposed). § 6 skill
+  0 gains "Precomps once the mentor can see inside them": what the opening and step 3 say when the
+  inside is read, partly read, or not read.
 **Inputs:** the 15 briefs in `discovery/curriculum-research/`, `discovery/diagnosis-evidence.md`,
 `specs/005-diagnosis/spec.md` (draft, branch `worktree-agent-a4ba74721dd169ee2`),
 `discovery/usage-notes/adobe-assistant-2026-10-08.md`, interviews 007 and 008, `discovery/insights.md`,
@@ -457,6 +460,59 @@ passes as the answer plus the pending step.
 - **Eval engineer:** add R-ONE-IDEA to `product/evals/easing/rubric.md` (reading above) and to cases
   02, 03, 05 and 21; then re-run 02, 03, 04, 05, 19 and 21, and the full set before the next
   baseline (easing is the gate for every other skill's merge).
+
+#### Precomps once the mentor can see inside them (spec 015 CD-2, proposed 2026-11-16)
+
+**Where the line comes from.** Spec 002's research row 9 (Icon: "the mentor can't see inside
+precomps in this slice and should say so"), carried into `ease-mentor/SKILL.md` step 2's leave-outs
+("I can't see inside these yet, so I'm not saying they're fine") and step 3 (a precomp named as the
+focus with nothing to ease). Spec 015 phase 2 reads inside precomps, so "can't see" stops being true
+for most comps. The lesson itself doesn't change: easing still eases and checks keys **in this comp
+only** (spec 015 FR-028; opening a precomp is skill 10's idea). What changes is that the leave-out can
+say what's actually inside instead of hiding it.
+
+**The rule:** the leave-out says why the lesson skips the precomp, which is now "this lesson doesn't
+check inside it", not "I can't see". It never says what's inside is fine, and it never says "linear"
+about inner keys (phase 2 reads key times, not their ease). How to open it is said only if they ask
+(§ 2 rule 2).
+
+| What the read gives for the precomp | Opening's leave-out (step 2) | Named as the focus with nothing to ease in this comp (step 3) |
+|---|---|---|
+| **Read; keys inside** | "Icon has keys inside it, which this lesson doesn't check." Two or more: "Icon and Seal have keys inside them, which this lesson doesn't check." | "Icon's keys are inside the precomp, and this lesson only checks keys in this comp. Want to start with Title instead?" |
+| **Read; nothing keyed inside** (only expressions, or nothing moving) | No leave-out line: nothing is skipped that easing could ease. Its own keys in this comp are findings like any layer's | "Icon has nothing to ease, inside or out. Want to start with Title instead?" |
+| **Partly read** (too deep, a loop, out of time, an error on one level) with keys found | As "keys inside": the keys found are enough to say it | As "keys inside" |
+| **Partly read, no keys found** | "I couldn't read all of Icon's insides, so I'm not saying it's fine." | "I couldn't read all of Icon's insides, and this lesson only checks keys in this comp. Want to start with Title instead?" |
+| **Not read** (the read failed, or an older mentor or bridge) | Today's line, unchanged: "I can't see inside these yet, so I'm not saying they're fine." | Today's step 3, unchanged |
+
+**On request** (rule 3: the answer, then the pending step again): "How do I get to them?" gets
+"Double-click Icon to open it; its keys are on the layers inside." and the pending step. "Are they
+linear?" gets "I don't check inside Icon in this lesson, so I can't say." and the pending step.
+
+**Why the not-read line stays word for word:** every eval fixture today has no inside read, so
+easing's set keeps passing unchanged, and the line is still honest where the read didn't run. Spec
+015 FR-028 keeps phase 2 out of every skill's tool replies, so none of this shows until a later spec
+puts the inside status in easing's snapshot.
+
+**Rejected:** *"This lesson doesn't check inside precomps" for every precomp* (CD-2's suggestion). It's
+true, but on a precomp with nothing keyed inside it's a leave-out for nothing, and it adds a sentence
+to an opening that already carries a count, a proposal and the hidden layers. *Counting inner keys in
+the opening* ("Icon has 6 keys inside"): a number the learner can't act on in this lesson (rule 2).
+*Easing the inner keys from the outer comp*: skill 10's idea, and FR-028.
+
+**The other skills.** Key types, speed graph, null and the pivot have their own "can't see inside"
+lines (their designs' overlap tables). The same states fit them; each skill's design takes them when
+its spec picks this up. Not changed here.
+
+**Items (`NNN`, the cockpit's), when a spec lifts FR-028 for easing:**
+- **Builder:** easing's snapshot gives each precomp layer its inside status (read with keys, read with
+  none, partly read with or without keys, not read), from spec 015's precomp summary; then
+  `ease-mentor/SKILL.md` steps 2 and 3 take the table's lines as written.
+- **Eval engineer:** three cases on a fresh capture (Icon read with keys; a precomp with nothing keyed
+  inside; a too-deep partial read); the existing precomp cases stay as the not-read state.
+
+**Evidence and guesses:** R: spec 015 FR-022 to FR-028 and T006 (the read and its limits); AB
+follow-up (inner keys are most of a real comp's motion). Guess: that "which this lesson doesn't check"
+reads as a scope, not a judgment, to a first-timer.
 
 ### 1. Pick the key type on purpose (suggested `keyframes.types`)
 

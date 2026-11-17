@@ -1,0 +1,62 @@
+{
+  "id": "58-unkeyed-position-expression-named",
+  "title": "The learner names Joined, whose Position an expression drives with no keys: the leave-out sentence ('An expression drives Joined's Position, so moving its pivot may not show'), no demo, no promise the check will work",
+  "covers": [
+    "spec015-OQ-8",
+    "011-TD-21",
+    "T059",
+    "T061-dependent"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "planted.json": "live"
+  },
+  "turns": [
+    {
+      "project": "planted.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "planted.json",
+      "say": "Joined should turn from its top-left corner."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "say": [
+      {
+        "id": "leave_out_sentence",
+        "must": "An expression drives Joined['’]s Position, so moving its pivot may not show",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "not_ignores_pivot",
+        "never": "(?:ignores?|overrides?|overwrites?) (?:the |its )?(?:pivot|anchor)",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_undo",
+        "never": "\\bundo\\b",
+        "turns": [
+          2
+        ]
+      },
+      {
+        "id": "no_field_words",
+        "never": "\\b[a-z]+_[a-z_]+\\b|\\bmotion from\\b|\\bown keys\\b|\\bown expressions\\b|\\bby expression\\b",
+        "turns": [
+          2
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-EXPRESSION-LEAVE-OUT",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 015 T059, optional (011 TD § 21's own-expression row). Joined is 015 Planted's layer 6: Position on an expression, no keys. Written ahead of T061: the pivot tool still groups only keyed expressions as `expression_anchor_position`, so today the tool may accept Joined as the focus; the `SKILL.md` line also keys on the snapshot's motion_from, so the mentor may say the sentence anyway. A failure before T061 merges is expected plumbing, not a prompt bug; re-run after T061."
+}

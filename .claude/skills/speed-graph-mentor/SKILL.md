@@ -316,6 +316,8 @@ Call `record_lesson` once per lesson or review:
   words ("said 'the middle' first time; after shaping, said 'near the start'"). No times, no layer
   or property names (those belong in `attempted`), no influence or speed numbers, no method (which
   panel, drag or dialog, or "skipped reading the graph"), and no guess at why something was missed.
+  Say what the learner did, never how the lesson went: not that they asked for the demonstration
+  or when they stopped (`demo_used` and `result` hold those), so open with what the checks showed.
   Never say why a move stayed default, which part was unshaped, or what your hint said (no key,
   side or handle): "the
   second move was still the default shape at the first check, then passed" is enough.

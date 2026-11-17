@@ -8,6 +8,7 @@ here and doesn't copy it. Gaps or contradictions come back as questions.
 re-run on the built branch (§ 9, last note). § 16 (pacing, one idea per turn) **approved
 2026-10-28** by the human, as written: where § 5 cuts the lesson into turns differently, § 16 wins.
 The rule is now shared by every skill (curriculum § 2).
+§ 17 (what drives a focus layer, from spec 015's expression read, 2026-11-16) is **proposed**.
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2, § 6 skill 6, § 8, § 9, § 12 (B9), § 13
 (the FR-029 correction), § 14; spec 004 (approved), above all FR-005, FR-013, FR-014, FR-018 to
 FR-022, FR-024, FR-028, FR-029, FR-030, FR-037, the Edge Cases table, and plan.md › Waves › Wave B.
@@ -270,7 +271,7 @@ not this skill's file.
 | Overlap | What the check must see | What it must not do |
 |---|---|---|
 | Expression on a child's keyed Position, Scale or Rotation | Flagged by today's snapshot. The layer can be in the focus but isn't the demo target. P2 uses values after expressions, so a jump the expression causes still shows. If it jumps, the hint names the jump and the expression in one sentence | Blame the learner's parenting for what the expression does, or skip the layer |
-| Expression on an unkeyed child property | Not read until R2 (the map's "not read" marker). If a child jumps and no keyed expression is flagged, the hint names the jump, not a cause, and says the mentor can't see expressions on unkeyed properties yet | Say the layer has no expression |
+| Expression on an unkeyed child property | **Read by spec 015 (R2): § 17 treats it as the keyed row** (the jump hint names it; not the demo target). What follows applies only when the read doesn't have it (an older mentor). Not read until R2 (the map's "not read" marker). If a child jumps and no keyed expression is flagged, the hint names the jump, not a cause, and says the mentor can't see expressions on unkeyed properties yet | Say the layer has no expression |
 | Pick-whip link instead of a parent | P1 fails: R1's parent is the Parent link only. The child snaps to the null's Position (P2; L-3, both cases). On a keyed Position the expression flag appears and the keys stay; on an unkeyed one there's no flag (R2), so the check names the pick whip from where the child landed (on the null's place, with no parent and a jump). § 7's two-pick-whips hint fires either way (L-3) | Count an expression-linked follower as parented |
 | Option or Shift held while parenting (L-1) | P1 passes (the parent is set). Option keeps the child's raw values, so P2 sees a jump by the null's place; Shift rewrites its Position keys onto the null, so P2 sees every such child land on one spot; P3 passes in both (times and counts kept). § 7's jump hint, with its one held-key question | Name the key as the cause, call it a pick-whip link, or teach either key |
 | Expression on the null's Position (a float, like Adobe's CTRL suggestion) | P4 is on keys only; an expression move doesn't count as "one move". The stored null transform for P2 is read after expressions, at the stored time | Pass P4 on an expression with no keys |
@@ -708,3 +709,70 @@ should turn or scale from…", `-132344`), said before the learner had named a p
 sentence moved to turn 3, after the learner names the place, that line has no reason to appear.
 Turn 3's "put that corner on the middle of the group" uses the learner's own place and doesn't
 match the check's "put it on".
+
+## 17. What drives a focus layer: wording for spec 015's read (proposed 2026-11-16)
+
+**Why now.** Spec 015 FR-015 (T026, merged) gives this skill's snapshot, for each focus and candidate
+layer, what drives it: its own keys, its own expressions (by property), and the parents that move it.
+Before, an expression on an unkeyed property wasn't seen, so a child that jumped because of one got
+"I can't see expressions on properties without keys yet" (§ 9). No line in `SKILL.md` says how to put
+the new facts in the learner's words, so eval case null 55 is held for this section.
+
+**Where the wording lives.** Here, with the lesson, as in skill 5's § 21. Spec 014's design keeps the
+rule (TD 014 § 10.1 rule 1) and the routing of an existing control null to the pivot skill (K7).
+
+**The rule: this lesson says what drives a layer only where the learner acts on it** (curriculum § 2
+rule 2). A layer moved by its own expression can be in the group: a parent carries it like any child,
+and its expression keeps running. So nothing is said about it up front. It comes up in three places:
+
+| Where | What the read shows | What the mentor says (copy these) |
+|---|---|---|
+| The jump hint (§ 7), when a focus layer jumped when parented | Its own expression on Position, Scale or Rotation, keyed or not | The hint's usual sentence, with the expression as one clause, never as the cause: "Chip is 40 px left of where it was at 0.5 s, and an expression drives its Position too." Then the hint's usual where-to-look, as § 7 says |
+| Same | No expression on those three, and the read covers unkeyed properties | The hint's usual sentence alone. Never "I can't see expressions on properties without keys yet": it can now |
+| The learner asks why a group layer moves on its own | Its own expression on Position, Scale or Rotation | "An expression drives Chip's Position, so that's its own motion; it'll still move with the null." Then the pending step again, in one sentence (rule 3) |
+| The read has none of this (an older mentor or snapshot) | n/a | Today's lines, unchanged (§ 9's unkeyed row, `SKILL.md` step 5's jump line) |
+
+**Never:**
+- anything about a layer **outside the group**: its parent, its expression, or its motion (eval case
+  53: Const Kid rides on an expression-driven parent outside the group, and the lesson says nothing);
+- the lesson's own null named as what drives a child ("Chip rides on Group Null" as a note): that's
+  the lesson's result, said in the pass sentence as today;
+- a parent's motion added to an already-parented layer's leave-out line ("Title already follows CTRL"
+  stays as it is);
+- "Chip has no animation of its own" or "Chip holds still" about a layer an expression moves, in the
+  pass sentence or anywhere;
+- an expression as the cause of a jump ("the expression made it jump"): a clause beside the jump, as
+  the keyed case does today (R-NO-CAUSE);
+- a word from the read's own fields ("motion from", "own expressions"), or Edit > Undo for motion an
+  expression makes (spec 015 K2).
+
+**Demo target.** Never a layer with its own expression on Position, Scale or Rotation, **keyed or not**
+(today's rule, § 4, names keyed ones only). An expression that sets its own value would make the demo
+layer jump, and the read doesn't say which kind it is. If no focus layer qualifies, there's no demo and
+the mentor walks it through in words, as § 4 says.
+
+**What it needs from the tools (for the builder):** the demo target rule above, from the read; the
+jump hint's "expression too" flag from the read's own expressions on Position, Scale and Rotation,
+keyed or not (today it's keyed only). **To confirm:** the read never lists the lesson's own null as a
+moving parent in a way `SKILL.md` would be tempted to say; if it does, the never-line above covers
+the words, but a test should cover the reply.
+
+**For the eval engineer (null 55).** The group's layers run on Position expressions, so two things are
+pinnable: (a) on a demo request, the demo isn't run on them (no demo, a walk-through in words, if every
+focus layer has one); (b) if the case plants a jump on one of them, the Pass line is the first row's
+sentence with the fixture's names. Hard checks either way: never "no animation", "holds still" or
+"doesn't move" about those layers; no word with an underscore or a dot; no "undo" for their motion.
+
+**Items (`NNN`, the cockpit's).** These change `SKILL.md`, which spec 015 keeps out of scope (OQ-8 is
+the pivot's one line), so the cockpit decides which spec carries them:
+- **Builder, `null-parenting-mentor/SKILL.md`:** step 5's jump line takes the expression clause from
+  the read, keyed or not, and says "can't see expressions without keys yet" only when the read doesn't
+  have them; a line for "why does it move on its own"; the never-lines above.
+- **Builder, tool:** the demo rule and the hint flag above.
+- **Eval engineer:** null 55; a jump case on a sets-its-own-value Position expression (planted).
+
+**Evidence and guesses.** R: spec 015 T026 and T035 (null 53, 54: the outside layer and the renumbered
+wiggle, both silent and passing 3 of 3); § 9's keyed-expression row (approved, built). Guess: that a
+learner doesn't need a word up front about a group layer moved by its own expression, because the
+pass frames show it still moving; that a sets-its-own-value expression on a child is rare enough that
+the jump hint, not a warning, is the right place.

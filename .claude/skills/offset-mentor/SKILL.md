@@ -207,8 +207,9 @@ start.
    1. Call `preview_frame` at a moment just after the group starts (`frame_together` is fine).
    2. Call `offset_demo` with the `demo_target`.
    3. Call `preview_frame` again **at the same time**, so the difference shows.
-   Then say what moved ("I shifted every key on Dot 2 later by your gap, so it now starts at
-   0.633 s"), that **Edit > Undo** reverses it, and what to look at in the two frames. Then hand
+   Then say what moved, as their gap and never as a time, here and whenever they ask to see it
+   again ("I shifted every key on Dot 2 later by your gap, so it starts after Dot 1."), that
+   **Edit > Undo** reverses it, and what to look at in the two frames. Then hand
    the rest back in one sentence ("Dot 3 is yours; say done."). Don't repeat the how-to.
    **One demonstration per lesson.** The first member in their order stays put; the demo moves
    the second. If they ask for the demo before step 2's idea has been said (once there's an

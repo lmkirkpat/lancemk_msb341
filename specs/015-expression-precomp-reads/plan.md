@@ -3,7 +3,7 @@
 **Branch**: `015-expression-precomp-reads` (spec folder only; build branches are the cockpit's) |
 **Date**: 2026-11-14 | **Spec**: [spec.md](spec.md) (approved `944cd8c`, OQ-1 to OQ-5 as recommended)
 
-**Status**: Draft, awaiting the builder's approval with [tasks.md](tasks.md).
+**Status**: Approved 2026-11-14 with [tasks.md](tasks.md). Phase 1 shippable 2026-11-16 (T040).
 
 ## Summary
 
@@ -17,6 +17,13 @@ server, ahead of skills 4 and 10, so spec 014's ask mode can answer about real c
   pivot and null checks compare at the same frame and on base values, so expression motion is never
   the learner's edit (K2). A new read-only tool, `describe_layers`, gives the ask mode a summary
   and a detail shape.
+  *Phase 1 follow-up (2026-11-16, FR-004a, T064):* the tool also gives each parent expression's
+  peak shift on a named layer in comp pixels, worked out in Node from the fine sweep and the samples
+  (research R15), so 014's 1 px floor covers Rotation and Scale.
+  *Phase 1 follow-up (2026-11-16, FR-004b, T065):* each layer's summary and detail also give its own
+  keyed properties (count and a key-types rollup) and its Locked, 3D and Collapse switches, from the
+  snapshot the tool already takes; reply-only, in `comp-reads.mjs`, with the whole-comp summary leaving
+  out empties to keep SC-007's 12 KB.
 - **Phase 2 (precomps, US4):** a separate snippet reads inside precomps by comp id, with time
   mapping through start, stretch and time remap, and `describe_layers` reports it. No skill's
   findings change.
@@ -76,7 +83,7 @@ out of other-changes lists rather than adding a new kind no `SKILL.md` knows (R7
 specs/015-expression-precomp-reads/
 ├── spec.md
 ├── plan.md              # this file
-├── research.md          # R1 to R14
+├── research.md          # R1 to R15
 ├── data-model.md
 ├── quickstart.md
 ├── contracts/
@@ -95,11 +102,14 @@ mentor/
 │   └── precomp-contents.jsx    # new (phase 2)
 ├── lib/
 │   ├── expressions.mjs         # new: expression reads, builds-on, references, links
-│   ├── same-time.mjs           # new: same-frame shared times (K2), if T004 shows it's needed
+│   ├── k2-changes.mjs          # new: K2 shared helper (pairValues, baseViews, unkeyed changes)
+│   ├── footprint-shift.mjs     # new (T064, FR-004a): peak shift in comp pixels
 │   ├── precomp-time.mjs        # new (phase 2): time mapping
 │   ├── motion-sources.mjs      # changed: expressions read, moves_by
 │   ├── anchor-check.mjs        # changed: K2
-│   └── null-parenting-check.mjs # changed: K2
+│   ├── null-parenting-check.mjs # changed: K2
+│   ├── offset.mjs, key-types.mjs, speed-graph.mjs # changed: unkeyed changes (T025)
+│   └── snapshot.mjs            # changed: phase 1 fields
 ├── tools/
 │   ├── comp-reads.mjs          # new: describe_layers
 │   ├── transform-anchor.mjs    # changed: motion_from (FR-015)
@@ -108,8 +118,9 @@ mentor/
 ├── fixture/precomp-contents.mjs # new (phase 2): fixture twin
 ├── fixture.mjs                 # changed: sweeps in fixture mode
 ├── dev/capture.mjs             # changed: --measure, --time, --contents
+├── dev/live-015/               # new: T015 plant scripts
 └── test/
-    ├── fixtures/expressions/   # new live captures (Comp 1, Mentor Practice, planted)
+    ├── fixtures/expressions/   # new live captures (Comp 1, Mentor Practice, planted) plus mock-ae.mjs
     ├── fixtures/precomps/      # new (phase 2)
     └── *.test.mjs              # new tests per FR
 
@@ -125,6 +136,8 @@ goes in new files where possible, so the shared-file edits stay small.
 |---|---|---|---|
 | **0. Live checks** | T001 to T008 | Facts for the reads | Results logged and folded into research before T010 |
 | **1. Expressions** (US1, US2, US3) | T009 to T040 | On its own: spec 014 can build on it | SC-001 to SC-010; six sets on B1 (SC-006) |
+| 1 follow-up: footprint shift (FR-004a) | T064 | Before 014's FR-007 test on Comp 1 and its three sessions (built 2026-11-16 on `014-mentor`, `2440c62`) | SC-003a; mentor and hooks suites; skill replies on eval fixtures unchanged |
+| 1 follow-up: own keys and switches (FR-004b) | T065 | With T064, in 014's `014-mentor` worktree; before 014's ask cases 05 and 13 to 16 run | SC-003b; SC-007; mentor and hooks suites; skill replies on eval fixtures unchanged |
 | **2. Precomps** (US4) | T041 to T056 | After phase 1 is merged and its gate passes | SC-011 to SC-013; easing unchanged; eval gate (spec OQ-6) |
 
 ## Risks

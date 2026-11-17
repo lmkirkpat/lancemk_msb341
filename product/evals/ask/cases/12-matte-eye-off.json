@@ -1,0 +1,42 @@
+{
+  "id": "12-matte-eye-off",
+  "title": "A matte with its eye off by design in reach: it is a matte, never \"hidden\"",
+  "covers": [
+    "TD 17.15",
+    "FR-012",
+    "A8"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/matte-eye-off.json",
+      "say": "/ask-mentor Why can't I see Window Matte?"
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": [
+          "answer",
+          "describe"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "says_matte",
+        "must": "matte",
+        "in": "all"
+      },
+      {
+        "id": "never_hidden",
+        "never": "\\bhidden\\b|\\bhid\\b|\\bhide\\b|\\bmissing\\b|\\bshy\\b",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-MATTE-NOT-HIDDEN",
+    "R-HONEST-KINDS"
+  ]
+}

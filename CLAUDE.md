@@ -209,14 +209,49 @@ a brand new session act like a colleague who already knows what you are working 
   - **Mockup and spec (2026-11-14):** the ask-first mockup passed design review after fixes
     (`product/mockups/ask-mentor/`, `64bd9c4`). Spec 014 approved, OQ-1 to OQ-5 as recommended: the answer
     comes as data (explanation, steps, up to two offered skills, closing offer), B1 offers no skills, and the
-    bridge's health check says whether a comp is active (constitution 1.5.0). The reads are spec 015's;
-    the three sessions wait for spec 015 phase 1 (FR-060). FR-055 carries spec 007's amendments.
+    Ask is always available on Home (the comp-active flag was dropped 2026-11-16: T001 found AE's active item
+    reads "no comp" after a click on footage or an empty Project spot, so constitution 1.5.0's exception was
+    removed in 1.6.0; `discovery/usage-notes/ask-build.md`). The reads are spec 015's.
+    **Spec 015 phase 1 is shippable (2026-11-16, T040, `9d1aca6`):** expressions, what links here, and K2 in
+    the six checks. Every phase 1 SC is met (SC-006's 3 of 3 as the builder read it; SC-008's whole-turn half
+    by margin, to confirm at the first live turns). B1 re-run of all six sets (T036, `1c6789b`): easing 32/33,
+    key types 35/36, speed graph 35/37, offset 42/44, pivot 61/64, null 50/55, no hard-rule break. A six-set B1
+    run is about $190 and doesn't fit one 5-hour usage window, so split it. Pan Behind on AE 27.0 takes the
+    selected layer. All six sets need a fresh A run at 014's ship step. **Open:** OQ-10 (the 1 px floor
+    needs screen pixels on the asked layer, but FR-004 gives property units; builder's call); T063's
+    leftovers (a rubric rewording and one or two `SKILL.md` lines). Phase 2 (inside precomps) is next:
+    T041. FR-055 carries spec 007's amendments.
   - **Plan and 100 tasks approved (2026-11-14, `99124e6`), PQ-1 to PQ-5 as recommended:** the mentor answers
     through a `give_answer` tool whose fields are the whole answer and which enforces the hard rules (B1 strips
     offers). MVP is phases 1 and 2 on A. The panel half of phase 1 can start now; the mentor half waits on 015
     T040, Go deeper on 015 T023 and T026. `.specify/feature.json` still points at 015 while it's being built, so
     run 014's Spec Kit steps with explicit paths, not the setup scripts.
-  - **Next:** phase 0 (T001 to T007), then the panel half of phase 1.
+  - **Built so far (2026-11-16):**
+    - **Phase 0 (T001 to T007): done.** Results are in `discovery/usage-notes/ask-build.md`.
+    - **The panel half of phase 1 (T017 to T030, plus T101): done but not merged.** It's on branch `014-panel` in
+      the worktree `../wt-014-panel` (`a6a5c90`). Panel tests: 762 pass and 1 skipped, which waits for the ask eval
+      set. Helper tests: 282 of 282.
+      - T101 removed the dead comp-active code and the `home-nocomp` state.
+      - Go deeper stays hidden behind the flag in `panel/lib/phase.js` until phase 2.
+      - Merge this branch only between live sittings.
+    - **The ask eval set (T031 to T033): merged** (`b59e7c8`, `product/evals/ask/`).
+      - 17 cases, numbered 01 to 17: § 17 situations 1, 4, 5, 6, 7 and 9 to 15, then EE-4's four rows, then a how-to.
+      - The dry run validates. No model has run it yet.
+      - Before T037, re-run `fixtures/build.mjs` against 015's live `comp1.json`. That turns on situation 1's
+        ordering check.
+      - The B1 run is estimated at $6 to $9.
+  - **Next:**
+    1. The mentor half of phase 1 (T008 to T016, minus the withdrawn T015): unblocked by 015 T040. Cut the
+       skill-builder worktree from local `main`. Before T037, re-run the ask fixtures' `build.mjs` against
+       015's live `comp1.json`. The record guard doesn't cover the ask mode (015 OQ-7), so 014 needs its own
+       way to keep FR-020 true for an asked record entry. 014 `spec.md` line 28's "too small to see" quote is
+       stale after H-7.
+    2. Then the phase 1 gate:
+       - T034 (reviewer) and T035 (design-reviewer, which also re-checks T101).
+       - T036: merge both halves between live sittings.
+       - T037: the B1 eval run.
+       - T038: the live smoke test, which needs the builder.
+       - T039 and T040: log the results and fold them into the spec.
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),

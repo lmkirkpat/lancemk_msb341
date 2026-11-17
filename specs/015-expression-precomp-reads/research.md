@@ -24,6 +24,10 @@ expressions in every skill's snapshot, and two reads at two moments could disagr
 expression on each `layers[].properties[]` entry (rejected: unkeyed properties aren't in `layers`,
 and adding them there would change what easing iterates).
 
+**Hidden dimension half (FR-006a, E29; session 2):** the hidden half of a separable Position keeps
+stale values (joined: X/Y read 960, 540; separated: Position reads the last joined value). Every new
+pass uses the snippet's existing `inUse()` test, which already keeps the keyed walk off the hidden half.
+
 ## R2. Expression text in the raw read, and its size
 
 **Decision:** the raw read keeps each expression's full text up to **20,000 characters**, with
@@ -94,9 +98,11 @@ and after are the same (T001), so it needs no special case.
 candidates. Replaying the reads with only the playhead moved gives no change (the check already
 compares at shared times), and rounding, a missing footprint and the mentor's own guess don't arise.
 The saved reply is reproduced, to 0.001 px on rock.png's edges, only by an **Anchor Point change on
-Shake Control** of about (572, −114) px: Pan Behind on the null that sits over the rock. Turn g shows it
-back, which fits an Undo. This is an inference from the saved reply, not a read of AE; T005 confirms
-it by hand.
+Shake Control** of about (572, −114) px: Pan Behind on Shake Control. Turn g shows it back, which
+fits an Undo. This was an inference from the saved reply; **T005 confirmed it by hand** (session 2):
+Pan Behind on Shake Control moved its base Position and Anchor Point together by (+561, −120), the
+children stayed still (0.07 px) and the shake carried on. Pan Behind took Shake Control, which was
+both selected and under the cursor; which rule decides is open (T034).
 
 **Consequence:** the check was right to see a change. It failed by reporting the side effect (Shake
 Control's footprint "moved up at 2.6 s") as its own entry, next to an `anchor_changed` entry the mentor
@@ -109,13 +115,20 @@ didn't lead with. K2 now has two halves (R7).
   (Anchor Point, base Position, Scale, Rotation, parent, an expression), its footprint shift at the
   shared times is attached to that entry as `effect: { distance_px, direction, time }`, and no separate
   moved entry is made for that layer. Turn f becomes one entry: Shake Control's Anchor Point, with the
-  shift as its effect. A moved entry stays only for a footprint shift with no property change on the
+  shift as its effect. As built (data-model § 5), `effect` is omitted when nothing visibly moved, and
+  is `{ distance_px: null, direction: null, reason }` when the footprint can't be read. A moved entry stays only for a footprint shift with no property change on the
   layer or a parent behind it, and only when the base rule below doesn't rule it out.
 - **Same time only.** Shared times are the same frame in both reads (both rounded to a frame when
   `fps` is known). No shared time gives `not_compared`. T004 showed the pivot check already does this;
   the null check's before-read time and the other checks get the same helper.
+  *As built:* there is no separate `same-time.mjs`. Pivot and null each keep their own half-frame
+  window (`anchor-check.mjs`, `null-parenting-check.mjs`), and the shared helper
+  `mentor/lib/k2-changes.mjs` matches sample times within 0.0005 s rather than rounding to a frame.
 - **Expression motion is never reported.** For a property with an active expression (on, no error),
-  compare `base`. A footprint or value difference with no `base` difference on the layer or a parent is
+  compare `base` (as built: `pairValues` in `k2-changes.mjs` uses `base` only when both reads have it
+  for that property, so a read from before spec 015 compares as read; `baseViews` gives the pivot and
+  null checks two reads with `base` swapped in, so their footprints differ only by real edits). A
+  footprint or value difference with no `base` difference on the layer or a parent is
   left out of the other-changes list (FR-013's "MAY report" isn't used yet: a new kind no `SKILL.md`
   knows could reach the learner as a field name, rule 5; spec 014 can add it).
 - **Renumbering (FR-013a, E28).** `wiggle` follows the layer's index (T002: about 6 px), so a layer
@@ -125,10 +138,17 @@ didn't lead with. K2 now has two halves (R7).
   with what changed (FR-014). Null's `expression_toggled` becomes this kind; offset's on/off listing
   keeps its sentence form.
 
-**Sites:** pivot (`anchor-check.mjs`: item 5's moved list, `rawChanged`, `otherChanges`), null
-(`null-parenting-check.mjs`: `value_changed` (OA-4), the jump check's footprints,
-`expression_toggled`). Offset, key types and speed graph compare keys, not sampled values: they get
-SC-005's replays and change only if one fails.
+**Sites (as built, phase 1 merge `a3300e3`):** the shared helper is `mentor/lib/k2-changes.mjs`
+(`pairValues`, `baseViews`, `unkeyedChanges`, `unkeyedChangeNotes`). Pivot
+(`mentor/lib/anchor-check.mjs`: item 5's moved list, `rawChanged`, `otherChanges`, the
+`changed_layers` entries with `effect`), null (`mentor/lib/null-parenting-check.mjs`:
+`value_changed` (OA-4), `parent_changed`, the jump check's footprints; `expression_toggled` is now
+`expression_changed`), both through `pairValues` and `baseViews`. The pivot and null snapshot tools
+(`mentor/tools/transform-anchor.mjs`, `mentor/tools/null-parenting.mjs`) add `motion_from` (R8).
+**Differs from this decision:** offset, key types and speed graph were planned to change only if an
+SC-005 replay failed; the build (T025) gives all three `unkeyedChangeNotes` from the shared helper,
+so they now list unkeyed transform changes outside the focus (data-model § 5). Keyed changes stay
+with each check's own key diff. Offset's on/off sentence form is unchanged.
 
 ## R8. K3: `moves_children` and the snapshot field (FR-005, FR-015)
 
@@ -173,7 +193,7 @@ hand-written shake or wiggle whole.
 when the request touches a precomp (or asks for a comp id). It reads the active comp's precomp layers
 recursively, **once per comp id** (a memo), depth limit **5** (OQ-5), and a stack of ids for loops.
 Per comp: id, name, duration, frame rate, size, places used (layers in the project whose source is it,
-counted through `usedIn`), and its layers with the R1 fields, keyed properties (path, key count, key
+counted in each comp `usedIn` lists, since one comp can hold it twice), and its layers with the R1 fields, keyed properties (path, key count, key
 times only), and the R1 expression inventory. Per precomp layer: start time, stretch, in and out,
 `time_remap`, and when remap is on, the remap value at every outer frame from in to out (cap 600, then
 `remap_cut`). Time mapping is done in Node (`mentor/lib/precomp-time.mjs`).
@@ -181,8 +201,17 @@ times only), and the R1 expression inventory. Per precomp layer: start time, str
 **Why separate:** the skills' snapshots must not grow by the size of every inner comp (Comp 1's
 inner reads are 347 keyed properties), and FR-028 says no skill uses the contents yet.
 
-**Mapping:** without remap, `outer = start + inner × stretch / 100` (negative stretch reverses; **Live**,
-T006, still open). With remap, an inner time shows at each outer frame whose remap value is within half an inner
+**Mapping (confirmed live, T006, all 8 keys against AE's `sourceTime()` and the builder's eye):**
+- Without remap, `outer = start + inner × stretch / 100`. A negative stretch reverses, and AE reports
+  the in point **after** the out point (copy C: 3.5 and −4.5), so the shown span is
+  `[min(in, out), max(in, out))`. A key landing exactly on the upper end never shows (copy C's inner 0).
+- With remap, an inner time shows at every outer frame whose remap value equals it (within half an
+  inner frame). A flat stretch of remap is a **range**: copy D's inner 1 holds for 16 frames (0 to
+  0.5 s), inner 0 for 165 (2.5 s on). Report `{ first, last, frames }`.
+- `sourceTime()` exists only in expressions, not in ExtendScript, so the snippet can't ask AE for the
+  mapping; it reads start, stretch, in and out and the remap values, and Node maps.
+- **Places used counts layers:** `usedIn` lists comps (3 for Icon Precomp), but 4 layers use it
+  (Mentor Overlaps holds two). The snippet counts layers in each `usedIn` comp whose source is it. With remap, an inner time shows at each outer frame whose remap value is within half an inner
 frame of it. Nested mappings compound from the inside out. A key "never shows" when no outer time in
 the precomp layer's in-out range (and the outer comp's 0 to duration) maps to it.
 
@@ -203,3 +232,66 @@ changes existing shared files (`snapshot.jsx`, `motion-sources.mjs`, `anchor-che
 **one skill-builder branch with the cockpit's `--shared-owner`**, not parallel worktrees. Phase 2 is a
 second branch the same way. Eval work (eval-engineer) runs in parallel once a phase's branch is
 merged.
+
+## R15. Footprint shift in comp pixels (FR-004a, OQ-10; added 2026-11-16)
+
+**Decision:** a pure function in a new file, `mentor/lib/footprint-shift.mjs`, on top of
+`comp-space.mjs` (which already gives a layer's box corners through its parent chain and returns
+`null` with a reason for `three_d`, `auto_orient`, `no_rect`, `not_sampled` and `singular`).
+`describe_layers` calls it for each named layer and each parent-chain expression with
+`moves_children` by expression.
+
+- **Peak:** the fine sweep's `max_offset` and `max_at` only (the coarse sweep misses peaks: Comp 1's
+  coarse Rotation peak is 0.283° against the fine 0.589°).
+- **Rotation:** the box corners through the chain at the reading time, with the source property at its
+  base and at base + `max_offset`; the shift is the largest corner distance. The sign doesn't change
+  the distance, so `max_offset` (absolute) is enough.
+- **Position and Anchor Point** (a pure translation of the children): every corner moves the same
+  distance, `max_offset` times the scale of the layers it passes through (the source layer's own
+  scale too, for Anchor Point). With uniform scale on those layers that's exact; with a non-uniform
+  one it needs the peak's direction.
+- **Scale:** always needs the peak's direction (`max_offset` is a vector length).
+- **The peak's direction:** the snippet's fine sweep adds `max_value`, the after-expression value it
+  already read at `max_at` (additive; fine sweeps only run with `measure_layers`, which only
+  `describe_layers` sends, so no skill's snapshot changes). Without it (older snapshots, including
+  today's `comp1.json`), the cases above that need it return `direction_unknown`. Comp 1 needs it for
+  nothing: its two are Rotation and Position with no layer above.
+- **`chain_moves`:** the samples are at the reading time, not the peak, so the conversion is exact only
+  if the values it depends on are the same at both. Those are the transform values of the named layer
+  and every layer between it and the source layer, the source layer's Anchor Point and Scale (and
+  Rotation, for a Scale source in a non-uniform chain), and the Scale of every layer above the source.
+  If any of them has keys or a varying active expression, the result is `chain_moves`. The source
+  layer's own Position is exempt for a Rotation or Scale source (moving the pivot doesn't change the
+  distance to it), and so is any Rotation above the source layer (a turn doesn't change a length).
+  On Comp 1, Shake Control's Position shakes, but it is exempt for its Rotation, so both convert.
+
+**Why:** it uses only what's already read, so it adds no AE time or write and works on the live
+fixture. **Considered:** (a) sampling the chain at each peak time in the same snapshot (exact for
+moving chains, but a snippet change for every measured layer and not testable on today's fixture;
+revisit if `chain_moves` turns up often in 014's sessions); (b) a lever-arm estimate from the box size
+alone (rejected: a guess, FR-004a); (c) giving the number in property units with the pixel version left
+to the mentor's prose (rejected: the model would do the arithmetic, OQ-10).
+
+**Expected on `comp1.json`** (a scratch check from the fixture, 2026-11-16, not a requirement beyond
+SC-003a): Rotation gives rock.png about 9.36 px, logo.png about 8.60 and the ten Shakers precomps about
+11.3 each; Position gives 12.147 on each of those. *Corrected 2026-11-16 (spec Amendment 8):* this note
+first gave the title layer about 6.84 px, worked from its position at the reading time (3.403 s). Its own
+Position keys (2.503 s and 2.636 s) bracket the peak (2.569 s), so by the rule above it's `chain_moves`
+(`shift_px: null`) for both sources, which is what T064 returns (`2440c62`).
+
+**Corrected 2026-11-16 (spec Amendment 9, from spec 014's reviews T034 and T035; the code on
+`014-mentor` was right, this note was wrong):**
+
+- **Rotation under a non-uniform scale.** "The sign doesn't change the distance, so `max_offset` is
+  enough" and "any Rotation above the source layer is exempt" hold only when every layer above the
+  Rotation source has uniform scale. Under a non-uniform scale above it, a turn changes lengths, so the
+  peak's direction (`max_value`) is needed (`direction_unknown` without it), and Rotation above the
+  source counts toward `chain_moves`.
+- **A Position source** doesn't depend on its own layer's Rotation: Position applies in the parent's
+  space.
+- **The named layer's box** is one of the values that count for `chain_moves`. A text or shape layer
+  whose box changes over time comes back `chain_moves`: keys or a varying active expression outside
+  Transform (Rectangle Size, Path, Source Text, text animators), or a sampled box that differs between
+  samples.
+- **`switch_not_read`:** a 3D or Auto-Orient switch in the chain that couldn't be read (anything but
+  true or false) returns `null` with this reason, never taken as off.

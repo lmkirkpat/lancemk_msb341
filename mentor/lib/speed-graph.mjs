@@ -8,6 +8,7 @@
 import { MentorError } from "../errors.mjs";
 import { needsEase, parseSegmentId, segmentId, segments } from "./analyze.mjs";
 import { unexpectedChanges } from "./diff.mjs";
+import { unkeyedChangeNotes } from "./k2-changes.mjs";
 import { alignLayers } from "./renumber.mjs";
 import { isKeptLinear } from "./marks.mjs";
 import { fastestPart } from "./speed-graph-bezier.mjs";
@@ -461,7 +462,8 @@ export function check(baseline, now0, lesson, { seen_shaped = [] } = {}) {
     pairs,
     // T466 (overlap audit OA-3, changed by the builder): only the graded targets; a pair the learner
     // said should land hard is reported like any other pair outside them.
-    other_changes: [...aligned.notes, ...unexpectedChanges(aligned.baseline, current, targetSet)],
+    // Spec 015 K2 (T025): unkeyed values too, compared on base so an expression's motion isn't one.
+    other_changes: [...aligned.notes, ...unexpectedChanges(aligned.baseline, current, targetSet), ...unkeyedChangeNotes(baseline, now0)],
     // Every focus pair graded and passed: keys changed or a pair gone holds the pass until the
     // learner says whether that was on purpose (FR-014).
     passed: graded.length > 0 && graded.length === pairs.length && graded.every((p) => p.result === "passed"),

@@ -1,0 +1,491 @@
+{
+ "taken_at": "2026-11-15T03:41:06.970Z",
+ "project": "Claude AE Tutor Test (converted).aep",
+ "comp": {
+  "id": 2737,
+  "name": "Intro",
+  "duration": 6,
+  "frame_rate": 30,
+  "time": 0.6,
+  "hide_shy": false,
+  "width": 1920,
+  "height": 1080
+ },
+ "precomp_layers": [],
+ "layers": [
+  {
+   "index": 1,
+   "name": "Ctrl",
+   "kind": "null",
+   "enabled": true,
+   "is_null": true,
+   "properties": [
+    {
+     "path": "ADBE Transform Group/ADBE Position",
+     "display_path": "Transform › Position",
+     "match_name": "ADBE Position",
+     "display_name": "Position",
+     "dimensions": 1,
+     "expression_enabled": false,
+     "keys": [
+      {
+       "index": 1,
+       "time": 0,
+       "in_type": "linear",
+       "out_type": "linear",
+       "value": [
+        100,
+        100,
+        0
+       ],
+       "in_ease": [
+        {
+         "speed": 0,
+         "influence": 16.667
+        }
+       ],
+       "out_ease": [
+        {
+         "speed": 425,
+         "influence": 16.667
+        }
+       ]
+      },
+      {
+       "index": 2,
+       "time": 4,
+       "in_type": "linear",
+       "out_type": "linear",
+       "value": [
+        1800,
+        100,
+        0
+       ],
+       "in_ease": [
+        {
+         "speed": 425,
+         "influence": 16.667
+        }
+       ],
+       "out_ease": [
+        {
+         "speed": 0,
+         "influence": 16.667
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "layer_info": [
+  {
+   "index": 1,
+   "name": "Ctrl",
+   "kind": "null",
+   "enabled": true,
+   "is_null": true,
+   "adjustment": false,
+   "has_video": true,
+   "three_d": false,
+   "collapse": false,
+   "auto_orient": false,
+   "parent": null,
+   "shy": false,
+   "solo": false,
+   "guide": false,
+   "locked": false,
+   "in_point": 0,
+   "out_point": 6,
+   "start_time": 0,
+   "stretch": 100,
+   "time_remap": false,
+   "matte": null,
+   "is_matte": false,
+   "motion_blur": false,
+   "effect_count": 0,
+   "effects": [],
+   "mask_count": 0,
+   "transform": {
+    "anchor": [
+     0,
+     0,
+     0
+    ],
+    "position": [
+     355,
+     100,
+     0
+    ],
+    "scale": [
+     100,
+     100,
+     100
+    ],
+    "rotation": 15,
+    "opacity": 0
+   },
+   "samples": [
+    {
+     "time": 0,
+     "anchor": [
+      0,
+      0,
+      0
+     ],
+     "position": [
+      100,
+      100,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 15,
+     "opacity": 0,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 100,
+      "height": 100
+     },
+     "rect_extents": null
+    },
+    {
+     "time": 0.6,
+     "anchor": [
+      0,
+      0,
+      0
+     ],
+     "position": [
+      355,
+      100,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 15,
+     "opacity": 0,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 100,
+      "height": 100
+     },
+     "rect_extents": null
+    },
+    {
+     "time": 1.5,
+     "anchor": [
+      0,
+      0,
+      0
+     ],
+     "position": [
+      737.501,
+      100,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 15,
+     "opacity": 0,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 100,
+      "height": 100
+     },
+     "rect_extents": null
+    },
+    {
+     "time": 4,
+     "anchor": [
+      0,
+      0,
+      0
+     ],
+     "position": [
+      1800,
+      100,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 15,
+     "opacity": 0,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 100,
+      "height": 100
+     },
+     "rect_extents": null
+    }
+   ],
+   "samples_truncated": false
+  },
+  {
+   "index": 2,
+   "name": "Window Matte",
+   "kind": "solid",
+   "enabled": false,
+   "is_null": false,
+   "adjustment": false,
+   "has_video": true,
+   "three_d": false,
+   "collapse": false,
+   "auto_orient": false,
+   "parent": null,
+   "shy": false,
+   "solo": false,
+   "guide": false,
+   "locked": false,
+   "in_point": 0,
+   "out_point": 6,
+   "start_time": 0,
+   "stretch": 100,
+   "time_remap": false,
+   "matte": null,
+   "is_matte": true,
+   "motion_blur": false,
+   "effect_count": 0,
+   "effects": [],
+   "mask_count": 0,
+   "transform": {
+    "anchor": [
+     100,
+     100,
+     0
+    ],
+    "position": [
+     960,
+     540,
+     0
+    ],
+    "scale": [
+     100,
+     100,
+     100
+    ],
+    "rotation": 15,
+    "opacity": 100
+   },
+   "samples": [
+    {
+     "time": 0.6,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      960,
+      540,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 15,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null,
+     "base": {
+      "rotation": 0
+     }
+    },
+    {
+     "time": 1.5,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      960,
+      540,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 15,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null,
+     "base": {
+      "rotation": 0
+     }
+    }
+   ],
+   "samples_truncated": false
+  },
+  {
+   "index": 3,
+   "name": "Photo",
+   "kind": "solid",
+   "enabled": true,
+   "is_null": false,
+   "adjustment": false,
+   "has_video": true,
+   "three_d": false,
+   "collapse": false,
+   "auto_orient": false,
+   "parent": null,
+   "shy": false,
+   "solo": false,
+   "guide": false,
+   "locked": false,
+   "in_point": 0,
+   "out_point": 6,
+   "start_time": 0,
+   "stretch": 100,
+   "time_remap": false,
+   "matte": {
+    "layer": 2,
+    "type": "alpha"
+   },
+   "is_matte": false,
+   "motion_blur": false,
+   "effect_count": 0,
+   "effects": [],
+   "mask_count": 0,
+   "transform": {
+    "anchor": [
+     100,
+     100,
+     0
+    ],
+    "position": [
+     960,
+     540,
+     0
+    ],
+    "scale": [
+     100,
+     100,
+     100
+    ],
+    "rotation": 0,
+    "opacity": 100
+   },
+   "samples": [
+    {
+     "time": 0.6,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      960,
+      540,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 0,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null
+    },
+    {
+     "time": 1.5,
+     "anchor": [
+      100,
+      100,
+      0
+     ],
+     "position": [
+      960,
+      540,
+      0
+     ],
+     "scale": [
+      100,
+      100,
+      100
+     ],
+     "rotation": 0,
+     "opacity": 100,
+     "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 200,
+      "height": 200
+     },
+     "rect_extents": null
+    }
+   ],
+   "samples_truncated": false
+  }
+ ],
+ "expressions": [
+  {
+   "layer": 2,
+   "path": "ADBE Transform Group/ADBE Rotate Z",
+   "display_path": "Transform › Rotation",
+   "group": "transform",
+   "keys": 0,
+   "enabled": true,
+   "active": true,
+   "error": null,
+   "text": "thisComp.layer(\"Ctrl\").transform.rotation",
+   "text_length": 41,
+   "text_cut": false
+  }
+ ],
+ "expressions_read": "all",
+ "expression_sweeps": [
+  {
+   "layer": 2,
+   "path": "ADBE Transform Group/ADBE Rotate Z",
+   "kind": "coarse",
+   "sampled_every": 0.25,
+   "varies": false,
+   "max_offset": 15,
+   "max_at": 0
+  }
+ ],
+ "measured_layers": [],
+ "host": {
+  "ae_version": "27.0x78",
+  "os": "Macintosh OS 27.2.1/64"
+ }
+}

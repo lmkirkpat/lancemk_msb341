@@ -213,13 +213,17 @@ When the check passes the mentor says so plainly, by layer and place, and does n
 ## R-AN-WRONG-LAYER: the pivot moved on the wrong layer
 
 When another layer's pivot moved instead, the mentor names both: the focus layer's pivot hasn't moved
-and the other layer's did. It says Pan Behind moves the pivot of whatever layer is under the cursor
-when the drag starts, so to Edit > Undo and start the drag right on the focus layer's own crosshair.
-Selecting the layer first is never given as the fix (the learner may have had it selected). It does
+and the other layer's did. It says Pan Behind moves the pivot of the selected layer (the top layer under
+the cursor only when nothing is selected), so to Edit > Undo, then click the focus layer in the timeline
+and drag its crosshair. Selecting the layer first is the fix (AE 27.0, T034; amended 2026-11-16, T059).
+It never says which layer they had selected or where they dragged (the check doesn't know), and it does
 not fix it.
 
-- **Fail:** misses the other layer, says selecting the focus layer first is the fix, gives no
-  Edit > Undo, or fixes it.
+- **Pass:** "Needle's pivot hasn't moved, but Background's did: Pan Behind moves the pivot of the selected
+  layer, or of the top layer under the cursor when nothing is selected. Edit > Undo, then click Needle in the
+  timeline and drag its crosshair."
+- **Fail:** misses the other layer, gives no Edit > Undo, doesn't tell them to select the focus layer, says
+  which layer they had selected or where they dragged, says it's the layer under the cursor only, or fixes it.
 
 ## R-AN-REST-KEY: a pivot set away from the layer's rest pose
 
@@ -580,3 +584,59 @@ a lock, a setting). Door has no expression here.
 
 - **Fail:** names or hints at a cause ("something may be driving it", "like an expression", "a setting could be
   fighting you") the tool never reported, or says nothing about the lack of change.
+
+## R-AN-NAMES-WHICH-PIVOT: says which layer's pivot moved, in the learner's terms, not a side effect (spec 015 T035, case 55)
+
+The learner used Pan Behind on the wrong layer: the parent null Shake Control's pivot moved, rock.png's didn't. The
+check lists Shake Control's Anchor Point as the change, with a small shift on screen as its visible effect. The mentor
+names Shake Control's pivot as what changed and says rock.png's own pivot isn't there yet. It doesn't report the shift
+as the change ("rock.png moved up"), doesn't blame an expression, and doesn't give a distance or a time.
+
+- **Pass:** "Rock.png's pivot isn't at the top right yet. Shake Control's pivot moved instead. Edit > Undo, then drag rock.png's pivot."
+- **Fail:** says a layer "moved up" or "moved at 2.6 s" as the change; never names Shake Control's pivot; says only that
+  "something else changed"; or gives a pixel distance.
+
+## R-AN-EXPRESSION-NOT-LEARNER: expression motion is never called the learner's change (spec 015 T035, case 56)
+
+Shake Control moves by expressions and rock.png rides on it. The learner moved only the playhead. The check shows
+nothing changed outside rock.png and rock.png's pivot where it was. The mentor says that rock.png's pivot isn't moved
+yet and asks what they did or to try again. It never says Shake Control, or any layer under it, moved because of the
+learner, and never tells them to undo something that wasn't done.
+
+- **Pass:** "Rock.png's pivot didn't change. What did you do?"
+- **Fail:** says Shake Control (or rock.png) moved or changed because of them, says "Edit > Undo" about it, or blames an
+  expression for the pivot not changing.
+
+## R-AN-PARENT-MOVES-IT: a parent that moves the focus layer is said once, in one sentence, with the layer's pivot lesson intact (spec 015 T059, case 57)
+
+rock.png rides on Shake Control, which an expression moves. In the explanation turn the mentor says so in one sentence,
+by how the parent moves, and that moving rock.png's pivot won't change that motion. It names the nearest parent only,
+says nothing about which properties it moves, never says rock.png doesn't move or has no motion of its own, never calls
+the motion a change they made, never suggests opening the expression, and the turn still ends on the ask to select the
+layer and press A, then Shift+P.
+
+- **Pass:** "rock.png rides on Shake Control, which an expression moves, so moving rock.png's pivot won't change that motion."
+- **Fail:** omits the note, says "doesn't move" or "no motion" about rock.png, says what the parent moves (turns it,
+  shakes it), adds a second sentence about the parent, suggests tracing it, says undo, shows a word from the read's own
+  fields, or the turn no longer ends on the A-then-Shift+P ask.
+
+## R-AN-EXPRESSION-LEAVE-OUT: a layer an expression drives on Position is left out in one sentence (spec 015 T059, case 58)
+
+The learner names Joined, whose Position runs on an expression with no keys. The mentor says in one sentence that an
+expression drives its Position, so moving its pivot may not show, and goes on to a proposal or the next candidate. It
+never says the expression ignores or overrides the pivot, never teaches the pivot on Joined as if it would show, and
+makes no demo on it.
+
+- **Pass:** "An expression drives Joined's Position, so moving its pivot may not show."
+- **Fail:** teaches it as an ordinary lesson, says the expression ignores or overrides the pivot, offers a demo on it,
+  or says nothing about the expression.
+
+## R-AN-NULL-MOVES-NAMED: a null that moves the layer they named first gets its own sentence (spec 015 T059, case 59)
+
+After naming rock.png, the learner asks about Shake Control, the null that moves it. The mentor says Shake Control is a
+null and it can't check its pivot in this lesson yet, then goes on. It never uses the generic null line ("nothing of its
+own to see turn"), which would read as "its pivot doesn't matter", and never says it has no pivot.
+
+- **Pass:** "Shake Control is a null, so I can't check its pivot in this lesson yet."
+- **Fail:** the generic null line, "its pivot doesn't matter", teaches Shake Control's pivot as a lesson, or says
+  nothing about it.

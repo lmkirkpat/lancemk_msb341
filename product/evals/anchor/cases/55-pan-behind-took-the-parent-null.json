@@ -1,0 +1,64 @@
+{
+  "id": "55-pan-behind-took-the-parent-null",
+  "title": "The learner's Pan Behind went to the parent null (Shake Control) instead of rock.png (AB turn f): the reply says Shake Control's pivot moved, in those terms, never 'moved up'; rock.png's own pivot didn't pass",
+  "covers": [
+    "spec015-K2",
+    "FR-014a",
+    "E17",
+    "SC-005",
+    "T035"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "rig.json": "live",
+    "rig-panned.json": "live"
+  },
+  "turns": [
+    {
+      "project": "rig.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "rig.json",
+      "say": "rock.png should turn from its top-right corner."
+    },
+    {
+      "project": "rig-panned.json",
+      "say": "I used Pan Behind. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_called": [
+      "anchor_check"
+    ],
+    "last_check": {
+      "passed": false,
+      "has": [
+        "Shake Control"
+      ]
+    },
+    "say": [
+      {
+        "id": "names_parent_pivot",
+        "must": "Shake Control[^.?!]{0,60}\\b(?:pivot|anchor point)\\b|\\b(?:pivot|anchor point)\\b[^.?!]{0,60}Shake Control",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "not_a_side_effect",
+        "never": "\\bmoved (?:up|down|left|right)\\b|\\b(?:up|down) at \\d",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-NAMES-WHICH-PIVOT",
+    "R-NAMES-REAL",
+    "R-ONE-IDEA"
+  ],
+  "note": "Spec 015 T035 (Eval plan row 1). Fixtures are T015's live 015 Rig captures (Comp 1's Shake and Sweep rig with Comp 1's own expression texts): rig-panned.json is Pan Behind on Shake Control, +561, -120, the turn f edit. Not taken on Comp 1 itself."
+}

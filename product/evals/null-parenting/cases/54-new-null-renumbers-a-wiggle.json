@@ -1,0 +1,67 @@
+{
+  "id": "54-new-null-renumbers-a-wiggle",
+  "title": "The learner's new null goes on top and renumbers Wiggle, whose Position follows its index: the layer's values change with no edit and nothing is reported on it",
+  "covers": [
+    "spec015-K2",
+    "FR-013a",
+    "E28",
+    "SC-005",
+    "T035"
+  ],
+  "learner_record": "anchor-learned.json",
+  "fixture_sources": {
+    "expressions/planted.json": "live",
+    "expressions/planted-renumbered.json": "live"
+  },
+  "turns": [
+    {
+      "project": "expressions/planted.json",
+      "say": "/null-parenting-mentor"
+    },
+    {
+      "project": "expressions/planted.json",
+      "say": "Index Link and Runtime Name should move together."
+    },
+    {
+      "project": "expressions/planted-renumbered.json",
+      "say": "I added a null. The group will only slide, so the spot doesn't matter. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_called": [
+      "null_parent_check"
+    ],
+    "last_check": {
+      "parenting_passed": false,
+      "codes_include": [
+        "null_ready"
+      ],
+      "lacks": [
+        "Wiggle",
+        "jumped"
+      ]
+    },
+    "say": [
+      {
+        "id": "no_wiggle_talk",
+        "never": "\\bWiggle\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "no_jump_talk",
+        "never": "\\bjump(?:s|ed)?\\b",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-NULL-EXPRESSION-NOT-LEARNER",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 015 T035 (Eval plan row 4). planted.json and planted-renumbered.json are T015's live 015 Planted captures: Null 1 added above everything, Wiggle from 18 to 19, its after-expression Position about 6 px away (T002). Index Link and Runtime Name are the group (the default proposal); Wiggle is outside it."
+}

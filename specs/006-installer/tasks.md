@@ -125,10 +125,10 @@ the eval engineer, not its builder (constitution VI).
 
 ## Phase 6: Uninstall (US4, P3)
 
-- [ ] T054 [US4] PB · `installer/lib/uninstall.mjs` from `install-state.json`, keep history by default; never touches debug mode or the upstream bridge (FR-019, FR-020). *Amended 2026-11-09 (spec 013 T044):* always remove the saved lesson conversation from the learner home, `panel-conversation.json`, `panel-conversation-frames/` and any leftover `panel-conversation.json.*.tmp`, even when the learner keeps their history; test both choices.
+- [ ] T054 [US4] PB · `installer/lib/uninstall.mjs` from `install-state.json`, keep history by default; never touches debug mode or the upstream bridge (FR-019, FR-020). *Amended 2026-11-09 (spec 013 T044):* always remove the saved lesson conversation from the learner home, `panel-conversation.json`, `panel-conversation-frames/` and any leftover `panel-conversation.json.*.tmp`, even when the learner keeps their history; test both choices. *Amended 2026-11-16 (spec 015 OQ-9):* also always remove `session.json`, `session.json.*.tmp` and `session.json.unreadable-*` from the learner home; *amended 2026-11-16 (Q7 answered):* also always remove `calls.jsonl` (the mentor writes no rotated or temp copies of it), with both choices tested.
 - [ ] T055 [US4] PB · Uninstall from the downloaded app, in `installer/applet/installer.applescript`.
 - [ ] T056 [US4] PB · Uninstall from the panel's Check setup screen, in `panel/`. Depends on T033.
-- [ ] T057 [US4] EE · `product/evals/installer/inventory-diff.mjs`: SC-005, keep and remove. *Amended 2026-11-09:* with keep, the diff expects the saved conversation files gone and the learner record still there.
+- [ ] T057 [US4] EE · `product/evals/installer/inventory-diff.mjs`: SC-005, keep and remove. *Amended 2026-11-09:* with keep, the diff expects the saved conversation files gone and the learner record still there. *Amended 2026-11-16:* also expects `session.json` and its `.tmp` and `.unreadable-*` leftovers gone, and `calls.jsonl` gone (Q7, 2026-11-16).
 
 ---
 

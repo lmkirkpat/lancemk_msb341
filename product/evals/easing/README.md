@@ -346,3 +346,7 @@ B1 baseline compared: `2026-11-11-225131.json`, 32/33 (97%); gap 0 points.
 **A baseline (FR-035, T053):** `results/2026-11-12-101243.json`, `claude-opus-5-5`, effort `medium`, $2.62 mentor credit ($3.42 judge, on subscription), at `ffc0c1b`.
 
 **Timing (T068, `node product/evals/lib/timing-report.mjs results/2026-11-12-101243.json`):** 240 requests over 33 cases, 0 re-sends, 0 went quiet, 0 with no headers, max headers 4520 ms, max gap 5221 ms.
+
+## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
+
+**Full run: `results/2026-11-16-144917.json`, 32/33 (97%), $18.67.** SC-006 met, no hard-rule check failed, no timeouts. Last B1 baseline 32/33. The one miss, 01 (R-NAMES-LAYERS, 'all starting at 0.5 s' for four Title pairs), was noise: `--repeat 3` `-190718` had 1 pass and 2 judge `ETIMEDOUT` (plumbing), then `-193122` 3/3 ($0.68).

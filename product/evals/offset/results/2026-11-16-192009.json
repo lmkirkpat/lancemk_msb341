@@ -1,0 +1,386 @@
+{
+  "run_at": "2026-11-17T02:20:09.667Z",
+  "options": {
+    "only": "41",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 3.37,
+  "fixtures_note": "Stand-in and synthetic fixtures until the live sitting; see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "41-button-show-me-again",
+      "title": "Panel: Show me again explains the change already made with a frame, and makes no second demonstration",
+      "covers": [
+        "RQ-14",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "d0fb27d3795a50e5d4989b07dfd7c3754968479b3f35116279a03a8519f9ed34",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "last_turn_tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_turn_tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_min",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_only_on",
+              "pass": true,
+              "detail": "only the demo target"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOW-ME-AGAIN",
+              "pass": false,
+              "reason": "In Turn 4 the mentor ran preview_frame, made no change and handed Dot 3 back, but its explanation reads out tool numbers ('so it now starts at 0.633 s', 'Scrub between 0.5 s and 0.633 s') where the rubric asks for the change in words, as in 'later by your gap'."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time comes from tool results: Dot 1/2/3, Position, Opacity, Blurriness and Seal from offset_snapshot, 0.5 s and 0.633 s from offset_demo, and 1 s and 0.6 s from the preview_frame calls."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Each turn moves one step and ends on something to do: Turn 1 ends on the choice, Turn 2 combines idea and task and ends on 'Play it back and say done', and Turns 3 and 4 explain the one change and end on 'Dot 3 is yours. Play it back and say done.' The blank-frame remarks are ignored as fixture artifacts."
+            }
+          ],
+          "cost": 1.0951246000000001,
+          "session_id": "f04df1ef-b7e2-4305-a1c7-4248c2b82f9d",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 2\"\n  ],\n  \"targets\": [\n    \"6/Transform › Position/1\",\n    \"6/Transform › Opacity/1\",\n    \"6/Effects › Gaussian Blur › Blurriness/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Dot 2's Position, Opacity and Blurriness all run from 0.5 s to 1.5 s. If you'd rather stagger layers, Dot 1, Dot 2 and Dot 3 also all start at 0.5 s. Seal is a precomp, and I can't check its timing yet, so I'll leave it out.\n\nWhich would you like to work on: Dot 2's three properties, or the three Dots?\n\n### Turn 2: the project is an open comp\nLEARNER: Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"layers\",\"order\":[\"Dot 1\",\"Dot 2\",\"Dot 3\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"targets\": [\n    \"layer/5\",\n    \"layer/6\",\n    \"layer/7\"\n  ],\n  \"demo_target\": \"layer/6\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-IH5ipf-runtime/f04df1ef-b7e2-4305-a1c7-4248c2b82f9d/tool-results/mcp-ae-mentor-blob-1794881888573-ksxtxt.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1}\nMENTOR: Here at 1 s, all three Dots are mid-move. When everything moves at once, nothing leads the eye.\n\nSo Dot 1 goes first, then Dot 2, then Dot 3, each 4 frames after the one before. Leave Dot 1 where it is and move Dot 2 and Dot 3 later. You can select a Dot's keys and drag them later, or drag the middle of its bar. Quick Offset does all of them in one drag: select them, hold Command and Option, and drag.\n\nPlay it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Show me how first.\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-IH5ipf-runtime/f04df1ef-b7e2-4305-a1c7-4248c2b82f9d/tool-results/mcp-ae-mentor-blob-1794881893730-sd342b.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1}\nTOOL CALL offset_demo {\"target\":\"layer/6\"}\nTOOL RESULT (ok): {\n  \"layer\": \"Dot 2\",\n  \"properties\": [\n    \"Position\",\n    \"Opacity\",\n    \"Blurriness\"\n  ],\n  \"shift_frames\": 4,\n  \"from\": 0.5,\n  \"to\": 0.633,\n  \"undo\": \"Edit > Undo\"\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-IH5ipf-runtime/f04df1ef-b7e2-4305-a1c7-4248c2b82f9d/tool-results/mcp-ae-mentor-blob-1794881894984-6gmnis.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1}\nMENTOR: I moved every key on Dot 2 (its Position, Opacity and Blurriness) 4 frames later, so it now starts at 0.633 s. Edit > Undo will reverse it.\n\nI meant to show you the difference with a frame at 1 s before and after, but both frames came back as plain dark backgrounds, so you can't see it there. The timeline shows it instead: Dot 2's keys now sit just to the right of Dot 1's, and when you play it back, Dot 2 follows a moment behind Dot 1.\n\nDot 3 is yours. Play it back and say done.\n\n### Turn 4: the project is an open comp\nLEARNER: Show me again: explain the change you already made, with a frame. Don't change anything.\nTOOL CALL preview_frame {\"time\":0.6,\"layer\":\"Dot 2\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-IH5ipf-runtime/f04df1ef-b7e2-4305-a1c7-4248c2b82f9d/tool-results/mcp-ae-mentor-blob-1794881902552-y1rgtr.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.6,\"layer_bounds_reason\":\"effects\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: I tried a frame at 0.6 s, between Dot 1's start and Dot 2's new start, but it also came back as a plain dark background. I can't show you the change in a still, and I won't describe a picture I can't see.\n\nHere's what changed. All of Dot 2's keys (Position, Opacity and Blurriness) moved together by your 4 frames, so it now starts at 0.633 s, while Dot 1 still starts at 0.5 s. Look at Dot 2 in the timeline and you'll see its keys sitting just to the right of Dot 1's. Scrub between 0.5 s and 0.633 s, and Dot 1 is already moving while Dot 2 hasn't started yet.\n\nDot 3 is yours. Play it back and say done.\n"
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "last_turn_tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_turn_tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_min",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_only_on",
+              "pass": true,
+              "detail": "only the demo target"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOW-ME-AGAIN",
+              "pass": false,
+              "reason": "In Turn 4 the mentor ran preview_frame, changed nothing and handed back 'Dot 3 is yours', but it read out raw numbers beyond the learner's gap ('it starts at 0.633 s', 'Scrub between 0.5 s and 0.633 s'), which the item's fail condition rules out."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every layer, property and time named (Dot 1/2/3, Seal, Position, Opacity, Blurriness, 0.5 s, 1.5 s, 0.633 s, 1 s, 0.6 s, 4 frames) appears in or follows directly from the offset_snapshot, offset_demo and preview_frame results."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Turn 1 ends on the group choice; Turn 2 combines the lockstep sentence, the plan said back and the how-to with its alternatives, ending on 'Play it back and say done.'; Turns 3 and 4 explain the one demo change and end with 'Dot 3 is yours. Play it back and say done.' (the blank-frame remarks are ignored)."
+            }
+          ],
+          "cost": 1.1427562,
+          "session_id": "67a93430-9078-4ee6-ab1a-cd009878be99",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 2\"\n  ],\n  \"targets\": [\n    \"6/Transform › Position/1\",\n    \"6/Transform › Opacity/1\",\n    \"6/Effects › Gaussian Blur › Blurriness/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: Dot 2's Position, Opacity and Blurriness all run from 0.5 s to 1.5 s, starting and landing on the same frames. If you'd rather stagger layers, Dot 1, Dot 2 and Dot 3 also all start at 0.5 s. I'm leaving Seal out because it's a precomp, and I can't check its timing yet.\n\nDo you want to work on Dot 2's properties or on the three Dots?\n\n### Turn 2: the project is an open comp\nLEARNER: Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"layers\",\"order\":[\"Dot 1\",\"Dot 2\",\"Dot 3\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"targets\": [\n    \"layer/5\",\n    \"layer/6\",\n    \"layer/7\"\n  ],\n  \"demo_target\": \"layer/6\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-pXF1XE-runtime/67a93430-9078-4ee6-ab1a-cd009878be99/tool-results/mcp-ae-mentor-blob-1794881929582-171ebi.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1}\nMENTOR: All three Dots are moving at once here at 1 s. When everything moves at once, nothing leads the eye.\n\nSo Dot 1 goes first, then Dot 2, then Dot 3, each 4 frames after the one before. Leave Dot 1 where it is and move Dot 2 and Dot 3 later. You can select a Dot's keys and drag them later, or drag the middle of its bar. Quick Offset does all of them in one drag: select them, hold Command and Option, and drag.\n\nPlay it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Show me how first.\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-pXF1XE-runtime/67a93430-9078-4ee6-ab1a-cd009878be99/tool-results/mcp-ae-mentor-blob-1794881936562-vq944q.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1}\nTOOL CALL offset_demo {\"target\":\"layer/6\"}\nTOOL RESULT (ok): {\n  \"layer\": \"Dot 2\",\n  \"properties\": [\n    \"Position\",\n    \"Opacity\",\n    \"Blurriness\"\n  ],\n  \"shift_frames\": 4,\n  \"from\": 0.5,\n  \"to\": 0.633,\n  \"undo\": \"Edit > Undo\"\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-pXF1XE-runtime/67a93430-9078-4ee6-ab1a-cd009878be99/tool-results/mcp-ae-mentor-blob-1794881937971-yi0ic9.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1}\nMENTOR: I moved every key on Dot 2 (its Position, Opacity and Blurriness) 4 frames later, so it now starts at 0.633 s instead of 0.5 s. Edit > Undo reverses it. I rendered 1 s before and after the shift, but both frames came back as plain dark background, so they don't show the change. Look in the timeline instead: Dot 2's keys now sit a little after Dot 1's, and when you play it back, Dot 2 follows Dot 1 instead of moving with it.\n\nDot 3 is yours. Play it back and say done.\n\n### Turn 4: the project is an open comp\nLEARNER: Show me again: explain the change you already made, with a frame. Don't change anything.\nTOOL CALL preview_frame {\"time\":0.6,\"layer\":\"Dot 1\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-pXF1XE-runtime/67a93430-9078-4ee6-ab1a-cd009878be99/tool-results/mcp-ae-mentor-blob-1794881945059-3x24ns.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.6,\"layer_bounds_reason\":\"not_sampled\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nTOOL CALL preview_frame {\"time\":0.6,\"layer\":\"Dot 2\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-pXF1XE-runtime/67a93430-9078-4ee6-ab1a-cd009878be99/tool-results/mcp-ae-mentor-blob-1794881945261-ogljgr.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.6,\"layer_bounds_reason\":\"effects\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: I rendered 0.6 s, but the frame came back as plain dark background again, so I can't point to the Dots in it. Here's the change from the key times: before, Dot 2 started at 0.5 s along with Dot 1. Now all of Dot 2's keys sit 4 frames later, so it starts at 0.633 s. At 0.6 s, Dot 1 is already moving and Dot 2 hasn't started yet, so Dot 1 leads and Dot 2 follows. Scrub between 0.5 s and 0.633 s in your Composition panel and you'll see Dot 1 move on its own.\n\nDot 3 is yours. Play it back and say done.\n"
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_gap_named",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_parents",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_self_instructions",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_sequence_layers",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "last_turn_tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "last_turn_tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_read_learner_record",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "demo_calls_min",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_calls_max",
+              "pass": true,
+              "detail": "1 demo calls"
+            },
+            {
+              "check": "demo_only_on",
+              "pass": true,
+              "detail": "only the demo target"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-SHOW-ME-AGAIN",
+              "pass": false,
+              "reason": "In Turn 4 the mentor correctly re-explains only the Dot 2 shift, takes a preview_frame, changes nothing and hands Dot 3 back, but it gives the change as numbers ('Dot 2 now starts at 0.633 s while Dot 1 and Dot 3 still start at 0.5 s') rather than in words as the learner's gap, which the item lists as a fail."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name and time the mentor uses (Dot 1, Dot 2, Dot 3, Seal, Position, Opacity, Blurriness, 0.5 s, 1.5 s, 0.633 s, 4 frames) appears in the offset_snapshot, offset_demo or preview_frame results, and the remark about Dot 2's keys sitting right of the others follows directly from the demo result."
+            },
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "Each turn moves one idea and ends on a hand-off: Turn 1 names the group, the other kind and Seal's leave-out and ends on the choice; Turn 2 gives the lockstep sentence and the plan back, then the how-to with Quick Offset, ending on 'play it back and say done'; Turns 3 and 4 say what moved and end on 'Dot 3 is yours to move. Play it back and say done.' The blank-frame remarks are ignored as fixture artifacts."
+            }
+          ],
+          "cost": 1.1359652,
+          "session_id": "d9160211-b853-4bf9-9fcb-fdb0cc5a219b",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /offset-mentor\nTOOL CALL offset_snapshot {}\nTOOL RESULT (ok): {\n  \"lesson\": \"new\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"default\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": null,\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 2\"\n  ],\n  \"targets\": [\n    \"6/Transform › Position/1\",\n    \"6/Transform › Opacity/1\",\n    \"6/Effects › Gaussian Blur › Blurriness/1\"\n  ],\n  \"demo_target\": null,\n  \"demo_used\": false,\n  \"no_demo_reason\": \"awaiting_order\",\n  \"frame_together\": 1,\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nMENTOR: On Dot 2, Position, Opacity and Blurriness all run from 0.5 s to 1.5 s, starting and landing on the same frames. Dot 1, Dot 2 and Dot 3 also all start at 0.5 s, if you'd rather stagger layers. Seal is a precomp, and I can't check its timing yet, so I'll leave it out.\n\nDo you want to stagger Dot 2's properties or the three Dots?\n\n### Turn 2: the project is an open comp\nLEARNER: Stagger the Dots: Dot 1 first, then Dot 2, then Dot 3, four frames apart.\nTOOL CALL offset_snapshot {\"skill_options\":{\"kind\":\"layers\",\"order\":[\"Dot 1\",\"Dot 2\",\"Dot 3\"],\"gap_frames\":4}}\nTOOL RESULT (ok): {\n  \"lesson\": \"continued\",\n  \"mode\": \"lesson\",\n  \"mode_source\": \"in_progress\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": true\n      }\n    ]\n  },\n  \"host\": {\n    \"known\": true,\n    \"version\": \"26.5\",\n    \"build\": \"89\",\n    \"os\": \"macOS 27.0.1\",\n    \"platform\": \"mac\",\n    \"beta\": null\n  },\n  \"quick_offset\": true,\n  \"project\": \"Claude AE Tutor Test.aep\",\n  \"comp\": {\n    \"name\": \"Mentor Practice 2\",\n    \"duration\": 8,\n    \"frame_rate\": 30\n  },\n  \"group\": {\n    \"kind\": \"layers\",\n    \"start\": 0.5,\n    \"end\": null,\n    \"members\": [\n      {\n        \"layer_index\": 5,\n        \"layer\": \"Dot 1\",\n        \"label\": \"Dot 1\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/5\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"label\": \"Dot 2\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\",\n          \"Blurriness\"\n        ],\n        \"target\": \"layer/6\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 7,\n        \"layer\": \"Dot 3\",\n        \"label\": \"Dot 3\",\n        \"start\": 0.5,\n        \"properties\": [\n          \"Position\",\n          \"Opacity\"\n        ],\n        \"target\": \"layer/7\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"proposed_kind\": \"properties\",\n  \"other_kind\": \"layers\",\n  \"other_group\": {\n    \"kind\": \"properties\",\n    \"layer\": \"Dot 2\",\n    \"start\": 0.5,\n    \"end\": 1.5,\n    \"members\": [\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Position\",\n        \"property\": \"Position\",\n        \"label\": \"Position\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Position/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Transform › Opacity\",\n        \"property\": \"Opacity\",\n        \"label\": \"Opacity\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Transform › Opacity/1\",\n        \"has_linear_pairs\": true\n      },\n      {\n        \"layer_index\": 6,\n        \"layer\": \"Dot 2\",\n        \"unit\": \"Effects › Gaussian Blur › Blurriness\",\n        \"property\": \"Blurriness\",\n        \"label\": \"Blurriness\",\n        \"move_index\": 1,\n        \"start\": 0.5,\n        \"end\": 1.5,\n        \"target\": \"6/Effects › Gaussian Blur › Blurriness/1\",\n        \"has_linear_pairs\": true\n      }\n    ]\n  },\n  \"left_out\": [\n    {\n      \"reason\": \"precomp\",\n      \"layers\": [\n        \"Seal\"\n      ]\n    }\n  ],\n  \"refused_members\": [],\n  \"order\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"order_unmatched\": [],\n  \"focus\": [\n    \"Dot 1\",\n    \"Dot 2\",\n    \"Dot 3\"\n  ],\n  \"targets\": [\n    \"layer/5\",\n    \"layer/6\",\n    \"layer/7\"\n  ],\n  \"demo_target\": \"layer/6\",\n  \"demo_used\": false,\n  \"no_demo_reason\": null,\n  \"frame_together\": 1,\n  \"floor_check\": {\n    \"gap_frames\": 4,\n    \"gap_seconds\": 0.133,\n    \"gap_under_floor\": false\n  },\n  \"server_current\": true,\n  \"stored_choices\": false\n}\nTOOL CALL preview_frame {\"time\":1}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-UWmot9-runtime/d9160211-b853-4bf9-9fcb-fdb0cc5a219b/tool-results/mcp-ae-mentor-blob-1794881971603-r60am9.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1}\nMENTOR: That's the frame at 1 s, and all three Dots got there by starting together at 0.5 s. When everything moves at once, nothing leads the eye.\n\nSo Dot 1 goes first, then Dot 2, then Dot 3, each 4 frames after the one before. Leave Dot 1 where it is and move Dot 2 and Dot 3 later. To move a Dot, either select its keys and drag them later or drag the middle of its bar. Quick Offset can do both in one drag: select the layers, hold Command and Option, and drag. Then play it back and say done.\n\n### Turn 3: the project is an open comp\nLEARNER: Show me how first.\nTOOL CALL preview_frame {\"time\":0.6}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-UWmot9-runtime/d9160211-b853-4bf9-9fcb-fdb0cc5a219b/tool-results/mcp-ae-mentor-blob-1794881978597-43vis9.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.6}\nTOOL CALL offset_demo {\"target\":\"layer/6\"}\nTOOL RESULT (ok): {\n  \"layer\": \"Dot 2\",\n  \"properties\": [\n    \"Position\",\n    \"Opacity\",\n    \"Blurriness\"\n  ],\n  \"shift_frames\": 4,\n  \"from\": 0.5,\n  \"to\": 0.633,\n  \"undo\": \"Edit > Undo\"\n}\nTOOL CALL preview_frame {\"time\":0.6}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-UWmot9-runtime/d9160211-b853-4bf9-9fcb-fdb0cc5a219b/tool-results/mcp-ae-mentor-blob-1794881981569-f26573.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":0.6}\nMENTOR: I moved all of Dot 2's keys (Position, Opacity and Blurriness) 4 frames later, so Dot 2 now starts at 0.633 s instead of 0.5 s. Edit > Undo reverses it. I took a frame at 0.6 s before and after the shift, but both came out almost completely dark, so they don't show the change. You'll see it better in the timeline, where Dot 2's keys now sit just to the right of Dot 1's, and on playback, where Dot 2 starts a beat after Dot 1.\n\nDot 3 is yours to move. Play it back and say done.\n\n### Turn 4: the project is an open comp\nLEARNER: Show me again: explain the change you already made, with a frame. Don't change anything.\nTOOL CALL preview_frame {\"time\":1.5,\"layer\":\"Dot 2\"}\nTOOL RESULT (ok): [Image: source: ~/.claude/projects/-private-var-folders-46-djntkg2n30b6jxyl-7nx71cr0000gn-T-AEMentor-UWmot9-runtime/d9160211-b853-4bf9-9fcb-fdb0cc5a219b/tool-results/mcp-ae-mentor-blob-1794881989489-14trcu.png]\n{\"comp\":\"Mentor Practice 2\",\"time\":1.5,\"layer_bounds_reason\":\"effects\",\"comp_size\":{\"width\":1920,\"height\":1080},\"image_size\":{\"width\":1920,\"height\":1080}}\nMENTOR: I haven't changed anything else. The only change so far is the one I made: all of Dot 2's keys (Position, Opacity and Blurriness) moved 4 frames later, so Dot 2 now starts at 0.633 s while Dot 1 and Dot 3 still start at 0.5 s. I rendered another frame at 1.5 s, but it came out almost entirely dark like the first two, so a still frame here can't show the change. In the timeline, Dot 2's first keys now sit 4 frames to the right of the other two Dots' keys.\n\nDot 3 is yours to move. Play it back and say done.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

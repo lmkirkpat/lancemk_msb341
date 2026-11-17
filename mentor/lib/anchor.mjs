@@ -9,6 +9,7 @@
 
 import { MentorError, registerErrors } from "../errors.mjs";
 import { compPosition, footprint, layerMatrix, sampleAt } from "./comp-space.mjs";
+import { expressionDrives, expressionsRead } from "./expressions.mjs";
 import { byIndex, byName, layerInfo } from "./layer-info.mjs";
 import { sourcesOf } from "./motion-sources.mjs";
 import { classOf } from "./visibility.mjs";
@@ -144,9 +145,15 @@ export const keyedLayer = (snapshot, index) => (snapshot.layers || []).find((l) 
 const propsOf = (kl, paths) => (kl ? kl.properties.filter((p) => paths.includes(p.path)) : []);
 const keyedProps = (kl, paths) => propsOf(kl, paths).filter((p) => p.keys.length > 0);
 
-export function keyFlags(kl) {
+// With `read` ({ snapshot, index }) and read R2 in it, the two expression flags come from R2's
+// source expressions, keyed or not (T061, TD § 21: one bucket and reason), so an erroring or
+// switched-off one counts for neither (T062). Without `read`, or on a snapshot without R2, an
+// expression switched on over keys, as before spec 015.
+export function keyFlags(kl, read = null) {
   const has = (paths) => keyedProps(kl, paths).length > 0;
-  const expr = (paths) => keyedProps(kl, paths).some((p) => p.expression_enabled);
+  const expr = (paths) => (read
+    ? expressionDrives(read.snapshot, read.index, paths, kl ? kl.properties : [])
+    : keyedProps(kl, paths).some((p) => p.expression_enabled));
   return {
     anchor: has([ANCHOR]),
     position: has(POSITION_PATHS),
@@ -364,7 +371,7 @@ export function candidates(snapshot, { rest_times = {} } = {}) {
   if (!known) return [];
   const out = layers.map((entry) => {
     const kl = keyedLayer(snapshot, entry.index);
-    const flags = keyFlags(kl);
+    const flags = keyFlags(kl, { snapshot, index: entry.index });
     const cls = classOf(snapshot, entry.index);
     const src = sourcesOf(snapshot, entry.index);
     const parents = (src && src.parents) || [];
@@ -476,7 +483,7 @@ export function neededTimes(snapshot) {
   const times = [];
   for (const entry of layers) {
     const kl = keyedLayer(snapshot, entry.index);
-    const flags = keyFlags(kl);
+    const flags = keyFlags(kl, { snapshot, index: entry.index });
     const [bucket] = structural(snapshot, entry, flags, classOf(snapshot, entry.index), kl);
     if (bucket === "never") continue;
     const rk = restKey(kl);
@@ -674,6 +681,7 @@ const REFUSAL_TEXT = {
   collapsed: "That precomp passes its layers through.",
   anchor_or_position_keyed: "Its Anchor Point or Position has keys.",
   expression: "An expression drives its Anchor Point or Position.",
+  expression_rotation_scale: "An expression drives its Rotation or Scale.",
   not_at_rest: "The playhead isn't on its rest key.",
   not_found: "That layer isn't in the comp now.",
   cant_read: "I can't read that layer right now.",
@@ -694,8 +702,15 @@ export function demoRefusal(snapshot, entry, { rest_time = null } = {}) {
   if (entry.three_d === true) return "three_d";
   if (entry.kind === "precomp" && entry.collapse === true) return "collapsed";
   const kl = keyedLayer(snapshot, entry.index);
-  const flags = keyFlags(kl);
+  const flags = keyFlags(kl, { snapshot, index: entry.index });
   if (flags.anchor || flags.position) return flags.expression_anchor_position ? "expression" : "anchor_or_position_keyed";
+  // T061 (TD § 21): its own expression on Anchor Point, Position, Rotation or Scale, keyed or not.
+  // Only with read R2: before it, keyed Rotation or Scale expressions were left out of the candidates
+  // but never refused here, and that stays so.
+  if (expressionsRead(snapshot) === "all") {
+    if (flags.expression_anchor_position) return "expression";
+    if (flags.expression_rotation_scale) return "expression_rotation_scale";
+  }
   if (isNum(rest_time)) {
     const fps = snapshot.comp && snapshot.comp.frame_rate;
     const t = snapshot.comp && snapshot.comp.time;

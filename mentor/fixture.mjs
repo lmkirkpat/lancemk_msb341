@@ -104,10 +104,23 @@ async function applyEdits(project) {
   return project;
 }
 
+// Spec 015 research R13: a saved capture's sweeps are returned as saved. A layer the caller asks a
+// fine sweep for that the capture wasn't measured with is listed in fine_not_read (reason "fixture"),
+// so it reads as not read, never as "doesn't move". A capture from before spec 015 has no
+// expressions at all, which every reader treats as not read.
+function markFineSweeps(project, args) {
+  const asked = args && Array.isArray(args.measure_layers) ? args.measure_layers : [];
+  if (!asked.length || !Array.isArray(project.expression_sweeps)) return project;
+  const measured = new Set(Array.isArray(project.measured_layers) ? project.measured_layers : []);
+  const missing = asked.filter((i) => !measured.has(i));
+  if (missing.length) project.fine_not_read = missing.map((layer) => ({ layer, reason: "fixture" }));
+  return project;
+}
+
 // A state with "undo_demo": true is the learner's Edit > Undo of the demo: the demo edit is left
 // out of this snapshot (usage notes, panel session 1).
-async function snapshot() {
-  const project = loadProject();
+async function snapshot(args) {
+  const project = markFineSweeps(loadProject(), args);
   if (readState().undo_demo) return project;
   return applyEdits(project);
 }

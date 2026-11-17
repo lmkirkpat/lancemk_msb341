@@ -18,13 +18,16 @@ Additive only. `layers`, `precomp_layers` and every existing `layer_info` field 
 | `group` | `transform` \| `effect` \| `text` \| `mask` \| `shape` \| `other` | from the path's root |
 | `keys` | int | `numKeys` |
 | `enabled` | bool | `expressionEnabled` |
-| `active` | bool | `enabled` and no `error` (T001: AE 27.0 keeps an erroring expression on, at the base value). Only the in-use side of a separable Position is walked (`inUse`, as today); separating or joining clears the expression (T003) |
+| `active` | bool | `enabled` and no `error` (T001: AE 27.0 keeps an erroring expression on, at the base value). Only the in-use side of a separable Position is walked (`inUse`, as today), since the hidden half holds stale values (FR-006a); separating or joining clears the expression (T003) |
 | `error` | string \| null | `expressionError`, trimmed to 300 characters |
 | `text` | string | up to 20,000 characters (research R2) |
 | `text_length` | int | full length |
 | `text_cut` | bool | |
 
-`expressions_read`: `"all"` when the walk finished, or `{ status: "not_read", reason }` when it threw.
+`expressions_read`: `"all"` when the walk finished with every property read; `{ status: "partial",
+reason, skipped: int }` when one or more properties threw while being read (the rest are kept, and
+the read is never called complete, FR-018); `{ status: "not_read", reason }` when the walk itself
+threw.
 
 ### `layer_info[].effects`
 
@@ -45,8 +48,10 @@ sample's exact time.
 | `kind` | `coarse` (24 times, always, every active transform expression) or `fine` (`measure_layers` only) |
 | `sampled_every` | seconds |
 | `varies` | bool: the result changed by more than the tolerance across the sweep |
+| `status` | present only when the sweep didn't run: `{ status: "not_read", reason: "budget" }` for coarse sweeps past the snippet's time or count budget (the plan's number), so `varies` is unknown, never false |
 | `max_offset` | largest distance from base, in the property's units |
 | `max_at` | time of that peak |
+| `max_value` | *Added 2026-11-16 (FR-004a, research R15), fine sweeps only:* the after-expression value the sweep read at `max_at`. Absent on older snapshots, which is `direction_unknown` where FR-004a needs a direction, never a guess |
 
 ## 2. Derived (Node, `mentor/lib/expressions.mjs`)
 
@@ -80,22 +85,34 @@ only when `links` is empty and `unresolved_in_comp` is 0.
 - Per layer `expressions`: `{ status: "read", list: [Expression read] }` (was `not_read` with
   `on_keyed`). `on_keyed` stays for old snapshots.
 - Per parent: `moves_children: bool` plus `moves_by: "keys" | "expression" | "both" | null`.
-- `static_as_read` is true only when own keys, own source expressions and parents are all empty
-  and expressions were read.
+- `static_as_read`: on snapshots with the new expression fields, true only when own keys, own source
+  expressions and parents are all empty. On **older snapshots it keeps its old meaning** (no own keys
+  and no parents), because expressions weren't read there. Nothing in production reads it today
+  (review, T031); a consumer that needs "static" must check `read.expressions` too.
 
 ## 4. `motion_from` (pivot and null snapshot tools, FR-015)
 
-On each focus or candidate layer those tools already return:
-`{ own_keys: bool, own_expressions: [property], parents: [{ layer, by: "keys" | "expression" | "both" }] }`
-or `{ status: "not_read", reason }`.
+On each focus or candidate layer those tools already return, **only when the snapshot has the new
+expression fields**:
+`{ own_keys: bool, own_expressions: [property], parents: [{ layer, by: "keys" | "expression" | "both" }] }`.
+On an older snapshot (every eval fixture captured before phase 1) the field is **absent**, not
+`not_read`, so those tool replies are byte-identical to before. The eval gate covers the field
+through cases on new captures (eval-engineer, T035).
 
 ## 5. Check changes (K2, FR-012 to FR-014)
 
 - Other-change entries attributed to the learner need a difference at a **same-frame** time (see
   research R7) on a non-expression value or on `base`.
 - A real change outside the focus is one entry per changed property on that layer (Anchor Point,
-  Position, Scale, Rotation, parent, expression), with `effect: { distance_px, direction, time } | null`
-  for the footprint shift it caused. No separate moved entry for that layer (FR-014a).
+  Position, Scale, Rotation, parent, expression), with `effect` for the footprint shift it caused. No
+  separate moved entry for that layer (FR-014a). `effect` is:
+  - **omitted** when nothing visibly moved;
+  - `{ distance_px, direction, time }` when the footprint shift was measured;
+  - `{ distance_px: null, direction: null, reason }` when the footprint can't be read (a null, a layer
+    with no bounds). Pivot and null use the same shape.
+- **Offset, key types and speed graph** list changes to unkeyed properties outside their focus too,
+  compared on `base` at a same-frame time, through one shared helper, `mentor/lib/k2-changes.mjs`
+  (review, T031). Keyed changes stay with each skill's own comparison.
 - A layer whose index changed is matched by the existing renumber matching and compared on `base`
   (FR-013a).
 - New kind `expression_changed`: `{ layer, property, what: "turned_on" | "turned_off" | "text" | "error" }`.
@@ -109,11 +126,50 @@ See [contracts/describe-layers.md](contracts/describe-layers.md). Summary per la
 `refs_out` count, `precomp` (phase 2 summary or `not_read`), `read` statuses. Detail adds each
 expression's `text` (cut at 1,500), `error`, every link, and every reference.
 
+**Footprint shift (FR-004a, added 2026-11-16).** On each layer named in `layers`, summary and detail:
+`shifts: [{ from_layer_index, from_layer, property, shift_px, at, sampled_every, sampled: true,
+measured_on: "box" } | { from_layer_index, from_layer, property, shift_px: null, reason }]`, one per
+active parent-chain transform expression that moves the layer (Opacity excluded). `shift_px` is
+rounded to 0.01 px. `reason` is one of `three_d`, `auto_orient`, `no_rect`, `not_sampled`,
+`no_fine_sweep`, `chain_moves`, `direction_unknown`, `singular`, and (*added 2026-11-16, spec
+Amendment 9*) `switch_not_read`: a 3D or Auto-Orient switch in the chain read as anything but true or
+false, never taken as off. `chain_moves` also covers a named text or shape layer whose box changes over
+time, and `direction_unknown` a Rotation source under non-uniform scale (research R15). An empty list means the layer has no
+such parent expression, and is only given when the motion-sources map read expressions (`read.expressions`
+is `"all"`); otherwise `shifts` is `{ status: "not_read", reason: "older_snapshot" }`. Layers not
+named get no `shifts`, and the reply's `read.shifts` is `"read"` or `{ status: "not_read", reason:
+"not_asked" }`. Computed by `mentor/lib/footprint-shift.mjs` (research R15).
+
+**Own keys and switches (FR-004b, added 2026-11-16, Amendment 7).** From the snapshot the tool already
+takes; nothing new is read.
+
+- `own_keys`: `[{ property, keys, key_types, expression_on? }]`, one per property in the snapshot's
+  `layers[].properties` for that layer, in snapshot order. `property` is the display name (as in
+  `expressions`); detail adds `display_path`. `key_types` is one of:
+  - `single_key`: one key (set, not animated; `analyze.mjs`'s existing skip reason);
+  - `all_held`: two or more keys and every pair snaps;
+  - `none_held`: two or more keys and no pair snaps;
+  - `some_held`: two or more keys, some pairs snap and some don't.
+
+  A pair snaps when the first key's `out_type` or the second key's `in_type` is `hold` (key types'
+  `snaps`, L-1; reused, not copied). `expression_on: true` is present only when the property's
+  expression is on (the snapshot's `expression_enabled`). Summary: at most 8 entries, then
+  `own_keys_more: n` when there are more. Detail: every entry.
+- `locked`, `three_d`: booleans from `layer_info`. `collapse`: boolean, on `precomp` and `footage`
+  layers only (spec OQ-12). A switch the snapshot read as `null` is `{ status: "not_read", reason:
+  "error" }`; with no `layer_info`, `switches: { status: "not_read", reason: "older_snapshot" }` replaces
+  all three.
+- **Named layers** (in `layers`, summary or detail): `own_keys` always present (`[]` when none), and
+  every switch that applies to the kind, `false` included.
+- **Whole-comp summary** (no `layers`): `own_keys` only when non-empty, and a switch only when `true`
+  (or not read). The reply's `read` block gains `own_keys: "read"` and `switches: "read" | not_read`,
+  which say that a layer without them has no keys and those switches off.
+
 ## 7. Phase 2: comp contents (`precomp-contents.jsx` + `precomp-time.mjs`)
 
 ### Comp contents (keyed by `comp_id`)
 
-`{ comp_id, name, duration, frame_rate, width, height, places_used, depth, layers: [{ index, name,
+`{ comp_id, name, duration, frame_rate, width, height, places_used (layers, not comps; FR-023), depth, layers: [{ index, name,
 kind, parent, enabled, in_point, out_point, start_time, stretch, time_remap, source_comp_id | null,
 keyed: [{ path, display_name, keys, times }], expressions: [as § 1] }], status: "read" | { status:
 "not_read", reason: "too_deep" | "loop" | "error" } }`
@@ -121,8 +177,10 @@ keyed: [{ path, display_name, keys, times }], expressions: [as § 1] }], status:
 ### Time mapping (per precomp layer, outer to inner)
 
 `{ outer_layer, source_comp_id, start_time, stretch, remap: null | { every_frame: [inner times],
-cut: bool }, shown: [outer_in, outer_out] }`. Derived per inner key: `{ inner_time, outer_times:
-[t], shows: bool }`. Nested layers compound mappings from the inside out.
+cut: bool }, shown: [lower, upper) }`, where lower and upper are the in and out points in either order
+(a negative stretch reports in after out; FR-025). Derived per inner key: `{ inner_time, outer:
+[{ first, last, frames }], shows: bool }`: a single time is a range with `frames: 1`, and a held remap
+gives a longer one (FR-024). A key on `upper` doesn't show. Nested layers compound mappings from the inside out.
 
 ### Precomp summary (FR-027)
 

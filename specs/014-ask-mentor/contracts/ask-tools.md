@@ -17,10 +17,18 @@ Shapes are in [data-model.md](../data-model.md) § 1, § 2, § 8.
 `goal` (optional; general motion terms, required in phase 3 when `kind` is `answer`).
 
 **Does, in order:**
-1. Reads the session's last read (comp name, project, layers, the motion-sources map). With none (`howto`,
-   `outside`, `no_comp`), `comp` is `null`.
+1. Takes its own snapshot of the active comp for each answer about a comp (`answer`, `describe`, `clarify`,
+   `no_comp`), and takes the comp name, project, layers and the motion-sources map from it. *Amended
+   2026-11-16 (b):* it never uses "the session's last read": `describe_layers` doesn't write to the session
+   (spec 015 FR-019, FR-020; a 015 test checks it), so there is none. Reading again also catches a comp
+   switched between the mentor's read and its answer (`COMP_NOT_NAMED`). A `NO_ACTIVE_COMP` from this read
+   makes a `no_comp` answer valid; `AE_UNREACHABLE` and `AE_BUSY` stay errors. `howto` and `outside` read
+   nothing, and `comp` is `null`.
 2. Checks the rules in research R3 and refuses the first that fails, with its code; nothing is saved.
 3. On B1, keeps the checked offer for the record of the call but returns `offered_skills: []`.
+3a. Normalizes each not-taught step (amended 2026-11-14, T035 design review): a step whose `skill` is "not
+   taught yet" gets "Not something I teach yet." appended to its `text` if the text doesn't already end with it.
+   The panel draws no separate tag for it, so this sentence is the only marker and must never be missing.
 4. Saves `session.ask` (data-model § 2) for `answer`, `describe` and `howto`.
 5. Phase 3: for `answer`, writes one asked entry (data-model § 3) and links it.
 
@@ -28,6 +36,27 @@ Shapes are in [data-model.md](../data-model.md) § 1, § 2, § 8.
 
 **Never:** accepts a step list in `explanation`; offers more than two skills; offers a skill no step uses
 (except PQ-4's `howto`); changes AE.
+
+### Refusals
+
+Each refusal returns its code and a plain message (data-model § 8); nothing is saved, and the mentor tries
+again. The codes in research R3: `TOO_MANY_STEPS`, `BAD_STEP_SKILL`, `BAD_OFFER`, `BAD_CLOSING`,
+`COMP_NOT_NAMED`, `STEPS_IN_EXPLANATION`, `KEYFRAME_SKILL_ON_KEYLESS`, `ROUTE_TO_PIVOT`, `OFFER_NOT_READY`,
+`NOT_ACTIONABLE`. *Added 2026-11-16 (b), five more the build added (`mentor/lib/ask-answer.mjs`, T013):*
+
+| Code | Refused when |
+|---|---|
+| `ANSWER_SHAPE` | A field is missing or has the wrong type (an empty explanation; the steps or offered skills not a list; a step's text, a step's layer, an offered skill, the closing offer or the goal not text), or `kind` isn't one of the six kinds |
+| `KIND_MISMATCH` | An `answer` with no steps, or a `describe` or `howto` with steps |
+| `STEP_NEEDS_LAYER` | A step is tagged with a skill but names no layer (a not-taught or untagged step may have none) |
+| `COMP_IS_OPEN` | A `no_comp` answer while the read found a comp open |
+| `UNKNOWN_LAYER` | *(added 2026-11-16 (d), from the build, `mentor/lib/ask-answer.mjs`)* A step names a layer that `give_answer`'s own read doesn't find in the comp |
+| `NO_ACTIVE_COMP` | *(added 2026-11-16 (d), from the build)* An answer about a comp (`answer`, `describe`, `clarify`), but `give_answer`'s own read finds no comp active |
+| `NOT_PLAIN_WORDS` | The explanation, a step or the closing offer holds code, a backtick, a skill ID, or an underscore name from tool output. Names from the learner's own comp (the comp, its layers and their effects) are exempt, underscores and all |
+
+*Added 2026-11-16 (d):* `COMP_NOT_NAMED` and `NO_ACTIVE_COMP` from `give_answer` mean the comp changed between
+the mentor's read and its answer. The mentor then reads again before answering, and never answers from the
+earlier read.
 
 ## `go_deeper` (phase 2)
 

@@ -35,6 +35,26 @@ test("a ready skill passes all four checks", async () => {
   fs.rmSync(repo, { recursive: true, force: true });
 });
 
+test("ask-mentor (spec 014 T031): describe_layers, give_answer, preview_frame and Skill are accepted, and its runner is found", async () => {
+  const server = { tools: ["describe_layers", "preview_frame", "give_answer", "go_deeper", "note_said"].map((name) => ({ name })) };
+  const repo = tempRepo({
+    ".claude/skills/ask-mentor/SKILL.md": skill("ask-mentor", "mcp__ae-mentor__describe_layers, mcp__ae-mentor__preview_frame, mcp__ae-mentor__give_answer, mcp__ae-mentor__go_deeper, mcp__ae-mentor__note_said, Skill", "Read with describe_layers, then answer once with give_answer. Never call go_deeper without a yes."),
+    "product/evals/ask/run.mjs": RUNNER("ask-mentor"),
+  });
+  assert.equal(runnerFor(repo, "ask-mentor"), "ask");
+  const r = await readyForA({ repo, skill: "ask-mentor", server, dryRun: ok });
+  assert.equal(r.ok, true, render(r));
+  assert.deepEqual(r.checks.map((c) => c.status), ["pass", "pass", "pass", "pass"]);
+  // A tool the skill uses but doesn't allow is still caught.
+  fs.writeFileSync(path.join(repo, ".claude/skills/ask-mentor/SKILL.md"), skill("ask-mentor", "mcp__ae-mentor__describe_layers, Skill", "Read with describe_layers, then answer with give_answer."));
+  assert.equal(status(await readyForA({ repo, skill: "ask-mentor", server, dryRun: ok }), "body"), "fail");
+  fs.rmSync(repo, { recursive: true, force: true });
+});
+
+test("the real repo: the ask runner is the one that builds ask-mentor's tools", () => {
+  assert.equal(runnerFor(REPO, "ask-mentor"), "ask");
+});
+
 test("a name A refuses, a frontmatter name that differs, and a missing file each fail the name check", async () => {
   const repo = tempRepo({
     ".claude/skills/helper/SKILL.md": skill("helper", "mcp__ae-mentor__a_demo", "x"),
@@ -99,12 +119,12 @@ test("toolsNamedIn needs the whole name: a longer word doesn't count", () => {
   assert.deepEqual([...toolsNamedIn("a_demo_extra and xa_demo and a_demo.", ["a_demo"])], [["a_demo", [1]]]);
 });
 
-test("the real repo: every skill's runner is found (next-mentor has none) and all seven are ready, with a real dry run", async () => {
+test("the real repo: every skill's runner is found (next-mentor has none) and every skill is ready, with a real dry run", async () => {
   assert.equal(runnerFor(REPO, "ease-mentor"), "easing");
   assert.equal(runnerFor(REPO, "null-parenting-mentor"), "null-parenting");
   assert.equal(runnerFor(REPO, "next-mentor"), null);
   const skills = fs.readdirSync(path.join(REPO, ".claude", "skills")).filter((n) => n.endsWith("-mentor")).sort();
-  assert.equal(skills.length, 7);
+  assert.ok(skills.length >= 7); // 8 once ask-mentor is built (spec 014 T014)
   for (const s of skills) {
     const r = await readyForA({ repo: REPO, skill: s });
     assert.equal(r.ok, true, render(r));

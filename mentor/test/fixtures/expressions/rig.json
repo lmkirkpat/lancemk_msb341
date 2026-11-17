@@ -1,0 +1,1172 @@
+{
+  "taken_at": "2026-11-15T03:39:56.657Z",
+  "project": "Claude AE Tutor Test (converted).aep",
+  "comp": {
+    "id": 2711,
+    "name": "015 Rig",
+    "duration": 5.005,
+    "frame_rate": 29.97,
+    "time": 0.601,
+    "hide_shy": false,
+    "width": 1920,
+    "height": 1080
+  },
+  "precomp_layers": [],
+  "layers": [
+    {
+      "index": 5,
+      "name": "Sweep Control",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "properties": [
+        {
+          "path": "ADBE Transform Group/ADBE Position",
+          "display_path": "Transform › Position",
+          "match_name": "ADBE Position",
+          "display_name": "Position",
+          "dimensions": 1,
+          "expression_enabled": false,
+          "keys": [
+            {
+              "index": 1,
+              "time": 3.37,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                222,
+                483,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 8317.349,
+                  "influence": 16.667
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "time": 3.537,
+              "in_type": "linear",
+              "out_type": "linear",
+              "value": [
+                1611,
+                483,
+                0
+              ],
+              "in_ease": [
+                {
+                  "speed": 8317.349,
+                  "influence": 16.667
+                }
+              ],
+              "out_ease": [
+                {
+                  "speed": 0,
+                  "influence": 16.667
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layer_info": [
+    {
+      "index": 1,
+      "name": "G Shakers",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 5.005,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 0.601,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2.636,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 2,
+      "name": "G Shakers",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 5.005,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          100,
+          100,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 0.601,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2.636,
+          "anchor": [
+            100,
+            100,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 200,
+            "height": 200
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 3,
+      "name": "Black Solid 1",
+      "kind": "solid",
+      "enabled": false,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 5.005,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 1,
+      "effects": [
+        {
+          "name": "CC Light Sweep",
+          "match_name": "CC Light Sweep"
+        }
+      ],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          960,
+          540,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 0.601,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2.636,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 4,
+      "name": "Shake Control",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 5.005,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          952.447,
+          542.709,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0.007,
+        "opacity": 0
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            952.352,
+            542.492,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ],
+            "rotation": 0
+          }
+        },
+        {
+          "time": 0.601,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            952.447,
+            542.709,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0.007,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ],
+            "rotation": 0
+          }
+        },
+        {
+          "time": 2.636,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            963.717,
+            546.044,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0.398,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null,
+          "base": {
+            "position": [
+              960,
+              540,
+              0
+            ],
+            "rotation": 0
+          }
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 5,
+      "name": "Sweep Control",
+      "kind": "null",
+      "enabled": true,
+      "is_null": true,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 5.005,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          222,
+          483,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 0
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            222,
+            483,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 0.601,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            222,
+            483,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2.636,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            222,
+            483,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3.37,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            222,
+            483,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 3.537,
+          "anchor": [
+            0,
+            0,
+            0
+          ],
+          "position": [
+            1611,
+            483,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 0,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 6,
+      "name": "rock.png",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": 4,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 5.005,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          794,
+          267.5,
+          0
+        ],
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            794,
+            267.5,
+            0
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1588,
+            "height": 535
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 0.601,
+          "anchor": [
+            794,
+            267.5,
+            0
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1588,
+            "height": 535
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2.636,
+          "anchor": [
+            794,
+            267.5,
+            0
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1588,
+            "height": 535
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    },
+    {
+      "index": 7,
+      "name": "White Solid 1",
+      "kind": "solid",
+      "enabled": true,
+      "is_null": false,
+      "adjustment": false,
+      "has_video": true,
+      "three_d": false,
+      "collapse": false,
+      "auto_orient": false,
+      "parent": null,
+      "shy": false,
+      "solo": false,
+      "guide": false,
+      "locked": false,
+      "in_point": 0,
+      "out_point": 5.005,
+      "start_time": 0,
+      "stretch": 100,
+      "time_remap": false,
+      "matte": null,
+      "is_matte": false,
+      "motion_blur": false,
+      "effect_count": 0,
+      "effects": [],
+      "mask_count": 0,
+      "transform": {
+        "anchor": [
+          960,
+          540,
+          0
+        ],
+        "position": [
+          960,
+          540,
+          0
+        ],
+        "scale": [
+          100,
+          100,
+          100
+        ],
+        "rotation": 0,
+        "opacity": 100
+      },
+      "samples": [
+        {
+          "time": 0.6,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 0.601,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        },
+        {
+          "time": 2.636,
+          "anchor": [
+            960,
+            540,
+            0
+          ],
+          "position": [
+            960,
+            540,
+            0
+          ],
+          "scale": [
+            100,
+            100,
+            100
+          ],
+          "rotation": 0,
+          "opacity": 100,
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+          },
+          "rect_extents": null
+        }
+      ],
+      "samples_truncated": false
+    }
+  ],
+  "expressions": [
+    {
+      "layer": 3,
+      "path": "ADBE Effect Parade/CC Light Sweep#1/CC Light Sweep-0001",
+      "display_path": "Effects › CC Light Sweep › Center",
+      "group": "effect",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "thisComp.layer(\"Sweep Control\").transform.position",
+      "text_length": 50,
+      "text_cut": false
+    },
+    {
+      "layer": 4,
+      "path": "ADBE Transform Group/ADBE Position",
+      "display_path": "Transform › Position",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "// Rock shake with multiple impacts (Position + shared array)\namps = [6,12,20];   // amplitude in pixels\nfreq = 8;  // shakes per second\ndecays = [1,4,10];  // how quickly it settles\n\n// Times of hammer hits (seconds)\nimpacts = [0.5, 1.5, 2.5];\n\noffset = [0,0];\n\nfor (i = 0; i < impacts.length; i++){\n  t = time - impacts[i];\n  if (t >= 0){\n\t  amp=amps[1];\n\t  decay=decays[1];\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\n  }\n}\n\nvalue + offset\n",
+      "text_length": 530,
+      "text_cut": false
+    },
+    {
+      "layer": 4,
+      "path": "ADBE Transform Group/ADBE Rotate Z",
+      "display_path": "Transform › Rotation",
+      "group": "transform",
+      "keys": 0,
+      "enabled": true,
+      "active": true,
+      "error": null,
+      "text": "// Rock shake with multiple impacts (Rotation + shared array)\namps = [.25,.5,.75];    // amplitude in degrees\nfreq = 10;\ndecay = 3;\n\n// Same impact times as Position\nimpacts = [0.5, 1.5, 2.5];\n\nrot = 0;\n\nfor (i = 0; i < impacts.length; i++){\n  t = time - impacts[i];\n  if (t >= 0){\n\t  amp=amps[i];\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\n  }\n}\n\nvalue + rot\n",
+      "text_length": 378,
+      "text_cut": false
+    }
+  ],
+  "expressions_read": "all",
+  "expression_sweeps": [
+    {
+      "layer": 4,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "coarse",
+      "sampled_every": 0.209,
+      "varies": true,
+      "max_offset": 12.102,
+      "max_at": 2.503
+    },
+    {
+      "layer": 4,
+      "path": "ADBE Transform Group/ADBE Position",
+      "kind": "fine",
+      "sampled_every": 0.033,
+      "varies": true,
+      "max_offset": 12.147,
+      "max_at": 1.502
+    },
+    {
+      "layer": 4,
+      "path": "ADBE Transform Group/ADBE Rotate Z",
+      "kind": "coarse",
+      "sampled_every": 0.209,
+      "varies": true,
+      "max_offset": 0.283,
+      "max_at": 1.668
+    },
+    {
+      "layer": 4,
+      "path": "ADBE Transform Group/ADBE Rotate Z",
+      "kind": "fine",
+      "sampled_every": 0.033,
+      "varies": true,
+      "max_offset": 0.589,
+      "max_at": 2.569
+    }
+  ],
+  "measured_layers": [
+    4,
+    5
+  ],
+  "host": {
+    "ae_version": "27.0x78",
+    "os": "Macintosh OS 27.2.1/64"
+  }
+}

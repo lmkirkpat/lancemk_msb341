@@ -44,18 +44,18 @@ the Easing on Title lesson in progress on Mentor Practice, and the "about 40 px 
 
 ### The Comp 1 answer (revised after the design review)
 
-Three parts, about 121 words in all (§ 5.1's cap is about 120). Only the first and last are the mentor's
+Three parts, about 117 words in all (§ 5.1's cap is about 120). Only the first and last are the mentor's
 words; the middle is drawn by the panel from the step data:
 
 > *Mentor (prose):* In Comp 1, rock.png rides on Shake Control, a null moved by expressions:
 > - All three hits are the same size.
-> - Rotation is too small to see: 0.75° at most, gone in about 1/3 s.
+> - Rotation moves the rock about 9 px at most, gone in about 1/3 s.
 > - The turn centers on the rock, where Shake Control sits.
 >
 > *Panel (from step data):* **STEPS**
 > 1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first
 >    hit's size for all three. Not something I teach yet.
-> 2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most, too small to see. Not something I teach yet.
+> 2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet.
 > 3. Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits.
 >    *Set the pivot*
 > 4. Play it back and watch the turn.
@@ -125,7 +125,9 @@ Home  Lesson  Skills                    ● AE
   Long lesson or comp names truncate to one line; the full text is in a tooltip and in the button's
   accessible name (the text is only drawn short, not cut).
 - **Nothing else from the record is on Home.** No due review, and no badge on the Skills tab.
-- **No comp open** (`home-nocomp`): AE is connected but no comp is active. The card says "No comp open.
+- **Withdrawn 2026-11-16 (spec 014 FR-047, T001: AE's active item reads "no comp" after a click on footage or
+  an empty Project spot, so a "no" can't be trusted; Ask stays available and `ask-nocomp` covers it).**
+  **No comp open** (`home-nocomp`): AE is connected but no comp is active. The card says "No comp open.
   Open one, or click into its timeline." in place of the hint, Ask is paused with that reason, and the
   line reads "Find my next lesson · Needs an open comp." You can still type. This needs the health check
   to say whether a comp is active (yes or no, no name); until it does, the same case shows after Ask as
@@ -249,7 +251,7 @@ the flow clicks through.
 | `home-review-due` | changed | Identical to `home-return`, on purpose; the review is in Skills |
 | `home-lessonopen` | changed | Ask paused ("Your lesson is open. Ask there, or end it first."); line goes back to the lesson; End lesson |
 | `home-lessonopen-deeper` | new | The same, for a lesson from Go deeper; End lesson goes to `ask-ended` |
-| `home-nocomp` | new (restored) | No comp named; "No comp open. Open one, or click into its timeline."; Ask and the line paused |
+| ~~`home-nocomp`~~ (withdrawn 2026-11-16, spec 014 FR-047) | ~~new (restored)~~ | No comp named; "No comp open. Open one, or click into its timeline."; Ask and the line paused |
 | `home-unreadable`, `home-unreadable-why` | changed / same | Spec 007's banners over the new Home; asking works |
 | `home-unreachable`, `home-busy` | changed | Spec 007's banners; the box still takes text, Ask paused with the reason |
 | `home-loading` | same | Skeleton reshaped to one card and one line |
@@ -327,7 +329,8 @@ the flow clicks through.
    show reads past about 15 s.
 9. **Memory on Home** (`#cmp-memory`). **Recommend A: move it to Skills.** 012 allows one quiet line, and
    "Next time: a keyed swing on Door" is a lesson nudge at the door.
-10. **No comp open before Ask** (`home-nocomp`). The panel can only pause Ask if the bridge's health check
+10. **Settled 2026-11-16: no.** The flag was dropped (spec 014 FR-047 withdrawn; `discovery/usage-notes/ask-build.md` T001).
+    **No comp open before Ask** (`home-nocomp`). The panel can only pause Ask if the bridge's health check
     says whether a comp is active. A yes or no carries no name, but it's still the panel learning
     something about the project, so it may need the same constitution II amendment as the comp name.
     **Recommend** adding the yes or no with spec 014 (it's one flag, and it saves a wasted mentor turn);
@@ -414,9 +417,10 @@ the pivot ›", "Yes, go deeper on Set the pivot.", "From your question. Back re
 your lesson ›", "Your Set the pivot lesson is open.", "Practice", "✓ Done", "Pivot moved, nothing else
 did.", "Set the pivot · practiced on Shake Control", "Set the pivot · ended, not saved", "Back to your
 steps ›", "Back to your question ›", "Earlier questions (1)", "Pick up Easing on Title", "Back to your
-lesson", "Your lesson is open. Ask there, or end it first.", "No comp open. Open one, or click into its
-timeline.", "Needs an open comp.", "After Effects is busy. Your answer will come when it's free.",
-"Waiting for After Effects.", "See what's covered ›", "Not finished yet.", "Ask about your comp on Home,
+lesson", "Your lesson is open. Ask there, or end it first.", ~~"No comp open. Open one, or click into its
+timeline."~~ (now the mentor's words, `ask-nocomp`), ~~"Needs an open comp."~~ (withdrawn 2026-11-16), "After Effects is busy. Your answer will come when it's free.",
+"Waiting for After Effects.", "Available after the answer.", "Back to Home. Your question stays here.",
+"See what's covered ›", "Not finished yet.", "Ask about your comp on Home,
 or pick a skill.". The rest are spec 007's `panel/lib/copy.js` strings as they are. No internal field
 names appear anywhere.
 

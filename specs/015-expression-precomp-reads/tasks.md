@@ -3,7 +3,7 @@
 **Input**: [spec.md](spec.md) (approved `944cd8c`), [plan.md](plan.md), [research.md](research.md),
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md).
 
-**Status**: Draft, awaiting the builder's approval with the plan.
+**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-ups T064 (FR-004a; built on `014-mentor` at `2440c62`, SC-003a met as amended by Amendment 8) and T065 (FR-004b, Amendment 7) open; T066 (FR-004a's Amendment 9 corrections) open.
 
 **Format**: `- [ ] T### [P?] [Story?] (owner) Description`. `[P]` = can run alongside the other
 `[P]` tasks in the same block (different files, no unfinished dependency). Owners: **skill-builder**
@@ -57,19 +57,21 @@ step). Read-only scripts except where a plant is named.
   (SB-2).** On a duplicate of Comp 1, the agent reads Shake Control's base Position, Anchor Point and
   rock.png's footprint at 0.6 s; the builder uses Pan Behind on Shake Control by hand; the agent reads
   again at 0.6 s. Answer: did the base value and anchor change together, and did the children stay
-  still? **Also confirms turn f's likely action:** with the null over the rock, does Pan Behind take
-  Shake Control (the layer under the cursor), and does its anchor change match T004's fitted
+  still? **Also confirms turn f's likely action:** does Pan Behind take Shake Control when it's
+  selected (session 2: it took Shake Control, which was both selected and under the cursor, so this
+  can't tell the two rules apart; T034 tests it), and
+  does its anchor change match T004's fitted
   (572, −114) px in kind? Script in `mentor/dev/live-015/pan-behind-read.jsx`. At the same sitting,
   run once as written the three scripts folded together after the live runs and not yet run:
   `separate-dims.jsx`, the renumber step in `random-expression.jsx`, and the edited
-  `error-expression.jsx` (`expression-reads.md` › Still open). **Done 2026-11-14 (cockpit with the builder, `expression-reads.md` session 2): SB-2 and turn f confirmed by hand; Pan Behind took the *selected* layer; the scripts reproduce T001 to T003; new: hidden dimension properties hold stale values.**
-- [ ] T006 (skill-builder, AE; **builder's hands** for the scrub check) **Time mapping (E22).** Read
+  `error-expression.jsx` (`expression-reads.md` › Still open). **Done 2026-11-14 (cockpit with the builder, `expression-reads.md` session 2): SB-2 and turn f confirmed by hand; Pan Behind took Shake Control (selected; whether selection or the cursor decides is T034's A/B test); the scripts reproduce T001 to T003; new: hidden dimension properties hold stale values.**
+- [x] T006 (skill-builder, AE; **builder's hands** for the scrub check) **Time mapping (E22).** Read
   Mentor Practice's Icon. On a duplicate, plant by script four copies of a keyed precomp: start
   offset 0.5 s, stretch 50%, stretch −100%, and time remap with two remap keys. For two inner keys per
   copy, the agent computes the outer time from `startTime`, `stretch` and the remap values; the
   builder scrubs to each and confirms the key's pose shows there (by eye). Answer key saved as
   `mentor/test/fixtures/precomps/time-mapping-key.json`. Script in
-  `mentor/dev/live-015/time-mapping.jsx`.
+  `mentor/dev/live-015/time-mapping.jsx`. **Done 2026-11-14 (cockpit with the builder, `expression-reads.md` session 2): all eight keys match AE and the builder's eye; negative stretch reports in > out; remap holds a range; count layers, not `usedIn`.**
 - [x] T007 (cockpit) Log T001 to T006 in `discovery/usage-notes/expression-reads.md` (new): each
   question, the answer, and what it changes. **Done for T001 to T004 (session 1);** the cockpit adds
   T005 and T006 to the same note when they run.
@@ -78,7 +80,9 @@ step). Read-only scripts except where a plant is named.
   and hand it back to the builder before T010. **Done 2026-11-14 for T001 to T004** (spec Amendment
   1; research R3, R5, R6, R7; data-model § 1 and § 5). T004 changed US3, SC-005 and added FR-013a,
   FR-014a and OQ-8, so it goes back to the builder before T022. T005 and T006's answers get a short
-  second fold when they run.
+  second fold when they run. **Second fold done 2026-11-14 for T005 and T006** (spec Amendment 2: new
+  FR-006a and E29; FR-023 to FR-025, SC-005 (a), SC-011, SC-012, E21 to E23 tightened; research R1,
+  R6, R12; data-model § 1 and § 7). Nothing in it changes an approved decision.
 
 **Checkpoint:** live facts logged; research matches them.
 
@@ -88,37 +92,47 @@ step). Read-only scripts except where a plant is named.
 
 ## Setup
 
-- [ ] T009 (cockpit) Cut the phase 1 skill-builder worktree from local `main` (not `origin/main`;
-  CLAUDE.md next step 3) and name it `--shared-owner` for `mentor/**`.
+- [x] T009 (cockpit) Cut the phase 1 skill-builder worktree from local `main` (not `origin/main`;
+  CLAUDE.md next step 3) and name it `--shared-owner` for `mentor/**`. **Done 2026-11-14: `../wt-015-reads`, branch `015-reads-p1` from `71dc7c9`.**
 
 ## Foundational (blocks US1 to US3)
 
-- [ ] T010 (skill-builder) In `mentor/jsx/snapshot.jsx`, add the expressions pass (research R1, R2):
+- [x] T010 (skill-builder) In `mentor/jsx/snapshot.jsx`, add the expressions pass (research R1, R2):
   top-level `expressions` (one entry per property with a non-empty expression, fields per data-model
   § 1: `layer`, `path`, `display_path`, `group`, `keys`, `enabled`, `active`, `error` "trimmed to
   300 characters", `text` "up to 20,000 characters", `text_length`, `text_cut`) and `expressions_read`.
   Walk every group; skip markers; each read in its own try. `active` follows T003's answer.
-- [ ] T011 [P] (skill-builder) In `mentor/jsx/snapshot.jsx`, add `layer_info[].effects`:
+- [x] T011 [P] (skill-builder) In `mentor/jsx/snapshot.jsx`, add `layer_info[].effects`:
   `[{ name, match_name }]` for every effect, keyed or not (FR-007).
-- [ ] T012 (skill-builder) In `mentor/jsx/snapshot.jsx`, add `samples[].base` with only the
+- [x] T012 (skill-builder) In `mentor/jsx/snapshot.jsx`, add `samples[].base` with only the
   properties that have an active, error-free transform expression, read with `valueAtTime(t, true)`
   at the sample's exact time (research R5; data-model § 1).
-- [ ] T013 (skill-builder) In `mentor/jsx/snapshot.jsx`, add `expression_sweeps`: a coarse sweep
+- [x] T013 (skill-builder) In `mentor/jsx/snapshot.jsx`, add `expression_sweeps`: a coarse sweep
   (24 times, every active, error-free transform expression) and a fine sweep for
   `ARGS.measure_layers` at `max(1 frame, duration / 240)`, giving `varies`, `max_offset`, `max_at`,
   `sampled_every` (research R9; contracts/snippets.md).
-- [ ] T014 (skill-builder) In `mentor/dev/capture.mjs` add `--measure <indexes>` and `--time` (prints
+- [x] T014 (skill-builder) In `mentor/dev/capture.mjs` add `--measure <indexes>` and `--time` (prints
   elapsed ms); in `mentor/fixture.mjs` return saved sweeps and mark missing fine sweeps
   `not_read: fixture` (research R13). Tests in `mentor/test/fixture-sweeps.test.mjs`.
-- [ ] T015 (skill-builder, AE) Capture fixtures into `mentor/test/fixtures/expressions/`: Comp 1
+- [x] T015 (skill-builder, AE) Capture fixtures into `mentor/test/fixtures/expressions/`: Comp 1
   (`--measure 25,26 --times 0.6`), Mentor Practice, Mentor Practice 2, Mentor Overlaps, and one
   duplicate comp with the planted cases from T001 and T002 (an erroring expression on a transform
   and on an effect property; a `wiggle` layer with a layer added above it, read before and after, E28)
-  plus: a link to a guide layer, a link to a
+  plus: a joined layer and a separated layer whose hidden half holds a different stale value (E29),
+  a link to a guide layer, a link to a
   matte, a link by index and by `index - 1`, a `comp("…")` reference, a run-time name, a Source Text
   expression, a constant `value` expression on a parent (E19), and a comp with 30 expressions (for
   SC-007). Reset and strict-compare every original.
-- [ ] T016 (skill-builder) **Easing unchanged (FR-021, SC-004).** Extend
+  **Partly done 2026-11-14:** every capture but Comp 1 (the builder's project was closed). Mentor Practice, Mentor
+  Practice 2 and Mentor Overlaps (each also captured with `main`'s snippet: identical apart from read R2), and three
+  planted comps from `mentor/dev/live-015/plant-t015.jsx`: 015 Rig (Comp 1's rig with Comp 1's own expression
+  texts; playhead moved, Pan Behind's values and a base Position edit, each reset and strict-compared), 015 Planted
+  (before and after a null renumbers its wiggle) and 015 Thirty. Comp 1 tests run on a shape derived from the
+  committed live reads (`fixtures/expressions/comp1.mjs`) until `comp1.json` is captured.
+  **Done 2026-11-16:** Comp 1 captured live (`91fd02b`, `comp1.json`; fixes from it merged `1499819`).
+  Open for the eval-engineer: the stand-ins T035 marked to re-derive from it, and spec 014's ask fixtures
+  (`product/evals/ask/fixtures/build.mjs`).
+- [x] T016 (skill-builder) **Easing unchanged (FR-021, SC-004).** Extend
   `mentor/test/analyze-unchanged.test.mjs` (or add `analyze-r2-unchanged.test.mjs`) so the easing
   findings on the new Mentor Practice and Mentor Practice 2 captures equal the committed baselines
   (`practice-findings-baseline.json`), and Comp 1 gives 0 keyframe-skill findings from Shake Control
@@ -131,18 +145,19 @@ step). Read-only scripts except where a plant is named.
 **Goal:** expression reads with state, text, builds-on, base and after values, and how much they move.
 **Independent test:** SC-001 and SC-003 on the Comp 1 capture, E1 to E9 and E27 on the others.
 
-- [ ] T017 [US1] (skill-builder) Create `mentor/lib/expressions.mjs`: expression reads from the
+- [x] T017 [US1] (skill-builder) Create `mentor/lib/expressions.mjs`: expression reads from the
   snapshot (data-model § 2), `is_source` = on, active and no error (FR-006), base and after values at
   a given time (FR-003), and `moves` from the sweeps or `not_read` (FR-004). Tests in
   `mentor/test/expressions-read.test.mjs`: SC-001's 3 expressions with text identical to
   `comp1-ground-truth.json`; SC-003's (960, 540) and (952.4, 542.5) within 0.1 px at 0.6 s; E1 to E4,
-  E7, E9, E27.
-- [ ] T018 [US1] (skill-builder) Add the builds-on classifier to `mentor/lib/expressions.mjs`
+  E7, E9, E27; E29 (FR-006a: on T015's joined and separated layers, no expression, base value or sweep
+  comes from the hidden half).
+- [x] T018 [US1] (skill-builder) Add the builds-on classifier to `mentor/lib/expressions.mjs`
   (research R3: `builds_on`, `sets_own`, `cant_tell`, always `inferred: true`). Tests in
   `mentor/test/expressions-builds-on.test.mjs`: Comp 1 gives 2 `builds_on` and 1 `sets_own`; E5
   (`wiggle`, `loopOut`, `smooth`, `temporalWiggle` without `value`), E6 (`value` in a comment and in a
   string), `.value` on another property, cut text gives `cant_tell`.
-- [ ] T019 [US1] (skill-builder) Update `mentor/lib/motion-sources.mjs` (FR-005, data-model § 3):
+- [x] T019 [US1] (skill-builder) Update `mentor/lib/motion-sources.mjs` (FR-005, data-model § 3):
   `read.expressions` "all" when the snapshot has `expressions`; per-layer `expressions` read;
   `moves_children` true for keys **or** a source transform expression whose sweep `varies`;
   `moves_by`; `static_as_read` only when expressions were read. Tests in
@@ -154,12 +169,12 @@ step). Read-only scripts except where a plant is named.
 **Goal:** incoming links per layer, marked inferred, with whether the target renders.
 **Independent test:** SC-002 on Comp 1; E10 to E16 on the planted captures and strings.
 
-- [ ] T020 [US2] (skill-builder) Add the reference finder to `mentor/lib/expressions.mjs` (research
+- [x] T020 [US2] (skill-builder) Add the reference finder to `mentor/lib/expressions.mjs` (research
   R4's table: name, index, `index ± N`, `thisLayer`, `parent`, unresolved, other comp; the referenced
   property when the chain is plain). Tests in `mentor/test/expressions-refs.test.mjs`: E10 (Comp 1's
   two "G Shakers" and "Y Fragments": topmost, `shared_name`), E11, E12, E13, E26 (string cases), and
   Sweep Center → Sweep Control's Position.
-- [ ] T021 [US2] (skill-builder) Add `links_in` and `target_renders` (FR-008 to FR-011; data-model
+- [x] T021 [US2] (skill-builder) Add `links_in` and `target_renders` (FR-008 to FR-011; data-model
   § 2) using `mentor/lib/visibility.mjs` and in and out at the comp's time. Tests in
   `mentor/test/expressions-links.test.mjs`: SC-002 (exactly 1 link into Sweep Control, target
   `eye_off`; every other Comp 1 layer `status: "read"` with 0 links and `unresolved_in_comp: 0`); E14
@@ -175,7 +190,7 @@ pivot and null.
 
 **Starts after the builder approves Amendment 1 and answers OQ-8.** Both done 2026-11-14 (OQ-8 as recommended).
 
-- [ ] T022 [US3] (skill-builder) Rewrite `mentor/test/k2-turn-f.test.mjs`'s third test (the todo for
+- [x] T022 [US3] (skill-builder) Rewrite `mentor/test/k2-turn-f.test.mjs`'s third test (the todo for
   the old SC-005) to SC-005 (a): on `BASE` against `panBehindOnShakeControl(NOW, …)` with the fitted
   `pan_behind_fit`, `check` returns **exactly one** other change for Shake Control, its Anchor Point,
   carrying an `effect` whose `distance_px` and `direction` equal the saved reply's old moved entry
@@ -183,7 +198,7 @@ pivot and null.
   (playhead only: no change, SC-005 b). Change test 2 to assert the same numbers through the new
   `effect` instead of the old moved entry, so it still proves T004's fit. The test stays failing
   until T023.
-- [ ] T023 [US3] (skill-builder) In `mentor/lib/anchor-check.mjs` (FR-012 to FR-014a; research R7;
+- [x] T023 [US3] (skill-builder) In `mentor/lib/anchor-check.mjs` (FR-012 to FR-014a; research R7;
   data-model § 5): (a) a changed property on a layer outside the focus becomes one entry per property
   with the footprint shift attached as `effect`, and no separate moved entry for that layer; (b)
   item 5's moved list, `rawChanged` and `otherChanges` compare `base` for properties with an active
@@ -191,18 +206,18 @@ pivot and null.
   add `expression_changed`. Tests in `mentor/test/anchor-check-k2.test.mjs`: SC-005 (b), (c) with the
   T015 renumber capture, (d) a planted base Position change reported as Position; no shared time gives
   `not_compared`. Makes T022 pass.
-- [ ] T024 [US3] (skill-builder) In `mentor/lib/null-parenting-check.mjs`, the same two halves:
+- [x] T024 [US3] (skill-builder) In `mentor/lib/null-parenting-check.mjs`, the same two halves:
   `value_changed` (OA-4) and the jump check compare `base` for expression-driven properties at the same
   frame; a real property change is one entry with its effect attached; `expression_toggled` becomes
   `expression_changed` (keep every existing test's meaning). Tests in
   `mentor/test/null-parenting-k2.test.mjs`: SC-005 (a) to (d), including **the learner's new null
   renumbering a `wiggle` layer below it gives no change on that layer** (FR-013a, E28).
-- [ ] T025 [P] [US3] (skill-builder) Replay SC-005 (a) to (d) through offset, key types and speed
+- [x] T025 [P] [US3] (skill-builder) Replay SC-005 (a) to (d) through offset, key types and speed
   graph (`mentor/test/k2-replay-keyed.test.mjs`): (a) is reported as the anchor change (these checks
   compare keys, so expect a property entry, not a moved one), (b) and (c) give nothing, (d) is
   reported. Change `mentor/lib/offset-keys.mjs`, `mentor/lib/key-types.mjs` or
   `mentor/lib/speed-graph.mjs` only if a replay fails.
-- [ ] T026 [US3] (skill-builder) Add `motion_from` (data-model § 4) to the focus and candidate
+- [x] T026 [US3] (skill-builder) Add `motion_from` (data-model § 4) to the focus and candidate
   layers that `mentor/tools/transform-anchor.mjs` and `mentor/tools/null-parenting.mjs` return
   (FR-015, OQ-3: these two only). Tests in the existing `anchor-tools` and `null-parenting-tools`
   tests: rock.png gives `parents: [{ layer: "Shake Control", by: "expression" }]`. Don't edit any
@@ -210,54 +225,134 @@ pivot and null.
 
 ## Shared: the ask's read tool, honesty and privacy (US1 to US3)
 
-- [ ] T027 (skill-builder) Create `mentor/tools/comp-reads.mjs` with `describe_layers` per
+- [x] T027 (skill-builder) Create `mentor/tools/comp-reads.mjs` with `describe_layers` per
   [contracts/describe-layers.md](contracts/describe-layers.md): `TOOLS` only, no `SKILLS`; summary and
   detail shapes; `NAME_SHARED`, `NOT_FOUND`, `DETAIL_NEEDS_LAYERS`; `read.precomps` always
   `not_read` in phase 1; caps "≤ 4 KB per layer", "≤ 12 KB" whole comp, text "cut at 1,500
   characters", detail "≤ 16 KB". Tests in `mentor/test/comp-reads.test.mjs`: SC-007 on Comp 1 and the
   30-expression capture; no expression text in any summary; read-only (no write snippet called).
-- [ ] T028 [P] (skill-builder) Honesty sweep, `mentor/test/not-read.test.mjs` (FR-018, SC-009): the
+- [x] T028 [P] (skill-builder) Honesty sweep, `mentor/test/not-read.test.mjs` (FR-018, SC-009): the
   committed `comp1-snapshot.json` (no `expressions`), a capture with an unresolved reference, an
   other-comp reference, and a fixture without fine sweeps: every reply and map says `not_read` or
   `cant_resolve`, never `none`, `[]` or `false` for a read that didn't run.
-- [ ] T029 [P] (skill-builder) FR-020 guard in `record_lesson` (`mentor/tools/common.mjs`): refuse a
+- [x] T029 [P] (skill-builder) FR-020 guard in `record_lesson` (`mentor/tools/common.mjs`): refuse a
   summary or `next` that contains 24 or more characters copied from any expression text or error in
   the session's last snapshot, with a new code (plain message, no field names). Tests in
   `mentor/test/record-expression-guard.test.mjs`. See OQ-7.
-- [ ] T030 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`;
+- [x] T030 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`;
   all pass. Note the counts in the hand-back.
 
 ## Phase 1 gate
 
-- [ ] T031 (reviewer) Review the phase 1 branch against FR-001 to FR-021 and the Edge Cases rows
-  E1 to E19, E27.
-- [ ] T032 (cockpit) Merge with `/merge-worktree` (shared owner named), between live sittings
-  (CLAUDE.md: a `mentor/` merge needs a fresh session for live lessons).
-- [ ] T033 (skill-builder, AE) Live on `main`: SC-003's one live read of Shake Control at 0.6 s, and
+- [x] T031 (reviewer) Review the phase 1 branch against FR-001 to FR-021 and the Edge Cases rows
+  E1 to E19, E27. **Done:** fix round M1, S1, S3 to S5, S7 and the small items in; the replay of 938
+  tool calls across 253 cases changed only null case 42 (gains `effect`), before and after the fixes.
+- [x] T032 (cockpit) Merge with `/merge-worktree` (shared owner named), between live sittings
+  (CLAUDE.md: a `mentor/` merge needs a fresh session for live lessons). **Done 2026-11-16 (`a3300e3`):**
+  mentor tests 1677 pass, 4 todo, 0 fail; hooks 39/39.
+- [x] T033 (skill-builder, AE) Live on `main`: SC-003's one live read of Shake Control at 0.6 s, and
   SC-008's timing (`capture.mjs --time` on Comp 1 and Mentor Practice, with and without the new
   passes; ≤ 0.5 s added). If over, drop the fine sweep to 120 samples (research R9) and re-measure.
-- [ ] T034 (skill-builder reads, **builder's hands**) SC-010: 10 spot checks of the read's facts in AE
+  **Comp 1 half done 2026-11-16 (cockpit):** SC-003 live ✓ (base 960, 540; after 952.352, 542.492 at 0.6 s;
+  rock.png's source is Shake Control by expression). SC-008 on Comp 1 ✓: about 165 ms before the merge,
+  about 210 ms after (+45 ms, wall clock, 3 runs each), fine sweep adds nothing measurable. The T015 Comp 1
+  capture (merged `1499819`) found three faults the derived fixture hid, fixed there: AE 27.0 gives
+  expression text with `\r` line ends, which made `strip()` read Shake Control's two as setting their own
+  value; SC-001's compare; the whole-comp summary at 12.4 KB (now 10.5 KB, no cap change). **Open:** Mentor
+  Practice's timing; `contracts/describe-layers.md` should say a child's parent entry omits `moves` when the
+  parent is in the same reply (spec-writer, with T040); an eval case where the learner asks about Shake
+  Control's shake and hears it builds on the null's own Position (eval-engineer).
+  **Mentor Practice done 2026-11-16:** about 129 ms before the merge, about 137 ms after (+8 ms, 4 runs each);
+  SC-004's phase 1 half ✓: `analyze()` gives identical easing findings before and after (old code on a
+  pre-merge capture against new code on a new one, and new code on both). T033 done.
+- [x] T034 (skill-builder reads, **builder's hands**) SC-010: 10 spot checks of the read's facts in AE
   across Comp 1 and the T001 and T015 planted copies, including one off and one erroring expression; at
-  least 9 of 10 agree. Logged by the cockpit in `discovery/usage-notes/expression-reads.md`.
-- [ ] T035 [P] (eval-engineer) Add the K2 cases from spec › Eval plan (five rows, Amendment 1: turn
+  least 9 of 10 agree. Logged by the cockpit in `discovery/usage-notes/expression-reads.md`. **Plus the
+  Pan Behind A/B test** (T005 couldn't separate the rules): select layer A, use Pan Behind with the
+  cursor over layer B, and read which anchor moved. It decides the pivot `SKILL.md` "wrong layer" lines,
+  frozen until then.
+  **Done 2026-11-16 (`expression-reads.md` session 3): 10 of 10 agree. Pan Behind on AE 27.0 takes the
+  selected layer, or with nothing selected the top layer under the cursor; T058 rewrites the pivot
+  `SKILL.md` lines to match.**
+- [x] T035 [P] (eval-engineer) Add the K2 cases from spec › Eval plan (five rows, Amendment 1: turn
   f's real edit named by cause; expression motion; a renumbered `wiggle`) to `product/evals/anchor/`,
   `product/evals/null-parenting/` and `product/evals/offset/` (or key types), with fixtures derived
-  from the T015 Comp 1 capture. Case numbers from the cockpit.
-- [ ] T036 (eval-engineer) Re-run all six sets on B1 at the merge commit, one set at a time: easing,
+  from the T015 Comp 1 capture. Case numbers from the cockpit. **Also:** pivot and null cases on new
+  captures where the check's reply carries `motion_from` (an edit reported by its cause, FR-014a), since
+  the replay's existing fixtures predate it.
+  **Done 2026-11-16 (`da09e60`, merged `73a6dee`):** pivot 55, 56, null 53, 54, offset 44, each 3/3 on B1
+  (about $19 with two superseded drafts, both case bugs). Built on the live 015 Rig and Planted captures;
+  three stand-ins to re-derive after T015 (marked in the READMEs). Pivot 57 and null 55 held: `motion_from`
+  has no `SKILL.md` wording yet, so no case can pin how it's said (OQ-8 or spec 014).
+- [x] T036 (eval-engineer) Re-run all six sets on B1 at the merge commit, one set at a time: easing,
   key types, speed graph, offset, pivot, null. Each meets its SC-006 bar with every hard-rule check
   passing; T035's cases pass 3 of 3. Triage with `/eval-triage`; log in each README (SC-006).
-- [ ] T037 [P] (eval-engineer) Free A checks (`decisions/011` steps 1 and 2):
+  **Done 2026-11-16 (`1c6789b`):** easing 32/33, key types 35/36, speed graph 35/37, offset 42/44, pivot 61/64,
+  null 50/55; every hard-rule check passes. T035's and T059's cases (offset 44, pivot 55 to 59, null 53 to 55)
+  passed in the full runs at this commit; the builder took that with their earlier 3/3 as met (no repeat).
+  Three real minor misses go to T063 (key types 33, speed graph 16, offset 41); the rest were noise on repeat.
+  About $227 notional; a six-set B1 run doesn't fit one 5-hour usage window, so split it.
+- [x] T037 [P] (eval-engineer) Free A checks (`decisions/011` steps 1 and 2):
   `product/evals/lib/ready-for-a.mjs` and `--runtime a --dry-run` on all six sets. Paid A runs wait
   for spec 014's ship step.
-- [ ] T038 [P] (curriculum-designer) CD-1 in `specs/014-ask-mentor/teaching-design.md`: update Q8 and
+  **Done 2026-11-16 (no commit):** all six ready; A dry runs valid (easing 33, key types 36, speed graph 37,
+  offset 44, pivot 61, null 54 cases); settings hash unchanged at `3acbda26`. The hash covers the helper's
+  settings, not `mentor/`, so it doesn't make the old A results reusable: phase 1 changed what every
+  skill's tools return, and the new cases have never run on A. All six need a fresh A run at 014's ship step.
+- [x] T038 [P] (curriculum-designer) CD-1 in `specs/014-ask-mentor/teaching-design.md`: update Q8 and
   the § 13 precomps row for phase 2, and say whether § 5.1's "in order of visible effect" needs a
   "too small to see" threshold. **Start only after the other session's uncommitted edits to that
   file are committed.**
-- [ ] T039 [P] (curriculum-designer) CD-2: the wording that replaces easing's "I can't see inside these
+  **CD-1 done 2026-11-16: 014 TD § 5.1a (proposed 1 px "too small to see" threshold, builder's H-7), § 5.5 (answers once inside a precomp is read), Q8 and § 13 updated; also `motion_from` wording in 011 TD § 21 and 012 TD § 17 (unblocks pivot 57, null 55).**
+- [x] T039 [P] (curriculum-designer) CD-2: the wording that replaces easing's "I can't see inside these
   yet" once phase 2 lands, in the easing teaching design (`specs/002-easing-slice/` or curriculum
   § 6, skill 0). Design only; the `SKILL.md` change is a later skill-builder task.
-- [ ] T040 (spec-writer) Fold T033 to T039's results into the spec (status, any SC amendments) and
+  **CD-2 done 2026-11-16: curriculum § 6 skill 0, wording per precomp read state; the not-read line kept word for word.**
+- [x] T040 (spec-writer) Fold T033 to T039's results into the spec (status, any SC amendments) and
   hand the cockpit a CLAUDE.md note. **Phase 1 is shippable here** (to spec 014).
+  **Done 2026-11-16 (spec Amendment 5):** every phase 1 SC met (spec › Phase 1 results); SC-006's 3-of-3
+  clause as the builder read it, SC-008's whole-turn half by margin (first live turns confirm it). The
+  contract's `moves` rule was already in (`1499819`). New OQ-10 (screen pixels for the 1 px floor).
+
+### Phase 1 follow-ups (Amendment 4, builder decisions 2026-11-16)
+
+Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block phase 2 except as noted.
+
+- [x] T057 (skill-builder) OQ-9 as answered: the session baseline keeps expression text and errors
+  during a lesson for `copiesExpression` (`mentor/tools/common.mjs`), and blanks them once the
+  lesson's record is saved or a new lesson replaces the baseline; `calls.jsonl` logs a refused
+  `record_lesson` call without the refused text. Tests for both blanking paths, a guard refusal across
+  two fresh servers (B1), and a log line with no refused text. **In progress on branch `015-oq9`.**
+  Before T040.
+  **Done 2026-11-16 (`f7fe578`, merged `4ce9bec`; mentor 1705 pass, 0 fail):** text cleared at the pass save
+  and for other passed lessons when one starts (SHA-256 kept, so "text changed" still works); refused calls
+  logged without the copied fields. Open: an abandoned unpassed lesson keeps its text until the next start
+  on that skill and comp (uninstall removes it); `UNSAFE_RECORD` refusals still log their arguments (one-line
+  fix with the same `omitFromLog`, not yet asked for).
+- [x] T058 (skill-builder) The `motion_from` wording in `.claude/skills/anchor-mentor/SKILL.md` and
+  `.claude/skills/null-parenting-mentor/SKILL.md`, from `specs/011-anchor/teaching-design.md` § 21 and
+  `specs/012-null-parenting/teaching-design.md` § 17 (OQ-8, widened). Wording only; leave the Pan
+  Behind "wrong layer" lines alone until T034. Take example sentences from the Pass lines, not
+  invented ones.
+  **Done 2026-11-16 (branch `015-t058`):** 011 TD § 21 and 012 TD § 17 wording in both `SKILL.md` files,
+  plus the Pan Behind lines rewritten to T034's rule (select the layer first); `anchor-check.mjs`'s
+  wrong-layer test unchanged (it never assumed a cause). Also `UNSAFE_RECORD` refusals logged without the
+  unsafe fields (T057's open item). Pivot case 06 and R-AN-WRONG-LAYER pin the old rule and need updating
+  with T059. Not done (tool items in both sections): the unkeyed-expression buckets, the demo refusal and
+  the null jump flag still read keyed expressions only.
+- [x] T059 (eval-engineer) After T058: pivot 57 and null 55 from those sections' Pass lines (held
+  since T035), plus one case where the learner asks about Shake Control's shake and the mentor says
+  it builds on the null's own Position (never "sets its own value"; E30), on the live T015 Comp 1
+  capture with its `\r` text. Case numbers from the cockpit. Each 3/3 on B1; the pivot and null sets
+  still meet SC-006 (T036's bar).
+  **Done 2026-11-16 (`33145ed`, about $16 on B1):** pivot 06 updated to the selected-layer rule and 3/3;
+  pivot 57 3/3, 59 3/3, null 55 3/3 (one regex miss, loosened). Pivot 58 (an unkeyed Position expression
+  named as the focus) 0/3 until T061: re-run it after T061 merges. The Shake Control "builds on" case
+  moved to spec 014's set.
+- [x] T060 (spec-writer) Record in the spec and hand to spec 014: the 1 px "too small to see" floor
+  (014 TD § 5.1a, H-7) is approved; the "hard to tell apart" band is deferred until after spec 014's
+  three sessions. Fold with T040.
+  **Done 2026-11-16:** spec OQ-8; handed to spec 014 through the cockpit (014 TD already has it, `d56b19d`).
 
 **Checkpoint:** spec 014 can build on phase 1.
 
@@ -270,6 +365,96 @@ pivot and null.
 
 ## Setup
 
+- [x] T061 (skill-builder) The code half of 011 TD § 21 and 012 TD § 17, which T058 left out (wording
+  only): the pivot leave-out groups, the demo refusal and the null jump flag still look only at keyed
+  expressions, so a layer whose unkeyed Position, Rotation, Scale or Anchor Point an expression drives
+  can be proposed or used as the demo target. Match T058's `SKILL.md` lines, with tests. Also: when one
+  `record_lesson` field copies an expression and another holds an email or phone number, only the copy
+  is left out of `calls.jsonl` (`mentor/tools/common.mjs` checks expressions first); leave out both.
+  Cockpit-numbered 2026-11-16. Before T036. **Done 2026-11-16:** `sourceExpressionOn` in `expressions.mjs` (R2 fully
+  read, on and no error); the pivot's buckets, `neededTimes` and demo refusal (new reason
+  `expression_rotation_scale`, R2 only), the null demo target and `expression_on_move`; the copy refusal's
+  log line also leaves out unsafe fields. Replay of 480 calls across all 115 pivot and null cases: only null
+  53 and 54 change (`demo_target` null with `no_qualifying_layer`; `expression_on_move` true).
+- [x] T062 (skill-builder) Two follow-ups from T061 (cockpit-numbered 2026-11-16, builder's go): (a) a keyed
+  expression that errors still leaves its layer out of the pivot lesson and the demos, while an unkeyed
+  one doesn't; make both follow "on and no error" (T001: AE plays the keys under an erroring
+  expression). (b) A `record_lesson` refused for not matching the lesson's checks still logs every field
+  to `calls.jsonl`; leave out any field holding an email or phone number, the reply unchanged. Replay
+  the pivot and null cases on old and new code and list the changed replies. **Done 2026-11-16:** (a) `expressionDrives`
+  in `expressions.mjs`: with R2 fully read, the pivot's flags, its demo, the null demo target and
+  `expression_on_move` take only source expressions, keyed or not; without R2, the keyed rule as before.
+  (b) `record_lesson` adds every email or phone field to `omitted_fields` on any refusal (mismatch,
+  already saved, validation's plain errors), and the server reads `omitFromLog` from any error; replies
+  unchanged. Replay of 524 calls across all 119 pivot and null cases: no reply changes (no capture has an
+  erroring keyed expression).
+- [x] T063 (skill-builder) Three `SKILL.md` fixes from T036 (cockpit-numbered 2026-11-16, builder's go), each
+  one line with its example from the rubric's Pass line: (a) key types case 33 (`names_blink`): a hint names
+  the layer or property it's about; (b) speed graph case 16 (R-RECORD-HONEST): a record summary says what
+  the learner did, never how the lesson went; (c) offset case 41 (R-SHOW-ME-AGAIN): say a shift as the
+  learner's gap ("later by your gap"), never a raw time. No change to eval cases, rubrics or `mentor/`.
+  Then EE re-runs each case `--repeat 3` on B1 (3/3 each).
+  **Done 2026-11-16 (`84693de`, re-runs `c7167ea`, about $15 on B1):** offset 41 3/3 (failing since 11-11);
+  key types 33 2/3 and speed graph 16 2/3, each fix holding in all 3 runs and the misses on other items
+  (a hint with menu steps, R-HINT-NOT-FIX; the judge strict on `attempted`). Offset demo cases 03, 16, 40 pass
+  (40 noise, 3/3). The builder took it as met. **Open, to come back to:** reword R-SHOW-ME-AGAIN's Fail line to
+  "numbers other than the learner's own gap" (EE); a key types line, a hint says what's off and where with
+  no menu path; maybe a speed graph line, the record's `attempted` names only what the check saw (SB).
+- [ ] T064 (skill-builder) FR-004a, the footprint shift in comp pixels (spec OQ-10, Amendment 6; research
+  R15; data-model § 1 `max_value` and § 6 `shifts`; contracts/describe-layers.md). Cockpit-numbered
+  2026-11-16, builder's go. New `mentor/lib/footprint-shift.mjs` on `comp-space.mjs`; `describe_layers`
+  adds `shifts` to each named layer and `read.shifts`; `snapshot.jsx`'s fine sweep adds `max_value` (and
+  its fixture-mode twin passes it through when present). No new AE write, no extra snapshot call,
+  FR-004's fields unchanged. Tests in `mentor/test/footprint-shift.test.mjs` on the live Comp 1 capture
+  (`mentor/test/fixtures/expressions/comp1.json`): SC-003a (*amended 2026-11-16, Amendment 8:* 12 of the 13 layers Shake Control moves, the title layer `chain_moves`; each within
+  0.05 px of 2·r·sin(θ/2) from the fixture's values, none under 1 px, rock.png between 8.6 and 9.4 px;
+  Position about 12.1 px each), plus one test per `null` reason in FR-004a on planted or edited
+  fixtures (none returns a number), the coarse-only case (`no_fine_sweep`), and SC-007's caps with
+  `shifts` in (rock.png ≤ 4 KB; a whole-comp summary has no `shifts`). Check that every skill tool's reply
+  on every eval fixture is byte-identical before and after (no skill sends `measure_layers`), then run
+  the mentor and hooks suites. Report the shifts the tool gives on Comp 1 in the hand-back (they replace
+  014 TD § 16's "about 9 px", the curriculum designer's edit).
+  **Shared code, sequenced by the cockpit:** T064 edits `mentor/` (`comp-reads.mjs`, `snapshot.jsx`,
+  `fixture.mjs`, a new lib file). Spec 014's mentor half (014 T008 to T016) edits `mentor/` too under its
+  own `--shared-owner` worktree, so T064 must not run as a second `mentor/` shared owner in parallel: the
+  cockpit either folds it into 014's mentor worktree or runs it before or after that one, cut from local
+  `main` and merged between live sittings (research R14). **Needed by:** 014's FR-007 ordering test on
+  Comp 1 (014 T037's situation 1 check, after its `fixtures/build.mjs` re-run) and 014's three sessions.
+  It doesn't block 014 T008 to T016 or phase 2. No eval case: no skill lists `describe_layers` in this
+  spec, and the ask set that reads the field is spec 014's.
+  **Sequencing decided 2026-11-16 (builder):** folded into spec 014's mentor worktree (014 T008 to T016),
+  so one skill-builder owns the new field and 014's reader of it.
+- [ ] T065 (skill-builder) FR-004b, own keys and switches in `describe_layers` (spec Amendment 7, E32,
+  OQ-12; data-model § 6; contracts/describe-layers.md). Cockpit-numbered 2026-11-16, builder's choice.
+  In `mentor/tools/comp-reads.mjs`, every layer entry gains `own_keys` (from the snapshot's
+  `layers[].properties`: `property`, `keys`, `key_types`, `expression_on` when on; detail adds
+  `display_path`), `locked`, `three_d`, and `collapse` on precomp and footage layers only; the `read`
+  block gains `own_keys` and `switches`. Named layers carry every field, empties included; the whole-comp
+  summary leaves out empty `own_keys` and switches that are off; a summary lists at most 8 keyed
+  properties, then `own_keys_more`. The pair rule is key types' `snaps` (L-1), exported from
+  `key-types.mjs` or moved to `analyze.mjs`, never copied. Reply-only: no snippet, `snapshot.jsx` or
+  fixture-mode change, no new AE write, no extra snapshot call. Tests (in
+  `mentor/test/comp-reads.test.mjs` or a new file) for SC-003b on the live Comp 1 capture and its
+  planted or edited fixtures, a switch read as `null` (not read, never `false`), a snapshot with no
+  `layer_info`, and SC-007 with the new fields (rock.png ≤ 4 KB; whole-comp ≤ 12 KB). Check that every
+  lesson skill's tool reply on every eval fixture is byte-identical before and after, then run the mentor
+  and hooks suites. Report the whole-comp summary's size on Comp 1 in the hand-back.
+  **Where:** in spec 014's `014-mentor` worktree, together with T064, under that worktree's one
+  `--shared-owner` for `mentor/` (research R14; never a second shared owner in parallel). **Needed by:**
+  spec 014's ask cases 05 (a keyed layer), 13 (keys under an expression that's on), 14 (separated
+  dimensions), 15 (a single key and hold keys) and 16 (a locked layer in a step), in
+  `product/evals/ask/cases/`, before 014's B1 run (014 T037). No eval case here: the ask set is spec 014's.
+- [ ] T066 (skill-builder) FR-004a's corrections (spec Amendment 9, *added 2026-11-16* from 014's reviews
+  T034 and T035; research R15 › Corrected; data-model § 6; contracts/describe-layers.md). Cockpit-numbered
+  2026-11-16. In `mentor/lib/footprint-shift.mjs`: (1) a Rotation source with non-uniform scale on any
+  layer above it needs `max_value` (`direction_unknown` without it), and Rotation above the source then
+  counts toward `chain_moves`; a Position source doesn't depend on its own layer's Rotation; (2) a named
+  text or shape layer whose box changes over time (keys or a varying active expression outside Transform,
+  or a sampled box that differs between samples) is `chain_moves`; (3) a 3D or Auto-Orient switch in the
+  chain read as anything but true or false is `switch_not_read`, never off. One unit test per case on
+  planted or edited fixtures (none returns a number); SC-003a's Comp 1 figures unchanged; skill replies
+  byte-identical; mentor and hooks suites pass. **Where:** a skill-builder on `014-mentor`, with T064 and
+  T065 under that worktree's one `--shared-owner` for `mentor/`. Tick it with T064 when built there.
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script
@@ -282,21 +467,28 @@ pivot and null.
 
 - [ ] T043 [US4] (skill-builder) Create `mentor/jsx/precomp-contents.jsx` (research R12;
   contracts/snippets.md): recursion by comp id with a memo, `max_depth` default 5, an id stack for
-  loops, places used through `usedIn`, per-layer R1 fields, keyed properties as path, count and
-  times, the expression inventory, and remap values per outer frame (cap 600, `remap_cut`).
+  loops, places used counted as **layers** in each comp `usedIn` lists (FR-023), per-layer R1 fields
+  with in and out points as AE reports them (in after out on a negative stretch), keyed properties as
+  path, count and times, skipping the hidden half of a separable Position (FR-006a), the expression
+  inventory, and remap values per outer frame (cap 600, `remap_cut`). No `sourceTime()`: it's
+  expression-only (research R12).
 - [ ] T044 [US4] (skill-builder) Add `--contents <file>` to `mentor/dev/capture.mjs` and the fixture
   twin `mentor/fixture/precomp-contents.mjs` (state file key `contents`; `not_read: fixture` without
   it). Tests in `mentor/test/fixture-precomp.test.mjs`.
 - [ ] T045 [US4] (skill-builder, AE) Capture into `mentor/test/fixtures/precomps/`: Comp 1's project,
-  Mentor Practice (Icon), and T006's four planted copies plus a 7-deep nest (for the depth limit).
+  Mentor Practice (Icon), and T006's four copies, re-planted with `mentor/dev/live-015/time-mapping.jsx`
+  (the T006 comp was deleted) and deleted again after, plus a 7-deep nest (for the depth limit).
 - [ ] T046 [US4] (skill-builder) Create `mentor/lib/precomp-time.mjs`: start, stretch (including
-  negative, per T006) and remap mapping, compounding through nests (FR-024). Tests in
-  `mentor/test/precomp-time.test.mjs`: SC-012, every mapped time within half an outer frame of
-  `time-mapping-key.json`.
-- [ ] T047 [US4] (skill-builder) Keys never shown (FR-025, E23) in `mentor/lib/precomp-time.mjs`.
-  Tests: Comp 1's 30 s precomps against T042's ground truth.
+  negative, per T006) and remap mapping, compounding through nests (FR-024), each key as ranges
+  `{ first, last, frames }`. Tests in `mentor/test/precomp-time.test.mjs`: SC-012, all 8 keys of
+  `time-mapping-key.json` within half an outer frame, copy D's two keys as ranges matching
+  `outer_first`, `outer_last` and `frames` (16 and 165).
+- [ ] T047 [US4] (skill-builder) Keys never shown (FR-025, E23) in `mentor/lib/precomp-time.mjs`,
+  using the span `[min(in, out), max(in, out))`. Tests: copy C's inner 0 (lands on the upper end) is
+  never shown and its inner 1 is; Comp 1's 30 s precomps against T042's ground truth.
 - [ ] T048 [P] [US4] (skill-builder) Tests in `mentor/test/precomp-read.test.mjs`: SC-011 (20 precomp
-  layers; 347 and 123; 353/321 and 242/131 told apart by id; places used), E21, E24 (Collapse
+  layers; 347 and 123; 353/321 and 242/131 told apart by id; places used), E21 (Icon Precomp's places
+  used is 4 layers, not 3 comps), E24 (Collapse
   reported), E25 (7-deep nest gives `too_deep` past 5; a loop fixture built by editing a capture's ids
   in the test, since AE prevents one).
 - [ ] T049 [US4] (skill-builder) Phase 2 in `describe_layers` (`mentor/tools/comp-reads.mjs`):
@@ -334,7 +526,11 @@ pivot and null.
   US1 (T017 to T019) → US2 (T020, T021, which use T017's reads) and US3 (T022 to T026, which use
   T017 and T019). T027 needs T017 to T021. T028 and T029 any time after T017.
 - **Gate:** T030 → T031 → T032 → T033, T034, T035 to T039 (T035, T037, T038, T039 in parallel; T036
-  after T035) → T040.
+  after T035) → T040. T057 before T040; T058 → T059 (T059 after T036's run or folded into it); T060
+  with T040. T064 after T040, sequenced against 014's mentor worktree (one `mentor/` shared owner at a
+  time); before 014's FR-007 test on Comp 1 and its three sessions (*met 2026-11-16:* built on `014-mentor`,
+  `2440c62`, so that test no longer waits).
+  T065 with T064 in the same `014-mentor` worktree; before 014 T037. T066 likewise (*added 2026-11-16*).
 - **Phase 2:** after T040. T042 and T043 can start together; T044 → T045 → T046 to T050 → T051 →
   gate.
 
@@ -358,5 +554,5 @@ T033, T034) are serial because of the one-driver rule, and T005, T006, T034 wait
 2. Phase 2 follows when phase 1's gate passes, and doesn't block spec 014's first version (the
    answer says "I couldn't see inside [precomp]" until then).
 
-**Task count:** 56 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
-which US4 8).
+**Task count:** 64 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
+which US4 8; phase 1 follow-ups T057 to T064: 8, added 2026-11-16). *Amended 2026-11-16:* 66 with T065 and T066.

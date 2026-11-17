@@ -1,7 +1,8 @@
 # Implementation Plan: Ask the mentor
 
 **Branch**: `014-ask-mentor` (spec folder only; build branches are the cockpit's) | **Date**: 2026-11-14 |
-**Spec**: [spec.md](spec.md) (approved 2026-11-14, OQ-1 to OQ-5 as recommended; constitution 1.5.0)
+**Spec**: [spec.md](spec.md) (approved 2026-11-14, OQ-1 to OQ-5 as recommended; amended 2026-11-16: FR-047 withdrawn,
+OQ-1 superseded; constitution 1.6.0)
 
 **Status**: Approved by the builder 2026-11-14 (PQ-1 to PQ-5 as recommended).
 
@@ -20,7 +21,8 @@ then the learner's choice. Three spec phases, as the spec orders them, plus a sh
   with `give_answer`: the mentor's answer is the call's four fields, checked by the tool (two offered
   skills at most, each among the steps' skills, no keyframe skill on keyless motion, the comp named
   first, none offered on B1). The panel opens ask-first, draws the answer from `give_answer`'s result
-  (never from prose), docks Your steps, and pauses Ask from the bridge's new `comp_active` flag.
+  (never from prose), docks Your steps, and keeps Ask available; with no comp active, the mentor's read answers "No comp open"
+  (`ask-nocomp`). (The bridge's `comp_active` flag was dropped 2026-11-16 after T001; research R10.)
 - **Phase 2, Go deeper (US2).** `go_deeper` saves a hand-in in `session.json` and the mentor hands over
   with the `Skill` tool on A. The pivot and null snapshot tools read the hand-in and open on the moving
   layer (K6); the pivot takes a null with children as its focus and grades the children's footprints
@@ -51,15 +53,15 @@ on B1, with situation 16 on A; the six sets and next-mentor re-run on B1.
 **Target Platform**: macOS, After Effects 27.0, the forked CEP bridge; runtime B1 for building, A for the
 sessions.
 
-**Project Type**: MCP server tools + skills + CEP panel + one bridge field.
+**Project Type**: MCP server tools + skills + CEP panel (no bridge change since FR-047 was withdrawn, 2026-11-16).
 
 **Performance Goals**: first sign of the mentor working ≤ 10 s in 9 of 10 ask turns on A (SC-004); median
 answer turn ≤ $0.10 and go-deeper lesson ≤ $0.40 on A (SC-005). The read is spec 015's (≤ 0.5 s added to
 a snapshot); the cost is mostly the skill's prompt, so `ask-mentor/SKILL.md` stays short (research R16).
 
 **Constraints**: ask mode never changes the project (FR-002); the panel never parses prose (FR-016, FR-048);
-no stand-in reads (FR-059); learner's words never in the record (FR-040, FR-045); the panel reads only the
-yes or no `comp_active` from the bridge (constitution II, 1.5.0).
+no stand-in reads (FR-059); learner's words never in the record (FR-040, FR-045); the panel reads nothing
+about the project from the bridge (constitution II, 1.6.0; FR-047 withdrawn 2026-11-16).
 
 **Scale/Scope**: one skill (new), three tools (new), changes to the six lesson skills and `/next-mentor`,
 about 30 panel state ids (MU › States), one eval set (about 25 cases).
@@ -71,7 +73,7 @@ about 30 panel state ids (MU › States), one eval set (about 25 cases).
 | Principle | How this plan meets it |
 |---|---|
 | I. Spec before build | Spec 014 approved 2026-11-14; teaching design and mockup approved the same day |
-| II. Decisions recorded | `decisions/003`, `005`: the ask tools are narrow and fixed (no script argument); `give_answer`, `go_deeper` and `note_said` touch only `session.json` and the record, never AE. The panel draws from tool results and the record, holds no teaching logic (which skill to offer, B1's empty offer and every guard are the server's), and reads one thing from the bridge: `comp_active` as true, false or null, **no name** (the 1.5.0 exception). `decisions/012`: Home ask-first, no review at the door. No new decision needed |
+| II. Decisions recorded | `decisions/003`, `005`: the ask tools are narrow and fixed (no script argument); `give_answer`, `go_deeper` and `note_said` touch only `session.json` and the record, never AE. The panel draws from tool results and the record, holds no teaching logic (which skill to offer, B1's empty offer and every guard are the server's), and reads nothing about the project from the bridge (constitution 1.6.0, 2026-11-16: the 1.5.0 `comp_active` exception was removed when FR-047 was withdrawn; research R10). `decisions/012`: Home ask-first, no review at the door. No new decision needed |
 | III. Teaching quality evaluated | New set `product/evals/ask/` (FR-061) built by the eval engineer, not the skill-builder; the six sets and next-mentor get the rule cases (FR-062) and re-run after each `SKILL.md` change |
 | IV. Privacy | The question, expression text and effect names stay in the conversation; the hand-in keeps no learner words (research R5); asked entries hold general terms only and pass the personal-detail check on every text field (FR-044) |
 | V. Simplicity and checkpoints | No new dependency. Many files, so this plan and tasks go to the builder first. Asked entries go in a new list so no existing reader changes (R8) |
@@ -83,7 +85,8 @@ about 30 panel state ids (MU › States), one eval set (about 25 cases).
 
 **Re-check after design:** still passes. Choices worth naming: the answer's words come only from
 `give_answer` (PQ-1), so the panel has nothing to parse; B1 is detected by the server from the helper's
-environment, fail-closed to B1 (R4); `comp_active` is `null`, never a guess, when AE is busy (R10).
+environment, fail-closed to B1 (R4). Re-checked 2026-11-16 against constitution 1.6.0 after FR-047's withdrawal: still
+passes, and simpler (no bridge change, no panel read of the project).
 
 ## Project Structure
 
@@ -100,7 +103,7 @@ specs/014-ask-mentor/
 ├── contracts/
 │   ├── ask-tools.md            # give_answer, go_deeper, note_said
 │   ├── hand-in.md              # K6 hand-in, K7, hand-back, opening order
-│   └── panel-ask.md            # what the panel reads and draws; result lines; comp_active
+│   └── panel-ask.md            # what the panel reads and draws; result lines
 ├── checklists/requirements.md
 └── tasks.md
 ```
@@ -124,7 +127,7 @@ mentor/
 ├── curriculum/path.json        # changed: short_name per skill (FR-021)
 └── test/*.test.mjs             # new tests per FR
 
-bridge/cep/host.js              # changed: /health adds comp_active (UPSTREAM.md noted)
+bridge/cep/host.js              # unchanged (T015 withdrawn 2026-11-16 with FR-047)
 
 .claude/skills/
 ├── ask-mentor/SKILL.md         # new
@@ -153,7 +156,7 @@ lesson code paths don't change.
 
 | Phase | Tasks | Waits on | Gate |
 |---|---|---|---|
-| **0. Before build** | T001 to T007 | Nothing | `comp_active` live facts and the hand-over test folded into research |
+| **0. Before build** | T001 to T007 | Nothing | The comp-active live facts (FR-047 withdrawn on them), the hand-over and practice tests folded into research |
 | **1. Answer** (US1, US3) | T008 to T040 | Mentor half: spec 015 T040 (phase 1 shippable). Panel half: nothing | Ask set on B1 (SC-006's B1 half for phase 1 cases); panel states (SC-011 for phase 1 ids) |
 | **2. Go deeper** (US2) | T041 to T063 | Phase 1 merged; spec 015 T026 (`motion_from`, pivot and null) and T023 (K2 in the pivot check) | Pivot, null, ask sets on B1; go-deeper panel states |
 | **3. Follow-through** (US4, US5, US6) | T064 to T087 | Phase 1; FR-029 and FR-035 wait on spec 015 T022 to T025 (K2) | All six sets, next and ask on B1 (SC-006, SC-007) |
@@ -167,8 +170,9 @@ lesson code paths don't change.
   count refusals per case; a guard that fires on more than 1 in 10 good answers gets loosened.
 - **Cost per answer over $0.10** because the skill's prompt is large (the baseline spent $0.16 loading one
   skill). R16 keeps `SKILL.md` short and the read to the summary shape first.
-- **`comp_active` is wrong while the CEP panel has focus** (T001 checks); if so, the flag stays `null`
-  and `ask-nocomp` covers it.
+- ~~**`comp_active` is wrong while the CEP panel has focus**~~ Closed 2026-11-16: T001 found panel focus
+  doesn't change it, but a "no" is wrong after a Project panel click, so the flag was dropped (FR-047
+  withdrawn) and `ask-nocomp` covers no comp.
 - **Spec 015 slips.** The panel half of phase 1 and every test on 015's captures can start; the skill half
   can't (FR-059).
 - **Usage limits stall the eval gates** (seven stalls in parallel run 3). One set at a time.

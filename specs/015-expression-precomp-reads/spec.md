@@ -4,18 +4,111 @@
 
 **Created**: 2026-11-14
 
-**Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3).
+**Status**: **Phase 1 shippable (2026-11-16, T040)**: spec 014 can build on it. Phase 2 (US4) not
+started (next: T041). Phase 1 follow-ups: FR-004a (OQ-10) built by T064 on `014-mentor` (`2440c62`, SC-003a met, Amendment 8); FR-004b (Amendment 7) open: T065. FR-004a's Amendment 9 corrections (non-uniform scale, the named layer's box, `switch_not_read`) open: T066. Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3). Phase 1's results are in Success Criteria › Phase 1 results.
 
 **Amendment 1 (2026-11-14, Phase 0 live checks, T008; approved by the builder 2026-11-14 with OQ-8 as recommended):** evidence in
 `discovery/usage-notes/expression-reads.md` (session 1) and the corrected finding 4 in
 `discovery/usage-notes/ask-baseline.md`. **AB turn f was most likely a real edit** (Pan Behind took
-Shake Control, the null over the rock, and changed its anchor), not playhead or expression motion. The
+Shake Control and changed its anchor), not playhead or expression motion. The
 check was right to see a change; the failure was that it named a side effect ("moved up at 2.6 s")
 instead of the cause (Shake Control's pivot moved, not rock.png's). Also: an erroring expression stays
 on in AE 27.0 and gives its base value; values don't change between reads at one time, but `wiggle`
 changes when the layer's index changes; separating or joining dimensions clears the expression. Changed
 here: US1 #6, US3 (story, why, test, scenarios), FR-006, FR-012 to FR-014, new FR-013a and FR-014a,
 SC-005, Edge Cases E4, E7, E17, E18 and new E28, Eval plan, Assumptions, and OQ-8 (new).
+
+**Amendment 2 (2026-11-14, Phase 0 session 2, T008's second fold):** evidence in
+`discovery/usage-notes/expression-reads.md` session 2 (`9d05420`, `cf37e7e`) and
+`mentor/test/fixtures/precomps/time-mapping-key.json`. T005 confirmed by hand that Pan Behind on
+Shake Control moves its base Position and Anchor Point together (+561, −120), keeps the children
+still (0.07 px) and leaves the shake running, the same edit as T004's fit (572, −114); it took Shake
+Control, which was both selected and under the cursor; which rule decides is open (T034). The hidden half of a
+separable Position holds stale values that don't draw. T006 confirmed the time-mapping formula on all
+eight keys, with three rules: a negative stretch reports the in point after the out point, a remapped
+key holds over a range, and "places used" counts layers, not comps. Changed here: US3's why, new
+FR-006a, FR-023 to FR-025 tightened, SC-005 (a), SC-011, SC-012, Edge Cases E21, E22, E23 and new
+E29, Assumptions. No approved decision changes.
+
+**Amendment 3 (2026-11-16, the T031 review of phase 1; fixes on `015-reads-p1`):** documentation
+to match the build, add or tighten only. Changed here: FR-018 (partial walks and the sweep budget),
+OQ-7 (the guard as built, plus a note for spec 014), new OQ-9 (`session.json` holds expression text)
+and an open item for T034 (which layer Pan Behind takes). Data model § 1, § 3, § 4 and § 5 match the
+build (`effect` omitted when nothing moved; `motion_from` absent on older snapshots;
+`static_as_read`'s old meaning on older snapshots; `k2-changes.mjs`).
+
+**Amendment 4 (2026-11-16, builder decisions on OQ-8 and OQ-9; T033's Comp 1 capture, merge `1499819`):**
+add or tighten only. OQ-9 answered: the session baseline keeps expression text and errors during a
+lesson and blanks them when the record is saved or a new lesson replaces the baseline; refused
+`record_lesson` calls are logged without the refused text; spec 006's uninstall always removes the
+session file. OQ-8 widened: the pivot and null `motion_from` wording is carried here (from 011 TD § 21
+and 012 TD § 17), and the 1 px "too small to see" floor (014 TD § 5.1a, H-7) is approved, the "hard to
+tell apart" band deferred. New edge case E30 and an Assumptions line: AE 27.0 gives expression text
+with `\r` line ends. Changed here: Edge Cases (E30), Out of scope (the one pivot line becomes the pivot
+and null `motion_from` lines), Assumptions, OQ-8, OQ-9; `contracts/describe-layers.md` (a parent's
+`moves` said once in a summary); tasks T057 to T060 (new, phase 1 follow-ups). No approved decision
+changes.
+
+**Amendment 5 (2026-11-16, T040 and T060: phase 1's gate results):** evidence in
+`discovery/usage-notes/expression-reads.md` session 3 (T033, T034), each eval set's README (T036,
+`1c6789b`) and tasks T033 to T039, T057 to T059 and T061 to T063. Every phase 1 SC is met; SC-006's
+3-of-3 clause and SC-008's whole-turn half are met as the notes under Phase 1 results say, not by the
+letter of a fresh run, and both notes are there for anyone who disagrees. T034 settled which layer Pan
+Behind takes on AE 27.0 (the selected layer; with nothing selected, the top layer under the cursor).
+T060: the 1 px floor is recorded as approved and handed to spec 014 (OQ-8). New OQ-10: the floor is
+measured in screen pixels on the asked layer, which FR-004 doesn't give. Changed here: Status, Success
+Criteria (Phase 1 results), Assumptions (T034, A runs), OQ-8, the T034 open item (answered), OQ-10
+(new). No requirement or approved decision changes.
+
+**Amendment 6 (2026-11-16, OQ-10 answered by the builder as recommended):** add only. New FR-004a: for
+each parent expression that moves an asked layer, `describe_layers` gives the peak shift of that layer's
+box in comp pixels, worked out in the mentor from values the sweep already reads, so the 1 px floor
+(014 TD § 5.1a) applies to Rotation and Scale as well as Position. Changed here: Status, FR-004a, new
+SC-003a (with a Phase 1 results row), SC-007's note, Edge Cases (new E31), OQ-10 (answered), new
+OQ-11; plan (summary, structure), research (new R15), data model (§ 1 sweeps, § 6),
+`contracts/describe-layers.md` (the field), tasks T064 (new). FR-004's fields don't change. No approved
+decision changes.
+
+**Amendment 7 (2026-11-16, builder's choice relayed by the cockpit; from spec 014's skill-builder):** add
+only. `describe_layers`' layer summary and detail said nothing about a layer's **own** keys or its Locked,
+3D and Collapse Transformations switches, so in the ask mode a layer with keys and no parent or
+expression read the same as a still one, and the mentor couldn't give a step that depends on the lock.
+The snapshot already reads all of it (`layers[].properties[].keys`, `layer_info[].locked`, `three_d`,
+`collapse`), so this adds fields to the reply only: no snippet change, no new AE write, no extra snapshot
+call. New FR-004b: for each layer, its own keyed properties (key count and a key-types rollup in the
+existing terms, a single key being "set, not animated" as 014's K4 counts it) and the three switches.
+The whole-comp summary leaves out empty lists and switches that are off, so SC-007's 12 KB cap holds.
+Needed by spec 014's ask cases 05 and 13 to 16 (`product/evals/ask/cases/`). Changed here: Status,
+FR-004b (new), FR-016 (a pointer), new SC-003b (with a Phase 1 results row), SC-007's note, Edge Cases
+(new E32), new OQ-12; data model § 6, `contracts/describe-layers.md` (fields, read block, limits), plan
+(summary, phases table), tasks T065 (new). FR-004 and FR-004a don't change, and no skill's tool reply
+changes. No approved decision changes.
+
+**Amendment 8 (2026-11-16, T064's results; builder's answers relayed by the cockpit):** SC-003a's "every
+one of the 13 layers" conflicted with FR-004a on Comp 1. The title layer (DISCOVER the past to INSPIRE the
+future) has its own Position keys at 2.503 s and 2.636 s, and the Rotation peak (2.569 s) falls between
+them, so its position at the peak differs from its position at the reading time (3.403 s). FR-004a makes
+that `shift_px: null` with `chain_moves`, which is what T064 returns. **FR-004a stands;** SC-003a now
+expects numbers on 12 of the 13 layers and `chain_moves` on the title, and research R15's scratch figure
+for the title (6.84 px, worked from the reading-time position, which R15's own rule rules out) is
+corrected. SC-003a is met (Phase 1 results). OQ-12 answered as recommended; the key-types names in
+FR-004b are kept. Changed here: Status, SC-003a, Phase 1 results (SC-003a row), OQ-12; research R15.
+No requirement or approved decision changes.
+
+**Amendment 9 (2026-11-16, from spec 014's reviews T034 and T035; relayed by the cockpit):** add only.
+The code on `014-mentor` is right and research R15 was wrong in three places, so FR-004a's `null`
+reasons grow to match it. (1) **Rotation under a non-uniform scale:** R15 said the sign of a Rotation
+peak doesn't change the distance and that any Rotation above the source layer is exempt. Neither holds
+when a layer above the Rotation source has non-uniform scale: the peak's direction is then needed
+(`direction_unknown` without it), and Rotation above the source counts toward `chain_moves`. A Position
+source doesn't depend on its own layer's Rotation, since Position applies in the parent's space.
+(2) **The named layer's box can change:** a text or shape layer whose box changes over time (keys or a
+varying expression outside Transform, such as Rectangle Size, Path, Source Text or a text animator, or
+a sampled box that differs between samples) is `chain_moves`. (3) **New reason `switch_not_read`:** a 3D
+or Auto-Orient switch in the chain that couldn't be read (anything but true or false) returns `null`
+with this reason, never treated as off. Changed here: Status, FR-004a; research R15; data model § 6;
+`contracts/describe-layers.md`; tasks T066 (new, cockpit-numbered). SC-003a's figures don't change (no
+layer above Shake Control). No approved decision changes.
 
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
@@ -168,7 +261,7 @@ rock.png's", not a side effect such as "Shake Control moved up at 2.6 s". Motion
 an expression (the playhead moved, or a layer's index changed under a `wiggle`) is never reported as
 mine.
 
-**Why this priority**: in AB turn f the check saw a real edit (Pan Behind took the null over the rock,
+**Why this priority**: in AB turn f the check saw a real edit (Pan Behind took Shake Control,
 `expression-reads.md` T004) but named its side effect, so neither the builder nor the mentor could tell
 what had happened, and the advice was "Edit > Undo until it's back" for a move the builder didn't
 recognize. The other half of K2 (TD 014 § 10.1 rule 3) still stands: expression motion must never be
@@ -262,14 +355,18 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 | E18 | `random()` without a seed, `wiggle()` | Same value between reads at one time on the same index (T002) | A learner change | Live (T002 done) |
 | E19 | Parent expression that's constant (`value`) | Doesn't move children (sampled result never varies) | Moves children | Planted |
 | E20 | Same-name comps, nested | By id | By name | Comp 1 (353/321, 242/131) |
-| E21 | Comp used in several places | Count of places | Read once and assumed to show the same everywhere | Comp 1 |
-| E22 | Start offset, stretch (including negative), time remap | Inner times mapped to outer time | Inner key times as outer times | Mentor Practice Icon plus planted (none in Comp 1) |
-| E23 | Precomp longer than it's shown | Keys outside the shown time flagged | Counted as visible motion | Comp 1 (30 s precomps in a 5 s comp) |
+| E21 | Comp used in several places | Count of **layers** using it (T006: Icon Precomp is in 3 comps but 4 layers) | Count the comps `usedIn` lists; read once and assume it shows the same everywhere | Comp 1, Mentor Practice (Icon) |
+| E22 | Start offset, stretch (including negative), time remap | Inner times mapped to outer time; with a negative stretch, the in point is after the out point and the shown span is [lower, upper); with time remap, a key whose remap value is flat maps to a **range** of outer frames | Inner key times as outer times; assume in < out; one time for a held remap | T006 answer key (`time-mapping-key.json`) |
+| E23 | Precomp longer than it's shown, or a key landing exactly on the span's end | Keys outside the shown time flagged; a key on the end of [lower, upper) never shows (T006's reversed copy) | Counted as visible motion | Comp 1 (30 s precomps in a 5 s comp), T006 copy C |
 | E24 | Collapse Transformations on a precomp layer | Reported with the precomp | Ignored | Live |
 | E25 | Depth limit, or a cycle | "Not read: too deep" or "not read: loop" | Empty | Planted (cycle: unit only; AE prevents one) |
 | E26 | Expressions inside a precomp that reference the outer comp | Not followed (as E13) | Resolved | Planted text |
 | E27 | Older snapshot or fixture without the new fields | "Not read" | "None" | Comp 1's committed snapshot |
+| E29 | Hidden half of a separable Position (X/Y when joined, Position when separated) | Skipped: its values are stale and never draw (FR-006a) | Report its value, keys or expression | Planted (T015) |
 | E28 | A layer's index changes under a `wiggle` (a layer added or removed above it, such as the null skill's null) | Its after-expression values change with no edit (T002: about 6 px); compared on base, so nothing is reported | A learner change on that layer | Planted (T015) |
+| E30 | Expression text with `\r` line ends (AE 27.0 returns them; Amendment 4) | A `//` comment ends at `\r`, `\r\n`, `\n`, U+2028 or U+2029, so `value` after it counts (Shake Control builds on value); the snapshot keeps AE's text raw, and only `describe_layers` detail and text comparisons normalize line ends (`normalizeLineEnds()`) | Read the rest of the text as one comment and report "sets its own value"; a line-end-only difference reported as "text changed" | Comp 1 live capture (T015, `1499819`) plus unit text |
+| E31 | A parent's Rotation or Scale expression moves a child by an amount in degrees or percent (FR-004a) | The child's peak shift in comp pixels, through its distance from the parent's pivot; `shift_px: null` with a reason when the chain is 3D, auto-oriented, boxless, moving, or the direction wasn't recorded | Degrees or percent given as the size; a hand estimate; 0 for "couldn't work it out" | Comp 1 capture (Shake Control's Rotation, 0.589° fine peak) plus planted unit fixtures |
+| E32 | A layer's own keys and switches in `describe_layers` (FR-004b) | Each keyed property with its key count and rollup: one key is "set, not animated"; a pair with a hold on either side counts as held (key types' rule, L-1); a keyed property whose expression is on says so; separated dimensions as X and Y Position, never the hidden half (FR-006a); a precomp layer's own keys only (inside is phase 2). Locked and 3D as read; Collapse only on precomp and footage layers (OQ-12); a switch that wasn't read, or an older snapshot with no `layer_info`, is not read | A single key as motion; a keyed layer read like a still one; a hold on the second key's in side as not held; `false` for a switch that wasn't read; a text or shape layer's Collapse (AE reads it on, spec 004 T136) as a switch the learner turned on | Comp 1 capture (3 keyed properties, a text layer reading Collapse on) plus planted fixtures (single key, all held, in-side hold, some held, locked, 3D) |
 
 ## Requirements *(mandatory)*
 
@@ -293,6 +390,70 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   largest difference from the base value over the comp's duration (in the property's units: pixels,
   degrees, percent), the time of that peak, and whether the result varies at all. The sampling step
   is set in the plan; the result is marked as sampled (TD 014 § 19 "Checked 2026-11-14"; see OQ-4).
+- **FR-004a** *(added 2026-11-16, OQ-10)*: For each layer a caller names, and for each active
+  transform expression on a layer in its parent chain that moves it (FR-005's `moves_children` by
+  expression), `describe_layers` MUST give that expression's **peak footprint shift on the named
+  layer, in comp pixels**: how far the named layer's farthest box corner moves at the expression's
+  peak, compared with the same layer with that one property at its base value. It also gives the peak's
+  time and `sampled_every` from FR-004's fine sweep, and is marked as sampled and as measured on the
+  layer's box, not its visible pixels (OQ-11). This is what 014 TD § 5.1a's 1 px floor and "say its
+  size" are measured in, for Position, Anchor Point, Rotation and Scale alike.
+  - **Worked out, never read anew:** computed in the mentor (Node) with the existing comp-space math,
+    from the fine sweep's peak and the snapshot's transform samples. No new AE write, no extra
+    snapshot call, and FR-004's fields stay as they are. The sweep MAY record the value it already
+    read at its peak (additive; research R15).
+  - **Never a guess:** when the shift can't be worked out exactly from what was read, the entry is
+    `shift_px: null` with a reason, never an estimate, a property-unit number in its place, or 0.
+    At least: a 3D layer anywhere in the chain (`three_d`); Auto-Orient on (`auto_orient`); the named
+    layer has no box (a null, camera, light or audio layer; `no_rect`); a layer in the chain has no
+    sample at the reading time (`not_sampled`); no fine sweep for that expression, because the budget
+    cut it, it errored, or the snapshot is older (`no_fine_sweep`; a coarse peak is never used); a value
+    the shift depends on could differ between the reading time and the peak, because it has keys or
+    a varying active expression (`chain_moves`; research R15 lists which values count); the peak's
+    direction is needed but wasn't recorded (a Scale source, or a Position or Anchor Point source
+    through a non-uniform scale, on a snapshot without the sweep's peak value; `direction_unknown`); a
+    scale of 0 (`singular`).
+    *Added 2026-11-16 (Amendment 9):* a Rotation source with non-uniform scale on any layer above it
+    also needs the peak's direction (`direction_unknown` without it), and Rotation above the source then
+    counts toward `chain_moves`. A named text or shape layer whose box changes over time (keys or a
+    varying active expression outside Transform, such as Rectangle Size, Path, Source Text or a text
+    animator, or a sampled box that differs between samples) is `chain_moves`. A 3D or Auto-Orient
+    switch in the chain that couldn't be read (anything but true or false) is `switch_not_read`, never
+    taken as off. A Position source doesn't depend on its own layer's Rotation (Position applies in the
+    parent's space).
+  - **Scope:** only layers named in `layers` (not a whole-comp summary, which says the read as
+    `not_read: "not_asked"`), and only parent-chain expressions, as approved. Opacity and non-transform
+    expressions get no entry (they don't move the box). Each expression is converted on its own; two
+    sources together are not combined (the deferred "hard to tell apart" band, 014 TD § 5.1a).
+- **FR-004b** *(added 2026-11-16, Amendment 7)*: `describe_layers` MUST give, for each layer in its
+  summary and detail, the layer's **own keys** and its **Locked, 3D and Collapse Transformations
+  switches**, from the snapshot it already takes (no snippet change, no new AE write, no extra snapshot
+  call).
+  - **Own keys:** one entry per property on the layer with one or more keys (the snapshot's
+    `layers[].properties`, which already skip the hidden half of a separable Position, FR-006a), each
+    with its key count and one rollup of its key types:
+    - one key: **set, not animated** (`single_key`, the term `analyze.mjs` already uses; the same line
+      spec 014's K4 draws, where motion needs two or more keys on one property);
+    - two or more keys, every pair snaps: **all held**;
+    - two or more keys, no pair snaps: **none held**;
+    - two or more keys, some pairs snap and some don't: **some held**.
+    A pair snaps by key types' rule (`key-types.mjs`, L-1): a hold on the first key's out side, or on
+    the second key's in side. The rule is reused, never copied (spec 009 FR-022). An entry also says when
+    the property's expression is on, so the keys are read with that expression (its own entry in
+    `expressions` says whether it builds on them). A precomp layer's entries are its own layer's keys
+    only; what's inside is phase 2.
+  - **Switches:** `locked`, `three_d` and `collapse` as the snapshot reads them (`layer_info`).
+    `collapse` is given only on precomp and footage layers, where it's a switch the learner sets
+    (Collapse Transformations, or Continuously Rasterize on vector footage); on text and shape layers
+    AE reads it on whatever the switch shows (spec 004 T136), so it's left out there (OQ-12). A switch
+    whose read failed (the snapshot's `null`), or a snapshot with no `layer_info`, is said as not read,
+    never `false`.
+  - **Size:** a named layer (in `layers`) always carries its own keys (an empty list when it has none)
+    and every switch that applies. The whole-comp summary (no `layers`) lists own keys only on layers
+    that have them and a switch only when it's on, and its `read` block says that a layer without them
+    has none (SC-007). A summary lists at most 8 keyed properties per layer and counts the rest; detail
+    lists them all with their display paths.
+  - **Byte-identical skills:** no lesson skill's tool reply changes (no skill lists `describe_layers`).
 - **FR-005**: The motion-sources map (spec 004 FR-014) MUST include expressions on any property: its
   read status for expressions changes from keyed-only to all, and each parent's `moves_children` MUST
   be true when the parent has keys on a moving transform property **or** an on, error-free transform
@@ -302,6 +463,11 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   is off or has an error MUST NOT count as a source of motion, and an erroring one MUST be reported as
   on with an error, never as working (AE 27.0 keeps it on and gives the base value, T001). Only the
   side of a separable Position in use is read (E3, E4, E7).
+- **FR-006a**: Every read that walks properties (the expression read, base values, sweeps, and phase 2's
+  inner keyed and expression reads) MUST skip the hidden half of a separable Position: Position when
+  its dimensions are separated, X, Y and Z Position when they're joined. The hidden half holds stale
+  values that never draw (T005 session: joined X/Y read 960, 540; separated Position reads the last
+  joined value) and MUST NOT be reported as a value, a key or a source (E29).
 - **FR-007**: Effects on every layer MUST be named, keyed or not, with which of their properties are
   keyed or expression-driven (TD 014 Q5).
 
@@ -351,12 +517,15 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   properties, on and error flags, builds-on-value flags, how much each transform expression moves,
   incoming and outgoing link counts, effect names, and read status), with **no expression text**. A
   **detail** for named layers (index, or name when unique), with each expression's text, capped at a
-  length set in the plan with a "cut short" flag and the full length (SC-007).
+  length set in the plan with a "cut short" flag and the full length (SC-007). *Added 2026-11-16
+  (Amendment 7):* both shapes also carry FR-004b's own keys and switches.
 - **FR-017**: A layer asked for by a name two layers share MUST return the candidates (index and
   parent) instead of guessing.
 - **FR-018**: A read that didn't run, ran only in part, or met an older snapshot MUST say "not read"
   with the reason, never "none", empty or false (E27). The motion-sources map's existing pattern
-  (`not_read`) is kept.
+  (`not_read`) is kept. A read that ran only in part (a property threw during the expression walk)
+  MUST say **partial**, never "all". A sweep skipped for its time budget MUST say not read with the
+  reason "budget", so "doesn't vary" is never inferred from a sweep that didn't run (data-model § 1).
 - **FR-019**: The reads MUST be read-only: no change to the project, its selection, the playhead or
   the active comp. They run as fixed snippets through the bridge, with no script text from the model
   (constitution II).
@@ -372,11 +541,17 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   links and effects as phase 1, for each inner comp. Every comp MUST be identified by its **id**, with
   its name as a label only (E20).
 - **FR-023**: For each comp read, the read MUST give its duration, size, frame rate and how many
-  layers across the project use it as a source (E21).
+  layers across the project use it as a source, counted by **layers**, not by the comps that hold
+  them (one comp can hold it twice; E21).
 - **FR-024**: For each precomp layer, inner key times MUST be mapped to the outer comp's time through
   start time, stretch (including negative) and time remap, and nested mappings MUST compound (E22).
-- **FR-025**: Inner keys and expression peaks that map outside the precomp layer's in and out points,
-  or outside the outer comp, MUST be counted and flagged as never showing (E23).
+  Without remap, outer = start time + inner time × stretch / 100. With remap, an inner key maps to every
+  outer frame whose remap value equals it, and a run of such frames MUST be reported as a **range**
+  (first, last, frame count), not one time.
+- **FR-025**: Inner keys and expression peaks that map outside the precomp layer's shown span, or
+  outside the outer comp, MUST be counted and flagged as never showing (E23). The shown span is
+  [lower, upper) of the in and out points, whichever order AE reports them in (a negative stretch
+  reports in after out), so a key landing exactly on the upper end never shows.
 - **FR-026**: Recursion MUST stop at a depth limit (set in the plan; OQ-5) and on a repeated comp id,
   reporting the reason (E25). Each comp's contents are read once and shared across the places it's
   used.
@@ -425,12 +600,34 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 - **SC-003**: On Comp 1, rock.png's motion sources name Shake Control as moving its children by
   expression, and Shake Control's Position shows a base of (960, 540) and an after-expression value
   within 0.1 px of (952.4, 542.5) at 0.6 s. *Measured by:* unit test plus one live read.
+- **SC-003a** *(added 2026-11-16, FR-004a)*: On the live Comp 1 capture
+  (`mentor/test/fixtures/expressions/comp1.json`), Shake Control's Rotation (fine peak 0.589° at
+  2.569 s) gives a footprint shift on **12 of the 13 layers it moves**, each within 0.05 px of a
+  hand calculation from the fixture's own values (2·r·sin(θ/2), r the farthest box corner's distance
+  from Shake Control's pivot), and **none under 1 px**. The 13th, the title layer, gives `shift_px:
+  null` with `chain_moves` for both sources: its own Position keys (2.503 s and 2.636 s) bracket the peak,
+  so its place at the peak isn't its place at the reading time (*amended 2026-11-16, Amendment 8*). rock.png's is **between 8.6 and 9.4 px**, the
+  range of 014 TD § 16's hand estimate ("about 9 px"). Shake Control's Position (fine peak 12.147 px)
+  gives about 12.1 px on each of the same 12 (no layer above it). Every `null` reason in FR-004a has a unit test on a
+  planted or edited fixture, and none returns a number. *Measured by:* unit tests (T064).
+- **SC-003b** *(added 2026-11-16, FR-004b)*: On the live Comp 1 capture, named-layer summaries give
+  exactly the 3 keyed properties the capture holds, each matching its key count and rolled up as none
+  held (the text layer's Position, 2 keys; Sweep Control's Position, 2; General Logo Animation
+  Graphics.png's Rotation, 6), and rock.png gives an empty own-keys list with Locked, 3D and Collapse
+  off. The text layer (AE reads Collapse on) carries no `collapse`. The whole-comp summary stays
+  **at most 12 KB** (SC-007; about 10.8 KB expected: 10.5 KB today plus about 0.3 KB). On planted or
+  edited fixtures, each rollup (set, not animated; all held; none held; some held), a hold on only the
+  second key's in side (held), a keyed property with its expression on, separated X and Y Position,
+  a locked layer, a 3D layer, and a switch read as `null` (not read) each have a test. Every lesson
+  skill's tool reply on every eval fixture is byte-identical before and after. *Measured by:* unit
+  tests (T065).
 - **SC-004**: The easing findings on Mentor Practice are **identical** before and after phase 1 and
   after phase 2 (spec 004 SC-004), and Comp 1 yields 0 keyframe-skill findings from Shake Control or
   the Sweep Center. *Measured by:* unit test.
 - **SC-005**: Through each skill check with an other-changes list (pivot, null, offset, key types,
   speed graph), on fixtures derived from the Comp 1 capture:
-  - (a) AB turn f's edit (T004's fitted Anchor Point change on Shake Control) gives **exactly one**
+  - (a) AB turn f's edit (T004's fitted Anchor Point change on Shake Control, confirmed by T005's
+    hand edit of the same kind, +561, −120) gives **exactly one**
     change, Shake Control's Anchor Point, with its footprint shift attached, and **no** separate moved
     entry for Shake Control (pivot and null; the keyed-value checks report the anchor change);
   - (b) the same reads with only the playhead moved give **0** changes (E17a);
@@ -446,7 +643,11 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   whole-comp summary **at most 12 KB**, the summary holds **no** expression text, and one expression's
   detail is capped (FR-016). *Measured by:* unit test on Comp 1 and a planted comp with 30 expressions.
   The caps are a first guess (Comp 1's full ground truth, with all text, is 7.5 KB); the plan may
-  tune them with a reason.
+  tune them with a reason. FR-004a's shifts count toward the same caps (*2026-11-16*). So do FR-004b's
+  own keys and switches (*2026-11-16, Amendment 7*): said in full on every layer, they'd add about
+  1.9 KB to Comp 1's whole-comp summary and break 12 KB, so the whole-comp summary leaves out empty
+  lists and switches that are off (about 0.2 KB on Comp 1), and a layer's summary lists at most 8 keyed
+  properties.
 - **SC-008**: Read time: phase 1 adds **at most 0.5 s** to a snapshot of Comp 1 and of Mentor Practice,
   and a whole-turn first activity on a skill stays **≤ 10 s** (spec 003 SC-004). Measured live today:
   60 ms for all 4,720 of Comp 1's properties. *Measured by:* the builder, timings in usage notes.
@@ -457,14 +658,39 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   (spec 004 SC-002's bar) across Comp 1 and the planted cases, including at least one off and one error
   expression. *Measured by:* the builder, in usage notes.
 
+**Phase 1 results (T040, 2026-11-16).** Phase 1 merged at `a3300e3`; the follow-ups (T057 to T059, T061
+to T063) merged after it. "Live" means AE 27.0.
+
+| SC | Result | Evidence |
+|---|---|---|
+| SC-001 | Met | Unit test on the live Comp 1 capture (T015, `91fd02b`): 3 expressions, text identical, 2 build on value, 1 sets its own. The capture found the `\r` fault (E30), fixed at `1499819` |
+| SC-002 | Met | T021's tests on the same capture; spot checks 3 and 4 live (T034) |
+| SC-003 | Met | Unit test, plus T033's live read: base (960, 540), after (952.352, 542.492) at 0.6 s; rock.png's source is Shake Control by expression |
+| SC-003a | Met (as amended by Amendment 8) | T064 on `014-mentor` (`2440c62`), unit tests on the live Comp 1 capture. Rotation: rock.png 9.36 px, logo.png 8.6 px, the ten Shakers precomps 11.32 to 11.33 px. Position: 12.15 px on each of those 12. The title layer: no number for either, `chain_moves`. All within 0.05 px of 2·r·sin(θ/2), none under 1 px; mentor tests 1817 pass, 4 todo. rock.png's 9.36 px replaces 014 TD § 16's "about 9 px" estimate (the curriculum designer's edit, SB-4) |
+| SC-003b | Open (added by Amendment 7) | T065 |
+| SC-004 | Met (phase 1 half) | T016's test; T033: Mentor Practice's easing findings identical before and after the merge, old code on a pre-merge capture and new code on a new one |
+| SC-005 | Met | T022 to T025's unit tests, one set per skill check |
+| SC-006 | Met, with the builder's reading of the 3-of-3 clause | T036 at `edc0a1e` (`1c6789b`): easing 32/33, key types 35/36, speed graph 35/37, offset 42/44, pivot 61/64, null 50/55; every hard-rule check passes. The K2 cases (pivot 55, 56; null 53, 54; offset 44) and T059's (pivot 57 to 59, null 55) passed 3/3 on B1 earlier (T035, T059; null 53, 54 and pivot 58 again after T061) and passed once each in the full run at `edc0a1e`; the builder took that as meeting 3 of 3, with no repeat at that commit. After the run, T063 changed one line each in key types, speed graph and offset `SKILL.md` (`84693de`); those cases re-ran on B1 (`c7167ea`: offset 41 3/3, key types 33 and speed graph 16 2/3 on other items, already counted as fails above), so every set stays at its bar |
+| SC-007 | Met | T027's tests; live Comp 1 whole-comp summary 10.5 KB (was 12.4 KB before a parent's `moves` was said once, `1499819`; contracts/describe-layers.md › Limits) |
+| SC-008 | Snapshot half met live; whole-turn half met by margin, not re-measured | T033: Comp 1 about 165 to 210 ms (+45 ms), Mentor Practice about 129 to 137 ms (+8 ms), budget 0.5 s. No lesson has run in the panel since the merge. The turn log's worst first activity before it is 9.1 s on B1 and 5.3 s on A (all within 10 s), and the snapshot adds under 0.05 s. The first live turns after the merge (spec 014 T038, or the next lesson) confirm it |
+| SC-009 | Met | T028's honesty sweep |
+| SC-010 | Met, 10 of 10 | T034 (`expression-reads.md` session 3), including one off and one erroring expression |
+
+Not SCs but carried by phase 1: the record guard (FR-020, T029) and OQ-9's blanking (T057); the pivot
+and null `motion_from` wording (T058, eval cases T059); the unkeyed and erroring expression rules in
+the pivot and null tools (T061, T062). Every set needs a fresh A run at spec 014's ship step (T037;
+Assumptions).
+
 **Phase 2**
 
 - **SC-011**: On Comp 1, **all 20** precomp layers are read; inner keyed-property and layer counts
   match a ground-truth capture (expected 347 and 123); the two same-name nested pairs are told apart by
-  id; and places-used counts match. *Measured by:* unit test on a fresh capture.
-- **SC-012**: On Icon and the planted start, stretch, negative-stretch and remap cases, **every** mapped
-  inner key time is within half an outer frame of the answer key, and keys outside the shown time are
-  flagged on Comp 1's 30 s precomps if any exist. *Measured by:* unit tests on live captures.
+  id; and places-used counts (layers, not comps) match; on the practice project, Icon Precomp's is 4.
+  *Measured by:* unit test on a fresh capture.
+- **SC-012**: On T006's four copies (`time-mapping-key.json`), **all 8** inner keys map within half an
+  outer frame of the answer key: the remapped copy's two keys as ranges matching `outer_first`,
+  `outer_last` and `frames`, and the reversed copy's inner 0 flagged as never shown. Keys outside the
+  shown time are flagged on Comp 1's 30 s precomps if any exist. *Measured by:* unit tests on live captures.
 - **SC-013**: A whole-project read of Comp 1 (22 comps, 33,447 properties) takes **at most 1.5 s**
   (measured live: 292 ms for the walk alone), and the precomp summary for all 20 layers is **at most
   12 KB**. *Measured by:* the builder live, and a unit test for size.
@@ -491,7 +717,8 @@ motion) belong to spec 014's set and to pivot K1, not here.
   errors; nothing writes one.
 - **The two lessons:** skill 4 (*Find what's moving it*) and skill 10 (*Precompose*). Queued for later
   specs.
-- **Any skill's teaching or `SKILL.md` wording** (except the one pivot line OQ-8 may add). Rule 1 ("trace before teaching") and the other § 10.1
+- **Any skill's teaching or `SKILL.md` wording** (except the pivot and null `motion_from` lines OQ-8
+  carries, T058, *amended 2026-11-16*). Rule 1 ("trace before teaching") and the other § 10.1
   rules are spec 014's and the skill-builder's. This spec only changes what the tools return (K2, K3).
 - **Lifting easing's "I can't see inside these yet"** or making inner keys findings in any skill. Phase
   2 gives the data; a later spec decides how lessons use it.
@@ -517,13 +744,28 @@ motion) belong to spec 014's set and to pivot K1, not here.
   (T002); separating or joining dimensions clears the expression, and the hidden-side state can't be
   made by script (T003, so E7 is "UI not tested"); turn f was a real anchor edit, by inference from the
   saved reply (T004).
-- **Still to check by hand (T005):** that Pan Behind on an expression-driven null changes its base
-  Position and anchor together and keeps the children still (SB-2), and that it reproduces turn f's
-  edit. SC-005 (a) uses T004's fitted edit until then.
+- **Checked by hand 2026-11-14 (T005, session 2):** Pan Behind on the expression-driven
+  null changes its base Position and Anchor Point together (+561, −120), keeps the children still
+  (0.07 px) and leaves the shake running (SB-2); it took Shake Control, which was both selected and under the cursor; which rule decides is
+  open (T034). The edit matches
+  T004's fit for turn f within a few pixels. T006 confirmed the time mapping on all eight keys against
+  AE's `sourceTime()` (an expression-only function, so the read can't call it) and the builder's eye.
+- **Checked by hand 2026-11-16 (T034, session 3):** Pan Behind on AE 27.0 takes the **selected** layer,
+  even with the cursor over another; with nothing selected, the top layer under the cursor (which AE
+  then selects). Turn f fits: Shake Control was selected. This overturns the pivot `SKILL.md` lines from
+  spec 011's AE 26.5 session; T058 rewrote them.
+- **Checked live 2026-11-16 (T015 Comp 1 capture, merge `1499819`):** AE 27.0 returns expression text
+  with `\r` line ends. The snapshot keeps the text as AE gives it; only `describe_layers` detail (shown
+  with `\n`) and text comparisons (SC-001, FR-014's "text changed") normalize, through
+  `normalizeLineEnds()` (E30). Fixtures derived by hand had `\n` and hid this.
 - Expression text stays in tool replies to the model only, never in the repo except in fixtures made
-  from the builder's own comps with no real names.
+  from the builder's own comps with no real names. On the learner's machine it sits in `session.json`
+  only while a lesson runs (OQ-9, answered 2026-11-16).
 - Moving to A (`decisions/011`): the reads don't depend on the runtime. Each set's A result goes stale
-  when the tools change; the A re-runs happen in spec 014's ship step, not here.
+  when the tools change; the A re-runs happen in spec 014's ship step, not here. *T037 (2026-11-16):*
+  all six sets are ready for A and their A dry runs are valid; the settings hash is unchanged at
+  `3acbda26`, but it covers the helper's settings, not `mentor/`, so no earlier A result carries over:
+  all six need a fresh A run.
 - Read time was measured on one machine with one comp; the 0.5 s and 1.5 s budgets leave room for
   larger projects, which haven't been measured.
 
@@ -565,6 +807,12 @@ motion) belong to spec 014's set and to pivot K1, not here.
   copied from an expression's text or error in the session's last snapshot (T029).** The cost: a
   refusal is one more turn in a lesson, and evals could see it; no current case writes expression
   text, so none should.
+  **As built (T029, T031 review, 2026-11-16):** the guard compares against **the current lesson's
+  starting snapshot**, not the session's latest read, and does nothing when no lesson is running.
+  Copies under 24 characters pass by design. It guards `attempted` as well as the summary and `next`.
+  **Note for spec 014:** the ask mode runs with no lesson, so this guard doesn't cover an "asked"
+  record entry. Spec 014 needs its own guard (or a snapshot to compare against) for FR-020 to hold
+  there; this spec doesn't change spec 014.
 
 ### New from Phase 0 (2026-11-14)
 
@@ -574,6 +822,104 @@ motion) belong to spec 014's set and to pivot K1, not here.
   out of scope. **Recommended: tool change first (T023); if the new pivot eval case (Eval plan, row 1)
   still fails on wording, one narrow pivot `SKILL.md` line in this spec (a new task after T036), not
   spec 014's rule changes.** Expands Out of scope by that one line if needed.
+  **Widened by the builder 2026-11-16 (Amendment 4):** this spec carries the `motion_from` wording
+  for both pivot and null, from `specs/011-anchor/teaching-design.md` § 21 and
+  `specs/012-null-parenting/teaching-design.md` § 17 (T058), with eval cases pivot 57 and null 55
+  written from those sections' Pass lines, plus a case where the learner asks about Shake Control's
+  shake and hears that it builds on the null's own Position (the answer the `\r` bug got wrong, E30)
+  (T059). The 1 px "too small to see" floor in `specs/014-ask-mentor/teaching-design.md` § 5.1a (H-7)
+  is approved; the "hard to tell apart" band is deferred until after spec 014's three sessions (T060
+  records both).
+  **T060 (2026-11-16):** recorded here and handed to spec 014 through the cockpit. 014's teaching
+  design already carries it (§ 5.1a, H-7 answered, `d56b19d`): the first three bullets of § 5.1a are in
+  force, the fourth waits on 014's three sessions. Spec 015 builds nothing for the band. What the floor
+  needs from the reads is OQ-10.
+
+### New from the T031 review (2026-11-16)
+
+- **OQ-9: `session.json` now holds expression text and effect names on disk.** The lesson baseline
+  stored in the session file includes the snapshot's new fields. It isn't the learner record, so FR-020
+  holds, but it is a file on the learner's machine with text from their project (constitution IV),
+  and spec 006's uninstall removes the conversation files (FR-019, T054, T057), not necessarily this
+  one. **Recommended: keep it (the checks need the baseline), have the session file drop expression
+  text and keep only its length and a hash (enough for FR-014's "text changed"), and ask spec 006 to
+  confirm its uninstall removes `session.json` with the conversation files.** Changes what the
+  baseline stores, so it's the builder's call; it doesn't block the phase 1 merge if the builder
+  prefers to keep the text and only fix the uninstall.
+  **Answered 2026-11-16 (builder, Amendment 4): keep the text during a lesson, then blank it.**
+  - The session baseline keeps expression text and errors while a lesson runs, because the record
+    guard (OQ-7, `copiesExpression` in `mentor/tools/common.mjs`) needs them across turns, and on B1
+    each turn is a fresh server that only has the file.
+  - They're blanked as soon as the lesson's record is saved, or when a new lesson replaces the
+    baseline.
+  - `calls.jsonl` logs a refused `record_lesson` call without the refused text.
+  - Spec 006's uninstall always removes `session.json` and its leftovers, even with "keep my
+    history" (spec 006 FR-019, amended 2026-11-16).
+  - **Rejected: length plus hash** (the recommendation above, withdrawn by the cockpit). It serves
+    FR-014's "text changed" but not the guard: a substring check needs the text, and a hash that
+    could answer it would have to be reversible.
+  Built by T057.
+- **Answered 2026-11-16 by T034: the selected layer; with nothing selected, the top layer under the
+  cursor** (Assumptions). T058 rewrote the `SKILL.md` lines. The item as it stood:
+  **Open item for T034 (the next live sitting): which layer does Pan Behind act on?**
+  `.claude/skills/anchor-mentor/SKILL.md` lines 378 to 381 say it acts on the layer under the cursor
+  even when another layer is selected (spec 011's live finding, 2026-10-26). T005 moved the selected
+  layer (Shake Control, which was also over the rock). Test at T034: select layer A, start a Pan
+  Behind drag over layer B (not over A), and see which layer's Anchor Point moves. Until then this
+  spec doesn't change that `SKILL.md` line, and Amendment 2 names only the layer it took in T005, not a
+  general rule.
+
+### New from T040 (2026-11-16)
+
+- **OQ-10: Who gives a source's peak in screen pixels on the asked layer?** *Answered 2026-11-16: as
+  recommended (FR-004a).* The approved 1 px floor
+  (014 TD § 5.1a) and "say its size" are measured as **screen pixels on the asked layer** (014 TD's
+  needs, item 4). FR-004 gives each expression's peak in **the property's own units**: pixels for a
+  parent's Position, but degrees for Rotation and percent for Scale, which turn into pixels on a child
+  only through its distance from the pivot. On Comp 1 that's the case that matters: Shake Control's
+  Rotation peaks at 0.59° (T034), which 014 TD § 16 puts at about 9 px on rock.png by hand. Without
+  it, the ask mode can't apply the floor to a rotation or scale source, and § 16's "about 9 px" stays an
+  estimate. **Recommended: spec 015 adds it as a phase 1 follow-up**, a new FR-004a and one
+  skill-builder task: for the asked layer, each parent expression's peak shift of the layer's footprint
+  in comp pixels, worked out in the mentor from the values the sweep already reads (no new AE write,
+  no change to FR-004's fields). It doesn't block 014's mentor half (T008 to T014); it's needed before
+  014's FR-007 ordering is tested on Comp 1 and before the three sessions. *If no:* 014 states
+  rotation and scale in their own units and applies the floor to Position only, and TD § 5.1a needs the
+  curriculum designer to say so.
+  **Answered 2026-11-16 (builder): as recommended.** FR-004a, SC-003a, E31; built by T064 (skill-builder).
+  It must land before 014's FR-007 ordering test on Comp 1 and before 014's three sessions (*built
+  2026-11-16 on `014-mentor`, `2440c62`; that test no longer waits*); 014's
+  mentor half (014 T008 to T016) doesn't wait for it. Once it merges, § 16's "about 9 px" can be
+  replaced with the tool's number (014 TD SB-4, the curriculum designer's edit).
+
+### New from Amendment 6 (2026-11-16)
+
+- **OQ-11: The shift is measured on the layer's box, not its visible pixels. Is that the floor's
+  edge?** 014 TD § 5.1a says "the asked layer's farthest edge". The reads have the layer's box only
+  (visible bounds are pivot K1, out of scope here), so a padded PNG or a full-frame precomp reads
+  larger than what shows: Comp 1's ten Shakers precomps have 1920 × 1080 boxes and read about 11.3 px,
+  and rock.png's box is padded (the AB baseline). The error runs one way: a box never makes a visible
+  move look smaller, so the floor never hides a real cause, but it can give a size to a move the eye
+  can't see. **Recommended: measure on the box for now, say so in the field (FR-004a), and ask the
+  curriculum designer (through the cockpit) whether § 5.1a should say "its box's farthest edge" until
+  visible bounds exist.** Doesn't block T064.
+  **Answered 2026-11-16 by the builder, as recommended:** measure on the box for now; the curriculum
+  designer words § 5.1a to match until visible bounds exist.
+
+### New from Amendment 7 (2026-11-16)
+
+- **OQ-12: Collapse on text and shape layers.** AE's scripting reads Collapse Transformations as on for
+  every text and shape layer checked so far (spec 004 T136: Lid, Banner, Sign, Tile and Caption; Comp 1's
+  text layer too), whatever the switch looks like in the timeline, where it's the Continuously Rasterize
+  switch. Passed through, the ask mode could tell a learner a switch is on that they never touched.
+  **Recommended: give `collapse` only on precomp and footage layers (FR-004b as written), and check one
+  text layer's switch by hand at the next live sitting.** If the timeline shows it off while the read
+  says on, keep it left out; if the read follows the switch, add text and shape layers back with a
+  note. Doesn't block T065.
+  **Answered 2026-11-16 (builder): as recommended.** `collapse` on precomp and footage layers only
+  (FR-004b as written); one text layer's switch is checked by hand at the next live sitting. The
+  key-types names in FR-004b (`single_key`, `all_held`, `none_held`, `some_held`) are kept (builder, the
+  same day).
 
 ### For the curriculum designer (hand-off, not edits)
 

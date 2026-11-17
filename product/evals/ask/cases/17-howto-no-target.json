@@ -1,0 +1,41 @@
+{
+  "id": "17-howto-no-target",
+  "title": "A how-to inside the six with no comp target: two sentences, no steps, one offer of the lesson (A only; B1 offers nothing)",
+  "covers": [
+    "FR-019",
+    "PQ-4"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/practice.json",
+      "say": "/ask-mentor How does the speed graph work?"
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": "howto",
+        "max_sentences": [
+          {
+            "field": "explanation",
+            "max": 2
+          }
+        ],
+        "offered_equals": [
+          "easing.speed_graph"
+        ]
+      }
+    ],
+    "text": [
+      {
+        "id": "offer_names_speed_graph",
+        "must": "speed graph",
+        "in": "offer"
+      }
+    ]
+  },
+  "rubric": [
+    "R-HOWTO"
+  ]
+}

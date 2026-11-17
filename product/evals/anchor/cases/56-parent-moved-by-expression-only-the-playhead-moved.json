@@ -1,0 +1,66 @@
+{
+  "id": "56-parent-moved-by-expression-only-the-playhead-moved",
+  "title": "rock.png rides on Shake Control, which an expression moves; only the playhead moved since the first read and the learner says done: nothing is called a change, no Edit > Undo about the parent",
+  "covers": [
+    "spec015-K2",
+    "FR-013",
+    "E17a",
+    "SC-005",
+    "T035"
+  ],
+  "learner_record": "mentor/test/fixtures/anchor/records/easing-learned.json",
+  "fixture_sources": {
+    "synthetic/rig-playhead-0.6.json": "synthetic",
+    "rig-later.json": "live"
+  },
+  "turns": [
+    {
+      "project": "synthetic/rig-playhead-0.6.json",
+      "say": "/anchor-mentor"
+    },
+    {
+      "project": "synthetic/rig-playhead-0.6.json",
+      "say": "rock.png should turn from its top-right corner."
+    },
+    {
+      "project": "rig-later.json",
+      "say": "I used Pan Behind. Done."
+    }
+  ],
+  "expect": {
+    "demo_calls_max": 0,
+    "tools_called": [
+      "anchor_check"
+    ],
+    "last_check": {
+      "passed": false,
+      "lacks": [
+        "Shake Control"
+      ],
+      "has": [
+        "not_moved_enough"
+      ]
+    },
+    "say": [
+      {
+        "id": "no_undo",
+        "never": "\\bundo\\b",
+        "turns": [
+          3
+        ]
+      },
+      {
+        "id": "parent_not_blamed",
+        "never": "Shake Control",
+        "turns": [
+          3
+        ]
+      }
+    ]
+  },
+  "rubric": [
+    "R-AN-EXPRESSION-NOT-LEARNER",
+    "R-NAMES-REAL"
+  ],
+  "note": "Spec 015 T035 (Eval plan row 2). rig-later.json is T015's live 015 Rig read with the playhead at 3.4 s (no edit). rock.png's pivot is unchanged, so the check says not moved enough; the case is about what it doesn't say."
+}

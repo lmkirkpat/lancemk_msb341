@@ -38,7 +38,7 @@
 - Choices left open are Open questions (OQ-1 to OQ-5, each with a recommendation) rather than
   [NEEDS CLARIFICATION] markers; the spec is written to the recommendations.
 - **Blocking before the plan:** OQ-1 (constitution II amendment for the comp-active flag). FR-047 is written
-  so the rest of the spec stands if it's held.
+  so the rest of the spec stands if it's held. (Superseded 2026-11-16: FR-047 withdrawn after T001; constitution 1.6.0.)
 - SC-004, SC-005 and SC-007 use runtime-level measures (turn log, eval runs) because spec 013's bars are
   defined that way; they stay user-facing (time to first sign, cost per answer).
 - Curriculum-designer items CD-2 and CD-3 are inconsistencies inside the teaching design; the spec follows

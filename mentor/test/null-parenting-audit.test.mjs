@@ -25,7 +25,10 @@ test("OA-4: an unkeyed property of a non-focus layer changes (an expression, say
   assert.ok(!read.layers.some((l) => l.name === "Background"), "Background has no keys");
   for (const s of bg.samples) s.position = [s.position[0] + 40, s.position[1], s.position[2]];
   const { result } = check(base, read, lesson, {});
-  assert.deepEqual(result.other_changes.filter((o) => o.layer === "Background"), [{ kind: "value_changed", layer: "Background", properties: ["Position"] }]);
+  // Spec 015 FR-014a: the shift it caused rides along as its effect.
+  assert.deepEqual(result.other_changes.filter((o) => o.layer === "Background"), [
+    { kind: "value_changed", layer: "Background", properties: ["Position"], effect: { distance_px: 40, direction: "right", time: base.comp.time } },
+  ]);
   assert.equal(result.parenting_passed, before.parenting_passed, "FR-021: reported, not graded");
   assert.equal(result.passed, before.passed);
 });

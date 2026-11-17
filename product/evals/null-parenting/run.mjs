@@ -101,6 +101,11 @@ function resolveFixture(name) {
     const f = path.join(EVAL_DIR, "fixtures", "synthetic", name.slice("eval-synthetic/".length));
     return fs.existsSync(f) ? { file: f, source: "synthetic" } : null;
   }
+  // Spec 015 T035: T015's live captures (015 Rig, 015 Planted), named "expressions/<file>".
+  if (name.startsWith("expressions/")) {
+    const f = path.join(REPO, "mentor", "test", "fixtures", name);
+    return fs.existsSync(f) ? { file: f, source: "live" } : null;
+  }
   if (name.startsWith("synthetic/")) {
     const f = path.join(FIX_DIR, name);
     return fs.existsSync(f) ? { file: f, source: "synthetic" } : null;
@@ -472,6 +477,10 @@ function check(expect, turns, c) {
       if ("parenting_passed" in want && r.parenting_passed !== want.parenting_passed) problems.push(`parenting_passed was ${r.parenting_passed}`);
       for (const code of want.codes_include || []) if (!(r.codes || []).includes(code)) problems.push(`missing code ${code} (had ${(r.codes || []).join(",") || "none"})`);
       for (const code of want.codes_exclude || []) if ((r.codes || []).includes(code)) problems.push(`unexpected code ${code}`);
+      // Spec 015 T035: substrings that must / must not appear in the check's raw reply (a layer name).
+      const raw = last.result.replace(/":\s+/g, '":');
+      for (const x of want.has || []) if (!raw.includes(x)) problems.push(`reply lacks ${x}`);
+      for (const x of want.lacks || []) if (raw.includes(x)) problems.push(`reply has ${x}`);
       if ("region" in want && (last.input || {}).region !== want.region) problems.push(`region was ${JSON.stringify((last.input || {}).region)}`);
       add("last_check", problems.length === 0, problems.length ? problems.join("; ") : "matches");
     }

@@ -32,8 +32,9 @@ every existing suite unchanged.
    center". Expect: the first line names Comp 1; the steps are on Shake Control, hit sizes first; Steps
    drawn from data; Your steps folded; **no Go deeper** (B1). Ask "what does the sweep control layer do?":
    no Steps, no dock.
-3. `comp_active`: click into the Project panel with a footage item selected, then close every comp viewer;
-   Home shows `home-nocomp` only when the bridge reports `false` (T001's states).
+3. No comp: close every comp viewer; Ask on Home stays available, and asking gets "No comp open. Open one, or
+   click into its timeline." (`ask-nocomp`). Then reopen the comp, click a footage item in the Project panel
+   and ask again: the same line, and clicking into the timeline fixes it (FR-047 withdrawn 2026-11-16, T001).
 4. `node panel/dev/turns.js --ask --last 4`: the ask turns, first sign ≤ 10 s.
 
 ## Phase 2 (B1, then A in the ship step)
