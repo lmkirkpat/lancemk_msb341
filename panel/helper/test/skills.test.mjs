@@ -8,7 +8,11 @@ import { readSkill, listSkills, commandOf, SKILL_PATTERN, SkillError } from "../
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const SKILLS = path.join(REPO, ".claude", "skills");
-const MENTORS = ["anchor-mentor", "ease-mentor", "key-types-mentor", "next-mentor", "null-parenting-mentor", "offset-mentor", "speed-graph-mentor"];
+// ask-mentor (spec 014) runs on A too, so the helper loads it like the lesson skills. Its SKILL.md is
+// the skill-builder's (branch 014-mentor); until that merge reaches this tree it isn't here, so the
+// list holds it only when the file is. After the merge it always is.
+const HAS_ASK = fs.existsSync(path.join(SKILLS, "ask-mentor", "SKILL.md"));
+const MENTORS = ["anchor-mentor", "ask-mentor", "ease-mentor", "key-types-mentor", "next-mentor", "null-parenting-mentor", "offset-mentor", "speed-graph-mentor"].filter((n) => n !== "ask-mentor" || HAS_ASK);
 
 // The body as an independent reading: everything after the second line that is exactly "---".
 function independentBody(file) {

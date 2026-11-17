@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createMcpClient } from "../lib/mcp-client.mjs";
-import { readSkill } from "../lib/skills.mjs";
+import { readSkill, listSkills } from "../lib/skills.mjs";
 import { HELPER_DIR, loadSettings } from "../lib/settings.mjs";
 import {
   buildLessonPrompt,
@@ -194,4 +194,32 @@ test("the message breakpoint goes on a copy; the history is never changed", () =
   assert.deepEqual(sent[2].content[0].cache_control, { type: "ephemeral", ttl: "5m" }, "the newest non-system message");
   assert.equal(sent[3].content[0].cache_control, undefined);
   assert.equal(JSON.stringify(withoutBreakpoints(sent)), frozen);
+});
+
+// Spec 014: ask-mentor runs on A (T037). Its allowed-tools filter gives it exactly the three ask tools,
+// and no lesson skill is ever offered the ask tools. ask-mentor's SKILL.md comes with 014-mentor.
+const ASK_TOOLS = ["describe_layers", "give_answer", "preview_frame"];
+const HAS_ASK = fs.existsSync(path.join(SKILLS, "ask-mentor", "SKILL.md"));
+
+test("ask-mentor offers exactly describe_layers, preview_frame and give_answer, and no Skill", { skip: HAS_ASK ? false : "ask-mentor's SKILL.md isn't in this tree yet (014-mentor)" }, () => {
+  assert.deepEqual(readSkill(SKILLS, "ask-mentor").allowedTools.slice().sort(), ASK_TOOLS);
+  for (const patch of [undefined, HAIKU]) {
+    const p = lesson("ask-mentor", patch);
+    assert.deepEqual([...p.allowed].sort(), ASK_TOOLS, "every one runs: the server has all three");
+    assert.deepEqual(offered(p).sort(), ASK_TOOLS);
+  }
+});
+
+test("no other mentor skill is offered give_answer or describe_layers", () => {
+  const names = listSkills(SKILLS).filter((n) => n !== "ask-mentor");
+  assert.ok(names.length >= 7);
+  for (const patch of [undefined, HAIKU]) {
+    for (const name of names) {
+      const p = lesson(name, patch);
+      for (const t of ["give_answer", "describe_layers"]) {
+        assert.ok(!p.allowed.has(t), `${name}: ${t}`);
+        assert.ok(!offered(p).includes(t), `${name}: ${t} offered`);
+      }
+    }
+  }
 });
