@@ -3,7 +3,7 @@
 **Input**: [spec.md](spec.md) (approved `944cd8c`), [plan.md](plan.md), [research.md](research.md),
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md).
 
-**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-ups T064 (FR-004a; built on `014-mentor` at `2440c62`, SC-003a met as amended by Amendment 8) and T065 (FR-004b, Amendment 7) open.
+**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-ups T064 (FR-004a; built on `014-mentor` at `2440c62`, SC-003a met as amended by Amendment 8) and T065 (FR-004b, Amendment 7) open; T066 (FR-004a's Amendment 9 corrections) open.
 
 **Format**: `- [ ] T### [P?] [Story?] (owner) Description`. `[P]` = can run alongside the other
 `[P]` tasks in the same block (different files, no unfinished dependency). Owners: **skill-builder**
@@ -444,6 +444,17 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   spec 014's ask cases 05 (a keyed layer), 13 (keys under an expression that's on), 14 (separated
   dimensions), 15 (a single key and hold keys) and 16 (a locked layer in a step), in
   `product/evals/ask/cases/`, before 014's B1 run (014 T037). No eval case here: the ask set is spec 014's.
+- [ ] T066 (skill-builder) FR-004a's corrections (spec Amendment 9, *added 2026-11-16* from 014's reviews
+  T034 and T035; research R15 › Corrected; data-model § 6; contracts/describe-layers.md). Cockpit-numbered
+  2026-11-16. In `mentor/lib/footprint-shift.mjs`: (1) a Rotation source with non-uniform scale on any
+  layer above it needs `max_value` (`direction_unknown` without it), and Rotation above the source then
+  counts toward `chain_moves`; a Position source doesn't depend on its own layer's Rotation; (2) a named
+  text or shape layer whose box changes over time (keys or a varying active expression outside Transform,
+  or a sampled box that differs between samples) is `chain_moves`; (3) a 3D or Auto-Orient switch in the
+  chain read as anything but true or false is `switch_not_read`, never off. One unit test per case on
+  planted or edited fixtures (none returns a number); SC-003a's Comp 1 figures unchanged; skill replies
+  byte-identical; mentor and hooks suites pass. **Where:** a skill-builder on `014-mentor`, with T064 and
+  T065 under that worktree's one `--shared-owner` for `mentor/`. Tick it with T064 when built there.
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script
@@ -519,7 +530,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   with T040. T064 after T040, sequenced against 014's mentor worktree (one `mentor/` shared owner at a
   time); before 014's FR-007 test on Comp 1 and its three sessions (*met 2026-11-16:* built on `014-mentor`,
   `2440c62`, so that test no longer waits).
-  T065 with T064 in the same `014-mentor` worktree; before 014 T037.
+  T065 with T064 in the same `014-mentor` worktree; before 014 T037. T066 likewise (*added 2026-11-16*).
 - **Phase 2:** after T040. T042 and T043 can start together; T044 → T045 → T046 to T050 → T051 →
   gate.
 
@@ -544,4 +555,4 @@ T033, T034) are serial because of the one-driver rule, and T005, T006, T034 wait
    answer says "I couldn't see inside [precomp]" until then).
 
 **Task count:** 64 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
-which US4 8; phase 1 follow-ups T057 to T064: 8, added 2026-11-16).
+which US4 8; phase 1 follow-ups T057 to T064: 8, added 2026-11-16). *Amended 2026-11-16:* 66 with T065 and T066.

@@ -44,7 +44,10 @@ entry per parent-chain transform expression that moves it, with its peak shift i
 layer's box or `shift_px: null` with a reason (data-model § 6, research R15). Never a number in degrees
 or percent in its place, and never 0 for "couldn't work it out". The fine sweep in this tool's snapshot
 also records `max_value` (data-model § 1); no other snapshot sends `measure_layers`, so no skill's reply
-changes.
+changes. *Added 2026-11-16 (spec Amendment 9):* `reason` may also be `switch_not_read` (a 3D or
+Auto-Orient switch in the chain that couldn't be read, never taken as off); `chain_moves` includes a
+named layer whose box changes over time, and `direction_unknown` a Rotation source under non-uniform
+scale (data-model § 6, research R15).
 
 **Own keys and switches (FR-004b, added 2026-11-16):** every layer entry, summary and detail, carries
 `own_keys` (each keyed property with its key count, `key_types` of `single_key`, `all_held`,
