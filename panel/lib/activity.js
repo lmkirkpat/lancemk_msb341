@@ -25,6 +25,11 @@ const STATUS = {
   null_parent_demo: "Parenting one layer to show you…",
   null_parent_check: "Checking your null…",
   recommend_next: "Looking at your history and this comp…",
+  // Spec 014's ask tools (ask-mentor's allowed-tools). The ask thread draws its own timed status
+  // (MU ask-reading, then ask-reading-long at 6 s), not these, so a tool call there never changes the
+  // line; these are for FR-062's one-line-per-tool rule and any lesson that calls them.
+  describe_layers: "Reading the open comp…", // MU's own line (COPY.ask.reading)
+  give_answer: "Writing the answer…", // MU has no line for this; the shortest plain one, for design review
 };
 
 function statusFor(toolName) {

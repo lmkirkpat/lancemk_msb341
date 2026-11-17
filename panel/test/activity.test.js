@@ -52,3 +52,35 @@ test("anything else is just Working…", () => {
   assert.equal(statusFor("ToolSearch"), "Working…");
   assert.equal(statusFor(undefined), "Working…");
 });
+
+// Spec 014's ask tools (trial merge with 014-mentor's ask-mentor/SKILL.md): each has its line, and the
+// thread's status stays its own timed one, so the learner never sees two reading lines or a flicker.
+test("ask-mentor's tools have their lines: describe_layers is MU's \"Reading the open comp…\"", () => {
+  const { COPY } = require("../lib/copy.js");
+  assert.equal(STATUS.describe_layers, COPY.ask.reading);
+  assert.equal(STATUS.describe_layers, "Reading the open comp…");
+  assert.equal(STATUS.give_answer, "Writing the answer…");
+  for (const t of ["describe_layers", "preview_frame", "give_answer"]) assert.doesNotMatch(STATUS[t], /_|snapshot|ae-mentor/, t);
+});
+
+test("the ask thread's status comes from its own timer, never the tool: one line, then Still reading at 6 s", async () => {
+  const { ready } = require("./app-harness.js");
+  const { renderApp } = require("../lib/screens.js");
+  const { COPY } = require("../lib/copy.js");
+  const timers = [];
+  const h = await ready({ runtime: "a", setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; } });
+  const fire = (ms) => timers.filter((x) => x.ms === ms).forEach((x) => x.fn());
+  h.app.setDraft("Why does it swing?");
+  h.app.act("ask_home");
+  const status = () => renderApp(h.app.model()).lesson.status.replace(/&#39;/g, "'");
+  const count = (s, w) => s.split(w).length - 1;
+  h.adapter().emit("tool_call", { name: "describe_layers" });
+  assert.equal(count(status(), COPY.ask.reading), 1, "one Reading line, not two");
+  h.adapter().emit("tool_call", { name: "give_answer" });
+  assert.equal(count(status(), COPY.ask.reading), 1, "a tool call doesn't swap the line");
+  assert.equal(status().includes(STATUS.give_answer), false);
+  fire(6000);
+  assert.equal(count(status(), COPY.ask.reading_long), 1);
+  h.adapter().emit("tool_call", { name: "describe_layers" });
+  assert.equal(status().includes(COPY.ask.reading_long), true, "a later read doesn't flick it back");
+});
