@@ -20,6 +20,13 @@ size rule until spec 015 T064 lands (spec 015 OQ-10, FR-004a); (3) this header's
 contracts/ask-tools.md › Refusals and data-model § 8. New OQ-6 (FR-007's order before T064). No approved
 decision or FR changes.
 
+**Amended 2026-11-16 (c), the builder's answer to OQ-6 (as recommended), relayed by the cockpit:** spec 015
+T064 is built on `014-mentor` (`2440c62`), so FR-004's size rule is the comp-pixel one from now on, and
+FR-007 gains the standing rule for sources with no pixel number: pixel-measured sources ranked by size
+first, then those with no pixel number (a `null` shift, or degrees or percent only) in the read's order.
+014's FR-007 test on Comp 1 no longer waits for T064. Changed here: FR-004's note, FR-007, OQ-6. No
+approved decision changes.
+
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
 flag, as the builder accepted them in the review. Carry the mockup's spec 007 amendments. Reference spec
@@ -309,11 +316,14 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   MUST name both (TD § 5.1 part 1).
 - **FR-004**: When the cause has parts, the explanation MAY be a short bulleted list, in order of visible effect
   (spec 015 FR-004's "how much"). It MUST NOT be numbered, called steps, or docked.
-  *Amended 2026-11-16 (b), spec 015 OQ-10:* **phase 1, until spec 015 T064 lands**, the skill gives each
+  *Amended 2026-11-16 (b), spec 015 OQ-10:* **phase 1, until spec 015 T064 lands** (*built 2026-11-16 on
+  `014-mentor`, `2440c62`, so this first half no longer applies there; amended (c)*), the skill gives each
   source's size in the read's own units (pixels for Position and Anchor Point, degrees for Rotation, percent
   for Scale; spec 015 FR-004's `moves`) and never drops a source or calls it too small to see for being small.
   **After T064**, it uses the comp-pixel `shifts` on the asked layer (spec 015 FR-004a) and TD § 5.1a's 1 px
-  floor (under 1 px: never named as a cause, never a step; 1 px and up: its size, not an adjective).
+  floor (under 1 px: never named as a cause, never a step; 1 px and up: its size, not an adjective). A source
+  whose shift is `null` (with a reason) has no pixel number: it's given in its own units and never dropped
+  for being small (*amended 2026-11-16 (c), OQ-6*).
 - **FR-005**: Step lines MUST be things the learner does in AE: each starts with an action on a named layer or
   property, in AE's words for the builder's version (AE 27.0), followable without asking what to do. Two to
   four lines; past four, the first three and a sentence saying there's more. Explanation is never a step
@@ -328,6 +338,9 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   or rewritten code (H-2, TD § 19).
 - **FR-007**: Steps MUST be ordered by visible effect when the read gives how much each source moves the layer
   (TD § 19 "Checked 2026-11-14"), and MUST NOT name a fix before that has been read.
+  *Amended 2026-11-16 (c), OQ-6:* "how much" is the comp-pixel shift on the asked layer (spec 015 FR-004a).
+  Sources with a pixel number are ranked by it, biggest first; sources with none (a `null` shift, or a size
+  in degrees or percent only) come after them, in the read's order, never ranked against pixels by feel.
 - **FR-008**: The turn MUST end on one closing offer: one sentence, a question, naming at most two skills, both
   among the step tags (TD § 5.1 part 3, § 7.1). No greeting, no "great question", no recap, no list of what's
   fine. The whole answer, step lines included, SHOULD be about 120 words (a guess to tune on the sessions).
@@ -720,6 +733,10 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   until T064, order by size only among sources in pixels, put degree and percent sources after them in the
   read's order, and keep 014's FR-007 test on Comp 1 waiting for T064 (as spec 015's tasks already say).**
   If no: the mentor would rank across units by feel, which TD § 5.1a was written to stop.
+  **Answered 2026-11-16 (builder): as recommended, and as a standing rule, not an interim one.**
+  Pixel-measured sources are ranked by size; sources with no pixel number (a `null` shift, or degrees or
+  percent only) go after them in the read's order (FR-007, amended (c)). T064 is built on `014-mentor`
+  (`2440c62`), so 014's FR-007 test on Comp 1 no longer waits for it.
 
 ### For the curriculum designer (hand-off, not edits)
 
