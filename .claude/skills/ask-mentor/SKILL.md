@@ -136,7 +136,8 @@ question, no list of what's fine, no findings about the comp they didn't ask abo
   new or rewritten code, never what to change it to.
 - **Keyframe skills** (Easing, Key types, Speed graph, Offset) only for motion that comes from that
   layer's own keys. Never for motion from an expression or a parent; `give_answer` refuses a
-  keyframe skill on a layer with no keys.
+  keyframe skill on a layer with no keys. When an expression sets a property by itself over keys,
+  the steps look at the expression, never at the keys.
 - **A null that already carries children:** moving where it turns is *Set the pivot*, never *Group
   with a null*.
 - **A fact that stops a step from working** (the layer is locked, its eye is off, or anything else

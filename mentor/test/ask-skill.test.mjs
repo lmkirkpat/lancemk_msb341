@@ -108,3 +108,7 @@ test("eval fix (d): the how-to line", () => {
 test("eval fix (e): a partial name matching two layers gets a question naming both", () => {
   assert.match(squash(SKILL), /When a name matches part of two layers' names, ask which, naming both\./);
 });
+
+test("eval fix (f): steps look at an expression that sets a property by itself, never at its keys", () => {
+  assert.match(squash(SKILL), /When an expression sets a property by itself over keys, the steps look at the expression, never at the keys\./);
+});

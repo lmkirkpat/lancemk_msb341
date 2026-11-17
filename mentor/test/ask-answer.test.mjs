@@ -322,3 +322,29 @@ test("eval fix (d): a how-to's explanation is at most two sentences with no list
   refuses(howto("The speed graph shows speed over time:\n- Steep means fast.\n- Flat means slow."), b1({ snapshot: null }), "HOWTO_TOO_LONG");
   assert.ok(checkAnswer(edit(() => {}), b1()), "an answer's bullets are fine");
 });
+
+test("eval fix (f): a keyframe skill on keys under an expression that sets the value by itself is refused; one that builds on them isn't", async () => {
+  const fs = await import("node:fs");
+  const { FIXTURES } = await import("./helpers.mjs");
+  // Live Mentor Practice: Logo's two Rotation keys sit under an active expression that sets its own value.
+  const live = JSON.parse(fs.readFileSync(`${FIXTURES}/expressions/practice.json`, "utf8"));
+  const logo = live.layer_info.find((l) => l.name === "Logo").index;
+  const rot = (s) => s.expressions.find((x) => x.layer === logo && x.path.endsWith("ADBE Rotate Z"));
+  assert.ok(rot(live) && rot(live).enabled && !rot(live).error);
+  const input = {
+    kind: "answer",
+    explanation: "In Mentor Practice, Logo turns on its own Rotation keys and an expression.",
+    steps: [{ text: "Select Logo's two Rotation keys and press F9.", skill: "easing.basic", layer: "Logo" }],
+    offered_skills: [],
+    closing_offer: "Try it?",
+  };
+  assert.throws(() => checkAnswer(input, b1({ snapshot: live })), (e) => e.code === "KEYFRAME_SKILL_ON_KEYLESS" && /sets the value by itself/.test(e.message));
+  const builds = structuredClone(live);
+  rot(builds).text = `value + ${rot(builds).text}`;
+  assert.ok(checkAnswer(input, b1({ snapshot: builds })), "builds on the keys: still a keyframe step");
+  const none = structuredClone(live);
+  none.expressions = none.expressions.filter((x) => x !== rot(none));
+  assert.ok(checkAnswer(input, b1({ snapshot: none })), "no expression: the keys drive it");
+  const lookAtIt = { ...input, steps: [{ text: "Open Logo's Rotation expression and look at how it sets the turn: it uses time alone. Not something I teach yet.", skill: "not_taught", layer: "Logo" }] };
+  assert.ok(checkAnswer(lookAtIt, b1({ snapshot: live })), "the step looks at the expression");
+});

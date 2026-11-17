@@ -12,6 +12,7 @@
 
 import { MentorError, MESSAGES, registerErrors } from "../errors.mjs";
 import { layerInfo } from "./layer-info.mjs";
+import { expressionReads } from "./expressions.mjs";
 import { motionSources } from "./motion-sources.mjs";
 import { readPath, shortName } from "./path.mjs";
 import { copiesExpression } from "../tools/common.mjs";
@@ -131,6 +132,17 @@ function hasKeyedMotion(map, index) {
   return !!e && e.own_keys.some((k) => k.keys >= 2);
 }
 
+// Eval fix (f), TD § 13 (expressions over keys): keys under an active expression that sets its own
+// value (read from its text) don't make the motion. True when every property with two or more keys
+// on the layer is like that, so a keyframe skill can't change what moves.
+function keysOverridden(snapshot, map, index) {
+  const e = map.layers.find((l) => l.layer_index === index);
+  const keyed = e ? e.own_keys.filter((k) => k.keys >= 2) : [];
+  if (!keyed.length) return false;
+  const sets = new Set(expressionReads(snapshot).list.filter((x) => x.layer_index === index && x.active && x.builds_on === "sets_own").map((x) => x.path));
+  return keyed.every((k) => sets.has(k.path));
+}
+
 function nullWithChildren(snapshot, map, index) {
   const info = layerInfo(snapshot).layers.find((l) => l.index === index);
   const e = map.layers.find((l) => l.layer_index === index);
@@ -230,6 +242,9 @@ export function checkAnswer(input, ctx) {
     if (!map || !s.layer || !KEYFRAME_SKILLS.includes(s.skill)) return;
     const keyed = layersNamed(snapshot, s.layer).some((l) => hasKeyedMotion(map, l.index));
     if (!keyed) fail("KEYFRAME_SKILL_ON_KEYLESS", `Step ${i + 1} is on ${s.layer}.`);
+    if (layersNamed(snapshot, s.layer).every((l) => !hasKeyedMotion(map, l.index) || keysOverridden(snapshot, map, l.index))) {
+      throw new MentorError("KEYFRAME_SKILL_ON_KEYLESS", `Step ${i + 1} is on ${s.layer}, whose keys are under an expression that sets the value by itself, so a keyframe skill can't change what moves. Point the step at the expression instead.`);
+    }
   });
   if (map && offered.includes(NULL_SKILL)) {
     const onNull = steps.some((s) => s.skill === NULL_SKILL && s.layer && layersNamed(snapshot, s.layer).some((l) => nullWithChildren(snapshot, map, l.index)));
