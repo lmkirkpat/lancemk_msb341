@@ -42,6 +42,7 @@ MU › Copy, plus the lines below.
 |---|---|---|
 | Ask (Home or thread box) | `/ask-mentor ` + the text as typed | `question` |
 | Follow-up bar | the text as typed; the first one after a go-deeper lesson gets `/ask-mentor ` in front | `followup` |
+| Follow-up bar or Try again, first send after any other lesson (amendment (e)) | `/ask-mentor ` + the context wrapper below + the text as typed | `followup` |
 | Go deeper | "Yes, go deeper on [short name]." | `go_deeper` |
 | End lesson (go-deeper lesson) | "/ask-mentor I've ended that lesson." | `followup` |
 
@@ -52,6 +53,37 @@ the tool's data, never the prose (FR-031's note, FR-016). Any other kind stays a
 
 All carry `thread: "ask"` in the turn log. The learner's bubble shows the text as typed (or MU's "Yes, go
 deeper on Set the pivot."), never the `/ask-mentor ` prefix; End lesson shows only the divider.
+
+### Context after a lesson (added 2026-11-16, spec amendment (e), the builder's decision)
+
+After a lesson ends the thread's conversation (item 5 above), the next send into the thread starts a fresh
+mentor conversation. So that first follow-up or Try again carries the thread's last question and its answer,
+and the mentor sees what the learner sees on screen. Exact request, one item per line:
+
+```
+/ask-mentor Earlier question and answer, as shown in the panel:
+Question: [the entry's text as typed]
+Answer: [explanation]
+Steps:
+[n]. [step text] (layer: [layer])
+Closing: [closing offer]
+Follow-up: [the text as typed]
+```
+
+- **Source:** the panel's saved thread only: the latest entry with a valid AskView (its `text`, and the
+  view's `explanation`, `steps[].text`, `steps[].layer` and `closing_offer`). Data the mentor produced and the
+  panel already validated; nothing parsed from prose (FR-016), no teaching logic (constitution II).
+- **Bounded:** that one question and answer only, no earlier entries, no tags, offers or kind.
+- **Omitted parts:** no `Steps:` block when there are none; no ` (layer: …)` when a step's layer is `null`; no
+  `Closing:` line when it's `null`. If the latest entry's AskView is `null` (FR-048's fallback), there's no
+  validated answer: the send is the prefix and the text only.
+- **Once:** only the first send after the lesson; later sends are the plain follow-up. Try again resends the
+  same request it retries.
+- **Never shown:** the bubble shows the text as typed; the wrapper is in the request only. The wrapper's first
+  line is a constant in `REQUESTS`, eval-synced (T104).
+- **What the mentor does with it:** treats the learner's text as a follow-up to that question and answer, and
+  reads the comp again before answering, since the lesson may have changed it. The context is what was on
+  screen, not the comp's state (`ask-mentor/SKILL.md`, T103).
 
 ## Result lines and dividers (FR-051, PQ-3)
 
@@ -75,7 +107,9 @@ thread: "That was step [n]; next is step [n+1]: [next_step]." or "That was the l
 
 Ask card first ("Ask about the open comp", "What do you want to know or change?", "Reads your comp. Changes
 nothing."), then one quiet line in MU's order: a lesson open → "Back to your lesson"; a lesson in progress →
-"Pick up [skill] on [layer]" with Set it aside; else "Find my next lesson". No due review, Practice due or
+"Pick up [skill] on [layer]" with Set it aside; *(added 2026-11-16, amendment (e))* its comp name comes from the snapshot
+result the panel saved with the lesson (every lesson snapshot returns the comp), not the learner record, and
+it shows no last-check time (MU's two lines; spec 007's card line is superseded); else "Find my next lesson". No due review, Practice due or
 memory on Home; they're in Skills (`skills-due`). Empty record: "Welcome to Knack." with the same Home
 (`home-first`). Ask is always on; no comp shows after a press as `ask-nocomp` ("No comp open. Open one, or
 click into its timeline."). `home-nocomp` is withdrawn with FR-047 (2026-11-16; tasks T101 removes it).

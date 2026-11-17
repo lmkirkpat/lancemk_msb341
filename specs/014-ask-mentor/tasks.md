@@ -193,6 +193,23 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   tests. Or, if removing them breaks spec 007's state-table test while MU still lists `home-nocomp`, keep the
   id and say why in the hand-back. Re-run the panel and helper suites; all pass. Then the design-reviewer
   checks it with T035's branch.
+
+*Added 2026-11-16 (spec amendment (e)); cockpit numbers; being built now, before T036:*
+
+- [ ] T102 (panel-builder) **The first send after a lesson** (FR-052's note (e), contracts/panel-ask.md ›
+  Requests, Context after a lesson, Home): (1) the first follow-up or Try again into the thread after any
+  lesson gets the `/ask-mentor ` prefix; (2) it carries the wrapper exactly as the contract gives it, built from
+  the saved thread's latest valid AskView (AskView keeps each step's `layer`, data-model § 7), the prefix and
+  text only when that view is `null`; the bubble shows the text as typed; (3) Pick up's comp name from the
+  snapshot result saved with the lesson, and no last-check time. Tests: the request byte for byte with and
+  without steps, layers and closing offer; a `null` view; only the first send wrapped; Try again resends the
+  same request; no bubble shows the wrapper; Pick up's comp from the saved snapshot. Panel suite passes.
+- [ ] T103 [P] (skill-builder) Add one line to `.claude/skills/ask-mentor/SKILL.md`: "If the message carries an
+  earlier question and answer, treat the learner's text as a follow-up to it, and read the comp again before
+  answering." Matches the wrapper's first line in contracts/panel-ask.md.
+- [ ] T104 [P] (eval-engineer) Ask case 18: a follow-up sent in the wrapper after a lesson changed the comp.
+  Checks: a fresh read before `give_answer`; the answer follows from the earlier question and from the comp as
+  read now, not as the context described it. The request uses the wrapper from `REQUESTS`. Dry run validates.
 - [ ] T036 (cockpit) Merge both with `/merge-worktree` (skill-builder's shared owner named), between live
   sittings.
 - [ ] T037 (eval-engineer) The ask set on B1 at the merge commit: at least 80% and every hard check passing;
@@ -402,7 +419,7 @@ must land before session 3 (T094).
   (T015 withdrawn). **Phase 1, panel:** T008's panel cut (no 015 wait) → T017, T018, T024, T027, T028 in any order
   → T019 → T020, T021, T022 → T023, T025, T026 → T029 → T030 → T101. **Evals:** T031 after T008 (fixtures from 015 T015)
   → T032 → T033.
-- **Gate 1:** T016, T030, T033 → T034, T035; T101 → T036 → T037, T038 → T039 → T040.
+- **Gate 1:** T016, T030, T033 → T034, T035; T101, T102, T103, T104 → T036 → T037, T038 → T039 → T040.
 - **Phase 2:** T040 and 015 T023, T026 → T041 → T042 → T043, T044 → T045, T046 → T047 → T049, T050, T051 → T052.
   Panel T053 to T057 in parallel with the mentor work. T058 after T041; T059 after T052 and T057.
 - **Gate 2:** T060, T061 → T062 → T063.
@@ -434,12 +451,12 @@ phase 1 (T017 to T030) and T001 to T007 run before 015 lands, so they're off the
    skills' hand-ins.
 3. T085 to T087 follow spec 015 phase 2, whenever it lands.
 
-**Task count:** 101 (100 active; T015 withdrawn 2026-11-16, T101 added). Phase 0: 7. Spec phase 1: 34 (setup
+**Task count:** 104 (103 active; T015 withdrawn 2026-11-16, T101 added, T102 to T104 added 2026-11-16 by amendment (e)). Phase 0: 7. Spec phase 1: 34 (setup
 and foundational 5, US1 3, US3 12 with T015 withdrawn, suites and the runtime flag 3, evals 3, gate 8 with
-T101). Spec phase 2: 23 (setup 1, US2 14, suites and evals 4, gate 4). Spec phase 3:
+T101; plus T102 to T104). Spec phase 2: 23 (setup 1, US2 14, suites and evals 4, gate 4). Spec phase 3:
 24 (setup 1, US5 6, US6 5, US4 1, suites 1, evals 3, gate 4, later 3). Ship: 13.
 
-**By owner:** skill-builder 35, 34 active (T001 and T038 on AE), panel-builder 22 (with T101), cockpit 15 (three of them logging the
-builder's sessions), eval-engineer 14, spec-writer 8, reviewer 3, design-reviewer 3, the builder 1 (T097).
+**By owner:** skill-builder 36, 35 active (T001 and T038 on AE; with T103), panel-builder 23 (with T101 and T102), cockpit 15 (three of them logging the
+builder's sessions), eval-engineer 15 (with T104), spec-writer 8, reviewer 3, design-reviewer 3, the builder 1 (T097).
 Builder's hands in 6 (T038, T092 to T094, T097, and T001's panel-focus state). Paid: T089, T090 (recommended),
 T099.
