@@ -68,3 +68,13 @@ test("Sizes (015 FR-004a, TD § 5.1a): the 1 px floor on the read's pixel shifts
   for (const line of quoted) assert.ok(squash(section("5.")).includes(squash(line)), line);
   assert.doesNotMatch(sizes, /hard to tell apart/, "the deferred band isn't used");
 });
+
+test("every quoted phrase anywhere in the file is copied from the teaching design (015 FR-004b's keys, holds and locks included)", () => {
+  const body = SKILL.slice(SKILL.indexOf("\n---\n", 4));
+  const quoted = [...body.matchAll(/"([^"\n]{12,})"/g)].map((m) => m[1]);
+  const td = squash(TD).toLowerCase();
+  for (const q of quoted) assert.ok(td.includes(squash(q).toLowerCase()), q);
+  for (const want of ["set, not animated", "unlock rock.png first"]) assert.ok(quoted.includes(want), want);
+  assert.match(SKILL, /biggest first; then the sources with no pixel\s+number, in the order the read lists them/, "014 OQ-6's order");
+  assert.match(SKILL, /you can't tell, so never call\s+it off/, "a switch not read is never off");
+});
