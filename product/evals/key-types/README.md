@@ -390,3 +390,7 @@ Same change as offset (see `offset/README.md`). `rubric.md` R-OR1-LESSON now say
 ## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
 
 **Full run: `results/2026-11-16-150337.json`, 35/36 (97%), $21.08.** SC-006 met, no hard-rule (universal) check failed, no timeouts. First full B1 run in this set since the A runs (A 34/36 on 2026-11-09). The one miss, 33 button-hint (`say:names_blink`, never matched /Blink|Opacity/), failed 3/3 on repeat (`-191323`, $2.43): real but minor. The hint is sound teaching (names the keys at 1 s and 1.8 s, changes nothing) but never names Blink or Opacity. Proposal: either one line in `SKILL.md` so a hint names the layer or property, or loosen the check to also accept the key times; not changed (needs the builder).
+
+## Spec 015 T063 re-run (2026-11-16, B1, at `84693de`)
+
+Case 33 `--repeat 3`: **2/3**, $2.90 (`results/2026-11-16-193805.json`). The T063 fix worked for what it targeted: the hint named Blink's Opacity and the keys in all three runs, and `names_blink` passed each time. The one miss (run 2) is a different item: R-HINT-NOT-FIX, the hint spelled out "click the key, choose Animation > Toggle Hold Keyframe" as steps. Minor, real but rare (1 of 3); no change proposed yet.
