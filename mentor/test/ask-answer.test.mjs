@@ -258,3 +258,21 @@ test("every refusal code is registered with a plain message, with no field names
     assert.doesNotMatch(MESSAGES[code], /[a-z]_[a-z]/, code);
   }
 });
+
+test("audit: code, backticks, skill IDs and underscore names in what the learner reads are NOT_PLAIN_WORDS", () => {
+  refuses(edit((a) => { a.explanation += "\n- It ends in `value + offset`."; }), b1(), "NOT_PLAIN_WORDS");
+  refuses(edit((a) => { a.steps[1].text = "Open Shake Control's Rotation expression and look at its wiggle(10, 3). Not something I teach yet."; }), b1(), "NOT_PLAIN_WORDS");
+  refuses(edit((a) => { a.closing_offer = "Try them, or want to go deeper with transform.anchor?"; }), b1(), "NOT_PLAIN_WORDS");
+  refuses(edit((a) => { a.explanation += "\n- Its parent moves_children."; }), b1(), "NOT_PLAIN_WORDS");
+  assert.ok(checkAnswer(edit((a) => { a.steps[3].text = "Play it back and watch the turn."; }), b1()), "TD § 16 itself passes");
+});
+
+test("audit: a layer whose own name has an underscore is fine to name", () => {
+  const snap = structuredClone(SNAP);
+  snap.layer_info.find((l) => l.name === "Shake Control").name = "shake_ctrl";
+  const input = edit((a) => {
+    a.explanation = a.explanation.replaceAll("Shake Control", "shake_ctrl");
+    for (const st of a.steps) { st.text = st.text.replaceAll("Shake Control", "shake_ctrl"); if (st.layer) st.layer = "shake_ctrl"; }
+  });
+  assert.equal(checkAnswer(input, b1({ snapshot: snap })).reply.steps[2].layer, "shake_ctrl");
+});

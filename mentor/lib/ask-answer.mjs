@@ -16,7 +16,7 @@ import { motionSources } from "./motion-sources.mjs";
 import { readPath, shortName } from "./path.mjs";
 
 // Data-model § 8's messages, word for word, plus four this build adds (named in the hand-back):
-// ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER and COMP_IS_OPEN.
+// ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN and NOT_PLAIN_WORDS.
 registerErrors({
   TOO_MANY_STEPS: "Give at most four steps; give the first three and say there's more in the closing offer.",
   BAD_STEP_SKILL: "Each step's skill must be a skill, not taught, or none.",
@@ -32,6 +32,7 @@ registerErrors({
   KIND_MISMATCH: "An answer has one to four steps; a description or a how-to has none. Pick the kind that fits.",
   STEP_NEEDS_LAYER: "A step tagged with a skill names the layer it's on, exactly as it appears in the comp.",
   COMP_IS_OPEN: "A comp is open, so read it and answer about it.",
+  NOT_PLAIN_WORDS: "Say it in plain words: no code, no backticks, and no names from tool output; name a skill by its short name.",
 });
 
 export const KINDS = ["answer", "describe", "howto", "clarify", "outside", "no_comp"];
@@ -181,6 +182,18 @@ export function checkAnswer(input, ctx) {
     const core = squash(s.text.replace(/\s*not something i teach yet\.?$/i, ""));
     if (core.length >= 20 && flat.includes(core)) fail("STEPS_IN_EXPLANATION");
   }
+
+  // ae-mentor rule 5 and TD § 9 (no code): what the learner reads holds no backtick, no expression
+  // code, and no skill ID, kind or other underscore name from tool output.
+  // The comp's own layer, effect and comp names may hold underscores, so they're taken out first.
+  const own = snapshot ? [snapshot.comp && snapshot.comp.name, ...(layerInfo(snapshot).known ? layerInfo(snapshot).layers : snapshot.layers || [])
+    .flatMap((l) => [l.name, ...(Array.isArray(l.effects) ? l.effects.map((f) => f && f.name) : [])])].filter((n) => isStr(n) && n.includes("_")) : [];
+  const unnamed = (t) => own.reduce((acc, n) => acc.split(n).join(" "), t);
+  const shown = [expl, closing || "", ...steps.map((s) => s.text)].map(unnamed);
+  const ids = [...skills, NOT_TAUGHT];
+  const leaks = (t) => t.includes("`") || /\bthisComp\b|\bwiggle\(|\bvalue\s*\+/.test(t) ||
+    ids.some((id) => t.includes(id)) || /\b[A-Za-z]+_[A-Za-z_]+\b/.test(t);
+  if (shown.some(leaks)) fail("NOT_PLAIN_WORDS");
 
   // K4 and FR-027 read the motion-sources map of the same read.
   const map = snapshot && steps.length ? motionSources(snapshot) : null;

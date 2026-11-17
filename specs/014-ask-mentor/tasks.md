@@ -99,7 +99,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   write in this phase). Tests in `mentor/test/ask-tools.test.mjs`: reply shape; `comp` from the last read, never
   the input; `tags` from `path.json`; read-only (a fake bridge sees no write snippet); `NO_ACTIVE_COMP` from the
   read gives a valid `no_comp` answer.
-- [ ] T014 [US1] (skill-builder) `.claude/skills/ask-mentor/SKILL.md` (new; name `ask-mentor`, FR-057):
+- [x] T014 [US1] (skill-builder) `.claude/skills/ask-mentor/SKILL.md` (new; name `ask-mentor`, FR-057):
   `allowed-tools` = `describe_layers`, `preview_frame`, `give_answer`. Teaching from TD § 5, § 6 turns 1 to 3
   and 7, § 8 (read the named layers and their sources, summary first, detail for the moving layers), § 9,
   § 13, § 14; FR-001 to FR-020 except the offer's hand-over. The answer turn is one `give_answer` call and no
@@ -110,7 +110,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   the change in `bridge/UPSTREAM.md` › Changes. Test the cache logic in `bridge/test/comp-active.test.mjs` (new
   folder; Node built-ins, no CEP).~~ **Withdrawn 2026-11-16** with FR-047 (T001: a "no" is unreliable;
   `discovery/usage-notes/ask-build.md` › T001). Don't build; the bridge is unchanged.
-- [ ] T016 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; all
+- [x] T016 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; all
   pass. Note the counts in the hand-back.
 
 ## User Story 3: Home opens on a place to ask (P1) and the thread (panel-builder)
