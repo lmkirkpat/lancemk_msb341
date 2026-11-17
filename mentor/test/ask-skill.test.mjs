@@ -105,8 +105,10 @@ test("eval fix (d): the how-to line", () => {
   assert.match(SKILL, /A how-to's explanation is at most two sentences, no bullets\./);
 });
 
-test("eval fix (e): a partial name matching two layers gets a question naming both", () => {
-  assert.match(squash(SKILL), /When a name matches part of two layers' names, ask which, naming both\./);
+test("eval fix (e), moved into the tool by T037 fix (h): a name the read returns candidates for, shared or partial, gets a question naming them", () => {
+  assert.match(squash(SKILL), /A name that comes back with candidates \(two layers share it, or it's part of several names\) is a clarifying question \(below\) naming them\./);
+  assert.match(squash(SKILL), /both clarify conditions hold \(a name the read gives candidates for,/);
+  assert.doesNotMatch(SKILL, /When a name matches part of two layers' names/, "the tool decides a partial match now");
 });
 
 test("eval fix (f): steps look at an expression that sets a property by itself, never at its keys", () => {

@@ -36,9 +36,9 @@ here.
 1. **The layers the question names.** Call `describe_layers` with them, by name, in the summary
    shape. If the question names no layer ("make it feel more natural"), call it with no layers for
    the whole comp's summary.
-   - A name two layers share comes back with its candidates: that's a clarifying question (below).
-   - A name it can't find: read the whole comp's summary to find it. When a name matches part of
-     two layers' names, ask which, naming both.
+   - A name that comes back with candidates (two layers share it, or it's part of several names) is
+     a clarifying question (below) naming them.
+   - A name it can't find: read the whole comp's summary.
 2. **The layers that make the motion, in detail.** When the motion comes from an expression, on
    the layer or on a parent up its chain, call `describe_layers` again with `detail: true` on the
    layer that has the expression.
@@ -90,7 +90,7 @@ stated once, as an assumption in their words, in the first part.
 | `no_comp` | `describe_layers` returned `NO_ACTIVE_COMP` | none | none |
 
 **Default to an answer.** An answer with its assumption stated beats a question. Ask one
-clarifying question only when both clarify conditions hold (a layer name two layers share, or a
+clarifying question only when both clarify conditions hold (a name the read gives candidates for, or a
 goal like "make it feel more natural" with keyed motion on one layer and an expression on another). The
 question is one sentence naming the choices from the read (up to three layers) and carries nothing
 else. After any reply, even a vague one, give the answer with the assumption stated.

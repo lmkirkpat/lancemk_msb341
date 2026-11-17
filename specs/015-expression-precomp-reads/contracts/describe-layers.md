@@ -8,7 +8,7 @@ In this spec no skill lists it.
 
 | Field | Type | Default | Notes |
 |---|---|---|---|
-| `layers` | array of int or string | none (whole comp) | Index, or a name. A name two layers share returns `NAME_SHARED` for that entry (FR-017) |
+| `layers` | array of int or string | none (whole comp) | Index, or a name. A name two layers share returns `NAME_SHARED` for that entry (FR-017). A name that's no layer's exact name is matched loosely (below) |
 | `detail` | bool | false | false: summary shape; true: detail shape for the named layers |
 | `at_time` | number | the comp's current time | Time for base and after-expression values (FR-003) |
 | `comp_id` | int | the active comp | Phase 2 only: describe an inner comp's layers by id |
@@ -32,12 +32,23 @@ precomp, or `comp_id` is given, one `precomp-contents` read.
           own_keys: "read", switches: "read" | not_read,   // FR-004b (Amendment 7)
           precomps: "read" | not_read },            // phase 1: precomps is always not_read
   layers: [ Layer summary | Layer detail | { asked, error: "NAME_SHARED", candidates: [{ layer_index, parent }] }
+            | { asked, error: "NAME_PARTIAL", candidates: [{ layer_index, layer, parent }] }
             | { asked, error: "NOT_FOUND" } ],
   size: { bytes, cut: [layer names left out] }       // present only when the reply hit its cap
 }
 ```
 
 Layer summary and Layer detail: data-model § 6. `not_read` is `{ status: "not_read", reason }`.
+
+**Loose names (added 2026-11-17, spec 014 T037 fix (h), answers 014's OQ-8):** a name with no exact
+match (case-sensitive, as before) is matched loosely: the asked text, ignoring case, as a whole word or
+words in a layer's name, so "rock" matches `rock.png` (the name without its extension) and `Rock
+Shadow.png`, but not `Rocky.png`. All loose matches are one tier. One match resolves: that layer's entry is
+a normal named entry (shifts included) plus `asked`, the text it was asked by, so the caller uses the real
+`layer` name from then on. Two or more return `NAME_PARTIAL` with every candidate's `layer_index`, `layer`
+name and `parent` name, in layer order; the caller asks which (014 FR-014's one clarifying question). No
+match is `NOT_FOUND`. An exact name always wins, and an exact name two layers share is still
+`NAME_SHARED` (FR-017).
 
 **Footprint shift (FR-004a, added 2026-11-16):** each layer named in `layers` carries `shifts`, one
 entry per parent-chain transform expression that moves it, with its peak shift in comp pixels on that

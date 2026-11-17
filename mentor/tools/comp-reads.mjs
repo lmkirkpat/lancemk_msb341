@@ -28,9 +28,23 @@ const notRead = (reason) => ({ status: "not_read", reason });
 const bytes = (v) => Buffer.byteLength(JSON.stringify(v), "utf8");
 const textReply = (value) => ({ content: [{ type: "text", text: JSON.stringify(value) }] });
 
-// Each asked entry as a layer index, or an error entry (FR-017: a shared name returns the candidates).
+// A name that isn't any layer's exact name, matched loosely (T037 case 09): the asked text, ignoring
+// case, as a whole word or words in the layer's name. That covers the same name in another case, the
+// name without its file extension ("rock" for rock.png) and a word in a longer name ("rock" in Rock
+// Shadow.png), all one tier, so "rock" with rock.png and Rock Shadow.png is two candidates.
+const escape = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+export function loosely(asked, name) {
+  const a = String(asked).trim().toLowerCase();
+  if (!a) return false;
+  return new RegExp(`(^|[^\\p{L}\\p{N}])${escape(a)}($|[^\\p{L}\\p{N}])`, "u").test(String(name).toLowerCase());
+}
+
+// Each asked entry as a layer index, or an error entry. FR-017: a shared name returns the candidates.
+// A name with no exact match but one loose match resolves to that layer, and the reply says which name
+// it matched (`asked` on the entry); two or more loose matches return NAME_PARTIAL with each candidate.
 function resolveAsked(snapshot, asked) {
   const layers = layerInfo(snapshot).layers;
+  const nameOf = (i) => (i == null ? null : (layers.find((x) => x.index === i) || {}).name ?? null);
   return asked.map((a) => {
     if (typeof a === "number") {
       const l = layers.find((x) => x.index === a);
@@ -39,8 +53,12 @@ function resolveAsked(snapshot, asked) {
     const same = layers.filter((x) => x.name === a);
     if (same.length === 1) return { index: same[0].index };
     if (same.length > 1) {
-      const nameOf = (i) => (i == null ? null : (layers.find((x) => x.index === i) || {}).name ?? null);
       return { asked: a, error: "NAME_SHARED", candidates: same.map((l) => ({ layer_index: l.index, parent: nameOf(l.parent) })) };
+    }
+    const near = layers.filter((x) => loosely(a, x.name));
+    if (near.length === 1) return { index: near[0].index, asked: a };
+    if (near.length > 1) {
+      return { asked: a, error: "NAME_PARTIAL", candidates: near.map((l) => ({ layer_index: l.index, layer: l.name, parent: nameOf(l.parent) })) };
     }
     return { asked: a, error: "NOT_FOUND" };
   });
@@ -122,6 +140,7 @@ function summaryOf(entry, ctx) {
   return {
     layer_index: entry.index,
     layer: entry.name,
+    ...(entry.asked_as != null ? { asked: entry.asked_as } : {}),
     kind: entry.kind,
     class: m ? m.class : null,
     ...keysAndSwitches(ctx.snapshot, entry, { named: ctx.named, detail: ctx.detail }),
@@ -238,7 +257,7 @@ export async function describeLayers({ layers: asked, detail = false, at_time } 
     precomps: notRead("phase_2"),
   };
   const entries = named
-    ? named.map((e) => (e.index == null ? e : byIndex(snapshot, e.index)))
+    ? named.map((e) => (e.index == null ? e : e.asked != null ? { ...byIndex(snapshot, e.index), asked_as: e.asked } : byIndex(snapshot, e.index)))
     : layerInfo(snapshot).layers;
   const build = (list) => {
     ctx.listed = new Set(list.filter((e) => !e.error).map((e) => e.index));
@@ -254,9 +273,11 @@ export const TOOLS = [
     title: "Describe layers",
     description:
       "Read-only. What moves the active comp's layers: expressions on any property (on, error, whether each builds on its own " +
-      "value, how far it moves), what links to each layer and whether that shows, effects, and parents. Omit layers for a " +
-      "summary of the whole comp; name layers (index, or a name only one layer has) for their summary, or with detail for " +
-      "each expression's text. Links and builds-on are inferred from the text. It can't see inside precomps yet.",
+      "value, how far it moves), what links to each layer and whether that shows, effects, parents, and each layer's own " +
+      "keys and key types. Omit layers for a summary of the whole comp; name layers (index, or a " +
+      "name only one layer has) for their summary, or with detail for each expression's text. A name that's a word in one " +
+      "layer's name (rock for rock.png) reads that layer; a word in several returns them all, to ask which. Links and " +
+      "builds-on are inferred from the text. It can't see inside precomps yet.",
     inputSchema: {
       type: "object",
       properties: {
