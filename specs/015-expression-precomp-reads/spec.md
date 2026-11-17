@@ -4,7 +4,8 @@
 
 **Created**: 2026-11-14
 
-**Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3).
+**Status**: **Phase 1 shippable (2026-11-16, T040)**: spec 014 can build on it. Phase 2 (US4) not
+started (next: T041). Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3). Phase 1's results are in Success Criteria › Phase 1 results.
 
 **Amendment 1 (2026-11-14, Phase 0 live checks, T008; approved by the builder 2026-11-14 with OQ-8 as recommended):** evidence in
 `discovery/usage-notes/expression-reads.md` (session 1) and the corrected finding 4 in
@@ -47,6 +48,17 @@ with `\r` line ends. Changed here: Edge Cases (E30), Out of scope (the one pivot
 and null `motion_from` lines), Assumptions, OQ-8, OQ-9; `contracts/describe-layers.md` (a parent's
 `moves` said once in a summary); tasks T057 to T060 (new, phase 1 follow-ups). No approved decision
 changes.
+
+**Amendment 5 (2026-11-16, T040 and T060: phase 1's gate results):** evidence in
+`discovery/usage-notes/expression-reads.md` session 3 (T033, T034), each eval set's README (T036,
+`1c6789b`) and tasks T033 to T039, T057 to T059 and T061 to T063. Every phase 1 SC is met; SC-006's
+3-of-3 clause and SC-008's whole-turn half are met as the notes under Phase 1 results say, not by the
+letter of a fresh run, and both notes are there for anyone who disagrees. T034 settled which layer Pan
+Behind takes on AE 27.0 (the selected layer; with nothing selected, the top layer under the cursor).
+T060: the 1 px floor is recorded as approved and handed to spec 014 (OQ-8). New OQ-10: the floor is
+measured in screen pixels on the asked layer, which FR-004 doesn't give. Changed here: Status, Success
+Criteria (Phase 1 results), Assumptions (T034, A runs), OQ-8, the T034 open item (answered), OQ-10
+(new). No requirement or approved decision changes.
 
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
@@ -504,6 +516,27 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   (spec 004 SC-002's bar) across Comp 1 and the planted cases, including at least one off and one error
   expression. *Measured by:* the builder, in usage notes.
 
+**Phase 1 results (T040, 2026-11-16).** Phase 1 merged at `a3300e3`; the follow-ups (T057 to T059, T061
+to T063) merged after it. "Live" means AE 27.0.
+
+| SC | Result | Evidence |
+|---|---|---|
+| SC-001 | Met | Unit test on the live Comp 1 capture (T015, `91fd02b`): 3 expressions, text identical, 2 build on value, 1 sets its own. The capture found the `\r` fault (E30), fixed at `1499819` |
+| SC-002 | Met | T021's tests on the same capture; spot checks 3 and 4 live (T034) |
+| SC-003 | Met | Unit test, plus T033's live read: base (960, 540), after (952.352, 542.492) at 0.6 s; rock.png's source is Shake Control by expression |
+| SC-004 | Met (phase 1 half) | T016's test; T033: Mentor Practice's easing findings identical before and after the merge, old code on a pre-merge capture and new code on a new one |
+| SC-005 | Met | T022 to T025's unit tests, one set per skill check |
+| SC-006 | Met, with the builder's reading of the 3-of-3 clause | T036 at `edc0a1e` (`1c6789b`): easing 32/33, key types 35/36, speed graph 35/37, offset 42/44, pivot 61/64, null 50/55; every hard-rule check passes. The K2 cases (pivot 55, 56; null 53, 54; offset 44) and T059's (pivot 57 to 59, null 55) passed 3/3 on B1 earlier (T035, T059; null 53, 54 and pivot 58 again after T061) and passed once each in the full run at `edc0a1e`; the builder took that as meeting 3 of 3, with no repeat at that commit. After the run, T063 changed one line each in key types, speed graph and offset `SKILL.md` (`84693de`); those cases re-ran on B1 (`c7167ea`: offset 41 3/3, key types 33 and speed graph 16 2/3 on other items, already counted as fails above), so every set stays at its bar |
+| SC-007 | Met | T027's tests; live Comp 1 whole-comp summary 10.5 KB (was 12.4 KB before a parent's `moves` was said once, `1499819`; contracts/describe-layers.md › Limits) |
+| SC-008 | Snapshot half met live; whole-turn half met by margin, not re-measured | T033: Comp 1 about 165 to 210 ms (+45 ms), Mentor Practice about 129 to 137 ms (+8 ms), budget 0.5 s. No lesson has run in the panel since the merge. The turn log's worst first activity before it is 9.1 s on B1 and 5.3 s on A (all within 10 s), and the snapshot adds under 0.05 s. The first live turns after the merge (spec 014 T038, or the next lesson) confirm it |
+| SC-009 | Met | T028's honesty sweep |
+| SC-010 | Met, 10 of 10 | T034 (`expression-reads.md` session 3), including one off and one erroring expression |
+
+Not SCs but carried by phase 1: the record guard (FR-020, T029) and OQ-9's blanking (T057); the pivot
+and null `motion_from` wording (T058, eval cases T059); the unkeyed and erroring expression rules in
+the pivot and null tools (T061, T062). Every set needs a fresh A run at spec 014's ship step (T037;
+Assumptions).
+
 **Phase 2**
 
 - **SC-011**: On Comp 1, **all 20** precomp layers are read; inner keyed-property and layer counts
@@ -573,6 +606,10 @@ motion) belong to spec 014's set and to pivot K1, not here.
   open (T034). The edit matches
   T004's fit for turn f within a few pixels. T006 confirmed the time mapping on all eight keys against
   AE's `sourceTime()` (an expression-only function, so the read can't call it) and the builder's eye.
+- **Checked by hand 2026-11-16 (T034, session 3):** Pan Behind on AE 27.0 takes the **selected** layer,
+  even with the cursor over another; with nothing selected, the top layer under the cursor (which AE
+  then selects). Turn f fits: Shake Control was selected. This overturns the pivot `SKILL.md` lines from
+  spec 011's AE 26.5 session; T058 rewrote them.
 - **Checked live 2026-11-16 (T015 Comp 1 capture, merge `1499819`):** AE 27.0 returns expression text
   with `\r` line ends. The snapshot keeps the text as AE gives it; only `describe_layers` detail (shown
   with `\n`) and text comparisons (SC-001, FR-014's "text changed") normalize, through
@@ -581,7 +618,10 @@ motion) belong to spec 014's set and to pivot K1, not here.
   from the builder's own comps with no real names. On the learner's machine it sits in `session.json`
   only while a lesson runs (OQ-9, answered 2026-11-16).
 - Moving to A (`decisions/011`): the reads don't depend on the runtime. Each set's A result goes stale
-  when the tools change; the A re-runs happen in spec 014's ship step, not here.
+  when the tools change; the A re-runs happen in spec 014's ship step, not here. *T037 (2026-11-16):*
+  all six sets are ready for A and their A dry runs are valid; the settings hash is unchanged at
+  `3acbda26`, but it covers the helper's settings, not `mentor/`, so no earlier A result carries over:
+  all six need a fresh A run.
 - Read time was measured on one machine with one comp; the 0.5 s and 1.5 s budgets leave room for
   larger projects, which haven't been measured.
 
@@ -646,6 +686,10 @@ motion) belong to spec 014's set and to pivot K1, not here.
   (T059). The 1 px "too small to see" floor in `specs/014-ask-mentor/teaching-design.md` § 5.1a (H-7)
   is approved; the "hard to tell apart" band is deferred until after spec 014's three sessions (T060
   records both).
+  **T060 (2026-11-16):** recorded here and handed to spec 014 through the cockpit. 014's teaching
+  design already carries it (§ 5.1a, H-7 answered, `d56b19d`): the first three bullets of § 5.1a are in
+  force, the fourth waits on 014's three sessions. Spec 015 builds nothing for the band. What the floor
+  needs from the reads is OQ-10.
 
 ### New from the T031 review (2026-11-16)
 
@@ -671,13 +715,32 @@ motion) belong to spec 014's set and to pivot K1, not here.
     FR-014's "text changed" but not the guard: a substring check needs the text, and a hash that
     could answer it would have to be reversible.
   Built by T057.
-- **Open item for T034 (the next live sitting): which layer does Pan Behind act on?**
+- **Answered 2026-11-16 by T034: the selected layer; with nothing selected, the top layer under the
+  cursor** (Assumptions). T058 rewrote the `SKILL.md` lines. The item as it stood:
+  **Open item for T034 (the next live sitting): which layer does Pan Behind act on?**
   `.claude/skills/anchor-mentor/SKILL.md` lines 378 to 381 say it acts on the layer under the cursor
   even when another layer is selected (spec 011's live finding, 2026-10-26). T005 moved the selected
   layer (Shake Control, which was also over the rock). Test at T034: select layer A, start a Pan
   Behind drag over layer B (not over A), and see which layer's Anchor Point moves. Until then this
   spec doesn't change that `SKILL.md` line, and Amendment 2 names only the layer it took in T005, not a
   general rule.
+
+### New from T040 (2026-11-16)
+
+- **OQ-10: Who gives a source's peak in screen pixels on the asked layer?** The approved 1 px floor
+  (014 TD § 5.1a) and "say its size" are measured as **screen pixels on the asked layer** (014 TD's
+  needs, item 4). FR-004 gives each expression's peak in **the property's own units**: pixels for a
+  parent's Position, but degrees for Rotation and percent for Scale, which turn into pixels on a child
+  only through its distance from the pivot. On Comp 1 that's the case that matters: Shake Control's
+  Rotation peaks at 0.59° (T034), which 014 TD § 16 puts at about 9 px on rock.png by hand. Without
+  it, the ask mode can't apply the floor to a rotation or scale source, and § 16's "about 9 px" stays an
+  estimate. **Recommended: spec 015 adds it as a phase 1 follow-up**, a new FR-004a and one
+  skill-builder task: for the asked layer, each parent expression's peak shift of the layer's footprint
+  in comp pixels, worked out in the mentor from the values the sweep already reads (no new AE write,
+  no change to FR-004's fields). It doesn't block 014's mentor half (T008 to T014); it's needed before
+  014's FR-007 ordering is tested on Comp 1 and before the three sessions. *If no:* 014 states
+  rotation and scale in their own units and applies the floor to Position only, and TD § 5.1a needs the
+  curriculum designer to say so.
 
 ### For the curriculum designer (hand-off, not edits)
 

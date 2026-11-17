@@ -3,7 +3,7 @@
 **Input**: [spec.md](spec.md) (approved `944cd8c`), [plan.md](plan.md), [research.md](research.md),
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md).
 
-**Status**: Draft, awaiting the builder's approval with the plan.
+**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041).
 
 **Format**: `- [ ] T### [P?] [Story?] (owner) Description`. `[P]` = can run alongside the other
 `[P]` tasks in the same block (different files, no unfinished dependency). Owners: **skill-builder**
@@ -114,7 +114,7 @@ step). Read-only scripts except where a plant is named.
 - [x] T014 (skill-builder) In `mentor/dev/capture.mjs` add `--measure <indexes>` and `--time` (prints
   elapsed ms); in `mentor/fixture.mjs` return saved sweeps and mark missing fine sweeps
   `not_read: fixture` (research R13). Tests in `mentor/test/fixture-sweeps.test.mjs`.
-- [ ] T015 (skill-builder, AE) Capture fixtures into `mentor/test/fixtures/expressions/`: Comp 1
+- [x] T015 (skill-builder, AE) Capture fixtures into `mentor/test/fixtures/expressions/`: Comp 1
   (`--measure 25,26 --times 0.6`), Mentor Practice, Mentor Practice 2, Mentor Overlaps, and one
   duplicate comp with the planted cases from T001 and T002 (an erroring expression on a transform
   and on an effect property; a `wiggle` layer with a layer added above it, read before and after, E28)
@@ -129,6 +129,9 @@ step). Read-only scripts except where a plant is named.
   texts; playhead moved, Pan Behind's values and a base Position edit, each reset and strict-compared), 015 Planted
   (before and after a null renumbers its wiggle) and 015 Thirty. Comp 1 tests run on a shape derived from the
   committed live reads (`fixtures/expressions/comp1.mjs`) until `comp1.json` is captured.
+  **Done 2026-11-16:** Comp 1 captured live (`91fd02b`, `comp1.json`; fixes from it merged `1499819`).
+  Open for the eval-engineer: the stand-ins T035 marked to re-derive from it, and spec 014's ask fixtures
+  (`product/evals/ask/fixtures/build.mjs`).
 - [x] T016 (skill-builder) **Easing unchanged (FR-021, SC-004).** Extend
   `mentor/test/analyze-unchanged.test.mjs` (or add `analyze-r2-unchanged.test.mjs`) so the easing
   findings on the new Mentor Practice and Mentor Practice 2 captures equal the committed baselines
@@ -305,8 +308,11 @@ pivot and null.
   yet" once phase 2 lands, in the easing teaching design (`specs/002-easing-slice/` or curriculum
   § 6, skill 0). Design only; the `SKILL.md` change is a later skill-builder task.
   **CD-2 done 2026-11-16: curriculum § 6 skill 0, wording per precomp read state; the not-read line kept word for word.**
-- [ ] T040 (spec-writer) Fold T033 to T039's results into the spec (status, any SC amendments) and
+- [x] T040 (spec-writer) Fold T033 to T039's results into the spec (status, any SC amendments) and
   hand the cockpit a CLAUDE.md note. **Phase 1 is shippable here** (to spec 014).
+  **Done 2026-11-16 (spec Amendment 5):** every phase 1 SC met (spec › Phase 1 results); SC-006's 3-of-3
+  clause as the builder read it, SC-008's whole-turn half by margin (first live turns confirm it). The
+  contract's `moves` rule was already in (`1499819`). New OQ-10 (screen pixels for the 1 px floor).
 
 ### Phase 1 follow-ups (Amendment 4, builder decisions 2026-11-16)
 
@@ -343,9 +349,10 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   pivot 57 3/3, 59 3/3, null 55 3/3 (one regex miss, loosened). Pivot 58 (an unkeyed Position expression
   named as the focus) 0/3 until T061: re-run it after T061 merges. The Shake Control "builds on" case
   moved to spec 014's set.
-- [ ] T060 (spec-writer) Record in the spec and hand to spec 014: the 1 px "too small to see" floor
+- [x] T060 (spec-writer) Record in the spec and hand to spec 014: the 1 px "too small to see" floor
   (014 TD § 5.1a, H-7) is approved; the "hard to tell apart" band is deferred until after spec 014's
   three sessions. Fold with T040.
+  **Done 2026-11-16:** spec OQ-8; handed to spec 014 through the cockpit (014 TD already has it, `d56b19d`).
 
 **Checkpoint:** spec 014 can build on phase 1.
 
@@ -489,5 +496,5 @@ T033, T034) are serial because of the one-driver rule, and T005, T006, T034 wait
 2. Phase 2 follows when phase 1's gate passes, and doesn't block spec 014's first version (the
    answer says "I couldn't see inside [precomp]" until then).
 
-**Task count:** 60 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
-which US4 8; phase 1 follow-ups T057 to T060: 4, added 2026-11-16).
+**Task count:** 63 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
+which US4 8; phase 1 follow-ups T057 to T063: 7, added 2026-11-16).

@@ -3,7 +3,7 @@
 **Branch**: `015-expression-precomp-reads` (spec folder only; build branches are the cockpit's) |
 **Date**: 2026-11-14 | **Spec**: [spec.md](spec.md) (approved `944cd8c`, OQ-1 to OQ-5 as recommended)
 
-**Status**: Draft, awaiting the builder's approval with [tasks.md](tasks.md).
+**Status**: Approved 2026-11-14 with [tasks.md](tasks.md). Phase 1 shippable 2026-11-16 (T040).
 
 ## Summary
 
