@@ -137,6 +137,14 @@ function createApp(deps) {
 
   function init() {
     state.thread = session.readThread ? session.readThread() : null;
+    // A close while an answer was loading saves the question with nothing under it. Reopened, it's a
+    // stopped turn: spec 007's notice with "Your question's still here." and Try again (MU › States
+    // still missing; T035 design review item 2).
+    const last = thr.latest(state.thread);
+    if (last && !last.answered) {
+      state.thread = thr.notice(thr.answer(state.thread, { view: null, prose: null, had_result: false }), { title: E.stopped.title, text: COPY.ask.question_still_here });
+      persistThread();
+    }
     later(() => {
       if (state.record.status === "pending") { state.record = { status: "loading", record: null }; changed(); }
     }, LOADING_AFTER_MS);

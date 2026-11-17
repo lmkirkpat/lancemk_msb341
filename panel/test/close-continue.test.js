@@ -139,6 +139,33 @@ test("closing mid-answer keeps the thread; reopened, the question is there with 
   assert.equal(again.adapter().sent[0].text, "/ask-mentor Why does the rock shake from its middle?");
 });
 
+test("T035 item 2: closed while the answer loads and no turn end arrives → reopened, the question shows stopped with Try again", async () => {
+  const { COPY } = require("../lib/copy.js");
+  const { renderApp } = require("../lib/screens.js");
+  const h = await ready({ runtime: "a", setTimeout: () => 0 });
+  h.app.setDraft("Why does the rock shake from its middle?");
+  h.app.act("ask_home");
+  h.app.shutdown(); // the page goes before the adapter reports anything
+  assert.equal(h.saved.thread.questions[0].answered, false, "saved mid-answer");
+  const again = await ready({ runtime: "a", thread: h.saved.thread, setTimeout: () => 0 });
+  again.app.act("back_question");
+  const q = again.app.model().thread.questions[0];
+  assert.equal(q.answered, true);
+  assert.deepEqual(q.notice, { title: COPY.errors.stopped.title, text: COPY.ask.question_still_here });
+  assert.equal(again.saved.thread.questions[0].answered, true, "saved settled, so it reads the same next time");
+  const r = renderApp(again.app.model()).lesson;
+  const words = [r.chat.earlier || "", ...r.chat.items, r.actions].join("\n").replace(/&#39;/g, "'");
+  assert.ok(words.includes("Why does the rock shake from its middle?"));
+  assert.ok(words.includes(COPY.errors.stopped.title));
+  assert.ok(words.includes("Your question's still here."));
+  assert.match(r.actions, /data-action="ask_try_again"/, "Try again shows");
+  assert.equal(again.adapters.length, 0, "reopening starts nothing");
+  again.app.act("ask_try_again");
+  assert.equal(again.adapter().started[0].resumeSessionId, "session-1");
+  assert.equal(again.adapter().sent[0].text, "/ask-mentor Why does the rock shake from its middle?");
+  assert.equal(again.app.model().thread.questions[0].notice, null, "Try again clears the notice");
+});
+
 test("an answered thread and a waiting lesson both survive a close", async () => {
   const h = await ready({ runtime: "a", setTimeout: () => 0 });
   h.app.setDraft("Why?");
