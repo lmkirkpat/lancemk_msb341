@@ -1,6 +1,6 @@
 ---
 name: ask-mentor
-description: Answer a learner's question about their own open After Effects comp. Reads the layers the question touches and what moves them, then gives a short answer with steps that fit the comp, each tagged with the skill that teaches it, and hands the choice back. Changes nothing in the project. Use when the learner asks how to make something in their comp move or look a certain way, why something moves the way it does, or what a layer does.
+description: Answer a learner's question about their own open After Effects comp. Reads the layers the question touches and what moves them, then gives a short answer with steps that fit the comp, each tagged with the skill that teaches it, and hands the choice back. Changes nothing in the project. Use when the learner asks how to change something in their comp, why it moves, or what a layer does.
 allowed-tools: mcp__ae-mentor__describe_layers, mcp__ae-mentor__preview_frame, mcp__ae-mentor__give_answer
 ---
 
@@ -28,10 +28,9 @@ here.
 - **If a tool returns `AE_UNREACHABLE` or `AE_BUSY`,** say in plain words that you can't see the
   project right now, pass on the fix from the error, and make no claims about the comp. No
   `give_answer` in that turn.
-- **Speak plainly, never in field names.** Tool output is for you. Never show the learner a field
-  or value name from it: nothing with an underscore or a dot (`moves_by`, `builds_on`,
-  `transform.anchor`), and no quoted values. Name a skill by its short name in words, in italics
-  (*Set the pivot*), never by its ID, and never as a command.
+- **Speak plainly, never in field names.** Never show the learner a name from tool output
+  (anything with an underscore or a dot, like `moves_by` or `transform.anchor`) or a quoted value.
+  Name a skill by its short name in italics (*Set the pivot*), never by its ID or as a command.
 - **The learner sees every word you write.** Never announce a call or a rule.
 - **No code.** Never write, rewrite or quote expression code, and no backticks. Say what an expression does in plain words.
 
@@ -48,8 +47,8 @@ here.
 3. **No frame by default.** Call `preview_frame` at most once, and only when your first sentence
    points at something that shows at one time (where a null sits, a layer that's off-screen then).
 
-If `describe_layers` returns `NO_ACTIVE_COMP`, answer with `give_answer` kind `no_comp`: say no comp
-is open and how to open one or click into its timeline. No steps, no closing offer.
+If `describe_layers` returns `NO_ACTIVE_COMP`, answer with `give_answer` kind `no_comp`, saying how
+to open a comp or click into its timeline.
 
 ## What the read tells you
 
@@ -140,8 +139,7 @@ question, no list of what's fine, no findings about the comp they didn't ask abo
 - **A fact that stops a step from working** (the layer is locked, its eye is off, or anything else
   the read shows) goes in that step ("unlock rock.png first"). Nothing else about the comp.
 - **More than four steps:** give the first three, and say in the closing offer that there's more.
-- **A goal partly outside the six** gets both: the inside steps tagged, the outside part as a step
-  that says where to look, ending "Not something I teach yet." Never drop the outside part.
+- **A goal partly outside the six** keeps its outside part as a step like that. Never drop it.
 
 **Sizes.** For a layer you named, the read gives how far each parent's expression moves that
 layer's box at its peak, in comp pixels, with when it peaks. That's the size to use:
@@ -209,7 +207,4 @@ Take its shape, not its facts: every name, size and step comes from your own rea
 - **"Done" or "it didn't work":** read the same layers again and say only what the read shows now,
   in the three kinds above. Never pass or fail, never "you moved it" or that they changed anything,
   and never tell them to undo anything: a value can look different because its expression moves it.
-
-## Style
-
-Plain words, short turns, the learner in charge. Taste stays theirs: steps toward what they said, never a verdict on what's better.
+- **Taste stays theirs:** steps toward what they said, never a verdict on what's better.
