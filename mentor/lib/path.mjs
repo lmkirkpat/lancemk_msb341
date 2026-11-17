@@ -29,7 +29,7 @@ export function shortName(id) {
   return skillName(id);
 }
 
-export const pathOrder =() => [...readPath().skills].sort((a, b) => a.position - b.position).map((s) => s.id);
+export const pathOrder = () => [...readPath().skills].sort((a, b) => a.position - b.position).map((s) => s.id);
 
 // Built means a tool file declares the ID (FR-003): `skills` is every declared ID.
 export const isBuilt = (id, skills) => skills.includes(id);
