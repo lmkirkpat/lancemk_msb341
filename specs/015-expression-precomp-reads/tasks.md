@@ -281,9 +281,14 @@ pivot and null.
   (about $19 with two superseded drafts, both case bugs). Built on the live 015 Rig and Planted captures;
   three stand-ins to re-derive after T015 (marked in the READMEs). Pivot 57 and null 55 held: `motion_from`
   has no `SKILL.md` wording yet, so no case can pin how it's said (OQ-8 or spec 014).
-- [ ] T036 (eval-engineer) Re-run all six sets on B1 at the merge commit, one set at a time: easing,
+- [x] T036 (eval-engineer) Re-run all six sets on B1 at the merge commit, one set at a time: easing,
   key types, speed graph, offset, pivot, null. Each meets its SC-006 bar with every hard-rule check
   passing; T035's cases pass 3 of 3. Triage with `/eval-triage`; log in each README (SC-006).
+  **Done 2026-11-16 (`1c6789b`):** easing 32/33, key types 35/36, speed graph 35/37, offset 42/44, pivot 61/64,
+  null 50/55; every hard-rule check passes. T035's and T059's cases (offset 44, pivot 55 to 59, null 53 to 55)
+  passed in the full runs at this commit; the builder took that with their earlier 3/3 as met (no repeat).
+  Three real minor misses go to T063 (key types 33, speed graph 16, offset 41); the rest were noise on repeat.
+  About $227 notional; a six-set B1 run doesn't fit one 5-hour usage window, so split it.
 - [x] T037 [P] (eval-engineer) Free A checks (`decisions/011` steps 1 and 2):
   `product/evals/lib/ready-for-a.mjs` and `--runtime a --dry-run` on all six sets. Paid A runs wait
   for spec 014's ship step.
@@ -376,6 +381,12 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   already saved, validation's plain errors), and the server reads `omitFromLog` from any error; replies
   unchanged. Replay of 524 calls across all 119 pivot and null cases: no reply changes (no capture has an
   erroring keyed expression).
+- [ ] T063 (skill-builder) Three `SKILL.md` fixes from T036 (cockpit-numbered 2026-11-16, builder's go), each
+  one line with its example from the rubric's Pass line: (a) key types case 33 (`names_blink`): a hint names
+  the layer or property it's about; (b) speed graph case 16 (R-RECORD-HONEST): a record summary says what
+  the learner did, never how the lesson went; (c) offset case 41 (R-SHOW-ME-AGAIN): say a shift as the
+  learner's gap ("later by your gap"), never a raw time. No change to eval cases, rubrics or `mentor/`.
+  Then EE re-runs each case `--repeat 3` on B1 (3/3 each).
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script
