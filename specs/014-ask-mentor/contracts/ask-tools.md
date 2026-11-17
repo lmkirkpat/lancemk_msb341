@@ -50,7 +50,13 @@ again. The codes in research R3: `TOO_MANY_STEPS`, `BAD_STEP_SKILL`, `BAD_OFFER`
 | `KIND_MISMATCH` | An `answer` with no steps, or a `describe` or `howto` with steps |
 | `STEP_NEEDS_LAYER` | A step is tagged with a skill but names no layer (a not-taught or untagged step may have none) |
 | `COMP_IS_OPEN` | A `no_comp` answer while the read found a comp open |
+| `UNKNOWN_LAYER` | *(added 2026-11-16 (d), from the build, `mentor/lib/ask-answer.mjs`)* A step names a layer that `give_answer`'s own read doesn't find in the comp |
+| `NO_ACTIVE_COMP` | *(added 2026-11-16 (d), from the build)* An answer about a comp (`answer`, `describe`, `clarify`), but `give_answer`'s own read finds no comp active |
 | `NOT_PLAIN_WORDS` | The explanation, a step or the closing offer holds code, a backtick, a skill ID, or an underscore name from tool output. Names from the learner's own comp (the comp, its layers and their effects) are exempt, underscores and all |
+
+*Added 2026-11-16 (d):* `COMP_NOT_NAMED` and `NO_ACTIVE_COMP` from `give_answer` mean the comp changed between
+the mentor's read and its answer. The mentor then reads again before answering, and never answers from the
+earlier read.
 
 ## `go_deeper` (phase 2)
 

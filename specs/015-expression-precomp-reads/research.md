@@ -278,3 +278,20 @@ SC-003a): Rotation gives rock.png about 9.36 px, logo.png about 8.60 and the ten
 first gave the title layer about 6.84 px, worked from its position at the reading time (3.403 s). Its own
 Position keys (2.503 s and 2.636 s) bracket the peak (2.569 s), so by the rule above it's `chain_moves`
 (`shift_px: null`) for both sources, which is what T064 returns (`2440c62`).
+
+**Corrected 2026-11-16 (spec Amendment 9, from spec 014's reviews T034 and T035; the code on
+`014-mentor` was right, this note was wrong):**
+
+- **Rotation under a non-uniform scale.** "The sign doesn't change the distance, so `max_offset` is
+  enough" and "any Rotation above the source layer is exempt" hold only when every layer above the
+  Rotation source has uniform scale. Under a non-uniform scale above it, a turn changes lengths, so the
+  peak's direction (`max_value`) is needed (`direction_unknown` without it), and Rotation above the
+  source counts toward `chain_moves`.
+- **A Position source** doesn't depend on its own layer's Rotation: Position applies in the parent's
+  space.
+- **The named layer's box** is one of the values that count for `chain_moves`. A text or shape layer
+  whose box changes over time comes back `chain_moves`: keys or a varying active expression outside
+  Transform (Rectangle Size, Path, Source Text, text animators), or a sampled box that differs between
+  samples.
+- **`switch_not_read`:** a 3D or Auto-Orient switch in the chain that couldn't be read (anything but
+  true or false) returns `null` with this reason, never taken as off.

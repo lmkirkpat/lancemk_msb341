@@ -31,6 +31,10 @@ MU › Copy, plus the lines below.
    latest answer has none; opens itself once on returning from a lesson.
 4. Go deeper appears only inside its answer; while its lesson is open it's **Back to your lesson ›**; after
    the lesson it's gone (FR-050).
+5. *Added 2026-11-16 (spec amendment (d), the builder's decision):* starting any other lesson (Find my next
+   lesson, Pick up, or a Skills lesson) ends the thread's conversation but keeps its last question, answer and
+   steps saved and visible; "Back to your question ›" still works after the lesson. Nothing is deleted
+   (FR-052's note, research R12).
 
 ## Requests (added to `REQUESTS`, eval-synced)
 
@@ -40,6 +44,11 @@ MU › Copy, plus the lines below.
 | Follow-up bar | the text as typed; the first one after a go-deeper lesson gets `/ask-mentor ` in front | `followup` |
 | Go deeper | "Yes, go deeper on [short name]." | `go_deeper` |
 | End lesson (go-deeper lesson) | "/ask-mentor I've ended that lesson." | `followup` |
+
+*Added 2026-11-16 (spec amendment (d)), a new question in the follow-up bar:* when a follow-up turn returns
+a `give_answer` result of kind `answer`, `describe` or `howto`, the panel treats it as a new question: it
+folds the earlier entries, logs the turn as `question`, and Go deeper acts on the newest answer. Decided from
+the tool's data, never the prose (FR-031's note, FR-016). Any other kind stays a `followup`.
 
 All carry `thread: "ask"` in the turn log. The learner's bubble shows the text as typed (or MU's "Yes, go
 deeper on Set the pivot."), never the `/ask-mentor ` prefix; End lesson shows only the divider.

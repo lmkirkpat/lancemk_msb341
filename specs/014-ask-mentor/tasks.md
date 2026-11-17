@@ -150,6 +150,11 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 - [ ] T026 [US3] (panel-builder) `panel/lib/panel-session.js` version 3 with the thread (research R12); a
   version 2 file reads as today; a Skills lesson ends the thread. Tests in `panel/test/panel-session.test.js`
   and `panel/test/close-continue.test.js`.
+  **Note 2026-11-16 (spec amendment (d), the builder's decision):** starting a lesson (Find my next lesson,
+  Pick up, or a Skills lesson) ends the thread's conversation but keeps its last question, answer and steps
+  saved and visible, and "Back to your question ›" still works after the lesson; nothing is deleted (FR-052's
+  note, research R12). A follow-up whose `give_answer` result is kind `answer`, `describe` or `howto` is a new
+  question (FR-031's note). If `014-panel` built the old rule, the change needs a cockpit-numbered task.
 - [ ] T027 [P] [US3] (panel-builder) FR-058: `panel/lib/turns.js` adds `thread` and the kinds `question`,
   `followup`, `go_deeper` (research R11); `panel/dev/turns.js --ask` reports answer turns and go-deeper lessons
   apart. Tests in `panel/test/turns.test.js` and `panel/test/turns-report.test.js`.
