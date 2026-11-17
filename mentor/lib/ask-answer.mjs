@@ -15,7 +15,7 @@ import { layerInfo } from "./layer-info.mjs";
 import { motionSources } from "./motion-sources.mjs";
 import { readPath, shortName } from "./path.mjs";
 
-// Data-model § 8's messages, word for word, plus four this build adds (named in the hand-back):
+// Data-model § 8's messages, word for word, plus five this build adds (named in the hand-back):
 // ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN and NOT_PLAIN_WORDS.
 registerErrors({
   TOO_MANY_STEPS: "Give at most four steps; give the first three and say there's more in the closing offer.",
