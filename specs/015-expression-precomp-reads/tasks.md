@@ -3,7 +3,7 @@
 **Input**: [spec.md](spec.md) (approved `944cd8c`), [plan.md](plan.md), [research.md](research.md),
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md).
 
-**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-ups T064 (FR-004a) and T065 (FR-004b, Amendment 7) open.
+**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-ups T064 (FR-004a; built on `014-mentor` at `2440c62`, SC-003a met as amended by Amendment 8) and T065 (FR-004b, Amendment 7) open.
 
 **Format**: `- [ ] T### [P?] [Story?] (owner) Description`. `[P]` = can run alongside the other
 `[P]` tasks in the same block (different files, no unfinished dependency). Owners: **skill-builder**
@@ -406,7 +406,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   adds `shifts` to each named layer and `read.shifts`; `snapshot.jsx`'s fine sweep adds `max_value` (and
   its fixture-mode twin passes it through when present). No new AE write, no extra snapshot call,
   FR-004's fields unchanged. Tests in `mentor/test/footprint-shift.test.mjs` on the live Comp 1 capture
-  (`mentor/test/fixtures/expressions/comp1.json`): SC-003a (all 13 layers Shake Control moves, each within
+  (`mentor/test/fixtures/expressions/comp1.json`): SC-003a (*amended 2026-11-16, Amendment 8:* 12 of the 13 layers Shake Control moves, the title layer `chain_moves`; each within
   0.05 px of 2·r·sin(θ/2) from the fixture's values, none under 1 px, rock.png between 8.6 and 9.4 px;
   Position about 12.1 px each), plus one test per `null` reason in FR-004a on planted or edited
   fixtures (none returns a number), the coarse-only case (`no_fine_sweep`), and SC-007's caps with
@@ -517,7 +517,8 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
 - **Gate:** T030 → T031 → T032 → T033, T034, T035 to T039 (T035, T037, T038, T039 in parallel; T036
   after T035) → T040. T057 before T040; T058 → T059 (T059 after T036's run or folded into it); T060
   with T040. T064 after T040, sequenced against 014's mentor worktree (one `mentor/` shared owner at a
-  time); before 014's FR-007 test on Comp 1 and its three sessions.
+  time); before 014's FR-007 test on Comp 1 and its three sessions (*met 2026-11-16:* built on `014-mentor`,
+  `2440c62`, so that test no longer waits).
   T065 with T064 in the same `014-mentor` worktree; before 014 T037.
 - **Phase 2:** after T040. T042 and T043 can start together; T044 → T045 → T046 to T050 → T051 →
   gate.

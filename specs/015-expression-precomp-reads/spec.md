@@ -5,7 +5,7 @@
 **Created**: 2026-11-14
 
 **Status**: **Phase 1 shippable (2026-11-16, T040)**: spec 014 can build on it. Phase 2 (US4) not
-started (next: T041). Phase 1 follow-ups FR-004a (OQ-10, 2026-11-16) and FR-004b (Amendment 7, 2026-11-16) are open: T064 and T065. Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3). Phase 1's results are in Success Criteria › Phase 1 results.
+started (next: T041). Phase 1 follow-ups: FR-004a (OQ-10) built by T064 on `014-mentor` (`2440c62`, SC-003a met, Amendment 8); FR-004b (Amendment 7) open: T065. Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3). Phase 1's results are in Success Criteria › Phase 1 results.
 
 **Amendment 1 (2026-11-14, Phase 0 live checks, T008; approved by the builder 2026-11-14 with OQ-8 as recommended):** evidence in
 `discovery/usage-notes/expression-reads.md` (session 1) and the corrected finding 4 in
@@ -83,6 +83,17 @@ FR-004b (new), FR-016 (a pointer), new SC-003b (with a Phase 1 results row), SC-
 (new E32), new OQ-12; data model § 6, `contracts/describe-layers.md` (fields, read block, limits), plan
 (summary, phases table), tasks T065 (new). FR-004 and FR-004a don't change, and no skill's tool reply
 changes. No approved decision changes.
+
+**Amendment 8 (2026-11-16, T064's results; builder's answers relayed by the cockpit):** SC-003a's "every
+one of the 13 layers" conflicted with FR-004a on Comp 1. The title layer (DISCOVER the past to INSPIRE the
+future) has its own Position keys at 2.503 s and 2.636 s, and the Rotation peak (2.569 s) falls between
+them, so its position at the peak differs from its position at the reading time (3.403 s). FR-004a makes
+that `shift_px: null` with `chain_moves`, which is what T064 returns. **FR-004a stands;** SC-003a now
+expects numbers on 12 of the 13 layers and `chain_moves` on the title, and research R15's scratch figure
+for the title (6.84 px, worked from the reading-time position, which R15's own rule rules out) is
+corrected. SC-003a is met (Phase 1 results). OQ-12 answered as recommended; the key-types names in
+FR-004b are kept. Changed here: Status, SC-003a, Phase 1 results (SC-003a row), OQ-12; research R15.
+No requirement or approved decision changes.
 
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
@@ -568,11 +579,13 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   within 0.1 px of (952.4, 542.5) at 0.6 s. *Measured by:* unit test plus one live read.
 - **SC-003a** *(added 2026-11-16, FR-004a)*: On the live Comp 1 capture
   (`mentor/test/fixtures/expressions/comp1.json`), Shake Control's Rotation (fine peak 0.589° at
-  2.569 s) gives a footprint shift on **every one of the 13 layers it moves**, each within 0.05 px of a
+  2.569 s) gives a footprint shift on **12 of the 13 layers it moves**, each within 0.05 px of a
   hand calculation from the fixture's own values (2·r·sin(θ/2), r the farthest box corner's distance
-  from Shake Control's pivot), and **none under 1 px**. rock.png's is **between 8.6 and 9.4 px**, the
+  from Shake Control's pivot), and **none under 1 px**. The 13th, the title layer, gives `shift_px:
+  null` with `chain_moves` for both sources: its own Position keys (2.503 s and 2.636 s) bracket the peak,
+  so its place at the peak isn't its place at the reading time (*amended 2026-11-16, Amendment 8*). rock.png's is **between 8.6 and 9.4 px**, the
   range of 014 TD § 16's hand estimate ("about 9 px"). Shake Control's Position (fine peak 12.147 px)
-  gives about 12.1 px on each (no layer above it). Every `null` reason in FR-004a has a unit test on a
+  gives about 12.1 px on each of the same 12 (no layer above it). Every `null` reason in FR-004a has a unit test on a
   planted or edited fixture, and none returns a number. *Measured by:* unit tests (T064).
 - **SC-003b** *(added 2026-11-16, FR-004b)*: On the live Comp 1 capture, named-layer summaries give
   exactly the 3 keyed properties the capture holds, each matching its key count and rolled up as none
@@ -630,7 +643,7 @@ to T063) merged after it. "Live" means AE 27.0.
 | SC-001 | Met | Unit test on the live Comp 1 capture (T015, `91fd02b`): 3 expressions, text identical, 2 build on value, 1 sets its own. The capture found the `\r` fault (E30), fixed at `1499819` |
 | SC-002 | Met | T021's tests on the same capture; spot checks 3 and 4 live (T034) |
 | SC-003 | Met | Unit test, plus T033's live read: base (960, 540), after (952.352, 542.492) at 0.6 s; rock.png's source is Shake Control by expression |
-| SC-003a | Open (added by Amendment 6) | T064 |
+| SC-003a | Met (as amended by Amendment 8) | T064 on `014-mentor` (`2440c62`), unit tests on the live Comp 1 capture. Rotation: rock.png 9.36 px, logo.png 8.6 px, the ten Shakers precomps 11.32 to 11.33 px. Position: 12.15 px on each of those 12. The title layer: no number for either, `chain_moves`. All within 0.05 px of 2·r·sin(θ/2), none under 1 px; mentor tests 1817 pass, 4 todo. rock.png's 9.36 px replaces 014 TD § 16's "about 9 px" estimate (the curriculum designer's edit, SB-4) |
 | SC-003b | Open (added by Amendment 7) | T065 |
 | SC-004 | Met (phase 1 half) | T016's test; T033: Mentor Practice's easing findings identical before and after the merge, old code on a pre-merge capture and new code on a new one |
 | SC-005 | Met | T022 to T025's unit tests, one set per skill check |
@@ -851,7 +864,8 @@ motion) belong to spec 014's set and to pivot K1, not here.
   rotation and scale in their own units and applies the floor to Position only, and TD § 5.1a needs the
   curriculum designer to say so.
   **Answered 2026-11-16 (builder): as recommended.** FR-004a, SC-003a, E31; built by T064 (skill-builder).
-  It must land before 014's FR-007 ordering test on Comp 1 and before 014's three sessions; 014's
+  It must land before 014's FR-007 ordering test on Comp 1 and before 014's three sessions (*built
+  2026-11-16 on `014-mentor`, `2440c62`; that test no longer waits*); 014's
   mentor half (014 T008 to T016) doesn't wait for it. Once it merges, § 16's "about 9 px" can be
   replaced with the tool's number (014 TD SB-4, the curriculum designer's edit).
 
@@ -879,6 +893,10 @@ motion) belong to spec 014's set and to pivot K1, not here.
   text layer's switch by hand at the next live sitting.** If the timeline shows it off while the read
   says on, keep it left out; if the read follows the switch, add text and shape layers back with a
   note. Doesn't block T065.
+  **Answered 2026-11-16 (builder): as recommended.** `collapse` on precomp and footage layers only
+  (FR-004b as written); one text layer's switch is checked by hand at the next live sitting. The
+  key-types names in FR-004b (`single_key`, `all_held`, `none_held`, `some_held`) are kept (builder, the
+  same day).
 
 ### For the curriculum designer (hand-off, not edits)
 
