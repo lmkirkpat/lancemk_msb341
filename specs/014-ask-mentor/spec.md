@@ -40,6 +40,20 @@ from the tool's data, not the prose (FR-031's note, contracts/panel-ask.md, data
 (MU) doesn't describe either panel case, so it doesn't change. No approved decision changes; (1) replaces
 R12's lesson-start rule by the builder's decision.
 
+**Amended 2026-11-16 (e), from the panel build after (d), the builder's approval of (2) relayed by the cockpit;
+add only:** (1) the first follow-up or Try again into the thread after a lesson starts a fresh mentor
+conversation, so it carries the `/ask-mentor ` prefix (contracts/panel-ask.md › Requests). (2) **That same
+send carries the thread's last question and its answer** (the builder's decision, 2026-11-16), built by the
+panel from its own saved thread: the question text, plus the accepted `give_answer` result's explanation,
+steps (text and layer) and closing offer, in a fixed wrapper (contracts/panel-ask.md › Context after a
+lesson). Only data the mentor produced and the panel already validated; never shown to the learner; no
+teaching logic in the panel (constitution II, FR-016). The ask skill gains one line for it (T103), and the
+ask set one case (T104, case 18). AskView keeps each step's `layer` (data-model § 7). (3) Pick up's comp name
+comes from the snapshot result the panel saved with the lesson, not the learner record (FR-055's FR-026
+note). (4) Pick up shows no last-check time; spec 007's card line for it is superseded (same note). No
+approved decision or FR changes; (3) narrows MU's "from the record" to the panel's saved lesson data, which is
+still not a read.
+
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
 flag, as the builder accepted them in the review. Carry the mockup's spec 007 amendments. Reference spec
@@ -545,6 +559,9 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   a Skills lesson) MUST end the thread's conversation but keep its last question, answer and steps saved and
   visible; "Back to your question ›" (`home-thread`) still opens them after the lesson. Nothing is deleted
   (research R12).
+  *Added 2026-11-16 (e):* the first follow-up or Try again into that thread after the lesson MUST carry the
+  `/ask-mentor ` prefix and the thread's last question and answer in the wrapper of contracts/panel-ask.md ›
+  Context after a lesson; the learner's bubble shows only the text as typed.
 - **FR-053**: Panel copy MUST be MU › Copy's strings, plain (CLAUDE.md › Voice), with no field names, tool
   names or commands (spec 007 SC-011).
 - **FR-054**: Accessibility per MU › Accessibility: Ask paused with `aria-disabled` and its reason linked; the
@@ -563,6 +580,9 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   - **FR-010:** an empty record shows Find my next lesson with "Welcome to Knack.", not the path's first skill
     with Start lesson.
   - **FR-026:** "Your lesson is waiting" becomes the quiet line "Pick up [skill] on [layer]" with Set it aside.
+    *Added 2026-11-16 (e):* the comp name under it comes from the snapshot result the panel saved with the
+    lesson (every lesson snapshot returns the comp), not from the learner record; it is still not a read. The
+    line shows MU's two lines only, with no last-check time; spec 007's card line with that time is superseded.
   - **FR-046 (not in MU's list):** "not on Home or Skills (D2, settled)" is overridden by `decisions/012`: Ask
     is on Home; the Lesson tab's Ask stays.
   - **FR-050 and FR-051 (not in MU's list):** What the mentor remembers and Practice due move from Home to
