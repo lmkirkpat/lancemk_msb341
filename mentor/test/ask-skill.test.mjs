@@ -119,3 +119,8 @@ test("eval fix (g): one skill when the question sits inside one, and a firmer wo
   assert.match(squash(SKILL), /Offer one skill when the question sits inside one\./);
   assert.match(squash(SKILL), /At most about 120 words in all, steps included\.\*\* Count before you call/);
 });
+
+test("T037 fix (i): own keys say whether they're eased, and an already-eased landing goes to the speed graph", () => {
+  assert.match(squash(SKILL), /each keyed property with its key count, key types and whether it's eased;/);
+  assert.match(squash(SKILL), /Keys already eased: a softer landing is \*Speed graph\*, never Easy Ease again\./);
+});

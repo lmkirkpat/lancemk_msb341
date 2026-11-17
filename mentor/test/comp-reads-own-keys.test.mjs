@@ -34,9 +34,9 @@ test(`SC-003b (${LIVE ? "live" : "derived"} Comp 1): the 3 keyed properties, eac
   use(COMP1);
   const r = await call({ layers: [TITLE, "Sweep Control", "General Logo Animation Graphics.png"] });
   assert.deepEqual(r.layers.map((l) => [l.layer, l.own_keys]), [
-    [TITLE, [{ property: "Position", keys: 2, key_types: "none_held" }]],
-    ["Sweep Control", [{ property: "Position", keys: 2, key_types: "none_held" }]],
-    ["General Logo Animation Graphics.png", [{ property: "Rotation", keys: 6, key_types: "none_held" }]],
+    [TITLE, [{ property: "Position", keys: 2, key_types: "none_held", ease: "eased" }]],
+    ["Sweep Control", [{ property: "Position", keys: 2, key_types: "none_held", ease: "linear" }]],
+    ["General Logo Animation Graphics.png", [{ property: "Rotation", keys: 6, key_types: "none_held", ease: "eased" }]],
   ]);
   assert.equal(r.read.own_keys, "read");
   assert.equal(r.read.switches, "read");
@@ -89,7 +89,7 @@ test("rollups: some pairs held is some_held; the rule is key types' own snaps", 
 
 test("a keyed property whose expression is on says so; one that's off says nothing", async () => {
   plant((s) => { keyedProp(s, 1).expression_enabled = true; });
-  assert.deepEqual((await one(TITLE)).own_keys[0], { property: "Position", keys: 2, key_types: "none_held", expression_on: true });
+  assert.deepEqual((await one(TITLE)).own_keys[0], { property: "Position", keys: 2, key_types: "none_held", ease: "eased", expression_on: true });
   use(COMP1);
   assert.equal("expression_on" in (await one(TITLE)).own_keys[0], false);
 });
@@ -151,4 +151,33 @@ test("review N4: with no layer_info, each layer's switches say older_snapshot, a
     collapse: { status: "not_read", reason: "older_snapshot" },
   });
   assert.deepEqual(reads.switches({ ...entry, locked: null, three_d: false, collapse: true }), { locked: { status: "not_read", reason: "error" }, three_d: false, collapse: true });
+});
+
+// T037 case 05 (round 3): each entry says whether the pairs that move are eased, linear or mixed, by
+// easing's own segmentState, so an Easy Eased landing isn't sent back to Easy Ease.
+test("ease: live Mentor Practice's Subtitle Position is eased (Easy Ease), its Opacity mixed (partly eased), Title linear; holds and one key carry none", async () => {
+  use(PRACTICE);
+  const sub = await one("Subtitle");
+  assert.deepEqual(sub.own_keys.map((k) => [k.property, k.ease]), [["Position", "eased"], ["Opacity", "mixed"]]);
+  assert.ok((await one("Title")).own_keys.every((k) => k.ease === "linear"));
+  const cursor = (await one("Cursor")).own_keys[0];
+  assert.deepEqual([cursor.key_types, "ease" in cursor], ["all_held", false], "a held pair doesn't move");
+  const logo = (await one("Logo")).own_keys.find((k) => k.property === "Scale");
+  assert.deepEqual([logo.key_types, "ease" in logo], ["single_key", false], "one key doesn't move");
+  const whole = (await call({})).layers.find((l) => l.layer === "Subtitle");
+  assert.equal(whole.own_keys[0].ease, "eased", "in the whole-comp summary too");
+  use(COMP1);
+});
+
+test("ease: a mix of eased and linear pairs is mixed; held pairs are left out of the rollup; the rule is easing's segmentState", async () => {
+  plant((s) => { const k = keyedProp(s, 27).keys; k[2].out_type = "linear"; k[3].in_type = "linear"; });
+  assert.equal((await one("General Logo Animation Graphics.png")).own_keys[0].ease, "mixed");
+  plant((s) => { const k = keyedProp(s, 27).keys; k[2].out_type = "hold"; });
+  const some = (await one("General Logo Animation Graphics.png")).own_keys[0];
+  assert.deepEqual([some.key_types, some.ease], ["some_held", "eased"], "the held pair doesn't count");
+  plant((s) => { const k = keyedProp(s, 1).keys; k[1].in_type = "hold"; });
+  assert.equal("ease" in (await one(TITLE)).own_keys[0], false, "held on the second key's in side (L-1) doesn't move either");
+  const src = fs.readFileSync(new URL("../tools/comp-reads.mjs", import.meta.url), "utf8");
+  assert.match(src, /import \{ segmentState \} from "\.\.\/lib\/analyze\.mjs"/, "reused, never a second definition");
+  use(COMP1);
 });

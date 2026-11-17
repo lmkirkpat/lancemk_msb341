@@ -11,6 +11,7 @@ import { MentorError, registerErrors } from "../errors.mjs";
 import { byIndex, layerInfo } from "../lib/layer-info.mjs";
 import { expressionReads, expressionsRead, linksIn, normalizeLineEnds, rawExpression, valuesAt } from "../lib/expressions.mjs";
 import { footprintShifts } from "../lib/footprint-shift.mjs";
+import { segmentState } from "../lib/analyze.mjs";
 import { snaps } from "../lib/key-types.mjs";
 import { motionSources } from "../lib/motion-sources.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
@@ -86,16 +87,32 @@ function keyTypes(keys) {
   for (let i = 1; i < keys.length; i++) if (snaps(keys[i - 1], keys[i])) held++;
   return held === keys.length - 1 ? "all_held" : held === 0 ? "none_held" : "some_held";
 }
+// T037 case 05: whether the pairs that move are eased, by easing's own pair rule (analyze.mjs'
+// segmentState, the one the easing lessons use). A pair that snaps (key types' `snaps`, so a hold on
+// either side) doesn't move and doesn't count; with no pair that moves (one key, or every pair held)
+// there's no `ease`. A partly eased pair makes it "mixed".
+function easeOf(keys) {
+  const moving = [];
+  for (let i = 1; i < keys.length; i++) if (!snaps(keys[i - 1], keys[i])) moving.push(segmentState(keys[i - 1], keys[i]));
+  if (!moving.length) return null;
+  if (moving.every((x) => x === "eased")) return "eased";
+  if (moving.every((x) => x === "linear")) return "linear";
+  return "mixed";
+}
 function ownKeys(snapshot, index, detail) {
   const keyed = (snapshot.layers || []).find((l) => l.index === index);
   const props = keyed ? (keyed.properties || []).filter((p) => Array.isArray(p.keys) && p.keys.length > 0) : [];
-  const list = props.map((p) => ({
-    property: p.display_name,
-    ...(detail ? { display_path: p.display_path } : {}),
-    keys: p.keys.length,
-    key_types: keyTypes(p.keys),
-    ...(p.expression_enabled ? { expression_on: true } : {}),
-  }));
+  const list = props.map((p) => {
+    const ease = easeOf(p.keys);
+    return {
+      property: p.display_name,
+      ...(detail ? { display_path: p.display_path } : {}),
+      keys: p.keys.length,
+      key_types: keyTypes(p.keys),
+      ...(ease ? { ease } : {}),
+      ...(p.expression_enabled ? { expression_on: true } : {}),
+    };
+  });
   if (detail || list.length <= OWN_KEYS_SUMMARY) return { own_keys: list };
   return { own_keys: list.slice(0, OWN_KEYS_SUMMARY), own_keys_more: list.length - OWN_KEYS_SUMMARY };
 }
@@ -274,7 +291,7 @@ export const TOOLS = [
     description:
       "Read-only. What moves the active comp's layers: expressions on any property (on, error, whether each builds on its own " +
       "value, how far it moves), what links to each layer and whether that shows, effects, parents, and each layer's own " +
-      "keys and key types. Omit layers for a summary of the whole comp; name layers (index, or a " +
+      "keys (key types, and whether they're eased). Omit layers for a summary of the whole comp; name layers (index, or a " +
       "name only one layer has) for their summary, or with detail for each expression's text. A name that's a word in one " +
       "layer's name (rock for rock.png) reads that layer; a word in several returns them all, to ask which. Links and " +
       "builds-on are inferred from the text. It can't see inside precomps yet.",

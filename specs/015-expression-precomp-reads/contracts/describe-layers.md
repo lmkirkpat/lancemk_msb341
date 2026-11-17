@@ -69,6 +69,15 @@ and a switch only when it's on, and `read.own_keys` and `read.switches` say that
 switch that wasn't read is `not_read`, never `false`. Reply-only: `comp-reads.mjs` reads them from the
 snapshot it already takes, and no snippet or skill reply changes.
 
+**Ease (added 2026-11-17, spec 014 T037 fix (i)):** each `own_keys` entry also carries `ease`: `eased`,
+`linear` or `mixed`, over its pairs that move. A pair that snaps (key types' `snaps`) doesn't move and
+doesn't count; each other pair is rolled up by easing's own pair rule (`analyze.mjs` `segmentState`, the
+one the easing lessons use): `eased` when every pair is eased at both ends (Easy Ease included), `linear`
+when every pair is linear at both ends, and `mixed` otherwise (a partly eased pair, or eased and linear
+pairs together). With no pair that moves (`single_key`, `all_held`) there's no `ease`. In a summary and in
+detail, named and whole comp. Live Mentor Practice: Subtitle's Position is `eased`, its Opacity `mixed`.
+About 16 bytes per keyed property; Comp 1's whole-comp summary stays under 12 KB.
+
 ## Limits (SC-007, research R11)
 
 - Summary: ≤ 4 KB per layer with its sources; ≤ 12 KB for the whole comp. Over the cap, layers are
