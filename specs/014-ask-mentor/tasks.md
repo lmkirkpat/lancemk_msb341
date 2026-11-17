@@ -95,7 +95,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 **Goal:** `give_answer` and the `ask-mentor` skill on B1. **Independent test:** the ask set's phase 1 cases
 (T032) on B1, no panel.
 
-- [ ] T013 [US1] (skill-builder) `mentor/tools/ask.mjs` with `give_answer` (contracts/ask-tools.md; no record
+- [x] T013 [US1] (skill-builder) `mentor/tools/ask.mjs` with `give_answer` (contracts/ask-tools.md; no record
   write in this phase). Tests in `mentor/test/ask-tools.test.mjs`: reply shape; `comp` from the last read, never
   the input; `tags` from `path.json`; read-only (a fake bridge sees no write snippet); `NO_ACTIVE_COMP` from the
   read gives a valid `no_comp` answer.

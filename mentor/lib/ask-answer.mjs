@@ -140,6 +140,12 @@ export function checkAnswer(input, ctx) {
   if (kind === "answer" && rawSteps.length === 0) fail("KIND_MISMATCH");
   if ((kind === "describe" || kind === "howto") && rawSteps.length > 0) fail("KIND_MISMATCH");
 
+  // The comp first: a comp switched since the mentor read it fails here, before any layer check.
+  const expl = explanation.trim();
+  if ((kind === "answer" || kind === "describe") && compName && !expl.split("\n")[0].toLowerCase().includes(compName.toLowerCase())) {
+    fail("COMP_NOT_NAMED");
+  }
+
   if (rawSteps.length > MAX_STEPS) fail("TOO_MANY_STEPS");
   const steps = rawSteps.map((s, i) => {
     const text = s.text.trim();
@@ -169,10 +175,6 @@ export function checkAnswer(input, ctx) {
     if ((steps.length || offered.length) && !oneQuestion(closing)) fail("BAD_CLOSING");
   }
 
-  const expl = explanation.trim();
-  if ((kind === "answer" || kind === "describe") && compName && !expl.split("\n")[0].toLowerCase().includes(compName.toLowerCase())) {
-    fail("COMP_NOT_NAMED");
-  }
   if (/^\s*\d+[.)]\s/m.test(expl) || /\bsteps?\s*:/i.test(expl)) fail("STEPS_IN_EXPLANATION");
   const flat = squash(expl);
   for (const s of steps) {
