@@ -124,3 +124,8 @@ test("T037 fix (i): own keys say whether they're eased, and an already-eased lan
   assert.match(squash(SKILL), /each keyed property with its key count, key types and whether it's eased;/);
   assert.match(squash(SKILL), /Keys already eased: a softer landing is \*Speed graph\*, never Easy Ease again\./);
 });
+
+test("T037 fix (j): a follow-up after a lesson is as short as any follow-up", () => {
+  const after = squash(SKILL.slice(SKILL.indexOf("- **After a lesson:**"), SKILL.indexOf("- **\"Do it for me\"")));
+  assert.match(after, /Then reply as a follow-up \(above\): one or two sentences, then the step again in one\.$/);
+});
