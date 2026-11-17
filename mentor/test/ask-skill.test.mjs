@@ -140,3 +140,8 @@ test("T037 fix (l): a link's render state is said of the layer holding the expre
   assert.match(squash(SKILL), /Each link says whether that layer \(the one with the expression\) renders now; a control null never does\./);
   assert.doesNotMatch(SKILL, /Say whether the layer it drives renders/);
 });
+
+test("T037 fix (m): after a clarifying reply, the first line names the layer chosen and the goal as read, as a pattern, not a sentence to copy", () => {
+  assert.match(squash(SKILL), /After their reply, even a vague one, answer; the explanation's first line names the layer they chose and what you took their goal to mean \(\*In \[comp\], taking \[their word\] as \[a change\] on \[layer\], …\*\)\./);
+  assert.match(squash(SKILL), /A guess about what they want is stated once, as an assumption, in the first line\./);
+});
