@@ -490,3 +490,7 @@ B1 baseline compared: `2026-11-11-230338.json`, 39/43 (91%); A is 4.7 points bel
 ## Spec 015 K2 case (T035, written 2026-11-16, B1)
 
 **44 expression-layer-outside-focus**: Dots staggered by whole-bar drags; Tab (no keys, outside the lesson) has a Position expression following Dot 3, so its value after the expression changes with no edit while its base Position doesn't. Checks: pass; reply lacks Tab; turn 3 never says Tab. Rubric R-OF-EXPRESSION-NOT-LEARNER. Fixtures `dots-extras-expression-follows*.json`, built by `fixtures/build.mjs` from the dots-extras pair; **stand-in, re-derive from the T015 capture** (the expression layer is hand-added). Result B1 `--repeat 3`: 3/3, $2.20 (`2026-11-16-124704`).
+
+## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
+
+**Full run: `results/2026-11-16-153757.json`, 42/44 (95%), $29.17.** SC-006 met, no hard-rule check failed, no timeouts. Last B1 baseline 39/43. T035's case 44 passed. Misses: 34 (`say:names_other_change`) passed the last baseline; noise, 3/3 on repeat (`-191759`, $2.21). 41 button-show-me-again (R-SHOW-ME-AGAIN, reads out 0.633 s) failed 0/3 (`-192009`, $3.37), and it failed the 2026-11-11 baseline too: real, known. Proposal: one line in `SKILL.md` that a show-me-again says the shift as the learner's gap, not a time, with the example from the rubric's Pass line ('later by your gap').

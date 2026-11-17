@@ -1,0 +1,1781 @@
+{
+  "run_at": "2026-11-16T22:42:57.874Z",
+  "options": {
+    "only": null,
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": false,
+  "cost_usd": 0,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 55,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "01-first-lesson-wave-a",
+      "title": "First lesson on the wave A comp: asks first, then proposes the group",
+      "covers": [
+        "EP-1",
+        "US1-1",
+        "FR-005a"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "893424a45d36a043ef99cf64cdde699cb03425848f19f04c62108a11fea7a811",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "79d29e33-8cbb-48c6-89ad-9c87a24e2d97",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "02-explain-what-a-parent-passes",
+      "title": "Explain: position, scale and rotation pass down, not opacity or effects, in one sentence; no rig example unless asked; ends on the turn-or-scale question",
+      "covers": [
+        "EP-2",
+        "US1-2",
+        "FR-023a"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "f656ed4ca2a9fd402a16911d3c65ec0b0406933deda99be849d97881804379d6",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "93bbde4a-b05a-49c9-80fa-f7cf61b31b28",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "03-pivot-question",
+      "title": "The pivot is asked, never picked; it'll only slide is accepted",
+      "covers": [
+        "EP-3",
+        "US1-3",
+        "FR-016"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "a697e10a7326b2a06879ddb5c8313036c7bca69302f543222f340b840d32501a",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "039292e6-412f-4c25-a64a-9fd8dde88e0d",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "04-demonstration",
+      "title": "One demonstration on the target only, moved 0 pixels, none before the null passes",
+      "covers": [
+        "EP-4",
+        "US1-4",
+        "FR-017"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "a851bca11ee67c74cc5bcea4bf70f6e5c463ea89bce92d3619ee4b15c5a2adbb",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "d5a9d567-034e-46bf-9938-1349ff96f97a",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "05-correct-parenting-passes",
+      "title": "B9: a correct parenting passes though the children's own values changed",
+      "covers": [
+        "EP-5",
+        "US2-1",
+        "B9"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "parented-center.json": "live"
+      },
+      "hash": "b94a5b76f2ad7cfe36b0b42895e848c373be55aad1999ca30759beb54b813e12",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "b2e9a6e3-2619-4d46-8222-3a25df56af9d",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "06-jump",
+      "title": "A layer that jumped: layer, distance, direction, no cause, Edit > Undo",
+      "covers": [
+        "EP-6",
+        "US2-2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "jumped.json": "live"
+      },
+      "hash": "70781b1c360d9e993169719c2df2cb29df01d6664c4b5f6e4e8cfe9f34764a61",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "d5c1828f-edce-4e69-b831-2047d85d9ef6",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "07-pick-whip-from-position",
+      "title": "The wrong pick whip is not a parent; the Parent column is named",
+      "covers": [
+        "EP-7",
+        "US1-5"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "pickwhip-position.json": "live"
+      },
+      "hash": "f2fed1115b5945985265d00ba01033cd158153c53c19c1b7159d56e96ecd4561",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "c187aeb3-0707-429a-963c-3394aa786e49",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "08-null-keyed-before-the-check",
+      "title": "A null keyed before the parenting check still passes; nothing asked to be undone",
+      "covers": [
+        "EP-8",
+        "US2-4",
+        "row 30"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "null-keyed-early.json": "live"
+      },
+      "hash": "f06dbe31c90ced5b5daf787280906d5a2c18092879772c4fb7bdba06afc85db3",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "4fd4ee14-69f2-4498-bc1d-dba85e8ebe30",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "09-fade-instead-of-move",
+      "title": "A fade on the null: P4 fails with the opacity hint",
+      "covers": [
+        "EP-9",
+        "US1-7"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "fade-null.json": "live"
+      },
+      "hash": "fc9b1db2612338fcc6349bceef84086ac1189d8fa37d0d262ee0c5fe71a70ae7",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "f1f080ab-1cb5-4ba3-bce2-51d0a7ceced7",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "10-visible-parent",
+      "title": "A visible parent: the hint names who drags whom",
+      "covers": [
+        "EP-10",
+        "TD 7"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "visible-parent.json": "live"
+      },
+      "hash": "370b96a09e57e5d685358f1433c01d3585f8b18feab10c726dc1b4eb88884a99",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "452f3818-19b4-4bea-812c-d3aabb659940",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "11-comments-never-graded",
+      "title": "After a pass, the comments (linear move, default name) are offered, not graded; the new null is never called faded",
+      "covers": [
+        "EP-11",
+        "US1-8",
+        "L-1",
+        "FR-020"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "slide-null.json": "live"
+      },
+      "hash": "97e8388433e83ceab7e3f70886d7237779e0d375e08c9a1362e93e0aaf6ce151",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "1d6d9fa5-8730-49f0-a42e-7c54af8360d8",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "12-version-trap",
+      "title": "Asked about a shortcut and holding Option: the menu path, no shortcut, hold no key, never advised",
+      "covers": [
+        "EP-12",
+        "FR-023",
+        "L-1",
+        "L-1"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "6e508cb3c6590379416f6bbc78ea17252d579bc0edbffac6fb35165d9521e36a",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "c90233f8-3c2e-4a85-8844-3f9e4239e7e6",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "13-missing-prerequisite",
+      "title": "The pivot lesson isn't learned: named and offered; on insistence, one sentence",
+      "covers": [
+        "EP-13",
+        "US4"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "d7ee3d75b6683ffb2815497fde705919275a8ecc312a83e2329686b6275322f1",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "4decb01d-fe59-4cec-ae85-ce88ce877c30",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "14-incomplete-attempt",
+      "title": "An incomplete attempt: says what's still off and where; doesn't fix or offer to",
+      "covers": [
+        "EP-14",
+        "FR-019"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "f58c36b48222d2572f0dc5bbe5a92ff4cd89b7315ab34f8d7e51703a23cc91a8",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "645114f0-b23c-49ce-9c8b-ceaccbddc78c",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "15-do-the-rest-for-me",
+      "title": "Do the rest: declined warmly in one or two sentences, no offer to do it later; the one demo offer is made once (if not already made), never twice",
+      "covers": [
+        "EP-15",
+        "US1-9",
+        "FR-023a"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "parented-center.json": "live"
+      },
+      "hash": "6103cea981f4280f6fae3c4d98aae71f25e26b2f699676323ff248e0a14b4618",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "5c35f28a-d514-4550-a77c-990f87cc235c",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "16-review-wave-a",
+      "title": "Review on the wave A comp: Chip A to C, no 'null', no method, no demo",
+      "covers": [
+        "EP-16",
+        "SC-004",
+        "L6-1",
+        "US3-1"
+      ],
+      "fixture_sources": {
+        "practice2b-with-wave-a-parented.json": "live"
+      },
+      "hash": "23e9dc9bf59067f73e173ece32c7affd0d342f5a8b41c6249d614929f57addd0",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "dc5181eb-9676-4cd3-af29-06c14c03ee12",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "17-review-visible-parent",
+      "title": "Review with a visible parent: the hint has no 'null'; the skill stays learned (the learner names Row A to C, not the offered Chips)",
+      "covers": [
+        "EP-17",
+        "US3-2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "review-rows-visible.json": "live"
+      },
+      "hash": "c098a39dd3e5602e31696a0b082afde566bf4fa286f97dbc1552bd0ec82f0ed0",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "b1768483-7b67-4c15-bd85-da9dfc824d53",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "18-due-review-no-new-group",
+      "title": "A due review with no new group (OR-1): a lesson starts, and no review is mentioned; nothing recorded",
+      "covers": [
+        "EP-18",
+        "US3-3",
+        "OR-1",
+        "FR-048",
+        "FR-052"
+      ],
+      "fixture_sources": {
+        "synthetic/crowd-only.json": "synthetic"
+      },
+      "hash": "90c0f8d3f0bbe9a775e424eedc93e797dcffc493e73540add87b39fb4a658beb",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "3f07a82d-9f08-4aef-9a9f-f03be175b172",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "19-second-group-offered-once",
+      "title": "After a no: Chip A to C once, then the mentor asks; never a third offer",
+      "covers": [
+        "EP-19",
+        "US1-8",
+        "FR-005a"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "e360d7656aeee0cc1bb4695be72310b32e590db352730be038c35706d16a6c4f",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "2f92950a-8f37-41eb-9c4e-24260fdc47dd",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "20-crowd-only",
+      "title": "A crowd-only comp: the crowd question, no proposal, no layer named or counted",
+      "covers": [
+        "EP-20",
+        "US1-9",
+        "FR-005a"
+      ],
+      "fixture_sources": {
+        "synthetic/crowd-only.json": "synthetic"
+      },
+      "hash": "122b56312098ecb1ad33c1bbebe486e1c37f678074a1eb1917503613d3e16cda",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "4726a61f-fe18-47f5-8213-7595a0ce2b3b",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "21-chain-on-purpose",
+      "title": "A null that follows another layer is asked about; the chain is checked only after the learner says so",
+      "covers": [
+        "FR-009",
+        "TD 14",
+        "row 23"
+      ],
+      "fixture_sources": {
+        "synthetic/before.json": "synthetic",
+        "synthetic/row23-still-parent-placed.json": "synthetic"
+      },
+      "hash": "8640f07e1d09b65a0b72f17af1fcb59ede6b8fe32ef101301bb6893f8568eb8f",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "67a1a994-5046-4c91-bd5b-9098b0940543",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "22-you-pick-the-spot",
+      "title": "The learner asks the mentor to choose the spot: the choice is handed back",
+      "covers": [
+        "EP-3",
+        "US1-3",
+        "FR-016"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "0d75f69c27290d76521755f06331d3fc76c8701fa55043615cba2eb4d9c8a64e",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "7cf9f0ad-bfde-44b6-a3ed-1b2b3f1a34aa",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "23-no-number-as-a-target",
+      "title": "Asked how close is close enough: no number, no pixel",
+      "covers": [
+        "SKILL hard rule",
+        "FR-029"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "42448d70c723223fef5bbf18b1cb08da378b15eafd182ac48201d578f5149f5d",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "a8124a38-b006-4c47-96b4-160c0ad7f473",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "24-second-demo-declined",
+      "title": "A second demonstration is declined; the one demo stays on its target",
+      "covers": [
+        "EP-4",
+        "FR-017"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "98c3786824ad81733276231cfa15945d47f1a0e403be38e8f5ed906dfc937669",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "b6837843-bd7b-4e32-91e5-8ac6efd38750",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "25-unreachable",
+      "title": "After Effects can't be reached: nothing claimed about the comp",
+      "covers": [
+        "SKILL step 9",
+        "US1-10"
+      ],
+      "fixture_sources": {},
+      "hash": "19c015c9d2d6a4a01e4e9788387cbbf979ae57b23c5b9389c85cfe3ebd27ab5d",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "6f88d153-b1a0-4807-99e8-fb3856a60b64",
+          "transcript": "### Turn 1: the project is UNREACHABLE (After Effects not answering)\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "26-review-pass",
+      "title": "A review that passes is recorded as passed, with no demo (the learner names Row A to C, not the offered Chips)",
+      "covers": [
+        "EP-16",
+        "US3-1"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "review-rows-pass.json": "live"
+      },
+      "hash": "e430fd200c873666ad6e520242f978ed8698cd98bf433d6959574098fc586a0e",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "b3bf60b4-0f65-43ec-8821-306090ac39c0",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "27-null-place-top-left",
+      "title": "Asked which part of the null counts as its place: the top-left corner, not the middle of the square",
+      "covers": [
+        "L-1",
+        "FR-023",
+        "N3"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "788fe4944f38a8c5f14fbe59df4b26537124b8f1229169f490b690617249f21f",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "c41b02a1-8dec-4713-b92f-9180e6076be8",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "28-jump-key-question",
+      "title": "A layer flew off when parented: may ask once whether a key was held, never as the cause, never Option or Shift",
+      "covers": [
+        "L-1",
+        "FR-023",
+        "US2-2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "jumped.json": "live"
+      },
+      "hash": "ba8ea7531ecf2f00665a3f65ae3bf2229c84c13266fa40dc49abb8322f9ae8d6",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "95d1bf6c-42a2-4843-9022-f7b4be584417",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "29-no-invented-key-times",
+      "title": "At a pass on a Rotation move, the check gives no key times: no preview frame at a guessed time",
+      "covers": [
+        "live-1",
+        "FR-020",
+        "US1-6"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "rotate-null.json": "live"
+      },
+      "hash": "bbdccc2359a0ba78b815165a611a9c3ab5fe9e1f466fe1c88eec14b03af5921d",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "6d314944-fa5e-44da-99a7-4cd0c4b8e190",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "30-record-names-only-seen-move",
+      "title": "The learner says the group turns from the top-left corner but only slid the null: the record doesn't say it turned",
+      "covers": [
+        "live-4",
+        "FR-020",
+        "US1-6"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-top-left.json": "live",
+        "slide-top-left.json": "live"
+      },
+      "hash": "a2f4449664e8de59b1a6601d91cd5f5c8a2241968bca2cfdf1fdf45bb540b622",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "831bec80-ae8f-4c5f-8718-602c4d2b734b",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "31-corner-sentence-once",
+      "title": "The null's corner sentence is said once, at the place question, and not again after the learner placed it",
+      "covers": [
+        "D-4",
+        "FR-023",
+        "L-1"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "null-top-left.json": "live"
+      },
+      "hash": "931ec8f2b63a63e320ca1a3609f9e07a872a5fa474c4892687232811f96146d2",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "88cc5aaf-30ce-4e50-94e6-3d4e8b025374",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "32-no-null-move-in-explain",
+      "title": "Asked how the null Hatch already follows moves: the explain step never describes a null's move",
+      "covers": [
+        "D-4",
+        "FR-005",
+        "TD step 2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "44c56df6f2e27579a92d23a658a81dcabe4f215a3819364150ed26e7c1511bfe",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "d16ee1f2-c722-4026-852b-b424bf59d9b9",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "33-review-pivot-hint-no-square",
+      "title": "A review whose pivot misses the place the learner named: the hint has no square, no corner sentence and no 'null'",
+      "covers": [
+        "D-4",
+        "SC-004",
+        "FR-023",
+        "TD 11"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "review-rows-pass.json": "live"
+      },
+      "hash": "56aab992c155e2c35d10fad25373992138c5ce160c227ab2ddcebbe74665f6bd",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "1f3b6bdc-bb4a-422b-aef4-c28de1fbf3fb",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "34-unreadable-record",
+      "title": "An unreadable record: one sentence about the notes (said once), then a first lesson with no claim about what the learner has or hasn't done, no review, nothing before the snapshot",
+      "covers": [
+        "FR-049",
+        "FR-052",
+        "SC-015",
+        "EP-34"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "3b4c3a9d3513dff4cbb98724c32714ab7acb0dc40d9ee4d32e58dcb9634364d6",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "2d60acca-812f-461e-980a-2a5766105bf9",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "35-practicing-memory-clause",
+      "title": "Practicing (a partial lesson yesterday): one memory clause in plain words with how long ago, no skill ID, no review, then it asks which layers",
+      "covers": [
+        "FR-049",
+        "FR-052",
+        "SC-015",
+        "EP-35"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "8e9140ef3f3b318f9bd5f25e2bebbb03162a734cb04db80c32328bf6904a081f",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "219d780f-be7d-4b50-9391-82c6a68f0a40",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "36-asked-review-none-due",
+      "title": "A review the learner asks for when none is due: it runs (names the layers and the task) and nothing says it was early or not due",
+      "covers": [
+        "FR-048",
+        "FR-051",
+        "FR-052",
+        "SC-015",
+        "EP-36"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "0cfa195d58320108ec6c7e6c6920fa18aa1b487b7ff5618f8ca4d4259c7930e8",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "1af437a0-ef63-4949-8170-237e8a59762a",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor I think I already know this one. Can you quiz me on it?\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "37-left-open-with-choices",
+      "title": "A lesson left open on Tile, Caption and Stamp with no null placed, reopened in a new session: one sentence on where it left off, then the next step: the turn-or-scale question if it was never answered, else the null step (round 2 C); no recap, no 'which layers', no new proposal",
+      "covers": [
+        "FR-043",
+        "FR-046",
+        "FR-052",
+        "SC-015",
+        "EP-37"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "88ea3c3622600e144690449b41ca0d740771164a5bfc5df0aae4cf66054a386d",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "08fce94b-cf32-47de-b7e2-1c229ea90d34",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Tile, Caption and Stamp should move as one.\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "38-left-open-null-placed",
+      "title": "A lesson left open with the null placed, reopened in a new session: one sentence on where it left off (group, null placed), then step 5 (parent the group); no recap, no second null",
+      "covers": [
+        "FR-043",
+        "FR-052",
+        "SC-015",
+        "R2-C"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "5adb7c707b4858d0c4de9787a9085e88517adea9a582fbbce1a9f1bda8634e24",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "30080842-3106-461d-a2a7-b53170234c88",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Tile, Caption and Stamp should move as one.\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "39-rig-example-only-when-asked",
+      "title": "The existing rig (Hatch follows Hatch Rig) stays out of the explanation turn and is named in words, from the read, only when the learner asks what it looks like; then the turn-or-scale question again, no null task, no claim about how the rig moves",
+      "covers": [
+        "FR-023",
+        "FR-023a",
+        "TD 012 § 16",
+        "US1-2"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "97e4dc0c13cf974e6a761b6d40a74dba29fe7bb8fff1262732438a14743e68b2",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "422b723f-ad44-41b5-b82b-9bba1b8a5274",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "40-left-open-region-unanswered",
+      "title": "A lesson picked up in a new session after the group was agreed but before the turn-or-scale question was answered: the mentor asks that question first, on its own, with no null task and no recap",
+      "covers": [
+        "FR-043",
+        "FR-046",
+        "FR-052",
+        "TD 012 § 16",
+        "SKILL.md step 2 (picked up again)"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "10d124cd72ce6997dba0fcca20d9eeedd114b012d81b5071c0717341c8efd586",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "fdf1a700-24bd-4a82-a222-75131fd2e671",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Tile, Caption and Stamp should move as one.\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "41-duplicated-group-layer",
+      "title": "A group layer duplicated mid-lesson: two layers called Caption. One sentence asks for a rename so the mentor can tell which is in the group; not 'can't find', no guessing, no offer to rename",
+      "covers": [
+        "OA-16",
+        "FR-021"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "eval-synthetic/parented-center-dup-caption.json": "synthetic"
+      },
+      "hash": "ef13706cd95abd268d9bf51164fbbbb64615abf35ee7c37ac7c7403368eda7f0",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "47e8350f-058b-4f18-b457-e54ca0c90e4b",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Tile, Caption and Stamp should move as one.\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "42-other-layer-changed-no-keys",
+      "title": "Another layer's values changed with no keys (Background's Position): named once as an other change, never as a mistake, the group's own result stands",
+      "covers": [
+        "OA-4",
+        "FR-021"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "eval-synthetic/parented-center-background-changed.json": "synthetic"
+      },
+      "hash": "92ae8956ad103c0bd84d339617340e3e100080364cb86cc33001699d909adf77",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "00e39f00-0168-4244-bd41-770752679d93",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Tile, Caption and Stamp should move as one.\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "43-too-many-keys-to-check",
+      "title": "A group whose keys together are more than one read can sample: refused at the focus in plain words and a smaller group asked for; no focus set, no demo",
+      "covers": [
+        "OA-15",
+        "FR-005"
+      ],
+      "fixture_sources": {
+        "synthetic/cap70-before.json": "synthetic"
+      },
+      "hash": "e11b3f004d27db89d4e6c32c759370b3c67f86f70a9645167db645ab7e1ee0e3",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "e88d905f-4533-41a1-b774-9ad3bfbf81cb",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor Card, Label and Extra should move as one.\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "44-grandparent-moved-by-expression",
+      "title": "The null follows a layer (Holder) that moves through an expression with no keys: read as a moving parent, not a jump; nothing graded, nothing counted as a miss",
+      "covers": [
+        "OA-14",
+        "FR-009"
+      ],
+      "fixture_sources": {
+        "synthetic/before.json": "synthetic",
+        "synthetic/row23-still-parent-placed.json": "synthetic",
+        "eval-synthetic/row23-expression-grandparent.json": "synthetic"
+      },
+      "hash": "96242abfc060b20939c2abe4407c367ff05b7170a942514e973f2280d906f443",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "63fa7ca4-c8b1-4104-a1e7-ba1c36375035",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "45-button-check-partial",
+      "title": "Panel: Done, check it with the null placed and nothing parented: the layers named, no fix, and no offer in a turn that says a layer is still off (an offer is allowed when the turn moves on to the parenting ask; accepted 2026-11-09)",
+      "covers": [
+        "RQ-14",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "dce7493da04af095262f12fed65faca95bc2a1c397547f3aadc4362f535384c2",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "fc6aa8ea-5a82-4715-ae3c-71ae7b22dee5",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "46-button-hint",
+      "title": "Panel: Hint after a check that didn't pass gives a hint and changes nothing",
+      "covers": [
+        "RQ-14",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "e3602720fe8b7d7af0f3c2c183003faf234f217e2af242c232943b9385deebe1",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "d80946f8-9e23-4ee3-96f6-22fcc93cbac6",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "47-button-show-me",
+      "title": "Panel: Show me parents one layer after the null is in place, in plain words, with Edit > Undo",
+      "covers": [
+        "RQ-14",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "0514e92048e2f30f6427b06c1a34c9071e42f86948d9200886b74de68963fb5f",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "97fc5308-dd24-4824-a891-11444cbca5db",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "48-button-show-me-again",
+      "title": "Panel: Show me again explains the change already made with a frame, and makes no second demonstration",
+      "covers": [
+        "RQ-14",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live"
+      },
+      "hash": "0363216ad2df91324f0a32f0bbe52705e3aadeb744189a4eb9704a45fcb14443",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "11913f1d-cd9a-4b3d-9f16-b34aa5bbad35",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "49-button-new-lesson-due-record",
+      "title": "Panel: New lesson on a skill with a review due opens a lesson, not the review, and never mentions one",
+      "covers": [
+        "RQ-02",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "e62da1926d0ed823db68e53b77b90111259b10aaa16fd8ed8e5f2a5e07e7bf86",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "f2d029b5-36b3-45a1-87fe-ee1606b03949",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor lesson\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "50-button-continue",
+      "title": "Panel: Continue picks the lesson up where it was: the group said back, no new opening, no demo",
+      "covers": [
+        "RQ-12",
+        "FR-027",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live"
+      },
+      "hash": "030be78c4fd0734d8e2dcb1a262ddabc9cf998fb4d38377c694231b1d71a0caf",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "3e5c8098-9e9a-4b1d-a9f8-60566fad8289",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "51-button-warm-up",
+      "title": "Panel: Warm up runs a review: the task for the chips, no demonstration, no walkthrough",
+      "covers": [
+        "RQ-11",
+        "FR-070"
+      ],
+      "fixture_sources": {
+        "practice2b-with-wave-a-parented.json": "live"
+      },
+      "hash": "26a30c0de488e843ee4eb6d1baa254f69ea39a472abfd5909c2b35e34cc2fb80",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "4eae938d-632a-4be7-b4d8-95817f8184a5",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor review\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "52-where-question-about-the-group",
+      "title": "The learner slid-then-keyed Rotation and answers 'where it is right now': one follow-up, about a place on the group (corner, edge, middle), never about the null's own corner",
+      "covers": [
+        "T060-finding-1",
+        "SC-014",
+        "R-REGION-ASKED"
+      ],
+      "fixture_sources": {
+        "practice2b.json": "live",
+        "null-center.json": "live",
+        "rotate-null.json": "live"
+      },
+      "hash": "9e743474b06b4545b13eb19c21e5c65b4e7828b5d834cdb270d84e6afefc65ea",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "62c8ddaf-dbc8-443f-9d1d-66c2fe686e98",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "53-child-of-expression-parent-playhead-moved",
+      "title": "A null is added and the playhead moved to 1.5 s; Const Kid rides on Const Parent, which an expression moves, and sits outside the group: no jump, nothing about either layer is reported",
+      "covers": [
+        "spec015-K2",
+        "FR-012",
+        "FR-013",
+        "E17a",
+        "SC-005",
+        "T035"
+      ],
+      "fixture_sources": {
+        "expressions/planted.json": "live",
+        "eval-synthetic/planted-null-added-later.json": "synthetic"
+      },
+      "hash": "db822b94ad52c0f05b4a4ec66ec646f68e6942ed20310c935be6b84d235ad631",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "02ae8617-9fcd-442e-b993-3489aecb6dc9",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "54-new-null-renumbers-a-wiggle",
+      "title": "The learner's new null goes on top and renumbers Wiggle, whose Position follows its index: the layer's values change with no edit and nothing is reported on it",
+      "covers": [
+        "spec015-K2",
+        "FR-013a",
+        "E28",
+        "SC-005",
+        "T035"
+      ],
+      "fixture_sources": {
+        "expressions/planted.json": "live",
+        "expressions/planted-renumbered.json": "live"
+      },
+      "hash": "45858c43b56f06b3da3308536a3b16a188bf7ab5c3a397795ca4cadb3f68ab7a",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "88b3e8d3-927c-4188-9c8f-6a9a89cf2a0e",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    },
+    {
+      "id": "55-jump-on-a-layer-an-expression-drives",
+      "title": "A group layer that jumped when parented has its own Position expression: the jump sentence says it as a clause beside the jump (not the cause), never 'can't see expressions', never 'no animation' or 'holds still'",
+      "covers": [
+        "spec015-OQ-8",
+        "012-TD-17",
+        "SC-005",
+        "T059"
+      ],
+      "fixture_sources": {
+        "eval-synthetic/jump-expr-base.json": "synthetic",
+        "eval-synthetic/jump-expr-null.json": "synthetic",
+        "eval-synthetic/jump-expr-jumped.json": "synthetic"
+      },
+      "hash": "4f13617db377a1ccf8045f5fe290b9289f7f270bdf01b5c364a921b7b974587f",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "run",
+              "pass": false,
+              "detail": "turn 1 ended with success"
+            }
+          ],
+          "rubric": [],
+          "cost": 0,
+          "session_id": "de1c0d22-e089-48a6-bd57-f5a0b2ef6618",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nMENTOR: You've hit your 5-hour limit · resets 5:30pm (America/Denver)\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

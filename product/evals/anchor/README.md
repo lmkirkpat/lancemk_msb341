@@ -707,3 +707,9 @@ Case 06 and R-AN-WRONG-LAYER pinned the old Pan Behind rule (start the drag on t
 **T059 results, B1, `--repeat 3`:** 06 3/3 (`2026-11-16-140246`, $2.72; the first run `-135701` was 1/3 with two `ETIMEDOUT`, plumbing); 57 3/3 (`-135805`, $1.70); 58 0/3 (`-135902`, $1.82, waits on T061: the mentor says the sentence, then teaches Joined as an ordinary lesson); 59 3/3 (`-140010`, $2.44).
 
 **T059 re-run after T061 (`f480d3c`), B1, `--repeat 3`:** 58 3/3 (`2026-11-16-140805`, $1.43). The mentor now leaves Joined out and goes on.
+
+## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
+
+**First run `-154148` was void: 8/64, $6.63.** The account's 5-hour usage limit hit at case 09 (`You've hit your 5-hour limit`), so 56 cases never ran. Plumbing; not a score. **Re-run after the limit reset: `results/2026-11-16-175949.json`, 61/64 (95%), $51.11.** SC-006 met, no hard-rule check failed. Last B1 baseline 56/59. T035 and T059 cases 55, 56, 57, 58 and 59 all passed. Misses 29 (R-ONE-IDEA) and 50 (R-ONE-IDEA) were noise, each 3/3 on repeat (`-192129`, $2.67; `-192321`, $4.99); 50 had failed the 2026-11-09 baseline too. Case 06 passed.
+
+Run order note: the cost of the void run isn't part of the score.

@@ -386,3 +386,7 @@ B1 baseline compared: `2026-10-29-143934.json`, 29/30 (97%); A is 2.2 points bel
 ## Changed after seeing results (2026-11-11, human-approved): R-OR1-LESSON accepts the named practice comp
 
 Same change as offset (see `offset/README.md`). `rubric.md` R-OR1-LESSON now says that offering "Mentor Practice 2", the comp `key-types-mentor/SKILL.md` (~line 142) names, is not an invented target; any other comp or layer no tool result names still fails. No case was re-run for key types (no failure of this item has been seen here).
+
+## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
+
+**Full run: `results/2026-11-16-150337.json`, 35/36 (97%), $21.08.** SC-006 met, no hard-rule (universal) check failed, no timeouts. First full B1 run in this set since the A runs (A 34/36 on 2026-11-09). The one miss, 33 button-hint (`say:names_blink`, never matched /Blink|Opacity/), failed 3/3 on repeat (`-191323`, $2.43): real but minor. The hint is sound teaching (names the keys at 1 s and 1.8 s, changes nothing) but never names Blink or Opacity. Proposal: either one line in `SKILL.md` so a hint names the layer or property, or loosen the check to also accept the key times; not changed (needs the builder).

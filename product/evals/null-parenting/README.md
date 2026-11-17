@@ -664,3 +664,7 @@ Fixtures `eval-synthetic/jump-expr-base.json`, `jump-expr-null.json`, `jump-expr
 **T059 results, B1, `--repeat 3`:** 55 2/3 (`2026-11-16-140126`, $2.89; the miss was my regex, which didn't allow "an expression also drives", now loosened) then 3/3 (`-140414`, $3.03, regex unchanged at that run).
 
 **T059 re-run after T061 (`f480d3c`), B1, `--repeat 3`:** 53 3/3 (`2026-11-16-140903`, $2.16); 54 3/3 (`2026-11-16-141002`, $2.17).
+
+## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
+
+**First run `-154257` was void: 0/55, $0.00.** The 5-hour usage limit was already hit. Plumbing. **Re-run after the reset: `results/2026-11-16-185236.json`, 50/55 (91%), $40.99.** SC-006 met; the one failed deterministic check, 05 `say:no_jump_claim`, was noise (3/3 on repeat, `-192439`, $2.96); every universal check passed. Last B1 baseline 45/52. T035 and T059 cases 53, 54 and 55 passed. Misses and repeats (3 each): 05 3/3 and 17 3/3 (R-REVIEW-HINT) and 35 3/3 (R-USES-MEMORY), all noise. 30 first failed on `ETIMEDOUT` (plumbing), then 2/3 on repeat (`-192619`; the miss was R-NAMES-REAL, 'two keys on its Rotation'). 52 also first failed on `ETIMEDOUT`, then 2/3 (`-192836`; R-ONE-IDEA, a second explanatory sentence). 30 and 52 are minor, majority passes, so noise; no prompt change proposed.

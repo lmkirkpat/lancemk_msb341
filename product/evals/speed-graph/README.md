@@ -416,3 +416,7 @@ B1 baseline compared: `2026-11-11-232337.json`, 36/37 (97%); gap 0 points.
 **A baseline (FR-035, T053):** `results/2026-11-12-102435.json`, `claude-opus-5-5`, effort `medium`, $2.04 mentor credit ($4.60 judge, on subscription), at `ffc0c1b`.
 
 **Timing (T068, `node product/evals/lib/timing-report.mjs results/2026-11-12-102435.json`):** 208 requests over 37 cases, 0 re-sends, 0 went quiet, 0 with no headers, max headers 1625 ms, max gap 4498 ms.
+
+## Spec 015 T036 re-baseline (2026-11-16, B1, at `edc0a1e`)
+
+**Full run: `results/2026-11-16-151920.json`, 35/37 (95%), $23.37.** SC-006 met, no hard-rule check failed, no timeouts. Last B1 baseline 36/37. Misses: 19 reading-answer-as-frame (R-ONE-IDEA, bulleted task) was noise, 3/3 on repeat (`-191632`, $1.98). 16 stop-early-record (R-RECORD-HONEST) passed the last baseline and went 1/3 on repeat (`-191525`, $3.30): real, a record summary that opens with lesson method ('Asked for the demonstration before reading the graph'). Proposal: one line in `SKILL.md`'s record step that a summary says what the learner did or didn't do, never how the lesson went; take the example from the rubric's Pass line.
