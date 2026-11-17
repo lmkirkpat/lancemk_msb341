@@ -20,7 +20,7 @@ test("TD § 16's answer: explanation, four numbered steps with their tags, the o
   assert.equal(v.steps[3].text, "Play it back and watch the turn.", "PQ-5: an untagged look step");
   assert.deepEqual(v.offers, [{ skill: "transform.anchor", tag: "Set the pivot" }]);
   assert.equal(v.closing_offer, COMP1.closing_offer);
-  assert.equal("layer" in v.steps[0], false, "the panel draws no layer field");
+  assert.deepEqual(v.steps.map((s) => s.layer), ["Shake Control", "Shake Control", "Shake Control", null], "amendment (e): kept for the context after a lesson");
 });
 
 test("FR-017: a b1 panel never gets offers, whatever the result says; nor does a b1 result", () => {

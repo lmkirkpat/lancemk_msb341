@@ -103,7 +103,7 @@ test("canContinue: only unfinished, same bridge start, known start", () => {
 // ---------- spec 014 T026: version 3, the ask thread beside the lesson (research R12) ----------
 const at = require("../lib/ask-thread.js");
 
-const thread = (id) => at.answer(at.addQuestion(at.newThread({ id, claude_session_id: `s-${id}` }), { text: "Why does it swing?", kind: "question" }), { view: { kind: "answer", explanation: "In Comp 1, Door turns from its middle.", steps: [{ number: 1, text: "Pan Behind its pivot.", tag: "Set the pivot", not_taught: false }], offers: [], closing_offer: "Try it?" }, had_result: true });
+const thread = (id) => at.answer(at.addQuestion(at.newThread({ id, claude_session_id: `s-${id}` }), { text: "Why does it swing?", kind: "question" }), { view: { kind: "answer", explanation: "In Comp 1, Door turns from its middle.", steps: [{ number: 1, text: "Pan Behind its pivot.", tag: "Set the pivot", not_taught: false, layer: "Door" }], offers: [], closing_offer: "Try it?" }, had_result: true });
 
 test("a version 2 file reads as today, and has no thread", () => {
   const home = tmpHome();

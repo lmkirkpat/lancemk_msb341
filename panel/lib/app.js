@@ -20,7 +20,7 @@ const { COPY } = require("./copy.js");
 const { askView, fallbackText, ANSWER_TOOL } = require("./ask-result.js");
 const PHASE = require("./phase.js");
 const thr = require("./ask-thread.js");
-const { askRequest, followUpRequest, goDeeperRequest, ASK_COMMAND } = require("./requests.js");
+const { askRequest, followUpRequest, goDeeperRequest, contextRequest, ASK_COMMAND } = require("./requests.js");
 
 const LOADING_AFTER_MS = 300; // FR-008
 const SENDING_MS = 600; // MU ask-sending: Asking… shows on Home before the thread takes over
@@ -756,8 +756,9 @@ function createApp(deps) {
     state.home_view = "home";
     state.steps_open = false;
     state.steps_list_open = false;
-    if (state.thread && state.thread.claude_session_id) {
-      state.thread = Object.assign({}, state.thread, { claude_session_id: null });
+    if (state.thread) {
+      // amendment (e): the next follow-up or Try again carries the last question and answer.
+      state.thread = Object.assign({}, thr.setAfterLesson(state.thread, true), { claude_session_id: null });
       persistThread();
     }
   }
@@ -856,6 +857,7 @@ function createApp(deps) {
     if (t.error && t.error.kind === "timeout" && runtime !== "a") stopThreadAdapter();
     // MU › States still missing: spec 007's notices, with "Your question's still here." in place of the lesson's line.
     if (err) state.thread = thr.notice(state.thread, { title: err.title, text: COPY.ask.question_still_here });
+    else state.thread = thr.setAfterLesson(state.thread, false); // the context went through: later sends are plain
     if (deps.appendTurn && e) {
       deps.appendTurn({ at: t.sent_at || new Date(t.sent_ms).toISOString(), kind: t.kind, thread: "ask", wait_ms: e.wait_ms, first_event_ms: e.first_event_ms, total_ms: e.total_ms, cost_usd: e.cost_usd, ok: e.ok, lesson_passed: false,
         runtime: e.runtime || runtime, model: e.model, effort: e.effort, settings_hash: e.settings_hash, tokens: e.tokens, other_model: e.other_model, error_kind: e.error_kind, start_ms: e.start_ms });
@@ -918,8 +920,9 @@ function createApp(deps) {
   function followUp(text) {
     const q = String(text || "").trim();
     if (!q || !state.thread || followOff()) return false;
+    const req = state.thread.after_lesson ? contextRequest(thr.contextEntry(state.thread), q) : followUpRequest(q);
     state.thread = thr.addQuestion(state.thread, { text: q, kind: "followup", at: now().toISOString() });
-    askSend(followUpRequest(q));
+    askSend(req);
     changed();
     return true;
   }
@@ -940,7 +943,12 @@ function createApp(deps) {
   function askRetry() {
     const q = thr.latest(state.thread);
     if (!q || askBusy()) return;
-    const req = q.kind === "question" ? askRequest(q.text) : { kind: q.kind, label: q.text, request: q.text };
+    // After a lesson a follow-up's retry is the same wrapped request it retries (amendment (e)); a
+    // question stands alone and goes as a question.
+    const last = state.thread.questions.length - 1;
+    const req = q.kind === "question" ? askRequest(q.text)
+      : q.kind === "followup" && state.thread.after_lesson ? contextRequest(thr.contextEntry(state.thread, last), q.text)
+        : { kind: q.kind, label: q.text, request: q.text };
     state.thread = thr.retry(state.thread);
     askSend(req, { pressed: "try_again" });
   }

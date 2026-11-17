@@ -11,7 +11,21 @@ const READING_LONG_MS = 6000; // MU ask-reading-long: "Still reading the open co
 const ENTRY_KINDS = ["question", "followup", "go_deeper"];
 
 function newThread({ id, claude_session_id, at } = {}) {
-  return { version: VERSION, id: id || null, claude_session_id: claude_session_id || null, started_at: at || null, questions: [], latest_steps: null, deeper: null, steps_open_once: false };
+  return { version: VERSION, id: id || null, claude_session_id: claude_session_id || null, started_at: at || null, questions: [], latest_steps: null, deeper: null, steps_open_once: false, after_lesson: false };
+}
+
+// after_lesson (amendment (e)): a lesson ended the thread's conversation and no turn has gone through
+// since, so the next follow-up or Try again carries the context (contracts/panel-ask.md › Context after
+// a lesson). Set by the lesson's start; cleared by the first turn that ends without a notice.
+const setAfterLesson = (th, on) => (th && th.after_lesson !== on ? Object.assign({}, th, { after_lesson: on }) : th);
+
+// The entry the context is built from: the latest one with an answer on screen (a view, or the
+// mentor's words), skipping entries with nothing under them and the entry being sent (`before`).
+// Its view may be null (FR-048's fallback); contextRequest then sends the prefix and text only.
+function contextEntry(th, before) {
+  const qs = th ? th.questions.slice(0, before === undefined ? th.questions.length : before) : [];
+  for (let i = qs.length - 1; i >= 0; i--) if (qs[i].view || qs[i].prose) return qs[i];
+  return null;
 }
 
 const latest = (th) => (th && th.questions.length ? th.questions[th.questions.length - 1] : null);
@@ -88,7 +102,7 @@ const isStr = (v) => typeof v === "string";
 const isObj = (v) => !!v && typeof v === "object" && !Array.isArray(v);
 
 function cleanStep(s) {
-  return isObj(s) && typeof s.number === "number" && isStr(s.text) ? { number: s.number, text: s.text, tag: isStr(s.tag) ? s.tag : null, not_taught: s.not_taught === true } : null;
+  return isObj(s) && typeof s.number === "number" && isStr(s.text) ? { number: s.number, text: s.text, tag: isStr(s.tag) ? s.tag : null, not_taught: s.not_taught === true, layer: isStr(s.layer) ? s.layer : null } : null;
 }
 
 function cleanView(v) {
@@ -118,7 +132,8 @@ function fromSaved(s) {
     latest_steps: steps && steps.length && steps.every(Boolean) ? steps : null,
     deeper: null, // a go-deeper lesson doesn't outlive the panel in this phase (phase 2 owns it)
     steps_open_once: s.steps_open_once === true,
+    after_lesson: s.after_lesson === true,
   };
 }
 
-module.exports = { newThread, addQuestion, asNewQuestion, NEW_QUESTION_KINDS, answer, notice, retry, latest, split, offersOf, readingLong, fromSaved, READING_LONG_MS, VERSION };
+module.exports = { newThread, setAfterLesson, contextEntry, addQuestion, asNewQuestion, NEW_QUESTION_KINDS, answer, notice, retry, latest, split, offersOf, readingLong, fromSaved, READING_LONG_MS, VERSION };

@@ -4,7 +4,7 @@ const assert = require("node:assert/strict");
 const { REQUESTS, visibleKinds, startRequest, newLessonRequest, warmUpRequest, showMeAgain, followOnRequest } = require("../lib/requests.js");
 
 test("matches the contract's table", () => {
-  assert.deepEqual(Object.keys(REQUESTS).sort(), ["check", "continue", "find_next", "hint", "show_me", "show_me_again", "show_me_again_other", "start", "yes"]);
+  assert.deepEqual(Object.keys(REQUESTS).sort(), ["ask_context", "check", "continue", "find_next", "hint", "show_me", "show_me_again", "show_me_again_other", "start", "yes"]);
   assert.equal(REQUESTS.start.request, "/ease-mentor");
   assert.equal(REQUESTS.show_me.request, "Show me how first.");
   assert.equal(REQUESTS.check.label, "Done, check it"); // RQ-14: the label moved, the request didn't

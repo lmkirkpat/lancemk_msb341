@@ -234,3 +234,46 @@ test("ask: every case opens with the panel's question request, and any Go deeper
     for (const t of c.turns) if (/^Yes, go deeper on /.test(t.say)) assert.ok(deeper.has(t.say), `${f}: "${t.say}" isn't the panel's Go deeper`);
   }
 });
+
+// ---------- spec 014 T102 and T104: the context sent after a lesson (amendment (e)) ----------
+// Any ask case turn that carries the wrapper must be exactly what the panel builds from the parts it
+// shows: its question, answer, steps (with layers) and closing offer, then the follow-up. Parsed
+// back from the turn, rebuilt with the panel's contextRequest, compared byte for byte.
+const { contextRequest } = require("../lib/requests.js");
+const WRAP = `${ASK_COMMAND} ${REQUESTS.ask_context.request}`;
+
+function rebuild(say) {
+  const lines = say.split("\n").slice(1);
+  const take = (prefix) => (lines.length && lines[0].startsWith(prefix) ? lines.shift().slice(prefix.length) : null);
+  const question = take("Question: ");
+  let answer = take("Answer: ");
+  while (answer !== null && lines.length && !/^(Steps:|Closing: |Follow-up: )/.test(lines[0])) answer += `\n${lines.shift()}`;
+  const steps = [];
+  if (lines[0] === "Steps:") {
+    lines.shift();
+    while (lines.length && /^\d+\. /.test(lines[0])) {
+      const m = /^\d+\. (.*?)(?: \(layer: (.*)\))?$/.exec(lines.shift());
+      steps.push({ text: m[1], layer: m[2] === undefined ? null : m[2] });
+    }
+  }
+  const closing = take("Closing: ");
+  const follow = take("Follow-up: ");
+  assert.equal(lines.length, 0, `nothing after Follow-up: ${lines.join(" | ")}`);
+  assert.ok(follow !== null, "a Follow-up line");
+  return contextRequest({ text: question, view: { explanation: answer, steps, closing_offer: closing } }, follow).request;
+}
+
+test("ask: a turn carrying the context after a lesson is the panel's wrapper, byte for byte (T104)", { skip: fs.existsSync(ASK_SET) ? false : "product/evals/ask/ isn't built yet" }, () => {
+  const files = fs.readdirSync(ASK_SET).filter((f) => f.endsWith(".json"));
+  for (const f of files) {
+    const c = JSON.parse(fs.readFileSync(path.join(ASK_SET, f), "utf8"));
+    for (const t of c.turns) if (typeof t.say === "string" && t.say.startsWith(WRAP)) assert.equal(t.say, rebuild(t.say), f);
+  }
+});
+
+test("ask: the wrapper parses back to itself (the check above can catch a case that drifts)", () => {
+  const say = contextRequest({ text: "Why?", view: { explanation: "In Comp 1, it turns.\n- From its middle.", steps: [{ text: "Pan Behind.", layer: "Door" }, { text: "Play it back.", layer: null }], closing_offer: "Try them?" } }, "Done.").request;
+  assert.equal(rebuild(say), say);
+  const drifted = say.replace("(layer: Door)", "(Door)").replace("Closing: ", "Closing offer: ");
+  assert.throws(() => assert.equal(drifted, rebuild(drifted)), "a case worded its own way fails");
+});

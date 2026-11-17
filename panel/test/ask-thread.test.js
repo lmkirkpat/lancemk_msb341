@@ -5,13 +5,13 @@ const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const t = require("../lib/ask-thread.js");
 
-const STEPS = [{ number: 1, text: "Select Shake Control and Pan Behind its pivot.", tag: "Set the pivot", not_taught: false }, { number: 2, text: "Play it back.", tag: null, not_taught: false }];
+const STEPS = [{ number: 1, text: "Select Shake Control and Pan Behind its pivot.", tag: "Set the pivot", not_taught: false, layer: "Shake Control" }, { number: 2, text: "Play it back.", tag: null, not_taught: false, layer: null }];
 const view = (o) => Object.assign({ kind: "answer", explanation: "In Comp 1, rock.png rides on Shake Control.", steps: STEPS, offers: [], closing_offer: "Try them?" }, o);
 const AT = "2026-11-14T12:00:00.000Z";
 
 test("a new thread is empty, with no steps to dock", () => {
   const th = t.newThread({ id: "th-1", claude_session_id: "s-1", at: AT });
-  assert.deepEqual(th, { version: 1, id: "th-1", claude_session_id: "s-1", started_at: AT, questions: [], latest_steps: null, deeper: null, steps_open_once: false });
+  assert.deepEqual(th, { version: 1, id: "th-1", claude_session_id: "s-1", started_at: AT, questions: [], latest_steps: null, deeper: null, steps_open_once: false, after_lesson: false });
 });
 
 test("an answer with steps docks them; the entry keeps its view and no prose shows beside it", () => {

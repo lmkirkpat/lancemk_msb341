@@ -57,6 +57,7 @@ function askView(ev, opts) {
       text: s.text,
       tag: s.skill && s.skill !== NOT_TAUGHT ? j.tags[s.skill] : null,
       not_taught: s.skill === NOT_TAUGHT,
+      layer: isStr(s.layer) ? s.layer : null, // amendment (e): saved for the context after a lesson, never drawn
     })),
     offers: onA ? j.offered_skills.map((skill) => ({ skill, tag: j.tags[skill] })) : [],
     closing_offer: j.closing_offer,

@@ -374,7 +374,9 @@ test("after the lesson, Back to your question opens the same answer and steps; a
   const a = h.adapter();
   assert.equal(h.adapters.length, n + 1, "a fresh conversation");
   assert.deepEqual(a.started[0], { skill: "ask-mentor" }, "not a resume");
-  assert.deepEqual(a.sent[0], { text: "/ask-mentor Why the null?", kind: "followup" }, "the ask skill opens from the request");
+  assert.equal(a.sent[0].kind, "followup");
+  assert.ok(a.sent[0].text.startsWith("/ask-mentor Earlier question and answer, as shown in the panel:\n"), "the ask skill opens from the request, with the context (amendment (e))");
+  assert.ok(a.sent[0].text.endsWith("\nFollow-up: Why the null?"));
   assert.equal(h.app.model().thread.claude_session_id, "session-1");
   assert.ok(text(h).includes("Why the null?"));
   assert.equal(text(h).includes("/ask-mentor"), false, "the bubble shows the text as typed");
