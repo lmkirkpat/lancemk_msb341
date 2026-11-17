@@ -78,6 +78,13 @@ pairs together). With no pair that moves (`single_key`, `all_held`) there's no `
 detail, named and whole comp. Live Mentor Practice: Subtitle's Position is `eased`, its Opacity `mixed`.
 About 16 bytes per keyed property; Comp 1's whole-comp summary stays under 12 KB.
 
+**Links in (renamed 2026-11-17, spec 014 T037 fix (l)):** each link into a layer carries
+`from_renders`, whether the **from layer** (the one holding the expression, which the link drives)
+renders at the comp's current time: in a summary's `links_in.first[]` the bool (or `null` when not
+read), in detail `{ renders, why, at_time }` (data-model § 2, Link). It was `target_renders`, with the
+same value; the old name read as the linked layer's own state, which for a control null is always "doesn't
+render". Comp 1: the one link into Sweep Control is from Black Solid 1, `from_renders: false` (eye off).
+
 ## Limits (SC-007, research R11)
 
 - Summary: ≤ 4 KB per layer with its sources; ≤ 12 KB for the whole comp. Over the cap, layers are

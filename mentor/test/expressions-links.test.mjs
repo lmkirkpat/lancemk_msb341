@@ -25,7 +25,14 @@ test("SC-002: exactly 1 link into Sweep Control, from Black Solid 1's CC Light S
     { from: l.from_layer, prop: l.from_property, reads: l.property, how: l.how, inferred: l.inferred, shared: l.shared_name },
     { from: "Black Solid 1", prop: "Effects › CC Light Sweep › Center", reads: "Position", how: "name", inferred: true, shared: false },
   );
-  assert.deepEqual([l.target_renders.renders, l.target_renders.why], [false, "eye_off"], "E14");
+  assert.deepEqual([l.from_renders.renders, l.from_renders.why], [false, "eye_off"], "E14");
+});
+
+test("T037 fix (l): a link's render state is the from layer's (Black Solid 1, eye off), never the linked null's own", () => {
+  const [l] = linksIn(C1).get(idxOf(C1, "Sweep Control")).links;
+  assert.equal(l.target_renders, undefined, "the old name is gone");
+  assert.deepEqual(l.from_renders, rendersAt(C1, idxOf(C1, "Black Solid 1"), C1.comp.time));
+  assert.equal(rendersAt(C1, idxOf(C1, "Sweep Control"), C1.comp.time).why, "null", "the null's own state differs");
 });
 
 test("SC-002: every other Comp 1 layer has the read run, 0 links and 0 unresolved, never left blank", () => {
@@ -84,7 +91,7 @@ const linksTo = (name) => linksIn(P).get(idxOf(P, name));
 
 test("live E15 and E16: Ctrl's links from a matte (renders) and a guide (doesn't), plus the run-time name it can't resolve", () => {
   const ctrl = linksTo("Ctrl");
-  const from = Object.fromEntries(ctrl.links.map((l) => [l.from_layer, [l.property, l.target_renders.why]]));
+  const from = Object.fromEntries(ctrl.links.map((l) => [l.from_layer, [l.property, l.from_renders.why]]));
   assert.deepEqual(from["Matte Link"], ["Rotation", "matte_renders"]);
   assert.deepEqual(from["Guide Link"], ["Position", "guide"]);
   assert.equal(ctrl.unresolved_in_comp, 2, "Runtime Name's thisComp.layer(n), and Comp Ref's comp() (review S7)");
