@@ -1,0 +1,46 @@
+{
+  "id": "18-followup-after-lesson",
+  "title": "The first follow-up after a lesson, sent in the context wrapper: a fresh read first, an answer that follows from the earlier answer, and no wrapper label in what the learner reads",
+  "covers": [
+    "T104",
+    "amendment (e)",
+    "contracts/panel-ask.md > Context after a lesson",
+    "FR-001",
+    "FR-009",
+    "FR-016"
+  ],
+  "turns": [
+    {
+      "project": "product/evals/ask/fixtures/comp1.json",
+      "say": "/ask-mentor Earlier question and answer, as shown in the panel:\nQuestion: Make the rock shake from where the hammer hits.\nAnswer: In Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- All three hits are the same size.\n- Rotation moves the rock about 9 px at most, gone in about 1/3 s.\n- The turn centers on the rock, where Shake Control sits.\nSteps:\n1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet. (layer: Shake Control)\n2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet. (layer: Shake Control)\n3. Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. (layer: Shake Control)\n4. Play it back and watch the turn.\nClosing: Try them, or want to go deeper on step 3 with *Set the pivot*?\nFollow-up: What about step 2?"
+    }
+  ],
+  "expect": {
+    "answers": [
+      {
+        "turn": 1,
+        "kind": [
+          "answer",
+          "describe"
+        ],
+        "no_keyframe_skills": true
+      }
+    ],
+    "text": [
+      {
+        "id": "follows_step_2",
+        "must": "rotation",
+        "in": "all"
+      },
+      {
+        "id": "no_wrapper_label",
+        "never": "Earlier question and answer|as shown in the panel|Follow-up:|Closing:|(?:^|\\n)\\s*(?:Question|Answer):",
+        "in": "all"
+      }
+    ]
+  },
+  "rubric": [
+    "R-FOLLOWS-EARLIER",
+    "R-HONEST-KINDS"
+  ]
+}

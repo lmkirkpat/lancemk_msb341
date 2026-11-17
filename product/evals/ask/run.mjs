@@ -105,7 +105,7 @@ const readJson = (p) => JSON.parse(fs.readFileSync(repoFile(p), "utf8"));
 const factsOf = (c) => c.turns.map((t) => (t.project === "unreachable" || !fs.existsSync(repoFile(t.project)) ? {} : fixtureFacts(readJson(t.project))));
 
 const EXPECT_KEYS = ["answers", "no_answer_turns", "turn_first_tool", "tools_called", "tools_not_called", "text", "prose_max_sentences"];
-const ANSWER_KEYS = ["turn", "kind", "steps", "no_keyframe_skills", "step_skills_include", "step_skills_forbid", "offered_equals", "step_on_layer", "max_sentences", "step_order"];
+const ANSWER_KEYS = ["turn", "kind", "steps", "no_keyframe_skills", "step_skills_include", "step_skills_forbid", "offered_equals", "step_on_layer", "max_sentences", "step_order", "step_text_order"];
 
 function validate(c) {
   const problems = [];
@@ -358,10 +358,12 @@ async function runCase(c, opts) {
   }
   const pass = !plumbing && checksPass && rubric.length > 0 && rubric.every((x) => x.pass);
   const refusals = refusalsOf(turns);
+  const refusalsByCode = {};
+  for (const f of refusals) refusalsByCode[f.code] = (refusalsByCode[f.code] || 0) + 1;
   const transcript = renderTranscript(turns, rt);
   fs.rmSync(home, { recursive: true, force: true });
   return { pass, ...(plumbing ? { plumbing: "judge reply unreadable" } : {}), checks, rubric, cost, session_id: sessionId,
-    answer_calls: answerCallCount(turns), refusals, transcript,
+    answer_calls: answerCallCount(turns), refusals, refusals_by_code: refusalsByCode, transcript,
     ...(fin ? { runtime: "a", mentor_cost_usd: Number(fin.cost.toFixed(4)), judge_cost_usd: Number((cost - fin.cost).toFixed(4)), cost_unknown_turns: fin.cost_unknown_turns, other_model_turns: fin.other_model_turns, prompt_hashes: fin.prompt_hashes, allowlist: fin.allowlist, ...(fin.failed_turns ? { failed_turns: fin.failed_turns } : {}), ...(fin.request_timing ? { request_timing: fin.request_timing } : {}), ...(fin.request_events ? { request_events: fin.request_events } : {}) } : {}) };
 }
 
@@ -410,7 +412,7 @@ async function main() {
     for (const c of cases) {
       const facts = factsOf(c);
       for (const a of c.expect.answers || []) {
-        for (const o of a.step_order || []) {
+        for (const o of [...(a.step_order || []), ...(a.step_text_order || [])]) {
           if (o.needs_sweeps && !(facts[a.turn - 1] || {}).sweeps) console.log(`${c.id}  step_order "${o.id}" is inactive: ${c.turns[a.turn - 1].project} has no expression sweeps (they arrive with spec 015 T015's live capture)`);
         }
       }
@@ -448,7 +450,7 @@ async function main() {
       const why = r.pass ? "" : "  " + [...r.checks.filter((x) => !x.pass && !x.warn).map((x) => `${x.check}: ${x.detail}`),
         ...r.rubric.filter((x) => !x.pass).map((x) => `${x.item}: ${x.reason}`)].join(" | ");
       const warns = r.checks.filter((x) => x.warn).map((x) => `${x.check}: ${x.detail}`);
-      console.log(`${c.id}${opts.repeat > 1 ? ` [${i + 1}/${opts.repeat}]` : ""}  ${r.pass ? "pass" : r.plumbing ? "PLUMBING" : "FAIL"}  $${r.cost.toFixed(2)}  refused ${r.refusals.length}/${r.answer_calls}${why}${warns.length ? `  [warn: ${warns.join(" | ")}]` : ""}`);
+      console.log(`${c.id}${opts.repeat > 1 ? ` [${i + 1}/${opts.repeat}]` : ""}  ${r.pass ? "pass" : r.plumbing ? "PLUMBING" : "FAIL"}  $${r.cost.toFixed(2)}  refused ${r.refusals.length}/${r.answer_calls}${r.refusals.length ? ` ${JSON.stringify(r.refusals_by_code)}` : ""}${why}${warns.length ? `  [warn: ${warns.join(" | ")}]` : ""}`);
     }
     const passes = runs.filter((r) => r.pass).length;
     const valid = runs.filter((r) => !r.plumbing).length;
@@ -458,7 +460,7 @@ async function main() {
   const passed = results.filter((r) => r.pass).length;
   const pct = Math.round((passed / results.length) * 100);
   const out = { run_at: new Date().toISOString(), options: opts, partial: !!opts.only, not_run_on_runtime: skippedHere.map((c) => c.id), cost_usd: Number(cost.toFixed(2)),
-    refusals: { answer_calls: answerTotal, refused: refusedTotal, rate: answerTotal ? Number((refusedTotal / answerTotal).toFixed(3)) : 0, by_code: byCode },
+    refusals: { answer_calls: answerTotal, refused: refusedTotal, rate: answerTotal ? Number((refusedTotal / answerTotal).toFixed(3)) : 0, by_code: byCode, offer_not_ready: byCode.OFFER_NOT_READY || 0, by_case: Object.fromEntries(results.filter((x) => x.runs.some((q) => q.refusals.length)).map((x) => [x.id, x.runs.map((q) => q.refusals_by_code)])) },
     summary: { passed, total: results.length, percent: pct, target_percent: TARGET * 100 }, cases: results };
   Object.assign(out, ab.resultFields(opts, results, { resultsDir: RESULTS_DIR, readme: fs.readFileSync(path.join(EVAL_DIR, "README.md"), "utf8") }));
   fs.mkdirSync(RESULTS_DIR, { recursive: true });
@@ -477,7 +479,7 @@ async function main() {
     console.log();
     ab.printSummary(out, TARGET * 100);
   } else console.log(`\n${passed}/${results.length} passed (${pct}%, target ${TARGET * 100}%) ${pct >= TARGET * 100 ? "✓" : "✗"}  $${cost.toFixed(2)}${change}`);
-  console.log(`Refusals: ${refusedTotal} of ${answerTotal} answer calls${answerTotal ? ` (${Math.round((refusedTotal / answerTotal) * 100)}%; plan > Risks loosens a guard above 10%)` : ""}${refusedTotal ? `; by code ${JSON.stringify(byCode)}` : ""}.`);
+  console.log(`Refusals: ${refusedTotal} of ${answerTotal} answer calls${answerTotal ? ` (${Math.round((refusedTotal / answerTotal) * 100)}%; plan > Risks loosens a guard above 10%)` : ""}${refusedTotal ? `; by code ${JSON.stringify(byCode)}` : ""}.${opts.runtime === "a" ? ` OFFER_NOT_READY on A: ${byCode.OFFER_NOT_READY || 0}.` : ""}`);
   const plumbed = results.reduce((n, r) => n + (r.runs || []).filter((x) => x.plumbing).length, 0);
   if (plumbed) console.log(`${plumbed} run(s) had an unreadable judge reply: plumbing, left out of the pass counts (cases with no readable run: ${results.filter((r) => r.plumbing).map((r) => r.id.slice(0, 2)).join(", ") || "none"}).`);
   console.log(`Results: ${path.relative(REPO, file)}`);

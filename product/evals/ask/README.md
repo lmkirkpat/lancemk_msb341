@@ -11,7 +11,7 @@ tools `describe_layers` and `give_answer` don't exist yet. T037 is the first run
 
 ## Cases
 
-17 cases. All run on B1 and A (no case sets `runtimes`); the A-only expectations are individual checks.
+18 cases. All run on B1 and A (no case sets `runtimes`); the A-only expectations are individual checks.
 
 | Case | TD § 17 situation, or row | What it covers | Fixture |
 |---|---|---|---|
@@ -32,10 +32,11 @@ tools `describe_layers` and `give_answer` don't exist yet. T037 is the first run
 | 15-single-and-hold-keys | EE-4 row 3 (A10) | One key is set, not animated; holds are a jump | `practice.json` |
 | 16-locked-layer-in-the-step | EE-4 row 4 (A12) | A locked layer: the unlock is in the step it blocks (locked stands for "locked or Collapse") | `practice-title-locked.json` |
 | 17-howto-no-target | FR-019 (PQ-4) | A how-to with no comp target: two sentences, no steps, one offer of the lesson | `practice.json` |
+| 18-followup-after-lesson | T104, amendment (e) | The first follow-up after a lesson, sent in the full context wrapper (contracts/panel-ask.md): a read before the answer, the answer follows from the earlier one (TD § 16's worked answer, "What about step 2?"), no wrapper label in what the learner reads | `comp1.json` |
 
 Not in this set (they need later phases): situations 2, 3, 8, 16, 17, 18 and 19 of § 17 (turn 4's fresh read,
 the padded PNG, "just the steps", the hand-in, the record entry, a learned skill as practice, a change on the
-wrong layer). Case numbers 01 to 17 are the cockpit's; the next case takes 18.
+wrong layer). Case numbers 01 to 17 are the cockpit's; the next case takes 19. Case 18's wrapper is written out in full in the case file, from the contract; when the panel adds the wrapper's first line to `REQUESTS`, its sync test should pin case 18's first line to it.
 
 ## What a turn looks like
 
@@ -61,6 +62,7 @@ On the words the learner reads (explanation, step lines, closing offer, and any 
 
 On the tools:
 
+- **read_before_answer**: on an answer, describe or clarify turn, `describe_layers` was called before `give_answer` (FR-001; the tool can't enforce it). A how-to or outside answer needs no read.
 - **only_ask_tools**: `describe_layers`, `preview_frame` and `give_answer` only.
 - **no_project_change**: no demonstration, no `set_*`, no `pan_*`, no `record_lesson`.
 - **no_lesson_started**: no `Skill`, no `go_deeper`, no snapshot or `recommend_next` call. This set never says yes.
@@ -81,8 +83,9 @@ On each answer a case expects (`expect.answers`):
 
 ## Case-level `expect` keys
 
-- `answers`: `[{ turn, kind (a string or a list), steps: [min, max], no_keyframe_skills, step_skills_include, step_skills_forbid, offered_equals (A only), step_on_layer, max_sentences: [{ field: "explanation"|"closing_offer", max }], step_order: [{ id, first, then, needs_sweeps }] }]`.
-  `step_order` with `needs_sweeps` counts only when the fixture carries expression sweeps (see Fixtures); until then the dry run says it is inactive.
+- `answers`: `[{ turn, kind (a string or a list), steps: [min, max], no_keyframe_skills, step_skills_include, step_skills_forbid, offered_equals (A only), step_on_layer, max_sentences: [{ field: "explanation"|"closing_offer", max }], step_order: [{ id, first, then, needs_sweeps }], step_text_order: [{ id, first, then, needs_sweeps }] }]`.
+  `step_order` compares step skill tags; `step_text_order` compares regexes over the step text (FR-007, OQ-6: the bigger pixel source first, e.g. Position's 12.15 px before Rotation's 9.36 px on Comp 1).
+  `step_order` with `needs_sweeps` counts only when the fixture carries expression sweeps (see Fixtures). The Comp 1 fixtures do, so case 01's is active; a fixture without sweeps is reported inactive in the dry run.
 - `no_answer_turns`: turns that must not call `give_answer` (a follow-up is prose).
 - `turn_first_tool`: `[{ turn, tool }]`.
 - `tools_called`, `tools_not_called`: over the whole case.
@@ -111,8 +114,8 @@ node --test product/evals/ask/test/                      # the checks, the fixtu
   SKILL.md is `PENDING` in the dry run, not a failure.
 - **Refusals** (plan > Risks): each run prints `refused n/m` (give_answer calls the tool refused, over all of them) and the
   results file has `refusals: { answer_calls, refused, rate, by_code }`. A guard that fires on more than 1 in 10 good
-  answers gets loosened. A turn that never gets an accepted answer fails `answer_given` and names the codes.
-- **Cost estimate (B1, full run, not measured):** 20 mentor turns and 17 judge calls, about $6 to $9. Only
+  answers gets loosened. Per case the results hold `refusals_by_code` for each run, and `refusals.by_case` and `refusals.offer_not_ready` (the A-only OFFER_NOT_READY count) summarize the run. The codes read include the five the build added (ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN, NOT_PLAIN_WORDS). A turn that never gets an accepted answer fails `answer_given` and names the codes.
+- **Cost estimate (B1, full run, not measured):** 21 mentor turns and 18 judge calls, about $6 to $9. Only
   `--dry-run`, `--only` and `--changed` while working; one full run at the phase 1 merge commit (T037).
 
 ## Fixtures
@@ -123,15 +126,15 @@ All are built by `node product/evals/ask/fixtures/build.mjs` from spec 015 T015'
 
 | File | From | Change |
 |---|---|---|
-| `comp1.json` | `comp1.mjs` (Comp 1) | none. **Derived** until T015's live `comp1.json` lands: no `expression_sweeps`, so "how much it moves" reads as not read |
+| `comp1.json` | `comp1.mjs` (Comp 1) | none. The live capture (spec 015 T015, rebuilt 2026-11-16): 29 layers, 3 expressions, 4 `expression_sweeps` |
 | `comp1-two-rocks.json` | Comp 1 | layer 22 (outline.png) becomes Rock Shadow.png with its own two Position keys (copied from Sweep Control), so "the rock" names two layers with different first steps |
 | `practice.json` | live capture, Mentor Practice | none |
 | `practice-title-locked.json` | `practice.json` | Title's Lock switch on |
 | `card-and-glow.json` | planted layers 4 and 18 | renamed Card (two Scale keys) and Glow (`wiggle` expression), comp renamed Intro |
 | `matte-eye-off.json` | planted layers 1, 9, 10 | Window Matte (a matte, eye off), Photo (uses it), Ctrl; comp renamed Intro |
 
-When T015's live `comp1.json` lands, re-run `build.mjs`: the fixture gains sweeps and case 01's `step_order`
-(hit sizes before the pivot, TD § 16) becomes a live check. The case hash changes with the fixture, so `--changed` re-runs it.
+The Comp 1 fixtures come from spec 015 T015's live capture, so case 01's `step_order` (hit sizes before the pivot,
+TD § 16) is a live check. A new capture only needs `build.mjs` re-run; the case hash changes with the fixture, so `--changed` re-runs it.
 
 ## Decisions made building this (2026-11-16)
 

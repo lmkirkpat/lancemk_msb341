@@ -254,3 +254,18 @@ On B1 the offer is wording only. It does not teach the skill in the answer.
 - **Pass:** two sentences on how the speed graph works, then a question offering the speed graph lesson.
 - **Fail:** a list or steps, three or more sentences, a tutorial, a lesson that starts, or no offer of the
   lesson.
+
+## R-FOLLOWS-EARLIER: the first follow-up after a lesson is answered as a follow-up to the earlier answer
+
+The learner's message carries the earlier question and answer (a wrapper the panel adds) and a short follow-up
+that only makes sense with it ("What about step 2?"). The mentor reads the comp again, then answers the
+follow-up: it takes "step 2" to be the earlier answer's second step, stays on the same layers and the same
+motion, and does not restart with a new unrelated answer or ask what the learner means. The comp as read now is
+the truth; the earlier answer is only what was on screen. Nothing says or hints at the wrapper (no "earlier
+question", "you said", "follow-up", "closing", no repeated labels).
+
+- **Pass:** the Rotation expression on Shake Control, what it does to rock.png, and what to look at, in the
+  words of the read.
+- **Fail:** a clarifying question about which step; an answer about a different layer or the Position hits; a
+  recap of the whole earlier answer; or any wrapper label or the phrase "earlier answer" in what the learner
+  reads.
