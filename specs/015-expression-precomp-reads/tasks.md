@@ -3,7 +3,7 @@
 **Input**: [spec.md](spec.md) (approved `944cd8c`), [plan.md](plan.md), [research.md](research.md),
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md).
 
-**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-up T064 (FR-004a) open.
+**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-ups T064 (FR-004a) and T065 (FR-004b, Amendment 7) open.
 
 **Format**: `- [ ] T### [P?] [Story?] (owner) Description`. `[P]` = can run alongside the other
 `[P]` tasks in the same block (different files, no unfinished dependency). Owners: **skill-builder**
@@ -424,6 +424,26 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   spec, and the ask set that reads the field is spec 014's.
   **Sequencing decided 2026-11-16 (builder):** folded into spec 014's mentor worktree (014 T008 to T016),
   so one skill-builder owns the new field and 014's reader of it.
+- [ ] T065 (skill-builder) FR-004b, own keys and switches in `describe_layers` (spec Amendment 7, E32,
+  OQ-12; data-model § 6; contracts/describe-layers.md). Cockpit-numbered 2026-11-16, builder's choice.
+  In `mentor/tools/comp-reads.mjs`, every layer entry gains `own_keys` (from the snapshot's
+  `layers[].properties`: `property`, `keys`, `key_types`, `expression_on` when on; detail adds
+  `display_path`), `locked`, `three_d`, and `collapse` on precomp and footage layers only; the `read`
+  block gains `own_keys` and `switches`. Named layers carry every field, empties included; the whole-comp
+  summary leaves out empty `own_keys` and switches that are off; a summary lists at most 8 keyed
+  properties, then `own_keys_more`. The pair rule is key types' `snaps` (L-1), exported from
+  `key-types.mjs` or moved to `analyze.mjs`, never copied. Reply-only: no snippet, `snapshot.jsx` or
+  fixture-mode change, no new AE write, no extra snapshot call. Tests (in
+  `mentor/test/comp-reads.test.mjs` or a new file) for SC-003b on the live Comp 1 capture and its
+  planted or edited fixtures, a switch read as `null` (not read, never `false`), a snapshot with no
+  `layer_info`, and SC-007 with the new fields (rock.png ≤ 4 KB; whole-comp ≤ 12 KB). Check that every
+  lesson skill's tool reply on every eval fixture is byte-identical before and after, then run the mentor
+  and hooks suites. Report the whole-comp summary's size on Comp 1 in the hand-back.
+  **Where:** in spec 014's `014-mentor` worktree, together with T064, under that worktree's one
+  `--shared-owner` for `mentor/` (research R14; never a second shared owner in parallel). **Needed by:**
+  spec 014's ask cases 05 (a keyed layer), 13 (keys under an expression that's on), 14 (separated
+  dimensions), 15 (a single key and hold keys) and 16 (a locked layer in a step), in
+  `product/evals/ask/cases/`, before 014's B1 run (014 T037). No eval case here: the ask set is spec 014's.
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script
@@ -498,6 +518,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   after T035) → T040. T057 before T040; T058 → T059 (T059 after T036's run or folded into it); T060
   with T040. T064 after T040, sequenced against 014's mentor worktree (one `mentor/` shared owner at a
   time); before 014's FR-007 test on Comp 1 and its three sessions.
+  T065 with T064 in the same `014-mentor` worktree; before 014 T037.
 - **Phase 2:** after T040. T042 and T043 can start together; T044 → T045 → T046 to T050 → T051 →
   gate.
 

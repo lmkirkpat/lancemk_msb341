@@ -11,6 +11,14 @@ PQ-1). Housekeeping done 2026-11-14 (T006): mockup v5, CD-2 to CD-4 answered. **
 (T005, builder option A):** FR-047 withdrawn (T001: a "no comp" read is unreliable,
 [`ask-build.md`](../../discovery/usage-notes/ask-build.md) › T001); OQ-1's answer superseded, constitution
 1.6.0 removes the exception; Ask is always available on Home and `ask-nocomp` covers no comp.
+**Amended 2026-11-16 (b), builder's approval relayed by the cockpit; add only:** (1) `give_answer` takes its
+own snapshot for each answer about a comp, not "the session's last read", since `describe_layers` never
+writes to the session (spec 015 FR-019, FR-020; contracts/ask-tools.md step 1; data-model § 1 and § 3,
+research R3 and T013 say the same); (2) FR-004 gains phase 1's
+size rule until spec 015 T064 lands (spec 015 OQ-10, FR-004a); (3) this header's mockup quote matches TD
+§ 16 after H-7; (4) the five refusal codes the build added beyond research R3 are listed in
+contracts/ask-tools.md › Refusals and data-model § 8. New OQ-6 (FR-007's order before T064). No approved
+decision or FR changes.
 
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
@@ -25,8 +33,9 @@ four shared rules in all six skills, the learner record, and Home, which now ope
 **What is taught** is set by the curriculum designer's teaching design, which this spec links to and doesn't
 copy: [`teaching-design.md`](teaching-design.md) (written "TD § n"). The panel's screens are the
 ui-designer's approved mockup, v5 (2026-11-14: step 2 of the Comp 1 answer now pairs an action with the read
-fact, "Open Shake Control's Rotation expression and look at its amounts: 0.75° at most, too small to see. Not
-something I teach yet."): [`product/mockups/ask-mentor/`](../../product/mockups/ask-mentor/README.md)
+fact; *corrected 2026-11-16 (b):* since H-7, TD § 16's step 2 is "Open Shake Control's Rotation expression and
+look at its amounts: 0.75° at most. Not something I teach yet.", with no "too small to see", and TD § 16 is
+the version to copy; the mockup still carries the old wording): [`product/mockups/ask-mentor/`](../../product/mockups/ask-mentor/README.md)
 (written "MU", with its state ids). Where this spec needs something those don't say, it's a question below,
 not an edit to them.
 
@@ -300,6 +309,11 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   MUST name both (TD § 5.1 part 1).
 - **FR-004**: When the cause has parts, the explanation MAY be a short bulleted list, in order of visible effect
   (spec 015 FR-004's "how much"). It MUST NOT be numbered, called steps, or docked.
+  *Amended 2026-11-16 (b), spec 015 OQ-10:* **phase 1, until spec 015 T064 lands**, the skill gives each
+  source's size in the read's own units (pixels for Position and Anchor Point, degrees for Rotation, percent
+  for Scale; spec 015 FR-004's `moves`) and never drops a source or calls it too small to see for being small.
+  **After T064**, it uses the comp-pixel `shifts` on the asked layer (spec 015 FR-004a) and TD § 5.1a's 1 px
+  floor (under 1 px: never named as a cause, never a step; 1 px and up: its size, not an adjective).
 - **FR-005**: Step lines MUST be things the learner does in AE: each starts with an action on a named layer or
   property, in AE's words for the builder's version (AE 27.0), followable without asking what to do. Two to
   four lines; past four, the first three and a sentence saying there's more. Explanation is never a step
@@ -700,6 +714,12 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 - **OQ-5: Cost target per answer turn (SC-005)?** **Recommended: $0.10 median on A**, measured over the
   sessions; if it's over, look first at what loads per turn (the baseline spent $0.16 loading one skill)
   before changing the bar.
+- **OQ-6 (new 2026-11-16 (b)): FR-007's order before spec 015 T064.** FR-007 orders steps by visible effect
+  "when the read gives how much each source moves the layer". Until T064, sizes come in mixed units (a
+  parent's 12 px Position and its 0.59° Rotation), which can't be compared without guessing. **Recommended:
+  until T064, order by size only among sources in pixels, put degree and percent sources after them in the
+  read's order, and keep 014's FR-007 test on Comp 1 waiting for T064 (as spec 015's tasks already say).**
+  If no: the mentor would rank across units by feel, which TD § 5.1a was written to stop.
 
 ### For the curriculum designer (hand-off, not edits)
 
@@ -732,3 +752,5 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   `give_answer`'s not-taught normalization (contracts/ask-tools.md step 3a) is in FR-006 and data-model § 1.
 - Open, not mine to edit here: spec 007 FR-006 still lists `home-nocomp`; MU's `home-nocomp` row and open
   question 10 are moot (a request for the ui-designer).
+- Open, not mine to edit here (2026-11-16 (b)): MU's step 2 and rotation bullet still say "too small to see"
+  (`README.md` and `index.html`); TD § 16 has the current wording (a request for the ui-designer).

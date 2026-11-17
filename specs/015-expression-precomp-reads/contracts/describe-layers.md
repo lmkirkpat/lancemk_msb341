@@ -29,6 +29,7 @@ precomp, or `comp_id` is given, one `precomp-contents` read.
   comp: { name, time },
   read: { expressions: "all" | not_read, links: "read" | not_read, sweeps: "fine" | "coarse" | not_read,
           shifts: "read" | not_read,                // FR-004a; not_read "not_asked" with no `layers`
+          own_keys: "read", switches: "read" | not_read,   // FR-004b (Amendment 7)
           precomps: "read" | not_read },            // phase 1: precomps is always not_read
   layers: [ Layer summary | Layer detail | { asked, error: "NAME_SHARED", candidates: [{ layer_index, parent }] }
             | { asked, error: "NOT_FOUND" } ],
@@ -45,6 +46,15 @@ or percent in its place, and never 0 for "couldn't work it out". The fine sweep 
 also records `max_value` (data-model § 1); no other snapshot sends `measure_layers`, so no skill's reply
 changes.
 
+**Own keys and switches (FR-004b, added 2026-11-16):** every layer entry, summary and detail, carries
+`own_keys` (each keyed property with its key count, `key_types` of `single_key`, `all_held`,
+`none_held` or `some_held`, and `expression_on: true` when its expression is on) plus `locked`,
+`three_d` and, on precomp and footage layers only, `collapse` (data-model § 6). A named layer always
+carries them, `[]` and `false` included; the whole-comp summary carries `own_keys` only when non-empty
+and a switch only when it's on, and `read.own_keys` and `read.switches` say that absence means none. A
+switch that wasn't read is `not_read`, never `false`. Reply-only: `comp-reads.mjs` reads them from the
+snapshot it already takes, and no snippet or skill reply changes.
+
 ## Limits (SC-007, research R11)
 
 - Summary: ≤ 4 KB per layer with its sources; ≤ 12 KB for the whole comp. Over the cap, layers are
@@ -57,6 +67,10 @@ changes.
   so a child whose parent was cut gets `moves` back, and its size note counts against the cap. (Live
   Comp 1: 13,412 to 10,526 bytes.)
 - Detail shows expression text and errors with `\n` line ends (AE 27.0 gives `\r`; spec E30).
+- *Amended 2026-11-16 (Amendment 7, FR-004b):* a summary lists at most 8 own keyed properties per
+  layer, then `own_keys_more`; detail lists all. The whole-comp summary leaves out empty `own_keys` and
+  switches that are off: said in full on every layer, they'd add about 1.9 KB to Comp 1's 10.5 KB and
+  break the 12 KB cap; left out, they add about 0.2 KB.
 
 ## Errors
 
