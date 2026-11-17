@@ -119,6 +119,11 @@ latest_steps: [step] | null, deeper: null | { skill, tag, step_number, state: "s
 Each thread entry (added 2026-11-16 from the panel build, T035 review):
 - `kind`: `question` | `followup` | `go_deeper` (the turn log's kinds, research R11). A new `question` folds
   the entries before it; a follow-up or Go deeper press stays in view with the answer it follows.
+  *Added 2026-11-16 (spec amendment (d)):* a follow-up whose `give_answer` result has kind `answer`,
+  `describe` or `howto` becomes `question` (folds the earlier entries; Go deeper acts on it), from the tool's
+  data, never the prose. Starting another lesson ends the thread's conversation but keeps the thread's last
+  question, answer and `latest_steps` saved and visible, and Back to your question still opens them (research
+  R12); nothing is deleted.
 - `answered`: whether the turn has ended; Try again resets it to `false`.
 - `notice`: `null` | `{ title | null, text }`, a passing error shown on the latest entry ("Your question's
   still here."); cleared by Try again.
@@ -133,6 +138,9 @@ Adds `thread: "ask"` (optional) and kinds `question`, `followup`, `go_deeper` to
 
 ## 8. Error codes (new; plain messages, no field names)
 
+*Added 2026-11-16 (d):* `COMP_NOT_NAMED` or `NO_ACTIVE_COMP` from `give_answer` means the comp changed between
+the mentor's read and its answer; the mentor reads again before answering (contracts/ask-tools.md › Refusals).
+
 | Code | Tool | Message (to the mentor) |
 |---|---|---|
 | `TOO_MANY_STEPS` | give_answer | "Give at most four steps; give the first three and say there's more in the closing offer." |
@@ -140,6 +148,8 @@ Adds `thread: "ask"` (optional) and kinds `question`, `followup`, `go_deeper` to
 | `BAD_OFFER` | give_answer | "Offer at most two skills, each one a step uses." |
 | `BAD_CLOSING` | give_answer | "End on one question that hands the choice back." |
 | `COMP_NOT_NAMED` | give_answer | "Start with the comp you read: In [comp], …" |
+| `UNKNOWN_LAYER` | give_answer | *(added 2026-11-16 (d), from the build, `mentor/lib/ask-answer.mjs`)* A step names a layer the answer's own read doesn't find in the comp. Message as the build words it |
+| `NO_ACTIVE_COMP` | give_answer | *(added 2026-11-16 (d), from the build)* The answer is about a comp, but its own read finds none active (a `no_comp` answer is the valid one). Message as the build words it |
 | `STEPS_IN_EXPLANATION` | give_answer | "Leave the steps out of the explanation; they go only in the steps." |
 | `KEYFRAME_SKILL_ON_KEYLESS` | give_answer | "That layer's motion has no keys, so a keyframe skill can't help with it." |
 | `ROUTE_TO_PIVOT` | give_answer, go_deeper | "That null already carries children; moving where it turns is Set the pivot." |

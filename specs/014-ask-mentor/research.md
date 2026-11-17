@@ -225,6 +225,13 @@ today's `lesson`. Starting a lesson from Skills or Find my next lesson while a t
 thread (it folds into history; Back to your question goes); a new question on Home while a thread exists
 adds to it (MU `home-thread`). A version 2 file reads as a lesson, as today.
 
+*Amended 2026-11-16 (spec amendment (d), the builder's decision):* starting a lesson (Find my next lesson,
+Pick up, or a Skills lesson) ends the thread's **conversation** but keeps its last question, answer and
+steps saved and visible, and "Back to your question ›" still works after the lesson. Nothing is deleted.
+"Folds into history; Back to your question goes" no longer applies in phase 1. A new question after such a
+lesson starts a new conversation in the same visible thread. **Why:** the learner came with a question, and
+a lesson shouldn't take the answer away.
+
 **Request text:** Home's ask sends `/ask-mentor ` plus the question as typed, so B1 launches with the ask
 skill's tools (`skillOf`) and A opens the ask skill (`commandOf`). Follow-ups go as typed. The first
 follow-up after a go-deeper lesson, and End lesson in one, send with `/ask-mentor ` in front, so A

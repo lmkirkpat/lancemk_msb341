@@ -27,6 +27,19 @@ first, then those with no pixel number (a `null` shift, or degrees or percent on
 014's FR-007 test on Comp 1 no longer waits for T064. Changed here: FR-004's note, FR-007, OQ-6. No
 approved decision changes.
 
+**Amended 2026-11-16 (d), from the phase 1 reviews T034 and T035, relayed by the cockpit; add only:** (1) **the
+thread when a lesson starts (the builder's decision, 2026-11-16):** starting a lesson (Find my next lesson,
+Pick up, or a Skills lesson) ends the conversation but keeps the last question, its answer and its steps
+saved and visible, and "Back to your question ›" still works after the lesson. Nothing is deleted; research
+R12's "folds into history" no longer applies in phase 1 (FR-052's note, R12, data-model § 7,
+contracts/panel-ask.md, T026's note). (2) `give_answer`'s refusals `UNKNOWN_LAYER` and `NO_ACTIVE_COMP`, which
+the build throws, are listed in contracts/ask-tools.md › Refusals and data-model § 8, with what a
+`COMP_NOT_NAMED` or `NO_ACTIVE_COMP` from `give_answer` means. (3) **A new question in the follow-up bar:** a
+follow-up turn whose `give_answer` result is kind `answer`, `describe` or `howto` is a new question, decided
+from the tool's data, not the prose (FR-031's note, contracts/panel-ask.md, data-model § 7). The mockup
+(MU) doesn't describe either panel case, so it doesn't change. No approved decision changes; (1) replaces
+R12's lesson-start rule by the builder's decision.
+
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
 flag, as the builder accepted them in the review. Carry the mockup's spec 007 amendments. Reference spec
@@ -444,6 +457,10 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   learner asks, gets stuck (turn 4), or asks a new question (TD § 5.4).
 - **FR-031**: A new question MUST get a fresh answer (turn 2 again); the session's earlier answer is context,
   not recited.
+  *Added 2026-11-16 (d):* a question typed in the follow-up bar counts as new when its turn's `give_answer`
+  result has kind `answer`, `describe` or `howto`. The panel then folds the earlier entries, logs the turn as
+  `question`, and Go deeper acts on the newest answer. This is decided from the tool's data, never the prose
+  (FR-016; contracts/panel-ask.md › Requests).
 - **FR-032**: A due review MUST NOT open a session the learner started with a question. It MAY appear as one
   clause after an answer, at most once per session, only when its skill fits the comp (TD § 10.1 rule 5).
 
@@ -524,6 +541,10 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   not saved") (MU › Going deeper).
 - **FR-052**: While a go-deeper lesson is open, Home MUST show `home-lessonopen-deeper` and the thread
   `ask-lessonopen` (follow-up and Ask paused, with the reason in words); AE busy shows `ask-busy`.
+  *Added 2026-11-16 (d), the builder's decision:* starting any other lesson (Find my next lesson, Pick up, or
+  a Skills lesson) MUST end the thread's conversation but keep its last question, answer and steps saved and
+  visible; "Back to your question ›" (`home-thread`) still opens them after the lesson. Nothing is deleted
+  (research R12).
 - **FR-053**: Panel copy MUST be MU › Copy's strings, plain (CLAUDE.md › Voice), with no field names, tool
   names or commands (spec 007 SC-011).
 - **FR-054**: Accessibility per MU › Accessibility: Ask paused with `aria-disabled` and its reason linked; the
