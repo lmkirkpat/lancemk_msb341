@@ -217,41 +217,58 @@ a brand new session act like a colleague who already knows what you are working 
     by margin, to confirm at the first live turns). B1 re-run of all six sets (T036, `1c6789b`): easing 32/33,
     key types 35/36, speed graph 35/37, offset 42/44, pivot 61/64, null 50/55, no hard-rule break. A six-set B1
     run is about $190 and doesn't fit one 5-hour usage window, so split it. Pan Behind on AE 27.0 takes the
-    selected layer. All six sets need a fresh A run at 014's ship step. **Open:** OQ-10 (the 1 px floor
-    needs screen pixels on the asked layer, but FR-004 gives property units; builder's call); T063's
-    leftovers (a rubric rewording and one or two `SKILL.md` lines). Phase 2 (inside precomps) is next:
-    T041. FR-055 carries spec 007's amendments.
+    selected layer. All six sets need a fresh A run at 014's ship step. **Follow-ups built on 014's mentor
+    branch (2026-11-16, merged `6af25bc`):** T064 (FR-004a, OQ-10 answered: each parent expression's shift in
+    comp pixels on a named layer, measured on the box, null with a reason, never a guess; Comp 1's rock 9.36 px
+    rotation and 12.15 px Position, the title `chain_moves`, so SC-003a is 12 of 13), T065 (FR-004b: each
+    layer's own keys and its Locked, 3D and Collapse switches; Collapse only on precomp and footage, OQ-12;
+    whole-comp summary 10.8 KB) and T066 (review corrections: a box that changes, `switch_not_read`, Rotation
+    under a non-uniform scale). Every lesson skill's replies stay byte-identical (re-check with
+    `mentor/dev/compare-skill-replies.mjs <base-ref>`). `comp-space.mjs` still reads a missing 3D or
+    Auto-Orient switch as off (left alone: other skills use it). **Open:** T063's leftovers (a rubric
+    rewording and one or two `SKILL.md` lines). Phase 2 (inside precomps) is next: T041. FR-055 carries spec
+    007's amendments.
   - **Plan and 100 tasks approved (2026-11-14, `99124e6`), PQ-1 to PQ-5 as recommended:** the mentor answers
     through a `give_answer` tool whose fields are the whole answer and which enforces the hard rules (B1 strips
     offers). MVP is phases 1 and 2 on A. The panel half of phase 1 can start now; the mentor half waits on 015
     T040, Go deeper on 015 T023 and T026. `.specify/feature.json` still points at 015 while it's being built, so
     run 014's Spec Kit steps with explicit paths, not the setup scripts.
-  - **Built so far (2026-11-16):**
-    - **Phase 0 (T001 to T007): done.** Results are in `discovery/usage-notes/ask-build.md`.
-    - **The panel half of phase 1 (T017 to T030, plus T101): done but not merged.** It's on branch `014-panel` in
-      the worktree `../wt-014-panel` (`a6a5c90`). Panel tests: 762 pass and 1 skipped, which waits for the ask eval
-      set. Helper tests: 282 of 282.
-      - T101 removed the dead comp-active code and the `home-nocomp` state.
-      - Go deeper stays hidden behind the flag in `panel/lib/phase.js` until phase 2.
-      - Merge this branch only between live sittings.
-    - **The ask eval set (T031 to T033): merged** (`b59e7c8`, `product/evals/ask/`).
-      - 17 cases, numbered 01 to 17: § 17 situations 1, 4, 5, 6, 7 and 9 to 15, then EE-4's four rows, then a how-to.
-      - The dry run validates. No model has run it yet.
-      - Before T037, re-run `fixtures/build.mjs` against 015's live `comp1.json`. That turns on situation 1's
-        ordering check.
-      - The B1 run is estimated at $6 to $9.
+  - **Phase 1 built and merged (2026-11-16, T036 at `e0ed02f`):** mentor (`6af25bc`), panel (`3e05606`) and
+    ask set (`e0ed02f`). Tests on `main`: mentor 1839, panel 805, helper 285, hooks 39, ask set 32, all pass.
+    **Restart AE before the next sitting** so the panel and `ask-mentor` load.
+    - **Mentor:** the `ask-mentor` skill (2,497 words; the cap is about 2,500, so trim before adding) and
+      `give_answer`, which takes its own read and refuses an answer that breaks a hard rule. Five codes beyond
+      R3, plus `UNKNOWN_LAYER` and `NO_ACTIVE_COMP`, are in contracts/ask-tools.md › Refusals. A comp change
+      between read and answer makes the mentor read again. Expression code in learner text is refused. Comp
+      names match whole ("Comp 10" fails for "Comp 1"; side effect: "In Logo I see…" is refused on comp
+      "Logo"). B1 strips offers; on A every offer is refused (`OFFER_NOT_READY`) until phase 2, one retry each.
+    - **Panel:** T035's seven fixes. Starting a lesson keeps the thread and ends only its conversation
+      (amendment (d), builder's choice). The first follow-up after a lesson carries the last question and
+      answer in a wrapper the learner never sees (amendment (e), T102 to T104; contracts/panel-ask.md › Context
+      after a lesson). A new question in the follow-up bar folds the earlier one, decided from the tool's
+      `kind`. Pick up names the comp, from the lesson's saved snapshot.
+    - **Ask set:** 18 cases (case 18 is the wrapper). Fixtures are 015's live Comp 1 capture; the ordering
+      check is live (`step_text_order`: Position's 12.15 px before Rotation's 9.36 px on the rock), and every
+      answer turn must call `describe_layers` first. The next case number is 19.
+    - **Ordering rule (OQ-6):** sources with a pixel size first, biggest first, then the rest in the read's
+      order. Sizes under 1 px aren't named (TD § 5.1a).
+    - **Cross-branch gaps** a trial merge caught (each branch passed alone): the panel's activity lines and the
+      helper's skill list had no `ask-mentor`. Trial-merge parallel branches in a scratch worktree before T036.
   - **Next:**
-    1. The mentor half of phase 1 (T008 to T016, minus the withdrawn T015): unblocked by 015 T040. Cut the
-       skill-builder worktree from local `main`. Before T037, re-run the ask fixtures' `build.mjs` against
-       015's live `comp1.json`. The record guard doesn't cover the ask mode (015 OQ-7), so 014 needs its own
-       way to keep FR-020 true for an asked record entry. 014 `spec.md` line 28's "too small to see" quote is
-       stale after H-7.
-    2. Then the phase 1 gate:
-       - T034 (reviewer) and T035 (design-reviewer, which also re-checks T101).
-       - T036: merge both halves between live sittings.
-       - T037: the B1 eval run.
-       - T038: the live smoke test, which needs the builder.
-       - T039 and T040: log the results and fold them into the spec.
+    1. T037, the B1 run of the ask set (about $6 to $9), started at `f959763`. Triage, then T039.
+    2. T038, the live smoke test (builder), with the panel-builder's checks: keyboard focus on Your steps; a
+       close while reading shows "Your question's still here."; a lesson keeps the thread; a new question in
+       the follow-up bar folds the earlier one; Pick up names the comp; a follow-up after a lesson picks up
+       from the earlier answer.
+    3. T040's fold-in: three contract gaps the panel-builder resolved its own way (the wrapper uses the latest
+       entry with something under it, and a fallback sends no wrapper; Try again on a question resends it
+       plain; a bulleted answer spans several lines), the undefined FR-063, the task count (case 18), and the
+       activity line "Writing the answer…" (not in the mockup; a design-reviewer look).
+    4. **Paid, on the builder's go:** the A evals re-run at the merge commit, since the new `mentor/` files
+       move the settings hash.
+    5. **Later:** FR-020 for an asked record entry (phase 3; the skill-builder suggests recording what each
+       answer saw, for the K5 guard). Server rule 4 ("start with the lesson's own snapshot tool") doesn't fit
+       the ask mode; change it at the next six-set re-baseline, since it moves every hash.
 - **Sprint 4 (`sprints/sprint-4-plan.md`): option A runtime, spec 013 (`specs/013-api-runtime/`,
   `decisions/010`), paused 2026-10-30.** Built and merged (local `main`, not pushed): the helper
   (`panel/helper/`, SDK `@anthropic-ai/sdk` 1.3.0), the A adapter (`panel.json` `"runtime": "a"`),
