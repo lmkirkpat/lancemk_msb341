@@ -64,11 +64,15 @@ function askView(ev, opts) {
 }
 
 // FR-048 with no prose: the mentor writes nothing outside give_answer on an answer turn (PQ-1), so a
-// result the panel can't draw falls back to its own words, the explanation and the closing offer, as
-// they came. → that text, or null when neither is usable.
+// result the panel can't draw falls back to its own words as they came: the explanation, each usable
+// step's text as a plain line (no Steps heading, no numbers, no tags), then the closing offer (T035
+// design review item 5). → that text, or null when none of it is usable.
 function fallbackText(ev) {
   if (!ev || ev.name !== ANSWER_TOOL || !ev.ok || !isObj(ev.json)) return null;
-  const parts = [ev.json.explanation, ev.json.closing_offer].filter((x) => isStr(x) && x.trim() !== "");
+  const j = ev.json;
+  const usable = (x) => isStr(x) && x.trim() !== "";
+  const steps = Array.isArray(j.steps) ? j.steps.map((s) => (isObj(s) ? s.text : s)).filter(usable).map((x) => x.trim()) : [];
+  const parts = [j.explanation, steps.join("\n"), j.closing_offer].filter(usable);
   return parts.length ? parts.join("\n\n") : null;
 }
 

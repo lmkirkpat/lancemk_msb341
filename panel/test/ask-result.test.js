@@ -3,7 +3,7 @@
 "use strict";
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
-const { askView, ANSWER_TOOL } = require("../lib/ask-result.js");
+const { askView, fallbackText, ANSWER_TOOL } = require("../lib/ask-result.js");
 const COMP1 = require("./fixtures/ask/comp1-answer.json");
 
 const result = (json, o) => Object.assign({ type: "tool_result", name: ANSWER_TOOL, ok: true, text: json === undefined ? "" : JSON.stringify(json), json }, o);
@@ -92,4 +92,23 @@ test("the view holds no field name, id or command a screen could show by acciden
   const v = askView(result(COMP1), A);
   const shown = JSON.stringify([v.explanation, v.closing_offer, v.steps.map((s) => [s.text, s.tag]), v.offers.map((o) => o.tag)]);
   assert.doesNotMatch(shown, /transform\.anchor|not_taught|offered_skills|ask-mentor/);
+});
+
+// T035 design review item 5 (FR-048, contracts/panel-ask.md rule 2): the fallback is the mentor's words
+// as they came, the steps' text included, as plain lines.
+test("fallbackText: the explanation, each step's text as a plain line, then the closing offer", () => {
+  const j = copy();
+  j.steps.push({ text: "A fifth step.", skill: null, layer: null }); // 5 steps: the view is null
+  assert.equal(askView(result(j), A), null);
+  const t = fallbackText(result(j));
+  const lines = j.steps.map((s) => s.text);
+  assert.equal(t, `${j.explanation}\n\n${lines.join("\n")}\n\n${j.closing_offer}`);
+  assert.doesNotMatch(t, /Steps|^\d+\./m, "no heading, no numbers");
+});
+
+test("fallbackText: unusable steps are left out; no steps, no step lines; nothing usable is null", () => {
+  assert.equal(fallbackText(result({ explanation: "Hi.", steps: [{ text: "" }, null, { text: 3 }, { text: " Play it back. " }], closing_offer: null })), "Hi.\n\nPlay it back.");
+  assert.equal(fallbackText(result({ explanation: "Hi.", steps: "not a list", closing_offer: "Want more?" })), "Hi.\n\nWant more?");
+  assert.equal(fallbackText(result({ steps: [], closing_offer: null })), null);
+  assert.equal(fallbackText(result({ explanation: "Hi." }, { ok: false })), null, "a refusal isn't an answer");
 });

@@ -494,3 +494,15 @@ test("T035 item 4: the dock holds the new question's steps", async () => {
   assert.ok(text(h).includes(A.your_steps(1)));
   assert.deepEqual(h.app.model().thread.latest_steps.map((x) => x.text), ["Parent the letters to a null."]);
 });
+
+test("T035 item 5: a malformed answer falls back to the words with the steps' text, and no Steps, dock or Go deeper", () => withGoDeeper(async () => {
+  const bad = JSON.parse(JSON.stringify(COMP1));
+  bad.offered_skills = ["transform.anchor", "parenting.null", "timing.offset"]; // 3 offers: no view
+  const h = await answered(bad);
+  const t = text(h);
+  for (const s of COMP1.steps) assert.ok(t.includes(s.text), `step text shown: ${s.text}`);
+  assert.ok(t.includes("rock.png rides on Shake Control"));
+  assert.ok(t.includes("Try them, or want to go deeper"));
+  assert.doesNotMatch(screen(h).html, /class="steps-lbl"|stepsblock|class="check steps"|data-action="go_deeper"|<ol/);
+  assert.equal(h.app.model().thread.latest_steps, null, "no dock");
+}));
