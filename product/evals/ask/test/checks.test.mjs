@@ -290,3 +290,10 @@ test("case 18: the wrapper is the contract's, and its checks pass a follow-up an
   assert.deepEqual(failed(waived), []);
   assert.ok(byName(waived, "answer_prose_empty@1").waived);
 });
+
+test("a promise to read after the learner acts isn't narration; narrating a call still is", () => {
+  const closing = good({ closing_offer: "Open it, then ask me again from inside that comp, and I'll read the layers that move?" });
+  assert.ok(byName(run([answerTurn(closing)]), "no_narration").pass);
+  const narrated = turn(read, { kind: "say", text: "Let me read the layers." }, call(good()));
+  assert.ok(!byName(run([narrated]), "no_narration").pass);
+});

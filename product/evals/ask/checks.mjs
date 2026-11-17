@@ -111,7 +111,13 @@ export function askChecks(expect, ctx) {
     add(name, !m, m ? `${detail} "${m[0]}"` : "clean");
   };
   never("plain_words", INTERNAL_NAME);
-  never("no_narration", NARRATION);
+  // A promise to read after the learner acts ("ask me again from inside, and I'll read the layers") is a plain
+  // hand-back, not narrating a call, so that clause is left out of the scan.
+  const readsForNarration = reads.replace(/\bask me again\b[^.?!\n]*/gi, "");
+  {
+    const m = readsForNarration.match(NARRATION);
+    add("no_narration", !m, m ? `said "${m[0]}"` : "clean");
+  }
   never("no_test_tell", SYNTH_TELL);
   never("no_slash_command", NO_SLASH_COMMAND);
   never("no_cant_see", CANT_SEE);
