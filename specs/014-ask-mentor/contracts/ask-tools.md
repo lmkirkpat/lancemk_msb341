@@ -16,6 +16,10 @@ Shapes are in [data-model.md](../data-model.md) § 1, § 2, § 8.
 **Input:** `kind`, `explanation`, `steps` (`[{ text, skill, layer }]`), `offered_skills`, `closing_offer`,
 `goal` (optional; general motion terms, required in phase 3 when `kind` is `answer`).
 
+*Clarified 2026-11-16 (f), from the T037 triage (FR-008, FR-018; data-model § 1):* `closing_offer` is required
+for `answer`, `describe`, `howto` and `outside`, and `null` only for `clarify` and `no_comp`. `outside` has no
+offered skills, but its closing sentence says what the mentor does cover.
+
 **Does, in order:**
 1. Takes its own snapshot of the active comp for each answer about a comp (`answer`, `describe`, `clarify`,
    `no_comp`), and takes the comp name, project, layers and the motion-sources map from it. *Amended

@@ -23,6 +23,13 @@ The call's input and the tool's reply have the same fields; the reply holds what
 `kind` rules: `answer` needs at least one step; `describe` and `howto` have none; `clarify`, `outside` and
 `no_comp` have no steps and no offer (FR-014, FR-016). Contract: [contracts/ask-tools.md](contracts/ask-tools.md).
 
+*Clarified 2026-11-16 (f), from the T037 triage:*
+- **"No offer" means no offered skills** (`offered_skills: []`), not no closing sentence. An `outside`
+  answer's `closing_offer` carries FR-018's "what I do cover" sentence, and it may name skills there (the
+  eval check rejects only offered skills on `outside`).
+- **`closing_offer` is required** (a non-empty sentence) for `answer`, `describe`, `howto` and `outside`
+  (FR-008). It is `null` only for `clarify` and `no_comp`. A `describe` with a `null` closing is refused.
+
 ## 2. Session additions (`session.json`, `mentor/lib/session.mjs`)
 
 Additive; the existing `lessons`, `current` and `review_offers` keep their shapes.
