@@ -1,5 +1,5 @@
 {
- "taken_at": "2026-11-14T20:54:48.182Z",
+ "taken_at": "2026-11-16T20:02:09.533Z",
  "project": "Comp 1.aep",
  "comp": {
   "id": 1,
@@ -449,6 +449,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -471,103 +472,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      -650.931,
-      144.58,
-      0
-     ],
-     "scale": [
-      207.62,
-      207.62,
-      100
-     ],
-     "rotation": 0.241,
-     "opacity": 100,
-     "rect": {
-      "left": 2.61,
-      "top": -25.088,
-      "width": 621.958,
-      "height": 30.744
-     },
-     "rect_extents": {
-      "left": 2.61,
-      "top": -25.088,
-      "width": 621.958,
-      "height": 30.744
-     }
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      -650.931,
-      144.58,
-      0
-     ],
-     "scale": [
-      207.62,
-      207.62,
-      100
-     ],
-     "rotation": 0.241,
-     "opacity": 100,
-     "rect": {
-      "left": 2.61,
-      "top": -25.088,
-      "width": 621.958,
-      "height": 30.744
-     },
-     "rect_extents": {
-      "left": 2.61,
-      "top": -25.088,
-      "width": 621.958,
-      "height": 30.744
-     }
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      -650.931,
-      144.58,
-      0
-     ],
-     "scale": [
-      207.62,
-      207.62,
-      100
-     ],
-     "rotation": 0.241,
-     "opacity": 100,
-     "rect": {
-      "left": 2.61,
-      "top": -25.088,
-      "width": 621.958,
-      "height": 30.744
-     },
-     "rect_extents": {
-      "left": 2.61,
-      "top": -25.088,
-      "width": 621.958,
-      "height": 30.744
-     }
-    },
-    {
-     "time": 2.5,
      "anchor": [
       0,
       0,
@@ -663,38 +568,6 @@
      }
     },
     {
-     "time": 3.4,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      -651.477,
-      274.579,
-      0
-     ],
-     "scale": [
-      207.62,
-      207.62,
-      100
-     ],
-     "rotation": 0.241,
-     "opacity": 100,
-     "rect": {
-      "left": 2.61,
-      "top": -25.088,
-      "width": 621.958,
-      "height": 30.744
-     },
-     "rect_extents": {
-      "left": 2.61,
-      "top": -25.088,
-      "width": 621.958,
-      "height": 30.744
-     }
-    },
-    {
      "time": 3.403,
      "anchor": [
       0,
@@ -727,8 +600,7 @@
      }
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 2,
@@ -755,6 +627,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -777,115 +650,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -939,8 +704,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 3,
@@ -967,6 +731,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -989,115 +754,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0.4,
-      -1.3,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.241,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0.4,
-      -1.3,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.241,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0.4,
-      -1.3,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.241,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0.4,
-      -1.3,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.241,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -1151,8 +808,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 4,
@@ -1179,6 +835,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -1201,115 +858,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      -0.005,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.026,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      -0.005,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.026,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      -0.005,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.026,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      -0.005,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.026,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -1363,8 +912,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 5,
@@ -1391,6 +939,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -1413,115 +962,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -1575,8 +1016,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 6,
@@ -1603,6 +1043,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -1625,115 +1066,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -1787,8 +1120,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 7,
@@ -1815,6 +1147,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -1837,115 +1170,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.01,
-      0.288,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.034,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.01,
-      0.288,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.034,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.01,
-      0.288,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.034,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.01,
-      0.288,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.034,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -1999,8 +1224,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 8,
@@ -2027,6 +1251,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -2049,115 +1274,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      1353.664,
-      546.706,
-      0
-     ],
-     "position": [
-      393.669,
-      6.72,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.002,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      1353.664,
-      546.706,
-      0
-     ],
-     "position": [
-      393.669,
-      6.72,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.002,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      1353.664,
-      546.706,
-      0
-     ],
-     "position": [
-      393.669,
-      6.72,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.002,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      1353.664,
-      546.706,
-      0
-     ],
-     "position": [
-      393.669,
-      6.72,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0.002,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       1353.664,
       546.706,
@@ -2211,8 +1328,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 9,
@@ -2239,6 +1355,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -2261,115 +1378,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -2423,8 +1432,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 10,
@@ -2451,6 +1459,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -2473,115 +1482,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.039,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.012,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.039,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.012,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.039,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.012,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.039,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.012,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -2635,8 +1536,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 11,
@@ -2663,6 +1563,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -2685,115 +1586,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -2847,8 +1640,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 12,
@@ -2875,6 +1667,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -2897,115 +1690,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -3059,8 +1744,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 13,
@@ -3087,6 +1771,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -3109,115 +1794,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -3271,8 +1848,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 14,
@@ -3299,6 +1875,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -3321,115 +1898,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -3483,8 +1952,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 15,
@@ -3511,6 +1979,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -3533,115 +2002,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -3695,8 +2056,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 16,
@@ -3723,6 +2083,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -3745,115 +2106,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.064,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.064,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.064,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.064,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -3907,8 +2160,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 17,
@@ -3935,6 +2187,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -3957,115 +2210,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -4119,8 +2264,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 18,
@@ -4147,6 +2291,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -4169,115 +2314,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -4331,8 +2368,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 19,
@@ -4359,6 +2395,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -4381,115 +2418,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.26,
-      0.412,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.002,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.26,
-      0.412,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.002,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.26,
-      0.412,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.002,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      -0.26,
-      0.412,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": -0.002,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -4543,8 +2472,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 20,
@@ -4571,6 +2499,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -4593,115 +2522,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -4755,8 +2576,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 21,
@@ -4783,6 +2603,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -4805,115 +2626,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -4967,8 +2680,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 22,
@@ -4995,6 +2707,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -5017,88 +2730,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      222,
-      483,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      222,
-      483,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      222,
-      483,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
      "anchor": [
       0,
       0,
@@ -5133,33 +2765,6 @@
      ],
      "position": [
       222,
-      483,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      471.325,
       483,
       0
      ],
@@ -5233,8 +2838,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 23,
@@ -5261,6 +2865,12 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 1,
+   "effects": [
+    {
+     "name": "CC Light Sweep",
+     "match_name": "CC Light Sweep"
+    }
+   ],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -5283,115 +2893,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -5445,13 +2947,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": [
-    {
-     "name": "CC Light Sweep",
-     "match_name": "CC Light Sweep"
-    }
-   ]
+   "samples_truncated": false
   },
   {
    "index": 24,
@@ -5478,6 +2974,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -5500,115 +2997,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      794,
-      268,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      99.805,
-      99.805,
-      100
-     ],
-     "rotation": -0.032,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1588,
-      "height": 536
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      794,
-      268,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      99.805,
-      99.805,
-      100
-     ],
-     "rotation": -0.032,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1588,
-      "height": 536
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      794,
-      268,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      99.805,
-      99.805,
-      100
-     ],
-     "rotation": -0.032,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1588,
-      "height": 536
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      794,
-      268,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      99.805,
-      99.805,
-      100
-     ],
-     "rotation": -0.032,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1588,
-      "height": 536
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       794,
       268,
@@ -5662,8 +3051,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 25,
@@ -5690,6 +3078,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -5712,41 +3101,6 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      960,
-      552,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null,
-     "base": {
-      "position": [
-       960,
-       540,
-       0
-      ],
-      "rotation": 0
-     }
-    },
-    {
      "time": 0.6,
      "anchor": [
       0,
@@ -5756,76 +3110,6 @@
      "position": [
       952.352,
       542.492,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null,
-     "base": {
-      "position": [
-       960,
-       540,
-       0
-      ],
-      "rotation": 0
-     }
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      960,
-      552.22,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null,
-     "base": {
-      "position": [
-       960,
-       540,
-       0
-      ],
-      "rotation": 0
-     }
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      960,
-      552.224,
       0
      ],
      "scale": [
@@ -5922,41 +3206,6 @@
      }
     },
     {
-     "time": 3.4,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      960.318,
-      540.103,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null,
-     "base": {
-      "position": [
-       960,
-       540,
-       0
-      ],
-      "rotation": 0
-     }
-    },
-    {
      "time": 3.403,
      "anchor": [
       0,
@@ -5992,8 +3241,7 @@
      }
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 26,
@@ -6020,6 +3268,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -6042,88 +3291,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      222,
-      483,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      222,
-      483,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      222,
-      483,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
      "anchor": [
       0,
       0,
@@ -6158,33 +3326,6 @@
      ],
      "position": [
       222,
-      483,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 0,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 100,
-      "height": 100
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
-     "anchor": [
-      0,
-      0,
-      0
-     ],
-     "position": [
-      471.325,
       483,
       0
      ],
@@ -6258,8 +3399,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 27,
@@ -6286,6 +3426,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -6325,33 +3466,6 @@
       100
      ],
      "rotation": -15,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 575,
-      "height": 630
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 0.5,
-     "anchor": [
-      316.625,
-      597.511,
-      0
-     ],
-     "position": [
-      1876.127,
-      707.836,
-      0
-     ],
-     "scale": [
-      -99.166,
-      99.166,
-      100
-     ],
-     "rotation": -43.9,
      "opacity": 100,
      "rect": {
       "left": 0,
@@ -6443,33 +3557,6 @@
      "rect_extents": null
     },
     {
-     "time": 1.5,
-     "anchor": [
-      316.625,
-      597.511,
-      0
-     ],
-     "position": [
-      1876.127,
-      707.836,
-      0
-     ],
-     "scale": [
-      -99.166,
-      99.166,
-      100
-     ],
-     "rotation": -43.865,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 575,
-      "height": 630
-     },
-     "rect_extents": null
-    },
-    {
      "time": 1.502,
      "anchor": [
       316.625,
@@ -6524,33 +3611,6 @@
      "rect_extents": null
     },
     {
-     "time": 2.5,
-     "anchor": [
-      316.625,
-      597.511,
-      0
-     ],
-     "position": [
-      1876.127,
-      707.836,
-      0
-     ],
-     "scale": [
-      -99.166,
-      99.166,
-      100
-     ],
-     "rotation": -43.747,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 575,
-      "height": 630
-     },
-     "rect_extents": null
-    },
-    {
      "time": 2.503,
      "anchor": [
       316.625,
@@ -6578,33 +3638,6 @@
      "rect_extents": null
     },
     {
-     "time": 3.4,
-     "anchor": [
-      316.625,
-      597.511,
-      0
-     ],
-     "position": [
-      1876.127,
-      707.836,
-      0
-     ],
-     "scale": [
-      -99.166,
-      99.166,
-      100
-     ],
-     "rotation": -43.932,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 575,
-      "height": 630
-     },
-     "rect_extents": null
-    },
-    {
      "time": 3.403,
      "anchor": [
       316.625,
@@ -6632,8 +3665,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 28,
@@ -6660,6 +3692,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -6682,115 +3715,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      794,
-      267.5,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      108.668,
-      108.668,
-      100
-     ],
-     "rotation": -0.032,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1588,
-      "height": 535
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      794,
-      267.5,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      108.668,
-      108.668,
-      100
-     ],
-     "rotation": -0.032,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1588,
-      "height": 535
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      794,
-      267.5,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      108.668,
-      108.668,
-      100
-     ],
-     "rotation": -0.032,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1588,
-      "height": 535
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      794,
-      267.5,
-      0
-     ],
-     "position": [
-      0,
-      0,
-      0
-     ],
-     "scale": [
-      108.668,
-      108.668,
-      100
-     ],
-     "rotation": -0.032,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1588,
-      "height": 535
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       794,
       267.5,
@@ -6844,8 +3769,7 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   },
   {
    "index": 29,
@@ -6872,6 +3796,7 @@
    "is_matte": false,
    "motion_blur": false,
    "effect_count": 0,
+   "effects": [],
    "mask_count": 0,
    "transform": {
     "anchor": [
@@ -6894,115 +3819,7 @@
    },
    "samples": [
     {
-     "time": 0.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
      "time": 0.6,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 1.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 2.5,
-     "anchor": [
-      960,
-      540,
-      0
-     ],
-     "position": [
-      960,
-      540,
-      0
-     ],
-     "scale": [
-      100,
-      100,
-      100
-     ],
-     "rotation": 0,
-     "opacity": 100,
-     "rect": {
-      "left": 0,
-      "top": 0,
-      "width": 1920,
-      "height": 1080
-     },
-     "rect_extents": null
-    },
-    {
-     "time": 3.4,
      "anchor": [
       960,
       540,
@@ -7056,14 +3873,9 @@
      "rect_extents": null
     }
    ],
-   "samples_truncated": false,
-   "effects": []
+   "samples_truncated": false
   }
  ],
- "host": {
-  "ae_version": "27.0x78",
-  "os": "Macintosh OS 27.2.1/64"
- },
  "expressions": [
   {
    "layer": 23,
@@ -7087,7 +3899,7 @@
    "enabled": true,
    "active": true,
    "error": null,
-   "text": "// Rock shake with multiple impacts (Position + shared array)\namps = [6,12,20];   // amplitude in pixels\nfreq = 8;  // shakes per second\ndecays = [1,4,10];  // how quickly it settles\n\n// Times of hammer hits (seconds)\nimpacts = [0.5, 1.5, 2.5];\n\noffset = [0,0];\n\nfor (i = 0; i < impacts.length; i++){\n  t = time - impacts[i];\n  if (t >= 0){\n\t  amp=amps[1];\n\t  decay=decays[1];\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\n  }\n}\n\nvalue + offset\n",
+   "text": "// Rock shake with multiple impacts (Position + shared array)\ramps = [6,12,20];   // amplitude in pixels\rfreq = 8;  // shakes per second\rdecays = [1,4,10];  // how quickly it settles\r\r// Times of hammer hits (seconds)\rimpacts = [0.5, 1.5, 2.5];\r\roffset = [0,0];\r\rfor (i = 0; i < impacts.length; i++){\r  t = time - impacts[i];\r  if (t >= 0){\r\t  amp=amps[1];\r\t  decay=decays[1];\r    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\r               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\r  }\r}\r\rvalue + offset\r",
    "text_length": 530,
    "text_cut": false
   },
@@ -7100,13 +3912,56 @@
    "enabled": true,
    "active": true,
    "error": null,
-   "text": "// Rock shake with multiple impacts (Rotation + shared array)\namps = [.25,.5,.75];    // amplitude in degrees\nfreq = 10;\ndecay = 3;\n\n// Same impact times as Position\nimpacts = [0.5, 1.5, 2.5];\n\nrot = 0;\n\nfor (i = 0; i < impacts.length; i++){\n  t = time - impacts[i];\n  if (t >= 0){\n\t  amp=amps[i];\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\n  }\n}\n\nvalue + rot\n",
+   "text": "// Rock shake with multiple impacts (Rotation + shared array)\ramps = [.25,.5,.75];    // amplitude in degrees\rfreq = 10;\rdecay = 3;\r\r// Same impact times as Position\rimpacts = [0.5, 1.5, 2.5];\r\rrot = 0;\r\rfor (i = 0; i < impacts.length; i++){\r  t = time - impacts[i];\r  if (t >= 0){\r\t  amp=amps[i];\r    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\r  }\r}\r\rvalue + rot\r",
    "text_length": 378,
    "text_cut": false
   }
  ],
  "expressions_read": "all",
- "expression_sweeps": [],
- "measured_layers": [],
- "derived": true
+ "expression_sweeps": [
+  {
+   "layer": 25,
+   "path": "ADBE Transform Group/ADBE Position",
+   "kind": "coarse",
+   "sampled_every": 0.209,
+   "varies": true,
+   "max_offset": 12.102,
+   "max_at": 2.503
+  },
+  {
+   "layer": 25,
+   "path": "ADBE Transform Group/ADBE Position",
+   "kind": "fine",
+   "sampled_every": 0.033,
+   "varies": true,
+   "max_offset": 12.147,
+   "max_at": 1.502
+  },
+  {
+   "layer": 25,
+   "path": "ADBE Transform Group/ADBE Rotate Z",
+   "kind": "coarse",
+   "sampled_every": 0.209,
+   "varies": true,
+   "max_offset": 0.283,
+   "max_at": 1.668
+  },
+  {
+   "layer": 25,
+   "path": "ADBE Transform Group/ADBE Rotate Z",
+   "kind": "fine",
+   "sampled_every": 0.033,
+   "varies": true,
+   "max_offset": 0.589,
+   "max_at": 2.569
+  }
+ ],
+ "measured_layers": [
+  25,
+  26
+ ],
+ "host": {
+  "ae_version": "27.0x78",
+  "os": "Macintosh OS 27.2.1/64"
+ }
 }
