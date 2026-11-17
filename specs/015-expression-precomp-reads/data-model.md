@@ -51,6 +51,7 @@ sample's exact time.
 | `status` | present only when the sweep didn't run: `{ status: "not_read", reason: "budget" }` for coarse sweeps past the snippet's time or count budget (the plan's number), so `varies` is unknown, never false |
 | `max_offset` | largest distance from base, in the property's units |
 | `max_at` | time of that peak |
+| `max_value` | *Added 2026-11-16 (FR-004a, research R15), fine sweeps only:* the after-expression value the sweep read at `max_at`. Absent on older snapshots, which is `direction_unknown` where FR-004a needs a direction, never a guess |
 
 ## 2. Derived (Node, `mentor/lib/expressions.mjs`)
 
@@ -124,6 +125,17 @@ See [contracts/describe-layers.md](contracts/describe-layers.md). Summary per la
 `expressions` (property, on, error flag, builds_on, moves), `links_in` count and first three,
 `refs_out` count, `precomp` (phase 2 summary or `not_read`), `read` statuses. Detail adds each
 expression's `text` (cut at 1,500), `error`, every link, and every reference.
+
+**Footprint shift (FR-004a, added 2026-11-16).** On each layer named in `layers`, summary and detail:
+`shifts: [{ from_layer_index, from_layer, property, shift_px, at, sampled_every, sampled: true,
+measured_on: "box" } | { from_layer_index, from_layer, property, shift_px: null, reason }]`, one per
+active parent-chain transform expression that moves the layer (Opacity excluded). `shift_px` is
+rounded to 0.01 px. `reason` is one of `three_d`, `auto_orient`, `no_rect`, `not_sampled`,
+`no_fine_sweep`, `chain_moves`, `direction_unknown`, `singular`. An empty list means the layer has no
+such parent expression, and is only given when the motion-sources map read expressions (`read.expressions`
+is `"all"`); otherwise `shifts` is `{ status: "not_read", reason: "older_snapshot" }`. Layers not
+named get no `shifts`, and the reply's `read.shifts` is `"read"` or `{ status: "not_read", reason:
+"not_asked" }`. Computed by `mentor/lib/footprint-shift.mjs` (research R15).
 
 ## 7. Phase 2: comp contents (`precomp-contents.jsx` + `precomp-time.mjs`)
 
