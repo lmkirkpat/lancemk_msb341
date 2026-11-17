@@ -112,3 +112,8 @@ test("eval fix (e): a partial name matching two layers gets a question naming bo
 test("eval fix (f): steps look at an expression that sets a property by itself, never at its keys", () => {
   assert.match(squash(SKILL), /When an expression sets a property by itself over keys, the steps look at the expression, never at the keys\./);
 });
+
+test("eval fix (g): one skill when the question sits inside one, and a firmer word limit", () => {
+  assert.match(squash(SKILL), /Offer one skill when the question sits inside one\./);
+  assert.match(squash(SKILL), /At most about 120 words in all, steps included\.\*\* Count before you call/);
+});
