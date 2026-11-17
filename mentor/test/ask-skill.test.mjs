@@ -89,3 +89,31 @@ test("T103 (amendment (e)): the context-after-a-lesson rule, word for word, and 
   for (const label of ["as shown in the panel", "Question:", "Answer:", "Closing:", "Follow-up:", "(layer:"]) assert.ok(!SKILL.includes(label), label);
   assert.match(SKILL, /never mention it, quote it,\s+or repeat its labels/);
 });
+
+test("eval fix (a): the turn-over rule closes the answer section, after the worked answer", () => {
+  const answer = SKILL.slice(SKILL.indexOf("## The answer"), SKILL.indexOf("## After the answer"));
+  const rule = answer.indexOf("Once `give_answer` is accepted your turn is over:");
+  assert.ok(rule > answer.indexOf("### The worked answer"), "near the end of the answer section");
+  assert.match(squash(answer.slice(rule)), /end it without writing anything, not even a sentence saying the answer is shown\./);
+});
+
+test("eval fixes (c) and (d): the outside and how-to lines", () => {
+  assert.match(squash(SKILL), /An outside part names no tool, menu, preset or setting, only that it's outside and what you do cover\./);
+});
+
+test("eval fix (d): the how-to line", () => {
+  assert.match(SKILL, /A how-to's explanation is at most two sentences, no bullets\./);
+});
+
+test("eval fix (e): a partial name matching two layers gets a question naming both", () => {
+  assert.match(squash(SKILL), /When a name matches part of two layers' names, ask which, naming both\./);
+});
+
+test("eval fix (f): steps look at an expression that sets a property by itself, never at its keys", () => {
+  assert.match(squash(SKILL), /When an expression sets a property by itself over keys, the steps look at the expression, never at the keys\./);
+});
+
+test("eval fix (g): one skill when the question sits inside one, and a firmer word limit", () => {
+  assert.match(squash(SKILL), /Offer one skill when the question sits inside one\./);
+  assert.match(squash(SKILL), /At most about 120 words in all, steps included\.\*\* Count before you call/);
+});

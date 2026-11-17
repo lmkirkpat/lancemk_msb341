@@ -306,3 +306,45 @@ test("review N2: the first line must name the comp as a whole name", () => {
   refuses(edit((a) => { a.explanation = a.explanation.replace("In Comp 1,", "In Logo Final,"); }), b1({ snapshot: logo }), "COMP_NOT_NAMED");
   assert.ok(checkAnswer(edit((a) => { a.explanation = a.explanation.replace("In Comp 1,", "In Logo,"); }), b1({ snapshot: logo })));
 });
+
+test("eval fix (b): a describe with no closing is refused, and the message says it's missing and required", () => {
+  const describe = { kind: "describe", explanation: "In Comp 1, Sweep Control is a null whose Position drives the Center of the CC Light Sweep on Black Solid 1.", steps: [], offered_skills: [], closing_offer: null };
+  assert.throws(() => checkAnswer(describe, b1()), (e) => e.code === "BAD_CLOSING" && /missing/.test(e.message) && /description/.test(e.message) && !/[a-z]_[a-z]/.test(e.message));
+  assert.throws(() => checkAnswer({ ...describe, kind: "outside", explanation: "Render settings are outside what I cover." }, b1({ snapshot: null })), (e) => e.code === "BAD_CLOSING" && /missing/.test(e.message));
+  assert.ok(checkAnswer({ ...describe, closing_offer: "Want to know what moves Sweep Control?" }, b1()));
+});
+
+test("eval fix (d): a how-to's explanation is at most two sentences with no list, else HOWTO_TOO_LONG", () => {
+  const howto = (explanation) => ({ kind: "howto", explanation, steps: [], offered_skills: ["easing.speed_graph"], closing_offer: "Want to learn it on one of your layers?" });
+  const two = "The speed graph shows how fast a property changes between two keys. A soft landing is a curve that comes down to rest, about 1/3 s long.";
+  assert.ok(checkAnswer(howto(two), b1({ snapshot: null })));
+  refuses(howto(`${two} Drag the handles to shape it.`), b1({ snapshot: null }), "HOWTO_TOO_LONG");
+  refuses(howto("The speed graph shows speed over time:\n- Steep means fast.\n- Flat means slow."), b1({ snapshot: null }), "HOWTO_TOO_LONG");
+  assert.ok(checkAnswer(edit(() => {}), b1()), "an answer's bullets are fine");
+});
+
+test("eval fix (f): a keyframe skill on keys under an expression that sets the value by itself is refused; one that builds on them isn't", async () => {
+  const fs = await import("node:fs");
+  const { FIXTURES } = await import("./helpers.mjs");
+  // Live Mentor Practice: Logo's two Rotation keys sit under an active expression that sets its own value.
+  const live = JSON.parse(fs.readFileSync(`${FIXTURES}/expressions/practice.json`, "utf8"));
+  const logo = live.layer_info.find((l) => l.name === "Logo").index;
+  const rot = (s) => s.expressions.find((x) => x.layer === logo && x.path.endsWith("ADBE Rotate Z"));
+  assert.ok(rot(live) && rot(live).enabled && !rot(live).error);
+  const input = {
+    kind: "answer",
+    explanation: "In Mentor Practice, Logo turns on its own Rotation keys and an expression.",
+    steps: [{ text: "Select Logo's two Rotation keys and press F9.", skill: "easing.basic", layer: "Logo" }],
+    offered_skills: [],
+    closing_offer: "Try it?",
+  };
+  assert.throws(() => checkAnswer(input, b1({ snapshot: live })), (e) => e.code === "KEYFRAME_SKILL_ON_KEYLESS" && /sets the value by itself/.test(e.message));
+  const builds = structuredClone(live);
+  rot(builds).text = `value + ${rot(builds).text}`;
+  assert.ok(checkAnswer(input, b1({ snapshot: builds })), "builds on the keys: still a keyframe step");
+  const none = structuredClone(live);
+  none.expressions = none.expressions.filter((x) => x !== rot(none));
+  assert.ok(checkAnswer(input, b1({ snapshot: none })), "no expression: the keys drive it");
+  const lookAtIt = { ...input, steps: [{ text: "Open Logo's Rotation expression and look at how it sets the turn: it uses time alone. Not something I teach yet.", skill: "not_taught", layer: "Logo" }] };
+  assert.ok(checkAnswer(lookAtIt, b1({ snapshot: live })), "the step looks at the expression");
+});

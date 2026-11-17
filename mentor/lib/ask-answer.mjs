@@ -12,12 +12,13 @@
 
 import { MentorError, MESSAGES, registerErrors } from "../errors.mjs";
 import { layerInfo } from "./layer-info.mjs";
+import { expressionReads } from "./expressions.mjs";
 import { motionSources } from "./motion-sources.mjs";
 import { readPath, shortName } from "./path.mjs";
 import { copiesExpression } from "../tools/common.mjs";
 
-// Data-model § 8's messages, word for word, plus five this build adds (named in the hand-back):
-// ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN and NOT_PLAIN_WORDS.
+// Data-model § 8's messages, word for word, plus six this build adds (named in the hand-backs):
+// ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN, NOT_PLAIN_WORDS and HOWTO_TOO_LONG.
 registerErrors({
   TOO_MANY_STEPS: "Give at most four steps; give the first three and say there's more in the closing offer.",
   BAD_STEP_SKILL: "Each step's skill must be a skill, not taught, or none.",
@@ -33,6 +34,7 @@ registerErrors({
   KIND_MISMATCH: "An answer has one to four steps; a description or a how-to has none. Pick the kind that fits.",
   STEP_NEEDS_LAYER: "A step tagged with a skill names the layer it's on, exactly as it appears in the comp.",
   COMP_IS_OPEN: "A comp is open, so read it and answer about it.",
+  HOWTO_TOO_LONG: "A how-to's explanation is at most two sentences, with no list.",
   NOT_PLAIN_WORDS: "Say it in plain words: no code, no backticks, and no names from tool output; name a skill by its short name.",
 });
 
@@ -130,6 +132,17 @@ function hasKeyedMotion(map, index) {
   return !!e && e.own_keys.some((k) => k.keys >= 2);
 }
 
+// Eval fix (f), TD § 13 (expressions over keys): keys under an active expression that sets its own
+// value (read from its text) don't make the motion. True when every property with two or more keys
+// on the layer is like that, so a keyframe skill can't change what moves.
+function keysOverridden(snapshot, map, index) {
+  const e = map.layers.find((l) => l.layer_index === index);
+  const keyed = e ? e.own_keys.filter((k) => k.keys >= 2) : [];
+  if (!keyed.length) return false;
+  const sets = new Set(expressionReads(snapshot).list.filter((x) => x.layer_index === index && x.active && x.builds_on === "sets_own").map((x) => x.path));
+  return keyed.every((k) => sets.has(k.path));
+}
+
 function nullWithChildren(snapshot, map, index) {
   const info = layerInfo(snapshot).layers.find((l) => l.index === index);
   const e = map.layers.find((l) => l.layer_index === index);
@@ -194,11 +207,15 @@ export function checkAnswer(input, ctx) {
   if (kind !== "howto" && !offered.every((o) => stepSkills.includes(o))) fail("BAD_OFFER");
 
   if (!NO_CLOSING.has(kind)) {
-    if (!closing) fail("BAD_CLOSING");
+    // Eval fix (b): describe answers came with no closing; say plainly it's missing and required.
+    if (!closing) throw new MentorError("BAD_CLOSING", "The closing offer is missing. It's required for an answer, a description, a how-to and an outside line: one sentence handing the choice back. Only a question back and no comp leave it out.");
     if ((steps.length || offered.length) && !oneQuestion(closing)) fail("BAD_CLOSING");
   }
 
   if (/^\s*\d+[.)]\s/m.test(expl) || /\bsteps?\s*:/i.test(expl)) fail("STEPS_IN_EXPLANATION");
+  // FR-019 (eval fix (d)): a how-to is two sentences, no list. A sentence ends at . ! or ? before a
+  // space or the end, so "1/3 s" and "0.75°" don't count.
+  if (kind === "howto" && (/^\s*[-•*]\s/m.test(expl) || (expl.match(/[.!?](?=\s|$)/g) || []).length > 2)) fail("HOWTO_TOO_LONG");
   const flat = squash(expl);
   for (const s of steps) {
     const core = squash(s.text.replace(/\s*not something i teach yet\.?$/i, ""));
@@ -225,6 +242,9 @@ export function checkAnswer(input, ctx) {
     if (!map || !s.layer || !KEYFRAME_SKILLS.includes(s.skill)) return;
     const keyed = layersNamed(snapshot, s.layer).some((l) => hasKeyedMotion(map, l.index));
     if (!keyed) fail("KEYFRAME_SKILL_ON_KEYLESS", `Step ${i + 1} is on ${s.layer}.`);
+    if (layersNamed(snapshot, s.layer).every((l) => !hasKeyedMotion(map, l.index) || keysOverridden(snapshot, map, l.index))) {
+      throw new MentorError("KEYFRAME_SKILL_ON_KEYLESS", `Step ${i + 1} is on ${s.layer}, whose keys are under an expression that sets the value by itself, so a keyframe skill can't change what moves. Point the step at the expression instead.`);
+    }
   });
   if (map && offered.includes(NULL_SKILL)) {
     const onNull = steps.some((s) => s.skill === NULL_SKILL && s.layer && layersNamed(snapshot, s.layer).some((l) => nullWithChildren(snapshot, map, l.index)));
