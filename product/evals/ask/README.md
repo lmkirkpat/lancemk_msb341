@@ -82,7 +82,7 @@ On each answer a case expects (`expect.answers`):
 ## Case-level `expect` keys
 
 - `answers`: `[{ turn, kind (a string or a list), steps: [min, max], no_keyframe_skills, step_skills_include, step_skills_forbid, offered_equals (A only), step_on_layer, max_sentences: [{ field: "explanation"|"closing_offer", max }], step_order: [{ id, first, then, needs_sweeps }] }]`.
-  `step_order` with `needs_sweeps` counts only when the fixture carries expression sweeps (see Fixtures); until then the dry run says it is inactive.
+  `step_order` with `needs_sweeps` counts only when the fixture carries expression sweeps (see Fixtures). The Comp 1 fixtures do, so case 01's is active; a fixture without sweeps is reported inactive in the dry run.
 - `no_answer_turns`: turns that must not call `give_answer` (a follow-up is prose).
 - `turn_first_tool`: `[{ turn, tool }]`.
 - `tools_called`, `tools_not_called`: over the whole case.
@@ -123,15 +123,15 @@ All are built by `node product/evals/ask/fixtures/build.mjs` from spec 015 T015'
 
 | File | From | Change |
 |---|---|---|
-| `comp1.json` | `comp1.mjs` (Comp 1) | none. **Derived** until T015's live `comp1.json` lands: no `expression_sweeps`, so "how much it moves" reads as not read |
+| `comp1.json` | `comp1.mjs` (Comp 1) | none. The live capture (spec 015 T015, rebuilt 2026-11-16): 29 layers, 3 expressions, 4 `expression_sweeps` |
 | `comp1-two-rocks.json` | Comp 1 | layer 22 (outline.png) becomes Rock Shadow.png with its own two Position keys (copied from Sweep Control), so "the rock" names two layers with different first steps |
 | `practice.json` | live capture, Mentor Practice | none |
 | `practice-title-locked.json` | `practice.json` | Title's Lock switch on |
 | `card-and-glow.json` | planted layers 4 and 18 | renamed Card (two Scale keys) and Glow (`wiggle` expression), comp renamed Intro |
 | `matte-eye-off.json` | planted layers 1, 9, 10 | Window Matte (a matte, eye off), Photo (uses it), Ctrl; comp renamed Intro |
 
-When T015's live `comp1.json` lands, re-run `build.mjs`: the fixture gains sweeps and case 01's `step_order`
-(hit sizes before the pivot, TD § 16) becomes a live check. The case hash changes with the fixture, so `--changed` re-runs it.
+The Comp 1 fixtures come from spec 015 T015's live capture, so case 01's `step_order` (hit sizes before the pivot,
+TD § 16) is a live check. A new capture only needs `build.mjs` re-run; the case hash changes with the fixture, so `--changed` re-runs it.
 
 ## Decisions made building this (2026-11-16)
 
