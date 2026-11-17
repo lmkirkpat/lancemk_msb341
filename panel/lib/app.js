@@ -20,7 +20,7 @@ const { COPY } = require("./copy.js");
 const { askView, fallbackText, ANSWER_TOOL } = require("./ask-result.js");
 const PHASE = require("./phase.js");
 const thr = require("./ask-thread.js");
-const { askRequest, followUpRequest, goDeeperRequest } = require("./requests.js");
+const { askRequest, followUpRequest, goDeeperRequest, ASK_COMMAND } = require("./requests.js");
 
 const LOADING_AFTER_MS = 300; // FR-008
 const SENDING_MS = 600; // MU ask-sending: Asking… shows on Home before the thread takes over
@@ -744,18 +744,22 @@ function createApp(deps) {
     if (a) a.stop();
   }
 
-  // A lesson from Skills or Find my next lesson ends the thread (research R12).
+  // A lesson from Find my next lesson, Pick up or Skills ends the thread's conversation, not the
+  // thread: its questions, answers and steps stay saved and visible, and Back to your question still
+  // opens them (research R12 as amended 2026-11-16 (d); contracts/panel-ask.md rule 5). The next
+  // question or follow-up starts a new conversation in the same thread.
   function endThread() {
     if (!state.thread && !state.threadAdapter) return;
     stopThreadAdapter();
-    state.thread = null;
     state.askTurn = null;
     state.askSending = false;
-    state.askFrames = {};
     state.home_view = "home";
     state.steps_open = false;
     state.steps_list_open = false;
-    if (session.clearThread) session.clearThread();
+    if (state.thread && state.thread.claude_session_id) {
+      state.thread = Object.assign({}, state.thread, { claude_session_id: null });
+      persistThread();
+    }
   }
 
   // From Asking… on Home to the thread, at the mentor's first sign of work or after SENDING_MS.
@@ -857,6 +861,10 @@ function createApp(deps) {
   // Sends one thread turn, starting (or resuming) the thread's conversation if it isn't running.
   function askSend(req, o) {
     if (askBusy() || !state.thread) return false;
+    // A new conversation opens the ask skill from its first request (research R12): a follow-up or a
+    // Try again into a thread whose conversation a lesson ended gets /ask-mentor in front, as the first
+    // follow-up after a go-deeper lesson does. The bubble still shows the text as typed.
+    if (!state.thread.claude_session_id && !req.request.startsWith(`${ASK_COMMAND} `)) req = Object.assign({}, req, { request: `${ASK_COMMAND} ${req.request}` });
     if (!state.threadAdapter) {
       const a = deps.createAdapter(deps.cfg);
       state.threadAdapter = a;

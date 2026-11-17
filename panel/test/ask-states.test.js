@@ -332,26 +332,85 @@ test("FR-058: each answer turn is logged as a question or follow-up with thread 
   assert.equal(JSON.stringify(h.turns).includes("rock"), false);
 });
 
-test("a lesson from Skills or Find my next lesson ends the thread (research R12)", async () => {
+// Research R12 as amended 2026-11-16 (d), contracts/panel-ask.md rule 5 (T035 design review item 3):
+// a lesson ends the thread's conversation, never the thread.
+for (const [name, go] of [
+  ["Find my next lesson", (h) => h.app.act("find_next")],
+  ["a Skills lesson", (h) => h.app.act("new_lesson", { skill: "keyframes.types" })],
+  ["Start lesson", (h) => h.app.act("start")],
+]) {
+  test(`${name} ends the thread's conversation but keeps its question, answer and steps (R12 (d))`, async () => {
+    const h = await answered();
+    h.app.act("thread_back");
+    const before = h.saved.thread;
+    go(h);
+    assert.equal(h.adapters[0].stopped, 1, "the thread's conversation stops");
+    assert.equal(h.app.model().tab, "lesson");
+    assert.ok(h.saved.thread, "nothing deleted");
+    assert.equal(h.saved.thread.claude_session_id, null, "the conversation is over: the next ask starts a new one");
+    assert.deepEqual(h.saved.thread.questions, before.questions);
+    assert.deepEqual(h.saved.thread.latest_steps, before.latest_steps);
+    assert.ok(h.app.model().thread, "still in view");
+  });
+}
+
+test("after the lesson, Back to your question opens the same answer and steps; a follow-up starts a new conversation with the ask skill", async () => {
   const h = await answered();
   h.app.act("thread_back");
-  assert.ok(h.saved.thread, "saved");
-  h.app.act("find_next");
-  assert.equal(h.saved.thread, null);
-  assert.equal(h.adapters[0].stopped, 1, "the thread's conversation stops");
+  h.app.act("start");
   h.app.act("go_home");
-  assert.notEqual(st(h), "home-thread");
+  assert.ok(text(h).includes(A.back_to_question), "the way back shows while the lesson is open");
+  h.adapter().emit("turn_end", { ok: true, kind: "start" }); // the lesson's first turn ends
+  h.app.act("tab", { tab: "lesson" });
+  h.app.act("end_lesson");
+  assert.equal(st(h), "home-thread");
+  assert.ok(text(h).includes(A.back_to_question));
+  h.app.act("back_question");
+  assert.equal(st(h), "ask-answer");
+  assert.ok(text(h).includes("In Comp 1, rock.png rides on Shake Control"));
+  assert.ok(text(h).includes(A.your_steps(4)));
+  const n = h.adapters.length;
+  assert.equal(h.app.followUp("Why the null?"), true);
+  const a = h.adapter();
+  assert.equal(h.adapters.length, n + 1, "a fresh conversation");
+  assert.deepEqual(a.started[0], { skill: "ask-mentor" }, "not a resume");
+  assert.deepEqual(a.sent[0], { text: "/ask-mentor Why the null?", kind: "followup" }, "the ask skill opens from the request");
+  assert.equal(h.app.model().thread.claude_session_id, "session-1");
+  assert.ok(text(h).includes("Why the null?"));
+  assert.equal(text(h).includes("/ask-mentor"), false, "the bubble shows the text as typed");
+  a.emit("text", { text: "It carries the rock." });
+  a.emit("turn_end", { ok: true, kind: "followup" });
+  h.app.followUp("And the letters?");
+  assert.equal(a.sent[1].text, "And the letters?", "later follow-ups go as typed");
 });
 
-test("asking with a lesson waiting keeps that lesson; picking it up ends the thread", async () => {
+test("a new question on Home after the lesson starts a new conversation in the same visible thread", async () => {
+  const h = await answered();
+  h.app.act("thread_back");
+  h.app.act("find_next");
+  h.adapter().emit("turn_end", { ok: true, kind: "find_next" });
+  h.app.act("tab", { tab: "lesson" });
+  h.app.act("end_lesson");
+  askFromHome(h, "What does Sweep Control do?");
+  assert.deepEqual(h.adapter().started[0], { skill: "ask-mentor" });
+  assert.equal(h.adapter().sent[0].text, "/ask-mentor What does Sweep Control do?");
+  const qs = h.app.model().thread.questions;
+  assert.deepEqual(qs.map((q) => [q.text, q.folded]), [[Q, true], ["What does Sweep Control do?", false]]);
+});
+
+test("asking with a lesson waiting keeps that lesson; picking it up keeps the thread too", async () => {
   const SAVED = { version: 2, claude_session_id: "s1", bridge_started: CONNECTED.started, ended: false, started_at: "x", updated_at: "x", skill: "ease-mentor", lesson: { skill: "easing.basic", focus: ["Title"], snapshots: 1, checks: 1, replied: true, passed: false, labels: {}, check_list: { source: "check", summary: "1 of 2 yours eased", sections: [], outside: [], stale: null, stale_kind: null, checked_at: null } }, messages: [] };
   const h = await answered(COMP1, { saved: SAVED });
   h.app.act("thread_back");
   assert.equal(st(h), "home-inprogress");
   assert.ok(text(h).includes(A.back_to_question), "both the line and the way back");
   h.app.act("continue");
-  assert.equal(h.saved.thread, null);
   assert.equal(h.app.model().tab, "lesson");
+  assert.ok(h.saved.thread, "nothing deleted");
+  assert.equal(h.saved.thread.claude_session_id, null);
+  assert.equal(h.saved.thread.questions[0].text, Q);
+  h.app.act("go_home");
+  assert.ok(text(h).includes(A.back_to_question));
 });
 
 test("the thread survives the panel closing; reopened, Home links back to it and a follow-up resumes the conversation", async () => {
