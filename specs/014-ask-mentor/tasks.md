@@ -85,7 +85,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   six, and a skill without one falls back to its full name.
 - [x] T011 (skill-builder) `mentor/lib/session.mjs`: the `ask` block (data-model § 2): `saveAnswer`,
   `latestAnswer`, `askStartedAt`; an unreadable file behaves as today. Tests in `mentor/test/session-ask.test.mjs`.
-- [ ] T012 (skill-builder) `mentor/lib/ask-answer.mjs`: validate and normalize an asked result (research R3,
+- [x] T012 (skill-builder) `mentor/lib/ask-answer.mjs`: validate and normalize an asked result (research R3,
   data-model § 1, contracts/ask-tools.md), using spec 015's motion-sources map (015 T019) for K4. Tests in
   `mentor/test/ask-answer.test.mjs` on 015's Comp 1 capture: TD § 16's answer accepted (with PQ-5's untagged
   step 4); one refusal per R3 row; `describe` with no steps accepted; B1 returns `offered_skills: []`.
