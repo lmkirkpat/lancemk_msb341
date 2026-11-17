@@ -1,0 +1,172 @@
+{
+  "run_at": "2026-11-17T06:21:27.704Z",
+  "options": {
+    "only": "17",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.12,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "17-howto-no-target",
+      "title": "A how-to inside the six with no comp target: two sentences, no steps, one offer of the lesson (A only; B1 offers nothing)",
+      "covers": [
+        "FR-019",
+        "PQ-4"
+      ],
+      "hash": "f4327d2b93de64168f87098c2df452d0a461c8ef06644ee3203234ca635cea9e",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": false,
+              "detail": "said \"The Speed Graph is in the Graph Editor. It shows how fast a keyed prop\" next to the answer"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind howto"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was howto (wanted howto)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "max_sentences:explanation@1",
+              "pass": true,
+              "detail": "2 sentences in the explanation (at most 2)"
+            },
+            {
+              "check": "text:offer_names_speed_graph",
+              "pass": true,
+              "detail": "offer of turn 1: \"Speed graph\""
+            }
+          ],
+          "rubric": [],
+          "cost": 0.1237946,
+          "session_id": "f3275d22-478a-47d4-9d00-ed75b5634b32",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: How does the speed graph work?\nTOOL CALL describe_layers {}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":{\"status\":\"not_read\",\"reason\":\"not_asked\"},\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\"}],\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":3,\"layer\":\"CTRL\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\"}],\"parents\":[],\"children\":2,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":4,\"layer\":\"Bar\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"End\",\"keys\":2,\"key_types\":\"none_held\"},{\"property\":\"X Position\",\"keys\":3,\"key_types\":\"none_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":5,\"layer\":\"Glow\",\"kind\":\"adjustment\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Blurriness\",\"keys\":2,\"key_types\":\"none_held\"}],\"parents\":[],\"children\":0,\"effects\":[\"Gaussian Blur\"],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":6,\"layer\":\"Cursor\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Opacity\",\"keys\":6,\"key_types\":\"all_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"expression_on\":true}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\"}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":8,\"layer\":\"Old Take\",\"kind\":\"text\",\"class\":\"hidden\",\"own_keys\":[{\"property\":\"Position\",\"keys\":2,\"key_types\":\"none_held\"}],\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":9,\"layer\":\"Icon\",\"kind\":\"precomp\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},{\"layer_index\":10,\"layer\":\"Background\",\"kind\":\"solid\",\"class\":\"renders\",\"parents\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE (in an answer turn this is a slip; the learner sees only the answer): The Speed Graph is in the Graph Editor. It shows how fast a keyed property is changing at each moment:\n\n- **A flat line** means the layer moves at a steady speed.\n- **A hill** means it speeds up, reaches its top speed, then slows down.\n- **Dragging the handles at each key** changes that curve, which controls how sharply a move starts and how gently it settles.\n\nTo try it, open the Graph Editor on a property with keys, like Title's Position, and look at the speed curve. If you want a hands-on walkthrough, you can open the *Speed graph* lesson from the Skills tab.\nANSWER (kind: howto; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, the Speed Graph in the Graph Editor plots how fast a keyed property moves over time, so a flat line means steady speed and a hill means it speeds up then slows down. Dragging the handles at each key reshapes that curve, letting you shape exactly how sharply a move starts and settles.\n\nCLOSING OFFER: Want to go deeper with the *Speed graph* lesson on one of your keyed layers?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 71\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

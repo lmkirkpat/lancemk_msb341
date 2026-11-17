@@ -1,0 +1,194 @@
+{
+  "run_at": "2026-11-17T07:26:48.155Z",
+  "options": {
+    "only": "12",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.19,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "12-matte-eye-off",
+      "title": "A matte with its eye off by design in reach: it is a matte, never \"hidden\"",
+      "covers": [
+        "TD 17.15",
+        "FR-012",
+        "A8"
+      ],
+      "hash": "9b66aa92570651b7ceae9d29ebb9263062e5fa3368c7aa238c8dfd789c7a2f55",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "no prose"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind describe"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was describe (wanted answer or describe)"
+            },
+            {
+              "check": "no_steps_for_kind@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Intro"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:says_matte",
+              "pass": true,
+              "detail": "all of turn 1: \"Matte\""
+            },
+            {
+              "check": "text:never_hidden",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-MATTE-NOT-HIDDEN",
+              "pass": true,
+              "reason": "The answer calls Window Matte \"a solid working as a matte\" whose shape cuts out another layer \"rather than drawing the solid itself\"; it never says hidden or missing and gives no step to turn the eye on."
+            },
+            {
+              "item": "R-HONEST-KINDS",
+              "pass": true,
+              "reason": "The read facts (solid, class matte) are stated plainly, the inferences are marked (\"which means…\", \"So what you see is…\"), and the unread link is named (\"My read doesn't say which layer uses it as its matte\") rather than called absent."
+            }
+          ],
+          "cost": 0.18692,
+          "session_id": "eeb7f9d1-8fe1-49c2-844f-0820bbb47d6b",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Why can't I see Window Matte?\nTOOL CALL describe_layers {\"layers\":[\"Window Matte\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Intro\",\"time\":0.6},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":{\"status\":\"not_read\",\"reason\":\"fixture\",\"coarse\":\"read\"},\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":2,\"layer\":\"Window Matte\",\"kind\":\"solid\",\"class\":\"matte\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":false,\"max_offset\":15,\"max_at\":0,\"units\":\"degrees\",\"sampled_every\":0.25,\"sweep\":\"coarse\",\"fine\":{\"status\":\"not_read\",\"reason\":\"fixture\"}}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":1,\"precomp\":\"not_a_precomp\"}]}\nANSWER (kind: describe; what the learner sees, rebuilt from the answer call)\nIn Intro, Window Matte is a solid working as a matte, which means After Effects uses its shape to cut out another layer rather than drawing the solid itself. So what you see is the layer it shapes, showing through where Window Matte is. My read doesn't say which layer uses it as its matte.\n\nCLOSING OFFER: Want to ask about the layer it shapes, or about anything else in Intro?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 69\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

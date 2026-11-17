@@ -1,0 +1,203 @@
+{
+  "run_at": "2026-11-17T06:13:12.712Z",
+  "options": {
+    "only": "14",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "waive": [
+      "answer_prose_empty"
+    ],
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.18,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "14-separated-dimensions",
+      "title": "Separated dimensions (Bar's X Position has the keys): the step names X Position, never a Position that isn't there",
+      "covers": [
+        "EE-4",
+        "FR-010",
+        "A4"
+      ],
+      "hash": "89357bab47073ff855f810731a44869a1b3ea07a643142a9ce03e424279b4200",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "(waived) said \"In Mentor Practice, Bar slides using keyframes on its own X Position, \" next to the answer",
+              "waived": true
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:names_x_position",
+              "pass": true,
+              "detail": "all of turn 1: \"X Position\""
+            },
+            {
+              "check": "text:never_bare_position_keys",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-DIMENSION",
+              "pass": true,
+              "reason": "The answer says \"X Position has 3 keys\" and step 1 says \"Open Bar's X Position in the timeline\", so it never calls a separated property \"Position\" and the step sits on the property that has the keys."
+            }
+          ],
+          "cost": 0.1826892,
+          "session_id": "040adba7-0f9f-469e-bad3-486ba5e300d3",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the Bar's slide ease in.\nTOOL CALL describe_layers {\"layers\":[\"Bar\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":4,\"layer\":\"Bar\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"End\",\"keys\":2,\"key_types\":\"none_held\"},{\"property\":\"X Position\",\"keys\":3,\"key_types\":\"none_held\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE (in an answer turn this is a slip; the learner sees only the answer): In Mentor Practice, Bar slides using keyframes on its own X Position, which has 3 keys and none of them are held. Bar also has 2 keys on End. That looks like the bar growing rather than sliding, so I'm assuming you mean the X Position move.\n\n1. Open Bar's X Position in the timeline and select the keys where the slide arrives (the 2nd and 3rd). *(Easing)*\n2. Choose Animation > Keyframe Assistant > Easy Ease In (Shift+F9) so the slide slows down as it reaches each of those keys. *(Easing)*\n3. Play it back and watch how the slide settles.\n\nWill you try these, ask about a step, or go deeper with *Easing*?\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Bar slides on its own keys: X Position has 3 keys, and none are held. Bar also has 2 keys on End, which looks like the bar growing rather than sliding, so I'm assuming you mean the X Position move.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Open Bar's X Position in the timeline and select the keys the slide arrives at (the 2nd and 3rd).  [tag: Easing; layer: Bar]\n2. Choose Animation > Keyframe Assistant > Easy Ease In (Shift+F9) so the slide slows into each of those keys.  [tag: Easing; layer: Bar]\n3. Play it back and watch how the slide settles.  [no tag]\n\nCLOSING OFFER: Want to try these, ask about a step, or go deeper with *Easing*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 102\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

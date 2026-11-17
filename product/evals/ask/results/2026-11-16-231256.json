@@ -1,0 +1,204 @@
+{
+  "run_at": "2026-11-17T06:12:56.152Z",
+  "options": {
+    "only": "16",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "waive": [
+      "answer_prose_empty"
+    ],
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.21,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "16-locked-layer-in-the-step",
+      "title": "A locked layer (Title) that stops a step from working: the unlock is said in the step it blocks",
+      "covers": [
+        "EE-4",
+        "FR-015",
+        "A12"
+      ],
+      "hash": "216436a9018da9ddbd7fc20603cc4c15fb0a897d3433f677e5fca1e4d9535126",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "(waived) said \"In Mentor Practice, Title moves on its own keyframes, and it also ride\" next to the answer",
+              "waived": true
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "4 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "4 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "answer_length@1",
+              "pass": false,
+              "detail": "157 words (about 120 wanted)",
+              "warn": true
+            },
+            {
+              "check": "text:unlock_in_a_step",
+              "pass": true,
+              "detail": "steps of turn 1: \"Unlock\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-BLOCKER-IN-STEP",
+              "pass": true,
+              "reason": "The read shows Title is locked (\"locked\":true), and step 1 opens with \"Unlock Title first,\" inside that step and before the key edits it blocks; no unrelated finding about another layer is added, since the CTRL lines concern Title's own landing motion."
+            }
+          ],
+          "cost": 0.2080764,
+          "session_id": "ab62bf52-f011-4277-b0b1-f534dc49feba",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Title land softer.\nTOOL CALL describe_layers {\"layers\":[\"Title\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":1,\"layer\":\"Title\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":4,\"key_types\":\"none_held\"},{\"property\":\"Scale\",\"keys\":2,\"key_types\":\"none_held\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\"}],\"locked\":true,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE (in an answer turn this is a slip; the learner sees only the answer): In Mentor Practice, Title moves on its own keyframes, and it also rides on CTRL, a null that's animated with keyframes. Title has 4 Position keys, 2 Scale keys and 2 Opacity keys, and none of them are hold keys. I'm assuming \"land\" means the moment Title's Position stops on its last key. CTRL's keys move Title too, but I didn't check which of CTRL's properties they're on or how far they move it.\n\n1. **Unlock Title first.** Then select its last Position and Scale keyframes and choose Animation > Keyframe Assistant > Easy Ease In. *(Easing)*\n2. **Make the slowdown longer.** Open the Graph Editor and switch to the Speed Graph. On Title's last Position key, drag the incoming handle further left so the slowdown lasts longer. *(Speed graph)*\n3. **Check CTRL.** Select CTRL and press U to show its keyframes. If its last keys land at the same moment as Title's, apply Easy Ease In to them too. *(Easing)*\n4. **Play it back** and watch the landing.\n\nWant to try these, or go deeper with *Easing* or *Speed graph*?\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Title moves on its own keys and also rides on CTRL, a null moved by keys:\n- Title has 4 Position keys, 2 Scale keys and 2 Opacity keys, none held.\n- I'm assuming \"land\" means where Title's Position comes to rest on its last key.\n- CTRL's keys move Title too. I didn't read which of CTRL's properties they're on or how far they move it.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Unlock Title first, then select its last Position and Scale keyframes and apply Animation > Keyframe Assistant > Easy Ease In.  [tag: Easing; layer: Title]\n2. Open the Graph Editor, switch to the Speed Graph, and drag the incoming handle on Title's last Position key further left so it slows over a longer time.  [tag: Speed graph; layer: Title]\n3. Press U on CTRL to show its keys, and apply Easy Ease In to its last keyframes if they land at the same moment.  [tag: Easing; layer: CTRL]\n4. Play it back and watch the landing.  [no tag]\n\nCLOSING OFFER: Want to try these, or go deeper with *Easing* or *Speed graph*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 157\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

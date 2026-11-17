@@ -1,0 +1,331 @@
+{
+  "run_at": "2026-11-17T07:38:39.479Z",
+  "options": {
+    "only": "18",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.39,
+  "refusals": {
+    "answer_calls": 0,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "18-followup-after-lesson",
+      "title": "The first follow-up after a lesson, sent in the context wrapper: a fresh read first, then a short prose answer that follows from the earlier answer (FR-028), with no wrapper label in what the learner reads",
+      "covers": [
+        "T104",
+        "amendment (e)",
+        "contracts/panel-ask.md > Context after a lesson",
+        "FR-028",
+        "FR-001",
+        "FR-016"
+      ],
+      "hash": "340cab45af1e214b691a078eb1f58cd4306c0c9e0f7bad4ea08436fd4cfa4660",
+      "pass": false,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "no_answer@1",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "turn_first_tool@1",
+              "pass": true,
+              "detail": "turn 1's first tool was describe_layers"
+            },
+            {
+              "check": "text:follows_step_2",
+              "pass": true,
+              "detail": "prose of turn 1: \"Rotation\""
+            },
+            {
+              "check": "text:no_wrapper_label",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "prose_max_sentences:short_follow_up",
+              "pass": false,
+              "detail": "7 sentences of prose in turn 1 (at most 4)"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.1034448,
+          "session_id": "63f78bf1-4715-45be-a822-476bb9d6907f",
+          "answer_calls": 0,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Earlier question and answer, as shown in the panel:\nQuestion: Make the rock shake from where the hammer hits.\nAnswer: In Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- All three hits are the same size.\n- Rotation moves the rock about 9 px at most, gone in about 1/3 s.\n- The turn centers on the rock, where Shake Control sits.\nSteps:\n1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet. (layer: Shake Control)\n2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet. (layer: Shake Control)\n3. Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. (layer: Shake Control)\n4. Play it back and watch the turn.\nClosing: Try them, or want to go deeper on step 3 with *Set the pivot*?\nFollow-up: What about step 2?\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE: Step 2 is about the turn. Shake Control's Rotation expression gives each hit its own amount of turn, getting bigger with each hit: a quarter of a degree on the first, half a degree on the second, three quarters on the third. Every hit settles at the same speed. The turn peaks at about 0.6° around 2.57 seconds. Unlike Position, the turn isn't the same size on every hit.\n\nStep 2 itself: open Shake Control's Rotation expression and look at those three amounts. Editing them isn't something I teach yet.\n"
+        },
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "no_answer@1",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "turn_first_tool@1",
+              "pass": true,
+              "detail": "turn 1's first tool was describe_layers"
+            },
+            {
+              "check": "text:follows_step_2",
+              "pass": true,
+              "detail": "prose of turn 1: \"Rotation\""
+            },
+            {
+              "check": "text:no_wrapper_label",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "prose_max_sentences:short_follow_up",
+              "pass": false,
+              "detail": "5 sentences of prose in turn 1 (at most 4)"
+            }
+          ],
+          "rubric": [],
+          "cost": 0.10359779999999999,
+          "session_id": "1b77568c-be1e-44bd-b0e6-5acfa91127d8",
+          "answer_calls": 0,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Earlier question and answer, as shown in the panel:\nQuestion: Make the rock shake from where the hammer hits.\nAnswer: In Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- All three hits are the same size.\n- Rotation moves the rock about 9 px at most, gone in about 1/3 s.\n- The turn centers on the rock, where Shake Control sits.\nSteps:\n1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet. (layer: Shake Control)\n2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet. (layer: Shake Control)\n3. Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. (layer: Shake Control)\n4. Play it back and watch the turn.\nClosing: Try them, or want to go deeper on step 3 with *Set the pivot*?\nFollow-up: What about step 2?\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE: Shake Control's Rotation expression gives each hammer hit its own turn: about a quarter of a degree on the first hit, half a degree on the second and three-quarters on the third, and each one settles quickly. At its strongest the null turns about 0.6°, just after the third hit at around 2.6 s. So unlike Position, here each hit is a different size.\n\nFor step 2, open Shake Control's Rotation expression and look at those three amounts to decide whether they match how hard you want each hit to feel. Changing an expression isn't something I teach yet.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "no_answer@1",
+              "pass": true,
+              "detail": "prose only"
+            },
+            {
+              "check": "turn_first_tool@1",
+              "pass": true,
+              "detail": "turn 1's first tool was describe_layers"
+            },
+            {
+              "check": "text:follows_step_2",
+              "pass": true,
+              "detail": "prose of turn 1: \"Rotation\""
+            },
+            {
+              "check": "text:no_wrapper_label",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            },
+            {
+              "check": "prose_max_sentences:short_follow_up",
+              "pass": true,
+              "detail": "4 sentences of prose in turn 1 (at most 4)"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-FOLLOWS-EARLIER",
+              "pass": true,
+              "reason": "The mentor re-read Shake Control, then took 'step 2' as the earlier answer's second step and stayed on the same layer and motion: 'Shake Control's Rotation expression gives each of the three hammer hits its own tilt: a quarter of a degree… half… three quarters'. It used the read as the truth, giving the 0.59° peak near 2.57 s rather than the earlier 0.75°, did not recap the whole earlier answer, and used no wrapper label or 'earlier answer' phrasing."
+            }
+          ],
+          "cost": 0.18008359999999998,
+          "session_id": "9ec2c579-2fe9-4353-a638-1416edfcb322",
+          "answer_calls": 0,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Earlier question and answer, as shown in the panel:\nQuestion: Make the rock shake from where the hammer hits.\nAnswer: In Comp 1, rock.png rides on Shake Control, a null moved by expressions:\n- All three hits are the same size.\n- Rotation moves the rock about 9 px at most, gone in about 1/3 s.\n- The turn centers on the rock, where Shake Control sits.\nSteps:\n1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet. (layer: Shake Control)\n2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet. (layer: Shake Control)\n3. Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. (layer: Shake Control)\n4. Play it back and watch the turn.\nClosing: Try them, or want to go deeper on step 3 with *Set the pivot*?\nFollow-up: What about step 2?\nTOOL CALL describe_layers {\"layers\":[\"Shake Control\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Comp 1\",\"time\":3.403},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"fine\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":25,\"layer\":\"Shake Control\",\"kind\":\"null\",\"class\":\"null\",\"own_keys\":[],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":13,\"effects\":[],\"expressions\":[{\"property\":\"Position\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":12.147,\"max_at\":1.502,\"units\":\"px\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Position\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Position + shared array)\\namps = [6,12,20];   // amplitude in pixels\\nfreq = 8;  // shakes per second\\ndecays = [1,4,10];  // how quickly it settles\\n\\n// Times of hammer hits (seconds)\\nimpacts = [0.5, 1.5, 2.5];\\n\\noffset = [0,0];\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[1];\\n\\t  decay=decays[1];\\n    offset += [Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp,\\n               Math.cos(freq*t*2*Math.PI)/Math.exp(decay*t)*amp];\\n  }\\n}\\n\\nvalue + offset\\n\",\"cut_short\":false,\"full_length\":530,\"values\":{\"base\":[960,540,0],\"after\":[960.326,540.047,0],\"time\":3.403},\"refs\":[]},{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"builds_on\",\"moves\":{\"varies\":true,\"max_offset\":0.589,\"max_at\":2.569,\"units\":\"degrees\",\"sampled_every\":0.033,\"sweep\":\"fine\"},\"display_path\":\"Transform › Rotation\",\"keys\":0,\"text\":\"// Rock shake with multiple impacts (Rotation + shared array)\\namps = [.25,.5,.75];    // amplitude in degrees\\nfreq = 10;\\ndecay = 3;\\n\\n// Same impact times as Position\\nimpacts = [0.5, 1.5, 2.5];\\n\\nrot = 0;\\n\\nfor (i = 0; i < impacts.length; i++){\\n  t = time - impacts[i];\\n  if (t >= 0){\\n\\t  amp=amps[i];\\n    rot += Math.sin(freq*t*2*Math.PI)/Math.exp(decay*t)*amp;\\n  }\\n}\\n\\nvalue + rot\\n\",\"cut_short\":false,\"full_length\":378,\"values\":{\"base\":0,\"after\":0.011,\"time\":3.403},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE: Shake Control's Rotation expression gives each of the three hammer hits its own tilt: a quarter of a degree on the first, half a degree on the second and three quarters on the third. Each tilt wobbles about 10 times a second and fades out, and the turn peaks at about 0.59° near 2.57 s.\n\nSo step 2 is just to open Shake Control's Rotation expression and look at those three amounts. Changing them isn't something I teach yet.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

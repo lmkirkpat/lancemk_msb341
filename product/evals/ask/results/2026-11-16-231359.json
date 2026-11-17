@@ -1,0 +1,204 @@
+{
+  "run_at": "2026-11-17T06:13:59.519Z",
+  "options": {
+    "only": "15",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "waive": [
+      "answer_prose_empty"
+    ],
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.21,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "15-single-and-hold-keys",
+      "title": "One key (set, not animated) and hold keys (a jump): Logo's single Scale key and Cursor's holds are each said as what they are",
+      "covers": [
+        "EE-4",
+        "FR-010",
+        "A10"
+      ],
+      "hash": "9ab6c247698a78cf1ca439019a858704f34bfee9a0b3443daa77fd796ef33189",
+      "pass": true,
+      "passes": 1,
+      "runs": [
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "(waived) said \"In Mentor Practice, both problems come from each layer's own keyframes\" next to the answer",
+              "waived": true
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer or describe)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_starts_with_action@1",
+              "pass": false,
+              "detail": "\"On Logo, move the playhead to where the scale-up s\" doesn't start with an action verb (the list is a guess)",
+              "warn": true
+            },
+            {
+              "check": "text:single_key_said",
+              "pass": true,
+              "detail": "all of turn 1: \"one key\""
+            },
+            {
+              "check": "text:hold_or_snap_said",
+              "pass": true,
+              "detail": "all of turn 1: \"Hold\""
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-KEY-SHAPES",
+              "pass": true,
+              "reason": "The answer says Logo's single key means \"its scale is set, not animated\" and that Cursor's Hold keys make it \"jump from one value to the next instead of fading\". Step 2 only offers a key-type change, conditioned on \"If you want Cursor to fade rather than blink\", and does not treat the hold as a slide to be eased."
+            }
+          ],
+          "cost": 0.2063744,
+          "session_id": "15b2ff50-106d-4a65-9e3d-e230931ac174",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Why doesn't the Logo scale up, and why does the Cursor snap on and off?\nTOOL CALL describe_layers {\"layers\":[\"Logo\",\"Cursor\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":{\"status\":\"not_read\",\"reason\":\"fixture\",\"coarse\":\"read\"},\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"expression_on\":true}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\",\"fine\":{\"status\":\"not_read\",\"reason\":\"fixture\"}}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"},{\"layer_index\":6,\"layer\":\"Cursor\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Opacity\",\"keys\":6,\"key_types\":\"all_held\"}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE (in an answer turn this is a slip; the learner sees only the answer): In Mentor Practice, both problems come from each layer's own keyframes.\n\n**Logo:** Scale has only one keyframe. That sets a size but doesn't animate it, because there's no second value to grow to. To fix it, move the playhead to where the scale-up should end and type a larger Scale value to add a second keyframe. Adding keyframes isn't something I teach yet.\n\n**Cursor:** Opacity has six keyframes, and all of them are Hold keyframes. A Hold keyframe keeps its value until the next one and then jumps, which is why it blinks on and off. If you want it to fade instead, select its Opacity keyframes, right-click one, choose Keyframe Interpolation, and set Temporal Interpolation to Linear or Bezier. If you meant it to blink, it already does.\n\nThen play it back and watch both layers.\n\nYou can try these, ask about either one, or open *Key types* from the Skills tab to learn more about the Cursor fix.\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, both come from the layers' own keys:\n- Logo has just one Scale key, so its scale is set, not animated: there's no second value for it to grow to.\n- Cursor's Opacity has 6 keys, all of them Hold keys, so it jumps from one value to the next instead of fading.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. On Logo, move the playhead to where the scale-up should end, then type a larger Scale value to add a second key. Not something I teach yet.  [no tag: not taught yet; layer: Logo]\n2. If you want Cursor to fade rather than blink, select its Opacity keys, right-click one, choose Keyframe Interpolation, and set Temporal Interpolation to Linear or Bezier.  [tag: Key types; layer: Cursor]\n3. Play it back and watch both layers.  [no tag]\n\nCLOSING OFFER: Try them, or want to go deeper on step 2 with *Key types*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 127\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

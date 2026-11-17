@@ -1,0 +1,204 @@
+{
+  "run_at": "2026-11-17T06:21:14.751Z",
+  "options": {
+    "only": "13",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.13,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "13-expression-over-keys",
+      "title": "Keys and an enabled expression on one property (Logo's Rotation): both said; the keys are not edited as if they drove it",
+      "covers": [
+        "EE-4",
+        "FR-010",
+        "A1"
+      ],
+      "hash": "7a5be64061966a01c3d2346959c3ed072adc9d6da81ecd2bc5469bc9d6f1cb35",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": false,
+              "detail": "said \"In Mentor Practice, Logo's spin comes from an expression on its Rotati\" next to the answer"
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "2 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "2 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_starts_with_action@1",
+              "pass": false,
+              "detail": "\"Twirl open Logo's Transform, open the Rotation exp\" doesn't start with an action verb (the list is a guess)",
+              "warn": true
+            },
+            {
+              "check": "no_keyframe_skills@1",
+              "pass": true,
+              "detail": "none"
+            },
+            {
+              "check": "text:says_expression",
+              "pass": true,
+              "detail": "all of turn 1: \"expression\""
+            },
+            {
+              "check": "text:says_keys",
+              "pass": true,
+              "detail": "all of turn 1: \"keyframes\""
+            }
+          ],
+          "rubric": [],
+          "cost": 0.1300928,
+          "session_id": "7d82be79-d599-49e2-acf5-14d10c7d4380",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make the Logo's spin ease out.\nTOOL CALL describe_layers {\"layers\":[\"Logo\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":{\"status\":\"not_read\",\"reason\":\"fixture\",\"coarse\":\"read\"},\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"expression_on\":true}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":false,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\",\"fine\":{\"status\":\"not_read\",\"reason\":\"fixture\"}}}],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nTOOL CALL describe_layers {\"layers\":[\"Logo\"],\"detail\":true}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":{\"status\":\"not_read\",\"reason\":\"fixture\",\"coarse\":\"read\"},\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":7,\"layer\":\"Logo\",\"kind\":\"shape\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Scale\",\"display_path\":\"Transform › Scale\",\"keys\":1,\"key_types\":\"single_key\"},{\"property\":\"Rotation\",\"display_path\":\"Transform › Rotation\",\"keys\":2,\"key_types\":\"none_held\",\"expression_on\":true}],\"locked\":false,\"three_d\":false,\"parents\":[],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[{\"property\":\"Rotation\",\"group\":\"transform\",\"on\":true,\"error\":null,\"builds_on\":\"sets_own\",\"moves\":{\"varies\":true,\"max_offset\":140,\"max_at\":7.667,\"units\":\"degrees\",\"sampled_every\":0.333,\"sweep\":\"coarse\",\"fine\":{\"status\":\"not_read\",\"reason\":\"fixture\"}},\"display_path\":\"Transform › Rotation\",\"keys\":2,\"text\":\"time * 30\",\"cut_short\":false,\"full_length\":9,\"values\":{\"base\":0,\"after\":0,\"time\":0},\"refs\":[]}],\"links_in\":{\"status\":\"read\",\"links\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE (in an answer turn this is a slip; the learner sees only the answer): In Mentor Practice, Logo's spin comes from an expression on its Rotation, not from its keyframes. The expression turns it at a steady 30° every second the whole time, so it never slows down. This check measured about 140° of turn at the most. While the expression is on, it sets Rotation by itself, so Logo's two Rotation keyframes don't do anything.\n\n1. Twirl open Logo's Transform, open the Rotation expression and look at it. It adds the same amount of turn every second and has nothing that slows it down near the end. Changing that isn't something I teach yet.\n2. Play it back and watch whether the spin keeps the same speed to the end.\n\nWant to try those, or ask about either step?\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Logo's spin comes from an expression on its own Rotation, not from its keys:\n- It turns at a steady 30° each second the whole time, reaching about 140° in this read, so it never slows down.\n- It sets Rotation by itself, which means Logo's two Rotation keys have no effect while it's on.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Twirl open Logo's Transform, open the Rotation expression and look at it: it adds the same amount of turn every second, with nothing that slows it near the end. Not something I teach yet.  [no tag: not taught yet; layer: Logo]\n2. Play it back and watch whether the spin keeps the same speed to the end.  [no tag]\n\nCLOSING OFFER: Want to try those, or ask about either step?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 114\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

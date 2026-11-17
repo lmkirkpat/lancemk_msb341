@@ -1,0 +1,219 @@
+{
+  "run_at": "2026-11-17T06:12:18.064Z",
+  "options": {
+    "only": "05",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "waive": [
+      "answer_prose_empty"
+    ],
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "not_run_on_runtime": [],
+  "cost_usd": 0.2,
+  "refusals": {
+    "answer_calls": 1,
+    "refused": 0,
+    "rate": 0,
+    "by_code": {},
+    "offer_not_ready": 0,
+    "by_case": {}
+  },
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "05-keyed-softer-one-offer",
+      "title": "A question inside one skill on a keyed layer (\"make Subtitle land softer\"): steps plus one offer of the speed graph, and no lesson starts",
+      "covers": [
+        "TD 17.7",
+        "FR-008",
+        "FR-016",
+        "FR-022"
+      ],
+      "hash": "b0d9380bf527445a2f87c97bd9913788995fff2a0159c665a53d3b8bf0b9f4e1",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_cant_see",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_undo",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_code",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_ask_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "no_project_change",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "no_lesson_started",
+              "pass": true,
+              "detail": "none started"
+            },
+            {
+              "check": "read_before_answer@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "record_skills_unchanged",
+              "pass": true,
+              "detail": "unchanged"
+            },
+            {
+              "check": "answer_prose_empty@1",
+              "pass": true,
+              "detail": "(waived) said \"In Mentor Practice, Subtitle moves on its own keyframes: 3 Position ke\" next to the answer",
+              "waived": true
+            },
+            {
+              "check": "answer_given@1",
+              "pass": true,
+              "detail": "kind answer"
+            },
+            {
+              "check": "kind@1",
+              "pass": true,
+              "detail": "kind was answer (wanted answer)"
+            },
+            {
+              "check": "steps_one_to_four@1",
+              "pass": true,
+              "detail": "3 steps"
+            },
+            {
+              "check": "steps_count@1",
+              "pass": true,
+              "detail": "3 steps (wanted 1 to 4)"
+            },
+            {
+              "check": "offers_valid@1",
+              "pass": true,
+              "detail": "none on B1"
+            },
+            {
+              "check": "runtime_field@1",
+              "pass": true,
+              "detail": "reply runtime was b1"
+            },
+            {
+              "check": "closing_offer@1",
+              "pass": true,
+              "detail": "1 sentence(s)"
+            },
+            {
+              "check": "first_line_names_comp@1",
+              "pass": true,
+              "detail": "names Mentor Practice"
+            },
+            {
+              "check": "no_step_list_in_prose@1",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "step_skills_known@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_layers_real@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "not_taught_marked@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "step_skills_include@1",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "text:offer_names_speed_graph",
+              "pass": true,
+              "detail": "offer of turn 1: \"Speed graph\""
+            },
+            {
+              "check": "text:no_review",
+              "pass": true,
+              "detail": "all of turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-ONE-IDEA",
+              "pass": true,
+              "reason": "The answer gives the source and the assumption, three steps, and one closing question (\"Want to try these, or go deeper with *Easing* or the *Speed graph*?\") naming two skills that are both step tags; at 137 words it has no greeting, recap, praise or second question."
+            },
+            {
+              "item": "R-STEPS-ACTIONABLE",
+              "pass": true,
+              "reason": "Each step starts with an action on a named layer or property in After Effects' terms: select Subtitle's last Position keyframe and apply Easy Ease In, open the Graph Editor and drag the handle, play back and check CTRL's keys; there are three steps."
+            },
+            {
+              "item": "R-OFFER-FITS",
+              "pass": false,
+              "reason": "The question sits inside one skill, but the closing offer names two skills (\"go deeper with *Easing* or the *Speed graph*\") instead of exactly one, which is two offers for one idea."
+            }
+          ],
+          "cost": 0.20288480000000003,
+          "session_id": "22230e76-3f31-4364-9e4e-ddcc46b35892",
+          "answer_calls": 1,
+          "refusals": [],
+          "refusals_by_code": {},
+          "transcript": "### Turn 1: the open comp is readable\nLEARNER: Make Subtitle land softer.\nTOOL CALL describe_layers {\"layers\":[\"Subtitle\"]}\nTOOL RESULT (ok): {\"comp\":{\"name\":\"Mentor Practice\",\"time\":0},\"read\":{\"expressions\":\"all\",\"links\":\"read\",\"sweeps\":\"coarse\",\"shifts\":\"read\",\"own_keys\":\"read\",\"switches\":\"read\",\"precomps\":{\"status\":\"not_read\",\"reason\":\"phase_2\"}},\"layers\":[{\"layer_index\":2,\"layer\":\"Subtitle\",\"kind\":\"text\",\"class\":\"renders\",\"own_keys\":[{\"property\":\"Position\",\"keys\":3,\"key_types\":\"none_held\"},{\"property\":\"Opacity\",\"keys\":2,\"key_types\":\"none_held\"}],\"locked\":false,\"three_d\":false,\"parents\":[{\"layer_index\":3,\"layer\":\"CTRL\",\"class\":\"null\",\"moves_children\":true,\"moves_by\":\"keys\",\"expressions\":[]}],\"shifts\":[],\"children\":0,\"effects\":[],\"expressions\":[],\"links_in\":{\"count\":0,\"first\":[],\"unresolved_in_comp\":0},\"refs_out\":0,\"precomp\":\"not_a_precomp\"}]}\nMENTOR PROSE (in an answer turn this is a slip; the learner sees only the answer): In Mentor Practice, Subtitle moves on its own keyframes: 3 Position keyframes and 2 Opacity keyframes, none of them hold keyframes. It's also parented to CTRL, a null that has its own keyframes, so some of the motion may come from CTRL. I haven't looked at CTRL's keyframes. I'm taking \"land\" to mean Subtitle's movement as it reaches its last Position keyframe.\n\n1. Select Subtitle's last Position keyframe and choose Animation > Keyframe Assistant > Easy Ease In, so it slows down as it arrives. (*Easing*)\n2. Open the Graph Editor, switch to the speed graph, and drag that last keyframe's handle further out to make the slowdown longer. (*Speed graph*)\n3. Play it back and watch the landing. If it still stops hard, check whether CTRL's keyframes are moving it at that moment.\n\nWill you try these, or would you like to go deeper with *Easing* or the *Speed graph*?\nANSWER (kind: answer; what the learner sees, rebuilt from the answer call)\nIn Mentor Practice, Subtitle moves on its own keys: 3 Position keys and 2 Opacity keys, none of them held.\n- It also rides on CTRL, a null moved by keys, so part of the motion may come from there. I didn't read CTRL's keys.\n- I'm assuming that by landing you mean the Position move arriving at its last key.\n\nSTEPS (drawn by the panel from step data, numbered, with each tag)\n1. Select Subtitle's last Position keyframe and choose Animation > Keyframe Assistant > Easy Ease In so it slows down as it arrives.  [tag: Easing; layer: Subtitle]\n2. Open the Graph Editor, switch to the Speed graph, and drag that last key's handle out further to make the slowdown longer.  [tag: Speed graph; layer: Subtitle]\n3. Play it back and watch the landing. If it still stops hard, check whether CTRL's own keys are moving it at that moment.  [no tag]\n\nCLOSING OFFER: Want to try these, or go deeper with *Easing* or the *Speed graph*?\n\nGO DEEPER BUTTONS: none (B1 never offers; judge the closing offer's wording and the tags only)\nWORDS: 137\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}
