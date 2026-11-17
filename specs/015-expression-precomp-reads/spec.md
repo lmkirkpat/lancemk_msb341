@@ -5,7 +5,7 @@
 **Created**: 2026-11-14
 
 **Status**: **Phase 1 shippable (2026-11-16, T040)**: spec 014 can build on it. Phase 2 (US4) not
-started (next: T041). Phase 1 follow-ups: FR-004a (OQ-10) built by T064 on `014-mentor` (`2440c62`, SC-003a met, Amendment 8); FR-004b (Amendment 7) open: T065. Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3). Phase 1's results are in Success Criteria › Phase 1 results.
+started (next: T041). Phase 1 follow-ups: FR-004a (OQ-10) built by T064 on `014-mentor` (`2440c62`, SC-003a met, Amendment 8); FR-004b (Amendment 7) open: T065. FR-004a's Amendment 9 corrections (non-uniform scale, the named layer's box, `switch_not_read`) open: T066. Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3). Phase 1's results are in Success Criteria › Phase 1 results.
 
 **Amendment 1 (2026-11-14, Phase 0 live checks, T008; approved by the builder 2026-11-14 with OQ-8 as recommended):** evidence in
 `discovery/usage-notes/expression-reads.md` (session 1) and the corrected finding 4 in
@@ -94,6 +94,21 @@ for the title (6.84 px, worked from the reading-time position, which R15's own r
 corrected. SC-003a is met (Phase 1 results). OQ-12 answered as recommended; the key-types names in
 FR-004b are kept. Changed here: Status, SC-003a, Phase 1 results (SC-003a row), OQ-12; research R15.
 No requirement or approved decision changes.
+
+**Amendment 9 (2026-11-16, from spec 014's reviews T034 and T035; relayed by the cockpit):** add only.
+The code on `014-mentor` is right and research R15 was wrong in three places, so FR-004a's `null`
+reasons grow to match it. (1) **Rotation under a non-uniform scale:** R15 said the sign of a Rotation
+peak doesn't change the distance and that any Rotation above the source layer is exempt. Neither holds
+when a layer above the Rotation source has non-uniform scale: the peak's direction is then needed
+(`direction_unknown` without it), and Rotation above the source counts toward `chain_moves`. A Position
+source doesn't depend on its own layer's Rotation, since Position applies in the parent's space.
+(2) **The named layer's box can change:** a text or shape layer whose box changes over time (keys or a
+varying expression outside Transform, such as Rectangle Size, Path, Source Text or a text animator, or
+a sampled box that differs between samples) is `chain_moves`. (3) **New reason `switch_not_read`:** a 3D
+or Auto-Orient switch in the chain that couldn't be read (anything but true or false) returns `null`
+with this reason, never treated as off. Changed here: Status, FR-004a; research R15; data model § 6;
+`contracts/describe-layers.md`; tasks T066 (new, cockpit-numbered). SC-003a's figures don't change (no
+layer above Shake Control). No approved decision changes.
 
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
@@ -398,6 +413,14 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
     direction is needed but wasn't recorded (a Scale source, or a Position or Anchor Point source
     through a non-uniform scale, on a snapshot without the sweep's peak value; `direction_unknown`); a
     scale of 0 (`singular`).
+    *Added 2026-11-16 (Amendment 9):* a Rotation source with non-uniform scale on any layer above it
+    also needs the peak's direction (`direction_unknown` without it), and Rotation above the source then
+    counts toward `chain_moves`. A named text or shape layer whose box changes over time (keys or a
+    varying active expression outside Transform, such as Rectangle Size, Path, Source Text or a text
+    animator, or a sampled box that differs between samples) is `chain_moves`. A 3D or Auto-Orient
+    switch in the chain that couldn't be read (anything but true or false) is `switch_not_read`, never
+    taken as off. A Position source doesn't depend on its own layer's Rotation (Position applies in the
+    parent's space).
   - **Scope:** only layers named in `layers` (not a whole-comp summary, which says the read as
     `not_read: "not_asked"`), and only parent-chain expressions, as approved. Opacity and non-transform
     expressions get no entry (they don't move the box). Each expression is converted on its own; two

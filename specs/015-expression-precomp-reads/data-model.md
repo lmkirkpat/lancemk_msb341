@@ -131,7 +131,10 @@ expression's `text` (cut at 1,500), `error`, every link, and every reference.
 measured_on: "box" } | { from_layer_index, from_layer, property, shift_px: null, reason }]`, one per
 active parent-chain transform expression that moves the layer (Opacity excluded). `shift_px` is
 rounded to 0.01 px. `reason` is one of `three_d`, `auto_orient`, `no_rect`, `not_sampled`,
-`no_fine_sweep`, `chain_moves`, `direction_unknown`, `singular`. An empty list means the layer has no
+`no_fine_sweep`, `chain_moves`, `direction_unknown`, `singular`, and (*added 2026-11-16, spec
+Amendment 9*) `switch_not_read`: a 3D or Auto-Orient switch in the chain read as anything but true or
+false, never taken as off. `chain_moves` also covers a named text or shape layer whose box changes over
+time, and `direction_unknown` a Rotation source under non-uniform scale (research R15). An empty list means the layer has no
 such parent expression, and is only given when the motion-sources map read expressions (`read.expressions`
 is `"all"`); otherwise `shifts` is `{ status: "not_read", reason: "older_snapshot" }`. Layers not
 named get no `shifts`, and the reply's `read.shifts` is `"read"` or `{ status: "not_read", reason:
