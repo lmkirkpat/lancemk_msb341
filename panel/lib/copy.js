@@ -160,7 +160,6 @@ const COPY = {
     didnt_start: "Didn't start",
     on: (skill, focus) => `${skill} on ${focus}`,
     check_tag: (n) => `check ${n}`,
-    last_check: "last check",
     nothing_new: "This warm-up is still due. Open another comp and try again, or pick another skill.",
     ae_lost: { title: "Can't connect to After Effects.", body: `Make sure it's open and not rendering, with no dialog showing. ${STILL_OPEN}` },
   },

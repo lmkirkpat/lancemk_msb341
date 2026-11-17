@@ -6,7 +6,6 @@
 const { COPY } = require("./copy.js");
 const { escapeHtml: esc, renderMentorText } = require("./text.js");
 const { stageOf } = require("./lesson.js");
-const { shortDate } = require("./memory.js");
 const { visibleKinds } = require("./requests.js");
 const { rowsOf } = require("./checklist/index.js");
 const { listCollapsed } = require("./view-state.js");
@@ -97,9 +96,12 @@ function quietLine(m) {
     const v = m.saved_lesson.lesson || {};
     const skill = m.names[v.skill] || COPY.home.a_skill;
     const title = COPY.quiet.pick_up(skill, focusText(v));
+    // MU home-inprogress: "Pick up Easing on Title" over "Mentor Practice · 1 of 3 yours eased". The
+    // comp is the name the lesson's own snapshot returned (saved with the lesson), never a read.
     const l = v.check_list;
-    const sub = [l && l.summary, l && l.checked_at ? `${COPY.lesson.last_check} ${checkClock(l.checked_at)}` : null].filter(Boolean).join(" · ");
-    const full = [title, sub, off].filter(Boolean).join(". ");
+    const parts = [typeof v.comp === "string" && v.comp ? v.comp : null, l && l.summary].filter(Boolean);
+    const sub = parts.join(" · ");
+    const full = [title, parts.join(", "), off].filter(Boolean).join(". ");
     const attrs = off ? `aria-disabled="true" aria-describedby="quiet-why"` : `data-action="continue"`;
     return `<div class="quietwrap"><button type="button" class="qline" ${attrs} title="${esc(full)}" aria-label="${esc(full)}"><span class="ql">${esc(title)}${sub ? `<small>${esc(sub)}</small>` : ""}</span>${chev}</button>`
       + `${off ? `<p class="aside meta" id="quiet-why">${esc(off)}</p>` : ""}<p class="aside meta">${esc(COPY.quiet.not_finished)} ${btn(COPY.home.cutoff.set_aside, "set_aside", "quiet")}</p></div>`;
@@ -123,13 +125,6 @@ function lessonTitle(m, v) {
   const name = m.names[v.skill] || COPY.home.a_skill;
   const focus = focusText(v);
   return focus ? COPY.lesson.on(name, focus) : name;
-}
-
-function checkClock(iso) {
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return "";
-  const h = d.getHours();
-  return `${shortDate(iso)}, ${h % 12 || 12}:${String(d.getMinutes()).padStart(2, "0")} ${h < 12 ? "am" : "pm"}`;
 }
 
 function homeBody(m) {

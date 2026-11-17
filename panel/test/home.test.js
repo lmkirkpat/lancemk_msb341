@@ -133,6 +133,29 @@ test("home-inprogress: the quiet line Pick up [skill] on [layer], with Set it as
   assert.equal(v.includes('data-action="find_next"'), false, "one quiet line, not two");
 });
 
+test("T035 item 6: Pick up names the comp, as MU draws it: \"Pick up Easing on Title\" over \"Mentor Practice · 1 of 3 yours eased\"", async () => {
+  const saved = { version: 2, claude_session_id: "s1", bridge_started: CONNECTED.started, ended: false, started_at: "x", updated_at: "x", skill: "ease-mentor", lesson: { skill: "easing.basic", focus: ["Title"], comp: "Mentor Practice", snapshots: 1, checks: 1, replied: true, passed: false, labels: {}, check_list: { source: "check", summary: "1 of 3 yours eased", sections: [], outside: [], stale: null, stale_kind: null, checked_at: "2026-11-09T11:00:00.000Z" } }, messages: [] };
+  const h = await ready({ saved, memory: { status: "ok", record: LESSON } });
+  assert.equal(st(h), "home-inprogress");
+  const v = html(h);
+  assert.ok(v.includes('<span class="ql">Pick up Easing on Title<small>Mentor Practice · 1 of 3 yours eased</small></span>'), "MU's two lines, nothing else");
+  assert.match(v, /title="Pick up Easing on Title\. Mentor Practice, 1 of 3 yours eased" aria-label="Pick up Easing on Title\. Mentor Practice, 1 of 3 yours eased"/, "MU's tooltip and accessible name");
+});
+
+test("T035 item 6: the comp comes from the lesson's own snapshot reply and is saved with it, so a reopened panel names it", async () => {
+  const h = await ready({ memory: { status: "ok", record: LESSON } });
+  h.app.act("start");
+  const seg = (id, a, b) => ({ id, from_time: a, to_time: b, state: "linear" });
+  h.adapter().emit("tool_result", { name: "snapshot_project", ok: true, text: "", images: [], json: { lesson: "new", comp: { name: "Mentor Practice", duration: 5 }, focus: ["Title"], demo_target: "a", targets: ["a", "b"], findings: [{ layer: "Title", property: "Position", segments: [seg("a", 0.5, 1.5), seg("b", 1.5, 3)] }] } });
+  h.adapter().emit("turn_end", { ok: true, cost_usd: 0, kind: "start" });
+  assert.equal(h.saved.current.lesson.comp, "Mentor Practice");
+  h.app.shutdown();
+  const again = await ready({ saved: h.saved.current, memory: { status: "ok", record: LESSON } });
+  assert.equal(st(again), "home-inprogress");
+  assert.ok(words(again).includes("Pick up Easing on Title"));
+  assert.match(html(again), /<small>Mentor Practice( · [^<]+)?<\/small>/);
+});
+
 test("home-lessonopen: Ask paused with the reason, the line goes back to the lesson, End lesson under it", async () => {
   const h = await ready();
   h.app.act("start");
