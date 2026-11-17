@@ -422,6 +422,8 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   Comp 1 (014 T037's situation 1 check, after its `fixtures/build.mjs` re-run) and 014's three sessions.
   It doesn't block 014 T008 to T016 or phase 2. No eval case: no skill lists `describe_layers` in this
   spec, and the ask set that reads the field is spec 014's.
+  **Sequencing decided 2026-11-16 (builder):** folded into spec 014's mentor worktree (014 T008 to T016),
+  so one skill-builder owns the new field and 014's reader of it.
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script

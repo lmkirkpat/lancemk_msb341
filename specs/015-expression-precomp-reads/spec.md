@@ -804,6 +804,8 @@ motion) belong to spec 014's set and to pivot K1, not here.
   can't see. **Recommended: measure on the box for now, say so in the field (FR-004a), and ask the
   curriculum designer (through the cockpit) whether § 5.1a should say "its box's farthest edge" until
   visible bounds exist.** Doesn't block T064.
+  **Answered 2026-11-16 by the builder, as recommended:** measure on the box for now; the curriculum
+  designer words § 5.1a to match until visible bounds exist.
 
 ### For the curriculum designer (hand-off, not edits)
 
