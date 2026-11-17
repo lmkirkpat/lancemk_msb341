@@ -96,3 +96,7 @@ test("eval fix (a): the turn-over rule closes the answer section, after the work
   assert.ok(rule > answer.indexOf("### The worked answer"), "near the end of the answer section");
   assert.match(squash(answer.slice(rule)), /end it without writing anything, not even a sentence saying the answer is shown\./);
 });
+
+test("eval fixes (c) and (d): the outside and how-to lines", () => {
+  assert.match(squash(SKILL), /An outside part names no tool, menu, preset or setting, only that it's outside and what you do cover\./);
+});

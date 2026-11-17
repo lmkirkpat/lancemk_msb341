@@ -98,6 +98,9 @@ goal like "make it feel more natural" with keyed motion on one layer and an expr
 question is one sentence naming the choices from the read (up to three layers) and carries nothing
 else. After any reply, even a vague one, give the answer with the assumption stated.
 
+An outside part names no tool, menu, preset or setting, only that it's outside and what you do
+cover.
+
 ### Fields
 
 - **`explanation`:** what's making it happen now. The first line names the comp you read ("In
