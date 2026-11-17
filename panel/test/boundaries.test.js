@@ -33,7 +33,7 @@ const WRITES = /\bfs\.(writeFileSync|appendFileSync|renameSync|unlinkSync|rmSync
 const ALLOWED_WRITES = {
   [path.join("lib", "loaded-stamp.js")]: ["renameSync", "unlinkSync", "writeFileSync"],
   [path.join("lib", "panel-session.js")]: ["mkdirSync", "mkdirSync", "renameSync", "unlinkSync", "writeFileSync", "writeFileSync"],
-  [path.join("lib", "runtime.js")]: ["mkdirSync", "rmSync", "rmSync", "symlinkSync", "writeFileSync"],
+  [path.join("lib", "runtime.js")]: ["mkdirSync", "mkdirSync", "rmSync", "rmSync", "rmSync", "symlinkSync", "writeFileSync", "writeFileSync", "writeFileSync"], // T105 adds the hook script and settings.json
   [path.join("lib", "turns.js")]: ["appendFileSync", "mkdirSync"],
 };
 

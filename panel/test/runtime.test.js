@@ -62,7 +62,9 @@ test("every *-mentor skill is linked, found by pattern, and nothing else from .c
 
   ensureRuntime(t.repo, t.dir);
   assert.deepEqual(runtimeSkills(t.dir), ["ease-mentor", "next-mentor", "speed-graph-mentor"]);
-  assert.deepEqual(fs.readdirSync(path.join(t.dir, ".claude")), ["skills"], "no agents, hooks or settings");
+  assert.deepEqual(fs.readdirSync(path.join(t.dir, ".claude")).sort(), ["hooks", "settings.json", "skills"], "no agents; hooks and settings are the panel's own (T105)");
+  assert.deepEqual(fs.readdirSync(path.join(t.dir, ".claude", "hooks")), ["end-turn-after-answer.js"], "none of the repo's hooks");
+  assert.notEqual(fs.readFileSync(path.join(t.dir, ".claude", "settings.json"), "utf8"), "{}\n", "not the repo's settings");
   assert.deepEqual(fs.readdirSync(t.dir).sort(), [".claude", ".mcp.json"]);
   assert.equal(fs.readFileSync(path.join(t.dir, ".claude", "skills", "next-mentor", "SKILL.md"), "utf8"), "# next-mentor\n");
   assert.equal(fs.readlinkSync(path.join(t.dir, ".claude", "skills", "speed-graph-mentor")), path.join(t.repo, ".claude", "skills", "speed-graph-mentor"));
@@ -123,4 +125,83 @@ test("spec 014 R4: B1's folder sets no runtime flag, even if the repo's server e
   ensureRuntime(t.repo, t.dir);
   const b = JSON.parse(fs.readFileSync(path.join(t.dir, ".mcp.json"), "utf8")).mcpServers["ae-mentor"];
   assert.deepEqual(b.env, { AE_MENTOR_HOME: "/tmp/h" });
+});
+
+// ---------- spec 014 T105: the hook that ends the turn after an accepted give_answer (B1) ----------
+const { spawnSync } = require("child_process");
+const { answerAccepted, runtimeSettings, HOOK_FILE, ANSWER_TOOL } = require("../lib/runtime.js");
+
+// What Claude Code passed the hook in the live probe (2026-11-17, Claude Code 2.1.326): an MCP tool's
+// tool_response is its content blocks.
+const REPLY = { kind: "describe", comp: "Intro", explanation: "In Intro, Window Matte is a solid used as a matte.", steps: [], offered_skills: [], closing_offer: "Want to ask how its shape shows up?", runtime: "b1", tags: {} };
+const hookInput = (over) => Object.assign({ session_id: "s", hook_event_name: "PostToolUse", tool_name: ANSWER_TOOL, tool_input: {}, tool_response: [{ type: "text", text: JSON.stringify(REPLY, null, 2) }], tool_use_id: "toolu_1" }, over);
+
+test("T105: an accepted give_answer ends the turn; a refusal, another tool or anything odd doesn't", () => {
+  assert.equal(ANSWER_TOOL, "mcp__ae-mentor__give_answer");
+  assert.equal(answerAccepted(hookInput()), true);
+  for (const kind of ["answer", "describe", "howto", "clarify", "outside", "no_comp"]) assert.equal(answerAccepted(hookInput({ tool_response: [{ type: "text", text: JSON.stringify(Object.assign({}, REPLY, { kind })) }] })), true, kind);
+  assert.equal(answerAccepted(hookInput({ tool_response: { content: [{ type: "text", text: JSON.stringify(REPLY) }] } })), true, "the result object shape too");
+  const no = {
+    "a refusal (the server's error text)": { tool_response: [{ type: "text", text: "KIND_MISMATCH: An answer has one to four steps." }] },
+    "a refusal marked as an error": { tool_response: { content: [{ type: "text", text: JSON.stringify(REPLY) }], isError: true } },
+    "a lesson tool": { tool_name: "mcp__ae-mentor__snapshot_project" },
+    "describe_layers": { tool_name: "mcp__ae-mentor__describe_layers" },
+    "a lookalike name": { tool_name: "mcp__ae-mentor__give_answer_x" },
+    "an unknown kind": { tool_response: [{ type: "text", text: JSON.stringify(Object.assign({}, REPLY, { kind: "lesson" })) }] },
+    "no explanation": { tool_response: [{ type: "text", text: JSON.stringify(Object.assign({}, REPLY, { explanation: 3 })) }] },
+    "two text blocks": { tool_response: [{ type: "text", text: JSON.stringify(REPLY) }, { type: "text", text: "{}" }] },
+    "no response": { tool_response: undefined },
+    "a string response": { tool_response: JSON.stringify(REPLY) },
+  };
+  for (const [why, over] of Object.entries(no)) assert.equal(answerAccepted(hookInput(over)), false, why);
+  assert.equal(answerAccepted(null), false);
+});
+
+test("T105: the runtime folder's settings hold only this hook, matched to give_answer alone, by absolute path", () => {
+  const t = repo();
+  ensureRuntime(t.repo, t.dir);
+  const script = path.join(t.dir, ".claude", "hooks", HOOK_FILE);
+  const settings = JSON.parse(fs.readFileSync(path.join(t.dir, ".claude", "settings.json"), "utf8"));
+  assert.deepEqual(settings, runtimeSettings(script));
+  assert.deepEqual(Object.keys(settings), ["hooks"], "no other setting");
+  assert.deepEqual(Object.keys(settings.hooks), ["PostToolUse"]);
+  const [entry] = settings.hooks.PostToolUse;
+  assert.equal(settings.hooks.PostToolUse.length, 1);
+  assert.equal(entry.hooks[0].command, `node ${JSON.stringify(script)}`);
+  const m = new RegExp(entry.matcher);
+  assert.equal(m.test("mcp__ae-mentor__give_answer"), true);
+  // Every lesson skill's tools, and the ask skill's others: none match (lessons never meet the hook).
+  for (const tool of ["snapshot_project", "set_ease", "diff_since_last", "record_lesson", "read_learner_record", "preview_frame", "recommend_next", "key_types_check", "speed_graph_demo", "offset_check", "anchor_snapshot", "null_parent_check", "describe_layers", "go_deeper", "note_said", "give_answer_x"]) {
+    assert.equal(m.test(`mcp__ae-mentor__${tool}`), false, tool);
+  }
+});
+
+function runHook(dir, input) {
+  return spawnSync(process.execPath, [path.join(dir, ".claude", "hooks", HOOK_FILE)], { input: typeof input === "string" ? input : JSON.stringify(input), encoding: "utf8" });
+}
+
+test("T105: the generated script, run as Claude Code runs it: {\"continue\": false} for an accepted answer, nothing otherwise, always exit 0", () => {
+  const t = repo();
+  ensureRuntime(t.repo, t.dir);
+  const ok = runHook(t.dir, hookInput());
+  assert.equal(ok.status, 0);
+  assert.deepEqual(JSON.parse(ok.stdout), { continue: false }, "no stopReason: nothing new to show (checked live: the result text stays empty)");
+  for (const input of [hookInput({ tool_response: [{ type: "text", text: "BAD_OFFER: Offer at most two skills." }] }), hookInput({ tool_name: "mcp__ae-mentor__describe_layers" }), "not json", ""]) {
+    const r = runHook(t.dir, input);
+    assert.equal(r.status, 0);
+    assert.equal(r.stdout, "", "a refusal lets the mentor try again");
+    assert.equal(r.stderr, "");
+  }
+});
+
+test("T105: rebuilt on every launch: a stray file in hooks/ goes, an edited script is rewritten", () => {
+  const t = repo();
+  ensureRuntime(t.repo, t.dir);
+  const hooks = path.join(t.dir, ".claude", "hooks");
+  fs.writeFileSync(path.join(hooks, "stray.js"), "x\n");
+  fs.writeFileSync(path.join(hooks, HOOK_FILE), "edited\n");
+  ensureRuntime(t.repo, t.dir);
+  assert.deepEqual(fs.readdirSync(hooks), [HOOK_FILE]);
+  assert.match(fs.readFileSync(path.join(hooks, HOOK_FILE), "utf8"), /function answerAccepted/);
+  assert.equal(fs.readdirSync(path.join(t.dir, ".claude", "skills")).includes("hooks"), false);
 });
