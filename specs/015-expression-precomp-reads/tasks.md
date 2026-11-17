@@ -400,7 +400,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   (40 noise, 3/3). The builder took it as met. **Open, to come back to:** reword R-SHOW-ME-AGAIN's Fail line to
   "numbers other than the learner's own gap" (EE); a key types line, a hint says what's off and where with
   no menu path; maybe a speed graph line, the record's `attempted` names only what the check saw (SB).
-- [ ] T064 (skill-builder) FR-004a, the footprint shift in comp pixels (spec OQ-10, Amendment 6; research
+- [x] T064 (skill-builder) FR-004a, the footprint shift in comp pixels (spec OQ-10, Amendment 6; research
   R15; data-model § 1 `max_value` and § 6 `shifts`; contracts/describe-layers.md). Cockpit-numbered
   2026-11-16, builder's go. New `mentor/lib/footprint-shift.mjs` on `comp-space.mjs`; `describe_layers`
   adds `shifts` to each named layer and `read.shifts`; `snapshot.jsx`'s fine sweep adds `max_value` (and
@@ -424,7 +424,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   spec, and the ask set that reads the field is spec 014's.
   **Sequencing decided 2026-11-16 (builder):** folded into spec 014's mentor worktree (014 T008 to T016),
   so one skill-builder owns the new field and 014's reader of it.
-- [ ] T065 (skill-builder) FR-004b, own keys and switches in `describe_layers` (spec Amendment 7, E32,
+- [x] T065 (skill-builder) FR-004b, own keys and switches in `describe_layers` (spec Amendment 7, E32,
   OQ-12; data-model § 6; contracts/describe-layers.md). Cockpit-numbered 2026-11-16, builder's choice.
   In `mentor/tools/comp-reads.mjs`, every layer entry gains `own_keys` (from the snapshot's
   `layers[].properties`: `property`, `keys`, `key_types`, `expression_on` when on; detail adds
@@ -444,7 +444,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   spec 014's ask cases 05 (a keyed layer), 13 (keys under an expression that's on), 14 (separated
   dimensions), 15 (a single key and hold keys) and 16 (a locked layer in a step), in
   `product/evals/ask/cases/`, before 014's B1 run (014 T037). No eval case here: the ask set is spec 014's.
-- [ ] T066 (skill-builder) FR-004a's corrections (spec Amendment 9, *added 2026-11-16* from 014's reviews
+- [x] T066 (skill-builder) FR-004a's corrections (spec Amendment 9, *added 2026-11-16* from 014's reviews
   T034 and T035; research R15 › Corrected; data-model § 6; contracts/describe-layers.md). Cockpit-numbered
   2026-11-16. In `mentor/lib/footprint-shift.mjs`: (1) a Rotation source with non-uniform scale on any
   layer above it needs `max_value` (`direction_unknown` without it), and Rotation above the source then

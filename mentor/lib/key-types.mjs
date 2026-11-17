@@ -38,7 +38,7 @@ const isHeld = (from) => from.out_type === "hold";
 // A pair that snaps: held at its first key, or a mixed pair (hold on the second key's in side), which
 // After Effects also snaps, at its first key (L-1). For the should-move and extra-holds lists (H-5,
 // overlap audit OA-7 and OA-8); the focus check keeps its own wrong-side verdict.
-const snaps = (from, to) => isHeld(from) || to.in_type === "hold";
+export const snaps = (from, to) => isHeld(from) || to.in_type === "hold";
 // Spec 004 FR-013 and spec 009 SR-3: with reads R1 known, the visibility class decides (a layer the
 // learner hid is out, a track matte is in whatever its eye, a null stays out); without them, the eye
 // switch as before.

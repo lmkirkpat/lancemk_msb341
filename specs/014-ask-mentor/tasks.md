@@ -78,14 +78,14 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 ## Mentor foundational (skill-builder; blocks US1)
 
-- [ ] T009 (skill-builder) `mentor/lib/runtime-flag.mjs`: `runtime()` returns `"a"` only when
+- [x] T009 (skill-builder) `mentor/lib/runtime-flag.mjs`: `runtime()` returns `"a"` only when
   `AE_MENTOR_RUNTIME` is `a`, else `"b1"` (research R4). Tests in `mentor/test/runtime-flag.test.mjs`.
-- [ ] T010 [P] (skill-builder) FR-021: add `short_name` to every skill in `mentor/curriculum/path.json` (MU ›
+- [x] T010 [P] (skill-builder) FR-021: add `short_name` to every skill in `mentor/curriculum/path.json` (MU ›
   Short skill tags) and `shortName(id)` in `mentor/lib/path.mjs`. Tests in `mentor/test/path.test.mjs`: all
   six, and a skill without one falls back to its full name.
-- [ ] T011 (skill-builder) `mentor/lib/session.mjs`: the `ask` block (data-model § 2): `saveAnswer`,
+- [x] T011 (skill-builder) `mentor/lib/session.mjs`: the `ask` block (data-model § 2): `saveAnswer`,
   `latestAnswer`, `askStartedAt`; an unreadable file behaves as today. Tests in `mentor/test/session-ask.test.mjs`.
-- [ ] T012 (skill-builder) `mentor/lib/ask-answer.mjs`: validate and normalize an asked result (research R3,
+- [x] T012 (skill-builder) `mentor/lib/ask-answer.mjs`: validate and normalize an asked result (research R3,
   data-model § 1, contracts/ask-tools.md), using spec 015's motion-sources map (015 T019) for K4. Tests in
   `mentor/test/ask-answer.test.mjs` on 015's Comp 1 capture: TD § 16's answer accepted (with PQ-5's untagged
   step 4); one refusal per R3 row; `describe` with no steps accepted; B1 returns `offered_skills: []`.
@@ -95,11 +95,11 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 **Goal:** `give_answer` and the `ask-mentor` skill on B1. **Independent test:** the ask set's phase 1 cases
 (T032) on B1, no panel.
 
-- [ ] T013 [US1] (skill-builder) `mentor/tools/ask.mjs` with `give_answer` (contracts/ask-tools.md; no record
+- [x] T013 [US1] (skill-builder) `mentor/tools/ask.mjs` with `give_answer` (contracts/ask-tools.md; no record
   write in this phase). Tests in `mentor/test/ask-tools.test.mjs`: reply shape; `comp` from `give_answer`'s own read (contracts/ask-tools.md step 1), never
   the input; `tags` from `path.json`; read-only (a fake bridge sees no write snippet); `NO_ACTIVE_COMP` from the
   read gives a valid `no_comp` answer.
-- [ ] T014 [US1] (skill-builder) `.claude/skills/ask-mentor/SKILL.md` (new; name `ask-mentor`, FR-057):
+- [x] T014 [US1] (skill-builder) `.claude/skills/ask-mentor/SKILL.md` (new; name `ask-mentor`, FR-057):
   `allowed-tools` = `describe_layers`, `preview_frame`, `give_answer`. Teaching from TD § 5, § 6 turns 1 to 3
   and 7, § 8 (read the named layers and their sources, summary first, detail for the moving layers), § 9,
   § 13, § 14; FR-001 to FR-020 except the offer's hand-over. The answer turn is one `give_answer` call and no
@@ -110,7 +110,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   the change in `bridge/UPSTREAM.md` › Changes. Test the cache logic in `bridge/test/comp-active.test.mjs` (new
   folder; Node built-ins, no CEP).~~ **Withdrawn 2026-11-16** with FR-047 (T001: a "no" is unreliable;
   `discovery/usage-notes/ask-build.md` › T001). Don't build; the bridge is unchanged.
-- [ ] T016 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; all
+- [x] T016 (skill-builder) Run `cd mentor && npm test` and `node --test .claude/hooks/test/*.test.mjs`; all
   pass. Note the counts in the hand-back.
 
 ## User Story 3: Home opens on a place to ask (P1) and the thread (panel-builder)
@@ -204,7 +204,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   snapshot result saved with the lesson, and no last-check time. Tests: the request byte for byte with and
   without steps, layers and closing offer; a `null` view; only the first send wrapped; Try again resends the
   same request; no bubble shows the wrapper; Pick up's comp from the saved snapshot. Panel suite passes.
-- [ ] T103 [P] (skill-builder) Add one line to `.claude/skills/ask-mentor/SKILL.md`: "If the message carries an
+- [x] T103 [P] (skill-builder) Add one line to `.claude/skills/ask-mentor/SKILL.md`: "If the message carries an
   earlier question and answer, treat the learner's text as a follow-up to it, and read the comp again before
   answering." Matches the wrapper's first line in contracts/panel-ask.md.
 - [ ] T104 [P] (eval-engineer) Ask case 18: a follow-up sent in the wrapper after a lesson changed the comp.

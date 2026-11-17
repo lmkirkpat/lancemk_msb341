@@ -380,3 +380,45 @@ export function recordReviewOffer(skill) {
 export function reviewOffers() {
   return recentOffers(read().review_offers);
 }
+
+// Spec 014 (data-model § 2): the latest answer from the ask mode, one per session file, written by
+// give_answer for answer, describe and howto. Additive: lessons, current and review_offers keep their
+// shapes, and no lesson reads it. `started_at` is the first ask's time in the session window and
+// stays until the window lapses (FR-032's test, phase 3). `entry_date` links the asked entry in the
+// record (phase 3); null until then. An unreadable file behaves as for every other reader here:
+// it's set aside and SESSION_UNREADABLE is thrown, and the next call starts fresh.
+const ASK_FIELDS = ["comp_id", "project", "comp", "kind", "steps", "offered_skills", "goal"];
+const inWindow = (iso, now) => typeof iso === "string" && Date.parse(iso) >= windowStart(now);
+
+export function saveAnswer(answer, { now = Date.now() } = {}) {
+  if (!answer || typeof answer !== "object") throw new Error("saveAnswer needs the accepted answer.");
+  const state = read();
+  const prev = state.ask && typeof state.ask === "object" ? state.ask : null;
+  const at = new Date(now).toISOString();
+  const ask = { at };
+  for (const k of ASK_FIELDS) ask[k] = answer[k] === undefined ? null : answer[k];
+  if (!isPlainData(ask)) throw new Error("The answer must be plain JSON data.");
+  ask.steps = Array.isArray(ask.steps) ? ask.steps : [];
+  ask.offered_skills = Array.isArray(ask.offered_skills) ? ask.offered_skills : [];
+  ask.entry_date = answer.entry_date === undefined ? null : answer.entry_date;
+  ask.started_at = prev && inWindow(prev.started_at, now) ? prev.started_at : at;
+  state.ask = structuredClone(ask);
+  write(state);
+  return ask;
+}
+
+// The session's latest answer, or null when there's none or it's older than the session window
+// (pass { any: true } for it whatever its age).
+export function latestAnswer({ now = Date.now(), any = false } = {}) {
+  const ask = read().ask;
+  if (!ask || typeof ask !== "object" || Array.isArray(ask)) return null;
+  if (!any && !inWindow(ask.at, now)) return null;
+  return structuredClone(ask);
+}
+
+// When the learner first asked in this session window, or null.
+export function askStartedAt({ now = Date.now() } = {}) {
+  const ask = read().ask;
+  if (!ask || typeof ask !== "object" || !inWindow(ask.started_at, now)) return null;
+  return ask.started_at;
+}

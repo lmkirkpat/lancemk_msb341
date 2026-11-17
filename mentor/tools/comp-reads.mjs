@@ -10,6 +10,8 @@
 import { MentorError, registerErrors } from "../errors.mjs";
 import { byIndex, layerInfo } from "../lib/layer-info.mjs";
 import { expressionReads, expressionsRead, linksIn, normalizeLineEnds, rawExpression, valuesAt } from "../lib/expressions.mjs";
+import { footprintShifts } from "../lib/footprint-shift.mjs";
+import { snaps } from "../lib/key-types.mjs";
 import { motionSources } from "../lib/motion-sources.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 
@@ -57,6 +59,49 @@ function withParents(snapshot, indexes) {
   return [...out].sort((a, b) => a - b);
 }
 
+// FR-004b (data-model § 6): a layer's own keyed properties, from the snapshot's layers[].properties
+// (which already skip the hidden half of a separable Position), each rolled up by key types' `snaps`.
+export const OWN_KEYS_SUMMARY = 8;
+function keyTypes(keys) {
+  if (keys.length === 1) return "single_key";
+  let held = 0;
+  for (let i = 1; i < keys.length; i++) if (snaps(keys[i - 1], keys[i])) held++;
+  return held === keys.length - 1 ? "all_held" : held === 0 ? "none_held" : "some_held";
+}
+function ownKeys(snapshot, index, detail) {
+  const keyed = (snapshot.layers || []).find((l) => l.index === index);
+  const props = keyed ? (keyed.properties || []).filter((p) => Array.isArray(p.keys) && p.keys.length > 0) : [];
+  const list = props.map((p) => ({
+    property: p.display_name,
+    ...(detail ? { display_path: p.display_path } : {}),
+    keys: p.keys.length,
+    key_types: keyTypes(p.keys),
+    ...(p.expression_enabled ? { expression_on: true } : {}),
+  }));
+  if (detail || list.length <= OWN_KEYS_SUMMARY) return { own_keys: list };
+  return { own_keys: list.slice(0, OWN_KEYS_SUMMARY), own_keys_more: list.length - OWN_KEYS_SUMMARY };
+}
+// Locked and 3D on every layer; Collapse only on precomp and footage layers (OQ-12: AE reads it on
+// for text and shape layers whatever the switch shows). A switch read as null is not read, never false.
+const COLLAPSE_KINDS = new Set(["precomp", "footage"]);
+// Review N4: with no layer_info the switches weren't read at all, which the read block says as
+// older_snapshot, so each layer says the same.
+export function switches(entry, known = true) {
+  const one = (v) => (typeof v === "boolean" ? v : notRead(known ? "error" : "older_snapshot"));
+  const out = { locked: one(entry.locked), three_d: one(entry.three_d) };
+  if (COLLAPSE_KINDS.has(entry.kind)) out.collapse = one(entry.collapse);
+  return out;
+}
+// Named layers say everything; the whole-comp summary leaves out what's empty or off (SC-007).
+function keysAndSwitches(snapshot, entry, { named, detail }) {
+  const keys = ownKeys(snapshot, entry.index, detail);
+  const sw = switches(entry, layerInfo(snapshot).known);
+  if (named) return { ...keys, ...sw };
+  const out = keys.own_keys.length ? keys : {};
+  for (const [k, v] of Object.entries(sw)) if (v !== false) out[k] = v;
+  return out;
+}
+
 function exprSummary(x) {
   return { property: x.property, group: x.group, on: x.on, error: !!x.error, builds_on: x.builds_on, moves: x.moves };
 }
@@ -79,9 +124,12 @@ function summaryOf(entry, ctx) {
     layer: entry.name,
     kind: entry.kind,
     class: m ? m.class : null,
+    ...keysAndSwitches(ctx.snapshot, entry, { named: ctx.named, detail: ctx.detail }),
     parents: m && Array.isArray(m.parents)
       ? m.parents.map((p) => ({ layer_index: p.layer_index, layer: p.layer, class: p.class, moves_children: p.moves_children, moves_by: p.moves_by ?? null, expressions: (exprOf.get(p.layer_index) || []).filter((x) => x.active || (x.on && x.error)).map((x) => parentExpr(x, ctx.listed.has(p.layer_index))) }))
       : notRead("no_layer_info"),
+    // FR-004a: only on layers the caller named (a whole-comp summary has none).
+    ...(ctx.shiftsFor ? { shifts: ctx.shiftsFor(entry.index) } : {}),
     children: m && Array.isArray(m.children) ? m.children.length : notRead("no_layer_info"),
     effects: Array.isArray(entry.effects) ? entry.effects.map((f) => f.name) : notRead(entry.effects === undefined ? "older_snapshot" : "error"),
     expressions: ctx.exprRead === "all" ? mine.map(exprSummary) : ctx.exprRead,
@@ -171,11 +219,22 @@ export async function describeLayers({ layers: asked, detail = false, at_time } 
   const er = expressionReads(snapshot);
   const exprOf = new Map();
   for (const x of er.list) exprOf.set(x.layer_index, [...(exprOf.get(x.layer_index) || []), x]);
-  const ctx = { map: motionSources(snapshot), links: linksIn(snapshot, { time: atTime }), exprOf, exprRead };
+  const ctx = { map: motionSources(snapshot), links: linksIn(snapshot, { time: atTime }), exprOf, exprRead, snapshot, detail: !!detail, named: !!named };
+  // FR-004a (research R15): each named layer's footprint shifts at the reading time, worked out once.
+  if (named) {
+    const shifts = new Map();
+    ctx.shiftsFor = (index) => {
+      if (!shifts.has(index)) shifts.set(index, footprintShifts(snapshot, index, atTime));
+      return shifts.get(index);
+    };
+  }
   const read = {
     expressions: exprRead,
     links: exprRead === "all" ? "read" : exprRead,
     sweeps: sweepsRead(snapshot, measured),
+    shifts: !named ? notRead("not_asked") : exprRead === "all" ? "read" : exprRead,
+    own_keys: "read",
+    switches: layerInfo(snapshot).known ? "read" : notRead("older_snapshot"),
     precomps: notRead("phase_2"),
   };
   const entries = named
