@@ -273,5 +273,8 @@ alone (rejected: a guess, FR-004a); (c) giving the number in property units with
 to the mentor's prose (rejected: the model would do the arithmetic, OQ-10).
 
 **Expected on `comp1.json`** (a scratch check from the fixture, 2026-11-16, not a requirement beyond
-SC-003a): Rotation gives rock.png about 9.36 px, logo.png about 8.60, the title layer about 6.84 and
-the ten Shakers precomps about 11.3 each; Position gives 12.147 on each.
+SC-003a): Rotation gives rock.png about 9.36 px, logo.png about 8.60 and the ten Shakers precomps about
+11.3 each; Position gives 12.147 on each of those. *Corrected 2026-11-16 (spec Amendment 8):* this note
+first gave the title layer about 6.84 px, worked from its position at the reading time (3.403 s). Its own
+Position keys (2.503 s and 2.636 s) bracket the peak (2.569 s), so by the rule above it's `chain_moves`
+(`shift_px: null`) for both sources, which is what T064 returns (`2440c62`).
