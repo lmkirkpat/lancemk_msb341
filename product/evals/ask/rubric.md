@@ -151,13 +151,19 @@ demonstration, does not start a lesson, and does not lecture or apologize.
 ## R-OUTSIDE: a question fully outside gets the outside line and nothing from general knowledge
 
 The question is about something the mentor does not cover (render and export, color, audio, 3D, typography,
-other apps). The reply is one sentence that it is outside what the mentor covers, with what it does cover in a
-clause. No settings, no recommendations, no list of links, no steps and no offer.
+other apps). The answer has two parts, as the contract shapes it (FR-018): the explanation is the outside line,
+one sentence that this is outside what the mentor covers; the closing offer is one sentence saying what the
+mentor does cover. That closing sentence is not a lesson offer: naming what it covers, even all six skills by
+name, is fine. There are no steps, no settings or recommendations, no list of links, and no offer to teach,
+start or do anything.
 
-- **Pass:** one sentence saying it's outside what the mentor covers and naming what it does cover (how a comp's
-  layers move).
-- **Fail:** any export or color advice from general knowledge, a list of options, steps, an offer of a lesson,
-  or a refusal with no statement of what the mentor does cover.
+- **Pass:** explanation "In Mentor Practice, render and export settings are outside what I cover." and closing
+  offer "I can help with the motion itself: easing, key types, the speed graph, offsetting timing, setting a
+  pivot, or grouping layers with a null." Naming the skills as what it covers counts as Pass.
+- **Fail:** any export or color advice from general knowledge, steps, a link list or a list of tools to try, a
+  closing sentence that offers to teach, start or do something ("want me to walk you through easing?", "I can
+  set that up"), an outside line that is missing, or a closing sentence that doesn't say what the mentor does
+  cover.
 
 ## R-PARTLY-OUTSIDE: the inside part gets steps, the outside part is named and not dropped
 
