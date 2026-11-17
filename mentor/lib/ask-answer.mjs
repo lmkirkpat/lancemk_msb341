@@ -165,7 +165,8 @@ export function checkAnswer(input, ctx) {
   // The comp first: a comp switched since the mentor read it fails here, before any layer check.
   const expl = explanation.trim();
   if ((kind === "answer" || kind === "describe") && compName && !namesComp(expl.split("\n")[0], compName)) {
-    fail("COMP_NOT_NAMED");
+    // Review S5: say which comp is open now, so a comp switched since the read is read again.
+    throw new MentorError("COMP_NOT_NAMED", `The comp open now is ${compName}, and the first line doesn't name it. If you read a different comp, the comp changed since: read ${compName} again, then answer, starting "In ${compName}, …".`);
   }
 
   if (rawSteps.length > MAX_STEPS) fail("TOO_MANY_STEPS");

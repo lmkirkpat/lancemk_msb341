@@ -184,3 +184,14 @@ test("a refusal names the step and says what to fix, with no field names", async
     return true;
   });
 });
+
+test("review S5: a comp switched since the read is refused with a message that says it changed and names the open comp", async () => {
+  use(PRACTICE);
+  await assert.rejects(() => handler(td16()), (e) => {
+    assert.equal(e.code, "COMP_NOT_NAMED");
+    assert.match(e.message, /The comp open now is Mentor Practice/);
+    assert.match(e.message, /changed/);
+    assert.doesNotMatch(e.message, /[a-z]_[a-z]/);
+    return true;
+  });
+});
