@@ -20,6 +20,10 @@ server, ahead of skills 4 and 10, so spec 014's ask mode can answer about real c
   *Phase 1 follow-up (2026-11-16, FR-004a, T064):* the tool also gives each parent expression's
   peak shift on a named layer in comp pixels, worked out in Node from the fine sweep and the samples
   (research R15), so 014's 1 px floor covers Rotation and Scale.
+  *Phase 1 follow-up (2026-11-16, FR-004b, T065):* each layer's summary and detail also give its own
+  keyed properties (count and a key-types rollup) and its Locked, 3D and Collapse switches, from the
+  snapshot the tool already takes; reply-only, in `comp-reads.mjs`, with the whole-comp summary leaving
+  out empties to keep SC-007's 12 KB.
 - **Phase 2 (precomps, US4):** a separate snippet reads inside precomps by comp id, with time
   mapping through start, stretch and time remap, and `describe_layers` reports it. No skill's
   findings change.
@@ -133,6 +137,7 @@ goes in new files where possible, so the shared-file edits stay small.
 | **0. Live checks** | T001 to T008 | Facts for the reads | Results logged and folded into research before T010 |
 | **1. Expressions** (US1, US2, US3) | T009 to T040 | On its own: spec 014 can build on it | SC-001 to SC-010; six sets on B1 (SC-006) |
 | 1 follow-up: footprint shift (FR-004a) | T064 | Before 014's FR-007 test on Comp 1 and its three sessions | SC-003a; mentor and hooks suites; skill replies on eval fixtures unchanged |
+| 1 follow-up: own keys and switches (FR-004b) | T065 | With T064, in 014's `014-mentor` worktree; before 014's ask cases 05 and 13 to 16 run | SC-003b; SC-007; mentor and hooks suites; skill replies on eval fixtures unchanged |
 | **2. Precomps** (US4) | T041 to T056 | After phase 1 is merged and its gate passes | SC-011 to SC-013; easing unchanged; eval gate (spec OQ-6) |
 
 ## Risks

@@ -137,6 +137,31 @@ is `"all"`); otherwise `shifts` is `{ status: "not_read", reason: "older_snapsho
 named get no `shifts`, and the reply's `read.shifts` is `"read"` or `{ status: "not_read", reason:
 "not_asked" }`. Computed by `mentor/lib/footprint-shift.mjs` (research R15).
 
+**Own keys and switches (FR-004b, added 2026-11-16, Amendment 7).** From the snapshot the tool already
+takes; nothing new is read.
+
+- `own_keys`: `[{ property, keys, key_types, expression_on? }]`, one per property in the snapshot's
+  `layers[].properties` for that layer, in snapshot order. `property` is the display name (as in
+  `expressions`); detail adds `display_path`. `key_types` is one of:
+  - `single_key`: one key (set, not animated; `analyze.mjs`'s existing skip reason);
+  - `all_held`: two or more keys and every pair snaps;
+  - `none_held`: two or more keys and no pair snaps;
+  - `some_held`: two or more keys, some pairs snap and some don't.
+
+  A pair snaps when the first key's `out_type` or the second key's `in_type` is `hold` (key types'
+  `snaps`, L-1; reused, not copied). `expression_on: true` is present only when the property's
+  expression is on (the snapshot's `expression_enabled`). Summary: at most 8 entries, then
+  `own_keys_more: n` when there are more. Detail: every entry.
+- `locked`, `three_d`: booleans from `layer_info`. `collapse`: boolean, on `precomp` and `footage`
+  layers only (spec OQ-12). A switch the snapshot read as `null` is `{ status: "not_read", reason:
+  "error" }`; with no `layer_info`, `switches: { status: "not_read", reason: "older_snapshot" }` replaces
+  all three.
+- **Named layers** (in `layers`, summary or detail): `own_keys` always present (`[]` when none), and
+  every switch that applies to the kind, `false` included.
+- **Whole-comp summary** (no `layers`): `own_keys` only when non-empty, and a switch only when `true`
+  (or not read). The reply's `read` block gains `own_keys: "read"` and `switches: "read" | not_read`,
+  which say that a layer without them has no keys and those switches off.
+
 ## 7. Phase 2: comp contents (`precomp-contents.jsx` + `precomp-time.mjs`)
 
 ### Comp contents (keyed by `comp_id`)

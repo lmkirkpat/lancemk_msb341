@@ -13,6 +13,9 @@ split in two.
 **Updated 2026-11-16 (H-7 answered):** § 5.1a's 1 px floor approved; its "hard to tell apart" band
 deferred until after the three sessions and kept as a labeled proposal. § 16's rotation bullet and
 step 2 drop "too small to see", since the rotation moves the rock well over 1 px.
+**Updated 2026-11-16 (spec 015 OQ-11):** § 5.1a measures on the layer's box until visible bounds exist
+(pivot K1), with what that means for teaching; § 16 notes spec 015 SC-003a's 8.6 to 9.4 px range for
+the rock (teaching unchanged).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2 (the method, the opening rule, the turn
 rule, "do it for me"), § 3 (where "what's moving it" lives), § 4 (the path), § 5 (reads R1 to R4 and
 the motion-sources map), § 8 (overlaps); `.claude/skills/next-mentor/SKILL.md` (the hand-over);
@@ -150,11 +153,17 @@ proposal until spec 014's three sessions show real cases; until then the mentor 
 phrase, and two sources of similar size are simply both named with their sizes, biggest first.
 
 - **Measure in screen pixels on the asked layer, not in the property's units.** A source's size is
-  how far it moves the asked layer's farthest edge at its peak, in comp pixels (spec 015 FR-004's
-  peak, turned into pixels by the tool: a rotation by the distance from the pivot to the far edge, a
-  scale by the layer's size). Degrees and percent mislead: 0.75° turning a 40 px icon from its corner
-  moves its far edge about half a pixel, and the rock's far end (about 910 px from the hit corner)
-  about 12 px (AB follow-up).
+  how far it moves the farthest edge of the asked layer's box at its peak, in comp pixels (spec 015
+  FR-004a: FR-004's peak, turned into pixels by the tool: a rotation by the distance from the pivot to
+  the box's far corner, a scale by the box's size). Degrees and percent mislead: 0.75° turning a 40 px
+  icon from its corner moves its far edge about half a pixel, and the rock's far end (about 910 px from
+  the hit corner) about 12 px (AB follow-up).
+  **The box, until visible bounds exist** (spec 015 OQ-11, answered 2026-11-16; visible bounds are
+  pivot K1, not built). A padded PNG or a full-frame precomp reads larger than what shows (Comp 1's
+  Shakers precomps have 1920 × 1080 boxes), so the floor never hides a real cause, but it can give a
+  size to a move the eye can't see. So the mentor says the size as the tool gives it ("moves it up to
+  about 11 px") and never adds that it's clearly or easily visible; the learner judges by playing it
+  back, as the next bullet already says.
 - **Under 1 px at its peak: not visible.** It's never named as a cause and never gets a step. If the
   learner asks about it, it's "too small to see: it moves [layer] less than a pixel". Reason: an edge
   that moves less than a pixel doesn't land on a new pixel. T005's child moved 0.07 px when its
@@ -593,6 +602,10 @@ so its far corner is about 840 px from the center at 100% scale, or about 910 px
 (AB follow-up): 0.589° moves that about 8.6 to 9.4 px. rock.png's scale in Comp 1 isn't in the design
 docs; it would have to be under about 12% for the move to fall under 1 px, which the 910 px figure
 rules out. Replace "about 9 px" with the tool's number once SB-4's conversion reads Comp 1.
+**Noted 2026-11-16 (spec 015 OQ-11):** that number comes from spec 015 T064 (FR-004a), measured on
+rock.png's box, which is padded (AB), so it may be larger than the visible rock moves. SC-003a expects
+8.6 to 9.4 px; a scratch check gave about 9.36. The teaching above is unchanged until T064's number
+lands.
 
 **steps** (data: each line is something the learner does in AE; two to four):
 
