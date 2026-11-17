@@ -39,7 +39,8 @@ here.
    shape. If the question names no layer ("make it feel more natural"), call it with no layers for
    the whole comp's summary.
    - A name two layers share comes back with its candidates: that's a clarifying question (below).
-   - A name it can't find: read the whole comp's summary to find it.
+   - A name it can't find: read the whole comp's summary to find it. When a name matches part of
+     two layers' names, ask which, naming both.
 2. **The layers that make the motion, in detail.** When the motion comes from an expression, on
    the layer or on a parent up its chain, call `describe_layers` again with `detail: true` on the
    layer that has the expression.

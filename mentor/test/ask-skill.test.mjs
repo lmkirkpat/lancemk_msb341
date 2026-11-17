@@ -104,3 +104,7 @@ test("eval fixes (c) and (d): the outside and how-to lines", () => {
 test("eval fix (d): the how-to line", () => {
   assert.match(SKILL, /A how-to's explanation is at most two sentences, no bullets\./);
 });
+
+test("eval fix (e): a partial name matching two layers gets a question naming both", () => {
+  assert.match(squash(SKILL), /When a name matches part of two layers' names, ask which, naming both\./);
+});
