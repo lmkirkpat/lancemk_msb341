@@ -142,3 +142,13 @@ test("a summary lists at most 8 keyed properties, then counts the rest; detail l
   assert.equal("own_keys_more" in det, false);
   use(COMP1);
 });
+
+test("review N4: with no layer_info, each layer's switches say older_snapshot, as the read block does", () => {
+  const entry = { index: 1, name: "Title", kind: "precomp" };
+  assert.deepEqual(reads.switches(entry, false), {
+    locked: { status: "not_read", reason: "older_snapshot" },
+    three_d: { status: "not_read", reason: "older_snapshot" },
+    collapse: { status: "not_read", reason: "older_snapshot" },
+  });
+  assert.deepEqual(reads.switches({ ...entry, locked: null, three_d: false, collapse: true }), { locked: { status: "not_read", reason: "error" }, three_d: false, collapse: true });
+});

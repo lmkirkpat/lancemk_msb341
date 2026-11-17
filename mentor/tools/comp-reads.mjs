@@ -84,8 +84,10 @@ function ownKeys(snapshot, index, detail) {
 // Locked and 3D on every layer; Collapse only on precomp and footage layers (OQ-12: AE reads it on
 // for text and shape layers whatever the switch shows). A switch read as null is not read, never false.
 const COLLAPSE_KINDS = new Set(["precomp", "footage"]);
-function switches(entry) {
-  const one = (v) => (typeof v === "boolean" ? v : notRead("error"));
+// Review N4: with no layer_info the switches weren't read at all, which the read block says as
+// older_snapshot, so each layer says the same.
+export function switches(entry, known = true) {
+  const one = (v) => (typeof v === "boolean" ? v : notRead(known ? "error" : "older_snapshot"));
   const out = { locked: one(entry.locked), three_d: one(entry.three_d) };
   if (COLLAPSE_KINDS.has(entry.kind)) out.collapse = one(entry.collapse);
   return out;
@@ -93,7 +95,7 @@ function switches(entry) {
 // Named layers say everything; the whole-comp summary leaves out what's empty or off (SC-007).
 function keysAndSwitches(snapshot, entry, { named, detail }) {
   const keys = ownKeys(snapshot, entry.index, detail);
-  const sw = switches(entry);
+  const sw = switches(entry, layerInfo(snapshot).known);
   if (named) return { ...keys, ...sw };
   const out = keys.own_keys.length ? keys : {};
   for (const [k, v] of Object.entries(sw)) if (v !== false) out[k] = v;
