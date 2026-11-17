@@ -444,7 +444,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   spec 014's ask cases 05 (a keyed layer), 13 (keys under an expression that's on), 14 (separated
   dimensions), 15 (a single key and hold keys) and 16 (a locked layer in a step), in
   `product/evals/ask/cases/`, before 014's B1 run (014 T037). No eval case here: the ask set is spec 014's.
-- [ ] T066 (skill-builder) FR-004a's corrections (spec Amendment 9, *added 2026-11-16* from 014's reviews
+- [x] T066 (skill-builder) FR-004a's corrections (spec Amendment 9, *added 2026-11-16* from 014's reviews
   T034 and T035; research R15 › Corrected; data-model § 6; contracts/describe-layers.md). Cockpit-numbered
   2026-11-16. In `mentor/lib/footprint-shift.mjs`: (1) a Rotation source with non-uniform scale on any
   layer above it needs `max_value` (`direction_unknown` without it), and Rotation above the source then
