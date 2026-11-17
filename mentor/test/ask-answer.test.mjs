@@ -287,3 +287,22 @@ test("review S4: expression code or a copy of the comp's own expression text in 
   assert.ok(checkAnswer(td16(), b1()));
   assert.ok(checkAnswer(edit((a) => { a.explanation += "\n- The ease and the length of each hit stay the same."; }), b1()));
 });
+
+test("review N2: the first line must name the comp as a whole name", () => {
+  const { namesComp } = ask;
+  assert.equal(namesComp("In Comp 1, rock.png rides on Shake Control:", "Comp 1"), true);
+  assert.equal(namesComp("In Comp 10, rock.png rides on Shake Control:", "Comp 1"), false);
+  assert.equal(namesComp("In Logo Final, the mark spins.", "Logo"), false);
+  assert.equal(namesComp("In Logo, the mark spins.", "Logo"), true);
+  assert.equal(namesComp("In MyLogo, the mark spins.", "Logo"), false);
+  assert.equal(namesComp("Comp 1's rock rides on Shake Control.", "Comp 1"), true);
+  assert.equal(namesComp("In comp 1 the rock rides on its parent.", "Comp 1"), true, "case doesn't matter");
+  assert.equal(namesComp("In Comp 10, and in Comp 1, the rock rides on it.", "Comp 1"), true, "a later whole match counts");
+  const ten = structuredClone(SNAP);
+  ten.comp.name = "Comp 1";
+  refuses(edit((a) => { a.explanation = a.explanation.replace("In Comp 1,", "In Comp 10,"); }), b1({ snapshot: ten }), "COMP_NOT_NAMED");
+  const logo = structuredClone(SNAP);
+  logo.comp.name = "Logo";
+  refuses(edit((a) => { a.explanation = a.explanation.replace("In Comp 1,", "In Logo Final,"); }), b1({ snapshot: logo }), "COMP_NOT_NAMED");
+  assert.ok(checkAnswer(edit((a) => { a.explanation = a.explanation.replace("In Comp 1,", "In Logo,"); }), b1({ snapshot: logo })));
+});

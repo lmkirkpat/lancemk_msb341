@@ -89,6 +89,24 @@ export function withNotTaughtLine(text) {
   return `${/[.!?]$/.test(t) ? t : `${t}.`} ${NOT_TAUGHT_LINE}`;
 }
 
+// Review N2: the line names the comp as a whole name, not inside a longer one ("Comp 10" isn't
+// "Comp 1", "Logo Final" isn't "Logo"): no letter or digit on either side, and not followed by a
+// capitalized word or a number that would carry the name on.
+export function namesComp(line, name) {
+  const l = line.toLowerCase();
+  const n = name.toLowerCase();
+  const word = /[\p{L}\p{N}]/u;
+  for (let i = l.indexOf(n); i >= 0; i = l.indexOf(n, i + 1)) {
+    const before = i > 0 ? line[i - 1] : "";
+    const rest = line.slice(i + n.length);
+    if (before && word.test(before)) continue;
+    if (rest && word.test(rest[0])) continue;
+    if (/^\s+[\p{Lu}\p{N}]/u.test(rest)) continue;
+    return true;
+  }
+  return false;
+}
+
 // One sentence, ending in a question mark (FR-008). A sentence break is an end mark followed by space.
 const oneQuestion = (t) => t.endsWith("?") && !/[.!?]["'”’)\]*_]*\s+\S/.test(t.slice(0, -1)) && !t.includes("\n");
 
@@ -146,7 +164,7 @@ export function checkAnswer(input, ctx) {
 
   // The comp first: a comp switched since the mentor read it fails here, before any layer check.
   const expl = explanation.trim();
-  if ((kind === "answer" || kind === "describe") && compName && !expl.split("\n")[0].toLowerCase().includes(compName.toLowerCase())) {
+  if ((kind === "answer" || kind === "describe") && compName && !namesComp(expl.split("\n")[0], compName)) {
     fail("COMP_NOT_NAMED");
   }
 
