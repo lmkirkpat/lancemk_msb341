@@ -79,8 +79,12 @@ export async function giveAnswer(input = {}) {
       goal,
     });
   }
-  return textReply(reply);
+  return textReply({ ...reply, done: DONE });
 }
+
+// Eval run 2026-11-16: every accepted answer was followed by prose (a copy, or "the answer is in the
+// panel"). The reply says plainly that the turn is finished; it's safe for the learner to read.
+export const DONE = "The learner can see this answer now. Your turn is finished: write nothing more.";
 
 const STEP = {
   type: "object",

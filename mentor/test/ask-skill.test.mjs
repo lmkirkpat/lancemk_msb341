@@ -89,3 +89,10 @@ test("T103 (amendment (e)): the context-after-a-lesson rule, word for word, and 
   for (const label of ["as shown in the panel", "Question:", "Answer:", "Closing:", "Follow-up:", "(layer:"]) assert.ok(!SKILL.includes(label), label);
   assert.match(SKILL, /never mention it, quote it,\s+or repeat its labels/);
 });
+
+test("eval fix (a): the turn-over rule closes the answer section, after the worked answer", () => {
+  const answer = SKILL.slice(SKILL.indexOf("## The answer"), SKILL.indexOf("## After the answer"));
+  const rule = answer.indexOf("Once `give_answer` is accepted your turn is over:");
+  assert.ok(rule > answer.indexOf("### The worked answer"), "near the end of the answer section");
+  assert.match(squash(answer.slice(rule)), /end it without writing anything, not even a sentence saying the answer is shown\./);
+});

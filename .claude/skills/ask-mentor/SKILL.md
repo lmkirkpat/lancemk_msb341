@@ -187,6 +187,9 @@ expressions. Its one `give_answer` call:
 
 Take its shape, not its facts: every name, size and step comes from your own read.
 
+**Once `give_answer` is accepted your turn is over:** end it without writing anything, not even a
+sentence saying the answer is shown.
+
 ## After the answer
 
 - **A follow-up question** ("why the null?", "where's Pan Behind?"): one or two sentences, then the

@@ -70,9 +70,9 @@ test("give_answer is registered from its own file, with TOOLS only: no skill ID 
 test(`reply shape on B1 (${LIVE ? "live" : "derived"} Comp 1): the accepted fields plus comp, runtime and tags; no offer`, async () => {
   const r = await call(td16());
   const { goal, ...shown } = td16();
-  assert.deepEqual(r, { ...shown, comp: "Comp 1", offered_skills: [], runtime: "b1", tags: { "transform.anchor": "Set the pivot" } });
+  assert.deepEqual(r, { ...shown, comp: "Comp 1", offered_skills: [], runtime: "b1", tags: { "transform.anchor": "Set the pivot" }, done: askModule.DONE });
   assert.equal(goal.length > 0, true);
-  assert.deepEqual(Object.keys(r), ["kind", "comp", "explanation", "steps", "offered_skills", "closing_offer", "runtime", "tags"], "short: no read data echoed");
+  assert.deepEqual(Object.keys(r), ["kind", "comp", "explanation", "steps", "offered_skills", "closing_offer", "runtime", "tags", "done"], "short: no read data echoed");
 });
 
 test("comp comes from the tool's read, never the input; a switched comp is refused", async () => {
@@ -144,7 +144,7 @@ test("howto and outside read nothing; their comp is null", async () => {
 test("NO_ACTIVE_COMP from the read gives a valid no_comp answer; any other kind gets the error", async () => {
   askModule.io.takeSnapshot = async () => { throw new MentorError("NO_ACTIVE_COMP"); };
   const r = await call({ kind: "no_comp", explanation: "No comp is open. Open one, or click into its timeline, then ask again.", steps: [], offered_skills: [], closing_offer: null });
-  assert.deepEqual(r, { kind: "no_comp", comp: null, explanation: "No comp is open. Open one, or click into its timeline, then ask again.", steps: [], offered_skills: [], closing_offer: null, runtime: "b1", tags: {} });
+  assert.deepEqual(r, { kind: "no_comp", comp: null, explanation: "No comp is open. Open one, or click into its timeline, then ask again.", steps: [], offered_skills: [], closing_offer: null, runtime: "b1", tags: {}, done: askModule.DONE });
   assert.equal(fs.existsSync(SESSION), false, "no_comp isn't saved");
   await refuses(td16(), "NO_ACTIVE_COMP");
 });
@@ -194,4 +194,11 @@ test("review S5: a comp switched since the read is refused with a message that s
     assert.doesNotMatch(e.message, /[a-z]_[a-z]/);
     return true;
   });
+});
+
+test("eval fix (a): every accepted reply ends with a plain done note that's safe for the learner to read", async () => {
+  const r = await call(td16());
+  assert.equal(r.done, askModule.DONE);
+  assert.match(r.done, /finished: write nothing more\.$/);
+  assert.doesNotMatch(r.done, /[_`]|give_answer|panel|tool/i, "no tool names, fields or panel talk");
 });
