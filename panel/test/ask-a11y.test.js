@@ -77,7 +77,7 @@ test("the ask box has a visible label, not only a placeholder", async () => {
 
 test("Your steps' twirl-down is a button with aria-expanded and aria-controls on the list", async () => {
   const s = html(await answered());
-  assert.match(s, /<button type="button" class="check-head" aria-expanded="false" aria-controls="ask-steps-body"/);
+  assert.match(s, /<button type="button" class="check-head" id="ask-steps-toggle" aria-expanded="false" aria-controls="ask-steps-body"/);
   assert.match(s, /<div class="check-body" id="ask-steps-body" hidden>/);
 });
 
@@ -135,4 +135,39 @@ test("T035 item 3: pressing Ask keeps the box focusable: readonly while it's out
   assert.match(s, /<textarea id="ask-q"[^>]*\sreadonly/);
   assert.doesNotMatch(s, /<textarea id="ask-q"[^>]*\sdisabled/);
   assert.match(s, />Why does it swing\?<\/textarea>/, "the question stays in the box while it goes");
+});
+
+// T035 design review item 1 (FR-054): a press on a data-keep-focus control redraws it, and main.js's
+// setHtml finds it again by id. Without an id focus falls to the page body.
+const keepFocusTags = (s) => [...s.matchAll(/<[a-z]+\b[^>]*\bdata-keep-focus\b[^>]*>/g)].map((m) => m[0]);
+
+test("T035 item 1: Your steps' twirl-down has an id, so focus stays on it after the press redraws it", async () => {
+  const h = await answered();
+  const before = keepFocusTags(html(h)).find((t) => /data-action="toggle_steps"/.test(t));
+  assert.ok(before, "the twirl-down keeps focus");
+  assert.match(before, /\sid="ask-steps-toggle"/);
+  h.app.act("toggle_steps", { short: false });
+  const after = keepFocusTags(html(h)).find((t) => /data-action="toggle_steps"/.test(t));
+  assert.match(after, /\sid="ask-steps-toggle"/, "the same id after the redraw");
+  assert.match(after, /aria-expanded="true"/);
+});
+
+test("T035 item 1: the lesson checklist's toggle (spec 007) has an id too, the same before and after a press", async () => {
+  const h = await ready({ memory: { status: "ok", record: LESSON } });
+  h.app.act("start");
+  const seg = (id, a, b) => ({ id, from_time: a, to_time: b, state: "linear" });
+  h.adapter().emit("tool_result", { name: "snapshot_project", ok: true, text: "", images: [], json: { lesson: "new", focus: null, demo_target: "a", targets: ["a", "b"], findings: [{ layer: "Title", property: "Position", segments: [seg("a", 0.5, 1.5), seg("b", 1.5, 3)] }] } });
+  h.adapter().emit("turn_end", { ok: true, cost_usd: 0, kind: "start" });
+  const tags = () => keepFocusTags(html(h)).filter((t) => /data-action="toggle_list"/.test(t));
+  assert.equal(tags().length, 1, "the checklist is drawn");
+  assert.match(tags()[0], /\sid="check-toggle"/);
+  h.app.act("toggle_list", { short: false });
+  assert.match(tags()[0], /\sid="check-toggle"/);
+});
+
+test("T035 item 1: every data-keep-focus control the screens draw has an id", () => {
+  const src = fs.readFileSync(path.join(__dirname, "..", "lib", "screens.js"), "utf8");
+  const tags = [...src.matchAll(/<[a-z]+\b[^<>]*\bdata-keep-focus\b[^<>]*>/g)].map((m) => m[0]);
+  assert.ok(tags.length >= 4, `found ${tags.length}`);
+  for (const t of tags) assert.match(t, /\sid="[^"]+"/, `no id: ${t}`);
 });

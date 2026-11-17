@@ -244,7 +244,7 @@ function stepsDock(m) {
   const steps = m.thread.latest_steps;
   if (!steps || !steps.length) return "";
   const open = m.ask.steps_open || m.steps_list_open;
-  return `<section class="check steps" aria-label="${esc(A.steps_aria)}"><button type="button" class="check-head" aria-expanded="${!!open}" aria-controls="ask-steps-body" data-action="toggle_steps" data-keep-focus>`
+  return `<section class="check steps" aria-label="${esc(A.steps_aria)}"><button type="button" class="check-head" id="ask-steps-toggle" aria-expanded="${!!open}" aria-controls="ask-steps-body" data-action="toggle_steps" data-keep-focus>`
     + `<span class="chev" aria-hidden="true"><span class="ch-tall">${m.ask.steps_open ? "▾" : "▸"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span>`
     + `<span class="sum">${esc(A.your_steps(steps.length))}<small>${esc(A.steps_note)}</small></span></button>`
     + `<div class="check-body" id="ask-steps-body"${open ? "" : " hidden"}><ol class="ans">${stepItems(steps)}</ol></div></section>`;
@@ -436,13 +436,13 @@ function listHtml(m) {
     const allDone = s.rows.length > 0 && s.rows.every((r) => r.family === "done");
     return `${s.title ? `<h3${allDone ? ' class="alld"' : ""}>${esc(s.title)}</h3>` : ""}<ul>${s.rows.map((row) => rowHtml(row, v.timeline)).join("")}</ul>`;
   }).join("");
-  const fold = nDone >= 2 ? `<button type="button" class="foldline" data-action="fold_done" data-keep-focus aria-expanded="${!!m.done_unfolded}"><span aria-hidden="true">✓</span> ${esc(COPY.check.done_fold(nDone, m.done_unfolded))}</button>` : "";
+  const fold = nDone >= 2 ? `<button type="button" class="foldline" id="check-fold" data-action="fold_done" data-keep-focus aria-expanded="${!!m.done_unfolded}"><span aria-hidden="true">✓</span> ${esc(COPY.check.done_fold(nDone, m.done_unfolded))}</button>` : "";
   const lines = [foldLine, l.more].filter(Boolean).map((t) => `<p class="more">${esc(t)}</p>`).join("");
   const plainList = (title, items) => (items && items.length ? `<h3>${esc(title)}</h3><ul class="plain">${items.map((o) => `<li><span class="what">${esc(o)}</span></li>`).join("")}</ul>` : "");
   const footer = (l.footer || []).map((t) => `<p class="foot">${esc(t)}</p>`).join("");
   const outside = `${footer}${plainList(COPY.check.worth_a_look, l.worth_a_look)}${plainList(COPY.check.outside, l.outside)}`;
   const cls = ["check", m.done_unfolded ? "unfold" : "", l.stale ? "stale" : ""].filter(Boolean).join(" ");
-  return `<section class="${cls}" aria-label="${esc(COPY.check.aria)}"><button type="button" class="check-head" aria-expanded="${!collapsed}" data-action="toggle_list" data-keep-focus><span class="chev" aria-hidden="true"><span class="ch-tall">${collapsed ? "▸" : "▾"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span><span class="sum">${esc(l.summary)}${l.sub ? `<small>${esc(l.sub)}</small>` : ""}</span></button><div class="check-body"${collapsed && !noteOnly ? " hidden" : ""}>${l.stale ? `<p class="stale-note">${esc(l.stale)}</p>` : ""}${noteOnly ? "" : `${fold}${body}${lines}${outside}`}</div></section>`;
+  return `<section class="${cls}" aria-label="${esc(COPY.check.aria)}"><button type="button" class="check-head" id="check-toggle" aria-expanded="${!collapsed}" data-action="toggle_list" data-keep-focus><span class="chev" aria-hidden="true"><span class="ch-tall">${collapsed ? "▸" : "▾"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span><span class="sum">${esc(l.summary)}${l.sub ? `<small>${esc(l.sub)}</small>` : ""}</span></button><div class="check-body"${collapsed && !noteOnly ? " hidden" : ""}>${l.stale ? `<p class="stale-note">${esc(l.stale)}</p>` : ""}${noteOnly ? "" : `${fold}${body}${lines}${outside}`}</div></section>`;
 }
 
 const whyOff = (text) => `<div class="actions"><p class="why-off">${esc(text)}</p></div>`;
