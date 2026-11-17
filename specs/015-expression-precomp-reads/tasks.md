@@ -400,7 +400,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   (40 noise, 3/3). The builder took it as met. **Open, to come back to:** reword R-SHOW-ME-AGAIN's Fail line to
   "numbers other than the learner's own gap" (EE); a key types line, a hint says what's off and where with
   no menu path; maybe a speed graph line, the record's `attempted` names only what the check saw (SB).
-- [ ] T064 (skill-builder) FR-004a, the footprint shift in comp pixels (spec OQ-10, Amendment 6; research
+- [x] T064 (skill-builder) FR-004a, the footprint shift in comp pixels (spec OQ-10, Amendment 6; research
   R15; data-model § 1 `max_value` and § 6 `shifts`; contracts/describe-layers.md). Cockpit-numbered
   2026-11-16, builder's go. New `mentor/lib/footprint-shift.mjs` on `comp-space.mjs`; `describe_layers`
   adds `shifts` to each named layer and `read.shifts`; `snapshot.jsx`'s fine sweep adds `max_value` (and

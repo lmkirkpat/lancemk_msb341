@@ -10,6 +10,7 @@
 import { MentorError, registerErrors } from "../errors.mjs";
 import { byIndex, layerInfo } from "../lib/layer-info.mjs";
 import { expressionReads, expressionsRead, linksIn, normalizeLineEnds, rawExpression, valuesAt } from "../lib/expressions.mjs";
+import { footprintShifts } from "../lib/footprint-shift.mjs";
 import { motionSources } from "../lib/motion-sources.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 
@@ -82,6 +83,8 @@ function summaryOf(entry, ctx) {
     parents: m && Array.isArray(m.parents)
       ? m.parents.map((p) => ({ layer_index: p.layer_index, layer: p.layer, class: p.class, moves_children: p.moves_children, moves_by: p.moves_by ?? null, expressions: (exprOf.get(p.layer_index) || []).filter((x) => x.active || (x.on && x.error)).map((x) => parentExpr(x, ctx.listed.has(p.layer_index))) }))
       : notRead("no_layer_info"),
+    // FR-004a: only on layers the caller named (a whole-comp summary has none).
+    ...(ctx.shiftsFor ? { shifts: ctx.shiftsFor(entry.index) } : {}),
     children: m && Array.isArray(m.children) ? m.children.length : notRead("no_layer_info"),
     effects: Array.isArray(entry.effects) ? entry.effects.map((f) => f.name) : notRead(entry.effects === undefined ? "older_snapshot" : "error"),
     expressions: ctx.exprRead === "all" ? mine.map(exprSummary) : ctx.exprRead,
@@ -172,10 +175,19 @@ export async function describeLayers({ layers: asked, detail = false, at_time } 
   const exprOf = new Map();
   for (const x of er.list) exprOf.set(x.layer_index, [...(exprOf.get(x.layer_index) || []), x]);
   const ctx = { map: motionSources(snapshot), links: linksIn(snapshot, { time: atTime }), exprOf, exprRead };
+  // FR-004a (research R15): each named layer's footprint shifts at the reading time, worked out once.
+  if (named) {
+    const shifts = new Map();
+    ctx.shiftsFor = (index) => {
+      if (!shifts.has(index)) shifts.set(index, footprintShifts(snapshot, index, atTime));
+      return shifts.get(index);
+    };
+  }
   const read = {
     expressions: exprRead,
     links: exprRead === "all" ? "read" : exprRead,
     sweeps: sweepsRead(snapshot, measured),
+    shifts: !named ? notRead("not_asked") : exprRead === "all" ? "read" : exprRead,
     precomps: notRead("phase_2"),
   };
   const entries = named

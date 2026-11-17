@@ -502,7 +502,7 @@ function sweep(x, kind, step) {
     var p = x._prop;
     var dur = comp.duration;
     var n = Math.max(1, Math.floor(dur / step - 1e-9) + 1);
-    var maxOff = 0, maxAt = 0, after0 = null, part0 = null, resultMoves = false, partMoves = false;
+    var maxOff = 0, maxAt = 0, maxVal = null, after0 = null, part0 = null, resultMoves = false, partMoves = false;
     for (var i = 0; i < n; i++) {
         var t = i * step;
         var after = vec(p.valueAtTime(t, false));
@@ -511,12 +511,16 @@ function sweep(x, kind, step) {
         var part = [];
         for (var d = 0; d < after.length; d++) part.push(after[d] - (d < base.length ? base[d] : 0));
         var off = dist(after, base);
-        if (off > maxOff + 1e-9) { maxOff = off; maxAt = t; }
+        if (off > maxOff + 1e-9) { maxOff = off; maxAt = t; maxVal = after; }
         if (after0 === null) { after0 = after; part0 = part; continue; }
         if (dist(after, after0) > SWEEP_TOL) resultMoves = true;
         if (dist(part, part0) > SWEEP_TOL) partMoves = true;
     }
-    return { layer: x.layer, path: x.path, kind: kind, sampled_every: r3(step), varies: resultMoves && partMoves, max_offset: r3(maxOff), max_at: r3(maxAt) };
+    var out = { layer: x.layer, path: x.path, kind: kind, sampled_every: r3(step), varies: resultMoves && partMoves, max_offset: r3(maxOff), max_at: r3(maxAt) };
+    // FR-004a (research R15): a fine sweep also keeps the after-expression value it read at its peak,
+    // the peak's direction. Coarse sweeps, the only ones a skill's snapshot runs, are unchanged.
+    if (kind === "fine" && maxVal !== null) out.max_value = maxVal.length === 1 ? r3(maxVal[0]) : r3list(maxVal);
+    return out;
 }
 
 // Review S4: a budget, so an expression-heavy comp never slows every skill's snapshot. Sweeps run for
