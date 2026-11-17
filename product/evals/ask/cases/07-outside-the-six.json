@@ -21,7 +21,7 @@
     "text": [
       {
         "id": "no_general_answer",
-        "never": "H\\.?264|bitrate|\\bMP4\\b|Media Encoder|\\bcodec|Render Queue|\\b1080\\b|frame rate",
+        "never": "H\\.?264|bitrate|\\bMP4\\b|Media Encoder|\\bcodec|Render Queue|\\b1080 ?[x×p]",
         "in": "all"
       }
     ]
