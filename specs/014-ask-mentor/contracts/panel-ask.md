@@ -83,7 +83,10 @@ Follow-up: [the text as typed]
   line is a constant in `REQUESTS`, eval-synced (T104).
 - **What the mentor does with it:** treats the learner's text as a follow-up to that question and answer, and
   reads the comp again before answering, since the lesson may have changed it. The context is what was on
-  screen, not the comp's state (`ask-mentor/SKILL.md`, T103).
+  screen, not the comp's state (`ask-mentor/SKILL.md`, T103). *Clarified 2026-11-16 (f):* reading again
+  means `describe_layers`; it does not mean `give_answer`. A follow-up gets prose (FR-028: one or two sentences,
+  then the pending step). Only a send that is really a new question gets `give_answer`, with kind `answer`,
+  `describe` or `howto`, and the panel treats it as new (amendment (d), above).
 
 ## Result lines and dividers (FR-051, PQ-3)
 

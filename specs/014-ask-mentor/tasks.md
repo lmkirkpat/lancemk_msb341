@@ -210,6 +210,11 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 - [ ] T104 [P] (eval-engineer) Ask case 18: a follow-up sent in the wrapper after a lesson changed the comp.
   Checks: a fresh read before `give_answer`; the answer follows from the earlier question and from the comp as
   read now, not as the context described it. The request uses the wrapper from `REQUESTS`. Dry run validates.
+  *Corrected 2026-11-16 (f), from the T037 triage:* "before `give_answer`" conflicted with FR-028 and TD § 6
+  (a follow-up gets one or two sentences of prose, then the pending step). Case 18's follow-up is a follow-up,
+  so the checks are: `describe_layers` is called first, then prose per FR-028, with **no** `give_answer`. A
+  follow-up that is really a new question (its result kind `answer`, `describe` or `howto`) still uses
+  `give_answer` (amendment (d)); that is not case 18.
 - [x] T036 (cockpit) Merge both with `/merge-worktree` (skill-builder's shared owner named), between live
   sittings.
 - [ ] T037 (eval-engineer) The ask set on B1 at the merge commit: at least 80% and every hard check passing;

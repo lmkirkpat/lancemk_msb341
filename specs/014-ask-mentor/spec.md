@@ -54,6 +54,18 @@ note). (4) Pick up shows no last-check time; spec 007's card line for it is supe
 approved decision or FR changes; (3) narrows MU's "from the record" to the panel's saved lesson data, which is
 still not a read.
 
+**Amended 2026-11-16 (f), from the first B1 ask eval triage (T037, `product/evals/ask/results/2026-11-16-230639.json`,
+a diagnostic run), relayed by the cockpit; add only:** (1) T104's check "a fresh read before `give_answer`"
+conflicted with FR-028 and TD § 6: a follow-up gets prose after `describe_layers`, with no `give_answer`; a
+follow-up that is really a new question still uses `give_answer` (amendment (d)). T104 and
+contracts/panel-ask.md › Context after a lesson say so. (2) `outside` carries no offered skills, but its
+closing sentence (FR-018's "what I do cover") is allowed (data-model § 1). (3) `closing_offer` is required for
+`answer`, `describe`, `howto` and `outside`, `null` only for `clarify` and `no_comp` (FR-008; data-model § 1,
+contracts/ask-tools.md). (4) FR-022's note: an expression that sets its own value over keys gets steps on the
+expression and no keyframe skill (TD § 13, K4, overlap A1; case 13). (5) OQ-7 and OQ-8, matte users and partial
+name matches, are open for spec 015. No approved decision or FR changes; (1) to (3) bring the plan's files in
+line with FR-028, FR-018 and FR-008.
+
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
 flag, as the builder accepted them in the review. Carry the mockup's spec 007 amendments. Reference spec
@@ -437,6 +449,12 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 - **FR-022**: The offer MUST name only a skill whose lesson's check can see the learner's real target, and MUST
   NOT name a keyframe skill (easing, key types, speed graph, offset) for motion with no keys (K4). The same rule
   MUST hold in `recommend_next` (K4).
+  *Note 2026-11-16 (f), from the T037 triage (case 13), TD § 13 "Expressions over keys" and K4:* when a
+  property has keys and an enabled expression, and the read shows the expression sets the value by itself
+  (inferred, FR-010), the keys don't drive the motion. The steps look at the expression (FR-006's "Open …'s
+  expression and look at …" shape, never editing it), no step edits those keys as if they drive it (overlap
+  A1), and no keyframe skill is offered for that property, the same as K4. If the read can't tell, the answer
+  says so (FR-010). This is a teaching rule in `SKILL.md`; `KEYFRAME_SKILL_ON_KEYLESS` only covers no keys.
 - **FR-023**: A learned skill MUST be offered and run as **practice**, never a review: the lesson starts without
   review mode, no "review" label or "Review passed" shows, a miss says what's still off and where with no fail
   words, and it's recorded as practice, so status and review date stay as they were (TD § 19; the record's
@@ -778,6 +796,13 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   Pixel-measured sources are ranked by size; sources with no pixel number (a `null` shift, or degrees or
   percent only) go after them in the read's order (FR-007, amended (c)). T064 is built on `014-mentor`
   (`2440c62`), so 014's FR-007 test on Comp 1 no longer waits for it.
+
+- **OQ-7 (new 2026-11-16 (f), for spec 015, not decided here): does `describe_layers` report which layer uses a
+  matte?** In T037 case 12 the mentor couldn't say Photo uses Window Matte, so FR-012's "a matte is never
+  hidden" and overlap A8 lean on a read 015 may not give. Spec 015's call; 014 changes only if it adds the field.
+- **OQ-8 (new 2026-11-16 (f), for spec 015, not decided here): should a partial name like "rock" return
+  candidates rather than `NOT_FOUND`?** T037 case 09. If 015 returns candidates, FR-014's one clarifying
+  question (up to three names) can use them; today the mentor gets nothing to ask with. Spec 015's call.
 
 ### For the curriculum designer (hand-off, not edits)
 
