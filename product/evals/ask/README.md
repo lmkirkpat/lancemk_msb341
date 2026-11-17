@@ -11,7 +11,7 @@ tools `describe_layers` and `give_answer` don't exist yet. T037 is the first run
 
 ## Cases
 
-17 cases. All run on B1 and A (no case sets `runtimes`); the A-only expectations are individual checks.
+18 cases. All run on B1 and A (no case sets `runtimes`); the A-only expectations are individual checks.
 
 | Case | TD § 17 situation, or row | What it covers | Fixture |
 |---|---|---|---|
@@ -32,10 +32,11 @@ tools `describe_layers` and `give_answer` don't exist yet. T037 is the first run
 | 15-single-and-hold-keys | EE-4 row 3 (A10) | One key is set, not animated; holds are a jump | `practice.json` |
 | 16-locked-layer-in-the-step | EE-4 row 4 (A12) | A locked layer: the unlock is in the step it blocks (locked stands for "locked or Collapse") | `practice-title-locked.json` |
 | 17-howto-no-target | FR-019 (PQ-4) | A how-to with no comp target: two sentences, no steps, one offer of the lesson | `practice.json` |
+| 18-followup-after-lesson | T104, amendment (e) | The first follow-up after a lesson, sent in the full context wrapper (contracts/panel-ask.md): a read before the answer, the answer follows from the earlier one (TD § 16's worked answer, "What about step 2?"), no wrapper label in what the learner reads | `comp1.json` |
 
 Not in this set (they need later phases): situations 2, 3, 8, 16, 17, 18 and 19 of § 17 (turn 4's fresh read,
 the padded PNG, "just the steps", the hand-in, the record entry, a learned skill as practice, a change on the
-wrong layer). Case numbers 01 to 17 are the cockpit's; the next case takes 18.
+wrong layer). Case numbers 01 to 17 are the cockpit's; the next case takes 19. Case 18's wrapper is written out in full in the case file, from the contract; when the panel adds the wrapper's first line to `REQUESTS`, its sync test should pin case 18's first line to it.
 
 ## What a turn looks like
 
@@ -114,7 +115,7 @@ node --test product/evals/ask/test/                      # the checks, the fixtu
 - **Refusals** (plan > Risks): each run prints `refused n/m` (give_answer calls the tool refused, over all of them) and the
   results file has `refusals: { answer_calls, refused, rate, by_code }`. A guard that fires on more than 1 in 10 good
   answers gets loosened. Per case the results hold `refusals_by_code` for each run, and `refusals.by_case` and `refusals.offer_not_ready` (the A-only OFFER_NOT_READY count) summarize the run. The codes read include the five the build added (ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN, NOT_PLAIN_WORDS). A turn that never gets an accepted answer fails `answer_given` and names the codes.
-- **Cost estimate (B1, full run, not measured):** 20 mentor turns and 17 judge calls, about $6 to $9. Only
+- **Cost estimate (B1, full run, not measured):** 21 mentor turns and 18 judge calls, about $6 to $9. Only
   `--dry-run`, `--only` and `--changed` while working; one full run at the phase 1 merge commit (T037).
 
 ## Fixtures

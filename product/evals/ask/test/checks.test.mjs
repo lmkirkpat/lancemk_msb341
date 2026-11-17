@@ -232,10 +232,10 @@ test("fixtureFacts reports a dangling reference", () => {
   assert.equal(f.problems.length, 2);
 });
 
-test("case files: each is valid JSON with the keys the runner needs, and the numbers run 01 to 17", () => {
+test("case files: each is valid JSON with the keys the runner needs, and the numbers run 01 to 18", () => {
   const dir = path.join(HERE, "..", "cases");
   const files = fs.readdirSync(dir).filter((f) => /^\d\d-.*\.json$/.test(f)).sort();
-  assert.deepEqual(files.map((f) => f.slice(0, 2)), Array.from({ length: 17 }, (_, i) => String(i + 1).padStart(2, "0")));
+  assert.deepEqual(files.map((f) => f.slice(0, 2)), Array.from({ length: 18 }, (_, i) => String(i + 1).padStart(2, "0")));
   for (const f of files) {
     const c = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
     assert.equal(c.id, f.replace(/\.json$/, ""));
@@ -270,4 +270,17 @@ test("the Comp 1 fixtures carry the shifts the order check needs (Position 12.15
   const f = fixtures()["comp1.json"];
   assert.ok(f.expression_sweeps.some((s) => s.kind === "fine" && s.path.endsWith("ADBE Position") && s.max_offset > 12));
   assert.ok(f.expression_sweeps.some((s) => s.kind === "fine" && s.path.endsWith("ADBE Rotate Z")));
+});
+
+test("case 18: the wrapper is the contract's, and its checks pass a follow-up answer and fail a leaked label", () => {
+  const c = JSON.parse(fs.readFileSync(path.join(HERE, "..", "cases", "18-followup-after-lesson.json"), "utf8"));
+  const lines = c.turns[0].say.split("\n");
+  assert.equal(lines[0], "/ask-mentor Earlier question and answer, as shown in the panel:");
+  assert.deepEqual(lines.map((l) => l.split(":")[0]).filter((l) => /^(Question|Answer|Steps|Closing|Follow-up)$/.test(l)), ["Question", "Answer", "Steps", "Closing", "Follow-up"]);
+  assert.match(lines.at(-1), /^Follow-up: /);
+  const ok = good({ steps: [{ text: "Open Shake Control's Rotation expression and look at its amounts. Not something I teach yet.", skill: "not_taught", layer: "Shake Control" }], offered_skills: [], closing_offer: "Want to look at the pivot next?", explanation: "In Comp 1, Shake Control's Rotation turns rock.png a little with each hit." });
+  assert.deepEqual(failed(run([answerTurn(ok)], c.expect)), []);
+  const leaked = good({ ...ok, explanation: "In Comp 1, Follow-up: Rotation turns rock.png." });
+  assert.ok(failed(run([answerTurn(leaked)], c.expect)).includes("text:no_wrapper_label"));
+  assert.ok(failed(run([turn(call(ok))], c.expect)).includes("read_before_answer@1"));
 });
