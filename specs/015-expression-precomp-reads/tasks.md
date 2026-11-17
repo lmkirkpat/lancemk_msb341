@@ -3,7 +3,7 @@
 **Input**: [spec.md](spec.md) (approved `944cd8c`), [plan.md](plan.md), [research.md](research.md),
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md).
 
-**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041).
+**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-ups T064 (FR-004a; built on `014-mentor` at `2440c62`, SC-003a met as amended by Amendment 8) and T065 (FR-004b, Amendment 7) open; T066 (FR-004a's Amendment 9 corrections) open.
 
 **Format**: `- [ ] T### [P?] [Story?] (owner) Description`. `[P]` = can run alongside the other
 `[P]` tasks in the same block (different files, no unfinished dependency). Owners: **skill-builder**
@@ -400,6 +400,61 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   (40 noise, 3/3). The builder took it as met. **Open, to come back to:** reword R-SHOW-ME-AGAIN's Fail line to
   "numbers other than the learner's own gap" (EE); a key types line, a hint says what's off and where with
   no menu path; maybe a speed graph line, the record's `attempted` names only what the check saw (SB).
+- [ ] T064 (skill-builder) FR-004a, the footprint shift in comp pixels (spec OQ-10, Amendment 6; research
+  R15; data-model § 1 `max_value` and § 6 `shifts`; contracts/describe-layers.md). Cockpit-numbered
+  2026-11-16, builder's go. New `mentor/lib/footprint-shift.mjs` on `comp-space.mjs`; `describe_layers`
+  adds `shifts` to each named layer and `read.shifts`; `snapshot.jsx`'s fine sweep adds `max_value` (and
+  its fixture-mode twin passes it through when present). No new AE write, no extra snapshot call,
+  FR-004's fields unchanged. Tests in `mentor/test/footprint-shift.test.mjs` on the live Comp 1 capture
+  (`mentor/test/fixtures/expressions/comp1.json`): SC-003a (*amended 2026-11-16, Amendment 8:* 12 of the 13 layers Shake Control moves, the title layer `chain_moves`; each within
+  0.05 px of 2·r·sin(θ/2) from the fixture's values, none under 1 px, rock.png between 8.6 and 9.4 px;
+  Position about 12.1 px each), plus one test per `null` reason in FR-004a on planted or edited
+  fixtures (none returns a number), the coarse-only case (`no_fine_sweep`), and SC-007's caps with
+  `shifts` in (rock.png ≤ 4 KB; a whole-comp summary has no `shifts`). Check that every skill tool's reply
+  on every eval fixture is byte-identical before and after (no skill sends `measure_layers`), then run
+  the mentor and hooks suites. Report the shifts the tool gives on Comp 1 in the hand-back (they replace
+  014 TD § 16's "about 9 px", the curriculum designer's edit).
+  **Shared code, sequenced by the cockpit:** T064 edits `mentor/` (`comp-reads.mjs`, `snapshot.jsx`,
+  `fixture.mjs`, a new lib file). Spec 014's mentor half (014 T008 to T016) edits `mentor/` too under its
+  own `--shared-owner` worktree, so T064 must not run as a second `mentor/` shared owner in parallel: the
+  cockpit either folds it into 014's mentor worktree or runs it before or after that one, cut from local
+  `main` and merged between live sittings (research R14). **Needed by:** 014's FR-007 ordering test on
+  Comp 1 (014 T037's situation 1 check, after its `fixtures/build.mjs` re-run) and 014's three sessions.
+  It doesn't block 014 T008 to T016 or phase 2. No eval case: no skill lists `describe_layers` in this
+  spec, and the ask set that reads the field is spec 014's.
+  **Sequencing decided 2026-11-16 (builder):** folded into spec 014's mentor worktree (014 T008 to T016),
+  so one skill-builder owns the new field and 014's reader of it.
+- [ ] T065 (skill-builder) FR-004b, own keys and switches in `describe_layers` (spec Amendment 7, E32,
+  OQ-12; data-model § 6; contracts/describe-layers.md). Cockpit-numbered 2026-11-16, builder's choice.
+  In `mentor/tools/comp-reads.mjs`, every layer entry gains `own_keys` (from the snapshot's
+  `layers[].properties`: `property`, `keys`, `key_types`, `expression_on` when on; detail adds
+  `display_path`), `locked`, `three_d`, and `collapse` on precomp and footage layers only; the `read`
+  block gains `own_keys` and `switches`. Named layers carry every field, empties included; the whole-comp
+  summary leaves out empty `own_keys` and switches that are off; a summary lists at most 8 keyed
+  properties, then `own_keys_more`. The pair rule is key types' `snaps` (L-1), exported from
+  `key-types.mjs` or moved to `analyze.mjs`, never copied. Reply-only: no snippet, `snapshot.jsx` or
+  fixture-mode change, no new AE write, no extra snapshot call. Tests (in
+  `mentor/test/comp-reads.test.mjs` or a new file) for SC-003b on the live Comp 1 capture and its
+  planted or edited fixtures, a switch read as `null` (not read, never `false`), a snapshot with no
+  `layer_info`, and SC-007 with the new fields (rock.png ≤ 4 KB; whole-comp ≤ 12 KB). Check that every
+  lesson skill's tool reply on every eval fixture is byte-identical before and after, then run the mentor
+  and hooks suites. Report the whole-comp summary's size on Comp 1 in the hand-back.
+  **Where:** in spec 014's `014-mentor` worktree, together with T064, under that worktree's one
+  `--shared-owner` for `mentor/` (research R14; never a second shared owner in parallel). **Needed by:**
+  spec 014's ask cases 05 (a keyed layer), 13 (keys under an expression that's on), 14 (separated
+  dimensions), 15 (a single key and hold keys) and 16 (a locked layer in a step), in
+  `product/evals/ask/cases/`, before 014's B1 run (014 T037). No eval case here: the ask set is spec 014's.
+- [ ] T066 (skill-builder) FR-004a's corrections (spec Amendment 9, *added 2026-11-16* from 014's reviews
+  T034 and T035; research R15 › Corrected; data-model § 6; contracts/describe-layers.md). Cockpit-numbered
+  2026-11-16. In `mentor/lib/footprint-shift.mjs`: (1) a Rotation source with non-uniform scale on any
+  layer above it needs `max_value` (`direction_unknown` without it), and Rotation above the source then
+  counts toward `chain_moves`; a Position source doesn't depend on its own layer's Rotation; (2) a named
+  text or shape layer whose box changes over time (keys or a varying active expression outside Transform,
+  or a sampled box that differs between samples) is `chain_moves`; (3) a 3D or Auto-Orient switch in the
+  chain read as anything but true or false is `switch_not_read`, never off. One unit test per case on
+  planted or edited fixtures (none returns a number); SC-003a's Comp 1 figures unchanged; skill replies
+  byte-identical; mentor and hooks suites pass. **Where:** a skill-builder on `014-mentor`, with T064 and
+  T065 under that worktree's one `--shared-owner` for `mentor/`. Tick it with T064 when built there.
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script
@@ -472,7 +527,10 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   T017 and T019). T027 needs T017 to T021. T028 and T029 any time after T017.
 - **Gate:** T030 → T031 → T032 → T033, T034, T035 to T039 (T035, T037, T038, T039 in parallel; T036
   after T035) → T040. T057 before T040; T058 → T059 (T059 after T036's run or folded into it); T060
-  with T040.
+  with T040. T064 after T040, sequenced against 014's mentor worktree (one `mentor/` shared owner at a
+  time); before 014's FR-007 test on Comp 1 and its three sessions (*met 2026-11-16:* built on `014-mentor`,
+  `2440c62`, so that test no longer waits).
+  T065 with T064 in the same `014-mentor` worktree; before 014 T037. T066 likewise (*added 2026-11-16*).
 - **Phase 2:** after T040. T042 and T043 can start together; T044 → T045 → T046 to T050 → T051 →
   gate.
 
@@ -496,5 +554,5 @@ T033, T034) are serial because of the one-driver rule, and T005, T006, T034 wait
 2. Phase 2 follows when phase 1's gate passes, and doesn't block spec 014's first version (the
    answer says "I couldn't see inside [precomp]" until then).
 
-**Task count:** 63 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
-which US4 8; phase 1 follow-ups T057 to T063: 7, added 2026-11-16).
+**Task count:** 64 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
+which US4 8; phase 1 follow-ups T057 to T064: 8, added 2026-11-16). *Amended 2026-11-16:* 66 with T065 and T066.

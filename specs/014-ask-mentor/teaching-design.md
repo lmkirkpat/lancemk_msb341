@@ -13,6 +13,9 @@ split in two.
 **Updated 2026-11-16 (H-7 answered):** § 5.1a's 1 px floor approved; its "hard to tell apart" band
 deferred until after the three sessions and kept as a labeled proposal. § 16's rotation bullet and
 step 2 drop "too small to see", since the rotation moves the rock well over 1 px.
+**Updated 2026-11-16 (spec 015 OQ-11):** § 5.1a measures on the layer's box until visible bounds exist
+(pivot K1), with what that means for teaching; § 16 notes spec 015 SC-003a's 8.6 to 9.4 px range for
+the rock (teaching unchanged).
 **Builds on:** `specs/004-ae-curriculum/curriculum.md` § 2 (the method, the opening rule, the turn
 rule, "do it for me"), § 3 (where "what's moving it" lives), § 4 (the path), § 5 (reads R1 to R4 and
 the motion-sources map), § 8 (overlaps); `.claude/skills/next-mentor/SKILL.md` (the hand-over);
@@ -150,11 +153,17 @@ proposal until spec 014's three sessions show real cases; until then the mentor 
 phrase, and two sources of similar size are simply both named with their sizes, biggest first.
 
 - **Measure in screen pixels on the asked layer, not in the property's units.** A source's size is
-  how far it moves the asked layer's farthest edge at its peak, in comp pixels (spec 015 FR-004's
-  peak, turned into pixels by the tool: a rotation by the distance from the pivot to the far edge, a
-  scale by the layer's size). Degrees and percent mislead: 0.75° turning a 40 px icon from its corner
-  moves its far edge about half a pixel, and the rock's far end (about 910 px from the hit corner)
-  about 12 px (AB follow-up).
+  how far it moves the farthest edge of the asked layer's box at its peak, in comp pixels (spec 015
+  FR-004a: FR-004's peak, turned into pixels by the tool: a rotation by the distance from the pivot to
+  the box's far corner, a scale by the box's size). Degrees and percent mislead: 0.75° turning a 40 px
+  icon from its corner moves its far edge about half a pixel, and the rock's far end (about 910 px from
+  the hit corner) about 12 px (AB follow-up).
+  **The box, until visible bounds exist** (spec 015 OQ-11, answered 2026-11-16; visible bounds are
+  pivot K1, not built). A padded PNG or a full-frame precomp reads larger than what shows (Comp 1's
+  Shakers precomps have 1920 × 1080 boxes), so the floor never hides a real cause, but it can give a
+  size to a move the eye can't see. So the mentor says the size as the tool gives it ("moves it up to
+  about 11 px") and never adds that it's clearly or easily visible; the learner judges by playing it
+  back, as the next bullet already says.
 - **Under 1 px at its peak: not visible.** It's never named as a cause and never gets a step. If the
   learner asks about it, it's "too small to see: it moves [layer] less than a pixel". Reason: an edge
   that moves less than a pixel doesn't land on a new pixel. T005's child moved 0.07 px when its
@@ -174,9 +183,9 @@ phrase, and two sources of similar size are simply both named with their sizes, 
 
 **What it changed (2026-11-16):** § 16's rotation bullet and step 2 said "too small to see" about a
 source that moves the rock several pixels, which the floor's third bullet rules out. They now say the
-size and drop the adjective; they don't say "hard to tell apart" (deferred). The size in § 16 is an
-estimate from the design docs (see § 16's note) until the tool's pixel conversion (SB-4) reads it on
-Comp 1.
+size and drop the adjective; they don't say "hard to tell apart" (deferred). The size in § 16 is now
+a read (2026-11-16): spec 015's `describe_layers` (FR-004a, SB-4) measures 9.36 px on rock.png's box,
+said as "about 9 px" (see § 16's note).
 
 **Needs from the tools (for the builder):** the peak in screen pixels on the asked layer, for each
 source, and whether two sources peak at the same times. Spec 015 FR-004 gives the peak in property
@@ -586,13 +595,24 @@ the mentor's prose never lists, numbers or repeats a step, and never writes "Ste
 
 **Changed 2026-11-16 (H-7, the 1 px floor):** the rotation bullet was "Rotation is too small to see:
 0.75° at most, gone in about 1/3 s." Under the floor, a source of 1 px or more gets its size, not an
-adjective. **The 9 px is an estimate, not a read:** spec 015's sweep puts the rotation's peak at
+adjective. **Before 2026-11-16 the 9 px was an estimate, not a read** (kept for the record): spec 015's sweep puts the rotation's peak at
 0.589° (Comp 1 fixture, at 2.569 s; the expression's largest amount is 0.75°, but the decay means the
 sampled peak is lower). The turn centers on the rock (AB follow-up), and rock.png's box is 1588 × 535,
 so its far corner is about 840 px from the center at 100% scale, or about 910 px from the hit corner
 (AB follow-up): 0.589° moves that about 8.6 to 9.4 px. rock.png's scale in Comp 1 isn't in the design
 docs; it would have to be under about 12% for the move to fall under 1 px, which the 910 px figure
 rules out. Replace "about 9 px" with the tool's number once SB-4's conversion reads Comp 1.
+**Noted 2026-11-16 (spec 015 OQ-11):** that number comes from spec 015 T064 (FR-004a), measured on
+rock.png's box, which is padded (AB), so it may be larger than the visible rock moves. SC-003a expects
+8.6 to 9.4 px; a scratch check gave about 9.36. The teaching above is unchanged until T064's number
+lands.
+**Measured 2026-11-16 (SB-4, spec 015 FR-004a and SC-003a's Phase 1 results):** `describe_layers` reads
+rock.png's peak shift from Shake Control's Rotation as **9.36 px** (0.589° at 2.569 s), inside SC-003a's
+8.6 to 9.4 px, and its Position shift as **12.15 px**. The rotation bullet is now a read, said as "about
+9 px" (§ 5.1a: the size as the tool gives it, in plain words, rounded to the whole pixel). Its wording
+doesn't change. The order holds under § 5.1a, biggest first: the Position hits (12.15 px) lead, the
+rotation (9.36 px) follows. Both are measured on the layer's box, which is padded (015 OQ-11, "box for
+now"; § 5.1a), so the bullet says the size and never that it's easy to see.
 
 **steps** (data: each line is something the learner does in AE; two to four):
 
@@ -682,7 +702,7 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
   the door but keeping it in the follow-through; "asked about" pulling a review forward; a stand-in
   layer for a lesson that can't check the real target; one optional frame; § 5.1a's deferred "about
   the same size" as at least half the larger (the approved 1 px floor is R: T005's 0.07 px, and the
-  pivot check's `MOVE_PX`); § 16's "about 9 px" (an estimate until SB-4 reads it); § 5.5's wording (no learner has met a read-inside answer yet).
+  pivot check's `MOVE_PX`); § 5.5's wording (no learner has met a read-inside answer yet).
 
 ## 19. Open questions
 
@@ -801,6 +821,8 @@ Follow-up):
 4. § 5.1a needs each source's peak as **screen pixels on the asked layer**. Spec 015 FR-004 gives the
    peak in the property's units only. (Whether two sources peak at the same times is only needed for
    the deferred band; not needed now.) Once it exists, read Comp 1 and replace § 16's "about 9 px".
+   **Done 2026-11-16:** spec 015 FR-004a reads 9.36 px (rotation) and 12.15 px (Position) on
+   rock.png's box; § 16 keeps "about 9 px", now a read.
 5. § 5.5 needs the phase 2 read in the ask's reply (spec 015 FR-027's summary, and detail per inner
    comp), with each level's read status, so "partly read" can be told from "nothing inside".
 

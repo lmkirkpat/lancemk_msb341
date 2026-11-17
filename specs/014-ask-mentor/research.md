@@ -60,7 +60,7 @@ states as a MUST and the tool can see ([contracts/ask-tools.md](contracts/ask-to
 | FR-006, PQ-5 | each step's `skill` is a skill ID, `"not_taught"`, or `null` | `BAD_STEP_SKILL` |
 | FR-008, FR-016 | at most 2 offered skills, each among the steps' skills (PQ-4: a `howto` may carry 1 with no steps) | `BAD_OFFER` |
 | FR-008 | `closing_offer` is one sentence ending in "?" when anything is offered or steps exist | `BAD_CLOSING` |
-| FR-003 | for `answer` and `describe`, `explanation`'s first line contains the comp name of the session's last read | `COMP_NOT_NAMED` |
+| FR-003 | for `answer` and `describe`, `explanation`'s first line contains the comp name of `give_answer`'s own read (*corrected 2026-11-16 (b)*; contracts/ask-tools.md step 1) | `COMP_NOT_NAMED` |
 | FR-009 | `explanation` has no numbered list, no "Steps:" and no step text | `STEPS_IN_EXPLANATION` |
 | FR-022 (K4) | no keyframe skill (easing, key types, speed graph, offset) offered or tagged for a step whose layer's motion has no keys, from spec 015's motion-sources map | `KEYFRAME_SKILL_ON_KEYLESS` |
 | FR-027 | Group with a null not offered for a step on a null that already has children (route to Set the pivot) | `ROUTE_TO_PIVOT` |
@@ -68,6 +68,9 @@ states as a MUST and the tool can see ([contracts/ask-tools.md](contracts/ask-to
 | FR-014, FR-016 | `clarify`, `outside`, `no_comp` have no steps and no offer | `NOT_ACTIONABLE` |
 
 Word count (FR-008, about 120) is a SHOULD and a guess, so it's an eval rubric item, not a refusal.
+
+*Added 2026-11-16 (b):* the build (T013) refuses five more, listed in contracts/ask-tools.md › Refusals and
+data-model § 8: `ANSWER_SHAPE`, `KIND_MISMATCH`, `STEP_NEEDS_LAYER`, `COMP_IS_OPEN`, `NOT_PLAIN_WORDS`.
 
 **Why:** each one was a baseline failure or an eval risk (AB 3: Easing for keyless motion). Each refusal
 costs one retry, so the set counts refusals (plan › Risks).
@@ -221,6 +224,13 @@ goes to **version 3**: `thread` (questions, answers' results, the latest steps, 
 today's `lesson`. Starting a lesson from Skills or Find my next lesson while a thread exists ends the
 thread (it folds into history; Back to your question goes); a new question on Home while a thread exists
 adds to it (MU `home-thread`). A version 2 file reads as a lesson, as today.
+
+*Amended 2026-11-16 (spec amendment (d), the builder's decision):* starting a lesson (Find my next lesson,
+Pick up, or a Skills lesson) ends the thread's **conversation** but keeps its last question, answer and
+steps saved and visible, and "Back to your question ›" still works after the lesson. Nothing is deleted.
+"Folds into history; Back to your question goes" no longer applies in phase 1. A new question after such a
+lesson starts a new conversation in the same visible thread. **Why:** the learner came with a question, and
+a lesson shouldn't take the answer away.
 
 **Request text:** Home's ask sends `/ask-mentor ` plus the question as typed, so B1 launches with the ask
 skill's tools (`skillOf`) and A opens the ask skill (`commandOf`). Follow-ups go as typed. The first

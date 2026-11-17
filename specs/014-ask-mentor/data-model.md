@@ -12,7 +12,7 @@ The call's input and the tool's reply have the same fields; the reply holds what
 | Field | Type | Notes |
 |---|---|---|
 | `kind` | `answer` \| `describe` \| `howto` \| `clarify` \| `outside` \| `no_comp` | **Added by the plan** (spec allowed renames with a reason): lets the panel pick `ask-answer`, `ask-new-question`, `ask-clarify`, `ask-outside`, `ask-nocomp` without reading words. `describe` = a describe-the-comp answer with no steps (US1 scenario 2) |
-| `comp` | string \| null | Set by the tool from the session's last read, never by the model. `null` for `no_comp` and when no read ran (`outside`, `howto`) |
+| `comp` | string \| null | Set by the tool from its own read of the active comp, taken for each answer (contracts/ask-tools.md step 1; *corrected 2026-11-16 (b)* from "the session's last read"), never by the model. `null` for `no_comp` and when no read ran (`outside`, `howto`) |
 | `explanation` | string | The mentor's words for part 1: one or two sentences, or a lead line and up to four `- ` bullets. No numbers, no "Steps:" (FR-004, FR-009) |
 | `steps` | array, 0 to 4 | Each `{ text, skill, layer }`. `skill`: a skill ID, `"not_taught"`, or `null` (an untagged look or playback step, PQ-5). `layer`: a layer name from the last read, or `null`. **Normalized in the reply:** a `"not_taught"` step's `text` ends with "Not something I teach yet.", appended by the tool when missing (contracts/ask-tools.md step 3a, FR-006); the panel draws no tag for it, so this sentence is its only marker |
 | `offered_skills` | array, 0 to 2 | Skill IDs, each among the steps' skills (PQ-4: a `howto` may carry one with no steps). **Always `[]` in the reply on B1** (FR-017, research R4) |
@@ -62,7 +62,7 @@ without the key reads as `asked: []`.
 |---|---|---|
 | `kind` | `"asked"` | |
 | `date` | ISO time | Set by the tool |
-| `project`, `comp` | string | From the session's last read, never the model |
+| `project`, `comp` | string | From `give_answer`'s own read (*corrected 2026-11-16 (b)*), never the model |
 | `layers` | string[] | The steps' layers, de-duplicated; personal-detail check on each |
 | `goal` | string | General motion terms (≤ 120 characters); never the question (FR-040); personal-detail check |
 | `skills` | string[] | Skill IDs the steps referenced (tags and offers) |
@@ -109,6 +109,8 @@ not_taught: bool }], offers: [{ skill, tag }], closing_offer }`, or **`null`** w
 not JSON, has an unknown `kind`, more than 4 steps, more than 2 offers, an offer not among the steps'
 skills (outside `howto`), or a field of the wrong type. `null` means FR-048's fallback: the mentor's words
 as they came, no STEPS, no dock, no Go deeper. On a `b1` panel, `offers` is always `[]`.
+*Added 2026-11-16 (amendment (e)):* each step also keeps the result's `layer` (string or `null`), for the
+context sent after a lesson (contracts/panel-ask.md › Context after a lesson). It is never drawn.
 
 ### Thread (`panel/lib/ask-thread.js`, saved in `panel-session.json` version 3)
 
@@ -119,6 +121,11 @@ latest_steps: [step] | null, deeper: null | { skill, tag, step_number, state: "s
 Each thread entry (added 2026-11-16 from the panel build, T035 review):
 - `kind`: `question` | `followup` | `go_deeper` (the turn log's kinds, research R11). A new `question` folds
   the entries before it; a follow-up or Go deeper press stays in view with the answer it follows.
+  *Added 2026-11-16 (spec amendment (d)):* a follow-up whose `give_answer` result has kind `answer`,
+  `describe` or `howto` becomes `question` (folds the earlier entries; Go deeper acts on it), from the tool's
+  data, never the prose. Starting another lesson ends the thread's conversation but keeps the thread's last
+  question, answer and `latest_steps` saved and visible, and Back to your question still opens them (research
+  R12); nothing is deleted.
 - `answered`: whether the turn has ended; Try again resets it to `false`.
 - `notice`: `null` | `{ title | null, text }`, a passing error shown on the latest entry ("Your question's
   still here."); cleared by Try again.
@@ -133,6 +140,9 @@ Adds `thread: "ask"` (optional) and kinds `question`, `followup`, `go_deeper` to
 
 ## 8. Error codes (new; plain messages, no field names)
 
+*Added 2026-11-16 (d):* `COMP_NOT_NAMED` or `NO_ACTIVE_COMP` from `give_answer` means the comp changed between
+the mentor's read and its answer; the mentor reads again before answering (contracts/ask-tools.md › Refusals).
+
 | Code | Tool | Message (to the mentor) |
 |---|---|---|
 | `TOO_MANY_STEPS` | give_answer | "Give at most four steps; give the first three and say there's more in the closing offer." |
@@ -140,11 +150,18 @@ Adds `thread: "ask"` (optional) and kinds `question`, `followup`, `go_deeper` to
 | `BAD_OFFER` | give_answer | "Offer at most two skills, each one a step uses." |
 | `BAD_CLOSING` | give_answer | "End on one question that hands the choice back." |
 | `COMP_NOT_NAMED` | give_answer | "Start with the comp you read: In [comp], …" |
+| `UNKNOWN_LAYER` | give_answer | *(added 2026-11-16 (d), from the build, `mentor/lib/ask-answer.mjs`)* A step names a layer the answer's own read doesn't find in the comp. Message as the build words it |
+| `NO_ACTIVE_COMP` | give_answer | *(added 2026-11-16 (d), from the build)* The answer is about a comp, but its own read finds none active (a `no_comp` answer is the valid one). Message as the build words it |
 | `STEPS_IN_EXPLANATION` | give_answer | "Leave the steps out of the explanation; they go only in the steps." |
 | `KEYFRAME_SKILL_ON_KEYLESS` | give_answer | "That layer's motion has no keys, so a keyframe skill can't help with it." |
 | `ROUTE_TO_PIVOT` | give_answer, go_deeper | "That null already carries children; moving where it turns is Set the pivot." |
 | `OFFER_NOT_READY` | give_answer, go_deeper | "That lesson can't start from an answer yet; keep the step and leave out the offer." |
 | `NOT_ACTIONABLE` | give_answer | "A question back, an outside line or no comp has no steps and no offer." |
+| `ANSWER_SHAPE` | give_answer | "Give the answer as the tool describes it: a kind, an explanation, the steps as a list, the offered skills as a list, and a closing offer." *(added 2026-11-16 (b), from the build)* |
+| `KIND_MISMATCH` | give_answer | "An answer has one to four steps; a description or a how-to has none. Pick the kind that fits." *(added 2026-11-16 (b))* |
+| `STEP_NEEDS_LAYER` | give_answer | "A step tagged with a skill names the layer it's on, exactly as it appears in the comp." *(added 2026-11-16 (b))* |
+| `COMP_IS_OPEN` | give_answer | "A comp is open, so read it and answer about it." *(added 2026-11-16 (b))* |
+| `NOT_PLAIN_WORDS` | give_answer | "Say it in plain words: no code, no backticks, and no names from tool output; name a skill by its short name." *(added 2026-11-16 (b))* |
 | `NOT_OFFERED` | go_deeper | "Only a skill the last answer offered can start from it." |
 | `NOT_ON_THIS_RUNTIME` | go_deeper | "The lesson can't start from here. Say so in one sentence and name where to start it." |
 | `NO_ANSWER` | go_deeper, note_said | "There's no answer in this session yet." |

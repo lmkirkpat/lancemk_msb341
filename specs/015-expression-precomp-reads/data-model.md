@@ -51,6 +51,7 @@ sample's exact time.
 | `status` | present only when the sweep didn't run: `{ status: "not_read", reason: "budget" }` for coarse sweeps past the snippet's time or count budget (the plan's number), so `varies` is unknown, never false |
 | `max_offset` | largest distance from base, in the property's units |
 | `max_at` | time of that peak |
+| `max_value` | *Added 2026-11-16 (FR-004a, research R15), fine sweeps only:* the after-expression value the sweep read at `max_at`. Absent on older snapshots, which is `direction_unknown` where FR-004a needs a direction, never a guess |
 
 ## 2. Derived (Node, `mentor/lib/expressions.mjs`)
 
@@ -124,6 +125,45 @@ See [contracts/describe-layers.md](contracts/describe-layers.md). Summary per la
 `expressions` (property, on, error flag, builds_on, moves), `links_in` count and first three,
 `refs_out` count, `precomp` (phase 2 summary or `not_read`), `read` statuses. Detail adds each
 expression's `text` (cut at 1,500), `error`, every link, and every reference.
+
+**Footprint shift (FR-004a, added 2026-11-16).** On each layer named in `layers`, summary and detail:
+`shifts: [{ from_layer_index, from_layer, property, shift_px, at, sampled_every, sampled: true,
+measured_on: "box" } | { from_layer_index, from_layer, property, shift_px: null, reason }]`, one per
+active parent-chain transform expression that moves the layer (Opacity excluded). `shift_px` is
+rounded to 0.01 px. `reason` is one of `three_d`, `auto_orient`, `no_rect`, `not_sampled`,
+`no_fine_sweep`, `chain_moves`, `direction_unknown`, `singular`, and (*added 2026-11-16, spec
+Amendment 9*) `switch_not_read`: a 3D or Auto-Orient switch in the chain read as anything but true or
+false, never taken as off. `chain_moves` also covers a named text or shape layer whose box changes over
+time, and `direction_unknown` a Rotation source under non-uniform scale (research R15). An empty list means the layer has no
+such parent expression, and is only given when the motion-sources map read expressions (`read.expressions`
+is `"all"`); otherwise `shifts` is `{ status: "not_read", reason: "older_snapshot" }`. Layers not
+named get no `shifts`, and the reply's `read.shifts` is `"read"` or `{ status: "not_read", reason:
+"not_asked" }`. Computed by `mentor/lib/footprint-shift.mjs` (research R15).
+
+**Own keys and switches (FR-004b, added 2026-11-16, Amendment 7).** From the snapshot the tool already
+takes; nothing new is read.
+
+- `own_keys`: `[{ property, keys, key_types, expression_on? }]`, one per property in the snapshot's
+  `layers[].properties` for that layer, in snapshot order. `property` is the display name (as in
+  `expressions`); detail adds `display_path`. `key_types` is one of:
+  - `single_key`: one key (set, not animated; `analyze.mjs`'s existing skip reason);
+  - `all_held`: two or more keys and every pair snaps;
+  - `none_held`: two or more keys and no pair snaps;
+  - `some_held`: two or more keys, some pairs snap and some don't.
+
+  A pair snaps when the first key's `out_type` or the second key's `in_type` is `hold` (key types'
+  `snaps`, L-1; reused, not copied). `expression_on: true` is present only when the property's
+  expression is on (the snapshot's `expression_enabled`). Summary: at most 8 entries, then
+  `own_keys_more: n` when there are more. Detail: every entry.
+- `locked`, `three_d`: booleans from `layer_info`. `collapse`: boolean, on `precomp` and `footage`
+  layers only (spec OQ-12). A switch the snapshot read as `null` is `{ status: "not_read", reason:
+  "error" }`; with no `layer_info`, `switches: { status: "not_read", reason: "older_snapshot" }` replaces
+  all three.
+- **Named layers** (in `layers`, summary or detail): `own_keys` always present (`[]` when none), and
+  every switch that applies to the kind, `false` included.
+- **Whole-comp summary** (no `layers`): `own_keys` only when non-empty, and a switch only when `true`
+  (or not read). The reply's `read` block gains `own_keys: "read"` and `switches: "read" | not_read`,
+  which say that a layer without them has no keys and those switches off.
 
 ## 7. Phase 2: comp contents (`precomp-contents.jsx` + `precomp-time.mjs`)
 
