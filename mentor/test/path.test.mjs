@@ -107,3 +107,31 @@ test("this test only reads curriculum.md", () => {
   table("4. The path");
   assert.equal(fs.statSync(path.join(REPO, "specs", "004-ae-curriculum", "curriculum.md")).mtimeMs, before);
 });
+
+// Spec 014 T010 (FR-021): the six built skills' short names, from MU › Short skill tags and the
+// spec's table, and the fallback to the full name.
+const { shortName } = await import("../lib/path.mjs");
+
+test("FR-021: the six short names, the same in path.json and shortName()", () => {
+  const want = {
+    "easing.basic": "Easing",
+    "keyframes.types": "Key types",
+    "easing.speed_graph": "Speed graph",
+    "timing.offset": "Offset",
+    "transform.anchor": "Set the pivot",
+    "parenting.null": "Group with a null",
+  };
+  for (const [id, name] of Object.entries(want)) {
+    assert.equal(PATH.skills.find((s) => s.id === id).short_name, name, id);
+    assert.equal(shortName(id), name, id);
+  }
+  assert.deepEqual(PATH.skills.filter((s) => "short_name" in s).map((s) => s.id).sort(), Object.keys(want).sort(), "only the six have one");
+});
+
+test("FR-021: a skill without a short name falls back to its full name; an unknown ID is null", () => {
+  assert.equal(shortName("motion.sources"), "Find what's moving it");
+  assert.equal(shortName("precomp.basic"), "Precompose and open the right level");
+  assert.equal(shortName("keyframes"), "Setting keyframes", "the on-ramp has its name");
+  assert.equal(shortName("no.such"), null);
+  assert.equal(skillName("transform.anchor"), "Set the pivot (anchor point)", "the full name is unchanged");
+});

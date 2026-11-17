@@ -80,7 +80,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 - [x] T009 (skill-builder) `mentor/lib/runtime-flag.mjs`: `runtime()` returns `"a"` only when
   `AE_MENTOR_RUNTIME` is `a`, else `"b1"` (research R4). Tests in `mentor/test/runtime-flag.test.mjs`.
-- [ ] T010 [P] (skill-builder) FR-021: add `short_name` to every skill in `mentor/curriculum/path.json` (MU ›
+- [x] T010 [P] (skill-builder) FR-021: add `short_name` to every skill in `mentor/curriculum/path.json` (MU ›
   Short skill tags) and `shortName(id)` in `mentor/lib/path.mjs`. Tests in `mentor/test/path.test.mjs`: all
   six, and a skill without one falls back to its full name.
 - [ ] T011 (skill-builder) `mentor/lib/session.mjs`: the `ask` block (data-model § 2): `saveAnswer`,

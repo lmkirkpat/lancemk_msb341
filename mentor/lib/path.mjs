@@ -20,7 +20,16 @@ export function skillName(id) {
   return s ? s.name : null;
 }
 
-export const pathOrder = () => [...readPath().skills].sort((a, b) => a.position - b.position).map((s) => s.id);
+// Spec 014 FR-021: the short name a step tag and Go deeper use (MU › Short skill tags), or the full
+// name for a skill without one, or null for an ID the path doesn't have. Lesson headers and the
+// Skills tab keep the full name.
+export function shortName(id) {
+  const s = readPath().skills.find((x) => x.id === id);
+  if (s) return typeof s.short_name === "string" && s.short_name ? s.short_name : s.name;
+  return skillName(id);
+}
+
+export const pathOrder =() => [...readPath().skills].sort((a, b) => a.position - b.position).map((s) => s.id);
 
 // Built means a tool file declares the ID (FR-003): `skills` is every declared ID.
 export const isBuilt = (id, skills) => skills.includes(id);
