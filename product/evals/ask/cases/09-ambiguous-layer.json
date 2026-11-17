@@ -49,7 +49,7 @@
       },
       {
         "id": "names_second_rock",
-        "must": "Rock Shadow",
+        "must": "Small Rock",
         "turns": [
           1
         ],

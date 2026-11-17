@@ -61,13 +61,13 @@ export function fixtures() {
 
   // 2. Comp 1 with a second "rock" layer that moves on its own keys (the layers 26 keys, copied), so "the
   //    rock" names two layers whose first steps differ: rock.png's motion comes from Shake Control's
-  //    expressions, Rock Shadow.png's from its own keys. Layer 22 (outline.png) is the one changed.
+  //    expressions, Small Rock.png's from its own keys. Layer 22 (outline.png) is the one changed.
   {
     const s = clone(comp1());
     const donor = s.layers.find((l) => l.name === "Sweep Control");
     const donorInfo = s.layer_info.find((l) => l.name === "Sweep Control");
     const target = s.layers.findIndex((l) => l.index === 22);
-    const entry = { index: 22, name: "Rock Shadow.png", kind: "footage", enabled: true, is_null: false, properties: clone(donor.properties) };
+    const entry = { index: 22, name: "Small Rock.png", kind: "footage", enabled: true, is_null: false, properties: clone(donor.properties) };
     if (target >= 0) s.layers[target] = entry;
     else { s.layers.push(entry); s.layers.sort((a, b) => a.index - b.index); }
     const info = s.layer_info.find((l) => l.index === 22);
@@ -76,7 +76,7 @@ export function fixtures() {
     // Position along the keys. Anchor, scale, rotation, opacity and rect are outline.png's (an ordinary
     // 1588 x 535 image at full opacity); only Position follows the donor.
     const own = clone(info);
-    info.name = "Rock Shadow.png";
+    info.name = "Small Rock.png";
     info.parent = null;
     info.enabled = true;
     info.transform = { ...clone(own.transform), position: clone(donorInfo.transform.position) };
