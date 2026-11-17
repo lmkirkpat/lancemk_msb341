@@ -204,7 +204,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   snapshot result saved with the lesson, and no last-check time. Tests: the request byte for byte with and
   without steps, layers and closing offer; a `null` view; only the first send wrapped; Try again resends the
   same request; no bubble shows the wrapper; Pick up's comp from the saved snapshot. Panel suite passes.
-- [ ] T103 [P] (skill-builder) Add one line to `.claude/skills/ask-mentor/SKILL.md`: "If the message carries an
+- [x] T103 [P] (skill-builder) Add one line to `.claude/skills/ask-mentor/SKILL.md`: "If the message carries an
   earlier question and answer, treat the learner's text as a follow-up to it, and read the comp again before
   answering." Matches the wrapper's first line in contracts/panel-ask.md.
 - [ ] T104 [P] (eval-engineer) Ask case 18: a follow-up sent in the wrapper after a lesson changed the comp.

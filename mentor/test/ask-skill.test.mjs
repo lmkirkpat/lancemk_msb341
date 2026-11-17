@@ -81,3 +81,11 @@ test("every quoted phrase anywhere in the file is copied from the teaching desig
   assert.match(SKILL, /biggest first; then the sources with no pixel\s+number, in the order the read lists them/, "014 OQ-6's order");
   assert.match(SKILL, /you can't tell, so never call\s+it off/, "a switch not read is never off");
 });
+
+test("T103 (amendment (e)): the context-after-a-lesson rule, word for word, and none of the wrapper's labels", () => {
+  const tasks = fs.readFileSync(path.join(REPO, "specs", "014-ask-mentor", "tasks.md"), "utf8");
+  const rule = /Add one line to `\.claude\/skills\/ask-mentor\/SKILL\.md`: "([^"]+)"/.exec(tasks)[1];
+  assert.ok(squash(SKILL).includes(squash(rule)), rule);
+  for (const label of ["as shown in the panel", "Question:", "Answer:", "Closing:", "Follow-up:", "(layer:"]) assert.ok(!SKILL.includes(label), label);
+  assert.match(SKILL, /never mention it, quote it,\s+or repeat its labels/);
+});
