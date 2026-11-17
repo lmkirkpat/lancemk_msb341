@@ -183,9 +183,9 @@ phrase, and two sources of similar size are simply both named with their sizes, 
 
 **What it changed (2026-11-16):** § 16's rotation bullet and step 2 said "too small to see" about a
 source that moves the rock several pixels, which the floor's third bullet rules out. They now say the
-size and drop the adjective; they don't say "hard to tell apart" (deferred). The size in § 16 is an
-estimate from the design docs (see § 16's note) until the tool's pixel conversion (SB-4) reads it on
-Comp 1.
+size and drop the adjective; they don't say "hard to tell apart" (deferred). The size in § 16 is now
+a read (2026-11-16): spec 015's `describe_layers` (FR-004a, SB-4) measures 9.36 px on rock.png's box,
+said as "about 9 px" (see § 16's note).
 
 **Needs from the tools (for the builder):** the peak in screen pixels on the asked layer, for each
 source, and whether two sources peak at the same times. Spec 015 FR-004 gives the peak in property
@@ -595,7 +595,7 @@ the mentor's prose never lists, numbers or repeats a step, and never writes "Ste
 
 **Changed 2026-11-16 (H-7, the 1 px floor):** the rotation bullet was "Rotation is too small to see:
 0.75° at most, gone in about 1/3 s." Under the floor, a source of 1 px or more gets its size, not an
-adjective. **The 9 px is an estimate, not a read:** spec 015's sweep puts the rotation's peak at
+adjective. **Before 2026-11-16 the 9 px was an estimate, not a read** (kept for the record): spec 015's sweep puts the rotation's peak at
 0.589° (Comp 1 fixture, at 2.569 s; the expression's largest amount is 0.75°, but the decay means the
 sampled peak is lower). The turn centers on the rock (AB follow-up), and rock.png's box is 1588 × 535,
 so its far corner is about 840 px from the center at 100% scale, or about 910 px from the hit corner
@@ -606,6 +606,13 @@ rules out. Replace "about 9 px" with the tool's number once SB-4's conversion re
 rock.png's box, which is padded (AB), so it may be larger than the visible rock moves. SC-003a expects
 8.6 to 9.4 px; a scratch check gave about 9.36. The teaching above is unchanged until T064's number
 lands.
+**Measured 2026-11-16 (SB-4, spec 015 FR-004a and SC-003a's Phase 1 results):** `describe_layers` reads
+rock.png's peak shift from Shake Control's Rotation as **9.36 px** (0.589° at 2.569 s), inside SC-003a's
+8.6 to 9.4 px, and its Position shift as **12.15 px**. The rotation bullet is now a read, said as "about
+9 px" (§ 5.1a: the size as the tool gives it, in plain words, rounded to the whole pixel). Its wording
+doesn't change. The order holds under § 5.1a, biggest first: the Position hits (12.15 px) lead, the
+rotation (9.36 px) follows. Both are measured on the layer's box, which is padded (015 OQ-11, "box for
+now"; § 5.1a), so the bullet says the size and never that it's easy to see.
 
 **steps** (data: each line is something the learner does in AE; two to four):
 
@@ -695,7 +702,7 @@ the step list allowed; length about 120 words; every claim in one of § 5.3's ki
   the door but keeping it in the follow-through; "asked about" pulling a review forward; a stand-in
   layer for a lesson that can't check the real target; one optional frame; § 5.1a's deferred "about
   the same size" as at least half the larger (the approved 1 px floor is R: T005's 0.07 px, and the
-  pivot check's `MOVE_PX`); § 16's "about 9 px" (an estimate until SB-4 reads it); § 5.5's wording (no learner has met a read-inside answer yet).
+  pivot check's `MOVE_PX`); § 5.5's wording (no learner has met a read-inside answer yet).
 
 ## 19. Open questions
 
@@ -814,6 +821,8 @@ Follow-up):
 4. § 5.1a needs each source's peak as **screen pixels on the asked layer**. Spec 015 FR-004 gives the
    peak in the property's units only. (Whether two sources peak at the same times is only needed for
    the deferred band; not needed now.) Once it exists, read Comp 1 and replace § 16's "about 9 px".
+   **Done 2026-11-16:** spec 015 FR-004a reads 9.36 px (rotation) and 12.15 px (Position) on
+   rock.png's box; § 16 keeps "about 9 px", now a read.
 5. § 5.5 needs the phase 2 read in the ask's reply (spec 015 FR-027's summary, and detail per inner
    comp), with each level's read status, so "partly read" can be told from "nothing inside".
 

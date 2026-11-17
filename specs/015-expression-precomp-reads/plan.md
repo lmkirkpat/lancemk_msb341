@@ -136,7 +136,7 @@ goes in new files where possible, so the shared-file edits stay small.
 |---|---|---|---|
 | **0. Live checks** | T001 to T008 | Facts for the reads | Results logged and folded into research before T010 |
 | **1. Expressions** (US1, US2, US3) | T009 to T040 | On its own: spec 014 can build on it | SC-001 to SC-010; six sets on B1 (SC-006) |
-| 1 follow-up: footprint shift (FR-004a) | T064 | Before 014's FR-007 test on Comp 1 and its three sessions | SC-003a; mentor and hooks suites; skill replies on eval fixtures unchanged |
+| 1 follow-up: footprint shift (FR-004a) | T064 | Before 014's FR-007 test on Comp 1 and its three sessions (built 2026-11-16 on `014-mentor`, `2440c62`) | SC-003a; mentor and hooks suites; skill replies on eval fixtures unchanged |
 | 1 follow-up: own keys and switches (FR-004b) | T065 | With T064, in 014's `014-mentor` worktree; before 014's ask cases 05 and 13 to 16 run | SC-003b; SC-007; mentor and hooks suites; skill replies on eval fixtures unchanged |
 | **2. Precomps** (US4) | T041 to T056 | After phase 1 is merged and its gate passes | SC-011 to SC-013; easing unchanged; eval gate (spec OQ-6) |
 
