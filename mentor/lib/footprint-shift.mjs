@@ -4,8 +4,8 @@
 // one property at its base value. Pure, on comp-space.mjs's matrices: no AE, no new read.
 //
 // Never a guess: whenever the shift can't be worked out exactly from what was read, the entry is
-// `shift_px: null` with a reason (three_d, auto_orient, no_rect, not_sampled, no_fine_sweep,
-// chain_moves, direction_unknown, singular), never an estimate, a number in degrees or percent, or 0.
+// `shift_px: null` with a reason (three_d, auto_orient, switch_not_read, no_rect, not_sampled,
+// no_fine_sweep, chain_moves, direction_unknown, singular), never an estimate, a number in degrees or percent, or 0.
 //
 // The samples are at the reading time, not the peak, so the conversion is exact only when every
 // value it depends on is the same at both (research R15's `chain_moves` list): the transform of the
@@ -91,8 +91,10 @@ function shiftFor(snapshot, chain, k, x, time, moving) {
   const named = chain[0];
   const key = sampleKeyOf(x.path);
 
-  if (chain.some((e) => e.three_d) || !["anchor", "position", "scale", "rotation"].includes(key) || /Rotate [XY]|Orientation|Position_2/.test(x.path)) return no("three_d");
-  if (chain.some((e) => e.auto_orient)) return no("auto_orient");
+  if (chain.some((e) => e.three_d === true) || !["anchor", "position", "scale", "rotation"].includes(key) || /Rotate [XY]|Orientation|Position_2/.test(x.path)) return no("three_d");
+  if (chain.some((e) => e.auto_orient === true)) return no("auto_orient");
+  // Review S2: a 3D or Auto-Orient switch the snapshot couldn't read (null, or absent) can't vouch for 2D.
+  if (chain.some((e) => typeof e.three_d !== "boolean" || typeof e.auto_orient !== "boolean")) return no("switch_not_read");
   if (named.is_null || named.kind === "camera" || named.kind === "light" || named.has_video === false) return no("no_rect");
 
   const sweeps = Array.isArray(snapshot.expression_sweeps) ? snapshot.expression_sweeps : [];

@@ -274,3 +274,17 @@ test("chain_moves: a text layer whose box can change (keys or an expression outs
   // A footage layer's box doesn't come from its text or contents: rock.png is unaffected.
   assert.equal(typeof entry(SNAP, ROCK, "Rotation").shift_px, "number");
 });
+
+// Review S2: an unreadable 3D or Auto-Orient switch anywhere in the chain is never taken as off.
+test("switch_not_read: a 3D or Auto-Orient switch read as null, or missing, in the chain", () => {
+  const s = load();
+  byIndex(s, SHAKE).three_d = null;
+  assert.deepEqual(reasonFor(s), ["switch_not_read"]);
+  const t = load();
+  delete byIndex(t, ROCK).auto_orient;
+  assert.deepEqual(reasonFor(t), ["switch_not_read"]);
+  const on = load();
+  byIndex(on, SHAKE).three_d = null;
+  byIndex(on, ROCK).three_d = true;
+  assert.deepEqual(reasonFor(on), ["three_d"], "a switch that's on is definite");
+});
