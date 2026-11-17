@@ -72,6 +72,17 @@ function corners(chain, time, over) {
   return [[left, top], [left + width, top], [left + width, top + height], [left, top + height]].map((c) => apply(m, c));
 }
 
+// Keys or an active expression outside the Transform group and the effects, or a sampled box that
+// differs between samples.
+const BOX_SAFE = /^(ADBE Transform Group|ADBE Effect Parade|ADBE Marker)(\/|$)/;
+function boxMoves(snapshot, layer) {
+  const keyed = (snapshot.layers || []).find((l) => l.index === layer.index);
+  if (keyed && (keyed.properties || []).some((p) => p.keys && p.keys.length > 0 && !BOX_SAFE.test(p.path))) return true;
+  if ((snapshot.expressions || []).some((x) => x.layer === layer.index && x.enabled === true && !x.error && !BOX_SAFE.test(x.path))) return true;
+  const rects = (layer.samples || []).map((s) => s.rect).filter(Boolean).map((r) => JSON.stringify([r.left, r.top, r.width, r.height]));
+  return new Set(rects).size > 1;
+}
+
 // One entry for the expression `x` on chain[k] (k ≥ 1), moving chain[0].
 function shiftFor(snapshot, chain, k, x, time, moving) {
   const src = chain[k];
@@ -116,6 +127,9 @@ function shiftFor(snapshot, chain, k, x, time, moving) {
     if (!aboveUniform) deps.push([chain[i].index, "rotation"]);
   }
   if (deps.some(([i, p]) => moving(i, p))) return no("chain_moves");
+  // Review S1: a text or shape layer's box can change over time (Source Text, animators, Rectangle
+  // Size, Path), so the box at the peak may not be the box now. Effects and markers don't change it.
+  if ((named.kind === "text" || named.kind === "shape") && boxMoves(snapshot, named)) return no("chain_moves");
   // With a direction, the peak value is compared with the base, which must then be the same at the
   // peak as now: a keyed source property can't give it.
   const baseNow = samples[k].base && samples[k].base[key] != null ? samples[k].base[key] : null;

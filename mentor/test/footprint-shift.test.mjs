@@ -251,3 +251,26 @@ test("an older snapshot: named layers say shifts aren't read, with the read's re
   assert.deepEqual(r.layers[0].shifts, { status: "not_read", reason: "older_snapshot" });
   use(COMP1);
 });
+
+// Review S1: a text or shape layer's box can change over time, so the box at the peak may not be now's.
+test("chain_moves: a text layer whose box can change (keys or an expression outside Transform, or a sampled box that differs)", () => {
+  const still = () => { const s = load(); s.layers = s.layers.filter((l) => l.index !== TITLE); return s; };
+  const base = still();
+  assert.equal(typeof entry(base, TITLE, "Rotation").shift_px, "number", "with its Position keys gone, the title converts");
+  const text = { path: "ADBE Text Properties/ADBE Text Document", display_name: "Source Text", display_path: "Text › Source Text", expression_enabled: false };
+  const keyed = still();
+  keyed.layers.push({ index: TITLE, name: byIndex(keyed, TITLE).name, properties: [{ ...text, keys: [{ time: 0, value: 0, in_type: "hold", out_type: "hold" }, { time: 3, value: 0, in_type: "hold", out_type: "hold" }] }] });
+  assert.deepEqual([...new Set(shiftsOf(keyed, TITLE).map((e) => e.reason))], ["chain_moves"]);
+  const expr = still();
+  expr.expressions.push({ layer: TITLE, path: text.path, display_path: text.display_path, group: "other", keys: 0, enabled: true, active: true, error: null, text: "time.toFixed(1)", text_length: 15, text_cut: false });
+  assert.deepEqual([...new Set(shiftsOf(expr, TITLE).map((e) => e.reason))], ["chain_moves"]);
+  const grows = still();
+  byIndex(grows, TITLE).samples[0].rect = { ...byIndex(grows, TITLE).samples[0].rect, width: 400 };
+  assert.deepEqual([...new Set(shiftsOf(grows, TITLE).map((e) => e.reason))], ["chain_moves"]);
+  // Keys on an effect don't change the box: still a number.
+  const fx = still();
+  fx.layers.push({ index: TITLE, name: byIndex(fx, TITLE).name, properties: [{ path: "ADBE Effect Parade/ADBE Gaussian Blur 2#1/ADBE Gaussian Blur 2-0001", display_name: "Blurriness", display_path: "Effects › Gaussian Blur › Blurriness", expression_enabled: false, keys: [{ time: 0, value: 0 }, { time: 3, value: 9 }] }] });
+  assert.equal(entry(fx, TITLE, "Rotation").shift_px, entry(base, TITLE, "Rotation").shift_px);
+  // A footage layer's box doesn't come from its text or contents: rock.png is unaffected.
+  assert.equal(typeof entry(SNAP, ROCK, "Rotation").shift_px, "number");
+});
