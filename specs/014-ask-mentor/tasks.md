@@ -83,7 +83,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 - [x] T010 [P] (skill-builder) FR-021: add `short_name` to every skill in `mentor/curriculum/path.json` (MU ›
   Short skill tags) and `shortName(id)` in `mentor/lib/path.mjs`. Tests in `mentor/test/path.test.mjs`: all
   six, and a skill without one falls back to its full name.
-- [ ] T011 (skill-builder) `mentor/lib/session.mjs`: the `ask` block (data-model § 2): `saveAnswer`,
+- [x] T011 (skill-builder) `mentor/lib/session.mjs`: the `ask` block (data-model § 2): `saveAnswer`,
   `latestAnswer`, `askStartedAt`; an unreadable file behaves as today. Tests in `mentor/test/session-ask.test.mjs`.
 - [ ] T012 (skill-builder) `mentor/lib/ask-answer.mjs`: validate and normalize an asked result (research R3,
   data-model § 1, contracts/ask-tools.md), using spec 015's motion-sources map (015 T019) for K4. Tests in
