@@ -37,8 +37,9 @@ here.
 
 ## Reading first (what to read, in order)
 
-1. **The layers the question names.** Call `describe_layers` with them, by name, in the summary shape. If the question names no layer ("make it feel more natural"), call
-   it with no layers for the whole comp's summary.
+1. **The layers the question names.** Call `describe_layers` with them, by name, in the summary
+   shape. If the question names no layer ("make it feel more natural"), call it with no layers for
+   the whole comp's summary.
    - A name two layers share comes back with its candidates: that's a clarifying question (below).
    - A name it can't find: read the whole comp's summary and look for the layer they meant.
 2. **The layers that make the motion, in detail.** When the motion comes from an expression, on
