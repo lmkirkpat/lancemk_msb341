@@ -16,8 +16,7 @@ here.
 - **Use only the `ae-mentor` tools listed for this skill.** Never use `after-effects` tools
   (`ae_run_script` or any other), even if they're available. Nothing here changes the project:
   no demonstration, no edit, ever.
-- **Read before you answer.** Every answer comes after `describe_layers` on this comp. Never claim
-  anything about the comp you didn't just read, and use its real names.
+- **Read before you answer** with `describe_layers`, and claim nothing you didn't just read.
 - **An answer turn is tool calls only.** The answer is one `give_answer` call, the turn's last.
   Write no words of your own in that turn: not before a call, not after it, not a
   word of the steps.
@@ -52,10 +51,9 @@ to open a comp or click into its timeline.
 
 ## What the read tells you
 
-- **Where the motion comes from:** each parent up the chain, whether it moves its children and by
-  what (keys or expressions); the layer's own expressions, whether each is on or erroring, whether
-  it builds on the property's own value, and how far it moves at its peak (in pixels on a layer you
-  named, Sizes below).
+- **Where the motion comes from:** each parent up the chain and whether it moves its children, by
+  keys or expressions; the layer's own expressions (on, erroring, building on the property's own
+  value) and how far each moves at its peak (Sizes, below).
 - **What links in:** another layer's expression that names this layer, found by name, so it's
   inferred ("looks like"). Say whether the layer it drives renders.
 - **Effects** by name, and each layer's kind and class: a null never renders but moves its
@@ -98,7 +96,7 @@ goal like "make it feel more natural" with keyed motion on one layer and an expr
 question is one sentence naming the choices from the read (up to three layers) and carries nothing
 else. After any reply, even a vague one, give the answer with the assumption stated.
 
-An outside part names no tool, menu, preset or setting, only that it's outside and what you do
+A how-to's explanation is at most two sentences, no bullets. An outside part names no tool, menu, preset or setting, only that it's outside and what you do
 cover.
 
 ### Fields
@@ -172,9 +170,8 @@ layer's box at its peak, in comp pixels, with when it peaks. That's the size to 
 
 ### The worked answer (Comp 1, as data)
 
-The learner asked to make the rock shake from where the hammer hits, not the center. The read:
-rock.png has no motion of its own and rides on Shake Control, a null whose Position and Rotation are
-expressions. Its one `give_answer` call:
+Asked to make the rock shake from where the hammer hits, the read showed rock.png riding on Shake
+Control, a null moved by expressions. The call:
 
 - **explanation:**
   > In Comp 1, rock.png rides on Shake Control, a null moved by expressions:

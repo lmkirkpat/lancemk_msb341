@@ -16,8 +16,8 @@ import { motionSources } from "./motion-sources.mjs";
 import { readPath, shortName } from "./path.mjs";
 import { copiesExpression } from "../tools/common.mjs";
 
-// Data-model § 8's messages, word for word, plus five this build adds (named in the hand-back):
-// ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN and NOT_PLAIN_WORDS.
+// Data-model § 8's messages, word for word, plus six this build adds (named in the hand-backs):
+// ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN, NOT_PLAIN_WORDS and HOWTO_TOO_LONG.
 registerErrors({
   TOO_MANY_STEPS: "Give at most four steps; give the first three and say there's more in the closing offer.",
   BAD_STEP_SKILL: "Each step's skill must be a skill, not taught, or none.",
@@ -33,6 +33,7 @@ registerErrors({
   KIND_MISMATCH: "An answer has one to four steps; a description or a how-to has none. Pick the kind that fits.",
   STEP_NEEDS_LAYER: "A step tagged with a skill names the layer it's on, exactly as it appears in the comp.",
   COMP_IS_OPEN: "A comp is open, so read it and answer about it.",
+  HOWTO_TOO_LONG: "A how-to's explanation is at most two sentences, with no list.",
   NOT_PLAIN_WORDS: "Say it in plain words: no code, no backticks, and no names from tool output; name a skill by its short name.",
 });
 
@@ -200,6 +201,9 @@ export function checkAnswer(input, ctx) {
   }
 
   if (/^\s*\d+[.)]\s/m.test(expl) || /\bsteps?\s*:/i.test(expl)) fail("STEPS_IN_EXPLANATION");
+  // FR-019 (eval fix (d)): a how-to is two sentences, no list. A sentence ends at . ! or ? before a
+  // space or the end, so "1/3 s" and "0.75°" don't count.
+  if (kind === "howto" && (/^\s*[-•*]\s/m.test(expl) || (expl.match(/[.!?](?=\s|$)/g) || []).length > 2)) fail("HOWTO_TOO_LONG");
   const flat = squash(expl);
   for (const s of steps) {
     const core = squash(s.text.replace(/\s*not something i teach yet\.?$/i, ""));

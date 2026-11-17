@@ -313,3 +313,12 @@ test("eval fix (b): a describe with no closing is refused, and the message says 
   assert.throws(() => checkAnswer({ ...describe, kind: "outside", explanation: "Render settings are outside what I cover." }, b1({ snapshot: null })), (e) => e.code === "BAD_CLOSING" && /missing/.test(e.message));
   assert.ok(checkAnswer({ ...describe, closing_offer: "Want to know what moves Sweep Control?" }, b1()));
 });
+
+test("eval fix (d): a how-to's explanation is at most two sentences with no list, else HOWTO_TOO_LONG", () => {
+  const howto = (explanation) => ({ kind: "howto", explanation, steps: [], offered_skills: ["easing.speed_graph"], closing_offer: "Want to learn it on one of your layers?" });
+  const two = "The speed graph shows how fast a property changes between two keys. A soft landing is a curve that comes down to rest, about 1/3 s long.";
+  assert.ok(checkAnswer(howto(two), b1({ snapshot: null })));
+  refuses(howto(`${two} Drag the handles to shape it.`), b1({ snapshot: null }), "HOWTO_TOO_LONG");
+  refuses(howto("The speed graph shows speed over time:\n- Steep means fast.\n- Flat means slow."), b1({ snapshot: null }), "HOWTO_TOO_LONG");
+  assert.ok(checkAnswer(edit(() => {}), b1()), "an answer's bullets are fine");
+});

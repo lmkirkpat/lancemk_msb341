@@ -100,3 +100,7 @@ test("eval fix (a): the turn-over rule closes the answer section, after the work
 test("eval fixes (c) and (d): the outside and how-to lines", () => {
   assert.match(squash(SKILL), /An outside part names no tool, menu, preset or setting, only that it's outside and what you do cover\./);
 });
+
+test("eval fix (d): the how-to line", () => {
+  assert.match(SKILL, /A how-to's explanation is at most two sentences, no bullets\./);
+});
