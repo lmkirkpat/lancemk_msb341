@@ -119,7 +119,8 @@ const COPY = {
     busy_status: "After Effects is busy. Your answer will come when it's free.",
     question_still_here: "Your question's still here.",
     // The thread's hand-back after a go-deeper lesson (contracts/panel-ask.md, from record_lesson's data).
-    hand_back: (n, next) => `That was step ${n}; next is step ${n + 1}: ${next}`,
+    // Always ends in a period, whether or not the step's text does (T035 design review item 7).
+    hand_back: (n, next) => { const t = String(next == null ? "" : next).trim(); return `That was step ${n}; next is step ${n + 1}: ${/[.!?…]$/.test(t) ? t : `${t}.`}`; },
     last_step: "That was the last step.",
   },
   quiet: {
