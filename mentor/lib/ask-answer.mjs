@@ -194,7 +194,8 @@ export function checkAnswer(input, ctx) {
   if (kind !== "howto" && !offered.every((o) => stepSkills.includes(o))) fail("BAD_OFFER");
 
   if (!NO_CLOSING.has(kind)) {
-    if (!closing) fail("BAD_CLOSING");
+    // Eval fix (b): describe answers came with no closing; say plainly it's missing and required.
+    if (!closing) throw new MentorError("BAD_CLOSING", "The closing offer is missing. It's required for an answer, a description, a how-to and an outside line: one sentence handing the choice back. Only a question back and no comp leave it out.");
     if ((steps.length || offered.length) && !oneQuestion(closing)) fail("BAD_CLOSING");
   }
 

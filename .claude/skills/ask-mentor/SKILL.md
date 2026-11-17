@@ -109,8 +109,9 @@ else. After any reply, even a vague one, give the answer with the assumption sta
 - **`offered_skills`:** the skills to go deeper on, by ID, one or two, each one a step's skill. A
   `howto` offers its one lesson.
 - **`closing_offer`:** one sentence handing the choice back: try the steps, ask about one, or go
-  deeper on a named skill. A question when there are steps or an offer. Null for `clarify` and
-  `no_comp`. For `outside`, one sentence on what you do cover.
+  deeper on a named skill. A question when there are steps or an offer. Required for answer,
+  describe, howto and outside; null only for clarify and no_comp. For `outside`, one sentence on
+  what you do cover.
 - **`goal`:** optional, what they want in general motion terms, never their words copied, never a
   name.
 

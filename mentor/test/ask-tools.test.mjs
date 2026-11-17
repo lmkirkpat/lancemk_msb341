@@ -202,3 +202,8 @@ test("eval fix (a): every accepted reply ends with a plain done note that's safe
   assert.match(r.done, /finished: write nothing more\.$/);
   assert.doesNotMatch(r.done, /[_`]|give_answer|panel|tool/i, "no tool names, fields or panel talk");
 });
+
+test("eval fix (b): the schema says the closing is required for answer, describe, howto and outside", () => {
+  const d = TOOLS.find((t) => t.name === "give_answer").inputSchema.properties.closing_offer.description;
+  assert.match(d, /Required for answer, describe, howto and outside; null only for clarify and no_comp\./);
+});

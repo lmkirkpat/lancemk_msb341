@@ -306,3 +306,10 @@ test("review N2: the first line must name the comp as a whole name", () => {
   refuses(edit((a) => { a.explanation = a.explanation.replace("In Comp 1,", "In Logo Final,"); }), b1({ snapshot: logo }), "COMP_NOT_NAMED");
   assert.ok(checkAnswer(edit((a) => { a.explanation = a.explanation.replace("In Comp 1,", "In Logo,"); }), b1({ snapshot: logo })));
 });
+
+test("eval fix (b): a describe with no closing is refused, and the message says it's missing and required", () => {
+  const describe = { kind: "describe", explanation: "In Comp 1, Sweep Control is a null whose Position drives the Center of the CC Light Sweep on Black Solid 1.", steps: [], offered_skills: [], closing_offer: null };
+  assert.throws(() => checkAnswer(describe, b1()), (e) => e.code === "BAD_CLOSING" && /missing/.test(e.message) && /description/.test(e.message) && !/[a-z]_[a-z]/.test(e.message));
+  assert.throws(() => checkAnswer({ ...describe, kind: "outside", explanation: "Render settings are outside what I cover." }, b1({ snapshot: null })), (e) => e.code === "BAD_CLOSING" && /missing/.test(e.message));
+  assert.ok(checkAnswer({ ...describe, closing_offer: "Want to know what moves Sweep Control?" }, b1()));
+});

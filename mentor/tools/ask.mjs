@@ -113,7 +113,7 @@ export const TOOLS = [
         explanation: { type: "string", description: "What's making it happen now. The first line names the comp. One or two sentences, or a lead line and up to four lines starting \"- \". Never numbered, never the steps." },
         steps: { type: "array", items: STEP, description: "Zero to four, in order of visible effect. Only for answer." },
         offered_skills: { type: "array", items: { type: "string" }, description: "Zero to two skill IDs to go deeper on, each one a step's skill (a howto may offer its one lesson)." },
-        closing_offer: { type: ["string", "null"], description: "One sentence handing the choice back, a question when there are steps or an offer. Null for clarify and no_comp." },
+        closing_offer: { type: ["string", "null"], description: "One sentence handing the choice back, a question when there are steps or an offer. Required for answer, describe, howto and outside; null only for clarify and no_comp." },
         goal: { type: "string", description: "Optional: what the learner wants, in general motion terms, never their words or names." },
       },
       required: ["kind", "explanation", "steps", "offered_skills", "closing_offer"],
