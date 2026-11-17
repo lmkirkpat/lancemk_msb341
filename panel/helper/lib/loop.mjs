@@ -18,6 +18,7 @@ import { stallFetch, isStall } from "./stall.mjs";
 import { costOf, sumCosts, tokensOf, addTokens, ZERO_TOKENS } from "./cost.mjs";
 import { buildLessonPrompt, buildTools, promptHash, toolChangeBlocks, userContent, skillSystemMessage, withBreakpoint, withoutBreakpoints, SKILL_TOOL } from "./prompt.mjs";
 import { readSkill, commandOf } from "./skills.mjs";
+import { answerAccepted } from "./answer-end.mjs";
 
 export const BETAS = Object.freeze({
   updates: "thinking-display-updates-2026-08-18",
@@ -623,6 +624,7 @@ export function createLesson(opts) {
         const pendingHandOver = {};
         const results = [];
         let ran = false;
+        let answered = false;
         const flight = {};
         try {
           for (const use of uses) {
@@ -630,6 +632,7 @@ export function createLesson(opts) {
             if (abortKind) throw new TurnAbort(abortKind);
             const r = await runTool(use, race, emit, pendingHandOver, flight);
             results.push(resultBlock(use.id, r.content, r.isError));
+            if (answerAccepted(use.name, r.content, r.isError)) answered = true;
             if (r.ran) ran = true;
           }
         } catch (e) {
@@ -653,6 +656,14 @@ export function createLesson(opts) {
         messages.push({ role: "user", content: results });
         applyHandOver(pendingHandOver, emit);
         markComplete();
+        // T105: an accepted answer is the turn's end; no request goes after it, so no words follow
+        // it. The history ends on its result, which the next learner message joins (addUserText),
+        // and it's saved at this mark, so a continue resumes from here.
+        if (answered) {
+          log({ event: "answer_ended_turn", step: steps });
+          clearTimeout(timer);
+          return summary(true, null);
+        }
       }
       // The step limit: as B1's --max-turns, the turn ends without an answer and no error. It ends
       // on a complete exchange (every call made has its result), so nothing is taken back and the
