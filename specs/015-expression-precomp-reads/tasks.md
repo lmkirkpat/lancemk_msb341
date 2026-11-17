@@ -381,12 +381,18 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   already saved, validation's plain errors), and the server reads `omitFromLog` from any error; replies
   unchanged. Replay of 524 calls across all 119 pivot and null cases: no reply changes (no capture has an
   erroring keyed expression).
-- [ ] T063 (skill-builder) Three `SKILL.md` fixes from T036 (cockpit-numbered 2026-11-16, builder's go), each
+- [x] T063 (skill-builder) Three `SKILL.md` fixes from T036 (cockpit-numbered 2026-11-16, builder's go), each
   one line with its example from the rubric's Pass line: (a) key types case 33 (`names_blink`): a hint names
   the layer or property it's about; (b) speed graph case 16 (R-RECORD-HONEST): a record summary says what
   the learner did, never how the lesson went; (c) offset case 41 (R-SHOW-ME-AGAIN): say a shift as the
   learner's gap ("later by your gap"), never a raw time. No change to eval cases, rubrics or `mentor/`.
   Then EE re-runs each case `--repeat 3` on B1 (3/3 each).
+  **Done 2026-11-16 (`84693de`, re-runs `c7167ea`, about $15 on B1):** offset 41 3/3 (failing since 11-11);
+  key types 33 2/3 and speed graph 16 2/3, each fix holding in all 3 runs and the misses on other items
+  (a hint with menu steps, R-HINT-NOT-FIX; the judge strict on `attempted`). Offset demo cases 03, 16, 40 pass
+  (40 noise, 3/3). The builder took it as met. **Open, to come back to:** reword R-SHOW-ME-AGAIN's Fail line to
+  "numbers other than the learner's own gap" (EE); a key types line, a hint says what's off and where with
+  no menu path; maybe a speed graph line, the record's `attempted` names only what the check saw (SB).
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script
