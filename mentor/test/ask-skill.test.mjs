@@ -54,9 +54,12 @@ test("every quoted example line in the worked answer is copied whole from TD § 
   for (const line of quoted) assert.ok(SOURCES.includes(squash(line)), line);
 });
 
-test("the stale 'too small to see' wording (before H-7) is never an example", () => {
+test("the stale 'too small to see' wording (before H-7) is never an example; § 16's rotation bullet is", () => {
   assert.doesNotMatch(SKILL, /0\.75° at most, too small to see/);
-  assert.doesNotMatch(SKILL, /about 9 px/, "§ 16's 9 px is an estimate, not a read");
+  // § 16's 9 px is a read since 2026-11-16 (015 T064: 9.36 px on rock.png), placed after the hit sizes.
+  const hits = SKILL.indexOf("> - All three hits are the same size.");
+  const turn = SKILL.indexOf("> - Rotation moves the rock about 9 px at most, gone in about 1/3 s.");
+  assert.ok(hits > 0 && turn > hits, "the rotation bullet follows the Position bullet");
 });
 
 test("Sizes (015 FR-004a, TD § 5.1a): the 1 px floor on the read's pixel shifts, its one quoted line copied from § 5.1a", () => {
