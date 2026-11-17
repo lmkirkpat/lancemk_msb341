@@ -137,7 +137,8 @@ test("kinds: no steps for describe, howto, clarify, outside; no offer for clarif
   const outside = good({ kind: "outside", comp: null, explanation: "That's outside what I cover.", steps: [], offered_skills: [], closing_offer: null });
   assert.deepEqual(failed(run([turn(call(outside))], ex("outside"))), []);
   assert.ok(failed(run([turn(call({ ...outside, steps: good().steps }))], ex("outside"))).includes("no_steps_for_kind@1"));
-  assert.ok(failed(run([turn(call({ ...outside, closing_offer: "Want a lesson?" }))], ex("outside"))).includes("no_offer_for_kind@1"));
+  assert.ok(!failed(run([turn(call({ ...outside, closing_offer: "I can help with the motion in your layers." }))], ex("outside"))).includes("no_offer_for_kind@1"));
+  assert.ok(failed(run([turn(call({ ...outside, offered_skills: ["easing.basic"] }))], ex("outside"))).includes("no_offer_for_kind@1"));
   assert.ok(failed(run([turn(call(outside))], ex("answer"))).includes("kind@1"));
   assert.deepEqual(failed(run([turn(call(outside))], ex(["answer", "outside"]))), []);
 });
@@ -278,9 +279,14 @@ test("case 18: the wrapper is the contract's, and its checks pass a follow-up an
   assert.equal(lines[0], "/ask-mentor Earlier question and answer, as shown in the panel:");
   assert.deepEqual(lines.map((l) => l.split(":")[0]).filter((l) => /^(Question|Answer|Steps|Closing|Follow-up)$/.test(l)), ["Question", "Answer", "Steps", "Closing", "Follow-up"]);
   assert.match(lines.at(-1), /^Follow-up: /);
-  const ok = good({ steps: [{ text: "Open Shake Control's Rotation expression and look at its amounts. Not something I teach yet.", skill: "not_taught", layer: "Shake Control" }], offered_skills: [], closing_offer: "Want to look at the pivot next?", explanation: "In Comp 1, Shake Control's Rotation turns rock.png a little with each hit." });
-  assert.deepEqual(failed(run([answerTurn(ok)], c.expect)), []);
-  const leaked = good({ ...ok, explanation: "In Comp 1, Follow-up: Rotation turns rock.png." });
-  assert.ok(failed(run([answerTurn(leaked)], c.expect)).includes("text:no_wrapper_label"));
-  assert.ok(failed(run([turn(call(ok))], c.expect)).includes("read_before_answer@1"));
+  const prose = (text) => turn(read, { kind: "say", text });
+  const ok = "Step 2 is Shake Control's Rotation expression, which tips rock.png a little with each hit. Open it and look at its three amounts. Not something I teach yet.";
+  assert.deepEqual(failed(run([prose(ok)], c.expect)), []);
+  assert.ok(failed(run([prose("Follow-up: Rotation tips rock.png.")], c.expect)).includes("text:no_wrapper_label"));
+  assert.ok(failed(run([turn({ kind: "say", text: ok })], c.expect)).includes("turn_first_tool@1"));
+  assert.ok(failed(run([turn(read, call(good()))], c.expect)).includes("no_answer@1"));
+  // a diagnostic waiver reports the check and never fails the case
+  const waived = run([answerTurn(good({ steps: good().steps }), [{ kind: "say", text: "Done." }])], EXPECT, { waive: ["answer_prose_empty"] });
+  assert.deepEqual(failed(waived), []);
+  assert.ok(byName(waived, "answer_prose_empty@1").waived);
 });

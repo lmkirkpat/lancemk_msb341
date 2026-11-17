@@ -1,12 +1,12 @@
 {
   "id": "18-followup-after-lesson",
-  "title": "The first follow-up after a lesson, sent in the context wrapper: a fresh read first, an answer that follows from the earlier answer, and no wrapper label in what the learner reads",
+  "title": "The first follow-up after a lesson, sent in the context wrapper: a fresh read first, then a short prose answer that follows from the earlier answer (FR-028), with no wrapper label in what the learner reads",
   "covers": [
     "T104",
     "amendment (e)",
     "contracts/panel-ask.md > Context after a lesson",
+    "FR-028",
     "FR-001",
-    "FR-009",
     "FR-016"
   ],
   "turns": [
@@ -16,21 +16,29 @@
     }
   ],
   "expect": {
-    "answers": [
+    "no_answer_turns": [
+      1
+    ],
+    "turn_first_tool": [
       {
         "turn": 1,
-        "kind": [
-          "answer",
-          "describe"
+        "tool": "describe_layers"
+      }
+    ],
+    "prose_max_sentences": [
+      {
+        "id": "short_follow_up",
+        "turns": [
+          1
         ],
-        "no_keyframe_skills": true
+        "max": 4
       }
     ],
     "text": [
       {
         "id": "follows_step_2",
         "must": "rotation",
-        "in": "all"
+        "in": "prose"
       },
       {
         "id": "no_wrapper_label",
@@ -40,7 +48,6 @@
     ]
   },
   "rubric": [
-    "R-FOLLOWS-EARLIER",
-    "R-HONEST-KINDS"
+    "R-FOLLOWS-EARLIER"
   ]
 }

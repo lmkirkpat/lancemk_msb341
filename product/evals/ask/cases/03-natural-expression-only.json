@@ -9,7 +9,7 @@
   "turns": [
     {
       "project": "product/evals/ask/fixtures/comp1.json",
-      "say": "/ask-mentor Make the shake feel more natural."
+      "say": "/ask-mentor Make the rock's shake feel more natural."
     }
   ],
   "expect": {

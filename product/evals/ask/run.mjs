@@ -5,6 +5,7 @@
 //
 //   node product/evals/ask/run.mjs                    every case that runs on B1
 //   node product/evals/ask/run.mjs --only 06          one case (id prefix); `--only 0` is 01 to 09, `--only 1` 10 to 17
+//   --waive answer_prose_empty                          a diagnostic run: checks with that name (before the @turn) are reported as waived, never failed. Not for a bar run.
 //   node product/evals/ask/run.mjs --changed          skip cases unchanged since their last pass
 //   node product/evals/ask/run.mjs --repeat 3         each case 3 times; passes on a majority
 //   node product/evals/ask/run.mjs --judge-always     judge even after a failed check
@@ -83,6 +84,7 @@ function parseArgs(argv) {
     else if (a === "--judge-always") opts.judgeAlways = true;
     else if (a === "--dry-run") opts.dryRun = true;
     else if (a === "--runtime") opts.runtime = argv[++i];
+    else if (a === "--waive") (opts.waive ||= []).push(argv[++i]);
     else if (a === "--settings") opts.settings = argv[++i];
     else throw new Error(`Unknown argument: ${a}`);
   }
@@ -339,7 +341,7 @@ async function runCase(c, opts) {
   const rt = opts.runtime || "b1";
   const record = { start: startRecord, end: readRecord(path.join(home, "learner.json")) };
   const checks = error ? [{ check: "run", pass: false, detail: error }]
-    : askChecks(c.expect, { turns, c, runtime: rt, fixtures: factsOf(c), record, allowed: ASK_ALLOWED });
+    : askChecks(c.expect, { turns, c, runtime: rt, fixtures: factsOf(c), record, allowed: ASK_ALLOWED, waive: opts.waive || [] });
   const denied = turns.flatMap((t) => t.denials || []);
   if (!error && denied.length) checks.push({ check: "no_permission_denials", pass: false, detail: `denied ${denied.map((d) => d.tool_name).join(", ")}` });
   if (fin && (!error || !fin.allowlist.pass)) checks.push({ check: "allowlist", pass: fin.allowlist.pass, detail: fin.allowlist.detail });
