@@ -54,29 +54,40 @@ test("homeView without skills data still draws, with no card (older callers)", (
   assert.equal(homeView({ memory: ok(TWO_DUE), pathData: SIX_PATH }).practice, null);
 });
 
-test("Home's card: the skill, last practiced and the count, between Up next and memory", async () => {
+// Spec 014 (FR-055, MU skills-due): Practice due moved off Home to the top of Skills.
+const skillsText = (h) => { h.app.act("tab", { tab: "skills" }); return plain(renderApp(h.app.model()).view); };
+
+test("Home never shows Practice due, even with two due (decisions/012)", async () => {
   const h = await onHome(TWO_DUE);
-  const text = homeText(h);
-  assert.ok(text.includes(COPY.home.practice_due));
+  assert.equal(h.app.model().state, "home-return", "home-review-due is home-return");
+  assert.ok(!homeText(h).includes(COPY.home.practice_due));
+  assert.ok(!/data-action="warm_up"/.test(renderApp(h.app.model()).view));
+});
+
+test("skills-due: the due line tops Skills with the skill, last practiced and the count, memory under the path", async () => {
+  const h = await onHome(TWO_DUE);
+  const text = skillsText(h);
+  assert.equal(h.app.model().state, "skills-due");
   assert.ok(text.includes("Break the lockstep with offset"));
-  assert.ok(text.includes(`${COPY.home.last_practiced} Oct 26.`));
-  assert.ok(text.includes(COPY.home.more_due(1)));
-  assert.ok(text.indexOf(COPY.home.up_next) < text.indexOf(COPY.home.practice_due));
-  assert.ok(text.indexOf(COPY.home.practice_due) < text.indexOf(COPY.home.memory_title));
+  assert.ok(text.includes(COPY.skills.due_line("Oct 26")));
+  assert.ok(text.includes(COPY.skills.more_due(1)));
+  assert.ok(text.indexOf(COPY.skills.due_line("Oct 26")) < text.indexOf(COPY.skills.pick), "at the top");
+  assert.ok(text.indexOf("Move a group with a null") < text.indexOf(COPY.home.memory_title), "memory under the path");
   assert.doesNotMatch(text, /about \d+ min/, "no expected length");
 });
 
-test("Home's card with one due has no count line, and a record without last_practiced leaves that out", async () => {
+test("the due line with one due has no count, and a record without last_practiced leaves that out", async () => {
   const h = await onHome({ skills: { "timing.offset": { status: "learned", review_due: "2026-11-01" } }, lessons });
-  const text = homeText(h);
-  assert.ok(text.includes(COPY.home.practice_due));
-  assert.ok(!text.includes("is due in Skills"));
-  assert.ok(!text.includes(COPY.home.last_practiced));
+  const text = skillsText(h);
+  assert.ok(text.includes(COPY.skills.due_line(null)));
+  assert.ok(!text.includes("more due"));
+  assert.ok(!text.includes("last practiced"));
 });
 
-test("no card when nothing is due", async () => {
+test("no due line when nothing is due", async () => {
   const h = await onHome({ skills: { "timing.offset": learned("2026-12-01") }, lessons });
-  assert.ok(!homeText(h).includes(COPY.home.practice_due));
+  assert.ok(!skillsText(h).includes(COPY.skills.due_line(null)));
+  assert.notEqual(h.app.model().state, "skills-due");
 });
 
 // ---------- T064: Warm up on Home and skill-detail, ↻ on Skills ----------
@@ -84,8 +95,9 @@ test("no card when nothing is due", async () => {
 const hasWarmUp = (html) => /data-action="warm_up"/.test(html);
 const view = (h) => renderApp(h.app.model()).view;
 
-test("Home's Warm up sends the first due skill's review, and shows the warm-up status (RQ-11)", async () => {
+test("Skills' Warm up sends the first due skill's review, and shows the warm-up status (RQ-11)", async () => {
   const h = await onHome(TWO_DUE);
+  h.app.act("tab", { tab: "skills" });
   assert.ok(hasWarmUp(view(h)));
   assert.match(view(h), /data-action="warm_up"[^>]*data-skill="timing\.offset"/);
   h.app.act("warm_up", { skill: "timing.offset" });
@@ -111,20 +123,21 @@ test("Warm up never starts easing, or a skill with no review", async () => {
   assert.equal(h.app.model().tab, "home");
 });
 
-test("with a lesson open, Home's Warm up reads Available after your lesson (FR-024)", async () => {
+test("with a lesson open, Skills' Warm up reads Available after your lesson (FR-024)", async () => {
   const h = await onHome(TWO_DUE);
   h.app.act("find_next");
-  h.app.act("go_home");
+  h.app.act("tab", { tab: "skills" });
   const html = view(h);
-  assert.equal(h.app.model().state, "home-lessonopen");
   assert.ok(!hasWarmUp(html));
+  assert.match(html, /aria-disabled="true" aria-describedby="due-why"/, "still focusable, with its reason");
   assert.ok(plain(html).includes(COPY.paused.after_lesson));
 });
 
-test("with After Effects out of reach, Home's Warm up is replaced by the reason", async () => {
+test("with After Effects out of reach, Skills' Warm up says why", async () => {
   const h = await onHome(TWO_DUE, { connection: { state: "not_connected", started: null } });
+  h.app.act("tab", { tab: "skills" });
   const html = view(h);
-  assert.ok(plain(html).includes(COPY.home.practice_due));
+  assert.ok(plain(html).includes(COPY.skills.due_line("Oct 26")));
   assert.ok(!hasWarmUp(html));
   assert.ok(plain(html).includes(COPY.paused.needs_ae));
 });
@@ -341,7 +354,7 @@ test("Ask stays after a saved review while the mentor's session lives (FR-046)",
   assert.ok(lessonParts(h).ask.includes("<form"));
 });
 
-test("skills-after-review: after a saved pass with another still due; Home's card moves on (D14)", async () => {
+test("skills-after-review: after a saved pass with another still due; the due line moves on (D14)", async () => {
   const { h, save } = await passThrough("review", "timing.offset", withDue("timing.offset", "2026-11-12"))();
   h.adapter().emit("tool_result", OF_SNAP());
   h.adapter().emit("tool_result", OF_CHECK(true));
@@ -349,10 +362,9 @@ test("skills-after-review: after a saved pass with another still due; Home's car
   h.app.act("see_skills");
   assert.equal(h.app.model().state, "skills-after-review");
   assert.ok(plain(view(h)).includes("1 due for practice"));
-  h.app.act("tab", { tab: "home" });
-  const text = homeText(h);
-  assert.ok(text.includes("Set the pivot (anchor point)"), "the next due skill");
-  assert.ok(!text.includes("is due in Skills"), "no count line");
+  const text = plain(view(h));
+  assert.match(text, /class="dueline"[^]*Set the pivot \(anchor point\)/, "the due line names the next due skill");
+  assert.ok(!text.includes("more due"), "no count line");
 });
 
 test("a saved review with nothing else due is the plain Skills list", async () => {
@@ -424,10 +436,11 @@ test("nothing is recorded, nothing can be continued, and it stays due (FR-052)",
   h.app.act("back_home");
   assert.equal(h.app.model().state, "home-return");
   assert.equal(h.adapters[0].stopped, 1, "the mentor's process ends with it");
-  const text = homeText(h);
-  assert.ok(text.includes(COPY.home.practice_due));
-  assert.ok(text.includes("Break the lockstep with offset"));
-  assert.ok(hasWarmUp(view(h)), "another try is open");
+  assert.ok(!homeText(h).includes(COPY.home.practice_due), "Home never leads with a review (spec 014)");
+  h.app.act("tab", { tab: "skills" });
+  assert.equal(h.app.model().state, "skills-due");
+  assert.ok(plain(view(h)).includes("Break the lockstep with offset"));
+  assert.ok(hasWarmUp(view(h)), "another try is open, from Skills");
 });
 
 test("Pick a skill leaves for Skills, with the due skill still ↻", async () => {

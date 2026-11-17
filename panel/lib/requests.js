@@ -13,6 +13,9 @@ const REQUESTS = {
   find_next: { label: "Find my next lesson", request: "/next-mentor" },
   yes: { label: "Yes, let's go", request: "Yes, let's go." },
   show_me_again_other: { label: "Show me again", request: "Show me again: explain the change you already made, with a frame. Don't change anything." },
+  // Spec 014 amendment (e): the first line of the context sent after a lesson (contracts/panel-ask.md ›
+  // Context after a lesson). Not a button: nothing draws its label. Eval-synced (T104).
+  ask_context: { label: null, request: "Earlier question and answer, as shown in the panel:" },
 };
 
 const EASING_COMMAND = "/ease-mentor";
@@ -48,4 +51,36 @@ function visibleKinds(view, { lessonOpen, canContinue } = {}) {
   return kinds;
 }
 
-module.exports = { REQUESTS, visibleKinds, startRequest, newLessonRequest, warmUpRequest, showMeAgain, followOnRequest };
+// Spec 014 (contracts/panel-ask.md › Requests, research R12). A question, from Home or the thread,
+// opens the ask skill, so B1 launches with its tools and A switches to it; the learner's bubble
+// shows `label`, the text as typed, never the command. A follow-up goes as typed. Go deeper sends
+// MU's sentence with the offer's short name, drawn from the answer's own data.
+const ASK_COMMAND = "/ask-mentor";
+const askRequest = (text) => ({ kind: "question", label: text, request: `${ASK_COMMAND} ${text}` });
+const followUpRequest = (text) => ({ kind: "followup", label: text, request: text });
+const goDeeperRequest = (tag) => ({ kind: "go_deeper", label: `Yes, go deeper on ${tag}.`, request: `Yes, go deeper on ${tag}.` });
+
+// The first follow-up or Try again after a lesson ended the thread's conversation (contracts/panel-ask.md
+// › Context after a lesson, amendment (e)). entry: the thread's latest answered entry, { text, view }.
+// Its view is the AskView the panel already validated; nothing comes from prose (FR-016). A null view
+// (FR-048's fallback) has no validated answer, so the send is the prefix and the text only. Empty parts
+// are left out. The bubble shows `label`, the text as typed; the wrapper is in `request` only.
+function contextRequest(entry, text) {
+  const t = String(text);
+  const v = entry && entry.view;
+  if (!v) return { kind: "followup", label: t, request: `${ASK_COMMAND} ${t}` };
+  const has = (x) => typeof x === "string" && x.trim() !== "";
+  const lines = [`${ASK_COMMAND} ${REQUESTS.ask_context.request}`];
+  if (has(entry.text)) lines.push(`Question: ${entry.text}`);
+  if (has(v.explanation)) lines.push(`Answer: ${v.explanation}`);
+  const steps = (v.steps || []).filter((st) => has(st.text));
+  if (steps.length) {
+    lines.push("Steps:");
+    steps.forEach((st, i) => lines.push(`${i + 1}. ${st.text}${has(st.layer) ? ` (layer: ${st.layer})` : ""}`));
+  }
+  if (has(v.closing_offer)) lines.push(`Closing: ${v.closing_offer}`);
+  lines.push(`Follow-up: ${t}`);
+  return { kind: "followup", label: t, request: lines.join("\n") };
+}
+
+module.exports = { REQUESTS, visibleKinds, startRequest, newLessonRequest, warmUpRequest, showMeAgain, followOnRequest, ASK_COMMAND, askRequest, followUpRequest, goDeeperRequest, contextRequest };

@@ -246,3 +246,53 @@ button.foldline:hover:not(:disabled) { background: none; }
   button.foldline { display: block; }
   .check:not(.unfold) li.done, .check:not(.unfold) h3.alld { display: none; }
 }
+
+/* ---------- Spec 014: ask-first Home and the ask thread (product/mockups/ask-mentor) ---------- */
+/* Paused but focusable (FR-054): aria-disabled reads like disabled and does nothing on press. */
+button[aria-disabled="true"] { opacity: .45; cursor: default; }
+button[aria-disabled="true"]:hover { background: #3a3a3a; }
+button.primary[aria-disabled="true"]:hover { background: var(--primary-fill); }
+button.quiet[aria-disabled="true"]:hover { background: transparent; }
+button.pressed[aria-disabled="true"] { opacity: 1; cursor: progress; }
+.askcard label.small { display: block; font-size: 11px; color: var(--muted); margin: 0 0 3px; }
+.askcard textarea { width: 100%; resize: none; background: var(--bg-sunk); color: var(--text-strong); border: 1px solid var(--line); border-radius: 3px; padding: 6px 8px; margin: 0 0 8px; min-height: 56px; display: block; font: inherit; }
+.askcard textarea::placeholder { color: #8c8c8c; }
+.askcard textarea:disabled { opacity: .55; }
+.askcard .row.between { justify-content: space-between; flex-wrap: nowrap; align-items: flex-end; }
+.askcard .row.between .meta { margin: 0; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+/* The one quiet line: a full-width row between two rules, not a card and not blue (decisions/012). */
+.quietwrap { margin: 4px 0 10px; }
+button.qline { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; color: var(--text-strong); text-align: left; padding: 9px 2px; cursor: pointer; }
+button.qline:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--bg-raised); }
+button.qline[aria-disabled="true"] { opacity: 1; color: var(--muted); }
+button.qline[aria-disabled="true"]:hover { background: none; }
+.qline .ql { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qline .ql small { display: block; color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qline .chev { color: var(--text-strong); font-size: 18px; line-height: 1; flex: none; }
+.quietwrap .aside { margin: 2px 0 0; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.thread-link { margin-top: 10px; }
+.skel-box { height: 44px; }
+.skel-end { margin-left: auto; height: 22px; }
+.lhead.thread-head { border-bottom: 1px solid var(--line); } /* no strip under it, so it draws its own rule */
+/* The answer (FR-048): the Steps heading and list are drawn from the step data, never the prose. */
+.stepsblock { margin: 10px 0 8px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+h3.steps-lbl { margin: 0 0 2px; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+ol.ans { margin: 4px 0 8px; padding: 0 0 0 18px; }
+ol.ans li { margin: 0 0 5px; padding-left: 2px; }
+ol.ans li::marker { color: var(--muted); font-weight: 600; }
+em.skill { font-style: italic; color: var(--text-strong); font-weight: 600; }
+.deeper { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+.deeper button { max-width: 100%; text-align: left; white-space: normal; }
+.deeper .why-off { margin-top: 2px; }
+.check.steps ol.ans { margin-top: 2px; }
+.check.steps ol.ans li { display: list-item; border: 0; padding: 0 0 0 2px; }
+.ask-why { margin: 0; padding: 0 12px 10px; color: var(--muted); font-size: 11px; flex: none; }
+/* Practice due on Skills (MU skills-due) */
+.dueline { display: flex; align-items: center; gap: 8px; padding: 8px 10px; margin: 10px 0 4px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-raised); }
+.dueline .g { color: var(--warn); font-weight: 700; }
+.dueline .n { flex: 1; min-width: 0; color: var(--text-strong); }
+.dueline .n small { display: block; color: var(--muted); font-size: 11px; }
+@media (max-height: 560px) {
+  .askcard textarea { min-height: 44px; }
+}
+.askcard textarea[readonly] { opacity: .75; } /* sending: still focusable (FR-054), just not editable */

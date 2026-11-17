@@ -58,25 +58,24 @@ test("FR-013: Pick a skill goes to the Skills tab; FR-005: switching tabs sends 
   assert.equal(h.adapters.length, 0);
 });
 
-test("home-first: the path's first skill, Start lesson, Pick a skill, No lessons yet, in the card order", async () => {
+test("home-first (spec 014): the welcome, the ask card, then Find my next lesson; no Start lesson, no memory", async () => {
   const h = await ready();
   assert.equal(h.app.model().state, "home-first");
   const v = home(h);
-  assert.ok(v.includes("Easing"));
-  assert.ok(v.indexOf(COPY.buttons.start) < v.indexOf(COPY.home.memory_title), "Start lesson sits above memory (FR-007)");
-  assert.ok(v.includes(COPY.home.welcome_first));
-  assert.ok(v.includes(COPY.home.memory_empty));
-  assert.ok(v.includes(COPY.home.first_why));
+  assert.ok(v.indexOf(COPY.home.welcome_first) < v.indexOf(COPY.ask.card_title));
+  assert.ok(v.indexOf(COPY.ask.card_title) < v.indexOf(COPY.buttons.find_next), "the ask card leads (decisions/012)");
+  assert.equal(v.includes(COPY.buttons.start), false);
+  assert.equal(v.includes(COPY.home.memory_title), false, "memory moved to Skills");
+  assert.equal(v.includes(COPY.home.first_why), false);
 });
 
-test("home-return: Find my next lesson plus the memory card, with the record's line", async () => {
+test("home-return (spec 014): the ask card and Find my next lesson; nothing else from the record", async () => {
   const h = await ready({ memory: { status: "ok", record: LESSON } });
   assert.equal(h.app.model().state, "home-return");
   const v = home(h);
-  assert.ok(v.includes(COPY.home.welcome_back));
-  assert.ok(v.includes("Oct 26"));
+  assert.ok(v.includes(COPY.ask.card_title));
   assert.ok(v.includes(COPY.buttons.find_next));
-  assert.ok(v.includes(COPY.home.next_time));
+  for (const gone of [COPY.home.welcome_back, "Oct 26", COPY.home.next_time, COPY.home.up_next, COPY.home.memory_title, COPY.buttons.pick_skill]) assert.equal(v.includes(gone), false, gone);
 });
 
 test("home-unreadable and What happened?: a banner, not a first run; Got it returns to the first-run screen", async () => {
@@ -98,6 +97,7 @@ test("home-unreachable and home-busy: banner, AE actions replaced by why in word
   let v = home(h);
   assert.ok(v.includes(COPY.home.unreachable.title));
   assert.ok(v.includes(COPY.paused.needs_ae));
+  assert.match(render(h).view, /id="ask-go"[^>]*aria-disabled="true"/, "Ask paused with the reason, still focusable");
   assert.equal(v.includes(COPY.buttons.start), false);
   h.app.act("reconnect");
   assert.equal(h.polled(), 1);

@@ -218,8 +218,8 @@ for (const [label, patch] of MODELS) {
 }
 
 // R4: on A the helper tells the server it's on A, so give_answer can offer skills and go_deeper can
-// hand in. Not built yet: that's T028 (serverEnv in lib/mcp-client.mjs).
-test("R4: the server is started with AE_MENTOR_RUNTIME=a", { todo: "serverEnv (lib/mcp-client.mjs:44) doesn't set it yet; T028 builds it" }, async () => {
+// hand in (T028, serverEnv in lib/mcp-client.mjs).
+test("R4: the server is started with AE_MENTOR_RUNTIME=a", async () => {
   const s = await setup();
   s.svc.script(reply([toolUse("note_value", { value: "x" }, "tu_n")], { stop_reason: "tool_use" }), reply([text("Ok.")]));
   await s.turn("/ask-mentor hi");

@@ -84,3 +84,50 @@ test("the count line reads right for one and for many (D15)", () => {
   assert.equal(COPY.check.unnamed_more(1), "1 more pair. It gets its name at your next check.");
   assert.equal(COPY.check.unnamed_more(3), "3 more pairs. They get names at your next check.");
 });
+
+// ---------- spec 014 T017: the ask copy (FR-053, MU › Copy) ----------
+
+const MU = path.join(__dirname, "..", "..", "product", "mockups", "ask-mentor", "README.md");
+// MU › Copy's quoted strings, in order.
+function muCopy() {
+  const text = fs.readFileSync(MU, "utf8");
+  const section = text.slice(text.indexOf("## Copy (panel words only)"), text.indexOf("## Platform"));
+  return [...section.matchAll(/"([^"]+)"/g)].map((m) => m[1].replace(/\s+/g, " "));
+}
+
+// Drawn in spec 014's phase 2 (go deeper: T054 to T056), not by this phase's panel.
+const PHASE_2 = new Set([
+  "Yes, go deeper on Set the pivot.", "From your question. Back returns you to it.", "Back to your lesson ›", "Your Set the pivot lesson is open.",
+  "Practice", "✓ Done", "Pivot moved, nothing else did.", "Set the pivot · practiced on Shake Control", "Set the pivot · ended, not saved", "Back to your steps ›",
+  "practiced on Shake Control",
+  // home-nocomp's two lines: withdrawn 2026-11-16 (spec 014 T101, FR-047). The mentor's own read says
+  // "No comp open…" in ask-nocomp; MU › Copy still lists them.
+  "No comp open. Open one, or click into its timeline.", "Needs an open comp.",
+]);
+
+test("every MU › Copy string this phase draws is in the copy, word for word", () => {
+  const A = COPY.ask;
+  const drawn = new Set(strings(COPY).map(([, s]) => s).concat([A.go_deeper("Set the pivot"), A.your_steps(4), A.earlier(1), COPY.quiet.pick_up("Easing", "Title"), COPY.paused.waiting_ae]));
+  const want = muCopy();
+  assert.ok(want.length > 35, `only ${want.length} strings read from MU › Copy`);
+  const missing = want.filter((s) => !PHASE_2.has(s) && !drawn.has(s));
+  assert.deepEqual(missing, []);
+});
+
+test("the ask copy names no tool, field, skill command or slash command (FR-053)", () => {
+  const all = strings({ ask: COPY.ask, quiet: COPY.quiet, none: COPY.lesson.none_sub });
+  assert.deepEqual(scan(all), []);
+  for (const [at, s] of all) {
+    assert.doesNotMatch(s, /give_answer|describe_layers|go_deeper|note_said|ask-mentor|\/ask|_/, at);
+  }
+});
+
+test("the hand-back line names the step and the next one, or says it was the last", () => {
+  assert.equal(COPY.ask.hand_back(3, "Play it back and watch the turn."), "That was step 3; next is step 4: Play it back and watch the turn.");
+  assert.equal(COPY.ask.last_step, "That was the last step.");
+  // T035 item 7 (contracts/panel-ask.md › Result lines and dividers): the line ends with "." even when
+  // the step's text doesn't, and never doubles it.
+  assert.equal(COPY.ask.hand_back(3, "Play it back and watch the turn"), "That was step 3; next is step 4: Play it back and watch the turn.");
+  assert.equal(COPY.ask.hand_back(1, "Play it back.  "), "That was step 1; next is step 2: Play it back.");
+  assert.equal(COPY.ask.hand_back(2, "Does it hinge now?"), "That was step 2; next is step 3: Does it hinge now?", "a question keeps its own mark");
+});

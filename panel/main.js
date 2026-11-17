@@ -22,20 +22,34 @@
   const { createApp } = lib("app.js");
   const { writeLoadedStamp } = lib("loaded-stamp.js");
   const { renderApp, nextTab } = lib("screens.js");
+  const { askBoxKey } = lib("keys.js");
 
   const $ = (id) => document.getElementById(id);
   const SHORT = window.matchMedia("(max-height: 560px)");
 
   // ---------- drawing: only what changed, so scroll, focus and Flip survive a redraw ----------
 
+  // A redraw replaces the markup, so a box keeps what was typed (data-keep-value) and the focused
+  // control keeps focus by its id: focus is never dropped to the page (spec 014 FR-054).
   function setHtml(el, html) {
     if (el.__html === html) return;
     const list = el.querySelector && el.querySelector(".check-body");
     const top = list ? list.scrollTop : 0;
+    const active = document.activeElement && el.contains(document.activeElement) && document.activeElement.id ? document.activeElement : null;
+    const kept = [...el.querySelectorAll("[data-keep-value][id]")].map((b) => ({ id: b.id, value: b.value, start: b.selectionStart, end: b.selectionEnd }));
     el.innerHTML = html;
     el.__html = html;
     const after = el.querySelector && el.querySelector(".check-body");
     if (after) after.scrollTop = top;
+    for (const k of kept) {
+      const b = document.getElementById(k.id);
+      if (b && b.tagName === "INPUT") b.value = k.value; // the textarea's text comes from the app's draft
+      if (b && active && active.id === k.id && typeof k.start === "number") { try { b.setSelectionRange(k.start, k.end); } catch (e) {} }
+    }
+    if (active) {
+      const again = document.getElementById(active.id);
+      if (again && document.activeElement !== again) again.focus();
+    }
   }
 
   function patchChat(el, chat) {
@@ -103,7 +117,8 @@
     const dom = ev.target.closest("[data-dom]");
     if (dom) return domAction(dom);
     const el = ev.target.closest("[data-action]");
-    if (!el || el.disabled) return;
+    if (!el || el.disabled || el.getAttribute("aria-disabled") === "true") return; // paused, but focusable (FR-054)
+    if (el.type === "submit") ev.preventDefault(); // the form's own submit would send twice
     const keepFocus = el.getAttribute("role") === "tab" || el.hasAttribute("data-keep-focus");
     app.act(el.dataset.action, { tab: el.dataset.tab, skill: el.dataset.skill, short: SHORT.matches });
     if (!keepFocus) focusNewest();
@@ -118,7 +133,18 @@
     sides.forEach((s, i) => { s.hidden = i !== next; });
   }
 
+  // Home's ask box: the app keeps the draft, so Ask turns on with text and a redraw keeps it.
+  document.addEventListener("input", (ev) => {
+    if (ev.target && ev.target.id === "ask-q") app.setDraft(ev.target.value);
+  });
+
   document.addEventListener("keydown", (ev) => {
+    if (ev.target && ev.target.id === "ask-q" && askBoxKey(ev) === "send") {
+      ev.preventDefault();
+      app.setDraft(ev.target.value);
+      app.act("ask_home");
+      return;
+    }
     if (ev.target.getAttribute && ev.target.getAttribute("role") === "tab") {
       const tab = nextTab(ev.target.dataset.tab, ev.key);
       if (!tab) return;
@@ -129,6 +155,18 @@
   });
 
   document.addEventListener("submit", (ev) => {
+    if (ev.target.closest("[data-askhome]")) {
+      ev.preventDefault();
+      app.act("ask_home");
+      return;
+    }
+    const follow = ev.target.closest("[data-followup]");
+    if (follow) {
+      ev.preventDefault();
+      const box = follow.querySelector("input");
+      if (app.followUp(box.value)) box.value = ""; // paused: what was typed stays
+      return;
+    }
     const form = ev.target.closest("[data-ask]");
     if (!form) return;
     ev.preventDefault();
@@ -177,6 +215,9 @@
       readFrame: (file) => ps.readFrame({}, file),
       newSession: ps.newPanelSession,
       savedStatus: ps.savedStatus,
+      readThread: () => ps.readThread({}),
+      writeThread: (t) => ps.writeThread({}, t),
+      clearThread: () => ps.clearThread({}),
     },
     appendTurn: (entry) => appendTurn({}, entry),
     bridgeStarted: () => bridgeStarted(),

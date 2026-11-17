@@ -69,7 +69,14 @@ function ensureRuntime(repoPath, dir, fs) {
   }
   for (const name of wanted) linkTo(path.join(skills, name), path.join(repoPath, ".claude", "skills", name), fs);
 
-  const out = { mcpServers: { [SERVER]: Object.assign({}, server, { args }) } };
+  // B1 sets no runtime flag (spec 014 research R4): the server fails closed to B1, so an answer
+  // offers no skill and nothing hands over. A flag in the repo's own .mcp.json doesn't come along.
+  const entry = Object.assign({}, server, { args });
+  if (entry.env && typeof entry.env === "object") {
+    entry.env = Object.assign({}, entry.env);
+    delete entry.env.AE_MENTOR_RUNTIME;
+  }
+  const out = { mcpServers: { [SERVER]: entry } };
   fs.writeFileSync(path.join(dir, ".mcp.json"), JSON.stringify(out, null, 2) + "\n");
   return dir;
 }

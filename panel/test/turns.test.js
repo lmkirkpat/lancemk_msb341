@@ -101,3 +101,19 @@ test("the app passes the adapter's turn_end fields through to the log, with the 
   b.adapter().emit("turn_end", { ok: true, kind: "start", cost_usd: 0.02 });
   assert.equal(b.turns[b.turns.length - 1].runtime, "b1");
 });
+
+// ---------- spec 014 T027: ask turns (FR-058, research R11) ----------
+
+test("ask thread turns: kinds question, followup and go_deeper, tagged thread ask", () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), "panel-turns-"));
+  appendTurn({ home }, { kind: "question", ok: true, thread: "ask", text: "How do I make the rock shake?" });
+  appendTurn({ home }, { kind: "followup", ok: true, thread: "ask" });
+  appendTurn({ home }, { kind: "go_deeper", ok: true, thread: "ask", runtime: "a" });
+  appendTurn({ home }, { kind: "check", ok: true, thread: "ask" });
+  appendTurn({ home }, { kind: "check", ok: true, thread: "lesson" });
+  const lines = read(home);
+  assert.deepEqual(lines.map((l) => l.kind), ["question", "followup", "go_deeper", "check", "check"]);
+  assert.deepEqual(lines.map((l) => l.thread), ["ask", "ask", "ask", "ask", undefined], "only ask is a thread; anything else is left off");
+  assert.deepEqual(Object.keys(lines[0]).sort(), ["at", "cost_usd", "first_event_ms", "kind", "lesson_passed", "ok", "runtime", "thread", "total_ms", "wait_ms"]);
+  assert.doesNotMatch(fs.readFileSync(path.join(home, "panel-turns.jsonl"), "utf8"), /rock/, "never the question");
+});

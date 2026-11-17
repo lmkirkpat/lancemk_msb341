@@ -117,7 +117,7 @@ const SITS_ON = {
   "button.primary": [primaryFill, buttonHover],
   "button.quiet": [BG, RAISED],
   "button.pressed": [PRESSED],
-  ".why-off": [BG],
+  ".why-off": [BG, RAISED],
   ".banner b": [BAN_BAD, BAN_WARN, BAN_INFO],
   ".banner.bad .ic": [BAN_BAD],
   ".banner.warn .ic": [BAN_WARN],
@@ -179,6 +179,21 @@ const SITS_ON = {
   ".statusline": [STATUS],
   ".ask input": [SUNK],
   ".ask input::placeholder": [SUNK],
+  // spec 014: the ask card, the quiet line, the answer, Your steps, the follow-up reason, Skills' due line
+  ".askcard label.small": [RAISED],
+  ".askcard textarea": [SUNK],
+  ".askcard textarea::placeholder": [SUNK],
+  "button.qline": [BG, RAISED],
+  "button.qline[aria-disabled=\"true\"]": [BG],
+  ".qline .ql small": [BG, RAISED],
+  ".qline .chev": [BG, RAISED],
+  "h3.steps-lbl": [RAISED],
+  "ol.ans li::marker": [RAISED, LIST],
+  "em.skill": [RAISED, LIST],
+  ".ask-why": [BG],
+  ".dueline .g": [RAISED],
+  ".dueline .n": [RAISED],
+  ".dueline .n small": [RAISED],
 };
 
 

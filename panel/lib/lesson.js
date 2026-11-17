@@ -16,6 +16,7 @@ function initialLesson(opts) {
     skill: (opts && opts.skill) || null,
     mode: "lesson",
     focus: null,
+    comp: null, // the lesson's comp name, from its snapshot's reply: Pick up's second line (MU home-inprogress)
     demo_target: null,
     demo_made: false,
     demo_unknown: false,
@@ -79,6 +80,7 @@ function onSnapshot(v, ev) {
     labels,
     mode: r.mode || "lesson",
     focus: r.focus === undefined ? v.focus : r.focus,
+    comp: r.comp && typeof r.comp.name === "string" && r.comp.name ? r.comp.name : v.comp || null,
     demo_target: r.demo_target || null,
     null_ready: v.null_ready || r.null_ready === true,
     // FR-052: the tool's own code, on a review. Sticky: the screen it opens ends the lesson.

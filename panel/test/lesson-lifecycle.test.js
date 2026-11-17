@@ -197,14 +197,15 @@ test("asking from a passed lesson: the passed screen stays, its ways out wait fo
   assert.equal(h.turns.filter((t) => t.lesson_passed).length, 1, "the pass is logged once");
 });
 
-test("Home's start waits, and says why, while a question after a pass is being answered (FR-060, FR-061)", async () => {
+test("Home's line and Ask wait, and say why, while a question after a pass is being answered (FR-060, FR-061)", async () => {
   const h = await passedLesson();
   h.app.ask("Why?");
   h.app.act("tab", { tab: "home" });
   assert.ok(homeHtml(h).includes(COPY.paused.after_answer));
-  assert.equal(homeHtml(h).includes('data-action="start"'), false);
+  assert.equal(homeHtml(h).includes('data-action="find_next"'), false);
+  assert.match(homeHtml(h), /id="ask-go"[^>]*aria-disabled="true"/);
   end(h);
-  assert.ok(homeHtml(h).includes('data-action="start"'));
+  assert.ok(homeHtml(h).includes('data-action="find_next"'));
 });
 
 test("a second record refused after a pass can't unsay Saved; a later failing check can't unsay the pass", async () => {
@@ -265,15 +266,16 @@ test("FR-053: a saved lesson refreshes Home's memory card", async () => {
 
 // ---------- T022: a lesson in progress ----------
 
-test("home-lessonopen: Back to lesson and End lesson; Start replaced by why (FR-024); End records nothing (FR-025, FR-073)", async () => {
+test("home-lessonopen (spec 014): the line goes back to the lesson, End lesson under it; Ask paused with why; End records nothing", async () => {
   const h = await open();
   h.app.act("go_home");
   assert.equal(st(h), "home-lessonopen");
   const v = homeHtml(h);
-  assert.ok(v.includes(COPY.home.lesson_open.kicker));
-  assert.ok(v.includes(COPY.buttons.back_lesson));
-  assert.ok(v.includes(COPY.home.lesson_open.note));
-  assert.ok(v.includes(COPY.paused.after_lesson));
+  assert.ok(v.includes(COPY.quiet.back_lesson));
+  assert.match(v, /class="qline" data-action="back_lesson"/);
+  assert.ok(v.includes(COPY.quiet.end_note));
+  assert.ok(v.includes(COPY.ask.lesson_open), "Ask says why it's paused");
+  assert.match(v, /<textarea[^>]*disabled/, "MU: the box is locked while a lesson is open");
   assert.equal(v.includes(COPY.buttons.start), false);
   const sent = h.adapter().sent.length;
   h.app.act("end_lesson");
@@ -290,13 +292,13 @@ test("FR-060, FR-061: End lesson is off during a turn and says why; back on when
   h.app.act("hint");
   h.app.act("go_home");
   assert.equal(st(h), "home-lessonopen");
-  assert.match(renderApp(h.app.model()).view, /data-action="end_lesson" disabled/);
+  assert.match(renderApp(h.app.model()).view, /data-action="end_lesson" aria-disabled="true" aria-describedby="end-why"/);
   assert.ok(homeHtml(h).includes(COPY.paused.end_after_answer));
   h.app.act("end_lesson");
   assert.equal(h.app.model().lesson_open, true);
   assert.equal(h.adapter().stopped, 0);
   end(h, "hint");
-  assert.doesNotMatch(renderApp(h.app.model()).view, /data-action="end_lesson" disabled/);
+  assert.doesNotMatch(renderApp(h.app.model()).view, /data-action="end_lesson" aria-disabled/);
   assert.equal(homeHtml(h).includes(COPY.paused.end_after_answer), false);
 });
 
@@ -308,26 +310,28 @@ test("FR-023: only one lesson at a time; Start while one is open does nothing", 
 
 const saved = (over) => Object.assign({ version: 2, claude_session_id: "s1", bridge_started: CONNECTED.started, ended: false, started_at: "2026-11-09T10:00:00.000Z", updated_at: "2026-11-09T10:05:00.000Z", skill: "ease-mentor", lesson: { skill: "easing.basic", focus: ["Title"], snapshots: 1, checks: 1, replied: true, passed: false, labels: {}, check_list: { source: "check", summary: "1 of 3 yours eased · 2 still to ease", sections: [], outside: [], worth_a_look: [], footer: [], stale: null, stale_kind: null, checked_at: new Date(2026, 10, 8, 21, 12).toISOString() } }, messages: [{ role: "mentor", text: "Earlier.", frames: ["/gone.png"] }, { role: "learner", text: "Done, check it", frames: [] }] }, over);
 
-test("FR-026: a saved lesson with the same start time shows home-cutoff; Up next pushed back", async () => {
+test("FR-026 (spec 014): a saved lesson with the same start time is the quiet line Pick up [skill] on [layer]", async () => {
   const h = await ready({ saved: saved() });
-  assert.equal(st(h), "home-cutoff");
+  assert.equal(st(h), "home-inprogress");
   const v = homeHtml(h);
-  assert.ok(v.includes(COPY.home.cutoff.kicker));
-  assert.ok(v.includes("Easing on Title"));
+  assert.ok(v.includes(COPY.quiet.pick_up("Easing", "Title")));
   assert.ok(v.includes("1 of 3 yours eased"));
-  assert.match(v, /card lead dim/);
-  assert.ok(v.includes(COPY.buttons.continue));
+  assert.match(v, /class="qline" data-action="continue"/, "pressing the line is Continue lesson");
+  assert.ok(v.includes(COPY.quiet.not_finished));
   assert.ok(v.includes(COPY.home.cutoff.set_aside));
-  assert.match(v, /data-action="start"/, "Start stays, not primary");
+  assert.equal(v.includes('data-action="start"'), false);
+  assert.ok(v.indexOf(COPY.ask.card_title) < v.indexOf(COPY.quiet.pick_up("Easing", "Title")), "the ask card still leads");
+  h.app.act("continue");
+  assert.equal(h.app.model().tab, "lesson");
 });
 
 test("FR-028: only a differing start time ends a saved lesson; busy or absent keeps it and re-checks on poll", async () => {
   const h = await ready({ saved: saved(), connection: { state: "busy", started: null } });
-  assert.notEqual(st(h), "home-cutoff");
+  assert.notEqual(st(h), "home-inprogress");
   assert.notEqual(st(h), "home-aeclosed");
   assert.ok(h.saved.current, "kept");
   h.app.setConnection(CONNECTED);
-  assert.equal(st(h), "home-cutoff");
+  assert.equal(st(h), "home-inprogress");
 
   const a = await ready({ saved: saved(), connection: { state: "connected", started: "2026-11-09T11:00:00.000Z" } });
   assert.equal(st(a), "home-aeclosed");
@@ -345,7 +349,7 @@ test("Set it aside clears the saved lesson and sends nothing (FR-027, FR-073)", 
   h.app.act("set_aside");
   assert.equal(h.saved.current, null);
   assert.equal(h.adapters.length, 0);
-  assert.notEqual(st(h), "home-cutoff");
+  assert.notEqual(st(h), "home-inprogress");
 });
 
 test("lesson-continued: redrawn, the divider, the stale note, resumed with the saved skill (FR-027, plan P8)", async () => {
@@ -367,17 +371,17 @@ test("lesson-continued: redrawn, the divider, the stale note, resumed with the s
 test("Start lesson with a saved lesson waiting replaces it (FR-028)", async () => {
   const h = await ready({ saved: saved() });
   h.app.act("start");
-  assert.equal(h.saved.current.version, 2);
+  assert.equal(h.saved.current.version, 3, "spec 014 T026: version 3 adds the thread beside the lesson");
   assert.equal(h.saved.current.claude_session_id, "session-1");
 });
 
-test("panel-session.json is version 2 and keeps the skill, picked_up and labels (plan P8)", () => {
+test("panel-session.json (version 3 since spec 014) keeps the skill, picked_up and labels (plan P8)", () => {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "panel-v2-"));
   const s = ps.newPanelSession({ claude_session_id: "x", bridge_started: "t", skill: "ease-mentor", lesson: { picked_up: true, labels: { a: "L" } } });
-  assert.equal(s.version, 2);
+  assert.equal(s.version, 3);
   ps.writePanelSession({ home }, s);
   const back = ps.readPanelSession({ home });
-  assert.equal(back.version, 2);
+  assert.equal(back.version, 3);
   assert.equal(back.skill, "ease-mentor");
   assert.equal(back.lesson.picked_up, true);
   assert.deepEqual(back.lesson.labels, { a: "L" });
@@ -935,20 +939,17 @@ test("a saved lesson with no skill in its view still restarts from the session's
   assert.equal(h.adapter().sent[0].text, "/offset-mentor");
 });
 
-const homeStart = (h) => {
-  const tag = /<button[^>]*data-action="start"[^>]*>/.exec(renderApp(h.app.model()).view);
-  return tag && (/data-skill="([^"]+)"/.exec(tag[0]) || [])[1];
-};
-
+// Spec 014: Home has no Start lesson any more; after any way out of a lesson its line is Find my
+// next lesson, naming no skill, and the ask card leads.
 for (const [how, leave] of [["End lesson", (h) => h.app.act("end_lesson")], ["Back to Home", (h) => h.app.act("back_home")], ["the Home tab after it stops", (h) => { h.adapter().emit("exit", { code: 1 }); h.app.act("tab", { tab: "home" }); }]]) {
-  test(`Home's Start names its own skill after an offset lesson left by ${how}`, async () => {
+  test(`Home's line is Find my next lesson after an offset lesson left by ${how}`, async () => {
     const h = await ready();
     h.app.act("new_lesson", { skill: "timing.offset" });
     h.adapter().emit("turn_end", { ok: true, kind: "new_lesson" });
     leave(h);
     assert.equal(h.app.model().tab, "home");
-    assert.equal(homeStart(h), "easing.basic");
-    h.app.act("start", { skill: homeStart(h) });
-    assert.equal(h.adapter().sent[0].text, "/ease-mentor");
+    const v = renderApp(h.app.model()).view;
+    assert.equal(/data-action="start"/.test(v), false);
+    assert.match(v, /class="qline" data-action="find_next"/);
   });
 }

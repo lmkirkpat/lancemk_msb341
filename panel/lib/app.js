@@ -17,8 +17,14 @@ const { statusFor } = require("./activity.js");
 const { connectionFromTool } = require("./connection.js");
 const { shortDate } = require("./memory.js");
 const { COPY } = require("./copy.js");
+const { askView, fallbackText, ANSWER_TOOL } = require("./ask-result.js");
+const PHASE = require("./phase.js");
+const thr = require("./ask-thread.js");
+const { askRequest, followUpRequest, goDeeperRequest, contextRequest, ASK_COMMAND } = require("./requests.js");
 
 const LOADING_AFTER_MS = 300; // FR-008
+const SENDING_MS = 600; // MU ask-sending: Asking… shows on Home before the thread takes over
+const ASK_SKILL = "ask-mentor";
 const AE_LOST = /AE_UNREACHABLE|AE_BUSY/;
 
 const E = COPY.errors;
@@ -88,6 +94,16 @@ function createApp(deps) {
     done_unfolded: false,
     focus_tick: 0,
     closing: false, // the panel is closing (shutdown): its own stop of the mentor ends nothing
+    // the ask thread (spec 014): its own conversation, apart from any lesson's (research R12)
+    home_view: "home", // "thread" while the thread is on the Home tab
+    draft: "",
+    thread: null,
+    threadAdapter: null,
+    askTurn: null, // the turn in flight: { kind, sent_ms, long, pressed, committed, block, had_result, view, error, srcs }
+    askSending: false,
+    askFrames: {}, // entry index → frame data URLs, this panel session only
+    steps_open: false,
+    steps_list_open: false,
   };
 
   const changed = () => deps.onChange();
@@ -120,6 +136,15 @@ function createApp(deps) {
   }
 
   function init() {
+    state.thread = session.readThread ? session.readThread() : null;
+    // A close while an answer was loading saves the question with nothing under it. Reopened, it's a
+    // stopped turn: spec 007's notice with "Your question's still here." and Try again (MU › States
+    // still missing; T035 design review item 2).
+    const last = thr.latest(state.thread);
+    if (last && !last.answered) {
+      state.thread = thr.notice(thr.answer(state.thread, { view: null, prose: null, had_result: false }), { title: E.stopped.title, text: COPY.ask.question_still_here });
+      persistThread();
+    }
     later(() => {
       if (state.record.status === "pending") { state.record = { status: "loading", record: null }; changed(); }
     }, LOADING_AFTER_MS);
@@ -456,7 +481,8 @@ function createApp(deps) {
 
   // Every lesson start: which request, whose lesson, and the status line (T041, FR-087).
   function beginLesson(skillId, req, status) {
-    if (state.busy || state.lesson_open) return;
+    if (state.busy || state.lesson_open || askBusy()) return;
+    endThread();
     stopAdapter();
     resetLessonFields();
     state.start = { skill: skillId, req, status };
@@ -499,7 +525,8 @@ function createApp(deps) {
   // Find my next lesson (FR-013, FR-082): one next-mentor turn. It isn't a lesson, so it writes no
   // display log and can't come back as home-cutoff.
   function findNext() {
-    if (state.busy || state.lesson_open) return;
+    if (state.busy || state.lesson_open || askBusy()) return;
+    endThread();
     stopAdapter();
     resetLessonFields();
     state.start = { picking: true };
@@ -559,7 +586,8 @@ function createApp(deps) {
   }
 
   function continueLesson() {
-    if (state.busy || state.lesson_open || !state.pending) return;
+    if (state.busy || state.lesson_open || !state.pending || askBusy()) return;
+    endThread();
     const saved = state.pending;
     stopAdapter();
     resetLessonFields();
@@ -593,6 +621,7 @@ function createApp(deps) {
   function tryAgain() {
     if (state.busy || !state.error) return;
     const e = state.error;
+    if (e.from === "thread") { state.error = null; askRetry(); return; }
     if (e.state === "lesson-start-failed" || (!state.lesson_open && !state.lesson_over)) {
       state.error = null;
       if (state.start && state.start.picking) findNext();
@@ -669,6 +698,294 @@ function createApp(deps) {
     state.list_open = false; // opened at a short dock and since resized: it would override the press
   }
 
+  // ---------- the ask thread (spec 014 US3; research R12) ----------
+
+  const askBusy = () => !!state.askTurn;
+  const conn = () => (state.connection && state.connection.state) || null;
+
+  // Why Home's Ask is paused, or null (FR-054: the reason is shown and linked to the button).
+  function askOff() {
+    if (state.error && state.error.blocks_home) return COPY.paused.needs_mentor;
+    if (state.lesson_open) return COPY.ask.lesson_open;
+    if (askBusy() || state.askSending) return COPY.ask.answering;
+    if (state.lesson_over && state.busy) return COPY.paused.after_answer;
+    if (conn() === "not_connected") return COPY.paused.needs_ae;
+    if (conn() === "busy") return COPY.paused.waiting_ae;
+    return null; // no comp open is the mentor's read to say (ask-nocomp): T101
+  }
+
+  // Why the quiet line is paused, or null.
+  function quietOff() {
+    if (state.error && state.error.blocks_home) return COPY.paused.needs_mentor;
+    if (askBusy() || state.askSending) return COPY.ask.after_answer;
+    if (state.lesson_over && state.busy) return COPY.paused.after_answer;
+    if (conn() === "not_connected") return COPY.paused.needs_ae;
+    if (conn() === "busy") return COPY.paused.waiting_ae;
+    return null;
+  }
+
+  // Why the thread's follow-up bar (and Go deeper) is paused, or null.
+  function followOff() {
+    if (state.error && state.error.blocks_home) return COPY.paused.needs_mentor;
+    if (state.lesson_open) return COPY.ask.lesson_open;
+    if (conn() === "not_connected") return COPY.paused.needs_ae;
+    if (conn() === "busy") return COPY.paused.waiting_ae; // MU ask-busy: before "answering", it's the reason
+    if (askBusy()) return COPY.ask.answering;
+    return null;
+  }
+
+  function persistThread() {
+    if (state.thread && session.writeThread) session.writeThread(state.thread);
+  }
+
+  function stopThreadAdapter() {
+    const a = state.threadAdapter;
+    state.threadAdapter = null;
+    if (a) a.stop();
+  }
+
+  // A lesson from Find my next lesson, Pick up or Skills ends the thread's conversation, not the
+  // thread: its questions, answers and steps stay saved and visible, and Back to your question still
+  // opens them (research R12 as amended 2026-11-16 (d); contracts/panel-ask.md rule 5). The next
+  // question or follow-up starts a new conversation in the same thread.
+  function endThread() {
+    if (!state.thread && !state.threadAdapter) return;
+    stopThreadAdapter();
+    state.askTurn = null;
+    state.askSending = false;
+    state.home_view = "home";
+    state.steps_open = false;
+    state.steps_list_open = false;
+    if (state.thread) {
+      // amendment (e): the next follow-up or Try again carries the last question and answer.
+      state.thread = Object.assign({}, thr.setAfterLesson(state.thread, true), { claude_session_id: null });
+      persistThread();
+    }
+  }
+
+  // From Asking… on Home to the thread, at the mentor's first sign of work or after SENDING_MS.
+  function toThread() {
+    if (!state.askSending) return;
+    state.askSending = false;
+    state.draft = ""; // MU ask-sending keeps the question in the box until the thread takes over
+    state.home_view = "thread";
+    state.focus_tick++;
+  }
+
+  function unref(h) { if (h && typeof h.unref === "function") h.unref(); }
+
+  function wireThread(a) {
+    const live = (fn) => (e) => { if (state.threadAdapter === a) fn(e); };
+    const turn = () => state.askTurn;
+    a.on("turn_start", live((e) => { if (turn()) turn().sent_at = e.at; }));
+    a.on("tool_call", live(() => { toThread(); changed(); }));
+    a.on("text_delta", live((e) => { if (!turn()) return; turn().block += e.text; toThread(); changed(); }));
+    a.on("text", live((e) => {
+      const t = turn();
+      if (!t) return;
+      t.committed += (t.committed ? "\n\n" : "") + e.text;
+      t.block = "";
+      toThread();
+      changed();
+    }));
+    a.on("tool_result", live(onAskToolResult));
+    a.on("error", live(onAskError));
+    a.on("turn_end", live(onAskTurnEnd));
+    a.on("exit", live(() => {
+      state.threadAdapter = null;
+      if (state.askTurn && !state.closing) onAskTurnEnd({ ok: false });
+      changed();
+    }));
+  }
+
+  function onAskToolResult(e) {
+    const t = state.askTurn;
+    const c = connectionFromTool(e);
+    if (c) {
+      state.connection = Object.assign({}, state.connection, { state: c });
+      deps.forgetPoll();
+    }
+    if (t && e.images && e.images.length) for (const im of e.images) t.srcs.push(`data:${im.mimeType || "image/png"};base64,${im.data}`);
+    // FR-016, PQ-1: the answer's words come only from give_answer's accepted fields. A refusal isn't
+    // a result; the mentor tries again. The last result in the turn is the answer.
+    if (t && e.name === ANSWER_TOOL && e.ok) {
+      t.had_result = true;
+      t.answer_kind = e.json && typeof e.json === "object" && typeof e.json.kind === "string" ? e.json.kind : null;
+      t.view = askView(e, { runtime });
+      t.fallback = t.view ? null : fallbackText(e);
+      toThread();
+    }
+    changed();
+  }
+
+  function onAskError(e) {
+    const t = treatError(e.kind, { runtime, firstTurn: false });
+    if (t.treatment === "logged") { deps.log(logEntry(e)); return; }
+    if (t.treatment === "blocking") {
+      // Home's error banner, with Try again resending the question (spec 007's err-* states).
+      state.error = Object.assign({}, t, { from: "thread" });
+      state.askSending = false;
+      state.askTurn = null;
+      state.home_view = "home";
+      stopThreadAdapter();
+      persistThread();
+      changed();
+      return;
+    }
+    if (state.askTurn) state.askTurn.error = t;
+  }
+
+  function onAskTurnEnd(e) {
+    const t = state.askTurn;
+    if (!t) return;
+    state.askTurn = null;
+    toThread();
+    // A new question typed in the follow-up bar: the accepted result's kind says so, never the words
+    // (contracts/panel-ask.md › Requests, amended (d)). It folds what came before and logs as a question.
+    if (t.kind === "followup" && thr.NEW_QUESTION_KINDS.includes(t.answer_kind)) {
+      state.thread = thr.asNewQuestion(state.thread);
+      t.kind = "question";
+    }
+    // FR-048: no view → the mentor's words; with no prose on an answer turn (PQ-1), the rejected
+    // result's own explanation and closing offer.
+    const prose = (t.committed + t.block).trim() || (t.view ? null : t.fallback) || null;
+    state.thread = thr.answer(state.thread, { view: t.view, prose, had_result: t.had_result });
+    if (t.srcs.length) state.askFrames[state.thread.questions.length - 1] = t.srcs;
+    let err = t.error || (e && e.ok === false ? { title: E.stopped.title } : null);
+    if (!err && !t.view && !prose) err = { title: E.refused.title }; // never a question with nothing under it
+    // B1's timeout leaves the process running (research R5): the next send resumes in a fresh one.
+    if (t.error && t.error.kind === "timeout" && runtime !== "a") stopThreadAdapter();
+    // MU › States still missing: spec 007's notices, with "Your question's still here." in place of the lesson's line.
+    if (err) state.thread = thr.notice(state.thread, { title: err.title, text: COPY.ask.question_still_here });
+    else state.thread = thr.setAfterLesson(state.thread, false); // the context went through: later sends are plain
+    if (deps.appendTurn && e) {
+      deps.appendTurn({ at: t.sent_at || new Date(t.sent_ms).toISOString(), kind: t.kind, thread: "ask", wait_ms: e.wait_ms, first_event_ms: e.first_event_ms, total_ms: e.total_ms, cost_usd: e.cost_usd, ok: e.ok, lesson_passed: false,
+        runtime: e.runtime || runtime, model: e.model, effort: e.effort, settings_hash: e.settings_hash, tokens: e.tokens, other_model: e.other_model, error_kind: e.error_kind, start_ms: e.start_ms });
+    }
+    state.focus_tick++;
+    persistThread();
+    changed();
+  }
+
+  // Sends one thread turn, starting (or resuming) the thread's conversation if it isn't running.
+  function askSend(req, o) {
+    if (askBusy() || !state.thread) return false;
+    // A new conversation opens the ask skill from its first request (research R12): a follow-up or a
+    // Try again into a thread whose conversation a lesson ended gets /ask-mentor in front, as the first
+    // follow-up after a go-deeper lesson does. The bubble still shows the text as typed.
+    if (!state.thread.claude_session_id && !req.request.startsWith(`${ASK_COMMAND} `)) req = Object.assign({}, req, { request: `${ASK_COMMAND} ${req.request}` });
+    if (!state.threadAdapter) {
+      const a = deps.createAdapter(deps.cfg);
+      state.threadAdapter = a;
+      wireThread(a);
+      const resume = state.thread.claude_session_id;
+      const id = a.start(resume ? { resumeSessionId: resume, skill: ASK_SKILL } : { skill: ASK_SKILL });
+      if (state.threadAdapter !== a) return false; // the start failed; onAskError has shown why
+      if (!resume) state.thread = Object.assign({}, state.thread, { claude_session_id: id });
+    }
+    const t = { kind: req.kind, sent_ms: now().getTime(), sent_at: null, long: false, pressed: (o && o.pressed) || null, committed: "", block: "", had_result: false, answer_kind: null, view: null, fallback: null, error: null, srcs: [] };
+    state.askTurn = t;
+    if (state.error && state.error.from === "thread") state.error = null; // a lesson's own error stays with it
+    unref(later(() => { if (state.askTurn === t) { t.long = true; changed(); } }, thr.READING_LONG_MS));
+    persistThread();
+    try {
+      state.threadAdapter.send(req.request, req.kind);
+    } catch (e) {
+      deps.log({ kind: "send_failed", length: 0 });
+      state.askTurn = null;
+      if (e.code !== "BUSY") stopThreadAdapter();
+      state.thread = thr.notice(thr.answer(state.thread, { view: null, prose: null, had_result: false }), { title: E.stopped.title, text: COPY.ask.question_still_here });
+      persistThread();
+    }
+    return true;
+  }
+
+  // Ask on Home: a new question, in the thread if there is one (MU home-thread, TD § 6 turn 7).
+  function askQuestion(text) {
+    const q = String(text || "").trim();
+    if (!q || askOff()) return false;
+    const at = now().toISOString();
+    if (!state.thread) state.thread = thr.newThread({ id: `ask-${now().getTime()}`, at });
+    state.thread = thr.addQuestion(state.thread, { text: q, kind: "question", at });
+    state.steps_open = false;
+    state.steps_list_open = false;
+    state.askSending = true;
+    unref(later(() => { toThread(); changed(); }, SENDING_MS));
+    if (!askSend(askRequest(q))) state.askSending = false;
+    changed();
+    return true;
+  }
+
+  // The thread's follow-up bar. False when it's paused, so the box keeps what was typed.
+  function followUp(text) {
+    const q = String(text || "").trim();
+    if (!q || !state.thread || followOff()) return false;
+    const req = state.thread.after_lesson ? contextRequest(thr.contextEntry(state.thread), q) : followUpRequest(q);
+    state.thread = thr.addQuestion(state.thread, { text: q, kind: "followup", at: now().toISOString() });
+    askSend(req);
+    changed();
+    return true;
+  }
+
+  // Go deeper (FR-048, FR-050): only an offer drawn in an answer still in view. The lesson it opens
+  // is phase 2's (T054); this sends the press, once.
+  function goDeeper({ skill }) {
+    if (!PHASE.FLAGS.go_deeper || !state.thread || followOff()) return;
+    const entry = state.thread.questions.slice().reverse().find((q) => q.view && !q.folded);
+    const offer = thr.offersOf(state.thread, entry).find((x) => x.skill === skill);
+    if (!offer) return;
+    const req = goDeeperRequest(offer.tag);
+    state.thread = thr.addQuestion(state.thread, { text: req.label, kind: "go_deeper", at: now().toISOString() });
+    askSend(req, { pressed: skill });
+  }
+
+  // Try again: the latest entry, as it was sent.
+  function askRetry() {
+    const q = thr.latest(state.thread);
+    if (!q || askBusy()) return;
+    // After a lesson a follow-up's retry is the same wrapped request it retries (amendment (e)); a
+    // question stands alone and goes as a question.
+    const last = state.thread.questions.length - 1;
+    const req = q.kind === "question" ? askRequest(q.text)
+      : q.kind === "followup" && state.thread.after_lesson ? contextRequest(thr.contextEntry(state.thread, last), q.text)
+        : { kind: q.kind, label: q.text, request: q.text };
+    state.thread = thr.retry(state.thread);
+    askSend(req, { pressed: "try_again" });
+  }
+
+  function setDraft(text) {
+    const was = !!state.draft.trim();
+    state.draft = String(text || "");
+    if (was !== !!state.draft.trim()) changed(); // Ask turns on or off; nothing else redraws per key
+  }
+
+  function toggleSteps(short) {
+    if (short) { state.steps_list_open = !state.steps_list_open; return; }
+    state.steps_open = !state.steps_open;
+    state.steps_list_open = false;
+  }
+
+  function askModel() {
+    const th = state.thread;
+    const q = thr.latest(th);
+    const t = state.askTurn;
+    const view = q && q.view;
+    return {
+      thread: !!th,
+      sending: state.askSending,
+      busy: !!t,
+      long: !!t && t.long,
+      pressed: t ? t.pressed : null,
+      answered: !!q && q.answered,
+      latest_kind: q ? q.kind : null,
+      view_kind: view ? view.kind : null,
+      earlier_count: th ? thr.split(th).earlier_count : 0,
+      has_steps: !!th && !!th.latest_steps,
+      steps_open: state.steps_open,
+      notice: !!q && !!q.notice,
+    };
+  }
+
   const ACTIONS = {
     tab: ({ tab }) => { if (tab) { state.tab = tab; if (tab === "skills") state.skill_detail = null; } },
     go_home: () => { state.tab = "home"; },
@@ -700,6 +1017,13 @@ function createApp(deps) {
     back_home: () => leaveLesson("home"),
     toggle_list: ({ short }) => toggleList(short),
     fold_done: () => { state.done_unfolded = !state.done_unfolded; },
+    ask_home: () => { askQuestion(state.draft); },
+    thread_back: () => { state.home_view = "home"; },
+    back_question: () => { if (state.thread) { state.tab = "home"; state.home_view = "thread"; } },
+    toggle_steps: ({ short }) => toggleSteps(short),
+    go_deeper: goDeeper,
+    ask_try_again: askRetry,
+    see_covered: () => { state.tab = "skills"; state.skill_detail = null; },
   };
 
   function act(name, args) {
@@ -710,7 +1034,9 @@ function createApp(deps) {
   function shutdown() {
     state.closing = true;
     persist();
+    persistThread();
     if (state.adapter) state.adapter.stop();
+    if (state.threadAdapter) state.threadAdapter.stop();
   }
 
   function model() {
@@ -743,7 +1069,10 @@ function createApp(deps) {
     const viewArgs = { memory, pathData: deps.pathData, built, now: now() };
     const skills_view = skillsView(viewArgs);
     const detail = state.skill_detail ? skillDetail(state.skill_detail, viewArgs) : null;
-    m.skills_state = state.review_saved && skills_view.due_count > 0 ? "after_review" : skills_view.state;
+    m.skills_state = state.review_saved && skills_view.due_count > 0 ? "after_review" : skills_view.due_count > 0 ? "due" : skills_view.state;
+    m.home_view = state.home_view;
+    m.draft = !!state.draft.trim();
+    m.ask = askModel();
     const lessonSkill = state.lesson && state.lesson.skill;
     m.review_date = lessonSkill ? daysUntilReview(recordSkills(memory)[lessonSkill], built.find((s) => s.id === lessonSkill), now()) : null;
     m.skill_detail = detail ? detail.state : null;
@@ -763,10 +1092,19 @@ function createApp(deps) {
       retry_kind: state.last ? retryKind(state.last.kind, state.lesson) : null,
       retry_same: state.last ? retryKind(state.last.kind, state.lesson) === state.last.kind : false,
       focus_tick: state.focus_tick,
+      runtime,
+      draft_text: state.draft,
+      thread: state.thread,
+      ask_turn: state.askTurn ? { committed: state.askTurn.committed + state.askTurn.block, view: state.askTurn.view, srcs: state.askTurn.srcs } : null,
+      ask_frames: state.askFrames,
+      ask_off: askOff(),
+      quiet_off: quietOff(),
+      follow_off: followOff(),
+      steps_list_open: state.steps_list_open,
     });
   }
 
-  return { init, act, ask, model, setConnection, shutdown };
+  return { init, act, ask, model, setConnection, shutdown, askQuestion, followUp, setDraft };
 }
 
 module.exports = { createApp, retryKind };

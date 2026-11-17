@@ -53,7 +53,7 @@ test("T045 bug: offset lesson, demo running, panel closed → Continue lesson of
   assert.equal(h.saved.current.ended, false, "closing the panel isn't the lesson ending");
   assert.equal(ps.canContinue(h.saved.current, CONNECTED.started), true);
   const again = await reopen(h);
-  assert.equal(st(again), "home-cutoff");
+  assert.equal(st(again), "home-inprogress");
   again.app.act("continue");
   assert.deepEqual(again.adapter().started[0], { resumeSessionId: "session-1", skill: "offset-mentor" });
   assert.equal(again.adapter().sent[0].kind, "continue");
@@ -67,7 +67,7 @@ test("closing between turns keeps the lesson waiting too", async () => {
   h.adapter().emit("exit", { code: 0 });
   await tick();
   assert.equal(h.saved.current.ended, false);
-  assert.equal(st(await reopen(h)), "home-cutoff");
+  assert.equal(st(await reopen(h)), "home-inprogress");
 });
 
 test("a close mid-demo saves where the demo stands: may have landed, so Show me isn't offered fresh (FR-030)", async () => {
@@ -112,5 +112,82 @@ test("through the real A adapter: Show me in flight, panel closed, helper exits 
   assert.equal(h.turns.at(-1).ok, false);
   assert.equal(h.turns.at(-1).error_kind, null, "the logged signature of the live bug");
   assert.equal(h.saved.current.ended, false);
-  assert.equal(st(await reopen(h)), "home-cutoff");
+  assert.equal(st(await reopen(h)), "home-inprogress");
+});
+
+// ---------- spec 014 T026: the ask thread across a close (research R12, panel session version 3) ----------
+const COMP1 = require("./fixtures/ask/comp1-answer.json");
+const GIVE = { name: "give_answer", ok: true, text: JSON.stringify(COMP1), images: [], json: COMP1 };
+
+test("closing mid-answer keeps the thread; reopened, the question is there with Try again, resuming the conversation", async () => {
+  const h = await ready({ runtime: "a", setTimeout: () => 0 });
+  h.app.setDraft("Why does the rock shake from its middle?");
+  h.app.act("ask_home");
+  const a = h.adapter();
+  h.app.shutdown();
+  a.emit("turn_end", { ok: false, kind: "question", cost_usd: null, error_kind: null }); // what the A adapter does once stopped
+  a.emit("exit", { code: 0 });
+  assert.equal(a.stopped, 1);
+  assert.ok(h.saved.thread, "the thread is saved");
+  const again = await ready({ runtime: "a", thread: h.saved.thread, setTimeout: () => 0 });
+  assert.equal(st(again), "home-thread");
+  again.app.act("back_question");
+  const m = again.app.model();
+  assert.equal(m.thread.questions[0].text, "Why does the rock shake from its middle?");
+  again.app.act("ask_try_again");
+  assert.equal(again.adapter().started[0].resumeSessionId, "session-1");
+  assert.equal(again.adapter().sent[0].text, "/ask-mentor Why does the rock shake from its middle?");
+});
+
+test("T035 item 2: closed while the answer loads and no turn end arrives → reopened, the question shows stopped with Try again", async () => {
+  const { COPY } = require("../lib/copy.js");
+  const { renderApp } = require("../lib/screens.js");
+  const h = await ready({ runtime: "a", setTimeout: () => 0 });
+  h.app.setDraft("Why does the rock shake from its middle?");
+  h.app.act("ask_home");
+  h.app.shutdown(); // the page goes before the adapter reports anything
+  assert.equal(h.saved.thread.questions[0].answered, false, "saved mid-answer");
+  const again = await ready({ runtime: "a", thread: h.saved.thread, setTimeout: () => 0 });
+  again.app.act("back_question");
+  const q = again.app.model().thread.questions[0];
+  assert.equal(q.answered, true);
+  assert.deepEqual(q.notice, { title: COPY.errors.stopped.title, text: COPY.ask.question_still_here });
+  assert.equal(again.saved.thread.questions[0].answered, true, "saved settled, so it reads the same next time");
+  const r = renderApp(again.app.model()).lesson;
+  const words = [r.chat.earlier || "", ...r.chat.items, r.actions].join("\n").replace(/&#39;/g, "'");
+  assert.ok(words.includes("Why does the rock shake from its middle?"));
+  assert.ok(words.includes(COPY.errors.stopped.title));
+  assert.ok(words.includes("Your question's still here."));
+  assert.match(r.actions, /data-action="ask_try_again"/, "Try again shows");
+  assert.equal(again.adapters.length, 0, "reopening starts nothing");
+  again.app.act("ask_try_again");
+  assert.equal(again.adapter().started[0].resumeSessionId, "session-1");
+  assert.equal(again.adapter().sent[0].text, "/ask-mentor Why does the rock shake from its middle?");
+  assert.equal(again.app.model().thread.questions[0].notice, null, "Try again clears the notice");
+});
+
+test("an answered thread and a waiting lesson both survive a close", async () => {
+  const h = await ready({ runtime: "a", setTimeout: () => 0 });
+  h.app.setDraft("Why?");
+  h.app.act("ask_home");
+  h.adapter().emit("tool_result", GIVE);
+  h.adapter().emit("turn_end", { ok: true, kind: "question" });
+  h.app.shutdown();
+  const again = await ready({ runtime: "a", thread: h.saved.thread });
+  again.app.act("back_question");
+  assert.equal(st(again), "ask-answer");
+  assert.equal(again.adapters.length, 0, "reading the thread starts nothing");
+});
+
+test("B1: a timed-out answer leaves its hung process; Try again resumes in a fresh one", async () => {
+  const h = await ready({ runtime: "b1", setTimeout: () => 0 });
+  h.app.setDraft("Why?");
+  h.app.act("ask_home");
+  const first = h.adapter();
+  first.emit("error", { kind: "timeout", message: "" });
+  first.emit("turn_end", { ok: false, kind: "question" });
+  assert.equal(first.stopped, 1);
+  h.app.act("ask_try_again");
+  assert.notEqual(h.adapter(), first);
+  assert.equal(h.adapter().started[0].resumeSessionId, "session-1");
 });

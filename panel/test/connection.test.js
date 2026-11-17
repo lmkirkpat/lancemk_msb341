@@ -53,6 +53,15 @@ test("no answer within 2 s is busy, and busy has no start time (FR-028 keeps the
   assert.deepEqual(r, { state: BUSY, started: null });
 });
 
+// Spec 014 T101: the comp-active flag was dropped (builder 2026-11-16, FR-047 withdrawn): AE's
+// activeItem reads "no comp" after a click in the Project panel, so the panel never reads one.
+test("a health answer's comp_active is ignored: the reading is state and start time only", async () => {
+  for (const comp_active of [false, true, null]) {
+    const r = await readConnection({ fs: OK, http: fakeHttp(answer({ ok: true, started: "s", comp_active })) });
+    assert.deepEqual(r, { state: CONNECTED, started: "s" });
+  }
+});
+
 test("no bridge file, or one with no port or token, is not connected", async () => {
   const missing = { readFileSync() { throw new Error("ENOENT"); } };
   assert.equal((await readConnection({ fs: missing, http: fakeHttp(() => {}) })).state, NOT_CONNECTED);

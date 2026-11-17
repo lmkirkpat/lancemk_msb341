@@ -71,3 +71,34 @@ test("skill-detail-noreview for easing; skill-detail-new with Builds on, never b
   assert.equal(practicing.state, "noreview");
   assert.equal(practicing.status_line, "In progress.");
 });
+
+// ---------- spec 014 T021: skills-due, memory under the path, lesson-none (MU, FR-055) ----------
+const { ready, plain, SIX_PATH, LESSON } = require("./app-harness.js");
+const { renderApp } = require("../lib/screens.js");
+const { COPY } = require("../lib/copy.js");
+
+const DUE = { skills: { "timing.offset": { status: "learned", last_practiced: "2026-10-26T12:00:00.000Z", review_due: "2026-11-01" }, "transform.anchor": { status: "learned", review_due: "2026-11-02" } }, lessons: [{ skill: "timing.offset", date: "2026-10-26T12:00:00.000Z", result: "passed" }] };
+const onSkills = async (record) => { const h = await ready({ memory: { status: "ok", record }, pathData: SIX_PATH }); h.app.act("tab", { tab: "skills" }); return h; };
+
+test("skills-due: the due line first, with Warm up for the first due skill in path order and a count", async () => {
+  const h = await onSkills(DUE);
+  assert.equal(h.app.model().state, "skills-due");
+  const v = renderApp(h.app.model()).view;
+  assert.match(v, /class="dueline"[^]*Break the lockstep with offset[^]*data-action="warm_up" data-skill="timing\.offset"/);
+  assert.ok(plain(v).includes(`${COPY.skills.due_line("Oct 26")} · ${COPY.skills.more_due(1)}`));
+  assert.ok(v.indexOf("dueline") < v.indexOf('class="skills"'), "at the top, above the path");
+  assert.equal((v.match(/class="dueline"/g) || []).length, 1, "one line");
+});
+
+test("Skills with nothing due keeps spec 007's states and has no due line", async () => {
+  const h = await onSkills(LESSON);
+  assert.notEqual(h.app.model().state, "skills-due");
+  assert.doesNotMatch(renderApp(h.app.model()).view, /dueline/);
+});
+
+test("lesson-none's new line points at asking on Home (MU lesson-none)", async () => {
+  const h = await ready();
+  h.app.act("tab", { tab: "lesson" });
+  assert.equal(h.app.model().state, "lesson-none");
+  assert.ok(plain(renderApp(h.app.model()).view).includes("Ask about your comp on Home, or pick a skill."));
+});

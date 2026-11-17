@@ -2,7 +2,9 @@
 // FR-004, FR-009, FR-011, FR-019; research R4, decisions/010). The server is the same code, call
 // log and fixture mode the evals measure; its instructions come from its own `initialize` reply.
 // Its environment is an allowlist: a fixed PATH, HOME, TZ, the learner home and the AE_MENTOR_*
-// variables the start command passes. Never the key, never any ANTHROPIC_* variable.
+// variables the start command passes. Never the key, never any ANTHROPIC_* variable. The server is
+// told it's on A (AE_MENTOR_RUNTIME=a, spec 014 research R4); B1 never sets it, so the server fails
+// closed to B1.
 
 import { spawn as nodeSpawn } from "node:child_process";
 import fs from "node:fs";
@@ -40,7 +42,7 @@ export function serverCommand(mcpConfigFile, execPath = process.execPath) {
   return { command, args, cwd: dir };
 }
 
-// The server's environment: the allowlist only.
+// The server's environment: the allowlist only, plus the runtime flag.
 export function serverEnv({ home, fixtureEnv, baseEnv = process.env } = {}) {
   const env = { PATH: CHILD_PATH };
   if (baseEnv.HOME) env.HOME = baseEnv.HOME;
@@ -50,6 +52,7 @@ export function serverEnv({ home, fixtureEnv, baseEnv = process.env } = {}) {
     env[k] = v;
   }
   if (home) env.AE_MENTOR_HOME = home;
+  env.AE_MENTOR_RUNTIME = "a"; // after the passable ones, so nothing a start command passes can change it
   return env;
 }
 

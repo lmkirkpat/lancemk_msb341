@@ -6,7 +6,9 @@ const nodeFs = require("fs");
 const path = require("path");
 const { defaultHome } = require("./config.js");
 
-const KINDS = ["start", "new_lesson", "warm_up", "find_next", "yes", "check", "hint", "show_me", "show_me_again", "ask", "continue"];
+// question, followup and go_deeper are the ask thread's (spec 014 research R11); `ask` stays the
+// lesson's Ask bar.
+const KINDS = ["start", "new_lesson", "warm_up", "find_next", "yes", "check", "hint", "show_me", "show_me_again", "ask", "continue", "question", "followup", "go_deeper"];
 const num = (v) => (typeof v === "number" && isFinite(v) ? v : null);
 // Model ids, effort levels and hashes: short tokens only, so no message text can ride in (FR-029).
 const id = (v) => (typeof v === "string" && /^[A-Za-z0-9._:-]{1,80}$/.test(v) ? v : null);
@@ -28,6 +30,8 @@ function appendTurn(opts, entry) {
       lesson_passed: entry.lesson_passed === true,
       runtime: entry.runtime === "a" ? "a" : "b1", // B1 lines get this field only (data-model › Turn log)
     };
+    // Every turn sent from an ask thread, its go-deeper lesson's included (spec 014 FR-058, R11).
+    if (entry.thread === "ask") line.thread = "ask";
     if (line.runtime === "a") {
       line.model = id(entry.model);
       line.effort = id(entry.effort);
