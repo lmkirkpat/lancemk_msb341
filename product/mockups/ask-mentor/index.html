@@ -405,7 +405,7 @@ let QTEXT = "How can I make the rock shaking more organic, like it's vibrating f
 const LEAD = `In ${COMP}, rock.png rides on Shake Control, a null moved by expressions:`;
 const WHY = [
   `All three hits are the same size.`,
-  `Rotation is too small to see: 0.75° at most, gone in about 1/3 s.`,
+  `Rotation moves the rock about 9 px at most, gone in about 1/3 s.`,
   `The turn centers on the rock, where Shake Control sits.`,
 ];
 const OFFER = `Try them, or want to go deeper on step 3 with <em class="skill">${PIV}</em>?`;
@@ -413,7 +413,7 @@ const OFFER = `Try them, or want to go deeper on step 3 with <em class="skill">$
 // prose. Steps 1 and 2 state a read fact with an action, never the edit (H-2). Tags use the short names.
 const STEPS = [
   `Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first hit's size for all three. Not something I teach yet.`,
-  `Open Shake Control's Rotation expression and look at its amounts: 0.75° at most, too small to see. Not something I teach yet.`,
+  `Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet.`,
   `Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits. <em class="skill">${PIV}</em>`,
   `Play it back and watch the turn.`,
 ];

@@ -44,18 +44,18 @@ the Easing on Title lesson in progress on Mentor Practice, and the "about 40 px 
 
 ### The Comp 1 answer (revised after the design review)
 
-Three parts, about 121 words in all (§ 5.1's cap is about 120). Only the first and last are the mentor's
+Three parts, about 117 words in all (§ 5.1's cap is about 120). Only the first and last are the mentor's
 words; the middle is drawn by the panel from the step data:
 
 > *Mentor (prose):* In Comp 1, rock.png rides on Shake Control, a null moved by expressions:
 > - All three hits are the same size.
-> - Rotation is too small to see: 0.75° at most, gone in about 1/3 s.
+> - Rotation moves the rock about 9 px at most, gone in about 1/3 s.
 > - The turn centers on the rock, where Shake Control sits.
 >
 > *Panel (from step data):* **STEPS**
 > 1. Open Shake Control's Position expression and look at how it sets each hit's size: it uses the first
 >    hit's size for all three. Not something I teach yet.
-> 2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most, too small to see. Not something I teach yet.
+> 2. Open Shake Control's Rotation expression and look at its amounts: 0.75° at most. Not something I teach yet.
 > 3. Select Shake Control (the null, not a letter) and Pan Behind its pivot to where the hammer hits.
 >    *Set the pivot*
 > 4. Play it back and watch the turn.
