@@ -288,3 +288,45 @@ test("switch_not_read: a 3D or Auto-Orient switch read as null, or missing, in t
   byIndex(on, ROCK).three_d = true;
   assert.deepEqual(reasonFor(on), ["three_d"], "a switch that's on is definite");
 });
+
+// Review S3. rock.png → Shake Control → a planted parent scaled 200% × 100% (non-uniform above the source).
+function squashed() {
+  const s = load();
+  const top = { ...structuredClone(byIndex(s, 26)), index: 30, name: "Squash", parent: null, is_null: true };
+  for (const smp of top.samples) Object.assign(smp, { anchor: [0, 0, 0], position: [0, 0, 0], scale: [200, 100, 100], rotation: 0 });
+  if (!sampleAt(top, T)) top.samples.push({ ...top.samples[0], time: T });
+  s.layer_info.push(top);
+  byIndex(s, SHAKE).parent = 30;
+  return s;
+}
+const keyShakeRotation = (s) => s.layers.push({ index: SHAKE, name: "Shake Control", properties: [{ path: ROT, display_name: "Rotation", display_path: "Transform › Rotation", expression_enabled: true, keys: [{ time: 0, value: 0, in_type: "linear", out_type: "linear" }, { time: 4, value: 5, in_type: "linear", out_type: "linear" }] }] });
+
+test("S3: a Rotation source under a non-uniform scale needs the peak's direction: direction_unknown without max_value", () => {
+  assert.deepEqual(entry(squashed(), ROCK, "Rotation"), { from_layer_index: SHAKE, from_layer: "Shake Control", property: "Rotation", shift_px: null, reason: "direction_unknown" });
+});
+
+test("S3: with max_value, the exact number, checked against comp-space's footprint at base and at peak", () => {
+  const s = squashed();
+  const peak = 0.589;
+  fineOf(s, ROT).max_value = peak;
+  const at = (rotation) => { const c = structuredClone(s); sampleAt(byIndex(c, SHAKE), T).rotation = rotation; return footprint(c, ROCK, T).corners; };
+  const base = sampleAt(byIndex(s, SHAKE), T).base.rotation;
+  const a = at(base);
+  const b = at(peak);
+  const hand = Math.max(...a.map((p, i) => Math.hypot(b[i][0] - p[0], b[i][1] - p[1])));
+  const got = entry(s, ROCK, "Rotation").shift_px;
+  assert.ok(Math.abs(got - hand) <= 0.01, `${got} vs ${hand.toFixed(3)}`);
+  assert.notEqual(got, entry(SNAP, ROCK, "Rotation").shift_px, "the squash changes the number");
+});
+
+test("S3: keys on the source layer's own Rotation don't block a Position source (uniform, and non-uniform with max_value)", () => {
+  const s = load();
+  keyShakeRotation(s);
+  assert.equal(entry(s, ROCK, "Position").shift_px, entry(SNAP, ROCK, "Position").shift_px);
+  const q = squashed();
+  keyShakeRotation(q);
+  const fine = q.expression_sweeps.find((w) => w.layer === SHAKE && w.path === POS && w.kind === "fine");
+  const b = sampleAt(byIndex(q, SHAKE), T).base.position;
+  fine.max_value = [b[0] + 3, b[1] + 4, 0];
+  assert.equal(entry(q, ROCK, "Position").shift_px, Math.round(Math.hypot(6, 4) * 100) / 100);
+});
