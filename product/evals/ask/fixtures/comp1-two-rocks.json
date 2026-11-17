@@ -2686,7 +2686,7 @@
    "index": 22,
    "name": "Rock Shadow.png",
    "kind": "footage",
-   "enabled": false,
+   "enabled": true,
    "is_null": false,
    "adjustment": false,
    "has_video": true,
@@ -2711,8 +2711,8 @@
    "mask_count": 0,
    "transform": {
     "anchor": [
-     0,
-     0,
+     794,
+     267.5,
      0
     ],
     "position": [
@@ -2721,19 +2721,19 @@
      0
     ],
     "scale": [
-     100,
-     100,
+     99.843,
+     99.843,
      100
     ],
     "rotation": 0,
-    "opacity": 0
+    "opacity": 100
    },
    "samples": [
     {
      "time": 0.6,
      "anchor": [
-      0,
-      0,
+      794,
+      267.5,
       0
      ],
      "position": [
@@ -2742,25 +2742,25 @@
       0
      ],
      "scale": [
-      100,
-      100,
+      99.843,
+      99.843,
       100
      ],
      "rotation": 0,
-     "opacity": 0,
+     "opacity": 100,
      "rect": {
       "left": 0,
       "top": 0,
-      "width": 100,
-      "height": 100
+      "width": 1588,
+      "height": 535
      },
      "rect_extents": null
     },
     {
      "time": 3.37,
      "anchor": [
-      0,
-      0,
+      794,
+      267.5,
       0
      ],
      "position": [
@@ -2769,25 +2769,25 @@
       0
      ],
      "scale": [
-      100,
-      100,
+      99.843,
+      99.843,
       100
      ],
      "rotation": 0,
-     "opacity": 0,
+     "opacity": 100,
      "rect": {
       "left": 0,
       "top": 0,
-      "width": 100,
-      "height": 100
+      "width": 1588,
+      "height": 535
      },
      "rect_extents": null
     },
     {
      "time": 3.403,
      "anchor": [
-      0,
-      0,
+      794,
+      267.5,
       0
      ],
      "position": [
@@ -2796,25 +2796,25 @@
       0
      ],
      "scale": [
-      100,
-      100,
+      99.843,
+      99.843,
       100
      ],
      "rotation": 0,
-     "opacity": 0,
+     "opacity": 100,
      "rect": {
       "left": 0,
       "top": 0,
-      "width": 100,
-      "height": 100
+      "width": 1588,
+      "height": 535
      },
      "rect_extents": null
     },
     {
      "time": 3.537,
      "anchor": [
-      0,
-      0,
+      794,
+      267.5,
       0
      ],
      "position": [
@@ -2823,17 +2823,17 @@
       0
      ],
      "scale": [
-      100,
-      100,
+      99.843,
+      99.843,
       100
      ],
      "rotation": 0,
-     "opacity": 0,
+     "opacity": 100,
      "rect": {
       "left": 0,
       "top": 0,
-      "width": 100,
-      "height": 100
+      "width": 1588,
+      "height": 535
      },
      "rect_extents": null
     }

@@ -71,10 +71,19 @@ export function fixtures() {
     if (target >= 0) s.layers[target] = entry;
     else { s.layers.push(entry); s.layers.sort((a, b) => a.index - b.index); }
     const info = s.layer_info.find((l) => l.index === 22);
+    // Footage that renders, not outline.png's switched-off layer and not the null's zero opacity: keep
+    // outline.png's own flags (footage, has_video, not a guide or matte), switch it on, and take the null's
+    // Position along the keys. Anchor, scale, rotation, opacity and rect are outline.png's (an ordinary
+    // 1588 x 535 image at full opacity); only Position follows the donor.
+    const own = clone(info);
     info.name = "Rock Shadow.png";
     info.parent = null;
-    info.transform = clone(donorInfo.transform);
-    info.samples = clone(donorInfo.samples);
+    info.enabled = true;
+    info.transform = { ...clone(own.transform), position: clone(donorInfo.transform.position) };
+    info.samples = clone(donorInfo.samples).map((smp) => {
+      const base = own.samples[0];
+      return { ...smp, anchor: clone(base.anchor), scale: clone(base.scale), rotation: base.rotation, opacity: base.opacity, rect: clone(base.rect), rect_extents: base.rect_extents };
+    });
     out["comp1-two-rocks.json"] = s;
   }
 

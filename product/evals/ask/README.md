@@ -128,7 +128,7 @@ All are built by `node product/evals/ask/fixtures/build.mjs` from spec 015 T015'
 | File | From | Change |
 |---|---|---|
 | `comp1.json` | `comp1.mjs` (Comp 1) | none. The live capture (spec 015 T015, rebuilt 2026-11-16): 29 layers, 3 expressions, 4 `expression_sweeps` |
-| `comp1-two-rocks.json` | Comp 1 | layer 22 (outline.png) becomes Rock Shadow.png with its own two Position keys (copied from Sweep Control), so "the rock" names two layers with different first steps |
+| `comp1-two-rocks.json` | Comp 1 | layer 22 (outline.png) becomes Rock Shadow.png, a visible footage layer (on, full opacity, outline.png's size) with its own two Position keys (copied from Sweep Control), so "the rock" names two layers with different first steps |
 | `practice.json` | live capture, Mentor Practice | none |
 | `practice-title-locked.json` | `practice.json` | Title's Lock switch on |
 | `card-and-glow.json` | planted layers 4 and 18 | renamed Card (two Scale keys) and Glow (`wiggle` expression), comp renamed Intro |
