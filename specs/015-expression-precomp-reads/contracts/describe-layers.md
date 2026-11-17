@@ -28,6 +28,7 @@ precomp, or `comp_id` is given, one `precomp-contents` read.
 {
   comp: { name, time },
   read: { expressions: "all" | not_read, links: "read" | not_read, sweeps: "fine" | "coarse" | not_read,
+          shifts: "read" | not_read,                // FR-004a; not_read "not_asked" with no `layers`
           precomps: "read" | not_read },            // phase 1: precomps is always not_read
   layers: [ Layer summary | Layer detail | { asked, error: "NAME_SHARED", candidates: [{ layer_index, parent }] }
             | { asked, error: "NOT_FOUND" } ],
@@ -36,6 +37,13 @@ precomp, or `comp_id` is given, one `precomp-contents` read.
 ```
 
 Layer summary and Layer detail: data-model § 6. `not_read` is `{ status: "not_read", reason }`.
+
+**Footprint shift (FR-004a, added 2026-11-16):** each layer named in `layers` carries `shifts`, one
+entry per parent-chain transform expression that moves it, with its peak shift in comp pixels on that
+layer's box or `shift_px: null` with a reason (data-model § 6, research R15). Never a number in degrees
+or percent in its place, and never 0 for "couldn't work it out". The fine sweep in this tool's snapshot
+also records `max_value` (data-model § 1); no other snapshot sends `measure_layers`, so no skill's reply
+changes.
 
 ## Limits (SC-007, research R11)
 

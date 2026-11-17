@@ -232,3 +232,46 @@ changes existing shared files (`snapshot.jsx`, `motion-sources.mjs`, `anchor-che
 **one skill-builder branch with the cockpit's `--shared-owner`**, not parallel worktrees. Phase 2 is a
 second branch the same way. Eval work (eval-engineer) runs in parallel once a phase's branch is
 merged.
+
+## R15. Footprint shift in comp pixels (FR-004a, OQ-10; added 2026-11-16)
+
+**Decision:** a pure function in a new file, `mentor/lib/footprint-shift.mjs`, on top of
+`comp-space.mjs` (which already gives a layer's box corners through its parent chain and returns
+`null` with a reason for `three_d`, `auto_orient`, `no_rect`, `not_sampled` and `singular`).
+`describe_layers` calls it for each named layer and each parent-chain expression with
+`moves_children` by expression.
+
+- **Peak:** the fine sweep's `max_offset` and `max_at` only (the coarse sweep misses peaks: Comp 1's
+  coarse Rotation peak is 0.283° against the fine 0.589°).
+- **Rotation:** the box corners through the chain at the reading time, with the source property at its
+  base and at base + `max_offset`; the shift is the largest corner distance. The sign doesn't change
+  the distance, so `max_offset` (absolute) is enough.
+- **Position and Anchor Point** (a pure translation of the children): every corner moves the same
+  distance, `max_offset` times the scale of the layers it passes through (the source layer's own
+  scale too, for Anchor Point). With uniform scale on those layers that's exact; with a non-uniform
+  one it needs the peak's direction.
+- **Scale:** always needs the peak's direction (`max_offset` is a vector length).
+- **The peak's direction:** the snippet's fine sweep adds `max_value`, the after-expression value it
+  already read at `max_at` (additive; fine sweeps only run with `measure_layers`, which only
+  `describe_layers` sends, so no skill's snapshot changes). Without it (older snapshots, including
+  today's `comp1.json`), the cases above that need it return `direction_unknown`. Comp 1 needs it for
+  nothing: its two are Rotation and Position with no layer above.
+- **`chain_moves`:** the samples are at the reading time, not the peak, so the conversion is exact only
+  if the values it depends on are the same at both. Those are the transform values of the named layer
+  and every layer between it and the source layer, the source layer's Anchor Point and Scale (and
+  Rotation, for a Scale source in a non-uniform chain), and the Scale of every layer above the source.
+  If any of them has keys or a varying active expression, the result is `chain_moves`. The source
+  layer's own Position is exempt for a Rotation or Scale source (moving the pivot doesn't change the
+  distance to it), and so is any Rotation above the source layer (a turn doesn't change a length).
+  On Comp 1, Shake Control's Position shakes, but it is exempt for its Rotation, so both convert.
+
+**Why:** it uses only what's already read, so it adds no AE time or write and works on the live
+fixture. **Considered:** (a) sampling the chain at each peak time in the same snapshot (exact for
+moving chains, but a snippet change for every measured layer and not testable on today's fixture;
+revisit if `chain_moves` turns up often in 014's sessions); (b) a lever-arm estimate from the box size
+alone (rejected: a guess, FR-004a); (c) giving the number in property units with the pixel version left
+to the mentor's prose (rejected: the model would do the arithmetic, OQ-10).
+
+**Expected on `comp1.json`** (a scratch check from the fixture, 2026-11-16, not a requirement beyond
+SC-003a): Rotation gives rock.png about 9.36 px, logo.png about 8.60, the title layer about 6.84 and
+the ten Shakers precomps about 11.3 each; Position gives 12.147 on each.

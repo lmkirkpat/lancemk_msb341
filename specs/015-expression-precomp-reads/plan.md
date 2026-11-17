@@ -17,6 +17,9 @@ server, ahead of skills 4 and 10, so spec 014's ask mode can answer about real c
   pivot and null checks compare at the same frame and on base values, so expression motion is never
   the learner's edit (K2). A new read-only tool, `describe_layers`, gives the ask mode a summary
   and a detail shape.
+  *Phase 1 follow-up (2026-11-16, FR-004a, T064):* the tool also gives each parent expression's
+  peak shift on a named layer in comp pixels, worked out in Node from the fine sweep and the samples
+  (research R15), so 014's 1 px floor covers Rotation and Scale.
 - **Phase 2 (precomps, US4):** a separate snippet reads inside precomps by comp id, with time
   mapping through start, stretch and time remap, and `describe_layers` reports it. No skill's
   findings change.
@@ -76,7 +79,7 @@ out of other-changes lists rather than adding a new kind no `SKILL.md` knows (R7
 specs/015-expression-precomp-reads/
 ├── spec.md
 ├── plan.md              # this file
-├── research.md          # R1 to R14
+├── research.md          # R1 to R15
 ├── data-model.md
 ├── quickstart.md
 ├── contracts/
@@ -96,6 +99,7 @@ mentor/
 ├── lib/
 │   ├── expressions.mjs         # new: expression reads, builds-on, references, links
 │   ├── k2-changes.mjs          # new: K2 shared helper (pairValues, baseViews, unkeyed changes)
+│   ├── footprint-shift.mjs     # new (T064, FR-004a): peak shift in comp pixels
 │   ├── precomp-time.mjs        # new (phase 2): time mapping
 │   ├── motion-sources.mjs      # changed: expressions read, moves_by
 │   ├── anchor-check.mjs        # changed: K2
@@ -128,6 +132,7 @@ goes in new files where possible, so the shared-file edits stay small.
 |---|---|---|---|
 | **0. Live checks** | T001 to T008 | Facts for the reads | Results logged and folded into research before T010 |
 | **1. Expressions** (US1, US2, US3) | T009 to T040 | On its own: spec 014 can build on it | SC-001 to SC-010; six sets on B1 (SC-006) |
+| 1 follow-up: footprint shift (FR-004a) | T064 | Before 014's FR-007 test on Comp 1 and its three sessions | SC-003a; mentor and hooks suites; skill replies on eval fixtures unchanged |
 | **2. Precomps** (US4) | T041 to T056 | After phase 1 is merged and its gate passes | SC-011 to SC-013; easing unchanged; eval gate (spec OQ-6) |
 
 ## Risks

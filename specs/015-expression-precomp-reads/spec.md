@@ -5,7 +5,7 @@
 **Created**: 2026-11-14
 
 **Status**: **Phase 1 shippable (2026-11-16, T040)**: spec 014 can build on it. Phase 2 (US4) not
-started (next: T041). Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3). Phase 1's results are in Success Criteria › Phase 1 results.
+started (next: T041). Phase 1 follow-up FR-004a (OQ-10, 2026-11-16) is open: T064. Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended). Plan and tasks approved 2026-11-14 ([plan.md](plan.md), [tasks.md](tasks.md)) with OQ-6 and OQ-7 as recommended. FR-015 narrowed to pivot and null (OQ-3). Phase 1's results are in Success Criteria › Phase 1 results.
 
 **Amendment 1 (2026-11-14, Phase 0 live checks, T008; approved by the builder 2026-11-14 with OQ-8 as recommended):** evidence in
 `discovery/usage-notes/expression-reads.md` (session 1) and the corrected finding 4 in
@@ -59,6 +59,15 @@ T060: the 1 px floor is recorded as approved and handed to spec 014 (OQ-8). New 
 measured in screen pixels on the asked layer, which FR-004 doesn't give. Changed here: Status, Success
 Criteria (Phase 1 results), Assumptions (T034, A runs), OQ-8, the T034 open item (answered), OQ-10
 (new). No requirement or approved decision changes.
+
+**Amendment 6 (2026-11-16, OQ-10 answered by the builder as recommended):** add only. New FR-004a: for
+each parent expression that moves an asked layer, `describe_layers` gives the peak shift of that layer's
+box in comp pixels, worked out in the mentor from values the sweep already reads, so the 1 px floor
+(014 TD § 5.1a) applies to Rotation and Scale as well as Position. Changed here: Status, FR-004a, new
+SC-003a (with a Phase 1 results row), SC-007's note, Edge Cases (new E31), OQ-10 (answered), new
+OQ-11; plan (summary, structure), research (new R15), data model (§ 1 sweeps, § 6),
+`contracts/describe-layers.md` (the field), tasks T064 (new). FR-004's fields don't change. No approved
+decision changes.
 
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
@@ -315,6 +324,7 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 | E29 | Hidden half of a separable Position (X/Y when joined, Position when separated) | Skipped: its values are stale and never draw (FR-006a) | Report its value, keys or expression | Planted (T015) |
 | E28 | A layer's index changes under a `wiggle` (a layer added or removed above it, such as the null skill's null) | Its after-expression values change with no edit (T002: about 6 px); compared on base, so nothing is reported | A learner change on that layer | Planted (T015) |
 | E30 | Expression text with `\r` line ends (AE 27.0 returns them; Amendment 4) | A `//` comment ends at `\r`, `\r\n`, `\n`, U+2028 or U+2029, so `value` after it counts (Shake Control builds on value); the snapshot keeps AE's text raw, and only `describe_layers` detail and text comparisons normalize line ends (`normalizeLineEnds()`) | Read the rest of the text as one comment and report "sets its own value"; a line-end-only difference reported as "text changed" | Comp 1 live capture (T015, `1499819`) plus unit text |
+| E31 | A parent's Rotation or Scale expression moves a child by an amount in degrees or percent (FR-004a) | The child's peak shift in comp pixels, through its distance from the parent's pivot; `shift_px: null` with a reason when the chain is 3D, auto-oriented, boxless, moving, or the direction wasn't recorded | Degrees or percent given as the size; a hand estimate; 0 for "couldn't work it out" | Comp 1 capture (Shake Control's Rotation, 0.589° fine peak) plus planted unit fixtures |
 
 ## Requirements *(mandatory)*
 
@@ -338,6 +348,33 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   largest difference from the base value over the comp's duration (in the property's units: pixels,
   degrees, percent), the time of that peak, and whether the result varies at all. The sampling step
   is set in the plan; the result is marked as sampled (TD 014 § 19 "Checked 2026-11-14"; see OQ-4).
+- **FR-004a** *(added 2026-11-16, OQ-10)*: For each layer a caller names, and for each active
+  transform expression on a layer in its parent chain that moves it (FR-005's `moves_children` by
+  expression), `describe_layers` MUST give that expression's **peak footprint shift on the named
+  layer, in comp pixels**: how far the named layer's farthest box corner moves at the expression's
+  peak, compared with the same layer with that one property at its base value. It also gives the peak's
+  time and `sampled_every` from FR-004's fine sweep, and is marked as sampled and as measured on the
+  layer's box, not its visible pixels (OQ-11). This is what 014 TD § 5.1a's 1 px floor and "say its
+  size" are measured in, for Position, Anchor Point, Rotation and Scale alike.
+  - **Worked out, never read anew:** computed in the mentor (Node) with the existing comp-space math,
+    from the fine sweep's peak and the snapshot's transform samples. No new AE write, no extra
+    snapshot call, and FR-004's fields stay as they are. The sweep MAY record the value it already
+    read at its peak (additive; research R15).
+  - **Never a guess:** when the shift can't be worked out exactly from what was read, the entry is
+    `shift_px: null` with a reason, never an estimate, a property-unit number in its place, or 0.
+    At least: a 3D layer anywhere in the chain (`three_d`); Auto-Orient on (`auto_orient`); the named
+    layer has no box (a null, camera, light or audio layer; `no_rect`); a layer in the chain has no
+    sample at the reading time (`not_sampled`); no fine sweep for that expression, because the budget
+    cut it, it errored, or the snapshot is older (`no_fine_sweep`; a coarse peak is never used); a value
+    the shift depends on could differ between the reading time and the peak, because it has keys or
+    a varying active expression (`chain_moves`; research R15 lists which values count); the peak's
+    direction is needed but wasn't recorded (a Scale source, or a Position or Anchor Point source
+    through a non-uniform scale, on a snapshot without the sweep's peak value; `direction_unknown`); a
+    scale of 0 (`singular`).
+  - **Scope:** only layers named in `layers` (not a whole-comp summary, which says the read as
+    `not_read: "not_asked"`), and only parent-chain expressions, as approved. Opacity and non-transform
+    expressions get no entry (they don't move the box). Each expression is converted on its own; two
+    sources together are not combined (the deferred "hard to tell apart" band, 014 TD § 5.1a).
 - **FR-005**: The motion-sources map (spec 004 FR-014) MUST include expressions on any property: its
   read status for expressions changes from keyed-only to all, and each parent's `moves_children` MUST
   be true when the parent has keys on a moving transform property **or** an on, error-free transform
@@ -483,6 +520,14 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 - **SC-003**: On Comp 1, rock.png's motion sources name Shake Control as moving its children by
   expression, and Shake Control's Position shows a base of (960, 540) and an after-expression value
   within 0.1 px of (952.4, 542.5) at 0.6 s. *Measured by:* unit test plus one live read.
+- **SC-003a** *(added 2026-11-16, FR-004a)*: On the live Comp 1 capture
+  (`mentor/test/fixtures/expressions/comp1.json`), Shake Control's Rotation (fine peak 0.589° at
+  2.569 s) gives a footprint shift on **every one of the 13 layers it moves**, each within 0.05 px of a
+  hand calculation from the fixture's own values (2·r·sin(θ/2), r the farthest box corner's distance
+  from Shake Control's pivot), and **none under 1 px**. rock.png's is **between 8.6 and 9.4 px**, the
+  range of 014 TD § 16's hand estimate ("about 9 px"). Shake Control's Position (fine peak 12.147 px)
+  gives about 12.1 px on each (no layer above it). Every `null` reason in FR-004a has a unit test on a
+  planted or edited fixture, and none returns a number. *Measured by:* unit tests (T064).
 - **SC-004**: The easing findings on Mentor Practice are **identical** before and after phase 1 and
   after phase 2 (spec 004 SC-004), and Comp 1 yields 0 keyframe-skill findings from Shake Control or
   the Sweep Center. *Measured by:* unit test.
@@ -505,7 +550,7 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   whole-comp summary **at most 12 KB**, the summary holds **no** expression text, and one expression's
   detail is capped (FR-016). *Measured by:* unit test on Comp 1 and a planted comp with 30 expressions.
   The caps are a first guess (Comp 1's full ground truth, with all text, is 7.5 KB); the plan may
-  tune them with a reason.
+  tune them with a reason. FR-004a's shifts count toward the same caps (*2026-11-16*).
 - **SC-008**: Read time: phase 1 adds **at most 0.5 s** to a snapshot of Comp 1 and of Mentor Practice,
   and a whole-turn first activity on a skill stays **≤ 10 s** (spec 003 SC-004). Measured live today:
   60 ms for all 4,720 of Comp 1's properties. *Measured by:* the builder, timings in usage notes.
@@ -524,6 +569,7 @@ to T063) merged after it. "Live" means AE 27.0.
 | SC-001 | Met | Unit test on the live Comp 1 capture (T015, `91fd02b`): 3 expressions, text identical, 2 build on value, 1 sets its own. The capture found the `\r` fault (E30), fixed at `1499819` |
 | SC-002 | Met | T021's tests on the same capture; spot checks 3 and 4 live (T034) |
 | SC-003 | Met | Unit test, plus T033's live read: base (960, 540), after (952.352, 542.492) at 0.6 s; rock.png's source is Shake Control by expression |
+| SC-003a | Open (added by Amendment 6) | T064 |
 | SC-004 | Met (phase 1 half) | T016's test; T033: Mentor Practice's easing findings identical before and after the merge, old code on a pre-merge capture and new code on a new one |
 | SC-005 | Met | T022 to T025's unit tests, one set per skill check |
 | SC-006 | Met, with the builder's reading of the 3-of-3 clause | T036 at `edc0a1e` (`1c6789b`): easing 32/33, key types 35/36, speed graph 35/37, offset 42/44, pivot 61/64, null 50/55; every hard-rule check passes. The K2 cases (pivot 55, 56; null 53, 54; offset 44) and T059's (pivot 57 to 59, null 55) passed 3/3 on B1 earlier (T035, T059; null 53, 54 and pivot 58 again after T061) and passed once each in the full run at `edc0a1e`; the builder took that as meeting 3 of 3, with no repeat at that commit. After the run, T063 changed one line each in key types, speed graph and offset `SKILL.md` (`84693de`); those cases re-ran on B1 (`c7167ea`: offset 41 3/3, key types 33 and speed graph 16 2/3 on other items, already counted as fails above), so every set stays at its bar |
@@ -727,7 +773,8 @@ motion) belong to spec 014's set and to pivot K1, not here.
 
 ### New from T040 (2026-11-16)
 
-- **OQ-10: Who gives a source's peak in screen pixels on the asked layer?** The approved 1 px floor
+- **OQ-10: Who gives a source's peak in screen pixels on the asked layer?** *Answered 2026-11-16: as
+  recommended (FR-004a).* The approved 1 px floor
   (014 TD § 5.1a) and "say its size" are measured as **screen pixels on the asked layer** (014 TD's
   needs, item 4). FR-004 gives each expression's peak in **the property's own units**: pixels for a
   parent's Position, but degrees for Rotation and percent for Scale, which turn into pixels on a child
@@ -741,6 +788,22 @@ motion) belong to spec 014's set and to pivot K1, not here.
   014's FR-007 ordering is tested on Comp 1 and before the three sessions. *If no:* 014 states
   rotation and scale in their own units and applies the floor to Position only, and TD § 5.1a needs the
   curriculum designer to say so.
+  **Answered 2026-11-16 (builder): as recommended.** FR-004a, SC-003a, E31; built by T064 (skill-builder).
+  It must land before 014's FR-007 ordering test on Comp 1 and before 014's three sessions; 014's
+  mentor half (014 T008 to T016) doesn't wait for it. Once it merges, § 16's "about 9 px" can be
+  replaced with the tool's number (014 TD SB-4, the curriculum designer's edit).
+
+### New from Amendment 6 (2026-11-16)
+
+- **OQ-11: The shift is measured on the layer's box, not its visible pixels. Is that the floor's
+  edge?** 014 TD § 5.1a says "the asked layer's farthest edge". The reads have the layer's box only
+  (visible bounds are pivot K1, out of scope here), so a padded PNG or a full-frame precomp reads
+  larger than what shows: Comp 1's ten Shakers precomps have 1920 × 1080 boxes and read about 11.3 px,
+  and rock.png's box is padded (the AB baseline). The error runs one way: a box never makes a visible
+  move look smaller, so the floor never hides a real cause, but it can give a size to a move the eye
+  can't see. **Recommended: measure on the box for now, say so in the field (FR-004a), and ask the
+  curriculum designer (through the cockpit) whether § 5.1a should say "its box's farthest edge" until
+  visible bounds exist.** Doesn't block T064.
 
 ### For the curriculum designer (hand-off, not edits)
 

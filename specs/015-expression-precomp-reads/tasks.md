@@ -3,7 +3,7 @@
 **Input**: [spec.md](spec.md) (approved `944cd8c`), [plan.md](plan.md), [research.md](research.md),
 [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md).
 
-**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041).
+**Status**: Approved 2026-11-14 with the plan. Phase 1 shippable 2026-11-16 (T040); phase 2 next (T041); phase 1 follow-up T064 (FR-004a) open.
 
 **Format**: `- [ ] T### [P?] [Story?] (owner) Description`. `[P]` = can run alongside the other
 `[P]` tasks in the same block (different files, no unfinished dependency). Owners: **skill-builder**
@@ -400,6 +400,28 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   (40 noise, 3/3). The builder took it as met. **Open, to come back to:** reword R-SHOW-ME-AGAIN's Fail line to
   "numbers other than the learner's own gap" (EE); a key types line, a hint says what's off and where with
   no menu path; maybe a speed graph line, the record's `attempted` names only what the check saw (SB).
+- [ ] T064 (skill-builder) FR-004a, the footprint shift in comp pixels (spec OQ-10, Amendment 6; research
+  R15; data-model § 1 `max_value` and § 6 `shifts`; contracts/describe-layers.md). Cockpit-numbered
+  2026-11-16, builder's go. New `mentor/lib/footprint-shift.mjs` on `comp-space.mjs`; `describe_layers`
+  adds `shifts` to each named layer and `read.shifts`; `snapshot.jsx`'s fine sweep adds `max_value` (and
+  its fixture-mode twin passes it through when present). No new AE write, no extra snapshot call,
+  FR-004's fields unchanged. Tests in `mentor/test/footprint-shift.test.mjs` on the live Comp 1 capture
+  (`mentor/test/fixtures/expressions/comp1.json`): SC-003a (all 13 layers Shake Control moves, each within
+  0.05 px of 2·r·sin(θ/2) from the fixture's values, none under 1 px, rock.png between 8.6 and 9.4 px;
+  Position about 12.1 px each), plus one test per `null` reason in FR-004a on planted or edited
+  fixtures (none returns a number), the coarse-only case (`no_fine_sweep`), and SC-007's caps with
+  `shifts` in (rock.png ≤ 4 KB; a whole-comp summary has no `shifts`). Check that every skill tool's reply
+  on every eval fixture is byte-identical before and after (no skill sends `measure_layers`), then run
+  the mentor and hooks suites. Report the shifts the tool gives on Comp 1 in the hand-back (they replace
+  014 TD § 16's "about 9 px", the curriculum designer's edit).
+  **Shared code, sequenced by the cockpit:** T064 edits `mentor/` (`comp-reads.mjs`, `snapshot.jsx`,
+  `fixture.mjs`, a new lib file). Spec 014's mentor half (014 T008 to T016) edits `mentor/` too under its
+  own `--shared-owner` worktree, so T064 must not run as a second `mentor/` shared owner in parallel: the
+  cockpit either folds it into 014's mentor worktree or runs it before or after that one, cut from local
+  `main` and merged between live sittings (research R14). **Needed by:** 014's FR-007 ordering test on
+  Comp 1 (014 T037's situation 1 check, after its `fixtures/build.mjs` re-run) and 014's three sessions.
+  It doesn't block 014 T008 to T016 or phase 2. No eval case: no skill lists `describe_layers` in this
+  spec, and the ask set that reads the field is spec 014's.
 - [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree from local `main`, `--shared-owner` for
   `mentor/**`.
 - [ ] T042 (skill-builder, AE) Ground truth for Comp 1's inner comps (read-only script
@@ -472,7 +494,8 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   T017 and T019). T027 needs T017 to T021. T028 and T029 any time after T017.
 - **Gate:** T030 → T031 → T032 → T033, T034, T035 to T039 (T035, T037, T038, T039 in parallel; T036
   after T035) → T040. T057 before T040; T058 → T059 (T059 after T036's run or folded into it); T060
-  with T040.
+  with T040. T064 after T040, sequenced against 014's mentor worktree (one `mentor/` shared owner at a
+  time); before 014's FR-007 test on Comp 1 and its three sessions.
 - **Phase 2:** after T040. T042 and T043 can start together; T044 → T045 → T046 to T050 → T051 →
   gate.
 
@@ -496,5 +519,5 @@ T033, T034) are serial because of the one-driver rule, and T005, T006, T034 wait
 2. Phase 2 follows when phase 1's gate passes, and doesn't block spec 014's first version (the
    answer says "I couldn't see inside [precomp]" until then).
 
-**Task count:** 63 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
-which US4 8; phase 1 follow-ups T057 to T063: 7, added 2026-11-16).
+**Task count:** 64 (Phase 0: 8; spec phase 1: 32, of which US1 3, US2 2, US3 5; spec phase 2: 16, of
+which US4 8; phase 1 follow-ups T057 to T064: 8, added 2026-11-16).
