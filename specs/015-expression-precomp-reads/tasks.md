@@ -424,7 +424,7 @@ Numbered after phase 2's T041 to T056 so nothing renumbers. They don't block pha
   spec, and the ask set that reads the field is spec 014's.
   **Sequencing decided 2026-11-16 (builder):** folded into spec 014's mentor worktree (014 T008 to T016),
   so one skill-builder owns the new field and 014's reader of it.
-- [ ] T065 (skill-builder) FR-004b, own keys and switches in `describe_layers` (spec Amendment 7, E32,
+- [x] T065 (skill-builder) FR-004b, own keys and switches in `describe_layers` (spec Amendment 7, E32,
   OQ-12; data-model § 6; contracts/describe-layers.md). Cockpit-numbered 2026-11-16, builder's choice.
   In `mentor/tools/comp-reads.mjs`, every layer entry gains `own_keys` (from the snapshot's
   `layers[].properties`: `property`, `keys`, `key_types`, `expression_on` when on; detail adds
