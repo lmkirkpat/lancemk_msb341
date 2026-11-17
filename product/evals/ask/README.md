@@ -17,7 +17,7 @@ tools `describe_layers` and `give_answer` don't exist yet. T037 is the first run
 |---|---|---|---|
 | 01-parent-source | 1 | A child with no keys rides a null moved by expressions: parent and expressions named, steps on the parent | `comp1.json` |
 | 02-review-due-question-first | 4 | A review is due, the first message is a question: answer first, no review or lesson ahead of it; the record is untouched | `practice.json` + `records/review-due-four-skills.json` |
-| 03-natural-expression-only | 5 | "Make the shake natural" on all-expression motion: no keyframe skill tagged or offered | `comp1.json` |
+| 03-natural-expression-only | 5 | "Make the rock's shake natural" (the live Comp 1 also has a keyed logo, so "the shake" alone is ambiguous) on all-expression motion: no keyframe skill tagged or offered | `comp1.json` |
 | 04-link-described | 6 | "What does Sweep Control do?": a null drives an effect on another layer; described, never "can't see" | `comp1.json` |
 | 05-keyed-softer-one-offer | 7 | A question inside one skill on a keyed layer: steps plus one offer of the speed graph, no lesson | `practice.json` |
 | 06-do-it-for-me | 9 | "Can you just do it for me?": the decline in one sentence, step 1 again, nothing changed | `practice.json` |
@@ -32,7 +32,7 @@ tools `describe_layers` and `give_answer` don't exist yet. T037 is the first run
 | 15-single-and-hold-keys | EE-4 row 3 (A10) | One key is set, not animated; holds are a jump | `practice.json` |
 | 16-locked-layer-in-the-step | EE-4 row 4 (A12) | A locked layer: the unlock is in the step it blocks (locked stands for "locked or Collapse") | `practice-title-locked.json` |
 | 17-howto-no-target | FR-019 (PQ-4) | A how-to with no comp target: two sentences, no steps, one offer of the lesson | `practice.json` |
-| 18-followup-after-lesson | T104, amendment (e) | The first follow-up after a lesson, sent in the full context wrapper (contracts/panel-ask.md): a read before the answer, the answer follows from the earlier one (TD § 16's worked answer, "What about step 2?"), no wrapper label in what the learner reads | `comp1.json` |
+| 18-followup-after-lesson | T104, amendment (e), FR-028 | The first follow-up after a lesson, sent in the full context wrapper (contracts/panel-ask.md): a read first, then a short prose answer (no `give_answer`, FR-028) that follows from the earlier answer (TD § 16's, "What about step 2?"), no wrapper label in what the learner reads | `comp1.json` |
 
 Not in this set (they need later phases): situations 2, 3, 8, 16, 17, 18 and 19 of § 17 (turn 4's fresh read,
 the padded PNG, "just the steps", the hand-in, the record entry, a learned skill as practice, a change on the
@@ -72,7 +72,7 @@ On each answer a case expects (`expect.answers`):
 
 - **answer_given**, **kind**, **one_answer** (one accepted call per turn), **answer_prose_empty**.
 - **no_steps_for_kind** (describe, howto, clarify, outside, no_comp have none), **steps_one_to_four**, **steps_count**.
-- **no_offer_for_kind** (clarify, outside, no_comp carry no offer and no closing offer).
+- **no_offer_for_kind** (clarify and no_comp carry no offered skills and no closing offer; outside carries no offered skills, and its closing offer is the one sentence on what the mentor does cover, FR-018).
 - **offers_valid**: on B1 `offered_skills` is `[]` (FR-017); on A at most two, each among the step skills (a how-to may offer one with no steps).
 - **runtime_field**: the reply's `runtime` is the run's.
 - **closing_offer**: one sentence ending in "?" when there are steps or an offer.
@@ -99,6 +99,7 @@ Each case lists the `rubric` items the judge grades (`rubric.md`). A judge reads
 From the repo root:
 
 ```sh
+node product/evals/ask/run.mjs --waive answer_prose_empty --only 01   # diagnostic: that check is reported as waived, never failed (not a bar run)
 node product/evals/ask/run.mjs --dry-run                 # free: cases, fixtures, record, rubric items, the tool list
 node product/evals/ask/run.mjs --runtime a --dry-run     # free: also starts the A helper (no key, no request)
 node product/evals/ask/run.mjs                           # B1, every case (needs ask-mentor built: spec 014 T014)

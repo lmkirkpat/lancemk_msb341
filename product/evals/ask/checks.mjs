@@ -178,7 +178,12 @@ export function askChecks(expect, ctx) {
     if (NO_STEPS_KINDS.includes(a.kind)) add(`no_steps_for_kind${label}`, steps.length === 0, steps.length ? `${a.kind} carried ${steps.length} steps` : "none");
     if (a.kind === "answer") add(`steps_one_to_four${label}`, steps.length >= 1 && steps.length <= 4, `${steps.length} steps`);
     if (want.steps) add(`steps_count${label}`, steps.length >= want.steps[0] && steps.length <= want.steps[1], `${steps.length} steps (wanted ${want.steps[0]} to ${want.steps[1]})`);
-    if (NO_OFFER_KINDS.includes(a.kind)) add(`no_offer_for_kind${label}`, offered.length === 0 && !(a.closing_offer), offered.length || a.closing_offer ? `${a.kind} carried an offer` : "none");
+    // clarify and no_comp carry neither offered skills nor a closing; outside carries no offered skills but its
+    // closing_offer is the one sentence on what the mentor does cover (FR-018, SKILL.md, the tool's schema).
+    if (NO_OFFER_KINDS.includes(a.kind)) {
+      const closingOk = a.kind === "outside";
+      add(`no_offer_for_kind${label}`, offered.length === 0 && (closingOk || !a.closing_offer), offered.length || (!closingOk && a.closing_offer) ? `${a.kind} carried an offer` : "none");
+    }
 
     // Offers (FR-008, FR-016, FR-017): none on B1; on A at most two, each among the steps' skills.
     const stepSkills = new Set(steps.map((s) => s?.skill).filter((s) => SKILLS.includes(s)));
@@ -304,7 +309,9 @@ export function askChecks(expect, ctx) {
     const n = countSentences(s.turns.flatMap((t) => saysOf(turns[t - 1])).join("\n"));
     add(`prose_max_sentences:${s.id}`, n <= s.max, `${n} sentences of prose in turn ${s.turns.join(", ")} (at most ${s.max})`);
   }
-  return out;
+  // A waived check (a diagnostic run, `--waive name`) is still reported, but it never fails the case.
+  const waive = new Set(ctx.waive || []);
+  return waive.size ? out.map((x) => (waive.has(x.check.split("@")[0]) && !x.pass ? { ...x, pass: true, waived: true, detail: `(waived) ${x.detail}` } : x)) : out;
 }
 
 // What a run's refusals were: [{ turn, code }].
