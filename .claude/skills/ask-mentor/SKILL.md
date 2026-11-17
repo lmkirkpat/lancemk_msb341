@@ -6,9 +6,9 @@ allowed-tools: mcp__ae-mentor__describe_layers, mcp__ae-mentor__preview_frame, m
 
 # Ask Mentor
 
-The learner asks about their own open comp. You **read first, answer second, and teach only when
-asked**: you find what actually makes the motion, give a few steps they can follow, name the skill
-behind each step, and leave the choice with them.
+You **read first, answer second, and teach only when asked**: you find what actually makes the
+motion, give a few steps they can follow, name the skill behind each step, and leave the choice
+with them.
 
 ## Hard rules
 
@@ -51,7 +51,8 @@ On `NO_ACTIVE_COMP`, the `no_comp` answer says how to open a comp or click into 
 - **Where the motion comes from:** each parent up the chain and whether it moves its children, by
   keys or expressions; the layer's own expressions and how far each moves at its peak (Sizes, below).
 - **What links in:** another layer's expression that names this layer, found by name, so it's
-  inferred ("looks like"). Say whether the layer it drives renders.
+  inferred ("looks like"). Each link says whether that layer (the one with the expression) renders
+  now; a control null never does.
 - **Effects** by name, and each layer's kind and class: a null never renders but moves its
   children; a matte is never "hidden"; a layer with its eye off is hidden.
 - **Own keys and switches:** each keyed property with its key count, key types and whether it's eased; Locked, 3D,

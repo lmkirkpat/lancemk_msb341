@@ -320,9 +320,9 @@ export function rawExpression(snapshot, layerIndex, path) {
   return (Array.isArray(snapshot.expressions) ? snapshot.expressions : []).find((x) => x.layer === layerIndex && x.path === path) || null;
 }
 
-// ---- Links into a layer, and whether their target renders (FR-008 to FR-011)
+// ---- Links into a layer, and whether the layer driving each one renders (FR-008 to FR-011)
 
-// Whether the layer holding the expression renders at `time`: spec 004 FR-013's class plus its in
+// Whether the layer holding the expression (the link's from layer, the one it drives) renders at `time`: spec 004 FR-013's class plus its in
 // and out points. A matte renders through its fill layer, so it's never "doesn't render" (E15).
 export function rendersAt(snapshot, layerIndex, time) {
   const v = visibility(snapshot).find((e) => e.layer_index === layerIndex);
@@ -363,7 +363,9 @@ export function linksIn(snapshot, { time } = {}) {
       into.links.push({
         from_layer_index: x.layer_index, from_layer: x.layer, from_property: x.display_path, property: r.property,
         how: r.how, shared_name: r.shared_name, inferred: true, from_active: x.active,
-        target_renders: rendersAt(snapshot, x.layer_index, at),
+        // The from layer's state, not the linked layer's (T037 fix (l): `target_renders` read as the
+        // control null's own, which never renders).
+        from_renders: rendersAt(snapshot, x.layer_index, at),
       });
     }
   }

@@ -135,3 +135,8 @@ test("T037 fix (k): a pivot and a spot the learner names are never read, so they
   assert.match(honest, /A layer's pivot and any spot the learner names are never read: mark them \("looks like"\) or say so\./);
   assert.doesNotMatch(SKILL, /The turn centers on/, "case 01 copied this unmarked line word for word");
 });
+
+test("T037 fix (l): a link's render state is said of the layer holding the expression, never of the linked control null", () => {
+  assert.match(squash(SKILL), /Each link says whether that layer \(the one with the expression\) renders now; a control null never does\./);
+  assert.doesNotMatch(SKILL, /Say whether the layer it drives renders/);
+});

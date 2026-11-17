@@ -71,9 +71,15 @@ target_index | null, target_name | null, property | null, shared_name: bool, inf
 ### Link (into a layer) = a resolved reference seen from its target
 
 `{ from_layer_index, from_layer, from_property, property | null, how, shared_name, inferred: true,
-target_renders: { renders: bool, why: "eye_off" | "guide" | "matte_renders" | "outside_in_out" |
-"renders", at_time } }`. `target_renders` uses spec 004 FR-013's class plus in and out at the
-comp's current time (FR-011).
+from_renders: { renders: bool | null, why: "eye_off" | "guide" | "matte_renders" | "null" |
+"soloed_elsewhere" | "outside_in_out" | "renders" | "not_read", at_time } }`. `from_renders` is the
+**from layer's** state (the layer holding the expression, which the link drives), using spec 004
+FR-013's class plus in and out at the comp's current time (FR-011). In a summary's `links_in.first`
+it's the bool `renders` only; detail carries the whole object.
+
+*Renamed 2026-11-17 (spec 014 T037 fix (l)):* was `target_renders`. The value never changed (it was
+always the from layer's), but "target" read as the linked layer: on Comp 1, Sweep Control (a null,
+which never renders) instead of Black Solid 1 (eye off). FR-011's "target" is this from layer.
 
 Per layer: `links_in: { status: "read", links: [Link], unresolved_in_comp: int }`. "No links" is said
 only when `links` is empty and `unresolved_in_comp` is 0.

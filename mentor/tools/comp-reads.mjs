@@ -170,7 +170,7 @@ function summaryOf(entry, ctx) {
     effects: Array.isArray(entry.effects) ? entry.effects.map((f) => f.name) : notRead(entry.effects === undefined ? "older_snapshot" : "error"),
     expressions: ctx.exprRead === "all" ? mine.map(exprSummary) : ctx.exprRead,
     links_in: li && li.status === "read"
-      ? { count: li.links.length, first: li.links.slice(0, 3).map((l) => ({ from_layer: l.from_layer, from_property: l.from_property, property: l.property, inferred: true, target_renders: l.target_renders.renders })), unresolved_in_comp: li.unresolved_in_comp }
+      ? { count: li.links.length, first: li.links.slice(0, 3).map((l) => ({ from_layer: l.from_layer, from_property: l.from_property, property: l.property, inferred: true, from_renders: l.from_renders.renders })), unresolved_in_comp: li.unresolved_in_comp }
       : li || notRead("older_snapshot"),
     refs_out: ctx.exprRead === "all" ? refsOut : ctx.exprRead,
     precomp: entry.kind === "precomp" ? notRead("phase_2") : "not_a_precomp",

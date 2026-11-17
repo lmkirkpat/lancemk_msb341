@@ -56,7 +56,7 @@ test("SC-002 in the summary: Sweep Control has 1 link in, from Black Solid 1's s
   const { layers } = await call({ layers: ["Sweep Control"] });
   assert.deepEqual(layers[0].links_in, {
     count: 1, unresolved_in_comp: 0,
-    first: [{ from_layer: "Black Solid 1", from_property: "Effects › CC Light Sweep › Center", property: "Position", inferred: true, target_renders: false }],
+    first: [{ from_layer: "Black Solid 1", from_property: "Effects › CC Light Sweep › Center", property: "Position", inferred: true, from_renders: false }],
   });
   const black = (await call({ layers: ["Black Solid 1"] })).layers[0];
   assert.deepEqual(black.effects, ["CC Light Sweep"]);
