@@ -809,6 +809,7 @@ function createApp(deps) {
     // a result; the mentor tries again. The last result in the turn is the answer.
     if (t && e.name === ANSWER_TOOL && e.ok) {
       t.had_result = true;
+      t.answer_kind = e.json && typeof e.json === "object" && typeof e.json.kind === "string" ? e.json.kind : null;
       t.view = askView(e, { runtime });
       t.fallback = t.view ? null : fallbackText(e);
       toThread();
@@ -838,6 +839,12 @@ function createApp(deps) {
     if (!t) return;
     state.askTurn = null;
     toThread();
+    // A new question typed in the follow-up bar: the accepted result's kind says so, never the words
+    // (contracts/panel-ask.md › Requests, amended (d)). It folds what came before and logs as a question.
+    if (t.kind === "followup" && thr.NEW_QUESTION_KINDS.includes(t.answer_kind)) {
+      state.thread = thr.asNewQuestion(state.thread);
+      t.kind = "question";
+    }
     // FR-048: no view → the mentor's words; with no prose on an answer turn (PQ-1), the rejected
     // result's own explanation and closing offer.
     const prose = (t.committed + t.block).trim() || (t.view ? null : t.fallback) || null;
@@ -874,7 +881,7 @@ function createApp(deps) {
       if (state.threadAdapter !== a) return false; // the start failed; onAskError has shown why
       if (!resume) state.thread = Object.assign({}, state.thread, { claude_session_id: id });
     }
-    const t = { kind: req.kind, sent_ms: now().getTime(), sent_at: null, long: false, pressed: (o && o.pressed) || null, committed: "", block: "", had_result: false, view: null, fallback: null, error: null, srcs: [] };
+    const t = { kind: req.kind, sent_ms: now().getTime(), sent_at: null, long: false, pressed: (o && o.pressed) || null, committed: "", block: "", had_result: false, answer_kind: null, view: null, fallback: null, error: null, srcs: [] };
     state.askTurn = t;
     if (state.error && state.error.from === "thread") state.error = null; // a lesson's own error stays with it
     unref(later(() => { if (state.askTurn === t) { t.long = true; changed(); } }, thr.READING_LONG_MS));

@@ -425,3 +425,72 @@ test("the thread survives the panel closing; reopened, Home links back to it and
   assert.equal(again.adapter().started[0].resumeSessionId, "session-1");
   assert.equal(again.adapter().started[0].skill, "ask-mentor");
 });
+
+// T035 design review item 4; contracts/panel-ask.md › Requests and data-model § 7 as amended (d): a new
+// question typed in the follow-up bar. The give_answer result's kind decides, never the words.
+const NULL_ANSWER = { kind: "answer", comp: "Comp 1", explanation: "In Comp 1, the letters each move on their own.", steps: [{ text: "Parent the letters to a null.", skill: "parenting.null", layer: "Letters" }], offered_skills: ["parenting.null"], closing_offer: "Want to go deeper on Move a group?", runtime: "a", tags: { "parenting.null": "Move a group" } };
+
+async function followedUp(json, prose) {
+  const h = await answered();
+  assert.equal(h.app.followUp("How do I move the letters together?"), true);
+  const a = h.adapter();
+  if (prose) a.emit("text", { text: prose });
+  if (json) a.emit("tool_result", GIVE(json));
+  a.emit("turn_end", { ok: true, kind: "followup" });
+  return h;
+}
+
+for (const [kind, json] of [["answer", NULL_ANSWER], ["describe", DESCRIBE], ["howto", kindOnly("howto", "To move layers together, parent them to a null.", "Want to try it?")]]) {
+  test(`T035 item 4: a follow-up answered with kind ${kind} is a new question: earlier entries fold, state and log say question`, async () => {
+    const h = await followedUp(json);
+    const qs = h.app.model().thread.questions;
+    assert.deepEqual(qs.map((q) => [q.kind, q.folded]), [["question", true], ["question", false]]);
+    assert.equal(st(h), "ask-new-question", "not ask-followup");
+    assert.ok(text(h).includes(A.earlier(1)));
+    assert.deepEqual(h.turns.map((t) => [t.kind, t.thread]), [["question", "ask"], ["question", "ask"]], "FR-058: logged as a question");
+    assert.equal(h.adapter().sent[1].text, "How do I move the letters together?", "it went as typed: the decision is after the answer");
+    assert.equal(h.saved.thread.questions[1].kind, "question", "saved that way");
+  });
+}
+
+for (const [kind, json] of [["clarify", CLARIFY], ["outside", OUTSIDE], ["no_comp", NOCOMP]]) {
+  test(`T035 item 4: a follow-up answered with kind ${kind} stays a follow-up`, async () => {
+    const h = await followedUp(json);
+    assert.deepEqual(h.app.model().thread.questions.map((q) => [q.kind, q.folded]), [["question", false], ["followup", false]]);
+    assert.equal(h.turns[1].kind, "followup");
+  });
+}
+
+test("T035 item 4: the words never decide; a prose follow-up that sounds new stays a follow-up", async () => {
+  const h = await followedUp(null, "That's a new question. Here's a fresh answer about the letters.");
+  assert.equal(st(h), "ask-followup");
+  assert.deepEqual(h.app.model().thread.questions.map((q) => q.kind), ["question", "followup"]);
+  assert.equal(h.turns[1].kind, "followup");
+});
+
+test("T035 item 4: a refused give_answer isn't a result; only the accepted one decides", async () => {
+  const h = await answered();
+  h.app.followUp("And the letters?");
+  const a = h.adapter();
+  a.emit("tool_result", { name: "give_answer", ok: false, text: "KIND_MISMATCH: An answer has one to four steps.", images: [] });
+  a.emit("tool_result", GIVE(CLARIFY));
+  a.emit("turn_end", { ok: true, kind: "followup" });
+  assert.equal(h.app.model().thread.questions[1].kind, "followup");
+});
+
+test("T035 item 4: Go deeper acts on the newest answer; the folded one's offer is gone", () => withGoDeeper(async () => {
+  const h = await followedUp(NULL_ANSWER);
+  const html = screen(h).html;
+  assert.equal((html.match(/data-action="go_deeper"/g) || []).length, 1, "one Go deeper, the newest answer's");
+  assert.match(html, /data-skill="parenting\.null"/);
+  h.app.act("go_deeper", { skill: "transform.anchor" });
+  assert.equal(h.adapter().sent.length, 2, "the folded answer's offer does nothing");
+  h.app.act("go_deeper", { skill: "parenting.null" });
+  assert.deepEqual(h.adapter().sent[2], { text: "Yes, go deeper on Move a group.", kind: "go_deeper" });
+}));
+
+test("T035 item 4: the dock holds the new question's steps", async () => {
+  const h = await followedUp(NULL_ANSWER);
+  assert.ok(text(h).includes(A.your_steps(1)));
+  assert.deepEqual(h.app.model().thread.latest_steps.map((x) => x.text), ["Parent the letters to a null."]);
+});

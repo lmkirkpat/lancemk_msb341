@@ -93,3 +93,16 @@ test("read back from a file: a thread of the wrong shape is null; entries are cl
   assert.equal("extra" in th.questions[0], false);
   assert.deepEqual(th.latest_steps, STEPS);
 });
+
+test("asNewQuestion: a follow-up becomes a question and folds the entries before it; nothing else changes", () => {
+  let th = t.newThread({ id: "x", at: AT });
+  th = t.answer(t.addQuestion(th, { text: "Why?", kind: "question", at: AT }), { view: view(), prose: null, had_result: true });
+  th = t.addQuestion(th, { text: "And the letters?", kind: "followup", at: AT });
+  const n = t.asNewQuestion(th);
+  assert.deepEqual(n.questions.map((q) => [q.kind, q.folded]), [["question", true], ["question", false]]);
+  assert.deepEqual(th.questions.map((q) => [q.kind, q.folded]), [["question", false], ["followup", false]], "immutable");
+  assert.equal(t.split(n).earlier_count, 1);
+  const q = t.addQuestion(th, { text: "Yes, go deeper on Set the pivot.", kind: "go_deeper", at: AT });
+  assert.equal(t.asNewQuestion(q), q, "only a follow-up");
+  assert.deepEqual(t.NEW_QUESTION_KINDS, ["answer", "describe", "howto"]);
+});

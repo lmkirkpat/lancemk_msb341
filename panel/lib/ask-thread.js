@@ -31,6 +31,19 @@ function addQuestion(th, { text, kind, at }) {
   return Object.assign({}, th, { questions: before.concat(entry) });
 }
 
+// The kinds of give_answer result that make a follow-up a new question (contracts/panel-ask.md ›
+// Requests, amended 2026-11-16 (d); FR-031's note). From the tool's data only, never the prose.
+const NEW_QUESTION_KINDS = ["answer", "describe", "howto"];
+
+// A follow-up the mentor answered as a new question: it becomes one, and folds what came before it,
+// as a question from Home would. Anything else is left as it is.
+function asNewQuestion(th) {
+  const q = latest(th);
+  if (!q || q.kind !== "followup") return th;
+  const qs = th.questions.map((e, i) => (i === th.questions.length - 1 ? Object.assign({}, e, { kind: "question" }) : e.folded ? e : Object.assign({}, e, { folded: true })));
+  return Object.assign({}, th, { questions: qs });
+}
+
 // The turn ended. view: the AskView or null. had_result: whether a give_answer result came at all.
 // A result (valid or not) settles the dock: its steps, or none (FR-048 fails closed). A turn with no
 // result is an ordinary prose turn: after a follow-up the dock stays (MU ask-followup); after a new
@@ -108,4 +121,4 @@ function fromSaved(s) {
   };
 }
 
-module.exports = { newThread, addQuestion, answer, notice, retry, latest, split, offersOf, readingLong, fromSaved, READING_LONG_MS, VERSION };
+module.exports = { newThread, addQuestion, asNewQuestion, NEW_QUESTION_KINDS, answer, notice, retry, latest, split, offersOf, readingLong, fromSaved, READING_LONG_MS, VERSION };
