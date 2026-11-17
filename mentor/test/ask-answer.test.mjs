@@ -276,3 +276,14 @@ test("audit: a layer whose own name has an underscore is fine to name", () => {
   });
   assert.equal(checkAnswer(input, b1({ snapshot: snap })).reply.steps[2].layer, "shake_ctrl");
 });
+
+test("review S4: expression code or a copy of the comp's own expression text in what the learner reads is NOT_PLAIN_WORDS", () => {
+  refuses(edit((a) => { a.explanation += "\n- Its Rotation is Math.sin(time*20)*decay, so it fades."; }), b1(), "NOT_PLAIN_WORDS");
+  refuses(edit((a) => { a.steps[1].text = "Open Shake Control's Rotation expression and add loopOut() at the end. Not something I teach yet."; }), b1(), "NOT_PLAIN_WORDS");
+  refuses(edit((a) => { a.closing_offer = "Try them, or want to change time * 20 first?"; }), b1(), "NOT_PLAIN_WORDS");
+  // 24 or more characters copied from Comp 1's own Position expression.
+  refuses(edit((a) => { a.steps[0].text = "Open Shake Control's Position expression and look for Rock shake with multiple impacts. Not something I teach yet."; }), b1(), "NOT_PLAIN_WORDS");
+  // Plain words about the same things stay fine: TD § 16 itself, and a word like "length" or "ease" without a call.
+  assert.ok(checkAnswer(td16(), b1()));
+  assert.ok(checkAnswer(edit((a) => { a.explanation += "\n- The ease and the length of each hit stay the same."; }), b1()));
+});

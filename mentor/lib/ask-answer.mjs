@@ -14,6 +14,7 @@ import { MentorError, MESSAGES, registerErrors } from "../errors.mjs";
 import { layerInfo } from "./layer-info.mjs";
 import { motionSources } from "./motion-sources.mjs";
 import { readPath, shortName } from "./path.mjs";
+import { copiesExpression } from "../tools/common.mjs";
 
 // Data-model § 8's messages, word for word, plus five this build adds (named in the hand-back):
 // ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN and NOT_PLAIN_WORDS.
@@ -59,6 +60,8 @@ const ACTIONS = [
   "in", "on", "from", "at", "inside", "back", "undo",
 ];
 
+// Expression code in prose: the language's own words and calls (review S4).
+const CODE = /\bthis(?:Comp|Layer|Property)\b|\bvalue\s*[+*\/-]|\btime\s*[*\/+-]\s*[\d(]|\b(?:Math\.\w+|wiggle|loopOut|loopIn|loopOutDuration|loopInDuration|valueAtTime|velocityAtTime|linear|ease|easeIn|easeOut|seedRandom|random|clamp|toComp|fromComp|length|degreesToRadians)\s*\(/;
 const isStr = (v) => typeof v === "string";
 const isObj = (v) => !!v && typeof v === "object" && !Array.isArray(v);
 const fail = (code, detail) => { throw new MentorError(code, detail ? `${detail} ${MESSAGES[code]}` : undefined); };
@@ -191,9 +194,11 @@ export function checkAnswer(input, ctx) {
   const unnamed = (t) => own.reduce((acc, n) => acc.split(n).join(" "), t);
   const shown = [expl, closing || "", ...steps.map((s) => s.text)].map(unnamed);
   const ids = [...skills, NOT_TAUGHT];
-  const leaks = (t) => t.includes("`") || /\bthisComp\b|\bwiggle\(|\bvalue\s*\+/.test(t) ||
-    ids.some((id) => t.includes(id)) || /\b[A-Za-z]+_[A-Za-z_]+\b/.test(t);
+  const leaks = (t) => t.includes("`") || CODE.test(t) || ids.some((id) => t.includes(id)) || /\b[A-Za-z]+_[A-Za-z_]+\b/.test(t);
   if (shown.some(leaks)) fail("NOT_PLAIN_WORDS");
+  // Review S4: and nothing copied from the comp's own expressions (24 characters or more in a row,
+  // the record guard's rule).
+  if ([expl, closing || "", ...steps.map((s) => s.text)].some((t) => copiesExpression(t, snapshot))) fail("NOT_PLAIN_WORDS");
 
   // K4 and FR-027 read the motion-sources map of the same read.
   const map = snapshot && steps.length ? motionSources(snapshot) : null;
