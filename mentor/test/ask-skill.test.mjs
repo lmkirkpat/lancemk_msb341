@@ -129,3 +129,9 @@ test("T037 fix (j): a follow-up after a lesson is as short as any follow-up", ()
   const after = squash(SKILL.slice(SKILL.indexOf("- **After a lesson:**"), SKILL.indexOf("- **\"Do it for me\"")));
   assert.match(after, /Then reply as a follow-up \(above\): one or two sentences, then the step again in one\.$/);
 });
+
+test("T037 fix (k): a pivot and a spot the learner names are never read, so they're marked; the worked answer no longer states the turn's center", () => {
+  const honest = squash(SKILL.slice(SKILL.indexOf("## Honest about what was read"), SKILL.indexOf("## The answer")));
+  assert.match(honest, /A layer's pivot and any spot the learner names are never read: mark them \("looks like"\) or say so\./);
+  assert.doesNotMatch(SKILL, /The turn centers on/, "case 01 copied this unmarked line word for word");
+});
