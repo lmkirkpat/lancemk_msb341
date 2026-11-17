@@ -61,6 +61,7 @@ On the words the learner reads (explanation, step lines, closing offer, and any 
 
 On the tools:
 
+- **read_before_answer**: on an answer, describe or clarify turn, `describe_layers` was called before `give_answer` (FR-001; the tool can't enforce it). A how-to or outside answer needs no read.
 - **only_ask_tools**: `describe_layers`, `preview_frame` and `give_answer` only.
 - **no_project_change**: no demonstration, no `set_*`, no `pan_*`, no `record_lesson`.
 - **no_lesson_started**: no `Skill`, no `go_deeper`, no snapshot or `recommend_next` call. This set never says yes.
@@ -81,7 +82,8 @@ On each answer a case expects (`expect.answers`):
 
 ## Case-level `expect` keys
 
-- `answers`: `[{ turn, kind (a string or a list), steps: [min, max], no_keyframe_skills, step_skills_include, step_skills_forbid, offered_equals (A only), step_on_layer, max_sentences: [{ field: "explanation"|"closing_offer", max }], step_order: [{ id, first, then, needs_sweeps }] }]`.
+- `answers`: `[{ turn, kind (a string or a list), steps: [min, max], no_keyframe_skills, step_skills_include, step_skills_forbid, offered_equals (A only), step_on_layer, max_sentences: [{ field: "explanation"|"closing_offer", max }], step_order: [{ id, first, then, needs_sweeps }], step_text_order: [{ id, first, then, needs_sweeps }] }]`.
+  `step_order` compares step skill tags; `step_text_order` compares regexes over the step text (FR-007, OQ-6: the bigger pixel source first, e.g. Position's 12.15 px before Rotation's 9.36 px on Comp 1).
   `step_order` with `needs_sweeps` counts only when the fixture carries expression sweeps (see Fixtures). The Comp 1 fixtures do, so case 01's is active; a fixture without sweeps is reported inactive in the dry run.
 - `no_answer_turns`: turns that must not call `give_answer` (a follow-up is prose).
 - `turn_first_tool`: `[{ turn, tool }]`.
@@ -111,7 +113,7 @@ node --test product/evals/ask/test/                      # the checks, the fixtu
   SKILL.md is `PENDING` in the dry run, not a failure.
 - **Refusals** (plan > Risks): each run prints `refused n/m` (give_answer calls the tool refused, over all of them) and the
   results file has `refusals: { answer_calls, refused, rate, by_code }`. A guard that fires on more than 1 in 10 good
-  answers gets loosened. A turn that never gets an accepted answer fails `answer_given` and names the codes.
+  answers gets loosened. Per case the results hold `refusals_by_code` for each run, and `refusals.by_case` and `refusals.offer_not_ready` (the A-only OFFER_NOT_READY count) summarize the run. The codes read include the five the build added (ANSWER_SHAPE, KIND_MISMATCH, STEP_NEEDS_LAYER, COMP_IS_OPEN, NOT_PLAIN_WORDS). A turn that never gets an accepted answer fails `answer_given` and names the codes.
 - **Cost estimate (B1, full run, not measured):** 20 mentor turns and 17 judge calls, about $6 to $9. Only
   `--dry-run`, `--only` and `--changed` while working; one full run at the phase 1 merge commit (T037).
 

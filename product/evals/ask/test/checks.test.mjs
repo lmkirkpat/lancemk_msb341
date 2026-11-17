@@ -242,3 +242,32 @@ test("case files: each is valid JSON with the keys the runner needs, and the num
     for (const k of ["title", "covers", "turns", "expect", "rubric"]) assert.ok(k in c, `${f}: ${k}`);
   }
 });
+
+test("the five newer refusal codes are read by name", () => {
+  for (const c of ["ANSWER_SHAPE", "KIND_MISMATCH", "STEP_NEEDS_LAYER", "COMP_IS_OPEN", "NOT_PLAIN_WORDS"]) assert.equal(refusalCode(`That answer was refused: ${c}. Try again.`), c);
+});
+
+test("read_before_answer: describe_layers must come before give_answer on a comp-based answer", () => {
+  assert.ok(byName(run([answerTurn()]), "read_before_answer@1").pass);
+  assert.ok(failed(run([turn(call(good()))])).includes("read_before_answer@1"));
+  assert.ok(failed(run([turn(call(good()), read)])).includes("read_before_answer@1"));
+  // a how-to (no comp target) needs no read
+  assert.equal(byName(run([turn(call(good({ kind: "howto", steps: [], offered_skills: [], closing_offer: "Want the lesson?" })))], { answers: [{ turn: 1, kind: "howto" }] }), "read_before_answer@1"), undefined);
+});
+
+test("step_text_order: the bigger pixel source's step comes first, and only with sweeps", () => {
+  const ex = { answers: [{ turn: 1, kind: "answer", step_text_order: [{ id: "p", first: "Position", then: "Rotation", needs_sweeps: true }] }] };
+  const sw = { fixtures: [{ ...FX[0], sweeps: true }] };
+  const steps = (a, b) => good({ steps: [{ text: a, skill: "not_taught", layer: "Shake Control" }, { text: b, skill: "not_taught", layer: "Shake Control" }], offered_skills: [], closing_offer: "Try them?" });
+  const P = "Open Shake Control's Position expression and look at its sizes. Not something I teach yet.";
+  const R = "Open Shake Control's Rotation expression and look at its amounts. Not something I teach yet.";
+  assert.ok(byName(run([answerTurn(steps(P, R))], ex, sw), "step_text_order:p@1").pass);
+  assert.ok(failed(run([answerTurn(steps(R, P))], ex, sw)).includes("step_text_order:p@1"));
+  assert.ok(/skipped/.test(byName(run([answerTurn(steps(R, P))], ex), "step_text_order:p@1").detail));
+});
+
+test("the Comp 1 fixtures carry the shifts the order check needs (Position 12.15 px, Rotation 9.36 px on rock.png)", () => {
+  const f = fixtures()["comp1.json"];
+  assert.ok(f.expression_sweeps.some((s) => s.kind === "fine" && s.path.endsWith("ADBE Position") && s.max_offset > 12));
+  assert.ok(f.expression_sweeps.some((s) => s.kind === "fine" && s.path.endsWith("ADBE Rotate Z")));
+});

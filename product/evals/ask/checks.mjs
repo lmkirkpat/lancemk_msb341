@@ -40,7 +40,7 @@ export function answerCalls(turn) {
 
 // Refusals are plain messages with a code (research R3). A known code wins; else the first ALL_CAPS word
 // with an underscore; else UNKNOWN.
-export const REFUSAL_CODES = ["TOO_MANY_STEPS", "BAD_STEP_SKILL", "BAD_OFFER", "BAD_CLOSING", "COMP_NOT_NAMED", "STEPS_IN_EXPLANATION", "KEYFRAME_SKILL_ON_KEYLESS", "ROUTE_TO_PIVOT", "OFFER_NOT_READY", "NOT_ACTIONABLE", "NO_ACTIVE_COMP", "AE_UNREACHABLE", "AE_BUSY"];
+export const REFUSAL_CODES = ["TOO_MANY_STEPS", "BAD_STEP_SKILL", "BAD_OFFER", "BAD_CLOSING", "COMP_NOT_NAMED", "STEPS_IN_EXPLANATION", "KEYFRAME_SKILL_ON_KEYLESS", "ROUTE_TO_PIVOT", "OFFER_NOT_READY", "NOT_ACTIONABLE", "ANSWER_SHAPE", "KIND_MISMATCH", "STEP_NEEDS_LAYER", "COMP_IS_OPEN", "NOT_PLAIN_WORDS", "NO_ACTIVE_COMP", "AE_UNREACHABLE", "AE_BUSY"];
 export function refusalCode(text) {
   const t = String(text || "");
   const known = REFUSAL_CODES.find((c) => t.includes(c));
@@ -128,6 +128,19 @@ export function askChecks(expect, ctx) {
   add("no_project_change", changing.length === 0, changing.length ? `called ${[...new Set(changing)].join(", ")}` : "none called");
   const started = called.filter((n) => n === "Skill" || n === "go_deeper" || /snapshot/.test(n) || n === "recommend_next");
   add("no_lesson_started", started.length === 0, started.length ? `called ${[...new Set(started)].join(", ")}` : "none started");
+
+  // Read before answer (FR-001): the tool can't enforce it. For a comp-based answer (answer, describe, clarify),
+  // describe_layers was called earlier in the case than the first give_answer call of that turn.
+  {
+    const seq = turns.flatMap((t, i) => tools(t).filter((e) => e.name !== "ToolSearch").map((e) => ({ n: e.name, turn: i + 1 })));
+    answered.forEach((x) => {
+      const k = x.accepted[0]?.reply?.kind;
+      if (!["answer", "describe", "clarify"].includes(k)) return;
+      const firstAnswer = seq.findIndex((e) => e.n === ANSWER_TOOL && e.turn === x.i);
+      const read = seq.findIndex((e) => e.n === "describe_layers");
+      add(`read_before_answer@${x.i}`, read >= 0 && read < firstAnswer, read < 0 ? "give_answer without any describe_layers read" : read > firstAnswer ? "describe_layers came after give_answer" : "ok");
+    });
+  }
 
   // The asked entry changes no skill state (FR-061): the learner record's skills and lessons are as they began.
   if (ctx.record) {
@@ -232,6 +245,15 @@ export function askChecks(expect, ctx) {
     for (const m of want.max_sentences || []) {
       const n = countSentences(m.field === "closing_offer" ? p.offer : p.explanation);
       add(`max_sentences:${m.field}${label}`, n <= m.max, `${n} sentences in the ${m.field} (at most ${m.max})`);
+    }
+    // Step text order (FR-007, OQ-6): sources with a pixel size first, biggest first. `first` and `then` are
+    // regexes over the step text; when `then` is present `first` must come before it.
+    for (const o of want.step_text_order || []) {
+      const at = (re) => steps.findIndex((s) => new RegExp(re, "i").test(String(s?.text || "")));
+      const first = at(o.first);
+      const then = at(o.then);
+      if (o.needs_sweeps && !fx.sweeps) add(`step_text_order:${o.id}${label}`, true, "skipped: the fixture has no expression sweeps");
+      else add(`step_text_order:${o.id}${label}`, first >= 0 && (then < 0 || first < then), first < 0 ? `no step matches /${o.first}/` : then < 0 ? "ok (the later one isn't present)" : `/${o.first}/ at ${first + 1}, /${o.then}/ at ${then + 1}`);
     }
     // Step order, when the read gives how much each source moves the layer (spec 015's sweeps): the fixture
     // must carry sweeps for it to count.

@@ -27,6 +27,14 @@
         ],
         "no_keyframe_skills": true,
         "step_on_layer": "Shake Control",
+        "step_text_order": [
+          {
+            "id": "bigger_pixel_source_first",
+            "first": "Position",
+            "then": "Rotation",
+            "needs_sweeps": true
+          }
+        ],
         "step_order": [
           {
             "id": "hit_sizes_before_pivot",
