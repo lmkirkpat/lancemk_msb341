@@ -148,6 +148,15 @@ function parentExpr(x, parentListed) {
   return parentListed ? { property: x.property, error: !!x.error } : { property: x.property, error: !!x.error, moves: x.moves };
 }
 
+// T037 fix (p): the children by name when there are few, so a reply never talks about a child it can't
+// name; past CHILD_NAMES only the count (live Comp 1: one null has 13 children, and the whole-comp
+// summary has a 12 KB cap).
+export const CHILD_NAMES = 5;
+function childLayers(m) {
+  if (!m || !Array.isArray(m.children) || !m.children.length || m.children.length > CHILD_NAMES) return {};
+  return { child_layers: m.children.map((c) => ({ layer_index: c.layer_index, layer: c.layer })) };
+}
+
 function summaryOf(entry, ctx) {
   const { map, links, exprOf } = ctx;
   const m = map.layers.find((l) => l.layer_index === entry.index);
@@ -167,6 +176,7 @@ function summaryOf(entry, ctx) {
     // FR-004a: only on layers the caller named (a whole-comp summary has none).
     ...(ctx.shiftsFor ? { shifts: ctx.shiftsFor(entry.index) } : {}),
     children: m && Array.isArray(m.children) ? m.children.length : notRead("no_layer_info"),
+    ...childLayers(m),
     effects: Array.isArray(entry.effects) ? entry.effects.map((f) => f.name) : notRead(entry.effects === undefined ? "older_snapshot" : "error"),
     expressions: ctx.exprRead === "all" ? mine.map(exprSummary) : ctx.exprRead,
     links_in: li && li.status === "read"

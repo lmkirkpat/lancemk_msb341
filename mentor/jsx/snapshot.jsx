@@ -503,6 +503,7 @@ function sweep(x, kind, step) {
     var dur = comp.duration;
     var n = Math.max(1, Math.floor(dur / step - 1e-9) + 1);
     var maxOff = 0, maxAt = 0, maxVal = null, after0 = null, part0 = null, resultMoves = false, partMoves = false;
+    var offsets = [];
     for (var i = 0; i < n; i++) {
         var t = i * step;
         var after = vec(p.valueAtTime(t, false));
@@ -511,6 +512,7 @@ function sweep(x, kind, step) {
         var part = [];
         for (var d = 0; d < after.length; d++) part.push(after[d] - (d < base.length ? base[d] : 0));
         var off = dist(after, base);
+        offsets.push(r3(off));
         if (off > maxOff + 1e-9) { maxOff = off; maxAt = t; maxVal = after; }
         if (after0 === null) { after0 = after; part0 = part; continue; }
         if (dist(after, after0) > SWEEP_TOL) resultMoves = true;
@@ -520,6 +522,10 @@ function sweep(x, kind, step) {
     // FR-004a (research R15): a fine sweep also keeps the after-expression value it read at its peak,
     // the peak's direction. Coarse sweeps, the only ones a skill's snapshot runs, are unchanged.
     if (kind === "fine" && maxVal !== null) out.max_value = maxVal.length === 1 ? r3(maxVal[0]) : r3list(maxVal);
+    // Spec 014 T037 fix (o): a fine sweep also keeps every sample's distance from base, at i * sampled_every,
+    // so Node can say when a parent's shift is last over 1 px on a child's box. offsets_every is the step
+    // unrounded (to 1e-6), since sampled_every's 3 places drift by a frame over a long comp.
+    if (kind === "fine") { out.offsets = offsets; out.offsets_every = Math.round(step * 1e6) / 1e6; }
     return out;
 }
 

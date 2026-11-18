@@ -149,17 +149,27 @@ function shiftFor(snapshot, chain, k, x, time, moving) {
   const at = samples[k];
   const v0 = { ...at };
   const v1 = { ...at };
+  // Without a direction, the source moved by `off` from its base (any direction gives the same length).
+  const offsetBy = (off) => {
+    const v = { ...at };
+    if (key === "rotation") v.rotation = r0 + off;
+    else if (separated) {
+      v.position = [...p0];
+      v.position[sepDim] = p0[sepDim] + off;
+    } else v[key] = [b0[0] + off, b0[1]];
+    return v;
+  };
+  const r0 = isNum(baseNow) ? baseNow : at.rotation;
+  const sepDim = x.path.endsWith("_0") ? 0 : 1;
+  const p0 = separated ? pair(baseNow) || pair(at.position) : null;
+  const b0 = !separated && key !== "rotation" ? pair(baseNow) || pair(at[key]) : null;
   if (key === "rotation") {
-    const r0 = isNum(baseNow) ? baseNow : at.rotation;
     v0.rotation = r0;
     v1.rotation = needsDirection ? Number(Array.isArray(peak) ? peak[0] : peak) : r0 + fine.max_offset;
   } else if (separated) {
-    const d = x.path.endsWith("_0") ? 0 : 1;
-    const p0 = pair(baseNow) || pair(at.position);
     v0.position = [...p0];
-    v1.position = [...p0];
-    if (needsDirection) v1.position[d] = Number(Array.isArray(peak) ? peak[0] : peak);
-    else v1.position[d] = p0[d] + fine.max_offset;
+    v1.position = needsDirection ? [...p0] : offsetBy(fine.max_offset).position;
+    if (needsDirection) v1.position[sepDim] = Number(Array.isArray(peak) ? peak[0] : peak);
   } else if (needsDirection) {
     const b = pair(baseNow);
     const p = pair(peak);
@@ -168,15 +178,50 @@ function shiftFor(snapshot, chain, k, x, time, moving) {
     v1[key] = p;
   } else {
     // A pure translation of the children through uniform scales: any direction gives the same length.
-    const b = pair(baseNow) || pair(at[key]);
-    v0[key] = b;
-    v1[key] = [b[0] + fine.max_offset, b[1]];
+    v0[key] = b0;
+    v1[key] = offsetBy(fine.max_offset)[key];
   }
   if (!layerMatrix(v0) || !layerMatrix(v1)) return no("not_sampled");
   const c0 = corners(chain, time, { index: src.index, values: v0 });
-  const c1 = corners(chain, time, { index: src.index, values: v1 });
-  const shift = Math.max(...c0.map((c, i) => Math.hypot(c1[i][0] - c[0], c1[i][1] - c[1])));
-  return { ...head, shift_px: r2(shift), at: fine.max_at, sampled_every: fine.sampled_every, sampled: true, measured_on: "box" };
+  const lengthTo = (values) => {
+    const c1 = corners(chain, time, { index: src.index, values });
+    return Math.max(...c0.map((c, i) => Math.hypot(c1[i][0] - c[0], c1[i][1] - c[1])));
+  };
+  const shift = lengthTo(v1);
+  const over = overFloor(fine, needsDirection, (off) => {
+    const v = offsetBy(off);
+    return layerMatrix(v) ? lengthTo(v) : null;
+  });
+  return { ...head, shift_px: r2(shift), at: fine.max_at, sampled_every: fine.sampled_every, sampled: true, measured_on: "box", over_1px: over };
+}
+
+// Spec 014 T037 fix (o): when the shift shows, from the fine sweep's per-sample offsets, each one put
+// through the same box conversion as the peak: `from`, the first sample at 1 px or more, and `until`,
+// the sample after the last one at 1 px or more (every sample after it is under 1 px to the comp's
+// end), or `until: null` with `to_end: true` when the last sample is still over. "never" when no sample
+// reaches 1 px. Sampled, so a stretch shorter than `sampled_every` can be missed. Not read, never a
+// guess: `older_snapshot` (a sweep with no offsets), `direction_unknown` (the conversion needs each
+// sample's direction, which the sweep doesn't keep), `not_sampled` (an offset that can't be converted).
+export const FLOOR_PX = 1;
+export function overFloor(fine, needsDirection, lengthAt) {
+  const offs = fine.offsets;
+  const every = fine.offsets_every;
+  if (!Array.isArray(offs) || !offs.length || !offs.every(isNum) || !isNum(every) || every <= 0) return { status: "not_read", reason: "older_snapshot" };
+  if (needsDirection) return { status: "not_read", reason: "direction_unknown" };
+  let first = -1;
+  let last = -1;
+  for (let i = 0; i < offs.length; i++) {
+    const px = lengthAt(offs[i]);
+    if (px === null || !isNum(px)) return { status: "not_read", reason: "not_sampled" };
+    if (px >= FLOOR_PX - EPS) {
+      if (first < 0) first = i;
+      last = i;
+    }
+  }
+  if (first < 0) return "never";
+  const t = (i) => Math.round(i * every * 1000) / 1000;
+  if (last === offs.length - 1) return { from: t(first), until: null, to_end: true };
+  return { from: t(first), until: t(last + 1) };
 }
 
 // FR-004a: [entry] for the layer at `index` at `time` (one per active parent-chain transform

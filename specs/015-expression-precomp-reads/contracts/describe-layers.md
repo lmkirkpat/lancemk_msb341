@@ -85,6 +85,19 @@ read), in detail `{ renders, why, at_time }` (data-model § 2, Link). It was `ta
 same value; the old name read as the linked layer's own state, which for a control null is always "doesn't
 render". Comp 1: the one link into Sweep Control is from Black Solid 1, `from_renders: false` (eye off).
 
+**When a shift shows (added 2026-11-18, spec 014 T037 fix (o)):** each `shifts` entry with a number also
+carries `over_1px`: `{ from, until }` (seconds: the first sample at 1 px or more on the box, and the sample
+after the last one), `{ from, until: null, to_end: true }`, `"never"`, or `{ status: "not_read", reason }`
+(`older_snapshot`, `direction_unknown`, `not_sampled`), from the fine sweep's new `offsets` and
+`offsets_every` (data-model § 1, § 6). No other snapshot sends `measure_layers`, so no skill's reply
+changes. Captures from before this date have no `offsets`, so their spans are `older_snapshot` until
+they're captured again.
+
+**Children by name (added 2026-11-18, spec 014 T037 fix (p)):** a layer with 1 to 5 children also carries
+`child_layers: [{ layer_index, layer }]` next to the `children` count, summary and detail, named and whole
+comp; more than 5 is the count only (live Comp 1: Shake Control's 13). A reply never has to talk about a
+child it can't name. At most about 35 bytes per layer in a whole-comp summary (data-model § 6).
+
 ## Limits (SC-007, research R11)
 
 - Summary: ≤ 4 KB per layer with its sources; ≤ 12 KB for the whole comp. Over the cap, layers are

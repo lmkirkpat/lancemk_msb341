@@ -52,6 +52,7 @@ sample's exact time.
 | `max_offset` | largest distance from base, in the property's units |
 | `max_at` | time of that peak |
 | `max_value` | *Added 2026-11-16 (FR-004a, research R15), fine sweeps only:* the after-expression value the sweep read at `max_at`. Absent on older snapshots, which is `direction_unknown` where FR-004a needs a direction, never a guess |
+| `offsets`, `offsets_every` | *Added 2026-11-18 (spec 014 T037 fix (o)), fine sweeps only:* every sample's distance from base (as `max_offset`, rounded to 0.001), sample `i` at `i × offsets_every` seconds; `offsets_every` is the step to 1e-6, since `sampled_every`'s three places drift by a frame over a long comp. Not in any reply; `over_1px` (§ 6) is worked out from them. Absent on older snapshots |
 
 ## 2. Derived (Node, `mentor/lib/expressions.mjs`)
 
@@ -129,12 +130,16 @@ through cases on new captures (eval-engineer, T035).
 See [contracts/describe-layers.md](contracts/describe-layers.md). Summary per layer: `layer_index`,
 `layer`, `kind`, `class`, `parents` (with `moves_by`), `children` count, `effects` (names),
 `expressions` (property, on, error flag, builds_on, moves), `links_in` count and first three,
-`refs_out` count, `precomp` (phase 2 summary or `not_read`), `read` statuses. Detail adds each
+`refs_out` count, `precomp` (phase 2 summary or `not_read`), `read` statuses. *Added 2026-11-18 (spec 014
+T037 fix (p)):* `child_layers: [{ layer_index, layer }]`, in layer order, next to `children` when a layer
+has 1 to 5 children (`CHILD_NAMES` in `comp-reads.mjs`); with none or more than 5, only the count. Each layer
+is in at most one list (its parent's), so the names add at most about 35 bytes per layer to a whole-comp
+summary: Mentor Practice 90 bytes, 015 Rig 56, Comp 1 none (its one parent has 13). Detail adds each
 expression's `text` (cut at 1,500), `error`, every link, and every reference.
 
 **Footprint shift (FR-004a, added 2026-11-16).** On each layer named in `layers`, summary and detail:
 `shifts: [{ from_layer_index, from_layer, property, shift_px, at, sampled_every, sampled: true,
-measured_on: "box" } | { from_layer_index, from_layer, property, shift_px: null, reason }]`, one per
+measured_on: "box", over_1px } | { from_layer_index, from_layer, property, shift_px: null, reason }]`, one per
 active parent-chain transform expression that moves the layer (Opacity excluded). `shift_px` is
 rounded to 0.01 px. `reason` is one of `three_d`, `auto_orient`, `no_rect`, `not_sampled`,
 `no_fine_sweep`, `chain_moves`, `direction_unknown`, `singular`, and (*added 2026-11-16, spec
@@ -145,6 +150,17 @@ such parent expression, and is only given when the motion-sources map read expre
 is `"all"`); otherwise `shifts` is `{ status: "not_read", reason: "older_snapshot" }`. Layers not
 named get no `shifts`, and the reply's `read.shifts` is `"read"` or `{ status: "not_read", reason:
 "not_asked" }`. Computed by `mentor/lib/footprint-shift.mjs` (research R15).
+
+*Added 2026-11-18 (spec 014 T037 fix (o)):* `over_1px`, on every entry with a number, says when the shift
+shows: each of the fine sweep's `offsets` (§ 1) is put through the same box conversion as the peak, and
+`{ from, until }` gives the first sample at 1 px or more and the sample after the last one (every sample
+after it is under 1 px to the comp's end), in seconds to 0.001; `{ from, until: null, to_end: true }` when
+the last sample is still over; `"never"` when no sample reaches 1 px. Sampled, so a stretch shorter than
+`sampled_every` can be missed. Not read, never a guess: `{ status: "not_read", reason }` with
+`older_snapshot` (a sweep with no `offsets`), `direction_unknown` (the conversion needs each sample's
+direction: a Scale source, or a non-uniform scale above the source; the sweep keeps only the peak's), or
+`not_sampled`. The span is the motion on the box, not a settle time per hit: the mentor says when it
+shows, never a time worked out from the expression's text.
 
 **Own keys and switches (FR-004b, added 2026-11-16, Amendment 7).** From the snapshot the tool already
 takes; nothing new is read.
