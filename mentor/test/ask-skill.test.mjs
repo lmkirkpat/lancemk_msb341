@@ -51,14 +51,18 @@ test("every quoted example line in the worked answer is copied whole from TD § 
     ...[...worked.matchAll(/"([^"]{12,})"/g)].map((m) => m[1]),
   ];
   assert.ok(quoted.length >= 7, `found ${quoted.length}`);
-  for (const line of quoted) assert.ok(SOURCES.includes(squash(line)), line);
+  // T037 fix (o), round 5: the one line that differs. § 16 has "gone in about 1/3 s", a time no read
+  // gives, which case 01 kept working out from the expression's text; the worked answer says the
+  // read's peak time instead, until the curriculum designer updates § 16.
+  const ROUND5 = { "- Rotation moves the rock about 9 px at most, near 2.6 s.": "- Rotation moves the rock about 9 px at most, gone in about 1/3 s." };
+  for (const line of quoted) assert.ok(SOURCES.includes(squash(ROUND5[line] ?? line)), line);
 });
 
 test("the stale 'too small to see' wording (before H-7) is never an example; § 16's rotation bullet is", () => {
   assert.doesNotMatch(SKILL, /0\.75° at most, too small to see/);
   // § 16's 9 px is a read since 2026-11-16 (015 T064: 9.36 px on rock.png), placed after the hit sizes.
   const hits = SKILL.indexOf("> - All three hits are the same size.");
-  const turn = SKILL.indexOf("> - Rotation moves the rock about 9 px at most, gone in about 1/3 s.");
+  const turn = SKILL.indexOf("> - Rotation moves the rock about 9 px at most, near 2.6 s.");
   assert.ok(hits > 0 && turn > hits, "the rotation bullet follows the Position bullet");
 });
 
@@ -125,9 +129,13 @@ test("T037 fix (i): own keys say whether they're eased, and an already-eased lan
   assert.match(squash(SKILL), /Keys already eased: a softer landing is \*Speed graph\*, never Easy Ease again\./);
 });
 
-test("T037 fix (j): a follow-up after a lesson is as short as any follow-up", () => {
+test("T037 fixes (j) and (q): a follow-up after a lesson is as short as any follow-up, at most three sentences in a set shape", () => {
   const after = squash(SKILL.slice(SKILL.indexOf("- **After a lesson:**"), SKILL.indexOf("- **\"Do it for me\"")));
-  assert.match(after, /Then reply as a follow-up \(above\): one or two sentences, then the step again in one\.$/);
+  assert.match(after, /Then reply as a follow-up \(above\)\.$/);
+  const follow = squash(SKILL.slice(SKILL.indexOf("- **A follow-up question**"), SKILL.indexOf("- **A new question:**")));
+  assert.match(follow, /three sentences at most: what the step is about, the one read fact that matters, and the step again\. No other amounts or times, no `give_answer`, no new list\.$/);
+  // Case 18's Pass line is a shape, not a sentence: none of the rubric's words are quoted here.
+  assert.doesNotMatch(SKILL, /in the words of the read/);
 });
 
 test("T037 fixes (k) and (n): a pivot is said as not read, never 'looks like'; a spot the learner names is an assumption; the worked answer no longer states the turn's center", () => {
@@ -149,5 +157,14 @@ test("T037 fix (m): after a clarifying reply, the first line names the layer cho
 test("T037 fix (n): a number worked out from an expression's text, or a motion sampled only coarsely, is inferred; only the read's values are plain", () => {
   const honest = squash(SKILL.slice(SKILL.indexOf("## Honest about what was read"), SKILL.indexOf("## The answer")));
   assert.match(honest, /\*\*Read\*\* \(a value a tool returned\): a plain statement\./);
-  assert.match(honest, /So is a number you work out from an expression's text \(a settle time\) and a motion the read sampled only coarsely: "about", "looks like"\./);
+  // Round 5 (fix (o)): marking a worked-out settle time as inferred didn't stop it (case 01), so it's never said.
+  assert.match(honest, /as is a motion the read sampled only coarsely \("about"\)\. Never a time worked out from an expression's text \(a settle or fade time\): times come only from the read\./);
+  assert.doesNotMatch(SKILL, /a settle time\) and a motion/);
+});
+
+test("T037 fix (o): Sizes say when a shift shows, from the read, or else when it peaks; never how long it lasts", () => {
+  const sizes = squash(SKILL.slice(SKILL.indexOf("**Sizes.**"), SKILL.indexOf("### Skills")));
+  assert.match(sizes, /with when it peaks and, if read, when it's over a pixel:/);
+  assert.match(sizes, /with when it shows, or else when it peaks\./);
+  assert.doesNotMatch(SKILL, /how long it lasts|gone in about/);
 });
