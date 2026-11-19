@@ -4,7 +4,10 @@
 
 **Created**: 2026-11-14
 
-**Status**: Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended; OQ-1's
+**Status**: **Phase 1 done 2026-11-19 (T040): asking works on B1.** Phase 1 merged at `e0ed02f` (T036), the ask
+set met its B1 bar at `91fd9c7` (T037) and the live B1 smoke is logged (T038); details in amendment (g). Phase 2
+(Go deeper) is next: T042 on.
+Approved by the builder 2026-11-14 as written (OQ-1 to OQ-5 as recommended; OQ-1's
 constitution amendment was 1.5.0, removed in 1.6.0 below). Plan and tasks approved 2026-11-14 (PQ-1 to PQ-5 as
 recommended; FR-006 and FR-016 amended for PQ-5 and PQ-4, FR-019 to match PQ-4, FR-009 points at
 PQ-1). Housekeeping done 2026-11-14 (T006): mockup v5, CD-2 to CD-4 answered. **Amended 2026-11-16
@@ -65,6 +68,48 @@ contracts/ask-tools.md). (4) FR-022's note: an expression that sets its own valu
 expression and no keyframe skill (TD § 13, K4, overlap A1; case 13). (5) OQ-7 and OQ-8, matte users and partial
 name matches, are open for spec 015. No approved decision or FR changes; (1) to (3) bring the plan's files in
 line with FR-028, FR-018 and FR-008.
+
+**Amended 2026-11-19 (g), T040: phase 1's results folded in, relayed by the cockpit; add only.** Sources:
+[`ask-build.md`](../../discovery/usage-notes/ask-build.md) › Phase 1 (T037, T038),
+[`product/evals/ask/README.md`](../../product/evals/ask/README.md) › Results, and git since `e0ed02f`.
+1. **Phase 1 results.**
+   - Reviews T034 and T035 are folded in as amendments (d) and (e). T101 to T104 are done.
+   - **T105** (cockpit-numbered after the first triage; built `849aa8a` for B1 and `c192b57` for A, merged
+     `59e7368`): the turn ends right after an accepted `give_answer`. On B1 a hook in the runtime folder does it;
+     on A the helper does. So FR-009's "no prose in the answer turn" holds by tool, not by prompt. A refused
+     call still goes back to the mentor for a retry.
+   - **T037 met on 2026-11-18 at `91fd9c7`:** 18/18 with `--repeat 3` (majority pass), $11.04, no FR-061 hard
+     check failing, refusals 3 of 60 answer calls (all case 11, each passed on retry). Situations 4 and 5
+     (cases 02 to 05) passed 3 of 3. Situation 1 (case 01) passed 2 of 3 in the full run and 3 of 3 in a re-run
+     at the same commit, so 5 of 6. The builder accepted that, with the step order on the watch list. So
+     SC-006's B1 half is met as the builder accepted it, not by the letter of its "3 of 3" for situation 1.
+   - **The ask set's bar from now on is `--repeat 3` with a majority pass**, because single runs flip.
+   - **T038's live B1 smoke is logged** (2026-11-19, `c0aec58`): 12 checks, first sign of work 4 of 4 within
+     10 s (median 2.2 s), and three findings (item 7).
+2. **Three panel rules built in phase 1 without a contract line** are now in contracts/panel-ask.md, checked
+   against `panel/lib/` on `main`: (a) the after-lesson wrapper comes from the latest entry with something under
+   it, and if that entry has no valid answer (FR-048's fallback) the send has no wrapper; (b) Try again on a
+   question resends it as a plain question, with no wrapper; (c) a bulleted explanation spans several lines
+   in the wrapper. No FR changes.
+3. **FR-063 was cited but never defined.** The Phases table's "(FR-063)" meant FR-060 and now says so. FR-063
+   is reserved for item 7's end-lesson rule.
+4. **Task count.** Tasks are now 108 (107 active): T105 (built and merged; it has no line in `tasks.md` yet) and
+   T106 to T108 (added 2026-11-19, `fac1ed7`) join the 104. Case 18 is T104, already counted. The count
+   paragraph in `tasks.md` is updated at T063, since phase 2's branches are ticking that file now.
+5. **The activity line "Writing the answer…"** (`panel/lib/activity.js`, for `give_answer`) isn't in MU.
+   Recorded as built in contracts/panel-ask.md › Activity lines and flagged for a design-reviewer look; not
+   decided here.
+6. **Spec 015 edits from T037 rounds 4 and 5** (fixes (h), (i), (l), (o), (p); made by the skill-builder with
+   the builder's approval) are checked in 015's contract and data model against `mentor/` on `main`. Spec
+   015's FR-011 and US2 scenario 2 now say "from layer" for the layer whose rendering is reported (015
+   Amendment 10). In this spec, Edge Cases A6's "target's rendering" means the same from layer. **OQ-8 is
+   closed** by fix (h)'s loose-name match.
+7. **T038's findings.**
+   - **Finding 1, "end lesson" typed in words:** new **FR-063** (reserved; full text and checks at T063).
+   - **Finding 2, a precomp read as the active comp:** Edge Cases › Watch W-1. Not a requirement.
+   - **Finding 3, no-comp prose and cost:** Edge Cases › Watch W-2, and notes on FR-058 and SC-005; cost and
+     tokens are rechecked on A at T089.
+   No approved decision changes. No approved FR changes; FR-063 is new.
 
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
@@ -128,7 +173,7 @@ and restraint is a mode switch away for Adobe. What stays hard to copy (CLAUDE.m
 
 | Phase | Stories | Waits on | Unblocks |
 |---|---|---|---|
-| **1. Answer** | US1, US3 (P1) | Spec 015 phase 1 merged, its SC-001 to SC-003 passing (FR-063) | Asking on B1 and the eval set |
+| **1. Answer** | US1, US3 (P1) | Spec 015 phase 1 merged, its SC-001 to SC-003 passing (FR-060; was cited as FR-063 until 2026-11-19 (g)) | Asking on B1 and the eval set |
 | **2. Go deeper** | US2 (P1) | Phase 1; spec 015's K3 for pivot and null | The three sessions on A (sprint 5 "done") |
 | **3. Follow-through** | US4, US5, US6 (P2) | Phase 1; US6's rule 3 waits on spec 015's K2 (US3 there) | Memory on the next comp; the four shared rules in all six skills |
 
@@ -332,6 +377,18 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 | A12 | Locked, 3D, Collapse | FR-015: said in the step it blocks | Snapshot today | New case (EE-4) |
 | A13 | Same-name layers | FR-014: one clarifying question naming up to three | 015 FR-017 | 12 |
 | A14 | Asked layer ≠ moving layer, and a pivot lesson refuses the moving layer | FR-024: offer on the real layer once K7 lands; a stand-in only per H-4 | K7 | 16 |
+
+*Note 2026-11-19 (g):* A6's "target's rendering" is the **from layer's** (the layer holding the expression that
+reads the asked layer; on Comp 1, Black Solid 1, not Sweep Control). Spec 015 renamed the field `from_renders`
+(015 Amendment 10).
+
+**Watch (added 2026-11-19 (g), from T038; not requirements).** Seen once live and not explained. Log each time
+it happens in the three sessions; a fix needs its own amendment.
+
+| # | What was seen | Why it matters | What to try |
+|---|---|---|---|
+| W-1 | `describe_layers` read **Y Shakers**, a precomp open in a viewer tab but not focused, as the active comp while Comp 1 was active in the viewer and timeline. The mentor answered about Y Shakers. A retry 30 s later read Comp 1 | FR-003's first line named the wrong comp, which is the safeguard working, but the answer was about the wrong comp. It doesn't match T001 state 1 | At a sitting: Comp 1 and a precomp tab open, focus Comp 1, read `activeItem`; then again after a double-click into the precomp and back. Possible fix if it repeats: when a follow-up's comp differs from the thread's, the answer says so and how to switch |
+| W-2 | No comp active: the panel showed the fixed `ask-nocomp` line every time, but the mentor's own sentence under it changed every turn. One no-comp follow-up cost $0.25 for a turn that read nothing | Cost (SC-005) on a turn with nothing to read; wording drift under a fixed line | Recheck cost and tokens on A at T089 (SC-005's note) |
 
 ## Requirements *(mandatory)*
 
@@ -619,6 +676,8 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   `preview_frame`, the record tools it writes, and the hand-over; nothing that changes the project.
 - **FR-058**: Every ask turn MUST show the first sign of the mentor working within 10 s (spec 003 SC-004, spec
   013 SC-002), and the turn log MUST tag ask turns so `panel/dev/turns.js` reports them apart from lessons.
+  *Note 2026-11-19 (g), T038:* on B1, 4 of 4 ask turns showed a first sign within 10 s (median 2.2 s). Tokens
+  aren't logged on B1, so research R16's per-answer tokens are measured on A at T089.
 
 **Dependencies on spec 015**
 
@@ -651,6 +710,16 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   R-ONE-IDEA read as "one answer, ending on one choice" (TD § 17).
 - **FR-062**: The six skills' sets MUST get cases for rules 1, 2, 5 and 6 and K5 (Eval plan), and re-run after
   each `SKILL.md` change (SC-007).
+
+**Ending a lesson in words (added 2026-11-19 (g), from T038 finding 1)**
+
+- **FR-063** (**reserved**; the full requirement and its checks are written at T063, after T106 to T108 land):
+  When the learner asks to stop a lesson in their own words, the panel MUST close the lesson as it does for
+  the End lesson button. T038 found the lesson stayed open: Home's Ask stayed paused and follow-ups went into
+  the lesson. **The builder's decision (2026-11-19):** a stop with something to record still calls
+  `record_lesson`, as today. Only a stop with nothing to record calls the new `end_lesson` tool (T106), which
+  writes nothing to the learner record, and the panel treats it like End lesson (T107). Every lesson set gets
+  a case for it (T108).
 
 ### Key Entities
 
@@ -687,6 +756,9 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   sessions puts a Stop control back on the table (MU open question 7). *Measured by:* `panel/dev/turns.js`.
 - **SC-005**: **Cost on A.** Median cost of an answer turn at most **$0.10**, and a go-deeper lesson's median at
   most **$0.40** (spec 013 SC-004). A first guess (OQ-5). *Measured by:* the turn log, over the sessions.
+  *Note 2026-11-19 (g), T038 on B1 (B1 cost isn't A cost):* the median of the first four answer turns was
+  $0.028, but two were over $0.10 ($0.12 and $0.16), and one no-comp follow-up cost $0.25 for a turn that read
+  nothing, most likely the resumed thread's context (Watch W-2). Recheck at T089 on A.
 - **SC-006**: **Ask eval set.** On B1, at least **80%** of cases pass and **every** hard-rule check passes on
   the merge commit; TD § 17's first five (AB's held cases) pass **3 of 3**. Before sprint 5 closes, one full A
   run meets spec 013 FR-033 against that B1 baseline. *Measured by:* eval runs, logged in the set's README.
@@ -803,6 +875,11 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
 - **OQ-8 (new 2026-11-16 (f), for spec 015, not decided here): should a partial name like "rock" return
   candidates rather than `NOT_FOUND`?** T037 case 09. If 015 returns candidates, FR-014's one clarifying
   question (up to three names) can use them; today the mentor gets nothing to ask with. Spec 015's call.
+  **Closed 2026-11-19 (g): answered by spec 015 on 2026-11-17** (T037 fix (h), `60d07e3`; 015
+  contracts/describe-layers.md › Loose names, 015 FR-017's note). A name with no exact match is matched
+  loosely, as whole words and ignoring case. One match resolves, and the entry carries `asked`. Two or more
+  return `NAME_PARTIAL` with each candidate's index, name and parent, which FR-014's one clarifying question
+  uses. No match is still `NOT_FOUND`. No FR here changes.
 
 ### For the curriculum designer (hand-off, not edits)
 
@@ -837,3 +914,6 @@ overlap tables; FR-033 to FR-037 change them. **015** = the read comes from spec
   question 10 are moot (a request for the ui-designer).
 - Open, not mine to edit here (2026-11-16 (b)): MU's step 2 and rotation bullet still say "too small to see"
   (`README.md` and `index.html`); TD § 16 has the current wording (a request for the ui-designer).
+- Done 2026-11-19 (T040): amendment (g). Open for T063 (mine): `tasks.md` needs a T105 line (built and merged
+  `59e7368`) and its count paragraph updated to 108; FR-063's full text. Open, not mine: a design-reviewer look
+  at "Writing the answer…" (contracts/panel-ask.md › Activity lines).

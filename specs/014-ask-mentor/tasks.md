@@ -224,7 +224,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   steps 2 to 4): the rock and sweep questions on Comp 1, `ask-nocomp` (quickstart step 3), `turns.js --ask` timing and one
   answer's tokens (research R16).
 - [x] T039 (cockpit) Log T037 and T038 in `discovery/usage-notes/ask-build.md`.
-- [ ] T040 (spec-writer) Fold T034 to T039 into the spec (status, any amendments). **Asking works on B1.**
+- [x] T040 (spec-writer) Fold T034 to T039 into the spec (status, any amendments). **Asking works on B1.** **Done 2026-11-19:** spec amendment (g), contracts/panel-ask.md (three as-built rules, activity lines), 015 Amendment 10, FR-063 reserved, OQ-8 closed; tasks now 108 (count paragraph and a T105 line at T063).
 
 **Checkpoint:** answers on B1, Home ask-first.
 

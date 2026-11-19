@@ -17,6 +17,7 @@ MU › Copy, plus the lines below.
 | `record_lesson`'s `hand_back` | `tool_result` | `ask-back`: the thread's hand-back line, drawn from data |
 | ~~`comp_active`~~ | ~~`GET /health`~~ | Withdrawn 2026-11-16 (FR-047): nothing read; Ask is always on, and no comp is `ask-nocomp` from the answer's `kind` |
 | `panel.json` runtime | config | Display guard: no Go deeper on `b1` |
+| `end_lesson` tool event (*added 2026-11-19, spec FR-063, reserved; built by T107*) | `tool_result` | The same as the End lesson button, keeping the mentor's last reply visible: the lesson closes, Home's Ask and the follow-up bar open, and the next thread send carries the wrapper (Context after a lesson) |
 
 ## Drawing an answer (FR-048, FR-049)
 
@@ -51,6 +52,11 @@ a `give_answer` result of kind `answer`, `describe` or `howto`, the panel treats
 folds the earlier entries, logs the turn as `question`, and Go deeper acts on the newest answer. Decided from
 the tool's data, never the prose (FR-031's note, FR-016). Any other kind stays a `followup`.
 
+*Added 2026-11-19 (spec amendment (g)), as built in phase 1 (`panel/lib/app.js` `askRetry`):* **Try again**
+resends the latest entry by its kind. A question goes again as a plain question, `/ask-mentor ` + the text,
+with no context wrapper, even after a lesson. A follow-up after a lesson goes again with the wrapper (Context
+after a lesson › Once); any other follow-up goes as typed.
+
 All carry `thread: "ask"` in the turn log. The learner's bubble shows the text as typed (or MU's "Yes, go
 deeper on Set the pivot."), never the `/ask-mentor ` prefix; End lesson shows only the divider.
 
@@ -58,7 +64,8 @@ deeper on Set the pivot."), never the `/ask-mentor ` prefix; End lesson shows on
 
 After a lesson ends the thread's conversation (item 5 above), the next send into the thread starts a fresh
 mentor conversation. So that first follow-up or Try again carries the thread's last question and its answer,
-and the mentor sees what the learner sees on screen. Exact request, one item per line:
+and the mentor sees what the learner sees on screen. Exact request, one item per line (but see "Several lines"
+below):
 
 ```
 /ask-mentor Earlier question and answer, as shown in the panel:
@@ -73,12 +80,24 @@ Follow-up: [the text as typed]
 - **Source:** the panel's saved thread only: the latest entry with a valid AskView (its `text`, and the
   view's `explanation`, `steps[].text`, `steps[].layer` and `closing_offer`). Data the mentor produced and the
   panel already validated; nothing parsed from prose (FR-016), no teaching logic (constitution II).
+  *Corrected 2026-11-19 (spec amendment (g)), as built (`panel/lib/ask-thread.js` `contextEntry`):* the
+  entry is the latest one **with something under it**: a valid AskView, or the mentor's words shown as
+  FR-048's fallback. Entries with nothing under them (a notice only) are skipped, and so is the entry being
+  sent or retried. If the chosen entry has no valid AskView, the panel doesn't reach back to an older entry
+  that has one: the send is the prefix and the text only (below). The same goes when no entry has anything
+  under it.
 - **Bounded:** that one question and answer only, no earlier entries, no tags, offers or kind.
 - **Omitted parts:** no `Steps:` block when there are none; no ` (layer: …)` when a step's layer is `null`; no
-  `Closing:` line when it's `null`. If the latest entry's AskView is `null` (FR-048's fallback), there's no
-  validated answer: the send is the prefix and the text only.
+  `Closing:` line when it's `null`. If the chosen entry's AskView is `null` (FR-048's fallback), there's no
+  validated answer: the send is the prefix and the text only, with **no wrapper**.
+- **Several lines** (*added 2026-11-19 (g), as built, `panel/lib/requests.js` `contextRequest`*): each part goes
+  as the AskView holds it, with nothing joined or escaped. So a bulleted explanation spans several lines after
+  `Answer:`, one bullet per line, before `Steps:`.
 - **Once:** only the first send after the lesson; later sends are the plain follow-up. Try again resends the
-  same request it retries.
+  same request it retries. *Clarified 2026-11-19 (g), as built:* "first" means until one thread turn ends
+  without a notice. A send that fails keeps the wrapper for the next follow-up or Try again. Try again on a
+  **question** never carries the wrapper (Requests, above). A question asked from Home after a lesson goes as a
+  plain question too; once it ends without a notice, later sends are plain.
 - **Never shown:** the bubble shows the text as typed; the wrapper is in the request only. The wrapper's first
   line is a constant in `REQUESTS`, eval-synced (T104).
 - **What the mentor does with it:** treats the learner's text as a follow-up to that question and answer, and
@@ -87,6 +106,20 @@ Follow-up: [the text as typed]
   means `describe_layers`; it does not mean `give_answer`. A follow-up gets prose (FR-028: one or two sentences,
   then the pending step). Only a send that is really a new question gets `give_answer`, with kind `answer`,
   `describe` or `howto`, and the panel treats it as new (amendment (d), above).
+
+## Activity lines (added 2026-11-19, spec amendment (g), as built; open for design review)
+
+The ask thread shows MU's own timed status while a turn runs: "Reading the open comp…", then "Still
+reading the open comp…" after about 6 s (`ask-reading`, `ask-reading-long`). A tool call doesn't change that line.
+`panel/lib/activity.js` also has a per-tool line for each ask tool, used only where a lesson's turn shows tool
+lines:
+
+| Tool | Line | In MU? |
+|---|---|---|
+| `describe_layers` | "Reading the open comp…" | Yes (`COPY.ask.reading`) |
+| `give_answer` | "Writing the answer…" | **No.** The panel-builder chose the shortest plain line. No lesson calls `give_answer` today, so it isn't seen |
+
+"Writing the answer…" is flagged for a design-reviewer look against MU › Copy. This contract doesn't decide it.
 
 ## Result lines and dividers (FR-051, PQ-3)
 
