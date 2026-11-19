@@ -110,6 +110,24 @@ with this reason, never treated as off. Changed here: Status, FR-004a; research 
 `contracts/describe-layers.md`; tasks T066 (new, cockpit-numbered). SC-003a's figures don't change (no
 layer above Shake Control). No approved decision changes.
 
+**Amendment 10 (2026-11-19, spec 014 T040; relayed by the cockpit):** add or tighten only. Spec 014's T037
+triage, rounds 4 and 5, changed `describe_layers`' reply. The skill-builder made the changes with the builder's
+approval, and wrote them into `contracts/describe-layers.md` and `data-model.md` at the time. Checked against
+`mentor/` on `main` on 2026-11-19; the contract and data model match the code:
+- (h) `60d07e3`: **loose names.** A name with no exact match is matched as whole words, ignoring case. One
+  match resolves and carries `asked`; two or more return `NAME_PARTIAL` with candidates. This answers 014's
+  OQ-8. FR-017 gets a note.
+- (i) `b0a43ec`: **`ease`** on each `own_keys` entry (`eased`, `linear` or `mixed`), by easing's own pair rule.
+- (l) `c2ac540`: **`target_renders` renamed `from_renders`**, same value. It was always the from layer's state
+  (the layer holding the expression), but "target" read as the linked layer. FR-011 and US2 scenario 2 now say
+  "from layer". Elsewhere in this spec (SC-002, Edge Cases E14 to E16, Key Entities › Link's last clause),
+  "target" in "whether the target renders" means the same from layer; Key Entities' "target layer and
+  property if named" is still the linked layer.
+- (o) `d2b3169`: **`over_1px`** on each shift with a number (when the shift shows on the box), from the fine
+  sweep's new `offsets`. Captures from before 2026-11-18 give `older_snapshot`.
+- (p) `d2b3169`: **`child_layers`** names a layer's children when it has 1 to 5.
+Changed here: FR-011, FR-017 (a note), US2 scenario 2. No other requirement or approved decision changes.
+
 **Input**: Cockpit task, sprint 5: "Two shared read capabilities for the ae-mentor server, not
 teaching skills. Build the reads now, and queue skills 4 (*Find what's moving it*) and 10
 (*Precompose*) as lessons for later. Expressions first, precomps as a later phase." Builder decision,
@@ -236,8 +254,9 @@ key, with US1's read as its input and nothing else built.
 1. **Given** Comp 1, **When** what links to Sweep Control is read, **Then** it lists one link: Black
    Solid 1 › CC Light Sweep › Center reads Sweep Control's Position, matched by the layer's name and
    marked as inferred.
-2. **Given** the same link, **Then** the target layer is reported as not rendering: eye off, not a
-   matte, not used as a matte by any layer.
+2. **Given** the same link, **Then** its from layer, Black Solid 1 (the layer holding the expression), is
+   reported as not rendering: eye off, not a matte, not used as a matte by any layer. (*Reworded
+   2026-11-19, Amendment 10:* was "the target layer"; same meaning.)
 3. **Given** any other Comp 1 layer, **When** what links to it is read, **Then** the result is "no
    expression links" with the read marked as run (never left blank); Shake Control's children come
    from the parent chain, not from this read.
@@ -483,9 +502,10 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
 - **FR-010**: References the read can't resolve (a name built at run time, a variable) MUST be listed
   per expression as "can't resolve", and references to another comp as "not followed" (E12, E13).
   "No links" MUST only be said when the search ran and every reference in the comp resolved.
-- **FR-011**: Every link MUST say whether its target **renders**, using spec 004's visibility class
-  (FR-013) plus whether the target is inside its in and out points at the time read. A matte is never
-  "doesn't render" (E14 to E16).
+- **FR-011**: Every link MUST say whether its **from layer** (the layer holding the expression, which the link
+  drives) **renders**, using spec 004's visibility class (FR-013) plus whether that layer is inside its in and
+  out points at the time read. A matte is never "doesn't render" (E14 to E16). (*Reworded 2026-11-19,
+  Amendment 10:* was "its target"; same meaning, and the field is `from_renders`.)
 
 **Phase 1: checks (US3)**
 
@@ -521,6 +541,10 @@ from a live read (spec 004 FR-012). **Live** = needs a planted case in AE (liste
   (Amendment 7):* both shapes also carry FR-004b's own keys and switches.
 - **FR-017**: A layer asked for by a name two layers share MUST return the candidates (index and
   parent) instead of guessing.
+  *Note 2026-11-19 (Amendment 10), as built 2026-11-17 (spec 014 T037 fix (h)):* a name with no exact match
+  is matched loosely (whole words, ignoring case). Two or more loose matches return `NAME_PARTIAL` with each
+  candidate's index, name and parent, the same "candidates, never a guess" rule. Details in
+  contracts/describe-layers.md › Loose names.
 - **FR-018**: A read that didn't run, ran only in part, or met an older snapshot MUST say "not read"
   with the reason, never "none", empty or false (E27). The motion-sources map's existing pattern
   (`not_read`) is kept. A read that ran only in part (a property threw during the expression walk)
