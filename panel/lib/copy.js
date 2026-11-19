@@ -123,7 +123,8 @@ const COPY = {
     question_still_here: "Your question's still here.",
     // The thread's hand-back after a go-deeper lesson (contracts/panel-ask.md, from record_lesson's data).
     // Always ends in a period, whether or not the step's text does (T035 design review item 7).
-    hand_back: (n, next) => { const t = String(next == null ? "" : next).trim(); return `That was step ${n}; next is step ${n + 1}: ${/[.!?…]$/.test(t) ? t : `${t}.`}`; },
+    // The step's text is the mentor's plain text, kept as given; only a closing period is added.
+    hand_back: (n, next) => { const t = String(next == null ? "" : next).trim(); return `That was step ${n}. Next is step ${n + 1}: ${/[.!?…]$/.test(t) ? t : `${t}.`}`; },
     last_step: "That was the last step.",
     // Spec 014 FR-051, PQ-3 (contracts/panel-ask.md › Result lines and dividers): what the check saw on
     // a passing go-deeper lesson, by skill. Plain, with no pass or fail words. resultLine() picks one.
@@ -139,10 +140,16 @@ const COPY = {
     // with none known, the divider stops at "practiced".
     divider_practiced: (tag, layer) => (layer ? `${tag} · practiced on ${layer}` : `${tag} · practiced`),
     divider_ended: (tag) => `${tag} · ended, not saved`,
+    // A go-deeper lesson whose check passed but whose record couldn't be saved (T061 review item 3).
+    divider_unsaved: (tag) => `${tag} · not saved`,
+    // lesson-passed-unsaved and lesson-passed-asking in a go-deeper lesson: no pass or fail words
+    // (MU › Asking again is normal; T061 review item 3). Spec 007's lessons keep their own lines.
+    deeper_unsaved: { title: "Couldn't save this one. Your comp is fine.", body: "This lesson won't appear in your history, and the mentor won't remember it." },
+    deeper_asking: "One more question before this is saved.",
     // MU › Going deeper (ask-deeper-lesson, ask-lessonopen, ask-deeper-passed, ask-back, home-lessonopen-deeper).
     from_question: "From your question. Back returns you to it.",
     back_to_lesson: "Back to your lesson ›",
-    lesson_is_open: (tag) => `Your ${tag} lesson is open.`,
+    lesson_is_open: (tag) => (tag ? `Your ${tag} lesson is open.` : "Your lesson is open."),
     back_to_steps: "Back to your steps ›",
     question_and_answer: "Your question and its answer",
     from_question_sub: "from your question",
@@ -315,9 +322,11 @@ function resultLine(skillId, passed) {
   return Object.prototype.hasOwnProperty.call(COPY.ask.result_lines, skillId) ? COPY.ask.result_lines[skillId] : null;
 }
 
-// The divider on return from a go-deeper lesson: practiced when its record was saved, else ended.
-function deeperDivider(tag, { saved, layer } = {}) {
-  return saved === true ? COPY.ask.divider_practiced(tag, layer || null) : COPY.ask.divider_ended(tag);
+// The divider on return from a go-deeper lesson: practiced when its record was saved, not saved when
+// its check passed but the record couldn't be saved, else ended.
+function deeperDivider(tag, { saved, passed, layer } = {}) {
+  if (saved === true) return COPY.ask.divider_practiced(tag, layer || null);
+  return passed === true ? COPY.ask.divider_unsaved(tag) : COPY.ask.divider_ended(tag);
 }
 
 module.exports = { COPY: freeze(COPY), resultLine, deeperDivider };

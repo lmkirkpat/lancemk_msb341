@@ -32,7 +32,7 @@ const STATUS = {
   give_answer: "Writing the answer…", // MU has no line for this; the shortest plain one, for design review
   // Spec 014 phase 2: Go deeper's hand-over (MU ask-deeper-starting's own status line) and T106's stop.
   go_deeper: "Getting your lesson ready…",
-  end_lesson: "Ending the lesson…", // not in MU; the shortest plain line, for design review
+  end_lesson: "Ending your lesson…", // not in MU; the shortest plain line, for design review
 };
 
 function statusFor(toolName) {

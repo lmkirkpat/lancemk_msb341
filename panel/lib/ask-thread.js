@@ -19,11 +19,13 @@ function newThread({ id, claude_session_id, at } = {}) {
 }
 
 // ---------- Go deeper (spec 014 FR-050 to FR-052, data-model § 7) ----------
-// deeper: null | { skill, tag, step_number, state, layer, practice, saved, hand_back }. One at a time.
+// deeper: null | { skill, tag, step_number, state, layer, practice, passed, saved, hand_back }. One at a
+// time. passed and saved follow the lesson while it's open, so a panel closed before the return still
+// knows what to draw when it reopens (fromSaved, settleOnRead).
 
 // The press (or a typed yes the mentor took): starting, until the lesson takes over or the turn ends.
 function pressDeeper(th, { skill, tag }) {
-  return Object.assign({}, th, { deeper: { skill: skill || null, tag: tag || null, step_number: null, state: "starting", layer: null, practice: false, saved: false, hand_back: null } });
+  return Object.assign({}, th, { deeper: { skill: skill || null, tag: tag || null, step_number: null, state: "starting", layer: null, practice: false, passed: false, saved: false, hand_back: null } });
 }
 
 // The mentor's go_deeper went through: the lesson is open, in the same conversation. The press's entry
@@ -32,7 +34,7 @@ function openDeeper(th, { skill, tag, practice }) {
   const d = Object.assign({}, th.deeper || {}, { skill: skill || (th.deeper && th.deeper.skill) || null, tag: tag || (th.deeper && th.deeper.tag) || null, state: "open", practice: practice === true });
   const q = latest(th);
   const next = q && !q.answered ? withLatest(th, { answered: true, notice: null }) : th;
-  return Object.assign({}, next, { deeper: Object.assign({ step_number: null, layer: null, saved: false, hand_back: null }, d) });
+  return Object.assign({}, next, { deeper: Object.assign({ step_number: null, layer: null, passed: false, saved: false, hand_back: null }, d) });
 }
 
 // The lesson's hand-in snapshot named the layer and the step (data-model § 4).
@@ -63,6 +65,14 @@ function backFromDeeper(th, { divider, hand_back, saved, answered, at }) {
   const entry = { text: String(divider || ""), kind: "lesson_back", at: at || null, view: null, prose: null, folded: false, answered: answered !== false, notice: null, hand_back: hand_back || null };
   const deeper = th.deeper ? Object.assign({}, th.deeper, { state: saved ? "passed" : "ended", saved: !!saved }) : null;
   return Object.assign({}, th, { questions: before.concat(entry), deeper, after_deeper: true, steps_open_once: true });
+}
+
+// The lesson's own result, kept on the thread as it happens (data-model § 7).
+function deeperResult(th, { passed, saved }) {
+  if (!th || !th.deeper) return th;
+  const p = passed === true;
+  const sv = saved === true;
+  return th.deeper.passed === p && th.deeper.saved === sv ? th : Object.assign({}, th, { deeper: Object.assign({}, th.deeper, { passed: p, saved: sv }) });
 }
 
 const setAfterDeeper = (th, on) => (th && th.after_deeper !== on ? Object.assign({}, th, { after_deeper: on }) : th);
@@ -168,6 +178,15 @@ function cleanView(v) {
   return { kind: v.kind, explanation: v.explanation, steps, offers, closing_offer: isStr(v.closing_offer) ? v.closing_offer : null };
 }
 
+function cleanHandBack(hb) {
+  return isObj(hb) && Number.isInteger(hb.step_number) ? { step_number: hb.step_number, next_step: isStr(hb.next_step) ? hb.next_step : null } : null;
+}
+
+function cleanDeeper(d) {
+  if (!isObj(d) || !DEEPER_STATES.includes(d.state)) return null;
+  return { skill: isStr(d.skill) ? d.skill : null, tag: isStr(d.tag) ? d.tag : null, step_number: Number.isInteger(d.step_number) ? d.step_number : null, state: d.state, layer: isStr(d.layer) ? d.layer : null, practice: d.practice === true, passed: d.passed === true, saved: d.saved === true, hand_back: cleanHandBack(d.hand_back) };
+}
+
 function cleanEntry(q) {
   if (!isObj(q) || !isStr(q.text) || !ENTRY_KINDS.includes(q.kind)) return null;
   const n = isObj(q.notice) ? { title: isStr(q.notice.title) ? q.notice.title : null, text: isStr(q.notice.text) ? q.notice.text : "" } : null;
@@ -187,14 +206,25 @@ function fromSaved(s) {
     started_at: isStr(s.started_at) ? s.started_at : null,
     questions: s.questions.map(cleanEntry).filter(Boolean),
     latest_steps: steps && steps.length && steps.every(Boolean) ? steps : null,
-    // A go-deeper lesson doesn't outlive the panel: one still open when it closed comes back, if at
-    // all, as Pick up (a lesson like any other). Its conversation was the thread's, still on the
-    // lesson's skill, so the next follow-up goes with the ask command in front (after_deeper).
-    deeper: null,
+    // A go-deeper lesson doesn't outlive the panel: one still open when it closed is settled by the
+    // app as it reads the thread back (settleOnRead), so its answer folds and Go deeper is gone
+    // (FR-050). Its conversation was the thread's, still on the lesson's skill, so the next follow-up
+    // goes with the ask command in front (after_deeper).
+    deeper: cleanDeeper(s.deeper),
     steps_open_once: s.steps_open_once === true,
     after_lesson: s.after_lesson === true,
     after_deeper: s.after_deeper === true || (isObj(s.deeper) && (s.deeper.state === "open" || s.deeper.state === "starting")),
   };
 }
 
-module.exports = { newThread, setAfterLesson, contextEntry, pressDeeper, openDeeper, deeperHandIn, dropDeeper, deeperOpen, handBackLine, backFromDeeper, setAfterDeeper, DEEPER_STATES, addQuestion, asNewQuestion, NEW_QUESTION_KINDS, answer, notice, retry, latest, split, offersOf, readingLong, fromSaved, READING_LONG_MS, VERSION };
+// A thread read back with its go-deeper lesson still open (or still starting) when the panel closed:
+// the lesson is over, so the thread gets its return now, as it would have on the way back (MU ask-back,
+// ask-ended). `divider` is the caller's (it knows the skill's name); the hand-back line comes from the
+// saved hand_back. Anything else is left as it is.
+function settleOnRead(th, { divider, copy, at }) {
+  if (!deeperOpen(th)) return th;
+  const d = th.deeper;
+  return backFromDeeper(th, { divider, hand_back: handBackLine(d.hand_back, copy), saved: d.saved === true, at });
+}
+
+module.exports = { newThread, setAfterLesson, contextEntry, pressDeeper, openDeeper, deeperHandIn, dropDeeper, deeperOpen, deeperResult, settleOnRead, handBackLine, backFromDeeper, setAfterDeeper, DEEPER_STATES, addQuestion, asNewQuestion, NEW_QUESTION_KINDS, answer, notice, retry, latest, split, offersOf, readingLong, fromSaved, READING_LONG_MS, VERSION };

@@ -35,6 +35,7 @@ test("a result line only on a pass: not passed, or no result, draws none", () =>
 
 test("no result line uses pass, fail or review words (FR-023, MU › Asking again is normal)", () => {
   for (const line of Object.values(COPY.ask.result_lines)) assert.doesNotMatch(line, /pass|fail|review|wrong|correct/i, line);
+  for (const line of [COPY.ask.deeper_asking, COPY.ask.deeper_unsaved.title, COPY.ask.deeper_unsaved.body, COPY.ask.divider_unsaved("x")]) assert.doesNotMatch(line, /pass|fail|review|wrong|correct/i, line);
 });
 
 test("dividers for each skill: practiced on the layer when saved, ended and not saved otherwise", () => {
@@ -43,6 +44,8 @@ test("dividers for each skill: practiced on the layer when saved, ended and not 
     assert.equal(deeperDivider(tag, { saved: false, layer: "Shake Control" }), `${tag} · ended, not saved`, id);
     assert.equal(deeperDivider(tag, {}), `${tag} · ended, not saved`, `${id}: unsaved by default`);
     assert.equal(deeperDivider(tag, { saved: true, layer: null }), `${tag} · practiced`, `${id}: no layer known`);
+    assert.equal(deeperDivider(tag, { saved: false, passed: true, layer: "Shake Control" }), `${tag} · not saved`, `${id}: passed, record failed (T061 item 3)`);
+    assert.equal(deeperDivider(tag, { saved: true, passed: true, layer: "Shake Control" }), `${tag} · practiced on Shake Control`, `${id}: saved wins`);
   }
   assert.equal(deeperDivider("Set the pivot", { saved: true, layer: "Shake Control" }), "Set the pivot · practiced on Shake Control", "MU's divider");
   assert.equal(deeperDivider("Set the pivot", { saved: false }), "Set the pivot · ended, not saved", "MU's ended divider");

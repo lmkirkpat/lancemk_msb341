@@ -84,7 +84,7 @@ const CASES = {
   "ask-deeper-passed": [() => checked(true), [COPY.lesson.done_tag, "Pivot moved, nothing else did.", COPY.lesson.saved, A.back_to_steps, A.from_question], [COPY.buttons.whats_next, COPY.lesson.passed, COPY.lesson.review_passed, "review", COPY.ask_placeholder, COPY.lesson.passed_tag]],
   "ask-lessonopen": [async () => { const h = await inLesson(); h.app.act("back_question"); return h; }, [Q, PRESS, A.back_to_lesson, A.lesson_is_open("Set the pivot"), A.lesson_open, A.your_steps(4)], [A.go_deeper("Set the pivot")]],
   "home-lessonopen-deeper": [async () => { const h = await inLesson(); h.app.act("tab", { tab: "home" }); return h; }, [A.card_title, A.lesson_open, COPY.quiet.back_lesson, A.from_question_sub, COPY.buttons.end_lesson], [A.back_to_question]],
-  "ask-back": [async () => { const h = await checked(true); h.app.act("back_steps"); return h; }, ["Set the pivot · practiced on Shake Control", `That was step 3; next is step 4: ${NEXT_STEP}`, A.question_and_answer, A.your_steps(4)], [A.go_deeper("Set the pivot"), A.back_to_lesson]],
+  "ask-back": [async () => { const h = await checked(true); h.app.act("back_steps"); return h; }, ["Set the pivot · practiced on Shake Control", `That was step 3. Next is step 4: ${NEXT_STEP}`, A.question_and_answer, A.your_steps(4)], [A.go_deeper("Set the pivot"), A.back_to_lesson]],
   "ask-ended": [async () => {
     const h = await inLesson();
     h.app.act("tab", { tab: "home" });
@@ -119,7 +119,8 @@ test("ask-deeper-starting: the press sends MU's sentence once, on the thread's c
   const a = h.adapter();
   assert.deepEqual(a.sent.at(-1), { text: PRESS, kind: "go_deeper" });
   const { html } = screen(h);
-  assert.match(html, /class="pressed" disabled aria-busy="true"/, "Starting…, and it can't be pressed");
+  assert.match(html, /class="pressed" aria-disabled="true" aria-busy="true"><span class="spin" aria-hidden="true"><\/span>Starting…/, "Starting…, focusable, and it can't be pressed (MU: aria-disabled)");
+  assert.doesNotMatch(html, /class="pressed" disabled/);
   h.app.act("go_deeper", { skill: "transform.anchor" });
   assert.equal(a.sent.length, 2, "question and press only");
   assert.equal(h.app.followUp("hello"), false, "the bar waits too");
@@ -322,7 +323,7 @@ test("T107 in a go-deeper lesson: the mentor's end_lesson keeps its reply, then 
   h.app.act("back_steps");
   assert.equal(st(h), "ask-ended");
   assert.ok(text(h).includes("Set the pivot · ended, not saved"));
-  assert.ok(text(h).includes(`That was step 3; next is step 4: ${NEXT_STEP}`));
+  assert.ok(text(h).includes(`That was step 3. Next is step 4: ${NEXT_STEP}`));
   assert.equal(a.sent.length, 3, "question, press, \"end lesson\": no End lesson request, the mentor already ended it");
 });
 
@@ -389,4 +390,221 @@ test("SC-011: with two offers, each gets its own Go deeper inside the answer; pr
   html = screen(h).html;
   assert.equal((html.match(/Starting…/g) || []).length, 1);
   assert.match(html, /data-skill="transform.anchor" aria-disabled="true"/, "the other waits, still focusable");
+});
+
+// ---------- T061 design review fixes ----------
+
+const thr = require("../lib/ask-thread.js");
+const fs = require("fs");
+const path = require("path");
+
+// Closes the panel and opens it again on what it saved, read back the way panel-session.js reads it.
+async function reopen(h, opts) {
+  h.app.shutdown();
+  const thread = thr.fromSaved(JSON.parse(JSON.stringify(h.saved.thread)));
+  const saved = h.saved.current ? JSON.parse(JSON.stringify(h.saved.current)) : null;
+  return panel(Object.assign({ thread, saved }, opts));
+}
+const goDeeperDrawn = (h) => /data-action="go_deeper"|deeper-btn/.test(screen(h).html);
+
+test("T061 item 1: reopened mid go-deeper lesson, the thread settles: answer folded, no Go deeper, ended, not saved", async () => {
+  const before = await inLesson();
+  const id = before.saved.thread.claude_session_id;
+  assert.equal(before.saved.current.claude_session_id, id, "while it's open, the lesson's log is on the thread's conversation");
+  const h = await reopen(before);
+  assert.equal(h.saved.current, null, "no Pick up: the conversation has one owner, the thread");
+  assert.notEqual(st(h), "home-inprogress");
+  assert.equal(text(h).includes("Pick up"), false);
+  h.app.act("back_question");
+  assert.equal(st(h), "ask-ended");
+  const t = text(h);
+  assert.ok(t.includes("Set the pivot · ended, not saved"));
+  assert.ok(t.includes(A.question_and_answer), "everything before folds");
+  assert.equal(goDeeperDrawn(h), false, "FR-050: Go deeper is gone after the lesson");
+  assert.equal(h.app.model().deeper.state, "ended");
+  assert.equal(h.saved.thread.questions.at(-1).kind, "lesson_back", "the settled thread is saved");
+  // The thread's next follow-up resumes the conversation, back on the ask skill. Nothing else runs on it.
+  assert.equal(h.app.followUp("What now?"), true);
+  assert.equal(h.adapters.length, 1);
+  assert.equal(h.adapter().started[0].resumeSessionId, id);
+  assert.deepEqual(h.adapter().sent.at(-1), { text: `${ASK_COMMAND} What now?`, kind: "followup" });
+  // Reopened again, it stays settled: one return, not two.
+  const again = await reopen(h);
+  assert.equal(again.app.model().thread.questions.filter((q) => q.kind === "lesson_back").length, 1);
+});
+
+test("T061 item 1: reopened after the record saved but before the turn ended, the return says practiced, with the hand-back", async () => {
+  const before = await inLesson();
+  before.app.act("check");
+  before.adapter().emit("tool_result", CHECK(true));
+  before.adapter().emit("tool_result", RECORD());
+  assert.equal(before.saved.thread.deeper.saved, true, "the saved flag follows the record");
+  const h = await reopen(before);
+  h.app.act("back_question");
+  assert.equal(st(h), "ask-back");
+  assert.ok(text(h).includes("Set the pivot · practiced on Shake Control"));
+  assert.ok(text(h).includes(`That was step 3. Next is step 4: ${NEXT_STEP}`));
+  assert.equal(goDeeperDrawn(h), false);
+});
+
+test("T061 item 1: reopened after a pass whose record failed, the return says not saved", async () => {
+  const before = await inLesson();
+  before.app.act("check");
+  before.adapter().emit("tool_result", CHECK(true));
+  before.adapter().emit("tool_result", R("record_lesson", "error", false));
+  const h = await reopen(before);
+  h.app.act("back_question");
+  assert.ok(text(h).includes("Set the pivot · not saved"));
+  assert.equal(text(h).includes("ended, not saved"), false);
+});
+
+test("T061 item 1: reopened while Go deeper was still starting, the thread settles too", async () => {
+  const h = await reopen(await pressed());
+  h.app.act("back_question");
+  assert.equal(goDeeperDrawn(h), false);
+  assert.ok(text(h).includes("Set the pivot · ended, not saved"));
+  assert.equal(h.app.model().thread.questions.filter((q) => q.kind === "lesson_back").length, 1);
+});
+
+test("T061 item 1: a thread with nothing open reads back as it was", async () => {
+  const h = await reopen(await answered());
+  h.app.act("back_question");
+  assert.equal(st(h), "ask-answer");
+  assert.equal(goDeeperDrawn(h), true);
+  assert.equal(h.app.model().deeper, null);
+});
+
+// Leaving a closed go-deeper lesson by the header's Back or the Home tab, not Back to your steps:
+// the return is already there (settleDeeper at turn end), and the leftover deeper_lesson flag only
+// keeps the closed lesson's own screen on the Lesson tab.
+const LEAVES = {
+  "header Back": (h) => h.app.act("back_question"),
+  "Home tab": (h) => { h.app.act("tab", { tab: "home" }); h.app.act("back_question"); },
+};
+const CLOSES = {
+  "a pass": async () => checked(true),
+  "the mentor's end_lesson": async () => {
+    const h = await inLesson();
+    h.app.ask("end lesson");
+    h.adapter().emit("tool_result", R("end_lesson", { ended: true, skill_name: "Set the pivot (anchor point)", hand_back: { step_number: 3, next_step: NEXT_STEP } }));
+    h.adapter().emit("turn_end", { ok: true, kind: "ask" });
+    return h;
+  },
+};
+for (const [closeName, close] of Object.entries(CLOSES)) {
+  for (const [leaveName, leave] of Object.entries(LEAVES)) {
+    test(`T061 check: after ${closeName}, leaving by the ${leaveName} returns to the thread once, and nothing else changes`, async () => {
+      const h = await close();
+      const a = h.adapter();
+      leave(h);
+      const m = h.app.model();
+      assert.equal(m.tab, "home");
+      assert.equal(st(h), closeName === "a pass" ? "ask-back" : "ask-ended");
+      assert.equal(m.thread.questions.filter((q) => q.kind === "lesson_back").length, 1);
+      assert.equal(goDeeperDrawn(h), false);
+      assert.equal(m.follow_off, null, "the follow-up bar is on");
+      assert.equal(m.ask_off, null, "Home's Ask is on");
+      // The thread's sends: one conversation, the ask command once, logged as the thread's.
+      assert.equal(h.app.followUp("And now?"), true);
+      assert.equal(h.adapter(), a);
+      assert.deepEqual(a.sent.at(-1), { text: `${ASK_COMMAND} And now?`, kind: "followup" });
+      a.emit("text", { text: "Play it back." });
+      a.emit("turn_end", { ok: true, kind: "followup" });
+      assert.equal(h.turns.at(-1).thread, "ask");
+      assert.equal(h.turns.at(-1).kind, "followup");
+      // The Lesson tab still shows the closed lesson, with Back to your steps; pressing it adds nothing.
+      h.app.act("tab", { tab: "lesson" });
+      assert.ok(text(h).includes(A.back_to_steps));
+      h.app.act("back_steps");
+      assert.equal(h.app.model().thread.questions.filter((q) => q.kind === "lesson_back").length, 1);
+      assert.equal(h.app.model().deeper_lesson, false);
+      assert.ok(["ask-followup", "ask-steps-open"].includes(st(h)), st(h));
+    });
+  }
+}
+
+test("T061 check: while a closed go-deeper lesson is still answering, the thread can't start a second process on its conversation", async () => {
+  const h = await inLesson();
+  h.app.act("check");
+  const a = h.adapter();
+  a.emit("tool_result", CHECK(true));
+  a.emit("tool_result", RECORD());
+  h.app.act("back_question");
+  const m = h.app.model();
+  assert.equal(m.lesson_open, false);
+  assert.equal(m.follow_off, COPY.paused.after_answer);
+  assert.equal(h.app.followUp("hello"), false);
+  h.app.act("go_deeper", { skill: "transform.anchor" });
+  h.app.act("tab", { tab: "home" });
+  assert.equal(h.app.askQuestion("Another"), false);
+  assert.equal(h.adapters.length, 1, "no second process");
+  h.app.act("back_question");
+  assert.match(screen(h).html, /data-action="back_lesson"/, "Go deeper is still Back to your lesson");
+  assert.equal(goDeeperDrawn(h), false);
+  a.emit("turn_end", { ok: true, kind: "check" });
+  assert.equal(st(h), "ask-back");
+  assert.equal(h.app.followUp("Now?"), true);
+});
+
+test("T061 item 3: a go-deeper lesson waiting on its record says no pass words", async () => {
+  const h = await inLesson();
+  h.app.act("check");
+  h.adapter().emit("tool_result", CHECK(true));
+  h.adapter().emit("turn_end", { ok: true, kind: "check" });
+  assert.equal(st(h), "lesson-passed-asking");
+  const { r } = screen(h);
+  const top = plain(r.lesson.head + r.lesson.banner);
+  assert.ok(top.includes(A.deeper_asking));
+  // The banner and the header (the checklist's own summary is spec 007's, left as it is).
+  for (const w of [COPY.lesson.check_passed, COPY.lesson.check_passed_tag, COPY.lesson.passed_tag, "passed"]) assert.equal(top.includes(w), false, w);
+});
+
+test("T061 item 3: a go-deeper lesson whose record failed says it couldn't save, and its divider says not saved", async () => {
+  const h = await inLesson();
+  h.app.act("check");
+  h.adapter().emit("tool_result", CHECK(true));
+  h.adapter().emit("tool_result", R("record_lesson", "error", false));
+  h.adapter().emit("turn_end", { ok: true, kind: "check" });
+  assert.equal(st(h), "lesson-passed-unsaved");
+  const t = text(h);
+  assert.ok(t.includes(A.deeper_unsaved.title));
+  assert.equal(t.includes(COPY.lesson.unsaved.title), false);
+  assert.equal(/pass/i.test(plain(screen(h).r.lesson.banner)), false);
+  h.app.act("back_steps");
+  assert.ok(text(h).includes("Set the pivot · not saved"));
+  assert.equal(text(h).includes("ended, not saved"), false);
+});
+
+test("T061 item 4: Home's line for a go-deeper lesson uses the short tag, so \"from your question\" fits", async () => {
+  const h = await inLesson();
+  h.app.act("tab", { tab: "home" });
+  const html = renderApp(h.app.model()).view;
+  const line = plain(html.match(/<small>([^<]*)<\/small>/)[1]);
+  assert.equal(line, `Set the pivot on Shake Control · ${A.from_question_sub}`);
+  assert.equal(plain(html).includes("Set the pivot (anchor point) on"), false);
+});
+
+test("T061 item 5 and nits: Back to your lesson names its reason; no tag reads Your lesson is open.", async () => {
+  const h = await inLesson();
+  h.app.act("back_question");
+  const html = screen(h).html;
+  const m = html.match(/data-action="back_lesson" aria-describedby="([^"]+)"/);
+  assert.ok(m, "Back to your lesson is linked to its line");
+  assert.match(html, new RegExp(`id="${m[1]}">${A.lesson_is_open("Set the pivot")}<`));
+  assert.equal(A.lesson_is_open(""), "Your lesson is open.");
+  assert.equal(A.lesson_is_open(null), "Your lesson is open.");
+});
+
+test("T061 nit: ask-deeper-starting draws no Your steps dock", async () => {
+  const h = await pressed();
+  assert.equal(st(h), "ask-deeper-starting");
+  assert.equal(screen(h).r.lesson.list, "");
+  assert.equal(text(h).includes(A.your_steps(4)), false);
+});
+
+test("T061 item 5: main.js moves focus to the newest message when a focused one is replaced (FR-054)", () => {
+  const main = fs.readFileSync(path.join(__dirname, "..", "main.js"), "utf8");
+  const patch = main.slice(main.indexOf("function patchChat"), main.indexOf("function focusNewest"));
+  assert.match(patch, /hadFocus/);
+  assert.match(patch, /\.focus\(\)/);
 });

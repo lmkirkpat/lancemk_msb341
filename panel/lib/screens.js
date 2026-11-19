@@ -38,6 +38,9 @@ function btn(label, action, cls, attrs) {
   return `<button type="button" class="${cls || ""}" data-action="${action}"${attrs ? ` ${attrs}` : ""}>${esc(label)}</button>`;
 }
 const pressed = (verb) => `<button type="button" class="pressed" disabled aria-busy="true"><span class="spin" aria-hidden="true"></span>${esc(verb)}</button>`;
+// Spec 014 MU: a pressed button that keeps focus (aria-disabled, not disabled), so focus stays on it
+// while it works (FR-054). Spec 007's screens keep `pressed` as their mockup draws it.
+const pressedFocusable = (verb) => `<button type="button" class="pressed" aria-disabled="true" aria-busy="true"><span class="spin" aria-hidden="true"></span>${esc(verb)}</button>`;
 
 function banner(kind, title, body, actions) {
   const ic = { bad: "!", warn: "!", info: "i" }[kind];
@@ -83,8 +86,11 @@ const chev = `<span class="chev" aria-hidden="true">›</span>`;
 // lesson. Long names are drawn short; the full text is the title and the accessible name.
 function quietLine(m) {
   if (m.lesson_open && m.lesson) {
-    const title = lessonTitle(m, m.lesson);
-    // MU home-lessonopen-deeper: the line says where the lesson came from, in place of its summary.
+    // MU home-lessonopen-deeper: the short tag the thread saved (as Go deeper read), so "from your
+    // question" isn't cut off at 343 or 260 pt; the line says where the lesson came from, in place of
+    // its summary.
+    const tag = m.deeper_lesson && m.deeper && m.deeper.tag;
+    const title = tag ? (focusText(m.lesson) ? COPY.lesson.on(tag, focusText(m.lesson)) : tag) : lessonTitle(m, m.lesson);
     const sum = m.deeper_lesson ? A.from_question_sub : m.lesson.check_list && m.lesson.check_list.summary;
     const full = [COPY.quiet.back_lesson, title, sum].filter(Boolean).join(". ");
     const answering = !!m.turn && !!m.turn.busy; // FR-060, FR-061
@@ -177,15 +183,17 @@ function deeperHtml(m, offers, i) {
   if (!PHASE.FLAGS.go_deeper || !offers.length || m.runtime !== "a") return ""; // SC-011: never on B1
   // FR-050, MU ask-lessonopen: while its lesson is open, Go deeper is Back to your lesson, so it can't
   // be pressed a second time.
+  // Also while a lesson that has just closed is still answering: it's still the place to go.
   const d = m.deeper;
-  if (d && d.state === "open" && m.lesson_open) {
-    return `<div class="deeper">${btn(A.back_to_lesson, "back_lesson", "quiet")}<p class="why-off">${esc(A.lesson_is_open(d.tag || ""))}</p></div>`;
+  if (d && d.state === "open" && (m.lesson_open || m.deeper_lesson)) {
+    const id = `deeper-open-${i}`;
+    return `<div class="deeper">${btn(A.back_to_lesson, "back_lesson", "quiet", `aria-describedby="${id}"`)}<p class="why-off" id="${id}">${esc(A.lesson_is_open(d.tag || ""))}</p></div>`;
   }
   const off = m.follow_off;
   const pressedSkill = m.ask.busy ? m.ask.pressed : null;
   const why = `deeper-why-${i}`;
   const btns = offers.map((o) => {
-    if (pressedSkill === o.skill) return pressed(COPY.buttons.pressed.start);
+    if (pressedSkill === o.skill) return pressedFocusable(COPY.buttons.pressed.start);
     return off && !pressedSkill
       ? `<button type="button" class="deeper-btn" aria-disabled="true" aria-describedby="${why}">${esc(A.go_deeper(o.tag))}</button>`
       : `<button type="button" class="deeper-btn" data-action="go_deeper" data-skill="${esc(o.skill)}"${pressedSkill ? ` aria-disabled="true" aria-describedby="${why}"` : ""}>${esc(A.go_deeper(o.tag))}</button>`;
@@ -263,6 +271,7 @@ function threadChat(m) {
 function stepsDock(m) {
   const steps = m.thread.latest_steps;
   if (!steps || !steps.length) return "";
+  if (m.state === "ask-deeper-starting") return ""; // MU draws no dock while the lesson gets ready
   const open = m.ask.steps_open || m.steps_list_open;
   return `<section class="check steps" aria-label="${esc(A.steps_aria)}"><button type="button" class="check-head" id="ask-steps-toggle" aria-expanded="${!!open}" aria-controls="ask-steps-body" data-action="toggle_steps" data-keep-focus>`
     + `<span class="chev" aria-hidden="true"><span class="ch-tall">${m.ask.steps_open ? "▾" : "▸"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span>`
@@ -374,8 +383,10 @@ function lessonBanner(m) {
   if (endedNoSave(m.lesson)) return banner("info", COPY.lesson.ended, "");
   if (s === "lesson-passed" || s === "lesson-passed-pivot") return banner("info", COPY.lesson.passed, savedLine(m));
   if (s === "practice-passed") return banner("info", COPY.lesson.review_passed, savedLine(m));
-  if (s === "lesson-passed-unsaved") return banner("warn", COPY.lesson.unsaved.title, COPY.lesson.unsaved.body);
-  if (s === "lesson-passed-asking") return banner("info", COPY.lesson.check_passed, COPY.lesson.one_more_question);
+  // A go-deeper lesson says no pass or fail words (MU › Asking again is normal); spec 007's lessons
+  // keep theirs (spec 007 FR-021).
+  if (s === "lesson-passed-unsaved") return m.deeper_lesson ? banner("warn", A.deeper_unsaved.title, A.deeper_unsaved.body) : banner("warn", COPY.lesson.unsaved.title, COPY.lesson.unsaved.body);
+  if (s === "lesson-passed-asking") return m.deeper_lesson ? banner("info", A.deeper_asking, "") : banner("info", COPY.lesson.check_passed, COPY.lesson.one_more_question);
   if (m.error && m.error.blocks_home) return banner("bad", m.error.title, m.error.body, btn(COPY.buttons.try_again, "try_again"));
   return "";
 }
@@ -627,4 +638,4 @@ function renderApp(m) {
   return { nav, view: "", lesson: lessonRegions(m) };
 }
 
-module.exports = { renderApp, nextTab, TABS, banner, btn, pressed, statusline };
+module.exports = { renderApp, nextTab, TABS, banner, btn, pressed, pressedFocusable, statusline };

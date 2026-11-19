@@ -132,7 +132,7 @@ test("T053: pressed is starting; the mentor's go_deeper opens it and answers the
   assert.equal(t.deeperOpen(th), true, "the answer can't be pressed twice while starting");
   assert.equal(t.dropDeeper(th).deeper, null);
   th = t.openDeeper(th, { skill: "transform.anchor", tag: "Set the pivot", practice: true });
-  assert.deepEqual(th.deeper, { skill: "transform.anchor", tag: "Set the pivot", step_number: null, state: "open", layer: null, practice: true, saved: false, hand_back: null });
+  assert.deepEqual(th.deeper, { skill: "transform.anchor", tag: "Set the pivot", step_number: null, state: "open", layer: null, practice: true, passed: false, saved: false, hand_back: null });
   assert.equal(t.latest(th).answered, true, "the press isn't left with nothing under it");
   assert.equal(t.dropDeeper(th), th, "an open lesson isn't dropped");
   th = t.deeperHandIn(th, { layer: "Shake Control", step_number: 3 });
@@ -171,7 +171,7 @@ test("T053: ended early, the return waits for the mentor's reply; Try again keep
 });
 
 test("T053: the hand-back line, from record_lesson's or end_lesson's data", () => {
-  assert.equal(t.handBackLine({ step_number: 3, next_step: "Play it back and watch the turn." }, COPY_ASK), "That was step 3; next is step 4: Play it back and watch the turn.");
+  assert.equal(t.handBackLine({ step_number: 3, next_step: "Play it back and watch the turn." }, COPY_ASK), "That was step 3. Next is step 4: Play it back and watch the turn.");
   assert.equal(t.handBackLine({ step_number: 4, next_step: null }, COPY_ASK), "That was the last step.");
   assert.equal(t.handBackLine(null, COPY_ASK), null);
   assert.equal(t.handBackLine({ step_number: "3", next_step: "x" }, COPY_ASK), null);
@@ -189,7 +189,8 @@ test("T053: read back, a return keeps its divider and line; a lesson still open 
   assert.equal(back.questions.at(-1).kind, "lesson_back");
   assert.equal(back.questions.at(-1).hand_back, "That was the last step.");
   assert.equal(back.after_deeper, true);
-  assert.equal(back.deeper, null);
+  assert.equal(back.deeper.state, "passed", "a settled lesson reads back settled");
+  assert.equal(t.deeperOpen(back), false);
   const open = t.fromSaved(JSON.parse(JSON.stringify(t.openDeeper(pressed(offered()), OFFER))));
   assert.equal(open.after_deeper, true, "its conversation is still on the lesson's skill");
   assert.equal(t.fromSaved(JSON.parse(JSON.stringify(offered()))).after_deeper, false);

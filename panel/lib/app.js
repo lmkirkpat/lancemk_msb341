@@ -124,6 +124,14 @@ function createApp(deps) {
 
   function loadSaved() {
     state.pending = session.read();
+    // A saved lesson on the thread's own conversation is the go-deeper lesson the thread has just
+    // settled ("ended, not saved"). It doesn't come back as Pick up: the conversation has one owner,
+    // the thread, so a follow-up and a resumed lesson can never share it.
+    const th = state.thread;
+    if (state.pending && th && th.claude_session_id && state.pending.claude_session_id === th.claude_session_id) {
+      session.clear();
+      state.pending = null;
+    }
     settleSaved();
   }
 
@@ -141,6 +149,14 @@ function createApp(deps) {
 
   function init() {
     state.thread = session.readThread ? session.readThread() : null;
+    // T061 review: a go-deeper lesson still open (or starting) when the panel closed is over. The
+    // thread gets its return now, so its answer folds and Go deeper is gone (FR-050).
+    if (thr.deeperOpen(state.thread)) {
+      const d = state.thread.deeper;
+      state.thread = thr.settleOnRead(state.thread, { divider: dividerOf(d, null, { saved: d.saved, passed: d.passed }), copy: COPY.ask, at: now().toISOString() });
+      state.steps_open = !!state.thread.latest_steps; // opens itself once, on the way back (FR-049)
+      persistThread();
+    }
     // A close while an answer was loading saves the question with nothing under it. Reopened, it's a
     // stopped turn: spec 007's notice with "Your question's still here." and Try again (MU › States
     // still missing; T035 design review item 2).
@@ -301,7 +317,10 @@ function createApp(deps) {
   // A go-deeper lesson's results the thread keeps: the hand-in's layer and step (data-model § 4), and
   // record_lesson's or end_lesson's hand_back for the line drawn on return (contracts/panel-ask.md).
   function deeperResult(e) {
-    if (!state.thread || !thr.deeperOpen(state.thread) || !e.ok || !e.json || typeof e.json !== "object") return;
+    if (!state.thread || !thr.deeperOpen(state.thread)) return;
+    const v = state.lesson || {};
+    state.thread = thr.deeperResult(state.thread, { passed: v.passed === true, saved: v.saved === true });
+    if (!e.ok || !e.json || typeof e.json !== "object") { persistThread(); return; }
     const j = e.json;
     if (list.isSnapshot(e.name) && j.mode_source === "hand_in" && j.hand_in && typeof j.hand_in === "object") {
       state.thread = thr.deeperHandIn(state.thread, { layer: j.hand_in.layer, step_number: j.hand_in.step_number });
@@ -312,15 +331,20 @@ function createApp(deps) {
     persistThread();
   }
 
-  // The divider for the lesson that just closed: practiced on its layer when its record was saved,
-  // else ended, not saved (FR-051). The layer is the hand-in's, else the lesson's focus.
-  function deeperDividerNow(saved) {
-    const d = (state.thread && state.thread.deeper) || {};
-    const v = state.lesson || {};
+  // The divider for a go-deeper lesson that has closed: practiced on its layer when its record was
+  // saved, not saved when it passed but the record wasn't, else ended, not saved (FR-051). The layer
+  // is the hand-in's, else the lesson's focus.
+  function dividerOf(d, lesson, { saved, passed }) {
+    const v = lesson || {};
     const layer = d.layer || (v.hand_in && v.hand_in.layer) || (Array.isArray(v.focus) && v.focus.length ? v.focus.join(", ") : null);
     const row = skillById(d.skill);
     const name = row && deps.pathData && Array.isArray(deps.pathData.skills) ? (deps.pathData.skills.find((s) => s.id === row.id) || {}).name : null;
-    return deeperDivider(d.tag || name || "", { saved, layer });
+    return deeperDivider(d.tag || name || "", { saved, passed, layer });
+  }
+
+  function deeperDividerNow(saved) {
+    const v = state.lesson || {};
+    return dividerOf((state.thread && state.thread.deeper) || {}, v, { saved, passed: v.passed === true });
   }
 
   // The go-deeper lesson has closed (record saved, end_lesson, or the mentor gone): the conversation
@@ -763,7 +787,7 @@ function createApp(deps) {
       if (state.threadAdapter && state.threadAdapter !== a) stopThreadAdapter();
       state.threadAdapter = a;
     }
-    state.thread = thr.backFromDeeper(state.thread, { divider: deeperDividerNow(false), hand_back: null, saved: false, answered: false, at: now().toISOString() });
+    state.thread = thr.backFromDeeper(state.thread, { divider: dividerOf(state.thread.deeper || {}, state.lesson, { saved: false, passed: false }), hand_back: null, saved: false, answered: false, at: now().toISOString() });
     state.steps_open = !!state.thread.latest_steps;
     state.steps_list_open = false;
     closeDeeperScreen();
@@ -838,6 +862,10 @@ function createApp(deps) {
   function followOff() {
     if (state.error && state.error.blocks_home) return COPY.paused.needs_mentor;
     if (state.lesson_open) return COPY.ask.lesson_open;
+    // A lesson that has closed but is still answering (a pass, then the mentor's last words): askOff's
+    // rule. For a go-deeper lesson that turn runs on the thread's own conversation, so a follow-up
+    // now would start a second process on it.
+    if (state.lesson_over && state.busy) return COPY.paused.after_answer;
     if (conn() === "not_connected") return COPY.paused.needs_ae;
     if (conn() === "busy") return COPY.paused.waiting_ae; // MU ask-busy: before "answering", it's the reason
     if (askBusy()) return COPY.ask.answering;
