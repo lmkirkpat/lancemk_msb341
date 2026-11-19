@@ -275,6 +275,23 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
   (typed, pressed or "show me") → `go_deeper` then `Skill`; the missing prerequisite sentence; TD § 7.1's B1 line
   on `NOT_ON_THIS_RUNTIME`; End lesson → name the next step. `allowed-tools` adds `go_deeper` and `Skill`.
 - [ ] T052 (skill-builder) Mentor and hooks suites; all pass.
+*Added 2026-11-19 (T038 finding: "end lesson" typed in the chat ended the lesson in words, but the panel kept it
+open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit numbers; after T052, before T060:*
+
+- [ ] T106 (skill-builder) An `end_lesson` tool in `mentor/tools/common.mjs`: the mentor calls it when the learner
+  asks to stop a lesson before `record_lesson` (in any words, or the End lesson request). It writes nothing to the
+  learner record, ends the lesson in `session.json`, and refuses with no lesson open or after `record_lesson`
+  already ended it. Every lesson `SKILL.md` (the six and `next-mentor`) calls it on that path, then replies in one
+  or two sentences with no demo and no check. Tests for the tool and its refusals. Lesson replies stay
+  byte-identical outside the stop path (`mentor/dev/compare-skill-replies.mjs`). It moves the settings hash.
+- [ ] T107 (panel-builder) The panel treats an `end_lesson` tool event like End lesson, keeping the mentor's
+  last reply visible: the lesson closes, `panel-session.json` ends, Home's Ask and the thread's follow-up bar
+  open, and the next thread send carries the after-lesson wrapper (amendment (e)). Tests, including T038's
+  repro: stop in words, then a Home follow-up logs `thread: "ask"`.
+- [ ] T108 [P] (eval-engineer) One case per lesson set (numbers from the cockpit): the learner says "end lesson"
+  mid-lesson; checks: `end_lesson` called, no `record_lesson`, no demo or check after it, at most two sentences.
+  Runs with T059's sets; the spec-writer adds the FR at T063.
+
 - [ ] T053 [US2] (panel-builder) `panel/lib/ask-thread.js`: Go deeper per offer, inside its answer only; Back to
   your lesson while open; gone after (FR-050). Tests in `panel/test/ask-thread.test.js`.
 - [ ] T054 [US2] (panel-builder) `panel/lib/screens.js`, `panel/lib/lesson.js`: `ask-deeper-starting`,
