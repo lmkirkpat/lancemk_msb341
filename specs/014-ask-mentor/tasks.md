@@ -242,37 +242,37 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 **Goal:** on A, a yes opens the pivot or null lesson on the moving layer and hands back.
 **Independent test:** the ask set's situation 16 on A (ship step) and the pivot and null sets on B1.
 
-- [ ] T042 [US2] (skill-builder) `mentor/lib/session.mjs`: `saveHandIn`, `takeHandIn(skill, compId)` (once,
+- [x] T042 [US2] (skill-builder) `mentor/lib/session.mjs`: `saveHandIn`, `takeHandIn(skill, compId)` (once,
   same comp, lapses after the window). Tests in `mentor/test/session-hand-in.test.mjs`.
-- [ ] T043 [US2] (skill-builder) `go_deeper` in `mentor/tools/ask.mjs` (contracts/ask-tools.md): B1 refusal,
+- [x] T043 [US2] (skill-builder) `go_deeper` in `mentor/tools/ask.mjs` (contracts/ask-tools.md): B1 refusal,
   `NO_ANSWER`, `NOT_OFFERED`, `OFFER_NOT_READY`, `ROUTE_TO_PIVOT`; `practice` and `missing_prerequisite` from
   the record and path. Tests in `mentor/test/ask-go-deeper.test.mjs` (no learner words saved).
-- [ ] T044 [US2] (skill-builder) `mentor/lib/opening.mjs`: the hand-in step (research R6; contracts/hand-in.md):
+- [x] T044 [US2] (skill-builder) `mentor/lib/opening.mjs`: the hand-in step (research R6; contracts/hand-in.md):
   `mode_source: "hand_in"`, never review, `hand_in_lost`. Tests in `mentor/test/opening-hand-in.test.mjs`;
   every existing opening test unchanged.
-- [ ] T045 [US2] (skill-builder) Set the pivot, K6 and K7: `mentor/tools/transform-anchor.mjs`,
+- [x] T045 [US2] (skill-builder) Set the pivot, K6 and K7: `mentor/tools/transform-anchor.mjs`,
   `mentor/lib/anchor.mjs`, `mentor/lib/anchor-check.mjs`: `hand_in: true` in its FINDERS entry; a null with
   children as a hand-in focus; children's footprints at the same frames on base values (015 K2); `your_call`
   when `place_named` (research R7). Tests in `mentor/test/anchor-hand-in.test.mjs` per contracts/hand-in.md ›
   Tests, including AB held 3's padded PNG.
-- [ ] T046 [P] [US2] (skill-builder) Group with a null, K6: `mentor/tools/null-parenting.mjs`: `hand_in: true`;
+- [x] T046 [P] [US2] (skill-builder) Group with a null, K6: `mentor/tools/null-parenting.mjs`: `hand_in: true`;
   the hand-in group as focus. Tests in `mentor/test/null-hand-in.test.mjs`.
-- [ ] T047 [US2] (skill-builder) `record_lesson`'s reply adds `hand_back` (`mentor/tools/common.mjs`). Tests in
+- [x] T047 [US2] (skill-builder) `record_lesson`'s reply adds `hand_back` (`mentor/tools/common.mjs`). Tests in
   `mentor/test/hand-back.test.mjs`.
-- [ ] T048 [P] [US2] (skill-builder) FR-022 in `recommend_next`: a test on 015's Comp 1 capture that no keyframe
+- [x] T048 [P] [US2] (skill-builder) FR-022 in `recommend_next`: a test on 015's Comp 1 capture that no keyframe
   skill is recommended with focus on expression-only layers (`mentor/test/recommend-k4.test.mjs`); change
   `mentor/lib/recommend.mjs` only if it fails.
-- [ ] T049 [US2] (skill-builder) `.claude/skills/anchor-mentor/SKILL.md`: hand-in opening ("We're on [layer], …",
+- [x] T049 [US2] (skill-builder) `.claude/skills/anchor-mentor/SKILL.md`: hand-in opening ("We're on [layer], …",
   first step A then Shift+P); rule 1 with `motion_from` (the parent note rewritten where the parent carries
   Rotation or Scale); rule 2 (say what's checked; never ask for a spot the learner called wrong); K7's null
   focus; a learned skill's lesson with no "review" and no fail words; FR-024's offers; the hand-back last line.
-- [ ] T050 [P] [US2] (skill-builder) `.claude/skills/null-parenting-mentor/SKILL.md`: hand-in opening; rule 1
+- [x] T050 [P] [US2] (skill-builder) `.claude/skills/null-parenting-mentor/SKILL.md`: hand-in opening; rule 1
   (a group whose motion comes from a parent above it); routing (an existing control null is Set the pivot's);
   the hand-back last line.
-- [ ] T051 [US2] (skill-builder) `.claude/skills/ask-mentor/SKILL.md` phase 2: offers (FR-022 to FR-024), the yes
+- [x] T051 [US2] (skill-builder) `.claude/skills/ask-mentor/SKILL.md` phase 2: offers (FR-022 to FR-024), the yes
   (typed, pressed or "show me") → `go_deeper` then `Skill`; the missing prerequisite sentence; TD § 7.1's B1 line
   on `NOT_ON_THIS_RUNTIME`; End lesson → name the next step. `allowed-tools` adds `go_deeper` and `Skill`.
-- [ ] T052 (skill-builder) Mentor and hooks suites; all pass.
+- [x] T052 (skill-builder) Mentor and hooks suites; all pass.
 - [ ] T053 [US2] (panel-builder) `panel/lib/ask-thread.js`: Go deeper per offer, inside its answer only; Back to
   your lesson while open; gone after (FR-050). Tests in `panel/test/ask-thread.test.js`.
 - [ ] T054 [US2] (panel-builder) `panel/lib/screens.js`, `panel/lib/lesson.js`: `ask-deeper-starting`,
