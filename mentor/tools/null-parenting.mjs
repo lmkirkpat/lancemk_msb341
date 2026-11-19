@@ -22,6 +22,7 @@ import * as session from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
 import { opening } from "../lib/opening.mjs";
+import { namesComp } from "../lib/ask-answer.mjs";
 
 registerErrors({ NULL_PARENT_REFUSED: REFUSED_MESSAGE });
 
@@ -106,6 +107,29 @@ function motionFromFor(snapshot, names) {
   return out;
 }
 
+// Spec 014 K6 (contracts/hand-in.md › Per skill): the group a hand-in opens on, the step's layer and
+// every other layer the step names, by whole name, in the comp's order. What the lesson keeps of the
+// hand-in has no learner words; the reply's slice adds `practice` (FR-023).
+function handInGroup(snapshot, h) {
+  const step = Number.isInteger(h.step_number) && Array.isArray(h.steps) ? h.steps[h.step_number - 1] : null;
+  const text = step && typeof step.text === "string" ? step.text : "";
+  const names = layerInfo(snapshot).layers.map((l) => l.name).filter((n, i, all) => all.indexOf(n) === i);
+  const named = names.filter((n) => n !== h.layer && namesComp(text, n));
+  return [h.layer, ...named];
+}
+const lessonHandIn = (h) => ({
+  layer: h.layer, step_number: Number.isInteger(h.step_number) ? h.step_number : null,
+  steps: (Array.isArray(h.steps) ? h.steps : []).map((x) => (x && typeof x.text === "string" ? x.text : typeof x === "string" ? x : "")),
+  place_named: h.place_named === true,
+});
+const handInSlice = (h, learner) => {
+  const kept = lessonHandIn(h);
+  return {
+    layer: kept.layer, step_number: kept.step_number, steps_after: kept.step_number ? kept.steps.slice(kept.step_number) : [],
+    place_named: kept.place_named, practice: !!learner && learner.status === "learned",
+  };
+};
+
 async function nullParentSnapshot({ mode: asked, skill_options } = {}) {
   const snapshot = await takeSnapshot();
   // FR-048, FR-049: without a mode, the tool picks lesson or review (spec 004 › The opening read),
@@ -118,9 +142,15 @@ async function nullParentSnapshot({ mode: asked, skill_options } = {}) {
     // A read from before wave B can't place layers on screen; start nothing.
     return json({ can_teach: false, why: "no_layer_info", ...said, comp: { name: snapshot.comp.name } });
   }
-  const focus = skill_options && Array.isArray(skill_options.focus) ? skill_options.focus : null;
-  const open = openLesson(snapshot.comp.id, mode);
+  // K6: a hand-in sets the focus to its group (unless the call names one) and starts a new lesson.
+  const taken = opened.mode_source === "hand_in" && opened.hand_in && opened.hand_in.layer ? opened.hand_in : null;
+  let focus = skill_options && Array.isArray(skill_options.focus) ? skill_options.focus : null;
+  if (taken && !focus) focus = handInGroup(snapshot, taken);
+  const open = taken ? null : openLesson(snapshot.comp.id, mode);
   const opts = { skill: SKILL, analyze, mode };
+  if (taken) opts.hand_in = lessonHandIn(taken);
+  // The slice on every reply while the lesson carries one (and once for a lost layer).
+  const sliceOf = (s) => (s && s.hand_in ? { hand_in: handInSlice(s.hand_in, opened.learner) } : opened.hand_in ? { hand_in: handInSlice(opened.hand_in, opened.learner) } : {});
 
   if (focus && !(open && sameList(open.focus, focus))) {
     // A new or changed focus: every name unique and every layer allowed before any lesson change.
@@ -130,7 +160,10 @@ async function nullParentSnapshot({ mode: asked, skill_options } = {}) {
     const problems = focusProblems(snapshot, focus, { exclude });
     if (problems.unknown.length) throw new MentorError("UNKNOWN_LAYER", `${problems.unknown.join(", ")} isn't in the comp. Use the layer's name exactly as it appears in the comp.`);
     if (!problems.ok) {
-      return json({ focus_set: false, rename_needed: problems.rename_needed, refused: problems.refused, focus_size: problems.size, ...said, comp: { name: snapshot.comp.name } });
+      // A hand-in whose group can't be the focus still opens a lesson on that comp, with no focus,
+      // so the lesson keeps the hand-in for its hand-back.
+      const kept = taken ? session.start(snapshot, opts).session : null;
+      return json({ focus_set: false, rename_needed: problems.rename_needed, refused: problems.refused, focus_size: problems.size, ...said, comp: { name: snapshot.comp.name }, ...(taken ? { focus_tried: focus, ...sliceOf(kept) } : {}) });
     }
     let started;
     try {
@@ -143,11 +176,12 @@ async function nullParentSnapshot({ mode: asked, skill_options } = {}) {
       started = resumed;
     }
     if (started.session.focus === null || !started.session.focus) {
-      return json({ focus_set: false, refused: started.analysis.focus_problems ? started.analysis.focus_problems.refused : [], ...said, comp: { name: snapshot.comp.name } });
+      return json({ focus_set: false, refused: started.analysis.focus_problems ? started.analysis.focus_problems.refused : [], ...said, comp: { name: snapshot.comp.name }, ...sliceOf(taken ? started.session : null) });
     }
-    return snapshotReply(snapshot, started, { focus_set: true, ...fields });
+    return snapshotReply(snapshot, started, { focus_set: true, ...fields, ...sliceOf(started.session) });
   }
-  return snapshotReply(snapshot, session.start(snapshot, opts), fields);
+  const started = session.start(snapshot, opts);
+  return snapshotReply(snapshot, started, { ...fields, ...sliceOf(started.session) });
 }
 
 // The target's P2 times in the baseline (the demo's reads ask for them).
