@@ -1,0 +1,142 @@
+{
+  "run_at": "2026-11-19T21:08:20.430Z",
+  "options": {
+    "only": "56",
+    "changed": false,
+    "repeat": 1,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.17,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 0,
+    "total": 1,
+    "percent": 0,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "56-hand-in-group-follows-an-expression-parent",
+      "title": "From an answer, a group whose motion comes from a parent above it: rock.png already follows Shake Control, a null an expression moves. The lesson says in a sentence that the parent already moves it, that where it turns is Set the pivot on Shake Control, and teaches no second null",
+      "covers": [
+        "spec014-rule-1",
+        "FR-026",
+        "T050",
+        "T058"
+      ],
+      "fixture_sources": {
+        "expressions/comp1.json": "live"
+      },
+      "hash": "0eefa786c4587d5b24fccffef81af4b355dcd646821ff7e0c1c91cd7be13817e",
+      "pass": false,
+      "passes": 0,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:names_the_parent",
+              "pass": true,
+              "detail": "turn 1: \"Shake Control\""
+            },
+            {
+              "check": "say:routes_to_the_pivot",
+              "pass": false,
+              "detail": "turn 1: never matched /\\bpivot\\b/"
+            },
+            {
+              "check": "say:no_second_null",
+              "pass": false,
+              "detail": "turn 1 said \"new null\""
+            }
+          ],
+          "rubric": [],
+          "cost": 0.167929,
+          "session_id": "c3a022b2-1400-4ffc-9335-42944bd8674d",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"focus_set\": false,\n  \"rename_needed\": [],\n  \"refused\": [\n    {\n      \"layer\": \"rock.png\",\n      \"reason\": \"parented\",\n      \"parent\": \"Shake Control\"\n    }\n  ],\n  \"focus_size\": null,\n  \"mode\": \"lesson\",\n  \"mode_source\": \"hand_in\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true,\n  \"comp\": {\n    \"name\": \"Comp 1\"\n  },\n  \"focus_tried\": [\n    \"rock.png\"\n  ],\n  \"hand_in\": {\n    \"layer\": \"rock.png\",\n    \"step_number\": 1,\n    \"steps_after\": [\n      \"Play it back.\"\n    ],\n    \"place_named\": false,\n    \"practice\": false\n  }\n}\nMENTOR: rock.png already follows Shake Control, so it can't be put under a new null here.\n\nWhich layers should move as one, like the parts of a lower third or a logo lockup?\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

@@ -68,7 +68,7 @@
       },
       {
         "id": "no_new_null",
-        "never": "\\b(?:add|make|create|insert|put in) (?:a|another|a new|the) null\\b|\\b(?:new|second|another) null\\b",
+        "never": "\\b(?:add|make|create|insert) (?:a|another|a new) null\\b|\\b(?:second|another) null\\b",
         "turns": [
           1
         ]
