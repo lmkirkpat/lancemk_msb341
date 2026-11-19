@@ -30,6 +30,9 @@ const STATUS = {
   // line; these are for FR-062's one-line-per-tool rule and any lesson that calls them.
   describe_layers: "Reading the open comp…", // MU's own line (COPY.ask.reading)
   give_answer: "Writing the answer…", // MU has no line for this; the shortest plain one, for design review
+  // Spec 014 phase 2: Go deeper's hand-over (MU ask-deeper-starting's own status line) and T106's stop.
+  go_deeper: "Getting your lesson ready…",
+  end_lesson: "Ending the lesson…", // not in MU; the shortest plain line, for design review
 };
 
 function statusFor(toolName) {

@@ -60,7 +60,7 @@ test("start spawns claude with the contract's arguments, cwd and PATH", () => {
   assert.deepEqual(JSON.parse(args[args.indexOf("--settings") + 1]), { outputStyle: "default" }, "no builder output style in the panel");
 });
 
-test("the mentor gets only ToolSearch and the six ae-mentor tools (contract › Guarantees)", () => {
+test("the mentor gets only ToolSearch and the seven ae-mentor tools (contract › Guarantees)", () => {
   const h = harness();
   h.adapter.start();
   const { args } = h.spawned[0];
@@ -190,7 +190,7 @@ const ID = "33333333-3333-4333-8333-333333333333";
 const EASING_ARGS = (flag) => ["--print", "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",
   "--include-partial-messages", flag, ID, "--mcp-config", ".mcp.json", "--strict-mcp-config", "--tools", "ToolSearch",
   "--allowedTools", "mcp__ae-mentor__read_learner_record", "mcp__ae-mentor__snapshot_project", "mcp__ae-mentor__preview_frame",
-  "mcp__ae-mentor__set_ease", "mcp__ae-mentor__diff_since_last", "mcp__ae-mentor__record_lesson", "--max-turns", "12",
+  "mcp__ae-mentor__set_ease", "mcp__ae-mentor__diff_since_last", "mcp__ae-mentor__record_lesson", "mcp__ae-mentor__end_lesson", "--max-turns", "12",
   "--settings", LEARNER_SETTINGS];
 const asSet = (list) => [...list].sort();
 
@@ -229,8 +229,8 @@ test("key types gets key types' tools, not easing's (the turn 2 denial in resear
   assert.notDeepEqual(asSet(listed), asSet(MENTOR_TOOLS.map((t) => PREFIX + t)));
 });
 
-test("the fallback is easing's six: no skill, a bad name, an unreadable or unusable SKILL.md", () => {
-  const six = EASING_ARGS("--session-id");
+test("the fallback is easing's seven: no skill, a bad name, an unreadable or unusable SKILL.md", () => {
+  const seven = EASING_ARGS("--session-id");
   const noFile = { readFileSync() { throw new Error("ENOENT"); } };
   const content = (text) => ({ readFileSync: () => text });
   const cases = {
@@ -248,7 +248,7 @@ test("the fallback is easing's six: no skill, a bad name, an unreadable or unusa
     "no allowed-tools": { skill: "key-types-mentor", runtimePath: "/runtime", fs: content("---\nname: x\n---\n") },
     "only Skill": { skill: "key-types-mentor", runtimePath: "/runtime", fs: content("---\nallowed-tools: Skill\n---\n") },
   };
-  for (const [name, opts] of Object.entries(cases)) assert.deepEqual(launchArgs("--session-id", ID, opts), six, name);
+  for (const [name, opts] of Object.entries(cases)) assert.deepEqual(launchArgs("--session-id", ID, opts), seven, name);
 });
 
 test("start({ skill }) launches with that skill's list, read from the runtime folder", () => {
