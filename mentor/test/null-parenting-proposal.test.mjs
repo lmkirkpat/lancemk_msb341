@@ -251,8 +251,16 @@ test("a focus of 1 or more than 4, a refused layer or an unknown name sets no fo
   const s = load("practice2b.json");
   assert.equal(focusProblems(s, ["Tile"]).size, "too_few");
   assert.equal(focusProblems(s, ["Tile", "Caption", "Stamp", "Row A", "Row B"]).size, "too_many");
-  assert.deepEqual(focusProblems(s, ["Tile", "Shadow"]).refused, [{ layer: "Shadow", reason: "parented", parent: "Plate" }]);
+  assert.deepEqual(focusProblems(s, ["Tile", "Shadow"]).refused, [{ layer: "Shadow", reason: "parented", parent: "Plate", parent_is_null: false }]);
   assert.throws(() => analyze(s, { skill_options: { focus: ["Tile", "Nope"] } }), (e) => e.code === "UNKNOWN_LAYER");
+});
+
+test("a refused layer a control null carries says so (parent_is_null), so the lesson routes it to Set the pivot", async () => {
+  const { comp1 } = await import("./fixtures/expressions/comp1.mjs");
+  assert.deepEqual(focusProblems(comp1(), ["rock.png", "logo.png"]).refused, [
+    { layer: "rock.png", reason: "parented", parent: "Shake Control", parent_is_null: true },
+    { layer: "logo.png", reason: "parented", parent: "Shake Control", parent_is_null: true },
+  ]);
 });
 
 test("review: past targets and already-parented layers are dropped before proposing (FR-024)", () => {

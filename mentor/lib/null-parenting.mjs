@@ -205,7 +205,9 @@ export function focusProblems(snapshot, names, { exclude = [] } = {}) {
     if (rename_needed.includes(n) || unknown.includes(n)) continue;
     const c = byLayer.get(n);
     if (c.bucket === "never" || out.has(n)) {
-      refused.push({ layer: n, reason: out.has(n) ? "past_target" : c.reason, ...(c.parent ? { parent: c.parent } : {}) });
+      // parent_is_null (review of T060, null case 56): a layer a control null carries is the pivot
+      // lesson's, so SKILL.md routes it there, from an answer or not.
+      refused.push({ layer: n, reason: out.has(n) ? "past_target" : c.reason, ...(c.parent ? { parent: c.parent, parent_is_null: c.parent_is_null } : {}) });
       continue;
     }
     focus.add(n);
