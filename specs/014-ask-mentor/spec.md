@@ -81,8 +81,8 @@ line with FR-028, FR-018 and FR-008.
    - **T037 met on 2026-11-18 at `91fd9c7`:** 18/18 with `--repeat 3` (majority pass), $11.04, no FR-061 hard
      check failing, refusals 3 of 60 answer calls (all case 11, each passed on retry). Situations 4 and 5
      (cases 02 to 05) passed 3 of 3. Situation 1 (case 01) passed 2 of 3 in the full run and 3 of 3 in a re-run
-     at the same commit, so 5 of 6. The builder accepted that, with the step order on the watch list. So
-     SC-006's B1 half is met as the builder accepted it, not by the letter of its "3 of 3" for situation 1.
+     at the same commit, so 5 of 6, with the step order on the watch list. **SC-006's B1 half is met** under
+     SC-006 as amended (h): every case passed a majority, and no hard-rule check failed on any run.
    - **The ask set's bar from now on is `--repeat 3` with a majority pass**, because single runs flip.
    - **T038's live B1 smoke is logged** (2026-11-19, `c0aec58`): 12 checks, first sign of work 4 of 4 within
      10 s (median 2.2 s), and three findings (item 7).
@@ -110,6 +110,13 @@ line with FR-028, FR-018 and FR-008.
    - **Finding 3, no-comp prose and cost:** Edge Cases › Watch W-2, and notes on FR-058 and SC-005; cost and
      tokens are rechecked on A at T089.
    No approved decision changes. No approved FR changes; FR-063 is new.
+
+**Amended 2026-11-19 (h), the builder's decisions on T040's hand-back, relayed by the cockpit:** (1) **SC-006's
+bar** is a run at `--repeat 3` with a majority pass per case, for every situation, situation 1 and AB's held
+cases included; every FR-061 hard-rule check must still pass on every run. T037 (amendment (g) item 1) meets it.
+`quickstart.md` Phase 1 step 1 says the same. (2) Spec 015's other "target" mentions (SC-002, E14 to E16, the
+Link entity) stay as written; 015 Amendment 10's note covers them. Changed here: SC-006, amendment (g) item 1,
+quickstart. T037's task line still says "3 of 3" and is aligned at T063. No approved decision changes.
 
 **Input**: Cockpit task, sprint 5: "Write spec 014 (the ask mode). Settle the answer's data (explanation,
 step lines, offered skills, closing offer as fields), no offered skills on B1, and the bridge's comp-active
@@ -762,6 +769,10 @@ it happens in the three sessions; a fix needs its own amendment.
 - **SC-006**: **Ask eval set.** On B1, at least **80%** of cases pass and **every** hard-rule check passes on
   the merge commit; TD § 17's first five (AB's held cases) pass **3 of 3**. Before sprint 5 closes, one full A
   run meets spec 013 FR-033 against that B1 baseline. *Measured by:* eval runs, logged in the set's README.
+  *Amended 2026-11-19 (h), the builder's decision:* the bar is a run of the whole set at `--repeat 3`. A case
+  passes when it passes on a majority of its 3 runs (2 of 3), and that holds for **every** situation, situation
+  1 and AB's held cases included; the "3 of 3" above no longer applies. At least **80%** of cases pass that
+  way. **Every** FR-061 hard-rule check MUST pass on **every** run, not just a majority.
 - **SC-007**: **The six skills hold.** After the shared-rule changes, each set still meets its own SC-006 on B1
   with every hard-rule check passing, and the new rule cases (Eval plan) pass 3 of 3; sets whose skill changed
   re-run on A before the first tester (`decisions/011`). *Measured by:* eval runs.

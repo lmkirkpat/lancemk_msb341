@@ -26,8 +26,9 @@ every existing suite unchanged.
 
 ## Phase 1 (B1)
 
-1. Evals: `node product/evals/ask/run.mjs --dry-run`, then `node product/evals/ask/run.mjs` (B1). Expect
-   SC-006's bar on the phase 1 cases; `--only 01 --repeat 3` for each of AB's held cases (situations 1, 4, 5).
+1. Evals: `node product/evals/ask/run.mjs --dry-run`, then `node product/evals/ask/run.mjs --repeat 3` (B1).
+   Expect SC-006's bar (amended 2026-11-19 (h)): each case passes on a majority of its 3 runs, AB's held cases
+   (situations 1, 4, 5) included, at least 80% of cases pass, and every hard-rule check passes on every run.
 2. Live smoke in the panel (B1, Comp 1 open): ask "make the rock shake from where the hammer hits, not the
    center". Expect: the first line names Comp 1; the steps are on Shake Control, hit sizes first; Steps
    drawn from data; Your steps folded; **no Go deeper** (B1). Ask "what does the sweep control layer do?":
