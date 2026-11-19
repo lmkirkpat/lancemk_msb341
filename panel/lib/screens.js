@@ -326,10 +326,15 @@ function savedLine(m) {
 
 // D6: saved with no pass has no state of its own; it keeps its screen, adds Saved and the ways out, and says nothing about a pass.
 const savedNoPass = (v) => !!v && v.saved === true && !v.passed;
+// Spec 014 T107: ended by the mentor with nothing recorded. Like D6, no state of its own: the screen
+// stays, with the mentor's last reply, a line that says it ended, and the ways out.
+const endedNoSave = (v) => !!v && v.ended === true && !v.passed && v.saved !== true;
+const closedNoPass = (v) => savedNoPass(v) || endedNoSave(v);
 
 function lessonBanner(m) {
   const s = m.state;
   if (savedNoPass(m.lesson)) return banner("info", COPY.lesson.saved, "");
+  if (endedNoSave(m.lesson)) return banner("info", COPY.lesson.ended, "");
   if (s === "lesson-passed" || s === "lesson-passed-pivot") return banner("info", COPY.lesson.passed, savedLine(m));
   if (s === "practice-passed") return banner("info", COPY.lesson.review_passed, savedLine(m));
   if (s === "lesson-passed-unsaved") return banner("warn", COPY.lesson.unsaved.title, COPY.lesson.unsaved.body);
@@ -459,8 +464,8 @@ function actionsHtml(m) {
   }
   if (s === "lesson-exited") return `<div class="actions">${btn(LABELS.start, "start", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if (s === "lesson-start-failed") return `<div class="actions">${btn(LABELS.try_again, "try_again", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
-  if ((FINISHED.includes(s) || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
-  if (FINISHED.includes(s) || savedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
+  if ((FINISHED.includes(s) || s === "lesson-passed-unsaved" || closedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
+  if (FINISHED.includes(s) || closedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
   if (s === "lesson-passed-unsaved") return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}</div>`;
   if (s === "lesson-passed-asking") return "";
   if (s === "lesson-starting") return whyOff(COPY.paused.after_look);
@@ -497,7 +502,7 @@ const VERB_KEY = { check: "check", check_again: "check", hint: "hint", show_me: 
 
 function askHtml(m) {
   const s = m.state;
-  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting", "practice-nothing-new"].includes(s) || savedNoPass(m.lesson)) return "";
+  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting", "practice-nothing-new"].includes(s) || closedNoPass(m.lesson)) return "";
   if ([...FINISHED, "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
   const open = m.can_ask && !(m.turn && m.turn.busy) && !m.error;
   return `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${esc(COPY.ask_label)}</label><input id="ask-in" type="text" placeholder="${esc(COPY.ask_placeholder)}"${open ? "" : " disabled"} /><button type="submit" aria-label="${esc(COPY.buttons.send)}"${open ? "" : " disabled"}>⏎</button></form>`;

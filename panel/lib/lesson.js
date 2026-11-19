@@ -36,6 +36,7 @@ function initialLesson(opts) {
     null_stage: null,
     landing_hard: [],
     no_new_target: false,
+    ended: false, // spec 014 T107: the mentor's end_lesson ended it, with nothing recorded
   };
 }
 
@@ -66,6 +67,9 @@ function markStale(v, kind, comp) {
 const aeLost = (ev) => !ev.ok && /AE_UNREACHABLE|AE_BUSY/.test(ev.text || "");
 // The mentor's refusal of a second save: the lesson is saved, even if the panel never saw the first.
 const alreadySaved = (ev) => !ev.ok && /^LESSON_ALREADY_SAVED/.test(ev.text || "");
+// Spec 014 T107: end_lesson ended the lesson, or refused because it already was. LESSON_NOT_OPEN
+// (no lesson in the mentor's session at all) says nothing about this one, so it changes nothing.
+const endedNow = (ev) => (ev.ok === true && !!ev.json && ev.json.ended === true) || (!ev.ok && /^LESSON_ALREADY_ENDED/.test(ev.text || ""));
 
 function onSnapshot(v, ev) {
   const r = ev.json;
@@ -156,6 +160,7 @@ function reduceLesson(view, ev) {
   if (ev.type !== "tool_result") return v;
   if (DEMO_TOOLS.has(ev.name)) return ev.ok ? onDemo(v) : v;
   if (ev.name === "record_lesson") return Object.assign({}, v, { saved: v.saved === true || alreadySaved(ev) || (ev.ok === true && !!ev.json && ev.json.saved === true) }); // a refused second record can't unsay the first
+  if (ev.name === "end_lesson") return endedNow(ev) ? Object.assign({}, v, { ended: true }) : v;
   if (list.isSnapshot(ev.name)) return onSnapshot(v, ev);
   if (list.isCheck(ev.name)) return onCheck(v, ev);
   return v;

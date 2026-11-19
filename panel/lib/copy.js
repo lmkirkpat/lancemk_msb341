@@ -159,6 +159,7 @@ const COPY = {
     check_passed: "Check passed.",
     one_more_question: "One more question before this lesson is saved.",
     saved: "Saved to your history.",
+    ended: "Lesson ended, not saved.", // spec 014 T107: the mentor ended it with nothing to record (not in MU; for design review)
     unsaved: { title: "Lesson passed, but it couldn't be saved", body: "Your comp is fine. This lesson won't appear in your history, and the mentor won't remember it." },
     picking_up: "Picking up your earlier lesson on this comp.",
     resumed_divider: "Picked up where you left off",

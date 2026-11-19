@@ -288,8 +288,19 @@ function createApp(deps) {
       }
       loadRecord();
     }
+    if (e.name === "end_lesson" && state.lesson && state.lesson.ended && state.lesson_open) closeEnded();
     persist();
     changed();
+  }
+
+  // Spec 014 T107: the mentor ended the lesson with nothing to record (end_lesson), in any words or
+  // from a request. It closes as End lesson would, but the chat stays, so the mentor's last reply is
+  // still on screen; panel-session.json ends, so it can't come back as Pick up, and Home's Ask and the
+  // thread open once the turn is done. T038's live bug: the lesson stayed open after a stop in words.
+  function closeEnded() {
+    state.lesson_over = true;
+    state.lesson_open = false;
+    if (state.session) state.session.ended = true;
   }
 
   // Nothing new on this comp (FR-052): nothing to do and nothing recorded, so the lesson closes like a
