@@ -233,6 +233,17 @@ async function recommendNext({ requested_skill } = {}, { skills, finders }) {
   return json(result);
 }
 
+// Spec 014 FR-026 (contracts/hand-in.md › Hand-back): a lesson opened from an answer's step hands
+// back to the next one: { step_number, next_step } (null after the last step). Absent for every
+// other lesson, so their replies are as before.
+export function handBack(lesson) {
+  const h = lesson && lesson.hand_in;
+  if (!h || !Number.isInteger(h.step_number)) return {};
+  const steps = Array.isArray(h.steps) ? h.steps : [];
+  const next = steps[h.step_number];
+  return { hand_back: { step_number: h.step_number, next_step: typeof next === "string" && next ? next : null } };
+}
+
 // `skills`: every skill ID the tool files declare; `finders`: their FINDERS, by skill ID
 // (mentor/tools/index.mjs). A plain array is read as `skills` (the call before spec 004).
 export function commonTools(options) {
@@ -244,7 +255,7 @@ export function commonTools(options) {
     if (copied.length) throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: copied });
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();
-    return json({ saved: true, skill: { status: skill.status, next: skill.next } });
+    return json({ saved: true, skill: { status: skill.status, next: skill.next }, ...handBack(lesson) });
   }
 
   // T061, T062: whatever refuses the call (a copy, a mismatch with the lesson's checks, a field
