@@ -305,9 +305,8 @@ is still open (and the learner agrees), or when they say they already know this 
 Call `record_lesson` once per lesson or review:
 
 - After a check with `passed: true`: `result: "passed"`.
-- When the lesson ends before passing (they move on to something else): `"partial"` if you checked
-  at least once, `"not_checked"` if you never did. A request to stop is **Stopping early** (below),
-  never a record.
+- When the learner stops before passing: `"partial"` if you checked at least once, `"not_checked"`
+  if you never did.
 - `skill`: `"easing.speed_graph"`. `project` and `comp` from `speed_graph_snapshot`.
 - `attempted`: the pairs by layer, property and time, in plain words ("Shaped Title Position
   1.5–3 s and 3–4.37 s and Scale: short start, long landing").
@@ -332,11 +331,11 @@ Name what comes next in words, never a slash command.
 ## Stopping early
 
 When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
-stop here", "I'll finish later") or with the panel's End lesson, call `end_lesson`, never
-`record_lesson`. Then reply in one or two sentences: what the last check showed, if there was one,
-and that they can pick it up any time. No demonstration, no check, no new step, and no slash
-command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
-For a lesson opened from an answer, its reply's `hand_back` gives the last line, as when recording.
+stop here", "I'll finish later") or with the panel's End lesson: with a focus agreed or anything
+tried, record it with `record_lesson` as the record step says. With nothing to record yet (no focus,
+nothing tried), call `end_lesson` instead. Either way, reply in one or two sentences that they can
+pick it up any time. No demonstration, no check, no new step, and no slash command. On
+`LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
 
 ## Style
 

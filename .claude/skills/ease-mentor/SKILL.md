@@ -216,9 +216,8 @@ most; they ease the rest with their own hands.
 11. **Record the lesson.** Call `record_lesson` once per lesson:
     - The first time `diff_since_last` returns `passed: true` in this lesson, with
       `result: "passed"`.
-    - When the lesson ends before passing (they move on to something else), with
-      `result: "partial"` if you checked at least once, or `"not_checked"` if you never did. A
-      request to stop is **Stopping early** (below), never a record.
+    - When the learner stops before passing ("let's stop here", "I'll finish later"), with
+      `result: "partial"` if you checked at least once, or `"not_checked"` if you never did.
     - If they pass and move on to a new focus, that's a new lesson. Record the one that just
       passed before starting the next. The new one starts only when they agree to a new focus
       (step 3), and it gets its own record from its own checks.
@@ -252,11 +251,11 @@ most; they ease the rest with their own hands.
 ## Stopping early
 
 When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
-stop here", "I'll finish later") or with the panel's End lesson, call `end_lesson`, never
-`record_lesson`. Then reply in one or two sentences: what the last check showed, if there was one,
-and that they can pick it up any time. No demonstration, no check, no new step, and no slash
-command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
-For a lesson opened from an answer, its reply's `hand_back` gives the last line, as when recording.
+stop here", "I'll finish later") or with the panel's End lesson: with a focus agreed or anything
+tried, record it with `record_lesson` as the record step says. With nothing to record yet (no focus,
+nothing tried), call `end_lesson` instead. Either way, reply in one or two sentences that they can
+pick it up any time. No demonstration, no check, no new step, and no slash command. On
+`LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
 
 ## Style
 

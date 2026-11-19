@@ -356,8 +356,7 @@ at most; they add the null, place it, parent the rest and give it its move with 
 11. **Record the lesson.** Call `record_lesson` once per lesson that had a group, with `skill`
     `parenting.null`:
     - `result: "passed"` when the last check passed; `"partial"` after a check that didn't;
-      `"not_checked"` before any check. A request to stop is **Stopping early** (below), never a
-      record.
+      `"not_checked"` before any check.
     - `project` and `comp` from `null_parent_snapshot`; `demo_used`: whether `null_parent_demo` ran.
     - `attempted`: the layers, the null's name and the move ("Parented Tile, Caption and Stamp to
       Group Null and turned it on its Rotation"). The move is only what the last check found it on:
@@ -458,11 +457,11 @@ jumps up front, and never the word "null"** until it passes. A jump that happens
 ## Stopping early
 
 When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
-stop here", "I'll finish later") or with the panel's End lesson, call `end_lesson`, never
-`record_lesson`. Then reply in one or two sentences: what the last check showed, if there was one,
-and that they can pick it up any time. No demonstration, no check, no new step, and no slash
-command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
-For a lesson opened from an answer, its reply's `hand_back` gives the last line, as when recording.
+stop here", "I'll finish later") or with the panel's End lesson: with a focus agreed or anything
+tried, record it with `record_lesson` as the record step says. With nothing to record yet (no focus,
+nothing tried), call `end_lesson` instead. Either way, reply in one or two sentences that they can
+pick it up any time. No demonstration, no check, no new step, and no slash command. On
+`LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
 
 ## Style
 

@@ -255,9 +255,8 @@ most; they hold the rest with their own hands.
 
 10. **Record the lesson.** Call `record_lesson` once per lesson that had a focus, with `skill`
     `keyframes.types`:
-    - `result: "passed"` when the last `key_types_check` passed; `"partial"` if the lesson ends after a
-      check that didn't pass; `"not_checked"` if it ends before any check. A request to stop is
-      **Stopping early** (below), never a record.
+    - `result: "passed"` when the last `key_types_check` passed; `"partial"` if they stop after a
+      check that didn't pass; `"not_checked"` if they stop before any check.
     - `project` and `comp` from `key_types_snapshot`; `demo_used`: whether `key_types_demo` ran.
     - `attempted`: the pairs by layer and property ("Held 3 Blink Opacity pairs"), including a
       practice blink they made.
@@ -301,11 +300,11 @@ question.** "I already know it" runs the same way.
 ## Stopping early
 
 When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
-stop here", "I'll finish later") or with the panel's End lesson, call `end_lesson`, never
-`record_lesson`. Then reply in one or two sentences: what the last check showed, if there was one,
-and that they can pick it up any time. No demonstration, no check, no new step, and no slash
-command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
-For a lesson opened from an answer, its reply's `hand_back` gives the last line, as when recording.
+stop here", "I'll finish later") or with the panel's End lesson: with a focus agreed or anything
+tried, record it with `record_lesson` as the record step says. With nothing to record yet (no focus,
+nothing tried), call `end_lesson` instead. Either way, reply in one or two sentences that they can
+pick it up any time. No demonstration, no check, no new step, and no slash command. On
+`LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
 
 ## Style
 
