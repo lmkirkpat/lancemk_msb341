@@ -476,3 +476,31 @@ export function peekHandIn() {
   const h = read().hand_in;
   return h && typeof h === "object" && !Array.isArray(h) ? structuredClone(h) : null;
 }
+
+// Spec 014 T106: the learner stopped the lesson before it was recorded. The current lesson is taken
+// out of session.json, so no later snapshot continues or resumes it, and `current` is cleared; the
+// ask and hand-in blocks stay. Returns the lesson as it was. LESSON_NOT_OPEN with no current lesson;
+// LESSON_ALREADY_ENDED once record_lesson has saved it.
+registerErrors({
+  LESSON_NOT_OPEN: "There's no lesson open to end. Answer the learner plainly; nothing needs saving.",
+  LESSON_ALREADY_ENDED: "This lesson is already saved, so it's already over. Answer the learner plainly; nothing more needs saving.",
+});
+
+export function endLesson() {
+  const state = read();
+  const key = currentKey(state);
+  const lesson = key != null ? state.lessons[key] : null;
+  if (!lesson) throw new MentorError("LESSON_NOT_OPEN");
+  if (lesson.pass_saved || lesson.recorded) throw new MentorError("LESSON_ALREADY_ENDED");
+  delete state.lessons[key];
+  state.current = null;
+  write(state);
+  return lesson;
+}
+
+// record_lesson saved this lesson (any result), so end_lesson has nothing left to end.
+export function markRecorded() {
+  return updateCurrent((lesson) => {
+    lesson.recorded = true;
+  });
+}

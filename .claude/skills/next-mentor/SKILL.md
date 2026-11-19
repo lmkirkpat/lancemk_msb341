@@ -1,7 +1,7 @@
 ---
 name: next-mentor
 description: Suggest the one After Effects skill to learn next, from the learner's record and their open comp, then hand over to that skill's lesson. Use when the user says "/next-mentor", "what should I learn next", "what's next", or starts a session without naming a skill.
-allowed-tools: mcp__ae-mentor__read_learner_record, mcp__ae-mentor__recommend_next, Skill
+allowed-tools: mcp__ae-mentor__read_learner_record, mcp__ae-mentor__recommend_next, mcp__ae-mentor__end_lesson, Skill
 ---
 
 # Next Mentor
@@ -97,6 +97,13 @@ recommendation.)
    with `focus_layers`, pass the layer names on, so the lesson can propose them. Only hand over to
    a skill whose `built` is true or that `recommend_next` recommended; if the skill's command
    isn't available, say it isn't ready yet.
+
+## Stopping early
+
+If the learner asks to stop a lesson that's still open (in any words, or with the panel's End
+lesson), call `end_lesson`, then reply in one or two sentences that they can pick it up any time.
+No demonstration, no check, no slash command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply
+the same way: there's nothing to end.
 
 ## Style
 

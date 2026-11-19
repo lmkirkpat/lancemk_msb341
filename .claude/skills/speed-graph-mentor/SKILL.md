@@ -1,7 +1,7 @@
 ---
 name: speed-graph-mentor
 description: Lead an After Effects lesson on shaping an ease in the speed graph, on the learner's own open comp - a quick start and a soft landing that still comes to rest. Picks eased pairs the learner made earlier, asks them to read the speed graph, explains influence with a frame from their comp, demonstrates on one pair only, and checks every pair they shape. Also runs this skill's review. Use when the user says "/speed-graph-mentor", "shape my ease", "speed graph", "make it land softly", or asks to learn the Graph Editor's speed graph in After Effects.
-allowed-tools: mcp__ae-mentor__speed_graph_snapshot, mcp__ae-mentor__speed_graph_demo, mcp__ae-mentor__speed_graph_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__speed_graph_snapshot, mcp__ae-mentor__speed_graph_demo, mcp__ae-mentor__speed_graph_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Speed Graph Mentor
@@ -305,8 +305,9 @@ is still open (and the learner agrees), or when they say they already know this 
 Call `record_lesson` once per lesson or review:
 
 - After a check with `passed: true`: `result: "passed"`.
-- When the learner stops before passing: `"partial"` if you checked at least once, `"not_checked"`
-  if you never did.
+- When the lesson ends before passing (they move on to something else): `"partial"` if you checked
+  at least once, `"not_checked"` if you never did. A request to stop is **Stopping early** (below),
+  never a record.
 - `skill`: `"easing.speed_graph"`. `project` and `comp` from `speed_graph_snapshot`.
 - `attempted`: the pairs by layer, property and time, in plain words ("Shaped Title Position
   1.5–3 s and 3–4.37 s and Scale: short start, long landing").
@@ -327,6 +328,15 @@ If it returns `UNSAFE_RECORD`, rewrite without the personal detail and try again
 `RECORD_MISMATCH`, fix the field it names and record again, without mentioning it. A short "I've
 noted that for next time" is enough.
 Name what comes next in words, never a slash command.
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson, call `end_lesson`, never
+`record_lesson`. Then reply in one or two sentences: what the last check showed, if there was one,
+and that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
+For a lesson opened from an answer, its reply's `hand_back` gives the last line, as when recording.
 
 ## Style
 

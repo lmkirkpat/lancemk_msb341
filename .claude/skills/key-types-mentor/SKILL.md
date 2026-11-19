@@ -1,7 +1,7 @@
 ---
 name: key-types-mentor
 description: Lead an After Effects lesson on picking the key type on purpose (hold and linear) in the learner's own open comp. Asks what's meant to snap, shows a frame from their comp, holds one pair at most as a demonstration, checks the learner's own holds pair by pair, and asks what should run at constant speed. Use when the user says "/key-types-mentor", "make it snap", "hold keyframes", "key types", or asks why a blink or cut fades instead of snapping.
-allowed-tools: mcp__ae-mentor__key_types_snapshot, mcp__ae-mentor__key_types_demo, mcp__ae-mentor__key_types_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__key_types_snapshot, mcp__ae-mentor__key_types_demo, mcp__ae-mentor__key_types_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Key Types Mentor
@@ -255,8 +255,9 @@ most; they hold the rest with their own hands.
 
 10. **Record the lesson.** Call `record_lesson` once per lesson that had a focus, with `skill`
     `keyframes.types`:
-    - `result: "passed"` when the last `key_types_check` passed; `"partial"` if they stop after a
-      check that didn't pass; `"not_checked"` if they stop before any check.
+    - `result: "passed"` when the last `key_types_check` passed; `"partial"` if the lesson ends after a
+      check that didn't pass; `"not_checked"` if it ends before any check. A request to stop is
+      **Stopping early** (below), never a record.
     - `project` and `comp` from `key_types_snapshot`; `demo_used`: whether `key_types_demo` ran.
     - `attempted`: the pairs by layer and property ("Held 3 Blink Opacity pairs"), including a
       practice blink they made.
@@ -296,6 +297,15 @@ question.** "I already know it" runs the same way.
    way. It doesn't change the review's result.
 7. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`,
    with `next` naming what's still off if it didn't pass.
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson, call `end_lesson`, never
+`record_lesson`. Then reply in one or two sentences: what the last check showed, if there was one,
+and that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
+For a lesson opened from an answer, its reply's `hand_back` gives the last line, as when recording.
 
 ## Style
 

@@ -1,7 +1,7 @@
 ---
 name: anchor-mentor
 description: Lead an After Effects lesson on setting a layer's pivot (its anchor point) where it should turn from, without the layer moving, in the learner's own open comp. Asks which layer should turn or grow from somewhere other than its middle and where, shows a frame from their comp, moves one pivot at most as a demonstration, and checks the learner's own Pan Behind, including on layers that are already animated. Also runs this skill's review. Use when the user says "/anchor-mentor", "pivot", "anchor point", "it swings wide", "turn from the edge", "rotate from the corner", or asks why a layer spins in place or swings around when it should hinge.
-allowed-tools: mcp__ae-mentor__anchor_snapshot, mcp__ae-mentor__anchor_demo, mcp__ae-mentor__anchor_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__anchor_snapshot, mcp__ae-mentor__anchor_demo, mcp__ae-mentor__anchor_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Anchor Mentor
@@ -484,8 +484,9 @@ comp.** This is step 2's sentence, the explanation turn's only one.
 
 11. **Record the lesson.** Call `record_lesson` once per lesson that had a focus, with `skill`
     `transform.anchor`:
-    - `result: "passed"` when the last `anchor_check` passed; `"partial"` if they stop after a check
-      that didn't pass; `"not_checked"` if they stop before any check.
+    - `result: "passed"` when the last `anchor_check` passed; `"partial"` if the lesson ends after a check
+      that didn't pass; `"not_checked"` if it ends before any check. A request to stop is
+      **Stopping early** (below), never a record.
     - `project` and `comp` from `anchor_snapshot`; `demo_used`: whether `anchor_demo` ran.
     - `attempted`: the layer and the place in words ("Set Needle's pivot to the middle of its
       bottom edge").
@@ -570,6 +571,15 @@ shortcut named before "done".** "I already know it" runs the same way.
    a reteach or a demo. `anchor_demo` will refuse in a review; never call it.
 5. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`, with
    `next` naming what's still off if it didn't pass.
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson, call `end_lesson`, never
+`record_lesson`. Then reply in one or two sentences: what the last check showed, if there was one,
+and that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
+For a lesson opened from an answer, its reply's `hand_back` gives the last line, as when recording.
 
 ## Style
 

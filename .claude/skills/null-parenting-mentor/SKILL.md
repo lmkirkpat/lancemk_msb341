@@ -1,7 +1,7 @@
 ---
 name: null-parenting-mentor
 description: Lead an After Effects lesson on moving a group of layers together with a null, in the learner's own open comp. Asks which layers should move as one (or proposes a group that sits together), shows how a parent carries its children, has the learner add and place a null where the group turns or scales from, parents one layer at most as a demonstration, catches any layer that jumps when parented, then checks the group's one move. Also runs this skill's review. Use when the user says "/null-parenting-mentor", "move them together", "null", "parent", "group these", or asks how to move several layers as one in After Effects.
-allowed-tools: mcp__ae-mentor__null_parent_snapshot, mcp__ae-mentor__null_parent_demo, mcp__ae-mentor__null_parent_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__null_parent_snapshot, mcp__ae-mentor__null_parent_demo, mcp__ae-mentor__null_parent_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Null Parenting Mentor
@@ -356,7 +356,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
 11. **Record the lesson.** Call `record_lesson` once per lesson that had a group, with `skill`
     `parenting.null`:
     - `result: "passed"` when the last check passed; `"partial"` after a check that didn't;
-      `"not_checked"` before any check.
+      `"not_checked"` before any check. A request to stop is **Stopping early** (below), never a
+      record.
     - `project` and `comp` from `null_parent_snapshot`; `demo_used`: whether `null_parent_demo` ran.
     - `attempted`: the layers, the null's name and the move ("Parented Tile, Caption and Stamp to
       Group Null and turned it on its Rotation"). The move is only what the last check found it on:
@@ -453,6 +454,15 @@ jumps up front, and never the word "null"** until it passes. A jump that happens
    learner did and what the check saw, in general terms ("the group followed one of its own
    layers"), never what they should
    have done or how ("follow one invisible control layer" is a fix: leave it out).
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson, call `end_lesson`, never
+`record_lesson`. Then reply in one or two sentences: what the last check showed, if there was one,
+and that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_NOT_OPEN` or `LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
+For a lesson opened from an answer, its reply's `hand_back` gives the last line, as when recording.
 
 ## Style
 

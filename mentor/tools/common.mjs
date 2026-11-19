@@ -9,7 +9,7 @@ import { runSnippet } from "../bridge-client.mjs";
 import * as session from "../lib/session.mjs";
 import * as learner from "../lib/learner-store.mjs";
 import * as reviews from "../lib/reviews.mjs";
-import { readPath } from "../lib/path.mjs";
+import { readPath, skillName } from "../lib/path.mjs";
 import { recommend } from "../lib/recommend.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
@@ -244,6 +244,14 @@ export function handBack(lesson) {
   return { hand_back: { step_number: h.step_number, next_step: typeof next === "string" && next ? next : null } };
 }
 
+// Spec 014 T106: the learner asked to stop before the lesson was recorded. Ends it in session.json and
+// writes nothing to the learner record. The reply names the lesson's skill in words, and hands back
+// to the answer's next step for a lesson opened from one, as record_lesson does.
+async function endLessonTool() {
+  const lesson = session.endLesson(); // LESSON_NOT_OPEN, LESSON_ALREADY_ENDED
+  return json({ ended: true, skill_name: skillName(lesson.skill), ...handBack(lesson) });
+}
+
 // `skills`: every skill ID the tool files declare; `finders`: their FINDERS, by skill ID
 // (mentor/tools/index.mjs). A plain array is read as `skills` (the call before spec 004).
 export function commonTools(options) {
@@ -255,6 +263,7 @@ export function commonTools(options) {
     if (copied.length) throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: copied });
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();
+    if (lesson) session.markRecorded(); // spec 014 T106: end_lesson has nothing left to end
     return json({ saved: true, skill: { status: skill.status, next: skill.next }, ...handBack(lesson) });
   }
 
@@ -322,6 +331,17 @@ export function commonTools(options) {
       },
       annotations: { readOnlyHint: false, destructiveHint: false },
       handler: recordLesson,
+    },
+    {
+      name: "end_lesson",
+      title: "End the lesson",
+      description:
+        "The learner asked to stop this lesson before it was recorded (in any words, or the panel's End lesson). Ends the " +
+        "lesson so it isn't picked up again, and saves nothing to the learner record. Refuses with no lesson open, or once " +
+        "record_lesson has saved it. Changes nothing in After Effects.",
+      inputSchema: { type: "object", properties: {}, additionalProperties: false },
+      annotations: { readOnlyHint: false, destructiveHint: false },
+      handler: endLessonTool,
     },
     {
       name: "recommend_next",
