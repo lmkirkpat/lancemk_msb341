@@ -1,0 +1,374 @@
+{
+  "run_at": "2026-11-19T22:54:39.329Z",
+  "options": {
+    "only": "57",
+    "changed": false,
+    "repeat": 3,
+    "judgeAlways": false,
+    "dryRun": false,
+    "strictSources": false,
+    "runtime": "b1",
+    "settings": null
+  },
+  "partial": true,
+  "cost_usd": 0.92,
+  "fixtures_note": "Stand-in and synthetic fixtures until the sitting (tasks T338); see fixture_sources per case.",
+  "summary": {
+    "passed": 1,
+    "total": 1,
+    "percent": 100,
+    "target_percent": 80
+  },
+  "cases": [
+    {
+      "id": "57-hand-in-existing-control-null-routes-to-the-pivot",
+      "title": "From an answer, the step's layer is an existing control null that already carries layers (Shake Control): that is Set the pivot's, never this lesson's. The mentor says so plainly, names the pivot lesson in words, and doesn't teach a null",
+      "covers": [
+        "spec014-routing",
+        "FR-027",
+        "SW-2",
+        "T050",
+        "T058"
+      ],
+      "fixture_sources": {
+        "expressions/comp1.json": "live"
+      },
+      "hash": "f8c95d5e7ecb52e3cf0dbc30c10e058d03e50b1f1d9ca5f0a341a38add68cd8a",
+      "pass": true,
+      "passes": 2,
+      "runs": [
+        {
+          "pass": false,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:names_the_null",
+              "pass": true,
+              "detail": "turn 1: \"Shake Control\""
+            },
+            {
+              "check": "say:routes_to_the_pivot",
+              "pass": true,
+              "detail": "turn 1: \"pivot\""
+            },
+            {
+              "check": "say:no_new_null",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-ROUTES-TO-PIVOT",
+              "pass": false,
+              "reason": "The mentor tells the learner not to add a null and to 'move Shake Control's pivot (its anchor point) to that spot'. That is an instruction, though, and it never says this belongs to the Set the pivot lesson rather than this one, so it says nothing about where the lesson for it lives."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name the mentor uses comes from a tool result: 'Shake Control' (snapshot hand_in/refused), 'pivot (its anchor point)' (other_skills 'Set the pivot (anchor point)') and 'Play it back.' (end_lesson next_step)."
+            }
+          ],
+          "cost": 0.30747920000000006,
+          "session_id": "2aa49e8d-6c42-4c8e-a22a-2263ba6718a9",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"focus_set\": false,\n  \"rename_needed\": [],\n  \"refused\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"reason\": \"null\"\n    }\n  ],\n  \"focus_size\": null,\n  \"mode\": \"lesson\",\n  \"mode_source\": \"hand_in\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true,\n  \"comp\": {\n    \"name\": \"Comp 1\"\n  },\n  \"focus_tried\": [\n    \"Shake Control\"\n  ],\n  \"hand_in\": {\n    \"layer\": \"Shake Control\",\n    \"step_number\": 1,\n    \"steps_after\": [\n      \"Play it back.\"\n    ],\n    \"place_named\": false,\n    \"practice\": false\n  }\n}\nTOOL CALL end_lesson {}\nTOOL RESULT (ok): {\n  \"ended\": true,\n  \"skill_name\": \"Move a group with a null\",\n  \"hand_back\": {\n    \"step_number\": 1,\n    \"next_step\": \"Play it back.\"\n  }\n}\nMENTOR: Shake Control is already a null that controls other layers, so you don't need to add another one. To change the point everything turns around, move Shake Control's pivot (its anchor point) to that spot.\n\nThat was step 1; next is Play it back.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:names_the_null",
+              "pass": true,
+              "detail": "turn 1: \"Shake Control\""
+            },
+            {
+              "check": "say:routes_to_the_pivot",
+              "pass": true,
+              "detail": "turn 1: \"pivot\""
+            },
+            {
+              "check": "say:no_new_null",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-ROUTES-TO-PIVOT",
+              "pass": true,
+              "reason": "The final mentor turn says Shake Control 'is already a null that controls other layers, so you don't need a second null on top of it' and that moving its pivot 'is the \"Set the pivot\" skill you've already learned'; it teaches no null, no parenting and no demonstration, and never says it can't see Shake Control."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Every name in the final mentor turn comes from tool output: Shake Control (refused/hand_in.layer), \"Set the pivot\" as learned (other_skills), and 'step 1; next is Play it back' (hand_in step_number and steps_after / end_lesson next_step); no layer, property or time is invented."
+            }
+          ],
+          "cost": 0.3027494,
+          "session_id": "2d391f88-21fd-4481-afbf-1cf4987cc28c",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"focus_set\": false,\n  \"rename_needed\": [],\n  \"refused\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"reason\": \"null\"\n    }\n  ],\n  \"focus_size\": null,\n  \"mode\": \"lesson\",\n  \"mode_source\": \"hand_in\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true,\n  \"comp\": {\n    \"name\": \"Comp 1\"\n  },\n  \"focus_tried\": [\n    \"Shake Control\"\n  ],\n  \"hand_in\": {\n    \"layer\": \"Shake Control\",\n    \"step_number\": 1,\n    \"steps_after\": [\n      \"Play it back.\"\n    ],\n    \"place_named\": false,\n    \"practice\": false\n  }\n}\nTOOL CALL end_lesson {}\nTOOL RESULT (ok): {\n  \"ended\": true,\n  \"skill_name\": \"Move a group with a null\",\n  \"hand_back\": {\n    \"step_number\": 1,\n    \"next_step\": \"Play it back.\"\n  }\n}\nMENTOR: Shake Control is already a null that controls other layers, so you don't need a second null on top of it. To change the point the group turns around, move Shake Control's pivot, which is the \"Set the pivot\" skill you've already learned.\n\nThat was step 1; next is Play it back.\n"
+        },
+        {
+          "pass": true,
+          "checks": [
+            {
+              "check": "plain_words",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_narration",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_pixel_target",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_shortcuts",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_modifier_advice",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "matte_not_hidden",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_test_tell",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "no_slash_command",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "only_mentor_tools",
+              "pass": true,
+              "detail": "ok"
+            },
+            {
+              "check": "demo_at_most_once",
+              "pass": true,
+              "detail": "0 demo calls"
+            },
+            {
+              "check": "first_snapshot_reply",
+              "pass": true,
+              "detail": "matches"
+            },
+            {
+              "check": "no_text_before_snapshot",
+              "pass": true,
+              "detail": "clean"
+            },
+            {
+              "check": "read_learner_record_never_called",
+              "pass": true,
+              "detail": "not called"
+            },
+            {
+              "check": "tools_called",
+              "pass": true,
+              "detail": "all called"
+            },
+            {
+              "check": "tools_not_called",
+              "pass": true,
+              "detail": "none called"
+            },
+            {
+              "check": "say:names_the_null",
+              "pass": true,
+              "detail": "turn 1: \"Shake Control\""
+            },
+            {
+              "check": "say:routes_to_the_pivot",
+              "pass": true,
+              "detail": "turn 1: \"pivot\""
+            },
+            {
+              "check": "say:no_new_null",
+              "pass": true,
+              "detail": "turn 1: clean"
+            }
+          ],
+          "rubric": [
+            {
+              "item": "R-NULL-ROUTES-TO-PIVOT",
+              "pass": true,
+              "reason": "The mentor's turn 1 reply routes the step to the pivot skill in plain words (\"changing where it turns is a matter of setting the pivot on Shake Control itself\"), teaches no new null, parenting or demonstration (\"you don't need a new null\"), and never says it can't see Shake Control."
+            },
+            {
+              "item": "R-NAMES-REAL",
+              "pass": true,
+              "reason": "Each name the mentor used appears in the turn 1 tool results: Shake Control (refused, reason \"null\"), step 1 and \"Play it back.\" (hand_in and end_lesson hand_back), so nothing was invented."
+            }
+          ],
+          "cost": 0.30705119999999997,
+          "session_id": "b320c43b-fad4-45a2-b1ca-a5ce4e5ee568",
+          "transcript": "### Turn 1: the project is an open comp\nLEARNER: /null-parenting-mentor\nTOOL CALL null_parent_snapshot {}\nTOOL RESULT (ok): {\n  \"focus_set\": false,\n  \"rename_needed\": [],\n  \"refused\": [\n    {\n      \"layer\": \"Shake Control\",\n      \"reason\": \"null\"\n    }\n  ],\n  \"focus_size\": null,\n  \"mode\": \"lesson\",\n  \"mode_source\": \"hand_in\",\n  \"learner\": {\n    \"readable\": true,\n    \"status\": \"not_started\",\n    \"times_passed\": 0,\n    \"next\": null,\n    \"last_attempted\": null,\n    \"days_since_practiced\": null,\n    \"review_due\": false,\n    \"other_skills\": [\n      {\n        \"skill_name\": \"Set the pivot (anchor point)\",\n        \"learned\": true,\n        \"hard\": true\n      },\n      {\n        \"skill_name\": \"Easing\",\n        \"learned\": true,\n        \"hard\": false\n      }\n    ]\n  },\n  \"server_current\": true,\n  \"comp\": {\n    \"name\": \"Comp 1\"\n  },\n  \"focus_tried\": [\n    \"Shake Control\"\n  ],\n  \"hand_in\": {\n    \"layer\": \"Shake Control\",\n    \"step_number\": 1,\n    \"steps_after\": [\n      \"Play it back.\"\n    ],\n    \"place_named\": false,\n    \"practice\": false\n  }\n}\nTOOL CALL end_lesson {}\nTOOL RESULT (ok): {\n  \"ended\": true,\n  \"skill_name\": \"Move a group with a null\",\n  \"hand_back\": {\n    \"step_number\": 1,\n    \"next_step\": \"Play it back.\"\n  }\n}\nMENTOR: Shake Control is already a control null, so changing where it turns is a matter of setting the pivot on Shake Control itself. That's how to do this step, and you don't need a new null.\n\nThat was step 1; next is Play it back.\n"
+        }
+      ]
+    }
+  ],
+  "runtime": "b1"
+}

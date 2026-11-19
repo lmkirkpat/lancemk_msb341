@@ -151,7 +151,11 @@ at most; they add the null, place it, parent the rest and give it its move with 
        true) already moves as one with what that null carries. Say so in one sentence, and that
        moving where they turn is *Set the pivot* on that null, named in words; never a second null
        on top of it, since an existing control null is always the pivot lesson's. In a lesson from
-       an answer, stop there; otherwise ask whether they want a different group. In a review, a layer from an earlier lesson on this comp is refused too: ask
+       an answer, stop there; otherwise ask whether they want a different group. In a lesson from
+       an answer whose step named a refused null itself (reason `null`), it's a control null
+       already: say in one sentence that moving where it turns is *Set the pivot* on it, named in
+       words, as the way to do that step, not something to learn first. Teach no null, ask for no
+       group, and stop there. In a review, a layer from an earlier lesson on this comp is refused too: ask
        for a group you haven't used. `focus_size` means too few or too many: ask as above. With
        `too_many_times`: "Those layers have more keys between them than I can check in one go."
        Ask for a smaller group.
