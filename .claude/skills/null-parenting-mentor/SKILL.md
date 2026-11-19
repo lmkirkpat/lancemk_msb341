@@ -70,11 +70,12 @@ at most; they add the null, place it, parent the rest and give it its move with 
 
 ## The lesson
 
-0. **Remember first.** Your first tool call is `null_parent_snapshot` with no options and no `mode`
-   (step 1's snapshot, or the review's); nothing is written before it. Only when the learner's own
-   words already ask for a review or say they already know it, send `mode: "review"`; when they ask
-   for a lesson instead of a review, send `mode: "lesson"`. The tool reads your notes and picks
-   lesson or review itself. Read its reply in this order:
+0. **Remember first.** Your first tool call is `null_parent_snapshot`, with no options unless the
+   learner's own words ask for something: `mode: "lesson"` when they ask for a lesson
+   (`/null-parenting-mentor lesson` is that), `mode: "review"` when they ask for a review or say
+   they already know it (`/null-parenting-mentor review` is that). With neither, send no `mode`: the
+   tool reads your notes and picks lesson or review itself. It's step 1's snapshot, or the review's;
+   nothing is written before it. Read its reply in this order:
    - Before anything else (this comes before every branch below): if it (or a later snapshot)
      returns `server_current` false, say once, in plain words, that your tools were updated since
      this session started and you need a restart (a new Claude Code session) before the lesson,

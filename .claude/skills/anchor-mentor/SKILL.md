@@ -68,6 +68,7 @@ at most; they set the rest with their own hands.
   pivot in the layer's center without the layer moving. Give it by menu path, never a shortcut, and
   only when the place they want is the center. For any other place, if they ask for a menu command,
   say the one there is only does the middle, so this place needs Pan Behind, and give no menu path.
+  Never name the menu item, even to say it only does the middle.
 - **A matte with its eye off** shows no crosshair, so Pan Behind can't grab it: turn its eye on to
   drag, and back off after.
 - **A pivot outside its shape** is easy to miss: the crosshair shows only with the layer selected
@@ -86,11 +87,12 @@ comp.** This is step 2's sentence, the explanation turn's only one.
 
 ## The lesson
 
-0. **Remember first.** Your first tool call is `anchor_snapshot` with no options and no `mode`
-   (step 1's snapshot, or the review's): your first words come after the snapshot returns. Only
-   when the learner's own words already ask for a review or say they already know it, send
-   `mode: "review"`; when they ask for a lesson instead of a review, send `mode: "lesson"`. The tool
-   reads your notes and picks lesson or review itself. Read its reply in this order:
+0. **Remember first.** Your first tool call is `anchor_snapshot`, with no options unless the
+   learner's own words ask for something: `mode: "lesson"` when they ask for a lesson
+   (`/anchor-mentor lesson` is that), `mode: "review"` when they ask for a review or say they
+   already know it (`/anchor-mentor review` is that). With neither, send no `mode`: the tool reads
+   your notes and picks lesson or review itself. It's step 1's snapshot, or the review's: your first
+   words come after the snapshot returns. Read its reply in this order:
    - Before anything else (this comes before every branch below): if it (or a later snapshot)
      returns `server_current` false, say once, in plain words, that your tools were updated since
      this session started and you need a restart (a new Claude Code session) before the lesson,

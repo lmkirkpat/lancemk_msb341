@@ -88,11 +88,12 @@ start.
 
 ## The lesson
 
-0. **Open with the snapshot.** Your first tool call is `offset_snapshot` with no options and no
-   `mode`; nothing is written before it. Only when the learner's own words already ask for a
-   review or say they know this skill, send `mode: "review"`; when they ask for a lesson instead of
-   a due review, send `mode: "lesson"`. The tool reads your notes and picks lesson or review
-   itself. Read its reply in this order:
+0. **Open with the snapshot.** Your first tool call is `offset_snapshot`, with no options unless the
+   learner's own words ask for something: `mode: "lesson"` when they ask for a lesson
+   (`/offset-mentor lesson` is that), `mode: "review"` when they ask for a review or say they
+   already know it (`/offset-mentor review` is that). With neither, send no `mode`: the tool reads
+   your notes and picks lesson or review itself. Nothing is written before it. Read its reply in
+   this order:
    - Before anything else (this comes before every branch below): if it (or a later snapshot)
      returns `server_current` false, say once, in plain words, that your tools were updated since
      this session started and you need a restart (a new Claude Code session) before the lesson,
