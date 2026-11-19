@@ -234,8 +234,10 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 
 **Starts after T040 and 015 T026** (`motion_from` in pivot and null) **and 015 T023** (K2 in the pivot check).
 
-- [ ] T041 (cockpit) Cut the phase 2 skill-builder worktree (`--shared-owner`) and panel-builder worktree from
-  local `main`.
+- [x] T041 (cockpit) Cut the phase 2 skill-builder worktree (`--shared-owner`) and panel-builder worktree from
+  local `main`. **Done 2026-11-19 from `c0aec58`: `../wt-014-p2-mentor` (branch `014-p2-mentor`, shared owner) and
+  `../wt-014-p2-panel` (branch `014-p2-panel`). Cut before T038 to T040 on the builder's go; merge `main` in if
+  T038 turns up fixes.**
 
 ## User Story 2: go deeper on my own layer, then back (P1)
 
