@@ -37,7 +37,9 @@ test("FR-057: named ask-mentor; allowed tools are describe_layers, preview_frame
 
 test("T051: a yes calls go_deeper then Skill; B1's refusal gets TD § 7.1's line; an ended lesson names the next step", () => {
   const after = squash(SKILL.slice(SKILL.indexOf("## After the answer")));
-  assert.match(after, /call `go_deeper` with the skill, the step's number, and `place_named` true when they named their own spot\. Then call `Skill` with its `command_skill`, writing nothing/);
+  assert.match(after, /call `go_deeper` with the skill, the step's number, and `place_named` true only for a spot the nine places can't hold\. Then call `Skill` with its `command_skill`, writing nothing/);
+  // Review of T060: WRONG_STEP is the mentor's own mistake, fixed and retried, never "can't start".
+  assert.match(after, /`WRONG_STEP`: call `go_deeper` again with the right step's number, writing nothing\. Any other refusal/);
   assert.match(after, /Never say that name\./);
   assert.match(after, /`NOT_ON_THIS_RUNTIME`:\*\* one sentence, naming the skill and never a command: "I can't start that lesson from here; open \*Set the pivot\* from the Skills tab when you want it\."/);
   assert.match(after, /They've ended the lesson:\*\* one sentence naming the next step from the answer, nothing more\./);

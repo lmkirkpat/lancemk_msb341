@@ -1,8 +1,10 @@
-// Spec 014 T106: end_lesson, for a learner who stops a lesson before it's recorded. It ends the
+// Spec 014 T106: end_lesson, for a learner who stops a lesson with nothing to record. It ends the
 // lesson in session.json (no later snapshot continues or resumes it), writes nothing to the learner
-// record, and refuses with no lesson open (LESSON_NOT_OPEN) or once record_lesson has saved it
-// (LESSON_ALREADY_ENDED). A lesson opened from an answer hands back, as record_lesson does. Fixture
-// mode; nothing here touches After Effects.
+// record, and refuses with no lesson open (LESSON_NOT_OPEN), once its pass is saved
+// (LESSON_ALREADY_ENDED), or once a demo or check has run that isn't recorded yet
+// (LESSON_HAS_PROGRESS; builder, 2026-11-19: that lesson is recorded instead). A focus alone, a
+// hand-in's included, is nothing to record. A lesson opened from an answer hands back, as
+// record_lesson does. Fixture mode; nothing here touches After Effects.
 
 import { test, beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
@@ -20,6 +22,7 @@ process.env.AE_MENTOR_FIXTURE_STATE = stateFile;
 
 const { TOOLS } = await import("../tools/index.mjs");
 const { MESSAGES } = await import("../errors.mjs");
+const session = await import("../lib/session.mjs");
 const SESSION = path.join(home, "session.json");
 const LEARNER = path.join(home, "learner.json");
 const EDITS = path.join(home, "fixture-edits.json");
@@ -61,18 +64,63 @@ test("an open lesson ends: gone from session.json, nothing in the learner record
 
 test("after an end, the next snapshot starts a new lesson, never the ended one", async () => {
   await call("anchor_snapshot", { skill_options: DOOR });
-  await call("anchor_check");
   await call("end_lesson");
   const next = await call("anchor_snapshot");
   assert.equal(next.lesson, "new");
   assert.equal(next.focus, null);
 });
 
-test("once record_lesson has saved the lesson, any result: LESSON_ALREADY_ENDED", async () => {
+test("a check has run: LESSON_HAS_PROGRESS, and the lesson stays as it was, to be recorded", async () => {
+  await call("anchor_snapshot", { skill_options: DOOR });
+  await call("anchor_check");
+  const before = onDisk();
+  await refuses("LESSON_HAS_PROGRESS");
+  assert.deepEqual(onDisk(), before, "nothing ended, nothing written");
+  assert.equal(fs.existsSync(LEARNER), false);
+});
+
+test("a demonstration has run: LESSON_HAS_PROGRESS", async () => {
+  const snap = await call("anchor_snapshot", { skill_options: { focus: [{ layer: "Door", place: "middle-left" }, { layer: "Lid", place: "bottom-left" }] } });
+  assert.ok(snap.demo_target, "a two-layer focus has a demo target");
+  await call("anchor_demo", { target: snap.demo_target });
+  assert.ok(Object.values(onDisk().lessons)[0].demo, "the demo ran");
+  await refuses("LESSON_HAS_PROGRESS");
+});
+
+test("a focus alone, with no demo or check, is nothing to record: it ends", async () => {
+  await call("anchor_snapshot", { skill_options: DOOR });
+  assert.deepEqual(await call("end_lesson"), { ended: true, skill_name: "Set the pivot (anchor point)" });
+});
+
+test("a pass saved: LESSON_ALREADY_ENDED, and the lesson stays as it was", async () => {
+  await call("anchor_snapshot", { skill_options: DOOR });
+  session.markChecked(true);
+  session.markPassSaved();
+  await refuses("LESSON_ALREADY_ENDED");
+  assert.equal(Object.keys(onDisk().lessons).length, 1);
+});
+
+test("a partial record leaves the lesson open to continue; end_lesson then ends it, with no second record", async () => {
+  await call("anchor_snapshot", { skill_options: DOOR });
+  await call("anchor_check");
+  await call("record_lesson", record({ result: "partial", summary: "Checked once; it moved." }));
+  const again = await call("anchor_snapshot");
+  assert.equal(again.lesson, "continued", "the continue path still picks it up");
+  const entries = JSON.parse(fs.readFileSync(LEARNER, "utf8"));
+  const r = await call("end_lesson");
+  assert.equal(r.ended, true);
+  assert.deepEqual(onDisk().lessons, {});
+  assert.deepEqual(JSON.parse(fs.readFileSync(LEARNER, "utf8")), entries, "the record is as it was");
+  assert.equal((await call("anchor_snapshot")).lesson, "new");
+});
+
+test("a check after the record is progress again: LESSON_HAS_PROGRESS until it's recorded", async () => {
   await call("anchor_snapshot", { skill_options: DOOR });
   await call("record_lesson", record());
-  await refuses("LESSON_ALREADY_ENDED");
-  assert.equal(Object.keys(onDisk().lessons).length, 1, "the recorded lesson stays as it was");
+  await call("anchor_check");
+  await refuses("LESSON_HAS_PROGRESS");
+  await call("record_lesson", record({ result: "partial", summary: "Checked once; it moved." }));
+  assert.equal((await call("end_lesson")).ended, true);
 });
 
 test("the ask's answer and hand-in stay; a lesson from an answer hands back to the next step", async () => {
@@ -103,5 +151,5 @@ test("an unreadable session file: SESSION_UNREADABLE, set aside, as for every re
 });
 
 test("the refusal messages name no field or tool", () => {
-  for (const code of ["LESSON_NOT_OPEN", "LESSON_ALREADY_ENDED"]) assert.doesNotMatch(MESSAGES[code], /[a-z]_[a-z]|`/, code);
+  for (const code of ["LESSON_NOT_OPEN", "LESSON_ALREADY_ENDED", "LESSON_HAS_PROGRESS"]) assert.doesNotMatch(MESSAGES[code], /[a-z]_[a-z]|`/, code);
 });

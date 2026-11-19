@@ -181,6 +181,9 @@ export function openMode(skill, compId, snapshot, { fresh = false } = {}) {
   return isStale(open, false, snapshot) ? null : open.mode;
 }
 
+// A demo ran or a check did: the lesson has something to record (LESSON_UNDERWAY, LESSON_HAS_PROGRESS).
+const hasProgress = (lesson) => !!(lesson.demo || lesson.checked || lesson.status === "checked");
+
 // Called by each skill's snapshot tool. Continues (same skill and comp) or resumes (after working
 // elsewhere) an unfinished lesson in the same mode, keeping its baseline and demo so re-snapshotting
 // can't reset either. Otherwise starts a new lesson with this snapshot as the baseline. Findings
@@ -203,7 +206,7 @@ export function start(snapshot, opts = {}) {
   const key = keyFor(skill, compId);
   const existing = state.lessons[key];
   const open = existing && !existing.passed && (existing.mode || "lesson") === mode ? existing : null;
-  if (open && fresh && !handInStart && (open.demo || open.checked || open.status === "checked")) throw new MentorError("LESSON_UNDERWAY");
+  if (open && fresh && !handInStart && hasProgress(open)) throw new MentorError("LESSON_UNDERWAY");
   const continuing = open && !fresh && !handInStart && !isStale(open, currentKey(state) !== key, snapshot) ? open : null;
   // The hand-in this lesson carries (spec 014 K6): the one given, a continued lesson's, or, on a fresh
   // restart of the same unpassed lesson, the one it had. Undefined for every lesson not opened from one.
@@ -303,6 +306,7 @@ export function recordDemo(targetId) {
     lesson.demo = { segment_id: targetId, at: new Date().toISOString() };
     lesson.demo_target = null;
     lesson.status = "demo_done";
+    delete lesson.recorded; // progress since the last record (end_lesson)
   });
 }
 
@@ -314,6 +318,7 @@ export function markChecked(passed, { demoUndone = false } = {}) {
     // A saved pass stays a pass: a later check answers a question, it doesn't reopen the lesson.
     lesson.passed = passed || !!lesson.pass_saved;
     if (demoUndone && lesson.demo && !lesson.demo.undone) lesson.demo.undone = new Date().toISOString();
+    delete lesson.recorded; // progress since the last record (end_lesson)
   });
 }
 
@@ -477,13 +482,19 @@ export function peekHandIn() {
   return h && typeof h === "object" && !Array.isArray(h) ? structuredClone(h) : null;
 }
 
-// Spec 014 T106: the learner stopped the lesson before it was recorded. The current lesson is taken
+// Spec 014 T106: the learner stopped the lesson with nothing to record. The current lesson is taken
 // out of session.json, so no later snapshot continues or resumes it, and `current` is cleared; the
 // ask and hand-in blocks stay. Returns the lesson as it was. LESSON_NOT_OPEN with no current lesson;
-// LESSON_ALREADY_ENDED once record_lesson has saved it.
+// LESSON_ALREADY_ENDED once its pass is saved (a passed lesson is never continued).
+// Builder, 2026-11-19: something to record means a demo ran or a check did, the same test as
+// LESSON_UNDERWAY; such a lesson is recorded, never ended (LESSON_HAS_PROGRESS). A focus alone,
+// a hand-in's included, isn't something to record. A partial or not-checked record leaves the lesson
+// open, so a later snapshot would continue it: end_lesson ends it then (its record is saved, so
+// nothing is lost), unless a demo or check has run since, which needs recording first.
 registerErrors({
   LESSON_NOT_OPEN: "There's no lesson open to end. Answer the learner plainly; nothing needs saving.",
   LESSON_ALREADY_ENDED: "This lesson is already saved, so it's already over. Answer the learner plainly; nothing more needs saving.",
+  LESSON_HAS_PROGRESS: "This lesson has a demonstration or a check in it, so it isn't ended: record the lesson instead, as the record step says, without mentioning this.",
 });
 
 export function endLesson() {
@@ -491,14 +502,16 @@ export function endLesson() {
   const key = currentKey(state);
   const lesson = key != null ? state.lessons[key] : null;
   if (!lesson) throw new MentorError("LESSON_NOT_OPEN");
-  if (lesson.pass_saved || lesson.recorded) throw new MentorError("LESSON_ALREADY_ENDED");
+  if (lesson.pass_saved) throw new MentorError("LESSON_ALREADY_ENDED");
+  if (hasProgress(lesson) && !lesson.recorded) throw new MentorError("LESSON_HAS_PROGRESS");
   delete state.lessons[key];
   state.current = null;
   write(state);
   return lesson;
 }
 
-// record_lesson saved this lesson (any result), so end_lesson has nothing left to end.
+// record_lesson saved this lesson (any result). A demo or check after it clears the mark, so that
+// progress is recorded too before the lesson can be ended.
 export function markRecorded() {
   return updateCurrent((lesson) => {
     lesson.recorded = true;
