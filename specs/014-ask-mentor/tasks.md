@@ -279,7 +279,7 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit numbers; after T052, before T060:*
 
 - [x] T106 (skill-builder) An `end_lesson` tool in `mentor/tools/common.mjs`: the mentor calls it when the learner asks to stop a lesson before `record_lesson` (in any words, or the End lesson request). It writes nothing to the learner record, ends the lesson in `session.json`, and refuses with no lesson open or after `record_lesson` already ended it. Every lesson `SKILL.md` (the six and `next-mentor`) calls it on that path only when there's nothing to record yet (no focus, nothing tried), then replies in one or two sentences with no demo and no check; a stop with something to record calls `record_lesson` as before (builder, 2026-11-19: keep the memory of an unfinished lesson). Tests for the tool and its refusals. Lesson replies stay byte-identical outside the stop path (`mentor/dev/compare-skill-replies.mjs`). It moves the settings hash.
-- [ ] T107 (panel-builder) The panel treats an `end_lesson` tool event like End lesson, keeping the mentor's
+- [x] T107 (panel-builder) The panel treats an `end_lesson` tool event like End lesson, keeping the mentor's
   last reply visible: the lesson closes, `panel-session.json` ends, Home's Ask and the thread's follow-up bar
   open, and the next thread send carries the after-lesson wrapper (amendment (e)). Tests, including T038's
   repro: stop in words, then a Home follow-up logs `thread: "ask"`.
@@ -287,18 +287,18 @@ open, so Home's Ask stayed paused and follow-ups went into the lesson); cockpit 
   mid-lesson; checks: `end_lesson` called, no `record_lesson`, no demo or check after it, at most two sentences.
   Runs with T059's sets; the spec-writer adds the FR at T063.
 
-- [ ] T053 [US2] (panel-builder) `panel/lib/ask-thread.js`: Go deeper per offer, inside its answer only; Back to
+- [x] T053 [US2] (panel-builder) `panel/lib/ask-thread.js`: Go deeper per offer, inside its answer only; Back to
   your lesson while open; gone after (FR-050). Tests in `panel/test/ask-thread.test.js`.
-- [ ] T054 [US2] (panel-builder) `panel/lib/screens.js`, `panel/lib/lesson.js`: `ask-deeper-starting`,
+- [x] T054 [US2] (panel-builder) `panel/lib/screens.js`, `panel/lib/lesson.js`: `ask-deeper-starting`,
   `ask-deeper-lesson` (from-your-question line, Pick ticked, Practice tag, Back to the thread),
   `ask-deeper-notyet`, `ask-deeper-passed` (✓ Done, Back to your steps ›), `ask-lessonopen`, `ask-back` (divider,
   hand-back line from `hand_back`, dock opens once), `ask-ended`, `home-lessonopen-deeper`. Tests in
   `panel/test/ask-deeper-states.test.js`.
-- [ ] T055 [P] [US2] (panel-builder) `panel/lib/requests.js`: Go deeper and End lesson requests; the first
+- [x] T055 [P] [US2] (panel-builder) `panel/lib/requests.js`: Go deeper and End lesson requests; the first
   follow-up after a lesson gets the prefix (contracts/panel-ask.md). Eval sync test updated.
-- [ ] T056 [P] [US2] (panel-builder) Result lines and dividers for all six (contracts/panel-ask.md, PQ-3) in
+- [x] T056 [P] [US2] (panel-builder) Result lines and dividers for all six (contracts/panel-ask.md, PQ-3) in
   `panel/lib/copy.js`, chosen by skill and the check's `passed`. Tests for each skill.
-- [ ] T057 (panel-builder) A `b1` panel shows no Go deeper for any result (SC-011); panel and helper suites pass;
+- [x] T057 (panel-builder) A `b1` panel shows no Go deeper for any result (SC-011); panel and helper suites pass;
   every new and changed MU id has a test (SC-011: 100%).
 - [ ] T058 [P] (eval-engineer) Cases (numbers from the cockpit): ask situations 16 (`runtimes: ["a"]`) and 18;
   next-mentor K4; pivot: AB held 1 through a hand-in (K7), AB held 3 (padded PNG, rule 2), rule 1 on a child of an
