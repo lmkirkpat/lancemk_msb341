@@ -3,7 +3,7 @@
 // renderMentorText. Layout and classes follow the mockup's states (product/mockups/ui-overhaul).
 "use strict";
 
-const { COPY } = require("./copy.js");
+const { COPY, resultLine } = require("./copy.js");
 const { escapeHtml: esc, renderMentorText } = require("./text.js");
 const { stageOf } = require("./lesson.js");
 const { visibleKinds } = require("./requests.js");
@@ -38,6 +38,9 @@ function btn(label, action, cls, attrs) {
   return `<button type="button" class="${cls || ""}" data-action="${action}"${attrs ? ` ${attrs}` : ""}>${esc(label)}</button>`;
 }
 const pressed = (verb) => `<button type="button" class="pressed" disabled aria-busy="true"><span class="spin" aria-hidden="true"></span>${esc(verb)}</button>`;
+// Spec 014 MU: a pressed button that keeps focus (aria-disabled, not disabled), so focus stays on it
+// while it works (FR-054). Spec 007's screens keep `pressed` as their mockup draws it.
+const pressedFocusable = (verb) => `<button type="button" class="pressed" aria-disabled="true" aria-busy="true"><span class="spin" aria-hidden="true"></span>${esc(verb)}</button>`;
 
 function banner(kind, title, body, actions) {
   const ic = { bad: "!", warn: "!", info: "i" }[kind];
@@ -83,8 +86,12 @@ const chev = `<span class="chev" aria-hidden="true">›</span>`;
 // lesson. Long names are drawn short; the full text is the title and the accessible name.
 function quietLine(m) {
   if (m.lesson_open && m.lesson) {
-    const title = lessonTitle(m, m.lesson);
-    const sum = m.lesson.check_list && m.lesson.check_list.summary;
+    // MU home-lessonopen-deeper: the short tag the thread saved (as Go deeper read), so "from your
+    // question" isn't cut off at 343 or 260 pt; the line says where the lesson came from, in place of
+    // its summary.
+    const tag = m.deeper_lesson && m.deeper && m.deeper.tag;
+    const title = tag ? (focusText(m.lesson) ? COPY.lesson.on(tag, focusText(m.lesson)) : tag) : lessonTitle(m, m.lesson);
+    const sum = m.deeper_lesson ? A.from_question_sub : m.lesson.check_list && m.lesson.check_list.summary;
     const full = [COPY.quiet.back_lesson, title, sum].filter(Boolean).join(". ");
     const answering = !!m.turn && !!m.turn.busy; // FR-060, FR-061
     const end = btn(COPY.buttons.end_lesson, "end_lesson", "quiet", answering ? 'aria-disabled="true" aria-describedby="end-why"' : "");
@@ -114,7 +121,9 @@ function quietLine(m) {
 function homeCards(m, o) {
   const h = m.home;
   const hello = (o && o.hideHello) || !h.hello ? "" : `<p class="hello">${esc(h.hello.text)}</p>`;
-  const link = m.ask.thread ? `<div class="thread-link">${btn(A.back_to_question, "back_question", "quiet")}</div>` : "";
+  // No Back to your question while a go-deeper lesson is open: the thread is paused too, and the
+  // lesson's own Back goes there (MU home-lessonopen-deeper).
+  const link = m.ask.thread && !(m.lesson_open && m.deeper_lesson) ? `<div class="thread-link">${btn(A.back_to_question, "back_question", "quiet")}</div>` : "";
   return `${hello}${askCard(m)}${quietLine(m)}${link}`;
 }
 
@@ -171,12 +180,20 @@ function stepItems(steps) {
 // One Go deeper per offer, inside its answer (FR-048, FR-050). Gray, not primary: the usual choice
 // is to try the steps. Paused, it stays focusable with its reason linked.
 function deeperHtml(m, offers, i) {
-  if (!PHASE.FLAGS.go_deeper || !offers.length) return ""; // phase 2 (lib/phase.js)
+  if (!PHASE.FLAGS.go_deeper || !offers.length || m.runtime !== "a") return ""; // SC-011: never on B1
+  // FR-050, MU ask-lessonopen: while its lesson is open, Go deeper is Back to your lesson, so it can't
+  // be pressed a second time.
+  // Also while a lesson that has just closed is still answering: it's still the place to go.
+  const d = m.deeper;
+  if (d && d.state === "open" && (m.lesson_open || m.deeper_lesson)) {
+    const id = `deeper-open-${i}`;
+    return `<div class="deeper">${btn(A.back_to_lesson, "back_lesson", "quiet", `aria-describedby="${id}"`)}<p class="why-off" id="${id}">${esc(A.lesson_is_open(d.tag || ""))}</p></div>`;
+  }
   const off = m.follow_off;
   const pressedSkill = m.ask.busy ? m.ask.pressed : null;
   const why = `deeper-why-${i}`;
   const btns = offers.map((o) => {
-    if (pressedSkill === o.skill) return pressed(COPY.buttons.pressed.start);
+    if (pressedSkill === o.skill) return pressedFocusable(COPY.buttons.pressed.start);
     return off && !pressedSkill
       ? `<button type="button" class="deeper-btn" aria-disabled="true" aria-describedby="${why}">${esc(A.go_deeper(o.tag))}</button>`
       : `<button type="button" class="deeper-btn" data-action="go_deeper" data-skill="${esc(o.skill)}"${pressedSkill ? ` aria-disabled="true" aria-describedby="${why}"` : ""}>${esc(A.go_deeper(o.tag))}</button>`;
@@ -202,7 +219,20 @@ function answerHtml(m, entry, i, srcs, frames) {
   return `<div class="msg mentor" tabindex="-1"><div class="who">${esc(COPY.mentor_label)}</div>${renderMentorText(v.explanation)}${pics}${steps}${v.closing_offer ? renderMentorText(v.closing_offer) : ""}${deeperHtml(m, offers, i)}</div>`;
 }
 
+// The return from a go-deeper lesson (MU ask-back, ask-ended): the divider, the panel's hand-back line
+// from the record's data, and the mentor's reply when End lesson asked for one. No learner bubble.
+function backHtml(m, entry, i) {
+  const parts = [`<div class="divider">${esc(entry.text)}</div>`];
+  if (entry.hand_back) parts.push(`<div class="msg mentor" tabindex="-1"><div class="who">${esc(COPY.mentor_label)}</div>${renderMentorText(entry.hand_back)}</div>`);
+  const last = i === m.thread.questions.length - 1;
+  if (last && m.ask_turn) parts.push(answerHtml(m, Object.assign({}, entry, { view: null, prose: m.ask_turn.committed || null }), i, m.ask_turn.srcs) || skeletonMsg());
+  else parts.push(answerHtml(m, Object.assign({}, entry, { view: null }), i, (m.ask_frames || {})[i]));
+  if (entry.notice) parts.push(`<div class="msg notice" role="status" tabindex="-1">${entry.notice.title ? `<b>${esc(entry.notice.title)}</b> ` : ""}${esc(entry.notice.text)}</div>`);
+  return parts.filter(Boolean).join("");
+}
+
 function entryHtml(m, entry, i) {
+  if (entry.kind === "lesson_back") return backHtml(m, entry, i);
   const parts = [learnerMsg(entry.text)];
   const last = i === m.thread.questions.length - 1;
   if (last && m.ask_turn) {
@@ -228,7 +258,10 @@ function threadChat(m) {
   });
   if (folded.length) {
     const n = th.questions.filter((q) => q.folded && q.kind === "question").length;
-    earlier = `<details class="earlier"><summary>${esc(A.earlier(n))}</summary>${folded.join("")}</details>`;
+    // MU ask-back: one question folded away by a lesson's return reads "Your question and its answer".
+    const first = th.questions.find((q) => !q.folded);
+    const label = n === 1 && first && first.kind === "lesson_back" ? A.question_and_answer : A.earlier(n);
+    earlier = `<details class="earlier"><summary>${esc(label)}</summary>${folded.join("")}</details>`;
   }
   return { earlier, items };
 }
@@ -238,6 +271,7 @@ function threadChat(m) {
 function stepsDock(m) {
   const steps = m.thread.latest_steps;
   if (!steps || !steps.length) return "";
+  if (m.state === "ask-deeper-starting") return ""; // MU draws no dock while the lesson gets ready
   const open = m.ask.steps_open || m.steps_list_open;
   return `<section class="check steps" aria-label="${esc(A.steps_aria)}"><button type="button" class="check-head" id="ask-steps-toggle" aria-expanded="${!!open}" aria-controls="ask-steps-body" data-action="toggle_steps" data-keep-focus>`
     + `<span class="chev" aria-hidden="true"><span class="ch-tall">${m.ask.steps_open ? "▾" : "▸"}</span><span class="ch-short">▸</span><span class="ch-short-open">▾</span></span>`
@@ -300,8 +334,16 @@ function headTitle(m) {
   return focusText(m.lesson) || (row && row.no_focus && m.lesson.checks === 0 ? row.no_focus : COPY.lesson.your_comp);
 }
 
+// A go-deeper lesson on a learned skill says Practice, never review (FR-023); on a pass, ✓ Done.
+const practiceOf = (m) => !!(m.lesson && m.lesson.hand_in && m.lesson.hand_in.practice) || !!(m.deeper && m.deeper.practice);
+
 function headTag(m) {
   const v = m.lesson;
+  if (m.deeper_lesson) {
+    if (v.passed && (v.saved === true || m.state === "ask-deeper-passed")) return `<span class="tag pass">${esc(COPY.lesson.done_tag)}</span>`;
+    if (practiceOf(m)) return `<span class="tag practice">${esc(COPY.lesson.practice_tag)}</span>`;
+    return v.checks > 0 && !v.passed ? `<span class="tag">${esc(COPY.lesson.check_tag(v.checks))}</span>` : "";
+  }
   if (m.state === "lesson-passed-asking") return `<span class="tag pass">${esc(COPY.lesson.check_passed_tag)}</span>`;
   if (m.state === "lesson-passed-unsaved" || (FINISHED.includes(m.state) && v.passed)) return `<span class="tag pass">${esc(COPY.lesson.passed_tag)}</span>`;
   if (v.mode === "review") return `<span class="tag practice">${esc(COPY.lesson.review_tag)}</span>`; // FR-014: from the tool's mode alone
@@ -312,7 +354,11 @@ function headHtml(m) {
   const v = m.lesson;
   if (m.state === "lesson-picking") return `<div class="lhead"><button type="button" class="back" data-action="go_home" aria-label="${esc(COPY.back.lesson)}" title="${esc(COPY.back.lesson)}">‹</button><div class="ltitle"><span class="kicker">${esc(COPY.lesson.picking_kicker)}</span><strong>${esc(COPY.lesson.picking_title)}</strong></div></div>`;
   const name = m.names[v.skill] || "";
-  return `<div class="lhead"><button type="button" class="back" data-action="go_home" aria-label="${esc(COPY.back.lesson)}" title="${esc(COPY.back.lesson)}">‹</button><div class="ltitle"><span class="kicker">${esc(name)}</span><strong>${esc(headTitle(m))}</strong></div>${headTag(m)}</div>${stripHtml(v)}`;
+  // MU › Going deeper: Back goes to the question (ask-lessonopen), and a line says where it came from.
+  const deep = m.deeper_lesson;
+  const back = deep ? (m.lesson_open ? COPY.back.question : COPY.back.question_closed) : COPY.back.lesson;
+  const fromq = deep ? `<p class="fromq">${esc(A.from_question)}</p>` : "";
+  return `<div class="lhead"><button type="button" class="back" data-action="${deep ? "back_question" : "go_home"}" aria-label="${esc(back)}" title="${esc(back)}">‹</button><div class="ltitle"><span class="kicker">${esc(name)}</span><strong>${esc(headTitle(m))}</strong></div>${headTag(m)}</div>${fromq}${stripHtml(v)}`;
 }
 
 // The saved passes: same page, different first line and due line (FR-021).
@@ -326,14 +372,21 @@ function savedLine(m) {
 
 // D6: saved with no pass has no state of its own; it keeps its screen, adds Saved and the ways out, and says nothing about a pass.
 const savedNoPass = (v) => !!v && v.saved === true && !v.passed;
+// Spec 014 T107: ended by the mentor with nothing recorded. Like D6, no state of its own: the screen
+// stays, with the mentor's last reply, a line that says it ended, and the ways out.
+const endedNoSave = (v) => !!v && v.ended === true && !v.passed && v.saved !== true;
+const closedNoPass = (v) => savedNoPass(v) || endedNoSave(v);
 
 function lessonBanner(m) {
   const s = m.state;
   if (savedNoPass(m.lesson)) return banner("info", COPY.lesson.saved, "");
+  if (endedNoSave(m.lesson)) return banner("info", COPY.lesson.ended, "");
   if (s === "lesson-passed" || s === "lesson-passed-pivot") return banner("info", COPY.lesson.passed, savedLine(m));
   if (s === "practice-passed") return banner("info", COPY.lesson.review_passed, savedLine(m));
-  if (s === "lesson-passed-unsaved") return banner("warn", COPY.lesson.unsaved.title, COPY.lesson.unsaved.body);
-  if (s === "lesson-passed-asking") return banner("info", COPY.lesson.check_passed, COPY.lesson.one_more_question);
+  // A go-deeper lesson says no pass or fail words (MU › Asking again is normal); spec 007's lessons
+  // keep theirs (spec 007 FR-021).
+  if (s === "lesson-passed-unsaved") return m.deeper_lesson ? banner("warn", A.deeper_unsaved.title, A.deeper_unsaved.body) : banner("warn", COPY.lesson.unsaved.title, COPY.lesson.unsaved.body);
+  if (s === "lesson-passed-asking") return m.deeper_lesson ? banner("info", A.deeper_asking, "") : banner("info", COPY.lesson.check_passed, COPY.lesson.one_more_question);
   if (m.error && m.error.blocks_home) return banner("bad", m.error.title, m.error.body, btn(COPY.buttons.try_again, "try_again"));
   return "";
 }
@@ -459,8 +512,12 @@ function actionsHtml(m) {
   }
   if (s === "lesson-exited") return `<div class="actions">${btn(LABELS.start, "start", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
   if (s === "lesson-start-failed") return `<div class="actions">${btn(LABELS.try_again, "try_again", "primary")}${btn(LABELS.back_home, "back_home")}</div>`;
-  if ((FINISHED.includes(s) || s === "lesson-passed-unsaved" || savedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
-  if (FINISHED.includes(s) || savedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
+  if (m.deeper_lesson && (s === "ask-deeper-passed" || s === "lesson-passed-unsaved" || closedNoPass(v))) {
+    // MU ask-deeper-passed: Back to your steps › in place of What's next ›, for any close.
+    return busy ? whyOff(COPY.paused.after_answer) : `<div class="actions">${btn(A.back_to_steps, "back_steps", "primary")}</div>`;
+  }
+  if ((FINISHED.includes(s) || s === "lesson-passed-unsaved" || closedNoPass(v)) && busy) return whyOff(COPY.paused.after_answer);
+  if (FINISHED.includes(s) || closedNoPass(v)) return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}${btn(LABELS.see_skills, "see_skills")}</div>`;
   if (s === "lesson-passed-unsaved") return `<div class="actions">${btn(LABELS.whats_next, "whats_next", "primary")}</div>`;
   if (s === "lesson-passed-asking") return "";
   if (s === "lesson-starting") return whyOff(COPY.paused.after_look);
@@ -497,8 +554,8 @@ const VERB_KEY = { check: "check", check_again: "check", hint: "hint", show_me: 
 
 function askHtml(m) {
   const s = m.state;
-  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting", "practice-nothing-new"].includes(s) || savedNoPass(m.lesson)) return "";
-  if ([...FINISHED, "lesson-passed-unsaved"].includes(s) && !m.can_ask) return "";
+  if (["lesson-exited", "lesson-start-failed", "lesson-picking-starting", "practice-nothing-new"].includes(s) || closedNoPass(m.lesson)) return "";
+  if ([...FINISHED, "lesson-passed-unsaved", "ask-deeper-passed"].includes(s) && !m.can_ask) return "";
   const open = m.can_ask && !(m.turn && m.turn.busy) && !m.error;
   return `<form class="ask" data-ask autocomplete="off"><label class="sr" for="ask-in">${esc(COPY.ask_label)}</label><input id="ask-in" type="text" placeholder="${esc(COPY.ask_placeholder)}"${open ? "" : " disabled"} /><button type="submit" aria-label="${esc(COPY.buttons.send)}"${open ? "" : " disabled"}>⏎</button></form>`;
 }
@@ -506,6 +563,9 @@ function askHtml(m) {
 function lessonRegions(m) {
   const chat = chatRegion(m);
   if (m.state === "practice-nothing-new") chat.items = chat.items.concat(`<p class="ro">${esc(COPY.lesson.nothing_new)}</p>`);
+  // MU ask-deeper-passed: what the check saw, by skill (FR-051), and that it's saved.
+  const result = m.state === "ask-deeper-passed" ? resultLine(m.lesson.skill, m.lesson.passed) : null;
+  if (result) chat.items = chat.items.concat(`<p class="passline" role="status">${esc(result)}<small>${esc(COPY.lesson.saved)}</small></p>`);
   return {
     head: headHtml(m),
     banner: lessonBanner(m),
@@ -578,4 +638,4 @@ function renderApp(m) {
   return { nav, view: "", lesson: lessonRegions(m) };
 }
 
-module.exports = { renderApp, nextTab, TABS, banner, btn, pressed, statusline };
+module.exports = { renderApp, nextTab, TABS, banner, btn, pressed, pressedFocusable, statusline };

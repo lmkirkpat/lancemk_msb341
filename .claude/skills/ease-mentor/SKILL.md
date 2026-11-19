@@ -1,7 +1,7 @@
 ---
 name: ease-mentor
 description: Lead an After Effects easing lesson on the learner's own open comp. Finds linear keyframe pairs, picks a focus, explains with a frame from their comp, demonstrates on one pair only, and checks the learner's own attempt. Use when the user says "/ease-mentor", "teach me easing", or asks to learn easing in After Effects.
-allowed-tools: mcp__ae-mentor__read_learner_record, mcp__ae-mentor__snapshot_project, mcp__ae-mentor__preview_frame, mcp__ae-mentor__set_ease, mcp__ae-mentor__diff_since_last, mcp__ae-mentor__record_lesson
+allowed-tools: mcp__ae-mentor__read_learner_record, mcp__ae-mentor__snapshot_project, mcp__ae-mentor__preview_frame, mcp__ae-mentor__set_ease, mcp__ae-mentor__diff_since_last, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson
 ---
 
 # Ease Mentor
@@ -247,6 +247,16 @@ most; they ease the rest with their own hands.
     the field it names and record again, without mentioning it to the learner.
     You don't need to announce the save. A short "I've noted that for next time" is enough.
     Name what comes next in words, never a slash command.
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson: once a demonstration or a check has
+run, record it with `record_lesson` as the record step says. Before either, call `end_lesson`
+instead, even with a focus agreed: there's nothing to record yet. Either way, reply in one or two
+sentences that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_HAS_PROGRESS`, record it instead, without mentioning it. On `LESSON_NOT_OPEN` or
+`LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
 
 ## Style
 

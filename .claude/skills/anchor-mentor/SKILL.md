@@ -1,7 +1,7 @@
 ---
 name: anchor-mentor
 description: Lead an After Effects lesson on setting a layer's pivot (its anchor point) where it should turn from, without the layer moving, in the learner's own open comp. Asks which layer should turn or grow from somewhere other than its middle and where, shows a frame from their comp, moves one pivot at most as a demonstration, and checks the learner's own Pan Behind, including on layers that are already animated. Also runs this skill's review. Use when the user says "/anchor-mentor", "pivot", "anchor point", "it swings wide", "turn from the edge", "rotate from the corner", or asks why a layer spins in place or swings around when it should hinge.
-allowed-tools: mcp__ae-mentor__anchor_snapshot, mcp__ae-mentor__anchor_demo, mcp__ae-mentor__anchor_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__anchor_snapshot, mcp__ae-mentor__anchor_demo, mcp__ae-mentor__anchor_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Anchor Mentor
@@ -97,6 +97,8 @@ comp.** This is step 2's sentence, the explanation turn's only one.
      then stop; true or null says nothing.
    - If `learner.error` is there, your notes couldn't be read: say once, in the error's words, that
      you couldn't read your notes, and teach a first lesson.
+   - **`mode_source` is hand_in or hand_in_lost** (the learner said yes to going deeper from an
+     answer): run **From an answer** below instead of step 1.
    - **`mode` is review** (a review was due, or the learner asked for one or said they already know
      it): run **The review** below instead; its first call is this one, already made.
    - **Practicing** (`learner.status`): pick up what `learner.next` says was still off. That's step
@@ -265,6 +267,13 @@ comp.** This is step 2's sentence, the explanation turn's only one.
          motion a change they made, and no Edit > Undo for it. Don't suggest tracing the parent or
          opening its expression, and never the read's own words ("motion from", "own keys", "by
          expression"). In a review, the same note, once.
+
+         **Trace first:** when the turn or growth they want comes from that parent (they said it's
+         the parent's motion, or the swing they see is the parent's), the note is the "moves it"
+         line, then one more sentence: that where it turns is set on the parent, not here. If the
+         parent isn't a null, offer to set the parent's pivot instead; if it's a null, it's "[null]
+         is a null, so I can't check its pivot in this lesson yet." Never teach the focus layer's pivot
+         as the fix for the parent's motion.
        - flipped: "Flip is flipped, so I'll go by its own sides: its own left edge is on the right
          of the screen."
        - precomp's frame (with its size): "Icon's edges are its precomp's frame, 400 × 400, not the
@@ -494,6 +503,57 @@ comp.** This is step 2's sentence, the explanation turn's only one.
     "I've noted that for next time" is enough.
     Name what comes next in words, never a slash command.
 
+## From an answer
+
+The learner asked a question, got steps, and said yes to going deeper on one of them. They're still
+in the same conversation, so you have their words and the answer; the snapshot's `hand_in` gives the
+layer, the step's number and the steps after it. Everything in the lesson above still holds (one
+demonstration, hints not fixes, the check, the record), with these changes:
+
+1. **The opening skips the intent question and the proposal.** Open as a continued lesson, in one
+   sentence, with their goal in their words, then step 2's first ask: "We're on [layer], so it turns
+   from [their spot, in their words]. Select [layer] in the timeline and press A, then Shift+P, so
+   both show." No memory clause, no list of layers, no idea yet: the explanation turn
+   (step 2) comes after their reply, without its repeat-back and its frame if the focus is a null.
+   - With no `focus` in the reply (the layer isn't a null, and no spot the nine places can't hold):
+     if they already named one of the nine (a corner, an edge's middle, or the middle), call
+     `anchor_snapshot` with that focus, as step 2 does, and never ask again. Otherwise: "We're on
+     [layer]. Where should it turn from: a corner, an edge, or the middle?" Then step 2 as usual.
+   - `focus_problems` names the layer: its sentence from step 1, then say in one sentence what the
+     answer's step still lets them do on their own, and stop. No proposal, no lesson on another layer
+     unless they ask.
+   - `hand_in` with no layer (a how-to): open as a first lesson, step 1.
+   - `mode_source` hand_in_lost: one sentence that you couldn't find that layer in this comp now, then
+     step 1 as a first lesson.
+2. **Their place is their call** (the reply's `places` gives the focus your_call). They named a
+   spot on the art that the nine places can't hold, or the focus is a null with no art of its own.
+   Say in the explanation turn what you can check and what you can't, once: "I can check that
+   [layer] and the layers it carries don't move, but not where the pivot sits on the art; that
+   part's yours." Name at most two of the layers it carries (the `null_focus` note's `children`),
+   then "the layers it carries". Never ask them to put the pivot anywhere else, not even to
+   nudge it back after, and never name a nine-place spot for it.
+3. **A null focus** (the `null_focus` note): it carries the layers, so where its pivot sits is where
+   they all turn from. Say that once in the explanation turn, in place of step 2's "where the pivot is
+   now" and its frame; the sentence from "The words the lesson uses" stays. No watch offer is made
+   on another layer unless `watch_offer` has one.
+4. **Already learned** (`practice` true in `hand_in`): it's practice. Never say "review", "test" or
+   "passed the review", and a check that doesn't pass says what's still off and where, never "failed",
+   "wrong" or "not quite".
+5. **The check** (step 7) reads the same, with four hints of its own. Name the first layer in
+   `item2.moved_children` and its way; at most two layers.
+   - `children_moved` (the null's pivot moved): "[null]'s pivot moved, but [child] moved with it, to
+     the right. Edit > Undo, then try Pan Behind (Y) with [null] selected."
+   - `carried_layer_moved` (its pivot didn't move): "[null]'s pivot hasn't moved, but [child] moved,
+     to the right. Edit > Undo, then try Pan Behind (Y) with [null] selected."
+   - `layer_dragged` on a null focus: "[null] moved, and the layers it carries moved with it. Pan
+     Behind (Y) drags the pivot, not the layer." Then Edit > Undo first.
+   - `pivot_unchanged`: "[null]'s pivot hasn't moved yet." Then the pending action again.
+   A pass on a your_call focus: say the pivot moved and the layers didn't, never that it's in the
+   right place.
+6. **Last, after `record_lesson` (or `end_lesson` on a stop):** its reply's `hand_back` gives the step and the next one. End the
+   lesson on one line: "That was step 3; next is Play it back and watch the turn." with `next_step`'s
+   text, or "That was the last step." when it's null. Nothing after it; no slash command.
+
 ## The review
 
 A review is hands-on and quick: **no demonstration, no watch offer, no walkthrough, and no tool or
@@ -514,6 +574,18 @@ shortcut named before "done".** "I already know it" runs the same way.
    a reteach or a demo. `anchor_demo` will refuse in a review; never call it.
 5. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`, with
    `next` naming what's still off if it didn't pass.
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson: once a demonstration or a check has
+run, record it with `record_lesson` as the record step says. Before either, call `end_lesson`
+instead, even with a focus agreed: there's nothing to record yet. Either way, reply in one or two
+sentences that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_HAS_PROGRESS`, record it instead, without mentioning it. On `LESSON_NOT_OPEN` or
+`LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
+When either tool's reply has `hand_back`, end on its hand-back line in place of the pick-it-up
+sentence, as "From an answer" item 6 says.
 
 ## Style
 

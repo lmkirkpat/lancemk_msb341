@@ -15,6 +15,7 @@ import { layerInfo } from "./layer-info.mjs";
 import { expressionReads } from "./expressions.mjs";
 import { motionSources } from "./motion-sources.mjs";
 import { readPath, shortName } from "./path.mjs";
+import { candidates as pivotCandidates } from "./anchor.mjs";
 import { copiesExpression } from "../tools/common.mjs";
 
 // Data-model § 8's messages, word for word, plus six this build adds (named in the hand-backs):
@@ -48,6 +49,33 @@ export const NOT_TAUGHT_LINE = "Not something I teach yet.";
 // FR-022 (K4): the skills whose check reads keys.
 export const KEYFRAME_SKILLS = ["easing.basic", "keyframes.types", "easing.speed_graph", "timing.offset"];
 export const NULL_SKILL = "parenting.null";
+export const PIVOT_SKILL = "transform.anchor";
+
+// FR-022, FR-024 (review of T060): what keeps a layer out of a pivot lesson for good, in words for
+// the model's retry. The pivot finder's own `never` reasons, read as the lesson would read this layer
+// from a hand-in. "Can't read" is left out: the answer's read has no sampled times, and the lesson's
+// own read may (it reads again with them).
+const PIVOT_NEVER = {
+  null: "it's a null that carries no other layer",
+  camera: "it's a camera",
+  light: "it's a light",
+  adjustment: "it's an adjustment layer",
+  three_d: "it's a 3D layer",
+  collapsed: "its Collapse switch is on",
+  anchor_keyed: "its Anchor Point is keyed",
+  expression_rotation_scale: "an expression drives its Rotation or Scale",
+  expression_anchor_position: "an expression sets its Anchor Point or Position by itself",
+  position_moves: "its Position is keyed to move",
+};
+
+// Why a pivot lesson can't run on any layer of this name, as the lesson opens from a hand-in on it,
+// or null when one of them can (or the read can't tell).
+export function pivotCantRun(snapshot, layer) {
+  if (!snapshot || !layer || !layerInfo(snapshot).known) return null;
+  const rows = pivotCandidates(snapshot, { hand_in: { layer } }).filter((c) => c.layer === layer);
+  if (!rows.length || !rows.every((c) => c.bucket === "never" && PIVOT_NEVER[c.reason])) return null;
+  return PIVOT_NEVER[rows[0].reason];
+}
 export const MAX_STEPS = 4;
 export const MAX_OFFERS = 2;
 
@@ -143,7 +171,8 @@ function keysOverridden(snapshot, map, index) {
   return keyed.every((k) => sets.has(k.path));
 }
 
-function nullWithChildren(snapshot, map, index) {
+// Exported for go_deeper's ROUTE_TO_PIVOT check on the same rule.
+export function nullWithChildren(snapshot, map, index) {
   const info = layerInfo(snapshot).layers.find((l) => l.index === index);
   const e = map.layers.find((l) => l.layer_index === index);
   return !!info && info.is_null === true && !!e && Array.isArray(e.children) && e.children.length > 0;
@@ -251,6 +280,15 @@ export function checkAnswer(input, ctx) {
     if (onNull) fail("ROUTE_TO_PIVOT");
   }
   if (runtime === "a") for (const o of offered) if (!handInReady(o)) fail("OFFER_NOT_READY");
+  // FR-022, FR-024: on A, a pivot offer whose every step sits on a layer the lesson can't take.
+  if (runtime === "a" && snapshot && offered.includes(PIVOT_SKILL)) {
+    const using = steps.map((s, i) => ({ s, n: i + 1 })).filter(({ s }) => s.skill === PIVOT_SKILL && s.layer);
+    const why = using.map(({ s }) => pivotCantRun(snapshot, s.layer));
+    if (using.length && why.every(Boolean)) {
+      const { s, n } = using[0];
+      throw new MentorError("OFFER_NOT_READY", `Step ${n} is on ${s.layer}, and the Set the pivot lesson can't run on it as it is: ${why[0]}. Keep the step and leave out the offer.`);
+    }
+  }
 
   const replyOffers = runtime === "a" ? offered : [];
   const tags = {};

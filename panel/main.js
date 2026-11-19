@@ -54,6 +54,9 @@
 
   function patchChat(el, chat) {
     const want = (chat.earlier ? [chat.earlier] : []).concat(chat.items);
+    // A message that had focus can be replaced (the skeleton, when the hand-in's reply comes): focus
+    // moves to the newest message, or the chat itself, never to the page (FR-054).
+    const hadFocus = !!document.activeElement && document.activeElement !== el && el.contains(document.activeElement);
     while (el.children.length > want.length) el.removeChild(el.lastElementChild);
     let changed = false;
     want.forEach((html, i) => {
@@ -68,6 +71,12 @@
       changed = true;
     });
     if (changed) el.scrollTop = el.scrollHeight;
+    if (hadFocus && !el.contains(document.activeElement)) {
+      const msgs = el.querySelectorAll(".msg.mentor, .msg.notice");
+      const target = msgs.length ? msgs[msgs.length - 1] : el;
+      target.setAttribute("tabindex", "-1");
+      target.focus();
+    }
   }
 
   function focusNewest() {

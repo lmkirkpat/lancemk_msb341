@@ -181,14 +181,22 @@ export function openMode(skill, compId, snapshot, { fresh = false } = {}) {
   return isStale(open, false, snapshot) ? null : open.mode;
 }
 
+// A demo ran or a check did: the lesson has something to record (LESSON_UNDERWAY, LESSON_HAS_PROGRESS).
+const hasProgress = (lesson) => !!(lesson.demo || lesson.checked || lesson.status === "checked");
+
 // Called by each skill's snapshot tool. Continues (same skill and comp) or resumes (after working
 // elsewhere) an unfinished lesson in the same mode, keeping its baseline and demo so re-snapshotting
 // can't reset either. Otherwise starts a new lesson with this snapshot as the baseline. Findings
 // describe the comp as it is now; targets always come from the baseline, so earlier edits keep
 // their credit.
 export function start(snapshot, opts = {}) {
-  const { skill = EASING, analyze = easingAnalyze, focus_layers, mode = "lesson", skill_options, fresh = false } = opts;
+  const { skill = EASING, analyze = easingAnalyze, focus_layers, mode = "lesson", skill_options, fresh = false, hand_in } = opts;
   if (!MODES.includes(mode)) throw new Error(`mode must be one of: ${MODES.join(", ")}`);
+  // Spec 014 K6: a lesson opened from a hand-in starts new on this read, whatever was open.
+  const handInStart = hand_in !== undefined && hand_in !== null;
+  if (handInStart && (mode !== "lesson" || typeof hand_in !== "object" || Array.isArray(hand_in) || !isPlainData(hand_in))) {
+    throw new Error("hand_in must be plain JSON data, on a lesson.");
+  }
   if (skill_options !== undefined && (skill_options === null || typeof skill_options !== "object" || Array.isArray(skill_options) || !isPlainData(skill_options))) {
     throw new Error("skill_options must be plain JSON data (an object of text, numbers, true/false, lists and objects).");
   }
@@ -198,8 +206,13 @@ export function start(snapshot, opts = {}) {
   const key = keyFor(skill, compId);
   const existing = state.lessons[key];
   const open = existing && !existing.passed && (existing.mode || "lesson") === mode ? existing : null;
-  if (open && fresh && (open.demo || open.checked || open.status === "checked")) throw new MentorError("LESSON_UNDERWAY");
-  const continuing = open && !fresh && !isStale(open, currentKey(state) !== key, snapshot) ? open : null;
+  if (open && fresh && !handInStart && hasProgress(open)) throw new MentorError("LESSON_UNDERWAY");
+  const continuing = open && !fresh && !handInStart && !isStale(open, currentKey(state) !== key, snapshot) ? open : null;
+  // The hand-in this lesson carries (spec 014 K6): the one given, a continued lesson's, or, on a fresh
+  // restart of the same unpassed lesson, the one it had. Undefined for every lesson not opened from one.
+  const lessonHandIn = handInStart ? hand_in
+    : continuing ? continuing.hand_in
+      : fresh && existing && !existing.passed ? existing.hand_in : undefined;
 
   // What the learner record says, read without changing it: an unreadable record means no marks
   // and no past targets, never an error from here.
@@ -210,6 +223,7 @@ export function start(snapshot, opts = {}) {
   const analyzerOpts = (snap) => {
     const o = { focus_layers, exclude, kept_linear: kept(marks, snap) };
     if (options !== undefined) o.skill_options = options;
+    if (lessonHandIn) o.hand_in = lessonHandIn;
     return o;
   };
 
@@ -251,6 +265,7 @@ export function start(snapshot, opts = {}) {
     };
     if (mode === "review") lesson.exclude = exclude;
     if (options !== undefined) lesson.skill_options = options;
+    if (lessonHandIn) lesson.hand_in = structuredClone(lessonHandIn);
   }
 
   // Rules the session enforces for every skill, whatever its analyzer proposed: no demo in a review
@@ -291,6 +306,7 @@ export function recordDemo(targetId) {
     lesson.demo = { segment_id: targetId, at: new Date().toISOString() };
     lesson.demo_target = null;
     lesson.status = "demo_done";
+    delete lesson.recorded; // progress since the last record (end_lesson)
   });
 }
 
@@ -302,6 +318,7 @@ export function markChecked(passed, { demoUndone = false } = {}) {
     // A saved pass stays a pass: a later check answers a question, it doesn't reopen the lesson.
     lesson.passed = passed || !!lesson.pass_saved;
     if (demoUndone && lesson.demo && !lesson.demo.undone) lesson.demo.undone = new Date().toISOString();
+    delete lesson.recorded; // progress since the last record (end_lesson)
   });
 }
 
@@ -421,4 +438,82 @@ export function askStartedAt({ now = Date.now() } = {}) {
   const ask = read().ask;
   if (!ask || typeof ask !== "object" || !inWindow(ask.started_at, now)) return null;
   return ask.started_at;
+}
+
+// Spec 014 K6 (data-model § 2, research R5): the hand-in go_deeper saves for one lesson to open on.
+// `{ skill, comp_id, layer, step_number, steps, goal, place_named, at, used }`, one per session file.
+// No learner words: the steps are the answer's own lines and the goal is in general terms (FR-045).
+// Taken once, by that skill's snapshot tool on the same comp (a how-to's, with no comp, on any comp),
+// and lapses after the session window. Additive: no lesson reads it, and nothing else changes it.
+const HAND_IN_FIELDS = ["skill", "comp_id", "layer", "step_number", "steps", "goal", "place_named"];
+
+export function saveHandIn(handIn, { now = Date.now() } = {}) {
+  if (!handIn || typeof handIn !== "object" || typeof handIn.skill !== "string") throw new Error("saveHandIn needs a skill.");
+  const state = read();
+  const saved = {};
+  for (const k of HAND_IN_FIELDS) saved[k] = handIn[k] === undefined ? null : handIn[k];
+  saved.steps = Array.isArray(saved.steps) ? saved.steps : [];
+  saved.place_named = saved.place_named === true;
+  saved.at = new Date(now).toISOString();
+  saved.used = false;
+  if (!isPlainData(saved)) throw new Error("The hand-in must be plain JSON data.");
+  state.hand_in = structuredClone(saved);
+  write(state);
+  return saved;
+}
+
+const handInFits = (h, skill, compId, now) => !!h && typeof h === "object" && !Array.isArray(h) && h.used !== true &&
+  h.skill === skill && (h.comp_id === null || h.comp_id === compId) && inWindow(h.at, now);
+
+// The hand-in for this skill and comp, marked used, or null (none, another skill's or comp's, used,
+// or lapsed). Reads only when there's nothing to take, so a snapshot without one writes nothing.
+export function takeHandIn(skill, compId, { now = Date.now() } = {}) {
+  const state = read();
+  if (!handInFits(state.hand_in, skill, compId, now)) return null;
+  state.hand_in.used = true;
+  state.hand_in.used_at = new Date(now).toISOString();
+  write(state);
+  return structuredClone(state.hand_in);
+}
+
+// The saved hand-in as it is, used or not, or null. For tests and the ask tools.
+export function peekHandIn() {
+  const h = read().hand_in;
+  return h && typeof h === "object" && !Array.isArray(h) ? structuredClone(h) : null;
+}
+
+// Spec 014 T106: the learner stopped the lesson with nothing to record. The current lesson is taken
+// out of session.json, so no later snapshot continues or resumes it, and `current` is cleared; the
+// ask and hand-in blocks stay. Returns the lesson as it was. LESSON_NOT_OPEN with no current lesson;
+// LESSON_ALREADY_ENDED once its pass is saved (a passed lesson is never continued).
+// Builder, 2026-11-19: something to record means a demo ran or a check did, the same test as
+// LESSON_UNDERWAY; such a lesson is recorded, never ended (LESSON_HAS_PROGRESS). A focus alone,
+// a hand-in's included, isn't something to record. A partial or not-checked record leaves the lesson
+// open, so a later snapshot would continue it: end_lesson ends it then (its record is saved, so
+// nothing is lost), unless a demo or check has run since, which needs recording first.
+registerErrors({
+  LESSON_NOT_OPEN: "There's no lesson open to end. Answer the learner plainly; nothing needs saving.",
+  LESSON_ALREADY_ENDED: "This lesson is already saved, so it's already over. Answer the learner plainly; nothing more needs saving.",
+  LESSON_HAS_PROGRESS: "This lesson has a demonstration or a check in it, so it isn't ended: record the lesson instead, as the record step says, without mentioning this.",
+});
+
+export function endLesson() {
+  const state = read();
+  const key = currentKey(state);
+  const lesson = key != null ? state.lessons[key] : null;
+  if (!lesson) throw new MentorError("LESSON_NOT_OPEN");
+  if (lesson.pass_saved) throw new MentorError("LESSON_ALREADY_ENDED");
+  if (hasProgress(lesson) && !lesson.recorded) throw new MentorError("LESSON_HAS_PROGRESS");
+  delete state.lessons[key];
+  state.current = null;
+  write(state);
+  return lesson;
+}
+
+// record_lesson saved this lesson (any result). A demo or check after it clears the mark, so that
+// progress is recorded too before the lesson can be ended.
+export function markRecorded() {
+  return updateCurrent((lesson) => {
+    lesson.recorded = true;
+  });
 }

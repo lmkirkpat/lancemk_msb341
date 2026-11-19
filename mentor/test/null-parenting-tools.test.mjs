@@ -414,7 +414,8 @@ test("every field, code and value SKILL.md names in backticks is in a tool's rep
   for (const c of Object.keys(MESSAGES)) seen.add(c);
   // Codes the planted runs above don't reach still have to be ones the code can emit: string
   // literals and reply keys in this skill's files (and the session's lesson kinds).
-  for (const f of ["lib/null-parenting.mjs", "lib/null-parenting-check.mjs", "tools/null-parenting.mjs", "lib/session.mjs"]) {
+  // Spec 014: the opening's mode sources and record_lesson's hand-back come from the shared files.
+  for (const f of ["lib/null-parenting.mjs", "lib/null-parenting-check.mjs", "tools/null-parenting.mjs", "lib/session.mjs", "lib/opening.mjs", "tools/common.mjs"]) {
     const src = fs.readFileSync(path.resolve(DIR, "../../..", f), "utf8");
     for (const m of src.matchAll(/["']([a-z][a-z0-9_-]*)["']/g)) seen.add(m[1]);
     for (const m of src.matchAll(/\b([a-z][a-z0-9_]*): /g)) seen.add(m[1]);

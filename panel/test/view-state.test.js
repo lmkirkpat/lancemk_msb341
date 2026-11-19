@@ -38,6 +38,15 @@ const MODELS = {
   "ask-followup": thread({ answered: true, latest_kind: "followup", has_steps: true }),
   "ask-steps-open": thread({ answered: true, has_steps: true, steps_open: true }),
   "ask-clarify": thread({ answered: true, view_kind: "clarify" }),
+  // spec 014 phase 2 (T054): Go deeper
+  "home-lessonopen-deeper": home({ lesson_open: true, deeper_lesson: true, lesson: initialLesson() }),
+  "ask-deeper-starting": thread({ busy: true, latest_kind: "go_deeper", deeper: "starting" }),
+  "ask-deeper-lesson": lessonTab({ skill: "transform.anchor", snapshots: 1 }, { deeper_lesson: true }),
+  "ask-deeper-notyet": lessonTab(checked({ skill: "transform.anchor" }), { deeper_lesson: true }),
+  "ask-deeper-passed": lessonTab(checked({ skill: "transform.anchor", passed: true, saved: true }), { deeper_lesson: true, lesson_open: false, lesson_over: true }),
+  "ask-lessonopen": thread({ answered: true, latest_kind: "go_deeper", has_steps: true, deeper: "open" }, { lesson_open: true }),
+  "ask-back": thread({ answered: true, latest_kind: "lesson_back", has_steps: true, steps_open: true, deeper: "passed", back_saved: true }),
+  "ask-ended": thread({ answered: true, latest_kind: "lesson_back", has_steps: true, steps_open: true, deeper: "ended", back_saved: false }),
   "ask-outside": thread({ answered: true, view_kind: "outside" }),
   "ask-unreachable": thread({ answered: true }, { connection: { state: "not_connected", started: null } }),
   "ask-nocomp": thread({ answered: true, view_kind: "no_comp" }),
@@ -153,7 +162,7 @@ function muStates() {
 test("the id list is spec 007's README table, minus what's held, with spec 014's changes", () => {
   const readme = readmeIds();
   assert.ok(readme.includes("skill-detail-noreview") && readme.includes("lesson-pass-busy") && readme.includes("skill-null-move"), "the expansion works");
-  const mu = Object.keys(muStates()).filter((id) => !DEEPER_IDS.includes(id) && !(id in ALIASES) && !WITHDRAWN.includes(id));
+  const mu = Object.keys(muStates()).filter((id) => !(id in ALIASES) && !WITHDRAWN.includes(id));
   const inScope = readme.filter((id) => !HELD.test(id) && !(id in ALIASES) && id !== "home-cutoff").concat(mu);
   assert.deepEqual([...STATE_IDS].filter((id) => !INTERIM_IDS.includes(id)).sort(), [...new Set(inScope)].sort());
   assert.deepEqual([...INTERIM_IDS], []);
@@ -229,4 +238,17 @@ test("the thread view needs a thread; Home's tab without one is Home", () => {
 
 test("T101: no connection reading makes home-nocomp; Ask's Home stays as it was", () => {
   assert.equal(stateOf(home({ connection: { state: "connected", started: null, comp_active: false } })), "home-return");
+});
+
+test("spec 014 T054: a go-deeper lesson is never review or a skill's own open state; AE busy still wins in the thread", () => {
+  assert.equal(stateOf(lessonTab({ skill: "transform.anchor", snapshots: 1, mode: "review" }, { deeper_lesson: true })), "ask-deeper-lesson");
+  assert.equal(stateOf(lessonTab({ skill: "parenting.null", snapshots: 1 }, { deeper_lesson: true })), "ask-deeper-lesson");
+  assert.equal(stateOf(lessonTab({ skill: "transform.anchor", snapshots: 1 })), "skill-pivot-open", "the same lesson from Skills");
+  assert.equal(stateOf(lessonTab(checked({ passed: true, saved: false }), { deeper_lesson: true })), "lesson-passed-unsaved");
+  assert.equal(stateOf(lessonTab(checked({ passed: true }), { deeper_lesson: true })), "lesson-passed-asking");
+  assert.equal(stateOf(thread({ answered: true, deeper: "open" }, { lesson_open: true, connection: { state: "busy" } })), "ask-busy");
+  assert.equal(stateOf(thread({ answered: true, deeper: "open" })), "ask-answer", "open but the lesson has closed: the thread as it is");
+  assert.equal(stateOf(thread({ busy: true, deeper: null })), "ask-reading", "a typed yes before the mentor takes it reads as reading");
+  assert.equal(stateOf(thread({ busy: true, answered: false, latest_kind: "lesson_back", back_saved: false })), "ask-ended", "the divider shows while the reply comes");
+  assert.equal(stateOf(home({ lesson_open: true, deeper_lesson: true, ask: { thread: true } })), "home-lessonopen-deeper");
 });

@@ -1,7 +1,7 @@
 ---
 name: null-parenting-mentor
 description: Lead an After Effects lesson on moving a group of layers together with a null, in the learner's own open comp. Asks which layers should move as one (or proposes a group that sits together), shows how a parent carries its children, has the learner add and place a null where the group turns or scales from, parents one layer at most as a demonstration, catches any layer that jumps when parented, then checks the group's one move. Also runs this skill's review. Use when the user says "/null-parenting-mentor", "move them together", "null", "parent", "group these", or asks how to move several layers as one in After Effects.
-allowed-tools: mcp__ae-mentor__null_parent_snapshot, mcp__ae-mentor__null_parent_demo, mcp__ae-mentor__null_parent_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__null_parent_snapshot, mcp__ae-mentor__null_parent_demo, mcp__ae-mentor__null_parent_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Null Parenting Mentor
@@ -89,6 +89,8 @@ at most; they add the null, place it, parent the rest and give it its move with 
      false): this builds on it. Name it ("Set the pivot") and offer it first. If they want this lesson
      anyway, say one sentence: "This builds on the pivot lesson: the null's position is the point
      the whole group turns around." Then carry on. Don't reteach the pivot.
+   - **`mode_source` is hand_in or hand_in_lost** (the learner said yes to going deeper from an
+     answer): run **From an answer** below instead of step 1.
    - **`mode` is review** (a review was due, or the learner asked for one or said they already know
      it): run **The review** below instead; its first call is this one, already made.
    - **Practicing** (the `status` in `learner`): pick up what its `next` says was still off.
@@ -144,7 +146,11 @@ at most; they add the null, place it, parent the rest and give it its move with 
        so I can tell them apart." One sentence. They rename it, you never do. Then ask again.
        `duplicate_names` lists names two layers share; ask the same if they want one of those.
      - `focus_set` false with `refused`: say why that layer can't be in the group, as above, and ask
-       for another. In a review, a layer from an earlier lesson on this comp is refused too: ask
+       for another. One exception: a layer that follows a null (its `parent`, with `parent_is_null`
+       true) already moves as one with what that null carries. Say so in one sentence, and that
+       moving where they turn is *Set the pivot* on that null, named in words; never a second null
+       on top of it, since an existing control null is always the pivot lesson's. In a lesson from
+       an answer, stop there; otherwise ask whether they want a different group. In a review, a layer from an earlier lesson on this comp is refused too: ask
        for a group you haven't used. `focus_size` means too few or too many: ask as above. With
        `too_many_times`: "Those layers have more keys between them than I can check in one go."
        Ask for a smaller group.
@@ -380,6 +386,35 @@ at most; they add the null, place it, parent the rest and give it its move with 
     noted that for next time" is enough.
     Name what comes next in words, never a slash command.
 
+## From an answer
+
+The learner asked a question, got steps, and said yes to going deeper on one of them. They're still
+in the same conversation, so you have their words and the answer; the snapshot's `hand_in` gives the
+step's number and the steps after it. Everything in the lesson above still holds (one
+demonstration, hints not fixes, the checks, the record), with these changes:
+
+1. **The group is already chosen** (the step's layer and the layers it names): skip step 1's
+   question and the proposals. With `focus_set` true, open in one sentence as a continued lesson,
+   with their goal in their words, then step 2 as usual from its frame: "We're on Tile, Caption and
+   Stamp, so they move as one card." No memory clause.
+   - `focus_set` false: when `refused` gives a layer a `parent`, item 2 answers it: say its sentence
+     and stop, without asking which layers should move as one. Otherwise say why for each layer in
+     `refused` or `rename_needed`, as step 1 does (the group the answer named is in `focus_tried`),
+     then ask which layers should move as one. No proposal.
+   - `hand_in` with no layer (a how-to): open as a first lesson, step 1.
+   - `mode_source` hand_in_lost: one sentence that you couldn't find that layer in this comp now,
+     then step 1 as a first lesson.
+2. **Trace first:** when the layers already follow a parent that moves them (their `motion_from`
+   lists it, or `left_out` or `refused` gives it as their `parent`), that parent already moves them
+   as one. Say so in one sentence, and that moving where it turns is *Set the pivot* on that parent, named in
+   words; never teach a second null on top of it (step 1's exception).
+3. **Already learned** (`practice` true in `hand_in`): it's practice. Never say "review", "test" or
+   "passed the review", and a check that doesn't pass says what's still off and where, never
+   "failed", "wrong" or "not quite".
+4. **Last, after `record_lesson` (or `end_lesson` on a stop):** its reply's `hand_back` gives the step and the next one. End the
+   lesson on one line: "That was step 2; next is Play it back." with `next_step`'s text, or "That was
+   the last step." when it's null. Nothing after it; no slash command.
+
 ## The review
 
 A review is hands-on and quick: **no demonstration, no walkthrough, no menu path, no warning about
@@ -422,6 +457,18 @@ jumps up front, and never the word "null"** until it passes. A jump that happens
    learner did and what the check saw, in general terms ("the group followed one of its own
    layers"), never what they should
    have done or how ("follow one invisible control layer" is a fix: leave it out).
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson: once a demonstration or a check has
+run, record it with `record_lesson` as the record step says. Before either, call `end_lesson`
+instead, even with a focus agreed: there's nothing to record yet. Either way, reply in one or two
+sentences that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_HAS_PROGRESS`, record it instead, without mentioning it. On `LESSON_NOT_OPEN` or
+`LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
+When either tool's reply has `hand_back`, end on its hand-back line in place of the pick-it-up
+sentence, as "From an answer" item 4 says.
 
 ## Style
 

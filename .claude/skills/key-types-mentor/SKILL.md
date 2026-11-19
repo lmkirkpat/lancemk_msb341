@@ -1,7 +1,7 @@
 ---
 name: key-types-mentor
 description: Lead an After Effects lesson on picking the key type on purpose (hold and linear) in the learner's own open comp. Asks what's meant to snap, shows a frame from their comp, holds one pair at most as a demonstration, checks the learner's own holds pair by pair, and asks what should run at constant speed. Use when the user says "/key-types-mentor", "make it snap", "hold keyframes", "key types", or asks why a blink or cut fades instead of snapping.
-allowed-tools: mcp__ae-mentor__key_types_snapshot, mcp__ae-mentor__key_types_demo, mcp__ae-mentor__key_types_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__key_types_snapshot, mcp__ae-mentor__key_types_demo, mcp__ae-mentor__key_types_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Key Types Mentor
@@ -296,6 +296,16 @@ question.** "I already know it" runs the same way.
    way. It doesn't change the review's result.
 7. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`,
    with `next` naming what's still off if it didn't pass.
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson: once a demonstration or a check has
+run, record it with `record_lesson` as the record step says. Before either, call `end_lesson`
+instead, even with a focus agreed: there's nothing to record yet. Either way, reply in one or two
+sentences that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_HAS_PROGRESS`, record it instead, without mentioning it. On `LESSON_NOT_OPEN` or
+`LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
 
 ## Style
 

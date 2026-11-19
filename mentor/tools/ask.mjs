@@ -1,21 +1,32 @@
-// Spec 014's ask tools (contracts/ask-tools.md). Phase 1: give_answer. TOOLS only: no SKILLS and no
-// FINDERS, which index.mjs allows (as spec 015's comp-reads.mjs does). Read-only for After Effects
-// (FR-002): its one read is a snapshot, and it never runs a snippet that changes the project, the
-// selection, the playhead or the active comp. It writes only session.json's ask block, and nothing to
-// the learner record in this phase (T013).
+// Spec 014's ask tools (contracts/ask-tools.md). Phase 1: give_answer; phase 2: go_deeper. TOOLS only:
+// no SKILLS and no FINDERS, which index.mjs allows (as spec 015's comp-reads.mjs does). Read-only for
+// After Effects (FR-002): their one read is a snapshot, and they never run a snippet that changes the
+// project, the selection, the playhead or the active comp. They write only session.json's ask and
+// hand_in blocks, and nothing to the learner record in these phases (T013, T043).
 //
 // The comp an answer is about comes from give_answer's own read of the active comp, taken when the
 // call is checked, never from the input. describe_layers (spec 015) keeps session.json untouched
 // (its FR-019, FR-020), so there's no saved "last read" to take it from; reading again also catches
 // a comp switched between the mentor's read and its answer (COMP_NOT_NAMED).
 
-import { MentorError } from "../errors.mjs";
-import { checkAnswer, KINDS, READ_KINDS } from "../lib/ask-answer.mjs";
-import { unsafeFields } from "../lib/learner-store.mjs";
+import { MentorError, registerErrors } from "../errors.mjs";
+import { checkAnswer, KINDS, NOT_TAUGHT, NULL_SKILL, nullWithChildren, READ_KINDS, skillIdOf } from "../lib/ask-answer.mjs";
+import { layerInfo } from "../lib/layer-info.mjs";
+import { peekRecord, unsafeFields } from "../lib/learner-store.mjs";
+import { motionSources } from "../lib/motion-sources.mjs";
+import { readPath, shortName, skillName } from "../lib/path.mjs";
 import { runtime } from "../lib/runtime-flag.mjs";
-import { saveAnswer } from "../lib/session.mjs";
+import { latestAnswer, saveAnswer, saveHandIn } from "../lib/session.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { copiesExpression } from "./common.mjs";
+
+// Data-model § 8's messages for go_deeper, word for word, plus WRONG_STEP, which this build adds.
+registerErrors({
+  NOT_OFFERED: "Only a skill the last answer offered can start from it.",
+  NOT_ON_THIS_RUNTIME: "The lesson can't start from here. Say so in one sentence and name where to start it.",
+  NO_ANSWER: "There's no answer in this session yet.",
+  WRONG_STEP: "Name the step that skill goes deeper on, by its number in the answer.",
+});
 
 // The read, through one object so tests can watch it and stand in for After Effects.
 export const io = { takeSnapshot };
@@ -27,7 +38,12 @@ const textReply = (value) => ({ content: [{ type: "text", text: JSON.stringify(v
 // imported when first needed, since it imports this file.
 async function skillModules() {
   const { SKILLS, FINDERS } = await import("./index.mjs");
-  return { skills: SKILLS, handInReady: (id) => !!(FINDERS[id] && FINDERS[id].hand_in === true) };
+  return {
+    skills: SKILLS,
+    handInReady: (id) => !!(FINDERS[id] && FINDERS[id].hand_in === true),
+    // The lesson's skill folder, *-mentor, for the Skill call (each tool file's FINDERS entry).
+    commandOf: (id) => (FINDERS[id] && typeof FINDERS[id].skill_command === "string" ? FINDERS[id].skill_command : null),
+  };
 }
 
 // Data-model § 2: `goal` is general motion terms, checked like a record field.
@@ -82,6 +98,77 @@ export async function giveAnswer(input = {}) {
   return textReply({ ...reply, done: DONE });
 }
 
+// ---- go_deeper (phase 2; contracts/ask-tools.md, research R5): the learner said yes to an offer.
+
+// Which step the lesson goes deeper on: the one asked for, which must use the skill, or the only step
+// that does. Null for a how-to, which has no steps (PQ-4). WRONG_STEP otherwise.
+function stepFor(ask, skill, step) {
+  const steps = Array.isArray(ask.steps) ? ask.steps : [];
+  const using = steps.map((s, i) => ({ s, n: i + 1 })).filter(({ s }) => s && s.skill === skill);
+  if (step === undefined || step === null) {
+    if (ask.kind === "howto" && !steps.length) return null;
+    if (using.length === 1) return using[0];
+    throw new MentorError("WRONG_STEP");
+  }
+  const hit = Number.isInteger(step) ? using.find((u) => u.n === step) : null;
+  if (!hit) throw new MentorError("WRONG_STEP");
+  return hit;
+}
+
+// FR-027: a null that already carries children is Set the pivot's, read again on the comp now. Only
+// when the active comp is still the answer's; otherwise the lesson's own snapshot finds what's there.
+async function routeToPivot(ask, layer) {
+  const snapshot = await io.takeSnapshot();
+  if (!snapshot || !snapshot.comp || snapshot.comp.id !== ask.comp_id || !layerInfo(snapshot).known) return;
+  const map = motionSources(snapshot);
+  const nulls = layerInfo(snapshot).layers.filter((l) => l.name === layer).some((l) => nullWithChildren(snapshot, map, l.index));
+  if (nulls) throw new MentorError("ROUTE_TO_PIVOT");
+}
+
+// FR-023: the first hard prerequisite the record doesn't show learned (the on-ramp never counts), or
+// null. An unreadable record names none.
+function missingPrerequisite(skill, record) {
+  const p = readPath();
+  const own = p.skills.find((s) => s.id === skill);
+  if (!own || !record) return null;
+  const learned = (id) => !!(record.skills && record.skills[id] && record.skills[id].status === "learned");
+  const missing = own.hard.find((id) => id !== p.on_ramp.id && !learned(id));
+  return missing ? skillName(missing) : null;
+}
+
+export async function goDeeper(input = {}) {
+  const args = input && typeof input === "object" ? input : {};
+  if (runtime() !== "a") throw new MentorError("NOT_ON_THIS_RUNTIME");
+  const ask = latestAnswer();
+  if (!ask) throw new MentorError("NO_ANSWER");
+  const { skills, handInReady, commandOf } = await skillModules();
+  const skill = skillIdOf(args.skill, skills);
+  if (!skill || skill === NOT_TAUGHT || !(ask.offered_skills || []).includes(skill)) throw new MentorError("NOT_OFFERED");
+  if (!handInReady(skill) || !commandOf(skill)) throw new MentorError("OFFER_NOT_READY");
+  const hit = stepFor(ask, skill, args.step);
+  const layer = hit && typeof hit.s.layer === "string" ? hit.s.layer : null;
+  if (skill === NULL_SKILL && layer) await routeToPivot(ask, layer);
+
+  saveHandIn({
+    skill,
+    comp_id: ask.comp_id ?? null,
+    layer,
+    step_number: hit ? hit.n : null,
+    steps: Array.isArray(ask.steps) ? ask.steps : [],
+    goal: ask.goal ?? null,
+    place_named: args.place_named === true,
+  });
+  const record = peekRecord();
+  const learned = !!(record && record.skills && record.skills[skill] && record.skills[skill].status === "learned");
+  return textReply({
+    skill_name: skillName(skill),
+    short_name: shortName(skill),
+    command_skill: commandOf(skill),
+    practice: learned,
+    missing_prerequisite: missingPrerequisite(skill, record),
+  });
+}
+
 // Eval run 2026-11-16: every accepted answer was followed by prose (a copy, or "the answer is in the
 // panel"). The reply says plainly that the turn is finished; it's safe for the learner to read.
 export const DONE = "The learner can see this answer now. Your turn is finished: write nothing more.";
@@ -120,5 +207,26 @@ export const TOOLS = [
       additionalProperties: false,
     },
     handler: giveAnswer,
+  },
+  {
+    name: "go_deeper",
+    title: "Go deeper",
+    description:
+      "The learner said yes to going deeper on a skill the last answer offered (typed, pressed, or \"show me\"). Hands the " +
+      "lesson the answer's layer, step and goal, so it opens on their layer without asking again; then call Skill with " +
+      "command_skill. Refuses a skill the answer didn't offer, or when the lesson can't start from here. Changes nothing in " +
+      "After Effects.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        skill: { type: "string", description: "The offered skill, by ID or short name." },
+        step: { type: "integer", minimum: 1, description: "The number of the step it goes deeper on. Optional when one step has that skill." },
+        place_named: { type: "boolean", description: "True when the learner named where it should turn from in their own words (a spot on the art), not one of the nine places." },
+      },
+      required: ["skill"],
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: false, destructiveHint: false },
+    handler: goDeeper,
   },
 ];

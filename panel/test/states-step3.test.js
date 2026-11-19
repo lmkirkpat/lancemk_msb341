@@ -80,7 +80,7 @@ for (const [skill, file, state] of REVIEWS) {
 
 // ---------- the final list ----------
 
-const STEP_FILES = ["states-step1.test.js", "states-step2.test.js", "states-step3.test.js", "ask-states.test.js"];
+const STEP_FILES = ["states-step1.test.js", "states-step2.test.js", "states-step3.test.js", "ask-states.test.js", "ask-deeper-states.test.js"];
 
 test("every state id is driven by a states-step test (SC-003's final list)", () => {
   const src = STEP_FILES.map((f) => fs.readFileSync(path.join(__dirname, f), "utf8")).join("\n");

@@ -1,7 +1,7 @@
 ---
 name: offset-mentor
 description: Lead an After Effects lesson on breaking the lockstep with offset, in the learner's own open comp. Finds layers that start together, or one layer's properties that start and land together, asks which should go first and how far apart, shows a frame from their comp, shifts one member at most as a demonstration, and checks the learner's own stagger. Also runs this skill's review. Use when the user says "/offset-mentor", "stagger", "offset", "lockstep", "everything moves at once", or asks how to make layers or properties not all move together in After Effects.
-allowed-tools: mcp__ae-mentor__offset_snapshot, mcp__ae-mentor__offset_demo, mcp__ae-mentor__offset_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__recommend_next
+allowed-tools: mcp__ae-mentor__offset_snapshot, mcp__ae-mentor__offset_demo, mcp__ae-mentor__offset_check, mcp__ae-mentor__preview_frame, mcp__ae-mentor__record_lesson, mcp__ae-mentor__end_lesson, mcp__ae-mentor__recommend_next
 ---
 
 # Offset Mentor
@@ -355,6 +355,16 @@ know it" runs the same way.
    refuse in a review; never call it.
 5. Record it with `record_lesson` as in the lesson (`demo_used: false`): `passed` or `partial`,
    with `next` naming what's still together if it didn't pass.
+
+## Stopping early
+
+When the learner asks to stop the lesson before it's recorded, in any words ("end lesson", "let's
+stop here", "I'll finish later") or with the panel's End lesson: once a demonstration or a check has
+run, record it with `record_lesson` as the record step says. Before either, call `end_lesson`
+instead, even with a focus agreed: there's nothing to record yet. Either way, reply in one or two
+sentences that they can pick it up any time. No demonstration, no check, no new step, and no slash
+command. On `LESSON_HAS_PROGRESS`, record it instead, without mentioning it. On `LESSON_NOT_OPEN` or
+`LESSON_ALREADY_ENDED`, reply the same way: there's nothing to end.
 
 ## Style
 

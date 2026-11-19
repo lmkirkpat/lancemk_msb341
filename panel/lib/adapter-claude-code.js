@@ -11,9 +11,10 @@ const { createStreamParser } = require("./stream.js");
 const { childPath } = require("./config.js");
 const { toolsForSkill, PREFIX } = require("./skill-tools.js");
 
-// Easing's six: the list when there's no skill to read (a request or a save with no skill, or an
-// unreadable SKILL.md), because every older save is an easing lesson.
-const MENTOR_TOOLS = ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson"];
+// Easing's seven: the list when there's no skill to read (a request or a save with no skill, or an
+// unreadable SKILL.md), because every older save is an easing lesson. end_lesson joined with spec 014
+// T106, so a fallback lesson can stop with nothing to record too.
+const MENTOR_TOOLS = ["read_learner_record", "snapshot_project", "preview_frame", "set_ease", "diff_since_last", "record_lesson", "end_lesson"];
 const TURN_TIMEOUT_MS = 5 * 60 * 1000;
 const AUTH = /not (?:logged|signed) in|\/login|authenticat|api key/i;
 // The repo's .claude/settings.local.json can set an output style for the builder (Explanatory adds

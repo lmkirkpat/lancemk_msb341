@@ -23,7 +23,10 @@ const COPY = {
     flip: "⇄ Flip", flip_aria: "Flip between the two frames", frame_bigger: "Show this frame bigger", frame_alt: "A frame from your comp",
     pressed: { start: "Starting…", check: "Checking…", hint: "Thinking…", show: "Showing…", find: "Looking…", try: "Trying…", open: "Opening…" },
   },
-  back: { lesson: "Back to Home. Your lesson stays open.", home: "Back to Home", skills: "Back to Skills" },
+  back: { lesson: "Back to Home. Your lesson stays open.", home: "Back to Home", skills: "Back to Skills",
+    // spec 014 MU › Going deeper: a go-deeper lesson's Back goes to its question. Once the lesson has
+    // closed it no longer stays open, so the label drops that (not in MU; for design review).
+    question: "Back to your question. Your lesson stays open.", question_closed: "Back to your question" },
   paused: {
     after_lesson: AFTER_LESSON, needs_ae: NEEDS_AE, needs_mentor: NEEDS_MENTOR, waiting_ae: "Waiting for After Effects.",
     hint_needs_ae: "Hint needs After Effects.", after_look: "Buttons turn on after the mentor looks at your comp.",
@@ -120,8 +123,36 @@ const COPY = {
     question_still_here: "Your question's still here.",
     // The thread's hand-back after a go-deeper lesson (contracts/panel-ask.md, from record_lesson's data).
     // Always ends in a period, whether or not the step's text does (T035 design review item 7).
-    hand_back: (n, next) => { const t = String(next == null ? "" : next).trim(); return `That was step ${n}; next is step ${n + 1}: ${/[.!?…]$/.test(t) ? t : `${t}.`}`; },
+    // The step's text is the mentor's plain text, kept as given; only a closing period is added.
+    hand_back: (n, next) => { const t = String(next == null ? "" : next).trim(); return `That was step ${n}. Next is step ${n + 1}: ${/[.!?…]$/.test(t) ? t : `${t}.`}`; },
     last_step: "That was the last step.",
+    // Spec 014 FR-051, PQ-3 (contracts/panel-ask.md › Result lines and dividers): what the check saw on
+    // a passing go-deeper lesson, by skill. Plain, with no pass or fail words. resultLine() picks one.
+    result_lines: {
+      "easing.basic": "Pairs eased, nothing else changed.",
+      "keyframes.types": "Keys set the way you wanted.",
+      "easing.speed_graph": "Ease shaped, still comes to rest.",
+      "timing.offset": "Staggered, and each one still lands.",
+      "transform.anchor": "Pivot moved, nothing else did.",
+      "parenting.null": "The group moves as one. Nothing jumped.",
+    },
+    // The return divider (ask-back, ask-ended). The layer comes from the hand-in or the lesson's focus;
+    // with none known, the divider stops at "practiced".
+    divider_practiced: (tag, layer) => (layer ? `${tag} · practiced on ${layer}` : `${tag} · practiced`),
+    divider_ended: (tag) => `${tag} · ended, not saved`,
+    // A go-deeper lesson whose check passed but whose record couldn't be saved (T061 review item 3).
+    divider_unsaved: (tag) => `${tag} · not saved`,
+    // lesson-passed-unsaved and lesson-passed-asking in a go-deeper lesson: no pass or fail words
+    // (MU › Asking again is normal; T061 review item 3). Spec 007's lessons keep their own lines.
+    deeper_unsaved: { title: "Couldn't save this one. Your comp is fine.", body: "This lesson won't appear in your history, and the mentor won't remember it." },
+    deeper_asking: "One more question before this is saved.",
+    // MU › Going deeper (ask-deeper-lesson, ask-lessonopen, ask-deeper-passed, ask-back, home-lessonopen-deeper).
+    from_question: "From your question. Back returns you to it.",
+    back_to_lesson: "Back to your lesson ›",
+    lesson_is_open: (tag) => (tag ? `Your ${tag} lesson is open.` : "Your lesson is open."),
+    back_to_steps: "Back to your steps ›",
+    question_and_answer: "Your question and its answer",
+    from_question_sub: "from your question",
   },
   quiet: {
     pick_up: (skill, focus) => (focus ? `Pick up ${skill} on ${focus}` : `Pick up ${skill}`),
@@ -136,6 +167,8 @@ const COPY = {
     picking_kicker: "What's next",
     picking_title: "One suggestion",
     review_tag: "↻ review",
+    practice_tag: "Practice", // spec 014 FR-023: a go-deeper lesson on a learned skill, never review
+    done_tag: "✓ Done", // spec 014 MU ask-deeper-passed
     passed_tag: "✓ passed",
     check_passed_tag: "✓ check passed",
     passed: "Lesson passed.",
@@ -145,6 +178,7 @@ const COPY = {
     check_passed: "Check passed.",
     one_more_question: "One more question before this lesson is saved.",
     saved: "Saved to your history.",
+    ended: "Lesson ended, not saved.", // spec 014 T107: the mentor ended it with nothing to record (not in MU; for design review)
     unsaved: { title: "Lesson passed, but it couldn't be saved", body: "Your comp is fine. This lesson won't appear in your history, and the mentor won't remember it." },
     picking_up: "Picking up your earlier lesson on this comp.",
     resumed_divider: "Picked up where you left off",
@@ -281,4 +315,18 @@ function freeze(node) {
   return node;
 }
 
-module.exports = { COPY: freeze(COPY) };
+// FR-051: the result line for a go-deeper lesson's check, by skill and the check's own `passed`. Null
+// when it didn't pass or the skill has no line, so nothing is drawn.
+function resultLine(skillId, passed) {
+  if (passed !== true) return null;
+  return Object.prototype.hasOwnProperty.call(COPY.ask.result_lines, skillId) ? COPY.ask.result_lines[skillId] : null;
+}
+
+// The divider on return from a go-deeper lesson: practiced when its record was saved, not saved when
+// its check passed but the record couldn't be saved, else ended.
+function deeperDivider(tag, { saved, passed, layer } = {}) {
+  if (saved === true) return COPY.ask.divider_practiced(tag, layer || null);
+  return passed === true ? COPY.ask.divider_unsaved(tag) : COPY.ask.divider_ended(tag);
+}
+
+module.exports = { COPY: freeze(COPY), resultLine, deeperDivider };

@@ -16,6 +16,10 @@ const REQUESTS = {
   // Spec 014 amendment (e): the first line of the context sent after a lesson (contracts/panel-ask.md ›
   // Context after a lesson). Not a button: nothing draws its label. Eval-synced (T104).
   ask_context: { label: null, request: "Earlier question and answer, as shown in the panel:" },
+  // Spec 014 phase 2 (contracts/panel-ask.md › Requests): End lesson on a lesson from Go deeper. It goes
+  // into the thread's conversation with the ask command in front (endDeeperRequest); the learner sees
+  // only the divider, so nothing draws a label. Eval-synced.
+  end_deeper: { label: null, request: "I've ended that lesson." },
 };
 
 const EASING_COMMAND = "/ease-mentor";
@@ -57,7 +61,11 @@ function visibleKinds(view, { lessonOpen, canContinue } = {}) {
 // MU's sentence with the offer's short name, drawn from the answer's own data.
 const ASK_COMMAND = "/ask-mentor";
 const askRequest = (text) => ({ kind: "question", label: text, request: `${ASK_COMMAND} ${text}` });
-const followUpRequest = (text) => ({ kind: "followup", label: text, request: text });
+// The first follow-up after a go-deeper lesson (afterDeeper) gets the ask command in front, so the
+// conversation goes back from the lesson's skill to the ask skill (contracts/panel-ask.md › Requests).
+const followUpRequest = (text, o) => ({ kind: "followup", label: text, request: o && o.afterDeeper ? `${ASK_COMMAND} ${text}` : text });
+// End lesson on a go-deeper lesson: a follow-up in the thread, with no bubble (label null).
+const endDeeperRequest = () => ({ kind: "followup", label: null, request: `${ASK_COMMAND} ${REQUESTS.end_deeper.request}` });
 const goDeeperRequest = (tag) => ({ kind: "go_deeper", label: `Yes, go deeper on ${tag}.`, request: `Yes, go deeper on ${tag}.` });
 
 // The first follow-up or Try again after a lesson ended the thread's conversation (contracts/panel-ask.md
@@ -83,4 +91,4 @@ function contextRequest(entry, text) {
   return { kind: "followup", label: t, request: lines.join("\n") };
 }
 
-module.exports = { REQUESTS, visibleKinds, startRequest, newLessonRequest, warmUpRequest, showMeAgain, followOnRequest, ASK_COMMAND, askRequest, followUpRequest, goDeeperRequest, contextRequest };
+module.exports = { REQUESTS, visibleKinds, startRequest, newLessonRequest, warmUpRequest, showMeAgain, followOnRequest, ASK_COMMAND, askRequest, followUpRequest, goDeeperRequest, endDeeperRequest, contextRequest };

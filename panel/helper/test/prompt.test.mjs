@@ -87,7 +87,7 @@ test("tools on Opus 5.5 and Sonnet 5.5: every server tool plus Skill; those outs
 test("tools on Opus 5.5: the same declaration whichever skill lists what, apart from which are deferred", () => {
   const strip = (p) => p.tools.map(({ defer_loading, ...t }) => t);
   assert.equal(JSON.stringify(strip(lesson("ease-mentor"))), JSON.stringify(strip(lesson("offset-mentor"))));
-  assert.deepEqual(offered(lesson("next-mentor")), ["read_learner_record", "recommend_next", "Skill"]);
+  assert.deepEqual(offered(lesson("next-mentor")), ["read_learner_record", "end_lesson", "recommend_next", "Skill"]);
   assert.ok(!lesson("offset-mentor").allowed.has("Skill"));
 });
 
@@ -122,7 +122,7 @@ test("tools on Haiku 5.5: exactly the skill's, in the server's order, as the ser
   const p = lesson("ease-mentor", HAIKU);
   const serverOrder = server.tools.map((t) => t.name).filter((n) => readSkill(SKILLS, "ease-mentor").allowedTools.includes(n));
   assert.deepEqual(p.tools.map((t) => t.name), serverOrder);
-  assert.equal(p.tools.length, 6);
+  assert.equal(p.tools.length, 7); // easing's six plus end_lesson (spec 014 T106)
   for (const t of p.tools) {
     const s = server.tools.find((x) => x.name === t.name);
     assert.deepEqual(t, { name: s.name, description: s.description, input_schema: s.inputSchema });
@@ -132,7 +132,7 @@ test("tools on Haiku 5.5: exactly the skill's, in the server's order, as the ser
   assert.equal(p.toolChanges, false);
 });
 
-test("each skill offers only its own tools; only next-mentor offers the hand-over tool", () => {
+test("each lesson skill offers only its own tools and never the hand-over tool; next-mentor offers it", () => {
   for (const patch of [undefined, HAIKU]) {
     for (const name of ["anchor-mentor", "key-types-mentor", "null-parenting-mentor", "offset-mentor", "speed-graph-mentor"]) {
       const p = lesson(name, patch);
@@ -141,7 +141,7 @@ test("each skill offers only its own tools; only next-mentor offers the hand-ove
       assert.ok(!p.allowed.has("Skill"));
     }
     const next = lesson("next-mentor", patch);
-    assert.deepEqual(offered(next), ["read_learner_record", "recommend_next", "Skill"]);
+    assert.deepEqual(offered(next), ["read_learner_record", "end_lesson", "recommend_next", "Skill"]);
     assert.deepEqual(next.tools.find((t) => t.name === "Skill"), { name: "Skill", description: skillTool.description, input_schema: skillTool.input_schema });
   }
 });
@@ -198,15 +198,17 @@ test("the message breakpoint goes on a copy; the history is never changed", () =
 
 // Spec 014: ask-mentor runs on A (T037). Its allowed-tools filter gives it exactly the three ask tools,
 // and no lesson skill is ever offered the ask tools. ask-mentor's SKILL.md comes with 014-mentor.
-const ASK_TOOLS = ["describe_layers", "give_answer", "preview_frame"];
+// Spec 014 phase 2 (T051): go_deeper, and Skill for the hand-over to the lesson on A.
+const ASK_TOOLS = ["describe_layers", "give_answer", "go_deeper", "preview_frame"];
 const HAS_ASK = fs.existsSync(path.join(SKILLS, "ask-mentor", "SKILL.md"));
 
-test("ask-mentor offers exactly describe_layers, preview_frame and give_answer, and no Skill", { skip: HAS_ASK ? false : "ask-mentor's SKILL.md isn't in this tree yet (014-mentor)" }, () => {
-  assert.deepEqual(readSkill(SKILLS, "ask-mentor").allowedTools.slice().sort(), ASK_TOOLS);
+test("ask-mentor offers exactly describe_layers, preview_frame, give_answer and go_deeper, plus Skill for Go deeper's hand-over", { skip: HAS_ASK ? false : "ask-mentor's SKILL.md isn't in this tree yet (014-mentor)" }, () => {
+  assert.deepEqual(readSkill(SKILLS, "ask-mentor").allowedTools.slice().sort(), ["Skill", ...ASK_TOOLS]);
   for (const patch of [undefined, HAIKU]) {
     const p = lesson("ask-mentor", patch);
-    assert.deepEqual([...p.allowed].sort(), ASK_TOOLS, "every one runs: the server has all three");
-    assert.deepEqual(offered(p).sort(), ASK_TOOLS);
+    assert.deepEqual([...p.allowed].filter((t) => t !== "Skill").sort(), ASK_TOOLS, "every one runs: the server has all four");
+    assert.deepEqual(offered(p).sort(), ["Skill", ...ASK_TOOLS]);
+    assert.deepEqual(p.tools.find((t) => t.name === "Skill"), { name: "Skill", description: skillTool.description, input_schema: skillTool.input_schema }, "the hand-over tool, as next-mentor's");
   }
 });
 

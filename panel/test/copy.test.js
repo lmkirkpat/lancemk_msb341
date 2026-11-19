@@ -123,11 +123,11 @@ test("the ask copy names no tool, field, skill command or slash command (FR-053)
 });
 
 test("the hand-back line names the step and the next one, or says it was the last", () => {
-  assert.equal(COPY.ask.hand_back(3, "Play it back and watch the turn."), "That was step 3; next is step 4: Play it back and watch the turn.");
+  assert.equal(COPY.ask.hand_back(3, "Play it back and watch the turn."), "That was step 3. Next is step 4: Play it back and watch the turn.");
   assert.equal(COPY.ask.last_step, "That was the last step.");
   // T035 item 7 (contracts/panel-ask.md › Result lines and dividers): the line ends with "." even when
   // the step's text doesn't, and never doubles it.
-  assert.equal(COPY.ask.hand_back(3, "Play it back and watch the turn"), "That was step 3; next is step 4: Play it back and watch the turn.");
-  assert.equal(COPY.ask.hand_back(1, "Play it back.  "), "That was step 1; next is step 2: Play it back.");
-  assert.equal(COPY.ask.hand_back(2, "Does it hinge now?"), "That was step 2; next is step 3: Does it hinge now?", "a question keeps its own mark");
+  assert.equal(COPY.ask.hand_back(3, "Play it back and watch the turn"), "That was step 3. Next is step 4: Play it back and watch the turn.");
+  assert.equal(COPY.ask.hand_back(1, "Play it back.  "), "That was step 1. Next is step 2: Play it back.");
+  assert.equal(COPY.ask.hand_back(2, "Does it hinge now?"), "That was step 2. Next is step 3: Does it hinge now?", "a question keeps its own mark");
 });

@@ -9,7 +9,7 @@ import { runSnippet } from "../bridge-client.mjs";
 import * as session from "../lib/session.mjs";
 import * as learner from "../lib/learner-store.mjs";
 import * as reviews from "../lib/reviews.mjs";
-import { readPath } from "../lib/path.mjs";
+import { readPath, skillName } from "../lib/path.mjs";
 import { recommend } from "../lib/recommend.mjs";
 import { takeSnapshot } from "../lib/snapshot.mjs";
 import { serverCurrent } from "../lib/server-current.mjs";
@@ -233,6 +233,25 @@ async function recommendNext({ requested_skill } = {}, { skills, finders }) {
   return json(result);
 }
 
+// Spec 014 FR-026 (contracts/hand-in.md › Hand-back): a lesson opened from an answer's step hands
+// back to the next one: { step_number, next_step } (null after the last step). Absent for every
+// other lesson, so their replies are as before.
+export function handBack(lesson) {
+  const h = lesson && lesson.hand_in;
+  if (!h || !Number.isInteger(h.step_number)) return {};
+  const steps = Array.isArray(h.steps) ? h.steps : [];
+  const next = steps[h.step_number];
+  return { hand_back: { step_number: h.step_number, next_step: typeof next === "string" && next ? next : null } };
+}
+
+// Spec 014 T106: the learner asked to stop before the lesson was recorded. Ends it in session.json and
+// writes nothing to the learner record. The reply names the lesson's skill in words, and hands back
+// to the answer's next step for a lesson opened from one, as record_lesson does.
+async function endLessonTool() {
+  const lesson = session.endLesson(); // LESSON_NOT_OPEN, LESSON_ALREADY_ENDED, LESSON_HAS_PROGRESS
+  return json({ ended: true, skill_name: skillName(lesson.skill), ...handBack(lesson) });
+}
+
 // `skills`: every skill ID the tool files declare; `finders`: their FINDERS, by skill ID
 // (mentor/tools/index.mjs). A plain array is read as `skills` (the call before spec 004).
 export function commonTools(options) {
@@ -244,7 +263,8 @@ export function commonTools(options) {
     if (copied.length) throw Object.assign(new MentorError("RECORD_HAS_EXPRESSION"), { omitFromLog: copied });
     const { skill } = learner.recordLesson(entry, skills, lesson ? { lesson } : {});
     if (lesson && entry.result === "passed") session.markPassSaved();
-    return json({ saved: true, skill: { status: skill.status, next: skill.next } });
+    if (lesson) session.markRecorded(); // spec 014 T106: end_lesson then ends it without a second record
+    return json({ saved: true, skill: { status: skill.status, next: skill.next }, ...handBack(lesson) });
   }
 
   // T061, T062: whatever refuses the call (a copy, a mismatch with the lesson's checks, a field
@@ -311,6 +331,18 @@ export function commonTools(options) {
       },
       annotations: { readOnlyHint: false, destructiveHint: false },
       handler: recordLesson,
+    },
+    {
+      name: "end_lesson",
+      title: "End the lesson",
+      description:
+        "The learner asked to stop this lesson before any demonstration or check (in any words, or the panel's End lesson). " +
+        "Ends the lesson so it isn't picked up again, and saves nothing to the learner record. Refuses with no lesson open, " +
+        "once its pass is saved, or once a demonstration or check has run since it was last recorded (record it instead). Changes nothing in " +
+        "After Effects.",
+      inputSchema: { type: "object", properties: {}, additionalProperties: false },
+      annotations: { readOnlyHint: false, destructiveHint: false },
+      handler: endLessonTool,
     },
     {
       name: "recommend_next",

@@ -213,13 +213,41 @@ test("next-mentor: Yes on A is the panel's text, run on A only", () => {
 // pin the strings; once it exists, every ask case's turns must be the panel's requests word for word:
 // a question is "/ask-mentor " plus the text, and a press of Go deeper is goDeeperRequest's sentence
 // with one of MU's short names (FR-021).
-const { askRequest, goDeeperRequest, ASK_COMMAND } = require("../lib/requests.js");
+const { askRequest, goDeeperRequest, endDeeperRequest, followUpRequest, ASK_COMMAND } = require("../lib/requests.js");
 const ASK_SET = path.join(EVALS, "ask", "cases");
 const SHORT_NAMES = ["Easing", "Key types", "Speed graph", "Offset", "Set the pivot", "Group with a null"];
 
 test("ask: the request strings the eval set must use", () => {
   assert.equal(askRequest("Why does it swing?").request, "/ask-mentor Why does it swing?");
   assert.equal(goDeeperRequest("Set the pivot").request, "Yes, go deeper on Set the pivot.");
+  // Spec 014 T055: End lesson on a go-deeper lesson, and the first follow-up after one.
+  assert.equal(endDeeperRequest().request, "/ask-mentor I've ended that lesson.");
+  assert.equal(followUpRequest("What's next?", { afterDeeper: true }).request, "/ask-mentor What's next?");
+  assert.equal(followUpRequest("What's next?").request, "What's next?");
+});
+
+// T055: any case in a set a go-deeper lesson runs in (the ask set, the two hand-in skills, next-mentor)
+// that presses Go deeper or End lesson sends the panel's sentence, word for word. T058's cases land
+// in these sets; until then this checks the ask set's.
+const DEEPER_SETS = ["ask", "anchor", "null-parenting", "next-mentor"];
+test("ask: every Go deeper and End lesson turn in the go-deeper sets is the panel's (T055)", () => {
+  const deeper = new Set(SHORT_NAMES.map((n) => goDeeperRequest(n).request));
+  const end = endDeeperRequest().request;
+  let seen = 0;
+  for (const set of DEEPER_SETS) {
+    const dir = path.join(EVALS, set, "cases");
+    if (!fs.existsSync(dir)) continue;
+    for (const f of fs.readdirSync(dir).filter((x) => x.endsWith(".json"))) {
+      const c = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
+      for (const t of c.turns || []) {
+        if (typeof t.say !== "string") continue;
+        seen++;
+        if (/go deeper on /i.test(t.say) && /^Yes,/i.test(t.say)) assert.ok(deeper.has(t.say), `${set}/${f}: "${t.say}" isn't the panel's Go deeper`);
+        if (/ended that lesson/i.test(t.say)) assert.equal(t.say, end, `${set}/${f}: End lesson's request`);
+      }
+    }
+  }
+  assert.ok(seen > 0, "read some turns");
 });
 
 test("ask: every case opens with the panel's question request, and any Go deeper turn is the panel's", { skip: fs.existsSync(ASK_SET) ? false : "product/evals/ask/ isn't built yet (T031)" }, () => {

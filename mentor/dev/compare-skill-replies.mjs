@@ -8,7 +8,7 @@
 //   node mentor/dev/compare-skill-replies.mjs 9ac1b44
 //
 // Each tool runs on a fresh temp home: snapshot tools alone, the other lesson tools after every
-// snapshot tool (so a check or demo has a lesson to act on). describe_layers, give_answer and
+// snapshot tool (so a check or demo has a lesson to act on). describe_layers, give_answer, go_deeper, end_lesson (new tools the base has none of) and
 // preview_frame aren't lesson tools and are left out. Times and the temp folder's name are
 // normalized. Exit 0 when identical, 1 when not (the first few differences are printed), 2 on a
 // usage error.
@@ -21,7 +21,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const SELF = fileURLToPath(import.meta.url);
 const REPO = path.resolve(path.dirname(SELF), "..", "..");
-const NOT_LESSON = new Set(["describe_layers", "give_answer", "preview_frame"]);
+const NOT_LESSON = new Set(["describe_layers", "end_lesson", "give_answer", "go_deeper", "preview_frame"]);
 
 // The worker: one mentor folder, every fixture, one JSON line per fixture and tool.
 async function worker(mentor, fixtures) {

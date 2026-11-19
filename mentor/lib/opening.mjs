@@ -7,12 +7,19 @@
 // call carries on (in_progress, session.openMode); 3. a review when this skill's review may be
 // offered now, by the same test recommend_next applies (review_due, recommend.reviewFor); 4. a lesson
 // (default). A due review with nothing new on this comp is a lesson (OR-1).
+//
+// Spec 014 (research R6, contracts/hand-in.md) adds a step between 1 and 2: a hand-in for this skill
+// and comp, from an answer's go-deeper, gives a lesson (hand_in), never a review, even when one is
+// due (FR-023). Only for a skill whose finder takes one (hand_in: true). It's taken once: its layer
+// gone from the comp gives hand_in_lost, still a lesson. A `mode: "lesson"` from the call takes it
+// too (both say lesson); `mode: "review"` leaves it for later.
 
 import { MentorError, MESSAGES } from "../errors.mjs";
 import { readRecord } from "./learner-store.mjs";
 import { readPath, skillName } from "./path.mjs";
 import { reviewFor } from "./recommend.mjs";
 import { isDue, localDate } from "./reviews.mjs";
+import { layerInfo } from "./layer-info.mjs";
 import * as session from "./session.mjs";
 
 const MODES = ["lesson", "review"];
@@ -73,10 +80,19 @@ function slice({ skill, record, error, finder, now }) {
   return out;
 }
 
+// A hand-in's layer is still in the comp, by its exact name (a how-to's, with none, always is).
+function hasLayer(snapshot, name) {
+  if (name === null || name === undefined) return true;
+  const info = layerInfo(snapshot);
+  const list = info.known ? info.layers : snapshot.layers || [];
+  return list.some((l) => l && l.name === name);
+}
+
 // `finder` is the skill's FINDERS entry (its focus, review flag and mentions). `fresh` is the call's
-// own fresh flag, for a tool that takes one. Returns { mode, mode_source, learner, record }; `record`
-// is the record as read (null when unreadable) for a tool that needs more of it, and never goes in
-// a reply. Reads the record once and writes nothing to it.
+// own fresh flag, for a tool that takes one. Returns { mode, mode_source, learner, record }, plus
+// `hand_in` (the session's, as taken) for hand_in and hand_in_lost; `record` is the record as read
+// (null when unreadable) for a tool that needs more of it, and never goes in a reply. Reads the
+// record once and writes nothing to it.
 export function opening({ skill, mode, snapshot, fresh = false, finder, now = new Date() }) {
   const compId = snapshot.comp.id;
   // The session first: an unreadable session file fails here as it would in session.start(),
@@ -86,7 +102,10 @@ export function opening({ skill, mode, snapshot, fresh = false, finder, now = ne
   const learner = slice({ skill, record, error, finder, now });
   const done = (m, source) => ({ mode: m, mode_source: source, learner, record });
 
-  if (mode !== undefined && mode !== null) return done(mode, "asked"); // session.start checks it
+  if (mode !== undefined && mode !== null && mode !== "lesson") return done(mode, "asked"); // session.start checks it
+  const handIn = finder && finder.hand_in === true ? session.takeHandIn(skill, compId, { now: now.getTime() }) : null;
+  if (handIn) return { ...done("lesson", hasLayer(snapshot, handIn.layer) ? "hand_in" : "hand_in_lost"), hand_in: handIn };
+  if (mode === "lesson") return done(mode, "asked");
   if (MODES.includes(carried)) return done(carried, "in_progress");
   if (record) {
     const offers = session.reviewOffers();
