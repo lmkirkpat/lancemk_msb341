@@ -98,3 +98,49 @@ Details are in `product/evals/ask/README.md` › Results.
     (the skill-builder made them, on the builder's approval), rewords FR-011 and US2's "target", and
     closes 014's OQ-8.
   - Re-capture Comp 1 live so `over_1px` reaches the fixtures.
+
+### T038: live B1 smoke in the panel (2026-11-19)
+
+Builder's hands, AE 27.0, Comp 1, panel on B1 at `c0aec58` (AE restarted first). Logs: `panel-turns.jsonl` and
+`calls.jsonl` in the learner home; thread kept in `panel-session.json`.
+
+| # | Check | Result |
+|---|---|---|
+| 1 | Rock question: first line names Comp 1 | pass |
+| 2 | Steps on Shake Control, biggest shift first (Position 12 px, Rotation 9 px) | pass |
+| 3 | Steps from the read; Your steps folded | pass |
+| 4 | No Go deeper on B1 (SC-011) | pass |
+| 5 | Keyboard focus on Your steps | pass |
+| 6 | Close while reading shows "Your question's still here." | pass |
+| 7 | Sweep question: no Steps, no dock | **fail on the first try**: the read took Y Shakers as the active comp (below); the retry 30 s later read Comp 1 and answered right |
+| 8 | Start a lesson from the thread | not a phase 1 check: on B1 the only way in is Skills (Go deeper is phase 2). Started from Skills; the thread was kept |
+| 9 | Follow-up after a lesson | **fail, then pass**: see "end lesson in words" below. After ending with the button, sends went to the thread |
+| 10 | No comp: Ask available, fixed line shown | **fail, then pass**: the box was locked only because the lesson was still open. On retest, typing worked and the panel showed "No comp open. Open one, or click into its timeline." |
+| 11 | Footage clicked: same line; a timeline click fixes it | pass (the next question read Comp 1, 29 layers) |
+| 12 | `turns.js --ask`: first sign ≤ 10 s | pass: 4/4, median 2.2 s (the retest's 6 also under 4.5 s) |
+
+**Finding 1: "end lesson" in words left the lesson open in the panel.** The learner typed "end lesson" right after
+a pivot opening. The mentor said "we'll stop here" but recorded nothing (nothing to note), and the panel only
+closes a lesson on the End lesson button or a saved `record_lesson`. So `panel-session.json` stayed
+`ended: false`, Home's Ask was paused ("Your lesson is open…"), its box was locked (`panel/lib/screens.js:69`),
+and follow-ups went into the lesson with "Done, check it" still showing. One cause, three symptoms (9 to 11).
+**Fix:** T106 to T108 (`fac1ed7`). The builder chose (2026-11-19): a stop with something to record calls
+`record_lesson` as before; a stop with nothing to record calls the new `end_lesson`, which the panel treats like
+End lesson.
+
+**Finding 2: the read took a precomp as the active comp.** At 17:40 `describe_layers` read **Y Shakers**, one of
+Comp 1's two Shakers precomps (layers 4 and 19), and the mentor answered about it ("In Y Shakers, the comp open
+now…"). The builder had Y Shakers open in a viewer tab, but not focused: Comp 1 was active in both the viewer and
+the timeline. That doesn't match T001 state 1 (`activeItem` followed the viewer). Not explained yet. To try at a
+sitting: Comp 1 and a precomp tab open, focus Comp 1, read `activeItem`; then the same after a double-click into
+the precomp and back. Possible fix if it reproduces: when a follow-up's comp differs from the one the thread has
+been about, the answer says so ("Y Shakers is the active comp now; click into Comp 1's timeline to ask about it").
+Watch for it in the three sessions.
+
+**Finding 3: the no-comp answer's prose varies, and one cost $0.25.** The panel showed the fixed line each time,
+but the mentor's own sentence under it changed every turn. The second no-comp follow-up ("what about now") cost
+$0.249 for an answer that read nothing, most likely the resumed thread's context. Two of the first four answer
+turns were over SC-005's $0.10 aim ($0.12 and $0.16; median $0.028). B1 cost isn't A cost: recheck at T089.
+Tokens (R16) aren't logged on B1, so they're measured on A at T089.
+
+**What it changes:** T106 to T108 added; finding 2 goes on the sessions' watch list; finding 3 goes to T089.
