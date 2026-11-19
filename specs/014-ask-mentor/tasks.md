@@ -220,10 +220,10 @@ marks order freedom only. The panel-builder's branch runs in parallel. A task to
 - [x] T037 (eval-engineer) The ask set on B1 at the merge commit: at least 80% and every hard check passing;
   situations 1, 4 and 5 at 3 of 3 (SC-006's B1 half). Triage with `/eval-triage`; log in the set's README with
   the refusal counts (plan › Risks).
-- [ ] T038 (skill-builder reads, AE, **builder's hands**) Live B1 smoke in the panel (quickstart › Phase 1
+- [x] T038 (skill-builder reads, AE, **builder's hands**) Live B1 smoke in the panel (quickstart › Phase 1
   steps 2 to 4): the rock and sweep questions on Comp 1, `ask-nocomp` (quickstart step 3), `turns.js --ask` timing and one
   answer's tokens (research R16).
-- [ ] T039 (cockpit) Log T037 and T038 in `discovery/usage-notes/ask-build.md`.
+- [x] T039 (cockpit) Log T037 and T038 in `discovery/usage-notes/ask-build.md`.
 - [ ] T040 (spec-writer) Fold T034 to T039 into the spec (status, any amendments). **Asking works on B1.**
 
 **Checkpoint:** answers on B1, Home ask-first.
