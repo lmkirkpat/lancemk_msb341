@@ -11,7 +11,7 @@ const AT = "2026-11-14T12:00:00.000Z";
 
 test("a new thread is empty, with no steps to dock", () => {
   const th = t.newThread({ id: "th-1", claude_session_id: "s-1", at: AT });
-  assert.deepEqual(th, { version: 1, id: "th-1", claude_session_id: "s-1", started_at: AT, questions: [], latest_steps: null, deeper: null, steps_open_once: false, after_lesson: false });
+  assert.deepEqual(th, { version: 1, id: "th-1", claude_session_id: "s-1", started_at: AT, questions: [], latest_steps: null, deeper: null, steps_open_once: false, after_lesson: false, after_deeper: false });
 });
 
 test("an answer with steps docks them; the entry keeps its view and no prose shows beside it", () => {
@@ -105,4 +105,92 @@ test("asNewQuestion: a follow-up becomes a question and folds the entries before
   const q = t.addQuestion(th, { text: "Yes, go deeper on Set the pivot.", kind: "go_deeper", at: AT });
   assert.equal(t.asNewQuestion(q), q, "only a follow-up");
   assert.deepEqual(t.NEW_QUESTION_KINDS, ["answer", "describe", "howto"]);
+});
+
+// ---------- spec 014 T053: Go deeper in the thread (FR-050, data-model § 7) ----------
+
+const COPY_ASK = require("../lib/copy.js").COPY.ask;
+const OFFER = { skill: "transform.anchor", tag: "Set the pivot" };
+function offered() {
+  let th = t.newThread({ id: "x", claude_session_id: "s", at: AT });
+  th = t.answer(t.addQuestion(th, { text: "How do I shake from the hit?", kind: "question", at: AT }), { view: view({ offers: [OFFER] }), prose: null, had_result: true });
+  return th;
+}
+const pressed = (th) => t.pressDeeper(t.addQuestion(th, { text: "Yes, go deeper on Set the pivot.", kind: "go_deeper", at: AT }), OFFER);
+
+test("T053: Go deeper lives inside its answer only: an offer per skill on that answer, none on a follow-up or the press", () => {
+  const th = pressed(offered());
+  assert.deepEqual(t.offersOf(th, th.questions[0]), [OFFER]);
+  assert.deepEqual(t.offersOf(th, th.questions[1]), [], "the press has no view, so no offers");
+  const f = t.answer(t.addQuestion(offered(), { text: "Why?", kind: "followup" }), { view: null, prose: "Because.", had_result: false });
+  assert.deepEqual(t.offersOf(f, f.questions[1]), [], "a later turn never offers again");
+});
+
+test("T053: pressed is starting; the mentor's go_deeper opens it and answers the press; a refusal drops it", () => {
+  let th = pressed(offered());
+  assert.equal(th.deeper.state, "starting");
+  assert.equal(t.deeperOpen(th), true, "the answer can't be pressed twice while starting");
+  assert.equal(t.dropDeeper(th).deeper, null);
+  th = t.openDeeper(th, { skill: "transform.anchor", tag: "Set the pivot", practice: true });
+  assert.deepEqual(th.deeper, { skill: "transform.anchor", tag: "Set the pivot", step_number: null, state: "open", layer: null, practice: true, saved: false, hand_back: null });
+  assert.equal(t.latest(th).answered, true, "the press isn't left with nothing under it");
+  assert.equal(t.dropDeeper(th), th, "an open lesson isn't dropped");
+  th = t.deeperHandIn(th, { layer: "Shake Control", step_number: 3 });
+  assert.equal(th.deeper.layer, "Shake Control");
+  assert.equal(th.deeper.step_number, 3);
+  assert.equal(t.deeperHandIn(th, { layer: "", step_number: "3" }).deeper.layer, "Shake Control", "bad data changes nothing");
+});
+
+test("T053: while the lesson is open the answer keeps its offer (drawn as Back to your lesson); after, it's folded away and gone", () => {
+  let th = t.openDeeper(pressed(offered()), { skill: "transform.anchor", tag: "Set the pivot" });
+  assert.equal(t.deeperOpen(th), true);
+  assert.deepEqual(t.offersOf(th, th.questions[0]), [OFFER], "still there, for screens to turn into Back to your lesson");
+  th = t.backFromDeeper(th, { divider: "Set the pivot · practiced on Shake Control", hand_back: "That was step 3; next is step 4: play it back.", saved: true, at: AT });
+  assert.equal(t.deeperOpen(th), false);
+  assert.equal(th.deeper.state, "passed");
+  assert.deepEqual(t.offersOf(th, th.questions[0]), [], "FR-050: gone after the lesson");
+  assert.deepEqual(th.questions.map((q) => [q.kind, q.folded]), [["question", true], ["go_deeper", true], ["lesson_back", false]]);
+  const back = t.latest(th);
+  assert.equal(back.text, "Set the pivot · practiced on Shake Control");
+  assert.equal(back.hand_back, "That was step 3; next is step 4: play it back.");
+  assert.equal(back.answered, true);
+  assert.equal(th.after_deeper, true, "the next follow-up goes back to the ask skill");
+  assert.equal(th.steps_open_once, true, "Your steps opens itself, once");
+  assert.equal(t.split(th).earlier_count, 1);
+});
+
+test("T053: ended early, the return waits for the mentor's reply; Try again keeps it a return", () => {
+  let th = t.openDeeper(pressed(offered()), OFFER);
+  th = t.backFromDeeper(th, { divider: "Set the pivot · ended, not saved", hand_back: null, saved: false, answered: false });
+  assert.equal(th.deeper.state, "ended");
+  assert.equal(t.latest(th).answered, false);
+  th = t.answer(th, { view: null, prose: "Step 3 is still there; next is step 4.", had_result: false });
+  assert.deepEqual(th.latest_steps, STEPS, "a return isn't a new question: the dock stays");
+  assert.equal(t.latest(th).prose, "Step 3 is still there; next is step 4.");
+  assert.equal(t.retry(th).questions.at(-1).kind, "lesson_back");
+});
+
+test("T053: the hand-back line, from record_lesson's or end_lesson's data", () => {
+  assert.equal(t.handBackLine({ step_number: 3, next_step: "Play it back and watch the turn." }, COPY_ASK), "That was step 3; next is step 4: Play it back and watch the turn.");
+  assert.equal(t.handBackLine({ step_number: 4, next_step: null }, COPY_ASK), "That was the last step.");
+  assert.equal(t.handBackLine(null, COPY_ASK), null);
+  assert.equal(t.handBackLine({ step_number: "3", next_step: "x" }, COPY_ASK), null);
+});
+
+test("T053: the context after another lesson skips a return and uses the last question asked", () => {
+  let th = t.backFromDeeper(t.openDeeper(pressed(offered()), OFFER), { divider: "d", saved: false, answered: false });
+  th = t.answer(th, { view: null, prose: "Next is step 4.", had_result: false });
+  assert.equal(t.contextEntry(th).text, "How do I shake from the hit?");
+});
+
+test("T053: read back, a return keeps its divider and line; a lesson still open on close sets the prefix", () => {
+  const th = t.backFromDeeper(t.openDeeper(pressed(offered()), OFFER), { divider: "d", hand_back: "That was the last step.", saved: true });
+  const back = t.fromSaved(JSON.parse(JSON.stringify(th)));
+  assert.equal(back.questions.at(-1).kind, "lesson_back");
+  assert.equal(back.questions.at(-1).hand_back, "That was the last step.");
+  assert.equal(back.after_deeper, true);
+  assert.equal(back.deeper, null);
+  const open = t.fromSaved(JSON.parse(JSON.stringify(t.openDeeper(pressed(offered()), OFFER))));
+  assert.equal(open.after_deeper, true, "its conversation is still on the lesson's skill");
+  assert.equal(t.fromSaved(JSON.parse(JSON.stringify(offered()))).after_deeper, false);
 });
