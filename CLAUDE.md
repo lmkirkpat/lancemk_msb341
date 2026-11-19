@@ -257,9 +257,7 @@ a brand new session act like a colleague who already knows what you are working 
   - **T037 triage (2026-11-16/17):** first full B1 run 0/18 (plumbing and rubric, `eae7290`, amendment (f)
     `d748984`), ask fixes (a) to (g) merged `bcd6867`, T105 (the turn ends after an accepted `give_answer`,
     B1 hook and A helper) merged `59e7368`, triage 2 `261fe52`. Second full run 9/18 at `542626f`'s parent;
-    since then 02, 11 and 12 pass alone, and 05, 09 and 18 failed reruns made before triage 2. Results in
-    `product/evals/ask/results/` are uncommitted. T034, T035, T102 and T104 are done but not ticked in
-    `tasks.md`.
+    since then 02, 11 and 12 pass alone, and 05, 09 and 18 failed reruns made before triage 2.
   - **Next (sprint ends 2026-11-24; phase 2, Go deeper, is on the sessions' critical path):**
     1. **T037 met 2026-11-18** at `91fd9c7`: 18/18 with `--repeat 3` (majority pass; single runs flip, so
        this is the bar), $11.04, no hard-rule failure, refusals 3 of 60. Case 01 was 5 of 6 (an ordering
